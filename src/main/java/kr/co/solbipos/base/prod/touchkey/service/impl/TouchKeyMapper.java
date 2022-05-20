@@ -117,4 +117,7 @@ public interface TouchKeyMapper {
     /** 터치키 데이터 복사 */
     int copyTouchKeyGrp(TouchKeyVO touchKeyVO);
 
+    /** 판매터치키 조회 - 데이터 기준으로 XML 만들기 */
+    String getTouchKeyXmlByData(DefaultMap<String> param);
+
 }

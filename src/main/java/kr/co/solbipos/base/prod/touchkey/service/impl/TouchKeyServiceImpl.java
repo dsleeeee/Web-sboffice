@@ -165,7 +165,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         param.put("storeCd", sessionInfoVO.getStoreCd());
         param.put("confgFg", ConfgFg.TOUCH_KEY.getCode());
         // 터치키 구성정보가 저장되어있는 XML
-        String xml = keyMapper.getTouchKeyXml(param);
+        String xml = keyMapper.getTouchKeyXmlByData(param);
         if ( xml != null ) {
             // | 를 기준으로 분류와 터치키 영역으로 나뉘어져있다.
             String[] xmls = xml.split("\\|");
@@ -214,7 +214,8 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                     }
                 }
 
-                result = xmls[0] + "|";
+                // 엔터값 xml에서 지원하는 방식으로 치환
+                result = xmls[0].replace("∧│enter│∧", "&#10;") + "|";
                 // XML Document 문자열로 반환
                 result += convertXMLDocumentToString(document);
 
@@ -297,7 +298,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         // XML 저장 처리 ( MERGE INTO )
         if(tukeyGrpCd != null && tukeyGrpCd.length() > 0){
             param.put("tukeyGrpCd", tukeyGrpCd);
-            if ( keyMapper.getTouchKeyXml(param) != null ) {
+            /*if ( keyMapper.getTouchKeyXml(param) != null ) {
                 if( keyMapper.updateTouchKeyConfgXml(param) != 1 ) {
                     System.out.println("터치키 저장 에러 : updateTouchKeyConfgXml");
                     result = false;
@@ -311,15 +312,15 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                     result = false;
                     throw new BizException( messageService.get("cmm.registFail") );
                 }
-            }
+            }*/
         }else{
             tukeyGrpCd = keyMapper.getTouchKeyGrpCd(param);
             param.put("tukeyGrpCd", tukeyGrpCd);
-            if( keyMapper.insertTouchKeyConfgXml(param) != 1 ) {
+            /*if( keyMapper.insertTouchKeyConfgXml(param) != 1 ) {
                 System.out.println("터치키 저장 에러 : insertTouchKeyConfgXml2");
                 result = false;
                 throw new BizException( messageService.get("cmm.registFail") );
-            }
+            }*/
         }
 
         //XML 분석, TouchClass, Touch Domain 생성
@@ -347,8 +348,8 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         if(touchKeyClassVOS.size() == 0)
         {
             //터치키 XML
-            keyMapper.deleteTouchKeyConfgXml(param);
-            keyMapper.defaultTouchKeyConfgXml(param);
+            //keyMapper.deleteTouchKeyConfgXml(param);
+            //keyMapper.defaultTouchKeyConfgXml(param);
             //터치키 분류
             tcParams.setRegId(sessionInfoVO.getUserId());
             keyMapper.defaultTouchKeyClass(tcParams);

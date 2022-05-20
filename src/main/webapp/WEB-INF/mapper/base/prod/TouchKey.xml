@@ -1776,4 +1776,360 @@
         </choose>
     </insert>
 
+    <!-- 판매터치키 조회 - 데이터 기준으로 XML 만들기 -->
+    <!--
+        TABLE    : TB_HQ_TOUCH_KEY_CLASS, TB_HQ_TOUCH_KEY, TB_MS_TOUCH_KEY_CLASS, TB_MS_TOUCH_KEY
+        PARAM    : DefaultMap
+        COMMENTS :  판매터치키 조회 - 데이터 기준으로 XML 만들기
+    -->
+    <select id="getTouchKeyXmlByData" parameterType="DefaultMap" resultType="java.lang.String">
+        /* USE : ViewMapper.getTouchKeyXmlByData */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT CONCAT
+                (
+                    ( SELECT XMLElement("mxGraphModel"
+                                ,XMLElement("root"
+                                    ,XMLElement("mxCell",XMLAttributes(0 AS "id"))
+                                    ,XMLElement("mxCell",XMLAttributes(1 AS "id", 0 AS "parent"))
+                                    ,XMLAGG(XMLElement("mxCell"
+                                    ,XMLAttributes(id AS "id", TUKEY_CLASS_NM AS "value", style AS "style", parent AS "parent", vertex AS "vertex")
+                                    ,CASE WHEN X != 0 AND Y != 0 THEN
+                                            XMLElement("mxGeometry",XMLAttributes( x AS "x" , y AS "y" ,width AS "width",height AS "height",geometry AS "as" ))
+                                          WHEN X = 0 AND Y = 0 THEN
+                                            XMLElement("mxGeometry",XMLAttributes( width AS "width",height AS "height",geometry AS "as" ))
+                                          WHEN X != 0 AND Y = 0 THEN
+                                            XMLElement("mxGeometry",XMLAttributes( x AS "x" ,width AS "width",height AS "height",geometry AS "as" ))
+                                          WHEN X = 0 AND Y != 0 THEN
+                                            XMLElement("mxGeometry",XMLAttributes(  y AS "y" ,width AS "width",height AS "height",geometry AS "as" ))
+                                          ELSE
+                                            XMLElement("mxGeometry",XMLAttributes( x AS "x" , y AS "y" ,width AS "width",height AS "height",geometry AS "as" ))
+                                      END
+                             ) <!-- mxCell -->
+                             ) <!-- XMLAGG -->
+                             ) <!-- root -->
+                             ).getClobVal() <!-- mxGraphModel -->
+                        FROM (
+                                 SELECT 'G'||TO_CHAR(( RANK() OVER(ORDER BY TUKEY_GRP_CD, TUKEY_CLASS_CD ) ) + 1) ID
+                                        , REPLACE(REPLACE(TUKEY_CLASS_NM, CHR(10), '∧│enter│∧'), CHR(13), '∧│enter│∧') AS TUKEY_CLASS_NM
+                                        , 'classCd='||TUKEY_CLASS_CD
+                                        || ';rounded=0;styleCd='||STYLE_CD
+                                        || ';fillColor='||NVL(FILL_COLOR, FN_GET_TOUCH_KEY_STYLE(STYLE_CD, 'G', '01', 'BUTTON_OFF_COLOR'))
+                                        || ';fontColor='||NVL(FONT_COLOR, FN_GET_TOUCH_KEY_STYLE(STYLE_CD, 'G', '01', 'FONT_OFF_COLOR'))
+                                        || ';fontSize=' ||NVL(FONT_SIZE , FN_GET_TOUCH_KEY_STYLE(STYLE_CD, 'G', '01', 'FONT_SIZE'))
+                                        || ';' style
+                                        , '1' parent
+                                        , '1' vertex
+                                        , width
+                                        , height
+                                        , 'geometry' as geometry
+                                        , TUKEY_CLASS_CD
+                                        , X + (PAGE_NO-1) * 500 as x
+                                        , Y
+                                   FROM TB_HQ_TOUCH_KEY_CLASS
+                                  WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                    AND TUKEY_GRP_CD = #{tukeyGrpCd}
+                             )
+                  )
+                  ,
+                  '|' ||
+                  (  SELECT XMLElement("mxGraphModel"
+                                ,XMLElement("root"
+                                    ,XMLElement("mxCell",XMLAttributes('0' AS "id" ) )
+                                    ,XMLElement("mxCell",XMLAttributes('1' AS "id" ,'0' AS "parent" , '0' AS "visible" ) )
+                                    ,XMLAGG(CASE WHEN TUKEY_FG = '01' THEN <!-- (SELECT XMLAGG(XMLElement("mxCell",XMLAttributes(parent AS id ,parent AS value, '0' AS parent , '0' AS visible )) -->
+                                                   XMLElement("mxCell"
+                                                   ,XMLAttributes(id AS "id", style AS "style", parent AS "parent", vertex AS "vertex")
+                                                   ,XMLElement("mxGeometry", XMLAttributes(x AS "x", y AS "y", width AS "width", height AS "height", geometry AS "as")))
+                                                 WHEN TUKEY_FG = '02' THEN
+                                                   XMLElement("mxCell"
+                                                   ,XMLAttributes(id AS "id", PROD_NM AS "value", style AS "style", parent AS "parent", vertex AS "vertex")
+                                                   ,XMLElement("mxGeometry", XMLAttributes(x_NAME AS "x", y AS "y", width AS "width", height AS "height", geometry AS "as")))
+                                                 WHEN TUKEY_FG = '03' THEN
+                                                   XMLElement("mxCell"
+                                                   ,XMLAttributes(id AS "id", SALE_UPRC AS "value", style AS "style", parent AS "parent", vertex AS "vertex")
+                                                   ,XMLElement("mxGeometry", XMLAttributes(x_NAME AS "x", y AS "y", width AS "width", height AS "height", geometry AS "as")))
+                                                 WHEN TUKEY_FG = '99' THEN
+                                                   (
+                                                      SELECT XMLAGG(XMLElement("mxCell", XMLAttributes(id AS "id", id AS "value", '0' AS "parent", '0' AS "visible")))
+                                                        FROM (
+                                                               SELECT TUKEY_CLASS_NM, TUKEY_CLASS_CD
+                                                                      ,'G'||to_char((rank() over(order by TUKEY_GRP_CD, TUKEY_CLASS_CD )) + 1) id
+                                                                 FROM TB_HQ_TOUCH_KEY_CLASS
+                                                                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                                                  AND TUKEY_GRP_CD = #{tukeyGrpCd}
+                                                             )
+                                                   )
+                                                 ELSE NULL
+                                             END
+                            ) <!-- XMLAGG -->
+                            ) <!-- XMLElement -->
+                            ).getClobVal() <!-- XMLElement("mxGraphModel", -->
+                       FROM ( SELECT A.*
+                                     , C.PROD_NM
+                                     , B.SALE_UPRC
+                                FROM ( SELECT A.TUKEY_FG
+                                              , id
+                                              , CASE WHEN A.TUKEY_FG = '01' THEN
+                                                       'prodCd='||PROD_CD
+                                                       || ';styleCd='||STYLE_CD
+                                                       || ';tukeyFg='||A.TUKEY_FG
+                                                       || ';rounded=0'
+                                                       || ';fillColor='||NVL(FILL_COLOR, FN_GET_TOUCH_KEY_STYLE(STYLE_CD, 'P', A.TUKEY_FG, 'BUTTON_OFF_COLOR'))
+                                                       || ';fontColor='||NVL(FONT_COLOR, FN_GET_TOUCH_KEY_STYLE(STYLE_CD, 'P', A.TUKEY_FG, 'FONT_OFF_COLOR'))
+                                                       || ';fontSize='||NVL(FONT_SIZE, FN_GET_TOUCH_KEY_STYLE(STYLE_CD, 'P', A.TUKEY_FG, 'FONT_SIZE'))
+                                                       || ';'
+                                                     WHEN A.TUKEY_FG = '02' THEN <!-- prodCd=9000000000005;styleCd=02;tukeyFg=02;rounded=0;fillColor=#edf8ff;fontColor=#444444;fontSize=15; -->
+                                                       'prodCd='||PROD_CD
+                                                       || ';styleCd='||STYLE_CD
+                                                       || ';tukeyFg='||A.TUKEY_FG
+                                                       || ';rounded=0'
+                                                       || ';strokeColor=none;resizable=0;selectable=1;movable=0;align=left;verticalAlign=top;whiteSpace=wrap;overflow=hidden'
+                                                       || ';fillColor='||NVL(FILL_COLOR, FN_GET_TOUCH_KEY_STYLE(STYLE_CD, 'P', A.TUKEY_FG, 'BUTTON_OFF_COLOR'))
+                                                       || ';fontColor='||NVL(FONT_COLOR, FN_GET_TOUCH_KEY_STYLE(STYLE_CD, 'P', A.TUKEY_FG, 'FONT_OFF_COLOR'))
+                                                       || ';fontSize='||NVL(FONT_SIZE, FN_GET_TOUCH_KEY_STYLE(STYLE_CD, 'P', A.TUKEY_FG, 'FONT_SIZE'))
+                                                       || ';'
+                                                     WHEN A.TUKEY_FG = '03' THEN <!-- prodCd=9000000000005;styleCd=02;tukeyFg=03;rounded=0;fillColor=#edf8ff;fontColor=#0267fe;fontSize=15; -->
+                                                       'prodCd='||PROD_CD
+                                                       || ';styleCd='||STYLE_CD
+                                                       || ';tukeyFg='||A.TUKEY_FG
+                                                       || ';rounded=0'
+                                                       || ';strokeColor=none;resizable=0;selectable=1;movable=0;align:right'
+                                                       || ';fillColor='||NVL(FILL_COLOR, FN_GET_TOUCH_KEY_STYLE(STYLE_CD, 'P', A.TUKEY_FG, 'BUTTON_OFF_COLOR'))
+                                                       || ';fontColor='||NVL(FONT_COLOR, FN_GET_TOUCH_KEY_STYLE(STYLE_CD, 'P', A.TUKEY_FG, 'FONT_OFF_COLOR'))
+                                                       || ';fontSize='||NVL(FONT_SIZE, FN_GET_TOUCH_KEY_STYLE(STYLE_CD, 'P', A.TUKEY_FG, 'FONT_SIZE'))
+                                                       || ';'
+                                                     ELSE
+                                                       'TUKEY_FG NOT FOUND'
+                                                END AS style
+                                              , '1' vertex
+                                              , width
+                                              , height
+                                              , 'geometry' as geometry
+                                              , X + (PAGE_NO-1) * 500 as x
+                                              , X  as x_NAME   <!-- 상품명,가격 태그는 그대로 사용 -->
+                                              , y
+                                              , A.PROD_CD
+                                              , A.HQ_OFFICE_CD
+                                              , CASE WHEN A.ID = B.MIN_ID THEN
+                                                       FN_GET_TOUCH_KEY_CLASS_ID2_HQ (#{hqOfficeCd}, #{tukeyGrpCd}, A.TUKEY_CLASS_CD)
+                                                     ELSE
+                                                       TO_CHAR(B.MIN_ID)
+                                                 END PARENT
+                                         FROM ( SELECT rank() over(order by A.TUKEY_GRP_CD, A.TUKEY_CLASS_CD, A.TUKEY_CD, TO_NUMBER(A.TUKEY_FG)) + 1 id
+                                                       , A.*
+                                                  FROM TB_HQ_TOUCH_KEY A
+                                                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                                   AND TUKEY_GRP_CD = #{tukeyGrpCd}
+                                              ) A,
+                                              ( SELECT HQ_OFFICE_CD
+                                                       , TUKEY_GRP_CD
+                                                       , TUKEY_CLASS_CD
+                                                       , TUKEY_CD
+                                                       , MIN(PARENT) MIN_ID
+                                                  FROM ( SELECT HQ_OFFICE_CD
+                                                                , TUKEY_GRP_CD
+                                                                , TUKEY_CLASS_CD
+                                                                , TUKEY_CD
+                                                                , rank() over(order by TUKEY_GRP_CD, TUKEY_CLASS_CD, TUKEY_CD, TO_NUMBER(TUKEY_FG)) + 1 PARENT
+                                                           FROM TB_HQ_TOUCH_KEY
+                                                          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                                            AND TUKEY_GRP_CD = #{tukeyGrpCd})
+                                                          GROUP
+                                                             BY HQ_OFFICE_CD, TUKEY_GRP_CD, TUKEY_CLASS_CD, TUKEY_CD
+                                              ) B
+                                        WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+                                          AND A.TUKEY_GRP_CD = #{tukeyGrpCd}
+                                          AND A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                                          AND A.TUKEY_GRP_CD = B.TUKEY_GRP_CD
+                                          AND A.TUKEY_CLASS_CD = B.TUKEY_CLASS_CD
+                                          AND A.TUKEY_CD = B.TUKEY_CD
+                                     ) A, TB_HQ_PRODUCT_SALE_PRICE_V01 B, TB_HQ_PRODUCT C
+                               WHERE A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                                 AND A.PROD_CD  = B.PROD_CD
+                                 AND B.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                 AND A.HQ_OFFICE_CD = C.HQ_OFFICE_CD
+                                 AND A.PROD_CD = C.PROD_CD
+                               UNION
+                              SELECT '99', 0, '', '1', 0, 0, 'geometry', 0, 0, 0, '', #{hqOfficeCd}, '', '', 0 FROM DUAL
+                            )
+                     )
+                ) FROM DUAL
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT CONCAT
+                (
+                    ( SELECT XMLElement("mxGraphModel"
+                                ,XMLElement("root"
+                                    ,XMLElement("mxCell",XMLAttributes(0 AS "id"))
+                                    ,XMLElement("mxCell",XMLAttributes(1 AS "id", 0 AS "parent"))
+                                    ,XMLAGG(XMLElement("mxCell"
+                                    ,XMLAttributes(id AS "id", TUKEY_CLASS_NM AS "value", style AS "style", parent AS "parent", vertex AS "vertex")
+                                    ,CASE WHEN X != 0 AND Y != 0 THEN
+                                            XMLElement("mxGeometry",XMLAttributes( x AS "x" , y AS "y" ,width AS "width",height AS "height",geometry AS "as" ))
+                                          WHEN X = 0 AND Y = 0 THEN
+                                            XMLElement("mxGeometry",XMLAttributes( width AS "width",height AS "height",geometry AS "as" ))
+                                          WHEN X != 0 AND Y = 0 THEN
+                                            XMLElement("mxGeometry",XMLAttributes( x AS "x" ,width AS "width",height AS "height",geometry AS "as" ))
+                                          WHEN X = 0 AND Y != 0 THEN
+                                            XMLElement("mxGeometry",XMLAttributes(  y AS "y" ,width AS "width",height AS "height",geometry AS "as" ))
+                                          ELSE
+                                            XMLElement("mxGeometry",XMLAttributes( x AS "x" , y AS "y" ,width AS "width",height AS "height",geometry AS "as" ))
+                                     END
+                             ) <!-- mxCell -->
+                             ) <!-- XMLAGG -->
+                             ) <!-- root -->
+                             ).getClobVal() <!-- mxGraphModel -->
+                        FROM (
+                                 SELECT 'G'||TO_CHAR(( RANK() OVER(ORDER BY TUKEY_GRP_CD, TUKEY_CLASS_CD ) ) + 1) ID
+                                        , REPLACE(REPLACE(TUKEY_CLASS_NM, CHR(10), '∧│enter│∧'), CHR(13), '∧│enter│∧') AS TUKEY_CLASS_NM
+                                        , 'classCd='||TUKEY_CLASS_CD
+                                        || ';rounded=0;styleCd='||STYLE_CD
+                                        || ';fillColor='||NVL(FILL_COLOR, FN_GET_TOUCH_KEY_STYLE(STYLE_CD, 'G', '01', 'BUTTON_OFF_COLOR'))
+                                        || ';fontColor='||NVL(FONT_COLOR, FN_GET_TOUCH_KEY_STYLE(STYLE_CD, 'G', '01', 'FONT_OFF_COLOR'))
+                                        || ';fontSize=' ||NVL(FONT_SIZE , FN_GET_TOUCH_KEY_STYLE(STYLE_CD, 'G', '01', 'FONT_SIZE'))
+                                        || ';' style
+                                        , '1' parent
+                                        , '1' vertex
+                                        , width
+                                        , height
+                                        , 'geometry' as geometry
+                                        , TUKEY_CLASS_CD
+                                        , X + (PAGE_NO-1) * 500 as x
+                                        , Y
+                                   FROM TB_MS_TOUCH_KEY_CLASS
+                                  WHERE STORE_CD = #{storeCd}
+                                    AND TUKEY_GRP_CD = #{tukeyGrpCd}
+                              )
+                    )
+                    ,
+                    '|' ||
+                    (  SELECT XMLElement("mxGraphModel"
+                                ,XMLElement("root"
+                                     ,XMLElement("mxCell",XMLAttributes('0' AS "id" ) )
+                                     ,XMLElement("mxCell",XMLAttributes('1' AS "id" ,'0' AS "parent" , '0' AS "visible" ) )
+                                     ,XMLAGG(CASE WHEN TUKEY_FG = '01' THEN <!-- (SELECT XMLAGG(XMLElement("mxCell",XMLAttributes(parent AS id ,parent AS value, '0' AS parent , '0' AS visible )) -->
+                                                    XMLElement("mxCell"
+                                                    ,XMLAttributes(id AS "id", style AS "style", parent AS "parent", vertex AS "vertex")
+                                                    ,XMLElement("mxGeometry", XMLAttributes(x AS "x", y AS "y", width AS "width", height AS "height", geometry AS "as")))
+                                                  WHEN TUKEY_FG = '02' THEN
+                                                    XMLElement("mxCell"
+                                                    ,XMLAttributes(id AS "id", PROD_NM AS "value", style AS "style", parent AS "parent", vertex AS "vertex")
+                                                    ,XMLElement("mxGeometry", XMLAttributes(x_NAME AS "x", y AS "y", width AS "width", height AS "height", geometry AS "as")))
+                                                  WHEN TUKEY_FG = '03' THEN
+                                                    XMLElement("mxCell"
+                                                    ,XMLAttributes(id AS "id", SALE_UPRC AS "value", style AS "style", parent AS "parent", vertex AS "vertex")
+                                                    ,XMLElement("mxGeometry", XMLAttributes(x_NAME AS "x", y AS "y", width AS "width", height AS "height", geometry AS "as")))
+                                                  WHEN TUKEY_FG = '99' THEN
+                                                    (
+                                                      SELECT XMLAGG(XMLElement("mxCell", XMLAttributes(id AS "id", id AS "value", '0' AS "parent", '0' AS "visible")))
+                                                        FROM (
+                                                               SELECT TUKEY_CLASS_NM, TUKEY_CLASS_CD
+                                                                      ,'G'||to_char((rank() over(order by TUKEY_GRP_CD, TUKEY_CLASS_CD )) + 1) id
+                                                                 FROM TB_MS_TOUCH_KEY_CLASS
+                                                                WHERE STORE_CD = #{storeCd}
+                                                                  AND TUKEY_GRP_CD = #{tukeyGrpCd}
+                                                             )
+                                                    )
+                                                  ELSE NULL
+                                              END
+                            ) <!-- XMLAGG -->
+                            ) <!-- XMLElement -->
+                            ).getClobVal() <!-- XMLElement("mxGraphModel", -->
+                       FROM ( SELECT A.*
+                                     , C.PROD_NM
+                                     , B.SALE_UPRC
+                                FROM ( SELECT A.TUKEY_FG
+                                              ,id
+                                              ,CASE WHEN A.TUKEY_FG = '01' THEN
+                                                      'prodCd='||PROD_CD
+                                                      || ';styleCd='||STYLE_CD
+                                                      || ';tukeyFg='||A.TUKEY_FG
+                                                      || ';rounded=0'
+                                                      || ';fillColor='||NVL(FILL_COLOR, FN_GET_TOUCH_KEY_STYLE(STYLE_CD, 'P', A.TUKEY_FG, 'BUTTON_OFF_COLOR'))
+                                                      || ';fontColor='||NVL(FONT_COLOR, FN_GET_TOUCH_KEY_STYLE(STYLE_CD, 'P', A.TUKEY_FG, 'FONT_OFF_COLOR'))
+                                                      || ';fontSize='||NVL(FONT_SIZE, FN_GET_TOUCH_KEY_STYLE(STYLE_CD, 'P', A.TUKEY_FG, 'FONT_SIZE'))
+                                                      || ';'
+                                                    WHEN A.TUKEY_FG = '02' THEN <!-- prodCd=9000000000005;styleCd=02;tukeyFg=02;rounded=0;fillColor=#edf8ff;fontColor=#444444;fontSize=15; -->
+                                                      'prodCd='||PROD_CD
+                                                      || ';styleCd='||STYLE_CD
+                                                      || ';tukeyFg='||A.TUKEY_FG
+                                                      || ';rounded=0'
+                                                      || ';strokeColor=none;resizable=0;selectable=1;movable=0;align=left;verticalAlign=top;whiteSpace=wrap;overflow=hidden'
+                                                      || ';fillColor='||NVL(FILL_COLOR, FN_GET_TOUCH_KEY_STYLE(STYLE_CD, 'P', A.TUKEY_FG, 'BUTTON_OFF_COLOR'))
+                                                      || ';fontColor='||NVL(FONT_COLOR, FN_GET_TOUCH_KEY_STYLE(STYLE_CD, 'P', A.TUKEY_FG, 'FONT_OFF_COLOR'))
+                                                      || ';fontSize='||NVL(FONT_SIZE, FN_GET_TOUCH_KEY_STYLE(STYLE_CD, 'P', A.TUKEY_FG, 'FONT_SIZE'))
+                                                      || ';'
+                                                    WHEN A.TUKEY_FG = '03' THEN <!-- prodCd=9000000000005;styleCd=02;tukeyFg=03;rounded=0;fillColor=#edf8ff;fontColor=#0267fe;fontSize=15; -->
+                                                      'prodCd='||PROD_CD
+                                                      || ';styleCd='||STYLE_CD
+                                                      || ';tukeyFg='||A.TUKEY_FG
+                                                      || ';rounded=0'
+                                                      || ';strokeColor=none;resizable=0;selectable=1;movable=0;align:right'
+                                                      || ';fillColor='||NVL(FILL_COLOR, FN_GET_TOUCH_KEY_STYLE(STYLE_CD, 'P', A.TUKEY_FG, 'BUTTON_OFF_COLOR'))
+                                                      || ';fontColor='||NVL(FONT_COLOR, FN_GET_TOUCH_KEY_STYLE(STYLE_CD, 'P', A.TUKEY_FG, 'FONT_OFF_COLOR'))
+                                                      || ';fontSize='||NVL(FONT_SIZE, FN_GET_TOUCH_KEY_STYLE(STYLE_CD, 'P', A.TUKEY_FG, 'FONT_SIZE'))
+                                                      || ';'
+                                                    ELSE
+                                                      'TUKEY_FG NOT FOUND'
+                                                END AS style
+                                              , '1' vertex
+                                              , width
+                                              , height
+                                              , 'geometry' as geometry
+                                              , X + (PAGE_NO-1) * 500 as x
+                                              , X  as x_NAME   <!-- 상품명,가격 태그는 그대로 사용 -->
+                                              , y
+                                              , A.PROD_CD
+                                              , A.STORE_CD
+                                              , CASE WHEN A.ID = B.MIN_ID THEN
+                                                       FN_GET_TOUCH_KEY_CLASS_ID2_MS (#{storeCd}, #{tukeyGrpCd}, A.TUKEY_CLASS_CD)
+                                                     ELSE
+                                                       TO_CHAR(B.MIN_ID)
+                                                 END PARENT
+                                         FROM ( SELECT rank() over(order by A.TUKEY_GRP_CD, A.TUKEY_CLASS_CD, A.TUKEY_CD, TO_NUMBER(A.TUKEY_FG)) + 1 id
+                                                       , A.*
+                                                  FROM TB_MS_TOUCH_KEY A
+                                                 WHERE STORE_CD = #{storeCd}
+                                                   AND TUKEY_GRP_CD = #{tukeyGrpCd}
+                                              ) A,
+                                              ( SELECT STORE_CD
+                                                       , TUKEY_GRP_CD
+                                                       , TUKEY_CLASS_CD
+                                                       , TUKEY_CD
+                                                       , MIN(PARENT) MIN_ID
+                                                  FROM ( SELECT STORE_CD
+                                                                , TUKEY_GRP_CD
+                                                                , TUKEY_CLASS_CD
+                                                                , TUKEY_CD
+                                                                , rank() over(order by TUKEY_GRP_CD, TUKEY_CLASS_CD, TUKEY_CD, TO_NUMBER(TUKEY_FG)) + 1 PARENT
+                                                           FROM TB_MS_TOUCH_KEY
+                                                          WHERE STORE_CD = #{storeCd}
+                                                            AND TUKEY_GRP_CD = #{tukeyGrpCd})
+                                                          GROUP
+                                                             BY STORE_CD, TUKEY_GRP_CD, TUKEY_CLASS_CD, TUKEY_CD
+                                              ) B
+                                        WHERE A.STORE_CD = #{storeCd}
+                                          AND A.TUKEY_GRP_CD = #{tukeyGrpCd}
+                                          AND A.STORE_CD = B.STORE_CD
+                                          AND A.TUKEY_GRP_CD = B.TUKEY_GRP_CD
+                                          AND A.TUKEY_CLASS_CD = B.TUKEY_CLASS_CD
+                                          AND A.TUKEY_CD = B.TUKEY_CD
+                                      ) A, TB_MS_PRODUCT_SALE_PRICE_V01 B, TB_MS_PRODUCT C
+                                WHERE A.STORE_CD = B.STORE_CD
+                                  AND A.PROD_CD  = B.PROD_CD
+                                  AND B.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                  AND A.STORE_CD = C.STORE_CD
+                                  AND A.PROD_CD = C.PROD_CD
+                                UNION
+                               SELECT '99', 0, '', '1', 0, 0, 'geometry', 0, 0, 0, '', #{storeCd}, '', '', 0 FROM DUAL
+                           )
+                    )
+               ) FROM DUAL
+            </when>
+        </choose>
+    </select>
+
 </mapper>
