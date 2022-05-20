@@ -116,19 +116,39 @@ app.controller('installRegistCtrl', ['$scope', '$http', function ($scope, $http)
     if(params.length == 0) {
       $scope._popMsg("설치요청할 POS를 선택해주세요.");
       return false;
+    } else {
+
+        // 신규설치는 한번만 가능 + POS한대에 한개의 설치건만 등록 가능
+        $.postJSONArray("/pos/install/installManage/installManage/getInstallRequestChk.sb", params, function (result) {
+
+                // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+                $scope._save('/pos/install/installManage/installManage/saveInstallRequest.sb', params, function(){
+                    // $scope.searchSalePriceList();
+
+                    $scope.getPosList(); // 리스트 초기화
+
+                    $("#agencyNm").val("선택");
+                    $("#agencyCd").val("");
+                    $scope.request.instReason = "";
+                    $scope.request.remark = "";
+                });
+            },
+            function (result) {
+                if(instReason === "001"){
+                    $scope._popMsg(messages["instl.instalChk1"]);
+                    return false;
+                } else {
+                    if(result.data == -1){
+                        $scope._popMsg(messages["instl.instalChk3"]);
+                        return false;
+                    } else {
+                        $scope._popMsg(messages["instl.instalChk2"]);
+                        return false;
+                    }
+                }
+            });
     }
 
-    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save('/pos/install/installManage/installManage/saveInstallRequest.sb', params, function(){
-      // $scope.searchSalePriceList();
-
-      $scope.getPosList(); // 리스트 초기화
-
-      $("#agencyNm").val("선택");
-      $("#agencyCd").val("");
-      $scope.request.instReason = "";
-      $scope.request.remark = "";
-    });
   };
 
 

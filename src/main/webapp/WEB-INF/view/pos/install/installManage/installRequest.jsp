@@ -172,5 +172,5 @@
 <script>
   var reasonData = ${ccu.getCommCodeExcpAll("102")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/install/installManage/installRequest.js?ver=2019010302.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/install/installManage/installRequest.js?ver=2019010302.06" charset="utf-8"></script>
 

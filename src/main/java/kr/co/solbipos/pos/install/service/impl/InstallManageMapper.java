@@ -39,4 +39,7 @@ public interface InstallManageMapper {
     /** 포스 H/W인증키 초기화 */
     int initPosHwKey(InstallVO installVO);
 
+    /** 설치요청 체크 */
+    int getInstallRequestChk(InstallVO installVO);
+
 }
