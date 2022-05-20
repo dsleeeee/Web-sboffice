@@ -116,7 +116,7 @@
         is-editable="false"
         initialized="_initComboBox(s)">
       </wj-combo-box>
-      <span class="s12 fl">※ 기준 년월로부터 매장 등록한지 3개월 이상이고, 3개월 동안 매출 자료가 발생되지 않아 익월 자동으로 폐점될 매장 목록입니다.</span>
+      <span class="s12 fl">※ 기준 년월로부터 매장 등록한지 3개월 이상이고, 1개월 동안 매출 자료가 발생되지 않아 익월 자동으로 폐점될 매장 목록입니다.</span>
 
       <%-- 엑셀 다운로드 //TODO --%>
       <%--<button id="btnExcel" class="btn_skyblue fr"><s:message code="cmm.excel.down" /></button>--%>
