@@ -144,7 +144,7 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
         } else {
             params.prcCtrlFg = "S";
         }
-        params.depositCupFg = "";
+        params.depositCupFg = "선택";
 
         for(var i = 0; i < rowsCount; i++) {
             // 추가기능 수행 : 파라미터
@@ -260,6 +260,21 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
 
             // <-- 검증 -->
             var result = "";
+
+            // 상품유형 보증금일때
+            if($scope.flex.collectionView.items[i].prodTypeFg === "4"){
+                $scope.flex.collectionView.items[i].vatFg = "2";
+                if($scope.flex.collectionView.items[i].depositCupFg === "" || $scope.flex.collectionView.items[i].depositCupFg === null || $scope.flex.collectionView.items[i].depositCupFg === "선택"){
+                    result = messages["simpleProd.depositCupFg.None"];
+                }
+            } else {
+                if($scope.flex.collectionView.items[i].saleUprc !== "" && $scope.flex.collectionView.items[i].saleUprc !== null){
+                    console.log($scope.flex.collectionView.items[i].depositCupFg);
+                    if($scope.flex.collectionView.items[i].depositCupFg !== ""  && $scope.flex.collectionView.items[i].depositCupFg !== null && $scope.flex.collectionView.items[i].depositCupFg !== "선택"){
+                        result = messages["simpleProd.depositCupFg.Chk"];
+                    }
+                }
+            }
 
             // 바코드
             if($scope.flex.collectionView.items[i].barCd === "" || $scope.flex.collectionView.items[i].barCd === null) {
@@ -446,17 +461,6 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
                 }
             }
 
-            // 상품유형 보증금일때
-            if($scope.flex.collectionView.items[i].prodTypeFg === "4"){
-                $scope.flex.collectionView.items[i].vatFg = "2";
-                if($scope.flex.collectionView.items[i].depositCupFg === "" || $scope.flex.collectionView.items[i].depositCupFg === null){
-                    result = messages["simpleProd.depositCupFg.None"];
-                }
-            } else {
-                if($scope.flex.collectionView.items[i].depositCupFg !== "" && $scope.flex.collectionView.items[i].prodNm !== "" && $scope.flex.collectionView.items[i].prodNm !== null){
-                    result = messages["simpleProd.depositCupFg.Chk"];
-                }
-            }
 
             $scope.flex.collectionView.items[i].result = result;
             // <-- //검증 -->

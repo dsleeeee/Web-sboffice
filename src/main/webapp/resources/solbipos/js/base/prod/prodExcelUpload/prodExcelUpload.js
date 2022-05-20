@@ -324,6 +324,19 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
                 // 최대길이 체크
                 if(nvl($scope.flex.collectionView.items[i].remark, '').getByteLengthForOracle() > 500) { result = messages["prodExcelUpload.remarkLengthChk"]; } // 비고 길이가 너무 깁니다.
             }
+            
+            // 상품유형 보증금일때
+            if($scope.flex.collectionView.items[i].prodTypeFg === "4"){
+                $scope.flex.collectionView.items[i].vatFg = "2";
+                if($scope.flex.collectionView.items[i].depositCupFg === "" || $scope.flex.collectionView.items[i].depositCupFg === null || $scope.flex.collectionView.items[i].depositCupFg === "선택"){
+                    result = messages["prodExcelUpload.depositCupFg.None"];
+                }
+            } else {
+                console.log($scope.flex.collectionView.items[i].depositCupFg);
+                if($scope.flex.collectionView.items[i].depositCupFg !== "" && $scope.flex.collectionView.items[i].depositCupFg !== null && $scope.flex.collectionView.items[i].depositCupFg !== undefined && $scope.flex.collectionView.items[i].depositCupFg !== "선택"){
+                    result = messages["prodExcelUpload.depositCupFg.Chk"];
+                }
+            }
 
             // 바코드
             if($scope.flex.collectionView.items[i].barCd === "" || $scope.flex.collectionView.items[i].barCd === null) {
@@ -521,19 +534,6 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
                             }
                         }
                     }
-                }
-            }
-
-            // 상품유형 보증금일때
-            if($scope.flex.collectionView.items[i].prodTypeFg === "4"){
-                $scope.flex.collectionView.items[i].vatFg = "2";
-                if($scope.flex.collectionView.items[i].depositCupFg === "" || $scope.flex.collectionView.items[i].depositCupFg === null){
-                    result = messages["prodExcelUpload.depositCupFg.None"];
-                }
-            } else {
-                console.log($scope.flex.collectionView.items[i].depositCupFg);
-                if($scope.flex.collectionView.items[i].depositCupFg !== "" && $scope.flex.collectionView.items[i].depositCupFg !== null && $scope.flex.collectionView.items[i].depositCupFg !== undefined){
-                    result = messages["prodExcelUpload.depositCupFg.Chk"];
                 }
             }
 
