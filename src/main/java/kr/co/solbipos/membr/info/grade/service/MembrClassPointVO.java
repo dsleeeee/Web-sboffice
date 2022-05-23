@@ -28,7 +28,7 @@ public class MembrClassPointVO extends CmmVO {
     /**
      * [적립율]
      */
-    private Integer accRate;
+    private float accRate;
     /**
      * [비고]
      */
@@ -90,13 +90,13 @@ public class MembrClassPointVO extends CmmVO {
     /**
      * @return the accRate
      */
-    public Integer getAccRate() {
+    public float getAccRate() {
         return accRate;
     }
     /**
      * @param accRate the useYn to set
      */
-    public void setAccRate(Integer accRate) {
+    public void setAccRate(float accRate) {
         this.accRate = accRate;
     }
 
