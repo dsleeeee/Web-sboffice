@@ -21,8 +21,29 @@ public class SmsChargeVO extends PageVO {
 
     private static final long serialVersionUID = 4567094904301269212L;
 
+    /**
+     * 소속구분
+     * M : 시스템
+     * A : 대리점
+     * H : 본사
+     * S : 매장, 가맹점
+     */
+    private String orgnFg;
+
     /** 소속코드 */
     private String orgnCd;
+
+    /** 소속명 */
+    private String orgnNm;
+
+    /** 소속코드 */
+    private String srchOrgnCd;
+
+    /** 소속명 */
+    private String srchOrgnNm;
+
+    /** 소속구분 */
+    private String srchOrgnFg;
 
     /** 충전일자 */
     private String chargeDate;
@@ -90,9 +111,35 @@ public class SmsChargeVO extends PageVO {
     /** 0이하시 SMS전송여부 */
     private String zeroSmsAmtYn;
 
+    /** 메세지타입 */
+    private String msgType;
+
+    /** 메세지별 건당금액 */
+    private String msgOneAmt;
+
+    public String getOrgnFg() { return orgnFg; }
+
+    public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
+
     public String getOrgnCd() { return orgnCd; }
 
     public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }
+
+    public String getOrgnNm() { return orgnNm; }
+
+    public void setOrgnNm(String orgnNm) { this.orgnNm = orgnNm; }
+
+    public String getSrchOrgnCd() { return srchOrgnCd; }
+
+    public void setSrchOrgnCd(String srchOrgnCd) { this.srchOrgnCd = srchOrgnCd; }
+
+    public String getSrchOrgnNm() { return srchOrgnNm; }
+
+    public void setSrchOrgnNm(String srchOrgnNm) { this.srchOrgnNm = srchOrgnNm; }
+
+    public String getSrchOrgnFg() { return srchOrgnFg; }
+
+    public void setSrchOrgnFg(String srchOrgnFg) { this.srchOrgnFg = srchOrgnFg; }
 
     public String getChargeDate() { return chargeDate; }
 
@@ -181,4 +228,12 @@ public class SmsChargeVO extends PageVO {
     public String getZeroSmsAmtYn() { return zeroSmsAmtYn; }
 
     public void setZeroSmsAmtYn(String zeroSmsAmtYn) { this.zeroSmsAmtYn = zeroSmsAmtYn; }
+
+    public String getMsgType() { return msgType; }
+
+    public void setMsgType(String msgType) { this.msgType = msgType; }
+
+    public String getMsgOneAmt() { return msgOneAmt; }
+
+    public void setMsgOneAmt(String msgOneAmt) { this.msgOneAmt = msgOneAmt; }
 }

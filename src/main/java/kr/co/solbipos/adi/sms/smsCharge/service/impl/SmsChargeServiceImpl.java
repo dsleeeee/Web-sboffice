@@ -203,4 +203,44 @@ public class SmsChargeServiceImpl implements SmsChargeService {
 
         return procCnt;
     }
+
+    /** 전송요금설정 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getMsgOneAmtSettingList(SmsChargeVO smsChargeVO, SessionInfoVO sessionInfoVO) {
+
+        return smsChargeMapper.getMsgOneAmtSettingList(smsChargeVO);
+    }
+
+    /** 전송요금설정 - 상세 조회 */
+    @Override
+    public List<DefaultMap<Object>> getMsgOneAmtSettingDetailList(SmsChargeVO smsChargeVO, SessionInfoVO sessionInfoVO) {
+
+        return smsChargeMapper.getMsgOneAmtSettingDetailList(smsChargeVO);
+    }
+
+    /** 전송요금설정 - 상세 저장 */
+    @Override
+    public int getMsgOneAmtSettingDetailSave(SmsChargeVO[] smsChargeVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(SmsChargeVO smsChargeVO : smsChargeVOs) {
+            smsChargeVO.setRegDt(currentDt);
+            smsChargeVO.setRegId(sessionInfoVO.getUserId());
+            smsChargeVO.setModDt(currentDt);
+            smsChargeVO.setModId(sessionInfoVO.getUserId());
+
+            procCnt = smsChargeMapper.getMsgOneAmtSettingDetailSaveMerge(smsChargeVO);
+        }
+
+        return procCnt;
+    }
+
+    /** 전송요금설정 - 건당금액(기본값) 조회 */
+    @Override
+    public DefaultMap<String> getMsgOneAmtBaseList(SmsChargeVO smsChargeVO, SessionInfoVO sessionInfoVO) {
+
+        return smsChargeMapper.getMsgOneAmtGuideList(smsChargeVO);
+    }
 }

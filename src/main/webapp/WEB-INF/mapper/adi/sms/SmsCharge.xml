@@ -69,9 +69,7 @@
         FN_GET_SMS_UPRC('LMS', #{orgnCd}) AS LMS_ONE_AMT,
         FN_GET_SMS_UPRC('MMS', #{orgnCd}) AS MMS_ONE_AMT,
         FN_GET_SMS_UPRC('ALK', #{alkChargeOrgnCd}) AS ALK_ONE_AMT,
-        FN_GET_SMS_UPRC('ALK_SMS', #{alkChargeOrgnCd}) AS ALK_SMS_ONE_AMT,
-        FN_GET_SMS_UPRC('ALK_LMS', #{alkChargeOrgnCd}) AS ALK_LMS_ONE_AMT,
-        FN_GET_SMS_UPRC('ALK_MMS', #{alkChargeOrgnCd}) AS ALK_MMS_ONE_AMT
+        FN_GET_SMS_UPRC('ALK_LMS', #{alkChargeOrgnCd}) AS ALK_LMS_ONE_AMT
         FROM dual
     </select>
 
@@ -140,5 +138,161 @@
                 ''
             )
     </insert>
+
+    <!-- 전송요금설정 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMsgOneAmtSettingList"  parameterType="SmsChargeVO" resultType="DefaultMap">
+        /* SmsChargeMapper.getMsgOneAmtSettingList */
+        SELECT
+        twuidv01.ORGN_FG,
+        twuidv01.ORGN_CD,
+        twuidv01.ORGN_NM
+        FROM
+        (
+            SELECT
+            DECODE(twuidv01.ORGN_FG, 'A', 'M', twuidv01.ORGN_FG) AS ORGN_FG,
+            twuidv01.ORGN_CD,
+            twuidv01.ORGN_NM,
+            twuidv01.HQ_OFFICE_CD,
+            twuidv01.STORE_CD
+            FROM TB_WB_USER_INFO_DTL_V01 twuidv01
+            WHERE 1=1
+            <if test='srchOrgnCd != null and srchOrgnCd != ""'>
+                AND twuidv01.ORGN_CD LIKE '%'||#{srchOrgnCd}||'%'
+            </if>
+            <if test='srchOrgnNm != null and srchOrgnNm != ""'>
+                AND twuidv01.ORGN_NM LIKE '%'||#{orgnNm}||'%'
+            </if>
+            <if test='srchOrgnFg != null and srchOrgnFg != ""'>
+                AND twuidv01.ORGN_FG = #{srchOrgnFg}
+            </if>
+            AND twuidv01.ORGN_CD NOT IN ('0000000')
+            GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.STORE_CD
+        ) twuidv01
+        WHERE 1=1
+        GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.STORE_CD
+        ORDER BY twuidv01.ORGN_FG
+    </select>
+
+    <!-- 전송요금설정 - 상세 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMsgOneAmtSettingDetailList"  parameterType="SmsChargeVO" resultType="DefaultMap">
+        /* SmsChargeMapper.getMsgOneAmtSettingDetailList */
+        SELECT
+        #{orgnCd} AS ORGN_CD,
+        MSG_TYPE,
+        MSG_ONE_AMT
+        FROM
+        (
+            SELECT *
+            FROM
+            (
+                SELECT
+                'SMS' AS MSG_TYPE,
+                FN_GET_SMS_UPRC('SMS', #{orgnCd}) AS MSG_ONE_AMT
+                FROM dual
+            )
+            UNION ALL
+            (
+                SELECT
+                'LMS' AS MSG_TYPE,
+                FN_GET_SMS_UPRC('LMS', #{orgnCd}) AS MSG_ONE_AMT
+                FROM dual
+            )
+            UNION ALL
+            (
+                SELECT
+                'MMS' AS MSG_TYPE,
+                FN_GET_SMS_UPRC('MMS', #{orgnCd}) AS MSG_ONE_AMT
+                FROM dual
+            )
+            UNION ALL
+            (
+                SELECT
+                'ALK' AS MSG_TYPE,
+                FN_GET_SMS_UPRC('ALK', #{orgnCd}) AS MSG_ONE_AMT
+                FROM dual
+            )
+            UNION ALL
+            (
+                SELECT
+                'ALK_LMS' AS MSG_TYPE,
+                FN_GET_SMS_UPRC('ALK_LMS', #{orgnCd}) AS MSG_ONE_AMT
+                FROM dual
+            )
+        )
+    </select>
+
+    <!-- 전송요금설정 - 상세 저장 merge -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getMsgOneAmtSettingDetailSaveMerge" parameterType="SmsChargeVO">
+        /* SmsChargeMapper.getMsgOneAmtSettingDetailSaveMerge */
+        MERGE INTO TB_CM_NMCODE
+        USING DUAL
+        ON  (
+                NMCODE_GRP_CD = '222' AND NMCODE_NM = #{msgType} AND NMCODE_ITEM_1 = #{orgnCd}
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            NMCODE_ITEM_2 = #{msgOneAmt},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+            INSERT (
+                NMCODE_GRP_CD,
+                NMCODE_CD,
+                PARENT_CD,
+                NMCODE_NM,
+                NMCODE_ITEM_1,
+                NMCODE_ITEM_2,
+                USE_COL_NM,
+                USE_TARGET_FG,
+                USE_SYSTEM_FG,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            ) VALUES (
+                '222',
+                LPAD( (SELECT MAX(NMCODE_CD)+1 FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '222') , 3, '0'),
+                '222',
+                #{msgType},
+                #{orgnCd},
+                TRIM(#{msgOneAmt}),
+                '',
+                'A',
+                'C',
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
+    </insert>
+
+    <!-- 전송요금설정 - 건당금액(기본값) 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMsgOneAmtBaseList" parameterType="SmsChargeVO" resultType="DefaultMap">
+        /* SmsChargeMapper.getMsgOneAmtBaseList */
+        SELECT
+        FN_GET_SMS_UPRC('SMS', '') AS SMS_ONE_AMT, -- TB_CM_NMCODE.NMCODE_GRP_CD = '222'
+        FN_GET_SMS_UPRC('LMS', '') AS LMS_ONE_AMT,
+        FN_GET_SMS_UPRC('MMS', '') AS MMS_ONE_AMT,
+        FN_GET_SMS_UPRC('ALK', '') AS ALK_ONE_AMT,
+        FN_GET_SMS_UPRC('ALK_LMS', '') AS ALK_LMS_ONE_AMT
+        FROM dual
+    </select>
 
 </mapper>

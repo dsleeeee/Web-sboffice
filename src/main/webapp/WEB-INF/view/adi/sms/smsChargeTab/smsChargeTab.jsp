@@ -4,6 +4,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<%--<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>--%>
 <c:set var="baseUrl" value="/adi/sms/smsChargeTab"/>
 
 <div class="con">
@@ -17,6 +18,12 @@
             <li>
                 <a id="smsChargeHistTab" href="#" ng-click="smsChargeHistShow()"><s:message code="smsChargeTab.smsChargeHist"/></a>
             </li>
+            <%--<c:if test="${orgnFg == 'MASTER'}">--%>
+                <%--&lt;%&ndash; 전송요금설정 탭 &ndash;%&gt;--%>
+                <%--<li>--%>
+                    <%--<a id="msgOneAmtSettingTab" href="#" ng-click="msgOneAmtSettingShow()"><s:message code="smsChargeTab.msgOneAmtSetting"/></a>--%>
+                <%--</li>--%>
+            <%--</c:if>--%>
         </ul>
     </div>
 </div>
@@ -27,7 +34,7 @@
     var pageGubunVal = "sms"; // 페이지구분
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeTab/smsChargeTab.js?ver=20220321.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeTab/smsChargeTab.js?ver=20220519.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- SMS충전/KCP PG 레이어 --%>
@@ -38,6 +45,12 @@
 
 <%-- SMS충전내역 레이어 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsChargeHist/smsChargeHist.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 전송요금설정 레이어 --%>
+<c:import url="/WEB-INF/view/adi/sms/smsCharge/msgOneAmtSetting.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
