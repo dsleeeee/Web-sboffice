@@ -43,4 +43,16 @@ public interface SmsChargeMapper {
 
     /** 잔여금액 알림 설정 팝업 - 저장 merge */
     int getRestSmsAmtAlimSettingSaveMerge(SmsChargeVO smsChargeVO);
+
+    /** 전송요금설정 - 조회 */
+    List<DefaultMap<Object>> getMsgOneAmtSettingList(SmsChargeVO smsChargeVO);
+
+    /** 전송요금설정 - 상세 조회 */
+    List<DefaultMap<Object>> getMsgOneAmtSettingDetailList(SmsChargeVO smsChargeVO);
+
+    /** 전송요금설정 - 상세 저장 merge */
+    int getMsgOneAmtSettingDetailSaveMerge(SmsChargeVO smsChargeVO);
+
+    /** 전송요금설정 - 건당금액(기본값) 조회 */
+    DefaultMap<String> getMsgOneAmtBaseList(SmsChargeVO smsChargeVO);
 }

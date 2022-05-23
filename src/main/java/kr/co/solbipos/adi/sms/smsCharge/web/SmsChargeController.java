@@ -214,4 +214,100 @@ public class SmsChargeController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 전송요금설정 - 조회
+     *
+     * @param smsChargeVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 05. 17.
+     */
+    @RequestMapping(value = "/msgOneAmtSetting/getMsgOneAmtSettingList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMsgOneAmtSettingList(SmsChargeVO smsChargeVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = smsChargeService.getMsgOneAmtSettingList(smsChargeVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, smsChargeVO);
+    }
+
+    /**
+     * 전송요금설정 - 상세 조회
+     *
+     * @param smsChargeVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 05. 17.
+     */
+    @RequestMapping(value = "/msgOneAmtSetting/getMsgOneAmtSettingDetailList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMsgOneAmtSettingDetailList(SmsChargeVO smsChargeVO, HttpServletRequest request,
+                                          HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = smsChargeService.getMsgOneAmtSettingDetailList(smsChargeVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, smsChargeVO);
+    }
+
+    /**
+     * 전송요금설정 - 상세 저장
+     *
+     * @param smsChargeVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 05. 18.
+     */
+    @RequestMapping(value = "/msgOneAmtSetting/getMsgOneAmtSettingDetailSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMsgOneAmtSettingDetailSave(@RequestBody SmsChargeVO[] smsChargeVOs, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = smsChargeService.getMsgOneAmtSettingDetailSave(smsChargeVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 전송요금설정 - 건당금액(기본값) 조회
+     *
+     * @param smsChargeVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 05. 19.
+     */
+    @RequestMapping(value = "/msgOneAmtSetting/getMsgOneAmtBaseList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMsgOneAmtBaseList(SmsChargeVO smsChargeVO, HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<String> result = smsChargeService.getMsgOneAmtBaseList(smsChargeVO, sessionInfoVO);
+
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+        resultMap.put("result", result);
+
+        return returnJson(Status.OK, resultMap);
+    }
+
 }

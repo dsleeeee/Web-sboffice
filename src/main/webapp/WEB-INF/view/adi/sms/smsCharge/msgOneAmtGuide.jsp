@@ -61,15 +61,6 @@
                         <input type="text" class="sb-input w100" id="msgOneAmtGuideAlkOneAmt" ng-model="alkOneAmt" readonly />
                     </td>
                 </tr>
-                <%--<tr>--%>
-                    <%--&lt;%&ndash; 알림톡SMS &ndash;%&gt;--%>
-                    <%--<th>--%>
-                        <%--<s:message code="msgOneAmtGuide.alkSms" />--%>
-                    <%--</th>--%>
-                    <%--<td>--%>
-                        <%--<input type="text" class="sb-input w100" id="msgOneAmtGuideAlkSmsOneAmt" ng-model="alkSmsOneAmt" readonly />--%>
-                    <%--</td>--%>
-                <%--</tr>--%>
                 <tr>
                     <%-- 알림톡LMS --%>
                     <th>
@@ -79,15 +70,6 @@
                         <input type="text" class="sb-input w100" id="msgOneAmtGuideAlkLmsOneAmt" ng-model="alkLmsOneAmt" readonly />
                     </td>
                 </tr>
-                <%--<tr>--%>
-                    <%--&lt;%&ndash; 알림톡MMS &ndash;%&gt;--%>
-                    <%--<th>--%>
-                        <%--<s:message code="msgOneAmtGuide.alkMms" />--%>
-                    <%--</th>--%>
-                    <%--<td>--%>
-                        <%--<input type="text" class="sb-input w100" id="msgOneAmtGuideAlkMmsOneAmt" ng-model="alkMmsOneAmt" readonly />--%>
-                    <%--</td>--%>
-                <%--</tr>--%>
                 </tbody>
             </table>
         </div>

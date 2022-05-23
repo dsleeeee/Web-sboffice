@@ -36,4 +36,16 @@ public interface SmsChargeService {
 
     /** 잔여금액 알림 설정 팝업 - 저장 */
     int getRestSmsAmtAlimSettingSave(SmsChargeVO smsChargeVO, SessionInfoVO sessionInfoVO);
+
+    /** 전송요금설정 - 조회 */
+    List<DefaultMap<Object>> getMsgOneAmtSettingList(SmsChargeVO smsChargeVO, SessionInfoVO sessionInfoVO);
+
+    /** 전송요금설정 - 상세 조회 */
+    List<DefaultMap<Object>> getMsgOneAmtSettingDetailList(SmsChargeVO smsChargeVO, SessionInfoVO sessionInfoVO);
+
+    /** 전송요금설정 - 상세 저장 */
+    int getMsgOneAmtSettingDetailSave(SmsChargeVO[] smsChargeVOs, SessionInfoVO sessionInfoVO);
+
+    /** 전송요금설정 - 건당금액(기본값) 조회 */
+    DefaultMap<String> getMsgOneAmtBaseList(SmsChargeVO smsChargeVO, SessionInfoVO sessionInfoVO);
 }

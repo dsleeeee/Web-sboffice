@@ -298,6 +298,12 @@ app.controller('alimtalkSendTypeDetailCtrl', ['$scope', '$http', function ($scop
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
             $scope.flex.collectionView.itemsEdited[i].status = "U";
             $scope.flex.collectionView.itemsEdited[i].sendTypeCd = $scope.selectedSendType.sendTypeCd;
+            // 전송유형 : 주문 -> 주문접수 일때만
+            if($scope.flex.collectionView.itemsEdited[i].sendTypeCd == "002" && $scope.flex.collectionView.itemsEdited[i].sendTypeDtlCd == "01") {
+                $scope.flex.collectionView.itemsEdited[i].necSendYn = 'Y';
+            } else {
+                $scope.flex.collectionView.itemsEdited[i].necSendYn = 'N';
+            }
             params.push($scope.flex.collectionView.itemsEdited[i]);
         }
 
@@ -480,6 +486,12 @@ app.controller('alimtalkSendTypeTemplateCtrl', ['$scope', '$http', function ($sc
         }
         params.templateGrpFg = $("#lblTemplateGrpFg").text();
         params.templateCd = $("#lblTemplateCd").text();
+        // 전송유형 : 주문 -> 주문접수 일때만
+        if(params.sendTypeCd == "002" && params.sendTypeDtlCd == "01") {
+            params.necSendYn = 'Y';
+        } else {
+            params.necSendYn = 'N';
+        }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._postJSONSave.withPopUp("/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkSendTypeDetailTemplateSave.sb", params, function(){
@@ -514,6 +526,12 @@ app.controller('alimtalkSendTypeTemplateCtrl', ['$scope', '$http', function ($sc
         }
         params.templateGrpFg = $("#lblTemplateGrpFg").text();
         params.templateCd = $("#lblTemplateCd").text();
+        // 전송유형 : 주문 -> 주문접수 일때만
+        if(params.sendTypeCd == "002" && params.sendTypeDtlCd == "01") {
+            params.necSendYn = 'Y';
+        } else {
+            params.necSendYn = 'N';
+        }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._postJSONSave.withOutPopUp("/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkSendTypeDetailTemplateSave.sb", params, function(){});

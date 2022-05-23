@@ -237,7 +237,7 @@
             USE_YN = #{useYn},
             MOD_DT = #{modDt},
             MOD_ID = #{modId},
-            NEC_SEND_YN = 'Y'
+            NEC_SEND_YN = #{necSendYn}
         WHEN NOT MATCHED THEN
             INSERT (
                 ORGN_CD,
@@ -266,7 +266,7 @@
                 #{regId},
                 #{modDt},
                 #{modId},
-                'Y'
+                #{necSendYn}
             )
     </insert>
 
@@ -328,7 +328,7 @@
             TEMPLATE_CD = #{templateCd},
             MOD_DT = #{modDt},
             MOD_ID = #{modId},
-            NEC_SEND_YN = 'Y'
+            NEC_SEND_YN = #{necSendYn}
         WHEN NOT MATCHED THEN
             INSERT (
                 ORGN_CD,
@@ -357,7 +357,7 @@
                 #{regId},
                 #{modDt},
                 #{modId},
-                'Y'
+                #{necSendYn}
             )
     </insert>
 

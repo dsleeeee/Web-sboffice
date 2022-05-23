@@ -84,6 +84,9 @@ public class AlimtalkSendTypeVO extends PageVO {
     /** 공통템플릿 구분 */
     private String commonFg;
 
+    /** 마이너스 제한금액 설정여부 */
+    private String necSendYn;
+
     public String getOrgnCd() { return orgnCd; }
 
     public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }
@@ -167,4 +170,8 @@ public class AlimtalkSendTypeVO extends PageVO {
     public String getCommonFg() { return commonFg; }
 
     public void setCommonFg(String commonFg) { this.commonFg = commonFg; }
+
+    public String getNecSendYn() { return necSendYn; }
+
+    public void setNecSendYn(String necSendYn) { this.necSendYn = necSendYn; }
 }
