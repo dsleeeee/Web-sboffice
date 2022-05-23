@@ -202,7 +202,7 @@
         WHERE   STORE_CD = #{storeCd}
         AND     POS_NO = #{posNo}
         <if test='instReason != null and instReason == "001"'>
-            AND INST_FG = '1'
+            AND INST_FG IN ('1', '0')
         </if>
         <if test='instReason != null and instReason != "001"'>
             AND INST_FG = '0'
