@@ -771,7 +771,8 @@
                 MOD_DT = #{modDt},
                 MOD_ID = #{modId},
                 PRC_CTRL_FG = #{prcCtrlFg},
-                MAP_PROD_CD = #{mapProdCd}
+                MAP_PROD_CD = #{mapProdCd},
+                DEPOSIT_CUP_FG = #{depositCupFg}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -813,7 +814,8 @@
                 MOD_DT,
                 MOD_ID,
                 PRC_CTRL_FG,
-                MAP_PROD_CD
+                MAP_PROD_CD,
+                DEPOSIT_CUP_FG
                 ) VALUES (
                 #{hqOfficeCd},
                 TRIM(REPLACE(REPLACE(#{prodCd}, CHR(10), NULL), CHR(13), NULL)),
@@ -853,7 +855,8 @@
                 #{modDt},
                 #{modId},
                 #{prcCtrlFg},
-                #{mapProdCd}
+                #{mapProdCd},
+                #{depositCupFg}
                 )
             </when>
             <!-- 매장 -->
@@ -902,7 +905,8 @@
                 REMARK = #{remark},
                 MOD_DT = #{modDt},
                 MOD_ID = #{modId},
-                MAP_PROD_CD = #{mapProdCd}
+                MAP_PROD_CD = #{mapProdCd},
+                DEPOSIT_CUP_FG = #{depositCupFg}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -945,7 +949,8 @@
                 MOD_DT,
                 MOD_ID,
                 REG_FG,
-                MAP_PROD_CD
+                MAP_PROD_CD,
+                DEPOSIT_CUP_FG
                 ) VALUES (
                 #{storeCd},
                 TRIM(REPLACE(REPLACE(#{prodCd}, CHR(10), NULL), CHR(13), NULL)),
@@ -986,7 +991,8 @@
                 #{modDt},
                 #{modId},
                 'S',
-                #{mapProdCd}
+                #{mapProdCd},
+                #{depositCupFg}
                 )
             </when>
         </choose>
