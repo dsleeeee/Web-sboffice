@@ -105,7 +105,6 @@ app.controller('msgOneAmtSettingCtrl', ['$scope', '$http', '$timeout', function 
     // 건당금액(기본값)
     $scope.searchMsgOneAmtBase = function() {
         var params = {};
-        params.orgnCd
 
         $scope._postJSONQuery.withOutPopUp( "/adi/sms/smsCharge/msgOneAmtSetting/getMsgOneAmtBaseList.sb", params, function(response){
             var msgOneAmtSetting = response.data.data.result;

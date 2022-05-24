@@ -153,7 +153,8 @@
         FROM
         (
             SELECT
-            DECODE(twuidv01.ORGN_FG, 'A', 'M', twuidv01.ORGN_FG) AS ORGN_FG,
+            twuidv01.ORGN_FG,
+--             DECODE(twuidv01.ORGN_FG, 'A', 'M', twuidv01.ORGN_FG) AS ORGN_FG,
             twuidv01.ORGN_CD,
             twuidv01.ORGN_NM,
             twuidv01.HQ_OFFICE_CD,
@@ -164,7 +165,7 @@
                 AND twuidv01.ORGN_CD LIKE '%'||#{srchOrgnCd}||'%'
             </if>
             <if test='srchOrgnNm != null and srchOrgnNm != ""'>
-                AND twuidv01.ORGN_NM LIKE '%'||#{orgnNm}||'%'
+                AND twuidv01.ORGN_NM LIKE '%'||#{srchOrgnNm}||'%'
             </if>
             <if test='srchOrgnFg != null and srchOrgnFg != ""'>
                 AND twuidv01.ORGN_FG = #{srchOrgnFg}
@@ -293,6 +294,23 @@
         FN_GET_SMS_UPRC('ALK', '') AS ALK_ONE_AMT,
         FN_GET_SMS_UPRC('ALK_LMS', '') AS ALK_LMS_ONE_AMT
         FROM dual
+    </select>
+
+    <!-- 전송요금설정 - 화면 권한 체크 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="msgOneAmtSettingAuth"  parameterType="SessionInfoVO" resultType="String">
+        /* SmsChargeMapper.msgOneAmtSettingAuth */
+        SELECT
+        COUNT(tce.USER_ID)
+        FROM TB_CM_EMPLOYEE tce
+        WHERE 1=1
+        AND tce.AGENCY_CD = '00001'
+        AND tce.ADMIN_FG = 'A'
+        AND tce.USE_YN = 'Y'
+        AND tce.USER_ID = #{userId}
     </select>
 
 </mapper>

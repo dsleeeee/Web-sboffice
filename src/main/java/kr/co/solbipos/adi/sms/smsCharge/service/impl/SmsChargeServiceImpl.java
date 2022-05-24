@@ -243,4 +243,11 @@ public class SmsChargeServiceImpl implements SmsChargeService {
 
         return smsChargeMapper.getMsgOneAmtGuideList(smsChargeVO);
     }
+
+    /** 전송요금설정 - 화면 권한 체크 */
+    @Override
+    public String msgOneAmtSettingAuth(SessionInfoVO sessionInfoVO) {
+
+        return smsChargeMapper.msgOneAmtSettingAuth(sessionInfoVO);
+    }
 }

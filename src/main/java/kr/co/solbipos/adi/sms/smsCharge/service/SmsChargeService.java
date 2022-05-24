@@ -48,4 +48,7 @@ public interface SmsChargeService {
 
     /** 전송요금설정 - 건당금액(기본값) 조회 */
     DefaultMap<String> getMsgOneAmtBaseList(SmsChargeVO smsChargeVO, SessionInfoVO sessionInfoVO);
+
+    /** 전송요금설정 - 화면 권한 체크 */
+    String msgOneAmtSettingAuth(SessionInfoVO sessionInfoVO);
 }

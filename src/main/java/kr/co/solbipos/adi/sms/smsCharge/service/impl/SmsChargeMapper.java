@@ -1,6 +1,7 @@
 package kr.co.solbipos.adi.sms.smsCharge.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.adi.sms.smsCharge.service.SmsChargeVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -55,4 +56,7 @@ public interface SmsChargeMapper {
 
     /** 전송요금설정 - 건당금액(기본값) 조회 */
     DefaultMap<String> getMsgOneAmtBaseList(SmsChargeVO smsChargeVO);
+
+    /** 전송요금설정 - 화면 권한 체크 */
+    String msgOneAmtSettingAuth(SessionInfoVO sessionInfoVO);
 }

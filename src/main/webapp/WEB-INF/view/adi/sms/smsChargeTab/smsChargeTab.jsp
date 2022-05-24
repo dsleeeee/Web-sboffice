@@ -4,7 +4,6 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<%--<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>--%>
 <c:set var="baseUrl" value="/adi/sms/smsChargeTab"/>
 
 <div class="con">
@@ -18,12 +17,12 @@
             <li>
                 <a id="smsChargeHistTab" href="#" ng-click="smsChargeHistShow()"><s:message code="smsChargeTab.smsChargeHist"/></a>
             </li>
-            <%--<c:if test="${orgnFg == 'MASTER'}">--%>
-                <%--&lt;%&ndash; 전송요금설정 탭 &ndash;%&gt;--%>
-                <%--<li>--%>
-                    <%--<a id="msgOneAmtSettingTab" href="#" ng-click="msgOneAmtSettingShow()"><s:message code="smsChargeTab.msgOneAmtSetting"/></a>--%>
-                <%--</li>--%>
-            <%--</c:if>--%>
+            <c:if test="${msgOneAmtSettingAuth == '1'}">
+                <%-- 전송요금설정 탭 --%>
+                <li>
+                    <a id="msgOneAmtSettingTab" href="#" ng-click="msgOneAmtSettingShow()"><s:message code="smsChargeTab.msgOneAmtSetting"/></a>
+                </li>
+            </c:if>
         </ul>
     </div>
 </div>
@@ -32,6 +31,7 @@
     var tabVal = "${tabVal}"; // SMS충전결제 후 충전모듈을 닫기위해 페이지 이동
     var urlVal = "/adi/sms/smsChargeTab/smsChargeTab/list.sb"; // SMS충전결제 후 충전모듈을 닫기위해 페이지 이동
     var pageGubunVal = "sms"; // 페이지구분
+    var msgOneAmtSettingAuth = "${msgOneAmtSettingAuth}"; // 전송요금설정 - 화면 권한 체크
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeTab/smsChargeTab.js?ver=20220519.01" charset="utf-8"></script>
