@@ -344,7 +344,9 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                 prodVO.setCornrCd("00");
                 prodVO.setHqBrandCd(simpleProdVO.getHqBrandCd());
                 prodVO.setRemark(simpleProdVO.getRemark());
-                prodVO.setDepositCupFg(simpleProdVO.getDepositCupFg());
+                if(simpleProdVO.getDepositCupFg() != null && !simpleProdVO.getDepositCupFg().equals("선택")){
+                    prodVO.setDepositCupFg(simpleProdVO.getDepositCupFg());
+                }
 
                 // 자동채번인 경우 상품코드 조회
                 if(simpleProdVO.getProdNoEnv() == ProdNoEnvFg.AUTO) {

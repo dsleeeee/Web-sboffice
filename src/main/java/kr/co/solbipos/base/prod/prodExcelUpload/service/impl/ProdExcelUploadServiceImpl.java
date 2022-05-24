@@ -275,6 +275,21 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
             } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
                 prodExcelUploadVO.setPrcCtrlFg("S");
             }
+
+            // 보증금상품유형
+            if(prodExcelUploadVO.getDepositCupFg() != null && !"".equals(prodExcelUploadVO.getDepositCupFg())){
+
+                DefaultMap<String> depositCupFgMap = new DefaultMap<>();
+                depositCupFgMap.put("선택", "");
+                depositCupFgMap.put("종이", "1");
+                depositCupFgMap.put("플라스틱", "2");
+                depositCupFgMap.put("다회용", "3");
+                depositCupFgMap.put("보증컵기타", "4");
+
+                String depositCupFg = (String)depositCupFgMap.get(prodExcelUploadVO.getDepositCupFg());
+
+                prodExcelUploadVO.setDepositCupFg(depositCupFg);
+            }
             // <-- //업로할때는 전부 명칭으로 들어간다 -->
 
             // 상품코드
