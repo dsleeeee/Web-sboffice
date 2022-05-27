@@ -235,6 +235,9 @@ public class StoreManageServiceImpl implements StoreManageService{
             // 웹 사용자 등록
             procCnt += mapper.insertStoreWebUser(storeManageVO);
 
+            // 기본 매출 시간대(001)
+            procCnt += mapper.insertStoreTimeSlot(storeManageVO);
+
             // 포스 출력물 마스터 등록 (단독, 프랜차이즈)
             if(EXCLUSIVE_HQ_OFFICE.equals(storeManageVO.getHqOfficeCd())) {
 

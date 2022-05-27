@@ -206,6 +206,9 @@ public class HqManageServiceImpl implements HqManageService{
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
+        // 기본 매출 시간대(001)
+        result = mapper.registTimeSlot(nmcodeVO);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         // 공통코드 복사 //todo
 //        HqNmcodeVO hqNmcodeVO = new HqNmcodeVO();

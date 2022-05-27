@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    TimeSlot.xml
+    시간대분류관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.05.20     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.base.store.timeSlot.service.impl.TimeSlotMapper">
+
+    <!-- 그룹조회 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
+        PARAM    : timeSlotVO
+        COMMENTS : 시간대분류 그룹을 조회한다.
+    -->
+    <select id="getTimeSlot" parameterType="timeSlotVO" resultType="DefaultMap">
+        /* USE : TimeSlotMapper.getTimeSlot */
+        SELECT 	NMCODE_NM ,
+        MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1)AS START_TIME,
+        LPAD(MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) + 1, 2, '0') AS END_TIME
+        <!-- 프차 -->
+        <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+            FROM 	TB_HQ_NMCODE
+            WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+        </if>
+        <!-- 단독매장 -->
+        <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+            FROM 	TB_MS_STORE_NMCODE
+            WHERE 	STORE_CD = #{storeCd}
+        </if>
+        AND 	NMCODE_GRP_CD = '001'
+        GROUP
+        BY      NMCODE_NM
+        ORDER
+        BY      START_TIME
+    </select>
+
+    <!-- 그룹저장 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
+        PARAM    : timeSlotVO
+        COMMENTS : 시간대분류그룹을 저장한다.
+    -->
+    <insert id="saveTimeSlot" parameterType="timeSlotVO">
+        /* USE : TimeSlotMapper.saveTimeSlot */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                MERGE INTO TB_HQ_NMCODE
+                USING DUAL
+                ON (
+                    HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND NMCODE_GRP_CD   = '001'
+                AND NMCODE_CD       = #{nmcodeCd}
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                SET
+                NMCODE_NM       = #{nmcodeNm},
+                NMCODE_ITEM_1   = #{nmcodeItem1}
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                HQ_OFFICE_CD,
+                NMCODE_GRP_CD,
+                NMCODE_CD,
+                PARENT_CD,
+                NMCODE_NM,
+                NMCODE_ITEM_1,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+                ) VALUES (
+                #{hqOfficeCd},
+                '001',
+                #{nmcodeCd},
+                '001',
+                #{nmcodeNm},
+                #{nmcodeItem1},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                MERGE INTO TB_MS_STORE_NMCODE
+                USING DUAL
+                ON (
+                    STORE_CD        = #{storeCd}
+                AND NMCODE_GRP_CD   = '001'
+                AND NMCODE_CD       = #{nmcodeCd}
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                SET
+                NMCODE_NM       = #{nmcodeNm},
+                NMCODE_ITEM_1   = #{nmcodeItem1}
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                STORE_CD,
+                NMCODE_GRP_CD,
+                NMCODE_CD,
+                PARENT_CD,
+                NMCODE_NM,
+                NMCODE_ITEM_1,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+                ) VALUES (
+                #{storeCd},
+                '001',
+                #{nmcodeCd},
+                '001',
+                #{nmcodeNm},
+                #{nmcodeItem1},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+                )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 그룹삭제 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
+        PARAM    : timeSlotVO
+        COMMENTS : 시간대분류그룹을 삭제한다.
+    -->
+    <delete id="deleteTimeSlot" parameterType="timeSlotVO">
+        /* USE : TimeSlotMapper.deleteTimeSlot */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                FROM 	TB_HQ_NMCODE
+                WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     NMCODE_GRP_CD = '001'
+                AND     NMCODE_CD = #{nmcodeCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                FROM 	TB_MS_STORE_NMCODE
+                WHERE 	STORE_CD = #{storeCd}
+                AND     NMCODE_GRP_CD = '001'
+                AND     NMCODE_CD = #{nmcodeCd}
+            </when>
+        </choose>
+    </delete>
+</mapper>

@@ -563,6 +563,56 @@
         )
     </insert>
 
+    <!-- 기본 매출 시간대  -->
+    <!--
+        TABLE    : TB_MS_STORE_NMCODE
+        PARAM    : storeManageVO
+        COMMENTS : 기본 매출 시간대를 등록한다. 000004 000008 -> FN_TB_WB_AUTHOR_GRP_USE_CD
+    -->
+    <insert id="insertStoreTimeSlot" parameterType="storeManageVO">
+        /* USE : StoreManageMapper.insertStoreTimeSlot */
+        INSERT INTO TB_MS_STORE_NMCODE
+        (
+            STORE_CD,
+            NMCODE_GRP_CD,
+            NMCODE_CD,
+            PARENT_CD,
+            NMCODE_NM,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+            SELECT  #{storeCd},
+                    NMCODE_GRP_CD,
+                    NMCODE_CD,
+                    PARENT_CD,
+                    NMCODE_NM,
+                    #{regDt},
+                    #{regId},     #{modDt},
+            #{modId}
+            FROM    TB_HQ_NMCODE
+            WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+            AND     NMCODE_GRP_CD = '001'
+        </if>
+        <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+            SELECT  #{storeCd},
+            NMCODE_GRP_CD,
+            NMCODE_CD,
+            PARENT_CD,
+            NMCODE_NM,
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+            FROM    TB_MS_STORE_NMCODE
+            WHERE   STORE_CD = '0000000'
+            AND     NMCODE_GRP_CD = '001'
+        </if>
+    </insert>
+
+
     <!-- 포스 출력물 템플릿 등록 (단독매장) -->
     <!--
         TABLE    : TB_MS_PRINT_TEMPL
