@@ -78,6 +78,9 @@ public interface StoreManageMapper {
     /** 매장 웹 사용자 등록 */
     int insertStoreWebUser(StoreManageVO storeManageVO);
 
+    /** 기본 매출 시간대 */
+    int insertStoreTimeSlot(StoreManageVO storeManageVO);
+
     /** 포스 출력물 템플릿 등록 (단독) */
     int insertDefaultPrintTemplete(StoreManageVO storeManageVO);
 
