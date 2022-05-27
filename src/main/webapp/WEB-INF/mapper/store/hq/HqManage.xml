@@ -451,6 +451,40 @@
         )
     </insert>
 
+    <!-- 시간대 분류 등록  -->
+    <!--
+        TABLE    : TB_HQ_NMCODE
+        PARAM    : hqManageVO
+        COMMENTS : 본사 공통코드를 등록한다.
+    -->
+    <insert id="registTimeSlot" parameterType="DefaultMap">
+        /* USE : HqManageMapper.registTimeSlot */
+        INSERT INTO TB_HQ_NMCODE
+        (
+            HQ_OFFICE_CD,
+            NMCODE_GRP_CD,
+            NMCODE_CD,
+            PARENT_CD,
+            NMCODE_NM,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        SELECT  #{hqOfficeCd},
+                NMCODE_GRP_CD,
+                NMCODE_CD,
+                PARENT_CD,
+                NMCODE_NM,
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+        FROM    TB_HQ_NMCODE
+        WHERE   HQ_OFFICE_CD = '00000'
+        AND     NMCODE_GRP_CD = '001'
+    </insert>
+
     <!-- 공통코드 복사   -->
     <!--
         TABLE    : TB_HQ_NMCODE

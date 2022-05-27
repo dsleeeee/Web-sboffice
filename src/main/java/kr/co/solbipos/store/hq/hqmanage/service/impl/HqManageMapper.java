@@ -61,6 +61,9 @@ public interface HqManageMapper {
 
     /** 본사 공통코드 등록 */
     int cmmCodeReg(HqNmcodeVO nmcodeVO);
+    
+    /** 시간대 분류 등록 */
+    int registTimeSlot(HqNmcodeVO nmcodeVO);
 
     /** 매장 기본 창고 등록 */
     int insertStorage(HqManageVO hqManage);
