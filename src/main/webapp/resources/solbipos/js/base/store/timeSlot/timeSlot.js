@@ -103,16 +103,18 @@ app.controller('timeSlotCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.timeChk = function (){
 
     var time = 0;
+
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
       if($scope.flex.collectionView.items[i].nmcodeNm !== "") {
-        if($scope.flex.collectionView.items[i].startTime == $scope.flex.collectionView.items[i].endTime){
-          console.log($scope.flex.collectionView.items[i].startTime + ' ' + $scope.flex.collectionView.items[i].endTime);
+        var startTime = Number($scope.flex.collectionView.items[i].startTime);
+        var endTime = Number($scope.flex.collectionView.items[i].endTime);
+        if(startTime == endTime){
           $scope._popMsg(messages["timeSlot.timeChk"]);
           return false;
-        } else if($scope.flex.collectionView.items[i].startTime < $scope.flex.collectionView.items[i].endTime){
-          time = time + ($scope.flex.collectionView.items[i].endTime - $scope.flex.collectionView.items[i].startTime);
-        } else if($scope.flex.collectionView.items[i].startTime > $scope.flex.collectionView.items[i].endTime) {
-          time = time + (24 - ($scope.flex.collectionView.items[i].startTime - $scope.flex.collectionView.items[i].endTime));
+        } else if(startTime < endTime){
+          time += endTime - startTime;
+        } else if(startTime > endTime) {
+          time += 24 - (startTime - endTime);
         }
       } else {
         $scope._popMsg(messages["timeSlot.nmcodeNm.none"]);
