@@ -9,6 +9,7 @@
 <c:set var="touchKeyEnvstVal" value="${touchKeyEnvstVal}" />
 <c:set var="touchKeyGrp" value="${touchKeyGrp}" />
 <c:set var="brandUseFg" value="${brandUseFg}" />
+<c:set var="fontSizeEnvstVal" value="${fontSizeEnvstVal}" />
 
 <%--서브컨텐츠--%>
 <div class="subCon" ng-controller="touchKeyCtrl" id="touchKeyView">
@@ -323,6 +324,9 @@
     var brandList = ${brandList};
     var touchKeyGrpData = ${touchKeyGrp};
 
+    // 본사 환경설정값 - 터치메뉴 폰트크기[1236]
+    var fontSizeEnvstVal = ${fontSizeEnvstVal};
+
     // 기존 터치키 그룹이 있을 떄/ 없을 때 버튼, selectBox 설정
     if(touchKeyGrpData.length === 0){
         $("#btnSrchTouchKey").css("display", "none");  //조회버튼
@@ -408,7 +412,7 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20220509.02"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20220527.01"
         charset="utf-8"></script>
 
 <%-- 스타일미리보기 팝업 --%>

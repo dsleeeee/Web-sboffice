@@ -1178,4 +1178,505 @@
         ORDER BY AGENCY_CD ASC
     </select>
 
+    <!-- 판매터치키 메뉴 임시테이블 삭제 -->
+    <!--
+        TABLE    : TB_TMP_TOUCH_KEY_CLASS
+        PARAM    : hqEnvstVO
+        COMMENTS : 판매터치키 메뉴 임시테이블 정보를 삭제한다.
+    -->
+    <delete id="deleteAllTmpTouchKeyClass" parameterType="hqEnvstVO">
+        /* USE : HqManageMapper.deleteAllTmpTouchKeyClass */
+        DELETE
+          FROM TB_TMP_TOUCH_KEY_CLASS
+         WHERE 1=1
+           AND SESSION_ID = #{sessionId}
+    </delete>
+
+    <!-- 판매터치키 임시테이블 삭제 -->
+    <!--
+        TABLE    : TB_TMP_TOUCH_KEY
+        PARAM    : hqEnvstVO
+        COMMENTS : 판매터치키 임시테이블 정보를 삭제한다.
+    -->
+    <delete id="deleteAllTmpTouchKey" parameterType="hqEnvstVO">
+        /* USE : HqManageMapper.deleteAllTmpTouchKey */
+        DELETE
+          FROM TB_TMP_TOUCH_KEY
+         WHERE 1=1
+           AND SESSION_ID = #{sessionId}
+    </delete>
+
+    <!-- 임시테이블에 본사 판매터치키 분류 입력-->
+    <!--
+        TABLE    : TB_TMP_TOUCH_KEY_CLASS, TB_HQ_TOUCH_KEY_CLASS
+        PARAM    : hqEnvstVO
+        COMMENTS : 임시테이블에 본사 판매터치키 분류를 입력한다.
+    -->
+    <insert id="insertTmpHqTouchKeyClass" parameterType="hqEnvstVO" >
+        /* USE : HqManageMapper.insertTmpHqTouchKeyClass */
+        INSERT INTO TB_TMP_TOUCH_KEY_CLASS(
+                    SESSION_ID,
+                    SEQ,
+                    HQ_OFFICE_CD,
+                    TUKEY_GRP_CD,
+                    TUKEY_CLASS_CD,
+                    TUKEY_CLASS_NM,
+                    PAGE_NO,
+                    PAGE_ROWS,
+                    X,
+                    Y,
+                    WIDTH,
+                    HEIGHT,
+                    STYLE_CD,
+                    FONT_SIZE,
+                    FONT_COLOR,
+                    FILL_COLOR,
+                    IMG_NM,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+        )
+             SELECT #{sessionId},
+                    ROWNUM,
+                    HQ_OFFICE_CD,
+                    TUKEY_GRP_CD,
+                    TUKEY_CLASS_CD,
+                    TUKEY_CLASS_NM,
+                    PAGE_NO,
+                    PAGE_ROWS,
+                    X,
+                    Y,
+                    WIDTH,
+                    HEIGHT,
+                    STYLE_CD,
+                    FONT_SIZE,
+                    FONT_COLOR,
+                    FILL_COLOR,
+                    IMG_NM,
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+               FROM TB_HQ_TOUCH_KEY_CLASS
+              WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+              ORDER
+                 BY TUKEY_GRP_CD, TUKEY_CLASS_CD
+    </insert>
+
+    <!-- 임시테이블에 본사 판매터치키 입력-->
+    <!--
+        TABLE    : TB_TMP_TOUCH_KEY, TB_HQ_TOUCH_KEY
+        PARAM    : hqEnvstVO
+        COMMENTS : 임시테이블에 본사 판매터치키를 입력한다.
+    -->
+    <insert id="insertTmpHqTouchKey" parameterType="hqEnvstVO" >
+        /* USE : HqManageMapper.insertTmpHqTouchKey */
+        INSERT INTO TB_TMP_TOUCH_KEY(
+                    SESSION_ID,
+                    SEQ,
+                    HQ_OFFICE_CD,
+                    TUKEY_CLASS_CD,
+                    TUKEY_CD,
+                    TUKEY_FG,
+                    PROD_CD,
+                    PAGE_NO,
+                    X,
+                    Y,
+                    WIDTH,
+                    HEIGHT,
+                    STYLE_CD,
+                    FONT_SIZE,
+                    FONT_COLOR,
+                    FILL_COLOR,
+                    IMG_NM,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID,
+                    TUKEY_GRP_CD
+        )
+             SELECT #{sessionId},
+                    ROWNUM,
+                    HQ_OFFICE_CD,
+                    TUKEY_CLASS_CD,
+                    TUKEY_CD,
+                    TUKEY_FG,
+                    PROD_CD,
+                    PAGE_NO,
+                    X,
+                    Y,
+                    WIDTH,
+                    HEIGHT,
+                    STYLE_CD,
+                    FONT_SIZE,
+                    FONT_COLOR,
+                    FILL_COLOR,
+                    IMG_NM,
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId},
+                    TUKEY_GRP_CD
+               FROM TB_HQ_TOUCH_KEY
+              WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+              ORDER
+                 BY TUKEY_GRP_CD, TUKEY_CLASS_CD, TUKEY_CD
+    </insert>
+
+    <!-- 본사 판매터치키 분류 기존정보 삭제 -->
+    <!--
+        TABLE    : TB_HQ_TOUCH_KEY_CLASS
+        PARAM    : hqEnvstVO
+        COMMENTS : 본사 판매터치키 분류 기존정보를 삭제한다.
+    -->
+    <delete id="deleteOrgHqTouchKeyClass" parameterType="hqEnvstVO">
+        /* USE : HqManageMapper.deleteOrgHqTouchKeyClass */
+        DELETE
+          FROM TB_HQ_TOUCH_KEY_CLASS
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+    </delete>
+
+    <!-- 본사 판매터치키 기존정보 삭제 -->
+    <!--
+        TABLE    : TB_HQ_TOUCH_KEY
+        PARAM    : hqEnvstVO
+        COMMENTS : 본사 판매터치키 기존정보를 삭제한다.
+    -->
+    <delete id="deleteOrgHqTouchKey" parameterType="hqEnvstVO">
+        /* USE : HqManageMapper.deleteOrgHqTouchKey */
+         DELETE
+           FROM TB_HQ_TOUCH_KEY
+          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+    </delete>
+
+    <!-- 본사 판매터치키 분류 재정렬 -->
+    <!--
+        TABLE    : TB_TMP_TOUCH_KEY_CLASS, TB_HQ_TOUCH_KEY_CLASS
+        PARAM    : hqEnvstVO
+        COMMENTS : 터치분류 메뉴 라인수 변경에 따른 터치키분류 재정렬(바둑판형식)
+    -->
+    <update id="chgSortHqTouchKeyClass" parameterType="hqEnvstVO">
+        /* HqManageMapper.chgSortHqTouchKeyClass */
+        INSERT INTO TB_HQ_TOUCH_KEY_CLASS(
+                HQ_OFFICE_CD,
+                TUKEY_GRP_CD,
+                TUKEY_CLASS_CD,
+                TUKEY_CLASS_NM,
+                PAGE_NO,
+                PAGE_ROWS,
+                X,
+                Y,
+                WIDTH,
+                HEIGHT,
+                STYLE_CD,
+                FONT_SIZE,
+                FONT_COLOR,
+                FILL_COLOR,
+                IMG_NM,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            )
+            SELECT thtkc.HQ_OFFICE_CD,
+                   thtkc.TUKEY_GRP_CD,
+                   thtkc.TUKEY_CLASS_CD,
+                   thtkc.TUKEY_CLASS_NM,
+                   thtkc.PAGE_NO,
+                   thtkc.PAGE_ROWS,
+                   thtkc.X,
+                   thtkc.Y,
+                   thtkc.WIDTH,
+                   thtkc.HEIGHT,
+                   thtkc.STYLE_CD,
+                   thtkc.FONT_SIZE,
+                   thtkc.FONT_COLOR,
+                   thtkc.FILL_COLOR,
+                   thtkc.IMG_NM,
+                   #{regDt} AS REG_DT,
+                   #{regId} AS REG_ID,
+                   #{modDt} AS MOD_DT,
+                   #{modId} AS MOD_ID
+            FROM (
+                    SELECT tttkc.GRP_ID,
+                           tttkc.HQ_OFFICE_CD,
+                           tttkc.TUKEY_GRP_CD,
+                           tttkc.TUKEY_CLASS_CD,
+                           tttkc.TUKEY_CLASS_NM,
+                           FLOOR((tttkc.GRP_ID-1) / (5*(TO_NUMBER(#{envstVal}))-1))+1 AS PAGE_NO,
+                           #{envstVal} AS PAGE_ROWS,
+                           MOD(MOD(tttkc.GRP_ID-1,5*(TO_NUMBER(#{envstVal}))-1),5) * 100 AS X,
+                           (FLOOR(MOD(tttkc.GRP_ID-1,5*(TO_NUMBER(#{envstVal}))-1)/5)) * 61 AS Y,
+                           '99' AS WIDTH,
+                           '60' AS HEIGHT,
+                           tttkc.STYLE_CD,
+                           tttkc.FONT_SIZE,
+                           tttkc.FONT_COLOR,
+                           tttkc.FILL_COLOR,
+                           tttkc.IMG_NM
+                      FROM (
+                               SELECT RANK() OVER(PARTITION BY tttkc.TUKEY_GRP_CD ORDER BY tttkc.TUKEY_GRP_CD, tttkc.TUKEY_CLASS_CD) AS GRP_ID,
+                                      tttkc.*
+                                 FROM TB_TMP_TOUCH_KEY_CLASS tttkc
+                                WHERE tttkc.SESSION_ID = #{sessionId}
+                                  AND tttkc.HQ_OFFICE_CD = #{hqOfficeCd}
+                                ORDER
+                                   BY tttkc.TUKEY_GRP_CD, tttkc.TUKEY_CLASS_CD
+                           ) tttkc
+                ) thtkc
+          WHERE 6 > thtkc.PAGE_NO
+  </update>
+
+    <!-- 본사 판매터치키 재정렬 (01: 셀 사이즈) -->
+    <!--
+        TABLE    : TB_TMP_TOUCH_KEY, TB_HQ_TOUCH_KEY
+        PARAM    : hqEnvstVO
+        COMMENTS : 터치분류 메뉴 라인수 변경에 따른 터치키 재정렬(바둑판형식)
+    -->
+    <update id="chgSortHqTouchKey01" parameterType="hqEnvstVO">
+        /* HqManageMapper.chgSortHqTouchKey01 */
+        INSERT INTO TB_HQ_TOUCH_KEY(
+                   HQ_OFFICE_CD,
+                   TUKEY_CLASS_CD,
+                   TUKEY_CD,
+                   TUKEY_FG,
+                   PROD_CD,
+                   PAGE_NO,
+                   X,
+                   Y,
+                   WIDTH,
+                   HEIGHT,
+                   STYLE_CD,
+                   FONT_SIZE,
+                   FONT_COLOR,
+                   FILL_COLOR,
+                   IMG_NM,
+                   REG_DT,
+                   REG_ID,
+                   MOD_DT,
+                   MOD_ID,
+                   TUKEY_GRP_CD
+             )
+             SELECT thtk.HQ_OFFICE_CD,
+                    thtk.TUKEY_CLASS_CD,
+                    thtk.TUKEY_CD,
+                    thtk.TUKEY_FG,
+                    thtk.PROD_CD,
+                    thtk.PAGE_NO,
+                    thtk.X,
+                    thtk.Y,
+                    thtk.WIDTH,
+                    thtk.HEIGHT,
+                    thtk.STYLE_CD,
+                    thtk.FONT_SIZE,
+                    thtk.FONT_COLOR,
+                    thtk.FILL_COLOR,
+                    thtk.IMG_NM,
+                    #{regDt} AS REG_DT,
+                    #{regId} AS REG_ID,
+                    #{modDt} AS MOD_DT,
+                    #{modId} AS MOD_ID,
+                    thtk.TUKEY_GRP_CD
+             FROM (
+                     SELECT tttk.GRP_ID,
+                            tttk.HQ_OFFICE_CD,
+                            tttk.TUKEY_CLASS_CD,
+                            tttk.TUKEY_CD,
+                            tttk.TUKEY_FG,
+                            tttk.PROD_CD,
+                            FLOOR((tttk.GRP_ID-1) / (5*(8-TO_NUMBER(#{envstVal}))-1))+1 AS PAGE_NO,
+                            MOD(MOD(tttk.GRP_ID-1,5*(8-TO_NUMBER(#{envstVal}))-1),5) * 100 AS X,
+                            (FLOOR(MOD(tttk.GRP_ID-1,5*(8-TO_NUMBER(#{envstVal}))-1)/5)) * 75 AS Y,
+                            '99' AS WIDTH,
+                            '74' AS HEIGHT,
+                            tttk.STYLE_CD,
+                            tttk.FONT_SIZE,
+                            tttk.FONT_COLOR,
+                            tttk.FILL_COLOR,
+                            tttk.IMG_NM,
+                            tttk.IN_FG,
+                            tttk.TUKEY_GRP_CD
+                    FROM (
+                            SELECT RANK() OVER(PARTITION BY tttk.TUKEY_GRP_CD, tttk.TUKEY_CLASS_CD ORDER BY tttk.TUKEY_GRP_CD, tttk.TUKEY_CLASS_CD, tttk.TUKEY_CD) AS GRP_ID,
+                                   tttk.*
+                              FROM TB_TMP_TOUCH_KEY tttk
+                             WHERE tttk.SESSION_ID = #{sessionId}
+                               AND tttk.HQ_OFFICE_CD = #{hqOfficeCd}
+                               AND tttk.TUKEY_FG = '01'
+                             ORDER
+                                BY tttk.TUKEY_GRP_CD, tttk.TUKEY_CLASS_CD, tttk.TUKEY_CD
+                         ) tttk
+                  ) thtk
+            WHERE 6 > thtk.PAGE_NO
+    </update>
+
+    <!-- 본사 판매터치키 재정렬 (02: 상품명) -->
+    <!--
+        TABLE    : TB_TMP_TOUCH_KEY, TB_HQ_TOUCH_KEY
+        PARAM    : hqEnvstVO
+        COMMENTS : 터치분류 메뉴 라인수 변경에 따른 터치키 재정렬(바둑판형식)
+    -->
+    <update id="chgSortHqTouchKey02" parameterType="hqEnvstVO">
+        /* HqManageMapper.chgSortHqTouchKey02 */
+        INSERT INTO TB_HQ_TOUCH_KEY(
+                   HQ_OFFICE_CD,
+                   TUKEY_CLASS_CD,
+                   TUKEY_CD,
+                   TUKEY_FG,
+                   PROD_CD,
+                   PAGE_NO,
+                   X,
+                   Y,
+                   WIDTH,
+                   HEIGHT,
+                   STYLE_CD,
+                   FONT_SIZE,
+                   FONT_COLOR,
+                   FILL_COLOR,
+                   IMG_NM,
+                   REG_DT,
+                   REG_ID,
+                   MOD_DT,
+                   MOD_ID,
+                   TUKEY_GRP_CD
+             )
+             SELECT thtk.HQ_OFFICE_CD,
+                    thtk.TUKEY_CLASS_CD,
+                    thtk.TUKEY_CD,
+                    thtk.TUKEY_FG,
+                    thtk.PROD_CD,
+                    thtk.PAGE_NO,
+                    thtk.X,
+                    thtk.Y,
+                    thtk.WIDTH,
+                    thtk.HEIGHT,
+                    thtk.STYLE_CD,
+                    thtk.FONT_SIZE,
+                    thtk.FONT_COLOR,
+                    thtk.FILL_COLOR,
+                    thtk.IMG_NM,
+                    #{regDt} AS REG_DT,
+                    #{regId} AS REG_ID,
+                    #{modDt} AS MOD_DT,
+                    #{modId} AS MOD_ID,
+                    thtk.TUKEY_GRP_CD
+             FROM (
+                     SELECT tttk.GRP_ID,
+                            tttk.HQ_OFFICE_CD,
+                            tttk.TUKEY_CLASS_CD,
+                            tttk.TUKEY_CD,
+                            tttk.TUKEY_FG,
+                            tttk.PROD_CD,
+                            FLOOR((tttk.GRP_ID-1) / (5*(8-TO_NUMBER(#{envstVal}))-1))+1 AS PAGE_NO,
+                            '5' AS X,
+                            '5' AS Y,
+                            '89' AS WIDTH,
+                            '64' AS HEIGHT,
+                            tttk.STYLE_CD,
+                            tttk.FONT_SIZE,
+                            tttk.FONT_COLOR,
+                            tttk.FILL_COLOR,
+                            tttk.IMG_NM,
+                            tttk.TUKEY_GRP_CD
+                    FROM (
+                            SELECT RANK() OVER(PARTITION BY tttk.TUKEY_GRP_CD, tttk.TUKEY_CLASS_CD ORDER BY tttk.TUKEY_GRP_CD, tttk.TUKEY_CLASS_CD, tttk.TUKEY_CD) AS GRP_ID,
+                                   tttk.*
+                              FROM TB_TMP_TOUCH_KEY tttk
+                             WHERE tttk.SESSION_ID = #{sessionId}
+                               AND tttk.HQ_OFFICE_CD = #{hqOfficeCd}
+                               AND tttk.TUKEY_FG = '02'
+                             ORDER
+                                BY tttk.TUKEY_GRP_CD, tttk.TUKEY_CLASS_CD, tttk.TUKEY_CD
+                         ) tttk
+                  ) thtk
+            WHERE 6 > thtk.PAGE_NO
+    </update>
+
+    <!-- 본사 판매터치키 재정렬 (03: 가격) -->
+    <!--
+        TABLE    : TB_TMP_TOUCH_KEY, TB_HQ_TOUCH_KEY
+        PARAM    : hqEnvstVO
+        COMMENTS : 터치분류 메뉴 라인수 변경에 따른 터치키 재정렬(바둑판형식)
+    -->
+    <update id="chgSortHqTouchKey03" parameterType="hqEnvstVO">
+        /* HqManageMapper.chgSortHqTouchKey03 */
+        INSERT INTO TB_HQ_TOUCH_KEY(
+                   HQ_OFFICE_CD,
+                   TUKEY_CLASS_CD,
+                   TUKEY_CD,
+                   TUKEY_FG,
+                   PROD_CD,
+                   PAGE_NO,
+                   X,
+                   Y,
+                   WIDTH,
+                   HEIGHT,
+                   STYLE_CD,
+                   FONT_SIZE,
+                   FONT_COLOR,
+                   FILL_COLOR,
+                   IMG_NM,
+                   REG_DT,
+                   REG_ID,
+                   MOD_DT,
+                   MOD_ID,
+                   TUKEY_GRP_CD
+             )
+             SELECT thtk.HQ_OFFICE_CD,
+                    thtk.TUKEY_CLASS_CD,
+                    thtk.TUKEY_CD,
+                    thtk.TUKEY_FG,
+                    thtk.PROD_CD,
+                    thtk.PAGE_NO,
+                    thtk.X,
+                    thtk.Y,
+                    thtk.WIDTH,
+                    thtk.HEIGHT,
+                    thtk.STYLE_CD,
+                    thtk.FONT_SIZE,
+                    thtk.FONT_COLOR,
+                    thtk.FILL_COLOR,
+                    thtk.IMG_NM,
+                    #{regDt} AS REG_DT,
+                    #{regId} AS REG_ID,
+                    #{modDt} AS MOD_DT,
+                    #{modId} AS MOD_ID,
+                    thtk.TUKEY_GRP_CD
+             FROM (
+                     SELECT tttk.GRP_ID,
+                            tttk.HQ_OFFICE_CD,
+                            tttk.TUKEY_CLASS_CD,
+                            tttk.TUKEY_CD,
+                            tttk.TUKEY_FG,
+                            tttk.PROD_CD,
+                            FLOOR((tttk.GRP_ID-1) / (5*(8-TO_NUMBER(#{envstVal}))-1))+1 AS PAGE_NO,
+                            94 - (LENGTH(thpsp.SALE_UPRC) * 10) AS X,
+                            '49' AS Y,
+                            (LENGTH(thpsp.SALE_UPRC) * 10) AS WIDTH,
+                            '20' AS HEIGHT,
+                            tttk.STYLE_CD,
+                            tttk.FONT_SIZE,
+                            tttk.FONT_COLOR,
+                            tttk.FILL_COLOR,
+                            tttk.IMG_NM,
+                            tttk.TUKEY_GRP_CD,
+                            thpsp.SALE_UPRC
+                    FROM (
+                            SELECT RANK() OVER(PARTITION BY tttk.TUKEY_GRP_CD, tttk.TUKEY_CLASS_CD ORDER BY tttk.TUKEY_GRP_CD, tttk.TUKEY_CLASS_CD, tttk.TUKEY_CD) AS GRP_ID,
+                                   tttk.*
+                              FROM TB_TMP_TOUCH_KEY tttk
+                             WHERE tttk.SESSION_ID = #{sessionId}
+                               AND tttk.HQ_OFFICE_CD = #{hqOfficeCd}
+                               AND tttk.TUKEY_FG = '03'
+                             ORDER
+                                BY tttk.TUKEY_GRP_CD, tttk.TUKEY_CLASS_CD, tttk.TUKEY_CD
+                         ) tttk, TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp
+                   WHERE tttk.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                     AND tttk.PROD_CD  = thpsp.PROD_CD
+                     AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
+                  ) thtk
+            WHERE 6 > thtk.PAGE_NO
+    </update>
+
 </mapper>

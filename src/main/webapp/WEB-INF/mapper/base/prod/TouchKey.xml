@@ -1783,7 +1783,7 @@
         COMMENTS :  판매터치키 조회 - 데이터 기준으로 XML 만들기
     -->
     <select id="getTouchKeyXmlByData" parameterType="DefaultMap" resultType="java.lang.String">
-        /* USE : ViewMapper.getTouchKeyXmlByData */
+        /* USE : TouchkeyMapper.getTouchKeyXmlByData */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
@@ -2128,6 +2128,30 @@
                            )
                     )
                ) FROM DUAL
+            </when>
+        </choose>
+    </select>
+
+    <!-- 터치키 분류코드 생성 -->
+    <!--
+        TABLE    : TB_HQ_TOUCH_KEY_CLASS, TB_MS_TOUCH_KEY_CLASS
+        PARAM    : DefaultMap
+        COMMENTS : 터치키 분류코드를 생성한다. (본사/매장)
+    -->
+    <select id="getTouchKeyClassCd" parameterType="DefaultMap" resultType="String">
+        /* USE : TouchkeyMapper.getTouchKeyClassCd */
+        <choose>
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT 'G' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(TUKEY_CLASS_CD, 2, 4))), 1) + 1, 4, '0') AS TUKEY_CLASS_CD
+                  FROM TB_HQ_TOUCH_KEY_CLASS
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                  AND TUKEY_GRP_CD = #{tukeyGrpCd}
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT 'G' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(TUKEY_CLASS_CD, 2, 4))), 1) + 1, 4, '0') AS TUKEY_CLASS_CD
+                  FROM TB_MS_TOUCH_KEY_CLASS
+                 WHERE STORE_CD = #{storeCd}
+                   AND TUKEY_GRP_CD = #{tukeyGrpCd}
             </when>
         </choose>
     </select>

@@ -741,7 +741,7 @@ Sidebar.prototype.makeDragSource = function () {
         }else{
           graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["02"].off, new Array(prodTag));
           graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["02"].off, new Array(prodTag));
-          graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles["02"].size, new Array(prodTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTSIZE, fontSizeEnvstVal, new Array(prodTag));
         }
 
         // 버튼에 금액 추가
@@ -759,7 +759,7 @@ Sidebar.prototype.makeDragSource = function () {
         }else{
           graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["03"].off, new Array(priceTag));
           graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["03"].off, new Array(priceTag));
-          graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles["03"].size, new Array(priceTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTSIZE, fontSizeEnvstVal, new Array(priceTag));
         }
 
         // 하위 셀의 사이즈 자동조정
@@ -2626,7 +2626,7 @@ Graph.prototype.initClassArea = function (prodArea) {
         );
         graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles.off, new Array(btn));
         graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles.off, new Array(btn));
-        graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles.size, new Array(btn));
+        graph.setCellStyles(mxConstants.STYLE_FONTSIZE, fontSizeEnvstVal, new Array(btn));
 
       } finally {
         graph.model.endUpdate();

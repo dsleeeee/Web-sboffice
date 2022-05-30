@@ -45,6 +45,8 @@ public class HqEnvstVO extends CmmVO{
     private UseYn useYn;
     /** 기능키 관련 프로시져 실행 결과 */
     private String result;
+    /** 세션ID */
+    private String sessionId;
 
     /**
      * @return the hqOfficeCd
@@ -175,4 +177,11 @@ public class HqEnvstVO extends CmmVO{
      */
     public void setResult(String result) { this.result = result; }
 
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
 }

@@ -493,14 +493,20 @@ app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $h
     $scope.pointSave = function () {
         // 파라미터 설정
         var params = new Array();
+        var vScope = agrid.getScope('memberClassCtrl');
+
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
             $scope.flex.collectionView.itemsEdited[i].status = "U";
             var item = $scope.flex.collectionView.itemsEdited[i];
-           /* var numChkregexp = /[^0-9]/g;
-            if (numChkregexp.test(item.accRate)) {
-                $scope._popMsg(messages["grade.membr.acc_rate"] + messages["cmm.require.number"]);
-                return false;
-            }*/
+
+            if(vScope.pointSaveFgCombo.selectedValue === "2") {
+                var numChkregexp = /[^0-9]/g;
+                if (numChkregexp.test(item.accRate)) {
+                    $scope._popMsg(messages["grade.membr.point.list.amt"] + messages["cmm.require.number"]);
+                    return false;
+                }
+            }
+
             params.push($scope.flex.collectionView.itemsEdited[i]);
         }
         for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
@@ -510,11 +516,15 @@ app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $h
                 $scope._popMsg(messages["grade.membr.pay.code"] + messages["cmm.require.select"]);
                 return false;
             }
-            /*var numChkregexp = /[^0-9]/g;
-            if (numChkregexp.test(item.accRate)) {
-                $scope._popMsg(messages["grade.membr.acc_rate"] + messages["cmm.require.number"]);
-                return false;
-            }*/
+
+            if(vScope.pointSaveFgCombo.selectedValue === "2") {
+                var numChkregexp = /[^0-9]/g;
+                if (numChkregexp.test(item.accRate)) {
+                    $scope._popMsg(messages["grade.membr.point.list.amt"] + messages["cmm.require.number"]);
+                    return false;
+                }
+            }
+
             params.push($scope.flex.collectionView.itemsAdded[i]);
         }
 

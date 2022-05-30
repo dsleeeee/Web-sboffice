@@ -1,16 +1,15 @@
 package kr.co.solbipos.store.hq.hqmanage.service.impl;
 
-import java.util.List;
-
-import kr.co.solbipos.store.manage.storemanage.service.MemberClassVO;
-import org.apache.ibatis.annotations.Mapper;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqMenuVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqNmcodeVO;
-import kr.co.solbipos.store.hq.hqmanage.service.HqPrintTemplVO;
+import kr.co.solbipos.store.manage.storemanage.service.MemberClassVO;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @Class Name : HqManageMapper.java
@@ -133,5 +132,35 @@ public interface HqManageMapper {
 
     /** 업체 목록 조회 */
     List<DefaultMap<String>> getAgencyCd(HqManageVO hqManage);
+
+    /** 판매터치키 메뉴 임시테이블 삭제 */
+    int deleteAllTmpTouchKeyClass(HqEnvstVO hqEnvstVO);
+
+    /** 판매터치키 임시테이블 삭제 */
+    int deleteAllTmpTouchKey(HqEnvstVO hqEnvstVO);
+
+    /** 임시테이블에 매장 판매터치키 분류 입력 */
+    int insertTmpHqTouchKeyClass(HqEnvstVO hqEnvstVO);
+
+    /** 임시테이블에 매장 판매터치키 입력*/
+    int insertTmpHqTouchKey(HqEnvstVO hqEnvstVO);
+
+    /** 매장 판매터치키 분류 기존정보 삭제 */
+    int deleteOrgHqTouchKeyClass(HqEnvstVO hqEnvstVO);
+
+    /** 매장 판매터치키 기존정보 삭제 */
+    int deleteOrgHqTouchKey(HqEnvstVO hqEnvstVO);
+
+    /** 매장 판매터치키 분류 재정렬*/
+    int chgSortHqTouchKeyClass(HqEnvstVO hqEnvstVO);
+
+    /** 매장 판매터치키 재정렬 (01: 셀 사이즈)*/
+    int chgSortHqTouchKey01(HqEnvstVO hqEnvstVO);
+
+    /** 매장 판매터치키 재정렬 (02: 상품명)*/
+    int chgSortHqTouchKey02(HqEnvstVO hqEnvstVO);
+
+    /** 매장 판매터치키 재정렬 (03: 가격)*/
+    int chgSortHqTouchKey03(HqEnvstVO hqEnvstVO);
 
 }

@@ -364,6 +364,16 @@ public class TouchKeyServiceImpl implements TouchKeyService {
             touchKeyClassVO.setStoreCd(sessionInfoVO.getOrgnCd());
             touchKeyClassVO.setRegId(sessionInfoVO.getUserId());
 
+            // 터치키 분류코드는 새로 생성한다.(MAX + 1, 데이터 기준으로 XML을 만들면서 실제 분류순서와 분류코드가 일치하지않아, 새 분류 생성시 오류 발생)
+            DefaultMap<String> nParams = new DefaultMap<String>();
+            nParams.put("orgnFg", sessionInfoVO.getOrgnFg().getCode());
+            nParams.put("hqOfficeCd", sessionInfoVO.getHqOfficeCd());
+            nParams.put("storeCd", sessionInfoVO.getStoreCd());
+            nParams.put("tukeyGrpCd", tukeyGrpCd);
+
+            String nTukeyClassCd = keyMapper.getTouchKeyClassCd(nParams);
+            touchKeyClassVO.setTukeyClassCd(nTukeyClassCd);
+
             // 터치 분류(그룹) 저장
             if( keyMapper.insertTouchKeyClass(touchKeyClassVO) != 1 ) {
                 System.out.println("터치키 저장 에러 : insertTouchKeyClass");
@@ -378,6 +388,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                 touchKeyVO.setStoreCd(sessionInfoVO.getOrgnCd());
                 touchKeyVO.setRegId(sessionInfoVO.getUserId());
                 touchKeyVO.setTukeyGrpCd(tukeyGrpCd);
+                touchKeyVO.setTukeyClassCd(nTukeyClassCd);
 
                 // 터치키 저장
                 if( keyMapper.insertTouchKey(touchKeyVO) != 1 ) {
@@ -543,10 +554,10 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                             continue;
                         }
                         switch(TouchKeyStyle.getEnum(styleKeyValue[0])) {
-                            case CLASS_CD:
+                            //case CLASS_CD:
                                 // 그룹코드는 layer 처리 문제로 커스텀태그의 값 활용하여 설정한다. : 20180920 노현수
-                                touchKeyClassVO.setTukeyClassCd(styleKeyValue[1]);
-                                break;
+                                //touchKeyClassVO.setTukeyClassCd(styleKeyValue[1]);
+                                //break;
                             case STYLE_CD:
                                 touchKeyClassVO.setStyleCd(styleKeyValue[1]);
                                 break;
@@ -643,7 +654,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         result.setOrgnFg(touchKeyClassVO.getOrgnFg());
         result.setHqOfficeCd(touchKeyClassVO.getHqOfficeCd());
         result.setStoreCd(touchKeyClassVO.getStoreCd());
-        result.setTukeyClassCd(touchKeyClassVO.getTukeyClassCd());
+        //result.setTukeyClassCd(touchKeyClassVO.getTukeyClassCd());
 
         //좌표, 크기
         mxGeometry geo = cell.getGeometry();
