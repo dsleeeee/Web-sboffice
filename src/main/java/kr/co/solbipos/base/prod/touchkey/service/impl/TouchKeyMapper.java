@@ -120,4 +120,7 @@ public interface TouchKeyMapper {
     /** 판매터치키 조회 - 데이터 기준으로 XML 만들기 */
     String getTouchKeyXmlByData(DefaultMap<String> param);
 
+    /** 터치키 분류코드 생성 */
+    String getTouchKeyClassCd(DefaultMap<String> param);
+
 }

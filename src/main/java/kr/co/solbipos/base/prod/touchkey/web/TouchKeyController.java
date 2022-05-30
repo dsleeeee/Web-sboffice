@@ -132,6 +132,13 @@ public class TouchKeyController {
         StoreTypeVO storeTypeVO = new StoreTypeVO();
         model.addAttribute("brandList", convertToJson(storeTypeService.getBrandList(storeTypeVO, sessionInfoVO)));
 
+        // 터치메뉴 폰트크기 환경설정값 조회
+        if ( "H".equals(sessionInfoVO.getOrgnFg().getCode()) ) {
+            model.addAttribute("fontSizeEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1236"), "15"));
+        } else {
+            model.addAttribute("fontSizeEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1236"), "15"));
+        }
+
         return "base/prod/touchKey/touchKey";
     }
 

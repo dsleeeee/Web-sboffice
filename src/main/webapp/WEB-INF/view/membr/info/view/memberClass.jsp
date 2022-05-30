@@ -241,7 +241,8 @@
                        ng-attr-placeholder="{{classData.pointSaveFg === '2' ? '원당1Point' : '%적립'}}"
                        ng-style="userUseYn ? { 'font-size': '0.8rem'} : {'display': 'none' }"
                        ng-attr-maxlength="{{classData.pointSaveFg === '2' ? '5' : '6'}}"
-                       ng-model="membrTotal"/>
+                       ng-model="membrTotal"
+                       onkeyup="this.value=this.value.replace(/[^0-9.]/g,'');"/>
 
                 <%--일괄등록--%>
                 <button class="btn_skyblue fl ml10" id="membrTotalbtn" ng-if="userUseYn" ng-click="pointTotal()"><s:message code="grade.membr.total.button"/></button>
@@ -317,4 +318,4 @@
     var membrClassList = ${membrClassList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberClass.js?ver=20210225.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberClass.js?ver=20210225.04" charset="utf-8"></script>

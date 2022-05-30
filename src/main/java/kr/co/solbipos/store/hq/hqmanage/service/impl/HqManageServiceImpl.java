@@ -10,13 +10,16 @@ import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import kr.co.solbipos.base.store.emp.system.service.enums.AdminFg;
 import kr.co.solbipos.pos.loginstatus.enums.SysStatFg;
-import kr.co.solbipos.store.hq.brand.enums.TargtFg;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
-import kr.co.solbipos.store.hq.hqmanage.service.*;
+import kr.co.solbipos.store.hq.hqmanage.service.HqManageService;
+import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
+import kr.co.solbipos.store.hq.hqmanage.service.HqMenuVO;
+import kr.co.solbipos.store.hq.hqmanage.service.HqNmcodeVO;
 import kr.co.solbipos.store.manage.storemanage.service.MemberClassVO;
 import kr.co.solbipos.sys.auth.authgroup.enums.IncldExcldFg;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +45,8 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  */
 @Service
 public class HqManageServiceImpl implements HqManageService{
+
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final String DEFAULT_POS_EMPNO = "0000";    // 기본 포스 직원번호
     private final String HQ_AUTH_GRP_CD = "000007"; // TODO 보나비용 사용자 그룹코드 (화면에서 사용자 그룹 선택 필요)
@@ -427,6 +432,9 @@ public class HqManageServiceImpl implements HqManageService{
                 if(chkEnvstCd.equals("0041"))
                 {
                     procResult = mapper.updateTouchKeyMng(hqEnvst);
+
+                    // 본사의 터치키분류 메뉴 라인수 변경에 따른 터치키 재정렬(바둑판형식)
+                    chgHqTouchKeySort(hqEnvst, sessionInfoVO);
                 }
             }
 
@@ -450,6 +458,49 @@ public class HqManageServiceImpl implements HqManageService{
         }
 
         return mapper.getAgencyCd(hqManage);
+    }
+
+    /** 본사의 터치키분류 메뉴 라인수 변경에 따른 터치키 재정렬(바둑판형식) */
+    public void chgHqTouchKeySort(HqEnvstVO hqEnvstVO, SessionInfoVO sessionInfoVO){
+
+        String dt = currentDateTimeString();
+        HqEnvstVO hqEnvstVO2 = new HqEnvstVO();
+
+        hqEnvstVO2.setHqOfficeCd(hqEnvstVO.getHqOfficeCd());
+        hqEnvstVO2.setEnvstVal(hqEnvstVO.getEnvstVal());
+        hqEnvstVO2.setSessionId(sessionInfoVO.getUserId());
+        hqEnvstVO2.setRegDt(dt);
+        hqEnvstVO2.setRegId(sessionInfoVO.getUserId());
+        hqEnvstVO2.setModDt(dt);
+        hqEnvstVO2.setModId(sessionInfoVO.getUserId());
+
+        try{
+            // 0. 임시테이블 초기화
+            mapper.deleteAllTmpTouchKeyClass(hqEnvstVO2);
+            mapper.deleteAllTmpTouchKey(hqEnvstVO2);
+
+            // 1. 임시테이블에 매장 판매터치키 정보 입력
+            mapper.insertTmpHqTouchKeyClass(hqEnvstVO2);
+            mapper.insertTmpHqTouchKey(hqEnvstVO2);
+
+            // 2. 매장 판매터치키 기존정보 삭제
+            mapper.deleteOrgHqTouchKeyClass(hqEnvstVO2);
+            mapper.deleteOrgHqTouchKey(hqEnvstVO2);
+
+            // 3. 매장 판매터치키 재정렬 및 저장
+            mapper.chgSortHqTouchKeyClass(hqEnvstVO2);
+            mapper.chgSortHqTouchKey01(hqEnvstVO2); // 매장 판매터치키 재정렬 (01: 셀 사이즈)
+            mapper.chgSortHqTouchKey02(hqEnvstVO2); // 매장 판매터치키 재정렬 (02: 상품명)
+            mapper.chgSortHqTouchKey03(hqEnvstVO2); // 매장 판매터치키 재정렬 (03: 가격)
+
+            // 다시 임시테이블 초기화
+            mapper.deleteAllTmpTouchKeyClass(hqEnvstVO2);
+            mapper.deleteAllTmpTouchKey(hqEnvstVO2);
+
+        }catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.info("판매터치키_재정렬_오류 : " + e.getMessage());
+        }
     }
 
 

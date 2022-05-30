@@ -669,6 +669,9 @@ public class StoreManageServiceImpl implements StoreManageService{
                 if(chkEnvstCd.equals("1041"))
                 {
                     procResult = mapper.updateTouchKeyMng(storeEnvVO);
+
+                    // 매장의 터치키분류 메뉴 라인수 변경에 따른 터치키 재정렬(바둑판형식)
+                    chgStoreTouchKeySort(storeEnvVO, sessionInfoVO);
                 }
             }
         }
@@ -1392,5 +1395,48 @@ public class StoreManageServiceImpl implements StoreManageService{
     @Override
     public String getStoreEnvVal(StoreManageVO storeManageVO){
         return mapper.getStoreEnvVal(storeManageVO);
+    }
+
+    /** 매장의 터치키분류 메뉴 라인수 변경에 따른 터치키 재정렬(바둑판형식) */
+    public void chgStoreTouchKeySort(StoreEnvVO storeEnvVO, SessionInfoVO sessionInfoVO){
+
+        String dt = currentDateTimeString();
+        StoreEnvVO storeEnvVO2 = new StoreEnvVO();
+
+        storeEnvVO2.setStoreCd(storeEnvVO.getStoreCd());
+        storeEnvVO2.setEnvstVal(storeEnvVO.getEnvstVal());
+        storeEnvVO2.setSessionId(sessionInfoVO.getUserId());
+        storeEnvVO2.setRegDt(dt);
+        storeEnvVO2.setRegId(sessionInfoVO.getUserId());
+        storeEnvVO2.setModDt(dt);
+        storeEnvVO2.setModId(sessionInfoVO.getUserId());
+
+        try{
+            // 0. 임시테이블 초기화
+            mapper.deleteAllTmpTouchKeyClass(storeEnvVO2);
+            mapper.deleteAllTmpTouchKey(storeEnvVO2);
+
+            // 1. 임시테이블에 매장 판매터치키 정보 입력
+            mapper.insertTmpStoreTouchKeyClass(storeEnvVO2);
+            mapper.insertTmpStoreTouchKey(storeEnvVO2);
+
+            // 2. 매장 판매터치키 기존정보 삭제
+            mapper.deleteOrgStoreTouchKeyClass(storeEnvVO2);
+            mapper.deleteOrgStoreTouchKey(storeEnvVO2);
+
+            // 3. 매장 판매터치키 재정렬 및 저장
+            mapper.chgSortStoreTouchKeyClass(storeEnvVO2);
+            mapper.chgSortStoreTouchKey01(storeEnvVO2); // 매장 판매터치키 재정렬 (01: 셀 사이즈)
+            mapper.chgSortStoreTouchKey02(storeEnvVO2); // 매장 판매터치키 재정렬 (02: 상품명)
+            mapper.chgSortStoreTouchKey03(storeEnvVO2); // 매장 판매터치키 재정렬 (03: 가격)
+
+            // 다시 임시테이블 초기화
+            mapper.deleteAllTmpTouchKeyClass(storeEnvVO2);
+            mapper.deleteAllTmpTouchKey(storeEnvVO2);
+
+        }catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.info("판매터치키_재정렬_오류 : " + e.getMessage());
+        }
     }
 }

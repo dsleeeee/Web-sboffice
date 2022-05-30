@@ -404,4 +404,34 @@ public interface StoreManageMapper {
 
     /** 상품-알레르기 매핑정보 복사  */
     int insertStoreHqProductAlgiProd(StoreManageVO storeManageVO);
+
+    /** 판매터치키 메뉴 임시테이블 삭제 */
+    int deleteAllTmpTouchKeyClass(StoreEnvVO storeEnvVO);
+
+    /** 판매터치키 임시테이블 삭제 */
+    int deleteAllTmpTouchKey(StoreEnvVO storeEnvVO);
+
+    /** 임시테이블에 매장 판매터치키 분류 입력 */
+    int insertTmpStoreTouchKeyClass(StoreEnvVO storeEnvVO);
+
+    /** 임시테이블에 매장 판매터치키 입력*/
+    int insertTmpStoreTouchKey(StoreEnvVO storeEnvVO);
+
+    /** 매장 판매터치키 분류 기존정보 삭제 */
+    int deleteOrgStoreTouchKeyClass(StoreEnvVO storeEnvVO);
+
+    /** 매장 판매터치키 기존정보 삭제 */
+    int deleteOrgStoreTouchKey(StoreEnvVO storeEnvVO);
+
+    /** 매장 판매터치키 분류 재정렬*/
+    int chgSortStoreTouchKeyClass(StoreEnvVO storeEnvVO);
+
+    /** 매장 판매터치키 재정렬 (01: 셀 사이즈)*/
+    int chgSortStoreTouchKey01(StoreEnvVO storeEnvVO);
+
+    /** 매장 판매터치키 재정렬 (02: 상품명)*/
+    int chgSortStoreTouchKey02(StoreEnvVO storeEnvVO);
+
+    /** 매장 판매터치키 재정렬 (03: 가격)*/
+    int chgSortStoreTouchKey03(StoreEnvVO storeEnvVO);
 }
