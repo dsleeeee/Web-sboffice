@@ -125,8 +125,6 @@ app.controller('timeSlotCtrl', ['$scope', '$http', function ($scope, $http) {
     if(time == 24){
       $scope.save();
     } else {
-      console.log(time);
-      console.log("!24시간");
       $scope._popMsg(messages["timeSlot.timeChk"]);
       return false;
     }
