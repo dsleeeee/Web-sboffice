@@ -540,7 +540,7 @@
             #{boardCd},
             #{startDate},
             #{endDate},
-            #{title},
+            REPLACE(#{title}, CHR(39),'＇'),
             #{noticeYn},
             #{apprFg},
             #{targetFg},
