@@ -380,6 +380,9 @@ public interface ProdMapper {
     /** 상품 삭제 팝업 - 상품_세트구성_상품 영구삭제 */
     int deleteProdInfoUnitstProd(ProdVO prodVO);
 
+    /** 상품 삭제 팝업 - 상품_판매터치키 영구삭제 */
+    int deleteProdInfoTouchKey(ProdVO prodVO);
+
     /** 상품 삭제 팝업 - 본사) 상품별_취급매장 영구삭제 */
     int deleteProdInfoHqProductStore(ProdVO prodVO);
 
@@ -433,6 +436,9 @@ public interface ProdMapper {
 
     /** 상품 삭제 팝업 - 상품_세트구성_상품 영구삭제 (전매장) */
     int deleteProdInfoUnitstProdAllStore(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품_판매터치키 영구삭제 (전매장) */
+    int deleteProdInfoTouchKeyAllStore(ProdVO prodVO);
 
     /** 상품 삭제 팝업 - 매장) 주방프린터_출력상품 영구삭제(전매장) */
     int deleteProdInfoPrintProdAllStore(ProdVO prodVO);

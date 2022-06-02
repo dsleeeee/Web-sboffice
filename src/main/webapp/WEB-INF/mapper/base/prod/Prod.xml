@@ -5291,6 +5291,43 @@
         </choose>
     </delete>
 
+    <!-- 상품 삭제 팝업 - 상품_판매터치키 영구삭제 -->
+    <!--
+        TABLE    : TB_HQ_TOUCH_KEY, TB_MS_TOUCH_KEY
+        PARAM    : prodVO
+        COMMENTS : 상품_판매터치키 영구삭제
+    -->
+    <delete id="deleteProdInfoTouchKey" parameterType="prodVO">
+        /* USE : ProdMapper.deleteProdInfoTouchKey */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE TB_HQ_TOUCH_KEY
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND PROD_CD IN (
+                                    SELECT PROD_CD
+                                      FROM TB_TMP_DEL_PRODUCT
+                                     WHERE SESSION_ID = #{sessionId}
+                                       AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                       AND DEL_TYPE_FG = #{delTypeFg}
+                                  )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE TB_MS_TOUCH_KEY
+                 WHERE STORE_CD = #{storeCd}
+                   AND PROD_CD IN (
+                                    SELECT PROD_CD
+                                      FROM TB_TMP_DEL_PRODUCT
+                                     WHERE SESSION_ID = #{sessionId}
+                                       AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                       AND STORE_CD = #{storeCd}
+                                       AND DEL_TYPE_FG = #{delTypeFg}
+                                  )
+            </when>
+        </choose>
+    </delete>
+
     <!-- 상품 삭제 팝업 - 본사) 상품별_취급매장 영구삭제 -->
     <!--
         TABLE    : TB_HQ_PRODUCT_STORE
@@ -5725,6 +5762,29 @@
     <delete id="deleteProdInfoUnitstProdAllStore" parameterType="prodVO">
         /* USE : ProdMapper.deleteProdInfoUnitstProdAllStore */
         DELETE TB_MS_PRODUCT_UNITST_PROD
+         WHERE STORE_CD IN (
+                              SELECT STORE_CD
+                              FROM TB_MS_STORE
+                              WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                           )
+           AND PROD_CD IN (
+                              SELECT PROD_CD
+                               FROM TB_TMP_DEL_PRODUCT
+                              WHERE SESSION_ID = #{sessionId}
+                                AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                AND DEL_TYPE_FG = #{delTypeFg}
+                          )
+    </delete>
+
+    <!-- 상품 삭제 팝업 - 상품_판매터치키 영구삭제 (전매장) -->
+    <!--
+        TABLE    : TB_MS_TOUCH_KEY, TB_TMP_DEL_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : 상품_판매터치키 영구삭제 (전매장)
+    -->
+    <delete id="deleteProdInfoTouchKeyAllStore" parameterType="prodVO">
+        /* USE : ProdMapper.deleteProdInfoTouchKeyAllStore */
+        DELETE TB_MS_TOUCH_KEY
          WHERE STORE_CD IN (
                               SELECT STORE_CD
                               FROM TB_MS_STORE

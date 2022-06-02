@@ -1476,6 +1476,7 @@ public class ProdServiceImpl implements ProdService {
             prodMapper.deleteProdInfoSalePrice(prodVO1);           // 상품 판매금액
             prodMapper.deleteProdInfoVendorProd(prodVO1);          // 거래처별_취급상품
             prodMapper.deleteProdInfoUnitstProd(prodVO1);          // 상품_세트구성_상품
+            prodMapper.deleteProdInfoTouchKey(prodVO1);            // 상품_판매터치키
 
             if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
                 prodMapper.deleteProdInfoHqProductStore(prodVO1);  // 본사) 상품별_취급매장
@@ -1570,6 +1571,7 @@ public class ProdServiceImpl implements ProdService {
                 prodMapper.deleteProdInfoSalePriceAllStore(prodVO1);           // 상품 판매금액
                 prodMapper.deleteProdInfoVendorProdAllStore(prodVO1);          // 거래처별_취급상품
                 prodMapper.deleteProdInfoUnitstProdAllStore(prodVO1);          // 상품_세트구성_상품
+                prodMapper.deleteProdInfoTouchKeyAllStore(prodVO1);            // 상품_판매터치키
                 prodMapper.deleteProdInfoPrintProdAllStore(prodVO1);           // 매장) 주방프린터_출력상품
                 prodMapper.deleteProdInfoSdselProdAllStore(prodVO1);           // 매장) 상품_사이드선택_상품
 
@@ -1765,6 +1767,7 @@ public class ProdServiceImpl implements ProdService {
             prodMapper.deleteProdInfoSalePrice(prodVO);           // 상품 판매금액
             prodMapper.deleteProdInfoVendorProd(prodVO);          // 거래처별_취급상품
             prodMapper.deleteProdInfoUnitstProd(prodVO);          // 상품_세트구성_상품
+            prodMapper.deleteProdInfoTouchKey(prodVO);            // 상품_판매터치키 영구삭제
 
             if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
                 prodMapper.deleteProdInfoHqProductStore(prodVO);  // 본사) 상품별_취급매장
@@ -1859,6 +1862,7 @@ public class ProdServiceImpl implements ProdService {
                 prodMapper.deleteProdInfoSalePriceAllStore(prodVO);           // 상품 판매금액
                 prodMapper.deleteProdInfoVendorProdAllStore(prodVO);          // 거래처별_취급상품
                 prodMapper.deleteProdInfoUnitstProdAllStore(prodVO);          // 상품_세트구성_상품
+                prodMapper.deleteProdInfoTouchKeyAllStore(prodVO);            // 상품_판매터치키
                 prodMapper.deleteProdInfoPrintProdAllStore(prodVO);           // 매장) 주방프린터_출력상품
                 prodMapper.deleteProdInfoSdselProdAllStore(prodVO);           // 매장) 상품_사이드선택_상품
 
