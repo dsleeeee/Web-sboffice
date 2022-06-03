@@ -995,7 +995,6 @@ div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; 
 
 
 /* 그리드 텍스트 컬러 추가 /블루/블랙/레드 */
-
 .wij_gridText-blue {
     color: #0000ff !important;
 }
@@ -1007,6 +1006,42 @@ div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; 
 .wij_gridText-red {
     color: #ff0000 !important;
 }
+
+
+/* 그리드 텍스트 컬러 추가 및 글자 굵게 */
+.wij_gridText-black-bold {
+    color: #000000 !important;
+    font-weight: bold;
+}
+
+
+/* 그리드 바탕색 컬러 추가 및 글자 굵게 */
+.wij_gridBackground-gary-bold {
+    color: #000000 !important;
+    font-weight: bold;
+    background-color: #BFBFBF !important;
+}
+.wij_gridBackground-blue-bold {
+    color: #000000 !important;
+    font-weight: bold;
+    background-color: #9BC2E6 !important;
+}
+.wij_gridBackground-orange-bold {
+    color: #000000 !important;
+    font-weight: bold;
+    background-color: #FFC000 !important;
+}
+.wij_gridBackground-pink-bold {
+    color: #000000 !important;
+    font-weight: bold;
+    background-color: #F4B084 !important;
+}
+.wij_gridBackground-yellow-bold {
+    color: #000000 !important;
+    font-weight: bold;
+    background-color: #FFD966 !important;
+}
+
 
 
 .pageNum {position:relative; width:100%; text-align:center;}

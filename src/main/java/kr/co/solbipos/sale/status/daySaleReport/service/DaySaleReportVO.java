@@ -60,6 +60,14 @@ public class DaySaleReportVO extends PageVO {
     /** 엑셀파일명 */
     private String fileName;
 
+    /** 쿼리문의 PIVOT IN에 사용할 날짜 컬럼 문자열 */
+    private String pivotDateCol;
+
+    /** 매출 발생 일별 기준, 동적 컬럼 생성을 위한 쿼리 문자열*/
+    private String sQuery1;
+    private String sQuery2;
+    private String sQuery3;
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -117,4 +125,32 @@ public class DaySaleReportVO extends PageVO {
     public String getFileName() { return fileName; }
 
     public void setFileName(String fileName) { this.fileName = fileName; }
+
+    public String getPivotDateCol() { return pivotDateCol; }
+
+    public void setPivotDateCol(String pivotDateCol) { this.pivotDateCol = pivotDateCol; }
+
+    public String getsQuery1() {
+        return sQuery1;
+    }
+
+    public void setsQuery1(String sQuery1) {
+        this.sQuery1 = sQuery1;
+    }
+
+    public String getsQuery2() {
+        return sQuery2;
+    }
+
+    public void setsQuery2(String sQuery2) {
+        this.sQuery2 = sQuery2;
+    }
+
+    public String getsQuery3() {
+        return sQuery3;
+    }
+
+    public void setsQuery3(String sQuery3) {
+        this.sQuery3 = sQuery3;
+    }
 }

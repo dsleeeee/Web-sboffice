@@ -127,4 +127,213 @@
         AND tmsr.REPORT_TYPE = '02'
     </select>
 
+    <!-- 일별매출내역 조회 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getDaySaleReportListList"  parameterType="DaySaleReportVO" resultType="DefaultMap">
+        /* DaySaleReportMapper.getDaySaleReportListList */
+        SELECT *
+        FROM
+        (
+            SELECT *
+            FROM
+            (
+                -- 상품별-일자별 매출(배달의 민족, 쿠팡이츠, 요기요, 그외 매출(홀+CID))
+                SELECT
+                PROD_CD,
+                PROD_NM,
+                PROD_CLASS_CD,
+                PROD_CLASS_NM,
+                DLVR_IN_FG
+                ${sQuery1}
+                FROM
+                (
+                    SELECT
+                    PROD_CD,
+                    PROD_NM,
+                    PROD_CLASS_CD,
+                    PROD_CLASS_NM,
+                    DLVR_IN_FG
+                    ${sQuery1}
+                    ${sQuery3}
+                    FROM
+                    (
+                        SELECT *
+                        FROM
+                        (
+                            SELECT
+                            A.SALE_DATE,
+                            A.PROD_CD,
+                            B2.PROD_NM,
+                            B2.PROD_CLASS_CD,
+                            B2.PROD_CLASS_NM,
+                            (CASE WHEN A.DLVR_IN_FG IN ('3','4','5') THEN A.DLVR_IN_FG ELSE '999' END) AS DLVR_IN_FG,
+                            A.TOT_SALE_QTY,
+                            A.TOT_SALE_AMT,
+                            A.TOT_DC_AMT,
+                            A.REAL_SALE_AMT
+                            FROM TB_SL_DAILY_PROD_DLVR A,
+                            TB_MS_PRODUCT B,
+                            (
+                                SELECT
+                                DISTINCT A.PROD_CD,
+                                A.PROD_NM,
+                                B.PROD_CLASS_CD,
+                                B.PROD_CLASS_NM
+                                FROM TB_MS_PRODUCT A,
+                                TB_MS_PRODUCT_CLASS B,
+                                TB_SL_DAILY_PROD_DLVR C
+                                WHERE 1=1
+                                AND A.PROD_CLASS_CD = B.PROD_CLASS_CD
+                                AND A.STORE_CD = B.STORE_CD
+                                AND A.STORE_CD = C.STORE_CD
+                                AND A.PROD_CD = C.PROD_CD
+                                AND C.STORE_CD = #{storeCd}
+                                AND C.SALE_DATE BETWEEN #{dataCreateMonth}||'01' AND #{dataCreateMonth}||#{dataCreateMonthLastDate}
+                            ) B2
+                            WHERE 1=1
+                            AND B.STORE_CD (+)= A.STORE_CD
+                            AND B.HQ_BRAND_CD (+)= A.HQ_BRAND_CD
+                            AND B.PROD_CD (+)= A.PROD_CD
+                            AND A.PROD_CD (+)= B2.PROD_CD
+                            AND B.PROD_CLASS_CD (+)= B2.PROD_CLASS_CD
+                            AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+                            AND A.STORE_CD = #{storeCd}
+                            AND A.SALE_DATE BETWEEN #{dataCreateMonth}||'01' AND #{dataCreateMonth}||#{dataCreateMonthLastDate}
+                            ORDER BY A.PROD_CD ASC
+                        )
+                        PIVOT
+                        (
+                            SUM(TOT_SALE_QTY) TOT_SALE_QTY,
+                            SUM(TOT_SALE_AMT) TOT_SALE_AMT,
+                            SUM(TOT_DC_AMT) TOT_DC_AMT,
+                            SUM(REAL_SALE_AMT) TOT_REAL_SALE_AMT
+                            FOR SALE_DATE IN
+                            (
+                                ${pivotDateCol}
+                            )
+                        )
+                        ORDER BY DLVR_IN_FG, PROD_CLASS_CD, PROD_CD DESC
+                    )
+                )
+                WHERE 1=1
+                AND ALL_TOT_AMT != 0
+                -- //상품별-일자별 매출(배달의 민족, 쿠팡이츠, 요기요, 그외 매출(홀+CID))
+            )
+            UNION ALL
+            (
+                -- 분류명 행 추가
+                SELECT
+                DISTINCT '9999999999999' as PROD_CD,
+                '['||B.PROD_CLASS_NM||']' as PROD_NM,
+                B.PROD_CLASS_CD,
+                '['||B.PROD_CLASS_NM||']' AS PROD_CLASS_NM,
+                (CASE WHEN C.DLVR_IN_FG IN ('3','4','5') THEN C.DLVR_IN_FG ELSE '999' END) AS DLVR_IN_FG
+                ${sQuery2}
+                FROM TB_MS_PRODUCT A,
+                TB_MS_PRODUCT_CLASS B,
+                TB_SL_DAILY_PROD_DLVR C
+                WHERE 1=1
+                AND A.STORE_CD = B.STORE_CD
+                AND A.PROD_CLASS_CD = B.PROD_CLASS_CD
+                AND A.STORE_CD = C.STORE_CD
+                AND A.PROD_CD = C.PROD_CD
+                AND C.STORE_CD = #{storeCd}
+                AND C.SALE_DATE BETWEEN #{dataCreateMonth}||'01' AND #{dataCreateMonth}||#{dataCreateMonthLastDate}
+                -- //분류명 행 추가
+            )
+            UNION ALL
+            (
+                -- 배달별-일자별 합계
+                SELECT
+                '99999999999991' AS PROD_CD,
+                (CASE WHEN DLVR_IN_FG = '3' THEN '1. 배달의 민족 Total'
+                       WHEN DLVR_IN_FG = '4' THEN '2. 쿠팡이츠 Total'
+                       WHEN DLVR_IN_FG = '5' THEN '3. 요기요 Total'
+                       WHEN DLVR_IN_FG = '999' THEN '4. 그외 매출(홀+CID) Total'
+                       ELSE null END) AS PROD_NM,
+                '00000' AS PROD_CLASS_CD,
+                '' AS PROD_CLASS_NM,
+                DLVR_IN_FG
+                ${sQuery1}
+                FROM
+                (
+                    SELECT *
+                    FROM
+                    (
+                        SELECT
+                        A.SALE_DATE,
+                         (CASE WHEN A.DLVR_IN_FG IN ('3','4','5') THEN A.DLVR_IN_FG ELSE '999' END) AS DLVR_IN_FG,
+                        A.TOT_SALE_QTY,
+                        A.TOT_SALE_AMT,
+                        A.TOT_DC_AMT,
+                        A.REAL_SALE_AMT
+                        FROM TB_SL_DAILY_PROD_DLVR A
+                        WHERE 1=1
+                        AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND A.STORE_CD = #{storeCd}
+                        AND A.SALE_DATE BETWEEN #{dataCreateMonth}||'01' AND #{dataCreateMonth}||#{dataCreateMonthLastDate}
+                    )
+                    PIVOT
+                    (
+                        SUM(TOT_SALE_QTY) TOT_SALE_QTY,
+                        SUM(TOT_SALE_AMT) TOT_SALE_AMT,
+                        SUM(TOT_DC_AMT) TOT_DC_AMT,
+                        SUM(REAL_SALE_AMT) TOT_REAL_SALE_AMT
+                        FOR SALE_DATE IN
+                        (
+                            ${pivotDateCol}
+                        )
+                    )
+                )
+                -- //배달별-일자별 합계
+            )
+            UNION ALL
+            (
+                -- 일자별 합계
+                SELECT
+                '99999999999993' AS PROD_CD,
+                'POS 총 매출' AS PROD_NM,
+                '00000' AS PROD_CLASS_CD,
+                '' AS PROD_CLASS_NM,
+                 '0' AS DLVR_IN_FG
+                ${sQuery1}
+                FROM
+                (
+                    SELECT *
+                    FROM
+                    (
+                        SELECT
+                        A.SALE_DATE,
+                        A.TOT_SALE_QTY,
+                        A.TOT_SALE_AMT,
+                        A.TOT_DC_AMT,
+                        A.REAL_SALE_AMT
+                        FROM TB_SL_DAILY_PROD_DLVR A
+                        WHERE 1=1
+                        AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND A.STORE_CD = #{storeCd}
+                        AND A.SALE_DATE BETWEEN #{dataCreateMonth}||'01' AND #{dataCreateMonth}||#{dataCreateMonthLastDate}
+                    )
+                    PIVOT
+                    (
+                        SUM(TOT_SALE_QTY) TOT_SALE_QTY,
+                        SUM(TOT_SALE_AMT) TOT_SALE_AMT,
+                        SUM(TOT_DC_AMT) TOT_DC_AMT,
+                        SUM(REAL_SALE_AMT) TOT_REAL_SALE_AMT
+                        FOR SALE_DATE IN
+                        (
+                            ${pivotDateCol}
+                        )
+                    )
+                )
+                -- //일자별 합계
+            )
+        ) AA
+        WHERE 1=1
+        ORDER BY AA.DLVR_IN_FG, AA.PROD_CLASS_CD, AA.PROD_CD DESC
+    </select>
+
 </mapper>

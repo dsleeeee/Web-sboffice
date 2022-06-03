@@ -69,7 +69,7 @@ public class DaySaleReportController {
     @RequestMapping(value = "/daySaleReport/list.sb", method = RequestMethod.GET)
     public String daySaleReportView(HttpServletRequest request, HttpServletResponse response, Model model) {
 
-        return "sale/status/daySaleReport/daySaleReport";
+        return "sale/status/daySaleReport/daySaleReportTab";
     }
 
     /**
@@ -210,5 +210,28 @@ public class DaySaleReportController {
         in.close();
         response.getOutputStream().flush();
         response.getOutputStream().close();
+    }
+
+    /**
+     * 일별매출내역 조회 - 조회
+     *
+     * @param daySaleReportVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 05. 25.
+     */
+    @RequestMapping(value = "/daySaleReportList/getDaySaleReportListList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDaySaleReportListList(DaySaleReportVO daySaleReportVO, HttpServletRequest request,
+                                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = daySaleReportService.getDaySaleReportListList(daySaleReportVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, daySaleReportVO);
     }
 }
