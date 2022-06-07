@@ -13,8 +13,33 @@
  */
 var app = agrid.getApp();
 
- var timeData = [
+ var startTimeData = [
    {"name":"00", "value":"0"},
+   {"name":"01", "value":"1"},
+   {"name":"02", "value":"2"},
+   {"name":"03", "value":"3"},
+   {"name":"04", "value":"4"},
+   {"name":"05", "value":"5"},
+   {"name":"06", "value":"6"},
+   {"name":"07", "value":"7"},
+   {"name":"08", "value":"8"},
+   {"name":"09", "value":"9"},
+   {"name":"10", "value":"10"},
+   {"name":"11", "value":"11"},
+   {"name":"12", "value":"12"},
+   {"name":"13", "value":"13"},
+   {"name":"14", "value":"14"},
+   {"name":"15", "value":"15"},
+   {"name":"16", "value":"16"},
+   {"name":"17", "value":"17"},
+   {"name":"18", "value":"18"},
+   {"name":"19", "value":"19"},
+   {"name":"20", "value":"20"},
+   {"name":"21", "value":"21"},
+   {"name":"22", "value":"22"},
+   {"name":"23", "value":"23"}
+ ];
+ var endTimeData = [
    {"name":"01", "value":"1"},
    {"name":"02", "value":"2"},
    {"name":"03", "value":"3"},
@@ -49,7 +74,8 @@ app.controller('timeSlotCtrl', ['$scope', '$http', function ($scope, $http) {
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
-    $scope.timeDataMap = new wijmo.grid.DataMap(timeData, 'value', 'name');
+    $scope.startTimeDataMap = new wijmo.grid.DataMap(startTimeData, 'value', 'name');
+    $scope.endTimeDataMap = new wijmo.grid.DataMap(endTimeData, 'value', 'name');
     // 목록 조회
     $scope.getTimeSlotList();
 
@@ -102,19 +128,55 @@ app.controller('timeSlotCtrl', ['$scope', '$http', function ($scope, $http) {
   // 시간체크
   $scope.timeChk = function (){
 
-    var time = 0;
+    var nmcodeNm = [];
+    var timeSlot = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
 
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+      // 명칭 입력/미입력
       if($scope.flex.collectionView.items[i].nmcodeNm !== "") {
+        // 명칭 중복
+        if(nmcodeNm.indexOf($scope.flex.collectionView.items[i].nmcodeNm) !== -1){
+          $scope._popMsg(messages["timeSlot.nmcodeNm.chk"]);
+          return false;
+        } else {
+          nmcodeNm.push($scope.flex.collectionView.items[i].nmcodeNm);
+        }
+
         var startTime = Number($scope.flex.collectionView.items[i].startTime);
         var endTime = Number($scope.flex.collectionView.items[i].endTime);
+
         if(startTime == endTime){
-          $scope._popMsg(messages["timeSlot.timeChk"]);
+          $scope._popMsg(messages["timeSlot.time.duplicate"]);
           return false;
         } else if(startTime < endTime){
-          time += endTime - startTime;
+          for(var j=startTime; j<endTime; j++){
+            var time = timeSlot.indexOf(j);
+            if(time !== -1){
+              timeSlot.splice(time,1);
+            } else {
+              $scope._popMsg(messages["timeSlot.time.duplicate2"]);
+              return false;
+            }
+          }
         } else if(startTime > endTime) {
-          time += 24 - (startTime - endTime);
+          for(var j=startTime; j<=23; j++){
+            var time = timeSlot.indexOf(j);
+            if(time !== -1){
+              timeSlot.splice(time,1);
+            } else {
+              $scope._popMsg(messages["timeSlot.time.duplicate2"]);
+              return false;
+            }
+          }
+          for(var j=0; j<endTime; j++){
+            var time = timeSlot.indexOf(j);
+            if(time !== -1){
+              timeSlot.splice(time,1);
+            } else {
+              $scope._popMsg(messages["timeSlot.time.duplicate2"]);
+              return false;
+            }
+          }
         }
       } else {
         $scope._popMsg(messages["timeSlot.nmcodeNm.none"]);
@@ -122,10 +184,10 @@ app.controller('timeSlotCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     }
 
-    if(time == 24){
+    if(timeSlot.length === 0){
       $scope.save();
     } else {
-      $scope._popMsg(messages["timeSlot.timeChk"]);
+      $scope._popMsg(messages["timeSlot.time.none"]);
       return false;
     }
 
@@ -135,6 +197,12 @@ app.controller('timeSlotCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.save = function() {
     // 파라미터 설정
     var params = new Array();
+
+    for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
+      $scope.flex.collectionView.itemsRemoved[i].status = "D";
+      params.push($scope.flex.collectionView.itemsRemoved[i]);
+    }
+
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
       $scope.flex.collectionView.itemsEdited[i].status = "U";
       params.push($scope.flex.collectionView.itemsEdited[i]);
@@ -143,11 +211,6 @@ app.controller('timeSlotCtrl', ['$scope', '$http', function ($scope, $http) {
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
       $scope.flex.collectionView.itemsAdded[i].status = "I";
       params.push($scope.flex.collectionView.itemsAdded[i]);
-    }
-
-    for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
-      $scope.flex.collectionView.itemsRemoved[i].status = "D";
-      params.push($scope.flex.collectionView.itemsRemoved[i]);
     }
 
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수

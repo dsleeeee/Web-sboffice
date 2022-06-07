@@ -44,8 +44,8 @@
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="timeSlot.timeSlotNm"/>" binding="nmcodeNm" maxLength="30" width="*"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="timeSlot.startTime"/>" binding="startTime" data-map="timeDataMap" width="*" format="n2"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="timeSlot.endTime"/>" binding="endTime" data-map="timeDataMap" width="*" format="n2"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="timeSlot.startTime"/>" binding="startTime" data-map="startTimeDataMap" width="*" format="n2"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="timeSlot.endTime"/>" binding="endTime" data-map="endTimeDataMap" width="*" format="n2"></wj-flex-grid-column>
 
         </wj-flex-grid>
       </div>
@@ -57,5 +57,5 @@
   var orgnFg      = "${orgnFg}";
   var hqOfficeCd  = "${hqOfficeCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/store/timeSlot/timeSlot.js?ver=20220520.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/timeSlot/timeSlot.js?ver=20220520.02" charset="utf-8"></script>
 
