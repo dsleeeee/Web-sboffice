@@ -7,6 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<c:set var="storeNm" value="${sessionScope.sessionInfo.storeNm}" />
 
 <div id="daySaleReportListView" class="subCon" style="display: none;">
     <div ng-controller="daySaleReportListCtrl">
@@ -94,4 +95,8 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/daySaleReport/daySaleReportList.js?ver=20220531.01" charset="utf-8"></script>
+<script type="text/javascript">
+    var storeNm = "${storeNm}";
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/daySaleReport/daySaleReportList.js?ver=20220531.02" charset="utf-8"></script>

@@ -237,11 +237,14 @@ app.controller('daySaleReportListCtrl', ['$scope', '$http', '$timeout', function
 
     // <-- 엑셀다운로드 -->
     $scope.excelDownload = function(){
-        var month = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
-        month = month.substring(4);
+        var excelMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
+        excelMonth = excelMonth.substring(4);
 
-        var storeNm = $("#daySaleReportListStoreNm").val();
-        storeNm = storeNm.substring(storeNm.indexOf("]")+2); // 띄어쓰기 제외하고
+        var excelStoreNm = storeNm;
+        if(orgnFg == "HQ") {
+            excelStoreNm = $("#daySaleReportListStoreNm").val();
+            excelStoreNm = excelStoreNm.substring(excelStoreNm.indexOf("]")+2); // 띄어쓰기 제외하고
+        }
 
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
@@ -258,7 +261,7 @@ app.controller('daySaleReportListCtrl', ['$scope', '$http', '$timeout', function
                         return column.visible;
                     }
                 },
-                storeNm+' '+month+'월 매출 정리_'+getCurDate()+'.xlsx',
+                excelStoreNm+' '+excelMonth+'월 매출 정리_'+getCurDate()+'.xlsx',
                 function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
