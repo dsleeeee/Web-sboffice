@@ -144,7 +144,9 @@
         NVL(STIN_SALE_UPRC, '') AS STIN_SALE_UPRC,
         NVL(DLVR_SALE_UPRC, '') AS DLVR_SALE_UPRC,
         NVL(PACK_SALE_UPRC, '') AS PACK_SALE_UPRC,
-        NVL(DEPOSIT_CUP_FG, '') AS DEPOSIT_CUP_FG
+        NVL(DEPOSIT_CUP_FG, '') AS DEPOSIT_CUP_FG,
+        CASE PROD_TYPE_FG WHEN '4' THEN 'N' ELSE POINT_USE_YN END AS POINT_USE_YN,
+        CASE PROD_TYPE_FG WHEN '4' THEN 'N' ELSE DC_YN END AS DC_YN
         FROM TB_TMP_EXCEL_PRODUCT
         WHERE 1=1
         AND SESSION_ID = #{sessionId}
@@ -214,7 +216,9 @@
             STIN_SALE_UPRC,
             DLVR_SALE_UPRC,
             PACK_SALE_UPRC,
-            DEPOSIT_CUP_FG
+            DEPOSIT_CUP_FG,
+            POINT_USE_YN,
+            DC_YN
         ) VALUES (
             #{sessionId},
             #{seq},
@@ -265,8 +269,10 @@
             REPLACE(NVL(#{stinSaleUprc}, #{saleUprc}), ',',''),
             REPLACE(NVL(#{dlvrSaleUprc}, #{saleUprc}), ',',''),
             REPLACE(NVL(#{packSaleUprc}, #{saleUprc}), ',',''),
-            #{depositCupFg}
-        )
+            #{depositCupFg},
+            #{pointUseYn},
+            #{dcYn}
+         )
     </insert>
 
     <!-- 브랜드코드 검증 조회 -->
@@ -465,6 +471,34 @@
         FROM TB_CM_NMCODE
         WHERE NMCODE_GRP_CD = '045'
         AND NMCODE_NM = #{prcCtrlFg}
+        GROUP BY NMCODE_CD
+    </select>
+
+    <!-- 판매상품여부 검증 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        COMMENTS : [공통]명칭코드
+    -->
+    <select id="getPointUseYnCheck"  parameterType="ProdExcelUploadVO" resultType="String">
+        /* ProdExcelUploadMapper.getPointUseYnCheck */
+        SELECT (CASE WHEN COUNT(NMCODE_CD) = '0' THEN '' ELSE NMCODE_CD END) AS NMCODE_CD
+        FROM TB_CM_NMCODE
+        WHERE NMCODE_GRP_CD = '067'
+          AND NMCODE_NM = #{pointUseYn}
+        GROUP BY NMCODE_CD
+    </select>
+
+    <!-- 할인여부 검증 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        COMMENTS : [공통]명칭코드
+    -->
+    <select id="getDcYnCheck"  parameterType="ProdExcelUploadVO" resultType="String">
+        /* ProdExcelUploadMapper.getDcYnCheck */
+        SELECT (CASE WHEN COUNT(NMCODE_CD) = '0' THEN '' ELSE NMCODE_CD END) AS NMCODE_CD
+        FROM TB_CM_NMCODE
+        WHERE NMCODE_GRP_CD = '067'
+          AND NMCODE_NM = #{dcYn}
         GROUP BY NMCODE_CD
     </select>
 

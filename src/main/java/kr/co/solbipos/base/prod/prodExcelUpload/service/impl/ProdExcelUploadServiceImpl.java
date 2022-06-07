@@ -290,6 +290,18 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
 
                 prodExcelUploadVO.setDepositCupFg(depositCupFg);
             }
+
+            // 포인트사용여부
+            if (prodExcelUploadVO.getPointUseYn() != null && !"".equals(prodExcelUploadVO.getPointUseYn())) {
+                String pointUseYn = prodExcelUploadMapper.getPointUseYnCheck(prodExcelUploadVO);
+                prodExcelUploadVO.setPointUseYn(pointUseYn);
+            }
+
+            // 할인여부
+            if (prodExcelUploadVO.getDcYn() != null && !"".equals(prodExcelUploadVO.getDcYn())) {
+                String dcYn = prodExcelUploadMapper.getDcYnCheck(prodExcelUploadVO);
+                prodExcelUploadVO.setDcYn(dcYn);
+            }
             // <-- //업로할때는 전부 명칭으로 들어간다 -->
 
             // 상품코드
@@ -330,6 +342,18 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
 
             prodExcelUploadVO.setSessionId(sessionInfoVO.getUserId());
             prodExcelUploadVO.setSeq(i);
+
+            // 할인여부
+            if (prodExcelUploadVO.getDcYn() != null && !"".equals(prodExcelUploadVO.getDcYn())) {
+            } else {
+                prodExcelUploadVO.setResult("할인여부를 선택해주세요.");
+            }
+
+            // 포인트사용여부
+            if (prodExcelUploadVO.getPointUseYn() != null && !"".equals(prodExcelUploadVO.getPointUseYn())) {
+            } else {
+                prodExcelUploadVO.setResult("포인트사용여부를 선택해주세요.");
+            }
 
             // 초기재고
             if (prodExcelUploadVO.getStartStockQty() != null && !"".equals(prodExcelUploadVO.getStartStockQty())) {
@@ -516,6 +540,8 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
                 // 상품유형이 [보증금상품]이면 강제로 면세처리
                 if(prodExcelUploadVO.getProdTypeFg().equals("4")){
                     prodExcelUploadVO.setVatFg("2");
+                    prodExcelUploadVO.setPointUseYn("N");
+                    prodExcelUploadVO.setDcYn("N");
                 }
             } else {
                 prodExcelUploadVO.setResult("상품유형를 선택해주세요.");

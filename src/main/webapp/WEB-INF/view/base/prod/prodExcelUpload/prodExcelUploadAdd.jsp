@@ -58,6 +58,8 @@
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" width="85" align="center"></wj-flex-grid-column>
                 </c:if>
                 <wj-flex-grid-column header="<s:message code="prodExcelUpload.depositCupFg"/>" binding="depositCupFg" data-map="depositCupFgDataMap" width="100" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodExcelUpload.pointUseYn"/>" binding="pointUseYn" data-map="pointUseYnDataMap" width="85" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodExcelUpload.dcYn"/>" binding="dcYn" data-map="dcYnDataMap" width="85" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodExcelUpload.remark"/>" binding="remark" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
 
             </wj-flex-grid>

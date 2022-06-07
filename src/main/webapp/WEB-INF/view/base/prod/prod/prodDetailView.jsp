@@ -364,6 +364,7 @@
                         </td>
                     </tr>
                     <tr>
+                        <!-- 보증컵유형 -->
                         <th><s:message code="prod.depositCupFg"/></th>
                         <td>
                             <wj-combo-box ng-model="prodDetail.depositCupFg"
@@ -375,6 +376,34 @@
                                           is-editable="false">
                             </wj-combo-box>
                             {{_depositCupFg}}
+                        </td>
+                        <!-- 포인트사용여부 -->
+                        <th><s:message code="prod.pointUseYn"/></th>
+                        <td>
+                            <wj-combo-box ng-model="prodDetail.pointUseYn"
+                                          ng-hide="true"
+                                          text="_pointUseYn"
+                                          items-source="_getComboData('useYnComboData')"
+                                          display-member-path="name"
+                                          selected-value-path="value"
+                                          is-editable="false">
+                            </wj-combo-box>
+                            {{_pointUseYn}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <!-- 할인여부 -->
+                        <th><s:message code="prod.dcYn"/></th>
+                        <td>
+                            <wj-combo-box ng-model="prodDetail.dcYn"
+                                          ng-hide="true"
+                                          text="_dcYn"
+                                          items-source="_getComboData('useYnComboData')"
+                                          display-member-path="name"
+                                          selected-value-path="value"
+                                          is-editable="false">
+                            </wj-combo-box>
+                            {{_dcYn}}
                         </td>
                     </tr>
                     </tbody>

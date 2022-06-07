@@ -72,6 +72,12 @@ public interface ProdExcelUploadMapper {
     /** 가격관리구분 검증 조회 */
     String getPrcCtrlFgCheck(ProdExcelUploadVO prodExcelUploadVO);
 
+    /** 포인트사용여부 체크 */
+    String getPointUseYnCheck(ProdExcelUploadVO prodExcelUploadVO);
+
+    /** 할인여부 체크 */
+    String getDcYnCheck(ProdExcelUploadVO prodExcelUploadVO);
+
     /** 기초 마스터 체크 */
     DefaultMap<Object> getMasterChk(ProdExcelUploadVO prodExcelUploadVO);
 

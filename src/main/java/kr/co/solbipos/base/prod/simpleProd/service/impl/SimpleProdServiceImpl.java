@@ -347,6 +347,8 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                 if(simpleProdVO.getDepositCupFg() != null && !simpleProdVO.getDepositCupFg().equals("선택")){
                     prodVO.setDepositCupFg(simpleProdVO.getDepositCupFg());
                 }
+                prodVO.setPointUseYn(simpleProdVO.getPointUseYn());
+                prodVO.setDcYn(simpleProdVO.getDcYn());
 
                 // 자동채번인 경우 상품코드 조회
                 if(simpleProdVO.getProdNoEnv() == ProdNoEnvFg.AUTO) {

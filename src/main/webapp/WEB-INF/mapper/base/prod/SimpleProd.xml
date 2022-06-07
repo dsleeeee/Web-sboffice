@@ -238,7 +238,9 @@
             STIN_SALE_UPRC,
             DLVR_SALE_UPRC,
             PACK_SALE_UPRC,
-            DEPOSIT_CUP_FG
+            DEPOSIT_CUP_FG,
+            POINT_USE_YN,
+            DC_YN
         ) VALUES (
             #{sessionId},
             #{seq},
@@ -288,7 +290,9 @@
             NVL(#{stinSaleUprc}, #{saleUprc}),
             NVL(#{dlvrSaleUprc}, #{saleUprc}),
             NVL(#{packSaleUprc}, #{saleUprc}),
-            #{depositCupFg}
+            #{depositCupFg},
+            #{pointUseYn},
+            #{dcYn}
         )
     </insert>
 
@@ -348,7 +352,9 @@
         NVL(STIN_SALE_UPRC, '') AS STIN_SALE_UPRC,
         NVL(DLVR_SALE_UPRC, '') AS DLVR_SALE_UPRC,
         NVL(PACK_SALE_UPRC, '') AS PACK_SALE_UPRC,
-        NVL(DEPOSIT_CUP_FG, '') AS DEPOSIT_CUP_FG
+        NVL(DEPOSIT_CUP_FG, '') AS DEPOSIT_CUP_FG,
+        CASE PROD_TYPE_FG WHEN '4' THEN 'N' ELSE POINT_USE_YN END AS POINT_USE_YN,
+        CASE PROD_TYPE_FG WHEN '4' THEN 'N' ELSE DC_YN END AS DC_YN
         FROM TB_TMP_PRODUCT
         WHERE 1=1
         AND SESSION_ID = #{sessionId}
