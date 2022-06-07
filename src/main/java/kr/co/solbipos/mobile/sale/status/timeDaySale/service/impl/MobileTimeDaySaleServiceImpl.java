@@ -3,19 +3,15 @@ package kr.co.solbipos.mobile.sale.status.timeDaySale.service.impl;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.mobile.sale.status.prod.service.MobileProdSaleVO;
+import kr.co.solbipos.mobile.sale.status.prod.service.impl.MobileProdSaleMapper;
 import kr.co.solbipos.mobile.sale.status.timeDaySale.service.MobileTimeDaySaleService;
 import kr.co.solbipos.mobile.sale.status.timeDaySale.service.MobileTimeDaySaleVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
-import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : MobileTimeDaySaleServiceImpl.java
@@ -36,13 +32,15 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class MobileTimeDaySaleServiceImpl implements MobileTimeDaySaleService {
     private final MobileTimeDaySaleMapper mobileTimeDaySaleMapper;
+    private final MobileProdSaleMapper mobileProdSaleMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public MobileTimeDaySaleServiceImpl(MobileTimeDaySaleMapper mobileTimeDaySaleMapper) {
+    public MobileTimeDaySaleServiceImpl(MobileTimeDaySaleMapper mobileTimeDaySaleMapper, MobileProdSaleMapper mobileProdSaleMapper) {
         this.mobileTimeDaySaleMapper = mobileTimeDaySaleMapper;
+        this.mobileProdSaleMapper = mobileProdSaleMapper;
     }
 
     /** 일자-시간대별 - 조회 */
@@ -61,13 +59,27 @@ public class MobileTimeDaySaleServiceImpl implements MobileTimeDaySaleService {
         // 매출 발생 시간대 기준, 동적 컬럼 생성을 위한 쿼리 변수;
         String sQuery1 = "";
         String sQuery2 = "";
-        // 매출 시간대 설정
-        int iSaleDateStart = Integer.parseInt(mobileTimeDaySaleVO.getStartTime());
-        int iSaleDateEnd = Integer.parseInt(mobileTimeDaySaleVO.getEndTime());
-        for(int i = iSaleDateStart; i <= iSaleDateEnd; i++) {
-            sQuery1 += ", SUM(CASE WHEN tsdt.SALE_HOUR = " + i + " THEN tsdt.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T"  + i +  "\n";
-            sQuery2 += ", NVL(SUM(REAL_SALE_AMT_T" + i + "), 0) AS REAL_SALE_AMT_T"  + i +  "\n";
+
+        if(mobileTimeDaySaleVO.getOptionFg().equals("time")) { // 시간대
+            // 매출 시간대 설정
+            int iSaleDateStart = Integer.parseInt(mobileTimeDaySaleVO.getStartTime());
+            int iSaleDateEnd = Integer.parseInt(mobileTimeDaySaleVO.getEndTime());
+            for (int i = iSaleDateStart; i <= iSaleDateEnd; i++) {
+                sQuery1 += ", SUM(CASE WHEN tsdt.SALE_HOUR = " + i + " THEN tsdt.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T" + i + "\n";
+                sQuery2 += ", NVL(SUM(REAL_SALE_AMT_T" + i + "), 0) AS REAL_SALE_AMT_T" + i + "\n";
+            }
+        } else if(mobileTimeDaySaleVO.getOptionFg().equals("timeSlot")) {
+            MobileProdSaleVO mobileProdSaleVO = new MobileProdSaleVO();
+            mobileProdSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            mobileProdSaleVO.setStoreCd(sessionInfoVO.getStoreCd());
+            mobileTimeDaySaleVO.setStoreCd(sessionInfoVO.getStoreCd());
+            List<DefaultMap<String>> timeSlotColList = mobileProdSaleMapper.getTimeSlotList(mobileProdSaleVO);
+            for (int i = 0; i < timeSlotColList.size(); i++) {
+                sQuery1 += ", SUM(CASE WHEN TIME_SLOT = " + timeSlotColList.get(i).getStr("value").replace("~", "") + " THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T" + timeSlotColList.get(i).getStr("value").replace("~", "") + "\n";
+                sQuery2 += ", NVL(SUM(REAL_SALE_AMT_T" + timeSlotColList.get(i).getStr("value").replace("~", "") + "), 0) AS REAL_SALE_AMT_T" + timeSlotColList.get(i).getStr("value").replace("~", "") + "\n";
+            }
         }
+
         mobileTimeDaySaleVO.setsQuery1(sQuery1);
         mobileTimeDaySaleVO.setsQuery2(sQuery2);
 

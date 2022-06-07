@@ -31,6 +31,19 @@ public class DayPeriodSaleController {
     @RequestMapping(value = "/list.sb", method = RequestMethod.GET)
     public String dayPeriodSaleView(HttpServletRequest request, HttpServletResponse response, Model model) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 시간대 조회
+        List<DefaultMap<String>> timeSlotColList = dayService.getTimeSlotList(sessionInfoVO);
+        // 시간대를 , 로 연결하는 문자열 생성
+        String timeSlotCol = "";
+        for(int i=0; i < timeSlotColList.size(); i++) {
+            timeSlotCol += (timeSlotCol.equals("") ? "" : ",") + timeSlotColList.get(i).getStr("value");
+        }
+
+        model.addAttribute("timeSlotColList", timeSlotColList);
+        model.addAttribute("timeSlotCol", timeSlotCol);
+
         return "sale/status/dayPeriodSale/dayPeriodSale";
     }
 }

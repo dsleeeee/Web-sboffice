@@ -41,6 +41,18 @@ app.controller('monthTimeCtrl', ['$scope', '$http', '$timeout', function ($scope
         selectionMode: "2" // 달력 선택 모드(1:day 2:month)
     });
 
+    $scope.timeSlotData = [];
+    var comboArray  = [{name:"전체", value:""}];
+    for(var i = 0; i < timeSlotColList.length; i++){
+        var comboData   = {};
+        comboData.name = timeSlotColList[i].name + "(" + timeSlotColList[i].value + ")";
+        comboData.value = timeSlotColList[i].value;
+        comboArray.push(comboData);
+    }
+
+    timeSlotData = comboArray;
+    $scope._setComboData("timeSlotCombo", timeSlotData);
+
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("startTimeCombo", Hh);
     $scope._setComboData("endTimeCombo", Hh);
@@ -80,6 +92,13 @@ app.controller('monthTimeCtrl', ['$scope', '$http', '$timeout', function ($scope
             dataItem['saleCntT' + i] = i + "시 ~ " + j + "시";
             dataItem['totGuestCntT' + i] = i + "시 ~ " + j + "시";
             j=0;
+        }
+
+        // 시간대분류 컬럼 생성
+        for (var i = 0; i < timeSlotColList.length; i++) {
+            dataItem['realSaleAmtT' + timeSlotColList[i].value.replaceAll("~","")] = timeSlotColList[i].name + "(" + timeSlotColList[i].value + ")";
+            dataItem['saleCntT' + timeSlotColList[i].value.replaceAll("~","")]     = timeSlotColList[i].name + "(" + timeSlotColList[i].value + ")";
+            dataItem['totGuestCntT' + timeSlotColList[i].value.replaceAll("~","")] = timeSlotColList[i].name + "(" + timeSlotColList[i].value + ")";
         }
 
         s.columnHeaders.rows[0].dataItem = dataItem;
@@ -142,6 +161,8 @@ app.controller('monthTimeCtrl', ['$scope', '$http', '$timeout', function ($scope
         params.storeCds = $("#monthTimeStoreCd").val();
         params.startTime = $scope.startTime;
         params.endTime = $scope.endTime;
+        params.optionFg = $("input[name=optionFg]:checked").val();
+        params.timeSlot = $scope.timeSlot;
 
         $scope._inquiryMain("/sale/day/month/month/getMonthTimeList.sb", params, function() {}, false);
 
@@ -156,11 +177,26 @@ app.controller('monthTimeCtrl', ['$scope', '$http', '$timeout', function ($scope
             defaultCol++;
         }
 
-        for(var i = defaultCol; i <= columns.length; i++){ //72번 돈다
-            columns[i].visible = false;
-            for(var j = start; j <= end; j++) {
-                if (columns[i].binding == 'realSaleAmtT'+j || columns[i].binding == 'saleCntT'+j || columns[i].binding == 'totGuestCntT'+j) {
-                    columns[i].visible = true;
+        if($("input[name=optionFg]:checked").val() == "time") { // 시간대
+            // 선택한 시간대에 따른 리스트 항목 visible
+            for (var i = defaultCol; i <= columns.length; i++) { //72번 돈다
+                columns[i].visible = false;
+                for (var j = start; j <= end; j++) {
+                    if (columns[i].binding == 'realSaleAmtT' + j || columns[i].binding == 'saleCntT' + j || columns[i].binding == 'totGuestCntT' + j) {
+                        columns[i].visible = true;
+                    }
+                }
+            }
+        } else if($("input[name=optionFg]:checked").val() == "timeSlot"){   // 시간대분류
+            // 선택한 시간대에 따른 리스트 항목 visible
+            for (var i = defaultCol; i < columns.length; i++) {
+                columns[i].visible = false;
+                for(var j = 0; j < timeSlotColList.length; j++){
+                    if($scope.timeSlot == timeSlotColList[j].value || $scope.timeSlot === ""){
+                        if (columns[i].binding == 'realSaleAmtT'+timeSlotColList[j].value.replaceAll("~","") || columns[i].binding == 'saleCntT'+timeSlotColList[j].value.replaceAll("~","") || columns[i].binding == 'totGuestCntT'+timeSlotColList[j].value.replaceAll("~","")) {
+                            columns[i].visible = true;
+                        }
+                    }
                 }
             }
         }
@@ -173,6 +209,17 @@ app.controller('monthTimeCtrl', ['$scope', '$http', '$timeout', function ($scope
     $scope.monthTimeStoreShow = function () {
         $scope._broadcast('monthTimeStoreCtrl');
     };
+
+    // 라디오버튼 클릭시 이벤트 발생
+    $("input:radio[name=optionFg]").click(function(){
+        if($("input[name=optionFg]:checked").val() == "time"){              // 시간대
+            $("#timeOption").show();
+            $("#timeSlotOption").hide();
+        }else {       // 시간대분류
+            $("#timeOption").hide();
+            $("#timeSlotOption").show();
+        }
+    });
 
     // 엑셀 다운로드
     $scope.excelDownloadInfo = function () {

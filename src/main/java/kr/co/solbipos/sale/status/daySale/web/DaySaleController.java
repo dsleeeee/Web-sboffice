@@ -120,6 +120,17 @@ public class DaySaleController {
         model.addAttribute("guestColList", guestColList);
         model.addAttribute("guestCol", guestCol);
 
+        // 시간대 조회
+        List<DefaultMap<String>> timeSlotColList = dayService.getTimeSlotList(sessionInfoVO);
+        // 시간대를 , 로 연결하는 문자열 생성
+        String timeSlotCol = "";
+        for(int i=0; i < timeSlotColList.size(); i++) {
+            timeSlotCol += (timeSlotCol.equals("") ? "" : ",") + timeSlotColList.get(i).getStr("value");
+        }
+
+        model.addAttribute("timeSlotColList", timeSlotColList);
+        model.addAttribute("timeSlotCol", timeSlotCol);
+
         return "sale/status/daySale/daySale";
     }
 }

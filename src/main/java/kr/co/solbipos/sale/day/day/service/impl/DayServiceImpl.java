@@ -76,7 +76,16 @@ public class DayServiceImpl implements DayService {
         return dayMapper.getPosColList(dayVO);
     }
 
+    @Override
+    public List<DefaultMap<String>> getTimeSlotList(SessionInfoVO sessionInfoVO) {
+        DayVO dayVO = new DayVO();
 
+        dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dayVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        return dayMapper.getTimeSlotList(dayVO);
+    }
 
 
     /** 일자별(일별종합 탭) - 일별종합 리스트 조회 */
@@ -299,19 +308,32 @@ public class DayServiceImpl implements DayService {
         String sQuery1 = "";
         String sQuery2 = "";
 
-        // 매출 시간대 설정
-        int iSaleDateStart = Integer.parseInt(dayVO.getStartTime());
-        int iSaleDateEnd = Integer.parseInt(dayVO.getEndTime());
+        if(dayVO.getOptionFg().equals("time")){ // 시간대
+            // 매출 시간대 설정
+            int iSaleDateStart = Integer.parseInt(dayVO.getStartTime());
+            int iSaleDateEnd = Integer.parseInt(dayVO.getEndTime());
+    
+            for(int i = iSaleDateStart; i <= iSaleDateEnd; i++) {
+                sQuery1 += ", NVL(SUM(tssh.REAL_SALE_AMT_T" + i + "), 0) AS REAL_SALE_AMT_T"  + i +  "\n";
+                sQuery1 += ", NVL(SUM(tssh.SALE_CNT_T" + i + "), 0) AS SALE_CNT_T"  + i +  "\n";
+                sQuery1 += ", NVL(SUM(tssh.TOT_GUEST_CNT_T" + i + "), 0) AS TOT_GUEST_CNT_T"  + i +  "\n";
+    
+                sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T"  + i +  "\n";
+                sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN SALE_CNT ELSE 0 END) AS SALE_CNT_T"  + i +  "\n";
+                sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN GUEST_CNT_1 ELSE 0 END) AS TOT_GUEST_CNT_T"  + i +  "\n";
+            }
+        } else if(dayVO.getOptionFg().equals("timeSlot")){
+            dayVO.setStoreCd(sessionInfoVO.getStoreCd());
+            List<DefaultMap<String>> timeSlotColList = dayMapper.getTimeSlotList(dayVO);
+            for(int i = 0; i < timeSlotColList.size(); i++) {
+                sQuery1 += ", NVL(SUM(tssh.REAL_SALE_AMT_T" + timeSlotColList.get(i).getStr("value").replace("~", "") + "), 0) AS REAL_SALE_AMT_T"  + timeSlotColList.get(i).getStr("value").replace("~", "") +  "\n";
+                sQuery1 += ", NVL(SUM(tssh.SALE_CNT_T" + timeSlotColList.get(i).getStr("value").replace("~", "") + "), 0) AS SALE_CNT_T"  + timeSlotColList.get(i).getStr("value").replace("~", "") +  "\n";
+                sQuery1 += ", NVL(SUM(tssh.TOT_GUEST_CNT_T" + timeSlotColList.get(i).getStr("value").replace("~", "") + "), 0) AS TOT_GUEST_CNT_T"  + timeSlotColList.get(i).getStr("value").replace("~", "") +  "\n";
 
-        for(int i = iSaleDateStart; i <= iSaleDateEnd; i++) {
-            sQuery1 += ", NVL(SUM(tssh.REAL_SALE_AMT_T" + i + "), 0) AS REAL_SALE_AMT_T"  + i +  "\n";
-            sQuery1 += ", NVL(SUM(tssh.SALE_CNT_T" + i + "), 0) AS SALE_CNT_T"  + i +  "\n";
-            sQuery1 += ", NVL(SUM(tssh.TOT_GUEST_CNT_T" + i + "), 0) AS TOT_GUEST_CNT_T"  + i +  "\n";
-
-            sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T"  + i +  "\n";
-            sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN SALE_CNT ELSE 0 END) AS SALE_CNT_T"  + i +  "\n";
-            sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN GUEST_CNT_1 ELSE 0 END) AS TOT_GUEST_CNT_T"  + i +  "\n";
-
+                sQuery2 += ", SUM(CASE WHEN TIME_SLOT = " + timeSlotColList.get(i).getStr("value").replace("~", "") + " THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T"  + timeSlotColList.get(i).getStr("value").replace("~", "") +  "\n";
+                sQuery2 += ", SUM(CASE WHEN TIME_SLOT = " + timeSlotColList.get(i).getStr("value").replace("~", "") + " THEN SALE_CNT ELSE 0 END) AS SALE_CNT_T"  + timeSlotColList.get(i).getStr("value").replace("~", "") +  "\n";
+                sQuery2 += ", SUM(CASE WHEN TIME_SLOT = " + timeSlotColList.get(i).getStr("value").replace("~", "") + " THEN GUEST_CNT ELSE 0 END) AS TOT_GUEST_CNT_T"  + timeSlotColList.get(i).getStr("value").replace("~", "") +  "\n";
+            }
         }
         dayVO.setsQuery1(sQuery1);
         dayVO.setsQuery2(sQuery2);

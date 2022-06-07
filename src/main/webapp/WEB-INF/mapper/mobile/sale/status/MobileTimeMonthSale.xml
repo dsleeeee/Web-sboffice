@@ -18,6 +18,7 @@
     -->
     <select id="getMobileTimeMonthSaleDateTimeList" parameterType="MobileTimeMonthSaleVO" resultType="DefaultMap">
         /* MobileTimeMonthSaleMapper.getMobileTimeMonthSaleDateTimeList */
+        <if test="optionFg != null and optionFg.toString() == 'time'">
         SELECT
         TO_CHAR(TO_DATE(SALE_YM, 'YYYYMM'), 'YYYY-MM') AS SALE_YM
         ${sQuery2}
@@ -49,6 +50,64 @@
         )
         GROUP BY SALE_YM
         ORDER BY SALE_YM
+        </if>
+        <if test="optionFg != null and optionFg.toString() == 'timeSlot'">
+        SELECT
+        TO_CHAR(TO_DATE(SALE_YM, 'YYYYMM'), 'YYYY-MM') AS SALE_YM
+        ${sQuery2}
+        FROM
+        (
+            SELECT
+            SALE_YM
+            ${sQuery1}
+            FROM
+            (     SELECT SALE_YM,
+                        REAL_SALE_AMT,
+                        TIME_SLOT
+                FROM TB_SL_MONTHLY_TIME tsmt,
+                    (
+                    SELECT  MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) || LPAD(MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) + 1, 2, '0') AS TIME_SLOT,
+                    MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) AS START_TIME,
+                    MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) AS END_TIME
+                    <!-- 프차 -->
+                    <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                        FROM    TB_HQ_NMCODE
+                        WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                    </if>
+                    <!-- 단독매장 -->
+                    <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                        FROM 	TB_MS_STORE_NMCODE
+                        WHERE 	STORE_CD = #{storeCd}
+                    </if>
+                    AND		NMCODE_GRP_CD ='001'
+                    GROUP BY NMCODE_NM
+                    ) thn
+            WHERE 1=1
+            AND tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
+            <!-- 매장 -->
+            <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                AND tsmt.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test='orgnFg != null and orgnFg == "H"'>
+                AND (
+                        'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                    OR	tsmt.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                    )
+            </if>
+            AND tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+            AND tsmt.SALE_HOUR BETWEEN thn.START_TIME AND thn.END_TIME
+            <if test='timeSlot != null and timeSlot != ""'>
+                AND TIME_SLOT = replace(#{timeSlot},'~','')
+            </if>
+            )
+            GROUP BY SALE_YM
+        )
+        GROUP BY SALE_YM
+        ORDER BY SALE_YM
+        </if>
     </select>
 
     <!-- 시간대별 - 조회 -->
@@ -58,6 +117,7 @@
     -->
     <select id="getMobileTimeMonthSaleTimeList" parameterType="MobileTimeMonthSaleVO" resultType="DefaultMap">
         /* MobileTimeMonthSaleMapper.getMobileTimeMonthSaleTimeList */
+        <if test="optionFg != null and optionFg.toString() == 'time'">
         SELECT
         A.SALE_TIME,
         A.AMT_CNT,
@@ -111,6 +171,82 @@
             AND tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
         ) B
         ORDER BY A.SALE_TIME
+        </if>
+        <if test="optionFg != null and optionFg.toString() == 'timeSlot'">
+        SELECT
+        A.SALE_TIME,
+        A.AMT_CNT,
+        A.REAL_SALE_AMT,
+        DECODE(B.TOT_REAL_SALE_AMT, 0, 0, NVL(ROUND(A.REAL_SALE_AMT / B.TOT_REAL_SALE_AMT * 100, 2), 0)) AS AMT_RATE
+        FROM
+        (
+            SELECT
+            TIME_SLOT AS SALE_TIME,
+            NVL(SUM(tsmt.SALE_CNT) + SUM(tsmt.RTN_SALE_CNT), 0) AS AMT_CNT,
+            NVL(SUM(tsmt.REAL_SALE_AMT), 0) AS REAL_SALE_AMT
+            FROM TB_SL_MONTHLY_TIME tsmt,
+                (
+                SELECT  MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) || '~'|| LPAD(MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) + 1, 2, '0') AS TIME_SLOT,
+                MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) AS START_TIME,
+                MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) AS END_TIME
+                <!-- 프차 -->
+                <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                    FROM    TB_HQ_NMCODE
+                    WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                </if>
+                <!-- 단독매장 -->
+                <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                    FROM 	TB_MS_STORE_NMCODE
+                    WHERE 	STORE_CD = #{storeCd}
+                </if>
+                AND		NMCODE_GRP_CD ='001'
+                GROUP BY NMCODE_NM
+                ) thn
+            WHERE 1=1
+            AND tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
+            <!-- 매장 -->
+            <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                AND tsmt.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test='orgnFg != null and orgnFg == "H"'>
+                AND (
+                        'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                    OR	tsmt.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                    )
+            </if>
+            AND tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+            AND tsmt.SALE_HOUR BETWEEN thn.START_TIME AND thn.END_TIME
+            GROUP BY TIME_SLOT
+        ) A,
+        (
+            SELECT
+            NVL(SUM(tsmt.REAL_SALE_AMT), 0) AS TOT_REAL_SALE_AMT
+            FROM TB_SL_MONTHLY_TIME tsmt
+            WHERE 1=1
+            AND tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
+            <!-- 매장 -->
+            <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                AND tsmt.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test='orgnFg != null and orgnFg == "H"'>
+                AND (
+                        'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                    OR	tsmt.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                    )
+            </if>
+            AND tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+        ) B
+        <if test='timeSlot != null and timeSlot != ""'>
+            WHERE SALE_TIME = #{timeSlot}
+        </if>
+        ORDER BY A.SALE_TIME
+        </if>
     </select>
 
     <!-- 시간대별 - 차트 조회 -->
@@ -120,6 +256,7 @@
     -->
     <select id="getMobileTimeMonthSaleTimeChartList" parameterType="MobileTimeMonthSaleVO" resultType="DefaultMap">
         /* MobileTimeMonthSaleMapper.getMobileTimeMonthSaleTimeChartList */
+        <if test="optionFg != null and optionFg.toString() == 'time'">
         SELECT
         (tsmt.SALE_HOUR || '시') AS SALE_TIME,
         NVL(SUM(tsmt.REAL_SALE_AMT), 0) AS REAL_SALE_AMT
@@ -143,6 +280,52 @@
         AND tsmt.SALE_HOUR BETWEEN #{startTime} AND #{endTime}
         GROUP BY tsmt.SALE_HOUR
         ORDER BY tsmt.SALE_HOUR
+        </if>
+        <if test="optionFg != null and optionFg.toString() == 'timeSlot'">
+        SELECT
+        (TIME_SLOT || '시') AS SALE_TIME,
+        NVL(SUM(tsmt.REAL_SALE_AMT), 0) AS REAL_SALE_AMT
+        FROM TB_SL_MONTHLY_TIME tsmt,
+            (
+            SELECT  MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) || '~'|| LPAD(MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) + 1, 2, '0') AS TIME_SLOT,
+            MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) AS START_TIME,
+            MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) AS END_TIME
+            <!-- 프차 -->
+            <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                FROM    TB_HQ_NMCODE
+                WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+            </if>
+            <!-- 단독매장 -->
+            <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                FROM 	TB_MS_STORE_NMCODE
+                WHERE 	STORE_CD = #{storeCd}
+            </if>
+            AND		NMCODE_GRP_CD ='001'
+            GROUP BY NMCODE_NM
+            ) thn
+        WHERE 1=1
+        AND tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
+        <!-- 매장 -->
+        <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+            AND tsmt.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR	tsmt.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
+        </if>
+        AND tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+        AND tsmt.SALE_HOUR BETWEEN thn.START_TIME AND thn.END_TIME
+            <if test='timeSlot != null and timeSlot != ""'>
+                AND TIME_SLOT = #{timeSlot}
+            </if>
+        GROUP BY TIME_SLOT
+        ORDER BY TIME_SLOT
+        </if>
     </select>
 
 </mapper>

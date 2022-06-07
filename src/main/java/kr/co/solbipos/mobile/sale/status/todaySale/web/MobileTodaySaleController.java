@@ -75,6 +75,17 @@ public class MobileTodaySaleController {
 
         model.addAttribute("multiStoreFg", list.size());
 
+        // 시간대 조회
+        List<DefaultMap<String>> timeSlotColList = mobileProdSaleService.getTimeSlotList(sessionInfoVO);
+        // 시간대를 , 로 연결하는 문자열 생성
+        String timeSlotCol = "";
+        for(int i=0; i < timeSlotColList.size(); i++) {
+            timeSlotCol += (timeSlotCol.equals("") ? "" : ",") + timeSlotColList.get(i).getStr("value");
+        }
+
+        model.addAttribute("timeSlotColList", timeSlotColList);
+        model.addAttribute("timeSlotCol", timeSlotCol);
+
         return "mobile/sale/status/todaySale/mobileTodaySale";
     }
 

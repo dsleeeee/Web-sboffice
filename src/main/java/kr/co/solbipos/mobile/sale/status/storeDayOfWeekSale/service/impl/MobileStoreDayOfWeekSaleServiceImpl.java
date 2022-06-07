@@ -41,6 +41,7 @@ public class MobileStoreDayOfWeekSaleServiceImpl implements MobileStoreDayOfWeek
 
         mobileStoreDayOfWeekSaleVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         mobileStoreDayOfWeekSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        mobileStoreDayOfWeekSaleVO.setEmpNo(sessionInfoVO.getEmpNo());
         if(!StringUtil.getOrBlank(mobileStoreDayOfWeekSaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.

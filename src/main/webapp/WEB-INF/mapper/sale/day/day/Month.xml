@@ -356,6 +356,7 @@
     -->
     <select id="getMonthTimeList"  parameterType="MonthVO" resultType="DefaultMap">
         /* MonthMapper.getMonthTimeList */
+        <if test="optionFg != null and optionFg.toString() == 'time'">
         SELECT tssh.YEAR_MONTH
             , COUNT(tssh.STORE_cd) AS STORE_CNT
             , SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
@@ -384,13 +385,78 @@
                             OR   STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                             )
                     </if>
-                    <if test='startTime != "0" and endTime != "23"'>
+                    <if test='startTime != "0" or endTime != "23"'>
                        AND SALE_HOUR BETWEEN #{startTime} AND #{endTime}
                    </if>
                     GROUP BY SALE_YM, STORE_CD
                 ) tssh
         GROUP BY tssh.YEAR_MONTH
         ORDER BY tssh.YEAR_MONTH
+        </if>
+        <if test="optionFg != null and optionFg.toString() == 'timeSlot'">
+        SELECT tssh.YEAR_MONTH
+            , COUNT(tssh.STORE_cd) AS STORE_CNT
+            , SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
+            , SUM(tssh.SALE_CNT) AS SALE_CNT
+            , SUM(tssh.TOT_GUEST_CNT) AS TOT_GUEST_CNT
+            ${sQuery1}
+        FROM (
+                SELECT YEAR_MONTH
+                     , STORE_CD
+                     , SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+                     , SUM(SALE_CNT) AS SALE_CNT
+                     , SUM(GUEST_CNT) AS TOT_GUEST_CNT
+                     ${sQuery2}
+                  FROM (
+                        SELECT TO_CHAR(TO_DATE(SALE_YM, 'yyyymm'), 'yyyy-mm') YEAR_MONTH
+                        ,       STORE_CD
+                        ,       SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+                        ,       SUM(SALE_CNT) AS SALE_CNT
+                        ,       SUM(GUEST_CNT_1) AS GUEST_CNT
+                        ,	    thn.TIME_SLOT
+                        FROM    TB_SL_MONTHLY_TIME tsmt,
+                                (
+                                SELECT  MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) || LPAD(MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) + 1, 2, '0') AS TIME_SLOT,
+                                        MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) AS START_TIME,
+                                        MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) AS END_TIME
+                                <!-- 프차 -->
+                                <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                                    FROM    TB_HQ_NMCODE
+                                    WHERE 	HQ_OFFICE_CD = #{membrOrgnCd}
+                                </if>
+                                <!-- 단독매장 -->
+                                <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                                    FROM 	TB_MS_STORE_NMCODE
+                                    WHERE 	STORE_CD = #{storeCd}
+                                </if>
+                                AND		NMCODE_GRP_CD ='001'
+                                GROUP BY NMCODE_NM
+                                ) thn
+                            WHERE   HQ_OFFICE_CD = #{membrOrgnCd}
+                            AND     SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+                            AND     tsmt.SALE_HOUR BETWEEN thn.START_TIME AND thn.END_TIME
+                            <if test='storeCds != null and storeCds != ""'>
+                                AND STORE_CD IN
+                                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <if test='orgnFg != null and orgnFg == "H"'>
+                                AND (
+                                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                                OR   STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                                )
+                            </if>
+                            <if test='timeSlot != null and timeSlot != ""'>
+                                AND TIME_SLOT = replace(#{timeSlot},'~','')
+                            </if>
+                            GROUP BY SALE_YM, STORE_CD, TIME_SLOT
+                             )
+                    GROUP BY YEAR_MONTH, STORE_CD
+                ) tssh
+        GROUP BY tssh.YEAR_MONTH
+        ORDER BY tssh.YEAR_MONTH
+        </if>
     </select>
 
     <!-- 상품분류별탭 - 상품분류별 매출조회-->

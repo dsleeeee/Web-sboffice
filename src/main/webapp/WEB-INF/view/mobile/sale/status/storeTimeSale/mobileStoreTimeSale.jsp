@@ -52,6 +52,66 @@
                 <%--// 다중매장선택 모듈 멀티 선택 사용시 include --%>
             </td>
         </tr>
+        <tr>
+            <%-- 옵션 --%>
+            <th><s:message code="month.time.optionFg"/></th>
+            <td>
+                <span class="sb-radio"><input type="radio" id="optionFgTime" name="optionFg" value="time" checked /><label for="time">시간대</label></span>
+                <span class="sb-radio"><input type="radio" id="optionFgTimeSlot" name="optionFg" value="timeSlot" /><label for="timeSlot">시간대분류</label></span>
+            </td>
+        </tr>
+        <tr id="timeOption">
+            <%-- 시간대 --%>
+            <th><s:message code="mobile.timeDaySale.saleTime"/></th>
+            <td>
+                <div class="sb-select">
+                    <div class="sb-select fl w30">
+                        <wj-combo-box
+                                id="startTime"
+                                ng-model="startTime"
+                                items-source="_getComboData('startTimeCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                control="startTimeCombo"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </div>
+                    <div class="fl pd5">
+                        <label>~</label>
+                    </div>
+                    <div class="sb-select fl w30">
+                        <wj-combo-box
+                                id="endTime"
+                                ng-model="endTime"
+                                items-source="_getComboData('endTimeCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                control="endTimeCombo"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr id="timeSlotOption" style="display: none">
+            <th><s:message code="day.time.time"/></th>
+            <td colspan="3">
+                <div class="sb-select fl w120px" >
+                    <wj-combo-box
+                            id="timeSlotCombo"
+                            ng-model="timeSlot"
+                            control="timeSlotCombo"
+                            items-source="_getComboData('timeSlotCombo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                    </wj-combo-box>
+                </div>
+            </td>
+        </tr>
         </tbody>
     </table>
 
@@ -84,5 +144,20 @@
     <%-- //결제수단 --%>
 
 </div>
+<script type="text/javascript">
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/storeTimeSale/mobileStoreTimeSale.js?ver=20220427.01" charset="utf-8"></script>
+    // 시간대분류
+    var timeSlotColList = [];
+    <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
+    <c:forEach var="timeSlotCol" items="${timeSlotColList}">
+    var timeSlotParam   = {};
+    timeSlotParam.name  = "${timeSlotCol.name}";
+    timeSlotParam.value = "${timeSlotCol.value}";
+    timeSlotColList.push(timeSlotParam);
+    </c:forEach>
+
+    var timeSlotCol    = '${timeSlotCol}';
+    var arrTimeSlotCol = timeSlotCol.split(',');
+
+</script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/storeTimeSale/mobileStoreTimeSale.js?ver=20220427.02" charset="utf-8"></script>

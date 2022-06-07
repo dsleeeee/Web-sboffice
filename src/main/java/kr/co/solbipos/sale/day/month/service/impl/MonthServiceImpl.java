@@ -3,6 +3,8 @@ package kr.co.solbipos.sale.day.month.service.impl;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.sale.day.day.service.DayVO;
+import kr.co.solbipos.sale.day.day.service.impl.DayMapper;
 import kr.co.solbipos.sale.day.month.service.MonthService;
 import kr.co.solbipos.sale.day.month.service.MonthVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +35,15 @@ import java.util.List;
 @Transactional
 public class MonthServiceImpl implements MonthService {
     private final MonthMapper monthMapper;
+    private final DayMapper dayMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public MonthServiceImpl(MonthMapper monthMapper) {
+    public MonthServiceImpl(MonthMapper monthMapper, DayMapper dayMapper) {
         this.monthMapper = monthMapper;
+        this.dayMapper = dayMapper;
     }
 
     /** 월별종합탭 - 월별종합조회 */
@@ -139,19 +143,36 @@ public class MonthServiceImpl implements MonthService {
         //매출 발생 시간
         String sSaleDate ="";
 
-        // 매출 시간대 설정
-        int iSaleDateStart = Integer.parseInt(monthVO.getStartTime());
-        int iSaleDateEnd = Integer.parseInt(monthVO.getEndTime());
+        if(monthVO.getOptionFg().equals("time")){ // 시간대
 
-        for(int i = iSaleDateStart; i <= iSaleDateEnd; i++) {
-            sQuery1 += ", NVL(SUM(tssh.REAL_SALE_AMT_T" + i + "), 0) AS REAL_SALE_AMT_T"  + i +  "\n";
-            sQuery1 += ", NVL(SUM(tssh.SALE_CNT_T" + i + "), 0) AS SALE_CNT_T"  + i +  "\n";
-            sQuery1 += ", NVL(SUM(tssh.TOT_GUEST_CNT_T" + i + "), 0) AS TOT_GUEST_CNT_T"  + i +  "\n";
+            // 매출 시간대 설정
+            int iSaleDateStart = Integer.parseInt(monthVO.getStartTime());
+            int iSaleDateEnd = Integer.parseInt(monthVO.getEndTime());
 
-            sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T"  + i +  "\n";
-            sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN SALE_CNT ELSE 0 END) AS SALE_CNT_T"  + i +  "\n";
-            sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN GUEST_CNT_1 ELSE 0 END) AS TOT_GUEST_CNT_T"  + i +  "\n";
+            for(int i = iSaleDateStart; i <= iSaleDateEnd; i++) {
+                sQuery1 += ", NVL(SUM(tssh.REAL_SALE_AMT_T" + i + "), 0) AS REAL_SALE_AMT_T"  + i +  "\n";
+                sQuery1 += ", NVL(SUM(tssh.SALE_CNT_T" + i + "), 0) AS SALE_CNT_T"  + i +  "\n";
+                sQuery1 += ", NVL(SUM(tssh.TOT_GUEST_CNT_T" + i + "), 0) AS TOT_GUEST_CNT_T"  + i +  "\n";
 
+                sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T"  + i +  "\n";
+                sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN SALE_CNT ELSE 0 END) AS SALE_CNT_T"  + i +  "\n";
+                sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN GUEST_CNT_1 ELSE 0 END) AS TOT_GUEST_CNT_T"  + i +  "\n";
+            }
+        } else if(monthVO.getOptionFg().equals("timeSlot")){
+            DayVO dayVO = new DayVO();
+            dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            dayVO.setStoreCd(sessionInfoVO.getStoreCd());
+            monthVO.setStoreCd(sessionInfoVO.getStoreCd());
+            List<DefaultMap<String>> timeSlotColList = dayMapper.getTimeSlotList(dayVO);
+            for(int i = 0; i < timeSlotColList.size(); i++) {
+                sQuery1 += ", NVL(SUM(tssh.REAL_SALE_AMT_T" + timeSlotColList.get(i).getStr("value").replace("~", "") + "), 0) AS REAL_SALE_AMT_T"  + timeSlotColList.get(i).getStr("value").replace("~", "") +  "\n";
+                sQuery1 += ", NVL(SUM(tssh.SALE_CNT_T" + timeSlotColList.get(i).getStr("value").replace("~", "") + "), 0) AS SALE_CNT_T"  + timeSlotColList.get(i).getStr("value").replace("~", "") +  "\n";
+                sQuery1 += ", NVL(SUM(tssh.TOT_GUEST_CNT_T" + timeSlotColList.get(i).getStr("value").replace("~", "") + "), 0) AS TOT_GUEST_CNT_T"  + timeSlotColList.get(i).getStr("value").replace("~", "") +  "\n";
+
+                sQuery2 += ", SUM(CASE WHEN TIME_SLOT = " + timeSlotColList.get(i).getStr("value").replace("~", "") + " THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T"  + timeSlotColList.get(i).getStr("value").replace("~", "") +  "\n";
+                sQuery2 += ", SUM(CASE WHEN TIME_SLOT = " + timeSlotColList.get(i).getStr("value").replace("~", "") + " THEN SALE_CNT ELSE 0 END) AS SALE_CNT_T"  + timeSlotColList.get(i).getStr("value").replace("~", "") +  "\n";
+                sQuery2 += ", SUM(CASE WHEN TIME_SLOT = " + timeSlotColList.get(i).getStr("value").replace("~", "") + " THEN GUEST_CNT ELSE 0 END) AS TOT_GUEST_CNT_T"  + timeSlotColList.get(i).getStr("value").replace("~", "") +  "\n";
+            }
         }
 
         monthVO.setsQuery1(sQuery1);

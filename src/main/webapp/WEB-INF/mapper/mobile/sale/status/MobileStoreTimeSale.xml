@@ -18,27 +18,85 @@
     -->
     <select id="getMobileStoreTimeSaleList" parameterType="mobileStoreTimeSaleVO" resultType="DefaultMap">
         /* MobileStoreTimeSaleMapper.getMobileStoreTimeSaleList */
-        SELECT 	tsdt.STORE_CD,
-                tms.STORE_NM,
-                tsdt.SALE_HOUR,
-                SUM(tsdt.SALE_CNT) AS SALE_CNT,
-                SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT
-        FROM 	TB_SL_DAILY_TIME tsdt,
-                TB_MS_STORE tms
-        WHERE 	tms.STORE_CD = tsdt.STORE_CD
-        AND 	tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND tsdt.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
-            </foreach>
+        <if test="optionFg != null and optionFg.toString() == 'time'">
+            SELECT 	tsdt.STORE_CD,
+                    tms.STORE_NM,
+                    tsdt.SALE_HOUR,
+                    SUM(tsdt.SALE_CNT) AS SALE_CNT,
+                    SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT
+            FROM 	TB_SL_DAILY_TIME tsdt,
+                    TB_MS_STORE tms
+            WHERE 	tms.STORE_CD = tsdt.STORE_CD
+            AND 	tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test='arrStoreCd != null and arrStoreCd != ""'>
+                AND tsdt.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR	tsdt.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
+            AND 	tsdt.SALE_DATE = #{startDate}
+            <if test='startTime != "0" or endTime != "23"'>
+                AND SALE_HOUR BETWEEN #{startTime} AND #{endTime}
+            </if>
+            <if test='array != null and array != "" and array == "S"'>
+            GROUP BY ROLLUP ((tsdt.STORE_CD, tms.STORE_NM), tsdt.SALE_HOUR)
+            </if>
+            <if test='array != null and array != "" and array == "D"'>
+            GROUP BY ROLLUP (tsdt.SALE_HOUR, (tsdt.STORE_CD, tms.STORE_NM))
+            </if>
         </if>
-        AND 	tsdt.SALE_DATE = #{startDate}
-        <if test='array != null and array != "" and array == "S"'>
-        GROUP BY ROLLUP ((tsdt.STORE_CD, tms.STORE_NM), tsdt.SALE_HOUR)
-        </if>
-        <if test='array != null and array != "" and array == "D"'>
-        GROUP BY ROLLUP (tsdt.SALE_HOUR, (tsdt.STORE_CD, tms.STORE_NM))
+        <if test="optionFg != null and optionFg.toString() == 'timeSlot'">
+            SELECT 	tsdt.STORE_CD,
+                    tms.STORE_NM,
+                    TIME_SLOT AS SALE_HOUR,
+                    SUM(tsdt.SALE_CNT) AS SALE_CNT,
+                    SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT
+            FROM 	TB_SL_DAILY_TIME tsdt,
+                    TB_MS_STORE tms,
+                    (
+                    SELECT  MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) || '~' || LPAD(MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) + 1, 2, '0') AS TIME_SLOT,
+                    MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) AS START_TIME,
+                    MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) AS END_TIME
+                    <!-- 프차 -->
+                    <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                        FROM    TB_HQ_NMCODE
+                        WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                    </if>
+                    <!-- 단독매장 -->
+                    <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                        FROM 	TB_MS_STORE_NMCODE
+                        WHERE 	STORE_CD = #{storeCd}
+                    </if>
+                    AND		NMCODE_GRP_CD ='001'
+                    GROUP BY NMCODE_NM
+                    ) thn
+            WHERE 	tms.STORE_CD = tsdt.STORE_CD
+            AND 	tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test='arrStoreCd != null and arrStoreCd != ""'>
+                AND tsdt.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR	tsdt.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
+            AND 	tsdt.SALE_DATE = #{startDate}
+            AND     tsdt.SALE_HOUR BETWEEN thn.START_TIME AND thn.END_TIME
+            <if test='timeSlot != null and timeSlot != ""'>
+                AND TIME_SLOT = #{timeSlot}
+            </if>
+            <if test='array != null and array != "" and array == "S"'>
+            GROUP BY ROLLUP ((tsdt.STORE_CD, tms.STORE_NM), TIME_SLOT)
+            </if>
+            <if test='array != null and array != "" and array == "D"'>
+            GROUP BY ROLLUP (TIME_SLOT, (tsdt.STORE_CD, tms.STORE_NM))
+            </if>
         </if>
     </select>
 

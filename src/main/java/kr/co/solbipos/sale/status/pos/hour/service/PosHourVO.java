@@ -38,6 +38,15 @@ public class PosHourVO extends PageVO {
     /** 조회매장포스수 */
     private int storePosCnt;
 
+	/** 검색 시작 시간 */
+	private String startTime;
+	/** 검색 종료 시간 */
+	private String endTime;
+	/** 검색옵션 */
+	private String optionFg;
+	/** 시간대분류 */
+	private String timeSlot;
+
 	public String getStoreCd() {
 		return storeCd;
 	}
@@ -132,4 +141,35 @@ public class PosHourVO extends PageVO {
 		this.storePosCnt = storePosCnt;
 	}
 
+	public String getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+
+	public String getOptionFg() {
+		return optionFg;
+	}
+
+	public void setOptionFg(String optionFg) {
+		this.optionFg = optionFg;
+	}
+
+	public String getTimeSlot() {
+		return timeSlot;
+	}
+
+	public void setTimeSlot(String timeSlot) {
+		this.timeSlot = timeSlot;
+	}
 }

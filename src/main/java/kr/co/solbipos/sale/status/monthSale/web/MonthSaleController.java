@@ -103,6 +103,16 @@ public class MonthSaleController {
         // 상분분류별 탭 - 분류레벨 최대값 조회
         model.addAttribute("maxLevel", dayService.getDayProdClassMaxLevel(dayVO, sessionInfoVO));
 
+        // 시간대 조회
+        List<DefaultMap<String>> timeSlotColList = dayService.getTimeSlotList(sessionInfoVO);
+        // 시간대를 , 로 연결하는 문자열 생성
+        String timeSlotCol = "";
+        for(int i=0; i < timeSlotColList.size(); i++) {
+            timeSlotCol += (timeSlotCol.equals("") ? "" : ",") + timeSlotColList.get(i).getStr("value");
+        }
+
+        model.addAttribute("timeSlotColList", timeSlotColList);
+        model.addAttribute("timeSlotCol", timeSlotCol);
 
         return "sale/status/monthSale/monthSale";
     }

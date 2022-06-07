@@ -26,12 +26,18 @@
         <tr>
             <%-- 조회일자 --%>
             <th><s:message code="cmm.search.date"/></th>
-            <td colspan="3">
+            <td>
                 <div class="sb-select">
                     <span class="txtIn"><input id="srchTimeStartDate" class="w110px"></span>
                     <span class="rg">~</span>
                     <span class="txtIn"><input id="srchTimeEndDate" class="w110px"></span>
                 </div>
+            </td>
+            <%-- 옵션 --%>
+            <th><s:message code="day.time.optionFg"/></th>
+            <td>
+                <span class="sb-radio"><input type="radio" id="optionFgTime" name="optionFg" value="time" checked /><label for="time">시간대</label></span>
+                <span class="sb-radio"><input type="radio" id="optionFgTimeSlot" name="optionFg" value="timeSlot" /><label for="timeSlot">시간대분류</label></span>
             </td>
         </tr>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
@@ -55,7 +61,7 @@
         <c:if test="${sessionInfo.orgnFg == 'STORE'}">
             <input type="hidden" id="dayTimeSelectStoreCd" value="${sessionInfo.storeCd}"/>
         </c:if>
-        <tr>
+        <tr id="timeOption">
             <th><s:message code="day.time.time"/></th>
             <td colspan="3">
                 <div class="sb-select fl w200px">
@@ -86,6 +92,23 @@
                                         initialized="_initComboBox(s)">
                                 </wj-combo-box>
                     </div>
+                </div>
+            </td>
+        </tr>
+        <tr id="timeSlotOption" style="display: none">
+            <th><s:message code="day.time.time"/></th>
+            <td colspan="3">
+                <div class="sb-select fl w120px" >
+                    <wj-combo-box
+                            id="timeSlotCombo"
+                            ng-model="timeSlot"
+                            control="timeSlotCombo"
+                            items-source="_getComboData('timeSlotCombo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                    </wj-combo-box>
                 </div>
             </td>
         </tr>
@@ -126,6 +149,12 @@
                     <wj-flex-grid-column header="<s:message code="day.time.totGuestCnt"/>" binding="totGuestCntT${i}" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
                 </c:forEach>
 
+                <%-- 시간대분류류 컬럼 생성--%>
+               <c:forEach var="timeSlotCol" items="${timeSlotColList}">
+                   <wj-flex-grid-column header="<s:message code="day.time.realSaleAmt"/>" binding="realSaleAmtT${timeSlotCol.value.replace("~","")}" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                   <wj-flex-grid-column header="<s:message code="day.time.saleCnt"/>" binding="saleCntT${timeSlotCol.value.replace("~","")}" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                   <wj-flex-grid-column header="<s:message code="day.time.totGuestCnt"/>" binding="totGuestCntT${timeSlotCol.value.replace("~","")}" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                </c:forEach>
             </wj-flex-grid>
             <%-- ColumnPicker 사용시 include --%>
             <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
@@ -140,4 +169,4 @@
 <script type="text/javascript">
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTime.js?ver=20190625" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTime.js?ver=20190626" charset="utf-8"></script>

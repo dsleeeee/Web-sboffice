@@ -3,19 +3,15 @@ package kr.co.solbipos.mobile.sale.status.timeMonthSale.service.impl;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.mobile.sale.status.prod.service.MobileProdSaleVO;
+import kr.co.solbipos.mobile.sale.status.prod.service.impl.MobileProdSaleMapper;
 import kr.co.solbipos.mobile.sale.status.timeMonthSale.service.MobileTimeMonthSaleService;
 import kr.co.solbipos.mobile.sale.status.timeMonthSale.service.MobileTimeMonthSaleVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
-import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : MobileTimeMonthSaleServiceImpl.java
@@ -36,13 +32,15 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class MobileTimeMonthSaleServiceImpl implements MobileTimeMonthSaleService {
     private final MobileTimeMonthSaleMapper mobileTimeMonthSaleMapper;
+    private final MobileProdSaleMapper mobileProdSaleMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public MobileTimeMonthSaleServiceImpl(MobileTimeMonthSaleMapper mobileTimeMonthSaleMapper) {
+    public MobileTimeMonthSaleServiceImpl(MobileTimeMonthSaleMapper mobileTimeMonthSaleMapper, MobileProdSaleMapper mobileProdSaleMapper) {
         this.mobileTimeMonthSaleMapper = mobileTimeMonthSaleMapper;
+        this.mobileProdSaleMapper = mobileProdSaleMapper;
     }
 
     /** 일자-시간대별 - 조회 */
@@ -61,12 +59,25 @@ public class MobileTimeMonthSaleServiceImpl implements MobileTimeMonthSaleServic
         // 매출 발생 시간대 기준, 동적 컬럼 생성을 위한 쿼리 변수;
         String sQuery1 = "";
         String sQuery2 = "";
-        // 매출 시간대 설정
-        int iSaleDateStart = Integer.parseInt(mobileTimeMonthSaleVO.getStartTime());
-        int iSaleDateEnd = Integer.parseInt(mobileTimeMonthSaleVO.getEndTime());
-        for(int i = iSaleDateStart; i <= iSaleDateEnd; i++) {
-            sQuery1 += ", SUM(CASE WHEN tsmt.SALE_HOUR = " + i + " THEN tsmt.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T"  + i +  "\n";
-            sQuery2 += ", NVL(SUM(REAL_SALE_AMT_T" + i + "), 0) AS REAL_SALE_AMT_T"  + i +  "\n";
+
+        if(mobileTimeMonthSaleVO.getOptionFg().equals("time")) { // 시간대
+            // 매출 시간대 설정
+            int iSaleDateStart = Integer.parseInt(mobileTimeMonthSaleVO.getStartTime());
+            int iSaleDateEnd = Integer.parseInt(mobileTimeMonthSaleVO.getEndTime());
+            for (int i = iSaleDateStart; i <= iSaleDateEnd; i++) {
+                sQuery1 += ", SUM(CASE WHEN tsmt.SALE_HOUR = " + i + " THEN tsmt.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T" + i + "\n";
+                sQuery2 += ", NVL(SUM(REAL_SALE_AMT_T" + i + "), 0) AS REAL_SALE_AMT_T" + i + "\n";
+            }
+        } else if(mobileTimeMonthSaleVO.getOptionFg().equals("timeSlot")) {
+            MobileProdSaleVO mobileProdSaleVO = new MobileProdSaleVO();
+            mobileProdSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            mobileProdSaleVO.setStoreCd(sessionInfoVO.getStoreCd());
+            mobileTimeMonthSaleVO.setStoreCd(sessionInfoVO.getStoreCd());
+            List<DefaultMap<String>> timeSlotColList = mobileProdSaleMapper.getTimeSlotList(mobileProdSaleVO);
+            for (int i = 0; i < timeSlotColList.size(); i++) {
+                sQuery1 += ", SUM(CASE WHEN TIME_SLOT = " + timeSlotColList.get(i).getStr("value").replace("~", "") + " THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T" + timeSlotColList.get(i).getStr("value").replace("~", "") + "\n";
+                sQuery2 += ", NVL(SUM(REAL_SALE_AMT_T" + timeSlotColList.get(i).getStr("value").replace("~", "") + "), 0) AS REAL_SALE_AMT_T" + timeSlotColList.get(i).getStr("value").replace("~", "") + "\n";
+            }
         }
         mobileTimeMonthSaleVO.setsQuery1(sQuery1);
         mobileTimeMonthSaleVO.setsQuery2(sQuery2);

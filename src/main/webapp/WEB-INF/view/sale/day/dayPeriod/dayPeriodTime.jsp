@@ -33,12 +33,18 @@
                          <th>
                               <s:message code="dayPeriod.date" />
                          </th>
-                         <td colspan="3">
+                         <td>
                               <div class="sb-select">
                                    <span class="txtIn"> <input id="startDateDayPeriodTime" name="startDate" class="w110px" /></span>
                                    <span class="rg">~</span>
                                    <span class="txtIn"> <input id="endDateDayPeriodTime" name="endDate" class="w110px" /></span>
                               </div>
+                         </td>
+                         <%-- 옵션 --%>
+                         <th><s:message code="day.time.optionFg"/></th>
+                         <td>
+                              <span class="sb-radio"><input type="radio" id="optionFgTime" name="optionFg" value="time" checked /><label for="time">시간대</label></span>
+                              <span class="sb-radio"><input type="radio" id="optionFgTimeSlot" name="optionFg" value="timeSlot" /><label for="timeSlot">시간대분류</label></span>
                          </td>
                     </tr>
                     <tr <c:if test="${orgnFg == 'STORE'}">style="display: none;"</c:if> >
@@ -55,6 +61,57 @@
                                    <jsp:param name="targetId" value="dayPeriodTimeStore"/>
                               </jsp:include>
                               <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+                         </td>
+                    </tr>
+                    <tr id="timeOption">
+                         <th><s:message code="day.time.time"/></th>
+                         <td colspan="3">
+                              <div class="sb-select fl w200px">
+                                   <div class="sb-slect fl" style="width:65px;">
+                                        <wj-combo-box
+                                                id="startTime"
+                                                ng-model="startTime"
+                                                items-source="_getComboData('startTimeCombo')"
+                                                display-member-path="name"
+                                                selected-value-path="value"
+                                                is-editable="false"
+                                                control="startTimeCombo"
+                                                initialized="_initComboBox(s)">
+                                        </wj-combo-box>
+                                   </div>
+                                   <div class="fl pd5" style="padding-right: 15px;">
+                                        <label> ~ </label>
+                                   </div>
+                                   <div class="sb-select fl" style="width:65px;">
+                                        <wj-combo-box
+                                                id="endTime"
+                                                ng-model="endTime"
+                                                items-source="_getComboData('endTimeCombo')"
+                                                display-member-path="name"
+                                                selected-value-path="value"
+                                                is-editable="false"
+                                                control="endTimeCombo"
+                                                initialized="_initComboBox(s)">
+                                        </wj-combo-box>
+                                   </div>
+                              </div>
+                         </td>
+                    </tr>
+                    <tr id="timeSlotOption" style="display: none">
+                         <th><s:message code="day.time.time"/></th>
+                         <td colspan="3">
+                              <div class="sb-select fl w120px" >
+                                   <wj-combo-box
+                                           id="timeSlotCombo"
+                                           ng-model="timeSlot"
+                                           control="timeSlotCombo"
+                                           items-source="_getComboData('timeSlotCombo')"
+                                           display-member-path="name"
+                                           selected-value-path="value"
+                                           is-editable="false"
+                                           initialized="_initComboBox(s)">
+                                   </wj-combo-box>
+                              </div>
                          </td>
                     </tr>
                </tbody>
@@ -143,4 +200,4 @@
      var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayPeriod/dayPeriodTime.js?ver=20200131.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayPeriod/dayPeriodTime.js?ver=20200131.07" charset="utf-8"></script>

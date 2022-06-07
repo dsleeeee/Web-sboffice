@@ -35,7 +35,21 @@
         </ul>
     </div>
 </div>
+<script type="text/javascript">
+    // 시간대분류
+    var timeSlotColList = [];
+    <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
+    <c:forEach var="timeSlotCol" items="${timeSlotColList}">
+    var timeSlotParam   = {};
+    timeSlotParam.name  = "${timeSlotCol.name}";
+    timeSlotParam.value = "${timeSlotCol.value}";
+    timeSlotColList.push(timeSlotParam);
+    </c:forEach>
 
+    var timeSlotCol    = '${timeSlotCol}';
+    var arrTimeSlotCol = timeSlotCol.split(',');
+
+</script>
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/prodSale.js?ver=201901112.15" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>

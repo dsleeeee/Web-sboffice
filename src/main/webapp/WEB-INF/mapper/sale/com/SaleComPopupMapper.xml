@@ -826,8 +826,11 @@
 		<if test='endDate != null and endDate != ""'>
 			AND A.SALE_DATE	<![CDATA[ <= ]]> REPLACE(#{endDate}, '-', '')
 		</if>
-		<if test='saleHour != null and saleHour != ""'>
+		<if test='saleHour != null and saleHour != "" and saleHour.length == 2'>
 			AND A.SALE_HOUR = #{saleHour}
+		</if>
+		<if test='saleHour != null and saleHour != "" and saleHour.length != 2'>
+			AND A.SALE_HOUR BETWEEN SUBSTR(#{saleHour}, 0, 2) AND SUBSTR(#{saleHour}, -2) -1
 		</if>
 		<if test='posNo != null and posNo != ""'>
 			AND A.POS_NO = #{posNo}

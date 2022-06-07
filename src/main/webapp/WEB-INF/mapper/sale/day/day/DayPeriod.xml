@@ -18,6 +18,7 @@
     -->
     <select id="getDayPeriodTimeList"  parameterType="DayPeriodVO" resultType="DefaultMap">
         /* DayPeriodMapper.getDayPeriodTimeList */
+        <if test="optionFg != null and optionFg.toString() == 'time'">
          SELECT  SALE_HOUR AS SALE_TIME,
                 SUM(SALE_CNT) AS SALE_CNT,
                 SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
@@ -36,9 +37,56 @@
                 OR   STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                 )
         </if>
+        <if test='startTime != "0" or endTime != "23"'>
+            AND SALE_HOUR BETWEEN #{startTime} AND #{endTime}
+        </if>
         AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
         GROUP BY SALE_HOUR
         ORDER BY SALE_HOUR
+        </if>
+        <if test="optionFg != null and optionFg.toString() == 'timeSlot'">
+         SELECT  TIME_SLOT AS SALE_TIME,
+                SUM(SALE_CNT) AS SALE_CNT,
+                SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+                DECODE(SUM(SALE_CNT), 0, 0, ROUND(SUM(TOT_SALE_AMT) / SUM(SALE_CNT))) AS BILL_UPRC
+        FROM    TB_SL_DAILY_TIME,
+                (SELECT MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) || '~' || LPAD(MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) + 1, 2, '0') AS TIME_SLOT,
+                        MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) AS START_TIME,
+                        MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) AS END_TIME
+                <!-- 프차 -->
+                <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                    FROM 	TB_HQ_NMCODE
+                    WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                </if>
+                <!-- 단독매장 -->
+                <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                    FROM 	TB_MS_STORE_NMCODE
+                    WHERE 	STORE_CD = #{storeCd}
+                </if>
+                AND		NMCODE_GRP_CD ='001'
+                GROUP BY NMCODE_NM
+                ) thn
+        WHERE   HQ_OFFICE_CD = #{membrOrgnCd}
+        <if test='storeCds != null and storeCds != ""'>
+            AND STORE_CD IN
+            <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR   STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
+        </if>
+        <if test='timeSlot != null and timeSlot != ""'>
+            AND TIME_SLOT = #{timeSlot}
+        </if>
+        AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND     SALE_HOUR BETWEEN START_TIME AND END_TIME
+        GROUP BY TIME_SLOT
+        ORDER BY TIME_SLOT
+        </if>
     </select>
 
     <!-- 시간대별탭 - 시간대별 매출상세조회 -->
@@ -68,7 +116,12 @@
                 )
         </if>
         AND     tsdpt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test="optionFg != null and optionFg.toString() == 'time'">
         AND     tsdpt.SALE_HOUR = ${saleTime}
+        </if>
+        <if test="optionFg != null and optionFg.toString() == 'timeSlot'">
+            AND     tsdpt.SALE_HOUR BETWEEN SUBSTR(#{saleTime}, 0, 2) AND SUBSTR(#{saleTime}, -2) -1
+        </if>
         AND     tmp.STORE_CD (+)= tsdpt.STORE_CD
         AND     tmp.PROD_CD (+)= tsdpt.PROD_CD
         GROUP BY tsdpt.PROD_CD, tmp.PROD_NM

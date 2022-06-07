@@ -6,6 +6,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.mobile.sale.status.prod.service.MobileProdSaleService;
 import kr.co.solbipos.mobile.sale.status.storeTimeSale.service.MobileStoreTimeSaleService;
 import kr.co.solbipos.mobile.sale.status.storeTimeSale.service.MobileStoreTimeSaleVO;
 import org.springframework.stereotype.Controller;
@@ -39,10 +40,12 @@ public class MobileStoreTimeSaleController {
 
     private final SessionService sessionService;
     private final MobileStoreTimeSaleService mobileStoreTimeSaleService;
+    private final MobileProdSaleService mobileProdSaleService;
 
-    public MobileStoreTimeSaleController(SessionService sessionService, MobileStoreTimeSaleService mobileStoreTimeSaleService) {
+    public MobileStoreTimeSaleController(SessionService sessionService, MobileStoreTimeSaleService mobileStoreTimeSaleService, MobileProdSaleService mobileProdSaleService) {
         this.sessionService = sessionService;
         this.mobileStoreTimeSaleService = mobileStoreTimeSaleService;
+        this.mobileProdSaleService = mobileProdSaleService;
     }
 
     /**
@@ -54,6 +57,18 @@ public class MobileStoreTimeSaleController {
      */
     @RequestMapping(value = "/mobileStoreTimeSale/list.sb", method = RequestMethod.GET)
     public String mobileStoreTimeSaleView(HttpServletRequest request, HttpServletResponse response, Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 시간대 조회
+        List<DefaultMap<String>> timeSlotColList = mobileProdSaleService.getTimeSlotList(sessionInfoVO);
+        // 시간대를 , 로 연결하는 문자열 생성
+        String timeSlotCol = "";
+        for(int i=0; i < timeSlotColList.size(); i++) {
+            timeSlotCol += (timeSlotCol.equals("") ? "" : ",") + timeSlotColList.get(i).getStr("value");
+        }
+
+        model.addAttribute("timeSlotColList", timeSlotColList);
+        model.addAttribute("timeSlotCol", timeSlotCol);
 
         return "mobile/sale/status/storeTimeSale/mobileStoreTimeSale";
     }

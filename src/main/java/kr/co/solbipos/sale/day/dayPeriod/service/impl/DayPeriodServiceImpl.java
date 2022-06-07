@@ -56,6 +56,9 @@ public class DayPeriodServiceImpl implements DayPeriodService {
         // 매장 array 값 세팅
         String[] storeCds = dayPeriodVO.getStoreCds().split(",");
         dayPeriodVO.setStoreCdList(storeCds);
+        System.out.println("살려줘 : " + dayPeriodVO.getStartTime());
+        System.out.println("살려줘 : " + dayPeriodVO.getEndTime());
+        System.out.println("살려줘 : " + dayPeriodVO.getTimeSlot());
 
         return dayPeriodMapper.getDayPeriodTimeList(dayPeriodVO);
     }

@@ -3,10 +3,10 @@ package kr.co.solbipos.sale.status.pos.day.web;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
-import kr.co.common.exception.JsonException;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.sale.day.day.service.DayService;
 import kr.co.solbipos.sale.status.pos.day.service.PosDayService;
 import kr.co.solbipos.sale.status.pos.day.service.PosDayVO;
 
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static kr.co.common.utils.spring.StringUtil.toCamelCaseName;
 import kr.co.common.service.message.MessageService;
 
 import java.util.List;
@@ -48,12 +47,14 @@ public class PosDayController {
     private final SessionService sessionService;
     private final PosDayService posDayService;
     private final MessageService messageService;
+    private final DayService dayService;
 
     @Autowired
-    public PosDayController(SessionService sessionService, PosDayService posDayService, MessageService messageService) {
+    public PosDayController(SessionService sessionService, PosDayService posDayService, MessageService messageService, DayService dayService) {
         this.sessionService = sessionService;
         this.posDayService = posDayService;
         this.messageService = messageService;
+        this.dayService = dayService;
     }
 
 
@@ -68,6 +69,20 @@ public class PosDayController {
      */
     @RequestMapping(value = "/day/view.sb", method = RequestMethod.GET)
     public String posDayView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 시간대 조회
+        List<DefaultMap<String>> timeSlotColList = dayService.getTimeSlotList(sessionInfoVO);
+        // 시간대를 , 로 연결하는 문자열 생성
+        String timeSlotCol = "";
+        for(int i=0; i < timeSlotColList.size(); i++) {
+            timeSlotCol += (timeSlotCol.equals("") ? "" : ",") + timeSlotColList.get(i).getStr("value");
+        }
+
+        model.addAttribute("timeSlotColList", timeSlotColList);
+        model.addAttribute("timeSlotCol", timeSlotCol);
+
         return "sale/status/pos/posSale";
     }
 
@@ -77,7 +92,7 @@ public class PosDayController {
      * @param   request
      * @param   response
      * @param   model
-     * @param   posDaylVO
+     * @param   posDayVO
      * @return  String
      * @author  이승규
      * @since   2020. 01. 21.

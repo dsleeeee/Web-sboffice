@@ -13,6 +13,16 @@
  */
 var app = agrid.getApp();
 
+// 시 VALUE
+var Hh = [24];
+for(i =0 ; i < 24; i++){
+    var timeVal = i.toString();
+    if(i>=0 && i<=9){
+        timeVal = "0" + timeVal;
+    }
+    Hh[i] = {"name":timeVal,"value":timeVal}
+}
+
 /**
  *  시간대별 매출 조회 그리드 생성
  */
@@ -24,6 +34,23 @@ app.controller('dayPeriodTimeCtrl', ['$scope', '$http', '$timeout', function ($s
     // 검색조건에 조회기간
     var startDate = wcombo.genDateVal("#startDateDayPeriodTime", gvStartDate);
     var endDate = wcombo.genDateVal("#endDateDayPeriodTime", gvEndDate);
+
+    $scope.timeSlotData = [];
+    var comboArray  = [{name:"전체", value:""}];
+    for(var i = 0; i < timeSlotColList.length; i++){
+        var comboData   = {};
+        comboData.name = timeSlotColList[i].name + "(" + timeSlotColList[i].value + ")";
+        comboData.value = timeSlotColList[i].value;
+        comboArray.push(comboData);
+    }
+
+    timeSlotData = comboArray;
+    $scope._setComboData("timeSlotCombo", timeSlotData);
+
+    $scope._setComboData("startTimeCombo", Hh);
+    $scope._setComboData("endTimeCombo", Hh);
+    $scope.startTime     = "0";
+    $scope.endTime       = "23";
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -62,6 +89,7 @@ app.controller('dayPeriodTimeCtrl', ['$scope', '$http', '$timeout', function ($s
                     params.storeCds = $("#dayPeriodTimeStoreCd").val();
                     params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
                     params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+                    params.optionFg = $("input[name=optionFg]:checked").val();
 
                     var storeScope = agrid.getScope('dayPeriodTimeDetailCtrl');
                     storeScope._broadcast('dayPeriodTimeDetailCtrl', params);
@@ -82,6 +110,10 @@ app.controller('dayPeriodTimeCtrl', ['$scope', '$http', '$timeout', function ($s
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
         params.storeCds = $("#dayPeriodTimeStoreCd").val();
+        params.startTime = $scope.startTime;
+        params.endTime = $scope.endTime;
+        params.optionFg = $("input[name=optionFg]:checked").val();
+        params.timeSlot = $scope.timeSlot;
 
         $scope._inquiryMain("/sale/day/dayPeriod/dayPeriod/getDayPeriodTimeList.sb", params, function() {
             $scope.$apply(function() {
@@ -99,6 +131,16 @@ app.controller('dayPeriodTimeCtrl', ['$scope', '$http', '$timeout', function ($s
         $scope._broadcast('dayPeriodTimeStoreCtrl');
     };
 
+    // 라디오버튼 클릭시 이벤트 발생
+    $("input:radio[name=optionFg]").click(function(){
+        if($("input[name=optionFg]:checked").val() == "time"){              // 시간대
+            $("#timeOption").show();
+            $("#timeSlotOption").hide();
+        }else {       // 시간대분류
+            $("#timeOption").hide();
+            $("#timeSlotOption").show();
+        }
+    });
 
     // 시간대별 엑셀 다운로드
     $scope.excelDownloadPeriodSaleTime = function () {
@@ -159,8 +201,10 @@ app.controller('dayPeriodTimeDetailCtrl', ['$scope', '$http', '$timeout', functi
         params.storeCds = data.storeCds;
         params.startDate = data.startDate;
         params.endDate = data.endDate;
+        params.optionFg = data.optionFg;
+        params.timeSlot = data.timeSlot;
 
-        $scope._inquiryMain("/sale/day/dayPeriod/dayPeriod/getDayPeriodTimeDetailList.sb", params, function() {}, false);
+                $scope._inquiryMain("/sale/day/dayPeriod/dayPeriod/getDayPeriodTimeDetailList.sb", params, function() {}, false);
     };
     // <-- //검색 호출 -->
 

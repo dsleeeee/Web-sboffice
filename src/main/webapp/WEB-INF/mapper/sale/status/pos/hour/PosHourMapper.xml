@@ -11,6 +11,7 @@
         COMMENTS : 포스별매출일자별 - 리스트를 조회한다.
     -->
     <select id="getPosDayList" parameterType="posHourVO" resultType="DefaultMap">
+		<if test="optionFg != null and optionFg.toString() == 'time'">
 	    SELECT	NVL(B.SALE_HOUR,A.LV)	AS	SALE_HOUR
 		,		B.SALE_STORE_CNT
 		, 		B.TOT_SALE_AMT
@@ -94,8 +95,150 @@
 			        ORDER BY A.SALE_HOUR
 			        ) B
 			   WHERE 	A.LV = B.SALE_HOUR(+)
+		<if test='startTime != "0" or endTime != "23"'>
+			AND B.SALE_HOUR BETWEEN #{startTime} AND #{endTime}
+		</if>
 	ORDER
 	BY 		A.LV
+		</if>
+		<if test="optionFg != null and optionFg.toString() == 'timeSlot'">
+			SELECT NVL(B.SALE_HOUR,A.LV) AS SALE_HOUR
+			, B.SALE_STORE_CNT
+			, B.TOT_SALE_AMT
+			, B.TOT_DC_AMT
+			, B.TOT_REAL_SALE_AMT
+			, B.TOT_SALE_CNT
+			, B.*
+			FROM 	(
+					SELECT  MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) || '~' || LPAD(MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) + 1, 2, '0') AS LV
+					<!-- 프차 -->
+					<if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+						FROM    TB_HQ_NMCODE
+						WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+					</if>
+					<!-- 단독매장 -->
+					<if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+						FROM 	TB_MS_STORE_NMCODE
+						WHERE 	STORE_CD = #{storeCd}
+					</if>
+					AND		NMCODE_GRP_CD ='001'
+					GROUP BY NMCODE_NM
+					) A
+					, (
+					SELECT 	SALE_HOUR
+					, 		A.SALE_STORE_CNT
+					, 		A.TOT_SALE_AMT
+					, 		A.TOT_DC_AMT
+					, 		A.TOT_REAL_SALE_AMT
+					, 		A.TOT_SALE_CNT
+					, 		B.*
+					FROM (
+					SELECT TIME_SLOT AS SALE_HOUR
+					, COUNT(DISTINCT TSDP.STORE_CD) AS SALE_STORE_CNT
+					, SUM(TSDP.TOT_SALE_AMT) AS TOT_SALE_AMT
+					, SUM(TSDP.TOT_DC_AMT) AS TOT_DC_AMT
+					, SUM(TSDP.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
+					, SUM(TSDP.SALE_CNT) AS TOT_SALE_CNT
+					FROM TB_SL_DAILY_POS_TIME TSDP,
+					(
+					SELECT 	MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) || '~' || LPAD(MAX(NMCODE_CD)
+							KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) + 1, 2, '0') AS TIME_SLOT,
+							MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) AS START_TIME,
+							MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) AS END_TIME
+					<!-- 프차 -->
+					<if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+						FROM    TB_HQ_NMCODE
+						WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+					</if>
+					<!-- 단독매장 -->
+					<if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+						FROM 	TB_MS_STORE_NMCODE
+						WHERE 	STORE_CD = #{storeCd}
+					</if>
+					AND		NMCODE_GRP_CD ='001'
+					GROUP BY NMCODE_NM
+					) thn
+							WHERE	1 = 1
+							AND 	TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
+							AND     TSDP.SALE_HOUR BETWEEN thn.START_TIME AND thn.END_TIME
+							<if test='arrStorePos != null and arrStorePos.length >= 0'>
+								AND TSDP.STORE_CD||'||'||TSDP.POS_NO IN
+								<foreach collection="arrStorePos" item="item" open="(" close=")" separator=",">
+									#{item}
+								</foreach>
+							</if>
+							<if test='startDate != null and startDate != ""'>
+								AND TSDP.SALE_DATE >= #{startDate}
+							</if>
+							<if test='endDate != null and endDate != ""'>
+								AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+							</if>
+							GROUP BY TIME_SLOT
+					) A,
+					(
+					WITH T AS
+					(
+					SELECT	DISTINCT TSDP.STORE_CD || '||' || TSDP.POS_NO AS STORE_CD
+					, 		TIME_SLOT AS SALE_HOUR_TEMP
+					, 		SUM(TSDP.TOT_SALE_AMT) AS SALE_AMT
+					, 		SUM(TSDP.TOT_DC_AMT) AS DC_AMT
+					, 		SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
+					, 		SUM(TSDP.SALE_CNT) AS SALE_CNT
+					FROM    TB_SL_DAILY_POS_TIME TSDP,
+							(
+							SELECT  MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) || '~' || LPAD(MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) + 1, 2, '0') AS TIME_SLOT,
+							MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) AS START_TIME,
+							MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) AS END_TIME
+							<!-- 프차 -->
+							<if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+								FROM    TB_HQ_NMCODE
+								WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+							</if>
+							<!-- 단독매장 -->
+							<if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+								FROM 	TB_MS_STORE_NMCODE
+								WHERE 	STORE_CD = #{storeCd}
+							</if>
+							AND		NMCODE_GRP_CD ='001'
+							GROUP BY NMCODE_NM
+							) thn
+					WHERE   TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
+					AND     TSDP.SALE_HOUR BETWEEN thn.START_TIME AND thn.END_TIME
+					<if test='arrStorePos != null and arrStorePos.length >= 0'>
+						AND TSDP.STORE_CD||'||'||TSDP.POS_NO IN
+						<foreach collection="arrStorePos" item="item" open="(" close=")" separator=",">
+							#{item}
+						</foreach>
+					</if>
+					<if test='startDate != null and startDate != ""'>
+						AND TSDP.SALE_DATE >= #{startDate}
+					</if>
+					<if test='endDate != null and endDate != ""'>
+						AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+					</if>
+					GROUP BY TSDP.STORE_CD || '||' || TSDP.POS_NO, TIME_SLOT
+					)
+					SELECT  *
+					FROM    T
+					PIVOT	(
+					MAX(SALE_AMT) AS SALE_AMT, MAX(DC_AMT) AS DC_AMT, MAX(REAL_SALE_AMT) AS REAL_SALE_AMT, MAX(SALE_CNT) AS SALE_CNT
+					FOR STORE_CD IN (
+					<foreach collection="arrStorePos" item="item" separator=",">
+						'${item}'
+					</foreach>
+					)
+					)
+					) B
+					WHERE   A.SALE_HOUR = B.SALE_HOUR_TEMP
+					ORDER BY A.SALE_HOUR
+					) B
+			WHERE 	A.LV = B.SALE_HOUR(+)
+			<if test='timeSlot != null and timeSlot != ""'>
+				AND A.LV = #{timeSlot}
+			</if>
+			ORDER
+			BY 		A.LV
+		</if>
     </select>
 
     <select id="getStorePosList" parameterType="posDayVO" resultType="DefaultMap">

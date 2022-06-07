@@ -120,6 +120,11 @@ public class DayVO extends PageVO {
     /** 사원번호 */
     private String empNo;
 
+    /** 검색옵션 */
+    private String optionFg;
+    /** 시간대분류 */
+    private String timeSlot;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -540,5 +545,21 @@ public class DayVO extends PageVO {
 
     public void setEmpNo(String empNo) {
         this.empNo = empNo;
+    }
+
+    public String getOptionFg() {
+        return optionFg;
+    }
+
+    public void setOptionFg(String optionFg) {
+        this.optionFg = optionFg;
+    }
+
+    public String getTimeSlot() {
+        return timeSlot;
+    }
+
+    public void setTimeSlot(String timeSlot) {
+        this.timeSlot = timeSlot;
     }
 }

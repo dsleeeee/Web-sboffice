@@ -114,6 +114,7 @@ public class MobileTodaySaleServiceImpl implements  MobileTodaySaleService {
 
         mobileTodaySaleVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         mobileTodaySaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        mobileTodaySaleVO.setStoreCd(sessionInfoVO.getStoreCd());
         mobileTodaySaleVO.setEmpNo(sessionInfoVO.getEmpNo());
         if(!StringUtil.getOrBlank(mobileTodaySaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.

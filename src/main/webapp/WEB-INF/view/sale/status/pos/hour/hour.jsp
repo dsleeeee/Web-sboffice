@@ -36,27 +36,33 @@
 						</span>
 					</div>
 				</td>
-
-				<c:if test="${sessionInfo.orgnFg == 'HQ'}">
-					<input type="hidden" id="posHourSelectStoreCd" value=""/>
-					<tr>
-						<%-- 매장코드 --%>
-						<th><s:message code="todayBillSaleDtl.store"/></th>
-						<td>
-							<%-- 매장선택 모듈 멀티 선택 사용시 include --%>
+				<%-- 옵션 --%>
+				<th><s:message code="day.time.optionFg"/></th>
+				<td>
+					<span class="sb-radio"><input type="radio" id="optionFgTime" name="optionFg" value="time" checked /><label for="time">시간대</label></span>
+					<span class="sb-radio"><input type="radio" id="optionFgTimeSlot" name="optionFg" value="timeSlot" /><label for="timeSlot">시간대분류</label></span>
+				</td>
+			</tr>
+			<c:if test="${sessionInfo.orgnFg == 'HQ'}">
+				<input type="hidden" id="posHourSelectStoreCd" value=""/>
+				<tr>
+					<%-- 매장코드 --%>
+					<th><s:message code="todayBillSaleDtl.store"/></th>
+					<td>
+						<%-- 매장선택 모듈 멀티 선택 사용시 include --%>
 <%-- 							<jsp:include page="/WEB-INF/view/sale/status/pos/cmm/selectStoreM.jsp" flush="true"> --%>
-							<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
-								<jsp:param name="targetId" value="posHourSelectStore"/>
-								<jsp:param name="subTargetId" value="posHourSelectPos"/>
-								<jsp:param name="closeFunc" value="getPosNmList"/>
-							</jsp:include>
-							<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-						</td>
-					</tr>
-				</c:if>
-				<c:if test="${sessionInfo.orgnFg == 'STORE'}">
-					<input type="hidden" id="posHourSelectStoreCd" value="${sessionInfo.storeCd}"/>
-				</c:if>
+						<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
+							<jsp:param name="targetId" value="posHourSelectStore"/>
+							<jsp:param name="subTargetId" value="posHourSelectPos"/>
+							<jsp:param name="closeFunc" value="getPosNmList"/>
+						</jsp:include>
+						<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+					</td>
+				</tr>
+			</c:if>
+			<c:if test="${sessionInfo.orgnFg == 'STORE'}">
+				<input type="hidden" id="posHourSelectStoreCd" value="${sessionInfo.storeCd}"/>
+			</c:if>
 
 				<input type="hidden" id="posHourSelectPosCd" value=""/>
 				<input type="hidden" id="posHourSelectPosName" value=""/>
@@ -74,7 +80,56 @@
 						<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
 					</td>
 				</tr>
-
+			<tr id="timeOption">
+				<th><s:message code="month.srchTime"/></th>
+				<td colspan="3">
+					<div class="sb-select fl w200px">
+						<div class="sb-slect fl" style="width:65px;">
+							<wj-combo-box
+									id="startTime"
+									ng-model="startTime"
+									items-source="_getComboData('startTimeCombo')"
+									display-member-path="name"
+									selected-value-path="value"
+									is-editable="false"
+									control="startTimeCombo"
+									initialized="_initComboBox(s)">
+							</wj-combo-box>
+						</div>
+						<div class="fl pd5" style="padding-right: 15px;">
+							<label> ~ </label>
+						</div>
+						<div class="sb-select fl" style="width:65px;">
+							<wj-combo-box
+									id="endTime"
+									ng-model="endTime"
+									items-source="_getComboData('endTimeCombo')"
+									display-member-path="name"
+									selected-value-path="value"
+									is-editable="false"
+									control="endTimeCombo"
+									initialized="_initComboBox(s)">
+							</wj-combo-box>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr id="timeSlotOption" style="display: none">
+				<th><s:message code="day.time.time"/></th>
+				<td colspan="3">
+					<div class="sb-select fl w120px" >
+						<wj-combo-box
+								id="timeSlotCombo"
+								ng-model="timeSlot"
+								control="timeSlotCombo"
+								items-source="_getComboData('timeSlotCombo')"
+								display-member-path="name"
+								selected-value-path="value"
+								is-editable="false"
+								initialized="_initComboBox(s)">
+						</wj-combo-box>
+					</div>
+				</td>
 			</tr>
 		</tbody>
 	</table>
@@ -139,7 +194,7 @@
 	<%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/pos/hour/hour.js?ver=20190125.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/pos/hour/hour.js?ver=20190125.03" charset="utf-8"></script>
 
 <%-- 수량합계 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/com/popup/prodHour.jsp">

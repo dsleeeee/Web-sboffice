@@ -20,6 +20,7 @@
     -->
     <select id="getProdHourList" parameterType="prodHourVO" resultType="DefaultMap">
         /* USE : ProdHourMapper.getProdHourList */
+        <if test="optionFg != null and optionFg.toString() == 'time'">
         <include refid="CmmSQL.PagingTemplateHeader"/>
 		SELECT
 		PATH_NM,
@@ -59,6 +60,65 @@
 		GROUP BY PROD_CD, PROD_NM, PATH_NM
 		ORDER BY PROD_CD
 		<include refid="CmmSQL.PagingTemplateBottom"/>
+        </if>
+        <if test="optionFg != null and optionFg.toString() == 'timeSlot'">
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  PATH_NM,
+                PROD_CD,
+                PROD_NM
+                ${sQuery1}
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM (
+                SELECT  FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+                        tsdp.PROD_CD,
+                        tmp.PROD_NM,
+                        SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+                        SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+                        SUM(TOT_SALE_QTY) AS TOT_SALE_QTY,
+                        TIME_SLOT
+                FROM    TB_SL_DAILY_PROD_TIME tsdp,
+                        TB_MS_PRODUCT tmp,
+                        (
+                        SELECT  MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) || LPAD(MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) + 1, 2, '0') AS TIME_SLOT,
+                                MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) AS START_TIME,
+                                MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) AS END_TIME
+                        <!-- 프차 -->
+                        <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                            FROM    TB_HQ_NMCODE
+                            WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                        </if>
+                        <!-- 단독매장 -->
+                        <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                            FROM 	TB_MS_STORE_NMCODE
+                            WHERE 	STORE_CD = #{storeCd}
+                        </if>
+                        AND		NMCODE_GRP_CD ='001'
+                        GROUP BY NMCODE_NM
+                        ) thn
+                WHERE 1=1
+                AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='storeCd != null and storeCd != ""'>
+                    AND tsdp.STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+                </if>
+                <if test='orgnFg != null and orgnFg == "H"'>
+                    AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                    OR	tsdp.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                    )
+                </if>
+                AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                AND tsdp.SALE_HOUR BETWEEN thn.START_TIME AND thn.END_TIME
+                AND tmp.STORE_CD = tsdp.STORE_CD
+                AND tmp.PROD_CD = tsdp.PROD_CD
+                GROUP BY tsdp.PROD_CD, tmp.PROD_NM, tmp.STORE_CD, tmp.PROD_CLASS_CD, tsdp.SALE_DATE, TIME_SLOT
+            )
+        GROUP BY PATH_NM, PROD_CD, PROD_NM
+        ORDER BY PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+        </if>
     </select>
 
 	<!-- 시간대별탭 - 엑셀 조회 -->
@@ -69,6 +129,7 @@
     -->
     <select id="getProdHourExcelList" parameterType="prodHourVO" resultType="DefaultMap">
         /* USE : ProdHourMapper.getProdHourExcelList */
+        <if test="optionFg != null and optionFg.toString() == 'time'">
         SELECT
         PATH_NM,
         PROD_CD,
@@ -105,6 +166,62 @@
         )
         GROUP BY PROD_CD, PROD_NM, PATH_NM
         ORDER BY PROD_CD
+    </if>
+    <if test="optionFg != null and optionFg.toString() == 'timeSlot'">
+        SELECT  PATH_NM,
+        PROD_CD,
+        PROD_NM
+        ${sQuery1}
+        FROM (
+        SELECT  FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+        tsdp.PROD_CD,
+        tmp.PROD_NM,
+        SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+        SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+        SUM(TOT_SALE_QTY) AS TOT_SALE_QTY,
+        TIME_SLOT
+        FROM    TB_SL_DAILY_PROD_TIME tsdp,
+        TB_MS_PRODUCT tmp,
+        (
+        SELECT  MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) || LPAD(MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) + 1, 2, '0') AS TIME_SLOT,
+        MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) AS START_TIME,
+        MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) AS END_TIME
+        <!-- 프차 -->
+        <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+            FROM    TB_HQ_NMCODE
+            WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+        </if>
+        <!-- 단독매장 -->
+        <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+            FROM 	TB_MS_STORE_NMCODE
+            WHERE 	STORE_CD = #{storeCd}
+        </if>
+        AND		NMCODE_GRP_CD ='001'
+        GROUP BY NMCODE_NM
+        ) thn
+        WHERE 1=1
+        AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCd != null and storeCd != ""'>
+            AND tsdp.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+            'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+            OR	tsdp.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+            )
+        </if>
+        AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tsdp.SALE_HOUR BETWEEN thn.START_TIME AND thn.END_TIME
+        AND tmp.STORE_CD = tsdp.STORE_CD
+        AND tmp.PROD_CD = tsdp.PROD_CD
+        GROUP BY tsdp.PROD_CD, tmp.PROD_NM, tmp.STORE_CD, tmp.PROD_CLASS_CD, tsdp.SALE_DATE, TIME_SLOT
+        )
+        GROUP BY PATH_NM, PROD_CD, PROD_NM
+        ORDER BY PROD_CD
+    </if>
     </select>
 
 </mapper>

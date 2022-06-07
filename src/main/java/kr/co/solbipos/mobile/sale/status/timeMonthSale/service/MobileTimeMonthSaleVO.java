@@ -57,6 +57,11 @@ public class MobileTimeMonthSaleVO extends PageVO {
     /** 사원번호 */
     private String empNo;
 
+    /** 검색옵션 */
+    private String optionFg;
+    /** 시간대분류 */
+    private String timeSlot;
+
     /** 동적 컬럼 생성을 위한 쿼리 문자열*/
     private String sQuery1;
     private String sQuery2;
@@ -123,6 +128,22 @@ public class MobileTimeMonthSaleVO extends PageVO {
 
     public void setEmpNo(String empNo) {
         this.empNo = empNo;
+    }
+
+    public String getOptionFg() {
+        return optionFg;
+    }
+
+    public void setOptionFg(String optionFg) {
+        this.optionFg = optionFg;
+    }
+
+    public String getTimeSlot() {
+        return timeSlot;
+    }
+
+    public void setTimeSlot(String timeSlot) {
+        this.timeSlot = timeSlot;
     }
 
     public String getsQuery1() { return sQuery1; }

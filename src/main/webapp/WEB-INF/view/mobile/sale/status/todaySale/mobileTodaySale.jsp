@@ -280,6 +280,73 @@
         <a href="#" class="open"><s:message code="mobile.todaySale.todaySaleTime"/></a>
     </div>
     <div class="w100" id="mobileTodaySaleTimeGrid" ng-controller="mobileTodaySaleTimeCtrl">
+        <table class="searchTbl">
+            <colgroup>
+                <col class="w20"/>
+                <col class="w80"/>
+            </colgroup>
+            <tbody>
+            <tr>
+                <%-- 옵션 --%>
+                <th><s:message code="mobile.cmm.search.optionFg"/></th>
+                <td>
+                    <span class="sb-radio"><input type="radio" id="mobileOptionFgTime" name="optionFg" value="time" checked /><label for="time">시간대</label></span>
+                    <span class="sb-radio"><input type="radio" id="mobileOptionFgTimeSlot" name="optionFg" value="timeSlot" /><label for="timeSlot">시간대분류</label></span>
+                </td>
+            </tr>
+            <tr id="timeOption">
+                <th><s:message code="day.time.time"/></th>
+                <td>
+                    <div class="sb-select fl w200px">
+                        <div class="sb-slect fl" style="width:65px;">
+                            <wj-combo-box
+                                    id="startTime"
+                                    ng-model="startTime"
+                                    items-source="_getComboData('startTimeCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="startTimeCombo"
+                                    initialized="_initComboBox(s)">
+                            </wj-combo-box>
+                        </div>
+                        <div class="fl pd5" style="padding-right: 15px;">
+                            <label> ~ </label>
+                        </div>
+                        <div class="sb-select fl" style="width:65px;">
+                            <wj-combo-box
+                                    id="endTime"
+                                    ng-model="endTime"
+                                    items-source="_getComboData('endTimeCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="endTimeCombo"
+                                    initialized="_initComboBox(s)">
+                            </wj-combo-box>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr id="timeSlotOption" style="display: none">
+                <th><s:message code="day.time.time"/></th>
+                <td>
+                    <div class="sb-select fl w120px" >
+                        <wj-combo-box
+                                id="timeSlotCombo"
+                                ng-model="timeSlot"
+                                control="timeSlotCombo"
+                                items-source="_getComboData('timeSlotCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
         <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;">
             <wj-flex-grid
                     autoGenerateColumns="false"
@@ -304,6 +371,20 @@
 
 <script type="text/javascript">
     var multiStoreFg = '${multiStoreFg}';
+
+    // 시간대분류
+    var timeSlotColList = [];
+    <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
+    <c:forEach var="timeSlotCol" items="${timeSlotColList}">
+    var timeSlotParam   = {};
+    timeSlotParam.name  = "${timeSlotCol.name}";
+    timeSlotParam.value = "${timeSlotCol.value}";
+    timeSlotColList.push(timeSlotParam);
+    </c:forEach>
+
+    var timeSlotCol    = '${timeSlotCol}';
+    var arrTimeSlotCol = timeSlotCol.split(',');
+
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/todaySale/mobileTodaySale.js?ver=20210524.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/todaySale/mobileTodaySale.js?ver=20210524.04" charset="utf-8"></script>

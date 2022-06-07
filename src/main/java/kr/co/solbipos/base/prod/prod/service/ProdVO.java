@@ -253,6 +253,10 @@ public class ProdVO extends PageVO {
 
     /** 보증컵유형 */
     private String depositCupFg;
+    /** 포인트사용여부 */
+    private String pointUseYn;
+    /** 할인여부 */
+    private String dcYn;
 
     /**
      * @return the hqOfficeCd
@@ -1182,5 +1186,22 @@ public class ProdVO extends PageVO {
 
     public void setDepositCupFg(String depositCupFg) {
         this.depositCupFg = depositCupFg;
+    }
+
+
+    public String getPointUseYn() {
+        return pointUseYn;
+    }
+
+    public void setPointUseYn(String pointUseYn) {
+        this.pointUseYn = pointUseYn;
+    }
+
+    public String getDcYn() {
+        return dcYn;
+    }
+
+    public void setDcYn(String dcYn) {
+        this.dcYn = dcYn;
     }
 }

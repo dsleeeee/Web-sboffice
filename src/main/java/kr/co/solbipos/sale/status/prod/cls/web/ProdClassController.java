@@ -6,6 +6,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.sale.day.day.service.DayService;
 import kr.co.solbipos.sale.status.prod.cls.service.ProdClassService;
 import kr.co.solbipos.sale.status.prod.payFg.service.ProdPayFgService;
 import kr.co.solbipos.sale.status.prod.payFg.service.ProdPayFgVO;
@@ -44,12 +45,14 @@ public class ProdClassController {
     private final SessionService sessionService;
     private final ProdClassService prodClassService;
     private final ProdPayFgService prodPayFgService;
+    private final DayService dayService;
 
     @Autowired
-    public ProdClassController(SessionService sessionService, ProdClassService prodClassService, ProdPayFgService prodPayFgService) {
+    public ProdClassController(SessionService sessionService, ProdClassService prodClassService, ProdPayFgService prodPayFgService, DayService dayService) {
         this.sessionService = sessionService;
         this.prodClassService = prodClassService;
         this.prodPayFgService = prodPayFgService;
+        this.dayService = dayService;
     }
 
     /**
@@ -75,7 +78,18 @@ public class ProdClassController {
         }
         model.addAttribute("payColList", payColList);
         model.addAttribute("payCol", payCol);
-    	
+
+        // 시간대 조회
+        List<DefaultMap<String>> timeSlotColList = dayService.getTimeSlotList(sessionInfoVO);
+        // 시간대를 , 로 연결하는 문자열 생성
+        String timeSlotCol = "";
+        for(int i=0; i < timeSlotColList.size(); i++) {
+            timeSlotCol += (timeSlotCol.equals("") ? "" : ",") + timeSlotColList.get(i).getStr("value");
+        }
+
+        model.addAttribute("timeSlotColList", timeSlotColList);
+        model.addAttribute("timeSlotCol", timeSlotCol);
+
         return "sale/status/prod/prodSale";
     }
 

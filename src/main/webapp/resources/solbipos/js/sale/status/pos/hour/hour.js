@@ -3,6 +3,16 @@
  */
 var app = agrid.getApp();
 
+// 시 VALUE
+var Hh = [24];
+for(i =0 ; i < 24; i++){
+	var timeVal = i.toString();
+	if(i>=0 && i<=9){
+		timeVal = "0" + timeVal;
+	}
+	Hh[i] = {"name":timeVal,"value":timeVal}
+}
+
 /** 일자별(포스별 매출) controller */
 app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
@@ -11,6 +21,23 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
 	$scope.srchPosHourStartDate = wcombo.genDateVal("#srchPosHourStartDate", getToday());
 	$scope.srchPosHourEndDate   = wcombo.genDateVal("#srchPosHourEndDate", getToday());
+
+	$scope.timeSlotData = [];
+	var comboArray  = [{name:"전체", value:""}];
+	for(var i = 0; i < timeSlotColList.length; i++){
+		var comboData   = {};
+		comboData.name = timeSlotColList[i].name + "(" + timeSlotColList[i].value + ")";
+		comboData.value = timeSlotColList[i].value;
+		comboArray.push(comboData);
+	}
+
+	timeSlotData = comboArray;
+	$scope._setComboData("timeSlotCombo", timeSlotData);
+	// 조회조건 콤보박스 데이터 Set
+	$scope._setComboData("startTimeCombo", Hh);
+	$scope._setComboData("endTimeCombo", Hh);
+	$scope.startTime     = "0";
+	$scope.endTime       = "23";
 
 	//조회조건 콤보박스 데이터 Set
 	$scope._setComboData("posHourListScaleBox", gvListScaleBoxData);
@@ -137,7 +164,12 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		params.listScale = $scope.posHourListScale; //-페이지 스케일 갯수
 		params.arrPosCd = $scope.comboArray; //-포스정보
 		params.isPageChk = isPageChk;
-				
+		params.startTime = $scope.startTime;
+		params.endTime = $scope.endTime;
+		params.optionFg = $("input[name=optionFg]:checked").val();
+		params.timeSlot = $scope.timeSlot;
+
+
 		//등록일자 '전체기간' 선택에 따른 params
 		if(!$scope.isChecked){
 			params.startDate = wijmo.Globalize.format($scope.srchPosHourStartDate.value, 'yyyyMMdd');
@@ -185,6 +217,17 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	$scope.posHourSelectPosShow = function () {
 		$scope._broadcast('posHourSelectPosCtrl');
 	};
+
+	// 라디오버튼 클릭시 이벤트 발생
+	$("input:radio[name=optionFg]").click(function(){
+		if($("input[name=optionFg]:checked").val() == "time"){              // 시간대
+			$("#timeOption").show();
+			$("#timeSlotOption").hide();
+		}else {       // 시간대분류
+			$("#timeOption").hide();
+			$("#timeSlotOption").show();
+		}
+	});
 
 	//엑셀 다운로드
 	$scope.excelDownloadHour = function () {

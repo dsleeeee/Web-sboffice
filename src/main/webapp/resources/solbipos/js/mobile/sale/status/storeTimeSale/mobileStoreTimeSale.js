@@ -13,6 +13,16 @@
  */
 var app = agrid.getApp();
 
+// 시 VALUE
+var Hh = [24];
+for(i =0 ; i < 24; i++){
+    var timeVal = i.toString();
+    if(i>=0 && i<=9){
+        timeVal = "0" + timeVal;
+    }
+    Hh[i] = {"name":timeVal,"value":timeVal}
+}
+
 /**
  *  요일별 그리드 생성
  */
@@ -20,6 +30,34 @@ app.controller('mobileStoreTimeSaleCtrl', ['$scope', '$http', '$timeout', functi
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('mobileStoreTimeSaleCtrl', $scope, $http, false));
+
+    $scope.timeSlotData = [];
+    var comboArray  = [{name:"전체", value:""}];
+    for(var i = 0; i < timeSlotColList.length; i++){
+        var comboData   = {};
+        comboData.name = timeSlotColList[i].name + "(" + timeSlotColList[i].value + ")";
+        comboData.value = timeSlotColList[i].value;
+        comboArray.push(comboData);
+    }
+
+    timeSlotData = comboArray;
+    $scope._setComboData("timeSlotCombo", timeSlotData);
+
+    $scope._setComboData("startTimeCombo", Hh);
+    $scope._setComboData("endTimeCombo", Hh);
+    $scope.startTime     = "0";
+    $scope.endTime       = "23";
+
+    // 라디오버튼 클릭시 이벤트 발생
+    $("input:radio[name=optionFg]").click(function(){
+        if($("input[name=optionFg]:checked").val() == "time"){              // 시간대
+            $("#timeOption").show();
+            $("#timeSlotOption").hide();
+        }else {       // 시간대분류
+            $("#timeOption").hide();
+            $("#timeSlotOption").show();
+        }
+    });
 
     // 검색조건에 조회기간
     var startDate = wcombo.genDateVal("#startDate", gvStartDate);
@@ -67,6 +105,10 @@ app.controller('mobileStoreTimeSaleCtrl', ['$scope', '$http', '$timeout', functi
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
         params.srchStoreCd = $("#mobileStoreTimeSaleStoreCd").val();
         params.array = $(":input:radio[name=array]:checked").val();
+        params.startTime = $scope.startTime;
+        params.endTime = $scope.endTime;
+        params.optionFg = $("input[name=optionFg]:checked").val();
+        params.timeSlot = $scope.timeSlot;
 
         $scope._inquirySub("/mobile/sale/status/storeTimeSale/storeTimeSale/getMobileStoreTimeSaleList.sb", params, function() {
             

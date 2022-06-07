@@ -130,4 +130,37 @@
             )
     </select>
 
+    <!-- 모바일 매출현황 - 시간대조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : mobileProdSaleVO
+        COMMENTS : 모바일 매출현황 - 매장을 조회한다.
+    -->
+    <select id="getTimeSlotList" parameterType="mobileProdSaleVO" resultType="DefaultMap">
+        /* USE : MobileProdSaleMapper.getTimeSlotList */
+        <!-- 프차 -->
+        <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+            SELECT  NMCODE_NM AS NAME,
+            MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) || '~' ||LPAD(MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) + 1, 2, '0') AS VALUE
+            FROM 	TB_HQ_NMCODE
+            WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+            AND 	NMCODE_GRP_CD = '001'
+            GROUP
+            BY      NMCODE_NM
+            ORDER
+            BY      VALUE
+        </if>
+        <!-- 단독매장 -->
+        <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+            SELECT  NMCODE_NM AS NAME,
+            MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) || '~' ||LPAD(MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) + 1, 2, '0') AS VALUE
+            FROM 	TB_MS_STORE_NMCODE
+            WHERE 	STORE_CD = #{storeCd}
+            AND 	NMCODE_GRP_CD = '001'
+            GROUP
+            BY      NMCODE_NM
+            ORDER
+            BY      VALUE
+        </if>
+    </select>
 </mapper>

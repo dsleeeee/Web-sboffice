@@ -13,6 +13,16 @@
  */
 var app = agrid.getApp();
 
+// 시 VALUE
+var Hh = [24];
+for(i =0 ; i < 24; i++){
+    var timeVal = i.toString();
+    if(i>=0 && i<=9){
+        timeVal = "0" + timeVal;
+    }
+    Hh[i] = {"name":timeVal,"value":timeVal}
+}
+
 /**
  *  당일매출종합 그리드 생성
  */
@@ -216,6 +226,34 @@ app.controller('mobileTodaySaleTimeCtrl', ['$scope', '$http', function ($scope, 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('mobileTodaySaleTimeCtrl', $scope, $http, false));
 
+    $scope.timeSlotData = [];
+    var comboArray  = [{name:"전체", value:""}];
+    for(var i = 0; i < timeSlotColList.length; i++){
+        var comboData   = {};
+        comboData.name = timeSlotColList[i].name + "(" + timeSlotColList[i].value + ")";
+        comboData.value = timeSlotColList[i].value;
+        comboArray.push(comboData);
+    }
+
+    timeSlotData = comboArray;
+    $scope._setComboData("timeSlotCombo", timeSlotData);
+
+    $scope._setComboData("startTimeCombo", Hh);
+    $scope._setComboData("endTimeCombo", Hh);
+    $scope.startTime     = "0";
+    $scope.endTime       = "23";
+
+    // 라디오버튼 클릭시 이벤트 발생
+    $("input:radio[name=optionFg]").click(function(){
+        if($("input[name=optionFg]:checked").val() == "time"){              // 시간대
+            $("#timeOption").show();
+            $("#timeSlotOption").hide();
+        }else {       // 시간대분류
+            $("#timeOption").hide();
+            $("#timeSlotOption").show();
+        }
+    });
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // 합계
@@ -235,6 +273,10 @@ app.controller('mobileTodaySaleTimeCtrl', ['$scope', '$http', function ($scope, 
         var params = {};
         params.startDate = data.startDate;
         params.srchStoreCd = data.srchStoreCd;
+        params.startTime = $scope.startTime;
+        params.endTime = $scope.endTime;
+        params.optionFg = $("input[name=optionFg]:checked").val();
+        params.timeSlot = $scope.timeSlot;
 
         $scope._inquirySub("/mobile/sale/status/todaySale/todaySale/getMobileTodaySaleTimeList.sb", params, function() {}, false);
     };

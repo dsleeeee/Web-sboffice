@@ -130,6 +130,20 @@
 
     // 상품분류별 - 분류레벨 최대값
     var maxLevel    = '${maxLevel}';
+
+    // 시간대분류
+    var timeSlotColList = [];
+    <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
+    <c:forEach var="timeSlotCol" items="${timeSlotColList}">
+    var timeSlotParam   = {};
+    timeSlotParam.name  = "${timeSlotCol.name}";
+    timeSlotParam.value = "${timeSlotCol.value}";
+    timeSlotColList.push(timeSlotParam);
+    </c:forEach>
+
+    var timeSlotCol    = '${timeSlotCol}';
+    var arrTimeSlotCol = timeSlotCol.split(',');
+
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/monthSale/monthSale.js?ver=20210322.03" charset="utf-8"></script>

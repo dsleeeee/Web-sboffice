@@ -33,12 +33,18 @@
                 <th>
                     <s:message code="dayofweek.date" />
                 </th>
-                <td colspan="3">
+                <td>
                     <div class="sb-select">
                         <span class="txtIn"> <input id="startDateDayOfWeekTime" name="startDate" class="w110px" /></span>
                         <span class="rg">~</span>
                         <span class="txtIn"> <input id="endDateDayOfWeekTime" name="endDate" class="w110px" /></span>
                     </div>
+                </td>
+                <%-- 옵션 --%>
+                <th><s:message code="dayofweek.time.optionFg"/></th>
+                <td>
+                    <span class="sb-radio"><input type="radio" id="optionFgTime" name="optionFg" value="time" checked /><label for="time">시간대</label></span>
+                    <span class="sb-radio"><input type="radio" id="optionFgTimeSlot" name="optionFg" value="timeSlot" /><label for="timeSlot">시간대분류</label></span>
                 </td>
             </tr>
             <tr <c:if test="${orgnFg == 'STORE'}">style="display: none;"</c:if> >
@@ -57,7 +63,7 @@
                     <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
                 </td>
             </tr>
-            <tr>
+            <tr id="timeOption">
                 <th><s:message code="dayofweek.srchTime"/></th>
                 <td colspan="3">
                     <div class="sb-select fl w200px">
@@ -88,6 +94,24 @@
                                     initialized="_initComboBox(s)">
                             </wj-combo-box>
                         </div>
+                    </div>
+                </td>
+            </tr>
+            </tr>
+            <tr id="timeSlotOption" style="display: none">
+                <th><s:message code="day.time.time"/></th>
+                <td colspan="3">
+                    <div class="sb-select fl w120px" >
+                        <wj-combo-box
+                                id="timeSlotCombo"
+                                ng-model="timeSlot"
+                                control="timeSlotCombo"
+                                items-source="_getComboData('timeSlotCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
                     </div>
                 </td>
             </tr>
@@ -128,6 +152,12 @@
                         <wj-flex-grid-column header="<s:message code="dayofweek.time.totGuestCnt"/>" binding="totGuestCntT${i}" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
                     </c:forEach>
 
+                    <%-- 시간대분류류 컬럼 생성--%>
+                    <c:forEach var="timeSlotCol" items="${timeSlotColList}">
+                        <wj-flex-grid-column header="<s:message code="day.time.realSaleAmt"/>" binding="realSaleAmtT${timeSlotCol.value.replace("~","")}" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="day.time.saleCnt"/>" binding="saleCntT${timeSlotCol.value.replace("~","")}" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="day.time.totGuestCnt"/>" binding="totGuestCntT${timeSlotCol.value.replace("~","")}" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                    </c:forEach>
                 </wj-flex-grid>
 
                 <%-- ColumnPicker 사용시 include --%>
@@ -146,4 +176,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayOfWeek/dayOfWeekTime.js?ver=20200117.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayOfWeek/dayOfWeekTime.js?ver=20200117.04" charset="utf-8"></script>

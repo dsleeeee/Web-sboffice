@@ -60,4 +60,14 @@ public class MobileProdSaleServiceImpl implements MobileProdSaleService {
         return mobileProdSaleMapper.getStoreList(mobileProdSaleVO);
     }
 
+    @Override
+    public List<DefaultMap<String>> getTimeSlotList(SessionInfoVO sessionInfoVO) {
+        MobileProdSaleVO mobileProdSaleVO = new MobileProdSaleVO();
+        mobileProdSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            mobileProdSaleVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        return mobileProdSaleMapper.getTimeSlotList(mobileProdSaleVO);
+    }
+
 }

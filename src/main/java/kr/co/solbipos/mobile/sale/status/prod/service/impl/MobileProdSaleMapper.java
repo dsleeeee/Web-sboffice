@@ -19,4 +19,7 @@ public interface MobileProdSaleMapper {
 
     /** 모바일 매출현황 - 매장조회 */
     List<DefaultMap<String>> getStoreList(MobileProdSaleVO mobileProdSaleVO);
+
+    /** 모바일 매출현황 - 시간대조회 */
+    List<DefaultMap<String>> getTimeSlotList(MobileProdSaleVO mobileProdSaleVO);
 }

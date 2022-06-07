@@ -1,15 +1,15 @@
 package kr.co.solbipos.sale.day.dayOfWeek.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.sale.day.day.service.DayVO;
+import kr.co.solbipos.sale.day.day.service.impl.DayMapper;
 import kr.co.solbipos.sale.day.dayOfWeek.service.DayOfWeekService;
 import kr.co.solbipos.sale.day.dayOfWeek.service.DayOfWeekVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import kr.co.solbipos.sale.day.day.enums.SaleTimeFg;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +34,15 @@ import java.util.List;
 @Transactional
 public class DayOfWeekServiceImpl implements DayOfWeekService {
     private final DayOfWeekMapper dayOfWeekMapper;
+    private final DayMapper dayMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public DayOfWeekServiceImpl(DayOfWeekMapper dayOfWeekMapper) {
+    public DayOfWeekServiceImpl(DayOfWeekMapper dayOfWeekMapper, DayMapper dayMapper) {
         this.dayOfWeekMapper = dayOfWeekMapper;
+        this.dayMapper = dayMapper;
     }
 
     /** 주간종합탭 - 주간종합조회 */
@@ -136,19 +138,36 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
         String sQuery1 = "";
         String sQuery2 = "";
 
-        // 매출 시간대 설정
-        int iSaleDateStart = Integer.parseInt(dayOfWeekVO.getStartTime());
-        int iSaleDateEnd = Integer.parseInt(dayOfWeekVO.getEndTime());
+        if(dayOfWeekVO.getOptionFg().equals("time")){ // 시간대
+            // 매출 시간대 설정
+            int iSaleDateStart = Integer.parseInt(dayOfWeekVO.getStartTime());
+            int iSaleDateEnd = Integer.parseInt(dayOfWeekVO.getEndTime());
 
-        for(int i = iSaleDateStart; i <= iSaleDateEnd; i++) {
-            sQuery1 += ", NVL(SUM(tssh.REAL_SALE_AMT_T" + i + "), 0) AS REAL_SALE_AMT_T"  + i +  "\n";
-            sQuery1 += ", NVL(SUM(tssh.SALE_CNT_T" + i + "), 0) AS SALE_CNT_T"  + i +  "\n";
-            sQuery1 += ", NVL(SUM(tssh.TOT_GUEST_CNT_T" + i + "), 0) AS TOT_GUEST_CNT_T"  + i +  "\n";
+            for(int i = iSaleDateStart; i <= iSaleDateEnd; i++) {
+                sQuery1 += ", NVL(SUM(tssh.REAL_SALE_AMT_T" + i + "), 0) AS REAL_SALE_AMT_T"  + i +  "\n";
+                sQuery1 += ", NVL(SUM(tssh.SALE_CNT_T" + i + "), 0) AS SALE_CNT_T"  + i +  "\n";
+                sQuery1 += ", NVL(SUM(tssh.TOT_GUEST_CNT_T" + i + "), 0) AS TOT_GUEST_CNT_T"  + i +  "\n";
 
-            sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T"  + i +  "\n";
-            sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN SALE_CNT ELSE 0 END) AS SALE_CNT_T"  + i +  "\n";
-            sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN GUEST_CNT_1 ELSE 0 END) AS TOT_GUEST_CNT_T"  + i +  "\n";
+                sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T"  + i +  "\n";
+                sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN SALE_CNT ELSE 0 END) AS SALE_CNT_T"  + i +  "\n";
+                sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN GUEST_CNT_1 ELSE 0 END) AS TOT_GUEST_CNT_T"  + i +  "\n";
 
+            }
+        } else if(dayOfWeekVO.getOptionFg().equals("timeSlot")){
+            DayVO dayVO = new DayVO();
+            dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            dayVO.setStoreCd(sessionInfoVO.getStoreCd());
+            dayOfWeekVO.setStoreCd(sessionInfoVO.getStoreCd());
+            List<DefaultMap<String>> timeSlotColList = dayMapper.getTimeSlotList(dayVO);
+            for(int i = 0; i < timeSlotColList.size(); i++) {
+                sQuery1 += ", NVL(SUM(tssh.REAL_SALE_AMT_T" + timeSlotColList.get(i).getStr("value").replace("~", "") + "), 0) AS REAL_SALE_AMT_T"  + timeSlotColList.get(i).getStr("value").replace("~", "") +  "\n";
+                sQuery1 += ", NVL(SUM(tssh.SALE_CNT_T" + timeSlotColList.get(i).getStr("value").replace("~", "") + "), 0) AS SALE_CNT_T"  + timeSlotColList.get(i).getStr("value").replace("~", "") +  "\n";
+                sQuery1 += ", NVL(SUM(tssh.TOT_GUEST_CNT_T" + timeSlotColList.get(i).getStr("value").replace("~", "") + "), 0) AS TOT_GUEST_CNT_T"  + timeSlotColList.get(i).getStr("value").replace("~", "") +  "\n";
+
+                sQuery2 += ", SUM(CASE WHEN TIME_SLOT = " + timeSlotColList.get(i).getStr("value").replace("~", "") + " THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_T"  + timeSlotColList.get(i).getStr("value").replace("~", "") +  "\n";
+                sQuery2 += ", SUM(CASE WHEN TIME_SLOT = " + timeSlotColList.get(i).getStr("value").replace("~", "") + " THEN SALE_CNT ELSE 0 END) AS SALE_CNT_T"  + timeSlotColList.get(i).getStr("value").replace("~", "") +  "\n";
+                sQuery2 += ", SUM(CASE WHEN TIME_SLOT = " + timeSlotColList.get(i).getStr("value").replace("~", "") + " THEN GUEST_CNT ELSE 0 END) AS TOT_GUEST_CNT_T"  + timeSlotColList.get(i).getStr("value").replace("~", "") +  "\n";
+            }
         }
 
         dayOfWeekVO.setsQuery1(sQuery1);

@@ -53,6 +53,8 @@ app.controller('mobileTimeDaySaleDateTimeCtrl', ['$scope', '$http', function ($s
         params.srchStoreCd = data.srchStoreCd;
         params.startTime = data.startTime;
         params.endTime = data.endTime;
+        params.optionFg = $("input[name=optionFg]:checked").val();
+        params.timeSlot = data.timeSlot;
 
         $scope._inquirySub("/mobile/sale/status/timeDaySale/timeDaySale/getMobileTimeDaySaleDateTimeList.sb", params, function() {
             // 조회 결과가 없으면 grid에'조회 결과 없음' Msg 띄우기
@@ -65,14 +67,27 @@ app.controller('mobileTimeDaySaleDateTimeCtrl', ['$scope', '$http', function ($s
             var start = parseInt(data.startTime) + 1;
             var end = parseInt(data.endTime) + 1;
 
-            // 컬럼 총갯수
-            var columnsCnt = 25;
+            if($("input[name=optionFg]:checked").val() == "time") { // 시간대
+                // 컬럼 총갯수
+                var columnsCnt = 25;
+                for (var i = 1; i < columnsCnt; i++) {
+                    if (i >= start && i <= end) {
+                        columns[i].visible = true;
+                    } else {
+                        columns[i].visible = false;
+                    }
+                }
+            } else if($("input[name=optionFg]:checked").val() == "timeSlot") {   // 시간대분류
 
-            for (var i = 1; i < columnsCnt; i++) {
-                if (i >= start && i <= end) {
-                    columns[i].visible = true;
-                } else {
+                for (var i = start; i < columns.length; i++) {
                     columns[i].visible = false;
+                    for(var j = 0; j < timeSlotColList.length; j++){
+                        if($scope.timeSlot == timeSlotColList[j].value || $scope.timeSlot === ""){
+                            if (columns[i].binding == 'realSaleAmtT'+timeSlotColList[j].value.replaceAll("~","")) {
+                                columns[i].visible = true;
+                            }
+                        }
+                    }
                 }
             }
             // <-- //그리드 visible -->
@@ -89,6 +104,18 @@ app.controller('mobileTimeDaySaleCtrl', ['$scope', '$http', function ($scope, $h
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('mobileTimeDaySaleCtrl', $scope, $http, false));
+
+    $scope.timeSlotData = [];
+    var comboArray  = [{name:"전체", value:""}];
+    for(var i = 0; i < timeSlotColList.length; i++){
+        var comboData   = {};
+        comboData.name = timeSlotColList[i].name + "(" + timeSlotColList[i].value + ")";
+        comboData.value = timeSlotColList[i].value;
+        comboArray.push(comboData);
+    }
+
+    timeSlotData = comboArray;
+    $scope._setComboData("timeSlotCombo", timeSlotData);
 
     // 검색조건에 조회기간
     var startDate = wcombo.genDateVal("#startDate", gvStartDate);
@@ -124,6 +151,8 @@ app.controller('mobileTimeDaySaleCtrl', ['$scope', '$http', function ($scope, $h
         params.startTime = 0;
         params.endTime = 23;
         params.diffTime = 1; // 조회시간 차이(차트 높이 때문에)
+        params.optionFg = $("input[name=optionFg]:checked").val();
+        params.timeSlot = $scope.timeSlot;
 
         // 바 차트
         $scope._broadcast("mobileTimeDaySaleTimeChartCtrl", params);
@@ -160,6 +189,8 @@ app.controller('mobileTimeDaySaleCtrl', ['$scope', '$http', function ($scope, $h
         params.srchStoreCd = $("#mobileTimeDaySaleStoreCd").val();
         params.startTime = $scope.startTime;
         params.endTime = $scope.endTime;
+        params.optionFg = $("input[name=optionFg]:checked").val();
+        params.timeSlot = $scope.timeSlot;
         var diffTime = parseInt($scope.endTime) - parseInt($scope.startTime) + 1;
         params.diffTime = diffTime; // 조회시간 차이(차트 높이 때문에)
 
@@ -181,6 +212,18 @@ app.controller('mobileTimeDaySaleCtrl', ['$scope', '$http', function ($scope, $h
     $scope.mobileTimeDaySaleStoreShow = function () {
         $scope._broadcast('mobileTimeDaySaleStoreCtrl');
     };
+
+    // 라디오버튼 클릭시 이벤트 발생
+    $("input:radio[name=optionFg]").click(function(){
+        if($("input[name=optionFg]:checked").val() == "time"){              // 시간대
+            $("#timeOption").show();
+            $("#timeSlotOption").hide();
+        }else {       // 시간대분류
+            $("#timeOption").hide();
+            $("#timeSlotOption").show();
+        }
+    });
+
 }]);
 /**
  *  시간대별 차트 생성
@@ -229,6 +272,8 @@ app.controller('mobileTimeDaySaleTimeChartCtrl', ['$scope', '$http', function ($
         params.srchStoreCd = data.srchStoreCd;
         params.startTime = data.startTime;
         params.endTime = data.endTime;
+        params.optionFg = $("input[name=optionFg]:checked").val();
+        params.timeSlot = data.timeSlot;
 
         $scope._inquirySub("/mobile/sale/status/timeDaySale/timeDaySale/getMobileTimeDaySaleTimeChartList.sb", params);
     };

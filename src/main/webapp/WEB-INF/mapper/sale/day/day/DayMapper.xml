@@ -144,6 +144,39 @@
         ORDER BY tmp.STORE_CD, tmp.POS_NO
     </select>
 
+    <!-- 시간대별 탭 - 시간대 리스트 조회-->
+    <!--
+        TABLE    : TB_MS_POS
+        COMMENTS : [매장]포스 정보
+    -->
+    <select id="getTimeSlotList"  parameterType="dayVO" resultType="DefaultMap">
+        /* DayMapper.getTimeSlotList */
+        <!-- 프차 -->
+        <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+            SELECT  NMCODE_NM AS NAME,
+                    MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) || '~' ||LPAD(MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) + 1, 2, '0') AS VALUE
+            FROM 	TB_HQ_NMCODE
+            WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+            AND 	NMCODE_GRP_CD = '001'
+            GROUP
+            BY      NMCODE_NM
+            ORDER
+            BY      VALUE
+        </if>
+        <!-- 단독매장 -->
+        <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+            SELECT  NMCODE_NM AS NAME,
+                    MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) || '~' ||LPAD(MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) + 1, 2, '0') AS VALUE
+            FROM 	TB_MS_STORE_NMCODE
+            WHERE 	STORE_CD = #{storeCd}
+            AND 	NMCODE_GRP_CD = '001'
+            GROUP
+            BY      NMCODE_NM
+            ORDER
+            BY      VALUE
+        </if>
+    </select>
+
     <!-- 일자별(일별종합 탭) - 일별종합 리스트 조회 -->
     <!--
         TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY, TB_SL_SALE_HDR_DC
@@ -848,6 +881,7 @@
     -->
     <select id="getDayTimeList" parameterType="dayVO" resultType="DefaultMap">
         /* USE : DayMapper.getDayTimeList */
+        <if test="optionFg != null and optionFg.toString() == 'time'">
         SELECT TO_CHAR(TO_DATE(tssh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
              , tssh.YOIL
              , COUNT(tssh.STORE_cd) AS STORE_CNT
@@ -878,13 +912,81 @@
                     OR  STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                     )
                 </if>
-                <if test='startTime != "0" and endTime != "23"'>
+                <if test='startTime != "0" or endTime != "23"'>
                     AND SALE_HOUR BETWEEN #{startTime} AND #{endTime}
                 </if>
                  GROUP BY SALE_DATE, STORE_CD
              ) tssh
         GROUP BY SALE_DATE, YOIL
         ORDER BY SALE_DATE DESC
+        </if>
+        <if test="optionFg != null and optionFg.toString() == 'timeSlot'">
+        SELECT TO_CHAR(TO_DATE(tssh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+             , tssh.YOIL
+             , COUNT(tssh.STORE_cd) AS STORE_CNT
+             , SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
+             , SUM(tssh.SALE_CNT) AS SALE_CNT
+             , SUM(tssh.TOT_GUEST_CNT) AS TOT_GUEST_CNT
+            ${sQuery1}
+        FROM (
+                 SELECT SALE_DATE
+                      , TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+                      , STORE_CD
+                      , SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+                      , SUM(SALE_CNT) AS SALE_CNT
+                      , SUM(GUEST_CNT) AS TOT_GUEST_CNT
+                        ${sQuery2}
+                 FROM   (
+                            SELECT  SALE_DATE
+                                ,   TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+                                ,   STORE_CD
+                                ,   SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+                                ,   SUM(SALE_CNT) AS SALE_CNT
+                                ,   SUM(GUEST_CNT_1) AS GUEST_CNT
+                                ,	thn.TIME_SLOT
+                            FROM 	TB_SL_DAILY_TIME tsdt,
+                                    (SELECT     MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) || LPAD(MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) + 1, 2, '0') AS TIME_SLOT,
+                                                MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) AS START_TIME,
+                                                MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) AS END_TIME
+                                    <!-- 프차 -->
+                                    <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                                        FROM 	TB_HQ_NMCODE
+                                        WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                                    </if>
+                                    <!-- 단독매장 -->
+                                    <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                                        FROM 	TB_MS_STORE_NMCODE
+                                        WHERE 	STORE_CD = #{storeCd}
+                                    </if>
+                                    AND		NMCODE_GRP_CD ='001'
+                                    GROUP BY NMCODE_NM
+                                    ) thn
+                            WHERE 	tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+                            AND 	tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                            AND     tsdt.SALE_HOUR BETWEEN thn.START_TIME AND thn.END_TIME
+                            <if test='arrStoreCd != null and arrStoreCd != ""'>
+                                AND STORE_CD IN
+                                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <if test='orgnFg != null and orgnFg == "H"'>
+                                AND (
+                                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                                OR  STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                                )
+                            </if>
+                            <if test='timeSlot != null and timeSlot != ""'>
+                                AND TIME_SLOT = replace(#{timeSlot},'~','')
+                            </if>
+                            GROUP
+                            BY      SALE_DATE, STORE_CD, TIME_SLOT
+                        )
+                 GROUP BY SALE_DATE, STORE_CD
+             ) tssh
+        GROUP BY SALE_DATE, YOIL
+        ORDER BY SALE_DATE DESC
+        </if>
     </select>
 
     <!-- 일자별(상품분류 탭) - 상품분류 MAX(depth) 값 가져오기  -->

@@ -15,4 +15,7 @@ public interface MobileProdSaleService {
 
     /** 모바일 매출현황 - 매장조회 */
     List<DefaultMap<String>> getStoreList(MobileProdSaleVO mobileProdSaleVO, SessionInfoVO sessionInfoVO);
+
+    /** 모바일 매출현황 - 시간대조회 */
+    List<DefaultMap<String>> getTimeSlotList(SessionInfoVO sessionInfoVO);
 }

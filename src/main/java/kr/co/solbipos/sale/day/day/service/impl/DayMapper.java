@@ -27,6 +27,9 @@ public interface DayMapper {
     /** 포스별 탭 - 포스 컬럼 리스트 조회 */
     List<DefaultMap<String>> getPosColList(DayVO dayVO);
 
+    /** 포스별 탭 - 시간대 리스트 조회 */
+    List<DefaultMap<String>> getTimeSlotList(DayVO dayVO);
+
 
     /** 일자별 - 일별종합 리스트 조회 */
     List<DefaultMap<String>> getDayTotalList(DayVO dayVO);

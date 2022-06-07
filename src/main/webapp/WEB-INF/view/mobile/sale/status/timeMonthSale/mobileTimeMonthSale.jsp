@@ -52,6 +52,14 @@
             <input type="hidden" id="mobileTimeMonthSaleStoreCd" value="${sessionInfo.storeCd}"/>
         </c:if>
         <tr>
+            <%-- 옵션 --%>
+            <th><s:message code="month.time.optionFg"/></th>
+            <td>
+                <span class="sb-radio"><input type="radio" id="optionFgTime" name="optionFg" value="time" checked /><label for="time">시간대</label></span>
+                <span class="sb-radio"><input type="radio" id="optionFgTimeSlot" name="optionFg" value="timeSlot" /><label for="timeSlot">시간대분류</label></span>
+            </td>
+        </tr>
+        <tr id="timeOption">
             <%-- 시간대 --%>
             <th><s:message code="mobile.timeMonthSale.saleTime"/></th>
             <td>
@@ -86,6 +94,23 @@
                 </div>
             </td>
         </tr>
+        <tr id="timeSlotOption" style="display: none">
+            <th><s:message code="day.time.time"/></th>
+            <td colspan="3">
+                <div class="sb-select fl w120px" >
+                    <wj-combo-box
+                            id="timeSlotCombo"
+                            ng-model="timeSlot"
+                            control="timeSlotCombo"
+                            items-source="_getComboData('timeSlotCombo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                    </wj-combo-box>
+                </div>
+            </td>
+        </tr>
         </tbody>
     </table>
 
@@ -111,6 +136,11 @@
                 <%-- 시간대 컬럼 생성--%>
                 <c:forEach var="i" begin="0" end="23">
                     <wj-flex-grid-column header="${i}<s:message code="mobile.timeMonthSale.T"/>" binding="realSaleAmtT${i}" width="70" align="right" is-read-only="true" aggregate="Sum" visible="true"></wj-flex-grid-column>
+                </c:forEach>
+
+                <%-- 시간대분류 컬럼 생성--%>
+                <c:forEach var="timeSlotCol" items="${timeSlotColList}">
+                    <wj-flex-grid-column header="${timeSlotCol.name}(${timeSlotCol.value})" binding="realSaleAmtT${timeSlotCol.value.replace("~","")}" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
                 </c:forEach>
 
                 <!-- 조회 결과가 없을 때, msg 띄우기 -->
@@ -185,6 +215,20 @@
 
 <script type="text/javascript">
     var multiStoreFg = '${multiStoreFg}';
+
+    // 시간대분류
+    var timeSlotColList = [];
+    <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
+    <c:forEach var="timeSlotCol" items="${timeSlotColList}">
+    var timeSlotParam   = {};
+    timeSlotParam.name  = "${timeSlotCol.name}";
+    timeSlotParam.value = "${timeSlotCol.value}";
+    timeSlotColList.push(timeSlotParam);
+    </c:forEach>
+
+    var timeSlotCol    = '${timeSlotCol}';
+    var arrTimeSlotCol = timeSlotCol.split(',');
+
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/timeMonthSale/mobileTimeMonthSale.js?ver=20210609.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/timeMonthSale/mobileTimeMonthSale.js?ver=20210609.03" charset="utf-8"></script>

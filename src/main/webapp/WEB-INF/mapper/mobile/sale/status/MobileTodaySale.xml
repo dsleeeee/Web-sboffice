@@ -437,11 +437,83 @@
     -->
     <select id="getMobileTodaySaleTimeList"  parameterType="MobileTodaySaleVO" resultType="DefaultMap">
         /* MobileTodaySaleMapper.getMobileTodaySaleTimeList */
-        SELECT
-        A.SALE_TIME,
-        A.AMT_CNT,
-        A.REAL_SALE_AMT,
-        DECODE(B.TOT_REAL_SALE_AMT, 0, 0, NVL(ROUND(A.REAL_SALE_AMT / B.TOT_REAL_SALE_AMT * 100, 2), 0)) AS AMT_RATE
+        <if test="optionFg != null and optionFg.toString() == 'time'">
+        SELECT  A.SALE_TIME,
+                A.AMT_CNT,
+                A.REAL_SALE_AMT,
+                DECODE(B.TOT_REAL_SALE_AMT, 0, 0, NVL(ROUND(A.REAL_SALE_AMT / B.TOT_REAL_SALE_AMT * 100, 2), 0)) AS AMT_RATE
+        FROM    (
+                SELECT  SALE_TIME,
+                        SUM(AMT_CNT) AS AMT_CNT,
+                        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+                FROM    (
+                        SELECT  *
+                        FROM    (
+                                SELECT  SALE_HOUR AS SALE_TIME,
+                                        SUM(SALE_CNT) AS AMT_CNT,
+                                        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+                                FROM    TB_SL_DAILY_TIME tssh
+                                WHERE    1=1
+                                AND     tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+                                <!-- 매장 -->
+                                <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                                    AND tssh.STORE_CD IN
+                                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                                        #{item}
+                                    </foreach>
+                                </if>
+                                <if test='orgnFg != null and orgnFg == "H"'>
+                                    AND (
+                                            'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                                        OR	tssh.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                                        )
+                                </if>
+                                AND     tssh.SALE_DATE = #{startDate}
+                                GROUP BY SALE_HOUR
+                                )
+                                UNION ALL
+                                (
+                                    SELECT
+                                    LPAD(LEVEL-1, 2, 0) AS SALE_TIME,
+                                    0 AS AMT_CNT,
+                                    0 AS REAL_SALE_AMT
+                                    FROM dual
+                                    <![CDATA[
+                                        CONNECT BY LEVEL <= 25
+                                    ]]>
+                                )
+                        )
+                    GROUP BY SALE_TIME
+                ) A,
+                (
+                    SELECT  NVL(SUM(tssh.REAL_SALE_AMT), 0) AS TOT_REAL_SALE_AMT
+                    FROM    TB_SL_DAILY_TIME tssh
+                    WHERE   1=1
+                    AND     tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     tssh.SALE_DATE = #{startDate}
+                    <!-- 매장 -->
+                    <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
+                        AND tssh.STORE_CD IN
+                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                            #{item}
+                        </foreach>
+                    </if>
+                    <if test='orgnFg != null and orgnFg == "H"'>
+                        AND (
+                                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                            OR	tssh.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                            )
+                    </if>
+            ) B
+        <if test='startTime != "0" or endTime != "23"'>
+            WHERE A.SALE_TIME BETWEEN #{startTime} AND #{endTime}
+        </if>
+        </if>
+        <if test="optionFg != null and optionFg.toString() == 'timeSlot'">
+        SELECT  A.SALE_TIME,
+                A.AMT_CNT,
+                A.REAL_SALE_AMT,
+                DECODE(B.TOT_REAL_SALE_AMT, 0, 0, NVL(ROUND(A.REAL_SALE_AMT / B.TOT_REAL_SALE_AMT * 100, 2), 0)) AS AMT_RATE
         FROM
         (
             SELECT
@@ -455,15 +527,32 @@
                 (
                     SELECT
                     SALE_TIME,
-                    COUNT(DISTINCT BILL_NO) AS AMT_CNT,
+                    SUM(SALE_CNT) AS AMT_CNT,
                     NVL(SUM(REAL_SALE_AMT), 0) AS REAL_SALE_AMT
                     FROM
                     (
                         SELECT
-                        tssh.BILL_NO,
-                        SUBSTR(tssh.REG_DT, 9, 2) AS SALE_TIME,
-                        tssh.REAL_SALE_AMT
-                        FROM TB_SL_SALE_HDR tssh
+                        TIME_SLOT AS SALE_TIME,
+                        SALE_CNT,
+                        REAL_SALE_AMT
+                        FROM TB_SL_DAILY_TIME tssh,
+                            (
+                            SELECT 	MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) || '~' || LPAD(MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) + 1, 2, '0') AS TIME_SLOT,
+                                    MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) AS START_TIME,
+                                    MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) AS END_TIME
+                            <!-- 프차 -->
+                            <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                                FROM    TB_HQ_NMCODE
+                                WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                            </if>
+                            <!-- 단독매장 -->
+                            <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                                FROM 	TB_MS_STORE_NMCODE
+                                WHERE 	STORE_CD = #{storeCd}
+                            </if>
+                            AND		NMCODE_GRP_CD ='001'
+                            GROUP BY NMCODE_NM
+                            ) thn
                         WHERE 1=1
                         AND tssh.HQ_OFFICE_CD = #{hqOfficeCd}
                         <!-- 매장 -->
@@ -480,29 +569,37 @@
                                 )
                         </if>
                         AND tssh.SALE_DATE = #{startDate}
+                        AND tssh.SALE_HOUR BETWEEN thn.START_TIME AND thn.END_TIME
                     )
                     GROUP BY SALE_TIME
                     ORDER BY SALE_TIME
                 )
                 UNION ALL
                 (
-                    SELECT
-                    LPAD(LEVEL-1, 2, 0) AS SALE_TIME,
-                    0 AS AMT_CNT,
-                    0 AS REAL_SALE_AMT
-                    FROM dual
-                    <![CDATA[
-                        CONNECT BY LEVEL <= 25
-                    ]]>
-                )
+                    SELECT  MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) || '~' || LPAD(MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) + 1, 2, '0') AS SALE_TIME,
+                            0 AS AMT_CNT,
+                            0 AS REAL_SALE_AMT
+                    <!-- 프차 -->
+                    <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                        FROM    TB_HQ_NMCODE
+                        WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                    </if>
+                    <!-- 단독매장 -->
+                    <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                        FROM 	TB_MS_STORE_NMCODE
+                        WHERE 	STORE_CD = #{storeCd}
+                    </if>
+                    AND		NMCODE_GRP_CD ='001'
+                    GROUP BY NMCODE_NM
+            )
             )
             GROUP BY SALE_TIME
             ORDER BY SALE_TIME
-        ) A,
-        (
+            ) A,
+            (
             SELECT
             NVL(SUM(tssh.REAL_SALE_AMT), 0) AS TOT_REAL_SALE_AMT
-            FROM TB_SL_SALE_HDR tssh
+            FROM TB_SL_DAILY_TIME tssh
             WHERE 1=1
             AND tssh.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
@@ -514,12 +611,16 @@
             </if>
             <if test='orgnFg != null and orgnFg == "H"'>
                 AND (
-                        'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                    OR	tssh.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
-                    )
+                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR	tssh.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
             </if>
             AND tssh.SALE_DATE = #{startDate}
-        ) B
+            ) B
+            <if test='timeSlot != null and timeSlot != ""'>
+                WHERE SALE_TIME = #{timeSlot}
+            </if>
+        </if>
     </select>
 
 </mapper>

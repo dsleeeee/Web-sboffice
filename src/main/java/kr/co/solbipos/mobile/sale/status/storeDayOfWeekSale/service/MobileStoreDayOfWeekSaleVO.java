@@ -45,6 +45,9 @@ public class MobileStoreDayOfWeekSaleVO extends PageVO {
     /** 정렬 */
     private String array;
 
+    /** 사원번호 */
+    private String empNo;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -83,5 +86,13 @@ public class MobileStoreDayOfWeekSaleVO extends PageVO {
 
     public void setArray(String array) {
         this.array = array;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
     }
 }

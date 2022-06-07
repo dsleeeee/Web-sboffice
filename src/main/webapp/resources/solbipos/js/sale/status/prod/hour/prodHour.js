@@ -55,6 +55,17 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // 조회일자 세팅
     var startDate = wcombo.genDateVal("#startDateProdHour", gvStartDate);
     var endDate = wcombo.genDateVal("#endDateProdHour", gvEndDate);
+    $scope.timeSlotData = [];
+    var comboArray  = [{name:"전체", value:""}];
+    for(var i = 0; i < timeSlotColList.length; i++){
+        var comboData   = {};
+        comboData.name = timeSlotColList[i].name + "(" + timeSlotColList[i].value + ")";
+        comboData.value = timeSlotColList[i].value;
+        comboArray.push(comboData);
+    }
+
+    timeSlotData = comboArray;
+    $scope._setComboData("timeSlotCombo", timeSlotData);
 
     // 콤보박스 데이터 Set
     $scope._setComboData('prodHourlistScaleBox', gvListScaleBoxData);
@@ -88,6 +99,12 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
                 dataItem['totSaleQtyT' + i] = i + "시";
                 dataItem['totSaleAmtT' + i] = i + "시";
             }
+        }
+
+        // 시간대분류 컬럼 생성
+        for (var i = 0; i < timeSlotColList.length; i++) {
+            dataItem['totSaleQtyT' + timeSlotColList[i].value.replaceAll("~","")] = timeSlotColList[i].name + "(" + timeSlotColList[i].value + ")";
+            dataItem['totSaleAmtT' + timeSlotColList[i].value.replaceAll("~","")] = timeSlotColList[i].name + "(" + timeSlotColList[i].value + ")";
         }
 
         s.columnHeaders.rows[0].dataItem = dataItem;
@@ -163,6 +180,8 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
         params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
+        params.optionFg = $("input[name=optionFg]:checked").val();
+        params.timeSlot = $scope.timeSlot;
 
         if(params.startDate > params.endDate){
        	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
@@ -177,89 +196,104 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
         var columns = grid.columns;
         var start = 0;
         var end = 0;
-        
-        if($scope.saleTime === "00"){
-            start = 3;
-            end = 4;
-        }else if($scope.saleTime  === "01"){
-            start = 5;
-            end = 6;
-        }else if($scope.saleTime  === "02"){
-            start = 7;
-            end = 8;
-        }else if($scope.saleTime  === "03"){
-            start = 9;
-            end = 10;
-        }else if($scope.saleTime  === "04"){
-            start = 11;
-            end = 12;
-        }else if($scope.saleTime  === "05"){
-            start = 13;
-            end = 14;
-        }else if($scope.saleTime  === "06"){
-            start = 15;
-            end = 16;
-        }else if($scope.saleTime  === "07"){
-            start = 17;
-            end = 18;
-        }else if($scope.saleTime  === "08"){
-            start = 19;
-            end = 20;
-        }else if($scope.saleTime  === "09"){
-            start = 21;
-            end = 22;
-        }else if($scope.saleTime  === "10"){
-            start = 23;
-            end = 24;
-        }else if($scope.saleTime  === "11"){
-            start = 25;
-            end = 26;
-        }else if($scope.saleTime  === "12"){
-            start = 27;
-            end = 28;
-        }else if($scope.saleTime  === "13"){
-            start = 29;
-            end = 30;
-        }else if($scope.saleTime  === "14"){
-            start = 31;
-            end = 32;
-        }else if($scope.saleTime  === "15"){
-            start = 33;
-            end = 34;
-        }else if($scope.saleTime  === "16"){
-            start = 35;
-            end = 36;
-        }else if($scope.saleTime  === "17"){
-            start = 37;
-            end = 38;
-        }else if($scope.saleTime  === "18"){
-            start = 39;
-            end = 40;
-        }else if($scope.saleTime  === "19"){
-            start = 41;
-            end = 42;
-        }else if($scope.saleTime  === "20"){
-            start = 43;
-            end = 44;
-        }else if($scope.saleTime  === "21"){
-            start = 45;
-            end = 46;
-        }else if($scope.saleTime  === "22"){
-            start = 47;
-            end = 48;
-        }else if($scope.saleTime  === "23"){
-            start = 49;
-            end = 50;
-        }else if($scope.saleTime === ""){ //전체
-            start = 3;
-            end = 50;
-        }
-        
-        for(var i = 3; i <= 50; i++){
-            if(i >= start && i <= end){
-                columns[i].visible = true;
-            }else{
+
+        if($("input[name=optionFg]:checked").val() == "time") { // 시간대
+
+            if ($scope.saleTime === "00") {
+                start = 3;
+                end = 4;
+            } else if ($scope.saleTime === "01") {
+                start = 5;
+                end = 6;
+            } else if ($scope.saleTime === "02") {
+                start = 7;
+                end = 8;
+            } else if ($scope.saleTime === "03") {
+                start = 9;
+                end = 10;
+            } else if ($scope.saleTime === "04") {
+                start = 11;
+                end = 12;
+            } else if ($scope.saleTime === "05") {
+                start = 13;
+                end = 14;
+            } else if ($scope.saleTime === "06") {
+                start = 15;
+                end = 16;
+            } else if ($scope.saleTime === "07") {
+                start = 17;
+                end = 18;
+            } else if ($scope.saleTime === "08") {
+                start = 19;
+                end = 20;
+            } else if ($scope.saleTime === "09") {
+                start = 21;
+                end = 22;
+            } else if ($scope.saleTime === "10") {
+                start = 23;
+                end = 24;
+            } else if ($scope.saleTime === "11") {
+                start = 25;
+                end = 26;
+            } else if ($scope.saleTime === "12") {
+                start = 27;
+                end = 28;
+            } else if ($scope.saleTime === "13") {
+                start = 29;
+                end = 30;
+            } else if ($scope.saleTime === "14") {
+                start = 31;
+                end = 32;
+            } else if ($scope.saleTime === "15") {
+                start = 33;
+                end = 34;
+            } else if ($scope.saleTime === "16") {
+                start = 35;
+                end = 36;
+            } else if ($scope.saleTime === "17") {
+                start = 37;
+                end = 38;
+            } else if ($scope.saleTime === "18") {
+                start = 39;
+                end = 40;
+            } else if ($scope.saleTime === "19") {
+                start = 41;
+                end = 42;
+            } else if ($scope.saleTime === "20") {
+                start = 43;
+                end = 44;
+            } else if ($scope.saleTime === "21") {
+                start = 45;
+                end = 46;
+            } else if ($scope.saleTime === "22") {
+                start = 47;
+                end = 48;
+            } else if ($scope.saleTime === "23") {
+                start = 49;
+                end = 50;
+            } else if ($scope.saleTime === "") { //전체
+                start = 3;
+                end = 50;
+            }
+
+            for (var i = 3; i <= 50; i++) {
+                if (i >= start && i <= end) {
+                    columns[i].visible = true;
+                } else {
+                    columns[i].visible = false;
+                }
+            }
+        } else if($("input[name=optionFg]:checked").val() == "timeSlot"){   // 시간대분류
+            // 선택한 시간대에 따른 리스트 항목 visible
+            for (var i = 3; i < columns.length; i++) {
                 columns[i].visible = false;
+                for(var j = 0; j < timeSlotColList.length; j++){
+                    if($scope.timeSlot == timeSlotColList[j].value || $scope.timeSlot === ""){
+                        if (columns[i].binding == 'totSaleQtyT'+timeSlotColList[j].value.replaceAll("~","") || columns[i].binding == 'totSaleAmtT'+timeSlotColList[j].value.replaceAll("~","")) {
+                            columns[i].visible = true;
+                        }
+                    }
+                }
             }
         }
     };
@@ -271,6 +305,17 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
         $scope._broadcast('dayTimeSelectStoreCtrl');
     };
 
+    // 라디오버튼 클릭시 이벤트 발생
+    $("input:radio[name=optionFg]").click(function(){
+        if($("input[name=optionFg]:checked").val() == "time"){              // 시간대
+            $("#timeOption").show();
+            $("#timeSlotOption").hide();
+        }else {       // 시간대분류
+            $("#timeOption").hide();
+            $("#timeSlotOption").show();
+        }
+    });
+
     // 엑셀 다운로드
     $scope.excelDownloadHour = function () {
     	// 파라미터
@@ -279,6 +324,8 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
         params.saleTime = $scope.saleTime;
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
+        params.optionFg = $("input[name=optionFg]:checked").val();
+        params.timeSlot = $scope.timeSlot;
 
 		$scope._broadcast('prodHourExcelCtrl', params);
     };
@@ -329,6 +376,12 @@ app.controller('prodHourExcelCtrl', ['$scope', '$http', '$timeout', function ($s
                 dataItem['totSaleQtyT' + i] = i + "시";
                 dataItem['totSaleAmtT' + i] = i + "시";
             }
+        }
+
+        // 시간대분류 컬럼 생성
+        for (var i = 0; i < timeSlotColList.length; i++) {
+            dataItem['totSaleQtyT' + timeSlotColList[i].value.replaceAll("~","")] = timeSlotColList[i].name + "(" + timeSlotColList[i].value + ")";
+            dataItem['totSaleAmtT' + timeSlotColList[i].value.replaceAll("~","")] = timeSlotColList[i].name + "(" + timeSlotColList[i].value + ")";
         }
 
         s.columnHeaders.rows[0].dataItem = dataItem;
@@ -388,6 +441,8 @@ app.controller('prodHourExcelCtrl', ['$scope', '$http', '$timeout', function ($s
         params.saleTime = data.saleTime;
         params.startDate = data.startDate;
         params.endDate = data.endDate;
+        params.optionFg = data.optionFg;
+        params.timeSlot = data.timeSlot;
 
 		$scope.isChkProdClassDisplay();
 
@@ -420,88 +475,102 @@ app.controller('prodHourExcelCtrl', ['$scope', '$http', '$timeout', function ($s
         var start = 0;
         var end = 0;
 
-        if($scope.saleTime === "00"){
-            start = 3;
-            end = 4;
-        }else if($scope.saleTime  === "01"){
-            start = 5;
-            end = 6;
-        }else if($scope.saleTime  === "02"){
-            start = 7;
-            end = 8;
-        }else if($scope.saleTime  === "03"){
-            start = 9;
-            end = 10;
-        }else if($scope.saleTime  === "04"){
-            start = 11;
-            end = 12;
-        }else if($scope.saleTime  === "05"){
-            start = 13;
-            end = 14;
-        }else if($scope.saleTime  === "06"){
-            start = 15;
-            end = 16;
-        }else if($scope.saleTime  === "07"){
-            start = 17;
-            end = 18;
-        }else if($scope.saleTime  === "08"){
-            start = 19;
-            end = 20;
-        }else if($scope.saleTime  === "09"){
-            start = 21;
-            end = 22;
-        }else if($scope.saleTime  === "10"){
-            start = 23;
-            end = 24;
-        }else if($scope.saleTime  === "11"){
-            start = 25;
-            end = 26;
-        }else if($scope.saleTime  === "12"){
-            start = 27;
-            end = 28;
-        }else if($scope.saleTime  === "13"){
-            start = 29;
-            end = 30;
-        }else if($scope.saleTime  === "14"){
-            start = 31;
-            end = 32;
-        }else if($scope.saleTime  === "15"){
-            start = 33;
-            end = 34;
-        }else if($scope.saleTime  === "16"){
-            start = 35;
-            end = 36;
-        }else if($scope.saleTime  === "17"){
-            start = 37;
-            end = 38;
-        }else if($scope.saleTime  === "18"){
-            start = 39;
-            end = 40;
-        }else if($scope.saleTime  === "19"){
-            start = 41;
-            end = 42;
-        }else if($scope.saleTime  === "20"){
-            start = 43;
-            end = 44;
-        }else if($scope.saleTime  === "21"){
-            start = 45;
-            end = 46;
-        }else if($scope.saleTime  === "22"){
-            start = 47;
-            end = 48;
-        }else if($scope.saleTime  === "23"){
-            start = 49;
-            end = 50;
-        }else if($scope.saleTime === ""){ //전체
-            start = 3;
-            end = 50;
-        }
+        if($("input[name=optionFg]:checked").val() == "time") { // 시간대
+            if ($scope.saleTime === "00") {
+                start = 3;
+                end = 4;
+            } else if ($scope.saleTime === "01") {
+                start = 5;
+                end = 6;
+            } else if ($scope.saleTime === "02") {
+                start = 7;
+                end = 8;
+            } else if ($scope.saleTime === "03") {
+                start = 9;
+                end = 10;
+            } else if ($scope.saleTime === "04") {
+                start = 11;
+                end = 12;
+            } else if ($scope.saleTime === "05") {
+                start = 13;
+                end = 14;
+            } else if ($scope.saleTime === "06") {
+                start = 15;
+                end = 16;
+            } else if ($scope.saleTime === "07") {
+                start = 17;
+                end = 18;
+            } else if ($scope.saleTime === "08") {
+                start = 19;
+                end = 20;
+            } else if ($scope.saleTime === "09") {
+                start = 21;
+                end = 22;
+            } else if ($scope.saleTime === "10") {
+                start = 23;
+                end = 24;
+            } else if ($scope.saleTime === "11") {
+                start = 25;
+                end = 26;
+            } else if ($scope.saleTime === "12") {
+                start = 27;
+                end = 28;
+            } else if ($scope.saleTime === "13") {
+                start = 29;
+                end = 30;
+            } else if ($scope.saleTime === "14") {
+                start = 31;
+                end = 32;
+            } else if ($scope.saleTime === "15") {
+                start = 33;
+                end = 34;
+            } else if ($scope.saleTime === "16") {
+                start = 35;
+                end = 36;
+            } else if ($scope.saleTime === "17") {
+                start = 37;
+                end = 38;
+            } else if ($scope.saleTime === "18") {
+                start = 39;
+                end = 40;
+            } else if ($scope.saleTime === "19") {
+                start = 41;
+                end = 42;
+            } else if ($scope.saleTime === "20") {
+                start = 43;
+                end = 44;
+            } else if ($scope.saleTime === "21") {
+                start = 45;
+                end = 46;
+            } else if ($scope.saleTime === "22") {
+                start = 47;
+                end = 48;
+            } else if ($scope.saleTime === "23") {
+                start = 49;
+                end = 50;
+            } else if ($scope.saleTime === "") { //전체
+                start = 3;
+                end = 50;
+            }
 
-        for(var i = 3; i <= 50; i++){
-            if(i >= start && i <= end){
-                columns[i].visible = true;
-            }else{
+            for (var i = 3; i <= 50; i++) {
+                if (i >= start && i <= end) {
+                    columns[i].visible = true;
+                } else {
+                    columns[i].visible = false;
+                }
+            }
+        } else if($("input[name=optionFg]:checked").val() == "timeSlot"){   // 시간대분류
+            // 선택한 시간대에 따른 리스트 항목 visible
+            for (var i = 3; i < columns.length; i++) {
                 columns[i].visible = false;
+                for(var j = 0; j < timeSlotColList.length; j++){
+                    if($scope.timeSlot == timeSlotColList[j].value || $scope.timeSlot === ""){
+                        if (columns[i].binding == 'totSaleQtyT'+timeSlotColList[j].value.replaceAll("~","") || columns[i].binding == 'totSaleAmtT'+timeSlotColList[j].value.replaceAll("~","")) {
+                            columns[i].visible = true;
+                        }
+                    }
+                }
             }
         }
     };
