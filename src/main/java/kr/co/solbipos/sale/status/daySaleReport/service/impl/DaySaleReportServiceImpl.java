@@ -114,4 +114,75 @@ public class DaySaleReportServiceImpl implements DaySaleReportService {
 
         return daySaleReportMapper.getDaySaleReportChk(daySaleReportVO);
     }
+
+    /** 일별매출내역 조회 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getDaySaleReportListList(DaySaleReportVO daySaleReportVO, SessionInfoVO sessionInfoVO) {
+
+        daySaleReportVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            daySaleReportVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        // '20220401' AS A01, '20220402' AS A02...
+        int dataCreateMonth = Integer.parseInt(daySaleReportVO.getDataCreateMonth());
+        int dataCreateMonthLastDate = Integer.parseInt(daySaleReportVO.getDataCreateMonthLastDate());
+        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+        String pivotDateCol = "";
+        for(int i=1; i <= dataCreateMonthLastDate; i++) {
+            if (i < 10) {
+                pivotDateCol += (pivotDateCol.equals("") ? "" : ",") + "'"+dataCreateMonth+"0"+i+"'"+" AS A0"+i;
+            } else {
+                pivotDateCol += (pivotDateCol.equals("") ? "" : ",") + "'"+dataCreateMonth+i+"'"+" AS A"+i;
+            }
+        }
+        daySaleReportVO.setPivotDateCol(pivotDateCol);
+
+        // 매출 발생 일별 기준, 동적 컬럼 생성을 위한 쿼리 변수
+        String sQuery1 = "";
+        String sQuery2 = "";
+        String sQuery3 = ", (0";
+        for(int i=1; i <= dataCreateMonthLastDate; i++) {
+            if (i < 10) {
+                sQuery1 += ", NVL(A0" + i + "_TOT_SALE_QTY, 0) AS A0" + i + "_TOT_SALE_QTY" + "\n";
+                sQuery1 += ", NVL(A0" + i + "_TOT_SALE_AMT, 0) AS A0" + i + "_TOT_SALE_AMT" + "\n";
+                sQuery1 += ", NVL(A0" + i + "_TOT_DC_AMT, 0) AS A0" + i + "_TOT_DC_AMT" + "\n";
+                sQuery1 += ", NVL(A0" + i + "_TOT_REAL_SALE_AMT, 0) AS A0" + i + "_TOT_REAL_SALE_AMT" + "\n";
+
+                sQuery2 += ", null AS A0" + i + "_TOT_SALE_QTY" + "\n";
+                sQuery2 += ", null AS A0" + i + "_TOT_SALE_AMT" + "\n";
+                sQuery2 += ", null AS A0" + i + "_TOT_DC_AMT" + "\n";
+                sQuery2 += ", null AS A0" + i + "_TOT_REAL_SALE_AMT" + "\n";
+
+                sQuery3 += "+ NVL(A0" + i + "_TOT_SALE_QTY, 0)";
+                sQuery3 += "+ NVL(A0" + i + "_TOT_SALE_AMT, 0)";
+                sQuery3 += "+ NVL(A0" + i + "_TOT_DC_AMT, 0)";
+                sQuery3 += "+ NVL(A0" + i + "_TOT_REAL_SALE_AMT, 0)";
+            } else {
+                sQuery1 += ", NVL(A" + i + "_TOT_SALE_QTY, 0) AS A" + i + "_TOT_SALE_QTY" + "\n";
+                sQuery1 += ", NVL(A" + i + "_TOT_SALE_AMT, 0) AS A" + i + "_TOT_SALE_AMT" + "\n";
+                sQuery1 += ", NVL(A" + i + "_TOT_DC_AMT, 0) AS A" + i + "_TOT_DC_AMT" + "\n";
+                sQuery1 += ", NVL(A" + i + "_TOT_REAL_SALE_AMT, 0) AS A" + i + "_TOT_REAL_SALE_AMT" + "\n";
+
+                sQuery2 += ", null AS A" + i + "_TOT_SALE_QTY" + "\n";
+                sQuery2 += ", null AS A" + i + "_TOT_SALE_AMT" + "\n";
+                sQuery2 += ", null AS A" + i + "_TOT_DC_AMT" + "\n";
+                sQuery2 += ", null AS A" + i + "_TOT_REAL_SALE_AMT" + "\n";
+
+                sQuery3 += "+ NVL(A" + i + "_TOT_SALE_QTY, 0)";
+                sQuery3 += "+ NVL(A" + i + "_TOT_SALE_AMT, 0)";
+                sQuery3 += "+ NVL(A" + i + "_TOT_DC_AMT, 0)";
+                sQuery3 += "+ NVL(A" + i + "_TOT_REAL_SALE_AMT, 0)";
+
+                if(i == dataCreateMonthLastDate) {
+                    sQuery3 += ") AS ALL_TOT_AMT";
+                }
+            }
+        }
+        daySaleReportVO.setsQuery1(sQuery1);
+        daySaleReportVO.setsQuery2(sQuery2);
+        daySaleReportVO.setsQuery3(sQuery3);
+
+        return daySaleReportMapper.getDaySaleReportListList(daySaleReportVO);
+    }
 }

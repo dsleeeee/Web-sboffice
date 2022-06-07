@@ -33,4 +33,7 @@ public interface DaySaleReportService {
 
     /** 일별매출내역 다운로드 - 자료생성 요청건 존재여부 확인 */
     DefaultMap<String> getDaySaleReportChk(DaySaleReportVO daySaleReportVO, SessionInfoVO sessionInfoVO);
+
+    /** 일별매출내역 조회 - 조회 */
+    List<DefaultMap<Object>> getDaySaleReportListList(DaySaleReportVO daySaleReportVO, SessionInfoVO sessionInfoVO);
 }
