@@ -470,12 +470,43 @@
               </td>
             </tr>
             <tr>
+              <!-- 보증금상품유형 -->
               <th><s:message code="prod.depositCupFg"/></th>
               <td>
                 <div class="sb-select">
                   <wj-combo-box id="_depositCupFg" name="depositCupFg"
                                 ng-model="prodModifyInfo.depositCupFg"
                                 items-source="_getComboData('depositCupFgComboData')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                  </wj-combo-box>
+                </div>
+              </td>
+              <!-- 포인트사용여부 -->
+              <th><s:message code="prod.pointUseYn"/></th>
+              <td>
+                <div class="sb-select">
+                  <wj-combo-box id="_depositCupFg" name="pointUseYn"
+                                ng-model="prodModifyInfo.pointUseYn"
+                                items-source="_getComboData('useYnComboData')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                  </wj-combo-box>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <!-- 할인여부 -->
+              <th><s:message code="prod.dcYn"/></th>
+              <td>
+                <div class="sb-select">
+                  <wj-combo-box id="_depositCupFg" name="dcYn"
+                                ng-model="prodModifyInfo.dcYn"
+                                items-source="_getComboData('useYnComboData')"
                                 display-member-path="name"
                                 selected-value-path="value"
                                 is-editable="false"
@@ -781,7 +812,7 @@
   });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20211103.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20211103.09" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

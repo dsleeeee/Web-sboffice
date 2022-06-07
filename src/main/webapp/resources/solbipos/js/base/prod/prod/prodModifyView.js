@@ -117,6 +117,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             params.sdselGrpNm = ""; // 선택매뉴명
             params.sdselGrpCd = ""; // 선택매뉴코드
             params.depositCupFg = ""; //보증금상품유형
+            params.pointUseYn = "Y"; //포인트사용여부
+            params.dcYn = "Y"; //할인여부
             // 상품발주정보
             params.splyUprc = $("#prodModifySplyUprc").val(); // 공급단가
             params.splyUprcUseYn = "Y"; // 공급단가사용여부
@@ -492,8 +494,10 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
 
         // 상품유형
         if ($scope.prodModifyInfo.prodTypeFg === "4"){
-            // 보증금 상품은 강제로 면세
+            // 보증금 상품은 강제로 면세 + 포인트사용여부 N + 할인여부 N
             $scope.prodModifyInfo.vatFg = "2";
+            $scope.prodModifyInfo.pointUseYn = "N";
+            $scope.prodModifyInfo.dcYn = "N";
             if($scope.prodModifyInfo.depositCupFg === "" || $scope.prodModifyInfo.depositCupFg === null){
                 $scope._popMsg(messages["prod.depositCupFgChk.none"]);
                 return false;

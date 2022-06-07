@@ -67,6 +67,8 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.vendrCdDataMap = new wijmo.grid.DataMap(vendrComboList, 'value', 'name'); // 거래처
         $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
         $scope.depositCupFgDataMap = new wijmo.grid.DataMap(depositCupFgData, 'value', 'name'); // 보증금상품유형
+        $scope.pointUseYnDataMap = new wijmo.grid.DataMap(pointUseYnData, 'value', 'name'); // 재고관리여부
+        $scope.dcYnDataMap = new wijmo.grid.DataMap(dcYnData, 'value', 'name'); // 재고관리여부
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
@@ -90,10 +92,11 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
                 var item = s.rows[e.row].dataItem;
-                // 가격 변경시 체크박스 체크
                 if (col.binding === "prodTypeFg") {
                     if(item.prodTypeFg === "4"){
                         item.vatFg = "2";
+                        item.pointUseYn = "N";
+                        item.dcYn = "N";
                     }
                 }
             }
@@ -145,6 +148,8 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
             params.prcCtrlFg = "S";
         }
         params.depositCupFg = "선택";
+        params.pointUseYn="Y";
+        params.dcYn="Y";
 
         for(var i = 0; i < rowsCount; i++) {
             // 추가기능 수행 : 파라미터
@@ -213,6 +218,8 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
                 $scope.flex.collectionView.items[i].prcCtrlFg = "S";
             }
             $scope.flex.collectionView.items[i].depositCupFg = "";
+            $scope.flex.collectionView.items[i].pointUseYn = "N";
+            $scope.flex.collectionView.items[i].dcYn = "N";
         }
         $scope.flex.refresh();
     };
@@ -264,6 +271,8 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
             // 상품유형 보증금일때
             if($scope.flex.collectionView.items[i].prodTypeFg === "4"){
                 $scope.flex.collectionView.items[i].vatFg = "2";
+                $scope.flex.collectionView.items[i].pointUseYn = "N";
+                $scope.flex.collectionView.items[i].dcYn = "N";
                 if($scope.flex.collectionView.items[i].depositCupFg === "" || $scope.flex.collectionView.items[i].depositCupFg === null || $scope.flex.collectionView.items[i].depositCupFg === "선택"){
                     result = messages["simpleProd.depositCupFg.None"];
                 }
