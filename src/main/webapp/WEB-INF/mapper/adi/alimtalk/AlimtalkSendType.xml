@@ -566,7 +566,7 @@
         TABLE    : CET_SMSPT_T
         COMMENTS : [마스터-공용]SMS-본사/매장-SMS잔여수량
     -->
-    <select id="getAlimtalkSmsAmtList"  parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
+    <select id="getAlimtalkSmsAmtList" parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
         /* AlimtalkSendTypeMapper.getAlimtalkSmsAmtList */
         SELECT
         NVL(MAX(cst.SMS_AMT), 0) AS SMS_AMT
