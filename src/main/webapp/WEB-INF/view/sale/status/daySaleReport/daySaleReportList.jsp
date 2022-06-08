@@ -59,7 +59,7 @@
                     </td>
                 </c:if>
                 <c:if test="${orgnFg == 'STORE'}">
-                    <th></th>
+                    <td></td>
                     <td></td>
                 </c:if>
             </tr>
