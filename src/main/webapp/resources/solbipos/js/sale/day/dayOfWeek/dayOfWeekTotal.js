@@ -55,6 +55,7 @@ app.controller('dayOfWeekTotalCtrl', ['$scope', '$http', '$timeout', function ($
         dataItem.vatAmt   = messages["dayofweek.sale"];
         dataItem.totTipAmt   = messages["dayofweek.totTipAmt"];
         dataItem.totEtcAmt   = messages["dayofweek.totEtcAmt"];
+        dataItem.cupAmt   = messages["dayofweek.cupAmt"];
         dataItem.totPayAmt   = messages["dayofweek.payMethod"];
         dataItem.genRealSaleAmt   = messages["dayofweek.dlvrPack"];
         dataItem.dlvrRealSaleAmt   = messages["dayofweek.dlvrPack"];

@@ -95,6 +95,7 @@ app.controller('todayDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
     dataItem.vatAmt      = messages["todayDtl.vatAmt"];
     dataItem.totTipAmt   = messages["todayDtl.totTipAmt"];
     dataItem.totEtcAmt   = messages["todayDtl.totEtcAmt"];
+    dataItem.cupAmt      = messages["todayDtl.cupAmt"];
     dataItem.billCnt     = messages["todayDtl.billCnt"];
     dataItem.billUprc    = messages["todayDtl.billUprc"];
     dataItem.totPayAmt   = messages["todayDtl.payMethod"];
@@ -489,6 +490,7 @@ app.controller('todayDtlDetailCtrl', ['$scope', '$http', '$timeout', function ($
     dataItem.vatAmt      = messages["todayDtl.dtl.vatAmt"];
     dataItem.totTipAmt   = messages["todayDtl.dtl.totTipAmt"];
     dataItem.totEtcAmt   = messages["todayDtl.dtl.totEtcAmt"];
+    dataItem.cupAmt      = messages["todayDtl.dtl.cupAmt"];
     dataItem.membrNo     = messages["todayDtl.dtl.membrNo"];
     dataItem.membrNm     = messages["todayDtl.dtl.membrNm"];
     dataItem.tblNm       = messages["todayDtl.dtl.tblNm"];
