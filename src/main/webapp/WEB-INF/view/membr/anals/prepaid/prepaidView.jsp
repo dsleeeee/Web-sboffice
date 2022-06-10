@@ -5,6 +5,8 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="membrClassManageFg" value="${membrClassManageFg}" />
 <c:set var="baseUrl" value="/membr/anals/prepaid/" />
 
 <div class="subCon" ng-controller="prepaidCtrl">
@@ -70,9 +72,11 @@
     <%--// 페이지 스케일  --%>
 
     <%-- 선불금 충전 --%>
-    <button class="btn_skyblue ml5 fr"  ng-click="charge()">
-      <s:message code="prepaid.charge" />
-    </button>
+    <span <c:if test="${orgnFg == 'HQ' and membrClassManageFg == '0'}">style="display: none;"</c:if>>
+      <button class="btn_skyblue ml5 fr"  ng-click="charge()">
+        <s:message code="prepaid.charge" />
+      </button>
+    </span>
     <%-- 엑셀 다운로드 //TODO --%>
     <button class="btn_skyblue fr" ng-click="excelDownload()">
       <s:message code="cmm.excel.down" />
@@ -166,7 +170,11 @@
   var arrayData = ${ccu.getCommCodeExcpAll("075")};
   var prepaidInFgData = ${ccu.getCommCodeExcpAll("073")};
   var prepaidPayFgData = ${ccu.getCommCodeExcpAll("074")};
+  var orgnFg = "${orgnFg}";
   var baseUrl = "${baseUrl}";
+
+  // 회원등급 관리구분[1237]
+  var membrClassManageFg = ${membrClassManageFg};
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/membr/anals/prepaid/prepaid.js?ver=20181226.02" charset="utf-8"></script>
 

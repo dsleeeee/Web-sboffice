@@ -6400,4 +6400,72 @@
             WHERE 6 > tmtk.PAGE_NO
     </update>
 
+    <!-- 본사 환경변수 조회 -->
+    <!--
+      TABLE    : TB_HQ_ENVST
+      PARAM    : memberClassVO
+      COMMENTS : 본사 환경변수 테이블에 등록된 값을 조회한다.
+    -->
+    <select id="getHqEnvst" parameterType="memberClassVO" resultType="String">
+        /* USE : StoreManageMapper.getHqEnvst */
+        SELECT
+            ENVST_VAL
+        FROM
+            TB_HQ_ENVST
+        WHERE
+            HQ_OFFICE_CD = #{hqOfficeCd}
+            AND ENVST_CD = #{envstCd}
+            AND USE_YN = 'Y'
+    </select>
+
+    <!-- 회원 기본등급 등록(프랜차이즈 매장용) -->
+    <!--
+        TABLE    : TB_MB_MEMBER_CLASS
+        PARAM    : memberClassVO
+        COMMENTS : 회원 기본등급을 저장한다.(프랜차이즈 매장용)
+    -->
+    <insert id="insertStoreMemberClass" parameterType="memberClassVO" >
+        /* USE : StoreManageMapper.insertStoreMemberClass */
+        INSERT INTO TB_MB_MEMBER_CLASS
+        (
+           MEMBR_ORGN_CD,
+           MEMBR_CLASS_CD,
+           MEMBR_CLASS_NM,
+           DC_RATE,
+           POINT_SAVE_FG,
+           DEFLT_YN,
+           NEW_JOIN_SAVE_POINT,
+           FIRST_SALE_SAVE_POINT,
+           MIN_USE_POINT,
+           ANVSR_POINT_SAVE_FG,
+           ANVSR_SAVE_POINT,
+           USE_YN,
+           REG_DT,
+           REG_ID,
+           MOD_DT,
+           MOD_ID,
+           REG_STORE_CD
+        )
+        SELECT #{membrOrgnCd},
+               (SELECT LPAD( NVL(MAX(MEMBR_CLASS_CD), 0) + 1, 3, '0') FROM TB_MB_MEMBER_CLASS WHERE MEMBR_ORGN_CD = #{membrOrgnCd}),
+               MEMBR_CLASS_NM,
+               DC_RATE,
+               POINT_SAVE_FG,
+               DEFLT_YN,
+               NEW_JOIN_SAVE_POINT,
+               FIRST_SALE_SAVE_POINT,
+               MIN_USE_POINT,
+               ANVSR_POINT_SAVE_FG,
+               ANVSR_SAVE_POINT,
+               USE_YN,
+               #{regDt},
+               #{regId},
+               #{modDt},
+               #{modId},
+               #{storeCd}
+          FROM TB_MB_MEMBER_CLASS
+         WHERE MEMBR_ORGN_CD = '0000000'
+           AND MEMBR_CLASS_CD = '000'
+    </insert>
+
 </mapper>

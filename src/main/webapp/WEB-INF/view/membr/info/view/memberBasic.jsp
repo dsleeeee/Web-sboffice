@@ -331,7 +331,9 @@
     </div>
     <div class="btnSet">
         <%-- 저장 --%>
-        <span><a href="#" class="btn_blue pd20" id="btnSave" ng-click="save()"><s:message code="cmm.save"/></a></span>
+        <span <c:if test="${orgnFg == 'HQ' and membrClassManageFg == '0'}">style="display: none;"</c:if>>
+            <a href="#" class="btn_blue pd20" id="btnSave" ng-click="save()"><s:message code="cmm.save"/></a>
+        </span>
         <span><a href="#" class="btn_gray" ng-click="close()"><s:message code="cmm.close" /></a></span>
     </div>
 </div>

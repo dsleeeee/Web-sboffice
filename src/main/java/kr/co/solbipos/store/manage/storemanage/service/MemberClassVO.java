@@ -44,6 +44,13 @@ public class MemberClassVO extends CmmVO {
     private int anvsrSavePoint;
     /**  [사용여부] */
     private UseYn useYn;
+    /** [본사코드] */
+    private String hqOfficeCd;
+    /** [매장코드] */
+    private String storeCd;
+    /** [환경설정코드] */
+    private String envstCd;
+
 
     /**
      * @return the membrOrgnCd
@@ -223,5 +230,29 @@ public class MemberClassVO extends CmmVO {
      */
     public void setUseYn(UseYn useYn) {
         this.useYn = useYn;
+    }
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
+
+    public String getStoreCd() {
+        return storeCd;
+    }
+
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
+    }
+
+    public String getEnvstCd() {
+        return envstCd;
+    }
+
+    public void setEnvstCd(String envstCd) {
+        this.envstCd = envstCd;
     }
 }

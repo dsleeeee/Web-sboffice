@@ -10,7 +10,7 @@
 <div class="subCon" id="memberPostpaidArea" ng-controller="memberPostpaidCtrl" style="display:none;">
 
   <%--searchTbl--%>
-  <div class="searchBar flddUnfld">
+  <div class="searchBar">
     <a href="#" class="open fl"><s:message code="memberFg.prepaid" /></a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -82,7 +82,9 @@
       <div class="wj-TblWrapBr mr10 pd20" style="height:460px; overflow-y: hidden;" ng-controller="memberPostpaidRegistCtrl">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code="memberFg.regist"/></span>
-          <button class="btn_skyblue" ng-click="regPrepaid()"><s:message code="cmm.delete" /></button>
+          <span <c:if test="${orgnFg == 'HQ' and membrClassManageFg == '0'}">style="display: none;"</c:if>>
+            <button class="btn_skyblue" ng-click="regPrepaid()"><s:message code="cmm.delete" /></button>
+          </span>
         </div>
         <div class="w100 mt10 mb20">
           <div class="wj-gridWrap" style="height:340px; overflow-y: hidden; overflow-x: hidden;">
@@ -119,7 +121,9 @@
       <div class="wj-TblWrapBr ml10 pd20" style="height:460px; overflow-y: hidden;" ng-controller="memberPostpaidNoRegistCtrl">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code="memberFg.noRegist"/></span>
-          <button class="btn_skyblue" ng-click="regPostpaid()"><s:message code="memberFg.regist"/></button>
+          <span <c:if test="${orgnFg == 'HQ' and membrClassManageFg == '0'}">style="display: none;"</c:if>>
+            <button class="btn_skyblue" ng-click="regPostpaid()"><s:message code="memberFg.regist"/></button>
+          </span>
         </div>
         <div class="w100 mt10 mb20">
           <div class="wj-gridWrap" style="height:340px; overflow-y: hidden; overflow-x: hidden;">

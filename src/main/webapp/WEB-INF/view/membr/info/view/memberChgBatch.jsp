@@ -7,6 +7,7 @@
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
+<c:set var="membrClassManageFg" value="${membrClassManageFg}" />
 
 <div class="subCon" ng-controller="memberChgBatchCtrl">
 
@@ -451,82 +452,84 @@
                 is-editable="false"
                 initialized="initComboBox(s)">
         </wj-combo-box>
-        <%-- 회원등급 --%>
-        <span class="fl bk lh30 ml10 mb10 mr5"><s:message code='regist.class.nm'/></span>
-        <div class="sb-select w100px fl">
-            <wj-combo-box
-                    id="rMemberClass"
-                    ng-model="chgMembrClassCd"
-                    control="memberClassCombo"
-                    items-source="_getComboData('rMemberClassList')"
-                    display-member-path="name"
-                    selected-value-path="value"
-                    is-editable="false"
-                    initialized="_initComboBox(s)">
-            </wj-combo-box>
+        <div <c:if test="${orgnFg == 'HQ' and membrClassManageFg == '0'}">style="display: none;"</c:if>>
+            <%-- 회원등급 --%>
+            <span class="fl bk lh30 ml10 mb10 mr5"><s:message code='regist.class.nm'/></span>
+            <div class="sb-select w100px fl">
+                <wj-combo-box
+                        id="rMemberClass"
+                        ng-model="chgMembrClassCd"
+                        control="memberClassCombo"
+                        items-source="_getComboData('rMemberClassList')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        initialized="_initComboBox(s)">
+                </wj-combo-box>
+            </div>
+            <button class="btn_skyblue ml5 fl" id="save" ng-click="chgSave('class')">
+                <s:message code="cmm.apply"/>
+            </button>
+            <%-- 단축번호--%>
+            <span class="fl bk lh30 ml10 mb10 mr5"><s:message code='member.excel.shortNo'/></span>
+            <div class="sb-select w100px fl">
+                <wj-combo-box
+                        id="shortNoYn"
+                        ng-model="shortNoYn"
+                        control="shortNoYnCombo"
+                        items-source="_getComboData('shortNoYn')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        initialized="_initComboBox(s)">
+                </wj-combo-box>
+            </div>
+            <button class="btn_skyblue ml5 fl" id="save" ng-click="chgSave('short')">
+                <s:message code="cmm.apply"/>
+            </button>
+            <%-- 이메일수신 --%>
+            <span class="fl bk lh30 ml10 mb10 mr5"><s:message code='regist.email.recv'/></span>
+            <div class="sb-select w100px fl">
+                <wj-combo-box
+                        id="emailRecvYn"
+                        ng-model="chgEmailRecvYn"
+                        control="emailRecvYnCombo"
+                        items-source="_getComboData('emailRecvYn')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        initialized="_initComboBox(s)">
+                </wj-combo-box>
+            </div>
+            <button class="btn_skyblue ml5 fl" id="save" ng-click="chgSave('email')">
+                <s:message code="cmm.apply"/>
+            </button>
+            <%-- sms 수신--%>
+            <span class="fl bk lh30 ml10 mb10 mr5"><s:message code='regist.sms.recv'/></span>
+            <div class="sb-select w100px fl">
+                <wj-combo-box
+                        id="smsRecvYn"
+                        ng-model="chgSmsRecvYn"
+                        control="smsRecvYnCombo"
+                        items-source="_getComboData('smsRecvYn')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        initialized="_initComboBox(s)">
+                </wj-combo-box>
+            </div>
+            <button class="btn_skyblue ml5 fl" id="save" ng-click="chgSave('sms')">
+                <s:message code="cmm.apply"/>
+            </button>
+            <%-- 저장 --%>
+            <button class="btn_skyblue ml5 fr" id="save" ng-click="gridSave()">
+                <s:message code="cmm.save"/>
+            </button>
+            <%-- 삭제 --%>
+            <button class="btn_skyblue ml5 fr" id="save" ng-click="gridDel()">
+                <s:message code="cmm.del"/>
+            </button>
         </div>
-        <button class="btn_skyblue ml5 fl" id="save" ng-click="chgSave('class')">
-            <s:message code="cmm.apply"/>
-        </button>
-        <%-- 단축번호--%>
-        <span class="fl bk lh30 ml10 mb10 mr5"><s:message code='member.excel.shortNo'/></span>
-        <div class="sb-select w100px fl">
-            <wj-combo-box
-                    id="shortNoYn"
-                    ng-model="shortNoYn"
-                    control="shortNoYnCombo"
-                    items-source="_getComboData('shortNoYn')"
-                    display-member-path="name"
-                    selected-value-path="value"
-                    is-editable="false"
-                    initialized="_initComboBox(s)">
-            </wj-combo-box>
-        </div>
-        <button class="btn_skyblue ml5 fl" id="save" ng-click="chgSave('short')">
-            <s:message code="cmm.apply"/>
-        </button>
-        <%-- 이메일수신 --%>
-        <span class="fl bk lh30 ml10 mb10 mr5"><s:message code='regist.email.recv'/></span>
-        <div class="sb-select w100px fl">
-            <wj-combo-box
-                    id="emailRecvYn"
-                    ng-model="chgEmailRecvYn"
-                    control="emailRecvYnCombo"
-                    items-source="_getComboData('emailRecvYn')"
-                    display-member-path="name"
-                    selected-value-path="value"
-                    is-editable="false"
-                    initialized="_initComboBox(s)">
-            </wj-combo-box>
-        </div>
-        <button class="btn_skyblue ml5 fl" id="save" ng-click="chgSave('email')">
-            <s:message code="cmm.apply"/>
-        </button>
-        <%-- sms 수신--%>
-        <span class="fl bk lh30 ml10 mb10 mr5"><s:message code='regist.sms.recv'/></span>
-        <div class="sb-select w100px fl">
-            <wj-combo-box
-                    id="smsRecvYn"
-                    ng-model="chgSmsRecvYn"
-                    control="smsRecvYnCombo"
-                    items-source="_getComboData('smsRecvYn')"
-                    display-member-path="name"
-                    selected-value-path="value"
-                    is-editable="false"
-                    initialized="_initComboBox(s)">
-            </wj-combo-box>
-        </div>
-        <button class="btn_skyblue ml5 fl" id="save" ng-click="chgSave('sms')">
-            <s:message code="cmm.apply"/>
-        </button>
-        <%-- 저장 --%>
-        <button class="btn_skyblue ml5 fr" id="save" ng-click="gridSave()">
-            <s:message code="cmm.save"/>
-        </button>
-        <%-- 삭제 --%>
-        <button class="btn_skyblue ml5 fr" id="save" ng-click="gridDel()">
-            <s:message code="cmm.del"/>
-        </button>
     </div>
 
     <%-- 회원목록 그리드 --%>
@@ -597,6 +600,10 @@
     var memberClassSelect = ${memberClassSelect};
     var regstrStoreList = ${regstrStoreList};
     var orgnFg = "${orgnFg}";
+
+    // 회원등급 관리구분[1237]
+    var membrClassManageFg = ${membrClassManageFg};
+
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberChgBatch.js?ver=20220308.01" charset="utf-8"></script>

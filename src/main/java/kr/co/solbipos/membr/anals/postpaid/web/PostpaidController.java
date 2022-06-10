@@ -4,7 +4,9 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.membr.anals.postpaid.service.PostpaidService;
 import kr.co.solbipos.membr.anals.taxBill.service.TaxBillVO;
@@ -48,12 +50,14 @@ public class PostpaidController {
 
     private final PostpaidService service;
     private final SessionService sessionService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public PostpaidController(PostpaidService service, SessionService sessionService) {
+    public PostpaidController(PostpaidService service, SessionService sessionService, CmmEnvUtil cmmEnvUtil) {
         this.service = service;
         this.sessionService = sessionService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -67,6 +71,9 @@ public class PostpaidController {
     public String registList(HttpServletRequest request, HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 회원등급 관리구분
+        model.addAttribute("membrClassManageFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1237"), "1"));
 
         return "membr/anals/postpaid/postpaidView";
     }

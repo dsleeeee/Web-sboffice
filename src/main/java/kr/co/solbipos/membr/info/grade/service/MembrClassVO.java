@@ -109,6 +109,28 @@ public class MembrClassVO extends CmmVO {
     private String anvsrPointSaveFgNm;
 
     /**
+     * [회원분류 관리구분]
+     */
+    private String membrClassManageFg;
+
+    /**
+     * [본사코드]
+     */
+    private String hqOfficeCd;
+
+    /**
+     * [매장코드]
+     */
+    private String storeCd;
+
+    /** 소속구분
+     * M : 시스템
+     * A : 대리점
+     * H : 본사
+     * S : 매장, 가맹점 */
+    private String orgnFg;
+
+    /**
      * @return the membrOrgnFg
      */
 
@@ -412,4 +434,35 @@ public class MembrClassVO extends CmmVO {
         this.anvsrPointSaveFgNm = anvsrPointSaveFgNm;
     }
 
+    public String getMembrClassManageFg() {
+        return membrClassManageFg;
+    }
+
+    public void setMembrClassManageFg(String membrClassManageFg) {
+        this.membrClassManageFg = membrClassManageFg;
+    }
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
+
+    public String getStoreCd() {
+        return storeCd;
+    }
+
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
+    }
+
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
 }

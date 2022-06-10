@@ -8,6 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
+<c:set var="membrClassManageFg" value="${membrClassManageFg}" />
 
 <%-- 우편번호 찾기 팝업 --%>
 <%-- 선택한 주소를 부모창에 바인딩 하기 위해, 각 화면마다 구분자를 지정하여 element id명을 파악한다. --%>
@@ -442,29 +443,33 @@
         <button class="btn_skyblue ml5 fr" ng-click="excelDownloadTotal()"><s:message code="cmm.excel.downTotal" /></button>
         <%-- 엑셀다운로드 --%>
         <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
-        <%-- 신규 회원 등록 --%>
-        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="registMember()">
-            <s:message code="webMenu.new"/>
-        </button>
-        <%-- 선택회원 삭제 --%>
-        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="deleteMember()">
-            <s:message code="regist.membr.delete"/>
-        </button>
-        <%-- 본사(A0001, A0007)만 보이게 --%>
-        <c:if test="${ (orgnFg eq 'HQ' and hqOfficeCd eq 'A0001') or (orgnFg eq 'HQ' and hqOfficeCd eq 'A0007') }">
-            <%-- 회원 거래처 매핑 --%>
-            <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="memberVendorMapping()">
-                <s:message code="regist.memberVendorMapping"/>
+
+        <div <c:if test="${orgnFg == 'HQ' and membrClassManageFg == '0'}">style="display: none;"</c:if>>
+            <%-- 신규 회원 등록 --%>
+            <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="registMember()">
+                <s:message code="webMenu.new"/>
             </button>
-        </c:if>
-        <%-- 회원 포인트 이관 --%>
-        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="memberPointMove()">
-            <s:message code="regist.memberPointMove"/>
-        </button>
-        <%-- 회원 포인트 조정 --%>
-        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="memberPointAdjust()">
-            <s:message code="regist.memberPointAdjust"/>
-        </button>
+            <%-- 선택회원 삭제 --%>
+            <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="deleteMember()">
+                <s:message code="regist.membr.delete"/>
+            </button>
+            <%-- 본사(A0001, A0007)만 보이게 --%>
+            <c:if test="${ (orgnFg eq 'HQ' and hqOfficeCd eq 'A0001') or (orgnFg eq 'HQ' and hqOfficeCd eq 'A0007') }">
+                <%-- 회원 거래처 매핑 --%>
+                <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="memberVendorMapping()">
+                    <s:message code="regist.memberVendorMapping"/>
+                </button>
+            </c:if>
+            <%-- 회원 포인트 이관 --%>
+            <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="memberPointMove()">
+                <s:message code="regist.memberPointMove"/>
+            </button>
+            <%-- 회원 포인트 조정 --%>
+            <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="memberPointAdjust()">
+                <s:message code="regist.memberPointAdjust"/>
+            </button>
+        </div>
+
         <%-- SMS전송 --%>
         <button class="btn_skyblue ml5 fr" id="btnSmsSendRepresent" ng-click="smsSendPop()" style="display: none;">
             <s:message code="regist.smsSend"/>
@@ -499,7 +504,7 @@
                 <wj-flex-grid-column header="<s:message code="regist.sms.recv"/>" binding="smsRecvYn" data-map="smsRecvDataMap" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.useYn"/>" binding="useYn" data-map="useYnDataMap" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
                 <%--본사--%>
-                <c:if test="${orgnFg == 'HQ'}">
+                <c:if test="${orgnFg == 'HQ' and membrClassManageFg == '1'}">
                     <wj-flex-grid-column header="<s:message code="regist.membr.store"/>" binding="postpaidStore" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
                 </c:if>
                 <%--단독매장--%>
@@ -573,7 +578,7 @@
                 <wj-flex-grid-column header="<s:message code="regist.sms.recv"/>" binding="smsRecvYn" data-map="smsRecvDataMap" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.useYn"/>" binding="useYn" data-map="useYnDataMap" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
                 <%--본사--%>
-                <c:if test="${orgnFg == 'HQ'}">
+                <c:if test="${orgnFg == 'HQ' and membrClassManageFg == '1'}">
                     <wj-flex-grid-column header="<s:message code="regist.membr.store"/>" binding="postpaidStore" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
                 </c:if>
                 <%--단독매장--%>
@@ -656,6 +661,10 @@
         msgGrpParam.msgGrpNm = "${msgGrpCol.msgGrpNm}";
         msgGrpColList.push(msgGrpParam);
     </c:forEach>
+
+    // 회원등급 관리구분[1237]
+    var membrClassManageFg = ${membrClassManageFg};
+
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20220218.02" charset="utf-8"></script>

@@ -37,6 +37,23 @@
           FROM TB_MB_MEMBER_CLASS
          WHERE USE_YN = 'Y'
            AND MEMBR_ORGN_CD = #{membrOrgnCd}
+        <choose>
+            <!-- 본사 -->
+            <when test='membrOrgnFg != null and membrOrgnFg.toString() == "HQ"'>
+                AND REG_STORE_CD IS NULL
+            </when>
+            <!-- 프랜차이즈 매장 -->
+            <when test='membrOrgnFg != null and membrOrgnFg.toString() == "STORE" and hqOfficeCd != "00000"'>
+                <if test='membrClassManageFg != null and membrClassManageFg == "0"'>
+                    AND REG_STORE_CD = #{storeCd}
+                </if>
+                <if test='membrClassManageFg != null and membrClassManageFg == "1"'>
+                    AND REG_STORE_CD IS NULL
+                </if>
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
          ORDER BY DEFLT_YN DESC
     </select>
 
