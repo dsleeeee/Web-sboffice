@@ -145,4 +145,71 @@
 		GROUP BY SALE_DATE, PROD_CD, PROD_NM, NON_SALE_FG
 		ORDER BY SALE_DATE, PROD_CD, PROD_NM, NON_SALE_FG
 	</select>
+
+	<!-- 반환내역 -->
+	<!--
+        TABLE    : TB_SL_SALE_DTL
+        PARAM    : nonSaleVO
+        COMMENTS : 반환내역을 조회한다.
+    -->
+	<select id="getCupRefundList" parameterType="nonSaleVO" resultType="DefaultMap">
+	/* USE : NonSaleMapper.getCupRefundList */
+	<include refid="CmmSQL.PagingTemplateHeader"/>
+		SELECT 	tcrd.STORE_CD,
+				tms.STORE_NM,
+				TO_CHAR(TO_DATE(tcrd.SALE_DATE, 'YYYYMMDD'),'YYYY-MM-DD') SALE_DATE,
+				tcrd.POS_NO,
+				tcrd.REFUND_NO,
+				tcrd.BARCODE_ID,
+				tcrd.DEPOSIT_AMOUNT,
+				tcrd.CONTAINER_TYPE,
+				tcrd.STANDARD_YN,
+				tcrd.REFUNDED_AMOUNT
+		<include refid="CmmSQL.PagingTemplateCount"/>
+		FROM 	TB_CUP_REFUND_DTL tcrd,
+				TB_MS_STORE tms
+		WHERE 	tms.STORE_CD = tcrd.STORE_CD
+		AND 	tms.HQ_OFFICE_CD = #{hqOfficeCd}
+		<if test='storeCd != null and storeCd != ""'>
+			AND tcrd.STORE_CD IN
+			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+		AND 	SALE_DATE BETWEEN #{startDate} AND #{endDate}
+		ORDER BY STORE_CD, SALE_DATE, POS_NO, REFUND_NO
+		<include refid="CmmSQL.PagingTemplateBottom"/>
+	</select>
+
+	<!-- 반환내역 엑셀 -->
+	<!--
+        TABLE    : TB_SL_SALE_DTL
+        PARAM    : nonSaleVO
+        COMMENTS : 반환내역 엑셀을 조회한다.
+    -->
+	<select id="getCupRefundExcelList" parameterType="nonSaleVO" resultType="DefaultMap">
+	/* USE : NonSaleMapper.getCupRefundExcelList */
+		SELECT 	tcrd.STORE_CD,
+				tms.STORE_NM,
+				tcrd.SALE_DATE,
+				tcrd.POS_NO,
+				tcrd.REFUND_NO,
+				tcrd.BARCODE_ID,
+				tcrd.DEPOSIT_AMOUNT,
+				tcrd.CONTAINER_TYPE,
+				tcrd.STANDARD_YN,
+				tcrd.REFUNDED_AMOUNT
+		FROM 	TB_CUP_REFUND_DTL tcrd,
+				TB_MS_STORE tms
+		WHERE 	tms.STORE_CD = tcrd.STORE_CD
+		AND 	tms.HQ_OFFICE_CD = #{hqOfficeCd}
+		<if test='storeCd != null and storeCd != ""'>
+			AND tcrd.STORE_CD IN
+			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+		AND 	SALE_DATE BETWEEN #{startDate} AND #{endDate}
+		ORDER BY STORE_CD, SALE_DATE, POS_NO, REFUND_NO
+	</select>
 </mapper>

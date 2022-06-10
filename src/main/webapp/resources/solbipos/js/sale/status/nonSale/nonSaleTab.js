@@ -16,13 +16,29 @@ var app = agrid.getApp();
 app.controller('nonSaleTabCtrl', ['$scope', function ($scope) {
 
     $scope.init = function () {
-        $("#nonSaleDayView").show();
+        $("#cupRefundView").show();
+        $("#nonSaleDayView").hide();
+    };
+
+    // 반환내역 탭 보이기
+    $scope.cupRefundShow = function () {
+        $("#cupRefundTab").addClass("on");
+        $("#nonSaleDayTab").removeClass("on");
+
+        $("#cupRefundView").show();
+        $("#nonSaleDayView").hide();
+
+        // angular 그리드 hide 시 깨지므로 refresh()
+        var scope = agrid.getScope("cupRefundCtrl");
+        scope.flex.refresh();
     };
 
     // 일별 탭 보이기
     $scope.nonSaleDayShow = function () {
+        $("#cupRefundTab").removeClass("on");
         $("#nonSaleDayTab").addClass("on");
 
+        $("#cupRefundView").hide();
         $("#nonSaleDayView").show();
 
         // angular 그리드 hide 시 깨지므로 refresh()

@@ -32,4 +32,10 @@ public interface NonSaleMapper {
     /** 일별 엑셀 조회 */
     List<DefaultMap<String>> getNonSaleDayExcelList(NonSaleVO nonSaleVO);
 
+    /** 반환내역 조회 */
+    List<DefaultMap<String>> getCupRefundList(NonSaleVO nonSaleVO);
+
+    /** 반환내역 엑셀 조회 */
+    List<DefaultMap<String>> getCupRefundExcelList(NonSaleVO nonSaleVO);
+
 }

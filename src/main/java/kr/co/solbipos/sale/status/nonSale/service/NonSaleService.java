@@ -27,4 +27,10 @@ public interface NonSaleService {
     /** 일별 엑셀 조회 */
     List<DefaultMap<String>> getNonSaleDayExcelList(NonSaleVO nonSaleVO, SessionInfoVO sessionInfoVO);
 
+    /** 반환내역 조회 */
+    List<DefaultMap<String>> getCupRefundList(NonSaleVO nonSaleVO, SessionInfoVO sessionInfoVO);
+
+    /** 반환내역 엑셀 조회 */
+    List<DefaultMap<String>> getCupRefundExcelList(NonSaleVO nonSaleVO, SessionInfoVO sessionInfoVO);
+
 }
