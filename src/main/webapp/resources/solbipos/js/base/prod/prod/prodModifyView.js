@@ -701,6 +701,14 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                     if($scope.prodModifyInfo.depositCupFg === null){
                         $scope.prodModifyInfo.depositCupFg = "";
                     }
+
+                    if($scope.prodModifyInfo.pointUseYn === null){
+                        $scope.prodModifyInfo.pointUseYn = "Y";
+                    }
+
+                    if($scope.prodModifyInfo.dcYn === null){
+                        $scope.prodModifyInfo.dcYn = "Y";
+                    }
                 }
             );
 

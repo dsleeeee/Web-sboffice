@@ -78,6 +78,14 @@ app.controller('prodDetailCtrl', ['$scope', '$http', function ($scope, $http) {
                 if(prodDetail.depositCupFg === null){
                     prodDetail.depositCupFg = "";
                 }
+
+                if(prodDetail.pointUseYn === null){
+                    prodDetail.pointUseYn = "Y";
+                }
+
+                if(prodDetail.dcYn === null){
+                    prodDetail.dcYn = "Y";
+                }
             }
         );
         // 기능수행 종료 : 반드시 추가
