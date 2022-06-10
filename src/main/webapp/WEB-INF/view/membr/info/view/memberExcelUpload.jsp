@@ -9,15 +9,16 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}"/>
+<c:set var="membrClassManageFg" value="${membrClassManageFg}" />
 
 <div class="subCon" ng-controller="memberExcelUploadCtrl">
 
     <%-- 조회조건 --%>
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl">${menuNm}</a>
     </div>
     <%-- 상단 타이틀 --%>
-    <table class="searchTbl">
+    <table class="searchTbl" <c:if test="${orgnFg == 'HQ' and membrClassManageFg == '0'}">style="display: none;"</c:if>>
         <colgroup>
             <col class="w15" />
             <col class="w35" />
@@ -87,7 +88,7 @@
     </div>
 
     <%-- 회원내역 그리드 --%>
-    <div class="oh mb10">
+    <div class="oh mb10" <c:if test="${orgnFg == 'HQ' and membrClassManageFg == '0'}">style="display: none;"</c:if>>
         <div class="sb-select dkbr ml5 fl">
             <wj-combo-box
                     class="w100px fl"
@@ -198,6 +199,9 @@
     var hqOfficeCd = "${hqOfficeCd}"; <%-- 본사코드 --%>
     var storeCd = "${storeCd}"; <%-- 매장코드 --%>
     var orgnFg = "${orgnFg}"; <%-- 본사매장구분 --%>
+
+    // 회원등급 관리구분[1237]
+    var membrClassManageFg = ${membrClassManageFg};
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberExcelUpload.js?ver=2019052801.13" charset="utf-8"></script>

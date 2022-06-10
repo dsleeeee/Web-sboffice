@@ -6,18 +6,16 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
-import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.info.grade.service.MemberClassService;
 import kr.co.solbipos.membr.info.grade.service.MembrClassPointVO;
 import kr.co.solbipos.membr.info.grade.service.MembrClassVO;
 import kr.co.solbipos.membr.info.regist.service.RegistService;
 import kr.co.solbipos.membr.info.regist.validate.RegistDelete;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +30,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnJsonBindingFieldError;
-import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : GradeController.java
@@ -86,8 +82,13 @@ public class MemberClassController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
+        // 회원등급 관리구분
+        String membrClassManageFg = CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1237"), "1");
+        model.addAttribute("membrClassManageFg", membrClassManageFg);
+
         // 회원등급 조회
-        String result = classService.getMemberClassList(sessionInfoVO);
+        membrClassVO.setMembrClassManageFg(membrClassManageFg);
+        String result = classService.getMemberClassList(membrClassVO, sessionInfoVO);
 
         // 회원등급 리스트 조회
         List membrClassList = registService.getMembrClassList(sessionInfoVO);
@@ -108,7 +109,7 @@ public class MemberClassController {
     @ResponseBody
     public Result getMemberClassList(MembrClassVO membrClassVO, HttpServletRequest request, HttpServletResponse response, Model model) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        List<DefaultMap<String>> result = classService.getMemberClassGridList(sessionInfoVO);
+        List<DefaultMap<String>> result = classService.getMemberClassGridList(membrClassVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, result);
     }
 
@@ -150,6 +151,8 @@ public class MemberClassController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
         int result = classService.classInfoChk(membrClassVO,sessionInfoVO);
+        
+        membrClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().toString());
         DefaultMap<Object> status = classService.getMember(membrClassVO, sessionInfoVO);
 
         if(result == 0) {

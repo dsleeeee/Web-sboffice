@@ -42,7 +42,9 @@ app.controller('memberInfoPointCtrl', ['$scope', '$http', function ($scope, $htt
                     var item = s.rows[e.row].dataItem;
                     // 값이 있으면 링크 효과
                     if (nvl(item[("pointChgFg")], '') == '3') {
-                        wijmo.addClass(e.cell, 'wijLink');
+                        if(!(orgnFg == "HQ" && membrClassManageFg == "0")){
+                            wijmo.addClass(e.cell, 'wijLink');
+                        }
                     }
                 }
             }
@@ -60,14 +62,16 @@ app.controller('memberInfoPointCtrl', ['$scope', '$http', function ($scope, $htt
 
                     // 값이 있으면 링크
                     if (nvl(selectedRow[("pointChgFg")], '') == '3') {
-                        var params = $scope.getSelectedMemberInfoPoint();
-                        params.gubun = "memberInfoPointDtl";
-                        params.chgDate = selectedRow.chgDate;
-                        params.chgSeq = selectedRow.chgSeq;
+                        if(!(orgnFg == "HQ" && membrClassManageFg == "0")) {
+                            var params = $scope.getSelectedMemberInfoPoint();
+                            params.gubun = "memberInfoPointDtl";
+                            params.chgDate = selectedRow.chgDate;
+                            params.chgSeq = selectedRow.chgSeq;
 
-                        $scope.setSelectedMemberInfoPoint(params);
-                        $scope.wjMemberPointAdjustDtlLayer.show(true);
-                        event.preventDefault();
+                            $scope.setSelectedMemberInfoPoint(params);
+                            $scope.wjMemberPointAdjustDtlLayer.show(true);
+                            event.preventDefault();
+                        }
                     }
                 }
             }

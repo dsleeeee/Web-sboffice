@@ -2,9 +2,7 @@ package kr.co.solbipos.membr.info.grade.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.membr.info.grade.service.MembrClassPointVO;
 
-import java.util.ArrayList;
 import java.util.List;
 
     public interface MemberClassService {
@@ -13,7 +11,7 @@ import java.util.List;
         DefaultMap<Object> getMember(MembrClassVO membrClassVO, SessionInfoVO sessionInfoVO);
 
         /** 회원등급설정 조회 */
-        String getMemberClassList(SessionInfoVO sessionInfoVO);
+        String getMemberClassList(MembrClassVO membrClassVO, SessionInfoVO sessionInfoVO);
 
         /** 등급체크 */
         int classInfoChk(MembrClassVO membrClassVO, SessionInfoVO sessionInfoVO);
@@ -28,7 +26,7 @@ import java.util.List;
         int saveClassPointList(MembrClassPointVO[] membrClassPointVOs, SessionInfoVO sessionInfoVO);
 
         /** 회원등급설정 조회 */
-        List<DefaultMap<String>> getMemberClassGridList(SessionInfoVO sessionInfoVO);
+        List<DefaultMap<String>> getMemberClassGridList(MembrClassVO membrClassVO, SessionInfoVO sessionInfoVO);
 
         /** 등급포인트 적립 저장 */
         int getMemberClassPointDel(MembrClassPointVO[] membrClassPointVOs, SessionInfoVO sessionInfoVO);

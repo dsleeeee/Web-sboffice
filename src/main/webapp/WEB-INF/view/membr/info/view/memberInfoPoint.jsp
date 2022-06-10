@@ -3,6 +3,8 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+
 <wj-popup control="wjMemberInfoPointLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;height:700px;" fade-in="false" fade-out="false">
 
     <%-- header --%>
@@ -20,7 +22,9 @@
             <div class="oh mb10">
                 <s:message code="regist.memberInfoPoint.infoPoint"/>
                 <%-- 회원 포인트 조정 --%>
-                <button class="btn_skyblue fr" id="btnMemberInfoPointAdjust" ng-click="memberInfoPointAdjust()"><s:message code='regist.memberPointAdjust' /></button>
+                <span <c:if test="${orgnFg == 'HQ' and membrClassManageFg == '0'}">style="display: none;"</c:if>>
+                    <button class="btn_skyblue fr" id="btnMemberInfoPointAdjust" ng-click="memberInfoPointAdjust()"><s:message code='regist.memberPointAdjust' /></button>
+                </span>
             </div>
             <div class="w100 mt10 mb20">
                 <div class="wj-gridWrap" style="height:260px; overflow-y: hidden; overflow-x: hidden;">
@@ -84,4 +88,4 @@
     var pointChgFgData = ${ccu.getCommCodeExcpAll("031")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfoPoint.js?ver=20210316.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfoPoint.js?ver=20220610.01" charset="utf-8"></script>

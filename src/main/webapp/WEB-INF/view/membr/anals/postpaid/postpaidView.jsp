@@ -7,12 +7,13 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<c:set var="membrClassManageFg" value="${membrClassManageFg}" />
 <%--<c:set var="baseUrl" value="/membr/anals/postpaid/" />--%>
 
 <div class="subCon" ng-controller="postpaidCtrl">
 
   <%-- 조회조건 --%>
-  <div class="searchBar flddUnfld">
+  <div class="searchBar">
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -72,14 +73,16 @@
     </wj-combo-box>
     <%--// 페이지 스케일  --%>
 
-    <%-- 외상입금 --%>
-    <button class="btn_skyblue ml5 fr"  ng-click="deposit()">
-      <s:message code="postpaid.deposit" />
-    </button>
-    <%-- 세금계산서 발행입금 --%>
-    <button class="btn_skyblue ml5 fr"  ng-click="taxBillDeposit()">
-      <s:message code="postpaid.taxBill.deposit" />
-    </button>
+    <div <c:if test="${orgnFg == 'HQ' and membrClassManageFg == '0'}">style="display: none;"</c:if>>
+      <%-- 외상입금 --%>
+      <button class="btn_skyblue ml5 fr"  ng-click="deposit()">
+        <s:message code="postpaid.deposit" />
+      </button>
+      <%-- 세금계산서 발행입금 --%>
+      <button class="btn_skyblue ml5 fr"  ng-click="taxBillDeposit()">
+        <s:message code="postpaid.taxBill.deposit" />
+      </button>
+    </div>
   </div>
 
   <%-- 그리드 --%>
@@ -125,6 +128,10 @@
   var postpaidFgData = ${ccu.getCommCodeExcpAll("073")};
   var postpaidPayFgData = ${ccu.getCommCodeExcpAll("074")};
   var baseUrl = "${baseUrl}";
+
+  // 회원등급 관리구분[1237]
+  var membrClassManageFg = ${membrClassManageFg};
+
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/membr/anals/postpaid/postpaid.js?ver=2018090301" charset="utf-8"></script>
 

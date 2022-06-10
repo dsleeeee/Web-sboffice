@@ -1,7 +1,6 @@
 package kr.co.solbipos.membr.info.grade.service.impl;
 
 import kr.co.common.data.enums.Status;
-import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
@@ -20,11 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service("classService")
 @Transactional
@@ -57,6 +55,13 @@ public class MemberClassServiceImpl implements MemberClassService {
     public DefaultMap<Object> getMember(MembrClassVO membrClassVO, SessionInfoVO sessionInfoVO) {
 
         DefaultMap<Object> result = new DefaultMap<>();
+
+        if(membrClassVO.getOrgnFg().equals(OrgnFg.HQ.toString())){
+            membrClassVO.setMembrOrgnFg(OrgnFg.HQ);
+        }else{
+            membrClassVO.setMembrOrgnFg(OrgnFg.STORE);
+        }
+
         DefaultMap<String> mcd = mapper.getMemberClassDetail(membrClassVO);
         List<DefaultMap<String>> mcp = mapper.getMemberClassPoint(membrClassVO);
 
@@ -71,9 +76,14 @@ public class MemberClassServiceImpl implements MemberClassService {
      * @return
      */
     @Override
-    public String getMemberClassList(SessionInfoVO sessionInfoVO) {
-        MembrClassVO membrClassVO = new MembrClassVO();
+    public String getMemberClassList(MembrClassVO membrClassVO, SessionInfoVO sessionInfoVO) {
         List<DefaultMap<String>> classList;
+
+        membrClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            membrClassVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
         if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
             membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
             membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
@@ -95,11 +105,16 @@ public class MemberClassServiceImpl implements MemberClassService {
 
     /** 회원등급설정 조회 */
     @Override
-    public List<DefaultMap<String>> getMemberClassGridList(SessionInfoVO sessionInfoVO) {
-        MembrClassVO membrClassVO = new MembrClassVO();
+    public List<DefaultMap<String>> getMemberClassGridList(MembrClassVO membrClassVO, SessionInfoVO sessionInfoVO) {
         List<DefaultMap<String>> classList;
 
         LOGGER.info("sessionInfoVO.getHqOfficeCd() ::::{}",sessionInfoVO.getHqOfficeCd());
+
+        membrClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            membrClassVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
         if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
             membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
             membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
@@ -131,6 +146,11 @@ public class MemberClassServiceImpl implements MemberClassService {
         String dt = currentDateTimeString();
         String defltYn = membrClassVO.getDefltYn();
 
+        membrClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            membrClassVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
         if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
             membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
             membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
@@ -140,11 +160,15 @@ public class MemberClassServiceImpl implements MemberClassService {
                 membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
             } else {
                 membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
-                membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+                membrClassVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
             }
         }
 
-        //membrClassVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        // 등급코드 수동채번 -> 자동채번으로 변경 (2022.06.07)
+        if(membrClassVO.getMembrClassCd() == null || "".equals(membrClassVO.getMembrClassCd())) {
+            LOGGER.info("등급코드 자동채번");
+            membrClassVO.setMembrClassCd(mapper.getMemberClassCd(membrClassVO));
+        }
 
         // 회원등급 중복여부
         int classChk = mapper.classInfoChk(membrClassVO);
@@ -180,6 +204,13 @@ public class MemberClassServiceImpl implements MemberClassService {
                 if (classResult > 0 && "Y".equals(defltYn)) {
                     membrClassVO.setDefltYn("N");
                     classResult = mapper.defaultUpdateClassInfo(membrClassVO);
+
+                    // '기본등급은 1개 존재해야합니다.' alert 발생을 방지하기 위함.
+                    // 등록된 등급이 '기본' 1개 일때 해당 등급을 수정하면, '일반'으로 update할 등급이 없어
+                    // 현재 수정하는 등급이 '기본'임에도 불구하고, alert가 발생됨.
+                    if("Y".equals(defltChk) && classResult == 0) {
+                        classResult = 1;
+                    }
                 }
             }
         // 회원등급 코드가 중복이 안되면(신규)
@@ -202,6 +233,13 @@ public class MemberClassServiceImpl implements MemberClassService {
                 if (classResult > 0 && "Y".equals(defltYn)) {
                     membrClassVO.setDefltYn("N");
                     classResult = mapper.defaultUpdateClassInfo(membrClassVO);
+
+                    // '기본등급은 1개 존재해야합니다.' alert 발생을 방지하기 위함.
+                    // 최초 회원등급 '기본'으로 신규등록시, 기존 등급이 하나도 없기 때문에(최초라서 나머지 등급들을 '일반'으로 변경할 것이 없어, classResult = 0)
+                    // 현재 등록하는 등급을'기본'으로 저장함에도 불구하고, alert가 발생됨.
+                    if(defltChkList < 1) {
+                        classResult = 1;
+                    }
                 }
             }
         }
@@ -221,6 +259,24 @@ public class MemberClassServiceImpl implements MemberClassService {
             membrClassVO.setModId(sessionInfoVO.getUserId());
             membrClassVO.setModDt(DateUtil.currentDateTimeString());
 
+            membrClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+                membrClassVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+
+            if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
+                membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+                membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+            } else {
+                if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+                    membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+                } else {
+                    membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+                    membrClassVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+                }
+            }
+
             int result = mapper.deleteClassInfo(membrClassVO);
             if (result <= 0) {
                 throw new JsonException(Status.FAIL, messageService.get("cmm.dltFail"));
@@ -239,6 +295,25 @@ public class MemberClassServiceImpl implements MemberClassService {
 
         DefaultMap<Object> result = new DefaultMap<>();
         for (MembrClassVO membrClassVO : membrClassVOs) {
+
+            membrClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+                membrClassVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+
+            if ("00000".equals(sessionInfoVO.getHqOfficeCd())) { // 단독매장
+                membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+                membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+            } else {
+                if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+                    membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+                } else {
+                    membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+                    membrClassVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+                }
+            }
+
             deleteChk = mapper.deleteClassChk(membrClassVO);
             if(deleteChk > 0){
                 result.put("membrClassNm",membrClassVO.getMembrClassNm());
@@ -277,7 +352,7 @@ public class MemberClassServiceImpl implements MemberClassService {
                     membrClassPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
                 } else {
                     membrClassPointVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
-                    membrClassPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+                    membrClassPointVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
                 }
             }
             membrClassPointVO.setRegDt(dt);

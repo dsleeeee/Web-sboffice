@@ -5,6 +5,7 @@ import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
@@ -85,10 +86,19 @@ public class RegistServiceImpl implements RegistService {
     @Override
     public List<DefaultMap<String>> getMembrClassList(SessionInfoVO sessionInfoVO) {
 
+        // 회원등급 관리구분
+        String membrClassManageFg = CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1237"), "1");
+
         MembrClassVO membrClassVO = new MembrClassVO();
 
         membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
         membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        membrClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            membrClassVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        membrClassVO.setMembrClassManageFg(membrClassManageFg);
 
         List<DefaultMap<String>> resultList = mapper.getMemberClassList(membrClassVO);
 

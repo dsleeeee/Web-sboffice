@@ -38,18 +38,12 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.getSelectedMember = function () {
         return $scope.selectedMember;
     };
-    $scope.userUseYn = false;
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         $scope.$apply(function () {
             $scope.data = new wijmo.collections.CollectionView(result);
         });
-
-        if (gvHqOfficeCd === '00000') { // 단독매장
-            $scope.userUseYn = true;
-        } else { // 프랜차이즈는 본사만 추가 가능
-            if (gvStoreCd === '') $scope.userUseYn = true;
-        }
 
         // ReadOnly 효과설정
         s.formatItem.addHandler(function (s, e) {
@@ -120,6 +114,8 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.detailData.defltYn = 'N'
         }
         $scope.detailData.anvsrPointSaveFg = String(nvl($scope.detailData.anvsrPointSaveFg, '0'));
+        $scope.detailData.membrClassManageFg = membrClassManageFg;
+
         var params = $scope.detailData;
 
         // 저장
@@ -130,7 +126,7 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
                 $scope._popMsg(response.data.data.message); // 저장되었습니다.
                 $scope.getMember();
                 var scope = agrid.getScope('memberClassDetailCtrl');
-                scope._broadcast('memberClassDetailCtrl', params);
+                scope._gridDataInit();
             }
         });
     };
@@ -144,6 +140,7 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
                     $scope._popMsg(messages["grade.membr.deflt.yn.chk"]);
                     return false
                 }
+                $scope.flex.collectionView.items[i].membrClassManageFg = membrClassManageFg;
                 params.push($scope.flex.collectionView.items[i]);
             }
         }
@@ -161,7 +158,7 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
                             $scope.getMember();
                             $scope.newAdd();
                             var scope = agrid.getScope('memberClassDetailCtrl');
-                            scope._broadcast('memberClassDetailCtrl', '');
+                            scope._gridDataInit();
                         });
                     }
                 });
@@ -172,7 +169,8 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
         });
     };
     $scope.getMember = function () {
-        var params = {}
+        var params = {};
+        params.membrClassManageFg = membrClassManageFg;
         $scope._inquiryMain("/membr/info/grade/view/getMemberClassList.sb", params, function () {
         });
     };
@@ -185,14 +183,14 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
         //if( $.isEmptyObject($scope.selectedMember) ){
 
         // 등급코드을 입력하세요.
-        var msg = messages["grade.membr.grade.cd"] + messages["cmm.require.text"];
+        /*var msg = messages["grade.membr.grade.cd"] + messages["cmm.require.text"];
         if (isNull($scope.detailData.membrClassCd)) {
             // $scope._popMsg(msg);
             $scope._popMsg(msg, function () {
                 $("#membrClassCd").focus();
             });
             return false;
-        }
+        }*/
         // 등급코드 숫자영문.
         var msg = messages["grade.membr.grade.cd"] + messages["cmm.require.number.en"];
         var numChkregexp = /[^A-za-z0-9]/g;
@@ -330,30 +328,11 @@ app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $h
     $scope.getSelectedMember = function () {
         return $scope.selectedMember;
     };
-    $scope.userUseYn = false;
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         payCd.unshift({name: "현금영수", value: "00"});
         $scope.payCdDataMap = new wijmo.grid.DataMap(payCd, 'value', 'name');
-        if (gvHqOfficeCd === '00000') { // 단독매장
-            $scope.userUseYn = true;
-        } else { // 프랜차이즈는 본사만 추가 가능
-            if (gvStoreCd === '') $scope.userUseYn = true;
-        }
-        // bindColumnGroup 생성
-        // bindColumnGroups(s, dataHeader);
-
-        if ($scope.userUseYn === false) {
-            // ReadOnly 효과설정
-            s.formatItem.addHandler(function (s, e) {
-                if (e.panel === s.cells) {
-                    var col = s.columns[e.col];
-                    if (col.binding === "payCd" || col.binding === "membrOrgnCd" || col.binding === "accRate") {
-                        col.isReadOnly = true;
-                    }
-                }
-            });
-        }
     };
     $scope.$on("memberClassDetailCtrl", function (event, data) {
         $scope.setSelectedMember(data);
@@ -367,8 +346,12 @@ app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $h
     $scope.getClassList = function () {
 
         var params = {};
-        params.membrClassCd = $scope.getSelectedMember().membrClassCd;
         params.membrOrgnCd = $scope.getSelectedMember().membrOrgnCd;
+        params.membrClassCd = $scope.getSelectedMember().membrClassCd;
+        params.hqOfficeCd = hqOfficeCd;
+        params.storeCd = storeCd;
+        params.orgnFg = orgnFg;
+        params.membrClassManageFg = membrClassManageFg;
 
         $scope.$broadcast('loadingPopupActive');
         // ajax 통신 설정

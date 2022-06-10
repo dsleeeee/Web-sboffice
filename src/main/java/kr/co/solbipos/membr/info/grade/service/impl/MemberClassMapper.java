@@ -64,4 +64,7 @@ public interface MemberClassMapper {
 
     /** 회원등급 포인트삭제 */
     int deleteClassPayRateInfo(MembrClassVO membrClassVO);
+
+    /** 회원등급코드 조회 */
+    String getMemberClassCd(MembrClassVO membrClassVO);
 }

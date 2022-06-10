@@ -4,13 +4,15 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
-import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.adi.sms.sendStatus.service.SendStatusService;
+import kr.co.solbipos.adi.sms.sendStatus.service.SendStatusVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO;
@@ -20,8 +22,6 @@ import kr.co.solbipos.membr.info.regist.service.RegistService;
 import kr.co.solbipos.membr.info.regist.service.RegistVO;
 import kr.co.solbipos.membr.info.regist.validate.Regist;
 import kr.co.solbipos.membr.info.regist.validate.RegistDelete;
-import kr.co.solbipos.adi.sms.sendStatus.service.SendStatusService;
-import kr.co.solbipos.adi.sms.sendStatus.service.SendStatusVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,6 +126,9 @@ public class RegistController {
 
         // 회원 강제삭제를 위한 강제삭제 체크용 비밀번호 조회
         model.addAttribute("forcedDeleteChkPwd", registService.getForcedDeleteChkPwd());
+
+        // 회원등급 관리구분
+        model.addAttribute("membrClassManageFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1237"), "1"));
 
         return "membr/info/view/memberInfo";
     }

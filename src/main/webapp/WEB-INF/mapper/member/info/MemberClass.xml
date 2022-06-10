@@ -36,6 +36,20 @@
               , USE_ACC_POINT_YN
           FROM TB_MB_MEMBER_CLASS
           WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+        <choose>
+            <!-- 본사 -->
+            <when test='membrOrgnFg != null and membrOrgnFg.toString() == "HQ"'>
+                AND REG_STORE_CD IS NULL
+            </when>
+            <!-- 프랜차이즈 매장 -->
+            <when test='membrOrgnFg != null and membrOrgnFg.toString() == "STORE" and hqOfficeCd != "00000"'>
+                <if test='membrClassManageFg != null and membrClassManageFg == "0"'>
+                    AND REG_STORE_CD = #{storeCd}
+                </if>
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
           AND USE_YN = 'Y'
          ORDER BY MEMBR_CLASS_CD ASC
     </select>
@@ -71,7 +85,21 @@
           FROM TB_MB_MEMBER_CLASS
           WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
             AND MEMBR_CLASS_CD = #{membrClassCd}
-         ORDER BY REG_DT DESC
+        <choose>
+            <!-- 본사 -->
+            <when test='membrOrgnFg != null and membrOrgnFg.toString() == "HQ"'>
+                AND REG_STORE_CD IS NULL
+            </when>
+            <!-- 프랜차이즈 매장 -->
+            <when test='membrOrgnFg != null and membrOrgnFg.toString() == "STORE" and hqOfficeCd != "00000"'>
+                <if test='membrClassManageFg != null and membrClassManageFg == "0"'>
+                    AND REG_STORE_CD = #{storeCd}
+                </if>
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        ORDER BY REG_DT DESC
     </select>
 
     <!-- 회원등급 상세(포인트) 조회-->
@@ -101,6 +129,20 @@
 	        AND tmmc.MEMBR_CLASS_CD = tmmcpr.MEMBR_CLASS_CD
           WHERE tmmcpr.MEMBR_ORGN_CD = #{membrOrgnCd}
             AND tmmcpr.MEMBR_CLASS_CD = #{membrClassCd}
+        <choose>
+            <!-- 본사 -->
+            <when test='membrOrgnFg != null and membrOrgnFg.toString() == "HQ"'>
+                AND tmmc.REG_STORE_CD IS NULL
+            </when>
+            <!-- 프랜차이즈 매장 -->
+            <when test='membrOrgnFg != null and membrOrgnFg.toString() == "STORE" and hqOfficeCd != "00000"'>
+                <if test='membrClassManageFg != null and membrClassManageFg == "0"'>
+                    AND tmmc.REG_STORE_CD = #{storeCd}
+                </if>
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
          ORDER BY tmmcpr.PAY_CD ASC
     </select>
 
@@ -115,6 +157,20 @@
           FROM TB_MB_MEMBER_CLASS
           WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
             AND MEMBR_CLASS_CD = #{membrClassCd}
+        <choose>
+            <!-- 본사 -->
+            <when test='membrOrgnFg != null and membrOrgnFg.toString() == "HQ"'>
+                AND REG_STORE_CD IS NULL
+            </when>
+            <!-- 프랜차이즈 매장 -->
+            <when test='membrOrgnFg != null and membrOrgnFg.toString() == "STORE" and hqOfficeCd != "00000"'>
+                <if test='membrClassManageFg != null and membrClassManageFg == "0"'>
+                    AND REG_STORE_CD = #{storeCd}
+                </if>
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
     </select>
 
     <!-- 회원등급 기본여부-->
@@ -128,6 +184,20 @@
           FROM TB_MB_MEMBER_CLASS
           WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
             AND MEMBR_CLASS_CD = #{membrClassCd}
+        <choose>
+            <!-- 본사 -->
+            <when test='membrOrgnFg != null and membrOrgnFg.toString() == "HQ"'>
+                AND REG_STORE_CD IS NULL
+            </when>
+            <!-- 프랜차이즈 매장 -->
+            <when test='membrOrgnFg != null and membrOrgnFg.toString() == "STORE" and hqOfficeCd != "00000"'>
+                <if test='membrClassManageFg != null and membrClassManageFg == "0"'>
+                    AND REG_STORE_CD = #{storeCd}
+                </if>
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
     </select>
 
     <!-- 회원등급 기본여부(기존에 저장된 기본이 있는지) -->
@@ -140,6 +210,20 @@
         SELECT Count(*)
           FROM TB_MB_MEMBER_CLASS
           WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+        <choose>
+            <!-- 본사 -->
+            <when test='membrOrgnFg != null and membrOrgnFg.toString() == "HQ"'>
+                AND REG_STORE_CD IS NULL
+            </when>
+            <!-- 프랜차이즈 매장 -->
+            <when test='membrOrgnFg != null and membrOrgnFg.toString() == "STORE" and hqOfficeCd != "00000"'>
+                <if test='membrClassManageFg != null and membrClassManageFg == "0"'>
+                    AND REG_STORE_CD = #{storeCd}
+                </if>
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
             AND DEFLT_YN = 'Y'
     </select>
 
@@ -170,7 +254,8 @@
 	               DC_ACC_POINT_YN,
 	               MAX_USE_POINT,
 	               DC_LIMIT_AMT,
-	               USE_ACC_POINT_YN)
+	               USE_ACC_POINT_YN,
+	               REG_STORE_CD)
             VALUES(#{membrOrgnCd},
                    #{membrClassCd},
                    #{membrClassNm},
@@ -190,7 +275,23 @@
                    #{dcAccPointYn},
                    #{maxUsePoint},
                    #{dcLimitAmt},
-                   #{useAccPointYn})
+                   #{useAccPointYn},
+                <choose>
+                    <!-- 본사 -->
+                    <when test='membrOrgnFg != null and membrOrgnFg.toString() == "HQ"'>
+                        ''
+                    </when>
+                    <!-- 프랜차이즈 매장 -->
+                    <when test='membrOrgnFg != null and membrOrgnFg.toString() == "STORE" and hqOfficeCd != "00000"'>
+                        <if test='membrClassManageFg != null and membrClassManageFg == "0"'>
+                            #{storeCd}
+                        </if>
+                    </when>
+                    <otherwise>
+                        ''
+                    </otherwise>
+                </choose>
+                )
     </insert>
 
     <!-- 회원등급 수정-->
@@ -225,6 +326,21 @@
         , USE_ACC_POINT_YN = #{useAccPointYn}
         WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
         AND MEMBR_CLASS_CD = #{membrClassCd}
+        <choose>
+            <!-- 본사 -->
+            <when test='membrOrgnFg != null and membrOrgnFg.toString() == "HQ"'>
+                AND REG_STORE_CD IS NULL
+            </when>
+            <!-- 프랜차이즈 매장 -->
+            <when test='membrOrgnFg != null and membrOrgnFg.toString() == "STORE" and hqOfficeCd != "00000"'>
+                <if test='membrClassManageFg != null and membrClassManageFg == "0"'>
+                    AND REG_STORE_CD = #{storeCd}
+                </if>
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+
     </update>
 
     <!-- 회원등급 사용여부-->
@@ -241,7 +357,22 @@
         	AND tmmc.MEMBR_ORGN_CD = tmmcpr.MEMBR_ORGN_CD
         	AND tmmc.MEMBR_ORGN_CD = #{membrOrgnCd}
         	AND tmmc.MEMBR_CLASS_CD = #{membrClassCd}
-        	AND tmmc.POINT_SAVE_FG = #{pointSaveFg})
+        	AND tmmc.POINT_SAVE_FG = #{pointSaveFg}
+            <choose>
+                <!-- 본사 -->
+                <when test='membrOrgnFg != null and membrOrgnFg.toString() == "HQ"'>
+                    AND tmmc.REG_STORE_CD IS NULL
+                </when>
+                <!-- 프랜차이즈 매장 -->
+                <when test='membrOrgnFg != null and membrOrgnFg.toString() == "STORE" and hqOfficeCd != "00000"'>
+                    <if test='membrClassManageFg != null and membrClassManageFg == "0"'>
+                        AND tmmc.REG_STORE_CD = #{storeCd}
+                    </if>
+                </when>
+                <otherwise>
+                </otherwise>
+            </choose>
+        	)
         	WHEN MATCHED THEN
         UPDATE
         SET
@@ -252,7 +383,22 @@
         /* MemberClassMapper.defaultUpdateClassInfo */
        UPDATE TB_MB_MEMBER_CLASS
           SET DEFLT_YN = #{defltYn}
-	    WHERE  MEMBR_ORGN_CD || MEMBR_CLASS_CD != #{membrOrgnClassCd}
+	    WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+        <choose>
+            <!-- 본사 -->
+            <when test='membrOrgnFg != null and membrOrgnFg.toString() == "HQ"'>
+                AND REG_STORE_CD IS NULL
+            </when>
+            <!-- 프랜차이즈 매장 -->
+            <when test='membrOrgnFg != null and membrOrgnFg.toString() == "STORE" and hqOfficeCd != "00000"'>
+                <if test='membrClassManageFg != null and membrClassManageFg == "0"'>
+                    AND REG_STORE_CD = #{storeCd}
+                </if>
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        AND MEMBR_CLASS_CD != #{membrClassCd}
     </update>
 
     <!-- 회원등급 사용여부-->
@@ -270,6 +416,20 @@
         AND tmm.MEMBR_ORGN_CD = tmmc.MEMBR_ORGN_CD
         AND tmmc.MEMBR_ORGN_CD = #{membrOrgnCd}
         AND tmmc.MEMBR_CLASS_CD = #{membrClassCd}
+        <choose>
+            <!-- 본사 -->
+            <when test='membrOrgnFg != null and membrOrgnFg.toString() == "HQ"'>
+                AND tmmc.REG_STORE_CD IS NULL
+            </when>
+            <!-- 프랜차이즈 매장 -->
+            <when test='membrOrgnFg != null and membrOrgnFg.toString() == "STORE" and hqOfficeCd != "00000"'>
+                <if test='membrClassManageFg != null and membrClassManageFg == "0"'>
+                    AND tmmc.REG_STORE_CD = #{storeCd}
+                </if>
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
     </select>
 
     <!-- 회원등급 삭제 -->
@@ -277,17 +437,31 @@
         TABLE    : TB_MB_MEMBER_CLASS
     -->
     <delete id="deleteClassInfo" parameterType="memberClassVO">
-        /* MemberClassMapper.deleteMemberInfo */
+        /* MemberClassMapper.deleteClassInfo */
         DELETE FROM TB_MB_MEMBER_CLASS
         WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
         AND MEMBR_CLASS_CD = #{membrClassCd}
+        <choose>
+            <!-- 본사 -->
+            <when test='membrOrgnFg != null and membrOrgnFg.toString() == "HQ"'>
+                AND REG_STORE_CD IS NULL
+            </when>
+            <!-- 프랜차이즈 매장 -->
+            <when test='membrOrgnFg != null and membrOrgnFg.toString() == "STORE" and hqOfficeCd != "00000"'>
+                <if test='membrClassManageFg != null and membrClassManageFg == "0"'>
+                    AND REG_STORE_CD = #{storeCd}
+                </if>
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
     </delete>
     <!-- 회원등급 포인트삭제 -->
     <!--
         TABLE    : TB_MB_MEMBER_CLASS_PAY_RATE
     -->
     <delete id="deleteClassPayRateInfo" parameterType="memberClassVO">
-      /* MemberClassMapper.deleteMemberInfo */
+      /* MemberClassMapper.deleteClassPayRateInfo */
       DELETE FROM
         TB_MB_MEMBER_CLASS_PAY_RATE
         WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
@@ -379,5 +553,17 @@
         AND MEMBR_CLASS_CD = #{membrClassCd}
             AND PAY_CD = #{initPayCd}
     </delete>
+
+    <!-- 회원등급코드 조회 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_CLASS
+        COMMENTS : 회원등급코드를 조회한다.
+    -->
+    <select id="getMemberClassCd" parameterType="memberClassVO" resultType="String">
+        /* USE : MemberClassMapper.getMemberClassCd */
+         SELECT LPAD( NVL(MAX(MEMBR_CLASS_CD), 0) + 1, 3, '0')
+           FROM TB_MB_MEMBER_CLASS
+          WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+    </select>
 
 </mapper>

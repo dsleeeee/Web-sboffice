@@ -9,11 +9,12 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
+<c:set var="membrClassManageFg" value="${membrClassManageFg}" />
 
 <div class="subCon" ng-controller="memberPointCtrl">
 
     <%-- 조회조건 --%>
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl">${menuNm}</a>
     </div>
 
@@ -42,7 +43,9 @@
                 <td>
                     <input type="text" class="sb-input fl w70" ng-model="changeAll.adjustPartRemark" id="adjustPartRemark"/>
                     <%--저장--%>
-                    <button class="btn_skyblue sb-input ml5 fl w25" ng-click="adjustAll()"><s:message code="cmm.save"/></button>
+                    <span <c:if test="${orgnFg == 'HQ' and membrClassManageFg == '0'}">style="display: none;"</c:if>>
+                        <button class="btn_skyblue sb-input ml5 fl w25" ng-click="adjustAll()"><s:message code="cmm.save"/></button>
+                    </span>
                 </td>
             </tr>
             </tbody>
@@ -54,7 +57,7 @@
         <h2 class="h2_tit oh lh30">
             <s:message code="memberPoint.excelPoing.title"/>
         </h2>
-        <table class="searchTbl">
+        <table class="searchTbl" <c:if test="${orgnFg == 'HQ' and membrClassManageFg == '0'}">style="display: none;"</c:if>>
             <colgroup>
                 <col class="w15"/>
                 <col class="w15"/>
@@ -101,7 +104,7 @@
         </ul>
     </div>
 
-    <div class="oh mb10">
+    <div class="oh mb10" <c:if test="${orgnFg == 'HQ' and membrClassManageFg == '0'}">style="display: none;"</c:if>>
         <div class="sb-select dkbr ml5 fl">
             <wj-combo-box
                     class="w100px fl"
@@ -197,6 +200,9 @@
     <%--결혼유무--%>
     var anvrsDataMap = ${ccu.getCommCode("032")};
     var memberClassList = ${memberClassList};
+
+    // 회원등급 관리구분[1237]
+    var membrClassManageFg = ${membrClassManageFg};
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberPoint.js?ver=20201118.05" charset="utf-8"></script>

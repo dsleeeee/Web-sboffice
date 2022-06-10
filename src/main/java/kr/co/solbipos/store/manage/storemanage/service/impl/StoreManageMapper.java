@@ -437,4 +437,10 @@ public interface StoreManageMapper {
 
     /** 매장 판매터치키 재정렬 (03: 가격)*/
     int chgSortStoreTouchKey03(StoreEnvVO storeEnvVO);
+
+    /** 본사 환경변수 조회 */
+    String getHqEnvst(MemberClassVO memberClassVO);
+
+    /** 회원 기본등급 등록(프랜차이즈 매장용) */
+    int insertStoreMemberClass(MemberClassVO memberClassVO);
 }

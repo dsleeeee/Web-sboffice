@@ -112,6 +112,7 @@
                 <if test='telNo != null and telNo != ""'>
                    AND SBPENC.D(tmm.TEL_NO) LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
                 </if>
+                   AND tmm.REG_STORE_CD = #{storeCd}
                  ORDER BY tmmps.MEMBR_NO, tmmps.STORE_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -213,6 +214,7 @@
                 <if test='telNo != null and telNo != ""'>
                    AND  SBPENC.D(tmm.TEL_NO) LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
                 </if>
+                   AND tmm.REG_STORE_CD = #{storeCd}
                  ORDER BY tmm.MEMBR_NO, tms.STORE_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -306,6 +308,7 @@
                 <if test='telNo != null and telNo != ""'>
                    AND SBPENC.D(tmm.TEL_NO) LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
                 </if>
+                  AND tmm.REG_STORE_CD = #{storeCd}
                  ORDER BY tmmps.MEMBR_NO, tmmps.STORE_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -407,6 +410,7 @@
                 <if test='telNo != null and telNo != ""'>
                    AND SBPENC.D(tmm.TEL_NO) LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
                 </if>
+                  AND tmm.REG_STORE_CD = #{storeCd}
                  ORDER BY tmm.MEMBR_NO, tms.STORE_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>

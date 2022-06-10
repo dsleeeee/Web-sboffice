@@ -6,6 +6,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
@@ -84,6 +85,9 @@ public class ChgBatchController {
         model.addAttribute("memberClassList", membrClassListAll);
         model.addAttribute("memberClassSelect", membrClassListAll);
 //        model.addAttribute("membrChgBatchList", membrChgBatchList);
+
+        // 회원등급 관리구분
+        model.addAttribute("membrClassManageFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1237"), "1"));
 
         return "membr/info/view/memberChgBatch";
     }

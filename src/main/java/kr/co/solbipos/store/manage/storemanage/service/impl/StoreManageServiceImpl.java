@@ -7,6 +7,7 @@ import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.security.EncUtil;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
@@ -290,7 +291,6 @@ public class StoreManageServiceImpl implements StoreManageService{
 
             // 회원등급 생성
             MemberClassVO memberClassVO = new MemberClassVO();
-            memberClassVO.setMembrOrgnCd(storeCd);
             memberClassVO.setRegDt(dt);
             memberClassVO.setRegId(sessionInfoVO.getUserId());
             memberClassVO.setModDt(dt);
@@ -298,7 +298,24 @@ public class StoreManageServiceImpl implements StoreManageService{
 
             // 단독매장 회원등급 생성
             if(storeManageVO.getHqOfficeCd().equals("00000")) {
+                memberClassVO.setMembrOrgnCd(storeCd);
                 procCnt += mapper.insertMemberClass(memberClassVO);
+            }
+
+            // 프랜차이즈매장 회원등급 생성
+            if(!storeManageVO.getHqOfficeCd().equals("00000")){
+                memberClassVO.setMembrOrgnCd(storeManageVO.getHqOfficeCd());
+                memberClassVO.setHqOfficeCd(storeManageVO.getHqOfficeCd());
+                memberClassVO.setStoreCd(storeCd);
+                memberClassVO.setEnvstCd("1237");
+
+                // 본사 환경설정값 [회원관리구분(통합/개별) : 1237] 조회
+                String envst1237 = StringUtil.getOrBlank(mapper.getHqEnvst(memberClassVO));
+
+                // 개별(매장별) 회원관리인 경우, 기본등급 생성
+                if("0".equals(envst1237)){
+                    procCnt += mapper.insertStoreMemberClass(memberClassVO);
+                }
             }
 
             // 프랜차이즈매장: 본사에 등록된 결제수단분류/쿠폰/상품권 생성

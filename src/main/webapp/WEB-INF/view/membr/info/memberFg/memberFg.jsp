@@ -4,6 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
+<c:set var="membrClassManageFg" value="${membrClassManageFg}" />
 
 <div class="con">
   <div class="tabType1" ng-controller="memberFgCtrl" ng-init="init()">
@@ -28,6 +29,8 @@
 
 <script>
   var memberClassList = ${memberClassList}; <%-- 회원등급목록 --%>
+  // 회원등급 관리구분[1237]
+  var membrClassManageFg = ${membrClassManageFg};
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/membr/info/memberFg/memberFg.js?ver=20181220.01" charset="utf-8"></script>
 
