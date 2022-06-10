@@ -40,8 +40,8 @@
             <wj-flex-grid-column header="<s:message code="saleComPopup.payco.apprProcFg"/>" binding="apprProcFg" 	width="70" 		align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.payco.apprCompanyNm"/>" 	binding="apprCompanyNm" 	width="130" 	align="center"  is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.payco.saleAmt"/>" 	binding="saleAmt" 		width="80" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.payco.tipAmt"/>" 	binding="tipAmt" 		width="80" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.payco.vatAmt"/>" 	binding="vatAmt"		width="80" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+<%--            <wj-flex-grid-column header="<s:message code="saleComPopup.payco.tipAmt"/>" 	binding="tipAmt" 		width="80" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>--%>
+<%--            <wj-flex-grid-column header="<s:message code="saleComPopup.payco.vatAmt"/>" 	binding="vatAmt"		width="80" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>--%>
             <wj-flex-grid-column header="<s:message code="saleComPopup.payco.instCntNm"/>" 	binding="instCntNm" 	width="60" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.payco.instCnt"/>" 	binding="instCnt" 		width="60" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.payco.apprDt"/>" 	binding="apprDt" 		width="130" 	align="center" is-read-only="true"></wj-flex-grid-column>

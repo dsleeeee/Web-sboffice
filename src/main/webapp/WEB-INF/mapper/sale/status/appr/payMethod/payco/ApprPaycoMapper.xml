@@ -34,7 +34,7 @@
                 SELECT STORE_CD
                      , 1 AS SALE_FG
                      , 1 AS CNT
-                     , APPR_AMT
+                     , (APPR_AMT + COUPN_AMT + POINT_AMT) AS APPR_AMT
                   FROM TB_SL_SALE_PAY_PAYCO
                  WHERE SALE_AMT>0
         ]]>
@@ -76,7 +76,7 @@
                 SELECT STORE_CD
                      , -1 AS SALE_FG
                      , -1 AS CNT
-                     , APPR_AMT
+                     , (APPR_AMT + COUPN_AMT + POINT_AMT) AS APPR_AMT
                   FROM TB_SL_SALE_PAY_PAYCO
                  WHERE SALE_AMT<0
         ]]>
@@ -158,7 +158,7 @@
                 SELECT STORE_CD
                      , 1 AS SALE_FG
                      , 1 AS CNT
-                     , APPR_AMT
+                     , (APPR_AMT + COUPN_AMT + POINT_AMT) AS APPR_AMT
                   FROM TB_SL_SALE_PAY_PAYCO
                  WHERE SALE_AMT>0
         ]]>
@@ -200,7 +200,7 @@
                 SELECT STORE_CD
                      , -1 AS SALE_FG
                      , -1 AS CNT
-                     , APPR_AMT
+                     , (APPR_AMT + COUPN_AMT + POINT_AMT) AS APPR_AMT
                   FROM TB_SL_SALE_PAY_PAYCO
                  WHERE SALE_AMT<0
         ]]>
