@@ -591,7 +591,7 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
             // 거래처
             if (prodExcelUploadVO.getVendrCd() != null && !"".equals(prodExcelUploadVO.getVendrCd()) && !"선택".equals(prodExcelUploadVO.getVendrCd())) {
                 String vendrList = simpleProdMapper.vendrComboList(simpleProdVO).toString();
-                if(!vendrList.contains(prodExcelUploadVO.getVendrCd())){
+                if(vendrList.indexOf(prodExcelUploadVO.getVendrCd()) != -1){
                     prodExcelUploadVO.setResult("존재하지 않는 거래처입니다.");
                 } else {
                     String vendrCd = prodExcelUploadMapper.getVendrCdCheck(prodExcelUploadVO);
