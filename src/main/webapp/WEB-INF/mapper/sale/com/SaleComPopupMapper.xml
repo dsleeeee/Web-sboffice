@@ -1234,22 +1234,23 @@
     -->
     <select id="getPaycoApprPopList" parameterType="saleComPopupVO" resultType="DefaultMap">
         /* USE : SaleComPopupMapper.getPaycoApprPopList */
-        SELECT TO_CHAR(TO_DATE(TSSPP.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
-			,TSSPP.POS_NO
-			,DECODE(TSSPP.SALE_YN, 'Y', '승인', 'N',  '취소') AS APPR_GUBUN
-			,DECODE(TSSPP.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
-			,TSSPP.APPR_COMPANY_NM
-			,TSSPP.APPR_AMT AS SALE_AMT
-			,TSSPP.TIP_AMT
-			,TSSPP.VAT_AMT
-			,DECODE(TSSPP.INST_CNT, 0 , '일시불', '할부') AS INST_CNT_NM
-			,TSSPP.INST_CNT
-			,TO_CHAR(TO_DATE(TSSPP.APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS APPR_DT
-			,TSSPP.APPR_NO
-			,TSSPP.APPR_AMT
-		FROM TB_SL_SALE_PAY_PAYCO TSSPP
+        SELECT 	TO_CHAR(TO_DATE(TSSPP.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+			,	TSSPP.POS_NO
+			,	DECODE(TSSPP.SALE_YN, 'Y', '승인', 'N',  '취소') AS APPR_GUBUN
+			,	DECODE(TSSPP.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
+			,	TSSPP.APPR_COMPANY_NM
+			,	TSSPP.APPR_AMT AS SALE_AMT
+			,	TSSPP.TIP_AMT
+			,	TSSPP.VAT_AMT
+			,	DECODE(TSSPP.INST_CNT, 0 , '일시불', '할부') AS INST_CNT_NM
+			,	TSSPP.INST_CNT
+			,	TO_CHAR(TO_DATE(TSSPP.APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS APPR_DT
+			,	TSSPP.APPR_NO
+			,	TSSPP.APPR_AMT
+		FROM 	TB_SL_SALE_PAY_PAYCO TSSPP
 		WHERE 1=1
 		AND TSSPP.HQ_OFFICE_CD = #{hqOfficeCd}
+		AND	TSSPP.APPR_AMT != 0
         <if test='storeCd != null and storeCd != ""'>
             AND TSSPP.STORE_CD = #{storeCd}
         </if>
@@ -1277,7 +1278,98 @@
 		<if test='endDate != null and endDate != ""'>
 			AND TSSPP.SALE_DATE <![CDATA[ <= ]]> #{endDate}
 		</if>
-    </select>
+		UNION ALL
+		SELECT 	TO_CHAR(TO_DATE(TSSPP.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+			,	TSSPP.POS_NO
+			,	DECODE(TSSPP.SALE_YN, 'Y', '승인', 'N',  '취소') AS APPR_GUBUN
+			,	DECODE(TSSPP.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
+			,	'PAYCO-쿠폰' AS APPR_COMPANY_NM
+			,	TSSPP.COUPN_AMT AS SALE_AMT
+			,	TSSPP.TIP_AMT
+			,	TSSPP.VAT_AMT
+			,	DECODE(TSSPP.INST_CNT, 0 , '일시불', '할부') AS INST_CNT_NM
+			,	TSSPP.INST_CNT
+			,	TO_CHAR(TO_DATE(TSSPP.APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS APPR_DT
+			,	TSSPP.APPR_NO
+			,	TSSPP.COUPN_AMT AS APPR_AMT
+		FROM 	TB_SL_SALE_PAY_PAYCO TSSPP
+		WHERE 1=1
+		AND TSSPP.HQ_OFFICE_CD = #{hqOfficeCd}
+		AND TSSPP.COUPN_AMT != 0
+		<if test='storeCd != null and storeCd != ""'>
+			AND TSSPP.STORE_CD = #{storeCd}
+		</if>
+		<if test='arrStoreCornr != null and arrStoreCornr != ""'>
+			AND TSSPP.STORE_CD||'||'||TSSPP.CORNR_CD  IN
+			<foreach collection="arrStoreCornr" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+		<if test='arrStorePos != null and arrStorePos != ""'>
+			AND TSSPP.STORE_CD||'||'||TSSPP.POS_NO  IN
+			<foreach collection="arrStorePos" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+		<if test='apprProcFg != null and apprProcFg != ""'>
+			AND TSSPP.APPR_PROC_FG = #{apprProcFg}
+		</if>
+		<if test='saleFg != null and saleFg != ""'>
+			AND TSSPP.SALE_YN = DECODE(#{saleFg},'1','Y','-1','N')
+		</if>
+		<if test='startDate != null and startDate != ""'>
+			AND TSSPP.SALE_DATE >= #{startDate}
+		</if>
+		<if test='endDate != null and endDate != ""'>
+			AND TSSPP.SALE_DATE <![CDATA[ <= ]]> #{endDate}
+		</if>
+		UNION ALL
+		SELECT 	TO_CHAR(TO_DATE(TSSPP.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+			,	TSSPP.POS_NO
+			,	DECODE(TSSPP.SALE_YN, 'Y', '승인', 'N',  '취소') AS APPR_GUBUN
+			,	DECODE(TSSPP.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
+			,	'PAYCO-포인트' AS APPR_COMPANY_NM
+			,	TSSPP.POINT_AMT AS SALE_AMT
+			,	TSSPP.TIP_AMT
+			,	TSSPP.VAT_AMT
+			,	DECODE(TSSPP.INST_CNT, 0 , '일시불', '할부') AS INST_CNT_NM
+			,	TSSPP.INST_CNT
+			,	TO_CHAR(TO_DATE(TSSPP.APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS APPR_DT
+			,	TSSPP.APPR_NO
+			,	TSSPP.POINT_AMT AS APPR_AMT
+		FROM 	TB_SL_SALE_PAY_PAYCO TSSPP
+		WHERE 1=1
+		AND TSSPP.HQ_OFFICE_CD = #{hqOfficeCd}
+		AND TSSPP.POINT_AMT != 0
+		<if test='storeCd != null and storeCd != ""'>
+			AND TSSPP.STORE_CD = #{storeCd}
+		</if>
+		<if test='arrStoreCornr != null and arrStoreCornr != ""'>
+			AND TSSPP.STORE_CD||'||'||TSSPP.CORNR_CD  IN
+			<foreach collection="arrStoreCornr" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+		<if test='arrStorePos != null and arrStorePos != ""'>
+			AND TSSPP.STORE_CD||'||'||TSSPP.POS_NO  IN
+			<foreach collection="arrStorePos" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+		<if test='apprProcFg != null and apprProcFg != ""'>
+			AND TSSPP.APPR_PROC_FG = #{apprProcFg}
+		</if>
+		<if test='saleFg != null and saleFg != ""'>
+			AND TSSPP.SALE_YN = DECODE(#{saleFg},'1','Y','-1','N')
+		</if>
+		<if test='startDate != null and startDate != ""'>
+			AND TSSPP.SALE_DATE >= #{startDate}
+		</if>
+		<if test='endDate != null and endDate != ""'>
+			AND TSSPP.SALE_DATE <![CDATA[ <= ]]> #{endDate}
+		</if>
+		ORDER BY APPR_DT
+	</select>
 
     <!-- 매출공통팝업 - 승인현황(매장현황) 팝업(MPAY) -->
     <!--

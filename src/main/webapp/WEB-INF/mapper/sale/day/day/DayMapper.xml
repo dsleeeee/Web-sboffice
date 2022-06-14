@@ -195,6 +195,7 @@
         ,       tssh.VAT_AMT
         ,       tssh.TOT_TIP_AMT
         ,       tssh.TOT_ETC_AMT
+        ,       tssh.CUP_AMT
         ,       tssh.BILL_CNT
         ,       tssh.BILL_UPRC
         ,       tssddp.GEN_REAL_SALE_AMT
@@ -221,6 +222,7 @@
                     ,       SUM(tssh.VAT_AMT) AS VAT_AMT
                     ,       SUM(tssh.TOT_TIP_AMT) AS TOT_TIP_AMT
                     ,       SUM(tssh.TOT_ETC_AMT) AS TOT_ETC_AMT
+                    ,       SUM(tssh.CUP_AMT) AS CUP_AMT
                     ,       SUM(tssh.BILL_CNT) AS BILL_CNT
                     ,       DECODE(SUM(tssh.BILL_CNT), 0, 0, ROUND(SUM(tssh.REAL_SALE_AMT) / SUM(tssh.BILL_CNT))) AS BILL_UPRC
                     FROM    (   SELECT  tssh.SALE_DATE, tssh.STORE_CD
@@ -231,6 +233,7 @@
                                 ,       SUM(tssh.VAT_AMT) AS VAT_AMT
                                 ,       SUM(tssh.TOT_TIP_AMT) AS TOT_TIP_AMT
                                 ,       SUM(tssh.TOT_ETC_AMT) AS TOT_ETC_AMT
+                                ,       SUM(tssh.CUP_AMT) AS CUP_AMT
                                 ,       COUNT(tssh.BILL_NO) AS BILL_CNT
                                 FROM    TB_SL_SALE_HDR tssh
                                 WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -323,6 +326,7 @@
         ,       tssh.VAT_AMT
         ,       tssh.TOT_TIP_AMT
         ,       tssh.TOT_ETC_AMT
+        ,       tssh.CUP_AMT
         ,       tssh.BILL_CNT
         ,       tssh.BILL_UPRC
         ,       tssddp.GEN_REAL_SALE_AMT
@@ -351,6 +355,7 @@
                     ,       SUM(tssh.VAT_AMT) AS VAT_AMT
                     ,       SUM(tssh.TOT_TIP_AMT) AS TOT_TIP_AMT
                     ,       SUM(tssh.TOT_ETC_AMT) AS TOT_ETC_AMT
+                    ,       SUM(tssh.CUP_AMT) AS CUP_AMT
                     ,       SUM(tssh.BILL_CNT) AS BILL_CNT
                     ,       DECODE(SUM(tssh.BILL_CNT), 0, 0, ROUND(SUM(tssh.REAL_SALE_AMT) / SUM(tssh.BILL_CNT))) AS BILL_UPRC
                     FROM    (   SELECT  tssh.SALE_DATE, tssh.STORE_CD
@@ -361,6 +366,7 @@
                                 ,       SUM(tssh.VAT_AMT) AS VAT_AMT
                                 ,       SUM(tssh.TOT_TIP_AMT) AS TOT_TIP_AMT
                                 ,       SUM(tssh.TOT_ETC_AMT) AS TOT_ETC_AMT
+                                ,       SUM(tssh.CUP_AMT) AS CUP_AMT
                                 ,       COUNT(tssh.BILL_NO) AS BILL_CNT
                                 FROM    TB_SL_SALE_HDR tssh
                                 WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}

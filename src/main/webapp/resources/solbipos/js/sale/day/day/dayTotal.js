@@ -135,6 +135,7 @@ app.controller('dayTotalCtrl', ['$scope', '$http', '$timeout', function ($scope,
     dataItem.vatAmt      = messages["day.dayTotal.saleInfo"];
     dataItem.totTipAmt   = messages["day.dayTotal.totTipAmt"];
     dataItem.totEtcAmt   = messages["day.dayTotal.totEtcAmt"];
+    dataItem.cupAmt   = messages["day.dayTotal.cupAmt"];
     dataItem.totPayAmt   = messages["day.dayTotal.payMethod"];
     dataItem.genRealSaleAmt   = messages["day.dayTotal.dlvrPack"];
     dataItem.genRealSaleRate   = messages["day.dayTotal.dlvrPack"];

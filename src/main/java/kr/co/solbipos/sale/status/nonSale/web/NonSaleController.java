@@ -103,4 +103,46 @@ public class NonSaleController {
         return ReturnUtil.returnListJson(Status.OK, list,  nonSaleVO);
     }
 
+    /**
+     * 반환내역 - 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   nonSaleVO
+     * @return  String
+     * @author  권지현
+     * @since   2022.06.08
+     */
+    @RequestMapping(value = "/nonSale/getCupRefundList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCupRefundList(HttpServletRequest request, HttpServletResponse response,
+                                    Model model, NonSaleVO nonSaleVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = nonSaleService.getCupRefundList(nonSaleVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list,  nonSaleVO);
+    }
+
+    /**
+     * 반환내역 - 엑셀리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   nonSaleVO
+     * @return  String
+     * @author  권지현
+     * @since   2022.06.08
+     */
+    @RequestMapping(value = "/nonSale/getCupRefundExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCupRefundExcelList(HttpServletRequest request, HttpServletResponse response,
+                                    Model model, NonSaleVO nonSaleVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = nonSaleService.getCupRefundExcelList(nonSaleVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list,  nonSaleVO);
+    }
+
 }

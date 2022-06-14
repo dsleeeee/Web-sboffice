@@ -29,6 +29,7 @@
                 tssh.VAT_AMT,
                 tssh.TOT_TIP_AMT,
                 tssh.TOT_ETC_AMT,
+                tssh.CUP_AMT,
                 <foreach collection="arrPayCol" item="item" separator="+">
                     NVL(tsshp.PAY${item}, 0)
                 </foreach> AS TOT_PAY_AMT,
@@ -53,7 +54,8 @@
                     ROUND(SUM(REAL_SALE_AMT) / COUNT(BILL_NO)) AS BILL_UPRC,
                     SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT,
                     SUM(TOT_TIP_AMT) AS TOT_TIP_AMT,
-                    SUM(TOT_ETC_AMT) AS TOT_ETC_AMT
+                    SUM(TOT_ETC_AMT) AS TOT_ETC_AMT,
+                    SUM(CUP_AMT) AS CUP_AMT
             FROM    TB_SL_SALE_HDR
             WHERE   HQ_OFFICE_CD = #{membrOrgnCd}
             AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}

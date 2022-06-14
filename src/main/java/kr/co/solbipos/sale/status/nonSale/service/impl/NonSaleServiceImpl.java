@@ -67,4 +67,30 @@ public class NonSaleServiceImpl implements NonSaleService {
         return nonSaleMapper.getNonSaleDayExcelList(nonSaleVO);
     }
 
+    @Override
+    public List<DefaultMap<String>> getCupRefundList(NonSaleVO nonSaleVO, SessionInfoVO sessionInfoVO) {
+
+        nonSaleVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        nonSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        nonSaleVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if(!StringUtil.getOrBlank(nonSaleVO.getStoreCd()).equals("")) {
+            nonSaleVO.setArrStoreCd(nonSaleVO.getStoreCd().split(","));
+        }
+        return nonSaleMapper.getCupRefundList(nonSaleVO);
+    }
+
+    @Override
+    public List<DefaultMap<String>> getCupRefundExcelList(NonSaleVO nonSaleVO, SessionInfoVO sessionInfoVO) {
+
+        nonSaleVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        nonSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        nonSaleVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if(!StringUtil.getOrBlank(nonSaleVO.getStoreCd()).equals("")) {
+            nonSaleVO.setArrStoreCd(nonSaleVO.getStoreCd().split(","));
+        }
+        return nonSaleMapper.getCupRefundExcelList(nonSaleVO);
+    }
+
 }

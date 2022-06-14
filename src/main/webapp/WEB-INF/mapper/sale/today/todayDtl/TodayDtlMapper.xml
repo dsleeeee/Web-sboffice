@@ -134,6 +134,7 @@
         ,       tssh.VAT_AMT
         ,       tssh.TOT_TIP_AMT
         ,       tssh.TOT_ETC_AMT
+        ,       tssh.CUP_AMT
         ,       DECODE(tssh.SALE_YN, 'Y', tssh.BILL_CNT, -(tssh.BILL_CNT)) AS BILL_CNT
         ,       tssh.BILL_UPRC
         ,       tssh.TOT_GUEST_CNT
@@ -167,6 +168,7 @@
                     ,       SUM(tssh.VAT_AMT) AS VAT_AMT
                     ,       SUM(tssh.TOT_TIP_AMT) AS TOT_TIP_AMT
                     ,       SUM(tssh.TOT_ETC_AMT) AS TOT_ETC_AMT
+                    ,       SUM(tssh.CUP_AMT) AS CUP_AMT
                     ,       COUNT(tssh.BILL_NO) AS BILL_CNT
                     ,       DECODE(COUNT(tssh.BILL_NO), 0, 0, ROUND(SUM(tssh.REAL_SALE_AMT) / COUNT(tssh.BILL_NO))) AS BILL_UPRC
                     ,       SUM(tssh.TOT_GUEST_CNT) AS TOT_GUEST_CNT
@@ -296,6 +298,7 @@
         ,       tssh.VAT_AMT
         ,       tssh.TOT_TIP_AMT
         ,       tssh.TOT_ETC_AMT
+        ,       tssh.CUP_AMT
         ,       DECODE(tssh.MEMBR_YN, 'Y', tsshm.MEMBR_NO, NULL) AS MEMBR_NO
         ,       DECODE(tssh.MEMBR_YN, 'Y', SBPENC.D(tsshm.MEMBR_NM), NULL) AS MEMBR_NM
         ,       tmt.TBL_NM AS TBL_NM
