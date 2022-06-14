@@ -42,6 +42,11 @@ public class SideMenuManageVO extends PageVO {
     private String sdattrClassCd;
     /** 사이드선택그룹코드 */
     private String sdselGrpCd;
+    /** 사이드속성분류 속성없음*/
+    private String sdattrClassNone;
+    /** 사이드선택그룹 선택메뉴없음*/
+    private String sdSelGrpNone;
+
 
     public String getOrgnFg() {
         return orgnFg;
@@ -121,5 +126,21 @@ public class SideMenuManageVO extends PageVO {
 
     public void setSdselGrpCd(String sdselGrpCd) {
         this.sdselGrpCd = sdselGrpCd;
+    }
+
+    public String getSdattrClassNone() {
+        return sdattrClassNone;
+    }
+
+    public void setSdattrClassNone(String sdattrClassNone) {
+        this.sdattrClassNone = sdattrClassNone;
+    }
+
+    public String getSdSelGrpNone() {
+        return sdSelGrpNone;
+    }
+
+    public void setSdSelGrpNone(String sdSelGrpNone) {
+        this.sdSelGrpNone = sdSelGrpNone;
     }
 }

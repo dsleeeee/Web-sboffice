@@ -1603,6 +1603,12 @@
                 <if test="sideProdYn != null and sideProdYn != ''">
                     AND thp.SIDE_PROD_YN = #{sideProdYn}
                 </if>
+                <if test='sdattrClassNone != null and sdattrClassNone == "Y"'>
+                    AND thp.SDATTR_CLASS_CD IS NULL
+                </if>
+                <if test='sdSelGrpNone != null and sdSelGrpNone == "Y"'>
+                    AND thp.SDSEL_GRP_CD IS NULL
+                </if>
                 <if test="sdattrClassCd != null and sdattrClassCd != ''">
                     AND thp.SDATTR_CLASS_CD = #{sdattrClassCd}
                 </if>
@@ -1672,6 +1678,12 @@
                 </if>
                 <if test="sideProdYn != null and sideProdYn != ''">
                     AND tmp.SIDE_PROD_YN = #{sideProdYn}
+                </if>
+                <if test='sdattrClassNone != null and sdattrClassNone == "Y"'>
+                    AND tmp.SDATTR_CLASS_CD IS NULL
+                </if>
+                <if test='sdSelGrpNone != null and sdSelGrpNone == "Y"'>
+                    AND tmp.SDSEL_GRP_CD IS NULL
                 </if>
                 <if test="sdattrClassCd != null and sdattrClassCd != ''">
                     AND tmp.SDATTR_CLASS_CD = #{sdattrClassCd}
