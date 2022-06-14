@@ -119,6 +119,7 @@
         AND taan.NMCODE_LEVEL = '1'
         AND taan.PARENT_CD = '001'
         AND taan.USE_YN = 'Y'
+        AND taan.NMCODE_CD != '000'
         ORDER BY taan.NMCODE_CD
     </select>
 
