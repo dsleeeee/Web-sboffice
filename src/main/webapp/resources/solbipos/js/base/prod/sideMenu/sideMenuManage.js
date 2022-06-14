@@ -84,6 +84,8 @@ app.controller('sideMenuManageCtrl', ['$scope', '$http', function ($scope, $http
         params.sideProdYn = $scope.sideProdYn;
         params.sdattrClassCd = $scope.sdattrClassCd;
         params.sdselGrpCd = $("#sdselGrpCd").val();
+        params.sdattrClassNone = $("#chkSdattrClassNone").is(":checked") === true ? 'Y' : 'N';
+        params.sdSelGrpNone = $("#chkSdSelGrpNone").is(":checked") === true ? 'Y' : 'N';
 
         $scope._inquiryMain("/base/prod/sideMenu/menuProd/getSideMenuManageProdList.sb", params, function() {
 

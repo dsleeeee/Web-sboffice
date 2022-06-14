@@ -76,8 +76,12 @@
                         </wj-combo-box>
                     </div>
                 </td>
-                <td></td>
-                <td></td>
+                <td colspan="2">
+                    <div style="float: left;"><input type="checkbox" id="chkSdattrClassNone"/></div>
+                    <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="sideMenu.manage.attrNo"/></label></div>
+                    <div style="float: left;"><input type="checkbox" id="chkSdSelGrpNone"/></div>
+                    <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="sideMenu.manage.selectMenuNo" /></label></div>
+                </td>
             </tr>
             <tr id="trAttrSelectMenu">
                 <%-- 속성 --%>
@@ -255,6 +259,13 @@
         <%--//페이지 리스트--%>
 </div>
 
+<style type="text/css">
+    input[type=checkbox]  {
+        width: 17px;
+        height: 17px;
+    }
+</style>
+
 <script>
     var orgnFg = "${orgnFg}";
     var hqOfficeCd = "${hqOfficeCd}";
@@ -281,4 +292,4 @@
     }
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuManage.js?ver=20220124.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuManage.js?ver=20220614.01" charset="utf-8"></script>
