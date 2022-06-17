@@ -29,7 +29,7 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="saleComPopup.prodClassNm"/>" 	binding="pathNm" 		width="300" align="center" is-read-only="true" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.prodClassNm"/>" 	binding="pathNm" 		width="300" align="left" is-read-only="true" ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.prodCd"/>" 		binding="prodCd"		width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.prodNm"/>" 		binding="prodNm"		width="150" align="center" is-read-only="true" ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.totSaleQty"/>" 	binding="totSaleQty" 	width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -47,4 +47,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/com/prod.js?ver=20200121.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/com/prod.js?ver=20200121.02" charset="utf-8"></script>
