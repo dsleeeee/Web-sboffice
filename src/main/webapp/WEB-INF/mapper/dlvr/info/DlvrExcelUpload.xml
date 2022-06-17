@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    DlvrExcelUpload.xml
+    배달지엑셀업로드
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.06.15     최초작성
+-->
+<mapper namespace="kr.co.solbipos.dlvr.info.dlvrExcelUpload.service.impl.DlvrExcelUploadMapper">
+
+    <!-- 배달지엑셀업로드 임시테이블 전체 삭제 -->
+    <!--
+        TABLE    : TB_TMP_DELIVERY_TEL_NO
+        PARAM    : dlvrEmpVO
+        COMMENTS : 배달지엑셀업로드 임시테이블 전체 삭제한다.
+    -->
+    <delete id="getDlvrExcelUploadDeleteAll" parameterType="dlvrExcelUploadVO">
+        /* USE : DlvrExcelUploadMapper.getDlvrExcelUploadDeleteAll */
+        DELETE
+        FROM
+        TB_TMP_DELIVERY_TEL_NO
+        WHERE
+            SESSION_ID = #{sessionId}
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND STORE_CD = #{storeCd}
+    </delete>
+
+    <!-- 업로드시 임시테이블 저장 -->
+    <!--
+        TABLE    : TB_TMP_DELIVERY_TEL_NO
+        COMMENTS : [임시]배달지엑셀업로드
+    -->
+    <insert id="getDlvrExcelUploadCheckSave" parameterType="dlvrExcelUploadVO">
+        /* DlvrExcelUploadMapper.getDlvrExcelUploadCheckSave */
+        INSERT INTO TB_TMP_DELIVERY_TEL_NO
+        (
+            SESSION_ID,
+            SEQ,
+            HQ_OFFICE_CD,
+            STORE_CD,
+            RESULT,
+            CID_CALL_DT,
+            CID_LINE_NO,
+            CID_TEL_NO,
+            DLVR_ADDR,
+            DLVR_ADDR_DTL,
+            ORDER_NO,
+            DLVR_FG,
+            DLVR_MEMO,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{sessionId},
+            #{seq},
+            #{hqOfficeCd},
+            #{storeCd},
+            #{result},
+            #{cidCallDt},
+            #{cidLineNo},
+            #{cidTelNo},
+            #{dlvrAddr},
+            #{dlvrAddrDtl},
+            #{orderNo},
+            #{dlvrFg},
+            #{dlvrMemo},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+         )
+    </insert>
+
+    <!-- 임시테이블 조회 -->
+    <!--
+        TABLE    : TB_TMP_DELIVERY_TEL_NO
+        COMMENTS : [임시]배달지엑셀업로드
+    -->
+    <select id="getDlvrExcelUploadCheckList"  parameterType="dlvrExcelUploadVO" resultType="DefaultMap">
+        /* DlvrExcelUploadMapper.getDlvrExcelUploadCheckList */
+        SELECT  SESSION_ID,
+                SEQ,
+                HQ_OFFICE_CD,
+                STORE_CD,
+                RESULT,
+                CID_CALL_DT,
+                CID_LINE_NO,
+                CID_TEL_NO,
+                DLVR_ADDR,
+                DLVR_ADDR_DTL,
+                ORDER_NO,
+                DLVR_FG,
+                DLVR_MEMO
+        FROM    TB_TMP_DELIVERY_TEL_NO
+        WHERE   SESSION_ID = #{sessionId}
+        AND     HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     STORE_CD = #{storeCd}
+    </select>
+
+    <!-- 배달지엑셀업로드 임시테이블 삭제 -->
+    <!--
+        TABLE    : TB_TMP_DELIVERY_TEL_NO
+        PARAM    : dlvrEmpVO
+        COMMENTS : 배달지엑셀업로드 임시테이블 삭제한다.
+    -->
+    <delete id="getDlvrExcelUploadCheckDelete" parameterType="dlvrExcelUploadVO">
+        /* USE : DlvrExcelUploadMapper.getDlvrExcelUploadCheckDelete */
+        DELETE
+        FROM
+            TB_TMP_DELIVERY_TEL_NO
+        WHERE
+            SESSION_ID = #{sessionId}
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND STORE_CD = #{storeCd}
+        <if test='seq != null and seq != 0'>
+        AND SEQ = #{seq}
+        </if>
+        <if test='deleteFg != null and deleteFg != ""'>
+            AND RESULT = #{deleteFg}
+        </if>
+    </delete>
+
+    <!-- 배달지엑셀업로드 임시테이블 삭제 -->
+    <!--
+        TABLE    : TB_PS_DELIVERY_TEL_NO
+        PARAM    : dlvrEmpVO
+        COMMENTS : 배달지엑셀업로드 임시테이블 삭제한다.
+    -->
+    <select id="getCidCallSeq" parameterType="dlvrExcelUploadVO" resultType="String">
+        /* USE : DlvrExcelUploadMapper.getCidCallSeq */
+        SELECT  NVL(MAX(CID_CALL_SEQ) + 1, '1')
+        FROM    TB_PS_DELIVERY_TEL_NO
+        WHERE   STORE_CD = #{storeCd}
+        AND     SALE_DATE = #{saleDate}
+    </select>
+
+    <!-- 저장 -->
+    <!--
+        TABLE    : TB_PS_DELIVERY_TEL_NO
+        COMMENTS : [배달] CID 전화목록
+    -->
+    <insert id="getDeliveryTelNoSave" parameterType="dlvrExcelUploadVO">
+        /* DlvrExcelUploadMapper.getDeliveryTelNoSave */
+        INSERT INTO TB_PS_DELIVERY_TEL_NO
+        (
+            STORE_CD,
+            SALE_DATE,
+            CID_CALL_SEQ,
+            CID_CALL_DT,
+            CID_LINE_NO,
+            CID_TEL_NO,
+            DLVR_ADDR,
+            DLVR_ADDR_DTL,
+            ORDER_NO,
+            DLVR_FG,
+            DLVR_MEMO,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+             #{storeCd},
+             #{saleDate},
+             #{cidCallSeq},
+             #{saleDate} || '000000', -- cidCallDt
+             '1',   -- cidLineNo
+             #{cidTelNo},
+             #{dlvrAddr},
+             #{dlvrAddrDtl},
+             '0001', -- orderNo
+             '1', -- dlvrFg
+             #{dlvrMemo},
+             #{regDt},
+             #{regId},
+             #{modDt},
+             #{modId}
+         )
+    </insert>
+</mapper>

@@ -56,6 +56,7 @@ app.controller('saleComProdCtrl', ['$scope', '$http', '$timeout', function ($sco
       params.endDate		= data.endDate;
       params.saleMonth 	= data.saleMonth;
       params.empNo 		= data.empNo;
+      params.orderEmpNo = data.orderEmpNo;
       params.yoil 		= data.yoil;
       params.posNo 		= data.posNo;
       params.billNo 		= data.billNo;

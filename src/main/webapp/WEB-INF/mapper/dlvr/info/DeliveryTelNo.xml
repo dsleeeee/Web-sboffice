@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    DeliveryTelNo.xml
+    배달지정보관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.06.16     최초작성
+-->
+<mapper namespace="kr.co.solbipos.dlvr.info.deliveryTelNo.service.impl.DeliveryTelNoMapper">
+
+    <!-- 배달지정보관리 조회 -->
+    <!--
+        TABLE    : TB_PS_DELIVERY_TEL_NO
+        COMMENTS :
+    -->
+    <select id="getDeliveryTelNoList"  parameterType="deliveryTelNoVO" resultType="DefaultMap">
+        /* DeliveryTelNoMapper.getDeliveryTelNoList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+                CID_CALL_SEQ,
+                CID_CALL_DT,
+                CID_LINE_NO,
+                CID_TEL_NO,
+                DLVR_ADDR,
+                DLVR_ADDR_DTL,
+                ORDER_NO,
+                DLVR_FG,
+                DLVR_MEMO
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    TB_PS_DELIVERY_TEL_NO
+        WHERE   STORE_CD = #{storeCd}
+        <if test='startDate != null and startDate != ""'>
+            AND SALE_DATE <![CDATA[>= ]]> #{startDate}
+        </if>
+        <if test='endDate != null and endDate != ""'>
+            AND SALE_DATE <![CDATA[<= ]]> #{endDate}
+        </if>
+        <if test='cidTelNo != null and cidTelNo != ""'>
+            AND CID_TEL_NO LIKE '%' || #{cidTelNo} || '%'
+        </if>
+        <if test='dlvrAddr != null and dlvrAddr != ""'>
+            AND (DLVR_ADDR LIKE '%' || #{dlvrAddr} || '%' OR DLVR_ADDR_DTL LIKE '%' || #{dlvrAddr} || '%' )
+        </if>
+        <if test='dlvrMemo != null and dlvrMemo != ""'>
+            AND DLVR_MEMO LIKE '%' || #{dlvrMemo} || '%'
+        </if>
+        ORDER BY SALE_DATE, CID_CALL_SEQ
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 배달지정보관리 수정 -->
+    <!--
+        TABLE    : TB_PS_DELIVERY_TEL_NO
+        PARAM    : deliveryTelNoVO
+        COMMENTS : 배달지정보관리 수정.
+    -->
+    <update id="updateDeliveryTelNo" parameterType="deliveryTelNoVO">
+        /* USE : DeliveryTelNoMapper.updateDeliveryTelNo */
+        UPDATE  TB_PS_DELIVERY_TEL_NO
+        SET     CID_TEL_NO = #{cidTelNo},
+                DLVR_ADDR = #{dlvrAddr},
+                DLVR_ADDR_DTL = #{dlvrAddrDtl},
+                DLVR_MEMO = #{dlvrMemo}
+        WHERE   STORE_CD = #{storeCd}
+        AND     SALE_DATE = REPLACE(#{saleDate}, '-', '')
+        AND     CID_CALL_SEQ = #{cidCallSeq}
+    </update>
+
+    <!-- 배달지정보관리 삭제 -->
+    <!--
+        TABLE    : TB_PS_DELIVERY_TEL_NO
+        PARAM    : deliveryTelNoVO
+        COMMENTS : 배달지정보관리 삭제.
+    -->
+    <delete id="deleteDeliveryTelNo" parameterType="deliveryTelNoVO">
+        /* USE : DeliveryTelNoMapper.deleteDeliveryTelNo */
+        DELETE FROM TB_PS_DELIVERY_TEL_NO
+        WHERE   STORE_CD = #{storeCd}
+        AND     SALE_DATE = REPLACE(#{saleDate}, '-', '')
+        AND     CID_CALL_SEQ = #{cidCallSeq}
+    </delete>
+
+    <!-- 배달지정보관리 전체삭제 -->
+    <!--
+        TABLE    : TB_PS_DELIVERY_TEL_NO
+        PARAM    : deliveryTelNoVO
+        COMMENTS : 배달지정보관리 전체삭제.
+    -->
+    <delete id="deleteAllDeliveryTelNo" parameterType="deliveryTelNoVO">
+        /* USE : DeliveryTelNoMapper.deleteAllDeliveryTelNo */
+        DELETE FROM TB_PS_DELIVERY_TEL_NO
+        WHERE   STORE_CD = #{storeCd}
+    </delete>
+</mapper>

@@ -25,4 +25,13 @@ public interface WeightService {
     /** 중량별 리스트 조회 */
     List<DefaultMap<String>> getWeightList(WeightVO weightVO, SessionInfoVO sessionInfoVO);
 
+    /** 일자별 리스트 조회 */
+    List<DefaultMap<String>> getWeightDayList(WeightVO weightVO, SessionInfoVO sessionInfoVO);
+
+    /** 상품별 리스트 조회 */
+    List<DefaultMap<String>> getWeightProdList(WeightVO weightVO, SessionInfoVO sessionInfoVO);
+
+    /** 상품별 엑셀 리스트 조회 */
+    List<DefaultMap<String>> getWeightProdExcelList(WeightVO weightVO, SessionInfoVO sessionInfoVO);
+
 }

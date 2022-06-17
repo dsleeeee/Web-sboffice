@@ -5,11 +5,11 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="empDayPeriodView" class="subCon" style="display: none;" ng-controller="empDayPeriodCtrl">
+<div id="orderEmpPeriodView" class="subCon" style="display: none;" ng-controller="orderEmpPeriodCtrl">
     <div class="searchBar flddUnfld">
-      <a href="#" class="open fl"><s:message code="empsale.dayPeriod"/></a>
+      <a href="#" class="open fl"><s:message code="orderEmp.orderEmpPeriod"/></a>
       <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnEmpDayPeriodSearch" ng-click="_broadcast('empDayPeriodMainCtrlSrch')">
+      <button class="btn_blue fr mt5 mr10" id="btnOrderEmpPeriodSearch" ng-click="_broadcast('orderEmpPeriodMainCtrlSrch')">
         <s:message code="cmm.search"/>
       </button>
     </div>
@@ -25,9 +25,9 @@
 	    	<th><s:message code="cmm.search.date" /></th>
         	<td colspan="3">
           	<div class="sb-select">
-       		    <span class="txtIn"><input id="srchEmpDayPeriodStartDate" class="w110px"></span>
+       		    <span class="txtIn"><input id="srchOrderEmpPeriodStartDate" class="w110px"></span>
                 <span class="rg">~</span>
-                <span class="txtIn"><input id="srchEmpDayPeriodEndDate" class="w110px"></span>
+                <span class="txtIn"><input id="srchOrderEmpPeriodEndDate" class="w110px"></span>
             	<span class="chk ml10" style="display: none;">
 					<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
 	              	<label for="chkDt">
@@ -49,13 +49,13 @@
                             closeFunc - 팝업 닫기시 호출할 함수
             --%>
             <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
-                <jsp:param name="targetId" value="empDayPeriodSelectStore"/>
+                <jsp:param name="targetId" value="orderEmpPeriodSelectStore"/>
             </jsp:include>
             <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
         </td>
       </c:if>
       <c:if test="${sessionInfo.orgnFg == 'STORE'}">
-            <input type="hidden" id="empDayPeriodSelectStoreCd" value="${sessionInfo.storeCd}"/>
+            <input type="hidden" id="orderEmpPeriodSelectStoreCd" value="${sessionInfo.storeCd}"/>
       </c:if>
       </tr>
       </tbody>
@@ -64,21 +64,10 @@
 
     <div id="gridRepresent" class="w50 fl" style="width:49%;">
      <%-- 판매자별 --%>
-     <div class="w100 mt20" ng-controller="empDayPeriodMainCtrl">
+     <div class="w100 mt20" ng-controller="orderEmpPeriodMainCtrl">
        <div class="oh sb-select mb10">
-         <span class="fl bk lh30"><s:message code='empsale.empsale'/></span>
+         <span class="fl bk lh30"><s:message code='orderEmp.orderEmp'/></span>
 
-         <%-- 페이지 스케일  --%>
-<!--         <wj-combo-box -->
-<!--                 class="w100px fl" -->
-<!--                 id="empDayPeriodDtlListScaleBox" -->
-<!--                 ng-model="empDayPeriodDtlListScale" -->
-<!--                 items-source="_getComboData('empDayPeriodDtlListScaleBox')" -->
-<!--                 display-member-path="name" -->
-<!--                 selected-value-path="value" -->
-<!--                 is-editable="false" -->
-<!--                 initialized="initComboBox(s)"> -->
-<!--         </wj-combo-box> -->
          <%-- 엑셀다운로드 --%>
          <button class="btn_skyblue fr" ng-click="excelDownloadDayPeriod()"><s:message code="cmm.excel.down" />
          </button>
@@ -87,7 +76,7 @@
     <div class="w100 mt10" id="wjWrapType1">
       <div class="wj-gridWrap col2-t2">
         <wj-flex-grid
-          id="empDayPeriodGrid"
+          id="orderEmpPeriodGrid"
           loaded-rows="loadedRows(s,e)"
           autoGenerateColumns="false"
           selection-mode="Row"
@@ -98,14 +87,14 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>"              binding="storeNm"           width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="empsale.emp"/>"              binding="empNm"             width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="empday.billCnt"/>"           binding="billCnt"           width="150" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="empday.realSaleAmt"/>"       binding="realSaleAmt"       width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>"             binding="storeNm"           width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.orderEmp2"/>"      binding="empNm"             width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.billCnt"/>"        binding="billCnt"           width="150" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.realSaleAmt"/>"    binding="realSaleAmt"       width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         </wj-flex-grid>
         <%-- ColumnPicker 사용시 include --%>
         <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-          <jsp:param name="pickerTarget" value="empDayPeriodMainCtrl"/>
+          <jsp:param name="pickerTarget" value="orderEmpPeriodMainCtrl"/>
         </jsp:include>
         <%--// ColumnPicker 사용시 include --%>
       </div>
@@ -115,14 +104,14 @@
       <%--페이지 리스트--%>
       <div class="pageNum3 mt20">
       	<%-- id --%>
-      	<ul id="empDayPeriodMainCtrlPager" data-size="10"></ul>
+      	<ul id="orderEmpPeriodMainCtrlPager" data-size="10"></ul>
       </div>
       <%--//페이지 리스트--%>
       <%-- 엑셀 리스트 --%>
-      <div class="w100 mt10" id="wjWrapType3" style="display:none;" ng-controller="empDayPeriodExcelCtrl">
+      <div class="w100 mt10" id="wjWrapType3" style="display:none;" ng-controller="orderEmpPeriodExcelCtrl">
         <div class="wj-gridWrap">
           <wj-flex-grid
-          id="empDayPeriodExcelGrid"
+          id="orderEmpPeriodExcelGrid"
           loaded-rows="loadedRows(s,e)"
           autoGenerateColumns="false"
           selection-mode="Row"
@@ -133,10 +122,10 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>"              binding="storeNm"           width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="empsale.emp"/>"              binding="empNm"             width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="empday.billCnt"/>"           binding="billCnt"           width="150" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="empday.realSaleAmt"/>"       binding="realSaleAmt"       width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>"             binding="storeNm"           width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.orderEmp2"/>"      binding="empNm"             width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.billCnt"/>"        binding="billCnt"           width="150" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.realSaleAmt"/>"    binding="realSaleAmt"       width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         </wj-flex-grid>
         </div>
   	 </div>
@@ -147,21 +136,10 @@
 
     <div id="gridDetail" class="w50 fr" style="width:49%;">
      <%-- 코너별 --%>
-     <div class="w100 mt20" ng-controller="empDayPeriodDtlCtrl">
+     <div class="w100 mt20" ng-controller="orderEmpPeriodDtlCtrl">
        <div class="oh sb-select mb10">
-         <span class="fl bk lh30"><s:message code='corner.SaleDtl'/></span>
+         <span class="fl bk lh30"><s:message code='orderEmp.saleDtl'/></span>
 
-         <%-- 페이지 스케일  --%>
-<!--         <wj-combo-box -->
-<!--                 class="w100px fl" -->
-<!--                 id="empDayPeriodDtlListScaleBox" -->
-<!--                 ng-model="empDayPeriodDtlListScale" -->
-<!--                 items-source="_getComboData('empDayPeriodDtlListScaleBox')" -->
-<!--                 display-member-path="name" -->
-<!--                 selected-value-path="value" -->
-<!--                 is-editable="false" -->
-<!--                 initialized="initComboBox(s)"> -->
-<!--         </wj-combo-box> -->
          <%-- 코너별 매출 상세 엑셀다운로드 --%>
          <button class="btn_skyblue fr" ng-click="excelDownloadDayPeriodDtl()"><s:message code="cmm.excel.down" />
          </button>
@@ -170,7 +148,7 @@
     <div class="w100 mt10" id="wjWrapType1">
       <div class="wj-gridWrap col2-t2">
         <wj-flex-grid
-          id="empDayPeriodDtlGrid"
+          id="orderEmpPeriodDtlGrid"
           autoGenerateColumns="false"
           selection-mode="Row"
           items-source="data"
@@ -180,19 +158,19 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="empday.saleDate"/>"          binding="saleDate"         width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="saleComPopup.posNo"/>"       binding="posNo"            width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="saleComPopup.billNo"/>"      binding="billNo"           width="100" align="center" is-read-only="true" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="saleComPopup.saleFg"/>"      binding="saleYn"           width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="saleComPopup.tblCd"/>"       binding="tblCd"            width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="saleComPopup.billDt"/>"      binding="billDt"           width="130" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="saleComPopup.totSaleAmt"/>"  binding="totSaleAmt"       width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="billInfo.dcAmt"/>"           binding="totDcAmt"         width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="empday.realSaleAmt"/>"       binding="realSaleAmt"      width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.saleDate"/>"    binding="saleDate"         width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.posNo"/>"       binding="posNo"            width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.billNo"/>"      binding="billNo"           width="100" align="center" is-read-only="true" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.saleFg"/>"      binding="saleYn"           width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.tblCd"/>"       binding="tblCd"            width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.billDt"/>"      binding="billDt"           width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.totSaleAmt"/>"  binding="totSaleAmt"       width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.dcAmt"/>"       binding="totDcAmt"         width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.realSaleAmt"/>" binding="realSaleAmt"      width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         </wj-flex-grid>
         <%-- ColumnPicker 사용시 include --%>
         <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-          <jsp:param name="pickerTarget" value="empDayPeriodDtlCtrl"/>
+          <jsp:param name="pickerTarget" value="orderEmpPeriodDtlCtrl"/>
         </jsp:include>
         <%--// ColumnPicker 사용시 include --%>
       </div>
@@ -202,14 +180,14 @@
       <%-- 페이지 리스트 --%>
       <div class="pageNum3 mt20">
       	<%-- id --%>
-      	<ul id="empDayPeriodDtlCtrlPager" data-size="10"></ul>
+      	<ul id="orderEmpPeriodDtlCtrlPager" data-size="10"></ul>
       </div>
       <%--//페이지 리스트--%>
   	  <%-- 엑셀 리스트 --%>
-      <div class="w100 mt10" id="wjWrapType3" style="display:none;" ng-controller="empDayPeriodDtlExcelCtrl">
+      <div class="w100 mt10" id="wjWrapType3" style="display:none;" ng-controller="orderEmpPeriodDtlExcelCtrl">
         <div class="wj-gridWrap">
         <wj-flex-grid
-          id="empDayPeriodDtlExcelGrid"
+          id="orderEmpPeriodDtlExcelGrid"
           autoGenerateColumns="false"
           selection-mode="Row"
           items-source="data"
@@ -223,6 +201,7 @@
           <wj-flex-grid-column header="<s:message code="saleComPopup.posNo"/>"       binding="posNo"            width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="saleComPopup.billNo"/>"      binding="billNo"           width="100" align="center" is-read-only="true" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="saleComPopup.saleFg"/>"      binding="saleYn"           width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="orderEmp.tblCd"/>"         binding="tblCd"            width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="saleComPopup.totSaleAmt"/>"  binding="totSaleAmt"       width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="billInfo.dcAmt"/>"           binding="totDcAmt"         width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="empday.realSaleAmt"/>"       binding="realSaleAmt"      width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -236,5 +215,5 @@
 
 <script type="text/javascript">
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/emp/dayPeriod/empDayPeriod.js?ver=20190125.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderEmp/orderEmpPeriod.js?ver=20220610.01" charset="utf-8"></script>
 

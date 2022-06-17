@@ -55,4 +55,58 @@ public class WeightServiceImpl implements WeightService {
         return weightMapper.getWeightList(weightVO);
     }
 
+    /** 일자별 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getWeightDayList(WeightVO weightVO, SessionInfoVO sessionInfoVO) {
+
+        weightVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        weightVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        weightVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
+            weightVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            weightVO.setArrStoreCd(weightVO.getStoreCd().split(","));
+        }
+        return weightMapper.getWeightDayList(weightVO);
+    }
+
+    /** 상품별 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getWeightProdList(WeightVO weightVO, SessionInfoVO sessionInfoVO) {
+
+        weightVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        weightVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        weightVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
+            weightVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            weightVO.setArrStoreCd(weightVO.getStoreCd().split(","));
+        }
+        return weightMapper.getWeightProdList(weightVO);
+    }
+
+    /** 상품별 엑셀 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getWeightProdExcelList(WeightVO weightVO, SessionInfoVO sessionInfoVO) {
+
+        weightVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        weightVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        weightVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
+            weightVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            weightVO.setArrStoreCd(weightVO.getStoreCd().split(","));
+        }
+        return weightMapper.getWeightProdExcelList(weightVO);
+    }
+
 }

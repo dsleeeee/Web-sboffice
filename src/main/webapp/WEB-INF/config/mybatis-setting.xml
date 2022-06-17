@@ -737,6 +737,8 @@
     <typeAlias alias="offAddVO" type="kr.co.solbipos.sale.status.offAdd.service.OffAddVO"/>
     <!-- 매출관리 > 매출현황2 > 보증금현황 -->
     <typeAlias alias="nonSaleVO" type="kr.co.solbipos.sale.status.nonSale.service.NonSaleVO"/>
+    <!-- 매출관리 > 매출현황2 > 주문자현황 -->
+    <typeAlias alias="orderEmpVO" type="kr.co.solbipos.sale.status.orderEmp.service.OrderEmpVO"/>
 
     <!-- 매출관리 > 매출분석 > 매장별배출분석 -->
     <typeAlias alias="storeRankVO" 	type="kr.co.solbipos.sale.anals.store.rank.service.StoreRankVO"/>
@@ -829,6 +831,11 @@
 
     <!-- 배달관리 > 배달현황 > 배달지별 내역 -->
     <typeAlias alias="dlvrReceiptVO" type="kr.co.solbipos.dlvr.anals.dlvrReceipt.service.DlvrReceiptVO"/>
+
+    <!-- 배달관리 > CID 배달정보 > 배달지엑셀업로드 -->
+    <typeAlias alias="dlvrExcelUploadVO" type="kr.co.solbipos.dlvr.info.dlvrExcelUpload.service.DlvrExcelUploadVO"/>
+    <!-- 배달관리 > CID 배달정보 > 배달지정보관리 -->
+    <typeAlias alias="deliveryTelNoVO" type="kr.co.solbipos.dlvr.info.deliveryTelNo.service.DeliveryTelNoVO"/>
 
     <!-- KDS -->
     <typeAlias alias="kdsVO" type="kr.co.solbipos.kds.anals.chart.service.KdsVO"/>

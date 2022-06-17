@@ -62,7 +62,7 @@ public class WeightController {
      */
     @RequestMapping(value = "/weight/view.sb", method = RequestMethod.GET)
     public String WeightView(HttpServletRequest request, HttpServletResponse response, Model model) {
-        return "sale/status/weight/weight";
+        return "sale/status/weight/weightTab";
     }
 
     /**
@@ -83,6 +83,69 @@ public class WeightController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<String>> list = weightService.getWeightList(weightVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list,  weightVO);
+    }
+
+    /**
+     * 일자별 - 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   weightVO
+     * @return  String
+     * @author  권지현
+     * @since   2021.11.08
+     */
+    @RequestMapping(value = "/weightDay/getWeightDayList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getWeightDayList(HttpServletRequest request, HttpServletResponse response,
+                                Model model, WeightVO weightVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = weightService.getWeightDayList(weightVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list,  weightVO);
+    }
+
+    /**
+     * 상품별 - 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   weightVO
+     * @return  String
+     * @author  권지현
+     * @since   2022.06.09
+     */
+    @RequestMapping(value = "/weightProd/getWeightProdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getWeightProdList(HttpServletRequest request, HttpServletResponse response,
+                                Model model, WeightVO weightVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = weightService.getWeightProdList(weightVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list,  weightVO);
+    }
+
+    /**
+     * 상품별 - 엑셀리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   weightVO
+     * @return  String
+     * @author  권지현
+     * @since   2022.06.09
+     */
+    @RequestMapping(value = "/weightProd/getWeightProdExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getWeightProdExcelList(HttpServletRequest request, HttpServletResponse response,
+                                Model model, WeightVO weightVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = weightService.getWeightProdExcelList(weightVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list,  weightVO);
     }
 }
