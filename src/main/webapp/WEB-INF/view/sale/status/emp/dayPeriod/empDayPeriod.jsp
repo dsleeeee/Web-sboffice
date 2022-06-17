@@ -184,6 +184,8 @@
           <wj-flex-grid-column header="<s:message code="saleComPopup.posNo"/>"       binding="posNo"            width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="saleComPopup.billNo"/>"      binding="billNo"           width="100" align="center" is-read-only="true" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="saleComPopup.saleFg"/>"      binding="saleYn"           width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="saleComPopup.tblCd"/>"       binding="tblCd"            width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="saleComPopup.billDt"/>"      binding="billDt"           width="130" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="saleComPopup.totSaleAmt"/>"  binding="totSaleAmt"       width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="billInfo.dcAmt"/>"           binding="totDcAmt"         width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="empday.realSaleAmt"/>"       binding="realSaleAmt"      width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
