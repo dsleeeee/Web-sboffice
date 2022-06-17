@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
@@ -590,8 +591,9 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
 
             // 거래처
             if (prodExcelUploadVO.getVendrCd() != null && !"".equals(prodExcelUploadVO.getVendrCd()) && !"선택".equals(prodExcelUploadVO.getVendrCd())) {
-                String vendrList = simpleProdMapper.vendrComboList(simpleProdVO).toString();
-                if(!vendrList.contains(prodExcelUploadVO.getVendrCd())){
+                List<DefaultMap<String>> vendrList = simpleProdMapper.vendrComboList(simpleProdVO);
+                Optional vendrResult = vendrList.stream().filter(x -> x.get("value").equals(prodExcelUploadVO.getVendrCd())).findFirst();
+                if(!vendrResult.isPresent()){
                     prodExcelUploadVO.setResult("존재하지 않는 거래처입니다.");
                 } else {
                     String vendrCd = prodExcelUploadMapper.getVendrCdCheck(prodExcelUploadVO);
