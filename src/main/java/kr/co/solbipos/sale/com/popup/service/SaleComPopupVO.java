@@ -24,6 +24,8 @@ public class SaleComPopupVO extends PageVO {
     private String chkPop;
     /** 사원번호 */
     private String empNo;
+    /** 주문자사원번호 */
+    private String orderEmpNo;
     /** 요일 */
     private String yoil;
     /** 포스번호 */
@@ -176,6 +178,14 @@ public class SaleComPopupVO extends PageVO {
 
 	public void setEmpNo(String empNo) {
 		this.empNo = empNo;
+	}
+
+	public String getOrderEmpNo() {
+		return orderEmpNo;
+	}
+
+	public void setOrderEmpNo(String orderEmpNo) {
+		this.orderEmpNo = orderEmpNo;
 	}
 
 	public String getYoil() {
