@@ -8,14 +8,14 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
 
-<div class="subCon" ng-controller="weightCtrl" id="weightView" style="display: none;">
+<div class="subCon" ng-controller="weightDayCtrl" id="weightDayView" style="display: none;">
 
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">
-        <a href="#" class="open fl"> <s:message code="weight.weightSale" /></a>
+        <a href="#" class="open fl"> <s:message code="weight.weightDay" /></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_broadcast('weightCtrl',1)" id="nxBtnSearch">
+            <button class="btn_blue fr" ng-click="_broadcast('weightDayCtrl',1)" id="nxBtnSearch">
                 <s:message code="cmm.search" />
             </button>
         </div>
@@ -35,9 +35,9 @@
                 </th>
                 <td>
                     <div class="sb-select">
-                        <span class="txtIn"> <input id="startDate" name="startDate" class="w110px" /></span>
+                        <span class="txtIn"> <input id="startDayDate" name="startDate" class="w110px" /></span>
                         <span class="rg">~</span>
-                        <span class="txtIn"> <input id="endDate" name="endDate" class="w110px" /></span>
+                        <span class="txtIn"> <input id="endDayDate" name="endDate" class="w110px" /></span>
                     </div>
                 </td>
                 <c:if test="${orgnFg == 'HQ'}">
@@ -46,7 +46,7 @@
                     <td>
                         <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
                         <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
-                            <jsp:param name="targetId" value="weightStore"/>
+                            <jsp:param name="targetId" value="weightDayStore"/>
                         </jsp:include>
                         <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
                     </td>
@@ -92,8 +92,6 @@
                         <wj-flex-grid-column header="<s:message code="weight.storeNm"/>" binding="storeNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     </c:if>
                     <wj-flex-grid-column header="<s:message code="weight.saleDate"/>" binding="saleDate" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="weight.posNo"/>" binding="posNo" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="weight.billNo"/>" binding="billNo" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="weight.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="weight.prodNm"/>" binding="prodNm" width="80" is-read-only="true" align="left"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="weight.barCd"/>" binding="barcdCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -105,10 +103,14 @@
                     <wj-flex-grid-column header="<s:message code="weight.saleAmt"/>" binding="saleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="weight.saleDc"/>" binding="dcAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="weight.realSaleAmt"/>" binding="realSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+
+
                 </wj-flex-grid>
+
             </div>
         </div>
     </div>
+
 </div>
 
 <script type="text/javascript">
@@ -116,7 +118,7 @@
     var storeCd = "${storeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/weight/weight.js?ver=20211115.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/weight/weightDay.js?ver=20211115.02" charset="utf-8"></script>
 
 <%-- 매장 선택 --%>
 <c:import url="/WEB-INF/view/application/layer/store.jsp">
