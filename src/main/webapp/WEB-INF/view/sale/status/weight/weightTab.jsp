@@ -14,13 +14,13 @@
                 <a id="weightTab" href="#" class="on" ng-click="weightShow()"><s:message code="weight.weightSale"/></a>
             </li>
             <%-- 상품별 탭 --%>
-            <li>
-                <a id="weightProdTab" href="#" ng-click="weightProdShow()"><s:message code="weight.weightProd"/></a>
-            </li>
-            <%-- 일자별 탭 --%>
-            <li>
-                <a id="weightDayTab" href="#" ng-click="weightDayShow()"><s:message code="weight.weightDay"/></a>
-            </li>
+<%--            <li>--%>
+<%--                <a id="weightProdTab" href="#" ng-click="weightProdShow()"><s:message code="weight.weightProd"/></a>--%>
+<%--            </li>--%>
+<%--            &lt;%&ndash; 일자별 탭 &ndash;%&gt;--%>
+<%--            <li>--%>
+<%--                <a id="weightDayTab" href="#" ng-click="weightDayShow()"><s:message code="weight.weightDay"/></a>--%>
+<%--            </li>--%>
         </ul>
     </div>
 </div>
