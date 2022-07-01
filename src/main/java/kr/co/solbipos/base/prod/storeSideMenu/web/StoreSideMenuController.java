@@ -162,6 +162,13 @@ public class StoreSideMenuController {
         // 터치키 그룹 가져오기
         List<DefaultMap<String>> touchKeyGrpList = touchkeyService.getTouchKeyGrp(params, sessionInfoVO);
         model.addAttribute("touchKeyGrp", convertToJson(touchKeyGrpList));
+        
+        // 터치메뉴 폰트크기 환경설정값 조회
+        if ( "H".equals(sessionInfoVO.getOrgnFg().getCode()) ) {
+            model.addAttribute("fontSizeEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1236"), "15"));
+        } else {
+            model.addAttribute("fontSizeEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1236"), "15"));
+        }
 
         return "base/prod/storeSideMenu/storeSideMenu";
     }
