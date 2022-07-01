@@ -426,6 +426,7 @@ app.controller('todayDtlDetailCtrl', ['$scope', '$http', '$timeout', function ($
         params.posNo    = selectedRow.posNo;
         params.billNo   = selectedRow.billNo;
         params.saleYn   = selectedRow.saleYn;
+        params.webReg   = selectedRow.webReg;
 
         if (col.binding === "billNo") { // 영수증번호 클릭
           $scope._broadcast('billInfoCtrl', params);

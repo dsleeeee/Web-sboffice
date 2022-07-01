@@ -324,6 +324,10 @@
                 </foreach>
         ,       tsspc.PAY02 AS PAY02 -- 현금
         ,       tsspc.PAY021 AS PAY021 -- 현금영수증
+        ,       CASE
+                    WHEN tssh.REG_ID LIKE 'WEB_REG_%' THEN 'Y'
+                    ELSE 'N'
+                END AS WEB_REG
         <![CDATA[
         FROM    TB_SL_SALE_HDR tssh
         ,       (   SELECT  POS_NO, BILL_NO
