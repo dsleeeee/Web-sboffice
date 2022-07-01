@@ -28,11 +28,16 @@ public interface PostpaidService {
     /** 후불 회원 외상, 입금 내역 */
     List<DefaultMap<Object>> getPostpaidMemberList(PostpaidStoreVO postpaidStoreVO, SessionInfoVO sessionInfoVO);
 
+
+    /** 후불 회원 외상, 입금 내역 엑셀 */
+    List<DefaultMap<Object>> getPostpaidMemberListExcel(PostpaidStoreVO postpaidStoreVO, SessionInfoVO sessionInfoVO);
+
     /** 후불 대상 회원 조회 */
     List<DefaultMap<Object>> getDepositMemberList(PostpaidStoreVO postpaidStoreVO, SessionInfoVO sessionInfoVO);
 
     /** 외상 입금 */
     int saveDeposit(PostpaidStoreVO postpaidStoreVO, SessionInfoVO sessionInfoVO);
+    int saveDeposit(PostpaidStoreVO[] postpaidStoreVOs, SessionInfoVO sessionInfoVO);
 
     /** 세금계산서 요청목록 조회 */
     List<DefaultMap<Object>> getTaxBillList(TaxBillVO taxBillVO, SessionInfoVO sessionInfoVO);
