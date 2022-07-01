@@ -74,6 +74,23 @@ public class PostpaidServiceImpl implements PostpaidService {
         return mapper.getPostpaidMemberList(postpaidStoreVO);
     }
 
+    /** 후불 회원 외상, 입금 내역 엑셀 */
+    @Override
+    public List<DefaultMap<Object>> getPostpaidMemberListExcel(PostpaidStoreVO postpaidStoreVO, SessionInfoVO sessionInfoVO) {
+
+        String[] storeCds = postpaidStoreVO.getStoreCds().split(",");
+        postpaidStoreVO.setStoreCdList(storeCds);
+
+        postpaidStoreVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+        postpaidStoreVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        postpaidStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        postpaidStoreVO.setStoreCd(sessionInfoVO.getStoreCd());
+        postpaidStoreVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        postpaidStoreVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        return mapper.getPostpaidMemberListExcel(postpaidStoreVO);
+    }
+
     /** 후불 대상 회원 조회 */
     @Override
     public List<DefaultMap<Object>> getDepositMemberList(PostpaidStoreVO postpaidStoreVO, SessionInfoVO sessionInfoVO) {
@@ -129,6 +146,42 @@ public class PostpaidServiceImpl implements PostpaidService {
 
         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
+        return result;
+    }
+
+    @Override
+    public int saveDeposit(PostpaidStoreVO[] postpaidStoreVOs, SessionInfoVO sessionInfoVO) {
+        String dt = currentDateTimeString();
+        int result = 0;
+        for(PostpaidStoreVO postpaidStoreVO : postpaidStoreVOs){
+
+        postpaidStoreVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        postpaidStoreVO.setSaleDate(currentDateString());
+        postpaidStoreVO.setPostpaidDt(dt);
+        postpaidStoreVO.setPostpaidFg(PostpaidFg.DEPOSIT); // 입금
+        postpaidStoreVO.setPostpaidPayFg(PostpaidPayFg.CASH); // 현금
+        postpaidStoreVO.setNonsaleTypeApprNo("  ");// 비매출 승인번호
+
+        postpaidStoreVO.setRegId(sessionInfoVO.getUserId());
+        postpaidStoreVO.setRegDt(dt);
+        postpaidStoreVO.setModId(sessionInfoVO.getUserId());
+        postpaidStoreVO.setModDt(dt);
+
+        // 외상입금하려는 회원의 StoreCd를 가져온다.
+        if(postpaidStoreVO.getStoreCd() == null || postpaidStoreVO.getStoreCd() == ""){
+            postpaidStoreVO.setStoreCd(mapper.getDepositStoreCd(postpaidStoreVO));
+        }
+
+        result = mapper.saveDeposit(postpaidStoreVO);
+
+        // 외상입금 시 집계 테이블(TB_MB_MEMBER_PAID_BALANCE)에 금액반영
+        if(result > 0){
+            result = mapper.savePaidBalancePostPaid(postpaidStoreVO);
+        }
+
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        }
         return result;
     }
 

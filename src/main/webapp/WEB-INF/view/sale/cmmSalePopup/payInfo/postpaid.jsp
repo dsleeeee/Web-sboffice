@@ -44,4 +44,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/payInfo/postpaid.js?ver=20190211.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/payInfo/postpaid.js?ver=20190211.02" charset="utf-8"></script>

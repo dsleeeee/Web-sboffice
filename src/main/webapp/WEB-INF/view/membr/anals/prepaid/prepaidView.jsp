@@ -54,6 +54,27 @@
         <input type="text" class="sb-input w100" id="srchMembrNm" ng-model="membrNm" onkeyup="fnNxBtnSearch();"/>
       </td>
     </tr>
+    <tr>
+      <th><s:message code="prepaid.prepaidYn"/></th>
+      <td>
+        <div class="sb-select">
+          <wj-combo-box
+                  id="srchUseYn"
+                  ng-model="useYn"
+                  items-source="_getComboData('useYn')"
+                  display-member-path="name"
+                  selected-value-path="value"
+                  is-editable="false"
+                  initialized="_initComboBox(s)">
+          </wj-combo-box>
+        </div>
+      </td>
+      <th <c:if test="${orgnFg == 'HQ' and membrClassManageFg == '0'}">style="display: none;"</c:if>><s:message code="prepaid.prepaidAmt2"/></th>
+      <td <c:if test="${orgnFg == 'HQ' and membrClassManageFg == '0'}">style="display: none;"</c:if>>
+        <input type="text" class="sb-input w50" id="prepaidAmt" ng-model="prepaidAmt" numberOnly>
+        <a href="#" class="btn_grayS ml10" ng-click="batchChange()"><s:message code="prepaid.batchChange" /></a>
+      </td>
+    </tr>
     </tbody>
   </table>
 
@@ -94,8 +115,7 @@
                 sticky-headers="true"
                 selection-mode="Row"
                 items-source="data"
-                item-formatter="_itemFormatter"
-                is-read-only="true">
+                item-formatter="_itemFormatter">
 
           <!-- define columns -->
           <%--
@@ -115,14 +135,16 @@
           <wj-flex-grid-column header="<s:message code="prepaid.sendYn"/>" binding="sendYn" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prepaid.sendDt"/>" binding="sendDt" visible="false"></wj-flex-grid-column>
           --%>
+          <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prepaid.hqOfficeCd"/>" binding="hqOfficeCd" width="70" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prepaid.storeCd"/>" binding="storeCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prepaid.storeNm"/>" binding="storeNm" width="140" is-read-only="true" align="left"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prepaid.membrNo"/>" binding="membrNo" width="140" is-read-only="true" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prepaid.membrNm"/>" binding="membrNm" width="200" is-read-only="true" align="left"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prepaid.prepaidAmt"/>" binding="prepaidAmt" width="150" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prepaid.prepaidUseAmt"/>" binding="prepaidUseAmt" width="150" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prepaid.prepaidBalAmt"/>" binding="prepaidBalAmt" width="150" is-read-only="true" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prepaid.membrNo"/>" binding="membrNo" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prepaid.membrNm"/>" binding="membrNm" width="90" is-read-only="true" align="left"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prepaid.prepaidAmt"/>" binding="prepaidAmt" width="90" is-read-only="true" align="right"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prepaid.prepaidUseAmt"/>" binding="prepaidUseAmt" width="90" is-read-only="true" align="right"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prepaid.prepaidBalAmt"/>" binding="prepaidBalAmt" width="90" is-read-only="true" align="right"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prepaid.prepaidAmt2"/>" binding="prepaidAmt2" width="90" data-type="Number" align="right"></wj-flex-grid-column>
 
         </wj-flex-grid>
       </div>
@@ -175,12 +197,18 @@
 
   // 회원등급 관리구분[1237]
   var membrClassManageFg = ${membrClassManageFg};
-</script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/prepaid/prepaid.js?ver=20181226.02" charset="utf-8"></script>
 
-<%-- 선불금충전 팝업 --%>
-<c:import url="/WEB-INF/view/membr/anals/prepaid/charge.jsp">
-</c:import>
+  $(function(){
+    $("input:text[numberOnly]").on("keyup", function() {
+      $(this).val($(this).val().replace(/[^-|^0-9]/g,""));
+    });
+  });
+</script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/prepaid/prepaid.js?ver=20181226.03" charset="utf-8"></script>
+
+<%--&lt;%&ndash; 선불금충전 팝업 &ndash;%&gt;--%>
+<%--<c:import url="/WEB-INF/view/membr/anals/prepaid/charge.jsp">--%>
+<%--</c:import>--%>
 
 <%-- 매장 선택 --%>
 <c:import url="/WEB-INF/view/application/layer/store.jsp">

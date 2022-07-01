@@ -86,6 +86,14 @@
 							</th>
 							<td id="rTotEtcAmt"></td>
 							<th>
+								<div class="impWrap"><s:message code="posExcclc.totDepositCnt"/></div>
+							</th>
+							<td id="rTotDepositCnt"></td>
+							<th></th>
+							<td></td>
+						</tr>
+						<tr>
+							<th>
 								<div class="impWrap"><s:message code="posExcclc.cancelCnt"/></div>
 							</th>
 							<td id="rCancelCnt"></td>
@@ -93,6 +101,10 @@
 								<div class="impWrap"><s:message code="posExcclc.cancelAmt"/></div>
 							</th>
 							<td id="rCancelAmt"></td>
+							<th></th>
+							<td></td>
+							<th></th>
+							<td></td>
 						</tr>
 						</tbody>
 					</table>
@@ -557,6 +569,8 @@
 
 		    $("#rTotTipAmt").text(numComma(data.totTipAmt));
 		    $("#rTotEtcAmt").text(numComma(data.totEtcAmt));
+		    $("#rTotDepositCnt").text(numComma(data.totDepositCnt));
+
 		    $("#rCancelCnt").text(numComma(data.rtnBillCnt));
 		    $("#rCancelAmt").text(numComma(data.rtnBillAmt));
 

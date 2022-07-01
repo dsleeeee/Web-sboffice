@@ -13,6 +13,11 @@
  */
 var app = agrid.getApp();
 
+var useYnFgData = [
+  {"name":"전체","value":""},
+  {"name":"유","value":"Y"},
+  {"name":"무","value":"N"}
+];
 /**
  *  선불회원 그리드 생성
  */
@@ -28,6 +33,7 @@ app.controller('prepaidCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // comboBox 초기화
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
+  $scope._setComboData("useYn", useYnFgData);
   // $scope._setComboData("srchArrayCombo", arrayData);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -35,6 +41,32 @@ app.controller('prepaidCtrl', ['$scope', '$http', function ($scope, $http) {
     // 그리드 DataMap 설정
     $scope.prepaidInFgDataMap = new wijmo.grid.DataMap(prepaidInFgData, 'value', 'name');
     $scope.prepaidPayFgDataMap = new wijmo.grid.DataMap(prepaidPayFgData, 'value', 'name');
+
+    s.cellEditEnded.addHandler(function (s, e) {
+      if (e.panel === s.cells) {
+        var col = s.columns[e.col];
+        var item = s.rows[e.row].dataItem;
+        // 가격 변경시 체크박스 체크
+        if (col.binding === "prepaidAmt2") {
+          $scope.checked(item);
+        }
+      }
+      s.collectionView.commitEdit();
+    });
+  };
+
+  // 충전금액 수정 시 체크박스 체크
+  $scope.checked = function (item){
+    item.gChk = true;
+  };
+
+  $scope.batchChange = function (){
+    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+      if($scope.flex.collectionView.items[i].gChk) {
+        $scope.flex.collectionView.items[i].prepaidAmt2 = $scope.prepaidAmt;
+      }
+    }
+    $scope.flex.refresh();
   };
 
   $scope.$on("prepaidCtrl", function(event, data) {
@@ -60,10 +92,21 @@ app.controller('prepaidCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._inquiryMain(baseUrl + "prepaid/getPrepaidMemberList.sb", params, function() {}, false);
   };
 
-  // 선불금 충전 팝업
+  // 선불금 충전 팝업 > 저장버튼으로 수정
   $scope.charge = function(){
-    var popup = $scope.chargeLayer;
-    popup.show(true, function (s) {
+    // var popup = $scope.chargeLayer;
+    // popup.show(true, function (s) {
+    // });
+    var params = new Array();
+    for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
+      $scope.flex.collectionView.itemsEdited[u].status = "U";
+      $scope.flex.collectionView.itemsEdited[u].prepaidStoreCd = $scope.flex.collectionView.itemsEdited[u].storeCd;
+      $scope.flex.collectionView.itemsEdited[u].prepaidAmt = $scope.flex.collectionView.itemsEdited[u].prepaidAmt2;
+      params.push($scope.flex.collectionView.itemsEdited[u]);
+    }
+
+    $scope._save(baseUrl + "prepaid/saveChargeAmt.sb",params, function (){
+      $scope.searchPostpaid();
     });
   };
 

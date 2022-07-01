@@ -652,6 +652,8 @@
 
     <!-- 정산관리 -->
     <typeAlias alias="depositDdcVO" type="kr.co.solbipos.excclc.excclc.depositDdc.service.DepositDdcVO"/>
+    <!-- 정산관리 > 정산관리 > 매출수기등록 -->
+    <typeAlias alias="saleRegistVO" type="kr.co.solbipos.excclc.excclc.saleRegist.service.SaleRegistVO"/>
 
 	<!-- 공통팝업 -->
     <typeAlias alias="stockComPopupVO" type="kr.co.solbipos.stock.com.popup.service.StockComPopupVO"/>

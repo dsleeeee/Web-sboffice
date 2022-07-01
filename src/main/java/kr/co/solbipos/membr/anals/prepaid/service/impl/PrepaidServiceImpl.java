@@ -73,6 +73,7 @@ public class PrepaidServiceImpl implements PrepaidService {
         prepaidStoreVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         prepaidStoreVO.setEmpNo(sessionInfoVO.getEmpNo());
 
+        System.out.println("dhkdkdkk " + prepaidStoreVO.getUseYn());
         return mapper.getPrepaidMemberList(prepaidStoreVO);
     }
 
@@ -146,6 +147,39 @@ public class PrepaidServiceImpl implements PrepaidService {
 
         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
+        return result;
+
+    }
+    /** 선불충전 */
+    @Override
+    public int saveChargeAmt(PrepaidStoreVO[] prepaidStoreVOs, SessionInfoVO sessionInfoVO) {
+
+        String dt = currentDateTimeString();
+        int result = 0;
+        for(PrepaidStoreVO prepaidStoreVO : prepaidStoreVOs){
+
+            prepaidStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            prepaidStoreVO.setSaleDate(currentDateString());
+            prepaidStoreVO.setPrepaidDt(dt);
+            prepaidStoreVO.setPrepaidFg(PrepaidFg.CHARGE); // 충전
+            prepaidStoreVO.setPrepaidPayFg(PrepaidPayFg.CASH); // 현금
+            prepaidStoreVO.setNonsaleTypeApprNo(" ");// 비매출 영수증번호
+
+            prepaidStoreVO.setRegId(sessionInfoVO.getUserId());
+            prepaidStoreVO.setRegDt(dt);
+            prepaidStoreVO.setModId(sessionInfoVO.getUserId());
+            prepaidStoreVO.setModDt(dt);
+
+            result = mapper.saveChargeAmt(prepaidStoreVO);
+
+            //선불입금 시 집계 테이블(TB_MB_MEMBER_PAID_BALANCE)에 금액반영
+            if(result > 0){
+                result = mapper.savePaidBalancePrePaid(prepaidStoreVO);
+            }
+
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        }
         return result;
 
     }

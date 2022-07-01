@@ -90,7 +90,7 @@
 <script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.js" charset="utf-8"></script>
 <!--script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js"></script-->
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TableLayoutNew.js?ver=20210219.002" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/graph/js/TableLayoutNew.js?ver=20210219.003" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/graph/js/TableAttrNew.js?ver=20210516.001" charset="utf-8"></script>
 
 <%--서브컨텐츠--%>

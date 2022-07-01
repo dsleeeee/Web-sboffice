@@ -313,6 +313,7 @@ Floor.prototype.init = function() {
             // 그룹명 오류 처리
             for (var i = 0; i < view.items.length; i++) {
                 var item = view.items[i];
+                item.name.replaceAll("&", "＆");
                 var itemName = nvl(item.name, ' ');
 
                 if(itemName.trim() == '')
@@ -1719,7 +1720,7 @@ FormatLayout.prototype.open = function(isLoad) {
                 var xmlStr = jsonStr.data;
                 if (xmlStr != null) {
                     try {
-                        var xml = mxUtils.parseXml(xmlStr);
+                        var xml = mxUtils.parseXml(xmlStr.replace("&","﹠"));
                         this.setGraphXml(graph, xml.documentElement);
                         main.initValue();
                         if (!isLoad) {

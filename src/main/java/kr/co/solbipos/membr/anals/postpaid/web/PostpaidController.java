@@ -100,6 +100,27 @@ public class PostpaidController {
     }
 
     /**
+     * 후불 회원 외상, 입금 내역
+     *
+     * @param postpaidStoreVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "postpaid/getPostpaidMemberListExcel.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPostpaidMemberListExcel( PostpaidStoreVO postpaidStoreVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = service.getPostpaidMemberListExcel(postpaidStoreVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, postpaidStoreVO);
+    }
+
+    /**
      * 후불 대상 회원 조회
      *
      * @param postpaidStoreVO
@@ -120,6 +141,25 @@ public class PostpaidController {
         return ReturnUtil.returnListJson(Status.OK, result, postpaidStoreVO);
     }
 
+    /**
+     * 외상입금
+     * @param postpaidStoreVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "postpaid/saveDeposit.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveDeposit(@RequestBody PostpaidStoreVO[] postpaidStoreVOs, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = service.saveDeposit(postpaidStoreVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
     /**
      * 외상입금
      * @param postpaidStoreVO

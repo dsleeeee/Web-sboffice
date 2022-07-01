@@ -65,6 +65,8 @@ public class PrepaidStoreVO extends PageVO {
     /** 사원번호 */
     private String empNo;
 
+    private String useYn;
+
     public String getMembrOrgnCd() { return membrOrgnCd; }
 
     public void setMembrOrgnCd(String membrOrgnCd) { this.membrOrgnCd = membrOrgnCd; }
@@ -369,5 +371,13 @@ public class PrepaidStoreVO extends PageVO {
 
     public void setEmpNo(String empNo) {
         this.empNo = empNo;
+    }
+
+    public String getUseYn() {
+        return useYn;
+    }
+
+    public void setUseYn(String useYn) {
+        this.useYn = useYn;
     }
 }

@@ -93,7 +93,7 @@ public class TableLayoutServiceImpl implements TableLayoutService {
         param.put("storeCd", sessionInfoVO.getStoreCd());
         param.put("confgFg", ConfgFg.TABLE_LAYOUT.getCode());
         param.put("confgSubFg", "1");
-        param.put("xml", xml);
+        param.put("xml", xml.replaceAll("&", "＆"));
         param.put("useYn", "Y");
         param.put("regDt", currentDateTimeString());
         param.put("regId", sessionInfoVO.getUserId());
@@ -159,6 +159,7 @@ public class TableLayoutServiceImpl implements TableLayoutService {
 
         try {
             mxGraph graph = new mxGraph();
+            xml = xml.replaceAll("&","＆");
             Document doc = mxXmlUtils.parseXml(xml);
             mxCodec codec = new mxCodec(doc);
 
