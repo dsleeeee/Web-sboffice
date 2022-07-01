@@ -119,6 +119,27 @@ public class PrepaidController {
         return ReturnUtil.returnListJson(Status.OK, result, prepaidStoreVO);
     }
 
+
+    /**
+     * 선불충전
+     * @param prepaidStoreVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "prepaid/saveChargeAmt.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveChargeAmt(@RequestBody PrepaidStoreVO[] prepaidStoreVOs, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = service.saveChargeAmt(prepaidStoreVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
     /**
      * 후불 대상 회원 조회
      *

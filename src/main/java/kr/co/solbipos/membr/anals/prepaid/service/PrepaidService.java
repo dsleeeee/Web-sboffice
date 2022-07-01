@@ -37,5 +37,6 @@ public interface PrepaidService {
 
     /** 선불충전 */
     int saveChargeAmt(PrepaidStoreVO prepaidStoreVO, SessionInfoVO sessionInfoVO);
+    int saveChargeAmt(PrepaidStoreVO[] prepaidStoreVOs, SessionInfoVO sessionInfoVO);
 
 }

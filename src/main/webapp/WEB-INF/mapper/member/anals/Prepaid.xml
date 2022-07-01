@@ -19,53 +19,59 @@
   <select id="getPrepaidMemberList"  parameterType="prepaidStoreVO" resultType="DefaultMap">
         /* PrepaidMapper.getPrepaidMemberList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT
-        tmmpb.HQ_OFFICE_CD,
-        tmmpb.STORE_CD,
-        tms.STORE_NM,
-        tmmpb.MEMBR_NO,
-        SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
-        tmmpb.PREPAID_AMT,
-        tmmpb.PREPAID_USE_AMT,
-        tmmpb.PREPAID_BAL_AMT
+        SELECT  b.STORE_CD,
+                b.STORE_NM,
+                b.MEMBR_NO,
+                b.MEMBR_NM,
+                a.PREPAID_AMT,
+                a.PREPAID_USE_AMT,
+                a.PREPAID_BAL_AMT
         <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM TB_MB_MEMBER_PAID_BALANCE tmmpb,
-        TB_MB_MEMBER tmm,
-        TB_MS_STORE tms
-        WHERE 1=1
-        AND tmmpb.HQ_OFFICE_CD = #{hqOfficeCd}
-        <if test='storeCds != null and storeCds != ""'>
-            AND tmmpb.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                #{item}
-            </foreach>
+        FROM    TB_MB_MEMBER_PAID_BALANCE a,
+                (
+                SELECT  tmmp.STORE_CD,
+                        tms.STORE_NM,
+                        tmmp.MEMBR_NO,
+                        SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM
+                FROM    TB_MB_MEMBER_PREPAID_STORE tmmp,
+                        TB_MB_MEMBER tmm,
+                        TB_MS_STORE tms
+                WHERE 1=1
+                AND tmmp.MEMBR_ORGN_CD = #{membrOrgnCd}
+                <if test='storeCds != null and storeCds != ""'>
+                      AND tmmp.STORE_CD IN
+                      <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                          #{item}
+                      </foreach>
+                </if>
+                <if test='storeCd != null and storeCd != ""'>
+                      AND tmmp.STORE_CD = #{storeCd}
+                </if>
+                <if test='orgnFg != null and orgnFg == "H"'>
+                    AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                    OR	tmmp.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                    )
+                </if>
+                AND     tmm.MEMBR_ORGN_CD = tmmp.MEMBR_ORGN_CD
+                AND     tmm.MEMBR_NO = tmmp.MEMBR_NO
+                AND     tms.STORE_CD = tmmp.STORE_CD
+                <if test='membrNo != null and membrNo != ""'>
+                          AND tmmp.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
+                </if>
+                <if test='membrNm != null and membrNm != ""'>
+                          AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
+                </if>
+                ) b
+        WHERE   A.STORE_CD(+)  = B.STORE_CD
+        AND 	A.MEMBR_NO(+) = B.MEMBR_NO
+        <if test='useYn != null and useYn.equals("Y")'>
+          AND A.PREPAID_BAL_AMT IS NOT NULL
         </if>
-      <if test='orgnFg != null and orgnFg == "H"'>
-          AND (
-                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-              OR	tmmpb.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
-              )
-      </if>
-        <if test='storeCd != null and storeCd != ""'>
-            <![CDATA[
-              AND tmmpb.STORE_CD = #{storeCd}
-            ]]>
+        <if test='useYn != null and useYn.equals("N")'>
+          AND A.PREPAID_BAL_AMT IS NULL
         </if>
-        AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
-        AND tmm.MEMBR_NO = tmmpb.MEMBR_NO
-        AND tms.HQ_OFFICE_CD = tmmpb.HQ_OFFICE_CD
-        AND tms.STORE_CD = tmmpb.STORE_CD
-        <if test='membrNo != null and membrNo != ""'>
-            <![CDATA[
-              AND tmmpb.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
-            ]]>
-        </if>
-        <if test='membrNm != null and membrNm != ""'>
-            <![CDATA[
-              AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
-            ]]>
-        </if>
-        ORDER BY tmmpb.MOD_DT DESC, tmmpb.STORE_CD, tmmpb.MEMBR_NO
+        ORDER BY a.MOD_DT DESC NULLS LAST, b.STORE_CD, b.MEMBR_NO
         <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
 
@@ -76,46 +82,61 @@
     -->
     <select id="getPrepaidMemberListExcel"  parameterType="prepaidStoreVO" resultType="DefaultMap">
         /* PrepaidMapper.getPrepaidMemberListExcel */
-        SELECT
-        tmmpb.HQ_OFFICE_CD,
-        tmmpb.STORE_CD,
-        tms.STORE_NM,
-        tmmpb.MEMBR_NO,
-        SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
-        tmmpb.PREPAID_AMT,
-        tmmpb.PREPAID_USE_AMT,
-        tmmpb.PREPAID_BAL_AMT
-        FROM TB_MB_MEMBER_PAID_BALANCE tmmpb,
-        TB_MB_MEMBER tmm,
-        TB_MS_STORE tms
-        WHERE 1=1
-        AND tmmpb.HQ_OFFICE_CD = #{hqOfficeCd}
-        <if test='storeCds != null and storeCds != ""'>
-            AND tmmpb.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                #{item}
-            </foreach>
+        SELECT  b.STORE_CD,
+                b.STORE_NM,
+                b.MEMBR_NO,
+                b.MEMBR_NM,
+                a.PREPAID_AMT,
+                a.PREPAID_USE_AMT,
+                a.PREPAID_BAL_AMT
+        FROM    TB_MB_MEMBER_PAID_BALANCE a,
+                (
+                SELECT  tmmp.STORE_CD,
+                        tms.STORE_NM,
+                        tmmp.MEMBR_NO,
+                        SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM
+                FROM    TB_MB_MEMBER_PREPAID_STORE tmmp,
+                        TB_MB_MEMBER tmm,
+                        TB_MS_STORE tms
+                WHERE 1=1
+                AND tmmp.MEMBR_ORGN_CD = #{membrOrgnCd}
+                <if test='storeCd != null and storeCd != ""'>
+                    AND tmmp.STORE_CD = #{storeCd}
+                </if>
+                <if test='orgnFg != null and orgnFg == "H"'>
+                    AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE MEMBR_ORGN_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                    OR	tmmp.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                    )
+                </if>
+                AND     tmm.MEMBR_ORGN_CD = tmmp.MEMBR_ORGN_CD
+                AND     tmm.MEMBR_NO = tmmp.MEMBR_NO
+                AND     tms.STORE_CD = tmmp.STORE_CD
+                <if test='defaultStoreCd != null and defaultStoreCd != ""'>
+                    AND tmm.REG_STORE_CD != #{defaultStoreCd}
+                </if>
+                <if test='prepaidStoreCd != null and prepaidStoreCd != ""'>
+                    AND tmm.REG_STORE_CD = #{prepaidStoreCd}
+                </if>
+                <if test='prepaidStoreNm != null and prepaidStoreNm != ""'>
+                    AND tms.STORE_NM LIKE '%'|| #{prepaidStoreNm} ||'%'
+                </if>
+                <if test='membrNo != null and membrNo != ""'>
+                    AND tmmp.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
+                </if>
+                <if test='membrNm != null and membrNm != ""'>
+                    AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
+                </if>
+                ) b
+        WHERE   A.STORE_CD(+)  = B.STORE_CD
+        AND 	A.MEMBR_NO(+) = B.MEMBR_NO
+        <if test='useYn != null and useYn.equals("Y")'>
+            AND A.PREPAID_BAL_AMT IS NOT NULL
         </if>
-        <if test='storeCd != null and storeCd != ""'>
-            <![CDATA[
-              AND tmmpb.STORE_CD = #{storeCd}
-            ]]>
+        <if test='useYn != null and useYn.equals("N")'>
+            AND A.PREPAID_BAL_AMT IS NULL
         </if>
-        AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
-        AND tmm.MEMBR_NO = tmmpb.MEMBR_NO
-        AND tms.HQ_OFFICE_CD = tmmpb.HQ_OFFICE_CD
-        AND tms.STORE_CD = tmmpb.STORE_CD
-        <if test='membrNo != null and membrNo != ""'>
-            <![CDATA[
-              AND tmmpb.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
-            ]]>
-        </if>
-        <if test='membrNm != null and membrNm != ""'>
-            <![CDATA[
-              AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
-            ]]>
-        </if>
-        ORDER BY tmmpb.MOD_DT DESC, tmmpb.STORE_CD, tmmpb.MEMBR_NO
+        ORDER BY a.MOD_DT DESC NULLS LAST, b.STORE_CD, b.MEMBR_NO
     </select>
 
 
