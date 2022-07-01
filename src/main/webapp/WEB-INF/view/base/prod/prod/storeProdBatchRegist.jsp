@@ -14,7 +14,7 @@
 
         <%-- body --%>
         <div class="wj-dialog-body">
-            <table class="tblType01" ng-controller="regProdCtrl">
+            <table class="tblType01" ng-controller="srchProdCtrl">
                 <colgroup>
                     <col class="w15" />
                     <col class="w35" />
@@ -41,6 +41,33 @@
                         <td><s:message code="salePrice.saleUprcApply"/></td>
                     </tr>
                 </c:if>
+                <tr>
+                    <th><s:message code="prod.brandNm"/></th>
+                    <%-- 브랜드명 --%>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchHqBrand"
+                                    ng-model="hqBrandCd"
+                                    items-source="_getComboData('srchHqBrand')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    selected-index-changed="setHqBrandCd(s)">
+                            </wj-combo-box>
+                            <input type="hidden" id="_srchHqBrand" disabled />
+                        </div>
+                    </td>
+                    <%-- 분류조회 --%>
+                    <th><s:message code="prod.prodClass" /></th>
+                    <td>
+                        <input type="text" class="sb-input w120px" id="srchStoreProdClassCd" ng-model="prodClassNm" ng-click="popUpStoreProdClass()" style="float: left;"
+                               placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
+                        <input type="hidden" id="_storeProdClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
+                        <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delStoreProdClass()"><s:message code="cmm.selectCancel"/></button>
+                    </td>
+                </tr>
                 </tbody>
             </table>
             <%-- 조회 --%>
@@ -136,4 +163,4 @@
     var subPriceFg = "${subPriceFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/storeProdBatchRegist.js?ver=20210526.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/storeProdBatchRegist.js?ver=20210526.05" charset="utf-8"></script>

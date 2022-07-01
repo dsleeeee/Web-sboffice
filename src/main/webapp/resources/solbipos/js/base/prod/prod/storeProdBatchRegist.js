@@ -13,17 +13,58 @@
  */
 var app = agrid.getApp();
 
-app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('srchProdCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('regProdCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('srchProdCtrl', $scope, $http, true));
 
     $scope.storeSaleUprcApply = true;
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
+    };
 
+    // 상품분류정보 팝업
+    $scope.popUpStoreProdClass = function() {
+        var popUp = $scope.prodClassPopUpLayer;
+        popUp.show(true, function (s) {
+            // 선택 버튼 눌렀을때만
+            if (s.dialogResult === "wj-hide-apply") {
+                var scope = agrid.getScope('prodClassPopUpCtrl');
+                var prodClassCd = scope.getSelectedClass();
+                var params = {};
+                params.prodClassCd = prodClassCd;
+                // 조회 수행 : 조회URL, 파라미터, 콜백함수
+                $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+                    function(response){
+                        $("#_storeProdClassCd").val(prodClassCd);
+                        // $scope.prodClassCd = prodClassCd;
+                        $scope.prodClassNm = response.data.data;
+                    }
+                );
+            }
+        });
+    };
+
+    // 상품분류정보 선택취소
+    $scope.delStoreProdClass = function(){
+        $("#_storeProdClassCd").val("");
+        // $scope.prodClassCd = "";
+        $scope.prodClassNm = "";
+    };
+
+    $scope.setHqBrandCd = function (){
+        $("#_srchHqBrand").val($scope.hqBrandCd);
+    }
+}]);
+
+app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('regProdCtrl', $scope, $http, true));
+
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
         s.cellEditEnded.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
@@ -62,6 +103,7 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 등록상품조회
         $scope.searchRegProd();
+        event.preventDefault();
     });
 
     // 등록 상품 조회
@@ -72,11 +114,12 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
         params.hqOfficeCd = $("#hdHqOfficeCd").val();
         params.storeCd     = $("#hdStoreCd").val();
         params.prodRegFg = 'Y';
+        params.hqBrandCd = '';
+        params.prodClassCd = '';
 
         $scope._inquirySub("/base/prod/prod/prod/getStoreProdBatchList.sb", params, function() {
             // 미등록상품 조회
-            var noRegProdGrid = agrid.getScope("noRegProdCtrl");
-            noRegProdGrid._pageView('noRegProdCtrl', 1);
+            $scope._broadcast("noRegProdCtrl");
         });
     };
 
@@ -135,10 +178,7 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
     // 매장 삭제 완료 후처리
     $scope.allSearch = function () {
         $scope.searchRegProd();
-        var noRegProdGrid = agrid.getScope("noRegProdCtrl");
-        noRegProdGrid.searchNoRegProd();
     };
-
 }]);
 
 
@@ -168,8 +208,10 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
         params.hqOfficeCd = $("#hdHqOfficeCd").val();
         params.storeCd     = $("#hdStoreCd").val();
         params.prodRegFg = 'N';
+        params.hqBrandCd = $("#_srchHqBrand").val();
+        params.prodClassCd = $("#_storeProdClassCd").val();
 
-        $scope._inquirySub("/base/prod/prod/prod/getStoreProdBatchList.sb", params, function() {}, false);
+        $scope._inquirySub("/base/prod/prod/prod/getStoreProdBatchList.sb", params);
     };
 
     // 상품등록
@@ -189,9 +231,8 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 매장 등록 완료 후처리
     $scope.allSearch = function () {
-        $scope.searchNoRegProd();
-        var regProdGrid = agrid.getScope("regProdCtrl");
-        regProdGrid.searchRegProd();
+        var scope = agrid.getScope("regProdCtrl");
+        scope.searchRegProd();
     };
 
 }]);

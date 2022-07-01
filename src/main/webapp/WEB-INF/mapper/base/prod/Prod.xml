@@ -2741,6 +2741,12 @@
         <if test='prodNm != null and prodNm.toString() != ""'>
             AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
+        <if test='hqBrandCd != null and hqBrandCd.toString() != ""'>
+            AND thp.HQ_BRAND_CD = #{hqBrandCd}
+        </if>
+        <if test='prodClassCd != null and prodClassCd.toString() != ""'>
+            AND thp.PROD_CLASS_CD = #{prodClassCd}
+        </if>
         AND (
                 ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
                 OR
