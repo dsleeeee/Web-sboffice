@@ -94,12 +94,12 @@ app.controller('alimtalkIdRegisterCtrl', ['$scope', '$http', function ($scope, $
     // 인증요청
     $scope.registerRequestSave = function() {
         if ($scope.plusFriendId === "" || $scope.plusFriendId === undefined) {
-            $scope._popMsg(messages["alimtalkIdRegister.plusFriendIdAlert"]); // 카카오계정ID를 입력해주세요.
+            $scope._popMsg(messages["alimtalkIdRegister.plusFriendIdBlank"]); // 카카오계정ID를 입력해주세요.
             return;
         }
 
         if ($scope.phoneNo === "" || $scope.phoneNo === undefined) {
-            $scope._popMsg(messages["alimtalkIdRegister.phoneNoAlert"]); // 휴대폰번호를 입력해주세요.
+            $scope._popMsg(messages["alimtalkIdRegister.phoneNoBlank"]); // 휴대폰번호를 입력해주세요.
             return;
         } else {
             // 숫자만 입력
@@ -202,7 +202,7 @@ app.controller('alimtalkIdRegisterCtrl', ['$scope', '$http', function ($scope, $
         }
 
         if ($scope.token === "" || $scope.token === undefined) {
-            $scope._popMsg(messages["alimtalkIdRegister.tokenAlert"]); // 인증번호를 입력해주세요.
+            $scope._popMsg(messages["alimtalkIdRegister.tokenBlank"]); // 인증번호를 입력해주세요.
             return;
         }
 

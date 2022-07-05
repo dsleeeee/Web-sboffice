@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    AlimtalkTemplate.xml
+    알림톡 템플릿관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2022.06.08     최초작성
+-->
+<mapper namespace="kr.co.solbipos.adi.alimtalk.alimtalkTemplate.service.impl.AlimtalkTemplateMapper">
+
+    <!-- 알림톡 템플릿관리 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getAlimtalkTemplateList" parameterType="AlimtalkTemplateVO" resultType="DefaultMap">
+        /* AlimtalkTemplateMapper.getAlimtalkTemplateList */
+        SELECT
+        taat.SEND_TYPE_CD,
+        (SELECT NMCODE_NM FROM TB_AL_ALIMTALK_NMCODE WHERE NMCODE_GRP_CD = '001' AND NMCODE_LEVEL = '1' AND PARENT_CD = '001' AND NMCODE_CD = taat.SEND_TYPE_CD) AS SEND_TYPE_NM,
+        taat.SEND_TYPE_DTL_CD,
+        (SELECT NMCODE_NM FROM TB_AL_ALIMTALK_NMCODE WHERE NMCODE_GRP_CD = '001' AND NMCODE_LEVEL = '2' AND PARENT_CD = taat.SEND_TYPE_CD AND NMCODE_CD = taat.SEND_TYPE_DTL_CD) AS SEND_TYPE_DTL_NM,
+        taat.COMMON_FG,
+        taat.TEMPLATE_CD,
+        taat.TEMPLATE_NM,
+        taat.APPR_FG,
+        TO_CHAR(TO_DATE(taat.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS REG_DT
+        FROM TB_AL_ALIMTALK_TEMPLATE taat
+        WHERE 1=1
+        AND (
+                (taat.COMMON_FG = 'C')
+                OR
+                (taat.COMMON_FG = 'S' AND taat.ORGN_CD = #{orgnCd})
+            )
+        <if test="sendTypeCd != null and sendTypeCd != ''">
+            AND taat.SEND_TYPE_CD = #{sendTypeCd}
+        </if>
+        <if test="sendTypeDtlCd != null and sendTypeDtlCd != ''">
+            AND taat.SEND_TYPE_DTL_CD = #{sendTypeDtlCd}
+        </if>
+        <if test="apprFg != null and apprFg != ''">
+            AND taat.APPR_FG = #{apprFg}
+        </if>
+        <if test="templateCd != null and templateCd != ''">
+            AND taat.TEMPLATE_CD LIKE '%' || #{templateCd} || '%'
+        </if>
+        <if test="templateNm != null and templateNm != ''">
+            AND taat.TEMPLATE_NM LIKE '%' || #{templateNm} || '%'
+        </if>
+        ORDER BY taat.SEND_TYPE_CD, taat.SEND_TYPE_DTL_CD, taat.COMMON_FG, taat.TEMPLATE_CD
+    </select>
+
+    <!-- 알림톡 전송유형 콤보박스 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSendTypeCdComboList" parameterType="AlimtalkTemplateVO" resultType="DefaultMap">
+        /* AlimtalkTemplateMapper.getSendTypeCdComboList */
+        SELECT
+        taan.NMCODE_CD AS VALUE,
+        taan.NMCODE_NM AS NAME
+        FROM TB_AL_ALIMTALK_NMCODE taan
+        WHERE 1=1
+        AND taan.NMCODE_GRP_CD = '001'
+        AND taan.NMCODE_LEVEL = '1'
+        AND taan.PARENT_CD = '001'
+        AND taan.USE_YN = 'Y'
+        ORDER BY taan.NMCODE_CD
+    </select>
+
+    <!-- 알림톡 전송유형상세 콤보박스 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSendTypeDtlCdComboList" parameterType="AlimtalkTemplateVO" resultType="DefaultMap">
+        /* AlimtalkTemplateMapper.getSendTypeDtlCdComboList */
+        SELECT
+        taan.NMCODE_CD AS VALUE,
+        taan.NMCODE_NM AS NAME
+        FROM TB_AL_ALIMTALK_NMCODE taan
+        WHERE 1=1
+        AND taan.NMCODE_GRP_CD = '001'
+        AND taan.NMCODE_LEVEL = '2'
+        AND taan.PARENT_CD = #{sendTypeCd}
+        AND taan.USE_YN = 'Y'
+        ORDER BY taan.NMCODE_CD
+    </select>
+
+    <!-- 알림톡 계정 콤보박스 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getGroupKeyComboList" parameterType="AlimtalkTemplateVO" resultType="DefaultMap">
+        /* AlimtalkTemplateMapper.getGroupKeyComboList */
+        SELECT
+        taan.NMCODE_NM AS VALUE,
+        taan.REMARK AS NAME
+        FROM TB_AL_ALIMTALK_NMCODE taan
+        WHERE 1=1
+        AND taan.NMCODE_GRP_CD = '999'
+        AND taan.NMCODE_LEVEL = '2'
+        AND taan.PARENT_CD = '004'
+        AND taan.USE_YN = 'Y'
+    </select>
+
+    <!-- 템플릿코드(자동채번) -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getAlimtalkTemplateTemplateNum" parameterType="AlimtalkTemplateVO" resultType="String">
+        /* AlimtalkTemplateMapper.getAlimtalkTemplateTemplateNum */
+        SELECT
+        LPAD(NVL(MAX(TO_NUMBER(SUBSTR(TEMPLATE_CD, 7))), 0) + 1, 4, '0') AS TEMPLATE_NUM
+        FROM TB_AL_ALIMTALK_TEMPLATE
+        WHERE 1=1
+        AND ORGN_CD = #{orgnCd}
+        AND SEND_TYPE_CD = #{sendTypeCd}
+        AND SEND_TYPE_DTL_CD = #{sendTypeDtlCd}
+        AND COMMON_FG = #{commonFg}
+    </select>
+
+    <!-- 알림톡 템플릿 카테고리(중분류) 콤보박스 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getTemplateClsCdMComboList" parameterType="AlimtalkTemplateVO" resultType="DefaultMap">
+        /* AlimtalkTemplateMapper.getTemplateClsCdMComboList */
+        SELECT
+        taan.NMCODE_CD AS VALUE,
+        taan.NMCODE_NM AS NAME
+        FROM TB_AL_ALIMTALK_NMCODE taan
+        WHERE 1=1
+        AND taan.NMCODE_GRP_CD = '003'
+        AND taan.NMCODE_LEVEL = '2'
+        AND taan.PARENT_CD = #{templateClsCd}
+        AND taan.USE_YN = 'Y'
+        ORDER BY taan.NMCODE_CD
+    </select>
+
+    <!-- 알림톡 템플릿등록 팝업 - #{변수} 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getAlimtalkTemplateParamsList" parameterType="AlimtalkTemplateVO" resultType="DefaultMap">
+        /* AlimtalkTemplateMapper.getAlimtalkTemplateParamsList */
+        SELECT
+        tcn.NMCODE_NM AS TEMPLATE_PARAMS_CD,
+        tcn.NMCODE_ITEM_1 AS TEMPLATE_PARAMS_NM,
+        tcn.NMCODE_ITEM_2 AS TEMPLATE_PARAMS_EX
+        FROM TB_CM_NMCODE tcn
+        WHERE 1=1
+        AND tcn.NMCODE_GRP_CD = '304'
+        <choose>
+            <when test='sendTypeCd != null and sendTypeCd != ""'>
+                <!-- 000 기본 -->
+                <if test='sendTypeCd == "000"'>
+                    <![CDATA[
+                        AND tcn.NMCODE_CD BETWEEN '000' AND '999'
+                    ]]>
+                </if>
+                <!-- 001 대기 -->
+                <if test='sendTypeCd == "001"'>
+                    <![CDATA[
+                        AND tcn.NMCODE_CD BETWEEN '100' AND '199'
+                    ]]>
+                </if>
+                <!-- 002 주문 -->
+                <if test='sendTypeCd == "002"'>
+                    <![CDATA[
+                        AND tcn.NMCODE_CD BETWEEN '200' AND '299'
+                    ]]>
+                </if>
+                <!-- 003 예약 -->
+                <if test='sendTypeCd == "003"'>
+                    <![CDATA[
+                        AND tcn.NMCODE_CD BETWEEN '300' AND '399'
+                    ]]>
+                </if>
+                <!-- 004 매출 -->
+                <if test='sendTypeCd == "004"'>
+                    <![CDATA[
+                        AND tcn.NMCODE_CD BETWEEN '400' AND '499'
+                    ]]>
+                </if>
+            </when>
+        </choose>
+        ORDER BY tcn.NMCODE_CD
+    </select>
+
+    <!-- 전체 #{변수} 컬럼 리스트 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getAlimtalkTemplateParamsColList" parameterType="AlimtalkTemplateVO" resultType="DefaultMap">
+        /* AlimtalkTemplateMapper.getAlimtalkTemplateParamsColList */
+        SELECT
+        tcn.NMCODE_NM AS TEMPLATE_PARAMS_CD,
+        tcn.NMCODE_ITEM_1 AS TEMPLATE_PARAMS_NM,
+        tcn.NMCODE_ITEM_2 AS TEMPLATE_PARAMS_EX
+        FROM TB_CM_NMCODE tcn
+        WHERE 1=1
+        AND tcn.NMCODE_GRP_CD = '304'
+        ORDER BY tcn.NMCODE_CD
+    </select>
+
+    <!-- 알림톡 템플릿등록 팝업 - 저장 insert -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getAlimtalkTemplateRegisterSaveInsert" parameterType="AlimtalkTemplateVO">
+        /* AlimtalkTemplateMapper.getAlimtalkTemplateRegisterSaveInsert */
+        INSERT INTO TB_AL_ALIMTALK_TEMPLATE
+        (
+            ORGN_CD,
+            GROUP_KEY,
+            APPR_FG,
+            TEMPLATE_GRP_FG,
+            SEND_TYPE_CD,
+            SEND_TYPE_DTL_CD,
+            TEMPLATE_CD,
+            TEMPLATE_NM,
+            TEMPLATE_CONTENT,
+            TEMPLATE_MSG_TYPE,
+            TEMPLATE_EMPSIZE_TYPE,
+            TEMPLATE_EXTRA,
+            TEMPLATE_AD,
+            TEMPLATE_TITLE,
+            TEMPLATE_SUBTITLE,
+            FILE_PATH,
+            FILE_NM,
+            TEMPLATE_IMG_NM,
+            TEMPLATE_IMG_URL,
+            SECURITY_FG,
+            TEMPLATE_CLS_CD,
+            BUTTONS_ORDERING,
+            BUTTONS_TYPE,
+            BUTTONS_NAME,
+            BUTTONS_LINK_MO,
+            BUTTONS_LINK_PC,
+            BUTTONS_LINK_IOS,
+            BUTTONS_LINK_ANDROID,
+            COMMON_FG,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{orgnCd},
+            #{groupKey},
+            'TSC01',
+            #{templateGrpFg},
+            #{sendTypeCd},
+            #{sendTypeDtlCd},
+            #{templateCd},
+            #{templateNm},
+            #{templateContent},
+            #{templateMsgType},
+            #{templateEmpsizeType},
+            #{templateExtra},
+            #{templateAd},
+            #{templateTitle},
+            #{templateSubtitle},
+            #{filePath},
+            #{fileNm},
+            #{templateImgNm},
+            #{templateImgUrl},
+            #{securityFg},
+            #{templateClsCd},
+            #{buttonsOpdering},
+            #{buttonsType},
+            #{buttonsName},
+            #{buttonsLinkMo},
+            #{buttonsLinkPc},
+            #{buttonsLinkLos},
+            #{buttonsLinkAndroid},
+            #{commonFg},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 알림톡 템플릿 카테고리(대분류) 콤보박스 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getTemplateClsCdLComboList" parameterType="AlimtalkTemplateVO" resultType="DefaultMap">
+        /* AlimtalkTemplateMapper.getTemplateClsCdLComboList */
+        SELECT
+        taan.NMCODE_CD AS VALUE,
+        taan.NMCODE_NM AS NAME
+        FROM TB_AL_ALIMTALK_NMCODE taan
+        WHERE 1=1
+        AND taan.NMCODE_GRP_CD = '003'
+        AND taan.NMCODE_LEVEL = '1'
+        AND taan.PARENT_CD = '003'
+        AND taan.USE_YN = 'Y'
+        ORDER BY taan.NMCODE_CD
+    </select>
+
+    <!-- 알림톡 템플릿상세 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getAlimtalkTemplateDtlList" parameterType="AlimtalkTemplateVO" resultType="DefaultMap">
+        /* AlimtalkTemplateMapper.getAlimtalkTemplateDtlList */
+        SELECT
+        taat.GROUP_KEY,
+        (SELECT REMARK FROM TB_AL_ALIMTALK_NMCODE WHERE NMCODE_GRP_CD = '999' AND NMCODE_LEVEL = '2' AND PARENT_CD = '004' AND NMCODE_NM = taat.GROUP_KEY) AS GROUP_KEY_NM,
+        taat.TEMPLATE_GRP_FG,
+        taat.SEND_TYPE_CD,
+        (SELECT NMCODE_NM FROM TB_AL_ALIMTALK_NMCODE WHERE NMCODE_GRP_CD = '001' AND NMCODE_LEVEL = '1' AND PARENT_CD = '001' AND NMCODE_CD = taat.SEND_TYPE_CD) AS SEND_TYPE_NM,
+        taat.SEND_TYPE_DTL_CD,
+        (SELECT NMCODE_NM FROM TB_AL_ALIMTALK_NMCODE WHERE NMCODE_GRP_CD = '001' AND NMCODE_LEVEL = '2' AND PARENT_CD = taat.SEND_TYPE_CD AND NMCODE_CD = taat.SEND_TYPE_DTL_CD) AS SEND_TYPE_DTL_NM,
+        taat.TEMPLATE_CD,
+        taat.TEMPLATE_NM,
+        taat.TEMPLATE_CONTENT,
+        taat.TEMPLATE_MSG_TYPE,
+        taat.TEMPLATE_EMPSIZE_TYPE,
+        taat.TEMPLATE_EXTRA,
+        taat.TEMPLATE_AD,
+        taat.TEMPLATE_TITLE,
+        taat.TEMPLATE_SUBTITLE,
+        taat.TEMPLATE_IMG_NM,
+        taat.TEMPLATE_IMG_URL,
+        taat.SECURITY_FG,
+        SUBSTR(taat.TEMPLATE_CLS_CD, 0, 3) AS TEMPLATE_CLS_CD_L,
+        (SELECT NMCODE_NM FROM TB_AL_ALIMTALK_NMCODE WHERE NMCODE_GRP_CD = '003' AND NMCODE_LEVEL = '1' AND PARENT_CD = '003' AND NMCODE_CD = SUBSTR(taat.TEMPLATE_CLS_CD, 0, 3)) AS TEMPLATE_CLS_NM_L,
+        SUBSTR(taat.TEMPLATE_CLS_CD, 4, 3) AS TEMPLATE_CLS_CD_M,
+        (SELECT NMCODE_NM FROM TB_AL_ALIMTALK_NMCODE WHERE NMCODE_GRP_CD = '003' AND NMCODE_LEVEL = '2' AND PARENT_CD = SUBSTR(taat.TEMPLATE_CLS_CD, 0, 3) AND NMCODE_CD = SUBSTR(taat.TEMPLATE_CLS_CD, 4, 3)) AS TEMPLATE_CLS_NM_M
+        FROM TB_AL_ALIMTALK_TEMPLATE taat
+        WHERE 1=1
+        AND taat.SEND_TYPE_CD = #{sendTypeCd}
+        AND taat.SEND_TYPE_DTL_CD = #{sendTypeDtlCd}
+        AND taat.TEMPLATE_CD = #{templateCd}
+    </select>
+
+    <!-- 알림톡 템플릿상세 팝업 - 버튼 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getAlimtalkTemplateDtlButtonsList" parameterType="AlimtalkTemplateVO" resultType="DefaultMap">
+        /* AlimtalkTemplateMapper.getAlimtalkTemplateDtlButtonsList */
+        SELECT
+        taat.BUTTONS_ORDERING,
+        taat.BUTTONS_TYPE,
+        taat.BUTTONS_NAME,
+        taat.BUTTONS_LINK_MO,
+        taat.BUTTONS_LINK_PC,
+        taat.BUTTONS_LINK_IOS,
+        taat.BUTTONS_LINK_ANDROID
+        FROM TB_AL_ALIMTALK_TEMPLATE taat
+        WHERE 1=1
+        AND taat.SEND_TYPE_CD = #{sendTypeCd}
+        AND taat.SEND_TYPE_DTL_CD = #{sendTypeDtlCd}
+        AND taat.TEMPLATE_CD = #{templateCd}
+        AND taat.BUTTONS_ORDERING != '0'
+        ORDER BY taat.BUTTONS_ORDERING
+    </select>
+
+</mapper>

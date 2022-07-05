@@ -156,7 +156,7 @@
     var apiUrl = "${apiUrl}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkIdRegister.js?ver=20220414.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkIdRegister.js?ver=20220414.02" charset="utf-8"></script>
 
 <%-- 알림톡 계정생성 가이드 팝업 --%>
 <c:import url="/WEB-INF/view/adi/alimtalk/alimtalkSendType/alimtalkManual.jsp">
