@@ -573,6 +573,8 @@
     <typeAlias alias="alimtalkSendStatusVO" type="kr.co.solbipos.adi.alimtalk.alimtalkSendStatus.service.AlimtalkSendStatusVO"/>
     <!-- 부가서비스 > 알림톡관리 > 알림톡 전송이력 -->
     <typeAlias alias="alimtalkSendHistVO" type="kr.co.solbipos.adi.alimtalk.alimtalkSendHist.service.AlimtalkSendHistVO"/>
+    <!-- 부가서비스 > 알림톡관리 > 알림톡 템플릿관리 -->
+    <typeAlias alias="alimtalkTemplateVO" type="kr.co.solbipos.adi.alimtalk.alimtalkTemplate.service.AlimtalkTemplateVO"/>
 <!--
     <typeAlias alias="dlvrZoneVO" type="kr.co.solbipos.adi.etc.dlvrzone.service.DlvrZoneVO"/>
     <typeAlias alias="useSmVO" type="kr.co.solbipos.adi.sms.usesm.service.UseSmVO"/>

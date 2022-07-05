@@ -2472,3 +2472,37 @@ label.rdo-po {font-size:14px; position:relative; top:-2px}
 .divBar a.close:before {transform:rotate(90deg);}
 
 
+
+/* tooltip 20220628 추가 */
+.tooltip {
+    position: relative;
+    display: block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: #222;
+    color: #fff;
+    font-size: 12px;
+    text-align: center; /* 가로정렬 */
+    line-height: 15px; /* 세로정렬 */
+}
+.tooltip .tooltiptext {
+    visibility: hidden;       /* 이벤트가 없으면 툴팁 영역을 숨김 */
+    width: 250px;             /* 툴팁 영역의 넓이를 설정 */
+    background-color: #222;
+    color: #fff;
+    font-size: 12px;
+    text-align: left;
+    border-radius: 6px;
+    padding: 5px 5px;
+    position: absolute;       /* 절대 위치를 사용 */
+    z-index: 1;
+}
+.tooltip:hover .tooltiptext {
+    visibility: visible;      /* hover 이벤트 발생시 영역을 보여줌 */
+}
+.tooltip .tooltip-right {
+    top: -5px;                /* 영역의 위치를 -5 만큼 위로 이동 */
+    left: 105%;              /* 오른쪽에 생성해야하므로 영역을 왼쪽쪽에서 105% 이동 */
+}
+
