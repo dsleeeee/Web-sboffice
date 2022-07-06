@@ -150,14 +150,14 @@
   <%--//페이지 리스트--%>
 </div>
 <script>
-  var fileType    = ${ccu.getCommCode("303")};
+  <%--var fileType    = ${ccu.getCommCode("303")};--%>
   var useYn       = ${ccu.getCommCode("067")};
   var clsFg       = ${ccu.getCommCodeExcpAll("059")};
   var sysStatFg   = ${ccu.getCommCodeExcpAll("005")};
   var hqList      = ${ccu.getHqOfficeList()};
   var hqOfficeCd  = "${hqOfficeCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/media.js?ver=20210609.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/media.js?ver=20220705.01" charset="utf-8"></script>
 
 <%-- 버전 상세정보 레이어 --%>
 <c:import url="/WEB-INF/view/base/store/media/verInfoDtl.jsp">

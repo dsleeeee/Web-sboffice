@@ -13,6 +13,18 @@
  */
 var app = agrid.getApp();
 
+// 파일타입
+var fileTypeComboData = [
+    {"name":"전체","value":""},
+    {"name":"POS 듀얼모니터(광고)","value":"001"},
+    {"name":"로고","value":"002"},
+    {"name":"키오스크(인트로)","value":"003"},
+    {"name":"DID","value":"004"},
+    {"name":"POS테이블 바탕화면","value":"005"},
+    {"name":"로그인로고","value":"006"},
+    {"name":"POS (인트로)","value":"007"}
+];
+
 /**********************************************************************
  *  미디어관리 그리드
  **********************************************************************/
@@ -25,7 +37,7 @@ app.controller('mediaCtrl', ['$scope', '$http', function ($scope, $http) {
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
   $scope._setComboData("useYn", useYn);
-  $scope._setComboData("fileType", fileType);
+  $scope._setComboData("fileType", fileTypeComboData);
 
   // 등록일자 셋팅
   $scope.srchStartDate = wcombo.genDateVal("#srchTimeStartDate", gvStartDate);
@@ -42,7 +54,7 @@ app.controller('mediaCtrl', ['$scope', '$http', function ($scope, $http) {
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     $scope.useYnDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');
-    $scope.fileTypeDataMap = new wijmo.grid.DataMap(fileType, 'value', 'name');
+    $scope.fileTypeDataMap = new wijmo.grid.DataMap(fileTypeComboData, 'value', 'name');
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {

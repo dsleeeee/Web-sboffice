@@ -51,6 +51,7 @@
             <if test='startDate != null and startDate != ""'>
                 AND #{startDate} BETWEEN ADVER_S_DATE AND ADVER_E_DATE
             </if>
+            AND FILE_USE_TYPE != '008'
             <include refid="CmmSQL.PagingTemplateBottom"/>
         </when>
         <!-- 매장 -->
@@ -84,6 +85,7 @@
             <if test='startDate != null and startDate != ""'>
                 AND #{startDate} BETWEEN ADVER_S_DATE AND ADVER_E_DATE
             </if>
+            AND FILE_USE_TYPE != '008'
             <include refid="CmmSQL.PagingTemplateBottom"/>
         </when>
         </choose>

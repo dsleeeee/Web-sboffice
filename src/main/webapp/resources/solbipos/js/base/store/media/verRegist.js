@@ -13,13 +13,25 @@
  */
 var app = agrid.getApp();
 
+// 파일타입
+var verRegistfileTypeComboData = [
+  {"name":"전체","value":""},
+  {"name":"POS 듀얼모니터(광고)","value":"001"},
+  {"name":"로고","value":"002"},
+  {"name":"키오스크(인트로)","value":"003"},
+  {"name":"DID","value":"004"},
+  {"name":"POS테이블 바탕화면","value":"005"},
+  {"name":"로그인로고","value":"006"},
+  {"name":"POS (인트로)","value":"007"}
+];
+
 app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('verRegistCtrl', $scope, $http, true));
 
   // 콤보박스 데이터
   $scope._setComboData("useYnCombo", useYnData);
-  $scope._setComboData("fileTypeCombo", fileTypeData);
+  $scope._setComboData("fileTypeCombo", verRegistfileTypeComboData);
 
   // 등록일자 셋팅
   var startDate = wcombo.genDateVal("#startDate", gvStartDate);
