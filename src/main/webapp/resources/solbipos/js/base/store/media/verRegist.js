@@ -15,7 +15,6 @@ var app = agrid.getApp();
 
 // 파일타입
 var verRegistFileTypeComboData = [
-  {"name":"전체","value":""},
   {"name":"POS 듀얼모니터(광고)","value":"001"},
   {"name":"로고","value":"002"},
   {"name":"키오스크(인트로)","value":"003"},

@@ -129,6 +129,6 @@
   var storeCd      = "${storeCd}";
   var userId       = "${userId}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/verRegist.js?ver=20220705.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/verRegist.js?ver=20220705.03" charset="utf-8"></script>
 
 
