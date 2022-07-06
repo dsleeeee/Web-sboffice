@@ -90,9 +90,12 @@ app.controller('postpaidCtrl', ['$scope', '$http', function ($scope, $http) {
 
     var params = new Array();
     for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
-      $scope.flex.collectionView.itemsEdited[u].status = "U";
-      $scope.flex.collectionView.itemsEdited[u].postpaidAmt = $scope.flex.collectionView.itemsEdited[u].postpaidAmt2;
-      params.push($scope.flex.collectionView.itemsEdited[u]);
+      console.log($scope.flex.collectionView.itemsEdited[u].postpaidAmt2);
+      if(($scope.flex.collectionView.itemsEdited[u].postpaidAmt2 !== undefined || $scope.flex.collectionView.itemsEdited[u].postpaidAmt2 !== '') && $scope.flex.collectionView.itemsEdited[u].postpaidAmt2 > 0){
+        $scope.flex.collectionView.itemsEdited[u].status = "U";
+        $scope.flex.collectionView.itemsEdited[u].postpaidAmt = $scope.flex.collectionView.itemsEdited[u].postpaidAmt2;
+        params.push($scope.flex.collectionView.itemsEdited[u]);
+      }
     }
 
     $scope._save("/membr/anals/postpaid/postpaid/saveDeposit.sb",params, function (){

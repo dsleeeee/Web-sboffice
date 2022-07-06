@@ -99,10 +99,13 @@ app.controller('prepaidCtrl', ['$scope', '$http', function ($scope, $http) {
     // });
     var params = new Array();
     for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
-      $scope.flex.collectionView.itemsEdited[u].status = "U";
-      $scope.flex.collectionView.itemsEdited[u].prepaidStoreCd = $scope.flex.collectionView.itemsEdited[u].storeCd;
-      $scope.flex.collectionView.itemsEdited[u].prepaidAmt = $scope.flex.collectionView.itemsEdited[u].prepaidAmt2;
-      params.push($scope.flex.collectionView.itemsEdited[u]);
+      console.log($scope.flex.collectionView.itemsEdited[u].prepaidAmt2);
+      if(($scope.flex.collectionView.itemsEdited[u].prepaidAmt2 !== undefined || $scope.flex.collectionView.itemsEdited[u].prepaidAmt2 !== '') && $scope.flex.collectionView.itemsEdited[u].prepaidAmt2 > 0) {
+        $scope.flex.collectionView.itemsEdited[u].status = "U";
+        $scope.flex.collectionView.itemsEdited[u].prepaidStoreCd = $scope.flex.collectionView.itemsEdited[u].storeCd;
+        $scope.flex.collectionView.itemsEdited[u].prepaidAmt = $scope.flex.collectionView.itemsEdited[u].prepaidAmt2;
+        params.push($scope.flex.collectionView.itemsEdited[u]);
+      }
     }
 
     $scope._save(baseUrl + "prepaid/saveChargeAmt.sb",params, function (){
