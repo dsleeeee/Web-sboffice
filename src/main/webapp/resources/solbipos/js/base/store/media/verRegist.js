@@ -14,7 +14,7 @@
 var app = agrid.getApp();
 
 // 파일타입
-var verRegistfileTypeComboData = [
+var verRegistFileTypeComboData = [
   {"name":"전체","value":""},
   {"name":"POS 듀얼모니터(광고)","value":"001"},
   {"name":"로고","value":"002"},
@@ -31,7 +31,7 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 콤보박스 데이터
   $scope._setComboData("useYnCombo", useYnData);
-  $scope._setComboData("fileTypeCombo", verRegistfileTypeComboData);
+  $scope._setComboData("fileTypeCombo", verRegistFileTypeComboData);
 
   // 등록일자 셋팅
   var startDate = wcombo.genDateVal("#startDate", gvStartDate);
