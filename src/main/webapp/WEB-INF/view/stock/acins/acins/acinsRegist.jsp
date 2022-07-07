@@ -6,28 +6,29 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/stock/acins/acins/acinsRegist/"/>
 
-<wj-popup id="wjAcinsRegistLayer" control="wjAcinsRegistLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+<wj-popup id="wjAcinsRegistLayer" control="wjAcinsRegistLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px;height:750px;">
   <div id="acinsRegistLayer" class="wj-dialog wj-dialog-columns" ng-controller="acinsRegistCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
-      <s:message code="acins.reg.registTitle"/>
+      <s:message code="acins.reg.registTitle"/>&nbsp;&nbsp;<span id="registSubTitle"></span>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
-    <div class="wj-dialog-body sc2" style="height: 600px;">
-      <p id="registSubTitle" class="s14 bk mb5 fl"></p>
+    <div class="wj-dialog-body sc2" style="height: 700px;">
 
       <form name="myForm" novalidate>
         <table class="tblType01" style="position: relative;">
           <colgroup>
-            <col class="w15"/>
-            <col class="w35"/>
-            <col class="w15"/>
-            <col class="w35"/>
+            <col class="w10"/>
+            <col class="w20"/>
+            <col class="w10"/>
+            <col class="w20"/>
+            <col class="w10"/>
+            <col class="w20"/>
           </colgroup>
           <tbody>
           <tr>
             <%-- 실사제목 --%>
             <th><s:message code="acins.reg.acinsTitle"/><em class="imp">*</em></th>
-            <td colspan="3">
+            <td colspan="5">
               <input type="text" id="acinsTitle" name="acinsTitle" ng-model="acinsTitle" class="sb-input w100" maxlength="33"
                      required
                      popover-enable="myForm.acinsTitle.$invalid"
@@ -47,13 +48,13 @@
             <td>
               <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
             </td>
-          </tr>
-          <tr>
             <%-- 바코드 --%>
             <th><s:message code="acins.reg.barcd"/></th>
             <td>
               <input type="text" id="srchBarcdCd" name="srchBarcdCd" ng-model="barcdCd" class="sb-input w100" maxlength="40"/>
             </td>
+          </tr>
+          <tr>
             <%-- 상품분류 --%>
             <th><s:message code="acins.reg.prodClass"/></th>
             <td>
@@ -61,22 +62,23 @@
                      placeholder="<s:message code="cmm.all" />" readonly/>
               <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
             </td>
-          </tr>
-          <tr>
 	         <%-- 출고창고 --%>
 	         <th><s:message code="hqMove.outStorage"/></th>
 	         <td>
-	            <%-- 창고선택 모듈 멀티 선택 사용시 include
-	                 param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-	                              displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
-	                              modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
-	                              closeFunc - 팝업 닫기시 호출할 함수
-	            --%>	            
-	            <jsp:include page="/WEB-INF/view/stock/com/popup/cmmStorage/selectStorageS.jsp" flush="true">
-	              <jsp:param name="targetId" value="registSelectStorage"/>
-	            </jsp:include>
-	            <%--// 창고선택 모듈 멀티 선택 사용시 include --%>
-	        </td>
+              <span class="txtIn w150px sb-select fl mr5">
+                 <wj-combo-box
+                         id="acinsRegAdjStorageCd"
+                         ng-model="acins.reg.adjStorageCd"
+                         items-source="_getComboData('acinsRegAdjStorageCd')"
+                         display-member-path="name"
+                         selected-value-path="value"
+                         is-editable="false"
+                         initialized="_initComboBox(s)"
+                         selected-index-changed="selectedIndexChangedReg(s)"
+                 >
+                 </wj-combo-box>
+              </span>
+             </td>
             <%-- 실사구분 --%>
             <th><s:message code="acins.reg.acinsFg"/></th>
             <td>
@@ -122,17 +124,14 @@
 
       <div class="mt10 oh">
         <%-- 조회 --%>
-        <button type="button" class="btn_blue fr" id="btnSearch" ng-click="fnSearch();">
+        <button type="button" class="btn_blue fr ml5" id="btnSearch" ng-click="fnSearch();">
           <s:message code="cmm.search"/></button>
+          <%-- 상품찾기 --%>
+          <button type="button" class="btn_blue fr ml5" id="btnProdFind" ng-click="prodFind();">
+            <s:message code="acins.reg.prodFind"/></button>
       </div>
 
-      <ul class="txtSty3 mt10">
-        <li class="red"><s:message code="acins.reg.txt1"/></li>
-        <li class="red"><s:message code="acins.reg.txt2"/></li>
-        <li class="red"><s:message code="acins.reg.txt3"/></li>
-      </ul>
-
-      <table class="tblType01 mt10 tc" style="position: relative;">
+      <table id="prodFind" class="tblType01 mt10 tc" style="position: relative;display:none;">
         <colgroup>
           <col class="w70"/>
           <col class="w30"/>
@@ -164,7 +163,7 @@
         </tbody>
       </table>
 
-      <div class="mt20 tr">
+      <div class="mt10 tr">
         <div class="oh sb-select">
           <%-- 페이지 스케일  --%>
           <wj-combo-box
@@ -179,6 +178,10 @@
           </wj-combo-box>
           <%--// 페이지 스케일  --%>
 
+          <ul class="txtSty3">
+            <li class="red fl"><s:message code="acins.reg.txt3"/></li>
+          </ul>
+
           <%-- 현재고적용 --%>
           <button type="button" class="btn_skyblue ml5" id="btnCurrToAcins" ng-click="setCurrToAcins()">
             <s:message code="acins.reg.currToAcins"/></button>
@@ -190,7 +193,7 @@
 
       <div class="w100 mt10 mb20">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 500px; overflow-x: hidden; overflow-y: hidden;">
+        <div class="wj-gridWrap" style="height: 400px; overflow-x: hidden; overflow-y: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
@@ -232,12 +235,12 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/acins/acins/acinsRegist.js?ver=20200923.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/acins/acins/acinsRegist.js?ver=20200923.03" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
 </c:import>
 
-<%-- 공통팝업 수불/재고 엑셀업로드 --%>
-<c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUploadMPS/excelUploadMPS.jsp">
+<%-- 공통팝업 실사/조정/폐기 엑셀업로드 --%>
+<c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUploadStore/excelUploadStore.jsp">
 </c:import>

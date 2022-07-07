@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    PeriodSale.xml
+    기간매출상세 화면
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.07.01     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.status.periodSale.service.impl.PeriodSaleMapper">
+
+    <!-- 기간매출상세 리스트 조회 -->
+    <!--
+        TABLE    :
+        PARAM    : periodSaleVO
+        COMMENTS : 기간매출상세 리스트 조회
+    -->
+    <select id="getPeriodSaleList" parameterType="periodSaleVO" resultType="DefaultMap">
+        /* USE : PeriodSaleMapper.getPeriodSaleList */
+        <![CDATA[
+        SELECT  tssh.STORE_CD,
+                tms.STORE_NM,
+                TO_CHAR(TO_DATE(tssh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+                tssh.POS_NO
+        ,       tssh.BILL_NO
+        ,       tssh.SALE_YN
+        ,       tmt.TBL_NM AS TBL_NM
+--         ,       SUBSTR(tssh.BILL_DT, 9, 6) AS BILL_DT
+        , 		TO_CHAR(TO_DATE(tssh.BILL_DT,'yyyy/mm/dd hh24:mi:ss'),'hh24:mi:ss') AS BILL_DT
+--         ,       SUBSTR(tssh.BILL_DT, 9, 2) || ':' || SUBSTR(tssh.BILL_DT, 11, 2) || ':' || SUBSTR(tssh.BILL_DT, 13, 2) AS BILL_DT
+        ,       tssd.PROD_CD
+        ,       tmpb.BARCD_CD
+        ,       tmp.PROD_NM
+        ,       tssd.SALE_QTY
+        ,       tssd.SALE_AMT
+        ,       tssd.DC_AMT
+        ,       tssd.REAL_SALE_AMT
+        ,       (tssd.REAL_SALE_AMT - tssd.VAT_AMT) AS GA_AMT
+        ,       tssd.VAT_AMT
+        FROM    TB_SL_SALE_HDR tssh
+        ,       TB_SL_SALE_DTL tssd
+        ,       TB_MS_TABLE tmt
+        ,       TB_MS_PRODUCT tmp
+        ,       TB_MS_PRODUCT_BARCD tmpb
+        ,       TB_MS_STORE tms
+        WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tssh.STORE_CD     = #{storeCd}
+        AND     tssh.SALE_DATE between #{startDate} and #{endDate}
+        ]]>
+        <if test='posNo != null and posNo != ""'>
+            AND   tssh.POS_NO       = #{posNo}
+        </if>
+        <if test='billNo != null and billNo != ""'>
+            AND   tssh.BILL_NO    = #{billNo}
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND   tssd.PROD_CD    = #{prodCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='barcdCd != null and barcdCd != ""'>
+            AND tmpb.BARCD_CD = #{barcdCd}
+        </if>
+        <![CDATA[
+        AND     tssd.HQ_OFFICE_CD     = tssh.HQ_OFFICE_CD
+        AND     tssd.STORE_CD         = tssh.STORE_CD
+        AND     tssd.SALE_DATE        = tssh.SALE_DATE
+        AND     tssd.POS_NO           = tssh.POS_NO
+        AND     tssd.BILL_NO          = tssh.BILL_NO
+        AND     tmt.STORE_CD      (+) = tssh.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmt.TBL_CD        (+) = tssh.TBL_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmp.STORE_CD      (+) = tssd.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmp.PROD_CD       (+) = tssd.PROD_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmpb.STORE_CD     (+) = tmp.STORE_CD
+        AND     tmpb.PROD_CD      (+) = tmp.PROD_CD
+        AND     tms.HQ_OFFICE_CD     = tssh.HQ_OFFICE_CD
+        AND     tms.STORE_CD         = tssh.STORE_CD
+        ORDER
+        BY      tssh.STORE_CD, tms.STORE_NM, tssh.SALE_DATE, tssh.POS_NO, tssh.BILL_NO, tssd.BILL_DTL_NO
+        ]]>
+    </select>
+
+</mapper>
