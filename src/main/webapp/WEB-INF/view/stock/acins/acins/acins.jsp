@@ -36,13 +36,13 @@
         <div class="sb-select">
           <span class="txtIn w150px">
             <wj-combo-box
-              id="srchProcFg"
-              ng-model="procFg"
-              items-source="_getComboData('srchProcFg')"
-              display-member-path="name"
-              selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)">
+                    id="srchProcFg"
+                    ng-model="procFg"
+                    items-source="_getComboData('srchProcFg')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)">
             </wj-combo-box>
           </span>
         </div>
@@ -67,23 +67,27 @@
       <s:message code="cmm.search"/></button>
   </div>
 
-  <div class="mt20 tr">
-    <%-- 삭제 --%>
-    <button type="button" class="btn_skyblue ml5" id="btnDelete" ng-click="deleteAcins()">
-      <s:message code="cmm.delete"/></button>
+  <div class="mt20">
+    <div class="updownSet oh mb10">
+      <span class="tl s14 mt5 lh15 red">* 확정된 데이터는 삭제 하실 수 없습니다.</span>
+      <%-- 삭제 --%>
+      <button type="button" class="btn_skyblue ml5 fr" id="btnDelete" ng-click="deleteAcins()">
+        <s:message code="cmm.delete"/>
+      </button>
+    </div>
   </div>
 
   <div class="w100 mt10">
     <%--위즈모 테이블--%>
     <div class="wj-gridWrap" style="height: 350px; overflow-x: hidden; overflow-y: hidden;">
       <wj-flex-grid
-        autoGenerateColumns="false"
-        selection-mode="Row"
-        items-source="data"
-        control="flex"
-        initialized="initGrid(s,e)"
-        is-read-only="false"
-        item-formatter="_itemFormatter">
+              autoGenerateColumns="false"
+              selection-mode="Row"
+              items-source="data"
+              control="flex"
+              initialized="initGrid(s,e)"
+              is-read-only="false"
+              item-formatter="_itemFormatter">
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center" is-read-only="false"></wj-flex-grid-column>

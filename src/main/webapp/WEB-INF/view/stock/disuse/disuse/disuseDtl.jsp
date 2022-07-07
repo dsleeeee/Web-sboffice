@@ -6,14 +6,13 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/stock/disuse/disuse/disuseDtl/"/>
 
-<wj-popup id="wjDisuseDtlLayer" control="wjDisuseDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+<wj-popup id="wjDisuseDtlLayer" control="wjDisuseDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px;height:750px;">
   <div id="disuseDtlLayer" class="wj-dialog wj-dialog-columns" ng-controller="disuseDtlCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
-      <s:message code="disuse.reg.registTitle"/>
+      <s:message code="disuse.reg.registTitle"/>&nbsp;&nbsp;<span id="registSubTitle"></span>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
-    <div class="wj-dialog-body sc2" style="height: 600px;">
-      <p id="registSubTitle" class="s14 bk mb5 fl"></p>
+    <div class="wj-dialog-body sc2" style="height: 700px;">
 
       <form name="myForm" novalidate>
         <table class="tblType01" style="position: relative;">
@@ -57,11 +56,11 @@
         </table>
       </form>
 
-      <ul class="txtSty3 mt10">
-        <li class="red"><s:message code="disuse.dtl.txt1"/></li>
-      </ul>
+      <div class="mt10 tr">
+        <ul ng-if="btnDtlSave" class="txtSty3">
+          <li class="red fl"><s:message code="disuse.dtl.txt1"/></li>
+        </ul>
 
-      <div class="mt20 tr">
         <%-- 상품추가 --%>
         <button type="button" class="btn_skyblue ml5" id="btnDtlAddProd" ng-click="addProd()" ng-if="btnDtlAddProd">
           <s:message code="disuse.dtl.addProd"/></button>
