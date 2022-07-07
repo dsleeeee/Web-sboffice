@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ExcelUploadStore.xml
+    공통팝업 실사/조정/폐기 엑셀업로드
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2020.09.10     최초작성
+-->
+<mapper namespace="kr.co.solbipos.iostock.cmmExcelUpload.excelUploadStore.service.impl.ExcelUploadStoreMapper">
+
+    <!-- 엑셀업로드 - 엑셀업로드 입력 -->
+    <!--
+        TABLE    : TB_ST_STORE_TEMP_EXCEL
+        PARAM    : excelUploadStoreVO
+        COMMENTS : 엑셀업로드 한 데이터를 입력한다.
+    -->
+    <insert id="insertExcelUpload" parameterType="excelUploadStoreVO">
+        /* USE : ExcelUploadStoreMapper.insertExcelUpload */
+        INSERT INTO TB_ST_STORE_TEMP_EXCEL
+        (
+            SESSION_ID,
+            HQ_OFFICE_CD,
+            STORE_CD,
+            SEQ,
+            PROD_BARCD_CD,
+            PROD_CD,
+            UPRC,
+            PO_UNIT_QTY,
+            UNIT_QTY,
+            ETC_QTY,
+            QTY,
+            REMARK,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{sessionId},
+            #{hqOfficeCd},
+            #{storeCd},
+            #{seq},
+            TRIM(REPLACE(REPLACE(#{prodBarcdCd}, CHR(10), NULL), CHR(13), NULL)),
+            TRIM(REPLACE(REPLACE(#{prodCd}, CHR(10), NULL), CHR(13), NULL)),
+            TRIM(REPLACE(REPLACE(#{uprc}, CHR(10), NULL), CHR(13), NULL)),
+            TRIM(REPLACE(REPLACE(#{poUnitQty}, CHR(10), NULL), CHR(13), NULL)),
+            TRIM(REPLACE(REPLACE(#{unitQty}, CHR(10), NULL), CHR(13), NULL)),
+            TRIM(REPLACE(REPLACE(#{etcQty}, CHR(10), NULL), CHR(13), NULL)),
+            TRIM(REPLACE(REPLACE(#{qty}, CHR(10), NULL), CHR(13), NULL)),
+            #{remark},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 엑셀업로드 - 엑셀업로드 데이터 중 PROD_BARCD_CD 의 값이 상품코드인 경우 PROD_CD 컬럼에 UPDATE -->
+    <!--
+        TABLE    : TB_ST_STORE_TEMP_EXCEL
+        PARAM    : excelUploadStoreVO
+        COMMENTS : 엑셀업로드 데이터 중 PROD_BARCD_CD 의 값이 상품코드인 경우 PROD_CD 컬럼에 UPDATE 한다.
+    -->
+    <update id="updateExcelUploadProdCd" parameterType="excelUploadStoreVO">
+        /* USE : ExcelUploadStoreMapper.updateExcelUploadProdCd */
+        <choose>
+            <!-- 본사 -->
+            <when test='storeCd == null'>
+                UPDATE TB_ST_STORE_TEMP_EXCEL tpte
+                SET tpte.PROD_CD = (
+                                        SELECT thp.PROD_CD
+                                        FROM TB_HQ_PRODUCT thp
+                                        WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                                        AND thp.PROD_CD = tpte.PROD_BARCD_CD
+                                    )
+                WHERE tpte.SESSION_ID = #{sessionId}
+                AND tpte.PROD_CD IS NULL
+            </when>
+            <!-- 가맹점 -->
+            <when test='storeCd != null'>
+                UPDATE TB_ST_STORE_TEMP_EXCEL tpte
+                SET tpte.PROD_CD = (
+                                        SELECT tmp.PROD_CD
+                                        FROM TB_MS_PRODUCT tmp
+                                        WHERE tmp.STORE_CD = #{storeCd}
+                                        AND tmp.PROD_CD = tpte.PROD_BARCD_CD
+                                    )
+                WHERE tpte.SESSION_ID = #{sessionId}
+                AND tpte.PROD_CD IS NULL
+            </when>
+        </choose>
+    </update>
+
+    <!-- 엑셀업로드 - 엑셀업로드 데이터 중 PROD_BARCD_CD 의 값이 바코드인 경우 상품코드를 찾아 PROD_CD 컬럼에 UPDATE -->
+    <!--
+        TABLE    : TB_ST_STORE_TEMP_EXCEL
+        PARAM    : excelUploadStoreVO
+        COMMENTS : 엑셀업로드 데이터 중 PROD_BARCD_CD 의 값이 바코드인 경우 상품코드를 찾아 PROD_CD 컬럼에 UPDATE 한다.
+    -->
+    <update id="updateExcelUploadBarcdCd" parameterType="excelUploadStoreVO">
+        /* USE : ExcelUploadStoreMapper.updateExcelUploadBarcdCd */
+        <choose>
+            <!-- 본사 -->
+            <when test='storeCd == null'>
+                UPDATE TB_ST_STORE_TEMP_EXCEL tpte
+                SET tpte.PROD_CD = (
+                                        SELECT MAX(thpb.PROD_CD)
+                                        FROM TB_HQ_PRODUCT_BARCD thpb
+                                        WHERE thpb.HQ_OFFICE_CD = #{hqOfficeCd}
+                                        AND thpb.BARCD_CD = tpte.PROD_BARCD_CD
+                                    )
+                WHERE tpte.SESSION_ID = #{sessionId}
+                AND tpte.PROD_CD IS NULL
+            </when>
+            <!-- 가맹점 -->
+            <when test='storeCd != null'>
+                UPDATE TB_ST_STORE_TEMP_EXCEL tpte
+                SET tpte.PROD_CD = (
+                                        SELECT MAX(tmpb.PROD_CD)
+                                        FROM TB_MS_PRODUCT_BARCD tmpb
+                                        WHERE tmpb.STORE_CD = #{storeCd}
+                                        AND tmpb.BARCD_CD = tpte.PROD_BARCD_CD
+                                    )
+                WHERE tpte.SESSION_ID = #{sessionId}
+                AND tpte.PROD_CD IS NULL
+            </when>
+        </choose>
+    </update>
+
+    <!-- 엑셀업로드 - UPRC 를 LAST_COST_UPRC 로 UPDATE -->
+    <!--
+        TABLE    : TB_ST_STORE_TEMP_EXCEL
+        PARAM    : excelUploadStoreVO
+        COMMENTS : UPRC 를 LAST_COST_UPRC 로 UPDATE 한다.
+    -->
+    <update id="updateExcelUploadUprc" parameterType="excelUploadStoreVO">
+        /* USE : ExcelUploadStoreMapper.updateExcelUploadUprc */
+        <choose>
+            <!-- 본사 -->
+            <when test='storeCd == null'>
+                UPDATE TB_ST_STORE_TEMP_EXCEL tpte
+                SET tpte.UPRC = (
+                                    SELECT thp.LAST_COST_UPRC
+                                    FROM TB_HQ_PRODUCT thp
+                                    WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                                    AND thp.PROD_CD = tpte.PROD_BARCD_CD
+                                )
+                WHERE tpte.SESSION_ID = #{sessionId}
+                AND tpte.PROD_CD IS NOT NULL
+                AND tpte.UPRC IS NULL
+            </when>
+            <!-- 가맹점 -->
+            <when test='storeCd != null'>
+                UPDATE TB_ST_STORE_TEMP_EXCEL tpte
+                SET tpte.UPRC = (
+                                    SELECT tmp.LAST_COST_UPRC
+                                    FROM TB_MS_PRODUCT tmp
+                                    WHERE tmp.STORE_CD = #{storeCd}
+                                    AND tmp.PROD_CD = tpte.PROD_BARCD_CD
+                                )
+                WHERE tpte.SESSION_ID = #{sessionId}
+                AND tpte.PROD_CD IS NOT NULL
+                AND tpte.UPRC IS NULL
+            </when>
+        </choose>
+    </update>
+
+    <!-- 엑셀업로드 - 현재 세션ID 와 동일한 데이터 삭제 -->
+    <!--
+        TABLE    : TB_ST_STORE_TEMP_EXCEL
+        PARAM    : excelUploadStoreVO
+        COMMENTS : 현재 세션ID 와 동일한 데이터를 삭제한다.
+    -->
+    <delete id="deleteExcelUpload" parameterType="excelUploadStoreVO">
+        /* USE : ExcelUploadStoreMapper.deleteExcelUpload */
+        DELETE TB_ST_STORE_TEMP_EXCEL
+        WHERE SESSION_ID = #{sessionId}
+    </delete>
+
+    <!-- 엑셀업로드 - 엑셀업로드 실패내역 조회 -->
+    <!--
+        TABLE    : TB_ST_STORE_TEMP_EXCEL
+        PARAM    : excelUploadStoreVO
+        COMMENTS : 엑셀업로드 실패내역을 조회한다.
+    -->
+    <select id="getExcelUploadErrInfoList" parameterType="excelUploadStoreVO" resultType="DefaultMap">
+        /* USE : ExcelUploadStoreMapper.getExcelUploadErrInfoList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <![CDATA[
+                    SELECT
+                    DECODE(tpte.PROD_CD, NULL, '0', '1') AS PROD_STATUS,
+                    DECODE(thvp.PROD_CD, NULL, '0', '1') AS VENDR_PROD_STATUS,
+                    tpte.PROD_BARCD_CD,
+                    tpte.PROD_CD,
+                    tpte.UPRC,
+                    tpte.UNIT_QTY,
+                    tpte.ETC_QTY,
+                    tpte.QTY,
+                    tpte.REMARK,
+                    thp.STOCK_PROD_YN,
+                    thp.PO_PROD_FG,
+                    thp.USE_YN
+                    FROM TB_ST_STORE_TEMP_EXCEL tpte,
+                    TB_HQ_PRODUCT thp,
+                    TB_HQ_VENDOR_PROD thvp
+                    WHERE 1=1
+                    AND tpte.SESSION_ID = #{sessionId}
+                    AND tpte.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thp.HQ_OFFICE_CD (+)= tpte.HQ_OFFICE_CD
+                    AND thp.PROD_CD (+)= tpte.PROD_CD
+                    AND thvp.HQ_OFFICE_CD (+)= tpte.HQ_OFFICE_CD
+                    AND thvp.VENDR_CD (+)= #{vendrCd}
+                    AND thvp.PROD_CD (+)= tpte.PROD_CD
+                    ORDER BY tpte.PROD_BARCD_CD, tpte.PROD_CD
+                ]]>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <![CDATA[
+                    SELECT
+                    DECODE(tpte.PROD_CD, NULL, '0', '1') AS PROD_STATUS,
+                    DECODE(tmvp.PROD_CD, NULL, '0', '1') AS VENDR_PROD_STATUS,
+                    tpte.PROD_BARCD_CD,
+                    tpte.PROD_CD,
+                    tpte.UPRC,
+                    tpte.UNIT_QTY,
+                    tpte.ETC_QTY,
+                    tpte.QTY,
+                    tpte.REMARK,
+                    tmp.STOCK_PROD_YN,
+                    tmp.PO_PROD_FG,
+                    tmp.USE_YN
+                    FROM TB_ST_STORE_TEMP_EXCEL tpte,
+                    TB_MS_PRODUCT tmp,
+                    TB_MS_VENDOR_PROD tmvp
+                    WHERE 1=1
+                    AND tpte.SESSION_ID = #{sessionId}
+                    AND tpte.STORE_CD = #{storeCd}
+                    AND tmp.STORE_CD (+)= tpte.STORE_CD
+                    AND tmp.PROD_CD (+)= tpte.PROD_CD
+                    AND tmvp.STORE_CD (+)= tpte.STORE_CD
+                    AND tmvp.VENDR_CD (+)= #{vendrCd}
+                    AND tmvp.PROD_CD (+)= tpte.PROD_CD
+                    ORDER BY tpte.PROD_BARCD_CD, tpte.PROD_CD
+                ]]>
+            </when>
+        </choose>
+    </select>
+
+</mapper>
