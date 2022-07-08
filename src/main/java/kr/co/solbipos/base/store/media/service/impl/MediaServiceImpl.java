@@ -8,10 +8,13 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.store.media.service.MediaApplcStoreVO;
 import kr.co.solbipos.base.store.media.service.MediaService;
 import kr.co.solbipos.base.store.media.service.MediaVO;
 import kr.co.solbipos.pos.confg.verrecv.enums.VerRecvFg;
+import kr.co.solbipos.base.store.memberTerms.service.impl.MemberTermsMapper; // 이용약관관리
+import kr.co.solbipos.base.store.memberTerms.service.MemberTermsVO; // 이용약관관리
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,12 +48,14 @@ public class MediaServiceImpl implements MediaService {
 
     private final MediaMapper mediaMapper;
     private final MessageService messageService;
+    private final MemberTermsMapper memberTermsMapper; // 이용약관관리
 
     /** Constructor Injection */
     @Autowired
-    public MediaServiceImpl(MediaMapper mediaMapper, MessageService messageService) {
+    public MediaServiceImpl(MediaMapper mediaMapper, MessageService messageService, MemberTermsMapper memberTermsMapper) {
         this.mediaMapper = mediaMapper;
         this.messageService = messageService;
+        this.memberTermsMapper = memberTermsMapper; // 이용약관관리
     }
 
     /** 포스버전 목록 조회 */
@@ -119,6 +124,24 @@ public class MediaServiceImpl implements MediaService {
             if (!mediaVO.getResult().equals("T")){
                 isSuccess = "2";
                 return isSuccess;
+            }
+
+            System.out.println("파일타입 : " + (String)multi.getParameter("fileType"));
+            // 이용약관관리시 이전내역은 전부 사용여부 N처리
+            if( ("008").equals((String)multi.getParameter("fileType")) ) {
+                String currentDt = currentDateTimeString();
+
+                MemberTermsVO memberTermsVO = new MemberTermsVO();
+                memberTermsVO.setModDt(currentDt);
+                memberTermsVO.setModId((String)multi.getParameter("userId"));
+
+                memberTermsVO.setOrgnFg((String) multi.getParameter("orgnFg"));
+                memberTermsVO.setHqOfficeCd((String) multi.getParameter("hqOfficeCd"));
+                memberTermsVO.setStoreCd((String)multi.getParameter("storeCd"));
+
+                System.out.println("이용약관관리 신규등록시 이전내역은 전부 사용여부 N처리");
+
+                memberTermsMapper.getMemberTermsRegistPreUpdateSave(memberTermsVO);
             }
 
             String insertDt = currentDateTimeString();
@@ -236,6 +259,7 @@ public class MediaServiceImpl implements MediaService {
 
         // 파일서버 대응 경로 지정 (운영)
         String path = BaseEnv.FILE_UPLOAD_DIR + "Media/";
+
         // 업로드 되는 파일명
         String newFileName = "";
 

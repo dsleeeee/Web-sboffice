@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MemberTerms.xml
+    회원약관관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2022.07.06     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.store.memberTerms.service.impl.MemberTermsMapper">
+
+    <!-- 회원약관관리 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMemberTermsList"  parameterType="MemberTermsVO" resultType="DefaultMap">
+        /* MemberTermsMapper.getMemberTermsList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT
+                ADVER_FILE_NO AS VER_SER_NO,
+                TO_CHAR(TO_DATE(ADVER_S_DATE, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(ADVER_E_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_DATE,
+                FILE_DESC AS VER_SER_NM,
+                FILE_USE_TYPE,
+                FILE_SIZE,
+                USE_YN,
+                FILE_ORG_NM || '.' || FILE_EXT AS FILE_ORG_NM
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM TB_HQ_POS_ADVER_FILE
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='verSerNo != null and verSerNo != ""'>
+                    AND ADVER_FILE_NO LIKE '%' || #{verSerNo} || '%'
+                </if>
+                <if test='verSerNm != null and verSerNm != ""'>
+                    AND FILE_DESC LIKE '%' || #{verSerNm} || '%'
+                </if>
+                <if test='fileOrgNm != null and fileOrgNm != ""'>
+                    AND FILE_ORG_NM LIKE '%' || #{fileOrgNm} || '%'
+                </if>
+                <if test='useYn != null and useYn.toString() != ""'>
+                    AND USE_YN = #{useYn}
+                </if>
+                <if test='fileType != null and fileType.toString() != ""'>
+                    AND FILE_USE_TYPE = #{fileType}
+                </if>
+                <if test='startDate != null and startDate != ""'>
+                    AND #{startDate} BETWEEN ADVER_S_DATE AND ADVER_E_DATE
+                </if>
+                ORDER BY REG_DT DESC
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT
+                ADVER_FILE_NO AS VER_SER_NO,
+                TO_CHAR(TO_DATE(ADVER_S_DATE, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(ADVER_E_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_DATE,
+                FILE_DESC AS VER_SER_NM,
+                FILE_USE_TYPE,
+                FILE_SIZE,
+                USE_YN,
+                FILE_ORG_NM || '.' || FILE_EXT AS FILE_ORG_NM
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM TB_MS_POS_ADVER_FILE
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                <if test='verSerNo != null and verSerNo != ""'>
+                    AND ADVER_FILE_NO LIKE '%' || #{verSerNo} || '%'
+                </if>
+                <if test='verSerNm != null and verSerNm != ""'>
+                    AND FILE_DESC LIKE '%' || #{verSerNm} || '%'
+                </if>
+                <if test='fileOrgNm != null and fileOrgNm != ""'>
+                    AND FILE_ORG_NM LIKE '%' || #{fileOrgNm} || '%'
+                </if>
+                <if test='useYn != null and useYn.toString() != ""'>
+                    AND USE_YN = #{useYn}
+                </if>
+                <if test='fileType != null and fileType.toString() != ""'>
+                    AND FILE_USE_TYPE = #{fileType}
+                </if>
+                <if test='startDate != null and startDate != ""'>
+                    AND #{startDate} BETWEEN ADVER_S_DATE AND ADVER_E_DATE
+                </if>
+                ORDER BY REG_DT DESC
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 회원약관관리 신규등록 팝업 - 이전내역은 전부 사용여부 N처리 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getMemberTermsRegistPreUpdateSave" parameterType="MemberTermsVO">
+        /* MemberTermsMapper.getMemberTermsRegistPreUpdateSave */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "HQ"'>
+                UPDATE
+                TB_HQ_POS_ADVER_FILE
+                SET
+                USE_YN = 'N',
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{hqOfficeCd}
+                AND FILE_USE_TYPE = '008'
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "STORE"'>
+                UPDATE
+                TB_MS_POS_ADVER_FILE
+                SET
+                USE_YN = 'N',
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND FILE_USE_TYPE = '008'
+            </when>
+        </choose>
+    </update>
+
+</mapper>

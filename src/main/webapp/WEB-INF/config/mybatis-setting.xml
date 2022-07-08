@@ -245,8 +245,11 @@
     <typeAlias alias="storeTypeVO" type="kr.co.solbipos.base.store.storeType.service.StoreTypeVO" />
     <!-- 기초관리 매장관리 다중매장그룹관리 -->
     <typeAlias alias="multistoreGroupVO" type="kr.co.solbipos.base.store.multistoreGroup.service.MultistoreGroupVO" />
-<!-- 기초관리 매장관리 시간대분류관리 -->
+    <!-- 기초관리 매장관리 시간대분류관리 -->
     <typeAlias alias="timeSlotVO" type="kr.co.solbipos.base.store.timeSlot.service.TimeSlotVO" />
+
+    <!-- 기초관리 > 매장관리 > 회원약관관리 -->
+    <typeAlias alias="memberTermsVO" type="kr.co.solbipos.base.store.memberTerms.service.MemberTermsVO"/>
 <!--
     <typeAlias alias="posFuncVO" type="kr.co.solbipos.base.store.posfunc.service.PosFuncVO"/>
     <typeAlias alias="empBrandVO" type="kr.co.solbipos.base.store.empbrand.service.EmpBrandVO"/>
