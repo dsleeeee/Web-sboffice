@@ -67,4 +67,11 @@ public interface AuthMapper {
      * @return
      */
     String selectAccessManagementCheck(SessionInfoVO sessionInfoVO);
+
+    /**
+     * POS 자동 로그인 return URL 조회
+     * @param sessionInfoVO
+     * @return
+     */
+    String getPosLoginReturnUrl(SessionInfoVO sessionInfoVO);
 }

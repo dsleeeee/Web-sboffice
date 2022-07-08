@@ -303,6 +303,16 @@ public class AuthServiceImpl implements AuthService {
         return authMapper.selectLoginHist(loginHistVO);
     }
 
+    /**
+     *  POS 자동 로그인 return URL 조회
+     * @param sessionInfoVO
+     * @return
+     */
+    @Override
+    public String getPosLoginReturnUrl(SessionInfoVO sessionInfoVO) {
+        return authMapper.getPosLoginReturnUrl(sessionInfoVO);
+    }
+
 }
 
 
