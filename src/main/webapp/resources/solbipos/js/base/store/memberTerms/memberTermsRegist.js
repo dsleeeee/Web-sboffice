@@ -109,35 +109,34 @@ app.controller('memberTermsRegistCtrl', ['$scope', '$http', function ($scope, $h
         }
 
         // 날짜 중복여부 체크
-        // $scope.chkRegist();
-        $scope.regist();
+        $scope.chkRegist();
     };
 
     // 날짜 중복여부 체크
-    // $scope.chkRegist = function(){
-    //     // 날짜 체크
-    //     var param = {};
-    //     param.storeCd = storeCd;
-    //     param.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
-    //     param.endDate =  wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
-    //     if( isEmptyObject($scope.getSelectVersion()) ) {
-    //         param.verSerNo = '0';
-    //     } else {
-    //         param.verSerNo = $scope.version.verSerNo;
-    //     }
-    //     param.fileType = $scope.versionFileTypeCombo.selectedValue;
-    //     param.useYn = $scope.versionUseYnCombo.selectedValue;
-    //
-    //     $.postJSON("/base/store/media/chkDate.sb", param, function(result) {
-    //             $scope.$broadcast('loadingPopupActive');
-    //             if(result.status === 'OK') {
-    //                 $scope.regist();
-    //             }
-    //         },
-    //         function(result) {
-    //             $scope._popMsg($scope.versionFileTypeCombo.text + messages["memberTermsRegist.chkDate.msg"]); // 타입은 사용기간을 중복할 수 없습니다.
-    //         });
-    // };
+    $scope.chkRegist = function(){
+        // 날짜 체크
+        var param = {};
+        param.storeCd = storeCd;
+        param.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
+        param.endDate =  wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+        if( isEmptyObject($scope.getSelectVersion()) ) {
+            param.verSerNo = '0';
+        } else {
+            param.verSerNo = $scope.version.verSerNo;
+        }
+        param.fileType = $scope.versionFileTypeCombo.selectedValue;
+        param.useYn = $scope.versionUseYnCombo.selectedValue;
+
+        $.postJSON("/base/store/media/chkDate.sb", param, function(result) {
+                $scope.$broadcast('loadingPopupActive');
+                if(result.status === 'OK') {
+                    $scope.regist();
+                }
+            },
+            function(result) {
+                $scope._popMsg($scope.versionFileTypeCombo.text + messages["memberTermsRegist.chkDate.msg"]); // 타입은 사용기간을 중복할 수 없습니다.
+            });
+    };
 
     // 파일 타입 변경 시 첨부파일 확장자 변경
     $scope.fileTypeChg = function(s){
@@ -264,7 +263,9 @@ app.controller('memberTermsRegistCtrl', ['$scope', '$http', function ($scope, $h
 
     // 닫기
     $scope.close = function(){
-        endDate.value = new Date(Date.now());
+        // endDate.value = new Date(Date.now());
+        // 무제한
+        endDate.value = new Date('2099-12-31');
 
         // 첨부파일 리셋
         var agent = navigator.userAgent.toLowerCase();

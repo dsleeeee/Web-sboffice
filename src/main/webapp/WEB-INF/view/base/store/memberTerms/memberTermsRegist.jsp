@@ -150,4 +150,4 @@
     var userId       = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/memberTerms/memberTermsRegist.js?ver=20220708.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/memberTerms/memberTermsRegist.js?ver=20220708.02" charset="utf-8"></script>
