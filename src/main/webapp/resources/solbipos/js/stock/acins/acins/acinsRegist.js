@@ -19,6 +19,13 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+    var comboParams             = {};
+    // 출고창고
+    var url = '/stock/acins/acins/acins/getOutStorageCombo.sb';
+
+    // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
+    $scope._queryCombo("combo", "acinsRegAdjStorageCd", null, url, comboParams, null); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+
     s.cellEditEnded.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
@@ -38,6 +45,82 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
     s.bottomLeftCells.setCellData(0, 0, '합계');
   };
 
+
+  //DB 데이터를 조회해와서 그리드에서 사용할 Combo를 생성한다.
+  // comboFg : map - 그리드에 사용할 Combo, combo - ComboBox 생성. 두가지 다 사용할경우 combo,map 으로 하면 둘 다 생성.
+  // comboId : combo 생성할 ID
+  // gridMapId : grid 에서 사용할 Map ID
+  // url : 데이터 조회할 url 정보. 명칭관리 조회시에는 url 필요없음.
+  // params : 데이터 조회할 url에 보낼 파라미터
+  // option : A - combo 최상위에 전체라는 텍스트를 붙여준다. S - combo 최상위에 선택이라는 텍스트를 붙여준다. A 또는 S 가 아닌 경우는 데이터값만으로 생성
+  // callback : queryCombo 후 callback 할 함수
+  $scope._queryCombo = function (comboFg, comboId, gridMapId, url, params, option, callback) {
+    var comboUrl = "/iostock/cmm/iostockCmm/getCombo.sb";
+    if (url) {
+      comboUrl = url;
+    }
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+      params.sid = document.getElementsByName('sessionId')[0].value;
+    }
+
+    // ajax 통신 설정
+    $http({
+      method : 'POST', //방식
+      url    : comboUrl, /* 통신할 URL */
+      params : params, /* 파라메터로 보낼 데이터 */
+      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+    }).then(function successCallback(response) {
+      if ($scope._httpStatusCheck(response, true)) {
+        if (!$.isEmptyObject(response.data.data.list)) {
+          var list       = response.data.data.list;
+          var comboArray = [];
+          var comboData  = {};
+
+          if (comboFg.indexOf("combo") >= 0 && nvl(comboId, '') !== '') {
+            comboArray = [];
+            if (option === "A") {
+              comboData.name  = messages["cmm.all"];
+              comboData.value = "";
+              comboArray.push(comboData);
+            } else if (option === "S") {
+              comboData.name  = messages["cmm.select"];
+              comboData.value = "";
+              comboArray.push(comboData);
+            }
+
+            for (var i = 0; i < list.length; i++) {
+              comboData       = {};
+              comboData.name  = list[i].nmcodeNm;
+              comboData.value = list[i].nmcodeCd;
+              comboArray.push(comboData);
+            }
+            $scope._setComboData(comboId, comboArray);
+          }
+
+          if (comboFg.indexOf("map") >= 0 && nvl(gridMapId, '') !== '') {
+            comboArray = [];
+            for (var i = 0; i < list.length; i++) {
+              comboData      = {};
+              comboData.id   = list[i].nmcodeCd;
+              comboData.name = list[i].nmcodeNm;
+              comboArray.push(comboData);
+            }
+            $scope[gridMapId] = new wijmo.grid.DataMap(comboArray, 'id', 'name');
+          }
+        }
+      }
+    }, function errorCallback(response) {
+      $scope._popMsg(messages["cmm.error"]);
+      return false;
+    }).then(function () {
+      if (typeof callback === 'function') {
+        $timeout(function () {
+          callback();
+        }, 10);
+      }
+    });
+  };
 
   $scope.calcAmt = function (item) {
     var costUprc    = parseInt(item.costUprc);
@@ -123,8 +206,7 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
             return false;
           }
           $scope.acinsTitle = response.data.data.acinsTitle;
-          $("#registSelectStorageCd").val(response.data.data.adjStorageCd);
-          $("#registSelectStorageNm").val(response.data.data.storageNm);
+          $scope.acins.reg.adjStorageCd = response.data.data.adjStorageCd;
         }
       }
     }, function errorCallback(response) {
@@ -162,20 +244,28 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.acinsFg     = $scope.acinsFg;
     params.vendrCd     = $("#acinsRegistSelectVendrCd").val();
     params.listScale   = $scope.listScale;
-    params.storageCd    = $("#registSelectStorageCd").val();
+    params.storageCd    = $scope.acins.reg.adjStorageCd;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/stock/acins/acins/acinsRegist/list.sb", params);
   };
 
+  // 상품찾기버튼
+  $scope.prodFind = function () {
+    if($("#prodFind").css("display") === "none"){
+      $("#prodFind").css("display", "");
+    } else {
+      $("#prodFind").css("display", "none");
+    }
+  }
 
   // 조회버튼으로 조회시
   $scope.fnSearch = function () {
 
-	if($("#registSelectStorageCd").val() === ""){
-	  alert("창고를 선택하여 주십시요.");
-	  return false;
-	}
+	// if($scope.acins.reg.adjStorageCd === ""){
+	//   alert("창고를 선택하여 주십시요.");
+	//   return false;
+	// }
     if ($scope.flex.collectionView.itemsEdited.length > 0 || $scope.flex.collectionView.itemsAdded.length > 0) {
       var msg = messages["acins.reg.searchMsg"]; // 저장되지 않은 자료가 있습니다. 조회하시겠습니까?
       s_alert.popConf(msg, function () {
@@ -188,9 +278,13 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
     }
   };
 
+  $scope.selectedIndexChangedReg = function (){
+    $scope.searchAcinsRegistList();
+  }
 
   // 실사 상품 저장
   $scope.saveAcinsRegist = function () {
+
     if (nvl($scope.acinsTitle, '') === '') {
       var msg = messages["acins.reg.acinsTitle"] + messages["cmm.require.text"]; // 실사제목을 입력하세요.
       $scope._popMsg(msg);
@@ -232,7 +326,7 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
       item.acinsTitle = $scope.acinsTitle;
       item.storageCd  = "999";		//001	->	999
       item.hqBrandCd  = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
-      item.adjStorageCd = $("#registSelectStorageCd").val();
+      item.adjStorageCd = $scope.acins.reg.adjStorageCd;
 
       if(item.status !== "R") params.push(item);
     }
@@ -254,11 +348,11 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
       item.acinsTitle = $scope.acinsTitle;
       item.storageCd  = "999";	//001	->	999
       item.hqBrandCd  = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
-      item.adjStorageCd = $("#registSelectStorageCd").val();
+      item.adjStorageCd = $scope.acins.reg.adjStorageCd;
 
       if(item.status !== "R") params.push(item);
     }
-    console.log(params);
+    // console.log(params);
     if(params.length > 0 || ($scope.seqNo  !== null && $scope.seqNo !== ''))
     {
         $scope._save("/stock/acins/acins/acinsRegist/save.sb", params, function () {
@@ -280,7 +374,15 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
       var acinsScope = agrid.getScope('acinsCtrl');
       acinsScope.searchAcinsList();
 
-      $scope.wjAcinsRegistLayer.hide(true);
+      var params       = {};
+      params.startDate = $scope.acinsDate;
+      params.endDate   = $scope.acinsDate;
+
+      $.postJSON("/stock/acins/acins/acins/list.sb", params, function(result) {
+        $scope.seqNo = result.data.list[0].seqNo;
+        $scope.searchAcinsRegistList();
+      });
+
     }
     // 실사상세내역 페이지에서 호출한 경우
     else if ($scope.callParent === "acinsDtl") {
@@ -291,6 +393,7 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
       acinsDtlScope._setPagingInfo('curr', 1); // 페이지번호 1로 세팅
       acinsDtlScope.searchAcinsDtlList();
 
+      $scope.searchAcinsRegistList();
     }
 
 //    $scope.wjAcinsRegistLayer.hide(true);
@@ -466,7 +569,7 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '실사_' + getCurDateTime() +'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);
@@ -481,13 +584,14 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
       var msg = messages["acins.reg.acinsTitle"] + messages["cmm.require.text"]; // 실사제목을 입력하세요.
       $scope._popMsg(msg);
       return false;
-    } else if (nvl($("#registSelectStorageCd").val(),'') === '' && prcsFg !== 'excelFormDown') {
-        var msg = messages["hqMove.outStorage"] + messages["cmm.require.text"];
-        $scope._popMsg(msg);
-        return false;
     }
+    // else if (nvl($scope.acins.reg.adjStorageCd,'') === '' && prcsFg !== 'excelFormDown') {
+    //     var msg = messages["hqMove.outStorage"] + messages["cmm.require.text"];
+    //     $scope._popMsg(msg);
+    //     return false;
+    // }
 
-    var excelUploadScope = agrid.getScope('excelUploadMPSCtrl');
+    var excelUploadScope = agrid.getScope('excelUploadStoreCtrl');
     /** 업로드 구분. 해당값에 따라 엑셀 양식이 달라짐. */
     var uploadFg = 'acins';
 
@@ -522,14 +626,14 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.seqNo    = $scope.seqNo;
     params.title    = $scope.acinsTitle;
     params.addQtyFg = $scope.addQtyFg;
-    params.adjStorageCd    = $("#registSelectStorageCd").val();
+    params.adjStorageCd    = $scope.acins.reg.adjStorageCd;
 
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
     	params.sid = document.getElementsByName('sessionId')[0].value;
     }
 
-    var excelUploadScope = agrid.getScope('excelUploadMPSCtrl');
+    var excelUploadScope = agrid.getScope('excelUploadStoreCtrl');
 
     $http({
       method : 'POST', //방식
@@ -557,7 +661,7 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
   $scope.excelUploadErrInfo = function () {
     var params      = {};
     params.uploadFg = 'acins';
-    $scope._broadcast('excelUploadMPSErrInfoCtrl', params);
+    $scope._broadcast('excelUploadStoreErrInfoCtrl', params);
   };
 
 
@@ -566,12 +670,5 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
   // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
   $scope.acinsRegistSelectVendrShow = function () {
     $scope._broadcast('acinsRegistSelectVendrCtrl');
-  };
-
-  // 창고선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.registSelectStorageShow = function () {
-    $scope._broadcast('registSelectStorageCtrl');
   };
 }]);

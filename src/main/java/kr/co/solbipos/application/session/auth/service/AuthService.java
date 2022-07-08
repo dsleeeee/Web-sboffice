@@ -78,4 +78,11 @@ public interface AuthService {
       */
     <E> List<E> selectLoginHist(LoginHistVO loginHistVO);
 
+    /**
+     *  POS 자동 로그인 return URL 조회
+     * @param sessionInfoVO
+     * @return
+     */
+    String getPosLoginReturnUrl(SessionInfoVO sessionInfoVO);
+
 }

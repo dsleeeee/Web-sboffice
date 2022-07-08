@@ -214,7 +214,7 @@
                         AND PROD_CD = tmp.PROD_CD
                         AND #{adjDate} BETWEEN START_DATE AND END_DATE
                      ), 0) AS SALE_UPRC
-        ,       NVL(tsssc.AVG_COST_UPRC, tmp.COST_UPRC) AS COST_UPRC
+        ,       tmp.COST_UPRC
         ,       NVL(NVL(tssad.CURR_QTY, tsssc.CURR_QTY), 0) AS CURR_QTY
         ,       tssad.ADJ_QTY
         ,       tssad.ADJ_AMT
@@ -225,15 +225,7 @@
         <![CDATA[
         FROM    TB_MS_PRODUCT tmp
         ,       TB_ST_STORE_ADJUST_DTL tssad
-        ,       (   SELECT  tsssc.PROD_CD, tsssc.CURR_QTY, tsssm.AVG_COST_UPRC
-                    FROM    TB_ST_STORE_STOCK_CUR tsssc
-                    ,       TB_ST_STORE_STOCK_MONTHLY tsssm
-                    WHERE   tsssc.STORE_CD        	=   #{storeCd}
-                    AND		tsssc.STORAGE_CD		=	#{storageCd}
-                    AND     tsssm.IOSTOCK_YM  (+) 	=   SUBSTR(#{adjDate}, 0, 6)
-                    AND     tsssm.STORE_CD(+)     	=   tsssc.STORE_CD
-                    AND     tsssm.PROD_CD     (+) 	=   tsssc.PROD_CD
-                )   tsssc
+        ,       TB_ST_STORE_STOCK_CUR tsssc
         ,       TB_MS_PRODUCT_BARCD tmpb
         WHERE   tmp.STORE_CD        =   #{storeCd}
         AND     tmp.STOCK_PROD_YN       =   'Y'
@@ -242,6 +234,8 @@
         AND     tssad.STORE_CD      (+) =   #{storeCd}
         AND     tssad.ADJ_DATE      (+) =   #{adjDate}
         AND     tssad.SEQ_NO        (+) =   #{seqNo}
+        AND     tsssc.STORE_CD      (+) =   tmp.STORE_CD
+        AND     tsssc.STORAGE_CD    (+) =   '999'
         AND     tsssc.PROD_CD       (+) =   tmp.PROD_CD
         AND     tmpb.STORE_CD       (+) =   tmp.STORE_CD
         AND     tmpb.PROD_CD        (+) =   tmp.PROD_CD
@@ -416,7 +410,7 @@
                         AND PROD_CD = tmp.PROD_CD
                         AND #{adjDate} BETWEEN START_DATE AND END_DATE
                      ), 0) AS SALE_UPRC
-        ,       NVL(tsssm.AVG_COST_UPRC, tmp.COST_UPRC) AS COST_UPRC
+        ,       tmp.COST_UPRC
         ,       tssad.CURR_QTY
         ,       tssad.ADJ_QTY
         ,       tssad.ADJ_AMT
@@ -429,27 +423,6 @@
         FROM    TB_ST_STORE_ADJUST		tssa
         ,		TB_ST_STORE_ADJUST_DTL tssad
         ,       TB_MS_PRODUCT tmp
-        ,       (   SELECT  tsssm.PROD_CD
-                    ,       tsssm.AVG_COST_UPRC
-                    ,       (tsssm.BASE_QTY + NVL(IOSTOCK_QTY, 0)) AS CMPT_DATE_QTY
-                    FROM    (   SELECT  tsssm.IOSTOCK_YM, tsssm.STORE_CD
-                                ,       tsssm.PROD_CD, tsssm.BASE_QTY, tsssm.AVG_COST_UPRC
-                                FROM    TB_ST_STORE_STOCK_MONTHLY tsssm
-                                WHERE   tsssm.STORE_CD      =   #{storeCd}
-                                AND     tsssm.IOSTOCK_YM    =   SUBSTR(#{adjDate}, 0, 6)
-                            ) tsssm
-                    ,       (   SELECT  tsssd.IOSTOCK_DATE, tsssd.STORE_CD
-                                ,       tsssd.PROD_CD
-                                ,       SUM(tsssd.IOSTOCK_QTY) AS IOSTOCK_QTY
-                                FROM    TB_ST_STORE_STOCK_DAILY tsssd
-                                WHERE   tsssd.STORE_CD      =   #{storeCd}
-                                AND     tsssd.IOSTOCK_DATE  =   #{adjDate}
-                                GROUP
-                                BY      tsssd.IOSTOCK_DATE, tsssd.STORE_CD
-                                ,       tsssd.PROD_CD
-                            ) tsssd
-                    WHERE   tsssd.PROD_CD(+)=   tsssm.PROD_CD
-                )   tsssm
         ,       TB_MS_PRODUCT_BARCD tmpb
         WHERE   tssad.STORE_CD          =   #{storeCd}
         AND     tssad.ADJ_DATE          =   #{adjDate}
@@ -459,7 +432,6 @@
         AND     tssad.SEQ_NO           	=   tssa.SEQ_NO
         AND     tssad.STORE_CD          =   tmp.STORE_CD
         AND     tssad.PROD_CD           =   tmp.PROD_CD
-        AND     tsssm.PROD_CD       (+) =   tssad.PROD_CD
         AND     tmpb.STORE_CD       (+) =   tssad.STORE_CD
         AND     tmpb.PROD_CD        (+) =   tssad.PROD_CD
         ORDER
@@ -866,16 +838,16 @@
     <!--                엑셀업로드 시작                 -->
     <!--  조정관리 엑셀업로드 - 엑셀업로드 수량추가 -->
     <!--
-        TABLE    : TB_PO_TEMP_EXCEL, TB_ST_STORE_ADJUST_DTL
-        PARAM    : excelUploadMPSVO
+        TABLE    : TB_ST_STORE_TEMP_EXCEL, TB_ST_STORE_ADJUST_DTL
+        PARAM    : excelUploadStoreVO
         COMMENTS : 조정관리 엑셀업로드 - 엑셀업로드 수량추가인 경우 기존에 등록된 내역을 TEMP 테이블에 입력한다.
     -->
-    <insert id="insertExcelUploadAddQty" parameterType="excelUploadMPSVO">
+    <insert id="insertExcelUploadAddQty" parameterType="excelUploadStoreVO">
         /* USE : AdjMapper.insertExcelUploadAddQty */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                INSERT INTO TB_PO_TEMP_EXCEL
+                INSERT INTO TB_ST_STORE_TEMP_EXCEL
                 (   SESSION_ID
                 ,   HQ_OFFICE_CD
                 ,   PROD_CD
@@ -898,7 +870,7 @@
                 AND     ADJ_DATE    =  #{date}
                 AND     SEQ_NO      =  #{seqNo}
                 AND     PROD_CD     IN (  SELECT  PROD_CD
-                                          FROM    TB_PO_TEMP_EXCEL
+                                          FROM    TB_ST_STORE_TEMP_EXCEL
                                           WHERE   SESSION_ID  = #{sessionId}
                                           AND     PROD_CD     IS NOT  NULL
                                           AND     PROD_CD     IN (  SELECT  PROD_CD
@@ -911,7 +883,7 @@
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                INSERT INTO TB_PO_TEMP_EXCEL
+                INSERT INTO TB_ST_STORE_TEMP_EXCEL
                 (   SESSION_ID
                 ,   STORE_CD
                 ,   PROD_CD
@@ -934,7 +906,7 @@
                 AND     ADJ_DATE    =  #{date}
                 AND     SEQ_NO      =  #{seqNo}
                 AND     PROD_CD     IN (  SELECT  PROD_CD
-                                          FROM    TB_PO_TEMP_EXCEL
+                                          FROM    TB_ST_STORE_TEMP_EXCEL
                                           WHERE   SESSION_ID  = #{sessionId}
                                           AND     PROD_CD     IS NOT  NULL
                                           AND     PROD_CD     IN (  SELECT  PROD_CD
@@ -951,11 +923,11 @@
 
     <!--  조정관리 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품 삭제 -->
     <!--
-        TABLE    : TB_ST_HQ_ADJUST_DTL, TB_PO_TEMP_EXCEL
-        PARAM    : excelUploadMPSVO
+        TABLE    : TB_ST_HQ_ADJUST_DTL, TB_ST_STORE_TEMP_EXCEL
+        PARAM    : excelUploadStoreVO
         COMMENTS : 조정관리 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제한다.
     -->
-    <delete id="deleteAdjToExcelUploadData" parameterType="excelUploadMPSVO">
+    <delete id="deleteAdjToExcelUploadData" parameterType="excelUploadStoreVO">
         /* USE : AdjMapper.deleteAdjToExcelUploadData */
         <choose>
             <!-- 본사 -->
@@ -965,7 +937,7 @@
                 AND     ADJ_DATE      = #{date}
                 AND     SEQ_NO        = #{seqNo}
                 AND     PROD_CD       IN  ( SELECT  PROD_CD
-                FROM    TB_PO_TEMP_EXCEL
+                FROM    TB_ST_STORE_TEMP_EXCEL
                 WHERE   SESSION_ID  = #{sessionId}
                 AND     PROD_CD     IS NOT NULL
                 )
@@ -977,7 +949,7 @@
                 AND     ADJ_DATE      = #{date}
                 AND     SEQ_NO        = #{seqNo}
                 AND     PROD_CD       IN  ( SELECT  PROD_CD
-                                            FROM    TB_PO_TEMP_EXCEL
+                                            FROM    TB_ST_STORE_TEMP_EXCEL
                                             WHERE   SESSION_ID  = #{sessionId}
                                             AND     PROD_CD     IS NOT NULL
                                           )
@@ -988,17 +960,77 @@
 
     <!--  조정관리 엑셀업로드 - 엑셀업로드 한 수량을 조정수량으로 입력 -->
     <!--
-        TABLE    : TB_ST_HQ_ADJUST_DTL, TB_PO_TEMP_EXCEL, TB_HQ_PRODUCT, TB_ST_HQ_STOCK_CUR, TB_ST_HQ_STOCK_MONTHLY
-                   TB_ST_STORE_ADJUST_DTL, TB_PO_TEMP_EXCEL, TB_MS_PRODUCT, TB_ST_STORE_STOCK_CUR, TB_ST_STORE_STOCK_MONTHLY
-        PARAM    : excelUploadMPSVO
+        TABLE    : TB_ST_HQ_ADJUST_DTL, TB_ST_STORE_TEMP_EXCEL, TB_HQ_PRODUCT, TB_ST_HQ_STOCK_CUR, TB_ST_HQ_STOCK_MONTHLY
+                   TB_ST_STORE_ADJUST_DTL, TB_ST_STORE_TEMP_EXCEL, TB_MS_PRODUCT, TB_ST_STORE_STOCK_CUR, TB_ST_STORE_STOCK_MONTHLY
+        PARAM    : excelUploadStoreVO
         COMMENTS : 조정관리 엑셀업로드 - 엑셀업로드 한 수량을 조정수량으로 입력한다.
     -->
-    <insert id="insertAdjToExcelUploadData" parameterType="excelUploadMPSVO">
+    <insert id="insertAdjToExcelUploadData" parameterType="excelUploadStoreVO">
         /* USE : AdjMapper.insertAdjToExcelUploadData */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                INSERT INTO TB_ST_HQ_ADJUST_DTL
+                MERGE INTO TB_ST_HQ_ADJUST_DTL A
+                USING
+                (
+                SELECT  #{hqOfficeCd} AS HQ_OFFICE_CD
+                ,       #{date} AS ADJ_DATE
+                ,       #{seqNo} AS SEQ_NO
+                ,       '00' AS HQ_BRAND_CD
+                ,       tpte.PROD_CD
+                ,       tpte.COST_UPRC AS COST_UPRC
+                ,       tpte.PO_UNIT_QTY
+                ,       NVL(tshsc.CURR_QTY,0) AS CURR_QTY
+                ,       tpte.QTY AS ADJ_QTY
+                ,       tpte.COST_UPRC * tpte.QTY AS ADJ_AMT
+                ,       tpte.REMARK
+                ,       #{regDt} AS REG_DT
+                ,       #{regId} AS REG_ID
+                ,       #{modDt} AS MOD_DT
+                ,       #{modId} AS MOD_ID
+                FROM    (   SELECT  tpte.HQ_OFFICE_CDAVG_COST_UPRC
+                            ,       tpte.PROD_CD
+                            ,       thp.PO_UNIT_QTY
+                            ,       NVL(MAX(thp.COST_UPRC), 0) AS COST_UPRC
+                            ,       SUM(tpte.QTY)    AS QTY
+                            ,       MAX(tpte.REMARK) AS REMARK
+                            FROM    TB_ST_STORE_TEMP_EXCEL tpte
+                            ,       TB_HQ_PRODUCT thp
+                            WHERE   tpte.SESSION_ID     =   #{sessionId}
+                            AND     tpte.PROD_CD        IS NOT  NULL
+                            AND     thp.HQ_OFFICE_CD    =   #{hqOfficeCd}
+                            AND     thp.PROD_CD         =   tpte.PROD_CD
+                            AND     thp.STOCK_PROD_YN   =   'Y'
+                            AND     thp.USE_YN          =   'Y'
+                            GROUP
+                            BY      tpte.HQ_OFFICE_CD
+                            ,       tpte.PROD_CD
+                            ,       thp.PO_UNIT_QTY
+                        ) tpte
+                ,       TB_ST_HQ_STOCK_CUR tsssc
+                WHERE   tsssc.HQ_OFFICE_CD  (+) =   tpte.HQ_OFFICE_CD
+                AND     tsssc.storage_cd    (+) =   '999'
+                AND     tsssc.PROD_CD       (+) =   tpte.PROD_CD
+                )   B
+                ON (
+                A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                AND A.ADJ_DATE = B.ADJ_DATE
+                AND A.SEQ_NO = B.SEQ_NO
+                AND A.PROD_CD = B.PROD_CD
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                SET
+                A.COST_UPRC     = B.COST_UPRC,
+                A.PO_UNIT_QTY   = B.PO_UNIT_QTY,
+                A.CURR_QTY      = B.CURR_QTY,
+                A.ADJ_QTY       = A.ADJ_QTY + B.ADJ_QTY,
+                A.ADJ_AMT       = A.ADJ_AMT + B.ADJ_AMT,
+                A.REMARK        = B.REMARK,
+                A.MOD_DT        = B.MOD_DT,
+                A.MOD_ID        = B.MOD_ID
+                WHEN NOT MATCHED THEN
+                INSERT
                 (   HQ_OFFICE_CD
                 ,   ADJ_DATE
                 ,   SEQ_NO
@@ -1014,56 +1046,87 @@
                 ,   REG_ID
                 ,   MOD_DT
                 ,   MOD_ID
+                ) VALUES (
+                    B.HQ_OFFICE_CD
+                ,   B.ADJ_DATE
+                ,   B.SEQ_NO
+                ,   B.HQ_BRAND_CD
+                ,   B.PROD_CD
+                ,   B.COST_UPRC
+                ,   B.PO_UNIT_QTY
+                ,   B.CURR_QTY
+                ,   B.ADJ_QTY
+                ,   B.ADJ_AMT
+                ,   B.REMARK
+                ,   B.REG_DT
+                ,   B.REG_ID
+                ,   B.MOD_DT
+                ,   B.MOD_ID
                 )
-                SELECT  #{hqOfficeCd}
-                ,       #{date}
-                ,       #{seqNo}
-                ,       '00'
-                ,       tpte.PROD_CD
-                ,       NVL(tshsc.AVG_COST_UPRC, tpte.COST_UPRC) AS COST_UPRC
-                ,       tpte.PO_UNIT_QTY
-                ,       NVL(tshsc.CURR_QTY,0) AS CURR_QTY
-                ,       tpte.QTY AS ADJ_QTY
-                ,       NVL(tshsc.AVG_COST_UPRC, tpte.COST_UPRC) * tpte.QTY AS ADJ_AMT
-                ,       tpte.REMARK
-                ,       #{regDt}
-                ,       #{regId}
-                ,       #{modDt}
-                ,       #{modId}
-                FROM    (   SELECT  tpte.HQ_OFFICE_CD
-                            ,       tpte.PROD_CD
-                            ,       thp.PO_UNIT_QTY
-                            ,       NVL(MAX(thp.COST_UPRC), 0) AS COST_UPRC
-                            ,       SUM(tpte.QTY)    AS QTY
-                            ,       MAX(tpte.REMARK) AS REMARK
-                            FROM    TB_PO_TEMP_EXCEL tpte
-                            ,       TB_HQ_PRODUCT thp
-                            WHERE   tpte.SESSION_ID     =   #{sessionId}
-                            AND     tpte.PROD_CD        IS NOT  NULL
-                            AND     thp.HQ_OFFICE_CD    =   #{hqOfficeCd}
-                            AND     thp.PROD_CD         =   tpte.PROD_CD
-                            AND     thp.STOCK_PROD_YN   =   'Y'
-                            AND     thp.USE_YN          =   'Y'
-                            GROUP
-                            BY      tpte.HQ_OFFICE_CD
-                            ,       tpte.PROD_CD
-                            ,       thp.PO_UNIT_QTY
-                        ) tpte
-                ,       (   SELECT  tshsc.HQ_OFFICE_CD, tshsc.PROD_CD, tshsc.CURR_QTY, tshsm.AVG_COST_UPRC
-                            FROM    TB_ST_HQ_STOCK_CUR tshsc
-                            ,       TB_ST_HQ_STOCK_MONTHLY tshsm
-                            WHERE   tshsc.HQ_OFFICE_CD    =   #{hqOfficeCd}
-                            AND     tshsm.IOSTOCK_YM  (+) =   SUBSTR(#{date}, 0, 6)
-                            AND     tshsm.HQ_OFFICE_CD(+) =   tshsc.HQ_OFFICE_CD
-                            AND     tshsm.PROD_CD     (+) =   tshsc.PROD_CD
-                            AND     tshsc.storage_cd = '999'
-                        ) tshsc
-                WHERE   tshsc.HQ_OFFICE_CD  (+) =   tpte.HQ_OFFICE_CD
-                AND     tshsc.PROD_CD       (+) =   tpte.PROD_CD
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                INSERT INTO TB_ST_STORE_ADJUST_DTL
+                MERGE INTO TB_ST_STORE_ADJUST_DTL A
+                USING
+                (
+                SELECT  #{storeCd} AS STORE_CD
+                ,       #{date}   AS ADJ_DATE
+                ,       #{seqNo}  AS SEQ_NO
+                ,       '00' AS HQ_BRAND_CD
+                ,       tpte.PROD_CD
+                ,       tpte.COST_UPRC AS COST_UPRC
+                ,       tpte.PO_UNIT_QTY
+                ,       NVL(tsssc.CURR_QTY,0) AS CURR_QTY
+                ,       tpte.QTY AS ADJ_QTY
+                ,       tpte.COST_UPRC * tpte.QTY AS ADJ_AMT
+                ,       tpte.REMARK
+                ,       #{regDt} AS REG_DT
+                ,       #{regId} AS REG_ID
+                ,       #{modDt} AS MOD_DT
+                ,       #{modId} AS MOD_ID
+                FROM    (   SELECT  tpte.STORE_CD
+                            ,       tpte.PROD_CD
+                            ,       tmp.PO_UNIT_QTY
+                            ,       NVL(MAX(tmp.COST_UPRC), 0) AS COST_UPRC
+                            ,       SUM(tpte.QTY)    AS QTY
+                            ,       MAX(tpte.REMARK) AS REMARK
+                            FROM    TB_ST_STORE_TEMP_EXCEL tpte
+                            ,       TB_MS_PRODUCT tmp
+                            WHERE   tpte.SESSION_ID     =   #{sessionId}
+                            AND     tpte.PROD_CD        IS NOT  NULL
+                            AND     tmp.STORE_CD        =   #{storeCd}
+                            AND     tmp.PROD_CD         =   tpte.PROD_CD
+                            AND     tmp.STOCK_PROD_YN   =   'Y'
+                            AND     tmp.USE_YN          =   'Y'
+                            GROUP
+                            BY      tpte.STORE_CD
+                            ,       tpte.PROD_CD
+                            ,       tmp.PO_UNIT_QTY
+                        ) tpte
+                ,       TB_ST_STORE_STOCK_CUR tsssc
+                WHERE   tsssc.STORE_CD      (+) =   tpte.STORE_CD
+                AND     tsssc.storage_cd    (+) =   '999'
+                AND     tsssc.PROD_CD       (+) =   tpte.PROD_CD
+                ) B
+                ON (
+                A.STORE_CD = B.STORE_CD
+                AND A.ADJ_DATE = B.ADJ_DATE
+                AND A.SEQ_NO = B.SEQ_NO
+                AND A.PROD_CD = B.PROD_CD
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                SET
+                A.COST_UPRC     = B.COST_UPRC,
+                A.PO_UNIT_QTY   = B.PO_UNIT_QTY,
+                A.CURR_QTY      = B.CURR_QTY,
+                A.ADJ_QTY       = A.ADJ_QTY + B.ADJ_QTY,
+                A.ADJ_AMT       = A.ADJ_AMT + B.ADJ_AMT,
+                A.REMARK        = B.REMARK,
+                A.MOD_DT        = B.MOD_DT,
+                A.MOD_ID        = B.MOD_ID
+                WHEN NOT MATCHED THEN
+                INSERT
                 (   STORE_CD
                 ,   ADJ_DATE
                 ,   SEQ_NO
@@ -1079,52 +1142,23 @@
                 ,   REG_ID
                 ,   MOD_DT
                 ,   MOD_ID
+                ) VALUES (
+                    B.STORE_CD
+                ,   B.ADJ_DATE
+                ,   B.SEQ_NO
+                ,   B.HQ_BRAND_CD
+                ,   B.PROD_CD
+                ,   B.COST_UPRC
+                ,   B.PO_UNIT_QTY
+                ,   B.CURR_QTY
+                ,   B.ADJ_QTY
+                ,   B.ADJ_AMT
+                ,   B.REMARK
+                ,   B.REG_DT
+                ,   B.REG_ID
+                ,   B.MOD_DT
+                ,   B.MOD_ID
                 )
-                SELECT  #{storeCd}
-                ,       #{date}
-                ,       #{seqNo}
-                ,       '00'
-                ,       tpte.PROD_CD
-                ,       NVL(tsssc.AVG_COST_UPRC, tpte.COST_UPRC) AS COST_UPRC
-                ,       tpte.PO_UNIT_QTY
-                ,       NVL(tsssc.CURR_QTY,0) AS CURR_QTY
-                ,       tpte.QTY AS ADJ_QTY
-                ,       NVL(tsssc.AVG_COST_UPRC, tpte.COST_UPRC) * tpte.QTY AS ADJ_AMT
-                ,       tpte.REMARK
-                ,       #{regDt}
-                ,       #{regId}
-                ,       #{modDt}
-                ,       #{modId}
-                FROM    (   SELECT  tpte.STORE_CD
-                            ,       tpte.PROD_CD
-                            ,       tmp.PO_UNIT_QTY
-                            ,       NVL(MAX(tmp.COST_UPRC), 0) AS COST_UPRC
-                            ,       SUM(tpte.QTY)    AS QTY
-                            ,       MAX(tpte.REMARK) AS REMARK
-                            FROM    TB_PO_TEMP_EXCEL tpte
-                            ,       TB_MS_PRODUCT tmp
-                            WHERE   tpte.SESSION_ID     =   #{sessionId}
-                            AND     tpte.PROD_CD        IS NOT  NULL
-                            AND     tmp.STORE_CD        =   #{storeCd}
-                            AND     tmp.PROD_CD         =   tpte.PROD_CD
-                            AND     tmp.STOCK_PROD_YN   =   'Y'
-                            AND     tmp.USE_YN          =   'Y'
-                            GROUP
-                            BY      tpte.STORE_CD
-                            ,       tpte.PROD_CD
-                            ,       tmp.PO_UNIT_QTY
-                        ) tpte
-                ,       (   SELECT  tsssc.STORE_CD, tsssc.PROD_CD, tsssc.CURR_QTY, tsssm.AVG_COST_UPRC
-                            FROM    TB_ST_STORE_STOCK_CUR tsssc
-                            ,       TB_ST_STORE_STOCK_MONTHLY tsssm
-                            WHERE   tsssc.STORE_CD      =   #{storeCd}
-                            AND     tsssm.IOSTOCK_YM(+) =   SUBSTR(#{date}, 0, 6)
-                            AND     tsssm.STORE_CD  (+) =   tsssc.STORE_CD
-                            AND     tsssm.PROD_CD   (+) =   tsssc.PROD_CD
-                            AND     tsssc.storage_cd = '999'
-                        ) tsssc
-                WHERE   tsssc.STORE_CD  (+) =   tpte.STORE_CD
-                AND     tsssc.PROD_CD   (+) =   tpte.PROD_CD
             </when>
         </choose>
     </insert>
@@ -1132,17 +1166,17 @@
 
     <!--  조정관리 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제 -->
     <!--
-        TABLE    : TB_PO_TEMP_EXCEL, TB_HQ_PRODUCT
-                   TB_PO_TEMP_EXCEL, TB_MS_PRODUCT
-        PARAM    : excelUploadMPSVO
+        TABLE    : TB_ST_STORE_TEMP_EXCEL, TB_HQ_PRODUCT
+                   TB_ST_STORE_TEMP_EXCEL, TB_MS_PRODUCT
+        PARAM    : excelUploadStoreVO
         COMMENTS : 조정관리 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제한다.
     -->
-    <delete id="deleteExcelUploadCompleteData" parameterType="excelUploadMPSVO">
+    <delete id="deleteExcelUploadCompleteData" parameterType="excelUploadStoreVO">
         /* USE : AdjMapper.deleteExcelUploadCompleteData */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                DELETE  TB_PO_TEMP_EXCEL
+                DELETE  TB_ST_STORE_TEMP_EXCEL
                 WHERE   SESSION_ID  = #{sessionId}
                 AND     PROD_CD     IS NOT NULL
                 AND     PROD_CD     IN  ( SELECT  PROD_CD
@@ -1154,7 +1188,7 @@
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                DELETE  TB_PO_TEMP_EXCEL
+                DELETE  TB_ST_STORE_TEMP_EXCEL
                 WHERE   SESSION_ID  = #{sessionId}
                 AND     PROD_CD     IS NOT NULL
                 AND     PROD_CD     IN  ( SELECT  PROD_CD

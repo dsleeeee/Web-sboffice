@@ -212,5 +212,15 @@
             USER_ID = #{userId}
     </update>
 
-
+    <select id="getPosLoginReturnUrl" parameterType="sessionInfoVO" resultType="String">
+       /* AuthMapper.getPosLoginReturnUrl */
+        SELECT NVL(URL,'') AS URL
+          FROM TB_WB_RESRCE_INFO
+         WHERE RESRCE_CD = (
+                                SELECT NMCODE_ITEM_2
+                                  FROM TB_CM_NMCODE
+                                 WHERE NMCODE_GRP_CD = '226'
+                                AND NMCODE_ITEM_1 = #{resrceCd}
+                            )
+    </select>
 </mapper>

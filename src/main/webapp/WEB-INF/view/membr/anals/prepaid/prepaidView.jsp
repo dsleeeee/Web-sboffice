@@ -204,7 +204,7 @@
     });
   });
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/prepaid/prepaid.js?ver=20181226.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/prepaid/prepaid.js?ver=20181226.04" charset="utf-8"></script>
 
 <%--&lt;%&ndash; 선불금충전 팝업 &ndash;%&gt;--%>
 <%--<c:import url="/WEB-INF/view/membr/anals/prepaid/charge.jsp">--%>

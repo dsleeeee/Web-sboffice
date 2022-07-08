@@ -421,11 +421,12 @@ public class AdjServiceImpl implements AdjService {
         if(!seqNo.equals("")) {
             // 수량추가인 경우
             if(StringUtil.getOrBlank(excelUploadMPSVO.getAddQtyFg()).equals("add")) {
-                result = adjMapper.insertExcelUploadAddQty(excelUploadMPSVO);
-            }
-
+//                result = adjMapper.insertExcelUploadAddQty(excelUploadMPSVO);
+            } else {
             // 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제
             result = adjMapper.deleteAdjToExcelUploadData(excelUploadMPSVO);
+            }
+
         }
 
         // 신규등록인 경우
