@@ -17,6 +17,7 @@ else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )           
     <input type='hidden' id='s_userId'  name='s_userId'  value='<%=request.getParameter("userId")%>'>
     <input type='hidden' id='s_userPwd' name='s_userPwd' value='nxposweb'>
     <input type='hidden' id='accessCd'  name='accessCd'  value='<%=request.getParameter("accessCd")%>'>
+    <input type='hidden' id='resrceCd'  name='resrceCd'  value='<%=request.getParameter("resrceCd")%>'>
 
     <%--     <s:eval expression="@env['login.check.id.save']" var="idField"/> --%>
 
@@ -112,6 +113,7 @@ else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )           
             document.getElementById("userId").value             = document.getElementById("s_userId").value;
             document.getElementById("userPwd").value            = document.getElementById("accessCd").value;
             document.getElementById("accessCd").value           = "";
+            document.getElementById("resrceCd").value           = document.getElementById("resrceCd").value;
             $('#nxBtnSearchn').click();
         }
     }

@@ -1,0 +1,907 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ProductMapper.xml
+    생산관리 - 생산등록
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2022.07.01     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.stock.product.product.service.impl.ProductMapper">
+
+    <!-- 생산관리 - 생산등록 리스트 조회 -->
+    <!--
+        TABLE    : TB_ST_STORE_PRODUCT
+        PARAM    : productVO
+        COMMENTS : 생산관리 - 생산등록 리스트를 조회한다.
+    -->
+    <select id="getStProductList" parameterType="productVO" resultType="DefaultMap">
+        /* USE : ProductMapper.getStProductList */
+         SELECT STORE_CD
+                , STORAGE_CD
+                , PRODUCT_DATE
+                , SEQ_NO
+                , PRODUCT_TITLE
+                , PRODUCT_FG
+                , PROC_FG
+                , DTL_CNT
+                , TOT_PRODUCT_WEIGHT
+                , TOT_PRODUCT_AMT
+                , TO_CHAR(TO_DATE(SUBSTR(CONFM_DATE, 1, 8), 'yyyymmdd'), 'yyyy-mm-dd') CONFM_DATE
+                , CONFM_ID
+                , TO_CHAR(TO_DATE(SUBSTR(REG_DT, 1, 8), 'yyyymmdd'), 'yyyy-mm-dd') AS REG_DATE
+                , PRODUCT_STORAGE_CD
+           FROM TB_ST_STORE_PRODUCT
+          WHERE STORE_CD = #{storeCd}
+            AND PRODUCT_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='productFg != null and productFg != ""'>
+            AND PRODUCT_FG = #{productFg}
+        </if>
+        <if test='procFg != null and procFg != ""'>
+            AND PROC_FG = #{procFg}
+        </if>
+          ORDER
+             BY PRODUCT_DATE, SEQ_NO DESC
+    </select>
+
+    <!-- 생산관리 - 생산등록 DTL 전부 삭제 -->
+    <!--
+        TABLE    : TB_ST_STORE_PRODUCT_DTL
+        PARAM    : productVO
+        COMMENTS : 생산관리 - 생산등록, SEQ_NO 에 해당하는 DTL을 전부 삭제한다.
+    -->
+    <delete id="deleteStAllProductDtl" parameterType="productVO">
+        /* USE : ProductMapper.deleteStAllProductDtl */
+        DELETE
+          FROM TB_ST_STORE_PRODUCT_DTL
+         WHERE STORE_CD = #{storeCd}
+           AND PRODUCT_DATE = #{productDate}
+           AND PRODUCT_FG = #{productFg}
+           AND SEQ_NO = #{seqNo}
+    </delete>
+
+    <!-- 생산관리 - 생산등록 HD 삭제 -->
+    <!--
+        TABLE    : TB_ST_STORE_PRODUCT
+        PARAM    : productVO
+        COMMENTS : 생산관리 - 생산등록, SEQ_NO 에 해당하는 HD를 삭제한다.
+    -->
+    <delete id="deleteStProductHd" parameterType="productVO">
+        /* USE : ProductMapper.deleteStProductHd */
+        DELETE
+          FROM TB_ST_STORE_PRODUCT
+         WHERE STORE_CD = #{storeCd}
+           AND PRODUCT_DATE = #{productDate}
+           AND PRODUCT_FG = #{productFg}
+           AND SEQ_NO = #{seqNo}
+    </delete>
+
+    <!-- 생산관리 - 생산등록 상품 리스트 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT, TB_ST_STORE_PRODUCT_DTL, TB_ST_STORE_STOCK_CUR, TB_ST_STORE_STOCK_MONTHLY
+        PARAM    : productVO
+        COMMENTS : 생산관리 - 생산등록 상품 리스트를 조회한다.
+    -->
+    <select id="getProductRegistList" parameterType="productVO" resultType="DefaultMap">
+        /* USE : ProductMapper.getProductRegistList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+          SELECT tmpb.BARCD_CD
+                , tmp.PROD_CD
+                , tmp.PROD_NM
+                , tmp.PO_UNIT_QTY
+                , NVL((SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
+                         FROM TB_MS_PRODUCT_SALE_PRICE
+                        WHERE STORE_CD = tmp.STORE_CD
+                          AND PROD_CD = tmp.PROD_CD
+                          AND #{productDate} BETWEEN START_DATE AND END_DATE
+                  ), 0) AS SALE_UPRC
+                , NVL(tsssc.AVG_COST_UPRC, tmp.COST_UPRC) AS COST_UPRC
+                , NVL(NVL(tsspd.CURR_QTY, tsssc.CURR_QTY), 0) AS CURR_QTY
+                , tsspd.PRODUCT_WEIGHT
+                , tsspd.PRODUCT_SALE_UPRC
+                , tsspd.PRODUCT_QTY
+                , tsspd.PRODUCT_AMT
+                , tsspd.REMARK
+                , DECODE(tsspd.PROD_CD, NULL, 'I', 'U') AS PRODUCT_PROD_STATUS
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    TB_MS_PRODUCT tmp
+        ,       TB_ST_STORE_PRODUCT_DTL tsspd
+        ,       (   SELECT tsssc.PROD_CD
+                           , tsssc.CURR_QTY
+                           , tsssm.AVG_COST_UPRC
+                      FROM TB_ST_STORE_STOCK_CUR tsssc
+                           , TB_ST_STORE_STOCK_MONTHLY tsssm
+                     WHERE tsssc.STORE_CD = #{storeCd}
+                       AND tsssc.STORAGE_CD	= #{storageCd}
+                       AND tsssm.IOSTOCK_YM (+)= SUBSTR(#{productDate}, 0, 6)
+                       AND tsssm.STORE_CD (+)= tsssc.STORE_CD
+                       AND tsssm.PROD_CD (+)= tsssc.PROD_CD
+                ) tsssc
+        ,       TB_MS_PRODUCT_BARCD tmpb
+        WHERE tmp.STORE_CD = #{storeCd}
+          AND tmp.STOCK_PROD_YN = 'Y'
+          AND tmp.USE_YN = 'Y'
+          AND tsspd.PROD_CD (+)= tmp.PROD_CD
+          AND tsspd.STORE_CD (+)= #{storeCd}
+          AND tsspd.PRODUCT_DATE (+)= #{productDate}
+          AND tsspd.PRODUCT_FG (+) = #{productFg}
+          AND tsspd.SEQ_NO (+)= #{seqNo}
+          AND tsssc.PROD_CD (+)= tmp.PROD_CD
+          AND tmpb.STORE_CD (+)= tmp.STORE_CD
+          AND tmpb.PROD_CD (+)= tmp.PROD_CD
+        <if test='prodCd != null and prodCd != ""'>
+            AND tmp.PROD_CD = #{prodCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='barcdCd != null and barcdCd != ""'>
+            AND tmpb.BARCD_CD = #{barcdCd}
+        </if>
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND tmp.PROD_CLASS_CD IN (
+                                            SELECT #{prodClassCd} AS PROD_CLASS_CD
+                                              FROM DUAL
+                                             UNION
+                                            SELECT tmpc.PROD_CLASS_CD
+                                              FROM TB_MS_PRODUCT_CLASS tmpc
+                                             WHERE tmpc.STORE_CD = #{storeCd}
+                                        START WITH tmpc.P_PROD_CLASS_CD = #{prodClassCd} AND tmpc.STORE_CD = #{storeCd}
+                                        CONNECT BY tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD AND tmpc.STORE_CD = #{storeCd}
+                                      )
+        </if>
+          ORDER
+             BY tmp.PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 생산관리 - 생산등록 제목 변경(header 정보) -->
+    <!--
+        TABLE    : TB_ST_STORE_PRODUCT
+        PARAM    : productVO
+        COMMENTS : 생산관리 - 생산등록 제목을 변경한다.(header 정보)
+    -->
+    <update id="updateProductHdTitle" parameterType="productVO">
+        /* USE : ProductMapper updateProductHdTitle */
+        UPDATE TB_ST_STORE_PRODUCT
+           SET PRODUCT_TITLE = #{productTitle}
+        ,      MOD_DT = #{modDt}
+        ,      MOD_ID = #{modId}
+        WHERE STORE_CD = #{storeCd}
+          AND PRODUCT_DATE = #{productDate}
+          AND PRODUCT_FG = #{productFg}
+          AND SEQ_NO = #{seqNo}
+    </update>
+
+    <!-- 생산관리 - 생산등록 신규 차수 조회 -->
+    <!--
+        TABLE    : TB_ST_STORE_PRODUCT
+        PARAM    : productVO
+        COMMENTS : 생산관리 - 생산등록 신규 차수를 조회한다.
+    -->
+    <select id="getProductNewSeqNo" parameterType="productVO" resultType="String">
+        /* USE : ProductMapper.getProductNewSeqNo */
+        SELECT NVL(MAX(SEQ_NO), 0)+1 AS SEQ_NO
+          FROM TB_ST_STORE_PRODUCT
+         WHERE STORE_CD = #{storeCd}
+           AND PRODUCT_DATE = #{productDate}
+           AND PRODUCT_FG = #{productFg}
+    </select>
+
+    <!-- 생산관리 - 생산등록 상품 DTL 삭제 -->
+    <!--
+        TABLE    : TB_ST_STORE_PRODUCT_DTL
+        PARAM    : productVO
+        COMMENTS : 생산관리 - 생산등록 상품 DTL을 삭제한다.
+    -->
+    <delete id="deleteProductDtl" parameterType="productVO">
+        /* USE : ProductMapper.deleteProductDtl */
+        DELETE
+          FROM TB_ST_STORE_PRODUCT_DTL
+         WHERE STORE_CD = #{storeCd}
+           AND PRODUCT_DATE = #{productDate}
+           AND PRODUCT_FG = #{productFg}
+           AND SEQ_NO = #{seqNo}
+           AND PROD_CD = #{prodCd}
+    </delete>
+
+    <!-- 생산관리 - 생산등록 상품 DTL 등록 -->
+    <!--
+        TABLE    : TB_ST_STORE_PRODUCT_DTL
+        PARAM    : productVO
+        COMMENTS : 생산관리 - 생산등록 상품 DTL을 등록한다.
+    -->
+    <insert id="insertProductDtl" parameterType="productVO">
+        /* USE : ProductMapper.insertProductDtl */
+        INSERT INTO TB_ST_STORE_PRODUCT_DTL
+        (
+            STORE_CD,
+            PRODUCT_DATE,
+            PRODUCT_FG,
+            SEQ_NO,
+            HQ_BRAND_CD,
+            PROD_CD,
+            COST_UPRC,
+            PO_UNIT_QTY,
+            CURR_QTY,
+            PRODUCT_QTY,
+            PRODUCT_WEIGHT,
+            PRODUCT_SALE_UPRC,
+            PRODUCT_AMT,
+            REMARK,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{storeCd},
+            #{productDate},
+            #{productFg},
+            #{seqNo},
+            #{hqBrandCd},
+            #{prodCd},
+            #{costUprc},
+            #{poUnitQty},
+            #{currQty},
+            #{productQty},
+            #{productWeight},
+            #{productSaleUprc},
+            #{productAmt},
+            #{remark},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 생산관리 - 생산등록 상품 DTL 수정 -->
+    <!--
+        TABLE    : TB_ST_STORE_PRODUCT_DTL
+        PARAM    : productVO
+        COMMENTS : 생산관리 - 생산등록 상품 DTL을 수정한다.
+    -->
+    <update id="updateProductDtl" parameterType="productVO">
+        /* USE : ProductMapper.updateProductDtl */
+        UPDATE TB_ST_STORE_PRODUCT_DTL
+           SET PRODUCT_WEIGHT = #{productWeight}
+               , PRODUCT_SALE_UPRC = #{productSaleUprc}
+               , PRODUCT_QTY = #{productQty}
+               , PRODUCT_AMT = #{productAmt}
+               , REMARK = #{remark}
+         WHERE STORE_CD = #{storeCd}
+           AND PRODUCT_DATE = #{productDate}
+           AND PRODUCT_FG = #{productFg}
+           AND SEQ_NO = #{seqNo}
+           AND PROD_CD = #{prodCd}
+    </update>
+
+    <!-- 생산관리 - 생산등록 HD 등록 -->
+    <!--
+        TABLE    : TB_ST_STORE_PRODUCT, TB_ST_STORE_PRODUCT_DTL
+        PARAM    : productVO
+        COMMENTS : 생산관리 - 생산등록 HD를 등록한다.
+    -->
+    <insert id="insertProductHd" parameterType="productVO">
+        /* USE : ProductMapper.insertProductHd */
+        INSERT INTO TB_ST_STORE_PRODUCT
+        (
+            STORE_CD,
+            STORAGE_CD,
+            PRODUCT_DATE,
+            PRODUCT_FG,
+            SEQ_NO,
+            PRODUCT_TITLE,
+            PROC_FG,
+            DTL_CNT,
+            TOT_PRODUCT_WEIGHT,
+            TOT_PRODUCT_AMT,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID,
+            PRODUCT_STORAGE_CD
+        )
+        SELECT  tsspd.STORE_CD
+        ,       #{storageCd}
+        ,       tsspd.PRODUCT_DATE
+        ,       #{productFg}
+        ,       tsspd.SEQ_NO
+        ,       #{productTitle}
+        ,       #{procFg}
+        ,       COUNT(tsspd.PROD_CD)
+        ,       NVL(SUM(tsspd.PRODUCT_WEIGHT), 0)
+        ,       NVL(SUM(tsspd.PRODUCT_AMT), 0)
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        ,       #{productStorageCd}
+         FROM   TB_ST_STORE_PRODUCT_DTL tsspd
+        WHERE   tsspd.STORE_CD = #{storeCd}
+          AND   tsspd.PRODUCT_DATE = #{productDate}
+          AND   tsspd.PRODUCT_FG = #{productFg}
+          AND   tsspd.SEQ_NO =  #{seqNo}
+        GROUP
+        BY      tsspd.STORE_CD
+        ,       #{storageCd}
+        ,       tsspd.PRODUCT_DATE
+        ,       #{productFg}
+        ,       tsspd.SEQ_NO
+        ,       #{productTitle}
+        ,       #{procFg}
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+    </insert>
+
+    <!-- 생산관리 - 생산등록 HD 수정 -->
+    <!--
+        TABLE    : TB_ST_STORE_PRODUCT, TB_ST_STORE_PRODUCT_DTL
+        PARAM    : productVO
+        COMMENTS : 생산관리 - 생산등록 HD를 수정한다.
+    -->
+    <update id="updateProductHd" parameterType="productVO">
+        /* USE : ProductMapper.updateProductHd */
+        UPDATE TB_ST_STORE_PRODUCT
+           SET (DTL_CNT, TOT_PRODUCT_WEIGHT, TOT_PRODUCT_AMT)
+               = ( SELECT COUNT(tsspd.PROD_CD)
+                          , NVL(SUM(tsspd.PRODUCT_WEIGHT), 0)
+                          , NVL(SUM(tsspd.PRODUCT_AMT), 0)
+                     FROM TB_ST_STORE_PRODUCT_DTL tsspd
+                    WHERE tsspd.STORE_CD = #{storeCd}
+                      AND tsspd.PRODUCT_DATE = #{productDate}
+                      AND tsspd.PRODUCT_FG = #{productFg}
+                      AND tsspd.SEQ_NO = #{seqNo}
+                 )
+        ,       PRODUCT_TITLE = #{productTitle}
+        ,       PRODUCT_STORAGE_CD = #{productStorageCd}
+        ,       PROC_FG     = #{procFg}
+        ,       CONFM_DATE  = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
+        ,       CONFM_ID    = DECODE(#{procFg}, '0', NULL, #{modId})
+        ,       MOD_DT      = #{modDt}
+        ,       MOD_ID      = #{modId}
+        WHERE STORE_CD      = #{storeCd}
+          AND PRODUCT_DATE = #{productDate}
+          AND PRODUCT_FG = #{productFg}
+          AND SEQ_NO = #{seqNo}
+    </update>
+
+    <!-- 생산관리 - 생산등록 상세 조회 -->
+    <!--
+        TABLE    : TB_ST_STORE_PRODUCT
+        PARAM    : productVO
+        COMMENTS : 생산관리 - 생산등록 상세를 조회한다.
+    -->
+    <select id="getProductDtl" parameterType="productVO" resultType="DefaultMap">
+        /* USE : ProductMapper.getProductDtl */
+        SELECT PROC_FG
+               , PRODUCT_TITLE
+          FROM TB_ST_STORE_PRODUCT
+         WHERE STORE_CD = #{storeCd}
+           AND PRODUCT_DATE = #{productDate}
+           AND PRODUCT_FG = #{productFg}
+           AND SEQ_NO = #{seqNo}
+    </select>
+
+    <!-- 생산관리 - 생산등록 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT, TB_ST_STORE_PRODUCT, TB_ST_STORE_PRODUCT_DTL, TB_ST_STORE_STOCK_MONTHLY
+                   , TB_MS_PRODUCT_BARCD, TB_ST_STORE_STOCK_DAILY
+        PARAM    : productVO
+        COMMENTS : 생산관리 - 생산등록 상세 리스트를 조회한다.
+    -->
+    <select id="getProductDtlList" parameterType="productVO" resultType="DefaultMap">
+        /* USE : ProductMapper.getProductDtlList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  tmpb.BARCD_CD
+                , tmp.PROD_CD
+                , tmp.PROD_NM
+                , tmp.PO_UNIT_QTY
+                , NVL((SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
+                               FROM TB_MS_PRODUCT_SALE_PRICE
+                              WHERE STORE_CD = tmp.STORE_CD
+                                AND PROD_CD = tmp.PROD_CD
+                                AND #{productDate} BETWEEN START_DATE AND END_DATE
+                      ), 0) AS SALE_UPRC
+                , NVL(tsssm.AVG_COST_UPRC, tmp.COST_UPRC) AS COST_UPRC
+                , tsspd.CURR_QTY
+                , tsspd.PRODUCT_WEIGHT
+                , tsspd.PRODUCT_SALE_UPRC
+                , tsspd.PRODUCT_QTY
+                , tsspd.PRODUCT_AMT
+                , tsspd.REMARK
+                , 'U' AS PRODUCT_PROD_STATUS
+                , tssp.PRODUCT_STORAGE_CD
+        <include refid="CmmSQL.PagingTemplateCount"/>
+          FROM  TB_ST_STORE_PRODUCT	tssp
+                , TB_ST_STORE_PRODUCT_DTL tsspd
+                , TB_MS_PRODUCT tmp
+                , (   SELECT  tsssm.PROD_CD
+                              , tsssm.AVG_COST_UPRC
+                              , (tsssm.BASE_QTY + NVL(IOSTOCK_QTY, 0)) AS CMPT_DATE_QTY
+                        FROM  (SELECT tsssm.IOSTOCK_YM
+                                      , tsssm.STORE_CD
+                                      , tsssm.PROD_CD
+                                      , tsssm.BASE_QTY
+                                      , tsssm.AVG_COST_UPRC
+                                 FROM TB_ST_STORE_STOCK_MONTHLY tsssm
+                                WHERE tsssm.STORE_CD = #{storeCd}
+                                  AND tsssm.IOSTOCK_YM = SUBSTR(#{productDate}, 0, 6)
+                              ) tsssm
+                            , ( SELECT tsssd.IOSTOCK_DATE
+                                      , tsssd.STORE_CD
+                                      , tsssd.PROD_CD
+                                      , SUM(tsssd.IOSTOCK_QTY) AS IOSTOCK_QTY
+                                 FROM TB_ST_STORE_STOCK_DAILY tsssd
+                                WHERE tsssd.STORE_CD = #{storeCd}
+                                  AND tsssd.IOSTOCK_DATE = #{productDate}
+                                GROUP
+                                   BY tsssd.IOSTOCK_DATE
+                                      , tsssd.STORE_CD
+                                      , tsssd.PROD_CD
+                              ) tsssd
+                       WHERE tsssd.PROD_CD (+)= tsssm.PROD_CD
+                  )   tsssm
+                , TB_MS_PRODUCT_BARCD tmpb
+          WHERE tsspd.STORE_CD = #{storeCd}
+            AND tsspd.PRODUCT_FG = #{productFg}
+            AND tsspd.PRODUCT_DATE = #{productDate}
+            AND tsspd.SEQ_NO = #{seqNo}
+            AND	tsspd.STORE_CD = tssp.STORE_CD
+            AND tsspd.PRODUCT_FG = tssp.PRODUCT_FG
+            AND tsspd.PRODUCT_DATE = tssp.PRODUCT_DATE
+            AND tsspd.SEQ_NO = tssp.SEQ_NO
+            AND tsspd.STORE_CD = tmp.STORE_CD
+            AND tsspd.PROD_CD = tmp.PROD_CD
+            AND tsssm.PROD_CD (+)= tsspd.PROD_CD
+            AND tmpb.STORE_CD (+)= tsspd.STORE_CD
+            AND tmpb.PROD_CD (+)= tsspd.PROD_CD
+          ORDER
+             BY tsspd.PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 생산관리 - 생산등록 리더기자료 텍스트 업로드시, 현재 세션ID 와 동일한 데이터 모두 삭제 -->
+    <!--
+        TABLE    : TB_PO_STORE_PRODUCT_TEMP_EXCEL
+        PARAM    : productVO
+        COMMENTS : 생산등록 리더기자료 텍스트 업로드시, 현재 세션ID 와 동일한 데이터를 모두 삭제한다.
+    -->
+    <delete id="deleteUploadProduct" parameterType="productVO">
+        /* USE : ProductMapper.deleteUploadProduct */
+        DELETE TB_PO_STORE_PRODUCT_TEMP_EXCEL
+         WHERE SESSION_ID = #{sessionId}
+    </delete>
+
+    <!-- 생산관리 - 생산등록 리더기자료 텍스트 업로드시, 임시테이블에 저장 -->
+    <!--
+        TABLE    : TB_PO_STORE_PRODUCT_TEMP_EXCEL
+        PARAM    : productVO
+        COMMENTS : 생산등록 리더기자료 텍스트 업로드시, 임시테이블에 저장한다.
+    -->
+    <insert id="saveUploadProductTemp" parameterType="productVO">
+        /* USE : ProductMapper.saveUploadProductTemp */
+        INSERT INTO TB_PO_STORE_PRODUCT_TEMP_EXCEL
+        (
+            SESSION_ID,
+            HQ_OFFICE_CD,
+            STORE_CD,
+            SEQ,
+            PROD_WT_UPRC,
+            PROD_CD,
+            PRODUCT_WEIGHT,
+            UPRC,
+            PO_UNIT_QTY,
+            UNIT_QTY,
+            ETC_QTY,
+            QTY,
+            REMARK,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID,
+            BARCD_CD
+        )
+        VALUES
+        (
+            #{sessionId},
+            #{hqOfficeCd},
+            #{storeCd},
+            #{seq},
+            #{prodWtUprc},
+            '',
+            #{productWeight},
+            #{productSaleUprc},
+            '',
+            '',
+            '',
+            '',
+            '미등록상품',
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId},
+            #{barcdCd}
+        )
+    </insert>
+
+    <!-- 생산관리 - 생산등록 리더기자료 텍스트 업로드시, 임시테이블 바코드로 상품코드 맵핑 -->
+    <!--
+        TABLE    : TB_PO_STORE_PRODUCT_TEMP_EXCEL, TB_MS_PRODUCT_BARCD
+        PARAM    : productVO
+        COMMENTS : 생산등록 리더기자료 텍스트 업로드시, 임시테이블 바코드로 상품코드를 맵핑한다.
+    -->
+    <update id="updateUploadProductMapping" parameterType="productVO">
+      /* USE : ProductMapper.updateUploadProductMapping */
+      UPDATE TB_PO_STORE_PRODUCT_TEMP_EXCEL tpspte
+         SET tpspte.PROD_CD = (
+                                  SELECT tmpb.PROD_CD
+                                    FROM TB_MS_PRODUCT_BARCD tmpb
+                                   WHERE tmpb.STORE_CD = #{storeCd}
+                                     AND tmpb.BARCD_CD = tpspte.BARCD_CD
+                              )
+      WHERE tpspte.SESSION_ID = #{sessionId}
+        AND tpspte.PROD_CD IS NULL
+    </update>
+
+    <!-- 생산관리 - 생산등록 리더기자료 텍스트 업로드시, 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제 -->
+    <!--
+        TABLE    : TB_PO_STORE_PRODUCT_TEMP_EXCEL, TB_ST_STORE_PRODUCT_DTL
+        PARAM    : productVO
+        COMMENTS : 생산등록 리더기자료 텍스트 업로드시, 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제한다.
+    -->
+    <delete id="deleteUploadProductData" parameterType="productVO">
+      /* USE : ProductMapper.deleteUploadProductData */
+      DELETE
+        FROM TB_ST_STORE_PRODUCT_DTL
+       WHERE STORE_CD = #{storeCd}
+         AND PRODUCT_DATE = #{productDate}
+         AND PRODUCT_FG = #{productFg}
+         AND SEQ_NO = #{seqNo}
+         AND PROD_CD IN ( SELECT PROD_CD
+                            FROM TB_PO_STORE_PRODUCT_TEMP_EXCEL
+                           WHERE SESSION_ID  = #{sessionId}
+                             AND PROD_CD IS NOT NULL
+                         )
+
+    </delete>
+
+    <!-- 생산관리 - 생산등록 리더기자료 텍스트 업로드시, 임시테이블자료로 생산등록 상품 DTL 등록 -->
+    <!--
+        TABLE    : TB_PO_STORE_PRODUCT_TEMP_EXCEL, TB_ST_STORE_PRODUCT_DTL
+        PARAM    : productVO
+        COMMENTS : 생산등록 리더기자료 텍스트 업로드시, 임시테이블자료로 생산등록 상품 DTL에 등록한다.
+    -->
+    <insert id="saveUploadProductDtl" parameterType="productVO">
+        /* USE : ProductMapper.saveUploadProductDtl */
+        INSERT INTO TB_ST_STORE_PRODUCT_DTL
+        (
+            STORE_CD,
+            PRODUCT_DATE,
+            PRODUCT_FG,
+            SEQ_NO,
+            HQ_BRAND_CD,
+            PROD_CD,
+            COST_UPRC,
+            PO_UNIT_QTY,
+            CURR_QTY,
+            PRODUCT_QTY,
+            PRODUCT_WEIGHT,
+            PRODUCT_SALE_UPRC,
+            PRODUCT_AMT,
+            REMARK,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        SELECT tpspte.STORE_CD,
+               #{productDate},
+               #{productFg},
+               #{seqNo},
+               #{hqBrandCd},
+               tmp.PROD_CD,
+               NVL(tsssc.AVG_COST_UPRC, tmp.COST_UPRC) AS COST_UPRC,
+               tmp.PO_UNIT_QTY,
+               NVL(tsssc.CURR_QTY, 0) AS CURR_QTY,
+               tpspte.QTY,
+               tpspte.PRODUCT_WEIGHT,
+               tpspte.UPRC,
+               NVL(tpspte.UPRC, '0') * NVL(tpspte.QTY, '0') AS AMT,
+               '',
+               #{regDt},
+               #{regId},
+               #{modDt},
+               #{modId}
+          FROM TB_MS_PRODUCT tmp,
+                (
+                    SELECT tpspte.STORE_CD
+                           , tpspte.PROD_WT_UPRC
+                           , tpspte.PROD_CD
+                           , tpspte.BARCD_CD
+                           , tpspte.PRODUCT_WEIGHT
+                           , tpspte.UPRC
+                           , COUNT(1) AS QTY
+                      FROM TB_PO_STORE_PRODUCT_TEMP_EXCEL tpspte
+                     WHERE tpspte.SESSION_ID = #{sessionId}
+                       AND tpspte.HQ_OFFICE_CD = #{hqOfficeCd}
+                       AND tpspte.STORE_CD = #{storeCd}
+                       AND tpspte.PROD_WT_UPRC IS NOT NULL
+                       AND tpspte.PROD_CD IS NOT NULL
+                     GROUP
+                        BY tpspte.STORE_CD,
+                           tpspte.PROD_WT_UPRC,
+                           tpspte.PROD_CD,
+                           tpspte.BARCD_CD,
+                           tpspte.PRODUCT_WEIGHT,
+                           tpspte.UPRC
+               ) tpspte,
+               (   SELECT tsssc.PROD_CD
+                           , tsssc.CURR_QTY
+                           , tsssm.AVG_COST_UPRC
+                      FROM TB_ST_STORE_STOCK_CUR tsssc
+                           , TB_ST_STORE_STOCK_MONTHLY tsssm
+                     WHERE tsssc.STORE_CD = #{storeCd}
+                       AND tsssc.STORAGE_CD	= #{storageCd}
+                       AND tsssm.IOSTOCK_YM (+)= SUBSTR(#{productDate}, 0, 6)
+                       AND tsssm.STORE_CD (+)= tsssc.STORE_CD
+                       AND tsssm.PROD_CD (+)= tsssc.PROD_CD
+              ) tsssc
+        WHERE 1=1
+        AND tmp.STORE_CD = #{storeCd}
+        AND tmp.STOCK_PROD_YN = 'Y'
+        AND tmp.USE_YN = 'Y'
+        AND tmp.STORE_CD (+)= tpspte.STORE_CD
+        AND tmp.PROD_CD (+)= tpspte.PROD_CD
+        AND tsssc.PROD_CD (+)= tpspte.PROD_CD
+    </insert>
+
+    <!-- 생산관리 - 생산등록 리더기자료 텍스트 업로드시, 임시테이블자료로 생산등록 상품 DTL 등록 (수량추가 등록) -->
+    <!--
+        TABLE    : TB_PO_STORE_PRODUCT_TEMP_EXCEL, TB_ST_STORE_PRODUCT_DTL
+        PARAM    : productVO
+        COMMENTS : 생산등록 리더기자료 텍스트 업로드시, 임시테이블자료로 생산등록 상품 DTL에 등록한다. (수량추가 등록)
+    -->
+    <insert id="saveUploadProductAddDtl" parameterType="productVO">
+        /* USE : ProductMapper.saveUploadProductAddDtl */
+        MERGE INTO TB_ST_STORE_PRODUCT_DTL A
+        USING (
+                  SELECT tpspte.STORE_CD AS STORE_CD,
+                         #{productDate} AS PRODUCT_DATE,
+                         #{productFg} AS PRODUCT_FG,
+                         #{seqNo} AS SEQ_NO,
+                         #{hqBrandCd} AS HQ_BRAND_CD,
+                         tmp.PROD_CD AS PROD_CD,
+                         NVL(tsssc.AVG_COST_UPRC, tmp.COST_UPRC) AS COST_UPRC,
+                         tmp.PO_UNIT_QTY AS PO_UNIT_QTY,
+                         NVL(tsssc.CURR_QTY, 0) AS CURR_QTY,
+                         tpspte.QTY AS PRODUCT_QTY,
+                         tpspte.PRODUCT_WEIGHT AS PRODUCT_WEIGHT,
+                         tpspte.UPRC AS PRODUCT_SALE_UPRC,
+                         NVL(tpspte.UPRC, '0') * NVL(tpspte.QTY, '0') AS PRODUCT_AMT,
+                         '' AS REMARK,
+                         #{regDt} AS REG_DT,
+                         #{regId} AS REG_ID,
+                         #{modDt} AS MOD_DT,
+                         #{modId} AS MOD_ID
+                    FROM TB_MS_PRODUCT tmp,
+                          (
+                              SELECT tpspte.STORE_CD
+                                     , tpspte.PROD_WT_UPRC
+                                     , tpspte.PROD_CD
+                                     , tpspte.BARCD_CD
+                                     , tpspte.PRODUCT_WEIGHT
+                                     , tpspte.UPRC
+                                     , COUNT(1) AS QTY
+                                FROM TB_PO_STORE_PRODUCT_TEMP_EXCEL tpspte
+                               WHERE tpspte.SESSION_ID = #{sessionId}
+                                 AND tpspte.HQ_OFFICE_CD = #{hqOfficeCd}
+                                 AND tpspte.STORE_CD = #{storeCd}
+                                 AND tpspte.PROD_WT_UPRC IS NOT NULL
+                                 AND tpspte.PROD_CD IS NOT NULL
+                               GROUP
+                                  BY tpspte.STORE_CD,
+                                     tpspte.PROD_WT_UPRC,
+                                     tpspte.PROD_CD,
+                                     tpspte.BARCD_CD,
+                                     tpspte.PRODUCT_WEIGHT,
+                                     tpspte.UPRC
+                         ) tpspte,
+                         (   SELECT tsssc.PROD_CD
+                                     , tsssc.CURR_QTY
+                                     , tsssm.AVG_COST_UPRC
+                                FROM TB_ST_STORE_STOCK_CUR tsssc
+                                     , TB_ST_STORE_STOCK_MONTHLY tsssm
+                               WHERE tsssc.STORE_CD = #{storeCd}
+                                 AND tsssc.STORAGE_CD	= #{storageCd}
+                                 AND tsssm.IOSTOCK_YM (+)= SUBSTR(#{productDate}, 0, 6)
+                                 AND tsssm.STORE_CD (+)= tsssc.STORE_CD
+                                 AND tsssm.PROD_CD (+)= tsssc.PROD_CD
+                        ) tsssc
+                  WHERE 1=1
+                  AND tmp.STORE_CD = #{storeCd}
+                  AND tmp.STOCK_PROD_YN = 'Y'
+                  AND tmp.USE_YN = 'Y'
+                  AND tmp.STORE_CD (+)= tpspte.STORE_CD
+                  AND tmp.PROD_CD (+)= tpspte.PROD_CD
+                  AND tsssc.PROD_CD (+)= tpspte.PROD_CD
+              ) B
+          ON  (
+                  A.STORE_CD = B.STORE_CD
+                  AND A.PRODUCT_DATE = B.PRODUCT_DATE
+                  AND A.PRODUCT_FG = B.PRODUCT_FG
+                  AND A.SEQ_NO = B.SEQ_NO
+                  AND A.PROD_CD = B.PROD_CD
+              )
+      WHEN MATCHED THEN
+             UPDATE SET A.COST_UPRC = B.COST_UPRC,
+                        A.PO_UNIT_QTY = B.PO_UNIT_QTY,
+                        A.CURR_QTY = B.CURR_QTY,
+                        A.PRODUCT_QTY = (A.PRODUCT_QTY + B.PRODUCT_QTY),
+                        A.PRODUCT_AMT = (A.PRODUCT_AMT + B.PRODUCT_AMT),
+                        A.MOD_DT = B.MOD_DT,
+                        A.MOD_ID = B.MOD_ID
+      WHEN NOT MATCHED THEN
+             INSERT
+             (
+                A.STORE_CD,
+                A.PRODUCT_DATE,
+                A.PRODUCT_FG,
+                A.SEQ_NO,
+                A.HQ_BRAND_CD,
+                A.PROD_CD,
+                A.COST_UPRC,
+                A.PO_UNIT_QTY,
+                A.CURR_QTY,
+                A.PRODUCT_QTY,
+                A.PRODUCT_WEIGHT,
+                A.PRODUCT_SALE_UPRC,
+                A.PRODUCT_AMT,
+                A.REMARK,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+             )
+             VALUES
+             (
+                B.STORE_CD,
+                B.PRODUCT_DATE,
+                B.PRODUCT_FG,
+                B.SEQ_NO,
+                B.HQ_BRAND_CD,
+                B.PROD_CD,
+                B.COST_UPRC,
+                B.PO_UNIT_QTY,
+                B.CURR_QTY,
+                B.PRODUCT_QTY,
+                B.PRODUCT_WEIGHT,
+                B.PRODUCT_SALE_UPRC,
+                B.PRODUCT_AMT,
+                B.REMARK,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
+             )
+    </insert>
+
+    <!-- 생산관리 - 생산등록 리더기자료 텍스트 업로드시, 정상 입력된 데이터 임시테이블에서 삭제 -->
+       <!--
+           TABLE    : TB_PO_STORE_PRODUCT_TEMP_EXCEL, TB_MS_PRODUCT
+           PARAM    : productVO
+           COMMENTS : 생산등록 리더기자료 텍스트 업로드시, 정상 입력된 데이터 임시테이블에서 삭제한다.
+       -->
+    <delete id="deleteUploadProductCompleteData" parameterType="productVO">
+      /* USE : ProductMapper.deleteUploadProductCompleteData */
+      DELETE TB_PO_STORE_PRODUCT_TEMP_EXCEL
+       WHERE SESSION_ID = #{sessionId}
+         AND PROD_CD IS NOT NULL
+         AND PROD_CD IN (  SELECT PROD_CD
+                             FROM TB_MS_PRODUCT
+                            WHERE STORE_CD = #{storeCd}
+                              AND STOCK_PROD_YN = 'Y'
+                              AND USE_YN = 'Y'
+                        )
+    </delete>
+
+    <!-- 생산관리 - 생산등록 업로드 실패내역 조회 -->
+    <!--
+        TABLE    : TB_PO_STORE_PRODUCT_TEMP_EXCEL, TB_MS_PRODUCT
+        PARAM    : productVO
+        COMMENTS : 생산등록 업로드 실패내역을 조회한다.
+    -->
+    <select id="getUploadErrInfoList" parameterType="productVO" resultType="DefaultMap">
+      /* USE : ProductMapper.getUploadErrInfoList */
+      SELECT DECODE(tpspte.PROD_CD, NULL, '0', '1') AS PROD_STATUS,
+             tpspte.PROD_WT_UPRC,
+             tpspte.PROD_CD,
+             tpspte.BARCD_CD,
+             tpspte.UPRC,
+             tpspte.UNIT_QTY,
+             tpspte.ETC_QTY,
+             tpspte.QTY,
+             tpspte.REMARK,
+             tmp.STOCK_PROD_YN,
+             tmp.PO_PROD_FG,
+             tmp.USE_YN
+        FROM TB_PO_STORE_PRODUCT_TEMP_EXCEL tpspte,
+             TB_MS_PRODUCT tmp
+       WHERE 1=1
+         AND tpspte.SESSION_ID = #{sessionId}
+         AND tpspte.STORE_CD = #{storeCd}
+         AND tpspte.PROD_WT_UPRC IS NOT NULL
+         AND tmp.STORE_CD (+)= tpspte.STORE_CD
+         AND tmp.PROD_CD (+)= tpspte.PROD_CD
+       ORDER
+          BY tpspte.PROD_WT_UPRC, tpspte.PROD_CD
+    </select>
+
+    <!-- 생산관리 - 생산등록 상품찾기 -->
+    <!--
+        TABLE    : TB_PO_STORE_PRODUCT_TEMP_EXCEL, TB_MS_PRODUCT
+        PARAM    : productVO
+        COMMENTS : 생산등록 상품을 조회한다.
+    -->
+    <select id="getProdInfo" parameterType="productVO" resultType="DefaultMap">
+        /* USE : ProductMapper.getProdInfo */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tmpb.BARCD_CD
+               , tmp.PROD_CD
+               , tmp.PROD_NM
+               , tmp.PO_UNIT_QTY
+               , NVL((SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
+                        FROM TB_MS_PRODUCT_SALE_PRICE
+                       WHERE STORE_CD = tmp.STORE_CD
+                         AND PROD_CD = tmp.PROD_CD
+                         AND #{productDate} BETWEEN START_DATE AND END_DATE
+                     ), 0) AS SALE_UPRC
+               , NVL(tsssc.AVG_COST_UPRC, tmp.COST_UPRC) AS COST_UPRC
+               , NVL(NVL(tsspd.CURR_QTY, tsssc.CURR_QTY), 0) AS CURR_QTY
+               , tsspd.PRODUCT_WEIGHT
+               , tsspd.PRODUCT_SALE_UPRC
+               , tsspd.PRODUCT_QTY
+               , tsspd.PRODUCT_AMT
+               , tsspd.REMARK
+               , DECODE(tsspd.PROD_CD, NULL, 'I', 'U') AS PRODUCT_PROD_STATUS
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    TB_MS_PRODUCT tmp
+        ,       TB_ST_STORE_PRODUCT_DTL tsspd
+        ,       (   SELECT tsssc.PROD_CD
+                          , tsssc.CURR_QTY
+                          , tsssm.AVG_COST_UPRC
+                     FROM TB_ST_STORE_STOCK_CUR tsssc
+                          , TB_ST_STORE_STOCK_MONTHLY tsssm
+                    WHERE tsssc.STORE_CD = #{storeCd}
+                      AND tsssc.STORAGE_CD = #{storageCd}
+                      AND tsssm.IOSTOCK_YM (+)= SUBSTR(#{productDate}, 0, 6)
+                      AND tsssm.STORE_CD (+)= tsssc.STORE_CD
+                      AND tsssm.PROD_CD (+)= tsssc.PROD_CD
+               ) tsssc
+        ,       TB_MS_PRODUCT_BARCD tmpb
+        WHERE tmp.STORE_CD = #{storeCd}
+          AND tmp.STOCK_PROD_YN = 'Y'
+          AND tmp.USE_YN = 'Y'
+          AND tsspd.PROD_CD (+)= tmp.PROD_CD
+          AND tsspd.STORE_CD (+)= #{storeCd}
+          AND tsspd.PRODUCT_DATE (+)= #{productDate}
+          AND tsspd.PRODUCT_FG (+) = #{productFg}
+          AND tsspd.SEQ_NO (+)= #{seqNo}
+          AND tsssc.PROD_CD (+)= tmp.PROD_CD
+          AND tmpb.STORE_CD (+)= tmp.STORE_CD
+          AND tmpb.PROD_CD (+)= tmp.PROD_CD
+        <if test='prodBarcdCd != null and prodBarcdCd != ""'>
+            AND (tmp.PROD_CD = #{prodBarcdCd} OR tmpb.BARCD_CD = #{prodBarcdCd})
+        </if>
+        ORDER
+           BY tmp.PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+</mapper>

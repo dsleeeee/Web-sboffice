@@ -166,7 +166,8 @@ public class SessionInfoVO extends CmmVO {
     /** 모바일 자동로그인 Serial No */
     private String loginAutoSerial;
 
-
+    /** POS 자동 로그인 return URL */
+    private String resrceCd;
 
 	/**
      * @return the sessionId
@@ -666,5 +667,13 @@ public class SessionInfoVO extends CmmVO {
 
     public void setLoginAutoSerial(String loginAutoSerial) {
         this.loginAutoSerial = loginAutoSerial;
+    }
+
+    public String getResrceCd() {
+        return resrceCd;
+    }
+
+    public void setResrceCd(String resrceCd) {
+        this.resrceCd = resrceCd;
     }
 }

@@ -137,6 +137,27 @@ public class AuthController {
             // 메인 페이지로
             // 세션 생성
             sessionService.setSessionInfo(request, response, result);
+
+            // POS 자동 로그인 return URL 조회
+            if(params.getUserPwd().length() > 30){
+
+                LOGGER.info("resrceCd 값 : " + params.getResrceCd());
+
+                String posLoginReturnUrl = authService.getPosLoginReturnUrl(params);
+                if(!isEmpty(posLoginReturnUrl)){
+
+                    LOGGER.info("posLoginReturnUrl 값 : " + posLoginReturnUrl);
+
+                    if("/".equals(posLoginReturnUrl.substring(0, 1))){
+                        returnUrl = posLoginReturnUrl.substring(1, posLoginReturnUrl.length());
+                    }else{
+                        returnUrl = posLoginReturnUrl;
+                    }
+                }
+            }
+
+            LOGGER.info("returnUrl 값 : " + returnUrl);
+
         } else if (code == LoginResult.NOT_EXISTS_ID || code == LoginResult.PASSWORD_ERROR) {
             // 다시 로그인 페이지로 이동
             returnUrl = failUrl;
