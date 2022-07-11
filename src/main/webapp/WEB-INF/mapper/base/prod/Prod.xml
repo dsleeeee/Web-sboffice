@@ -2745,7 +2745,15 @@
             AND thp.HQ_BRAND_CD = #{hqBrandCd}
         </if>
         <if test='prodClassCd != null and prodClassCd.toString() != ""'>
-            AND thp.PROD_CLASS_CD = #{prodClassCd}
+            AND thp.PROD_CLASS_CD IN (
+                                        SELECT  PROD_CLASS_CD
+                                        FROM    TB_HQ_PRODUCT_CLASS
+                                        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH
+                                        PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY
+                                        PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    )
         </if>
         AND (
                 ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
