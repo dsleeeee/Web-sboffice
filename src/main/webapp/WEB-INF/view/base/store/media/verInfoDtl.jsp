@@ -98,6 +98,12 @@
     </div>
   </div>
 </wj-popup>
+
+<script>
+  var fileType    = ${ccu.getCommCode("303")};
+  var useYn       = ${ccu.getCommCode("067")};
+</script>
+
 <script type="text/javascript" src="/resource/solbipos/js/base/store/media/verInfoDtl.js?ver=2019011001" charset="utf-8"></script>
 
 
