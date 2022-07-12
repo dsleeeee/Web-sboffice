@@ -49,7 +49,7 @@ app.controller('productErrInfoCtrl', ['$scope', '$http', function ($scope, $http
         var params = {};
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/stock/product/product/productRegist/getUploadErrInfoList.sb", params);
+        $scope._inquirySub("/stock/product/product/productRegist/getUploadErrInfoList.sb", params);
     };
 
 }]);

@@ -65,11 +65,11 @@ public class ProductServiceImpl implements ProductService {
 
             // DTL 삭제
             result = productMapper.deleteStAllProductDtl(productVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
             // HD 삭제
             result = productMapper.deleteStProductHd(productVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
             returnResult += result;
         }
@@ -107,14 +107,14 @@ public class ProductServiceImpl implements ProductService {
         productVO.setModDt(currentDt);
 
         result = productMapper.updateProductHdTitle(productVO);
-        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         return result;
     }
 
     /** 생산관리 - 생산등록 상품 저장 */
     @Override
-    public int saveProductRegist(ProductVO[] productVOs, SessionInfoVO sessionInfoVO) {
+    public String saveProductRegist(ProductVO[] productVOs, SessionInfoVO sessionInfoVO) {
 
         int returnResult = 0;
         int result = 0;
@@ -173,19 +173,22 @@ public class ProductServiceImpl implements ProductService {
             if(StringUtil.getOrBlank(productVO.getStatus()).equals("DELETE")) {
 
                 result = productMapper.deleteProductDtl(productVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
             } else if(StringUtil.getOrBlank(productVO.getStatus()).equals("UPDATE")) {
 
-                // 상품의 상태(등록이 되어있지 않은 경우 I, 이미 등록된 경우 U)
-                if(StringUtil.getOrBlank(productVO.getProductProdStatus()).equals("I")) {
-                    result = productMapper.insertProductDtl(productVO);
-                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-                }
+                // 생산등록 상품 DTL 처리 전, 동일한 데이터가 있는지 확인
+                if(productMapper.chkProductDtl(productVO) > 0) {
 
-                if(StringUtil.getOrBlank(productVO.getProductProdStatus()).equals("U")) {
+                    // org 키값을 셋팅
+                    productVO.setOrgProductWeight(productVO.getProductWeight());
+                    productVO.setOrgProductSaleUprc(productVO.getProductSaleUprc());
+
                     result = productMapper.updateProductDtl(productVO);
-                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                    if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }else{
+                    result = productMapper.insertProductDtl(productVO);
+                    if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
             }
 
@@ -196,14 +199,14 @@ public class ProductServiceImpl implements ProductService {
         // header 테이블 등록
         if(!isEmpty(seqNo)){
             result = productMapper.insertProductHd(productHdVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }else{
             result = productMapper.updateProductHd(productHdVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
 
-        return returnResult;
+        return productHdVO.getSeqNo();
     }
 
     /** 생산관리 - 생산등록 상세 조회 */
@@ -291,20 +294,20 @@ public class ProductServiceImpl implements ProductService {
             if(StringUtil.getOrBlank(productVO.getStatus()).equals("DELETE")) {
 
                 result = productMapper.deleteProductDtl(productVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
             } else if(StringUtil.getOrBlank(productVO.getStatus()).equals("UPDATE")) {
 
-                // 상품의 상태(등록이 되어있지 않은 경우 I, 이미 등록된 경우 U)
-                if(StringUtil.getOrBlank(productVO.getProductProdStatus()).equals("I")) {
-                    result = productMapper.insertProductDtl(productVO);
-                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                // 생산등록 상품 DTL 처리 전, 동일한 데이터가 있는지 확인
+                if(productMapper.chkProductDtl(productVO) > 0) {
+                   // org 키값을 셋팅
+                   productVO.setOrgProductWeight(productVO.getProductWeight());
+                   productVO.setOrgProductSaleUprc(productVO.getProductSaleUprc());
                 }
 
-                if(StringUtil.getOrBlank(productVO.getProductProdStatus()).equals("U")) {
-                    result = productMapper.updateProductDtl(productVO);
-                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-                }
+                result = productMapper.updateProductDtl(productVO);
+                if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
             }
 
             returnResult += result;
@@ -313,7 +316,7 @@ public class ProductServiceImpl implements ProductService {
 
         // header 테이블 수정
         result = productMapper.updateProductHd(productHdVO);
-        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         return returnResult;
     }
@@ -331,7 +334,7 @@ public class ProductServiceImpl implements ProductService {
 
     /** 생산관리 - 생산등록 리더기자료 텍스트 업로드 */
     @Override
-    public int saveUploadProduct(ProductVO[] productVOs, SessionInfoVO sessionInfoVO) {
+    public String saveUploadProduct(ProductVO[] productVOs, SessionInfoVO sessionInfoVO) {
 
         int returnResult = 0;
         int result = 0;
@@ -410,7 +413,7 @@ public class ProductServiceImpl implements ProductService {
             productVO.setSeq(++i);
 
             result = productMapper.saveUploadProductTemp(productVO);
-            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             returnResult += result;
         }
 
@@ -463,7 +466,7 @@ public class ProductServiceImpl implements ProductService {
            result = productMapper.deleteUploadProductCompleteData(productDtlVO);
        }
 
-       return returnResult;
+       return productHdVO.getSeqNo();
     }
 
     /** 생산관리 - 생산등록 업로드 실패내역 조회 */

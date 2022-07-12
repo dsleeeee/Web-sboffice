@@ -5,16 +5,16 @@
 
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
-<wj-popup control="wjProductRegistLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+<wj-popup control="wjProductRegistLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px;height:750px;">
     <div class="wj-dialog wj-dialog-columns title" ng-controller="productRegistCtrl">
 
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font">
-            <label id="popTitle"></label>
+            <label id="popTitle"></label>&nbsp;&nbsp;<label id="lblPRProductDateTitle"></label> : <label id="lblPRProductDate"></label>
             <a href="" class="wj-hide btn_close" ng-click="close()"></a>
         </div>
 
-        <div class="wj-dialog-body sc2" style="height: 600px;">
+        <div class="wj-dialog-body sc2" style="height: 700px;">
 
             <table class="tblType01" style="position: relative;">
               <colgroup>
@@ -24,13 +24,6 @@
                 <col class="w35"/>
               </colgroup>
               <tbody>
-              <tr>
-                  <%-- 생산등록/폐기등록 일자 --%>
-                  <th><label id="lblPRProductDateTitle"></label></th>
-                  <td>
-                      <label id="lblPRProductDate"></label>
-                  </td>
-              </tr>
               <tr>
                 <%-- 생산등록/폐기등록 제목 --%>
                 <th><label id="lblPRTitleTitle"></label><em class="imp">*</em></th>
@@ -91,18 +84,21 @@
 
             <div class="mt10 oh">
                 <%-- 조회 --%>
-                <button type="button" class="btn_blue fr" id="btnSearch" ng-click="fnSearch();">
+                <button type="button" class="btn_blue fr ml5" id="btnSearch" ng-click="fnSearch();">
                   <s:message code="cmm.search"/>
+                </button>
+                <%-- 상품찾기 --%>
+                <button type="button" class="btn_blue fr ml5" id="btnProdFind" ng-click="prodFind();">
+                  <s:message code="adj.reg.prodFind"/>
                 </button>
             </div>
 
-            <ul class="txtSty3 mt10">
+            <%--<ul class="txtSty3 mt10">
                 <li class="red"><s:message code="product.comment.txt1"/></li>
                 <li class="red"><s:message code="product.comment.txt2"/></li>
-                <li class="red"><s:message code="product.comment.txt3"/></li>
-            </ul>
+            </ul>--%>
 
-            <table class="tblType01 mt10 tc" style="position: relative;">
+            <table id="prodFind" class="tblType01 mt10 tc" style="position: relative; display: none;">
                 <colgroup>
                   <col class="w70"/>
                   <col class="w30"/>
@@ -134,7 +130,7 @@
                 </tbody>
             </table>
 
-            <div class="mt20 tr">
+            <div class="mt10 tr">
                 <div class="oh sb-select">
                   <%-- 페이지 스케일  --%>
                   <wj-combo-box
@@ -150,6 +146,10 @@
                   </wj-combo-box>
                   <%--// 페이지 스케일  --%>
 
+                  <ul class="txtSty3">
+                    <li class="red fl"><s:message code="product.comment.txt3"/></li>
+                  </ul>
+
                   <%-- 저장 --%>
                   <button type="button" class="btn_skyblue ml5" id="btnRegSave" ng-click="saveProductRegist()">
                     <s:message code="cmm.save"/>
@@ -159,7 +159,7 @@
 
             <div class="w100 mt10 mb20">
                 <%--위즈모 테이블--%>
-                <div class="wj-gridWrap" style="height: 500px; overflow-x: hidden; overflow-y: hidden;">
+                <div class="wj-gridWrap" style="height: 400px; overflow-x: hidden; overflow-y: hidden;">
                   <wj-flex-grid
                     autoGenerateColumns="false"
                     selection-mode="Row"
@@ -175,17 +175,20 @@
                     <wj-flex-grid-column header="<s:message code="product.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="product.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="product.barcdCd"/>" binding="barcdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="product.saleUprc"/>" binding="saleUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="product.costUprc"/>" binding="costUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="product.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="product.currQty"/>" binding="currQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="product.saleUprc"/>" binding="saleUprc" width="60" align="right" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="product.costUprc"/>" binding="costUprc" width="55" align="right" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="product.poUnitQty"/>" binding="poUnitQty" width="55" align="right" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="product.currQty"/>" binding="currQty" width="60" align="right" is-read-only="true"></wj-flex-grid-column>
 
-                    <wj-flex-grid-column header="<s:message code="product.productWeight"/>" binding="productWeight" width="100" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="product.productSaleUprc"/>" binding="productSaleUprc" width="100" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="product.productQty"/>" binding="productQty" width="100" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="product.productAmt"/>" binding="productAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="product.productWeight"/>" binding="productWeight" width="75" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="product.productSaleUprc"/>" binding="productSaleUprc" width="75" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="product.productQty"/>" binding="productQty" width="75" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="product.productAmt"/>" binding="productAmt" width="75" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="product.remark"/>" binding="remark" width="200" align="left" max-length=300></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="product.prodStatus"/>" binding="productProdStatus" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+
+                    <wj-flex-grid-column header="<s:message code="product.productWeight"/>" binding="orgProductWeight" width="75" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="product.productSaleUprc"/>" binding="orgProductSaleUprc" width="75" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
                   </wj-flex-grid>
                 </div>
@@ -193,7 +196,7 @@
             </div>
 
             <%-- 페이지 리스트 --%>
-              <div class="pageNum mt20">
+              <div class="pageNum mt10">
                 <%-- id --%>
                 <ul id="productRegistCtrlPager" data-size="10">
                 </ul>
@@ -213,7 +216,7 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/product/product/productRegist.js?ver=20220706.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/product/product/productRegist.js?ver=20220706.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

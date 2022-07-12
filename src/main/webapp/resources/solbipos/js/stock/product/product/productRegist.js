@@ -22,6 +22,9 @@ app.controller('productRegistCtrl', ['$scope', '$http', '$timeout', function ($s
     // 제목변경여부 파악을 위한 변수
     var global_productTitle;
 
+    // 신규 업로드 후, 바로 재조회시 사용
+    var rSeqNo = "";
+
     $scope._setComboData("PRListScaleBox", gvListScaleBoxData);
     $scope._setComboData("PRAddQtyFg", [
         {"name": messages["product.addQtyFgApply"], "value": "apply"},
@@ -121,12 +124,7 @@ app.controller('productRegistCtrl', ['$scope', '$http', '$timeout', function ($s
         params.barcdCd = $("#srchPRBarcdCd").val();
         params.prodClassCd = $scope.prodClassCd;
         params.listScale = $scope.listScale;
-
-        if(orgnFg === "HQ"){
-            params.storageCd = "001";
-        }else{
-            params.storageCd = "000";
-        }
+        params.storageCd = "999";	//001	->	999
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquirySub("/stock/product/product/productRegist/list.sb", params, function() {
@@ -222,9 +220,6 @@ app.controller('productRegistCtrl', ['$scope', '$http', '$timeout', function ($s
 
                         vDtlScope.searchProductDtlList(params);
                     }
-
-                    $scope.wjProductRegistLayer.hide(true);
-                    $scope.close();
                 });
                 return false;
             }
@@ -324,28 +319,41 @@ app.controller('productRegistCtrl', ['$scope', '$http', '$timeout', function ($s
         }
 
         if(params.length > 0 || ($("#hdSeqNo").val() !== null && $("#hdSeqNo").val() !== '')) {
-            $scope._save("/stock/product/product/productRegist/save.sb", params, function () {
-                
-                // 부모창 재조회
-                var vScope = agrid.getScope('productCtrl');
-                vScope.searchProductList();
 
-                // 상세페이지에서 호출한 경우
-                if ($("#hdSeqNo").val() !== "") {
-                    var vDtlScope = agrid.getScope('productDtlCtrl');
-                    vDtlScope._setPagingInfo('curr', 1); // 페이지번호 1로 세팅
+            $scope._postJSONSave.withPopUp("/stock/product/product/productRegist/save.sb", params, function (result) {
+                if (result.data.status === "OK") {
 
-                    // 상품 리스트 재조회
-                    var params = {};
-                    params.productDate = $("#hdProductDate").val();
-                    params.productFg = $("#hdProductFg").val();
-                    params.seqNo = $("#hdSeqNo").val();
+                    // 현재 페이징 NO 갖고있기(페이징 유지를 위해)
+                    var getCurr = $scope._getPagingInfo('curr');
 
-                    vDtlScope.searchProductDtlList(params);
+                    // 부모창 재조회
+                    var vScope = agrid.getScope('productCtrl');
+                    vScope.searchProductList();
+
+                    // 상세페이지에서 호출한 경우
+                    if ($("#hdSeqNo").val() !== "") {
+                        var vDtlScope = agrid.getScope('productDtlCtrl');
+                        vDtlScope._setPagingInfo('curr', 1); // 페이지번호 1로 세팅
+
+                        // 상품 리스트 재조회
+                        var params = {};
+                        params.productDate = $("#hdProductDate").val();
+                        params.productFg = $("#hdProductFg").val();
+                        params.seqNo = $("#hdSeqNo").val();
+
+                        vDtlScope.searchProductDtlList(params);
+                    }
+
+                    // 등록화면 재조회
+                    if($("#hdSeqNo").val() === null || $("#hdSeqNo").val() === "") {
+                        $("#hdSeqNo").val(result.data.data);
+                    }
+
+                    var vRegScope = agrid.getScope('productRegistCtrl');
+                    vRegScope._setPagingInfo('curr', getCurr); // 페이징 유지하기
+
+                    $scope.searchProductRegistList();
                 }
-
-                $scope.wjProductRegistLayer.hide(true);
-                $scope.close();
             });
         }else{
           $scope._popMsg(messages["cmm.not.modify"]);
@@ -381,10 +389,6 @@ app.controller('productRegistCtrl', ['$scope', '$http', '$timeout', function ($s
           $scope._popMsg(msg);
           return false;
         }
-
-        /*var excelUploadScope = agrid.getScope('excelUploadMPSCtrl');
-        /!** 업로드 구분. 해당값에 따라 엑셀 양식이 달라짐. *!/
-        var uploadFg = 'adj';*/
 
         // 양식다운로드
         if (prcsFg === 'formDownload') {
@@ -451,7 +455,7 @@ app.controller('productRegistCtrl', ['$scope', '$http', '$timeout', function ($s
         $scope.excelTextFg = 'text';
 
         // 업로드 progress 관련 기본값 세팅
-        $scope.stepCnt     = 100; // 한번에 DB에 저장할 숫자 세팅
+        $scope.stepCnt     = 5000; // 한번에 DB에 저장할 숫자 세팅
         $scope.progressCnt = 0;   // 처리된 숫자
 
         // 선택한 파일이 있을 경우
@@ -508,6 +512,7 @@ app.controller('productRegistCtrl', ['$scope', '$http', '$timeout', function ($s
                                 $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                                 console.log(jsonData);
                                 $scope.save(jsonData);
+                                rSeqNo = ""; // 초기화
                             }, 10);
                         } else {
                             $scope._popMsg(messages['product.noData'], function () {
@@ -594,6 +599,15 @@ app.controller('productRegistCtrl', ['$scope', '$http', '$timeout', function ($s
         var params       = [];
         var msg          = '';
 
+        console.log("totalRows : " + $scope.totalRows);
+
+        // 업로드 5000개 제한
+        if($scope.totalRows > $scope.stepCnt){
+            msg = messages["product.chk.upload.count"] + messages["product.chk.dataForm"]; // 업로드 데이터 갯수는 5000개까지만 입력 가능합니다. 데이터 및 양식을 확인해주세요.
+            $scope.valueCheckErrPopup(msg);
+            return false;
+        }
+
         // 저장 시작이면 업로드 중 팝업 오픈
         if ($scope.progressCnt === 0) {
             $timeout(function () {
@@ -610,7 +624,7 @@ app.controller('productRegistCtrl', ['$scope', '$http', '$timeout', function ($s
 
             // 업로드 데이터 유무 체크
             if (nvl(item.prodWtUprc, '') === '') {
-                msg = messages["product.not.qty"] + message["product.chk.dataForm"]; // 업로드 데이터 중 없는 데이터가 존재합니다. 데이터 및 양식을 확인해주세요.
+                msg = messages["product.not.qty"] + messages["product.chk.dataForm"]; // 업로드 데이터 중 없는 데이터가 존재합니다. 데이터 및 양식을 확인해주세요.
                 $scope.valueCheckErrPopup(msg);
                 return false;
             }
@@ -666,6 +680,11 @@ app.controller('productRegistCtrl', ['$scope', '$http', '$timeout', function ($s
             headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
         }).then(function successCallback(response) {
             if ($scope._httpStatusCheck(response, true)) {
+                if (response.data.status === "OK") {
+                    if(rSeqNo === "" && response.data.data !== null){
+                        rSeqNo = response.data.data;
+                    }
+                }
             }
         }, function errorCallback(response) {
             $scope.textUploadingPopup(false); // 업로딩 팝업 닫기
@@ -690,6 +709,9 @@ app.controller('productRegistCtrl', ['$scope', '$http', '$timeout', function ($s
                 // 업로드 에러내역 팝업 호출
                 $scope.uploadErrInfo();
 
+                // 현재 페이징 NO 갖고있기(페이징 유지를 위해)
+                var getCurr = $scope._getPagingInfo('curr');
+
                 // 부모창 재조회
                 var vScope = agrid.getScope('productCtrl');
                 vScope.searchProductList();
@@ -708,9 +730,15 @@ app.controller('productRegistCtrl', ['$scope', '$http', '$timeout', function ($s
                     vDtlScope.searchProductDtlList(params);
                 }
 
-                $scope.wjProductRegistLayer.hide(true);
-                $scope.textUploadingPopup(false); // 업로딩 팝업 닫기
-                $scope.close();
+                // 등록화면 재조회
+                if($("#hdSeqNo").val() === null || $("#hdSeqNo").val() === "") {
+                    $("#hdSeqNo").val(rSeqNo);
+                }
+
+                var vRegScope = agrid.getScope('productRegistCtrl');
+                vRegScope._setPagingInfo('curr', getCurr); // 페이징 유지하기
+
+                $scope.searchProductRegistList();
             }
         });
     };
@@ -803,12 +831,7 @@ app.controller('productRegistCtrl', ['$scope', '$http', '$timeout', function ($s
         params.prodBarcdCd = $("#prodBarcdCd").val();
         params.listScale = 1; // 상품 하나만 조회해야 하므로 listScale 1로 줌.
         params.curr = 1;
-
-        if(orgnFg === "HQ"){
-            params.storageCd = "001";
-        }else{
-            params.storageCd = "000";
-        }
+        params.storageCd = "999";	//001	->	999
 
         var url = "/stock/product/product/productRegist/getProdInfo.sb";
         $scope._postJSONQuery.withOutPopUp(url, params, function (response) {
@@ -888,6 +911,15 @@ app.controller('productRegistCtrl', ['$scope', '$http', '$timeout', function ($s
     flex.collectionView.commitNew();
   };
 
+   // 상품찾기 버튼
+   $scope.prodFind = function(){
+    if($("#prodFind").css("display") === "none"){
+     $("#prodFind").css("display", "");
+    } else {
+     $("#prodFind").css("display", "none");
+    }
+   };
+
    // 팝업 닫기
    $scope.close = function () {
 
@@ -911,6 +943,8 @@ app.controller('productRegistCtrl', ['$scope', '$http', '$timeout', function ($s
       $("#prodBarcdCd").val("");
       $("input:checkbox[id='autoAddChk']").prop("checked", false);
       $("#addQty").val("");
+
+       $("#prodFind").css("display", "none");
 
       $scope._setPagingInfo('curr', 1); // 페이지번호 1로 세팅
 

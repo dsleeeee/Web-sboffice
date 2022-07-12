@@ -44,7 +44,7 @@
             AND PROC_FG = #{procFg}
         </if>
           ORDER
-             BY PRODUCT_DATE, SEQ_NO DESC
+             BY PRODUCT_DATE DESC, SEQ_NO DESC
     </select>
 
     <!-- 생산관리 - 생산등록 DTL 전부 삭제 -->
@@ -88,73 +88,171 @@
     <select id="getProductRegistList" parameterType="productVO" resultType="DefaultMap">
         /* USE : ProductMapper.getProductRegistList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-          SELECT tmpb.BARCD_CD
-                , tmp.PROD_CD
-                , tmp.PROD_NM
-                , tmp.PO_UNIT_QTY
-                , NVL((SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
-                         FROM TB_MS_PRODUCT_SALE_PRICE
-                        WHERE STORE_CD = tmp.STORE_CD
-                          AND PROD_CD = tmp.PROD_CD
-                          AND #{productDate} BETWEEN START_DATE AND END_DATE
-                  ), 0) AS SALE_UPRC
-                , NVL(tsssc.AVG_COST_UPRC, tmp.COST_UPRC) AS COST_UPRC
-                , NVL(NVL(tsspd.CURR_QTY, tsssc.CURR_QTY), 0) AS CURR_QTY
-                , tsspd.PRODUCT_WEIGHT
-                , tsspd.PRODUCT_SALE_UPRC
-                , tsspd.PRODUCT_QTY
-                , tsspd.PRODUCT_AMT
-                , tsspd.REMARK
-                , DECODE(tsspd.PROD_CD, NULL, 'I', 'U') AS PRODUCT_PROD_STATUS
+        SELECT  A.BARCD_CD
+        ,       A.PROD_CD
+        ,       A.PROD_NM
+        ,       A.PO_UNIT_QTY
+        ,       A.SALE_UPRC
+        ,       A.COST_UPRC
+        ,       A.CURR_QTY
+        ,       A.ORG_PRODUCT_WEIGHT
+        ,       A.ORG_PRODUCT_SALE_UPRC
+        ,       A.PRODUCT_WEIGHT
+        ,       A.PRODUCT_SALE_UPRC
+        ,       A.PRODUCT_QTY
+        ,       A.PRODUCT_AMT
+        ,       A.REMARK
+        ,       A.PRODUCT_PROD_STATUS
         <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM    TB_MS_PRODUCT tmp
-        ,       TB_ST_STORE_PRODUCT_DTL tsspd
-        ,       (   SELECT tsssc.PROD_CD
-                           , tsssc.CURR_QTY
-                           , tsssm.AVG_COST_UPRC
-                      FROM TB_ST_STORE_STOCK_CUR tsssc
-                           , TB_ST_STORE_STOCK_MONTHLY tsssm
-                     WHERE tsssc.STORE_CD = #{storeCd}
-                       AND tsssc.STORAGE_CD	= #{storageCd}
-                       AND tsssm.IOSTOCK_YM (+)= SUBSTR(#{productDate}, 0, 6)
-                       AND tsssm.STORE_CD (+)= tsssc.STORE_CD
-                       AND tsssm.PROD_CD (+)= tsssc.PROD_CD
-                ) tsssc
-        ,       TB_MS_PRODUCT_BARCD tmpb
-        WHERE tmp.STORE_CD = #{storeCd}
-          AND tmp.STOCK_PROD_YN = 'Y'
-          AND tmp.USE_YN = 'Y'
-          AND tsspd.PROD_CD (+)= tmp.PROD_CD
-          AND tsspd.STORE_CD (+)= #{storeCd}
-          AND tsspd.PRODUCT_DATE (+)= #{productDate}
-          AND tsspd.PRODUCT_FG (+) = #{productFg}
-          AND tsspd.SEQ_NO (+)= #{seqNo}
-          AND tsssc.PROD_CD (+)= tmp.PROD_CD
-          AND tmpb.STORE_CD (+)= tmp.STORE_CD
-          AND tmpb.PROD_CD (+)= tmp.PROD_CD
+        FROM (
+                  SELECT tmpb.BARCD_CD
+                        , tmp.PROD_CD
+                        , tmp.PROD_NM
+                        , tmp.PO_UNIT_QTY
+                        , NVL((SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
+                                 FROM TB_MS_PRODUCT_SALE_PRICE
+                                WHERE STORE_CD = tmp.STORE_CD
+                                  AND PROD_CD = tmp.PROD_CD
+                                  AND #{productDate} BETWEEN START_DATE AND END_DATE
+                          ), 0) AS SALE_UPRC
+                        , tmp.COST_UPRC AS COST_UPRC
+                        , NVL(NVL(tsspd.CURR_QTY, tsssc.CURR_QTY), 0) AS CURR_QTY
+                        , tsspd.PRODUCT_WEIGHT AS ORG_PRODUCT_WEIGHT
+                        , tsspd.PRODUCT_SALE_UPRC AS ORG_PRODUCT_SALE_UPRC
+                        , tsspd.PRODUCT_WEIGHT
+                        , tsspd.PRODUCT_SALE_UPRC
+                        , tsspd.PRODUCT_QTY
+                        , tsspd.PRODUCT_AMT
+                        , tsspd.REMARK
+                        , DECODE(tsspd.PROD_CD, NULL, 'I', 'U') AS PRODUCT_PROD_STATUS
+                FROM    TB_MS_PRODUCT tmp
+                ,       TB_ST_STORE_PRODUCT_DTL tsspd
+                <choose>
+                    <when test='productFg != null and productFg == "0"'>
+                        ,       TB_ST_STORE_STOCK_CUR tsssc
+                    </when>
+                    <when test='productFg != null and productFg == "1"'>
+                        ,       TB_ST_STORE_WT_STOCK_CUR  tsssc
+                    </when>
+                </choose>
+                ,       TB_MS_PRODUCT_BARCD tmpb
+                WHERE tmp.STORE_CD = #{storeCd}
+                  AND tmp.STOCK_PROD_YN = 'Y'
+                  AND tmp.USE_YN = 'Y'
+                  AND tsspd.PROD_CD (+)= tmp.PROD_CD
+                  AND tsspd.STORE_CD (+)= #{storeCd}
+                  AND tsspd.PRODUCT_DATE (+)= #{productDate}
+                  AND tsspd.PRODUCT_FG (+) = #{productFg}
+                  AND tsspd.SEQ_NO (+)= #{seqNo}
+              <choose>
+                <when test='productFg != null and productFg == "0"'>
+                    AND tsssc.STORE_CD (+)= tmp.STORE_CD
+                    AND tsssc.STORAGE_CD (+)= #{storageCd}
+                    AND tsssc.PROD_CD (+)= tmp.PROD_CD
+                </when>
+                <when test='productFg != null and productFg == "1"'>
+                    AND tsssc.STORE_CD = tmp.STORE_CD
+                    AND tsssc.STORAGE_CD = #{storageCd}
+                    AND tsssc.PROD_CD = tmp.PROD_CD
+                    AND tsssc.SCALE_WT = tsspd.PRODUCT_WEIGHT
+                    AND tsssc.WT_UPRC = tsspd.PRODUCT_SALE_UPRC
+                </when>
+              </choose>
+                  AND tmpb.STORE_CD (+)= tmp.STORE_CD
+                  AND tmpb.PROD_CD (+)= tmp.PROD_CD
+               <if test='prodClassCd != null and prodClassCd != ""'>
+                    AND tmp.PROD_CLASS_CD IN (
+                                                    SELECT #{prodClassCd} AS PROD_CLASS_CD
+                                                      FROM DUAL
+                                                     UNION
+                                                    SELECT tmpc.PROD_CLASS_CD
+                                                      FROM TB_MS_PRODUCT_CLASS tmpc
+                                                     WHERE tmpc.STORE_CD = #{storeCd}
+                                                START WITH tmpc.P_PROD_CLASS_CD = #{prodClassCd} AND tmpc.STORE_CD = #{storeCd}
+                                                CONNECT BY tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD AND tmpc.STORE_CD = #{storeCd}
+                                              )
+                </if>
+                  UNION
+                  SELECT tmpb.BARCD_CD
+                        , tmp.PROD_CD
+                        , tmp.PROD_NM
+                        , tmp.PO_UNIT_QTY
+                        , NVL((SELECT MAX(SALE_UPRC) KEEP(DENSE_RANK FIRST ORDER BY REG_DT DESC)
+                                 FROM TB_MS_PRODUCT_SALE_PRICE
+                                WHERE STORE_CD = tmp.STORE_CD
+                                  AND PROD_CD = tmp.PROD_CD
+                                  AND #{productDate} BETWEEN START_DATE AND END_DATE
+                          ), 0) AS SALE_UPRC
+                        , tmp.COST_UPRC AS COST_UPRC
+                        , NVL(NVL(tsspd.CURR_QTY, tsssc.CURR_QTY), 0) AS CURR_QTY
+                        , tsspd.PRODUCT_WEIGHT AS ORG_PRODUCT_WEIGHT
+                        , tsspd.PRODUCT_SALE_UPRC AS ORG_PRODUCT_SALE_UPRC
+                        , tsspd.PRODUCT_WEIGHT
+                        , tsspd.PRODUCT_SALE_UPRC
+                        , tsspd.PRODUCT_QTY
+                        , tsspd.PRODUCT_AMT
+                        , tsspd.REMARK
+                        , DECODE(tsspd.PROD_CD, NULL, 'I', 'U') AS PRODUCT_PROD_STATUS
+                FROM    TB_MS_PRODUCT tmp
+                ,       TB_ST_STORE_PRODUCT_DTL tsspd
+                <choose>
+                    <when test='productFg != null and productFg == "0"'>
+                        ,       TB_ST_STORE_STOCK_CUR tsssc
+                    </when>
+                    <when test='productFg != null and productFg == "1"'>
+                        ,       TB_ST_STORE_WT_STOCK_CUR  tsssc
+                    </when>
+                </choose>
+                ,       TB_MS_PRODUCT_BARCD tmpb
+                WHERE tmp.STORE_CD = #{storeCd}
+                  AND tmp.STOCK_PROD_YN = 'Y'
+                  AND tmp.USE_YN = 'Y'
+                  AND tsspd.PROD_CD (+)= tmp.PROD_CD
+                  AND tsspd.STORE_CD (+)= #{storeCd}
+                  AND tsspd.PRODUCT_DATE (+)= #{productDate}
+                  AND tsspd.PRODUCT_FG (+) = #{productFg}
+                  AND tsspd.SEQ_NO (+)= null
+                <choose>
+                    <when test='productFg != null and productFg == "0"'>
+                        AND tsssc.STORE_CD (+)= tmp.STORE_CD
+                        AND tsssc.STORAGE_CD (+)= #{storageCd}
+                        AND tsssc.PROD_CD (+)= tmp.PROD_CD
+                    </when>
+                    <when test='productFg != null and productFg == "1"'>
+                        AND tsssc.STORE_CD = tmp.STORE_CD
+                        AND tsssc.STORAGE_CD = #{storageCd}
+                        AND tsssc.PROD_CD = tmp.PROD_CD
+                        AND tsssc.SCALE_WT = tsspd.PRODUCT_WEIGHT
+                        AND tsssc.WT_UPRC = tsspd.PRODUCT_SALE_UPRC
+                    </when>
+                </choose>
+                  AND tmpb.STORE_CD (+)= tmp.STORE_CD
+                  AND tmpb.PROD_CD (+)= tmp.PROD_CD
+                <if test='prodClassCd != null and prodClassCd != ""'>
+                    AND tmp.PROD_CLASS_CD IN (
+                                                    SELECT #{prodClassCd} AS PROD_CLASS_CD
+                                                      FROM DUAL
+                                                     UNION
+                                                    SELECT tmpc.PROD_CLASS_CD
+                                                      FROM TB_MS_PRODUCT_CLASS tmpc
+                                                     WHERE tmpc.STORE_CD = #{storeCd}
+                                                START WITH tmpc.P_PROD_CLASS_CD = #{prodClassCd} AND tmpc.STORE_CD = #{storeCd}
+                                                CONNECT BY tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD AND tmpc.STORE_CD = #{storeCd}
+                                              )
+                </if>
+            ) A
+        WHERE 1=1
         <if test='prodCd != null and prodCd != ""'>
-            AND tmp.PROD_CD = #{prodCd}
+            AND A.PROD_CD = #{prodCd}
         </if>
         <if test='prodNm != null and prodNm != ""'>
-            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+            AND A.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
         <if test='barcdCd != null and barcdCd != ""'>
-            AND tmpb.BARCD_CD = #{barcdCd}
-        </if>
-        <if test='prodClassCd != null and prodClassCd != ""'>
-            AND tmp.PROD_CLASS_CD IN (
-                                            SELECT #{prodClassCd} AS PROD_CLASS_CD
-                                              FROM DUAL
-                                             UNION
-                                            SELECT tmpc.PROD_CLASS_CD
-                                              FROM TB_MS_PRODUCT_CLASS tmpc
-                                             WHERE tmpc.STORE_CD = #{storeCd}
-                                        START WITH tmpc.P_PROD_CLASS_CD = #{prodClassCd} AND tmpc.STORE_CD = #{storeCd}
-                                        CONNECT BY tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD AND tmpc.STORE_CD = #{storeCd}
-                                      )
+            AND A.BARCD_CD = #{barcdCd}
         </if>
           ORDER
-             BY tmp.PROD_CD
+             BY A.PROD_CD, A.PRODUCT_WEIGHT
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -191,6 +289,25 @@
            AND PRODUCT_FG = #{productFg}
     </select>
 
+    <!-- 생산관리 - 생산등록 상품 DTL 처리 전, 동일한 데이터가 있는지 확인 -->
+    <!--
+        TABLE    : TB_ST_STORE_PRODUCT_DTL
+        PARAM    : productVO
+        COMMENTS : 생산관리 - 생산등록 상품 DTL 처리 전, 동일한 데이터가 있는지 확인
+    -->
+    <select id="chkProductDtl" parameterType="productVO" resultType="int">
+         /* ProductMapper.chkProductDtl */
+        SELECT COUNT(1)
+          FROM TB_ST_STORE_PRODUCT_DTL
+         WHERE STORE_CD = #{storeCd}
+           AND PRODUCT_DATE = #{productDate}
+           AND PRODUCT_FG = #{productFg}
+           AND SEQ_NO = #{seqNo}
+           AND PROD_CD = #{prodCd}
+           AND PRODUCT_WEIGHT = #{productWeight}
+           AND PRODUCT_SALE_UPRC = #{productSaleUprc}
+    </select>
+
     <!-- 생산관리 - 생산등록 상품 DTL 삭제 -->
     <!--
         TABLE    : TB_ST_STORE_PRODUCT_DTL
@@ -206,6 +323,8 @@
            AND PRODUCT_FG = #{productFg}
            AND SEQ_NO = #{seqNo}
            AND PROD_CD = #{prodCd}
+           AND PRODUCT_WEIGHT = #{orgProductWeight}
+           AND PRODUCT_SALE_UPRC = #{orgProductSaleUprc}
     </delete>
 
     <!-- 생산관리 - 생산등록 상품 DTL 등록 -->
@@ -279,6 +398,8 @@
            AND PRODUCT_FG = #{productFg}
            AND SEQ_NO = #{seqNo}
            AND PROD_CD = #{prodCd}
+           AND PRODUCT_WEIGHT = #{orgProductWeight}
+           AND PRODUCT_SALE_UPRC = #{orgProductSaleUprc}
     </update>
 
     <!-- 생산관리 - 생산등록 HD 등록 -->
@@ -326,7 +447,7 @@
         WHERE   tsspd.STORE_CD = #{storeCd}
           AND   tsspd.PRODUCT_DATE = #{productDate}
           AND   tsspd.PRODUCT_FG = #{productFg}
-          AND   tsspd.SEQ_NO =  #{seqNo}
+          AND   tsspd.SEQ_NO = #{seqNo}
         GROUP
         BY      tsspd.STORE_CD
         ,       #{storageCd}
@@ -339,6 +460,7 @@
         ,       #{regId}
         ,       #{modDt}
         ,       #{modId}
+        ,       #{productStorageCd}
     </insert>
 
     <!-- 생산관리 - 생산등록 HD 수정 -->
@@ -410,8 +532,10 @@
                                 AND PROD_CD = tmp.PROD_CD
                                 AND #{productDate} BETWEEN START_DATE AND END_DATE
                       ), 0) AS SALE_UPRC
-                , NVL(tsssm.AVG_COST_UPRC, tmp.COST_UPRC) AS COST_UPRC
+                , tmp.COST_UPRC AS COST_UPRC
                 , tsspd.CURR_QTY
+                , tsspd.PRODUCT_WEIGHT AS ORG_PRODUCT_WEIGHT
+                , tsspd.PRODUCT_SALE_UPRC AS ORG_PRODUCT_SALE_UPRC
                 , tsspd.PRODUCT_WEIGHT
                 , tsspd.PRODUCT_SALE_UPRC
                 , tsspd.PRODUCT_QTY
@@ -420,51 +544,24 @@
                 , 'U' AS PRODUCT_PROD_STATUS
                 , tssp.PRODUCT_STORAGE_CD
         <include refid="CmmSQL.PagingTemplateCount"/>
-          FROM  TB_ST_STORE_PRODUCT	tssp
+          FROM  TB_ST_STORE_PRODUCT tssp
                 , TB_ST_STORE_PRODUCT_DTL tsspd
                 , TB_MS_PRODUCT tmp
-                , (   SELECT  tsssm.PROD_CD
-                              , tsssm.AVG_COST_UPRC
-                              , (tsssm.BASE_QTY + NVL(IOSTOCK_QTY, 0)) AS CMPT_DATE_QTY
-                        FROM  (SELECT tsssm.IOSTOCK_YM
-                                      , tsssm.STORE_CD
-                                      , tsssm.PROD_CD
-                                      , tsssm.BASE_QTY
-                                      , tsssm.AVG_COST_UPRC
-                                 FROM TB_ST_STORE_STOCK_MONTHLY tsssm
-                                WHERE tsssm.STORE_CD = #{storeCd}
-                                  AND tsssm.IOSTOCK_YM = SUBSTR(#{productDate}, 0, 6)
-                              ) tsssm
-                            , ( SELECT tsssd.IOSTOCK_DATE
-                                      , tsssd.STORE_CD
-                                      , tsssd.PROD_CD
-                                      , SUM(tsssd.IOSTOCK_QTY) AS IOSTOCK_QTY
-                                 FROM TB_ST_STORE_STOCK_DAILY tsssd
-                                WHERE tsssd.STORE_CD = #{storeCd}
-                                  AND tsssd.IOSTOCK_DATE = #{productDate}
-                                GROUP
-                                   BY tsssd.IOSTOCK_DATE
-                                      , tsssd.STORE_CD
-                                      , tsssd.PROD_CD
-                              ) tsssd
-                       WHERE tsssd.PROD_CD (+)= tsssm.PROD_CD
-                  )   tsssm
                 , TB_MS_PRODUCT_BARCD tmpb
           WHERE tsspd.STORE_CD = #{storeCd}
-            AND tsspd.PRODUCT_FG = #{productFg}
             AND tsspd.PRODUCT_DATE = #{productDate}
+            AND tsspd.PRODUCT_FG = #{productFg}
             AND tsspd.SEQ_NO = #{seqNo}
             AND	tsspd.STORE_CD = tssp.STORE_CD
-            AND tsspd.PRODUCT_FG = tssp.PRODUCT_FG
             AND tsspd.PRODUCT_DATE = tssp.PRODUCT_DATE
+            AND tsspd.PRODUCT_FG = tssp.PRODUCT_FG
             AND tsspd.SEQ_NO = tssp.SEQ_NO
             AND tsspd.STORE_CD = tmp.STORE_CD
             AND tsspd.PROD_CD = tmp.PROD_CD
-            AND tsssm.PROD_CD (+)= tsspd.PROD_CD
             AND tmpb.STORE_CD (+)= tsspd.STORE_CD
             AND tmpb.PROD_CD (+)= tsspd.PROD_CD
           ORDER
-             BY tsspd.PROD_CD
+             BY tsspd.PROD_CD, tsspd.PRODUCT_WEIGHT
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -565,7 +662,7 @@
          AND PRODUCT_DATE = #{productDate}
          AND PRODUCT_FG = #{productFg}
          AND SEQ_NO = #{seqNo}
-         AND PROD_CD IN ( SELECT PROD_CD
+         AND PROD_CD || PRODUCT_WEIGHT || PRODUCT_SALE_UPRC IN ( SELECT PROD_CD || PRODUCT_WEIGHT || UPRC
                             FROM TB_PO_STORE_PRODUCT_TEMP_EXCEL
                            WHERE SESSION_ID  = #{sessionId}
                              AND PROD_CD IS NOT NULL
@@ -608,7 +705,7 @@
                #{seqNo},
                #{hqBrandCd},
                tmp.PROD_CD,
-               NVL(tsssc.AVG_COST_UPRC, tmp.COST_UPRC) AS COST_UPRC,
+               tmp.COST_UPRC AS COST_UPRC,
                tmp.PO_UNIT_QTY,
                NVL(tsssc.CURR_QTY, 0) AS CURR_QTY,
                tpspte.QTY,
@@ -642,25 +739,37 @@
                            tpspte.BARCD_CD,
                            tpspte.PRODUCT_WEIGHT,
                            tpspte.UPRC
-               ) tpspte,
-               (   SELECT tsssc.PROD_CD
-                           , tsssc.CURR_QTY
-                           , tsssm.AVG_COST_UPRC
-                      FROM TB_ST_STORE_STOCK_CUR tsssc
-                           , TB_ST_STORE_STOCK_MONTHLY tsssm
-                     WHERE tsssc.STORE_CD = #{storeCd}
-                       AND tsssc.STORAGE_CD	= #{storageCd}
-                       AND tsssm.IOSTOCK_YM (+)= SUBSTR(#{productDate}, 0, 6)
-                       AND tsssm.STORE_CD (+)= tsssc.STORE_CD
-                       AND tsssm.PROD_CD (+)= tsssc.PROD_CD
-              ) tsssc
+               ) tpspte
+            <choose>
+                <when test='productFg != null and productFg == "0"'>
+                    ,       TB_ST_STORE_STOCK_CUR tsssc
+                </when>
+                <when test='productFg != null and productFg == "1"'>
+                    ,       TB_ST_STORE_WT_STOCK_CUR  tsssc
+                </when>
+            </choose>
         WHERE 1=1
         AND tmp.STORE_CD = #{storeCd}
         AND tmp.STOCK_PROD_YN = 'Y'
         AND tmp.USE_YN = 'Y'
         AND tmp.STORE_CD (+)= tpspte.STORE_CD
         AND tmp.PROD_CD (+)= tpspte.PROD_CD
-        AND tsssc.PROD_CD (+)= tpspte.PROD_CD
+        <choose>
+            <when test='productFg != null and productFg == "0"'>
+                AND tsssc.STORE_CD (+)= tpspte.STORE_CD
+                AND tsssc.STORAGE_CD (+)= #{storageCd}
+                AND tsssc.PROD_CD (+)= tpspte.PROD_CD
+            </when>
+            <when test='productFg != null and productFg == "1"'>
+                AND tsssc.STORE_CD = tpspte.STORE_CD
+                AND tsssc.STORAGE_CD = #{storageCd}
+                AND tsssc.PROD_CD = tpspte.PROD_CD
+                AND tsssc.SCALE_WT = tpspte.PRODUCT_WEIGHT
+                AND tsssc.WT_UPRC = tpspte.UPRC
+            </when>
+        </choose>
+
+
     </insert>
 
     <!-- 생산관리 - 생산등록 리더기자료 텍스트 업로드시, 임시테이블자료로 생산등록 상품 DTL 등록 (수량추가 등록) -->
@@ -679,7 +788,7 @@
                          #{seqNo} AS SEQ_NO,
                          #{hqBrandCd} AS HQ_BRAND_CD,
                          tmp.PROD_CD AS PROD_CD,
-                         NVL(tsssc.AVG_COST_UPRC, tmp.COST_UPRC) AS COST_UPRC,
+                         tmp.COST_UPRC AS COST_UPRC,
                          tmp.PO_UNIT_QTY AS PO_UNIT_QTY,
                          NVL(tsssc.CURR_QTY, 0) AS CURR_QTY,
                          tpspte.QTY AS PRODUCT_QTY,
@@ -713,25 +822,37 @@
                                      tpspte.BARCD_CD,
                                      tpspte.PRODUCT_WEIGHT,
                                      tpspte.UPRC
-                         ) tpspte,
-                         (   SELECT tsssc.PROD_CD
-                                     , tsssc.CURR_QTY
-                                     , tsssm.AVG_COST_UPRC
-                                FROM TB_ST_STORE_STOCK_CUR tsssc
-                                     , TB_ST_STORE_STOCK_MONTHLY tsssm
-                               WHERE tsssc.STORE_CD = #{storeCd}
-                                 AND tsssc.STORAGE_CD	= #{storageCd}
-                                 AND tsssm.IOSTOCK_YM (+)= SUBSTR(#{productDate}, 0, 6)
-                                 AND tsssm.STORE_CD (+)= tsssc.STORE_CD
-                                 AND tsssm.PROD_CD (+)= tsssc.PROD_CD
-                        ) tsssc
+                         ) tpspte
+                       <choose>
+                            <when test='productFg != null and productFg == "0"'>
+                                ,       TB_ST_STORE_STOCK_CUR tsssc
+                            </when>
+                            <when test='productFg != null and productFg == "1"'>
+                                ,       TB_ST_STORE_WT_STOCK_CUR  tsssc
+                            </when>
+                        </choose>
                   WHERE 1=1
                   AND tmp.STORE_CD = #{storeCd}
                   AND tmp.STOCK_PROD_YN = 'Y'
                   AND tmp.USE_YN = 'Y'
                   AND tmp.STORE_CD (+)= tpspte.STORE_CD
                   AND tmp.PROD_CD (+)= tpspte.PROD_CD
-                  AND tsssc.PROD_CD (+)= tpspte.PROD_CD
+                <choose>
+                    <when test='productFg != null and productFg == "0"'>
+                        AND tsssc.STORE_CD (+)= tpspte.STORE_CD
+                        AND tsssc.STORAGE_CD (+)= #{storageCd}
+                        AND tsssc.PROD_CD (+)= tpspte.PROD_CD
+                    </when>
+                    <when test='productFg != null and productFg == "1"'>
+                        AND tsssc.STORE_CD = tpspte.STORE_CD
+                        AND tsssc.STORAGE_CD = #{storageCd}
+                        AND tsssc.PROD_CD = tpspte.PROD_CD
+                        AND tsssc.SCALE_WT = tpspte.PRODUCT_WEIGHT
+                        AND tsssc.WT_UPRC = tpspte.UPRC
+                    </when>
+                </choose>
+
+
               ) B
           ON  (
                   A.STORE_CD = B.STORE_CD
@@ -739,6 +860,8 @@
                   AND A.PRODUCT_FG = B.PRODUCT_FG
                   AND A.SEQ_NO = B.SEQ_NO
                   AND A.PROD_CD = B.PROD_CD
+                  AND A.PRODUCT_WEIGHT = B.PRODUCT_WEIGHT
+                  AND A.PRODUCT_SALE_UPRC = B.PRODUCT_SALE_UPRC
               )
       WHEN MATCHED THEN
              UPDATE SET A.COST_UPRC = B.COST_UPRC,
@@ -863,8 +986,10 @@
                          AND PROD_CD = tmp.PROD_CD
                          AND #{productDate} BETWEEN START_DATE AND END_DATE
                      ), 0) AS SALE_UPRC
-               , NVL(tsssc.AVG_COST_UPRC, tmp.COST_UPRC) AS COST_UPRC
+               , tmp.COST_UPRC AS COST_UPRC
                , NVL(NVL(tsspd.CURR_QTY, tsssc.CURR_QTY), 0) AS CURR_QTY
+               , tsspd.PRODUCT_WEIGHT AS ORG_PRODUCT_WEIGHT
+               , tsspd.PRODUCT_SALE_UPRC AS ORG_PRODUCT_SALE_UPRC
                , tsspd.PRODUCT_WEIGHT
                , tsspd.PRODUCT_SALE_UPRC
                , tsspd.PRODUCT_QTY
@@ -874,17 +999,14 @@
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM    TB_MS_PRODUCT tmp
         ,       TB_ST_STORE_PRODUCT_DTL tsspd
-        ,       (   SELECT tsssc.PROD_CD
-                          , tsssc.CURR_QTY
-                          , tsssm.AVG_COST_UPRC
-                     FROM TB_ST_STORE_STOCK_CUR tsssc
-                          , TB_ST_STORE_STOCK_MONTHLY tsssm
-                    WHERE tsssc.STORE_CD = #{storeCd}
-                      AND tsssc.STORAGE_CD = #{storageCd}
-                      AND tsssm.IOSTOCK_YM (+)= SUBSTR(#{productDate}, 0, 6)
-                      AND tsssm.STORE_CD (+)= tsssc.STORE_CD
-                      AND tsssm.PROD_CD (+)= tsssc.PROD_CD
-               ) tsssc
+        <choose>
+            <when test='productFg != null and productFg == "0"'>
+                ,       TB_ST_STORE_STOCK_CUR tsssc
+            </when>
+            <when test='productFg != null and productFg == "1"'>
+                ,       TB_ST_STORE_WT_STOCK_CUR  tsssc
+            </when>
+        </choose>
         ,       TB_MS_PRODUCT_BARCD tmpb
         WHERE tmp.STORE_CD = #{storeCd}
           AND tmp.STOCK_PROD_YN = 'Y'
@@ -893,15 +1015,29 @@
           AND tsspd.STORE_CD (+)= #{storeCd}
           AND tsspd.PRODUCT_DATE (+)= #{productDate}
           AND tsspd.PRODUCT_FG (+) = #{productFg}
-          AND tsspd.SEQ_NO (+)= #{seqNo}
-          AND tsssc.PROD_CD (+)= tmp.PROD_CD
+          AND tsspd.SEQ_NO (+)= null
+        <choose>
+            <when test='productFg != null and productFg == "0"'>
+                AND tsssc.STORE_CD (+)= tmp.STORE_CD
+                AND tsssc.STORAGE_CD (+)= #{storageCd}
+                AND tsssc.PROD_CD (+)= tmp.PROD_CD
+            </when>
+            <when test='productFg != null and productFg == "1"'>
+                AND tsssc.STORE_CD = tmp.STORE_CD
+                AND tsssc.STORAGE_CD = #{storageCd}
+                AND tsssc.PROD_CD = tmp.PROD_CD
+                AND tsssc.SCALE_WT = tsspd.PRODUCT_WEIGHT
+                AND tsssc.WT_UPRC = tsspd.PRODUCT_SALE_UPRC
+            </when>
+        </choose>
           AND tmpb.STORE_CD (+)= tmp.STORE_CD
           AND tmpb.PROD_CD (+)= tmp.PROD_CD
         <if test='prodBarcdCd != null and prodBarcdCd != ""'>
             AND (tmp.PROD_CD = #{prodBarcdCd} OR tmpb.BARCD_CD = #{prodBarcdCd})
         </if>
         ORDER
-           BY tmp.PROD_CD
+           BY tmp.PROD_CD, PRODUCT_WEIGHT
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
+
 </mapper>
