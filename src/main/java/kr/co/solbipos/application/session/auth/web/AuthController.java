@@ -73,7 +73,35 @@ public class AuthController {
     public String login(String userId, String type, HttpServletRequest request, HttpServletResponse response, Model model) {
 
         if (sessionService.isValidSession(request)) {
-            return "redirect:/" + MAIN_PAGE_URL;
+
+            String returnUrl = MAIN_PAGE_URL;
+
+            // POS에서 WEB화면 접근시 WEB 로그인 session이 이미 있는경우
+            if (request.getParameter("accessCd") != null && request.getParameter("accessCd").length() > 30) {
+                if (request.getParameter("resrceCd") != null && request.getParameter("resrceCd").length() > 0) {
+
+                    SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+                    sessionInfoVO.setResrceCd(request.getParameter("resrceCd"));
+
+                    String posLoginReturnUrl = authService.getPosLoginReturnUrl(sessionInfoVO);
+
+                    if(!isEmpty(posLoginReturnUrl)){
+
+                        LOGGER.info("posLoginReturnUrl 값 : " + posLoginReturnUrl);
+
+                        if("/".equals(posLoginReturnUrl.substring(0, 1))){
+                            returnUrl = posLoginReturnUrl.substring(1, posLoginReturnUrl.length());
+                        }else{
+                            returnUrl = posLoginReturnUrl;
+                        }
+
+                        // view화면 처리시 사용
+                        returnUrl += "?posLoginReconnect=Y";
+                    }
+                }
+            }
+
+            return "redirect:/" + returnUrl;
         }
 
         model.addAttribute("userId", userId);

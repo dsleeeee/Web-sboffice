@@ -6,7 +6,6 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.stock.adj.adj.service.AdjVO;
 import kr.co.solbipos.stock.product.product.service.ProductService;
 import kr.co.solbipos.stock.product.product.service.ProductVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 
 /**
  * @Class Name : ProductController.java
@@ -61,6 +62,12 @@ public class ProductController {
      */
     @RequestMapping(value = "/product/view.sb", method = RequestMethod.GET)
     public String view(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        // POS에서 해당 WEB 화면 재접속한 경우(이전 접속 session 그대로 존재), 'posLoginReconnect'값울 판단하여 view화면 처리
+        if(request.getParameter("posLoginReconnect") != null && request.getParameter("posLoginReconnect").length() > 0){
+            model.addAttribute("posLoginReconnect", request.getParameter("posLoginReconnect"));
+        }
+
         return "stock/product/product/product";
     }
 
@@ -169,9 +176,9 @@ public class ProductController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = productService.saveProductRegist(productVOs, sessionInfoVO);
+        String result = productService.saveProductRegist(productVOs, sessionInfoVO);
 
-        return ReturnUtil.returnJson(Status.OK, result);
+        return returnJson(Status.OK, result);
     }
 
     /**
@@ -279,9 +286,9 @@ public class ProductController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = productService.saveUploadProduct(ProductVOs, sessionInfoVO);
+        String result = productService.saveUploadProduct(ProductVOs, sessionInfoVO);
 
-        return ReturnUtil.returnJson(Status.OK, result);
+        return returnJson(Status.OK, result);
     }
 
     /**

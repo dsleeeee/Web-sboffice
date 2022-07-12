@@ -37,4 +37,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/product/product/productErrInfo.js?ver=20220706.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/product/product/productErrInfo.js?ver=20220706.02" charset="utf-8"></script>

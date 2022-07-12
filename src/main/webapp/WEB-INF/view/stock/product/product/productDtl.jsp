@@ -5,17 +5,16 @@
 
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
-<wj-popup id="wjProductDtlLayer" control="wjProductDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+<wj-popup id="wjProductDtlLayer" control="wjProductDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px;height:750px;">
     <div id="productDtlLayer" class="wj-dialog wj-dialog-columns title" ng-controller="productDtlCtrl">
 
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font">
-            <label id="popDtlTitle"></label>&nbsp;<s:message code="product.prodList"/>
+            <label id="popDtlTitle"></label><s:message code="product.prodList"/>&nbsp;&nbsp;<label id="lblPDProductDateTitle"></label>
             <a href="" class="wj-hide btn_close" ng-click="closeDtl()"></a>
         </div>
 
-        <div class="wj-dialog-body sc2" style="height: 600px;">
-            <label id="lblPDProductDateTitle" class="s14 bk mb5 fl"></label>
+        <div class="wj-dialog-body sc2" style="height: 700px;">
             <table class="tblType01" style="position: relative;">
                 <colgroup>
                     <col class="w15"/>
@@ -34,11 +33,10 @@
                 </tbody>
             </table>
 
-            <ul class="txtSty3 mt10">
-                <li class="red"><s:message code="product.dtl.txt1"/></li>
-            </ul>
-
-            <div class="mt20 tr">
+            <div class="mt10 tr">
+                <ul ng-if="btnDtlSave" class="txtSty3">
+                    <li class="red fl"><s:message code="product.dtl.txt1"/></li>
+                </ul>
                 <%-- 상품추가 --%>
                 <button type="button" class="btn_skyblue ml5" id="btnDtlAddProd" ng-click="addProd()" ng-if="btnDtlAddProd">
                   <s:message code="adj.dtl.addProd"/></button>
@@ -68,17 +66,21 @@
                          <wj-flex-grid-column header="<s:message code="product.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                          <wj-flex-grid-column header="<s:message code="product.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
                          <wj-flex-grid-column header="<s:message code="product.barcdCd"/>" binding="barcdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                         <wj-flex-grid-column header="<s:message code="product.saleUprc"/>" binding="saleUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-                         <wj-flex-grid-column header="<s:message code="product.costUprc"/>" binding="costUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-                         <wj-flex-grid-column header="<s:message code="product.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-                         <wj-flex-grid-column header="<s:message code="product.currQty"/>" binding="currQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+                         <wj-flex-grid-column header="<s:message code="product.saleUprc"/>" binding="saleUprc" width="60" align="right" is-read-only="true"></wj-flex-grid-column>
+                         <wj-flex-grid-column header="<s:message code="product.costUprc"/>" binding="costUprc" width="55" align="right" is-read-only="true"></wj-flex-grid-column>
+                         <wj-flex-grid-column header="<s:message code="product.poUnitQty"/>" binding="poUnitQty" width="55" align="right" is-read-only="true"></wj-flex-grid-column>
+                         <wj-flex-grid-column header="<s:message code="product.currQty"/>" binding="currQty" width="60" align="right" is-read-only="true"></wj-flex-grid-column>
 
-                         <wj-flex-grid-column header="<s:message code="product.productWeight"/>" binding="productWeight" width="100" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-                         <wj-flex-grid-column header="<s:message code="product.productSaleUprc"/>" binding="productSaleUprc" width="100" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-                         <wj-flex-grid-column header="<s:message code="product.productQty"/>" binding="productQty" width="100" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-                         <wj-flex-grid-column header="<s:message code="product.productAmt"/>" binding="productAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                         <wj-flex-grid-column header="<s:message code="product.productWeight"/>" binding="productWeight" width="75" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+                         <wj-flex-grid-column header="<s:message code="product.productSaleUprc"/>" binding="productSaleUprc" width="75" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+                         <wj-flex-grid-column header="<s:message code="product.productQty"/>" binding="productQty" width="75" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+                         <wj-flex-grid-column header="<s:message code="product.productAmt"/>" binding="productAmt" width="75" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                          <wj-flex-grid-column header="<s:message code="product.remark"/>" binding="remark" width="200" align="left" max-length=300></wj-flex-grid-column>
                          <wj-flex-grid-column header="<s:message code="product.prodStatus"/>" binding="productProdStatus" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+
+                         <wj-flex-grid-column header="<s:message code="product.productWeight"/>" binding="orgProductWeight" width="75" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                         <wj-flex-grid-column header="<s:message code="product.productSaleUprc"/>" binding="orgProductSaleUprc" width="75" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
 
                      </wj-flex-grid>
                </div>
@@ -103,13 +105,6 @@
 
 <script type="text/javascript">
     var orgnFg = "${orgnFg}";
-
-    // POS에서 접속한 경우, 왼쪽 메뉴영역은 접어두기.
-    var referrer = document.referrer;
-    if(referrer.indexOf("userId") > 0 && referrer.indexOf("resrceCd") > 0 && referrer.indexOf("accessCd") ){
-        $(".menuControl").trigger("click");
-    }
-
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/product/product/productDtl.js?ver=20220706.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/product/product/productDtl.js?ver=20220706.02" charset="utf-8"></script>

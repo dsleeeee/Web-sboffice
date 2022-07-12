@@ -20,7 +20,7 @@ public interface ProductService {
     int updateProductHdTitle(ProductVO productVO, SessionInfoVO sessionInfoVO);
 
     /** 생산관리 - 생산등록 상품 저장*/
-    int saveProductRegist(ProductVO[] productVOs, SessionInfoVO sessionInfoVO);
+    String saveProductRegist(ProductVO[] productVOs, SessionInfoVO sessionInfoVO);
 
     /** 생산관리 - 생산등록 상세 조회 */
     DefaultMap<String> getProductDtl(ProductVO productVO, SessionInfoVO sessionInfoVO);
@@ -35,7 +35,7 @@ public interface ProductService {
     int deleteUploadProduct(ProductVO productVO, SessionInfoVO sessionInfoVO);
 
     /** 생산관리 - 생산등록 리더기자료 텍스트 업로드 */
-    int saveUploadProduct(ProductVO[] productVOs, SessionInfoVO sessionInfoVO);
+    String saveUploadProduct(ProductVO[] productVOs, SessionInfoVO sessionInfoVO);
 
     /** 생산관리 - 생산등록 업로드 실패내역 조회 */
     List<DefaultMap<String>> getUploadErrInfoList (ProductVO productVO, SessionInfoVO sessionInfoVO);

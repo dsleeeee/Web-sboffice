@@ -72,6 +72,10 @@ public class ProductVO extends PageVO {
     private String addQtyFg;
     /** 상품코드/바코드 */
     private String prodBarcdCd;
+    /** 생산 중량(변경전 중량) */
+    private String orgProductWeight;
+    /** 생산 판매가(변경전 판매가) */
+    private String orgProductSaleUprc;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -311,5 +315,21 @@ public class ProductVO extends PageVO {
 
     public void setProdBarcdCd(String prodBarcdCd) {
         this.prodBarcdCd = prodBarcdCd;
+    }
+
+    public String getOrgProductWeight() {
+        return orgProductWeight;
+    }
+
+    public void setOrgProductWeight(String orgProductWeight) {
+        this.orgProductWeight = orgProductWeight;
+    }
+
+    public String getOrgProductSaleUprc() {
+        return orgProductSaleUprc;
+    }
+
+    public void setOrgProductSaleUprc(String orgProductSaleUprc) {
+        this.orgProductSaleUprc = orgProductSaleUprc;
     }
 }

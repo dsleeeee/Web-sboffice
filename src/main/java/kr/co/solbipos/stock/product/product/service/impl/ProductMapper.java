@@ -1,7 +1,6 @@
 package kr.co.solbipos.stock.product.product.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.stock.adj.adj.service.AdjVO;
 import kr.co.solbipos.stock.product.product.service.ProductVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -29,6 +28,9 @@ public interface ProductMapper {
 
     /** 생산관리 - 생산등록 신규 SEQ 조회 */
     String getProductNewSeqNo(ProductVO productVO);
+
+    /** 생산관리 - 생산등록 상품 DTL 처리 전, 동일한 데이터가 있는지 확인 */
+    int chkProductDtl(ProductVO productVO);
 
     /** 생산관리 - 생산등록 상품 DTL 삭제 */
     int deleteProductDtl(ProductVO productVO);
