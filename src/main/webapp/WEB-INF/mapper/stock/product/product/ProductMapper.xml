@@ -117,10 +117,20 @@
                           ), 0) AS SALE_UPRC
                         , tmp.COST_UPRC AS COST_UPRC
                         , NVL(NVL(tsspd.CURR_QTY, tsssc.CURR_QTY), 0) AS CURR_QTY
-                        , tsspd.PRODUCT_WEIGHT AS ORG_PRODUCT_WEIGHT
-                        , tsspd.PRODUCT_SALE_UPRC AS ORG_PRODUCT_SALE_UPRC
-                        , tsspd.PRODUCT_WEIGHT
-                        , tsspd.PRODUCT_SALE_UPRC
+                        <choose>
+                            <when test='productFg != null and productFg == "0"'>
+                                , tsspd.PRODUCT_WEIGHT    AS ORG_PRODUCT_WEIGHT
+                                , tsspd.PRODUCT_SALE_UPRC AS ORG_PRODUCT_SALE_UPRC
+                                , tsspd.PRODUCT_WEIGHT
+                                , tsspd.PRODUCT_SALE_UPRC
+                            </when>
+                            <when test='productFg != null and productFg == "1"'>
+                                , tsssc.SCALE_WT        AS ORG_PRODUCT_WEIGHT
+                                , tsssc.WT_UPRC         AS ORG_PRODUCT_SALE_UPRC
+                                , tsssc.SCALE_WT        AS PRODUCT_WEIGHT
+                                , tsssc.WT_UPRC         AS PRODUCT_SALE_UPRC
+                            </when>
+                        </choose>
                         , tsspd.PRODUCT_QTY
                         , tsspd.PRODUCT_AMT
                         , tsspd.REMARK
@@ -154,8 +164,8 @@
                     AND tsssc.STORE_CD = tmp.STORE_CD
                     AND tsssc.STORAGE_CD = #{storageCd}
                     AND tsssc.PROD_CD = tmp.PROD_CD
-                    AND tsssc.SCALE_WT = tsspd.PRODUCT_WEIGHT
-                    AND tsssc.WT_UPRC = tsspd.PRODUCT_SALE_UPRC
+                    AND tsssc.SCALE_WT = tsspd.PRODUCT_WEIGHT (+)
+                    AND tsssc.WT_UPRC = tsspd.PRODUCT_SALE_UPRC (+)
                 </when>
               </choose>
                   AND tmpb.STORE_CD (+)= tmp.STORE_CD
@@ -172,6 +182,8 @@
                                                 CONNECT BY tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD AND tmpc.STORE_CD = #{storeCd}
                                               )
                 </if>
+
+                <if test='productFg != null and productFg == "0"'>
                   UNION
                   SELECT tmpb.BARCD_CD
                         , tmp.PROD_CD
@@ -195,14 +207,7 @@
                         , DECODE(tsspd.PROD_CD, NULL, 'I', 'U') AS PRODUCT_PROD_STATUS
                 FROM    TB_MS_PRODUCT tmp
                 ,       TB_ST_STORE_PRODUCT_DTL tsspd
-                <choose>
-                    <when test='productFg != null and productFg == "0"'>
-                        ,       TB_ST_STORE_STOCK_CUR tsssc
-                    </when>
-                    <when test='productFg != null and productFg == "1"'>
-                        ,       TB_ST_STORE_WT_STOCK_CUR  tsssc
-                    </when>
-                </choose>
+                ,       TB_ST_STORE_STOCK_CUR tsssc
                 ,       TB_MS_PRODUCT_BARCD tmpb
                 WHERE tmp.STORE_CD = #{storeCd}
                   AND tmp.STOCK_PROD_YN = 'Y'
@@ -212,33 +217,23 @@
                   AND tsspd.PRODUCT_DATE (+)= #{productDate}
                   AND tsspd.PRODUCT_FG (+) = #{productFg}
                   AND tsspd.SEQ_NO (+)= null
-                <choose>
-                    <when test='productFg != null and productFg == "0"'>
-                        AND tsssc.STORE_CD (+)= tmp.STORE_CD
-                        AND tsssc.STORAGE_CD (+)= #{storageCd}
-                        AND tsssc.PROD_CD (+)= tmp.PROD_CD
-                    </when>
-                    <when test='productFg != null and productFg == "1"'>
-                        AND tsssc.STORE_CD = tmp.STORE_CD
-                        AND tsssc.STORAGE_CD = #{storageCd}
-                        AND tsssc.PROD_CD = tmp.PROD_CD
-                        AND tsssc.SCALE_WT = tsspd.PRODUCT_WEIGHT
-                        AND tsssc.WT_UPRC = tsspd.PRODUCT_SALE_UPRC
-                    </when>
-                </choose>
+                  AND tsssc.STORE_CD (+)= tmp.STORE_CD
+                  AND tsssc.STORAGE_CD (+)= #{storageCd}
+                  AND tsssc.PROD_CD (+)= tmp.PROD_CD
                   AND tmpb.STORE_CD (+)= tmp.STORE_CD
                   AND tmpb.PROD_CD (+)= tmp.PROD_CD
-                <if test='prodClassCd != null and prodClassCd != ""'>
-                    AND tmp.PROD_CLASS_CD IN (
-                                                    SELECT #{prodClassCd} AS PROD_CLASS_CD
-                                                      FROM DUAL
-                                                     UNION
-                                                    SELECT tmpc.PROD_CLASS_CD
-                                                      FROM TB_MS_PRODUCT_CLASS tmpc
-                                                     WHERE tmpc.STORE_CD = #{storeCd}
-                                                START WITH tmpc.P_PROD_CLASS_CD = #{prodClassCd} AND tmpc.STORE_CD = #{storeCd}
-                                                CONNECT BY tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD AND tmpc.STORE_CD = #{storeCd}
-                                              )
+                    <if test='prodClassCd != null and prodClassCd != ""'>
+                        AND tmp.PROD_CLASS_CD IN (
+                                                        SELECT #{prodClassCd} AS PROD_CLASS_CD
+                                                          FROM DUAL
+                                                         UNION
+                                                        SELECT tmpc.PROD_CLASS_CD
+                                                          FROM TB_MS_PRODUCT_CLASS tmpc
+                                                         WHERE tmpc.STORE_CD = #{storeCd}
+                                                    START WITH tmpc.P_PROD_CLASS_CD = #{prodClassCd} AND tmpc.STORE_CD = #{storeCd}
+                                                    CONNECT BY tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD AND tmpc.STORE_CD = #{storeCd}
+                                                  )
+                    </if>
                 </if>
             ) A
         WHERE 1=1
@@ -764,8 +759,8 @@
                 AND tsssc.STORE_CD = tpspte.STORE_CD
                 AND tsssc.STORAGE_CD = #{storageCd}
                 AND tsssc.PROD_CD = tpspte.PROD_CD
-                AND tsssc.SCALE_WT = tpspte.PRODUCT_WEIGHT
-                AND tsssc.WT_UPRC = tpspte.UPRC
+                AND tsssc.SCALE_WT = tpspte.PRODUCT_WEIGHT (+)
+                AND tsssc.WT_UPRC = tpspte.UPRC            (+)
             </when>
         </choose>
 
@@ -847,8 +842,8 @@
                         AND tsssc.STORE_CD = tpspte.STORE_CD
                         AND tsssc.STORAGE_CD = #{storageCd}
                         AND tsssc.PROD_CD = tpspte.PROD_CD
-                        AND tsssc.SCALE_WT = tpspte.PRODUCT_WEIGHT
-                        AND tsssc.WT_UPRC = tpspte.UPRC
+                        AND tsssc.SCALE_WT = tpspte.PRODUCT_WEIGHT (+)
+                        AND tsssc.WT_UPRC = tpspte.UPRC            (+)
                     </when>
                 </choose>
 
@@ -988,10 +983,20 @@
                      ), 0) AS SALE_UPRC
                , tmp.COST_UPRC AS COST_UPRC
                , NVL(NVL(tsspd.CURR_QTY, tsssc.CURR_QTY), 0) AS CURR_QTY
-               , tsspd.PRODUCT_WEIGHT AS ORG_PRODUCT_WEIGHT
-               , tsspd.PRODUCT_SALE_UPRC AS ORG_PRODUCT_SALE_UPRC
-               , tsspd.PRODUCT_WEIGHT
-               , tsspd.PRODUCT_SALE_UPRC
+               <choose>
+                   <when test='productFg != null and productFg == "0"'>
+                       , tsspd.PRODUCT_WEIGHT    AS ORG_PRODUCT_WEIGHT
+                       , tsspd.PRODUCT_SALE_UPRC AS ORG_PRODUCT_SALE_UPRC
+                       , tsspd.PRODUCT_WEIGHT
+                       , tsspd.PRODUCT_SALE_UPRC
+                   </when>
+                   <when test='productFg != null and productFg == "1"'>
+                       , tsssc.SCALE_WT        AS ORG_PRODUCT_WEIGHT
+                       , tsssc.WT_UPRC         AS ORG_PRODUCT_SALE_UPRC
+                       , tsssc.SCALE_WT        AS PRODUCT_WEIGHT
+                       , tsssc.WT_UPRC         AS PRODUCT_SALE_UPRC
+                   </when>
+               </choose>
                , tsspd.PRODUCT_QTY
                , tsspd.PRODUCT_AMT
                , tsspd.REMARK
@@ -1026,8 +1031,8 @@
                 AND tsssc.STORE_CD = tmp.STORE_CD
                 AND tsssc.STORAGE_CD = #{storageCd}
                 AND tsssc.PROD_CD = tmp.PROD_CD
-                AND tsssc.SCALE_WT = tsspd.PRODUCT_WEIGHT
-                AND tsssc.WT_UPRC = tsspd.PRODUCT_SALE_UPRC
+                AND tsssc.SCALE_WT = tsspd.PRODUCT_WEIGHT (+)
+                AND tsssc.WT_UPRC = tsspd.PRODUCT_SALE_UPRC (+)
             </when>
         </choose>
           AND tmpb.STORE_CD (+)= tmp.STORE_CD

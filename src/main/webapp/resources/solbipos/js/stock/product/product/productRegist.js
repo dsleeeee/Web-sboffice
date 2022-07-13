@@ -127,7 +127,7 @@ app.controller('productRegistCtrl', ['$scope', '$http', '$timeout', function ($s
         params.storageCd = "999";	//001	->	999
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquirySub("/stock/product/product/productRegist/list.sb", params, function() {
+        $scope._inquiryMain("/stock/product/product/productRegist/list.sb", params, function() {
 
             if($("#hdSeqNo").val() !== ""){
 
@@ -164,7 +164,7 @@ app.controller('productRegistCtrl', ['$scope', '$http', '$timeout', function ($s
                   return false;
                 }).then(function () {});
             }
-        }, false);
+        });
     };
 
     // 조회버튼으로 조회시
