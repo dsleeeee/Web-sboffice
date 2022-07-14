@@ -92,6 +92,9 @@ public class HqEmpVO extends PageVO {
     /** 메인화면매출표시 */
     private String mainSaleFg;
 
+    /** 거래처 코드 */
+    private String vendrCd;
+
     /**
      * @return the hqOfficeCd
      */
@@ -396,5 +399,13 @@ public class HqEmpVO extends PageVO {
 
     public void setMainSaleFg(String mainSaleFg) {
         this.mainSaleFg = mainSaleFg;
+    }
+
+    public String getVendrCd() {
+        return vendrCd;
+    }
+
+    public void setVendrCd(String vendrCd) {
+        this.vendrCd = vendrCd;
     }
 }

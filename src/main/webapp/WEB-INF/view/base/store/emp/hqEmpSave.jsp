@@ -9,7 +9,7 @@
   <form name="empForm">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="hqEmp.hqEmpInfo"/><span>{{hqEmpRegistInfo.empInfo}}</span>
-      <a href="#" class="wj-hide btn_close"></a>
+      <a href="#" class="wj-hide btn_close" ng-click="close()"></a>
     </div>
 
     <div class="wj-dialog-body sc2" style="overflow-y: hidden;">
@@ -167,7 +167,8 @@
                             popover-enable="empForm.smsRecvYn.$invalid"
                             popover-placement="bottom-left"
                             popover-trigger="'mouseenter'"
-                            uib-popover="<s:message code="hqEmp.smsRecvYn" />은(는) 필수 입력항목 입니다.">
+                            uib-popover="<s:message code="hqEmp.smsRecvYn" />은(는) 필수 입력항목 입니다."
+                            control="hqEmpSmsRecvYnCombo">
               </wj-combo-box>
             </div>
             </td>
@@ -190,7 +191,8 @@
                               popover-enable="empForm.serviceFg.$invalid"
                               popover-placement="bottom-left"
                               popover-trigger="'mouseenter'"
-                              uib-popover="<s:message code="hqEmp.serviceFg" />은(는) 필수 입력항목 입니다.">
+                              uib-popover="<s:message code="hqEmp.serviceFg" />은(는) 필수 입력항목 입니다."
+                              control="hqEmpServiceFgCombo">
                 </wj-combo-box>
               </div>
             </td>
@@ -211,7 +213,8 @@
                               popover-enable="empForm.useYnFg.$invalid"
                               popover-placement="bottom-left"
                               popover-trigger="'mouseenter'"
-                              uib-popover="<s:message code="hqEmp.useYn" />은(는) 필수 입력항목 입니다.">
+                              uib-popover="<s:message code="hqEmp.useYn" />은(는) 필수 입력항목 입니다."
+                              control="hqEmpUseYnFgCombo">
                 </wj-combo-box>
               </div>
             </td>
@@ -233,7 +236,24 @@
                               popover-enable="empForm.mainSaleFg.$invalid"
                               popover-placement="bottom-left"
                               popover-trigger="'mouseenter'"
-                              uib-popover="<s:message code="hqEmp.mainSaleFg" />은(는) 필수 입력항목 입니다.">
+                              uib-popover="<s:message code="hqEmp.mainSaleFg" />은(는) 필수 입력항목 입니다."
+                              control="hqEmpMainSaleFgCombo">
+                </wj-combo-box>
+              </div>
+            </td>
+            <%-- 거래처 --%>
+            <th><s:message code="hqEmp.vendr"/></th>
+            <td>
+              <div class="sb-select w100">
+                <wj-combo-box
+                  id="vendrCd"
+                  ng-model="hqEmpRegistInfo.vendrCd"
+                  control="hqEmpVendrCdCombo"
+                  items-source="_getComboData('hqEmpVendrCdComboData')"
+                  display-member-path="name"
+                  selected-value-path="value"
+                  is-editable="false"
+                  initialized="_initComboBox(s)">
                 </wj-combo-box>
               </div>
             </td>
@@ -268,7 +288,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpSave.js?ver=20211122.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpSave.js?ver=20220713.02" charset="utf-8"></script>
 
 <%-- 관리브랜드 조회 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/emp/searchUserHqBrand.jsp">

@@ -28,6 +28,7 @@ import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 
 /**
@@ -73,10 +74,14 @@ public class HqEmpController {
     public String view(Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        HqEmpVO hqEmpVO = new HqEmpVO();
 
         // 브랜드사용여부
         String userHqBrandYn = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"));
         model.addAttribute("userHqBrandYn", userHqBrandYn);
+
+        // 본사 거래처 콤보박스
+        model.addAttribute("vendrList", convertToJson(hqEmpService.getHqVendrCombo(hqEmpVO, sessionInfoVO)));
 
         return "base/store/emp/hqEmp";
     }
