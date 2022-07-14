@@ -63,4 +63,7 @@ public interface HqEmpService {
 
     /** 미적용 관리브랜드 조회 팝업 - 조회 */
     List<DefaultMap<String>> getSearchNoUserHqBrandList(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
+
+    /** 본사 거래처 조회(콤보박스용) */
+    List<DefaultMap<String>> getHqVendrCombo(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
 }

@@ -110,7 +110,9 @@
         twub.HQ_BRAND_CD,
         twub.HQ_BRAND_NM,
         the.USE_YN,
-        NVL(the.MAIN_SALE_FG, '0') AS MAIN_SALE_FG
+        NVL(the.MAIN_SALE_FG, '0') AS MAIN_SALE_FG,
+        the.VENDR_CD,
+        (SELECT VENDR_NM FROM TB_HQ_VENDOR WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND VENDR_CD = the.VENDR_CD) AS VENDR_NM
         FROM TB_HQ_EMPLOYEE the,
         (
             SELECT
@@ -179,7 +181,8 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            VENDR_CD
         )
         VALUES
         (
@@ -197,7 +200,8 @@
             #{regDt},
             #{regId},
             #{modDt},
-            #{modId}
+            #{modId},
+            #{vendrCd}
         )
     </insert>
 
@@ -269,7 +273,8 @@
                the.USE_YN = #{useYn},
                the.MAIN_SALE_FG = #{mainSaleFg},
                the.MOD_DT = #{modDt},
-               the.MOD_ID = #{modId}
+               the.MOD_ID = #{modId},
+               the.VENDR_CD = #{vendrCd}
          WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
            AND the.EMP_NO = #{empNo}
     </update>
@@ -721,5 +726,24 @@
             #{modId}
         )
     </insert>
+
+    <!-- 본사 거래처 조회(콤보박스용) -->
+    <!--
+        TABLE    : TB_HQ_VENDOR
+        PARAM    : hqEmpVO
+        COMMENTS : 본사 거래처를 조회한다.
+    -->
+    <select id="getHqVendrCombo" resultType="DefaultMap">
+    /* USE : HqEmpMapper.getHqVendrCombo */
+      SELECT '' AS VALUE,
+             '선택' AS NAME
+        FROM DUAL
+       UNION
+      SELECT VENDR_CD AS VALUE,
+             VENDR_NM AS NAME
+        FROM TB_HQ_VENDOR
+       WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+       ORDER BY VALUE NULLS FIRST, VALUE ASC
+    </select>
 
 </mapper>

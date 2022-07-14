@@ -410,4 +410,11 @@ public class HqEmpServiceImpl implements HqEmpService {
         return hqEmpMapper.getSearchNoUserHqBrandList(hqEmpVO);
     }
 
+    /** 본사 거래처 조회(콤보박스용) */
+    public List<DefaultMap<String>> getHqVendrCombo(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO){
+
+        hqEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return hqEmpMapper.getHqVendrCombo(hqEmpVO);
+    }
 }

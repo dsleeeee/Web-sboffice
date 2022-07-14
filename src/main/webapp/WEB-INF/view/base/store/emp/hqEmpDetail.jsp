@@ -93,8 +93,8 @@
             <td>
               {{hqEmp.mainSaleFg}}
             </td>
-            <th></th>
-            <td></td>
+            <th><s:message code="hqEmp.vendr"/></th>
+            <td>{{hqEmp.vendrNm}}</td>
           </tr>
           <tr id="trUserHqBrandYnDtl" style="display: none;">
             <%-- 관리브랜드 --%>

@@ -40,6 +40,8 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._getComboDataQuery('072', 'hqEmpSmsRecvYnComboData');
   // 판매상품여부 콤보박스
   $scope._getComboDataQuery('007', 'hqEmpServiceFgComboData');
+  // 본사 거래처 콤보박스
+  $scope._setComboData('hqEmpVendrCdComboData', vendrList);
 
   // 선택 사원 (사원 수정시)
   $scope.selectedHqEmp;
@@ -169,7 +171,7 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
       if(response.data.data == 'SUCCESS') {
         $scope._popMsg(messages["cmm.registSucc"]);
-        $scope.hqEmpRegistLayer.hide();
+        $scope.close();
       } else if(response.data.data === 'USER_ID_REGEXP') {
         $scope._popMsg(messages["hqEmp.userIdRegexp.msg"]);
         return false;
@@ -203,7 +205,7 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
       if(response.data.data == 'SUCCESS') {
         $scope._popMsg(messages["cmm.saveSucc"]);
-        $scope.hqEmpRegistLayer.hide();
+        $scope.close();
       } else if(response.data.data === 'PASSWORD_REGEXP') {
         $scope._popMsg(messages["login.pw.not.match.char"]);
         return false;
@@ -219,6 +221,13 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 닫기버튼 클릭
   $scope.close = function(){
+    $scope.hqEmpWebUseYnCombo.selectedIndex = 0;
+    $scope.hqEmpSmsRecvYnCombo.selectedIndex = 0;
+    $scope.hqEmpServiceFgCombo.selectedIndex = 0;
+    $scope.hqEmpUseYnFgCombo.selectedIndex = 0;
+    $scope.hqEmpMainSaleFgCombo.selectedIndex = 0;
+    $scope.hqEmpVendrCdCombo.selectedIndex = 0;
+
     $scope.hqEmpRegistLayer.hide();
   };
 
