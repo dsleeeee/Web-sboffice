@@ -11,4 +11,6 @@ public interface StockManageViewService {
 	
 	/** 실사/조정/폐기 조회 - 실사/조정/폐기 엑셀 전체 리스트 조회 */
 	public List<DefaultMap<String>> getStockManageViewExcelList(StockManageViewVO stockManageViewVO, SessionInfoVO sessionInfoVO);
+
+	public List<DefaultMap<String>> getReason(StockManageViewVO stockManageViewVO, SessionInfoVO sessionInfoVO);
 }

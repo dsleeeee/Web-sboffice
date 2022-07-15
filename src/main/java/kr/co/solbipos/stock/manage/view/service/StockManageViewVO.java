@@ -23,7 +23,9 @@ public class StockManageViewVO extends PageVO {
     /** 상품개수 */
     private Integer prodQty;
     private String orgnFg;
-    
+    /** 사유 */
+    private String Reason;
+
     public String getHqOfficeCd() {
 		return hqOfficeCd;
 	}
@@ -78,5 +80,12 @@ public class StockManageViewVO extends PageVO {
 	public void setOrgnFg(String orgnFg) {
 		this.orgnFg = orgnFg;
 	}
-	
+
+	public String getReason() {
+		return Reason;
+	}
+
+	public void setReason(String reason) {
+		Reason = reason;
+	}
 }

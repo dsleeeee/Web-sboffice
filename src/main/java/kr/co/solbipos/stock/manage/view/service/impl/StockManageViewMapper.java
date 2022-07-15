@@ -18,4 +18,6 @@ public interface StockManageViewMapper {
 	
 	/** 실사/조정/폐기 조회 - 실사/조정/폐기 매장 엑셀 전체 리스트 조회 */
 	public List<DefaultMap<String>> getStockManageViewStoreExcelList(StockManageViewVO stockManageViewVO);
+
+	public List<DefaultMap<String>> getReason(StockManageViewVO stockManageViewVO);
 }

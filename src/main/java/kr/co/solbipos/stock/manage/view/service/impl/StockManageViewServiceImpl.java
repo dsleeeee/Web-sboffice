@@ -49,4 +49,12 @@ public class StockManageViewServiceImpl implements StockManageViewService {
 		}
 	}
 
+	@Override
+	public List<DefaultMap<String>> getReason(StockManageViewVO stockManageViewVO, SessionInfoVO sessionInfoVO) {
+		stockManageViewVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		stockManageViewVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		stockManageViewVO.setStoreCd(sessionInfoVO.getStoreCd());
+		return stockManageViewMapper.getReason(stockManageViewVO);
+	}
+
 }

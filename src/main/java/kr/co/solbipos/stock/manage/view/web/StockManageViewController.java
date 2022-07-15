@@ -102,4 +102,22 @@ public class StockManageViewController {
 		List<DefaultMap<String>> list = stockManageViewService.getStockManageViewExcelList(stockManageViewVO, sessionInfoVO);
 		return ReturnUtil.returnListJson(Status.OK, list, stockManageViewVO);
 	}
+
+	/**
+     * 실사/조정/폐기 조회 - 사유 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   StockManageViewVO
+     * @return  String
+     * @author  권지현
+     * @since   2022.07.12
+     */
+	@RequestMapping(value = "/view/getReason.sb", method = RequestMethod.POST)
+	@ResponseBody
+	public Result getReason(HttpServletRequest request, HttpServletResponse response, Model model, StockManageViewVO stockManageViewVO) {
+		SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+		List<DefaultMap<String>> list = stockManageViewService.getReason(stockManageViewVO, sessionInfoVO);
+		return ReturnUtil.returnListJson(Status.OK, list, stockManageViewVO);
+	}
 }
