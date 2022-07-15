@@ -21,15 +21,15 @@
   <%-- 주방프린터 그리드 --%>
   <div id="kitchenPrintGrid" style="height: 320px;">
     <wj-flex-grid
-      autoGenerateColumns="false"
-      control="flex"
-      initialized="initGrid(s,e)"
-      is-read-only="false"
-      sticky-headers="true"
-      selection-mode="Row"
-      items-source="data"
-      item-formatter="_itemFormatter"
-      ime-enabled="true">
+            autoGenerateColumns="false"
+            control="flex"
+            initialized="initGrid(s,e)"
+            is-read-only="false"
+            sticky-headers="true"
+            selection-mode="Row"
+            items-source="data"
+            item-formatter="_itemFormatter"
+            ime-enabled="true">
 
       <!-- define columns -->
       <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
@@ -55,15 +55,16 @@
   </div>
 </div>
 <script>
-var prter = [
-  {"name":"주방프린터","value":"0"},
-  {"name":"라벨프린터","value":"1"},
-  {"name":"KDS"       ,"value":"2"}
-];
-var prterKind   = ${cnv.getEnvCodeExcpAll("4030")};
-var prterLabelKind  = ${ccu.getCommCodeExcpAll("113")};
-var prterPort   = ${cnv.getEnvCodeExcpAll("4031")};
-var prterSpeed  = ${cnv.getEnvCodeExcpAll("4032")};
-var useYn       = ${ccu.getCommCodeExcpAll("067")};
+  var prter = [
+    {"name":"주방프린터","value":"0"},
+    {"name":"라벨프린터","value":"1"},
+    {"name":"KDS"       ,"value":"2"},
+    {"name":"발권프린터","value":"3"}
+  ];
+  var prterKind   = ${cnv.getEnvCodeExcpAll("4030")};
+  var prterLabelKind  = ${ccu.getCommCodeExcpAll("113")};
+  var prterPort   = ${cnv.getEnvCodeExcpAll("4031")};
+  var prterSpeed  = ${cnv.getEnvCodeExcpAll("4032")};
+  var useYn       = ${ccu.getCommCodeExcpAll("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrint.js?ver=20181128.16" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrint.js?ver=20220711.01" charset="utf-8"></script>

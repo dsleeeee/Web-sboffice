@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.stock.manage.dtlView.service.impl.StockManageDtlViewMapper">
+
+<!-- 실사/조정/폐기 조회 - 리스트 조회 -->
+    <!--
+        TABLE    : 
+        PARAM    : storePeriodVO
+        COMMENTS : 실사/조정/폐기 조회 - 리스트를 조회한다.
+    -->
+    <select id="getStockManageDtlViewList" parameterType="stockManageDtlViewVO" resultType="DefaultMap">
+    	/* USE : StockManageDtlViewMapper.getStockManageDtlViewList */
+        SELECT A.*
+        	   , (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '202' AND NMCODE_CD = A.HQ_GBN) AS HQ_GBN_NM
+        FROM
+		(
+		SELECT '2' AS SEQ
+		, 		N.hq_office_cd
+		, 		'' AS HQ_GBN
+		, 		'' AS TOT_DATE
+		, 		0 AS SEQ_NO
+		, 		'' AS PROC_FG_NM
+		, 		'' AS TITLE
+		, 		0 AS DTL_CNT
+		, 		'' AS REASON_CD
+		, 		'' AS REASON_NM
+		, 		N.PROD_CD
+		, 		(SELECT PROD_NM FROM TB_HQ_PRODUCT tmp WHERE TMP.HQ_OFFICE_CD = N.HQ_OFFICE_CD AND TMP.PROD_CD = N.PROD_CD) AS PROD_NM
+		, 		(SELECT BARCD_CD FROM TB_HQ_PRODUCT_BARCD tmp WHERE TMP.HQ_OFFICE_CD = N.HQ_OFFICE_CD AND TMP.PROD_CD = N.PROD_CD) AS BARCD_CD
+		, 		(SELECT PROD_CLASS_CD FROM TB_HQ_PRODUCT tmp WHERE TMP.HQ_OFFICE_CD = N.HQ_OFFICE_CD AND TMP.PROD_CD = N.PROD_CD) AS PROD_CLASS_CD
+		, 		0 AS CURR_QTY
+		, 		0 AS ACINS_QTY
+		, 		NVL(SUM(N.ADJ_QTY), 0) AS ADJ_QTY
+		, 		NVL(SUM(N.DISUSE_QTY), 0) AS DISUSE_QTY
+		, 		NVL(SUM(N.MOD_QTY), 0) AS MOD_QTY
+		, 		'' AS REMARK
+		FROM (
+		SELECT '1' AS HQ_GBN
+		, TSHAI.HQ_OFFICE_CD
+		, TO_CHAR(TO_DATE(TSHAI.ACINS_DATE,'YYYYMMDD'), 'YYYY-MM-DD') AS TOT_DATE
+		, TSHAI.SEQ_NO
+		, DECODE(TSHAI.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+		, TSHAI.ACINS_TITLE AS TITLE
+		, TSHAI.DTL_CNT
+		, TSHAI.REASON_CD
+		, (SELECT NMCODE_NM FROM TB_HQ_NMCODE thm WHERE thm.HQ_OFFICE_CD = TSHAI.HQ_OFFICE_CD AND NMCODE_GRP_CD = '134' AND thm.NMCODE_CD = TSHAI.REASON_CD) AS REASON_NM
+		, tssaid.PROD_CD
+		, tssaid.CMPT_CURR_QTY AS CURR_QTY
+		, tssaid.ACINS_QTY
+		, tssaid.ADJ_QTY
+		, 0 AS DISUSE_QTY
+		, tssaid.ADJ_QTY AS MOD_QTY
+		, tssaid.REMARK
+		FROM 	TB_ST_HQ_ACTUAL_INSPECTION TSHAI,
+		TB_ST_HQ_ACTUAL_INSPECTION_DTL tssaid
+		WHERE 	TSHAI.HQ_OFFICE_CD = #{hqOfficeCd}
+		AND  	tssaid.HQ_OFFICE_CD = TSHAI.HQ_OFFICE_CD
+		AND  	tssaid.ACINS_DATE = TSHAI.ACINS_DATE
+		AND  	tssaid.SEQ_NO = TSHAI.SEQ_NO
+		<if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+			AND TSHAI.ACINS_DATE BETWEEN #{startDate} AND #{endDate}
+		</if>
+		<if test="procFg != null and procFg != ''">
+			AND TSHAI.PROC_FG = #{procFg}
+		</if>
+		UNION ALL
+		SELECT '2' AS HQ_GBN
+		, TSHA.HQ_OFFICE_CD
+		, TO_CHAR(TO_DATE(TSHA.ADJ_DATE,'YYYYMMDD'), 'YYYY-MM-DD')  AS TOT_DATE
+		, TSHA.SEQ_NO
+		, DECODE(TSHA.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+		, TSHA.ADJ_TITLE AS TITLE
+		, TSHA.DTL_CNT
+		, TSHA.REASON_CD
+		, (SELECT NMCODE_NM FROM TB_HQ_NMCODE thm WHERE thm.HQ_OFFICE_CD = TSHA.HQ_OFFICE_CD AND NMCODE_GRP_CD = '135' AND thm.NMCODE_CD = TSHA.REASON_CD) AS REASON_NM
+		,	TSSAD.PROD_CD
+		,	TSSAD.CURR_QTY AS CURR_QTY
+		,	0 AS ACINS_QTY
+		,	TSSAD.ADJ_QTY
+		,	0 AS DISUSE_QTY
+		,	TSSAD.ADJ_QTY AS MOD_QTY
+		,	TSSAD.REMARK
+		FROM 	TB_ST_HQ_ADJUST TSHA,
+		TB_ST_HQ_ADJUST_DTL tssad
+		WHERE TSHA.HQ_OFFICE_CD = #{hqOfficeCd}
+		AND  	TSSAD.HQ_OFFICE_CD = TSHA.HQ_OFFICE_CD
+		AND  	TSSAD.ADJ_DATE = TSHA.ADJ_DATE
+		AND  	TSSAD.SEQ_NO = TSHA.SEQ_NO
+		<if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+			AND TSHA.ADJ_DATE BETWEEN #{startDate} AND #{endDate}
+		</if>
+		<if test="procFg != null and procFg != ''">
+			AND TSHA.PROC_FG = #{procFg}
+		</if>
+		UNION ALL
+		SELECT '3' AS HQ_GBN
+		, TSHD.HQ_OFFICE_CD
+		, TO_CHAR(TO_DATE(TSHD.DISUSE_DATE,'YYYYMMDD'), 'YYYY-MM-DD') AS TOT_DATE
+		, TSHD.SEQ_NO
+		, DECODE(TSHD.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+		, TSHD.DISUSE_TITLE AS TITLE
+		, TSHD.DTL_CNT
+		, TSHD.REASON_CD
+		, (SELECT NMCODE_NM FROM TB_HQ_NMCODE thm WHERE thm.HQ_OFFICE_CD = TSHD.HQ_OFFICE_CD AND NMCODE_GRP_CD = '136' AND thm.NMCODE_CD = TSHD.REASON_CD) AS REASON_NM
+		,	TSSDD.PROD_CD
+		,	TSSDD.CURR_QTY AS CURR_QTY
+		,	0 AS ACINS_QTY
+		,	0 AS ADJ_QTY
+		,	TSSDD.DISUSE_QTY AS DISUSE_QTY
+		,	TSSDD.DISUSE_QTY * -1 AS MOD_QTY
+		,	TSSDD.REMARK
+		FROM TB_ST_HQ_DISUSE TSHD,
+		TB_ST_HQ_DISUSE_DTL tssdd
+		WHERE TSHD.HQ_OFFICE_CD = #{hqOfficeCd}
+		AND  	TSSDD.HQ_OFFICE_CD = TSHD.HQ_OFFICE_CD
+		AND  	TSSDD.DISUSE_DATE = TSHD.DISUSE_DATE
+		AND  	TSSDD.SEQ_NO = TSHD.SEQ_NO
+		<if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+			AND TSHD.DISUSE_DATE BETWEEN #{startDate} AND #{endDate}
+		</if>
+		<if test="procFg != null and procFg != ''">
+			AND TSHD.PROC_FG = #{procFg}
+		</if>
+		) N
+		<if test="hqGbn != '' and hqGbn != null">
+			WHERE N.HQ_GBN = #{hqGbn}
+		</if>
+		<if test="reason != '' and reason != null">
+			AND N.REASON_CD = #{reason}
+		</if>
+		GROUP BY N.PROD_CD, N.HQ_OFFICE_CD
+		UNION ALL
+        SELECT  '1' AS SEQ
+		, M.HQ_OFFICE_CD
+		, M.HQ_GBN
+		, M.TOT_DATE
+		, M.SEQ_NO
+		, M.PROC_FG_NM
+		, M.TITLE
+		, M.DTL_CNT
+		, M.REASON_CD
+		, M.REASON_NM
+		, M.PROD_CD
+		, (SELECT PROD_NM FROM TB_HQ_PRODUCT tmp WHERE TMP.HQ_OFFICE_CD = M.HQ_OFFICE_CD AND TMP.PROD_CD = M.PROD_CD) AS PROD_NM
+		, (SELECT BARCD_CD FROM TB_HQ_PRODUCT_BARCD tmp WHERE TMP.HQ_OFFICE_CD = M.HQ_OFFICE_CD AND TMP.PROD_CD = M.PROD_CD) AS BARCD_CD
+		, (SELECT PROD_CLASS_CD FROM TB_HQ_PRODUCT tmp WHERE TMP.HQ_OFFICE_CD = M.HQ_OFFICE_CD AND TMP.PROD_CD = M.PROD_CD) AS PROD_CLASS_CD
+		, M.CURR_QTY
+		, M.ACINS_QTY
+		, M.ADJ_QTY
+		, M.DISUSE_QTY
+		, M.MOD_QTY
+		, M.REMARK
+		  FROM (
+				SELECT '1' AS HQ_GBN
+					 , TSHAI.HQ_OFFICE_CD
+					 , TO_CHAR(TO_DATE(TSHAI.ACINS_DATE,'YYYYMMDD'), 'YYYY-MM-DD') AS TOT_DATE
+					 , TSHAI.SEQ_NO
+					 , DECODE(TSHAI.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+					 , TSHAI.ACINS_TITLE AS TITLE
+					 , TSHAI.DTL_CNT
+				     , TSHAI.REASON_CD
+					 , (SELECT NMCODE_NM FROM TB_HQ_NMCODE thm WHERE thm.HQ_OFFICE_CD = TSHAI.HQ_OFFICE_CD AND NMCODE_GRP_CD = '134' AND thm.NMCODE_CD = TSHAI.REASON_CD) AS REASON_NM
+					 , tssaid.PROD_CD
+					 , tssaid.CMPT_CURR_QTY AS CURR_QTY
+					 , tssaid.ACINS_QTY
+					 , tssaid.ADJ_QTY
+					 , 0 AS DISUSE_QTY
+					 , tssaid.ADJ_QTY AS MOD_QTY
+					 , tssaid.REMARK
+				FROM 	TB_ST_HQ_ACTUAL_INSPECTION TSHAI,
+						TB_ST_HQ_ACTUAL_INSPECTION_DTL tssaid
+				WHERE 	TSHAI.HQ_OFFICE_CD = #{hqOfficeCd}
+				AND  	tssaid.HQ_OFFICE_CD = TSHAI.HQ_OFFICE_CD
+				AND  	tssaid.ACINS_DATE = TSHAI.ACINS_DATE
+				AND  	tssaid.SEQ_NO = TSHAI.SEQ_NO
+				 	<if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+				 		AND TSHAI.ACINS_DATE BETWEEN #{startDate} AND #{endDate}
+				 	</if>
+				 	<if test="procFg != null and procFg != ''">
+				 		AND TSHAI.PROC_FG = #{procFg}
+				 	</if>
+				UNION ALL
+				SELECT '2' AS HQ_GBN
+					 , TSHA.HQ_OFFICE_CD
+					 , TO_CHAR(TO_DATE(TSHA.ADJ_DATE,'YYYYMMDD'), 'YYYY-MM-DD')  AS TOT_DATE
+					 , TSHA.SEQ_NO
+					 , DECODE(TSHA.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+					 , TSHA.ADJ_TITLE AS TITLE
+					 , TSHA.DTL_CNT
+					 , TSHA.REASON_CD
+					 , (SELECT NMCODE_NM FROM TB_HQ_NMCODE thm WHERE thm.HQ_OFFICE_CD = TSHA.HQ_OFFICE_CD AND NMCODE_GRP_CD = '135' AND thm.NMCODE_CD = TSHA.REASON_CD) AS REASON_NM
+					 ,	TSSAD.PROD_CD
+					 ,	TSSAD.CURR_QTY AS CURR_QTY
+					 ,	0 AS ACINS_QTY
+					 ,	TSSAD.ADJ_QTY
+					 ,	0 AS DISUSE_QTY
+					 ,	TSSAD.ADJ_QTY AS MOD_QTY
+					 ,	TSSAD.REMARK
+				 FROM 	TB_ST_HQ_ADJUST TSHA,
+						TB_ST_HQ_ADJUST_DTL tssad
+				 WHERE TSHA.HQ_OFFICE_CD = #{hqOfficeCd}
+				AND  	TSSAD.HQ_OFFICE_CD = TSHA.HQ_OFFICE_CD
+				AND  	TSSAD.ADJ_DATE = TSHA.ADJ_DATE
+				AND  	TSSAD.SEQ_NO = TSHA.SEQ_NO
+				 	<if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+				 		AND TSHA.ADJ_DATE BETWEEN #{startDate} AND #{endDate}
+				 	</if>
+				 	<if test="procFg != null and procFg != ''">
+				 		AND TSHA.PROC_FG = #{procFg}
+				 	</if>
+				UNION ALL
+				SELECT '3' AS HQ_GBN
+					 , TSHD.HQ_OFFICE_CD
+					 , TO_CHAR(TO_DATE(TSHD.DISUSE_DATE,'YYYYMMDD'), 'YYYY-MM-DD') AS TOT_DATE
+					 , TSHD.SEQ_NO
+					 , DECODE(TSHD.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+					 , TSHD.DISUSE_TITLE AS TITLE
+					 , TSHD.DTL_CNT
+					 , TSHD.REASON_CD
+					 , (SELECT NMCODE_NM FROM TB_HQ_NMCODE thm WHERE thm.HQ_OFFICE_CD = TSHD.HQ_OFFICE_CD AND NMCODE_GRP_CD = '136' AND thm.NMCODE_CD = TSHD.REASON_CD) AS REASON_NM
+					 ,	TSSDD.PROD_CD
+					 ,	TSSDD.CURR_QTY AS CURR_QTY
+					 ,	0 AS ACINS_QTY
+					 ,	0 AS ADJ_QTY
+					 ,	TSSDD.DISUSE_QTY AS DISUSE_QTY
+					 ,	TSSDD.DISUSE_QTY * -1 AS MOD_QTY
+					 ,	TSSDD.REMARK
+					FROM TB_ST_HQ_DISUSE TSHD,
+						TB_ST_HQ_DISUSE_DTL tssdd
+					WHERE TSHD.HQ_OFFICE_CD = #{hqOfficeCd}
+	  				AND  	TSSDD.HQ_OFFICE_CD = TSHD.HQ_OFFICE_CD
+					AND  	TSSDD.DISUSE_DATE = TSHD.DISUSE_DATE
+					AND  	TSSDD.SEQ_NO = TSHD.SEQ_NO
+				 	<if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+				 	AND TSHD.DISUSE_DATE BETWEEN #{startDate} AND #{endDate}
+				 	</if>
+				 	<if test="procFg != null and procFg != ''">
+				 		AND TSHD.PROC_FG = #{procFg}
+				 	</if>
+			  ) M
+		 <if test="hqGbn != '' and hqGbn != null">
+		 	WHERE M.HQ_GBN = #{hqGbn}
+		 </if>
+		<if test="reason != '' and reason != null">
+			AND M.REASON_CD = #{reason}
+		</if>
+		 ) A
+		 WHERE 1=1
+		<if test="prodCd != null and prodCd != ''">
+			AND A.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+		</if>
+		<if test="prodNm != null and prodNm != ''">
+			AND A.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+		</if>
+		<if test="barCd != null and barCd != ''">
+			AND A.BARCD_CD LIKE '%'|| #{barCd} ||'%'
+		</if>
+		<if test="prodClassCd != null and prodClassCd != ''">
+		AND A.PROD_CLASS_CD IN (
+		SELECT PROD_CLASS_CD
+		FROM TB_HQ_PRODUCT_CLASS
+		WHERE 1=1
+		AND HQ_OFFICE_CD = #{hqOfficeCd}
+		START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+		CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+		)
+		</if>
+		ORDER BY PROD_CD, SEQ, HQ_GBN, SEQ_NO
+    </select>
+    
+    <select id="getStockManageDtlViewStoreList" parameterType="stockManageDtlViewVO" resultType="DefaultMap">
+    	/* USE : StockManageDtlViewMapper.getStockManageDtlViewStoreList */
+    	SELECT A.*
+        	   , (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '202' AND NMCODE_CD = A.HQ_GBN) AS HQ_GBN_NM
+        FROM
+        (
+		SELECT 	'2' AS SEQ
+		, 		'' AS HQ_GBN
+		, 		'' AS TOT_DATE
+		, 		0 AS SEQ_NO
+		, 		'' AS PROC_FG_NM
+		, 		'' AS TITLE
+		, 		0 AS DTL_CNT
+		, 		'' AS REASON_CD
+		, 		'' AS REASON_NM
+		, 		N.PROD_CD
+		, 		(SELECT PROD_NM FROM TB_MS_PRODUCT tmp WHERE TMP.STORE_CD = N.STORE_CD AND TMP.PROD_CD = N.PROD_CD) AS PROD_NM
+		, 		(SELECT BARCD_CD FROM TB_MS_PRODUCT_BARCD tmp WHERE TMP.STORE_CD = N.STORE_CD AND TMP.PROD_CD = N.PROD_CD) AS BARCD_CD
+		, 		(SELECT PROD_CLASS_CD FROM TB_MS_PRODUCT tmp WHERE TMP.STORE_CD = N.STORE_CD AND TMP.PROD_CD = N.PROD_CD) AS PROD_CLASS_CD
+		, 		0 AS CURR_QTY
+		, 		0 AS ACINS_QTY
+		, 		NVL(SUM(N.ADJ_QTY), 0) AS ADJ_QTY
+		, 		NVL(SUM(N.DISUSE_QTY), 0) AS DISUSE_QTY
+		, 		NVL(SUM(N.MOD_QTY), 0) AS MOD_QTY
+		, 		'' AS REMARK
+		FROM (
+		SELECT '1' AS HQ_GBN
+		, TSSAI.STORE_CD
+		, TO_CHAR(TO_DATE(TSSAI.ACINS_DATE,'YYYYMMDD'), 'YYYY-MM-DD') AS TOT_DATE
+		, TSSAI.SEQ_NO
+		, DECODE(TSSAI.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+		, ACINS_TITLE AS TITLE
+		, TSSAI.DTL_CNT
+		, TSSAI.REASON_CD
+		, (SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE thm WHERE thm.STORE_CD = TSSAI.STORE_CD AND NMCODE_GRP_CD = '134' AND thm.NMCODE_CD = TSSAI.REASON_CD) AS REASON_NM
+		,	tssaid.PROD_CD
+		,	tssaid.CMPT_CURR_QTY AS CURR_QTY
+		,	tssaid.ACINS_QTY
+		,	tssaid.ADJ_QTY
+		,	0 AS DISUSE_QTY
+		,	tssaid.ADJ_QTY AS MOD_QTY
+		,	tssaid.REMARK
+		FROM TB_ST_STORE_ACTUAL_INSPECTION TSSAI,
+		TB_ST_STORE_ACTUAL_INSPECTION_DTL tssaid
+		WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSAI.STORE_CD)
+		AND TSSAI.STORE_CD = #{storeCd}
+		AND  	tssaid.STORE_CD = TSSAI.STORE_CD
+		AND  	tssaid.ACINS_DATE = TSSAI.ACINS_DATE
+		AND  	tssaid.SEQ_NO = TSSAI.SEQ_NO
+		<if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+			AND TSSAI.ACINS_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
+		</if>
+		<if test="procFg != null and procFg != ''">
+			AND TSSAI.PROC_FG = #{procFg} 								/* (0:등록, 1:확정) */
+		</if>
+		UNION ALL
+		SELECT '2' AS HQ_GBN
+		, TSSA.STORE_CD
+		, TO_CHAR(TO_DATE(TSSA.ADJ_DATE,'YYYYMMDD'), 'YYYY-MM-DD')  AS TOT_DATE
+		, TSSA.SEQ_NO
+		, DECODE(TSSA.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+		, ADJ_TITLE AS TITLE
+		, TSSA.DTL_CNT
+		, TSSA.REASON_CD
+		, (SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE thm WHERE thm.STORE_CD = TSSA.STORE_CD AND NMCODE_GRP_CD = '135' AND thm.NMCODE_CD = TSSA.REASON_CD) AS REASON_NM
+		,	TSSAD.PROD_CD
+		,	TSSAD.CURR_QTY AS CURR_QTY
+		,	0 AS ACINS_QTY
+		,	TSSAD.ADJ_QTY
+		,	0 AS DISUSE_QTY
+		,	TSSAD.ADJ_QTY AS MOD_QTY
+		,	TSSAD.REMARK
+		FROM TB_ST_STORE_ADJUST TSSA,
+		TB_ST_STORE_ADJUST_DTL tssad
+		WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSA.STORE_CD)
+		AND TSSA.STORE_CD = #{storeCd}
+		AND  	TSSAD.STORE_CD = TSSA.STORE_CD
+		AND  	TSSAD.ADJ_DATE = TSSA.ADJ_DATE
+		AND  	TSSAD.SEQ_NO = TSSA.SEQ_NO
+		<if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+			AND TSSA.ADJ_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
+		</if>
+		<if test="procFg != null and procFg != ''">
+			AND TSSA.PROC_FG = #{procFg} 								/* (0:등록, 1:확정) */
+		</if>
+		UNION ALL
+		SELECT '3' AS HQ_GBN
+		, TSSD.STORE_CD
+		, TO_CHAR(TO_DATE(TSSD.DISUSE_DATE,'YYYYMMDD'), 'YYYY-MM-DD') AS TOT_DATE
+		, TSSD.SEQ_NO
+		, DECODE(TSSD.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+		, DISUSE_TITLE AS TITLE
+		, TSSD.DTL_CNT
+		, TSSD.REASON_CD
+		, (SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE thm WHERE thm.STORE_CD = TSSD.STORE_CD AND NMCODE_GRP_CD = '136' AND thm.NMCODE_CD = TSSD.REASON_CD) AS REASON_NM
+		,	TSSDD.PROD_CD
+		,	TSSDD.CURR_QTY AS CURR_QTY
+		,	0 AS ACINS_QTY
+		,	0 AS ADJ_QTY
+		,	TSSDD.DISUSE_QTY AS DISUSE_QTY
+		,	TSSDD.DISUSE_QTY * -1 AS MOD_QTY
+		,	TSSDD.REMARK
+		FROM TB_ST_STORE_DISUSE TSSD,
+		TB_ST_STORE_DISUSE_DTL tssdd
+		WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSD.STORE_CD)
+		AND TSSD.STORE_CD = #{storeCd}
+		AND  	TSSDD.STORE_CD = TSSD.STORE_CD
+		AND  	TSSDD.DISUSE_DATE = TSSD.DISUSE_DATE
+		AND  	TSSDD.SEQ_NO = TSSD.SEQ_NO
+		<if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+			AND TSSD.DISUSE_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
+		</if>
+		<if test="procFg != null and procFg != ''">
+			AND TSSD.PROC_FG = #{procFg} 								/* (0:등록, 1:확정) */
+		</if>
+		) N
+		<if test="hqGbn != '' and hqGbn != null">
+			WHERE N.HQ_GBN = #{hqGbn} 				/* (1:실사, 2:조정, 3:폐기) */
+		</if>
+		<if test="reason != '' and reason != null">
+			AND N.REASON_CD = #{reason}
+		</if>
+		GROUP BY N.PROD_CD, N.STORE_CD
+		UNION ALL
+    	SELECT '1' AS SEQ
+    		 , M.HQ_GBN
+			 , M.TOT_DATE
+			 , M.SEQ_NO
+			 , M.PROC_FG_NM
+			 , M.TITLE
+			 , M.DTL_CNT
+			 , M.REASON_CD
+			 , M.REASON_NM
+			, M.PROD_CD
+			, (SELECT PROD_NM FROM TB_MS_PRODUCT tmp WHERE TMP.STORE_CD = M.STORE_CD AND TMP.PROD_CD = M.PROD_CD) AS PROD_NM
+			, (SELECT BARCD_CD FROM TB_MS_PRODUCT_BARCD tmp WHERE TMP.STORE_CD = M.STORE_CD AND TMP.PROD_CD = M.PROD_CD) AS BARCD_CD
+			, (SELECT PROD_CLASS_CD FROM TB_MS_PRODUCT tmp WHERE TMP.STORE_CD = M.STORE_CD AND TMP.PROD_CD = M.PROD_CD) AS PROD_CLASS_CD
+			, M.CURR_QTY
+			, M.ACINS_QTY
+			, M.ADJ_QTY
+			, M.DISUSE_QTY
+			, M.MOD_QTY
+			, M.REMARK
+		  FROM (
+				SELECT '1' AS HQ_GBN
+					 , TSSAI.STORE_CD
+					 , TO_CHAR(TO_DATE(TSSAI.ACINS_DATE,'YYYYMMDD'), 'YYYY-MM-DD') AS TOT_DATE
+					 , TSSAI.SEQ_NO
+					 , DECODE(TSSAI.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+					 , ACINS_TITLE AS TITLE
+					 , TSSAI.DTL_CNT
+					 , TSSAI.REASON_CD
+					 , (SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE thm WHERE thm.STORE_CD = TSSAI.STORE_CD AND NMCODE_GRP_CD = '134' AND thm.NMCODE_CD = TSSAI.REASON_CD) AS REASON_NM
+					,	tssaid.PROD_CD
+					,	tssaid.CMPT_CURR_QTY AS CURR_QTY
+					,	tssaid.ACINS_QTY
+					,	tssaid.ADJ_QTY
+					,	0 AS DISUSE_QTY
+					,	tssaid.ADJ_QTY AS MOD_QTY
+					,	tssaid.REMARK
+					FROM TB_ST_STORE_ACTUAL_INSPECTION TSSAI,
+						TB_ST_STORE_ACTUAL_INSPECTION_DTL tssaid
+				WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSAI.STORE_CD)
+        		 AND TSSAI.STORE_CD = #{storeCd}
+				AND  	tssaid.STORE_CD = TSSAI.STORE_CD
+				AND  	tssaid.ACINS_DATE = TSSAI.ACINS_DATE
+				AND  	tssaid.SEQ_NO = TSSAI.SEQ_NO
+				 <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+				 	AND TSSAI.ACINS_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
+				 </if>
+				 <if test="procFg != null and procFg != ''">
+				 	AND TSSAI.PROC_FG = #{procFg} 								/* (0:등록, 1:확정) */
+				 </if>
+				UNION ALL
+				SELECT '2' AS HQ_GBN
+					 , TSSA.STORE_CD
+					 , TO_CHAR(TO_DATE(TSSA.ADJ_DATE,'YYYYMMDD'), 'YYYY-MM-DD')  AS TOT_DATE
+					 , TSSA.SEQ_NO
+					 , DECODE(TSSA.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+					 , ADJ_TITLE AS TITLE
+					 , TSSA.DTL_CNT
+					 , TSSA.REASON_CD
+					 , (SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE thm WHERE thm.STORE_CD = TSSA.STORE_CD AND NMCODE_GRP_CD = '135' AND thm.NMCODE_CD = TSSA.REASON_CD) AS REASON_NM
+					,	TSSAD.PROD_CD
+					,	TSSAD.CURR_QTY AS CURR_QTY
+					,	0 AS ACINS_QTY
+					,	TSSAD.ADJ_QTY
+					,	0 AS DISUSE_QTY
+					,	TSSAD.ADJ_QTY AS MOD_QTY
+					,	TSSAD.REMARK
+				FROM TB_ST_STORE_ADJUST TSSA,
+					TB_ST_STORE_ADJUST_DTL tssad
+				WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSA.STORE_CD)
+        		 AND TSSA.STORE_CD = #{storeCd}
+				AND  	TSSAD.STORE_CD = TSSA.STORE_CD
+				AND  	TSSAD.ADJ_DATE = TSSA.ADJ_DATE
+				AND  	TSSAD.SEQ_NO = TSSA.SEQ_NO
+      			 <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+				 	AND TSSA.ADJ_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
+				 </if>
+				 <if test="procFg != null and procFg != ''">
+				 	AND TSSA.PROC_FG = #{procFg} 								/* (0:등록, 1:확정) */
+				 </if>
+				UNION ALL
+				SELECT '3' AS HQ_GBN
+					 , TSSD.STORE_CD
+					 , TO_CHAR(TO_DATE(TSSD.DISUSE_DATE,'YYYYMMDD'), 'YYYY-MM-DD') AS TOT_DATE
+					 , TSSD.SEQ_NO
+					 , DECODE(TSSD.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+					 , DISUSE_TITLE AS TITLE
+					 , TSSD.DTL_CNT
+					 , TSSD.REASON_CD
+					 , (SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE thm WHERE thm.STORE_CD = TSSD.STORE_CD AND NMCODE_GRP_CD = '136' AND thm.NMCODE_CD = TSSD.REASON_CD) AS REASON_NM
+					,	TSSDD.PROD_CD
+					,	TSSDD.CURR_QTY AS CURR_QTY
+					,	0 AS ACINS_QTY
+					,	0 AS ADJ_QTY
+					,	TSSDD.DISUSE_QTY AS DISUSE_QTY
+					,	TSSDD.DISUSE_QTY * -1 AS MOD_QTY
+					,	TSSDD.REMARK
+				FROM TB_ST_STORE_DISUSE TSSD,
+					TB_ST_STORE_DISUSE_DTL tssdd
+				WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSD.STORE_CD)
+				 AND TSSD.STORE_CD = #{storeCd}
+				AND  	TSSDD.STORE_CD = TSSD.STORE_CD
+				AND  	TSSDD.DISUSE_DATE = TSSD.DISUSE_DATE
+				AND  	TSSDD.SEQ_NO = TSSD.SEQ_NO
+      			 <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+				 	AND TSSD.DISUSE_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
+				 </if>
+				 <if test="procFg != null and procFg != ''">
+				 	AND TSSD.PROC_FG = #{procFg} 								/* (0:등록, 1:확정) */
+				 </if>
+			  ) M
+	   	 <if test="hqGbn != '' and hqGbn != null">
+		 	WHERE M.HQ_GBN = #{hqGbn} 				/* (1:실사, 2:조정, 3:폐기) */
+		 </if>
+		<if test="reason != '' and reason != null">
+			AND M.REASON_CD = #{reason}
+		</if>
+		 ) A
+		WHERE 1=1
+		<if test="prodCd != null and prodCd != ''">
+			AND A.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+		</if>
+		<if test="prodNm != null and prodNm != ''">
+			AND A.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+		</if>
+		<if test="barCd != null and barCd != ''">
+			AND A.BARCD_CD LIKE '%'|| #{barCd} ||'%'
+		</if>
+		<if test="prodClassCd != null and prodClassCd != ''">
+			AND A.PROD_CLASS_CD IN (
+			SELECT  PROD_CLASS_CD
+			FROM    TB_MS_PRODUCT_CLASS
+			WHERE   STORE_CD = #{storeCd}
+			START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+			CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = #{storeCd}
+			)
+		</if>
+		ORDER BY PROD_CD, SEQ, HQ_GBN, SEQ_NO
+    </select>
+
+	<select id="getReason" parameterType="stockManageDtlViewVO" resultType="DefaultMap">
+		SELECT 	'' AS VALUE,
+				'전체' AS NAME
+		FROM DUAL
+		UNION
+		<choose>
+			<!-- 본사 -->
+			<when test='orgnFg != null and orgnFg == "H"'>
+				SELECT  NMCODE_CD AS VALUE,
+						NMCODE_NM AS NAME
+				FROM    TB_HQ_NMCODE
+				WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+				<if test='hqGbn != "" and hqGbn != null and hqGbn == "1"'>	/* (1:실사, 2:조정, 3:폐기) */
+					AND     NMCODE_GRP_CD = '134'
+				</if>
+				<if test='hqGbn != "" and hqGbn != null and hqGbn == "2"'>
+					AND     NMCODE_GRP_CD = '135'
+				</if>
+				<if test='hqGbn != "" and hqGbn != null and hqGbn == "3"'>
+					AND     NMCODE_GRP_CD = '136'
+				</if>
+				AND     USE_YN = 'Y'
+			</when>
+			<!-- 가맹점 -->
+			<when test='orgnFg != null and orgnFg == "S"'>
+				SELECT  NMCODE_CD AS VALUE,
+						NMCODE_NM AS NAME
+				FROM    TB_MS_STORE_NMCODE
+				WHERE   STORE_CD = #{storeCd}
+				<if test='hqGbn != "" and hqGbn != null and hqGbn == "1"'>	/* (1:실사, 2:조정, 3:폐기) */
+					AND     NMCODE_GRP_CD = '134'
+				</if>
+				<if test='hqGbn != "" and hqGbn != null and hqGbn == "2"'>
+					AND     NMCODE_GRP_CD = '135'
+				</if>
+				<if test='hqGbn != "" and hqGbn != null and hqGbn == "3"'>
+					AND     NMCODE_GRP_CD = '136'
+				</if>
+				AND     USE_YN = 'Y'
+			</when>
+		</choose>
+		ORDER
+		BY VALUE NULLS FIRST, VALUE ASC
+	</select>
+</mapper>

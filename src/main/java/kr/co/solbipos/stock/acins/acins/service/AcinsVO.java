@@ -72,6 +72,8 @@ public class AcinsVO extends PageVO {
     private String  areaFg;
     /** 선택창고 */
     private String adjStorageCd;
+    /** 사유코드 */
+    private String acinsReason;
     /**
      * @return the hqOfficeCd
      */
@@ -521,4 +523,12 @@ public class AcinsVO extends PageVO {
 	public void setAdjStorageCd(String adjStorageCd) {
 		this.adjStorageCd = adjStorageCd;
 	}
+
+    public String getAcinsReason() {
+        return acinsReason;
+    }
+
+    public void setAcinsReason(String acinsReason) {
+        this.acinsReason = acinsReason;
+    }
 }

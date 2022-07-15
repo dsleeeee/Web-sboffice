@@ -7,7 +7,7 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadStore.service.ExcelUploadStoreVO;
 import kr.co.solbipos.stock.disuse.disuse.service.DisuseService;
 import kr.co.solbipos.stock.disuse.disuse.service.DisuseVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -146,6 +146,7 @@ public class DisuseServiceImpl implements DisuseService {
                 disuseHdVO.setStoreCd(sessionInfoVO.getStoreCd());
                 disuseHdVO.setDisuseDate(disuseVO.getDisuseDate());
                 disuseHdVO.setDisuseTitle(disuseVO.getDisuseTitle());
+                disuseHdVO.setDisuseReason(disuseVO.getDisuseReason());
                 disuseHdVO.setSeqNo(disuseVO.getSeqNo());
                 disuseHdVO.setProcFg("0");
                 disuseHdVO.setDisuseStorageCd(disuseVO.getDisuseStorageCd());
@@ -320,6 +321,7 @@ public class DisuseServiceImpl implements DisuseService {
                 disuseHdVO.setStoreCd(sessionInfoVO.getStoreCd());
                 disuseHdVO.setDisuseDate(disuseVO.getDisuseDate());
                 disuseHdVO.setDisuseTitle(disuseVO.getDisuseTitle());
+                disuseHdVO.setDisuseReason(disuseVO.getDisuseReason());
                 disuseHdVO.setSeqNo(disuseVO.getSeqNo());
                 disuseHdVO.setStorageCd(disuseVO.getStorageCd());
                 disuseHdVO.setDisuseStorageCd(disuseVO.getDisuseStorageCd());
@@ -400,29 +402,29 @@ public class DisuseServiceImpl implements DisuseService {
 
     /** 폐기관리 - 엑셀업로드 */
     @Override
-    public int excelUpload(ExcelUploadMPSVO excelUploadMPSVO, SessionInfoVO sessionInfoVO) {
+    public int excelUpload(ExcelUploadStoreVO excelUploadStoreVO, SessionInfoVO sessionInfoVO) {
         int result = 0;
 
         String currentDt = currentDateTimeString();
 
-        excelUploadMPSVO.setSessionId(sessionInfoVO.getSessionId());
-        excelUploadMPSVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        excelUploadMPSVO.setStoreCd(sessionInfoVO.getStoreCd());
-        excelUploadMPSVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        excelUploadMPSVO.setRegId(sessionInfoVO.getUserId());
-        excelUploadMPSVO.setRegDt(currentDt);
-        excelUploadMPSVO.setModId(sessionInfoVO.getUserId());
-        excelUploadMPSVO.setModDt(currentDt);
+        excelUploadStoreVO.setSessionId(sessionInfoVO.getSessionId());
+        excelUploadStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        excelUploadStoreVO.setStoreCd(sessionInfoVO.getStoreCd());
+        excelUploadStoreVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        excelUploadStoreVO.setRegId(sessionInfoVO.getUserId());
+        excelUploadStoreVO.setRegDt(currentDt);
+        excelUploadStoreVO.setModId(sessionInfoVO.getUserId());
+        excelUploadStoreVO.setModDt(currentDt);
 
-        String seqNo = StringUtil.getOrBlank(excelUploadMPSVO.getSeqNo());
+        String seqNo = StringUtil.getOrBlank(excelUploadStoreVO.getSeqNo());
         String insFg = (seqNo.equals("") ? "I" : "U");
         if(!seqNo.equals("")) {
             // 수량추가인 경우
-            if(StringUtil.getOrBlank(excelUploadMPSVO.getAddQtyFg()).equals("add")) {
-//                result = disuseMapper.insertExcelUploadAddQty(excelUploadMPSVO);
+            if(StringUtil.getOrBlank(excelUploadStoreVO.getAddQtyFg()).equals("add")) {
+//                result = disuseMapper.insertExcelUploadAddQty(excelUploadStoreVO);
             } else {
             // 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제
-            result = disuseMapper.deleteDisuseToExcelUploadData(excelUploadMPSVO);
+            result = disuseMapper.deleteDisuseToExcelUploadData(excelUploadStoreVO);
             }
 
         }
@@ -431,9 +433,9 @@ public class DisuseServiceImpl implements DisuseService {
         if(seqNo.equals("")) {
             // 신규 seq 조회
             DisuseVO newSeqNoVO = new DisuseVO();
-            newSeqNoVO.setHqOfficeCd(excelUploadMPSVO.getHqOfficeCd());
-            newSeqNoVO.setStoreCd(excelUploadMPSVO.getStoreCd());
-            newSeqNoVO.setDisuseDate(excelUploadMPSVO.getDate());
+            newSeqNoVO.setHqOfficeCd(excelUploadStoreVO.getHqOfficeCd());
+            newSeqNoVO.setStoreCd(excelUploadStoreVO.getStoreCd());
+            newSeqNoVO.setDisuseDate(excelUploadStoreVO.getDate());
             if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
                 seqNo = disuseMapper.getHqNewSeqNo(newSeqNoVO);
             }
@@ -442,22 +444,23 @@ public class DisuseServiceImpl implements DisuseService {
             }
         }
 
-        excelUploadMPSVO.setSeqNo(Integer.parseInt(seqNo));
+        excelUploadStoreVO.setSeqNo(Integer.parseInt(seqNo));
         // 엑셀업로드 한 수량을 폐기수량으로 입력
-        result = disuseMapper.insertDisuseToExcelUploadData(excelUploadMPSVO);
+        result = disuseMapper.insertDisuseToExcelUploadData(excelUploadStoreVO);
 
         // 정상 입력된 데이터 TEMP 테이블에서 삭제
-        result = disuseMapper.deleteExcelUploadCompleteData(excelUploadMPSVO);
+        result = disuseMapper.deleteExcelUploadCompleteData(excelUploadStoreVO);
 
         DisuseVO disuseHdVO = new DisuseVO();
         disuseHdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         disuseHdVO.setStoreCd(sessionInfoVO.getStoreCd());
-        disuseHdVO.setDisuseDate(excelUploadMPSVO.getDate());
-        disuseHdVO.setDisuseTitle(excelUploadMPSVO.getTitle());
+        disuseHdVO.setDisuseDate(excelUploadStoreVO.getDate());
+        disuseHdVO.setDisuseTitle(excelUploadStoreVO.getTitle());
+        disuseHdVO.setDisuseReason(excelUploadStoreVO.getReason());
         disuseHdVO.setSeqNo(Integer.parseInt(seqNo));
         disuseHdVO.setProcFg("0");
         disuseHdVO.setStorageCd("999");
-        disuseHdVO.setDisuseStorageCd(excelUploadMPSVO.getDisuseStorageCd());
+        disuseHdVO.setDisuseStorageCd(excelUploadStoreVO.getDisuseStorageCd());
         disuseHdVO.setRegId(sessionInfoVO.getUserId());
         disuseHdVO.setRegDt(currentDt);
         disuseHdVO.setModId(sessionInfoVO.getUserId());
@@ -490,5 +493,10 @@ public class DisuseServiceImpl implements DisuseService {
         }
 
         return result;
+    }
+
+    @Override
+    public List<DefaultMap<String>> getDisuseReason(SessionInfoVO sessionInfoVO) {
+        return disuseMapper.getDisuseReason(sessionInfoVO);
     }
 }

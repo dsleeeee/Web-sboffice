@@ -32,6 +32,7 @@ app.controller('viewDtlCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	    $scope.hqGbn    	= data.hqGbn; // 상태
 	    $scope.hqGbnNm    	= data.hqGbnNm; // 상태명
 	    $scope.title    	= data.title; // 제목
+	    $scope.reasonNm    	= data.reasonNm; // 사유
 	    $scope.orgnFg     	= data.orgnFg;
 	    $scope.hqOfficeCd	= data.hqOfficeCd;
 	    $scope.storeCd		= data.storeCd;

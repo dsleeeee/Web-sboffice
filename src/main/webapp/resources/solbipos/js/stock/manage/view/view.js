@@ -2,12 +2,18 @@
  * get application
  */
 
+// 콤보박스 아무것도 선택하지 않았을 때 사용
+var defaultComboData = [
+	{"name": "전체", "value": ""}
+];
+
 var app = agrid.getApp();
 
 app.controller('stockManageViewCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 	// 상위 객체 상속 : T/F 는 picker
 	angular.extend(this, new RootController('stockManageViewCtrl', $scope, $http, true));
 
+	$scope._setComboData("srchReason", defaultComboData);
 	// 조회일자 세팅
 	$scope.srchStartDate = wcombo.genDateVal("#srchClassStartDate", getToday());
 	$scope.srchEndDate   = wcombo.genDateVal("#srchClassEndDate", getToday());
@@ -73,6 +79,7 @@ app.controller('stockManageViewCtrl', ['$scope', '$http', '$timeout', function (
 	    			params.seqNo		= selectedRow.seqNo; // 차수
 	    			params.hqGbn		= selectedRow.hqGbn; // 상태
 	    		    params.title		= selectedRow.title; // 제목
+	    		    params.reasonNm		= selectedRow.reasonNm; // 사유
 	    		    params.hqOfficeCd	= $("#hqOfficeCd").val();
 	    		    params.storeCd		= $("#storeCd").val();
 
@@ -135,6 +142,30 @@ app.controller('stockManageViewCtrl', ['$scope', '$http', '$timeout', function (
 	$scope.excelDownload = function () {
 		var params     = {};
 		$scope._broadcast('stockManageViewExcelCtrl',params);
+	};
+
+	// 상태에 따른 사유 조회
+	$scope.setReason = function (s) {
+
+		var params = {};
+
+		if(s.selectedValue === "") {
+			$scope._setComboData("srchReason", defaultComboData);
+
+		}else {
+
+			params.hqGbn = s.selectedValue;
+
+			// 계정조회
+			$scope._postJSONQuery.withOutPopUp("/stock/manage/view/view/getReason.sb", params, function (response) {
+				if (response.data.data.list.length > 0) {
+					var reasonList = response.data.data.list;
+					$scope._setComboData("srchReason", reasonList);
+				} else {
+					$scope._setComboData("srchReason", defaultComboData);
+				}
+			});
+		}
 	};
 }]);
 

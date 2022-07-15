@@ -3,6 +3,8 @@ app.controller('disuseDtlCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('disuseDtlCtrl', $scope, $http, true));
 
+  $scope._setComboData("disuseDtlReason", reasonData);
+
   var global_disuseStorageCd;	  
   var global_disuseTitle;
   
@@ -62,7 +64,7 @@ app.controller('disuseDtlCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.seqNo      = data.seqNo;
       $scope.disuse.dtl.disuseStorageCd	=	data.disuseStorageCd;
 
-      $scope.procFgCheck(); // 폐기 진행구분 체크
+      $scope.procFgCheck(true); // 폐기 진행구분 체크
     }
     else { // 페이징처리에서 broadcast 호출시
       $scope.searchDisuseDtlList();
@@ -74,7 +76,7 @@ app.controller('disuseDtlCtrl', ['$scope', '$http', function ($scope, $http) {
 
 
   // 폐기 진행구분 체크 및 폐기제목 조회
-  $scope.procFgCheck = function () {
+  $scope.procFgCheck = function (data) {
     var params        = {};
     params.disuseDate = $scope.disuseDate;
     params.seqNo      = $scope.seqNo;
@@ -106,6 +108,7 @@ app.controller('disuseDtlCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.btnDtlConfirm = false;
           }
           $scope.disuseTitle = response.data.data.disuseTitle;
+          $scope.disuseReason = response.data.data.disuseReason;
           $scope.disuse.dtl.disuseStorageCd	=	response.data.data.disuseStorageCd;
           global_disuseTitle 			= 	response.data.data.disuseTitle;         
           global_disuseStorageCd 		=	response.data.data.disuseStorageCd;          
@@ -124,7 +127,9 @@ app.controller('disuseDtlCtrl', ['$scope', '$http', function ($scope, $http) {
       // "complete" code here
       $scope.wjDisuseDtlLayer.show(true);
       $("#registSubTitle").html(messages["disuse.reg.disuseDate"] + ' : ' + getFormatDate($scope.disuseDate, '-'));
-      $scope.searchDisuseDtlList();
+      if(data){
+        $scope.searchDisuseDtlList();
+      }
     });
   };
 
@@ -188,7 +193,8 @@ app.controller('disuseDtlCtrl', ['$scope', '$http', function ($scope, $http) {
       item.disuseDate  = $scope.disuseDate;
       item.seqNo       = $scope.seqNo;
       item.disuseTitle = $scope.disuseTitle;
-      item.disuseStorageCd = $scope.disuse.dtl.disuseStorageCd;      
+      item.disuseReason = $scope.disuseReason;
+      item.disuseStorageCd = $scope.disuse.dtl.disuseStorageCd;
       item.storageCd   = "999";	//001	->	999
       item.hqBrandCd   = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.confirmFg   = confirmFg;

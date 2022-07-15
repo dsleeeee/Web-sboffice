@@ -7,7 +7,7 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadStore.service.ExcelUploadStoreVO;
 import kr.co.solbipos.stock.acins.acins.service.AcinsService;
 import kr.co.solbipos.stock.acins.acins.service.AcinsVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,6 +147,7 @@ public class AcinsServiceImpl implements AcinsService {
                 acinsHdVO.setStoreCd(sessionInfoVO.getStoreCd());
                 acinsHdVO.setAcinsDate(acinsVO.getAcinsDate());
                 acinsHdVO.setAcinsTitle(acinsVO.getAcinsTitle());
+                acinsHdVO.setAcinsReason(acinsVO.getAcinsReason());
                 acinsHdVO.setSeqNo(acinsVO.getSeqNo());
                 acinsHdVO.setProcFg("0");
                 acinsHdVO.setAdjStorageCd(acinsVO.getAdjStorageCd());
@@ -321,6 +322,7 @@ public class AcinsServiceImpl implements AcinsService {
                 acinsHdVO.setStoreCd(sessionInfoVO.getStoreCd());
                 acinsHdVO.setAcinsDate(acinsVO.getAcinsDate());
                 acinsHdVO.setAcinsTitle(acinsVO.getAcinsTitle());
+                acinsHdVO.setAcinsReason(acinsVO.getAcinsReason());
                 acinsHdVO.setSeqNo(acinsVO.getSeqNo());
                 acinsHdVO.setStorageCd(acinsVO.getStorageCd());
                 acinsHdVO.setAdjStorageCd(acinsVO.getAdjStorageCd());
@@ -401,29 +403,29 @@ public class AcinsServiceImpl implements AcinsService {
 
     /** 실사관리 - 엑셀업로드 */
     @Override
-    public int excelUpload(ExcelUploadMPSVO excelUploadMPSVO, SessionInfoVO sessionInfoVO) {
+    public int excelUpload(ExcelUploadStoreVO excelUploadStoreVO, SessionInfoVO sessionInfoVO) {
         int result = 0;
 
         String currentDt = currentDateTimeString();
 
-        excelUploadMPSVO.setSessionId(sessionInfoVO.getSessionId());
-        excelUploadMPSVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        excelUploadMPSVO.setStoreCd(sessionInfoVO.getStoreCd());
-        excelUploadMPSVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        excelUploadMPSVO.setRegId(sessionInfoVO.getUserId());
-        excelUploadMPSVO.setRegDt(currentDt);
-        excelUploadMPSVO.setModId(sessionInfoVO.getUserId());
-        excelUploadMPSVO.setModDt(currentDt);
+        excelUploadStoreVO.setSessionId(sessionInfoVO.getSessionId());
+        excelUploadStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        excelUploadStoreVO.setStoreCd(sessionInfoVO.getStoreCd());
+        excelUploadStoreVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        excelUploadStoreVO.setRegId(sessionInfoVO.getUserId());
+        excelUploadStoreVO.setRegDt(currentDt);
+        excelUploadStoreVO.setModId(sessionInfoVO.getUserId());
+        excelUploadStoreVO.setModDt(currentDt);
 
-        String seqNo = StringUtil.getOrBlank(excelUploadMPSVO.getSeqNo());
+        String seqNo = StringUtil.getOrBlank(excelUploadStoreVO.getSeqNo());
         String insFg = (seqNo.equals("") ? "I" : "U");
         if(!seqNo.equals("")) {
             // 수량추가인 경우
-            if(StringUtil.getOrBlank(excelUploadMPSVO.getAddQtyFg()).equals("add")) {
-//                result = acinsMapper.insertExcelUploadAddQty(excelUploadMPSVO);
+            if(StringUtil.getOrBlank(excelUploadStoreVO.getAddQtyFg()).equals("add")) {
+//                result = acinsMapper.insertExcelUploadAddQty(excelUploadStoreVO);
             } else {
             // 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제
-            result = acinsMapper.deleteAcinsToExcelUploadData(excelUploadMPSVO);
+            result = acinsMapper.deleteAcinsToExcelUploadData(excelUploadStoreVO);
             }
 
         }
@@ -432,9 +434,9 @@ public class AcinsServiceImpl implements AcinsService {
         if(seqNo.equals("")) {
             // 신규 seq 조회
             AcinsVO newSeqNoVO = new AcinsVO();
-            newSeqNoVO.setHqOfficeCd(excelUploadMPSVO.getHqOfficeCd());
-            newSeqNoVO.setStoreCd(excelUploadMPSVO.getStoreCd());
-            newSeqNoVO.setAcinsDate(excelUploadMPSVO.getDate());
+            newSeqNoVO.setHqOfficeCd(excelUploadStoreVO.getHqOfficeCd());
+            newSeqNoVO.setStoreCd(excelUploadStoreVO.getStoreCd());
+            newSeqNoVO.setAcinsDate(excelUploadStoreVO.getDate());
             if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
                 seqNo = acinsMapper.getHqNewSeqNo(newSeqNoVO);
             }
@@ -443,22 +445,23 @@ public class AcinsServiceImpl implements AcinsService {
             }
         }
 
-        excelUploadMPSVO.setSeqNo(Integer.parseInt(seqNo));
+        excelUploadStoreVO.setSeqNo(Integer.parseInt(seqNo));
         // 엑셀업로드 한 수량을 실사수량으로 입력
-        result = acinsMapper.insertAcinsToExcelUploadData(excelUploadMPSVO);
+        result = acinsMapper.insertAcinsToExcelUploadData(excelUploadStoreVO);
 
         // 정상 입력된 데이터 TEMP 테이블에서 삭제
-        result = acinsMapper.deleteExcelUploadCompleteData(excelUploadMPSVO);
+        result = acinsMapper.deleteExcelUploadCompleteData(excelUploadStoreVO);
 
         AcinsVO acinsHdVO = new AcinsVO();
         acinsHdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         acinsHdVO.setStoreCd(sessionInfoVO.getStoreCd());
-        acinsHdVO.setAcinsDate(excelUploadMPSVO.getDate());
-        acinsHdVO.setAcinsTitle(excelUploadMPSVO.getTitle());
+        acinsHdVO.setAcinsDate(excelUploadStoreVO.getDate());
+        acinsHdVO.setAcinsTitle(excelUploadStoreVO.getTitle());
+        acinsHdVO.setAcinsReason(excelUploadStoreVO.getReason());
         acinsHdVO.setSeqNo(Integer.parseInt(seqNo));
         acinsHdVO.setProcFg("0");
         acinsHdVO.setStorageCd("999");
-        acinsHdVO.setAdjStorageCd(excelUploadMPSVO.getAdjStorageCd());
+        acinsHdVO.setAdjStorageCd(excelUploadStoreVO.getAdjStorageCd());
         acinsHdVO.setRegId(sessionInfoVO.getUserId());
         acinsHdVO.setRegDt(currentDt);
         acinsHdVO.setModId(sessionInfoVO.getUserId());
@@ -491,5 +494,10 @@ public class AcinsServiceImpl implements AcinsService {
         }
 
         return result;
+    }
+
+    @Override
+    public List<DefaultMap<String>> getAcinsReason(SessionInfoVO sessionInfoVO) {
+        return acinsMapper.getAcinsReason(sessionInfoVO);
     }
 }

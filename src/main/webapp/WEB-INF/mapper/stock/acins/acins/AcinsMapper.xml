@@ -17,13 +17,16 @@
         ,       tshai.ACINS_TITLE, tshai.PROC_FG, tshai.DTL_CNT
         ,       tshai.ADJ_CNT, tshai.CONFM_DATE
         ,       SUBSTR(tshai.REG_DT,0,8) AS REG_DATE
-        ,		tshai.ADJ_STORAGE_CD
+        ,		tshai.ADJ_STORAGE_CD, tshai.REASON_CD AS ACINS_REASON
         FROM    TB_ST_HQ_ACTUAL_INSPECTION tshai
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     ACINS_DATE  BETWEEN #{startDate} AND #{endDate}
         ]]>
         <if test='procFg != null and procFg != ""'>
             AND tshai.PROC_FG = #{procFg}
+        </if>
+        <if test='acinsReason != null and acinsReason != ""'>
+            AND tshai.REASON_CD = #{acinsReason}
         </if>
         <![CDATA[
         ORDER BY tshai.ACINS_DATE DESC, tshai.SEQ_NO DESC
@@ -44,13 +47,16 @@
         ,       tssai.ACINS_TITLE, tssai.PROC_FG, tssai.DTL_CNT
         ,       tssai.ADJ_CNT, tssai.CONFM_DATE
         ,       SUBSTR(tssai.REG_DT,0,8) AS REG_DATE
-        ,		tssai.ADJ_STORAGE_CD
+        ,		tssai.ADJ_STORAGE_CD, tssai.REASON_CD AS ACINS_REASON
         FROM    TB_ST_STORE_ACTUAL_INSPECTION tssai
         WHERE   tssai.STORE_CD    = #{storeCd}
         AND     tssai.ACINS_DATE  BETWEEN #{startDate} AND #{endDate}
         ]]>
         <if test='procFg != null and procFg != ""'>
             AND tssai.PROC_FG = #{procFg}
+        </if>
+        <if test='acinsReason != null and acinsReason != ""'>
+            AND tssai.REASON_CD = #{acinsReason}
         </if>
         <![CDATA[
         ORDER BY tssai.ACINS_DATE DESC, tssai.SEQ_NO DESC
@@ -67,7 +73,7 @@
     <select id="getHqProcFgCheck" parameterType="acinsVO" resultType="DefaultMap">
         /* USE : AcinsMapper.getHqProcFgCheck */
         <![CDATA[
-        SELECT  tshai.PROC_FG, tshai.ACINS_TITLE, tshai.ADJ_STORAGE_CD, ths.STORAGE_NM
+        SELECT  tshai.PROC_FG, tshai.ACINS_TITLE, tshai.ADJ_STORAGE_CD, ths.STORAGE_NM, tshai.REASON_CD AS ACINS_REASON
         FROM    TB_ST_HQ_ACTUAL_INSPECTION tshai
 		,       TB_HQ_STORAGE               ths
         WHERE   tshai.HQ_OFFICE_CD  = #{hqOfficeCd}
@@ -88,7 +94,7 @@
     <select id="getStProcFgCheck" parameterType="acinsVO" resultType="DefaultMap">
         /* USE : AcinsMapper.getStProcFgCheck */
         <![CDATA[
-        SELECT  tssai.PROC_FG, tssai.ACINS_TITLE, tssai.ADJ_STORAGE_CD, tms.STORAGE_NM
+        SELECT  tssai.PROC_FG, tssai.ACINS_TITLE, tssai.ADJ_STORAGE_CD, tms.STORAGE_NM, tssai.REASON_CD AS ACINS_REASON
         FROM    TB_ST_STORE_ACTUAL_INSPECTION tssai
         ,       TB_MS_STORAGE               tms
         WHERE   tssai.STORE_CD      = #{storeCd}
@@ -712,37 +718,40 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            REASON_CD
         )
         SELECT	tshaid.HQ_OFFICE_CD
-        ,		#{storageCd}
-        ,		tshaid.ACINS_DATE
-        ,		tshaid.SEQ_NO
-        ,		#{acinsTitle}
-        ,		#{procFg}
-        ,       #{adjStorageCd}
-        ,		COUNT(tshaid.PROD_CD)
-        ,		SUM(DECODE(tshaid.ADJ_QTY, 0, 0, 1))
-        ,		SUM(tshaid.ACINS_AMT)
-        ,       #{regDt}
-        ,       #{regId}
-        ,       #{modDt}
-        ,       #{modId}
+             ,		#{storageCd}
+             ,		tshaid.ACINS_DATE
+             ,		tshaid.SEQ_NO
+             ,		#{acinsTitle}
+             ,		#{procFg}
+             ,       #{adjStorageCd}
+             ,		COUNT(tshaid.PROD_CD)
+             ,		SUM(DECODE(tshaid.ADJ_QTY, 0, 0, 1))
+             ,		SUM(tshaid.ACINS_AMT)
+             ,       #{regDt}
+             ,       #{regId}
+             ,       #{modDt}
+             ,       #{modId}
+             ,       #{acinsReason}
         FROM	TB_ST_HQ_ACTUAL_INSPECTION_DTL tshaid
         WHERE	tshaid.HQ_OFFICE_CD	=	#{hqOfficeCd}
         AND     tshaid.ACINS_DATE	=	#{acinsDate}
         AND     tshaid.SEQ_NO	    =	#{seqNo}
         GROUP
-        BY		tshaid.HQ_OFFICE_CD
-        ,		#{storageCd}
-        ,		tshaid.ACINS_DATE
-        ,		tshaid.SEQ_NO
-        ,		#{acinsTitle}
-        ,		#{procFg}
-        ,       #{regDt}
-        ,       #{regId}
-        ,       #{modDt}
-        ,       #{modId}
+            BY		tshaid.HQ_OFFICE_CD
+             ,		#{storageCd}
+             ,		tshaid.ACINS_DATE
+             ,		tshaid.SEQ_NO
+             ,		#{acinsTitle}
+             ,		#{procFg}
+             ,       #{regDt}
+             ,       #{regId}
+             ,       #{modDt}
+             ,       #{modId}
+             ,       #{acinsReason}
     </insert>
 
 
@@ -769,37 +778,40 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            REASON_CD
         )
         SELECT  tshaid.STORE_CD
-        ,       #{storageCd}
-        ,       tshaid.ACINS_DATE
-        ,       tshaid.SEQ_NO
-        ,       #{acinsTitle}
-        ,       #{procFg}
-        ,       #{adjStorageCd}
-        ,       COUNT(tshaid.PROD_CD)
-        ,       SUM(DECODE(tshaid.ADJ_QTY, 0, 0, 1))
-        ,       SUM(tshaid.ACINS_AMT)
-        ,       #{regDt}
-        ,       #{regId}
-        ,       #{modDt}
-        ,       #{modId}
+             ,       #{storageCd}
+             ,       tshaid.ACINS_DATE
+             ,       tshaid.SEQ_NO
+             ,       #{acinsTitle}
+             ,       #{procFg}
+             ,       #{adjStorageCd}
+             ,       COUNT(tshaid.PROD_CD)
+             ,       SUM(DECODE(tshaid.ADJ_QTY, 0, 0, 1))
+             ,       SUM(tshaid.ACINS_AMT)
+             ,       #{regDt}
+             ,       #{regId}
+             ,       #{modDt}
+             ,       #{modId}
+             ,       #{acinsReason}
         FROM    TB_ST_STORE_ACTUAL_INSPECTION_DTL tshaid
         WHERE   tshaid.STORE_CD     =   #{storeCd}
         AND     tshaid.ACINS_DATE   =   #{acinsDate}
         AND     tshaid.SEQ_NO       =   #{seqNo}
         GROUP
-        BY      tshaid.STORE_CD
-        ,       #{storageCd}
-        ,       tshaid.ACINS_DATE
-        ,       tshaid.SEQ_NO
-        ,       #{acinsTitle}
-        ,       #{procFg}
-        ,       #{regDt}
-        ,       #{regId}
-        ,       #{modDt}
-        ,       #{modId}
+            BY      tshaid.STORE_CD
+             ,       #{storageCd}
+             ,       tshaid.ACINS_DATE
+             ,       tshaid.SEQ_NO
+             ,       #{acinsTitle}
+             ,       #{procFg}
+             ,       #{regDt}
+             ,       #{regId}
+             ,       #{modDt}
+             ,       #{modId}
+             ,       #{acinsReason}
     </insert>
 
 
@@ -822,6 +834,7 @@
                     AND     tshaid.SEQ_NO       =   #{seqNo}
                 )
         ,       ACINS_TITLE = #{acinsTitle}
+        ,       REASON_CD = #{acinsReason}
         ,       ADJ_STORAGE_CD = #{adjStorageCd}
         ,       PROC_FG     = #{procFg}
         ,       CONFM_DATE  = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
@@ -844,21 +857,22 @@
         /* USE : AcinsMapper.updateStAcinsHd */
         UPDATE  TB_ST_STORE_ACTUAL_INSPECTION
         SET     (DTL_CNT, ADJ_CNT, TOT_ACINS_AMT)
-              = (   SELECT  COUNT(tshaid.PROD_CD)
-                    ,       SUM(DECODE(tshaid.ADJ_QTY, 0, 0, 1))
-                    ,       SUM(tshaid.ACINS_AMT)
-                    FROM    TB_ST_STORE_ACTUAL_INSPECTION_DTL tshaid
-                    WHERE   tshaid.STORE_CD =   #{storeCd}
-                    AND     tshaid.ACINS_DATE   =   #{acinsDate}
-                    AND     tshaid.SEQ_NO       =   #{seqNo}
-                )
-        ,       ACINS_TITLE = #{acinsTitle}
-        ,       ADJ_STORAGE_CD = #{adjStorageCd}
-        ,       PROC_FG     = #{procFg}
-        ,       CONFM_DATE  = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
-        ,       CONFM_ID    = DECODE(#{procFg}, '0', NULL, #{modId})
-        ,       MOD_DT      = #{modDt}
-        ,       MOD_ID      = #{modId}
+                                 = (   SELECT  COUNT(tshaid.PROD_CD)
+                                            ,       SUM(DECODE(tshaid.ADJ_QTY, 0, 0, 1))
+                                            ,       SUM(tshaid.ACINS_AMT)
+                                       FROM    TB_ST_STORE_ACTUAL_INSPECTION_DTL tshaid
+                                       WHERE   tshaid.STORE_CD =   #{storeCd}
+                                         AND     tshaid.ACINS_DATE   =   #{acinsDate}
+                                         AND     tshaid.SEQ_NO       =   #{seqNo}
+            )
+          ,       ACINS_TITLE = #{acinsTitle}
+          ,       REASON_CD = #{acinsReason}
+          ,       ADJ_STORAGE_CD = #{adjStorageCd}
+          ,       PROC_FG     = #{procFg}
+          ,       CONFM_DATE  = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
+          ,       CONFM_ID    = DECODE(#{procFg}, '0', NULL, #{modId})
+          ,       MOD_DT      = #{modDt}
+          ,       MOD_ID      = #{modId}
         WHERE   STORE_CD      = #{storeCd}
         AND     ACINS_DATE    = #{acinsDate}
         AND     SEQ_NO        = #{seqNo}
@@ -1214,7 +1228,7 @@
     <!--
         TABLE    : TB_ST_STORE_TEMP_EXCEL, TB_HQ_PRODUCT
                    TB_ST_STORE_TEMP_EXCEL, TB_MS_PRODUCT
-        PARAM    : excelUploaMPSVO
+        PARAM    : excelUploadStoreVO
         COMMENTS : 실사관리 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제한다.
     -->
     <delete id="deleteExcelUploadCompleteData" parameterType="excelUploadStoreVO">
@@ -1247,4 +1261,28 @@
         </choose>
     </delete>
     <!--                엑셀업로드 끝                 -->
+
+
+    <select id="getAcinsReason" parameterType="sessionInfoVO" resultType="DefaultMap">
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg.toString() == "HQ"'>
+                SELECT  NMCODE_CD,
+                NMCODE_NM
+                FROM    TB_HQ_NMCODE
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     NMCODE_GRP_CD = '134'
+                AND     USE_YN = 'Y'
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                SELECT  NMCODE_CD,
+                NMCODE_NM
+                FROM    TB_MS_STORE_NMCODE
+                WHERE   STORE_CD = #{storeCd}
+                AND     NMCODE_GRP_CD = '134'
+                AND     USE_YN = 'Y'
+            </when>
+        </choose>
+    </select>
 </mapper>

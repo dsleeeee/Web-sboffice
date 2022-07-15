@@ -17,10 +17,12 @@
       <form name="myForm" novalidate>
         <table class="tblType01" style="position: relative;">
           <colgroup>
-            <col class="w15"/>
-            <col class="w35"/>
-            <col class="w15"/>
-            <col class="w35"/>
+            <col class="w10"/>
+            <col class="w20"/>
+            <col class="w10"/>
+            <col class="w20"/>
+            <col class="w10"/>
+            <col class="w20"/>
           </colgroup>
           <tbody>
           <tr>
@@ -33,10 +35,24 @@
                      popover-trigger="'mouseenter'"
                      uib-popover="<s:message code="disuse.dtl.disuseTitle"/>은(는) 필수 입력항목 입니다."/>
             </td>
+            <th><s:message code="disuse.dtl.disuseReason"/></th>
+            <td>
+              <span class="txtIn w150px sb-select fl mr5">
+                 <wj-combo-box
+                         id="disuseDtlReason"
+                         ng-model="disuseReason"
+                         items-source="_getComboData('disuseDtlReason')"
+                         display-member-path="name"
+                         selected-value-path="value"
+                         is-editable="false"
+                         initialized="_initComboBox(s)">
+                 </wj-combo-box>
+              </span>
+            </td>
           </tr>
           <tr>
 			<th><s:message code="disuse.dtl.disuseStorageCd"/><em class="imp">*</em></th>
-            <td colspan="3">
+            <td>
             	<span class="txtIn w150px sb-select fl mr5">
 	            <wj-combo-box
 	                id="disuseDtlAdjStorageCd"
@@ -121,4 +137,4 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/disuse/disuse/disuseDtl.js?ver=20200904.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/disuse/disuse/disuseDtl.js?ver=20200904.02" charset="utf-8"></script>

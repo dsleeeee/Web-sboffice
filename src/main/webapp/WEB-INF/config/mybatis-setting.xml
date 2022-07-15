@@ -245,7 +245,7 @@
     <typeAlias alias="storeTypeVO" type="kr.co.solbipos.base.store.storeType.service.StoreTypeVO" />
     <!-- 기초관리 매장관리 다중매장그룹관리 -->
     <typeAlias alias="multistoreGroupVO" type="kr.co.solbipos.base.store.multistoreGroup.service.MultistoreGroupVO" />
-    <!-- 기초관리 매장관리 시간대분류관리 -->
+<!-- 기초관리 매장관리 시간대분류관리 -->
     <typeAlias alias="timeSlotVO" type="kr.co.solbipos.base.store.timeSlot.service.TimeSlotVO" />
 
     <!-- 기초관리 > 매장관리 > 회원약관관리 -->
@@ -651,6 +651,7 @@
     <typeAlias alias="storePeriodVO" type="kr.co.solbipos.stock.status.storeperiod.service.StorePeriodVO"/>
     <typeAlias alias="stockManageViewVO" type="kr.co.solbipos.stock.manage.view.service.StockManageViewVO"/>
     <typeAlias alias="stockManageViewStoreVO" type="kr.co.solbipos.stock.manage.viewStore.service.StockManageViewStoreVO"/>
+    <typeAlias alias="stockManageDtlViewVO" type="kr.co.solbipos.stock.manage.dtlView.service.StockManageDtlViewVO"/>
     <typeAlias alias="productVO" type="kr.co.solbipos.stock.product.product.service.ProductVO" />
     <!-- 재고관리 > 생산관리 > 중량재고현황(매장) -->
     <typeAlias alias="weightStockVO" type="kr.co.solbipos.stock.product.weightStock.service.WeightStockVO"/>

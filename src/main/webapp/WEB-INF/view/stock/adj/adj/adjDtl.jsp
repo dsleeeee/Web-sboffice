@@ -16,10 +16,12 @@
       <form name="myForm" novalidate>
         <table class="tblType01" style="position: relative;">
           <colgroup>
-            <col class="w15"/>
-            <col class="w35"/>
-            <col class="w15"/>
-            <col class="w35"/>
+            <col class="w10"/>
+            <col class="w20"/>
+            <col class="w10"/>
+            <col class="w20"/>
+            <col class="w10"/>
+            <col class="w20"/>
           </colgroup>
           <tbody>
           <tr>
@@ -32,10 +34,24 @@
                      popover-trigger="'mouseenter'"
                      uib-popover="<s:message code="adj.dtl.adjTitle"/>은(는) 필수 입력항목 입니다."/>
             </td>
+            <th><s:message code="adj.dtl.adjReason"/></th>
+            <td>
+              <span class="txtIn w150px sb-select fl mr5">
+                 <wj-combo-box
+                         id="adjDtlReason"
+                         ng-model="adjReason"
+                         items-source="_getComboData('adjDtlReason')"
+                         display-member-path="name"
+                         selected-value-path="value"
+                         is-editable="false"
+                         initialized="_initComboBox(s)">
+                 </wj-combo-box>
+              </span>
+            </td>
           </tr>
           <tr>
 			<th><s:message code="adj.dtl.adjStorageCd"/><em class="imp">*</em></th>
-            <td colspan="3">
+            <td>
             	<span class="txtIn w150px sb-select fl mr5">
 	            <wj-combo-box
 	                id="acinsDtlAdjStorageCd"
@@ -115,4 +131,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/adj/adj/adjDtl.js?ver=2020094.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/adj/adj/adjDtl.js?ver=2020094.02" charset="utf-8"></script>

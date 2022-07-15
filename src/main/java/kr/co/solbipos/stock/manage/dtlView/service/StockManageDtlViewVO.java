@@ -1,8 +1,8 @@
-package kr.co.solbipos.stock.manage.view.service;
+package kr.co.solbipos.stock.manage.dtlView.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 
-public class StockManageViewVO extends PageVO {
+public class StockManageDtlViewVO extends PageVO {
 
 	private static final long serialVersionUID = 2722329433257568791L;
 	
@@ -25,6 +25,10 @@ public class StockManageViewVO extends PageVO {
     private String orgnFg;
     /** 사유 */
     private String Reason;
+	private String prodCd;
+	private String prodNm;
+	private String barCd;
+	private String prodClassCd;
 
     public String getHqOfficeCd() {
 		return hqOfficeCd;
@@ -87,5 +91,37 @@ public class StockManageViewVO extends PageVO {
 
 	public void setReason(String reason) {
 		Reason = reason;
+	}
+
+	public String getProdCd() {
+		return prodCd;
+	}
+
+	public void setProdCd(String prodCd) {
+		this.prodCd = prodCd;
+	}
+
+	public String getProdNm() {
+		return prodNm;
+	}
+
+	public void setProdNm(String prodNm) {
+		this.prodNm = prodNm;
+	}
+
+	public String getBarCd() {
+		return barCd;
+	}
+
+	public void setBarCd(String barCd) {
+		this.barCd = barCd;
+	}
+
+	public String getProdClassCd() {
+		return prodClassCd;
+	}
+
+	public void setProdClassCd(String prodClassCd) {
+		this.prodClassCd = prodClassCd;
 	}
 }

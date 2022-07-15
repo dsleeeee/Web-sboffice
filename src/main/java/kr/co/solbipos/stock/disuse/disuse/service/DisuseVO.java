@@ -66,6 +66,8 @@ public class DisuseVO extends PageVO {
     private String  areaFg;
     /** 선택창고 */
     private String disuseStorageCd;
+    /** 사유코드 */
+    private String disuseReason;
     
     /**
      * @return the hqOfficeCd
@@ -474,7 +476,12 @@ public class DisuseVO extends PageVO {
 	public void setAreaFg(String areaFg) {
 		this.areaFg = areaFg;
 	}
-    
 
-    
+    public String getDisuseReason() {
+        return disuseReason;
+    }
+
+    public void setDisuseReason(String disuseReason) {
+        this.disuseReason = disuseReason;
+    }
 }
