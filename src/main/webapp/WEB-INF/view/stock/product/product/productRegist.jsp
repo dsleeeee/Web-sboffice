@@ -216,7 +216,7 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/product/product/productRegist.js?ver=20220706.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/product/product/productRegist.js?ver=20220715.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
