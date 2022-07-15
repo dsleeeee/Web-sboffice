@@ -17,58 +17,70 @@
 	</div>
 	<table class="searchTbl">
 		<colgroup>
-			<col class="w13"/>
-            <col class="w37"/>
-            <col class="w13"/>
-            <col class="w37"/>
+			<col class="w15"/>
+			<col class="w35"/>
+			<col class="w15"/>
+			<col class="w35"/>
 		</colgroup>
-		<tr>
-			<%-- 조회일자 --%>
-			<th><s:message code="stockManageView.srchDate" /></th>
-			<td colspan="3">
-			<div class="sb-select">
-				<span class="txtIn"><input id="srchClassStartDate" class="w120px"></span>
-				<span class="rg">~</span>
-				<span class="txtIn"><input id="srchClassEndDate" class="w120px"></span>
-			</div>
-			</td>
-		</tr>
-		<tr>
-			<%-- 상태 --%>
-			<th><s:message code="stockManageView.hqGbn" /></th>
-			<td>
+		<tbody>
+			<tr>
+				<%-- 조회일자 --%>
+				<th><s:message code="stockManageView.srchDate" /></th>
+				<td>
 				<div class="sb-select">
-	          		<span class="txtIn w150px">
-	            		<wj-combo-box
-	              			id="srchStatus"
-	              			ng-model="hqGbnModel"
-	              			items-source="_getComboData('srchStatus')"
-	              			display-member-path="name"
-	              			selected-value-path="value"
-	              			is-editable="false"
-	              			initialized="_initComboBox(s)">
-	            		</wj-combo-box>
-	          		</span>
-	        	</div>
-			</td>
-			<%-- 진행 --%>
-			<th><s:message code="stockManageView.procFg" /></th>
-			<td>
-				<div class="sb-select">
-	          		<span class="txtIn w150px">
-	            		<wj-combo-box
-	              			id="srchProcFg"
-	              			ng-model="procFgModel"
-	              			items-source="_getComboData('srchProcFg')"
-	              			display-member-path="name"
-	              			selected-value-path="value"
-	              			is-editable="false"
-	              			initialized="_initComboBox(s)">
-	            		</wj-combo-box>
-	          		</span>
-	        	</div>
-			</td>
-		</tr>
+					<span class="txtIn"><input id="srchClassStartDate" class="w110px"></span>
+					<span class="rg">~</span>
+					<span class="txtIn"><input id="srchClassEndDate" class="w110px"></span>
+				</div>
+				</td>
+				<%-- 진행 --%>
+				<th><s:message code="stockManageView.procFg" /></th>
+				<td>
+					<div class="sb-select">
+					<span class="txtIn w150px">
+						<wj-combo-box
+								id="srchProcFg"
+								ng-model="procFgModel"
+								items-source="_getComboData('srchProcFg')"
+								display-member-path="name"
+								selected-value-path="value"
+								is-editable="false"
+								initialized="_initComboBox(s)">
+						</wj-combo-box>
+					</span>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<%-- 상태 --%>
+				<th><s:message code="stockManageView.hqGbn" /></th>
+				<td>
+					<div class="sb-select fl mr5 w110px">
+						<wj-combo-box
+	<%--						id="srchStatus"--%>
+	<%--						ng-model="hqGbnModel"--%>
+							items-source="_getComboData('srchStatus')"
+							display-member-path="name"
+							selected-value-path="value"
+							is-editable="false"
+							initialized="_initComboBox(s)"
+							selected-index-changed="setReason(s)">
+						</wj-combo-box>
+					</div>
+					<div class="sb-select fl w110px">
+						<wj-combo-box
+								id="srchReason"
+								ng-model="reason"
+								items-source="_getComboData('srchReason')"
+								display-member-path="name"
+								selected-value-path="value"
+								is-editable="false"
+								initialized="_initComboBox(s)">
+						</wj-combo-box>
+					</div>
+				</td>
+			</tr>
+		</tbody>
 	</table>
 
 	<input type="hidden" id="hqOfficeCd" value="${sessionInfo.hqOfficeCd}"/>
@@ -107,12 +119,13 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="stockManageView.hqGbn"/>"         binding="hqGbn"        width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="stockManageView.hqGbn"/>"         binding="hqGbnNm"        width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="stockManageView.totDate"/>"         binding="totDate"        width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="stockManageView.hqGbn"/>"         binding="hqGbn"        width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="stockManageView.hqGbn"/>"         binding="hqGbnNm"        width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="stockManageView.totDate"/>"         binding="totDate"        width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="stockManageView.seqNo"/>"       	binding="seqNo"        width="100" align="right" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="stockManageView.procFg"/>"        binding="procFgNm"        width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="stockManageView.title"/>"       	binding="title"        width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+			<wj-flex-grid-column header="<s:message code="stockManageView.reasonNm"/>"        binding="reasonNm"        width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="stockManageView.dtlCnt"/>"        binding="dtlCnt"        width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         </wj-flex-grid>
 
@@ -147,12 +160,13 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="stockManageView.hqGbn"/>"         binding="hqGbn"        width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="stockManageView.hqGbn"/>"         binding="hqGbnNm"        width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="stockManageView.totDate"/>"         binding="totDate"        width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="stockManageView.hqGbn"/>"         binding="hqGbn"        width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="stockManageView.hqGbn"/>"         binding="hqGbnNm"        width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="stockManageView.totDate"/>"         binding="totDate"        width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="stockManageView.seqNo"/>"       	binding="seqNo"        width="100" align="right" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="stockManageView.procFg"/>"        binding="procFgNm"        width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="stockManageView.title"/>"       	binding="title"        width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="stockManageView.reasonNm"/>"        binding="reasonNm"        width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="stockManageView.dtlCnt"/>"        binding="dtlCnt"        width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
@@ -170,4 +184,4 @@
 
 <script type="text/javascript">
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/stock/manage/view/view.js?ver=20200316.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/manage/view/view.js?ver=20200316.02" charset="utf-8"></script>

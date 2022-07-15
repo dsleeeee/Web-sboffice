@@ -11,7 +11,7 @@
 <wj-popup id="viewDtlLayer" control="viewDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
   <div id="cardLayer" class="wj-dialog wj-dialog-columns" ng-controller="viewDtlCtrl">
     <div id="popHeader" class="wj-dialog-header wj-dialog-header-font">
-      <span>{{totDate}} {{seqNo}}<s:message code="stockManageView.seq"/> {{hqGbnNm}} [{{title}}] <s:message code="stockManageView.detailInfo"/></span>
+      <span>{{totDate}} {{seqNo}}<s:message code="stockManageView.seq"/> {{hqGbnNm}} [{{title}}] [{{reasonNm}}] <s:message code="stockManageView.detailInfo"/></span>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
 
@@ -33,13 +33,13 @@
             <wj-flex-grid-column header="<s:message code="stockManageView.prodNm"/>"        binding="prodNm"	width="200"     align="center"	is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="stockManageView.barcd"/>"         binding="barcd"		width="110"     align="center"	is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="stockManageView.splyUprc"/>"      binding="splyUprc"	width="80"     align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="stockManageView.costUprc"/>"      binding="costUprc"	width="80"     align="right"		is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="stockManageView.poUnitQty"/>"     binding="poUnitQty"	width="60"     align="right"		is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          	<wj-flex-grid-column header="<s:message code="stockManageView.cmptCurrQty"/>"   binding="cmptCurrQty"	width="60"     align="right"		is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="stockManageView.costUprc"/>"      binding="costUprc"	width="80"     align="right"    is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="stockManageView.poUnitQty"/>"     binding="poUnitQty"	width="60"     align="right"    is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          	<wj-flex-grid-column header="<s:message code="stockManageView.cmptCurrQty"/>"   binding="currQty"	width="60"     align="right"    is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 
-          	<wj-flex-grid-column header="<s:message code="stockManageView.acinsQty"/>"     binding="acinsQty"	width="60"     align="right"		is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+          	<wj-flex-grid-column header="<s:message code="stockManageView.acinsQty"/>"     binding="acinsQty"	width="60"     align="right"    is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
           	<wj-flex-grid-column header="<s:message code="stockManageView.adjQty"/>"     binding="adjQty"	width="60"     align="right"		is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-          	<wj-flex-grid-column header="<s:message code="stockManageView.disuseQty"/>"     binding="disuseQty"	width="60"     align="right"		is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+          	<wj-flex-grid-column header="<s:message code="stockManageView.disuseQty"/>"     binding="disuseQty"	width="60"     align="right"    is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
           	
           	<wj-flex-grid-column header="<s:message code="stockManageView.remark"/>"     binding="remark"	width="80"     align="center"		is-read-only="true"></wj-flex-grid-column>          
           </wj-flex-grid>
@@ -51,4 +51,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/manage/view/viewDtl.js?ver=20200330.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/manage/view/viewDtl.js?ver=20200330.02" charset="utf-8"></script>
