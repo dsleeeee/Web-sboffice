@@ -311,7 +311,7 @@ app.controller('excelUploadStoreCtrl', ['$scope', '$http','$timeout', function (
     $scope.excelUpload = function () {
         $scope.excelTextFg = 'excel';
         // 업로드 progress 관련 기본값 세팅
-        $scope.stepCnt     = 100; // 한번에 DB에 저장할 숫자 세팅
+        $scope.stepCnt     = 5000; // 한번에 DB에 저장할 숫자 세팅
         $scope.progressCnt = 0;   // 처리된 숫자
 
         // 선택한 파일이 있으면
@@ -383,6 +383,15 @@ app.controller('excelUploadStoreCtrl', ['$scope', '$http','$timeout', function (
         $scope.totalRows = jsonData.length;
         var params       = [];
         var msg          = '';
+
+        console.log("totalRows : " + $scope.totalRows);
+
+        // 업로드 5000개 제한
+        if($scope.totalRows > $scope.stepCnt){
+            msg = "업로드 데이터 갯수는 5000개까지만 입력 가능합니다. 데이터 및 양식을 확인해주세요.";
+            $scope.valueCheckErrPopup(msg);
+            return false;
+        }
 
         // 저장 시작이면 업로드 중 팝업 오픈
         if ($scope.progressCnt === 0) {

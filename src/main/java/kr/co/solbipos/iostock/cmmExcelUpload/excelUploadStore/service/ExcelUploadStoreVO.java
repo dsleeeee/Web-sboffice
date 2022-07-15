@@ -80,6 +80,8 @@ public class ExcelUploadStoreVO extends PageVO {
 
     private String poUnitQty;
 
+    private String reason;
+
     /**
      * @return the orgnFg
      */
@@ -418,6 +420,19 @@ public class ExcelUploadStoreVO extends PageVO {
         this.disuseStorageCd = disuseStorageCd;
     }
 
+    public String getPoUnitQty() {
+        return poUnitQty;
+    }
 
+    public void setPoUnitQty(String poUnitQty) {
+        this.poUnitQty = poUnitQty;
+    }
 
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
 }
