@@ -3,6 +3,8 @@ app.controller('acinsDtlCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('acinsDtlCtrl', $scope, $http, true));
 
+  $scope._setComboData("acinsDtlReason", reasonData);
+
   var global_adjStorageCd;	  
   var global_acinsTitle;
   
@@ -72,7 +74,7 @@ app.controller('acinsDtlCtrl', ['$scope', '$http', function ($scope, $http) {
 //      $scope.adjStorageCd     = data.adjStorageCd;
       $scope.acins.dtl.adjStorageCd	=	data.adjStorageCd;
 
-      $scope.procFgCheck(); // 실사 진행구분 체크
+      $scope.procFgCheck(true); // 실사 진행구분 체크
     }
     else { // 페이징처리에서 broadcast 호출시
       $scope.searchAcinsDtlList();
@@ -84,7 +86,7 @@ app.controller('acinsDtlCtrl', ['$scope', '$http', function ($scope, $http) {
 
 
   // 실사 진행구분 체크 및 실사제목 조회
-  $scope.procFgCheck = function () {
+  $scope.procFgCheck = function (data) {
     var params       = {};
     params.acinsDate = $scope.acinsDate;
     params.seqNo     = $scope.seqNo;
@@ -116,6 +118,7 @@ app.controller('acinsDtlCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.btnDtlConfirm = false;
           }
           $scope.acinsTitle = response.data.data.acinsTitle;
+          $scope.acinsReason = response.data.data.acinsReason;
           $scope.acins.dtl.adjStorageCd	=	response.data.data.adjStorageCd;
           global_acinsTitle 			= 	response.data.data.acinsTitle;         
           global_adjStorageCd 			=	response.data.data.adjStorageCd;	  
@@ -135,7 +138,9 @@ app.controller('acinsDtlCtrl', ['$scope', '$http', function ($scope, $http) {
       // "complete" code here
       $scope.wjAcinsDtlLayer.show(true);
       $("#registSubTitle").html(messages["acins.reg.acinsDate"] + ' : ' + getFormatDate($scope.acinsDate, '-'));
-      $scope.searchAcinsDtlList();
+      if(data){
+        $scope.searchAcinsDtlList();
+      }
     });
   };
 
@@ -150,10 +155,12 @@ app.controller('acinsDtlCtrl', ['$scope', '$http', function ($scope, $http) {
     params.adjStorageCd     = $scope.acins.dtl.adjStorageCd;
     params.listScale = 50;
 
-    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+    if(params.seqNo !== null && params.seqNo !== undefined){
+      // 조회 수행 : 조회URL, 파라미터, 콜백함수
 //    $scope._inquiryMain("/stock/acins/acins/acinsDtl/list.sb", params);
-    $scope._inquiryMain("/stock/acins/acins/acinsDtl/list.sb", params, function () {
-    });
+      $scope._inquiryMain("/stock/acins/acins/acinsDtl/list.sb", params, function () {
+      });
+    }
     
   };
 
@@ -205,6 +212,7 @@ app.controller('acinsDtlCtrl', ['$scope', '$http', function ($scope, $http) {
       item.acinsDate  = $scope.acinsDate;
       item.seqNo      = $scope.seqNo;
       item.acinsTitle = $scope.acinsTitle;
+      item.acinsReason = $scope.acinsReason;
 //      item.adjStorageCd = $scope.adjStorageCd;
       item.adjStorageCd = $scope.acins.dtl.adjStorageCd;      
       item.storageCd  = "999";	//001	->	999

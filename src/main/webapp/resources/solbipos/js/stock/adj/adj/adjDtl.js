@@ -3,6 +3,8 @@ app.controller('adjDtlCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('adjDtlCtrl', $scope, $http, true));
 
+  $scope._setComboData("adjDtlReason", reasonData);
+
   var global_adjStorageCd;	  
   var global_acinsTitle;  
   
@@ -60,7 +62,7 @@ app.controller('adjDtlCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.adjDate = data.adjDate;
       $scope.seqNo   = data.seqNo;
 
-      $scope.procFgCheck(); // 조정 진행구분 체크
+      $scope.procFgCheck(true); // 조정 진행구분 체크
     }
     else { // 페이징처리에서 broadcast 호출시
       $scope.searchAdjDtlList();
@@ -72,7 +74,7 @@ app.controller('adjDtlCtrl', ['$scope', '$http', function ($scope, $http) {
 
 
   // 조정 진행구분 체크 및 조정제목 조회
-  $scope.procFgCheck = function () {
+  $scope.procFgCheck = function (data) {
     var params     = {};
     params.adjDate = $scope.adjDate;
     params.seqNo   = $scope.seqNo;
@@ -104,8 +106,10 @@ app.controller('adjDtlCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.btnDtlConfirm = false;
           }
           $scope.adjTitle = response.data.data.adjTitle;
+          $scope.adjReason = response.data.data.adjReason;
+          console.log($scope.adjReason);
           $scope.acins.dtl.adjStorageCd	=	response.data.data.adjStorageCd;
-          global_acinsTitle 			= 	response.data.data.adjTitle;;          
+          global_acinsTitle 			= 	response.data.data.adjTitle;
           global_adjStorageCd 			=	response.data.data.adjStorageCd;          
         }
       }
@@ -122,7 +126,9 @@ app.controller('adjDtlCtrl', ['$scope', '$http', function ($scope, $http) {
       // "complete" code here
       $scope.wjAdjDtlLayer.show(true);
       $("#registSubTitle").html(messages["adj.reg.adjDate"] + ' : ' + getFormatDate($scope.adjDate, '-'));
-      $scope.searchAdjDtlList();
+      if(data){
+        $scope.searchAdjDtlList();
+      }
     });
   };
 
@@ -186,7 +192,8 @@ app.controller('adjDtlCtrl', ['$scope', '$http', function ($scope, $http) {
       item.adjDate   = $scope.adjDate;
       item.seqNo     = $scope.seqNo;
       item.adjTitle  = $scope.adjTitle;
-      item.adjStorageCd = $scope.acins.dtl.adjStorageCd;      
+      item.adjReason  = $scope.adjReason;
+      item.adjStorageCd = $scope.acins.dtl.adjStorageCd;
       item.storageCd = "999";	//001	->	999
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.confirmFg = confirmFg;

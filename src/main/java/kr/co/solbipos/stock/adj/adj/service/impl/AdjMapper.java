@@ -1,7 +1,8 @@
 package kr.co.solbipos.stock.adj.adj.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadStore.service.ExcelUploadStoreVO;
 import kr.co.solbipos.stock.adj.adj.service.AdjVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -84,15 +85,17 @@ public interface AdjMapper {
     List<DefaultMap<String>> getStAdjDtlList(AdjVO adjVO);
 
     /** 조정관리 엑셀업로드 - 엑셀업로드 수량추가 */
-    int insertExcelUploadAddQty(ExcelUploadMPSVO excelUploadMPSVO);
+    int insertExcelUploadAddQty(ExcelUploadStoreVO excelUploadStoreVO);
 
     /** 조정관리 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제 */
-    int deleteAdjToExcelUploadData(ExcelUploadMPSVO excelUploadMPSVO);
+    int deleteAdjToExcelUploadData(ExcelUploadStoreVO excelUploadStoreVO);
 
     /** 조정관리 엑셀업로드 - 엑셀업로드 한 수량을 조정수량으로 입력 */
-    int insertAdjToExcelUploadData(ExcelUploadMPSVO excelUploadMPSVO);
+    int insertAdjToExcelUploadData(ExcelUploadStoreVO excelUploadStoreVO);
 
     /** 조정관리 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제 */
-    int deleteExcelUploadCompleteData(ExcelUploadMPSVO excelUploadMPSVO);
-
+    int deleteExcelUploadCompleteData(ExcelUploadStoreVO excelUploadStoreVO);
+    
+    /** 사유값 */
+    List<DefaultMap<String>> getAdjReason(SessionInfoVO sessionInfoVO);
 }

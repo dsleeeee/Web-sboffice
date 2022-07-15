@@ -21,18 +21,16 @@
     <tr>
       <%-- 폐기일자 --%>
       <th><s:message code="disuse.disuseDate"/></th>
-      <td colspan="3">
+      <td>
         <div class="sb-select">
-          <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w110px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
         </div>
       </td>
-    </tr>
-    <tr>
       <%-- 진행 --%>
       <th><s:message code="disuse.procFg"/></th>
-      <td colspan="3">
+      <td>
         <div class="sb-select">
           <span class="txtIn w150px">
             <wj-combo-box
@@ -51,11 +49,26 @@
     <tr>
       <%-- 폐기등록 --%>
       <th><s:message code="disuse.disuseRegist"/></th>
-      <td colspan="3">
+      <td>
         <div class="sb-select fl mr10">
-          <span class="txtIn"><input id="disuseDate" class="w120px" ng-model="disuseDate"></span>
+          <span class="txtIn"><input id="disuseDate" class="w110px" ng-model="disuseDate"></span>
         </div>
         <a href="#" class="btn_grayS" ng-click="newAdj()"><s:message code="disuse.disuseRegist"/></a>
+      </td>
+      <%-- 사유 --%>
+      <th><s:message code="disuse.disuseReason"/></th>
+      <td>
+      <span class="txtIn w150px sb-select fl mr5">
+         <wj-combo-box
+                 id="disuseReason"
+                 ng-model="disuseReason"
+                 items-source="_getComboData('disuseReason')"
+                 display-member-path="name"
+                 selected-value-path="value"
+                 is-editable="false"
+                 initialized="_initComboBox(s)">
+         </wj-combo-box>
+      </span>
       </td>
     </tr>
     </tbody>
@@ -95,6 +108,7 @@
         <wj-flex-grid-column header="<s:message code="disuse.seqNo"/>" binding="seqNo" width="40" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="disuse.procFg"/>" binding="procFg" width="50" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="disuse.disuseTitle"/>" binding="disuseTitle" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="disuse.disuseReason"/>" binding="disuseReason" width="90" align="left" is-read-only="true" data-map="disuseReasonDataMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="disuse.dtlCnt"/>" binding="dtlCnt" width="50" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="disuse.regDate"/>" binding="regDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="disuse.confmDate"/>" binding="confmDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
@@ -119,7 +133,10 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/disuse/disuse/disuse.js?ver=20200904.02" charset="utf-8"></script>
+<script>
+  var reasonData =  ${reasonData};
+</script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/disuse/disuse/disuse.js?ver=20200904.03" charset="utf-8"></script>
 
 <%-- 폐기 상세 레이어 --%>
 <c:import url="/WEB-INF/view/stock/disuse/disuse/disuseDtl.jsp">

@@ -7,7 +7,7 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadStore.service.ExcelUploadStoreVO;
 import kr.co.solbipos.stock.adj.adj.service.AdjService;
 import kr.co.solbipos.stock.adj.adj.service.AdjVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,6 +147,7 @@ public class AdjServiceImpl implements AdjService {
                 adjHdVO.setStoreCd(sessionInfoVO.getStoreCd());
                 adjHdVO.setAdjDate(adjVO.getAdjDate());
                 adjHdVO.setAdjTitle(adjVO.getAdjTitle());
+                adjHdVO.setAdjReason(adjVO.getAdjReason());
                 adjHdVO.setSeqNo(adjVO.getSeqNo());
                 adjHdVO.setProcFg("0");
                 adjHdVO.setAdjStorageCd(adjVO.getAdjStorageCd());
@@ -322,6 +323,7 @@ public class AdjServiceImpl implements AdjService {
                 adjHdVO.setStoreCd(sessionInfoVO.getStoreCd());
                 adjHdVO.setAdjDate(adjVO.getAdjDate());
                 adjHdVO.setAdjTitle(adjVO.getAdjTitle());
+                adjHdVO.setAdjReason(adjVO.getAdjReason());
                 adjHdVO.setSeqNo(adjVO.getSeqNo());
                 adjHdVO.setStorageCd(adjVO.getStorageCd());
                 adjHdVO.setAdjStorageCd(adjVO.getAdjStorageCd());
@@ -402,29 +404,29 @@ public class AdjServiceImpl implements AdjService {
 
     /** 조정관리 - 엑셀업로드 */
     @Override
-    public int excelUpload(ExcelUploadMPSVO excelUploadMPSVO, SessionInfoVO sessionInfoVO) {
+    public int excelUpload(ExcelUploadStoreVO excelUploadStoreVO, SessionInfoVO sessionInfoVO) {
         int result = 0;
 
         String currentDt = currentDateTimeString();
 
-        excelUploadMPSVO.setSessionId(sessionInfoVO.getSessionId());
-        excelUploadMPSVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        excelUploadMPSVO.setStoreCd(sessionInfoVO.getStoreCd());
-        excelUploadMPSVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        excelUploadMPSVO.setRegId(sessionInfoVO.getUserId());
-        excelUploadMPSVO.setRegDt(currentDt);
-        excelUploadMPSVO.setModId(sessionInfoVO.getUserId());
-        excelUploadMPSVO.setModDt(currentDt);
+        excelUploadStoreVO.setSessionId(sessionInfoVO.getSessionId());
+        excelUploadStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        excelUploadStoreVO.setStoreCd(sessionInfoVO.getStoreCd());
+        excelUploadStoreVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        excelUploadStoreVO.setRegId(sessionInfoVO.getUserId());
+        excelUploadStoreVO.setRegDt(currentDt);
+        excelUploadStoreVO.setModId(sessionInfoVO.getUserId());
+        excelUploadStoreVO.setModDt(currentDt);
 
-        String seqNo = StringUtil.getOrBlank(excelUploadMPSVO.getSeqNo());
+        String seqNo = StringUtil.getOrBlank(excelUploadStoreVO.getSeqNo());
         String insFg = (seqNo.equals("") ? "I" : "U");
         if(!seqNo.equals("")) {
             // 수량추가인 경우
-            if(StringUtil.getOrBlank(excelUploadMPSVO.getAddQtyFg()).equals("add")) {
-//                result = adjMapper.insertExcelUploadAddQty(excelUploadMPSVO);
+            if(StringUtil.getOrBlank(excelUploadStoreVO.getAddQtyFg()).equals("add")) {
+//                result = adjMapper.insertExcelUploadAddQty(excelUploadStoreVO);
             } else {
             // 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제
-            result = adjMapper.deleteAdjToExcelUploadData(excelUploadMPSVO);
+            result = adjMapper.deleteAdjToExcelUploadData(excelUploadStoreVO);
             }
 
         }
@@ -433,9 +435,9 @@ public class AdjServiceImpl implements AdjService {
         if(seqNo.equals("")) {
             // 신규 seq 조회
             AdjVO newSeqNoVO = new AdjVO();
-            newSeqNoVO.setHqOfficeCd(excelUploadMPSVO.getHqOfficeCd());
-            newSeqNoVO.setStoreCd(excelUploadMPSVO.getStoreCd());
-            newSeqNoVO.setAdjDate(excelUploadMPSVO.getDate());
+            newSeqNoVO.setHqOfficeCd(excelUploadStoreVO.getHqOfficeCd());
+            newSeqNoVO.setStoreCd(excelUploadStoreVO.getStoreCd());
+            newSeqNoVO.setAdjDate(excelUploadStoreVO.getDate());
             if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
                 seqNo = adjMapper.getHqNewSeqNo(newSeqNoVO);
             }
@@ -444,22 +446,23 @@ public class AdjServiceImpl implements AdjService {
             }
         }
 
-        excelUploadMPSVO.setSeqNo(Integer.parseInt(seqNo));
+        excelUploadStoreVO.setSeqNo(Integer.parseInt(seqNo));
         // 엑셀업로드 한 수량을 조정수량으로 입력
-        result = adjMapper.insertAdjToExcelUploadData(excelUploadMPSVO);
+        result = adjMapper.insertAdjToExcelUploadData(excelUploadStoreVO);
 
         // 정상 입력된 데이터 TEMP 테이블에서 삭제
-        result = adjMapper.deleteExcelUploadCompleteData(excelUploadMPSVO);
+        result = adjMapper.deleteExcelUploadCompleteData(excelUploadStoreVO);
 
         AdjVO adjHdVO = new AdjVO();
         adjHdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         adjHdVO.setStoreCd(sessionInfoVO.getStoreCd());
-        adjHdVO.setAdjDate(excelUploadMPSVO.getDate());
-        adjHdVO.setAdjTitle(excelUploadMPSVO.getTitle());
+        adjHdVO.setAdjDate(excelUploadStoreVO.getDate());
+        adjHdVO.setAdjTitle(excelUploadStoreVO.getTitle());
+        adjHdVO.setAdjReason(excelUploadStoreVO.getReason());
         adjHdVO.setSeqNo(Integer.parseInt(seqNo));
         adjHdVO.setProcFg("0");
         adjHdVO.setStorageCd("999");
-        adjHdVO.setAdjStorageCd(excelUploadMPSVO.getAdjStorageCd());
+        adjHdVO.setAdjStorageCd(excelUploadStoreVO.getAdjStorageCd());
         adjHdVO.setRegId(sessionInfoVO.getUserId());
         adjHdVO.setRegDt(currentDt);
         adjHdVO.setModId(sessionInfoVO.getUserId());
@@ -492,5 +495,10 @@ public class AdjServiceImpl implements AdjService {
         }
 
         return result;
+    }
+
+    @Override
+    public List<DefaultMap<String>> getAdjReason(SessionInfoVO sessionInfoVO) {
+        return adjMapper.getAdjReason(sessionInfoVO);
     }
 }

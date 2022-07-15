@@ -66,6 +66,8 @@ public class AdjVO extends PageVO {
     private String  areaFg;
     /** 선택창고 */
     private String adjStorageCd;
+    /** 사유코드 */
+    private String adjReason;
 
     /**
      * @return the hqOfficeCd
@@ -474,5 +476,12 @@ public class AdjVO extends PageVO {
 	public void setAreaFg(String areaFg) {
 		this.areaFg = areaFg;
 	}
-    
+
+    public String getAdjReason() {
+        return adjReason;
+    }
+
+    public void setAdjReason(String adjReason) {
+        this.adjReason = adjReason;
+    }
 }

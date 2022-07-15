@@ -17,13 +17,16 @@
         ,       tsha.ADJ_TITLE, tsha.PROC_FG, tsha.DTL_CNT
         ,       tsha.CONFM_DATE
         ,       SUBSTR(tsha.REG_DT,0,8) AS REG_DATE
-        ,		tsha.ADJ_STORAGE_CD
+        ,		tsha.ADJ_STORAGE_CD, tsha.REASON_CD AS ADJ_REASON
         FROM    TB_ST_HQ_ADJUST tsha
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     ADJ_DATE  BETWEEN #{startDate} AND #{endDate}
         ]]>
         <if test='procFg != null and procFg != ""'>
             AND tsha.PROC_FG = #{procFg}
+        </if>
+        <if test='adjReason != null and adjReason != ""'>
+            AND tsha.REASON_CD = #{adjReason}
         </if>
         <![CDATA[
         ORDER BY tsha.ADJ_DATE DESC, tsha.SEQ_NO DESC
@@ -44,13 +47,16 @@
         ,       tssa.ADJ_TITLE, tssa.PROC_FG, tssa.DTL_CNT
         ,       tssa.CONFM_DATE
         ,       SUBSTR(tssa.REG_DT,0,8) AS REG_DATE
-        ,		tssa.ADJ_STORAGE_CD
+        ,		tssa.ADJ_STORAGE_CD, tssa.REASON_CD AS ADJ_REASON
         FROM    TB_ST_STORE_ADJUST tssa
         WHERE   STORE_CD  = #{storeCd}
         AND     ADJ_DATE  BETWEEN #{startDate} AND #{endDate}
         ]]>
         <if test='procFg != null and procFg != ""'>
             AND tssa.PROC_FG = #{procFg}
+        </if>
+        <if test='adjReason != null and adjReason != ""'>
+            AND tssa.REASON_CD = #{adjReason}
         </if>
         <![CDATA[
         ORDER BY tssa.ADJ_DATE DESC, tssa.SEQ_NO DESC
@@ -67,7 +73,7 @@
     <select id="getHqProcFgCheck" parameterType="adjVO" resultType="DefaultMap">
         /* USE : AdjMapper.getHqProcFgCheck */
         <![CDATA[
-        SELECT  tsha.PROC_FG, tsha.ADJ_TITLE, tsha.ADJ_STORAGE_CD, ths.STORAGE_NM
+        SELECT  tsha.PROC_FG, tsha.ADJ_TITLE, tsha.ADJ_STORAGE_CD, ths.STORAGE_NM, tsha.REASON_CD AS ADJ_REASON
         FROM    TB_ST_HQ_ADJUST tsha
         ,       TB_HQ_STORAGE               ths
         WHERE   tsha.HQ_OFFICE_CD  = #{hqOfficeCd}
@@ -88,7 +94,7 @@
     <select id="getStProcFgCheck" parameterType="adjVO" resultType="DefaultMap">
         /* USE : AdjMapper.getStProcFgCheck */
         <![CDATA[
-        SELECT  tssa.PROC_FG, tssa.ADJ_TITLE, tssa.ADJ_STORAGE_CD, tms.STORAGE_NM
+        SELECT  tssa.PROC_FG, tssa.ADJ_TITLE, tssa.ADJ_STORAGE_CD, tms.STORAGE_NM, tssa.REASON_CD AS ADJ_REASON
         FROM    TB_ST_STORE_ADJUST tssa
         ,       TB_MS_STORAGE               tms
         WHERE   tssa.STORE_CD      = #{storeCd}
@@ -687,36 +693,39 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            REASON_CD
         )
         SELECT  tshad.HQ_OFFICE_CD
-        ,       #{storageCd}
-        ,       tshad.ADJ_DATE
-        ,       tshad.SEQ_NO
-        ,       #{adjTitle}
-        ,       #{procFg}
-        ,       #{adjStorageCd}
-        ,       COUNT(tshad.PROD_CD)
-        ,       SUM(tshad.ADJ_AMT)
-        ,       #{regDt}
-        ,       #{regId}
-        ,       #{modDt}
-        ,       #{modId}
+             ,       #{storageCd}
+             ,       tshad.ADJ_DATE
+             ,       tshad.SEQ_NO
+             ,       #{adjTitle}
+             ,       #{procFg}
+             ,       #{adjStorageCd}
+             ,       COUNT(tshad.PROD_CD)
+             ,       SUM(tshad.ADJ_AMT)
+             ,       #{regDt}
+             ,       #{regId}
+             ,       #{modDt}
+             ,       #{modId}
+             ,       #{adjReason}
         FROM    TB_ST_HQ_ADJUST_DTL tshad
         WHERE   tshad.HQ_OFFICE_CD  =   #{hqOfficeCd}
         AND     tshad.ADJ_DATE      =   #{adjDate}
         AND     tshad.SEQ_NO        =   #{seqNo}
         GROUP
-        BY      tshad.HQ_OFFICE_CD
-        ,       #{storageCd}
-        ,       tshad.ADJ_DATE
-        ,       tshad.SEQ_NO
-        ,       #{adjTitle}
-        ,       #{procFg}
-        ,       #{regDt}
-        ,       #{regId}
-        ,       #{modDt}
-        ,       #{modId}
+            BY      tshad.HQ_OFFICE_CD
+             ,       #{storageCd}
+             ,       tshad.ADJ_DATE
+             ,       tshad.SEQ_NO
+             ,       #{adjTitle}
+             ,       #{procFg}
+             ,       #{regDt}
+             ,       #{regId}
+             ,       #{modDt}
+             ,       #{modId}
+             ,       #{adjReason}
     </insert>
 
 
@@ -742,36 +751,39 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            REASON_CD
         )
         SELECT  tshad.STORE_CD
-        ,       #{storageCd}
-        ,       tshad.ADJ_DATE
-        ,       tshad.SEQ_NO
-        ,       #{adjTitle}
-        ,       #{procFg}
-        ,       #{adjStorageCd}
-        ,       COUNT(tshad.PROD_CD)
-        ,       SUM(tshad.ADJ_AMT)
-        ,       #{regDt}
-        ,       #{regId}
-        ,       #{modDt}
-        ,       #{modId}
+             ,       #{storageCd}
+             ,       tshad.ADJ_DATE
+             ,       tshad.SEQ_NO
+             ,       #{adjTitle}
+             ,       #{procFg}
+             ,       #{adjStorageCd}
+             ,       COUNT(tshad.PROD_CD)
+             ,       SUM(tshad.ADJ_AMT)
+             ,       #{regDt}
+             ,       #{regId}
+             ,       #{modDt}
+             ,       #{modId}
+             ,       #{adjReason}
         FROM    TB_ST_STORE_ADJUST_DTL tshad
         WHERE   tshad.STORE_CD      =   #{storeCd}
         AND     tshad.ADJ_DATE      =   #{adjDate}
         AND     tshad.SEQ_NO        =   #{seqNo}
         GROUP
-        BY      tshad.STORE_CD
-        ,       #{storageCd}
-        ,       tshad.ADJ_DATE
-        ,       tshad.SEQ_NO
-        ,       #{adjTitle}
-        ,       #{procFg}
-        ,       #{regDt}
-        ,       #{regId}
-        ,       #{modDt}
-        ,       #{modId}
+            BY      tshad.STORE_CD
+             ,       #{storageCd}
+             ,       tshad.ADJ_DATE
+             ,       tshad.SEQ_NO
+             ,       #{adjTitle}
+             ,       #{procFg}
+             ,       #{regDt}
+             ,       #{regId}
+             ,       #{modDt}
+             ,       #{modId}
+             ,       #{adjReason}
     </insert>
 
 
@@ -785,20 +797,21 @@
         /* USE : AdjMapper.updateHqAdjHd */
         UPDATE  TB_ST_HQ_ADJUST
         SET     (DTL_CNT, TOT_ADJ_AMT)
-              = (   SELECT  COUNT(tshad.PROD_CD)
-                    ,       SUM(tshad.ADJ_AMT)
-                    FROM    TB_ST_HQ_ADJUST_DTL tshad
-                    WHERE   tshad.HQ_OFFICE_CD  =   #{hqOfficeCd}
-                    AND     tshad.ADJ_DATE      =   #{adjDate}
-                    AND     tshad.SEQ_NO        =   #{seqNo}
-                )
-        ,       ADJ_TITLE   = #{adjTitle}
-        ,       ADJ_STORAGE_CD = #{adjStorageCd}
-        ,       PROC_FG     = #{procFg}
-        ,       CONFM_DATE  = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
-        ,       CONFM_ID    = DECODE(#{procFg}, '0', NULL, #{modId})
-        ,       MOD_DT      = #{modDt}
-        ,       MOD_ID      = #{modId}
+                                 = (   SELECT  COUNT(tshad.PROD_CD)
+                                            ,       SUM(tshad.ADJ_AMT)
+                                       FROM    TB_ST_HQ_ADJUST_DTL tshad
+                                       WHERE   tshad.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                         AND     tshad.ADJ_DATE      =   #{adjDate}
+                                         AND     tshad.SEQ_NO        =   #{seqNo}
+            )
+          ,       ADJ_TITLE   = #{adjTitle}
+          ,       REASON_CD = #{adjReason}
+          ,       ADJ_STORAGE_CD = #{adjStorageCd}
+          ,       PROC_FG     = #{procFg}
+          ,       CONFM_DATE  = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
+          ,       CONFM_ID    = DECODE(#{procFg}, '0', NULL, #{modId})
+          ,       MOD_DT      = #{modDt}
+          ,       MOD_ID      = #{modId}
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     ADJ_DATE      = #{adjDate}
         AND     SEQ_NO        = #{seqNo}
@@ -815,20 +828,21 @@
         /* USE : AdjMapper.updateStAdjHd */
         UPDATE  TB_ST_STORE_ADJUST
         SET     (DTL_CNT, TOT_ADJ_AMT)
-              = (   SELECT  COUNT(tssad.PROD_CD)
-                    ,       SUM(tssad.ADJ_AMT)
-                    FROM    TB_ST_STORE_ADJUST_DTL tssad
-                    WHERE   tssad.STORE_CD  =   #{storeCd}
-                    AND     tssad.ADJ_DATE      =   #{adjDate}
-                    AND     tssad.SEQ_NO        =   #{seqNo}
-                )
-        ,       ADJ_TITLE   = #{adjTitle}
-        ,       ADJ_STORAGE_CD = #{adjStorageCd}
-        ,       PROC_FG     = #{procFg}
-        ,       CONFM_DATE  = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
-        ,       CONFM_ID    = DECODE(#{procFg}, '0', NULL, #{modId})
-        ,       MOD_DT      = #{modDt}
-        ,       MOD_ID      = #{modId}
+                                 = (   SELECT  COUNT(tssad.PROD_CD)
+                                            ,       SUM(tssad.ADJ_AMT)
+                                       FROM    TB_ST_STORE_ADJUST_DTL tssad
+                                       WHERE   tssad.STORE_CD  =   #{storeCd}
+                                         AND     tssad.ADJ_DATE      =   #{adjDate}
+                                         AND     tssad.SEQ_NO        =   #{seqNo}
+            )
+          ,       ADJ_TITLE   = #{adjTitle}
+          ,       REASON_CD = #{adjReason}
+          ,       ADJ_STORAGE_CD = #{adjStorageCd}
+          ,       PROC_FG     = #{procFg}
+          ,       CONFM_DATE  = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
+          ,       CONFM_ID    = DECODE(#{procFg}, '0', NULL, #{modId})
+          ,       MOD_DT      = #{modDt}
+          ,       MOD_ID      = #{modId}
         WHERE   STORE_CD      = #{storeCd}
         AND     ADJ_DATE      = #{adjDate}
         AND     SEQ_NO        = #{seqNo}
@@ -980,7 +994,7 @@
                 ,       tpte.PROD_CD
                 ,       tpte.COST_UPRC AS COST_UPRC
                 ,       tpte.PO_UNIT_QTY
-                ,       NVL(tshsc.CURR_QTY,0) AS CURR_QTY
+                ,       NVL(tsssc.CURR_QTY,0) AS CURR_QTY
                 ,       tpte.QTY AS ADJ_QTY
                 ,       tpte.COST_UPRC * tpte.QTY AS ADJ_AMT
                 ,       tpte.REMARK
@@ -988,25 +1002,25 @@
                 ,       #{regId} AS REG_ID
                 ,       #{modDt} AS MOD_DT
                 ,       #{modId} AS MOD_ID
-                FROM    (   SELECT  tpte.HQ_OFFICE_CDAVG_COST_UPRC
-                            ,       tpte.PROD_CD
-                            ,       thp.PO_UNIT_QTY
-                            ,       NVL(MAX(thp.COST_UPRC), 0) AS COST_UPRC
-                            ,       SUM(tpte.QTY)    AS QTY
-                            ,       MAX(tpte.REMARK) AS REMARK
-                            FROM    TB_ST_STORE_TEMP_EXCEL tpte
-                            ,       TB_HQ_PRODUCT thp
-                            WHERE   tpte.SESSION_ID     =   #{sessionId}
-                            AND     tpte.PROD_CD        IS NOT  NULL
-                            AND     thp.HQ_OFFICE_CD    =   #{hqOfficeCd}
-                            AND     thp.PROD_CD         =   tpte.PROD_CD
-                            AND     thp.STOCK_PROD_YN   =   'Y'
-                            AND     thp.USE_YN          =   'Y'
-                            GROUP
-                            BY      tpte.HQ_OFFICE_CD
-                            ,       tpte.PROD_CD
-                            ,       thp.PO_UNIT_QTY
-                        ) tpte
+                FROM    (   SELECT  tpte.HQ_OFFICE_CD
+                ,       tpte.PROD_CD
+                ,       thp.PO_UNIT_QTY
+                ,       NVL(MAX(thp.COST_UPRC), 0) AS COST_UPRC
+                ,       SUM(tpte.QTY)    AS QTY
+                ,       MAX(tpte.REMARK) AS REMARK
+                FROM    TB_ST_STORE_TEMP_EXCEL tpte
+                ,       TB_HQ_PRODUCT thp
+                WHERE   tpte.SESSION_ID     =   #{sessionId}
+                AND     tpte.PROD_CD        IS NOT  NULL
+                AND     thp.HQ_OFFICE_CD    =   #{hqOfficeCd}
+                AND     thp.PROD_CD         =   tpte.PROD_CD
+                AND     thp.STOCK_PROD_YN   =   'Y'
+                AND     thp.USE_YN          =   'Y'
+                GROUP
+                BY      tpte.HQ_OFFICE_CD
+                ,       tpte.PROD_CD
+                ,       thp.PO_UNIT_QTY
+                ) tpte
                 ,       TB_ST_HQ_STOCK_CUR tsssc
                 WHERE   tsssc.HQ_OFFICE_CD  (+) =   tpte.HQ_OFFICE_CD
                 AND     tsssc.storage_cd    (+) =   '999'
@@ -1201,4 +1215,27 @@
         </choose>
     </delete>
     <!--                엑셀업로드 끝                 -->
+
+    <select id="getAdjReason" parameterType="sessionInfoVO" resultType="DefaultMap">
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg.toString() == "HQ"'>
+                SELECT  NMCODE_CD,
+                NMCODE_NM
+                FROM    TB_HQ_NMCODE
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     NMCODE_GRP_CD = '135'
+                AND     USE_YN = 'Y'
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                SELECT  NMCODE_CD,
+                NMCODE_NM
+                FROM    TB_MS_STORE_NMCODE
+                WHERE   STORE_CD = #{storeCd}
+                AND     NMCODE_GRP_CD = '135'
+                AND     USE_YN = 'Y'
+            </when>
+        </choose>
+    </select>
 </mapper>

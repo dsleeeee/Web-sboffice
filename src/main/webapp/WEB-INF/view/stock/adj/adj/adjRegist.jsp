@@ -28,13 +28,27 @@
           <tr>
             <%-- 조정제목 --%>
             <th><s:message code="adj.reg.adjTitle"/><em class="imp">*</em></th>
-            <td colspan="5">
+            <td colspan="3">
               <input type="text" id="adjTitle" name="adjTitle" ng-model="adjTitle" class="sb-input w100" maxlength="33"
                      required
                      popover-enable="myForm.adjTitle.$invalid"
                      popover-placement="bottom-left"
                      popover-trigger="'mouseenter'"
                      uib-popover="<s:message code="adj.reg.adjTitle"/>은(는) 필수 입력항목 입니다."/>
+            </td>
+            <th><s:message code="adj.reg.adjReason"/></th>
+            <td>
+            <span class="txtIn w150px sb-select fl mr5">
+               <wj-combo-box
+                       id="adjRegReason"
+                       ng-model="adjReason"
+                       items-source="_getComboData('adjRegReason')"
+                       display-member-path="name"
+                       selected-value-path="value"
+                       is-editable="false"
+                       initialized="_initComboBox(s)">
+               </wj-combo-box>
+            </span>
             </td>
           </tr>
           <tr>
@@ -230,7 +244,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/adj/adj/adjRegist.js?ver=20200923.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/adj/adj/adjRegist.js?ver=20200923.04" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

@@ -21,18 +21,16 @@
     <tr>
       <%-- 조정일자 --%>
       <th><s:message code="adj.adjDate"/></th>
-      <td colspan="3">
+      <td>
         <div class="sb-select">
-          <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w110px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
         </div>
       </td>
-    </tr>
-    <tr>
       <%-- 진행 --%>
       <th><s:message code="adj.procFg"/></th>
-      <td colspan="3">
+      <td>
         <div class="sb-select">
           <span class="txtIn w150px">
             <wj-combo-box
@@ -51,11 +49,26 @@
     <tr>
       <%-- 조정등록 --%>
       <th><s:message code="adj.adjRegist"/></th>
-      <td colspan="3">
+      <td>
         <div class="sb-select fl mr10">
-          <span class="txtIn"><input id="adjDate" class="w120px" ng-model="adjDate"></span>
+          <span class="txtIn"><input id="adjDate" class="w110px" ng-model="adjDate"></span>
         </div>
         <a href="#" class="btn_grayS" ng-click="newAdj()"><s:message code="adj.adjRegist"/></a>
+      </td>
+      <%-- 사유 --%>
+      <th><s:message code="adj.adjReason"/></th>
+      <td>
+      <span class="txtIn w150px sb-select fl mr5">
+         <wj-combo-box
+                 id="adjReason"
+                 ng-model="adjReason"
+                 items-source="_getComboData('adjReason')"
+                 display-member-path="name"
+                 selected-value-path="value"
+                 is-editable="false"
+                 initialized="_initComboBox(s)">
+         </wj-combo-box>
+      </span>
       </td>
     </tr>
     </tbody>
@@ -95,6 +108,7 @@
         <wj-flex-grid-column header="<s:message code="adj.seqNo"/>" binding="seqNo" width="40" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="adj.procFg"/>" binding="procFg" width="50" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="adj.adjTitle"/>" binding="adjTitle" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="adj.adjReason"/>" binding="adjReason" width="90" align="left" is-read-only="true" data-map="adjReasonDataMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="adj.dtlCnt"/>" binding="dtlCnt" width="50" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="adj.regDate"/>" binding="regDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="adj.confmDate"/>" binding="confmDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
@@ -119,7 +133,10 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/adj/adj/adj.js?ver=20200904.01" charset="utf-8"></script>
+<script>
+  var reasonData =  ${reasonData};
+</script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/adj/adj/adj.js?ver=20200904.02" charset="utf-8"></script>
 
 <%-- 조정 상세 레이어 --%>
 <c:import url="/WEB-INF/view/stock/adj/adj/adjDtl.jsp">

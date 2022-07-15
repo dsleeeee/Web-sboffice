@@ -21,41 +21,54 @@
     <tr>
       <%-- 실사일자 --%>
       <th><s:message code="acins.acinsDate"/></th>
-      <td colspan="3">
+      <td>
         <div class="sb-select">
-          <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w110px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
         </div>
       </td>
-    </tr>
-    <tr>
       <%-- 진행 --%>
       <th><s:message code="acins.procFg"/></th>
-      <td colspan="3">
-        <div class="sb-select">
-          <span class="txtIn w150px">
-            <wj-combo-box
-                    id="srchProcFg"
-                    ng-model="procFg"
-                    items-source="_getComboData('srchProcFg')"
-                    display-member-path="name"
-                    selected-value-path="value"
-                    is-editable="false"
-                    initialized="_initComboBox(s)">
-            </wj-combo-box>
-          </span>
-        </div>
+      <td>
+          <div class="sb-select">
+            <span class="txtIn w150px">
+                <wj-combo-box
+                        id="srchProcFg"
+                        ng-model="procFg"
+                        items-source="_getComboData('srchProcFg')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        initialized="_initComboBox(s)">
+                </wj-combo-box>
+              </span>
+          </div>
       </td>
     </tr>
     <tr>
       <%-- 실사등록 --%>
       <th><s:message code="acins.acinsRegist"/></th>
-      <td colspan="3">
+      <td>
         <div class="sb-select fl mr10">
-          <span class="txtIn"><input id="acinsDate" class="w120px" ng-model="acinsDate"></span>
+          <span class="txtIn"><input id="acinsDate" class="w110px" ng-model="acinsDate"></span>
         </div>
         <a href="#" class="btn_grayS" ng-click="newAcins()"><s:message code="acins.acinsRegist"/></a>
+      </td>
+      <%-- 사유 --%>
+      <th><s:message code="acins.acinsReason"/></th>
+      <td>
+        <span class="txtIn w150px sb-select fl mr5">
+           <wj-combo-box
+                   id="acinsReason"
+                   ng-model="acinsReason"
+                   items-source="_getComboData('acinsReason')"
+                   display-member-path="name"
+                   selected-value-path="value"
+                   is-editable="false"
+                   initialized="_initComboBox(s)">
+           </wj-combo-box>
+        </span>
       </td>
     </tr>
     </tbody>
@@ -95,6 +108,7 @@
         <wj-flex-grid-column header="<s:message code="acins.seqNo"/>" binding="seqNo" width="40" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="acins.procFg"/>" binding="procFg" width="50" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="acins.acinsTitle"/>" binding="acinsTitle" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="acins.acinsReason"/>" binding="acinsReason" width="90" align="left" is-read-only="true" data-map="acinsReasonDataMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="acins.dtlCnt"/>" binding="dtlCnt" width="50" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="acins.adjCnt"/>" binding="adjCnt" width="50" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="acins.regDate"/>" binding="regDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
@@ -120,7 +134,10 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/acins/acins/acins.js?ver=20200904.01" charset="utf-8"></script>
+<script>
+  var reasonData =  ${reasonData};
+</script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/acins/acins/acins.js?ver=20200904.02" charset="utf-8"></script>
 
 <%-- 실사 상세 레이어 --%>
 <c:import url="/WEB-INF/view/stock/acins/acins/acinsDtl.jsp">

@@ -8,6 +8,8 @@ app.controller('adjCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('adjCtrl', $scope, $http, true));
 
+  $scope._setComboData("adjReason", [{name: "전체", value: ""}].concat(reasonData));
+
   $scope.srchStartDate = wcombo.genDateVal("#srchStartDate", gvStartDate);
   $scope.srchEndDate   = wcombo.genDateVal("#srchEndDate", gvEndDate);
   $scope.adjDate       = wcombo.genDate("#adjDate");
@@ -26,6 +28,8 @@ app.controller('adjCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+    // 그리드 DataMap 설정
+    $scope.adjReasonDataMap = new wijmo.grid.DataMap(reasonData, 'value', 'name'); // 사유
 
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("adjCtrl");

@@ -6,7 +6,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadStore.service.ExcelUploadStoreVO;
 import kr.co.solbipos.stock.disuse.disuse.service.DisuseService;
 import kr.co.solbipos.stock.disuse.disuse.service.DisuseVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : DisuseController.java
@@ -61,6 +65,22 @@ public class DisuseController {
      */
     @RequestMapping(value = "/disuse/view.sb", method = RequestMethod.GET)
     public String disuseView(HttpServletRequest request, HttpServletResponse response, Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        List<DefaultMap<String>> listReason = new ArrayList<DefaultMap<String>>();
+        // CARD사 목록 조회
+        listReason = disuseService.getDisuseReason(sessionInfoVO);
+        // 콤보박스용 데이터 생성
+        List<HashMap<String, String>> combo = new ArrayList<HashMap<String, String>>();
+        HashMap<String, String> m = new HashMap<>();
+        for ( HashMap<String, String> cardCmpnyList : listReason ) {
+            m = new HashMap<>();
+            m.put("name", cardCmpnyList.get("nmcodeNm"));
+            m.put("value", cardCmpnyList.get("nmcodeCd"));
+            combo.add(m);
+        }
+        // 사유
+        model.addAttribute("reasonData", convertToJson(combo));
+
         return "stock/disuse/disuse/disuse";
     }
 
@@ -254,7 +274,7 @@ public class DisuseController {
      * @param   request
      * @param   response
      * @param   model
-     * @param   excelUploadMPSVO
+     * @param   excelUploadStoreVO
      * @return  String
      * @author  안동관
      * @since   2018. 12. 17.
@@ -262,11 +282,11 @@ public class DisuseController {
     @RequestMapping(value = "/disuseRegist/excelUpload.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result excelUpload(HttpServletRequest request, HttpServletResponse response,
-        Model model, ExcelUploadMPSVO excelUploadMPSVO) {
+        Model model, ExcelUploadStoreVO excelUploadStoreVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = disuseService.excelUpload(excelUploadMPSVO, sessionInfoVO);
+        int result = disuseService.excelUpload(excelUploadStoreVO, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }

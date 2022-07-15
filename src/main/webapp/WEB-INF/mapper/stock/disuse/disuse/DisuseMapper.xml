@@ -17,13 +17,16 @@
         ,       tshd.DISUSE_TITLE, tshd.PROC_FG, tshd.DTL_CNT
         ,       tshd.CONFM_DATE
         ,       SUBSTR(tshd.REG_DT,0,8) AS REG_DATE
-        ,		tshd.DISUSE_STORAGE_CD
+        ,		tshd.DISUSE_STORAGE_CD , tshd.REASON_CD AS DISUSE_REASON
         FROM    TB_ST_HQ_DISUSE tshd
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     DISUSE_DATE  BETWEEN #{startDate} AND #{endDate}
         ]]>
         <if test='procFg != null and procFg != ""'>
             AND tshd.PROC_FG = #{procFg}
+        </if>
+        <if test='disuseReason != null and disuseReason != ""'>
+            AND tshd.REASON_CD = #{disuseReason}
         </if>
         <![CDATA[
         ORDER BY tshd.DISUSE_DATE DESC, tshd.SEQ_NO DESC
@@ -44,13 +47,16 @@
         ,       tssd.DISUSE_TITLE, tssd.PROC_FG, tssd.DTL_CNT
         ,       tssd.CONFM_DATE
         ,       SUBSTR(tssd.REG_DT,0,8) AS REG_DATE
-        ,		tssd.DISUSE_STORAGE_CD
+        ,		tssd.DISUSE_STORAGE_CD, tssd.REASON_CD AS DISUSE_REASON
         FROM    TB_ST_STORE_DISUSE tssd
         WHERE   tssd.STORE_CD     = #{storeCd}
         AND     tssd.DISUSE_DATE  BETWEEN #{startDate} AND #{endDate}
         ]]>
         <if test='procFg != null and procFg != ""'>
             AND tssd.PROC_FG = #{procFg}
+        </if>
+        <if test='disuseReason != null and disuseReason != ""'>
+            AND tssd.REASON_CD = #{disuseReason}
         </if>
         <![CDATA[
         ORDER BY tssd.DISUSE_DATE DESC, tssd.SEQ_NO DESC
@@ -67,7 +73,7 @@
     <select id="getHqProcFgCheck" parameterType="disuseVO" resultType="DefaultMap">
         /* USE : DisuseMapper.getHqProcFgCheck */
         <![CDATA[
-        SELECT  tshd.PROC_FG, tshd.DISUSE_TITLE, tshd.DISUSE_STORAGE_CD, ths.STORAGE_NM
+        SELECT  tshd.PROC_FG, tshd.DISUSE_TITLE, tshd.DISUSE_STORAGE_CD, ths.STORAGE_NM, tshd.REASON_CD AS DISUSE_REASON
         FROM    TB_ST_HQ_DISUSE tshd
         ,       TB_HQ_STORAGE               ths
         WHERE   tshd.HQ_OFFICE_CD  = #{hqOfficeCd}
@@ -88,7 +94,7 @@
     <select id="getStProcFgCheck" parameterType="disuseVO" resultType="DefaultMap">
         /* USE : DisuseMapper.getStProcFgCheck */
         <![CDATA[
-        SELECT  tssd.PROC_FG, tssd.DISUSE_TITLE, tssd.DISUSE_STORAGE_CD, tms.STORAGE_NM
+        SELECT  tssd.PROC_FG, tssd.DISUSE_TITLE, tssd.DISUSE_STORAGE_CD, tms.STORAGE_NM, tssd.REASON_CD AS DISUSE_REASON
         FROM    TB_ST_STORE_DISUSE tssd
         ,       TB_MS_STORAGE               tms
         WHERE   tssd.STORE_CD      = #{storeCd}
@@ -691,21 +697,23 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            REASON_CD
         )
         SELECT  tshdd.HQ_OFFICE_CD
-        ,       #{storageCd}
-        ,       tshdd.DISUSE_DATE
-        ,       tshdd.SEQ_NO
-        ,       #{disuseTitle}
-        ,       #{procFg}
-        ,       #{disuseStorageCd}
-        ,       COUNT(tshdd.PROD_CD)
-        ,       SUM(tshdd.DISUSE_AMT)
-        ,       #{regDt}
-        ,       #{regId}
-        ,       #{modDt}
-        ,       #{modId}
+             ,       #{storageCd}
+             ,       tshdd.DISUSE_DATE
+             ,       tshdd.SEQ_NO
+             ,       #{disuseTitle}
+             ,       #{procFg}
+             ,       #{disuseStorageCd}
+             ,       COUNT(tshdd.PROD_CD)
+             ,       SUM(tshdd.DISUSE_AMT)
+             ,       #{regDt}
+             ,       #{regId}
+             ,       #{modDt}
+             ,       #{modId}
+             ,       #{disuseReason}
         FROM    TB_ST_HQ_DISUSE_DTL tshdd
         WHERE   tshdd.HQ_OFFICE_CD  =   #{hqOfficeCd}
         AND     tshdd.DISUSE_DATE   =   #{disuseDate}
@@ -746,21 +754,23 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            REASON_CD
         )
         SELECT  tssdd.STORE_CD
-        ,       #{storageCd}
-        ,       tssdd.DISUSE_DATE
-        ,       tssdd.SEQ_NO
-        ,       #{disuseTitle}
-        ,       #{procFg}
-        ,       #{disuseStorageCd}
-        ,       COUNT(tssdd.PROD_CD)
-        ,       SUM(tssdd.DISUSE_AMT)
-        ,       #{regDt}
-        ,       #{regId}
-        ,       #{modDt}
-        ,       #{modId}
+             ,       #{storageCd}
+             ,       tssdd.DISUSE_DATE
+             ,       tssdd.SEQ_NO
+             ,       #{disuseTitle}
+             ,       #{procFg}
+             ,       #{disuseStorageCd}
+             ,       COUNT(tssdd.PROD_CD)
+             ,       SUM(tssdd.DISUSE_AMT)
+             ,       #{regDt}
+             ,       #{regId}
+             ,       #{modDt}
+             ,       #{modId}
+             ,       #{disuseReason}
         FROM    TB_ST_STORE_DISUSE_DTL tssdd
         WHERE   tssdd.STORE_CD  =   #{storeCd}
         AND     tssdd.DISUSE_DATE   =   #{disuseDate}
@@ -789,20 +799,21 @@
         /* USE : DisuseMapper.updateHqDisuseHd */
         UPDATE  TB_ST_HQ_DISUSE
         SET     (DTL_CNT, TOT_DISUSE_AMT)
-              = (   SELECT  COUNT(tshdd.PROD_CD)
-                    ,       SUM(tshdd.DISUSE_AMT)
-                    FROM    TB_ST_HQ_DISUSE_DTL tshdd
-                    WHERE   tshdd.HQ_OFFICE_CD  =   #{hqOfficeCd}
-                    AND     tshdd.DISUSE_DATE   =   #{disuseDate}
-                    AND     tshdd.SEQ_NO        =   #{seqNo}
-                )
-        ,       DISUSE_TITLE = #{disuseTitle}
-        ,       DISUSE_STORAGE_CD = #{disuseStorageCd}
-        ,       PROC_FG      = #{procFg}
-        ,       CONFM_DATE   = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
-        ,       CONFM_ID     = DECODE(#{procFg}, '0', NULL, #{modId})
-        ,       MOD_DT       = #{modDt}
-        ,       MOD_ID       = #{modId}
+                                    = (   SELECT  COUNT(tshdd.PROD_CD)
+                                               ,       SUM(tshdd.DISUSE_AMT)
+                                          FROM    TB_ST_HQ_DISUSE_DTL tshdd
+                                          WHERE   tshdd.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                            AND     tshdd.DISUSE_DATE   =   #{disuseDate}
+                                            AND     tshdd.SEQ_NO        =   #{seqNo}
+            )
+          ,       DISUSE_TITLE = #{disuseTitle}
+          ,       REASON_CD = #{disuseReason}
+          ,       DISUSE_STORAGE_CD = #{disuseStorageCd}
+          ,       PROC_FG      = #{procFg}
+          ,       CONFM_DATE   = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
+          ,       CONFM_ID     = DECODE(#{procFg}, '0', NULL, #{modId})
+          ,       MOD_DT       = #{modDt}
+          ,       MOD_ID       = #{modId}
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     DISUSE_DATE   = #{disuseDate}
         AND     SEQ_NO        = #{seqNo}
@@ -819,20 +830,21 @@
         /* USE : DisuseMapper.updateStDisuseHd */
         UPDATE  TB_ST_STORE_DISUSE
         SET     (DTL_CNT, TOT_DISUSE_AMT)
-              = (   SELECT  COUNT(tssdd.PROD_CD)
-                    ,       SUM(tssdd.DISUSE_AMT)
-                    FROM    TB_ST_STORE_DISUSE_DTL tssdd
-                    WHERE   tssdd.STORE_CD      =   #{storeCd}
-                    AND     tssdd.DISUSE_DATE   =   #{disuseDate}
-                    AND     tssdd.SEQ_NO        =   #{seqNo}
-                )
-        ,       DISUSE_TITLE = #{disuseTitle}
-        ,       DISUSE_STORAGE_CD = #{disuseStorageCd}
-        ,       PROC_FG      = #{procFg}
-        ,       CONFM_DATE   = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
-        ,       CONFM_ID     = DECODE(#{procFg}, '0', NULL, #{modId})
-        ,       MOD_DT       = #{modDt}
-        ,       MOD_ID       = #{modId}
+                                    = (   SELECT  COUNT(tssdd.PROD_CD)
+                                               ,       SUM(tssdd.DISUSE_AMT)
+                                          FROM    TB_ST_STORE_DISUSE_DTL tssdd
+                                          WHERE   tssdd.STORE_CD      =   #{storeCd}
+                                            AND     tssdd.DISUSE_DATE   =   #{disuseDate}
+                                            AND     tssdd.SEQ_NO        =   #{seqNo}
+            )
+          ,       DISUSE_TITLE = #{disuseTitle}
+          ,       REASON_CD = #{disuseReason}
+          ,       DISUSE_STORAGE_CD = #{disuseStorageCd}
+          ,       PROC_FG      = #{procFg}
+          ,       CONFM_DATE   = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
+          ,       CONFM_ID     = DECODE(#{procFg}, '0', NULL, #{modId})
+          ,       MOD_DT       = #{modDt}
+          ,       MOD_ID       = #{modId}
         WHERE   STORE_CD      = #{storeCd}
         AND     DISUSE_DATE   = #{disuseDate}
         AND     SEQ_NO        = #{seqNo}
@@ -984,7 +996,7 @@
                 ,       tpte.PROD_CD
                 ,       tpte.COST_UPRC AS COST_UPRC
                 ,       tpte.PO_UNIT_QTY
-                ,       NVL(tshsc.CURR_QTY,0) AS CURR_QTY
+                ,       NVL(tsssc.CURR_QTY,0) AS CURR_QTY
                 ,       tpte.QTY AS DISUSE_QTY
                 ,       tpte.COST_UPRC * tpte.QTY AS DISUSE_AMT
                 ,       tpte.REMARK
@@ -1206,4 +1218,27 @@
         </choose>
     </delete>
     <!--                엑셀업로드 끝                 -->
+
+    <select id="getDisuseReason" parameterType="sessionInfoVO" resultType="DefaultMap">
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg.toString() == "HQ"'>
+                SELECT  NMCODE_CD,
+                NMCODE_NM
+                FROM    TB_HQ_NMCODE
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     NMCODE_GRP_CD = '136'
+                AND     USE_YN = 'Y'
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                SELECT  NMCODE_CD,
+                NMCODE_NM
+                FROM    TB_MS_STORE_NMCODE
+                WHERE   STORE_CD = #{storeCd}
+                AND     NMCODE_GRP_CD = '136'
+                AND     USE_YN = 'Y'
+            </when>
+        </choose>
+    </select>
 </mapper>

@@ -4,6 +4,7 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
   angular.extend(this, new RootController('adjRegistCtrl', $scope, $http, true));
 
   $scope._setComboData("regListScaleBox", gvListScaleBoxData);
+  $scope._setComboData("adjRegReason", reasonData);
 
   $scope._setComboData("srchAdjFg", [
     {"name": messages["cmm.all"], "value": ""},
@@ -154,6 +155,7 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
       $scope.prodBarcdCd = '';
       $scope.autoAddChk  = false;
       $scope.adjTitle    = '';
+      $scope.adjReason    = '';
 
       // 신규등록이면 조정구분 disabled 시킨다.
       if ($scope.callParent === "adj") {
@@ -199,6 +201,7 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
             return false;
           }
           $scope.adjTitle = response.data.data.adjTitle;
+          $scope.adjReason = response.data.data.adjReason;
           $scope.acins.reg.adjStorageCd = response.data.data.adjStorageCd;
         }
       }
@@ -298,6 +301,7 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
       item.adjDate   = $scope.adjDate;
       item.seqNo     = $scope.seqNo;
       item.adjTitle  = $scope.adjTitle;
+      item.adjReason  = $scope.adjReason;
       item.storageCd = "999";	//001	->	999
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.adjStorageCd = $scope.acins.reg.adjStorageCd;
@@ -320,6 +324,7 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
       item.adjDate   = $scope.adjDate;
       item.seqNo     = $scope.seqNo;
       item.adjTitle  = $scope.adjTitle;
+      item.adjReason  = $scope.adjReason;
       item.storageCd = "999";	//001	->	999
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.adjStorageCd = $scope.acins.reg.adjStorageCd;
@@ -367,7 +372,7 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
       var adjDtlScope = agrid.getScope('adjDtlCtrl');
       adjDtlScope._setPagingInfo('curr', 1); // 페이지번호 1로 세팅
       adjDtlScope.searchAdjDtlList();
-
+      adjDtlScope.procFgCheck(false);
       $scope.searchAdjRegistList();
     }
 
@@ -576,6 +581,7 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.date     = $scope.adjDate;
     params.seqNo    = $scope.seqNo;
     params.title    = $scope.adjTitle;
+    params.reason    = $scope.adjReason;
     params.addQtyFg = $scope.addQtyFg;
     params.adjStorageCd    = $scope.acins.reg.adjStorageCd;
 

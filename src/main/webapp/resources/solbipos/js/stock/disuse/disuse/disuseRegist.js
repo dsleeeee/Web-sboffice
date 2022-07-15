@@ -4,6 +4,7 @@ app.controller('disuseRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
   angular.extend(this, new RootController('disuseRegistCtrl', $scope, $http, true));
 
   $scope._setComboData("regListScaleBox", gvListScaleBoxData);
+  $scope._setComboData("disuseRegReason", reasonData);
 
   $scope._setComboData("srchDisuseFg", [
     {"name": messages["cmm.all"], "value": ""},
@@ -154,6 +155,7 @@ app.controller('disuseRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
       $scope.prodBarcdCd = '';
       $scope.autoAddChk  = false;
       $scope.disuseTitle = '';
+      $scope.disuseReason = '';
 
       // 신규등록이면 폐기구분 disabled 시킨다.
       if ($scope.callParent === "disuse") {
@@ -201,6 +203,7 @@ app.controller('disuseRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
             return false;
           }
           $scope.disuseTitle = response.data.data.disuseTitle;
+          $scope.disuseReason = response.data.data.disuseReason;
           $scope.disuse.reg.disuseStorageCd = response.data.data.disuseStorageCd;
         }
       }
@@ -302,6 +305,7 @@ app.controller('disuseRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
       item.disuseDate  = $scope.disuseDate;
       item.seqNo       = $scope.seqNo;
       item.disuseTitle = $scope.disuseTitle;
+      item.disuseReason = $scope.disuseReason;
       item.storageCd   = "999";	//001	->	999
       item.hqBrandCd   = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.adjStorageCd = $scope.disuse.reg.disuseStorageCd;
@@ -325,6 +329,7 @@ app.controller('disuseRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
       item.disuseDate  = $scope.disuseDate;
       item.seqNo       = $scope.seqNo;
       item.disuseTitle = $scope.disuseTitle;
+      item.disuseReason = $scope.disuseReason;
       item.storageCd   = "999";	//001	->	999
       item.hqBrandCd   = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.disuseStorageCd = $scope.disuse.reg.disuseStorageCd;
@@ -372,7 +377,7 @@ app.controller('disuseRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
       var disuseDtlScope = agrid.getScope('disuseDtlCtrl');
       disuseDtlScope._setPagingInfo('curr', 1); // 페이지번호 1로 세팅
       disuseDtlScope.searchDisuseDtlList();
-
+      disuseDtlScope.procFgCheck(false);
       $scope.searchDisuseRegistList();
     }
 
@@ -585,6 +590,7 @@ app.controller('disuseRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
     params.date     = $scope.disuseDate;
     params.seqNo    = $scope.seqNo;
     params.title    = $scope.disuseTitle;
+    params.reason    = $scope.disuseReason;
     params.addQtyFg = $scope.addQtyFg;
     params.disuseStorageCd    = $scope.disuse.reg.disuseStorageCd;
 
