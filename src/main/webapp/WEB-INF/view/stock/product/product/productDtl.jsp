@@ -107,4 +107,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/product/product/productDtl.js?ver=20220706.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/product/product/productDtl.js?ver=20220715.01" charset="utf-8"></script>

@@ -42,6 +42,25 @@ app.controller('productDtlCtrl', ['$scope', '$http', function ($scope, $http) {
           s.collectionView.commitEdit();
         });
 
+        // ReadOnly 효과설정
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                var item = s.rows[e.row].dataItem;
+
+                // 폐기등록시, 생산중량, 생산판매가는 입력 불가
+                if (col.binding === 'productWeight' || col.binding === 'productSaleUprc') {
+                    if($("#hdProductFg").val() === "1") {
+                        wijmo.addClass(e.cell, 'wj-custom-readonly');
+                        wijmo.setAttribute(e.cell, 'aria-readonly', true);
+
+                        // Attribute 의 변경사항을 적용.
+                        e.cell.outerHTML = e.cell.outerHTML;
+                    }
+                }
+            }
+        });
+
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
         // add a sigma to the header to show that this is a summary row
