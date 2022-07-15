@@ -648,6 +648,7 @@
     <typeAlias alias="storePeriodVO" type="kr.co.solbipos.stock.status.storeperiod.service.StorePeriodVO"/>
     <typeAlias alias="stockManageViewVO" type="kr.co.solbipos.stock.manage.view.service.StockManageViewVO"/>
     <typeAlias alias="stockManageViewStoreVO" type="kr.co.solbipos.stock.manage.viewStore.service.StockManageViewStoreVO"/>
+    <typeAlias alias="stockManageDtlViewVO" type="kr.co.solbipos.stock.manage.dtlView.service.StockManageDtlViewVO"/>
     <!-- 공통팝업 수불/재고 엑셀업로드 -->
     <typeAlias alias="excelUploadVO" type="kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO"/>
     <typeAlias alias="excelUploadMPSVO" type="kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO"/>
