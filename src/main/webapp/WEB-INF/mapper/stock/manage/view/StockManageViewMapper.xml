@@ -81,7 +81,7 @@
 		 	WHERE M.HQ_GBN = #{hqGbn} 				/* (1:실사, 2:조정, 3:폐기) */
 		 </if>
 		<if test="reason != '' and reason != null">
-			WHERE M.REASON_CD = #{reason}
+			AND M.REASON_CD = #{reason}
 		</if>
 		 ) A
 		 <include refid="CmmSQL.PagingTemplateBottom"/>

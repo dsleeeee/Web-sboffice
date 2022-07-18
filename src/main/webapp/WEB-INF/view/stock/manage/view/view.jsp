@@ -57,8 +57,8 @@
 				<td>
 					<div class="sb-select fl mr5 w110px">
 						<wj-combo-box
-	<%--						id="srchStatus"--%>
-	<%--						ng-model="hqGbnModel"--%>
+							id="srchStatus"
+							ng-model="hqGbnModel"
 							items-source="_getComboData('srchStatus')"
 							display-member-path="name"
 							selected-value-path="value"
