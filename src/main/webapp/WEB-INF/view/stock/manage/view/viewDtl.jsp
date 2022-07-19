@@ -51,4 +51,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/manage/view/viewDtl.js?ver=20200330.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/manage/view/viewDtl.js?ver=20220719.01" charset="utf-8"></script>

@@ -2020,7 +2020,7 @@
 				   , 	TB_HQ_PRODUCT_BARCD THPB
 				WHERE   TSHAI.HQ_OFFICE_CD	=	#{hqOfficeCd}
 				AND		TSHAI.ACINS_DATE	=	#{totDate}
-				AND		TSHAI.SEQ_NO		=	1
+				AND		TSHAI.SEQ_NO		=	#{seqNo}
 				AND		TSHAI.HQ_OFFICE_CD  =   TSHAID.HQ_OFFICE_CD
 				AND     TSHAI.ACINS_DATE    =   TSHAID.ACINS_DATE
 				AND     TSHAI.SEQ_NO        =   TSHAID.SEQ_NO
@@ -2046,7 +2046,7 @@
 				, 		TB_MS_PRODUCT_BARCD TMPB
 			    WHERE   TSSAI.STORE_CD		=	#{storeCd}
 			    AND		TSSAI.ACINS_DATE	=	#{totDate}
-			    AND		TSSAI.SEQ_NO		=	1
+			    AND		TSSAI.SEQ_NO		=	#{seqNo}
 			    AND		TSSAI.STORE_CD  	=   TSSAID.STORE_CD
 			    AND     TSSAI.ACINS_DATE    =   TSSAID.ACINS_DATE
 			    AND     TSSAI.SEQ_NO        =   TSSAID.SEQ_NO
@@ -2077,7 +2077,7 @@
 				, 		TB_HQ_PRODUCT_BARCD THPB
 			    WHERE   TSHA.HQ_OFFICE_CD	=	#{hqOfficeCd}
 			    AND		TSHA.ADJ_DATE		=	#{totDate}
-			    AND		TSHA.SEQ_NO			=	1
+			    AND		TSHA.SEQ_NO			=	#{seqNo}
 			    AND		TSHA.HQ_OFFICE_CD  	=   TSHAD.HQ_OFFICE_CD
 			    AND     TSHA.ADJ_DATE    	=   TSHAD.ADJ_DATE
 			    AND     TSHA.SEQ_NO        	=   TSHAD.SEQ_NO
@@ -2102,7 +2102,7 @@
 				, 		TB_MS_PRODUCT_BARCD TMPB
 			    WHERE   TSSA.STORE_CD		=	#{storeCd}
 			    AND		TSSA.ADJ_DATE		=	#{totDate}
-			    AND		TSSA.SEQ_NO			=	1
+			    AND		TSSA.SEQ_NO			=	#{seqNo}
 			    AND		TSSA.STORE_CD  		=   TSSAD.STORE_CD
 			    AND     TSSA.ADJ_DATE    	=   TSSAD.ADJ_DATE
 			    AND     TSSA.SEQ_NO        	=   TSSAD.SEQ_NO
@@ -2133,7 +2133,7 @@
 				, 		TB_HQ_PRODUCT_BARCD THPB
 			    WHERE   TSHD.HQ_OFFICE_CD	=	#{hqOfficeCd}
 			    AND		TSHD.DISUSE_DATE	=	#{totDate}
-			    AND		TSHD.SEQ_NO			=	1
+			    AND		TSHD.SEQ_NO			=	#{seqNo}
 			    AND		TSHD.HQ_OFFICE_CD  	=   TSHDD.HQ_OFFICE_CD
 			    AND     TSHD.DISUSE_DATE    =   TSHDD.DISUSE_DATE
 			    AND     TSHD.SEQ_NO        	=   TSHDD.SEQ_NO
@@ -2158,7 +2158,7 @@
 				, 		TB_MS_PRODUCT_BARCD TMPB
 			    WHERE   TSSD.STORE_CD		=	#{storeCd}
 			    AND		TSSD.DISUSE_DATE	=	#{totDate}
-			    AND		TSSD.SEQ_NO			=	1
+			    AND		TSSD.SEQ_NO			=	#{seqNo}
 			    AND		TSSD.STORE_CD  		=   TSSDD.STORE_CD
 			    AND     TSSD.DISUSE_DATE    =   TSSDD.DISUSE_DATE
 			    AND     TSSD.SEQ_NO        	=   TSSDD.SEQ_NO

@@ -49,6 +49,7 @@ app.controller('viewDtlCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		  var params			={};
 		  	  params.totDate	= $scope.totDate.replace(/-/gi, "");
 		  	  params.hqGbn		= $scope.hqGbn;
+		  	  params.seqNo		= $scope.seqNo;
 		  	  params.hqOfficeCd	= $scope.hqOfficeCd;
 		  	  params.storeCd	= $scope.storeCd;
 		  	  
