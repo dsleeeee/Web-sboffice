@@ -57,6 +57,13 @@ app.controller('srchProdCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.setHqBrandCd = function (){
         $("#_srchHqBrand").val($scope.hqBrandCd);
     }
+
+    // 매장선택 모듈 팝업 사용시 정의
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+    $scope.originalStoreShow = function () {
+        $scope._broadcast('originalStoreCtrl', $("#hdStoreCd").val());
+    };
 }]);
 
 app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
@@ -116,6 +123,7 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
         params.prodRegFg = 'Y';
         params.hqBrandCd = '';
         params.prodClassCd = '';
+        params.originalStore = '';
 
         $scope._inquirySub("/base/prod/prod/prod/getStoreProdBatchList.sb", params, function() {
             // 미등록상품 조회
@@ -210,6 +218,7 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
         params.prodRegFg = 'N';
         params.hqBrandCd = $("#_srchHqBrand").val();
         params.prodClassCd = $("#_storeProdClassCd").val();
+        params.originalStore = $("#originalStoreCd").val();
 
         $scope._inquirySub("/base/prod/prod/prod/getStoreProdBatchList.sb", params);
     };

@@ -2755,6 +2755,14 @@
                                         PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
                                     )
         </if>
+        <if test='originalStore != null and originalStore.toString() != ""'>
+            AND thp.PROD_CD IN (
+                                SELECT  PROD_CD
+                                FROM    TB_MS_PRODUCT
+                                WHERE   STORE_CD = #{originalStore}
+                                AND     USE_YN = 'Y'
+                                )
+        </if>
         AND (
                 ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
                 OR
