@@ -108,6 +108,7 @@
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "STORE" and hqOfficeCd != "00000"'>
                 and a.MEMBR_ORGN_CD = #{hqOfficeCd}
+                and a.REG_STORE_CD = #{storeCd}
             </when>
             <!--  단독매장 -->
             <when test='orgnFg != null and orgnFg == "STORE" and hqOfficeCd == "00000"'>
@@ -139,6 +140,9 @@
             AND tmmp.MEMBR_NO (+)= tmm.MEMBR_NO
         	AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
         	AND tmm.MEMBR_NO = #{membrNo}
+        <if test='orgnFg != null and orgnFg == "S" and hqOfficeCd != "00000"'>
+            AND tmm.REG_STORE_CD = #{storeCd}
+        </if>
   </select>
 
 

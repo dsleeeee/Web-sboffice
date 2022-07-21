@@ -35,12 +35,19 @@
                     <th><s:message code="prod.prodNm"/></th>
                     <td><input type="text" id="srchBatProdNm" ng-model="prodNm" /></td>
                 </tr>
-                <c:if test="${subPriceFg == '1'}">
-                    <tr>
+                <tr>
+                    <th><s:message code="prod.storeProd"/></th>
+                    <td>
+                        <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
+                        <jsp:include page="/WEB-INF/view/base/prod/prod/selectStoreS.jsp" flush="true">
+                            <jsp:param name="targetId" value="originalStore"/>
+                        </jsp:include>
+                    </td>
+                    <c:if test="${subPriceFg == '1'}">
                         <th><input type="checkbox" id="storeSaleUprcApply" ng-model="storeSaleUprcApply"/> <s:message code="salePrice.batchChange"/></th>
                         <td><s:message code="salePrice.saleUprcApply"/></td>
-                    </tr>
-                </c:if>
+                    </c:if>
+                </tr>
                 <tr>
                     <th><s:message code="prod.brandNm"/></th>
                     <%-- 브랜드명 --%>
@@ -163,4 +170,4 @@
     var subPriceFg = "${subPriceFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/storeProdBatchRegist.js?ver=20210526.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/storeProdBatchRegist.js?ver=20210526.06" charset="utf-8"></script>

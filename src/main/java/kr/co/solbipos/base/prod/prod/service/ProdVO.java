@@ -257,6 +257,8 @@ public class ProdVO extends PageVO {
     private String pointUseYn;
     /** 할인여부 */
     private String dcYn;
+    /** 매장상품 */
+    private String originalStore;
 
     /**
      * @return the hqOfficeCd
@@ -1203,5 +1205,13 @@ public class ProdVO extends PageVO {
 
     public void setDcYn(String dcYn) {
         this.dcYn = dcYn;
+    }
+
+    public String getOriginalStore() {
+        return originalStore;
+    }
+
+    public void setOriginalStore(String originalStore) {
+        this.originalStore = originalStore;
     }
 }

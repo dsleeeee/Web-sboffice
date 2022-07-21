@@ -80,7 +80,11 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
     if (orgnFg === "STORE") {
         if(hqOfficeCd !== "00000") {
-            $scope.storeMembr = true;
+            if(membrClassManageFg === "0"){
+                $scope.storeMembr = true;
+            } else {
+                $scope.visitStoreMembr = true;
+            }
         }
     } else {
         $scope.storeMembr = false;
@@ -389,6 +393,12 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         params.memberSaleFg = $scope.memberSaleFg;
         params.memberPointFg = $scope.memberPointFg;
         params.useYn = $scope.useYn;
+        if($scope.storeMembr){
+            params.membrClassManageFg = "0";
+        } else {
+            params.membrClassManageFg = "1";
+        }
+        console.log($scope.storeMembr);
         // params.useYn = 'Y';
 
         // console.log('params ', params);
@@ -409,9 +419,9 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         }
 
         // 자기매장 회원만 보이게
-        if(orgnFg == "STORE") {
-            params.storeMembr = true;
-        }
+        // if(orgnFg == "STORE") {
+        //     params.storeMembr = true;
+        // }
 
         $scope._inquiryMain("/membr/info/view/view/getMemberlist.sb", params, function () {});
     };
@@ -841,13 +851,19 @@ app.controller('memberExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
         params.gendrFg = $scope.gendrFg;
         params.memberSaleFg = $scope.memberSaleFg;
         params.memberPointFg = $scope.memberPointFg;
-        // params.useYn = $scope.useYn;
-        params.useYn = 'Y';
+        params.useYn = $scope.useYn;
+        if($scope.storeMembr){
+            params.membrClassManageFg = "0";
+        } else {
+            params.membrClassManageFg = "1";
+        }
+        console.log(params.membrClassManageFg);
+        // params.useYn = 'Y';
 
         // 자기매장 회원만 보이게
-        if(orgnFg == "STORE") {
-            params.storeMembr = true;
-        }
+        // if(orgnFg == "STORE") {
+        //     params.storeMembr = true;
+        // }
 
         $scope._inquiryMain("/membr/info/view/view/getMemberListExcel.sb", params, function() {
             if ($scope.excelFlex.rows.length <= 0) {

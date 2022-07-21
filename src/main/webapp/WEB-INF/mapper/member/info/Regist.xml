@@ -184,11 +184,6 @@
                 </foreach>
             </if>
         </if>
-        <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
-            <if test='storeMembr == "true"'>
-                AND tmm.REG_STORE_CD = #{storeCd}
-            </if>
-        </if>
         <if test='cstCardUseFg != null and cstCardUseFg != ""'>
             AND tmm.CST_CARD_USE_FG = #{cstCardUseFg}
         </if>
@@ -288,6 +283,9 @@
                 AND tmmp.LAST_SALE_DATE >= TO_CHAR(ADD_MONTHS(SYSDATE, - #{marketingSmsGubun}), 'yyyyMMdd')
             ]]>
         </if>
+        <if test='orgnFg.toString() == "STORE" and hqOfficeCd != "00000" and membrClassManageFg == "0"'>
+            AND tmm.REG_STORE_CD = #{storeCd}
+        </if>
         ORDER BY tmm.MEMBR_NO
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -301,7 +299,7 @@
         /* RegistMapper.getMemberListExcel */
         SELECT
         tmm.MEMBR_NO,
-        SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
+        RPAD(SUBSTR(SBPENC.D(tmm.MEMBR_NM),0,1), LENGTHB(CONVERT(SBPENC.D(tmm.MEMBR_NM), 'KO16MSWIN949')), '*') AS MEMBR_NM,
         tmm.MEMBR_CLASS_CD,
         tmmc.MEMBR_CLASS_NM,
         tmm.MEMBR_CARD_NO,
@@ -312,7 +310,7 @@
         tmm.POST_NO,
         SBPENC.D(tmm.ADDR) AS ADDR,
         SBPENC.D(tmm.ADDR_DTL) AS ADDR_DTL,
-        SBPENC.D(tmm.TEL_NO) AS TEL_NO,
+        RPAD(SUBSTR(SBPENC.D(tmm.TEL_NO),0,7),11,'*') AS TEL_NO,
         tmm.EMAIL_ADDR,
         (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '072' AND NMCODE_CD = tmm.EMAIL_RECV_YN) AS EMAIL_RECV_YN,
         tmm.BIRTHDAY,
@@ -417,11 +415,6 @@
                 </foreach>
             </if>
         </if>
-        <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
-            <if test='storeMembr == "true"'>
-                AND tmm.REG_STORE_CD = #{storeCd}
-            </if>
-        </if>
         <if test='cstCardUseFg != null and cstCardUseFg != ""'>
             AND tmm.CST_CARD_USE_FG = #{cstCardUseFg}
         </if>
@@ -520,6 +513,9 @@
             <![CDATA[
                 AND tmmp.LAST_SALE_DATE >= TO_CHAR(ADD_MONTHS(SYSDATE, - #{marketingSmsGubun}), 'yyyyMMdd')
             ]]>
+        </if>
+        <if test='orgnFg.toString() == "STORE" and hqOfficeCd != "00000" and membrClassManageFg == "0"'>
+            AND tmm.REG_STORE_CD = #{storeCd}
         </if>
         ORDER BY tmm.MEMBR_NO
     </select>

@@ -67,9 +67,9 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
     /*$scope._setComboData("rGendrFg", genderDataMapEx);*/
     /*$scope._setComboData("rWeddingYn", weddingDataMap);*/
     $scope._setComboData("rMemberClassList", memberClass); // 회원등급 적용
-    memberClass.unshift({name: "선택", value: ""});
     // memberClass.unshift({name: "전체", value: ""});
     $scope._setComboData("rMemberClassSelect", memberClassSelect);
+    memberClassSelect.unshift({name: "선택", value: ""});
     // $scope._setComboData("rMembrcardYn", rMembrcardList);
     $scope._getComboDataQuery('299', 'membrCardFg', 'A');
     $scope._getComboDataQuery('032', 'anvType', 'A');
@@ -91,6 +91,7 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
     $scope._getComboDataQuery('076', 'weddingYn', 'A');
     $scope._getComboDataQuery('055', 'gendrFg', 'A');
     $scope._getComboDataQuery('067', 'useYnAll', 'A');
+    $scope._getComboDataQuery('067', 'useYn', '');
 
     // 선택 회원
     $scope.selectedMember;
@@ -215,7 +216,46 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
                     display: 'table-cell',
                     verticalAlign: 'middle',
                     textAlign: 'center'
-                });
+                })
+
+
+                if ((panel.grid.columnHeaders.rows.length - 1) === r) {
+                    // 헤더의 전체선택 클릭 로직
+                    var flex   = panel.grid;
+                    var column = flex.columns[c];
+                    // check that this is a boolean column
+                    if (column.binding === 'gChk' || column.format === 'checkBox' || column.format === 'checkBoxText') {
+                        // prevent sorting on click
+                        column.allowSorting = false;
+                        // count true values to initialize checkbox
+                        var cnt             = 0;
+                        for (var i = 0; i < flex.rows.length; i++) {
+                            if (flex.getCellData(i, c) === true) {
+                                cnt++;
+                            }
+                        }
+                        // create and initialize checkbox
+                        if (column.format === 'checkBoxText') {
+                            cell.innerHTML = '<input id=\"' + column.binding + '\" type=\"checkbox\" class=\"wj-cell-check\" />'
+                                + '<label for=\"' + column.binding + '\" class=\"wj-header-label\">' + cell.innerHTML + '</label>';
+                        } else {
+                            cell.innerHTML = '<input type=\"checkbox\" class=\"wj-cell-check\" />';
+                        }
+                        var cb           = cell.firstChild;
+                        cb.checked       = cnt > 0;
+                        cb.indeterminate = cnt > 0 && cnt < flex.rows.length;
+                        // apply checkbox value to cells
+                        cb.addEventListener('click', function (e) {
+                            flex.beginUpdate();
+                            for (var i = 0; i < flex.rows.length; i++) {
+                                if(!flex.rows[i].isReadOnly) {
+                                    flex.setCellData(i, c, cb.checked);
+                                }
+                            }
+                            flex.endUpdate();
+                        });
+                    }
+                }
             }
             // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
             else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
@@ -327,9 +367,9 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
         }
 
         // 자기매장 회원만 보이게
-        if(orgnFg == "STORE") {
-            params.storeMembr = true;
-        }
+        // if(orgnFg == "STORE") {
+        //     params.storeMembr = true;
+        // }
 
         // console.log('params ', params);
         $scope._inquiryMain("/membr/info/chgBatch/chgBatch/getMemberChgBatchList.sb", params, function () {});
@@ -350,6 +390,8 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
                     $scope.flex.collectionView.items[i].smsRecvYn = $scope.chgSmsRecvYn;
                 } else if (param === "email") {
                     $scope.flex.collectionView.items[i].emailRecvYn = $scope.chgEmailRecvYn;
+                } else if(param === "use") {
+                    $scope.flex.collectionView.items[i].useYn = $scope.chgUseYn;
                 }
             }
         }

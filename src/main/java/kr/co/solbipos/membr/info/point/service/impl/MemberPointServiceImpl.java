@@ -116,6 +116,9 @@ public class MemberPointServiceImpl implements MemberPointService {
                 }
             }
 
+            memberPointVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            memberPointVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            memberPointVO.setStoreCd(sessionInfoVO.getStoreCd());
             memberPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
             String pattern = "^[0-9]*$"; //숫자만
             //String val = "123456789"; //대상문자열

@@ -412,7 +412,7 @@
                             id="rMemberClass"
                             ng-model="membrClassCd"
                             control="memberClassCombo"
-                            items-source="_getComboData('rMemberClassList')"
+                            items-source="_getComboData('rMemberClassSelect')"
                             display-member-path="name"
                             selected-value-path="value"
                             is-editable="false"
@@ -441,17 +441,6 @@
     </table>
 
     <div class="mt20 oh sb-select dkbr">
-        <%-- 페이지 스케일  --%>
-        <wj-combo-box
-                class="w100px fl"
-                id="listScaleBox"
-                ng-model="listScale"
-                items-source="_getComboData('listScaleBox')"
-                display-member-path="name"
-                selected-value-path="value"
-                is-editable="false"
-                initialized="initComboBox(s)">
-        </wj-combo-box>
         <div <c:if test="${orgnFg == 'HQ' and membrClassManageFg == '0'}">style="display: none;"</c:if>>
             <%-- 회원등급 --%>
             <span class="fl bk lh30 ml10 mb10 mr5"><s:message code='regist.class.nm'/></span>
@@ -521,6 +510,23 @@
             <button class="btn_skyblue ml5 fl" id="save" ng-click="chgSave('sms')">
                 <s:message code="cmm.apply"/>
             </button>
+            <%-- 사용여부 --%>
+            <span class="fl bk lh30 ml10 mb10 mr5"><s:message code='regist.useYn'/></span>
+            <div class="sb-select w100px fl">
+                <wj-combo-box
+                        id="useYn"
+                        ng-model="chgUseYn"
+                        control="useYnCombo"
+                        items-source="_getComboData('useYn')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        initialized="_initComboBox(s)">
+                </wj-combo-box>
+            </div>
+            <button class="btn_skyblue ml5 fl" id="save" ng-click="chgSave('use')">
+                <s:message code="cmm.apply"/>
+            </button>
             <%-- 저장 --%>
             <button class="btn_skyblue ml5 fr" id="save" ng-click="gridSave()">
                 <s:message code="cmm.save"/>
@@ -546,7 +552,7 @@
                     ime-enabled="true">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                <wj-flex-grid-column header="" binding="gChk" width="40"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.membr.no"/>" binding="membrNo" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.membr.nm"/>" binding="membrNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.class.cd"/>" binding="membrClassCd" align="center" data-map="memberClassDataMap"></wj-flex-grid-column>
@@ -566,13 +572,6 @@
         </div>
     </div>
 
-    <%-- 페이지 리스트 --%>
-    <div class="pageNum mt20">
-        <%-- id --%>
-        <ul id="memberChgBatchCtrlPager" data-size="10">
-        </ul>
-    </div>
-    <%--//페이지 리스트--%>
 </div>
 
 <script>
@@ -606,7 +605,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberChgBatch.js?ver=20220308.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberChgBatch.js?ver=20220308.02" charset="utf-8"></script>
 
 <%-- 회원정보 상세 팝업 --%>
 <c:import url="/WEB-INF/view/membr/info/view/memberInfoDtl.jsp">

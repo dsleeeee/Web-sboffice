@@ -314,9 +314,7 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/curr/hqCurr/hqCurr.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/curr/hqCurr/hqCurr.js?ver=20181224.02" charset="utf-8"></script>
 
-<%-- 재고현황 팝업 --%>
-<c:import url="/WEB-INF/view/stock/curr/hqCurr/hqCurrDtl.jsp"></c:import>
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp"></c:import>

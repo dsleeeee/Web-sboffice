@@ -157,7 +157,7 @@
         <%-- 우리매장 --%>
         <c:if test="${orgnFg == 'STORE'}">
             <c:if test="${hqOfficeCd ne '00000'}">
-                <tr style="display: none"> <%-- 자기매장 회원만 보이게 --%>
+                <tr <c:if test="${membrClassManageFg ne '1'}"> style="display: none"</c:if>> <%-- 자기매장 회원만 보이게 --%>
                     <th><s:message code="regist.use.store.membr"/></th>
                     <td>
                         <input type="checkbox" id="storeMembr" ng-model="storeMembr"/>
@@ -663,11 +663,11 @@
     </c:forEach>
 
     // 회원등급 관리구분[1237]
-    var membrClassManageFg = ${membrClassManageFg};
+    var membrClassManageFg = "${membrClassManageFg}";
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20220218.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20220218.03" charset="utf-8"></script>
 
 <%-- 후불적용매장등록 --%>
 <c:import url="/WEB-INF/view/membr/info/view/postpaidStoreRegist.jsp">

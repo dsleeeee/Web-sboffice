@@ -3,28 +3,30 @@
  */
 var app = agrid.getApp();
 
-/** 현재고현황 그리드 controller */
-app.controller('hqCurrCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+/** 일재고현황 그리드 controller */
+app.controller('dayCurrCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('hqCurrCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('dayCurrCtrl', $scope, $http, true));
+
+    var srchStartDate = wcombo.genDateVal("#srchStartDate", getToday());
 
   $scope._setComboData("srchUnitFg", [
-    {"name": messages["hqCurr.unitStockFg"], "value": "0"},
-    {"name": messages["hqCurr.unitOrderFg"], "value": "1"}
+    {"name": messages["dayCurr.unitStockFg"], "value": "0"},
+    {"name": messages["dayCurr.unitOrderFg"], "value": "1"}
   ]);
 
   $scope._setComboData("srchWeightFg", [
-    {"name": messages["hqCurr.weightFg0"], "value": "0"},
-    {"name": messages["hqCurr.weightFg1"], "value": "1"}
+    {"name": messages["dayCurr.weightFg0"], "value": "0"},
+    {"name": messages["dayCurr.weightFg1"], "value": "1"}
   ]);
 
   $scope._setComboData("srchSafeStockFg", [
     {"name": messages["cmm.all"], "value": ""},
-    {"name": messages["hqCurr.safeStockFg0"], "value": "0"}
+    {"name": messages["dayCurr.safeStockFg0"], "value": "0"}
   ]);
 
   //조회조건 콤보박스 listScale 세팅
-  $scope._setComboData("hqCurrListScaleBox", gvListScaleBoxData);
+  $scope._setComboData("dayCurrListScaleBox", gvListScaleBoxData);
   $scope.isSearch = false;
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -33,7 +35,7 @@ app.controller('hqCurrCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	$scope.ChkProdClassDisplay = false;
 
     // picker 사용시 호출 : 미사용시 호출안함
-    $scope._makePickColumns("hqCurrCtrl");
+    $scope._makePickColumns("dayCurrCtrl");
 
     // 그리드 링크 효과
     s.formatItem.addHandler(function (s, e) {
@@ -55,26 +57,27 @@ app.controller('hqCurrCtrl', ['$scope', '$http', '$timeout', function ($scope, $
   };
 
   // 다른 컨트롤러의 broadcast 받기
-  $scope.$on("hqCurrCtrl", function (event, data) {
-    $scope.searchHqCurrList(true);
+  $scope.$on("dayCurrCtrl", function (event, data) {
+    $scope.searchDayCurrList(true);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
 
 
   // 현재고현황 리스트 조회
-  $scope.searchHqCurrList = function (isPageChk) {
+  $scope.searchDayCurrList = function (isPageChk) {
     // 파라미터
     var params     = {};
+    params.searchDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
     params.prodCd = $scope.prodCdModel;
     params.prodNm = $scope.prodNmModel;
     params.barcdCd = $scope.barcdCdModel;
     params.unitFg = $scope.unitFgModel;
     params.prodClassCd = $scope.prodClassCd;
-    params.vendrCd = $("#hqCurrSelectVendrCd").val();
+    params.vendrCd = $("#dayCurrSelectVendrCd").val();
     params.isPageChk = isPageChk;
     params.listScale = $scope.listScaleCombo.text;
-    params.storageCd = $("#hqCurrSelectStorageCd").val();
+    params.storageCd = $("#dayCurrSelectStorageCd").val();
     params.safeStockFg		 = $scope.safeStockFgModel;
     
     $scope.excelProdCd		= params.prodCd;
@@ -89,7 +92,7 @@ app.controller('hqCurrCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     $scope.isSearch 		= true;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/stock/curr/hqCurr/hqCurr/list.sb", params);
+    $scope._inquiryMain("/stock/curr/dayCurr/dayCurr/list.sb", params);
   };
 
   // 상품분류정보 팝업
@@ -116,8 +119,8 @@ app.controller('hqCurrCtrl', ['$scope', '$http', '$timeout', function ($scope, $
   // 거래처선택 모듈 팝업 사용시 정의
   // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
   // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.hqCurrSelectVendrShow = function () {
-    $scope._broadcast('hqCurrSelectVendrCtrl');
+  $scope.dayCurrSelectVendrShow = function () {
+    $scope._broadcast('dayCurrSelectVendrCtrl');
   };
 
   //상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
@@ -125,7 +128,7 @@ app.controller('hqCurrCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	  var columns = $scope.flex.columns;
 
 	  for(var i=0; i<columns.length; i++){
-		  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+		  if(columns[i].binding === 'prodClassNm'){
 			  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
 		  }
 	  }
@@ -134,24 +137,25 @@ app.controller('hqCurrCtrl', ['$scope', '$http', '$timeout', function ($scope, $
   //창고선택 모듈 팝업 사용시 정의
   // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
   // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.hqCurrSelectStorageShow = function () {
-    $scope._broadcast('hqCurrSelectStorageCtrl');
+  $scope.dayCurrSelectStorageShow = function () {
+    $scope._broadcast('dayCurrSelectStorageCtrl');
   };
 
   //엑셀 다운로드
   $scope.excelDownload = function () {
 	  // 파라미터
 	  var params     = {};
+	  params.searchDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd')
 	  
-	  $scope._broadcast('hqCurrExcelCtrl',params);
+	  $scope._broadcast('dayCurrExcelCtrl',params);
   };
 
 }]);
 
-app.controller('hqCurrExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('dayCurrExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
 	// 상위 객체 상속 : T/F 는 picker
-	angular.extend(this, new RootController('hqCurrExcelCtrl', $scope, $http, $timeout, true));
+	angular.extend(this, new RootController('dayCurrExcelCtrl', $scope, $http, $timeout, true));
 
 	var checkInt = true;
 
@@ -164,9 +168,9 @@ app.controller('hqCurrExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
 	};
 	
 	// 다른 컨트롤러의 broadcast 받기
-	$scope.$on("hqCurrExcelCtrl", function (event, data) {
+	$scope.$on("dayCurrExcelCtrl", function (event, data) {
 		if(data != undefined && $scope.isSearch) {
-			$scope.searchPeriodIostockExcelList(true);
+			$scope.searchPeriodIostockExcelList(data);
 			// 기능수행 종료 : 반드시 추가
 			event.preventDefault();
 		} else{
@@ -180,18 +184,19 @@ app.controller('hqCurrExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
 		var columns = $scope.excelFlex.columns;
 
 		for(var i=0; i<columns.length; i++){
-			if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+			if(columns[i].binding === 'prodClassNm'){
 				$scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
 			}
 		}
 	};
 
 	// 전체 엑셀 리스트 조회
-	$scope.searchPeriodIostockExcelList = function (isPageChk) {// 파라미터
+	$scope.searchPeriodIostockExcelList = function (data) {// 파라미터
 		
 		// 파라미터
 	    var params     = {};
-	    params.prodCd = $scope.excelProdCd;
+        params.searchDate = data.searchDate;
+        params.prodCd = $scope.excelProdCd;
 	    params.prodNm = $scope.excelProdNm;
 	    params.barcdCd = $scope.excelBarcdCd;
 	    params.unitFg = $scope.excelUnitFg;
@@ -204,7 +209,7 @@ app.controller('hqCurrExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
 		$scope.isChkProdClassDisplay();
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
-		$scope._inquiryMain("/stock/curr/hqCurr/hqCurr/excelList.sb", params, function(){
+		$scope._inquiryMain("/stock/curr/dayCurr/dayCurr/excelList.sb", params, function(){
 			if ($scope.excelFlex.rows.length <= 0) {
 			      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 			      return false;
