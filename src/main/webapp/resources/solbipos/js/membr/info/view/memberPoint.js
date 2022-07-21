@@ -256,7 +256,7 @@ app.controller('memberPointCtrl', ['$scope', '$http', '$timeout', function ($sco
             $.postJSONArray("/membr/info/point/point/memberPointSave.sb", params, function (result) {
                 $scope.$broadcast('loadingPopupInactive');
                 $scope._popMsg(messages["cmm.saveSucc"]);
-                for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
                     var item = $scope.flex.collectionView.items[i];
                     if (item.memberResult === "검증성공") {
                         $scope.flex.collectionView.removeAt(i);
@@ -272,6 +272,10 @@ app.controller('memberPointCtrl', ['$scope', '$http', '$timeout', function ($sco
     };
 
     $scope.adjustAll = function () {
+        if($scope.changeAll === undefined || $scope.changeAll.totAjdPoint === ''){
+            $scope._popMsg(messages["memberPoint.change.null"]);
+            return false;
+        }
         var msg = messages["memberPoint.excel.del"];
         $scope._popConfirm(msg, function () {
             $scope.$broadcast('loadingPopupActive', messages['cmm.saving']);

@@ -208,6 +208,9 @@ public class RegistServiceImpl implements RegistService {
             registVO.setMemberSaleFg(null);
             registVO.setMemberPointFg(null);
             registVO.setUseYn(null);
+            if(CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1237"), "1").equals("1")){
+                registVO.setMembrClassManageFg(null);
+            }
         }
 
         return mapper.getMemberListExcel(registVO);

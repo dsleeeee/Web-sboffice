@@ -231,6 +231,11 @@ public class RegistVO extends PageVO {
     private String arrMembrNo[];
 
     /**
+     * [회원분류 관리구분]
+     */
+    private String membrClassManageFg;
+
+    /**
      * @return the orgnFg
      */
 
@@ -1295,6 +1300,14 @@ public class RegistVO extends PageVO {
 
     public void setArrMembrNo(String[] arrMembrNo) {
         this.arrMembrNo = arrMembrNo;
+    }
+
+    public String getMembrClassManageFg() {
+        return membrClassManageFg;
+    }
+
+    public void setMembrClassManageFg(String membrClassManageFg) {
+        this.membrClassManageFg = membrClassManageFg;
     }
 
     @Override
