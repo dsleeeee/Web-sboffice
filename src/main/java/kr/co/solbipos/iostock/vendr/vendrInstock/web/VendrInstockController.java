@@ -4,7 +4,9 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO;
 import kr.co.solbipos.iostock.vendr.vendrInstock.service.VendrInstockService;
@@ -47,12 +49,14 @@ public class VendrInstockController {
     private final SessionService sessionService;
     private final VendrInstockService vendrInstockService;
     private final VolmErrService volmErrService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     @Autowired
-    public VendrInstockController(SessionService sessionService, VendrInstockService vendrInstockService, VolmErrService volmErrService) {
+    public VendrInstockController(SessionService sessionService, VendrInstockService vendrInstockService, VolmErrService volmErrService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.vendrInstockService = vendrInstockService;
         this.volmErrService = volmErrService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -66,6 +70,18 @@ public class VendrInstockController {
      */
     @RequestMapping(value = "/vendrInstock/view.sb", method = RequestMethod.GET)
     public String vendrInstockView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // [1241 창고사용여부] 환경설정값 조회
+        if ( "H".equals(sessionInfoVO.getOrgnFg().getCode()) ) {
+            model.addAttribute("storageEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1241"), "0"));
+            System.out.println("storageEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1241"), "0"));
+        } else {
+            model.addAttribute("storageEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1241"), "0"));
+            System.out.println("storageEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1241"), "0"));
+        }
+
         return "iostock/vendr/vendrInstock/vendrInstock";
     }
 

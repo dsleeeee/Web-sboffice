@@ -14,7 +14,7 @@
     </div>
     <div class="wj-dialog-body sc2" style="height: 500px;">
 
-      <div class="tr mt20 fr">
+      <div class="tr mt20 fr">OutstockDataMapper.updateDstbDataCreate
         <%-- 상품추가/변경 --%>
         <button type="button" id="btnAddProd" class="btn_skyblue ml5 fl" ng-click="addStandMoveDtlProd()" ng-if="btnAddProd">
           <s:message code="standMove.addProd"/></button>

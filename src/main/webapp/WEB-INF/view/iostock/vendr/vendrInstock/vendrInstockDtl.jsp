@@ -118,23 +118,23 @@
   </form>
 
   <h3 class="h3_tbl pdt5 lh30 mt10">
-    <s:message code="vendrInstock.dtl.slipDtlInfo"/>    
+    <s:message code="vendrInstock.dtl.slipDtlInfo"/>
     <div class="fr" ng-if="procLayerIfFg">
-		<%--출고창고 --%>	   	
-	   	<span class="txtIn w150px sb-select fl mr5">
-	       <wj-combo-box
-	         id="saveVendrDtlOutStorageCd"
-	         ng-model="slipInfo.outStorageCd"
-	         ng-disabled="outStorageCdDisabledFg"
-	         items-source="_getComboData('saveVendrDtlOutStorageCd')"
-	         display-member-path="name"
-	         selected-value-path="value"
-	         is-editable="false"
-	         initialized="_initComboBox(s)"
-             control="outStorageCdCombo"
-	         >
-	       </wj-combo-box>
-	     </span>    
+      <%--출고창고 --%>
+      <span class="txtIn w150px sb-select fl mr5" <c:if test="${storageEnvstVal == '0'}">style="display: none;"</c:if> >
+         <wj-combo-box
+           id="saveVendrDtlOutStorageCd"
+           ng-model="slipInfo.outStorageCd"
+           ng-disabled="outStorageCdDisabledFg"
+           items-source="_getComboData('saveVendrDtlOutStorageCd')"
+           display-member-path="name"
+           selected-value-path="value"
+           is-editable="false"
+           initialized="_initComboBox(s)"
+           control="outStorageCdCombo"
+           >
+         </wj-combo-box>
+       </span>
       <p class="s12 bk lh30 fl"><s:message code="vendrInstock.dtl.procFg"/>: [</p>
       <p class="s12 bk lh30 fl red" ng-bind="procNm"></p>
       <p class="s12 bk lh30 fl">]</p>
@@ -190,7 +190,12 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockDtl.js?ver=20201020.08" charset="utf-8"></script>
+<script type="text/javascript">
+  // [1241 창고사용여부] 환경설정값
+  var storageEnvstVal = "${storageEnvstVal}";
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockDtl.js?ver=20220714.02" charset="utf-8"></script>
 
 <%-- 발주번호선택 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/vendr/vendrInstock/vendrInstockOrderSlip.jsp">

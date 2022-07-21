@@ -69,30 +69,32 @@
             </td>
           </tr>
           <tr>
-              <%-- 상품분류 --%>
-              <th><s:message code="disuse.reg.prodClass"/></th>
-              <td>
-                <input type="text" class="sb-input w100" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()"
-                       placeholder="<s:message code="cmm.all" />" readonly/>
-                <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
-              </td>
-	         <%-- 출고창고 --%>
-	         <th><s:message code="hqMove.outStorage"/></th>
-	         <td>
-            	<span class="txtIn w150px sb-select fl mr5">
-	            <wj-combo-box
-                        id="disuseRegAdjStorageCd"
-                        ng-model="disuse.reg.disuseStorageCd"
-                        items-source="_getComboData('disuseRegAdjStorageCd')"
-                        display-member-path="name"
-                        selected-value-path="value"
-                        is-editable="false"
-                        initialized="_initComboBox(s)"
-                        selected-index-changed="selectedIndexChangedReg(s)"
-                >
-	              </wj-combo-box>
-	            </span>
-             </td>
+            <%-- 상품분류 --%>
+            <th><s:message code="disuse.reg.prodClass"/></th>
+            <td>
+              <input type="text" class="sb-input w100" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()"
+                     placeholder="<s:message code="cmm.all" />" readonly/>
+              <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
+            </td>
+            <%-- 출고창고 --%>
+            <th <c:if test="${storageEnvstVal == '0'}">style="display: none;"</c:if> >
+              <s:message code="hqMove.outStorage"/>
+            </th>
+            <td <c:if test="${storageEnvstVal == '0'}">style="display: none;"</c:if> >
+              <span class="txtIn w150px sb-select fl mr5">
+              <wj-combo-box
+                      id="disuseRegAdjStorageCd"
+                      ng-model="disuse.reg.disuseStorageCd"
+                      items-source="_getComboData('disuseRegAdjStorageCd')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      initialized="_initComboBox(s)"
+                      selected-index-changed="selectedIndexChangedReg(s)"
+              >
+                </wj-combo-box>
+              </span>
+            </td>
             <%-- 폐기구분 --%>
             <th><s:message code="disuse.reg.disuseFg"/></th>
             <td>
@@ -244,7 +246,12 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/disuse/disuse/disuseRegist.js?ver=20200923.04" charset="utf-8"></script>
+<script type="text/javascript">
+  // [1241 창고사용여부] 환경설정값
+  var storageEnvstVal = "${storageEnvstVal}";
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/stock/disuse/disuse/disuseRegist.js?ver=20220714.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

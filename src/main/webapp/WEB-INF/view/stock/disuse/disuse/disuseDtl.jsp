@@ -50,9 +50,12 @@
               </span>
             </td>
           </tr>
-          <tr>
-			<th><s:message code="disuse.dtl.disuseStorageCd"/><em class="imp">*</em></th>
-            <td>
+          <tr <c:if test="${storageEnvstVal == '0'}">style="display: none;"</c:if> >
+              <th>
+                  <s:message code="disuse.dtl.disuseStorageCd"/>
+                  <em class="imp">*</em>
+              </th>
+              <td>
             	<span class="txtIn w150px sb-select fl mr5">
 	            <wj-combo-box
 	                id="disuseDtlAdjStorageCd"
@@ -131,10 +134,9 @@
   </div>
 </wj-popup>
 
-
 <script type="text/javascript">
-
-
+  // [1241 창고사용여부] 환경설정값
+  var storageEnvstVal = "${storageEnvstVal}";
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/stock/disuse/disuse/disuseDtl.js?ver=20200904.02" charset="utf-8"></script>

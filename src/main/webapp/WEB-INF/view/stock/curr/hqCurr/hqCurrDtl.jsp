@@ -73,10 +73,12 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-	       <wj-flex-grid-column header="<s:message code="hqCurr.prodCd"/>"			binding="prodCd"		width="130"		align="center"	is-read-only="true"></wj-flex-grid-column>
-	       <wj-flex-grid-column header="<s:message code="hqCurr.storageCd"/>"		binding="storageCd"		width="130"		align="center"	is-read-only="true"></wj-flex-grid-column>
-	       <wj-flex-grid-column header="<s:message code="hqCurr.storageNm"/>"		binding="storageNm"		width="*"		align="center"	is-read-only="true"></wj-flex-grid-column>
-	       <wj-flex-grid-column header="<s:message code="hqCurr.currQty"/>"			binding="currQty"		width="120"		align="center"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.prodCd"/>"			binding="prodCd"		width="130"		align="center"	is-read-only="true"></wj-flex-grid-column>
+            <c:if test="${storageEnvstVal == '1'}">
+              <wj-flex-grid-column header="<s:message code="hqCurr.storageCd"/>"		binding="storageCd"		width="130"		align="center"	is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="hqCurr.storageNm"/>"		binding="storageNm"		width="*"		align="center"	is-read-only="true"></wj-flex-grid-column>
+            </c:if>
+            <wj-flex-grid-column header="<s:message code="hqCurr.currQty"/>"			binding="currQty"		width="120"		align="center"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           </wj-flex-grid>
           <%-- ColumnPicker 사용시 include --%>
           <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
@@ -90,5 +92,10 @@
     </div>
   </div>
 </wj-popup>
+
+<script type="text/javascript">
+  // [1241 창고사용여부] 환경설정값
+  var storageEnvstVal = "${storageEnvstVal}";
+</script>
 
 <script type="text/javascript" src="/resource/solbipos/js/stock/curr/hqCurr/hqCurrDtl.js?ver=20200413.01" charset="utf-8"></script>

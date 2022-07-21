@@ -5,6 +5,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,12 +49,14 @@ public class HqCurrController {
     private final SessionService sessionService;
     private final HqCurrService hqCurrService;
     private final CmmEnvService cmmEnvService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     @Autowired
-    public HqCurrController(SessionService sessionService, HqCurrService hqCurrService, CmmEnvService cmmEnvService) {
+    public HqCurrController(SessionService sessionService, HqCurrService hqCurrService, CmmEnvService cmmEnvService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.hqCurrService = hqCurrService;
         this.cmmEnvService = cmmEnvService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -66,6 +70,7 @@ public class HqCurrController {
      */
     @RequestMapping(value = "/hqCurr/view.sb", method = RequestMethod.GET)
     public String hqCurrView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         // 본사 환경설정 0003(레시피사용여부) 조회
@@ -80,6 +85,15 @@ public class HqCurrController {
 
         model.addAttribute("envst0003", envst0003);
         model.addAttribute("envst0008", envst0008);
+
+        // [1241 창고사용여부] 환경설정값 조회
+        if ( "H".equals(sessionInfoVO.getOrgnFg().getCode()) ) {
+            model.addAttribute("storageEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1241"), "0"));
+            System.out.println("storageEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1241"), "0"));
+        } else {
+            model.addAttribute("storageEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1241"), "0"));
+            System.out.println("storageEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1241"), "0"));
+        }
 
         return "stock/curr/hqCurr/hqCurr";
     }

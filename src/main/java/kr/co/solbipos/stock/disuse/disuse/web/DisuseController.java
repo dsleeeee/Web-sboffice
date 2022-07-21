@@ -4,7 +4,9 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadStore.service.ExcelUploadStoreVO;
 import kr.co.solbipos.stock.disuse.disuse.service.DisuseService;
@@ -47,11 +49,13 @@ import static kr.co.common.utils.spring.StringUtil.convertToJson;
 public class DisuseController {
     private final SessionService sessionService;
     private final DisuseService disuseService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     @Autowired
-    public DisuseController(SessionService sessionService, DisuseService disuseService) {
+    public DisuseController(SessionService sessionService, DisuseService disuseService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.disuseService = disuseService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -65,7 +69,9 @@ public class DisuseController {
      */
     @RequestMapping(value = "/disuse/view.sb", method = RequestMethod.GET)
     public String disuseView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
         List<DefaultMap<String>> listReason = new ArrayList<DefaultMap<String>>();
         // CARD사 목록 조회
         listReason = disuseService.getDisuseReason(sessionInfoVO);
@@ -80,6 +86,15 @@ public class DisuseController {
         }
         // 사유
         model.addAttribute("reasonData", convertToJson(combo));
+
+        // [1241 창고사용여부] 환경설정값 조회
+        if ( "H".equals(sessionInfoVO.getOrgnFg().getCode()) ) {
+            model.addAttribute("storageEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1241"), "0"));
+            System.out.println("storageEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1241"), "0"));
+        } else {
+            model.addAttribute("storageEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1241"), "0"));
+            System.out.println("storageEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1241"), "0"));
+        }
 
         return "stock/disuse/disuse/disuse";
     }

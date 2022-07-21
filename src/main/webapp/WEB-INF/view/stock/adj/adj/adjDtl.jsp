@@ -50,8 +50,11 @@
             </td>
           </tr>
           <tr>
-			<th><s:message code="adj.dtl.adjStorageCd"/><em class="imp">*</em></th>
-            <td>
+			<th <c:if test="${storageEnvstVal == '0'}">style="display: none;"</c:if> >
+              <s:message code="adj.dtl.adjStorageCd"/>
+              <em class="imp">*</em>
+            </th>
+            <td colspan="3" <c:if test="${storageEnvstVal == '0'}">style="display: none;"</c:if> >
             	<span class="txtIn w150px sb-select fl mr5">
 	            <wj-combo-box
 	                id="acinsDtlAdjStorageCd"
@@ -131,4 +134,9 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/adj/adj/adjDtl.js?ver=2020094.02" charset="utf-8"></script>
+<script type="text/javascript">
+  // [1241 창고사용여부] 환경설정값
+  var storageEnvstVal = "${storageEnvstVal}";
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/stock/adj/adj/adjDtl.js?ver=20220714.02" charset="utf-8"></script>

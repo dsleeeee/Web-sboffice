@@ -65,10 +65,10 @@
         </if>
         , tsswsc.SCALE_WT
         , tsswsc.WT_UPRC
-        , tsswsc.ACC_MALL_SALE_QTY
-        , tsswsc.ACC_MALL_RTN_QTY
-        , tsswsc.ACC_PRDTION_IN_QTY
-        , tsswsc.ACC_PRDTION_OUT_QTY
+        , SF_ZERO_TO_NULL(tsswsc.ACC_MALL_SALE_QTY) AS ACC_MALL_SALE_QTY
+        , SF_ZERO_TO_NULL(tsswsc.ACC_MALL_RTN_QTY) AS ACC_MALL_RTN_QTY
+        , SF_ZERO_TO_NULL(tsswsc.ACC_PRDTION_IN_QTY) AS ACC_PRDTION_IN_QTY
+        , SF_ZERO_TO_NULL(tsswsc.ACC_PRDTION_OUT_QTY) AS ACC_PRDTION_OUT_QTY
         FROM    (
         <![CDATA[
             SELECT  A.HQ_OFFICE_CD

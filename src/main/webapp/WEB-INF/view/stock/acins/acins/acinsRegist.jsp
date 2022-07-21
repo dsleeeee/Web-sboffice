@@ -76,9 +76,29 @@
                      placeholder="<s:message code="cmm.all" />" readonly/>
               <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
             </td>
+            <%-- 실사구분 --%>
+            <th><s:message code="acins.reg.acinsFg"/></th>
+            <td>
+                <div class="sb-select">
+                    <span class="txtIn w150px">
+                    <wj-combo-box
+                            id="srchAcinsFg"
+                            ng-model="acinsFg"
+                            ng-disabled="readAcinsFg"
+                            items-source="_getComboData('srchAcinsFg')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                    </wj-combo-box>
+                    </span>
+                </div>
+            </td>
 	         <%-- 출고창고 --%>
-	         <th><s:message code="hqMove.outStorage"/></th>
-	         <td>
+             <th <c:if test="${storageEnvstVal == '0'}">style="display: none;"</c:if> >
+                <s:message code="hqMove.outStorage"/>
+             </th>
+             <td <c:if test="${storageEnvstVal == '0'}">style="display: none;"</c:if> >
               <span class="txtIn w150px sb-select fl mr5">
                  <wj-combo-box
                          id="acinsRegAdjStorageCd"
@@ -93,24 +113,7 @@
                  </wj-combo-box>
               </span>
              </td>
-            <%-- 실사구분 --%>
-            <th><s:message code="acins.reg.acinsFg"/></th>
-            <td>
-              <div class="sb-select">
-              <span class="txtIn w150px">
-                <wj-combo-box
-                  id="srchAcinsFg"
-                  ng-model="acinsFg"
-                  ng-disabled="readAcinsFg"
-                  items-source="_getComboData('srchAcinsFg')"
-                  display-member-path="name"
-                  selected-value-path="value"
-                  is-editable="false"
-                  initialized="_initComboBox(s)">
-                </wj-combo-box>
-              </span>
-              </div>
-            </td>
+
           </tr>
           <tr>
             <td colspan="4">
@@ -249,7 +252,12 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/acins/acins/acinsRegist.js?ver=20200923.04" charset="utf-8"></script>
+<script type="text/javascript">
+  // [1241 창고사용여부] 환경설정값
+  var storageEnvstVal = "${storageEnvstVal}";
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/stock/acins/acins/acinsRegist.js?ver=20220714.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

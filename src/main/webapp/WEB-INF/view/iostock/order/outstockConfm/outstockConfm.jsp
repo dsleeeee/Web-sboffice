@@ -126,37 +126,39 @@
       <span class="txtIn "><input id="outDate" class="w120px"></span>
     </div>
     <%--출고창고 --%>
-          	<p class="s14 bk fl mr5 lh30"><s:message code="outstockConfm.dtl.outStorage"/></p>
-          	<span class="txtIn w150px sb-select fl mr5">
-              <wj-combo-box
-                id="srchOutStorageCd"
-                ng-model="save.outStorageCd"
-                items-source="_getComboData('srchOutStorageCd')"
-                display-member-path="name"
-                selected-value-path="value"                
-                is-editable="false"
-                initialized="_initComboBox(s)"
-                selected-index-changed="selectedIndexChanged(s)"
-                >
-              </wj-combo-box>
-            </span>
-          	<%--배송기사 --%>    
-          	<p class="s14 bk fl mr5 lh30"><s:message code="outstockConfm.dtl.dlvrNm"/></p>     
-        	<span class="txtIn w150px sb-select fl mr5">
-              <wj-combo-box
-                id="saveDlvrCd"
-                ng-model="save.dlvrCd"
-                items-source="_getComboData('saveDlvrCd')"
-                display-member-path="name"
-                selected-value-path="value"
-                is-editable="false"
-                initialized="_initComboBox(s)">
-              </wj-combo-box>
-            </span>
-    
+    <p class="s14 bk fl mr5 lh30" <c:if test="${storageEnvstVal == '0'}">style="display: none;"</c:if> >
+      <s:message code="outstockConfm.dtl.outStorage"/>
+    </p>
+    <span class="txtIn w150px sb-select fl mr5" <c:if test="${storageEnvstVal == '0'}">style="display: none;"</c:if> >
+      <wj-combo-box
+        id="srchOutStorageCd"
+        ng-model="save.outStorageCd"
+        items-source="_getComboData('srchOutStorageCd')"
+        display-member-path="name"
+        selected-value-path="value"
+        is-editable="false"
+        initialized="_initComboBox(s)"
+        selected-index-changed="selectedIndexChanged(s)"
+        >
+      </wj-combo-box>
+    </span>
+    <%--배송기사 --%>
+    <p class="s14 bk fl mr5 lh30"><s:message code="outstockConfm.dtl.dlvrNm"/></p>
+    <span class="txtIn w150px sb-select fl mr5">
+      <wj-combo-box
+        id="saveDlvrCd"
+        ng-model="save.dlvrCd"
+        items-source="_getComboData('saveDlvrCd')"
+        display-member-path="name"
+        selected-value-path="value"
+        is-editable="false"
+        initialized="_initComboBox(s)">
+      </wj-combo-box>
+    </span>
     <%-- 출고자료생성 --%>
     <button type="button" id="btnConfirm" class="btn_skyblue ml5 fl" ng-click="saveOutstockConfirm()">
-      <s:message code="outstockConfm.outstockConfirm"/></button>
+      <s:message code="outstockConfm.outstockConfirm"/>
+    </button>
   </div>
   <div style="clear: both;"></div>
 
@@ -205,7 +207,12 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockConfm/outstockConfm.js?ver=20200731.01" charset="utf-8"></script>
+<script type="text/javascript">
+  // [1241 창고사용여부] 환경설정값
+  var storageEnvstVal = "${storageEnvstVal}";
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockConfm/outstockConfm.js?ver=20220714.02" charset="utf-8"></script>
 
 <%-- 출고확정 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/outstockConfm/outstockConfmDtl.jsp">
