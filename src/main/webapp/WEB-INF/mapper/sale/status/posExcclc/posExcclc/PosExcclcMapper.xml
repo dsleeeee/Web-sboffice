@@ -285,6 +285,7 @@
     </select>
 
     <select id="getPosExcclcDetailInfo" parameterType="posExcclcVO" resultType="DefaultMap">
+       /* PosExcclcMapper.getPosExcclcDetailInfo */
 		SELECT A.STORE_CD
 		     , (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = A.STORE_CD) AS STORE_NM
 		     , A.OPEN_DT
