@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SpecificDayMemo.xml
+    이벤트등록
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.07.20     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.store.specificDayMemo.service.impl.SpecificDayMemoMapper">
+
+    <!-- 이벤트등록 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSpecificDayMemoList" parameterType="specificDayMemoVO" resultType="DefaultMap">
+        /* SpecificDayMemoMapper.getSpecificDayMemoList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  TO_CHAR(TO_DATE(SPECIFIC_DAY, 'yyyymmdd'), 'yyyy-mm-dd') AS SPECIFIC_DAY,
+                        TO_CHAR(TO_DATE(SPECIFIC_DAY, 'YYYYMMDD'), 'DY') AS YOIL,
+                        SPECIFIC_NO,
+                        SPECIFIC_DAY_MEMO
+                FROM    TB_HQ_SPECIFIC_DAY_MEMO
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     SPECIFIC_DAY BETWEEN #{startMonth} || '01' AND #{endMonth} || '31'
+                ORDER
+                BY      SPECIFIC_DAY, SPECIFIC_NO
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  TO_CHAR(TO_DATE(SPECIFIC_DAY, 'yyyymmdd'), 'yyyy-mm-dd') AS SPECIFIC_DAY,
+                        TO_CHAR(TO_DATE(SPECIFIC_DAY, 'YYYYMMDD'), 'DY') AS YOIL,
+                        SPECIFIC_NO,
+                        SPECIFIC_DAY_MEMO
+                FROM    TB_MS_SPECIFIC_DAY_MEMO
+                WHERE   STORE_CD = #{storeCd}
+                AND     SPECIFIC_DAY BETWEEN #{startMonth} || '01' AND #{endMonth} || '31'
+                ORDER
+                BY      SPECIFIC_DAY, SPECIFIC_NO
+            </when>
+        </choose>
+    </select>
+
+    <!-- 이벤트등록 - 신규 등록 채번 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSpecificNo" parameterType="specificDayMemoVO" resultType="String">
+        /* SpecificDayMemoMapper.getSpecificNo */
+        <choose>
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  LPAD( NVL(MAX(SPECIFIC_NO), 0) + 1, 4, '0') AS SPECIFIC_NO
+                FROM    TB_HQ_SPECIFIC_DAY_MEMO
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     SPECIFIC_DAY = #{specificDay}
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  LPAD( NVL(MAX(SPECIFIC_NO), 8000) + 1, 4, '0') AS SPECIFIC_NO
+                FROM    TB_MS_SPECIFIC_DAY_MEMO
+                WHERE   STORE_CD  = #{storeCd}
+                AND     SPECIFIC_DAY = #{specificDay}
+                AND     SPECIFIC_NO > 8000
+            </when>
+        </choose>
+    </select>
+
+    <!-- 이벤트등록 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getSpecificDayMemoRegist" parameterType="specificDayMemoVO">
+        /* SpecificDayMemoMapper.getSpecificDayMemoRegist */
+        <choose>
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_SPECIFIC_DAY_MEMO
+                (
+                    HQ_OFFICE_CD,
+                    SPECIFIC_DAY,
+                    SPECIFIC_NO,
+                    SPECIFIC_DAY_MEMO,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                )
+                VALUES
+                (
+                    #{hqOfficeCd},
+                    #{specificDay},
+                    #{specificNo},
+                    #{specificDayMemo},
+                    #{regId},
+                    #{regDt},
+                    #{modId},
+                    #{modDt}
+                )
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_SPECIFIC_DAY_MEMO
+                (
+                    STORE_CD,
+                    SPECIFIC_DAY,
+                    SPECIFIC_NO,
+                    SPECIFIC_DAY_MEMO,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                )
+                VALUES
+                (
+                    #{storeCd},
+                    #{specificDay},
+                    #{specificNo},
+                    #{specificDayMemo},
+                    #{regId},
+                    #{regDt},
+                    #{modId},
+                    #{modDt}
+                )
+            </when>
+        </choose>
+    </insert>
+
+    <update id="getSpecificDayMemoSave" parameterType="specificDayMemoVO">
+        /* SpecificDayMemoMapper.getSpecificDayMemoSave */
+        <choose>
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE  TB_HQ_SPECIFIC_DAY_MEMO
+                SET     SPECIFIC_DAY_MEMO = #{specificDayMemo}
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     SPECIFIC_DAY = replace(#{specificDay},'-','')
+                AND     SPECIFIC_NO = #{specificNo}
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE  TB_MS_SPECIFIC_DAY_MEMO
+                SET     SPECIFIC_DAY_MEMO = #{specificDayMemo}
+                WHERE   STORE_CD = #{storeCd}
+                AND     SPECIFIC_DAY = replace(#{specificDay},'-','')
+                AND     SPECIFIC_NO = #{specificNo}
+            </when>
+        </choose>
+    </update>
+
+    <delete id="getSpecificDayMemoDelete" parameterType="specificDayMemoVO">
+        /* SpecificDayMemoMapper.getSpecificDayMemoDelete */
+        <choose>
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE  TB_HQ_SPECIFIC_DAY_MEMO
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     SPECIFIC_DAY = replace(#{specificDay},'-','')
+                AND     SPECIFIC_NO = #{specificNo}
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE  TB_MS_SPECIFIC_DAY_MEMO
+                WHERE   STORE_CD = #{storeCd}
+                AND     SPECIFIC_DAY = replace(#{specificDay},'-','')
+                AND     SPECIFIC_NO = #{specificNo}
+            </when>
+        </choose>
+    </delete>
+</mapper>
