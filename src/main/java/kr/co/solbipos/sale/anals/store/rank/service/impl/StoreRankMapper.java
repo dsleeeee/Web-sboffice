@@ -17,6 +17,7 @@ public interface StoreRankMapper {
     
     /** 매장순위 - 결제수단 컬럼 리스트 조회 */
     List<DefaultMap<String>> getPayColList(StoreRankVO storeRankVO);
+    List<DefaultMap<String>> getPayColAllList(StoreRankVO storeRankVO);
 
     /** 매장순위 - 매장 리스트 조회  */
     List<DefaultMap<String>> getStoreList(StoreRankVO storeRankVO);

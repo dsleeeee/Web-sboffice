@@ -71,7 +71,7 @@ public class StoreRankServiceImpl implements StoreRankService {
     /** 매장순위 - 결제수단 컬럼 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getPayColList(StoreRankVO storeRankVO, SessionInfoVO sessionInfoVO) {
-        return storeRankMapper.getPayColList(storeRankVO);
+        return storeRankMapper.getPayColAllList(storeRankVO);
     }
 
     @Override

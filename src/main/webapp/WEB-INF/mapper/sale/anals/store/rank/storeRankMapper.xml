@@ -145,6 +145,40 @@
         ]]>
     </select>
 
+	<!-- 매장별매출분석 - 결제수단 컬럼 리스트 조회 -->
+	<!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : storeRankVO
+        COMMENTS : 결제수단 컬럼 리스트 조회한다.
+    -->
+	<select id="getPayColAllList" parameterType="storeRankVO" resultType="DefaultMap">
+        /* USE : storeRankMapper.getPayColAllList */
+        <![CDATA[
+		SELECT *
+		FROM
+		(
+			SELECT *
+			FROM
+			(
+				SELECT  TCN.NMCODE_CD AS PAY_CD, TCN.NMCODE_NM AS PAY_NM, TCN.NMCODE_ITEM_1 AS PAY_METHOD
+				FROM    TB_CM_NMCODE TCN
+				WHERE   TCN.NMCODE_GRP_CD   =   '024'
+				ORDER
+				BY      TCN.NMCODE_CD
+			)
+			UNION ALL
+			(
+				 SELECT
+				'00' AS PAY_CD,
+				'결제합계' AS PAY_NM,
+				'' AS PAY_METHOD
+				 FROM dual
+			)
+		)
+		ORDER BY PAY_CD
+        ]]>
+	</select>
+
 	<!-- 매장별매출분석 - 매장 리스트 조회 -->
 	<!--
         TABLE    : TB_CM_NMCODE
