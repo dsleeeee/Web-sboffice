@@ -89,8 +89,9 @@
 
       </form>
 
-      <div class="tr mt20 mr10">
+      <div class="tr mt20 mr10" <c:if test="${storageEnvstVal == '0'}">style="display: none;"</c:if> >
         <div class="mt20 oh sb-select dkbr">
+          <%-- 담당창고 --%>
           <span class="fl bk lh30 ml10"><s:message code='deliveryCharger.chargeStorage'/></span>
           <div class="tr fr">
             <%-- 창고추가 --%>
@@ -104,7 +105,7 @@
       </div>
       <div style="clear: both;"></div>
 
-      <div class="w100 mt10 mb20">
+      <div class="w100 mt10 mb20" <c:if test="${storageEnvstVal == '0'}">style="display: none;"</c:if> >
         <!--위즈모 테이블-->
         <div class="wj-gridWrap" style="height: 200px; overflow-x: hidden; overflow-y: hidden;">
           <wj-flex-grid
@@ -127,8 +128,14 @@
         </div>
         <!--//위즈모 테이블-->
       </div>
+
     </div>
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist.js?ver=20181224.06" charset="utf-8"></script>
+<script type="text/javascript">
+  // [1241 창고사용여부] 환경설정값
+  var storageEnvstVal = "${storageEnvstVal}";
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist.js?ver=20181224.08" charset="utf-8"></script>

@@ -5,7 +5,9 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.code.CmmEnvService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.cmm.service.IostockCmmService;
 import kr.co.solbipos.iostock.cmm.service.IostockCmmVO;
@@ -55,13 +57,15 @@ public class InstockConfmController {
     private final InstockConfmService instockConfmService;
     private final CmmEnvService cmmEnvService;
     private final IostockCmmService iostockCmmService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     @Autowired
-    public InstockConfmController(SessionService sessionService, InstockConfmService instockConfmService, CmmEnvService cmmEnvService, IostockCmmService iostockCmmService) {
+    public InstockConfmController(SessionService sessionService, InstockConfmService instockConfmService, CmmEnvService cmmEnvService, IostockCmmService iostockCmmService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.instockConfmService = instockConfmService;
         this.cmmEnvService = cmmEnvService;
         this.iostockCmmService = iostockCmmService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -75,13 +79,24 @@ public class InstockConfmController {
      */
     @RequestMapping(value = "/instockConfm/view.sb", method = RequestMethod.GET)
     public String instockConfmView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
         // 매장입고 환경변수 조회
         HqEnvstVO hqEnvstVO = new HqEnvstVO();
         hqEnvstVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         hqEnvstVO.setEnvstCd("1043");
         String envst1043 = cmmEnvService.getHqEnvst(hqEnvstVO);
         model.addAttribute("envst1043", envst1043);
+
+        // [1241 창고사용여부] 환경설정값 조회
+        if ( "H".equals(sessionInfoVO.getOrgnFg().getCode()) ) {
+            model.addAttribute("storageEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1241"), "0"));
+            System.out.println("storageEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1241"), "0"));
+        } else {
+            model.addAttribute("storageEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1241"), "0"));
+            System.out.println("storageEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1241"), "0"));
+        }
 
         return "iostock/order/instockConfm/instockConfm";
     }

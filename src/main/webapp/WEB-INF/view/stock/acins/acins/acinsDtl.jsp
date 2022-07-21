@@ -33,24 +33,26 @@
                      popover-trigger="'mouseenter'"
                      uib-popover="<s:message code="acins.dtl.acinsTitle"/>은(는) 필수 입력항목 입니다."/>
             </td>
-
           </tr>
-          <tr>
-			<th><s:message code="acins.dtl.adjStorageCd"/><em class="imp">*</em></th>
+          <tr <c:if test="${storageEnvstVal == '0'}">style="display: none;"</c:if> >
+            <th>
+              <s:message code="acins.dtl.adjStorageCd"/>
+              <em class="imp">*</em>
+            </th>
             <td colspan="3">
-            	<span class="txtIn w150px sb-select fl mr5">
-	            <wj-combo-box
-	                id="acinsDtlAdjStorageCd"
-	                ng-model="acins.dtl.adjStorageCd"
-	                items-source="_getComboData('acinsDtlAdjStorageCd')"
-	                display-member-path="name"
-	                selected-value-path="value"
-	                is-editable="false"
-	                initialized="_initComboBox(s)"
-	                selected-index-changed="selectedIndexChanged(s)"
-	                >
-	              </wj-combo-box>    
-	            </span>        	
+                <span class="txtIn w150px sb-select fl mr5">
+                <wj-combo-box
+                    id="acinsDtlAdjStorageCd"
+                    ng-model="acins.dtl.adjStorageCd"
+                    items-source="_getComboData('acinsDtlAdjStorageCd')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)"
+                    selected-index-changed="selectedIndexChanged(s)"
+                    >
+                  </wj-combo-box>
+                </span>
             </td>
           </tr>
           </tbody>
@@ -118,4 +120,9 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/acins/acins/acinsDtl.js?ver=20200904.01" charset="utf-8"></script>
+<script type="text/javascript">
+  // [1241 창고사용여부] 환경설정값
+  var storageEnvstVal = "${storageEnvstVal}";
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/stock/acins/acins/acinsDtl.js?ver=20220714.02" charset="utf-8"></script>

@@ -5,7 +5,9 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.code.CmmEnvService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO;
 import kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderDtlVO;
@@ -48,12 +50,14 @@ public class RtnStoreOrderController {
     private final SessionService sessionService;
     private final CmmEnvService cmmEnvService;
     private final RtnStoreOrderService rtnStoreOrderService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     @Autowired
-    public RtnStoreOrderController(SessionService sessionService, CmmEnvService cmmEnvService, RtnStoreOrderService rtnStoreOrderService) {
+    public RtnStoreOrderController(SessionService sessionService, CmmEnvService cmmEnvService, RtnStoreOrderService rtnStoreOrderService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.cmmEnvService = cmmEnvService;
         this.rtnStoreOrderService = rtnStoreOrderService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -90,6 +94,15 @@ public class RtnStoreOrderController {
         model.addAttribute("envst1042", envst1042);
         model.addAttribute("envst1044", envst1044);
         model.addAttribute("reqDate" , reqDate);
+
+        // [1241 창고사용여부] 환경설정값 조회
+        if ( "H".equals(sessionInfoVO.getOrgnFg().getCode()) ) {
+            model.addAttribute("storageEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1241"), "0"));
+            System.out.println("storageEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1241"), "0"));
+        } else {
+            model.addAttribute("storageEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1241"), "0"));
+            System.out.println("storageEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1241"), "0"));
+        }
 
         return "iostock/orderReturn/rtnStoreOrder/rtnStoreOrder";
     }

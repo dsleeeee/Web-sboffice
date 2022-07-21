@@ -107,8 +107,10 @@
       <div class="tr mt20 fr">
         <div id="outstockBtnLayer" style="display: none;">
           	<%--출고창고 --%>
-          	<p class="s14 bk fl mr5 lh30"><s:message code="outstockConfm.dtl.outStorage"/></p>
-          	<span class="txtIn w150px sb-select fl mr5">
+          	<p class="s14 bk fl mr5 lh30" <c:if test="${storageEnvstVal == '0'}">style="display: none;"</c:if> >
+              <s:message code="outstockConfm.dtl.outStorage"/>
+            </p>
+          	<span class="txtIn w150px sb-select fl mr5" <c:if test="${storageEnvstVal == '0'}">style="display: none;"</c:if>>
               <wj-combo-box
                 id="saveDtlOutStorageCd"
                 ng-model="save.dtl.outStorageCd"
@@ -201,4 +203,9 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockConfm/outstockConfmDtl.js?ver=20200731.01" charset="utf-8"></script>
+<script type="text/javascript">
+  // [1241 창고사용여부] 환경설정값
+  var storageEnvstVal = "${storageEnvstVal}";
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockConfm/outstockConfmDtl.js?ver=20220714.02" charset="utf-8"></script>

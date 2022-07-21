@@ -86,8 +86,9 @@
         <wj-flex-grid-column header="<s:message code="deliveryCharger.dlvrNm"/>" binding="dlvrNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="deliveryCharger.carNo"/>" binding="carNo" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="deliveryCharger.useYn"/>" binding="useYn" width="70" align="center" is-read-only="true" data-map="useYnMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="deliveryCharger.storageCnt"/>" binding="storageCnt" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
-
+        <c:if test="${storageEnvstVal == '1'}">
+          <wj-flex-grid-column header="<s:message code="deliveryCharger.storageCnt"/>" binding="storageCnt" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
+        </c:if>
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>
       <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
@@ -106,6 +107,11 @@
   </div>
   <%--//페이지 리스트--%>
 </div>
+
+<script type="text/javascript">
+  // [1241 창고사용여부] 환경설정값
+  var storageEnvstVal = "${storageEnvstVal}";
+</script>
 
 <script type="text/javascript" src="/resource/solbipos/js/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerList.js?ver=20181224.01" charset="utf-8"></script>
 

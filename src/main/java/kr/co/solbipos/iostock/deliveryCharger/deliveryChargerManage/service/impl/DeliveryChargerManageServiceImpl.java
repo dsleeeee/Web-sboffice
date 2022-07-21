@@ -5,6 +5,8 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.deliveryCharger.deliveryChargerManage.service.DeliveryChargerManageService;
 import kr.co.solbipos.iostock.deliveryCharger.deliveryChargerManage.service.DeliveryChargerManageVO;
@@ -20,13 +22,15 @@ public class DeliveryChargerManageServiceImpl implements DeliveryChargerManageSe
 
     private final DeliveryChargerManageMapper deliveryChargerManageMapper;
     private final MessageService messageService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
     public DeliveryChargerManageServiceImpl(DeliveryChargerManageMapper deliveryChargerManageMapper,
-        MessageService messageService) {
+        MessageService messageService, CmmEnvUtil cmmEnvUtil) {
         this.deliveryChargerManageMapper = deliveryChargerManageMapper;
         this.messageService = messageService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /** 배송기사 리스트 조회 */
@@ -60,6 +64,11 @@ public class DeliveryChargerManageServiceImpl implements DeliveryChargerManageSe
             deliveryChargerManageVO.setDlvrCd(dlvrCd);
             // 추가
             result = deliveryChargerManageMapper.insertDeliveryCharger(deliveryChargerManageVO);
+
+            // [1241 창고사용여부] 환경설정값 으로 조건에 따라 창고 로직 히든하여 무조건 창고 등록하도록
+            deliveryChargerManageVO.setStorageCd("001");
+            result = deliveryChargerManageMapper.insertDeliveryChargerStorage(deliveryChargerManageVO);
+
         }
         else {
             // 수정

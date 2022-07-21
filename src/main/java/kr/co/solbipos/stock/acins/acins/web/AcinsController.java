@@ -4,7 +4,9 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.iostock.cmm.service.IostockCmmService;
@@ -49,12 +51,14 @@ public class AcinsController {
     private final SessionService sessionService;
     private final AcinsService acinsService;
     private final IostockCmmService iostockCmmService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     @Autowired
-    public AcinsController(SessionService sessionService, AcinsService acinsService, IostockCmmService iostockCmmService) {
+    public AcinsController(SessionService sessionService, AcinsService acinsService, IostockCmmService iostockCmmService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.acinsService = acinsService;
         this.iostockCmmService = iostockCmmService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -68,6 +72,18 @@ public class AcinsController {
      */
     @RequestMapping(value = "/acins/view.sb", method = RequestMethod.GET)
     public String acinsView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // [1241 창고사용여부] 환경설정값 조회
+        if ( "H".equals(sessionInfoVO.getOrgnFg().getCode()) ) {
+            model.addAttribute("storageEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1241"), "0"));
+            System.out.println("storageEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1241"), "0"));
+        } else {
+            model.addAttribute("storageEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1241"), "0"));
+            System.out.println("storageEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1241"), "0"));
+        }
+
         return "stock/acins/acins/acins";
     }
 

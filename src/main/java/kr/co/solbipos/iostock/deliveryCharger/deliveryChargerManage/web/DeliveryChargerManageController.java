@@ -20,7 +20,9 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.deliveryCharger.deliveryChargerManage.service.DeliveryChargerManageService;
 import kr.co.solbipos.iostock.deliveryCharger.deliveryChargerManage.service.DeliveryChargerManageVO;
@@ -46,6 +48,8 @@ public class DeliveryChargerManageController {
     @Autowired
     SessionService sessionService;
 
+    @Autowired
+    CmmEnvUtil cmmEnvUtil;
 
     /**
      * 배송기사관리 - 페이지 이동
@@ -59,6 +63,18 @@ public class DeliveryChargerManageController {
     @RequestMapping(value = "/deliveryChargerList/view.sb", method = RequestMethod.GET)
     public String deliveryChargerManageView(HttpServletRequest request, HttpServletResponse response,
         Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // [1241 창고사용여부] 환경설정값 조회
+        if ( "H".equals(sessionInfoVO.getOrgnFg().getCode()) ) {
+            model.addAttribute("storageEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1241"), "0"));
+            System.out.println("storageEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1241"), "0"));
+        } else {
+            model.addAttribute("storageEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1241"), "0"));
+            System.out.println("storageEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1241"), "0"));
+        }
+
         return "iostock/deliveryCharger/deliveryChargerManage/deliveryChargerList";
     }
 
