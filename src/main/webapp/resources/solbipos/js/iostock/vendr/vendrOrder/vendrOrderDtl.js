@@ -9,7 +9,7 @@ app.controller('vendrOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
   var comboParams         = {};
   comboParams.nmcodeGrpCd = "024";
   // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
-  vendrOrderCtrlScope._queryCombo("combo", "orderType", null, url, comboParams, "S"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+  vendrOrderCtrlScope._queryCombo("combo", "orderType", null, url, comboParams, ""); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("vendrOrderDtlCtrl", function (event, data) {

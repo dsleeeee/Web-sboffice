@@ -6,13 +6,13 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/iostock/vendr/vendrOrder/vendrOrderProdReg/"/>
 
-<wj-popup id="wjVendrOrderProdRegLayer" control="wjVendrOrderProdRegLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+<wj-popup id="wjVendrOrderProdRegLayer" control="wjVendrOrderProdRegLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px;height:750px;">
   <div id="vendrOrderProdRegLayer" class="wj-dialog wj-dialog-columns" ng-controller="vendrOrderProdRegCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="vendrOrder.reg.title"/>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
-    <div class="wj-dialog-body sc2" style="height: 600px;">
+    <div class="wj-dialog-body sc2" style="height: 700px;">
       <table class="tblType01">
         <colgroup>
           <col class="w15"/>
@@ -95,12 +95,11 @@
           <s:message code="cmm.search"/></button>
       </div>
 
-      <ul class="txtSty3 mt10">
-        <li class="red"><s:message code="vendrOrder.reg.txt1"/></li>
-      </ul>
-
       <div class="mt20 tr">
-        <%-- 최종원가를 발주원가로 세팅 --%>
+        <ul class="txtSty3">
+          <li class="red fl"><s:message code="vendrOrder.reg.txt1"/></li>
+        </ul>
+      <%-- 최종원가를 발주원가로 세팅 --%>
         <button type="button" class="btn_skyblue ml5" id="btnAddProd" ng-click="setLastCostToOrderCost()">
           <s:message code="vendrOrder.reg.lastCostToOrderCost"/></button>
         <%-- 저장 --%>
@@ -124,11 +123,11 @@
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="vendrOrder.reg.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrOrder.reg.prodNm"/>" binding="prodNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrOrder.reg.orgplceCd"/>" binding="orgplceCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrOrder.reg.lastCostUprc"/>" binding="lastCostUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrOrder.reg.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrOrder.reg.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrOrder.reg.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
+<%--            <wj-flex-grid-column header="<s:message code="vendrOrder.reg.orgplceCd"/>" binding="orgplceCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>--%>
+            <wj-flex-grid-column header="<s:message code="vendrOrder.reg.lastCostUprc"/>" binding="lastCostUprc" width="65" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrOrder.reg.poUnitFg"/>" binding="poUnitFg" width="65" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrOrder.reg.poUnitQty"/>" binding="poUnitQty" width="60" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrOrder.reg.safeStock"/>" binding="safeStockUnitQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrOrder.reg.safeStock"/>" binding="safeStockEtcQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrOrder.reg.currQty"/>" binding="currUnitQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>

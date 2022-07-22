@@ -868,22 +868,22 @@ public class VendrInstockServiceImpl implements VendrInstockService {
 
         // 수량추가인 경우
         if(StringUtil.getOrBlank(excelUploadMPSVO.getAddQtyFg()).equals("add")) {
+//            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+//                result = vendrInstockHqMapper.insertExcelUploadAddQty(excelUploadMPSVO);
+//            }
+//            else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+//                result = vendrInstockStoreMapper.insertExcelUploadAddQty(excelUploadMPSVO);
+//            }
+        } else {
+            // 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제
             if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-                result = vendrInstockHqMapper.insertExcelUploadAddQty(excelUploadMPSVO);
+                result = vendrInstockHqMapper.deleteVendrInstockToExcelUploadData(excelUploadMPSVO);
             }
             else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-                result = vendrInstockStoreMapper.insertExcelUploadAddQty(excelUploadMPSVO);
+                result = vendrInstockStoreMapper.deleteVendrInstockToExcelUploadData(excelUploadMPSVO);
             }
         }
-
-        // 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-            result = vendrInstockHqMapper.deleteVendrInstockToExcelUploadData(excelUploadMPSVO);
-        }
-        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-            result = vendrInstockStoreMapper.deleteVendrInstockToExcelUploadData(excelUploadMPSVO);
-        }
-
+        
         // 엑셀업로드 한 수량을 입고수량으로 입력
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
             result = vendrInstockHqMapper.insertVendrInstockToExcelUploadData(excelUploadMPSVO);

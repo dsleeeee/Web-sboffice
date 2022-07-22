@@ -1319,40 +1319,16 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                INSERT INTO TB_PO_HQ_VENDR_ORDER_DTL
-                (   HQ_OFFICE_CD
-                ,   SLIP_NO
-                ,   STORAGE_CD
-                ,   HQ_BRAND_CD
-                ,   PROD_CD
-                ,   SLIP_FG
-                ,   COST_UPRC
-                ,   PO_UNIT_FG
-                ,   PO_UNIT_QTY
-                ,   ORDER_UNIT_QTY
-                ,   ORDER_ETC_QTY
-                ,   ORDER_TOT_QTY
-                ,   ORDER_AMT
-                ,   ORDER_VAT
-                ,   ORDER_TOT
-                ,   IN_UNIT_QTY
-                ,   IN_ETC_QTY
-                ,   IN_TOT_QTY
-                ,   IN_AMT
-                ,   IN_VAT
-                ,   IN_TOT
-                ,   REG_DT
-                ,   REG_ID
-                ,   MOD_DT
-                ,   MOD_ID
-                )
-                SELECT  #{hqOfficeCd}
-                ,       #{slipNo}
+                MERGE INTO TB_PO_HQ_VENDR_ORDER_DTL A
+                USING
+                (
+                 SELECT  #{hqOfficeCd} AS HQ_OFFICE_CD
+                ,       #{slipNo} AS SLIP_NO
                 ,       '999' AS STORAGE_CD		<!-- 전체재고용 창고코드 ('001' -> '000' -> '999') -->
                 ,       '00' AS HQ_BRAND_CD
                 ,       tpte.PROD_CD
-                ,       #{slipFg}
-                ,       tpte.UPRC
+                ,       #{slipFg} AS SLIP_FG
+                ,       tpte.UPRC AS COST_UPRC
                 ,       thp.PO_UNIT_FG
                 ,       thp.PO_UNIT_QTY
                 ,       tpte.UNIT_QTY * ${slipFg} AS ORDER_UNIT_QTY
@@ -1370,10 +1346,10 @@
                 ,       0 AS IN_AMT
                 ,       0 AS IN_VAT
                 ,       0 AS IN_TOT
-                ,       #{regDt}
-                ,       #{regId}
-                ,       #{modDt}
-                ,       #{modId}
+                ,       #{regDt} AS REG_DT
+                ,       #{regId} AS REG_ID
+                ,       #{modDt} AS MOD_DT
+                ,       #{modId} AS MOD_ID
                 FROM    (   SELECT  tpte.HQ_OFFICE_CD
                             ,       tpte.PROD_CD
                             ,       MAX(NVL(tpte.UPRC, 0)) UPRC
@@ -1411,11 +1387,29 @@
                 AND     thp.HQ_OFFICE_CD   =   tpte.HQ_OFFICE_CD
                 AND     thp.PROD_CD        =   tpte.PROD_CD
                 AND     NVL(tpte.QTY,0)    >   0
-            </when>
-            <!-- 가맹점 -->
-            <when test='orgnFg != null and orgnFg == "S"'>
-                INSERT INTO TB_PO_STORE_VENDR_ORDER_DTL
-                (   STORE_CD
+                ) B
+                ON (
+                    A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                AND A.SLIP_NO = B.SLIP_NO
+                AND A.STORAGE_CD = B.STORAGE_CD
+                AND A.PROD_CD = B.PROD_CD
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                SET
+                A.SLIP_FG           = B.SLIP_FG,
+                A.ORDER_UNIT_QTY    = A.ORDER_UNIT_QTY + B.ORDER_UNIT_QTY,
+                A.ORDER_ETC_QTY     = A.ORDER_ETC_QTY  + B.ORDER_ETC_QTY,
+                A.ORDER_TOT_QTY     = A.ORDER_TOT_QTY  + B.ORDER_TOT_QTY,
+                A.ORDER_AMT         = A.ORDER_AMT      + B.ORDER_AMT,
+                A.ORDER_VAT         = A.ORDER_VAT      + B.ORDER_VAT,
+                A.ORDER_TOT         = A.ORDER_TOT      + B.ORDER_TOT,
+                A.MOD_DT            = B.MOD_DT,
+                A.MOD_ID            = B.MOD_ID
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                    HQ_OFFICE_CD
                 ,   SLIP_NO
                 ,   STORAGE_CD
                 ,   HQ_BRAND_CD
@@ -1440,14 +1434,46 @@
                 ,   REG_ID
                 ,   MOD_DT
                 ,   MOD_ID
+                ) VALUES (
+                    B.HQ_OFFICE_CD
+                ,   B.SLIP_NO
+                ,   B.STORAGE_CD
+                ,   B.HQ_BRAND_CD
+                ,   B.PROD_CD
+                ,   B.SLIP_FG
+                ,   B.COST_UPRC
+                ,   B.PO_UNIT_FG
+                ,   B.PO_UNIT_QTY
+                ,   B.ORDER_UNIT_QTY
+                ,   B.ORDER_ETC_QTY
+                ,   B.ORDER_TOT_QTY
+                ,   B.ORDER_AMT
+                ,   B.ORDER_VAT
+                ,   B.ORDER_TOT
+                ,   B.IN_UNIT_QTY
+                ,   B.IN_ETC_QTY
+                ,   B.IN_TOT_QTY
+                ,   B.IN_AMT
+                ,   B.IN_VAT
+                ,   B.IN_TOT
+                ,   B.REG_DT
+                ,   B.REG_ID
+                ,   B.MOD_DT
+                ,   B.MOD_ID
                 )
-                SELECT  #{storeCd}
-                ,       #{slipNo}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                MERGE INTO TB_PO_STORE_VENDR_ORDER_DTL A
+                USING
+                (
+                SELECT  #{storeCd} AS STORE_CD
+                ,       #{slipNo} AS SLIP_NO
                 ,       '999' AS STORAGE_CD		<!-- 전체재고용 창고코드 ('001' -> '000' -> '999') -->
                 ,       '00' AS HQ_BRAND_CD
                 ,       tpte.PROD_CD
-                ,       #{slipFg}
-                ,       tpte.UPRC
+                ,       #{slipFg} AS SLIP_FG
+                ,       tpte.UPRC AS COST_UPRC
                 ,       tmp.PO_UNIT_FG
                 ,       tmp.PO_UNIT_QTY
                 ,       tpte.UNIT_QTY * ${slipFg} AS ORDER_UNIT_QTY
@@ -1465,10 +1491,10 @@
                 ,       0 AS IN_AMT
                 ,       0 AS IN_VAT
                 ,       0 AS IN_TOT
-                ,       #{regDt}
-                ,       #{regId}
-                ,       #{modDt}
-                ,       #{modId}
+                ,       #{regDt} AS REG_DT
+                ,       #{regId} AS REG_ID
+                ,       #{modDt} AS MOD_DT
+                ,       #{modId} AS MOD_ID
                 FROM    (   SELECT  tpte.STORE_CD
                             ,       tpte.PROD_CD
                             ,       MAX(NVL(tpte.UPRC, 0)) UPRC
@@ -1506,6 +1532,79 @@
                 AND     tmp.STORE_CD       =   tpte.STORE_CD
                 AND     tmp.PROD_CD        =   tpte.PROD_CD
                 AND     NVL(tpte.QTY,0)    >   0
+                ) B
+                ON (
+                    A.STORE_CD = B.STORE_CD
+                AND A.SLIP_NO = B.SLIP_NO
+                AND A.STORAGE_CD = B.STORAGE_CD
+                AND A.PROD_CD = B.PROD_CD
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                SET
+                A.SLIP_FG           = B.SLIP_FG,
+                A.ORDER_UNIT_QTY    = A.ORDER_UNIT_QTY + B.ORDER_UNIT_QTY,
+                A.ORDER_ETC_QTY     = A.ORDER_ETC_QTY  + B.ORDER_ETC_QTY,
+                A.ORDER_TOT_QTY     = A.ORDER_TOT_QTY  + B.ORDER_TOT_QTY,
+                A.ORDER_AMT         = A.ORDER_AMT      + B.ORDER_AMT,
+                A.ORDER_VAT         = A.ORDER_VAT      + B.ORDER_VAT,
+                A.ORDER_TOT         = A.ORDER_TOT      + B.ORDER_TOT,
+                A.MOD_DT            = B.MOD_DT,
+                A.MOD_ID            = B.MOD_ID
+                WHEN NOT MATCHED THEN
+                INSERT
+                (   STORE_CD
+                ,   SLIP_NO
+                ,   STORAGE_CD
+                ,   HQ_BRAND_CD
+                ,   PROD_CD
+                ,   SLIP_FG
+                ,   COST_UPRC
+                ,   PO_UNIT_FG
+                ,   PO_UNIT_QTY
+                ,   ORDER_UNIT_QTY
+                ,   ORDER_ETC_QTY
+                ,   ORDER_TOT_QTY
+                ,   ORDER_AMT
+                ,   ORDER_VAT
+                ,   ORDER_TOT
+                ,   IN_UNIT_QTY
+                ,   IN_ETC_QTY
+                ,   IN_TOT_QTY
+                ,   IN_AMT
+                ,   IN_VAT
+                ,   IN_TOT
+                ,   REG_DT
+                ,   REG_ID
+                ,   MOD_DT
+                ,   MOD_ID
+                ) VALUES (
+                    B.STORE_CD
+                ,   B.SLIP_NO
+                ,   B.STORAGE_CD
+                ,   B.HQ_BRAND_CD
+                ,   B.PROD_CD
+                ,   B.SLIP_FG
+                ,   B.COST_UPRC
+                ,   B.PO_UNIT_FG
+                ,   B.PO_UNIT_QTY
+                ,   B.ORDER_UNIT_QTY
+                ,   B.ORDER_ETC_QTY
+                ,   B.ORDER_TOT_QTY
+                ,   B.ORDER_AMT
+                ,   B.ORDER_VAT
+                ,   B.ORDER_TOT
+                ,   B.IN_UNIT_QTY
+                ,   B.IN_ETC_QTY
+                ,   B.IN_TOT_QTY
+                ,   B.IN_AMT
+                ,   B.IN_VAT
+                ,   B.IN_TOT
+                ,   B.REG_DT
+                ,   B.REG_ID
+                ,   B.MOD_DT
+                ,   B.MOD_ID
+                )
             </when>
         </choose>
     </insert>

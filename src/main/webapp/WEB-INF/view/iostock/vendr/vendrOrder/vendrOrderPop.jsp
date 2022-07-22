@@ -5,13 +5,13 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/iostock/order/vendrOrder/vendrOrderPop/"/>
-<wj-popup id="wjVendrOrderPopLayer" control="wjVendrOrderPopLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+<wj-popup id="wjVendrOrderPopLayer" control="wjVendrOrderPopLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px;height:750px;">
   <div id="vendrOrderPopLayer" class="wj-dialog wj-dialog-columns">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="vendrOrder.pop.title"/>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
-    <div class="wj-dialog-body sc2" style="height: 600px;">
+    <div class="wj-dialog-body sc2" style="height: 700px;">
       <div ng-controller="vendrOrderPopCtrl">
         <%-- 발주정보, 발주상품, 발주서 탭 --%>
         <div class="tabType1">

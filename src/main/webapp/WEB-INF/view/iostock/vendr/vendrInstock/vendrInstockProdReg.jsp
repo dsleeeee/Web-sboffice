@@ -6,13 +6,13 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/iostock/vendr/vendrInstock/vendrInstockProdReg/"/>
 
-<wj-popup id="wjVendrInstockProdRegLayer" control="wjVendrInstockProdRegLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+<wj-popup id="wjVendrInstockProdRegLayer" control="wjVendrInstockProdRegLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px;height:750px;">
   <div id="vendrInstockProdRegLayer" class="wj-dialog wj-dialog-columns" ng-controller="vendrInstockProdRegCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="vendrInstock.reg.title"/>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
-    <div class="wj-dialog-body sc2" style="height: 600px;">
+    <div class="wj-dialog-body sc2" style="height: 700px;">
       <table class="tblType01">
         <colgroup>
           <col class="w15"/>
@@ -76,12 +76,11 @@
           <s:message code="cmm.search"/></button>
       </div>
 
-      <ul class="txtSty3 mt10">
-        <li class="red"><s:message code="vendrInstock.reg.txt1"/></li>
-        <li class="red"><s:message code="vendrInstock.reg.txt2"/></li>
-      </ul>
-
       <div class="mt20 tr">
+        <ul class="txtSty3">
+          <li class="red fl"><s:message code="vendrInstock.reg.txt1"/></li>
+          <li class="red fl"><s:message code="vendrInstock.reg.txt2"/></li>
+        </ul>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <span class="chk pdb5 txtIn" style="top: 0px;">
           <input type="checkbox" name="storeSplyChk" id="storeSplyChk" ng-model="storeSplyChk"/>

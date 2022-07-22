@@ -7,11 +7,10 @@
 <c:set var="baseUrl" value="/iostock/vendr/vendrOrder/vendrOrderProd/"/>
 
 <div id="prodView" style="display: none;" ng-controller="vendrOrderProdCtrl">
-  <ul class="txtSty3 mt10">
-    <li class="red"><s:message code="vendrOrder.prod.txt1"/></li>
-  </ul>
-
   <div class="mt20 tr">
+    <ul class="txtSty3">
+      <li class="red fl"><s:message code="vendrOrder.prod.txt1"/></li>
+    </ul>
     <%-- 추가/변경 --%>
     <button type="button" class="btn_skyblue ml5" id="btnAddProd" ng-click="addProd()" ng-if="btnAddProdFg">
       <s:message code="vendrOrder.prod.addProd"/></button>
