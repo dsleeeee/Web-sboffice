@@ -216,7 +216,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrOrder/vendrOrderDtl.js?ver=20181224.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrOrder/vendrOrderDtl.js?ver=20181224.05" charset="utf-8"></script>
 
 <%-- 발주타입등록 팝업 레이어--%>
 <c:import url="/WEB-INF/view/iostock/vendr/vendrOrder/vendrOrderTypeRegPop.jsp">
