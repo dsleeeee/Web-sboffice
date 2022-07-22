@@ -133,10 +133,24 @@ app.controller('printCodeCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = new Array();
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
       $scope.flex.collectionView.itemsEdited[i].status = "U";
+      // 최대길이 체크
+      if(nvl($scope.flex.collectionView.itemsEdited[i].prtNm, '').getByteLengthForOracle() > 50) {
+        $scope._popMsg(messages["item.prtNmLengthChk"]); // 출력코드명 길이가 너무 깁니다.
+        return false;
+      }
       params.push($scope.flex.collectionView.itemsEdited[i]);
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
       $scope.flex.collectionView.itemsAdded[i].status = "I";
+      // 최대길이 체크
+      if(nvl($scope.flex.collectionView.itemsAdded[i].prtCd, '').getByteLengthForOracle() > 50) {
+        $scope._popMsg(messages["item.prtCdLengthChk"]); // 출력코드 길이가 너무 깁니다.
+        return false;
+      }
+      if(nvl($scope.flex.collectionView.itemsAdded[i].prtNm, '').getByteLengthForOracle() > 50) {
+        $scope._popMsg(messages["item.prtNmLengthChk"]); // 출력코드명 길이가 너무 깁니다.
+        return false;
+      }
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
