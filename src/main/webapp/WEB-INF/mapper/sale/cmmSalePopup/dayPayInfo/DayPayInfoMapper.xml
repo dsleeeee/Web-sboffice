@@ -312,7 +312,7 @@
         COMMENTS : 매출공통팝업 - 모바일페이 상세 리스트를 조회한다.
     -->
     <select id="getDayMpayList" parameterType="payInfoVO" resultType="DefaultMap">
-        /* USE : PayInfoMapper.getDayMpayList */
+        /* USE : DayPayInfoMapper.getDayMpayList */
         <![CDATA[
         SELECT  tsspm.MPAY_CD, tcn.NMCODE_NM AS MPAY_NM
         ,       SUM(DECODE(tsspm.SALE_YN, 'Y', 1, 0)) AS APPR_CNT
@@ -352,7 +352,7 @@
                 )
         </if>
         <![CDATA[
-        AND     tcn.NMCODE_GRP_CD         (+)=   '081'
+        AND     tcn.NMCODE_GRP_CD         (+)=   '109'
         AND     tcn.NMCODE_CD             (+)=   tsspm.MPAY_CD
         GROUP
         BY      tsspm.MPAY_CD, tcn.NMCODE_NM
