@@ -25,6 +25,10 @@ app.controller('dstbReqCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     {"name": messages["dstbReq.procFgDstb"], "value": "10"},
     {"name": messages["dstbReq.procFgDstbCompt"], "value": "20"}
   ]);
+
+  // 본사 거래처 콤보박스
+  $scope._setComboData('vendrCd', vendrList);
+
   $scope.procFg = "00,10"; // 진행구분 기본값 세팅
 
   $scope.procFgMap = new wijmo.grid.DataMap([
@@ -77,6 +81,7 @@ app.controller('dstbReqCtrl', ['$scope', '$http', '$timeout', function ($scope, 
           params.slipFg   = selectedRow.slipFg;
           params.procFg   = selectedRow.procFg;
           params.hdRemark = selectedRow.remark;
+          params.vendrCd  = $scope.vendrCdCombo.selectedValue;
           $scope._broadcast('dstbReqDtlCtrl', params);
         }
       }
@@ -86,6 +91,12 @@ app.controller('dstbReqCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
     s.bottomLeftCells.setCellData(0, 0, '합계');
+
+    // 현재 로그인 사원에 맵핑된 거래처코드로 셋팅(없으면 '본사'로 셋팅됨.)
+    $scope.vendrCdCombo.selectedValue = empVendrCd;
+    // 거래처는 수정 못하게 처리
+    $("#vendrCd").attr("disabled", true);
+    $("#vendrCd").css('background-color', '#F0F0F0');
   };
 
   // itemFormatter 기본설정 : private
@@ -168,6 +179,7 @@ app.controller('dstbReqCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     params.dateFg    = $scope.dateFg;
     params.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
     params.endDate   = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
+    params.vendrCd   = $scope.vendrCdCombo.selectedValue;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/order/dstbReq/dstbReq/list.sb", params);
@@ -186,6 +198,7 @@ app.controller('dstbReqCtrl', ['$scope', '$http', '$timeout', function ($scope, 
           item.empNo     = "0000";
           item.storageCd = "999";	//전체재고용 창고코드 ('001' -> '000' -> '999')
           item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+          item.vendrCd   = $scope.vendrCdCombo.selectedValue;
           params.push(item);
         }
       }

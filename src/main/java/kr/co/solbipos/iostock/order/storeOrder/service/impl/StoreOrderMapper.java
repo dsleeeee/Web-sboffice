@@ -87,4 +87,7 @@ public interface StoreOrderMapper {
 
     /** 주문등록 출고요청일자에 등록한 주문 총 합계 금액 조회 */
     String getOrderTotAmt(StoreOrderVO storeOrderVO);
+
+    /** 본사 거래처 조회(콤보박스용) */
+    List<DefaultMap<String>> getHqVendrCombo(StoreOrderVO storeOrderVO);
 }

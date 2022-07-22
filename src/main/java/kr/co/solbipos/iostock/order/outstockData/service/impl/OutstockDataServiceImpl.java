@@ -57,19 +57,19 @@ public class OutstockDataServiceImpl implements OutstockDataService {
             outstockDataVO.setModDt(currentDt);
 
             // 직배송거래처 및 배송기사 조회
-            List<DefaultMap<String>> storeVendrDlvrList = outstockDataMapper.getStoreVendrDlvr(outstockDataVO);
+            //List<DefaultMap<String>> storeVendrDlvrList = outstockDataMapper.getStoreVendrDlvr(outstockDataVO);
 
-            for(int i=0; i < storeVendrDlvrList.size(); i++) {
+            //for(int i=0; i < storeVendrDlvrList.size(); i++) {
                 slipNoIdx++;
                 String slipNo    = yymm + StringUtil.lpad(String.valueOf(maxSlipNoIdx+slipNoIdx), 6, "0");
-                String vendrCd   = StringUtil.getOrBlank(storeVendrDlvrList.get(i).get("vendrCd"));
-                String dlvrCd    = StringUtil.getOrBlank(storeVendrDlvrList.get(i).get("dlvrCd"));
+                //String vendrCd   = StringUtil.getOrBlank(storeVendrDlvrList.get(i).get("vendrCd"));
+                //String dlvrCd    = StringUtil.getOrBlank(storeVendrDlvrList.get(i).get("dlvrCd"));
 
                 // TB_PO_HQ_STORE_DISTRIBUTE 수정
                 outstockDataVO.setProcFg("20");
                 outstockDataVO.setUpdateProcFg("30");
                 outstockDataVO.setSlipNo(slipNo);
-                outstockDataVO.setVendrCd(vendrCd);
+                //outstockDataVO.setVendrCd(vendrCd);
                 result = outstockDataMapper.updateDstbDataCreate(outstockDataVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
@@ -78,11 +78,11 @@ public class OutstockDataServiceImpl implements OutstockDataService {
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
                 // TB_PO_HQ_STORE_OUTSTOCK 자료입력
-                outstockDataVO.setDlvrCd(dlvrCd);
+                //outstockDataVO.setDlvrCd(dlvrCd);
                 outstockDataVO.setSlipKind("0"); // 전표종류 TB_CM_NMCODE(NMCODE_GRP_CD=') 0:일반 1:물량오류 2:이동
                 result = outstockDataMapper.insertOutstockDataCreate(outstockDataVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-            }
+            //}
 
             returnResult += result;
         }

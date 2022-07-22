@@ -112,6 +112,8 @@ public class DstbCloseProdVO extends PageVO {
     private String barcdCd;
     /** 상품분류코드 */
     private String prodClassCd;
+    /** 거래처코드 */
+    private String vendrCd;
 
     /**
      * @return the hqOfficeCd
@@ -853,5 +855,13 @@ public class DstbCloseProdVO extends PageVO {
      */
     public void setProdClassCd(String prodClassCd) {
         this.prodClassCd = prodClassCd;
+    }
+
+    public String getVendrCd() {
+        return vendrCd;
+    }
+
+    public void setVendrCd(String vendrCd) {
+        this.vendrCd = vendrCd;
     }
 }

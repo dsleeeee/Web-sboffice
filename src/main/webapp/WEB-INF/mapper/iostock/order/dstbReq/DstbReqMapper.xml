@@ -48,6 +48,14 @@
                 #{item}
             </foreach>
         </if>
+        <choose>
+            <when test='vendrCd != null and vendrCd != ""'>
+              AND tphso.HQ_VENDR_CD = #{vendrCd}
+            </when>
+            <otherwise>
+              AND tphso.HQ_VENDR_CD IS NULL
+            </otherwise>
+        </choose>
         ORDER BY tphso.REQ_DATE DESC, tms.STORE_CD
     </select>
 
@@ -167,7 +175,8 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            HQ_VENDR_CD
         )
         SELECT  #{hqOfficeCd}
         ,       #{reqDate}
@@ -210,6 +219,7 @@
         ,       #{regId}
         ,       #{modDt}
         ,       #{modId}
+        ,       #{vendrCd}
         FROM    (   SELECT  PROD_CD         ,   PO_UNIT_FG     ,   PO_UNIT_QTY
                     ,       REMARK
                     ,       ORDER_SPLY_UPRC ,   ORDER_UNIT_QTY ,   ORDER_ETC_QTY      ,   ORDER_TOT_QTY       ,   ORDER_AMT       ,   ORDER_VAT       ,   ORDER_TOT
@@ -270,5 +280,19 @@
         AND     SLIP_FG     = #{slipFg}
         AND     PROD_CD     = #{prodCd}
     </update>
+
+    <!-- 현재 로그인 사원에 맵핑된 거래처코드 조회 -->
+    <!--
+        TABLE    : TB_HQ_EMPLOYEE
+        PARAM    : dstbReqVO
+        COMMENTS : 현재 로그인 사원에 맵핑된 거래처코드 조회한다.
+    -->
+    <select id="getEmployeeVendr" parameterType="dstbReqVO" resultType="String">
+      /* USE : DstbReqMapper.getEmployeeVendr */
+      SELECT VENDR_CD
+        FROM TB_HQ_EMPLOYEE
+       WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+         AND EMP_NO = #{empNo}
+    </select>
 
 </mapper>

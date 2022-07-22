@@ -46,6 +46,16 @@
                 #{item}
             </foreach>
         </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            <choose>
+                <when test='vendrCd != null and vendrCd != ""'>
+                  AND tpsie.VENDR_CD = #{vendrCd}
+                </when>
+                <otherwise>
+                  AND tpsie.VENDR_CD IS NULL
+                </otherwise>
+            </choose>
+        </if>
         ORDER BY tpsie.SLIP_NO
     </select>
 
@@ -305,6 +315,7 @@
         ,       REG_ID
         ,       MOD_DT
         ,       MOD_ID
+        ,       VENDR_CD
         )
         SELECT  #{hqOfficeCd}       ,   #{newSlipNo}        ,   tpsie.STORE_CD       ,  EMP_NO          ,   tpsie.SLIP_FG
         ,       '1'                 ,   '10'                ,   #{outDate}
@@ -315,6 +326,7 @@
         ,       #{regId}
         ,       #{modDt}
         ,       #{modId}
+        ,       tpsie.VENDR_CD
         FROM    TB_PO_STORE_INSTOCK_ERROR tpsie
         ,       (   SELECT  COUNT(*)          AS DTL_CNT
                     ,       SUM(MGR_UNIT_QTY) AS MGR_UNIT_QTY

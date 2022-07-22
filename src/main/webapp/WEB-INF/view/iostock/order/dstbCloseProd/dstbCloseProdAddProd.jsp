@@ -62,6 +62,24 @@
             <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
           </td>
         </tr>
+        <tr>
+          <%-- 거래처 --%>
+          <th <c:if test="${envst1242 == '0'}">style="display: none;"</c:if>><s:message code="dstbCloseProd.dtl.vender"/></th>
+          <td <c:if test="${envst1242 == '0'}">style="display: none;"</c:if>>
+            <div class="sb-select fl w150px">
+              <wj-combo-box
+                id="dtlVendrCd"
+                ng-model="vendrCd"
+                control="dtlVendrCdCombo"
+                items-source="_getComboData('dtlVendrCd')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </div>
+          </td>
+        </tr>
         </tbody>
       </table>
 
@@ -87,8 +105,8 @@
         </wj-combo-box>
         <%--// 페이지 스케일  --%>
         <%-- 저장 --%>
-        <button type="button" class="btn_skyblue ml5 fr" id="btnSave" ng-click="saveDstbCloseProdAddProd()">
-          <s:message code="cmm.save"/></button>
+        <%--<button type="button" class="btn_skyblue ml5 fr" id="btnSave" ng-click="saveDstbCloseProdAddProd()">
+          <s:message code="cmm.save"/></button>--%>
       </div>
 
       <%--<div class="wj-TblWrap ml20 mr20 pdb20">--%>
@@ -127,7 +145,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/dstbCloseProd/dstbCloseProdAddProd.js?ver=20200824.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/dstbCloseProd/dstbCloseProdAddProd.js?ver=20220722.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

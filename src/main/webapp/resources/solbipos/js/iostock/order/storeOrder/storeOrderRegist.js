@@ -25,6 +25,9 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
     {"name": messages["storeOrder.dtl.addQtyFgAdd"], "value": "add"}
   ]);
 
+  // 본사 거래처 콤보박스
+  $scope._setComboData('dtlVendrCd', vendrList);
+
   $scope.srchRegStartDate = wcombo.genDate("#srchRegStartDate");
   $scope.srchRegEndDate   = wcombo.genDate("#srchRegEndDate");
   
@@ -160,6 +163,11 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
       $scope.slipFg      = data.slipFg;
       $scope.callParent  = data.callParent;
       $scope.regHdRemark = data.hdRemark;
+      $scope.vendrCd     = data.vendrCd;
+      
+      // 거래처는 수정 못하게 처리
+      $("#dtlVendrCd").attr("disabled", true);
+      $("#dtlVendrCd").css('background-color', '#F0F0F0');
 
       // 값 초기화
       $scope.prodClassCdNm = messages["cmm.all"];
@@ -393,6 +401,7 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
     params.startDate = wijmo.Globalize.format($scope.srchRegStartDate.value, 'yyyyMMdd');
     params.endDate   = wijmo.Globalize.format($scope.srchRegEndDate.value,   'yyyyMMdd');
     params.listScale = 50;
+    params.vendrCd   = $scope.vendrCd;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/order/storeOrder/storeOrderRegist/list.sb", params);
@@ -445,6 +454,7 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
 
     var params       = {};
     params.reqDate   = $scope.reqDate;
+    params.vendrCd   = $scope.vendrCd;
     $scope._postJSONQuery.withOutPopUp( "/iostock/order/storeOrder/storeOrder/getOrderTotAmt.sb", params, function(response) {
 
       if(response.data.data !== null) {
@@ -498,6 +508,7 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
       item.slipFg    = $scope.slipFg;
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.hdRemark  = $scope.regHdRemark;
+      item.vendrCd   = $scope.vendrCd;
 
       if(item.prevOrderTot !== null){
           orderTot += parseInt(item.orderTot - item.prevOrderTot); //  합계 - 기주문수량금액 = 추가한 주문수량의 금액 합계
@@ -528,7 +539,6 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
     });
   };
 
-
   // 저장 후 콜백 서치 함수
   $scope.saveRegistCallback = function () {
     $scope.searchStoreOrderRegistList();
@@ -548,7 +558,6 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
       storeOrderDtlScope.searchStoreOrderDtlList();
     }
   };
-
 
   // 안전재고 수량적용.
   $scope.setSafeToOrder = function () {
@@ -594,7 +603,6 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
       }
     }
   };
-
 
   $scope.option2LayerHide = function () {
     $("#option2DateLayer").hide();
@@ -684,7 +692,6 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
     });
   };
 
-
   // 상품분류정보 팝업
   $scope.popUpProdClass = function () {
     var popUp = $scope.prodClassPopUpLayer;
@@ -705,7 +712,6 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
       }
     });
   };
-
 
   // 엑셀 다운로드
   $scope.excelDownload = function () {
@@ -729,7 +735,6 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
       });
     }, 10);
   };
-
 
   /** 엑셀업로드 관련 공통 함수 */
   $scope.excelTextUpload = function (prcsFg) {
@@ -760,7 +765,6 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
     }
   };
 
-
   /** 업로드 완료 후 callback 함수. 업로드 이후 로직 작성 */
   $scope.uploadCallBack = function () {
     var params      = {};
@@ -768,6 +772,7 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
     params.slipFg   = $scope.slipFg;
     params.hdRemark = $scope.regHdRemark;
     params.addQtyFg = $scope.addQtyFg;
+    params.vendrCd  = $scope.vendrCd;
 
     var excelUploadScope = agrid.getScope('excelUploadMPSCtrl');
 
@@ -796,7 +801,6 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
       excelUploadScope.excelUploadingPopup(false); // 업로딩 팝업 닫기
     });
   };
-
 
   // 에러내역 팝업 호출
   $scope.excelUploadErrInfo = function () {

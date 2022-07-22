@@ -42,6 +42,24 @@
         </div>
       </td>
     </tr>
+    <tr <c:if test="${envst1242 == '0'}">style="display: none;"</c:if>>
+      <%-- 거래처 --%>
+      <th><s:message code="dstbCloseProd.vender"/></th>
+      <td>
+        <div class="sb-select fl w150px">
+          <wj-combo-box
+            id="vendrCd"
+            ng-model="vendrCd"
+            control="vendrCdCombo"
+            items-source="_getComboData('vendrCd')"
+            display-member-path="name"
+            selected-value-path="value"
+            is-editable="false"
+            initialized="_initComboBox(s)">
+          </wj-combo-box>
+        </div>
+      </td>
+    </tr>
     </tbody>
   </table>
 
@@ -96,9 +114,15 @@
 
 <script type="text/javascript">
   var sysStatFg     = ${ccu.getCommCode("005")};
+  var gEnvst1242  = '${envst1242}';
+  var empVendrCd = '${empVendrCd}';
+
+  <%-- 본사 거래처 콤보박스 --%>
+  var vendrList = ${vendrList};
+
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockData/outstockData.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockData/outstockData.js?ver=20220722.01" charset="utf-8"></script>
 
 <%-- 출고자료생성 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/outstockData/outstockDataDtl.jsp">

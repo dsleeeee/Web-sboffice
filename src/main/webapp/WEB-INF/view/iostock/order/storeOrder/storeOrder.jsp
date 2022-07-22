@@ -7,7 +7,7 @@
 <c:set var="baseUrl" value="/iostock/order/storeOrder/storeOrder/"/>
 
 <div class="subCon" ng-controller="storeOrderCtrl">
-  <div class="searchBar flddUnfld">
+  <div class="searchBar">
     <a href="#" class="open">${menuNm}</a>
   </div>
   <table class="searchTbl">
@@ -62,6 +62,19 @@
         <div class="sb-select fl mr10">
           <span class="txtIn"><input id="reqDate" class="w150px" ng-model="reqDate"></span>
         </div>
+        <%-- 거래처 --%>
+        <div class="sb-select fl w150px" <c:if test="${envst1242 == '0'}">style="display: none;"</c:if>>
+          <wj-combo-box
+            id="vendrCd"
+            ng-model="vendrCd"
+            control="vendrCdCombo"
+            items-source="_getComboData('vendrCd')"
+            display-member-path="name"
+            selected-value-path="value"
+            is-editable="false"
+            initialized="_initComboBox(s)">
+          </wj-combo-box>
+        </div>
         <a href="#" class="btn_grayS" ng-click="newReqOrder()"><s:message code="storeOrder.reqRegist"/></a>
       </td>
     </tr>
@@ -94,11 +107,13 @@
         <wj-flex-grid-column header="<s:message code="storeOrder.reqDate"/>" binding="reqDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeOrder.slipFg"/>" binding="slipFg" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeOrder.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeOrder.vendr"/>" binding="hqVendrNm" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeOrder.dtlCnt"/>" binding="dtlCnt" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeOrder.orderAmt"/>" binding="orderAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeOrder.orderVat"/>" binding="orderVat" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeOrder.orderTot"/>" binding="orderTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeOrder.remark"/>" binding="remark" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeOrder.vendr"/>" binding="hqVendrCd" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>
@@ -116,14 +131,19 @@
 	var gReqDate 	= '${reqDate}';
 	var gEnvst1044 	= '${envst1044}';
 	var gEnvst1042 	= '${envst1042}';
-	
+	var gEnvst1242  = '${envst1242}';
+
 	console.log('gReqDate  : ' + gReqDate);
 	console.log('gEnvst1044: ' + gEnvst1044);
 	console.log('gEnvst1042: ' + gEnvst1042);
+    console.log('gEnvst1242: ' + gEnvst1242);
+
+    <%-- 본사 거래처 콤보박스 --%>
+    var vendrList = ${vendrList};
 	
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeOrder/storeOrder.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeOrder/storeOrder.js?ver=20220722.01" charset="utf-8"></script>
 
 <%-- 주문등록 상품 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/storeOrder/storeOrderDtl.jsp">

@@ -4,10 +4,11 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="baseUrl" value="/iostock/volmErr/volmErr/volmErr/"/>
 
 <div class="subCon" ng-controller="volmErrCtrl">
-  <div class="searchBar flddUnfld">
+  <div class="searchBar">
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('volmErrCtrl')"><s:message code="cmm.search"/></button>
@@ -89,6 +90,24 @@
         </div>
       </td>
     </tr>
+    <tr <c:if test="${envst1242 == '0' or orgnFg == 'STORE'}">style="display: none;"</c:if>>
+      <%-- 거래처 --%>
+      <th><s:message code="dstbReq.vender"/></th>
+      <td>
+        <div class="sb-select fl w150px">
+          <wj-combo-box
+            id="vendrCd"
+            ng-model="vendrCd"
+            control="vendrCdCombo"
+            items-source="_getComboData('vendrCd')"
+            display-member-path="name"
+            selected-value-path="value"
+            is-editable="false"
+            initialized="_initComboBox(s)">
+          </wj-combo-box>
+        </div>
+      </td>
+    </tr>
     </tbody>
   </table>
 
@@ -136,7 +155,17 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/volmErr/volmErr/volmErr.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript">
+  var orgnFg = '${orgnFg}';
+
+  var gEnvst1242  = '${envst1242}';
+  var empVendrCd = '${empVendrCd}';
+
+  <%-- 본사 거래처 콤보박스 --%>
+  var vendrList = ${vendrList};
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/iostock/volmErr/volmErr/volmErr.js?ver=20220722.01" charset="utf-8"></script>
 
 <%-- 물량오류 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/volmErr/volmErr/volmErrDtl.jsp">

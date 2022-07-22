@@ -47,6 +47,7 @@ public class VolmErrServiceImpl implements VolmErrService {
         if(!StringUtil.getOrBlank(volmErrVO.getStoreCd()).equals("")) {
             volmErrVO.setArrStoreCd(volmErrVO.getStoreCd().split(","));
         }
+
         return volmErrMapper.getVolmErrList(volmErrVO);
     }
 
