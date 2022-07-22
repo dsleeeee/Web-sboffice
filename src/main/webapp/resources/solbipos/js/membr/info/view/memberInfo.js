@@ -579,13 +579,15 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
             var params = new Array();
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
                 if($scope.flex.collectionView.items[i].gChk) {
-                    $scope.flex.collectionView.items[i].membrNo = $scope.flex.collectionView.items[i].membrNo;
-                    $scope.flex.collectionView.items[i].membrNm = $scope.flex.collectionView.items[i].membrNm;
-                    $scope.flex.collectionView.items[i].telNo = $scope.flex.collectionView.items[i].telNo;
-                    $scope.flex.collectionView.items[i].orgnFg = "C";
-                    $scope.flex.collectionView.items[i].orgnCd = $scope.orgnCd;
-                    $scope.flex.collectionView.items[i].userId = "";
-                    params.push($scope.flex.collectionView.items[i]);
+                    if($scope.flex.collectionView.items[i].smsRecvYn == "수신") {
+                        $scope.flex.collectionView.items[i].membrNo = $scope.flex.collectionView.items[i].membrNo;
+                        $scope.flex.collectionView.items[i].membrNm = $scope.flex.collectionView.items[i].membrNm;
+                        $scope.flex.collectionView.items[i].telNo = $scope.flex.collectionView.items[i].telNo;
+                        $scope.flex.collectionView.items[i].orgnFg = "C";
+                        $scope.flex.collectionView.items[i].orgnCd = $scope.orgnCd;
+                        $scope.flex.collectionView.items[i].userId = "";
+                        params.push($scope.flex.collectionView.items[i]);
+                    }
                 }
             }
         }
