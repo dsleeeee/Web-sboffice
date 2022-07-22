@@ -112,7 +112,7 @@
         the.USE_YN,
         NVL(the.MAIN_SALE_FG, '0') AS MAIN_SALE_FG,
         the.VENDR_CD,
-        (SELECT VENDR_NM FROM TB_HQ_VENDOR WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND VENDR_CD = the.VENDR_CD) AS VENDR_NM
+        NVL((SELECT VENDR_NM FROM TB_HQ_VENDOR WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND VENDR_CD = the.VENDR_CD), '본사') AS VENDR_NM
         FROM TB_HQ_EMPLOYEE the,
         (
             SELECT
@@ -736,7 +736,7 @@
     <select id="getHqVendrCombo" resultType="DefaultMap">
     /* USE : HqEmpMapper.getHqVendrCombo */
       SELECT '' AS VALUE,
-             '선택' AS NAME
+             '본사' AS NAME
         FROM DUAL
        UNION
       SELECT VENDR_CD AS VALUE,

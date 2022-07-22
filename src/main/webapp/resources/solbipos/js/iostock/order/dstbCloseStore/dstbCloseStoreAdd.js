@@ -15,6 +15,9 @@ app.controller('dstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', function
     {"name": messages["dstbCloseStore.add.option2Sale"], "value": "SALE"}
   ]);
 
+  // 본사 거래처 콤보박스
+  $scope._setComboData('dtlVendrCd', vendrList);
+
   $scope.srchRegStartDate = wcombo.genDate("#srchRegStartDate");
   $scope.srchRegEndDate   = wcombo.genDate("#srchRegEndDate");
 
@@ -145,6 +148,11 @@ app.controller('dstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', function
     if (!$.isEmptyObject(data)) {
       $scope.reqDate = data.reqDate;
       $scope.slipFg  = data.slipFg;
+      $scope.vendrCd = data.vendrCd;
+
+      // 거래처는 수정 못하게 처리
+      $("#dtlVendrCd").attr("disabled", true);
+      $("#dtlVendrCd").css('background-color', '#F0F0F0');
 
       // 값 초기화
       $scope.prodClassCdNm = messages["cmm.all"];
@@ -270,6 +278,7 @@ app.controller('dstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', function
     params.startDate = wijmo.Globalize.format($scope.srchRegStartDate.value, 'yyyyMMdd');
     params.endDate   = wijmo.Globalize.format($scope.srchRegEndDate.value, 'yyyyMMdd');
     params.listScale = 50;
+    params.vendrCd   = $scope.vendrCd;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/order/dstbCloseStore/dstbCloseStoreAdd/list.sb", params);
@@ -301,6 +310,7 @@ app.controller('dstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', function
       item.empNo     = "0000";
       item.storageCd = "999";	//전체재고용 창고코드 ('001' -> '000' -> '999')
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+      item.vendrCd   = $scope.vendrCd;
       params.push(item);
     }
 
@@ -455,6 +465,7 @@ app.controller('dstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', function
     params.storeCd = $("#dstbCloseStoreAddSelectStoreCd").val();
     params.slipFg  = $scope.slipFg;
     params.date    = $scope.reqDate;
+    params.vendrCd = $scope.vendrCd;
 
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){

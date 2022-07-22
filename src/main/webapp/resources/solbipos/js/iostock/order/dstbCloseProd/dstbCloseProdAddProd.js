@@ -6,6 +6,9 @@ app.controller('dstbCloseProdAddProdCtrl', ['$scope', '$http', '$timeout', funct
   //페이지 스케일 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
 
+  // 본사 거래처 콤보박스
+  $scope._setComboData('dtlVendrCd', vendrList);
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     var comboParams         = {};
@@ -45,6 +48,7 @@ app.controller('dstbCloseProdAddProdCtrl', ['$scope', '$http', '$timeout', funct
           params.prodNm   = selectedRow.prodNm;
           params.slipFg   = $scope.slipFg;
           params.storeCds = $("#dstbCloseProdAddProdSelectStoreCd").val();
+          params.vendrCd  = $scope.dtlVendrCdCombo.selectedValue;
           $scope._broadcast('dstbCloseProdAddRegistCtrl', params);
         }
       }
@@ -62,6 +66,11 @@ app.controller('dstbCloseProdAddProdCtrl', ['$scope', '$http', '$timeout', funct
 
       $scope.reqDate = data.reqDate;
       $scope.slipFg  = data.slipFg;
+      $scope.vendrCd = data.vendrCd;
+
+      // 거래처는 수정 못하게 처리
+      $("#dtlVendrCd").attr("disabled", true);
+      $("#dtlVendrCd").css('background-color', '#F0F0F0');
 
       // 값 초기화
       $scope.prodClassCdNm = messages["cmm.all"];
@@ -90,6 +99,7 @@ app.controller('dstbCloseProdAddProdCtrl', ['$scope', '$http', '$timeout', funct
     params.reqDate = $scope.reqDate;
     params.slipFg  = $scope.slipFg;
     params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
+    params.vendrCd   = $scope.dtlVendrCdCombo.selectedValue;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/order/dstbCloseProd/dstbCloseProdAddProd/list.sb", params);

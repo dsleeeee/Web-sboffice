@@ -19,4 +19,7 @@ public interface DstbReqService {
     /** 분배등록 상세 리스트 저장 */
     int saveDstbReqDtl(DstbReqVO[] dstbReqVOs, SessionInfoVO sessionInfoVO);
 
+    /** 현재 로그인 사원에 맵핑된 거래처코드 조회 **/
+    String getEmployeeVendr(DstbReqVO dstbReqVOs, SessionInfoVO sessionInfoVO);
+
 }

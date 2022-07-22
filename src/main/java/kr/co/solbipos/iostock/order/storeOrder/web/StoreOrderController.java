@@ -6,6 +6,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.code.CmmCodeService;
 import kr.co.common.service.code.CmmEnvService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -28,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : StoreOrderController.java
@@ -82,6 +84,10 @@ public class StoreOrderController {
         hqEnvstVO.setEnvstCd("1042");
         String envst1042 = cmmEnvService.getHqEnvst(hqEnvstVO);
 
+        // 본사 환경설정 1242(거래처출고사용여부) 조회
+        hqEnvstVO.setEnvstCd("1242");
+        String envst1242 = CmmUtil.nvl(cmmEnvService.getHqEnvst(hqEnvstVO), "0");
+
         // 매장 환경설정 1044(출고요청일자선택) 조회
         StoreEnvVO storeEnvVO = new StoreEnvVO();
         storeEnvVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -94,7 +100,11 @@ public class StoreOrderController {
         storeOrderVO.setStoreCd(sessionInfoVO.getStoreCd());
         String reqDate = storeOrderService.getReqDate(storeOrderVO);
 
+        // 본사 거래처 콤보박스
+        model.addAttribute("vendrList", convertToJson(storeOrderService.getHqVendrCombo(storeOrderVO, sessionInfoVO)));
+
         model.addAttribute("envst1042", envst1042);
+        model.addAttribute("envst1242", envst1242);
         model.addAttribute("envst1044", envst1044);
         model.addAttribute("reqDate" , reqDate);
 
@@ -117,6 +127,7 @@ public class StoreOrderController {
         Model model, StoreOrderVO storeOrderVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        storeOrderVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         storeOrderVO.setStoreCd(sessionInfoVO.getStoreCd());
 
         List<DefaultMap<String>> list = storeOrderService.getStoreOrderList(storeOrderVO);

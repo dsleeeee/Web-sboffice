@@ -114,6 +114,8 @@ public class DstbCloseStoreVO extends PageVO {
     private String option1;
     /** 옵션2 */
     private String option2;
+    /** 거래처코드 */
+    private String vendrCd;
 
     /**
      * @return the hqOfficeCd
@@ -869,5 +871,13 @@ public class DstbCloseStoreVO extends PageVO {
      */
     public void setOption2(String option2) {
         this.option2 = option2;
+    }
+
+    public String getVendrCd() {
+        return vendrCd;
+    }
+
+    public void setVendrCd(String vendrCd) {
+        this.vendrCd = vendrCd;
     }
 }

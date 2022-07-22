@@ -405,6 +405,7 @@
         ,       REG_ID
         ,       MOD_DT
         ,       MOD_ID
+        ,       VENDR_CD
         )
         SELECT  tphso.HQ_OFFICE_CD  ,       tphso.SLIP_NO       ,       tphso.STORE_CD        ,       tphso.EMP_NO      ,       tphso.SLIP_FG
         ,       '0'                 ,       tphso.OUT_DATE      ,       tphso.IN_DATE
@@ -415,6 +416,7 @@
         ,       #{regId}
         ,       #{modDt}
         ,       #{modId}
+        ,       tphso.VENDR_CD
         FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
         ,       (   SELECT  COUNT(*)          AS DTL_CNT
                     ,       SUM(OUT_UNIT_QTY) AS OUT_UNIT_QTY

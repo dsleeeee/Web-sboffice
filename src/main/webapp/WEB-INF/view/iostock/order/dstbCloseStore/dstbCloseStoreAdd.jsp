@@ -70,7 +70,7 @@
         <tr>
           <%-- 옵션1 --%>
           <th><s:message code="dstbCloseStore.add.option1"/></th>
-          <td colspan="3">
+          <td>
             <span class="txtIn w200px sb-select fl mr5">
               <wj-combo-box
                 id="option1"
@@ -82,6 +82,22 @@
                 initialized="_initComboBox(s)">
               </wj-combo-box>
             </span>
+          </td>
+          <%-- 거래처 --%>
+          <th <c:if test="${envst1242 == '0'}">style="display: none;"</c:if>><s:message code="dstbCloseProd.dtl.vender"/></th>
+          <td <c:if test="${envst1242 == '0'}">style="display: none;"</c:if>>
+            <div class="sb-select fl w150px">
+              <wj-combo-box
+                id="dtlVendrCd"
+                ng-model="vendrCd"
+                control="dtlVendrCdCombo"
+                items-source="_getComboData('dtlVendrCd')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </div>
           </td>
         </tr>
         <tr>
@@ -210,7 +226,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/dstbCloseStore/dstbCloseStoreAdd.js?ver=20200910.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/dstbCloseStore/dstbCloseStoreAdd.js?ver=20220722.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

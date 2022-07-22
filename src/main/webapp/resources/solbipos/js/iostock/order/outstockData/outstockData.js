@@ -22,6 +22,9 @@ app.controller('outstockDataCtrl', ['$scope', '$http', function ($scope, $http) 
     {"name": messages["outstockData.modDate"], "value": "mod"}
   ]);
 
+  // 본사 거래처 콤보박스
+  $scope._setComboData('vendrCd', vendrList);
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
@@ -60,6 +63,7 @@ app.controller('outstockDataCtrl', ['$scope', '$http', function ($scope, $http) 
           params.storeCd   = selectedRow.storeCd;
           params.storeNm   = selectedRow.storeNm;
           params.slipFg    = $scope.slipFg;
+          params.vendrCd   = $scope.vendrCdCombo.selectedValue;
           $scope._broadcast('outstockDataDtlCtrl', params);
         }
       }
@@ -69,6 +73,12 @@ app.controller('outstockDataCtrl', ['$scope', '$http', function ($scope, $http) 
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
     s.bottomLeftCells.setCellData(0, 0, '합계');
+
+    // 현재 로그인 사원에 맵핑된 거래처코드로 셋팅(없으면 '본사'로 셋팅됨.)
+    $scope.vendrCdCombo.selectedValue = empVendrCd;
+    // 거래처는 수정 못하게 처리
+    $("#vendrCd").attr("disabled", true);
+    $("#vendrCd").css('background-color', '#F0F0F0');
   };
 
   // 다른 컨트롤러의 broadcast 받기
@@ -91,6 +101,7 @@ app.controller('outstockDataCtrl', ['$scope', '$http', function ($scope, $http) 
     params.slipFg    = $scope.slipFg;
     params.startDate = $scope.searchedStartDate;
     params.endDate   = $scope.searchedEndDate;
+    params.vendrCd   = $scope.vendrCdCombo.selectedValue;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/order/outstockData/outstockData/list.sb", params);
@@ -124,6 +135,7 @@ app.controller('outstockDataCtrl', ['$scope', '$http', function ($scope, $http) 
         item.empNo     = "0000";
         item.storageCd = "999";	//전체재고용 창고코드 ('001' -> '000' -> '999')
         item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+        item.vendrCd   = $scope.vendrCdCombo.selectedValue;
         params.push(item);
       }
     }

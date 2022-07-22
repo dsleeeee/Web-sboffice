@@ -112,6 +112,8 @@ public class VolmErrVO extends PageVO {
     
     /** 헤드 인덱스(DAY SEQUENCE) */
     private Integer seqNo;
+    /** 거래처코드 */
+    private String vendrCd;
     
     
     public String getOrgnFg() {
@@ -787,4 +789,12 @@ public class VolmErrVO extends PageVO {
 	public void setAreaFg(String areaFg) {
 		this.areaFg = areaFg;
 	}
+
+    public String getVendrCd() {
+        return vendrCd;
+    }
+
+    public void setVendrCd(String vendrCd) {
+        this.vendrCd = vendrCd;
+    }
 }
