@@ -264,6 +264,13 @@
         ,       B.VAN_CD
         ,       E.VAN_NM
         ,       F.POS_CNT
+        ,       F.POS_ENVST_4019_1
+        ,       F.POS_ENVST_4019_2
+        ,       F.POS_ENVST_4019_3
+        ,       F.POS_ENVST_4019_4
+        ,       F.POS_ENVST_4019_5
+        ,       F.POS_ENVST_4019_6
+        ,       F.POS_ENVST_4019_7
         ,       G.BILL_CNT
         ,       G.SALE_CNT
         ,       G.RTN_SALE_CNT
@@ -291,12 +298,27 @@
         ,       TB_CM_AGENCY D
         ,       TB_CM_VAN_CMPNY E
         ,       (
-                    SELECT  STORE_CD
-                    ,       COUNT(POS_NO) AS POS_CNT
-                    FROM    TB_MS_POS
-                    WHERE   USE_YN  =   'Y'
+                    SELECT  A.STORE_CD
+                    ,       COUNT(A.POS_NO) AS POS_CNT
+                    ,       REGEXP_REPLACE(LISTAGG(' ('||A.POS_NO||')'||' '||C.ENVST_VAL_NM, ',') WITHIN GROUP(ORDER BY A.POS_NO), '([^,]+)(,\1)*(,|$)', '\1\3') AS POS_FG -- POS_ENVST_4019
+                    ,       SF_ZERO_TO_NULL(SUM(DECODE(B.ENVST_VAL, 1, 1, 0))) AS POS_ENVST_4019_1
+                    ,       SF_ZERO_TO_NULL(SUM(DECODE(B.ENVST_VAL, 2, 1, 0))) AS POS_ENVST_4019_2
+                    ,       SF_ZERO_TO_NULL(SUM(DECODE(B.ENVST_VAL, 3, 1, 0))) AS POS_ENVST_4019_3
+                    ,       SF_ZERO_TO_NULL(SUM(DECODE(B.ENVST_VAL, 4, 1, 0))) AS POS_ENVST_4019_4
+                    ,       SF_ZERO_TO_NULL(SUM(DECODE(B.ENVST_VAL, 5, 1, 0))) AS POS_ENVST_4019_5
+                    ,       SF_ZERO_TO_NULL(SUM(DECODE(B.ENVST_VAL, 6, 1, 0))) AS POS_ENVST_4019_6
+                    ,       SF_ZERO_TO_NULL(SUM(DECODE(B.ENVST_VAL, 7, 1, 0))) AS POS_ENVST_4019_7
+                    FROM    TB_MS_POS A
+                    ,       TB_MS_POS_ENVST B
+                    ,       TB_CM_ENVST_DTL C
+                    WHERE   A.USE_YN            =   'Y'
+                    AND     B.STORE_CD      (+) =   A.STORE_CD
+                    AND     B.POS_NO        (+) =   A.POS_NO
+                    AND     B.ENVST_CD      (+) =   '4019'
+                    AND     C.ENVST_CD      (+) =   '4019'
+                    AND     C.ENVST_VAL_CD  (+) =   B.ENVST_VAL
                     GROUP
-                    BY      STORE_CD
+                    BY      A.STORE_CD
                 ) F
         ,       (
                     SELECT  A.STORE_CD              STORE_CD
