@@ -93,6 +93,12 @@ public interface ViewMapper {
     /** 입금/출금계정 복사 */
     String copyAccount(CopyStoreEnvVO copyStoreEnvVO);
 
+    /** 원산지 복사 */
+    String copyRecpOrigin(CopyStoreEnvVO copyStoreEnvVO);
+
+    /** 식품 알레르기 복사 */
+    String copyFoodAllergy(CopyStoreEnvVO copyStoreEnvVO);
+
     /** 매장환경 복사를 위한 정보 조회 */
     List<DefaultMap<String>> getStoreEnvInfoList(CopyStoreEnvVO copyStoreEnvVO);
 

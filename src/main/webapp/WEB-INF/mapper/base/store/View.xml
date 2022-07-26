@@ -533,6 +533,46 @@
         }
     </select>
 
+    <!-- 원산지 복사 프로시져 호출 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_RECP_ORIGIN
+        PARAM    :
+        COMMENTS : 원산지 관련 정보를 복사한다.
+    -->
+    <select id="copyRecpOrigin" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+          /* USE : ViewMapper.copyRecpOrigin */
+        {
+            CALL PKG_MS_STORE_COPY.SP_MS_PRODUCT_RECP_ORIGIN
+            (
+                #{hqOfficeCd},
+                #{originalStoreCd},
+                #{targetStoreCd},
+                #{regId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
+    <!-- 식품 알레르기 복사 프로시져 호출 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_ALGI_INFO
+        PARAM    :
+        COMMENTS : 식품 알레르기 관련 정보를 복사한다.
+    -->
+    <select id="copyFoodAllergy" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+          /* USE : ViewMapper.copyFoodAllergy */
+        {
+            CALL PKG_MS_STORE_COPY.SP_MS_PRODUCT_ALGI_INFO
+            (
+                #{hqOfficeCd},
+                #{originalStoreCd},
+                #{targetStoreCd},
+                #{regId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
     <!-- 매장환경 복사를 위한 정보 조회 -->
     <!--
         TABLE    :

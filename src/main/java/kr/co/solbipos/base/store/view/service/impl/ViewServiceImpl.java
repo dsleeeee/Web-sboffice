@@ -193,6 +193,12 @@ public class ViewServiceImpl implements ViewService {
             if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.ACCOUNT) { // 입금/출금계정
                 procResult = viewMapper.copyAccount(copyStoreEnvVO);
             }
+            if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.RECP_ORIGIN) { // 원산지
+                procResult = viewMapper.copyRecpOrigin(copyStoreEnvVO);
+            }
+            if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.FOOD_ALLERGY) { // 식품 알레르기
+                procResult = viewMapper.copyFoodAllergy(copyStoreEnvVO);
+            }
         }
 
         return result;

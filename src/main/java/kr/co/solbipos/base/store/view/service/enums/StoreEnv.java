@@ -46,8 +46,11 @@ public enum StoreEnv implements CodeEnum {
     /** 상품권 */
     GIFT("09"),
     /** 입금/출금계정 */
-    ACCOUNT("10");
-
+    ACCOUNT("10"),
+    /** 원산지 */
+    RECP_ORIGIN("11"),
+    /** 식품 알레르기 */
+    FOOD_ALLERGY("12");
 
     private String code;
     private StoreEnv[] values;

@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="copyStoreEnvLayer" show-trigger="Click" hide-trigger="Click" style="display:none; width:600px; height:550px;">
+<wj-popup control="copyStoreEnvLayer" show-trigger="Click" hide-trigger="Click" style="display:none; width:600px; height:600px;">
   <div class="wj-dialog wj-dialog-columns title" ng-controller="copyStoreEnvCtrl">
 
     <%-- header --%>
@@ -13,7 +13,7 @@
     </div>
 
     <%-- body --%>
-    <div class="wj-dialog-body" style="height:500px; overflow-y: auto;">
+    <div class="wj-dialog-body" style="height:550px; overflow-y: auto;">
       <%-- 매장검색영역 --%>
       <div class="searchBar_s">
         <a href="#" class="open">환경복사 매장 선택</a><!--하단 검색테이블 열기 .open, 하단 검색테이블 닫기 .close-->
@@ -57,7 +57,7 @@
         </table>
       </div>
       <%--위즈모 테이블--%>
-      <div class="theGrid" style="height: 230px; overflow-y: hidden; overflow-x: hidden;">
+      <div class="theGrid" style="height: 280px; overflow-y: hidden; overflow-x: hidden;">
         <wj-flex-grid
                 autoGenerateColumns="false"
                 selection-mode="Row"
@@ -95,6 +95,8 @@
           7. 쿠폰분류 : 쿠폰분류를 복사합니다.<br />
           8. 상품권 : 상품권분류, 상품권을 복사합니다.<br />
           9. 입금/출금계정 : 입금/출금계정을 복사합니다.<br />
+          10. 원산지 : 재료-원산지정보, 재료-상품맵핑정보를 복사합니다.<br />
+          11. 식품 알레르기 : 재료-알레르기정보, 재료-상품맵핑정보를 복사합니다.<br />
         </p>
         <p class="s12 blue mt10 lh20">
           ※ '객층', '상품이미지', '키오스크키맵', '배달시스템 상품명칭매핑'은 해당 메뉴에서 매장복사 하실 수 있습니다.<br />
