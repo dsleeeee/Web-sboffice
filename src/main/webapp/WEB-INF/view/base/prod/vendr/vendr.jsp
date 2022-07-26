@@ -130,7 +130,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/vendr.js?ver=20200506.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/vendr.js?ver=20220726.01" charset="utf-8"></script>
 
 <%-- 거래처관리 상세 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/vendr/info.jsp">

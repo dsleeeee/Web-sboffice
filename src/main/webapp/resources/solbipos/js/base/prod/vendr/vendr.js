@@ -57,6 +57,9 @@ app.controller('vendrCtrl', ['$scope', '$http', function ($scope, $http) {
                 }
             }
         });
+
+        // 거래처목록 조회
+        $scope.searchVendrList();
     }
 
     // 거래처 상세 정보
