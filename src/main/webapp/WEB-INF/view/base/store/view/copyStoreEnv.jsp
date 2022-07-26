@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="copyStoreEnvLayer" show-trigger="Click" hide-trigger="Click" style="display:none; width:600px; height:600px;">
+<wj-popup control="copyStoreEnvLayer" show-trigger="Click" hide-trigger="Click" style="display:none; width:600px; height:570px;">
   <div class="wj-dialog wj-dialog-columns title" ng-controller="copyStoreEnvCtrl">
 
     <%-- header --%>
@@ -13,7 +13,7 @@
     </div>
 
     <%-- body --%>
-    <div class="wj-dialog-body" style="height:550px; overflow-y: auto;">
+    <div class="wj-dialog-body" style="height:520px; overflow-y: auto;">
       <%-- 매장검색영역 --%>
       <div class="searchBar_s">
         <a href="#" class="open">환경복사 매장 선택</a><!--하단 검색테이블 열기 .open, 하단 검색테이블 닫기 .close-->
@@ -73,7 +73,7 @@
         </wj-flex-grid>
       </div>
 
-      <div class="btnSet">
+      <div class="btnSet2">
         <%-- 복사 --%>
         <span><a href="#" class="btn_blue" ng-click="copy()"><s:message code="cmm.copy" /></a></span>
         <%-- 닫기 --%>
