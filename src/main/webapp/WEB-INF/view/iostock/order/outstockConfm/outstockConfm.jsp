@@ -7,7 +7,7 @@
 <c:set var="baseUrl" value="/iostock/order/outstockConfm/outstockConfm/"/>
 
 <div class="subCon" ng-controller="outstockConfmCtrl">
-  <div class="searchBar flddUnfld">
+  <div class="searchBar">
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('outstockConfmCtrl')">
@@ -92,12 +92,24 @@
                           modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
                           closeFunc - 팝업 닫기시 호출할 함수
         --%>
-        <jsp:include page="/WEB-INF/view/iostock/cmm/selectVendrS.jsp" flush="true">
+        <%--<jsp:include page="/WEB-INF/view/iostock/cmm/selectVendrS.jsp" flush="true">
           <jsp:param name="targetId" value="outstockConfmSelectVendr"/>
           <jsp:param name="displayNm" value="전체"/>
           <jsp:param name="displayWidth" value="170px"/>
-        </jsp:include>
+        </jsp:include>--%>
         <%--// 거래처선택 모듈 싱글 선택 사용시 include --%>
+          <div class="sb-select fl w150px">
+            <wj-combo-box
+              id="vendrCd"
+              ng-model="vendrCd"
+              control="vendrCdCombo"
+              items-source="_getComboData('vendrCd')"
+              display-member-path="name"
+              selected-value-path="value"
+              is-editable="false"
+              initialized="_initComboBox(s)">
+            </wj-combo-box>
+          </div>
       </td>
     </tr>
     <tr>
@@ -210,9 +222,14 @@
 <script type="text/javascript">
   // [1241 창고사용여부] 환경설정값
   var storageEnvstVal = "${storageEnvstVal}";
+  var gEnvst1242  = '${envst1242}';
+  var empVendrCd = '${empVendrCd}';
+
+  <%-- 본사 거래처 콤보박스 --%>
+  var vendrList = ${vendrList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockConfm/outstockConfm.js?ver=20220714.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockConfm/outstockConfm.js?ver=20220722.01" charset="utf-8"></script>
 
 <%-- 출고확정 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/outstockConfm/outstockConfmDtl.jsp">

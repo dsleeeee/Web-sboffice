@@ -19,6 +19,9 @@ app.controller('dstbCloseStoreCtrl', ['$scope', '$http', '$timeout', function ($
     {"name": messages["dstbCloseStore.modDate"], "value": "mod"}
   ]);
 
+  // 본사 거래처 콤보박스
+  $scope._setComboData('vendrCd', vendrList);
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     var comboParams         = {};
@@ -67,6 +70,7 @@ app.controller('dstbCloseStoreCtrl', ['$scope', '$http', '$timeout', function ($
           params.storeNm = selectedRow.storeNm;
           params.slipFg  = selectedRow.slipFg;
           params.procFg  = selectedRow.procFg;
+          params.vendrCd = $scope.vendrCdCombo.selectedValue;
           $scope._broadcast('dstbCloseStoreDtlCtrl', params);
         }
       }
@@ -98,6 +102,12 @@ app.controller('dstbCloseStoreCtrl', ['$scope', '$http', '$timeout', function ($
       modDt      : messages["dstbCloseStore.modDt"],
       slipFg     : messages["dstbCloseStore.slipFg"],
     };
+
+    // 현재 로그인 사원에 맵핑된 거래처코드로 셋팅(없으면 '본사'로 셋팅됨.)
+    $scope.vendrCdCombo.selectedValue = empVendrCd;
+    // 거래처는 수정 못하게 처리
+    $("#vendrCd").attr("disabled", true);
+    $("#vendrCd").css('background-color', '#F0F0F0');
 
   };
 
@@ -200,6 +210,7 @@ app.controller('dstbCloseStoreCtrl', ['$scope', '$http', '$timeout', function ($
     params.slipFg    = $scope.slipFg;
     params.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
     params.endDate   = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
+    params.vendrCd   = $scope.vendrCdCombo.selectedValue;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/order/dstbCloseStore/dstbCloseStore/list.sb", params);
@@ -231,6 +242,7 @@ app.controller('dstbCloseStoreCtrl', ['$scope', '$http', '$timeout', function ($
     var params     = {};
     params.reqDate = wijmo.Globalize.format(reqDate.value, 'yyyyMMdd');
     params.slipFg  = $scope.slipFg;
+    params.vendrCd = $scope.vendrCdCombo.selectedValue;
     $scope._broadcast('dstbCloseStoreAddCtrl', params);
   };
 

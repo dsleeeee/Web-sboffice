@@ -190,6 +190,13 @@
                     <wj-flex-grid-column header="<s:message code="oper.agencyCd"/>      " binding="agencyCd"        width=" 80" is-read-only="true" align="center"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.agency"/>        " binding="agencyNm"        width="120" is-read-only="true" align="left"  > </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.posCnt"/>        " binding="posCnt"          width=" 60" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.posEnvst40191"/> " binding="posEnvst40191"   width=" 70" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.posEnvst40192"/> " binding="posEnvst40192"   width=" 70" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.posEnvst40193"/> " binding="posEnvst40193"   width=" 70" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.posEnvst40194"/> " binding="posEnvst40194"   width=" 70" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.posEnvst40195"/> " binding="posEnvst40195"   width=" 70" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.posEnvst40196"/> " binding="posEnvst40196"   width=" 70" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.posEnvst40197"/> " binding="posEnvst40197"   width=" 70" is-read-only="true" align="center"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.billCnt"/>       " binding="billCnt"         width="120" is-read-only="true" align="right" > </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.saleCnt"/>       " binding="saleCnt"         width="120" is-read-only="true" align="right" > </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.rtnSaleCnt"/>    " binding="rtnSaleCnt"      width="120" is-read-only="true" align="right" > </wj-flex-grid-column>

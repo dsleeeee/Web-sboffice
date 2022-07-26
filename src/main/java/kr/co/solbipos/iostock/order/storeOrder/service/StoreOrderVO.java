@@ -52,6 +52,8 @@ public class StoreOrderVO extends PageVO {
     private String envst1042;
     /** 공통코드 */
     private String nmcodeGrpCd;
+    /** 거래처코드 */
+    private String vendrCd;
 
     /**
      * @return the reqDate
@@ -373,5 +375,13 @@ public class StoreOrderVO extends PageVO {
      */
     public void setNmcodeGrpCd(String nmcodeGrpCd) {
         this.nmcodeGrpCd = nmcodeGrpCd;
+    }
+
+    public String getVendrCd() {
+        return vendrCd;
+    }
+
+    public void setVendrCd(String vendrCd) {
+        this.vendrCd = vendrCd;
     }
 }

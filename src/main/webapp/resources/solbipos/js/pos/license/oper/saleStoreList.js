@@ -60,6 +60,13 @@ app.controller('saleStoreListCtrl', ['$scope', '$http', '$timeout', function ($s
         dataItem.agencyCd       = messages["oper.storeInfo"];
         dataItem.agencyNm       = messages["oper.storeInfo"];
         dataItem.posCnt         = messages["oper.storeInfo"];
+        dataItem.posEnvst40191  = messages["oper.storeInfo"];
+        dataItem.posEnvst40192  = messages["oper.storeInfo"];
+        dataItem.posEnvst40193  = messages["oper.storeInfo"];
+        dataItem.posEnvst40194  = messages["oper.storeInfo"];
+        dataItem.posEnvst40195  = messages["oper.storeInfo"];
+        dataItem.posEnvst40196  = messages["oper.storeInfo"];
+        dataItem.posEnvst40197  = messages["oper.storeInfo"];
         dataItem.billCnt        = messages["oper.dateTot"];
         dataItem.saleCnt        = messages["oper.dateTot"];
         dataItem.rtnSaleCnt     = messages["oper.dateTot"];

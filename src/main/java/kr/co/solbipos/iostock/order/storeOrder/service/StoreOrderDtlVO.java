@@ -80,6 +80,8 @@ public class StoreOrderDtlVO extends PageVO {
     private String option2;
     /** 판매금액 */
     private String saleUprc;
+    /** 거래처코드 */
+    private String vendrCd;
 
     /**
      * @return the reqDate
@@ -597,5 +599,13 @@ public class StoreOrderDtlVO extends PageVO {
      */
     public void setSaleUprc(String saleUprc) {
         this.saleUprc = saleUprc;
+    }
+
+    public String getVendrCd() {
+        return vendrCd;
+    }
+
+    public void setVendrCd(String vendrCd) {
+        this.vendrCd = vendrCd;
     }
 }

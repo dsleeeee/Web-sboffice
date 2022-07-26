@@ -26,6 +26,7 @@ app.controller('outstockDataDtlCtrl', ['$scope', '$http', '$timeout', function (
     $scope.storeCd   = data.storeCd;
     $scope.storeNm   = data.storeNm;
     $scope.slipFg    = data.slipFg;
+    $scope.vendrCd   = data.vendrCd;
 
     $scope.wjOutstockDataDtlLayer.show(true);
     $("#spanDtlTitle").html('['+messages["outstockData.dtl.order"]+'] ' + '[' + $scope.storeCd + '] ' + $scope.storeNm);
@@ -45,6 +46,7 @@ app.controller('outstockDataDtlCtrl', ['$scope', '$http', '$timeout', function (
     params.endDate   = $scope.endDate;
     params.storeCd   = $scope.storeCd;
     params.slipFg    = $scope.slipFg;
+    params.vendrCd   = $scope.vendrCd;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/iostock/order/outstockData/outstockDataDtl/list.sb", params, function () {
     });

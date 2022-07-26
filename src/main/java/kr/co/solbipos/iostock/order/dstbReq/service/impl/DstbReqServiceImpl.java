@@ -128,6 +128,7 @@ public class DstbReqServiceImpl implements DstbReqService {
                 storeOrderVO.setRegDt(currentDt);
                 storeOrderVO.setModId(sessionInfoVO.getUserId());
                 storeOrderVO.setModDt(currentDt);
+                storeOrderVO.setVendrCd(dstbReqVO.getVendrCd());
             }
 
             int slipFg       = dstbReqVO.getSlipFg();
@@ -177,6 +178,7 @@ public class DstbReqServiceImpl implements DstbReqService {
             dstbReqVO.setRegDt(currentDt);
             dstbReqVO.setModId(sessionInfoVO.getUserId());
             dstbReqVO.setModDt(currentDt);
+            dstbReqVO.setVendrCd(storeOrderVO.getVendrCd());
 
             result = dstbReqMapper.insertDstbReqRegist(dstbReqVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
@@ -184,6 +186,16 @@ public class DstbReqServiceImpl implements DstbReqService {
         }
 
         return returnResult;
+    }
+
+    /** 현재 로그인 사원에 맵핑된 거래처코드 조회 */
+    @Override
+    public String getEmployeeVendr(DstbReqVO dstbReqVO, SessionInfoVO sessionInfoVO){
+
+        dstbReqVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dstbReqVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        return dstbReqMapper.getEmployeeVendr(dstbReqVO);
     }
 
 

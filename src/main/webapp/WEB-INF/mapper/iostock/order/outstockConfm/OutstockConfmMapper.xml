@@ -11,7 +11,6 @@
     -->
     <select id="getReqNoConfirmCnt" parameterType="outstockConfmVO" resultType="DefaultMap">
         /* USE : OutstockConfmMapper.getReqNoConfirmCnt */
-        <![CDATA[
         SELECT	tphso.REQ_NO_CONFIRM_CNT, tphsd.OUTSTOCK_NO_CREATE_CNT
         FROM	(	SELECT  COUNT(*) AS REQ_NO_CONFIRM_CNT
                     FROM    TB_MS_STORE tms
@@ -20,6 +19,14 @@
                     AND     tphso.STORE_CD      =   tms.STORE_CD
                     AND     REQ_DATE    BETWEEN #{startDate} AND #{endDate}
                     AND     PROC_FG     IN      ('00','10')
+                    <choose>
+                        <when test='vendrCd != null and vendrCd != ""'>
+                          AND tphso.HQ_VENDR_CD = #{vendrCd}
+                        </when>
+                        <otherwise>
+                          AND tphso.HQ_VENDR_CD IS NULL
+                        </otherwise>
+                    </choose>
                 ) tphso
         ,		(	SELECT  COUNT(*) AS OUTSTOCK_NO_CREATE_CNT
                     FROM    (   SELECT  tphso.STORE_CD
@@ -28,11 +35,18 @@
                                 AND     tphso.REQ_DATE      BETWEEN #{startDate} AND #{endDate}
                                 AND     tphso.SLIP_FG       =       #{slipFg}
                                 AND     tphso.PROC_FG       IN      ('00','10','20')
+                            <choose>
+                                <when test='vendrCd != null and vendrCd != ""'>
+                                  AND tphso.HQ_VENDR_CD = #{vendrCd}
+                                </when>
+                                <otherwise>
+                                  AND tphso.HQ_VENDR_CD IS NULL
+                                </otherwise>
+                            </choose>
                                 GROUP
                                 BY      tphso.STORE_CD
                             )
                 ) tphsd
-        ]]>
     </select>
 
     <!-- 출고확정 - 출고확정 리스트 조회 -->
@@ -94,9 +108,14 @@
         <if test='procFg != null and procFg != ""'>
             AND tphso.PROC_FG = #{procFg}
         </if>
-        <if test='vendrCd != null and vendrCd != ""'>
-            AND tphso.VENDR_CD = #{vendrCd}
-        </if>
+        <choose>
+            <when test='vendrCd != null and vendrCd != ""'>
+              AND tphso.VENDR_CD = #{vendrCd}
+            </when>
+            <otherwise>
+              AND tphso.VENDR_CD IS NULL
+            </otherwise>
+        </choose>
         <if test='dlvrCd != null and dlvrCd != ""'>
             AND tphso.DLVR_CD = #{dlvrCd}
         </if>

@@ -1,15 +1,5 @@
 package kr.co.solbipos.iostock.order.storeOrder.service.impl;
 
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
-
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
@@ -26,6 +16,15 @@ import kr.co.solbipos.iostock.order.outstockData.service.impl.OutstockDataMapper
 import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderDtlVO;
 import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderService;
 import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 @Service("storeOrderService")
 @Transactional
@@ -85,6 +84,7 @@ public class StoreOrderServiceImpl implements StoreOrderService {
                 storeOrderVO.setRegDt(currentDt);
                 storeOrderVO.setModId(sessionInfoVO.getUserId());
                 storeOrderVO.setModDt(currentDt);
+                storeOrderVO.setVendrCd(storeOrderDtlVO.getVendrCd());
             }
             LOGGER.debug("### EmpNo: " + sessionInfoVO.getEmpNo());
 
@@ -481,6 +481,7 @@ public class StoreOrderServiceImpl implements StoreOrderService {
         storeOrderVO.setEmpNo("0000");
         storeOrderVO.setProcFg("00");
         storeOrderVO.setRemark(excelUploadMPSVO.getHdRemark());
+        storeOrderVO.setVendrCd(excelUploadMPSVO.getVendrCd());
 
         //주문요청일의 상품건수 조회
         dtlCnt = storeOrderMapper.getDtlCnt(storeOrderVO);
@@ -512,5 +513,13 @@ public class StoreOrderServiceImpl implements StoreOrderService {
         storeOrderVO.setStoreCd(sessionInfoVO.getStoreCd());
 
         return storeOrderMapper.getOrderTotAmt(storeOrderVO);
+    }
+
+    /** 본사 거래처 조회(콤보박스용) */
+    public List<DefaultMap<String>> getHqVendrCombo(StoreOrderVO storeOrderVO, SessionInfoVO sessionInfoVO){
+
+        storeOrderVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return storeOrderMapper.getHqVendrCombo(storeOrderVO);
     }
 }

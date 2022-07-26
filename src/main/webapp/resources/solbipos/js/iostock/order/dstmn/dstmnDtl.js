@@ -251,6 +251,7 @@ app.controller('dstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	$scope.endDate = data.endDate;
     $scope.slipNo = data.slipNo;
     $scope.slipFg = data.slipFg;
+    $scope.vendrCd = data.vendrCd;
     $scope.wjDstmnDtlLayer.show(true);
 
 

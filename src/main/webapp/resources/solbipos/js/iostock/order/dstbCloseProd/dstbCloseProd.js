@@ -19,6 +19,9 @@ app.controller('dstbCloseProdCtrl', ['$scope', '$http', '$timeout', function ($s
     {"name": messages["dstbCloseProd.modDate"], "value": "mod"}
   ]);
 
+  // 본사 거래처 콤보박스
+  $scope._setComboData('vendrCd', vendrList);
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     var comboParams         = {};
@@ -75,6 +78,7 @@ app.controller('dstbCloseProdCtrl', ['$scope', '$http', '$timeout', function ($s
           params.prodNm  = selectedRow.prodNm;
           params.slipFg  = selectedRow.slipFg;
           params.procFg  = selectedRow.procFg;
+          params.vendrCd = $scope.vendrCdCombo.selectedValue;
           $scope._broadcast('dstbCloseProdDtlCtrl', params);
         }
       }
@@ -84,6 +88,12 @@ app.controller('dstbCloseProdCtrl', ['$scope', '$http', '$timeout', function ($s
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
     s.bottomLeftCells.setCellData(0, 0, '합계');
+
+    // 현재 로그인 사원에 맵핑된 거래처코드로 셋팅(없으면 '본사'로 셋팅됨.)
+    $scope.vendrCdCombo.selectedValue = empVendrCd;
+    // 거래처는 수정 못하게 처리
+    $("#vendrCd").attr("disabled", true);
+    $("#vendrCd").css('background-color', '#F0F0F0');
   };
 
   // itemFormatter 기본설정 : private
@@ -166,6 +176,7 @@ app.controller('dstbCloseProdCtrl', ['$scope', '$http', '$timeout', function ($s
     params.slipFg    = $scope.slipFg;
     params.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
     params.endDate   = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
+    params.vendrCd   = $scope.vendrCdCombo.selectedValue;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/order/dstbCloseProd/dstbCloseProd/list.sb", params);
@@ -198,6 +209,7 @@ app.controller('dstbCloseProdCtrl', ['$scope', '$http', '$timeout', function ($s
     var params     = {};
     params.reqDate = wijmo.Globalize.format(reqDate.value, 'yyyyMMdd');
     params.slipFg  = $scope.slipFg;
+    params.vendrCd = $scope.vendrCdCombo.selectedValue;
     $scope._broadcast('dstbCloseProdAddProdCtrl', params);
   };
 

@@ -109,6 +109,8 @@ public class DstbReqVO extends PageVO {
     private String envst0011;
     /** 분배완료여부 */
     private String dstbConfirmFg;
+    /** 거래처코드 */
+    private String vendrCd;
 
 
     public String getOrgnFg() {
@@ -775,5 +777,13 @@ public class DstbReqVO extends PageVO {
      */
     public void setDstbConfirmFg(String dstbConfirmFg) {
         this.dstbConfirmFg = dstbConfirmFg;
+    }
+
+    public String getVendrCd() {
+        return vendrCd;
+    }
+
+    public void setVendrCd(String vendrCd) {
+        this.vendrCd = vendrCd;
     }
 }

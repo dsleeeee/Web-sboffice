@@ -25,4 +25,7 @@ public interface DstbReqMapper {
     /** 분배등록 분배완료 */
     int updateDstbConfirm(DstbReqVO dstbReqVO);
 
+    /** 현재 로그인 사원에 맵핑된 거래처코드 조회 */
+    String getEmployeeVendr(DstbReqVO dstbReqVO);
+
 }

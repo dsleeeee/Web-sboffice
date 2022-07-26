@@ -118,6 +118,7 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
     $scope.slipFg      = data.slipFg;
     $scope.procFg      = data.procFg;
     $scope.dtlHdRemark = data.hdRemark;
+    $scope.vendrCd     = data.vendrCd;
 
     $scope.wjStoreOrderDtlLayer.show(true);
     if ($scope.procFg === "00") {
@@ -272,6 +273,7 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
 
     var params       = {};
     params.reqDate   = $scope.reqDate;
+    params.vendrCd   = $scope.vendrCd;
     $scope._postJSONQuery.withOutPopUp( "/iostock/order/storeOrder/storeOrder/getOrderTotAmt.sb", params, function(response) {
 
       if(response.data.data !== null) {
@@ -292,6 +294,7 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
       item.slipFg    = $scope.slipFg;
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리.
       item.hdRemark  = $scope.dtlHdRemark;
+      item.vendrCd   = $scope.vendrCd;
 
       if (item.orderTotQty !== null && item.orderTotQty !== 0 && (parseInt(item.orderTotQty) < parseInt(item.poMinQty))) {
           $scope._popMsg(messages["storeOrder.dtl.prodCd"] +"["+item.prodCd+"]" +" "+ messages["storeOrder.dtl.not.minOrderQty"]); // 주문수량은 최소주문수량 이상 입력하셔야 합니다.
@@ -410,7 +413,8 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
     params.callParent = "storeOrderDtl";
     params.reqDate    = $scope.reqDate;
     params.slipFg     = $scope.slipFg;
-    params.hdRemark   = $scope.dtlHdRemark
+    params.hdRemark   = $scope.dtlHdRemark;
+    params.vendrCd    = $scope.vendrCd;
     $scope._broadcast("storeOrderRegistCtrl", params);
   };
 

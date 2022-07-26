@@ -71,7 +71,7 @@
         </tr>
         <tr>
           <th><s:message code="storeOrder.dtl.option2"/></th>
-          <td colspan="3">
+          <td>
             <span class="txtIn w120px sb-select fl mr5">
               <wj-combo-box
                 id="option2"
@@ -102,6 +102,21 @@
               <s:message code="storeOrder.dtl.txtOption2Out"/></p>
             <p id="option2SaleLayer2" class="s14 bk lh30 fl ml10" style="display: none;">
               <s:message code="storeOrder.dtl.txtOption2Sale"/></p>
+          </td>
+          <th <c:if test="${envst1242 == '0'}">style="display: none;"</c:if>><s:message code="storeOrder.dtl.vendr"/></th>
+          <td <c:if test="${envst1242 == '0'}">style="display: none;"</c:if>>
+            <div class="sb-select fl w150px">
+              <wj-combo-box
+                id="dtlVendrCd"
+                ng-model="vendrCd"
+                control="dtlVendrCdCombo"
+                items-source="_getComboData('dtlVendrCd')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </div>
           </td>
         </tr>
         <tr>
@@ -214,7 +229,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeOrder/storeOrderRegist.js?ver=20220420.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeOrder/storeOrderRegist.js?ver=20220722.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

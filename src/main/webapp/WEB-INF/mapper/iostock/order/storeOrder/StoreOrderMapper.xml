@@ -24,6 +24,8 @@
         ,        tphso.MD_AMT*tphso.SLIP_FG        AS MD_AMT
         ,        tphso.MD_VAT*tphso.SLIP_FG        AS MD_VAT
         ,        tphso.MD_TOT*tphso.SLIP_FG        AS MD_TOT
+        ,        tphso.HQ_VENDR_CD                 AS HQ_VENDR_CD
+        ,        NVL((SELECT VENDR_NM FROM TB_HQ_VENDOR WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND VENDR_CD = tphso.HQ_VENDR_CD), '본사') AS HQ_VENDR_NM
         FROM     TB_PO_HQ_STORE_ORDER tphso
         WHERE    tphso.STORE_CD   =   #{storeCd}
         ]]>
@@ -195,7 +197,17 @@
         AND     tphso.SLIP_FG     (+) =   #{slipFg}
         AND     the.HQ_OFFICE_CD      =   #{hqOfficeCd}
         AND     the.ENVST_CD          =   '0011'
-        AND     TMP.PROD_CD NOT IN  (SELECT PROD_CD FROM TB_PO_HQ_STORE_DISTRIBUTE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND REQ_DATE = #{reqDate} AND PROC_FG IN ('20','30') AND SLIP_FG = 1)
+        <choose>
+            <when test='vendrCd != null and vendrCd != ""'>
+                AND     TMP.PROD_CD NOT IN  (SELECT PROD_CD FROM TB_PO_HQ_STORE_DISTRIBUTE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = #{storeCd} AND REQ_DATE = #{reqDate} AND PROC_FG IN ('20','30') AND SLIP_FG = 1 AND HQ_VENDR_CD = #{vendrCd})
+            </when>
+            <otherwise>
+                AND     TMP.PROD_CD NOT IN  (SELECT PROD_CD FROM TB_PO_HQ_STORE_DISTRIBUTE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = #{storeCd} AND REQ_DATE = #{reqDate} AND PROC_FG IN ('20','30') AND SLIP_FG = 1 AND HQ_VENDR_CD IS NULL)
+            </otherwise>
+        </choose>
+        <if test='vendrCd != null and vendrCd != ""'>
+        AND 	tmp.PROD_CD IN ( SELECT PROD_CD FROM TB_HQ_VENDOR_PROD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND VENDR_CD = #{vendrCd} AND USE_YN = 'Y')
+        </if>
         <if test='prodCd != null and prodCd != ""'>
             AND tmp.PROD_CD = #{prodCd}
         </if>
@@ -275,13 +287,19 @@
     -->
     <select id="getHdExist" parameterType="storeOrderVO" resultType="String">
         /* USE : storeOrderMapper.getHdExist */
-        <![CDATA[
         SELECT  DECODE(COUNT(*), 0, 'N', 'Y') AS IS_EXIST
         FROM    TB_PO_HQ_STORE_ORDER tphso
         WHERE   tphso.REQ_DATE    = #{reqDate}
         AND     tphso.STORE_CD    = #{storeCd}
         AND     tphso.SLIP_FG     = #{slipFg}
-        ]]>
+        <choose>
+            <when test='vendrCd != null and vendrCd != ""'>
+              AND tphso.HQ_VENDR_CD = #{vendrCd}
+            </when>
+            <otherwise>
+              AND tphso.HQ_VENDR_CD IS NULL
+            </otherwise>
+        </choose>
     </select>
 
     <!-- 주문등록 출고요청가능일인지 여부 조회 -->
@@ -619,7 +637,8 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            HQ_VENDR_CD
         )
         SELECT  tphsod.REQ_DATE
         ,       tphsod.STORE_CD
@@ -644,6 +663,7 @@
         ,       #{regId}
         ,       #{modDt}
         ,       #{modId}
+        ,       #{vendrCd}
         FROM    TB_PO_HQ_STORE_ORDER_DTL tphsod
         WHERE   tphsod.REQ_DATE  = #{reqDate}
         AND     tphsod.STORE_CD  = #{storeCd}
@@ -1144,6 +1164,33 @@
          WHERE STORE_CD = #{storeCd}
            AND REQ_DATE = #{reqDate}
            AND SLIP_FG = 1
+        <choose>
+            <when test='vendrCd != null and vendrCd != ""'>
+              AND HQ_VENDR_CD = #{vendrCd}
+            </when>
+            <otherwise>
+              AND HQ_VENDR_CD IS NULL
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 본사 거래처 조회(콤보박스용) -->
+    <!--
+        TABLE    : TB_HQ_VENDOR
+        PARAM    : storeOrderVO
+        COMMENTS : 본사 거래처를 조회한다.
+    -->
+    <select id="getHqVendrCombo" resultType="DefaultMap">
+    /* USE : StoreOrderMapper.getHqVendrCombo */
+      SELECT '' AS VALUE,
+             '본사' AS NAME
+        FROM DUAL
+       UNION
+      SELECT VENDR_CD AS VALUE,
+             VENDR_NM AS NAME
+        FROM TB_HQ_VENDOR
+       WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+       ORDER BY VALUE NULLS FIRST, VALUE ASC
     </select>
 
 </mapper>

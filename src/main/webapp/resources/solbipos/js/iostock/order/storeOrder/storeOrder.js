@@ -20,6 +20,9 @@ app.controller('storeOrderCtrl', ['$scope', '$http', '$timeout', function ($scop
     {"name": messages["storeOrder.modDate"], "value": "mod"}
   ]);
 
+  // 본사 거래처 콤보박스
+  $scope._setComboData('vendrCd', vendrList);
+
   // 출고가능일자 세팅
   $scope.reqDate.value = new Date(getFormatDate(gReqDate, "-"));
   // 출고요청일자 선택가능여부에 따라 출고요청일자 선택여부 처리
@@ -65,6 +68,7 @@ app.controller('storeOrderCtrl', ['$scope', '$http', '$timeout', function ($scop
           params.slipFg   = selectedRow.slipFg;
           params.procFg   = selectedRow.procFg;
           params.hdRemark = selectedRow.remark;
+          params.vendrCd  = selectedRow.hqVendrCd;
           $scope._broadcast('storeOrderDtlCtrl', params);
         }
       }
@@ -103,6 +107,7 @@ app.controller('storeOrderCtrl', ['$scope', '$http', '$timeout', function ($scop
     params.reqDate    = wijmo.Globalize.format($scope.reqDate.value, 'yyyyMMdd');
     params.slipFg     = $scope.slipFg;
     params.hdRemark   = "";
+    params.vendrCd    = $scope.vendrCdCombo.selectedValue;
     $scope._broadcast("storeOrderRegistCtrl", params);
   };
 

@@ -23,7 +23,7 @@
     <tr>
       <%-- 조회일자 --%>
       <th><s:message code="cmm.search.date"/></th>
-      <td>
+      <td colspan="3">
         <div class="sb-select">
           <span class="txtIn w150px">
             <wj-combo-box
@@ -58,13 +58,29 @@
           </wj-combo-box>
         </span>
       </td>
+      <%-- 거래처 --%>
+      <th <c:if test="${envst1242 == '0'}">style="display: none;"</c:if>><s:message code="dstbReq.vender"/></th>
+      <td <c:if test="${envst1242 == '0'}">style="display: none;"</c:if>>
+        <div class="sb-select fl w150px">
+          <wj-combo-box
+            id="vendrCd"
+            ng-model="vendrCd"
+            control="vendrCdCombo"
+            items-source="_getComboData('vendrCd')"
+            display-member-path="name"
+            selected-value-path="value"
+            is-editable="false"
+            initialized="_initComboBox(s)">
+          </wj-combo-box>
+        </div>
+      </td>
     </tr>
     </tbody>
   </table>
 
   <div class="tr mt10">
     <button type="button" id="btnDstbConfirm" class="btn_skyblue ml5" ng-click="saveDstbConfirm()"><s:message code="dstbReq.dstbConfirm"/></button><%--분배완료--%>
-    <button                                   class="btn_skyblue ml5" ng-click="excelDownload()"  ><s:message code="cmm.excel.down" 	/></button><%--엑셀 다운로드--%>
+    <button class="btn_skyblue ml5" ng-click="excelDownload()"  ><s:message code="cmm.excel.down" 	/></button><%--엑셀 다운로드--%>
   </div>
 
   <div class="w100 mt10">
@@ -103,7 +119,16 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/dstbReq/dstbReq.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript">
+
+  var gEnvst1242  = '${envst1242}';
+  var empVendrCd = '${empVendrCd}';
+
+  <%-- 본사 거래처 콤보박스 --%>
+  var vendrList = ${vendrList};
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/dstbReq/dstbReq.js?ver=20220722.01" charset="utf-8"></script>
 
 <%-- 분배등록 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/dstbReq/dstbReqDtl.jsp">

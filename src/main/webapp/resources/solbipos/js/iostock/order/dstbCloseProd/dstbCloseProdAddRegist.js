@@ -96,6 +96,7 @@ app.controller('dstbCloseProdAddRegistCtrl', ['$scope', '$http', '$timeout', fun
     $scope.prodNm   = data.prodNm;
     $scope.slipFg   = data.slipFg;
     $scope.storeCds = data.storeCds;
+    $scope.vendrCd  = data.vendrCd;
 
     $scope.wjDstbCloseProdAddRegistLayer.show(true);
     $("#spanAddRegistTitle").html('['+messages["dstbCloseProd.addRegist.order"]+'] ' + '[' + $scope.prodCd + '] ' + $scope.prodNm);
@@ -114,6 +115,7 @@ app.controller('dstbCloseProdAddRegistCtrl', ['$scope', '$http', '$timeout', fun
     params.prodCd  = $scope.prodCd;
     params.slipFg  = $scope.slipFg;
     params.storeCd = $scope.storeCds;
+    params.vendrCd = $scope.vendrCd;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/iostock/order/dstbCloseProd/dstbCloseProdAddRegist/list.sb", params, function () {
     });
@@ -148,6 +150,7 @@ app.controller('dstbCloseProdAddRegistCtrl', ['$scope', '$http', '$timeout', fun
           item.empNo     = "0000";
           item.storageCd = "999";	//전체재고용 창고코드 (001 -> 000 -> 999)
           item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+          item.vendrCd   = $scope.vendrCd;
           params.push(item);
         }                
         

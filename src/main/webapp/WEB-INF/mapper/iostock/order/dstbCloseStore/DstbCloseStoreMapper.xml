@@ -56,6 +56,14 @@
         <if test='storeNm != null and storeNm != ""'>
             AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
         </if>
+        <choose>
+            <when test='vendrCd != null and vendrCd != ""'>
+              AND tphsd.HQ_VENDR_CD = #{vendrCd}
+            </when>
+            <otherwise>
+              AND tphsd.HQ_VENDR_CD IS NULL
+            </otherwise>
+        </choose>
         GROUP
         BY       tphsd.REQ_DATE, tphsd.SLIP_FG, tphsd.PROC_FG
         ,        tphsd.STORE_CD, tms.STORE_NM
@@ -119,8 +127,16 @@
         AND     tsssc.PROD_CD    (+) =   tphsd.PROD_CD
         AND     the.HQ_OFFICE_CD     =   #{hqOfficeCd}
         AND     the.ENVST_CD         =   '0011'
-        ORDER BY tphsd.PROD_CD
         ]]>
+        <choose>
+            <when test='vendrCd != null and vendrCd != ""'>
+              AND tphsd.HQ_VENDR_CD = #{vendrCd}
+            </when>
+            <otherwise>
+              AND tphsd.HQ_VENDR_CD IS NULL
+            </otherwise>
+        </choose>
+        ORDER BY tphsd.PROD_CD
     </select>
 
     <!-- 분배마감 - 분배마감 리스트 확정 -->
@@ -277,7 +293,6 @@
             , SF_ZERO_TO_NULL(optionTb.ORDER_TOT_QTY) AS MGR_TOT_QTY
         </if>
         <include refid="CmmSQL.PagingTemplateCount"/>
-        <![CDATA[
         FROM    TB_MS_PRODUCT tmp
         ,       TB_ST_STORE_STOCK_CUR tsssc
         ,       (   SELECT  PROD_CD, CURR_QTY
@@ -292,13 +307,23 @@
                     WHERE   tphsd.HQ_OFFICE_CD  =   #{hqOfficeCd}
                     AND     tphsd.REQ_DATE      =   #{reqDate}
                     AND     tphsd.SLIP_FG       =   #{slipFg}
+                    <choose>
+                        <when test='vendrCd != null and vendrCd != ""'>
+                          AND tphsd.HQ_VENDR_CD = #{vendrCd}
+                        </when>
+                        <otherwise>
+                          AND tphsd.HQ_VENDR_CD IS NULL
+                        </otherwise>
+                    </choose>
                     GROUP
                     BY      tphsd.STORE_CD, tphsd.PROD_CD, tphsd.SLIP_FG, tphsd.PO_UNIT_QTY
                 ) tphsd
         ,       TB_HQ_PRODUCT thp
         ,       TB_MS_PRODUCT_BARCD tmpb
         ,       TB_HQ_ENVST the
-        ]]>
+        <if test='vendrCd != null and vendrCd != ""'>
+            ,       TB_HQ_VENDOR_PROD thvp
+        </if>
         <if test='option2 == "ORD"'>
             ,   (   SELECT  tphsod.PROD_CD
                     ,       TRUNC(SUM(tphsod.ORDER_TOT_QTY) / tphsod.PO_UNIT_QTY) AS ORDER_UNIT_QTY
@@ -341,7 +366,6 @@
                     BY      tsdp.PROD_CD, tmp.PO_UNIT_QTY
                 ) optionTb
         </if>
-        <![CDATA[
         WHERE   tmp.STORE_CD          =   #{storeCd}
         AND     tmp.USE_YN            =   'Y'
         AND     tmp.PO_PROD_FG        IN ('1', '3')
@@ -357,8 +381,18 @@
         AND     tmpb.PROD_CD      (+) =   tmp.PROD_CD
         AND     the.HQ_OFFICE_CD      =   #{hqOfficeCd}
         AND     the.ENVST_CD          =   '0011'
-        AND     thp.PROD_CD NOT IN  (SELECT PROD_CD FROM TB_PO_HQ_STORE_DISTRIBUTE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND REQ_DATE = #{reqDate} AND PROC_FG IN ('20','30') AND SLIP_FG = 1)
-        ]]>
+        <choose>
+            <when test='vendrCd != null and vendrCd != ""'>
+              AND thp.PROD_CD NOT IN (SELECT PROD_CD FROM TB_PO_HQ_STORE_DISTRIBUTE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = #{storeCd} AND REQ_DATE = #{reqDate} AND PROC_FG IN ('20','30') AND SLIP_FG = 1 AND HQ_VENDR_CD = #{vendrCd} )
+              AND thvp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+              AND thvp.VENDR_CD =  #{vendrCd}
+              AND thvp.PROD_CD = thp.PROD_CD
+              AND thvp.USE_YN = 'Y'
+            </when>
+            <otherwise>
+              AND     thp.PROD_CD NOT IN (SELECT PROD_CD FROM TB_PO_HQ_STORE_DISTRIBUTE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = #{storeCd} AND REQ_DATE = #{reqDate} AND PROC_FG IN ('20','30') AND SLIP_FG = 1 AND HQ_VENDR_CD IS NULL )
+            </otherwise>
+        </choose>
         <if test='prodCd != null and prodCd != ""'>
             AND tmp.PROD_CD = #{prodCd}
         </if>
@@ -446,7 +480,8 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            HQ_VENDR_CD
         )
         VALUES
         (
@@ -474,7 +509,8 @@
             #{regDt},
             #{regId},
             #{modDt},
-            #{modId}
+            #{modId},
+            #{vendrCd}
         )
     </insert>
 
@@ -549,7 +585,8 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            HQ_VENDR_CD
         )
         SELECT  #{hqOfficeCd}   ,   #{date}         ,   ${seq}+(ROWNUM-1)
         ,       #{storeCd}      ,   '0000'          ,   #{slipFg}
@@ -570,6 +607,7 @@
         ,       #{regId}
         ,       #{modDt}
         ,       #{modId}
+        ,       #{vendrCd}
         FROM    (   SELECT  tpte.STORE_CD
                     ,       tpte.PROD_CD
                     ,       TRUNC(SUM(NVL(tpte.UNIT_QTY, 0)*tmp.PO_UNIT_QTY+NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0))/tmp.PO_UNIT_QTY) AS UNIT_QTY

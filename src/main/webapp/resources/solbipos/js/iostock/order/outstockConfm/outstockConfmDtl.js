@@ -180,6 +180,7 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
 	$scope.endDate = data.endDate;
     $scope.slipNo = data.slipNo;
     $scope.slipFg = data.slipFg;
+    $scope.vendrCd = data.vendrCd;
     $scope.wjOutstockConfmDtlLayer.show(true);
 
 
