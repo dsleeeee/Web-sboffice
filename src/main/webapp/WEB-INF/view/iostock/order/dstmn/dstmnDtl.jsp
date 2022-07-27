@@ -98,12 +98,7 @@
         </tbody>
       </table>
 
-      <%--<ul class="txtSty3 mt10">
-        <li class="red"><s:message code="outstockConfm.dtl.txt1"/></li>
-        <li class="red"><s:message code="outstockConfm.dtl.txt2"/></li>
-        <li class="red"><s:message code="outstockConfm.dtl.txt3"/></li>
-      </ul>--%>
-      <div class="tooltip mt20 fl">?
+      <div class="tooltipBtn mt20 fl">설명
         <span class="tooltiptext tooltip-right">
         * <s:message code="outstockConfm.dtl.txt1"/><br/>
         * <s:message code="outstockConfm.dtl.txt2"/><br/>

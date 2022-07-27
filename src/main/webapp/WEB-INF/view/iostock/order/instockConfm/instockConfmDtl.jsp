@@ -65,7 +65,7 @@
         </tbody>
       </table>
 
-      <div class="tooltip mt20 fl">?
+      <div class="tooltipBtn mt20 fl">설명
         <span class="tooltiptext tooltip-right">
         * <s:message code="instockConfm.dtl.txt1"/><br/>
         * <s:message code="instockConfm.dtl.txt2"/><br/>
