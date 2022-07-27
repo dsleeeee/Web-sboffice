@@ -141,12 +141,13 @@
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="30"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="empCardInfo.empCardNo"/>" binding="employeeCardNo" width="200" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="empCardInfo.empCardNo"/>" binding="employeeCardNo" width="150" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="empCardInfo.empNo"/>" binding="employeeNo" width="150" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="empCardInfo.empNm"/>" binding="employeeNm" width="150" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="empCardInfo.divNm"/>" binding="divNm" width="200" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="empCardInfo.deptNm"/>" binding="deptNm" width="200" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="empCardInfo.divNm"/>" binding="divNm" width="150" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="empCardInfo.deptNm"/>" binding="deptNm" width="150" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="empCardInfo.positionNm"/>" binding="positionNm" width="150" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="empCardInfo.useFg"/>" binding="useFg" data-map="useFgDataMap" width="90" align="center"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -163,7 +164,7 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/empCardInfo.js?ver=20210907.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/empCardInfo.js?ver=20220727.01" charset="utf-8"></script>
 
 <%-- 사원카드정보관리 엑셀업로드 --%>
 <c:import url="/WEB-INF/view/base/store/emp/excelUploadEmpCardInfo.jsp">

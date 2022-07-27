@@ -26,6 +26,7 @@
             <wj-flex-grid-column header="<s:message code="empCardInfo.divNm"/>" binding="divNm" width="150" align="center" data-type="String"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="empCardInfo.deptNm"/>" binding="deptNm" width="150" align="center" data-type="String"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="empCardInfo.positionNm"/>" binding="positionNm" width="150" align="center" data-type="String"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="empCardInfo.useFg"/>" binding="useFg" width="90" align="center" data-type="String"></wj-flex-grid-column>
 
         </wj-flex-grid>
     </div>
@@ -33,4 +34,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/excelUploadEmpCardInfo.js?ver=20210907.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/excelUploadEmpCardInfo.js?ver=20220727.01" charset="utf-8"></script>

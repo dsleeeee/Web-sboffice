@@ -61,6 +61,7 @@ app.controller('excelUploadEmpCardInfoCtrl', ['$scope', '$http', '$timeout', fun
         params.divNm = '경영관리본부';
         params.deptNm = '총무부';
         params.positionNm = '차장';
+        params.useFg = '정상';
 
         var newRow = flex.collectionView.addNew();
         for (var prop in params) {

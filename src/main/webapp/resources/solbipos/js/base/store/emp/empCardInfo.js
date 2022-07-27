@@ -13,6 +13,12 @@
  */
 var app = agrid.getApp();
 
+// 카드사용구분
+var useFgDataMapData = [
+    {"name":"정상","value":"1"},
+    {"name":" 사용불가","value":"0"}
+];
+
 app.controller('empCardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('empCardInfoCtrl', $scope, $http, true));
@@ -21,6 +27,8 @@ app.controller('empCardInfoCtrl', ['$scope', '$http', '$timeout', function ($sco
     $scope._setComboData("listScaleBox", gvListScaleBoxData);
 
     $scope.initGrid = function (s, e) {
+        // 그리드 DataMap 설정
+        $scope.useFgDataMap = new wijmo.grid.DataMap(useFgDataMapData, 'value', 'name'); // 카드사용구분
 
         // ReadOnly 효과설정
         s.formatItem.addHandler(function (s, e) {
