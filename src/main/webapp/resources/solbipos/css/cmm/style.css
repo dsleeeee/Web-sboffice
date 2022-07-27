@@ -130,10 +130,10 @@ button {outline:none; border:0; font-family:'NotoR', Malgun Gothic, '맑은 고�
 .pdb5 {padding-bottom:5px;} .pdb10 {padding-bottom:10px;} .pdb15 {padding-bottom:15px;} .pdb20 {padding-bottom:20px;} .pdb30 {padding-bottom:30px;} .pdb40 {padding-bottom:40px;}
 
 button.btn_blue {background:#1e88e5; border:1px solid #1e88e5; color:#fff; border-radius:4px; line-height:25px; padding:0 25px; font-size:1em; transition:all 0.2s;}
-button.btn_blue:hover {background:#174291; transition:all 0.2s;}
+button.btn_blue:hover {background:#174291; transition:all 0.2s; cursor:pointer;}
 
 button.btn_skyblue {background:#ebf5ff; border:1px solid #93cbfc; color:#337dde; border-radius:4px; line-height:23px; padding:0 10px; font-size:0.75em; transition:all 0.2s;}
-button.btn_skyblue:hover {background:#93cbfc; color:#fff; transition:all 0.2s;}
+button.btn_skyblue:hover {background:#93cbfc; color:#fff; transition:all 0.2s; cursor:pointer;}
 
 button.btn_blk {background:#fff; border:1px solid #2e333f; color:#2e333f; border-radius:4px; line-height:30px; padding:0 20px; font-size:1em; transition:all 0.2s;}
 button.btn_blk:hover {background:#e8e8e8; color:#2e333f; transition:all 0.2s;}
@@ -2486,7 +2486,19 @@ label.rdo-po {font-size:14px; position:relative; top:-2px}
     text-align: center; /* 가로정렬 */
     line-height: 15px; /* 세로정렬 */
 }
-.tooltip .tooltiptext {
+.tooltipBtn{
+    position: relative;
+    display: block;
+    background-color: #aeaeae;
+    color:#fff;
+    border-radius:4px;
+    line-height:30px;
+    padding:0 30px;
+    font-size:1em;
+    transition:all 0.2s;
+}
+.tooltip .tooltiptext,
+.tooltipBtn .tooltiptext{
     visibility: hidden;       /* 이벤트가 없으면 툴팁 영역을 숨김 */
     width: 400px;             /* 툴팁 영역의 넓이를 설정 */
     background-color: #e8e8e8;
@@ -2499,10 +2511,12 @@ label.rdo-po {font-size:14px; position:relative; top:-2px}
     z-index: 4;
     line-height: 1.5em;
 }
-.tooltip:hover .tooltiptext {
+.tooltip:hover .tooltiptext,
+.tooltipBtn:hover .tooltiptext{
     visibility: visible;      /* hover 이벤트 발생시 영역을 보여줌 */
 }
-.tooltip .tooltip-right {
+.tooltip .tooltip-right,
+.tooltipBtn .tooltip-right{
     top: -5px;                /* 영역의 위치를 -5 만큼 위로 이동 */
     left: 105%;              /* 오른쪽에 생성해야하므로 영역을 왼쪽쪽에서 105% 이동 */
 }

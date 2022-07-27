@@ -177,7 +177,7 @@
           <%-- 저장 --%>
           <button type="button" class="btn_skyblue ml5" id="btnSave" ng-click="saveDstbCloseStoreAdd()">
             <s:message code="cmm.save"/></button>
-            <div class="tooltip fl">?
+            <div class="tooltipBtn fl">설명
                  <span class="tooltiptext tooltip-right">
                    * <s:message code="dstbCloseStore.add.txt1"/><br/>
                  </span>

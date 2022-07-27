@@ -18,7 +18,7 @@
         <%-- 저장 --%>
         <button type="button" id="btnDtlSave" class="btn_skyblue ml5" ng-click="save()">
           <s:message code="cmm.save"/></button>
-          <div class="tooltip fl">?
+          <div class="tooltipBtn fl">설명
             <span class="tooltiptext tooltip-right">
               * <s:message code="dstbCloseProd.addRegist.txt1"/><br/>
               * <s:message code="dstbCloseProd.addRegist.txt2"/><br/>

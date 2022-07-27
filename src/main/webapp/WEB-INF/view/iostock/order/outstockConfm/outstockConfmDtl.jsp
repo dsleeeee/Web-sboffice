@@ -98,7 +98,7 @@
         </tbody>
       </table>
 
-      <div class="tooltip mt20 fl">?
+      <div class="tooltipBtn mt20 fl">설명
         <span class="tooltiptext tooltip-right">
         * <s:message code="outstockConfm.dtl.txt1"/><br/>
         * <s:message code="outstockConfm.dtl.txt2"/><br/>
