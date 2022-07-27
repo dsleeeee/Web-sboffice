@@ -808,5 +808,14 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
     params.uploadFg = 'order';
     $scope._broadcast('excelUploadMPSErrInfoCtrl', params);
   };
+  
+  // 확장조회
+  $scope.searchAddShowChange = function () {
+    if( $("#tblSearchAddShow").css("display") === 'none') {
+        $("#tblSearchAddShow").show();
+    } else {
+        $("#tblSearchAddShow").hide();
+    }
+  };
 
 }]);

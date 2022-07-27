@@ -6,15 +6,15 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/iostock/order/outstockConfm/outstockConfmDtl/"/>
 
-<wj-popup id="wjOutstockConfmDtlLayer" control="wjOutstockConfmDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+<wj-popup id="wjOutstockConfmDtlLayer" control="wjOutstockConfmDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px;height:750px;">
   <div id="outstockConfmDtlLayer" class="wj-dialog wj-dialog-columns" ng-controller="outstockConfmDtlCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="outstockConfm.dtl.title"/>
-      <span id="spanDtlTitle"></span>
+      <label id="lblTitle"></label>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
-    <div class="wj-dialog-body sc2" style="height: 600px;">
-      <table class="tblType01">
+    <div class="wj-dialog-body sc2" style="height: 700px;">
+      <table class="tblType01" style="display: none;">
         <colgroup>
           <col class="w25"/>
           <col class="w25"/>
@@ -39,10 +39,12 @@
         </tbody>
       </table>
 
-      <table class="tblType01 mt10">
+      <table class="tblType01">
         <colgroup>
-          <col class="w20"/>
-          <col class="w80"/>
+          <col class="w15"/>
+          <col class="w35"/>
+          <col class="w15"/>
+          <col class="w35"/>
         </colgroup>
         <tbody>
         <tr>
@@ -51,8 +53,6 @@
           <td>
             <input type="text" id="hdRemark" name="hdRemark" ng-model="hdRemark" class="sb-input w100" maxlength="300"/>
           </td>
-        </tr>
-        <tr>
           <%-- 본사비고(매장열람불가) --%>
           <th><s:message code="outstockConfm.dtl.hqRemark"/></th>
           <td>
@@ -62,7 +62,7 @@
         <tr style="display: none;">
           <%-- 배송기사 --%>
           <th><s:message code="outstockConfm.dtl.dlvrNm"/></th>
-          <td>
+          <td colspan="3">
             <span class="txtIn w150px sb-select fl mr5">
               <wj-combo-box
                 id="srchDtlDlvrCd"
@@ -79,7 +79,7 @@
         <tr>
           <%-- 거래명세표 --%>
           <th><s:message code="outstockConfm.dtl.stmtAcct"/></th>
-          <td>
+          <td colspan="3">
             <span class="txtIn w150px sb-select fl mr5">
               <wj-combo-box
                 id="stmtAcctFg"
@@ -98,13 +98,14 @@
         </tbody>
       </table>
 
-      <ul class="txtSty3 mt10">
-        <li class="red"><s:message code="outstockConfm.dtl.txt1"/></li>
-        <li class="red"><s:message code="outstockConfm.dtl.txt2"/></li>
-        <li class="red"><s:message code="outstockConfm.dtl.txt3"/></li>
-      </ul>
-
-      <div class="tr mt20 fr">
+      <div class="tooltip mt20 fl">?
+        <span class="tooltiptext tooltip-right">
+        * <s:message code="outstockConfm.dtl.txt1"/><br/>
+        * <s:message code="outstockConfm.dtl.txt2"/><br/>
+        * <s:message code="outstockConfm.dtl.txt3"/><br/>
+        </span>
+      </div>
+      <div class="tr mt10 fr">
         <div id="outstockBtnLayer" style="display: none;">
           	<%--출고창고 --%>
           	<p class="s14 bk fl mr5 lh30" <c:if test="${storageEnvstVal == '0'}">style="display: none;"</c:if> >
@@ -161,7 +162,7 @@
 
       <div class="w100 mt10 mb20">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 400px; overflow-x: hidden; overflow-y: hidden;">
+        <div class="wj-gridWrap" style="height: 450px; overflow-x: hidden; overflow-y: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
@@ -181,19 +182,19 @@
             <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.storeCd"/>" binding="storeCd" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.barcdCd"/>" binding="barcdCd" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.outSplyUprc"/>" binding="outSplyUprc" width="70" align="right" is-read-only="false" max-length=10 data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.unitQty"/>" binding="outUnitQty" width="70" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.etcQty"/>" binding="outEtcQty" width="70" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.outUnitQty"/>" binding="outTotQty" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.outAmt"/>" binding="outAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.outVat"/>" binding="outVat" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.outTot"/>" binding="outTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.remark"/>" binding="remark" width="200" align="left" is-read-only="false" max-length=300></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.vatFg"/>" binding="vatFg01" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.envst0011"/>" binding="envst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.barcdCd"/>" binding="barcdCd" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.poUnitFg"/>" binding="poUnitFg" width="60" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.poUnitQty"/>" binding="poUnitQty" width="60" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.outSplyUprc"/>" binding="outSplyUprc" width="60" align="right" is-read-only="false" max-length=10 data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.unitQty"/>" binding="outUnitQty" width="65" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.etcQty"/>" binding="outEtcQty" width="65" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.outUnitQty"/>" binding="outTotQty" width="60" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.outAmt"/>" binding="outAmt" width="60" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.outVat"/>" binding="outVat" width="60" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.outTot"/>" binding="outTot" width="60" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.remark"/>" binding="remark" width="150" align="left" is-read-only="false" max-length=300></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.vatFg"/>" binding="vatFg01" width="60" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.envst0011"/>" binding="envst0011" width="60" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
           </wj-flex-grid>
         </div>
         <%--//위즈모 테이블--%>
@@ -208,4 +209,4 @@
   var storageEnvstVal = "${storageEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockConfm/outstockConfmDtl.js?ver=20220722.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockConfm/outstockConfmDtl.js?ver=20220726.01" charset="utf-8"></script>

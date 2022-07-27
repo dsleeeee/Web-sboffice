@@ -6,13 +6,13 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/iostock/order/instockConfm/instockConfmDtl/"/>
 
-<wj-popup id="wjInstockConfmDtlLayer" control="wjInstockConfmDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+<wj-popup id="wjInstockConfmDtlLayer" control="wjInstockConfmDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px;height: 750px;">
   <div id="instockConfmDtlLayer" class="wj-dialog wj-dialog-columns" ng-controller="instockConfmDtlCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
-      <span id="spanDtlTitle"></span>
+      <label id="lblTitle"></label>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
-    <div class="wj-dialog-body sc2" style="height: 600px;">
+    <div class="wj-dialog-body sc2" style="height: 700px;">
       <table class="tblType01">
         <colgroup>
           <col class="w15"/>
@@ -65,11 +65,13 @@
         </tbody>
       </table>
 
-      <ul class="txtSty3 mt10">
-        <li class="red"><s:message code="instockConfm.dtl.txt1"/></li>
-        <li class="red"><s:message code="instockConfm.dtl.txt2"/></li>
-        <li class="red"><s:message code="instockConfm.dtl.txt3"/></li>
-      </ul>
+      <div class="tooltip mt20 fl">?
+        <span class="tooltiptext tooltip-right">
+        * <s:message code="instockConfm.dtl.txt1"/><br/>
+        * <s:message code="instockConfm.dtl.txt2"/><br/>
+        * <s:message code="instockConfm.dtl.txt3"/><br/>
+        </span>
+      </div>
 
       <div class="tr mt20 fr">
         <div id="instockBtnLayer" style="display: none;">
@@ -112,7 +114,7 @@
 
       <div class="w100 mt10 mb20">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 280px; overflow-x: hidden; overflow-y: hidden;">	<%-- 400px -> 280px --%>
+        <div class="wj-gridWrap" style="height: 450px; overflow-x: hidden; overflow-y: hidden;">	<%-- 400px -> 280px --%>
           <wj-flex-grid
             autoGenerateColumns	="false"
             selection-mode		="Row"
@@ -172,7 +174,7 @@
             <wj-flex-grid-column header="<s:message code="instockConfm.dtl.inAmt"       />" binding="inAmt"         width="70"  align="right"   is-read-only="true"     data-type="Number" format="n0" aggregate="Sum"                  ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="instockConfm.dtl.inVat"       />" binding="inVat"         width="70"  align="right"   is-read-only="true"     data-type="Number" format="n0" aggregate="Sum"                  ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="instockConfm.dtl.inTot"       />" binding="inTot"         width="70"  align="right"   is-read-only="true"     data-type="Number" format="n0" aggregate="Sum"                  ></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.remark"      />" binding="remark"        width="100" align="left"    is-read-only="false"                                                    max-length=200  ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.remark"      />" binding="remark"        width="150" align="left"    is-read-only="false"                                                    max-length=200  ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="instockConfm.dtl.vatFg"       />" binding="vatFg01"       width="70"  align="right"   is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
 <%--
 			<wj-flex-grid-column header=""                                                  binding="arrStorageCd"  width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
@@ -200,4 +202,4 @@
   var storageEnvstVal = "${storageEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/instockConfm/instockConfmDtl.js?ver=20220714.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/instockConfm/instockConfmDtl.js?ver=20220726.01" charset="utf-8"></script>

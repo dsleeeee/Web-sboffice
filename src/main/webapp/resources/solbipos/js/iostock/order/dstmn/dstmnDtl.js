@@ -98,6 +98,7 @@ app.controller('dstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
       var dataItem = {};
           dataItem.slipNo         = messages["outstockConfm.dtl.slipNo"        ];	//전표번호
           dataItem.slipFg         = messages["outstockConfm.dtl.slipFg"        ];	//전표구분
+          dataItem.slipKind       = messages["outstockConfm.dtl.slipKind"      ];	//전표구분
           dataItem.seq            = messages["outstockConfm.dtl.seq"           ];	//순번
           dataItem.storeCd        = messages["outstockConfm.dtl.storeCd"       ];	//매장코드
           dataItem.prodCd         = messages["outstockConfm.dtl.prodCd"        ];	//상품코드
@@ -116,10 +117,60 @@ app.controller('dstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
           dataItem.outTot         = messages["outstockConfm.dtl.outTot"        ];  //합계
           dataItem.remark         = messages["outstockConfm.dtl.remark"        ];  //비고
           dataItem.vatFg01        = messages["outstockConfm.dtl.vatFg"         ];  //상품부가세구분
-          dataItem.envst0011        = messages["outstockConfm.dtl.envst0011"   ];  //출고가-부가세포함여부
+          dataItem.envst0011      = messages["outstockConfm.dtl.envst0011"     ];  //출고가-부가세포함여부
+
+          dataItem.arrStorageCd   = "";
+          dataItem.arrStorageNm   = "";
+          dataItem.arrCurrQty     = "";
+          dataItem.arrInUnitQty   = "";
+          dataItem.arrInEtcQty    = "";
+          dataItem.arrInTotQty    = "";
+          dataItem.arrInAmt       = "";
+          dataItem.arrInVat       = "";
+          dataItem.arrInTot       = "";
+
+
 
       s.columnHeaders.rows[0].dataItem = dataItem;
   //Grid Header 2줄 - END		----------------------------------------------------------------
+
+      s.itemFormatter = function (panel, r, c, cell) {
+            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+              //align in center horizontally and vertically
+              panel.rows[r].allowMerging    = true;
+              panel.columns[c].allowMerging = true;
+              wijmo.setCss(cell, {
+                display    : 'table',
+                tableLayout: 'fixed'
+              });
+              cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+              wijmo.setCss(cell.children[0], {
+                display      : 'table-cell',
+                verticalAlign: 'middle',
+                textAlign    : 'center'
+              });
+            }
+            // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+            else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+              // GroupRow 인 경우에는 표시하지 않는다.
+              if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+                cell.textContent = '';
+              } else {
+                if (!isEmpty(panel._rows[r]._data.rnum)) {
+                  cell.textContent = (panel._rows[r]._data.rnum).toString();
+                } else {
+                  cell.textContent = (r + 1).toString();
+                }
+              }
+            }
+            // readOnly 배경색 표시
+            else if (panel.cellType === wijmo.grid.CellType.Cell) {
+              var col = panel.columns[c];
+              if (col.isReadOnly) {
+                wijmo.addClass(cell, 'wj-custom-readonly');
+              }
+            }
+          }
 
 
 
@@ -302,7 +353,7 @@ app.controller('dstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
             $("#infoOutDate").html($scope.outDate !== null ? getFormatDate($scope.outDate) : '');
             $("#infoInDate").html('');
 
-            // $("#spanDtlTitle").html(messages["outstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["outstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["outstockConfm.dtl.reqDate"]+' : ' + getFormatDate($scope.outDate));
+            $("#lblTitle").text(messages["outstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["outstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["outstockConfm.dtl.reqDate"]+' : ' + getFormatDate($scope.outDate));
             $("#outstockBtnLayer").show();
             $scope.spanOutstockConfirmFg   = false;
             $scope.btnSetOutToIn		   = false;
@@ -327,7 +378,7 @@ app.controller('dstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
               $("#infoOutDate").html($scope.outDate !== null ? getFormatDate($scope.outDate) : '');
               $("#infoInDate").html('');
 
-              // $("#spanDtlTitle").html(messages["outstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["outstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["outstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate));
+              $("#lblTitle").text(messages["outstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["outstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["outstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate));
             }
             // 입고확정
             else if ($scope.procFg === "30") {
@@ -337,7 +388,7 @@ app.controller('dstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
               $("#infoOutDate").html($scope.outDate !== null ? getFormatDate($scope.outDate) : '');
               $("#infoInDate").html($scope.inDate !== null ? getFormatDate($scope.inDate) : '');
 
-              // $("#spanDtlTitle").html(messages["outstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["outstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["outstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate) + ', '+messages["outstockConfm.dtl.inDate"]+' : ' + getFormatDate($scope.inDate));
+              $("#lblTitle").text(messages["outstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["outstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["outstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate) + ', '+messages["outstockConfm.dtl.inDate"]+' : ' + getFormatDate($scope.inDate));
             }
           }
 

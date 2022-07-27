@@ -231,7 +231,7 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
             $("#infoOutDate").html($scope.outDate !== null ? getFormatDate($scope.outDate) : '');
             $("#infoInDate").html('');
 
-            // $("#spanDtlTitle").html(messages["outstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["outstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["outstockConfm.dtl.reqDate"]+' : ' + getFormatDate($scope.outDate));
+            $("#lblTitle").text(messages["outstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["outstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["outstockConfm.dtl.reqDate"]+' : ' + getFormatDate($scope.outDate));
             $("#outstockBtnLayer").show();
             $scope.spanOutstockConfirmFg   = true;
             $scope.btnSetOutToIn		   = true;
@@ -256,7 +256,7 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
               $("#infoOutDate").html($scope.outDate !== null ? getFormatDate($scope.outDate) : '');
               $("#infoInDate").html('');
 
-              // $("#spanDtlTitle").html(messages["outstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["outstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["outstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate));
+              $("#lblTitle").text(messages["outstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["outstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["outstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate));
             }
             // 입고확정
             else if ($scope.procFg === "30") {
@@ -266,7 +266,7 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
               $("#infoOutDate").html($scope.outDate !== null ? getFormatDate($scope.outDate) : '');
               $("#infoInDate").html($scope.inDate !== null ? getFormatDate($scope.inDate) : '');
 
-              // $("#spanDtlTitle").html(messages["outstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["outstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["outstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate) + ', '+messages["outstockConfm.dtl.inDate"]+' : ' + getFormatDate($scope.inDate));
+              $("#lblTitle").text(messages["outstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["outstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["outstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate) + ', '+messages["outstockConfm.dtl.inDate"]+' : ' + getFormatDate($scope.inDate));
             }
           }
 

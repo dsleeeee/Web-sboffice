@@ -6,16 +6,16 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/iostock/order/dstbCloseStore/dstbCloseStoreAdd/"/>
 
-<wj-popup id="wjDstbCloseStoreAddLayer" control="wjDstbCloseStoreAddLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+<wj-popup id="wjDstbCloseStoreAddLayer" control="wjDstbCloseStoreAddLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px;height:750px;">
   <div id="dstbCloseStoreAddLayer" class="wj-dialog wj-dialog-columns" ng-controller="dstbCloseStoreAddCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
-      <s:message code="dstbCloseStore.add.title"/>
+      <s:message code="dstbCloseStore.add.title"/> -
+      <s:message code="dstbCloseStore.add.addProdSubTitle"/>
+      <label id="addProdSubTitle"></label>
+      <label id="orderFgSubTitle"></label>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
-    <div class="wj-dialog-body sc2" style="height: 600px;">
-      <p class="s14 bk mb5 fl"><s:message code="dstbCloseStore.add.addProdSubTitle"/></p>
-      <p id="addProdSubTitle" class="s14 bk ml5 mb5 fl"></p>
-      <p id="orderFgSubTitle" class="s14 bk ml5 mb5 fl"></p>
+    <div class="wj-dialog-body sc2" style="height: 700px;">
       <table class="tblType01">
         <colgroup>
           <col class="w15"/>
@@ -67,6 +67,16 @@
             <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
           </td>
         </tr>
+        </tbody>
+      </table>
+      <table class="tblType01" id="tblSearchAddShow" style="display: none;">
+        <colgroup>
+          <col class="w15"/>
+          <col class="w35"/>
+          <col class="w15"/>
+          <col class="w35"/>
+        </colgroup>
+        <tbody>
         <tr>
           <%-- 옵션1 --%>
           <th><s:message code="dstbCloseStore.add.option1"/></th>
@@ -148,28 +158,37 @@
         </tbody>
       </table>
 
-      <div class="mt10 oh">
+      <div class="oh">
         <%-- 조회 --%>
         <button type="button" class="btn_blue fr" id="btnSearch" ng-click="search();">
           <s:message code="cmm.search"/></button>
+          <%-- 확장조회 --%>
+          <button class="btn_blue mr5 fr" id="btnSearchAddShow" ng-click="searchAddShowChange()">
+              <s:message code="cmm.search.addShow" />
+          </button>
       </div>
 
-      <ul class="txtSty3 mt10">
-        <li class="red"><s:message code="dstbCloseStore.add.txt1"/></li>
-      </ul>
+      <%--<ul class="txtSty3 mt10">--%>
+        <%--<li class="red"><s:message code="dstbCloseStore.add.txt1"/></li>--%>
+      <%--</ul>--%>
 
-      <div class="mt40 tr">
+      <div class="mt20 tr">
         <div class="tr">
           <%-- 저장 --%>
           <button type="button" class="btn_skyblue ml5" id="btnSave" ng-click="saveDstbCloseStoreAdd()">
             <s:message code="cmm.save"/></button>
+            <div class="tooltip fl">?
+                 <span class="tooltiptext tooltip-right">
+                   * <s:message code="dstbCloseStore.add.txt1"/><br/>
+                 </span>
+             </div>
         </div>
       </div>
 
       <%--<div class="wj-TblWrap ml20 mr20 pdb20">--%>
       <div class="w100 mt10 mb20">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 500px; overflow-x: hidden; overflow-y: hidden;">
+        <div class="wj-gridWrap" style="height: 400px; overflow-x: hidden; overflow-y: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
@@ -186,30 +205,30 @@
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.prodClassNm"/>" binding="prodClassNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.mgrSplyUprc"/>" binding="mgrSplyUprc" width="70" align="right" max-length=10 is-read-only="false" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.prevMgrUnitQty"/>" binding="prevMgrUnitQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.prevMgrEtcQty"/>" binding="prevMgrEtcQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.prevMgrTotQty"/>" binding="prevMgrTotQty" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.mgrUnitQty"/>" binding="mgrUnitQty" width="70" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.mgrEtcQty"/>" binding="mgrEtcQty" width="70" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.mgrTotQty"/>" binding="mgrTotQty" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.mgrAmt"/>" binding="mgrAmt" width="70" align="right" is-read-only="true" visible="false" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.mgrVat"/>" binding="mgrVat" width="70" align="right" is-read-only="true" visible="false" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.mgrTot"/>" binding="mgrTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.saleUprc"/>" binding="saleUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.splyUprc"/>" binding="splyUprc" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.hqSafeStock"/>" binding="hqSafeStockUnitQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.hqSafeStock"/>" binding="hqSafeStockEtcQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.hqCurrQty"/>" binding="hqCurrUnitQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.hqCurrQty"/>" binding="hqCurrEtcQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.storeCurrQty"/>" binding="storeCurrUnitQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.storeCurrQty"/>" binding="storeCurrEtcQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.remark"/>" binding="remark" width="200" align="left" max-length=300></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.poMinQty"/>" binding="poMinQty" width="70" align="right" is-read-only="true" visible="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.vatFg"/>" binding="vatFg01" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.envst0011"/>" binding="envst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.mgrSplyUprc"/>" binding="mgrSplyUprc" width="60" align="right" max-length=10 is-read-only="false" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.prevMgrUnitQty"/>" binding="prevMgrUnitQty" width="60" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.prevMgrEtcQty"/>" binding="prevMgrEtcQty" width="60" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.prevMgrTotQty"/>" binding="prevMgrTotQty" width="60" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.mgrUnitQty"/>" binding="mgrUnitQty" width="60" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.mgrEtcQty"/>" binding="mgrEtcQty" width="60" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.mgrTotQty"/>" binding="mgrTotQty" width="60" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.mgrAmt"/>" binding="mgrAmt" width="60" align="right" is-read-only="true" visible="false" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.mgrVat"/>" binding="mgrVat" width="60" align="right" is-read-only="true" visible="false" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.mgrTot"/>" binding="mgrTot" width="60" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.saleUprc"/>" binding="saleUprc" width="60" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.poUnitFg"/>" binding="poUnitFg" width="60" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.poUnitQty"/>" binding="poUnitQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.splyUprc"/>" binding="splyUprc" width="80" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.hqSafeStock"/>" binding="hqSafeStockUnitQty" width="50" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.hqSafeStock"/>" binding="hqSafeStockEtcQty" width="50" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.hqCurrQty"/>" binding="hqCurrUnitQty" width="50" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.hqCurrQty"/>" binding="hqCurrEtcQty" width="50" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.storeCurrQty"/>" binding="storeCurrUnitQty" width="50" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.storeCurrQty"/>" binding="storeCurrEtcQty" width="50" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.remark"/>" binding="remark" width="150" align="left" max-length=300></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.poMinQty"/>" binding="poMinQty" width="90" align="right" is-read-only="true" visible="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.vatFg"/>" binding="vatFg01" width="60" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.envst0011"/>" binding="envst0011" width="60" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>
@@ -226,7 +245,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/dstbCloseStore/dstbCloseStoreAdd.js?ver=20220722.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/dstbCloseStore/dstbCloseStoreAdd.js?ver=20220726.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

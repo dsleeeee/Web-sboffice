@@ -7,13 +7,14 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="baseUrl" value="/iostock/volmErr/volmErr/volmErrDtl/"/>
 
-<wj-popup id="wjVolmErrDtlLayer" control="wjVolmErrDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+<wj-popup id="wjVolmErrDtlLayer" control="wjVolmErrDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px;height:750px;">
   <div id="volmErrDtlLayer" class="wj-dialog wj-dialog-columns" ng-controller="volmErrDtlCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <span id="spanDtlTitle"></span>
+      <label id="lblTitle"></label>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
-    <div class="wj-dialog-body sc2" style="height: 600px;">
+    <div class="wj-dialog-body sc2" style="height: 700px;">
       <table class="tblType01">
         <colgroup>
           <col class="w15"/>
@@ -24,57 +25,61 @@
         <tbody>
         <tr>
           <th><s:message code="volmErr.dtl.remark"/></th>
-          <td colspan="3">
+          <td colspan="2">
             <input type="text" id="hdRemark" name="hdRemark" ng-model="hdRemark" class="sb-input w100"/>
           </td>
         </tr>
         </tbody>
       </table>
 
-      <ul class="txtSty3 mt10">
-        <li class="red"><s:message code="volmErr.dtl.txt1"/></li>
-      </ul>
-
-      <table class="tblType01 mt10">
+      <table class="tblType01 mt5">
         <colgroup>
-          <col class="w20"/>
+          <col class="w10"/>
+          <col class="w10"/>
           <col class="w30"/>
           <col class="w25"/>
           <col class="w25"/>
         </colgroup>
         <tbody>
         <tr>
-          <th class="tc"><s:message code="volmErr.dtl.tableTh1"/></th>
+          <th style="text-align: right;"><s:message code="volmErr.dtl.tableTh1"/></th>
+          <th>
+            <div class="tooltip">?
+              <span class="tooltiptext tooltip-right">
+              * <s:message code="volmErr.dtl.txt1"/><br/>
+              </span>
+            </div>
+          </th>
           <th class="tc"><s:message code="volmErr.dtl.tableTh2"/></th>
           <th class="tc"><s:message code="volmErr.dtl.tableTh3"/></th>
           <th class="tc"><s:message code="volmErr.dtl.tableTh4"/></th>
         </tr>
         <tr>
-          <td><s:message code="volmErr.dtl.tableTd1_1"/></td>
+          <td colspan="2"><s:message code="volmErr.dtl.tableTd1_1"/></td>
           <td><s:message code="volmErr.dtl.tableTd2_1"/></td>
           <td></td>
           <td></td>
         </tr>
         <tr>
-          <td><s:message code="volmErr.dtl.tableTd1_2"/></td>
+          <td colspan="2"><s:message code="volmErr.dtl.tableTd1_2"/></td>
           <td><s:message code="volmErr.dtl.tableTd2_2"/></td>
           <td><s:message code="volmErr.dtl.tableTd3_1"/></td>
           <td></td>
         </tr>
         <tr>
-          <td><s:message code="volmErr.dtl.tableTd1_3"/></td>
+          <td colspan="2"><s:message code="volmErr.dtl.tableTd1_3"/></td>
           <td><s:message code="volmErr.dtl.tableTd2_2"/></td>
           <td></td>
           <td></td>
         </tr>
         <tr>
-          <td><s:message code="volmErr.dtl.tableTd1_4"/></td>
+          <td colspan="2"><s:message code="volmErr.dtl.tableTd1_4"/></td>
           <td><s:message code="volmErr.dtl.tableTd2_2"/></td>
           <td><s:message code="volmErr.dtl.tableTd3_1"/></td>
           <td><s:message code="volmErr.dtl.tableTd4_1"/></td>
         </tr>
         <tr>
-          <td><s:message code="volmErr.dtl.tableTd1_5"/></td>
+          <td colspan="2"><s:message code="volmErr.dtl.tableTd1_5"/></td>
           <td><s:message code="volmErr.dtl.tableTd2_2"/></td>
           <td></td>
           <td><s:message code="volmErr.dtl.tableTd4_1"/></td>
@@ -82,7 +87,7 @@
         </tbody>
       </table>
 
-      <div class="tr mt20 fr">
+      <div class="tr mt10 mb5 fr">
         <div id="volmErrBtnLayer" style="display: none;">
           <span class="chk txtIn fl lh30" style="top: -2px;" ng-if="volmErrConfirmFg">
             <input type="checkbox" name="volmErrConfirmFg" id="volmErrConfirmFg" value="Y" ng-click="fnConfirmChk()"/>
@@ -107,7 +112,7 @@
       </div>
       <div style="clear: both;"></div>
 
-      <div class="w100 mt10 mb20">
+      <div class="w100">
         <%--위즈모 테이블--%>
         <div class="wj-gridWrap" style="height: 400px; overflow-y: hidden; overflow-x: hidden;">
           <wj-flex-grid
