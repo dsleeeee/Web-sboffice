@@ -6,16 +6,18 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/iostock/order/dstbCloseProd/dstbCloseProdAddProd/"/>
 
-<wj-popup id="wjDstbCloseProdAddProdLayer" control="wjDstbCloseProdAddProdLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+<wj-popup id="wjDstbCloseProdAddProdLayer" control="wjDstbCloseProdAddProdLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px;height:750px;">
   <div id="dstbCloseProdAddProdLayer" class="wj-dialog wj-dialog-columns" ng-controller="dstbCloseProdAddProdCtrl">
+
     <div class="wj-dialog-header wj-dialog-header-font">
-      <s:message code="dstbCloseProd.add.title"/>
+      <s:message code="dstbCloseProd.add.title"/> -
+      <s:message code="dstbCloseProd.add.addProdSubTitle"/>
+      <label id="addProdSubTitle"></label>
+      <label id="orderFgSubTitle"></label>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
-    <div class="wj-dialog-body sc2" style="height: 600px;">
-      <p class="s14 bk mb5 fl"><s:message code="dstbCloseProd.add.addProdSubTitle"/></p>
-      <p id="addProdSubTitle" class="s14 bk ml5 mb5 fl"></p>
-      <p id="orderFgSubTitle" class="s14 bk ml5 mb5 fl"></p>
+
+    <div class="wj-dialog-body sc2" style="height: 700px;">
       <table class="tblType01">
         <colgroup>
           <col class="w15"/>
@@ -83,13 +85,7 @@
         </tbody>
       </table>
 
-      <div class="mt10 oh">
-        <%-- 조회 --%>
-        <button type="button" class="btn_blue fr" id="btnSearch" ng-click="_pageView('dstbCloseProdAddProdCtrl',1);">
-          <s:message code="cmm.search"/></button>
-      </div>
-
-      <div class="mt40 oh sb-select dkbr">
+      <div class="mt20 oh sb-select dkbr">
         <%-- 페이지 스케일  --%>
         <wj-combo-box
           class="w100px fl"
@@ -107,12 +103,15 @@
         <%-- 저장 --%>
         <%--<button type="button" class="btn_skyblue ml5 fr" id="btnSave" ng-click="saveDstbCloseProdAddProd()">
           <s:message code="cmm.save"/></button>--%>
+          <%-- 조회 --%>
+         <button type="button" class="btn_blue fr" id="btnSearch" ng-click="_pageView('dstbCloseProdAddProdCtrl',1);">
+           <s:message code="cmm.search"/></button>
       </div>
 
       <%--<div class="wj-TblWrap ml20 mr20 pdb20">--%>
       <div class="w100 mt10 mb20">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 270px; overflow-x: hidden; overflow-y: hidden;">
+        <div class="wj-gridWrap" style="height: 400px; overflow-x: hidden; overflow-y: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"

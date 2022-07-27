@@ -184,7 +184,7 @@ app.controller('instockConfmDtlCtrl', ['$scope', '$http', '$timeout', function (
                     $scope.dlvrNm       = response.data.data.dlvrNm;
 
                     if($scope.procFg === "20"){										//출고확정 (10:수주확정, 20:출고확정, 30:입고확정)
-                        $("#spanDtlTitle").html(messages["instockConfm.dtl.slipNo"] + ' : ' + $scope.slipNo + ', ' + messages["instockConfm.dtl.store"] + ' : ' + $scope.storeNm + ', ' + messages["instockConfm.dtl.outDate"] + ' : ' + getFormatDate($scope.outDate));
+                        $("#lblTitle").text(messages["instockConfm.dtl.slipNo"] + ' : ' + $scope.slipNo + ', ' + messages["instockConfm.dtl.store"] + ' : ' + $scope.storeNm + ', ' + messages["instockConfm.dtl.outDate"] + ' : ' + getFormatDate($scope.outDate));
                         $scope.instockBtnLayerDisplay(true);
 
                         if (gEnvst1043 === "N") {	//1043: 매장입고시수량변경
@@ -199,10 +199,10 @@ app.controller('instockConfmDtlCtrl', ['$scope', '$http', '$timeout', function (
                         $scope.flex.isReadOnly = true;
 
                         if 		($scope.procFg === "10") {	//수주확정
-                            $("#spanDtlTitle").html(messages["instockConfm.dtl.slipNo"] + ' : ' + $scope.slipNo + ', ' + messages["instockConfm.dtl.store"] + ' : ' + $scope.storeNm + ', ' + messages["instockConfm.dtl.reqDate"] + ' : ' + getFormatDate($scope.outDate));
+                            $("#lblTitle").text(messages["instockConfm.dtl.slipNo"] + ' : ' + $scope.slipNo + ', ' + messages["instockConfm.dtl.store"] + ' : ' + $scope.storeNm + ', ' + messages["instockConfm.dtl.reqDate"] + ' : ' + getFormatDate($scope.outDate));
                         }
                         else if ($scope.procFg === "30") {	//입고확정
-                            $("#spanDtlTitle").html(messages["instockConfm.dtl.slipNo"] + ' : ' + $scope.slipNo + ', ' + messages["instockConfm.dtl.store"] + ' : ' + $scope.storeNm + ', ' + messages["instockConfm.dtl.outDate"] + ' : ' + getFormatDate($scope.outDate) + ', ' + messages["instockConfm.dtl.inDate"] + ' : ' + getFormatDate($scope.inDate));
+                            $("#lblTitle").text(messages["instockConfm.dtl.slipNo"] + ' : ' + $scope.slipNo + ', ' + messages["instockConfm.dtl.store"] + ' : ' + $scope.storeNm + ', ' + messages["instockConfm.dtl.outDate"] + ' : ' + getFormatDate($scope.outDate) + ', ' + messages["instockConfm.dtl.inDate"] + ' : ' + getFormatDate($scope.inDate));
                         }
                     }
 

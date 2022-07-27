@@ -580,4 +580,13 @@ app.controller('dstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', function
     });
   };
 
+  // 확장조회
+  $scope.searchAddShowChange = function () {
+    if( $("#tblSearchAddShow").css("display") === 'none') {
+        $("#tblSearchAddShow").show();
+    } else {
+        $("#tblSearchAddShow").hide();
+    }
+  };
+
 }]);

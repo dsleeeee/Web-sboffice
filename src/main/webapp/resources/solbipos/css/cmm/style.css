@@ -2480,7 +2480,7 @@ label.rdo-po {font-size:14px; position:relative; top:-2px}
     width: 15px;
     height: 15px;
     border-radius: 50%;
-    background-color: #222;
+    background-color: #a8a8a8;
     color: #fff;
     font-size: 12px;
     text-align: center; /* 가로정렬 */
@@ -2488,15 +2488,16 @@ label.rdo-po {font-size:14px; position:relative; top:-2px}
 }
 .tooltip .tooltiptext {
     visibility: hidden;       /* 이벤트가 없으면 툴팁 영역을 숨김 */
-    width: 250px;             /* 툴팁 영역의 넓이를 설정 */
-    background-color: #222;
-    color: #fff;
+    width: 400px;             /* 툴팁 영역의 넓이를 설정 */
+    background-color: #e8e8e8;
+    color: #ff0000;
     font-size: 12px;
     text-align: left;
     border-radius: 6px;
-    padding: 5px 5px;
+    padding: 10px 10px;
     position: absolute;       /* 절대 위치를 사용 */
-    z-index: 1;
+    z-index: 4;
+    line-height: 1.5em;
 }
 .tooltip:hover .tooltiptext {
     visibility: visible;      /* hover 이벤트 발생시 영역을 보여줌 */
