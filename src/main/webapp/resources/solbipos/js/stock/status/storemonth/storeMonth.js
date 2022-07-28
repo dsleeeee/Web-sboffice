@@ -148,13 +148,13 @@ app.controller('storeMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 	      var isChecked = $scope.isChecked;
 		  if(isChecked){
 			  for(var i=0; i<length; i++){
-				  if(columns[i].binding.substring(0,2) == 'lv'){
+				  if(columns[i].binding == 'prodClassNm'){
 	    			  columns[i].visible = true;
 	    		  }
 	          }
 		  }else{
 			  for(var i=0; i<length; i++){
-				  if(columns[i].binding.substring(0,2) == 'lv'){
+				  if(columns[i].binding == 'prodClassNm'){
 	    			  columns[i].visible = false;
 	    		  }
 	          }
@@ -246,9 +246,7 @@ app.controller('storeMonthMainCtrl', ['$scope', '$http', '$timeout', function ($
     s.allowMerging = 2;
     s.columnHeaders.rows.push(new wijmo.grid.Row());
     s.columnHeaders.rows[0].dataItem = {
-	  lv1Nm		    :messages["storeMonth.prodClassLNm"],
-	  lv2Nm		    :messages["storeMonth.prodClassMNm"],
-	  lv3Nm		    :messages["storeMonth.prodClassSNm"],
+		prodClassNm		    :messages["storeMonth.prodClassNm"],
 
 	  prodCd 	    :messages["storeMonth.prodCd"],
 	  prodNm 	    :messages["storeMonth.prodNm"],
@@ -397,7 +395,7 @@ app.controller('storeMonthMainCtrl', ['$scope', '$http', '$timeout', function ($
           }
       }else{ //수량 + 금액
     	  for(var i=0; i<length; i++){
-			  if(columns[i].binding != 'lv1Nm' && columns[i].binding != 'lv2Nm' && columns[i].binding != 'lv3Nm' && columns[i].binding != 'poUnitQty'){
+			  if(columns[i].binding != 'prodClassNm' && columns[i].binding != 'poUnitQty'){
     			  columns[i].visible = true;
     		  }
           }

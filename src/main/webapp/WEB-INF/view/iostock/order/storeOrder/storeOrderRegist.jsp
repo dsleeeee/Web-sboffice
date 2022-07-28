@@ -175,8 +175,8 @@
           <button type="button" class="btn_skyblue ml5" id="btnSave" ng-click="storeCloseCheck2()">
             <s:message code="cmm.save"/>
           </button>
-          <div class="tooltip fl">?
-            <span class="tooltiptext tooltip-right" style="width: 450px;">
+          <div class="tooltipBtn fl">설명
+            <span class="tooltiptext tooltip-right">
               * <s:message code="storeOrder.dtl.txt1"/><br/>
               * <s:message code="storeOrder.dtl.txt2"/><br/>
               * <s:message code="storeOrder.dtl.txt3"/><br/>

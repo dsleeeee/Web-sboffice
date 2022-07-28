@@ -81,7 +81,7 @@
           </span>
       </td>
     </tr>
-    <tr>
+    <tr <c:if test="${envst1242 == '0'}">style="display: none;"</c:if>>
       <%--TODO 거래처 로그인시 처리로직 필요 --%>
       <%-- 거래처 --%>
       <th><s:message code="outstockConfm.vendrNm"/></th>

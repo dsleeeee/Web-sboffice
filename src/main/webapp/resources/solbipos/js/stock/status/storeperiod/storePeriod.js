@@ -75,9 +75,7 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 
 	    // 첫째줄 헤더 생성
 	    var dataItem				= {};
-	    dataItem.lv1Nm				= messages["storePeriod.lv1Nm"];
-	    dataItem.lv2Nm				= messages["storePeriod.lv2Nm"];
-	    dataItem.lv3Nm				= messages["storePeriod.lv3Nm"];
+	    dataItem.prodClassNm		= messages["storePeriod.prodClassNm"];
 	    dataItem.prodCd				= messages["storePeriod.prodCd"];
 	    dataItem.prodNm				= messages["storePeriod.prodNm"];
 	    dataItem.storeCd			= messages["storePeriod.storeCd"];
@@ -295,14 +293,37 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 
 	// 조회옵션에 따른 visible 처리 (박정은, 20.03.17)
 	$scope.srchOptionView = function(){
-		var srchSrchOption = $scope.srchOption;
-		var columns = $scope.flex.columns;
-		var includeWord;
-		for(var i=0; i<columns.length; i++){
-			includeWord = /Qty|Tot/.exec(columns[i].binding) ? /Qty|Tot/.exec(columns[i].binding)[0] : "";
-			if((includeWord === "Qty" || includeWord === "Tot") && includeWord !== "poUnitQty"){
-				srchSrchOption.indexOf
-				(includeWord) ? columns[i].visible = true : columns[i].visible = false;
+		var srchSrchOption = $scope.excelSrchOption;
+		var check = srchSrchOption;
+		var grid = wijmo.Control.getControl("#storePeriodGrid");
+		var columns = grid.columns;
+		var length  = grid.columns.length;
+
+		if(check == '1'){ // 수량
+			for(var i=0; i<length; i++){
+				var colLength = columns[i].binding.length;
+				if(columns[i].binding.substring(colLength-2,colLength-5) == 'Tot'){
+					columns[i].visible = false;
+				}else if(columns[i].binding != 'prodClassNm'){
+					columns[i].visible = true;
+				}
+			}
+		}else if(check == '2'){ // 금액
+			for(var i=0; i<length; i++){
+				var colLength = columns[i].binding.length;
+				if(columns[i].binding != 'poUnitQty'){
+					if(columns[i].binding.substring(colLength-2,colLength-5) == 'Qty'){
+						columns[i].visible = false;
+					}else if(columns[i].binding != 'prodClassNm'){
+						columns[i].visible = true;
+					}
+				}
+			}
+		}else{ //수량 + 금액
+			for(var i=0; i<length; i++){
+				if(columns[i].binding != 'prodClassNm'){
+					columns[i].visible = true;
+				}
 			}
 		}
 	};
@@ -312,7 +333,7 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 		var columns = $scope.flex.columns;
 
 		for(var i=0; i<columns.length; i++){
-			if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+			if(columns[i].binding === 'prodClassNm'){
 				$scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
 			}
 		}
@@ -351,9 +372,7 @@ app.controller('storePeriodExcelCtrl', ['$scope', '$http', '$timeout', function 
 
 	    // 첫째줄 헤더 생성
 	    var dataItem				= {};
-	    dataItem.lv1Nm				= messages["storePeriod.lv1Nm"];
-	    dataItem.lv2Nm				= messages["storePeriod.lv2Nm"];
-	    dataItem.lv3Nm				= messages["storePeriod.lv3Nm"];
+	    dataItem.prodClassNm		= messages["storePeriod.prodClassNm"];
 	    dataItem.prodCd				= messages["storePeriod.prodCd"];
 	    dataItem.prodNm				= messages["storePeriod.prodNm"];
 	    dataItem.storeCd			= messages["storePeriod.storeCd"];
@@ -443,12 +462,36 @@ app.controller('storePeriodExcelCtrl', ['$scope', '$http', '$timeout', function 
 	// 조회옵션에 따른 visible 처리 (박정은, 20.03.17)
 	$scope.srchOptionView = function(){
 		var srchSrchOption = $scope.excelSrchOption;
-		var columns = $scope.excelFlex.columns;
-		var includeWord;
-		for(var i=0; i<columns.length; i++){
-			includeWord = /Qty|Tot/.exec(columns[i].binding) ? /Qty|Tot/.exec(columns[i].binding)[0] : "";
-			if((includeWord === "Qty" || includeWord === "Tot") && includeWord !== "poUnitQty"){
-				srchSrchOption.indexOf(includeWord) ? columns[i].visible = true : columns[i].visible = false;
+		var check = srchSrchOption;
+		var grid = wijmo.Control.getControl("#storePeriodExcelGrid");
+		var columns = grid.columns;
+		var length  = grid.columns.length;
+
+		if(check == '1'){ // 수량
+			for(var i=0; i<length; i++){
+				var colLength = columns[i].binding.length;
+				if(columns[i].binding.substring(colLength-2,colLength-5) == 'Tot'){
+					columns[i].visible = false;
+				}else if(columns[i].binding != 'prodClassNm'){
+					columns[i].visible = true;
+				}
+			}
+		}else if(check == '2'){ // 금액
+			for(var i=0; i<length; i++){
+				var colLength = columns[i].binding.length;
+				if(columns[i].binding != 'poUnitQty'){
+					if(columns[i].binding.substring(colLength-2,colLength-5) == 'Qty'){
+						columns[i].visible = false;
+					}else if(columns[i].binding != 'prodClassNm'){
+						columns[i].visible = true;
+					}
+				}
+			}
+		}else{ //수량 + 금액
+			for(var i=0; i<length; i++){
+				if(columns[i].binding != 'prodClassNm'){
+					columns[i].visible = true;
+				}
 			}
 		}
 	};
@@ -458,7 +501,7 @@ app.controller('storePeriodExcelCtrl', ['$scope', '$http', '$timeout', function 
 		var columns = $scope.excelFlex.columns;
 
 		for(var i=0; i<columns.length; i++){
-			if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+			if(columns[i].binding === 'prodClassNm'){
 				$scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
 			}
 		}

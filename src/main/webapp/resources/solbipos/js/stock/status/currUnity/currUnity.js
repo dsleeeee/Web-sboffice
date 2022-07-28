@@ -150,7 +150,7 @@ app.controller('currUnityCtrl', ['$scope', '$http', '$timeout', function ($scope
 	  var columns = $scope.flex.columns;
 
 	  for(var i=0; i<columns.length; i++){
-		  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+		  if(columns[i].binding === 'prodClassNm'){
 			  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
 		  }
 	  }
@@ -180,15 +180,6 @@ app.controller('currUnityHqDtlCtrl', ['$scope', '$http', '$timeout', function ($
 
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("currUnityHqDtlListScaleBox", gvListScaleBoxData);
-  // grid 초기화 : 생성되기전 초기화되면서 생성된다
-  $scope.initGrid = function (s, e) {
-    // picker 사용시 호출 : 미사용시 호출안함
-    $scope._makePickColumns("currUnityHqDtlCtrl");
-    // add the new GroupRow to the grid's 'columnFooters' panel
-    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
-    // add a sigma to the header to show that this is a summary row
-    s.bottomLeftCells.setCellData(0, 0, '합계');
-  };
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("currUnityHqDtlCtrl", function (event, data) {
@@ -349,7 +340,7 @@ app.controller('currUnityMainExcelCtrl', ['$scope', '$http', '$timeout', functio
 		var columns = $scope.mainExcelFlex.columns;
 
 		for(var i=0; i<columns.length; i++){
-			if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+			if(columns[i].binding === 'prodClassNm'){
 				$scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
 			}
 		}

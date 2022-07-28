@@ -143,6 +143,12 @@ app.controller('orderMainCtrl', ['$scope', '$http', '$timeout', function ($scope
 
   $scope.excelFg = false;
 
+    // 본사 거래처 콤보박스
+    $scope._setComboData('vendrCd', vendrList);
+    // // 거래처는 수정 못하게 처리
+    $("#vendrCd").attr("disabled", true);
+    $("#vendrCd").css('background-color', '#F0F0F0');
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // picker 사용시 호출 : 미사용시 호출안함
@@ -216,6 +222,7 @@ app.controller('orderMainCtrl', ['$scope', '$http', '$timeout', function ($scope
       slipFgNm   	: messages["orderStockInfo.slipFg"],
       procFgNm    	: messages["orderStockInfo.procFg"],
       slipNo    	: messages["orderStockInfo.slipNo"],
+      vendr      	: messages["orderStockInfo.vendr"],
       outDtFm     	: messages["orderStockInfo.outDate"],
       inDtFm    	: messages["orderStockInfo.inDate"],
       dtlCnt		: messages["orderStockInfo.prodCnt"],
@@ -266,6 +273,8 @@ app.controller('orderMainCtrl', ['$scope', '$http', '$timeout', function ($scope
       }
     }
 
+    $scope.vendrCdCombo.selectedValue = empVendrCd;
+
     $scope.displayChg();
   };
 
@@ -298,12 +307,14 @@ app.controller('orderMainCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.outDateFg = $scope.outDateFgModel;
     params.slipFg 	 = $scope.slipFgModel;
     params.procFg 	 = $scope.procFgModel;
+    params.vendrCd      = $scope.vendrCd;
     paramsisPageChk  = isPageChk;
 
     $scope.searchedStoreCd    = params.storeCd;
     $scope.searchedOutDateFg  = params.outDateFg;
     $scope.searchedslipFg     = params.slipFg;
     $scope.searchedProcFg     = params.procFg;
+    $scope.searchedVendrCd    = params.vendrCd;
 
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -350,6 +361,7 @@ app.controller('orderMainCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.outDateFg   = $scope.searchedOutDateFg;
     params.slipFg 	   = $scope.searchedslipFg;
     params.procFg 	   = $scope.searchedProcFg;
+    params.vendrCd 	   = $scope.searchedVendrCd;
     params.excelFg	   = $scope.excelFg;
 
     $scope._broadcast('orderExcelCtrl',params);
@@ -646,6 +658,7 @@ app.controller('orderExcelCtrl', ['$scope', '$http', '$timeout', function ($scop
       slipFgNm   	: messages["orderStockInfo.slipFg"],
       procFgNm    	: messages["orderStockInfo.procFg"],
       slipNo    	: messages["orderStockInfo.slipNo"],
+      vendr     	: messages["orderStockInfo.vendr"],
       outDtFm     	: messages["orderStockInfo.outDate"],
       inDtFm    	: messages["orderStockInfo.inDate"],
       dtlCnt		: messages["orderStockInfo.prodCnt"],
@@ -708,6 +721,7 @@ app.controller('orderExcelCtrl', ['$scope', '$http', '$timeout', function ($scop
 		  $scope.outDateFg   = data.outDateFg;
 		  $scope.slipFg 	 = data.slipFg;
 		  $scope.procFg 	 = data.procFg;
+		  $scope.vendrCd 	 = data.vendrCd;
 		  $scope.excelFg     = data.excelFg;
 
 		  $scope.searchOrderExcelList(false);
@@ -729,6 +743,7 @@ app.controller('orderExcelCtrl', ['$scope', '$http', '$timeout', function ($scop
     params.outDateFg = $scope.outDateFg;
     params.slipFg 	 = $scope.slipFg;
     params.procFg 	 = $scope.procFg;
+    params.vendrCd   = $scope.vendrCd;
     paramsisPageChk  = isPageChk;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수

@@ -5,7 +5,7 @@
 <mapper namespace="kr.co.solbipos.stock.status.storeday.service.impl.StoreDayMapper">
     <!-- 매장일수불 - 리스트 조회 -->
     <!--
-        TABLE    : TB_PO_STORE_STOCK, TB_MS_PRODUCT, TB_MS_PRODUCT_BARCD, TB_HQ_PRODUCT_CLASS
+        TABLE    : TB_ST_STORE_STOCK_DAILY, TB_MS_PRODUCT, TB_MS_PRODUCT_BARCD, TB_HQ_PRODUCT_CLASS
         PARAM    : storeDayVO
         COMMENTS : 매장일수불현황 - 리스트를 조회한다.
     -->
@@ -15,103 +15,63 @@
              , (SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
              <include refid="CmmSQL.PagingTemplateCount"/>
         FROM (
-                SELECT A.LV1_CD
-                         , A.LV1_NM
-                         , A.LV2_CD
-                         , A.LV2_NM
-                         , A.LV3_CD
-                         , A.LV3_NM
-                     , TPSS.PROD_CD
+                SELECT FN_GET_PROD_CLASS_CD_NM_STR(TMP.STORE_CD, TMP.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+                     , TSSSD.PROD_CD
                      , TMP.PROD_NM
-                     , TPSS.STORE_CD
-                     , (SELECT STORE_NM FROM TB_MS_STORE Z WHERE Z.STORE_CD = TPSS.STORE_CD) AS STORE_NM
+                     , TSSSD.STORE_CD
+                     , (SELECT STORE_NM FROM TB_MS_STORE Z WHERE Z.STORE_CD = TSSSD.STORE_CD) AS STORE_NM
                      , TMP.PO_UNIT_QTY
                      , TMP.PO_UNIT_FG
                      , TMPB.BARCD_CD
                      <if test='unitFg == "1"'>
-	                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '03', TPSS.IO_OCCR_QTY, 0) / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_03 /* 매장입고 수량*/
-	                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '12', TPSS.IO_OCCR_QTY, 0) / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_12 /* 매장반품 수량*/
-	                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '06', TPSS.IO_OCCR_QTY, 0) / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_06 /* 사입입고 수량*/
-	                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '18', TPSS.IO_OCCR_QTY, 0) / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_18 /* 사입반품 수량*/
-	                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '11', TPSS.IO_OCCR_QTY, 0) / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_11 /* 매장판매 수량*/
-	                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '04', TPSS.IO_OCCR_QTY, 0) / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_04 /* 매장이입 수량*/
-	                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '14', TPSS.IO_OCCR_QTY, 0) / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_14 /* 매장이출 수량*/
-	                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '17', TPSS.IO_OCCR_QTY, 0) / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_17 /* 재고폐기 수량*/
-	                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '21', TPSS.IO_OCCR_QTY, 0) / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_21 /* 재고조정 수량*/
-	                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '22', TPSS.IO_OCCR_QTY, 0) / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_22 /* 세트생성 수량*/
+                         , SF_ZERO_TO_NULL(SUM(STORE_IN_QTY / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_03 /* 매장입고 수량*/
+                         , SF_ZERO_TO_NULL(SUM(STORE_OUT_QTY / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_12 /* 매장반품 수량*/
+                         , SF_ZERO_TO_NULL(SUM(PURCHS_IN_QTY / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_06 /* 사입입고 수량*/
+                         , SF_ZERO_TO_NULL(SUM(PURCHS_OUT_QTY / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_18 /* 사입반품 수량*/
+                         , SF_ZERO_TO_NULL(SUM(STORE_SALE_QTY / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_11 /* 매장판매 수량*/
+                         , SF_ZERO_TO_NULL(SUM(MOVE_IN_QTY / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_04 /* 매장이입 수량*/
+                         , SF_ZERO_TO_NULL(SUM(MOVE_OUT_QTY / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_14 /* 매장이출 수량*/
+                         , SF_ZERO_TO_NULL(SUM(DISUSE_QTY / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_17 /* 재고폐기 수량*/
+                         , SF_ZERO_TO_NULL(SUM(ADJ_QTY / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_21 /* 재고조정 수량*/
+                         , SF_ZERO_TO_NULL(SUM(SET_IN_QTY / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_22 /* 세트생성 수량*/
                      </if>
                      <if test='unitFg == "0"'>
-                         , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '03', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_03 /* 매장입고 수량*/
-                         , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '12', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_12 /* 매장반품 수량*/
-                         , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '06', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_06 /* 사입입고 수량*/
-                         , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '18', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_18 /* 사입반품 수량*/
-                         , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '11', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_11 /* 매장판매 수량*/
-                         , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '04', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_04 /* 매장이입 수량*/
-                         , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '14', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_14 /* 매장이출 수량*/
-                         , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '17', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_17 /* 재고폐기 수량*/
-                         , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '21', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_21 /* 재고조정 수량*/
-                         , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '22', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_22 /* 세트생성 수량*/
+                         , SF_ZERO_TO_NULL(SUM(STORE_IN_QTY)) AS IO_OCCR_QTY_03 /* 매장입고 수량*/
+                         , SF_ZERO_TO_NULL(SUM(STORE_OUT_QTY)) AS IO_OCCR_QTY_12 /* 매장반품 수량*/
+                         , SF_ZERO_TO_NULL(SUM(PURCHS_IN_QTY)) AS IO_OCCR_QTY_06 /* 사입입고 수량*/
+                         , SF_ZERO_TO_NULL(SUM(PURCHS_OUT_QTY)) AS IO_OCCR_QTY_18 /* 사입반품 수량*/
+                         , SF_ZERO_TO_NULL(SUM(STORE_SALE_QTY)) AS IO_OCCR_QTY_11 /* 매장판매 수량*/
+                         , SF_ZERO_TO_NULL(SUM(MOVE_IN_QTY)) AS IO_OCCR_QTY_04 /* 매장이입 수량*/
+                         , SF_ZERO_TO_NULL(SUM(MOVE_OUT_QTY)) AS IO_OCCR_QTY_14 /* 매장이출 수량*/
+                         , SF_ZERO_TO_NULL(SUM(DISUSE_QTY)) AS IO_OCCR_QTY_17 /* 재고폐기 수량*/
+                         , SF_ZERO_TO_NULL(SUM(ADJ_QTY)) AS IO_OCCR_QTY_21 /* 재고조정 수량*/
+                         , SF_ZERO_TO_NULL(SUM(SET_IN_QTY)) AS IO_OCCR_QTY_22 /* 세트생성 수량*/
                      </if>
-                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '03', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_03 /* 매장입고 금액*/
-                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '12', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_12 /* 매장반품 금액*/
-                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '06', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_06 /* 사입입고 금액*/
-                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '18', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_18 /* 사입반품 금액*/
-                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '11', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_11 /* 매장판매 금액*/
-                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '04', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_04 /* 매장이입 금액*/
-                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '14', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_14 /* 매장이출 금액*/
-                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '17', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_17 /* 재고폐기 금액*/
-                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '22', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_22 /* 세트생성 금액*/
-                  FROM (
-                            <![CDATA[
-							SELECT  A.HQ_OFFICE_CD
-							,       A.PROD_CLASS_CD
-							,		NULL	LV1_CD
-							,		NULL	LV2_CD
-							,		NULL	LV3_CD
-							,       DECODE	(A.LV ,1  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,LENGTH(A.AC))
-							                    ,    SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,INSTR(A.AC,'^',2,1)-2)
-							             	)  AS  LV1_NM
-							,       DECODE	(A.LV ,1  ,NULL
-							                    ,2  ,SUBSTR(A.AC,INSTR(A.AC,'^',2,1)+1,LENGTH(A.AC))
-							                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,2)+1,(INSTR(A.AC,'^',1,3)-1)-INSTR(A.AC,'^',1,2))
-							              	)  AS  LV2_NM
-							,       DECODE	(A.LV ,1  ,NULL
-							                    ,2  ,NULL
-							                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1)
-							             	)  AS  LV3_NM
-							FROM    (
-							        SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
-							        FROM    (
-							                    SELECT  HQ_OFFICE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
-							                    FROM    TB_HQ_PRODUCT_CLASS
-							                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
-							                )
-							        START WITH  P_PROD_CLASS_CD ='00000'
-                                    AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
-							        CONNECT BY
-							        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
-                                    AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
-							        )   A
-
-				    		]]>
-                          )               A
-                     , TB_PO_STORE_STOCK TPSS
+                     , SF_ZERO_TO_NULL(SUM(STORE_IN_TOT)) AS IO_OCCR_TOT_03 /* 매장입고 금액*/
+                     , SF_ZERO_TO_NULL(SUM(STORE_OUT_TOT)) AS IO_OCCR_TOT_12 /* 매장반품 금액*/
+                     , SF_ZERO_TO_NULL(SUM(PURCHS_IN_TOT)) AS IO_OCCR_TOT_06 /* 사입입고 금액*/
+                     , SF_ZERO_TO_NULL(SUM(PURCHS_OUT_TOT)) AS IO_OCCR_TOT_18 /* 사입반품 금액*/
+                     , SF_ZERO_TO_NULL(SUM(STORE_SALE_TOT)) AS IO_OCCR_TOT_11 /* 매장판매 금액*/
+                     , SF_ZERO_TO_NULL(SUM(MOVE_IN_TOT)) AS IO_OCCR_TOT_04 /* 매장이입 금액*/
+                     , SF_ZERO_TO_NULL(SUM(MOVE_OUT_TOT)) AS IO_OCCR_TOT_14 /* 매장이출 금액*/
+--                      , SF_ZERO_TO_NULL(SUM()) AS IO_OCCR_TOT_17 /* 재고폐기 금액*/
+--                      , SF_ZERO_TO_NULL(SUM()) AS IO_OCCR_TOT_22 /* 세트생성 금액*/
+                  FROM TB_ST_STORE_STOCK_DAILY TSSSD 
                      , TB_MS_PRODUCT TMP
                      , TB_MS_PRODUCT_BARCD TMPB
-                 WHERE TPSS.STORE_CD     = TMP.STORE_CD
-                   AND TPSS.PROD_CD      = TMP.PROD_CD
+                 WHERE TSSSD.STORE_CD     = TMP.STORE_CD
+                   AND TSSSD.PROD_CD      = TMP.PROD_CD
                    AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.STORE_CD = tmp.STORE_CD AND Z.HQ_OFFICE_CD = #{hqOfficeCd})
-                   AND TMP.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
-                   AND TPSS.STORE_CD     = TMPB.STORE_CD(+)
-                   AND TPSS.PROD_CD      = TMPB.PROD_CD(+)
+                   AND TSSSD.STORE_CD     = TMPB.STORE_CD(+)
+                   AND TSSSD.PROD_CD      = TMPB.PROD_CD(+)
                    <if test='startDate != null and startDate != ""'>
-                      AND TPSS.IO_PROC_DATE  = #{startDate}
+                      AND TSSSD.IOSTOCK_DATE  = #{startDate}
                    </if>
                    <if test='prodCd != null and prodCd != ""'>
                       AND TMP.PROD_CD  = #{prodCd}
                    </if>
                    <if test='arrStoreCd != null and arrStoreCd != ""'>
-                      AND TPSS.STORE_CD IN
+                      AND TSSSD.STORE_CD IN
                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
                            #{item}
                        </foreach>
@@ -119,7 +79,7 @@
                    <if test='arrVendrCd != null and arrVendrCd != ""'>
 			          AND TMP.PROD_CD IN    ( SELECT  PROD_CD
 			                                  FROM    TB_MS_VENDOR_PROD
-			                                  WHERE   STORE_CD = TPSS.STORE_CD
+			                                  WHERE   STORE_CD = TSSSD.STORE_CD
 			                                  AND     VENDR_CD IN
 			                                  <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
 			                                      #{item}
@@ -143,20 +103,16 @@
                    <if test='barcdCd != null and barcdCd != ""'>
                       AND TMPB.BARCD_CD  = #{barcdCd}
                    </if>
-                 GROUP BY  A.LV1_CD
-                         , A.LV1_NM
-                         , A.LV2_CD
-                         , A.LV2_NM
-                         , A.LV3_CD
-                         , A.LV3_NM
-                         , TPSS.PROD_CD
+                 GROUP BY  TMP.STORE_CD
+                         , TMP.PROD_CLASS_CD
+                         , TSSSD.PROD_CD
                          , TMP.PROD_NM
-                         , TPSS.STORE_CD
+                         , TSSSD.STORE_CD
                          , TMP.PO_UNIT_QTY
                          , TMP.PO_UNIT_FG
                          , TMPB.BARCD_CD
-                 ORDER BY TPSS.PROD_CD
-                        , TPSS.STORE_CD
+                 ORDER BY TSSSD.PROD_CD
+                        , TSSSD.STORE_CD
             ) A
 
          <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -166,99 +122,63 @@
         SELECT A.*
              , (SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
         FROM (
-                SELECT A.*
-                     , TPSS.PROD_CD
-                     , TMP.PROD_NM
-                     , TPSS.STORE_CD
-                     , (SELECT STORE_NM FROM TB_MS_STORE Z WHERE Z.STORE_CD = TPSS.STORE_CD) AS STORE_NM
-                     , TMP.PO_UNIT_QTY
-                     , TMP.PO_UNIT_FG
-                     , TMPB.BARCD_CD
-                     <if test='unitFg == "1"'>
-	                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '03', TPSS.IO_OCCR_QTY, 0) / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_03 /* 매장입고 수량*/
-	                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '12', TPSS.IO_OCCR_QTY, 0) / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_12 /* 매장반품 수량*/
-	                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '06', TPSS.IO_OCCR_QTY, 0) / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_06 /* 사입입고 수량*/
-	                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '18', TPSS.IO_OCCR_QTY, 0) / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_18 /* 사입반품 수량*/
-	                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '11', TPSS.IO_OCCR_QTY, 0) / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_11 /* 매장판매 수량*/
-	                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '04', TPSS.IO_OCCR_QTY, 0) / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_04 /* 매장이입 수량*/
-	                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '14', TPSS.IO_OCCR_QTY, 0) / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_14 /* 매장이출 수량*/
-	                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '17', TPSS.IO_OCCR_QTY, 0) / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_17 /* 재고폐기 수량*/
-	                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '21', TPSS.IO_OCCR_QTY, 0) / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_21 /* 재고조정 수량*/
-	                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '22', TPSS.IO_OCCR_QTY, 0) / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_22 /* 세트생성 수량*/
-                     </if>
-                     <if test='unitFg == "0"'>
-                         , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '03', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_03 /* 매장입고 수량*/
-                         , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '12', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_12 /* 매장반품 수량*/
-                         , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '06', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_06 /* 사입입고 수량*/
-                         , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '18', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_18 /* 사입반품 수량*/
-                         , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '11', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_11 /* 매장판매 수량*/
-                         , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '04', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_04 /* 매장이입 수량*/
-                         , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '14', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_14 /* 매장이출 수량*/
-                         , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '17', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_17 /* 재고폐기 수량*/
-                         , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '21', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_21 /* 재고조정 수량*/
-                         , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '22', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_22 /* 세트생성 수량*/
-                     </if>
-                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '03', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_03 /* 매장입고 금액*/
-                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '12', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_12 /* 매장반품 금액*/
-                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '06', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_06 /* 사입입고 금액*/
-                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '18', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_18 /* 사입반품 금액*/
-                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '11', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_11 /* 매장판매 금액*/
-                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '04', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_04 /* 매장이입 금액*/
-                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '14', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_14 /* 매장이출 금액*/
-                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '17', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_17 /* 재고폐기 금액*/
-                     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '22', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_22 /* 세트생성 금액*/
-                  FROM (
-                              SELECT   A.P_PROD_CLASS_CD   AS LV1_CD
-                                      ,A.PROD_CLASS_CD     AS LV2_CD
-                                      ,A.PROD_CLASS_NM     AS LV2_NM
-                                      ,B.PROD_CLASS_CD     AS LV3_CD
-                                      ,B.PROD_CLASS_NM     AS LV3_NM
-                                      ,(SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    A.P_PROD_CLASS_CD) FROM DUAL)    AS LV1_NM
-                              FROM    (
-                                          SELECT  HQ_OFFICE_CD
-                                                , P_PROD_CLASS_CD
-                                                , PROD_CLASS_CD
-                                                , PROD_CLASS_NM
-                                          FROM    TB_HQ_PRODUCT_CLASS
-                                          WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
-                                          AND     P_PROD_CLASS_CD IN (
-                                                                        SELECT  PROD_CLASS_CD
-                                                                        FROM    TB_HQ_PRODUCT_CLASS
-                                                                        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
-                                                                        AND     P_PROD_CLASS_CD = '00000'
-                                                                      )
-                                      )                      A,
-                                      TB_HQ_PRODUCT_CLASS    B
-                              WHERE   B.P_PROD_CLASS_CD IN    (
-                                                                  SELECT  PROD_CLASS_CD
-                                                                  FROM    TB_HQ_PRODUCT_CLASS
-                                                                  WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
-                                                                  AND     P_PROD_CLASS_CD IN (
-                                                                                               SELECT  PROD_CLASS_CD
-                                                                                               FROM    TB_HQ_PRODUCT_CLASS
-                                                                                               WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
-                                                                                               AND     P_PROD_CLASS_CD = '00000'
-                                                                                              )
-                                                              )
-                              AND     A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
-                              AND     A.PROD_CLASS_CD = B.P_PROD_CLASS_CD
-                          )               A
-                     , TB_PO_STORE_STOCK TPSS
-                     , TB_MS_PRODUCT TMP
+                SELECT FN_GET_PROD_CLASS_CD_NM_STR(TMP.STORE_CD, TMP.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+                    , TSSSD.PROD_CD
+                    , TMP.PROD_NM
+                    , TSSSD.STORE_CD
+                    , (SELECT STORE_NM FROM TB_MS_STORE Z WHERE Z.STORE_CD = TSSSD.STORE_CD) AS STORE_NM
+                    , TMP.PO_UNIT_QTY
+                    , TMP.PO_UNIT_FG
+                    , TMPB.BARCD_CD
+                    <if test='unitFg == "1"'>
+                        , SF_ZERO_TO_NULL(SUM(STORE_IN_QTY / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_03 /* 매장입고 수량*/
+                        , SF_ZERO_TO_NULL(SUM(STORE_OUT_QTY / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_12 /* 매장반품 수량*/
+                        , SF_ZERO_TO_NULL(SUM(PURCHS_IN_QTY / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_06 /* 사입입고 수량*/
+                        , SF_ZERO_TO_NULL(SUM(PURCHS_OUT_QTY / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_18 /* 사입반품 수량*/
+                        , SF_ZERO_TO_NULL(SUM(STORE_SALE_QTY / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_11 /* 매장판매 수량*/
+                        , SF_ZERO_TO_NULL(SUM(MOVE_IN_QTY / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_04 /* 매장이입 수량*/
+                        , SF_ZERO_TO_NULL(SUM(MOVE_OUT_QTY / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_14 /* 매장이출 수량*/
+                        , SF_ZERO_TO_NULL(SUM(DISUSE_QTY / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_17 /* 재고폐기 수량*/
+                        , SF_ZERO_TO_NULL(SUM(ADJ_QTY / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_21 /* 재고조정 수량*/
+                        , SF_ZERO_TO_NULL(SUM(SET_IN_QTY / TMP.PO_UNIT_QTY)) AS IO_OCCR_QTY_22 /* 세트생성 수량*/
+                    </if>
+                    <if test='unitFg == "0"'>
+                        , SF_ZERO_TO_NULL(SUM(STORE_IN_QTY)) AS IO_OCCR_QTY_03 /* 매장입고 수량*/
+                        , SF_ZERO_TO_NULL(SUM(STORE_OUT_QTY)) AS IO_OCCR_QTY_12 /* 매장반품 수량*/
+                        , SF_ZERO_TO_NULL(SUM(PURCHS_IN_QTY)) AS IO_OCCR_QTY_06 /* 사입입고 수량*/
+                        , SF_ZERO_TO_NULL(SUM(PURCHS_OUT_QTY)) AS IO_OCCR_QTY_18 /* 사입반품 수량*/
+                        , SF_ZERO_TO_NULL(SUM(STORE_SALE_QTY)) AS IO_OCCR_QTY_11 /* 매장판매 수량*/
+                        , SF_ZERO_TO_NULL(SUM(MOVE_IN_QTY)) AS IO_OCCR_QTY_04 /* 매장이입 수량*/
+                        , SF_ZERO_TO_NULL(SUM(MOVE_OUT_QTY)) AS IO_OCCR_QTY_14 /* 매장이출 수량*/
+                        , SF_ZERO_TO_NULL(SUM(DISUSE_QTY)) AS IO_OCCR_QTY_17 /* 재고폐기 수량*/
+                        , SF_ZERO_TO_NULL(SUM(ADJ_QTY)) AS IO_OCCR_QTY_21 /* 재고조정 수량*/
+                        , SF_ZERO_TO_NULL(SUM(SET_IN_QTY)) AS IO_OCCR_QTY_22 /* 세트생성 수량*/
+                    </if>
+                    , SF_ZERO_TO_NULL(SUM(STORE_IN_TOT)) AS IO_OCCR_TOT_03 /* 매장입고 금액*/
+                    , SF_ZERO_TO_NULL(SUM(STORE_OUT_TOT)) AS IO_OCCR_TOT_12 /* 매장반품 금액*/
+                    , SF_ZERO_TO_NULL(SUM(PURCHS_IN_TOT)) AS IO_OCCR_TOT_06 /* 사입입고 금액*/
+                    , SF_ZERO_TO_NULL(SUM(PURCHS_OUT_TOT)) AS IO_OCCR_TOT_18 /* 사입반품 금액*/
+                    , SF_ZERO_TO_NULL(SUM(STORE_SALE_TOT)) AS IO_OCCR_TOT_11 /* 매장판매 금액*/
+                    , SF_ZERO_TO_NULL(SUM(MOVE_IN_TOT)) AS IO_OCCR_TOT_04 /* 매장이입 금액*/
+                    , SF_ZERO_TO_NULL(SUM(MOVE_OUT_TOT)) AS IO_OCCR_TOT_14 /* 매장이출 금액*/
+                    --                      , SF_ZERO_TO_NULL(SUM()) AS IO_OCCR_TOT_17 /* 재고폐기 금액*/
+                    --                      , SF_ZERO_TO_NULL(SUM()) AS IO_OCCR_TOT_22 /* 세트생성 금액*/
+                    FROM TB_ST_STORE_STOCK_DAILY TSSSD
+                    , TB_MS_PRODUCT TMP
                      , TB_MS_PRODUCT_BARCD TMPB
-                 WHERE TPSS.STORE_CD     = TMP.STORE_CD
-                   AND TPSS.PROD_CD      = TMP.PROD_CD
-                   AND TMP.PROD_CLASS_CD = A.LV3_CD
-                   AND TPSS.STORE_CD     = TMPB.STORE_CD(+)
-                   AND TPSS.PROD_CD      = TMPB.PROD_CD(+)
+                 WHERE TSSSD.STORE_CD     = TMP.STORE_CD
+                   AND TSSSD.PROD_CD      = TMP.PROD_CD
+                   AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.STORE_CD = tmp.STORE_CD AND Z.HQ_OFFICE_CD = #{hqOfficeCd})
+                   AND TSSSD.STORE_CD     = TMPB.STORE_CD(+)
+                   AND TSSSD.PROD_CD      = TMPB.PROD_CD(+)
                    <if test='startDate != null and startDate != ""'>
-                      AND TPSS.IO_PROC_DATE  = #{startDate}
+                      AND TSSSD.IOSTOCK_DATE  = #{startDate}
                    </if>
                    <if test='prodCd != null and prodCd != ""'>
                       AND TMP.PROD_CD  = #{prodCd}
                    </if>
                    <if test='arrStoreCd != null and arrStoreCd != ""'>
-                      AND TPSS.STORE_CD IN
+                      AND TSSSD.STORE_CD IN
                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
                            #{item}
                        </foreach>
@@ -266,7 +186,7 @@
                    <if test='arrVendrCd != null and arrVendrCd != ""'>
 			          AND TMP.PROD_CD IN    ( SELECT  PROD_CD
 			                                  FROM    TB_MS_VENDOR_PROD
-			                                  WHERE   STORE_CD = TPSS.STORE_CD
+			                                  WHERE   STORE_CD = TSSSD.STORE_CD
 			                                  AND     VENDR_CD IN
 			                                  <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
 			                                      #{item}
@@ -290,20 +210,16 @@
                    <if test='barcdCd != null and barcdCd != ""'>
                       AND TMPB.BARCD_CD  = #{barcdCd}
                    </if>
-                 GROUP BY  A.LV1_CD
-                         , A.LV1_NM
-                         , A.LV2_CD
-                         , A.LV2_NM
-                         , A.LV3_CD
-                         , A.LV3_NM
-                         , TPSS.PROD_CD
+                 GROUP BY  TMP.STORE_CD
+                         , TMP.PROD_CLASS_CD
+                         , TSSSD.PROD_CD
                          , TMP.PROD_NM
-                         , TPSS.STORE_CD
+                         , TSSSD.STORE_CD
                          , TMP.PO_UNIT_QTY
                          , TMP.PO_UNIT_FG
                          , TMPB.BARCD_CD
-                 ORDER BY TPSS.PROD_CD
-                        , TPSS.STORE_CD
+                 ORDER BY TSSSD.PROD_CD
+                        , TSSSD.STORE_CD
             ) A
     </select>
 </mapper>

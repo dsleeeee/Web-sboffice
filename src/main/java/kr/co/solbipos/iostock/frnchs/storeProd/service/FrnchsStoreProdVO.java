@@ -20,6 +20,8 @@ public class FrnchsStoreProdVO extends PageVO {
     private String prodClassCd;
     /** 본사,매장 구분 */
     private String orgnFg;
+    /** 거래처코드 */
+    private String vendrCd;
     
     /**
      * @return the hqOfficeCd
@@ -112,6 +114,12 @@ public class FrnchsStoreProdVO extends PageVO {
 	public void setOrgnFg(String orgnFg) {
 		this.orgnFg = orgnFg;
 	}
-    
-    
+
+    public String getVendrCd() {
+        return vendrCd;
+    }
+
+    public void setVendrCd(String vendrCd) {
+        this.vendrCd = vendrCd;
+    }
 }

@@ -15,7 +15,7 @@
     <div class="wj-dialog-body sc2" style="height: 700px;">
 
       <div class="tr">
-        <div class="tooltip fl">?
+        <div class="tooltipBtn fl">설명
           <span class="tooltiptext tooltip-right">
           * <s:message code="outstockData.dtl.txt1"/><br/>
           * <s:message code="outstockData.dtl.txt2"/><br/>

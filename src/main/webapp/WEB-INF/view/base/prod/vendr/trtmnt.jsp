@@ -92,7 +92,7 @@
                   <wj-flex-grid-column header="<s:message code="func.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="vendr.prodCd"/>" binding="prodCd" width="*" is-read-only="true"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="vendr.prodNm"/>" binding="prodNm" width="*" is-read-only="true" ></wj-flex-grid-column>
-                  <wj-flex-grid-column header="<s:message code="vendr.splyUprc"/>" binding="splyUprc" width="*" align="right" ></wj-flex-grid-column>
+<%--                  <wj-flex-grid-column header="<s:message code="vendr.splyUprc"/>" binding="splyUprc" width="*" align="right" ></wj-flex-grid-column>--%>
                 </wj-flex-grid>
               </div>
             </div>
@@ -122,7 +122,7 @@
                   <wj-flex-grid-column header="<s:message code="func.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="vendr.prodCd"/>" binding="prodCd" width="*" is-read-only="true"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="vendr.prodNm"/>" binding="prodNm" width="*" is-read-only="true" ></wj-flex-grid-column>
-                  <wj-flex-grid-column header="<s:message code="vendr.splyUprc"/>" binding="splyUprc" width="*" align="right" ></wj-flex-grid-column>
+<%--                  <wj-flex-grid-column header="<s:message code="vendr.splyUprc"/>" binding="splyUprc" width="*" align="right" ></wj-flex-grid-column>--%>
                 </wj-flex-grid>
               </div>
             </div>

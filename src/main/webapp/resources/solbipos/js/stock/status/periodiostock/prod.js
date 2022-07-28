@@ -64,9 +64,7 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 
 	    // 첫째줄 헤더 생성
 	    var dataItem				= {};
-	    dataItem.lv1Nm				= messages["periodIostock.lv1Nm"];
-	    dataItem.lv2Nm				= messages["periodIostock.lv2Nm"];
-	    dataItem.lv3Nm				= messages["periodIostock.lv3Nm"];
+	    dataItem.prodClassNm		= messages["periodIostock.prodClassNm"];
 	    dataItem.prodCd				= messages["periodIostock.prodCd"];
 	    dataItem.prodNm				= messages["periodIostock.prodNm"];
 	    dataItem.poUnitQty			= messages["periodIostock.poUnitQty"];
@@ -306,7 +304,7 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 		var columns = $scope.flex.columns;
 
 		for(var i=0; i<columns.length; i++){
-			if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+			if(columns[i].binding === 'prodClassNm'){
 				$scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
 			}
 		}
@@ -344,9 +342,7 @@ app.controller('periodiostockExcelCtrl', ['$scope', '$http', '$timeout', functio
 
 	    // 첫째줄 헤더 생성
 	    var dataItem				= {};
-	    dataItem.lv1Nm				= messages["periodIostock.lv1Nm"];
-	    dataItem.lv2Nm				= messages["periodIostock.lv2Nm"];
-	    dataItem.lv3Nm				= messages["periodIostock.lv3Nm"];
+	    dataItem.prodClassNm		= messages["periodIostock.prodClassNm"];
 	    dataItem.prodCd				= messages["periodIostock.prodCd"];
 	    dataItem.prodNm				= messages["periodIostock.prodNm"];
 	    dataItem.poUnitQty			= messages["periodIostock.poUnitQty"];
@@ -472,7 +468,7 @@ app.controller('periodiostockExcelCtrl', ['$scope', '$http', '$timeout', functio
 		var columns = $scope.excelFlex.columns;
 
 		for(var i=0; i<columns.length; i++){
-			if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+			if(columns[i].binding === 'prodClassNm'){
 				$scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
 			}
 		}

@@ -47,6 +47,14 @@
       		<if test="storeNm != null and storeNm != ''">
             	AND TMS.STORE_NM LIKE '%'||#{storeNm}||'%'
         	</if>
+			<choose>
+				<when test='vendrCd != null and vendrCd != ""'>
+					AND TPHSO.VENDR_CD = #{vendrCd}
+				</when>
+				<otherwise>
+					AND TPHSO.VENDR_CD IS NULL
+				</otherwise>
+			</choose>
          GROUP BY TPHSO.STORE_CD
 	 			, TMS.STORE_NM
 	 			, TMS.BIZ_NO
@@ -102,6 +110,14 @@
             <if test="storeNm != null and storeNm != ''">
                 AND TMS.STORE_NM LIKE '%'||#{storeNm}||'%'
             </if>
+			<choose>
+				<when test='vendrCd != null and vendrCd != ""'>
+					AND TPHSO.VENDR_CD = #{vendrCd}
+				</when>
+				<otherwise>
+					AND TPHSO.VENDR_CD IS NULL
+				</otherwise>
+			</choose>
          GROUP BY TPHSO.STORE_CD
                 , TMS.STORE_NM
                 , TMS.BIZ_NO
@@ -161,6 +177,14 @@
    			AND TPHSO.SLIP_NO = TPHSOD.SLIP_NO
    			AND TPHSOD.STORE_CD = TMP.STORE_CD
    			AND TPHSOD.PROD_CD = TMP.PROD_CD
+			<choose>
+				<when test='vendrCd != null and vendrCd != ""'>
+					AND TPHSO.VENDR_CD = #{vendrCd}
+				</when>
+				<otherwise>
+					AND TPHSO.VENDR_CD IS NULL
+				</otherwise>
+			</choose>
  		GROUP BY TMP.STORE_CD
  	 			, TPHSOD.PROD_CD
 				, TMP.PROD_NM

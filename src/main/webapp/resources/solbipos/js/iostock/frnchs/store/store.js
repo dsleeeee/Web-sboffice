@@ -18,6 +18,12 @@ app.controller('frnchsStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
   // 콤보박스 데이터 Set
   $scope._setComboData('frnchsStorelistScaleBox', gvListScaleBoxData);
 
+    // 본사 거래처 콤보박스
+    $scope._setComboData('vendrCd', vendrList);
+    // // 거래처는 수정 못하게 처리
+    $("#vendrCd").attr("disabled", true);
+    $("#vendrCd").css('background-color', '#F0F0F0');
+
   //전표구분 grid data-map
   $scope.slipFgMap = new wijmo.grid.DataMap([
     {id: "1", name: messages["dstmn.orderSlipFg"]},
@@ -86,6 +92,7 @@ app.controller('frnchsStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
         	    params.prodNm    = $("#srchProdNm").val();
         	    params.slipNo 	 = selectedRow.slipNo;
         	    params.orgnFg    = $scope.orgnFg;
+        	    params.vendrCd    = $scope.vendrCd;
 
             	// 등록일자 '전체기간' 선택에 따른 params
                 if(!$scope.isChecked){
@@ -99,6 +106,8 @@ app.controller('frnchsStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
 
           }
 	});
+
+    $scope.vendrCdCombo.selectedValue = empVendrCd;
 
   };
 
@@ -124,13 +133,16 @@ app.controller('frnchsStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.storeCd   = $("#frnchsStoreSelectStoreCd").val();
     params.storeNm    = $("#storeNm").val();
     params.orgnFg    = $scope.orgnFg;
+    params.vendrCd      = $scope.vendrCd;
     params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
 
     $scope.storeCdForExcel   = params.storeCd;
     $scope.storeNmForExcel   = params.storeNm;
-    
-    // 등록일자 '전체기간' 선택에 따른 params
+    $scope.searchedVendrCd    = params.vendrCd;
+
+
+      // 등록일자 '전체기간' 선택에 따른 params
     if(!$scope.isChecked){
       params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
       params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
@@ -163,6 +175,7 @@ app.controller('frnchsStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.slipFg    = $scope.slipFg;
     params.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
     params.endDate   = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
+    params.vendrCd 	   = $scope.searchedVendrCd;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/order/dstmn/dstmn/list.sb", params);
@@ -227,6 +240,7 @@ app.controller('frnchsStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
       params.writtenDate = wijmo.Globalize.format(writtenDate.value, 'yyyyMMdd');
       params.billFg      = $scope.billFg;
       params.taxFg       = $scope.taxFg;
+        params.vendrCd    = $scope.vendrCd;
       $scope._broadcast('taxReportCtrl', params);
     }
     // 거래명세표 엑셀다운
@@ -247,6 +261,7 @@ app.controller('frnchsStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
   	params.endDate 	 = $scope.endDateForExcel;
   	params.orgnFg    = $scope.orgnFg;
   	params.excelFg   = $scope.excelFg;
+    params.vendrCd 	   = $scope.searchedVendrCd;
 
 	$scope._broadcast('frnchsStoreExcelCtrl',params);
   };
@@ -367,6 +382,7 @@ app.controller('frnchsStoreExcelCtrl', ['$scope', '$http', '$timeout', function 
 			$scope.storeNm   = data.storeNm;
 			$scope.startDate = data.startDate;
 			$scope.endDate   = data.endDate;
+            $scope.vendrCd 	 = data.vendrCd;
 			
 			$scope.searchFrnchsStoreList(false);
 		}else{
@@ -386,6 +402,7 @@ app.controller('frnchsStoreExcelCtrl', ['$scope', '$http', '$timeout', function 
     params.orgnFg    = $scope.orgnFg;
     params.startDate = $scope.startDate;
     params.endDate   = $scope.endDate;
+    params.vendrCd   = $scope.vendrCd;
     params.isPageChk = isPageChk;
     
     // 조회 수행 : 조회URL, 파라미터, 콜백함수

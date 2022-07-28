@@ -15,7 +15,7 @@
              , (SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
              <include refid="CmmSQL.PagingTemplateCount"/>
         FROM (
-                SELECT A.*
+                SELECT FN_GET_PROD_CLASS_CD_NM_STR(TMP.STORE_CD, TMP.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
 			         , TPSSM.PROD_CD
 					 , TMP.PROD_NM
 					 , TPSSM.STORE_CD
@@ -64,49 +64,12 @@
                     , SF_ZERO_TO_NULL(SUM(TPSSM.ADJ_AMT)          ) AS IO_OCCR_TOT_21   /* 재고조정 금액*/
                     , SF_ZERO_TO_NULL(SUM(TPSSM.SET_IN_AMT)       ) AS IO_OCCR_TOT_22   /* 세트생성 금액*/
                     , SF_ZERO_TO_NULL(SUM(TPSSM.CLOSE_AMT)        ) AS CLOSE_AMT        /* 기말재고금액 */
-                  FROM (
-                              SELECT   A.P_PROD_CLASS_CD   AS LV1_CD
-                                      ,A.PROD_CLASS_CD     AS LV2_CD
-                                      ,A.PROD_CLASS_NM     AS LV2_NM
-                                      ,B.PROD_CLASS_CD     AS LV3_CD
-                                      ,B.PROD_CLASS_NM     AS LV3_NM
-                                      ,(SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    A.P_PROD_CLASS_CD) FROM DUAL)    AS LV1_NM
-                              FROM    (
-                                          SELECT  HQ_OFFICE_CD
-                                                , P_PROD_CLASS_CD
-                                                , PROD_CLASS_CD
-                                                , PROD_CLASS_NM
-                                          FROM    TB_HQ_PRODUCT_CLASS
-                                          WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
-                                          AND     P_PROD_CLASS_CD IN (
-                                                                        SELECT  PROD_CLASS_CD
-                                                                        FROM    TB_HQ_PRODUCT_CLASS
-                                                                        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
-                                                                        AND     P_PROD_CLASS_CD = '00000'
-                                                                      )
-                                      )                      A,
-                                      TB_HQ_PRODUCT_CLASS    B
-                              WHERE   B.P_PROD_CLASS_CD IN    (
-                                                                  SELECT  PROD_CLASS_CD
-                                                                  FROM    TB_HQ_PRODUCT_CLASS
-                                                                  WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
-                                                                  AND     P_PROD_CLASS_CD IN (
-                                                                                               SELECT  PROD_CLASS_CD
-                                                                                               FROM    TB_HQ_PRODUCT_CLASS
-                                                                                               WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
-                                                                                               AND     P_PROD_CLASS_CD = '00000'
-                                                                                              )
-                                                              )
-                              AND     A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
-                              AND     A.PROD_CLASS_CD = B.P_PROD_CLASS_CD
-                          )               A
-                     , TB_ST_STORE_STOCK_MONTHLY TPSSM
+                  FROM TB_ST_STORE_STOCK_MONTHLY TPSSM
 				     , TB_MS_PRODUCT TMP
 				     , TB_MS_PRODUCT_BARCD TMPB
                  WHERE TPSSM.STORE_CD     = TMP.STORE_CD
                    AND TPSSM.PROD_CD      = TMP.PROD_CD
                    AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.STORE_CD = TPSSM.STORE_CD AND Z.HQ_OFFICE_CD = #{hqOfficeCd})
-                   AND TMP.PROD_CLASS_CD = A.LV3_CD
                    AND TPSSM.STORE_CD     = TMPB.STORE_CD(+)
                    AND TPSSM.PROD_CD      = TMPB.PROD_CD(+)
                    <if test='startDate != null and startDate != ""'>
@@ -148,12 +111,8 @@
                    <if test='barcdCd != null and barcdCd != ""'>
                       AND TMPB.BARCD_CD  = #{barcdCd}
                    </if>
-                 GROUP BY  A.LV1_CD
-                         , A.LV1_NM
-                         , A.LV2_CD
-                         , A.LV2_NM
-                         , A.LV3_CD
-                         , A.LV3_NM
+                 GROUP BY  TMP.STORE_CD
+                         , TMP.PROD_CLASS_CD
                          , TPSSM.PROD_CD
                          , TMP.PROD_NM
                          , TPSSM.STORE_CD

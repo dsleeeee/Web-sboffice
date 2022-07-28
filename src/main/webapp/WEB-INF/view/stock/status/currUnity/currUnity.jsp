@@ -78,7 +78,7 @@
     </tbody>
   </table>
 
-<div class="fl" style="width: 49%;">
+<div class="fl" style="width: 59%;">
 	<div class="mt20 oh sb-select dkbr">
 		<%-- 페이지 스케일  --%>
 		<wj-combo-box
@@ -114,17 +114,15 @@
         item-formatter="_itemFormatter">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="currUnity.lv1Nm"/>"          binding="lv1Nm" width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="currUnity.lv2Nm"/>"          binding="lv2Nm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="currUnity.lv3Nm"/>"          binding="lv3Nm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="currUnity.prodCd"/>"         binding="prodCd" width="130" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="currUnity.prodNm"/>"         binding="prodNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="currUnity.hqBarcdCd"/>"      binding="hBarcdCd" width="130" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="currUnity.storeBarcdCd"/>"   binding="mBarcdCd" width="130" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="currUnity.safeStockQty"/>"   binding="hSafeStockQty" width="80" align="center" is-read-only="true"aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="currUnity.hqQty"/>"          binding="hCurrQty" width="80" align="center" is-read-only="true"aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="currUnity.storeQty"/>"       binding="mCurrQty" width="80" align="center" is-read-only="true"aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="currUnity.totStockQty"/>"    binding="totCurrQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.prodClassNm"/>"    binding="prodClassNm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.prodCd"/>"         binding="prodCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.prodNm"/>"         binding="prodNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.hqBarcdCd"/>"      binding="hBarcdCd" width="80" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.storeBarcdCd"/>"   binding="mBarcdCd" width="80" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.safeStockQty"/>"   binding="hSafeStockQty" width="65" align="center" is-read-only="true"aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.hqQty"/>"          binding="hCurrQty" width="65" align="center" is-read-only="true"aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.storeQty"/>"       binding="mCurrQty" width="65" align="center" is-read-only="true"aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.totStockQty"/>"    binding="totCurrQty" width="65" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>
       <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
@@ -157,9 +155,7 @@
         item-formatter="_itemFormatter">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="currUnity.lv1Nm"/>"          binding="lv1Nm" width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="currUnity.lv2Nm"/>"          binding="lv2Nm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="currUnity.lv3Nm"/>"          binding="lv3Nm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.prodClassNm"/>"    binding="prodClassNm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="currUnity.prodCd"/>"         binding="prodCd" width="150" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="currUnity.prodNm"/>"         binding="prodNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="currUnity.hqBarcdCd"/>"      binding="hBarcdCd" width="150" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
@@ -181,7 +177,7 @@
 
 </div>
 
-<div ng-controller="currUnityHqDtlCtrl" id="currUnityHqDtl" class="fr" style="width: 49%;">
+<div ng-controller="currUnityHqDtlCtrl" id="currUnityHqDtl" class="fr" style="width: 39%;">
 
         <div class="mt20 oh sb-select dkbr">
             <%-- 페이지 스케일  --%>
@@ -218,10 +214,10 @@
               item-formatter="_itemFormatter">
 
               <!-- define columns -->
-              <wj-flex-grid-column header="<s:message code="currUnity.iostockDate"/>"       binding="ioProcDate"        width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="currUnity.iostockFg"/>"         binding="ioOccrFgNm"        width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="currUnity.qty"/>"               binding="ioOccrQty"         width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="currUnity.totQty"/>"            binding="totIoOccrQty"     width="*" align="center" is-read-only="true" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="currUnity.iostockDate"/>"       binding="ioProcDate"        width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="currUnity.iostockFg"/>"         binding="ioOccrFgNm"        width="65" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="currUnity.qty"/>"               binding="ioOccrQty"         width="60" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="currUnity.totQty"/>"            binding="totIoOccrQty"     width="65" align="center" is-read-only="true" ></wj-flex-grid-column>
             </wj-flex-grid>
 
             <%-- ColumnPicker 사용시 include --%>
@@ -257,7 +253,7 @@
               <!-- define columns -->
               <wj-flex-grid-column header="<s:message code="currUnity.iostockDate"/>"       binding="ioProcDate"        width="*" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="currUnity.iostockFg"/>"         binding="ioOccrFgNm"        width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="currUnity.qty"/>"               binding="ioOccrQty"         width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="currUnity.qty"/>"               binding="ioOccrQty"         width="*" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="currUnity.totQty"/>"            binding="totIoOccrQty"     width="*" align="center" is-read-only="true" ></wj-flex-grid-column>
             </wj-flex-grid>
 
@@ -272,7 +268,7 @@
 
     </div>
 
-    <div ng-controller="currUnityStoreDtlCtrl" id="currUnityStoreDtl" class="fr" style="display: none; width: 49%;">
+    <div ng-controller="currUnityStoreDtlCtrl" id="currUnityStoreDtl" class="fr" style="display: none; width: 39%;">
 
         <div class="mt20 oh sb-select dkbr">
             <%-- 페이지 스케일  --%>
@@ -307,11 +303,11 @@
               item-formatter="_itemFormatter">
 
               <!-- define columns -->
-              <wj-flex-grid-column header="<s:message code="currUnity.storeCd"/>"           binding="storeCd"       width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="currUnity.storeNm"/>"           binding="storeNm"       width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="currUnity.safeStockQty"/>"      binding="safeStockQty"  width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="currUnity.outPrice"/>"          binding="splyUprc"      width="*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="currUnity.qty"/>"               binding="currQty"       width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="currUnity.storeCd"/>"           binding="storeCd"       width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="currUnity.storeNm"/>"           binding="storeNm"       width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="currUnity.safeStockQty"/>"      binding="safeStockQty"  width="65" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="currUnity.outPrice"/>"          binding="splyUprc"      width="55" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="currUnity.qty"/>"               binding="currQty"       width="55" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             </wj-flex-grid>
 
             <%-- ColumnPicker 사용시 include --%>
@@ -362,7 +358,7 @@
 
     </div>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/stock/status/currUnity/currUnity.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/status/currUnity/currUnity.js?ver=20181224.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

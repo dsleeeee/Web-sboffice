@@ -40,6 +40,7 @@
 		     , M.IN_TOT
 		     , M.PENALTY_AMT
 		     , M.OUTSTOCK_PROC_FG
+             , NVL((SELECT VENDR_NM FROM TB_HQ_VENDOR thv WHERE thv.HQ_OFFICE_CD = #{hqOfficeCd} AND thv.VENDR_CD = M.VENDR_CD ), '본사') AS VENDR
 		     <include refid="CmmSQL.PagingTemplateCount"/>
 		  FROM (
 		        SELECT A.REQ_DATE
@@ -59,6 +60,7 @@
 		             , NULL   AS IN_TOT
 		             , NULL   AS PENALTY_AMT
 		             , NULL   AS OUTSTOCK_PROC_FG
+                     , NULL   AS VENDR_CD
 		          FROM TB_PO_HQ_STORE_ORDER A
 		         WHERE A.PROC_FG = '00'
 		         AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = A.STORE_CD)
@@ -87,6 +89,7 @@
 		             , B.IN_TOT
 		             , B.PENALTY_AMT
 		             , B.OUTSTOCK_PROC_FG
+		             , B.VENDR_CD
 		          FROM (
 		                SELECT TPHSD.HQ_OFFICE_CD
 		                     , TPHSD.REQ_DATE       /* 출고요청일자 */
@@ -126,10 +129,19 @@
 		                     , B.IN_DT
 		                     , (SELECT SUM(PENALTY_AMT) FROM TB_PO_HQ_STORE_OUTSTOCK_DTL Z WHERE Z.HQ_OFFICE_CD = B.HQ_OFFICE_CD AND Z.SLIP_NO = B.SLIP_NO) AS PENALTY_AMT
 		                     , B.PROC_FG    AS OUTSTOCK_PROC_FG
+		                     , B.VENDR_CD
 		                  FROM TB_PO_HQ_STORE_OUTSTOCK B
 		                 WHERE B.HQ_OFFICE_CD = #{hqOfficeCd}
 		                 ) B
 		         WHERE A.SLIP_NO = B.SLIP_NO(+)
+                <choose>
+                    <when test='vendrCd != null and vendrCd != ""'>
+                        AND B.VENDR_CD = #{vendrCd}
+                    </when>
+                    <otherwise>
+                        AND B.VENDR_CD IS NULL
+                    </otherwise>
+                </choose>
 		       ) M
 		       WHERE 1=1
 	            <if test='startDate != null and startDate != ""'>
@@ -251,6 +263,7 @@
              , M.IN_TOT_QTY
              , M.IN_TOT
              , M.PENALTY_AMT
+             , NVL((SELECT VENDR_NM FROM TB_HQ_VENDOR thv WHERE thv.HQ_OFFICE_CD = #{hqOfficeCd} AND thv.VENDR_CD = M.VENDR_CD ), '본사') AS VENDR
           FROM (
                 SELECT A.REQ_DATE
                      , A.STORE_CD
@@ -268,6 +281,7 @@
                      , NULL   AS IN_TOT_QTY
                      , NULL   AS IN_TOT
                      , NULL   AS PENALTY_AMT
+                     , NULL   AS VENDR_CD
                   FROM TB_PO_HQ_STORE_ORDER A
                  WHERE A.PROC_FG = '00'
                  AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = A.STORE_CD)
@@ -295,6 +309,7 @@
                      , B.IN_TOT_QTY
                      , B.IN_TOT
                      , B.PENALTY_AMT
+                     , B.VENDR_CD
                   FROM (
                         SELECT TPHSD.HQ_OFFICE_CD
                              , TPHSD.REQ_DATE       /* 출고요청일자 */
@@ -333,10 +348,19 @@
                              , B.IN_TOT
                              , B.IN_DT
                              , (SELECT SUM(PENALTY_AMT) FROM TB_PO_HQ_STORE_OUTSTOCK_DTL Z WHERE Z.HQ_OFFICE_CD = B.HQ_OFFICE_CD AND Z.SLIP_NO = B.SLIP_NO) AS PENALTY_AMT
+                             , B.VENDR_CD
                           FROM TB_PO_HQ_STORE_OUTSTOCK B
                          WHERE B.HQ_OFFICE_CD = #{hqOfficeCd}
                          ) B
                  WHERE A.SLIP_NO = B.SLIP_NO(+)
+                <choose>
+                    <when test='vendrCd != null and vendrCd != ""'>
+                        AND B.VENDR_CD = #{vendrCd}
+                    </when>
+                    <otherwise>
+                        AND B.VENDR_CD IS NULL
+                    </otherwise>
+                </choose>
                ) M
                WHERE 1=1
                 <if test='startDate != null and startDate != ""'>

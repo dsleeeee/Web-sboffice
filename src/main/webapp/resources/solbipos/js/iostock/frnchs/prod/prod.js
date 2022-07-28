@@ -15,7 +15,14 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
   
   // 콤보박스 데이터 Set
   $scope._setComboData('prodlistScaleBox', gvListScaleBoxData);
-  
+
+  // 본사 거래처 콤보박스
+  $scope._setComboData('vendrCd', vendrList);
+  // // 거래처는 수정 못하게 처리
+  $("#vendrCd").attr("disabled", true);
+  $("#vendrCd").css('background-color', '#F0F0F0');
+
+
   //매장선택 모듈 팝업 사용시 정의
   // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
   // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
@@ -93,6 +100,7 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
           params.startDate = $scope.searchedStartDate;
           params.endDate   = $scope.searchedEndDate;
           params.storeCd   = $("#prodSelectStoreCd").val();
+          params.vendrCd   = $scope.searchedVendrCd;
 
           $scope._broadcast('prodInOutstockInfoCtrl', params);
         }
@@ -113,6 +121,7 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
       poUnitFgNm: messages["prodStockInfo.poUnitFg"],
       poUnitQty : messages["prodStockInfo.poUnitQty"],
       outCnt    : messages["prodStockInfo.outCnt"],
+      vendr     : messages["prodStockInfo.vendr"],
       outTotQty : messages["prodStockInfo.out"],
       outTot    : messages["prodStockInfo.out"],
       inTotQty  : messages["prodStockInfo.in"],
@@ -188,13 +197,15 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
     params.prodCd      = $scope.prodCdModel;
     params.prodNm      = $("#srchProdNm").val();
     params.storeCd     = $("#prodSelectStoreCd").val();
+    params.vendrCd      = $scope.vendrCd;
     params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.isPageChk   = isPageChk;
     
     $scope.searchedStoreCd		= params.storeCd;
 	$scope.searchedProdClassCd  = params.prodClassCd;
 	$scope.searchedProdCd       = params.prodCd;     
-	$scope.searchedProdNm       = params.prodNm;     
+	$scope.searchedProdNm       = params.prodNm;
+    $scope.searchedVendrCd      = params.vendrCd;
     
     // 등록일자 '전체기간' 선택에 따른 params
     if(!$scope.isChecked){
@@ -331,6 +342,7 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
 	params.prodClassCd 	= $scope.searchedProdClassCd;
 	params.prodCd      	= $scope.searchedProdCd;
 	params.prodNm      	= $scope.searchedProdNm;
+    params.vendrCd 	    = $scope.searchedVendrCd;
 	params.excelFg	    = $scope.excelFg;
 	
 	$scope._broadcast('prodExcelCtrl',params);
@@ -380,6 +392,7 @@ app.controller('prodExcelCtrl', ['$scope', '$http', '$timeout', function ($scope
       poUnitFgNm: messages["prodStockInfo.poUnitFg"],
       poUnitQty : messages["prodStockInfo.poUnitQty"],
       outCnt    : messages["prodStockInfo.outCnt"],
+      vendr     : messages["prodStockInfo.vendr"],
       outTotQty : messages["prodStockInfo.out"],
       outTot    : messages["prodStockInfo.out"],
       inTotQty  : messages["prodStockInfo.in"],
@@ -424,6 +437,9 @@ app.controller('prodExcelCtrl', ['$scope', '$http', '$timeout', function ($scope
         }
       }
     }
+
+    $scope.vendrCdCombo.selectedValue = empVendrCd;
+
   };
 
 
@@ -441,6 +457,7 @@ app.controller('prodExcelCtrl', ['$scope', '$http', '$timeout', function ($scope
 			$scope.prodClassCd = data.prodClassCd
 			$scope.prodCd      = data.prodCd
 			$scope.prodNm      = data.prodNm;
+            $scope.vendrCd     = data.vendrCd;
 			
 		    $scope.searchProdList(false);
 
@@ -462,6 +479,7 @@ app.controller('prodExcelCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.prodCd      = $scope.prodCd;
     params.prodNm      = $scope.prodNm;
     params.storeCd     = $scope.storeCd;
+    params.vendrCd      = $scope.vendrCd;
     params.isPageChk   = isPageChk;
     
     // 조회 수행 : 조회URL, 파라미터, 콜백함수

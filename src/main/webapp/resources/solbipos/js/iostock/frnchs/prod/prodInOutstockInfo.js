@@ -117,7 +117,8 @@ app.controller('prodInOutstockInfoCtrl', ['$scope', '$http', '$timeout', functio
     $scope.startDate    = data.startDate;
     $scope.endDate      = data.endDate;
     $scope.storeCd      = data.storeCd;
-    
+    $scope.vendrCd      = data.vendrCd;
+
     $scope.wjProdInOutstockInfoLayer.show(true);
     
     var subTitleText = '&nbsp' + messages["prodInOutstockInfo.title"] + '&nbsp('
@@ -141,6 +142,7 @@ app.controller('prodInOutstockInfoCtrl', ['$scope', '$http', '$timeout', functio
     params.startDate = $scope.startDate;
     params.endDate   = $scope.endDate;
     params.storeCd   = $scope.storeCd;
+    params.vendrCd   = $scope.vendrCd;
     
     var storeCdChk = $scope.storeCd;
 

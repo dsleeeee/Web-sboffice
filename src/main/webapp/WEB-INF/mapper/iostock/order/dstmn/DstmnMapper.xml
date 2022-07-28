@@ -297,7 +297,14 @@
    		<if test='endDate != null and endDate != ""'>
    			AND tphso.OUT_DATE <![CDATA[<= ]]> REPLACE(#{endDate}, '-','')
    		</if>
-
+        <choose>
+            <when test='vendrCd != null and vendrCd != ""'>
+                AND tphso.VENDR_CD = #{vendrCd}
+            </when>
+            <otherwise>
+                AND tphso.VENDR_CD IS NULL
+            </otherwise>
+        </choose>
         <![CDATA[
         AND     tphsod.HQ_OFFICE_CD =   tphso.HQ_OFFICE_CD
         AND     tphsod.SLIP_NO      =   tphso.SLIP_NO
