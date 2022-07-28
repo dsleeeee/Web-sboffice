@@ -8,7 +8,7 @@
 
 <div id="prodView" style="display: none;" ng-controller="vendrOrderProdCtrl">
   <div class="mt20 tr">
-    <ul class="txtSty3">
+    <ul class="txtSty3" ng-if="btnProdSaveFg">
       <li class="red fl"><s:message code="vendrOrder.prod.txt1"/></li>
     </ul>
     <%-- 추가/변경 --%>
