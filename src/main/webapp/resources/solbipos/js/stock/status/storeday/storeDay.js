@@ -146,13 +146,13 @@ app.controller('storeDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	      var isChecked = $scope.isChecked;
 		  if(isChecked){
 			  for(var i=0; i<length; i++){
-				  if(columns[i].binding.substring(0,2) == 'lv'){
+				  if(columns[i].binding == 'prodClassNm'){
 	    			  columns[i].visible = true;
 	    		  }
 	          }
 		  }else{
 			  for(var i=0; i<length; i++){
-				  if(columns[i].binding.substring(0,2) == 'lv'){
+				  if(columns[i].binding == 'prodClassNm'){
 	    			  columns[i].visible = false;
 	    		  }
 	          }
@@ -249,9 +249,7 @@ app.controller('storeDayMainCtrl', ['$scope', '$http', '$timeout', function ($sc
     s.allowMerging = 2;
     s.columnHeaders.rows.push(new wijmo.grid.Row());
     s.columnHeaders.rows[0].dataItem = {
-	  lv1Nm					:messages["storeDay.prodClassLNm"],
-	  lv2Nm					:messages["storeDay.prodClassMNm"],
-	  lv3Nm					:messages["storeDay.prodClassSNm"],
+	  prodClassNm					:messages["storeDay.prodClassNm"],
 
 	  prodCd 				:messages["storeDay.prodCd"],
 	  prodNm 				:messages["storeDay.prodNm"],
@@ -388,7 +386,7 @@ app.controller('storeDayMainCtrl', ['$scope', '$http', '$timeout', function ($sc
     		  var colLength = columns[i].binding.length;
 			  if(columns[i].binding.substring(colLength-2,colLength-5) == 'Tot'){
     			  columns[i].visible = false;
-    		  }else if(columns[i].binding != 'lv1Nm' && columns[i].binding != 'lv2Nm' && columns[i].binding != 'lv3Nm'){
+    		  }else if(columns[i].binding != 'prodClassNm'){
     			  columns[i].visible = true;
     		  }
           }
@@ -398,14 +396,14 @@ app.controller('storeDayMainCtrl', ['$scope', '$http', '$timeout', function ($sc
     		  if(columns[i].binding != 'poUnitQty'){
 				  if(columns[i].binding.substring(colLength-2,colLength-5) == 'Qty'){
 	    			  columns[i].visible = false;
-	    		  }else if(columns[i].binding != 'lv1Nm' && columns[i].binding != 'lv2Nm' && columns[i].binding != 'lv3Nm'){
+	    		  }else if(columns[i].binding != 'prodClassNm'){
 	    			  columns[i].visible = true;
 	    		  }
     		  }
           }
       }else{ //수량 + 금액
     	  for(var i=0; i<length; i++){
-    		  if(columns[i].binding != 'lv1Nm' && columns[i].binding != 'lv2Nm' && columns[i].binding != 'lv3Nm'){
+    		  if(columns[i].binding != 'prodClassNm'){
     			  columns[i].visible = true;
     		  }
           }
@@ -439,9 +437,7 @@ app.controller('storeDayExcelCtrl', ['$scope', '$http', '$timeout', function ($s
 	    s.allowMerging = 2;
 	    s.columnHeaders.rows.push(new wijmo.grid.Row());
 	    s.columnHeaders.rows[0].dataItem = {
-		  lv1Nm					:messages["storeDay.prodClassLNm"],
-		  lv2Nm					:messages["storeDay.prodClassMNm"],
-		  lv3Nm					:messages["storeDay.prodClassSNm"],
+		  prodClassNm					:messages["storeDay.prodClassNm"],
 
 		  prodCd 				:messages["storeDay.prodCd"],
 		  prodNm 				:messages["storeDay.prodNm"],
@@ -551,7 +547,7 @@ app.controller('storeDayExcelCtrl', ['$scope', '$http', '$timeout', function ($s
 	    		  var colLength = columns[i].binding.length;
 				  if(columns[i].binding.substring(colLength-2,colLength-5) == 'Tot'){
 	    			  columns[i].visible = false;
-	    		  }else if(columns[i].binding != 'lv1Nm' && columns[i].binding != 'lv2Nm' && columns[i].binding != 'lv3Nm'){
+	    		  }else if(columns[i].binding != 'prodClassNm'){
 	    			  columns[i].visible = true;
 	    		  }
 	          }
@@ -561,14 +557,14 @@ app.controller('storeDayExcelCtrl', ['$scope', '$http', '$timeout', function ($s
 	    		  if(columns[i].binding != 'poUnitQty'){
 					  if(columns[i].binding.substring(colLength-2,colLength-5) == 'Qty'){
 		    			  columns[i].visible = false;
-		    		  }else if(columns[i].binding != 'lv1Nm' && columns[i].binding != 'lv2Nm' && columns[i].binding != 'lv3Nm'){
+		    		  }else if(columns[i].binding != 'prodClassNm'){
 		    			  columns[i].visible = true;
 		    		  }
 	    		  }
 	          }
 	      }else{ //수량 + 금액
 	    	  for(var i=0; i<length; i++){
-	    		  if(columns[i].binding != 'lv1Nm' && columns[i].binding != 'lv2Nm' && columns[i].binding != 'lv3Nm'){
+	    		  if(columns[i].binding != 'prodClassNm'){
 	    			  columns[i].visible = true;
 	    		  }
 	          }
@@ -594,13 +590,13 @@ app.controller('storeDayExcelCtrl', ['$scope', '$http', '$timeout', function ($s
 	      var isChecked = $scope.isChecked;
 		  if(isChecked){
 			  for(var i=0; i<length; i++){
-				  if(columns[i].binding.substring(0,2) == 'lv'){
+				  if(columns[i].binding == 'prodClassNm'){
 	    			  columns[i].visible = true;
 	    		  }
 	          }
 		  }else{
 			  for(var i=0; i<length; i++){
-				  if(columns[i].binding.substring(0,2) == 'lv'){
+				  if(columns[i].binding == 'prodClassNm'){
 	    			  columns[i].visible = false;
 	    		  }
 	          }

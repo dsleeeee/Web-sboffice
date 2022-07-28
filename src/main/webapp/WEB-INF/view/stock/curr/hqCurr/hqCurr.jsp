@@ -179,9 +179,7 @@
         >
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>"     binding="lv1Nm"         width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>"     binding="lv2Nm"         width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>"     binding="lv3Nm"         width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="hqCurr.prodClassNm"/>" binding="prodClassNm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqCurr.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqCurr.prodNm"/>" binding="prodNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqCurr.poUnitFg"/>" binding="poUnitFgNm" width="60" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
@@ -260,9 +258,7 @@
         >
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>"     binding="lv1Nm"         width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>"     binding="lv2Nm"         width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>"     binding="lv3Nm"         width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="hqCurr.prodClassNm"/>" binding="prodClassNm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqCurr.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqCurr.prodNm"/>" binding="prodNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqCurr.poUnitFg"/>" binding="poUnitFgNm" width="60" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
@@ -314,7 +310,7 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/curr/hqCurr/hqCurr.js?ver=20181224.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/curr/hqCurr/hqCurr.js?ver=20181224.03" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp"></c:import>

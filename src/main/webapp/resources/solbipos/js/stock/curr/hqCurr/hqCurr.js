@@ -125,7 +125,7 @@ app.controller('hqCurrCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	  var columns = $scope.flex.columns;
 
 	  for(var i=0; i<columns.length; i++){
-		  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+		  if(columns[i].binding === 'prodClassNm'){
 			  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
 		  }
 	  }
@@ -180,7 +180,7 @@ app.controller('hqCurrExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
 		var columns = $scope.excelFlex.columns;
 
 		for(var i=0; i<columns.length; i++){
-			if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+			if(columns[i].binding === 'prodClassNm'){
 				$scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
 			}
 		}
