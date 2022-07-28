@@ -124,6 +124,25 @@
         <input type="text" id="srchSlipProdNm" name="srchSlipProdNm" ng-model="prodNmModel" class="sb-input w100" maxlength="16" onkeyup="fnNxBtnSearch();"/>
       </td>
     </tr>
+    <c:if test="${envst1242 == '1'}">
+      <tr>
+        <th><s:message code="orderStockInfo.vendr" /></th>
+        <td>
+          <div class="sb-select fl w150px">
+            <wj-combo-box
+                    id="vendrCd"
+                    ng-model="vendrCd"
+                    control="vendrCdCombo"
+                    items-source="_getComboData('vendrCd')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)">
+            </wj-combo-box>
+          </div>
+        </td>
+      </tr>
+    </c:if>
     </tbody>
   </table>
 
@@ -164,6 +183,7 @@
 
            <!-- define columns -->
            <wj-flex-grid-column header="<s:message code="slipStockInfo.slipNo"/>"        binding="slipNo"        width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+           <wj-flex-grid-column header="<s:message code="slipStockInfo.vendr"/>"          binding="vendr"        width="80" align="center" is-read-only="true"></wj-flex-grid-column>
            <wj-flex-grid-column header="<s:message code="slipStockInfo.storeNm"/>"       binding="storeNm"       width="150" align="center"  is-read-only="true"></wj-flex-grid-column>
            <wj-flex-grid-column header="<s:message code="slipStockInfo.slipFg"/>"        binding="slipFgNm"        width="80" align="center"   is-read-only="true"></wj-flex-grid-column>
            <wj-flex-grid-column header="<s:message code="slipStockInfo.slipKind"/>"      binding="slipKindNm"      width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -291,6 +311,7 @@
 
        <!-- define columns -->
        <wj-flex-grid-column header="<s:message code="slipStockInfo.slipNo"/>"        binding="slipNo"        width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.vendr"/>"         binding="vendr"        width="80" align="center" is-read-only="true"></wj-flex-grid-column>
        <wj-flex-grid-column header="<s:message code="slipStockInfo.storeNm"/>"       binding="storeNm"       width="150" align="center"  is-read-only="true"></wj-flex-grid-column>
        <wj-flex-grid-column header="<s:message code="slipStockInfo.slipFg"/>"        binding="slipFgNm"        width="80" align="center"   is-read-only="true"></wj-flex-grid-column>
        <wj-flex-grid-column header="<s:message code="slipStockInfo.slipKind"/>"      binding="slipKindNm"      width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -344,7 +365,13 @@
    </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/frnchs/slip/slip.js" charset="utf-8"></script>
+<script type="text/javascript">
+  var gEnvst1242  = '${envst1242}';
+  var empVendrCd = '${empVendrCd}';
+  <%-- 본사 거래처 콤보박스 --%>
+  var vendrList = ${vendrList};
+</script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/frnchs/slip/slip.js?ver=20220727.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

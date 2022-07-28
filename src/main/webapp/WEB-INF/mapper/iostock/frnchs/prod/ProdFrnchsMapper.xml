@@ -33,11 +33,17 @@
 	 		, SUM(A.IN_TOT_QTY)                AS IN_TOT_QTY
 	 		, SUM(A.IN_TOT)                    AS IN_TOT
 	 		, SUM(A.PENALTY_AMT)               AS PENALTY_AMT
+            , NVL((SELECT VENDR_NM FROM TB_HQ_VENDOR thv WHERE thv.HQ_OFFICE_CD = #{hqOfficeCd} AND thv.VENDR_CD = B.VENDR_CD ), '본사') AS VENDR
 	 	<include refid="CmmSQL.PagingTemplateCount"/>	
   		FROM TB_PO_HQ_STORE_OUTSTOCK_DTL A
   	 		, TB_MS_PRODUCT              Z
+		    , TB_PO_HQ_STORE_OUTSTOCK B
  		WHERE A.STORE_CD = Z.STORE_CD
    		  AND A.PROD_CD  = Z.PROD_CD
+ 		  AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+ 		  AND B.STORE_CD = A.STORE_CD
+ 		  AND B.OUT_DATE = A.REQ_DATE
+ 		  AND B.SLIP_NO = A.SLIP_NO
    		<if test='orgnFg != null and orgnFg == "H"'>
    			AND A.HQ_OFFICE_CD = #{hqOfficeCd}
    		</if>
@@ -80,6 +86,14 @@
 		<if test='prodNm != null and prodNm != ""'>
  	  		AND Z.PROD_NM = #{prodNm}
 		</if>
+        <choose>
+            <when test='vendrCd != null and vendrCd != ""'>
+                AND B.VENDR_CD = #{vendrCd}
+            </when>
+            <otherwise>
+                AND B.VENDR_CD IS NULL
+            </otherwise>
+        </choose>
    		AND EXISTS (SELECT * FROM TB_PO_HQ_STORE_OUTSTOCK M
    					WHERE M.HQ_OFFICE_CD = A.HQ_OFFICE_CD
    					AND M.SLIP_NO = A.SLIP_NO
@@ -94,6 +108,7 @@
 	 		   , Z.PROD_NM
 	 		   , A.PO_UNIT_FG
 	 		   , A.PO_UNIT_QTY
+               , B.VENDR_CD
 	 		<choose>
 				<when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
 			 		, A.HQ_OFFICE_CD
@@ -155,6 +170,14 @@
 			<if test='endDate != null and endDate != ""'>
    			  AND TPHSO.OUT_DATE <![CDATA[ <= ]]> #{endDate}
    			</if>
+            <choose>
+                <when test='vendrCd != null and vendrCd != ""'>
+                    AND TPHSO.VENDR_CD = #{vendrCd}
+                </when>
+                <otherwise>
+                    AND TPHSO.VENDR_CD IS NULL
+                </otherwise>
+            </choose>
  			ORDER BY TPHSO.OUT_DT, TPHSOD.STORE_CD
     </select>
     
@@ -188,10 +211,16 @@
             , SUM(A.IN_TOT_QTY)                AS IN_TOT_QTY
             , SUM(A.IN_TOT)                    AS IN_TOT
             , SUM(A.PENALTY_AMT)               AS PENALTY_AMT
+            , NVL((SELECT VENDR_NM FROM TB_HQ_VENDOR thv WHERE thv.HQ_OFFICE_CD = #{hqOfficeCd} AND thv.VENDR_CD = B.VENDR_CD ), '본사') AS VENDR
         FROM TB_PO_HQ_STORE_OUTSTOCK_DTL A
             , TB_MS_PRODUCT              Z
+            , TB_PO_HQ_STORE_OUTSTOCK B
         WHERE A.STORE_CD = Z.STORE_CD
           AND A.PROD_CD  = Z.PROD_CD
+        AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+        AND B.STORE_CD = A.STORE_CD
+        AND B.OUT_DATE = A.REQ_DATE
+        AND B.SLIP_NO = A.SLIP_NO
         <if test='orgnFg != null and orgnFg == "H"'>
             AND A.HQ_OFFICE_CD = #{hqOfficeCd}
         </if>
@@ -234,6 +263,14 @@
         <if test='prodNm != null and prodNm != ""'>
             AND Z.PROD_NM = #{prodNm}
         </if>
+        <choose>
+            <when test='vendrCd != null and vendrCd != ""'>
+                AND B.VENDR_CD = #{vendrCd}
+            </when>
+            <otherwise>
+                AND B.VENDR_CD IS NULL
+            </otherwise>
+        </choose>
         AND EXISTS (SELECT * FROM TB_PO_HQ_STORE_OUTSTOCK M
                     WHERE M.HQ_OFFICE_CD = A.HQ_OFFICE_CD
                     AND M.SLIP_NO = A.SLIP_NO
@@ -248,6 +285,7 @@
                , Z.PROD_NM
                , A.PO_UNIT_FG
                , A.PO_UNIT_QTY
+               , B.VENDR_CD
             <choose>
                 <when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
                     , A.HQ_OFFICE_CD

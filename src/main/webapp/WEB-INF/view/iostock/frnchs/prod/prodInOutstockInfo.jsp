@@ -69,4 +69,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/frnchs/prod/prodInOutstockInfo.js" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/frnchs/prod/prodInOutstockInfo.js?ver=20220728.01" charset="utf-8"></script>

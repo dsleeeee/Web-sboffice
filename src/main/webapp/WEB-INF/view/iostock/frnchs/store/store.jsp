@@ -29,13 +29,30 @@
         <%-- 조회일자 --%>
         <tr>
             <th><s:message code="cmm.search.date" /></th>
-            <td colspan="3">
+            <td>
             <div class="sb-select">
                 <span class="txtIn"><input id="srchClassStartDate" class="w120px"></span>
                 <span class="rg">~</span>
                 <span class="txtIn"><input id="srchClassEndDate" class="w120px"></span>
             </div>
             </td>
+            <c:if test="${envst1242 == '1'}">
+                <th><s:message code="orderStockInfo.vendr" /></th>
+                <td>
+                    <div class="sb-select fl w150px">
+                        <wj-combo-box
+                                id="vendrCd"
+                                ng-model="vendrCd"
+                                control="vendrCdCombo"
+                                items-source="_getComboData('vendrCd')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </div>
+                </td>
+            </c:if>
         </tr>
         <tr style="display: none;">
           <%-- 전표구분 --%>
@@ -79,27 +96,17 @@
         </tbody>
     </table>
 
-    <div class="mt20">
-        <p style="color: red;">※ 전표구분이 출고인 경우 출고완료 및 입고완료 전표를, 반품인 경우 입고완료 전표를 포함합니다.<br/>
-                                 ※ 물량오류를 미처리 할 경우 자료가 상이할 수 있습니다.<br/><br/></p>
-    </div>
-    <div class="searchBar">
-        <a href="#" class="open fl"><s:message code="dstmn.stmtAcct"/>/<s:message code="frnchsStore.taxReport"/></a>
-    </div>
-
     <%-- 세금계산서 --%>
-    <table class="searchTbl">
+    <table class="searchTbl mt10">
         <colgroup>
-            <col class="w13"/>
-            <col class="w37"/>
-            <col class="w13"/>
-            <col class="w37"/>
+            <col class="w20"/>
+            <col class="w80"/>
         </colgroup>
         <tbody>
-        <tr>
+        <tr class="brt">
       <%-- 거래명세표 --%>
       <th><s:message code="dstmn.stmtAcct"/></th>
-      <td colspan="3">
+      <td>
         <span class="txtIn w150px sb-select fl mr5">
           <wj-combo-box
             id="stmtAcctFg"
@@ -118,7 +125,7 @@
     <tr>
       <%-- 세금계산서 --%>
       <th><s:message code="frnchsStore.taxReport"/></th>
-      <td colspan="3">
+      <td>
         <div class="sb-select fl mr5">
           <span class="txtIn"><input id="writtenDate" class="w120px"></span>
         </div>
@@ -242,8 +249,12 @@
     </div>
 </div>
 <script type="text/javascript">
+    var gEnvst1242  = '${envst1242}';
+    var empVendrCd = '${empVendrCd}';
+    <%-- 본사 거래처 콤보박스 --%>
+    var vendrList = ${vendrList};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/iostock/frnchs/store/store.js?ver=20190125.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/frnchs/store/store.js?ver=20190125.03" charset="utf-8"></script>
 
 <%-- 매장별 입출고내역 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/frnchs/store/storeDtl.jsp">

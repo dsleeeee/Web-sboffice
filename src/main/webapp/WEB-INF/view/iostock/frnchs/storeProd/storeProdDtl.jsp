@@ -69,4 +69,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/frnchs/storeProd/storeProdDtl.js?ver=20190207.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/frnchs/storeProd/storeProdDtl.js?ver=20190207.02" charset="utf-8"></script>

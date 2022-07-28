@@ -17,6 +17,12 @@ app.controller('frnchsStoreProdCtrl', ['$scope', '$http', '$timeout', function (
   // 콤보박스 데이터 Set
   $scope._setComboData('frnchsStoreProdlistScaleBox', gvListScaleBoxData);
 
+    // 본사 거래처 콤보박스
+    $scope._setComboData('vendrCd', vendrList);
+    // // 거래처는 수정 못하게 처리
+    $("#vendrCd").attr("disabled", true);
+    $("#vendrCd").css('background-color', '#F0F0F0');
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
@@ -44,6 +50,7 @@ app.controller('frnchsStoreProdCtrl', ['$scope', '$http', '$timeout', function (
     dataItem.poUnitFgNm  = messages["frnchsStoreProd.poUnitFg"];
     dataItem.poUnitQty       = messages["frnchsStoreProd.poUnitQty"];
     dataItem.outCnt  = messages["frnchsStoreProd.outCnt"];
+    dataItem.vendr  = messages["frnchsStoreProd.vendr"];
     dataItem.outTotQty      = messages["frnchsStoreProd.in"];
     dataItem.outTot   = messages["frnchsStoreProd.in"];
     dataItem.inTotQty   = messages["frnchsStoreProd.out"];
@@ -120,6 +127,7 @@ app.controller('frnchsStoreProdCtrl', ['$scope', '$http', '$timeout', function (
             	params.storeCd   = selectedRow.storeCd;
         	    params.prodCd    = selectedRow.prodCd;
         	    params.prodNm    = selectedRow.prodNm;
+        	    params.vendrCd   = $scope.vendrCd;
 
             if (col.binding === "prodCd") { // 상품코드
               $scope._broadcast('frnchsStoreProdDtlCtrl', params);
@@ -128,6 +136,8 @@ app.controller('frnchsStoreProdCtrl', ['$scope', '$http', '$timeout', function (
           }
 
 	});
+
+    $scope.vendrCdCombo.selectedValue = empVendrCd;
 
   };
 
@@ -158,6 +168,7 @@ app.controller('frnchsStoreProdCtrl', ['$scope', '$http', '$timeout', function (
     params.prodNm    = $("#srchProdNm").val();
     
     params.orgnFg    = $scope.orgnFg;
+    params.vendrCd   = $scope.vendrCd;
     params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     
@@ -167,6 +178,7 @@ app.controller('frnchsStoreProdCtrl', ['$scope', '$http', '$timeout', function (
     $scope.searchStoreCd   = params.storeCd;
     $scope.searchProdCd    = params.prodCd;
     $scope.searchProdNm    = params.prodNm;
+    $scope.searchedVendrCd    = params.vendrCd;
 
     if(params.startDate > params.endDate){
    	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
@@ -222,6 +234,7 @@ app.controller('frnchsStoreProdCtrl', ['$scope', '$http', '$timeout', function (
 	params.storeCd   = $scope.searchStoreCd;
 	params.prodCd    = $scope.searchProdCd;
 	params.prodNm    = $scope.searchProdNm;
+    params.vendrCd 	   = $scope.searchedVendrCd;
   	params.excelFg   = $scope.excelFg;
 
 	$scope._broadcast('frnchsStoreProdExcelCtrl',params);
@@ -258,6 +271,7 @@ app.controller('frnchsStoreProdExcelCtrl', ['$scope', '$http', '$timeout', funct
     dataItem.poUnitFgNm  = messages["frnchsStoreProd.poUnitFg"];
     dataItem.poUnitQty       = messages["frnchsStoreProd.poUnitQty"];
     dataItem.outCnt  = messages["frnchsStoreProd.outCnt"];
+    dataItem.vendr  = messages["frnchsStoreProd.vendr"];
     dataItem.outTotQty      = messages["frnchsStoreProd.in"];
     dataItem.outTot   = messages["frnchsStoreProd.in"];
     dataItem.inTotQty   = messages["frnchsStoreProd.out"];
@@ -329,6 +343,7 @@ app.controller('frnchsStoreProdExcelCtrl', ['$scope', '$http', '$timeout', funct
 			$scope.storeCd   = data.storeCd;
 			$scope.prodCd    = data.prodCd;
 			$scope.prodNm    = data.prodNm;
+            $scope.vendrCd 	 = data.vendrCd;
 			
 			$scope.searchFrnchsStoreProdList(false);
 		}else{
@@ -351,6 +366,7 @@ app.controller('frnchsStoreProdExcelCtrl', ['$scope', '$http', '$timeout', funct
 	params.prodCd    = $scope.prodCd
 	params.prodNm    = $scope.prodNm
     params.orgnFg    = $scope.orgnFg;
+    params.vendrCd   = $scope.vendrCd;
     params.isPageChk = isPageChk;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수

@@ -95,6 +95,7 @@ app.controller('frnchsStoreProdDtlCtrl', ['$scope', '$http', '$timeout', functio
     $scope.prodCd    		= data.prodCd;
     $scope.prodNm 			= data.prodNm;
     $scope.orgnFg     		= data.orgnFg;
+    $scope.vendrCd     		= data.vendrCd;
 
     $scope.frnchsStoreProdDtlLayer.show(true);
 
@@ -116,6 +117,7 @@ app.controller('frnchsStoreProdDtlCtrl', ['$scope', '$http', '$timeout', functio
         params.saleDate 	= $scope.saleDate;
         params.saleDay     	= $scope.saleDay;
         params.prodCd     	= $scope.prodCd;
+        params.vendrCd     	= $scope.vendrCd;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/iostock/frnchs/storeprod/storeprod/frnchsStoreProdDtlList.sb", params);
   };

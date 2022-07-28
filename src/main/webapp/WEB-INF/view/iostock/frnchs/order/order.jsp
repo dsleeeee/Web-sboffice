@@ -89,7 +89,7 @@
       <tr>
         <%-- 진행상태 --%>
         <th><s:message code="orderStockInfo.procFg" /></th>
-        <td colspan="3">
+        <td>
           <div class="sb-select">
               <span class="txtIn">
                     <wj-combo-box
@@ -104,6 +104,23 @@
                 </span>
           </div>
         </td>
+        <c:if test="${envst1242 == '1'}">
+          <th><s:message code="orderStockInfo.vendr" /></th>
+          <td>
+            <div class="sb-select fl w150px">
+              <wj-combo-box
+                      id="vendrCd"
+                      ng-model="vendrCd"
+                      control="vendrCdCombo"
+                      items-source="_getComboData('vendrCd')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </div>
+          </td>
+        </c:if>
       </tr>
       </tbody>
     </table>
@@ -153,6 +170,7 @@
               <wj-flex-grid-column header="<s:message code="orderStockInfo.slipFg"/>"               binding="slipFgNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.procFg"/>"               binding="procFgNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.slipNo"/>"               binding="slipNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="orderStockInfo.vendr"/>"                binding="vendr" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.outDate"/>"              binding="outDtFm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.inDate"/>"               binding="inDtFm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.prodCnt"/>"              binding="dtlCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -302,6 +320,7 @@
       <wj-flex-grid-column header="<s:message code="orderStockInfo.slipFg"/>"               binding="slipFgNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="orderStockInfo.procFg"/>"               binding="procFgNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="orderStockInfo.slipNo"/>"               binding="slipNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.vendr"/>"                binding="vendr" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="orderStockInfo.outDate"/>"              binding="outDtFm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="orderStockInfo.inDate"/>"               binding="inDtFm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="orderStockInfo.prodCnt"/>"              binding="dtlCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -363,7 +382,13 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/frnchs/order/order.js" charset="utf-8"></script>
+<script type="text/javascript">
+  var gEnvst1242  = '${envst1242}';
+  var empVendrCd = '${empVendrCd}';
+  <%-- 본사 거래처 콤보박스 --%>
+  var vendrList = ${vendrList};
+</script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/frnchs/order/order.js?ver=20220726.01" charset="utf-8"></script>
 
 <%-- 입고 상세 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/vendr/orderStockInfo/prodInstockInfo.jsp">

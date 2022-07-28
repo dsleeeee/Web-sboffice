@@ -97,6 +97,7 @@ app.controller('frnchsStoreDtlCtrl', ['$scope', '$http', '$timeout', function ($
     $scope.prodCd    		= data.prodCd;
     $scope.prodNm 			= data.prodNm;
     $scope.orgnFg     		= data.orgnFg;
+    $scope.vendrCd     		= data.vendrCd;
 
     $scope.frnchsStoreDtlLayer.show(true);
 
@@ -153,6 +154,7 @@ app.controller('frnchsStoreDtlCtrl', ['$scope', '$http', '$timeout', function ($
         params.startDate 	= $scope.startDate;
         params.endDate 		= $scope.endDate;
         params.slipNo    	= $scope.slipNo;
+        params.vendrCd    	= $scope.vendrCd;
         params.hqOfficeCd 	= $("#storeHqOfficeCd").val();
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/iostock/frnchs/store/store/frnchsStoreDtlList.sb", params);
@@ -228,6 +230,7 @@ app.controller('frnchsStoreDtlCtrl', ['$scope', '$http', '$timeout', function ($
       params.writtenDate = wijmo.Globalize.format(storeDtlWrittenDate.value, 'yyyyMMdd');
       params.billFg      = $scope.billFg;
       params.taxFg       = $scope.taxFg;
+      params.vendrCd    = $scope.vendrCd;
       $scope._broadcast('taxReportCtrl', params);
     }
 

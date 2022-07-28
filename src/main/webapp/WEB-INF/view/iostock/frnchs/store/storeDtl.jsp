@@ -23,7 +23,7 @@
 			<col class="w37"/>
 		</colgroup>
 		<tbody>
-			<tr style="border-top: 1px solid #e8e8e8;">
+			<tr style="border-top: 1px solid #e8e8e8;" class="brt">
 				<th><s:message code="cmm.search.date"/></th>
 				<td colspan="3">{{startDate}} ~ {{endDate}}</td>
 			</tr>
@@ -59,24 +59,19 @@
 			</tr>
 		</tbody>
 	</table>
-	<div class="searchBar flddUnfld mt10">
-        <a href="#" class="open fl"><s:message code="dstmn.stmtAcct"/>/<s:message code="frnchsStore.taxReport"/></a>
-    </div>
 
     <input type="hidden" id="storeHqOfficeCd" value="${sessionInfo.hqOfficeCd}"/>
     <%-- 세금계산서 --%>
-    <table class="searchTbl">
+    <table class="searchTbl mt10">
         <colgroup>
-            <col class="w13"/>
-            <col class="w37"/>
-            <col class="w13"/>
-            <col class="w37"/>
+            <col class="w20"/>
+            <col class="w80"/>
         </colgroup>
         <tbody>
-        <tr>
+        <tr class="brt">
       <%-- 거래명세표 --%>
       <th><s:message code="dstmn.stmtAcct"/></th>
-      <td colspan="3">
+      <td>
         <span class="txtIn w150px sb-select fl mr5">
           <wj-combo-box
             id="storeDtlStmtAcctFg"
@@ -95,7 +90,7 @@
     <tr>
       <%-- 세금계산서 --%>
       <th><s:message code="frnchsStore.taxReport"/></th>
-      <td colspan="3">
+      <td>
         <div class="sb-select fl mr5">
           <span class="txtIn"><input id="storeDtlWrittenDate" class="w120px"></span>
         </div>
@@ -159,4 +154,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/frnchs/store/storeDtl.js?ver=20190207.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/frnchs/store/storeDtl.js?ver=20190207.02" charset="utf-8"></script>
