@@ -135,6 +135,12 @@ app.controller('slipMainCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
   $scope.excelFg = false;
 
+  // 본사 거래처 콤보박스
+  $scope._setComboData('vendrCd', vendrList);
+  // // 거래처는 수정 못하게 처리
+  $("#vendrCd").attr("disabled", true);
+  $("#vendrCd").css('background-color', '#F0F0F0');
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // picker 사용시 호출 : 미사용시 호출안함
@@ -200,6 +206,7 @@ app.controller('slipMainCtrl', ['$scope', '$http', '$timeout', function ($scope,
     s.columnHeaders.rows.push(new wijmo.grid.Row());
     s.columnHeaders.rows[0].dataItem = {
       slipNo     : messages["slipStockInfo.slipNo"],
+      vendr     : messages["slipStockInfo.vendr"],
       storeNm    : messages["slipStockInfo.storeNm"],
       slipFgNm     : messages["slipStockInfo.slipFg"],
       slipKindNm   : messages["slipStockInfo.slipKind"],
@@ -253,7 +260,9 @@ app.controller('slipMainCtrl', ['$scope', '$http', '$timeout', function ($scope,
         }
       }
     }
-    
+
+    $scope.vendrCdCombo.selectedValue = empVendrCd;
+
     $scope.displayChg();
   };
 
@@ -290,6 +299,7 @@ app.controller('slipMainCtrl', ['$scope', '$http', '$timeout', function ($scope,
     params.prodCd	 = $scope.prodCdModel;
     params.prodNm	 = $scope.prodNmModel;
     params.prodClassCd = $scope.prodClassCd;
+    params.vendrCd      = $scope.vendrCd;
 
     $scope.searchedSlipFg	 = params.slipFg;
     $scope.searchedSlipKind	 = params.slipKind;
@@ -298,6 +308,7 @@ app.controller('slipMainCtrl', ['$scope', '$http', '$timeout', function ($scope,
     $scope.searchedProdNm	 = params.prodNm;
     $scope.searchedStoreCd   = params.storeCd;
     $scope.searchedProdClassCd   = params.prodClassCd;
+    $scope.searchedVendrCd    = params.vendrCd;
     params.isPageChk = isPageChk;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -343,6 +354,7 @@ app.controller('slipMainCtrl', ['$scope', '$http', '$timeout', function ($scope,
     params.startDate = $scope.searchedStartDate;
   	params.endDate 	 = $scope.searchedEndDate;
   	params.prodClassCd = $scope.searchedProdClassCd;
+    params.vendrCd 	   = $scope.searchedVendrCd;
   	params.excelFg   = $scope.excelFg;
 
 	$scope._broadcast('slipExcelCtrl',params);
@@ -600,6 +612,7 @@ app.controller('slipExcelCtrl', ['$scope', '$http', '$timeout', function ($scope
     s.columnHeaders.rows.push(new wijmo.grid.Row());
     s.columnHeaders.rows[0].dataItem = {
       slipNo     : messages["slipStockInfo.slipNo"],
+      vendr     : messages["slipStockInfo.vendr"],
       storeNm    : messages["slipStockInfo.storeNm"],
       slipFgNm     : messages["slipStockInfo.slipFg"],
       slipKindNm   : messages["slipStockInfo.slipKind"],
@@ -674,6 +687,7 @@ app.controller('slipExcelCtrl', ['$scope', '$http', '$timeout', function ($scope
 			$scope.prodCd    = data.prodCd;
 			$scope.prodNm    = data.prodNm;
 			$scope.prodClassCd = data.prodClassCd;
+            $scope.vendrCd 	 = data.vendrCd;
 			
 			$scope.excelFg     = data.excelFg;
 
@@ -701,6 +715,7 @@ app.controller('slipExcelCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.prodCd    = $scope.prodCd;
     params.prodNm    = $scope.prodNm;
     params.prodClassCd   = $scope.prodClassCd;
+    params.vendrCd   = $scope.vendrCd;
     
     params.isPageChk = isPageChk;
 

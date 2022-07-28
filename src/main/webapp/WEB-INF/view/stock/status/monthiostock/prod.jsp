@@ -167,9 +167,7 @@
 	              frozen-columns="5">
 
 	              <!-- define columns -->
-	              <wj-flex-grid-column header="<s:message code="monthIostock.prodClassLNm"/>"                binding="lv1Nm" width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-	              <wj-flex-grid-column header="<s:message code="monthIostock.prodClassMNm"/>"                binding="lv2Nm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-	              <wj-flex-grid-column header="<s:message code="monthIostock.prodClassSNm"/>"                binding="lv3Nm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="monthIostock.prodClassNm"/>"                binding="prodClassNm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 
 	              <wj-flex-grid-column header="<s:message code="monthIostock.prodCd"/>"                   binding="prodCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="monthIostock.prodNm"/>"                   binding="prodNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -240,7 +238,7 @@
 </div>
 <!-- //contents end -->
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/status/monthiostock/prod.js" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/status/monthiostock/prod.js?ver=20220725.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

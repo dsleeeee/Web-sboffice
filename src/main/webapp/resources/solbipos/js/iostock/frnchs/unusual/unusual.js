@@ -64,6 +64,12 @@ app.controller('unusualMainCtrl', ['$scope', '$http', '$timeout', function ($sco
 
   $scope.excelFg = false;
 
+  // 본사 거래처 콤보박스
+  $scope._setComboData('vendrCd', vendrList);
+  // // 거래처는 수정 못하게 처리
+  $("#vendrCd").attr("disabled", true);
+  $("#vendrCd").css('background-color', '#F0F0F0');
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     var comboParams         = {};
@@ -161,7 +167,9 @@ app.controller('unusualMainCtrl', ['$scope', '$http', '$timeout', function ($sco
         }
       }
     }
-    
+
+    $scope.vendrCdCombo.selectedValue = empVendrCd;
+
     $scope.displayChg();
   };
 
@@ -198,6 +206,7 @@ app.controller('unusualMainCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.slipFg	 = $scope.slipFgModel;
     params.outDateFg = $scope.outDateFgModel;
     params.storeCd	 = $("#unusualSelectStoreCd").val();
+    params.vendrCd  = $scope.vendrCd;
     params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
 
@@ -207,6 +216,7 @@ app.controller('unusualMainCtrl', ['$scope', '$http', '$timeout', function ($sco
     $scope.searchedSlipFg = params.slipFg;
     $scope.searchedOutDateFg = params.outDateFg;
     $scope.storeCd = params.storeCd;
+    $scope.searchedVendrCd    = params.vendrCd;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/frnchs/unusual/unUsual/list.sb", params, function () {});
@@ -255,6 +265,7 @@ app.controller('unusualMainCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.slipFg 		= $scope.searchedSlipFg;
     params.outDateFg 	= $scope.searchedOutDateFg;
     params.storeCd 		= $scope.storeCd;
+    params.vendrCd      = $scope.searchedVendrCd;
   	params.excelFg   	= $scope.excelFg;
 
 	$scope._broadcast('unusualExcelCtrl',params);
@@ -471,6 +482,7 @@ app.controller('unusualExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 		    $scope.slipFg 		= data.slipFg;
 		    $scope.outDateFg 	= data.outDateFg;
 		    $scope.storeCd 		= data.storeCd;
+            $scope.vendrCd 	 = data.vendrCd;
 		    $scope.excelFg     = data.excelFg;
 
 			$scope.searchUnusualList(false);
@@ -493,6 +505,7 @@ app.controller('unusualExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
     params.slipFg	 = $scope.slipFg;
     params.outDateFg = $scope.outDateFg;
     params.storeCd	 = $scope.storeCd;
+    params.vendrCd   = $scope.vendrCd;
     params.isPageChk = isPageChk;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수

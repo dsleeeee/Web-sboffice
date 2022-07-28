@@ -92,7 +92,7 @@
         ,       DECODE(tphvi.PROC_FG, 0, NULL, theconfm.EMP_NM) AS CONFM_NM
         ,       tphvi.IN_TOT_QTY * tphvi.SLIP_FG AS IN_TOT_QTY
         ,       tphvi.IN_TOT * tphvi.SLIP_FG AS IN_TOT
-        ,       (SELECT CASE WHEN MAX(STORAGE_CD) IS NULL THEN '000' ELSE MAX(STORAGE_CD) END FROM TB_PO_HQ_VENDR_INSTOCK_PROD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND SLIP_NO = #{slipNo}) AS OUT_STORAGE_CD
+        ,       (SELECT CASE WHEN MAX(STORAGE_CD) IS NULL THEN '001' ELSE MAX(STORAGE_CD) END FROM TB_PO_HQ_VENDR_INSTOCK_PROD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND SLIP_NO = #{slipNo}) AS OUT_STORAGE_CD
         FROM    TB_PO_HQ_VENDR_INSTOCK tphvi
         ,       TB_HQ_VENDOR thv
         ,       TB_HQ_EMPLOYEE thereg

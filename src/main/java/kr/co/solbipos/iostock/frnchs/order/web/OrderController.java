@@ -5,6 +5,13 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kr.co.common.service.code.CmmEnvService;
+import kr.co.common.utils.CmmUtil;
+import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqService;
+import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqVO;
+import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderService;
+import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderVO;
+import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +27,8 @@ import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.frnchs.order.service.OrderService;
 import kr.co.solbipos.iostock.frnchs.order.service.OrderVO;
+
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : OrderController.java
@@ -43,11 +52,17 @@ import kr.co.solbipos.iostock.frnchs.order.service.OrderVO;
 public class OrderController {
     private final SessionService sessionService;
     private final OrderService orderService;
+    private final StoreOrderService storeOrderService;
+    private final CmmEnvService cmmEnvService;
+    private final DstbReqService dstbReqService;
 
     @Autowired
-    public OrderController(SessionService sessionService, OrderService orderService) {
+    public OrderController(SessionService sessionService, OrderService orderService, StoreOrderService storeOrderService, CmmEnvService cmmEnvService, DstbReqService dstbReqService) {
         this.sessionService = sessionService;
         this.orderService = orderService;
+        this.storeOrderService = storeOrderService;
+        this.cmmEnvService = cmmEnvService;
+        this.dstbReqService = dstbReqService;
     }
 
     /**
@@ -61,6 +76,23 @@ public class OrderController {
      */
     @RequestMapping(value = "/ioStock/view.sb", method = RequestMethod.GET)
     public String orderView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 본사 환경설정 1242(거래처출고사용여부) 조회
+        HqEnvstVO hqEnvstVO = new HqEnvstVO();
+        hqEnvstVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        hqEnvstVO.setEnvstCd("1242");
+        model.addAttribute("envst1242", CmmUtil.nvl(cmmEnvService.getHqEnvst(hqEnvstVO), "0"));
+
+        // 본사 거래처 콤보박스
+        StoreOrderVO storeOrderVO = new StoreOrderVO();
+        model.addAttribute("vendrList", convertToJson(storeOrderService.getHqVendrCombo(storeOrderVO, sessionInfoVO)));
+
+        // 현재 로그인 사원에 맵핑된 거래처코드 조회
+        DstbReqVO dstbReqVO = new DstbReqVO();
+        model.addAttribute("empVendrCd", dstbReqService.getEmployeeVendr(dstbReqVO, sessionInfoVO));
+
         return "iostock/frnchs/order/order";
     }
 

@@ -12,6 +12,7 @@ app.controller('taxReportCtrl', ['$scope', '$http', '$timeout', function ($scope
     $scope.writtenYear  = getFormatDate($scope.writtenDate).split('-')[0].substr(2, 2);
     $scope.writtenMonth = getFormatDate($scope.writtenDate).split('-')[1];
     $scope.writtenDay   = getFormatDate($scope.writtenDate).split('-')[2];
+    $scope.vendrCd      = data.vendrCd;
 
     $scope.wjTaxReportLayer.show(true);
 
@@ -82,7 +83,8 @@ app.controller('taxReportCtrl', ['$scope', '$http', '$timeout', function ($scope
     var params    = {};
     params.slipNo = $scope.strSlipNo;
     params.slipFg = $scope.slipFg;
-    
+    params.vendrCd = $scope.vendrCd;
+
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
     	params['sid'] = document.getElementsByName('sessionId')[0].value;

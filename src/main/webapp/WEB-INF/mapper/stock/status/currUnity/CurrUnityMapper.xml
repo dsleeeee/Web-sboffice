@@ -7,12 +7,7 @@
     <!-- 본사매장통합현재고 - 본사매장통합현재고 리스트 조회  -->
     <select id="getCurrUnityList" parameterType="currUnityVO" resultType="DefaultMap">
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT A.LV1_NM
-        ,      A.LV1_CD
-        ,      A.LV2_NM
-        ,      A.LV2_CD
-        ,      A.LV3_NM
-        ,      A.LV3_CD
+        SELECT FN_GET_PROD_CLASS_CD_NM_STR(#{hqOfficeCd}, H.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
         ,      H.PROD_CD
 	    ,      H.PROD_NM
 	    ,      H.BARCD_CD  AS   H_BARCD_CD
@@ -72,43 +67,8 @@
 	          ,      TMP.PROD_NM
 	          ,      TMPB.BARCD_CD
 	          )   M
-	    ,      (
-	    		<![CDATA[
-				SELECT  A.HQ_OFFICE_CD
-				,       A.PROD_CLASS_CD
-				,		NULL	LV1_CD
-				,		NULL	LV2_CD
-				,		NULL	LV3_CD
-				,       DECODE	(A.LV ,1  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,LENGTH(A.AC))
-				                    ,    SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,INSTR(A.AC,'^',2,1)-2)
-				             	)  AS  LV1_NM
-				,       DECODE	(A.LV ,1  ,NULL
-				                    ,2  ,SUBSTR(A.AC,INSTR(A.AC,'^',2,1)+1,LENGTH(A.AC))
-				                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,2)+1,(INSTR(A.AC,'^',1,3)-1)-INSTR(A.AC,'^',1,2))
-				              	)  AS  LV2_NM
-				,       DECODE	(A.LV ,1  ,NULL
-				                    ,2  ,NULL
-				                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1)
-				             	)  AS  LV3_NM
-				FROM    (
-				        SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
-				        FROM    (
-				                    SELECT  HQ_OFFICE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
-				                    FROM    TB_HQ_PRODUCT_CLASS
-				                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
-				                )
-				        START WITH  P_PROD_CLASS_CD ='00000'
-                        AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
-				        CONNECT BY
-				        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
-                        AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
-				        )   A
-
-	    		]]>
-              )   A
 	    WHERE   H.PROD_CD    =    M.PROD_CD	(+)
 	    AND      H.PROD_NM   =   M.PROD_NM	(+)
-	    AND     H.PROD_CLASS_CD = A.PROD_CLASS_CD (+)
         <if test='prodCd != null and prodCd != ""'>
            AND H.PROD_CD  = #{prodCd}
         </if>
@@ -169,7 +129,7 @@
 		      WHEN   A.IO_OCCR_FG   =   '41'   THEN   '본사이출'
               WHEN   A.IO_OCCR_FG   =   '42'   THEN   '본사이입'
 		      END   AS IO_OCCR_FG_NM
-		,      A.IO_OCCR_QTY
+		,       ABS(A.IO_OCCR_QTY) AS IO_OCCR_QTY
 		,      SUM(A.IO_OCCR_QTY) OVER(ORDER BY A.IO_PROC_DATE)   AS   TOT_IO_OCCR_QTY
 		<include refid="CmmSQL.PagingTemplateCount"/>
 		FROM   (
@@ -182,24 +142,59 @@
                       WHEN   TPHS.IO_OCCR_FG   =   '13'   THEN   SUM(TPHS.IO_OCCR_QTY) * -1
                       WHEN   TPHS.IO_OCCR_FG   =   '14'   THEN   SUM(TPHS.IO_OCCR_QTY) * -1
                       WHEN   TPHS.IO_OCCR_FG   =   '16'   THEN   SUM(TPHS.IO_OCCR_QTY) * -1
-                      WHEN   TPHS.IO_OCCR_FG   =   '17'   THEN   SUM(TPHS.IO_OCCR_QTY)
+                      WHEN   TPHS.IO_OCCR_FG   =   '17'   THEN   SUM(TPHS.IO_OCCR_QTY) * -1
                       WHEN   TPHS.IO_OCCR_FG   =   '21'   THEN   SUM(TPHS.IO_OCCR_QTY)
                       WHEN   TPHS.IO_OCCR_FG   =   '22'   THEN   SUM(TPHS.IO_OCCR_QTY)
-                      WHEN   TPHS.IO_OCCR_FG   =   '23'   THEN   SUM(TPHS.IO_OCCR_QTY)
+                      WHEN   TPHS.IO_OCCR_FG   =   '23'   THEN   SUM(TPHS.IO_OCCR_QTY) * -1
                       WHEN   TPHS.IO_OCCR_FG   =   '31'   THEN   SUM(TPHS.IO_OCCR_QTY)
                       WHEN   TPHS.IO_OCCR_FG   =   '41'   THEN   SUM(TPHS.IO_OCCR_QTY) * -1
                       WHEN   TPHS.IO_OCCR_FG   =   '42'   THEN   SUM(TPHS.IO_OCCR_QTY)
                      END  IO_OCCR_QTY
-		      FROM   TB_PO_HQ_STOCK   TPHS
-		      WHERE   TPHS.HQ_OFFICE_CD   =   #{hqOfficeCd}
-		      AND      TPHS.STORAGE_CD      =   '999'
-		      <if test='prodCd != null and prodCd != ""'>
-	             AND TPHS.PROD_CD   = #{prodCd}
-	          </if>
+		      FROM  (
+		          	SELECT 	*
+		          	FROM	(
+						SELECT 	IOSTOCK_DATE AS IO_PROC_DATE,
+								VENDR_IN_QTY,
+								HQ_IN_QTY,
+								STORE_MOVE_IN_QTY,
+								HQ_OUT_QTY,
+								STORE_MOVE_OUT_QTY,
+								VENDR_OUT_QTY,
+								DISUSE_QTY,
+								ADJ_QTY,
+								SET_IN_QTY,
+								SET_OUT_QTY,
+								VENDR_ORDER_QTY
+						FROM 	TB_ST_HQ_STOCK_DAILY tshsd
+						WHERE   tshsd.HQ_OFFICE_CD   =   #{hqOfficeCd}
+						<if test='prodCd != null and prodCd != ""'>
+							AND tshsd.PROD_CD   = #{prodCd}
+						</if>
+					)
+					UNPIVOT
+					(
+						IO_OCCR_QTY
+						FOR IO_OCCR_FG
+						IN 	(
+								VENDR_IN_QTY 		AS '01',
+								HQ_IN_QTY 			AS '02',
+								STORE_MOVE_IN_QTY 	AS '04',
+								HQ_OUT_QTY 			AS '13',
+								STORE_MOVE_OUT_QTY 	AS '14',
+								VENDR_OUT_QTY 		AS '16',
+								DISUSE_QTY 			AS '17',
+								ADJ_QTY 			AS '21',
+								SET_IN_QTY 			AS '22',
+								SET_OUT_QTY 		AS '23',
+								VENDR_ORDER_QTY 	AS '31'
+							)
+					)
+					) TPHS
 		      GROUP
 		      BY      TPHS.IO_PROC_DATE
 		      ,      TPHS.IO_OCCR_FG
 		      )   A
+		WHERE	A.IO_OCCR_QTY != 0
 		<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -235,12 +230,7 @@
 
     <!-- 본사매장통합현재고 - 본사매장통합현재고 엑셀 전체 리스트 조회  -->
     <select id="getCurrUnityExcelList" parameterType="currUnityVO" resultType="DefaultMap">
-        SELECT A.LV1_NM
-        ,      A.LV1_CD
-        ,      A.LV2_NM
-        ,      A.LV2_CD
-        ,      A.LV3_NM
-        ,      A.LV3_CD
+        SELECT FN_GET_PROD_CLASS_CD_NM_STR(#{hqOfficeCd}, H.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
         ,      H.PROD_CD
 	    ,      H.PROD_NM
 	    ,      H.BARCD_CD  AS   H_BARCD_CD
@@ -295,43 +285,8 @@
 	          ,      TMP.PROD_NM
 	          ,      TMPB.BARCD_CD
 	          )   M
-	    ,      (
-                 <![CDATA[
-				SELECT  A.HQ_OFFICE_CD
-				,       A.PROD_CLASS_CD
-				,		NULL	LV1_CD
-				,		NULL	LV2_CD
-				,		NULL	LV3_CD
-				,       DECODE	(A.LV ,1  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,LENGTH(A.AC))
-				                    ,    SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,INSTR(A.AC,'^',2,1)-2)
-				             	)  AS  LV1_NM
-				,       DECODE	(A.LV ,1  ,NULL
-				                    ,2  ,SUBSTR(A.AC,INSTR(A.AC,'^',2,1)+1,LENGTH(A.AC))
-				                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,2)+1,(INSTR(A.AC,'^',1,3)-1)-INSTR(A.AC,'^',1,2))
-				              	)  AS  LV2_NM
-				,       DECODE	(A.LV ,1  ,NULL
-				                    ,2  ,NULL
-				                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1)
-				             	)  AS  LV3_NM
-				FROM    (
-				        SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
-				        FROM    (
-				                    SELECT  HQ_OFFICE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
-				                    FROM    TB_HQ_PRODUCT_CLASS
-				                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
-				                )
-				        START WITH  P_PROD_CLASS_CD ='00000'
-                        AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
-				        CONNECT BY
-				        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
-                        AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
-				        )   A
-
-	    		]]>
-              )   A
 	    WHERE   H.PROD_CD    =    M.PROD_CD	(+)
 	    AND      H.PROD_NM   =   M.PROD_NM	(+)
-	    AND     H.PROD_CLASS_CD = A.PROD_CLASS_CD (+)
         <if test='prodCd != null and prodCd != ""'>
            AND H.PROD_CD  = #{prodCd}
         </if>
@@ -389,7 +344,7 @@
 		      WHEN   A.IO_OCCR_FG   =   '41'   THEN   '본사이출'
               WHEN   A.IO_OCCR_FG   =   '42'   THEN   '본사이입'
 		      END   AS IO_OCCR_FG_NM
-		,      A.IO_OCCR_QTY
+		,       ABS(A.IO_OCCR_QTY) AS IO_OCCR_QTY
 		,      SUM(A.IO_OCCR_QTY) OVER(ORDER BY A.IO_PROC_DATE)   AS   TOT_IO_OCCR_QTY
 		FROM   (
 		      SELECT  TPHS.IO_PROC_DATE
@@ -409,16 +364,51 @@
                       WHEN   TPHS.IO_OCCR_FG   =   '41'   THEN   SUM(TPHS.IO_OCCR_QTY) * -1
                       WHEN   TPHS.IO_OCCR_FG   =   '42'   THEN   SUM(TPHS.IO_OCCR_QTY)
                      END  IO_OCCR_QTY
-		      FROM   TB_PO_HQ_STOCK   TPHS
-		      WHERE   TPHS.HQ_OFFICE_CD   =   #{hqOfficeCd}
-		      AND      TPHS.STORAGE_CD      =   '999'
-		      <if test='prodCd != null and prodCd != ""'>
-	             AND TPHS.PROD_CD   = #{prodCd}
-	          </if>
+				FROM  (
+					SELECT 	*
+					FROM	(
+							SELECT 	IOSTOCK_DATE AS IO_PROC_DATE,
+									VENDR_IN_QTY,
+									HQ_IN_QTY,
+									STORE_MOVE_IN_QTY,
+									HQ_OUT_QTY,
+									STORE_MOVE_OUT_QTY,
+									VENDR_OUT_QTY,
+									DISUSE_QTY,
+									ADJ_QTY,
+									SET_IN_QTY,
+									SET_OUT_QTY,
+									VENDR_ORDER_QTY
+							FROM 	TB_ST_HQ_STOCK_DAILY tshsd
+							WHERE   tshsd.HQ_OFFICE_CD   =   #{hqOfficeCd}
+							<if test='prodCd != null and prodCd != ""'>
+								AND tshsd.PROD_CD   = #{prodCd}
+							</if>
+							)
+							UNPIVOT
+							(
+								IO_OCCR_QTY
+								FOR IO_OCCR_FG
+								IN 	(
+									VENDR_IN_QTY 		AS '01',
+									HQ_IN_QTY 			AS '02',
+									STORE_MOVE_IN_QTY 	AS '04',
+									HQ_OUT_QTY 			AS '13',
+									STORE_MOVE_OUT_QTY 	AS '14',
+									VENDR_OUT_QTY 		AS '16',
+									DISUSE_QTY 			AS '17',
+									ADJ_QTY 			AS '21',
+									SET_IN_QTY 			AS '22',
+									SET_OUT_QTY 		AS '23',
+									VENDR_ORDER_QTY 	AS '31'
+									)
+							)
+					) TPHS
 		      GROUP
 		      BY      TPHS.IO_PROC_DATE
 		      ,      TPHS.IO_OCCR_FG
 		      )   A
+		WHERE	A.IO_OCCR_QTY != 0
     </select>
 
     <!-- 본사매장통합현재고 - 본사매장통합현재고 매장 상세 리스트 조회  -->

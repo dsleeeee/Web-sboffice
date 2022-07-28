@@ -22,6 +22,7 @@
 		     , A.IN_TOT_QTY
 		     , A.IN_TOT
 		     , (SELECT SUM(PENALTY_AMT) FROM TB_PO_HQ_STORE_OUTSTOCK_DTL Z WHERE Z.HQ_OFFICE_CD = A.HQ_OFFICE_CD AND Z.SLIP_NO = A.SLIP_NO) AS PENALTY_AMT
+             , NVL((SELECT VENDR_NM FROM TB_HQ_VENDOR thv WHERE thv.HQ_OFFICE_CD = #{hqOfficeCd} AND thv.VENDR_CD = A.VENDR_CD ), '본사') AS VENDR
 		     <include refid="CmmSQL.PagingTemplateCount"/>
 		  FROM TB_PO_HQ_STORE_OUTSTOCK A
 		     , TB_MS_STORE B
@@ -87,7 +88,14 @@
                  AND M.PROD_CD = Z.PROD_CD
                  AND Z.PROD_NM LIKE '%' || #{prodNm} || '%' )
          </if>
-
+        <choose>
+            <when test='vendrCd != null and vendrCd != ""'>
+                AND A.VENDR_CD = #{vendrCd}
+            </when>
+            <otherwise>
+                AND A.VENDR_CD IS NULL
+            </otherwise>
+        </choose>
          <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -152,6 +160,7 @@
              , A.IN_TOT_QTY
              , A.IN_TOT
              , (SELECT SUM(PENALTY_AMT) FROM TB_PO_HQ_STORE_OUTSTOCK_DTL Z WHERE Z.HQ_OFFICE_CD = A.HQ_OFFICE_CD AND Z.SLIP_NO = A.SLIP_NO) AS PENALTY_AMT
+             , NVL((SELECT VENDR_NM FROM TB_HQ_VENDOR thv WHERE thv.HQ_OFFICE_CD = #{hqOfficeCd} AND thv.VENDR_CD = A.VENDR_CD ), '본사') AS VENDR
           FROM TB_PO_HQ_STORE_OUTSTOCK A
              , TB_MS_STORE B
          WHERE A.STORE_CD = B.STORE_CD
@@ -216,6 +225,14 @@
                  AND M.PROD_CD = Z.PROD_CD
                  AND Z.PROD_NM LIKE '%' || #{prodNm} || '%' )
          </if>
+        <choose>
+            <when test='vendrCd != null and vendrCd != ""'>
+                AND A.VENDR_CD = #{vendrCd}
+            </when>
+            <otherwise>
+                AND A.VENDR_CD IS NULL
+            </otherwise>
+        </choose>
     </select>
 
     <!-- 전표별 입출고내역 - 전표별 입출고내역 상세 엑셀리스트 조회 -->

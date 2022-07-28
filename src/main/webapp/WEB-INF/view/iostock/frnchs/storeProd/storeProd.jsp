@@ -29,13 +29,30 @@
         <%-- 출고일자 --%>
         <tr>
             <th><s:message code="frnchsStoreProd.date" /></th>
-            <td colspan="3">
+            <td>
             <div class="sb-select">
-                <span class="txtIn"><input id="srchStartDate" class="w120px"></span>
+                <span class="txtIn"><input id="srchStartDate" class="w110px"></span>
                 <span class="rg">~</span>
-                <span class="txtIn"><input id="srchEndDate" class="w120px"></span>
+                <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
             </div>
             </td>
+            <c:if test="${envst1242 == '1'}">
+                <th><s:message code="orderStockInfo.vendr" /></th>
+                <td>
+                    <div class="sb-select fl w150px">
+                        <wj-combo-box
+                                id="vendrCd"
+                                ng-model="vendrCd"
+                                control="vendrCdCombo"
+                                items-source="_getComboData('vendrCd')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </div>
+                </td>
+            </c:if>
         </tr>
         <tr>
             <%-- 분류--%>
@@ -120,6 +137,7 @@
           <wj-flex-grid-column header="<s:message code="frnchsStoreProd.poUnitFg"/>"        binding="poUnitFgNm"       width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="frnchsStoreProd.poUnitQty"/>"     binding="poUnitQty"    width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="frnchsStoreProd.outCnt"/>"        binding="outCnt"       width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="frnchsStoreProd.vendr"/>"        binding="vendr"       width="80" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="frnchsStoreProd.cnt"/>"     binding="outTotQty"    width="130" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="frnchsStoreProd.totAmt"/>"       binding="outTot"      width="140" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="frnchsStoreProd.cnt"/>"    binding="inTotQty"   width="145" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -170,6 +188,7 @@
         <wj-flex-grid-column header="<s:message code="frnchsStoreProd.poUnitFg"/>"        binding="poUnitFgNm"       width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="frnchsStoreProd.poUnitQty"/>"     binding="poUnitQty"    width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="frnchsStoreProd.outCnt"/>"        binding="outCnt"       width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="frnchsStoreProd.vendr"/>"        binding="vendr"       width="80" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="frnchsStoreProd.cnt"/>"     binding="outTotQty"    width="130" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="frnchsStoreProd.totAmt"/>"       binding="outTot"      width="140" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="frnchsStoreProd.cnt"/>"    binding="inTotQty"   width="145" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -181,8 +200,12 @@
     </div>
 </div>
 <script type="text/javascript">
+    var gEnvst1242  = '${envst1242}';
+    var empVendrCd = '${empVendrCd}';
+    <%-- 본사 거래처 콤보박스 --%>
+    var vendrList = ${vendrList};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/iostock/frnchs/storeProd/storeProd.js?ver=20190125.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/frnchs/storeProd/storeProd.js?ver=20190125.03" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품정보 입력/수정 --%>
 <c:import url="/WEB-INF/view/iostock/frnchs/storeProd/storeProdDtl.jsp">

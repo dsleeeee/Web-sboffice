@@ -170,9 +170,7 @@
           frozen-columns="5">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="storePeriod.lv1Nm"/>"       binding="lv1Nm"				width="120"		align="center"	is-read-only="true"	visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="storePeriod.lv2Nm"/>"       binding="lv2Nm"				width="120"		align="right"	is-read-only="true"	visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="storePeriod.lv3Nm"/>"       binding="lv3Nm"				width="120"		align="center"	is-read-only="true"	visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storePeriod.prodClassNm"/>"	binding="prodClassNm"		width="200"		align="center"	is-read-only="true"	visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storePeriod.prodCd"/>"		binding="prodCd"			width="100"		align="center"	is-read-only="true"	format="d"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storePeriod.prodNm"/>"		binding="prodNm"			width="150"		align="center"	is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storePeriod.storeCd"/>"		binding="storeCd"			width="100"		align="center"	is-read-only="true"></wj-flex-grid-column>
@@ -236,10 +234,8 @@
           frozen-columns="5">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="storePeriod.lv1Nm"/>"       binding="lv1Nm"				width="120"		align="center"	is-read-only="true"	visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="storePeriod.lv2Nm"/>"       binding="lv2Nm"				width="120"		align="right"	is-read-only="true"	visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="storePeriod.lv3Nm"/>"       binding="lv3Nm"				width="120"		align="center"	is-read-only="true"	visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="storePeriod.prodCd"/>"		binding="prodCd"			width="100"		align="center"	is-read-only="true"	format="d"></wj-flex-grid-column>
+		  <wj-flex-grid-column header="<s:message code="storePeriod.prodClassNm"/>"	binding="prodClassNm"		width="200"		align="center"	is-read-only="true"	visible="false"></wj-flex-grid-column>
+		  <wj-flex-grid-column header="<s:message code="storePeriod.prodCd"/>"		binding="prodCd"			width="100"		align="center"	is-read-only="true"	format="d"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storePeriod.prodNm"/>"		binding="prodNm"			width="150"		align="center"	is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storePeriod.storeCd"/>"		binding="storeCd"			width="100"		align="center"	is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storePeriod.storeNm"/>"		binding="storeNm"			width="150"		align="center"	is-read-only="true"></wj-flex-grid-column>
@@ -276,7 +272,7 @@
 
 <script type="text/javascript">
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/stock/status/storeperiod/storePeriod.js?ver=20200313.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/status/storeperiod/storePeriod.js?ver=20200313.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

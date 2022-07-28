@@ -142,16 +142,16 @@ app.controller('dayIostockCtrl', ['$scope', '$http', '$timeout', function ($scop
 	      var isChecked = $scope.isChecked;
 		  if(isChecked){
 			  for(var i=0; i<length; i++){
-				  if(columns[i].binding.substring(0,2) == 'lv'){
-	    			  columns[i].visible = true;
-	    		  }
-	          }
+				  if(columns[i].binding === 'prodClassNm'){
+					  columns[i].visible = true;
+				  }
+			  }
 		  }else{
 			  for(var i=0; i<length; i++){
-				  if(columns[i].binding.substring(0,2) == 'lv'){
-	    			  columns[i].visible = false;
-	    		  }
-	          }
+				  if(columns[i].binding === 'prodClassNm'){
+					  columns[i].visible = false;
+				  }
+			  }
 		  }
 	  };
 }]);
@@ -241,9 +241,7 @@ app.controller('dayIostockMainCtrl', ['$scope', '$http', '$timeout', function ($
     s.allowMerging = 2;
     s.columnHeaders.rows.push(new wijmo.grid.Row());
     s.columnHeaders.rows[0].dataItem = {
-	  lv1Nm			: messages["dayIostock.prodClassLNm"],
-	  lv2Nm			: messages["dayIostock.prodClassMNm"],
-	  lv3Nm			: messages["dayIostock.prodClassSNm"],
+	  prodClassNm	: messages["dayIostock.prodClassNm"],
 
 	  prodCd 		: messages["dayIostock.prodCd"],
 	  prodNm 		: messages["dayIostock.prodNm"],
@@ -413,7 +411,7 @@ app.controller('dayIostockMainCtrl', ['$scope', '$http', '$timeout', function ($
           }
       }else{ //수량 + 금액
     	  for(var i=0; i<length; i++){
-    		  if(columns[i].binding != 'lv1Nm' && columns[i].binding != 'lv2Nm' && columns[i].binding != 'lv3Nm'){
+    		  if(columns[i].binding != 'prodClassNm'){
     			  columns[i].visible = true;
     		  }
           }
@@ -448,7 +446,7 @@ app.controller('dayIostockMainExcelCtrl', ['$scope', '$http', '$timeout', functi
     s.allowMerging = 2;
     s.columnHeaders.rows.push(new wijmo.grid.Row());
     s.columnHeaders.rows[0].dataItem = {
-	  lv1Nm			: messages["dayIostock.prodClassLNm"],
+	  prodClassNm	: messages["dayIostock.prodClassNm"],
 	  lv2Nm			: messages["dayIostock.prodClassMNm"],
 	  lv3Nm			: messages["dayIostock.prodClassSNm"],
 
@@ -608,13 +606,13 @@ app.controller('dayIostockMainExcelCtrl', ['$scope', '$http', '$timeout', functi
       var isChecked = $scope.isChecked;
 	  if(isChecked){
 		  for(var i=0; i<length; i++){
-			  if(columns[i].binding.substring(0,2) == 'lv'){
+			  if(columns[i].binding === 'prodClassNm'){
     			  columns[i].visible = true;
     		  }
           }
 	  }else{
 		  for(var i=0; i<length; i++){
-			  if(columns[i].binding.substring(0,2) == 'lv'){
+			  if(columns[i].binding === 'prodClassNm'){
     			  columns[i].visible = false;
     		  }
           }
@@ -651,7 +649,7 @@ app.controller('dayIostockMainExcelCtrl', ['$scope', '$http', '$timeout', functi
           }
       }else{ //수량 + 금액
     	  for(var i=0; i<length; i++){
-    		  if(columns[i].binding != 'lv1Nm' && columns[i].binding != 'lv2Nm' && columns[i].binding != 'lv3Nm'){
+    		  if(columns[i].binding != 'prodClassNm'){
     			  columns[i].visible = true;
     		  }
           }

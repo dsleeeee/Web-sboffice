@@ -26,14 +26,19 @@
              , SUM(A.IN_TOT_QTY)   AS IN_TOT_QTY
              , SUM(A.IN_TOT)       AS IN_TOT
              , SUM(A.PENALTY_AMT)  AS PENALTY_AMT
+             , NVL((SELECT VENDR_NM FROM TB_HQ_VENDOR thv WHERE thv.HQ_OFFICE_CD = #{hqOfficeCd} AND thv.VENDR_CD = B.VENDR_CD ), '본사') AS VENDR
         ]]>
         <include refid="CmmSQL.PagingTemplateCount"/>
         <![CDATA[
           FROM TB_PO_HQ_STORE_OUTSTOCK_DTL A
              , TB_MS_PRODUCT Z
+		     , TB_PO_HQ_STORE_OUTSTOCK B
          WHERE A.STORE_CD = Z.STORE_CD
            AND A.PROD_CD = Z.PROD_CD
            AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+ 		  AND B.STORE_CD = A.STORE_CD
+ 		  AND B.OUT_DATE = A.REQ_DATE
+ 		  AND B.SLIP_NO = A.SLIP_NO
         ]]>
            AND EXISTS (SELECT * FROM TB_PO_HQ_STORE_OUTSTOCK M WHERE M.HQ_OFFICE_CD = A.HQ_OFFICE_CD AND M.SLIP_NO = A.SLIP_NO AND M.OUT_DATE >= #{startDate} AND M.OUT_DATE <![CDATA[<=]]> #{endDate} )
            <if test='prodClassCd != null and prodClassCd != ""'>
@@ -57,6 +62,14 @@
                 #{item}
               </foreach>
            </if>
+            <choose>
+                <when test='vendrCd != null and vendrCd != ""'>
+                    AND B.VENDR_CD = #{vendrCd}
+                </when>
+                <otherwise>
+                    AND B.VENDR_CD IS NULL
+                </otherwise>
+            </choose>
            <![CDATA[
            GROUP BY A.HQ_OFFICE_CD
                , A.STORE_CD
@@ -64,6 +77,7 @@
                , Z.PROD_NM
                , A.PO_UNIT_FG
                , A.PO_UNIT_QTY
+               , B.VENDR_CD
            ORDER BY A.STORE_CD, A.PROD_CD
            ]]>
           <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -91,13 +105,18 @@
              , SUM(A.IN_TOT_QTY)   AS IN_TOT_QTY
              , SUM(A.IN_TOT)       AS IN_TOT
              , SUM(A.PENALTY_AMT)  AS PENALTY_AMT
+             , NVL((SELECT VENDR_NM FROM TB_HQ_VENDOR thv WHERE thv.HQ_OFFICE_CD = #{hqOfficeCd} AND thv.VENDR_CD = B.VENDR_CD ), '본사') AS VENDR
         ]]>
         <![CDATA[
           FROM TB_PO_HQ_STORE_OUTSTOCK_DTL A
              , TB_MS_PRODUCT Z
+		     , TB_PO_HQ_STORE_OUTSTOCK B
          WHERE A.STORE_CD = Z.STORE_CD
            AND A.PROD_CD = Z.PROD_CD
            AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+ 		  AND B.STORE_CD = A.STORE_CD
+ 		  AND B.OUT_DATE = A.REQ_DATE
+ 		  AND B.SLIP_NO = A.SLIP_NO
         ]]>
            AND EXISTS (SELECT * FROM TB_PO_HQ_STORE_OUTSTOCK M WHERE M.HQ_OFFICE_CD = A.HQ_OFFICE_CD AND M.SLIP_NO = A.SLIP_NO AND M.OUT_DATE >= #{startDate} AND M.OUT_DATE <![CDATA[<=]]> #{endDate} )
            <if test='prodClassCd != null and prodClassCd != ""'>
@@ -121,6 +140,14 @@
                 #{item}
               </foreach>
            </if>
+            <choose>
+                <when test='vendrCd != null and vendrCd != ""'>
+                    AND B.VENDR_CD = #{vendrCd}
+                </when>
+                <otherwise>
+                    AND B.VENDR_CD IS NULL
+                </otherwise>
+            </choose>
            <![CDATA[
            GROUP BY A.HQ_OFFICE_CD
                , A.STORE_CD
@@ -128,6 +155,7 @@
                , Z.PROD_NM
                , A.PO_UNIT_FG
                , A.PO_UNIT_QTY
+               , B.VENDR_CD
            ORDER BY A.STORE_CD, A.PROD_CD
            ]]>
      </select>
@@ -173,6 +201,14 @@
            <if test='prodCd != null and prodCd !=""'>
               AND TPHSOD.PROD_CD = #{prodCd}
            </if>
+            <choose>
+                <when test='vendrCd != null and vendrCd != ""'>
+                    AND TPHSO.VENDR_CD = #{vendrCd}
+                </when>
+                <otherwise>
+                    AND TPHSO.VENDR_CD IS NULL
+                </otherwise>
+            </choose>
         <![CDATA[
            AND TPHSO.HQ_OFFICE_CD = TPHSOD.HQ_OFFICE_CD
            AND TPHSO.SLIP_NO = TPHSOD.SLIP_NO

@@ -70,6 +70,8 @@ public class FrnchsStoreVO extends PageVO {
     private Long totVat;
     /** 합계 */
     private Long totTot;
+	/** 거래처코드 */
+	private String vendrCd;
     
     /**
      * @return the hqOfficeCd
@@ -517,6 +519,13 @@ public class FrnchsStoreVO extends PageVO {
      */
 	public void setTotTot(Long totTot) {
 		this.totTot = totTot;
-	}  
-	
+	}
+
+	public String getVendrCd() {
+		return vendrCd;
+	}
+
+	public void setVendrCd(String vendrCd) {
+		this.vendrCd = vendrCd;
+	}
 }

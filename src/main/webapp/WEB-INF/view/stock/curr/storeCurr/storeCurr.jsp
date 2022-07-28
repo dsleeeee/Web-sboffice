@@ -165,9 +165,7 @@
         frozen-columns="5">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="periodIostock.lv1Nm"/>"        			binding="lv1Nm"					width="120"		align="center"		is-read-only="true"		visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="periodIostock.lv2Nm"/>"        			binding="lv2Nm"					width="120"		align="center"		is-read-only="true"		visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="periodIostock.lv3Nm"/>"       			binding="lv3Nm"					width="120"		align="center"		is-read-only="true"		visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="periodIostock.prodClassNm"/>" binding="prodClassNm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeCurr.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeCurr.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeCurr.storeCd"/>" binding="storeCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -209,7 +207,7 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/curr/storeCurr/storeCurr.js?ver=20181224.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/curr/storeCurr/storeCurr.js?ver=20181224.05" charset="utf-8"></script>
 
 <%-- 현재고현황 상세 레이어 --%>
 <%--<c:import url="/WEB-INF/view/stock/curr/storeCurr/storeCurrDtl.jsp">--%>

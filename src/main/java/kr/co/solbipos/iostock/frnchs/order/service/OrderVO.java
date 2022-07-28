@@ -32,7 +32,9 @@ public class OrderVO extends PageVO {
     private String outDateFg;
     /** 진행상태 구분 */
     private String procFg;
-    
+    /** 거래처코드 */
+    private String vendrCd;
+
     /**
      * @return the hqOfficeCd
      */
@@ -148,4 +150,12 @@ public class OrderVO extends PageVO {
 	public void setProcFg(String procFg) {
 		this.procFg = procFg;
 	}
+
+    public String getVendrCd() {
+        return vendrCd;
+    }
+
+    public void setVendrCd(String vendrCd) {
+        this.vendrCd = vendrCd;
+    }
 }
