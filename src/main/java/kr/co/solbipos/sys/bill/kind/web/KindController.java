@@ -193,5 +193,53 @@ public class KindController {
         return returnJson(Status.OK, result);
         
     }
-    
+
+    /**
+     * 출력물 종류 삭제 전 체크
+     *
+     * @param kindVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 07. 27.
+     */
+    @RequestMapping(value = "/bill/getKindDeleteChk.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getKindDeleteChk(KindVO kindVO, HttpServletRequest request,
+                                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<String> result = kindService.getKindDeleteChk(kindVO, sessionInfoVO);
+
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+        resultMap.put("result", result);
+
+        return returnJson(Status.OK, resultMap);
+    }
+
+    /**
+     * 출력물 종류 삭제
+     *
+     * @param kindVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 07. 27.
+     */
+    @RequestMapping(value = "/bill/getKindDeleteSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getKindDeleteSave(@RequestBody KindVO[] kindVOs, HttpServletRequest request,
+                                                 HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = kindService.getKindDeleteSave(kindVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

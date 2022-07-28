@@ -132,4 +132,27 @@ public class KindServiceImpl implements KindService {
         
     }
 
+    /** 출력물 종류 삭제 전 체크 */
+    @Override
+    public DefaultMap<String> getKindDeleteChk(KindVO kindVO, SessionInfoVO sessionInfoVO) {
+
+        System.out.println("출력물종류 >>> 출력물종류 삭제 전 체크 >>> 선택한 항목 : " + kindVO.getPrtClassCd());
+        kindVO.setArrPrtClassCd(kindVO.getPrtClassCd().split(","));
+
+        return kindMapper.getKindDeleteChk(kindVO);
+    }
+
+    /** 출력물 종류 삭제 */
+    @Override
+    public int getKindDeleteSave(KindVO[] kindVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+
+        for(KindVO kindVO : kindVOs) {
+
+            procCnt = kindMapper.getKindDeleteSave(kindVO);
+        }
+
+        return procCnt;
+    }
 }

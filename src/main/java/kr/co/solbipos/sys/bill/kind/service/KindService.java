@@ -38,4 +38,9 @@ public interface KindService {
     /** 출력물매핑 목록 저장 */
     int savePrintMapngList(KindVO[] kindVOs, SessionInfoVO sessionInfoVO);
 
+    /** 출력물 종류 삭제 전 체크 */
+    DefaultMap<String> getKindDeleteChk(KindVO kindVO, SessionInfoVO sessionInfoVO);
+
+    /** 출력물 종류 삭제 */
+    int getKindDeleteSave(KindVO[] kindVOs, SessionInfoVO sessionInfoVO);
 }

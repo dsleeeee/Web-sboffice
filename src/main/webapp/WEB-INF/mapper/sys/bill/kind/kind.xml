@@ -215,5 +215,56 @@
             PRT_CLASS_CD = #{prtClassCd}
             AND PRT_CD = #{prtCd}
     </delete>
-    
+
+    <!-- 출력물 종류 삭제 전 체크 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getKindDeleteChk" parameterType="kindVO" resultType="DefaultMap">
+        /* KindMapper.getKindDeleteChk */
+        SELECT *
+        FROM
+        (
+            SELECT
+            thpt.HQ_OFFICE_CD AS ORGN_CD,
+            thpt.PRT_CLASS_CD
+            FROM TB_HQ_PRINT_TEMPL thpt
+            WHERE 1=1
+            <if test='arrPrtClassCd != null and arrPrtClassCd != ""'>
+                AND thpt.PRT_CLASS_CD IN
+                <foreach collection="arrPrtClassCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        )
+        UNION ALL
+        (
+            SELECT
+            tmpt.STORE_CD AS ORGN_CD,
+            tmpt.PRT_CLASS_CD
+            FROM TB_MS_PRINT_TEMPL tmpt
+            WHERE 1=1
+            <if test='arrPrtClassCd != null and arrPrtClassCd != ""'>
+                AND tmpt.PRT_CLASS_CD IN
+                <foreach collection="arrPrtClassCd" item="item" open="("  separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        )
+    </select>
+
+    <!-- 출력물 종류 삭제 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getKindDeleteSave" parameterType="kindVO">
+        /* KindMapper.getKindDeleteSave */
+        DELETE
+        FROM TB_CM_PRINT tcp
+        WHERE 1=1
+        AND tcp.PRT_CLASS_CD = #{prtClassCd}
+    </delete>
+
 </mapper>

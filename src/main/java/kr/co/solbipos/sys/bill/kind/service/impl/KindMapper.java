@@ -53,6 +53,10 @@ public interface KindMapper {
     
     /** 출력물매핑 목록 삭제 */
     int deletePrintMapngList(KindVO kindVO);
-    
-    
+
+    /** 출력물 종류 삭제 전 체크 */
+    DefaultMap<String> getKindDeleteChk(KindVO kindVO);
+
+    /** 출력물 종류 삭제 */
+    int getKindDeleteSave(KindVO kindVO);
 }

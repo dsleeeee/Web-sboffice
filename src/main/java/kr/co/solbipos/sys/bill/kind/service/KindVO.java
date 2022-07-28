@@ -39,8 +39,10 @@ public class KindVO extends CmmVO {
     private Boolean samplYn;
     /** 예제 */
     private String content;
-    
-    
+
+    /** 출력물분류코드 array */
+    private String arrPrtClassCd[];
+
     /**
      * @return the prtClassCd
      */
@@ -153,4 +155,10 @@ public class KindVO extends CmmVO {
     public void setContent(String content) {
         this.content = content;
     }
+
+    public String[] getArrPrtClassCd() {
+        return arrPrtClassCd;
+    }
+
+    public void setArrPrtClassCd(String[] arrPrtClassCd) { this.arrPrtClassCd = arrPrtClassCd; }
 }

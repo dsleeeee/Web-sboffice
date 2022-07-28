@@ -58,8 +58,12 @@ app.controller('printCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     });
   };
+
   // 출력물종류 그리드 조회
   $scope.$on("printCtrl", function(event, data) {
+    $scope.searchPrint();
+  });
+  $scope.searchPrint = function() {
     // 파라미터
     var params = {};
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
@@ -76,7 +80,8 @@ app.controller('printCtrl', ['$scope', '$http', function ($scope, $http) {
     });
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
-  });
+  };
+
   // 출력물종류 그리드 행 추가
   $scope.addRow = function() {
     // 파라미터 설정
@@ -102,7 +107,48 @@ app.controller('printCtrl', ['$scope', '$http', function ($scope, $http) {
     }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save("/sys/bill/kind/bill/save.sb", params);
-  }
+  };
+
+  // 삭제
+  $scope.delete = function() {
+    if (confirm(messages["cmm.choo.delete"])) {
+      // 파라미터 설정
+      var params = {};
+      var prtClassCds = "";
+      for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+        if($scope.flex.collectionView.items[i].gChk) {
+          prtClassCds = prtClassCds + $scope.flex.collectionView.items[i].prtClassCd +",";
+        }
+      }
+      params.prtClassCd = prtClassCds;
+
+      // 삭제 전 체크
+      $scope._postJSONQuery.withOutPopUp( "/sys/bill/kind/bill/getKindDeleteChk.sb", params, function(response){
+        if(response.data.data.result != null) {
+          $scope._popMsg(messages["kind.kindDeleteAllChkAlert"]); // 적용된 내역이 있어, 삭제하실 수 없습니다.
+          return false;
+        } else {
+          // 삭제 저장
+          $scope.deleteSave();
+        }
+      });
+    }
+  };
+
+  // 삭제 저장
+  $scope.deleteSave = function() {
+    // 파라미터 설정
+    var params = new Array();
+    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+      if($scope.flex.collectionView.items[i].gChk) {
+        params.push($scope.flex.collectionView.items[i]);
+      }
+    }
+
+    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+    $scope._postJSONSave.withPopUp("/sys/bill/kind/bill/getKindDeleteSave.sb", params, function(){ $scope.searchPrint() });
+  };
+
 }]);
 
 /**
