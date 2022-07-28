@@ -338,7 +338,19 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#storeCd").attr("readonly",true);
       $("#storeCd").css("width", "100%");
       $("#btnChkStoreCd").css("display", "none");
+
       $("#additionalArea").css("display", "none");
+      $scope.store.copyHqOfficeCd = "";
+      $scope.store.copyStoreInfo = "";
+      $("#storeEnvChk").prop("checked", false);
+      $("#posEnvChk").prop("checked", false);
+      $("#foodEnvChk").prop("checked", false);
+      $("#kitchenPrintChk").prop("checked", false);
+      $("#productChk").prop("checked", false);
+      $("#salePriceChk").prop("checked", false);
+      $("#supplyPriceChk").prop("checked", false);
+      $("#posFnkeyChk").prop("checked", false);
+      $("#touchKeyChk").prop("checked", false);
 
       $scope.store.mapStoreCd = storeDetailInfo.mapStoreCd;
     });
