@@ -108,7 +108,7 @@
         tmt.STORE_CD,
         tmt.TBL_CD,
         tmt.TBL_NM
-        FROM TB_MS_TABLE tmt
+        FROM TB_MS_TABLE_V01 tmt
         WHERE 1=1
         <if test='storeCd != null and storeCd != ""'>
             <![CDATA[
@@ -1710,7 +1710,7 @@
                 SUM(PAY${item}) AS PAY${item}
             </foreach> ,
             SUM(TOT_GUEST_CNT) AS TOT_GUEST_CNT,
-            ROUND(SUM(REAL_SALE_AMT) / SUM(TOT_GUEST_CNT)) AS GUEST_UPRC
+            DECODE( SUM(TOT_GUEST_CNT), 0, 0, ROUND(SUM(REAL_SALE_AMT) / SUM(TOT_GUEST_CNT))) AS GUEST_UPRC
             FROM
             (
                 SELECT
