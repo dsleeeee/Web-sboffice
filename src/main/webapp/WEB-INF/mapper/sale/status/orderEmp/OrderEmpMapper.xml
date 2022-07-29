@@ -108,7 +108,7 @@
 		     , tssd.BILL_NO
 		     , DECODE(tssd.SALE_YN,'Y','매출','반품') AS SALE_YN
 			 , (SELECT	'['||TSSH.TBL_CD||']'||tmt.TBL_NM
-				FROM 	TB_MS_TABLE tmt,
+				FROM 	TB_MS_TABLE_V01 tmt,
 						TB_SL_SALE_HDR tssh
 				WHERE 	tmt.STORE_CD = TSSH.STORE_CD
 				AND 	tmt.TBL_CD = TSSH.TBL_CD
@@ -152,7 +152,7 @@
 		 , 		tssd.BILL_NO
 		 , 		DECODE(tssd.SALE_YN,'Y','매출','반품') AS SALE_YN
 		 , (SELECT	'['||TSSH.TBL_CD||']'||tmt.TBL_NM
-			 FROM 	TB_MS_TABLE tmt,
+			 FROM 	TB_MS_TABLE_V01 tmt,
 			 TB_SL_SALE_HDR tssh
 			 WHERE 	tmt.STORE_CD = TSSH.STORE_CD
 			 AND 	tmt.TBL_CD = TSSH.TBL_CD

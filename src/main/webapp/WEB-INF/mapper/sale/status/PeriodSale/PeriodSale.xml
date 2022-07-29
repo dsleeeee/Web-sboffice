@@ -41,7 +41,7 @@
         ,       tssd.VAT_AMT
         FROM    TB_SL_SALE_HDR tssh
         ,       TB_SL_SALE_DTL tssd
-        ,       TB_MS_TABLE tmt
+        ,       TB_MS_TABLE_V01 tmt
         ,       TB_MS_PRODUCT tmp
         ,       TB_MS_PRODUCT_BARCD tmpb
         ,       TB_MS_STORE tms

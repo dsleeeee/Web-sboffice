@@ -96,7 +96,7 @@
 		     , TSSH.POS_NO
 		     , TSSH.BILL_NO
 		     , DECODE(TSSH.SALE_YN,'Y','매출','반품') AS SALE_YN
-             , (SELECT '['||TSSH.TBL_CD||']'||tmt.TBL_NM FROM TB_MS_TABLE tmt WHERE tmt.STORE_CD = TSSH.STORE_CD AND tmt.TBL_CD = TSSH.TBL_CD) AS TBL_CD
+             , (SELECT '['||TSSH.TBL_CD||']'||tmt.TBL_NM FROM TB_MS_TABLE_V01 tmt WHERE tmt.STORE_CD = TSSH.STORE_CD AND tmt.TBL_CD = TSSH.TBL_CD) AS TBL_CD
              , TO_CHAR(TO_DATE(TSSH.BILL_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS BILL_DT
 		     , TSSH.TOT_SALE_AMT
 		     , TSSH.TOT_DC_AMT

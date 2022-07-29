@@ -423,7 +423,7 @@
                 ) tsspc
         <![CDATA[
         ,       TB_SL_SALE_HDR_MEMBR tsshm
-        ,       TB_MS_TABLE tmt
+        ,       TB_MS_TABLE_V01 tmt
         WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     tssh.STORE_CD     = #{storeCd}
         AND     tssh.SALE_DATE    = #{startDate}

@@ -534,6 +534,11 @@ app.controller('tableDayExcelCtrl', ['$scope', '$http', '$timeout', function ($s
 	    params.tableCd = tableCd;
 	    params.hqOfficeCd = $("#HqOfficeCd").val();
 
+		//가상로그인 session 설정
+		if(document.getElementsByName('sessionId')[0]){
+			params['sid'] = document.getElementsByName('sessionId')[0].value;
+		}
+
 	    // ajax 통신 설정
 	    $http({
 	    	method : 'POST', //방식

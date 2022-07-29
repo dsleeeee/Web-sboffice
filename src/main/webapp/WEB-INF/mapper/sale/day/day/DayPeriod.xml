@@ -283,7 +283,7 @@
             tssh.TOT_TIP_AMT,
             tssh.REAL_SALE_AMT
             FROM TB_SL_SALE_HDR tssh,
-            TB_MS_TABLE tmt
+            TB_MS_TABLE_V01 tmt
             WHERE 1=1
             AND tssh.HQ_OFFICE_CD = #{membrOrgnCd}
             <if test='storeCd != null and storeCd != ""'>
