@@ -8,7 +8,11 @@
 
 <div class="subCon" ng-controller="disuseCtrl" id="disuseCtrl">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+
+    <%-- 조회 --%>
+    <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_pageView('disuseCtrl', 1)">
+      <s:message code="cmm.search"/></button>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -74,12 +78,6 @@
     </tbody>
   </table>
 
-  <div class="mt10 pdb20 oh bb">
-    <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('disuseCtrl', 1)">
-      <s:message code="cmm.search"/></button>
-  </div>
-
   <div class="mt20">
     <div class="updownSet oh mb10">
       <span class="tl s14 mt5 lh15 red">* 확정된 데이터는 삭제 하실 수 없습니다.</span>
@@ -104,14 +102,19 @@
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center" is-read-only="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="disuse.disuseDate"/>" binding="disuseDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="disuse.disuseDate"/>" binding="disuseDate" width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="disuse.seqNo"/>" binding="seqNo" width="40" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="disuse.procFg"/>" binding="procFg" width="50" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="disuse.disuseTitle"/>" binding="disuseTitle" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="disuse.disuseReason"/>" binding="disuseReason" width="90" align="left" is-read-only="true" data-map="disuseReasonDataMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="disuse.procFg"/>" binding="procFg" width="40" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="disuse.disuseTitle"/>" binding="disuseTitle" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="disuse.disuseReason"/>" binding="disuseReason" width="80" align="left" is-read-only="true" data-map="disuseReasonDataMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="disuse.dtlCnt"/>" binding="dtlCnt" width="50" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="disuse.regDate"/>" binding="regDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="disuse.confmDate"/>" binding="confmDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="disuse.regDate"/>" binding="regDate" width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="disuse.regId"/>" binding="regId" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="disuse.modDate"/>" binding="modDate" width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="disuse.modId"/>" binding="modId" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="disuse.confmDate"/>" binding="confmDate" width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="disuse.confmId"/>" binding="confmId" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+
         <wj-flex-grid-column header="<s:message code="disuse.disuseStorageCd"/>" binding="disuseStorageCd" width="0" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
 
       </wj-flex-grid>

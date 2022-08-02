@@ -17,7 +17,7 @@
         ,       tshd.DISUSE_TITLE, tshd.PROC_FG, tshd.DTL_CNT
         ,       tshd.CONFM_DATE
         ,       SUBSTR(tshd.REG_DT,0,8) AS REG_DATE
-        ,		tshd.DISUSE_STORAGE_CD , tshd.REASON_CD AS DISUSE_REASON
+        ,		tshd.DISUSE_STORAGE_CD , tshd.REASON_CD AS DISUSE_REASON, SUBSTR(tshd.MOD_DT,0,8) AS MOD_DATE, tshd.REG_ID, tshd.MOD_ID, tshd.CONFM_ID
         FROM    TB_ST_HQ_DISUSE tshd
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     DISUSE_DATE  BETWEEN #{startDate} AND #{endDate}

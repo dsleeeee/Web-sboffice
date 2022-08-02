@@ -47,7 +47,7 @@
         ,       tssa.ADJ_TITLE, tssa.PROC_FG, tssa.DTL_CNT
         ,       tssa.CONFM_DATE
         ,       SUBSTR(tssa.REG_DT,0,8) AS REG_DATE
-        ,		tssa.ADJ_STORAGE_CD, tssa.REASON_CD AS ADJ_REASON
+        ,		tssa.ADJ_STORAGE_CD, tssa.REASON_CD AS ADJ_REASON, SUBSTR(tssa.MOD_DT,0,8) AS MOD_DATE, tssa.REG_ID, tssa.MOD_ID, tssa.CONFM_ID
         FROM    TB_ST_STORE_ADJUST tssa
         WHERE   STORE_CD  = #{storeCd}
         AND     ADJ_DATE  BETWEEN #{startDate} AND #{endDate}
