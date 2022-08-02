@@ -1143,7 +1143,11 @@
 		     , SF_ZERO_TO_NULL(SUM(SALE_VENDR_RTN_QTY)) AS IO_OCCR_QTY_33 /* 거래처반품 수량*/
 		     , SF_ZERO_TO_NULL(SUM(SALE_VENDR_RTN_TOT)) AS IO_OCCR_TOT_33 /* 거래처반품 금액*/
   		FROM TB_ST_HQ_STOCK_DAILY TSHSD
+		   , TB_HQ_PRODUCT THP
  		WHERE TSHSD.HQ_OFFICE_CD = #{hqOfficeCd}
+		AND THP.STOCK_PROD_YN = 'Y'
+		AND TSHSD.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
+		AND TSHSD.PROD_CD = THP.PROD_CD
  			 <!-- !!!!!!!!!!!!!!!!!!! 날짜랑 상품코드 조건은 '업무쿼리'에 없었는데 직접 추가함. 물어보고 빼든지 말든지 하기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
  			  AND TSHSD.IOSTOCK_DATE BETWEEN #{startDate} AND #{endDate}
 			  AND TSHSD.PROD_CD = #{prodCd}
@@ -1175,7 +1179,11 @@
 		     , SF_ZERO_TO_NULL(SUM(SET_IN_QTY)) AS IO_OCCR_QTY_22 /* 세트생성 수량*/
 -- 		     , SF_ZERO_TO_NULL(SUM()) AS IO_OCCR_TOT_22 /* 세트생성 금액*/
   		FROM TB_ST_STORE_STOCK_DAILY TSSSD
+		   , TB_MS_PRODUCT TMP
  		WHERE TSSSD.STORE_CD 	= #{storeCd}
+		AND TMP.STOCK_PROD_YN = 'Y'
+		AND TSSSD.HQ_OFFICE_CD = TMP.HQ_OFFICE_CD
+		AND TSSSD.PROD_CD = TMP.PROD_CD
  			 <!-- !!!!!!!!!!!!!!!!!!! 날짜랑 상품코드 조건은 '업무쿼리'에 없었는데 직접 추가함. 물어보고 빼든지 말든지 하기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
  			  AND TSSSD.IOSTOCK_DATE BETWEEN #{startDate} AND #{endDate}
 			  AND TSSSD.PROD_CD = #{prodCd}
