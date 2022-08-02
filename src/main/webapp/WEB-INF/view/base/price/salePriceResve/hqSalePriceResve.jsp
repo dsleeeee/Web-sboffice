@@ -348,7 +348,7 @@
         </wj-combo-box>
 
         <%-- 저장 --%>
-        <button class="btn_skyblue fr" ng-click="addProdPrice()"><s:message code="cmm.add" /></button>
+        <button class="btn_skyblue fr" ng-click="addProdPrice()"><s:message code="salePriceResve.priceResve" /></button>
         <button class="btn_skyblue fr mr5" ng-click="saveProdPrice()"><s:message code="cmm.edit" /></button>
         <span class="fr mr10"><input type="checkbox" id="applyFg" ng-model="applyFg" /> 전매장적용</span>
     </div>

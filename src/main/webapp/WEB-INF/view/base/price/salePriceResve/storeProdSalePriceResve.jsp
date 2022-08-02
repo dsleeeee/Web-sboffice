@@ -206,7 +206,7 @@
                 initialized="_initComboBox(s)">
         </wj-combo-box>
 
-        <button class="btn_skyblue fr ml5" ng-click="addProdPrice()"><s:message code="cmm.add" /></button>
+        <button class="btn_skyblue fr ml5" ng-click="addProdPrice()"><s:message code="salePriceResve.priceResve" /></button>
         <button class="btn_skyblue fr" ng-click="saveProdPrice()"><s:message code="cmm.edit" /></button>
     </div>
 
