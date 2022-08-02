@@ -83,6 +83,7 @@
 			     , TB_HQ_PRODUCT THP
 			     , TB_HQ_PRODUCT_BARCD THPB
 			 WHERE TPHSM.HQ_OFFICE_CD = #{hqOfficeCd}
+		       AND THP.STOCK_PROD_YN = 'Y'
 			   <if test='startDate != null and startDate != ""'>
 		          AND TPHSM.IOSTOCK_YM  = #{startDate}
 		       </if>
@@ -210,6 +211,7 @@
 			     , TB_MS_PRODUCT TMP
 			     , TB_MS_PRODUCT_BARCD TMPB
 			 WHERE TPSSM.STORE_CD    = #{storeCd}
+		       AND TMP.STOCK_PROD_YN = 'Y'
 			   <if test='startDate != null and startDate != ""'>
 	              AND TPSSM.IOSTOCK_YM  = #{startDate}
 	           </if>
