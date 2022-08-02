@@ -34,7 +34,11 @@
 				     , SF_ZERO_TO_NULL(SUM(SALE_VENDR_RTN_TOT)) AS IO_OCCR_TOT_33 /* 거래처반품 금액*/
 				 <include refid="CmmSQL.PagingTemplateCount"/>
 				  FROM TB_ST_HQ_STOCK_DAILY TSHSD
+				     , TB_HQ_PRODUCT THP
 				 WHERE TSHSD.HQ_OFFICE_CD = #{hqOfficeCd}
+				 AND THP.STOCK_PROD_YN = 'Y'
+				 AND TSHSD.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
+				 AND TSHSD.PROD_CD = THP.PROD_CD
 						<if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
 						   AND TSHSD.IOSTOCK_DATE BETWEEN #{startDate} AND #{endDate}
 						</if>
@@ -66,8 +70,12 @@
 				     , SF_ZERO_TO_NULL(SUM(SET_IN_QTY)) AS IO_OCCR_QTY_05 /* 세트생성 수량*/
 -- 				     , SF_ZERO_TO_NULL(SUM()) AS IO_OCCR_TOT_05 /* 세트생성 금액*/
 				  <include refid="CmmSQL.PagingTemplateCount"/>
-				  FROM TB_ST_STORE_STOCK_DAILY TSSSD 
+				  FROM TB_ST_STORE_STOCK_DAILY TSSSD
+					  , TB_MS_PRODUCT TMP
 				 WHERE TSSSD.STORE_CD = #{storeCd}
+				 AND TMP.STOCK_PROD_YN = 'Y'
+				 AND TSSSD.STORE_CD = TMP.STORE_CD
+				 AND TSSSD.PROD_CD = TMP.PROD_CD
 					   <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
 	    				    AND TSSSD.IOSTOCK_DATE BETWEEN #{startDate} AND #{endDate}
 					   </if>
@@ -76,7 +84,6 @@
 				 <include refid="CmmSQL.PagingTemplateBottom"/>
              </when>
         </choose>
-
     </select>
     
     
@@ -108,7 +115,11 @@
 				 , SF_ZERO_TO_NULL(SUM(SALE_VENDR_RTN_QTY)) AS IO_OCCR_QTY_33 /* 거래처반품 수량*/
 				 , SF_ZERO_TO_NULL(SUM(SALE_VENDR_RTN_TOT)) AS IO_OCCR_TOT_33 /* 거래처반품 금액*/
 				  FROM TB_ST_HQ_STOCK_DAILY TSHSD
+				      , TB_HQ_PRODUCT THP
 				 WHERE TSHSD.HQ_OFFICE_CD = #{hqOfficeCd}
+				 AND THP.STOCK_PROD_YN = 'Y'
+				 AND TSHSD.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
+				 AND TSHSD.PROD_CD = THP.PROD_CD
 						<if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
 						   AND TSHSD.IOSTOCK_DATE BETWEEN #{startDate} AND #{endDate}
 						</if>
@@ -138,7 +149,11 @@
 				 , SF_ZERO_TO_NULL(SUM(SET_IN_QTY)) AS IO_OCCR_QTY_05 /* 세트생성 수량*/
 				 -- 				     , SF_ZERO_TO_NULL(SUM()) AS IO_OCCR_TOT_05 /* 세트생성 금액*/
 				  FROM TB_ST_STORE_STOCK_DAILY TSSSD
+					  , TB_MS_PRODUCT TMP
 				 WHERE TSSSD.STORE_CD = #{storeCd}
+				 AND TMP.STOCK_PROD_YN = 'Y'
+				 AND TSSSD.STORE_CD = TMP.STORE_CD
+				 AND TSSSD.PROD_CD = TMP.PROD_CD
 					   <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
 	    				    AND TSSSD.IOSTOCK_DATE BETWEEN #{startDate} AND #{endDate}
 					   </if>
@@ -146,6 +161,6 @@
 				 ORDER BY TSSSD.IOSTOCK_DATE DESC
              </when>
         </choose>
-
     </select>
+
 </mapper>
