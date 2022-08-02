@@ -74,6 +74,7 @@
 			     , TB_HQ_PRODUCT THP
 			     , TB_HQ_PRODUCT_BARCD THPB
 			 WHERE TSHSD.HQ_OFFICE_CD = #{hqOfficeCd}
+		       AND THP.STOCK_PROD_YN = 'Y'
 			   <if test='startDate != null and startDate != ""'>
 		          AND TSHSD.IOSTOCK_DATE = #{startDate}
 		       </if>
@@ -193,6 +194,7 @@
 			     , TB_MS_PRODUCT TMP
 			     , TB_MS_PRODUCT_BARCD TMPB
 			 WHERE TSSSD.STORE_CD    = #{storeCd}
+		       AND TMP.STOCK_PROD_YN = 'Y'
 			   <if test='startDate != null and startDate != ""'>
 	              AND TSSSD.IOSTOCK_DATE  = #{startDate}
 	           </if>
@@ -309,6 +311,7 @@
 			     , TB_HQ_PRODUCT THP
 			     , TB_HQ_PRODUCT_BARCD THPB
 			 WHERE TSHSD.HQ_OFFICE_CD = #{hqOfficeCd}
+               AND THP.STOCK_PROD_YN = 'Y'
 			   <if test='startDate != null and startDate != ""'>
 		          AND TSHSD.IOSTOCK_DATE  = #{startDate}
 		       </if>
@@ -425,6 +428,7 @@
 			     , TB_MS_PRODUCT TMP
 			     , TB_MS_PRODUCT_BARCD TMPB
 			 WHERE TSSSD.STORE_CD    = #{storeCd}
+			   AND TMP.STOCK_PROD_YN = 'Y'
 			   <if test='startDate != null and startDate != ""'>
 	              AND TSSSD.IOSTOCK_DATE  = #{startDate}
 	           </if>
