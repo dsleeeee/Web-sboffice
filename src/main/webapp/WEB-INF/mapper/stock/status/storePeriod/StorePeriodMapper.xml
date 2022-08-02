@@ -65,6 +65,7 @@
 	    AND TSSSD.PROD_CD     = TMP.PROD_CD
 	    AND TSSSD.STORE_CD 	= TMPB.STORE_CD(+)
 	    AND TSSSD.PROD_CD     = TMPB.PROD_CD(+)
+		AND TMP.STOCK_PROD_YN = 'Y'
 	    <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
  			AND TSSSD.IOSTOCK_DATE BETWEEN #{startDate} AND #{endDate}
 		</if>
@@ -168,7 +169,7 @@
     </select>
 
     <select id="getStoreperiodExcelList" parameterType="storePeriodVO" resultType="DefaultMap">
-    	/* USE : StorePeriodMapper.getStorePeriodList */
+    	/* USE : StorePeriodMapper.getStoreperiodExcelList */
 		SELECT FN_GET_PROD_CLASS_CD_NM_STR(TMP.STORE_CD, TMP.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
 			 , TSSSD.PROD_CD
 		     , TMP.PROD_NM
@@ -219,6 +220,7 @@
 	    AND TSSSD.PROD_CD     = TMP.PROD_CD
 	    AND TSSSD.STORE_CD 	= TMPB.STORE_CD(+)
 	    AND TSSSD.PROD_CD     = TMPB.PROD_CD(+)
+		AND TMP.STOCK_PROD_YN = 'Y'
 	    <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
  			AND TSSSD.IOSTOCK_DATE BETWEEN #{startDate} AND #{endDate}
 		</if>
