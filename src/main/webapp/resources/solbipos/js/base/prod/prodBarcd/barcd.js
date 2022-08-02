@@ -289,6 +289,15 @@ app.controller('barcdCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
         if(numberAlphabet.test($scope.flex.collectionView.itemsEdited[i].barCd)){
           $scope._popMsg("[" + $scope.flex.collectionView.itemsEdited[i].prodCd + "]" + $scope.flex.collectionView.itemsEdited[i].prodNm + messages["barcd.inChkBarCd.msg"]);
           return false;
+        } else {
+          for(var j = 0; j < $scope.flex.collectionView.itemsEdited.length; j++){
+            if(i != j){
+              if($scope.flex.collectionView.itemsEdited[i].barCd === $scope.flex.collectionView.itemsEdited[j].barCd){
+                $scope._popMsg(messages["barcd.chkBarCd.msg2"] + "["+ $scope.flex.collectionView.itemsEdited[i].barCd + "]");
+                return false;
+              }
+            }
+          }
         }
       }
 

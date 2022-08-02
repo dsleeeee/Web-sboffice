@@ -75,7 +75,7 @@ public class RtnInstockConfmController {
         HqEnvstVO hqEnvstVO = new HqEnvstVO();
         hqEnvstVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         hqEnvstVO.setEnvstCd("1043");
-        String envst1043 = cmmEnvService.getHqEnvst(hqEnvstVO);
+        String envst1043 = CmmUtil.nvl(cmmEnvService.getHqEnvst(hqEnvstVO), "Y");
         model.addAttribute("envst1043", envst1043);
 
         // [1241 창고사용여부] 환경설정값 조회

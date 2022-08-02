@@ -8,8 +8,14 @@
 
 <div class="subCon" ng-controller="adjCtrl">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+
+    <%-- 조회 --%>
+    <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_pageView('adjCtrl', 1)">
+      <s:message code="cmm.search"/>
+    </button>
   </div>
+
   <table class="searchTbl">
     <colgroup>
       <col class="w15"/>
@@ -74,12 +80,6 @@
     </tbody>
   </table>
 
-  <div class="mt10 pdb20 oh bb">
-    <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('adjCtrl', 1)">
-      <s:message code="cmm.search"/></button>
-  </div>
-
   <div class="mt20">
     <div class="updownSet oh mb10">
       <span class="tl s14 mt5 lh15 red">* 확정된 데이터는 삭제 하실 수 없습니다.</span>
@@ -104,14 +104,18 @@
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center" is-read-only="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="adj.adjDate"/>" binding="adjDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="adj.adjDate"/>" binding="adjDate" width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="adj.seqNo"/>" binding="seqNo" width="40" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="adj.procFg"/>" binding="procFg" width="50" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="adj.adjTitle"/>" binding="adjTitle" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="adj.adjReason"/>" binding="adjReason" width="90" align="left" is-read-only="true" data-map="adjReasonDataMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="adj.procFg"/>" binding="procFg" width="40" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="adj.adjTitle"/>" binding="adjTitle" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="adj.adjReason"/>" binding="adjReason" width="80" align="left" is-read-only="true" data-map="adjReasonDataMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="adj.dtlCnt"/>" binding="dtlCnt" width="50" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="adj.regDate"/>" binding="regDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="adj.confmDate"/>" binding="confmDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="adj.regDate"/>" binding="regDate" width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="adj.regId"/>" binding="regId" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="adj.modDate"/>" binding="modDate" width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="adj.modId"/>" binding="modId" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="adj.confmDate"/>" binding="confmDate" width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="adj.confmId"/>" binding="confmId" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="adj.adjStorageCd"/>" binding="adjStorageCd" width="0" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
 
       </wj-flex-grid>

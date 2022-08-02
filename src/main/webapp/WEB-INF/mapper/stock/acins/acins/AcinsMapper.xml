@@ -47,7 +47,7 @@
         ,       tssai.ACINS_TITLE, tssai.PROC_FG, tssai.DTL_CNT
         ,       tssai.ADJ_CNT, tssai.CONFM_DATE
         ,       SUBSTR(tssai.REG_DT,0,8) AS REG_DATE
-        ,		tssai.ADJ_STORAGE_CD, tssai.REASON_CD AS ACINS_REASON
+        ,		tssai.ADJ_STORAGE_CD, tssai.REASON_CD AS ACINS_REASON, SUBSTR(tssai.MOD_DT,0,8) AS MOD_DATE, tssai.REG_ID, tssai.MOD_ID, tssai.CONFM_ID
         FROM    TB_ST_STORE_ACTUAL_INSPECTION tssai
         WHERE   tssai.STORE_CD    = #{storeCd}
         AND     tssai.ACINS_DATE  BETWEEN #{startDate} AND #{endDate}

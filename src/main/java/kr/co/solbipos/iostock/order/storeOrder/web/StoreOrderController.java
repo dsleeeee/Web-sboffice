@@ -92,7 +92,7 @@ public class StoreOrderController {
         StoreEnvVO storeEnvVO = new StoreEnvVO();
         storeEnvVO.setStoreCd(sessionInfoVO.getStoreCd());
         storeEnvVO.setEnvstCd("1044");
-        String envst1044 = cmmEnvService.getStoreEnvst(storeEnvVO);
+        String envst1044 = CmmUtil.nvl(cmmEnvService.getStoreEnvst(storeEnvVO), "Y");
 
         // 출고요청가능일 조회
         StoreOrderVO storeOrderVO = new StoreOrderVO();
