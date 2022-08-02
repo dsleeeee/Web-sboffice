@@ -61,6 +61,11 @@ app.controller('dailyIoStockCtrl', ['$scope', '$http', '$timeout', function ($sc
 			//params.slipFg = selectedRow.slipNo; // 전표구분
 			params.ioOccrDt = selectedRow.ioOccrDt.replaceAll('-', ''); // 일자
 			params.ioOccrFg = col.binding.substring(colLength, colLength-2);
+			if($scope.orgnFg == "S" && params.ioOccrFg == "01"){ 		// 폐기
+				params.ioOccrFg = "21";
+			} else if($scope.orgnFg == "S" && params.ioOccrFg == "02"){	// 조정
+				params.ioOccrFg = "22";
+			}
 			params.ioOccrNm = s.columnHeaders.getCellData(0,ht.col,false);
 			$scope._broadcast('dailyIoStockInfoCtrl', params);
 		}
@@ -79,52 +84,52 @@ app.controller('dailyIoStockCtrl', ['$scope', '$http', '$timeout', function ($sc
     // 첫째줄 헤더 생성
     if($scope.orgnFg == "H") {
 	    var dataItem         = {};
-	    dataItem.ioOccrDt  = messages["dailyIostock.ioOccrDt"];
-	    dataItem.ioOccrQty01  = messages["dailyIostock.col2"];
-	    dataItem.ioOccrTot01  = messages["dailyIostock.col2"];
-	    dataItem.ioOccrQty16  = messages["dailyIostock.col3"];
-	    dataItem.ioOccrTot16       = messages["dailyIostock.col3"];
-	    dataItem.ioOccrQty13      = messages["dailyIostock.col4"];
-	    dataItem.ioOccrTot13   = messages["dailyIostock.col4"];
-	    dataItem.ioOccrQty02   = messages["dailyIostock.col5"];
-	    dataItem.ioOccrTot02   = messages["dailyIostock.col5"];
-	    dataItem.ioOccrQty04  = messages["dailyIostock.col6"];
-	    dataItem.ioOccrTot04  = messages["dailyIostock.col6"];
-	    dataItem.ioOccrQty14  = messages["dailyIostock.col7"];
-	    dataItem.ioOccrTot14       = messages["dailyIostock.col7"];
-	    dataItem.ioOccrQty17      = messages["dailyIostock.col8"];
-	    dataItem.ioOccrTot17   = messages["dailyIostock.col8"];
-	    dataItem.ioOccrQty21   = messages["dailyIostock.col9"];
-	    dataItem.ioOccrTot21   = messages["dailyIostock.col9"];
-	    dataItem.ioOccrQty22       = messages["dailyIostock.col10"];
-	    dataItem.ioOccrTot22      = messages["dailyIostock.col10"];
-	    dataItem.ioOccrQty19   = messages["dailyIostock.col11"];
-	    dataItem.ioOccrTot19   = messages["dailyIostock.col11"];
-	    dataItem.ioOccrQty33   = messages["dailyIostock.col12"];
-	    dataItem.ioOccrTot33   = messages["dailyIostock.col12"];
+	    dataItem.ioOccrDt		= messages["dailyIostock.ioOccrDt"];
+	    dataItem.ioOccrQty01	= messages["dailyIostock.col2"];
+	    dataItem.ioOccrTot01	= messages["dailyIostock.col2"];
+	    dataItem.ioOccrQty16	= messages["dailyIostock.col3"];
+	    dataItem.ioOccrTot16	= messages["dailyIostock.col3"];
+	    dataItem.ioOccrQty13	= messages["dailyIostock.col4"];
+	    dataItem.ioOccrTot13	= messages["dailyIostock.col4"];
+	    dataItem.ioOccrQty02	= messages["dailyIostock.col5"];
+	    dataItem.ioOccrTot02	= messages["dailyIostock.col5"];
+	    dataItem.ioOccrQty04	= messages["dailyIostock.col6"];
+	    dataItem.ioOccrTot04	= messages["dailyIostock.col6"];
+	    dataItem.ioOccrQty14	= messages["dailyIostock.col7"];
+	    dataItem.ioOccrTot14	= messages["dailyIostock.col7"];
+	    dataItem.ioOccrQty17	= messages["dailyIostock.col8"];
+	    dataItem.ioOccrTot17	= messages["dailyIostock.col8"];
+	    dataItem.ioOccrQty21	= messages["dailyIostock.col9"];
+	    dataItem.ioOccrTot21	= messages["dailyIostock.col9"];
+	    dataItem.ioOccrQty22	= messages["dailyIostock.col10"];
+	    dataItem.ioOccrTot22	= messages["dailyIostock.col10"];
+	    dataItem.ioOccrQty19	= messages["dailyIostock.col11"];
+	    dataItem.ioOccrTot19	= messages["dailyIostock.col11"];
+	    dataItem.ioOccrQty33	= messages["dailyIostock.col12"];
+	    dataItem.ioOccrTot33	= messages["dailyIostock.col12"];
     } else if($scope.orgnFg == "S") {
     	var dataItem         = {};
-	    dataItem.ioOccrDt  = messages["dailyIostock.ioOccrDt"];
-	    dataItem.ioOccrQty03  = messages["dailyIostock.col13"];
-	    dataItem.ioOccrTot03  = messages["dailyIostock.col13"];
-	    dataItem.ioOccrQty12  = messages["dailyIostock.col14"];
-	    dataItem.ioOccrTot12       = messages["dailyIostock.col14"];
-	    dataItem.ioOccrQty06      = messages["dailyIostock.col15"];
-	    dataItem.ioOccrTot06   = messages["dailyIostock.col15"];
-	    dataItem.ioOccrQty18   = messages["dailyIostock.col16"];
-	    dataItem.ioOccrTot18   = messages["dailyIostock.col16"];
-	    dataItem.ioOccrQty11  = messages["dailyIostock.col17"];
-	    dataItem.ioOccrTot11  = messages["dailyIostock.col17"];
-	    dataItem.ioOccrQty04  = messages["dailyIostock.col18"];
-	    dataItem.ioOccrTot04       = messages["dailyIostock.col18"];
-	    dataItem.ioOccrQty14      = messages["dailyIostock.col19"];
-	    dataItem.ioOccrTot14   = messages["dailyIostock.col19"];
-	    dataItem.ioOccrQty01   = messages["dailyIostock.col20"];
-	    dataItem.ioOccrTot01   = messages["dailyIostock.col20"];
-	    dataItem.ioOccrQty02       = messages["dailyIostock.col21"];
-	    dataItem.ioOccrTot02      = messages["dailyIostock.col21"];
-	    dataItem.ioOccrQty05   = messages["dailyIostock.col22"];
-	    dataItem.ioOccrTot05   = messages["dailyIostock.col22"];
+	    dataItem.ioOccrDt  		= messages["dailyIostock.ioOccrDt"];
+	    dataItem.ioOccrQty03	= messages["dailyIostock.col13"];
+	    dataItem.ioOccrTot03	= messages["dailyIostock.col13"];
+	    dataItem.ioOccrQty12	= messages["dailyIostock.col14"];
+	    dataItem.ioOccrTot12	= messages["dailyIostock.col14"];
+	    dataItem.ioOccrQty06	= messages["dailyIostock.col15"];
+	    dataItem.ioOccrTot06	= messages["dailyIostock.col15"];
+	    dataItem.ioOccrQty18	= messages["dailyIostock.col16"];
+	    dataItem.ioOccrTot18	= messages["dailyIostock.col16"];
+	    dataItem.ioOccrQty11	= messages["dailyIostock.col17"];
+	    dataItem.ioOccrTot11	= messages["dailyIostock.col17"];
+	    dataItem.ioOccrQty04	= messages["dailyIostock.col18"];
+	    dataItem.ioOccrTot04	= messages["dailyIostock.col18"];
+	    dataItem.ioOccrQty14	= messages["dailyIostock.col19"];
+	    dataItem.ioOccrTot14	= messages["dailyIostock.col19"];
+	    dataItem.ioOccrQty01	= messages["dailyIostock.col20"];
+	    dataItem.ioOccrTot01	= messages["dailyIostock.col20"];
+	    dataItem.ioOccrQty02	= messages["dailyIostock.col21"];
+	    dataItem.ioOccrTot02	= messages["dailyIostock.col21"];
+	    dataItem.ioOccrQty05	= messages["dailyIostock.col22"];
+	    dataItem.ioOccrTot05	= messages["dailyIostock.col22"];
     }
     s.columnHeaders.rows[0].dataItem = dataItem;
 	// <-- //그리드 헤더2줄 -->

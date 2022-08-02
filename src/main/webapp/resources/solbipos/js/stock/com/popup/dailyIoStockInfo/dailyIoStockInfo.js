@@ -101,9 +101,9 @@ app.controller('dailyIoStockInfoCtrl', ['$scope', '$http', '$timeout', function 
 			case "11" : {arrBinding=["saleDate", "storeCd", "storeNm", "qty", "amt"]; break;} // 매장판매(매출일자, 매장코드, 매장명, 수량, 금액)
 			case "04" : {arrBinding=["slipNo", "inConfmDt", "hqOfficeCd", "hqOfficeNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "inTotQty", "inTot"]; break;} // 매장이입(전표번호, 이입일, 본사코드, 본사명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
 			case "14" : {arrBinding=["slipNo", "outConfmDt", "hqOfficeCd", "hqOfficeNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "outTotQty", "outTot"]; break;} // 매장이출(전표번호, 이출일, 본사코드, 본사명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
-			case "17" : {arrBinding=["disuseDate", "seqNo", "title", "prodFgNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "disuseQty", "disuseAmt"]; break;} // 재고폐기(폐기일, 차수, 제목, 구분, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 폐기수량, 폐기금액)
-			case "21" : {arrBinding=["adjDate", "seqNo", "title", "prodFgNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "adjQty", "adjAmt"]; break;} // 재고조정(조정일, 차수, 제목, 구분, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 조정수량, 조정금액)
-			case "22" : {arrBinding=["setDate", "seqNo", "prodFgNm", "setMakeFgNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "compstProdCd", "compstProdQty"]; break;} //세트생성(생성일, 차수, 구분, 구성/해체구분, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 세트구성상품코드, 세트구성상품수량)
+			case "21" : {arrBinding=["disuseDate", "seqNo", "title", "prodFgNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "disuseQty", "disuseAmt"]; break;} // 재고폐기(폐기일, 차수, 제목, 구분, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 폐기수량, 폐기금액)
+			case "22" : {arrBinding=["adjDate", "seqNo", "title", "prodFgNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "adjQty", "adjAmt"]; break;} // 재고조정(조정일, 차수, 제목, 구분, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 조정수량, 조정금액)
+			case "19" : {arrBinding=["setDate", "seqNo", "prodFgNm", "setMakeFgNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "compstProdCd", "compstProdQty"]; break;} //세트생성(생성일, 차수, 구분, 구성/해체구분, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 세트구성상품코드, 세트구성상품수량)
 			}
 	  }
 	  $scope.drawGrid(grid, arrBinding, arrWidth, arrAlign, arrSum);
