@@ -351,7 +351,7 @@
         </wj-combo-box>
 
         <%-- 저장 --%>
-        <button class="btn_skyblue fr ml5" ng-click="addProdPrice2()"><s:message code="cmm.add" /></button>
+        <button class="btn_skyblue fr ml5" ng-click="addProdPrice2()"><s:message code="salePriceResve.priceResve" /></button>
         <button class="btn_skyblue fr" ng-click="saveProdPrice2()"><s:message code="cmm.edit" /></button>
     </div>
 
