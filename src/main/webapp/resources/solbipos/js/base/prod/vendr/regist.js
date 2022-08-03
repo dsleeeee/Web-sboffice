@@ -13,6 +13,10 @@
  */
 var app = agrid.getApp();
 
+var vatIncldYnData = [
+    {"name":"별도","value":"N"},
+    {"name":"포함","value":"Y"}
+];
 /**
  *  거래처 등록
  */
