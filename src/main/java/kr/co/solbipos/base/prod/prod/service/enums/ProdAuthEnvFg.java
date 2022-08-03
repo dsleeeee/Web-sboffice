@@ -12,14 +12,13 @@ import java.util.List;
 /**
  * @Class Name : ProdAuthEnvFg.java
  * @Description : 상품생성설정 enum type
- *                TB_HQ_ENVST
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2021.04.19  김설아      최초생성
  *
- * @author 솔비포스 개발본부 백엔드PT 김설아
+ * @author 솔비포스 개발본부 WEB개발팀 김설아
  * @since 2021.04.19
  * @version 1.0
  *

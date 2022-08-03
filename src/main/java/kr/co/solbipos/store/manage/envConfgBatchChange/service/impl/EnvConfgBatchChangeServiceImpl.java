@@ -24,7 +24,7 @@ import static kr.co.common.utils.DateUtil.currentDateString;
  * @ ----------  ---------   -------------------------------
  * @ 2021.02.17  김설아      최초생성
  *
- * @author 솔비포스 개발본부 백엔드PT 김설아
+ * @author 솔비포스 개발본부 WEB개발팀 김설아
  * @since 2021.02.17
  * @version 1.0
  *

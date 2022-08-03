@@ -23,7 +23,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  * @ ----------  ---------   -------------------------------
  * @ 2020.07.10  김설아      최초생성
  *
- * @author 솔비포스 개발본부 백엔드PT 김설아
+ * @author 솔비포스 개발본부 WEB개발팀 김설아
  * @since 2020.07.10
  * @version 1.0
  *
