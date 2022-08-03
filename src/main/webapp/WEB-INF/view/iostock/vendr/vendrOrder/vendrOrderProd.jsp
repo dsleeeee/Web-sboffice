@@ -55,7 +55,7 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrOrder/vendrOrderProd.js?ver=20181224.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrOrder/vendrOrderProd.js?ver=20181224.03" charset="utf-8"></script>
 
 <%-- 상품 등록 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/vendr/vendrOrder/vendrOrderProdReg.jsp">

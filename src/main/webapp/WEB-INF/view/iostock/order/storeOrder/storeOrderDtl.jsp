@@ -91,4 +91,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeOrder/storeOrderDtl.js?ver=20220722.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeOrder/storeOrderDtl.js?ver=20220722.02" charset="utf-8"></script>
