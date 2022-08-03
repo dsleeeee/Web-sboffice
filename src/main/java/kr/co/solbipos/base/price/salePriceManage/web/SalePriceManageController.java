@@ -26,6 +26,21 @@ import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 
+/**
+ * @Class Name : SalePriceManageController.java
+ * @Description : 기초관리 > 가격관리 > 판매가관리(매장용)
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2021.04.13  김설아      최초생성
+ *
+ * @author 솔비포스 개발본부 WEB개발팀 김설아
+ * @since 2021.04.13
+ * @version 1.0
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
 @Controller
 @RequestMapping("/base/price/salePriceManage")
 public class SalePriceManageController {
