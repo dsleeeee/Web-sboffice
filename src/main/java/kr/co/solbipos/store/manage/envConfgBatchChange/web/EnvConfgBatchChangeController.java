@@ -24,6 +24,21 @@ import java.util.List;
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
+/**
+ * @Class Name : envConfgBatchChange.java
+ * @Description : 기초관리 > 매장정보관리 > 환경변수일괄변경
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2021.02.17  김설아      최초생성
+ *
+ * @author 솔비포스 개발본부 백엔드PT 김설아
+ * @since 2021.02.17
+ * @version 1.0
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
 @Controller
 @RequestMapping("/store/manage/envConfgBatchChange")
 public class EnvConfgBatchChangeController {
