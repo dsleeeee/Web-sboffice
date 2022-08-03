@@ -46,7 +46,7 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
     // 등록한 내역 조회를 한 후 instockType 값을 조회해 와서 세팅하면서 이벤트가 발생하는데
     // DB에서 조회해 온 값으로 세팅하는 경우에는 초기화하지 않기 위해 slipSearchYn 변수를 사용.
     $scope.slipSearchYn = 'N';
-
+    $scope.btnDtlConfirmShowFg = false;
     if($scope.slipFg === 1) {
       $scope.btnSaveShowFg                         = true;  // 저장
       $scope.btnDelShowFg                          = false; // 삭제
