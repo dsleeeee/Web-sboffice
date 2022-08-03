@@ -46,7 +46,16 @@ app.controller('vendrInstockProdRegCtrl', ['$scope', '$http', '$timeout', functi
         }
       }
     });
-    
+
+    s.beginningEdit.addHandler(function (sender, elements) {
+      var col = sender.columns[elements.col];
+      if (col.binding === "inEtcQty") { // 입수에 따라 주문수량 컬럼 readonly 컨트롤
+        var dataItem = s.rows[elements.row].dataItem;
+        if (dataItem.poUnitQty === 1) {
+          elements.cancel = true;
+        }
+      }
+    });
     
     s.cellEditEnded.addHandler(function (s, e) {
       if (e.panel === s.cells) {

@@ -195,7 +195,7 @@
   var storageEnvstVal = "${storageEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockDtl.js?ver=20220714.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockDtl.js?ver=20220714.03" charset="utf-8"></script>
 
 <%-- 발주번호선택 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/vendr/vendrInstock/vendrInstockOrderSlip.jsp">

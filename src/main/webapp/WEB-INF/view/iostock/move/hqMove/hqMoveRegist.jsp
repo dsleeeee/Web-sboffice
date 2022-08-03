@@ -170,4 +170,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/move/hqMove/hqMoveRegist.js?ver=20181225.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/move/hqMove/hqMoveRegist.js?ver=20181225.06" charset="utf-8"></script>

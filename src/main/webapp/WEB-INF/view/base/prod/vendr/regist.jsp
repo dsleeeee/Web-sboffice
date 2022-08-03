@@ -157,8 +157,8 @@
 
 <script>
   var vendorFgData     = ${ccu.getCommCodeExcpAll("011")};
-  var vatIncldYnData   = ${ccu.getCommCodeExcpAll("067")};
+  <%--var vatIncldYnData   = ${ccu.getCommCodeExcpAll("067")};--%>
   var useYnData        = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/regist.js?ver=20200507.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/regist.js?ver=20200507.02" charset="utf-8"></script>
