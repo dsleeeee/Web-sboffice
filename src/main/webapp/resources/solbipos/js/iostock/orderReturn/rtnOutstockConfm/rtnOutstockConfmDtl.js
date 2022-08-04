@@ -164,6 +164,7 @@ app.controller('rtnOutstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functi
     $scope.slipNo 	= data.slipNo;
     $scope.reqDate 	= data.reqDate;
     $scope.storeCd 	= data.storeCd;
+    $scope.vendrCd = data.vendrCd;
     $scope.wjRtnOutstockConfmDtlLayer.show(true);
 
     $scope.getSlipNoInfo();
@@ -207,7 +208,7 @@ app.controller('rtnOutstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functi
 
           // 수주확정
           if ($scope.procFg === "10") {
-            $("#spanDtlTitle").html(messages["rtnOutstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["rtnOutstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["rtnOutstockConfm.dtl.reqDate"]+' : ' + getFormatDate($scope.outDate));
+            $("#lblTitle").text(messages["rtnOutstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["rtnOutstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["rtnOutstockConfm.dtl.reqDate"]+' : ' + getFormatDate($scope.outDate));
             $("#outstockBtnLayer").show();
             $scope.spanOutstockConfirmFg = true;
             $scope.btnDtlSave = true;
@@ -226,11 +227,11 @@ app.controller('rtnOutstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functi
 
             // 출고확정
             if ($scope.procFg === "20") {
-              $("#spanDtlTitle").html(messages["rtnOutstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["rtnOutstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["rtnOutstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate));
+              $("#lblTitle").text(messages["rtnOutstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["rtnOutstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["rtnOutstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate));
             }
             // 입고확정
             else if ($scope.procFg === "30") {
-              $("#spanDtlTitle").html(messages["rtnOutstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["rtnOutstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["rtnOutstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate) + ', '+messages["rtnOutstockConfm.dtl.inDate"]+' : ' + getFormatDate($scope.inDate));
+              $("#lblTitle").text(messages["rtnOutstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["rtnOutstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["rtnOutstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate) + ', '+messages["rtnOutstockConfm.dtl.inDate"]+' : ' + getFormatDate($scope.inDate));
             }
           }
 

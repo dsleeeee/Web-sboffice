@@ -6,13 +6,13 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/iostock/orderReturn/rtnInstockConfm/rtnInstockConfmDtl/"/>
 
-<wj-popup id="wjRtnInstockConfmDtlLayer" control="wjRtnInstockConfmDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+<wj-popup id="wjRtnInstockConfmDtlLayer" control="wjRtnInstockConfmDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px; height: 750px;">
   <div id="rtnInstockConfmDtlLayer" class="wj-dialog wj-dialog-columns" ng-controller="rtnInstockConfmDtlCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
-      <span id="spanDtlTitle"></span>
+      <label id="lblTitle"></label>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
-    <div class="wj-dialog-body sc2" style="height: 600px;">
+    <div class="wj-dialog-body sc2" style="height: 700px;">
       <table class="tblType01">
         <colgroup>
           <col class="w15"/>
@@ -27,7 +27,7 @@
             <input type="text" id="hdRemark" name="hdRemark" ng-model="hdRemark" class="sb-input w100" maxlength="300"/>
           </td>
         </tr>
-        <tr>
+        <tr style="display: none;">
           <th><s:message code="rtnInstockConfm.dtl.dlvrNm"/></th>
           <td colspan="3">
             <span class="txtIn w150px sb-select fl mr5">
@@ -65,11 +65,13 @@
         </tbody>
       </table>
 
-      <ul class="txtSty3 mt10">
-        <li class="red"><s:message code="rtnInstockConfm.dtl.txt1"/></li>
-        <li class="red"><s:message code="rtnInstockConfm.dtl.txt2"/></li>
-        <li class="red"><s:message code="rtnInstockConfm.dtl.txt3"/></li>
-      </ul>
+      <div class="tooltipBtn mt20 fl">설명
+        <span class="tooltiptext tooltip-right">
+        * <s:message code="rtnInstockConfm.dtl.txt1"/><br/>
+        * <s:message code="rtnInstockConfm.dtl.txt2"/><br/>
+        * <s:message code="rtnInstockConfm.dtl.txt3"/><br/>
+        </span>
+      </div>
 
       <div class="tr mt20 fr">
         <div id="instockBtnLayer" style="display: none;">
@@ -122,7 +124,7 @@
 
       <div class="w100 mt10 mb20">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 280px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="wj-gridWrap" style="height: 450px; overflow-y: hidden; overflow-x: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
@@ -140,10 +142,10 @@
             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.seq"/>" 		  binding="seq" 		width="0" 	align="center" 	is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.storeCd"/>" 	  binding="storeCd" 	width="0" 	align="center" 	is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.prodCd"/>" 	  binding="prodCd" 		width="100" align="center" 	is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.prodNm"/>" 	  binding="prodNm" 		width="100" align="left" 	is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.prodNm"/>" 	  binding="prodNm" 		width="150" align="left" 	is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.barcdCd"/>" 	  binding="barcdCd" 	width="100" align="left" 	is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.poUnitFg"/>" 	  binding="poUnitFg" 	width="60" 	align="center" 	is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.poUnitQty"/>"   binding="poUnitQty" 	width="60" 	align="right" 	is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.poUnitQty"/>"   binding="poUnitQty" 	width="50" 	align="right" 	is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.outSplyUprc"/>" binding="outSplyUprc" width="60" 	align="right" 	is-read-only="true" max-length=10 data-type="Number" format="n0"></wj-flex-grid-column>
             
             <wj-flex-grid-column header="<s:message code="instockConfm.dtl.unitQty"  	/>"   binding="outUnitQty"  width="70"  align="right"   is-read-only="true"     data-type="Number" format="n0" aggregate="Sum"  max-length=8    ></wj-flex-grid-column>
@@ -152,10 +154,10 @@
             <wj-flex-grid-column header="<s:message code="instockConfm.dtl.etcQty"		/>"   binding="inEtcQty"    width="70"  align="right"   is-read-only="false"     data-type="Number" format="n0" aggregate="Sum"  max-length=8    ></wj-flex-grid-column>
 
             <wj-flex-grid-column header="<s:message code="instockConfm.dtl.inTotQty"    />"   binding="inTotQty"    width="0"   align="right"   is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.inAmt"       />"   binding="inAmt"       width="70"  align="right"   is-read-only="true"     data-type="Number" format="n0" aggregate="Sum"                  ></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.inVat"       />"   binding="inVat"       width="70"  align="right"   is-read-only="true"     data-type="Number" format="n0" aggregate="Sum"                  ></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.inTot"       />"   binding="inTot"       width="70"  align="right"   is-read-only="true"     data-type="Number" format="n0" aggregate="Sum"                  ></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.remark"      />"   binding="remark"      width="100" align="left"    is-read-only="false"                                                    max-length=200  ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.inAmt"       />"   binding="inAmt"       width="60"  align="right"   is-read-only="true"     data-type="Number" format="n0" aggregate="Sum"                  ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.inVat"       />"   binding="inVat"       width="60"  align="right"   is-read-only="true"     data-type="Number" format="n0" aggregate="Sum"                  ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.inTot"       />"   binding="inTot"       width="60"  align="right"   is-read-only="true"     data-type="Number" format="n0" aggregate="Sum"                  ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.remark"      />"   binding="remark"      width="150" align="left"    is-read-only="false"                                                    max-length=200  ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="instockConfm.dtl.vatFg"       />"   binding="vatFg01"     width="70"  align="right"   is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
             
             
@@ -187,4 +189,4 @@
   var storageEnvstVal = "${storageEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnInstockConfm/rtnInstockConfmDtl.js?ver=20220714.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnInstockConfm/rtnInstockConfmDtl.js?ver=20220804.01" charset="utf-8"></script>

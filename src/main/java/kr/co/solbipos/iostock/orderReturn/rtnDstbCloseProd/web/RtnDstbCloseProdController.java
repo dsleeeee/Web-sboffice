@@ -3,11 +3,18 @@ package kr.co.solbipos.iostock.orderReturn.rtnDstbCloseProd.web;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
+import kr.co.common.service.code.CmmEnvService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqService;
+import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqVO;
+import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderService;
+import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderVO;
 import kr.co.solbipos.iostock.orderReturn.rtnDstbCloseProd.service.RtnDstbCloseProdService;
 import kr.co.solbipos.iostock.orderReturn.rtnDstbCloseProd.service.RtnDstbCloseProdVO;
+import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +26,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : RtnDstbCloseProdController.java
@@ -41,11 +50,17 @@ import java.util.List;
 public class RtnDstbCloseProdController {
     private final SessionService sessionService;
     private final RtnDstbCloseProdService rtnDstbCloseProdService;
+    private final DstbReqService dstbReqService;
+    private final StoreOrderService storeOrderService;
+    private final CmmEnvService cmmEnvService;
 
     @Autowired
-    public RtnDstbCloseProdController(SessionService sessionService, RtnDstbCloseProdService rtnDstbCloseProdService) {
+    public RtnDstbCloseProdController(SessionService sessionService, RtnDstbCloseProdService rtnDstbCloseProdService, DstbReqService dstbReqService, StoreOrderService storeOrderService, CmmEnvService cmmEnvService) {
         this.sessionService = sessionService;
         this.rtnDstbCloseProdService = rtnDstbCloseProdService;
+        this.dstbReqService = dstbReqService;
+        this.storeOrderService = storeOrderService;
+        this.cmmEnvService = cmmEnvService;
     }
 
     /**
@@ -59,6 +74,23 @@ public class RtnDstbCloseProdController {
      */
     @RequestMapping(value = "/rtnDstbCloseProd/view.sb", method = RequestMethod.GET)
     public String rtnDstbCloseProdView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 본사 환경설정 1242(거래처출고사용여부) 조회
+        HqEnvstVO hqEnvstVO = new HqEnvstVO();
+        hqEnvstVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        hqEnvstVO.setEnvstCd("1242");
+        model.addAttribute("envst1242", CmmUtil.nvl(cmmEnvService.getHqEnvst(hqEnvstVO), "0"));
+
+        // 본사 거래처 콤보박스
+        StoreOrderVO storeOrderVO = new StoreOrderVO();
+        model.addAttribute("vendrList", convertToJson(storeOrderService.getHqVendrCombo(storeOrderVO, sessionInfoVO)));
+
+        // 현재 로그인 사원에 맵핑된 거래처코드 조회
+        DstbReqVO dstbReqVO = new DstbReqVO();
+        model.addAttribute("empVendrCd", dstbReqService.getEmployeeVendr(dstbReqVO, sessionInfoVO));
+
         return "iostock/orderReturn/rtnDstbCloseProd/rtnDstbCloseProd";
     }
 

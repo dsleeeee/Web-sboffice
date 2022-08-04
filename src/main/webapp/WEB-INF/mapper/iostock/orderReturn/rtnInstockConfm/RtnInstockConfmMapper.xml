@@ -53,9 +53,14 @@
                     <if test='procFg != null and procFg != ""'>
                         AND tphso.PROC_FG = #{procFg}
                     </if>
-                    <if test='vendrCd != null and vendrCd != ""'>
-                        AND tphso.VENDR_CD = #{vendrCd}
-                    </if>
+					<choose>
+						<when test='vendrCd != null and vendrCd != ""'>
+							AND tphso.VENDR_CD = #{vendrCd}
+						</when>
+						<otherwise>
+							AND tphso.VENDR_CD IS NULL
+						</otherwise>
+					</choose>
                     <if test='dlvrCd != null and dlvrCd != ""'>
                         AND tphso.DLVR_CD = #{dlvrCd}
                     </if>
@@ -96,9 +101,14 @@
         <if test='procFg != null and procFg != ""'>
             AND tphso.PROC_FG = #{procFg}
         </if>
-        <if test='vendrCd != null and vendrCd != ""'>
-            AND tphso.VENDR_CD = #{vendrCd}
-        </if>
+		<choose>
+			<when test='vendrCd != null and vendrCd != ""'>
+				AND tphso.VENDR_CD = #{vendrCd}
+			</when>
+			<otherwise>
+				AND tphso.VENDR_CD IS NULL
+			</otherwise>
+		</choose>
         <if test='dlvrCd != null and dlvrCd != ""'>
             AND tphso.DLVR_CD = #{dlvrCd}
         </if>

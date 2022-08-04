@@ -84,6 +84,7 @@ app.controller('rtnDstbReqDtlCtrl', ['$scope', '$http', '$timeout', function ($s
     $scope.storeNm = data.storeNm;
     $scope.slipFg  = data.slipFg;
     $scope.procFg  = data.procFg;
+    $scope.vendrCd = data.vendrCd;
 
     $("#spanDtlTitle").html('['+messages["rtnDstbReq.dtl.orderReturn"]+'] ' + '[' + $scope.storeCd + '] ' + $scope.storeNm);
     $scope.orderProcFgCheck();
@@ -212,6 +213,7 @@ app.controller('rtnDstbReqDtlCtrl', ['$scope', '$http', '$timeout', function ($s
       item.hqBrandCd     = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.dstbConfirmFg = ($("#dstbConfirmFg").is(":checked") ? $("#dstbConfirmFg").val() : "");
       item.hdRemark      = $scope.hdRemark;
+      item.vendrCd       = $scope.vendrCd;
       params.push(item);
     }
 

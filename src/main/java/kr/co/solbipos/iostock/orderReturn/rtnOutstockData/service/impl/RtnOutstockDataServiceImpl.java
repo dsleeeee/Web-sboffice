@@ -58,35 +58,35 @@ public class RtnOutstockDataServiceImpl implements RtnOutstockDataService {
             rtnOutstockDataVO.setModDt(currentDt);
 
             // 직배송거래처 및 배송기사 조회
-            List<DefaultMap<String>> storeVendrDlvrList = rtnOutstockDataMapper.getStoreVendrDlvr(rtnOutstockDataVO);
+            //List<DefaultMap<String>> storeVendrDlvrList = rtnOutstockDataMapper.getStoreVendrDlvr(rtnOutstockDataVO);
 
-            for(int i=0; i < storeVendrDlvrList.size(); i++) {
+            //for(int i=0; i < storeVendrDlvrList.size(); i++) {
                 slipNoIdx++;
                 String slipNo    = yymm + StringUtil.lpad(String.valueOf(maxSlipNoIdx+slipNoIdx), 6, "0");
-                String vendrCd   = StringUtil.getOrBlank(storeVendrDlvrList.get(i).get("vendrCd"));
-                String dlvrCd    = StringUtil.getOrBlank(storeVendrDlvrList.get(i).get("dlvrCd"));
+                //String vendrCd   = StringUtil.getOrBlank(storeVendrDlvrList.get(i).get("vendrCd"));
+                //String dlvrCd    = StringUtil.getOrBlank(storeVendrDlvrList.get(i).get("dlvrCd"));
 
                 // TB_PO_HQ_STORE_DISTRIBUTE 수정
                 rtnOutstockDataVO.setProcFg("20");
                 rtnOutstockDataVO.setUpdateProcFg("30");
                 rtnOutstockDataVO.setSlipNo(slipNo);
-                rtnOutstockDataVO.setVendrCd(vendrCd);
+                //rtnOutstockDataVO.setVendrCd(vendrCd);
                 result = rtnOutstockDataMapper.updateDstbDataCreate(rtnOutstockDataVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                //if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
                 // TB_PO_HQ_STORE_OUTSTOCK_DTL 자료입력
                 result = rtnOutstockDataMapper.insertOutstockDtlDataCreate(rtnOutstockDataVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                //if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
                 // TB_PO_HQ_STORE_OUTSTOCK 자료입력
-                rtnOutstockDataVO.setDlvrCd(dlvrCd);
+                //rtnOutstockDataVO.setDlvrCd(dlvrCd);
                 rtnOutstockDataVO.setSlipKind("0"); // 전표종류 TB_CM_NMCODE(NMCODE_GRP_CD=') 0:일반 1:물량오류 2:이동
                 result = rtnOutstockDataMapper.insertRtnOutstockDataCreate(rtnOutstockDataVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                //if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
                 result = rtnOutstockDataMapper.insertRtnStoreOutStockProd(rtnOutstockDataVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-            }
+                //if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            //}
 
             returnResult += result;
         }

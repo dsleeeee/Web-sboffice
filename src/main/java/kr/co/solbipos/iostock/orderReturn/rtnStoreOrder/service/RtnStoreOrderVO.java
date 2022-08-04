@@ -50,6 +50,15 @@ public class RtnStoreOrderVO extends PageVO {
     private String dateFg;
     /** 수발주옵션 */
     private String envst1042;
+    /** 거래처코드 */
+    private String vendrCd;
+    /** 소속구분
+     * M : 시스템
+     * A : 대리점
+     * H : 본사
+     * S : 매장, 가맹점 */
+    private String orgnFg;
+
 
     /**
      * @return the reqDate
@@ -357,5 +366,21 @@ public class RtnStoreOrderVO extends PageVO {
      */
     public void setEnvst1042(String envst1042) {
         this.envst1042 = envst1042;
+    }
+
+    public String getVendrCd() {
+        return vendrCd;
+    }
+
+    public void setVendrCd(String vendrCd) {
+        this.vendrCd = vendrCd;
+    }
+
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
     }
 }

@@ -7,7 +7,7 @@
 <c:set var="baseUrl" value="/iostock/orderReturn/rtnDstbReq/rtnDstbReq/"/>
 
 <div class="subCon" ng-controller="rtnDstbReqCtrl">
-  <div class="searchBar flddUnfld">
+  <div class="searchBar">
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('rtnDstbReqCtrl')"><s:message code="cmm.search"/></button>
@@ -23,7 +23,7 @@
     <tr>
       <%-- 조회일자 --%>
       <th><s:message code="cmm.search.date"/></th>
-      <td>
+      <td colspan="3">
         <div class="sb-select">
           <span class="txtIn w150px">
             <wj-combo-box
@@ -57,6 +57,22 @@
             initialized="_initComboBox(s)">
           </wj-combo-box>
         </span>
+      </td>
+      <%-- 거래처 --%>
+      <th <c:if test="${envst1242 == '0'}">style="display: none;"</c:if>><s:message code="rtnDstbReq.vender"/></th>
+      <td <c:if test="${envst1242 == '0'}">style="display: none;"</c:if>>
+        <div class="sb-select fl w150px">
+          <wj-combo-box
+            id="vendrCd"
+            ng-model="vendrCd"
+            control="vendrCdCombo"
+            items-source="_getComboData('vendrCd')"
+            display-member-path="name"
+            selected-value-path="value"
+            is-editable="false"
+            initialized="_initComboBox(s)">
+          </wj-combo-box>
+        </div>
       </td>
     </tr>
     </tbody>
@@ -103,7 +119,16 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnDstbReq/rtnDstbReq.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript">
+
+  var gEnvst1242  = '${envst1242}';
+  var empVendrCd = '${empVendrCd}';
+
+  <%-- 본사 거래처 콤보박스 --%>
+  var vendrList = ${vendrList};
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnDstbReq/rtnDstbReq.js?ver=20220804.01" charset="utf-8"></script>
 
 <%-- 분배등록 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/orderReturn/rtnDstbReq/rtnDstbReqDtl.jsp">

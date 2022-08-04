@@ -71,17 +71,17 @@ public class OutstockDataServiceImpl implements OutstockDataService {
                 outstockDataVO.setSlipNo(slipNo);
                 //outstockDataVO.setVendrCd(vendrCd);
                 result = outstockDataMapper.updateDstbDataCreate(outstockDataVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                //if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
                 // TB_PO_HQ_STORE_OUTSTOCK_DTL 자료입력
                 result = outstockDataMapper.insertOutstockDtlDataCreate(outstockDataVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                //if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
                 // TB_PO_HQ_STORE_OUTSTOCK 자료입력
                 //outstockDataVO.setDlvrCd(dlvrCd);
                 outstockDataVO.setSlipKind("0"); // 전표종류 TB_CM_NMCODE(NMCODE_GRP_CD=') 0:일반 1:물량오류 2:이동
                 result = outstockDataMapper.insertOutstockDataCreate(outstockDataVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                //if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             //}
 
             returnResult += result;

@@ -10,6 +10,10 @@ import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO;
+import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqService;
+import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqVO;
+import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderService;
+import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderVO;
 import kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderDtlVO;
 import kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderService;
 import kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderVO;
@@ -26,6 +30,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : RtnStoreOrderController.java
@@ -50,13 +56,17 @@ public class RtnStoreOrderController {
     private final SessionService sessionService;
     private final CmmEnvService cmmEnvService;
     private final RtnStoreOrderService rtnStoreOrderService;
+    private final StoreOrderService storeOrderService;
+    private final DstbReqService dstbReqService;
     private final CmmEnvUtil cmmEnvUtil;
 
     @Autowired
-    public RtnStoreOrderController(SessionService sessionService, CmmEnvService cmmEnvService, RtnStoreOrderService rtnStoreOrderService, CmmEnvUtil cmmEnvUtil) {
+    public RtnStoreOrderController(SessionService sessionService, CmmEnvService cmmEnvService, RtnStoreOrderService rtnStoreOrderService, StoreOrderService storeOrderService, DstbReqService dstbReqService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.cmmEnvService = cmmEnvService;
         this.rtnStoreOrderService = rtnStoreOrderService;
+        this.storeOrderService = storeOrderService;
+        this.dstbReqService = dstbReqService;
         this.cmmEnvUtil = cmmEnvUtil;
     }
 
@@ -79,6 +89,10 @@ public class RtnStoreOrderController {
         hqEnvstVO.setEnvstCd("1042");
         String envst1042 = cmmEnvService.getHqEnvst(hqEnvstVO);
 
+        // 본사 환경설정 1242(거래처출고사용여부) 조회
+        hqEnvstVO.setEnvstCd("1242");
+        String envst1242 = CmmUtil.nvl(cmmEnvService.getHqEnvst(hqEnvstVO), "0");
+
         // 매장 환경설정 1044(출고요청일자선택) 조회
         StoreEnvVO storeEnvVO = new StoreEnvVO();
         storeEnvVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -91,7 +105,16 @@ public class RtnStoreOrderController {
         rtnStoreOrderVO.setStoreCd(sessionInfoVO.getStoreCd());
         String reqDate = rtnStoreOrderService.getReqDate(rtnStoreOrderVO);
 
+        // 본사 거래처 콤보박스
+        StoreOrderVO storeOrderVO = new StoreOrderVO();
+        model.addAttribute("vendrList", convertToJson(storeOrderService.getHqVendrCombo(storeOrderVO, sessionInfoVO)));
+
+        // 현재 로그인 사원에 맵핑된 거래처코드 조회
+        DstbReqVO dstbReqVO = new DstbReqVO();
+        model.addAttribute("empVendrCd", dstbReqService.getEmployeeVendr(dstbReqVO, sessionInfoVO));
+
         model.addAttribute("envst1042", envst1042);
+        model.addAttribute("envst1242", envst1242);
         model.addAttribute("envst1044", envst1044);
         model.addAttribute("reqDate" , reqDate);
 
@@ -123,6 +146,8 @@ public class RtnStoreOrderController {
         Model model, RtnStoreOrderVO rtnStoreOrderVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        rtnStoreOrderVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        rtnStoreOrderVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         //        rtnStoreOrderVO.setStoreCd(sessionInfoVO.getStoreCd());
 
         List<DefaultMap<String>> list = rtnStoreOrderService.getRtnStoreOrderList(rtnStoreOrderVO);

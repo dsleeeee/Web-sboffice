@@ -15,6 +15,9 @@ app.controller('rtnDstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', funct
     {"name": messages["rtnDstbCloseStore.add.option2Sale"], "value": "SALE"}
   ]);
 
+  // 본사 거래처 콤보박스
+  $scope._setComboData('dtlVendrCd', vendrList);
+
   $scope.srchRegStartDate = wcombo.genDate("#srchRegStartDate");
   $scope.srchRegEndDate   = wcombo.genDate("#srchRegEndDate");
 
@@ -79,11 +82,11 @@ app.controller('rtnDstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', funct
     s.bottomLeftCells.setCellData(0, 0, '합계');
 
     //Grid Header 2줄 - START	----------------------------------------------------------------
-    s.allowMerging  = 2;
-    s.columnHeaders.rows.push(new wijmo.grid.Row());
+    /*s.allowMerging  = 2;
+    s.columnHeaders.rows.push(new wijmo.grid.Row());*/
     
     //첫째줄 Header 생성
-    var dataItem = {};
+    /*var dataItem = {};
         dataItem.prodCd         	= messages["rtnStoreOrder.dtl.prodCd"        ];	//상품코드
         dataItem.prodNm         	= messages["rtnStoreOrder.dtl.prodNm"        ];	//상품명
         dataItem.orderSplyUprc  	= messages["rtnStoreOrder.dtl.orderSplyUprc" ];	//공급단가
@@ -112,10 +115,10 @@ app.controller('rtnDstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', funct
         dataItem.poMinQty        	= messages["rtnStoreOrder.dtl.poMinQty"      ]; //발주최소수량
         dataItem.vatFg01        	= messages["rtnStoreOrder.dtl.vatFg"         ]; //상품부가세구분
         dataItem.envst0011        	= messages["rtnStoreOrder.dtl.envst0011"     ]; //출고가-부가세포함여부
-    s.columnHeaders.rows[0].dataItem = dataItem;
+    s.columnHeaders.rows[0].dataItem = dataItem;*/
     //Grid Header 2줄 - END		----------------------------------------------------------------
     
-    s.itemFormatter = function (panel, r, c, cell) {
+    /*s.itemFormatter = function (panel, r, c, cell) {
       if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
         //align in center horizontally and vertically
         panel.rows[r].allowMerging    = true;
@@ -151,7 +154,7 @@ app.controller('rtnDstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', funct
           wijmo.addClass(cell, 'wj-custom-readonly');
         }
       }
-    }
+    }*/
   };
 
   // 금액 계산
@@ -234,10 +237,15 @@ app.controller('rtnDstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', funct
       $scope.callParent  = data.callParent;
       $scope.regHdRemark = data.hdRemark;
       $scope.storeCd     = data.storeCd;
+      $scope.vendrCd     = data.vendrCd;
+
+      // 거래처는 수정 못하게 처리
+      $("#dtlVendrCd").attr("disabled", true);
+      $("#dtlVendrCd").css('background-color', '#F0F0F0');
   
       // 값 초기화
       $scope.prodClassCdNm = messages["cmm.all"];
-      $scope.prodClassCd   =
+      $scope.prodClassCd   ='';
           	
       $scope.wjRtnDstbCloseStoreAddLayer.show(true);
       $("#addProdSubTitle").html(' ('+messages["rtnDstbCloseStore.add.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-') + ')');
@@ -270,6 +278,7 @@ app.controller('rtnDstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', funct
     params.startDate = wijmo.Globalize.format($scope.srchRegStartDate.value, 'yyyyMMdd');
     params.endDate   = wijmo.Globalize.format($scope.srchRegEndDate.value, 'yyyyMMdd');
     params.listScale = 50;
+    params.vendrCd   = $scope.vendrCd;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/orderReturn/rtnDstbCloseStore/rtnDstbCloseStoreAdd/list.sb", params, function (){
@@ -327,7 +336,7 @@ app.controller('rtnDstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', funct
       item.storageCd = "999";
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
 //      item.outStorageCd	= $scope.save.rtnDstbClose.storeAddOutStorageCd;
-          
+      item.vendrCd   = $scope.vendrCd;
       params.push(item);
     }
 
@@ -604,5 +613,14 @@ app.controller('rtnDstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', funct
       }
     });
   };
+
+  // 확장조회 숨김/보임
+  $scope.searchAddShowChange = function(){
+    if( $("#tblSearchAddShow").css("display") === 'none') {
+        $("#tblSearchAddShow").show();
+    } else {
+        $("#tblSearchAddShow").hide();
+    }
+};
 
 }]);

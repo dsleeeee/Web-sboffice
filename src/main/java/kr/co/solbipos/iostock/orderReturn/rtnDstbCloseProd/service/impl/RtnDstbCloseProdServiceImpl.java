@@ -179,7 +179,8 @@ public class RtnDstbCloseProdServiceImpl implements RtnDstbCloseProdService {
             Long mgrTot      = (rtnDstbCloseProdVO.getMgrTot()     == null ? 0 : rtnDstbCloseProdVO.getMgrTot())     * slipFg;
 
             if(mgrTotQty < 0) {
-            	
+
+                rtnDstbCloseProdVO.setOrderSplyUprc             (mgrSplyUprc);
             	rtnDstbCloseProdVO.setOrderUnitQty		        (mgrUnitQty);	//입고수량 주문단위
             	rtnDstbCloseProdVO.setOrderEtcQty		        (mgrEtcQty);	//입고수량 나머지
             	rtnDstbCloseProdVO.setOrderTotQty		        (mgrTotQty);	//입고수량합계 낱개

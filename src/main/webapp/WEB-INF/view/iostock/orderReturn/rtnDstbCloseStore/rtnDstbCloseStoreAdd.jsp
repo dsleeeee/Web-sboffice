@@ -6,16 +6,16 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/iostock/orderReturn/rtnDstbCloseStore/rtnDstbCloseStoreAdd/"/>
 
-<wj-popup id="wjRtnDstbCloseStoreAddLayer" control="wjRtnDstbCloseStoreAddLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+<wj-popup id="wjRtnDstbCloseStoreAddLayer" control="wjRtnDstbCloseStoreAddLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px;height:750px;">
   <div id="rtnDstbCloseStoreAddLayer" class="wj-dialog wj-dialog-columns" ng-controller="rtnDstbCloseStoreAddCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
-      <s:message code="rtnDstbCloseStore.add.title"/>
+      <s:message code="rtnDstbCloseStore.add.title"/> -
+      <s:message code="rtnDstbCloseStore.add.addProdSubTitle"/>
+      <label id="addProdSubTitle"></label>
+      <label id="orderFgSubTitle"></label>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
-    <div class="wj-dialog-body sc2" style="height: 600px;">
-      <p class="s14 bk mb5 fl"><s:message code="rtnDstbCloseStore.add.addProdSubTitle"/></p>
-      <p id="addProdSubTitle" class="s14 bk ml5 mb5 fl"></p>
-      <p id="orderFgSubTitle" class="s14 bk ml5 mb5 fl"></p>
+    <div class="wj-dialog-body sc2" style="height: 700px;">
       <table class="tblType01">
         <colgroup>
           <col class="w15"/>
@@ -67,10 +67,20 @@
             <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
           </td>
         </tr>
+        </tbody>
+      </table>
+      <table class="tblType01" id="tblSearchAddShow" style="display: none;">
+        <colgroup>
+          <col class="w15"/>
+          <col class="w35"/>
+          <col class="w15"/>
+          <col class="w35"/>
+        </colgroup>
+        <tbody>
         <tr>
           <%-- 옵션1 --%>
           <th><s:message code="rtnDstbCloseStore.add.option1"/></th>
-          <td colspan="3">
+          <td>
           <span class="txtIn w200px sb-select fl mr5">
             <wj-combo-box
               id="option1"
@@ -83,6 +93,22 @@
             </wj-combo-box>
           </span>
           </td>
+          <%-- 거래처 --%>
+            <th <c:if test="${envst1242 == '0'}">style="display: none;"</c:if>><s:message code="dstbCloseProd.dtl.vender"/></th>
+            <td <c:if test="${envst1242 == '0'}">style="display: none;"</c:if>>
+              <div class="sb-select fl w150px">
+                <wj-combo-box
+                  id="dtlVendrCd"
+                  ng-model="vendrCd"
+                  control="dtlVendrCdCombo"
+                  items-source="_getComboData('dtlVendrCd')"
+                  display-member-path="name"
+                  selected-value-path="value"
+                  is-editable="false"
+                  initialized="_initComboBox(s)">
+                </wj-combo-box>
+              </div>
+            </td>
         </tr>
         <tr>
           <%-- 옵션2 --%>
@@ -135,24 +161,29 @@
       <div class="mt10 oh">
         <%-- 조회 --%>
         <button type="button" class="btn_blue fr" id="btnSearch" ng-click="search();">
-          <s:message code="cmm.search"/></button>
+          <s:message code="cmm.search"/>
+        </button>
+        <%-- 확장조회 --%>
+        <button class="btn_blue mr5 fr" id="btnSearchAddShow" ng-click="searchAddShowChange()">
+            <s:message code="cmm.search.addShow" />
+        </button>
       </div>
-
-      <ul class="txtSty3 mt10">
-        <li class="red"><s:message code="rtnDstbCloseStore.add.txt1"/></li>
-      </ul>
-
-      <div class="mt40 tr">
+      <div class="mt10 tr">
         <div class="tr">
           <%-- 저장 --%>
           <button type="button" class="btn_skyblue ml5" id="btnSave" ng-click="saveRtnDstbCloseStoreAdd()"><s:message code="cmm.save"/></button>
+          <div class="tooltipBtn fl">설명
+             <span class="tooltiptext tooltip-right">
+               * <s:message code="rtnDstbCloseStore.add.txt1"/><br/>
+             </span>
+          </div>
         </div>
       </div>
 
       <%--<div class="wj-TblWrap ml20 mr20 pdb20">--%>
       <div class="w100 mt10 mb20">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 500px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="wj-gridWrap" style="height: 400px; overflow-y: hidden; overflow-x: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
@@ -170,30 +201,30 @@
             <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.prodClassNm"/>" binding="prodClassNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.mgrSplyUprc"/>" binding="mgrSplyUprc" width="70" align="right" max-length=10 is-read-only="false" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.prevMgrUnitQty"/>" binding="prevMgrUnitQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.prevMgrEtcQty"/>" binding="prevMgrEtcQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.prevMgrTotQty"/>" binding="prevMgrTotQty" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.mgrUnitQty"/>" binding="mgrUnitQty" width="70" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.mgrEtcQty"/>" binding="mgrEtcQty" width="70" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.mgrTotQty"/>" binding="mgrTotQty" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.mgrAmt"/>" binding="mgrAmt" width="70" align="right" is-read-only="true" visible="false" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.mgrVat"/>" binding="mgrVat" width="70" align="right" is-read-only="true" visible="false" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.mgrTot"/>" binding="mgrTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.saleUprc"/>" binding="saleUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.splyUprc"/>" binding="splyUprc" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.hqSafeStock"/>" binding="hqSafeStockUnitQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.hqSafeStock"/>" binding="hqSafeStockEtcQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.hqCurrQty"/>" binding="hqCurrUnitQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.hqCurrQty"/>" binding="hqCurrEtcQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.storeCurrQty"/>" binding="storeCurrUnitQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.storeCurrQty"/>" binding="storeCurrEtcQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.remark"/>" binding="remark" width="200" align="left" max-length=300></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.poMinQty"/>" binding="poMinQty" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.vatFg"/>" binding="vatFg01" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.envst0011"/>" binding="envst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>            
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.mgrSplyUprc"/>" binding="mgrSplyUprc" width="65" align="right" max-length=10 is-read-only="false" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.prevMgrUnitQty"/>" binding="prevMgrUnitQty" width="75" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.prevMgrEtcQty"/>" binding="prevMgrEtcQty" width="75" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.prevMgrTotQty"/>" binding="prevMgrTotQty" width="65" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.mgrUnitQty"/>" binding="mgrUnitQty" width="65" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.mgrEtcQty"/>" binding="mgrEtcQty" width="65" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.mgrTotQty"/>" binding="mgrTotQty" width="65" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.mgrAmt"/>" binding="mgrAmt" width="65" align="right" is-read-only="true" visible="false" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.mgrVat"/>" binding="mgrVat" width="65" align="right" is-read-only="true" visible="false" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.mgrTot"/>" binding="mgrTot" width="65" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.saleUprc"/>" binding="saleUprc" width="65" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.poUnitFg"/>" binding="poUnitFg" width="65" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.poUnitQty"/>" binding="poUnitQty" width="65" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.splyUprc"/>" binding="splyUprc" width="100" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.hqSafeStock"/>" binding="hqSafeStockUnitQty" width="100" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.hqSafeStock"/>" binding="hqSafeStockEtcQty" width="100" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.hqCurrQty"/>" binding="hqCurrUnitQty" width="65" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.hqCurrQty"/>" binding="hqCurrEtcQty" width="65" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.storeCurrQty"/>" binding="storeCurrUnitQty" width="65" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.storeCurrQty"/>" binding="storeCurrEtcQty" width="65" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.remark"/>" binding="remark" width="150" align="left" max-length=300></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.poMinQty"/>" binding="poMinQty" width="65" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.vatFg"/>" binding="vatFg01" width="65" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.add.envst0011"/>" binding="envst0011" width="65" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <!-- 
             <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.prodCd"/>" 			binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.prodNm"/>" 			binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
@@ -246,12 +277,13 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnDstbCloseStore/rtnDstbCloseStoreAdd.js?ver=20200914.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnDstbCloseStore/rtnDstbCloseStoreAdd.js?ver=20220804.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
 </c:import>
 
 <%-- 수불 엑셀업로드 공통 팝업 --%>
-<c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUpload/excelUpload.jsp">
+<%--<c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUpload/excelUpload.jsp">--%>
+<c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUploadMPS/excelUploadMPS.jsp">
 </c:import>

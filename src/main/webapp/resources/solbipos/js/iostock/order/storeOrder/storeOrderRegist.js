@@ -761,6 +761,7 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
         excelUploadScope.uploadFg = uploadFg;
         /** 부모컨트롤러 값을 넣으면 업로드가 완료된 후 uploadCallBack 이라는 함수를 호출해준다. */
         excelUploadScope.parentCtrl = 'storeOrderRegistCtrl';
+        excelUploadScope.vendrCd = $scope.vendrCd;
         // 엑셀 업로드
         if (prcsFg === 'excelUp') {
           $("#excelUpFile").val('');

@@ -113,7 +113,8 @@ public class RtnStoreOrderDtlVO extends PageVO {
     /** 출고창고 */
     private String outStorageCd;
     
-    
+    /** 거래처코드 */
+    private String vendrCd;
     
     /**
      * @return the reqDate
@@ -708,5 +709,12 @@ public class RtnStoreOrderDtlVO extends PageVO {
 	public void setOutStorageCd(String outStorageCd) {
 		this.outStorageCd = outStorageCd;
 	}
-	
+
+    public String getVendrCd() {
+        return vendrCd;
+    }
+
+    public void setVendrCd(String vendrCd) {
+        this.vendrCd = vendrCd;
+    }
 }
