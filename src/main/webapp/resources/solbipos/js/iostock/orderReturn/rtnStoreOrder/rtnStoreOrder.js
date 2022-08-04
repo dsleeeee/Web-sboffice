@@ -19,6 +19,9 @@ app.controller('rtnStoreOrderCtrl', ['$scope', '$http', '$timeout', function ($s
     {"name": messages["rtnStoreOrder.modDate"], "value": "mod"}
   ]);
 
+  // 본사 거래처 콤보박스
+  $scope._setComboData('vendrCd', vendrList);
+
   // 출고가능일자 세팅
   $scope.reqDate.value = new Date(getFormatDate(gReqDate, "-"));
   // 출고요청일자 선택가능여부에 따라 출고요청일자 선택여부 처리
@@ -63,7 +66,8 @@ app.controller('rtnStoreOrderCtrl', ['$scope', '$http', '$timeout', function ($s
           params.slipFg   = selectedRow.slipFg;
           params.procFg   = selectedRow.procFg;
           params.hdRemark = selectedRow.remark;
-          params.storeCd  = $scope.searchedStoreCd;
+          params.storeCd  = $("#rtnStoreOrderSelectStoreCd").val();
+          params.vendrCd  = selectedRow.hqVendrCd;
           $scope._broadcast('rtnStoreOrderDtlCtrl', params);
         }
       }
@@ -73,6 +77,14 @@ app.controller('rtnStoreOrderCtrl', ['$scope', '$http', '$timeout', function ($s
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
     s.bottomLeftCells.setCellData(0, 0, '합계');
+
+    // 현재 로그인 사원에 맵핑된 거래처코드로 셋팅(없으면 '본사'로 셋팅됨.)
+    if(orgnFg === "HQ") {
+      $scope.vendrCdCombo.selectedValue = empVendrCd;
+      // 거래처는 수정 못하게 처리
+      $("#vendrCd").attr("disabled", true);
+      $("#vendrCd").css('background-color', '#F0F0F0');
+    }
   };
 
   // 다른 컨트롤러의 broadcast 받기
@@ -96,6 +108,9 @@ app.controller('rtnStoreOrderCtrl', ['$scope', '$http', '$timeout', function ($s
     params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
     params.endDate   = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
     params.storeCd   = $scope.searchedStoreCd;
+    if(orgnFg === "HQ") {
+      params.vendrCd = $scope.vendrCdCombo.selectedValue;
+    }
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/orderReturn/rtnStoreOrder/rtnStoreOrder/list.sb", params);
@@ -113,6 +128,7 @@ app.controller('rtnStoreOrderCtrl', ['$scope', '$http', '$timeout', function ($s
     params.slipFg     = $scope.slipFg;
     params.hdRemark   = "";
     params.storeCd    = $("#rtnStoreOrderSelectStoreCd").val();
+    params.vendrCd    = $scope.vendrCdCombo.selectedValue;
 
     $scope._broadcast("rtnStoreOrderRegistCtrl", params);
   };

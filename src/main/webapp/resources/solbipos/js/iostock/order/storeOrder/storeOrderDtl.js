@@ -381,6 +381,7 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
         params.slipFg   = $scope.slipFg;
         params.remark   = $scope.dtlHdRemark;
         params.envst1042= gEnvst1042;
+        params.vendrCd  = $scope.vendrCd;
 
         //여신잔액 check를 위한 추가 - START
 	        var orderTot = 0;

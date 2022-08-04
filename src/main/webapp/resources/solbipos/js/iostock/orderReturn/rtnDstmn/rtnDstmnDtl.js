@@ -80,11 +80,11 @@ app.controller('rtnDstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 	    s.bottomLeftCells.setCellData(0, 0, '합계');
 	    
 	    //Grid Header 2줄 - START	----------------------------------------------------------------
-	    s.allowMerging  = 2;
-	    s.columnHeaders.rows.push(new wijmo.grid.Row());
+	    /*s.allowMerging  = 2;
+	    s.columnHeaders.rows.push(new wijmo.grid.Row());*/
 	    
 	    //첫째줄 Header 생성
-	    var dataItem = {};
+	   /* var dataItem = {};
 	        dataItem.slipNo         	= messages["rtnOutstockConfm.dtl.slipNo"         ];	
 	        dataItem.slipFg         	= messages["rtnOutstockConfm.dtl.slipFg"         ];	
 	        dataItem.seq  			    = messages["rtnOutstockConfm.dtl.seq" 			 ];	
@@ -109,7 +109,7 @@ app.controller('rtnDstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 	        dataItem.vatFg01       		= messages["rtnOutstockConfm.dtl.vatFg"      	 ]; 
 	        dataItem.envst0011      	= messages["rtnOutstockConfm.dtl.envst0011"      ]; 
 
-	    s.columnHeaders.rows[0].dataItem = dataItem;
+	    s.columnHeaders.rows[0].dataItem = dataItem;*/
 	  };
 
 	  // 금액 계산
@@ -192,6 +192,7 @@ app.controller('rtnDstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 	    $scope.slipNo 	= data.slipNo;
 	    $scope.reqDate 	= data.reqDate;
 	    $scope.storeCd 	= data.storeCd;
+	  	$scope.vendrCd = data.vendrCd;
 	    $scope.wjRtnDstmnDtlLayer.show(true);
 
 	    $scope.getSlipNoInfo();
@@ -235,13 +236,13 @@ app.controller('rtnDstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 
 	          // 수주확정
 	          if ($scope.procFg === "10") {
-	            $("#spanDtlTitle").html(messages["rtnOutstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["rtnOutstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["rtnOutstockConfm.dtl.reqDate"]+' : ' + getFormatDate($scope.outDate));
+	            $("#lblTitle").text(messages["rtnOutstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["rtnOutstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["rtnOutstockConfm.dtl.reqDate"]+' : ' + getFormatDate($scope.outDate));
 	            $("#outstockBtnLayer").show();
-	            $scope.spanOutstockConfirmFg = true;
-	            $scope.btnDtlSave = true;
-	            $scope.btnSetOutToIn = true;
-	            $scope.btnOutstockAfterDtlSave = false;
-	            $scope.flex.isReadOnly = false;
+	            $scope.spanOutstockConfirmFg = false;
+	            $scope.btnDtlSave = false;
+	            $scope.btnSetOutToIn = false;
+	            $scope.btnOutstockAfterDtlSave = true;
+	            $scope.flex.isReadOnly = true;
 	          }
 	          // 출고확정 또는 입고확정
 	          else if ($scope.procFg === "20" || $scope.procFg === "30") {
@@ -254,11 +255,11 @@ app.controller('rtnDstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 
 	            // 출고확정
 	            if ($scope.procFg === "20") {
-	              $("#spanDtlTitle").html(messages["rtnOutstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["rtnOutstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["rtnOutstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate));
+	              $("#lblTitle").text(messages["rtnOutstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["rtnOutstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["rtnOutstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate));
 	            }
 	            // 입고확정
 	            else if ($scope.procFg === "30") {
-	              $("#spanDtlTitle").html(messages["rtnOutstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["rtnOutstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["rtnOutstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate) + ', '+messages["rtnOutstockConfm.dtl.inDate"]+' : ' + getFormatDate($scope.inDate));
+	              $("#lblTitle").text(messages["rtnOutstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["rtnOutstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["rtnOutstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate) + ', '+messages["rtnOutstockConfm.dtl.inDate"]+' : ' + getFormatDate($scope.inDate));
 	            }
 	          }
 

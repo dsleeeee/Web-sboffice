@@ -292,6 +292,7 @@ public class StoreOrderServiceImpl implements StoreOrderService {
         dstbReqVO.setRegDt		(currentDt);
         dstbReqVO.setModId		(sessionInfoVO.getUserId());
         dstbReqVO.setModDt		(currentDt);
+        dstbReqVO.setVendrCd(storeOrderVO.getVendrCd());
 
         result = storeOrderMapper.insertDstbRegist(dstbReqVO);				//TB_PO_HQ_STORE_DISTRIBUTE
         if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
@@ -330,47 +331,52 @@ public class StoreOrderServiceImpl implements StoreOrderService {
             int 			slipNoIdx 	= 0;
 
             OutstockDataVO 	outstockDataVO = new OutstockDataVO();
-				            outstockDataVO.setHqOfficeCd(dstbCloseStoreVO.getHqOfficeCd	() );
-				            outstockDataVO.setStoreCd	(dstbCloseStoreVO.getStoreCd	() );
-				            outstockDataVO.setSlipFg	(dstbCloseStoreVO.getSlipFg		() );
-				            outstockDataVO.setEmpNo		(dstbCloseStoreVO.getEmpNo   	() );
-				            outstockDataVO.setRegId		(dstbCloseStoreVO.getRegId		() );
-				            outstockDataVO.setRegDt		(dstbCloseStoreVO.getRegDt		() );
-				            outstockDataVO.setModId		(dstbCloseStoreVO.getModId		() );
-				            outstockDataVO.setModDt		(dstbCloseStoreVO.getModDt		() );
+            outstockDataVO.setHqOfficeCd(dstbCloseStoreVO.getHqOfficeCd	() );
+            outstockDataVO.setStoreCd	(dstbCloseStoreVO.getStoreCd	() );
+            outstockDataVO.setSlipFg	(dstbCloseStoreVO.getSlipFg		() );
+            outstockDataVO.setEmpNo		(dstbCloseStoreVO.getEmpNo   	() );
+            outstockDataVO.setRegId		(dstbCloseStoreVO.getRegId		() );
+            outstockDataVO.setRegDt		(dstbCloseStoreVO.getRegDt		() );
+            outstockDataVO.setModId		(dstbCloseStoreVO.getModId		() );
+            outstockDataVO.setModDt		(dstbCloseStoreVO.getModDt		() );
+            outstockDataVO.setReqDate(dstbCloseStoreVO.getReqDate());
+            outstockDataVO.setVendrCd(dstbCloseStoreVO.getVendrCd());
+            outstockDataVO.setDateFg("req");
+            outstockDataVO.setStartDate(dstbCloseStoreVO.getReqDate());
+            outstockDataVO.setEndDate(dstbCloseStoreVO.getReqDate());
 
             //직배송거래처 및 배송기사 조회
-            List<DefaultMap<String>> storeVendrDlvrList = outstockDataMapper.getStoreVendrDlvr(outstockDataVO);
-            LOGGER.debug("### storeVendrDlvrList.size(): " + storeVendrDlvrList.size());
+            //List<DefaultMap<String>> storeVendrDlvrList = outstockDataMapper.getStoreVendrDlvr(outstockDataVO);
+            //LOGGER.debug("### storeVendrDlvrList.size(): " + storeVendrDlvrList.size());
 
-            for(int i=0; i < storeVendrDlvrList.size(); i++) {
+            //for(int i=0; i < storeVendrDlvrList.size(); i++) {
                 slipNoIdx++;
                 String slipNo    = yymm + StringUtil.lpad(String.valueOf(maxSlipNoIdx + slipNoIdx), 6, "0");
-                String vendrCd   = StringUtil.getOrBlank(storeVendrDlvrList.get(i).get("vendrCd"));
-                String dlvrCd    = StringUtil.getOrBlank(storeVendrDlvrList.get(i).get("dlvrCd"));
+                //String vendrCd   = StringUtil.getOrBlank(storeVendrDlvrList.get(i).get("vendrCd"));
+                //String dlvrCd    = StringUtil.getOrBlank(storeVendrDlvrList.get(i).get("dlvrCd"));
 
                 //TB_PO_HQ_STORE_DISTRIBUTE 수정
                 outstockDataVO.setProcFg		("20");	//00:등록, 10:MD확정, 20:분배마감, 30:전표수거
                 outstockDataVO.setUpdateProcFg	("30");	//00:등록, 10:MD확정, 20:분배마감, 30:전표수거
                 outstockDataVO.setSlipNo		(slipNo);
-                outstockDataVO.setVendrCd		(vendrCd);
+                //outstockDataVO.setVendrCd		(vendrCd);
                 result = outstockDataMapper.updateDstbDataCreate(outstockDataVO);
-                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+                //if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
                 
                 outstockDataVO.setOutDate	(storeOrderVO.getReqDate());	//출고일자 (수불기준일자)
                 //TB_PO_HQ_STORE_OUTSTOCK_DTL 자료입력
                 result = outstockDataMapper.insertOutstockDtlDataCreate(outstockDataVO);	//TB_PO_HQ_STORE_DISTRIBUTE의 '전표수거(PROC_FG='30')인 자료를, TB_PO_HQ_STORE_OUTSTOCK_DTL에 Insert
-                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+                //if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
                 //TB_PO_HQ_STORE_OUTSTOCK 자료입력
-                outstockDataVO.setDlvrCd	(dlvrCd);
+                //outstockDataVO.setDlvrCd	(dlvrCd);
                 outstockDataVO.setSlipKind	("0");							//전표종류	0:일반 1:물량오류 2:이동
 //                outstockDataVO.setOutDate	(storeOrderVO.getReqDate());	//출고일자 (수불기준일자)
                 outstockDataVO.setRemark	(storeOrderVO.getRemark ());	//비고
               //outstockDataVO.setHqRemark	();								//본사비고 (매장은 열람불가)
                 result = outstockDataMapper.insertOutstockDataCreate(outstockDataVO);		//TB_PO_HQ_STORE_OUTSTOCK_DTL SUM값등을 Insert
-                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
-            }
+                //if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+            //}
 
         }
 
@@ -399,12 +405,11 @@ public class StoreOrderServiceImpl implements StoreOrderService {
 
         //수량추가인 경우
         if(StringUtil.getOrBlank(excelUploadMPSVO.getAddQtyFg()).equals("add")) {
-            result = storeOrderMapper.insertExcelUploadAddQty(excelUploadMPSVO);
+            //result = storeOrderMapper.insertExcelUploadAddQty(excelUploadMPSVO);
+        }else {
+            //기존 주문데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제
+            result = storeOrderMapper.deleteStoreOrderToExcelUploadData(excelUploadMPSVO);
         }
-
-        //기존 주문데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제
-        result = storeOrderMapper.deleteStoreOrderToExcelUploadData(excelUploadMPSVO);
-
         //여신 체크
         StoreOrderVO storeOrderLoanVO = new StoreOrderVO();
         storeOrderLoanVO.setReqDate		(excelUploadMPSVO.getDate		()	);

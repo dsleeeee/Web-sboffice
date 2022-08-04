@@ -90,6 +90,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
                 rtnStoreOrderVO.setRegDt(currentDt);
                 rtnStoreOrderVO.setModId(sessionInfoVO.getUserId());
                 rtnStoreOrderVO.setModDt(currentDt);
+                rtnStoreOrderVO.setVendrCd(rtnStoreOrderDtlVO.getVendrCd());
             }
 
             String insFg = "";
@@ -164,7 +165,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
 
 	            	LOGGER.debug("### getProperties: " + prodVO.getProperties() );
 	            	result = rtnStoreOrderMapper.savetRtnStoreOrderProd(prodVO);
-	                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+	                //if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
 
 	            }
@@ -198,7 +199,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
 
 	            	LOGGER.debug("### getProperties: " + prodVO.getProperties() );
 	            	result = rtnStoreOrderMapper.updateRtnStoreOrderProd(prodVO);
-	                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+	                //if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
 
             	}
@@ -265,6 +266,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
                 rtnStoreOrderVO.setRegDt(currentDt);
                 rtnStoreOrderVO.setModId(sessionInfoVO.getUserId());
                 rtnStoreOrderVO.setModDt(currentDt);
+                rtnStoreOrderVO.setVendrCd(rtnStoreOrderDtlVO.getVendrCd());
             }
 
             String insFg = "";
@@ -435,6 +437,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
         dstbReqVO.setRegDt(currentDt);
         dstbReqVO.setModId(sessionInfoVO.getUserId());
         dstbReqVO.setModDt(currentDt);
+        dstbReqVO.setVendrCd(rtnStoreOrderVO.getVendrCd());
 
         result = rtnStoreOrderMapper.insertDstbRegist(dstbReqVO);
 //      반품수량을 업데이트 하는건데 result > 0 확인요망?
@@ -453,6 +456,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
         dstbCloseStoreVO.setModId(sessionInfoVO.getUserId());
         dstbCloseStoreVO.setModDt(currentDt);
         dstbCloseStoreVO.setEmpNo		(dstbReqVO.getEmpNo   	());
+        dstbCloseStoreVO.setVendrCd(dstbReqVO.getVendrCd());
 
         result = dstbCloseStoreMapper.updateDstbCloseConfirm(dstbCloseStoreVO);
         if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
@@ -485,42 +489,45 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
             outstockDataVO.setModId		(dstbCloseStoreVO.getModId		() );
             outstockDataVO.setModDt		(dstbCloseStoreVO.getModDt		() );
             outstockDataVO.setReqDate	(dstbCloseStoreVO.getReqDate	() );
+            outstockDataVO.setVendrCd(dstbCloseStoreVO.getVendrCd());
+            outstockDataVO.setDateFg("req");
+            outstockDataVO.setStartDate(dstbCloseStoreVO.getReqDate());
+            outstockDataVO.setEndDate(dstbCloseStoreVO.getReqDate());
 
             // 등록된 분배자료 기준으로 출고 자료 생성 - 분배자료확인(직배송거래처 및 배송기사 조회)
-            List<DefaultMap<String>> storeVendrDlvrList = outstockDataMapper.getStoreVendrDlvr(outstockDataVO);
+            //List<DefaultMap<String>> storeVendrDlvrList = outstockDataMapper.getStoreVendrDlvr(outstockDataVO);
 
-            for(int i=0; i < storeVendrDlvrList.size(); i++) {
+            //for(int i=0; i < storeVendrDlvrList.size(); i++) {
                 slipNoIdx++;
                 String slipNo    = yymm + StringUtil.lpad(String.valueOf(maxSlipNoIdx+slipNoIdx), 6, "0");
-                String vendrCd   = StringUtil.getOrBlank(storeVendrDlvrList.get(i).get("vendrCd"));
-                String dlvrCd    = StringUtil.getOrBlank(storeVendrDlvrList.get(i).get("dlvrCd"));
+                //String vendrCd   = StringUtil.getOrBlank(storeVendrDlvrList.get(i).get("vendrCd"));
+                //String dlvrCd    = StringUtil.getOrBlank(storeVendrDlvrList.get(i).get("dlvrCd"));
 
                 // TB_PO_HQ_STORE_DISTRIBUTE 수정
                 outstockDataVO.setProcFg("20");
                 outstockDataVO.setUpdateProcFg("30");
                 outstockDataVO.setSlipNo(slipNo);
-                outstockDataVO.setVendrCd(vendrCd);
+                //outstockDataVO.setVendrCd(vendrCd);
                 result = outstockDataMapper.updateDstbDataCreate(outstockDataVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                //if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
                 outstockDataVO.setOutDate	(rtnStoreOrderVO.getReqDate());	//출고일자 (수불기준일자)
                 // TB_PO_HQ_STORE_OUTSTOCK_DTL 자료입력
                 result = outstockDataMapper.insertOutstockDtlDataCreate(outstockDataVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                //if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
                 // TB_PO_HQ_STORE_OUTSTOCK 자료입력
-                outstockDataVO.setDlvrCd(dlvrCd);
+                //outstockDataVO.setDlvrCd(dlvrCd);
                 outstockDataVO.setSlipKind("0"); // 전표종류 TB_CM_NMCODE(NMCODE_GRP_CD=') 0:일반 1:물량오류 2:이동
-//                outstockDataVO.setOutDate	(rtnStoreOrderVO.getReqDate());	//출고일자 (수불기준일자)
                 outstockDataVO.setRemark	(rtnStoreOrderVO.getRemark ());	//비고
                 result = outstockDataMapper.insertOutstockDataCreate(outstockDataVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                //if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
                 // TB_PO_HQ_STORE_OUTSTOCK_PROD 자료입력
                 result = outstockDataMapper.insertRtnStoreOutStockProd(outstockDataVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                //if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-            }
+            //}
 
         }
 
@@ -546,12 +553,12 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
 
         // 수량추가인 경우
         if(StringUtil.getOrBlank(excelUploadMPSVO.getAddQtyFg()).equals("add")) {
-            result = rtnStoreOrderMapper.insertExcelUploadAddQty(excelUploadMPSVO);
+            //result = rtnStoreOrderMapper.insertExcelUploadAddQty(excelUploadMPSVO);
+        }else {
+            // 기존 주문데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제
+            result = rtnStoreOrderMapper.deleteStoreOrderToExcelUploadData(excelUploadMPSVO);
+            result = rtnStoreOrderMapper.deleteExlRtnStoreOrderProd(excelUploadMPSVO);
         }
-
-        // 기존 주문데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제
-        result = rtnStoreOrderMapper.deleteStoreOrderToExcelUploadData(excelUploadMPSVO);
-        result = rtnStoreOrderMapper.deleteExlRtnStoreOrderProd(excelUploadMPSVO);
 
         // 엑셀업로드 한 수량을 주문수량으로 입력
         result = rtnStoreOrderMapper.insertRtnStoreOrderToExcelUploadData(excelUploadMPSVO);
@@ -574,6 +581,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
         rtnStoreOrderVO.setEmpNo("0000");
         rtnStoreOrderVO.setProcFg("00");
         rtnStoreOrderVO.setRemark(excelUploadMPSVO.getHdRemark());
+        rtnStoreOrderVO.setVendrCd(excelUploadMPSVO.getVendrCd());
 
         // 주문요청일의 상품건수 조회
         dtlCnt = rtnStoreOrderMapper.getDtlCnt(rtnStoreOrderVO);

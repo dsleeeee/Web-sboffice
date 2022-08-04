@@ -46,6 +46,14 @@
         <if test='procFg != null and procFg != ""'>
             AND tphsd.PROC_FG = #{procFg}
         </if>
+        <choose>
+            <when test='vendrCd != null and vendrCd != ""'>
+              AND tphsd.HQ_VENDR_CD = #{vendrCd}
+            </when>
+            <otherwise>
+              AND tphsd.HQ_VENDR_CD IS NULL
+            </otherwise>
+        </choose>
         GROUP
         BY       tphsd.REQ_DATE, tphsd.SLIP_FG, tphsd.PROC_FG
         ,        tphsd.PROD_CD, tmp.PROD_NM
@@ -145,8 +153,16 @@
         AND     suborder.STORE_CD(+) =   tphsd.STORE_CD
         AND     the.HQ_OFFICE_CD     =   #{hqOfficeCd}
         AND     the.ENVST_CD         =   '0011'
-        ORDER BY tphsd.PROD_CD
         ]]>
+        <choose>
+            <when test='vendrCd != null and vendrCd != ""'>
+              AND tphsd.HQ_VENDR_CD = #{vendrCd}
+            </when>
+            <otherwise>
+              AND tphsd.HQ_VENDR_CD IS NULL
+            </otherwise>
+        </choose>
+        ORDER BY tphsd.PROD_CD
     </select>
 
     <!-- 반품마감 - 반품마감 리스트 확정 -->
@@ -232,23 +248,33 @@
     <select id="getRtnDstbCloseProdAddProdList" parameterType="rtnDstbCloseProdVO" resultType="DefaultMap">
         /* USE : RtnDstbCloseProdMapper.getRtnDstbCloseProdAddProdList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        <![CDATA[
         SELECT  ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM
         ,       thp.PROD_CD
         ,       thp.PROD_NM
         , 		thp.SPLY_UPRC
         ,       thp.PO_UNIT_FG
         ,       thp.PO_UNIT_QTY
-        ]]>
         <include refid="CmmSQL.PagingTemplateCount"/>
-        <![CDATA[
         FROM    TB_HQ_PRODUCT thp
         ,       TB_HQ_PRODUCT_BARCD thpb
+        <if test='vendrCd != null and vendrCd != ""'>
+            ,       TB_HQ_VENDOR_PROD thvp
+        </if>
         WHERE   thp.HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     thp.PO_PROD_FG        IN ('1', '3')
         AND     thpb.HQ_OFFICE_CD(+)=   thp.HQ_OFFICE_CD
         AND     thpb.PROD_CD     (+)=   thp.PROD_CD
-        AND     thp.PROD_CD NOT IN  (SELECT PROD_CD FROM TB_PO_HQ_STORE_DISTRIBUTE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND REQ_DATE = #{reqDate} AND PROC_FG IN ('20','30') AND SLIP_FG = -1)
-        ]]>
+        <!-- AND     thp.PROD_CD NOT IN  (SELECT PROD_CD FROM TB_PO_HQ_STORE_DISTRIBUTE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND REQ_DATE = #{reqDate} AND PROC_FG IN ('20','30') AND SLIP_FG = -1) -->
+        <choose>
+            <when test='vendrCd != null and vendrCd != ""'>
+              AND thvp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+              AND thvp.VENDR_CD =  #{vendrCd}
+              AND thvp.PROD_CD = thp.PROD_CD
+              AND thvp.USE_YN = 'Y'
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
         <if test='prodCd != null and prodCd != ""'>
             AND thp.PROD_CD = #{prodCd}
         </if>
@@ -284,7 +310,6 @@
     -->
     <select id="getRtnDstbCloseProdAddRegistList" parameterType="rtnDstbCloseProdVO" resultMap="confirmListMap">
         /* USE : RtnDstbCloseProdMapper.getRtnDstbCloseProdAddRegistList */
-		        <![CDATA[
         SELECT  tms.STORE_CD, tms.STORE_NM
         ,       tmp.PROD_CD, tmp.PROD_NM
         ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
@@ -315,6 +340,14 @@
                     WHERE   tphsd.HQ_OFFICE_CD  =   #{hqOfficeCd}
                     AND     tphsd.REQ_DATE      =   #{reqDate}
                     AND     tphsd.SLIP_FG       =   #{slipFg}
+                    <choose>
+                        <when test='vendrCd != null and vendrCd != ""'>
+                          AND tphsd.HQ_VENDR_CD = #{vendrCd}
+                        </when>
+                        <otherwise>
+                          AND tphsd.HQ_VENDR_CD IS NULL
+                        </otherwise>
+                    </choose>
                     GROUP
                     BY      tphsd.STORE_CD, tphsd.PROD_CD, tphsd.SLIP_FG, tphsd.PO_UNIT_QTY
                 ) tphsd
@@ -392,14 +425,36 @@
         AND     suborder3.STORE_CD   (+) =   tms.STORE_CD
         AND     the.HQ_OFFICE_CD        =   #{hqOfficeCd}
         AND     the.ENVST_CD            =   '0011'
-
-        ]]>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND tms.STORE_CD IN
             <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
         </if>
+        <choose>
+            <when test='vendrCd != null and vendrCd != ""'>
+                AND tms.STORE_CD NOT IN (SELECT STORE_CD
+                                           FROM TB_PO_HQ_STORE_DISTRIBUTE
+                                          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                            AND REQ_DATE = #{reqDate}
+                                            AND PROD_CD = #{prodCd}
+                                            AND PROC_FG IN ('20','30')
+                                            AND SLIP_FG = #{slipFg}
+                                            AND HQ_VENDR_CD = #{vendrCd}
+                                            GROUP BY STORE_CD)
+            </when>
+            <otherwise>
+                AND tms.STORE_CD NOT IN (SELECT STORE_CD
+                                           FROM TB_PO_HQ_STORE_DISTRIBUTE
+                                          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                            AND REQ_DATE = #{reqDate}
+                                            AND PROD_CD = #{prodCd}
+                                            AND PROC_FG IN ('20','30')
+                                            AND SLIP_FG = #{slipFg}
+                                            AND HQ_VENDR_CD IS NULL
+                                            GROUP BY STORE_CD)
+            </otherwise>
+        </choose>
     </select>
 
     <!--  반품마감 추가등록 분배등록 저장 -->
@@ -442,7 +497,8 @@
         REG_DT,
         REG_ID,
         MOD_DT,
-        MOD_ID
+        MOD_ID,
+        HQ_VENDR_CD
         )
         VALUES
         (
@@ -470,7 +526,8 @@
         #{regDt},
         #{regId},
         #{modDt},
-        #{modId}
+        #{modId},
+        #{vendrCd}
         )
     </insert>
 

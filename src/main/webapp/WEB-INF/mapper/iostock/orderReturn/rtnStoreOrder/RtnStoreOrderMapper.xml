@@ -24,6 +24,8 @@
         ,        tphso.MD_AMT*tphso.SLIP_FG        AS MD_AMT
         ,        tphso.MD_VAT*tphso.SLIP_FG        AS MD_VAT
         ,        tphso.MD_TOT*tphso.SLIP_FG        AS MD_TOT
+        ,        tphso.HQ_VENDR_CD                 AS HQ_VENDR_CD
+        ,        NVL((SELECT VENDR_NM FROM TB_HQ_VENDOR WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND VENDR_CD = tphso.HQ_VENDR_CD), '본사') AS HQ_VENDR_NM
         FROM     TB_PO_HQ_STORE_ORDER tphso
         WHERE    tphso.STORE_CD   =   #{storeCd}
         ]]>
@@ -41,6 +43,16 @@
         </if>
         <if test='procFg != null and procFg != ""'>
             AND tphso.PROC_FG = #{procFg}
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+          <choose>
+              <when test='vendrCd != null and vendrCd != ""'>
+                AND tphso.HQ_VENDR_CD = #{vendrCd}
+              </when>
+              <otherwise>
+                AND tphso.HQ_VENDR_CD IS NULL
+              </otherwise>
+          </choose>
         </if>
         ORDER BY tphso.REQ_DATE DESC
     </select>
@@ -640,7 +652,6 @@
 				        , 		optionTb.ORDER_ETC_QTY
 				        , 		optionTb.ORDER_TOT_QTY
 				        </if>
-				        <![CDATA[
 				        FROM    TB_MS_PRODUCT tmp
 				        ,       TB_ST_STORE_STOCK_CUR tsssc
 				        ,       (   SELECT  PROD_CD, CURR_QTY
@@ -651,7 +662,9 @@
 				        ,       TB_PO_HQ_STORE_ORDER_DTL tphso
 				        ,       TB_PO_HQ_STORE_ORDER_DTL tphsod
 				        ,       TB_HQ_ENVST the
-				        ]]>
+                        <if test='vendrCd != null and vendrCd != ""'>
+                        ,       TB_HQ_VENDOR_PROD thvp
+                        </if>
 				        <if test='option2 == "ORD"'>
 				            ,   (   SELECT  tphsod.PROD_CD
 				            ,       TRUNC(SUM(tphsod.ORDER_TOT_QTY) / tphsod.PO_UNIT_QTY) AS ORDER_UNIT_QTY
@@ -694,7 +707,6 @@
 				            BY      tsdp.PROD_CD, tmp.PO_UNIT_QTY
 				            ) optionTb
 				        </if>
-				        <![CDATA[
 				        WHERE   tmp.STORE_CD          =   #{storeCd}
 				        AND     tmp.USE_YN            =   'Y'
                         AND     tmp.PO_PROD_FG        IN  ('1','3')
@@ -713,8 +725,14 @@
                     	AND     tphsod.SLIP_FG    (+) =   -1
 				        AND     the.HQ_OFFICE_CD      =   #{hqOfficeCd}
 				        AND     the.ENVST_CD          =   '0011'
-				        AND     TMP.PROD_CD NOT IN  (SELECT PROD_CD FROM TB_PO_HQ_STORE_DISTRIBUTE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND REQ_DATE = #{reqDate} AND PROC_FG IN ('20','30') AND SLIP_FG = -1)
-				        ]]>
+                        <choose>
+                            <when test='vendrCd != null and vendrCd != ""'>
+                                AND     TMP.PROD_CD NOT IN  (SELECT PROD_CD FROM TB_PO_HQ_STORE_DISTRIBUTE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = #{storeCd} AND REQ_DATE = #{reqDate} AND PROC_FG IN ('20','30') AND SLIP_FG = -1 AND HQ_VENDR_CD = #{vendrCd})
+                            </when>
+                            <otherwise>
+                                AND     TMP.PROD_CD NOT IN  (SELECT PROD_CD FROM TB_PO_HQ_STORE_DISTRIBUTE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = #{storeCd} AND REQ_DATE = #{reqDate} AND PROC_FG IN ('20','30') AND SLIP_FG = -1 AND HQ_VENDR_CD IS NULL)
+                            </otherwise>
+                        </choose>
 				        <if test='prodCd != null and prodCd != ""'>
 				            AND tmp.PROD_CD = #{prodCd}
 				        </if>
@@ -748,6 +766,12 @@
 				        <if test='option2 != null and option2 != ""'>
 				            AND optionTb.PROD_CD  = tmp.PROD_CD
 				        </if>
+                        <if test='vendrCd != null and vendrCd != ""'>
+                           AND thvp.HQ_OFFICE_CD = #{hqOfficeCd}
+                           AND thvp.VENDR_CD = #{vendrCd}
+                           AND thvp.PROD_CD = tmp.PROD_CD
+                           AND thvp.USE_YN = 'Y'
+                        </if>
 		        )A
       ORDER
       BY      A.PROD_CD
@@ -780,13 +804,19 @@
     -->
     <select id="getHdExist" parameterType="rtnStoreOrderVO" resultType="String">
         /* USE : RtnStoreOrderMapper.getHdExist */
-        <![CDATA[
         SELECT  DECODE(COUNT(*), 0, 'N', 'Y') AS IS_EXIST
         FROM    TB_PO_HQ_STORE_ORDER tphso
         WHERE   tphso.REQ_DATE    = #{reqDate}
         AND     tphso.STORE_CD    = #{storeCd}
         AND     tphso.SLIP_FG     = #{slipFg}
-        ]]>
+        <choose>
+            <when test='vendrCd != null and vendrCd != ""'>
+              AND tphso.HQ_VENDR_CD = #{vendrCd}
+            </when>
+            <otherwise>
+              AND tphso.HQ_VENDR_CD IS NULL
+            </otherwise>
+        </choose>
     </select>
 
     <!-- 반품등록 반품진행구분 조회 -->
@@ -1065,7 +1095,7 @@
              MOD_DT,
              MOD_ID
         )
-        SELECT  '001'
+        SELECT  '000'
         ,       tmp.PROD_CD
         ,       #{slipFg}
         ,   	#{date}
@@ -1115,12 +1145,28 @@
                 ) tpte
         ,       TB_MS_PRODUCT tmp
         ,       TB_MS_STORE_ENVST tmse
+        <if test='vendrCd != null and vendrCd != ""'>
+        ,       TB_HQ_VENDOR_PROD thvp
+        </if>
         WHERE   tmp.STORE_CD       =   #{storeCd}
         AND     tmp.STORE_CD       =   tpte.STORE_CD
         AND     tmp.PROD_CD        =   tpte.PROD_CD
         AND     tmse.STORE_CD      =   tmp.STORE_CD
         AND     tmse.ENVST_CD      =   '0011'
         AND     NVL(tpte.QTY,0)    >   0
+        <if test='vendrCd != null and vendrCd != ""'>
+           AND thvp.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND thvp.VENDR_CD = #{vendrCd}
+           AND thvp.PROD_CD = tpte.PROD_CD
+           AND thvp.USE_YN = 'Y'
+        </if>
+        AND tpte.PROD_CD IN ( SELECT PROD_CD
+                                FROM TB_PO_HQ_STORE_ORDER_DTL
+                               WHERE STORE_CD = #{storeCd}
+                                 AND SLIP_FG = 1
+                               GROUP
+                                  BY PROD_CD
+                             )
     </insert>
 
     <!-- 반품등록 반품상품 DTL 저장 -->
@@ -1176,7 +1222,7 @@
         DELETE  TB_PO_HQ_STORE_ORDER_PROD
         WHERE   REQ_DATE    = #{reqDate}
         AND     STORE_CD    = #{storeCd}
-        AND     SLIP_FG     = '1'
+        AND     SLIP_FG     = #{slipFg}
         AND     PROD_CD     = #{prodCd}
     </delete>
 
@@ -1212,7 +1258,8 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            HQ_VENDR_CD
         )
         SELECT  tphsod.REQ_DATE
         ,       tphsod.STORE_CD
@@ -1237,6 +1284,7 @@
         ,       #{regId}
         ,       #{modDt}
         ,       #{modId}
+        ,       #{vendrCd}
         FROM    TB_PO_HQ_STORE_ORDER_DTL tphsod
         WHERE   tphsod.REQ_DATE  = #{reqDate}
         AND     tphsod.STORE_CD  = #{storeCd}
@@ -1373,7 +1421,8 @@
         REG_DT,
         REG_ID,
         MOD_DT,
-        MOD_ID
+        MOD_ID,
+        HQ_VENDR_CD
         )
         SELECT  #{hqOfficeCd}
         ,       #{reqDate}
@@ -1416,6 +1465,7 @@
         ,       #{regId}
         ,       #{modDt}
         ,       #{modId}
+        ,       #{vendrCd}
         FROM    (   SELECT  PROD_CD         ,   PO_UNIT_FG     ,   PO_UNIT_QTY
         ,       REMARK
         ,       ORDER_SPLY_UPRC ,   ORDER_UNIT_QTY ,   ORDER_ETC_QTY      ,   ORDER_TOT_QTY       ,   ORDER_AMT       ,   ORDER_VAT       ,   ORDER_TOT
@@ -1532,7 +1582,7 @@
         DELETE  TB_PO_HQ_STORE_ORDER_PROD
         WHERE   REQ_DATE      = #{date}
         AND     STORE_CD      = #{storeCd}
-        AND     SLIP_FG       = '1'
+        AND     SLIP_FG       = #{slipFg}
         AND     PROD_CD       IN  ( SELECT  PROD_CD
                                     FROM    TB_PO_TEMP_EXCEL
                                     WHERE   SESSION_ID  = #{sessionId}
@@ -1610,12 +1660,28 @@
                 ) tpte
         ,       TB_MS_PRODUCT tmp
         ,       TB_MS_STORE_ENVST tmse
+        <if test='vendrCd != null and vendrCd != ""'>
+        ,       TB_HQ_VENDOR_PROD thvp
+        </if>
         WHERE   tmp.STORE_CD       =   #{storeCd}
         AND     tmp.STORE_CD       =   tpte.STORE_CD
         AND     tmp.PROD_CD        =   tpte.PROD_CD
         AND     tmse.STORE_CD      =   tmp.STORE_CD
         AND     tmse.ENVST_CD      =   '0011'
         AND     NVL(tpte.QTY,0)    >   0
+        <if test='vendrCd != null and vendrCd != ""'>
+           AND thvp.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND thvp.VENDR_CD = #{vendrCd}
+           AND thvp.PROD_CD = tpte.PROD_CD
+           AND thvp.USE_YN = 'Y'
+        </if>
+        AND tpte.PROD_CD IN ( SELECT PROD_CD
+                                FROM TB_PO_HQ_STORE_ORDER_DTL
+       						   WHERE STORE_CD = #{storeCd}
+       						     AND SLIP_FG = 1
+       						   GROUP
+       						      BY PROD_CD
+       						 )
     </insert>
 
 

@@ -88,13 +88,13 @@
         AND     tmp.PROD_CD         =   tphsd.PROD_CD
         ]]>
         <if test='dateFg == "req"'>
-            AND tphsd.REQ_DATE BETWEEN #{startDate} AND #{endDate}
+            AND tphsd.REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
         </if>
         <if test='dateFg == "reg"'>
-            AND tphsd.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+            AND tphsd.REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
         </if>
         <if test='dateFg == "mod"'>
-            AND tphsd.MOD_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+            AND tphsd.REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
         </if>
         <choose>
            <when test='vendrCd != null and vendrCd != ""'>
@@ -163,13 +163,13 @@
         AND     tphdcs.STORAGE_CD   (+) =   tphsd.STORAGE_CD
         ]]>
         <if test='dateFg == "req"'>
-            AND tphsd.REQ_DATE BETWEEN #{startDate} AND #{endDate}
+            AND tphsd.REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
         </if>
         <if test='dateFg == "reg"'>
-            AND tphsd.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+            AND tphsd.REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
         </if>
         <if test='dateFg == "mod"'>
-            AND tphsd.MOD_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+            AND tphsd.REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
         </if>
         <![CDATA[
         GROUP
@@ -197,13 +197,13 @@
         AND     STORE_CD      = #{storeCd}
         AND     PROC_FG       = #{procFg}
         <if test='dateFg == "req"'>
-            AND REQ_DATE BETWEEN #{startDate} AND #{endDate}
+            AND REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
         </if>
         <if test='dateFg == "reg"'>
-            AND REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+            AND REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
         </if>
         <if test='dateFg == "mod"'>
-            AND MOD_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+            AND REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
         </if>
         <if test='vendrCd != null and vendrCd != ""'>
             AND PROD_CD IN  (   SELECT  PROD_CD
@@ -335,20 +335,22 @@
         	,	STORAGE_CD    
         	,	'12'
         	,   STORE_CD   
-        	,	'-1'     
- 			,	ORDER_UNIT_QTY
- 			,  	ORDER_ETC_QTY
-  			,	ORDER_TOT_QTY
-  			,	ORDER_AMT
-  			,	ORDER_VAT
-  			,	ORDER_TOT
+        	,	'-1'
+ 			,	SUM(ORDER_UNIT_QTY)
+ 			,  	SUM(ORDER_ETC_QTY)
+  			,	SUM(ORDER_TOT_QTY)
+  			,	SUM(ORDER_AMT)
+  			,	SUM(ORDER_VAT)
+  			,	SUM(ORDER_TOT)
         	,   #{regDt}                
         	,   #{regId}
         	,   #{modDt}                
         	,   #{modId}
-        FROM    TB_PO_HQ_STORE_ORDER_PROD
-        WHERE   REQ_DATE    =   #{reqDate}
-        AND     STORE_CD    =   #{storeCd}
+        FROM    TB_PO_HQ_STORE_OUTSTOCK_DTL
+        WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+          AND   SLIP_NO         =   #{slipNo}
+        GROUP
+           BY   PROD_CD, STORE_CD
 
     </insert>
 </mapper>

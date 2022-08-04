@@ -12,6 +12,9 @@ app.controller('rtnInstockConfmCtrl', ['$scope', '$http', '$timeout', function (
   var srchStartDate = wcombo.genDateVal("#srchStartDate", gvStartDate);
   var srchEndDate   = wcombo.genDateVal("#srchEndDate", gvEndDate);
 
+  // 본사 거래처 콤보박스
+  $scope._setComboData('vendrCd', vendrList);
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     $scope.setCombo();
@@ -49,6 +52,7 @@ app.controller('rtnInstockConfmCtrl', ['$scope', '$http', '$timeout', function (
           params.endDate    = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
           params.slipFg = $scope.slipFg;
           params.slipNo = selectedRow.slipNo;
+          params.vendrCd = $scope.vendrCdCombo.selectedValue;
           $scope._broadcast('rtnInstockConfmDtlCtrl', params);
         }
       }
@@ -58,6 +62,12 @@ app.controller('rtnInstockConfmCtrl', ['$scope', '$http', '$timeout', function (
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
     s.bottomLeftCells.setCellData(0, 0, '합계');
+
+    // 현재 로그인 사원에 맵핑된 거래처코드로 셋팅(없으면 '본사'로 셋팅됨.)
+    $scope.vendrCdCombo.selectedValue = empVendrCd;
+    // 거래처는 수정 못하게 처리
+    $("#vendrCd").attr("disabled", true);
+    $("#vendrCd").css('background-color', '#F0F0F0');
   };
 
 
@@ -96,6 +106,7 @@ app.controller('rtnInstockConfmCtrl', ['$scope', '$http', '$timeout', function (
     params.slipFg    = $scope.slipFg;
     params.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
     params.endDate   = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
+    params.vendrCd   = $scope.vendrCdCombo.selectedValue;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/orderReturn/rtnInstockConfm/rtnInstockConfm/list.sb", params);

@@ -20,6 +20,9 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
     {"name": messages["rtnStoreOrder.dtl.addQtyFgAdd"], "value": "add"}
   ]);
 
+  // 본사 거래처 콤보박스
+  $scope._setComboData('dtlVendrCd', vendrList);
+
   $scope.srchRegStartDate = wcombo.genDate("#srchRegStartDate");
   $scope.srchRegEndDate   = wcombo.genDate("#srchRegEndDate");
   
@@ -193,6 +196,11 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
       $scope.callParent  = data.callParent;
       $scope.regHdRemark = data.hdRemark;
       $scope.storeCd     = data.storeCd;
+      $scope.vendrCd     = data.vendrCd;
+
+      // 거래처는 수정 못하게 처리
+      $("#dtlVendrCd").attr("disabled", true);
+      $("#dtlVendrCd").css('background-color', '#F0F0F0');
 
       // 값 초기화
       $scope.prodClassCdNm = messages["cmm.all"];
@@ -284,6 +292,7 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
     params.endDate   = wijmo.Globalize.format($scope.srchRegEndDate.value, 'yyyyMMdd');
     params.storeCd   = $scope.storeCd;
     params.listScale = 50;
+    params.vendrCd   = $scope.vendrCd;
     
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderRegist/list.sb", params);
@@ -316,6 +325,7 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
       item.hdRemark  = $scope.regHdRemark;
       item.storeCd   = $scope.storeCd;
       item.outStorageCd	= $scope.save.dtl.rtnRegOutStorageCd;
+      item.vendrCd   = $scope.vendrCd;
       orderTot += parseInt(item.orderTot);
 
       params.push(item);
@@ -351,7 +361,7 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
   };
 
   // 옵션2 값 변경 이벤트 함수
-  $scope.selectedIndexChanged = function (s, e) {
+  $scope.selectedOption2Changed = function (s, e) {
     if (s.selectedValue === "") {
       $scope.option2LayerHide();
     }
@@ -448,6 +458,7 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
         excelUploadScope.storeCd    = $scope.storeCd;
         /** 부모컨트롤러 값을 넣으면 업로드가 완료된 후 uploadCallBack 이라는 함수를 호출해준다. */
         excelUploadScope.parentCtrl = 'rtnStoreOrderRegistCtrl';
+        excelUploadScope.vendrCd = $scope.vendrCd;
         // 엑셀 업로드
         if (prcsFg === 'excelUp') {
           $("#excelUpFile").val('');
@@ -471,6 +482,7 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
     params.slipFg   = $scope.slipFg;
     params.hdRemark = $scope.regHdRemark;
     params.addQtyFg = $scope.addQtyFg;
+    params.vendrCd  = $scope.vendrCd;
     
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
@@ -587,6 +599,15 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
         }, 10);
       }
     });
+  };
+
+  // 확장조회 숨김/보임
+  $scope.searchAddShowChange = function(){
+      if( $("#tblSearchAddShow").css("display") === 'none') {
+          $("#tblSearchAddShow").show();
+      } else {
+          $("#tblSearchAddShow").hide();
+      }
   };
 
 }]);

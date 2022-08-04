@@ -45,6 +45,14 @@
         <if test='dateFg == "mod"'>
             AND tphsd.MOD_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
         </if>
+        <choose>
+            <when test='vendrCd != null and vendrCd != ""'>
+              AND tphsd.HQ_VENDR_CD = #{vendrCd}
+            </when>
+            <otherwise>
+              AND tphsd.HQ_VENDR_CD IS NULL
+            </otherwise>
+        </choose>
         GROUP
         BY      tphsd.SLIP_FG, tphsd.STORE_CD, tms.STORE_NM, tms.SYS_STAT_FG, tphsl.CURR_LOAN_AMT, tphsl.AVAILABLE_ORDER_AMT,tphsd.REQ_DATE
         ORDER
@@ -88,6 +96,14 @@
         <if test='dateFg == "mod"'>
             AND tphsd.REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
         </if>
+        <choose>
+           <when test='vendrCd != null and vendrCd != ""'>
+             AND tphsd.HQ_VENDR_CD = #{vendrCd}
+           </when>
+           <otherwise>
+             AND tphsd.HQ_VENDR_CD IS NULL
+           </otherwise>
+        </choose>
         ORDER
         BY      tphsd.STORE_CD, tphsd.PROD_CD, DSTB_SPLY_UPRC DESC, tphsd.SEQ
     </select>
@@ -199,6 +215,7 @@
                                                           WHERE   thvp.VENDR_CD     =   #{vendrCd}
                                                           AND     thb.HQ_OFFICE_CD  =   #{hqOfficeCd}
                                                           AND     thb.HQ_BRAND_CD   =   thvp.HQ_BRAND_CD
+                                                          AND     thb.USE_YN = 'Y'
                                                       )
                             )
         </if>

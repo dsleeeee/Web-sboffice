@@ -56,6 +56,14 @@
         <if test='storeNm != null and storeNm != ""'>
             AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
         </if>
+        <choose>
+            <when test='vendrCd != null and vendrCd != ""'>
+              AND tphsd.HQ_VENDR_CD = #{vendrCd}
+            </when>
+            <otherwise>
+              AND tphsd.HQ_VENDR_CD IS NULL
+            </otherwise>
+        </choose>
         GROUP
         BY       tphsd.REQ_DATE, tphsd.SLIP_FG, tphsd.PROC_FG
         ,        tphsd.STORE_CD, tms.STORE_NM
@@ -119,8 +127,16 @@
         AND     tsssc.PROD_CD    (+) =   tphsd.PROD_CD
         AND     the.HQ_OFFICE_CD     =   #{hqOfficeCd}
         AND     the.ENVST_CD         =   '0011'
-        ORDER BY tphsd.PROD_CD
         ]]>
+        <choose>
+            <when test='vendrCd != null and vendrCd != ""'>
+              AND tphsd.HQ_VENDR_CD = #{vendrCd}
+            </when>
+            <otherwise>
+              AND tphsd.HQ_VENDR_CD IS NULL
+            </otherwise>
+        </choose>
+        ORDER BY tphsd.PROD_CD
     </select>
 
     <!-- 분배마감 - 분배마감 리스트 확정 -->
@@ -618,6 +634,9 @@
         ,       TB_MS_PRODUCT_BARCD tmpb
         ,       TB_HQ_ENVST the
         ]]>
+        <if test='vendrCd != null and vendrCd != ""'>
+            ,       TB_HQ_VENDOR_PROD thvp
+        </if>
         <if test='option2 == "ORD"'>
             ,   (   SELECT  tphsod.PROD_CD
                     ,       TRUNC(SUM(tphsod.ORDER_TOT_QTY) / tphsod.PO_UNIT_QTY) AS ORDER_UNIT_QTY
@@ -663,6 +682,7 @@
         <![CDATA[
         WHERE   tmp.STORE_CD          =   #{storeCd}
         AND     tmp.USE_YN            =   'Y'
+        AND     tmp.PO_PROD_FG        IN ('1', '3')
         AND     tsssc.STORAGE_CD      =   '999'
         AND     tsssc.STORE_CD    (+) =   tmp.STORE_CD
         AND     tsssc.PROD_CD     (+) =   tmp.PROD_CD
@@ -676,6 +696,18 @@
         AND     the.HQ_OFFICE_CD      =   #{hqOfficeCd}
         AND     the.ENVST_CD          =   '0011'
         ]]>
+        <choose>
+            <when test='vendrCd != null and vendrCd != ""'>
+              AND thp.PROD_CD NOT IN (SELECT PROD_CD FROM TB_PO_HQ_STORE_DISTRIBUTE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = #{storeCd} AND REQ_DATE = #{reqDate} AND PROC_FG IN ('20','30') AND SLIP_FG = #{slipFg} AND HQ_VENDR_CD = #{vendrCd} )
+              AND thvp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+              AND thvp.VENDR_CD =  #{vendrCd}
+              AND thvp.PROD_CD = thp.PROD_CD
+              AND thvp.USE_YN = 'Y'
+            </when>
+            <otherwise>
+              AND     thp.PROD_CD NOT IN (SELECT PROD_CD FROM TB_PO_HQ_STORE_DISTRIBUTE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = #{storeCd} AND REQ_DATE = #{reqDate} AND PROC_FG IN ('20','30') AND SLIP_FG = #{slipFg} AND HQ_VENDR_CD IS NULL )
+            </otherwise>
+        </choose>
         <if test='prodCd != null and prodCd != ""'>
             AND tmp.PROD_CD = #{prodCd}
         </if>
@@ -686,7 +718,7 @@
             AND tmpb.BARCD_CD = #{barcdCd}
         </if>
         <if test="prodClassCd != null and prodClassCd != ''">
-            AND tmp.PROD_CLASS_CD IN  ( SELECT  #{prodClassCd} AS PROD_CLASS_CD
+          <!--  AND tmp.PROD_CLASS_CD IN  ( SELECT  #{prodClassCd} AS PROD_CLASS_CD
                                         FROM    DUAL
                                         UNION
                                         SELECT  tmpc.PROD_CLASS_CD
@@ -694,6 +726,18 @@
                                         WHERE   tmpc.STORE_CD = #{storeCd}
                                         START WITH  tmpc.P_PROD_CLASS_CD = #{prodClassCd}   AND     tmpc.STORE_CD = #{storeCd}
                                         CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD   AND     tmpc.STORE_CD = #{storeCd}
+                                      )
+            -->
+            AND	tmp.PROD_CLASS_CD in (SELECT
+            									      PROD_CLASS_CD
+            									  FROM
+            									      TB_MS_PRODUCT_CLASS tmpc
+            									  WHERE
+            									      tmpc.STORE_CD = #{storeCd}
+            									  START WITH
+            									      tmpc.PROD_CLASS_CD = #{prodClassCd} AND tmpc.STORE_CD = #{storeCd}
+            									  CONNECT BY
+            									      PRIOR tmpc.PROD_CLASS_CD = tmpc.P_PROD_CLASS_CD  AND tmpc.STORE_CD = #{storeCd}
                                       )
         </if>
         <if test='option1 == "S"'>
@@ -749,7 +793,8 @@
         REG_DT,
         REG_ID,
         MOD_DT,
-        MOD_ID
+        MOD_ID,
+        HQ_VENDR_CD
         )
         VALUES
         (
@@ -777,7 +822,8 @@
         #{regDt},
         #{regId},
         #{modDt},
-        #{modId}
+        #{modId},
+        #{vendrCd}
         )
     </insert>
 

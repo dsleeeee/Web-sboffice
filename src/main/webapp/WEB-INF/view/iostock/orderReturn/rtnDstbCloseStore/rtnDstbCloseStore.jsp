@@ -75,11 +75,27 @@
     <tr>
     <%-- 출고요청일자 --%>
     <th><s:message code="rtnDstbCloseStore.reqDate"/></th>
-    <td colspan="3">
+    <td>
       <div class="sb-select fl mr10">
         <span class="txtIn"><input id="reqDate" class="w150px"></span>
       </div>
       <a href="#" class="btn_grayS" ng-click="add()"><s:message code="rtnDstbCloseStore.addRegist"/></a>
+    </td>
+    <%-- 거래처 --%>
+    <th <c:if test="${envst1242 == '0'}">style="display: none;"</c:if>><s:message code="dstbCloseProd.vender"/></th>
+    <td <c:if test="${envst1242 == '0'}">style="display: none;"</c:if>>
+      <div class="sb-select fl w150px">
+        <wj-combo-box
+          id="vendrCd"
+          ng-model="vendrCd"
+          control="vendrCdCombo"
+          items-source="_getComboData('vendrCd')"
+          display-member-path="name"
+          selected-value-path="value"
+          is-editable="false"
+          initialized="_initComboBox(s)">
+        </wj-combo-box>
+      </div>
     </td>
     </tr>
     </tbody>
@@ -131,7 +147,16 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnDstbCloseStore/rtnDstbCloseStore.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript">
+
+  var gEnvst1242  = '${envst1242}';
+  var empVendrCd = '${empVendrCd}';
+
+  <%-- 본사 거래처 콤보박스 --%>
+  var vendrList = ${vendrList};
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnDstbCloseStore/rtnDstbCloseStore.js?ver=20220804.01" charset="utf-8"></script>
 
 <%-- 반품마감 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/orderReturn/rtnDstbCloseStore/rtnDstbCloseStoreDtl.jsp">

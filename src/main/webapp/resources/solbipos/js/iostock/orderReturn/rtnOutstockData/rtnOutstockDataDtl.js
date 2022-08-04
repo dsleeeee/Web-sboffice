@@ -27,6 +27,7 @@ app.controller('rtnOutstockDataDtlCtrl', ['$scope', '$http', '$timeout', functio
     $scope.storeNm   = data.storeNm;
     $scope.slipFg    = data.slipFg;
     $scope.reqDate   = data.reqDate;
+    $scope.vendrCd   = data.vendrCd;
 
     $scope.wjRtnOutstockDataDtlLayer.show(true);
     $("#spanDtlTitle").html('['+messages["rtnOutstockData.dtl.orderReturn"]+'] ' + '[' + $scope.storeCd + '] ' + $scope.storeNm);
@@ -47,6 +48,7 @@ app.controller('rtnOutstockDataDtlCtrl', ['$scope', '$http', '$timeout', functio
     params.storeCd   = $scope.storeCd;
     params.slipFg    = $scope.slipFg;
     params.reqDate   = $scope.reqDate;
+    params.vendrCd   = $scope.vendrCd;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/iostock/orderReturn/rtnOutstockData/rtnOutstockDataDtl/list.sb", params, function () {
     });

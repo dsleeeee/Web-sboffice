@@ -83,6 +83,8 @@ app.controller('rtnDstbCloseProdDtlCtrl', ['$scope', '$http', '$timeout', functi
     $scope.prodNm  = data.prodNm;
     $scope.slipFg  = data.slipFg;
     $scope.procFg  = data.procFg;
+    $scope.vendrCd = data.vendrCd;
+
 
     $scope.wjRtnDstbCloseProdDtlLayer.show(true);
     $("#spanDtlTitle").html('['+messages["rtnDstbCloseProd.dtl.orderReturn"]+'] ' + '[' + $scope.prodCd + '] ' + $scope.prodNm);
@@ -107,6 +109,7 @@ app.controller('rtnDstbCloseProdDtlCtrl', ['$scope', '$http', '$timeout', functi
     params.prodCd  = $scope.prodCd;
     params.slipFg  = $scope.slipFg;
     params.procFg  = $scope.procFg;
+    params.vendrCd = $scope.vendrCd;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/iostock/orderReturn/rtnDstbCloseProd/rtnDstbCloseProdDtl/list.sb", params, function () {
     });

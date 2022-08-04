@@ -4,10 +4,11 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="baseUrl" value="/iostock/orderReturn/rtnStoreOrder/rtnStoreOrder/"/>
 
 <div class="subCon" ng-controller="rtnStoreOrderCtrl">
-  <div class="searchBar flddUnfld">
+  <div class="searchBar">
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('rtnStoreOrderCtrl')">
@@ -25,7 +26,7 @@
     <tr>
       <%-- 조회일자 --%>
       <th><s:message code="cmm.search.date"/></th>
-      <td>
+      <td colspan="3">
         <div class="sb-select">
           <span class="txtIn w150px">
           <wj-combo-box
@@ -64,7 +65,7 @@
     <tr>
       <%-- 반품요청일자 --%>
       <th><s:message code="rtnStoreOrder.reqDate"/></th>
-      <td>
+      <td colspan="3">
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
           <%-- 매장선택 모듈 싱글 선택 사용시 include
                param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
@@ -82,6 +83,19 @@
         </c:if>
         <div class="sb-select fl mr10">
           <span class="txtIn"><input id="reqDate" class="w150px" ng-model="rtnStoreOrder.reqDate"></span>
+        </div>
+        <%-- 거래처 --%>
+        <div class="sb-select fl w150px" <c:if test="${envst1242 == '0'}">style="display: none;"</c:if>>
+          <wj-combo-box
+            id="vendrCd"
+            ng-model="vendrCd"
+            control="vendrCdCombo"
+            items-source="_getComboData('vendrCd')"
+            display-member-path="name"
+            selected-value-path="value"
+            is-editable="false"
+            initialized="_initComboBox(s)">
+          </wj-combo-box>
         </div>
         <a href="#" class="btn_grayS" ng-click="newReqOrder()"><s:message code="rtnStoreOrder.reqRegist"/></a>
       </td>
@@ -109,11 +123,13 @@
         <wj-flex-grid-column header="<s:message code="rtnStoreOrder.reqDate"/>"  binding="reqDate" 	width="100" align="center" 	is-read-only="true" format="date"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnStoreOrder.slipFg"/>"   binding="slipFg" 	width="70" 	align="center" 	is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnStoreOrder.procFg"/>"   binding="procFg" 	width="70" 	align="center" 	is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.vendr"/>"    binding="hqVendrNm" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtlCnt"/>"   binding="dtlCnt" 	width="70" 	align="right" 	is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnStoreOrder.orderAmt"/>" binding="orderAmt" width="130" align="right" 	is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnStoreOrder.orderVat"/>" binding="orderVat" width="130" align="right" 	is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnStoreOrder.orderTot"/>" binding="orderTot" width="130" align="right" 	is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnStoreOrder.remark"/>"   binding="remark" 	width="*" 	align="left" 	is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.vendr"/>"    binding="hqVendrCd" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>
@@ -128,17 +144,25 @@
 
 
 <script type="text/javascript">
-var gReqDate = "${reqDate}";
-var gEnvst1044 = "${envst1044}";
-var gEnvst1042 	= '${envst1042}';
-/*
-console.log('gReqDate  : ' + gReqDate);
-console.log('gEnvst1044: ' + gEnvst1044);
-console.log('gEnvst1042: ' + gEnvst1042);
-*/
+  var orgnFg = "${orgnFg}";
+  var gReqDate = "${reqDate}";
+  var gEnvst1044 = "${envst1044}";
+  var gEnvst1042 	= '${envst1042}';
+  var gEnvst1242  = '${envst1242}';
+  /*
+  console.log('gReqDate  : ' + gReqDate);
+  console.log('gEnvst1044: ' + gEnvst1044);
+  console.log('gEnvst1042: ' + gEnvst1042);
+  console.log('gEnvst1242: ' + gEnvst1242);
+  */
+
+  <%-- 본사 거래처 콤보박스 --%>
+  var vendrList = ${vendrList};
+  var empVendrCd = '${empVendrCd}';
+
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnStoreOrder/rtnStoreOrder.js?ver=20200804.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnStoreOrder/rtnStoreOrder.js?ver=20220804.01" charset="utf-8"></script>
 
 <%-- 반품등록 상품 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderDtl.jsp">

@@ -64,6 +64,7 @@ public class RtnDstbReqServiceImpl implements RtnDstbReqService {
                 rtnDstbReqVO.setRegDt(currentDt);
                 rtnDstbReqVO.setModId(sessionInfoVO.getUserId());
                 rtnDstbReqVO.setModDt(currentDt);
+                rtnDstbReqVO.setRemark(orderProcFg.get("remark"));
 
                 if(orderProcFg.get("procFg").equals("00")) {
                     // MD수량 관련 내용을 주문내역으로 수정
@@ -76,6 +77,7 @@ public class RtnDstbReqServiceImpl implements RtnDstbReqService {
                 storeOrderVO.setProcFg("20");
                 storeOrderVO.setModId(sessionInfoVO.getUserId());
                 storeOrderVO.setModDt(currentDt);
+                storeOrderVO.setRemark(orderProcFg.get("remark"));
                 result = storeOrderMapper.updateStoreOrder(storeOrderVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 returnResult += result;
@@ -123,6 +125,7 @@ public class RtnDstbReqServiceImpl implements RtnDstbReqService {
                 storeOrderVO.setRegDt(currentDt);
                 storeOrderVO.setModId(sessionInfoVO.getUserId());
                 storeOrderVO.setModDt(currentDt);
+                storeOrderVO.setVendrCd(rtnDstbReqVO.getVendrCd());
             }
 
             int slipFg       = rtnDstbReqVO.getSlipFg();
@@ -172,6 +175,7 @@ public class RtnDstbReqServiceImpl implements RtnDstbReqService {
             rtnDstbReqVO.setRegDt(currentDt);
             rtnDstbReqVO.setModId(sessionInfoVO.getUserId());
             rtnDstbReqVO.setModDt(currentDt);
+            rtnDstbReqVO.setVendrCd(storeOrderVO.getVendrCd());
 
             result = rtnDstbReqMapper.insertRtnDstbReqRegist(rtnDstbReqVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));

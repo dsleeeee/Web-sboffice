@@ -160,6 +160,7 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
 	    $scope.procFg      = data.procFg;
 	    $scope.dtlHdRemark = data.hdRemark;
 	    $scope.storeCd     = data.storeCd;
+	    $scope.vendrCd     = data.vendrCd;
 
 	    $scope.wjRtnStoreOrderDtlLayer.show(true);
 	    if ($scope.procFg === "00") {
@@ -365,6 +366,7 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
       item.hdRemark  = $scope.dtlHdRemark;
       item.storeCd   = $scope.storeCd;
       item.outStorageCd	= $scope.save.dtl.rtnOutStorageCd;
+      item.vendrCd = $scope.vendrCd;
       orderTot += parseInt(item.orderTot);
            
       
@@ -398,6 +400,7 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
     params.remark  = $scope.dtlHdRemark;
     params.storeCd = $scope.storeCd;
     params.envst1042= gEnvst1042;
+    params.vendrCd = $scope.vendrCd;
     
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
@@ -413,7 +416,7 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
   // 저장 후 콜백 함수
   $scope.saveOrderDtlCallback = function () {
     $scope.searchRtnStoreOrderDtlList();
-    $scope.wjRtnStoreOrderDtlLayer.hide(true);
+    //$scope.wjRtnStoreOrderDtlLayer.hide(true);
     var rtnStoreOrderScope = agrid.getScope('rtnStoreOrderCtrl');
     rtnStoreOrderScope.searchRtnStoreOrderList();
   };
@@ -427,6 +430,7 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
     params.slipFg     = $scope.slipFg;
     params.hdRemark   = $scope.dtlHdRemark;
     params.storeCd    = $scope.storeCd;
+    params.vendrCd    = $scope.vendrCd;
     $scope._broadcast("rtnStoreOrderRegistCtrl", params);
   };
 

@@ -9,6 +9,10 @@ import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqService;
+import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqVO;
+import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderService;
+import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderVO;
 import kr.co.solbipos.iostock.orderReturn.rtnInstockConfm.service.RtnInstockConfmService;
 import kr.co.solbipos.iostock.orderReturn.rtnInstockConfm.service.RtnInstockConfmVO;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
@@ -23,6 +27,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : RtnInstockConfmController.java
@@ -48,13 +54,17 @@ public class RtnInstockConfmController {
     private final RtnInstockConfmService rtnInstockConfmService;
     private final CmmEnvService cmmEnvService;
     private final CmmEnvUtil cmmEnvUtil;
+    private final DstbReqService dstbReqService;
+    private final StoreOrderService storeOrderService;
 
     @Autowired
-    public RtnInstockConfmController(SessionService sessionService, RtnInstockConfmService rtnInstockConfmService, CmmEnvService cmmEnvService, CmmEnvUtil cmmEnvUtil) {
+    public RtnInstockConfmController(SessionService sessionService, RtnInstockConfmService rtnInstockConfmService, CmmEnvService cmmEnvService, CmmEnvUtil cmmEnvUtil, DstbReqService dstbReqService, StoreOrderService storeOrderService) {
         this.sessionService = sessionService;
         this.rtnInstockConfmService = rtnInstockConfmService;
         this.cmmEnvService = cmmEnvService;
         this.cmmEnvUtil = cmmEnvUtil;
+        this.dstbReqService = dstbReqService;
+        this.storeOrderService = storeOrderService;
     }
 
     /**
@@ -86,6 +96,18 @@ public class RtnInstockConfmController {
             model.addAttribute("storageEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1241"), "0"));
             System.out.println("storageEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1241"), "0"));
         }
+
+        // 본사 환경설정 1242(거래처출고사용여부) 조회
+        hqEnvstVO.setEnvstCd("1242");
+        model.addAttribute("envst1242", CmmUtil.nvl(cmmEnvService.getHqEnvst(hqEnvstVO), "0"));
+
+        // 본사 거래처 콤보박스
+        StoreOrderVO storeOrderVO = new StoreOrderVO();
+        model.addAttribute("vendrList", convertToJson(storeOrderService.getHqVendrCombo(storeOrderVO, sessionInfoVO)));
+
+        // 현재 로그인 사원에 맵핑된 거래처코드 조회
+        DstbReqVO dstbReqVO = new DstbReqVO();
+        model.addAttribute("empVendrCd", dstbReqService.getEmployeeVendr(dstbReqVO, sessionInfoVO));
 
         return "iostock/orderReturn/rtnInstockConfm/rtnInstockConfm";
     }

@@ -6,17 +6,19 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/iostock/orderReturn/rtnDstmn/rtnDstmnDtl/"/>
 
-<wj-popup id="wjRtnDstmnDtlLayer" control="wjRtnDstmnDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+<wj-popup id="wjRtnDstmnDtlLayer" control="wjRtnDstmnDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px;height: 750px;">
   <div id="rtnDstmnDtlLayer" class="wj-dialog wj-dialog-columns" ng-controller="rtnDstmnDtlCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
-      <span id="spanDtlTitle"></span>
+      <label id="lblTitle"></label>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
-    <div class="wj-dialog-body sc2" style="height: 600px;">
-      <table class="tblType01">
+    <div class="wj-dialog-body sc2" style="height: 700px;">
+      <table class="tblType01 mt10">
         <colgroup>
-          <col class="w20"/>
-          <col class="w80"/>
+          <col class="w15"/>
+          <col class="w35"/>
+          <col class="w15"/>
+          <col class="w35"/>
         </colgroup>
         <tbody>
         <tr>
@@ -25,18 +27,16 @@
           <td>
             <input type="text" id="hdRemark" name="hdRemark" ng-model="hdRemark" class="sb-input w100" maxlength="300"/>
           </td>
-        </tr>
-        <tr>
           <%-- 본사비고(매장열람불가) --%>
           <th><s:message code="rtnOutstockConfm.dtl.hqRemark"/></th>
           <td>
             <input type="text" id="hqRemark" name="hqRemark" ng-model="hqRemark" class="sb-input w100" maxlength="300"/>
           </td>
         </tr>
-        <tr>
+        <tr style="display: none;">
           <%-- 배송기사 --%>
           <th><s:message code="rtnOutstockConfm.dtl.dlvrNm"/></th>
-          <td>
+          <td colspan="3">
             <span class="txtIn w150px sb-select fl mr5">
               <wj-combo-box
                 id="srchDtlDlvrCd"
@@ -72,11 +72,13 @@
         </tbody>
       </table>
 
-      <ul class="txtSty3 mt10">
-        <li class="red"><s:message code="rtnOutstockConfm.dtl.txt1"/></li>
-        <li class="red"><s:message code="rtnOutstockConfm.dtl.txt2"/></li>
-        <li class="red"><s:message code="rtnOutstockConfm.dtl.txt3"/></li>
-      </ul>
+      <div class="tooltipBtn mt20 fl">설명
+        <span class="tooltiptext tooltip-right">
+        * <s:message code="rtnOutstockConfm.dtl.txt1"/><br/>
+        * <s:message code="rtnOutstockConfm.dtl.txt2"/><br/>
+        * <s:message code="rtnOutstockConfm.dtl.txt3"/><br/>
+        </span>
+      </div>
 
       <div class="tr mt20 fr">
         <div id="outstockBtnLayer" style="display: none;">
@@ -103,7 +105,7 @@
 
       <div class="w100 mt10 mb20">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 400px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="wj-gridWrap" style="height: 450px; overflow-y: hidden; overflow-x: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
@@ -121,17 +123,17 @@
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.storeCd"/>" 	binding="storeCd" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.prodCd"/>" 	binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.prodNm"/>" 	binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.barcdCd"/>" 	binding="barcdCd" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.barcdCd"/>" 	binding="barcdCd" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.outSplyUprc"/>" binding="outSplyUprc" width="70" align="right" is-read-only="false" max-length=10 data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.poUnitQty"/>" binding="poUnitQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.outSplyUprc"/>" binding="outSplyUprc" width="65" align="right" is-read-only="false" max-length=10 data-type="Number" format="n0"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.outUnitQty"/>" binding="outUnitQty" width="70" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.outUnitQty"/>" binding="outEtcQty" width="70" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.outTotQty"/>" binding="outTotQty" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.outAmt"/>" 	 binding="outAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.outVat"/>" 	 binding="outVat" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.outTot"/>" 	 binding="outTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.remark"/>" 	 binding="remark" width="200" align="left" is-read-only="false" max-length=300></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.outAmt"/>" 	 binding="outAmt" width="60" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.outVat"/>" 	 binding="outVat" width="60" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.outTot"/>" 	 binding="outTot" width="60" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.remark"/>" 	 binding="remark" width="150" align="left" is-read-only="false" max-length=300></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.vatFg"/>" 	 binding="vatFg01" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.envst0011"/>" binding="envst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.envst0011"/>" binding="orderUnitQty" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -162,4 +164,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnDstmn/rtnDstmnDtl.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnDstmn/rtnDstmnDtl.js?ver=20220804.01" charset="utf-8"></script>

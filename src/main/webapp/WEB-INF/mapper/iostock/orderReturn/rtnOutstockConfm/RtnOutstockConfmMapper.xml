@@ -66,6 +66,7 @@
         ,        (CASE WHEN tphso.PROC_FG >= '20' THEN userInfo.EMP_NM                 ELSE NULL END) AS OUT_NM
         ,        tphso.REMARK, tphso.HQ_REMARK, tphso.DLVR_CD, tphdc.DLVR_NM
         ,        tphsod.PENALTY_AMT
+        ,        NVL((SELECT VENDR_NM FROM TB_HQ_VENDOR WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND VENDR_CD = tphso.VENDR_CD), '본사') AS VENDR_NM
         FROM     TB_PO_HQ_STORE_OUTSTOCK tphso
         ,        (  SELECT  tphsod.HQ_OFFICE_CD, tphsod.SLIP_NO, SUM(tphsod.PENALTY_AMT) AS PENALTY_AMT
                     FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
@@ -84,9 +85,14 @@
                     <if test='procFg != null and procFg != ""'>
                         AND tphso.PROC_FG = #{procFg}
                     </if>
-                    <if test='vendrCd != null and vendrCd != ""'>
-                        AND tphso.VENDR_CD = #{vendrCd}
-                    </if>
+                    <choose>
+                        <when test='vendrCd != null and vendrCd != ""'>
+                          AND tphso.VENDR_CD = #{vendrCd}
+                        </when>
+                        <otherwise>
+                          AND tphso.VENDR_CD IS NULL
+                        </otherwise>
+                    </choose>
                     <if test='dlvrCd != null and dlvrCd != ""'>
                         AND tphso.DLVR_CD = #{dlvrCd}
                     </if>
@@ -124,9 +130,14 @@
         <if test='procFg != null and procFg != ""'>
             AND tphso.PROC_FG = #{procFg}
         </if>
-        <if test='vendrCd != null and vendrCd != ""'>
-            AND tphso.VENDR_CD = #{vendrCd}
-        </if>
+        <choose>
+            <when test='vendrCd != null and vendrCd != ""'>
+              AND tphso.VENDR_CD = #{vendrCd}
+            </when>
+            <otherwise>
+              AND tphso.VENDR_CD IS NULL
+            </otherwise>
+        </choose>
         <if test='dlvrCd != null and dlvrCd != ""'>
             AND tphso.DLVR_CD = #{dlvrCd}
         </if>
