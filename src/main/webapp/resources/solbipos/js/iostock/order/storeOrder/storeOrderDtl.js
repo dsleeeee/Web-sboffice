@@ -373,6 +373,8 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
         } else if (saveFg === "save") {
           $scope.saveOrderDtlCallback();
         }
+      }else{
+        $scope.saveOrderDtlCallback();
       }
     }, function errorCallback(response) {
       // called asynchronously if an error occurs
@@ -412,7 +414,9 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
   // 저장 후 콜백 함수
   $scope.saveOrderDtlCallback = function () {
     $scope.searchStoreOrderDtlList();
-    $scope.searchStoreLoan("N");
+    //$scope.searchStoreLoan("N");
+    $scope.orderProcFgCheck(); // 주문진행구분을 체크하여, 버튼 show/hidden 처리
+
 
     var storeOrderScope = agrid.getScope('storeOrderCtrl');
     storeOrderScope.searchStoreOrderList();
@@ -508,6 +512,61 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
   };
 
 
+  // 주문진행구분을 체크하여, 버튼 show/hidden 처리
+  $scope.orderProcFgCheck = function () {
+      var params     = {};
+      params.reqDate = $scope.reqDate;
+      params.slipFg  = $scope.slipFg;
+
+      //가상로그인 session 설정
+  	    if(document.getElementsByName('sessionId')[0]){
+  	    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+  	    }
+
+      // ajax 통신 설정
+      $http({
+        method : 'POST', //방식
+        url    : '/iostock/order/storeOrder/storeOrderRegist/orderProcFgCheck.sb', /* 통신할 URL */
+        params : params, /* 파라메터로 보낼 데이터 */
+        headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+      }).then(function successCallback(response) {
+        if ($scope._httpStatusCheck(response, true)) {
+          // 진행구분이 주문등록이 아니면 상품추가/변경 불가
+          if (!$.isEmptyObject(response.data.data)) {
+            if (response.data.data.procFg == "00") {
+              $scope.btnAddProd      = true;
+              $scope.btnDtlSave      = true;
+              $scope.flex.isReadOnly = false;
+
+              if (gEnvst1042 === "1" || gEnvst1042 === "2") {
+                $scope.btnConfirm = true;
+              } else {
+                $scope.btnConfirm = false;
+              }
+            }else{
+              $scope.btnAddProd      = false;
+              $scope.btnDtlSave      = false;
+              $scope.btnConfirm      = false;
+              $scope.flex.isReadOnly = true;
+            }
+            $scope.regHdRemark = response.data.data.remark;
+          }
+
+          $scope.searchStoreLoan("N");
+        }
+      }, function errorCallback(response) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+        if (response.data.message) {
+          $scope._popMsg(response.data.message);
+        } else {
+          $scope._popMsg(messages['cmm.error']);
+        }
+        return false;
+      }).then(function () {
+        // "complete" code here
+      });
+    };
 
 	//[엑셀 다운로드] - START	------------------------------------------------------------------------------------------------------------------------------
 	$scope.excelDownload = function(){

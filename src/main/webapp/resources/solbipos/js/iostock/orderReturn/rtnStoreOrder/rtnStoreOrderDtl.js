@@ -176,15 +176,13 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
 	    if ($scope.procFg === "00") {
 	      $scope.btnAddProd = true;
 	      $scope.btnDtlSave = true;
-//	      $scope.btnConfirm = true;
 	      $scope.flex.isReadOnly = false;
 	      
-//	      if (gEnvst1042 === "1" || gEnvst1042 === "2") {
-//	          $scope.btnConfirm = true;
-//	        } else {
-//	          $scope.btnConfirm = false;
-//	        }
-	      $scope.btnConfirm = true;
+	      if (gEnvst1042 === "1" || gEnvst1042 === "2") {
+	          $scope.btnConfirm = true;
+	        } else {
+	          $scope.btnConfirm = false;
+	        }
 	    }
 	    else {
 	      $scope.btnAddProd = false;
@@ -426,7 +424,7 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
   // 저장 후 콜백 함수
   $scope.saveOrderDtlCallback = function () {
     $scope.searchRtnStoreOrderDtlList();
-    //$scope.wjRtnStoreOrderDtlLayer.hide(true);
+    $scope.orderProcFgCheck(); // 주문진행구분을 체크하여, 버튼 show/hidden 처리
     var rtnStoreOrderScope = agrid.getScope('rtnStoreOrderCtrl');
     rtnStoreOrderScope.searchRtnStoreOrderList();
   };
@@ -521,5 +519,62 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
       }
     });
   };
+
+  // 주문진행구분을 체크하여, 버튼 show/hidden 처리
+  $scope.orderProcFgCheck = function () {
+      var params     = {};
+      params.reqDate = $scope.reqDate;
+      params.slipFg  = $scope.slipFg;
+      params.storeCd = $scope.storeCd;
+
+      //가상로그인 session 설정
+      if(document.getElementsByName('sessionId')[0]){
+      	params['sid'] = document.getElementsByName('sessionId')[0].value;
+      }
+
+      // ajax 통신 설정
+      $http({
+        method : 'POST', //방식
+        url    : '/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderRegist/orderProcFgCheck.sb', /* 통신할 URL */
+        params : params, /* 파라메터로 보낼 데이터 */
+        headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+      }).then(function successCallback(response) {
+        if ($scope._httpStatusCheck(response, true)) {
+          // 진행구분이 반품등록이 아니면 상품추가/변경 불가
+          if (!$.isEmptyObject(response.data.data)) {
+            if (response.data.data.procFg == "00") {
+              $scope.btnAddProd      = true;
+              $scope.btnDtlSave      = true;
+              $scope.flex.isReadOnly = false;
+
+              if (gEnvst1042 === "1" || gEnvst1042 === "2") {
+                $scope.btnConfirm = true;
+              } else {
+                $scope.btnConfirm = false;
+              }
+            }else{
+              $scope.btnAddProd      = false;
+              $scope.btnDtlSave      = false;
+              $scope.btnConfirm      = false;
+              $scope.flex.isReadOnly = true;
+            }
+            $scope.regHdRemark = response.data.data.remark;
+          }else{
+              $scope.wjRtnStoreOrderRegistLayer.show(true);
+              $("#registSubTitle").html(' ('+messages["rtnStoreOrder.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-') + ')');
+  //            $scope.regHdRemark = response.data.data.remark;
+          }
+        }
+      }, function errorCallback(response) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+        $scope._popMsg(messages["cmm.saveFail"]);
+        return false;
+      }).then(function () {
+        // "complete" code here
+  //      $scope.wjRtnStoreOrderRegistLayer.show(true);
+  //      $("#registSubTitle").html(' ('+messages["rtnStoreOrder.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-') + ')');
+      });
+    };
 
 }]);

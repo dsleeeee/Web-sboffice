@@ -162,7 +162,7 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("storeOrderRegistCtrl", function (event, data) {
 
-	  $scope.reset();
+	  //$scope.reset();
     // 그리드 초기화
     var cv          = new wijmo.collections.CollectionView([]);
     cv.trackChanges = true;
@@ -311,6 +311,7 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
         if (!$.isEmptyObject(response.data.data)) {
           if (response.data.data.procFg != "00") {
             $scope._popMsg(messages["storeOrder.dtl.not.orderProcEnd"]);
+            $scope.wjStoreOrderRegistLayer.hide();
             return false;
           }
           $scope.regHdRemark = response.data.data.remark;

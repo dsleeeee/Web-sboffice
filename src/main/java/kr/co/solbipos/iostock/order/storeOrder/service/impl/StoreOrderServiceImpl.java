@@ -85,6 +85,12 @@ public class StoreOrderServiceImpl implements StoreOrderService {
                 storeOrderVO.setModId(sessionInfoVO.getUserId());
                 storeOrderVO.setModDt(currentDt);
                 storeOrderVO.setVendrCd(storeOrderDtlVO.getVendrCd());
+
+                //주문진행구분 체크
+                DefaultMap<String> orderProcFg = getOrderProcFgCheck(storeOrderVO);
+                if(orderProcFg != null && !StringUtil.getOrBlank(orderProcFg.get("procFg")).equals("00")) {
+                    throw new JsonException(Status.SERVER_ERROR, messageService.get("storeOrder.dtl.dstbConfirm.msg")); //주문이 본사에서 분배완료 되었습니다.
+                }
             }
             LOGGER.debug("### EmpNo: " + sessionInfoVO.getEmpNo());
 
@@ -310,6 +316,7 @@ public class StoreOrderServiceImpl implements StoreOrderService {
         dstbCloseStoreVO.setReqDate		(storeOrderVO.getReqDate());
         dstbCloseStoreVO.setSlipFg		(storeOrderVO.getSlipFg ());
         dstbCloseStoreVO.setEmpNo		(dstbReqVO.getEmpNo   	());
+        dstbCloseStoreVO.setVendrCd     (dstbReqVO.getVendrCd());
 
         result = dstbCloseStoreMapper.updateDstbCloseConfirm(dstbCloseStoreVO);	//TB_PO_HQ_STORE_DISTRIBUTE
         if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));

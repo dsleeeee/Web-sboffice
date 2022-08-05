@@ -350,7 +350,7 @@
         WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
           AND   SLIP_NO         =   #{slipNo}
         GROUP
-           BY   PROD_CD, STORE_CD
+           BY   PROD_CD, STORAGE_CD, STORE_CD
 
     </insert>
 </mapper>
