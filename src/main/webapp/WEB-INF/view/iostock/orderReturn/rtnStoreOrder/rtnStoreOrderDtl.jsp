@@ -104,4 +104,4 @@
   var storageEnvstVal = "${storageEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderDtl.js?ver=20220804.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderDtl.js?ver=20220805.01" charset="utf-8"></script>

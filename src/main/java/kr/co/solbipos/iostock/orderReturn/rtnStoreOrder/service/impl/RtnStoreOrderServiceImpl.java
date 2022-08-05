@@ -91,6 +91,12 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
                 rtnStoreOrderVO.setModId(sessionInfoVO.getUserId());
                 rtnStoreOrderVO.setModDt(currentDt);
                 rtnStoreOrderVO.setVendrCd(rtnStoreOrderDtlVO.getVendrCd());
+
+                // 반품진행구분 체크
+                DefaultMap<String> orderProcFg = getOrderProcFgCheck(rtnStoreOrderVO);
+                if(orderProcFg != null && !StringUtil.getOrBlank(orderProcFg.get("procFg")).equals("00")) {
+                    throw new JsonException(Status.SERVER_ERROR, messageService.get("rtnStoreOrder.dtl.dstbConfirm.msg")); //반품이 본사에서 분배완료 되었습니다.
+                }
             }
 
             String insFg = "";
@@ -267,6 +273,12 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
                 rtnStoreOrderVO.setModId(sessionInfoVO.getUserId());
                 rtnStoreOrderVO.setModDt(currentDt);
                 rtnStoreOrderVO.setVendrCd(rtnStoreOrderDtlVO.getVendrCd());
+
+                // 반품진행구분 체크
+                DefaultMap<String> orderProcFg = getOrderProcFgCheck(rtnStoreOrderVO);
+                if(orderProcFg != null && !StringUtil.getOrBlank(orderProcFg.get("procFg")).equals("00")) {
+                    throw new JsonException(Status.SERVER_ERROR, messageService.get("rtnStoreOrder.dtl.dstbConfirm.msg")); //반품이 본사에서 분배완료 되었습니다.
+                }
             }
 
             String insFg = "";
@@ -404,7 +416,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
         DefaultMap<String> orderProcFg = getOrderProcFgCheck(rtnStoreOrderVO);
 
         if(orderProcFg != null && !StringUtil.getOrBlank(orderProcFg.get("procFg")).equals("00")) {
-            throw new JsonException(Status.FAIL, messageService.get("rtnStoreOrder.dtl.not.orderProcEnd")); //요청내역이 처리중입니다.
+            throw new JsonException(Status.SERVER_ERROR, messageService.get("rtnStoreOrder.dtl.not.orderProcEnd")); //요청내역이 처리중입니다.
         }
 
         // 반품수량을 MD 수량으로 수정
