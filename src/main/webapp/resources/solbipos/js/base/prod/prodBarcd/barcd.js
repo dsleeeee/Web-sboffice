@@ -292,7 +292,7 @@ app.controller('barcdCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
         } else {
           for(var j = 0; j < $scope.flex.collectionView.itemsEdited.length; j++){
             if(i != j){
-              if($scope.flex.collectionView.itemsEdited[i].barCd === $scope.flex.collectionView.itemsEdited[j].barCd){
+              if($scope.flex.collectionView.itemsEdited[i].barCd === $scope.flex.collectionView.itemsEdited[j].barCd && $scope.flex.collectionView.itemsEdited[j].barCd.length !== 0){
                 $scope._popMsg(messages["barcd.chkBarCd.msg2"] + "["+ $scope.flex.collectionView.itemsEdited[i].barCd + "]");
                 return false;
               }
