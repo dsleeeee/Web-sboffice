@@ -31,7 +31,13 @@
       </table>
 
       <div class="tr mt20">
-        <p id="dtlAvailableOrderAmt" class="fl s14 bk lh30"></p>
+        <div class="tooltipBtn fl">설명
+         <span class="tooltiptext tooltip-right">
+           * <s:message code="dstbReq.dtl.txt1"/><br/>
+           * <s:message code="dstbReq.dtl.txt2"/><br/>
+         </span>
+        </div>
+        <p id="dtlAvailableOrderAmt" class="fl s14 bk pdl10 pdt10"></p>
         <div id="dstbBtnLayer" ng-if="dstbBtnLayer">
           <span id="spanDstbConfirmFg" class="chk pdb5 txtIn" style="top: 0px;"><input type="checkbox" name="dstbConfirmFg" id="dstbConfirmFg" value="Y"/>
               <label for="dstbConfirmFg"><s:message code="dstbReq.dtl.dstbConfirmFg"/></label>
@@ -42,14 +48,9 @@
           <button type="button" id="btnDtlSave" class="btn_skyblue ml5" ng-click="saveValueCheck()"><s:message code="cmm.save"/></button>
           <%-- 엑셀 다운로드 --%>
           <button class="btn_skyblue ml5" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
-          <div class="tooltipBtn fl">설명
-           <span class="tooltiptext tooltip-right">
-             * <s:message code="dstbReq.dtl.txt1"/><br/>
-             * <s:message code="dstbReq.dtl.txt2"/><br/>
-           </span>
-          </div>
         </div>
       </div>
+      <div style="clear: both;"></div>
 
       <div class="w100 mt10 mb20">
         <%--위즈모 테이블--%>

@@ -239,4 +239,10 @@ app.controller('dstbCloseProdAddProdCtrl', ['$scope', '$http', '$timeout', funct
     });
   };
 
+  // 상품분류정보 선택취소
+  $scope.delProdClass = function(){
+      $scope.prodClassCd = "";
+      $scope.prodClassCdNm = "";
+  }
+
 }]);

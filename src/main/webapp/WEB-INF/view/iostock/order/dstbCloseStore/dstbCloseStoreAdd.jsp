@@ -62,9 +62,10 @@
           <%-- 분류 --%>
           <th><s:message code="dstbCloseStore.add.prodClassNm"/></th>
           <td>
-            <input type="text" class="sb-input w100" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()"
+            <input type="text" class="sb-input" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float: left; width: 200px;"
                    placeholder="<s:message code="cmm.all" />" readonly/>
-            <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
+            <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled/>
+            <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
           </td>
         </tr>
         </tbody>
@@ -158,7 +159,7 @@
         </tbody>
       </table>
 
-      <div class="oh">
+      <div class="oh mt10">
         <%-- 조회 --%>
         <button type="button" class="btn_blue fr" id="btnSearch" ng-click="search();">
           <s:message code="cmm.search"/></button>
@@ -172,7 +173,7 @@
         <%--<li class="red"><s:message code="dstbCloseStore.add.txt1"/></li>--%>
       <%--</ul>--%>
 
-      <div class="mt20 tr">
+      <div class="mt10 tr">
         <div class="tr">
           <%-- 저장 --%>
           <button type="button" class="btn_skyblue ml5" id="btnSave" ng-click="saveDstbCloseStoreAdd()">
@@ -245,7 +246,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/dstbCloseStore/dstbCloseStoreAdd.js?ver=20220726.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/dstbCloseStore/dstbCloseStoreAdd.js?ver=20220805.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

@@ -44,7 +44,7 @@
           <td>
             <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
           </td>
-          <%-- 상품코드 --%>
+          <%-- 상품명 --%>
           <th><s:message code="rtnDstbCloseProd.add.prodNm"/></th>
           <td>
             <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
@@ -59,9 +59,10 @@
           <%-- 분류 --%>
           <th><s:message code="rtnDstbCloseProd.add.prodClassNm"/></th>
           <td>
-            <input type="text" class="sb-input w100" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()"
+            <input type="text" class="sb-input" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float: left; width: 200px;"
                    placeholder="<s:message code="cmm.all" />" readonly/>
-            <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
+            <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled/>
+            <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
           </td>
         </tr>
         <tr>
@@ -142,7 +143,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnDstbCloseProd/rtnDstbCloseProdAddProd.js?ver=20220804.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnDstbCloseProd/rtnDstbCloseProdAddProd.js?ver=20220805.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

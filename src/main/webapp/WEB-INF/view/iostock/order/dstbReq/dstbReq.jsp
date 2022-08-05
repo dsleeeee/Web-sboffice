@@ -7,7 +7,7 @@
 <c:set var="baseUrl" value="/iostock/order/dstbReq/dstbReq/"/>
 
 <div class="subCon" ng-controller="dstbReqCtrl">
-  <div class="searchBar flddUnfld">
+  <div class="searchBar">
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('dstbReqCtrl')"><s:message code="cmm.search"/></button>

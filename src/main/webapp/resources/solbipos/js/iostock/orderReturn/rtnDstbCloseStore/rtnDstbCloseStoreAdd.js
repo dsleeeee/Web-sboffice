@@ -621,6 +621,12 @@ app.controller('rtnDstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', funct
     } else {
         $("#tblSearchAddShow").hide();
     }
-};
+  };
+
+  // 상품분류정보 선택취소
+  $scope.delProdClass = function(){
+      $scope.prodClassCd = "";
+      $scope.prodClassCdNm = "";
+  }
 
 }]);
