@@ -47,7 +47,7 @@
         ,       tssd.DISUSE_TITLE, tssd.PROC_FG, tssd.DTL_CNT
         ,       tssd.CONFM_DATE
         ,       SUBSTR(tssd.REG_DT,0,8) AS REG_DATE
-        ,		tssd.DISUSE_STORAGE_CD, tssd.REASON_CD AS DISUSE_REASON
+        ,		tssd.DISUSE_STORAGE_CD, tssd.REASON_CD AS DISUSE_REASON, SUBSTR(tssd.MOD_DT,0,8) AS MOD_DATE, tssd.REG_ID, tssd.MOD_ID, tssd.CONFM_ID
         FROM    TB_ST_STORE_DISUSE tssd
         WHERE   tssd.STORE_CD     = #{storeCd}
         AND     tssd.DISUSE_DATE  BETWEEN #{startDate} AND #{endDate}
