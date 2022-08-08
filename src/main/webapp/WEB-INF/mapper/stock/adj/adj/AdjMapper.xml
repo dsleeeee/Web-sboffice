@@ -17,7 +17,7 @@
         ,       tsha.ADJ_TITLE, tsha.PROC_FG, tsha.DTL_CNT
         ,       tsha.CONFM_DATE
         ,       SUBSTR(tsha.REG_DT,0,8) AS REG_DATE
-        ,		tsha.ADJ_STORAGE_CD, tsha.REASON_CD AS ADJ_REASON
+        ,		tsha.ADJ_STORAGE_CD, tsha.REASON_CD AS ADJ_REASON, SUBSTR(tsha.MOD_DT,0,8) AS MOD_DATE, tsha.REG_ID, tsha.MOD_ID, tsha.CONFM_ID
         FROM    TB_ST_HQ_ADJUST tsha
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     ADJ_DATE  BETWEEN #{startDate} AND #{endDate}

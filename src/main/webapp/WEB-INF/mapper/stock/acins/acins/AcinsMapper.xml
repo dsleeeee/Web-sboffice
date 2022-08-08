@@ -17,7 +17,7 @@
         ,       tshai.ACINS_TITLE, tshai.PROC_FG, tshai.DTL_CNT
         ,       tshai.ADJ_CNT, tshai.CONFM_DATE
         ,       SUBSTR(tshai.REG_DT,0,8) AS REG_DATE
-        ,		tshai.ADJ_STORAGE_CD, tshai.REASON_CD AS ACINS_REASON
+        ,		tshai.ADJ_STORAGE_CD, tshai.REASON_CD AS ACINS_REASON, SUBSTR(tshai.MOD_DT,0,8) AS MOD_DATE, tshai.REG_ID, tshai.MOD_ID, tshai.CONFM_ID
         FROM    TB_ST_HQ_ACTUAL_INSPECTION tshai
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     ACINS_DATE  BETWEEN #{startDate} AND #{endDate}
