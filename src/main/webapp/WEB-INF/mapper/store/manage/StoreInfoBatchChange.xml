@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StoreInfoBatchChange.xml
+    매장정보일괄변경
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2022.08.03     최초작성
+-->
+<mapper namespace="kr.co.solbipos.store.manage.storeInfoBatchChange.service.impl.StoreInfoBatchChangeMapper">
+
+    <!-- 매장정보일괄변경 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getStoreInfoBatchChangeList" parameterType="StoreInfoBatchChangeVO" resultType="DefaultMap">
+        /* StoreInfoBatchChangeMapper.getStoreInfoBatchChangeList */
+        SELECT
+        tho.HQ_OFFICE_CD,
+        tho.HQ_OFFICE_NM,
+        tms.STORE_CD,
+        tms.STORE_NM,
+        tms.SYS_STAT_FG,
+        tms.AGENCY_CD,
+        tca.AGENCY_NM,
+        tms.BIZ_STORE_NM,
+        tms.OWNER_NM,
+        tms.CLS_FG,
+        tms.AREA_CD,
+        tms.DIRECT_MANAGE_YN,
+        tms.TEL_NO,
+        tms.FAX_NO,
+        tms.VAN_CD,
+        tcvc.VAN_NM,
+        tms.SYS_REMARK,
+        tms.HD_REMARK,
+        tms.REMARK,
+        tms.MAP_STORE_CD
+        FROM TB_MS_STORE tms,
+        TB_HQ_OFFICE tho,
+        TB_CM_AGENCY tca,
+        TB_CM_VAN_CMPNY tcvc
+        WHERE 1=1
+        <if test="hqOfficeCd != null and hqOfficeCd != ''">
+            AND UPPER(tho.HQ_OFFICE_CD) LIKE '%'||UPPER(#{hqOfficeCd})||'%'
+        </if>
+        <if test="hqOfficeNm != null and hqOfficeNm != ''">
+            AND tho.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
+        </if>
+        <if test="storeCd != null and storeCd != ''">
+            AND UPPER(tms.STORE_CD) LIKE '%'||UPPER(#{storeCd})||'%'
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test="sysStatFg != null and sysStatFg != ''">
+            AND tms.SYS_STAT_FG = #{sysStatFg}
+        </if>
+        <if test="agencyCd != null and agencyCd != ''">
+            AND tms.AGENCY_CD LIKE '%'||#{agencyCd}||'%'
+        </if>
+        <if test="agencyNm != null and agencyNm != ''">
+            AND tca.AGENCY_NM LIKE '%'||#{agencyNm}||'%'
+        </if>
+        AND tms.HQ_OFFICE_CD (+)= tho.HQ_OFFICE_CD
+        AND tca.AGENCY_CD = tms.AGENCY_CD
+        AND tcvc.VAN_CD = tms.VAN_CD
+        AND tcvc.VAN_FG = '01'
+        ORDER BY tho.HQ_OFFICE_CD, tms.STORE_CD
+    </select>
+
+    <!-- 대리점코드 콤보박스 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getAgencyCdComboList" parameterType="StoreInfoBatchChangeVO" resultType="DefaultMap">
+        /* StoreInfoBatchChangeMapper.getAgencyCdComboList */
+        SELECT
+        tca.AGENCY_CD AS VALUE,
+        tca.AGENCY_NM AS NAME
+        FROM TB_CM_AGENCY tca
+        WHERE 1=1
+        ORDER BY tca.AGENCY_CD
+    </select>
+
+    <!-- 관리벤사 콤보박스 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getVanCdComboList" parameterType="StoreInfoBatchChangeVO" resultType="DefaultMap">
+        /* StoreInfoBatchChangeMapper.getVanCdComboList */
+        SELECT
+        tcvc.VAN_CD AS VALUE,
+        tcvc.VAN_NM AS NAME
+        FROM TB_CM_VAN_CMPNY tcvc
+        WHERE 1=1
+        AND tcvc.VAN_FG = '01'
+        ORDER BY tcvc.VAN_FG, tcvc.VAN_CD
+    </select>
+
+    <!-- 매장정보일괄변경 - 저장 update -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getStoreInfoBatchChangeSaveUpdate" parameterType="StoreInfoBatchChangeVO">
+        /* StoreInfoBatchChangeMapper.getStoreInfoBatchChangeSaveUpdate */
+        UPDATE
+        TB_MS_STORE
+        SET
+        STORE_NM = #{storeNm},
+        AGENCY_CD = #{agencyCd},
+        BIZ_STORE_NM = #{bizStoreNm},
+        OWNER_NM = #{ownerNm},
+        AREA_CD = #{areaCd},
+        DIRECT_MANAGE_YN = #{directManageYn},
+        TEL_NO = #{telNo},
+        FAX_NO = #{faxNo},
+        SYS_REMARK = #{sysRemark},
+        HD_REMARK = #{hdRemark},
+        REMARK = #{remark},
+        MAP_STORE_CD = #{mapStoreCd},
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND STORE_CD = #{storeCd}
+    </update>
+
+</mapper>
