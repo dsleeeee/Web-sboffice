@@ -75,6 +75,7 @@ app.controller('virtualLoginAgencyCtrl', ['$scope', '$http', function ($scope, $
 
     $scope.searchVirtualLoginAgency = function(){
         var params = {};
+        params.listScale = $scope.listScale;
 
         $scope._inquiryMain("/store/manage/virtualLoginAgency/virtualLoginAgency/getVirtualLoginAgencyrList.sb", params, function() {}, false);
     };
