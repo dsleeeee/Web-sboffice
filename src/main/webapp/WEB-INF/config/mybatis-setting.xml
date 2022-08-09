@@ -132,6 +132,8 @@
     <typeAlias alias="posHwInfoVO" type="kr.co.solbipos.store.manage.posHwInfo.service.PosHwInfoVO"/>
     <!-- 기초관리 > 매장정보관리 > 폐점예정매장 -->
     <typeAlias alias="closeStoreVO" type="kr.co.solbipos.store.manage.closeStore.service.CloseStoreVO"/>
+    <!-- 기초관리 > 매장정보관리 > 매장정보일괄변경 -->
+    <typeAlias alias="storeInfoBatchChangeVO" type="kr.co.solbipos.store.manage.storeInfoBatchChange.service.StoreInfoBatchChangeVO"/>
 
     <!-- 기초관리 -->
     <typeAlias alias="posFuncVO" type="kr.co.solbipos.base.store.posfunc.service.PosFuncVO"/>
