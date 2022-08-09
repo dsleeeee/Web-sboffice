@@ -523,6 +523,11 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             $scope._popMsg(messages['prod.prodNm'] + "은 " + messages["cmm.max100Chk"]);
             return; false;
         }
+        // 상품명 큰따옴표(") 입력 불가
+        if(nvl($scope.prodModifyInfo.prodNm, '').indexOf("\"") >= 0){
+            $scope._popMsg(messages["prod.prodNmTextChk.msg"]); // 상품명에 큰따옴표(")를 입력할 수 없습니다.
+            return; false;
+        }
         // 판매단가
         if (isNull($("#prodModifySaleUprc").val())) {
             $scope._popMsg(messages["prod.saleUprcChk.msg"]);
