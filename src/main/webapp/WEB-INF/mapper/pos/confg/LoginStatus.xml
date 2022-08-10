@@ -21,14 +21,16 @@
            <include refid="CmmSQL.PagingTemplateCount"/>
       FROM TB_MS_POS_LOGIN_LOG tmpll,
            TB_MS_STORE tms,
-           TB_HQ_OFFICE tho
+           TB_HQ_OFFICE tho,
+           TB_CM_AGENCY tca
      WHERE tms.STORE_CD (+)= tmpll.STORE_CD
        AND tms.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
+       AND tca.AGENCY_CD = tms.AGENCY_CD
       <choose>
           <!-- 총판 -->
           <when test='orgnFg != null and orgnFg == "AGENCY"'>
               <![CDATA[
-                    AND (tms.AGENCY_CD = #{agencyCd})
+                    AND (tca.AGENCY_CD = #{agencyCd} OR tca.P_AGENCY_CD = #{agencyCd})
                 ]]>
           </when>
       </choose>
