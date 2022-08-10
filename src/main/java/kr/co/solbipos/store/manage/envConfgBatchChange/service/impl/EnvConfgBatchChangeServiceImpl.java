@@ -197,11 +197,15 @@ public class EnvConfgBatchChangeServiceImpl implements EnvConfgBatchChangeServic
     /** 기능키명칭탭 - 조회 */
     @Override
     public List<DefaultMap<Object>> getEnvConfgBatchChangeFnkeyList(EnvConfgBatchChangeVO envConfgBatchChangeVO, SessionInfoVO sessionInfoVO) {
-        List<DefaultMap<Object>> result = new ArrayList<DefaultMap<Object>>();
 
-        result = envConfgBatchChangeMapper.getEnvConfgBatchChangeFnkeyList(envConfgBatchChangeVO);
+        envConfgBatchChangeVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
-        return result;
+        // 총판인 경우, session의 AgencyCode 값 넣기
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY) {
+            envConfgBatchChangeVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
+        return envConfgBatchChangeMapper.getEnvConfgBatchChangeFnkeyList(envConfgBatchChangeVO);
     }
 
     /** 기능키명칭탭 - 저장 */
