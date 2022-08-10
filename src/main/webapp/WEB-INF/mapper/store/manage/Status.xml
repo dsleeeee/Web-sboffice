@@ -88,7 +88,8 @@
                     ,       A.TOT_REFUND_CNT
                     ,       A.MIN_SALE_YM
                     ,       A.MAX_SALE_YM
-                ) G
+                ) G,
+        TB_CM_AGENCY tca
         WHERE 1=1
         <if test='hqOfficeCd != null and hqOfficeCd != ""'>
             <![CDATA[
@@ -117,9 +118,10 @@
         <if test='sysStatFg != null and sysStatFg != ""'>
             AND tms.SYS_STAT_FG = #{sysStatFg}
         </if>
+        AND tca.AGENCY_CD = tms.AGENCY_CD
         <if test='agencyCd != null and agencyCd != ""'>
             <![CDATA[
-                AND tms.AGENCY_CD = #{agencyCd}
+                AND (tca.AGENCY_CD = #{agencyCd} OR tca.P_AGENCY_CD = #{agencyCd})
             ]]>
         </if>
         <if test='vanCd != null and vanCd != ""'>
@@ -299,7 +301,8 @@
               tms.SYS_STAT_FG,
               tms.CLS_FG
               FROM TB_CM_VAN_CMPNY tcvc,
-              TB_MS_STORE tms
+              TB_MS_STORE tms,
+              TB_CM_AGENCY tca
               WHERE 1=1
                 AND tcvc.VAN_CD = tms.VAN_CD
                 AND tcvc.VAN_FG = '01'
@@ -323,11 +326,12 @@
                   AND tms.SYS_STAT_FG = #{sysStatFg}
                   ]]>
               </if>
+              AND tca.AGENCY_CD = tms.AGENCY_CD
               <choose>
                   <!-- 총판 -->
                   <when test='orgnFg != null and orgnFg == "AGENCY"'>
                       <![CDATA[
-                          AND tms.AGENCY_CD = #{agencyCd}
+                          AND (tca.AGENCY_CD = #{agencyCd} OR tca.P_AGENCY_CD = #{agencyCd})
                       ]]>
                    </when>
               </choose>
@@ -422,7 +426,8 @@
                     AND     B.USE_YN    =   'Y'
                     GROUP
                     BY      A.STORE_CD
-                ) K
+                ) K,
+        TB_CM_AGENCY tca
         WHERE 1=1
         <if test='chkDt != true'>
             <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
@@ -461,11 +466,12 @@
         AND E.VAN_FG        (+) =   '01'
         AND E.VAN_CD        (+) =   tms.VAN_CD
         AND K.STORE_CD      (+) =   tms.STORE_CD
+        AND tca.AGENCY_CD = tms.AGENCY_CD
         <choose>
             <!-- 총판 -->
             <when test='orgnFg != null and orgnFg == "AGENCY"'>
                 <![CDATA[
-                    AND tms.AGENCY_CD = #{agencyCd}
+                    AND (tca.AGENCY_CD = #{agencyCd} OR tca.P_AGENCY_CD = #{agencyCd})
                 ]]>
             </when>
         </choose>
@@ -546,7 +552,7 @@
             </when>
             <!-- 총판 -->
             <when test='orgnFg != null and orgnFg == "A"'>
-                AND tms.AGENCY_CD = #{agencyCd}
+                AND (tca.AGENCY_CD = #{agencyCd} OR tca.P_AGENCY_CD = #{agencyCd})
             </when>
         </choose>
         <if test='storeNm != null and storeNm != ""'>
