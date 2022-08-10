@@ -51,27 +51,29 @@
         ]]>
         <include refid="CmmSQL.PagingTemplateCount"/>
         <![CDATA[
-          FROM TB_HQ_OFFICE tho,
-               (
-          SELECT HQ_OFFICE_CD,
-                 COUNT(HQ_OFFICE_CD) AS CNT
+        FROM TB_HQ_OFFICE tho,
+        (
+            SELECT HQ_OFFICE_CD,
+            COUNT(HQ_OFFICE_CD) AS CNT
             FROM TB_MS_STORE
-           GROUP BY HQ_OFFICE_CD
-                ) tms,
-                (
-          SELECT the.HQ_OFFICE_CD,
-                 tcm.ENVST_NM AS POS_NM
+            GROUP BY HQ_OFFICE_CD
+        ) tms,
+        (
+            SELECT the.HQ_OFFICE_CD,
+            tcm.ENVST_NM AS POS_NM
             FROM TB_HQ_ENVST the,
-                 TB_CM_ENVST tcm
-           WHERE the.ENVST_CD = '140'
-             AND tcm.ENVST_CD = the.ENVST_CD
-                ) the
-         WHERE tho.HQ_OFFICE_CD != '00000'
-           AND tms.HQ_OFFICE_CD (+) = tho.HQ_OFFICE_CD
-           AND the.HQ_OFFICE_CD (+) = tho.HQ_OFFICE_CD
+            TB_CM_ENVST tcm
+            WHERE the.ENVST_CD = '140'
+            AND tcm.ENVST_CD = the.ENVST_CD
+        ) the,
+        TB_CM_AGENCY tca
+        WHERE tho.HQ_OFFICE_CD != '00000'
+        AND tms.HQ_OFFICE_CD (+) = tho.HQ_OFFICE_CD
+        AND the.HQ_OFFICE_CD (+) = tho.HQ_OFFICE_CD
         ]]>
+        AND tca.AGENCY_CD = tho.AGENCY_CD
         <if test='orgnFg != null and orgnFg == "A"'>
-            AND tho.AGENCY_CD = #{agencyCd}
+            AND (tca.AGENCY_CD = #{agencyCd} OR tca.P_AGENCY_CD = #{agencyCd}) -- 본사 AGENCY_CD
         </if>
         <if test='hqOfficeCd != null and hqOfficeCd != ""'>
            AND tho.HQ_OFFICE_CD LIKE '%'|| #{hqOfficeCd} || '%'
