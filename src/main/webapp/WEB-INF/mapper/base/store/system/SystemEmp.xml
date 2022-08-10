@@ -50,7 +50,7 @@
               </when>
               <!-- 총판 -->
               <when test='orgnFg != null and orgnFg == "A"'>
-                AND tce.AGENCY_CD = #{agencyCd}
+                AND (tca.AGENCY_CD = #{agencyCd} OR tca.P_AGENCY_CD = #{agencyCd})
               </when>
           </choose>
           <if test="chkDt == false">
