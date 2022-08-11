@@ -45,8 +45,8 @@
             twuidv01.HQ_OFFICE_CD,
             twuidv01.STORE_CD,
             (CASE WHEN twuidv01.ORGN_FG = 'H' THEN (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = twuidv01.HQ_OFFICE_CD)
-                  WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
-                  ELSE null END
+                   WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
+                   ELSE twuidv01.ORGN_CD END
             ) AS AGENCY_CD
             FROM
             (
@@ -74,7 +74,7 @@
                 <!-- 대리점 -->
                 <if test='orgnFg == "A"'>
                     <![CDATA[
-                        AND twuidv01.AGENCY_CD = #{orgnCd}
+                        AND twuidv01.AGENCY_CD IN (SELECT AGENCY_CD FROM TB_CM_AGENCY WHERE AGENCY_CD = #{orgnCd} OR P_AGENCY_CD = #{orgnCd})
                     ]]>
                 </if>
                 <!-- 본사 -->
@@ -164,7 +164,7 @@
             twuidv01.STORE_CD,
             (CASE WHEN twuidv01.ORGN_FG = 'H' THEN (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = twuidv01.HQ_OFFICE_CD)
                    WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
-                   ELSE null END
+                   ELSE twuidv01.ORGN_CD END
             ) AS AGENCY_CD
             FROM
             (
@@ -192,7 +192,7 @@
                 <!-- 대리점 -->
                 <if test='orgnFg == "A"'>
                     <![CDATA[
-                        AND twuidv01.AGENCY_CD = #{orgnCd}
+                        AND twuidv01.AGENCY_CD IN (SELECT AGENCY_CD FROM TB_CM_AGENCY WHERE AGENCY_CD = #{orgnCd} OR P_AGENCY_CD = #{orgnCd})
                     ]]>
                 </if>
                 <!-- 본사 -->

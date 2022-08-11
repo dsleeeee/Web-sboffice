@@ -40,7 +40,7 @@
             WHERE 1=1
             AND tho.HQ_OFFICE_CD != '00000'
             <if test='orgnFg != null and orgnFg == "A"'>
-                AND tho.AGENCY_CD = #{agencyCd}
+                AND tho.AGENCY_CD IN (SELECT AGENCY_CD FROM TB_CM_AGENCY WHERE AGENCY_CD = #{agencyCd} OR P_AGENCY_CD = #{agencyCd})
             </if>
             AND the.HQ_OFFICE_CD (+)= tho.HQ_OFFICE_CD
             AND the.ENVST_CD (+)= tce.ENVST_CD
@@ -55,7 +55,7 @@
             WHERE 1=1
             AND tms.HQ_OFFICE_CD != '00000'
             <if test='orgnFg != null and orgnFg == "A"'>
-                AND tho.AGENCY_CD = #{agencyCd}
+                AND tho.AGENCY_CD IN (SELECT AGENCY_CD FROM TB_CM_AGENCY WHERE AGENCY_CD = #{agencyCd} OR P_AGENCY_CD = #{agencyCd})
             </if>
             AND tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
             GROUP BY tms.HQ_OFFICE_CD
@@ -71,7 +71,7 @@
             WHERE 1=1
             AND tms.HQ_OFFICE_CD != '00000'
             <if test='orgnFg != null and orgnFg == "A"'>
-                AND tho.AGENCY_CD = #{agencyCd}
+                AND tho.AGENCY_CD IN (SELECT AGENCY_CD FROM TB_CM_AGENCY WHERE AGENCY_CD = #{agencyCd} OR P_AGENCY_CD = #{agencyCd})
             </if>
             AND tms.STORE_CD (+)= tmse.STORE_CD
             AND tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
@@ -316,7 +316,7 @@
                 </when>
             </choose>
             <if test='orgnFg != null and orgnFg == "A"'>
-                AND tms.AGENCY_CD = #{agencyCd}
+                AND tms.AGENCY_CD IN (SELECT AGENCY_CD FROM TB_CM_AGENCY WHERE AGENCY_CD = #{agencyCd} OR P_AGENCY_CD = #{agencyCd})
             </if>
             AND tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
             AND tmse.STORE_CD (+)= tms.STORE_CD
@@ -390,7 +390,7 @@
                 </when>
             </choose>
             <if test='orgnFg != null and orgnFg == "A"'>
-                AND tms.AGENCY_CD = #{agencyCd}
+                AND tms.AGENCY_CD IN (SELECT AGENCY_CD FROM TB_CM_AGENCY WHERE AGENCY_CD = #{agencyCd} OR P_AGENCY_CD = #{agencyCd})
             </if>
             AND tms.STORE_CD (+)= tmp.STORE_CD
             AND tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
@@ -497,7 +497,10 @@
         WHERE 	tms.STORE_CD = tmsf.STORE_CD
         AND 	tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
         AND 	tmsf.FNKEY_FG ='6020' -- 결제메뉴(좌)
-        AND		TMSF.fnkey_no = #{fnkeyNo}
+        AND		tmsf.fnkey_no = #{fnkeyNo}
+        <if test='orgnFg != null and orgnFg == "A"'>
+            AND tms.AGENCY_CD IN (SELECT AGENCY_CD FROM TB_CM_AGENCY WHERE AGENCY_CD = #{agencyCd} OR P_AGENCY_CD = #{agencyCd})
+        </if>
         <if test="hqOfficeCd != null and hqOfficeCd != ''">
             AND tms.HQ_OFFICE_CD LIKE '%'|| #{hqOfficeCd} ||'%'
         </if>
