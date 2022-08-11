@@ -169,7 +169,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/simpleProd/simpleProd.js?ver=20211111.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/simpleProd/simpleProd.js?ver=20220810.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

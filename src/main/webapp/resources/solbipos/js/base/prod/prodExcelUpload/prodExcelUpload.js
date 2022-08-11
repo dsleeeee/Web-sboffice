@@ -520,6 +520,9 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
                         }
                     }
                 }
+
+                // 큰따옴표(") 입력 불가
+                if ($scope.flex.collectionView.items[i].prodNm.indexOf("\"") >= 0) { result = messages["prodExcelUpload.prodNmTextChk"]; } // 상품명에 큰따옴표(")를 입력할 수 없습니다.
             }
 
             // 상품코드

@@ -47,7 +47,9 @@
         AND tcvc.VAN_FG = '01'
         AND tca.AGENCY_CD = tms.AGENCY_CD
         <if test='orgnFg != null and orgnFg == "A"'>
-            AND tms.AGENCY_CD = #{agencyCd}
+            <![CDATA[
+                AND (tca.AGENCY_CD = #{agencyCd} OR tca.P_AGENCY_CD = #{agencyCd})
+            ]]>
         </if>
         <if test='hqOfficeCd != null and hqOfficeCd != ""'>
             AND UPPER(tho.HQ_OFFICE_CD) LIKE '%'|| UPPER(#{hqOfficeCd})||'%'
