@@ -88,13 +88,13 @@
         AND     tmp.PROD_CD         =   tphsd.PROD_CD
         ]]>
         <if test='dateFg == "req"'>
-            AND tphsd.REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
+            AND tphsd.REQ_DATE BETWEEN #{startDate} AND #{endDate}
         </if>
         <if test='dateFg == "reg"'>
-            AND tphsd.REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
+            AND tphsd.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
         </if>
         <if test='dateFg == "mod"'>
-            AND tphsd.REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
+            AND tphsd.MOD_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
         </if>
         <choose>
            <when test='vendrCd != null and vendrCd != ""'>
@@ -163,13 +163,13 @@
         AND     tphdcs.STORAGE_CD   (+) =   tphsd.STORAGE_CD
         ]]>
         <if test='dateFg == "req"'>
-            AND tphsd.REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
+            AND tphsd.REQ_DATE BETWEEN #{startDate} AND #{endDate}
         </if>
         <if test='dateFg == "reg"'>
-            AND tphsd.REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
+            AND tphsd.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
         </if>
         <if test='dateFg == "mod"'>
-            AND tphsd.REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
+            AND tphsd.MOD_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
         </if>
         <![CDATA[
         GROUP
@@ -197,13 +197,13 @@
         AND     STORE_CD      = #{storeCd}
         AND     PROC_FG       = #{procFg}
         <if test='dateFg == "req"'>
-            AND REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
+            AND REQ_DATE BETWEEN #{startDate} AND #{endDate}
         </if>
         <if test='dateFg == "reg"'>
-            AND REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
+            AND REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
         </if>
         <if test='dateFg == "mod"'>
-            AND REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
+            AND MOD_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
         </if>
         <if test='vendrCd != null and vendrCd != ""'>
             AND PROD_CD IN  (   SELECT  PROD_CD
@@ -251,7 +251,7 @@
         ,       #{modDt}        ,       #{modId}
         FROM    (   SELECT  #{hqOfficeCd}   ,       #{slipNo}       ,       STORE_CD        ,       SLIP_FG
                     ,       DSTB_FG         ,       STORAGE_CD      ,       HQ_BRAND_CD     ,       PROD_CD         ,       PO_UNIT_FG      ,       PO_UNIT_QTY
-                    ,       REMARK          ,       #{outDate}	
+                    ,       REMARK          ,       #{outDate}
                     ,       ORDER_SPLY_UPRC ,       ORDER_UNIT_QTY  ,       ORDER_ETC_QTY   ,       ORDER_TOT_QTY   ,       ORDER_AMT       ,       ORDER_VAT       ,       ORDER_TOT
                     ,       MD_SPLY_UPRC    ,       MD_UNIT_QTY     ,       MD_ETC_QTY      ,       MD_TOT_QTY      ,       MD_AMT          ,       MD_VAT          ,       MD_TOT
                     ,       MGR_SPLY_UPRC   ,       MGR_UNIT_QTY    ,       MGR_ETC_QTY     ,       MGR_TOT_QTY     ,       MGR_AMT         ,       MGR_VAT         ,       MGR_TOT
@@ -299,7 +299,7 @@
         GROUP
         BY      SLIP_FG
     </insert>
-    
+
     <!-- 반품자료생성 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_OUTSTOCK_PROD
@@ -309,7 +309,7 @@
     <insert id="insertRtnStoreOutStockProd" parameterType="outstockDataVO">
         /* USE : OutstockDataMapper.insertRtnStoreOutStockProd */
         INSERT INTO TB_PO_HQ_STORE_OUTSTOCK_PROD
-        (      
+        (
         	HQ_OFFICE_CD
 			,SLIP_NO
 			,PROD_CD
@@ -328,13 +328,13 @@
 			,MOD_DT
 			,MOD_ID
         )
-        SELECT  
-        	#{hqOfficeCd}           
-        	,   #{slipNo}    
-        	,	PROD_CD   
-        	,	STORAGE_CD    
+        SELECT
+        	#{hqOfficeCd}
+        	,   #{slipNo}
+        	,	PROD_CD
+        	,	STORAGE_CD
         	,	'12'
-        	,   STORE_CD   
+        	,   STORE_CD
         	,	'-1'
  			,	SUM(ORDER_UNIT_QTY)
  			,  	SUM(ORDER_ETC_QTY)
@@ -342,9 +342,9 @@
   			,	SUM(ORDER_AMT)
   			,	SUM(ORDER_VAT)
   			,	SUM(ORDER_TOT)
-        	,   #{regDt}                
+        	,   #{regDt}
         	,   #{regId}
-        	,   #{modDt}                
+        	,   #{modDt}
         	,   #{modId}
         FROM    TB_PO_HQ_STORE_OUTSTOCK_DTL
         WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
