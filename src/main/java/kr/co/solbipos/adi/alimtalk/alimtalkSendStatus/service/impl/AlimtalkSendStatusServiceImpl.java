@@ -129,6 +129,10 @@ public class AlimtalkSendStatusServiceImpl implements AlimtalkSendStatusService 
     @Override
     public List<DefaultMap<Object>> getAlimtalkPeriodSendStatusList(AlimtalkSendStatusVO alimtalkSendStatusVO, SessionInfoVO sessionInfoVO) {
 
+        // 접속사용자의 권한(M : 시스템, A : 대리점, H : 본사, S : 매장)
+        alimtalkSendStatusVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        alimtalkSendStatusVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
             alimtalkSendStatusVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         }

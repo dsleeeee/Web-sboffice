@@ -120,6 +120,10 @@ public class SendStatusServiceImpl implements SendStatusService {
     @Override
     public List<DefaultMap<Object>> getPeriodSendStatusList(SendStatusVO sendStatusVO, SessionInfoVO sessionInfoVO) {
 
+        // 접속사용자의 권한(M : 시스템, A : 대리점, H : 본사, S : 매장)
+        sendStatusVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        sendStatusVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
             sendStatusVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         }
