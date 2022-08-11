@@ -739,7 +739,7 @@
     <select id="getOrderCloseCheck" parameterType="storeOrderVO" resultType="String">
         /* USE : storeOrderMapper.getOrderCloseCheck */
         <![CDATA[
-        SELECT	DECODE(SUM(ORDER_CLOSE_FG), 0, 'N', 'Y') AS ORDER_CLOSE_FG
+        SELECT	DECODE(NVL(SUM(ORDER_CLOSE_FG), 0), 0, 'N', 'Y') AS ORDER_CLOSE_FG
         FROM	(	SELECT  DECODE(tphsc.ORDER_CLOSE_FG, 'N', 0, 1) AS ORDER_CLOSE_FG
                     FROM    TB_PO_HQ_STORE_CLOSE tphsc
                     WHERE   tphsc.HQ_OFFICE_CD  = #{hqOfficeCd}
