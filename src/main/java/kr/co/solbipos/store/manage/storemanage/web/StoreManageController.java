@@ -831,9 +831,11 @@ public class StoreManageController {
      */
     @ResponseBody
     @RequestMapping(value = "/storeManage/chkUserId.sb", method = RequestMethod.POST)
-    public Result chkUserId(StoreManageVO storeManageVO) {
+    public Result chkUserId(StoreManageVO storeManageVO, HttpServletRequest request) {
 
-        EmpResult empResult= service.chkUserId(storeManageVO);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        EmpResult empResult= service.chkUserId(storeManageVO, sessionInfoVO);
 
         return returnJson(Status.OK, empResult);
     }

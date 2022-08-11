@@ -138,7 +138,7 @@ public interface StoreManageService {
     String getUseDigit8Store(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
 
     /** 웹 사용자 아이디 체크*/
-    EmpResult chkUserId(StoreManageVO storeManageVO);
+    EmpResult chkUserId(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
 
     /** ERP를 연동하는 본사인지 확인 */
     String getErpLinkHq(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
