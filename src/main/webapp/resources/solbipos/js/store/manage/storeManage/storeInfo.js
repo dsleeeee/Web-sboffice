@@ -1099,9 +1099,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         return false;
       }
     }else {
-      if(7 > $("#storeCd").val().length ||  $("#storeCd").val().length > 12) {
-        // 매장코드는 7~12자리로 입력하세요.
-        $scope._popMsg(messages["storeManage.require.storeCdLength7To12"]);
+      if($("#storeCd").val().length !== 6 && (8 > $("#storeCd").val().length || $("#storeCd").val().length > 12)) {
+        // 매장코드는 6자리 또는 8~12자리로 입력하세요.
+        $scope._popMsg(messages["storeManage.require.storeCdLength6Or8To12"]);
         return false;
       }
     }
@@ -1211,9 +1211,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
      }
 
      // 길이 및 형식 체크
-     if(8 > $("#userId").val().length || $("#userId").val().length > 12){
-       // 웹사용자아이디는 8자 이상 12자 이하로 입력해주세요.
-       $scope._popMsg(messages["storeManage.userIdLengthRegexp.msg"]);
+     if($("#userId").val().length !== 6 && (8 > $("#userId").val().length || $("#userId").val().length > 12)){
+       // 웹사용자아이디는 6자리 또는 8~12자리로 입력하세요.
+       $scope._popMsg(messages["storeManage.userIdLengthRegexp2.msg"]);
        return false;
      }
 
@@ -1221,6 +1221,11 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
      var params    = {};
      params.userId = $("#userId").val();
      params.erpLinkHq = erpLinkHq; // erp 연동 매장 여부 파악
+
+    if(orgnFg === "MASTER" || orgnFg === "AGENCY"){ // 관리자화면에서 매장등록시, erpLinkHq 값이 없어서 중복체크 때 조회해봄.
+      params.hqOfficeCd = $scope.store.hqOfficeCd;
+    }
+
      $scope._postJSONQuery.withPopUp( "/store/manage/storeManage/storeManage/chkUserId.sb", params, function(response){
 
        var result = response.data.data;
@@ -1245,6 +1250,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
          $("#userIdChkFg").val("");
          $scope.store.userIdChkFg = "";
          $scope._popMsg(messages["storeManage.userId.duplicate.msg"]);
+       } else if (result === "USER_ID_LENGHTH_REGEXP_6OR_8TO12"){
+         $scope._popMsg(messages["storeManage.userIdLengthRegexp2.msg"]);
        } else {
          $scope._popMsg(messages["storeManage.userId.notDuplicate.msg"]);
        }
@@ -1304,6 +1311,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $("#manageVanCd").val("");
           $("#agencyNm").val("");
           $("#agencyCd").val("");
+          $("#mapStoreCd").val("");
 
           $scope.store.storeCd = "";
           $scope.store.storeCdChkFg = "";
@@ -1328,6 +1336,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $scope.store.vanCd = "";
           $scope.store.agencyNm = "";
           $scope.store.agencyCd = "";
+          $scope.store.mapStoreCd = "";
 
           // ERP 연동 매장 정보 셋팅
           if($scope.store.storeCdInputType === "1") {
@@ -1354,6 +1363,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $("#manageVanCd").val(erpStoreScope.getErpStore().vanCd);
           $("#agencyNm").val(erpStoreScope.getErpStore().agencyNm);
           $("#agencyCd").val(erpStoreScope.getErpStore().agencyCd);
+          $("#mapStoreCd").val(erpStoreScope.getErpStore().bbqStoreCd);
 
           $scope.store.storeNm = erpStoreScope.getErpStore().storeNm;
           $scope.store.bizStoreNm = erpStoreScope.getErpStore().bizStoreNm;
@@ -1375,6 +1385,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $scope.store.vanCd = erpStoreScope.getErpStore().vanCd;
           $scope.store.agencyNm = erpStoreScope.getErpStore().agencyNm;
           $scope.store.agencyCd = erpStoreScope.getErpStore().agencyCd;
+          $scope.store.mapStoreCd = erpStoreScope.getErpStore().bbqStoreCd;
 
           // 매장환경복사에서 본사선택 콤보박스 자동셋팅
           $scope.envHqOfficeCdCombo.selectedValue = $("#hqOfficeCd").val();

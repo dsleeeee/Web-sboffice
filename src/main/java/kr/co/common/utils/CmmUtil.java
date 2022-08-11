@@ -157,8 +157,8 @@ public class CmmUtil {
 
         // 2021.11.17 BBQ는 매장코드가 숫자로만 되어있어서, 매장코드를 웹 사용자 아이디로 그대로 사용하기 위해 숫자로만 이뤄진 웹 사용자 아이디도 생성 가능하도록 변경.
 
-        if( len > 12 || len < 8 ) {
-            return EmpResult.USER_ID_LENGHTH_REGEXP;
+        if(len != 6 && (len > 12 || len < 8)) {
+            return EmpResult.USER_ID_LENGHTH_REGEXP_6OR_8TO12;
         } else if( flag == true ) {
             return EmpResult.USER_ID_CANNOT_USE_HANGEUL;
         } else if( flag3 == false ) {

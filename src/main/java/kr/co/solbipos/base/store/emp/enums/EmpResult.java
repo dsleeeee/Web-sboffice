@@ -43,6 +43,8 @@ public enum EmpResult implements CodeEnum {
     USER_ID_REGEXP("USER_ID_REGEXP"),
     /** 사용자 아이디는 8자 이상 12자 이하로 입력해주세요. */
     USER_ID_LENGHTH_REGEXP("USER_ID_LENGHTH_REGEXP"),
+    /** 사용자 아이디는 6자리 또는 8~12자리로 입력하세요. */
+    USER_ID_LENGHTH_REGEXP_6OR_8TO12("USER_ID_LENGHTH_REGEXP_6OR_8TO12"),
     /** 한글을 사용할 수 없습니다. */
     USER_ID_CANNOT_USE_HANGEUL("USER_ID_CANNOT_USE_HANGEUL"),
     /** 아이디는 영문자가 반드시 포함되어야 합니다. */
