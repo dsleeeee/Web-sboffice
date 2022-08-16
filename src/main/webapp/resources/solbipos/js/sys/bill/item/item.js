@@ -17,8 +17,10 @@ var app = agrid.getApp();
  * 출력코드구성 그리드 생성
  */
 app.controller('printCodeCtrl', ['$scope', '$http', function ($scope, $http) {
+  
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('printCodeCtrl', $scope, $http, false));
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     var contentColumn = s.columns.getColumn("content");
@@ -93,6 +95,7 @@ app.controller('printCodeCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     });
   };
+
   // 그리드 Row 사이즈 정렬
   $scope.autoSizeVisibleRows = function(flex) {
     for ( var r = 0; r < flex.itemsSource.itemCount; r++ ) {
@@ -101,6 +104,7 @@ app.controller('printCodeCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     }
   };
+
   // 출력코드구성 그리드 조회
   $scope.$on("printCodeCtrl", function(event, data) {
     // 파라미터
@@ -117,6 +121,7 @@ app.controller('printCodeCtrl', ['$scope', '$http', function ($scope, $http) {
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
+
   // 출력코드구성 그리드 행 추가
   $scope.addRow = function() {
     // 파라미터 설정
@@ -127,12 +132,18 @@ app.controller('printCodeCtrl', ['$scope', '$http', function ($scope, $http) {
     // 추가기능 수행 : 파라미터
     $scope._addRow(params);
   };
+
   // 출력코드구성 저장
   $scope.save = function() {
     // 파라미터 설정
     var params = new Array();
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
       $scope.flex.collectionView.itemsEdited[i].status = "U";
+      // 최소길이 체크
+      if(nvl($scope.flex.collectionView.itemsEdited[i].prtNm, '').getByteLengthForOracle() < 1) {
+        $scope._popMsg(messages["item.prtNmBlank"]); // 출력코드명을 입력해주세요.
+        return false;
+      }
       // 최대길이 체크
       if(nvl($scope.flex.collectionView.itemsEdited[i].prtNm, '').getByteLengthForOracle() > 50) {
         $scope._popMsg(messages["item.prtNmLengthChk"]); // 출력코드명 길이가 너무 깁니다.
@@ -140,24 +151,37 @@ app.controller('printCodeCtrl', ['$scope', '$http', function ($scope, $http) {
       }
       params.push($scope.flex.collectionView.itemsEdited[i]);
     }
+
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
       $scope.flex.collectionView.itemsAdded[i].status = "I";
+      // 최소길이 체크
+      if(nvl($scope.flex.collectionView.itemsAdded[i].prtCd, '').getByteLengthForOracle() < 1) {
+        $scope._popMsg(messages["item.prtCdBlank"]); // 출력코드를 입력해주세요.
+        return false;
+      }
       // 최대길이 체크
       if(nvl($scope.flex.collectionView.itemsAdded[i].prtCd, '').getByteLengthForOracle() > 50) {
         $scope._popMsg(messages["item.prtCdLengthChk"]); // 출력코드 길이가 너무 깁니다.
         return false;
       }
+      // 최소길이 체크
+      if(nvl($scope.flex.collectionView.itemsAdded[i].prtNm, '').getByteLengthForOracle() < 1) {
+        $scope._popMsg(messages["item.prtNmBlank"]); // 출력코드명을 입력해주세요.
+        return false;
+      }
+      // 최대길이 체크
       if(nvl($scope.flex.collectionView.itemsAdded[i].prtNm, '').getByteLengthForOracle() > 50) {
         $scope._popMsg(messages["item.prtNmLengthChk"]); // 출력코드명 길이가 너무 깁니다.
         return false;
       }
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
+
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save("/sys/bill/item/item/save.sb", params, function() {
       // 저장기능 수행 후 재조회
       $scope._broadcast("printCodeCtrl");
     });
   }
-}]);
 
+}]);
