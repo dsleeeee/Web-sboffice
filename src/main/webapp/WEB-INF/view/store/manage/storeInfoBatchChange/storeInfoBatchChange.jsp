@@ -8,6 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
+<c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 
 <div class="subCon" ng-controller="storeInfoBatchChangeCtrl">
 
@@ -281,11 +282,20 @@
         </tbody>
     </table>
 
+    <div class="mt20 oh">
+        <%-- 저장 --%>
+        <button class="btn_skyblue ml5 fr" id="btnSave" ng-click="save()">
+            <s:message code="cmm.save" />
+        </button>
+        <%--시스템패스워드--%>
+        <div class="sb-select dkbr ml5 fr">
+            <s:message code="storeInfoBatchChange.systemPw" />
+            <input type="password" class="sb-input w200px" id="srchSystemPw" ng-model="systemPw" />
+        </div>
+    </div>
+
     <%-- 그리드 --%>
     <div class="w100 mt10 mb20">
-        <div class="updownSet oh mb10">
-            <button class="btn_skyblue" id="btnClassSave" ng-click="save()"><s:message code='cmm.save' /></button>
-        </div>
         <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
             <wj-flex-grid
                     autoGenerateColumns="false"
@@ -325,6 +335,7 @@
 <script type="text/javascript">
     var orgnFg = "${orgnFg}";
     var pAgencyCd = "${pAgencyCd}";
+    var userId = "${userId}";
 
     <%-- 매장상태구분 --%>
     var sysStatFgComboData = ${ccu.getCommCode("005")};
@@ -334,7 +345,7 @@
     var areaCdComboData = ${ccu.getCommCode("061")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeInfoBatchChange/storeInfoBatchChange.js?ver=20220808.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeInfoBatchChange/storeInfoBatchChange.js?ver=20220808.02" charset="utf-8"></script>
 
 <%-- 대리점 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/searchAgency.jsp">

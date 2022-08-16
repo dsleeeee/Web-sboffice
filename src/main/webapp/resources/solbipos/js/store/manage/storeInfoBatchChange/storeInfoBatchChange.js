@@ -274,6 +274,27 @@ app.controller('storeInfoBatchChangeCtrl', ['$scope', '$http', function ($scope,
             }
         }
 
+        if($scope.systemPw === "" || $scope.systemPw === undefined) {
+            $scope._popMsg(messages["storeInfoBatchChange.systemPwBlank"]); // 시스템패스워드를 입력해주세요.
+            return false;
+
+        } else {
+            var date = new Date();
+            var year = new String(date.getFullYear());
+            var month = new String(date.getMonth()+1);
+            month = month.length <= 1 ? "0"+month : month;
+            var day = new String(date.getDate());
+            day = day.length <= 1 ? "0"+day : day;
+            var hh = new String(date.getHours());
+            hh = hh < 10 ? "0"+hh : hh;
+            var pw = userId + year + month + day + hh;
+
+            if($scope.systemPw !== pw) {
+                $scope._popMsg(messages["storeInfoBatchChange.systemPwError"]); // 시스템패스워드를 틀렸습니다. 다시확인해주세요.
+                return false;
+            }
+        }
+
         $scope._popConfirm(messages["cmm.choo.save"], function() {
             // 파라미터 설정
             var params = new Array();
