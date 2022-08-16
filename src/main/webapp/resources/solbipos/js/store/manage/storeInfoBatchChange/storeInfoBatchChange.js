@@ -314,4 +314,13 @@ app.controller('storeInfoBatchChangeCtrl', ['$scope', '$http', function ($scope,
     };
     // <-- //그리드 저장 -->
 
+    // 일괄변경 테이블 숨김/보임
+    $scope.changeShow = function(){
+        if($("#tblBatchChange").css("display") === 'none'){
+            $("#tblBatchChange").show();
+        } else {
+            $("#tblBatchChange").hide();
+        }
+    };
+
 }]);

@@ -20,6 +20,10 @@
             <button class="btn_blue fr" ng-click="_broadcast('storeInfoBatchChangeCtrl',1)">
                 <s:message code="cmm.search" />
             </button>
+            <%-- 일괄변경 --%>
+            <button class="btn_blue mr5 fl" id="btnShow" ng-click="changeShow()">
+                <s:message code="cmm.batchChange"/>
+            </button>
         </div>
     </div>
     <table class="searchTbl">
@@ -104,7 +108,7 @@
     </table>
 
     <%-- 일괄적용 --%>
-    <table class="searchTbl mt10">
+    <table class="searchTbl mt10" id="tblBatchChange" style="display: none;">
         <colgroup>
             <col class="w15" />
             <col class="w15" />
@@ -124,7 +128,7 @@
             </td>
             <%-- 일괄적용 --%>
             <td>
-                <a href="#" class="btn_grayS ml10" ng-click="batchChange('storeNmChg')"><s:message code="storeInfoBatchChange.batchChange" /></a>
+                <a href="#" class="btn_grayS ml10" ng-click="batchChange('storeNmChg')"><s:message code="cmm.batchApply" /></a>
             </td>
             <%-- 대리점 --%>
             <th>
@@ -136,7 +140,7 @@
             </td>
             <%-- 일괄적용 --%>
             <td>
-                <a href="#" class="btn_grayS ml10" ng-click="batchChange('agencyCdChg')"><s:message code="storeInfoBatchChange.batchChange" /></a>
+                <a href="#" class="btn_grayS ml10" ng-click="batchChange('agencyCdChg')"><s:message code="cmm.batchApply" /></a>
             </td>
         </tr>
         <tr>
@@ -149,7 +153,7 @@
             </td>
             <%-- 일괄적용 --%>
             <td>
-                <a href="#" class="btn_grayS ml10" ng-click="batchChange('bizStoreNmChg')"><s:message code="storeInfoBatchChange.batchChange" /></a>
+                <a href="#" class="btn_grayS ml10" ng-click="batchChange('bizStoreNmChg')"><s:message code="cmm.batchApply" /></a>
             </td>
             <%-- 대표자명 --%>
             <th>
@@ -160,7 +164,7 @@
             </td>
             <%-- 일괄적용 --%>
             <td>
-                <a href="#" class="btn_grayS ml10" ng-click="batchChange('ownerNmChg')"><s:message code="storeInfoBatchChange.batchChange" /></a>
+                <a href="#" class="btn_grayS ml10" ng-click="batchChange('ownerNmChg')"><s:message code="cmm.batchApply" /></a>
             </td>
         </tr>
         <tr>
@@ -183,7 +187,7 @@
             </td>
             <%-- 일괄적용 --%>
             <td>
-                <a href="#" class="btn_grayS ml10" ng-click="batchChange('areaCdChg')"><s:message code="storeInfoBatchChange.batchChange" /></a>
+                <a href="#" class="btn_grayS ml10" ng-click="batchChange('areaCdChg')"><s:message code="cmm.batchApply" /></a>
             </td>
             <%-- 직영구분 --%>
             <th>
@@ -204,7 +208,7 @@
             </td>
             <%-- 일괄적용 --%>
             <td>
-                <a href="#" class="btn_grayS ml10" ng-click="batchChange('directManageYnChg')"><s:message code="storeInfoBatchChange.batchChange" /></a>
+                <a href="#" class="btn_grayS ml10" ng-click="batchChange('directManageYnChg')"><s:message code="cmm.batchApply" /></a>
             </td>
         </tr>
         <tr>
@@ -217,7 +221,7 @@
             </td>
             <%-- 일괄적용 --%>
             <td>
-                <a href="#" class="btn_grayS ml10" ng-click="batchChange('telNoChg')"><s:message code="storeInfoBatchChange.batchChange" /></a>
+                <a href="#" class="btn_grayS ml10" ng-click="batchChange('telNoChg')"><s:message code="cmm.batchApply" /></a>
             </td>
             <%-- 팩스번호 --%>
             <th>
@@ -228,7 +232,7 @@
             </td>
             <%-- 일괄적용 --%>
             <td>
-                <a href="#" class="btn_grayS ml10" ng-click="batchChange('faxNoChg')"><s:message code="storeInfoBatchChange.batchChange" /></a>
+                <a href="#" class="btn_grayS ml10" ng-click="batchChange('faxNoChg')"><s:message code="cmm.batchApply" /></a>
             </td>
         </tr>
         <tr>
@@ -241,7 +245,7 @@
             </td>
             <%-- 일괄적용 --%>
             <td>
-                <a href="#" class="btn_grayS ml10" ng-click="batchChange('sysRemarkChg')"><s:message code="storeInfoBatchChange.batchChange" /></a>
+                <a href="#" class="btn_grayS ml10" ng-click="batchChange('sysRemarkChg')"><s:message code="cmm.batchApply" /></a>
             </td>
             <%-- 본사비고 --%>
             <th>
@@ -252,7 +256,7 @@
             </td>
             <%-- 일괄적용 --%>
             <td>
-                <a href="#" class="btn_grayS ml10" ng-click="batchChange('hdRemarkChg')"><s:message code="storeInfoBatchChange.batchChange" /></a>
+                <a href="#" class="btn_grayS ml10" ng-click="batchChange('hdRemarkChg')"><s:message code="cmm.batchApply" /></a>
             </td>
         </tr>
         <tr>
@@ -265,7 +269,7 @@
             </td>
             <%-- 일괄적용 --%>
             <td>
-                <a href="#" class="btn_grayS ml10" ng-click="batchChange('remarkChg')"><s:message code="storeInfoBatchChange.batchChange" /></a>
+                <a href="#" class="btn_grayS ml10" ng-click="batchChange('remarkChg')"><s:message code="cmm.batchApply" /></a>
             </td>
             <%-- 매핑매장코드 --%>
             <th>
@@ -276,7 +280,7 @@
             </td>
             <%-- 일괄적용 --%>
             <td>
-                <a href="#" class="btn_grayS ml10" ng-click="batchChange('mapStoreCdChg')"><s:message code="storeInfoBatchChange.batchChange" /></a>
+                <a href="#" class="btn_grayS ml10" ng-click="batchChange('mapStoreCdChg')"><s:message code="cmm.batchApply" /></a>
             </td>
         </tr>
         </tbody>
@@ -345,7 +349,7 @@
     var areaCdComboData = ${ccu.getCommCode("061")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeInfoBatchChange/storeInfoBatchChange.js?ver=20220808.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeInfoBatchChange/storeInfoBatchChange.js?ver=20220816.01" charset="utf-8"></script>
 
 <%-- 대리점 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/searchAgency.jsp">
