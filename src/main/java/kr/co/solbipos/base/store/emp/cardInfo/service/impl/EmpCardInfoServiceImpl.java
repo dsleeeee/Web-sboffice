@@ -96,13 +96,13 @@ public class EmpCardInfoServiceImpl implements EmpCardInfoService {
                 empCardInfoVO.setEmployeeOrgnCd(sessionInfoVO.getStoreCd());
             }
 //            empCardInfoVO.setUseFg("1"); // 사용
-            System.out.println("사원카드정보관리 >>> 엑셀업로드 >>> 카드사용구분_업로드 : " + empCardInfoVO.getUseFg());
+            System.out.println("사원카드정보관리 >>> 저장 >>> 카드사용구분 : " + empCardInfoVO.getUseFg());
             if("정상".equals(empCardInfoVO.getUseFg())) {
                 empCardInfoVO.setUseFg("1");
-            } else {
+            } else if("사용불가".equals(empCardInfoVO.getUseFg())) {
                 empCardInfoVO.setUseFg("0");
             }
-            System.out.println("사원카드정보관리 >>> 엑셀업로드 >>> 카드사용구분_업로드변환 : " + empCardInfoVO.getUseFg());
+            System.out.println("사원카드정보관리 >>> 저장 >>> 카드사용구분_저장값 : " + empCardInfoVO.getUseFg());
             empCardInfoVO.setRegDt(currentDt);
             empCardInfoVO.setRegId(sessionInfoVO.getUserId());
             empCardInfoVO.setModDt(currentDt);
