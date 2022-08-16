@@ -153,6 +153,15 @@ app.controller('excelUploadEmpCardInfoCtrl', ['$scope', '$http', '$timeout', fun
 
     // 데이터 저장
     $scope.save = function (jsonData) {
+        for (var i = 0; i < jsonData.length; i++) {
+            // 카드사용구분
+            if (jsonData[i].useFg == "정상") {
+                jsonData[i].useFg = "1";
+            } else {
+                jsonData[i].useFg = "0";
+            }
+        }
+
 
         $scope.totalRows = jsonData.length;
         var params = [];

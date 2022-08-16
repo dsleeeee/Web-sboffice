@@ -34,4 +34,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/excelUploadEmpCardInfo.js?ver=20220727.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/excelUploadEmpCardInfo.js?ver=20220816.01" charset="utf-8"></script>
