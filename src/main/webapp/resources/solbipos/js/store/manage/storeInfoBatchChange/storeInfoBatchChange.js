@@ -105,6 +105,9 @@ app.controller('storeInfoBatchChangeCtrl', ['$scope', '$http', function ($scope,
     });
 
     $scope.searchStoreInfoBatchChange = function(){
+        // 시스템패스워드 비우기
+        $scope.systemPw = "";
+
         var params = {};
 
         $scope._inquiryMain("/store/manage/storeInfoBatchChange/storeInfoBatchChange/getStoreInfoBatchChangeList.sb", params, function() {}, false);
