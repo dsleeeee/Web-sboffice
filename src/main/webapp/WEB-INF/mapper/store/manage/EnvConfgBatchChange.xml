@@ -321,6 +321,7 @@
             AND tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
             AND tmse.STORE_CD (+)= tms.STORE_CD
             AND tmse.ENVST_CD (+)= tce.ENVST_CD
+            AND tce.ENVST_CD = #{envstCd}
             ORDER BY tms.HQ_OFFICE_CD, tms.STORE_CD
         )
         WHERE 1=1
@@ -339,7 +340,6 @@
         <if test="useYn != null and useYn != ''">
             AND EXIST_FG = #{useYn}
         </if>
-        AND ENVST_CD = #{envstCd}
         ORDER BY HQ_OFFICE_CD, STORE_CD
     </select>
 
