@@ -93,18 +93,18 @@ public class VerManageServiceImpl implements VerManageService {
             VerInfoVO verInfo = uploadFile(multi);
 
             String insertDt = currentDateTimeString();
-            String pgmYn = (String) multi.getParameter("pgmYn") == "true" ? "Y": "N";
+           /* String pgmYn = (String) multi.getParameter("pgmYn") == "true" ? "Y": "N";
             String imgYn = (String)multi.getParameter("imgYn")== "true" ? "Y": "N";
-            String dbYn = (String)multi.getParameter("dbYn")== "true" ? "Y": "N";
+            String dbYn = (String)multi.getParameter("dbYn")== "true" ? "Y": "N";*/
 
 
             verInfo.setVerSerNo((String)multi.getParameter("verSerNo"));
             verInfo.setVerSerNm((String)multi.getParameter("verSerNm"));
             verInfo.setFileDesc((String)multi.getParameter("fileDesc"));
             verInfo.setProgFg((String)multi.getParameter("progFg"));
-            verInfo.setPgmYn(pgmYn);
-            verInfo.setImgYn(imgYn);
-            verInfo.setDbYn(dbYn);
+            verInfo.setPgmYn((String)multi.getParameter("pgmYn"));
+            verInfo.setImgYn((String)multi.getParameter("imgYn"));
+            verInfo.setDbYn((String)multi.getParameter("dbYn"));
             verInfo.setDelYn("N");
 
             if(String.valueOf(UseYn.Y).equals(multi.getParameter("useYn"))){
@@ -143,7 +143,7 @@ public class VerManageServiceImpl implements VerManageService {
 
             String insertDt = currentDateTimeString();
 
-            String pgmYn = "N";
+            /*String pgmYn = "N";
             String imgYn = "N";
             String dbYn = "N";
 
@@ -155,15 +155,15 @@ public class VerManageServiceImpl implements VerManageService {
             }
             if(Boolean.valueOf(multi.getParameter("dbYn")) == true) {
                 dbYn = "Y";
-            }
+            }*/
 
             verInfo.setVerSerNo((String)multi.getParameter("verSerNo"));
             verInfo.setVerSerNm((String)multi.getParameter("verSerNm"));
             verInfo.setFileDesc((String)multi.getParameter("fileDesc"));
             verInfo.setProgFg((String)multi.getParameter("progFg"));
-            verInfo.setPgmYn(pgmYn);
-            verInfo.setImgYn(imgYn);
-            verInfo.setDbYn(dbYn);
+            verInfo.setPgmYn((String)multi.getParameter("pgmYn"));
+            verInfo.setImgYn((String)multi.getParameter("imgYn"));
+            verInfo.setDbYn((String)multi.getParameter("dbYn"));
             verInfo.setDelYn("N");
 
             if(String.valueOf(UseYn.Y).equals(multi.getParameter("useYn"))){

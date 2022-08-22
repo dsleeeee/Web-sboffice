@@ -17,14 +17,13 @@ var app = agrid.getApp();
  *  회원정보 그리드
  **********************************************************************/
 app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
+
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('verRegistCtrl', $scope, $http, true));
 
   // 콤보박스 데이터
   $scope._setComboData("progFgCombo", progFg);
   $scope._setComboData("useYnCombo", useYn);
-
-  $scope.isEdit = false;
 
   // 버전정보
   $scope.version;
@@ -37,17 +36,43 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     return $scope.selectVersion;
   };
 
-  // 조회 버튼 클릭
   $scope.$on("verRegistCtrl", function(event, data) {
 
-    $scope.setSelectVersion(data);
-
-    if( !isEmptyObject($scope.getSelectVersion()) ) {
-      $scope.isEdit = true;
-      $scope.getVersionInfo();
+    // POS 버전에 따라 프로그램구분 콤보박스 셋팅
+    if(window.location.href.indexOf("verInfo/view.sb") > 0){
+      $scope.versionProgFgCombo.selectedValue = "1"; // [1] NXPOS_V1;
+    }else{
+      $scope.versionProgFgCombo.selectedValue = "2"; // [2] NXPOS_V2;
     }
 
-      event.preventDefault();
+    if(data !== undefined && !isEmptyObject(data)) {
+
+      // 정보 셋팅
+      $scope.setSelectVersion(data);
+
+      // 버전 정보 조회
+      $scope.getVersionInfo();
+
+      // UI 셋팅
+      $("#btnReg").css("display", "none");
+      $("#btnMod").css("display", "");
+      $("#verSerNo").attr("disabled", true);
+      $("#verSerNo").css('background-color', '#F0F0F0');
+
+    }else{
+
+      // UI 셋팅
+      $("#btnReg").css("display", "");
+      $("#btnMod").css("display", "none");
+      $("#verSerNo").attr("disabled", false);
+      $("#verSerNo").css('background-color', '#FFFFFF');
+    }
+
+    // 프로그램구분은 수정 못하게 처리
+    $("#progFg").attr("disabled", true);
+    $("#progFg").css('background-color', '#F0F0F0');
+    
+    event.preventDefault();
   });
 
   // 파일업로드시 파일사이즈 변경
@@ -58,8 +83,8 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     });
   };
 
-  // 저장
-  $scope.regist = function(){
+  // 입력양식 체크
+  $scope.chkForm = function(){
 
     // 버전일련번호 체크
     if($("#verSerNo").val() === null || $("#verSerNo").val() === undefined || $("#verSerNo").val() === "") {
@@ -82,16 +107,43 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     }
 
+    // 신규등록은 버전일련번호 중복체크 후 저장
+    if(isEmptyObject($scope.getSelectVersion())){
+
+      var params = {};
+      params.verSerNo = $scope.version.verSerNo;
+
+      $scope._postJSONQuery.withOutPopUp('/pos/confg/verManage/verInfo/chkVerSerNo.sb', params, function (response) {
+          var res = response.data.data;
+          if(res > 0) {
+            $scope._popMsg(messages["verManage.verSerNoChk.msg"]);
+            return false;
+          }else{
+            $scope.regist();
+          }
+      });
+    }else{
+      $scope.regist();
+    }
+  };
+
+  // 저장
+  $scope.regist = function(){
+
     var formData = new FormData($("#regForm")[0]);
 
+    if($scope.version.fileDesc === null || $scope.version.fileDesc === undefined || $scope.version.fileDesc === ""){
+      $scope.version.fileDesc = "";
+    }
+
     formData.append("verSerNo", $scope.version.verSerNo);
-    formData.append("verSerNm", $scope.version.verSerNo);
+    formData.append("verSerNm", $scope.version.verSerNm);
     formData.append("fileSize", $scope.version.fileSize);
-    formData.append("fileDesc", $scope.version.fileDesc === undefined ? "" : $scope.version.fileDesc);
+    formData.append("fileDesc", $scope.version.fileDesc);
     formData.append("progFg", $scope.versionProgFgCombo.selectedValue);
-    formData.append("pgmYn", $('input:checkbox[id="pgm"]').is(":checked"));
-    formData.append("dbYn",  $('input:checkbox[id="db"]').is(":checked"));
-    formData.append("imgYn", $('input:checkbox[id="img"]').is(":checked"));
+    formData.append("pgmYn", $("#pgm").is(":checked") === true ? 'Y' : 'N');
+    formData.append("dbYn",  $("#db").is(":checked") === true ? 'Y' : 'N');
+    formData.append("imgYn", $("#img").is(":checked") === true ? 'Y' : 'N');
     formData.append("useYn", $scope.versionUseYnCombo.selectedValue);
 
     var url = '';
@@ -151,11 +203,10 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     });
   };
 
-  // 버전 목록 조회
+  // 버전 정보 조회
   $scope.getVersionInfo = function(){
-    var params = {};
-    params    = $scope.getSelectVersion();
 
+    var params = $scope.getSelectVersion();
     console.log('params' , params);
 
     $scope._postJSONQuery.withOutPopUp( "/pos/confg/verManage/verInfo/dtlInfo.sb", params, function(response){
@@ -183,10 +234,13 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   };
 
   // 닫기
-  $scope.close = function(){
-    $scope.versionRegistLayer.hide();
-  };
+  $scope.closePop = function(){
+    // 초기화
+    $scope.setSelectVersion(null);
 
+    $scope.versionRegistLayer.hide();
+    console.log("closePop");
+  };
 
 }]);
 

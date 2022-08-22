@@ -69,6 +69,20 @@ public class VerManageController {
     }
 
     /**
+     * 버전정보 화면 이동(V2 버젼)
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/verInfoV2/view.sb", method = RequestMethod.GET)
+    public String viewV2(HttpServletRequest request, HttpServletResponse response,
+            Model model) {
+        return "pos/confg/vermanage/verManageV2";
+    }
+
+    /**
      * 버전정보 목록 조회
      *
      * @param verInfo

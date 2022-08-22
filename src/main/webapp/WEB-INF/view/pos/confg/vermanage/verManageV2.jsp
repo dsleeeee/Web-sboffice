@@ -8,15 +8,15 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
-<div class="subCon" ng-controller="verManageCtrl" id="verManageView">
+<div class="subCon" ng-controller="verManageV2Ctrl" id="verManageV2View">
   <div class="searchBar">
     <a href="#" class="open fl">
       <c:if test="${orgnFg != 'HQ'}">${menuNm}</c:if>
-      <c:if test="${orgnFg == 'HQ'}"><s:message code="verHq.verManage" /></c:if>
+      <c:if test="${orgnFg == 'HQ'}"><s:message code="verHq.verManageV2" /></c:if>
     </a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('verManageCtrl', 1)">
+      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('verManageV2Ctrl', 1)">
         <s:message code="cmm.search" />
       </button>
     </div>
@@ -118,7 +118,7 @@
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
     <%-- id --%>
-    <ul id="verManageCtrlPager" data-size="10">
+    <ul id="verManageV2CtrlPager" data-size="10">
     </ul>
   </div>
   <%--//페이지 리스트--%>
@@ -133,14 +133,18 @@
   var hqOfficeCd = "${hqOfficeCd}";
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verManage.js?ver=20220822.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verManageV2.js?ver=20220822.01" charset="utf-8"></script>
 
-<%-- 버전 상세정보 레이어 --%>
-<c:import url="/WEB-INF/view/pos/confg/vermanage/verInfoDtl.jsp">
-</c:import>
-<%-- 매장추가 레이어 --%>
-<c:import url="/WEB-INF/view/pos/confg/vermanage/storeAdd.jsp">
-</c:import>
-<%-- 버전 등록 및 수정 --%>
-<c:import url="/WEB-INF/view/pos/confg/vermanage/verRegist.jsp">
-</c:import>
+<!-- 관리자 화면인 경우만 아래 화면 import -->
+<!-- 본사 화면인 경우 탭 화면으로 구성되어 있어 이미 [POS 버전관리]화면에서 import 하고 있으므로, 중복을 방지하여 오류 안나게 처리 -->
+<c:if test="${orgnFg == 'MASTER'}">
+  <%-- 버전 상세정보 레이어 --%>
+  <c:import url="/WEB-INF/view/pos/confg/vermanage/verInfoDtl.jsp">
+  </c:import>
+  <%-- 매장추가 레이어 --%>
+  <c:import url="/WEB-INF/view/pos/confg/vermanage/storeAdd.jsp">
+  </c:import>
+  <%-- 버전 등록 및 수정 --%>
+  <c:import url="/WEB-INF/view/pos/confg/vermanage/verRegist.jsp">
+  </c:import>
+</c:if>

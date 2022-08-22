@@ -68,6 +68,8 @@ public class ApplcStoreVO extends PageVO {
     private String result;
     /** 복수검색여부 */
     private String chkMulti;
+    /** 포스 프로그램 구분 */
+    private String progFg;
 
     public OrgnFg getOrgnFg() {
         return orgnFg;
@@ -299,5 +301,13 @@ public class ApplcStoreVO extends PageVO {
 
     public void setChkMulti(String chkMulti) {
         this.chkMulti = chkMulti;
+    }
+
+    public String getProgFg() {
+        return progFg;
+    }
+
+    public void setProgFg(String progFg) {
+        this.progFg = progFg;
     }
 }

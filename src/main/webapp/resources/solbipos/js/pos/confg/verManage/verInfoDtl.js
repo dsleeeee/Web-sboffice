@@ -12,6 +12,8 @@
  * get application
  */
 var app = agrid.getApp();
+var scope = null;
+var manageVer = "";
 
 /**********************************************************************
  *  회원정보 그리드
@@ -29,6 +31,27 @@ app.controller('verDetailCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 조회 버튼 클릭
   $scope.$on("verDetailCtrl", function(event, data) {
+
+    if(window.location.href.indexOf("verHq/list.sb") > 0){ // 본사 화면에서 접속한 경우
+      // 활성화된 탭에 따라 모화면 ctrl 값 셋팅
+      if($("#verManageTab").hasClass("on")){
+        scope = agrid.getScope('verManageCtrl');
+        manageVer = "1"; // [1] NXPOS_V1;
+      }else{
+        scope = agrid.getScope('verManageV2Ctrl');
+        manageVer = "2"; // [2] NXPOS_V2;
+      }
+    }else{                                                // 관리자 화면에서 접속한 경우
+      // 유입화면(버전)에 따라 모화면 ctrl 값 셋팅
+      if(data.progFg === "1"){
+        scope = agrid.getScope('verManageCtrl');
+        manageVer = "1"; // [1] NXPOS_V1;
+      }else{
+        scope = agrid.getScope('verManageV2Ctrl');
+        manageVer = "2"; // [2] NXPOS_V2;
+      }
+    }
+
     $scope.getVersionInfo();
     event.preventDefault();
   });
@@ -36,8 +59,6 @@ app.controller('verDetailCtrl', ['$scope', '$http', function ($scope, $http) {
   // 버전 목록 조회
   $scope.getVersionInfo = function(){
     var params = {};
-
-    var scope = agrid.getScope('verManageCtrl');
     params    = scope.getSelectVersion();
 
     // console.log('params' , params);
@@ -98,7 +119,7 @@ app.controller('verDetailCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.storeAddLayer.show(true, function(){
       // 탭 닫을때 그리드 초기화
       var sScope = agrid.getScope("addStoreCtrl");
-      sScope._gridDataInit()
+      sScope._gridDataInit();
       var nScope = agrid.getScope("allStoreCtrl");
       nScope._gridDataInit();
 

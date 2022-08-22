@@ -10,7 +10,7 @@
 <%--<c:set var="baseUrl" value="/pos/confg/verRecv/verRecv/"/>--%>
 
 <div class="subCon" id="verRecvView">
-  <div class="searchBar flddUnfld">
+  <div class="searchBar">
     <a href="#" class="open fl">
       <c:if test="${orgnFg != 'HQ'}">${menuNm}</c:if>
       <c:if test="${orgnFg == 'HQ'}"><s:message code="verHq.verRecv" /></c:if>
@@ -50,18 +50,31 @@
           <td>
             <div class="sb-select w100">
               <wj-combo-box
-                      id="verRecvYn"
-                      ng-model="verRecvYn"
-                      items-source="_getComboData('verRecvYnCombo')"
-                      display-member-path="name"
-                      selected-value-path="value"
-                      is-editable="false"
-                      initialized="_initComboBox(s)">
+                  id="verRecvYn"
+                  ng-model="verRecvYn"
+                  items-source="_getComboData('verRecvYnCombo')"
+                  display-member-path="name"
+                  selected-value-path="value"
+                  is-editable="false"
+                  initialized="_initComboBox(s)">
               </wj-combo-box>
             </div>
           </td>
-          <td></td>
-          <td></td>
+          <%-- 프로그램구분 --%>
+          <th><s:message code="verRecv.progFg"/></th>
+          <td>
+            <div class="sb-select">
+              <wj-combo-box
+                id="progFg"
+                ng-model="progFg"
+                control="progFgCombo"
+                items-source="_getComboData('progFgCombo')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false">
+              </wj-combo-box>
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -84,10 +97,11 @@
 
               <!-- define columns -->
               <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="90" visible="false"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="verRecv.verSerNo"/>" binding="verSerNo" align="center" width="140" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="verRecv.verSerNm"/>" binding="fileDesc" align="left" width="*" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="verRecv.regCnt"/>" binding="regCnt" width="80" align="center" is-read-only="true" ></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="verRecv.recvCntM"/>" binding="recvCnt" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.verSerNo"/>" binding="verSerNo" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.verSerNm"/>" binding="fileDesc" align="left" width="120" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.regCnt"/>" binding="regCnt" width="75" align="center" is-read-only="true" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.recvCntM"/>" binding="recvCnt" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.progFg"/>" binding="progFg" data-map="progFgDataMap" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
           </div>
         </div>
@@ -172,6 +186,7 @@
 
 </div>
 <script>
-  var hqOfficeCd = "${hqOfficeCd}"
+  var hqOfficeCd = "${hqOfficeCd}";
+  var progFg      = ${ccu.getCommCode("059")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/verRecv.js?ver=20200805.09" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/verRecv.js?ver=20220822.01" charset="utf-8"></script>

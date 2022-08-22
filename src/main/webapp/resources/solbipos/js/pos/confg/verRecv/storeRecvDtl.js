@@ -23,6 +23,8 @@ app.controller('storeRecvDtlCtrl', ['$scope', '$http', function ($scope, $http) 
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
 
+  $scope.progFgDataMap = new wijmo.grid.DataMap(progFg, 'value', 'name');
+
   // 선택 매장
   $scope.selectStore;
   $scope.setSelectStore = function(store){

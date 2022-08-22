@@ -28,7 +28,8 @@
                tcpv.MOD_ID,
                NVL(tcpvs.REG_CNT, 0) AS REG_CNT,
                NVL(tcpvs.RECV_CNT, 0) AS RECV_CNT,
-               tcpv.FILE_DESC
+               tcpv.FILE_DESC,
+               tcpv.PROG_FG
         <include refid="CmmSQL.PagingTemplateCount"/>
           FROM TB_CM_POS_VERSN tcpv,
               (
@@ -57,6 +58,9 @@
           <if test='verSerNm != null and verSerNm != ""'>
            AND tcpv.VER_SER_NM = #{verSerNm}
           </if>
+          <if test='progFg != null and progFg != ""'>
+           AND tcpv.PROG_FG = #{progFg}
+          </if>
          ORDER BY tcpv.REG_DT DESC
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -84,9 +88,16 @@
                tcpvs.MOD_ID
          <include refid="CmmSQL.PagingTemplateCount"/>
           FROM TB_CM_POS_VERSN_STORE tcpvs,
-               TB_MS_STORE tms
+               TB_MS_STORE tms,
+               (
+                 SELECT STORE_CD
+                   FROM TB_MS_STORE_ENVST
+                  WHERE ENVST_CD = '1014'
+                    AND ENVST_VAL = #{progFg}
+                )tmse
          WHERE tcpvs.VER_SER_NO = #{verSerNo}
            AND tms.STORE_CD = tcpvs.STORE_CD
+           AND tms.STORE_CD = tmse.STORE_CD
         <if test='hqOfficeCd != null and hqOfficeCd != ""'>
            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
         </if>
@@ -142,7 +153,8 @@
           	   tho.HQ_OFFICE_NM,
           	   tms.STORE_CD,
           	   tms.STORE_NM,
-          	   NVL(tmp.POS_CNT, 0) AS POS_CNT
+          	   NVL(tmp.POS_CNT, 0) AS POS_CNT,
+          	   tmse.ENVST_VAL AS PROG_FG
         ]]>
         <include refid="CmmSQL.PagingTemplateCount"/>
         <![CDATA[
@@ -153,9 +165,15 @@
                  FROM TB_MS_POS tmp
                 WHERE tmp.USE_YN = 'Y'
                 GROUP BY tmp.STORE_CD
-               ) tmp
+               ) tmp,
+               (
+               SELECT STORE_CD, ENVST_VAL
+                 FROM TB_MS_STORE_ENVST
+                WHERE ENVST_CD = '1014'
+               )tmse
          WHERE tms.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
            AND tmp.STORE_CD = tms.STORE_CD
+           AND tmse.STORE_CD (+)= tms.STORE_CD
         ]]>
         <if test='hqOfficeCd != null and hqOfficeCd != ""'>
            AND tho.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -168,6 +186,9 @@
         </if>
         <if test='storeNm != null and storeNm != ""'>
            AND tms.STORE_NM LIKE '%'|| #{storeNm} ||'%'
+        </if>
+        <if test='progFg != null and progFg != ""'>
+           AND tmse.ENVST_VAL = #{progFg}
         </if>
          ORDER BY tho.HQ_OFFICE_CD, tms.STORE_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -189,7 +210,8 @@
              TO_CHAR(TO_DATE(tcpvs.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS REG_DT,
              TO_CHAR(TO_DATE(tcpvs.VER_RECV_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS VER_RECV_DT,
              tcpvs.POS_IP,
-             tcpv.FILE_DESC
+             tcpv.FILE_DESC,
+             tcpv.PROG_FG
         FROM TB_MS_STORE tms,
              TB_CM_POS_VERSN_STORE tcpvs,
              TB_CM_POS_VERSN tcpv
@@ -237,6 +259,9 @@
         <if test='verSerNm != null and verSerNm != ""'>
            AND tcpv.VER_SER_NM = #{verSerNm}
         </if>
+        <if test='progFg != null and progFg != ""'>
+           AND tcpv.PROG_FG = #{progFg}
+        </if>
          ORDER BY tcpv.REG_DT DESC, tcpv.VER_SER_NO DESC
           <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -259,9 +284,16 @@
                tcpvs.POS_IP
         <include refid="CmmSQL.PagingTemplateCount"/>
           FROM TB_CM_POS_VERSN_STORE tcpvs,
-               TB_MS_STORE tms
+               TB_MS_STORE tms,
+               (
+                SELECT STORE_CD
+                  FROM TB_MS_STORE_ENVST
+                 WHERE ENVST_CD = '1014'
+                   AND ENVST_VAL = #{progFg}
+               )tmse
          WHERE tcpvs.VER_SER_NO = #{verSerNo}
            AND tms.STORE_CD = tcpvs.STORE_CD
+           AND tmse.STORE_CD = tms.STORE_CD
         <if test='hqOfficeCd != null and hqOfficeCd != ""'>
            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
         </if>

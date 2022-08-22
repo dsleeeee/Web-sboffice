@@ -30,13 +30,14 @@
 
               <!-- define columns -->
               <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="verRecv.posNo"/>" binding="posNo" width="75" align="center" is-read-only="true" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.posNo"/>" binding="posNo" width="65" align="center" is-read-only="true" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.progFg"/>" binding="progFg" data-map="progFgDataMap" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="verRecv.verSerNo"/>" binding="verSerNo" width="110" align="center" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="verRecv.verSerNm"/>" binding="fileDesc" width="*" is-read-only="true" ></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="verRecv.verRecvFg"/>" binding="verRecvFg" data-map="verRecvFgDatMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="verRecv.regDt"/>" binding="regDt" width="120" aling="center" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="verRecv.verRecvDt"/>" binding="verRecvDt" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="verRecv.posIp"/>" binding="posIp" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.verSerNm"/>" binding="fileDesc" width="200" is-read-only="true" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.verRecvFg"/>" binding="verRecvFg" data-map="verRecvFgDatMap" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.regDt"/>" binding="regDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.verRecvDt"/>" binding="verRecvDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.posIp"/>" binding="posIp" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
           </div>
         </div>
@@ -49,4 +50,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/storeRecvDtl.js?ver=20190108.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/storeRecvDtl.js?ver=20220822.01" charset="utf-8"></script>

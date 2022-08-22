@@ -3,17 +3,17 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
 <wj-popup control="versionRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:350px;">
-  <div class="wj-dialog wj-dialog-columns title">
+    <div class="wj-dialog wj-dialog-columns title" ng-controller="verRegistCtrl">
 
     <%-- header --%>
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="verManage.verInfo" />
       <span id="versionDetailTitle" class="ml20"></span>
-      <a href="#" class="wj-hide btn_close"></a>
+      <a href="#" class="wj-hide btn_close" ng-click="closePop()"></a>
     </div>
 
     <%-- body --%>
-    <div class="wj-dialog-body" ng-controller="verRegistCtrl">
+    <div class="wj-dialog-body">
       <div>
         <div style="height:200px; overflow-y: auto;">
           <f:form id="regForm" name="regForm" >
@@ -103,16 +103,16 @@
         </div>
         <div class="btnSet2">
           <%-- 신규 --%>
-          <span><a href="#" class="btn_blue pd20" ng-click="regist()" ng-show="!isEdit"><s:message code="verManage.regist.new" /></a></span>
+          <span><a href="#" class="btn_blue pd20" ng-click="chkForm()" id="btnReg"><s:message code="verManage.regist.new" /></a></span>
           <%-- 수정 --%>
-          <span><a href="#" class="btn_blue pd20" ng-click="regist()" ng-show="isEdit"><s:message code="regist.modify" /></a></span>
+          <span><a href="#" class="btn_blue pd20" ng-click="chkForm()" id="btnMod"><s:message code="regist.modify" /></a></span>
           <%-- 닫기 --%>
-          <span><a href="#" class="btn_blue pd20" ng-click="close()"><s:message code="cmm.close" /></a></span>
+          <span><a href="#" class="btn_blue pd20" ng-click="closePop()"><s:message code="cmm.close" /></a></span>
         </div>
       </div>
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verRegist.js?ver=20190109.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verRegist.js?ver=20220822.01" charset="utf-8"></script>
 
 
