@@ -10,7 +10,7 @@
 <c:set var="baseUrl" value="/pos/confg/verRecv/verStore/"/>
 
 <div class="subCon" id="verStoreView">
-  <div class="searchBar flddUnfld">
+  <div class="searchBar">
     <a href="#" class="open fl">
           <c:if test="${orgnFg != 'HQ'}">${menuNm}</c:if>
           <c:if test="${orgnFg == 'HQ'}"><s:message code="verHq.verStore" /></c:if>
@@ -60,8 +60,21 @@
               </wj-combo-box>
             </div>
           </td>
-          <td></td>
-          <td></td>
+          <%-- 프로그램구분 --%>
+          <th><s:message code="verRecv.progFg"/></th>
+          <td>
+            <div class="sb-select">
+              <wj-combo-box
+                id="progFg3"
+                ng-model="progFg3"
+                control="progFg3Combo"
+                items-source="_getComboData('progFg3Combo')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false">
+              </wj-combo-box>
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -85,8 +98,9 @@
 
               <!-- define columns -->
               <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="90" visible="false"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="verRecv.verSerNo"/>" binding="verSerNo" align="center" width="130" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="verRecv.verSerNm"/>" binding="fileDesc" align="left" width="*" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.verSerNo"/>" binding="verSerNo" align="center" width="110" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.verSerNm"/>" binding="fileDesc" align="left" width="110" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.progFg"/>" binding="progFg" data-map="progFg3DataMap" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
           </div>
         </div>
@@ -149,4 +163,4 @@
   var orgnFg = "${orgnFg}";
   var hqOfficeCd = "${hqOfficeCd}"
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/verStore.js?ver=2019011003" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/verStore.js?ver=20220822.01" charset="utf-8"></script>

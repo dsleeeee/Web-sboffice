@@ -19,6 +19,7 @@ var app = agrid.getApp();
 app.controller('verHqCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.init = function () {
     $("#verManageView").show();
+    $("#verManageV2View").hide();
     $("#verRecvView").hide();
     $("#storeRecvView").hide();
     $("#verStoreView").hide();
@@ -27,11 +28,13 @@ app.controller('verHqCtrl', ['$scope', '$http', function ($scope, $http) {
   // POS버전관리 탭 보이기
   $scope.verManageShow = function () {
     $("#verManageTab").addClass("on");
+    $("#verManageV2Tab").removeClass("on");
     $("#verRecvTab").removeClass("on");
     $("#storeRecvTab").removeClass("on");
     $("#verStoreTab").removeClass("on");
 
     $("#verManageView").show();
+    $("#verManageV2View").hide();
     $("#verRecvView").hide();
     $("#storeRecvView").hide();
     $("#verStoreView").hide();
@@ -41,14 +44,35 @@ app.controller('verHqCtrl', ['$scope', '$http', function ($scope, $http) {
     scope.flex.refresh();
   };
 
+  // POS 버전 관리(V2 버전) 탭 보이기
+    $scope.verManageV2Show = function () {
+      $("#verManageTab").removeClass("on");
+      $("#verManageV2Tab").addClass("on");
+      $("#verRecvTab").removeClass("on");
+      $("#storeRecvTab").removeClass("on");
+      $("#verStoreTab").removeClass("on");
+
+      $("#verManageView").hide();
+      $("#verManageV2View").show();
+      $("#verRecvView").hide();
+      $("#storeRecvView").hide();
+      $("#verStoreView").hide();
+
+      // angular 그리드 hide 시 깨지므로 refresh()
+      var scope = agrid.getScope("verManageV2Ctrl");
+      scope.flex.refresh();
+    };
+
   // 버전별수신현황 탭 보이기
   $scope.verRecvShow = function () {
     $("#verManageTab").removeClass("on");
+    $("#verManageV2Tab").removeClass("on");
     $("#verRecvTab").addClass("on");
     $("#storeRecvTab").removeClass("on");
     $("#verStoreTab").removeClass("on");
 
     $("#verManageView").hide();
+    $("#verManageV2View").hide();
     $("#verRecvView").show();
     $("#storeRecvView").hide();
     $("#verStoreView").hide();
@@ -64,11 +88,13 @@ app.controller('verHqCtrl', ['$scope', '$http', function ($scope, $http) {
   // 매장별수신현황 탭 보이기
   $scope.storeRecvShow = function () {
     $("#verManageTab").removeClass("on");
+    $("#verManageV2Tab").removeClass("on");
     $("#verRecvTab").removeClass("on");
     $("#storeRecvTab").addClass("on");
     $("#verStoreTab").removeClass("on");
 
     $("#verManageView").hide();
+    $("#verManageV2View").hide();
     $("#verRecvView").hide();
     $("#storeRecvView").show();
     $("#verStoreView").hide();
@@ -81,11 +107,13 @@ app.controller('verHqCtrl', ['$scope', '$http', function ($scope, $http) {
   // 버전별매장현황 탭 보이기
   $scope.verStoreShow = function () {
     $("#verManageTab").removeClass("on");
+    $("#verManageV2Tab").removeClass("on");
     $("#verRecvTab").removeClass("on");
     $("#storeRecvTab").removeClass("on");
     $("#verStoreTab").addClass("on");
 
     $("#verManageView").hide();
+    $("#verManageV2View").hide();
     $("#verRecvView").hide();
     $("#storeRecvView").hide();
     $("#verStoreView").show();

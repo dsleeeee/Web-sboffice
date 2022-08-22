@@ -39,6 +39,8 @@ public class VerRecvVO extends PageVO {
     private String useYn;
     /** 수신여부 */
     private String verRecvYn;
+    /** 포스 프로그램 구분 */
+    private String progFg;
 
     /**
      * @return the verSerNo
@@ -150,5 +152,13 @@ public class VerRecvVO extends PageVO {
      */
     public void setVerRecvYn(String verRecvYn) {
         this.verRecvYn = verRecvYn;
+    }
+
+    public String getProgFg() {
+        return progFg;
+    }
+
+    public void setProgFg(String progFg) {
+        this.progFg = progFg;
     }
 }

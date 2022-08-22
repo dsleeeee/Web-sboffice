@@ -14,7 +14,7 @@
 var app = agrid.getApp();
 
 // 탭 변경
-function changeTab(){
+function changeVerTab(){
   var scope = agrid.getScope("addStoreCtrl");
   scope.changeTab();
 }
@@ -62,6 +62,7 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   angular.extend(this, new RootController('addStoreCtrl', $scope, $http, false));
 
   $scope.hqOfficeCd = gvHqOfficeCd;
+
   // 조회조건
   $scope._setComboData("hqOffice", hqList);
 
@@ -77,6 +78,7 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     if($("#srchHqOffice").val() != '' || $("#srchHqOffice").val() != null || $("#srchHqOffice").val() != undefined){
       $scope.selectedHqOffice = $("#srchHqOffice").val();
     }
+
     $scope.addStoreSearch();
     event.preventDefault();
   });
@@ -103,7 +105,6 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.addStoreSearch = function(){
 
     var params = {};
-    var scope  = agrid.getScope('verManageCtrl');
     var ver    = scope.getSelectVersion().verSerNo;
 
     if( !isEmptyObject($scope.store)){
@@ -118,7 +119,8 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     params.sysStatFg = $scope.sysStatFg;
     params.orgnFg = orgnFg;
     params.agencyCd = orgnCd;
-    $scope._inquiryMain("/pos/confg/verManage/applcStore/srchStoreList.sb", params, function() {
+    params.progFg = manageVer;
+    $scope._inquirySub("/pos/confg/verManage/applcStore/srchStoreList.sb", params, function() {
       // 적용매장 조회 후, 미적용 매장 조회
       var allStoreScope = agrid.getScope("allStoreCtrl");
       allStoreScope._pageView('allStoreCtrl', 1);
@@ -130,7 +132,6 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.delete = function(){
 
     var params = new Array();
-    var scope  = agrid.getScope('verManageCtrl');
     var ver    = scope.getSelectVersion().verSerNo;
 
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
@@ -188,7 +189,6 @@ app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.allStoreSearch = function(){
 
     var params = {};
-    var scope  = agrid.getScope('verManageCtrl');
     var ver    = scope.getSelectVersion().verSerNo;
 
     var addStoreScope = agrid.getScope('addStoreCtrl');
@@ -209,7 +209,9 @@ app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
       params.chkMulti = "N";
     }
 
-    $scope._inquiryMain("/pos/confg/verManage/applcStore/srchStoreList.sb", params, function() {
+    params.progFg = manageVer;
+
+    $scope._inquirySub("/pos/confg/verManage/applcStore/srchStoreList.sb", params, function() {
     }, false);
   };
 
@@ -218,7 +220,6 @@ app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.save = function(){
 
     var params = new Array();
-    var scope  = agrid.getScope('verManageCtrl');
     var ver    = scope.getSelectVersion().verSerNo;
 
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {

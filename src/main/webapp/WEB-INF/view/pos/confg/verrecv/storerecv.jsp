@@ -10,7 +10,7 @@
 <%--<c:set var="baseUrl" value="/pos/confg/verRecv/storeRecv/"/>--%>
 
 <div class="subCon" ng-controller="storeRecvCtrl" id="storeRecvView">
-  <div class="searchBar flddUnfld">
+  <div class="searchBar">
     <a href="#" class="open fl">
       <c:if test="${orgnFg != 'HQ'}">${menuNm}</c:if>
       <c:if test="${orgnFg == 'HQ'}"><s:message code="verHq.storeRecv" /></c:if>
@@ -54,6 +54,23 @@
           <input type="text" id="storeNm" name="storeNm" ng-model="storeNm" class="sb-input w100" size="50" onkeyup="fnNxBtnSearch('2');">
         </td>
       </tr>
+      <tr>
+        <%-- 프로그램구분 --%>
+        <th><s:message code="verRecv.progFg"/></th>
+        <td>
+          <div class="sb-select">
+            <wj-combo-box
+              id="progFg2"
+              ng-model="progFg2"
+              control="progFg2Combo"
+              items-source="_getComboData('progFg2Combo')"
+              display-member-path="name"
+              selected-value-path="value"
+              is-editable="false">
+            </wj-combo-box>
+          </div>
+        </td>
+      </tr>
     </tbody>
   </table>
 
@@ -75,6 +92,7 @@
         <wj-flex-grid-column header="<s:message code="verRecv.storeCd"/>" binding="storeCd" width="130" align="center" is-read-only="true" ></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="verRecv.storeNm"/>" binding="storeNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="verRecv.posCnt"/>" binding="posCnt" width="140" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="verRecv.progFg"/>" binding="progFg" data-map="progFg2DataMap" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
   </div>
@@ -94,7 +112,7 @@
   var hqOfficeCd = "${hqOfficeCd}";
   var orgnFg = "${orgnFg}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/storeRecv.js?ver=2019011003" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/storeRecv.js?ver=20220822.01" charset="utf-8"></script>
 
 <%-- 매장추가 레이어 --%>
 <c:import url="/WEB-INF/view/pos/confg/verrecv/storeRecvDtl.jsp">

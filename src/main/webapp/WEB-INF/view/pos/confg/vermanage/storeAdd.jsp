@@ -23,7 +23,7 @@
       <%-- 탭 --%>
       <ul class="subTab">
         <%-- 버전정보 --%>
-        <li><a id="storeInfo" href="#" onclick="changeTab()"><s:message code="verManage.verInfo" /></a></li>
+        <li><a id="storeInfo" href="#" onclick="changeVerTab()"><s:message code="verManage.verInfo" /></a></li>
         <%-- 적용매장 --%>
         <li><a id="storeEnv" href="#" class="on"><s:message code="verManage.store.registed" /></a></li>
       </ul>
@@ -135,11 +135,11 @@
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="32"></wj-flex-grid-column>
                 <c:if test="${orgnFg != 'HQ'}">
                   <wj-flex-grid-column header="<s:message code="verManage.store.hqOfficeCd"/>" binding="hqOfficeCd" align="center" width="55" is-read-only="true"></wj-flex-grid-column>
-                  <wj-flex-grid-column header="<s:message code="verManage.store.hqOfficeNm"/>" binding="hqOfficeNm" align="left" width="80" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="verManage.store.hqOfficeNm"/>" binding="hqOfficeNm" align="left" width="60" is-read-only="true"></wj-flex-grid-column>
                 </c:if>
-                <wj-flex-grid-column header="<s:message code="verManage.store.storeCd"/>" binding="storeCd" align="center" width="70" is-read-only="true" ></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="verManage.store.storeNm"/>" binding="storeNm" align="left" width="*" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="verManage.store.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="50" align="center" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="verManage.store.storeCd"/>" binding="storeCd" align="center" width="65" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="verManage.store.storeNm"/>" binding="storeNm" align="left" width="60" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="verManage.store.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="40" align="center" is-read-only="true" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.posCnt"/>" binding="posCnt"  width="50" align="center" is-read-only="true" ></wj-flex-grid-column>
 
               </wj-flex-grid>
@@ -170,11 +170,11 @@
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="32"></wj-flex-grid-column>
                 <c:if test="${orgnFg != 'HQ'}">
                   <wj-flex-grid-column header="<s:message code="verManage.store.hqOfficeCd"/>" binding="hqOfficeCd" align="center" width="55" is-read-only="true"></wj-flex-grid-column>
-                  <wj-flex-grid-column header="<s:message code="verManage.store.hqOfficeNm"/>" binding="hqOfficeNm" align="left" width="80" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="verManage.store.hqOfficeNm"/>" binding="hqOfficeNm" align="left" width="60" is-read-only="true"></wj-flex-grid-column>
                 </c:if>
-                <wj-flex-grid-column header="<s:message code="verManage.store.storeCd"/>" binding="storeCd" align="center" width="70" is-read-only="true" ></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="verManage.store.storeNm"/>" binding="storeNm" align="left" width="*" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="verManage.store.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="50" align="center" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="verManage.store.storeCd"/>" binding="storeCd" align="center" width="65" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="verManage.store.storeNm"/>" binding="storeNm" align="left" width="60" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="verManage.store.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="40" align="center" is-read-only="true" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.posCnt"/>" binding="posCnt"  width="50" align="center" is-read-only="true" ></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
@@ -185,7 +185,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/storeAdd.js?ver=20200423.09" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/storeAdd.js?ver=20220822.01" charset="utf-8"></script>
 
 <script>
   $(document).ready(function(){

@@ -13,6 +13,10 @@
       <li>
         <a id="verManageTab" href="#" class="on" ng-click="verManageShow()"><s:message code="verHq.verManage"/></a>
       </li>
+      <%-- POS 버전 관리(V2 버전) --%>
+       <li>
+         <a id="verManageV2Tab" href="#" ng-click="verManageV2Show()"><s:message code="verHq.verManageV2"/></a>
+       </li>
       <%-- 버전별 수신현황 --%>
       <li>
         <a id="verRecvTab" href="#" ng-click="verRecvShow()"><s:message code="verHq.verRecv"/></a>
@@ -28,11 +32,16 @@
     </ul>
   </div>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verhq/verHq.js?ver=20200805.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verhq/verHq.js?ver=20220822.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- POS버전관리 --%>
 <c:import url="/WEB-INF/view/pos/confg/vermanage/verManage.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+<%-- POS버전관리(V2버전) --%>
+<c:import url="/WEB-INF/view/pos/confg/vermanage/verManageV2.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

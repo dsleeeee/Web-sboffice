@@ -37,6 +37,9 @@ app.controller('storeRecvCtrl', ['$scope', '$http', function ($scope, $http) {
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
 
+  // 콤보박스 데이터
+  $scope._setComboData("progFg2Combo", progFg);
+
   // 선택 매장
   $scope.selectStore;
   $scope.setSelectStore = function(store){
@@ -45,6 +48,8 @@ app.controller('storeRecvCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.getSelectStore = function(){
     return $scope.selectStore;
   };
+
+  $scope.progFg2DataMap = new wijmo.grid.DataMap(progFg, 'value', 'name');
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -97,6 +102,7 @@ app.controller('storeRecvCtrl', ['$scope', '$http', function ($scope, $http) {
     params.storeCd = $("#storeCd").val();
     params.storeNm = $("#storeNm").val();
     params.lastVer = $("#lastVer").val();
+    params.progFg = $scope.progFg2Combo.selectedValue;
 
     // console.log('params', params);
 

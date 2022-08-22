@@ -44,6 +44,9 @@ app.controller('verInfoCtrl', ['$scope', '$http', function ($scope, $http) {
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("verRecvYnCombo", recvYn);
 
+  // 콤보박스 데이터
+  $scope._setComboData("progFg3Combo", progFg);
+
   // 선택 버전
   $scope.selectVersion;
   $scope.setSelectVersion = function(ver){
@@ -52,6 +55,8 @@ app.controller('verInfoCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.getSelectVersion = function(){
     return $scope.selectVersion;
   };
+
+  $scope.progFg3DataMap = new wijmo.grid.DataMap(progFg, 'value', 'name');
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -102,6 +107,8 @@ app.controller('verInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     if (orgnFg == 'HQ'){
       params.hqOfficeCd = hqOfficeCd;
     }
+
+    params.progFg = $scope.progFg3Combo.selectedValue;
 
     // console.log('params', params);
 
@@ -162,6 +169,7 @@ app.controller('verInfoDtlCtrl', ['$scope', '$http', function ($scope, $http) {
     if (orgnFg == 'HQ'){
       params.hqOfficeCd = hqOfficeCd;
     }
+    params.progFg = $scope.getSelectVersion().progFg;
 
     $scope._inquiryMain("/pos/confg/verRecv/verStore/storeList.sb", params, function() {
     });

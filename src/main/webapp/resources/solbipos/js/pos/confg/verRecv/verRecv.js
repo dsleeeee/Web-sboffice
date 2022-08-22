@@ -45,6 +45,9 @@ app.controller('verRecvCtrl', ['$scope', '$http', function ($scope, $http) {
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("verRecvYnCombo", recvYn);
 
+  // 콤보박스 데이터
+  $scope._setComboData("progFgCombo", progFg);
+
   // 선택 버전
   $scope.selectVersion;
   $scope.setSelectVersion = function(ver){
@@ -53,6 +56,8 @@ app.controller('verRecvCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.getSelectVersion = function(){
     return $scope.selectVersion;
   };
+
+  $scope.progFgDataMap = new wijmo.grid.DataMap(progFg, 'value', 'name');
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -100,6 +105,7 @@ app.controller('verRecvCtrl', ['$scope', '$http', function ($scope, $http) {
     params.verSerNo = $("#verSerNo").val();
     params.verSerNm = $("#verSerNm").val();
     params.hqOfficeCd = hqOfficeCd;
+    params.progFg = $scope.progFgCombo.selectedValue;
 
     $scope._inquiryMain("/pos/confg/verRecv/verRecv/list.sb", params, function() {
       $scope.$apply(function() {
@@ -158,6 +164,7 @@ app.controller('verRecvStoreCtrl', ['$scope', '$http', function ($scope, $http) 
     params.verSerNo = $scope.getSelectVersion().verSerNo;
     params.verRecvYn = scope.verRecvYn;
     params.hqOfficeCd = hqOfficeCd;
+    params.progFg =  $scope.getSelectVersion().progFg;
 
     // console.log('dtl params', params);
 

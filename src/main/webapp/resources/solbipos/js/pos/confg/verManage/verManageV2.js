@@ -1,11 +1,11 @@
 /****************************************************************
  *
- * 파일명 : verManage.js
- * 설  명 : 포스버전관리 JavaScript
+ * 파일명 : verManageV2.js
+ * 설  명 : 포스버전관리(V2 버전) JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2018.12.31     김지은      1.0           Angular방식으로 변경
+ * 2022.08.16     이다솜      1.0
  *
  * **************************************************************/
 /**
@@ -16,9 +16,9 @@ var app = agrid.getApp();
 /**********************************************************************
  *  포스버전관리 그리드
  **********************************************************************/
-app.controller('verManageCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('verManageV2Ctrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('verManageCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('verManageV2Ctrl', $scope, $http, true));
 
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
@@ -67,14 +67,14 @@ app.controller('verManageCtrl', ['$scope', '$http', function ($scope, $http) {
     });
 
     // 프로그램구분은 수정 못하게 처리
-    $scope.srchProgFgCombo.selectedValue = "1"; // [1] NXPOS_V1;
+    $scope.srchProgFgCombo.selectedValue = "2"; // [2] NXPOS_V2;
     $("#srchProgFg").attr("disabled", true);
     $("#srchProgFg").css('background-color', '#F0F0F0');
 
   };
 
   // 조회 버튼 클릭
-  $scope.$on("verManageCtrl", function(event, data) {
+  $scope.$on("verManageV2Ctrl", function(event, data) {
     $scope.getVersionList();
     event.preventDefault();
   });
@@ -97,11 +97,11 @@ app.controller('verManageCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.versionRegistLayer.show(true, function(){
       var scope = agrid.getScope('verRegistCtrl');
       scope.version = null;
-      scope.progFg = '1';
+      scope.progFg = '2';
       scope.useYn = 'Y';
 
       $('#file').val(null);
-      $scope._pageView('verManageCtrl', 1);
+      $scope._pageView('verManageV2Ctrl', 1);
     });
   };
 
