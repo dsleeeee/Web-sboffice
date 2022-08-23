@@ -363,7 +363,7 @@
             </wj-combo-box>
 
             <%-- 추가 --%>
-            <button class="btn_skyblue fr mr5" ng-click="addProdPrice()"><s:message code="cmm.add" /></button>
+            <button class="btn_skyblue fr mr5" ng-click="addProdPrice()"><s:message code="salePriceResve.priceResve" /></button>
             <%-- 수정 --%>
             <button class="btn_skyblue fr mr5" ng-click="saveProdPrice()"><s:message code="cmm.edit"/></button>
         </div>
