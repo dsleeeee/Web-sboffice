@@ -192,10 +192,10 @@ public class RtnDstbCloseProdServiceImpl implements RtnDstbCloseProdService {
 
                 if(prevMgrTotQty > 0) {
             		result = rtnDstbCloseProdMapper.updateRtnStoreOrderProd(rtnDstbCloseProdVO);
-            		 if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+            		 if(result < 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
             	}else {
             		result = rtnDstbCloseProdMapper.savetRtnStoreOrderProd(rtnDstbCloseProdVO);
-            		 if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+            		 if(result < 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
             	}
             	
             	
