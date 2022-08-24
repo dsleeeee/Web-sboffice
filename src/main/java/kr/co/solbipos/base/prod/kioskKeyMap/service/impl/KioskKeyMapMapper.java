@@ -154,4 +154,31 @@ public interface KioskKeyMapMapper {
 
     /** 키오스크 추천메뉴 매장적용 - 본사에서 사용중인 메뉴추천리스트 매장등록 */
     int insertStoreHqRecmdProd(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 카테고리(중분류) 조회 */
+    List<DefaultMap<Object>> getKioskCategoryM(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 카테고리(중분류) 저장 - 생성 시 카테고리 코드 생성 */
+    String getKioskCategoryCodeM(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 카테고리(중분류) 저장 - 생성 */
+    int insertKioskCategoryM(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 카테고리(중분류) 저장 - 수정 */
+    int updateKioskCategoryM(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 카테고리(중분류) 저장 - 삭제 */
+    int deleteKioskCategoryM(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키맵그룹에 중분류사용여부 조회 */
+    List<DefaultMap<Object>> getKioskKeyMapGroupTuMClsFg(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 키맵 그룹복제 - 키맵그룹에 중분류사용여부 조회 */
+    List<DefaultMap<Object>> getCopyKioskKeyMapGroupTuMClsFg(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 키맵 그룹복제 - 중분류 키맵그룹 rowCount 조회 */
+    List<DefaultMap<Object>> getKioskMClsCount(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 키맵 그룹복제 - 기존 카테고리(중분류) 복사 */
+    int copyKioskCategoryM(KioskKeyMapVO kioskKeyMapVO);
 }

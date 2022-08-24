@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
@@ -301,6 +302,16 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         result = kioskKeyMapMapper.copyKioskCategory(kioskKeyMapVO);
         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
+        // 중분류 키맵그룹 row count 조회
+        List<DefaultMap<Object>> selectList = new ArrayList<DefaultMap<Object>>();
+        selectList = kioskKeyMapMapper.getKioskMClsCount(kioskKeyMapVO);
+        System.out.println("중분류 키맵그룹 rowCount 조회 : " + selectList.get(0).get("rowCount").toString());
+        if(Integer.parseInt(selectList.get(0).get("rowCount").toString()) > 0) {
+            // 중분류도 복제
+            result = kioskKeyMapMapper.copyKioskCategoryM(kioskKeyMapVO);
+            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+
         // 기존 키맵그룹에 맵핑된 상품이 있으면 상품도 새 키맵그룹에 등록(현재 포스로 복제)
         result = kioskKeyMapMapper.copyKioskKeyMap(kioskKeyMapVO);
         if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
@@ -368,13 +379,13 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             kioskKeyMapMapper.deleteKioskKeyMapByTuClsCd(kioskKeyMapVO);
 
             // posNo 조회
-            List<DefaultMap<String>> posList = kioskKeyMapMapper.getKioskPosList(kioskKeyMapVO);
+//            List<DefaultMap<String>> posList = kioskKeyMapMapper.getKioskPosList(kioskKeyMapVO);
 
-            if(posList.size() > 0){
+//            if(posList.size() > 0){
 
-                for (int i = 0; i < posList.size(); i++) {
+//                for (int i = 0; i < posList.size(); i++) {
 
-                    kioskKeyMapVO.setPosNo(posList.get(i).getStr("value"));
+//                    kioskKeyMapVO.setPosNo(posList.get(i).getStr("value"));
 
                     // 새 키맵그룹과 카테고리(분류)코드로 INSERT
                     result = kioskKeyMapMapper.insertKioskCategoryStoreReg(kioskKeyMapVO);
@@ -384,8 +395,8 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
                     result = kioskKeyMapMapper.copyKioskKeyMapStoreReg(kioskKeyMapVO);
                     if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-                }
-            }
+//                }
+//            }
         }
 
         return result;
@@ -667,6 +678,81 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         }
 
         return result;
+    }
+
+    /** 키오스크 카테고리(중분류) 조회 */
+    public List<DefaultMap<Object>> getKioskCategoryM(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
+
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+            kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return kioskKeyMapMapper.getKioskCategoryM(kioskKeyMapVO);
+    }
+
+    /** 키오스크 카테고리(중분류) 저장 */
+    @Override
+    public int saveKioskCategoryM(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        for ( KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
+
+            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+                kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+
+            kioskKeyMapVO.setClsFg("K"); // K: KIOSK
+            kioskKeyMapVO.setRegDt(currentDt);
+            kioskKeyMapVO.setRegId(sessionInfoVO.getUserId());
+            kioskKeyMapVO.setModDt(currentDt);
+            kioskKeyMapVO.setModId(sessionInfoVO.getUserId());
+
+            // 페이지 수 계산
+            int indexNo = Integer.parseInt(kioskKeyMapVO.getIndexNo());
+            kioskKeyMapVO.setTuPage(Integer.toString((int)(Math.floor((indexNo - 1) / 4) + 1)));
+
+            if ( kioskKeyMapVO.getStatus() == GridDataFg.INSERT ) { // 생성
+
+                // 중분류코드 생성
+                kioskKeyMapVO.setTuMClsCd(kioskKeyMapMapper.getKioskCategoryCodeM(kioskKeyMapVO));
+
+                result += kioskKeyMapMapper.insertKioskCategoryM(kioskKeyMapVO);
+
+            } else if ( kioskKeyMapVO.getStatus() == GridDataFg.UPDATE ) { // 수정
+                result += kioskKeyMapMapper.updateKioskCategoryM(kioskKeyMapVO);
+
+            } else if ( kioskKeyMapVO.getStatus() == GridDataFg.DELETE ) { // 삭제
+                result += kioskKeyMapMapper.deleteKioskCategoryM(kioskKeyMapVO);
+
+                // 해당 카테고리(분류)에 해당하는 상품도 삭제
+                kioskKeyMapVO.setTuClsCd(kioskKeyMapVO.getTuMClsCd());
+                kioskKeyMapMapper.deleteAllKioskKeyMap(kioskKeyMapVO);
+            }
+        }
+
+        if ( result == kioskKeyMapVOs.length) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
+
+    /** 키맵그룹에 중분류사용여부 조회 */
+    @Override
+    public List<DefaultMap<Object>> getKioskKeyMapGroupTuMClsFg(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
+
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+            kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return kioskKeyMapMapper.getKioskKeyMapGroupTuMClsFg(kioskKeyMapVO);
     }
 
 }

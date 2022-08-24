@@ -7,6 +7,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
 <div id="kioskKeyMapRegistView" name="kioskKeyMapRegistView" class="subCon" style="display: none;">
+
     <div ng-controller="kioskKeyMapRegistCtrl">
         <div class="searchBar">
             <a href="#" class="open fl"><s:message code="kioskKeyMap.kioskKeyMapRegist" /></a>
@@ -55,9 +56,27 @@
                                 control="tuClsTypeCombo">
                         </wj-combo-box>
                     </div>
+                    <div class="sb-select mr5" style="width:5px; float:left;">
+                        [
+                    </div>
+                    <c:if test="${orgnFg == 'HQ'}">
+                        <%-- 중분류사용여부 --%>
+                        <div class="sb-select mr5" style="width:110px; float:left;">
+                            <wj-combo-box
+                                    id="tuMClsFg"
+                                    ng-model="tuMClsFg"
+                                    items-source="_getComboData('tuMClsFg')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="tuMClsFgCombo">
+                            </wj-combo-box>
+                        </div>
+                    </c:if>
                     <button class="btn_skyblue" id="btnTuClsTypeAdd" ng-click="tuClsTypeAdd()">
                         <s:message code="kioskKeyMap.tuClsTypeAdd" />
                     </button>
+                    ]
                     <c:if test="${kioskKeyMapGrpFg == '1'}">
                         <c:if test="${orgnFg == 'HQ'}">
                             <button class="btn_skyblue" id="btnTuClsTypeCopyHq" ng-click="tuClsTypeCopy()">
@@ -113,7 +132,7 @@
                     </button>
                 </div>
                 <div class="w100 mt10 mb20">
-                    <div class="wj-gridWrap" style="height:422px; overflow-x: hidden; overflow-y: hidden;">
+                    <div class="wj-gridWrap" style="height:200px; overflow-x: hidden; overflow-y: hidden;">
                         <wj-flex-grid
                                 autoGenerateColumns="false"
                                 control="flex"
@@ -128,12 +147,59 @@
                             <!-- define columns -->
                             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="kioskKeyMap.tuClsCd"/>" binding="tuClsCd" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="kioskKeyMap.tuClsNm"/>" binding="tuClsNm" width="150"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="kioskKeyMap.tuClsNm"/>" binding="tuClsNm" width="140"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="kioskKeyMap.clsMemo"/>" binding="clsMemo" width="90"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="kioskKeyMap.tuMClsFg"/>" binding="tuMClsFg" data-map="tuMClsFgDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                         </wj-flex-grid>
                     </div>
                 </div>
                 <input type="hidden" id="hdPosNo" />
                 <input type="hidden" id="hdTuClsType" />
+                <input type="hidden" id="hdTuMClsFg" />
+                <%-- 중분류그리드 --%>
+                <div id="divGridCategoryClsM" style="display: none;" ng-controller="categoryClsMCtrl">
+                    <div class="w100 mt10 mb20 bt">
+                        <div class="mb5 mt10">
+                            <label id="lbTuClsCdM"></label>
+                        </div>
+                        <div class="updownSet oh mb10 pd5" id="divBtnClsM" style="visibility: hidden;">
+                            <button class="btn_up" id="btnUpClsM" ng-click="rowMoveUpClsM()" >
+                                <s:message code="cmm.up" />
+                            </button>
+                            <button class="btn_down" id="btnDownClsM" ng-click="rowMoveDownClsM()">
+                                <s:message code="cmm.down" />
+                            </button>
+                            <button class="btn_skyblue" id="btnAddClsM" ng-click="addRowClsM()">
+                                <s:message code="cmm.add" />
+                            </button>
+                            <button class="btn_skyblue" id="btnDelClsM" ng-click="delRowClsM()">
+                                <s:message code="cmm.delete" />
+                            </button>
+                            <button class="btn_skyblue" id="btnSaveClsM" ng-click="saveClsM()">
+                                <s:message code="cmm.save" />
+                            </button>
+                        </div>
+                        <div class="wj-gridWrap" style="height:200px; overflow-x: hidden; overflow-y: hidden;">
+                            <wj-flex-grid
+                                    autoGenerateColumns="false"
+                                    control="flexM"
+                                    initialized="initGrid(s,e)"
+                                    sticky-headers="true"
+                                    selection-mode="Row"
+                                    items-source="data"
+                                    item-formatter="_itemFormatter"
+                                    ime-enabled="true"
+                                    id="wjGridCategoryClsM">
+
+                                <!-- define columns -->
+                                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="kioskKeyMap.tuMClsCd"/>" binding="tuMClsCd" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="kioskKeyMap.tuMClsNm"/>" binding="tuMClsNm" width="140"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="kioskKeyMap.mmClsMemo"/>" binding="mmClsMemo" width="90"></wj-flex-grid-column>
+                            </wj-flex-grid>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -181,7 +247,6 @@
 
     <div class="wj-TblWrap mt20 mb20 w40 fl" ng-controller="kioskProdCtrl">
         <div class="wj-TblWrapBr ml10 pd20" style="height:600px; overflow-y: hidden;">
-
             <table class="tblType01">
                 <colgroup>
                     <col class="w13" />
@@ -324,7 +389,6 @@
 </div>
 
 <script type="text/javascript">
-
     var orgnFg = "${orgnFg}";
 
     // 키오스크용 포스 목록
@@ -338,10 +402,9 @@
 
     // 키오스크 키맵그룹 사용여부 0: 미사용 1: 사용
     var kioskKeyMapGrpFg = "${kioskKeyMapGrpFg}";
-
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20200905.17" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20220823.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
