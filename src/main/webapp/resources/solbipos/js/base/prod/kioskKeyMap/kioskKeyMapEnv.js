@@ -11,17 +11,26 @@
 
 var app = agrid.getApp();
 
+// KIOSK중분류사용
+var tuMClsFgMapEnvComboData = [
+    {"name":"전체","value":""},
+    {"name":"미사용","value":"0"},
+    {"name":"중분류사용","value":"2"}
+];
+
 app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
     angular.extend(this, new RootController('kioskKeyMapEnvCtrl', $scope, $http, false));
 
     $scope._setComboData("srchEnvSysStatFg", sysStatFg);
     $scope._setComboData("envTuClsType", kioskTuClsTypeList); // 키오스크용 키맵그룹 목록
+    $scope._setComboData("tuMClsFgMapEnv", tuMClsFgMapEnvComboData); // KIOSK중분류사용
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
         $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
+        $scope.tuMClsFgDataMap = new wijmo.grid.DataMap(tuMClsFgMapEnvComboData, 'value', 'name'); // KIOSK중분류사용
 
         // 그리드 header 클릭시 정렬 이벤트 막기
         s.addEventListener(s.hostElement, 'mousedown', function (e) {
@@ -63,6 +72,7 @@ app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', function ($scope, $http
         params.storeCd = $("#srchEnvStoreCd").val();
         params.storeNm = $("#srchEnvStoreNm").val();
         params.sysStatFg = $scope.srchEnvSysStatFgCombo.selectedValue;
+        params.tuMClsFg = $scope.tuMClsFgMapEnvCombo.selectedValue;
 
         $scope._inquirySub("/base/prod/kioskKeyMap/kioskKeyMap/getStoreKioskPosList.sb", params, function () {
 
@@ -72,11 +82,11 @@ app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', function ($scope, $http
 
             // 환경설정 코드에 따라 보이는 컬럼이 다름
             if($("#hdEnvstCd").val() === "4068") {
-                columns[5].visible = true;
-                columns[6].visible = false;
-            }else{
-                columns[5].visible = false;
                 columns[6].visible = true;
+                columns[7].visible = false;
+            }else{
+                columns[6].visible = false;
+                columns[7].visible = true;
             }
 
             // 키오스크포스가 없는 매장은 선택 불가
@@ -144,7 +154,8 @@ app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', function ($scope, $http
         }
 
         // '01' 키맵그룹을 매장포스환경에 적용하시겠습니까?
-        $scope._popConfirm("'" + $scope.envTuClsTypeCombo.selectedValue + "' " + messages["kioskKeyMap.keyMapStoreKioskPosEnv.msg"], function() {
+        // <br/> (중분류 사용 키맵그룹은 중분류 사용 키오스크에만 적용됩니다.)
+        $scope._popConfirm("'" + $scope.envTuClsTypeCombo.selectedValue + "' " + messages["kioskKeyMap.keyMapStoreKioskPosEnv.msg"] + messages["kioskKeyMap.kioskTuMClsFg.msg"], function() {
 
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
 
@@ -152,21 +163,26 @@ app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', function ($scope, $http
 
                 if (item.gChk === true) {
                     if(item.posNo !== null && item.posNo !== "") {
-                        var obj = {};
-                        obj.storeCd = item.storeCd;
-                        obj.posNo = item.posNo;
-                        obj.envstCd = $("#hdEnvstCd").val();
-                        obj.envstVal = $scope.envTuClsTypeCombo.selectedValue;
-                        obj.tuClsType = $scope.envTuClsTypeCombo.selectedValue;
-                        
-                        // 키맵매장적용 여부
-                        if($("#chkTuClsTypeStore").is(":checked")){
-                            obj.chkTuClsTypeStore = "Y";
-                        }else{
-                            obj.chkTuClsTypeStore = "N";
-                        }
 
-                        params.push(obj);
+                        if($("#hdTuMClsFgMapEnv").val() === item.tuMClsFg) {
+
+                            var obj = {};
+                            obj.storeCd = item.storeCd;
+                            obj.posNo = item.posNo;
+                            obj.envstCd = $("#hdEnvstCd").val();
+                            obj.envstVal = $scope.envTuClsTypeCombo.selectedValue;
+                            obj.tuClsType = $scope.envTuClsTypeCombo.selectedValue;
+                            obj.tuMClsFg = $("#hdTuMClsFgStoreRegist").val(); // 매장 적용시에만 UPDATE / 매장 해당컬럼 사용안함 / 수정 기록 확인용 / 매장은 [1243 KIOSK중분류사용] 사용
+
+                            // 키맵매장적용 여부
+                            if($("#chkTuClsTypeStore").is(":checked")){
+                                obj.chkTuClsTypeStore = "Y";
+                            }else{
+                                obj.chkTuClsTypeStore = "N";
+                            }
+
+                            params.push(obj);
+                        }
                     }
                 }
             }
@@ -187,6 +203,32 @@ app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', function ($scope, $http
         $("#srchEnvStoreNm").val("");
         $scope.srchEnvSysStatFgCombo.selectedIndex = 0;
         $scope.envTuClsTypeCombo.selectedIndex = 0;
+    };
+
+    // 적용할 키맵그룹 선택 이벤트
+    $scope.setEnvTuClsTypeCombo = function (s){
+        var params = {};
+        params.tuClsType = s.selectedValue;
+
+        // 키맵그룹에 중분류사용여부 조회
+        $scope.kioskKeyMapGroupTuMClsFg(params);
+    };
+
+    // 키맵그룹에 중분류사용여부 조회
+    $scope.kioskKeyMapGroupTuMClsFg = function(params){
+        $scope._postJSONQuery.withOutPopUp("/base/prod/kioskKeyMap/kioskKeyMap/getKioskKeyMapGroupTuMClsFg.sb", params, function(response) {
+            var list = response.data.data.list;
+            if(list.length > 0) {
+                var tuMClsFgNm;
+                if(list[0].tuMClsFg == 0) {
+                    tuMClsFgNm = "(KIOSK중분류사용 : 미사용)";
+                } else if(list[0].tuMClsFg == 2) {
+                    tuMClsFgNm = "(KIOSK중분류사용 : 중분류사용)";
+                }
+                $("#lblTuMClsFgMapEnv").text(tuMClsFgNm);
+                $("#hdTuMClsFgMapEnv").val(list[0].tuMClsFg);
+            }
+        }, false);
     };
 
 }]);

@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="kioskKeyMapEnvLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;">
+<wj-popup control="kioskKeyMapEnvLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:800px;">
     <div class="wj-dialog wj-dialog-columns title" ng-controller="kioskKeyMapEnvCtrl">
 
         <%-- header --%>
@@ -17,10 +17,10 @@
             <%-- 조회조건 --%>
             <table class="tblType01">
                 <colgroup>
-                    <col class="w15" />
-                    <col class="w35" />
-                    <col class="w15" />
-                    <col class="w35" />
+                    <col class="w20" />
+                    <col class="w30" />
+                    <col class="w20" />
+                    <col class="w30" />
                 </colgroup>
                 <tbody>
                 <tr>
@@ -48,8 +48,21 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                    <th></th>
-                    <td></td>
+                    <%-- KIOSK중분류사용 --%>
+                    <th><s:message code="kioskKeyMap.kioskTuMClsFg" /></th>
+                    <td>
+                        <div class="sb-select w100 mr5">
+                            <wj-combo-box
+                                    id="tuMClsFgMapEnv"
+                                    ng-model="tuMClsFgMapEnv"
+                                    items-source="_getComboData('tuMClsFgMapEnv')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="tuMClsFgMapEnvCombo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -73,12 +86,13 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.storeCd"/>" binding="storeCd" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.storeNm"/>" binding="storeNm" width="190" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.storeNm"/>" binding="storeNm" width="160" align="left" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.sysStatFg"/>" binding="sysStatFg" width="85"  data-map="sysStatFgDataMap" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.kioskPosNo"/>" binding="posNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.envstVal"/>" binding="env4068" width="92" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.envstVal"/>" binding="env4069" width="92" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.kioskPosNo"/>" binding="posNo" width="110" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.kioskTuMClsFg"/>" binding="tuMClsFg" data-map="tuMClsFgDataMap" width="110" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.envstVal"/>" binding="env4068" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.envstVal"/>" binding="env4069" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
                 <%--//위즈모 테이블--%>
@@ -101,15 +115,26 @@
                                             display-member-path="name"
                                             selected-value-path="value"
                                             is-editable="false"
-                                            control="envTuClsTypeCombo">
+                                            control="envTuClsTypeCombo"
+                                            selected-index-changed="setEnvTuClsTypeCombo(s)">
                                     </wj-combo-box>
                                 </div>
                                 <div class="fl pd5" style="padding-right: 15px;">
                                     <div style="float: left;"><input type="checkbox" id="chkTuClsTypeStore" checked="checked"/></div>
                                     <div style="padding-top: 3px; padding-left: 20px;"><s:message code="kioskKeyMap.tuClsTypeStore" /></div>
                                 </div>
+                                <div class="sb-select" style="width:170px; float:left; padding-top:7px;">
+                                    <%-- KIOSK중분류사용 --%>
+                                    <label id="lblTuMClsFgMapEnv"></label>
+                                    <input type="hidden" id="hdTuMClsFgMapEnv" />
+                                </div>
                                 <button class="btn_blue ml5 fl" id="btnInsertEnv" ng-click="btnInsertEnv()"><s:message code="cmm.apply"/></button>
                                 <input type="hidden" id="hdEnvstCd"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                                * 키맵그룹 적용은 '선택한 키맵그룹에 KIOSK중분류사용' 과 '체크한 매장에 KIOSK중분류사용' 가 같은 매장만 적용됩니다.
                             </td>
                         </tr>
                         </tbody>
@@ -124,4 +149,4 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapEnv.js?ver=20220124.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapEnv.js?ver=20220823.01" charset="utf-8"></script>

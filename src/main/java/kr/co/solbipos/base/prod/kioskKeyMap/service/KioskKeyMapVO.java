@@ -93,6 +93,20 @@ public class KioskKeyMapVO extends PageVO {
     /** 추천메뉴표시순서 */
     private String index;
 
+    /** 키오스크터치분류키설명 */
+    private String clsMemo;
+
+    /** 중분류사용여부 */
+    private String tuMClsFg;
+
+    /** 카테고리코드 */
+    private String tuMClsCd;
+
+    /** 카테고리명 */
+    private String tuMClsNm;
+
+    /** 키오스크터치분류키설명 */
+    private String mmClsMemo;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -413,4 +427,34 @@ public class KioskKeyMapVO extends PageVO {
     public void setIndex(String index) {
         this.index = index;
     }
+
+    public String getClsMemo() {
+        return clsMemo;
+    }
+
+    public void setClsMemo(String clsMemo) {
+        this.clsMemo = clsMemo;
+    }
+
+    public String getTuMClsFg() {
+        return tuMClsFg;
+    }
+
+    public void setTuMClsFg(String tuMClsFg) { this.tuMClsFg = tuMClsFg; }
+
+    public String getTuMClsCd() {
+        return tuMClsCd;
+    }
+
+    public void setTuMClsCd(String tuMClsCd) { this.tuMClsCd = tuMClsCd; }
+
+    public String getTuMClsNm() {
+        return tuMClsNm;
+    }
+
+    public void setTuMClsNm(String tuMClsNm) { this.tuMClsNm = tuMClsNm; }
+
+    public String getMmClsMemo() { return mmClsMemo; }
+
+    public void setMmClsMemo(String mmClsMemo) { this.mmClsMemo = mmClsMemo; }
 }

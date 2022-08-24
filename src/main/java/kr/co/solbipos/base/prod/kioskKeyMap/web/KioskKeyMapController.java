@@ -573,4 +573,71 @@ public class KioskKeyMapController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 키오스크 카테고리(중분류) 조회
+     *
+     * @param kioskKeyMapVO
+     * @param request
+     * @param response
+     * @param model
+     * @author  김설아
+     * @since   2022. 08. 17.
+     */
+    @RequestMapping(value = "/kioskKeyMap/getKioskCategoryM.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getKioskCategoryM(KioskKeyMapVO kioskKeyMapVO, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = kioskKeyMapService.getKioskCategoryM(kioskKeyMapVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, result);
+    }
+
+    /**
+     * 키오스크 카테고리(중분류) 저장
+     *
+     * @param kioskKeyMapVOs
+     * @param request
+     * @param response
+     * @param model
+     * @author  김설아
+     * @since   2022. 08. 17.
+     */
+    @RequestMapping(value = "/kioskKeyMap/saveKioskCategoryM.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveKioskCategoryM(@RequestBody KioskKeyMapVO[] kioskKeyMapVOs, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = kioskKeyMapService.saveKioskCategoryM(kioskKeyMapVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 키맵그룹에 중분류사용여부 조회
+     *
+     * @param kioskKeyMapVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 08. 17.
+     */
+    @RequestMapping(value = "/kioskKeyMap/getKioskKeyMapGroupTuMClsFg.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getKioskKeyMapGroupTuMClsFg(KioskKeyMapVO kioskKeyMapVO, HttpServletRequest request,
+                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = kioskKeyMapService.getKioskKeyMapGroupTuMClsFg(kioskKeyMapVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, kioskKeyMapVO);
+    }
 }
