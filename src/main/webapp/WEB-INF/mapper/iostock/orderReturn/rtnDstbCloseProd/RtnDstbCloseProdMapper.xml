@@ -431,30 +431,7 @@
                 #{item}
             </foreach>
         </if>
-        <choose>
-            <when test='vendrCd != null and vendrCd != ""'>
-                AND tms.STORE_CD NOT IN (SELECT STORE_CD
-                                           FROM TB_PO_HQ_STORE_DISTRIBUTE
-                                          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                                            AND REQ_DATE = #{reqDate}
-                                            AND PROD_CD = #{prodCd}
-                                            AND PROC_FG IN ('20','30')
-                                            AND SLIP_FG = #{slipFg}
-                                            AND HQ_VENDR_CD = #{vendrCd}
-                                            GROUP BY STORE_CD)
-            </when>
-            <otherwise>
-                AND tms.STORE_CD NOT IN (SELECT STORE_CD
-                                           FROM TB_PO_HQ_STORE_DISTRIBUTE
-                                          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                                            AND REQ_DATE = #{reqDate}
-                                            AND PROD_CD = #{prodCd}
-                                            AND PROC_FG IN ('20','30')
-                                            AND SLIP_FG = #{slipFg}
-                                            AND HQ_VENDR_CD IS NULL
-                                            GROUP BY STORE_CD)
-            </otherwise>
-        </choose>
+        ORDER BY tms.STORE_CD
     </select>
 
     <!--  반품마감 추가등록 분배등록 저장 -->
