@@ -287,7 +287,7 @@
               autoGenerateColumns="false"
               selection-mode="Row"
               items-source="data"
-              control="flex"
+              control="orgFlex"
               initialized="initGrid(s,e)"
               is-read-only="true"
               item-formatter="_itemFormatter">
@@ -324,4 +324,4 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/billInfo/billInfo.js?ver=20190130.21" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/billInfo/billInfo.js?ver=20190130.22" charset="utf-8"></script>
