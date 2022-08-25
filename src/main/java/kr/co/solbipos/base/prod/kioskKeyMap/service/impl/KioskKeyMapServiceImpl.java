@@ -742,7 +742,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         }
     }
 
-    /** 키맵그룹에 중분류사용여부 조회 */
+    /** 키맵그룹에 KIOSK중분류사용 조회 */
     @Override
     public List<DefaultMap<Object>> getKioskKeyMapGroupTuMClsFg(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
 

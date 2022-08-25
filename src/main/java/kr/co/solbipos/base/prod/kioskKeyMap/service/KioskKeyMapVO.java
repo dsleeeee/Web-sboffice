@@ -96,7 +96,7 @@ public class KioskKeyMapVO extends PageVO {
     /** 키오스크터치분류키설명 */
     private String clsMemo;
 
-    /** 중분류사용여부 */
+    /** KIOSK중분류사용 */
     private String tuMClsFg;
 
     /** 카테고리코드 */

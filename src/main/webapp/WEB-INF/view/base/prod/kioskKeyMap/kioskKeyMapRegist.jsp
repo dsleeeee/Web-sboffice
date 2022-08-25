@@ -45,7 +45,7 @@
                 <%-- 키맵그룹 --%>
                 <th><s:message code="kioskKeyMap.tuClsType" /></th>
                 <td colspan="3">
-                    <div class="sb-select mr5" style="width:200px; float:left;">
+                    <div class="sb-select mr5" style="width:110px; float:left;">
                         <wj-combo-box
                                 id="tuClsType"
                                 ng-model="tuClsType"
@@ -56,11 +56,8 @@
                                 control="tuClsTypeCombo">
                         </wj-combo-box>
                     </div>
-                    <div class="sb-select mr5" style="width:5px; float:left;">
-                        [
-                    </div>
                     <c:if test="${orgnFg == 'HQ'}">
-                        <%-- 중분류사용여부 --%>
+                        <%-- KIOSK중분류사용 --%>
                         <div class="sb-select mr5" style="width:110px; float:left;">
                             <wj-combo-box
                                     id="tuMClsFg"
@@ -76,7 +73,6 @@
                     <button class="btn_skyblue" id="btnTuClsTypeAdd" ng-click="tuClsTypeAdd()">
                         <s:message code="kioskKeyMap.tuClsTypeAdd" />
                     </button>
-                    ]
                     <c:if test="${kioskKeyMapGrpFg == '1'}">
                         <c:if test="${orgnFg == 'HQ'}">
                             <button class="btn_skyblue" id="btnTuClsTypeCopyHq" ng-click="tuClsTypeCopy()">
@@ -404,7 +400,7 @@
     var kioskKeyMapGrpFg = "${kioskKeyMapGrpFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20220823.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20220823.03" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
