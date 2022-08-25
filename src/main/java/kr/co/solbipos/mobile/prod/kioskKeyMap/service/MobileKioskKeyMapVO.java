@@ -33,6 +33,8 @@ public class MobileKioskKeyMapVO extends PageVO {
     private String tuClsType;
     /** 카테고리 코드 */
     private String tuClsCd;
+    /** 터치키 코드 */
+    private String tuKeyCd;
     /** 상품 코드 */
     private String prodCd;
 
@@ -82,6 +84,14 @@ public class MobileKioskKeyMapVO extends PageVO {
 
     public void setTuClsCd(String tuClsCd) {
         this.tuClsCd = tuClsCd;
+    }
+
+    public String getTuKeyCd() {
+        return tuKeyCd;
+    }
+
+    public void setTuKeyCd(String tuKeyCd) {
+        this.tuKeyCd = tuKeyCd;
     }
 
     public String getProdCd() {

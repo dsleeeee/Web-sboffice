@@ -117,6 +117,6 @@
         AND     POS_NO      = #{posNo}
         AND     TU_CLS_TYPE = #{tuClsType}
         AND     TU_CLS_CD   = #{tuClsCd}
-        AND     PROD_CD     = #{prodCd}
+        AND     TU_KEY_CD   = #{tuKeyCd}
     </update>
 </mapper>
