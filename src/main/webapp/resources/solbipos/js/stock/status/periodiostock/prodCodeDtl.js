@@ -47,45 +47,44 @@ app.controller('prodCodeDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 	    dataItem.ioOccrDt			= messages["periodIostock.date"]; // 날짜
 	    
 	    // 본사
-	    dataItem.ioOccrQty01		= messages["periodIostock.ioOccr01"]; // 본사입고
-	    dataItem.ioOccrTot01		= messages["periodIostock.ioOccr01"];
-	    dataItem.ioOccrQty16		= messages["periodIostock.ioOccr16"]; // 업체반출
-	    dataItem.ioOccrTot16		= messages["periodIostock.ioOccr16"];
-	    dataItem.ioOccrQty13		= messages["periodIostock.ioOccr13"]; // 본사출고
-	    dataItem.ioOccrTot13		= messages["periodIostock.ioOccr13"];
-	    dataItem.ioOccrQty02		= messages["periodIostock.ioOccr02"]; // 본사반입
-	    dataItem.ioOccrTot02		= messages["periodIostock.ioOccr02"];
-	    
-	    // 공통
-	    dataItem.ioOccrQty04		= messages["periodIostock.ioOccr04"]; // 매장이입
-	    dataItem.ioOccrTot04		= messages["periodIostock.ioOccr04"];
-	    dataItem.ioOccrQty14		= messages["periodIostock.ioOccr14"]; // 매장이출
-	    dataItem.ioOccrTot14		= messages["periodIostock.ioOccr14"];
-	    dataItem.ioOccrQty17		= messages["periodIostock.ioOccr17"]; // 재고폐기
-	    dataItem.ioOccrTot17		= messages["periodIostock.ioOccr17"];
-	    dataItem.ioOccrQty21		= messages["periodIostock.ioOccr21"]; // 재고조정
-	    dataItem.ioOccrTot21		= messages["periodIostock.ioOccr21"];
-	    dataItem.ioOccrQty22		= messages["periodIostock.ioOccr22"]; // 세트생성
-	    dataItem.ioOccrTot22		= messages["periodIostock.ioOccr22"];
-	    
-	    // 매장
-	    dataItem.ioOccrQty03		= messages["periodIostock.ioOccr03"]; // 매장입고
-	    dataItem.ioOccrTot03		= messages["periodIostock.ioOccr03"];
-	    dataItem.ioOccrQty12		= messages["periodIostock.ioOccr12"]; // 매장반품
-	    dataItem.ioOccrTot12		= messages["periodIostock.ioOccr12"];
-	    dataItem.ioOccrQty06		= messages["periodIostock.ioOccr06"]; // 사입입고
-	    dataItem.ioOccrTot06		= messages["periodIostock.ioOccr06"];
-	    dataItem.ioOccrQty18		= messages["periodIostock.ioOccr18"]; // 사입반품
-	    dataItem.ioOccrTot18		= messages["periodIostock.ioOccr18"];
-	    dataItem.ioOccrQty11		= messages["periodIostock.ioOccr11"]; // 매장판매
-	    dataItem.ioOccrTot11		= messages["periodIostock.ioOccr11"];
+	    dataItem.vendrInQty 		= messages["periodIostock.ioOccr01"]; // 본사입고
+	    dataItem.vendrInTot 		= messages["periodIostock.ioOccr01"];
+	    dataItem.vendrOutQty 		= messages["periodIostock.ioOccr16"]; // 업체반출
+	    dataItem.vendrOutTot 		= messages["periodIostock.ioOccr16"];
+	    dataItem.hqOutQty	 		= messages["periodIostock.ioOccr13"]; // 본사출고
+	    dataItem.hqOutTot	 		= messages["periodIostock.ioOccr13"];
+	    dataItem.hqInQty 			= messages["periodIostock.ioOccr02"]; // 본사반입
+	    dataItem.hqInTot 			= messages["periodIostock.ioOccr02"];
 	    
 	    // 본사
-	    dataItem.ioOccrQty19		= messages["periodIostock.ioOccr19"]; // 거래처출고
-	    dataItem.ioOccrTot19		= messages["periodIostock.ioOccr19"];
-	    dataItem.ioOccrQty33		= messages["periodIostock.ioOccr33"]; // 거래처반품
-	    dataItem.ioOccrTot33		= messages["periodIostock.ioOccr33"];
+	    dataItem.storeMoveInQty 	= messages["periodIostock.ioOccr04"]; // 매장이입
+	    dataItem.storeMoveInTot 	= messages["periodIostock.ioOccr04"];
+	    dataItem.storeMoveOutQty 	= messages["periodIostock.ioOccr14"]; // 매장이출
+	    dataItem.storeMoveOutTot 	= messages["periodIostock.ioOccr14"];
+	    dataItem.disuseQty 			= messages["periodIostock.ioOccr17"]; // 재고폐기
+	    dataItem.adjQty 			= messages["periodIostock.ioOccr21"]; // 재고조정
+	    dataItem.setInQty 			= messages["periodIostock.ioOccr22"]; // 세트생성
+		dataItem.saleVendrOrderQty	= messages["periodIostock.ioOccr19"]; // 거래처출고
+		dataItem.saleVendrOrderTot	= messages["periodIostock.ioOccr19"];
+		dataItem.saleVendrRtnQty	= messages["periodIostock.ioOccr33"]; // 거래처반품
+		dataItem.saleVendrRtnTot	= messages["periodIostock.ioOccr33"];
 	    
+	    // 매장
+		dataItem.moveInQty 			= messages["periodIostock.ioOccr04"]; // 매장이입
+		dataItem.moveInTot 			= messages["periodIostock.ioOccr04"];
+		dataItem.moveOutQty 		= messages["periodIostock.ioOccr14"]; // 매장이출
+		dataItem.moveOutTot 		= messages["periodIostock.ioOccr14"];
+	    dataItem.storeInQty 		= messages["periodIostock.ioOccr03"]; // 매장입고
+	    dataItem.storeInTot 		= messages["periodIostock.ioOccr03"];
+	    dataItem.storeOutQty 		= messages["periodIostock.ioOccr12"]; // 매장반품
+	    dataItem.storeOutTot 		= messages["periodIostock.ioOccr12"];
+	    dataItem.purchsInQty 		= messages["periodIostock.ioOccr06"]; // 사입입고
+	    dataItem.purchsInTot 		= messages["periodIostock.ioOccr06"];
+	    dataItem.purchsOutQty		= messages["periodIostock.ioOccr18"]; // 사입반품
+	    dataItem.purchsOutTot		= messages["periodIostock.ioOccr18"];
+	    dataItem.storeSaleQty		= messages["periodIostock.ioOccr11"]; // 매장판매
+	    dataItem.storeSaleTot		= messages["periodIostock.ioOccr11"];
+
 	    s.columnHeaders.rows[0].dataItem = dataItem;
 
 	    s.itemFormatter = function (panel, r, c, cell) {
@@ -140,6 +139,8 @@ app.controller('prodCodeDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 	    $scope.storeNm			= data.storeNm; // 매장명
 	    $scope.storeCd  		= data.storeCd; // 매장코드
 	    $scope.hqOfficeCd		= hqOfficeCd; // 본사코드
+
+
 	    
 	    $scope.prodCodeDtlLayer.show(true);
 
@@ -151,8 +152,8 @@ app.controller('prodCodeDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 	  
 	  $scope.searchProdCodeDtlList = function(){
 		  var params			={};
-		  	  params.startDate	= $scope.startDate.replace(/-/gi, "");
-		  	  params.endDate	= $scope.endDate.replace(/-/gi, "");
+		  	  params.startDate	= $scope.startDate;
+		  	  params.endDate	= $scope.endDate;
 		  	  params.prodCd		= $scope.prodCd;
 		  	  params.storeCd	= $scope.storeCd;
 		  	  params.hqOfficeCd = $scope.hqOfficeCd;

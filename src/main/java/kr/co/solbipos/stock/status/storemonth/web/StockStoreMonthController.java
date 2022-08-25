@@ -83,4 +83,23 @@ public class StockStoreMonthController {
 		List<DefaultMap<String>> list = stockStoreMonthService.stockStoreMonthList(stockStoreMonthVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, stockStoreMonthVO);
 	}
+
+	/**
+     * 매장월수불 - 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  조동훤
+     * @since   2020. 03. 18.
+     */
+	@RequestMapping(value = "/storeMonth/viewExcelList.sb", method = RequestMethod.POST)
+	@ResponseBody
+	public Result StockStoreMonthExcelList(HttpServletRequest request, HttpServletResponse response, Model model, StockStoreMonthVO stockStoreMonthVO) {
+
+		SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+		List<DefaultMap<String>> list = stockStoreMonthService.stockStoreMonthExcelList(stockStoreMonthVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, stockStoreMonthVO);
+	}
 }

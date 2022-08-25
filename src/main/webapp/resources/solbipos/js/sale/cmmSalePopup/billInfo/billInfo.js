@@ -341,6 +341,10 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
         $scope._broadcast('orgBillInfoCtrl', params);
       } else if(nvl($scope.saleYn, '') === 'N' && nvl($scope.webReg, '') === 'Y'){
         $("#orgBillSubTitle").html(messages['billInfo.orgBill.null']);
+        // 그리드 초기화
+        $("orgBillInfo").css("display", "none");
+        var prodGrid = agrid.getScope('orgBillInfoCtrl');
+        prodGrid.gridDefault();
       }
     });
   };
@@ -365,7 +369,7 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
       scope.orgBillGuestInfo = "";
       scope._gridDataInit();
     }
-
+    $("orgBillInfo").css("display", "");
     $scope.wjBillInfoLayer.hide();
   };
 
@@ -471,6 +475,15 @@ app.controller('orgBillInfoCtrl', ['$scope', '$http', '$timeout', function ($sco
     }
   };
 
+  // 그리드 초기화
+  $scope.gridDefault = function () {
+    $timeout(function () {
+      var cv = new wijmo.collections.CollectionView([]);
+      cv.trackChanges = true;
+      $scope.data     = cv;
+      $scope.flex.refresh();
+    }, 10);
+  };
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("orgBillInfoCtrl", function (event, data) {

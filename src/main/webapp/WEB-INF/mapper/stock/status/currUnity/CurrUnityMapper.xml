@@ -130,7 +130,7 @@
               WHEN   A.IO_OCCR_FG   =   '42'   THEN   '본사이입'
 		      END   AS IO_OCCR_FG_NM
 		,       ABS(A.IO_OCCR_QTY) AS IO_OCCR_QTY
-		,      SUM(A.IO_OCCR_QTY) OVER(ORDER BY A.IO_PROC_DATE)   AS   TOT_IO_OCCR_QTY
+		,      SUM(A.IO_OCCR_QTY) OVER(ORDER BY A.IO_PROC_DATE, A.IO_OCCR_FG, A.IO_OCCR_QTY)   AS   TOT_IO_OCCR_QTY
 		<include refid="CmmSQL.PagingTemplateCount"/>
 		FROM   (
 		      SELECT  TPHS.IO_PROC_DATE
@@ -345,24 +345,24 @@
               WHEN   A.IO_OCCR_FG   =   '42'   THEN   '본사이입'
 		      END   AS IO_OCCR_FG_NM
 		,       ABS(A.IO_OCCR_QTY) AS IO_OCCR_QTY
-		,      SUM(A.IO_OCCR_QTY) OVER(ORDER BY A.IO_PROC_DATE)   AS   TOT_IO_OCCR_QTY
+		,      SUM(A.IO_OCCR_QTY) OVER(ORDER BY A.IO_PROC_DATE, A.IO_OCCR_FG, A.IO_OCCR_QTY )   AS   TOT_IO_OCCR_QTY
 		FROM   (
 		      SELECT  TPHS.IO_PROC_DATE
 		      ,      TPHS.IO_OCCR_FG
 		      ,      CASE
-                      WHEN   TPHS.IO_OCCR_FG   =   '01'   THEN   SUM(TPHS.IO_OCCR_QTY)
-                      WHEN   TPHS.IO_OCCR_FG   =   '02'   THEN   SUM(TPHS.IO_OCCR_QTY)
-                      WHEN   TPHS.IO_OCCR_FG   =   '04'   THEN   SUM(TPHS.IO_OCCR_QTY)
-                      WHEN   TPHS.IO_OCCR_FG   =   '13'   THEN   SUM(TPHS.IO_OCCR_QTY) * -1
-                      WHEN   TPHS.IO_OCCR_FG   =   '14'   THEN   SUM(TPHS.IO_OCCR_QTY) * -1
-                      WHEN   TPHS.IO_OCCR_FG   =   '16'   THEN   SUM(TPHS.IO_OCCR_QTY) * -1
-                      WHEN   TPHS.IO_OCCR_FG   =   '17'   THEN   SUM(TPHS.IO_OCCR_QTY)
-                      WHEN   TPHS.IO_OCCR_FG   =   '21'   THEN   SUM(TPHS.IO_OCCR_QTY)
-                      WHEN   TPHS.IO_OCCR_FG   =   '22'   THEN   SUM(TPHS.IO_OCCR_QTY)
-                      WHEN   TPHS.IO_OCCR_FG   =   '23'   THEN   SUM(TPHS.IO_OCCR_QTY)
-                      WHEN   TPHS.IO_OCCR_FG   =   '31'   THEN   SUM(TPHS.IO_OCCR_QTY)
-                      WHEN   TPHS.IO_OCCR_FG   =   '41'   THEN   SUM(TPHS.IO_OCCR_QTY) * -1
-                      WHEN   TPHS.IO_OCCR_FG   =   '42'   THEN   SUM(TPHS.IO_OCCR_QTY)
+						WHEN   TPHS.IO_OCCR_FG   =   '01'   THEN   SUM(TPHS.IO_OCCR_QTY)
+						WHEN   TPHS.IO_OCCR_FG   =   '02'   THEN   SUM(TPHS.IO_OCCR_QTY)
+						WHEN   TPHS.IO_OCCR_FG   =   '04'   THEN   SUM(TPHS.IO_OCCR_QTY)
+						WHEN   TPHS.IO_OCCR_FG   =   '13'   THEN   SUM(TPHS.IO_OCCR_QTY) * -1
+						WHEN   TPHS.IO_OCCR_FG   =   '14'   THEN   SUM(TPHS.IO_OCCR_QTY) * -1
+						WHEN   TPHS.IO_OCCR_FG   =   '16'   THEN   SUM(TPHS.IO_OCCR_QTY) * -1
+						WHEN   TPHS.IO_OCCR_FG   =   '17'   THEN   SUM(TPHS.IO_OCCR_QTY) * -1
+						WHEN   TPHS.IO_OCCR_FG   =   '21'   THEN   SUM(TPHS.IO_OCCR_QTY)
+						WHEN   TPHS.IO_OCCR_FG   =   '22'   THEN   SUM(TPHS.IO_OCCR_QTY)
+						WHEN   TPHS.IO_OCCR_FG   =   '23'   THEN   SUM(TPHS.IO_OCCR_QTY) * -1
+						WHEN   TPHS.IO_OCCR_FG   =   '31'   THEN   SUM(TPHS.IO_OCCR_QTY)
+						WHEN   TPHS.IO_OCCR_FG   =   '41'   THEN   SUM(TPHS.IO_OCCR_QTY) * -1
+						WHEN   TPHS.IO_OCCR_FG   =   '42'   THEN   SUM(TPHS.IO_OCCR_QTY)
                      END  IO_OCCR_QTY
 				FROM  (
 					SELECT 	*

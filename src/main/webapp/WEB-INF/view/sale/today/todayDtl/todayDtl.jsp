@@ -184,7 +184,7 @@
               </c:forEach>
               <wj-flex-grid-column header="<s:message code="todayDtl.dtl.guestUprc"/>" binding="guestUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="todayDtl.dtl.totOffaddAmt"/>" binding="totOffaddAmt" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="todayDtl.dtl.webReg"/>" binding="webReg" width="100" align="right" is-read-only="true" visible="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="todayDtl.dtl.webReg"/>" binding="webReg" width="100" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
 
             </wj-flex-grid>
             <%-- ColumnPicker 사용시 include --%>

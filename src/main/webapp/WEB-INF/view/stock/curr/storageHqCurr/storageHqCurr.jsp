@@ -47,7 +47,7 @@
 	      <th><s:message code="storeCurr.unitFg"/></th>
 	      <td>
 	        <div class="sb-select">
-	          <span class="txtIn w150px">
+	          <span class="txtIn w120px">
 	            <wj-combo-box
 	              id="srchUnitFg"
 	              ng-model="unitFgModel"
@@ -75,7 +75,7 @@
         <th><s:message code="hqCurr.safeStockFg"/></th>
         <td>
           <div class="sb-select">
-            <span class="txtIn w150px">
+            <span class="txtIn w120px">
               <wj-combo-box
                 id="srchSafeStockFg"
                 ng-model="safeStockFgModel"
@@ -86,7 +86,7 @@
                 initialized="_initComboBox(s)">
               </wj-combo-box>
             </span>
-            <span class="chk ml20">
+            <span class="chk ml5">
                  <input type="checkbox" id="prodClassDisplay" ng-model="isDisplay" ng-change="fnDisplay()"/>
                  <label for="prodClassDisplay">
                      <s:message code="storageHqCurr.prodClassDisplay" />

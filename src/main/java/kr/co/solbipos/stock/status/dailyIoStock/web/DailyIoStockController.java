@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -63,8 +64,13 @@ public class DailyIoStockController {
 	public String periodIostockView(HttpServletRequest request, HttpServletResponse response, Model model) {
 
 		SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-		return "stock/status/dailyIoStock/dailyIoStock";
+		String url = "";
+		if(sessionInfoVO.getOrgnFg().equals(OrgnFg.HQ)){
+			url = "stock/status/dailyIoStock/hqDailyIoStock";
+		} else if(sessionInfoVO.getOrgnFg().equals(OrgnFg.STORE)){
+			url = "stock/status/dailyIoStock/storeDailyIoStock";
+		}
+		return url;
 	}
 
 	/**

@@ -38,9 +38,9 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 
 	// 조회옵션 세팅
 	$scope._setComboData("srchSrchOption", [
-		{"name": messages["storePeriod.qtyTot"], "value": "QtyTot"},
-		{"name": messages["storePeriod.qty"], "value": "Qty"},
-	    {"name": messages["storePeriod.tot"], "value": "Tot"}
+		{"name": messages["storePeriod.qtyTot"], "value": "3"},
+		{"name": messages["storePeriod.qty"], "value": "1"},
+	    {"name": messages["storePeriod.tot"], "value": "2"}
 	]);
 
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -52,9 +52,9 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 	    s.formatItem.addHandler(function (s, e) {
 	      if (e.panel === s.cells) {
 	        var col = s.columns[e.col];
-	        var colQty = col.binding.substr(6, 3);
+	        var colQty = col.binding.slice(-3);
 
-	        if (col.binding === "prodCd" || (colQty === "Qty" && col.binding !== "poUnitQty") && s.cells.getCellData(e.row, e.col,false) != null) { // 상품코드 & 수량
+	        if (col.binding === "prodCd" || (colQty === "Qty" && col.binding !== "poUnitQty" && col.binding !== "setInQty") && s.cells.getCellData(e.row, e.col,false) != null) { // 상품코드 & 수량
 	        	var item = s.rows[e.row].dataItem;
 	          	wijmo.addClass(e.cell, 'wijLink');
 	          	wijmo.addClass(e.cell, 'wj-custom-readonly');
@@ -74,56 +74,34 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 	    s.columnHeaders.rows.push(new wijmo.grid.Row());
 
 	    // 첫째줄 헤더 생성
-	    var dataItem				= {};
-	    dataItem.prodClassNm		= messages["storePeriod.prodClassNm"];
-	    dataItem.prodCd				= messages["storePeriod.prodCd"];
-	    dataItem.prodNm				= messages["storePeriod.prodNm"];
-	    dataItem.storeCd			= messages["storePeriod.storeCd"];
-	    dataItem.storeNm			= messages["storePeriod.storeNm"];
-	    dataItem.poUnitQty			= messages["storePeriod.poUnitQty"];
-	    dataItem.poUnitFg			= messages["storePeriod.poUnitFg"];
-	    dataItem.barcdCd			= messages["storePeriod.barcdCd"];
+	    var dataItem			= {};
+	    dataItem.prodClassNm	= messages["storePeriod.prodClassNm"];
+	    dataItem.prodCd			= messages["storePeriod.prodCd"];
+	    dataItem.prodNm			= messages["storePeriod.prodNm"];
+	    dataItem.storeCd		= messages["storePeriod.storeCd"];
+	    dataItem.storeNm		= messages["storePeriod.storeNm"];
+	    dataItem.poUnitQty		= messages["storePeriod.poUnitQty"];
+	    dataItem.poUnitFgNm		= messages["storePeriod.poUnitFg"];
+	    dataItem.barcdCd		= messages["storePeriod.barcdCd"];
 
+	    dataItem.storeInQty  	= messages["storePeriod.ioOccr03"]; // 매장입고
+	    dataItem.storeInTot 	= messages["storePeriod.ioOccr03"];
+	    dataItem.storeOutQty 	= messages["storePeriod.ioOccr12"]; // 매장반품
+	    dataItem.storeOutTot 	= messages["storePeriod.ioOccr12"];
+	    dataItem.purchsInQty 	= messages["storePeriod.ioOccr06"]; // 사입입고
+	    dataItem.purchsInTot 	= messages["storePeriod.ioOccr06"];
+	    dataItem.purchsOutQty	= messages["storePeriod.ioOccr18"]; // 사입반품
+	    dataItem.purchsOutTot	= messages["storePeriod.ioOccr18"];
+	    dataItem.storeSaleQty	= messages["storePeriod.ioOccr11"]; // 매장판매
+	    dataItem.storeSaleTot	= messages["storePeriod.ioOccr11"];
 
-	    dataItem.ioOccrQty03		= messages["storePeriod.ioOccr03"]; // 매장입고
-	    dataItem.ioOccrTot03		= messages["storePeriod.ioOccr03"];
-	    dataItem.ioOccrQty12		= messages["storePeriod.ioOccr12"]; // 매장반품
-	    dataItem.ioOccrTot12		= messages["storePeriod.ioOccr12"];
-	    dataItem.ioOccrQty06		= messages["storePeriod.ioOccr06"]; // 사입입고
-	    dataItem.ioOccrTot06		= messages["storePeriod.ioOccr06"];
-	    dataItem.ioOccrQty18		= messages["storePeriod.ioOccr18"]; // 사입반품
-	    dataItem.ioOccrTot18		= messages["storePeriod.ioOccr18"];
-	    dataItem.ioOccrQty11		= messages["storePeriod.ioOccr11"]; // 매장판매
-	    dataItem.ioOccrTot11		= messages["storePeriod.ioOccr11"];
-
-
-	    /*
-	    dataItem.ioOccrQty03		= messages["periodIostock.ioOccr03"]; // 본사입고
-	    dataItem.ioOccrTot03		= messages["periodIostock.ioOccr03"];
-	    dataItem.ioOccrQty12		= messages["periodIostock.ioOccr12"]; // 업체반출
-	    dataItem.ioOccrTot12		= messages["periodIostock.ioOccr12"];
-	    dataItem.ioOccrQty06		= messages["periodIostock.ioOccr06"]; // 본사출고
-	    dataItem.ioOccrTot06		= messages["periodIostock.ioOccr06"];
-	    dataItem.ioOccrQty18		= messages["periodIostock.ioOccr18"]; // 본사반입
-	    dataItem.ioOccrTot18		= messages["periodIostock.ioOccr18"];
-
-
-	    dataItem.ioOccrQty11		= messages["periodIostock.ioOccr11"]; // 거래처출고
-	    dataItem.ioOccrTot11		= messages["periodIostock.ioOccr11"];
-	    dataItem.ioOccrQty11		= messages["periodIostock.ioOccr11"]; // 거래처반입
-	    dataItem.ioOccrTot11		= messages["periodIostock.ioOccr11"];
-	    */
-
-	    dataItem.ioOccrQty04		= messages["storePeriod.ioOccr04"]; // 매장이입
-	    dataItem.ioOccrTot04		= messages["storePeriod.ioOccr04"];
-	    dataItem.ioOccrQty14		= messages["storePeriod.ioOccr14"]; // 매장이출
-	    dataItem.ioOccrTot14		= messages["storePeriod.ioOccr14"];
-	    dataItem.ioOccrQty17		= messages["storePeriod.ioOccr17"]; // 재고폐기
-	    dataItem.ioOccrTot17		= messages["storePeriod.ioOccr17"];
-	    dataItem.ioOccrQty21		= messages["storePeriod.ioOccr21"]; // 재고조정
-	    dataItem.ioOccrTot21		= messages["storePeriod.ioOccr21"];
-	    dataItem.ioOccrQty22		= messages["storePeriod.ioOccr22"]; // 세트생성
-	    dataItem.ioOccrTot22		= messages["storePeriod.ioOccr22"];
+	    dataItem.moveInQty 		= messages["storePeriod.ioOccr04"]; // 매장이입
+	    dataItem.moveInTot 		= messages["storePeriod.ioOccr04"];
+	    dataItem.moveOutQty  	= messages["storePeriod.ioOccr14"]; // 매장이출
+	    dataItem.moveOutTot 	= messages["storePeriod.ioOccr14"];
+	    dataItem.disuseQty 		= messages["storePeriod.ioOccr17"]; // 재고폐기
+	    dataItem.adjQty 		= messages["storePeriod.ioOccr21"]; // 재고조정
+	    dataItem.setInQty		= messages["storePeriod.ioOccr22"]; // 세트생성
 
 	    s.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -187,16 +165,15 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
     			params.prodNm = selectedRow.prodNm; // 상품명
     			params.storeCd = selectedRow.storeCd;
     		    params.storeNm = selectedRow.storeNm;
+				params.startDate = selectedRow.startDate;
+				params.endDate = selectedRow.endDate;
 
-	    		if (col.binding === "prodCd") { // 상품코드
-	    			params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'); // 시작날짜
-	    		    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'); // 종료날짜
+				if (col.binding === "prodCd") { // 상품코드
 	    			$scope._broadcast('prodCodeDtlCtrl', params);
 	    		}
-	    		if (col.binding.substr(6,3) === "Qty" && selectedRow[col.binding] != null){
-	    			var colCode = col.binding.substring(col.binding.length, col.binding.length-2);
-	    			params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd'); // 시작날짜
-	    		    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd'); // 종료날짜
+	    		if (col.binding.slice(-3) === "Qty" && selectedRow[col.binding] != null && col.binding !== "setInQty"){
+	    			var colCode = col.binding;
+	    			params.storeCd = selectedRow.storeCd;
 	    			params.poUnitQty = selectedRow.poUnitQty; // 입수
 	    	        params.colCode = colCode; // 수량(컬럼 뒤에 붙는 숫자, 어떤 수량인지 구분)
 	    	        params.ioOccrFg = s.columnHeaders.getCellData(0,ht.col,false);
@@ -297,22 +274,20 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 		var check = srchSrchOption;
 		var grid = wijmo.Control.getControl("#storePeriodGrid");
 		var columns = grid.columns;
-		var length  = grid.columns.length;
+		var length  = grid.columns.length-2;
 
 		if(check == '1'){ // 수량
-			for(var i=0; i<length; i++){
-				var colLength = columns[i].binding.length;
-				if(columns[i].binding.substring(colLength-2,colLength-5) == 'Tot'){
+			for(var i=7; i<length; i++){
+				if(columns[i].binding.slice(-3) == 'Tot'){
 					columns[i].visible = false;
 				}else if(columns[i].binding != 'prodClassNm'){
 					columns[i].visible = true;
 				}
 			}
 		}else if(check == '2'){ // 금액
-			for(var i=0; i<length; i++){
-				var colLength = columns[i].binding.length;
+			for(var i=7; i<length; i++){
 				if(columns[i].binding != 'poUnitQty'){
-					if(columns[i].binding.substring(colLength-2,colLength-5) == 'Qty'){
+					if(columns[i].binding.slice(-3) == 'Qty'){
 						columns[i].visible = false;
 					}else if(columns[i].binding != 'prodClassNm'){
 						columns[i].visible = true;
@@ -332,7 +307,7 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 	$scope.isChkProdClassDisplay = function(){
 		var columns = $scope.flex.columns;
 
-		for(var i=0; i<columns.length; i++){
+		for(var i=0; i<columns.length-2; i++){
 			if(columns[i].binding === 'prodClassNm'){
 				$scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
 			}
@@ -378,31 +353,27 @@ app.controller('storePeriodExcelCtrl', ['$scope', '$http', '$timeout', function 
 	    dataItem.storeCd			= messages["storePeriod.storeCd"];
 	    dataItem.storeNm			= messages["storePeriod.storeNm"];
 	    dataItem.poUnitQty			= messages["storePeriod.poUnitQty"];
-	    dataItem.poUnitFg			= messages["storePeriod.poUnitFg"];
+	    dataItem.poUnitFgNm			= messages["storePeriod.poUnitFg"];
 	    dataItem.barcdCd			= messages["storePeriod.barcdCd"];
 
+		dataItem.storeInQty  	= messages["storePeriod.ioOccr03"]; // 매장입고
+		dataItem.storeInTot 	= messages["storePeriod.ioOccr03"];
+		dataItem.storeOutQty 	= messages["storePeriod.ioOccr12"]; // 매장반품
+		dataItem.storeOutTot 	= messages["storePeriod.ioOccr12"];
+		dataItem.purchsInQty 	= messages["storePeriod.ioOccr06"]; // 사입입고
+		dataItem.purchsInTot 	= messages["storePeriod.ioOccr06"];
+		dataItem.purchsOutQty	= messages["storePeriod.ioOccr18"]; // 사입반품
+		dataItem.purchsOutTot	= messages["storePeriod.ioOccr18"];
+		dataItem.storeSaleQty	= messages["storePeriod.ioOccr11"]; // 매장판매
+		dataItem.storeSaleTot	= messages["storePeriod.ioOccr11"];
 
-	    dataItem.ioOccrQty03		= messages["storePeriod.ioOccr03"]; // 매장입고
-	    dataItem.ioOccrTot03		= messages["storePeriod.ioOccr03"];
-	    dataItem.ioOccrQty12		= messages["storePeriod.ioOccr12"]; // 매장반품
-	    dataItem.ioOccrTot12		= messages["storePeriod.ioOccr12"];
-	    dataItem.ioOccrQty06		= messages["storePeriod.ioOccr06"]; // 사입입고
-	    dataItem.ioOccrTot06		= messages["storePeriod.ioOccr06"];
-	    dataItem.ioOccrQty18		= messages["storePeriod.ioOccr18"]; // 사입반품
-	    dataItem.ioOccrTot18		= messages["storePeriod.ioOccr18"];
-	    dataItem.ioOccrQty11		= messages["storePeriod.ioOccr11"]; // 매장판매
-	    dataItem.ioOccrTot11		= messages["storePeriod.ioOccr11"];
-
-	    dataItem.ioOccrQty04		= messages["storePeriod.ioOccr04"]; // 매장이입
-	    dataItem.ioOccrTot04		= messages["storePeriod.ioOccr04"];
-	    dataItem.ioOccrQty14		= messages["storePeriod.ioOccr14"]; // 매장이출
-	    dataItem.ioOccrTot14		= messages["storePeriod.ioOccr14"];
-	    dataItem.ioOccrQty17		= messages["storePeriod.ioOccr17"]; // 재고폐기
-	    dataItem.ioOccrTot17		= messages["storePeriod.ioOccr17"];
-	    dataItem.ioOccrQty21		= messages["storePeriod.ioOccr21"]; // 재고조정
-	    dataItem.ioOccrTot21		= messages["storePeriod.ioOccr21"];
-	    dataItem.ioOccrQty22		= messages["storePeriod.ioOccr22"]; // 세트생성
-	    dataItem.ioOccrTot22		= messages["storePeriod.ioOccr22"];
+		dataItem.moveInQty 		= messages["storePeriod.ioOccr04"]; // 매장이입
+		dataItem.moveInTot 		= messages["storePeriod.ioOccr04"];
+		dataItem.moveOutQty  	= messages["storePeriod.ioOccr14"]; // 매장이출
+		dataItem.moveOutTot 	= messages["storePeriod.ioOccr14"];
+		dataItem.disuseQty 		= messages["storePeriod.ioOccr17"]; // 재고폐기
+		dataItem.adjQty 		= messages["storePeriod.ioOccr21"]; // 재고조정
+		dataItem.setInQty		= messages["storePeriod.ioOccr22"]; // 세트생성
 
 	    s.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -469,8 +440,7 @@ app.controller('storePeriodExcelCtrl', ['$scope', '$http', '$timeout', function 
 
 		if(check == '1'){ // 수량
 			for(var i=0; i<length; i++){
-				var colLength = columns[i].binding.length;
-				if(columns[i].binding.substring(colLength-2,colLength-5) == 'Tot'){
+				if(columns[i].binding.slice(-3) == 'Tot'){
 					columns[i].visible = false;
 				}else if(columns[i].binding != 'prodClassNm'){
 					columns[i].visible = true;
@@ -478,9 +448,8 @@ app.controller('storePeriodExcelCtrl', ['$scope', '$http', '$timeout', function 
 			}
 		}else if(check == '2'){ // 금액
 			for(var i=0; i<length; i++){
-				var colLength = columns[i].binding.length;
 				if(columns[i].binding != 'poUnitQty'){
-					if(columns[i].binding.substring(colLength-2,colLength-5) == 'Qty'){
+					if(columns[i].binding.slice(-3) == 'Qty'){
 						columns[i].visible = false;
 					}else if(columns[i].binding != 'prodClassNm'){
 						columns[i].visible = true;

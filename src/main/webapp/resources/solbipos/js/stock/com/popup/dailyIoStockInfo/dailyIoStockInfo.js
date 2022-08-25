@@ -8,9 +8,6 @@ app.controller('dailyIoStockInfoCtrl', ['$scope', '$http', '$timeout', function 
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('dailyIoStockInfoCtrl', $scope, $http, true));
 
-  // 상품분류 항목표시 초기값 체크
-  $scope.isChecked = true;
-
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // picker 사용시 호출 : 미사용시 호출안함
@@ -71,39 +68,37 @@ app.controller('dailyIoStockInfoCtrl', ['$scope', '$http', '$timeout', function 
 
   $scope.changeColumns = function(grid){
 	  var arrBinding;
-	  var arrWidth = [100, 100, 100, 100, 150, 150, 150, 100, 100, 100, 80, 80];
-	  var arrAlign = ["center", "center", "center", "center", "center", "center", "center", "center", "center", "center", "right", "right"];
-	  var arrSum = ["", "", "", "", "", "", "", "", "", "", "Sum", "Sum"];
+	  var arrWidth 	= [80, 80, 80, 100, 150, 100, 100, 80, 70, 70];
+	  var arrAlign 	= ["center", "center", "center", "center", "center", "center", "center", "center", "right", "right"];
+	  var arrSum 	= ["", "", "", "", "", "", "", "", "Sum", "Sum"];
 
 	  if($scope.orgnFg == "H") { // 본사 권한
 		    switch($scope.ioOccrFg) {
-		    case "01" : {arrBinding=["slipNo", "instockDate", "vendrCd", "vendrNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "inTotQty", "inTot"]; break;} // 본사입고(전표번호, 입고일, 거래처코드, 거래처명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
-		    case "16" : {arrBinding=["slipNo", "rtnDate", "vendrCd", "vendrNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "inTotQty", "inTot"]; break;} // 업체반출(전표번호, 반출일, 거래처코드, 거래처명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
-		    case "13" : {arrBinding=["slipNo", "outDate", "storeCd", "storeNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "outTotQty", "outTot"]; break;} // 본사출고(전표번호, 출고일, 매장코드, 매장명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
-		    case "02" : {arrBinding=["slipNo", "carryInDate", "storeCd", "storeNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "outTotQty", "outTot"]; break;} // 본사반입(전표번호, 반입일, 매장코드, 매장명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
-		    case "04" : {arrBinding=["slipNo", "inConfmDt", "storeCd", "storeNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "inTotQty", "inTot"]; break;} // 매장이입(전표번호, 이입일, 매장코드, 매장명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
-		    case "14" : {arrBinding=["slipNo", "outConfmDt", "storeCd", "storeNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "outTotQty", "outTot"]; break;} // 매장이출(전표번호, 이출일, 매장코드, 매장명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
-		    case "17" : {arrBinding=["disuseDate", "seqNo", "title", "prodFgNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "disuseQty", "disuseAmt"]; break;} // 재고폐기(폐기일, 차수, 제목, 구분, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 폐기수량, 폐기금액)
-		    case "21" : {arrBinding=["adjDate", "seqNo", "title", "prodFgNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "adjQty", "adjAmt"]; break;} // 재고조정(조정일, 차수, 제목, 구분, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 조정수량, 조정금액)
-		    case "22" : {arrBinding=["setDate", "seqNo", "prodFgNm", "setMakeFgNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "compstProdCd", "compstProdQty"]; break;} //세트생성(생성일, 차수, 구분, 구성/해체구분, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 세트구성상품코드, 세트구성상품수량)
+		    case "vendrInQty" : {arrBinding=["slipNo", "instockDate", "vendrCd", "vendrNm", "prodClassNm", "prodCd", "prodNm", "barcdCd", "inTotQty", "inTot"]; break;} // 본사입고(전표번호, 입고일, 거래처코드, 거래처명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
+		    case "vendrOutQty" : {arrBinding=["slipNo", "rtnDate", "vendrCd", "vendrNm", "prodClassNm", "prodCd", "prodNm", "barcdCd", "inTotQty", "inTot"]; break;} // 업체반출(전표번호, 반출일, 거래처코드, 거래처명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
+		    case "hqOutQty" : {arrBinding=["slipNo", "outDate", "storeCd", "storeNm", "prodClassNm", "prodCd", "prodNm", "barcdCd", "outTotQty", "outTot"]; break;} // 본사출고(전표번호, 출고일, 매장코드, 매장명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
+		    case "hqInQty" : {arrBinding=["slipNo", "carryInDate", "storeCd", "storeNm", "prodClassNm", "prodCd", "prodNm", "barcdCd", "outTotQty", "outTot"]; break;} // 본사반입(전표번호, 반입일, 매장코드, 매장명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
+		    case "storeMoveInQty" : {arrBinding=["slipNo", "inConfmDt", "storeCd", "storeNm", "prodClassNm", "prodCd", "prodNm", "barcdCd", "inTotQty", "inTot"]; break;} // 매장이입(전표번호, 이입일, 매장코드, 매장명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
+		    case "storeMoveOutQty" : {arrBinding=["slipNo", "outConfmDt", "storeCd", "storeNm", "prodClassNm", "prodCd", "prodNm", "barcdCd", "outTotQty", "outTot"]; break;} // 매장이출(전표번호, 이출일, 매장코드, 매장명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
+		    case "disuseQty" : {arrBinding=["disuseDate", "seqNo", "disuseTitle", "prodFgNm", "prodClassNm", "prodCd", "prodNm", "barcdCd", "disuseQty", "disuseAmt"]; break;} // 재고폐기(폐기일, 차수, 제목, 구분, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 폐기수량, 폐기금액)
+		    case "adjQty" : {arrBinding=["adjDate", "seqNo", "adjTitle", "prodFgNm", "prodClassNm", "prodCd", "prodNm", "barcdCd", "adjQty", "adjAmt"]; break;} // 재고조정(조정일, 차수, 제목, 구분, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 조정수량, 조정금액)
 //		    !!!!!!!!!!!!!!!!!!!!!!!!!!! 아직 컬럼 정보 및 쿼리 안받음 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //		    case "19" : {arrBinding=["saleDate", "vendrCd", "vendrNm"]; break;} // 거래처출고(출고일, 거래처코드, 거래처명)
 //			case "33" : {arrBinding=["saleDate", "vendrCd", "vendrNm"]; break;} // 거래처반품(반품일, 거래처코드, 거래처명)
 		    }
 	  } else if($scope.orgnFg == "S") { // 가맹점 권한
 			switch($scope.ioOccrFg) {
-			case "03" : {arrBinding=["slipNo", "instockDate", "hqOfficeCd", "hqOfficeNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "inTotQty", "inTot"]; break;} // 매장입고(전표번호, 입고일, 본사코드, 본사명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
-			case "12" : {arrBinding=["slipNo", "carryOutDate", "hqOfficeCd", "hqOfficeNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "inTotQty", "inTot"]; break;} // 매장반품(전표번호, 반품일, 본사코드, 본사명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
-			case "06" : {arrBinding=["slipNo", "instockDate", "vendrCd", "vendrNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "inTotQty", "inTot"]; break;} // 사입입고(전표번호, 입고일, 거래처코드, 거래처명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
-			case "18" : {arrBinding=["slipNo", "rtnDate", "vendrCd", "vendrNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "inTotQty", "inTot"]; break;} // 사입반품(전표번호, 반품일, 거래처코드, 거래처명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
+			case "storeInQty" : {arrBinding=["slipNo", "instockDate", "hqOfficeCd", "hqOfficeNm", "prodClassNm", "prodCd", "prodNm", "barcdCd", "inTotQty", "inTot"]; break;} // 매장입고(전표번호, 입고일, 본사코드, 본사명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
+			case "storeOutQty" : {arrBinding=["slipNo", "carryOutDate", "hqOfficeCd", "hqOfficeNm", "prodClassNm", "prodCd", "prodNm", "barcdCd", "inTotQty", "inTot"]; break;} // 매장반품(전표번호, 반품일, 본사코드, 본사명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
+			case "purchsInQty" : {arrBinding=["slipNo", "instockDate", "vendrCd", "vendrNm", "prodClassNm", "prodCd", "prodNm", "barcdCd", "inTotQty", "inTot"]; break;} // 사입입고(전표번호, 입고일, 거래처코드, 거래처명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
+			case "purchsOutQty" : {arrBinding=["slipNo", "rtnDate", "vendrCd", "vendrNm", "prodClassNm", "prodCd", "prodNm", "barcdCd", "inTotQty", "inTot"]; break;} // 사입반품(전표번호, 반품일, 거래처코드, 거래처명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
 //			!!!!!!!!!!!!!!!!!!!!!!!!!!! 아직 컬럼 정보 및 쿼리 안받음 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //			case "11" : {arrBinding=["saleDate", "dlvrPackFg"]; break;} // 매장판매(영업일자, 배달포장구분)
-			case "11" : {arrBinding=["saleDate", "storeCd", "storeNm", "qty", "amt"]; break;} // 매장판매(매출일자, 매장코드, 매장명, 수량, 금액)
-			case "04" : {arrBinding=["slipNo", "inConfmDt", "hqOfficeCd", "hqOfficeNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "inTotQty", "inTot"]; break;} // 매장이입(전표번호, 이입일, 본사코드, 본사명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
-			case "14" : {arrBinding=["slipNo", "outConfmDt", "hqOfficeCd", "hqOfficeNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "outTotQty", "outTot"]; break;} // 매장이출(전표번호, 이출일, 본사코드, 본사명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
-			case "21" : {arrBinding=["disuseDate", "seqNo", "title", "prodFgNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "disuseQty", "disuseAmt"]; break;} // 재고폐기(폐기일, 차수, 제목, 구분, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 폐기수량, 폐기금액)
-			case "22" : {arrBinding=["adjDate", "seqNo", "title", "prodFgNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "adjQty", "adjAmt"]; break;} // 재고조정(조정일, 차수, 제목, 구분, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 조정수량, 조정금액)
-			case "19" : {arrBinding=["setDate", "seqNo", "prodFgNm", "setMakeFgNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "compstProdCd", "compstProdQty"]; break;} //세트생성(생성일, 차수, 구분, 구성/해체구분, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 세트구성상품코드, 세트구성상품수량)
+			case "storeSaleQty" : {arrBinding=["saleDate", "storeCd", "storeNm", "qty", "amt"]; break;} // 매장판매(매출일자, 매장코드, 매장명, 수량, 금액)
+			case "moveInQty" : {arrBinding=["slipNo", "inConfmDt", "hqOfficeCd", "hqOfficeNm", "prodClassNm", "prodCd", "prodNm", "barcdCd", "inTotQty", "inTot"]; break;} // 매장이입(전표번호, 이입일, 본사코드, 본사명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
+			case "moveOutQty" : {arrBinding=["slipNo", "outConfmDt", "hqOfficeCd", "hqOfficeNm", "prodClassNm", "prodCd", "prodNm", "barcdCd", "outTotQty", "outTot"]; break;} // 매장이출(전표번호, 이출일, 본사코드, 본사명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
+			case "disuseQty" : {arrBinding=["disuseDate", "seqNo", "title", "prodFgNm", "prodClassNm", "prodCd", "prodNm", "barcdCd", "disuseQty", "disuseAmt"]; break;} // 재고폐기(폐기일, 차수, 제목, 구분, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 폐기수량, 폐기금액)
+			case "adjQty" : {arrBinding=["adjDate", "seqNo", "title", "prodFgNm", "prodClassNm", "prodCd", "prodNm", "barcdCd", "adjQty", "adjAmt"]; break;} // 재고조정(조정일, 차수, 제목, 구분, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 조정수량, 조정금액)
 			}
 	  }
 	  $scope.drawGrid(grid, arrBinding, arrWidth, arrAlign, arrSum);
@@ -119,17 +114,6 @@ app.controller('dailyIoStockInfoCtrl', ['$scope', '$http', '$timeout', function 
 		  }
 	  }
   }
-
-  // 상품분류 숨기기
-  $scope.isChkDt = function() {
-	 for(var item = 0; item < $scope.flex.columns.length; item++) {
-		 var col = $scope.flex.columns[item];
-		 if(col.binding === 'lv1Nm' || col.binding === 'lv2Nm' || col.binding === 'lv3Nm') {
-			$scope.flex.columns[item].visible = $scope.isChecked? true: false;
-		 }
-	 }
-	 $scope.flex.refresh();
-  };
 
   //엑셀 다운로드
   $scope.excelDownload = function () {

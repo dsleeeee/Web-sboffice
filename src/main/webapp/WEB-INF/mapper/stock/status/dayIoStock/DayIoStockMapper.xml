@@ -23,53 +23,48 @@
 			     , THP.PO_UNIT_FG
 			     , THPB.BARCD_CD
 			     <if test='unitFg == "1"'>
-				     , SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_IN_QTY / THP.PO_UNIT_QTY)) 			AS IO_OCCR_QTY_01 /* 본사입고 수량*/
-					 , SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_IN_TOT))                   			AS IO_OCCR_TOT_01 /* 본사입고 금액*/
-					 , SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_OUT_QTY / THP.PO_UNIT_QTY)) 			AS IO_OCCR_QTY_16 /* 업체반출 수량*/
-					 , SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_OUT_TOT))                  			AS IO_OCCR_TOT_16 /* 업체반출 금액*/
-					 , SF_ZERO_TO_NULL(SUM(TSHSD.HQ_OUT_QTY / THP.PO_UNIT_QTY)) 				AS IO_OCCR_QTY_13 /* 본사출고 수량*/
-					 , SF_ZERO_TO_NULL(SUM(TSHSD.HQ_OUT_TOT))                   				AS IO_OCCR_TOT_13 /* 본사출고 금액*/
-					 , SF_ZERO_TO_NULL(SUM(TSHSD.HQ_IN_QTY / THP.PO_UNIT_QTY)) 				AS IO_OCCR_QTY_02 /* 본사반입 수량*/
-					 , SF_ZERO_TO_NULL(SUM(TSHSD.HQ_IN_TOT))                   				AS IO_OCCR_TOT_02 /* 본사반입 금액*/
-					 , SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_IN_QTY / THP.PO_UNIT_QTY)) 		AS IO_OCCR_QTY_04 /* 매장이입 수량*/
-					 , SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_IN_TOT))                   		AS IO_OCCR_TOT_04 /* 매장이입 금액*/
-					 , SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_OUT_QTY / THP.PO_UNIT_QTY)) 		AS IO_OCCR_QTY_14 /* 매장이출 수량*/
-					 , SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_OUT_TOT))                   		AS IO_OCCR_TOT_14 /* 매장이출 금액*/
-					 , SF_ZERO_TO_NULL(SUM(TSHSD.DISUSE_QTY / THP.PO_UNIT_QTY)) 				AS IO_OCCR_QTY_17 /* 재고폐기 수량*/
--- 					 , SF_ZERO_TO_NULL(SUM(TSHSD.DISUSE_AMT))                   				AS IO_OCCR_TOT_17 /* 재고폐기 금액*/
-					 , SF_ZERO_TO_NULL(SUM(TSHSD.ADJ_QTY / THP.PO_UNIT_QTY)) 				AS IO_OCCR_QTY_21 /* 재고조정 수량*/
--- 					 , SF_ZERO_TO_NULL(SUM(TSHSD.ADJ_AMT))                   				AS IO_OCCR_TOT_21 /* 재고조정 금액*/
-					 , SF_ZERO_TO_NULL(SUM(TSHSD.SET_IN_QTY / THP.PO_UNIT_QTY)) 				AS IO_OCCR_QTY_22 /* 세트생성 수량*/
--- 					 , SF_ZERO_TO_NULL(SUM(TSHSD.SET_IN_AMT))                   				AS IO_OCCR_TOT_22 /* 세트생성 금액*/
-					 , SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_ORDER_QTY / THP.PO_UNIT_QTY)) 	AS IO_OCCR_QTY_19 /* 거래처출고 수량*/
-					 , SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_ORDER_TOT))                   	AS IO_OCCR_TOT_19 /* 거래처출고 금액*/
-					 , SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_RTN_QTY / THP.PO_UNIT_QTY)) 		AS IO_OCCR_QTY_33 /* 거래처반품 수량*/
-					 , SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_RTN_TOT))                   		AS IO_OCCR_TOT_33 /* 거래처반품 금액*/
+				     , SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_IN_QTY / THP.PO_UNIT_QTY))			AS VENDR_IN_QTY /* 본사입고 수량*/
+					 , SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_IN_TOT))                   			AS VENDR_IN_TOT /* 본사입고 금액*/
+					 , SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_OUT_QTY / THP.PO_UNIT_QTY)) 			AS VENDR_OUT_QTY /* 업체반출 수량*/
+					 , SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_OUT_TOT))                  			AS VENDR_OUT_TOT /* 업체반출 금액*/
+					 , SF_ZERO_TO_NULL(SUM(TSHSD.HQ_OUT_QTY / THP.PO_UNIT_QTY))				AS HQ_OUT_QTY /* 본사출고 수량*/
+					 , SF_ZERO_TO_NULL(SUM(TSHSD.HQ_OUT_TOT))                  				AS HQ_OUT_TOT /* 본사출고 금액*/
+					 , SF_ZERO_TO_NULL(SUM(TSHSD.HQ_IN_QTY / THP.PO_UNIT_QTY)) 				AS HQ_IN_QTY /* 본사반입 수량*/
+					 , SF_ZERO_TO_NULL(SUM(TSHSD.HQ_IN_TOT))                   				AS HQ_IN_TOT /* 본사반입 금액*/
+					 , SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_IN_QTY / THP.PO_UNIT_QTY)) 		AS STORE_MOVE_IN_QTY /* 매장이입 수량*/
+					 , SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_IN_TOT))                   		AS STORE_MOVE_IN_TOT /* 매장이입 금액*/
+					 , SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_OUT_QTY / THP.PO_UNIT_QTY)) 	AS STORE_MOVE_OUT_QTY /* 매장이출 수량*/
+					 , SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_OUT_TOT))                   	AS STORE_MOVE_OUT_TOT /* 매장이출 금액*/
+					 , SF_ZERO_TO_NULL(SUM(TSHSD.DISUSE_QTY / THP.PO_UNIT_QTY)) 			AS DISUSE_QTY /* 재고폐기 수량*/
+					 , SF_ZERO_TO_NULL(SUM(TSHSD.ADJ_QTY / THP.PO_UNIT_QTY)) 				AS ADJ_QTY /* 재고조정 수량*/
+					 , SF_ZERO_TO_NULL(SUM(TSHSD.SET_IN_QTY / THP.PO_UNIT_QTY))				AS SET_IN_QTY /* 세트생성 수량*/
+					 , SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_ORDER_QTY / THP.PO_UNIT_QTY)) 	AS SALE_VENDR_ORDER_QTY /* 거래처출고 수량*/
+					 , SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_ORDER_TOT))                   	AS SALE_VENDR_ORDER_TOT /* 거래처출고 금액*/
+					 , SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_RTN_QTY / THP.PO_UNIT_QTY)) 	AS SALE_VENDR_RTN_QTY /* 거래처반품 수량*/
+					 , SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_RTN_TOT))                   	AS SALE_VENDR_RTN_TOT /* 거래처반품 금액*/
 				 </if>
 				 <if test='unitFg == "0"'>
-					 , SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_IN_QTY)) 			AS IO_OCCR_QTY_01 /* 본사입고 수량*/
-	                 , SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_IN_TOT)) 			AS IO_OCCR_TOT_01 /* 본사입고 금액*/
-	                 , SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_OUT_QTY)) 		AS IO_OCCR_QTY_16 /* 업체반출 수량*/
-	                 , SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_OUT_TOT)) 		AS IO_OCCR_TOT_16 /* 업체반출 금액*/
-	                 , SF_ZERO_TO_NULL(SUM(TSHSD.HQ_OUT_QTY)) 			AS IO_OCCR_QTY_13 /* 본사출고 수량*/
-	                 , SF_ZERO_TO_NULL(SUM(TSHSD.HQ_OUT_TOT)) 			AS IO_OCCR_TOT_13 /* 본사출고 금액*/
-	                 , SF_ZERO_TO_NULL(SUM(TSHSD.HQ_IN_QTY)) 			AS IO_OCCR_QTY_02 /* 본사반입 수량*/
-	                 , SF_ZERO_TO_NULL(SUM(TSHSD.HQ_IN_TOT)) 			AS IO_OCCR_TOT_02 /* 본사반입 금액*/
-	                 , SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_IN_QTY)) 	AS IO_OCCR_QTY_04 /* 매장이입 수량*/
-	                 , SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_IN_TOT)) 	AS IO_OCCR_TOT_04 /* 매장이입 금액*/
-	                 , SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_OUT_QTY)) 	AS IO_OCCR_QTY_14 /* 매장이출 수량*/
-	                 , SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_OUT_TOT)) 	AS IO_OCCR_TOT_14 /* 매장이출 금액*/
-	                 , SF_ZERO_TO_NULL(SUM(TSHSD.DISUSE_QTY)) 			AS IO_OCCR_QTY_17 /* 재고폐기 수량*/
--- 	                 , SF_ZERO_TO_NULL(SUM(TSHSD.DISUSE_AMT)) 			AS IO_OCCR_TOT_17 /* 재고폐기 금액*/
-	                 , SF_ZERO_TO_NULL(SUM(TSHSD.ADJ_QTY)) 				AS IO_OCCR_QTY_21 /* 재고조정 수량*/
--- 	                 , SF_ZERO_TO_NULL(SUM(TSHSD.ADJ_AMT)) 				AS IO_OCCR_TOT_21 /* 재고조정 금액*/
-	                 , SF_ZERO_TO_NULL(SUM(TSHSD.SET_IN_QTY)) 			AS IO_OCCR_QTY_22 /* 세트생성 수량*/
--- 	                 , SF_ZERO_TO_NULL(SUM(TSHSD.SET_IN_AMT)) 			AS IO_OCCR_TOT_22 /* 세트생성 금액*/
-	                 , SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_ORDER_QTY)) 	AS IO_OCCR_QTY_19 /* 거래처출고 수량*/
-	                 , SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_ORDER_TOT)) 	AS IO_OCCR_TOT_19 /* 거래처출고 금액*/
-	                 , SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_RTN_QTY)) 	AS IO_OCCR_QTY_33 /* 거래처반품 수량*/
-	                 , SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_RTN_TOT)) 	AS IO_OCCR_TOT_33 /* 거래처반품 금액*/
+					 , SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_IN_QTY))			AS VENDR_IN_QTY /* 본사입고 수량*/
+	                 , SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_IN_TOT))			AS VENDR_IN_TOT /* 본사입고 금액*/
+	                 , SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_OUT_QTY)) 		AS VENDR_OUT_QTY /* 업체반출 수량*/
+	                 , SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_OUT_TOT)) 		AS VENDR_OUT_TOT /* 업체반출 금액*/
+	                 , SF_ZERO_TO_NULL(SUM(TSHSD.HQ_OUT_QTY)) 			AS HQ_OUT_QTY /* 본사출고 수량*/
+	                 , SF_ZERO_TO_NULL(SUM(TSHSD.HQ_OUT_TOT)) 			AS HQ_OUT_TOT /* 본사출고 금액*/
+	                 , SF_ZERO_TO_NULL(SUM(TSHSD.HQ_IN_QTY)) 			AS HQ_IN_QTY /* 본사반입 수량*/
+	                 , SF_ZERO_TO_NULL(SUM(TSHSD.HQ_IN_TOT)) 			AS HQ_IN_TOT /* 본사반입 금액*/
+	                 , SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_IN_QTY)) 	AS STORE_MOVE_IN_QTY /* 매장이입 수량*/
+	                 , SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_IN_TOT)) 	AS STORE_MOVE_IN_TOT /* 매장이입 금액*/
+	                 , SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_OUT_QTY)) 	AS STORE_MOVE_OUT_QTY /* 매장이출 수량*/
+	                 , SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_OUT_TOT)) 	AS STORE_MOVE_OUT_TOT /* 매장이출 금액*/
+	                 , SF_ZERO_TO_NULL(SUM(TSHSD.DISUSE_QTY)) 			AS DISUSE_QTY /* 재고폐기 수량*/
+	                 , SF_ZERO_TO_NULL(SUM(TSHSD.ADJ_QTY)) 				AS ADJ_QTY /* 재고조정 수량*/
+	                 , SF_ZERO_TO_NULL(SUM(TSHSD.SET_IN_QTY)) 			AS SET_IN_QTY /* 세트생성 수량*/
+	                 , SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_ORDER_QTY))	AS SALE_VENDR_ORDER_QTY /* 거래처출고 수량*/
+	                 , SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_ORDER_TOT))	AS SALE_VENDR_ORDER_TOT /* 거래처출고 금액*/
+	                 , SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_RTN_QTY)) 	AS SALE_VENDR_RTN_QTY /* 거래처반품 수량*/
+	                 , SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_RTN_TOT)) 	AS SALE_VENDR_RTN_TOT /* 거래처반품 금액*/
 				 </if>
+		    		, #{startDate} AS START_DATE
 			  FROM TB_ST_HQ_STOCK_DAILY TSHSD
 			     , TB_HQ_PRODUCT THP
 			     , TB_HQ_PRODUCT_BARCD THPB
@@ -147,49 +142,44 @@
 			     , TMP.PO_UNIT_FG
 			     , TMPB.BARCD_CD
 			     <if test='unitFg == "1"'>
-				     , SF_ZERO_TO_NULL(SUM(TSSSD.STORE_IN_QTY / TMP.PO_UNIT_QTY)) 	AS IO_OCCR_QTY_03 /* 매장입고 수량*/
-				     , SF_ZERO_TO_NULL(SUM(TSSSD.STORE_IN_TOT))                   	AS IO_OCCR_TOT_03 /* 매장입고 금액*/
-				     , SF_ZERO_TO_NULL(SUM(TSSSD.STORE_OUT_QTY / TMP.PO_UNIT_QTY)) 	AS IO_OCCR_QTY_12 /* 매장반품 수량*/
-				     , SF_ZERO_TO_NULL(SUM(TSSSD.STORE_OUT_TOT))                   	AS IO_OCCR_TOT_12 /* 매장반품 금액*/
-				     , SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_IN_QTY / TMP.PO_UNIT_QTY)) 	AS IO_OCCR_QTY_06 /* 사입입고 수량*/
-				     , SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_IN_TOT))                   	AS IO_OCCR_TOT_06 /* 사입입고 금액*/
-				     , SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_OUT_QTY / TMP.PO_UNIT_QTY)) 	AS IO_OCCR_QTY_18 /* 사입반품 수량*/
-				     , SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_OUT_TOT))                   	AS IO_OCCR_TOT_18 /* 사입반품 금액*/
-				     , SF_ZERO_TO_NULL(SUM(TSSSD.STORE_SALE_QTY / TMP.PO_UNIT_QTY)) 	AS IO_OCCR_QTY_11 /* 매장판매 수량*/
-				     , SF_ZERO_TO_NULL(SUM(TSSSD.STORE_SALE_TOT))                  	AS IO_OCCR_TOT_11 /* 매장판매 금액*/
-				     , SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_IN_QTY / TMP.PO_UNIT_QTY)) 	AS IO_OCCR_QTY_04 /* 매장이입 수량*/
-				     , SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_IN_TOT))                   	AS IO_OCCR_TOT_04 /* 매장이입 금액*/
-				     , SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_OUT_QTY / TMP.PO_UNIT_QTY)) 	AS IO_OCCR_QTY_14 /* 매장이출 수량*/
-				     , SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_OUT_TOT))                   	AS IO_OCCR_TOT_14 /* 매장이출 금액*/
-				     , SF_ZERO_TO_NULL(SUM(TSSSD.DISUSE_QTY / TMP.PO_UNIT_QTY)) 		AS IO_OCCR_QTY_17 /* 재고폐기 수량*/
--- 				     , SF_ZERO_TO_NULL(SUM(TSSSD.DISUSE_AMT))                   		AS IO_OCCR_TOT_17 /* 재고폐기 금액*/
-				     , SF_ZERO_TO_NULL(SUM(TSSSD.ADJ_QTY / TMP.PO_UNIT_QTY)) 		AS IO_OCCR_QTY_21 /* 재고조정 수량*/
--- 				     , SF_ZERO_TO_NULL(SUM(TSSSD.ADJ_AMT))                   		AS IO_OCCR_TOT_21 /* 재고조정 금액*/
-				     , SF_ZERO_TO_NULL(SUM(TSSSD.SET_IN_QTY / TMP.PO_UNIT_QTY)) 		AS IO_OCCR_QTY_22 /* 세트생성 수량*/
--- 				     , SF_ZERO_TO_NULL(SUM(TSSSD.SET_IN_AMT))                   		AS IO_OCCR_TOT_22 /* 세트생성 금액*/
+				     , SF_ZERO_TO_NULL(SUM(TSSSD.STORE_IN_QTY / TMP.PO_UNIT_QTY)) 	AS STORE_IN_QTY /* 매장입고 수량*/
+				     , SF_ZERO_TO_NULL(SUM(TSSSD.STORE_IN_TOT))                   	AS STORE_IN_TOT /* 매장입고 금액*/
+				     , SF_ZERO_TO_NULL(SUM(TSSSD.STORE_OUT_QTY / TMP.PO_UNIT_QTY)) 	AS STORE_OUT_QTY /* 매장반품 수량*/
+				     , SF_ZERO_TO_NULL(SUM(TSSSD.STORE_OUT_TOT))                   	AS STORE_OUT_TOT /* 매장반품 금액*/
+				     , SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_IN_QTY / TMP.PO_UNIT_QTY)) 	AS PURCHS_IN_QTY /* 사입입고 수량*/
+				     , SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_IN_TOT))                   	AS PURCHS_IN_TOT /* 사입입고 금액*/
+				     , SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_OUT_QTY / TMP.PO_UNIT_QTY))	AS PURCHS_OUT_QTY /* 사입반품 수량*/
+				     , SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_OUT_TOT))                  	AS PURCHS_OUT_TOT /* 사입반품 금액*/
+				     , SF_ZERO_TO_NULL(SUM(TSSSD.STORE_SALE_QTY / TMP.PO_UNIT_QTY))	AS STORE_SALE_QTY /* 매장판매 수량*/
+				     , SF_ZERO_TO_NULL(SUM(TSSSD.STORE_SALE_TOT))                  	AS STORE_SALE_TOT /* 매장판매 금액*/
+				     , SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_IN_QTY / TMP.PO_UNIT_QTY)) 	AS MOVE_IN_QTY /* 매장이입 수량*/
+				     , SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_IN_TOT))                   	AS MOVE_IN_TOT /* 매장이입 금액*/
+				     , SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_OUT_QTY / TMP.PO_UNIT_QTY)) 	AS MOVE_OUT_QTY /* 매장이출 수량*/
+				     , SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_OUT_TOT))                   	AS MOVE_OUT_TOT /* 매장이출 금액*/
+				     , SF_ZERO_TO_NULL(SUM(TSSSD.DISUSE_QTY / TMP.PO_UNIT_QTY))		AS DISUSE_QTY /* 재고폐기 수량*/
+				     , SF_ZERO_TO_NULL(SUM(TSSSD.ADJ_QTY / TMP.PO_UNIT_QTY)) 		AS ADJ_QTY /* 재고조정 수량*/
+				     , SF_ZERO_TO_NULL(SUM(TSSSD.SET_IN_QTY / TMP.PO_UNIT_QTY))		AS SET_IN_QTY /* 세트생성 수량*/
 			     </if>
 			     <if test='unitFg == "0"'>
-                     , SF_ZERO_TO_NULL(SUM(TSSSD.STORE_IN_QTY)) 		AS IO_OCCR_QTY_03 /* 매장입고 수량*/
-                     , SF_ZERO_TO_NULL(SUM(TSSSD.STORE_IN_TOT)) 		AS IO_OCCR_TOT_03 /* 매장입고 금액*/
-                     , SF_ZERO_TO_NULL(SUM(TSSSD.STORE_OUT_QTY)) 	AS IO_OCCR_QTY_12 /* 매장반품 수량*/
-                     , SF_ZERO_TO_NULL(SUM(TSSSD.STORE_OUT_TOT)) 	AS IO_OCCR_TOT_12 /* 매장반품 금액*/
-                     , SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_IN_QTY)) 	AS IO_OCCR_QTY_06 /* 사입입고 수량*/
-                     , SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_IN_TOT)) 	AS IO_OCCR_TOT_06 /* 사입입고 금액*/
-                     , SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_OUT_QTY)) 	AS IO_OCCR_QTY_18 /* 사입반품 수량*/
-                     , SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_OUT_TOT)) 	AS IO_OCCR_TOT_18 /* 사입반품 금액*/
-                     , SF_ZERO_TO_NULL(SUM(TSSSD.STORE_SALE_QTY)) 	AS IO_OCCR_QTY_11 /* 매장판매 수량*/
-                     , SF_ZERO_TO_NULL(SUM(TSSSD.STORE_SALE_TOT)) 	AS IO_OCCR_TOT_11 /* 매장판매 금액*/
-                     , SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_IN_QTY)) 		AS IO_OCCR_QTY_04 /* 매장이입 수량*/
-                     , SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_IN_TOT)) 		AS IO_OCCR_TOT_04 /* 매장이입 금액*/
-                     , SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_OUT_QTY)) 		AS IO_OCCR_QTY_14 /* 매장이출 수량*/
-                     , SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_OUT_TOT)) 		AS IO_OCCR_TOT_14 /* 매장이출 금액*/
-                     , SF_ZERO_TO_NULL(SUM(TSSSD.DISUSE_QTY)) 		AS IO_OCCR_QTY_17 /* 재고폐기 수량*/
---                      , SF_ZERO_TO_NULL(SUM(TSSSD.DISUSE_AMT)) 		AS IO_OCCR_TOT_17 /* 재고폐기 금액*/
-                     , SF_ZERO_TO_NULL(SUM(TSSSD.ADJ_QTY)) 			AS IO_OCCR_QTY_21 /* 재고조정 수량*/
---                      , SF_ZERO_TO_NULL(SUM(TSSSD.ADJ_AMT)) 			AS IO_OCCR_TOT_21 /* 재고조정 금액*/
-                     , SF_ZERO_TO_NULL(SUM(TSSSD.SET_IN_QTY)) 		AS IO_OCCR_QTY_22 /* 세트생성 수량*/
---                      , SF_ZERO_TO_NULL(SUM(TSSSD.SET_IN_AMT)) 		AS IO_OCCR_TOT_22 /* 세트생성 금액*/
+                     , SF_ZERO_TO_NULL(SUM(TSSSD.STORE_IN_QTY)) 	AS STORE_IN_QTY /* 매장입고 수량*/
+                     , SF_ZERO_TO_NULL(SUM(TSSSD.STORE_IN_TOT)) 	AS STORE_IN_TOT /* 매장입고 금액*/
+                     , SF_ZERO_TO_NULL(SUM(TSSSD.STORE_OUT_QTY)) 	AS STORE_OUT_QTY /* 매장반품 수량*/
+                     , SF_ZERO_TO_NULL(SUM(TSSSD.STORE_OUT_TOT)) 	AS STORE_OUT_TOT /* 매장반품 금액*/
+                     , SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_IN_QTY)) 	AS PURCHS_IN_QTY /* 사입입고 수량*/
+                     , SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_IN_TOT)) 	AS PURCHS_IN_TOT /* 사입입고 금액*/
+                     , SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_OUT_QTY)) 	AS PURCHS_OUT_QTY /* 사입반품 수량*/
+                     , SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_OUT_TOT)) 	AS PURCHS_OUT_TOT /* 사입반품 금액*/
+                     , SF_ZERO_TO_NULL(SUM(TSSSD.STORE_SALE_QTY)) 	AS STORE_SALE_QTY /* 매장판매 수량*/
+                     , SF_ZERO_TO_NULL(SUM(TSSSD.STORE_SALE_TOT)) 	AS STORE_SALE_TOT /* 매장판매 금액*/
+                     , SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_IN_QTY)) 		AS MOVE_IN_QTY /* 매장이입 수량*/
+                     , SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_IN_TOT)) 		AS MOVE_IN_TOT /* 매장이입 금액*/
+                     , SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_OUT_QTY)) 	AS MOVE_OUT_QTY /* 매장이출 수량*/
+                     , SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_OUT_TOT)) 	AS MOVE_OUT_TOT /* 매장이출 금액*/
+                     , SF_ZERO_TO_NULL(SUM(TSSSD.DISUSE_QTY)) 		AS DISUSE_QTY /* 재고폐기 수량*/
+                     , SF_ZERO_TO_NULL(SUM(TSSSD.ADJ_QTY)) 			AS ADJ_QTY /* 재고조정 수량*/
+                     , SF_ZERO_TO_NULL(SUM(TSSSD.SET_IN_QTY)) 		AS SET_IN_QTY /* 세트생성 수량*/
                  </if>
+					, #{startDate} AS START_DATE
 			  FROM TB_ST_STORE_STOCK_DAILY TSSSD
 			     , TB_MS_PRODUCT TMP
 			     , TB_MS_PRODUCT_BARCD TMPB
@@ -260,52 +250,46 @@
 			     , THP.PO_UNIT_FG
 			     , THPB.BARCD_CD
 				<if test='unitFg == "1"'>
-					, SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_IN_QTY / THP.PO_UNIT_QTY)) 			AS IO_OCCR_QTY_01 /* 본사입고 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_IN_TOT))                   			AS IO_OCCR_TOT_01 /* 본사입고 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_OUT_QTY / THP.PO_UNIT_QTY)) 			AS IO_OCCR_QTY_16 /* 업체반출 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_OUT_TOT))                   			AS IO_OCCR_TOT_16 /* 업체반출 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.HQ_OUT_QTY / THP.PO_UNIT_QTY)) 			AS IO_OCCR_QTY_13 /* 본사출고 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.HQ_OUT_TOT))                   			AS IO_OCCR_TOT_13 /* 본사출고 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.HQ_IN_QTY / THP.PO_UNIT_QTY)) 				AS IO_OCCR_QTY_02 /* 본사반입 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.HQ_IN_TOT))                   				AS IO_OCCR_TOT_02 /* 본사반입 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_IN_QTY / THP.PO_UNIT_QTY)) 		AS IO_OCCR_QTY_04 /* 매장이입 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_IN_TOT))                   		AS IO_OCCR_TOT_04 /* 매장이입 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_OUT_QTY / THP.PO_UNIT_QTY)) 	AS IO_OCCR_QTY_14 /* 매장이출 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_OUT_TOT))                   	AS IO_OCCR_TOT_14 /* 매장이출 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.DISUSE_QTY / THP.PO_UNIT_QTY)) 			AS IO_OCCR_QTY_17 /* 재고폐기 수량*/
--- 					, SF_ZERO_TO_NULL(SUM(TSHSD.DISUSE_AMT))                   			AS IO_OCCR_TOT_17 /* 재고폐기 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.ADJ_QTY / THP.PO_UNIT_QTY)) 				AS IO_OCCR_QTY_21 /* 재고조정 수량*/
--- 					, SF_ZERO_TO_NULL(SUM(TSHSD.ADJ_AMT))                   				AS IO_OCCR_TOT_21 /* 재고조정 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.SET_IN_QTY / THP.PO_UNIT_QTY)) 			AS IO_OCCR_QTY_22 /* 세트생성 수량*/
--- 					, SF_ZERO_TO_NULL(SUM(TSHSD.SET_IN_AMT))                   			AS IO_OCCR_TOT_22 /* 세트생성 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_ORDER_QTY / THP.PO_UNIT_QTY)) 	AS IO_OCCR_QTY_19 /* 거래처출고 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_ORDER_TOT))                   	AS IO_OCCR_TOT_19 /* 거래처출고 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_RTN_QTY / THP.PO_UNIT_QTY)) 	AS IO_OCCR_QTY_33 /* 거래처반품 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_RTN_TOT))                   	AS IO_OCCR_TOT_33 /* 거래처반품 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_IN_QTY / THP.PO_UNIT_QTY)) 			AS VENDR_IN_QTY /* 본사입고 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_IN_TOT))                   			AS VENDR_IN_TOT /* 본사입고 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_OUT_QTY / THP.PO_UNIT_QTY)) 			AS VENDR_OUT_QTY /* 업체반출 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_OUT_TOT))                   			AS VENDR_OUT_TOT /* 업체반출 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.HQ_OUT_QTY / THP.PO_UNIT_QTY)) 				AS HQ_OUT_QTY /* 본사출고 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.HQ_OUT_TOT))                   				AS HQ_OUT_TOT /* 본사출고 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.HQ_IN_QTY / THP.PO_UNIT_QTY)) 				AS HQ_IN_QTY /* 본사반입 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.HQ_IN_TOT))                   				AS HQ_IN_TOT /* 본사반입 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_IN_QTY / THP.PO_UNIT_QTY)) 		AS STORE_MOVE_IN_QTY /* 매장이입 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_IN_TOT))                   		AS STORE_MOVE_IN_TOT /* 매장이입 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_OUT_QTY / THP.PO_UNIT_QTY)) 		AS STORE_MOVE_OUT_QTY /* 매장이출 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_OUT_TOT))                   		AS STORE_MOVE_OUT_TOT /* 매장이출 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.DISUSE_QTY / THP.PO_UNIT_QTY)) 				AS DISUSE_QTY /* 재고폐기 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.ADJ_QTY / THP.PO_UNIT_QTY)) 				AS ADJ_QTY /* 재고조정 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.SET_IN_QTY / THP.PO_UNIT_QTY)) 				AS SET_IN_QTY /* 세트생성 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_ORDER_QTY / THP.PO_UNIT_QTY)) 	AS SALE_VENDR_ORDER_QTY /* 거래처출고 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_ORDER_TOT))                   	AS SALE_VENDR_ORDER_TOT /* 거래처출고 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_RTN_QTY / THP.PO_UNIT_QTY)) 		AS SALE_VENDR_RTN_QTY /* 거래처반품 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_RTN_TOT))                   		AS SALE_VENDR_RTN_TOT /* 거래처반품 금액*/
 				</if>
 				<if test='unitFg == "0"'>
-					, SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_IN_QTY)) 			AS IO_OCCR_QTY_01 /* 본사입고 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_IN_TOT)) 			AS IO_OCCR_TOT_01 /* 본사입고 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_OUT_QTY)) 			AS IO_OCCR_QTY_16 /* 업체반출 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_OUT_TOT)) 			AS IO_OCCR_TOT_16 /* 업체반출 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.HQ_OUT_QTY)) 				AS IO_OCCR_QTY_13 /* 본사출고 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.HQ_OUT_TOT)) 				AS IO_OCCR_TOT_13 /* 본사출고 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.HQ_IN_QTY)) 				AS IO_OCCR_QTY_02 /* 본사반입 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.HQ_IN_TOT)) 				AS IO_OCCR_TOT_02 /* 본사반입 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_IN_QTY)) 		AS IO_OCCR_QTY_04 /* 매장이입 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_IN_TOT)) 		AS IO_OCCR_TOT_04 /* 매장이입 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_OUT_QTY)) 		AS IO_OCCR_QTY_14 /* 매장이출 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_OUT_TOT)) 		AS IO_OCCR_TOT_14 /* 매장이출 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.DISUSE_QTY)) 				AS IO_OCCR_QTY_17 /* 재고폐기 수량*/
--- 					, SF_ZERO_TO_NULL(SUM(TSHSD.DISUSE_AMT)) 				AS IO_OCCR_TOT_17 /* 재고폐기 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.ADJ_QTY)) 					AS IO_OCCR_QTY_21 /* 재고조정 수량*/
--- 					, SF_ZERO_TO_NULL(SUM(TSHSD.ADJ_AMT)) 					AS IO_OCCR_TOT_21 /* 재고조정 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.SET_IN_QTY)) 				AS IO_OCCR_QTY_22 /* 세트생성 수량*/
--- 					, SF_ZERO_TO_NULL(SUM(TSHSD.SET_IN_AMT)) 				AS IO_OCCR_TOT_22 /* 세트생성 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_ORDER_QTY)) 	AS IO_OCCR_QTY_19 /* 거래처출고 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_ORDER_TOT)) 	AS IO_OCCR_TOT_19 /* 거래처출고 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_RTN_QTY)) 		AS IO_OCCR_QTY_33 /* 거래처반품 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_RTN_TOT)) 		AS IO_OCCR_TOT_33 /* 거래처반품 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_IN_QTY)) 			AS VENDR_IN_QTY /* 본사입고 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_IN_TOT)) 			AS VENDR_IN_TOT /* 본사입고 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_OUT_QTY)) 		AS VENDR_OUT_QTY /* 업체반출 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_OUT_TOT)) 		AS VENDR_OUT_TOT /* 업체반출 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.HQ_OUT_QTY)) 			AS HQ_OUT_QTY /* 본사출고 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.HQ_OUT_TOT)) 			AS HQ_OUT_TOT /* 본사출고 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.HQ_IN_QTY)) 			AS HQ_IN_QTY /* 본사반입 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.HQ_IN_TOT)) 			AS HQ_IN_TOT /* 본사반입 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_IN_QTY)) 	AS STORE_MOVE_IN_QTY /* 매장이입 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_IN_TOT)) 	AS STORE_MOVE_IN_TOT /* 매장이입 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_OUT_QTY)) 	AS STORE_MOVE_OUT_QTY /* 매장이출 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.STORE_MOVE_OUT_TOT)) 	AS STORE_MOVE_OUT_TOT /* 매장이출 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.DISUSE_QTY)) 			AS DISUSE_QTY /* 재고폐기 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.ADJ_QTY)) 				AS ADJ_QTY /* 재고조정 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.SET_IN_QTY)) 			AS SET_IN_QTY /* 세트생성 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_ORDER_QTY)) 	AS SALE_VENDR_ORDER_QTY /* 거래처출고 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_ORDER_TOT)) 	AS SALE_VENDR_ORDER_TOT /* 거래처출고 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_RTN_QTY)) 	AS SALE_VENDR_RTN_QTY /* 거래처반품 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_RTN_TOT)) 	AS SALE_VENDR_RTN_TOT /* 거래처반품 금액*/
 				</if>
 				FROM TB_ST_HQ_STOCK_DAILY TSHSD
 			     , TB_HQ_PRODUCT THP
@@ -381,48 +365,42 @@
 			     , TMP.PO_UNIT_FG
 			     , TMPB.BARCD_CD
 				<if test='unitFg == "1"'>
-					, SF_ZERO_TO_NULL(SUM(TSSSD.STORE_IN_QTY / TMP.PO_UNIT_QTY)) 	AS IO_OCCR_QTY_03 /* 매장입고 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.STORE_IN_TOT))                   	AS IO_OCCR_TOT_03 /* 매장입고 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.STORE_OUT_QTY / TMP.PO_UNIT_QTY)) 	AS IO_OCCR_QTY_12 /* 매장반품 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.STORE_OUT_TOT))                   	AS IO_OCCR_TOT_12 /* 매장반품 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_IN_QTY / TMP.PO_UNIT_QTY)) 	AS IO_OCCR_QTY_06 /* 사입입고 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_IN_TOT))                   	AS IO_OCCR_TOT_06 /* 사입입고 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_OUT_QTY / TMP.PO_UNIT_QTY)) 	AS IO_OCCR_QTY_18 /* 사입반품 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_OUT_TOT))                   	AS IO_OCCR_TOT_18 /* 사입반품 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.STORE_SALE_QTY / TMP.PO_UNIT_QTY)) 	AS IO_OCCR_QTY_11 /* 매장판매 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.STORE_SALE_TOT))                  	AS IO_OCCR_TOT_11 /* 매장판매 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_IN_QTY / TMP.PO_UNIT_QTY)) 	AS IO_OCCR_QTY_04 /* 매장이입 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_IN_TOT))                   	AS IO_OCCR_TOT_04 /* 매장이입 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_OUT_QTY / TMP.PO_UNIT_QTY)) 	AS IO_OCCR_QTY_14 /* 매장이출 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_OUT_TOT))                   	AS IO_OCCR_TOT_14 /* 매장이출 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.DISUSE_QTY / TMP.PO_UNIT_QTY)) 		AS IO_OCCR_QTY_17 /* 재고폐기 수량*/
--- 					, SF_ZERO_TO_NULL(SUM(TSSSD.DISUSE_AMT))                   		AS IO_OCCR_TOT_17 /* 재고폐기 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.ADJ_QTY / TMP.PO_UNIT_QTY)) 		AS IO_OCCR_QTY_21 /* 재고조정 수량*/
--- 					, SF_ZERO_TO_NULL(SUM(TSSSD.ADJ_AMT))                   		AS IO_OCCR_TOT_21 /* 재고조정 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.SET_IN_QTY / TMP.PO_UNIT_QTY)) 		AS IO_OCCR_QTY_22 /* 세트생성 수량*/
--- 					, SF_ZERO_TO_NULL(SUM(TSSSD.SET_IN_AMT))                   		AS IO_OCCR_TOT_22 /* 세트생성 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.STORE_IN_QTY / TMP.PO_UNIT_QTY)) 	AS STORE_IN_QTY /* 매장입고 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.STORE_IN_TOT))                   	AS STORE_IN_TOT /* 매장입고 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.STORE_OUT_QTY / TMP.PO_UNIT_QTY)) 	AS STORE_OUT_QTY /* 매장반품 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.STORE_OUT_TOT))                   	AS STORE_OUT_TOT /* 매장반품 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_IN_QTY / TMP.PO_UNIT_QTY)) 	AS PURCHS_IN_QTY /* 사입입고 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_IN_TOT))                   	AS PURCHS_IN_TOT /* 사입입고 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_OUT_QTY / TMP.PO_UNIT_QTY)) 	AS PURCHS_OUT_QTY /* 사입반품 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_OUT_TOT))                   	AS PURCHS_OUT_TOT /* 사입반품 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.STORE_SALE_QTY / TMP.PO_UNIT_QTY)) 	AS STORE_SALE_QTY /* 매장판매 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.STORE_SALE_TOT))                  	AS STORE_SALE_TOT /* 매장판매 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_IN_QTY / TMP.PO_UNIT_QTY)) 	AS MOVE_IN_QTY /* 매장이입 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_IN_TOT))                   	AS MOVE_IN_TOT /* 매장이입 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_OUT_QTY / TMP.PO_UNIT_QTY)) 	AS MOVE_OUT_QTY /* 매장이출 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_OUT_TOT))                   	AS MOVE_OUT_TOT /* 매장이출 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.DISUSE_QTY / TMP.PO_UNIT_QTY)) 		AS DISUSE_QTY /* 재고폐기 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.ADJ_QTY / TMP.PO_UNIT_QTY)) 		AS ADJ_QTY /* 재고조정 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.SET_IN_QTY / TMP.PO_UNIT_QTY)) 		AS SET_IN_QTY /* 세트생성 수량*/
 				</if>
 				<if test='unitFg == "0"'>
-					, SF_ZERO_TO_NULL(SUM(TSSSD.STORE_IN_QTY)) 		AS IO_OCCR_QTY_03 /* 매장입고 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.STORE_IN_TOT)) 		AS IO_OCCR_TOT_03 /* 매장입고 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.STORE_OUT_QTY)) 	AS IO_OCCR_QTY_12 /* 매장반품 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.STORE_OUT_TOT)) 	AS IO_OCCR_TOT_12 /* 매장반품 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_IN_QTY)) 	AS IO_OCCR_QTY_06 /* 사입입고 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_IN_TOT)) 	AS IO_OCCR_TOT_06 /* 사입입고 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_OUT_QTY)) 	AS IO_OCCR_QTY_18 /* 사입반품 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_OUT_TOT)) 	AS IO_OCCR_TOT_18 /* 사입반품 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.STORE_SALE_QTY)) 	AS IO_OCCR_QTY_11 /* 매장판매 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.STORE_SALE_TOT)) 	AS IO_OCCR_TOT_11 /* 매장판매 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_IN_QTY)) 		AS IO_OCCR_QTY_04 /* 매장이입 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_IN_TOT)) 		AS IO_OCCR_TOT_04 /* 매장이입 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_OUT_QTY)) 		AS IO_OCCR_QTY_14 /* 매장이출 수량*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_OUT_TOT)) 		AS IO_OCCR_TOT_14 /* 매장이출 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.DISUSE_QTY)) 		AS IO_OCCR_QTY_17 /* 재고폐기 수량*/
--- 					, SF_ZERO_TO_NULL(SUM(TSSSD.DISUSE_AMT)) 		AS IO_OCCR_TOT_17 /* 재고폐기 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.ADJ_QTY)) 			AS IO_OCCR_QTY_21 /* 재고조정 수량*/
--- 					, SF_ZERO_TO_NULL(SUM(TSSSD.ADJ_AMT)) 			AS IO_OCCR_TOT_21 /* 재고조정 금액*/
-					, SF_ZERO_TO_NULL(SUM(TSSSD.SET_IN_QTY)) 		AS IO_OCCR_QTY_22 /* 세트생성 수량*/
--- 					, SF_ZERO_TO_NULL(SUM(TSSSD.SET_IN_AMT)) 		AS IO_OCCR_TOT_22 /* 세트생성 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.STORE_IN_QTY)) 		AS STORE_IN_QTY /* 매장입고 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.STORE_IN_TOT)) 		AS STORE_IN_TOT /* 매장입고 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.STORE_OUT_QTY)) 	AS STORE_OUT_QTY /* 매장반품 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.STORE_OUT_TOT)) 	AS STORE_OUT_TOT /* 매장반품 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_IN_QTY)) 	AS PURCHS_IN_QTY /* 사입입고 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_IN_TOT)) 	AS PURCHS_IN_TOT /* 사입입고 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_OUT_QTY)) 	AS PURCHS_OUT_QTY /* 사입반품 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.PURCHS_OUT_TOT)) 	AS PURCHS_OUT_TOT /* 사입반품 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.STORE_SALE_QTY)) 	AS STORE_SALE_QTY /* 매장판매 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.STORE_SALE_TOT)) 	AS STORE_SALE_TOT /* 매장판매 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_IN_QTY)) 		AS MOVE_IN_QTY /* 매장이입 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_IN_TOT)) 		AS MOVE_IN_TOT /* 매장이입 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_OUT_QTY)) 		AS MOVE_OUT_QTY /* 매장이출 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.MOVE_OUT_TOT)) 		AS MOVE_OUT_TOT /* 매장이출 금액*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.DISUSE_QTY)) 		AS DISUSE_QTY /* 재고폐기 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.ADJ_QTY)) 			AS ADJ_QTY /* 재고조정 수량*/
+					, SF_ZERO_TO_NULL(SUM(TSSSD.SET_IN_QTY)) 		AS SET_IN_QTY /* 세트생성 수량*/
 				</if>
 				FROM TB_ST_STORE_STOCK_DAILY TSSSD
 			     , TB_MS_PRODUCT TMP

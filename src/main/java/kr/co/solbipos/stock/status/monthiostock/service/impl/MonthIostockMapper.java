@@ -9,8 +9,10 @@ public interface MonthIostockMapper {
 
 	/** 월수불현황 리스트 조회(매장권한) */
 	List<DefaultMap<String>> storeMonthIostockList(MonthIostockVO monthIostockVO);
+	List<DefaultMap<String>> storeMonthIostockExcelList(MonthIostockVO monthIostockVO);
 
 	/** 월수불현황 리스트 조회(본사권한) */
 	List<DefaultMap<String>> hqMonthIostockList(MonthIostockVO monthIostockVO);
+	List<DefaultMap<String>> hqMonthIostockExcelList(MonthIostockVO monthIostockVO);
 
 }

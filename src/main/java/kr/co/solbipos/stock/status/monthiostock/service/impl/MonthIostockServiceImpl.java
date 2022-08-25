@@ -43,4 +43,22 @@ public class MonthIostockServiceImpl implements MonthIostockService {
 		return list;
 	}
 
+	@Override
+	public List<DefaultMap<String>> monthIostockExcelList(MonthIostockVO monthIostockVO, SessionInfoVO sessionInfoVO) {
+		monthIostockVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		monthIostockVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		monthIostockVO.setStoreCd(sessionInfoVO.getStoreCd());
+		// 거래처 멀티 선택
+		if(!StringUtil.getOrBlank(monthIostockVO.getVendrCd()).equals("")) {
+			monthIostockVO.setArrVendrCd(monthIostockVO.getVendrCd().split(","));
+		}
+		List<DefaultMap<String>> list;
+		if(monthIostockVO.getOrgnFg() == "H" && monthIostockVO.getOrgnFg() != null) { // 본사권한
+			list = monthIostockMapper.hqMonthIostockExcelList(monthIostockVO);
+		}else { // 매장권한
+			list = monthIostockMapper.storeMonthIostockExcelList(monthIostockVO);
+		}
+		return list;
+	}
+
 }

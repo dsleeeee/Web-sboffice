@@ -54,7 +54,7 @@
       <th><s:message code="dayCurr.unitFg"/></th>
       <td>
         <div class="sb-select">
-          <span class="txtIn w150px">
+          <span class="txtIn w120px">
             <wj-combo-box
               id="srchUnitFg"
               ng-model="unitFgModel"
@@ -72,9 +72,10 @@
       <%-- 분류 --%>
       <th><s:message code="dayCurr.prodClass"/></th>
       <td>
-        <input type="text" class="sb-input w100" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()"
-               placeholder="<s:message code="cmm.all" />" readonly/>
-        <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCdModel" disabled/>
+          <input type="text" class="sb-input w70" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float:left"
+                 placeholder="<s:message code="cmm.all" />" readonly/>
+          <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCdModel" disabled/>
+          <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
       </td>
       <%-- 안전재고 --%>
       <td colspan="2">
@@ -285,7 +286,7 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/curr/dayCurr/dayCurr.js?ver=20220715.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/curr/dayCurr/dayCurr.js?ver=20220803.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp"></c:import>

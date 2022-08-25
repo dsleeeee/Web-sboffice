@@ -122,6 +122,7 @@ app.controller('rtnStatusBillCtrl', ['$scope', '$http', '$timeout', function ($s
 			params.posNo    = selectedRow.posNo;
 			params.billNo   = selectedRow.billNo;
 			params.saleYn   = 'N';
+		  	params.webReg   = selectedRow.webReg;
 
 		  if (col.binding === "billNo") { // 영수증번호 클릭
 			  $scope._broadcast('billInfoCtrl', params);

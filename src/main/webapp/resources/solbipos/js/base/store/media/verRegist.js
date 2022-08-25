@@ -80,8 +80,29 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   // 파일업로드시 파일사이즈 변경
   $scope.uploadChange = function(){
     $scope.$apply(function() {
+      var maxSize = 20 * 1024 * 1024;
       var fileSize = document.getElementById("file").files[0].size;
-      $scope.version.fileSize = fileSize;
+
+      if(fileSize > maxSize) {
+        alert("첨부파일 사이즈는 20MB 이내로 등록 가능합니다.    ");
+
+        // 첨부파일 리셋
+        var agent = navigator.userAgent.toLowerCase();
+        if ( (navigator.appName == 'Netscape' && navigator.userAgent.search('Trident') != -1) || (agent.indexOf("msie") != -1) ){
+          // ie 일때
+          $("#file").replaceWith( $("#file").clone(true) );
+          $scope.version.uploadFile = "";
+        } else {
+          // other browser 일때
+          $("#file").val("");
+          $scope.version.uploadFile = "";
+        }
+        $scope.version.fileSize = "";
+
+        return false;
+      } else {
+        $scope.version.fileSize = fileSize;
+      }
     });
   };
 
@@ -167,6 +188,7 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       if ( (navigator.appName == 'Netscape' && navigator.userAgent.search('Trident') != -1) || (agent.indexOf("msie") != -1) ){
         // ie 일때
         $("#file").replaceWith( $("#file").clone(true) );
+        // media.fileSize.max
         $scope.version.uploadFile = "";
       } else {
         // other browser 일때
