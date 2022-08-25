@@ -131,6 +131,9 @@ public class AcinsServiceImpl implements AcinsService {
     /** 실사관리 - 실사상품 저장 */
     @Override
     public int saveAcinsRegist(AcinsVO[] acinsVOs, SessionInfoVO sessionInfoVO) {
+
+        System.out.println("실사관리 >>> 실사등록 팝업 >>> 저장");
+
         int returnResult = 0;
         int result = 0;
         int i = 0;
@@ -299,6 +302,9 @@ public class AcinsServiceImpl implements AcinsService {
     /** 실사관리 - 실사상세 상품 저장 */
     @Override
     public int saveAcinsDtl(AcinsVO[] acinsVOs, SessionInfoVO sessionInfoVO) {
+
+        System.out.println("실사관리 >>> 실사상세 팝업 >>> 저장");
+
         int returnResult = 0;
         int result = 0;
         int i = 0;
