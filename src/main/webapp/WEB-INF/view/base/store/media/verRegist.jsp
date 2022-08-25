@@ -21,7 +21,7 @@
     <%-- body --%>
     <div class="wj-dialog-body" ng-controller="verRegistCtrl">
       <div>
-        <div style="height:200px; overflow-y: auto;">
+        <div style="height:220px; overflow-y: auto;">
           <f:form id="regForm" name="regForm" >
             <h3 class="h3_tbl"><s:message code="media.verInfo" /></h3>
             <table class="searchTbl">
@@ -59,7 +59,7 @@
               <tr>
                   <%-- 파일사이즈 --%>
                 <th><s:message code="media.fileSize" /></th>
-                <td>{{version.fileSize}}</td>
+                <td><p class="s12 red mb10" id="fileSizeMax"><s:message code="media.fileSize.max" /></p>	{{version.fileSize}}</td>
               </tr>
               <tr> <%-- 사용기한 --%>
                 <th><s:message code="media.useDate" /></th>
@@ -129,6 +129,6 @@
   var storeCd      = "${storeCd}";
   var userId       = "${userId}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/verRegist.js?ver=20220705.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/verRegist.js?ver=20220705.04" charset="utf-8"></script>
 
 
