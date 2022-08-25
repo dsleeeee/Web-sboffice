@@ -134,6 +134,8 @@
                 <c:forEach var="payCol" items="${payColList}">
                     <wj-flex-grid-column header="${payCol.payNm}" binding="pay${payCol.payCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 </c:forEach>
+                <wj-flex-grid-column header="<s:message code="todayDtl.dtl.webReg"/>" binding="webReg" width="100" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+
             </wj-flex-grid>
 			<%-- ColumnPicker 사용시 include --%>
 			<jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
