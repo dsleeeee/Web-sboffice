@@ -2187,7 +2187,6 @@
                 FROM TB_HQ_KIOSK_M_CLS
                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
                 AND TU_CLS_TYPE = #{tuClsType}
-                AND TU_CLS_CD = #{tuClsCd}
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -2196,7 +2195,6 @@
                 WHERE STORE_CD = #{storeCd}
                 AND POS_NO = #{posNo}
                 AND TU_CLS_TYPE = #{tuClsType}
-                AND TU_CLS_CD = #{tuClsCd}
             </when>
         </choose>
     </select>
@@ -2381,7 +2379,7 @@
         </choose>
     </delete>
 
-    <!-- 키맵그룹에 중분류사용여부 조회 -->
+    <!-- 키맵그룹에 KIOSK중분류사용 조회 -->
     <!--
         TABLE    :
         PARAM    : kioskKeyMapVO
@@ -2406,7 +2404,7 @@
         </choose>
     </select>
 
-    <!-- 키오스크 키맵 그룹복제 - 키맵그룹에 중분류사용여부 조회 -->
+    <!-- 키오스크 키맵 그룹복제 - 키맵그룹에 KIOSK중분류사용 조회 -->
     <!--
         TABLE    :
         PARAM    : kioskKeyMapVO

@@ -170,10 +170,10 @@ public interface KioskKeyMapMapper {
     /** 키오스크 카테고리(중분류) 저장 - 삭제 */
     int deleteKioskCategoryM(KioskKeyMapVO kioskKeyMapVO);
 
-    /** 키맵그룹에 중분류사용여부 조회 */
+    /** 키맵그룹에 KIOSK중분류사용 조회 */
     List<DefaultMap<Object>> getKioskKeyMapGroupTuMClsFg(KioskKeyMapVO kioskKeyMapVO);
 
-    /** 키오스크 키맵 그룹복제 - 키맵그룹에 중분류사용여부 조회 */
+    /** 키오스크 키맵 그룹복제 - 키맵그룹에 KIOSK중분류사용 조회 */
     List<DefaultMap<Object>> getCopyKioskKeyMapGroupTuMClsFg(KioskKeyMapVO kioskKeyMapVO);
 
     /** 키오스크 키맵 그룹복제 - 중분류 키맵그룹 rowCount 조회 */

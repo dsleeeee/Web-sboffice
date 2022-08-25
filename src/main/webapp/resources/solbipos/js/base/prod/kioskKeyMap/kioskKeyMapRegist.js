@@ -25,7 +25,7 @@ var useYnAllComboData = [
     {"name": "미사용", "value": "N"}
 ];
 
-// 중분류사용여부
+// KIOSK중분류사용
 var tuMClsFgComboData = [
     {"name":"미사용","value":"0"},
     {"name":"중분류사용","value":"2"}
@@ -38,11 +38,11 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
 
     $scope._setComboData("posNo", kioskPosList); // 키오스크용 포스 목록
     $scope._setComboData("tuClsType", kioskTuClsTypeList); // 키오스크용 키맵그룹 목록
-    $scope._setComboData("tuMClsFg", tuMClsFgComboData); // 중분류사용여부
+    $scope._setComboData("tuMClsFg", tuMClsFgComboData); // KIOSK중분류사용
 
     $scope.initGrid = function (s, e) {
         // 그리드 DataMap 설정
-        $scope.tuMClsFgDataMap = new wijmo.grid.DataMap(tuMClsFgComboData, 'value', 'name'); // 중분류사용여부
+        $scope.tuMClsFgDataMap = new wijmo.grid.DataMap(tuMClsFgComboData, 'value', 'name'); // KIOSK중분류사용
 
         // ReadOnly 효과설정
         s.formatItem.addHandler(function (s, e) {
@@ -65,7 +65,7 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
                 var selectedRow = s.rows[ht.row].dataItem;
                 if (col.binding === "tuClsCd") {
                     if(selectedRow.tuClsCd !== '자동채번') {
-                        // 중분류사용여부
+                        // KIOSK중분류사용
                         // 미사용
                         if(selectedRow.tuMClsFg === "0") {
                             $("#divGridCategoryClsM").css("display", "none");
@@ -101,7 +101,7 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
         // 초기화
         $scope.reset();
 
-        // 키맵그룹에 중분류사용여부 조회
+        // 키맵그룹에 KIOSK중분류사용 조회
         $scope.kioskKeyMapGroupTuMClsFg();
 
         if(orgnFg === "STORE") {
@@ -142,7 +142,7 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
         }, false);
     };
 
-    // 키맵그룹에 중분류사용여부 조회
+    // 키맵그룹에 KIOSK중분류사용 조회
     $scope.kioskKeyMapGroupTuMClsFg = function(){
         var params = {};
         if(orgnFg === "STORE") {params.posNo = $scope.posNoCombo.selectedValue;}
@@ -419,7 +419,7 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
 
         if(orgnFg === "HQ") {
             if($scope.tuMClsFgCombo.selectedValue === null){
-                $scope._popMsg(messages["kioskKeyMap.tuMClsFgComboBlank"]); // 중분류사용여부를 선택해주세요.
+                $scope._popMsg(messages["kioskKeyMap.tuMClsFgComboBlank"]); // KIOSK중분류사용을 선택해주세요.
                 return false;
             }
         }
