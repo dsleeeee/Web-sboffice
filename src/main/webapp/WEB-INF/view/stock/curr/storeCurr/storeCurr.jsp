@@ -24,6 +24,36 @@
     </colgroup>
     <tbody>
     <tr>
+        <th><s:message code="storeCurr.storeNm" /></th>
+        <td>
+            <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                <jsp:param name="targetId" value="storeCurrSelectStore"/>
+            </jsp:include>
+        </td>
+
+        <c:choose>
+            <c:when test="${envst008 != null && envst008 != '00'}">
+                <%-- 상품구분 --%>
+                <th><s:message code="storeCurr.weightFg"/></th>
+                <td colspan="3">
+                    <div class="sb-select">
+    						<span class="txtIn w150px">
+    							<wj-combo-box
+                                        id="srchWeightFg"
+                                        ng-model="weightFg"
+                                        items-source="_getComboData('srchWeightFg')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)">
+    							</wj-combo-box>
+    						</span>
+                    </div>
+                </td>
+            </c:when>
+        </c:choose>
+    </tr>
+    <tr>
       <%-- 상품코드 --%>
       <th><s:message code="storeCurr.prodCd"/></th>
       <td>
@@ -45,7 +75,7 @@
       <th><s:message code="storeCurr.unitFg"/></th>
       <td>
         <div class="sb-select">
-          <span class="txtIn w150px">
+          <span class="txtIn w120px">
             <wj-combo-box
               id="srchUnitFg"
               ng-model="unitFg"
@@ -60,12 +90,6 @@
       </td>
     </tr>
     <tr>
-      <th><s:message code="storeCurr.storeNm" /></th>
-      <td>
-      	<jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
-      		<jsp:param name="targetId" value="storeCurrSelectStore"/>
-      	</jsp:include>
-      </td>
       <%-- 분류 --%>
       <th><s:message code="storeCurr.prodClass"/></th>
       <td>
@@ -74,56 +98,29 @@
         <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
         <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
       </td>
-    </tr>
-    <tr>
       <%-- 안전재고 --%>
       <th><s:message code="storeCurr.safeStockFg"/></th>
       <td>
-        <div class="sb-select">
-          <span class="txtIn w150px">
-            <wj-combo-box
-              id="srchSafeStockFg"
-              ng-model="safeStockFg"
-              items-source="_getComboData('srchSafeStockFg')"
-              display-member-path="name"
-              selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)">
-            </wj-combo-box>
-          </span>
-          <span class="chk ml10">
-				<input type="checkbox" ng-model="ChkProdClassDisplay" ng-change="isChkProdClassDisplay()" />
-	            <label for="chkDt">
-                	<s:message code="periodIostock.prodClassDisplay" />
-              	</label>
-          </span>
-        </div>
+          <div class="sb-select">
+      <span class="txtIn w120px">
+        <wj-combo-box
+                id="srchSafeStockFg"
+                ng-model="safeStockFg"
+                items-source="_getComboData('srchSafeStockFg')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)">
+        </wj-combo-box>
+      </span>
+              <span class="chk ml5">
+            <input type="checkbox" ng-model="ChkProdClassDisplay" ng-change="isChkProdClassDisplay()" />
+            <label for="chkDt">
+                <s:message code="periodIostock.prodClassDisplay" />
+            </label>
+      </span>
+          </div>
       </td>
-      <c:choose>
-    	<c:when test="${envst008 != null && envst008 != '00'}">
-    		<%-- 상품구분 --%>
-    			<th><s:message code="storeCurr.weightFg"/></th>
-    				<td colspan="3">
-    					<div class="sb-select">
-    						<span class="txtIn w150px">
-    							<wj-combo-box
-    								id="srchWeightFg"
-    								ng-model="weightFg"
-    								items-source="_getComboData('srchWeightFg')"
-    								display-member-path="name"
-    								selected-value-path="value"
-    								is-editable="false"
-    								initialized="_initComboBox(s)">
-    							</wj-combo-box>
-    						</span>
-    					</div>
-    				</td>
-    		</c:when>
-    	<c:otherwise>
-    		<th></th>
-    		<td></td>
-    	</c:otherwise>
-    	</c:choose>
     </tr>
     	<tr>
     	<%-- 거래처 --%>
@@ -207,7 +204,7 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/curr/storeCurr/storeCurr.js?ver=20181224.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/curr/storeCurr/storeCurr.js?ver=20220803.01" charset="utf-8"></script>
 
 <%-- 현재고현황 상세 레이어 --%>
 <%--<c:import url="/WEB-INF/view/stock/curr/storeCurr/storeCurrDtl.jsp">--%>
@@ -218,6 +215,3 @@
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
 </c:import>
-
-<%-- 재고현황 팝업 --%>
-<c:import url="/WEB-INF/view/stock/curr/hqCurr/hqCurrDtl.jsp"></c:import>

@@ -92,26 +92,32 @@ app.controller('hqCurrCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     $scope._inquiryMain("/stock/curr/hqCurr/hqCurr/list.sb", params);
   };
 
-  // 상품분류정보 팝업
-  $scope.popUpProdClass = function () {
-    var popUp = $scope.prodClassPopUpLayer;
-    popUp.show(true, function (s) {
-      // 선택 버튼 눌렀을때만
-      if (s.dialogResult === "wj-hide-apply") {
-        var scope          = agrid.getScope('prodClassPopUpCtrl');
-        var prodClassCd    = scope.getSelectedClass();
-        var params         = {};
-        params.prodClassCd = prodClassCd;
-        // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
-          function (response) {
-            $scope.prodClassCd   = prodClassCd;
-            $scope.prodClassCdNm = response.data.data;
-          }
-        );
-      }
-    });
-  };
+    // 상품분류정보 팝업
+    $scope.popUpProdClass = function() {
+        var popUp = $scope.prodClassPopUpLayer;
+        popUp.show(true, function (s) {
+            // 선택 버튼 눌렀을때만
+            if (s.dialogResult === "wj-hide-apply") {
+                var scope = agrid.getScope('prodClassPopUpCtrl');
+                var prodClassCd = scope.getSelectedClass();
+                var params = {};
+                params.prodClassCd = prodClassCd;
+                // 조회 수행 : 조회URL, 파라미터, 콜백함수
+                $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+                    function(response){
+                        $scope.prodClassCd = prodClassCd;
+                        $scope.prodClassCdNm = response.data.data;
+                    }
+                );
+            }
+        });
+    };
+
+    // 상품분류정보 선택취소
+    $scope.delProdClass = function(){
+        $scope.prodClassCd = "";
+        $scope.prodClassCdNm = "";
+    }
 
   // 거래처선택 모듈 팝업 사용시 정의
   // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'

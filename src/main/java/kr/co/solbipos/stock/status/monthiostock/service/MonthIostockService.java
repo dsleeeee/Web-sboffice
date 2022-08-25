@@ -9,5 +9,6 @@ public interface MonthIostockService {
 
 	/** 월수불현황 리스트 조회 */
 	List<DefaultMap<String>> monthIostockList(MonthIostockVO monthIostockVO, SessionInfoVO sessionInfoVO);
+	List<DefaultMap<String>> monthIostockExcelList(MonthIostockVO monthIostockVO, SessionInfoVO sessionInfoVO);
 
 }

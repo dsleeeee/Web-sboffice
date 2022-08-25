@@ -18,9 +18,23 @@ import kr.co.solbipos.stock.status.periodiostock.service.PeriodIostockVO;
 public interface StockComPopupMapper {
 
 	/** 일자별수불현황 - 일자별수불현황 본사 상세 리스트 조회 */
-    List<DefaultMap<String>> getDailyIoStockHqInfoList(DailyIoStockVO dailyIoStockVO);
+    List<DefaultMap<String>> getDailyIoStockHqInfoListVendrInQty(DailyIoStockVO dailyIoStockVO);
+    List<DefaultMap<String>> getDailyIoStockHqInfoListVendrOutQty(DailyIoStockVO dailyIoStockVO);
+    List<DefaultMap<String>> getDailyIoStockHqInfoListHqOutQty(DailyIoStockVO dailyIoStockVO);
+    List<DefaultMap<String>> getDailyIoStockHqInfoListHqInQty(DailyIoStockVO dailyIoStockVO);
+    List<DefaultMap<String>> getDailyIoStockHqInfoListStoreMoveInQty(DailyIoStockVO dailyIoStockVO);
+    List<DefaultMap<String>> getDailyIoStockHqInfoListStoreMoveOutQty(DailyIoStockVO dailyIoStockVO);
+    List<DefaultMap<String>> getDailyIoStockHqInfoListDisuseQty(DailyIoStockVO dailyIoStockVO);
+    List<DefaultMap<String>> getDailyIoStockHqInfoListAdjQty(DailyIoStockVO dailyIoStockVO);
     /** 일자별수불현황 - 일자별수불현황 매장 상세 리스트 조회 */
-    List<DefaultMap<String>> getDailyIoStockStoreInfoList(DailyIoStockVO dailyIoStockVO);
+    List<DefaultMap<String>> getDailyIoStockStoreInfoListStoreInQty(DailyIoStockVO dailyIoStockVO);
+    List<DefaultMap<String>> getDailyIoStockStoreInfoListStoreOutQty(DailyIoStockVO dailyIoStockVO);
+    List<DefaultMap<String>> getDailyIoStockStoreInfoListPurchsInQty(DailyIoStockVO dailyIoStockVO);
+    List<DefaultMap<String>> getDailyIoStockStoreInfoListPurchsOutQty(DailyIoStockVO dailyIoStockVO);
+    List<DefaultMap<String>> getDailyIoStockStoreInfoListMoveInQty(DailyIoStockVO dailyIoStockVO);
+    List<DefaultMap<String>> getDailyIoStockStoreInfoListMoveOutQty(DailyIoStockVO dailyIoStockVO);
+    List<DefaultMap<String>> getDailyIoStockStoreInfoListDisuseQty(DailyIoStockVO dailyIoStockVO);
+    List<DefaultMap<String>> getDailyIoStockStoreInfoListAdjQty(DailyIoStockVO dailyIoStockVO);
     /** 현재고현황 - 본사 현재고현황 본사 상세 리스트 조회 */
     List<DefaultMap<String>> getCmmStockStatusList(HqCurrVO hqCurrVO);
     /** 현재고현황 - 매장 현재고현황 본사 상세 리스트 조회 */
@@ -37,4 +51,20 @@ public interface StockComPopupMapper {
     List<DefaultMap<String>> getCmmViewDtlList(StockManageViewVO stockManageViewVO);
     /** 실사/조정/폐기  - 창고선택모듈 리스트 조회 */
     List<DefaultMap<String>> selectStorageList(StockManageViewVO stockManageViewVO);
+
+    /** 수량별 팝업리스트 */
+    List<DefaultMap<String>> getVendrInQtyDtlList(PeriodIostockVO periodIostockVO);
+    List<DefaultMap<String>> getVendrOutQtyDtlList(PeriodIostockVO periodIostockVO);
+    List<DefaultMap<String>> getHqOutQtyDtlList(PeriodIostockVO periodIostockVO);
+    List<DefaultMap<String>> getHqInQtyDtlList(PeriodIostockVO periodIostockVO);
+    List<DefaultMap<String>> getMoveInQtyDtlList(PeriodIostockVO periodIostockVO);
+    List<DefaultMap<String>> getMoveOutQtyDtlList(PeriodIostockVO periodIostockVO);
+    List<DefaultMap<String>> getDisuseQtyDtlList(PeriodIostockVO periodIostockVO);
+    List<DefaultMap<String>> getAdjQtyDtlList(PeriodIostockVO periodIostockVO);
+    List<DefaultMap<String>> getStoreInQtyDtlList(PeriodIostockVO periodIostockVO);
+    List<DefaultMap<String>> getStoreOutQtyDtlList(PeriodIostockVO periodIostockVO);
+    List<DefaultMap<String>> getPurchsInQtyDtlList(PeriodIostockVO periodIostockVO);
+    List<DefaultMap<String>> getPurchsOutQtyDtlList(PeriodIostockVO periodIostockVO);
+    List<DefaultMap<String>> getStoreSaleQtyDtlList(PeriodIostockVO periodIostockVO);
+
 }

@@ -3,41 +3,35 @@
  */
 var app = agrid.getApp();
 
-/** 매장일수불 그리드 controller */
-app.controller('storeMonthCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+/** 주문대비 입고현황 그리드 controller */
+app.controller('monthIostockCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 	// 상위 객체 상속 : T/F 는 picker
-	angular.extend(this, new RootController('storeMonthCtrl', $scope, $http, true));
+	angular.extend(this, new RootController('monthIostockCtrl', $scope, $http, true));
 
-	  $scope.isChecked = false;
+	$scope.excelFg = false;
+	$scope.isChecked = false;
 
 	  // 접속 사용자의 권한
 	  $scope.orgnFg = gvOrgnFg;
 
 	  //조회조건 단위구분 데이터 Set
 	  $scope._setComboData("srchUnitFgDisplay", [
-	    {"name": messages["storeMonth.unitStockFg"], "value": "0"}, // 재고단위
-	    {"name": messages["storeMonth.unitOrderFg"], "value": "1"} // 주문단위
+	    {"name": messages["monthIostock.unitStockFg"], "value": "0"}, // 재고단위
+	    {"name": messages["monthIostock.unitOrderFg"], "value": "1"} // 주문단위
 	  ]);
 
 	  //조회조건 조회옵션 데이터 Set
 	  $scope._setComboData("srchOptionDisplay", [
-		{"name": messages["storeMonth.Qty"] + "+" + messages["storeMonth.Amt"], "value": "3"}, // 수량+금액
-	    {"name": messages["storeMonth.Qty"], "value": "1"}, // 수량
-	    {"name": messages["storeMonth.Amt"], "value": "2"} // 금액
+		{"name": messages["monthIostock.Qty"] + "+" + messages["monthIostock.Amt"], "value": "3"}, // 수량+금액
+	    {"name": messages["monthIostock.Qty"], "value": "1"}, // 수량
+	    {"name": messages["monthIostock.Amt"], "value": "2"} // 금액
 	  ]);
-
-	  //매장선택 모듈 팝업 사용시 정의
-	  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-	  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-	  $scope.storeMonthSelectStoreShow = function () {
-	    $scope._broadcast('storeMonthSelectStoreCtrl');
-	  };
 
 	  //거래처선택 모듈 팝업 사용시 정의
 	  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
 	  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-	  $scope.storeMonthSelectVendrShow = function () {
-	    $scope._broadcast('storeMonthSelectVendrCtrl');
+	  $scope.monthIostockSelectVendrShow = function () {
+	    $scope._broadcast('monthIostockSelectVendrCtrl');
 	  };
 
 	  // 상품분류정보 팝업
@@ -142,7 +136,7 @@ app.controller('storeMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 
 	//상품분류 항목표시 함수
 	  $scope.isChkDt = function() {
-		  var grid = wijmo.Control.getControl("#storeMonthMainGrid");
+		  var grid = wijmo.Control.getControl("#monthIostockMainGrid");
 	      var columns = grid.columns;
 	      var length  = grid.columns.length-1;
 	      var isChecked = $scope.isChecked;
@@ -163,33 +157,27 @@ app.controller('storeMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 }]);
 
 
-/** 매장일수불 그리드 controller */
-app.controller('storeMonthMainCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+/** 주문대비 입고현황 그리드 controller */
+app.controller('monthIostockMainCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('storeMonthMainCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('monthIostockMainCtrl', $scope, $http, true));
 
-  // 조회조건 콤보박스 listScale 세팅
-  $scope._setComboData("storeMonthMainlistScaleBox", gvListScaleBoxData);
+  //조회조건 콤보박스 listScale 세팅
+  $scope._setComboData("monthIostockMainlistScaleBox", gvListScaleBoxData);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // picker 사용시 호출 : 미사용시 호출안함
-    $scope._makePickColumns("storeMonthMainCtrl");
+    $scope._makePickColumns("monthIostockMainCtrl");
 
     // 그리드 링크 효과
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
-        if (col.binding === "prodCd" || (col.binding.slice(-3) == 'Qty' && s.cells.getCellData(e.row,e.col,false) != null) && col.binding !== "poUnitQty" && col.binding !== "setInQty" && col.binding !== "closeQty") { // 상품코드, 본사출고-수량
+        var colLength = col.binding.length;
+        if (col.binding === "prodCd" || (col.binding.slice(-3) == 'Qty' && s.cells.getCellData(e.row,e.col,false) != null && col.binding !== "poUnitQty" && col.binding !== "setInQty" && col.binding !== "closeQty")) { // 상품코드, 각 수량별
     		wijmo.addClass(e.cell, 'wijLink');
             wijmo.addClass(e.cell, 'wj-custom-readonly');
-        }
-        // 구분이 반출이면 글씨색을 red 로 변경한다.
-        if (col.binding === "slipFg") {
-          var item = s.rows[e.row].dataItem;
-          if (item.slipFg === -1) {
-            wijmo.addClass(e.cell, 'red');
-          }
         }
 
         if (col.format === "date") {
@@ -205,28 +193,28 @@ app.controller('storeMonthMainCtrl', ['$scope', '$http', '$timeout', function ($
       var ht = s.hitTest(e);
 
       if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
-	    	var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
-	    	if (rng && rng.columnSpan > 1) {
-	    		e.preventDefault();
-	    	}
-	  }
+    		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+    		if (rng && rng.columnSpan > 1) {
+    			e.preventDefault();
+    		}
+  	  }
 
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col         = ht.panel.columns[ht.col];
         var colLength 	= col.binding.length;
         var selectedRow = s.rows[ht.row].dataItem;
         var params      = {};
-        	params.prodCd    = selectedRow.prodCd; // 상품코드
- 	        params.prodNm    = selectedRow.prodNm; // 상품명
- 	        params.startDate = selectedRow.startDate + "01"; // 시작날짜
- 	        params.endDate   = selectedRow.startDate + "31"; // 종료날짜
- 	        params.storeCd   = selectedRow.storeCd; // 매장코드
- 	        params.storeNm   = selectedRow.storeNm; // 매장이름
- 	        params.poUnitQty = selectedRow.poUnitQty; // 입수
+	        params.prodCd    = selectedRow.prodCd;
+	        params.prodNm    = selectedRow.prodNm;
+	        params.poUnitQty = selectedRow.poUnitQty;
+	        params.startDate = selectedRow.startDate + "01";
+            params.endDate   = selectedRow.startDate + "31";
+			params.storeCd   = $("#storeCd").val();
+			params.storeNm   = $("#storeNm").val();
         if (col.binding === "prodCd") { // 상품코드
 
   		  	$scope._broadcast('prodCodeDtlCtrl', params);
-        }else if(col.binding.slice(-3) == 'Qty' && selectedRow[col.binding] != null && col.binding !== "poUnitQty" && col.binding !== "setInQty" && col.binding !== "closeQty"){ //각 수량별
+		}else if(col.binding.slice(-3) == 'Qty' && selectedRow[col.binding] != null && col.binding !== "poUnitQty" && col.binding !== "setInQty" && col.binding !== "closeQty"){ //각 수량별
             var colCode = col.binding;
         	params.colCode = colCode; // 수량(컬럼 뒤에 붙는 숫자, 어떤 수량인지 구분)
         	params.ioOccrFg = s.columnHeaders.getCellData(0,ht.col,false);
@@ -245,39 +233,37 @@ app.controller('storeMonthMainCtrl', ['$scope', '$http', '$timeout', function ($
     s.allowMerging = 2;
     s.columnHeaders.rows.push(new wijmo.grid.Row());
     s.columnHeaders.rows[0].dataItem = {
-		prodClassNm		    :messages["storeMonth.prodClassNm"],
+	  prodClassNm		: messages["monthIostock.prodClassNm"],
 
-	  prodCd 	    :messages["storeMonth.prodCd"],
-	  prodNm 	    :messages["storeMonth.prodNm"],
-      storeCd		:messages["storeMonth.storeCd"],
-      storeNm		:messages["storeMonth.storeNm"],
-	  poUnitQty		:messages["storeMonth.poUnitQty"],
-	  poUnitFgNm 	:messages["storeMonth.poUnitFg"],
-	  barcdCd		:messages["storeMonth.barcdCd"],
-	  baseQty		:messages["storeMonth.basicStock"],
-	  baseAmt		:messages["storeMonth.basicStock"],
+	  prodCd 		: messages["monthIostock.prodCd"],
+	  prodNm 		: messages["monthIostock.prodNm"],
+	  poUnitQty		: messages["monthIostock.poUnitQty"],
+	  poUnitFgNm	: messages["monthIostock.poUnitFg"],
+	  barcdCd		: messages["monthIostock.barcdCd"],
 
-	  storeInQty  	:messages["storeMonth.accStoreIn"],
-	  storeInTot  	:messages["storeMonth.accStoreIn"],
-	  storeOutQty 	:messages["storeMonth.accStoreOut"],
-	  storeOutTot 	:messages["storeMonth.accStoreOut"],
-	  purchsInQty 	:messages["storeMonth.accPurchsIn"],
-	  purchsInTot 	:messages["storeMonth.accPurchsIn"],
-	  purchsOutQty	:messages["storeMonth.accPurchsOut"],
-	  purchsOutTot	:messages["storeMonth.accPurchsOut"],
-	  storeSaleQty	:messages["storeMonth.accStoreSale"],
-	  storeSaleTot	:messages["storeMonth.accStoreSale"],
+	  baseQty				:messages["monthIostock.basicStock"],
+	  baseAmt				:messages["monthIostock.basicStock"],
+	  storeInQty	:messages["monthIostock.accStoreIn"],
+	  storeInTot	:messages["monthIostock.accStoreIn"],
+	  storeOutQty	:messages["monthIostock.accStoreOut"],
+	  storeOutTot	:messages["monthIostock.accStoreOut"],
+	  purchsInQty	:messages["monthIostock.accPurchsIn"],
+	  purchsInTot	:messages["monthIostock.accPurchsIn"],
+	  purchsOutQty	:messages["monthIostock.accPurchsOut"],
+	  purchsOutTot	:messages["monthIostock.accPurchsOut"],
+	  storeSaleQty	:messages["monthIostock.accStoreSale"],
+	  storeSaleTot	:messages["monthIostock.accStoreSale"],
 
-	  moveInQty 	:messages["storeMonth.accStoreMoveIn"],
-	  moveInTot 	:messages["storeMonth.accStoreMoveIn"],
-      moveOutQty	:messages["storeMonth.accStoreMoveOut"],
-      moveOutTot	:messages["storeMonth.accStoreMoveOut"],
-      disuseQty 	:messages["storeMonth.accDisuse"],
-      adjQty     	:messages["storeMonth.accAdj"],
-      setInQty  	:messages["storeMonth.accSetIn"],
+	  moveInQty		:messages["monthIostock.accStoreMoveIn"],
+	  moveInTot		:messages["monthIostock.accStoreMoveIn"],
+      moveOutQty	:messages["monthIostock.accStoreMoveOut"],
+      moveOutTot	:messages["monthIostock.accStoreMoveOut"],
+      disuseQty		:messages["monthIostock.accDisuse"],
+      adjQty 		:messages["monthIostock.accAdj"],
+      setInQty		:messages["monthIostock.accSetIn"],
 
-      closeQty		:messages["storeMonth.endingStock"],
-      closeAmt		:messages["storeMonth.endingStock"],
+	  closeQty		:messages["monthIostock.endingStock"],
+	  closeAmt		:messages["monthIostock.endingStock"],
     };
 
     s.itemFormatter = function (panel, r, c, cell) {
@@ -321,21 +307,21 @@ app.controller('storeMonthMainCtrl', ['$scope', '$http', '$timeout', function ($
 
 
   // 다른 컨트롤러의 broadcast 받기
-  $scope.$on("storeMonthMainCtrl", function (event, data) {
-    $scope.searchStoreMonthList(true);
+  $scope.$on("monthIostockMainCtrl", function (event, data) {
+    $scope.searchMonthIostockList(true);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
 
   //다른 컨트롤러의 broadcast 받기
-  $scope.$on("storeMonthMainCtrlSrch", function (event, data) {
-    $scope.searchStoreMonthList(false);
+  $scope.$on("monthIostockMainCtrlSrch", function (event, data) {
+    $scope.searchMonthIostockList(false);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
 
-  // 매장일수불 리스트 조회
-  $scope.searchStoreMonthList = function (isPageChk) {
+  // 월수불현황 리스트 조회
+  $scope.searchMonthIostockList = function (isPageChk) {
     $scope.searchedStartDate = wijmo.Globalize.format($scope.startDate, 'yyyyMM');
 
     // 파라미터
@@ -345,30 +331,29 @@ app.controller('storeMonthMainCtrl', ['$scope', '$http', '$timeout', function ($
     params.prodCd	   = $scope.srchProdCd;
     params.prodNm	   = $scope.srchProdNm;
     params.barcdCd	   = $scope.srchBarcdCd;
-    params.vendrCd 	   = $("#storeMonthSelectVendrCd").val();
-    params.storeCd     = $("#storeMonthSelectStoreCd").val();
+    params.vendrCd 	   = $("#monthIostockSelectVendrCd").val();
     params.prodClassCd = $scope.prodClassCd;
     params.unitFg 	   = $scope.unitFg;
     params.isPageChk   = isPageChk;
     params.listScale = $scope.listScaleCombo.text;
 
-
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/stock/status/storeMonth/storeMonth/viewList.sb", params, function () {
+    $scope._inquiryMain("/stock/status/monthIoStock/prod/viewList.sb", params, function () {
     	$scope.displayChg($scope.srchOption);
     });
+	  $scope.excelFg = true;
   };
 
 
   //조회옵션 함수
   $scope.displayChg = function (srchOption) {
 	  var check = srchOption;
-	  var grid = wijmo.Control.getControl("#storeMonthMainGrid");
-	  var columns = grid.columns;
+	  var grid = wijmo.Control.getControl("#monthIostockMainGrid");
+      var columns = grid.columns;
       var length  = grid.columns.length-1;
 
       if(check == '1'){ // 수량
-    	  for(var i=0; i<length; i++){
+    	  for(var i=6; i<length; i++){
     		  if(columns[i].binding != 'poUnitQty'){
     			  if(columns[i].binding.slice(-3) == 'Tot' || columns[i].binding.slice(-3) == 'Amt'){
         			  columns[i].visible = false;
@@ -378,8 +363,7 @@ app.controller('storeMonthMainCtrl', ['$scope', '$http', '$timeout', function ($
     		  }
           }
       }else if(check == '2'){ // 금액
-    	  for(var i=0; i<length; i++){
-    		  var colLength = columns[i].binding.length;
+    	  for(var i=6; i<length; i++){
     		  if(columns[i].binding != 'poUnitQty'){
     			  if(columns[i].binding.slice(-3) == 'Qty'){
         			  columns[i].visible = false;
@@ -397,28 +381,28 @@ app.controller('storeMonthMainCtrl', ['$scope', '$http', '$timeout', function ($
       }
   }
 
-
   //엑셀 다운로드
-  $scope.excelDownloadStoreMonth = function () {
-	  var params         	= {};
-	  params.startDate   	= $scope.searchedStartDate;
-	  params.endDate     	= $scope.searchedStartDate;
+  $scope.excelDownloadMonthIostock = function () {
+	  // 파라미터
+	  var params     		= {};
+	  params.startDate		= $scope.searchedStartDate;
+	  params.endDate  		= $scope.searchedStartDate;
 	  params.prodCd	   		= $scope.srchProdCd;
 	  params.prodNm	   		= $scope.srchProdNm;
 	  params.barcdCd	   	= $scope.srchBarcdCd;
-	  params.vendrCd 	   	= $("#storeMonthSelectVendrCd").val();
-	  params.storeCd     	= $("#storeMonthSelectStoreCd").val();
+	  params.vendrCd 	   	= $("#monthIostockSelectVendrCd").val();
 	  params.prodClassCd 	= $scope.prodClassCd;
 	  params.unitFg 	   	= $scope.unitFg;
 
-	  $scope._broadcast('storeMonthMainExcelCtrl', params);
+	  $scope._broadcast('monthIostockExcelCtrl', params);
   };
 }]);
 
+
 /** 주문대비 입고현황 그리드 controller */
-app.controller('storeMonthMainExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('monthIostockExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 	// 상위 객체 상속 : T/F 는 picker
-	angular.extend(this, new RootController('storeMonthMainExcelCtrl', $scope, $http, true));
+	angular.extend(this, new RootController('monthIostockExcelCtrl', $scope, $http, true));
 
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
@@ -432,39 +416,40 @@ app.controller('storeMonthMainExcelCtrl', ['$scope', '$http', '$timeout', functi
 		s.allowMerging = 2;
 		s.columnHeaders.rows.push(new wijmo.grid.Row());
 		s.columnHeaders.rows[0].dataItem = {
-			prodClassNm		    :messages["storeMonth.prodClassNm"],
+			prodClassNm: messages["monthIostock.prodClassNm"],
 
-			prodCd 	    :messages["storeMonth.prodCd"],
-			prodNm 	    :messages["storeMonth.prodNm"],
-			storeCd		:messages["storeMonth.storeCd"],
-			storeNm		:messages["storeMonth.storeNm"],
-			poUnitQty		:messages["storeMonth.poUnitQty"],
-			poUnitFgNm 	:messages["storeMonth.poUnitFg"],
-			barcdCd		:messages["storeMonth.barcdCd"],
-			baseQty		:messages["storeMonth.basicStock"],
-			baseAmt		:messages["storeMonth.basicStock"],
+			prodCd: messages["monthIostock.prodCd"],
+			prodNm: messages["monthIostock.prodNm"],
+			poUnitQty: messages["monthIostock.poUnitQty"],
+			poUnitFgNm: messages["monthIostock.poUnitFg"],
+			barcdCd: messages["monthIostock.barcdCd"],
 
-			storeInQty  	:messages["storeMonth.accStoreIn"],
-			storeInTot  	:messages["storeMonth.accStoreIn"],
-			storeOutQty 	:messages["storeMonth.accStoreOut"],
-			storeOutTot 	:messages["storeMonth.accStoreOut"],
-			purchsInQty 	:messages["storeMonth.accPurchsIn"],
-			purchsInTot 	:messages["storeMonth.accPurchsIn"],
-			purchsOutQty	:messages["storeMonth.accPurchsOut"],
-			purchsOutTot	:messages["storeMonth.accPurchsOut"],
-			storeSaleQty	:messages["storeMonth.accStoreSale"],
-			storeSaleTot	:messages["storeMonth.accStoreSale"],
+			baseQty: messages["monthIostock.basicStock"],
+			baseAmt: messages["monthIostock.basicStock"],
+			vendrInQty: messages["monthIostock.accVendrIn"],
+			vendrInTot: messages["monthIostock.accVendrIn"],
+			vendrOutQty: messages["monthIostock.accVendrOut"],
+			vendrOutTot: messages["monthIostock.accVendrOut"],
+			hqOutQty: messages["monthIostock.hqOut"],
+			hqOutTot: messages["monthIostock.hqOut"],
+			hqInQty: messages["monthIostock.hqIn"],
+			hqInTot: messages["monthIostock.hqIn"],
 
-			moveInQty 	:messages["storeMonth.accStoreMoveIn"],
-			moveInTot 	:messages["storeMonth.accStoreMoveIn"],
-			moveOutQty	:messages["storeMonth.accStoreMoveOut"],
-			moveOutTot	:messages["storeMonth.accStoreMoveOut"],
-			disuseQty 	:messages["storeMonth.accDisuse"],
-			adjQty     	:messages["storeMonth.accAdj"],
-			setInQty  	:messages["storeMonth.accSetIn"],
+			storeMoveInQty: messages["monthIostock.accStoreMoveIn"],
+			storeMoveInTot: messages["monthIostock.accStoreMoveIn"],
+			storeMoveOutQty: messages["monthIostock.accStoreMoveOut"],
+			storeMoveOutTot: messages["monthIostock.accStoreMoveOut"],
+			disuseQty: messages["monthIostock.accDisuse"],
+			adjQty: messages["monthIostock.accAdj"],
+			setInQty: messages["monthIostock.accSetIn"],
 
-			closeQty		:messages["storeMonth.endingStock"],
-			closeAmt		:messages["storeMonth.endingStock"],
+			saleVendrOrderQty: messages["monthIostock.accSaleVendrOut"],
+			saleVendrOrderTot: messages["monthIostock.accSaleVendrOut"],
+			saleVendrRtnQty: messages["monthIostock.accSaleVendrIn"],
+			saleVendrRtnTot: messages["monthIostock.accSaleVendrIn"],
+
+			closeQty: messages["monthIostock.endingStock"],
+			closeAmt: messages["monthIostock.endingStock"],
 		}
 
 		s.itemFormatter = function (panel, r, c, cell) {
@@ -508,9 +493,9 @@ app.controller('storeMonthMainExcelCtrl', ['$scope', '$http', '$timeout', functi
 
 
 	// 다른 컨트롤러의 broadcast 받기
-	$scope.$on("storeMonthMainExcelCtrl", function (event, data) {
+	$scope.$on("monthIostockExcelCtrl", function (event, data) {
 
-		if(data != undefined) {
+		if(data != undefined && $scope.excelFg) {
 			if($scope.excelStartDate > $scope.excelEndDate){
 				$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 				return false;
@@ -529,22 +514,21 @@ app.controller('storeMonthMainExcelCtrl', ['$scope', '$http', '$timeout', functi
 
 		// 파라미터
 		var params         = {};
-		params.startDate   	= data.startDate;
-		params.endDate     	= data.endDate;
-		params.prodCd		= data.prodCd;
-		params.prodNm		= data.prodNm;
-		params.barcdCd	   	= data.barcdCd;
-		params.vendrCd 	   	= data.vendrCd;
-		params.storeCd     	= data.storeCd;
-		params.prodClassCd 	= data.prodClassCd;
-		params.unitFg 	   	= data.unitFg;
+		params.startDate	= data.startDate
+		params.endDate  	= data.endDate
+		params.prodCd		= data.prodCd
+		params.prodNm		= data.prodNm
+		params.barcdCd	   	= data.barcdCd
+		params.vendrCd 	   	= data.vendrCd
+		params.prodClassCd 	= data.prodClassCd
+		params.unitFg 	   	= data.unitFg
 
 		$scope.displayChg();
 		$scope.isChkDt();
 
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
-		$scope._inquiryMain("/stock/status/storeMonth/storeMonth/viewExcelList.sb", params, function () {
+		$scope._inquiryMain("/stock/status/monthIoStock/prod/viewExcelList.sb", params, function () {
 			if ($scope.excelFlex.rows.length <= 0) {
 				$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 				return false;
@@ -558,7 +542,7 @@ app.controller('storeMonthMainExcelCtrl', ['$scope', '$http', '$timeout', functi
 					includeColumns      : function (column) {
 						return column.visible;
 					}
-				}, '재고관리_매장재고현황_월수불현황_' +'_'+getToday()+'.xlsx', function () {
+				}, '재고관리_재고현황_월수불현황_' +'_'+getToday()+'.xlsx', function () {
 					$timeout(function () {
 						$scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
 					}, 10);
@@ -568,7 +552,7 @@ app.controller('storeMonthMainExcelCtrl', ['$scope', '$http', '$timeout', functi
 	};
 
 	$scope.isChkDt = function() {
-		var grid = wijmo.Control.getControl("#storeMonthMainExcelGrid");
+		var grid = wijmo.Control.getControl("#monthIostockMainExcelGrid");
 		var columns = grid.columns;
 		var length  = grid.columns.length;
 		var isChecked = $scope.isChecked;
@@ -591,7 +575,7 @@ app.controller('storeMonthMainExcelCtrl', ['$scope', '$http', '$timeout', functi
 	//조회옵션 함수
 	$scope.displayChg = function () {
 		var check = $scope.excelSrchOption;
-		var grid = wijmo.Control.getControl("#storeMonthMainExcelGrid");
+		var grid = wijmo.Control.getControl("#monthIostockMainExcelGrid");
 		var columns = grid.columns;
 		var length  = grid.columns.length;
 
@@ -625,3 +609,4 @@ app.controller('storeMonthMainExcelCtrl', ['$scope', '$http', '$timeout', functi
 	}
 
 }]);
+

@@ -9,4 +9,5 @@ public interface StockStoreMonthMapper {
 
 	/** 매장월수불 리스트 조회 */
 	List<DefaultMap<String>> stockStoreMonthList(StockStoreMonthVO stockStoreMonthVO);
+	List<DefaultMap<String>> stockStoreMonthExcelList(StockStoreMonthVO stockStoreMonthVO);
 }

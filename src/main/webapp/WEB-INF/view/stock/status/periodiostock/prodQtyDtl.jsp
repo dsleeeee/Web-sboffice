@@ -11,33 +11,14 @@
 <wj-popup id="prodQtyDtlLayer" control="prodQtyDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
   <div id="cardLayer" class="wj-dialog wj-dialog-columns" ng-controller="prodQtyDtlCtrl">
     <div id="popHeader" class="wj-dialog-header wj-dialog-header-font">
-      <span>{{ioOccrFg}}<s:message code="periodIostock.info"/></span>
+      <span>{{ioOccrFg}}<s:message code="periodIostock.info"/></span>&nbsp;&nbsp;[{{prodCd}}]{{prodNm}}&nbsp;&nbsp;<s:message code="periodIostock.poUnitQty"/>:{{poUnitQty}}
       <a href="#" class="wj-hide btn_close"></a>
     </div>
     <div class="wj-dialog-body sc2" style="height: 400px;">
-      <table class="searchTbl tc">
-        <colgroup>
-          <col class="w20"/>
-          <col class="w30"/>
-          <col class="w25"/>
-        </colgroup>
-        <tbody>
-        <tr>
-          <th class="tc"><s:message code="periodIostock.prodCd"/></th>
-          <th class="tc"><s:message code="periodIostock.prodNm"/></th>
-          <th class="tc"><s:message code="periodIostock.poUnitQty"/></th>
-        </tr>
-        <tr>
-          <td style="border-left: 1px solid #ccc;">{{prodCd}}</td>
-          <td style="border-left: 1px solid #ccc;">{{prodNm}}</td>
-          <td style="border-left: 1px solid #ccc; border-right: 1px solid #ccc;">{{poUnitQty}}</td>
-        </tr>
-        </tbody>
-      </table>
       
       <input type="hidden" id="hqOfficeCode" value="${sessionInfo.hqOfficeCd}"/>
 
-      <div class="tr mt20 fr">
+      <div class="tr fr">
         <div id="volmErrBtnLayer" style="display: none;">
           <span class="chk txtIn fl lh30" style="top: -2px;" ng-if="volmErrConfirmFg">
             <input type="checkbox" name="volmErrConfirmFg" id="volmErrConfirmFg" value="Y" ng-click="fnConfirmChk()"/>
@@ -62,7 +43,7 @@
 
       <div class="w100 mt10 mb20">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 200px; overflow-x: hidden; overflow-y: hidden;">
+        <div class="wj-gridWrap" style="height: 300px; overflow-x: hidden; overflow-y: hidden;">
           <wj-flex-grid
           	id="prodQtyDtlGrid"
             autoGenerateColumns="false"

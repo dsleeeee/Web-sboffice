@@ -49,4 +49,30 @@ public class StockStoreMonthServiceImpl implements StockStoreMonthService {
 
 		return stockStoreMonthMapper.stockStoreMonthList(stockStoreMonthVO);
 	}
+
+	@Override
+	public List<DefaultMap<String>> stockStoreMonthExcelList(StockStoreMonthVO stockStoreMonthVO, SessionInfoVO sessionInfoVO) {
+		stockStoreMonthVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		stockStoreMonthVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+
+		if (stockStoreMonthVO.getStoreCd() != null && !"".equals(stockStoreMonthVO.getStoreCd())) {
+			String[] arrStoreCd = stockStoreMonthVO.getStoreCd().split(",");
+			if (arrStoreCd.length > 0) {
+				if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+					stockStoreMonthVO.setArrStoreCd(arrStoreCd);
+				}
+			}
+		}
+
+		if (stockStoreMonthVO.getVendrCd() != null && !"".equals(stockStoreMonthVO.getVendrCd())) {
+			String[] arrVendrCd = stockStoreMonthVO.getVendrCd().split(",");
+			if (arrVendrCd.length > 0) {
+				if (arrVendrCd[0] != null && !"".equals(arrVendrCd[0])) {
+					stockStoreMonthVO.setArrVendrCd(arrVendrCd);
+				}
+			}
+		}
+
+		return stockStoreMonthMapper.stockStoreMonthExcelList(stockStoreMonthVO);
+	}
 }

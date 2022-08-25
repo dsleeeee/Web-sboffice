@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -61,7 +62,15 @@ public class MonthIostockController {
      */
     @RequestMapping(value = "/prod/list.sb", method = RequestMethod.GET)
     public String monthIostockView(HttpServletRequest request, HttpServletResponse response, Model model) {
-        return "stock/status/monthiostock/prod";
+		SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+		String url = "";
+
+		if(sessionInfoVO.getOrgnFg().equals(OrgnFg.HQ)){
+			url = "stock/status/monthiostock/hqProd";
+		} else if(sessionInfoVO.getOrgnFg().equals(OrgnFg.STORE)){
+			url = "stock/status/monthiostock/storeProd";
+		}
+        return url;
     }
 	
 	/**
@@ -80,6 +89,25 @@ public class MonthIostockController {
 		SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 		
 		List<DefaultMap<String>> list = monthIostockService.monthIostockList(monthIostockVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, monthIostockVO);
+	}
+
+	/**
+     * 월수불현황 - 리스트 조회 엑셀
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  조동훤
+     * @since   2020. 03. 18.
+     */
+	@RequestMapping(value = "/prod/viewExcelList.sb", method = RequestMethod.POST)
+	@ResponseBody
+	public Result monthIostockExcelList(HttpServletRequest request, HttpServletResponse response, Model model, MonthIostockVO monthIostockVO) {
+
+		SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+		List<DefaultMap<String>> list = monthIostockService.monthIostockExcelList(monthIostockVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, monthIostockVO);
 	}
 }
