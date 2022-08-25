@@ -143,7 +143,6 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
     $scope.posNo    = data.posNo;
     $scope.billNo   = data.billNo;
     $scope.saleYn   = data.saleYn;
-    $scope.webReg   = data.webReg;
 
     $scope.wjBillInfoLayer.show(true);
 
@@ -188,7 +187,8 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
           data.vatAmt       = addComma(data.vatAmt);
           data.totTipAmt    = addComma(data.totTipAmt);
           // 반품영수증인 경우 원거래 영수증값 세팅
-          if ($scope.saleYn === 'N' && $scope.webReg === 'N') {
+          console.log(data.orgBillNo);
+          if ($scope.saleYn === 'N' && data.orgBillNo !== null && data.orgBillNo !== undefined) {
             storeCdSize = data.orgBillNo.length - 14; // 매장코드 자리수 7자리 고정 >> 7~20 가변으로 수정됨에 따라 변경
             $scope.orgStoreCd  = data.orgBillNo.substr(0, storeCdSize);
             $scope.orgSaleDate = data.orgBillNo.substr(-14, 8);
@@ -332,14 +332,14 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/cmmSalePopup/billInfo/billInfo/billProdList.sb", params, function () {
       // 현재 영수증이 반품 영수증인 경우 원거래 영수증 조회
-      if (nvl($scope.saleYn, '') === 'N' && nvl($scope.webReg, '') === 'N') {
+      if (nvl($scope.saleYn, '') === 'N' && nvl($scope.orgBillNo, '') !== '') {
         var params       = {};
         params.storeCd   = $scope.orgStoreCd;
         params.saleDate  = $scope.orgSaleDate;
         params.posNo     = $scope.orgPosNo;
         params.billNo    = $scope.orgBillNo;
         $scope._broadcast('orgBillInfoCtrl', params);
-      } else if(nvl($scope.saleYn, '') === 'N' && nvl($scope.webReg, '') === 'Y'){
+      } else if(nvl($scope.saleYn, '') === 'N' && nvl($scope.orgBillNo, '') === ''){
         $("#orgBillSubTitle").html(messages['billInfo.orgBill.null']);
         // 그리드 초기화
         $("orgBillInfo").css("display", "none");
@@ -361,7 +361,7 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
     $scope.billGuestInfo = "";
     oScope._gridDataInit();
 
-    if($scope.saleYn === "N" && $scope.webReg === 'N') {
+    if($scope.saleYn === "N" && nvl($scope.orgBillNo, '') === '') {
       var scope = agrid.getScope("orgBillInfoCtrl");
       $("#orgBillSubTitle").val("");
       scope.orgBillInfo = "";
