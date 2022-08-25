@@ -83,7 +83,7 @@
         </if>
         AND PROD_CD = #{prodCd}
         <if test='deleteFg != null and deleteFg != ""'>
-        AND RESULT = #{deleteFg}
+            AND RESULT = #{deleteFg}
         </if>
     </delete>
 
@@ -287,18 +287,18 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT NVL((MIN(HQ_BRAND_CD) KEEP(DENSE_RANK FIRST ORDER BY MOD_DT DESC)), '0000000') AS HQ_BRAND_CD
-                  FROM TB_HQ_BRAND
-                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                   AND HQ_BRAND_NM = #{hqBrandCd}
-                   AND USE_YN = 'Y'
+                FROM TB_HQ_BRAND
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND HQ_BRAND_NM = #{hqBrandCd}
+                AND USE_YN = 'Y'
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT NVL((MIN(MS_BRAND_CD) KEEP(DENSE_RANK FIRST ORDER BY MOD_DT DESC)), '0000000') AS MS_BRAND_CD
-                  FROM TB_MS_BRAND
-                 WHERE STORE_CD = #{storeCd}
-                   AND MS_BRAND_NM = #{hqBrandCd}
-                   AND USE_YN = 'Y'
+                FROM TB_MS_BRAND
+                WHERE STORE_CD = #{storeCd}
+                AND MS_BRAND_NM = #{hqBrandCd}
+                AND USE_YN = 'Y'
             </when>
         </choose>
     </select>
@@ -424,38 +424,42 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT NVL(MAX(PROD_CLASS_CD), #{prodClassCd}) AS PROD_CLASS_CD
+                SELECT NVL(MAX(PROD_CLASS_CD), #{prodClassCd}||' - 존재하지 않는 상품분류입니다.') AS PROD_CLASS_CD
                 FROM
                 (
-                    SELECT
-                    thpc.PROD_CLASS_CD AS PROD_CLASS_CD
-                    , SUBSTR( SYS_CONNECT_BY_PATH(thpc.PROD_CLASS_NM,'▶') , 2 ) AS PATH_NM
-                    , SUBSTR( SYS_CONNECT_BY_PATH(thpc.PROD_CLASS_CD,'▶') , 2 ) AS PATH
-                    FROM TB_HQ_PRODUCT_CLASS thpc
-                    WHERE 1=1
-                    AND thpc.HQ_OFFICE_CD = #{membrOrgnCd}
-                    START WITH thpc.P_PROD_CLASS_CD = '00000' AND thpc.HQ_OFFICE_CD = #{membrOrgnCd}
-                    CONNECT BY thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD AND thpc.HQ_OFFICE_CD = #{membrOrgnCd}
+                SELECT
+                thpc.PROD_CLASS_CD AS PROD_CLASS_CD
+                , SUBSTR( SYS_CONNECT_BY_PATH(thpc.PROD_CLASS_NM,'▶') , 2 ) AS PATH_NM
+                , SUBSTR( SYS_CONNECT_BY_PATH(thpc.PROD_CLASS_CD,'▶') , 2 ) AS PATH
+                FROM TB_HQ_PRODUCT_CLASS thpc
+                WHERE 1=1
+                AND thpc.HQ_OFFICE_CD = #{membrOrgnCd}
+                START WITH thpc.P_PROD_CLASS_CD = '00000' AND thpc.HQ_OFFICE_CD = #{membrOrgnCd}
+                CONNECT BY thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD AND thpc.HQ_OFFICE_CD = #{membrOrgnCd}
                 )
                 WHERE 1=1
-                AND PATH_NM = #{prodClassCd}
+                AND ( PATH_NM = #{prodClassCd}
+                OR    PROD_CLASS_CD = #{prodClassCd}
+                )
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT NVL(MAX(PROD_CLASS_CD), #{prodClassCd}) AS PROD_CLASS_CD
+                SELECT NVL(MAX(PROD_CLASS_CD), #{prodClassCd}||' - 존재하지 않는 상품분류입니다.') AS PROD_CLASS_CD
                 FROM
                 (
-                    SELECT
-                    tmpc.PROD_CLASS_CD AS PROD_CLASS_CD
-                    , SUBSTR( SYS_CONNECT_BY_PATH(tmpc.PROD_CLASS_NM,'▶') , 2 ) AS PATH_NM
-                    , SUBSTR( SYS_CONNECT_BY_PATH(tmpc.PROD_CLASS_CD,'▶') , 2 ) AS PATH
-                    FROM (SELECT * FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd}) tmpc
-                    WHERE 1=1
-                    START WITH tmpc.P_PROD_CLASS_CD = '00000' AND tmpc.STORE_CD = #{storeCd}
-                    CONNECT BY tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD AND tmpc.STORE_CD = #{storeCd}
+                SELECT
+                tmpc.PROD_CLASS_CD AS PROD_CLASS_CD
+                , SUBSTR( SYS_CONNECT_BY_PATH(tmpc.PROD_CLASS_NM,'▶') , 2 ) AS PATH_NM
+                , SUBSTR( SYS_CONNECT_BY_PATH(tmpc.PROD_CLASS_CD,'▶') , 2 ) AS PATH
+                FROM (SELECT * FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd}) tmpc
+                WHERE 1=1
+                START WITH tmpc.P_PROD_CLASS_CD = '00000' AND tmpc.STORE_CD = #{storeCd}
+                CONNECT BY tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD AND tmpc.STORE_CD = #{storeCd}
                 )
                 WHERE 1=1
-                AND PATH_NM = #{prodClassCd}
+                AND ( PATH_NM = #{prodClassCd}
+                OR    PROD_CLASS_CD = #{prodClassCd}
+                )
             </when>
         </choose>
     </select>
@@ -510,38 +514,38 @@
     <select id="getMasterChk"  parameterType="ProdExcelUploadVO" resultType="DefaultMap">
         /* ProdExcelUploadMapper.getMasterChk */
         SELECT 	PROD_CLASS_CNT,
-                VENDR_CNT
+        VENDR_CNT
         FROM	(
-                SELECT 	COUNT(PROD_CLASS_CD) AS PROD_CLASS_CNT
-                <choose>
-                    <!-- 본사 -->
-                    <when test='orgnFg != null and orgnFg == "H"'>
-                        FROM 	TB_HQ_PRODUCT_CLASS
-                        WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
-                    </when>
-                    <!-- 매장 -->
-                    <when test='orgnFg != null and orgnFg == "S"'>
-                        FROM 	TB_MS_PRODUCT_CLASS
-                        WHERE 	STORE_CD = #{storeCd}
-                    </when>
-                </choose>
-                ),
-                (
-                SELECT 	COUNT(VENDR_CD) AS VENDR_CNT
-                <choose>
-                    <!-- 본사 -->
-                    <when test='orgnFg != null and orgnFg == "H"'>
-                        FROM 	TB_HQ_VENDOR
-                        WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
-                    </when>
-                    <!-- 매장 -->
-                    <when test='orgnFg != null and orgnFg == "S"'>
-                        FROM 	TB_MS_VENDOR
-                        WHERE 	STORE_CD = #{storeCd}
-                    </when>
-                </choose>
-                )
-</select>
+        SELECT 	COUNT(PROD_CLASS_CD) AS PROD_CLASS_CNT
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                FROM 	TB_HQ_PRODUCT_CLASS
+                WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                FROM 	TB_MS_PRODUCT_CLASS
+                WHERE 	STORE_CD = #{storeCd}
+            </when>
+        </choose>
+        ),
+        (
+        SELECT 	COUNT(VENDR_CD) AS VENDR_CNT
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                FROM 	TB_HQ_VENDOR
+                WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                FROM 	TB_MS_VENDOR
+                WHERE 	STORE_CD = #{storeCd}
+            </when>
+        </choose>
+        )
+    </select>
 
 
     <!-- 기초마스터등록 - 상품분류 조회 -->
@@ -577,8 +581,8 @@
     <select id="getVendrCdInsertList"  parameterType="ProdExcelUploadVO" resultType="DefaultMap">
         /* ProdExcelUploadMapper.getVendrCdInsertList */
         SELECT 	DISTINCT VENDR_CD AS VENDR_NM,
-                '1' AS VENDOR_FG,
-                'Y' AS VAT_INCLD_YN
+        '1' AS VENDOR_FG,
+        'Y' AS VAT_INCLD_YN
         FROM    TB_TMP_EXCEL_PRODUCT
         WHERE   1=1
         AND SESSION_ID = #{sessionId}
