@@ -158,12 +158,12 @@ a.btn_green:hover {background:#289643; transition:all 0.2s;}
 
 .updownSet {display:block; height:30px; text-align:right; position:relative;}
 
-button.btn_up {position:relative; top:-5px; background:#fff; border:1px solid #93cbfc; color:#337dde; border-radius:4px; line-height:23px; height:25px; padding:0 10px; font-size:0px; transition:all 0.2s; display:inline;}
+button.btn_up {position:relative; top:-3px; background:#fff; border:1px solid #93cbfc; color:#337dde; border-radius:4px; line-height:23px; height:25px; padding:0 10px; font-size:0px; transition:all 0.2s; display:inline;}
 button.btn_up:hover {background:#93cbfc; color:#fff; transition:all 0.2s;}
 button.btn_up:before {content:''; position:absolute; left:7px; top:6px; background:url(../img/menu_bullet_blue.png) no-repeat; width:6px; height:10px; transform:rotate(-90deg);}
 button.btn_up:hover:before {content:''; position:absolute; left:7px; top:6px; background:url(../img/menu_bullet.png) no-repeat; width:6px; height:10px; transform:rotate(-90deg);}
 
-button.btn_down {position:relative; top:-5px; background:#fff; border:1px solid #93cbfc; color:#337dde; border-radius:4px; line-height:23px; height:25px; padding:0 10px; font-size:0px; transition:all 0.2s; display:inline;}
+button.btn_down {position:relative; top:-3px; background:#fff; border:1px solid #93cbfc; color:#337dde; border-radius:4px; line-height:23px; height:25px; padding:0 10px; font-size:0px; transition:all 0.2s; display:inline;}
 button.btn_down:hover {background:#93cbfc; color:#fff; transition:all 0.2s;}
 button.btn_down:before {content:''; position:absolute; left:7px; top:6px; background:url(../img/menu_bullet_blue.png) no-repeat; width:6px; height:10px; transform:rotate(90deg);}
 button.btn_down:hover:before {content:''; position:absolute; left:7px; top:6px; background:url(../img/menu_bullet.png) no-repeat; width:6px; height:10px; transform:rotate(90deg);}

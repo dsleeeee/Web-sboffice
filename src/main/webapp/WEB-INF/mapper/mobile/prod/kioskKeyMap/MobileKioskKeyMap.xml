@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MobileKioskKeyMap.xml
+    (모바일) 상품관리 > 키오스크키맵
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.08.23     최초작성
+-->
+<mapper namespace="kr.co.solbipos.mobile.prod.kioskKeyMap.service.impl.MobileKioskKeyMapMapper">
+    <!-- 매장키맵 조회 -->
+    <!--
+        TABLE    : TB_HQ_BRAND, TB_MS_BRAND
+        PARAM    : mobileKioskKeyMapVO
+        COMMENTS : 매장키맵 목록을 가져온다.
+    -->
+    <select id="getMobileKioskKeyMapStoreList" parameterType="mobileKioskKeyMapVO" resultType="DefaultMap">
+        /* MobileKioskKeyMap.getMobileKioskKeyMapStoreList */
+        SELECT  TU_CLS_CD,
+                TU_CLS_NM,
+                TU_CLS_TYPE,
+                POS_NO,
+                '4068' AS ENVST_CD
+        FROM    TB_MS_KIOSK_CLS
+        WHERE   STORE_CD = #{storeCd}
+        AND     POS_NO = #{posNo}
+        AND     TU_CLS_TYPE = NVL(( SELECT  ENVST_VAL
+                                    FROM    TB_MS_POS_ENVST
+                                    WHERE   STORE_CD  = #{storeCd}
+                                    AND     POS_NO = #{posNo}
+                                    AND 	ENVST_CD = '4068'), '01')
+        ORDER BY INDEX_NO
+    </select>
+
+    <!-- 포장키맵 조회 -->
+    <!--
+        TABLE    : TB_HQ_BRAND, TB_MS_BRAND
+        PARAM    : mobileKioskKeyMapVO
+        COMMENTS : 포장키맵 목록을 가져온다.
+    -->
+    <select id="getMobileKioskKeyMapPackList" parameterType="mobileKioskKeyMapVO" resultType="DefaultMap">
+        /* MobileKioskKeyMap.getMobileKioskKeyMapPackList */
+        SELECT  TU_CLS_CD,
+                TU_CLS_NM,
+                TU_CLS_TYPE,
+                POS_NO,
+                '4069' AS ENVST_CD
+        FROM    TB_MS_KIOSK_CLS
+        WHERE   STORE_CD = #{storeCd}
+        AND     POS_NO = #{posNo}
+        AND     TU_CLS_TYPE = NVL(( SELECT  ENVST_VAL
+                                    FROM    TB_MS_POS_ENVST
+                                    WHERE   STORE_CD  = #{storeCd}
+                                    AND     POS_NO = #{posNo}
+                                    AND 	ENVST_CD = '4069'), '01')
+        ORDER BY INDEX_NO
+    </select>
+
+    <!-- 포장키맵 저장 -->
+    <!--
+        TABLE    : TB_HQ_BRAND, TB_MS_BRAND
+        PARAM    : mobileKioskKeyMapVO
+        COMMENTS : 포장키맵 목록을 가져온다.
+    -->
+    <update id="getMobileKioskKeyMapGrpSave" parameterType="mobileKioskKeyMapVO">
+        /* MobileKioskKeyMap.getMobileKioskKeyMapGrpSave */
+        UPDATE  TB_MS_KIOSK_CLS
+        SET     INDEX_NO    = #{indexNo},
+                MOD_DT      = #{modDt},
+                MOD_ID      = #{modId}
+        WHERE   STORE_CD    = #{storeCd}
+        AND     POS_NO      = #{posNo}
+        AND     TU_CLS_TYPE = #{tuClsType}
+        AND     TU_CLS_CD   = #{tuClsCd}
+    </update>
+
+    <!-- 키맵 상품 조회 -->
+    <!--
+        TABLE    : TB_HQ_BRAND, TB_MS_BRAND
+        PARAM    : mobileKioskKeyMapVO
+        COMMENTS : 키맵 상품 목록을 가져온다.
+    -->
+    <select id="getMobileKioskKeyMapProdList" parameterType="mobileKioskKeyMapVO" resultType="DefaultMap">
+        /* MobileKioskKeyMap.getMobileKioskKeyMapProdList */
+        SELECT  tmkk.TU_CLS_CD,
+                tmkk.TU_KEY_CD,
+                tmkk.POS_NO,
+                tmkk.PROD_CD,
+                tmp.PROD_NM,
+                #{tuClsType} AS TU_CLS_TYPE
+        FROM    TB_MS_KIOSK_KEY tmkk,
+                TB_MS_PRODUCT tmp
+        WHERE   tmp.STORE_CD (+) = tmkk.STORE_CD
+        AND     tmp.PROD_CD (+) = tmkk.PROD_CD
+        AND     tmkk.STORE_CD = #{storeCd}
+        AND     tmkk.POS_NO = #{posNo}
+        AND     tmkk.TU_CLS_TYPE = #{tuClsType}
+        AND     tmkk.TU_CLS_CD = #{tuClsCd}
+        ORDER BY INDEX_NO
+    </select>
+
+    <!-- 포장키맵 저장 -->
+    <!--
+        TABLE    : TB_HQ_BRAND, TB_MS_BRAND
+        PARAM    : mobileKioskKeyMapVO
+        COMMENTS : 포장키맵 목록을 가져온다.
+    -->
+    <update id="getMobileKioskKeyMapProdSave" parameterType="mobileKioskKeyMapVO">
+        /* MobileKioskKeyMap.getMobileKioskKeyMapProdSave */
+        UPDATE  TB_MS_KIOSK_KEY
+        SET     INDEX_NO    = #{indexNo},
+                MOD_DT      = #{modDt},
+                MOD_ID      = #{modId}
+        WHERE   STORE_CD    = #{storeCd}
+        AND     POS_NO      = #{posNo}
+        AND     TU_CLS_TYPE = #{tuClsType}
+        AND     TU_CLS_CD   = #{tuClsCd}
+        AND     PROD_CD     = #{prodCd}
+    </update>
+</mapper>
