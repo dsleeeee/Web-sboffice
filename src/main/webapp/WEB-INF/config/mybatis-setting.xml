@@ -921,6 +921,8 @@
     <typeAlias alias="mobileProdSoldOutVO" type="kr.co.solbipos.mobile.prod.prodSoldOut.service.MobileProdSoldOutVO"/>
     <!-- (모바일) 상품관리 > 품절관리(선택메뉴) -->
     <typeAlias alias="mobileSideMenuSoldOutVO" type="kr.co.solbipos.mobile.prod.sideMenuSoldOut.service.MobileSideMenuSoldOutVO"/>
+    <!-- (모바일) 상품관리 > 키오스크키맵 -->
+    <typeAlias alias="mobileKioskKeyMapVO" type="kr.co.solbipos.mobile.prod.kioskKeyMap.service.MobileKioskKeyMapVO"/>
     <!-- ====================================== 모바일 끝 ====================================== -->
 
   </typeAliases>
