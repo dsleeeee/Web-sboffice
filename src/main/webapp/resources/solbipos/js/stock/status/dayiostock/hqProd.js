@@ -208,6 +208,8 @@ app.controller('dayIostockMainCtrl', ['$scope', '$http', '$timeout', function ($
         var params       = {};
 		params.prodCd = selectedRow.prodCd; // 상품코드
 		params.prodNm = selectedRow.prodNm; // 상품명
+		params.storeCd		= $("#storeCd").val();
+		params.storeNm = $("#storeNm").val();
 		params.startDate = selectedRow.startDate; // 시작날짜
 		params.endDate = selectedRow.startDate; // 종료날짜
 

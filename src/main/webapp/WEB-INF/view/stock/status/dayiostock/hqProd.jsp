@@ -118,7 +118,9 @@
       </tbody>
     </table>
 
-    <input type="hidden" id="hqOfficeCd" value="${sessionInfo.hqOfficeCd}"/>
+	<input type="hidden" id="hqOfficeCd" value="${sessionInfo.hqOfficeCd}"/>
+	<input type="hidden" id="storeCd" value="${sessionInfo.storeCd}"/>
+	<input type="hidden" id="storeNm" value="${sessionInfo.storeNm}"/>
 
     <div ng-controller="dayIostockMainCtrl">
 	    <div class="mt20 oh sb-select dkbr">
@@ -259,7 +261,7 @@
 </div>
 <!-- //contents end -->
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/status/dayiostock/hqProd.js?ver=20220803.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/status/dayiostock/hqProd.js?ver=20220803.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
