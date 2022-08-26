@@ -13,11 +13,11 @@
     <div class="searchBar">
         <a href="#" class="fl"><s:message code="mobile.kioskKeyMap"/></a>
         <%-- 조회 --%>
-        <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('mobileKioskKeyMapGrpCtrl', '4068')">
-            <s:message code="mobile.kioskKeyMap.store"/><s:message code="mobile.cmm.search"/>
-        </button>
         <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('mobileKioskKeyMapGrpCtrl', '4069')">
             <s:message code="mobile.kioskKeyMap.pack"/><s:message code="mobile.cmm.search"/>
+        </button>
+        <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('mobileKioskKeyMapGrpCtrl', '4068')">
+            <s:message code="mobile.kioskKeyMap.store"/><s:message code="mobile.cmm.search"/>
         </button>
     </div>
     <table class="searchTbl">
