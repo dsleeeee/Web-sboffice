@@ -34,8 +34,10 @@
 	            ,       TB_HQ_PRODUCT_BARCD THPB
 	            WHERE   TPHVI.HQ_OFFICE_CD  =   #{hqOfficeCd}
 	            AND     TPHVI.SLIP_FG       =   '1'       /* 입고:1, 출고:-1 */
+	            AND     TPHVI.PROC_FG       =   '1'
 	            AND     TPHVI.INSTOCK_DATE  =   #{saleDate}
 				AND THP.STOCK_PROD_YN = 'Y'
+				AND THP.USE_YN = 'Y'
 	            AND     TPHVI.HQ_OFFICE_CD  =   TPHVID.HQ_OFFICE_CD
 	            AND     TPHVI.SLIP_NO       =   TPHVID.SLIP_NO
 	            AND     TPHVID.HQ_OFFICE_CD =   THP.HQ_OFFICE_CD
@@ -86,8 +88,10 @@
 	            ,       TB_HQ_PRODUCT_BARCD THPB
 	            WHERE   TPHVI.HQ_OFFICE_CD  =   #{hqOfficeCd}
 	             AND     TPHVI.SLIP_FG       =   '-1'       /* 입고:1, 출고:-1 */
+	             AND     TPHVI.PROC_FG       =   '1'
 	            AND     TPHVI.INSTOCK_DATE  =   #{saleDate}
 				AND THP.STOCK_PROD_YN = 'Y'
+				AND THP.USE_YN = 'Y'
 	            AND     TPHVI.HQ_OFFICE_CD  =   TPHVID.HQ_OFFICE_CD
 	            AND     TPHVI.SLIP_NO       =   TPHVID.SLIP_NO
 	            AND     TPHVID.HQ_OFFICE_CD =   THP.HQ_OFFICE_CD
@@ -142,6 +146,7 @@
 	             AND     TPHSO.PROC_FG      IN  ('20', '30')
 	            AND     TPHSO.OUT_DATE      =   #{saleDate}
 				AND THP.STOCK_PROD_YN = 'Y'
+				AND THP.USE_YN = 'Y'
 	            AND     TPHSO.HQ_OFFICE_CD  =   TPHSOD.HQ_OFFICE_CD
 	            AND     TPHSO.SLIP_NO       =   TPHSOD.SLIP_NO
 	            AND     TPHSOD.HQ_OFFICE_CD =   THP.HQ_OFFICE_CD
@@ -195,6 +200,7 @@
 	            AND     TPHSO.PROC_FG      =  '30'
 	            AND     TPHSO.IN_DATE      =   #{saleDate}
 				AND THP.STOCK_PROD_YN = 'Y'
+				AND THP.USE_YN = 'Y'
 	            AND     TPHSO.HQ_OFFICE_CD  =   TPHSOD.HQ_OFFICE_CD
 	            AND     TPHSO.SLIP_NO       =   TPHSOD.SLIP_NO
 	            AND     TPHSOD.HQ_OFFICE_CD =   THP.HQ_OFFICE_CD
@@ -245,6 +251,8 @@
 	            WHERE   TPSM.HQ_OFFICE_CD  =    #{hqOfficeCd}
 	            AND     TPSM.MOVE_DATE      =   #{saleDate}
 				AND THP.STOCK_PROD_YN = 'Y'
+				AND THP.USE_YN = 'Y'
+				AND TPSM.PROC_FG = '3'
 	            AND     TPSM.HQ_OFFICE_CD  =    TPSMD.HQ_OFFICE_CD
 	            AND     TPSM.SLIP_NO       =    TPSMD.SLIP_NO
 	            AND     TPSMD.HQ_OFFICE_CD  =   THP.HQ_OFFICE_CD
@@ -296,6 +304,8 @@
 	            WHERE   TPSM.HQ_OFFICE_CD  =    #{hqOfficeCd}
 	            AND     TPSM.MOVE_DATE      =   #{saleDate}
 				AND THP.STOCK_PROD_YN = 'Y'
+				AND THP.USE_YN = 'Y'
+				AND TPSM.PROC_FG = '3'
 	            AND     TPSM.HQ_OFFICE_CD  =    TPSMD.HQ_OFFICE_CD
 	            AND     TPSM.SLIP_NO       =    TPSMD.SLIP_NO
 	            AND     TPSMD.HQ_OFFICE_CD  =   THP.HQ_OFFICE_CD
@@ -346,6 +356,8 @@
 	            WHERE   TSHD.HQ_OFFICE_CD   =   #{hqOfficeCd}
 	            AND     TSHD.DISUSE_DATE    =   #{saleDate}
 				AND THP.STOCK_PROD_YN = 'Y'
+				AND THP.USE_YN = 'Y'
+				AND TSHD.PROC_FG = '1'
 	            AND     TSHD.HQ_OFFICE_CD   =   TSHDD.HQ_OFFICE_CD
 	            AND     TSHD.DISUSE_DATE    =   TSHDD.DISUSE_DATE
 	            AND     TSHD.SEQ_NO         =   TSHDD.SEQ_NO
@@ -398,6 +410,8 @@
 	            WHERE   TSHA.HQ_OFFICE_CD   =   #{hqOfficeCd}
 	            AND     TSHA.ADJ_DATE       =   #{saleDate}
 				AND THP.STOCK_PROD_YN = 'Y'
+				AND THP.USE_YN = 'Y'
+				AND TSHA.PROC_FG = '1'
 	            AND     TSHA.HQ_OFFICE_CD   =   TSHAD.HQ_OFFICE_CD
 	            AND     TSHA.ADJ_DATE       =   TSHAD.ADJ_DATE
 	            AND     TSHA.SEQ_NO         =   TSHAD.SEQ_NO
@@ -432,6 +446,8 @@
 				WHERE   TSHA.HQ_OFFICE_CD   =   #{hqOfficeCd}
 				AND     TSHA.ACINS_DATE		=   #{saleDate}
 				AND 	THP.STOCK_PROD_YN = 'Y'
+				AND 	THP.USE_YN = 'Y'
+				AND 	TSHA.PROC_FG = '1'
 				AND     TSHA.HQ_OFFICE_CD   =   TSHAD.HQ_OFFICE_CD
 				AND     TSHA.ACINS_DATE       =   TSHAD.ACINS_DATE
 				AND     TSHA.SEQ_NO         =   TSHAD.SEQ_NO
@@ -484,6 +500,7 @@
 	            WHERE   TSHSC.HQ_OFFICE_CD      =   #{hqOfficeCd}
 	            AND     TSHSC.SET_DATE      =   #{saleDate}
 				AND THP.STOCK_PROD_YN = 'Y'
+				AND THP.USE_YN = 'Y'
 	            AND     TSHSC.HQ_OFFICE_CD  =   TSHSCD.HQ_OFFICE_CD
 	            AND     TSHSC.SET_DATE      =   TSHSCD.SET_DATE
 	            AND     TSHSC.SEQ_NO        =   TSHSCD.SEQ_NO
@@ -537,6 +554,7 @@
 		,       TB_MS_PRODUCT_BARCD TMPB
 		WHERE   TPHSO.STORE_CD      =   #{storeCd}
 		AND 	TMP.STOCK_PROD_YN = 'Y'
+		AND 	TMP.USE_YN = 'Y'
 		AND     TPHSO.SLIP_FG       =   '1'
 		AND     TPHSO.SLIP_KIND    =   '0'
 		AND     TPHSO.PROC_FG      = '30'
@@ -592,6 +610,7 @@
 		,       TB_MS_PRODUCT_BARCD TMPB
 		WHERE   TPHSO.STORE_CD      =   #{storeCd}
 		AND 	TMP.STOCK_PROD_YN = 'Y'
+		AND 	TMP.USE_YN = 'Y'
 		AND     TPHSO.SLIP_FG       =   '-1'       /* 입고:1, 출고:-1 */
 		AND     TPHSO.SLIP_KIND    =   '0'
 		AND     TPHSO.PROC_FG      IN  ('20', '30')
@@ -647,7 +666,9 @@
 		,       TB_MS_PRODUCT_BARCD TMPB
 		WHERE   TPSVI.STORE_CD      =   #{storeCd}
 		AND 	TMP.STOCK_PROD_YN = 'Y'
+		AND 	TMP.USE_YN = 'Y'
 		AND     TPSVI.SLIP_FG       =   '1'       /* 입고:1, 출고:-1 */
+		AND     TPSVI.PROC_FG       =   '1'       /* 입고:1, 출고:-1 */
 		<if test="saleDate != '' and saleDate != null">
 			AND TPSVI.INSTOCK_DATE   =   #{saleDate}
 		</if>
@@ -701,7 +722,9 @@
 		,       TB_MS_PRODUCT_BARCD TMPB
 		WHERE   TPSVI.STORE_CD      =   #{storeCd}
 		AND 	TMP.STOCK_PROD_YN = 'Y'
+		AND 	TMP.USE_YN = 'Y'
 		AND     TPSVI.SLIP_FG       =   '-1'       /* 입고:1, 출고:-1 */
+		AND     TPSVI.PROC_FG       =   '1'
 		<if test="saleDate != '' and saleDate != null">
 			AND TPSVI.INSTOCK_DATE   =   #{saleDate}
 		</if>
@@ -756,6 +779,8 @@
 		WHERE   TPSM.HQ_OFFICE_CD   =   #{hqOfficeCd}
 		AND     TPSM.IN_STORE_CD    =   #{storeCd}
 		AND THP.STOCK_PROD_YN = 'Y'
+		AND THP.USE_YN = 'Y'
+		AND TPSM.PROC_FG = '3'
 		<if test="saleDate != '' and saleDate != null">
 			AND TPSM.MOVE_DATE      =   #{saleDate}
 		</if>
@@ -810,6 +835,8 @@
 			WHERE   TPSM.HQ_OFFICE_CD   =   #{hqOfficeCd}
 			AND     TPSM.OUT_STORE_CD   =   #{storeCd}
 			AND THP.STOCK_PROD_YN = 'Y'
+			AND THP.USE_YN = 'Y'
+			AND TPSM.PROC_FG = '3'
 			<if test="saleDate != '' and saleDate != null">
 				AND TPSM.MOVE_DATE      =   #{saleDate}
 			</if>
@@ -863,6 +890,8 @@
 		,       TB_MS_PRODUCT_BARCD TMPB
 		WHERE   TSSD.STORE_CD       =   #{storeCd}
 		AND TMP.STOCK_PROD_YN = 'Y'
+		AND TMP.USE_YN = 'Y'
+		AND TSSD.PROC_FG = '1'
 		<if test="saleDate != '' and saleDate != null">
 			AND TSSD.DISUSE_DATE    =   #{saleDate}
 		</if>
@@ -917,6 +946,8 @@
 		,       TB_MS_PRODUCT_BARCD TMPB
 		WHERE   TSSA.STORE_CD       =   #{storeCd}
 		AND TMP.STOCK_PROD_YN = 'Y'
+		AND TMP.USE_YN = 'Y'
+		AND TSSA.PROC_FG = '1'
 		<if test="saleDate != '' and saleDate != null">
 			AND TSSA.ADJ_DATE       =   #{saleDate}
 		</if>
@@ -936,6 +967,42 @@
 		,       TMP.PROD_CD
 		,       TMP.PROD_NM
 		,       TMPB.BARCD_CD
+		UNION ALL
+		SELECT  TSHA.ACINS_DATE AS ADJ_DATE
+		,       TSHA.SEQ_NO
+		,       TSHA.ACINS_TITLE AS ADJ_TITLE
+		,       DECODE(TSHA.PROC_FG,'0','입력','확정') AS PROD_FG_NM
+		,       THP.PROD_CLASS_CD
+		,       THP.PROD_CD
+		,       THP.PROD_NM
+		,       THPB.BARCD_CD
+		,       SUM(TSHAD.ADJ_QTY)      AS ADJ_QTY
+		,       SUM(TSHAD.ACINS_AMT)	AS ADJ_AMT
+		FROM    TB_ST_STORE_ACTUAL_INSPECTION TSHA
+		,       TB_ST_STORE_ACTUAL_INSPECTION_DTL TSHAD
+		,       TB_MS_PRODUCT THP
+		,       TB_MS_PRODUCT_BARCD THPB
+		WHERE   TSHA.STORE_CD   =   #{storeCd}
+		AND     TSHA.ACINS_DATE		=   #{saleDate}
+		AND 	THP.STOCK_PROD_YN = 'Y'
+		AND 	THP.USE_YN = 'Y'
+		AND 	TSHA.PROC_FG = '1'
+		AND     TSHA.STORE_CD   =   TSHAD.STORE_CD
+		AND     TSHA.ACINS_DATE       =   TSHAD.ACINS_DATE
+		AND     TSHA.SEQ_NO         =   TSHAD.SEQ_NO
+		AND     TSHAD.STORE_CD  =   THP.STORE_CD
+		AND     TSHAD.PROD_CD       =   THP.PROD_CD
+		AND     TSHAD.STORE_CD  =   THPB.STORE_CD(+)
+		AND     TSHAD.PROD_CD       =   THPB.PROD_CD(+)
+		GROUP
+		BY      TSHA.ACINS_DATE
+		,       TSHA.SEQ_NO
+		,       TSHA.ACINS_TITLE
+		,       TSHA.PROC_FG
+		,       THP.PROD_CLASS_CD
+		,       THP.PROD_CD
+		,       THP.PROD_NM
+		,       THPB.BARCD_CD
 		)   B
 		ORDER
 		BY      B.PROD_CD
@@ -1231,6 +1298,7 @@
                 ,       TB_MS_PRODUCT_BARCD TMPB
                 WHERE   TPHSO.STORE_CD      =   #{storeCd}
 				AND TMP.STOCK_PROD_YN = 'Y'
+				AND TMP.USE_YN = 'Y'
                 <if test="ioOccrFg == '03'">
                 AND     TPHSO.SLIP_FG       =   '1'       /* 입고:1, 출고:-1 */
                 </if>
@@ -1280,6 +1348,7 @@
                 ,       TB_MS_PRODUCT_BARCD TMPB
                 WHERE   TPSVI.STORE_CD      =   #{storeCd}
 				AND TMP.STOCK_PROD_YN = 'Y'
+				AND TMP.USE_YN = 'Y'
                 <if test="ioOccrFg == '06'">
                 AND     TPSVI.SLIP_FG       =   '1'       /* 입고:1, 출고:-1 */
                 </if>
@@ -1331,6 +1400,7 @@
                 WHERE   TPSM.HQ_OFFICE_CD   =   #{hqOfficeCd}
                 AND     TPSM.IN_STORE_CD    =   #{storeCd}
 				AND THP.STOCK_PROD_YN = 'Y'
+				AND THP.USE_YN = 'Y'
                 <if test="saleDate != '' and saleDate != null">
                     AND TPSM.MOVE_DATE      =   #{saleDate}
                 </if>
@@ -1376,6 +1446,7 @@
                 WHERE   TPSM.HQ_OFFICE_CD   =   #{hqOfficeCd}
                 AND     TPSM.OUT_TOT_QTY    =   #{storeCd}
 				AND THP.STOCK_PROD_YN = 'Y'
+				AND THP.USE_YN = 'Y'
                 <if test="saleDate != '' and saleDate != null">
                     AND TPSM.MOVE_DATE      =   #{saleDate}
                 </if>
@@ -1420,6 +1491,7 @@
                 ,       TB_MS_PRODUCT_BARCD TMPB
                 WHERE   TSSD.STORE_CD       =   #{storeCd}
 				AND TMP.STOCK_PROD_YN = 'Y'
+				AND TMP.USE_YN = 'Y'
                 <if test="saleDate != '' and saleDate != null">
                     AND TSSD.DISUSE_DATE    =   #{saleDate}
                 </if>
@@ -1465,6 +1537,7 @@
                 ,       TB_MS_PRODUCT_BARCD TMPB
                 WHERE   TSSA.STORE_CD       =   #{storeCd}
 				AND TMP.STOCK_PROD_YN = 'Y'
+				AND TMP.USE_YN = 'Y'
                 <if test="saleDate != '' and saleDate != null">
                     AND TSSA.ADJ_DATE       =   #{saleDate}
                 </if>
@@ -1510,6 +1583,7 @@
                 ,       TB_MS_PRODUCT_BARCD TMPB
                 WHERE   TSSSC.STORE_CD      =   #{storeCd}
 				AND TMP.STOCK_PROD_YN = 'Y'
+				AND TMP.USE_YN = 'Y'
                 <if test="saleDate != '' and saleDate != null">
                     AND TSSSC.SET_DATE      =   #{saleDate}
                 </if>
@@ -1562,6 +1636,7 @@
 		   , TB_HQ_PRODUCT THP
  		WHERE TSHSD.HQ_OFFICE_CD = #{hqOfficeCd}
 		AND THP.STOCK_PROD_YN = 'Y'
+		AND THP.USE_YN = 'Y'
 		AND TSHSD.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
 		AND TSHSD.PROD_CD = THP.PROD_CD
  			 <!-- !!!!!!!!!!!!!!!!!!! 날짜랑 상품코드 조건은 '업무쿼리'에 없었는데 직접 추가함. 물어보고 빼든지 말든지 하기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
@@ -1595,6 +1670,7 @@
 		   , TB_MS_PRODUCT TMP
  		WHERE TSSSD.STORE_CD 	= #{storeCd}
 		AND TMP.STOCK_PROD_YN = 'Y'
+		AND TMP.USE_YN = 'Y'
 		AND TSSSD.STORE_CD = TMP.STORE_CD
 		AND TSSSD.PROD_CD = TMP.PROD_CD
  			 <!-- !!!!!!!!!!!!!!!!!!! 날짜랑 상품코드 조건은 '업무쿼리'에 없었는데 직접 추가함. 물어보고 빼든지 말든지 하기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
@@ -1617,6 +1693,7 @@
              , TB_HQ_PRODUCT THP
 		 WHERE TPHVI.HQ_OFFICE_CD   = #{hqOfficeCd}
 		   AND TPHVI.SLIP_FG        = '1'       /* 입고:1, 출고:-1 */
+		   AND TPHVI.PROC_FG        = '1'
 		    <if test="prodCd != null and prodCd != ''">
 		   		AND TPHVID.PROD_CD       = #{prodCd}     /* 상품코드 */
 		    </if>
@@ -1626,6 +1703,7 @@
 		   AND TPHVI.HQ_OFFICE_CD   = TPHVID.HQ_OFFICE_CD
 		   AND TPHVI.SLIP_NO        = TPHVID.SLIP_NO
             AND THP.STOCK_PROD_YN = 'Y'
+            AND THP.USE_YN = 'Y'
             AND TPHVID.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
             AND TPHVID.PROD_CD = THP.PROD_CD
 		 GROUP BY TPHVID.HQ_BRAND_CD
@@ -1648,6 +1726,7 @@
              , TB_HQ_PRODUCT THP
 		 WHERE TPHVI.HQ_OFFICE_CD   = #{hqOfficeCd}
 		   AND TPHVI.SLIP_FG        = '-1'       /* 입고:1, 출고:-1 */
+		   AND TPHVI.PROC_FG        = '1'
 		   <if test="prodCd != null and prodCd != ''">
 		   		AND TPHVID.PROD_CD       = #{prodCd}     /* 상품코드 */
 		   </if>
@@ -1657,6 +1736,7 @@
 		   AND TPHVI.HQ_OFFICE_CD   = TPHVID.HQ_OFFICE_CD
 		   AND TPHVI.SLIP_NO        = TPHVID.SLIP_NO
             AND THP.STOCK_PROD_YN = 'Y'
+            AND THP.USE_YN = 'Y'
             AND TPHVID.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
             AND TPHVID.PROD_CD = THP.PROD_CD
 		 GROUP BY TPHVID.HQ_BRAND_CD
@@ -1693,6 +1773,7 @@
 		   AND TPHSO.OUT_DATE BETWEEN #{startDate} AND #{endDate}
 		   </if>
             AND THP.STOCK_PROD_YN = 'Y'
+            AND THP.USE_YN = 'Y'
             AND TPHSOD.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
             AND TPHSOD.PROD_CD = THP.PROD_CD
 		 GROUP BY TPHSO.SLIP_NO
@@ -1731,6 +1812,7 @@
 		   		AND TPHSO.IN_DATE BETWEEN #{startDate} AND #{endDate}
 		   </if>
             AND THP.STOCK_PROD_YN = 'Y'
+            AND THP.USE_YN = 'Y'
             AND TPHSOD.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
             AND TPHSOD.PROD_CD = THP.PROD_CD
 		 GROUP BY TPHSO.SLIP_NO
@@ -1765,6 +1847,7 @@
 		   </if>
 		   AND TPSM.HQ_OFFICE_CD    = TPSMD.HQ_OFFICE_CD
 		   AND TPSM.SLIP_NO         = TPSMD.SLIP_NO
+		   AND TPSM.PROC_FG         = '3'
 		   <if test="prodCd != null and prodCd != ''">
 		   AND TPSMD.PROD_CD        = #{prodCd}
 		   </if>
@@ -1772,6 +1855,7 @@
 		   AND TPSM.MOVE_DATE   BETWEEN #{startDate} AND #{endDate}
 		   </if>
             AND THP.STOCK_PROD_YN = 'Y'
+            AND THP.USE_YN = 'Y'
             AND TPSMD.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
             AND TPSMD.PROD_CD = THP.PROD_CD
 		 GROUP BY TPSM.SLIP_NO
@@ -1806,6 +1890,7 @@
 	   	   </if>
 	   	   AND TPSM.HQ_OFFICE_CD    = TPSMD.HQ_OFFICE_CD
 	   	   AND TPSM.SLIP_NO         = TPSMD.SLIP_NO
+		   AND TPSM.PROC_FG         = '3'
 	   	   <if test="prodCd != null and prodCd != ''">
 	   	   AND TPSMD.PROD_CD        = #{prodCd}
 	   	   </if>
@@ -1813,6 +1898,7 @@
 	   	   AND TPSM.MOVE_DATE   BETWEEN #{startDate} AND #{endDate}
 	   	   </if>
             AND THP.STOCK_PROD_YN = 'Y'
+            AND THP.USE_YN = 'Y'
             AND TPSMD.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
             AND TPSMD.PROD_CD = THP.PROD_CD
 	   	 GROUP BY TPSM.SLIP_NO
@@ -1848,6 +1934,8 @@
 				   AND TSHD.DISUSE_DATE BETWEEN #{startDate} AND #{endDate}
 				   </if>
                     AND THP.STOCK_PROD_YN = 'Y'
+                    AND THP.USE_YN = 'Y'
+                    AND TSHD.PROC_FG = '1'
                     AND TSHDD.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
                     AND TSHDD.PROD_CD = THP.PROD_CD
 				 GROUP BY TSHD.DISUSE_DATE
@@ -1878,6 +1966,8 @@
 						AND TSSD.DISUSE_DATE BETWEEN #{startDate} AND #{endDate}
 				   </if>
                     AND TMP.STOCK_PROD_YN = 'Y'
+                    AND TMP.USE_YN = 'Y'
+					AND TSSD.PROC_FG = '1'
                     AND TSSDD.STORE_CD = TMP.STORE_CD
                     AND TSSDD.PROD_CD = TMP.PROD_CD
 				 GROUP BY TSSD.DISUSE_DATE
@@ -1915,6 +2005,8 @@
 				   AND TSHAI.ACINS_DATE BETWEEN #{startDate} AND #{endDate}
 				   </if>
                     AND THP.STOCK_PROD_YN = 'Y'
+                    AND THP.USE_YN = 'Y'
+                    AND TSHAI.PROC_FG = '1'
                     AND TSHAID.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
                     AND TSHAID.PROD_CD = THP.PROD_CD
                  GROUP BY TSHAI.ACINS_DATE
@@ -1943,6 +2035,8 @@
 				   AND TSHA.ADJ_DATE BETWEEN #{startDate} AND #{endDate}
 				   </if>
                     AND THP.STOCK_PROD_YN = 'Y'
+                    AND THP.USE_YN = 'Y'
+					AND TSHA.PROC_FG = '1'
                     AND TSHAD.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
                     AND TSHAD.PROD_CD = THP.PROD_CD
 				 GROUP BY TSHA.ADJ_DATE
@@ -1974,6 +2068,8 @@
 						AND TSSAI.ACINS_DATE BETWEEN #{startDate} AND #{endDate}
 				   </if>
                     AND TMP.STOCK_PROD_YN = 'Y'
+                    AND TMP.USE_YN = 'Y'
+                    AND TSSAI.PROC_FG = '1'
                     AND TSSAID.STORE_CD = TMP.STORE_CD
                     AND TSSAID.PROD_CD = TMP.PROD_CD
 				 GROUP BY TSSAI.ACINS_DATE
@@ -2002,6 +2098,8 @@
 						AND TSSA.ADJ_DATE BETWEEN #{startDate} AND #{endDate}
 				   </if>
                     AND TMP.STOCK_PROD_YN = 'Y'
+                    AND TMP.USE_YN = 'Y'
+					AND TSSA.PROC_FG = '1'
                     AND TSSAD.STORE_CD = TMP.STORE_CD
                     AND TSSAD.PROD_CD = TMP.PROD_CD
 				 GROUP BY TSSA.ADJ_DATE
@@ -2026,15 +2124,18 @@
 		     , TB_HQ_PRODUCT THP
 		 WHERE TPHSO.STORE_CD   = #{storeCd}
 		   AND TPHSO.SLIP_FG        = '1'       /* 주문:1, 반품:-1 */
+		   AND TPHSO.SLIP_KIND	=   '0'
+		   AND TPHSO.PROC_FG	= '30'
 		   AND TPHSO.HQ_OFFICE_CD   = TPHSOD.HQ_OFFICE_CD
 		   AND TPHSO.SLIP_NO        = TPHSOD.SLIP_NO
 		   <if test="prodCd != null and prodCd != ''">
 		   		AND TPHSOD.PROD_CD		= #{prodCd}		/* 상품코드 */
 		   </if>
 		   <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
-		   		AND TPHSO.OUT_DATE BETWEEN #{startDate} AND #{endDate}
+		   		AND TPHSO.IN_DATE BETWEEN #{startDate} AND #{endDate}
 		   </if>
 		   AND THP.STOCK_PROD_YN = 'Y'
+		   AND THP.USE_YN = 'Y'
 	       AND TPHSOD.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
 		   AND TPHSOD.PROD_CD = THP.PROD_CD
 		 GROUP BY TPHSO.SLIP_NO
@@ -2067,12 +2168,13 @@
 		   		AND TPHSO.OUT_DATE BETWEEN #{startDate} AND #{endDate}
 		   </if>
 		   AND THP.STOCK_PROD_YN = 'Y'
+		   AND THP.USE_YN = 'Y'
 		   AND TPHSOD.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
 		   AND TPHSOD.PROD_CD = THP.PROD_CD
 		 GROUP BY TPHSO.SLIP_NO
-			 , TPHSO.IN_DATE
+			 , TPHSO.OUT_DATE
 			 , TPHSO.HQ_OFFICE_CD
-		 ORDER BY TPHSO.SLIP_NO, TPHSO.IN_DATE DESC
+		 ORDER BY TPHSO.SLIP_NO, TPHSO.OUT_DATE DESC
     </select>
 
 	<select id="getPurchsInQtyDtlList" parameterType="periodIostockVO" resultType="DefaultMap">
@@ -2088,6 +2190,7 @@
 		     , TB_MS_PRODUCT TMP
 		 WHERE TPSVI.STORE_CD 		= #{storeCd}
 		   AND TPSVI.SLIP_FG		= '1'
+		   AND TPSVI.PROC_FG		= '1'
 		   AND TPSVI.STORE_CD   	= TPSVID.STORE_CD
 		   AND TPSVI.SLIP_NO        = TPSVID.SLIP_NO
 		   <if test="prodCd != null and prodCd != ''">
@@ -2097,6 +2200,7 @@
 		   		AND TPSVI.INSTOCK_DATE BETWEEN #{startDate} AND #{endDate}
 		   </if>
 			AND TMP.STOCK_PROD_YN = 'Y'
+			AND TMP.USE_YN = 'Y'
 			AND TPSVID.STORE_CD = TMP.STORE_CD
 			AND TPSVID.PROD_CD = TMP.PROD_CD
 		 GROUP BY TPSVI.STORE_CD
@@ -2112,13 +2216,14 @@
 			 , TPSVI.INSTOCK_DATE  AS CARRY_OUT_DATE
 			 , TPSVI.VENDR_CD
 		     , (SELECT VENDR_NM FROM TB_MS_VENDOR Z WHERE Z.STORE_CD = TPSVI.STORE_CD AND Z.VENDR_CD = TPSVI.VENDR_CD) AS VENDR_NM /* 거래처명 */
-			 , SUM(TPSVID.OUT_TOT_QTY * TPSVI.SLIP_FG) 	AS IN_TOT_QTY
-			 , SUM(TPSVID.OUT_TOT * TPSVI.SLIP_FG) 	 	AS IN_TOT
+			 , SUM(TPSVID.IN_TOT_QTY * TPSVI.SLIP_FG) 	AS IN_TOT_QTY
+			 , SUM(TPSVID.IN_TOT * TPSVI.SLIP_FG) 	 	AS IN_TOT
 		  FROM TB_PO_STORE_VENDR_INSTOCK TPSVI
 			 , TB_PO_STORE_VENDR_INSTOCK_DTL TPSVID
 		     , TB_MS_PRODUCT TMP
 		 WHERE TPSVI.STORE_CD 		= #{storeCd}
 		   AND TPSVI.SLIP_FG		= '-1'
+		   AND TPSVI.PROC_FG		= '1'
 		   AND TPSVI.STORE_CD   	= TPSVID.STORE_CD
 		   AND TPSVI.SLIP_NO        = TPSVID.SLIP_NO
 		   <if test="prodCd != null and prodCd != ''">
@@ -2128,6 +2233,7 @@
 		    	AND TPSVI.INSTOCK_DATE BETWEEN #{startDate} AND #{endDate}
 		   </if>
 			AND TMP.STOCK_PROD_YN = 'Y'
+			AND TMP.USE_YN = 'Y'
 			AND TPSVID.STORE_CD = TMP.STORE_CD
 			AND TPSVID.PROD_CD = TMP.PROD_CD
 		 GROUP BY TPSVI.STORE_CD
@@ -2154,6 +2260,7 @@
             AND TSDP.SALE_DATE  BETWEEN #{startDate}    AND #{endDate}
        </if>
 		AND TMP.STOCK_PROD_YN = 'Y'
+		AND TMP.USE_YN = 'Y'
 		AND TSDP.STORE_CD = TMP.STORE_CD
 		AND TSDP.PROD_CD = TMP.PROD_CD
          GROUP

@@ -269,14 +269,14 @@
 
 <script type="text/javascript">
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/stock/status/storeperiod/storePeriod.js?ver=20220803.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/status/storeperiod/storePeriod.js?ver=20220803.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
 </c:import>
 
 <%-- 상품코드 상세 레이어 --%>
-<c:import url="/WEB-INF/view/stock/status/periodiostock/hqProdCodeDtl.jsp">
+<c:import url="/WEB-INF/view/stock/status/periodiostock/storeProdCodeDtl.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

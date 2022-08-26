@@ -101,7 +101,7 @@ public class StockComPopupServiceImpl implements StockComPopupService {
 	public List<DefaultMap<String>> getCmmProdCodeDtlList(PeriodIostockVO periodIostockVO,
 			SessionInfoVO sessionInfoVO) {
     	periodIostockVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-		if( sessionInfoVO.getOrgnFg() != null && sessionInfoVO.getOrgnFg().toString().equals("HQ")) {
+		if( sessionInfoVO.getOrgnFg() != null && sessionInfoVO.getOrgnFg().toString().equals("HQ") && periodIostockVO.getStoreCd().length() == 0) {
 			return stockComPopupMapper.getCmmProdCodeHqDtlList(periodIostockVO);
 		} else {
 			return stockComPopupMapper.getCmmProdCodeStoreDtlList(periodIostockVO);

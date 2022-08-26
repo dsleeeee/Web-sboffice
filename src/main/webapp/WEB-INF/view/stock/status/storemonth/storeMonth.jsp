@@ -306,7 +306,7 @@
 </c:import>
 
 <%-- 상품코드 상세 레이어 --%>
-<c:import url="/WEB-INF/view/stock/status/periodiostock/hqProdCodeDtl.jsp">
+<c:import url="/WEB-INF/view/stock/status/periodiostock/storeProdCodeDtl.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

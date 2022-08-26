@@ -165,8 +165,13 @@
 								SET_IN_QTY,
 								SET_OUT_QTY,
 								VENDR_ORDER_QTY
-						FROM 	TB_ST_HQ_STOCK_DAILY tshsd
+						FROM 	TB_ST_HQ_STOCK_DAILY tshsd,
+						 		TB_HQ_PRODUCT THP
 						WHERE   tshsd.HQ_OFFICE_CD   =   #{hqOfficeCd}
+						AND 	tshsd.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
+						AND 	tshsd.PROD_CD = THP.PROD_CD
+						AND 	THP.STOCK_PROD_YN = 'Y'
+						AND 	THP.USE_YN = 'Y'
 						<if test='prodCd != null and prodCd != ""'>
 							AND tshsd.PROD_CD   = #{prodCd}
 						</if>
@@ -211,7 +216,9 @@
 		FROM    TB_MS_PRODUCT TMP
 		,      TB_ST_STORE_STOCK_CUR   TSSSC
 		,      TB_MS_STORE            TMS
-		WHERE   TSSSC.STORAGE_CD   =   '999'
+		WHERE   TSSSC.STORAGE_CD   	=   '999'
+		AND 	TMP.STOCK_PROD_YN	=   'Y'
+		AND 	TMP.USE_YN       	=   'Y'
 		AND		EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSSC.STORE_CD)
 		<if test='prodCd != null and prodCd != ""'>
            AND TSSSC.PROD_CD  = #{prodCd}
@@ -379,8 +386,13 @@
 									SET_IN_QTY,
 									SET_OUT_QTY,
 									VENDR_ORDER_QTY
-							FROM 	TB_ST_HQ_STOCK_DAILY tshsd
+							FROM 	TB_ST_HQ_STOCK_DAILY tshsd,
+									TB_HQ_PRODUCT THP
 							WHERE   tshsd.HQ_OFFICE_CD   =   #{hqOfficeCd}
+							AND 	tshsd.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
+							AND 	tshsd.PROD_CD = THP.PROD_CD
+							AND 	THP.STOCK_PROD_YN = 'Y'
+							AND 	THP.USE_YN = 'Y'
 							<if test='prodCd != null and prodCd != ""'>
 								AND tshsd.PROD_CD   = #{prodCd}
 							</if>
@@ -422,6 +434,8 @@
 		,      TB_ST_STORE_STOCK_CUR   TSSSC
 		,      TB_MS_STORE            TMS
 		WHERE   TSSSC.STORAGE_CD   =   '999'
+		AND 	TMP.STOCK_PROD_YN    =   'Y'
+		AND 	TMP.USE_YN           =   'Y'
 		AND		EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSSC.STORE_CD)
 		<if test='prodCd != null and prodCd != ""'>
            AND TSSSC.PROD_CD  = #{prodCd}
