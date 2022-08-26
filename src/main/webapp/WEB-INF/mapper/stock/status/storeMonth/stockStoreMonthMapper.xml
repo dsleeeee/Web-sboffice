@@ -70,6 +70,7 @@
                    AND TPSSM.STORE_CD     = TMPB.STORE_CD(+)
                    AND TPSSM.PROD_CD      = TMPB.PROD_CD(+)
                    AND TMP.STOCK_PROD_YN = 'Y'
+                   AND TMP.USE_YN = 'Y'
                    <if test='startDate != null and startDate != ""'>
                       AND TPSSM.IOSTOCK_YM  = #{startDate}
                    </if>
@@ -189,6 +190,7 @@
                    AND TPSSM.STORE_CD     = TMPB.STORE_CD(+)
                    AND TPSSM.PROD_CD      = TMPB.PROD_CD(+)
                    AND TMP.STOCK_PROD_YN = 'Y'
+                   AND TMP.USE_YN = 'Y'
                    <if test='startDate != null and startDate != ""'>
                       AND TPSSM.IOSTOCK_YM  = #{startDate}
                    </if>

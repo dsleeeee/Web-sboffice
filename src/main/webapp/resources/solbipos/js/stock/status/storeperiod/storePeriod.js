@@ -163,10 +163,11 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 	    		params.orgnFg = $scope.orgnFg;
 	    		params.prodCd = selectedRow.prodCd; // 상품코드
     			params.prodNm = selectedRow.prodNm; // 상품명
-    			params.storeCd = selectedRow.storeCd;
-    		    params.storeNm = selectedRow.storeNm;
 				params.startDate = selectedRow.startDate;
 				params.endDate = selectedRow.endDate;
+    			params.storeCd = selectedRow.storeCd;
+    		    params.storeNm = selectedRow.storeNm;
+				params.poUnitQty = selectedRow.poUnitQty; // 입수
 
 				if (col.binding === "prodCd") { // 상품코드
 	    			$scope._broadcast('prodCodeDtlCtrl', params);

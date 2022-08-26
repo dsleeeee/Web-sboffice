@@ -34,6 +34,7 @@
 				     , TB_HQ_PRODUCT THP
 				 WHERE TSHSD.HQ_OFFICE_CD = #{hqOfficeCd}
 				 AND THP.STOCK_PROD_YN = 'Y'
+				 AND THP.USE_YN = 'Y'
 				 AND TSHSD.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
 				 AND TSHSD.PROD_CD = THP.PROD_CD
 						<if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
@@ -68,6 +69,7 @@
 					  , TB_MS_PRODUCT TMP
 				 WHERE TSSSD.STORE_CD = #{storeCd}
 				 AND TMP.STOCK_PROD_YN = 'Y'
+				 AND TMP.USE_YN = 'Y'
 				 AND TSSSD.STORE_CD = TMP.STORE_CD
 				 AND TSSSD.PROD_CD = TMP.PROD_CD
 					   <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
@@ -109,6 +111,7 @@
 				      , TB_HQ_PRODUCT THP
 				 WHERE TSHSD.HQ_OFFICE_CD = #{hqOfficeCd}
 				 AND THP.STOCK_PROD_YN = 'Y'
+				 AND THP.USE_YN = 'Y'
 				 AND TSHSD.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
 				 AND TSHSD.PROD_CD = THP.PROD_CD
 						<if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
@@ -140,6 +143,7 @@
 					  , TB_MS_PRODUCT TMP
 				 WHERE TSSSD.STORE_CD = #{storeCd}
 				 AND TMP.STOCK_PROD_YN = 'Y'
+				 AND TMP.USE_YN = 'Y'
 				 AND TSSSD.STORE_CD = TMP.STORE_CD
 				 AND TSSSD.PROD_CD = TMP.PROD_CD
 					   <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">

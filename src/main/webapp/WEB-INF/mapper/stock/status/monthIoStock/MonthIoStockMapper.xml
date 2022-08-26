@@ -78,6 +78,7 @@
 			     , TB_HQ_PRODUCT_BARCD THPB
 			 WHERE TPHSM.HQ_OFFICE_CD = #{hqOfficeCd}
 		       AND THP.STOCK_PROD_YN = 'Y'
+		       AND THP.USE_YN = 'Y'
 			   <if test='startDate != null and startDate != ""'>
 		          AND TPHSM.IOSTOCK_YM  = #{startDate}
 		       </if>
@@ -202,6 +203,7 @@
 			     , TB_HQ_PRODUCT_BARCD THPB
 			 WHERE TPHSM.HQ_OFFICE_CD = #{hqOfficeCd}
 		       AND THP.STOCK_PROD_YN = 'Y'
+		       AND THP.USE_YN = 'Y'
 			   <if test='startDate != null and startDate != ""'>
 		          AND TPHSM.IOSTOCK_YM  = #{startDate}
 		       </if>
@@ -318,11 +320,13 @@
                      , SF_ZERO_TO_NULL(SUM(TPSSM.CLOSE_QTY))        AS CLOSE_QTY            /* 기말재고수량 */
                      , SF_ZERO_TO_NULL(SUM(TPSSM.CLOSE_AMT))        AS CLOSE_AMT            /* 기말재고금액 */
                  </if>
+					, #{startDate} AS START_DATE
 			  FROM TB_ST_STORE_STOCK_MONTHLY TPSSM
 			     , TB_MS_PRODUCT TMP
 			     , TB_MS_PRODUCT_BARCD TMPB
 			 WHERE TPSSM.STORE_CD    = #{storeCd}
 		       AND TMP.STOCK_PROD_YN = 'Y'
+		       AND TMP.USE_YN = 'Y'
 			   <if test='startDate != null and startDate != ""'>
 	              AND TPSSM.IOSTOCK_YM  = #{startDate}
 	           </if>
@@ -438,6 +442,7 @@
 			     , TB_MS_PRODUCT_BARCD TMPB
 			 WHERE TPSSM.STORE_CD    = #{storeCd}
 		       AND TMP.STOCK_PROD_YN = 'Y'
+		       AND TMP.USE_YN = 'Y'
 			   <if test='startDate != null and startDate != ""'>
 	              AND TPSSM.IOSTOCK_YM  = #{startDate}
 	           </if>
