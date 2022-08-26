@@ -2132,7 +2132,7 @@
 		   		AND TPHSOD.PROD_CD		= #{prodCd}		/* 상품코드 */
 		   </if>
 		   <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
-		   		AND TPHSO.OUT_DATE BETWEEN #{startDate} AND #{endDate}
+		   		AND TPHSO.IN_DATE BETWEEN #{startDate} AND #{endDate}
 		   </if>
 		   AND THP.STOCK_PROD_YN = 'Y'
 		   AND THP.USE_YN = 'Y'
