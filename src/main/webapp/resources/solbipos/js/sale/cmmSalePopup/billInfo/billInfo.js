@@ -194,6 +194,8 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
             $scope.orgSaleDate = data.orgBillNo.substr(-14, 8);
             $scope.orgPosNo    = data.orgBillNo.substr(-6, 2);
             $scope.orgBillNo   = data.orgBillNo.substr(-4);
+          } else if (data.orgBillNo === null){
+            $scope.orgBillNo = "";
           }
 
           $scope.billInfo = data; // view 종합내역에 조회한 값 세팅

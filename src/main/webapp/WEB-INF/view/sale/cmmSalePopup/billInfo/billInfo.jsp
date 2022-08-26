@@ -324,4 +324,4 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/billInfo/billInfo.js?ver=20190130.22" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/billInfo/billInfo.js?ver=20190130.23" charset="utf-8"></script>
