@@ -2561,5 +2561,73 @@
         </choose>
     </insert>
 
+    <!-- 키오스크 키맵매장적용 - 본사 키맵그룹 매장적용 시 매장 카테고리(중분류) 저장 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 본사 키맵그룹 매장적용 시 매장 카테고리(중분류) 저장한다.
+    -->
+    <insert id="insertKioskCategoryStoreRegM" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.insertKioskCategoryStoreRegM */
+        INSERT INTO TB_MS_KIOSK_M_CLS
+        (
+            STORE_CD,
+            POS_NO,
+            TU_CLS_TYPE,
+            TU_CLS_CD,
+            TU_M_CLS_CD,
+            TU_M_CLS_NM,
+            TU_PAGE,
+            X,
+            Y,
+            WIDTH,
+            HEIGHT,
+            INDEX_NO,
+            CLS_FG,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID,
+            M_CLS_MEMO
+        )
+        SELECT
+        #{storeCd},
+        #{posNo},
+        TU_CLS_TYPE,
+        TU_CLS_CD,
+        TU_M_CLS_CD,
+        TU_M_CLS_NM,
+        TU_PAGE,
+        X,
+        Y,
+        WIDTH,
+        HEIGHT,
+        INDEX_NO,
+        CLS_FG,
+        #{regDt},
+        #{regId},
+        #{modDt},
+        #{modId},
+        M_CLS_MEMO
+        FROM TB_HQ_KIOSK_M_CLS tmkc
+        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+        AND TU_CLS_TYPE = #{tuClsType}
+    </insert>
+
+    <!-- 키오스크 키맵매장적용 - 매장에서 사용중인 기존 키맵그룹 삭제(중분류) -->
+    <!--
+        TABLE    : TB_MS_KIOSK_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 매장별 키맵그룹을 삭제한다.
+    -->
+    <delete id="deleteStoreTuClsTypeM" parameterType="kioskKeyMapVO" >
+        /* USE : KioskKeyMapMapper.deleteStoreTuClsTypeM */
+        DELETE TB_MS_KIOSK_M_CLS
+        WHERE STORE_CD = #{storeCd}
+        <if test="posNo != null and posNo != ''">
+            AND POS_NO = #{posNo}
+        </if>
+        AND TU_CLS_TYPE = #{tuClsType}
+    </delete>
 
 </mapper>

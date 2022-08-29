@@ -378,6 +378,9 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             // 기존 키맵상품삭제
             kioskKeyMapMapper.deleteKioskKeyMapByTuClsCd(kioskKeyMapVO);
 
+            // 기존 카테고리(중분류) 삭제
+            kioskKeyMapMapper.deleteStoreTuClsTypeM(kioskKeyMapVO);
+
             // posNo 조회
 //            List<DefaultMap<String>> posList = kioskKeyMapMapper.getKioskPosList(kioskKeyMapVO);
 
@@ -395,6 +398,16 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
                     result = kioskKeyMapMapper.copyKioskKeyMapStoreReg(kioskKeyMapVO);
                     if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
+                    // 중분류 키맵그룹 row count 조회
+                    List<DefaultMap<Object>> selectList = new ArrayList<DefaultMap<Object>>();
+                    kioskKeyMapVO.setOrgTuClsType(kioskKeyMapVO.getTuClsType());
+                    selectList = kioskKeyMapMapper.getKioskMClsCount(kioskKeyMapVO);
+                    System.out.println("중분류 키맵그룹 rowCount 조회 : " + selectList.get(0).get("rowCount").toString());
+                    if(Integer.parseInt(selectList.get(0).get("rowCount").toString()) > 0) {
+                        // 중분류도 복제
+                        result = kioskKeyMapMapper.insertKioskCategoryStoreRegM(kioskKeyMapVO);
+                        if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                    }
 //                }
 //            }
         }
@@ -460,6 +473,9 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
                 // 기존 키맵상품삭제
                 kioskKeyMapMapper.deleteKioskKeyMapByTuClsCd(kioskKeyMapVO);
 
+                // 기존 카테고리(중분류) 삭제
+                kioskKeyMapMapper.deleteStoreTuClsTypeM(kioskKeyMapVO);
+
                 // 새 키맵그룹과 카테고리(분류)코드로 INSERT
                 result = kioskKeyMapMapper.insertKioskCategoryStoreReg(kioskKeyMapVO);
                 if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
@@ -468,6 +484,18 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
                 result = kioskKeyMapMapper.copyKioskKeyMapStoreReg(kioskKeyMapVO);
                 if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
+                kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+
+                // 중분류 키맵그룹 row count 조회
+                List<DefaultMap<Object>> selectList = new ArrayList<DefaultMap<Object>>();
+                kioskKeyMapVO.setOrgTuClsType(kioskKeyMapVO.getTuClsType());
+                selectList = kioskKeyMapMapper.getKioskMClsCount(kioskKeyMapVO);
+                System.out.println("중분류 키맵그룹 rowCount 조회 : " + selectList.get(0).get("rowCount").toString());
+                if(Integer.parseInt(selectList.get(0).get("rowCount").toString()) > 0) {
+                    // 중분류도 복제
+                    result = kioskKeyMapMapper.insertKioskCategoryStoreRegM(kioskKeyMapVO);
+                    if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
             }
 
         }
