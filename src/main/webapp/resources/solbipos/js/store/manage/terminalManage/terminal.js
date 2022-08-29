@@ -19,6 +19,7 @@ var vanList     = new Array();
 var paycoList   = new Array();
 var mpayList    = new Array();
 var mcoupnList  = new Array();
+var paperVoucherList  = new Array();
 
 for(var i in vandorList) {
   if(vandorList[i].vanFg === '01'){
@@ -29,7 +30,10 @@ for(var i in vandorList) {
     mpayList.push(vandorList[i].name);
   } else if(vandorList[i].vanFg === '04'){
     mcoupnList.push(vandorList[i].name);
+  } else if(vandorList[i].vanFg === '06'){
+    paperVoucherList.push(vandorList[i].name);
   }
+
 }
 /**********************************************************************
  *  터미널 Ctrl
@@ -455,6 +459,9 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
           case '04':
             col.dataMap = mcoupnList;
             break;
+          case '06':
+            col.dataMap = paperVoucherList;
+            break;
         }
       }
     }
@@ -677,6 +684,9 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
             break;
           case '04':
             col.dataMap = mcoupnList;
+            break;
+          case '06':
+            col.dataMap = paperVoucherList;
             break;
         }
       }
