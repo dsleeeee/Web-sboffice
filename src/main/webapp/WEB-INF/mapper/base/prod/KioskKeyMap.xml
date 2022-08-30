@@ -149,7 +149,7 @@
                             MOD_DT,
                             MOD_ID,
                             CLS_MEMO,
-                            NVL((SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = tmkc.STORE_CD AND POS_NO = tmkc.POS_NO AND ENVST_CD = '1243'), 0) AS TU_M_CLS_FG
+                            NVL((SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = tmkc.STORE_CD AND POS_NO = tmkc.POS_NO AND ENVST_CD = '4101'), 0) AS TU_M_CLS_FG
                     FROM TB_MS_KIOSK_CLS tmkc
                    WHERE STORE_CD = #{storeCd}
                      AND POS_NO = #{posNo}
@@ -1155,7 +1155,7 @@
             tms.SYS_STAT_FG,
             (SELECT COUNT(*) FROM TB_MS_POS_ENVST WHERE STORE_CD = tms.STORE_CD AND ENVST_CD = '4019' AND ENVST_VAL = '6') AS KIOSK_POS_CNT,
             tmp.POS_NO,
-            NVL((SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = tms.STORE_CD AND POS_NO = tmp.POS_NO AND ENVST_CD = '1243'), 0) AS TU_M_CLS_FG
+            NVL((SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = tms.STORE_CD AND POS_NO = tmp.POS_NO AND ENVST_CD = '4101'), 0) AS TU_M_CLS_FG
             FROM TB_MS_STORE tms,
             (
                 SELECT
@@ -1292,7 +1292,7 @@
         #{regId},
         #{modDt},
         #{modId},
-        #{tuMClsFg} -- 매장 적용시에만 UPDATE / 매장 해당컬럼 사용안함 / 수정 기록 확인용 / 매장은 [1243 KIOSK중분류사용] 사용
+        #{tuMClsFg} -- 매장 적용시에만 UPDATE / 매장 해당컬럼 사용안함 / 수정 기록 확인용 / 매장은 [4101 KIOSK중분류사용] 사용
         FROM TB_HQ_KIOSK_CLS tmkc
         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
         AND TU_CLS_TYPE = #{tuClsType}
@@ -1366,7 +1366,7 @@
             tms.SYS_STAT_FG,
             (SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = tms.STORE_CD AND POS_NO = tmp.POS_NO AND ENVST_CD = '4068') AS ENV_4068,
             (SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = tms.STORE_CD AND POS_NO = tmp.POS_NO AND ENVST_CD = '4069') AS ENV_4069,
-            NVL((SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = tms.STORE_CD AND POS_NO = tmp.POS_NO AND ENVST_CD = '1243'), 0) AS TU_M_CLS_FG
+            NVL((SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = tms.STORE_CD AND POS_NO = tmp.POS_NO AND ENVST_CD = '4101'), 0) AS TU_M_CLS_FG
             FROM TB_MS_STORE tms,
             (
                 SELECT tmp.STORE_CD,
@@ -2398,7 +2398,7 @@
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT NVL((SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = #{storeCd} AND POS_NO = #{posNo} AND ENVST_CD = '1243'), 0) AS TU_M_CLS_FG
+                SELECT NVL((SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = #{storeCd} AND POS_NO = #{posNo} AND ENVST_CD = '4101'), 0) AS TU_M_CLS_FG
                 FROM dual
             </when>
         </choose>
@@ -2423,7 +2423,7 @@
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT (SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = #{storeCd} AND POS_NO = #{posNo} AND ENVST_CD = '1243') AS TU_M_CLS_FG
+                SELECT (SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = #{storeCd} AND POS_NO = #{posNo} AND ENVST_CD = '4101') AS TU_M_CLS_FG
                 FROM dual
             </when>
         </choose>

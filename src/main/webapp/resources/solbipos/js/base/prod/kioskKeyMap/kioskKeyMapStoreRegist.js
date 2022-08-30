@@ -120,7 +120,7 @@ app.controller('kioskKeyMapStoreRegCtrl', ['$scope', '$http', function ($scope, 
                         obj.storeCd = item.storeCd;
                         obj.tuClsType = $scope.applyTuClsTypeCombo.selectedValue;
                         obj.posNo = item.posNo;
-                        obj.tuMClsFg = $("#hdTuMClsFgStoreRegist").val(); // 매장 적용시에만 UPDATE / 매장 해당컬럼 사용안함 / 수정 기록 확인용 / 매장은 [1243 KIOSK중분류사용] 사용
+                        obj.tuMClsFg = $("#hdTuMClsFgStoreRegist").val(); // 매장 적용시에만 UPDATE / 매장 해당컬럼 사용안함 / 수정 기록 확인용 / 매장은 [4101 KIOSK중분류사용] 사용
 
                         params.push(obj);
                     }

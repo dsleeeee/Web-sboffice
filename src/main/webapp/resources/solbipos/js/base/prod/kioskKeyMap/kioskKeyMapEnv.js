@@ -172,7 +172,7 @@ app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', function ($scope, $http
                             obj.envstCd = $("#hdEnvstCd").val();
                             obj.envstVal = $scope.envTuClsTypeCombo.selectedValue;
                             obj.tuClsType = $scope.envTuClsTypeCombo.selectedValue;
-                            obj.tuMClsFg = $("#hdTuMClsFgStoreRegist").val(); // 매장 적용시에만 UPDATE / 매장 해당컬럼 사용안함 / 수정 기록 확인용 / 매장은 [1243 KIOSK중분류사용] 사용
+                            obj.tuMClsFg = $("#hdTuMClsFgStoreRegist").val(); // 매장 적용시에만 UPDATE / 매장 해당컬럼 사용안함 / 수정 기록 확인용 / 매장은 [4101 KIOSK중분류사용] 사용
 
                             // 키맵매장적용 여부
                             if($("#chkTuClsTypeStore").is(":checked")){
