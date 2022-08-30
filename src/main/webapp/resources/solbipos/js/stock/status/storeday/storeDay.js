@@ -142,7 +142,7 @@ app.controller('storeDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	  $scope.isChkDt = function() {
 		  var grid = wijmo.Control.getControl("#storeDayMainGrid");
 	      var columns = grid.columns;
-	      var length  = grid.columns.length;
+	      var length  = grid.columns.length-1;
 	      var isChecked = $scope.isChecked;
 		  if(isChecked){
 			  for(var i=0; i<length; i++){
@@ -179,7 +179,7 @@ app.controller('storeDayMainCtrl', ['$scope', '$http', '$timeout', function ($sc
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
         var colLength = col.binding.length;
-        if ((col.binding === "prodCd" || col.binding.substring(colLength-2,colLength-5) === 'Qty') && s.cells.getCellData(e.row,e.col,false) != null) { // 상품코드, 본사출고-수량
+        if ((col.binding === "prodCd" || col.binding.slice(-3) === 'Qty') && s.cells.getCellData(e.row,e.col,false) != null && col.binding !== "poUnitQty" && col.binding !== "setInQty") { // 상품코드, 본사출고-수량
         	var item = s.rows[e.row].dataItem;
     		wijmo.addClass(e.cell, 'wijLink');
             wijmo.addClass(e.cell, 'wj-custom-readonly');
@@ -218,20 +218,17 @@ app.controller('storeDayMainCtrl', ['$scope', '$http', '$timeout', function ($sc
         var params       = {};
 	        params.prodCd    = selectedRow.prodCd; // 상품코드
 	        params.prodNm    = selectedRow.prodNm; // 상품명
-	        params.startDate = $scope.searchedStartDate; // 시작날짜
-	        params.endDate   = $scope.searchedStartDate; // 종료날짜
+	        params.startDate = selectedRow.startDate; // 시작날짜
+	        params.endDate   = selectedRow.startDate; // 종료날짜
 	        params.storeCd   = selectedRow.storeCd; // 매장코드
 	        params.storeNm   = selectedRow.storeNm; // 매장이름
 	        params.poUnitQty = selectedRow.poUnitQty; // 입수
 
 	        if (col.binding === "prodCd") { // 상품코드
-    			params.startDate = wijmo.Globalize.format($scope.srchStoreDayStartDate.value, 'yyyy-MM-dd'); // 시작날짜
-    		    params.endDate = wijmo.Globalize.format($scope.srchStoreDayStartDate.value, 'yyyy-MM-dd'); // 종료날짜
-
     			$scope._broadcast('prodCodeDtlCtrl', params);
     		}
-	        if (col.binding.substring(colLength-2,colLength-5) === 'Qty' && selectedRow[col.binding] != null) { // 수량
-	        	var colCode = col.binding.substring(colLength, colLength-2);
+	        if (col.binding.slice(-3) === 'Qty' && selectedRow[col.binding] != null && col.binding !== "poUnitQty" && col.binding !== "setInQty") { // 수량
+	        	var colCode = col.binding;
 	        	params.colCode = colCode; // 수량(컬럼 뒤에 붙는 숫자, 어떤 수량인지 구분)
 	        	params.ioOccrFg = s.columnHeaders.getCellData(0,ht.col,false);
 
@@ -249,36 +246,33 @@ app.controller('storeDayMainCtrl', ['$scope', '$http', '$timeout', function ($sc
     s.allowMerging = 2;
     s.columnHeaders.rows.push(new wijmo.grid.Row());
     s.columnHeaders.rows[0].dataItem = {
-	  prodClassNm					:messages["storeDay.prodClassNm"],
+	  prodClassNm	:messages["storeDay.prodClassNm"],
 
-	  prodCd 				:messages["storeDay.prodCd"],
-	  prodNm 				:messages["storeDay.prodNm"],
-      storeCd				:messages["storeDay.storeCd"],
-      storeNm				:messages["storeDay.storeNm"],
-	  poUnitQty				:messages["storeDay.poUnitQty"],
-	  poUnitFgNm 			:messages["storeDay.poUnitFg"],
-	  barcdCd				:messages["storeDay.barcdCd"],
+	  prodCd 		:messages["storeDay.prodCd"],
+	  prodNm 		:messages["storeDay.prodNm"],
+      storeCd		:messages["storeDay.storeCd"],
+      storeNm		:messages["storeDay.storeNm"],
+	  poUnitQty		:messages["storeDay.poUnitQty"],
+	  poUnitFgNm	:messages["storeDay.poUnitFg"],
+	  barcdCd		:messages["storeDay.barcdCd"],
 
-	  ioOccrQty03			:messages["storeDay.accStoreIn"],
-	  ioOccrTot03			:messages["storeDay.accStoreIn"],
-	  ioOccrQty12			:messages["storeDay.accStoreOut"],
-	  ioOccrTot12			:messages["storeDay.accStoreOut"],
-	  ioOccrQty06			:messages["storeDay.accPurchsIn"],
-	  ioOccrTot06			:messages["storeDay.accPurchsIn"],
-	  ioOccrQty18			:messages["storeDay.accPurchsOut"],
-	  ioOccrTot18			:messages["storeDay.accPurchsOut"],
-	  ioOccrQty11			:messages["storeDay.accStoreSale"],
-	  ioOccrTot11			:messages["storeDay.accStoreSale"],
-	  ioOccrQty04			:messages["storeDay.accStoreMoveIn"],
-	  ioOccrTot04			:messages["storeDay.accStoreMoveIn"],
-      ioOccrQty14			:messages["storeDay.accStoreMoveOut"],
-      ioOccrTot14			:messages["storeDay.accStoreMoveOut"],
-      ioOccrQty17			:messages["storeDay.accDisuse"],
-      ioOccrTot17			:messages["storeDay.accDisuse"],
-      ioOccrQty21 			:messages["storeDay.accAdj"],
-      ioOccrTot21 			:messages["storeDay.accAdj"],
-      ioOccrQty22			:messages["storeDay.accSetIn"],
-      ioOccrTot22			:messages["storeDay.accSetIn"],
+	  storeInQty	:messages["storeDay.accStoreIn"],
+	  storeInTot	:messages["storeDay.accStoreIn"],
+	  storeOutQty 	:messages["storeDay.accStoreOut"],
+	  storeOutTot 	:messages["storeDay.accStoreOut"],
+	  purchsInQty 	:messages["storeDay.accPurchsIn"],
+	  purchsInTot 	:messages["storeDay.accPurchsIn"],
+	  purchsOutQty	:messages["storeDay.accPurchsOut"],
+	  purchsOutTot	:messages["storeDay.accPurchsOut"],
+	  storeSaleQty	:messages["storeDay.accStoreSale"],
+	  storeSaleTot	:messages["storeDay.accStoreSale"],
+	  moveInQty		:messages["storeDay.accStoreMoveIn"],
+	  moveInTot		:messages["storeDay.accStoreMoveIn"],
+      moveOutQty	:messages["storeDay.accStoreMoveOut"],
+      moveOutTot	:messages["storeDay.accStoreMoveOut"],
+      disuseQty		:messages["storeDay.accDisuse"],
+      adjQty		:messages["storeDay.accAdj"],
+      setInQty		:messages["storeDay.accSetIn"],
     };
 
     s.itemFormatter = function (panel, r, c, cell) {
@@ -379,12 +373,12 @@ app.controller('storeDayMainCtrl', ['$scope', '$http', '$timeout', function ($sc
 	  var check = srchOption;
 	  var grid = wijmo.Control.getControl("#storeDayMainGrid");
       var columns = grid.columns;
-      var length  = grid.columns.length;
+      var length  = grid.columns.length-1;
 
       if(check == '1'){ // 수량
     	  for(var i=0; i<length; i++){
     		  var colLength = columns[i].binding.length;
-			  if(columns[i].binding.substring(colLength-2,colLength-5) == 'Tot'){
+			  if(columns[i].binding.slice(-3) == 'Tot'){
     			  columns[i].visible = false;
     		  }else if(columns[i].binding != 'prodClassNm'){
     			  columns[i].visible = true;
@@ -394,7 +388,7 @@ app.controller('storeDayMainCtrl', ['$scope', '$http', '$timeout', function ($sc
     	  for(var i=0; i<length; i++){
     		  var colLength = columns[i].binding.length;
     		  if(columns[i].binding != 'poUnitQty'){
-				  if(columns[i].binding.substring(colLength-2,colLength-5) == 'Qty'){
+				  if(columns[i].binding.slice(-3) == 'Qty'){
 	    			  columns[i].visible = false;
 	    		  }else if(columns[i].binding != 'prodClassNm'){
 	    			  columns[i].visible = true;
@@ -437,36 +431,33 @@ app.controller('storeDayExcelCtrl', ['$scope', '$http', '$timeout', function ($s
 	    s.allowMerging = 2;
 	    s.columnHeaders.rows.push(new wijmo.grid.Row());
 	    s.columnHeaders.rows[0].dataItem = {
-		  prodClassNm					:messages["storeDay.prodClassNm"],
+		prodClassNm	:messages["storeDay.prodClassNm"],
 
-		  prodCd 				:messages["storeDay.prodCd"],
-		  prodNm 				:messages["storeDay.prodNm"],
-	      storeCd				:messages["storeDay.storeCd"],
-	      storeNm				:messages["storeDay.storeNm"],
-		  poUnitQty				:messages["storeDay.poUnitQty"],
-		  poUnitFgNm 			:messages["storeDay.poUnitFg"],
-		  barcdCd				:messages["storeDay.barcdCd"],
+		prodCd 		:messages["storeDay.prodCd"],
+		prodNm 		:messages["storeDay.prodNm"],
+		storeCd		:messages["storeDay.storeCd"],
+		storeNm		:messages["storeDay.storeNm"],
+		poUnitQty		:messages["storeDay.poUnitQty"],
+		poUnitFgNm	:messages["storeDay.poUnitFg"],
+		barcdCd		:messages["storeDay.barcdCd"],
 
-		  ioOccrQty03			:messages["storeDay.accStoreIn"],
-		  ioOccrTot03			:messages["storeDay.accStoreIn"],
-		  ioOccrQty12			:messages["storeDay.accStoreOut"],
-		  ioOccrTot12			:messages["storeDay.accStoreOut"],
-		  ioOccrQty06			:messages["storeDay.accPurchsIn"],
-		  ioOccrTot06			:messages["storeDay.accPurchsIn"],
-		  ioOccrQty18			:messages["storeDay.accPurchsOut"],
-		  ioOccrTot18			:messages["storeDay.accPurchsOut"],
-		  ioOccrQty11			:messages["storeDay.accStoreSale"],
-		  ioOccrTot11			:messages["storeDay.accStoreSale"],
-		  ioOccrQty04			:messages["storeDay.accStoreMoveIn"],
-		  ioOccrTot04			:messages["storeDay.accStoreMoveIn"],
-	      ioOccrQty14			:messages["storeDay.accStoreMoveOut"],
-	      ioOccrTot14			:messages["storeDay.accStoreMoveOut"],
-	      ioOccrQty17			:messages["storeDay.accDisuse"],
-	      ioOccrTot17			:messages["storeDay.accDisuse"],
-	      ioOccrQty21 			:messages["storeDay.accAdj"],
-	      ioOccrTot21 			:messages["storeDay.accAdj"],
-	      ioOccrQty22			:messages["storeDay.accSetIn"],
-	      ioOccrTot22			:messages["storeDay.accSetIn"],
+		storeInQty	:messages["storeDay.accStoreIn"],
+		storeInTot	:messages["storeDay.accStoreIn"],
+		storeOutQty 	:messages["storeDay.accStoreOut"],
+		storeOutTot 	:messages["storeDay.accStoreOut"],
+		purchsInQty 	:messages["storeDay.accPurchsIn"],
+		purchsInTot 	:messages["storeDay.accPurchsIn"],
+		purchsOutQty	:messages["storeDay.accPurchsOut"],
+		purchsOutTot	:messages["storeDay.accPurchsOut"],
+		storeSaleQty	:messages["storeDay.accStoreSale"],
+		storeSaleTot	:messages["storeDay.accStoreSale"],
+		moveInQty		:messages["storeDay.accStoreMoveIn"],
+		moveInTot		:messages["storeDay.accStoreMoveIn"],
+		moveOutQty	:messages["storeDay.accStoreMoveOut"],
+		moveOutTot	:messages["storeDay.accStoreMoveOut"],
+		disuseQty		:messages["storeDay.accDisuse"],
+		adjQty		:messages["storeDay.accAdj"],
+		setInQty		:messages["storeDay.accSetIn"],
 	    };
 
 	    s.itemFormatter = function (panel, r, c, cell) {
@@ -545,7 +536,7 @@ app.controller('storeDayExcelCtrl', ['$scope', '$http', '$timeout', function ($s
 	      if(check == '1'){ // 수량
 	    	  for(var i=0; i<length; i++){
 	    		  var colLength = columns[i].binding.length;
-				  if(columns[i].binding.substring(colLength-2,colLength-5) == 'Tot'){
+				  if(columns[i].binding.slice(-3) == 'Tot'){
 	    			  columns[i].visible = false;
 	    		  }else if(columns[i].binding != 'prodClassNm'){
 	    			  columns[i].visible = true;
@@ -555,7 +546,7 @@ app.controller('storeDayExcelCtrl', ['$scope', '$http', '$timeout', function ($s
 	    	  for(var i=0; i<length; i++){
 	    		  var colLength = columns[i].binding.length;
 	    		  if(columns[i].binding != 'poUnitQty'){
-					  if(columns[i].binding.substring(colLength-2,colLength-5) == 'Qty'){
+					  if(columns[i].binding.slice(-3) == 'Qty'){
 		    			  columns[i].visible = false;
 		    		  }else if(columns[i].binding != 'prodClassNm'){
 		    			  columns[i].visible = true;

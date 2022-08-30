@@ -45,32 +45,12 @@ app.controller('storeCurrCtrl', ['$scope', '$http', '$timeout', function ($scope
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
-        if (col.binding === "currQty" && s.cells.getCellData(e.row,e.col,false) != null ) { // 현재고
-          wijmo.addClass(e.cell, 'wijLink');
-          wijmo.addClass(e.cell, 'wj-custom-readonly');
-        }
 
         if (col.format === "date") {
           e.cell.innerHTML = getFormatDate(e.cell.innerText);
         } else if (col.format === "dateTime") {
           e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
         }
-      }
-    });
-
-    // 그리드 클릭 이벤트
-    s.addEventListener(s.hostElement, 'mousedown', function (e) {
-      var ht = s.hitTest(e);
-      if (ht.cellType === wijmo.grid.CellType.Cell) {
-        var col         = ht.panel.columns[ht.col];
-        var selectedRow = s.rows[ht.row].dataItem;
-         if (col.binding === "currQty") { // 현재고 클릭
-           var params    = {};
-           params.prodCd = selectedRow.prodCd;
-           params.prodNm = selectedRow.prodNm;
-           params.storeCd = selectedRow.storeCd;
-           $scope._broadcast('hqCurrDtlCtrl', params);
-         }
       }
     });
 

@@ -294,7 +294,8 @@
 		</if>
 		AND		TMS.STORE_CD	(+)	=	TSSSC.STORE_CD
 		AND		TMS.STORAGE_CD	(+)	=	TSSSC.STORAGE_CD
-        AND     TMP.STOCK_PROD_YN = 'Y'
+        AND     TMP.STOCK_PROD_YN   = 'Y'
+        AND     TMP.USE_YN          = 'Y'
         AND     TSSSC.STORE_CD    (+) =   TMP.STORE_CD
         AND     TSSSC.PROD_CD     (+) =   TMP.PROD_CD
 		GROUP

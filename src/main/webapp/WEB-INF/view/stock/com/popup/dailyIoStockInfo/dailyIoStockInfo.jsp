@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/stock/status/dailyIoStockDtl/"/>
 
-<wj-popup id="dailyIoStockInfoLayer" control="dailyIoStockInfoLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+<wj-popup id="dailyIoStockInfoLayer" control="dailyIoStockInfoLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px;">
   <div id="cardLayer" class="wj-dialog wj-dialog-columns" ng-controller="dailyIoStockInfoCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       {{ioOccrNm}}
@@ -28,31 +28,12 @@
 			<tr>
                 <td style="border-left: 1px solid #ccc;">{{ioOccrDt}}</td>
                 <td>
-                    <span class="chk ml10">
-                        <input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
-                            <label for="chkDt">
-                            <s:message code="currUnity.isChk" />
-                        </label>
-                    </span>
                 </td>
             </tr>
 		</tbody>
 	</table>
 
 	<div class="mt20 oh sb-select dkbr">
-        <%-- 페이지 스케일 --%>
-        <%-- <wj-combo-box
-            class="w100px fl"
-            id="dailyIoStockListScaleBox"
-            ng-model="listScale"
-            control="listScaleCombo"
-            items-source="_getComboData('dailyIoStockListScaleBox')"
-            display-member-path="name"
-            selected-value-path="value"
-            is-editable="false"
-            initialized="_initComboBox(s)">
-        </wj-combo-box> --%>
-
         <%-- 엑셀 다운로드 //TODO --%>
         <button class="btn_skyblue fr" ng-click="excelDownload()"><s:message code="cmm.excel.down" />
         </button>
@@ -87,4 +68,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/com/popup/dailyIoStockInfo/dailyIoStockInfo.js?ver=20190207.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/com/popup/dailyIoStockInfo/dailyIoStockInfo.js?ver=20220803.01" charset="utf-8"></script>

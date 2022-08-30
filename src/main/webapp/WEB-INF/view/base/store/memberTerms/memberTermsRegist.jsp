@@ -21,7 +21,7 @@
         <%-- body --%>
         <div class="wj-dialog-body" ng-controller="memberTermsRegistCtrl">
             <div>
-                <div style="height:200px; overflow-y: auto;">
+                <div style="height:220px; overflow-y: auto;">
                     <f:form id="regForm" name="regForm" >
                         <h3 class="h3_tbl"><s:message code="memberTermsRegist.verInfo" /></h3>
                         <table class="searchTbl">
@@ -71,6 +71,7 @@
                                     <s:message code="memberTermsRegist.fileSize" />
                                 </th>
                                 <td>
+                                    <p class="s12 red mb10" id="fileSizeMax"><s:message code="media.fileSize.max" /></p>
                                     {{version.fileSize}}
                                 </td>
                             </tr>
@@ -150,4 +151,4 @@
     var userId       = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/memberTerms/memberTermsRegist.js?ver=20220708.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/memberTerms/memberTermsRegist.js?ver=20220708.03" charset="utf-8"></script>

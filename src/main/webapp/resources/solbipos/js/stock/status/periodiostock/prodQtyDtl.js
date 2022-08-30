@@ -27,7 +27,6 @@ app.controller('prodQtyDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
 
 	  // 다른 컨트롤러의 broadcast 받기
 	  $scope.$on("prodQtyDtlCtrl", function (event, data) {
-
 		$scope.slipNo			= data.slipNo;
 	    $scope.startDate 		= data.startDate;
 	    $scope.endDate			= data.endDate;
@@ -88,31 +87,32 @@ app.controller('prodQtyDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
 		  ($scope.storeCd === null || $scope.storeCd === '') ? (cd="storeCd", nm = "storeNm") : (cd="hqOfficeCd", nm = "hqOfficeNm");
 
 		  switch($scope.colCode){
-		  case "01" : {arrBinding=["slipNo", "instockDate", "vendrCd", "vendrNm", "inTotQty", "inTot"]; break;} // 본사입고(전표번호, 입고일, 거래처코드, 거래처명, 수량, 금액)
-		  case "16" : {arrBinding=["slipNo", "rtnDate", "vendrCd", "vendrNm", "inTotQty", "inTot"]; break;} // 업체반출(전표번호, 반출일, 거래처코드, 거래처명, 수량, 금액)
-		  case "13" : {arrBinding=["slipNo", "outDate", "storeCd", "storeNm", "outTotQty", "outTot"]; break;} // 본사출고(전표번호, 출고일, 매장코드, 매장명, 수량, 금액)
-		  case "02" : {arrBinding=["slipNo", "carryInDate", "storeCd", "storeNm", "outTotQty", "outTot"]; break;} // 본사반입(전표번호, 반입일, 매장코드, 매장명, 수량, 금액)
+		  case "vendrInQty" : {arrBinding=["slipNo", "instockDate", "vendrCd", "vendrNm", "inTotQty", "inTot"]; break;} // 본사입고(전표번호, 입고일, 거래처코드, 거래처명, 수량, 금액)
+		  case "vendrOutQty" : {arrBinding=["slipNo", "rtnDate", "vendrCd", "vendrNm", "inTotQty", "inTot"]; break;} // 업체반출(전표번호, 반출일, 거래처코드, 거래처명, 수량, 금액)
+		  case "hqOutQty" : {arrBinding=["slipNo", "outDate", "storeCd", "storeNm", "outTotQty", "outTot"]; break;} // 본사출고(전표번호, 출고일, 매장코드, 매장명, 수량, 금액)
+		  case "hqInQty" : {arrBinding=["slipNo", "carryInDate", "storeCd", "storeNm", "outTotQty", "outTot"]; break;} // 본사반입(전표번호, 반입일, 매장코드, 매장명, 수량, 금액)
 
 		  // 본사, 매장권한 둘다 씀
-		  case "04" : {arrBinding=["slipNo", "inConfmDt", cd, nm, "inTotQty", "inTot"]; break;} // 매장이입(전표번호, 이입일, [매장코드, 매장명], [본사코드, 본사명] 수량, 금액)
-		  case "14" : {arrBinding=["slipNo", "outConfmDt", cd, nm, "outTotQty", "outTot"]; break;} // 매장이출(전표번호, 이출일, [매장코드, 매장명], [본사코드, 본사명], 수량, 금액)
-		  case "17" : {arrBinding=["disuseDate", "seqNo", "title", "prodFgNm", "disuseQty", "disuseAmt"]; break;} // 재고폐기(폐기일, 차수, 제목, 구분, 폐기수량, 폐기금액)
-		  case "21" : {arrBinding=["adjDate", "seqNo", "title", "prodFgNm", "adjQty", "adjAmt"]; break;} // 재고조정(조정일, 차수, 제목, 구분, 조정수량, 조정금액)
-		  case "22" : {arrBinding=["setDate", "seqNo", "prodFgNm", "setMakeFgNm", "compstProdCd", "compstProdQty"]; break;} //세트생성(생성일, 차수, 구분, 구성/해체구분, 세트구성상품코드, 세트구성상품수량)
+		  case "storeMoveInQty" : {arrBinding=["slipNo", "inConfmDt", cd, nm, "inTotQty", "inTot"]; break;} // 매장이입(전표번호, 이입일, [매장코드, 매장명], [본사코드, 본사명] 수량, 금액)
+		  case "storeMoveOutQty" : {arrBinding=["slipNo", "outConfmDt", cd, nm, "outTotQty", "outTot"]; break;} // 매장이출(전표번호, 이출일, [매장코드, 매장명], [본사코드, 본사명], 수량, 금액)
+		  case "moveInQty" : {arrBinding=["slipNo", "inConfmDt", cd, nm, "inTotQty", "inTot"]; break;} // 매장이입(전표번호, 이입일, [매장코드, 매장명], [본사코드, 본사명] 수량, 금액)
+		  case "moveOutQty" : {arrBinding=["slipNo", "outConfmDt", cd, nm, "outTotQty", "outTot"]; break;} // 매장이출(전표번호, 이출일, [매장코드, 매장명], [본사코드, 본사명], 수량, 금액)
+		  case "disuseQty" : {arrBinding=["disuseDate", "seqNo", "title", "prodFgNm", "disuseQty", "disuseAmt"]; break;} // 재고폐기(폐기일, 차수, 제목, 구분, 폐기수량, 폐기금액)
+		  case "adjQty" : {arrBinding=["adjDate", "seqNo", "title", "prodFgNm", "adjQty", "adjAmt"]; break;} // 재고조정(조정일, 차수, 제목, 구분, 조정수량, 조정금액)
+		  case "setInQty" : {arrBinding=["setDate", "seqNo", "prodFgNm", "setMakeFgNm", "compstProdCd", "compstProdQty"]; break;} //세트생성(생성일, 차수, 구분, 구성/해체구분, 세트구성상품코드, 세트구성상품수량)
 
 		  // !!!!!!!!!!!!!!!!!!!!!!!!!!! 아직 컬럼 정보 및 쿼리 안받음 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		  case "19" : {arrBinding=["saleDate", "vendrCd", "vendrNm"]; break;} // 거래처출고(출고일, 거래처코드, 거래처명)
-		  case "33" : {arrBinding=["saleDate", "vendrCd", "vendrNm"]; break;} // 거래처반품(반품일, 거래처코드, 거래처명)
+		  case "saleVendrOrderQty" : {arrBinding=["saleDate", "vendrCd", "vendrNm"]; break;} // 거래처출고(출고일, 거래처코드, 거래처명)
+		  case "saleVendrRtnQty" : {arrBinding=["saleDate", "vendrCd", "vendrNm"]; break;} // 거래처반품(반품일, 거래처코드, 거래처명)
 
-
-		  case "03" : {arrBinding=["slipNo", "instockDate", "hqOfficeCd", "hqOfficeNm", "inTotQty", "inTot"]; break;} // 매장입고(전표번호, 입고일, 본사코드, 본사명, 수량, 금액)
-		  case "12" : {arrBinding=["slipNo", "carryOutDate", "hqOfficeCd", "hqOfficeNm", "inTotQty", "inTot"]; break;} // 매장반품(전표번호, 반품일, 본사코드, 본사명, 수량, 금액)
-		  case "06" : {arrBinding=["slipNo", "instockDate", "vendrCd", "vendrNm", "inTotQty", "inTot"]; break;} // 사입입고(전표번호, 입고일, 거래처코드, 거래처명, 수량, 금액)
-		  case "18" : {arrBinding=["slipNo", "carryOutDate", "vendrCd", "vendrNm", "inTotQty", "inTot"]; break;} // 사입반품(전표번호, 반품일, 거래처코드, 거래처명, 수량, 금액)
+		  case "storeInQty" : {arrBinding=["slipNo", "instockDate", "hqOfficeCd", "hqOfficeNm", "inTotQty", "inTot"]; break;} // 매장입고(전표번호, 입고일, 본사코드, 본사명, 수량, 금액)
+		  case "storeOutQty" : {arrBinding=["slipNo", "carryOutDate", "hqOfficeCd", "hqOfficeNm", "inTotQty", "inTot"]; break;} // 매장반품(전표번호, 반품일, 본사코드, 본사명, 수량, 금액)
+		  case "purchsInQty" : {arrBinding=["slipNo", "instockDate", "vendrCd", "vendrNm", "inTotQty", "inTot"]; break;} // 사입입고(전표번호, 입고일, 거래처코드, 거래처명, 수량, 금액)
+		  case "purchsOutQty" : {arrBinding=["slipNo", "carryOutDate", "vendrCd", "vendrNm", "inTotQty", "inTot"]; break;} // 사입반품(전표번호, 반품일, 거래처코드, 거래처명, 수량, 금액)
 
 		  // !!!!!!!!!!!!!!!!!!!!!!!!!!! 아직 컬럼 정보 및 쿼리 안받음 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		  //case "11" : {arrBinding=["saleDate", "dlvrPackFg"]; break;} // 매장판매(영업일자, 배달포장구분)
-          case "11" : {arrBinding=["saleDate", "storeCd", "storeNm", "inTotQty", "inTot"]; break;} // 매장판매(매출일자, 매장코드, 매장명, 수량, 금액)
+          case "storeSaleQty" : {arrBinding=["saleDate", "storeCd", "storeNm", "inTotQty", "inTot"]; break;} // 매장판매(매출일자, 매장코드, 매장명, 수량, 금액)
 		  }
 
 		  $scope.drawGrid(grid, arrBinding);

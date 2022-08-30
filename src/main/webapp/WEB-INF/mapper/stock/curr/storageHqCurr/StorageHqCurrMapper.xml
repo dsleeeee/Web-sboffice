@@ -429,16 +429,21 @@
 
     <select id="getStorageHqList" parameterType="storageHqCurrVO" resultType="DefaultMap">
         /* USE : StorageHqCurrMapper.getStorageHqList - 본사 창고정보 조회 */
-        SELECT   B.HQ_OFFICE_CD
-		  ,      B.STORAGE_CD
-		  ,      THS.STORAGE_NM
-		FROM   TB_ST_HQ_STOCK_CUR B
-		  ,    TB_HQ_STORAGE THS
-		WHERE   B.HQ_OFFICE_CD   =   #{hqOfficeCd}
-		AND      B.STORAGE_CD   >=   '000'
-		AND      B.STORAGE_CD   <![CDATA[<]]>   '999'
-		AND      B.STORAGE_CD = THS.STORAGE_CD
-		AND      B.HQ_OFFICE_CD = THS.HQ_OFFICE_CD
+        SELECT  B.HQ_OFFICE_CD
+        ,       B.STORAGE_CD
+        ,       THS.STORAGE_NM
+		FROM    TB_ST_HQ_STOCK_CUR B
+        ,       TB_HQ_STORAGE THS
+        ,       TB_HQ_PRODUCT THP
+        WHERE   B.HQ_OFFICE_CD   =   #{hqOfficeCd}
+		AND     B.STORAGE_CD   >=   '000'
+		AND     B.STORAGE_CD   <![CDATA[<]]>   '999'
+		AND     B.STORAGE_CD = THS.STORAGE_CD
+		AND     B.HQ_OFFICE_CD = THS.HQ_OFFICE_CD
+        AND 	B.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
+        AND 	B.PROD_CD = THP.PROD_CD
+        AND 	THP.STOCK_PROD_YN = 'Y'
+        AND 	THP.USE_YN = 'Y'
 		GROUP
 		BY      B.HQ_OFFICE_CD
 		 ,      B.STORAGE_CD
@@ -447,17 +452,21 @@
 
     <select id="getStorageStorageList" parameterType="storageHqCurrVO" resultType="DefaultMap">
         /* USE : StorageHqCurrMapper.getStorageStorageList - 매장 창고정보 조회 */
-        SELECT   B.STORE_CD
-          ,      B.STORAGE_CD
-          ,      TMS.STORAGE_NM
-        FROM   TB_ST_STORE_STOCK_CUR B
-          ,    TB_MS_STORAGE TMS
+        SELECT  B.STORE_CD
+        ,       B.STORAGE_CD
+        ,       TMS.STORAGE_NM
+        FROM    TB_ST_STORE_STOCK_CUR B
+        ,       TB_MS_STORAGE TMS
+        ,       TB_MS_PRODUCT TMP
         WHERE   B.STORE_CD   =   #{storeCd}
-
-        AND      B.STORAGE_CD   >=   '000'
-        AND      B.STORAGE_CD   <![CDATA[<]]>   '999'
-        AND      B.STORAGE_CD = TMS.STORAGE_CD
-        AND      B.STORE_CD = TMS.STORE_CD
+        AND     B.STORAGE_CD   >=   '000'
+        AND     B.STORAGE_CD   <![CDATA[<]]>   '999'
+        AND     B.STORAGE_CD = TMS.STORAGE_CD
+        AND     B.STORE_CD = TMS.STORE_CD
+        AND 	B.STORE_CD = TMP.STORE_CD
+        AND 	B.PROD_CD = TMP.PROD_CD
+        AND 	TMP.STOCK_PROD_YN = 'Y'
+        AND 	TMP.USE_YN = 'Y'
         GROUP
         BY      B.STORE_CD
          ,      B.STORAGE_CD
