@@ -173,48 +173,67 @@ app.controller('acinsDtlCtrl', ['$scope', '$http', function ($scope, $http) {
       return false;
     }
 
-    // 확정처리가 체크 되어있으면서 그리드의 수정된 내역은 없는 경우 저장로직 태우기 위해 값 하나를 강제로 수정으로 변경한다.
-    if (confirmFg === 'Y' && $scope.flex.collectionView.itemsEdited.length <= 0) {
-      var item = $scope.flex.collectionView.items[0];
-      if (item === null) return false;
+    if($scope.flex.collectionView.items.length > 0) {
 
-      $scope.flex.collectionView.editItem(item);
-      item.status = "U";
-      $scope.flex.collectionView.commitEdit();
-    }
-    
-    if ($scope.flex.collectionView.itemsEdited.length <= 0 && 
-    	(global_adjStorageCd	!= $scope.acins.dtl.adjStorageCd ||
-    	 global_acinsTitle  	!= $scope.acinsTitle)
-    	) {
-    	
-    	var item = $scope.flex.collectionView.items[0];
-        if (item === null) return false;
+        // 확정처리가 체크 되어있으면서 그리드의 수정된 내역은 없는 경우 저장로직 태우기 위해 값 하나를 강제로 수정으로 변경한다.
+        if (confirmFg === 'Y' && $scope.flex.collectionView.itemsEdited.length <= 0) {
+          var item = $scope.flex.collectionView.items[0];
+          if (item === null) return false;
 
-        $scope.flex.collectionView.editItem(item);
-        item.status = "U";
-        $scope.flex.collectionView.commitEdit();
-    }
-    	
-    	
-    
-    var params = [];
-    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      var item = $scope.flex.collectionView.itemsEdited[i];
+          $scope.flex.collectionView.editItem(item);
+          item.status = "U";
+          $scope.flex.collectionView.commitEdit();
+        }
 
-      // 체크박스가 체크되어 있는 상품은 삭제한다.
-      if (item.gChk === true && nvl(item.acinsQty, '') !== '') {
-        item.status = "D";
-      }
-      else {
-        item.status = "U";
-      }
+        if ($scope.flex.collectionView.itemsEdited.length <= 0 &&
+            (global_adjStorageCd	!= $scope.acins.dtl.adjStorageCd ||
+             global_acinsTitle  	!= $scope.acinsTitle)
+            ) {
+
+            var item = $scope.flex.collectionView.items[0];
+            if (item === null) return false;
+
+            $scope.flex.collectionView.editItem(item);
+            item.status = "U";
+            $scope.flex.collectionView.commitEdit();
+        }
+
+
+
+        var params = [];
+        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+          var item = $scope.flex.collectionView.itemsEdited[i];
+
+          // 체크박스가 체크되어 있는 상품은 삭제한다.
+          if (item.gChk === true && nvl(item.acinsQty, '') !== '') {
+            item.status = "D";
+          }
+          else {
+            item.status = "U";
+          }
+          item.acinsDate  = $scope.acinsDate;
+          item.seqNo      = $scope.seqNo;
+          item.acinsTitle = $scope.acinsTitle;
+          item.acinsReason = $scope.acinsReason;
+    //      item.adjStorageCd = $scope.adjStorageCd;
+          item.adjStorageCd = $scope.acins.dtl.adjStorageCd;
+          item.storageCd  = "999";	//001	->	999
+          item.hqBrandCd  = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+          item.confirmFg  = confirmFg;
+
+          params.push(item);
+        }
+
+    // 수정시 상품이 없을때 제목 저장하려고
+    } else {
+
+      var params = [];
+      var item = {};
       item.acinsDate  = $scope.acinsDate;
       item.seqNo      = $scope.seqNo;
       item.acinsTitle = $scope.acinsTitle;
       item.acinsReason = $scope.acinsReason;
-//      item.adjStorageCd = $scope.adjStorageCd;
-      item.adjStorageCd = $scope.acins.dtl.adjStorageCd;      
+      item.adjStorageCd = $scope.acins.dtl.adjStorageCd;
       item.storageCd  = "999";	//001	->	999
       item.hqBrandCd  = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.confirmFg  = confirmFg;

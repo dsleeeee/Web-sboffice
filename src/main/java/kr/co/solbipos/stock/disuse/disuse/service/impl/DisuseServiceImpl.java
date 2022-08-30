@@ -50,6 +50,9 @@ public class DisuseServiceImpl implements DisuseService {
     /** 폐기관리 - 폐기 삭제 */
     @Override
     public int deleteDisuse(DisuseVO[] disuseVOs, SessionInfoVO sessionInfoVO) {
+
+        System.out.println("폐기관리 >>> 폐기 삭제 start");
+
         int returnResult = 0;
         int result = 0;
         String currentDt = currentDateTimeString();
@@ -62,19 +65,25 @@ public class DisuseServiceImpl implements DisuseService {
             disuseVO.setModId(sessionInfoVO.getUserId());
             disuseVO.setModDt(currentDt);
 
+            System.out.println("폐기관리 >>> 폐기 삭제 >>> DTL count : " + disuseVO.getDtlCnt());
+
             if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-                // DTL 삭제
-                result = disuseMapper.deleteHqAllDisuseDtl(disuseVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                if(disuseVO.getDtlCnt() > 0) {
+                    // DTL 삭제
+                    result = disuseMapper.deleteHqAllDisuseDtl(disuseVO);
+                    if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
 
                 // HD 삭제
                 result = disuseMapper.deleteHqDisuseHd(disuseVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             }
             else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-                // DTL 삭제
-                result = disuseMapper.deleteStAllDisuseDtl(disuseVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                if(disuseVO.getDtlCnt() > 0) {
+                    // DTL 삭제
+                    result = disuseMapper.deleteStAllDisuseDtl(disuseVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
 
                 // HD 삭제
                 result = disuseMapper.deleteStDisuseHd(disuseVO);
@@ -83,6 +92,8 @@ public class DisuseServiceImpl implements DisuseService {
 
             returnResult += result;
         }
+
+        System.out.println("폐기관리 >>> 폐기 삭제 end");
 
         return returnResult;
     }
@@ -130,6 +141,9 @@ public class DisuseServiceImpl implements DisuseService {
     /** 폐기관리 - 폐기상품 저장 */
     @Override
     public int saveDisuseRegist(DisuseVO[] disuseVOs, SessionInfoVO sessionInfoVO) {
+
+        System.out.println("폐기관리 >>> 폐기등록 팝업 >>> 저장 start");
+
         int returnResult = 0;
         int result = 0;
         int i = 0;
@@ -253,6 +267,8 @@ public class DisuseServiceImpl implements DisuseService {
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
+        System.out.println("폐기관리 >>> 폐기등록 팝업 >>> 저장 end");
+
         return returnResult;
     }
 
@@ -298,6 +314,9 @@ public class DisuseServiceImpl implements DisuseService {
     /** 폐기관리 - 폐기상세 상품 저장 */
     @Override
     public int saveDisuseDtl(DisuseVO[] disuseVOs, SessionInfoVO sessionInfoVO) {
+
+        System.out.println("폐기관리 >>> 폐기상세 팝업 >>> 저장 start");
+
         int returnResult = 0;
         int result = 0;
         int i = 0;
@@ -384,7 +403,7 @@ public class DisuseServiceImpl implements DisuseService {
         }
         
         //삭제가 아닐경우만
-        if(!StringUtil.getOrBlank(disuseHdVO.getStatus()).equals("DELETE")) {
+//        if(!StringUtil.getOrBlank(disuseHdVO.getStatus()).equals("DELETE")) {
 	        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
 	            // HD 수정
 	            result = disuseMapper.updateHqDisuseHd(disuseHdVO);
@@ -394,8 +413,10 @@ public class DisuseServiceImpl implements DisuseService {
 	            result = disuseMapper.updateStDisuseHd(disuseHdVO);
 	        }
 	        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
-        
+//        }
+
+        System.out.println("폐기관리 >>> 폐기상세 팝업 >>> 저장 end");
+
         return returnResult;
     }
 

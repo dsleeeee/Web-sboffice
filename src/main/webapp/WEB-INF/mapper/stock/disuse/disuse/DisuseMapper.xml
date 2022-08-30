@@ -700,35 +700,47 @@
             MOD_ID,
             REASON_CD
         )
-        SELECT  tshdd.HQ_OFFICE_CD
+        SELECT  #{hqOfficeCd}
              ,       #{storageCd}
-             ,       tshdd.DISUSE_DATE
-             ,       tshdd.SEQ_NO
+             ,       #{disuseDate}
+             ,       #{seqNo}
              ,       #{disuseTitle}
              ,       #{procFg}
              ,       #{disuseStorageCd}
-             ,       COUNT(tshdd.PROD_CD)
-             ,       SUM(tshdd.DISUSE_AMT)
+              ,      tshdd.DTL_CNT
+             ,       tshdd.TOT_DISUSE_AMT
              ,       #{regDt}
              ,       #{regId}
              ,       #{modDt}
              ,       #{modId}
              ,       #{disuseReason}
-        FROM    TB_ST_HQ_DISUSE_DTL tshdd
-        WHERE   tshdd.HQ_OFFICE_CD  =   #{hqOfficeCd}
-        AND     tshdd.DISUSE_DATE   =   #{disuseDate}
-        AND     tshdd.SEQ_NO        =   #{seqNo}
-        GROUP
-        BY      tshdd.HQ_OFFICE_CD
-        ,       #{storageCd}
-        ,       tshdd.DISUSE_DATE
-        ,       tshdd.SEQ_NO
-        ,       #{disuseTitle}
-        ,       #{procFg}
-        ,       #{regDt}
-        ,       #{regId}
-        ,       #{modDt}
-        ,       #{modId}
+        FROM DUAL a,
+        (
+            SELECT SUM(DTL_CNT) AS DTL_CNT, SUM(TOT_DISUSE_AMT) AS TOT_DISUSE_AMT
+            FROM
+            (
+                SELECT 0 AS DTL_CNT, 0 AS TOT_DISUSE_AMT
+                FROM dual
+                UNION ALL
+                SELECT NVL(COUNT(tshdd.PROD_CD), 0) AS DTL_CNT
+                ,       NVL(SUM(tshdd.DISUSE_AMT), 0) AS TOT_DISUSE_AMT
+                FROM    TB_ST_HQ_DISUSE_DTL tshdd
+                WHERE   tshdd.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                AND     tshdd.DISUSE_DATE   =   #{disuseDate}
+                AND     tshdd.SEQ_NO        =   #{seqNo}
+                GROUP
+                BY      tshdd.HQ_OFFICE_CD
+                ,       #{storageCd}
+                ,       tshdd.DISUSE_DATE
+                ,       tshdd.SEQ_NO
+                ,       #{disuseTitle}
+                ,       #{procFg}
+                ,       #{regDt}
+                ,       #{regId}
+                ,       #{modDt}
+                ,       #{modId}
+           )
+        ) tshdd
     </insert>
 
 
@@ -757,35 +769,47 @@
             MOD_ID,
             REASON_CD
         )
-        SELECT  tssdd.STORE_CD
+        SELECT  #{storeCd}
              ,       #{storageCd}
-             ,       tssdd.DISUSE_DATE
-             ,       tssdd.SEQ_NO
+             ,       #{disuseDate}
+             ,       #{seqNo}
              ,       #{disuseTitle}
              ,       #{procFg}
              ,       #{disuseStorageCd}
-             ,       COUNT(tssdd.PROD_CD)
-             ,       SUM(tssdd.DISUSE_AMT)
+              ,      tssdd.DTL_CNT
+             ,       tssdd.TOT_DISUSE_AMT
              ,       #{regDt}
              ,       #{regId}
              ,       #{modDt}
              ,       #{modId}
              ,       #{disuseReason}
-        FROM    TB_ST_STORE_DISUSE_DTL tssdd
-        WHERE   tssdd.STORE_CD  =   #{storeCd}
-        AND     tssdd.DISUSE_DATE   =   #{disuseDate}
-        AND     tssdd.SEQ_NO        =   #{seqNo}
-        GROUP
-        BY      tssdd.STORE_CD
-        ,       #{storageCd}
-        ,       tssdd.DISUSE_DATE
-        ,       tssdd.SEQ_NO
-        ,       #{disuseTitle}
-        ,       #{procFg}
-        ,       #{regDt}
-        ,       #{regId}
-        ,       #{modDt}
-        ,       #{modId}
+        FROM DUAL a,
+        (
+           SELECT SUM(DTL_CNT) AS DTL_CNT, SUM(TOT_DISUSE_AMT) AS TOT_DISUSE_AMT
+            FROM
+            (
+                SELECT 0 AS DTL_CNT, 0 AS TOT_DISUSE_AMT
+                FROM dual
+                UNION ALL
+                SELECT NVL(COUNT(tssdd.PROD_CD), 0) AS DTL_CNT
+                ,       NVL(SUM(tssdd.DISUSE_AMT), 0) AS TOT_DISUSE_AMT
+                FROM    TB_ST_STORE_DISUSE_DTL tssdd
+                WHERE   tssdd.STORE_CD  =   #{storeCd}
+                AND     tssdd.DISUSE_DATE   =   #{disuseDate}
+                AND     tssdd.SEQ_NO        =   #{seqNo}
+                GROUP
+                BY      tssdd.STORE_CD
+                ,       #{storageCd}
+                ,       tssdd.DISUSE_DATE
+                ,       tssdd.SEQ_NO
+                ,       #{disuseTitle}
+                ,       #{procFg}
+                ,       #{regDt}
+                ,       #{regId}
+                ,       #{modDt}
+                ,       #{modId}
+           )
+        ) tssdd
     </insert>
 
 
@@ -799,8 +823,8 @@
         /* USE : DisuseMapper.updateHqDisuseHd */
         UPDATE  TB_ST_HQ_DISUSE
         SET     (DTL_CNT, TOT_DISUSE_AMT)
-                                    = (   SELECT  COUNT(tshdd.PROD_CD)
-                                               ,       SUM(tshdd.DISUSE_AMT)
+                                    = (   SELECT  NVL(COUNT(tshdd.PROD_CD), 0)
+                                               ,       NVL(SUM(tshdd.DISUSE_AMT), 0)
                                           FROM    TB_ST_HQ_DISUSE_DTL tshdd
                                           WHERE   tshdd.HQ_OFFICE_CD  =   #{hqOfficeCd}
                                             AND     tshdd.DISUSE_DATE   =   #{disuseDate}
@@ -830,8 +854,8 @@
         /* USE : DisuseMapper.updateStDisuseHd */
         UPDATE  TB_ST_STORE_DISUSE
         SET     (DTL_CNT, TOT_DISUSE_AMT)
-                                    = (   SELECT  COUNT(tssdd.PROD_CD)
-                                               ,       SUM(tssdd.DISUSE_AMT)
+                                    = (   SELECT  NVL(COUNT(tssdd.PROD_CD), 0)
+                                               ,       NVL(SUM(tssdd.DISUSE_AMT), 0)
                                           FROM    TB_ST_STORE_DISUSE_DTL tssdd
                                           WHERE   tssdd.STORE_CD      =   #{storeCd}
                                             AND     tssdd.DISUSE_DATE   =   #{disuseDate}

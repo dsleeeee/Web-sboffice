@@ -696,36 +696,48 @@
             MOD_ID,
             REASON_CD
         )
-        SELECT  tshad.HQ_OFFICE_CD
+        SELECT  #{hqOfficeCd}
              ,       #{storageCd}
-             ,       tshad.ADJ_DATE
-             ,       tshad.SEQ_NO
+             ,       #{adjDate}
+             ,       #{seqNo}
              ,       #{adjTitle}
              ,       #{procFg}
              ,       #{adjStorageCd}
-             ,       COUNT(tshad.PROD_CD)
-             ,       SUM(tshad.ADJ_AMT)
+              ,      tshad.DTL_CNT
+             ,       tshad.TOT_ADJ_AMT
              ,       #{regDt}
              ,       #{regId}
              ,       #{modDt}
              ,       #{modId}
              ,       #{adjReason}
-        FROM    TB_ST_HQ_ADJUST_DTL tshad
-        WHERE   tshad.HQ_OFFICE_CD  =   #{hqOfficeCd}
-        AND     tshad.ADJ_DATE      =   #{adjDate}
-        AND     tshad.SEQ_NO        =   #{seqNo}
-        GROUP
-            BY      tshad.HQ_OFFICE_CD
-             ,       #{storageCd}
-             ,       tshad.ADJ_DATE
-             ,       tshad.SEQ_NO
-             ,       #{adjTitle}
-             ,       #{procFg}
-             ,       #{regDt}
-             ,       #{regId}
-             ,       #{modDt}
-             ,       #{modId}
-             ,       #{adjReason}
+        FROM DUAL a,
+        (
+            SELECT SUM(DTL_CNT) AS DTL_CNT, SUM(TOT_ADJ_AMT) AS TOT_ADJ_AMT
+            FROM
+            (
+                SELECT 0 AS DTL_CNT, 0 AS TOT_ADJ_AMT
+                FROM dual
+                UNION ALL
+                SELECT NVL(COUNT(tshad.PROD_CD), 0) AS DTL_CNT
+                ,       NVL(SUM(tshad.ADJ_AMT), 0) AS TOT_ADJ_AMT
+                FROM    TB_ST_HQ_ADJUST_DTL tshad
+                WHERE   tshad.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                AND     tshad.ADJ_DATE      =   #{adjDate}
+                AND     tshad.SEQ_NO        =   #{seqNo}
+                GROUP
+                    BY      tshad.HQ_OFFICE_CD
+                     ,       #{storageCd}
+                     ,       tshad.ADJ_DATE
+                     ,       tshad.SEQ_NO
+                     ,       #{adjTitle}
+                     ,       #{procFg}
+                     ,       #{regDt}
+                     ,       #{regId}
+                     ,       #{modDt}
+                     ,       #{modId}
+                     ,       #{adjReason}
+            )
+        ) tshad
     </insert>
 
 
@@ -754,36 +766,48 @@
             MOD_ID,
             REASON_CD
         )
-        SELECT  tshad.STORE_CD
+        SELECT  #{storeCd}
              ,       #{storageCd}
-             ,       tshad.ADJ_DATE
-             ,       tshad.SEQ_NO
+             ,       #{adjDate}
+             ,       #{seqNo}
              ,       #{adjTitle}
              ,       #{procFg}
              ,       #{adjStorageCd}
-             ,       COUNT(tshad.PROD_CD)
-             ,       SUM(tshad.ADJ_AMT)
+              ,      tshad.DTL_CNT
+             ,       tshad.TOT_ADJ_AMT
              ,       #{regDt}
              ,       #{regId}
              ,       #{modDt}
              ,       #{modId}
              ,       #{adjReason}
-        FROM    TB_ST_STORE_ADJUST_DTL tshad
-        WHERE   tshad.STORE_CD      =   #{storeCd}
-        AND     tshad.ADJ_DATE      =   #{adjDate}
-        AND     tshad.SEQ_NO        =   #{seqNo}
-        GROUP
-            BY      tshad.STORE_CD
-             ,       #{storageCd}
-             ,       tshad.ADJ_DATE
-             ,       tshad.SEQ_NO
-             ,       #{adjTitle}
-             ,       #{procFg}
-             ,       #{regDt}
-             ,       #{regId}
-             ,       #{modDt}
-             ,       #{modId}
-             ,       #{adjReason}
+        FROM DUAL a,
+        (
+           SELECT SUM(DTL_CNT) AS DTL_CNT, SUM(TOT_ADJ_AMT) AS TOT_ADJ_AMT
+            FROM
+            (
+                SELECT 0 AS DTL_CNT, 0 AS TOT_ADJ_AMT
+                FROM dual
+                UNION ALL
+                SELECT NVL(COUNT(tshad.PROD_CD), 0) AS DTL_CNT
+                ,       NVL(SUM(tshad.ADJ_AMT), 0) AS TOT_ADJ_AMT
+                FROM    TB_ST_STORE_ADJUST_DTL tshad
+                WHERE   tshad.STORE_CD      =   #{storeCd}
+                AND     tshad.ADJ_DATE      =   #{adjDate}
+                AND     tshad.SEQ_NO        =   #{seqNo}
+                GROUP
+                    BY      tshad.STORE_CD
+                     ,       #{storageCd}
+                     ,       tshad.ADJ_DATE
+                     ,       tshad.SEQ_NO
+                     ,       #{adjTitle}
+                     ,       #{procFg}
+                     ,       #{regDt}
+                     ,       #{regId}
+                     ,       #{modDt}
+                     ,       #{modId}
+                     ,       #{adjReason}
+            )
+        ) tshad
     </insert>
 
 
@@ -797,8 +821,8 @@
         /* USE : AdjMapper.updateHqAdjHd */
         UPDATE  TB_ST_HQ_ADJUST
         SET     (DTL_CNT, TOT_ADJ_AMT)
-                                 = (   SELECT  COUNT(tshad.PROD_CD)
-                                            ,       SUM(tshad.ADJ_AMT)
+                                 = (   SELECT  NVL(COUNT(tshad.PROD_CD), 0)
+                                            ,       NVL(SUM(tshad.ADJ_AMT), 0)
                                        FROM    TB_ST_HQ_ADJUST_DTL tshad
                                        WHERE   tshad.HQ_OFFICE_CD  =   #{hqOfficeCd}
                                          AND     tshad.ADJ_DATE      =   #{adjDate}
@@ -828,8 +852,8 @@
         /* USE : AdjMapper.updateStAdjHd */
         UPDATE  TB_ST_STORE_ADJUST
         SET     (DTL_CNT, TOT_ADJ_AMT)
-                                 = (   SELECT  COUNT(tssad.PROD_CD)
-                                            ,       SUM(tssad.ADJ_AMT)
+                                 = (   SELECT  NVL(COUNT(tssad.PROD_CD), 0)
+                                            ,       NVL(SUM(tssad.ADJ_AMT), 0)
                                        FROM    TB_ST_STORE_ADJUST_DTL tssad
                                        WHERE   tssad.STORE_CD  =   #{storeCd}
                                          AND     tssad.ADJ_DATE      =   #{adjDate}

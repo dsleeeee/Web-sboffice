@@ -51,6 +51,9 @@ public class AdjServiceImpl implements AdjService {
     /** 조정관리 - 조정 삭제 */
     @Override
     public int deleteAdj(AdjVO[] adjVOs, SessionInfoVO sessionInfoVO) {
+
+        System.out.println("조정관리 >>> 조정 삭제 start");
+
         int returnResult = 0;
         int result = 0;
         String currentDt = currentDateTimeString();
@@ -63,19 +66,25 @@ public class AdjServiceImpl implements AdjService {
             adjVO.setModId(sessionInfoVO.getUserId());
             adjVO.setModDt(currentDt);
 
+            System.out.println("조정관리 >>> 조정 삭제 >>> DTL count : " + adjVO.getDtlCnt());
+
             if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-                // DTL 삭제
-                result = adjMapper.deleteHqAllAdjDtl(adjVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                if(adjVO.getDtlCnt() > 0) {
+                    // DTL 삭제
+                    result = adjMapper.deleteHqAllAdjDtl(adjVO);
+                    if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
 
                 // HD 삭제
                 result = adjMapper.deleteHqAdjHd(adjVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             }
             else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-                // DTL 삭제
-                result = adjMapper.deleteStAllAdjDtl(adjVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                if(adjVO.getDtlCnt() > 0) {
+                    // DTL 삭제
+                    result = adjMapper.deleteStAllAdjDtl(adjVO);
+                    if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
 
                 // HD 삭제
                 result = adjMapper.deleteStAdjHd(adjVO);
@@ -84,6 +93,8 @@ public class AdjServiceImpl implements AdjService {
 
             returnResult += result;
         }
+
+        System.out.println("조정관리 >>> 조정 삭제 end");
 
         return returnResult;
     }
@@ -131,6 +142,9 @@ public class AdjServiceImpl implements AdjService {
     /** 조정관리 - 조정상품 저장 */
     @Override
     public int saveAdjRegist(AdjVO[] adjVOs, SessionInfoVO sessionInfoVO) {
+
+        System.out.println("조정관리 >>> 조정등록 팝업 >>> 저장 start");
+
         int returnResult = 0;
         int result = 0;
         int i = 0;
@@ -255,6 +269,8 @@ public class AdjServiceImpl implements AdjService {
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
+        System.out.println("조정관리 >>> 조정등록 팝업 >>> 저장 end");
+
         return returnResult;
     }
 
@@ -300,6 +316,9 @@ public class AdjServiceImpl implements AdjService {
     /** 조정관리 - 조정상세 상품 저장 */
     @Override
     public int saveAdjDtl(AdjVO[] adjVOs, SessionInfoVO sessionInfoVO) {
+
+        System.out.println("조정관리 >>> 조정상세 팝업 >>> 저장 start");
+
         int returnResult = 0;
         int result = 0;
         int i = 0;
@@ -386,7 +405,7 @@ public class AdjServiceImpl implements AdjService {
         }
         
         //삭제가 아닐경우만
-        if(!StringUtil.getOrBlank(adjHdVO.getStatus()).equals("DELETE")) {
+//        if(!StringUtil.getOrBlank(adjHdVO.getStatus()).equals("DELETE")) {
 	        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
 	            // HD 수정
 	            result = adjMapper.updateHqAdjHd(adjHdVO);
@@ -396,8 +415,10 @@ public class AdjServiceImpl implements AdjService {
 	            result = adjMapper.updateStAdjHd(adjHdVO);
 	        }
 	        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
-        
+//        }
+
+        System.out.println("조정관리 >>> 조정상세 팝업 >>> 저장 end");
+
         return returnResult;
     }
 

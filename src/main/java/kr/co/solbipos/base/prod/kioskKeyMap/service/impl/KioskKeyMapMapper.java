@@ -181,4 +181,10 @@ public interface KioskKeyMapMapper {
 
     /** 키오스크 키맵 그룹복제 - 기존 카테고리(중분류) 복사 */
     int copyKioskCategoryM(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 키맵매장적용 - 본사 키맵그룹 매장적용 시 매장 카테고리(중분류) 저장 */
+    int insertKioskCategoryStoreRegM(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 키맵매장적용 - 매장에서 사용중인 기존 키맵그룹 삭제(중분류) */
+    int deleteStoreTuClsTypeM(KioskKeyMapVO kioskKeyMapVO);
 }
