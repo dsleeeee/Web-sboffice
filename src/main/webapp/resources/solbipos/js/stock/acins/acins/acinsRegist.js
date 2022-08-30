@@ -293,82 +293,117 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
       $scope._popMsg(msg);
       return false;
     }
-    var params = [];
 
+    if($scope.flex.collectionView.items.length > 0) {
 
-    // 체크만 되어있는 경우 체크 풀기
-    // 추가된 상품 가져오기
-    for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-      var item = $scope.flex.collectionView.itemsAdded[i];
-      if (item.acinsQty === null) {
-          item.gChk = false;
+      var params = [];
+
+      // 체크만 되어있는 경우 체크 풀기
+      // 추가된 상품 가져오기
+      for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+        var item = $scope.flex.collectionView.itemsAdded[i];
+        if (item.acinsQty === null) {
+            item.gChk = false;
+        }
       }
-    }
-    // 수정된 상품 가져오기
-    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      var item = $scope.flex.collectionView.itemsEdited[i];
-      if (item.acinsQty === null) {
-          item.gChk = false;
+      // 수정된 상품 가져오기
+      for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+        var item = $scope.flex.collectionView.itemsEdited[i];
+        if (item.acinsQty === null) {
+            item.gChk = false;
+        }
       }
-    }
 
-    // 추가된 상품 가져오기
-    for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-      var item = $scope.flex.collectionView.itemsAdded[i];
+      // 추가된 상품 가져오기
+      for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+        var item = $scope.flex.collectionView.itemsAdded[i];
 
-      // 체크박스가 체크되어 있으면서 기존에 등록되어 있던 상품은 삭제한다.
-      if (item.acinsQty === null || item.acinsQty === '') {
-        item.status = "R";
-      } else if (item.gChk === true && item.acinsProdStatus === 'U') {
-        item.status = "D";
-      } else {
-        item.status = "U";
+        // 체크박스가 체크되어 있으면서 기존에 등록되어 있던 상품은 삭제한다.
+        if (item.acinsQty === null || item.acinsQty === '') {
+          item.status = "R";
+        } else if (item.gChk === true && item.acinsProdStatus === 'U') {
+          item.status = "D";
+        } else {
+          item.status = "U";
+        }
+        item.acinsDate  = $scope.acinsDate;
+        item.seqNo      = $scope.seqNo;
+        item.acinsTitle = $scope.acinsTitle;
+        item.acinsReason = $scope.acinsReason;
+        item.storageCd  = "999";		//001	->	999
+        item.hqBrandCd  = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+        item.adjStorageCd = $scope.acins.reg.adjStorageCd;
+
+        if(item.status !== "R") params.push(item);
       }
-      item.acinsDate  = $scope.acinsDate;
-      item.seqNo      = $scope.seqNo;
+
+      // 수정된 상품 가져오기
+      for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+        var item = $scope.flex.collectionView.itemsEdited[i];
+
+        // 체크박스가 체크되어 있으면서 기존에 등록되어 있던 상품은 삭제한다.
+        if (item.acinsQty === null || item.acinsQty === '') {
+          item.status = "R";
+        } else if (item.gChk === true && item.acinsProdStatus === 'U') {
+          item.status = "D";
+        } else {
+          item.status = "U";
+        }
+        item.acinsDate  = $scope.acinsDate;
+        item.seqNo      = $scope.seqNo;
+        item.acinsTitle = $scope.acinsTitle;
+        item.acinsReason = $scope.acinsReason;
+        item.storageCd  = "999";	//001	->	999
+        item.hqBrandCd  = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+        item.adjStorageCd = $scope.acins.reg.adjStorageCd;
+
+        if(item.status !== "R") params.push(item);
+      }
+
+      // 그리드를 조회한 후 입력안하고 저장시
+      if(params.length === 0) {
+        var params = [];
+        var item = {};
+        item.acinsDate = $scope.acinsDate;
+        item.seqNo = $scope.seqNo;
+        item.acinsTitle = $scope.acinsTitle;
+        item.acinsReason = $scope.acinsReason;
+        item.storageCd = "999";	//001	->	999
+        item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+        item.adjStorageCd = $scope.acins.reg.adjStorageCd;
+
+        params.push(item);
+      }
+
+    // 신규,수정시 조회한 상품이 없을때 제목 저장하려고
+    } else {
+
+      var params = [];
+      var item = {};
+      item.acinsDate = $scope.acinsDate;
+      item.seqNo = $scope.seqNo;
       item.acinsTitle = $scope.acinsTitle;
       item.acinsReason = $scope.acinsReason;
-      item.storageCd  = "999";		//001	->	999
-      item.hqBrandCd  = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+      item.storageCd = "999";	//001	->	999
+      item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.adjStorageCd = $scope.acins.reg.adjStorageCd;
 
-      if(item.status !== "R") params.push(item);
+      params.push(item);
     }
 
-    // 수정된 상품 가져오기
-    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      var item = $scope.flex.collectionView.itemsEdited[i];
-
-      // 체크박스가 체크되어 있으면서 기존에 등록되어 있던 상품은 삭제한다.
-      if (item.acinsQty === null || item.acinsQty === '') {
-        item.status = "R";
-      } else if (item.gChk === true && item.acinsProdStatus === 'U') {
-        item.status = "D";
-      } else {
-        item.status = "U";
-      }
-      item.acinsDate  = $scope.acinsDate;
-      item.seqNo      = $scope.seqNo;
-      item.acinsTitle = $scope.acinsTitle;
-      item.acinsReason = $scope.acinsReason;
-      item.storageCd  = "999";	//001	->	999
-      item.hqBrandCd  = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
-      item.adjStorageCd = $scope.acins.reg.adjStorageCd;
-
-      if(item.status !== "R") params.push(item);
-    }
     // console.log(params);
-    if(params.length > 0 || ($scope.seqNo  !== null && $scope.seqNo !== ''))
-    {
+    // if(params.length > 0 || ($scope.seqNo  !== null && $scope.seqNo !== ''))
+    // {
         $scope._save("/stock/acins/acins/acinsRegist/save.sb", params, function () {
           $scope.saveRegistCallback()
         });
-    }
-    else
-    {
-      $scope._popMsg(messages["cmm.not.modify"]);
-      return false;
-    }
+    // }
+    // else
+    // {
+    //   $scope._popMsg(messages["cmm.not.modify"]);
+    //   return false;
+    // }
+
   };
 
 

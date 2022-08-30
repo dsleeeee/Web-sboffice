@@ -51,6 +51,9 @@ public class AcinsServiceImpl implements AcinsService {
     /** 실사관리 - 실사 삭제 */
     @Override
     public int deleteAcins(AcinsVO[] acinsVOs, SessionInfoVO sessionInfoVO) {
+
+        System.out.println("실사관리 >>> 실사 삭제 start");
+
         int returnResult = 0;
         int result = 0;
         String currentDt = currentDateTimeString();
@@ -63,19 +66,25 @@ public class AcinsServiceImpl implements AcinsService {
             acinsVO.setModId(sessionInfoVO.getUserId());
             acinsVO.setModDt(currentDt);
 
+            System.out.println("실사관리 >>> 실사 삭제 >>> DTL count : " + acinsVO.getDtlCnt());
+
             if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-                // DTL 삭제
-                result = acinsMapper.deleteHqAllAcinsDtl(acinsVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                if(acinsVO.getDtlCnt() > 0) {
+                    // DTL 삭제
+                    result = acinsMapper.deleteHqAllAcinsDtl(acinsVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
 
                 // HD 삭제
                 result = acinsMapper.deleteHqAcinsHd(acinsVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             }
             else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-                // DTL 삭제
-                result = acinsMapper.deleteStAllAcinsDtl(acinsVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                if(acinsVO.getDtlCnt() > 0) {
+                    // DTL 삭제
+                    result = acinsMapper.deleteStAllAcinsDtl(acinsVO);
+                    if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
 
                 // HD 삭제
                 result = acinsMapper.deleteStAcinsHd(acinsVO);
@@ -84,6 +93,8 @@ public class AcinsServiceImpl implements AcinsService {
 
             returnResult += result;
         }
+
+        System.out.println("실사관리 >>> 실사 삭제 end");
 
         return returnResult;
     }
@@ -132,7 +143,7 @@ public class AcinsServiceImpl implements AcinsService {
     @Override
     public int saveAcinsRegist(AcinsVO[] acinsVOs, SessionInfoVO sessionInfoVO) {
 
-        System.out.println("실사관리 >>> 실사등록 팝업 >>> 저장");
+        System.out.println("실사관리 >>> 실사등록 팝업 >>> 저장 start");
 
         int returnResult = 0;
         int result = 0;
@@ -257,6 +268,8 @@ public class AcinsServiceImpl implements AcinsService {
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
+        System.out.println("실사관리 >>> 실사등록 팝업 >>> 저장 end");
+
         return returnResult;
     }
 
@@ -303,7 +316,7 @@ public class AcinsServiceImpl implements AcinsService {
     @Override
     public int saveAcinsDtl(AcinsVO[] acinsVOs, SessionInfoVO sessionInfoVO) {
 
-        System.out.println("실사관리 >>> 실사상세 팝업 >>> 저장");
+        System.out.println("실사관리 >>> 실사상세 팝업 >>> 저장 start");
 
         int returnResult = 0;
         int result = 0;
@@ -345,6 +358,9 @@ public class AcinsServiceImpl implements AcinsService {
             acinsVO.setRegDt(currentDt);
             acinsVO.setModId(sessionInfoVO.getUserId());
             acinsVO.setModDt(currentDt);
+
+            System.out.println("실사관리 >>> 실사상세 팝업 >>> status : " + acinsVO.getStatus());
+            System.out.println("실사관리 >>> 실사상세 팝업 >>> acinsProdStatus : " + acinsVO.getAcinsProdStatus());
 
             // 상품 삭제인 경우
             if(StringUtil.getOrBlank(acinsVO.getStatus()).equals("DELETE")) {
@@ -391,7 +407,7 @@ public class AcinsServiceImpl implements AcinsService {
         }
         
         //삭제가 아닐경우만
-        if(!StringUtil.getOrBlank(acinsHdVO.getStatus()).equals("DELETE")) {
+//        if(!StringUtil.getOrBlank(acinsHdVO.getStatus()).equals("DELETE")) {
 	        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
 	            // HD 수정
 	            result = acinsMapper.updateHqAcinsHd(acinsHdVO);
@@ -401,8 +417,10 @@ public class AcinsServiceImpl implements AcinsService {
 	            result = acinsMapper.updateStAcinsHd(acinsHdVO);
 	        }
 	        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
-        
+//        }
+
+        System.out.println("실사관리 >>> 실사상세 팝업 >>> 저장 end");
+
         return returnResult;
     }
 

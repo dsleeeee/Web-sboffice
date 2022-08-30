@@ -138,4 +138,4 @@
   var storageEnvstVal = "${storageEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/acins/acins/acinsDtl.js?ver=20220714.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/acins/acins/acinsDtl.js?ver=20220830.01" charset="utf-8"></script>

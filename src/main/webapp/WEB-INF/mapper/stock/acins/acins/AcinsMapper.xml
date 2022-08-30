@@ -721,37 +721,50 @@
             MOD_ID,
             REASON_CD
         )
-        SELECT	tshaid.HQ_OFFICE_CD
+        SELECT	#{hqOfficeCd}
              ,		#{storageCd}
-             ,		tshaid.ACINS_DATE
-             ,		tshaid.SEQ_NO
+             ,		#{acinsDate}
+             ,		#{seqNo}
              ,		#{acinsTitle}
              ,		#{procFg}
              ,       #{adjStorageCd}
-             ,		COUNT(tshaid.PROD_CD)
-             ,		SUM(DECODE(tshaid.ADJ_QTY, 0, 0, 1))
-             ,		SUM(tshaid.ACINS_AMT)
+             ,       tshaid.DTL_CNT
+             ,       tshaid.ADJ_CNT
+             ,       tshaid.TOT_ACINS_AMT
              ,       #{regDt}
              ,       #{regId}
              ,       #{modDt}
              ,       #{modId}
              ,       #{acinsReason}
-        FROM	TB_ST_HQ_ACTUAL_INSPECTION_DTL tshaid
-        WHERE	tshaid.HQ_OFFICE_CD	=	#{hqOfficeCd}
-        AND     tshaid.ACINS_DATE	=	#{acinsDate}
-        AND     tshaid.SEQ_NO	    =	#{seqNo}
-        GROUP
-            BY		tshaid.HQ_OFFICE_CD
-             ,		#{storageCd}
-             ,		tshaid.ACINS_DATE
-             ,		tshaid.SEQ_NO
-             ,		#{acinsTitle}
-             ,		#{procFg}
-             ,       #{regDt}
-             ,       #{regId}
-             ,       #{modDt}
-             ,       #{modId}
-             ,       #{acinsReason}
+        FROM DUAL a,
+        (
+            SELECT SUM(DTL_CNT) AS DTL_CNT, SUM(ADJ_CNT) AS ADJ_CNT, SUM(TOT_ACINS_AMT) AS TOT_ACINS_AMT
+            FROM
+            (
+                SELECT 0 AS DTL_CNT, 0 AS ADJ_CNT, 0 AS TOT_ACINS_AMT
+                FROM dual
+                UNION ALL
+                SELECT  NVL(COUNT(tshaid.PROD_CD), 0) AS DTL_CNT
+                ,       NVL(SUM(DECODE(tshaid.ADJ_QTY, 0, 0, 1)), 0) AS ADJ_CNT
+                ,       NVL(SUM(tshaid.ACINS_AMT), 0) AS TOT_ACINS_AMT
+                FROM	TB_ST_HQ_ACTUAL_INSPECTION_DTL tshaid
+                WHERE	tshaid.HQ_OFFICE_CD	=	#{hqOfficeCd}
+                AND     tshaid.ACINS_DATE	=	#{acinsDate}
+                AND     tshaid.SEQ_NO	    =	#{seqNo}
+                GROUP
+                    BY		tshaid.HQ_OFFICE_CD
+                     ,		#{storageCd}
+                     ,		tshaid.ACINS_DATE
+                     ,		tshaid.SEQ_NO
+                     ,		#{acinsTitle}
+                     ,		#{procFg}
+                     ,       #{regDt}
+                     ,       #{regId}
+                     ,       #{modDt}
+                     ,       #{modId}
+                     ,       #{acinsReason}
+             )
+        ) tshaid
     </insert>
 
 
@@ -781,37 +794,50 @@
             MOD_ID,
             REASON_CD
         )
-        SELECT  tshaid.STORE_CD
+        SELECT  #{storeCd}
              ,       #{storageCd}
-             ,       tshaid.ACINS_DATE
-             ,       tshaid.SEQ_NO
+             ,       #{acinsDate}
+             ,       #{seqNo}
              ,       #{acinsTitle}
              ,       #{procFg}
              ,       #{adjStorageCd}
-             ,       COUNT(tshaid.PROD_CD)
-             ,       SUM(DECODE(tshaid.ADJ_QTY, 0, 0, 1))
-             ,       SUM(tshaid.ACINS_AMT)
+             ,       tshaid.DTL_CNT
+             ,       tshaid.ADJ_CNT
+             ,       tshaid.TOT_ACINS_AMT
              ,       #{regDt}
              ,       #{regId}
              ,       #{modDt}
              ,       #{modId}
              ,       #{acinsReason}
-        FROM    TB_ST_STORE_ACTUAL_INSPECTION_DTL tshaid
-        WHERE   tshaid.STORE_CD     =   #{storeCd}
-        AND     tshaid.ACINS_DATE   =   #{acinsDate}
-        AND     tshaid.SEQ_NO       =   #{seqNo}
-        GROUP
-            BY      tshaid.STORE_CD
-             ,       #{storageCd}
-             ,       tshaid.ACINS_DATE
-             ,       tshaid.SEQ_NO
-             ,       #{acinsTitle}
-             ,       #{procFg}
-             ,       #{regDt}
-             ,       #{regId}
-             ,       #{modDt}
-             ,       #{modId}
-             ,       #{acinsReason}
+        FROM DUAL a,
+        (
+            SELECT SUM(DTL_CNT) AS DTL_CNT, SUM(ADJ_CNT) AS ADJ_CNT, SUM(TOT_ACINS_AMT) AS TOT_ACINS_AMT
+            FROM
+            (
+                SELECT 0 AS DTL_CNT, 0 AS ADJ_CNT, 0 AS TOT_ACINS_AMT
+                FROM dual
+                UNION ALL
+                SELECT  NVL(COUNT(tshaid.PROD_CD), 0) AS DTL_CNT
+                ,       NVL(SUM(DECODE(tshaid.ADJ_QTY, 0, 0, 1)), 0) AS ADJ_CNT
+                ,       NVL(SUM(tshaid.ACINS_AMT), 0) AS TOT_ACINS_AMT
+                FROM    TB_ST_STORE_ACTUAL_INSPECTION_DTL tshaid
+                WHERE   tshaid.STORE_CD     =   #{storeCd}
+                AND     tshaid.ACINS_DATE   =   #{acinsDate}
+                AND     tshaid.SEQ_NO       =   #{seqNo}
+                GROUP
+                    BY      tshaid.STORE_CD
+                     ,       #{storageCd}
+                     ,       tshaid.ACINS_DATE
+                     ,       tshaid.SEQ_NO
+                     ,       #{acinsTitle}
+                     ,       #{procFg}
+                     ,       #{regDt}
+                     ,       #{regId}
+                     ,       #{modDt}
+                     ,       #{modId}
+                     ,       #{acinsReason}
+            )
+        ) tshaid
     </insert>
 
 
@@ -825,9 +851,9 @@
         /* USE : AcinsMapper.updateHqAcinsHd */
         UPDATE  TB_ST_HQ_ACTUAL_INSPECTION
         SET     (DTL_CNT, ADJ_CNT, TOT_ACINS_AMT)
-              = (   SELECT  COUNT(tshaid.PROD_CD)
-                    ,       SUM(DECODE(tshaid.ADJ_QTY, 0, 0, 1))
-                    ,       SUM(tshaid.ACINS_AMT)
+              = (   SELECT  NVL(COUNT(tshaid.PROD_CD), 0)
+                    ,       NVL(SUM(DECODE(tshaid.ADJ_QTY, 0, 0, 1)), 0)
+                    ,       NVL(SUM(tshaid.ACINS_AMT), 0)
                     FROM    TB_ST_HQ_ACTUAL_INSPECTION_DTL tshaid
                     WHERE   tshaid.HQ_OFFICE_CD =   #{hqOfficeCd}
                     AND     tshaid.ACINS_DATE   =   #{acinsDate}
@@ -846,7 +872,6 @@
         AND     SEQ_NO        = #{seqNo}
     </update>
 
-
     <!-- 실사관리 - 실사 HD 수정(매장) -->
     <!--
         TABLE    : TB_ST_STORE_ACTUAL_INSPECTION
@@ -857,9 +882,9 @@
         /* USE : AcinsMapper.updateStAcinsHd */
         UPDATE  TB_ST_STORE_ACTUAL_INSPECTION
         SET     (DTL_CNT, ADJ_CNT, TOT_ACINS_AMT)
-                                 = (   SELECT  COUNT(tshaid.PROD_CD)
-                                            ,       SUM(DECODE(tshaid.ADJ_QTY, 0, 0, 1))
-                                            ,       SUM(tshaid.ACINS_AMT)
+                                 = (   SELECT  NVL(COUNT(tshaid.PROD_CD), 0)
+                                            ,       NVL(SUM(DECODE(tshaid.ADJ_QTY, 0, 0, 1)), 0)
+                                            ,       NVL(SUM(tshaid.ACINS_AMT), 0)
                                        FROM    TB_ST_STORE_ACTUAL_INSPECTION_DTL tshaid
                                        WHERE   tshaid.STORE_CD =   #{storeCd}
                                          AND     tshaid.ACINS_DATE   =   #{acinsDate}
