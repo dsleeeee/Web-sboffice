@@ -32,7 +32,8 @@
         </tbody>
       </table>
 
-      <table class="tblType01 mt5">
+      <%-- 출고 안내문--%>
+      <table class="tblType01 mt5" id="tblInOut" style="display: none;">
         <colgroup>
           <col class="w10"/>
           <col class="w10"/>
@@ -86,6 +87,61 @@
         </tr>
         </tbody>
       </table>
+      <%-- 반품 안내문--%>
+      <table class="tblType01 mt5" id="tblReturn"  style="display: none;">
+              <colgroup>
+                <col class="w10"/>
+                <col class="w10"/>
+                <col class="w30"/>
+                <col class="w25"/>
+                <col class="w25"/>
+              </colgroup>
+              <tbody>
+              <tr>
+                <th style="text-align: right;"><s:message code="volmErr.dtl.tableTh1"/></th>
+                <th>
+                  <div class="tooltip">?
+                    <span class="tooltiptext tooltip-right">
+                    * <s:message code="volmErr.dtl.txt1"/><br/>
+                    </span>
+                  </div>
+                </th>
+                <th class="tc"><s:message code="volmErr.dtl.tableTh2"/></th>
+                <th class="tc"><s:message code="volmErr.dtl.tableTh3"/></th>
+                <th class="tc"><s:message code="volmErr.dtl.tableTh4"/></th>
+              </tr>
+              <tr>
+                <td colspan="2"><s:message code="volmErr.dtl.tableTd1Rtn_1"/></td>
+                <td><s:message code="volmErr.dtl.tableTdRtn2_1"/></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td colspan="2"><s:message code="volmErr.dtl.tableTd1Rtn_2"/></td>
+                <td><s:message code="volmErr.dtl.tableTdRtn2_2"/></td>
+                <td><s:message code="volmErr.dtl.tableTdRtn3_1"/></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td colspan="2"><s:message code="volmErr.dtl.tableTd1Rtn_3"/></td>
+                <td><s:message code="volmErr.dtl.tableTdRtn2_2"/></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td colspan="2"><s:message code="volmErr.dtl.tableTd1Rtn_4"/></td>
+                <td><s:message code="volmErr.dtl.tableTdRtn2_1"/></td>
+                <td></td>
+                <td><s:message code="volmErr.dtl.tableTdRtn4_1"/></td>
+              </tr>
+              <tr>
+                <td colspan="2"><s:message code="volmErr.dtl.tableTd1Rtn_5"/></td>
+                <td><s:message code="volmErr.dtl.tableTdRtn2_2"/></td>
+                <td></td>
+                <td><s:message code="volmErr.dtl.tableTdRtn4_2"/></td>
+              </tr>
+              </tbody>
+            </table>
 
       <div class="tr mt10 mb5 fr">
         <div id="volmErrBtnLayer" style="display: none;">
@@ -145,4 +201,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/volmErr/volmErr/volmErrDtl.js?ver=20200922.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/volmErr/volmErr/volmErrDtl.js?ver=20220902.01" charset="utf-8"></script>

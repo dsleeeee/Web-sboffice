@@ -114,6 +114,8 @@ public class VolmErrVO extends PageVO {
     private Integer seqNo;
     /** 거래처코드 */
     private String vendrCd;
+    /** 프로시져 실행 결과 */
+    private String result;
     
     
     public String getOrgnFg() {
@@ -796,5 +798,13 @@ public class VolmErrVO extends PageVO {
 
     public void setVendrCd(String vendrCd) {
         this.vendrCd = vendrCd;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 }

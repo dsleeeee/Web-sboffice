@@ -60,6 +60,7 @@ public class RtnInstockConfmServiceImpl implements RtnInstockConfmService {
         String userId	 = sessionInfoVO.getUserId();
         String confirmFg = "N";
         String penaltyFg = "";
+        int instockErrCnt 	= 0;
 
         RtnInstockConfmVO rtnInstockConfmHdVO = new RtnInstockConfmVO();
 
@@ -84,6 +85,7 @@ public class RtnInstockConfmServiceImpl implements RtnInstockConfmService {
             int inUnitQty   = (rtnInstockConfmVO.getInUnitQty()  == null ? 0 : rtnInstockConfmVO.getInUnitQty()) * slipFg;
             int inEtcQty    = (rtnInstockConfmVO.getInEtcQty()   == null ? 0 : rtnInstockConfmVO.getInEtcQty()) * slipFg;
             int inTotQty    = (rtnInstockConfmVO.getInTotQty()   == null ? 0 : rtnInstockConfmVO.getInTotQty()) * slipFg;
+            int	outTotQty 	= (rtnInstockConfmVO.getOutTotQty()  == null ? 0 : rtnInstockConfmVO.getOutTotQty()) * slipFg;
             Long inAmt      = (rtnInstockConfmVO.getInAmt()      == null ? 0 : rtnInstockConfmVO.getInAmt()) * slipFg;
             Long inVat      = (rtnInstockConfmVO.getInVat()      == null ? 0 : rtnInstockConfmVO.getInVat()) * slipFg;
             Long inTot      = (rtnInstockConfmVO.getInTot()      == null ? 0 : rtnInstockConfmVO.getInTot()) * slipFg;
@@ -91,6 +93,8 @@ public class RtnInstockConfmServiceImpl implements RtnInstockConfmService {
             if(penaltyAmt > 0 && !penaltyFg.equals("Y")) {
                 penaltyFg = "Y";
             }
+            //출고수량과 입고수량이 다르면 카운트
+            if(inTotQty != outTotQty) instockErrCnt++;
 
             rtnInstockConfmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             rtnInstockConfmVO.setInUnitQty(inUnitQty);
@@ -155,18 +159,38 @@ public class RtnInstockConfmServiceImpl implements RtnInstockConfmService {
             rtnInstockConfmHdVO.setProcFg("20");
             rtnInstockConfmHdVO.setUpdateProcFg("30");
 
-            // DTL의 진행구분 수정. 출고확정 -> 입고확정
-            result = rtnInstockConfmMapper.updateInstockDtlConfirm(rtnInstockConfmHdVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            // 입고확정상태 확인 PROC_FG > 20
+            // 이미 확정한 경우 저장 및 확정하면 안됨 exception 처리 진행.
+            result = rtnInstockConfmMapper.getInstockConfirmCnt(rtnInstockConfmHdVO);
+            // 이미 입고확정된 내역입니다.
+            if(result > 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.modifyFail"));
 
-            // HD의 진행구분 수정. 출고확정 -> 입고확정
-            result = rtnInstockConfmMapper.updateInstockConfirm(rtnInstockConfmHdVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            // result 1이상이면 이미 입고확정 상태임.[처리구분] TB_CM_NMCODE(NMCODE_GRP_CD='113') 10:수주확정 20:출고확정 30:입고확정]
+            if(result <= 0)
+            {
+                // DTL의 진행구분 수정. 출고확정 -> 입고확정
+                result = rtnInstockConfmMapper.updateInstockDtlConfirm(rtnInstockConfmHdVO);
+                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-            // PROD의 진행구분 수정. 수주확정 -> 출고확정
-            result = rtnInstockConfmMapper.updateInstockProdConfirm(rtnInstockConfmHdVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                // HD의 진행구분 수정. 출고확정 -> 입고확정
+                result = rtnInstockConfmMapper.updateInstockConfirm(rtnInstockConfmHdVO);
+                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
+                // PROD의 진행구분 수정. 수주확정 -> 출고확정
+                result = rtnInstockConfmMapper.updateInstockProdConfirm(rtnInstockConfmHdVO);
+                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                //출고수량과 입고수량이 다른 상품이 있는 경우 물량오류로 등록
+                if(instockErrCnt > 0) {
+                    //물량오류 DTL 등록
+                    result = rtnInstockConfmMapper.insertInstockErrDtl(rtnInstockConfmHdVO);
+                    if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+
+                    //물량오류 HD 등록
+                    result = rtnInstockConfmMapper.insertInstockErrHd(rtnInstockConfmHdVO);
+                    if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+                }
+            }
         }
 
         return returnResult;

@@ -1,7 +1,6 @@
 package kr.co.solbipos.iostock.orderReturn.rtnInstockConfm.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.iostock.order.instockConfm.service.InstockConfmProdVO;
 import kr.co.solbipos.iostock.orderReturn.rtnInstockConfm.service.RtnInstockConfmVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -40,4 +39,13 @@ public interface RtnInstockConfmMapper {
 
     /** 입고확정 - [본사_수불] 출고전표_매장출고내역_상품 수정 */
     int mergeInstockConfmProd(RtnInstockConfmVO rtnInstockConfmVO);
+
+    /** 입고확정 - 입고확정상태 확인 PROC_FG > 20 */
+    int getInstockConfirmCnt(RtnInstockConfmVO rtnInstockConfmVO);
+
+    /** 입고확정 - 물량오류 DTL 등록 */
+    int insertInstockErrDtl(RtnInstockConfmVO rtnInstockConfmVO);
+
+    /** 입고확정 - 물량오류 HD 등록 */
+    int insertInstockErrHd(RtnInstockConfmVO rtnInstockConfmVO);
 }

@@ -493,4 +493,32 @@
         ]]>
     </select>
 
+    <!-- 물량오류관리 - 물량오류확정 프로시져 호출 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK, TB_PO_HQ_STORE_OUTSTOCK_DTL,
+                   TB_ST_HQ_ADJUST, TB_ST_HQ_ADJUST_DTL,
+                   TB_PO_STORE_INSTOCK_ERROR, TB_PO_STORE_INSTOCK_ERROR_DTL
+        PARAM    :
+        COMMENTS : 물량오류관리 - 물량오류건에 대해 확정한다.
+    -->
+    <select id="saveConfirmVolmErr" statementType="CALLABLE"  parameterType="volmErrVO" resultType="String">
+        /* USE : VolmErrMapper.saveConfirmVolmErr */
+        {
+            CALL PKG_PO_STORE_INSTOCK_ERR.SP_INSTOCK_ERR_CONFIRM_IU
+            (
+                #{hqOfficeCd},
+                #{storeCd},
+                #{slipNo},
+                #{slipFg},
+                #{procFg},
+                #{hqNewAdjustFg},
+                #{newSlipNoFg},
+                #{outDate},
+                #{areaFg},
+                #{regId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
 </mapper>

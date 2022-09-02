@@ -2,8 +2,6 @@ package kr.co.solbipos.iostock.volmErr.volmErr.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.iostock.volmErr.volmErr.service.VolmErrVO;
-import kr.co.solbipos.stock.adj.adj.service.AdjVO;
-
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -65,5 +63,8 @@ public interface VolmErrMapper {
 
     /** 조정관리 - 조정 신규 SEQ 조회(본사) */
     String getHqNewSeqNo(VolmErrVO volmErrVO);
+
+    /** 물량오류관리 - 물량오류확정 프로시져 호출 */
+    String saveConfirmVolmErr(VolmErrVO volmErrVO);
 
 }
