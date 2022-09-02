@@ -27,7 +27,8 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
 
 	  today = yyyy + mm + dd;
 
-	  return today;
+	  //return today;
+      return getTomorrow('');
 	}
   
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -75,6 +76,15 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
    
     $scope.wjVolmErrDtlLayer.show(true);
     $("#spanDtlTitle").html(messages["volmErr.dtl.slipNo"] + ' : ' + $scope.slipNo + ', ' + messages["volmErr.dtl.store"] + ' : ' + '[' + $scope.storeCd + '] ' + $scope.storeNm);
+
+    // 출고/반품 안내문 셋팅
+    if($scope.slipFg === 1){
+      $("#tblInOut").css("display", "");
+      $("#tblReturn").css("display", "none");
+    }else{
+      $("#tblInOut").css("display", "none");
+      $("#tblReturn").css("display", "");
+    }
         /*
         console.log('data.procFg        : ' + data.procFg     );
         console.log('$scope.procFg      : ' + $scope.procFg   );
@@ -375,7 +385,7 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
         if (newSlipNoFg       === "N" && (item.errFg === "O2" || item.errFg === "O4" || item.errFg === "R2")) {
           newSlipNoFg = "Y";
         }
-        if (hqNewAdjustFg     === "N" && (item.errFg === "O4" || item.errFg === "O5" || item.errFg === "R4")) {
+        if (hqNewAdjustFg     === "N" && (item.errFg === "O4" || item.errFg === "O5" || item.errFg === "R4" || item.errFg === "R5")) {
           hqNewAdjustFg = "Y";
         }
         if (storeNewAdjustFg  === "N" && item.errFg === "R2") {

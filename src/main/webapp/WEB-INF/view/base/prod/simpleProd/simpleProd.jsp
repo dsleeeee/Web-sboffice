@@ -89,17 +89,17 @@
                         <wj-flex-grid-column header="<s:message code="simpleProd.prodCd"/>" binding="prodCd" width="100" align="center"></wj-flex-grid-column>
                     </c:if>
                     <wj-flex-grid-column header="<s:message code="simpleProd.prodNm"/>" binding="prodNm" width="100" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="simpleProd.saleUprc"/>" binding="saleUprc" max-length="10" width="80" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="simpleProd.saleUprc"/>" binding="saleUprc" max-length="10" width="80" align="center" data-type="Number"></wj-flex-grid-column>
                     <c:if test="${subPriceFg == '1'}">
-                        <wj-flex-grid-column header="<s:message code="simpleProd.stinSaleUprc"/>" binding="stinSaleUprc" max-length="10" width="80" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="simpleProd.dlvrSaleUprc"/>" binding="dlvrSaleUprc" max-length="10" width="80" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="simpleProd.packSaleUprc"/>" binding="packSaleUprc" max-length="10" width="80" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="simpleProd.stinSaleUprc"/>" binding="stinSaleUprc" max-length="10" width="80" align="center" data-type="Number"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="simpleProd.dlvrSaleUprc"/>" binding="dlvrSaleUprc" max-length="10" width="80" align="center" data-type="Number"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="simpleProd.packSaleUprc"/>" binding="packSaleUprc" max-length="10" width="80" align="center" data-type="Number"></wj-flex-grid-column>
                     </c:if>
                     <wj-flex-grid-column header="<s:message code="simpleProd.vendrCd"/>" binding="vendrCd" data-map="vendrCdDataMap" width="75" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.prodTypeFg"/>" binding="prodTypeFg" data-map="prodTypeFgDataMap" width="85" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.poProdFg"/>" binding="poProdFg" data-map="poProdFgDataMap" width="125" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="simpleProd.splyUprc"/>" binding="splyUprc" width="80" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="simpleProd.costUprc"/>" binding="costUprc" width="80" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="simpleProd.splyUprc"/>" binding="splyUprc" width="80" align="center" data-type="Number"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="simpleProd.costUprc"/>" binding="costUprc" width="80" align="center" data-type="Number"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.vatFg"/>" binding="vatFg" data-map="vatFgDataMap" width="80" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.barCd"/>" binding="barCd" width="100" align="center"></wj-flex-grid-column>
                     <c:if test="${orgnFg == 'HQ'}">

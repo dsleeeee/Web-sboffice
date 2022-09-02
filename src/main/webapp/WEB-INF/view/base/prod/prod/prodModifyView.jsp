@@ -630,7 +630,7 @@
               <%--발주단위수량--%>
               <th><s:message code="prod.poUnitQty"/></th>
               <td>
-                <input type="text" id="prodModifyPoUnitQty" name="poUnitQty" class="sb-input w100"
+                <input type="text" numberOnly id="prodModifyPoUnitQty" name="poUnitQty" class="sb-input w100"
                        ng-model="prodModifyInfo.poUnitQty"
                        required
                        popover-enable="myForm.poUnitQty.$invalid"
@@ -641,7 +641,7 @@
               <%--최소발주수량--%>
               <th><s:message code="prod.poMinQty"/></th>
               <td>
-                <input type="text" id="prodModifyPoMinQty" name="poMinQty" class="sb-input w100"
+                <input type="text" numberOnly id="prodModifyPoMinQty" name="poMinQty" class="sb-input w100"
                        ng-model="prodModifyInfo.poMinQty"
                        required
                        popover-enable="myForm.poMinQty.$invalid"
@@ -654,7 +654,7 @@
               <%--안전재고--%>
               <th><s:message code="prod.safeStockQty"/></th>
               <td>
-                <input type="text" id="prodModifySafeStockQty" name="safeStockQty" class="sb-input w100"
+                <input type="text" numberOnly id="prodModifySafeStockQty" name="safeStockQty" class="sb-input w100"
                        ng-model="prodModifyInfo.safeStockQty"
                        required
                        popover-enable="myForm.safeStockQty.$invalid"

@@ -364,8 +364,8 @@
                     <wj-flex-grid-column header="<s:message code="salePriceManage.prodNm"/>" binding="prodNm" width="80" is-read-only="true" align="left"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="salePriceManage.poUnitQty"/>" binding="poUnitQty" visible="false" ></wj-flex-grid-column>
                     <c:if test="${hqOfficeCd != '00000'}">
-                        <wj-flex-grid-column header="<s:message code="salePriceManage.hqCostUprc"/>" binding="hqCostUprc" is-read-only="true" width="60" align="right"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="salePriceManage.hqSplyUprc"/>" binding="hqSplyUprc" is-read-only="true" width="60" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="salePriceManage.hqCostUprc"/>" binding="hqCostUprc" is-read-only="true" width="60" align="right" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="salePriceManage.hqSplyUprc"/>" binding="hqSplyUprc" is-read-only="true" width="60" align="right" visible="false"></wj-flex-grid-column>
                     </c:if>
                     <wj-flex-grid-column header="<s:message code="salePriceManage.storeSplyUprc"/>" binding="storeSplyUprc" is-read-only="true" width="*" align="right" visible="false"></wj-flex-grid-column>
                     <c:if test="${hqOfficeCd != '00000'}">
