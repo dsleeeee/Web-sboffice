@@ -163,17 +163,17 @@
 	              frozen-columns="6">
 
 	              <!-- define columns -->
-	              <wj-flex-grid-column header="<s:message code="monthIostock.prodClassNm"/>"        binding="prodClassNm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="monthIostock.prodClassNm"/>"        binding="prodClassNm" width="200" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
 
 	              <wj-flex-grid-column header="<s:message code="monthIostock.prodCd"/>"             binding="prodCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
-	              <wj-flex-grid-column header="<s:message code="monthIostock.prodNm"/>"             binding="prodNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="monthIostock.prodNm"/>"             binding="prodNm" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="monthIostock.poUnitQty"/>"          binding="poUnitQty" width="50" align="center" is-read-only="true"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="monthIostock.poUnitFg"/>"           binding="poUnitFgNm" width="50" align="center" is-read-only="true"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="monthIostock.barcdCd"/>"            binding="barcdCd" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
-	              <wj-flex-grid-column header="<s:message code="monthIostock.basicStockQty"/>"      binding="baseQty" width="60" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	              <wj-flex-grid-column header="<s:message code="monthIostock.basicStockAmt"/>"      binding="baseAmt" width="60" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="monthIostock.basicStockQty"/>"      binding="baseQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="monthIostock.basicStockAmt"/>"      binding="baseAmt" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 
-                  <wj-flex-grid-column header="<s:message code="monthIostock.accVendrInQty"/>"      binding="vendrInQty" width="60" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="monthIostock.accVendrInQty"/>"      binding="vendrInQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="monthIostock.accVendrInAmt"/>"      binding="vendrInTot" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="monthIostock.accVendrOutQty"/>"     binding="vendrOutQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="monthIostock.accVendrOutAmt"/>"     binding="vendrOutTot" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -233,17 +233,17 @@
                     >
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="monthIostock.prodClassNm"/>"        binding="prodClassNm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="monthIostock.prodClassNm"/>"        binding="prodClassNm" width="200" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
 
                         <wj-flex-grid-column header="<s:message code="monthIostock.prodCd"/>"             binding="prodCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="monthIostock.prodNm"/>"             binding="prodNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="monthIostock.prodNm"/>"             binding="prodNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="monthIostock.poUnitQty"/>"          binding="poUnitQty" width="50" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="monthIostock.poUnitFg"/>"           binding="poUnitFgNm" width="50" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="monthIostock.barcdCd"/>"            binding="barcdCd" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="monthIostock.basicStockQty"/>"      binding="baseQty" width="60" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="monthIostock.basicStockAmt"/>"      binding="baseAmt" width="60" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="monthIostock.basicStockQty"/>"      binding="baseQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="monthIostock.basicStockAmt"/>"      binding="baseAmt" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 
-                        <wj-flex-grid-column header="<s:message code="monthIostock.accVendrInQty"/>"      binding="vendrInQty" width="60" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="monthIostock.accVendrInQty"/>"      binding="vendrInQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="monthIostock.accVendrInAmt"/>"      binding="vendrInTot" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="monthIostock.accVendrOutQty"/>"     binding="vendrOutQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="monthIostock.accVendrOutAmt"/>"     binding="vendrOutTot" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

@@ -73,7 +73,7 @@
             <wj-flex-grid-column header="<s:message code="periodIostock.slipNo"/>"          binding="slipNo"	width="*"     align="center"	is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="periodIostock.outDate"/>"         binding="outDate"	width="*"     align="center"	is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="periodIostock.storeCd"/>"         binding="storeCd"	width="*"     align="center"	is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="periodIostock.storeNm"/>"         binding="storeNm"	width="*"     align="center"	is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="periodIostock.storeNm"/>"         binding="storeNm"	width="*"     align="left"	is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"          	binding="qty"		width="*"     align="right"		is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"             binding="tot"		width="*"     align="right"		is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           </wj-flex-grid>

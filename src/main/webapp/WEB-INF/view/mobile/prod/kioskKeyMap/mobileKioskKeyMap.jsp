@@ -84,9 +84,53 @@
                     <wj-flex-grid-column header="<s:message code="mobile.kioskKeyMap.posNo"/>" binding="posNo" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mobile.kioskKeyMap.tuClsCd"/>" binding="tuClsCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mobile.kioskKeyMap.tuClsNm"/>" binding="tuClsNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.kioskKeyMap.tuMClsFg"/>" binding="tuMClsFg" width="*" align="center" is-read-only="true" data-map="tuMClsFgDataMap"></wj-flex-grid-column>
 
                     <!-- 조회 결과가 없을 때, msg 띄우기 -->
                     <div class="gridMsg" id="mobileKioskKeyMapGrpMsg" style="line-height: 100px; display: none;"><s:message code="mobile.cmm.search.result.empty"/></div>
+                </wj-flex-grid>
+            </div>
+        </div>
+    </div>
+
+    <!-- 중분류 -->
+    <div ng-controller="mobileKioskKeyMapMGrpCtrl" style="display: none;" id="mobileKioskKeyMapMGrpDiv">
+        <div class="mt5 mb5 oh sb-select tr">
+            <button class="btn_up" id="btnUpKeyMapMGrp" ng-click="rowMoveUpKeyMap()" >
+                <s:message code="mobile.cmm.up" />
+            </button>
+            <button class="btn_down" id="btnDownKeyMapMGrp" ng-click="rowMoveDownKeyMap()">
+                <s:message code="mobile.cmm.down" />
+            </button>
+            <button class="btn_skyblue ml5 fr" id="btnSaveMGrp" ng-click="save()">
+                <s:message code="mobile.cmm.save"/>
+            </button>
+        </div>
+
+        <div class="gridBar mt10" id="mobileKioskKeyMapMGrp" onclick="girdFldUnfld('mobileKioskKeyMapMGrp')">
+            <a href="#" class="open" id="kioskKeyMapMGrpTitle"></a>
+        </div>
+        <div class="w100" id="mobileKioskKeyMapMGrpGrid" class="wj-TblWrapBr pd5" style="height: 150px;">
+            <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden; min-height:150px; height: 100%;">
+                <wj-flex-grid
+                        autoGenerateColumns="false"
+                        control="flex"
+                        initialized="initGrid(s,e)"
+                        selection-mode="Row"
+                        items-source="data"
+                        item-formatter="_itemFormatter">
+
+                    <!-- define columns -->
+                    <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.kioskKeyMap.tuClsCd"/>" binding="envstCd" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.kioskKeyMap.tuClsCd"/>" binding="tuClsType" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.kioskKeyMap.posNo"/>" binding="posNo" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.kioskKeyMap.tuClsCd"/>" binding="tuMClsCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.kioskKeyMap.tuClsNm"/>" binding="tuMClsNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mobile.kioskKeyMap.mmClsMemo"/>" binding="mmClsMemo" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+
+                    <!-- 조회 결과가 없을 때, msg 띄우기 -->
+                    <div class="gridMsg" id="mobileKioskKeyMapMGrpMsg" style="line-height: 100px; display: none;"><s:message code="mobile.cmm.search.result.empty"/></div>
                 </wj-flex-grid>
             </div>
         </div>
@@ -139,4 +183,4 @@
     var kioskPosList = ${kioskPosList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/prod/kioskKeyMap/mobileKioskKeyMap.js?ver=20220822.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/prod/kioskKeyMap/mobileKioskKeyMap.js?ver=20220822.02" charset="utf-8"></script>

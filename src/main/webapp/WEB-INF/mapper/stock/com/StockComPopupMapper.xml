@@ -766,39 +766,39 @@
 		,       TO_CHAR(TO_DATE(TPSM.IN_CONFM_DT,'YYYYMMDDHH24MISS'),'YYYY-MM-DD') AS IN_CONFM_DT
 		,       TPSM.HQ_OFFICE_CD
 		,       (SELECT HQ_OFFICE_NM FROM TB_HQ_OFFICE Z WHERE Z.HQ_OFFICE_CD = TPSM.HQ_OFFICE_CD) AS HQ_OFFICE_NM
-		,       THP.PROD_CLASS_CD
-		,       THP.PROD_CD
-		,       THP.PROD_NM
-		,       THPB.BARCD_CD
+		,       TMP.PROD_CLASS_CD
+		,       TMP.PROD_CD
+		,       TMP.PROD_NM
+		,       TMPB.BARCD_CD
 		,       SUM(TPSMD.IN_TOT_QTY)   AS IN_TOT_QTY
 		,       SUM(TPSMD.IN_TOT)       AS IN_TOT
 		FROM    TB_PO_STORE_MOVE TPSM
 		,       TB_PO_STORE_MOVE_DTL TPSMD
-		,       TB_HQ_PRODUCT THP
-		,       TB_HQ_PRODUCT_BARCD THPB
+		,       TB_MS_PRODUCT TMP
+		,       TB_MS_PRODUCT_BARCD TMPB
 		WHERE   TPSM.HQ_OFFICE_CD   =   #{hqOfficeCd}
 		AND     TPSM.IN_STORE_CD    =   #{storeCd}
-		AND THP.STOCK_PROD_YN = 'Y'
-		AND THP.USE_YN = 'Y'
+		AND TMP.STOCK_PROD_YN = 'Y'
+		AND TMP.USE_YN = 'Y'
 		AND TPSM.PROC_FG = '3'
 		<if test="saleDate != '' and saleDate != null">
 			AND TPSM.MOVE_DATE      =   #{saleDate}
 		</if>
 		AND     TPSM.HQ_OFFICE_CD   =   TPSMD.HQ_OFFICE_CD
 		AND     TPSM.SLIP_NO        =   TPSMD.SLIP_NO
-		AND     TPSMD.HQ_OFFICE_CD  =   THP.HQ_OFFICE_CD
-		AND     TPSMD.PROD_CD       =   THP.PROD_CD
-		AND     TPSMD.HQ_OFFICE_CD  =   THPB.HQ_OFFICE_CD(+)
-		AND     TPSMD.PROD_CD       =   THPB.PROD_CD(+)
+		AND     TPSM.IN_STORE_CD  	=   TMP.STORE_CD
+		AND     TPSMD.PROD_CD       =   TMP.PROD_CD
+		AND     TPSM.IN_STORE_CD  	=   TMPB.STORE_CD(+)
+		AND     TPSMD.PROD_CD       =   TMPB.PROD_CD(+)
 		GROUP
 		BY      TPSM.HQ_OFFICE_CD
 		,       TPSM.SLIP_NO
 		,       TO_CHAR(TO_DATE(TPSM.IN_CONFM_DT,'YYYYMMDDHH24MISS'),'YYYY-MM-DD')
 		,       TPSM.IN_STORE_CD
-		,       THP.PROD_CLASS_CD
-		,       THP.PROD_CD
-		,       THP.PROD_NM
-		,       THPB.BARCD_CD
+		,       TMP.PROD_CLASS_CD
+		,       TMP.PROD_CD
+		,       TMP.PROD_NM
+		,       TMPB.BARCD_CD
 		)   B
 		ORDER
 		BY      B.SLIP_NO,  B.PROD_CD
@@ -822,39 +822,39 @@
 			,       TO_CHAR(TO_DATE(TPSM.OUT_CONFM_DT,'YYYYMMDDHH24MISS'),'YYYY-MM-DD') AS OUT_CONFM_DT
 			,       TPSM.HQ_OFFICE_CD
 			,       (SELECT HQ_OFFICE_NM FROM TB_HQ_OFFICE Z WHERE Z.HQ_OFFICE_CD = TPSM.HQ_OFFICE_CD) AS HQ_OFFICE_NM
-			,       THP.PROD_CLASS_CD
-			,       THP.PROD_CD
-			,       THP.PROD_NM
-			,       THPB.BARCD_CD
+			,       TMP.PROD_CLASS_CD
+			,       TMP.PROD_CD
+			,       TMP.PROD_NM
+			,       TMPB.BARCD_CD
 			,       SUM(TPSMD.OUT_TOT_QTY)  AS OUT_TOT_QTY
 			,       SUM(TPSMD.OUT_TOT)      AS OUT_TOT
 			FROM    TB_PO_STORE_MOVE TPSM
 			,       TB_PO_STORE_MOVE_DTL TPSMD
-			,       TB_HQ_PRODUCT THP
-			,       TB_HQ_PRODUCT_BARCD THPB
+			,       TB_MS_PRODUCT TMP
+			,       TB_MS_PRODUCT_BARCD TMPB
 			WHERE   TPSM.HQ_OFFICE_CD   =   #{hqOfficeCd}
 			AND     TPSM.OUT_STORE_CD   =   #{storeCd}
-			AND THP.STOCK_PROD_YN = 'Y'
-			AND THP.USE_YN = 'Y'
+			AND TMP.STOCK_PROD_YN = 'Y'
+			AND TMP.USE_YN = 'Y'
 			AND TPSM.PROC_FG = '3'
 			<if test="saleDate != '' and saleDate != null">
 				AND TPSM.MOVE_DATE      =   #{saleDate}
 			</if>
 			AND     TPSM.HQ_OFFICE_CD   =   TPSMD.HQ_OFFICE_CD
 			AND     TPSM.SLIP_NO        =   TPSMD.SLIP_NO
-			AND     TPSMD.HQ_OFFICE_CD  =   THP.HQ_OFFICE_CD
-			AND     TPSMD.PROD_CD       =   THP.PROD_CD
-			AND     TPSMD.HQ_OFFICE_CD  =   THPB.HQ_OFFICE_CD(+)
-			AND     TPSMD.PROD_CD       =   THPB.PROD_CD(+)
+			AND     TPSM.OUT_STORE_CD  	=   TMP.STORE_CD
+			AND     TPSMD.PROD_CD       =   TMP.PROD_CD
+			AND     TPSM.OUT_STORE_CD  	=   TMPB.STORE_CD(+)
+			AND     TPSMD.PROD_CD       =   TMPB.PROD_CD(+)
 			GROUP
 			BY      TPSM.HQ_OFFICE_CD
 			,       TPSM.SLIP_NO
 			,       TO_CHAR(TO_DATE(TPSM.OUT_CONFM_DT,'YYYYMMDDHH24MISS'),'YYYY-MM-DD')
 			,       TPSM.OUT_STORE_CD
-			,       THP.PROD_CLASS_CD
-			,       THP.PROD_CD
-			,       THP.PROD_NM
-			,       THPB.BARCD_CD
+			,       TMP.PROD_CLASS_CD
+			,       TMP.PROD_CD
+			,       TMP.PROD_NM
+			,       TMPB.BARCD_CD
 		)   B
 		ORDER
 		BY      B.SLIP_NO,  B.PROD_CD

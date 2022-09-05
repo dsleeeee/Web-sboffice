@@ -18,6 +18,8 @@ public class StockManageViewStoreVO extends PageVO {
     private String statusFg;
     /** 진행 */
     private String procFg;
+    /** 사유 */
+    private String reason;
 
 	public String getOrgnFg() {
 		return orgnFg;
@@ -56,4 +58,11 @@ public class StockManageViewStoreVO extends PageVO {
 		this.procFg = procFg;
 	}
 
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
 }

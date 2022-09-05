@@ -155,9 +155,9 @@
           frozen-columns="6">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="periodIostock.prodClassNm"/>"	binding="prodClassNm"	width="200"		align="center"	is-read-only="true"	visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="periodIostock.prodClassNm"/>"	binding="prodClassNm"	width="200"		align="left"	is-read-only="true"	visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="periodIostock.prodCd"/>"		binding="prodCd"		width="100"		align="center"	is-read-only="true"	format="d"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="periodIostock.prodNm"/>"		binding="prodNm"		width="150"		align="center"	is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="periodIostock.prodNm"/>"		binding="prodNm"		width="150"		align="left"	is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="periodIostock.poUnitQty"/>"		binding="poUnitQty"		width="50"		align="right"	is-read-only="true"	aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="periodIostock.poUnitFg"/>"		binding="poUnitFgNm"	width="50"		align="center"	is-read-only="true" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="periodIostock.barcdCd"/>"		binding="barcdCd"		width="120"		align="center"	is-read-only="true" format="d"></wj-flex-grid-column>
@@ -217,9 +217,9 @@
           frozen-columns="6">
 
           <!-- define columns -->
-			<wj-flex-grid-column header="<s:message code="periodIostock.prodClassNm"/>"	binding="prodClassNm"	width="200"		align="center"	is-read-only="true"	visible="false"></wj-flex-grid-column>
+			<wj-flex-grid-column header="<s:message code="periodIostock.prodClassNm"/>"	binding="prodClassNm"	width="200"		align="left"	is-read-only="true"	visible="false"></wj-flex-grid-column>
 			<wj-flex-grid-column header="<s:message code="periodIostock.prodCd"/>"		binding="prodCd"		width="100"		align="center"	is-read-only="true"	format="d"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.prodNm"/>"		binding="prodNm"		width="150"		align="center"	is-read-only="true"></wj-flex-grid-column>
+			<wj-flex-grid-column header="<s:message code="periodIostock.prodNm"/>"		binding="prodNm"		width="150"		align="left"	is-read-only="true"></wj-flex-grid-column>
 			<wj-flex-grid-column header="<s:message code="periodIostock.poUnitQty"/>"	binding="poUnitQty"		width="50"		align="right"	is-read-only="true"	aggregate="Sum"></wj-flex-grid-column>
 			<wj-flex-grid-column header="<s:message code="periodIostock.poUnitFg"/>"	binding="poUnitFgNm"	width="50"		align="center"	is-read-only="true" ></wj-flex-grid-column>
 			<wj-flex-grid-column header="<s:message code="periodIostock.barcdCd"/>"		binding="barcdCd"		width="120"		align="center"	is-read-only="true" format="d"></wj-flex-grid-column>

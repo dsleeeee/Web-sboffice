@@ -72,6 +72,29 @@ public class MobileKioskKeyMapServiceImpl implements MobileKioskKeyMapService {
         return cnt;
     }
 
+    // 중분류 조회
+    @Override
+    public List<DefaultMap<String>> getMobileKioskKeyMapMList(MobileKioskKeyMapVO mobileKioskKeyMapVO, SessionInfoVO sessionInfoVO) {
+        mobileKioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+        return mobileKioskKeyMapMapper.getMobileKioskKeyMapMList(mobileKioskKeyMapVO);
+    }
+
+    // 중분류 저장
+    @Override
+    public int getMobileKioskKeyMapMGrpSave(MobileKioskKeyMapVO[] mobileKioskKeyMapVOs, SessionInfoVO sessionInfoVO) {
+        int cnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(MobileKioskKeyMapVO mobileKioskKeyMapVO : mobileKioskKeyMapVOs) {
+            mobileKioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+            mobileKioskKeyMapVO.setModDt(currentDt);
+            mobileKioskKeyMapVO.setModId(sessionInfoVO.getUserId());
+
+            cnt = mobileKioskKeyMapMapper.getMobileKioskKeyMapMGrpSave(mobileKioskKeyMapVO);
+        }
+        return cnt;
+    }
+
     // 키맵 상품 조회
     @Override
     public List<DefaultMap<String>> getMobileKioskKeyMapProdList(MobileKioskKeyMapVO mobileKioskKeyMapVO, SessionInfoVO sessionInfoVO) {

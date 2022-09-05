@@ -158,23 +158,23 @@
 	              >
 
 	              <!-- define columns -->
-				  <wj-flex-grid-column header="<s:message code="dayIostock.prodClassNm"/>" 			binding="prodClassNm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+				  <wj-flex-grid-column header="<s:message code="dayIostock.prodClassNm"/>" 			binding="prodClassNm" width="200" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
 
 				  <wj-flex-grid-column header="<s:message code="dayIostock.prodCd"/>"   			binding="prodCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
-	              <wj-flex-grid-column header="<s:message code="dayIostock.prodNm"/>"   			binding="prodNm" width="160" align="center" is-read-only="true"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="dayIostock.prodNm"/>"   			binding="prodNm" width="160" align="left" is-read-only="true"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="dayIostock.poUnitQty"/>"			binding="poUnitQty" width="50" align="center" is-read-only="true"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="dayIostock.poUnitFg"/>" 			binding="poUnitFgNm" width="50" align="center" is-read-only="true"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="dayIostock.barcdCd"/>"  			binding="barcdCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
 
-				  <wj-flex-grid-column header="<s:message code="dayIostock.accStoreInQty"/>"  		binding="storeInQty" width="60" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				  <wj-flex-grid-column header="<s:message code="dayIostock.accStoreInQty"/>"  		binding="storeInQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 				  <wj-flex-grid-column header="<s:message code="dayIostock.accStoreInAmt"/>"  		binding="storeInTot" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-				  <wj-flex-grid-column header="<s:message code="dayIostock.accStoreOutQty"/>" 		binding="storeOutQty" width="60" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				  <wj-flex-grid-column header="<s:message code="dayIostock.accStoreOutQty"/>" 		binding="storeOutQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 				  <wj-flex-grid-column header="<s:message code="dayIostock.accStoreOutAmt"/>" 		binding="storeOutTot" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-				  <wj-flex-grid-column header="<s:message code="dayIostock.accPurchsInQty"/>" 		binding="purchsInQty" width="60" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				  <wj-flex-grid-column header="<s:message code="dayIostock.accPurchsInQty"/>" 		binding="purchsInQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 				  <wj-flex-grid-column header="<s:message code="dayIostock.accPurchsInAmt"/>" 		binding="purchsInTot" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-				  <wj-flex-grid-column header="<s:message code="dayIostock.accPurchsOutQty"/>"		binding="purchsOutQty" width="60" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				  <wj-flex-grid-column header="<s:message code="dayIostock.accPurchsOutQty"/>"		binding="purchsOutQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 				  <wj-flex-grid-column header="<s:message code="dayIostock.accPurchsOutAmt"/>"		binding="purchsOutTot" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-				  <wj-flex-grid-column header="<s:message code="dayIostock.accStoreSaleQty"/>"		binding="storeSaleQty" width="60" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				  <wj-flex-grid-column header="<s:message code="dayIostock.accStoreSaleQty"/>"		binding="storeSaleQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 				  <wj-flex-grid-column header="<s:message code="dayIostock.accStoreSaleAmt"/>"		binding="storeSaleTot" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 
 	              <wj-flex-grid-column header="<s:message code="dayIostock.accStoreMoveInQty"/>" 	binding="moveInQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -218,23 +218,23 @@
 	              >
 
 	              <!-- define columns -->
-				  <wj-flex-grid-column header="<s:message code="dayIostock.prodClassNm"/>" 			binding="prodClassNm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+				  <wj-flex-grid-column header="<s:message code="dayIostock.prodClassNm"/>" 			binding="prodClassNm" width="200" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
 
 					<wj-flex-grid-column header="<s:message code="dayIostock.prodCd"/>"   			binding="prodCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
-					<wj-flex-grid-column header="<s:message code="dayIostock.prodNm"/>"   			binding="prodNm" width="160" align="center" is-read-only="true"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dayIostock.prodNm"/>"   			binding="prodNm" width="160" align="left" is-read-only="true"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dayIostock.poUnitQty"/>"			binding="poUnitQty" width="50" align="center" is-read-only="true"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dayIostock.poUnitFg"/>" 			binding="poUnitFgNm" width="50" align="center" is-read-only="true"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dayIostock.barcdCd"/>"  			binding="barcdCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
 
-					<wj-flex-grid-column header="<s:message code="dayIostock.accStoreInQty"/>"  	binding="storeInQty" width="60" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dayIostock.accStoreInQty"/>"  	binding="storeInQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dayIostock.accStoreInAmt"/>"  	binding="storeInTot" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-					<wj-flex-grid-column header="<s:message code="dayIostock.accStoreOutQty"/>" 	binding="storeOutQty" width="60" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dayIostock.accStoreOutQty"/>" 	binding="storeOutQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dayIostock.accStoreOutAmt"/>" 	binding="storeOutTot" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-					<wj-flex-grid-column header="<s:message code="dayIostock.accPurchsInQty"/>" 	binding="purchsInQty" width="60" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dayIostock.accPurchsInQty"/>" 	binding="purchsInQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dayIostock.accPurchsInAmt"/>" 	binding="purchsInTot" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-					<wj-flex-grid-column header="<s:message code="dayIostock.accPurchsOutQty"/>"	binding="purchsOutQty" width="60" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dayIostock.accPurchsOutQty"/>"	binding="purchsOutQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dayIostock.accPurchsOutAmt"/>"	binding="purchsOutTot" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-					<wj-flex-grid-column header="<s:message code="dayIostock.accStoreSaleQty"/>"	binding="storeSaleQty" width="60" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dayIostock.accStoreSaleQty"/>"	binding="storeSaleQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dayIostock.accStoreSaleAmt"/>"	binding="storeSaleTot" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 
 					<wj-flex-grid-column header="<s:message code="dayIostock.accStoreMoveInQty"/>" 	binding="moveInQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
