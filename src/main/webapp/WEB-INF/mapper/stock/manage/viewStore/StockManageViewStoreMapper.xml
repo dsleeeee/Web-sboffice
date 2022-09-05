@@ -18,6 +18,8 @@
 		     , M.PROC_FG_NM
 		     , M.DTL_CNT
 		     , M.TITLE
+			 , M.REASON_CD
+			 , M.REASON_NM
 		     <include refid="CmmSQL.PagingTemplateCount"/>
 		  FROM (
 		        SELECT '1' AS HQ_GBN
@@ -27,6 +29,8 @@
 		             , DECODE(TSSAI.PROC_FG,'0','등록','확정') AS PROC_FG_NM
 		             , TSSAI.DTL_CNT
 		             , TSSAI.ACINS_TITLE AS TITLE
+					 , TSSAI.REASON_CD
+					 , (SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE thm WHERE thm.STORE_CD = TSSAI.STORE_CD AND NMCODE_GRP_CD = '134' AND thm.NMCODE_CD = TSSAI.REASON_CD) AS REASON_NM
 		          FROM TB_ST_STORE_ACTUAL_INSPECTION TSSAI
 		         WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSAI.STORE_CD)
 		           <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
@@ -49,6 +53,8 @@
 		             , DECODE(TSSA.PROC_FG,'0','등록','확정') AS PROC_FG_NM
 		             , TSSA.DTL_CNT
 		             , TSSA.ADJ_TITLE AS TITLE
+					 , TSSA.REASON_CD
+					 , (SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE thm WHERE thm.STORE_CD = TSSA.STORE_CD AND NMCODE_GRP_CD = '135' AND thm.NMCODE_CD = TSSA.REASON_CD) AS REASON_NM
 		          FROM TB_ST_STORE_ADJUST TSSA
 		         WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSA.STORE_CD)
 		           <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
@@ -71,6 +77,8 @@
 		             , DECODE(TSSD.PROC_FG,'0','등록','확정') AS PROC_FG_NM
 		             , TSSD.DTL_CNT
 		             , TSSD.DISUSE_TITLE AS TITLE
+					 , TSSD.REASON_CD
+		 			 , (SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE thm WHERE thm.STORE_CD = TSSD.STORE_CD AND NMCODE_GRP_CD = '136' AND thm.NMCODE_CD = TSSD.REASON_CD) AS REASON_NM
 		          FROM TB_ST_STORE_DISUSE TSSD
 		         WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSD.STORE_CD)
 		           <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
@@ -90,6 +98,9 @@
 		 <if test="statusFg != '' and statusFg != null">
 		   AND M.HQ_GBN = #{statusFg}               /* (1:실사, 2:조정, 3:폐기) */
 		 </if>
+		<if test="reason != '' and reason != null">
+			AND M.REASON_CD = #{reason}
+		</if>
 		 ORDER BY M.STORE_CD, M.HQ_GBN
 	 ) A
 	 <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -108,6 +119,8 @@
 		     , M.PROC_FG_NM
 		     , M.DTL_CNT
 		     , M.TITLE
+			 , M.REASON_CD
+			 , M.REASON_NM
 		  FROM (
 		        SELECT '1' AS HQ_GBN
 		             , TSSAI.STORE_CD
@@ -116,7 +129,9 @@
 		             , DECODE(TSSAI.PROC_FG,'0','등록','확정') AS PROC_FG_NM
 		             , TSSAI.DTL_CNT
 		             , TSSAI.ACINS_TITLE AS TITLE
-		          FROM TB_ST_STORE_ACTUAL_INSPECTION TSSAI
+					 , TSSAI.REASON_CD
+					 , (SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE thm WHERE thm.STORE_CD = TSSAI.STORE_CD AND NMCODE_GRP_CD = '134' AND thm.NMCODE_CD = TSSAI.REASON_CD) AS REASON_NM
+				FROM TB_ST_STORE_ACTUAL_INSPECTION TSSAI
 		         WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSAI.STORE_CD)
 		           <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
 		               AND TSSAI.ACINS_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
@@ -138,7 +153,9 @@
 		             , DECODE(TSSA.PROC_FG,'0','등록','확정') AS PROC_FG_NM
 		             , TSSA.DTL_CNT
 		             , TSSA.ADJ_TITLE AS TITLE
-		          FROM TB_ST_STORE_ADJUST TSSA
+					 , TSSA.REASON_CD
+					 , (SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE thm WHERE thm.STORE_CD = TSSA.STORE_CD AND NMCODE_GRP_CD = '135' AND thm.NMCODE_CD = TSSA.REASON_CD) AS REASON_NM
+					FROM TB_ST_STORE_ADJUST TSSA
 		         WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSA.STORE_CD)
 		           <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
 		               AND TSSA.ADJ_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
@@ -160,7 +177,9 @@
 		             , DECODE(TSSD.PROC_FG,'0','등록','확정') AS PROC_FG_NM
 		             , TSSD.DTL_CNT
 		             , TSSD.DISUSE_TITLE AS TITLE
-		          FROM TB_ST_STORE_DISUSE TSSD
+		             , TSSD.REASON_CD
+				 	 , (SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE thm WHERE thm.STORE_CD = TSSD.STORE_CD AND NMCODE_GRP_CD = '136' AND thm.NMCODE_CD = TSSD.REASON_CD) AS REASON_NM
+				FROM TB_ST_STORE_DISUSE TSSD
 		         WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSD.STORE_CD)
 		           <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
 		               AND TSSD.DISUSE_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
@@ -179,6 +198,9 @@
 		 <if test="statusFg != '' and statusFg != null">
 		   AND M.HQ_GBN = #{statusFg}               /* (1:실사, 2:조정, 3:폐기) */
 		 </if>
+		<if test="reason != '' and reason != null">
+			AND M.REASON_CD = #{reason}
+		</if>
 		 ORDER BY M.STORE_CD, M.HQ_GBN
 	 ) A
     </select>

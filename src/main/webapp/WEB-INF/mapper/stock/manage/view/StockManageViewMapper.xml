@@ -165,7 +165,7 @@
 		 	WHERE M.HQ_GBN = #{hqGbn} 				/* (1:실사, 2:조정, 3:폐기) */
 		 </if>
 		<if test="reason != '' and reason != null">
-			WHERE M.REASON_CD = #{reason}
+			AND M.REASON_CD = #{reason}
 		</if>
 		 ORDER BY M.STORE_CD, M.HQ_GBN
 		 ) A
@@ -241,7 +241,7 @@
 		 	WHERE M.HQ_GBN = #{hqGbn} 				/* (1:실사, 2:조정, 3:폐기) */
 		 </if>
 		<if test="reason != '' and reason != null">
-			WHERE M.REASON_CD = #{reason}
+			AND M.REASON_CD = #{reason}
 		</if>
 		 ) A
     </select>
@@ -322,7 +322,7 @@
 		 	WHERE M.HQ_GBN = #{hqGbn} 				/* (1:실사, 2:조정, 3:폐기) */
 		 </if>
 		<if test="reason != '' and reason != null">
-			WHERE M.REASON_CD = #{reason}
+			AND M.REASON_CD = #{reason}
 		</if>
 		 ORDER BY M.STORE_CD, M.HQ_GBN
 		 ) A
