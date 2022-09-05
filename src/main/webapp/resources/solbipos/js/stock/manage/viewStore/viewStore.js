@@ -3,6 +3,12 @@
  */
 var app = agrid.getApp();
 
+// 콤보박스 아무것도 선택하지 않았을 때 사용
+var defaultComboData = [
+    {"name": "전체", "value": ""}
+];
+
+
 /** 매장 - 실사/조정/폐기 조회 그리드 controller */
 app.controller('stockViewStoreCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
@@ -10,6 +16,7 @@ app.controller('stockViewStoreCtrl', ['$scope', '$http', '$timeout', function ($
 
   $scope.excelFg = false;
 
+    $scope._setComboData("srchReason", defaultComboData);
   $scope.startDate = wcombo.genDateVal("#srchStartDate", getToday());
   $scope.endDate   = wcombo.genDateVal("#srchEndDate", getToday());
   $scope.orgnFg = gvOrgnFg;
@@ -70,6 +77,7 @@ app.controller('stockViewStoreCtrl', ['$scope', '$http', '$timeout', function ($
     			params.hqGbn		= selectedRow.hqGbn; // 상태
     		    params.title		= selectedRow.title; // 제목
     		    params.storeCd		= selectedRow.storeCd; // 매장코드
+                params.reasonNm		= selectedRow.reasonNm; // 사유
 
     			$scope._broadcast('viewDtlCtrl', params);
     		}
@@ -128,6 +136,29 @@ app.controller('stockViewStoreCtrl', ['$scope', '$http', '$timeout', function ($
 		$scope._broadcast('stockViewStoreExcelCtrl',params);
   };
 
+    // 상태에 따른 사유 조회
+    $scope.setReason = function (s) {
+
+        var params = {};
+
+        if(s.selectedValue === "") {
+            $scope._setComboData("srchReason", defaultComboData);
+
+        }else {
+
+            params.hqGbn = s.selectedValue;
+
+            // 계정조회
+            $scope._postJSONQuery.withOutPopUp("/stock/manage/view/view/getReason.sb", params, function (response) {
+                if (response.data.data.list.length > 0) {
+                    var reasonList = response.data.data.list;
+                    $scope._setComboData("srchReason", reasonList);
+                } else {
+                    $scope._setComboData("srchReason", defaultComboData);
+                }
+            });
+        }
+    };
 }]);
 
 

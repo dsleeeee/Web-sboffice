@@ -39,18 +39,28 @@
             <%-- 상태 --%>
             <th><s:message code="viewStore.statusFg" /></th>
             <td>
-                <div class="sb-select">
-                    <span class="txtIn w150px">
-                        <wj-combo-box
-                            id="srchStatusFg"
-                            ng-model="statusFgModel"
-                            items-source="_getComboData('srchStatusFg')"
+                <div class="sb-select fl mr5 w110px">
+                    <wj-combo-box
+                        id="srchStatusFg"
+                        ng-model="statusFgModel"
+                        items-source="_getComboData('srchStatusFg')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        initialized="_initComboBox(s)"
+                        selected-index-changed="setReason(s)">
+                    </wj-combo-box>
+                </div>
+                <div class="sb-select fl w110px">
+                    <wj-combo-box
+                            id="srchReason"
+                            ng-model="reason"
+                            items-source="_getComboData('srchReason')"
                             display-member-path="name"
                             selected-value-path="value"
                             is-editable="false"
                             initialized="_initComboBox(s)">
-                        </wj-combo-box>
-                    </span>
+                    </wj-combo-box>
                 </div>
             </td>
             <%-- 진행 --%>
@@ -119,17 +129,18 @@
           item-formatter="_itemFormatter">
 
           <c:if test="${orgnFg == 'HQ'}">
-            <wj-flex-grid-column header="<s:message code="viewStore.storeCd"/>"         binding="storeCd"        width="90" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="viewStore.storeNm"/>"         binding="storeNm"        width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="viewStore.storeCd"/>" binding="storeCd"   width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="viewStore.storeNm"/>" binding="storeNm"   width="120" align="center" is-read-only="true"></wj-flex-grid-column>
           </c:if>
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="viewStore.statusFg"/>"         binding="hqGbn"        width="50" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="viewStore.statusFg"/>"         binding="hqGbnNm"        width="50" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="viewStore.saleDate"/>"         binding="totDate"        width="90" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="viewStore.seqNo"/>"           binding="seqNo"        width="50" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="viewStore.procFg"/>"        binding="procFgNm"        width="50" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="viewStore.title"/>"           binding="title"        width="*" align="left" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="viewStore.prodQty"/>"        binding="dtlCnt"        width="90" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="viewStore.statusFg"/>"  binding="hqGbn"     width="50" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="viewStore.statusFg"/>"  binding="hqGbnNm"   width="50" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="viewStore.saleDate"/>"  binding="totDate"   width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="viewStore.seqNo"/>"     binding="seqNo"     width="50" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="viewStore.procFg"/>"    binding="procFgNm"  width="50" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="viewStore.title"/>"     binding="title"     width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="viewStore.reasonNm"/>"  binding="reasonNm"  width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="viewStore.prodQty"/>"   binding="dtlCnt"    width="90" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         </wj-flex-grid>
 
         <%-- ColumnPicker 사용시 include --%>
@@ -176,6 +187,7 @@
         		<wj-flex-grid-column header="<s:message code="viewStore.seqNo"/>"           binding="seqNo"        width="50" align="center" is-read-only="true"></wj-flex-grid-column>
        		    <wj-flex-grid-column header="<s:message code="viewStore.procFg"/>"        binding="procFgNm"        width="50" align="center" is-read-only="true"></wj-flex-grid-column>
           		<wj-flex-grid-column header="<s:message code="viewStore.title"/>"           binding="title"        width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="stockManageView.reasonNm"/>"        binding="reasonNm"        width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           		<wj-flex-grid-column header="<s:message code="viewStore.prodQty"/>"        binding="dtlCnt"        width="90" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 			</wj-flex-grid>
 		</div>
@@ -191,4 +203,4 @@
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/manage/viewStore/viewStore.js?ver=20200316.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/manage/viewStore/viewStore.js?ver=20200316.02" charset="utf-8"></script>
