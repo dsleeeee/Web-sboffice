@@ -159,10 +159,10 @@
 	              >
 
 	              <!-- define columns -->
-				  <wj-flex-grid-column header="<s:message code="dayIostock.prodClassNm"/>" 			binding="prodClassNm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+				  <wj-flex-grid-column header="<s:message code="dayIostock.prodClassNm"/>" 			binding="prodClassNm" width="200" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
 
 				  <wj-flex-grid-column header="<s:message code="dayIostock.prodCd"/>"    			binding="prodCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
-	              <wj-flex-grid-column header="<s:message code="dayIostock.prodNm"/>"    			binding="prodNm" width="160" align="center" is-read-only="true"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="dayIostock.prodNm"/>"    			binding="prodNm" width="160" align="left" is-read-only="true"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="dayIostock.poUnitQty"/>" 			binding="poUnitQty" width="50" align="center" is-read-only="true"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="dayIostock.poUnitFg"/>"  			binding="poUnitFgNm" width="50" align="center" is-read-only="true"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="dayIostock.barcdCd"/>"   			binding="barcdCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
@@ -222,10 +222,10 @@
 	              >
 
 	              <!-- define columns -->
-				  <wj-flex-grid-column header="<s:message code="dayIostock.prodClassNm"/>" binding="prodClassNm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+				  <wj-flex-grid-column header="<s:message code="dayIostock.prodClassNm"/>" binding="prodClassNm" width="200" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
 
 	              <wj-flex-grid-column header="<s:message code="dayIostock.prodCd"/>"   			binding="prodCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
-	              <wj-flex-grid-column header="<s:message code="dayIostock.prodNm"/>"   			binding="prodNm" width="160" align="center" is-read-only="true"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="dayIostock.prodNm"/>"   			binding="prodNm" width="160" align="left" is-read-only="true"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="dayIostock.poUnitQty"/>"			binding="poUnitQty" width="50" align="center" is-read-only="true"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="dayIostock.poUnitFg"/>" 			binding="poUnitFgNm" width="50" align="center" is-read-only="true"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="dayIostock.barcdCd"/>"  			binding="barcdCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>

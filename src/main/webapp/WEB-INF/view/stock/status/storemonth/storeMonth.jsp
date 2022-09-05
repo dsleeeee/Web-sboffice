@@ -188,12 +188,12 @@
 	              frozen-columns="5">
 
 	              <!-- define columns -->
-	              <wj-flex-grid-column header="<s:message code="storeMonth.prodClassNm"/>"          binding="prodClassNm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeMonth.prodClassNm"/>"          binding="prodClassNm" width="200" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
 
 	              <wj-flex-grid-column header="<s:message code="storeMonth.prodCd"/>"               binding="prodCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
-	              <wj-flex-grid-column header="<s:message code="storeMonth.prodNm"/>"               binding="prodNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeMonth.prodNm"/>"               binding="prodNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="storeMonth.storeCd"/>"              binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                  <wj-flex-grid-column header="<s:message code="storeMonth.storeNm"/>"              binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="storeMonth.storeNm"/>"              binding="storeNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="storeMonth.poUnitQty"/>"            binding="poUnitQty" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="storeMonth.poUnitFg"/>"             binding="poUnitFgNm" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="storeMonth.barcdCd"/>"              binding="barcdCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -256,12 +256,12 @@
                     >
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="storeMonth.prodClassNm"/>"          binding="prodClassNm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeMonth.prodClassNm"/>"          binding="prodClassNm" width="200" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
 
                         <wj-flex-grid-column header="<s:message code="storeMonth.prodCd"/>"               binding="prodCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storeMonth.prodNm"/>"               binding="prodNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeMonth.prodNm"/>"               binding="prodNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeMonth.storeCd"/>"              binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storeMonth.storeNm"/>"              binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeMonth.storeNm"/>"              binding="storeNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeMonth.poUnitQty"/>"            binding="poUnitQty" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeMonth.poUnitFg"/>"             binding="poUnitFgNm" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeMonth.barcdCd"/>"              binding="barcdCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
