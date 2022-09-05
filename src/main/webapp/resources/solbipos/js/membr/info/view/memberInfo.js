@@ -166,6 +166,7 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         dataItem.gChk = messages["cmm.chk"];
         dataItem.membrNo = messages["regist.membr.no"];
         dataItem.membrNm = messages["regist.membr.nm"];
+        dataItem.regStoreNm = messages["regist.membr.regStore"];
         dataItem.membrClassCd = messages["regist.class.cd"];
         dataItem.membrClassNm = messages["regist.class.nm"];
         dataItem.membrCardNo = messages["regist.card.no"];
@@ -629,6 +630,7 @@ app.controller('memberExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
         dataItem.gChk = messages["cmm.chk"];
         dataItem.membrNo = messages["regist.membr.no"];
         dataItem.membrNm = messages["regist.membr.nm"];
+        dataItem.regStoreNm = messages["regist.membr.regStore"];
         dataItem.membrClassCd = messages["regist.class.cd"];
         dataItem.membrClassNm = messages["regist.class.nm"];
         dataItem.membrCardNo = messages["regist.card.no"];
