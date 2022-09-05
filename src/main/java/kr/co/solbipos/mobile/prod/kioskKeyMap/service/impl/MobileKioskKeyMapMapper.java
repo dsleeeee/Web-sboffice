@@ -35,6 +35,12 @@ public interface MobileKioskKeyMapMapper {
     /** 키맵 저장 */
     int getMobileKioskKeyMapGrpSave(MobileKioskKeyMapVO mobileKioskKeyMapVO);
 
+    /** 중분류 조회 */
+    List<DefaultMap<String>> getMobileKioskKeyMapMList(MobileKioskKeyMapVO mobileKioskKeyMapVO);
+
+    /** 중분류 저장 */
+    int getMobileKioskKeyMapMGrpSave(MobileKioskKeyMapVO mobileKioskKeyMapVO);
+
     /** 키맵 상품 조회 */
     List<DefaultMap<String>> getMobileKioskKeyMapProdList(MobileKioskKeyMapVO mobileKioskKeyMapVO);
 

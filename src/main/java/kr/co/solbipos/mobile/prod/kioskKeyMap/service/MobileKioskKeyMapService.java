@@ -29,6 +29,10 @@ public interface MobileKioskKeyMapService {
     List<DefaultMap<String>> getMobileKioskKeyMapPackList(MobileKioskKeyMapVO mobileKioskKeyMapVO, SessionInfoVO sessionInfoVO);
     // 키맵 저장
     int getMobileKioskKeyMapGrpSave(MobileKioskKeyMapVO[] mobileKioskKeyMapVOs, SessionInfoVO sessionInfoVO);
+    // 중분류 조회
+    List<DefaultMap<String>> getMobileKioskKeyMapMList(MobileKioskKeyMapVO mobileKioskKeyMapVO, SessionInfoVO sessionInfoVO);
+    // 중분류 저장
+    int getMobileKioskKeyMapMGrpSave(MobileKioskKeyMapVO[] mobileKioskKeyMapVOs, SessionInfoVO sessionInfoVO);
     // 키맵 상품 조회
     List<DefaultMap<String>> getMobileKioskKeyMapProdList(MobileKioskKeyMapVO mobileKioskKeyMapVO, SessionInfoVO sessionInfoVO);
     // 키맵 상품 저장

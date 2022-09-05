@@ -38,6 +38,9 @@ public class MobileKioskKeyMapVO extends PageVO {
     /** 상품 코드 */
     private String prodCd;
 
+    private String envstCd;
+    private String tuMClsCd;
+
     public String getHqBrandNm() {
         return hqBrandNm;
     }
@@ -102,4 +105,19 @@ public class MobileKioskKeyMapVO extends PageVO {
         this.prodCd = prodCd;
     }
 
+    public String getEnvstCd() {
+        return envstCd;
+    }
+
+    public void setEnvstCd(String envstCd) {
+        this.envstCd = envstCd;
+    }
+
+    public String getTuMClsCd() {
+        return tuMClsCd;
+    }
+
+    public void setTuMClsCd(String tuMClsCd) {
+        this.tuMClsCd = tuMClsCd;
+    }
 }

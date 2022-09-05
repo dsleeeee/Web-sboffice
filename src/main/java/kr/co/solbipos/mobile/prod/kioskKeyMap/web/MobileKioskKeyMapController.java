@@ -140,6 +140,44 @@ public class MobileKioskKeyMapController {
     }
 
     /**
+     * 중분류 조회
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @return  String
+     * @author  권지현
+     * @since   2022.08.22
+     */
+    @RequestMapping(value = "/mobileKioskKeyMap/getMobileKioskKeyMapMList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMobileKioskKeyMapMList(HttpServletRequest request, HttpServletResponse response, Model model, MobileKioskKeyMapVO mobileKioskKeyMapVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = mobileKioskKeyMapService.getMobileKioskKeyMapMList(mobileKioskKeyMapVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, mobileKioskKeyMapVO);
+    }
+
+    /**
+     * 키맵 저장
+     * @param mobileKioskKeyMapVOs MobileKioskKeyMapVO[]
+     * @param request HttpServletRequest
+     * @return
+     */
+    @RequestMapping(value = "/mobileKioskKeyMap/getMobileKioskKeyMapMGrpSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMobileKioskKeyMapMGrpSave(@RequestBody MobileKioskKeyMapVO[] mobileKioskKeyMapVOs, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = mobileKioskKeyMapService.getMobileKioskKeyMapMGrpSave(mobileKioskKeyMapVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
      * 키맵상품조회
      *
      * @param request
