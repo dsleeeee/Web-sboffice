@@ -370,4 +370,11 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
 
         return outstockConfmVO;
     }
+
+    /** 출고창고 콤보조회(권한에 상관없이 본사창고 또는 매장창고 조회) */
+    @Override
+    public List<DefaultMap<String>> getOutStorageCombo2(OutstockConfmVO outstockConfmVO, SessionInfoVO sessionInfoVO) {
+
+        return outstockConfmMapper.getOutStorageCombo2(outstockConfmVO);
+    }
 }

@@ -711,7 +711,7 @@
 				        AND     tmp.USE_YN            =   'Y'
                         AND     tmp.PO_PROD_FG        IN  ('1','3')
 				        AND     tsssc.STORE_CD        =   #{storeCd}
-				        AND     tsssc.STORAGE_CD      =   '999'
+				        AND     tsssc.STORAGE_CD  (+) =   '999'
 	                    AND     tsssc.STORE_CD    (+) =   tmp.STORE_CD
 	                    AND     tsssc.PROD_CD     (+) =   tmp.PROD_CD
 	                    AND     tshsc.PROD_CD     (+) =   tmp.PROD_CD
@@ -725,14 +725,6 @@
                     	AND     tphsod.SLIP_FG    (+) =   -1
 				        AND     the.HQ_OFFICE_CD      =   #{hqOfficeCd}
 				        AND     the.ENVST_CD          =   '0011'
-                        <choose>
-                            <when test='vendrCd != null and vendrCd != ""'>
-                                AND     TMP.PROD_CD NOT IN  (SELECT PROD_CD FROM TB_PO_HQ_STORE_DISTRIBUTE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = #{storeCd} AND REQ_DATE = #{reqDate} AND PROC_FG IN ('20','30') AND SLIP_FG = -1 AND HQ_VENDR_CD = #{vendrCd})
-                            </when>
-                            <otherwise>
-                                AND     TMP.PROD_CD NOT IN  (SELECT PROD_CD FROM TB_PO_HQ_STORE_DISTRIBUTE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = #{storeCd} AND REQ_DATE = #{reqDate} AND PROC_FG IN ('20','30') AND SLIP_FG = -1 AND HQ_VENDR_CD IS NULL)
-                            </otherwise>
-                        </choose>
 				        <if test='prodCd != null and prodCd != ""'>
 				            AND tmp.PROD_CD = #{prodCd}
 				        </if>

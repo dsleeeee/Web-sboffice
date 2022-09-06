@@ -980,4 +980,25 @@
         AND     CONFM_YN        !=  'Y'
     </update>
 
+    <!-- 출고창고 콤보조회(권한에 상관없이 본사창고 또는 매장창고 조회) -->
+    <!--
+        TABLE    : TB_HQ_STORAGE, TB_MS_STORAGE
+        PARAM    : outstockConfmVO
+        COMMENTS : 출고창고 콤보조회(권한에 상관없이 본사창고 또는 매장창고 조회)
+    -->
+    <select id="getOutStorageCombo2" parameterType="outstockConfmVO" resultType="DefaultMap">
+        /* USE : OutstockConfmMapper.getOutStorageCombo2 */
+        SELECT  STORAGE_CD AS NMCODE_CD
+        ,       STORAGE_NM AS NMCODE_NM
+        <if test='storageTypeCombo != null and storageTypeCombo == "HQ"'>
+        FROM    TB_HQ_STORAGE
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        </if>
+        <if test='storageTypeCombo != null and storageTypeCombo == "STORE"'>
+        FROM    TB_MS_STORAGE
+        WHERE   STORE_CD = #{storeCd}
+        </if>
+        ORDER BY STORAGE_CD
+    </select>
+
 </mapper>

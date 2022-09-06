@@ -363,4 +363,24 @@ public class OutstockConfmController {
 
         return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
     }
+
+    /**
+     * 출고창고 콤보조회(권한에 상관없이 본사창고 또는 매장창고 조회)
+     * @param request
+     * @param response
+     * @param model
+     * @param outstockConfmVO
+     * @author  이다솜
+     * @since   2022. 09. 02.
+     */
+    @RequestMapping(value = "/outstockConfm/getOutStorageCombo2.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getOutStorageCombo2(HttpServletRequest request, HttpServletResponse response, Model model, OutstockConfmVO outstockConfmVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = outstockConfmService.getOutStorageCombo2(outstockConfmVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, outstockConfmVO);
+    }
 }

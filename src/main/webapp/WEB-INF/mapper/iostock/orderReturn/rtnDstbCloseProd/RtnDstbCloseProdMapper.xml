@@ -416,7 +416,7 @@
         AND     tphsd.STORE_CD      (+) =   tmp.STORE_CD
         AND     tphsd.PROD_CD       (+) =   tmp.PROD_CD
         AND     tshsc.PROD_CD       (+) =   tmp.PROD_CD
-        AND     tsssc.STORAGE_CD      =   '999'
+        AND     tsssc.STORAGE_CD    (+) =   '999'
         AND     tsssc.STORE_CD      (+) =   tmp.STORE_CD
         AND     tsssc.PROD_CD       (+) =   tmp.PROD_CD
         AND     suborder.STORE_CD   (+) =   tms.STORE_CD
