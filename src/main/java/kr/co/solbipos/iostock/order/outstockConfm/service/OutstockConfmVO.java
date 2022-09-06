@@ -181,6 +181,8 @@ public class OutstockConfmVO extends PageVO {
     private String  areaFg;
     /** 창고코드 */
     private String outStorageCd;
+    /** 창고콤보타입(매장, 본사) */
+    private String storageTypeCombo;
     
     
     /**
@@ -1258,6 +1260,12 @@ public class OutstockConfmVO extends PageVO {
 	public void setOutStorageCd(String outStorageCd) {
 		this.outStorageCd = outStorageCd;
 	}
-    
-    
+
+    public String getStorageTypeCombo() {
+        return storageTypeCombo;
+    }
+
+    public void setStorageTypeCombo(String storageTypeCombo) {
+        this.storageTypeCombo = storageTypeCombo;
+    }
 }

@@ -64,4 +64,7 @@ public interface OutstockConfmMapper {
 
     /** 출고확정 - [본사_수불] 출고전표_매장출고내역_상품 수정 */
     int mergeInstockConfmProd(OutstockConfmVO outstockConfmVO);
+
+    /** 출고창고 콤보조회(권한에 상관없이 본사창고 또는 매장창고 조회) */
+    List<DefaultMap<String>> getOutStorageCombo2(OutstockConfmVO outstockConfmVO);
 }

@@ -193,7 +193,7 @@
   var storageEnvstVal = "${storageEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnOutstockConfm/rtnOutstockConfmDtl.js?ver=20220804.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnOutstockConfm/rtnOutstockConfmDtl.js?ver=20220906.01" charset="utf-8"></script>
 
 <%-- 거래명세표 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/dstmn/transReport.jsp">

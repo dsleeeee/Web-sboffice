@@ -13,7 +13,7 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
   // 익일 날짜 셋팅 함수
   function getNextDay() {
 	  var today = new Date();
-	  var dd = today.getDate()+1;
+	  var dd = today.getDate();
 	  var mm = today.getMonth()+1; //January is 0!
 	  var yyyy = today.getFullYear();
 
@@ -27,8 +27,7 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
 
 	  today = yyyy + mm + dd;
 
-	  //return today;
-      return getTomorrow('');
+	  return today;
 	}
   
   // grid 초기화 : 생성되기전 초기화되면서 생성된다

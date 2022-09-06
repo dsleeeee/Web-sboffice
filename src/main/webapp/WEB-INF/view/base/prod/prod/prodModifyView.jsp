@@ -668,7 +668,7 @@
               </th>
               <td id="tdStartStockQty">
                 <%--defaultStock--%>
-                <input type="text" id="prodModifyStartStockQty" name="startStockQty" class="sb-input w100"
+                <input type="text" numberOnly id="prodModifyStartStockQty" name="startStockQty" class="sb-input w100"
                        ng-model="prodModifyInfo.startStockQty"
                        required
                        popover-enable="myForm.defaultStock.$invalid"

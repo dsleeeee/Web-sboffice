@@ -27,4 +27,7 @@ public interface OutstockConfmService {
     /** 출고확정 - 출고확정 이후 저장 */
     int saveOutstockAfter(OutstockConfmVO outstockConfmVO, SessionInfoVO sessionInfoVO);
 
+    /** 출고창고 콤보조회(권한에 상관없이 본사창고 또는 매장창고 조회) */
+    List<DefaultMap<String>> getOutStorageCombo2(OutstockConfmVO outstockConfmVO, SessionInfoVO sessionInfoVO);
+
 }

@@ -16,16 +16,11 @@ app.controller('rtnOutstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functi
   $scope.initGrid = function (s, e) {
     // 배송기사
     var comboParams             = {};
-   
     var url = '/iostock/order/outstockConfm/outstockConfm/getDlvrCombo.sb';
     // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
     $scope._queryCombo("combo", "srchDtlDlvrCd", null, url, comboParams, "S"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
-    
-    // 출고창고
-    url = '/iostock/order/outstockConfm/outstockConfm/getOutStorageCombo.sb';    
-    // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
-    $scope._queryCombo("combo", "saveDtlOutStorageCd", null, url, comboParams, null); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
-    
+
+    // 본사/매장 명칭 콤보조회 - 본사인 경우 본사, 매장인 경우 매장의 명칭 콤보조회
     comboParams         = {};
     comboParams.nmcodeGrpCd = "093";
     url = '/iostock/cmm/iostockCmm/getOrgnCombo.sb';
@@ -155,8 +150,7 @@ app.controller('rtnOutstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functi
     item.outVat    = outVat; // VAT
     item.outTot    = outTot; // 합계
   };
-  
-	  
+
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("rtnOutstockConfmDtlCtrl", function (event, data) {
 	$scope.startDate = data.startDate;
@@ -166,6 +160,14 @@ app.controller('rtnOutstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functi
     $scope.storeCd 	= data.storeCd;
     $scope.vendrCd = data.vendrCd;
     $scope.wjRtnOutstockConfmDtlLayer.show(true);
+
+    // 출고창고
+    var comboParams = {};
+    comboParams.storeCd = $scope.storeCd;
+    comboParams.storageTypeCombo = "STORE";
+    var url = '/iostock/order/outstockConfm/outstockConfm/getOutStorageCombo2.sb';
+    // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
+    $scope._queryCombo("combo", "saveDtlOutStorageCd", null, url, comboParams, null); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
 
     $scope.getSlipNoInfo();
     // 기능수행 종료 : 반드시 추가

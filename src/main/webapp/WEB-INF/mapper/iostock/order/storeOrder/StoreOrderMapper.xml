@@ -199,14 +199,6 @@
         AND     tphso.SLIP_FG     (+) =   #{slipFg}
         AND     the.HQ_OFFICE_CD      =   #{hqOfficeCd}
         AND     the.ENVST_CD          =   '0011'
-        <choose>
-            <when test='vendrCd != null and vendrCd != ""'>
-                AND     TMP.PROD_CD NOT IN  (SELECT PROD_CD FROM TB_PO_HQ_STORE_DISTRIBUTE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = #{storeCd} AND REQ_DATE = #{reqDate} AND PROC_FG IN ('20','30') AND SLIP_FG = 1 AND HQ_VENDR_CD = #{vendrCd})
-            </when>
-            <otherwise>
-                AND     TMP.PROD_CD NOT IN  (SELECT PROD_CD FROM TB_PO_HQ_STORE_DISTRIBUTE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = #{storeCd} AND REQ_DATE = #{reqDate} AND PROC_FG IN ('20','30') AND SLIP_FG = 1 AND HQ_VENDR_CD IS NULL)
-            </otherwise>
-        </choose>
         <if test='vendrCd != null and vendrCd != ""'>
         AND 	tmp.PROD_CD IN ( SELECT PROD_CD FROM TB_HQ_VENDOR_PROD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND VENDR_CD = #{vendrCd} AND USE_YN = 'Y')
         </if>
