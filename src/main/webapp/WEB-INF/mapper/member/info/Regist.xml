@@ -2638,4 +2638,164 @@
            AND A.MEMBR_NO = B.MEMBR_NO
     </delete>
 
+    <!-- 알림톡 전송유형 콤보박스 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getHqNmcodeComboList" parameterType="registVO" resultType="DefaultMap">
+        /* RegistMapper.getHqNmcodeComboList */
+        SELECT
+        thn.NMCODE_CD AS VALUE,
+        thn.NMCODE_NM AS NAME
+        FROM TB_HQ_NMCODE thn
+        WHERE 1=1
+        AND thn.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thn.NMCODE_GRP_CD = #{nmcodeGrpCd}
+        ORDER BY thn.NMCODE_CD
+    </select>
+
+    <!-- 회원정보 저장 (광운대아이스링크 추가정보) -->
+    <!--
+        TABLE    : TB_MB_MEMBER_ADDITORY_KWU
+        COMMENTS : 회원정보 저장 (광운대아이스링크 추가정보)
+    -->
+    <insert id="mergeMemberInfoAddKWU" parameterType="registVO">
+        /* RegistMapper.mergeMemberInfoAddKWU */
+        MERGE INTO TB_MB_MEMBER_ADDITORY_KWU
+        USING DUAL ON
+        (
+            MEMBR_ORGN_CD = #{membrOrgnCd} AND MEMBR_NO = #{membrNo}
+        )
+        WHEN MATCHED THEN
+            UPDATE
+            SET MEMBR_FG = #{memberFg},
+            PRIVATE_FG = #{privateFg},
+            POSTPAID_FG = #{postpaidFg},
+            PEOPLE_CNT = #{peopleCnt},
+            GROUP_FG = #{groupFg},
+            GROUP_TYPE_FG = #{groupTypeFg},
+            PAYMENT_FG = #{paymentFg},
+            TEACHER_CD = #{teacherCd},
+            CLASS_FG = #{classFg},
+            SKATE_FG = #{skateFg},
+            REGISTER_DATE = #{registerDate},
+            USE_DATE_FG = #{useDateFg},
+            USE_START_DATE = #{useStartDate},
+            USE_END_DATE = #{useEndDate},
+            USE_WEEK = #{useWeek},
+            USE_PROD_NM = #{useProdNm},
+            USE_AMT = #{useAmt},
+            BUSINESS_AMT = #{businessAmt},
+            TEACHER_AMT = #{teacherAmt},
+            TEACHER_CNT = #{teacherCnt},
+            USE_REMAIN_AMT = #{useRemainAmt},
+            TRANSPORTATION_AMT = #{transportationAmt},
+            TRANSPORTATION_CNT = #{transportationCnt},
+            MOD_ID = #{modId},
+            MOD_DT = #{modDt}
+            WHERE 1=1
+            AND MEMBR_ORGN_CD = #{membrOrgnCd}
+            AND MEMBR_NO = #{membrNo}
+        WHEN NOT MATCHED THEN
+            INSERT (
+                MEMBR_ORGN_CD,
+                MEMBR_NO,
+                MEMBR_FG,
+                PRIVATE_FG,
+                POSTPAID_FG,
+                PEOPLE_CNT,
+                GROUP_FG,
+                GROUP_TYPE_FG,
+                PAYMENT_FG,
+                TEACHER_CD,
+                CLASS_FG,
+                SKATE_FG,
+                REGISTER_DATE,
+                USE_DATE_FG,
+                USE_START_DATE,
+                USE_END_DATE,
+                USE_WEEK,
+                USE_PROD_NM,
+                USE_AMT,
+                BUSINESS_AMT,
+                TEACHER_AMT,
+                TEACHER_CNT,
+                USE_REMAIN_AMT,
+                TRANSPORTATION_AMT,
+                TRANSPORTATION_CNT,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            ) VALUES (
+                #{membrOrgnCd},
+                #{membrNo},
+                #{memberFg},
+                #{privateFg},
+                #{postpaidFg},
+                #{peopleCnt},
+                #{groupFg},
+                #{groupTypeFg},
+                #{paymentFg},
+                #{teacherCd},
+                #{classFg},
+                #{skateFg},
+                #{registerDate},
+                #{useDateFg},
+                #{useStartDate},
+                #{useEndDate},
+                #{useWeek},
+                #{useProdNm},
+                #{useAmt},
+                #{businessAmt},
+                #{teacherAmt},
+                #{teacherCnt},
+                #{useRemainAmt},
+                #{transportationAmt},
+                #{transportationCnt},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
+    </insert>
+
+    <!-- 회원정보 조회 (광운대아이스링크 추가정보) -->
+    <!--
+        TABLE    : TB_MB_MEMBER_ADDITORY_KWU
+        COMMENTS : 회원정보 조회 (광운대아이스링크 추가정보)
+    -->
+    <select id="getMemberInfoAddKWU" parameterType="registVO" resultType="DefaultMap">
+        /* RegistMapper.getMemberInfoAddKWU */
+        SELECT
+        tmmak.MEMBR_FG,
+        tmmak.PRIVATE_FG,
+        tmmak.POSTPAID_FG,
+        tmmak.PEOPLE_CNT,
+        tmmak.GROUP_FG,
+        tmmak.GROUP_TYPE_FG,
+        tmmak.PAYMENT_FG,
+        tmmak.TEACHER_CD,
+        tmmak.CLASS_FG,
+        tmmak.SKATE_FG,
+        tmmak.REGISTER_DATE,
+        tmmak.USE_DATE_FG,
+        tmmak.USE_START_DATE,
+        tmmak.USE_END_DATE,
+        tmmak.USE_WEEK,
+        tmmak.USE_PROD_NM,
+        tmmak.USE_AMT,
+        tmmak.BUSINESS_AMT,
+        tmmak.TEACHER_AMT,
+        tmmak.TEACHER_CNT,
+        tmmak.USE_REMAIN_AMT,
+        tmmak.TRANSPORTATION_AMT,
+        tmmak.TRANSPORTATION_CNT
+        FROM TB_MB_MEMBER_ADDITORY_KWU tmmak
+        WHERE 1=1
+        AND tmmak.MEMBR_ORGN_CD = #{membrOrgnCd}
+        AND tmmak.MEMBR_NO = #{membrNo}
+    </select>
+
 </mapper>

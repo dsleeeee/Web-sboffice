@@ -12,7 +12,7 @@
 
 <div class="wj-dialog-body" id="basicView" name="basicView" class="subCon" ng-controller="memberBasicCtrl">
     <%-- body --%>
-    <div style="height:400px; overflow-y: auto;">
+    <div style="height:520px; overflow-y: auto;">
         <f:form id="regForm" name="regForm" ng-submit="submit()">
             <%--                    <h3 class="h3_tbl"><s:message code="storeManage.basicInfo"/></h3>--%>
             <table class="searchTbl">
@@ -327,6 +327,345 @@
                 </tr>
                 </tbody>
             </table>
+            <%-- [1246 광운대아이스링크] --%>
+            <c:if test="${kwuEnvstVal == '1'}">
+                <%-- 회원 추가정보 --%>
+                <h3 class="h3_tbl"><s:message code="regist.kuw.member" /></h3>
+                <table class="searchTbl">
+                    <colgroup>
+                        <col class="w15"/>
+                        <col class="w35"/>
+                        <col class="w15"/>
+                        <col class="w35"/>
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <%-- 회원구분 --%>
+                        <th><s:message code="regist.kuw.memberFg"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchMemberFgCombo"
+                                        ng-model="member.memberFg"
+                                        items-source="_getComboData('memberFgCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchMemberFgCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                        <%-- 구분 --%>
+                        <th><s:message code="regist.kuw.privateFg"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchPrivateFgCombo"
+                                        ng-model="member.privateFg"
+                                        items-source="_getComboData('privateFgCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchPrivateFgCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <%-- 외상가능 --%>
+                        <th><s:message code="regist.kuw.postpaidFg"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchPostpaidFgCombo"
+                                        ng-model="member.postpaidFg"
+                                        items-source="_getComboData('postpaidFgCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchPostpaidFgCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                        <%-- 인원수 --%>
+                        <th><s:message code="regist.kuw.peopleCnt"/></th>
+                        <td>
+                            <input type="text" id="peopleCnt" name="srchPeopleCnt" ng-model="member.peopleCnt" class="sb-input w100" />
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <%-- 단체 --%>
+                <h3 class="h3_tbl"><s:message code="regist.kuw.group" /></h3>
+                <table class="searchTbl">
+                    <colgroup>
+                        <col class="w15"/>
+                        <col class="w35"/>
+                        <col class="w15"/>
+                        <col class="w35"/>
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <%-- 단체구분 --%>
+                        <th><s:message code="regist.kuw.groupFg"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchGroupFgCombo"
+                                        ng-model="member.groupFg"
+                                        items-source="_getComboData('groupFgCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchGroupFgCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                        <%-- 구분 --%>
+                        <th><s:message code="regist.kuw.groupTypeFg"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchGroupTypeFgCombo"
+                                        ng-model="member.groupTypeFg"
+                                        items-source="_getComboData('groupTypeFgCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchGroupTypeFgCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <%-- 납부상태 --%>
+                        <th><s:message code="regist.kuw.paymentFg"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchPaymentFgCombo"
+                                        ng-model="member.paymentFg"
+                                        items-source="_getComboData('paymentFgCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchPaymentFgCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                        <th></th>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <%-- 강사,강습구분현황 --%>
+                <h3 class="h3_tbl"><s:message code="regist.kuw.teacher" /></h3>
+                <table class="searchTbl">
+                    <colgroup>
+                        <col class="w15"/>
+                        <col class="w35"/>
+                        <col class="w15"/>
+                        <col class="w35"/>
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <%-- 강사명 --%>
+                        <th><s:message code="regist.kuw.teacherCd"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchTeacherCdCombo"
+                                        ng-model="member.teacherCd"
+                                        items-source="_getComboData('teacherCdCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchTeacherCdCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                        <%-- 강습구분 --%>
+                        <th><s:message code="regist.kuw.classFg"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchClassFgCombo"
+                                        ng-model="member.classFg"
+                                        items-source="_getComboData('classFgCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchClassFgCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <%-- 스케이트종류 --%>
+                        <th><s:message code="regist.kuw.skateFg"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchSkateFgCombo"
+                                        ng-model="member.skateFg"
+                                        items-source="_getComboData('skateFgCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchSkateFgCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                        <th></th>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <%-- 이용정보 --%>
+                <h3 class="h3_tbl"><s:message code="regist.kuw.use" /></h3>
+                <table class="searchTbl">
+                    <colgroup>
+                        <col class="w15"/>
+                        <col class="w35"/>
+                        <col class="w15"/>
+                        <col class="w35"/>
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <%-- 가입일자 --%>
+                        <th><s:message code="regist.kuw.registerDate"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-input-date
+                                        value="rRegisterDate"
+                                        ng-model="member.registerDate"
+                                        control="registerDateCombo"
+                                        format="yyyy/MM/dd"
+                                        min="1930-01-01"
+                                        max="2099-12-31"
+                                        initialized="_initDateBox(s)">
+                                </wj-input-date>
+                            </div>
+                        </td>
+                        <%-- 사용기간 구분 --%>
+                        <th><s:message code="regist.kuw.useDateFg"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchUseDateFgCombo"
+                                        ng-model="member.useDateFg"
+                                        items-source="_getComboData('useDateFgCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        selected-index-changed="srchUseDateFgComboChange(s)"
+                                        control="srchUseDateFgCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <%-- 시작일자 --%>
+                        <th><s:message code="regist.kuw.useStartDate"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-input-date
+                                        value="rUseStartDate"
+                                        ng-model="member.useStartDate"
+                                        control="useStartDateCombo"
+                                        format="yyyy/MM/dd"
+                                        min="1930-01-01"
+                                        max="2099-12-31"
+                                        initialized="_initDateBox(s)">
+                                </wj-input-date>
+                            </div>
+                        </td>
+                        <%-- 만료일자 --%>
+                        <th><s:message code="regist.kuw.useEndDate"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-input-date
+                                        value="rUseEndDate"
+                                        ng-model="member.useEndDate"
+                                        control="useEndDateCombo"
+                                        format="yyyy/MM/dd"
+                                        min="1930-01-01"
+                                        max="2099-12-31"
+                                        initialized="_initDateBox(s)">
+                                </wj-input-date>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <%-- 사용요일 --%>
+                        <th><s:message code="regist.kuw.useWeek"/></th>
+                        <td>
+                            <input type="text" id="useWeek" name="srchUseWeek" ng-model="member.useWeek" class="sb-input w100" />
+                        </td>
+                        <%-- 상품명 --%>
+                        <th><s:message code="regist.kuw.useProdNm"/></th>
+                        <td>
+                            <input type="text" id="useProdNm" name="srchUseProdNm" ng-model="member.useProdNm" class="sb-input w100" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <%-- 매출금액 --%>
+                        <th><s:message code="regist.kuw.useAmt"/></th>
+                        <td>
+                            <input type="text" id="useAmt" name="srchUseAmt" ng-model="member.useAmt" class="sb-input w100" />
+                        </td>
+                        <%-- 영업비 --%>
+                        <th><s:message code="regist.kuw.businessAmt"/></th>
+                        <td>
+                            <input type="text" id="businessAmt" name="srchBusinessAmt" ng-model="member.businessAmt" class="sb-input w100" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <%-- 강사비 --%>
+                        <th><s:message code="regist.kuw.teacherAmt"/></th>
+                        <td>
+                            <input type="text" id="teacherAmt" name="srchTeacherAmt" ng-model="member.teacherAmt" class="sb-input w100" />
+                        </td>
+                        <%-- 강사인원 --%>
+                        <th><s:message code="regist.kuw.teacherCnt"/></th>
+                        <td>
+                            <input type="text" id="teacherCnt" name="srchTeacherCnt" ng-model="member.teacherCnt" class="sb-input w100" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <%-- 잔액 --%>
+                        <th><s:message code="regist.kuw.useRemainAmt"/></th>
+                        <td>
+                            <input type="text" id="useRemainAmt" name="srchUseRemainAmt" ng-model="member.useRemainAmt" class="sb-input w100" />
+                        </td>
+                        <%-- 수송비 --%>
+                        <th><s:message code="regist.kuw.transportationAmt"/></th>
+                        <td>
+                            <input type="text" id="transportationAmt" name="srchTransportationAmt" ng-model="member.transportationAmt" class="sb-input w100" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <%-- 수송수량 --%>
+                        <th><s:message code="regist.kuw.transportationCnt"/></th>
+                        <td>
+                            <input type="text" id="transportationCnt" name="srchTransportationCnt" ng-model="member.transportationCnt" class="sb-input w100" />
+                        </td>
+                        <th></th>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </c:if>
         </f:form>
     </div>
     <div class="btnSet">
@@ -344,6 +683,15 @@
     var orgnFg = "${orgnFg}";
     var orgnCd = "${orgnCd}";
     var hqOfficeCd = "${hqOfficeCd}";
+
+    // [1246 광운대아이스링크] 환경설정값
+    var kwuEnvstVal = "${kwuEnvstVal}";
+    // List 형식("" 안붙임)
+    var memberFgComboList = ${memberFgComboList};
+    var groupFgComboList = ${groupFgComboList};
+    var teacherCdComboList = ${teacherCdComboList};
+    var classFgComboList = ${classFgComboList};
+    var skateFgComboList = ${skateFgComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20201112.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20220906.01" charset="utf-8"></script>

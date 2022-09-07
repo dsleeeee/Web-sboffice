@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
-<wj-popup id="memberRegistLayer" control="memberRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:620px;">
+<wj-popup id="memberRegistLayer" control="memberRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:900px;height:740px;">
     <div class="wj-dialog wj-dialog-columns title" ng-controller="memberRegistCtrl" ng-init="init()">
     <%-- header --%>
     <div class="wj-dialog-header wj-dialog-header-font">

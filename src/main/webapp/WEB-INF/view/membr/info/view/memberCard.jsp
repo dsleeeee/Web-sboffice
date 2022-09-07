@@ -8,7 +8,7 @@
 
 <div class="wj-dialog-body" id="cardView" name="cardView" class="subCon" ng-controller="memberCardCtrl">
     <%-- body --%>
-    <div style="height:400px; overflow-y: auto;">
+    <div style="height:520px; overflow-y: auto;">
         <f:form id="regCardForm" name="regCardForm">
 <%--                                <h3 class="h3_tbl"><s:message code="storeManage.basicInfo"/></h3>--%>
             <table class="searchTbl">

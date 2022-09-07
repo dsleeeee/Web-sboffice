@@ -200,4 +200,10 @@ public interface RegistService {
 
     /** 전체회원삭제 */
     int allMemberDelete(RegistVO registVO, SessionInfoVO sessionInfoVO);
+
+    /** 코드별 본사 공통코드 콤보박스 조회 */
+    List<DefaultMap<Object>> getHqNmcodeComboList(SessionInfoVO sessionInfoVO, String nmcodeGrpCd);
+
+    /** 회원정보 조회 (광운대아이스링크 추가정보) */
+    DefaultMap<String> getMemberInfoAddKWU(RegistVO registVO, SessionInfoVO sessionInfoVO);
 }

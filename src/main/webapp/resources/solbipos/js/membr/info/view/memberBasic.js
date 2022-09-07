@@ -9,6 +9,37 @@
  *
  * **************************************************************/
 
+// 구분
+var privateFgComboData = [
+    {"name":"개인","value":"1"},
+    {"name":"단체","value":"2"}
+];
+// 외상가능
+var postpaidFgComboData = [
+    {"name":"허용안함","value":"0"},
+    {"name":"외상허용","value":"1"}
+];
+// 단체-구분
+var groupTypeFgComboData = [
+    {"name":"단체","value":"1"},
+    {"name":"하키","value":"2"},
+    {"name":"기타","value":"3"}
+];
+// 납부상태
+var paymentFgComboData = [
+    {"name":"미납","value":"0"},
+    {"name":"납부완료","value":"1"},
+    {"name":"부분납부","value":"2"}
+];
+// 사용기간 구분
+var useDateFgComboData = [
+    {"name":"직접입력","value":"0"},
+    {"name":"1개월","value":"1"},
+    {"name":"3개월","value":"2"},
+    {"name":"6개월","value":"3"},
+    {"name":"12개월","value":"4"}
+];
+
 app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
@@ -33,6 +64,21 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._setComboData("basicRegStoreCd", regstrStoreList);
     // $scope._setComboData("rMemberClass", memberClassList);
     $scope._setComboData("rMemberClassSelect", memberClassSelect);
+
+
+    // [1246 광운대아이스링크]
+    // 콤보박스 데이터
+    $scope._setComboData("memberFgCombo", memberFgComboList); // 회원구분
+    $scope._setComboData("privateFgCombo", privateFgComboData); // 회원-구분
+    $scope._setComboData("postpaidFgCombo", postpaidFgComboData); // 외상가능
+    $scope._setComboData("groupFgCombo", groupFgComboList); // 단체구분
+    $scope._setComboData("groupTypeFgCombo", groupTypeFgComboData); // 단체-구분
+    $scope._setComboData("paymentFgCombo", paymentFgComboData); // 납부상태
+    $scope._setComboData("teacherCdCombo", teacherCdComboList); // 강사명
+    $scope._setComboData("classFgCombo", classFgComboList); // 강습구분
+    $scope._setComboData("skateFgCombo", skateFgComboList); // 스케이트종류
+    $scope._setComboData("useDateFgCombo", useDateFgComboData); // 사용기간 구분
+
 
     $scope.selectedMember;
     $scope.setSelectedMember = function (data) {
@@ -135,6 +181,33 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             // 이전포인트 초기값 세팅
             $scope.member.movePoint = 0;
 
+            // [1246 광운대아이스링크]
+            if(kwuEnvstVal === "1") {
+                // 데이터 바인딩
+                $scope.member.memberFg = "";
+                $scope.member.privateFg = "";
+                $scope.member.postpaidFg = "";
+                $scope.member.peopleCnt = "";
+                $scope.member.groupFg = "";
+                $scope.member.groupTypeFg = "";
+                $scope.member.paymentFg = "";
+                $scope.member.teacherCd = "";
+                $scope.member.classFg = "";
+                $scope.member.skateFg = "";
+                $scope.member.registerDate = new Date();
+                $scope.member.useDateFg = "";
+                $scope.member.useStartDate = new Date();
+                $scope.member.useEndDate = new Date();
+                $scope.member.useWeek = "";
+                $scope.member.useProdNm = "";
+                $scope.member.useAmt = "";
+                $scope.member.businessAmt = "";
+                $scope.member.teacherAmt = "";
+                $scope.member.teacherCnt = "";
+                $scope.member.useRemainAmt = "";
+                $scope.member.transportationAmt = "";
+                $scope.member.transportationCnt = "";
+            }
         //});
     };
 
@@ -189,7 +262,81 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.member.temp = orgnNm;
 
             console.log($scope.member);
+
+            // [1246 광운대아이스링크]
+            if(kwuEnvstVal === "1") {
+                // 광운대아이스링크 추가정보 조회
+                $scope.getMemberInfoAddKWU(params);
+            }
         });
+    };
+
+    // 광운대아이스링크 추가정보 조회
+    $scope.getMemberInfoAddKWU = function (params) {
+        $scope._postJSONQuery.withOutPopUp('/membr/info/view/base/getMemberInfoAddKWU.sb', params, function (response) {
+
+            if (!$.isEmptyObject(response.data)) {
+                var memberDetailInfoAddKWU = response.data.data;
+
+                // 데이터 바인딩
+                $scope.member.memberFg = memberDetailInfoAddKWU.memberFg;
+                $scope.member.privateFg = memberDetailInfoAddKWU.privateFg;
+                $scope.member.postpaidFg = memberDetailInfoAddKWU.postpaidFg;
+                $scope.member.peopleCnt = memberDetailInfoAddKWU.peopleCnt;
+                $scope.member.groupFg = memberDetailInfoAddKWU.groupFg;
+                $scope.member.groupTypeFg = memberDetailInfoAddKWU.groupTypeFg;
+                $scope.member.paymentFg = memberDetailInfoAddKWU.paymentFg;
+                $scope.member.teacherCd = memberDetailInfoAddKWU.teacherCd;
+                $scope.member.classFg = memberDetailInfoAddKWU.classFg;
+                $scope.member.skateFg = memberDetailInfoAddKWU.skateFg;
+                $scope.member.registerDate = stringToDate(memberDetailInfoAddKWU.registerDate);
+                $scope.member.useDateFg = memberDetailInfoAddKWU.useDateFg;
+                $scope.member.useStartDate = stringToDate(memberDetailInfoAddKWU.useStartDate);
+                $scope.member.useEndDate = stringToDate(memberDetailInfoAddKWU.useEndDate);
+                $scope.member.useWeek = memberDetailInfoAddKWU.useWeek;
+                $scope.member.useProdNm = memberDetailInfoAddKWU.useProdNm;
+                $scope.member.useAmt = memberDetailInfoAddKWU.useAmt;
+                $scope.member.businessAmt = memberDetailInfoAddKWU.businessAmt;
+                $scope.member.teacherAmt = memberDetailInfoAddKWU.teacherAmt;
+                $scope.member.teacherCnt = memberDetailInfoAddKWU.teacherCnt;
+                $scope.member.useRemainAmt = memberDetailInfoAddKWU.useRemainAmt;
+                $scope.member.transportationAmt = memberDetailInfoAddKWU.transportationAmt;
+                $scope.member.transportationCnt = memberDetailInfoAddKWU.transportationCnt;
+            }
+        });
+    };
+
+    // 사용기간 구분 선택시 만료일자 변경
+    $scope.srchUseDateFgComboChange = function(s) {
+        if(s.selectedValue != "") {
+            var chgAddMonth = 0;
+            var chgAddYear = 0;
+            // 1개월
+            if(s.selectedValue === "1") {
+                chgAddMonth = 1;
+            // 3개월
+            } else if(s.selectedValue === "2") {
+                chgAddMonth = 3;
+            // 6개월
+            } else if(s.selectedValue === "3") {
+                chgAddMonth = 6;
+            // 12개월
+            } else if(s.selectedValue === "4") {
+                chgAddYear = 1;
+            }
+
+            if(s.selectedValue !== "0") {
+                // 몇달 후 구하기
+                var date =  new Date($scope.member.useStartDate); // 시작일자
+                var year = new String(date.getFullYear()+chgAddYear);
+                var month = new String(date.getMonth()+1+chgAddMonth);
+                month = month.length <= 1 ? "0"+month : month;
+                var day = new String(date.getDate());
+                day = day.length <= 1 ? "0"+day : day;
+
+                $scope.member.useEndDate = stringToDate(year + month + day);
+            }
+        }
     };
     /*********************************************************
      * 값 체크
@@ -424,6 +571,13 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
         // console.log(params);
 
         var memberInfoScope = agrid.getScope('memberCtrl');
+
+        // [1246 광운대아이스링크]
+        if(kwuEnvstVal === "1") {
+            params.registerDate = dateToDaystring($scope.member.registerDate).replaceAll("-", "");
+            params.useStartDate = dateToDaystring($scope.member.useStartDate).replaceAll("-", "");
+            params.useEndDate = dateToDaystring($scope.member.useEndDate).replaceAll("-", "");
+        }
 
         // 회원 신규 등록시
         if ($.isEmptyObject($scope.selectedMember)) {

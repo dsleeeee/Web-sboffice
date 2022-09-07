@@ -235,6 +235,80 @@ public class RegistVO extends PageVO {
      */
     private String membrClassManageFg;
 
+    /** 명칭코드그룹코드 */
+    private String nmcodeGrpCd;
+
+    /** 회원구분 */
+    private String memberFg;
+
+    /** 회원-구분 */
+    private String privateFg;
+
+    /** 외상가능 */
+    private String postpaidFg;
+
+    /** 인원수 */
+    private String peopleCnt;
+
+    /** 단체구분 */
+    private String groupFg;
+
+    /** 단체 종류 구분 */
+    private String groupTypeFg;
+
+    /** 납부상태 구분 */
+    private String paymentFg;
+
+    /** 강사명 */
+    private String teacherCd;
+
+    /** 강습구분 */
+    private String classFg;
+
+    /** 스케이트종류 */
+    private String skateFg;
+
+    /** 가입일자 */
+    private String registerDate;
+
+    /** 사용기간 구분 */
+    private String useDateFg;
+
+    /** 시작일자 */
+    private String useStartDate;
+
+    /** 만료일자 */
+    private String useEndDate;
+
+    /** 사용요일 */
+    private String useWeek;
+
+    /** 상품명 */
+    private String useProdNm;
+
+    /** 매출금액 */
+    private String useAmt;
+
+    /** 영업비 */
+    private String businessAmt;
+
+    /** 강사비 */
+    private String teacherAmt;
+
+    /** 강사인원 */
+    private String teacherCnt;
+
+    /** 잔액 */
+    private String useRemainAmt;
+
+    /** 소송비 */
+    private String transportationAmt;
+
+    /** 소송수량 */
+    private String transportationCnt;
+
+
+
     /**
      * @return the orgnFg
      */
@@ -1309,6 +1383,129 @@ public class RegistVO extends PageVO {
     public void setMembrClassManageFg(String membrClassManageFg) {
         this.membrClassManageFg = membrClassManageFg;
     }
+
+    public String getNmcodeGrpCd() {
+        return nmcodeGrpCd;
+    }
+
+    public void setNmcodeGrpCd(String nmcodeGrpCd) {
+        this.nmcodeGrpCd = nmcodeGrpCd;
+    }
+
+    public String getMemberFg() {
+        return memberFg;
+    }
+
+    public void setMemberFg(String memberFg) {
+        this.memberFg = memberFg;
+    }
+
+    public String getPrivateFg() {
+        return privateFg;
+    }
+
+    public void setPrivateFg(String privateFg) {
+        this.privateFg = privateFg;
+    }
+
+    public String getPostpaidFg() {
+        return postpaidFg;
+    }
+
+    public void setPostpaidFg(String postpaidFg) {
+        this.postpaidFg = postpaidFg;
+    }
+
+    public String getPeopleCnt() { return peopleCnt; }
+
+    public void setPeopleCnt(String peopleCnt) {
+        this.peopleCnt = peopleCnt;
+    }
+
+    public String getGroupFg() { return groupTypeFg; }
+
+    public void setGroupFg(String groupTypeFg) {
+        this.groupTypeFg = groupTypeFg;
+    }
+
+    public String getGroupTypeFg() { return groupTypeFg; }
+
+    public void setGroupTypeFg(String groupTypeFg) {
+        this.groupTypeFg = groupTypeFg;
+    }
+
+    public String getPaymentFg() { return paymentFg; }
+
+    public void setPaymentFg(String paymentFg) {
+        this.paymentFg = paymentFg;
+    }
+
+    public String getTeacherCd() { return teacherCd; }
+
+    public void setTeacherCd(String teacherCd) {
+        this.teacherCd = teacherCd;
+    }
+
+    public String getClassFg() { return classFg; }
+
+    public void setClassFg(String classFg) { this.classFg = classFg; }
+
+    public String getSkateFg() { return skateFg; }
+
+    public void setSkateFg(String skateFg) { this.skateFg = skateFg; }
+
+    public String getRegisterDate() { return registerDate; }
+
+    public void setRegisterDate(String registerDate) { this.registerDate = registerDate; }
+
+    public String getUseDateFg() { return useDateFg; }
+
+    public void setUseDateFg(String useDateFg) { this.useDateFg = useDateFg; }
+
+    public String getUseStartDate() { return useStartDate; }
+
+    public void setUseStartDate(String useStartDate) { this.useStartDate = useStartDate; }
+
+    public String getUseEndDate() { return useEndDate; }
+
+    public void setUseEndDate(String useEndDate) { this.useEndDate = useEndDate; }
+
+    public String getUseWeek() { return useWeek; }
+
+    public void setUseWeek(String useWeek) { this.useWeek = useWeek; }
+
+    public String getUseProdNm() { return useProdNm; }
+
+    public void setUseProdNm(String useProdNm) { this.useProdNm = useProdNm; }
+
+    public String getUseAmt() { return useAmt; }
+
+    public void setUseAmt(String useAmt) { this.useAmt = useAmt; }
+
+    public String getBusinessAmt() { return businessAmt; }
+
+    public void setBusinessAmt(String businessAmt) { this.businessAmt = businessAmt; }
+
+    public String getTeacherAmt() { return teacherAmt; }
+
+    public void setTeacherAmt(String teacherAmt) { this.teacherAmt = teacherAmt; }
+
+    public String getTeacherCnt() { return teacherCnt; }
+
+    public void setTeacherCnt(String teacherCnt) { this.teacherCnt = teacherCnt; }
+
+    public String getUseRemainAmt() { return useRemainAmt; }
+
+    public void setUseRemainAmt(String useRemainAmt) { this.useRemainAmt = useRemainAmt; }
+
+    public String getTransportationAmt() { return transportationAmt; }
+
+    public void setTransportationAmt(String transportationAmt) { this.transportationAmt = transportationAmt; }
+
+    public String getTransportationCnt() { return transportationCnt; }
+
+    public void setTransportationCnt(String transportationCnt) { this.transportationCnt = transportationCnt; }
+
 
     @Override
 	public String toString() {
