@@ -1,11 +1,12 @@
-package kr.co.solbipos.excclc.excclc.saleRegist.service;
+package kr.co.solbipos.excclc.excclc.saleRegistKw.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 
-public class SaleRegistVO extends PageVO {
+public class SaleRegistKwVO extends PageVO {
 
     private static final long serialVersionUID = -6606377306049900821L;
 
+    private String orgnFg;
     /** 본사코드 */
     private String hqOfficeCd;
     /** 매장코드 */
@@ -29,11 +30,27 @@ public class SaleRegistVO extends PageVO {
     private String saleYn;
     /** 판매구분 */
     private String saleFg;
+    private String prodSaleFg;
     private String prodTypeFg;
     /** 결제코드 */
     private String payCd;
+    private String dcCd;
     /** 부가세구분 */
     private String vatFg;
+    private String prodVatFg;
+    private String membrNo;
+    private String membrNm;
+
+    private String depositAmt;
+    private String postpaidAmt;
+    private String businessAmt;
+    private String teacherAmt;
+    private String teacherCnt;
+    private String transportAmt;
+    private String qty;
+    private String remainAmt;
+    private String remark;
+
     private long saleUprc;
     private long saleQty;
     private long saleAmt;
@@ -52,6 +69,14 @@ public class SaleRegistVO extends PageVO {
     private long noTaxSaleAmt;
     private float cashPer;
     private float cardPer;
+
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -149,6 +174,14 @@ public class SaleRegistVO extends PageVO {
         this.saleFg = saleFg;
     }
 
+    public String getProdSaleFg() {
+        return prodSaleFg;
+    }
+
+    public void setProdSaleFg(String prodSaleFg) {
+        this.prodSaleFg = prodSaleFg;
+    }
+
     public String getProdTypeFg() {
         return prodTypeFg;
     }
@@ -165,12 +198,116 @@ public class SaleRegistVO extends PageVO {
         this.payCd = payCd;
     }
 
+    public String getDcCd() {
+        return dcCd;
+    }
+
+    public void setDcCd(String dcCd) {
+        this.dcCd = dcCd;
+    }
+
     public String getVatFg() {
         return vatFg;
     }
 
     public void setVatFg(String vatFg) {
         this.vatFg = vatFg;
+    }
+
+    public String getProdVatFg() {
+        return prodVatFg;
+    }
+
+    public void setProdVatFg(String prodVatFg) {
+        this.prodVatFg = prodVatFg;
+    }
+
+    public String getMembrNo() {
+        return membrNo;
+    }
+
+    public void setMembrNo(String membrNo) {
+        this.membrNo = membrNo;
+    }
+
+    public String getMembrNm() {
+        return membrNm;
+    }
+
+    public void setMembrNm(String membrNm) {
+        this.membrNm = membrNm;
+    }
+
+    public String getDepositAmt() {
+        return depositAmt;
+    }
+
+    public void setDepositAmt(String depositAmt) {
+        this.depositAmt = depositAmt;
+    }
+
+    public String getPostpaidAmt() {
+        return postpaidAmt;
+    }
+
+    public void setPostpaidAmt(String postpaidAmt) {
+        this.postpaidAmt = postpaidAmt;
+    }
+
+    public String getBusinessAmt() {
+        return businessAmt;
+    }
+
+    public void setBusinessAmt(String businessAmt) {
+        this.businessAmt = businessAmt;
+    }
+
+    public String getTeacherAmt() {
+        return teacherAmt;
+    }
+
+    public void setTeacherAmt(String teacherAmt) {
+        this.teacherAmt = teacherAmt;
+    }
+
+    public String getTeacherCnt() {
+        return teacherCnt;
+    }
+
+    public void setTeacherCnt(String teacherCnt) {
+        this.teacherCnt = teacherCnt;
+    }
+
+    public String getTransportAmt() {
+        return transportAmt;
+    }
+
+    public void setTransportAmt(String transportAmt) {
+        this.transportAmt = transportAmt;
+    }
+
+    public String getQty() {
+        return qty;
+    }
+
+    public void setQty(String qty) {
+        this.qty = qty;
+    }
+
+    public String getRemainAmt() {
+        return remainAmt;
+    }
+
+    public void setRemainAmt(String remainAmt) {
+        this.remainAmt = remainAmt;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public long getSaleUprc() {
