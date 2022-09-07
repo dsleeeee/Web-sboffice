@@ -36,10 +36,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnJsonBindingFieldError;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : RegistController.java
@@ -94,6 +97,7 @@ public class RegistController {
     public String registList(HttpServletRequest request, HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
         // 등록 매장 조회
         List regstrStoreList = registService.getRegistStore(sessionInfoVO);
         // 등록 매장 전체 포함
@@ -129,6 +133,88 @@ public class RegistController {
 
         // 회원등급 관리구분
         model.addAttribute("membrClassManageFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1237"), "1"));
+
+
+        /** 광운대 아이스링크 */
+        // [1246 광운대아이스링크] 환경설정값 조회
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("kwuEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1246"), "0"));
+            System.out.println("kwuEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1246"), "0"));
+        }
+        // 코드별 본사 공통코드 콤보박스 조회
+        // 회원구분
+        List memberFgComboList = registService.getHqNmcodeComboList(sessionInfoVO, "142");
+        String memberFgComboListAll = "";
+        if (memberFgComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "선택");
+            m.put("value", "");
+            list.add(m);
+            memberFgComboListAll = convertToJson(list);
+        } else {
+            memberFgComboListAll = cmmCodeUtil.assmblObj(memberFgComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("memberFgComboList", memberFgComboListAll);
+        // 단체구분
+        List groupFgComboList = registService.getHqNmcodeComboList(sessionInfoVO, "143");
+        String groupFgComboListAll = "";
+        if (memberFgComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "선택");
+            m.put("value", "");
+            list.add(m);
+            groupFgComboListAll = convertToJson(list);
+        } else {
+            groupFgComboListAll = cmmCodeUtil.assmblObj(groupFgComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("groupFgComboList", groupFgComboListAll);
+        // 강사명
+        List teacherCdComboList = registService.getHqNmcodeComboList(sessionInfoVO, "139");
+        String teacherCdComboListAll = "";
+        if (memberFgComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "선택");
+            m.put("value", "");
+            list.add(m);
+            teacherCdComboListAll = convertToJson(list);
+        } else {
+            teacherCdComboListAll = cmmCodeUtil.assmblObj(teacherCdComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("teacherCdComboList", teacherCdComboListAll);
+        // 강습구분
+        List classFgComboList = registService.getHqNmcodeComboList(sessionInfoVO, "140");
+        String classFgComboListAll = "";
+        if (memberFgComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "선택");
+            m.put("value", "");
+            list.add(m);
+            classFgComboListAll = convertToJson(list);
+        } else {
+            classFgComboListAll = cmmCodeUtil.assmblObj(classFgComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("classFgComboList", classFgComboListAll);
+        // 스케이트종류
+        List skateFgComboList = registService.getHqNmcodeComboList(sessionInfoVO, "144");
+        String skateFgComboListAll = "";
+        if (memberFgComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "선택");
+            m.put("value", "");
+            list.add(m);
+            skateFgComboListAll = convertToJson(list);
+        } else {
+            skateFgComboListAll = cmmCodeUtil.assmblObj(skateFgComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("skateFgComboList", skateFgComboListAll);
+        /** 광운대 아이스링크 */
+
+
 
         return "membr/info/view/memberInfo";
     }
@@ -950,4 +1036,24 @@ public class RegistController {
         return ReturnUtil.returnJson(Status.OK, result);
     }
 
+    /**
+     * 회원정보 조회 (광운대아이스링크 추가정보)
+     *
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "base/getMemberInfoAddKWU.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMemberInfoAddKWU(RegistVO registVO, HttpServletRequest request,
+                               HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<String> result = registService.getMemberInfoAddKWU(registVO, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
 }

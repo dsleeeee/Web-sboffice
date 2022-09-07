@@ -312,6 +312,18 @@ public class RegistServiceImpl implements RegistService {
                 throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             }*/
         }
+
+        // [1246 광운대아이스링크] 환경설정값 조회
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            String kwuEnvstVal = CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1246"), "0");
+            System.out.println("kwuEnvstVal : " + kwuEnvstVal);
+
+            if(("1").equals(kwuEnvstVal)) {
+                result = mapper.mergeMemberInfoAddKWU(registVO);
+
+            }
+        }
+
         return membrNo;
     }
 
@@ -367,6 +379,18 @@ public class RegistServiceImpl implements RegistService {
                 throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             }*/
         }
+
+        // [1246 광운대아이스링크] 환경설정값 조회
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            String kwuEnvstVal = CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1246"), "0");
+            System.out.println("kwuEnvstVal : " + kwuEnvstVal);
+
+            if(("1").equals(kwuEnvstVal)) {
+                result = mapper.mergeMemberInfoAddKWU(registVO);
+
+            }
+        }
+
         return result;
     }
 
@@ -1114,4 +1138,26 @@ public class RegistServiceImpl implements RegistService {
 
         return result;
     }
+
+    /** 코드별 본사 공통코드 콤보박스 조회 */
+    @Override
+    public List<DefaultMap<Object>> getHqNmcodeComboList(SessionInfoVO sessionInfoVO, String nmcodeGrpCd) {
+
+        RegistVO registVO = new RegistVO();
+        registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        registVO.setNmcodeGrpCd(nmcodeGrpCd);
+
+        return mapper.getHqNmcodeComboList(registVO);
+    }
+
+    /** 회원정보 조회 (광운대아이스링크 추가정보) */
+    @Override
+    public DefaultMap<String> getMemberInfoAddKWU(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+
+        // ERP 연동과 관련, 본사코드에 의해 조회하는 DB가 다름 (이다솜_2020.01.28)
+        registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return mapper.getMemberInfoAddKWU(registVO);
+    }
+
 }

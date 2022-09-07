@@ -5,7 +5,7 @@
 
 <div class="wj-dialog-body" id="deliView" name="deliView" class="subCon">
     <%-- body --%>
-    <div style="height:480px; overflow-y: auto;">
+    <div style="height:600px; overflow-y: auto;">
         <div ng-controller="memberDlvrCtrl">
             <f:form id="regDlvrForm" name="regDlvrForm">
                 <div class="searchBar flddUnfld">
