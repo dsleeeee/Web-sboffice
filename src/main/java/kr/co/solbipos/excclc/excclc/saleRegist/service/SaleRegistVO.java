@@ -34,22 +34,22 @@ public class SaleRegistVO extends PageVO {
     private String payCd;
     /** 부가세구분 */
     private String vatFg;
-    private int saleUprc;
-    private int saleQty;
-    private int saleAmt;
-    private int dcAmt;
-    private int realSaleAmt;
-    private int vatAmt;
-    private int totSaleAmt;
-    private int totDcAmt;
-    private int totRealSaleAmt;
-    private int totVatAmt;
-    private int cashAmt;
-    private int cardAmt;
-    private int payAmt;
-    private int recvPayAmt;
-    private int taxSaleAmt;
-    private int noTaxSaleAmt;
+    private long saleUprc;
+    private long saleQty;
+    private long saleAmt;
+    private long dcAmt;
+    private long realSaleAmt;
+    private long vatAmt;
+    private long totSaleAmt;
+    private long totDcAmt;
+    private long totRealSaleAmt;
+    private long totVatAmt;
+    private long cashAmt;
+    private long cardAmt;
+    private long payAmt;
+    private long recvPayAmt;
+    private long taxSaleAmt;
+    private long noTaxSaleAmt;
     private float cashPer;
     private float cardPer;
 
@@ -173,131 +173,131 @@ public class SaleRegistVO extends PageVO {
         this.vatFg = vatFg;
     }
 
-    public int getSaleUprc() {
+    public long getSaleUprc() {
         return saleUprc;
     }
 
-    public void setSaleUprc(int saleUprc) {
+    public void setSaleUprc(long saleUprc) {
         this.saleUprc = saleUprc;
     }
 
-    public int getSaleQty() {
+    public long getSaleQty() {
         return saleQty;
     }
 
-    public void setSaleQty(int saleQty) {
+    public void setSaleQty(long saleQty) {
         this.saleQty = saleQty;
     }
 
-    public int getSaleAmt() {
+    public long getSaleAmt() {
         return saleAmt;
     }
 
-    public void setSaleAmt(int saleAmt) {
+    public void setSaleAmt(long saleAmt) {
         this.saleAmt = saleAmt;
     }
 
-    public int getDcAmt() {
+    public long getDcAmt() {
         return dcAmt;
     }
 
-    public void setDcAmt(int dcAmt) {
+    public void setDcAmt(long dcAmt) {
         this.dcAmt = dcAmt;
     }
 
-    public int getRealSaleAmt() {
+    public long getRealSaleAmt() {
         return realSaleAmt;
     }
 
-    public void setRealSaleAmt(int realSaleAmt) {
+    public void setRealSaleAmt(long realSaleAmt) {
         this.realSaleAmt = realSaleAmt;
     }
 
-    public int getVatAmt() {
+    public long getVatAmt() {
         return vatAmt;
     }
 
-    public void setVatAmt(int vatAmt) {
+    public void setVatAmt(long vatAmt) {
         this.vatAmt = vatAmt;
     }
 
-    public int getTotSaleAmt() {
+    public long getTotSaleAmt() {
         return totSaleAmt;
     }
 
-    public void setTotSaleAmt(int totSaleAmt) {
+    public void setTotSaleAmt(long totSaleAmt) {
         this.totSaleAmt = totSaleAmt;
     }
 
-    public int getTotDcAmt() {
+    public long getTotDcAmt() {
         return totDcAmt;
     }
 
-    public void setTotDcAmt(int totDcAmt) {
+    public void setTotDcAmt(long totDcAmt) {
         this.totDcAmt = totDcAmt;
     }
 
-    public int getTotRealSaleAmt() {
+    public long getTotRealSaleAmt() {
         return totRealSaleAmt;
     }
 
-    public void setTotRealSaleAmt(int totRealSaleAmt) {
+    public void setTotRealSaleAmt(long totRealSaleAmt) {
         this.totRealSaleAmt = totRealSaleAmt;
     }
 
-    public int getTotVatAmt() {
+    public long getTotVatAmt() {
         return totVatAmt;
     }
 
-    public void setTotVatAmt(int totVatAmt) {
+    public void setTotVatAmt(long totVatAmt) {
         this.totVatAmt = totVatAmt;
     }
 
-    public int getCashAmt() {
+    public long getCashAmt() {
         return cashAmt;
     }
 
-    public void setCashAmt(int cashAmt) {
+    public void setCashAmt(long cashAmt) {
         this.cashAmt = cashAmt;
     }
 
-    public int getCardAmt() {
+    public long getCardAmt() {
         return cardAmt;
     }
 
-    public void setCardAmt(int cardAmt) {
+    public void setCardAmt(long cardAmt) {
         this.cardAmt = cardAmt;
     }
 
-    public int getPayAmt() {
+    public long getPayAmt() {
         return payAmt;
     }
 
-    public void setPayAmt(int payAmt) {
+    public void setPayAmt(long payAmt) {
         this.payAmt = payAmt;
     }
 
-    public int getRecvPayAmt() {
+    public long getRecvPayAmt() {
         return recvPayAmt;
     }
 
-    public void setRecvPayAmt(int recvPayAmt) {
+    public void setRecvPayAmt(long recvPayAmt) {
         this.recvPayAmt = recvPayAmt;
     }
 
-    public int getTaxSaleAmt() {
+    public long getTaxSaleAmt() {
         return taxSaleAmt;
     }
 
-    public void setTaxSaleAmt(int taxSaleAmt) {
+    public void setTaxSaleAmt(long taxSaleAmt) {
         this.taxSaleAmt = taxSaleAmt;
     }
 
-    public int getNoTaxSaleAmt() {
+    public long getNoTaxSaleAmt() {
         return noTaxSaleAmt;
     }
 
-    public void setNoTaxSaleAmt(int noTaxSaleAmt) {
+    public void setNoTaxSaleAmt(long noTaxSaleAmt) {
         this.noTaxSaleAmt = noTaxSaleAmt;
     }
 

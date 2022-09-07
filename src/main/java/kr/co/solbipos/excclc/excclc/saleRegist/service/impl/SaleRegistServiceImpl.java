@@ -71,15 +71,15 @@ public class SaleRegistServiceImpl implements SaleRegistService {
     public int getNewRegistList(SaleRegistVO[] saleRegistVOs, SessionInfoVO sessionInfoVO) {
 
         String billNo = "";
-        int billDtlNo = 1;
-        int taxSaleAmt = 0;
-        int noTaxSaleAmt = 0;
+        long billDtlNo = 1;
+        long taxSaleAmt = 0;
+        long noTaxSaleAmt = 0;
         String currentDt = currentDateTimeString();
 
-        int totSaleAmt = 0;
-        int totDcAmt = 0;
-        int realSaleAmt = 0;
-        int vatAmt = 0;
+        long totSaleAmt = 0;
+        long totDcAmt = 0;
+        long realSaleAmt = 0;
+        long vatAmt = 0;
 
         // hdr
         for(SaleRegistVO saleRegistVO : saleRegistVOs){
@@ -149,7 +149,7 @@ public class SaleRegistServiceImpl implements SaleRegistService {
                 }
 
                 // TB_SL_SALE_HDR_DC
-                if(saleRegistVO.getDcAmt() > 0){
+                if(totDcAmt > 0){
                     saleRegistMapper.getSaleHdrDc(saleRegistVO);
                 }
 
