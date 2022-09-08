@@ -658,7 +658,7 @@
     <typeAlias alias="stockManageViewStoreVO" type="kr.co.solbipos.stock.manage.viewStore.service.StockManageViewStoreVO"/>
     <typeAlias alias="stockManageDtlViewVO" type="kr.co.solbipos.stock.manage.dtlView.service.StockManageDtlViewVO"/>
     <typeAlias alias="productVO" type="kr.co.solbipos.stock.product.product.service.ProductVO" />
-    <!-- 재고관리 > 생산관리 > 중량재고현황(매장) -->
+    <typeAlias alias="stockVO" type="kr.co.solbipos.stock.product.stock.service.StockVO"/>
     <typeAlias alias="weightStockVO" type="kr.co.solbipos.stock.product.weightStock.service.WeightStockVO"/>
 
     <!-- 공통팝업 수불/재고 엑셀업로드 -->
