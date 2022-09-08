@@ -541,6 +541,8 @@
     <typeAlias alias="adjVO" type="kr.co.solbipos.adi.dclz.adj.service.AdjVO"/>
 -->
     <typeAlias alias="cdVO" type="kr.co.solbipos.adi.etc.cd.service.CdVO"/>
+    <!-- 광운대 > 공통코드 > 공통코드 -->
+    <typeAlias alias="cdKwnVO" type="kr.co.solbipos.adi.etc.cdKwn.service.CdKwnVO"/>
 <!--
     <typeAlias alias="resveVO" type="kr.co.solbipos.adi.etc.resve.service.ResveVO"/>
 -->
