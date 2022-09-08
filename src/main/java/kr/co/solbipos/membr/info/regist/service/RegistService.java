@@ -205,5 +205,5 @@ public interface RegistService {
     List<DefaultMap<Object>> getHqNmcodeComboList(SessionInfoVO sessionInfoVO, String nmcodeGrpCd);
 
     /** 회원정보 조회 (광운대아이스링크 추가정보) */
-    DefaultMap<String> getMemberInfoAddKWU(RegistVO registVO, SessionInfoVO sessionInfoVO);
+    DefaultMap<String> getMemberInfoAddKwu(RegistVO registVO, SessionInfoVO sessionInfoVO);
 }

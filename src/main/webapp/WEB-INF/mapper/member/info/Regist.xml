@@ -2660,8 +2660,8 @@
         TABLE    : TB_MB_MEMBER_ADDITORY_KWU
         COMMENTS : 회원정보 저장 (광운대아이스링크 추가정보)
     -->
-    <insert id="mergeMemberInfoAddKWU" parameterType="registVO">
-        /* RegistMapper.mergeMemberInfoAddKWU */
+    <insert id="mergeMemberInfoAddKwu" parameterType="registVO">
+        /* RegistMapper.mergeMemberInfoAddKwu */
         MERGE INTO TB_MB_MEMBER_ADDITORY_KWU
         USING DUAL ON
         (
@@ -2766,8 +2766,8 @@
         TABLE    : TB_MB_MEMBER_ADDITORY_KWU
         COMMENTS : 회원정보 조회 (광운대아이스링크 추가정보)
     -->
-    <select id="getMemberInfoAddKWU" parameterType="registVO" resultType="DefaultMap">
-        /* RegistMapper.getMemberInfoAddKWU */
+    <select id="getMemberInfoAddKwu" parameterType="registVO" resultType="DefaultMap">
+        /* RegistMapper.getMemberInfoAddKwu */
         SELECT
         tmmak.MEMBR_FG,
         tmmak.PRIVATE_FG,

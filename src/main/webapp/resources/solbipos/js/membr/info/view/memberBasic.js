@@ -273,7 +273,7 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 광운대아이스링크 추가정보 조회
     $scope.getMemberInfoAddKWU = function (params) {
-        $scope._postJSONQuery.withOutPopUp('/membr/info/view/base/getMemberInfoAddKWU.sb', params, function (response) {
+        $scope._postJSONQuery.withOutPopUp('/membr/info/view/base/getMemberInfoAddKwu.sb', params, function (response) {
 
             if (!$.isEmptyObject(response.data)) {
                 var memberDetailInfoAddKWU = response.data.data;

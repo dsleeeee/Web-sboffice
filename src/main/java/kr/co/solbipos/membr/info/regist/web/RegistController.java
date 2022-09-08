@@ -1045,14 +1045,14 @@ public class RegistController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "base/getMemberInfoAddKWU.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "base/getMemberInfoAddKwu.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getMemberInfoAddKWU(RegistVO registVO, HttpServletRequest request,
+    public Result getMemberInfoAddKwu(RegistVO registVO, HttpServletRequest request,
                                HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        DefaultMap<String> result = registService.getMemberInfoAddKWU(registVO, sessionInfoVO);
+        DefaultMap<String> result = registService.getMemberInfoAddKwu(registVO, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }

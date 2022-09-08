@@ -319,8 +319,7 @@ public class RegistServiceImpl implements RegistService {
             System.out.println("kwuEnvstVal : " + kwuEnvstVal);
 
             if(("1").equals(kwuEnvstVal)) {
-                result = mapper.mergeMemberInfoAddKWU(registVO);
-
+                result = mapper.mergeMemberInfoAddKwu(registVO);
             }
         }
 
@@ -386,8 +385,7 @@ public class RegistServiceImpl implements RegistService {
             System.out.println("kwuEnvstVal : " + kwuEnvstVal);
 
             if(("1").equals(kwuEnvstVal)) {
-                result = mapper.mergeMemberInfoAddKWU(registVO);
-
+                result = mapper.mergeMemberInfoAddKwu(registVO);
             }
         }
 
@@ -1152,12 +1150,12 @@ public class RegistServiceImpl implements RegistService {
 
     /** 회원정보 조회 (광운대아이스링크 추가정보) */
     @Override
-    public DefaultMap<String> getMemberInfoAddKWU(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+    public DefaultMap<String> getMemberInfoAddKwu(RegistVO registVO, SessionInfoVO sessionInfoVO) {
 
         // ERP 연동과 관련, 본사코드에 의해 조회하는 DB가 다름 (이다솜_2020.01.28)
         registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        return mapper.getMemberInfoAddKWU(registVO);
+        return mapper.getMemberInfoAddKwu(registVO);
     }
 
 }
