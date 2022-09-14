@@ -802,6 +802,11 @@
     <typeAlias alias="apprCoprtnVO" type="kr.co.solbipos.sale.status.appr.coprtn.service.ApprCoprtnVO"/>
     <typeAlias alias="apprAcquireVO" type="kr.co.solbipos.sale.status.appr.acquire.service.ApprAcquireVO"/>
 
+
+    <!-- 광운대 > 신용카드입금관리 > 신용카드입금관리 -->
+    <!--<typeAlias alias="cardCreditVO" type="kr.co.solbipos.sale.card.cardCredit.service.CardCreditVO"/>-->
+
+
     <!-- 매출관리 > 배달현황 > 내점/배달/포장 현황 -->
     <typeAlias alias="dlvrFgVO" type="kr.co.solbipos.sale.dlvr.dlvrFg.service.DlvrFgVO"/>
     <!-- 매출관리 > 배달현황 > 주문채널별현황 -->
