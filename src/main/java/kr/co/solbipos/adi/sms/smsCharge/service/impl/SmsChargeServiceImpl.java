@@ -62,7 +62,10 @@ public class SmsChargeServiceImpl implements SmsChargeService {
 
         // 현재 잔여금액
         String smsBaseAmt = smsChargeMapper.getSmsBaseAmtSelect(smsChargeVO);
-
+        if(smsBaseAmt == null)
+        {
+            smsBaseAmt = "0";
+        }
         LOGGER.info("WEB_SMS >>> 충전결제 >>> 현재 잔여금액 : " + smsBaseAmt);
 
         // SmsChargeHistVO
