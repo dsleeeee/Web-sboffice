@@ -606,6 +606,10 @@ public class StoreManageServiceImpl implements StoreManageService{
                 }
             }
 
+            // 특이매장 데이터 처리
+            mapper.unusualStoreRegInfo(storeManageVO);
+            LOGGER.info("특이매장 데이터 처리_unusualStoreRegInfo");
+
             // todo 공통코드 중 CMM 코드 복사 (프로시져)
 
 

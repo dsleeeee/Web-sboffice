@@ -4806,7 +4806,20 @@
     -->
     <insert id="insertKitchenPrintProduct" parameterType="storeProductVO">
         /* USE : StoreManageMapper.insertKitchenPrintProduct */
-        INSERT INTO TB_MS_PRINTER_PROD
+        MERGE INTO TB_MS_PRINTER_PROD
+        USING DUAL
+        ON (
+                STORE_CD = #{storeCd}
+            AND PRTER_NO = #{prterNo}
+            AND PROD_CD  = #{prodCd}
+            )
+        WHEN MATCHED THEN
+        UPDATE
+           SET
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
         (
             STORE_CD,
             PRTER_NO,
@@ -6469,5 +6482,23 @@
          WHERE MEMBR_ORGN_CD = '0000000'
            AND MEMBR_CLASS_CD = '000'
     </insert>
+
+    <!-- 특이매장 데이터 처리 프로시저 호출 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : storeManageVO
+        COMMENTS : 특이매장 데이터 처리 프로시저 호출
+    -->
+    <select id="unusualStoreRegInfo" statementType="CALLABLE"  parameterType="storeManageVO" resultType="String">
+        /* StoreManageMapper.unusualStoreRegInfo */
+        {
+            CALL PKG_MS_STORE_REG_INFO.SP_STORE_REG_INFO_0001
+            (
+                #{storeCd},
+                #{regId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
 
 </mapper>
