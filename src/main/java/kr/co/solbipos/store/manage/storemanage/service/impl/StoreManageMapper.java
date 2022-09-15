@@ -443,4 +443,7 @@ public interface StoreManageMapper {
 
     /** 회원 기본등급 등록(프랜차이즈 매장용) */
     int insertStoreMemberClass(MemberClassVO memberClassVO);
+
+    /** 특이매장 데이터 처리 */
+    String unusualStoreRegInfo(StoreManageVO storeManageVO);
 }
