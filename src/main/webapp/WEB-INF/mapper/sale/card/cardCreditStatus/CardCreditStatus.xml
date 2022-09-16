@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    CardCreditStatus.xml
+    신용카드입금현황 (광운대 아이스링크)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2022.09.16     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.card.cardCreditStatus.service.impl.CardCreditStatusMapper">
+
+    <!-- 신용카드입금현황 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getCardCreditStatusList" parameterType="CardCreditStatusVO" resultType="DefaultMap">
+        /* CardCreditStatusMapper.getCardCreditStatusList */
+        SELECT
+        tsspc.HQ_OFFICE_CD,
+        tsspc.HQ_BRAND_CD,
+        tsspc.STORE_CD,
+        tms.STORE_NM,
+        tsspc.SALE_DATE,
+        tsspc.POS_NO,
+        tsspc.BILL_NO,
+        tsspc.LINE_NO,
+        tsspc.LINE_SEQ_NO,
+        (tsspc.POS_NO ||'-'|| tsspc.BILL_NO ||'-'|| tsspc.LINE_NO ||'-'|| tsspc.LINE_SEQ_NO) AS BILL,
+        SUBSTR(tsspc.APPR_DT, 0, 8) AS APPR_DATE,
+        tsspc.APPR_NO,
+        (tsspc.SALE_FG * tsspc.APPR_AMT) AS APPR_AMT,
+        DECODE(tsspc.SALE_FG, 1, '승인', -1, '취소') AS APPR_GUBUN,
+        tsspc.CARD_NO,
+        tsspc.ACQUIRE_NM,
+        tsspc.MEMBR_JOIN_NO,
+        DECODE(tsspc.INST_CNT, 0 , '일시불', '할부') AS INST_CNT_NM,
+        tsspcck.CREDIT_DATE,
+        tsspcck.CREDIT_AMT,
+        tsspcck.CREDIT_FEE,
+        tsspcck.CREDIT_BANK
+        FROM TB_SL_SALE_PAY_CARD tsspc,
+        TB_SL_SALE_PAY_CARD_CREDIT_KWU tsspcck,
+        TB_MS_STORE tms
+        WHERE 1=1
+        AND tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="storeCd != null and storeCd != ''">
+            AND tsspc.STORE_CD = #{storeCd}
+        </if>
+        <if test="dateFg != null and dateFg != ''">
+            <!-- 승인일자 -->
+            <if test='dateFg == "1"'>
+                AND SUBSTR(tsspc.APPR_DT, 0, 8) BETWEEN #{startDate} AND #{endDate}
+            </if>
+            <!-- 영업일자 -->
+            <if test='dateFg == "2"'>
+                AND tsspc.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            </if>
+            <!-- 입금일자 -->
+            <if test='dateFg == "3"'>
+                AND tsspcck.CREDIT_DATE BETWEEN #{startDate} AND #{endDate}
+            </if>
+        </if>
+        <if test="creditBank != null and creditBank != ''">
+            AND tsspcck.CREDIT_BANK = #{creditBank}
+        </if>
+        <if test="creditFg != null and creditFg != ''">
+            <!-- 미입금 -->
+            <if test='creditFg == "0"'>
+                AND tsspcck.CREDIT_AMT IS NULL
+            </if>
+            <!-- 입금 -->
+            <if test='creditFg == "1"'>
+                AND tsspcck.CREDIT_AMT IS NOT NULL
+            </if>
+        </if>
+        AND tsspcck.HQ_OFFICE_CD (+)= tsspc.HQ_OFFICE_CD
+        AND tsspcck.HQ_BRAND_CD (+)= tsspc.HQ_BRAND_CD
+        AND tsspcck.STORE_CD (+)= tsspc.STORE_CD
+        AND tsspcck.SALE_DATE (+)= tsspc.SALE_DATE
+        AND tsspcck.POS_NO (+)= tsspc.POS_NO
+        AND tsspcck.BILL_NO (+)= tsspc.BILL_NO
+        AND tsspcck.LINE_NO (+)= tsspc.LINE_NO
+        AND tsspcck.LINE_SEQ_NO (+)= tsspc.LINE_SEQ_NO
+        AND tms.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
+        AND tms.STORE_CD = tsspc.STORE_CD
+        ORDER BY tsspc.STORE_CD, tsspc.SALE_DATE, tsspc.POS_NO, tsspc.BILL_NO, tsspc.LINE_NO, tsspc.LINE_SEQ_NO
+    </select>
+
+</mapper>
