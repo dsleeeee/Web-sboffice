@@ -25,9 +25,9 @@
           </colgroup>
           <tbody>
           <tr>
-            <th><s:message code="saleRegistKw.membrNo"/></th>
+            <th><s:message code="saleRegistKwu.membrNo"/></th>
             <td><input type="text" id="srchMembrNo" ng-model="membrNo"/></td>
-            <th><s:message code="saleRegistKw.membrNm"/></th>
+            <th><s:message code="saleRegistKwu.membrNm"/></th>
             <td><input type="text" id="srchMembrNm" ng-model="membrNm"/></td>
           </tr>
           </tbody>
@@ -50,8 +50,8 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="saleRegistKw.membrNo"/>" binding="membrNo" width="120" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleRegistKw.membrNm"/>" binding="membrNm" width="*" align="left"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleRegistKwu.membrNo"/>" binding="membrNo" width="120" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleRegistKwu.membrNm"/>" binding="membrNm" width="*" align="left"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>
@@ -147,7 +147,7 @@
       var params = {};
       params.membrNo = $scope.membrNo;
       params.membrNm = $scope.membrNm;
-      $scope._inquirySub("/excclc/excclc/saleRegistKw/saleRegistKw/getMembrKwList.sb", params, function () {
+      $scope._inquirySub("/excclc/excclc/saleRegistKwu/saleRegistKwu/getMembrKwList.sb", params, function () {
         $scope.searchFg = "Y";
       });
     };

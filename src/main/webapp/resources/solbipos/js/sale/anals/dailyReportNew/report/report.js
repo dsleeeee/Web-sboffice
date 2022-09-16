@@ -1907,6 +1907,8 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
             var arr_cfgPayLineSeq   = new Array();
             var arr_cfgPayLineNm    = new Array();
             var tmp_table           = "";
+            console.log("결제라인 : ");
+            console.log(flex_payline);
 
             for(var i=0; i<flex_payline.collectionView.items.length; i++){
                 var item = flex_payline.collectionView.items[i];
@@ -1993,6 +1995,11 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
         	}
         }
     */
+
+        console.log("정렬 순서");
+        console.log(arrDispSeq);
+
+
         //[영업일보 구성] 정렬 순서 ([i][0]:cfgCd, [i][1]:cfgDispSeq, [i][2]:cfgSelYn)
         for(var i=0; i<arrDispSeq.length; i++){
         	//console.log('Print: ' + arrDispSeq[i][0] + ', ' + arrDispSeq[i][1] + ', ' + arrDispSeq[i][2]);

@@ -72,7 +72,7 @@ app.controller('selectProdCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.searchRegProd = function(){
         var params        = {};
         params.storeCd = $("#storeCd").text();
-        $scope._inquiryMain("/excclc/excclc/saleRegistKw/saleRegistKw/getSelectProdList.sb", params, function() {});
+        $scope._inquiryMain("/excclc/excclc/saleRegistKwu/saleRegistKwu/getSelectProdList.sb", params, function() {});
     };
 
     // 상품분류정보 팝업
@@ -153,6 +153,18 @@ app.controller('newRegistCtrl', ['$scope', '$http', function ($scope, $http) {
                                 item.vatAmt = Math.floor(item.realSaleAmt - item.realSaleAmt/1.1);
                             } else {
                                 item.vatAmt = "0";
+                            }
+                            if(Math.abs(item.realSaleAmt) >= 1000000000000){
+                                $scope._popMsg("금액은 최대 999,999,999,999까지 가능합니다.");
+                                item.saleQty = "0";
+                                item.saleAmt = item.saleUprc * item.saleQty;
+                                item.dcAmt = "0";
+                                item.realSaleAmt = item.saleAmt - item.dcAmt;
+                                if(item.prodVatFg === '1'){
+                                    item.vatAmt = Math.floor(item.realSaleAmt - item.realSaleAmt/1.1);
+                                } else {
+                                    item.vatAmt = "0";
+                                }
                             }
                         }
                     }
@@ -294,7 +306,7 @@ app.controller('newRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.billChk = function (){
 
         if ($scope.flex.rows.length <= 0) {
-            $scope._popMsg(messages["saleRegistKw.not.data"]);
+            $scope._popMsg(messages["saleRegistKwu.not.data"]);
             return false;
         } else {
             if ($("#billNo").text().length === 4) {
@@ -302,7 +314,7 @@ app.controller('newRegistCtrl', ['$scope', '$http', function ($scope, $http) {
                 params.storeCd = $("#storeCd").text();
                 params.saleDate = $("#saleDate").text().replaceAll("-","");
                 params.billNo = $("#billNo").text();
-                $scope._postJSONQuery.withOutPopUp('/excclc/excclc/saleRegistKw/saleRegistKw/getBillDel.sb', params, function (result) {
+                $scope._postJSONQuery.withOutPopUp('/excclc/excclc/saleRegistKwu/saleRegistKwu/getBillDel.sb', params, function (result) {
                     $scope.save();
                 });
             } else {
@@ -323,10 +335,10 @@ app.controller('newRegistCtrl', ['$scope', '$http', function ($scope, $http) {
             totalAmt += Number($scope.flex.collectionView.items[i].realSaleAmt);
         }
         if($("#membrNo").val() === "" || $("#membrNo").val() === undefined){
-            $scope._popMsg(messages['saleRegistKw.membr.chk']);
+            $scope._popMsg(messages['saleRegistKwu.membr.chk']);
             return false;
         } else if(Number(cashAmt) + Number(cardAmt) !== totalAmt){
-            $scope._popMsg(messages['saleRegistKw.saleAmt.chk']);
+            $scope._popMsg(messages['saleRegistKwu.saleAmt.chk']);
             return false;
         }
 
@@ -354,11 +366,11 @@ app.controller('newRegistCtrl', ['$scope', '$http', function ($scope, $http) {
             }
         }
         if(params.length == 0){
-            $scope._popMsg(messages["saleRegistKw.not.data"]);
+            $scope._popMsg(messages["saleRegistKwu.not.data"]);
             return false;
         }
         console.log(params);
-        $scope._save("/excclc/excclc/saleRegistKw/saleRegistKw/getNewRegistList.sb", params, function (){
+        $scope._save("/excclc/excclc/saleRegistKwu/saleRegistKwu/getNewRegistList.sb", params, function (){
             $scope.newRegistLayer.hide();
 
             var scope = agrid.getScope('saleRegistCtrl');
@@ -380,19 +392,19 @@ app.controller('newRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         $('#cash').attr('readonly', false);
         $('#card').attr('readonly', false);
 
-        $scope._inquirySub("/excclc/excclc/saleRegistKw/saleRegistKw/getBillDtlList.sb", params, function() {
-            $.postJSON("/excclc/excclc/saleRegistKw/saleRegistKw/getCashAmt.sb", params, function(result) {
+        $scope._inquirySub("/excclc/excclc/saleRegistKwu/saleRegistKwu/getBillDtlList.sb", params, function() {
+            $.postJSON("/excclc/excclc/saleRegistKwu/saleRegistKwu/getCashAmt.sb", params, function(result) {
                 $("#card").val(result.data.list[0]);
                 $("#cash").val(result.data.list[1]);
             });
-            $.postJSON("/excclc/excclc/saleRegistKw/saleRegistKw/getSaleFg.sb", params, function(result) {
+            $.postJSON("/excclc/excclc/saleRegistKwu/saleRegistKwu/getSaleFg.sb", params, function(result) {
                 if(result.data.list === "1"){
                     $scope.saleFgCdCombo.selectedIndex = 0;
                 } else {
                     $scope.saleFgCdCombo.selectedIndex = 1;
                 }
             });
-            $.postJSON("/excclc/excclc/saleRegistKw/saleRegistKw/getHdrInfo.sb", params, function(result) {
+            $.postJSON("/excclc/excclc/saleRegistKwu/saleRegistKwu/getHdrInfo.sb", params, function(result) {
                 var hdrInfo = result.data[0];
                 $("#membrNo").val(hdrInfo.membrNo); // 매출처
                 $("#membrNm").val(hdrInfo.membrNm); // 매출처

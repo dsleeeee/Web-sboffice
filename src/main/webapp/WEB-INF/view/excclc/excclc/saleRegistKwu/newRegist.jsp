@@ -8,7 +8,7 @@
 
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font">
-            <s:message code="saleRegistKw.newRegist"/>
+            <s:message code="saleRegistKwu.newRegist"/>
 
             <a id="newRegistInfo" class="ml20">
                 <span class="mr10">영업일자 : <span id="saleDate"></span></span>
@@ -45,15 +45,15 @@
                         </td>
                     </tr>
                     <tr>
-                        <th><s:message code="saleRegistKw.membr"/></th>
+                        <th><s:message code="saleRegistKwu.membr"/></th>
                         <td>
                             <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-                            <jsp:include page="/WEB-INF/view/excclc/excclc/saleRegistKw/searchMembrKwS.jsp" flush="true">
+                            <jsp:include page="/WEB-INF/view/excclc/excclc/saleRegistKwu/searchMembrSKwu.jsp" flush="true">
                                 <jsp:param name="targetId" value="membr"/>
                             </jsp:include>
                             <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
                         </td>
-                        <th><s:message code="saleRegistKw.saleFg"/>
+                        <th><s:message code="saleRegistKwu.saleFg"/>
                         </th>
                         <td>
                             <div class="sb-select w100">
@@ -71,33 +71,33 @@
                                 </span>
                             </div>
                         </td>
-                        <th><s:message code="saleRegistKw.depositAmt"/></th>
+                        <th><s:message code="saleRegistKwu.depositAmt"/></th>
                         <td><input type="text" class="sb-input w100" id="depositAmt" ng-model="depositAmt" numberOnly/></td>
-                        <th><s:message code="saleRegistKw.postpaidAmt"/></th>
+                        <th><s:message code="saleRegistKwu.postpaidAmt"/></th>
                         <td><input type="text" class="sb-input w100" id="postpaidAmt" ng-model="postpaidAmt" numberOnly/></td>
                     </tr>
                     <tr>
-                        <th><s:message code="saleRegistKw.businessAmt"/></th>
+                        <th><s:message code="saleRegistKwu.businessAmt"/></th>
                         <td><input type="text" class="sb-input w100" id="businessAmt" ng-model="businessAmt" numberOnly/></td>
-                        <th><s:message code="saleRegistKw.teacherAmt"/></th>
+                        <th><s:message code="saleRegistKwu.teacherAmt"/></th>
                         <td><input type="text" class="sb-input w100" id="teacherAmt" ng-model="teacherAmt" numberOnly/></td>
-                        <th><s:message code="saleRegistKw.teacherCnt"/></th>
+                        <th><s:message code="saleRegistKwu.teacherCnt"/></th>
                         <td><input type="text" class="sb-input w100" id="teacherCnt" ng-model="teacherCnt" numberOnly/></td>
-                        <th><s:message code="saleRegistKw.transportAmt"/></th>
+                        <th><s:message code="saleRegistKwu.transportAmt"/></th>
                         <td><input type="text" class="sb-input w100" id="transportAmt" ng-model="transportAmt" numberOnly/></td>
                     </tr>
                     <tr>
-                        <th><s:message code="saleRegistKw.qty"/></th>
+                        <th><s:message code="saleRegistKwu.qty"/></th>
                         <td><input type="text" class="sb-input w100" id="qty" ng-model="qty" numberOnly/></td>
-                        <th><s:message code="saleRegistKw.remainAmt"/></th>
+                        <th><s:message code="saleRegistKwu.remainAmt"/></th>
                         <td><input type="text" class="sb-input w100" id="remainAmt" ng-model="remainAmt" numberOnly/></td>
-                        <th><s:message code="saleRegistKw.remark"/></th>
+                        <th><s:message code="saleRegistKwu.remark"/></th>
                         <td colspan="3">
                             <input type="text" class="sb-input w100" id="remark" ng-model="remark"/>
                         </td>
                     </tr>
                     </tbody>
-                </table class="searchTbl">
+                </table>
 
                 <%--- 적용상품 그리드 --%>
                 <div class="oh mt5">
@@ -114,18 +114,18 @@
                                     ime-enabled="true">
 
                                 <!-- define columns -->
-                                <wj-flex-grid-column header="<s:message code="saleRegistKw.prodCd"/>"     binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="saleRegistKw.prodNm"/>"     binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="saleRegistKw.saleUprc"/>"   binding="saleUprc" width="65" align="right" is-read-only="true"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="saleRegistKw.saleQty"/>"    binding="saleQty" width="65" align="center"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="saleRegistKw.saleAmt"/>"    binding="saleAmt" width="65" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="saleRegistKw.dcAmt"/>"      binding="dcAmt" width="65" align="right" aggregate="Sum"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="saleRegistKw.realSaleAmt"/>" binding="realSaleAmt" width="65" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="saleRegistKw.vatAmt"/>"     binding="vatAmt" width="65" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="saleRegistKw.vatFg"/>"      binding="vatFg" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="saleRegistKw.vatFg"/>"      binding="prodVatFg" width="80" data-map="vatFgDataMap" align="center"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="saleRegistKw.saleFg"/>"     binding="prodSaleFg" width="80" data-map="saleFgDataMap" align="center"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="saleRegistKw.prodTypeFg"/>" binding="prodTypeFg" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="saleRegistKwu.prodCd"/>"     binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="saleRegistKwu.prodNm"/>"     binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="saleRegistKwu.saleUprc"/>"   binding="saleUprc" width="65" align="right" is-read-only="true"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="saleRegistKwu.saleQty"/>"    binding="saleQty" width="65" align="center" max-length="4"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="saleRegistKwu.saleAmt"/>"    binding="saleAmt" width="65" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="saleRegistKwu.dcAmt"/>"      binding="dcAmt" width="65" align="right" max-length="8" aggregate="Sum"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="saleRegistKwu.realSaleAmt"/>" binding="realSaleAmt" width="65" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="saleRegistKwu.vatAmt"/>"     binding="vatAmt" width="65" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="saleRegistKwu.vatFg"/>"      binding="vatFg" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="saleRegistKwu.vatFg"/>"      binding="prodVatFg" width="80" data-map="vatFgDataMap" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="saleRegistKwu.saleFg"/>"     binding="prodSaleFg" width="80" data-map="saleFgDataMap" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="saleRegistKwu.prodTypeFg"/>" binding="prodTypeFg" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                             </wj-flex-grid>
                         </div>
                     </div>
@@ -136,7 +136,7 @@
             <div ng-controller="selectProdCtrl">
                 <%-- 조회조건 --%>
                 <div class="searchBar flddUnfld">
-                    <a href="#" class="open fl"><s:message code="saleRegistKw.selectProd"/></a>
+                    <a href="#" class="open fl"><s:message code="saleRegistKwu.selectProd"/></a>
                     <%-- 조회 --%>
                     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
                         <button class="btn_blue fr" ng-click="_pageView('selectProdCtrl',1)">
@@ -157,18 +157,18 @@
                     </colgroup>
                     <tbody>
                     <tr>
-                        <th><s:message code="saleRegistKw.prodCd"/></th>
+                        <th><s:message code="saleRegistKwu.prodCd"/></th>
                         <td><input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" /></td>
-                        <th><s:message code="saleRegistKw.prodNm"/></th>
+                        <th><s:message code="saleRegistKwu.prodNm"/></th>
                         <td><input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" /></td>
-                        <th><s:message code="saleRegistKw.prodClass"/></th>
+                        <th><s:message code="saleRegistKwu.prodClass"/></th>
                         <td>
                             <input type="text" class="sb-input w50" id="srchProdClassCd" ng-model="prodClassNm" ng-click="popUpProdClass()" style="float: left;"
                                    placeholder="<s:message code="prodBatchChange.srchClass" /> 선택" readonly/>
                             <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled />
                             <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
                         </td>
-                        <th><s:message code="saleRegistKw.barCd"/></th>
+                        <th><s:message code="saleRegistKwu.barCd"/></th>
                         <td><input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" /></td>
                     </tr>
                     </tbody>
@@ -189,15 +189,15 @@
                                         is-read-only="true">
 
                                     <!-- define columns -->
-                                    <wj-flex-grid-column header="<s:message code="saleRegistKw.pathNm"/>"     binding="pathNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
-                                    <wj-flex-grid-column header="<s:message code="saleRegistKw.prodCd"/>"     binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                                    <wj-flex-grid-column header="<s:message code="saleRegistKw.prodNm"/>"     binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-                                    <wj-flex-grid-column header="<s:message code="saleRegistKw.barCd"/>"      binding="barCd" width="80" align="left" is-read-only="true"></wj-flex-grid-column>
-                                    <wj-flex-grid-column header="<s:message code="saleRegistKw.prodTypeFg"/>" binding="prodTypeFg" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                                    <wj-flex-grid-column header="<s:message code="saleRegistKw.costUprc"/>"   binding="costUprc" align="right" is-read-only="true"></wj-flex-grid-column>
-                                    <wj-flex-grid-column header="<s:message code="saleRegistKw.splyUprc"/>"   binding="splyUprc" align="right" is-read-only="true"></wj-flex-grid-column>
-                                    <wj-flex-grid-column header="<s:message code="saleRegistKw.saleUprc"/>"   binding="saleUprc" align="right" is-read-only="true"></wj-flex-grid-column>
-                                    <wj-flex-grid-column header="<s:message code="saleRegistKw.vatFg"/>"      binding="vatFg" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="saleRegistKwu.pathNm"/>"     binding="pathNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="saleRegistKwu.prodCd"/>"     binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="saleRegistKwu.prodNm"/>"     binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="saleRegistKwu.barCd"/>"      binding="barCd" width="80" align="left" is-read-only="true"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="saleRegistKwu.prodTypeFg"/>" binding="prodTypeFg" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="saleRegistKwu.costUprc"/>"   binding="costUprc" align="right" is-read-only="true"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="saleRegistKwu.splyUprc"/>"   binding="splyUprc" align="right" is-read-only="true"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="saleRegistKwu.saleUprc"/>"   binding="saleUprc" align="right" is-read-only="true"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="saleRegistKwu.vatFg"/>"      binding="vatFg" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
                                 </wj-flex-grid>
                             </div>
                         </div>
@@ -215,7 +215,7 @@
     });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/saleRegistKw/newRegist.js?ver=20220831.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/saleRegistKwu/newRegist.js?ver=20220831.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
