@@ -874,6 +874,12 @@
     <!-- 광운대 > 후방매출등록 > 후방매출등록 -->
     <typeAlias alias="saleRegistKwVO" type="kr.co.solbipos.excclc.excclc.saleRegistKw.service.SaleRegistKwVO"/>
 
+    <!-- 광운대 > 리포트 > 분류별결제수단별 매출내역 -->
+    <!-- 광운대 > 리포트 > 결제수단별 매출내역 -->
+    <!-- 광운대 > 리포트 > 신용카드 매출내역 -->
+    <!-- 광운대 > 리포트 > 현금영수증 발행내역 -->
+    <typeAlias alias="reportKwuVO" type="kr.co.solbipos.sale.status.reportKwu.service.ReportKwuVO"/>
+
     <!-- ====================================== 모바일 시작 ====================================== -->
     <!-- (모바일) 매출현황 > 상품별매출현황 -->
     <typeAlias alias="mobileProdSaleVO" type="kr.co.solbipos.mobile.sale.status.prod.service.MobileProdSaleVO"/>

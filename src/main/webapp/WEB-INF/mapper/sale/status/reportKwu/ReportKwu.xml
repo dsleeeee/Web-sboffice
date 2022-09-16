@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    ReportKwu.xml
+    광운대 매출 리포트
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2022.09.13     신규생성
+-->
+<mapper namespace="kr.co.solbipos.sale.status.reportKwu.service.impl.ReportKwuMapper">
+
+    <!-- 분류별결제수단별 매출내역 - 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_PROD, TB_SL_DAILY_PROD_PAY, TB_MS_PRODUCT, TB_MS_PRODUCT_BARCD
+        PARAM    : reportKwuVO
+        COMMENTS : 분류별결제수단별 매출내역 리스트 조회
+    -->
+    <select id="getProdClassPayFgSaleList" parameterType="reportKwuVO" resultType="DefaultMap">
+      /* USE : ReportKwuMapper.getProdClassPayFgSaleList */
+        SELECT  LEVEL_CD
+        ,       LEVEL_NM
+        ,		NVL(SUM(TOT_SALE_AMT), 0) AS TOT_SALE_AMT
+        ,		NVL(SUM(TOT_DC_AMT), 0) AS TOT_DC_AMT
+        ,       NVL(SUM(REAL_SALE_AMT), 0) AS REAL_SALE_AMT
+        ,       <foreach collection="arrPayCol" item="item" separator=",">
+                   NVL(SUM(PAY_AMT_${item}), 0) AS PAY_AMT_${item}
+                </foreach>
+        , 		NVL(SUM(PAY_AMT_021), 0) AS PAY_AMT_021
+        ,       SUM(PAY_AMT_03) + SUM(PAY_AMT_04)
+                + SUM(PAY_AMT_06) + SUM(PAY_AMT_07) + SUM(PAY_AMT_08) + SUM(PAY_AMT_09) + SUM(PAY_AMT_10)
+                + SUM(PAY_AMT_14) + SUM(PAY_AMT_15)
+                + SUM(PAY_AMT_16) + SUM(PAY_AMT_17) + SUM(PAY_AMT_18) + SUM(PAY_AMT_19) AS ETC_AMT
+        FROM    (
+                SELECT
+                       <choose>
+                           <when test='level != null and level != "" and level == "1"'>
+                               REPLACE(SUBSTR(PATH, 0, 6) ,'▶','') AS LEVEL_CD,
+                               FN_GET_PROD_CLASS_CD_NM_STR(A.STORE_CD, REPLACE(SUBSTR(PATH, 0, 6) ,'▶',''), 'NM') AS LEVEL_NM,
+                           </when>
+                           <when test='level != null and level != "" and level == "2"'>
+                               REPLACE(SUBSTR(PATH, 6, 6) ,'▶','') AS LEVEL_CD,
+                               FN_GET_PROD_CLASS_CD_NM_STR(A.STORE_CD, REPLACE(SUBSTR(PATH, 6, 6) ,'▶',''), 'NM') AS LEVEL_NM,
+                           </when>
+                           <otherwise>
+                               REPLACE(SUBSTR(PATH, 12, 6) ,'▶','') AS LEVEL_CD,
+                               FN_GET_PROD_CLASS_CD_NM_STR(A.STORE_CD, REPLACE(SUBSTR(PATH, 12, 6) ,'▶',''), 'NM') AS LEVEL_NM,
+                           </otherwise>
+                       </choose>
+                       <foreach collection="arrPayCol" item="item" separator=",">
+                           A.PAY_AMT_${item}
+                       </foreach>
+                ,       B.PAY_AMT_021
+                ,       A.TOT_SALE_AMT
+        		,       A.TOT_DC_AMT
+        		,		A.REAL_SALE_AMT
+                FROM (
+                            SELECT  FN_GET_PROD_CLASS_CD_NM_STR(A.STORE_CD, B.PROD_CLASS_CD, 'CD_STR') AS PATH
+                            , 		A.STORE_CD
+                            ,		B.PROD_CLASS_CD
+                            ,       A.PROD_CD
+                            ,       <foreach collection="arrPayCol" item="item" separator=",">
+                                        SUM(A.PAY_AMT_${item}) AS PAY_AMT_${item}
+                                    </foreach>
+                            ,       SUM(A.TOT_SALE_AMT) AS TOT_SALE_AMT
+                            ,       SUM(A.TOT_DC_AMT) AS TOT_DC_AMT
+                            ,       SUM(A.REAL_SALE_AMT) AS REAL_SALE_AMT
+                            FROM    TB_SL_DAILY_PROD A
+                            ,       TB_MS_PRODUCT	 B
+                            WHERE   A.HQ_OFFICE_CD = #{hqOfficeCd}
+                            <if test='storeCd != null and storeCd != ""'>
+                                AND A.STORE_CD IN
+                                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <if test='orgnFg != null and orgnFg == "H"'>
+                            AND     (
+                                        'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                                        OR	A.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                                    )
+                            </if>
+                            AND     A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                            AND     A.STORE_CD = B.STORE_CD
+                            AND     A.PROD_CD = B.PROD_CD
+                            GROUP
+                            BY      A.STORE_CD
+                            ,		B.PROD_CLASS_CD
+                            ,       A.PROD_CD
+                    ) A
+                ,   (
+                            SELECT  B.STORE_CD
+                            ,       B.PROD_CD
+                            ,       SUM(B.PAY_AMT_02) PAY_AMT_021
+                            FROM    (
+                                            SELECT  A.STORE_CD
+                                            ,       A.SALE_DATE
+                                            ,       A.POS_NO
+                                            ,       A.BILL_NO
+                                            ,       A.PROD_CD
+                                            ,       SUM(B.PAY_AMT) PAY_AMT_02
+                                            FROM    TB_SL_SALE_DTL A
+                                            ,       TB_SL_SALE_DTL_PAY B
+                                            WHERE   A.HQ_OFFICE_CD = #{hqOfficeCd}
+                                            <if test='storeCd != null and storeCd != ""'>
+                                                AND A.STORE_CD IN
+                                                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                                                    #{item}
+                                                </foreach>
+                                            </if>
+                                            <if test='orgnFg != null and orgnFg == "H"'>
+                                            AND     (
+                                                        'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                                                        OR	A.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                                                    )
+                                            </if>
+                                            AND     A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                                            AND     B.STORE_CD      =   A.STORE_CD
+                                            AND     B.SALE_DATE     =   A.SALE_DATE
+                                            AND     B.POS_NO        =   A.POS_NO
+                                            AND     B.BILL_NO       =   A.BILL_NO
+                                            AND     B.BILL_DTL_NO   =   A.BILL_DTL_NO
+                                            AND     B.PAY_CD        =   '02'
+                                            GROUP
+                                            BY      A.STORE_CD
+                                            ,       A.SALE_DATE
+                                            ,       A.POS_NO
+                                            ,       A.BILL_NO
+                                            ,       A.PROD_CD
+                                    ) B
+                ,                   (
+                                            SELECT  C.STORE_CD
+                                            ,       C.SALE_DATE
+                                            ,       C.POS_NO
+                                            ,       C.BILL_NO
+                                            ,       SUM(C.SALE_AMT)
+                                            FROM    TB_SL_SALE_PAY_CASH C
+                                            WHERE   C.HQ_OFFICE_CD = #{hqOfficeCd}
+                                            <if test='storeCd != null and storeCd != ""'>
+                                                AND C.STORE_CD IN
+                                                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                                                    #{item}
+                                                </foreach>
+                                            </if>
+                                            <if test='orgnFg != null and orgnFg == "H"'>
+                                            AND     (
+                                                        'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                                                        OR	C.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                                                    )
+                                            </if>
+                                            AND     C.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                                            AND     C.APPR_PROC_FG IN ('1','2','4')
+                                            GROUP
+                                            BY      C.STORE_CD
+                                            ,       C.SALE_DATE
+                                            ,       C.POS_NO
+                                            ,       C.BILL_NO
+                                    ) C
+                            WHERE   C.STORE_CD   =   B.STORE_CD
+                            AND     C.SALE_DATE  =   B.SALE_DATE
+                            AND     C.POS_NO     =   B.POS_NO
+                            AND     C.BILL_NO    =   B.BILL_NO
+                            GROUP
+                            BY     	B.STORE_CD
+                            ,       B.PROD_CD
+                    ) B
+                WHERE B.PROD_CD (+)= A.PROD_CD
+                ORDER
+                BY    A.PROD_CD
+                )
+        GROUP
+        BY    LEVEL_CD
+        ,     LEVEL_NM
+        ORDER
+        BY    LEVEL_CD
+    </select>
+
+    <!-- 결제수단별 매출내역 - 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_SL_DAILY_TOTAL
+        PARAM    : reportKwuVO
+        COMMENTS : 결제수단별 매출내역 리스트 조회
+    -->
+    <select id="getPayFgSaleList" parameterType="reportKwuVO" resultType="DefaultMap">
+      /* USE : ReportKwuMapper.getPayFgSaleList */
+      SELECT TO_CHAR(TO_DATE(tssh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+      ,      tssh.TOT_SALE_AMT
+      ,      tssh.TOT_DC_AMT
+      ,      tssh.REAL_SALE_AMT
+      ,      <foreach collection="arrPayCol" item="item" separator=",">
+               tsshp.PAY${item} AS PAY${item}
+             </foreach>
+      ,      tsshp.PAY02 AS PAY02   -- 현금
+      ,      tsshp.PAY021 AS PAY021 -- 현금영수증
+        FROM (   SELECT tssh.SALE_DATE
+                 ,      SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT
+                 ,      SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT
+                 ,      SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
+                 FROM   (   SELECT tssh.SALE_DATE
+                            ,      tssh.STORE_CD
+                            ,      SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT
+                            ,      SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT
+                            ,      SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
+                            FROM   TB_SL_SALE_HDR tssh
+                            WHERE  tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+                            <if test='arrStoreCd != null and arrStoreCd != ""'>
+                                AND tssh.STORE_CD IN
+                                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <if test='orgnFg != null and orgnFg == "H"'>
+                                AND (
+                                        'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                                    OR  tssh.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                                    )
+                            </if>
+                            AND     tssh.SALE_DATE  BETWEEN #{startDate} AND #{endDate}
+                            GROUP
+                            BY      tssh.SALE_DATE
+                            ,       tssh.STORE_CD
+                        ) tssh
+                GROUP
+                  BY      tssh.SALE_DATE
+             ) tssh
+      ,      (
+                SELECT SALE_DATE
+                ,      <foreach collection="arrPayCol" item="item" separator=",">
+                           SUM(PAY_AMT_${item}) AS PAY${item}
+                       </foreach>,
+                       SUM(NON_CASH_AMT) AS PAY02,
+                       SUM(APPR_CASH_AMT) AS PAY021
+                  FROM TB_SL_DAILY_TOTAL tsdt
+                 WHERE tsdt.HQ_OFFICE_CD  = #{hqOfficeCd}
+                <if test='arrStoreCd != null and arrStoreCd != ""'>
+                    AND tsdt.STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+                </if>
+                <if test='orgnFg != null and orgnFg == "H"'>
+                    AND (
+                            'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                        OR  tsdt.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                        )
+                </if>
+                AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                GROUP
+                   BY SALE_DATE
+             ) tsshp
+      WHERE tsshp.SALE_DATE  (+) = tssh.SALE_DATE
+      ORDER
+         BY tssh.SALE_DATE DESC
+    </select>
+
+    <!-- 신용카드 매출내역 - 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_CARD, TB_MS_STORE
+        PARAM    : reportKwuVO
+        COMMENTS : 신용카드 매출내역 리스트 조회
+    -->
+    <select id="getPayCardSaleList" parameterType="reportKwuVO" resultType="DefaultMap">
+      /* USE : ReportKwuMapper.getPayCardSaleList */
+        SELECT TO_CHAR(TO_DATE(TSSPC.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,      TSSPC.BILL_NO
+        ,      DECODE(TSSPC.SALE_FG, 1, '승인', -1, '취소') AS APPR_GUBUN
+        ,      DECODE(TSSPC.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
+        ,      TSSPC.CARD_NO
+        ,      (TSSPC.SALE_FG * TSSPC.APPR_AMT) AS APPR_AMT
+        ,      TSSPC.ACQUIRE_NM
+        ,      TSSPC.ISSUE_NM
+        ,      TSSPC.APPR_NO
+        ,      TSSPC.MEMBR_JOIN_NO
+        ,      DECODE(TSSPC.INST_CNT, 0 , '일시불', '할부') AS INST_CNT_NM
+        ,      TSSPC.INST_CNT
+        ,      TO_CHAR(TO_DATE(TSSPC.APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS APPR_DT
+        FROM   TB_SL_SALE_PAY_CARD TSSPC
+        ,      TB_MS_STORE TMS
+        WHERE  TSSPC.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND TSSPC.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR  TSSPC.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
+        </if>
+        <if test='startDate != null and startDate != ""'>
+            AND TSSPC.SALE_DATE >= #{startDate}
+        </if>
+        <if test='endDate != null and endDate != ""'>
+            AND TSSPC.SALE_DATE <![CDATA[ <= ]]> #{endDate}
+        </if>
+        <if test='apprFg != null and apprFg != ""'>
+           AND TSSPC.SALE_FG = #{apprFg}
+       </if>
+        AND   TMS.HQ_OFFICE_CD = TSSPC.HQ_OFFICE_CD
+        AND   TMS.STORE_CD = TSSPC.STORE_CD
+        ORDER
+           BY TSSPC.STORE_CD
+        ,     TSSPC.SALE_DATE
+        ,     TSSPC.POS_NO
+        ,     TSSPC.BILL_NO
+    </select>
+
+    <!-- 현금영수증 발행내역 - 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_CASH
+        PARAM    : reportKwuVO
+        COMMENTS : 현금영수증 발행내역 리스트 조회
+    -->
+    <select id="getCashBillInfoList" parameterType="reportKwuVO" resultType="DefaultMap">
+      /* USE : ReportKwuMapper.getCashBillInfoList */
+        SELECT  TO_CHAR(TO_DATE(SUBSTR(tsspc.APPR_DT, 0, 8), 'yyyymmdd'), 'yyyy-mm-dd') AS APPR_DATE
+         ,      DECODE(tsspc.SALE_FG, 1, '승인', -1, '취소') AS APPR_GUBUN
+         ,      DECODE(tsspc.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_NM
+         ,      tsspc.SALE_AMT AS APPR_AMT
+         ,      tsspc.CASH_BILL_CARD_NO
+         ,      tsspc.BILL_NO
+         FROM   TB_SL_SALE_PAY_CASH tsspc
+         ,      TB_CM_NMCODE tcn
+         ,      TB_MS_STORE tms
+         WHERE  tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
+         AND    tsspc.SALE_DATE  BETWEEN #{startDate} AND #{endDate}
+         <if test='arrStoreCd != null and arrStoreCd != ""'>
+             AND tsspc.STORE_CD IN
+             <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                 #{item}
+             </foreach>
+         </if>
+         <if test='orgnFg != null and orgnFg == "H"'>
+         AND (
+                 'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                  OR  tsspc.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+             )
+         </if>
+         <![CDATA[
+         AND     tcn.NMCODE_GRP_CD     (+)    =   '018'
+         AND     tcn.NMCODE_CD         (+)    =   tsspc.APPR_PROC_FG
+         AND     tms.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
+         AND     tms.STORE_CD = tsspc.STORE_CD
+         AND     tsspc.APPR_PROC_FG IN ('1','2','4')
+         ]]>
+         ORDER
+         BY tsspc.STORE_CD
+         ,     tms.STORE_NM
+         ,     tsspc.APPR_DT
+    </select>
+</mapper>
