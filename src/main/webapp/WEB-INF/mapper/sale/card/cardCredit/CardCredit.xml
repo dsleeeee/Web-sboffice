@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    CardCredit.xml
+    신용카드입금관리 (광운대 아이스링크)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2022.09.08     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.card.cardCredit.service.impl.CardCreditMapper">
+
+    <!-- 신용카드입금관리 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getCardCreditList" parameterType="CardCreditVO" resultType="DefaultMap">
+        /* CardCreditMapper.getCardCreditList */
+        SELECT
+        tsspc.HQ_OFFICE_CD,
+        tsspc.HQ_BRAND_CD,
+        tsspc.STORE_CD,
+        tms.STORE_NM,
+        tsspc.SALE_DATE,
+        tsspc.POS_NO,
+        tsspc.BILL_NO,
+        tsspc.LINE_NO,
+        tsspc.LINE_SEQ_NO,
+        (tsspc.POS_NO ||'-'|| tsspc.BILL_NO ||'-'|| tsspc.LINE_NO ||'-'|| tsspc.LINE_SEQ_NO) AS BILL,
+        SUBSTR(tsspc.APPR_DT, 0, 8) AS APPR_DATE,
+        tsspc.APPR_NO,
+        (tsspc.SALE_FG * tsspc.APPR_AMT) AS APPR_AMT,
+        DECODE(tsspc.SALE_FG, 1, '승인', -1, '취소') AS APPR_GUBUN,
+        tsspc.CARD_NO,
+        tsspc.ACQUIRE_NM,
+        tsspc.MEMBR_JOIN_NO,
+        DECODE(tsspc.INST_CNT, 0 , '일시불', '할부') AS INST_CNT_NM,
+        tsspcck.CREDIT_DATE,
+        tsspcck.CREDIT_AMT,
+        tsspcck.CREDIT_FEE,
+        tsspcck.CREDIT_BANK
+        FROM TB_SL_SALE_PAY_CARD tsspc,
+        TB_SL_SALE_PAY_CARD_CREDIT_KWU tsspcck,
+        TB_MS_STORE tms
+        WHERE 1=1
+        AND tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="storeCd != null and storeCd != ''">
+            AND tsspc.STORE_CD = #{storeCd}
+        </if>
+        AND SUBSTR(tsspc.APPR_DT, 0, 8) BETWEEN #{startDate} AND #{endDate}
+        AND tsspcck.HQ_OFFICE_CD (+)= tsspc.HQ_OFFICE_CD
+        AND tsspcck.HQ_BRAND_CD (+)= tsspc.HQ_BRAND_CD
+        AND tsspcck.STORE_CD (+)= tsspc.STORE_CD
+        AND tsspcck.SALE_DATE (+)= tsspc.SALE_DATE
+        AND tsspcck.POS_NO (+)= tsspc.POS_NO
+        AND tsspcck.BILL_NO (+)= tsspc.BILL_NO
+        AND tsspcck.LINE_NO (+)= tsspc.LINE_NO
+        AND tsspcck.LINE_SEQ_NO (+)= tsspc.LINE_SEQ_NO
+        AND tms.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
+        AND tms.STORE_CD = tsspc.STORE_CD
+        ORDER BY tsspc.STORE_CD, tsspc.SALE_DATE, tsspc.POS_NO, tsspc.BILL_NO, tsspc.LINE_NO, tsspc.LINE_SEQ_NO
+    </select>
+
+    <!-- 신용카드입금관리 - 저장 merge -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getCardCreditSaveMerge" parameterType="CardCreditVO">
+        /* CardCreditMapper.getCardCreditSaveMerge */
+        MERGE INTO TB_SL_SALE_PAY_CARD_CREDIT_KWU
+        USING DUAL
+        ON  (
+                HQ_OFFICE_CD = #{hqOfficeCd} AND HQ_BRAND_CD = #{hqBrandCd} AND STORE_CD = #{storeCd} AND SALE_DATE = #{saleDate}
+                AND POS_NO = #{posNo} AND BILL_NO = #{billNo} AND LINE_NO = #{lineNo} AND LINE_SEQ_NO = #{lineSeqNo}
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            CREDIT_DATE = #{creditDate},
+            CREDIT_AMT = #{creditAmt},
+            CREDIT_FEE = #{creditFee},
+            CREDIT_BANK = #{creditBank},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+            INSERT (
+                HQ_OFFICE_CD,
+                HQ_BRAND_CD,
+                STORE_CD,
+                SALE_DATE,
+                POS_NO,
+                BILL_NO,
+                LINE_NO,
+                LINE_SEQ_NO,
+                CREDIT_DATE,
+                CREDIT_AMT,
+                CREDIT_FEE,
+                CREDIT_BANK,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            ) VALUES (
+                #{hqOfficeCd},
+                #{hqBrandCd},
+                #{storeCd},
+                #{saleDate},
+                #{posNo},
+                #{billNo},
+                #{lineNo},
+                #{lineSeqNo},
+                #{creditDate},
+                #{creditAmt},
+                #{creditFee},
+                #{creditBank},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
+    </insert>
+
+</mapper>
