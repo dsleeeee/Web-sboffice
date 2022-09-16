@@ -22,8 +22,8 @@
         /* USE : ProdClassMapper.getProdClassList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
-        PATH,
-        PATH_NM,
+        FN_GET_PROD_CLASS_CD_NM_STR(STORE_CD, PROD_CLASS_CD, 'CD_STR') AS PATH,
+        FN_GET_PROD_CLASS_CD_NM_STR(STORE_CD, PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
         PROD_CD,
         PROD_NM,
         BARCD_CD,
@@ -35,8 +35,10 @@
         FROM
         (
             SELECT
-            FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'CD_STR') AS PATH, --CD_STR
-            FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM, --NM_STR
+            --FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'CD_STR') AS PATH, --CD_STR
+            --FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM, --NM_STR
+            tmp.STORE_CD,
+            tmp.PROD_CLASS_CD,
             tsdp.PROD_CD,
             tmp.PROD_NM,
             tmpb.BARCD_CD,
@@ -68,6 +70,28 @@
             <if test="prodNm != null and prodNm != ''">
                 AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
             </if>
+            <if test="prodClassCd != null and prodClassCd != ''">
+                <if test='orgnFg != null and orgnFg == "H"'>
+                    AND tmp.PROD_CLASS_CD IN (
+                                                SELECT
+                                                PROD_CLASS_CD
+                                                FROM TB_HQ_PRODUCT_CLASS
+                                                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                            )
+                </if>
+                <if test='orgnFg != null and orgnFg == "S"'>
+                    AND tmp.PROD_CLASS_CD IN (
+                                                SELECT
+                                                PROD_CLASS_CD
+                                                FROM TB_MS_PRODUCT_CLASS
+                                                WHERE STORE_CD = #{storeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                                CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                                            )
+                </if>
+            </if>
             AND tmp.STORE_CD = tsdp.STORE_CD
             AND tmp.PROD_CD = tsdp.PROD_CD
             AND tmpb.STORE_CD (+)= tmp.STORE_CD
@@ -75,10 +99,7 @@
             GROUP BY tsdp.PROD_CD, tmp.PROD_NM, tmpb.BARCD_CD, tmp.STORE_CD, tmp.PROD_CLASS_CD
         )
         WHERE 1=1
-        <if test="prodClassCd != null and prodClassCd != ''">
-            AND PATH LIKE '%'|| #{prodClassCd} ||'%'
-        </if>
-        GROUP BY PROD_CD, PROD_NM, BARCD_CD, PATH, PATH_NM
+        GROUP BY PROD_CD, PROD_NM, BARCD_CD, FN_GET_PROD_CLASS_CD_NM_STR(STORE_CD, PROD_CLASS_CD, 'CD_STR'), FN_GET_PROD_CLASS_CD_NM_STR(STORE_CD, PROD_CLASS_CD, 'NM_STR')
         ORDER BY PROD_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -92,8 +113,8 @@
     <select id="getProdClassExcelList" parameterType="prodClassVO" resultType="DefaultMap">
         /* USE : ProdClassMapper.getProdClassExcelList */
         SELECT
-        PATH,
-        PATH_NM,
+        FN_GET_PROD_CLASS_CD_NM_STR(STORE_CD, PROD_CLASS_CD, 'CD_STR') AS PATH,
+        FN_GET_PROD_CLASS_CD_NM_STR(STORE_CD, PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
         PROD_CD,
         PROD_NM,
         BARCD_CD,
@@ -104,8 +125,10 @@
         FROM
         (
             SELECT
-            FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'CD_STR') AS PATH, --CD_STR
-            FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM, --NM_STR
+            --FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'CD_STR') AS PATH, --CD_STR
+            --FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM, --NM_STR
+            tmp.STORE_CD,
+            tmp.PROD_CLASS_CD,
             tsdp.PROD_CD,
             tmp.PROD_NM,
             tmpb.BARCD_CD,
@@ -137,6 +160,28 @@
             <if test="prodNm != null and prodNm != ''">
                 AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
             </if>
+            <if test="prodClassCd != null and prodClassCd != ''">
+                <if test='orgnFg != null and orgnFg == "H"'>
+                    AND tmp.PROD_CLASS_CD IN (
+                                                SELECT
+                                                PROD_CLASS_CD
+                                                FROM TB_HQ_PRODUCT_CLASS
+                                                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                            )
+                </if>
+                <if test='orgnFg != null and orgnFg == "S"'>
+                    AND tmp.PROD_CLASS_CD IN (
+                                                SELECT
+                                                PROD_CLASS_CD
+                                                FROM TB_MS_PRODUCT_CLASS
+                                                WHERE STORE_CD = #{storeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                                CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                                            )
+                </if>
+            </if>
             AND tmp.STORE_CD = tsdp.STORE_CD
             AND tmp.PROD_CD = tsdp.PROD_CD
             AND tmpb.STORE_CD (+)= tmp.STORE_CD
@@ -144,10 +189,7 @@
             GROUP BY tsdp.PROD_CD, tmp.PROD_NM, tmpb.BARCD_CD, tmp.STORE_CD, tmp.PROD_CLASS_CD
         )
         WHERE 1=1
-        <if test="prodClassCd != null and prodClassCd != ''">
-            AND PATH LIKE '%'|| #{prodClassCd} ||'%'
-        </if>
-        GROUP BY PROD_CD, PROD_NM, BARCD_CD, PATH, PATH_NM
+        GROUP BY PROD_CD, PROD_NM, BARCD_CD, FN_GET_PROD_CLASS_CD_NM_STR(STORE_CD, PROD_CLASS_CD, 'CD_STR'), FN_GET_PROD_CLASS_CD_NM_STR(STORE_CD, PROD_CLASS_CD, 'NM_STR')
         ORDER BY PROD_CD
     </select>
 

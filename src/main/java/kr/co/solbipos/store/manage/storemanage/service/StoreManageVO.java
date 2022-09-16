@@ -160,6 +160,9 @@ public class StoreManageVO extends PageVO {
     /** 사원번호 */
     private String empNo;
 
+    /** 프로시져 실행 결과 */
+    private String result;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -815,5 +818,13 @@ public class StoreManageVO extends PageVO {
 
     public void setEmpNo(String empNo) {
         this.empNo = empNo;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 }

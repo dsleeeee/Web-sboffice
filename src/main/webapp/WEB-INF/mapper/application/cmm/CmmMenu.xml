@@ -170,6 +170,7 @@
                                         twae.USER_ID = #{userId}
                                         AND twae.INCLD_EXCLD_FG = 'I'
                                         AND twae.USE_YN = 'Y'
+                                        AND twae.LOGIN_FG = NVL(#{loginFg}, 'W')
                                     MINUS
                                     SELECT
                                         twae.RESRCE_CD
@@ -179,6 +180,7 @@
                                         twae.USER_ID = #{userId}
                                         AND twae.INCLD_EXCLD_FG = 'E'
                                         AND twae.USE_YN = 'Y'
+                                        AND twae.LOGIN_FG = NVL(#{loginFg}, 'W')
                                 )
                 AND twri.RESRCE_FG = 'M'
                 AND twri.USE_YN = 'Y'
