@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    DailyTable.xml
+    매출수기등록
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.09.08     최초작성
+-->
+<mapper namespace="kr.co.solbipos.excclc.excclc.dailyTable.service.impl.DailyTableMapper">
+
+    <!-- 매출 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_MONEY, TB_MS_STORE, TB_CM_DATEM
+        PARAM    : dayCloseVO
+        COMMENTS : 매출 조회
+    -->
+    <select id="getSaleList"  parameterType="dayCloseVO" resultType="DefaultMap">
+        /* DailyTableMapper.getSaleList */
+        SELECT	tsdt.TOT_SALE_AMT AS SALE_AMT
+             ,		tsdt.TOT_DC_AMT	AS DC_AMT
+             ,		tsdt.NET_SALE_AMT
+             ,		(	SELECT	SUM(TOT_SALE_AMT)
+                        FROM	TB_SL_DAILY_MEMBR tsdm
+                        WHERE	tsdm.HQ_OFFICE_CD = tsdt.HQ_OFFICE_CD
+                        AND		tsdm.STORE_CD  = tsdt.STORE_CD
+                        AND		tsdm.SALE_DATE = tsdt.SALE_DATE) AS MEMBR_SALE_AMT
+             ,		tsmt.MONTH_SALE_AMT
+             ,		tsmt.MONTH_DC_AMT
+             ,		tsmt.MONTH_NET_SALE_AMT
+             ,		tsdt.TOT_GUEST_CNT AS GUEST_CNT
+             ,		FLOOR(tsdt.TOT_SALE_AMT/tsdt.TOT_GUEST_CNT) AS GUEST_AMT
+             ,		tsmt.MONTH_GUEST_CNT
+             ,		tsmt.MONTH_GUEST_ANT
+        FROM 	TB_SL_DAILY_TOTAL tsdt
+        ,       (
+                    SELECT 	HQ_OFFICE_CD
+                    ,       STORE_CD
+                    ,       SUM(TOT_SALE_AMT) AS MONTH_SALE_AMT
+                    ,		SUM(TOT_DC_AMT) AS MONTH_DC_AMT
+                    ,		SUM(NET_SALE_AMT) AS MONTH_NET_SALE_AMT
+                    ,		SUM(TOT_GUEST_CNT) AS MONTH_GUEST_CNT
+                    ,		SUM(FLOOR(TOT_SALE_AMT/TOT_GUEST_CNT)) AS MONTH_GUEST_ANT
+                    FROM 	TB_SL_DAILY_TOTAL tsdt2
+                    WHERE	tsdt2.HQ_OFFICE_CD  = #{hqOfficeCd}
+                    AND 	tsdt2.STORE_CD      = #{storeCd}
+                    AND 	tsdt2.SALE_DATE BETWEEN SUBSTR(#{startDate},1,6) || '01' AND #{startDate}
+                    GROUP BY HQ_OFFICE_CD, STORE_CD
+                ) tsmt
+        WHERE 	tsdt.HQ_OFFICE_CD   = #{hqOfficeCd}
+        AND 	tsdt.STORE_CD       = #{storeCd}
+        AND 	tsdt.SALE_DATE      = #{startDate}
+        AND 	tsdt.HQ_OFFICE_CD   = tsmt.HQ_OFFICE_CD
+        AND 	tsdt.STORE_CD       = tsmt.STORE_CD
+    </select>
+
+    <!-- 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR_INFO, TB_SL_SALE_HDR, TB_MB_MEMBER
+        PARAM    : dayCloseVO
+        COMMENTS : 분류별 조회
+    -->
+    <select id="getProdClassList"  parameterType="dayCloseVO" resultType="DefaultMap">
+        /* DailyTableMapper.getProdClassList */
+        SELECT 	A.PROD_CLASS_CD
+        ,		FN_GET_PROD_CLASS_CD_NM_STR(#{storeCd}, A.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+        ,		SALE_QTY
+        ,		CASH_AMT
+        ,		CARD_AMT
+        ,		REAL_SALE_AMT
+        ,		MONTH_SALE_QTY
+        ,		MONTH_CASH_AMT
+        ,		MONTH_CARD_AMT
+        ,		MONTH_REAL_SALE_AMT
+        FROM	(
+                    SELECT	tmp.PROD_CLASS_CD
+                    ,		SUM(tsdp.TOT_SALE_QTY) AS SALE_QTY
+                    ,		SUM(tsdp.PAY_AMT_02) AS CASH_AMT
+                    ,		SUM(tsdp.PAY_AMT_01) AS CARD_AMT
+                    -- 기타
+                    ,		SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
+                    FROM 	TB_SL_DAILY_PROD tsdp
+                    ,		TB_MS_PRODUCT tmp
+                    WHERE 	tsdp.HQ_OFFICE_CD   = #{hqOfficeCd}
+                    AND 	tsdp.STORE_CD       = #{storeCd}
+                    AND 	tsdp.SALE_DATE      = #{startDate}
+                    AND 	tsdp.PROD_CD        = tmp.PROD_CD
+                    GROUP BY tmp.PROD_CLASS_CD
+                ) A,
+                (
+                    SELECT 	tmp.PROD_CLASS_CD
+                    ,		SUM(TOT_SALE_QTY) AS MONTH_SALE_QTY
+                    ,		SUM(PAY_AMT_02) AS MONTH_CASH_AMT
+                    ,		SUM(PAY_AMT_01) AS MONTH_CARD_AMT
+                    -- 기타
+                    ,		SUM(REAL_SALE_AMT) AS MONTH_REAL_SALE_AMT
+                    FROM 	TB_SL_DAILY_PROD tsdt2
+                    ,		TB_MS_PRODUCT tmp
+                    WHERE	tsdt2.HQ_OFFICE_CD  = #{hqOfficeCd}
+                    AND 	tsdt2.STORE_CD      = #{storeCd}
+                    AND 	tsdt2.SALE_DATE BETWEEN SUBSTR(#{startDate},1,6) || '01' AND #{startDate}
+                    AND 	tsdt2.PROD_CD       = tmp.PROD_CD
+                    GROUP BY tmp.PROD_CLASS_CD
+                ) B
+        WHERE 	A.PROD_CLASS_CD = B.PROD_CLASS_CD
+        ORDER BY A.PROD_CLASS_CD
+    </select>
+
+    <!-- 결제수단별 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_MONEY, TB_MS_STORE, TB_CM_DATEM
+        PARAM    : dayCloseVO
+        COMMENTS : 결제수단별 조회
+    -->
+    <select id="getPayList"  parameterType="dayCloseVO" resultType="DefaultMap">
+        /* DailyTableMapper.getPayList */
+        SELECT  tsdt.PAY_AMT_02 AS CASH_AMT
+        ,		tsdt.PAY_AMT_01 AS CARD_AMT
+        ,		tsdt.PAY_AMT_11 AS POSTPAID_AMT
+        ,		tsdt.PAY_AMT_13 AS GITF_AMT
+        -- 전월미수
+        -- 당월미수
+        -- 수수료
+        ,		tpck.INTEREST_AMT
+        FROM 	TB_SL_DAILY_TOTAL tsdt
+        ,       TB_PO_CLOSE_KWU tpck
+        WHERE 	tsdt.HQ_OFFICE_CD   = #{hqOfficeCd}
+        AND 	tsdt.STORE_CD       = #{storeCd}
+        AND 	tsdt.SALE_DATE      = #{startDate}
+        AND 	tpck.STORE_CD       = tsdt.STORE_CD
+        AND 	tpck.CLOSE_DATE     = tsdt.SALE_DATE
+    </select>
+
+    <!-- 반품/출납 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_MONEY, TB_MS_STORE, TB_CM_DATEM
+        PARAM    : dayCloseVO
+        COMMENTS : 반품/출납 조회
+    -->
+    <select id="getRtnList"  parameterType="dayCloseVO" resultType="DefaultMap">
+        /* DailyTableMapper.getRtnList */
+        SELECT  RTN_SALE_CNT
+        ,		RTN_SALE_AMT
+        FROM 	TB_SL_DAILY_TOTAL tsdt
+        WHERE 	tsdt.HQ_OFFICE_CD   = #{hqOfficeCd}
+        AND 	tsdt.STORE_CD       = #{storeCd}
+        AND 	tsdt.SALE_DATE      = #{startDate}
+    </select>
+</mapper>
