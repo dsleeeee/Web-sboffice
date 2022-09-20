@@ -13,6 +13,7 @@
     <select id="getStoreCurrList" parameterType="storeCurrVO" resultType="DefaultMap">
         /* USE : StoreCurrMapper.getStoreCurrList */
         SELECT  FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+        ,       FN_GET_VENDOR_STR(#{hqOfficeCd}, tsssc.PROD_CD,'NM') AS VENDR_NM
         ,		tsssc.PROD_CD             ,   tmp.PROD_NM
         ,       tsssc.FIRST_IN_DATE       ,   tsssc.LAST_IN_DATE
         ,       tsssc.FIRST_SALE_DATE     ,   tsssc.LAST_SALE_DATE
@@ -115,8 +116,8 @@
         </if>
         <if test='arrVendrCd != null and arrVendrCd != ""'>
             AND tmp.PROD_CD IN    ( SELECT  PROD_CD
-                                    FROM    TB_MS_VENDOR_PROD
-                                    WHERE   STORE_CD = tsssc.STORE_CD
+                                    FROM    TB_HQ_VENDOR_PROD
+                                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
                                     AND     VENDR_CD IN
                                     <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
                                         #{item}
