@@ -2,23 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!--
-    SaleRegistKw.xml
+    SaleRegistKwu.xml
     매출수기등록
     ======================================================
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
     1       권지현     2022.06.24     최초작성
 -->
-<mapper namespace="kr.co.solbipos.excclc.excclc.saleRegistKw.service.impl.SaleRegistKwMapper">
+<mapper namespace="kr.co.solbipos.excclc.excclc.saleRegistKwu.service.impl.SaleRegistKwuMapper">
 
     <!-- 매출수기등록 리스트 조회 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_MONEY, TB_MS_STORE
-        PARAM    : saleRegistKwVO
+        PARAM    : saleRegistKwuVO
         COMMENTS : 매출수기등록 리스트 조회
     -->
-    <select id="getSaleRegistKwList"  parameterType="saleRegistKwVO" resultType="DefaultMap">
-        /* SaleRegistKwMapper.getSaleRegistKwList */
+    <select id="getSaleRegistKwuList"  parameterType="saleRegistKwuVO" resultType="DefaultMap">
+        /* SaleRegistKwuMapper.getSaleRegistKwuList */
         SELECT  POS_NO,
                 BILL_NO,
                 DECODE(SALE_FG,'1','매출','-1','반품') SALE_FG,
@@ -84,11 +84,11 @@
     <!-- 매출수기등록 상품 조회 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_MONEY, TB_MS_STORE
-        PARAM    : saleRegistKwVO
+        PARAM    : saleRegistKwuVO
         COMMENTS : 매출수기등록 상품 조회
     -->
-    <select id="getSelectProdList"  parameterType="saleRegistKwVO" resultType="DefaultMap">
-        /* SaleRegistKwMapper.getSelectProdList */
+    <select id="getSelectProdList"  parameterType="saleRegistKwuVO" resultType="DefaultMap">
+        /* SaleRegistKwuMapper.getSelectProdList */
         SELECT 	FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
                 tmp.PROD_CD,
                 tmp.PROD_NM,
@@ -135,11 +135,11 @@
     <!-- 매출처 팝업 조회 -->
     <!--
         TABLE    : TB_SL_SALE_HDR
-        PARAM    : saleRegistKwVO
+        PARAM    : saleRegistKwuVO
         COMMENTS : 매출처 팝업 조회
     -->
-    <select id="getMembrKwList" parameterType="saleRegistKwVO" resultType="DefaultMap">
-        /* SaleRegistKwMapper.getMembrKwList */
+    <select id="getMembrKwList" parameterType="saleRegistKwuVO" resultType="DefaultMap">
+        /* SaleRegistKwuMapper.getMembrKwList */
         SELECT  tmm.MEMBR_NO,
                 SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM
         FROM    TB_MB_MEMBER tmm
@@ -172,11 +172,11 @@
     <!-- 매출수기등록 영수번호 채번 -->
     <!--
         TABLE    : TB_SL_SALE_HDR
-        PARAM    : saleRegistKwVO
+        PARAM    : saleRegistKwuVO
         COMMENTS : 매출수기등록 영수번호 채번
     -->
-    <select id="getBillNo" parameterType="saleRegistKwVO" resultType="String">
-        /* SaleRegistKwMapper.getBillNo */
+    <select id="getBillNo" parameterType="saleRegistKwuVO" resultType="String">
+        /* SaleRegistKwuMapper.getBillNo */
         SELECT  LPAD(NVL(MAX(BILL_NO), 9000) + 1, 4, '0')
         FROM    TB_SL_SALE_HDR
         WHERE   STORE_CD = #{storeCd}
@@ -187,11 +187,11 @@
     <!-- 매출수기등록 DTL 저장 -->
     <!--
         TABLE    : TB_SL_SALE_DTL
-        PARAM    : saleRegistKwVO
+        PARAM    : saleRegistKwuVO
         COMMENTS : 매출수기등록 DTL 저장
     -->
-    <insert id="getSaleDtl" parameterType="saleRegistKwVO">
-        /* SaleRegistKwMapper.getSaleDtl */
+    <insert id="getSaleDtl" parameterType="saleRegistKwuVO">
+        /* SaleRegistKwuMapper.getSaleDtl */
         INSERT INTO TB_SL_SALE_DTL
         (
             HQ_OFFICE_CD,
@@ -279,11 +279,11 @@
     <!-- 매출수기등록 DTL_INFO 저장 -->
     <!--
         TABLE    : TB_SL_SALE_DTL_INFO
-        PARAM    : saleRegistKwVO
+        PARAM    : saleRegistKwuVO
         COMMENTS : 매출수기등록 DTL_INFO 저장
     -->
-    <insert id="getSaleDtlInfo" parameterType="saleRegistKwVO">
-        /* SaleRegistKwMapper.getSaleDtlInfo */
+    <insert id="getSaleDtlInfo" parameterType="saleRegistKwuVO">
+        /* SaleRegistKwuMapper.getSaleDtlInfo */
         INSERT INTO TB_SL_SALE_DTL_INFO
         (
             HQ_OFFICE_CD,
@@ -319,11 +319,11 @@
     <!-- 매출수기등록 DTL_PAY 저장 -->
     <!--
         TABLE    : TB_SL_SALE_DTL_PAY
-        PARAM    : saleRegistKwVO
+        PARAM    : saleRegistKwuVO
         COMMENTS : 매출수기등록 DTL_PAY 저장
     -->
-    <insert id="getSaleDtlPay" parameterType="saleRegistKwVO">
-        /* SaleRegistKwMapper.getSaleDtlPay */
+    <insert id="getSaleDtlPay" parameterType="saleRegistKwuVO">
+        /* SaleRegistKwuMapper.getSaleDtlPay */
         INSERT INTO TB_SL_SALE_DTL_PAY
         (
             HQ_OFFICE_CD,
@@ -381,11 +381,11 @@
     <!-- 매출수기등록 DTL_DC 저장 -->
     <!--
         TABLE    : TB_SL_SALE_DTL_DC
-        PARAM    : saleRegistKwVO
+        PARAM    : saleRegistKwuVO
         COMMENTS : 매출수기등록 DTL_DC 저장
     -->
-    <insert id="getSaleDtlDc" parameterType="saleRegistKwVO">
-        /* SaleRegistKwMapper.getSaleDtlDc */
+    <insert id="getSaleDtlDc" parameterType="saleRegistKwuVO">
+        /* SaleRegistKwuMapper.getSaleDtlDc */
         INSERT INTO TB_SL_SALE_DTL_DC
         (
             HQ_OFFICE_CD,
@@ -440,11 +440,11 @@
     <!-- 매출수기등록 HDR 저장 -->
     <!--
         TABLE    : TB_SL_SALE_HDR
-        PARAM    : saleRegistKwVO
+        PARAM    : saleRegistKwuVO
         COMMENTS : 매출수기등록 HDR 저장
     -->
-    <insert id="getSaleHdr" parameterType="saleRegistKwVO">
-        /* SaleRegistKwMapper.getSaleHdr */
+    <insert id="getSaleHdr" parameterType="saleRegistKwuVO">
+        /* SaleRegistKwuMapper.getSaleHdr */
         INSERT INTO TB_SL_SALE_HDR
         (
             HQ_OFFICE_CD,
@@ -532,11 +532,11 @@
     <!-- 매출수기등록 HDR_INFO 저장 -->
     <!--
         TABLE    : TB_SL_SALE_HDR_INFO
-        PARAM    : saleRegistKwVO
+        PARAM    : saleRegistKwuVO
         COMMENTS : 매출수기등록 HDR_INFO 저장
     -->
-    <insert id="getSaleHdrInfo" parameterType="saleRegistKwVO">
-        /* SaleRegistKwMapper.getSaleHdrInfo */
+    <insert id="getSaleHdrInfo" parameterType="saleRegistKwuVO">
+        /* SaleRegistKwuMapper.getSaleHdrInfo */
         INSERT INTO TB_SL_SALE_HDR_INFO
         (
             HQ_OFFICE_CD,
@@ -586,11 +586,11 @@
     <!-- 매출수기등록 HDR_PAY 저장 -->
     <!--
         TABLE    : TB_SL_SALE_HDR_PAY
-        PARAM    : saleRegistKwVO
+        PARAM    : saleRegistKwuVO
         COMMENTS : 매출수기등록 HDR_PAY 저장
     -->
-    <insert id="getSaleHdrPay" parameterType="saleRegistKwVO">
-        /* SaleRegistKwMapper.getSaleHdrPay */
+    <insert id="getSaleHdrPay" parameterType="saleRegistKwuVO">
+        /* SaleRegistKwuMapper.getSaleHdrPay */
         INSERT INTO TB_SL_SALE_HDR_PAY
         (
             HQ_OFFICE_CD,
@@ -636,11 +636,11 @@
     <!-- 매출수기등록 HDR_DC 저장 -->
     <!--
         TABLE    : TB_SL_SALE_HDR_DC
-        PARAM    : saleRegistKwVO
+        PARAM    : saleRegistKwuVO
         COMMENTS : 매출수기등록 HDR_DC 저장
     -->
-    <insert id="getSaleHdrDc" parameterType="saleRegistKwVO">
-        /* SaleRegistKwMapper.getSaleHdrDc */
+    <insert id="getSaleHdrDc" parameterType="saleRegistKwuVO">
+        /* SaleRegistKwuMapper.getSaleHdrDc */
         INSERT INTO TB_SL_SALE_HDR_DC
         (
             HQ_OFFICE_CD,
@@ -686,11 +686,11 @@
     <!-- 매출수기등록 PAY_CASH 저장 -->
     <!--
         TABLE    : TB_SL_SALE_PAY_CASH
-        PARAM    : saleRegistKwVO
+        PARAM    : saleRegistKwuVO
         COMMENTS : 매출수기등록 PAY_CASH 저장
     -->
-    <insert id="getSalePayCash" parameterType="saleRegistKwVO">
-        /* SaleRegistKwMapper.getSalePayCash */
+    <insert id="getSalePayCash" parameterType="saleRegistKwuVO">
+        /* SaleRegistKwuMapper.getSalePayCash */
         INSERT INTO TB_SL_SALE_PAY_CASH
         (
             HQ_OFFICE_CD,
@@ -750,11 +750,11 @@
     <!-- 매출수기등록 PAY_CARD 저장 -->
     <!--
         TABLE    : TB_SL_SALE_PAY_CARD
-        PARAM    : saleRegistKwVO
+        PARAM    : saleRegistKwuVO
         COMMENTS : 매출수기등록 PAY_CARD 저장
     -->
-    <insert id="getSalePayCard" parameterType="saleRegistKwVO">
-        /* SaleRegistKwMapper.getSalePayCard */
+    <insert id="getSalePayCard" parameterType="saleRegistKwuVO">
+        /* SaleRegistKwuMapper.getSalePayCard */
         INSERT INTO TB_SL_SALE_PAY_CARD
         (
             HQ_OFFICE_CD,
@@ -828,11 +828,11 @@
     <!-- 매출수기등록 특정 전표 조회 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_MONEY, TB_MS_STORE
-        PARAM    : saleRegistKwVO
+        PARAM    : saleRegistKwuVO
         COMMENTS : 매출수기등록 특정 전표 조회
     -->
-    <select id="getBillDtlList"  parameterType="saleRegistKwVO" resultType="DefaultMap">
-        /* SaleRegistKwMapper.getBillDtlList */
+    <select id="getBillDtlList"  parameterType="saleRegistKwuVO" resultType="DefaultMap">
+        /* SaleRegistKwuMapper.getBillDtlList */
         SELECT 	tssd.PROD_CD,
                 tmp.PROD_NM,
                 tssd.SALE_UPRC,
@@ -861,8 +861,8 @@
         AND     tssd.BILL_NO = #{billNo}
     </select>
 
-    <select id="getCashAmt"  parameterType="saleRegistKwVO" resultType="Integer">
-        /* SaleRegistKwMapper.getCashAmt */
+    <select id="getCashAmt"  parameterType="saleRegistKwuVO" resultType="Integer">
+        /* SaleRegistKwuMapper.getCashAmt */
         SELECT 	NVL(MAX(PAY_AMT), 0)
         FROM 	TB_SL_SALE_HDR_PAY
         WHERE   STORE_CD = #{storeCd}
@@ -880,8 +880,8 @@
         AND     PAY_CD = '02'
     </select>
 
-    <select id="getHdrInfo"  parameterType="saleRegistKwVO" resultType="DefaultMap">
-        /* SaleRegistKwMapper.getHdrInfo */
+    <select id="getHdrInfo"  parameterType="saleRegistKwuVO" resultType="DefaultMap">
+        /* SaleRegistKwuMapper.getHdrInfo */
         SELECT  NVL(MAX(MEMBR_NO),'') AS MEMBR_NO,
                 <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
                    NVL(MAX((SELECT '[' || MEMBR_NO || '] ' || SBPENC.D(tmm.MEMBR_NM) FROM TB_MB_MEMBER tmm WHERE tmm.MEMBR_ORGN_CD = #{storeCd} AND tmm.MEMBR_NO = tsshi.MEMBR_NO)), '') AS MEMBR_NM,
@@ -906,8 +906,8 @@
         AND     BILL_NO = #{billNo}
     </select>
 
-    <select id="getSaleFg"  parameterType="saleRegistKwVO" resultType="String">
-        /* SaleRegistKwMapper.getSaleFg */
+    <select id="getSaleFg"  parameterType="saleRegistKwuVO" resultType="String">
+        /* SaleRegistKwuMapper.getSaleFg */
         SELECT 	SALE_FG
         FROM 	TB_SL_SALE_HDR
         WHERE   STORE_CD = #{storeCd}
@@ -916,8 +916,8 @@
         AND     BILL_NO = #{billNo}
     </select>
 
-    <delete id="delSaleHdr" parameterType="saleRegistKwVO">
-        /* SaleRegistKwMapper.delSaleHdr */
+    <delete id="delSaleHdr" parameterType="saleRegistKwuVO">
+        /* SaleRegistKwuMapper.delSaleHdr */
         DELETE  TB_SL_SALE_HDR
         WHERE   STORE_CD = #{storeCd}
         AND     SALE_DATE = #{saleDate}

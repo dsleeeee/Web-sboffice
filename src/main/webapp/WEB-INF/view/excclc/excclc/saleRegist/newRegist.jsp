@@ -145,9 +145,9 @@
                                 <wj-flex-grid-column header="<s:message code="saleRegist.prodCd"/>"     binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="saleRegist.prodNm"/>"     binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="saleRegist.saleUprc"/>"   binding="saleUprc" align="right" is-read-only="true"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="saleRegist.saleQty"/>"    binding="saleQty" width="80" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="saleRegist.saleQty"/>"    binding="saleQty" width="80" align="center" max-length="4"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="saleRegist.saleAmt"/>"    binding="saleAmt" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="saleRegist.dcAmt"/>"      binding="dcAmt" align="right" aggregate="Sum"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="saleRegist.dcAmt"/>"      binding="dcAmt" align="right" aggregate="Sum" max-length="8"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="saleRegist.realSaleAmt"/>" binding="realSaleAmt" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="saleRegist.vatAmt"/>"     binding="vatAmt" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="saleRegist.vatFg"/>"      binding="vatFg" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -170,7 +170,7 @@
     });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/saleRegist/newRegist.js?ver=20220624.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/saleRegist/newRegist.js?ver=20220624.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

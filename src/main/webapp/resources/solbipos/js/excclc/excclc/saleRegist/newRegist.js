@@ -128,6 +128,18 @@ app.controller('newRegistCtrl', ['$scope', '$http', function ($scope, $http) {
                         } else {
                             item.vatAmt = "0";
                         }
+                        if(Math.abs(item.realSaleAmt) >= 1000000000000){
+                            $scope._popMsg("금액은 최대 999,999,999,999까지 가능합니다.");
+                            item.saleQty = "0";
+                            item.saleAmt = item.saleUprc * item.saleQty;
+                            item.dcAmt = "0";
+                            item.realSaleAmt = item.saleAmt;
+                            if(item.vatFg === '1'){
+                                item.vatAmt = Math.floor(item.realSaleAmt - item.realSaleAmt/1.1);
+                            } else {
+                                item.vatAmt = "0";
+                            }
+                        }
                     }
 
                     $scope.changeAmt();

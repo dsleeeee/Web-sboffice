@@ -92,10 +92,10 @@
   var storeNm = "${storeNm}";
   var storeCd = "${storeCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/saleRegistKw/saleRegist.js?ver=20220831.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/saleRegistKwu/saleRegist.js?ver=20220831.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 신규등록 --%>
-<c:import url="/WEB-INF/view/excclc/excclc/saleRegistKw/newRegist.jsp">
+<c:import url="/WEB-INF/view/excclc/excclc/saleRegistKwu/newRegist.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

@@ -1,8 +1,8 @@
-package kr.co.solbipos.excclc.excclc.saleRegistKw.service;
+package kr.co.solbipos.excclc.excclc.saleRegistKwu.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 
-public class SaleRegistKwVO extends PageVO {
+public class SaleRegistKwuVO extends PageVO {
 
     private static final long serialVersionUID = -6606377306049900821L;
 

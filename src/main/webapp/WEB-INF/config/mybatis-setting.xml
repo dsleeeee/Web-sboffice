@@ -871,8 +871,12 @@
     <!-- KDS -->
     <typeAlias alias="kdsVO" type="kr.co.solbipos.kds.anals.chart.service.KdsVO"/>
 
+    <!-- 광운대 > 광운대일마감 > 광운대일마감 -->
+    <typeAlias alias="dayCloseVO" type="kr.co.solbipos.excclc.excclc.dayClose.service.DayCloseVO"/>
+    <!-- 광운대 > 광운대일마감 > 일일일계표 -->
+    <typeAlias alias="dailyTableVO" type="kr.co.solbipos.excclc.excclc.dailyTable.service.DailyTableVO"/>
     <!-- 광운대 > 후방매출등록 > 후방매출등록 -->
-    <typeAlias alias="saleRegistKwVO" type="kr.co.solbipos.excclc.excclc.saleRegistKw.service.SaleRegistKwVO"/>
+    <typeAlias alias="saleRegistKwuVO" type="kr.co.solbipos.excclc.excclc.saleRegistKwu.service.SaleRegistKwuVO"/>
 
     <!-- 광운대 > 리포트 > 분류별결제수단별 매출내역 -->
     <!-- 광운대 > 리포트 > 결제수단별 매출내역 -->
