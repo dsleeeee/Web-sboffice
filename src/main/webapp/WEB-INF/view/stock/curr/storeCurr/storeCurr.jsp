@@ -7,7 +7,7 @@
 <c:set var="baseUrl" value="/stock/curr/storeCurr/storeCurr/"/>
 
 <div class="subCon3" ng-controller="storeCurrCtrl">
-	<div class="searchBar flddUnfld">
+	<div class="searchBar">
       <a href="#" class="open fl">${menuNm}</a>
         
       <%-- 조회 --%>
@@ -124,8 +124,8 @@
     </tr>
     	<tr>
     	<%-- 거래처 --%>
-      		<th style="display:none"><s:message code="storeCurr.vendrNm"/></th>
-      		<td style="display:none">
+      		<th><s:message code="storeCurr.vendrNm"/></th>
+      		<td>
       		<%-- 거래처선택 모듈 싱글 선택 사용시 include
       			param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
       						displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
@@ -134,7 +134,6 @@
       		--%>
       		<jsp:include page="/WEB-INF/view/iostock/cmm/selectVendrM.jsp" flush="true">
       			<jsp:param name="targetId" value="storeCurrSelectVendr"/>
-      			<jsp:param name="displayNm" value="전체"/>
    	   		</jsp:include>
       		<%--// 거래처선택 모듈 싱글 선택 사용시 include --%>
       		</td>
@@ -170,7 +169,7 @@
         <wj-flex-grid-column header="<s:message code="storeCurr.poUnitFg"/>" binding="poUnitFg" width="60" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeCurr.poUnitQty"/>" binding="poUnitQty" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeCurr.vendrCd"/>" binding="vendrCd" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeCurr.vendrNm"/>" binding="vendrNm" width="150" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeCurr.vendrNm"/>" binding="vendrNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeCurr.barcdNm"/>" binding="barcdNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeCurr.costUprc"/>" binding="costUprc" width="80" align="right" is-read-only="true" data-type="Number"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeCurr.safeStockQty"/>" binding="safeStockQty" width="80" align="right" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>

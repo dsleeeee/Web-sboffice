@@ -14,6 +14,7 @@
         /* USE : HqCurrMapper.getHqCurrList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT  FN_GET_PROD_CLASS_CD_NM_STR(#{hqOfficeCd}, thp.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+        ,       FN_GET_VENDOR_STR(#{hqOfficeCd}, tshsc.PROD_CD,'NM') AS VENDR_NM
         ,		tshsc.PROD_CD
         ,       thp.PROD_NM
         ,       tshsc.FIRST_VENDR_IN_DATE
@@ -23,7 +24,7 @@
         ,       tshsc.FIRST_SALE_DATE
         ,       tshsc.LAST_SALE_DATE
         ,       thp.COST_UPRC
-        ,       thv.VENDR_NM
+        <!-- ,       thv.VENDR_NM -->
         ,       thpb.BARCD_CD
         ,       thp.PO_UNIT_QTY
         ,       ROUND(tshsc.CURR_QTY * thp.COST_UPRC / thp.PO_UNIT_QTY) AS CURR_AMT
@@ -70,7 +71,7 @@
         FROM    TB_ST_HQ_STOCK_CUR tshsc
         ,       TB_HQ_PRODUCT thp
         ,       TB_HQ_PRODUCT_BARCD thpb
-        ,       (   SELECT   thvp.PROD_CD
+        <!-- ,       (   SELECT   thvp.PROD_CD
                     ,      LISTAGG((SELECT 	thv.VENDR_NM
                                     FROM	TB_HQ_VENDOR thv
                                     WHERE 	thv.HQ_OFFICE_CD  = thvp.HQ_OFFICE_CD
@@ -79,7 +80,7 @@
                     WHERE   thvp.HQ_OFFICE_CD    =   #{hqOfficeCd}
                     GROUP
                     BY      thvp.PROD_CD
-                ) thv
+                ) thv -->
         WHERE   tshsc.HQ_OFFICE_CD    	=   #{hqOfficeCd}
         AND     tshsc.STORAGE_CD      	=   '999'
         AND     thp.HQ_OFFICE_CD      	=   tshsc.HQ_OFFICE_CD
@@ -88,7 +89,7 @@
         AND     thp.USE_YN            	=   'Y'
         AND     thpb.HQ_OFFICE_CD (+) 	=   tshsc.HQ_OFFICE_CD
         AND     thpb.PROD_CD      (+) 	=   tshsc.PROD_CD
-        AND     thv.PROD_CD       (+) 	=   tshsc.PROD_CD
+    <!-- AND     thv.PROD_CD       (+) 	=   tshsc.PROD_CD -->
         <if test='prodCd != null and prodCd != ""'>
             AND tshsc.PROD_CD = #{prodCd}
         </if>
@@ -143,13 +144,14 @@
         /* USE : HqCurrMapper.getHqStoreCurrList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT  FN_GET_PROD_CLASS_CD_NM_STR(#{storeCd}, tmp.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+        ,       FN_GET_VENDOR_STR(#{storeCd}, tsssc.PROD_CD,'NM') AS VENDR_NM
 		,		tsssc.PROD_CD             ,   tmp.PROD_NM
         ,       tsssc.FIRST_IN_DATE       ,   tsssc.LAST_IN_DATE
         ,       tsssc.FIRST_SALE_DATE     ,   tsssc.LAST_SALE_DATE
         ,       tsssc.STORE_CD
         ,       (SELECT STORE_NM FROM TB_MS_STORE Z WHERE Z.STORE_CD = tsssc.STORE_CD) AS STORE_NM
         ,       tmp.COST_UPRC
-        ,       tmv.VENDR_NM
+        <!-- ,       tmv.VENDR_NM -->
         ,       tmpb.BARCD_CD
         ,       tmp.PO_UNIT_QTY
         ,       ROUND(tsssc.CURR_QTY * tmp.COST_UPRC / tmp.PO_UNIT_QTY) AS CURR_AMT
@@ -189,7 +191,7 @@
         FROM    TB_ST_STORE_STOCK_CUR tsssc
         ,       TB_MS_PRODUCT tmp
         ,       TB_MS_PRODUCT_BARCD tmpb
-        ,       (   SELECT  tmvp.PROD_CD
+        <!-- ,       (   SELECT  tmvp.PROD_CD
                     ,   LISTAGG((   SELECT 	tmv.VENDR_NM
                                     FROM	TB_MS_VENDOR tmv
                                     WHERE 	tmv.STORE_CD  = tmvp.STORE_CD
@@ -198,7 +200,7 @@
                     WHERE   tmvp.STORE_CD    =   #{storeCd}
                     GROUP
                     BY      tmvp.PROD_CD
-                ) tmv
+                ) tmv -->
         WHERE   tsssc.STORE_CD        =   #{storeCd}
         AND     tmp.STORE_CD          =   tsssc.STORE_CD
         AND     tsssc.STORAGE_CD      =   '999'
@@ -207,7 +209,7 @@
         AND     tmp.USE_YN            =   'Y'
         AND     tmpb.STORE_CD     (+) =   tsssc.STORE_CD
         AND     tmpb.PROD_CD      (+) =   tsssc.PROD_CD
-        AND     tmv.PROD_CD       (+) =   tsssc.PROD_CD
+        <!-- AND     tmv.PROD_CD       (+) =   tsssc.PROD_CD -->
         <if test='prodCd != null and prodCd != ""'>
             AND tsssc.PROD_CD = #{prodCd}
         </if>
@@ -240,7 +242,7 @@
         <if test='arrVendrCd != null and arrVendrCd != ""'>
             AND tmp.PROD_CD IN    ( SELECT  PROD_CD
                                     FROM    TB_MS_VENDOR_PROD
-                                    WHERE   STORE_CD = tsssc.STORE_CD
+                                    WHERE   STORE_CD = #{storeCd}
                                     AND     VENDR_CD IN
                                     <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
                                         #{item}
@@ -309,6 +311,7 @@
     <select id="getHqCurrExcelList" parameterType="hqCurrVO" resultType="DefaultMap">
         /* USE : HqCurrMapper.getHqCurrExcelList */
         SELECT  FN_GET_PROD_CLASS_CD_NM_STR(#{hqOfficeCd}, thp.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+        ,       FN_GET_VENDOR_STR(#{hqOfficeCd}, tshsc.PROD_CD,'NM') AS VENDR_NM
         ,		tshsc.PROD_CD
         ,       thp.PROD_NM
         ,       tshsc.FIRST_VENDR_IN_DATE
@@ -318,7 +321,7 @@
         ,       tshsc.FIRST_SALE_DATE
         ,       tshsc.LAST_SALE_DATE
         ,       thp.COST_UPRC
-        ,       thv.VENDR_NM
+        <!-- ,       thv.VENDR_NM -->
         ,       thpb.BARCD_CD
         ,       thp.PO_UNIT_QTY
         ,       ROUND(tshsc.CURR_QTY * thp.COST_UPRC / thp.PO_UNIT_QTY) AS CURR_AMT
@@ -364,7 +367,7 @@
         FROM    TB_ST_HQ_STOCK_CUR tshsc
         ,       TB_HQ_PRODUCT thp
         ,       TB_HQ_PRODUCT_BARCD thpb
-        ,       (   SELECT   thvp.PROD_CD
+        <!-- ,       (   SELECT   thvp.PROD_CD
                     ,      LISTAGG((SELECT 	thv.VENDR_NM
                                     FROM	TB_HQ_VENDOR thv
                                     WHERE 	thv.HQ_OFFICE_CD  = thvp.HQ_OFFICE_CD
@@ -373,7 +376,7 @@
                     WHERE   thvp.HQ_OFFICE_CD    =   #{hqOfficeCd}
                     GROUP
                     BY      thvp.PROD_CD
-                ) thv
+                ) thv -->
         WHERE   tshsc.HQ_OFFICE_CD    =   #{hqOfficeCd}
         AND     tshsc.STORAGE_CD      =   '999'
         AND     thp.HQ_OFFICE_CD      =   tshsc.HQ_OFFICE_CD
@@ -382,7 +385,7 @@
         AND     thp.USE_YN            =   'Y'
         AND     thpb.HQ_OFFICE_CD (+) =   tshsc.HQ_OFFICE_CD
         AND     thpb.PROD_CD      (+) =   tshsc.PROD_CD
-        AND     thv.PROD_CD       (+) =   tshsc.PROD_CD
+        <!-- AND     thv.PROD_CD       (+) =   tshsc.PROD_CD -->
         <if test='prodCd != null and prodCd != ""'>
             AND tshsc.PROD_CD = #{prodCd}
         </if>
@@ -428,13 +431,14 @@
     <select id="getHqStoreCurrExcelList" parameterType="hqCurrVO" resultType="DefaultMap">
         /* USE : HqCurrMapper.getHqStoreCurrExcelList */
         SELECT  FN_GET_PROD_CLASS_CD_NM_STR(#{storeCd}, tmp.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+        ,       FN_GET_VENDOR_STR(#{storeCd}, tsssc.PROD_CD,'NM') AS VENDR_NM
 		,		tsssc.PROD_CD             ,   tmp.PROD_NM
         ,       tsssc.FIRST_IN_DATE       ,   tsssc.LAST_IN_DATE
         ,       tsssc.FIRST_SALE_DATE     ,   tsssc.LAST_SALE_DATE
         ,       tsssc.STORE_CD
         ,       (SELECT STORE_NM FROM TB_MS_STORE Z WHERE Z.STORE_CD = tsssc.STORE_CD) AS STORE_NM
         ,       tmp.COST_UPRC
-        ,       tmv.VENDR_NM
+        <!-- ,       tmv.VENDR_NM -->
         ,       tmpb.BARCD_CD
         ,       tmp.PO_UNIT_QTY
         ,       ROUND(tsssc.CURR_QTY * tmp.COST_UPRC / tmp.PO_UNIT_QTY) AS CURR_AMT
@@ -473,7 +477,7 @@
         FROM    TB_ST_STORE_STOCK_CUR tsssc
         ,       TB_MS_PRODUCT tmp
         ,       TB_MS_PRODUCT_BARCD tmpb
-        ,       (   SELECT  tmvp.PROD_CD
+        <!-- ,       (   SELECT  tmvp.PROD_CD
                     ,   LISTAGG((   SELECT 	tmv.VENDR_NM
                                     FROM	TB_MS_VENDOR tmv
                                     WHERE 	tmv.STORE_CD  = tmvp.STORE_CD
@@ -482,7 +486,7 @@
                     WHERE   tmvp.STORE_CD    =   #{storeCd}
                     GROUP
                     BY      tmvp.PROD_CD
-                ) tmv
+                ) tmv -->
         WHERE   tsssc.STORE_CD        =   #{storeCd}
         AND     tmp.STORE_CD          =   tsssc.STORE_CD
         AND     tsssc.STORAGE_CD      =   '999'
@@ -491,7 +495,7 @@
         AND     tmp.USE_YN            =   'Y'
         AND     tmpb.STORE_CD     (+) =   tsssc.STORE_CD
         AND     tmpb.PROD_CD      (+) =   tsssc.PROD_CD
-        AND     tmv.PROD_CD       (+) =   tsssc.PROD_CD
+        <!-- AND     tmv.PROD_CD       (+) =   tsssc.PROD_CD -->
         <if test='prodCd != null and prodCd != ""'>
             AND tsssc.PROD_CD = #{prodCd}
         </if>
@@ -524,7 +528,7 @@
         <if test='arrVendrCd != null and arrVendrCd != ""'>
             AND tmp.PROD_CD IN    ( SELECT  PROD_CD
                                     FROM    TB_MS_VENDOR_PROD
-                                    WHERE   STORE_CD = tsssc.STORE_CD
+                                    WHERE   STORE_CD = #{storeCd}
                                     AND     VENDR_CD IN
                                     <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
                                         #{item}
