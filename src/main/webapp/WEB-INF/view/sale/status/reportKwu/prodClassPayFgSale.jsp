@@ -103,13 +103,6 @@
                 <wj-flex-grid-column header="<s:message code="prodClassPayFgSale.pointAmt"/>" binding="payAmt09" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodClassPayFgSale.etcAmt"/>" binding="etcAmt" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
-
-            <%-- ColumnPicker 사용시 include --%>
-            <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-                <jsp:param name="pickerTarget" value="prodClassPayFgSaleCtrl"/>
-            </jsp:include>
-            <%--// ColumnPicker 사용시 include --%>
-            </wj-flex-grid>
         </div>
     </div>
 </div>

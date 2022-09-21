@@ -101,13 +101,6 @@
                 <wj-flex-grid-column header="<s:message code="payCardSale.instCnt"/>" binding="instCntNm" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="payCardSale.transactionType"/>" binding="" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
-
-            <%-- ColumnPicker 사용시 include --%>
-            <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-                <jsp:param name="pickerTarget" value="payCardSaleCtrl"/>
-            </jsp:include>
-            <%--// ColumnPicker 사용시 include --%>
-            </wj-flex-grid>
         </div>
     </div>
 </div>

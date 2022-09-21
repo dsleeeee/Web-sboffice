@@ -82,13 +82,6 @@
                 <wj-flex-grid-column header="<s:message code="payFgSale.totDcAmt"/>" binding="totDcAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="payFgSale.realSaleAmt"/>" binding="realSaleAmt" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
-
-            <%-- ColumnPicker 사용시 include --%>
-            <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-                <jsp:param name="pickerTarget" value="payFgSaleCtrl"/>
-            </jsp:include>
-            <%--// ColumnPicker 사용시 include --%>
-            </wj-flex-grid>
         </div>
     </div>
 </div>

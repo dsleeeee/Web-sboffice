@@ -427,6 +427,11 @@
     <typeAlias alias="MembrNonBilClctVO" type="kr.co.solbipos.membr.anals.membrNonBilClct.service.MembrNonBilClctVO"/>
     <typeAlias alias="inclnVO" type="kr.co.solbipos.membr.anals.incln.service.InclnVO"/>
 
+    <!-- 광운대 > 리포트 > 강사별회원관리내역 -->
+    <typeAlias alias="InstructorMembrVO" type="kr.co.solbipos.membr.reportKwu.instructorMembr.service.InstructorMembrVO"/>
+    <!-- 광운대 > 리포트 > 월별회원등록현황 -->
+    <typeAlias alias="MonthlyMembrVO" type="kr.co.solbipos.membr.reportKwu.monthlyMembr.service.MonthlyMembrVO"/>
+
     <!--
         <typeAlias alias="gradeVO" type="kr.co.solbipos.membr.info.grade.service.GradeVO"/>
         <typeAlias alias="uploadVO" type="kr.co.solbipos.membr.info.upload.service.UploadVO"/>

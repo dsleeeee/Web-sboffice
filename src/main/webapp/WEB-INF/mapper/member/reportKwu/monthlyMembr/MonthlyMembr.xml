@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MonthlyMembr.xml
+    월별회원등록현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2022.09.19     최초작성
+-->
+<mapper namespace="kr.co.solbipos.membr.reportKwu.monthlyMembr.service.impl.MonthlyMembrMapper">
+
+    <!-- 본사 명칭 콤보조회 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE
+        PARAM    : monthlyMembrVO
+        COMMENTS : 본사 명칭 콤보조회
+    -->
+    <select id="selectHqCodeList" parameterType="monthlyMembrVO" resultType="DefaultMap">
+        /* USE : MonthlyMembrMapper.selectHqCodeList */
+        <choose>
+            <when test='codeType != null and codeType == "1"'>
+                SELECT  '' AS VALUE
+                ,       '000 - 전체' AS NAME
+                FROM DUAL
+                UNION
+                SELECT  thn.NMCODE_CD AS VALUE
+                ,       thn.NMCODE_CD || '-' || thn.NMCODE_NM AS NAME
+                FROM    TB_HQ_NMCODE thn
+                WHERE   thn.HQ_OFFICE_CD  = #{hqOfficeCd}
+                AND     thn.NMCODE_GRP_CD = #{nmcodeGrpCd}
+                ORDER
+                   BY VALUE NULLS FIRST, VALUE ASC
+            </when>
+            <otherwise>
+                SELECT  thn.NMCODE_CD AS VALUE
+                ,       thn.NMCODE_NM AS NAME
+                FROM    TB_HQ_NMCODE thn
+                WHERE   thn.HQ_OFFICE_CD  = #{hqOfficeCd}
+                AND     thn.NMCODE_GRP_CD = #{nmcodeGrpCd}
+                ORDER
+                   BY thn.NMCODE_CD
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 월별회원등록현황 - 리스트 조회 -->
+    <!--
+         TABLE    : TB_MB_MEMBER_ADDITORY_KWU, TB_MB_MEMBER
+         PARAM    : monthlyMembrVO
+         COMMENTS : 월별회원등록현황 리스트 조회
+    -->
+    <select id="getMonthlyMembrList" parameterType="monthlyMembrVO" resultType="DefaultMap">
+        /* USE : MonthlyMembrMapper.getMonthlyMembrList */
+        SELECT  TO_CHAR(TO_DATE(tmmak.REGISTER_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS REGISTER_DATE
+              , SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM
+              , tmm.GENDR_FG
+              , CASE WHEN tmm.BIRTHDAY IS NOT NULL THEN ((TO_NUMBER(TO_CHAR(SYSDATE, 'yyyy')) - TO_NUMBER(SUBSTR(tmm.BIRTHDAY,0,4))) +1) ELSE NULL END AS AGE
+              , ('[' || tmm.POST_NO || '] ' || ' ' || SBPENC.D(tmm.ADDR) || ' ' || SBPENC.D(tmm.ADDR_DTL))  AS ADDR
+              , SBPENC.D(tmm.TEL_NO) AS TEL_NO
+              , TO_CHAR(TO_DATE(tmmak.USE_START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_START_DATE
+              , TO_CHAR(TO_DATE(tmmak.USE_END_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_END_DATE
+              , tmmak.USE_AMT
+              , tmmak.SKATE_FG
+              , tmmak.CLASS_FG
+              , tmmak.USE_WEEK
+              , tmmak.TEACHER_CD
+              , tmm.REMARK
+        FROM  TB_MB_MEMBER_ADDITORY_KWU tmmak,
+              TB_MB_MEMBER tmm
+       WHERE  1=1
+         AND tmmak.MEMBR_ORGN_CD = #{membrOrgnCd}
+         AND tmmak.MEMBR_ORGN_CD = tmm.MEMBR_ORGN_CD
+         AND tmmak.MEMBR_NO = tmm.MEMBR_NO
+        <if test='startMonth != null and startMonth != ""'>
+        </if>
+        <if test='classFg != null and classFg != ""'>
+         AND tmmak.CLASS_FG = #{classFg}
+        </if>
+    </select>
+</mapper>

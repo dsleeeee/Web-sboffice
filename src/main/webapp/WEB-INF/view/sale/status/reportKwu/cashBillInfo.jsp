@@ -79,13 +79,6 @@
                 <wj-flex-grid-column header="<s:message code="cashBillInfo.cashBillCardNo"/>" binding="cashBillCardNo" width="130" align="left" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cashBillInfo.billNo"/>" binding="billNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
-
-            <%-- ColumnPicker 사용시 include --%>
-            <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-                <jsp:param name="pickerTarget" value="cashBillInfoCtrl"/>
-            </jsp:include>
-            <%--// ColumnPicker 사용시 include --%>
-            </wj-flex-grid>
         </div>
     </div>
 </div>

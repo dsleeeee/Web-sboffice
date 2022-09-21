@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    InstructorMembr.xml
+    강사별회원관리내역
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2022.09.19     최초작성
+-->
+<mapper namespace="kr.co.solbipos.membr.reportKwu.instructorMembr.service.impl.InstructorMembrMapper">
+
+    <!-- 본사 명칭 콤보조회 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE
+        PARAM    : instructorMembrVO
+        COMMENTS : 본사 명칭 콤보조회
+    -->
+    <select id="selectHqCodeList" parameterType="instructorMembrVO" resultType="DefaultMap">
+        /* USE : InstructorMembrMapper.selectHqCodeList */
+        <![CDATA[
+        SELECT  thn.NMCODE_CD AS VALUE
+        ,       thn.NMCODE_CD || '-' || thn.NMCODE_NM AS NAME
+        FROM    TB_HQ_NMCODE thn
+        WHERE   thn.HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     thn.NMCODE_GRP_CD = #{nmcodeGrpCd}
+        ]]>
+        ORDER BY thn.NMCODE_CD
+    </select>
+
+    <!-- 강사별회원관리내역 - 리스트 조회 -->
+    <!--
+         TABLE    : TB_MB_MEMBER_ADDITORY_KWU, TB_MB_MEMBER
+         PARAM    : instructorMembrVO
+         COMMENTS : 강사별회원관리내역 리스트 조회
+    -->
+    <select id="getInstructorMembrList" parameterType="instructorMembrVO" resultType="DefaultMap">
+        /* USE : InstructorMembrMapper.getInstructorMembrList */
+        SELECT  tmmak.MEMBR_NO
+              , SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM
+              , TO_CHAR(TO_DATE(tmmak.REGISTER_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS REGISTER_DATE
+              , TO_CHAR(TO_DATE(tmmak.USE_START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_START_DATE
+              , TO_CHAR(TO_DATE(tmmak.USE_END_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_END_DATE
+        FROM  TB_MB_MEMBER_ADDITORY_KWU tmmak,
+              TB_MB_MEMBER tmm
+       WHERE  1=1
+         AND tmmak.MEMBR_ORGN_CD = #{membrOrgnCd}
+         AND tmmak.MEMBR_ORGN_CD = tmm.MEMBR_ORGN_CD
+         AND tmmak.MEMBR_NO = tmm.MEMBR_NO
+        <if test='teacherCd != null and teacherCd != ""'>
+         AND  tmmak.TEACHER_CD = #{teacherCd}
+        </if>
+        <if test='classFg != null and classFg != ""'>
+         AND  tmmak.CLASS_FG = #{classFg}
+        </if>
+        <choose>
+            <when test='membrUseYn != null and membrUseYn == "1"'>
+              <![CDATA[
+              AND tmmak.USE_START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+              AND tmmak.USE_END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+              ]]>
+            </when>
+            <when test='membrUseYn != null and membrUseYn == "2"'>
+              <![CDATA[
+              AND (tmmak.USE_START_DATE > TO_CHAR(SYSDATE, 'yyyyMMdd')
+              OR tmmak.USE_END_DATE < TO_CHAR(SYSDATE, 'yyyyMMdd'))
+              ]]>
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+</mapper>
