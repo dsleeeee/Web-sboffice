@@ -114,12 +114,12 @@
                     <wj-flex-grid-column header="<s:message code="cardCreditStatus.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="cardCreditStatus.storeNm"/>" binding="storeNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                 </c:if>
-                <wj-flex-grid-column header="<s:message code="cardCreditStatus.saleDate"/>" binding="saleDate" width="80" is-read-only="true" align="center" format="date"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cardCreditStatus.saleDate"/>" binding="saleDate" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cardCreditStatus.bill"/>" binding="bill" width="125" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="cardCreditStatus.apprDate"/>" binding="apprDate" width="80" is-read-only="true" align="center" format="date"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cardCreditStatus.apprDate"/>" binding="apprDate" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cardCreditStatus.apprNo"/>" binding="apprNo" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cardCreditStatus.apprAmt"/>" binding="apprAmt" width="70" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="cardCreditStatus.creditDate"/>" binding="creditDate" width="80" is-read-only="true" align="center" format="date"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cardCreditStatus.creditDate"/>" binding="creditDate" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cardCreditStatus.creditAmt"/>" binding="creditAmt" width="70" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cardCreditStatus.creditFee"/>" binding="creditFee" width="70" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cardCreditStatus.creditBank"/>" binding="creditBank" data-map="creditBankDataMap" is-read-only="true" width="70" align="center"></wj-flex-grid-column>
@@ -134,4 +134,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/card/cardCreditStatus/cardCreditStatus.js?ver=20220916.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/card/cardCreditStatus/cardCreditStatus.js?ver=20220917.01" charset="utf-8"></script>

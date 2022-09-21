@@ -113,4 +113,73 @@ public class CardCreditController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 신용카드입금관리 엑셀업로드 팝업 - 업로드시 임시테이블 저장
+     *
+     * @param cardCreditVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 09. 19.
+     */
+    @RequestMapping(value = "/cardCreditExcelUploadAdd/getCardCreditExcelUploadAddSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCardCreditExcelUploadAddSave(@RequestBody CardCreditVO[] cardCreditVOs, HttpServletRequest request,
+                                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = cardCreditService.getCardCreditExcelUploadAddSave(cardCreditVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 신용카드입금관리 엑셀업로드 팝업 - 검증결과 전체 삭제
+     *
+     * @param cardCreditVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 09. 20.
+     */
+    @RequestMapping(value = "/cardCreditExcelUploadAdd/getCardCreditExcelUploadAddDeleteAll.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCardCreditExcelUploadAddDeleteAll(@RequestBody CardCreditVO cardCreditVO, HttpServletRequest request,
+                                                   HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = cardCreditService.getCardCreditExcelUploadAddDeleteAll(cardCreditVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 신용카드입금관리 엑셀업로드 팝업 - 업로드된 입금내역 저장
+     *
+     * @param cardCreditVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 09. 20.
+     */
+    @RequestMapping(value = "/cardCreditExcelUploadAdd/getCardCreditExcelUploadAddRealSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCardCreditExcelUploadAddRealSave(@RequestBody CardCreditVO cardCreditVO, HttpServletRequest request,
+                                                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = cardCreditService.getCardCreditExcelUploadAddRealSave(cardCreditVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

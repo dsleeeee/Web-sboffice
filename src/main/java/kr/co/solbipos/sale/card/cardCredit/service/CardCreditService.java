@@ -27,4 +27,13 @@ public interface CardCreditService {
 
     /** 신용카드입금관리 - 저장 */
     int getCardCreditSave(CardCreditVO[] cardCreditVOs, SessionInfoVO sessionInfoVO);
+
+    /** 신용카드입금관리 엑셀업로드 팝업 - 업로드시 임시테이블 저장 */
+    int getCardCreditExcelUploadAddSave(CardCreditVO[] cardCreditVOs, SessionInfoVO sessionInfoVO);
+
+    /** 신용카드입금관리 엑셀업로드 팝업 - 검증결과 전체 삭제 */
+    int getCardCreditExcelUploadAddDeleteAll(CardCreditVO cardCreditVO, SessionInfoVO sessionInfoVO);
+
+    /** 신용카드입금관리 엑셀업로드 팝업 - 업로드된 입금내역 저장 */
+    int getCardCreditExcelUploadAddRealSave(CardCreditVO cardCreditVO, SessionInfoVO sessionInfoVO);
 }

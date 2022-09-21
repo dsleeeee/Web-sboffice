@@ -72,4 +72,68 @@ public class CardCreditServiceImpl implements CardCreditService {
 
         return procCnt;
     }
+
+    /** 신용카드입금관리 엑셀업로드 팝업 - 업로드시 임시테이블 저장 */
+    @Override
+    public int getCardCreditExcelUploadAddSave(CardCreditVO[] cardCreditVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(CardCreditVO cardCreditVO : cardCreditVOs) {
+
+            cardCreditVO.setModDt(currentDt);
+            cardCreditVO.setModId(sessionInfoVO.getUserId());
+            cardCreditVO.setRegDt(currentDt);
+            cardCreditVO.setRegId(sessionInfoVO.getUserId());
+
+            cardCreditVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                cardCreditVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+
+            cardCreditVO.setSessionId(sessionInfoVO.getSessionId());
+
+            procCnt = cardCreditMapper.getCardCreditExcelUploadAddSaveInsert(cardCreditVO);
+        }
+
+        return procCnt;
+    }
+
+    /** 신용카드입금관리 엑셀업로드 팝업 - 검증결과 전체 삭제 */
+    @Override
+    public int getCardCreditExcelUploadAddDeleteAll(CardCreditVO cardCreditVO, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+
+        cardCreditVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            cardCreditVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        cardCreditVO.setSessionId(sessionInfoVO.getSessionId());
+
+        procCnt = cardCreditMapper.getCardCreditExcelUploadAddDeleteAll(cardCreditVO);
+
+        return procCnt;
+    }
+
+    /** 신용카드입금관리 엑셀업로드 팝업 - 업로드된 입금내역 저장 */
+    @Override
+    public int getCardCreditExcelUploadAddRealSave(CardCreditVO cardCreditVO, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        cardCreditVO.setModDt(currentDt);
+        cardCreditVO.setModId(sessionInfoVO.getUserId());
+        cardCreditVO.setRegDt(currentDt);
+        cardCreditVO.setRegId(sessionInfoVO.getUserId());
+
+        cardCreditVO.setSessionId(sessionInfoVO.getSessionId());
+
+        procCnt = cardCreditMapper.getCardCreditExcelUploadAddRealSaveMerge(cardCreditVO);
+
+        return procCnt;
+    }
 }
