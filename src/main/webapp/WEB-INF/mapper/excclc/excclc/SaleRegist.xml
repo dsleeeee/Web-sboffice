@@ -144,6 +144,7 @@
         FROM    TB_SL_SALE_HDR
         WHERE   STORE_CD = #{storeCd}
         AND     SALE_DATE = #{saleDate}
+        AND     POS_NO = #{posNo}
         AND     BILL_NO > '9000'
     </select>
 

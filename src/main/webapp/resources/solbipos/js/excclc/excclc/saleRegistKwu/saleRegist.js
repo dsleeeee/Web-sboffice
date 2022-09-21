@@ -150,7 +150,7 @@ app.controller('saleRegistCtrl', ['$scope', '$http', '$timeout', function ($scop
     params.storeCd = $("#saleRegistStoreCd").val();
     
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquirySub("/excclc/excclc/saleRegist/saleRegist/getSaleRegistList.sb", params, function (){
+    $scope._inquirySub("/excclc/excclc/saleRegistKwu/saleRegistKwu/getSaleRegistList.sb", params, function (){
       srchGubun = true;
     });
   };
