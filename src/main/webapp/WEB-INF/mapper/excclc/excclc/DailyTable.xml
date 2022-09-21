@@ -86,7 +86,8 @@
                     WHERE 	tsdp.HQ_OFFICE_CD   = #{hqOfficeCd}
                     AND 	tsdp.STORE_CD       = #{storeCd}
                     AND 	tsdp.SALE_DATE      = #{startDate}
-                    AND 	tsdp.PROD_CD        = tmp.PROD_CD
+                      AND 	tsdp.STORE_CD       = tmp.STORE_CD
+                    AND 	tsdp.PROD_CD        = tmp.PROD_CD(+)
                     GROUP BY tmp.PROD_CLASS_CD
                 ) A,
                 (
@@ -101,10 +102,11 @@
                     WHERE	tsdt2.HQ_OFFICE_CD  = #{hqOfficeCd}
                     AND 	tsdt2.STORE_CD      = #{storeCd}
                     AND 	tsdt2.SALE_DATE BETWEEN SUBSTR(#{startDate},1,6) || '01' AND #{startDate}
-                    AND 	tsdt2.PROD_CD       = tmp.PROD_CD
+                    AND 	tsdt2.STORE_CD      = tmp.STORE_CD
+                    AND 	tsdt2.PROD_CD       = tmp.PROD_CD(+)
                     GROUP BY tmp.PROD_CLASS_CD
                 ) B
-        WHERE 	A.PROD_CLASS_CD = B.PROD_CLASS_CD
+        WHERE 	A.PROD_CLASS_CD = B.PROD_CLASS_CD(+)
         ORDER BY A.PROD_CLASS_CD
     </select>
 
@@ -133,11 +135,11 @@
         AND 	tpck.CLOSE_DATE     = tsdt.SALE_DATE
     </select>
 
-    <!-- 반품/출납 조회 -->
+    <!-- 반품출납 조회 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_MONEY, TB_MS_STORE, TB_CM_DATEM
         PARAM    : dayCloseVO
-        COMMENTS : 반품/출납 조회
+        COMMENTS : 반품출납 조회
     -->
     <select id="getRtnList"  parameterType="dayCloseVO" resultType="DefaultMap">
         /* DailyTableMapper.getRtnList */
@@ -147,5 +149,362 @@
         WHERE 	tsdt.HQ_OFFICE_CD   = #{hqOfficeCd}
         AND 	tsdt.STORE_CD       = #{storeCd}
         AND 	tsdt.SALE_DATE      = #{startDate}
+    </select>
+
+    <!-- 결재라인 목록조회
+        TABLE    : TB_SL_SALE_PAY_LINE, TB_MS_STORE
+        PARAM    : dailyReportVO
+        COMMENTS : 결재라인 목록을 조회한다.
+    -->
+    <select id="getPayLineList" parameterType="dayCloseVO" resultType="DefaultMap">
+        /* DailyTableMapper.getPayLineList */
+    SELECT  HQ_OFFICE_CD    AS CFG_HQ_OFFICE_CD,
+            HQ_BRAND_CD     AS CFG_HQ_BRAND_CD,
+            STORE_CD        AS CFG_STORE_CD,
+            PAY_LINE_NO     AS CFG_PAY_LINE_NO,
+            PAY_LINE_SEQ    AS CFG_PAY_LINE_SEQ,
+            PAY_LINE_NM     AS CFG_PAY_LINE_NM,
+            USE_YN          AS CFG_USE_YN
+    FROM    TB_SL_SALE_PAY_LINE
+    WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+    AND     STORE_CD        = #{storeCd}
+    AND     HQ_BRAND_CD     = (
+                                SELECT  HQ_BRAND_CD
+                                FROM    TB_MS_STORE
+                                WHERE   HQ_OFFICE_CD= #{hqOfficeCd}
+                                AND     STORE_CD	= #{storeCd}
+                                )
+    AND		USE_YN			= 'Y'
+    ORDER BY CFG_PAY_LINE_SEQ
+    </select>
+
+
+    <!-- 수강현황 목록조회
+        TABLE    : TB_SL_SALE_PAY_LINE, TB_MS_STORE
+        PARAM    : dailyReportVO
+        COMMENTS : 결재라인 목록을 조회한다.
+    -->
+    <select id="getCourseStatusList" parameterType="dayCloseVO" resultType="DefaultMap">
+        /* DailyTableMapper.getCourseStatusList */
+        SELECT  '일계' AS FG
+        ,       0 AS TOT_TUITION
+        ,       0 AS STUDENT_CNT
+        ,       0 AS DC_TUITION
+        ,       0 AS NET_TUITION
+        ,       0 AS TUITION
+        FROM    DUAL
+        UNION ALL
+        SELECT  '월계' AS FG
+        ,       0 AS TOT_TUITION
+        ,       0 AS STUDENT_CNT
+        ,       0 AS DC_TUITION
+        ,       0 AS NET_TUITION
+        ,       0 AS TUITION
+        FROM    DUAL
+    </select>
+
+
+    <!-- 수강유형 목록조회
+        TABLE    : TB_SL_SALE_PAY_LINE, TB_MS_STORE
+        PARAM    : dailyReportVO
+        COMMENTS : 결재라인 목록을 조회한다.
+    -->
+    <select id="getCourseTypeList" parameterType="dayCloseVO" resultType="DefaultMap">
+        /* DailyTableMapper.getCourseTypeList */
+        SELECT  '일일수강생' AS FG
+        ,       0 AS CASH_AMT
+        ,       0 AS CARD_AMT
+        ,       0 AS DAY_SALE_QTY
+        ,       0 AS DAILY
+        ,       0 AS MONTH_SALE_QTY
+        ,       0 AS MONTHLY
+        ,       0 AS B_MONTHLY
+        ,       0 AS TOT_SUM
+        FROM    DUAL
+        UNION ALL
+        SELECT  '장비대여' AS FG
+        ,       0 AS CASH_AMT
+        ,       0 AS CARD_AMT
+        ,       0 AS DAY_SALE_QTY
+        ,       0 AS DAILY
+        ,       0 AS MONTH_SALE_QTY
+        ,       0 AS MONTHLY
+        ,       0 AS B_MONTHLY
+        ,       0 AS TOT_SUM
+        FROM    DUAL
+        UNION ALL
+        SELECT  '일일연마' AS FG
+        ,       0 AS CASH_AMT
+        ,       0 AS CARD_AMT
+        ,       0 AS DAY_SALE_QTY
+        ,       0 AS DAILY
+        ,       0 AS MONTH_SALE_QTY
+        ,       0 AS MONTHLY
+        ,       0 AS B_MONTHLY
+        ,       0 AS TOT_SUM
+        FROM    DUAL
+        UNION ALL
+        SELECT  '단체수강샹' AS FG
+        ,       0 AS CASH_AMT
+        ,       0 AS CARD_AMT
+        ,       0 AS DAY_SALE_QTY
+        ,       0 AS DAILY
+        ,       0 AS MONTH_SALE_QTY
+        ,       0 AS MONTHLY
+        ,       0 AS B_MONTHLY
+        ,       0 AS TOT_SUM
+        FROM    DUAL
+        UNION ALL
+        SELECT  '단기수강생' AS FG
+        ,       0 AS CASH_AMT
+        ,       0 AS CARD_AMT
+        ,       0 AS DAY_SALE_QTY
+        ,       0 AS DAILY
+        ,       0 AS MONTH_SALE_QTY
+        ,       0 AS MONTHLY
+        ,       0 AS B_MONTHLY
+        ,       0 AS TOT_SUM
+        FROM    DUAL
+        UNION ALL
+        SELECT  '속성수강생' AS FG
+        ,       0 AS CASH_AMT
+        ,       0 AS CARD_AMT
+        ,       0 AS DAY_SALE_QTY
+        ,       0 AS DAILY
+        ,       0 AS MONTH_SALE_QTY
+        ,       0 AS MONTHLY
+        ,       0 AS B_MONTHLY
+        ,       0 AS TOT_SUM
+        FROM    DUAL
+        UNION ALL
+        SELECT  '수강생연마' AS FG
+        ,       0 AS CASH_AMT
+        ,       0 AS CARD_AMT
+        ,       0 AS DAY_SALE_QTY
+        ,       0 AS DAILY
+        ,       0 AS MONTH_SALE_QTY
+        ,       0 AS MONTHLY
+        ,       0 AS B_MONTHLY
+        ,       0 AS TOT_SUM
+        FROM    DUAL
+        UNION ALL
+        SELECT  '기타' AS FG
+        ,       0 AS CASH_AMT
+        ,       0 AS CARD_AMT
+        ,       0 AS DAY_SALE_QTY
+        ,       0 AS DAILY
+        ,       0 AS MONTH_SALE_QTY
+        ,       0 AS MONTHLY
+        ,       0 AS B_MONTHLY
+        ,       0 AS TOT_SUM
+        FROM    DUAL
+        UNION ALL
+        SELECT  '합계' AS FG
+        ,       0 AS CASH_AMT
+        ,       0 AS CARD_AMT
+        ,       0 AS DAY_SALE_QTY
+        ,       0 AS DAILY
+        ,       0 AS MONTH_SALE_QTY
+        ,       0 AS MONTHLY
+        ,       0 AS B_MONTHLY
+        ,       0 AS TOT_SUM
+        FROM    DUAL
+    </select>
+
+
+    <!-- 수강료현황 목록조회
+        TABLE    : TB_SL_SALE_PAY_LINE, TB_MS_STORE
+        PARAM    : dailyReportVO
+        COMMENTS : 수강료현황 목록을 조회한다.
+    -->
+    <select id="getTuition1List" parameterType="dayCloseVO" resultType="DefaultMap">
+        /* DailyTableMapper.getTuition1List */
+        SELECT  '일계' AS FG
+        ,       0 AS CASH_AMT
+        ,       0 AS CARD_AMT
+        ,       0 AS CAT_AMT
+        ,       0 AS TOT_IN_AMT
+        ,       0 AS CANCEL_CNT
+        ,       0 AS CANCEL_AMT
+        FROM    DUAL
+        UNION ALL
+        SELECT  '월계' AS FG
+        ,       0 AS CASH_AMT
+        ,       0 AS CARD_AMT
+        ,       0 AS CAT_AMT
+        ,       0 AS TOT_IN_AMT
+        ,       0 AS CANCEL_CNT
+        ,       0 AS CANCEL_AMT
+        FROM    DUAL
+    </select>
+    <!-- 수강료현황 목록조회
+        TABLE    : TB_SL_SALE_PAY_LINE, TB_MS_STORE
+        PARAM    : dailyReportVO
+        COMMENTS : 수강료현황 목록을 조회한다.
+    -->
+    <select id="getTuition2List" parameterType="dayCloseVO" resultType="DefaultMap">
+        /* DailyTableMapper.getTuition2List */
+        SELECT  '일계' AS FG
+        ,       0 AS B_MONTH_UNPAID_AMT
+        ,       0 AS MONTH_UNPAID_AMT
+        ,       0 AS COMMISSION_AMT
+        ,       0 AS INTEREST_AMT
+        ,       0 AS CARD_IN_AMT
+        FROM    DUAL
+        UNION ALL
+        SELECT  '월계' AS FG
+        ,       0 AS B_MONTH_UNPAID_AMT
+        ,       0 AS MONTH_UNPAID_AMT
+        ,       0 AS COMMISSION_AMT
+        ,       0 AS INTEREST_AMT
+        ,       0 AS CARD_IN_AMT
+        FROM    DUAL
+    </select>
+
+    <!-- 단체수강 목록조회
+        TABLE    : TB_SL_SALE_PAY_LINE, TB_MS_STORE
+        PARAM    : dailyReportVO
+        COMMENTS : 단체수강 목록을 조회한다.
+    -->
+    <select id="getGroupCourseList" parameterType="dayCloseVO" resultType="DefaultMap">
+        /* DailyTableMapper.getGroupCourseList */
+        SELECT  '구분' AS FG
+        ,       '단체명' AS GROUP_NM
+        ,       '20220920' AS SALE_DATE
+        ,       '0' AS SUMMARY
+        ,       0 AS AMT
+        FROM    DUAL
+    </select>
+
+    <!-- 츨납현황 목록조회
+        TABLE    : TB_SL_SALE_PAY_LINE, TB_MS_STORE
+        PARAM    : dailyReportVO
+        COMMENTS : 츨납현황 목록을 조회한다.
+    -->
+    <select id="getPaymentStatus1List" parameterType="dayCloseVO" resultType="DefaultMap">
+        /* DailyTableMapper.getPaymentStatus1List */
+        SELECT  '월입금누계' AS MONTH_IN_AMT_SUM
+        ,       0 AS IN_AMT
+        ,       0 AS OUT_AMT
+        ,       0 AS REMAIN_AMT
+        FROM    DUAL
+    </select>
+
+    <!-- 츨납현황 목록조회
+        TABLE    : TB_SL_SALE_PAY_LINE, TB_MS_STORE
+        PARAM    : dailyReportVO
+        COMMENTS : 츨납현황 목록을 조회한다.
+    -->
+    <select id="getPaymentStatus2List" parameterType="dayCloseVO" resultType="DefaultMap">
+        /* DailyTableMapper.getPaymentStatus2List */
+        SELECT  '단체' AS IN_INFO
+        ,       GROUP_AMT AS IN_AMT
+        ,       '' AS OUT_INFO
+        ,       0 AS OUT_AMT
+        ,       0 AS REMAIN_AMT
+        FROM    TB_PO_CLOSE_KWU
+        WHERE   STORE_CD = #{storeCd}
+        AND     CLOSE_DATE = #{startDate}
+        UNION ALL
+        SELECT  '하키훈련' AS IN_INFO
+        ,       HOCKEY_AMT AS IN_AMT
+        ,       '' AS OUT_INFO
+        ,       0 AS OUT_AMT
+        ,       0 AS REMAIN_AMT
+        FROM    TB_PO_CLOSE_KWU
+        WHERE   STORE_CD = #{storeCd}
+        AND     CLOSE_DATE = #{startDate}
+        UNION ALL
+        SELECT  '기타' AS IN_INFO
+        ,       ETC_AMT AS IN_AMT
+        ,       '' AS OUT_INFO
+        ,       0 AS OUT_AMT
+        ,       0 AS REMAIN_AMT
+        FROM    TB_PO_CLOSE_KWU
+        WHERE   STORE_CD = #{storeCd}
+        AND     CLOSE_DATE = #{startDate}
+        UNION ALL
+        SELECT  '1일 일계입금' AS IN_INFO
+        ,       IN_DAY_AMT AS IN_AMT
+        ,       '' AS OUT_INFO
+        ,       0 AS OUT_AMT
+        ,       0 AS REMAIN_AMT
+        FROM    TB_PO_CLOSE_KWU
+        WHERE   STORE_CD = #{storeCd}
+        AND     CLOSE_DATE = #{startDate}
+        UNION ALL
+        SELECT  '입금계' AS IN_INFO
+        ,       IN_SUM AS IN_AMT
+        ,       '출금계' AS OUT_INFO
+        ,       OUT_SUM AS OUT_AMT
+        ,       0 AS REMAIN_AMT
+        FROM    TB_PO_CLOSE_KWU
+        WHERE   STORE_CD = #{storeCd}
+        AND     CLOSE_DATE = #{startDate}
+        UNION ALL
+        SELECT  '월입금계' AS IN_INFO
+        ,       IN_MONTH_SUM AS IN_AMT
+        ,       '월출금계' AS OUT_INFO
+        ,       OUT_MONTH_SUM AS OUT_AMT
+        ,       0 AS REMAIN_AMT
+        FROM    TB_PO_CLOSE_KWU
+        WHERE   STORE_CD = #{storeCd}
+        AND     CLOSE_DATE = #{startDate}
+        UNION ALL
+        SELECT  '전월누계' AS IN_INFO
+        ,       IN_B_MONTH_SUM AS IN_AMT
+        ,       '전월누계' AS OUT_INFO
+        ,       OUT_B_MONTH_SUM AS OUT_AMT
+        ,       0 AS REMAIN_AMT
+        FROM    TB_PO_CLOSE_KWU
+        WHERE   STORE_CD = #{storeCd}
+        AND     CLOSE_DATE = #{startDate}
+        UNION ALL
+        SELECT  '총누계' AS IN_INFO
+        ,       IN_TOTAL_SUM AS IN_AMT
+        ,       '총누계' AS OUT_INFO
+        ,       OUT_TOTAL_SUM AS OUT_AMT
+        ,       0 AS REMAIN_AMT
+        FROM    TB_PO_CLOSE_KWU
+        WHERE   STORE_CD = #{storeCd}
+        AND     CLOSE_DATE = #{startDate}
+    </select>
+
+    <!-- 츨납현황 목록조회
+        TABLE    : TB_SL_SALE_PAY_LINE, TB_MS_STORE
+        PARAM    : dailyReportVO
+        COMMENTS : 츨납현황 목록을 조회한다.
+    -->
+    <select id="getPaymentStatus3List" parameterType="dayCloseVO" resultType="DefaultMap">
+        /* DailyTableMapper.getPaymentStatus3List */
+        SELECT  '비고' AS REMARK
+        ,       REMARK1 AS CONTENT
+        FROM    TB_PO_CLOSE_KWU
+        WHERE   STORE_CD = #{storeCd}
+        AND     CLOSE_DATE = #{startDate}
+        UNION ALL
+        SELECT  '비고' AS REMARK
+        ,       REMARK2 AS CONTENT
+        FROM    TB_PO_CLOSE_KWU
+        WHERE   STORE_CD = #{storeCd}
+        AND     CLOSE_DATE = #{startDate}
+        UNION ALL
+        SELECT  '비고' AS REMARK
+        ,       REMARK3 AS CONTENT
+        FROM    TB_PO_CLOSE_KWU
+        WHERE   STORE_CD = #{storeCd}
+        AND     CLOSE_DATE = #{startDate}
+        UNION ALL
+        SELECT  '비고' AS REMARK
+        ,       REMARK4 AS CONTENT
+        FROM    TB_PO_CLOSE_KWU
+        WHERE   STORE_CD = #{storeCd}
+        AND     CLOSE_DATE = #{startDate}
+        UNION ALL
+        SELECT  '비고' AS REMARK
+        ,       REMARK5 AS CONTENT
+        FROM    TB_PO_CLOSE_KWU
+        WHERE   STORE_CD = #{storeCd}
+        AND     CLOSE_DATE = #{startDate}
     </select>
 </mapper>
