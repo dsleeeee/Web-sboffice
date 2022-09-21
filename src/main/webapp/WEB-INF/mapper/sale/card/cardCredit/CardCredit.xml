@@ -23,13 +23,13 @@
         tsspc.HQ_BRAND_CD,
         tsspc.STORE_CD,
         tms.STORE_NM,
-        tsspc.SALE_DATE,
+        (CASE WHEN tsspc.SALE_DATE IS NOT NULL THEN SUBSTR(tsspc.SALE_DATE, 1, 4)||'-'||SUBSTR(tsspc.SALE_DATE, 5, 2)||'-'||SUBSTR(tsspc.SALE_DATE, 7, 2) ELSE tsspc.SALE_DATE END) AS SALE_DATE,
         tsspc.POS_NO,
         tsspc.BILL_NO,
         tsspc.LINE_NO,
         tsspc.LINE_SEQ_NO,
         (tsspc.POS_NO ||'-'|| tsspc.BILL_NO ||'-'|| tsspc.LINE_NO ||'-'|| tsspc.LINE_SEQ_NO) AS BILL,
-        SUBSTR(tsspc.APPR_DT, 0, 8) AS APPR_DATE,
+        (CASE WHEN tsspc.APPR_DT IS NOT NULL THEN SUBSTR(tsspc.APPR_DT, 1, 4)||'-'||SUBSTR(tsspc.APPR_DT, 5, 2)||'-'||SUBSTR(tsspc.APPR_DT, 7, 2) ELSE tsspc.APPR_DT END) AS APPR_DATE,
         tsspc.APPR_NO,
         (tsspc.SALE_FG * tsspc.APPR_AMT) AS APPR_AMT,
         DECODE(tsspc.SALE_FG, 1, '승인', -1, '취소') AS APPR_GUBUN,
@@ -37,7 +37,7 @@
         tsspc.ACQUIRE_NM,
         tsspc.MEMBR_JOIN_NO,
         DECODE(tsspc.INST_CNT, 0 , '일시불', '할부') AS INST_CNT_NM,
-        tsspcck.CREDIT_DATE,
+        (CASE WHEN tsspcck.CREDIT_DATE IS NOT NULL THEN SUBSTR(tsspcck.CREDIT_DATE, 1, 4)||'-'||SUBSTR(tsspcck.CREDIT_DATE, 5, 2)||'-'||SUBSTR(tsspcck.CREDIT_DATE, 7, 2) ELSE tsspcck.CREDIT_DATE END) AS CREDIT_DATE,
         tsspcck.CREDIT_AMT,
         tsspcck.CREDIT_FEE,
         tsspcck.CREDIT_BANK
@@ -120,6 +120,156 @@
                 #{regId},
                 #{modDt},
                 #{modId}
+            )
+    </insert>
+
+    <!-- 신용카드입금관리 엑셀업로드 팝업 - 업로드시 임시테이블 저장 insert -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getCardCreditExcelUploadAddSaveInsert" parameterType="CardCreditVO">
+        /* CardCreditMapper.getCardCreditExcelUploadAddSaveInsert */
+        INSERT INTO TB_TMP_EXCEL_CARD_CREDIT_KWU
+        (
+            SESSION_ID,
+            HQ_OFFICE_CD,
+            STORE_CD,
+            APPR_DATE,
+            APPR_NO,
+            CREDIT_DATE,
+            CREDIT_AMT,
+            CREDIT_FEE,
+            CREDIT_BANK,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{sessionId},
+            #{hqOfficeCd},
+            #{storeCd},
+            #{apprDate},
+            #{apprNo},
+            #{creditDate},
+            #{creditAmt},
+            #{creditFee},
+            #{creditBank},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 신용카드입금관리 엑셀업로드 팝업 - 검증결과 전체 삭제 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getCardCreditExcelUploadAddDeleteAll" parameterType="CardCreditVO">
+        /* CardCreditMapper.getCardCreditExcelUploadAddDeleteAll */
+        DELETE
+        TB_TMP_EXCEL_CARD_CREDIT_KWU
+        WHERE 1=1
+        AND SESSION_ID = #{sessionId}
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCd != null and storeCd != ""'>
+            <![CDATA[
+                AND STORE_CD = #{storeCd}
+            ]]>
+        </if>
+    </delete>
+
+    <!-- 신용카드입금관리 엑셀업로드 팝업 - 업로드된 입금내역 저장 merge -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getCardCreditExcelUploadAddRealSaveMerge" parameterType="CardCreditVO">
+        /* CardCreditMapper.getCardCreditExcelUploadAddRealSaveMerge */
+        MERGE INTO TB_SL_SALE_PAY_CARD_CREDIT_KWU A
+        USING (
+                    SELECT
+                    tsspc.HQ_OFFICE_CD,
+                    tsspc.HQ_BRAND_CD,
+                    tsspc.STORE_CD,
+                    tsspc.SALE_DATE,
+                    tsspc.POS_NO,
+                    tsspc.BILL_NO,
+                    tsspc.LINE_NO,
+                    tsspc.LINE_SEQ_NO,
+                    (SELECT YYYYMMDD FROM TB_CM_DATEM WHERE YYYYMMDD = REPLACE(ttecck.CREDIT_DATE, '-', '')) AS CREDIT_DATE,
+                    DECODE(FN_IS_NUMBER_CHK(ttecck.CREDIT_AMT), 1, ttecck.CREDIT_AMT, 0) AS CREDIT_AMT,
+                    DECODE(FN_IS_NUMBER_CHK(ttecck.CREDIT_FEE), 1, ttecck.CREDIT_FEE, 0) AS CREDIT_FEE,
+                    ttecck.CREDIT_BANK,
+                    #{regDt} AS REG_DT,
+                    #{regId} AS REG_ID,
+                    #{modDt} AS MOD_DT,
+                    #{modId} AS MOD_ID
+                    FROM TB_SL_SALE_PAY_CARD tsspc,
+                    TB_TMP_EXCEL_CARD_CREDIT_KWU ttecck
+                    WHERE 1=1
+                    AND SUBSTR(tsspc.APPR_DT, 1, 8) BETWEEN #{startDate} AND #{endDate}
+                    AND ttecck.SESSION_ID = #{sessionId}
+                    AND SUBSTR(tsspc.APPR_DT, 1, 8) = REPLACE(ttecck.APPR_DATE, '-', '')
+                    AND tsspc.APPR_NO = ttecck.APPR_NO
+                    AND ttecck.CREDIT_AMT IS NOT NULL
+                    AND ttecck.CREDIT_FEE IS NOT NULL
+                    <![CDATA[
+                        AND LENGTH(ttecck.CREDIT_AMT) <= 13
+                        AND LENGTH(ttecck.CREDIT_FEE) <= 13
+                    ]]>
+                    AND ttecck.CREDIT_BANK IN ('국민은행', '하나은행')
+              ) B
+        ON  (
+                A.HQ_OFFICE_CD = B.HQ_OFFICE_CD AND A.HQ_BRAND_CD = B.HQ_BRAND_CD AND A.STORE_CD = B.STORE_CD AND A.SALE_DATE = B.SALE_DATE
+                AND A.POS_NO = B.POS_NO AND A.BILL_NO = B.BILL_NO AND A.LINE_NO = B.LINE_NO AND A.LINE_SEQ_NO = B.LINE_SEQ_NO
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            A.CREDIT_DATE = B.CREDIT_DATE,
+            A.CREDIT_AMT = B.CREDIT_AMT,
+            A.CREDIT_FEE = B.CREDIT_FEE,
+            A.CREDIT_BANK = B.CREDIT_BANK,
+            A.MOD_DT = B.MOD_DT,
+            A.MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.HQ_OFFICE_CD,
+                A.HQ_BRAND_CD,
+                A.STORE_CD,
+                A.SALE_DATE,
+                A.POS_NO,
+                A.BILL_NO,
+                A.LINE_NO,
+                A.LINE_SEQ_NO,
+                A.CREDIT_DATE,
+                A.CREDIT_AMT,
+                A.CREDIT_FEE,
+                A.CREDIT_BANK,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+            ) VALUES (
+                B.HQ_OFFICE_CD,
+                B.HQ_BRAND_CD,
+                B.STORE_CD,
+                B.SALE_DATE,
+                B.POS_NO,
+                B.BILL_NO,
+                B.LINE_NO,
+                B.LINE_SEQ_NO,
+                B.CREDIT_DATE,
+                B.CREDIT_AMT,
+                B.CREDIT_FEE,
+                B.CREDIT_BANK,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
             )
     </insert>
 

@@ -31,4 +31,13 @@ public interface CardCreditMapper {
 
     /** 신용카드입금관리 - 저장 merge */
     int getCardCreditSaveMerge(CardCreditVO cardCreditVO);
+
+    /** 신용카드입금관리 엑셀업로드 팝업 - 업로드시 임시테이블 저장 insert */
+    int getCardCreditExcelUploadAddSaveInsert(CardCreditVO cardCreditVO);
+
+    /** 신용카드입금관리 엑셀업로드 팝업 - 검증결과 전체 삭제 */
+    int getCardCreditExcelUploadAddDeleteAll(CardCreditVO cardCreditVO);
+
+    /** 신용카드입금관리 엑셀업로드 팝업 - 업로드된 입금내역 저장 merge */
+    int getCardCreditExcelUploadAddRealSaveMerge(CardCreditVO cardCreditVO);
 }

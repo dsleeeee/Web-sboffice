@@ -57,6 +57,15 @@ public class CardCreditVO extends PageVO {
     /** 입금은행 */
     private String creditBank;
 
+    /** 입금일자 */
+    private String apprDate;
+
+    /** 입금금액 */
+    private String apprNo;
+
+    /** 세션ID */
+    private String sessionId;
+
     public String getHqOfficeCd() { return hqOfficeCd; }
 
     public void setHqOfficeCd(String hqOfficeCd) { this.hqOfficeCd = hqOfficeCd; }
@@ -104,4 +113,16 @@ public class CardCreditVO extends PageVO {
     public String getCreditBank() { return creditBank; }
 
     public void setCreditBank(String creditBank) { this.creditBank = creditBank; }
+
+    public String getApprDate() { return apprDate; }
+
+    public void setApprDate(String apprDate) { this.apprDate = apprDate; }
+
+    public String getApprNo() { return apprNo; }
+
+    public void setApprNo(String apprNo) { this.apprNo = apprNo; }
+
+    public String getSessionId() { return sessionId; }
+
+    public void setSessionId(String sessionId) { this.sessionId = sessionId; }
 }
