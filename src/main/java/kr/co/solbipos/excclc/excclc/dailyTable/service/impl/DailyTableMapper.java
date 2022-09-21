@@ -34,4 +34,16 @@ public interface DailyTableMapper {
     List<DefaultMap<String>> getPayList(DailyTableVO dailyTableVO);
     List<DefaultMap<String>> getRtnList(DailyTableVO dailyTableVO);
 
+    List<DefaultMap<String>> getPayLineList(DailyTableVO dailyTableVO);
+
+    List<DefaultMap<String>> getCourseStatusList(DailyTableVO dailyTableVO);
+    List<DefaultMap<String>> getCourseTypeList(DailyTableVO dailyTableVO);
+    List<DefaultMap<String>> getTuition1List(DailyTableVO dailyTableVO);
+    List<DefaultMap<String>> getTuition2List(DailyTableVO dailyTableVO);
+    List<DefaultMap<String>> getGroupCourseList(DailyTableVO dailyTableVO);
+
+    List<DefaultMap<String>> getPaymentStatus1List(DailyTableVO dailyTableVO);
+    List<DefaultMap<String>> getPaymentStatus2List(DailyTableVO dailyTableVO);
+    List<DefaultMap<String>> getPaymentStatus3List(DailyTableVO dailyTableVO);
+
 }

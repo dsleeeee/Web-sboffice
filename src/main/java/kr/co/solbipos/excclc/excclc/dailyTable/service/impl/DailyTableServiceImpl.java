@@ -65,9 +65,21 @@ public class DailyTableServiceImpl implements DailyTableService {
         Map<String,Object> 	rtnMap 	= new HashMap<String, Object>();
 
         rtnMap.put("sl",        dailyTableMapper.getSaleList(dailyTableVO));        //매출종합
-        rtnMap.put("prodClass", dailyTableMapper.getProdClassList(dailyTableVO));   //상품
+        rtnMap.put("prodClass", dailyTableMapper.getProdClassList(dailyTableVO));   //분류
         rtnMap.put("pay",       dailyTableMapper.getPayList(dailyTableVO));         //결제수단
         rtnMap.put("rtn",       dailyTableMapper.getRtnList(dailyTableVO));         //반품출납
+
+        rtnMap.put("payline",	dailyTableMapper.getPayLineList	(dailyTableVO));   //결재라인
+        
+        rtnMap.put("courseStatus",	dailyTableMapper.getCourseStatusList(dailyTableVO));    //수강현황
+        rtnMap.put("courseType",	dailyTableMapper.getCourseTypeList(dailyTableVO));      //수강유형
+        rtnMap.put("tuition1",	    dailyTableMapper.getTuition1List(dailyTableVO));        //수강료현황
+        rtnMap.put("tuition2",	    dailyTableMapper.getTuition2List(dailyTableVO));       //수강료현황
+        rtnMap.put("groupCourse",   dailyTableMapper.getGroupCourseList(dailyTableVO));     //단체수강내역
+
+        rtnMap.put("paymentStatus1",   dailyTableMapper.getPaymentStatus1List(dailyTableVO));   //출납현황
+        rtnMap.put("paymentStatus2",   dailyTableMapper.getPaymentStatus2List(dailyTableVO));   //출납현황
+        rtnMap.put("paymentStatus3",   dailyTableMapper.getPaymentStatus3List(dailyTableVO));   //출납현황
 
         return rtnMap;
     }

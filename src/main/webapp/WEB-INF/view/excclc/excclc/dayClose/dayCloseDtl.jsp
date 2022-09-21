@@ -56,14 +56,10 @@
     <div class="tblBr">
       <table class="searchTbl">
         <colgroup>
-          <col class="w8"/>
-          <col class="w17"/>
-          <col class="w8"/>
-          <col class="w17"/>
-          <col class="w8"/>
-          <col class="w17"/>
-          <col class="w8"/>
-          <col class="w17"/>
+          <col class="w16"/>
+          <col class="w34"/>
+          <col class="w16"/>
+          <col class="w34"/>
         </colgroup>
         <tbody>
           <tr>
