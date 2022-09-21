@@ -64,21 +64,6 @@ app.controller('cardCreditStatusCtrl', ['$scope', '$http', '$timeout', function 
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
         // add a sigma to the header to show that this is a summary row
         s.bottomLeftCells.setCellData(0, 0, '합계');
-
-        // 그리드 링크 효과
-        s.formatItem.addHandler(function (s, e) {
-            if (e.panel === s.cells) {
-                var col = s.columns[e.col];
-
-                if (col.format === "date") {
-                    e.cell.innerHTML = getFormatDate(e.cell.innerText);
-                } else if (col.format === "dateTime") {
-                    e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
-                } else if (col.format === "time") {
-                    e.cell.innerHTML = getFormatTime(e.cell.innerText, 'hms');
-                }
-            }
-        });
     };
 
     // <-- 검색 호출 -->
@@ -89,8 +74,8 @@ app.controller('cardCreditStatusCtrl', ['$scope', '$http', '$timeout', function 
 
     $scope.searchCardCreditStatus = function(){
         var params = {};
-        params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
-        params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
+        params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
+        params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
         params.dateFg = $scope.dateFgCombo;
         params.creditBank = $scope.creditBankCombo;
         params.creditFg = $scope.creditFgCombo;
