@@ -41,6 +41,7 @@
             <wj-flex-grid-column header="<s:message code="selectVendr.vendrCd"/>" binding="vendrCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="selectVendr.vendrNm"/>" binding="vendrNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="selectVendr.vatIncldYn"/>" binding="vatIncldYn" width="100" align="center" is-read-only="true" data-map="vatIncldYnMap"></wj-flex-grid-column>
+            <!-- <wj-flex-grid-column header="<s:message code="selectVendr.useYn"/>" binding="useYn" width="65" align="center" is-read-only="true"></wj-flex-grid-column> -->
 
           </wj-flex-grid>
         </div>
@@ -48,11 +49,11 @@
       </div>
 
       <%-- 페이지 리스트 --%>
-      <div class="pageNum mt20">
-        <%-- id --%>
+      <%--<div class="pageNum mt20">
+        &lt;%&ndash; id &ndash;%&gt;
         <ul id="<c:out value="${param.targetId}"/>CtrlPager" data-size="10">
         </ul>
-      </div>
+      </div>--%>
       <%--//페이지 리스트--%>
     </div>
   </div>
