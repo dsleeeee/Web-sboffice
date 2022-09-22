@@ -351,7 +351,7 @@ public class AlimtalkSendTypeController {
      */
     @RequestMapping(value = "/alimtalkIdRegister/getCategoryCodeComboList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getSmsTelNoComboList(AlimtalkSendTypeVO alimtalkSendTypeVO, HttpServletRequest request,
+    public Result getCategoryCodeComboList(AlimtalkSendTypeVO alimtalkSendTypeVO, HttpServletRequest request,
                                        HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
