@@ -85,6 +85,13 @@ app.controller('smsChargeHistCtrl', ['$scope', '$http', '$timeout', function ($s
                         wijmo.addClass(e.cell, 'wijLink');
                     }
                 }
+
+                // 비고(결과메시지)
+                if (col.binding === "resultmessage") {
+                    if (item[("controlno")] == '*') {
+                        wijmo.addClass(e.cell, 'wijLink');
+                    }
+                }
             }
         });
 
@@ -110,6 +117,19 @@ app.controller('smsChargeHistCtrl', ['$scope', '$http', '$timeout', function ($s
                     if (selectedRow[("pgresource")] !== '*') {
                         // SMS충전영수증
                         $scope.smsChargeBill(selectedRow);
+                    }
+                }
+
+                // 비고(결과메시지) 수정 탭
+               if (col.binding === "resultmessage") {
+                    if (selectedRow[("controlno")] == '*') {
+                        $scope.setSelectedSmsChargeHist(selectedRow);
+                        $scope.wjResultmessageEditLayer.show(true);
+                        $("#resultmessage").val(selectedRow[("resultmessage")]);
+                        $("#orgnCd").val(selectedRow[("orgnCd")]);
+                        $("#chargeDate").val(selectedRow[("chargeDate")].replaceAll("-", ""));
+                        $("#chargeTime").val(selectedRow[("chargeTime")].replaceAll(":", ""));
+                        event.preventDefault();;
                     }
                 }
             }

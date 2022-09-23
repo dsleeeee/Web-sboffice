@@ -137,7 +137,7 @@
         </wj-combo-box>
         <%--// 페이지 스케일  --%>
         <%-- 엑셀다운로드 --%>
-        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadStatusPosinstall()"><s:message code="cmm.excel.down" /></button>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadStatusPosinstall()"><s:message code="cmm.excel.downCondition" /></button>
     </div>
 
     <%-- 그리드 --%>
@@ -166,7 +166,7 @@
                     <wj-flex-grid-column header="<s:message code="statusPosInstall.agency"/>" binding="agency" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="statusPosInstall.posNo"/>" binding="posNo" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="statusPosInstall.day"/>" binding="day" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="statusPosInstall.instFg"/>" binding="instFg" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="statusPosInstall.instFg"/>" binding="instFg" width="115" is-read-only="true" align="center" data-map="instFgDataMap"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="statusPosInstall.agencyNm"/>" binding="agencyNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="statusPosInstall.instAgencyNm"/>" binding="instAgencyNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="statusPosInstall.instInsId"/>" binding="instInsId" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -184,6 +184,41 @@
     </div>
     <%--//페이지 리스트--%>
 
+    <%-- 엑셀 그리드 --%>
+    <div class="w100 mt10 mb20" ng-controller="posInstallTotalExcelCtrl" style="display: none;">
+        <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
+            <div class="row">
+                <wj-flex-grid
+                        autoGenerateColumns="false"
+                        control="excelFlex"
+                        initialized="initGrid(s,e)"
+                        sticky-headers="true"
+                        selection-mode="Row"
+                        items-source="data"
+                        item-formatter="_itemFormatter"
+                        is-read-only="true">
+
+                    <!-- define columns -->
+                    <wj-flex-grid-column header="<s:message code="statusPosInstall.hqOfficeCd"/>" binding="hqOfficeCd" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="statusPosInstall.hqOfficeNm"/>" binding="hqOfficeNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="statusPosInstall.storeCd"/>" binding="storeCd" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="statusPosInstall.storeNm"/>" binding="storeNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="statusPosInstall.bizNo"/>" binding="bizNo" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="statusPosInstall.vanNo"/>" binding="vanNo" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="statusPosInstall.vanNm"/>" binding="vanNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="statusPosInstall.dist"/>" binding="dist" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="statusPosInstall.agency"/>" binding="agency" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="statusPosInstall.posNo"/>" binding="posNo" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="statusPosInstall.day"/>" binding="day" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="statusPosInstall.instFg"/>" binding="instFg" width="115" is-read-only="true" align="center" data-map="instFgDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="statusPosInstall.agencyNm"/>" binding="agencyNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="statusPosInstall.instAgencyNm"/>" binding="instAgencyNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="statusPosInstall.instInsId"/>" binding="instInsId" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+
+                </wj-flex-grid>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript">
@@ -192,4 +227,4 @@
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusPosInstall.js?ver=20220503.20" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusPosInstall.js?ver=20220503.21" charset="utf-8"></script>

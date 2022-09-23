@@ -47,9 +47,9 @@
                 <![CDATA[
                 SELECT  thv.VENDR_CD, thv.VENDR_NM
                 ,       thv.SHIP_FG, thv.VAT_INCLD_YN
+                ,       thv.USE_YN
                 FROM    TB_HQ_VENDOR thv
                 WHERE   thv.HQ_OFFICE_CD    =   #{hqOfficeCd}
-                AND     thv.USE_YN = 'Y'
                 ]]>
             </when>
             <!-- 가맹점 -->
@@ -57,9 +57,9 @@
                 <![CDATA[
                 SELECT  tmv.VENDR_CD, tmv.VENDR_NM
                 ,       tmv.SHIP_FG, tmv.VAT_INCLD_YN
+                ,       tmv.USE_YN
                 FROM    TB_MS_VENDOR tmv
                 WHERE   tmv.STORE_CD  = #{storeCd}
-                AND     tmv.USE_YN = 'Y'
                 ]]>
             </when>
         </choose>

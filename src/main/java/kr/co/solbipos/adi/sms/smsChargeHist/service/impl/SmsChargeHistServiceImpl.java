@@ -113,4 +113,15 @@ public class SmsChargeHistServiceImpl implements SmsChargeHistService {
 
         return procCnt;
     }
+
+    /** 비고(결과메시지) 팝업 - 저장 */
+    @Override
+    public int getResultmessageSave(SmsChargeHistVO smsChargeHistVO, SessionInfoVO sessionInfoVO) {
+        String currentDt = currentDateTimeString();
+
+        smsChargeHistVO.setModDt(currentDt);
+        smsChargeHistVO.setModId(sessionInfoVO.getUserId());
+
+        return smsChargeHistMapper.getResultmessageSave(smsChargeHistVO);
+    }
 }
