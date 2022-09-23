@@ -13,6 +13,7 @@ public interface StoreStatusMapper {
 
     /** 매장탭 - 매장정보조회*/
     List<DefaultMap<Object>> getStatusStoreList(StoreStatusVO storeStatusVO);
+    List<DefaultMap<Object>> getStatusStoreExcelList(StoreStatusVO storeStatusVO);
 
     /** 매장탭 - 코너 상세조회*/
     List<DefaultMap<Object>> getStatusStoreCornerList(StoreStatusVO storeStatusVO);
@@ -31,6 +32,7 @@ public interface StoreStatusMapper {
 
     /** POS설치현황탭 - POS설치현황 조회*/
     List<DefaultMap<Object>> getStatusPosInstallList(StoreStatusVO storeStatusVO);
+    List<DefaultMap<Object>> getStatusPosInstallExcelList(StoreStatusVO storeStatusVO);
 
     /** 매장현황 탭 - 관리매장 승인내역 리스트 조회 */
     List<DefaultMap<String>> getStatusApprList(StoreStatusVO storeStatusVO);
