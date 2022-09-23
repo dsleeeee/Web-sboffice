@@ -43,7 +43,8 @@
         tsspcck.CREDIT_BANK
         FROM TB_SL_SALE_PAY_CARD tsspc,
         TB_SL_SALE_PAY_CARD_CREDIT_KWU tsspcck,
-        TB_MS_STORE tms
+        TB_MS_STORE tms,
+        TB_SL_SALE_HDR tssh
         WHERE 1=1
         AND tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test="storeCd != null and storeCd != ''">
@@ -76,6 +77,7 @@
                 AND tsspcck.CREDIT_AMT IS NOT NULL
             </if>
         </if>
+        AND tsspc.POS_NO NOT IN ('99')
         AND tsspcck.HQ_OFFICE_CD (+)= tsspc.HQ_OFFICE_CD
         AND tsspcck.HQ_BRAND_CD (+)= tsspc.HQ_BRAND_CD
         AND tsspcck.STORE_CD (+)= tsspc.STORE_CD
@@ -86,6 +88,18 @@
         AND tsspcck.LINE_SEQ_NO (+)= tsspc.LINE_SEQ_NO
         AND tms.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
         AND tms.STORE_CD = tsspc.STORE_CD
+        <if test="rtnSaleFg != null and rtnSaleFg != ''">
+            <!-- 미포함 -->
+            <if test='rtnSaleFg == "0"'>
+                AND tssh.ORG_BILL_NO IS NOT NULL
+            </if>
+        </if>
+        AND tssh.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
+        AND tssh.HQ_BRAND_CD = tsspc.HQ_BRAND_CD
+        AND tssh.STORE_CD = tsspc.STORE_CD
+        AND tssh.SALE_DATE = tsspc.SALE_DATE
+        AND tssh.POS_NO = tsspc.POS_NO
+        AND tssh.BILL_NO = tsspc.BILL_NO
         ORDER BY tsspc.STORE_CD, tsspc.SALE_DATE, tsspc.POS_NO, tsspc.BILL_NO, tsspc.LINE_NO, tsspc.LINE_SEQ_NO
     </select>
 

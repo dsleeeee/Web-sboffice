@@ -36,6 +36,11 @@ var creditFgComboData = [
     {"name":"미입금","value":"0"},
     {"name":"입금","value":"1"}
 ];
+// 취소내역포함여부
+var rtnSaleFgComboData = [
+    {"name":"미포함","value":"0"},
+    {"name":"포함","value":"1"}
+];
 
 /**
  *  신용카드입금현황 그리드 생성
@@ -53,6 +58,7 @@ app.controller('cardCreditStatusCtrl', ['$scope', '$http', '$timeout', function 
     $scope._setComboData("dateFgCombo", dateFgComboData); // 일자구분
     $scope._setComboData("creditBankCombo", creditBankComboData); // 입금은행
     $scope._setComboData("creditFgCombo", creditFgComboData); // 입금구분
+    $scope._setComboData("rtnSaleFgCombo", rtnSaleFgComboData); // 취소내역포함여부
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -79,6 +85,7 @@ app.controller('cardCreditStatusCtrl', ['$scope', '$http', '$timeout', function 
         params.dateFg = $scope.dateFgCombo;
         params.creditBank = $scope.creditBankCombo;
         params.creditFg = $scope.creditFgCombo;
+        params.rtnSaleFg = $scope.rtnSaleFgCombo;
 
         $scope._inquiryMain("/sale/card/cardCreditStatus/cardCreditStatus/getCardCreditStatusList.sb", params, function() {}, false);
     };
@@ -87,7 +94,7 @@ app.controller('cardCreditStatusCtrl', ['$scope', '$http', '$timeout', function 
     // <-- 엑셀다운로드 -->
     $scope.excelDownload = function(){
         if ($scope.flex.rows.length <= 0) {
-            $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+            $scope._popMsg(messages["excelUpload.not.downloadData"]);	// 다운로드 할 데이터가 없습니다.
             return false;
         }
 
@@ -104,7 +111,7 @@ app.controller('cardCreditStatusCtrl', ['$scope', '$http', '$timeout', function 
                 '신용카드입금현황_'+getCurDate()+'.xlsx',
                 function () {
                     $timeout(function () {
-                        $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);
                 }
             );

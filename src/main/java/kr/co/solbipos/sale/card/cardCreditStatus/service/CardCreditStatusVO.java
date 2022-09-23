@@ -63,6 +63,9 @@ public class CardCreditStatusVO extends PageVO {
     /** 일자구분 */
     private String dateFg;
 
+    /** 취소내역포함여부 */
+    private String rtnSaleFg;
+
     public String getHqOfficeCd() { return hqOfficeCd; }
 
     public void setHqOfficeCd(String hqOfficeCd) { this.hqOfficeCd = hqOfficeCd; }
@@ -118,4 +121,8 @@ public class CardCreditStatusVO extends PageVO {
     public String getDateFg() { return dateFg; }
 
     public void setDateFg(String dateFg) { this.dateFg = dateFg; }
+
+    public String getRtnSaleFg() { return rtnSaleFg; }
+
+    public void setRtnSaleFg(String rtnSaleFg) { this.rtnSaleFg = rtnSaleFg; }
 }

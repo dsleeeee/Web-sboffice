@@ -87,6 +87,27 @@
                 </div>
             </td>
         </tr>
+        <tr style="display: none;">
+            <%-- 취소내역포함여부 --%>
+            <th>
+                <s:message code="cardCreditStatus.rtnSaleFg" />
+            </th>
+            <td>
+                <div class="sb-select">
+                    <wj-combo-box
+                            id="srchRtnSaleFgCombo"
+                            ng-model="rtnSaleFgCombo"
+                            items-source="_getComboData('rtnSaleFgCombo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                    </wj-combo-box>
+                </div>
+            </td>
+            <th></th>
+            <td></td>
+        </tr>
         </tbody>
     </table>
 
@@ -110,10 +131,8 @@
                     item-formatter="_itemFormatter">
 
                 <!-- define columns -->
-                <c:if test="${orgnFg == 'HQ'}">
-                    <wj-flex-grid-column header="<s:message code="cardCreditStatus.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="cardCreditStatus.storeNm"/>" binding="storeNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                </c:if>
+                <wj-flex-grid-column header="<s:message code="cardCreditStatus.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cardCreditStatus.storeNm"/>" binding="storeNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cardCreditStatus.saleDate"/>" binding="saleDate" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cardCreditStatus.bill"/>" binding="bill" width="125" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cardCreditStatus.apprDate"/>" binding="apprDate" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -134,4 +153,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/card/cardCreditStatus/cardCreditStatus.js?ver=20220917.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/card/cardCreditStatus/cardCreditStatus.js?ver=20220918.01" charset="utf-8"></script>
