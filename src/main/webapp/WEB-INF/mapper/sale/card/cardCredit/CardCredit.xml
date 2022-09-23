@@ -11,6 +11,25 @@
 -->
 <mapper namespace="kr.co.solbipos.sale.card.cardCredit.service.impl.CardCreditMapper">
 
+    <!-- 신용카드입금관리 - 매장 콤보박스 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getStoreCdComboList" parameterType="CardCreditVO" resultType="DefaultMap">
+        /* CardCreditMapper.getStoreCdComboList */
+        SELECT
+        tms.STORE_CD AS VALUE,
+        tms.STORE_NM AS NAME
+        FROM TB_MS_STORE tms
+        WHERE 1=1
+        AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="storeCd != null and storeCd != ''">
+            AND tms.STORE_CD = #{storeCd}
+        </if>
+        ORDER BY tms.STORE_CD
+    </select>
+
     <!-- 신용카드입금관리 - 조회 -->
     <!--
         TABLE    :
@@ -43,13 +62,13 @@
         tsspcck.CREDIT_BANK
         FROM TB_SL_SALE_PAY_CARD tsspc,
         TB_SL_SALE_PAY_CARD_CREDIT_KWU tsspcck,
-        TB_MS_STORE tms
+        TB_MS_STORE tms,
+        TB_SL_SALE_HDR tssh
         WHERE 1=1
         AND tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
-        <if test="storeCd != null and storeCd != ''">
-            AND tsspc.STORE_CD = #{storeCd}
-        </if>
+        AND tsspc.STORE_CD = #{storeCd}
         AND SUBSTR(tsspc.APPR_DT, 0, 8) BETWEEN #{startDate} AND #{endDate}
+        AND tsspc.POS_NO NOT IN ('99')
         AND tsspcck.HQ_OFFICE_CD (+)= tsspc.HQ_OFFICE_CD
         AND tsspcck.HQ_BRAND_CD (+)= tsspc.HQ_BRAND_CD
         AND tsspcck.STORE_CD (+)= tsspc.STORE_CD
@@ -60,6 +79,82 @@
         AND tsspcck.LINE_SEQ_NO (+)= tsspc.LINE_SEQ_NO
         AND tms.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
         AND tms.STORE_CD = tsspc.STORE_CD
+        <if test="rtnSaleFg != null and rtnSaleFg != ''">
+            <!-- 미포함 -->
+            <if test='rtnSaleFg == "0"'>
+                AND tssh.ORG_BILL_NO IS NOT NULL
+            </if>
+        </if>
+        AND tssh.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
+        AND tssh.HQ_BRAND_CD = tsspc.HQ_BRAND_CD
+        AND tssh.STORE_CD = tsspc.STORE_CD
+        AND tssh.SALE_DATE = tsspc.SALE_DATE
+        AND tssh.POS_NO = tsspc.POS_NO
+        AND tssh.BILL_NO = tsspc.BILL_NO
+        ORDER BY tsspc.STORE_CD, tsspc.SALE_DATE, tsspc.POS_NO, tsspc.BILL_NO, tsspc.LINE_NO, tsspc.LINE_SEQ_NO
+    </select>
+
+    <!-- 신용카드입금관리 - 엑셀 샘플 양식 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getCardCreditExcelSampleList" parameterType="CardCreditVO" resultType="DefaultMap">
+        /* CardCreditMapper.getCardCreditExcelSampleList */
+        SELECT
+        tsspc.HQ_OFFICE_CD,
+        tsspc.HQ_BRAND_CD,
+        tsspc.STORE_CD,
+        tms.STORE_NM,
+        tsspc.SALE_DATE,
+        tsspc.POS_NO,
+        tsspc.BILL_NO,
+        tsspc.LINE_NO,
+        tsspc.LINE_SEQ_NO,
+        (tsspc.POS_NO ||'-'|| tsspc.BILL_NO ||'-'|| tsspc.LINE_NO ||'-'|| tsspc.LINE_SEQ_NO) AS BILL,
+        SUBSTR(tsspc.APPR_DT, 0, 8) AS APPR_DATE,
+        tsspc.APPR_NO,
+        (tsspc.SALE_FG * tsspc.APPR_AMT) AS APPR_AMT,
+        DECODE(tsspc.SALE_FG, 1, '승인', -1, '취소') AS APPR_GUBUN,
+        tsspc.CARD_NO,
+        tsspc.ACQUIRE_NM,
+        tsspc.MEMBR_JOIN_NO,
+        DECODE(tsspc.INST_CNT, 0 , '일시불', '할부') AS INST_CNT_NM,
+        tsspcck.CREDIT_DATE,
+        tsspcck.CREDIT_AMT,
+        tsspcck.CREDIT_FEE,
+        tsspcck.CREDIT_BANK
+        FROM TB_SL_SALE_PAY_CARD tsspc,
+        TB_SL_SALE_PAY_CARD_CREDIT_KWU tsspcck,
+        TB_MS_STORE tms,
+        TB_SL_SALE_HDR tssh
+        WHERE 1=1
+        AND tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsspc.STORE_CD = #{storeCd}
+        AND SUBSTR(tsspc.APPR_DT, 0, 8) BETWEEN #{startDate} AND #{endDate}
+        AND tsspc.POS_NO NOT IN ('99')
+        AND tsspcck.HQ_OFFICE_CD (+)= tsspc.HQ_OFFICE_CD
+        AND tsspcck.HQ_BRAND_CD (+)= tsspc.HQ_BRAND_CD
+        AND tsspcck.STORE_CD (+)= tsspc.STORE_CD
+        AND tsspcck.SALE_DATE (+)= tsspc.SALE_DATE
+        AND tsspcck.POS_NO (+)= tsspc.POS_NO
+        AND tsspcck.BILL_NO (+)= tsspc.BILL_NO
+        AND tsspcck.LINE_NO (+)= tsspc.LINE_NO
+        AND tsspcck.LINE_SEQ_NO (+)= tsspc.LINE_SEQ_NO
+        AND tms.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
+        AND tms.STORE_CD = tsspc.STORE_CD
+        <if test="rtnSaleFg != null and rtnSaleFg != ''">
+            <!-- 미포함 -->
+            <if test='rtnSaleFg == "0"'>
+                AND tssh.ORG_BILL_NO IS NOT NULL
+            </if>
+        </if>
+        AND tssh.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
+        AND tssh.HQ_BRAND_CD = tsspc.HQ_BRAND_CD
+        AND tssh.STORE_CD = tsspc.STORE_CD
+        AND tssh.SALE_DATE = tsspc.SALE_DATE
+        AND tssh.POS_NO = tsspc.POS_NO
+        AND tssh.BILL_NO = tsspc.BILL_NO
         ORDER BY tsspc.STORE_CD, tsspc.SALE_DATE, tsspc.POS_NO, tsspc.BILL_NO, tsspc.LINE_NO, tsspc.LINE_SEQ_NO
     </select>
 
@@ -199,28 +294,56 @@
                     tsspc.BILL_NO,
                     tsspc.LINE_NO,
                     tsspc.LINE_SEQ_NO,
-                    (SELECT YYYYMMDD FROM TB_CM_DATEM WHERE YYYYMMDD = REPLACE(ttecck.CREDIT_DATE, '-', '')) AS CREDIT_DATE,
-                    DECODE(FN_IS_NUMBER_CHK(ttecck.CREDIT_AMT), 1, ttecck.CREDIT_AMT, 0) AS CREDIT_AMT,
-                    DECODE(FN_IS_NUMBER_CHK(ttecck.CREDIT_FEE), 1, ttecck.CREDIT_FEE, 0) AS CREDIT_FEE,
+                    ttecck.CREDIT_DATE,
+                    ttecck.CREDIT_AMT,
+                    ttecck.CREDIT_FEE,
                     ttecck.CREDIT_BANK,
                     #{regDt} AS REG_DT,
                     #{regId} AS REG_ID,
                     #{modDt} AS MOD_DT,
                     #{modId} AS MOD_ID
                     FROM TB_SL_SALE_PAY_CARD tsspc,
-                    TB_TMP_EXCEL_CARD_CREDIT_KWU ttecck
+                    (
+                        SELECT
+                        REPLACE(C.APPR_DATE, '-', '') AS APPR_DATE,
+                        C.APPR_NO,
+                        REPLACE(C.CREDIT_DATE, '-', '') AS CREDIT_DATE,
+                        C.CREDIT_AMT,
+                        C.CREDIT_FEE,
+                        C.CREDIT_BANK
+                        FROM TB_TMP_EXCEL_CARD_CREDIT_KWU C,
+                        TB_CM_DATEM D
+                        WHERE 1=1
+                        AND C.SESSION_ID = #{sessionId}
+                        AND D.YYYYMMDD = REPLACE(C.CREDIT_DATE, '-', '')
+                        AND FN_IS_NUMBER_CHK(C.CREDIT_AMT) = 1
+                        AND FN_IS_NUMBER_CHK(C.CREDIT_FEE) = 1
+                        AND C.CREDIT_AMT IS NOT NULL
+                        AND C.CREDIT_FEE IS NOT NULL
+                        <![CDATA[
+                            AND LENGTHB(C.CREDIT_AMT) <= 13
+                            AND LENGTHB(C.CREDIT_FEE) <= 13
+                        ]]>
+                        AND C.CREDIT_BANK IN ('국민은행', '하나은행')
+                    ) ttecck,
+                    TB_SL_SALE_HDR tssh
                     WHERE 1=1
+                    AND tsspc.STORE_CD = #{storeCd}
                     AND SUBSTR(tsspc.APPR_DT, 1, 8) BETWEEN #{startDate} AND #{endDate}
-                    AND ttecck.SESSION_ID = #{sessionId}
-                    AND SUBSTR(tsspc.APPR_DT, 1, 8) = REPLACE(ttecck.APPR_DATE, '-', '')
+                    AND SUBSTR(tsspc.APPR_DT, 1, 8) = ttecck.APPR_DATE
                     AND tsspc.APPR_NO = ttecck.APPR_NO
-                    AND ttecck.CREDIT_AMT IS NOT NULL
-                    AND ttecck.CREDIT_FEE IS NOT NULL
-                    <![CDATA[
-                        AND LENGTH(ttecck.CREDIT_AMT) <= 13
-                        AND LENGTH(ttecck.CREDIT_FEE) <= 13
-                    ]]>
-                    AND ttecck.CREDIT_BANK IN ('국민은행', '하나은행')
+                    <if test="rtnSaleFg != null and rtnSaleFg != ''">
+                        <!-- 미포함 -->
+                        <if test='rtnSaleFg == "0"'>
+                            AND tssh.ORG_BILL_NO IS NOT NULL
+                        </if>
+                    </if>
+                    AND tssh.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
+                    AND tssh.HQ_BRAND_CD = tsspc.HQ_BRAND_CD
+                    AND tssh.STORE_CD = tsspc.STORE_CD
+                    AND tssh.SALE_DATE = tsspc.SALE_DATE
+                    AND tssh.POS_NO = tsspc.POS_NO
+                    AND tssh.BILL_NO = tsspc.BILL_NO
               ) B
         ON  (
                 A.HQ_OFFICE_CD = B.HQ_OFFICE_CD AND A.HQ_BRAND_CD = B.HQ_BRAND_CD AND A.STORE_CD = B.STORE_CD AND A.SALE_DATE = B.SALE_DATE

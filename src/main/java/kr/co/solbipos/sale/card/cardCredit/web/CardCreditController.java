@@ -69,6 +69,29 @@ public class CardCreditController {
     }
 
     /**
+     * 신용카드입금관리 - 매장 콤보박스 조회
+     *
+     * @param cardCreditVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 09. 22.
+     */
+    @RequestMapping(value = "/cardCredit/getStoreCdComboList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreCdComboList(CardCreditVO cardCreditVO, HttpServletRequest request,
+                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = cardCreditService.getStoreCdComboList(cardCreditVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, cardCreditVO);
+    }
+
+    /**
      * 신용카드입금관리 - 조회
      *
      * @param cardCreditVO
@@ -90,6 +113,30 @@ public class CardCreditController {
 
         return ReturnUtil.returnListJson(Status.OK, result, cardCreditVO);
     }
+
+    /**
+     * 신용카드입금관리 - 엑셀 샘플 양식 조회
+     *
+     * @param cardCreditVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 09. 22.
+     */
+    @RequestMapping(value = "/cardCredit/getCardCreditExcelSampleList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCardCreditExcelSampleList(CardCreditVO cardCreditVO, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = cardCreditService.getCardCreditExcelSampleList(cardCreditVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, cardCreditVO);
+    }
+
 
     /**
      * 신용카드입금관리 - 저장

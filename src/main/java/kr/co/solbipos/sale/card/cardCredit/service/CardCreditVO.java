@@ -66,6 +66,9 @@ public class CardCreditVO extends PageVO {
     /** 세션ID */
     private String sessionId;
 
+    /** 취소내역포함여부 */
+    private String rtnSaleFg;
+
     public String getHqOfficeCd() { return hqOfficeCd; }
 
     public void setHqOfficeCd(String hqOfficeCd) { this.hqOfficeCd = hqOfficeCd; }
@@ -125,4 +128,8 @@ public class CardCreditVO extends PageVO {
     public String getSessionId() { return sessionId; }
 
     public void setSessionId(String sessionId) { this.sessionId = sessionId; }
+
+    public String getRtnSaleFg() { return rtnSaleFg; }
+
+    public void setRtnSaleFg(String rtnSaleFg) { this.rtnSaleFg = rtnSaleFg; }
 }

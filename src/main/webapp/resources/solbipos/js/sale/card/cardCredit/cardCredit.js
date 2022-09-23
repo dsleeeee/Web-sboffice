@@ -18,6 +18,15 @@ var creditBankData = [
     {"name":"국민은행","value":"국민은행"},
     {"name":"하나은행","value":"하나은행"}
 ];
+// 취소내역포함여부
+var rtnSaleFgComboData = [
+    {"name":"미포함","value":"0"},
+    {"name":"포함","value":"1"}
+];
+// 매장
+var storeCdComboData = [
+    {"name":"선택","value":""}
+];
 
 /**
  *  신용카드입금관리 그리드 생성
@@ -30,6 +39,10 @@ app.controller('cardCreditCtrl', ['$scope', '$http', '$timeout', function ($scop
     // 검색조건에 조회기간
     var startDate = wcombo.genDateVal("#startDate", gvStartDate);
     var endDate = wcombo.genDateVal("#endDate", gvEndDate);
+
+    // 조회조건 콤보박스 데이터 Set
+    $scope._setComboData("rtnSaleFgCombo", rtnSaleFgComboData); // 취소내역포함여부
+    $scope._setComboData("storeCdCombo", storeCdComboData); // 매장
 
     // 조회 여부
     var srchGubun = false;
@@ -44,6 +57,9 @@ app.controller('cardCreditCtrl', ['$scope', '$http', '$timeout', function ($scop
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
         // add a sigma to the header to show that this is a summary row
         s.bottomLeftCells.setCellData(0, 0, '합계');
+
+        // 매장 콤보박스
+        $scope.storeCdComboList();
     };
 
     // <-- 검색 호출 -->
@@ -56,6 +72,8 @@ app.controller('cardCreditCtrl', ['$scope', '$http', '$timeout', function ($scop
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
+        params.rtnSaleFg = $scope.rtnSaleFgCombo;
+        params.storeCd = $scope.storeCdCombo;
 
         $scope._inquiryMain("/sale/card/cardCredit/cardCredit/getCardCreditList.sb", params, function() {
             // 조회 여부
@@ -64,9 +82,28 @@ app.controller('cardCreditCtrl', ['$scope', '$http', '$timeout', function ($scop
             $("#lblSrchDate").text("승인일자 : " + params.startDate + " ~ " + params.endDate);
             $("#lblSrchStartDate").text(params.startDate);
             $("#lblSrchEndDate").text(params.endDate);
+            // 조회된 매장
+            $("#lblSrchStore").text("/ 매장 : " + params.storeCd);
+            $("#lblStoreCd").text(params.storeCd);
+            // 조회된 취소내역포함여부
+            $("#lblRtnSaleFg").text(params.rtnSaleFg);
         }, false);
     };
     // <-- //검색 호출 -->
+
+    // 매장 콤보박스
+    $scope.storeCdComboList = function() {
+        var params = {};
+
+        $scope._postJSONQuery.withOutPopUp('/sale/card/cardCredit/cardCredit/getStoreCdComboList.sb', params, function (response) {
+            if (response.data.data.list.length > 0) {
+                var storeCdList = response.data.data.list;
+                $scope._setComboData("storeCdCombo", storeCdList); // 매장
+            } else {
+                $scope._setComboData("storeCdCombo", storeCdComboData); // 매장
+            }
+        });
+    };
 
     // <-- 그리드 저장 -->
     $scope.save = function() {
@@ -182,7 +219,7 @@ app.controller('cardCreditCtrl', ['$scope', '$http', '$timeout', function ($scop
     // <-- 엑셀다운로드 -->
     $scope.excelDownload = function(){
         if ($scope.flex.rows.length <= 0) {
-            $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+            $scope._popMsg(messages["excelUpload.not.downloadData"]);	// 다운로드 할 데이터가 없습니다.
             return false;
         }
 
@@ -199,7 +236,7 @@ app.controller('cardCreditCtrl', ['$scope', '$http', '$timeout', function ($scop
                 '신용카드입금관리_'+getCurDate()+'.xlsx',
                 function () {
                     $timeout(function () {
-                        $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);
                 }
             );
@@ -209,9 +246,18 @@ app.controller('cardCreditCtrl', ['$scope', '$http', '$timeout', function ($scop
 
     // <-- 양식다운로드 -->
     $scope.excelSampleDownload = function(){
-        // 엑셀다운로드
-        var storeScope = agrid.getScope('cardCreditExcelSampleCtrl', null);
-        storeScope.excelDownload();
+        // 조회 여부
+        if(srchGubun) {
+            var params = {};
+            params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
+            params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
+            params.rtnSaleFg = $scope.rtnSaleFgCombo;
+            params.storeCd = $scope.storeCdCombo;
+
+            // 엑셀다운로드
+            var storeScope = agrid.getScope('cardCreditExcelSampleCtrl', params);
+            storeScope.excelDownload();
+        }
     };
     // <-- //양식다운로드 -->
 
@@ -243,36 +289,23 @@ app.controller('cardCreditExcelSampleCtrl', ['$scope', '$http', '$timeout', func
     $scope.initGrid = function (s, e) {
         // 그리드 DataMap 설정
         $scope.creditBankDataMap = new wijmo.grid.DataMap(creditBankData, 'value', 'name'); // 입금은행
-
-        // 그리드 셋팅
-        $scope.searchCardCreditExcelSample();
     };
 
     // <-- 검색 호출 -->
     $scope.$on("cardCreditExcelSampleCtrl", function(event, data) {
+        $scope.searchCardCreditExcelSample(data);
         event.preventDefault();
     });
-    // <-- //검색 호출 -->
 
-    // 그리드 셋팅
-    $scope.searchCardCreditExcelSample = function() {
-        // 파라미터 설정
-        var params = {};
-        params.apprDate = "2090-09-15";
-        params.apprNo = "99999999";
-        params.creditDate = "2090-09-15";
-        params.creditAmt = "1000";
-        params.creditFee = "50";
-        params.creditBank = "국민은행";
-
-       // 추가기능 수행 : 파라미터
-        $scope._addRow(params);
+    $scope.searchCardCreditExcelSample = function(params){
+        $scope._inquiryMain("/sale/card/cardCredit/cardCredit/getCardCreditExcelSampleList.sb", params, function() {}, false);
     };
+    // <-- //검색 호출 -->
 
     // <-- 엑셀다운로드 -->
     $scope.excelDownload = function(){
         if ($scope.flex.rows.length <= 0) {
-            $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+            $scope._popMsg(messages["excelUpload.not.downloadData"]);	// 다운로드 할 데이터가 없습니다.
             return false;
         }
 
@@ -289,7 +322,7 @@ app.controller('cardCreditExcelSampleCtrl', ['$scope', '$http', '$timeout', func
                 '신용카드입금관리_양식_'+getCurDate()+'.xlsx',
                 function () {
                     $timeout(function () {
-                        $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);
                 }
             );

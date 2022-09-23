@@ -134,6 +134,8 @@ app.controller('cardCreditExcelUploadAddCtrl', ['$scope', '$http', '$timeout', f
         var params = {};
         params.startDate = $("#lblSrchStartDate").text();
         params.endDate = $("#lblSrchEndDate").text();
+        params.rtnSaleFg = $("#lblRtnSaleFg").text();
+        params.storeCd = $("#lblStoreCd").text();
 
         // 업로드시 임시테이블 저장
         $scope._postJSONSave.withOutPopUp("/sale/card/cardCredit/cardCreditExcelUploadAdd/getCardCreditExcelUploadAddRealSave.sb", params, function () {

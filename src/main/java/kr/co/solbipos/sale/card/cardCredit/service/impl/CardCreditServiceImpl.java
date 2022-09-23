@@ -41,16 +41,34 @@ public class CardCreditServiceImpl implements CardCreditService {
     @Autowired
     public CardCreditServiceImpl(CardCreditMapper cardCreditMapper) { this.cardCreditMapper = cardCreditMapper; }
 
-    /** 신용카드입금관리 - 조회 */
+    /** 신용카드입금관리 - 매장 콤보박스 조회 */
     @Override
-    public List<DefaultMap<Object>> getCardCreditList(CardCreditVO cardCreditVO, SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<Object>> getStoreCdComboList(CardCreditVO cardCreditVO, SessionInfoVO sessionInfoVO) {
 
         cardCreditVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             cardCreditVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
+        return cardCreditMapper.getStoreCdComboList(cardCreditVO);
+    }
+
+    /** 신용카드입금관리 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getCardCreditList(CardCreditVO cardCreditVO, SessionInfoVO sessionInfoVO) {
+
+        cardCreditVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
         return cardCreditMapper.getCardCreditList(cardCreditVO);
+    }
+
+    /** 신용카드입금관리 - 엑셀 샘플 양식 조회 */
+    @Override
+    public List<DefaultMap<Object>> getCardCreditExcelSampleList(CardCreditVO cardCreditVO, SessionInfoVO sessionInfoVO) {
+
+        cardCreditVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return cardCreditMapper.getCardCreditExcelSampleList(cardCreditVO);
     }
 
     /** 신용카드입금관리 - 저장 */

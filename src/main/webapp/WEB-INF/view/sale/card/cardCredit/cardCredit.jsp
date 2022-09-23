@@ -34,13 +34,51 @@
                 <th>
                     <s:message code="cardCredit.apprDate" />
                 </th>
-                <td colspan="3">
+                <td>
                     <div class="sb-select">
                         <span class="txtIn"> <input id="startDate" name="startDate" class="w110px" /></span>
                         <span class="rg">~</span>
                         <span class="txtIn"> <input id="endDate" name="endDate" class="w110px" /></span>
                     </div>
                 </td>
+                <%-- 매장 --%>
+                <th>
+                    <s:message code="cardCredit.store" />
+                </th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                id="srchStoreCdCombo"
+                                ng-model="storeCdCombo"
+                                items-source="_getComboData('storeCdCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </div>
+                </td>
+            </tr>
+            <tr style="display: none;">
+                <%-- 취소내역포함여부 --%>
+                <th>
+                    <s:message code="cardCredit.rtnSaleFg" />
+                </th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                id="srchRtnSaleFgCombo"
+                                ng-model="rtnSaleFgCombo"
+                                items-source="_getComboData('rtnSaleFgCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </div>
+                </td>
+                <th></th>
+                <td></td>
             </tr>
             </tbody>
         </table>
@@ -49,7 +87,7 @@
             <div class="w100">
                 <div class="w50 fl">
                     <p class="tl s14 mt5 lh15">※ 입력 항목</p>
-                    <p class="tl s14 mt5 lh15">1. 입금일자 : '2090-09-15', '20900915' 형식으로 입력 가능</p>
+                    <p class="tl s14 mt5 lh15">1. 입금일자 : '20900915' 형식으로 입력 가능</p>
                     <p class="tl s14 mt5 lh15">2. 입금금액 : 숫자만 입력 가능</p>
                     <p class="tl s14 mt5 lh15">3. 수수료 &nbsp : 숫자만 입력 가능</p>
                     <p class="tl s14 mt5 lh15">4. 입금은행 : '국민은행', '하나은행' 만 입력 가능</p>
@@ -82,10 +120,15 @@
                 <s:message code="cmm.excel.excelUpload" />
             </button>
             <div class="sb-select ml5 fr">
-                <p class="tl s14 mt5 lh15 blue"><label id="lblSrchDate"></label></p>
+                <p class="tl s14 mt5 lh15 blue">
+                    <label id="lblSrchDate"></label>
+                    <label id="lblSrchStore"></label>
+                </p>
                 <div style="display: none">
                     <label id="lblSrchStartDate"></label>
                     <label id="lblSrchEndDate"></label>
+                    <label id="lblStoreCd"></label>
+                    <label id="lblRtnSaleFg"></label>
                 </div>
             </div>
         </div>
@@ -103,10 +146,8 @@
                         item-formatter="_itemFormatter">
 
                     <!-- define columns -->
-                    <c:if test="${orgnFg == 'HQ'}">
-                        <wj-flex-grid-column header="<s:message code="cardCredit.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="cardCredit.storeNm"/>" binding="storeNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                    </c:if>
+                    <wj-flex-grid-column header="<s:message code="cardCredit.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cardCredit.storeNm"/>" binding="storeNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="cardCredit.saleDate"/>" binding="saleDate" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="cardCredit.bill"/>" binding="bill" width="125" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="cardCredit.apprDate"/>" binding="apprDate" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -148,12 +189,22 @@
                         item-formatter="_itemFormatter">
 
                     <!-- define columns -->
+                    <wj-flex-grid-column header="<s:message code="cardCredit.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cardCredit.storeNm"/>" binding="storeNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cardCredit.saleDate"/>" binding="saleDate" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cardCredit.bill"/>" binding="bill" width="125" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="cardCredit.apprDate"/>" binding="apprDate" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="cardCredit.apprNo"/>" binding="apprNo" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="cardCredit.creditDate"/>" binding="creditDate" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="cardCredit.creditAmt"/>" binding="creditAmt" width="70" is-read-only="true" align="right"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="cardCredit.creditFee"/>" binding="creditFee" width="70" is-read-only="true" align="right"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cardCredit.apprAmt"/>" binding="apprAmt" width="70" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cardCredit.creditDate"/>" binding="creditDate" width="80" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cardCredit.creditAmt"/>" binding="creditAmt" width="70" align="right" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cardCredit.creditFee"/>" binding="creditFee" width="70" align="right" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="cardCredit.creditBank"/>" binding="creditBank" data-map="creditBankDataMap" width="70" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cardCredit.apprGubun"/>" binding="apprGubun" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cardCredit.cardNo"/>" binding="cardNo" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cardCredit.acquireNm"/>" binding="acquireNm" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cardCredit.membrJoinNo"/>" binding="membrJoinNo" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cardCredit.instCntNm"/>" binding="instCntNm" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -161,7 +212,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/card/cardCredit/cardCredit.js?ver=20220917.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/card/cardCredit/cardCredit.js?ver=20220918.01" charset="utf-8"></script>
 
 <%-- 신용카드입금관리 엑셀업로드 팝업 --%>
 <c:import url="/WEB-INF/view/sale/card/cardCredit/cardCreditExcelUploadAdd.jsp">

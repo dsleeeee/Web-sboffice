@@ -26,8 +26,14 @@ import java.util.List;
 @Repository
 public interface CardCreditMapper {
 
+    /** 신용카드입금관리 - 매장 콤보박스 조회 */
+    List<DefaultMap<Object>> getStoreCdComboList(CardCreditVO cardCreditVO);
+
     /** 신용카드입금관리 - 조회 */
     List<DefaultMap<Object>> getCardCreditList(CardCreditVO cardCreditVO);
+
+    /** 신용카드입금관리 - 엑셀 샘플 양식 조회 */
+    List<DefaultMap<Object>> getCardCreditExcelSampleList(CardCreditVO cardCreditVO);
 
     /** 신용카드입금관리 - 저장 merge */
     int getCardCreditSaveMerge(CardCreditVO cardCreditVO);

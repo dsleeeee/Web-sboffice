@@ -22,8 +22,14 @@ import java.util.List;
  */
 public interface CardCreditService {
 
+    /** 신용카드입금관리 - 매장 콤보박스 조회 */
+    List<DefaultMap<Object>> getStoreCdComboList(CardCreditVO cardCreditVO, SessionInfoVO sessionInfoVO);
+
     /** 신용카드입금관리 - 조회 */
     List<DefaultMap<Object>> getCardCreditList(CardCreditVO cardCreditVO, SessionInfoVO sessionInfoVO);
+
+    /** 신용카드입금관리 - 엑셀 샘플 양식 조회 */
+    List<DefaultMap<Object>> getCardCreditExcelSampleList(CardCreditVO cardCreditVO, SessionInfoVO sessionInfoVO);
 
     /** 신용카드입금관리 - 저장 */
     int getCardCreditSave(CardCreditVO[] cardCreditVOs, SessionInfoVO sessionInfoVO);
