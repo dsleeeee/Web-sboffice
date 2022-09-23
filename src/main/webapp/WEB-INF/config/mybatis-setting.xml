@@ -796,6 +796,9 @@
     <!-- 매출관리 > 매출분석 > 비매출충전내역 -->
     <typeAlias alias="nonSaleChargeVO" type="kr.co.solbipos.sale.anals.nonSaleCharge.service.NonSaleChargeVO"/>
 
+    <!-- 매출관리 > 매출분석 > 매장별매출분석2 -->
+    <typeAlias alias="saleAnalsVO" type="kr.co.solbipos.sale.anals.store.saleAnals.service.SaleAnalsVO"/>
+
     <!-- 매출관리 > 승인현황  -->
     <typeAlias alias="apprCardVO" type="kr.co.solbipos.sale.status.appr.payMethod.card.service.ApprCardVO"/>
     <typeAlias alias="apprCashBillVO" type="kr.co.solbipos.sale.status.appr.cashBill.service.ApprCashBillVO"/>
