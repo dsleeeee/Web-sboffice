@@ -85,26 +85,66 @@ app.controller('statusPosInstallCtrl', ['$scope', '$http', '$timeout', function 
 
   // 엑셀 다운로드
   $scope.excelDownloadStatusPosinstall = function () {
-    if ($scope.flex.rows.length <= 0) {
-      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-      return false;
-    }
+      $scope._popConfirm(messages["statusStore.totalExceDownload"], function() {
 
-    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-    $timeout(function () {
-      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-        includeColumnHeaders: true,
-        includeCellStyles: true,
-        includeColumns: function (column) {
-          return column.visible;
-        }
-      },
-          messages["storeStatus.posInstall"] + '_' + getCurDateTime() +'.xlsx', function () {
-            $timeout(function () {
-              $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-            }, 10);
-          });
-    }, 10);
+          var params = {};
+          // 조회일자 '전체기간' 선택에 따른 params
+          if(!$scope.isChecked){
+              params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+              params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+          }
+          $scope._broadcast('posInstallTotalExcelCtrl', params);
+      });
   };
 
+}]);
+
+
+app.controller('posInstallTotalExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('posInstallTotalExcelCtrl', $scope, $http, true));
+
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+        // 그리드 DataMap 설정
+        $scope.instFgDataMap = new wijmo.grid.DataMap(instFgData, 'value', 'name'); //현재상태
+    };
+
+    // 다른 컨트롤러의 broadcast 받기
+    $scope.$on("posInstallTotalExcelCtrl", function (event, data) {
+        $scope.searchExcelList(data);
+        // 기능수행 종료 : 반드시 추가
+        event.preventDefault();
+    });
+
+    // 상품매출순위 리스트 조회
+    $scope.searchExcelList = function (data) {
+        // 파라미터
+        var params       = {};
+        // 조회일자 '전체기간' 선택에 따른 params
+        params.startDate = data.startDate;
+        params.endDate = data.endDate;
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $scope._inquiryMain("/store/manage/status/posInstl/getStatusPosInstallExcelList.sb", params, function() {
+            if ($scope.excelFlex.rows.length <= 0) {
+                $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+                return false;
+            }
+            $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+            $timeout(function () {
+                wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
+                    includeColumnHeaders: true,
+                    includeCellStyles   : true,
+                    includeColumns      : function (column) {
+                        return column.visible;
+                    }
+                }, messages["storeStatus.storeStatus"] + "_" + messages["storeStatus.posInstall"] + getCurDateTime() +'.xlsx', function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                });
+            }, 10);
+        });
+    };
 }]);

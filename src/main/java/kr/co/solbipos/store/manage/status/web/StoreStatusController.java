@@ -89,6 +89,29 @@ public class StoreStatusController {
     }
 
     /**
+     * 매장탭 - 매장정보조회
+     *
+     * @param storeStatusVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/store/getStatusStoreExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStatusStoreExcelList(StoreStatusVO storeStatusVO, HttpServletRequest request,
+                                  HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+//        System.out.println("LISTSCALE : " + storeStatusVO.getListScale());
+
+        List<DefaultMap<Object>> result = storeStatusService.getStatusStoreExcelList(storeStatusVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, storeStatusVO);
+    }
+
+    /**
      * 매장탭 - 코너 상세조회
      *
      * @param storeStatusVO
@@ -210,6 +233,27 @@ public class StoreStatusController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<Object>> result = storeStatusService.getStatusPosInstallList(storeStatusVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, storeStatusVO);
+    }
+
+    /**
+     * POS설치현황탭 - POS설치현황 조회
+     *
+     * @param storeStatusVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/posInstl/getStatusPosInstallExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStatusPosInstallExcelList(StoreStatusVO storeStatusVO, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = storeStatusService.getStatusPosInstallExcelList(storeStatusVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, storeStatusVO);
     }

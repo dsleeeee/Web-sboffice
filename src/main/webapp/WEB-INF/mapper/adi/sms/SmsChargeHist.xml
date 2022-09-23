@@ -24,7 +24,7 @@
         twuidv01.ORGN_NM,
         ('[' || cpt.OGN_CD || '] ' || twuidv01.ORGN_NM || ' (현재잔여금액 : ' || cst.SMS_AMT || ')') AS ORGN,
         TO_CHAR(TO_DATE(cpt.CHARGE_DATE, 'YYYYMMDD'), 'YYYY-MM-DD') AS CHARGE_DATE,
-        TO_CHAR(TO_DATE(cpt.CHARGE_TIME, 'HH24MISS'), 'HH:MI:SS') AS CHARGE_TIME,
+        TO_CHAR(TO_DATE(cpt.CHARGE_TIME, 'HH24MISS'), 'HH24:MI:SS') AS CHARGE_TIME,
         cpt.PGRESOURCE,
         cpt.CONTROLNO,
         cpt.APPROVALNUM,
@@ -120,7 +120,7 @@
         twuidv01.ORGN_NM,
         ('[' || cpt.OGN_CD || '] ' || twuidv01.ORGN_NM || ' (현재잔여금액 : ' || cst.SMS_AMT || ')') AS ORGN,
         TO_CHAR(TO_DATE(cpt.CHARGE_DATE, 'YYYYMMDD'), 'YYYY-MM-DD') AS CHARGE_DATE,
-        TO_CHAR(TO_DATE(cpt.CHARGE_TIME, 'HH24MISS'), 'HH:MI:SS') AS CHARGE_TIME,
+        TO_CHAR(TO_DATE(cpt.CHARGE_TIME, 'HH24MISS'), 'HH24:MI:SS') AS CHARGE_TIME,
         cpt.PGRESOURCE,
         cpt.CONTROLNO,
         cpt.APPROVALNUM,
@@ -423,5 +423,22 @@
                 #{smsAmt}
             )
     </insert>
+
+
+    <!-- 비고(결과메시지) 저장 insert -->
+    <!--
+        TABLE    : CET_SMSPT_T
+        COMMENTS :
+    -->
+    <update id="getResultmessageSave" parameterType="SmsChargeHistVO">
+        /* SmsChargeHistMapper.getResultmessageSave */
+        UPDATE  CET_PGLOG_T
+        SET     RESULTMESSAGE = #{resultmessage}
+        ,       MOD_DT = #{modDt}
+        ,       MOD_ID = #{modId}
+        WHERE   OGN_CD = #{orgnCd}
+        AND     CHARGE_DATE = #{chargeDate}
+        AND     CHARGE_TIME = #{chargeTime}
+    </update>
 
 </mapper>

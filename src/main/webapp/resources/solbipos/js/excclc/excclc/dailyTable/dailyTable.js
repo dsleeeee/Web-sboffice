@@ -67,7 +67,7 @@ app.controller('dailyTableCtrl', ['$scope', '$http', '$timeout', function ($scop
 
             ///*
     	    var params = {};
-            	params.searchStoreCd   	= $("#dailyTableSelectStoreCd").val();
+            	params.storeCd   	= $("#dailyTableSelectStoreCd").val();
 
             //$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);	//cmm.progress=데이터 처리 중입니다.
     	    $scope._postJSONQuery.withOutPopUp	(	"/excclc/excclc/dailyTable/dailyTable/list.sb",	//영업일보 구성 조회
@@ -112,7 +112,7 @@ app.controller('dailyTableCtrl', ['$scope', '$http', '$timeout', function ($scop
 
         var params = {};
         	params.startDate 		= wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
-	        params.searchStoreCd   	= $("#dailyTableSelectStoreCd").val();
+	        params.storeCd   	= $("#dailyTableSelectStoreCd").val();
 
 	    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);	//'데이터 처리 중입니다.' 시작	//cmm.progress=데이터 처리 중입니다.
 

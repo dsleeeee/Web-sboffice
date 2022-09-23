@@ -47,6 +47,13 @@ public class StoreStatusServiceImpl implements StoreStatusService {
         return storeStatusMapper.getStatusStoreList(storeStatusVO);
     }
 
+    /** 매장탭 - 매장정보조회 */
+    @Override
+    public List<DefaultMap<Object>> getStatusStoreExcelList(StoreStatusVO storeStatusVO, SessionInfoVO sessionInfoVO) {
+
+        return storeStatusMapper.getStatusStoreExcelList(storeStatusVO);
+    }
+
     /** 매장탭 - 코너 상세조회 */
     @Override
     public List<DefaultMap<Object>> getStatusStoreCornerList(StoreStatusVO storeStatusVO, SessionInfoVO sessionInfoVO) {
@@ -87,6 +94,12 @@ public class StoreStatusServiceImpl implements StoreStatusService {
     public List<DefaultMap<Object>> getStatusPosInstallList(StoreStatusVO storeStatusVO, SessionInfoVO sessionInfoVO) {
 
         return storeStatusMapper.getStatusPosInstallList(storeStatusVO);
+    }
+
+    @Override
+    public List<DefaultMap<Object>> getStatusPosInstallExcelList(StoreStatusVO storeStatusVO, SessionInfoVO sessionInfoVO) {
+
+        return storeStatusMapper.getStatusPosInstallExcelList(storeStatusVO);
     }
 
     /** 매장현황 탭 - 관리매장 승인내역 리스트 조회 */

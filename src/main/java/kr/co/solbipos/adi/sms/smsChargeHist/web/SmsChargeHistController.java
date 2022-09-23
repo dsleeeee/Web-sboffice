@@ -157,4 +157,27 @@ public class SmsChargeHistController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 비고(결과메시지) - 저장
+     *
+     * @param smsChargeHistVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2022.09.22
+     */
+    @RequestMapping(value = "/smsChargeHist/getResultmessageSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getResultmessageSave(@RequestBody SmsChargeHistVO smsChargeHistVO, HttpServletRequest request,
+                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = smsChargeHistService.getResultmessageSave(smsChargeHistVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }
