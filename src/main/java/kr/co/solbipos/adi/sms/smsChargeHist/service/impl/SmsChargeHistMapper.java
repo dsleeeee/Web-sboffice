@@ -40,4 +40,7 @@ public interface SmsChargeHistMapper {
 
     /** 잔여금액 저장 insert */
     int getSmsQtySaveInsert(SmsChargeHistVO smsChargeHistVO);
+
+    /** 비고(결과메시지) 저장 update */
+    int getResultmessageSave(SmsChargeHistVO smsChargeHistVO);
 }

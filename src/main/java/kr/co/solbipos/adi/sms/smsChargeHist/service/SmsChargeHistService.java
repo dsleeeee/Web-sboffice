@@ -33,4 +33,7 @@ public interface SmsChargeHistService {
 
     /** SMS임의충전 팝업 - 저장 */
     int getSmsChargeRegistSave(SmsChargeHistVO smsChargeHistVO, SessionInfoVO sessionInfoVO);
+
+    /** 비고(결과메시지) 팝업 - 저장 */
+    int getResultmessageSave(SmsChargeHistVO smsChargeHistVO, SessionInfoVO sessionInfoVO);
 }
