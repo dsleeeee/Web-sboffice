@@ -31,7 +31,7 @@
              ,		tsmt.MONTH_DC_AMT
              ,		tsmt.MONTH_NET_SALE_AMT
              ,		tsdt.TOT_GUEST_CNT AS GUEST_CNT
-             ,		FLOOR(tsdt.TOT_SALE_AMT/tsdt.TOT_GUEST_CNT) AS GUEST_AMT
+             ,		DECODE(tsdt.TOT_GUEST_CNT, 0, 0, FLOOR(tsdt.TOT_SALE_AMT/tsdt.TOT_GUEST_CNT)) AS GUEST_AMT
              ,		tsmt.MONTH_GUEST_CNT
              ,		tsmt.MONTH_GUEST_ANT
         FROM 	TB_SL_DAILY_TOTAL tsdt
@@ -42,7 +42,7 @@
                     ,		SUM(TOT_DC_AMT) AS MONTH_DC_AMT
                     ,		SUM(NET_SALE_AMT) AS MONTH_NET_SALE_AMT
                     ,		SUM(TOT_GUEST_CNT) AS MONTH_GUEST_CNT
-                    ,		SUM(FLOOR(TOT_SALE_AMT/TOT_GUEST_CNT)) AS MONTH_GUEST_ANT
+                    ,		SUM(DECODE(TOT_GUEST_CNT, 0, 0, FLOOR(TOT_SALE_AMT/TOT_GUEST_CNT))) AS MONTH_GUEST_ANT
                     FROM 	TB_SL_DAILY_TOTAL tsdt2
                     WHERE	tsdt2.HQ_OFFICE_CD  = #{hqOfficeCd}
                     AND 	tsdt2.STORE_CD      = #{storeCd}
