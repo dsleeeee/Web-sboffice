@@ -147,10 +147,11 @@
                 <wj-flex-grid-column header="<s:message code="cardCreditStatus.acquireNm"/>" binding="acquireNm" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cardCreditStatus.membrJoinNo"/>" binding="membrJoinNo" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cardCreditStatus.instCntNm"/>" binding="instCntNm" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cardCreditStatus.apprGubun2"/>" binding="apprGubun2" width="75" is-read-only="true" align="center"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/card/cardCreditStatus/cardCreditStatus.js?ver=20220918.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/card/cardCreditStatus/cardCreditStatus.js?ver=20220918.02" charset="utf-8"></script>
