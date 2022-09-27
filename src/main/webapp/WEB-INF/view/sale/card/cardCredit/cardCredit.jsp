@@ -162,6 +162,7 @@
                     <wj-flex-grid-column header="<s:message code="cardCredit.acquireNm"/>" binding="acquireNm" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="cardCredit.membrJoinNo"/>" binding="membrJoinNo" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="cardCredit.instCntNm"/>" binding="instCntNm" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cardCredit.apprGubun2"/>" binding="apprGubun2" width="75" is-read-only="true" align="center"></wj-flex-grid-column>
                     <%-- 저장시 필요 --%>
                     <wj-flex-grid-column header="<s:message code="cardCredit.hqOfficeCd"/>" binding="hqOfficeCd" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="cardCredit.hqBrandCd"/>" binding="hqBrandCd" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -205,6 +206,7 @@
                     <wj-flex-grid-column header="<s:message code="cardCredit.acquireNm"/>" binding="acquireNm" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="cardCredit.membrJoinNo"/>" binding="membrJoinNo" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="cardCredit.instCntNm"/>" binding="instCntNm" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cardCredit.apprGubun2"/>" binding="apprGubun2" width="75" is-read-only="true" align="center"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -212,7 +214,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/card/cardCredit/cardCredit.js?ver=20220918.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/card/cardCredit/cardCredit.js?ver=20220918.02" charset="utf-8"></script>
 
 <%-- 신용카드입금관리 엑셀업로드 팝업 --%>
 <c:import url="/WEB-INF/view/sale/card/cardCredit/cardCreditExcelUploadAdd.jsp">

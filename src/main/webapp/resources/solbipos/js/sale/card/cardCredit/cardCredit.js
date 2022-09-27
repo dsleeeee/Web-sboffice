@@ -20,8 +20,8 @@ var creditBankData = [
 ];
 // 취소내역포함여부
 var rtnSaleFgComboData = [
-    {"name":"미포함","value":"0"},
-    {"name":"포함","value":"1"}
+    {"name":"포함","value":"1"},
+    {"name":"미포함","value":"0"}
 ];
 // 매장
 var storeCdComboData = [
