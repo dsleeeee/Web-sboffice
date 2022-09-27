@@ -40,7 +40,12 @@
         (CASE WHEN tsspcck.CREDIT_DATE IS NOT NULL THEN SUBSTR(tsspcck.CREDIT_DATE, 1, 4)||'-'||SUBSTR(tsspcck.CREDIT_DATE, 5, 2)||'-'||SUBSTR(tsspcck.CREDIT_DATE, 7, 2) ELSE tsspcck.CREDIT_DATE END) AS CREDIT_DATE,
         tsspcck.CREDIT_AMT,
         tsspcck.CREDIT_FEE,
-        tsspcck.CREDIT_BANK
+        tsspcck.CREDIT_BANK,
+        (CASE WHEN (tsspc.SALE_FG = 1 AND tssh.ORG_BILL_NO IS NOT NULL) THEN '취소된승인'
+               WHEN (tsspc.SALE_FG = 1 AND tssh.ORG_BILL_NO IS NULL) THEN '승인'
+               WHEN tsspc.SALE_FG = -1 THEN '취소'
+               ELSE null END
+        ) AS APPR_GUBUN2
         FROM TB_SL_SALE_PAY_CARD tsspc,
         TB_SL_SALE_PAY_CARD_CREDIT_KWU tsspcck,
         TB_MS_STORE tms,
@@ -91,7 +96,7 @@
         <if test="rtnSaleFg != null and rtnSaleFg != ''">
             <!-- 미포함 -->
             <if test='rtnSaleFg == "0"'>
-                AND tssh.ORG_BILL_NO IS NOT NULL
+                AND tssh.ORG_BILL_NO IS NULL
             </if>
         </if>
         AND tssh.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
