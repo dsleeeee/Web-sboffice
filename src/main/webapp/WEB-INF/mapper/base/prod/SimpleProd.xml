@@ -376,7 +376,21 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                INSERT INTO TB_HQ_VENDOR_PROD
+                MERGE INTO TB_HQ_VENDOR_PROD
+                USING DUAL
+                ON ( HQ_OFFICE_CD = #{membrOrgnCd}
+                     AND VENDR_CD = #{vendrCd}
+                     AND PROD_CD  = #{prodCd}
+                   )
+                WHEN MATCHED THEN
+                UPDATE
+                SET
+                SPLY_UPRC = #{splyUprc},
+                USE_YN = 'Y',
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+                WHEN NOT MATCHED THEN
+                INSERT
                 (
                     HQ_OFFICE_CD,
                     HQ_BRAND_CD,
@@ -403,7 +417,21 @@
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                INSERT INTO TB_MS_VENDOR_PROD
+                MERGE INTO TB_MS_VENDOR_PROD
+                USING DUAL
+                ON ( STORE_CD = #{storeCd}
+                     AND VENDR_CD = #{vendrCd}
+                     AND PROD_CD = #{prodCd}
+                   )
+                WHEN MATCHED THEN
+                UPDATE
+                SET
+                SPLY_UPRC = #{splyUprc},
+                USE_YN = 'Y',
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+                WHEN NOT MATCHED THEN
+                INSERT
                 (
                     STORE_CD,
                     VENDR_CD,
