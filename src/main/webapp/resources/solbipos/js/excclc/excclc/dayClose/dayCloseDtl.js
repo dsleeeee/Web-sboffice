@@ -110,12 +110,13 @@ app.controller('dayCloseDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
       }
 
       var closeInfo = response.data.data.list;
-
-      $scope.remark6      = closeInfo.remark6;
+      $scope.groupAmt = closeInfo.groupAmt;
+      $scope.hockeyAmt = closeInfo.hockeyAmt;
+      $scope.etcAmt = closeInfo.etcAmt;
+      $scope.remark6 = closeInfo.remark6;
 
       $scope._popMsg("마감데이터 수신이 완료되었습니다.");
     });
-
   };
 
   $scope.close = function (data){

@@ -84,23 +84,96 @@
     -->
     <select id="getDayCloseDtl"  parameterType="dayCloseVO" resultType="DefaultMap">
         /* DayCloseMapper.getDayCloseDtl */
-        SELECT	LISTAGG(SBPENC.D(tmm.MEMBR_NM) || '(' || NVL(TO_CHAR(tssh.TOT_SALE_AMT,'FM999,999,999,999'), 0) || ')', '/') WITHIN GROUP (ORDER BY SBPENC.D(tmm.MEMBR_NM)) AS REMARK6
-        FROM 	TB_SL_SALE_HDR_INFO tsshi,
-                TB_SL_SALE_HDR tssh,
-                TB_MB_MEMBER tmm
-        WHERE 	tsshi.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
-        AND 	tsshi.STORE_CD = tssh.STORE_CD
-        AND 	tsshi.SALE_DATE = tssh.SALE_DATE
-        AND 	tsshi.BILL_NO = tssh.BILL_NO
-        <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
-            AND tsshi.STORE_CD = tmm.MEMBR_ORGN_CD
-        </if>
-        <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
-            AND tsshi.HQ_OFFICE_CD = tmm.MEMBR_ORGN_CD
-        </if>
-        AND 	tsshi.MEMBR_NO = tmm.MEMBR_NO
-        AND 	tsshi.STORE_CD = #{storeCd}
-        AND 	tsshi.SALE_DATE = #{closeDate}
+        SELECT
+        A.GROUP_AMT,
+        B.HOCKEY_AMT,
+        C.ETC_AMT,
+        D.REMARK6
+        FROM
+        (
+            -- 단체
+            SELECT	SUM(tssh.REAL_SALE_AMT) AS GROUP_AMT
+            FROM 	TB_SL_SALE_HDR_INFO tsshi,
+                    TB_SL_SALE_HDR tssh,
+                    TB_MB_MEMBER tmm
+            WHERE 	tsshi.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+            AND 	tsshi.STORE_CD = tssh.STORE_CD
+            AND 	tsshi.SALE_DATE = tssh.SALE_DATE
+            AND 	tsshi.BILL_NO = tssh.BILL_NO
+            <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                AND tsshi.STORE_CD = tmm.MEMBR_ORGN_CD
+            </if>
+            <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                AND tsshi.HQ_OFFICE_CD = tmm.MEMBR_ORGN_CD
+            </if>
+            AND 	tsshi.MEMBR_NO = tmm.MEMBR_NO
+            AND 	tsshi.STORE_CD = #{storeCd}
+            AND 	tsshi.SALE_DATE = #{closeDate}
+            AND 	tsshi.POS_NO = '99'
+            AND     tmm.MEMBR_CLASS_CD = '001'
+        ) A,
+        (
+            -- 하키훈련
+            SELECT	SUM(tssh.REAL_SALE_AMT) AS HOCKEY_AMT
+            FROM 	TB_SL_SALE_HDR_INFO tsshi,
+                    TB_SL_SALE_HDR tssh,
+                    TB_MB_MEMBER tmm
+            WHERE 	tsshi.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+            AND 	tsshi.STORE_CD = tssh.STORE_CD
+            AND 	tsshi.SALE_DATE = tssh.SALE_DATE
+            AND 	tsshi.BILL_NO = tssh.BILL_NO
+            <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                AND tsshi.STORE_CD = tmm.MEMBR_ORGN_CD
+            </if>
+            <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                AND tsshi.HQ_OFFICE_CD = tmm.MEMBR_ORGN_CD
+            </if>
+            AND 	tsshi.MEMBR_NO = tmm.MEMBR_NO
+            AND 	tsshi.STORE_CD = #{storeCd}
+            AND 	tsshi.SALE_DATE = #{closeDate}
+            AND 	tsshi.POS_NO = '99'
+            AND     tmm.MEMBR_CLASS_CD = '001'
+        ) B,
+        (
+            -- 기타
+            SELECT (C1.CREDIT_AMT + C2.REAL_SALE_AMT) AS ETC_AMT
+            FROM
+            (
+                SELECT SUM(tsspcck.CREDIT_AMT) AS CREDIT_AMT
+                FROM   TB_SL_SALE_PAY_CARD_CREDIT_KWU tsspcck
+                WHERE  tsspcck.STORE_CD = #{storeCd}
+                AND 	tsspcck.CREDIT_DATE = #{closeDate}
+            ) C1,
+            (
+                SELECT	SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
+                FROM 	TB_SL_SALE_DTL tssd
+                WHERE  tssd.STORE_CD = #{storeCd}
+                AND 	tssd.SALE_DATE = #{closeDate}
+                AND 	tssd.POS_NO = '99'
+                AND     tssd.PROD_CD IN ('0000000000005', '0000000000006') -- 락카,임대료
+            ) C2
+        ) C,
+        (
+            -- 비고6
+            SELECT	LISTAGG(SBPENC.D(tmm.MEMBR_NM) || '(' || NVL(TO_CHAR(tssh.TOT_SALE_AMT,'FM999,999,999,999'), 0) || ')', '/') WITHIN GROUP (ORDER BY SBPENC.D(tmm.MEMBR_NM)) AS REMARK6
+            FROM 	TB_SL_SALE_HDR_INFO tsshi,
+                    TB_SL_SALE_HDR tssh,
+                    TB_MB_MEMBER tmm
+            WHERE 	tsshi.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+            AND 	tsshi.STORE_CD = tssh.STORE_CD
+            AND 	tsshi.SALE_DATE = tssh.SALE_DATE
+            AND 	tsshi.BILL_NO = tssh.BILL_NO
+            <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                AND tsshi.STORE_CD = tmm.MEMBR_ORGN_CD
+            </if>
+            <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                AND tsshi.HQ_OFFICE_CD = tmm.MEMBR_ORGN_CD
+            </if>
+            AND 	tsshi.MEMBR_NO = tmm.MEMBR_NO
+            AND 	tsshi.STORE_CD = #{storeCd}
+            AND 	tsshi.SALE_DATE = #{closeDate}
+            AND 	tsshi.POS_NO = '99'
+        ) D
     </select>
 
     <!-- 마감데이터 저장 -->

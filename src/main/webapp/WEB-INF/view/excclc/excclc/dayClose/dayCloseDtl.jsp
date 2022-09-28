@@ -170,4 +170,4 @@
   });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/dayClose/dayCloseDtl.js?ver=20220907.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/dayClose/dayCloseDtl.js?ver=20220928.01" charset="utf-8"></script>
