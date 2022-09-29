@@ -47,6 +47,8 @@ public class CouponVO extends PageVO {
     private String coupnApplyFg;
     /** 쿠폰대상구분 */
     private String coupnTargetFg;
+    /** 쿠폰적용품목구분 */
+    private String coupnProdFg;
     /** 사용여부 */
     private UseYn useYn;
     /** 쿠폰등록 본사 통제여부 */
@@ -220,6 +222,14 @@ public class CouponVO extends PageVO {
 
     public void setCoupnTargetFg(String coupnTargetFg) {
         this.coupnTargetFg = coupnTargetFg;
+    }
+
+    public String getCoupnProdFg() {
+        return coupnProdFg;
+    }
+
+    public void setCoupnProdFg(String coupnProdFg) {
+        this.coupnProdFg = coupnProdFg;
     }
 
     /**

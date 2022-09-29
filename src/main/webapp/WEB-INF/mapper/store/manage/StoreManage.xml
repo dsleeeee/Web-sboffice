@@ -1102,6 +1102,7 @@
                     ,       END_DATE
                     ,       COUPN_APPLY_FG
                     ,       COUPN_TARGET_FG
+                    ,       COUPN_PROD_FG
                     ,       'N'                 AS USE_YN
                     ,       #{regDt}            AS REG_DT
                     ,       #{regId}            AS REG_ID
@@ -1126,6 +1127,7 @@
         ,       A.END_DATE          =   B.END_DATE
         ,       A.COUPN_APPLY_FG    =   B.COUPN_APPLY_FG
         ,       A.COUPN_TARGET_FG   =   B.COUPN_TARGET_FG
+        ,       A.COUPN_PROD_FG   =   B.COUPN_PROD_FG
         ,       A.USE_YN            =   B.USE_YN
         ,       A.MOD_DT            =   B.MOD_DT
         ,       A.MOD_ID            =   B.MOD_ID
@@ -1145,6 +1147,7 @@
         ,       A.END_DATE
         ,       A.COUPN_APPLY_FG
         ,       A.COUPN_TARGET_FG
+        ,       A.COUPN_PROD_FG
         ,       A.USE_YN
         ,       A.REG_DT
         ,       A.REG_ID
@@ -1166,6 +1169,7 @@
         ,       B.END_DATE
         ,       B.COUPN_APPLY_FG
         ,       B.COUPN_TARGET_FG
+        ,       B.COUPN_PROD_FG
         ,       B.USE_YN
         ,       B.REG_DT
         ,       B.REG_ID
