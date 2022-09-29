@@ -112,7 +112,8 @@
         the.USE_YN,
         NVL(the.MAIN_SALE_FG, '0') AS MAIN_SALE_FG,
         the.VENDR_CD,
-        NVL((SELECT VENDR_NM FROM TB_HQ_VENDOR WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND VENDR_CD = the.VENDR_CD), '본사') AS VENDR_NM
+        NVL((SELECT VENDR_NM FROM TB_HQ_VENDOR WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND VENDR_CD = the.VENDR_CD), '본사') AS VENDR_NM,
+        NVL((SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND BRANCH_CD = the.BRANCH_CD), '지사없음') AS BRANCH_NM
         FROM TB_HQ_EMPLOYEE the,
         (
             SELECT
@@ -182,7 +183,8 @@
             REG_ID,
             MOD_DT,
             MOD_ID,
-            VENDR_CD
+            VENDR_CD,
+            BRANCH_CD
         )
         VALUES
         (
@@ -201,7 +203,8 @@
             #{regId},
             #{modDt},
             #{modId},
-            #{vendrCd}
+            #{vendrCd},
+            #{branchCd}
         )
     </insert>
 
@@ -274,7 +277,8 @@
                the.MAIN_SALE_FG = #{mainSaleFg},
                the.MOD_DT = #{modDt},
                the.MOD_ID = #{modId},
-               the.VENDR_CD = #{vendrCd}
+               the.VENDR_CD = #{vendrCd},
+               the.BRANCH_CD = #{branchCd}
          WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
            AND the.EMP_NO = #{empNo}
     </update>
@@ -742,6 +746,26 @@
       SELECT VENDR_CD AS VALUE,
              VENDR_NM AS NAME
         FROM TB_HQ_VENDOR
+       WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+       ORDER BY VALUE NULLS FIRST, VALUE ASC
+    </select>
+
+
+    <!-- 지사 조회(콤보박스용) -->
+    <!--
+        TABLE    : TB_HQ_VENDOR
+        PARAM    : hqEmpVO
+        COMMENTS : 지사를 조회한다.
+    -->
+    <select id="getHqBranchCombo" resultType="DefaultMap">
+    /* USE : HqEmpMapper.getHqBranchCombo */
+      SELECT '' AS VALUE,
+             '지사 선택' AS NAME
+        FROM DUAL
+       UNION
+      SELECT BRANCH_CD AS VALUE,
+             BRANCH_NM AS NAME
+        FROM TB_HQ_BRANCH_MOMS
        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
        ORDER BY VALUE NULLS FIRST, VALUE ASC
     </select>

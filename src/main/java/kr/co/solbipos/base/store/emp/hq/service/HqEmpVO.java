@@ -95,6 +95,9 @@ public class HqEmpVO extends PageVO {
     /** 거래처 코드 */
     private String vendrCd;
 
+    /** 지사 코드 */
+    private String branchCd;
+
     /**
      * @return the hqOfficeCd
      */
@@ -407,5 +410,13 @@ public class HqEmpVO extends PageVO {
 
     public void setVendrCd(String vendrCd) {
         this.vendrCd = vendrCd;
+    }
+
+    public String getBranchCd() {
+        return branchCd;
+    }
+
+    public void setBranchCd(String branchCd) {
+        this.branchCd = branchCd;
     }
 }

@@ -107,6 +107,17 @@
             <th></th>
             <td></td>
           </tr>
+          <tr>
+            <%-- 지사정보 --%>
+            <th>
+              <s:message code="hqEmp.branchNm"/>
+            </th>
+            <td>
+              {{hqEmp.branchNm}}
+            </td>
+            <th></th>
+            <td></td>
+          </tr>
           </tbody>
         </table>
       </div>
