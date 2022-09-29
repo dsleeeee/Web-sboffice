@@ -92,6 +92,7 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="prodClassPayFgSale.prodClassCd"/>" binding="levelCd" width="80" align="center" is-read-only="true" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodClassPayFgSale.prodClassNm"/>" binding="levelNm" width="180" align="left"	is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodClassPayFgSale.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodClassPayFgSale.totSaleAmt"/>" binding="totSaleAmt" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodClassPayFgSale.totDcAmt"/>" binding="totDcAmt" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodClassPayFgSale.realSaleAmt"/>" binding="realSaleAmt" width="90" align="right" is-read-only="true"></wj-flex-grid-column>

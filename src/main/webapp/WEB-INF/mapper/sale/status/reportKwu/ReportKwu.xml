@@ -20,6 +20,7 @@
       /* USE : ReportKwuMapper.getProdClassPayFgSaleList */
         SELECT  LEVEL_CD
         ,       LEVEL_NM
+        ,       SUBSTR(SALE_DATE, 1, 4)||'-'||SUBSTR(SALE_DATE, 5, 2)||'-'||SUBSTR(SALE_DATE, 7, 2) AS SALE_DATE
         ,		NVL(SUM(TOT_SALE_AMT), 0) AS TOT_SALE_AMT
         ,		NVL(SUM(TOT_DC_AMT), 0) AS TOT_DC_AMT
         ,       NVL(SUM(REAL_SALE_AMT), 0) AS REAL_SALE_AMT
@@ -47,6 +48,7 @@
                                FN_GET_PROD_CLASS_CD_NM_STR(A.STORE_CD, REPLACE(SUBSTR(PATH, 12, 6) ,'▶',''), 'NM') AS LEVEL_NM,
                            </otherwise>
                        </choose>
+                        A.SALE_DATE,
                        <foreach collection="arrPayCol" item="item" separator=",">
                            A.PAY_AMT_${item}
                        </foreach>
@@ -59,6 +61,7 @@
                             , 		A.STORE_CD
                             ,		B.PROD_CLASS_CD
                             ,       A.PROD_CD
+                            ,       A.SALE_DATE
                             ,       <foreach collection="arrPayCol" item="item" separator=",">
                                         SUM(A.PAY_AMT_${item}) AS PAY_AMT_${item}
                                     </foreach>
@@ -87,10 +90,12 @@
                             BY      A.STORE_CD
                             ,		B.PROD_CLASS_CD
                             ,       A.PROD_CD
+                            ,       A.SALE_DATE
                     ) A
                 ,   (
                             SELECT  B.STORE_CD
                             ,       B.PROD_CD
+                            ,       B.SALE_DATE
                             ,       SUM(B.PAY_AMT_02) PAY_AMT_021
                             FROM    (
                                             SELECT  A.STORE_CD
@@ -163,6 +168,7 @@
                             GROUP
                             BY     	B.STORE_CD
                             ,       B.PROD_CD
+                            ,       B.SALE_DATE
                     ) B
                 WHERE B.PROD_CD (+)= A.PROD_CD
                 ORDER
@@ -171,8 +177,9 @@
         GROUP
         BY    LEVEL_CD
         ,     LEVEL_NM
+        ,     SALE_DATE
         ORDER
-        BY    LEVEL_CD
+        BY    LEVEL_CD, SALE_DATE
     </select>
 
     <!-- 결제수단별 매출내역 - 리스트 조회 -->
