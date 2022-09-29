@@ -143,6 +143,10 @@
         <wj-flex-grid-column header="<s:message code="storeView.sysOpenDate"/>" binding="sysOpenDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeView.sysClosureDate"/>" binding="sysClosureDate"  width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeView.sms"/>" binding="gChk" visible="false" width="40" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.storeLocation"/>" binding="storeLocation" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.address"/>" binding="addr"  width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.latitude"/>" binding="latitude"  width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.longitude"/>" binding="longitude"  width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
   </div>
@@ -193,7 +197,7 @@ var sysStatFg = ${ccu.getCommCodeSelect("005")};
 var areaCd = ${ccu.getCommCodeSelect("061")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/view/view.js?ver=20220504.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/view/view.js?ver=20220928.02" charset="utf-8"></script>
 
 <%-- 매장 상세정보 --%>
 <c:import url="/WEB-INF/view/base/store/view/dtl.jsp">
@@ -209,4 +213,8 @@ var areaCd = ${ccu.getCommCodeSelect("061")};
 
 <%-- 매장 판매터치키복사 --%>
 <c:import url="/WEB-INF/view/base/store/view/copyStoreTouchKey.jsp">
+</c:import>
+
+<%-- 지도보기 팝업 --%>
+<c:import url="/WEB-INF/view/application/layer/mapPop.jsp">
 </c:import>

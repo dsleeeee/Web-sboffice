@@ -35,7 +35,10 @@
         tms.VAN_CD,
         tcvc.VAN_NM,
         tms.AGENCY_CD,
-        tca.AGENCY_NM
+        tca.AGENCY_NM,
+        tms.ADDR,
+        tms.LATITUDE,
+        tms.LONGITUDE
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_HQ_OFFICE tho,
         TB_MS_STORE tms,
@@ -174,7 +177,9 @@
                tms.SYS_REMARK,
                tms.HD_REMARK,
                tms.DIRECT_MANAGE_YN,
-               tms.MAP_STORE_CD
+               tms.MAP_STORE_CD,
+               tms.LATITUDE,
+               tms.LONGITUDE
           FROM TB_MS_STORE tms,
                TB_HQ_OFFICE tho,
                TB_CM_AGENCY tca,
@@ -347,6 +352,8 @@
             HD_REMARK,
             DIRECT_MANAGE_YN,
             MAP_STORE_CD,
+            LATITUDE,
+            LONGITUDE,
             REG_DT,
             REG_ID,
             MOD_DT,
@@ -379,6 +386,8 @@
             #{hdRemark},
             #{directManageYn},
             #{mapStoreCd},
+            #{latitude},
+            #{longitude},
             #{regDt},
             #{regId},
             #{modDt},
@@ -418,6 +427,8 @@
                HD_REMARK = #{hdRemark},
                DIRECT_MANAGE_YN = #{directManageYn},
                MAP_STORE_CD = #{mapStoreCd},
+               LATITUDE = #{latitude},
+               LONGITUDE = #{longitude},
                MOD_DT = #{modDt},
                MOD_ID = #{modId}
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}

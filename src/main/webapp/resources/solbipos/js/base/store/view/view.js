@@ -54,7 +54,13 @@ app.controller('storeListCtrl', ['$scope', '$http', function ($scope, $http) {
           wijmo.addClass(e.cell, 'wj-custom-readonly');
         }
 
-        if (col.binding === "storeCd" || col.binding === "storeNm" || col.binding === "ownerNm" ) {
+        // 지도보기 팝업 버튼 set
+        if( col.binding === "storeLocation"){
+            e.cell.innerHTML = messages["storeView.storeLocation"];
+            wijmo.addClass(e.cell, 'wj-custom-readonly');
+        }
+
+        if (col.binding === "storeCd" || col.binding === "storeNm" || col.binding === "ownerNm" || col.binding === "storeLocation") {
           wijmo.addClass(e.cell, 'wijLink');
         }
       }
@@ -85,6 +91,28 @@ app.controller('storeListCtrl', ['$scope', '$http', function ($scope, $http) {
         if ( col.binding === "buttons") {
             $scope.vLoginProcess(selectedRow.msUserId);
         }
+
+          // 지도보기 팝업
+          if(col.binding === "storeLocation") {
+
+            // 위도,경도 또는 주소가 있는지 체크
+            if(selectedRow.latitude === "" || selectedRow.longitude === "") {
+                if(selectedRow.addr === ""){
+                  $scope._popMsg(messages["storeView.mapOpen.msg"]); // 정확한 주소가 없어 지도를 조회할 수 없습니다.
+                  return;
+                }
+            }
+
+            var params = {};
+            params.title = messages["storeView.storeLocation"];   // 지도 팝업 title
+            params.markerNm = selectedRow.storeNm;                // 지도 위치 마커명
+            params.addr = selectedRow.addr;                       // 주소
+            params.latitude = selectedRow.latitude;               // 위도
+            params.longitude = selectedRow.longitude;             // 경도
+
+            $scope.mapPopLayer.show(true);
+            $scope._broadcast('mapPopCtrl', params);
+          }
       }
     });
   };
