@@ -124,6 +124,9 @@
     <typeAlias alias="storeStatusVO" type="kr.co.solbipos.store.manage.status.service.StoreStatusVO"/>
     <typeAlias alias="storeMenuVO" type="kr.co.solbipos.store.manage.storemanage.service.StoreMenuVO"/>
 
+    <!-- 기초관리 > 본사정보관리 > 본사-지사 관리 -->
+    <typeAlias alias="branchMomsVO" type="kr.co.solbipos.store.hq.branchMoms.service.BranchMomsVO"/>
+
     <!-- 기초관리 > 매장정보관리 > OKPOS-KCP 데이터 이관 -->
     <typeAlias alias="migDataMappingVO" type="kr.co.solbipos.store.manage.migDataMapping.service.MigDataMappingVO"/>
     <!-- 기초관리 > 매장정보관리 > 환경변수일괄변경 -->
