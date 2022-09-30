@@ -14,6 +14,9 @@ public class DailyTableVO extends PageVO {
     /** 매장코드 */
     private String storeCd;
 
+    /** 회원소속코드 */
+    private String membrOrgnCd;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -46,4 +49,7 @@ public class DailyTableVO extends PageVO {
         this.storeCd = storeCd;
     }
 
+    public String getMembrOrgnCd() { return membrOrgnCd; }
+
+    public void setMembrOrgnCd(String membrOrgnCd) { this.membrOrgnCd = membrOrgnCd; }
 }

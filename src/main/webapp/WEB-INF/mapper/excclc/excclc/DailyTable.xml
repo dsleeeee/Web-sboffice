@@ -186,21 +186,37 @@
     -->
     <select id="getCourseStatusList" parameterType="dayCloseVO" resultType="DefaultMap">
         /* DailyTableMapper.getCourseStatusList */
-        SELECT  '일계' AS FG
-        ,       0 AS TOT_TUITION
-        ,       0 AS STUDENT_CNT
-        ,       0 AS DC_TUITION
-        ,       0 AS NET_TUITION
-        ,       0 AS TUITION
-        FROM    DUAL
+        SELECT *
+        FROM
+        (
+            SELECT
+            '일계' AS FG,
+            SUM(tsdt.TOT_SALE_AMT) AS TOT_TUITION,
+            SUM(tsdt.SALE_CNT) AS STUDENT_CNT,
+            SUM(tsdt.TOT_DC_AMT) AS DC_TUITION,
+            SUM(tsdt.REAL_SALE_CNT) AS NET_TUITION,
+            0 AS TUITION --정규수강료
+            FROM TB_SL_DAILY_TOTAL tsdt
+            WHERE 1=1
+            AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsdt.STORE_CD = #{storeCd}
+            AND tsdt.SALE_DATE = #{startDate}
+        )
         UNION ALL
-        SELECT  '월계' AS FG
-        ,       0 AS TOT_TUITION
-        ,       0 AS STUDENT_CNT
-        ,       0 AS DC_TUITION
-        ,       0 AS NET_TUITION
-        ,       0 AS TUITION
-        FROM    DUAL
+        (
+            SELECT
+            '월계' AS FG,
+            SUM(tsdt.TOT_SALE_AMT) AS TOT_TUITION,
+            SUM(tsdt.SALE_CNT) AS STUDENT_CNT,
+            SUM(tsdt.TOT_DC_AMT) AS DC_TUITION,
+            SUM(tsdt.REAL_SALE_CNT) AS NET_TUITION,
+            0 AS TUITION --정규수강료
+            FROM TB_SL_DAILY_TOTAL tsdt
+            WHERE 1=1
+            AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsdt.STORE_CD = #{storeCd}
+            AND tsdt.SALE_DATE BETWEEN SUBSTR(#{startDate}, 1, 6)||'01' AND #{startDate}
+        )
     </select>
 
 
@@ -211,105 +227,138 @@
     -->
     <select id="getCourseTypeList" parameterType="dayCloseVO" resultType="DefaultMap">
         /* DailyTableMapper.getCourseTypeList */
-        SELECT  '일일수강생' AS FG
-        ,       0 AS CASH_AMT
-        ,       0 AS CARD_AMT
-        ,       0 AS DAY_SALE_QTY
-        ,       0 AS DAILY
-        ,       0 AS MONTH_SALE_QTY
-        ,       0 AS MONTHLY
-        ,       0 AS B_MONTHLY
-        ,       0 AS TOT_SUM
-        FROM    DUAL
-        UNION ALL
-        SELECT  '장비대여' AS FG
-        ,       0 AS CASH_AMT
-        ,       0 AS CARD_AMT
-        ,       0 AS DAY_SALE_QTY
-        ,       0 AS DAILY
-        ,       0 AS MONTH_SALE_QTY
-        ,       0 AS MONTHLY
-        ,       0 AS B_MONTHLY
-        ,       0 AS TOT_SUM
-        FROM    DUAL
-        UNION ALL
-        SELECT  '일일연마' AS FG
-        ,       0 AS CASH_AMT
-        ,       0 AS CARD_AMT
-        ,       0 AS DAY_SALE_QTY
-        ,       0 AS DAILY
-        ,       0 AS MONTH_SALE_QTY
-        ,       0 AS MONTHLY
-        ,       0 AS B_MONTHLY
-        ,       0 AS TOT_SUM
-        FROM    DUAL
-        UNION ALL
-        SELECT  '단체수강샹' AS FG
-        ,       0 AS CASH_AMT
-        ,       0 AS CARD_AMT
-        ,       0 AS DAY_SALE_QTY
-        ,       0 AS DAILY
-        ,       0 AS MONTH_SALE_QTY
-        ,       0 AS MONTHLY
-        ,       0 AS B_MONTHLY
-        ,       0 AS TOT_SUM
-        FROM    DUAL
-        UNION ALL
-        SELECT  '단기수강생' AS FG
-        ,       0 AS CASH_AMT
-        ,       0 AS CARD_AMT
-        ,       0 AS DAY_SALE_QTY
-        ,       0 AS DAILY
-        ,       0 AS MONTH_SALE_QTY
-        ,       0 AS MONTHLY
-        ,       0 AS B_MONTHLY
-        ,       0 AS TOT_SUM
-        FROM    DUAL
-        UNION ALL
-        SELECT  '속성수강생' AS FG
-        ,       0 AS CASH_AMT
-        ,       0 AS CARD_AMT
-        ,       0 AS DAY_SALE_QTY
-        ,       0 AS DAILY
-        ,       0 AS MONTH_SALE_QTY
-        ,       0 AS MONTHLY
-        ,       0 AS B_MONTHLY
-        ,       0 AS TOT_SUM
-        FROM    DUAL
-        UNION ALL
-        SELECT  '수강생연마' AS FG
-        ,       0 AS CASH_AMT
-        ,       0 AS CARD_AMT
-        ,       0 AS DAY_SALE_QTY
-        ,       0 AS DAILY
-        ,       0 AS MONTH_SALE_QTY
-        ,       0 AS MONTHLY
-        ,       0 AS B_MONTHLY
-        ,       0 AS TOT_SUM
-        FROM    DUAL
-        UNION ALL
-        SELECT  '기타' AS FG
-        ,       0 AS CASH_AMT
-        ,       0 AS CARD_AMT
-        ,       0 AS DAY_SALE_QTY
-        ,       0 AS DAILY
-        ,       0 AS MONTH_SALE_QTY
-        ,       0 AS MONTHLY
-        ,       0 AS B_MONTHLY
-        ,       0 AS TOT_SUM
-        FROM    DUAL
-        UNION ALL
-        SELECT  '합계' AS FG
-        ,       0 AS CASH_AMT
-        ,       0 AS CARD_AMT
-        ,       0 AS DAY_SALE_QTY
-        ,       0 AS DAILY
-        ,       0 AS MONTH_SALE_QTY
-        ,       0 AS MONTHLY
-        ,       0 AS B_MONTHLY
-        ,       0 AS TOT_SUM
-        FROM    DUAL
-    </select>
+        SELECT
+        A.LEVEL_CD,
+        A.LEVEL_NM AS FG,
+        SUM(A.CASH_AMT) AS CASH_AMT,
+        SUM(A.CARD_AMT) AS CARD_AMT,
+        SUM(A.DAY_SALE_QTY) AS DAY_SALE_QTY,
+        SUM(A.DAILY) AS DAILY,
+        SUM(A.MONTH_SALE_QTY) AS MONTH_SALE_QTY,
+        SUM(A.MONTHLY) AS MONTHLY,
+        SUM(A.B_MONTHLY) AS B_MONTHLY,
+        SUM(A.MONTHLY) + SUM(A.B_MONTHLY) AS TOT_SUM
+        FROM
+        (
+            SELECT *
+            FROM
+            (
+                SELECT
+                REPLACE(SUBSTR(PATH, 0, 6) ,'▶','') AS LEVEL_CD,
+                FN_GET_PROD_CLASS_CD_NM_STR(STORE_CD, REPLACE(SUBSTR(PATH, 0, 6) ,'▶',''), 'NM') AS LEVEL_NM,
+                CASH_AMT,
+                CARD_AMT,
+                DAY_SALE_QTY,
+                DAILY,
+                0 AS MONTH_SALE_QTY,
+                0 AS MONTHLY,
+                0 AS B_MONTHLY
+                FROM
+                (
+                    SELECT
+                    tsdp.STORE_CD,
+                    tmp.PROD_CLASS_CD,
+                    FN_GET_PROD_CLASS_CD_NM_STR(tsdp.STORE_CD, tmp.PROD_CLASS_CD, 'CD_STR') AS PATH,
+                    tsdp.PROD_CD,
+                    SUM(tsdp.PAY_AMT_02) AS CASH_AMT,
+                    SUM(tsdp.PAY_AMT_01) AS CARD_AMT,
+                    SUM(tsdp.TOT_SALE_QTY) AS DAY_SALE_QTY,
+                    SUM(tsdp.REAL_SALE_AMT) AS DAILY
+                    FROM TB_SL_DAILY_PROD tsdp,
+                    TB_MS_PRODUCT tmp
+                    WHERE 1=1
+                    AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND tsdp.STORE_CD = #{storeCd}
+                    AND tsdp.SALE_DATE = #{startDate}
+                    AND tmp.STORE_CD = tsdp.STORE_CD
+                    AND tmp.PROD_CD = tsdp.PROD_CD
+                    GROUP BY tsdp.STORE_CD, tmp.PROD_CLASS_CD, tsdp.PROD_CD
+                )
+            )
+            UNION ALL
+            (
+                SELECT
+                REPLACE(SUBSTR(PATH, 0, 6) ,'▶','') AS LEVEL_CD,
+                FN_GET_PROD_CLASS_CD_NM_STR(STORE_CD, REPLACE(SUBSTR(PATH, 0, 6) ,'▶',''), 'NM') AS LEVEL_NM,
+                0 AS CASH_AMT,
+                0 AS CARD_AMT,
+                0 AS DAY_SALE_QTY,
+                0 AS DAILY,
+                MONTH_SALE_QTY,
+                MONTHLY,
+                0 AS B_MONTHLY
+                FROM
+                (
+                    SELECT
+                    tsdp.STORE_CD,
+                    tmp.PROD_CLASS_CD,
+                    FN_GET_PROD_CLASS_CD_NM_STR(tsdp.STORE_CD, tmp.PROD_CLASS_CD, 'CD_STR') AS PATH,
+                    tsdp.PROD_CD,
+                    SUM(tsdp.TOT_SALE_QTY) AS MONTH_SALE_QTY,
+                    SUM(tsdp.REAL_SALE_AMT) AS MONTHLY
+                    FROM TB_SL_DAILY_PROD tsdp,
+                    TB_MS_PRODUCT tmp
+                    WHERE 1=1
+                    AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND tsdp.STORE_CD = #{storeCd}
+                    AND tsdp.SALE_DATE BETWEEN SUBSTR(#{startDate}, 1, 6)||'01' AND #{startDate}
+                    AND tmp.STORE_CD = tsdp.STORE_CD
+                    AND tmp.PROD_CD = tsdp.PROD_CD
+                    GROUP BY tsdp.STORE_CD, tmp.PROD_CLASS_CD, tsdp.PROD_CD
+                )
+            )
+            UNION ALL
+            (
+                SELECT
+                REPLACE(SUBSTR(PATH, 0, 6) ,'▶','') AS LEVEL_CD,
+                FN_GET_PROD_CLASS_CD_NM_STR(STORE_CD, REPLACE(SUBSTR(PATH, 0, 6) ,'▶',''), 'NM') AS LEVEL_NM,
+                0 AS CASH_AMT,
+                0 AS CARD_AMT,
+                0 AS DAY_SALE_QTY,
+                0 AS DAILY,
+                0 AS MONTH_SALE_QTY,
+                0 AS MONTHLY,
+                B_MONTHLY
+                FROM
+                (
+                    SELECT
+                    tsdp.STORE_CD,
+                    tmp.PROD_CLASS_CD,
+                    FN_GET_PROD_CLASS_CD_NM_STR(tsdp.STORE_CD, tmp.PROD_CLASS_CD, 'CD_STR') AS PATH,
+                    tsdp.PROD_CD,
+                    SUM(tsdp.REAL_SALE_AMT) AS B_MONTHLY
+                    FROM TB_SL_DAILY_PROD tsdp,
+                    TB_MS_PRODUCT tmp
+                    WHERE 1=1
+                    AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND tsdp.STORE_CD = #{storeCd}
+                    AND tsdp.SALE_DATE BETWEEN SUBSTR(#{startDate}, 1, 4)||'0101' AND DECODE(SUBSTR(#{startDate}, 5, 2), '01', SUBSTR(#{startDate}, 1, 6), TO_CHAR((TO_DATE(SUBSTR(#{startDate}, 1, 6), 'YYYYMM') -1), 'YYYYMM'))||'31'
+                    AND tmp.STORE_CD = tsdp.STORE_CD
+                    AND tmp.PROD_CD = tsdp.PROD_CD
+                    GROUP BY tsdp.STORE_CD, tmp.PROD_CLASS_CD, tsdp.PROD_CD
+                )
+            )
+            UNION ALL
+            (
+                SELECT
+                tmspc.PROD_CLASS_CD AS LEVEL_CD,
+                tmspc.PROD_CLASS_NM AS LEVEL_NM,
+                0 AS CASH_AMT,
+                0 AS CARD_AMT,
+                0 AS DAY_SALE_QTY,
+                0 AS DAILY,
+                0 AS MONTH_SALE_QTY,
+                0 AS MONTHLY,
+                0 AS B_MONTHLY
+                FROM TB_MS_PRODUCT_CLASS tmspc
+                WHERE 1=1
+                AND tmspc.P_PROD_CLASS_CD = '00000'
+                AND tmspc.STORE_CD = #{storeCd}
+            )
+        ) A
+        GROUP BY A.LEVEL_CD, A.LEVEL_NM
+        ORDER BY A.LEVEL_CD
+     </select>
 
 
     <!-- 수강료현황 목록조회
@@ -319,23 +368,39 @@
     -->
     <select id="getTuition1List" parameterType="dayCloseVO" resultType="DefaultMap">
         /* DailyTableMapper.getTuition1List */
-        SELECT  '일계' AS FG
-        ,       0 AS CASH_AMT
-        ,       0 AS CARD_AMT
-        ,       0 AS CAT_AMT
-        ,       0 AS TOT_IN_AMT
-        ,       0 AS CANCEL_CNT
-        ,       0 AS CANCEL_AMT
-        FROM    DUAL
+        SELECT *
+        FROM
+        (
+            SELECT
+            '일계' AS FG,
+            SUM(tsdt.PAY_AMT_02) AS CASH_AMT,
+            SUM(tsdt.PAY_AMT_01) AS CARD_AMT,
+            0 AS CAT_AMT, -- 신용단말기
+            SUM(tsdt.PAY_AMT_02) + SUM(tsdt.PAY_AMT_01) AS TOT_IN_AMT,
+            SUM(tsdt.RTN_REAL_SALE_AMT) AS CANCEL_CNT,
+            SUM(tsdt.RTN_SALE_CNT) AS CANCEL_AMT
+            FROM TB_SL_DAILY_TOTAL tsdt
+            WHERE 1=1
+            AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsdt.STORE_CD = #{storeCd}
+            AND tsdt.SALE_DATE = #{startDate}
+        )
         UNION ALL
-        SELECT  '월계' AS FG
-        ,       0 AS CASH_AMT
-        ,       0 AS CARD_AMT
-        ,       0 AS CAT_AMT
-        ,       0 AS TOT_IN_AMT
-        ,       0 AS CANCEL_CNT
-        ,       0 AS CANCEL_AMT
-        FROM    DUAL
+        (
+            SELECT
+            '월계' AS FG,
+            SUM(tsdt.PAY_AMT_02) AS CASH_AMT,
+            SUM(tsdt.PAY_AMT_01) AS CARD_AMT,
+            0 AS CAT_AMT, -- 신용단말기
+            SUM(tsdt.PAY_AMT_02) + SUM(tsdt.PAY_AMT_01) AS TOT_IN_AMT,
+            SUM(tsdt.RTN_REAL_SALE_AMT) AS CANCEL_CNT,
+            SUM(tsdt.RTN_SALE_CNT) AS CANCEL_AMT
+            FROM TB_SL_DAILY_TOTAL tsdt
+            WHERE 1=1
+            AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsdt.STORE_CD = #{storeCd}
+            AND tsdt.SALE_DATE BETWEEN SUBSTR(#{startDate}, 1, 6)||'01' AND #{startDate}
+        )
     </select>
     <!-- 수강료현황 목록조회
         TABLE    : TB_SL_SALE_PAY_LINE, TB_MS_STORE
@@ -344,21 +409,193 @@
     -->
     <select id="getTuition2List" parameterType="dayCloseVO" resultType="DefaultMap">
         /* DailyTableMapper.getTuition2List */
-        SELECT  '일계' AS FG
-        ,       0 AS B_MONTH_UNPAID_AMT
-        ,       0 AS MONTH_UNPAID_AMT
-        ,       0 AS COMMISSION_AMT
-        ,       0 AS INTEREST_AMT
-        ,       0 AS CARD_IN_AMT
-        FROM    DUAL
+        SELECT *
+        FROM
+        (
+            SELECT
+            '일계' AS FG,
+            A.B_MONTH_UNPAID_AMT, --전월미수
+            B.MONTH_UNPAID_AMT, --당월미수
+            C.COMMISSION_AMT, --수수료
+            D.INTEREST_AMT, -- 결산이자
+            (E.CARD_AMT + 0 + A.B_MONTH_UNPAID_AMT + D.INTEREST_AMT) - (B.MONTH_UNPAID_AMT + C.COMMISSION_AMT) AS CARD_IN_AMT --(신용카드+신용단말기+전월미수+결산이자) - (당월미수+수수료)
+            FROM
+            (
+                SELECT
+                SUM(tsspc.SALE_FG * tsspc.APPR_AMT) AS B_MONTH_UNPAID_AMT
+                FROM TB_SL_SALE_PAY_CARD tsspc,
+                TB_SL_SALE_PAY_CARD_CREDIT_KWU tsspcck,
+                TB_SL_SALE_HDR tssh
+                WHERE 1=1
+                AND tsspcck.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsspcck.STORE_CD = #{storeCd}
+                AND tsspc.APPR_DT IS NOT NULL
+                AND SUBSTR(tsspc.APPR_DT, 1, 8) BETWEEN TO_CHAR((TO_DATE(SUBSTR(#{startDate}, 1, 6), 'YYYYMM') -1), 'YYYYMM')||'01' AND TO_CHAR((TO_DATE(SUBSTR(#{startDate}, 1, 6), 'YYYYMM') -1), 'YYYYMM')||'31'
+                AND tsspcck.CREDIT_AMT = #{startDate}
+                AND tsspcck.HQ_OFFICE_CD (+)= tsspc.HQ_OFFICE_CD
+                AND tsspcck.HQ_BRAND_CD (+)= tsspc.HQ_BRAND_CD
+                AND tsspcck.STORE_CD (+)= tsspc.STORE_CD
+                AND tsspcck.SALE_DATE (+)= tsspc.SALE_DATE
+                AND tsspcck.POS_NO (+)= tsspc.POS_NO
+                AND tsspcck.BILL_NO (+)= tsspc.BILL_NO
+                AND tsspcck.LINE_NO (+)= tsspc.LINE_NO
+                AND tsspcck.LINE_SEQ_NO (+)= tsspc.LINE_SEQ_NO
+                AND tssh.ORG_BILL_NO IS NULL
+                AND tssh.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
+                AND tssh.HQ_BRAND_CD = tsspc.HQ_BRAND_CD
+                AND tssh.STORE_CD = tsspc.STORE_CD
+                AND tssh.SALE_DATE = tsspc.SALE_DATE
+                AND tssh.POS_NO = tsspc.POS_NO
+                AND tssh.BILL_NO = tsspc.BILL_NO
+            ) A,
+            (
+                SELECT
+                SUM(tsspc.SALE_FG * tsspc.APPR_AMT) AS MONTH_UNPAID_AMT
+                FROM TB_SL_SALE_PAY_CARD tsspc,
+                TB_SL_SALE_PAY_CARD_CREDIT_KWU tsspcck,
+                TB_SL_SALE_HDR tssh
+                WHERE 1=1
+                AND tsspcck.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsspcck.STORE_CD = #{storeCd}
+                AND tsspc.APPR_DT IS NOT NULL
+                AND SUBSTR(tsspc.APPR_DT, 1, 8) = #{startDate}
+                AND tsspcck.CREDIT_AMT IS NULL
+                AND tsspcck.HQ_OFFICE_CD (+)= tsspc.HQ_OFFICE_CD
+                AND tsspcck.HQ_BRAND_CD (+)= tsspc.HQ_BRAND_CD
+                AND tsspcck.STORE_CD (+)= tsspc.STORE_CD
+                AND tsspcck.SALE_DATE (+)= tsspc.SALE_DATE
+                AND tsspcck.POS_NO (+)= tsspc.POS_NO
+                AND tsspcck.BILL_NO (+)= tsspc.BILL_NO
+                AND tsspcck.LINE_NO (+)= tsspc.LINE_NO
+                AND tsspcck.LINE_SEQ_NO (+)= tsspc.LINE_SEQ_NO
+                AND tssh.ORG_BILL_NO IS NULL
+                AND tssh.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
+                AND tssh.HQ_BRAND_CD = tsspc.HQ_BRAND_CD
+                AND tssh.STORE_CD = tsspc.STORE_CD
+                AND tssh.SALE_DATE = tsspc.SALE_DATE
+                AND tssh.POS_NO = tsspc.POS_NO
+                AND tssh.BILL_NO = tsspc.BILL_NO
+            ) B,
+            (
+                SELECT
+                SUM(tsspcck.CREDIT_FEE) AS COMMISSION_AMT
+                FROM TB_SL_SALE_PAY_CARD_CREDIT_KWU tsspcck
+                WHERE 1=1
+                AND tsspcck.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsspcck.STORE_CD = #{storeCd}
+                AND tsspcck.CREDIT_DATE = #{startDate}
+            ) C,
+            (
+                SELECT
+                SUM(tpck.INTEREST_AMT) AS INTEREST_AMT
+                FROM TB_PO_CLOSE_KWU tpck
+                WHERE 1=1
+                AND tpck.STORE_CD = #{storeCd}
+                AND tpck.CLOSE_DATE = #{startDate}
+            ) D,
+            (
+                SELECT
+                SUM(tsdt.PAY_AMT_01) AS CARD_AMT
+                FROM TB_SL_DAILY_TOTAL tsdt
+                WHERE 1=1
+                AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsdt.STORE_CD = #{storeCd}
+                AND tsdt.SALE_DATE = #{startDate}
+            ) E
+        )
         UNION ALL
-        SELECT  '월계' AS FG
-        ,       0 AS B_MONTH_UNPAID_AMT
-        ,       0 AS MONTH_UNPAID_AMT
-        ,       0 AS COMMISSION_AMT
-        ,       0 AS INTEREST_AMT
-        ,       0 AS CARD_IN_AMT
-        FROM    DUAL
+        (
+            SELECT
+            '월계' AS FG,
+            A.B_MONTH_UNPAID_AMT, --전월미수
+            B.MONTH_UNPAID_AMT, --당월미수
+            C.COMMISSION_AMT, --수수료
+            D.INTEREST_AMT, -- 결산이자
+            (E.CARD_AMT + 0 + A.B_MONTH_UNPAID_AMT + D.INTEREST_AMT) - (B.MONTH_UNPAID_AMT + C.COMMISSION_AMT) AS CARD_IN_AMT --(신용카드+신용단말기+전월미수+결산이자) - (당월미수+수수료)
+            FROM
+            (
+                SELECT
+                SUM(tsspc.SALE_FG * tsspc.APPR_AMT) AS B_MONTH_UNPAID_AMT
+                FROM TB_SL_SALE_PAY_CARD tsspc,
+                TB_SL_SALE_PAY_CARD_CREDIT_KWU tsspcck,
+                TB_SL_SALE_HDR tssh
+                WHERE 1=1
+                AND tsspcck.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsspcck.STORE_CD = #{storeCd}
+                AND tsspc.APPR_DT IS NOT NULL
+                AND SUBSTR(tsspc.APPR_DT, 1, 8) BETWEEN TO_CHAR((TO_DATE(SUBSTR(#{startDate}, 1, 6), 'YYYYMM') -1), 'YYYYMM')||'01' AND TO_CHAR((TO_DATE(SUBSTR(#{startDate}, 1, 6), 'YYYYMM') -1), 'YYYYMM')||'31'
+                AND tsspcck.CREDIT_AMT BETWEEN SUBSTR(#{startDate}, 1, 6)||'01' AND #{startDate}
+                AND tsspcck.HQ_OFFICE_CD (+)= tsspc.HQ_OFFICE_CD
+                AND tsspcck.HQ_BRAND_CD (+)= tsspc.HQ_BRAND_CD
+                AND tsspcck.STORE_CD (+)= tsspc.STORE_CD
+                AND tsspcck.SALE_DATE (+)= tsspc.SALE_DATE
+                AND tsspcck.POS_NO (+)= tsspc.POS_NO
+                AND tsspcck.BILL_NO (+)= tsspc.BILL_NO
+                AND tsspcck.LINE_NO (+)= tsspc.LINE_NO
+                AND tsspcck.LINE_SEQ_NO (+)= tsspc.LINE_SEQ_NO
+                AND tssh.ORG_BILL_NO IS NULL
+                AND tssh.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
+                AND tssh.HQ_BRAND_CD = tsspc.HQ_BRAND_CD
+                AND tssh.STORE_CD = tsspc.STORE_CD
+                AND tssh.SALE_DATE = tsspc.SALE_DATE
+                AND tssh.POS_NO = tsspc.POS_NO
+                AND tssh.BILL_NO = tsspc.BILL_NO
+            ) A,
+            (
+                SELECT
+                SUM(tsspc.SALE_FG * tsspc.APPR_AMT) AS MONTH_UNPAID_AMT
+                FROM TB_SL_SALE_PAY_CARD tsspc,
+                TB_SL_SALE_PAY_CARD_CREDIT_KWU tsspcck,
+                TB_SL_SALE_HDR tssh
+                WHERE 1=1
+                AND tsspcck.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsspcck.STORE_CD = #{storeCd}
+                AND tsspc.APPR_DT IS NOT NULL
+                AND SUBSTR(tsspc.APPR_DT, 1, 8) BETWEEN SUBSTR(#{startDate}, 1, 6)||'01' AND #{startDate}
+                AND tsspcck.CREDIT_AMT IS NULL
+                AND tsspcck.HQ_OFFICE_CD (+)= tsspc.HQ_OFFICE_CD
+                AND tsspcck.HQ_BRAND_CD (+)= tsspc.HQ_BRAND_CD
+                AND tsspcck.STORE_CD (+)= tsspc.STORE_CD
+                AND tsspcck.SALE_DATE (+)= tsspc.SALE_DATE
+                AND tsspcck.POS_NO (+)= tsspc.POS_NO
+                AND tsspcck.BILL_NO (+)= tsspc.BILL_NO
+                AND tsspcck.LINE_NO (+)= tsspc.LINE_NO
+                AND tsspcck.LINE_SEQ_NO (+)= tsspc.LINE_SEQ_NO
+                AND tssh.ORG_BILL_NO IS NULL
+                AND tssh.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
+                AND tssh.HQ_BRAND_CD = tsspc.HQ_BRAND_CD
+                AND tssh.STORE_CD = tsspc.STORE_CD
+                AND tssh.SALE_DATE = tsspc.SALE_DATE
+                AND tssh.POS_NO = tsspc.POS_NO
+                AND tssh.BILL_NO = tsspc.BILL_NO
+            ) B,
+            (
+                SELECT
+                SUM(tsspcck.CREDIT_FEE) AS COMMISSION_AMT
+                FROM TB_SL_SALE_PAY_CARD_CREDIT_KWU tsspcck
+                WHERE 1=1
+                AND tsspcck.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsspcck.STORE_CD = #{storeCd}
+                AND tsspcck.CREDIT_DATE BETWEEN SUBSTR(#{startDate}, 1, 6)||'01' AND #{startDate}
+            ) C,
+            (
+                SELECT
+                SUM(tpck.INTEREST_AMT) AS INTEREST_AMT
+                FROM TB_PO_CLOSE_KWU tpck
+                WHERE 1=1
+                AND tpck.STORE_CD = #{storeCd}
+                AND tpck.CLOSE_DATE BETWEEN SUBSTR(#{startDate}, 1, 6)||'01' AND #{startDate}
+            ) D,
+            (
+                SELECT
+                SUM(tsdt.PAY_AMT_01) AS CARD_AMT
+                FROM TB_SL_DAILY_TOTAL tsdt
+                WHERE 1=1
+                AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsdt.STORE_CD = #{storeCd}
+                AND tsdt.SALE_DATE BETWEEN SUBSTR(#{startDate}, 1, 6)||'01' AND #{startDate}
+            ) E
+        )
     </select>
 
     <!-- 단체수강 목록조회
@@ -368,12 +605,33 @@
     -->
     <select id="getGroupCourseList" parameterType="dayCloseVO" resultType="DefaultMap">
         /* DailyTableMapper.getGroupCourseList */
-        SELECT  '구분' AS FG
-        ,       '단체명' AS GROUP_NM
-        ,       '20220920' AS SALE_DATE
-        ,       '0' AS SUMMARY
-        ,       0 AS AMT
-        FROM    DUAL
+        SELECT
+        (CASE WHEN tmmak.GROUP_TYPE_FG = '1' THEN '단체'
+               WHEN tmmak.GROUP_TYPE_FG = '2' THEN '하키'
+               WHEN tmmak.GROUP_TYPE_FG = '3' THEN '기타'
+               ELSE null END
+        ) AS FG,
+        tsdmp.MEMBR_NO,
+        SBPENC.D(tmm.MEMBR_NM) AS GROUP_NM,
+        SUBSTR(tsdmp.SALE_DATE, 1, 4)||'-'||SUBSTR(tsdmp.SALE_DATE, 5, 2)||'-'||SUBSTR(tsdmp.SALE_DATE, 7, 2) AS SALE_DATE,
+        LISTAGG(tsdmp.PROD_CD, ',') WITHIN GROUP (ORDER BY tsdmp.PROD_CD) AS PROD_CD,
+        LISTAGG(tmp.PROD_NM, ',') WITHIN GROUP (ORDER BY tmp.PROD_NM) AS SUMMARY,
+        SUM(tsdmp.REAL_SALE_AMT) AS AMT
+        FROM TB_SL_DAILY_MEMBR_PROD tsdmp,
+        TB_MS_PRODUCT tmp,
+        TB_MB_MEMBER tmm,
+        TB_MB_MEMBER_ADDITORY_KWU tmmak
+        WHERE 1=1
+        AND tsdmp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsdmp.STORE_CD = #{storeCd}
+        AND tsdmp.SALE_DATE = #{startDate}
+        AND tmp.STORE_CD (+)= tsdmp.STORE_CD
+        AND tmp.PROD_CD (+)= tsdmp.PROD_CD
+        AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
+        AND tmm.MEMBR_NO (+)= tsdmp.MEMBR_NO
+        AND tmmak.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
+        AND tmmak.MEMBR_NO (+)= tmm.MEMBR_NO
+        GROUP BY tmmak.GROUP_TYPE_FG, tsdmp.MEMBR_NO, tmm.MEMBR_NM, tsdmp.SALE_DATE
     </select>
 
     <!-- 츨납현황 목록조회

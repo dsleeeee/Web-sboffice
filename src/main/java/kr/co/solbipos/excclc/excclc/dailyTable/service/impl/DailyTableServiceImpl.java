@@ -55,9 +55,10 @@ public class DailyTableServiceImpl implements DailyTableService {
     /** 조회 */
     @Override
     public Map<String, Object> getDailyTableList(DailyTableVO dailyTableVO, SessionInfoVO sessionInfoVO) {
-        dailyTableVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        dailyTableVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
+        dailyTableVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dailyTableVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        dailyTableVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dailyTableVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
