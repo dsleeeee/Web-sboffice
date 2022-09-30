@@ -8,11 +8,11 @@
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
 
 <div class="subCon">
-  <div ng-controller="cardCtrl">
+  <div ng-controller="mcoupnCtrl">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl">${menuNm}</a>
       <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('cardCtrl')">
+      <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('mcoupnCtrl')">
         <s:message code="cmm.search"/>
       </button>
     </div>
@@ -47,14 +47,14 @@
                                 closeFunc - 팝업 닫기시 호출할 함수
               --%>
             <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
-              <jsp:param name="targetId" value="cardStore"/>
+              <jsp:param name="targetId" value="mcoupnStore"/>
             </jsp:include>
               <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
           </td>
         </tr>
       </c:if>
       <c:if test="${sessionInfo.orgnFg == 'STORE'}">
-        <input type="hidden" id="cardStoreCd" value="${sessionInfo.storeCd}"/>
+        <input type="hidden" id="mcoupnStoreCd" value="${sessionInfo.storeCd}"/>
       </c:if>
       </tbody>
     </table>
@@ -78,24 +78,22 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="card.saleDate"/>" binding="saleDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="card.branchNm"/>" binding="branchNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="card.storeCd"/>"  binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="card.storeNm"/>"  binding="storeNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="card.posNo"/>"    binding="posNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="card.billNo"/>"   binding="billNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="card.saleFg"/>"   binding="saleFg" width="80" align="center" is-read-only="true" data-map="saleFgMap"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="card.cardcoNm"/>" binding="cardcoNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="card.cardNo"/>"   binding="cardNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="card.instCnt"/>"  binding="instCnt" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="card.exDate"/>"   binding="exDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="card.apprAmt"/>"  binding="apprAmt" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="card.apprNo"/>"   binding="apprNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="card.apprDt"/>"   binding="apprDt" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="mcoupn.saleDate"/>" binding="saleDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="mcoupn.branchNm"/>" binding="branchNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="mcoupn.storeCd"/>"  binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="mcoupn.storeNm"/>"  binding="storeNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="mcoupn.posNo"/>"    binding="posNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="mcoupn.billNo"/>"   binding="billNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="mcoupn.mcoupnNm"/>" binding="mcoupncoNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="mcoupn.saleFg"/>"   binding="saleFg" width="80" align="center" is-read-only="true" data-map="saleFgMap"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="mcoupn.mcoupnBarcdNo"/>" binding="mcoupnBarcdNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="mcoupn.apprAmt"/>"  binding="apprAmt" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="mcoupn.apprNo"/>"   binding="apprNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="mcoupn.apprDt"/>"   binding="apprDt" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         </wj-flex-grid>
         <%-- ColumnPicker 사용시 include --%>
         <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-          <jsp:param name="pickerTarget" value="cardCtrl"/>
+          <jsp:param name="pickerTarget" value="mcoupnCtrl"/>
         </jsp:include>
         <%--// ColumnPicker 사용시 include --%>
       </div>
@@ -108,5 +106,5 @@
   var orgnFg = "${orgnFg}";
   var storeCd = "${storeCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/appr/card/card.js?ver=20220930.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/appr/mcoupn/mcoupn.js?ver=20220930.01" charset="utf-8"></script>
 

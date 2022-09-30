@@ -823,6 +823,10 @@
     <typeAlias alias="cashBillVO" type="kr.co.solbipos.sale.appr.cashBill.service.CashBillVO"/>
     <!-- 맘스터치 > 승인관리2 > 신용카드 승인 조회 -->
     <typeAlias alias="cardVO" type="kr.co.solbipos.sale.appr.card.service.CardVO"/>
+    <!-- 맘스터치 > 승인관리2 > 모바일쿠폰 승인 조회 -->
+    <typeAlias alias="mcoupnVO" type="kr.co.solbipos.sale.appr.mcoupn.service.McoupnVO"/>
+    <!-- 맘스터치 > 승인관리2 > 상품권 승인 조회 -->
+    <typeAlias alias="giftApprVO" type="kr.co.solbipos.sale.appr.gift.service.GiftApprVO"/>
 
 
     <!-- 매출관리 > 배달현황 > 내점/배달/포장 현황 -->

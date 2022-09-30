@@ -21,7 +21,7 @@ import java.util.List;
 
 
 /**
- * @Class Name : CardlController.java
+ * @Class Name : CardController.java
  * @Description : 맘스터치 > 승인관리2 > 신용카드 승인 조회
  * @Modification Information
  * @
@@ -37,7 +37,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/sale/appr/card")
-public class CardlController {
+public class CardController {
 
     private final SessionService sessionService;
     private final CardService cardService;
@@ -46,7 +46,7 @@ public class CardlController {
      * Constructor Injection
      */
     @Autowired
-    public CardlController(SessionService sessionService, CardService cardService) {
+    public CardController(SessionService sessionService, CardService cardService) {
         this.sessionService = sessionService;
         this.cardService = cardService;
     }

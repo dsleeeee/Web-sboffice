@@ -54,7 +54,7 @@
         </tr>
       </c:if>
       <c:if test="${sessionInfo.orgnFg == 'STORE'}">
-        <input type="hidden" id="todayBillSaleDtlSelectStoreCd" value="${sessionInfo.storeCd}"/>
+        <input type="hidden" id="cashBillStoreCd" value="${sessionInfo.storeCd}"/>
       </c:if>
       </tbody>
     </table>

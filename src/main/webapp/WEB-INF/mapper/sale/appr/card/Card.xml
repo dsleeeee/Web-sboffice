@@ -33,17 +33,14 @@
         -- 유효기간
         ,		tsspc.APPR_NO
         ,		tsspc.APPR_DT
-        FROM 	TB_SL_SALE_PAY_CARD tsspc,
-                TB_MS_STORE tms
-        WHERE 	tsspc.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
-        AND 	tsspc.STORE_CD = tms.STORE_CD
+        FROM 	TB_SL_SALE_PAY_CARD tsspc
+        WHERE 	tsspc.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='storeCds != null and storeCds != ""'>
             AND tsspc.STORE_CD IN
             <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
                 #{item}
             </foreach>
         </if>
-        AND     tsspc.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         ORDER BY tsspc.SALE_DATE, tsspc.STORE_CD, tsspc.POS_NO, tsspc.BILL_NO
     </select>
 
