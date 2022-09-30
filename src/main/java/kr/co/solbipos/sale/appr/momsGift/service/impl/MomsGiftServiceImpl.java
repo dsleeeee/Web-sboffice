@@ -27,10 +27,10 @@ import java.util.List;
  */
 @Service("momsGiftService")
 @Transactional
-public class MomsMomsGiftServiceImpl implements MomsGiftService {
+public class MomsGiftServiceImpl implements MomsGiftService {
     private final MomsGiftMapper giftMapper;
 
-    public MomsMomsGiftServiceImpl(MomsGiftMapper giftMapper) {
+    public MomsGiftServiceImpl(MomsGiftMapper giftMapper) {
         this.giftMapper = giftMapper;
     }
 
