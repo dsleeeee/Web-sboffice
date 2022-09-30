@@ -124,6 +124,9 @@
     <typeAlias alias="storeStatusVO" type="kr.co.solbipos.store.manage.status.service.StoreStatusVO"/>
     <typeAlias alias="storeMenuVO" type="kr.co.solbipos.store.manage.storemanage.service.StoreMenuVO"/>
 
+    <!-- 기초관리 > 본사정보관리 > 본사-지사 관리 -->
+    <typeAlias alias="branchMomsVO" type="kr.co.solbipos.store.hq.branchMoms.service.BranchMomsVO"/>
+
     <!-- 기초관리 > 매장정보관리 > OKPOS-KCP 데이터 이관 -->
     <typeAlias alias="migDataMappingVO" type="kr.co.solbipos.store.manage.migDataMapping.service.MigDataMappingVO"/>
     <!-- 기초관리 > 매장정보관리 > 환경변수일괄변경 -->
@@ -815,6 +818,15 @@
     <typeAlias alias="cardCreditVO" type="kr.co.solbipos.sale.card.cardCredit.service.CardCreditVO"/>
     <!-- 광운대 > 신용카드입금관리 > 신용카드입금현황 -->
     <typeAlias alias="cardCreditStatusVO" type="kr.co.solbipos.sale.card.cardCreditStatus.service.CardCreditStatusVO"/>
+
+    <!-- 맘스터치 > 승인관리2 > 현금영수증 승인 조회 -->
+    <typeAlias alias="cashBillVO" type="kr.co.solbipos.sale.appr.cashBill.service.CashBillVO"/>
+    <!-- 맘스터치 > 승인관리2 > 신용카드 승인 조회 -->
+    <typeAlias alias="cardVO" type="kr.co.solbipos.sale.appr.card.service.CardVO"/>
+    <!-- 맘스터치 > 승인관리2 > 모바일쿠폰 승인 조회 -->
+    <typeAlias alias="mcoupnVO" type="kr.co.solbipos.sale.appr.mcoupn.service.McoupnVO"/>
+    <!-- 맘스터치 > 승인관리2 > 상품권 승인 조회 -->
+    <typeAlias alias="giftApprVO" type="kr.co.solbipos.sale.appr.gift.service.GiftApprVO"/>
 
 
     <!-- 매출관리 > 배달현황 > 내점/배달/포장 현황 -->

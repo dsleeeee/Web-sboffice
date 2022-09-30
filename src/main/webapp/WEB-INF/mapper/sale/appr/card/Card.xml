@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    Card.xml
+    신용카드 승인 조회 (맘스터치)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.09.30     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.appr.card.service.impl.CardMapper">
+
+    <!-- 신용카드 승인 조회 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getCardList" parameterType="cardVO" resultType="DefaultMap">
+        /* CardMapper.getCardList */
+        SELECT	tsspc.SALE_DATE
+        -- 지사명
+        -- 지사코드
+        ,		tsspc.STORE_CD
+        ,		(SELECT tms.STORE_NM FROM TB_MS_STORE tms WHERE tms.STORE_CD = tsspc.STORE_CD) AS STORE_NM
+        ,		tsspc.POS_NO
+        ,		tsspc.BILL_NO
+        ,		tsspc.SALE_FG
+        ,       tsspc.ISSUE_NM
+        ,		tsspc.CARD_NO
+        ,		tsspc.APPR_AMT
+        ,		tsspc.INST_CNT
+        -- 유효기간
+        ,		tsspc.APPR_NO
+        ,		tsspc.APPR_DT
+        FROM 	TB_SL_SALE_PAY_CARD tsspc
+        WHERE 	tsspc.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsspc.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY tsspc.SALE_DATE, tsspc.STORE_CD, tsspc.POS_NO, tsspc.BILL_NO
+    </select>
+
+</mapper>

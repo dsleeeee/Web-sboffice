@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    BranchMoms.xml
+    본사-지사 관리 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.09.23      최초작성
+-->
+<mapper namespace="kr.co.solbipos.store.hq.branchMoms.service.impl.BranchMomsMapper">
+
+    <!-- 목록 조회 -->
+    <!--
+        TABLE    : TB_HQ_BRANCH_MOMS
+        PARAM    : branchMomsVO
+        COMMENTS : 목록을 조회한다.
+    -->
+    <select id="getBranchMomsList" parameterType="branchMomsVO" resultType="DefaultMap">
+        /* USE : BranchMomsMapper.getBranchMomsList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  BRANCH_CD
+        ,       BRANCH_NM
+        ,       BRANCH_OWNER_NM
+        ,       TEL_NO
+        ,       PHONE_NO
+        ,       EMAIL
+        ,       POST_NO
+        ,       ADDR
+        ,       ADDR_DTL
+        ,       USE_YN
+        ,       ORGPLCE_INFO
+        ,       TO_CHAR(TO_DATE(REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD') AS REG_DT
+        ,       REG_ID
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    TB_HQ_BRANCH_MOMS
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='branchCd != null and branchCd != ""'>
+            AND BRANCH_CD LIKE '%'|| #{branchCd} || '%'
+        </if>
+        <if test='branchNm != null and branchNm != ""'>
+            AND BRANCH_NM LIKE '%'|| #{branchNm} || '%'
+        </if>
+        <if test='branchOwnerNm != null and branchOwnerNm != ""'>
+            AND BRANCH_OWNER_NM LIKE '%'|| #{branchOwnerNm} || '%'
+        </if>
+        <if test='phoneNo != null and phoneNo != ""'>
+            AND PHONE_NO LIKE '%'|| #{phoneNo} || '%'
+        </if>
+        <if test='useYn != null and useYn != ""'>
+            AND USE_YN = #{useYn}
+        </if>
+         ORDER BY BRANCH_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 코드 채번 -->
+    <!--
+        TABLE    : TB_HQ_BRANCH_MOMS
+        PARAM    : branchMomsVO
+        COMMENTS : 새로운 그룹 생성시 코드를 생성한다.
+    -->
+    <select id="setBranchCd" parameterType="branchMomsVO" resultType="String">
+        /* USE : saveBranchMoms.setBranchCd */
+        SELECT LPAD(NVL(MAX(BRANCH_CD), '0') + 1, 3, '0')
+        FROM TB_HQ_BRANCH_MOMS
+        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+    </select>
+
+    <!-- 등록  -->
+    <!--
+        TABLE    : TB_HQ_BRANCH_MOMS
+        PARAM    : branchMomsVO
+        COMMENTS :
+    -->
+    <insert id="saveBranchMoms" parameterType="DefaultMap">
+        /* USE : BranchMomsMapper.saveBranchMoms */
+        MERGE INTO TB_HQ_BRANCH_MOMS thbm
+        USING DUAL
+        ON (
+            HQ_OFFICE_CD = #{hqOfficeCd}
+            AND BRANCH_CD = #{branchCd}
+        )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+                BRANCH_NM       = #{branchNm}
+            ,   BRANCH_OWNER_NM = #{branchOwnerNm}
+            ,   TEL_NO          = #{telNo}
+            ,   PHONE_NO        = #{phoneNo}
+            ,   EMAIL           = #{email}
+            ,   POST_NO         = #{postNo}
+            ,   ADDR            = #{addr}
+            ,   ADDR_DTL        = #{addrDtl}
+            ,   USE_YN          = #{useYn}
+            ,   ORGPLCE_INFO    = #{orgplceInfo}
+        WHEN NOT MATCHED THEN
+            INSERT
+            (
+                HQ_OFFICE_CD
+            ,   BRANCH_CD
+            ,   BRANCH_NM
+            ,   BRANCH_OWNER_NM
+            ,   TEL_NO
+            ,   PHONE_NO
+            ,   EMAIL
+            ,   POST_NO
+            ,   ADDR
+            ,   ADDR_DTL
+            ,   USE_YN
+            ,   ORGPLCE_INFO
+            ,   REG_DT
+            ,   REG_ID
+            ,   MOD_DT
+            ,   MOD_ID
+            )
+            VALUES
+            (
+                #{hqOfficeCd}
+            ,   #{branchCd}
+            ,   #{branchNm}
+            ,   #{branchOwnerNm}
+            ,   #{telNo}
+            ,   #{phoneNo}
+            ,   #{email}
+            ,   #{postNo}
+            ,   #{addr}
+            ,   #{addrDtl}
+            ,   #{useYn}
+            ,   #{orgplceInfo}
+            ,   #{regDt}
+            ,   #{regId}
+            ,   #{modDt}
+            ,   #{modId}
+            )
+    </insert>
+
+</mapper>
