@@ -3,7 +3,7 @@
  */
 var app = agrid.getApp();
 
-/** 영수증별매출상세현황 controller */
+/** 현금영수증 승인 controller */
 app.controller('cashBillCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('cashBillCtrl', $scope, $http, true));

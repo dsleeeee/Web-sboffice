@@ -22,7 +22,7 @@
         -- 지사명
         -- 지사코드
         ,		tsspc.STORE_CD
-        ,		tms.STORE_NM
+        ,		(SELECT tms.STORE_NM FROM TB_MS_STORE tms WHERE tms.STORE_CD = tsspc.STORE_CD) AS STORE_NM
         ,		tsspc.POS_NO
         ,		tsspc.BILL_NO
         ,		tsspc.SALE_FG
@@ -30,12 +30,8 @@
         ,		tsspc.SALE_AMT AS APPR_AMT
         ,		tsspc.APPR_NO
         ,		tsspc.APPR_DT
-        FROM 	TB_SL_SALE_PAY_CASH tsspc,
-                TB_MS_STORE tms,
-                TB_HQ_BRANCH_MOMS thbm
-        WHERE 	tsspc.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
-        AND 	tsspc.STORE_CD = tms.STORE_CD
-        AND 	tsspc.APPR_PROC_FG IN ('1','2','4')
+        FROM 	TB_SL_SALE_PAY_CASH tsspc
+        WHERE 	tsspc.APPR_PROC_FG IN ('1','2','4')
         <if test='storeCds != null and storeCds != ""'>
             AND tsspc.STORE_CD IN
             <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >

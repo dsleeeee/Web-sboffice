@@ -79,16 +79,16 @@
 
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="cashBill.saleDate"/>"       binding="saleDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="cashBill.branchNm"/>"       binding="branchNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="cashBill.branchNm"/>"       binding="branchNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="cashBill.storeCd"/>"        binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="cashBill.storeNm"/>"        binding="storeNm" width="60" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="cashBill.storeNm"/>"        binding="storeNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="cashBill.posNo"/>"          binding="posNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="cashBill.billNo"/>"         binding="billNo" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="cashBill.billNo"/>"         binding="billNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="cashBill.saleFg"/>"         binding="saleFg" width="80" align="center" is-read-only="true" data-map="saleFgMap"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="cashBill.cashBillCardNo"/>" binding="cashBillCardNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="cashBill.apprAmt"/>"        binding="apprAmt" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="cashBill.apprAmt"/>"        binding="apprAmt" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="cashBill.apprNo"/>"         binding="apprNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="cashBill.apprDt"/>"         binding="apprDt" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="cashBill.apprDt"/>"         binding="apprDt" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         </wj-flex-grid>
         <%-- ColumnPicker 사용시 include --%>
         <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">

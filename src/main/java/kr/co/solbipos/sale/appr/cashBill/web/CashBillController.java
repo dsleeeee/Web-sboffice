@@ -73,7 +73,7 @@ public class CashBillController {
      * @param model
      * @return  Object
      * @author  권지현
-     * @since   2022. 09. 22.
+     * @since   2022. 09. 29.
      */
     @RequestMapping(value = "/cashBill/getCashBillList.sb", method = RequestMethod.POST)
     @ResponseBody
