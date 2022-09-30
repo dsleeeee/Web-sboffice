@@ -59,7 +59,7 @@ public class CardController {
      * @param model
      */
     @RequestMapping(value = "/card/list.sb", method = RequestMethod.GET)
-    public String cardServiceView(HttpServletRequest request, HttpServletResponse response, Model model) {
+    public String cardView(HttpServletRequest request, HttpServletResponse response, Model model) {
 
         return "sale/appr/card/card";
     }

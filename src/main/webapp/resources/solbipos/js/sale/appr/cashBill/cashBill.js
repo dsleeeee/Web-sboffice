@@ -19,7 +19,6 @@ app.controller('cashBillCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-    $scope.getStorePosList();
 
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("cashBillCtrl");

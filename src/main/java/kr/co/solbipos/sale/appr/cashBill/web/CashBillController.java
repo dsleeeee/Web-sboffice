@@ -59,7 +59,7 @@ public class CashBillController {
      * @param model
      */
     @RequestMapping(value = "/cashBill/list.sb", method = RequestMethod.GET)
-    public String cashBillServiceView(HttpServletRequest request, HttpServletResponse response, Model model) {
+    public String cashBillView(HttpServletRequest request, HttpServletResponse response, Model model) {
 
         return "sale/appr/cashBill/cashBill";
     }

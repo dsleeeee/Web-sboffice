@@ -59,7 +59,7 @@ public class MomsGiftController {
      * @param model
      */
     @RequestMapping(value = "/gift/list.sb", method = RequestMethod.GET)
-    public String giftServiceView(HttpServletRequest request, HttpServletResponse response, Model model) {
+    public String giftView(HttpServletRequest request, HttpServletResponse response, Model model) {
 
         return "sale/appr/gift/gift";
     }

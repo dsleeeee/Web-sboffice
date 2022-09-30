@@ -59,7 +59,7 @@ public class McoupnController {
      * @param model
      */
     @RequestMapping(value = "/mcoupn/list.sb", method = RequestMethod.GET)
-    public String mcoupnServiceView(HttpServletRequest request, HttpServletResponse response, Model model) {
+    public String mcoupnView(HttpServletRequest request, HttpServletResponse response, Model model) {
 
         return "sale/appr/mcoupn/mcoupn";
     }
