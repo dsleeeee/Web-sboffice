@@ -1,14 +1,14 @@
-package kr.co.solbipos.sale.appr.gift.service.impl;
+package kr.co.solbipos.sale.appr.momsGift.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.sale.appr.gift.service.GiftApprVO;
+import kr.co.solbipos.sale.appr.momsGift.service.MomsGiftVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
- * @Class Name : GiftMapper.java
+ * @Class Name : MomsGiftMapper.java
  * @Description : 맘스터치 > 승인관리2 > 상품권 승인 조회
  * @Modification Information
  * @
@@ -24,9 +24,9 @@ import java.util.List;
  */
 @Mapper
 @Repository
-public interface GiftApprMapper {
+public interface MomsGiftMapper {
 
     /** 모바일쿠폰 승인 조회 */
-    List<DefaultMap<Object>> getGiftList(GiftApprVO giftVO);
+    List<DefaultMap<Object>> getGiftList(MomsGiftVO giftVO);
 
 }

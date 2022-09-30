@@ -1,17 +1,17 @@
-package kr.co.solbipos.sale.appr.gift.service.impl;
+package kr.co.solbipos.sale.appr.momsGift.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import kr.co.solbipos.sale.appr.gift.service.GiftApprService;
-import kr.co.solbipos.sale.appr.gift.service.GiftApprVO;
+import kr.co.solbipos.sale.appr.momsGift.service.MomsGiftService;
+import kr.co.solbipos.sale.appr.momsGift.service.MomsGiftVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 /**
- * @Class Name : GiftServiceImpl.java
+ * @Class Name : MomsMomsGiftServiceImpl.java
  * @Description : 맘스터치 > 승인관리2 > 상품권 승인 조회
  * @Modification Information
  * @
@@ -25,18 +25,18 @@ import java.util.List;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Service("giftApprService")
+@Service("momsGiftService")
 @Transactional
-public class GiftApprApprServiceImpl implements GiftApprService {
-    private final GiftApprMapper giftMapper;
+public class MomsMomsGiftServiceImpl implements MomsGiftService {
+    private final MomsGiftMapper giftMapper;
 
-    public GiftApprApprServiceImpl(GiftApprMapper giftMapper) {
+    public MomsMomsGiftServiceImpl(MomsGiftMapper giftMapper) {
         this.giftMapper = giftMapper;
     }
 
     /** 모바일쿠폰입금관리 - 매장 콤보박스 조회 */
     @Override
-    public List<DefaultMap<Object>> getGiftList(GiftApprVO giftVO, SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<Object>> getGiftList(MomsGiftVO giftVO, SessionInfoVO sessionInfoVO) {
 
         giftVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 

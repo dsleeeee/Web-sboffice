@@ -1,9 +1,9 @@
-package kr.co.solbipos.sale.appr.gift.service;
+package kr.co.solbipos.sale.appr.momsGift.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 
 /**
- * @Class Name : GiftVO.java
+ * @Class Name : MomsGiftVO.java
  * @Description : 맘스터치 > 승인관리2 > 상품권 승인 조회
  * @Modification Information
  * @
@@ -17,7 +17,7 @@ import kr.co.solbipos.application.common.service.PageVO;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public class GiftApprVO extends PageVO {
+public class MomsGiftVO extends PageVO {
 
     private static final long serialVersionUID = 4567094904301269212L;
 

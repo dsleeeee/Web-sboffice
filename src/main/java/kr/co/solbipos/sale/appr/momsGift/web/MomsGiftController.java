@@ -1,4 +1,4 @@
-package kr.co.solbipos.sale.appr.gift.web;
+package kr.co.solbipos.sale.appr.momsGift.web;
 
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
@@ -6,8 +6,8 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.sale.appr.gift.service.GiftApprService;
-import kr.co.solbipos.sale.appr.gift.service.GiftApprVO;
+import kr.co.solbipos.sale.appr.momsGift.service.MomsGiftService;
+import kr.co.solbipos.sale.appr.momsGift.service.MomsGiftVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +21,7 @@ import java.util.List;
 
 
 /**
- * @Class Name : GiftController.java
+ * @Class Name : MomsGiftController.java
  * @Description : 맘스터치 > 승인관리2 > 상품권 승인 조회
  * @Modification Information
  * @
@@ -37,16 +37,16 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/sale/appr/gift")
-public class GiftApprController {
+public class MomsGiftController {
 
     private final SessionService sessionService;
-    private final GiftApprService giftService;
+    private final MomsGiftService giftService;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public GiftApprController(SessionService sessionService, GiftApprService giftService) {
+    public MomsGiftController(SessionService sessionService, MomsGiftService giftService) {
         this.sessionService = sessionService;
         this.giftService = giftService;
     }
@@ -77,7 +77,7 @@ public class GiftApprController {
      */
     @RequestMapping(value = "/gift/getGiftList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getGiftList(GiftApprVO giftVO, HttpServletRequest request,
+    public Result getGiftList(MomsGiftVO giftVO, HttpServletRequest request,
                               HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);

@@ -9,14 +9,14 @@
     ======================================================
     1       권지현     2022.09.30     최초작성
 -->
-<mapper namespace="kr.co.solbipos.sale.appr.gift.service.impl.GiftApprMapper">
+<mapper namespace="kr.co.solbipos.sale.appr.momsGift.service.impl.MomsGiftMapper">
 
     <!-- 모바일쿠폰 승인 조회 - 조회 -->
     <!--
         TABLE    :
         COMMENTS :
     -->
-    <select id="getGiftList" parameterType="giftVO" resultType="DefaultMap">
+    <select id="getGiftList" parameterType="momsGiftVO" resultType="DefaultMap">
         /* GiftMapper.getGiftList */
         SELECT	tsspg.SALE_DATE
         -- 지사명
