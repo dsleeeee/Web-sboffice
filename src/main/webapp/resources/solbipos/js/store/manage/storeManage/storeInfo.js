@@ -260,6 +260,10 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     }
 
     $scope.store.mapStoreCd = "";
+    $scope.store.latitude = "";
+    $scope.store.longitude = "";
+    $("#latitude").val("");
+    $("#longitude").val("");
 
     // 매장코드8이상사용 확인 초기화
     $("#hdDigit8Store").val("");
@@ -353,6 +357,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#touchKeyChk").prop("checked", false);
 
       $scope.store.mapStoreCd = storeDetailInfo.mapStoreCd;
+      $scope.store.latitude = storeDetailInfo.latitude;
+      $scope.store.longitude = storeDetailInfo.longitude;
+
     });
 
     // 매장코드8이상사용 확인 초기화(상세화면에서는 필요가 없음)
@@ -657,6 +664,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     params.addr = $("#addr").val();
     params.addrdtl = $("#addrDtl").val();
     params.digit8Store = $("#hdDigit8Store").val();
+    params.latitude = $("#latitude").val();
+    params.longitude = $("#longitude").val();
 
      // ERP 연동 매장 등록인 경우, NXPOS_STORE_CD 값을 Update 하기 위함.
     if(orgnFg === "HQ") {
@@ -1312,6 +1321,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $("#agencyNm").val("");
           $("#agencyCd").val("");
           $("#mapStoreCd").val("");
+          $("#latitude").val("");
+          $("#longitude").val("");
 
           $scope.store.storeCd = "";
           $scope.store.storeCdChkFg = "";
@@ -1337,6 +1348,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $scope.store.agencyNm = "";
           $scope.store.agencyCd = "";
           $scope.store.mapStoreCd = "";
+          $scope.store.latitude = "";
+          $scope.store.longitude = "";
 
           // ERP 연동 매장 정보 셋팅
           if($scope.store.storeCdInputType === "1") {
@@ -1401,6 +1414,29 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     });
     event.preventDefault();
+
+  };
+
+  // 지도보기 팝업
+  $scope.openMap = function () {
+
+    // 위도,경도 또는 주소가 있는지 체크
+    if($("#latitude").val() === "" || $("#longitude").val() === "") {
+      if($("#addr").val() === ""){
+        $scope._popMsg(messages["storeManage.mapOpen.msg"]); // 정확한 주소가 없어 지도를 조회할 수 없습니다.
+        return;
+      }
+    }
+
+    var params = {};
+    params.title = messages["storeManage.storeLocation"]; // 지도 팝업 title
+    params.markerNm = $("#storeNm").val();                // 지도 위치 마커명
+    params.addr = $("#addr").val();                       // 주소
+    params.latitude = $("#latitude").val();               // 위도
+    params.longitude = $("#longitude").val();             // 경도
+
+    $scope.mapPopLayer.show(true);
+    $scope._broadcast('mapPopCtrl', params);
 
   };
 

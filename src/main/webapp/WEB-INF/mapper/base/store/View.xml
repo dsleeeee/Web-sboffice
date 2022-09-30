@@ -30,7 +30,10 @@
                tms.SYS_STAT_FG,
                TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'yyyyMMdd'), 'YYYY/MM/DD') AS SYS_OPEN_DATE,
                TO_CHAR(TO_DATE(tms.SYS_CLOSURE_DATE, 'yyyyMMdd'), 'YYYY/MM/DD') AS SYS_CLOSURE_DATE,
-               tme.USER_ID AS MS_USER_ID
+               tme.USER_ID AS MS_USER_ID,
+               tms.ADDR,
+               tms.LATITUDE,
+               tms.LONGITUDE
       <include refid="CmmSQL.PagingTemplateCount"/>
           FROM TB_MS_STORE tms,
                TB_MS_POS tmp,

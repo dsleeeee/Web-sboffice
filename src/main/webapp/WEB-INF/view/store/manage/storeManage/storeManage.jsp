@@ -141,6 +141,11 @@
         <wj-flex-grid-column header="<s:message code="storeManage.sysOpenDate"/>" binding="sysOpenDate" align="center" width="110" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeManage.van"/>" binding="vanNm" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeManage.agency"/>" binding="agencyNm" align="center" width="90" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.storeLocation"/>" binding="storeLocation" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.addr"/>" binding="addr" align="center" width="0" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.latitude"/>" binding="latitude" align="center" width="0" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.longitude"/>" binding="longitude" align="center" width="0" is-read-only="true" visible="false"></wj-flex-grid-column>
+
       </wj-flex-grid>
     </div>
   </div>
@@ -203,7 +208,7 @@ var erpLinkHq = "${erpLinkHq}"; // ERP를 연동하는 본사인지 확인
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeManage.js?ver=20200423.11" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeManage.js?ver=20220928.02" charset="utf-8"></script>
 
 <%-- 매장정보 --%>
 <c:import url="/WEB-INF/view/store/manage/storeManage/storeInfo.jsp">
@@ -221,4 +226,8 @@ var erpLinkHq = "${erpLinkHq}"; // ERP를 연동하는 본사인지 확인
 <c:import url="/WEB-INF/view/store/manage/storeManage/storeAuth.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 지도보기 팝업 --%>
+<c:import url="/WEB-INF/view/application/layer/mapPop.jsp">
 </c:import>

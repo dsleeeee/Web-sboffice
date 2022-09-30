@@ -163,6 +163,14 @@ public class StoreManageVO extends PageVO {
     /** 프로시져 실행 결과 */
     private String result;
 
+    /** 위도 */
+    private String latitude;
+
+    /** 경도 */
+    private String longitude;
+
+
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -826,5 +834,21 @@ public class StoreManageVO extends PageVO {
 
     public void setResult(String result) {
         this.result = result;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 }

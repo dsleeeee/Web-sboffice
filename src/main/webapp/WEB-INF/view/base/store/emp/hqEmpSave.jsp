@@ -26,7 +26,7 @@
       </div>
 
       <%-- 상세 --%>
-      <div id="dtlArea" style="height: 266px; overflow-y: auto;">
+      <div id="dtlArea" style="height: 290px; overflow-y: auto;">
 
         <table class="tblType01">
           <colgroup>
@@ -270,6 +270,28 @@
               </td>
               <th></th>
               <td></td>
+          </tr>
+          <tr>
+            <%-- 지사명 --%>
+            <th>
+              <s:message code="hqEmp.branchNm"/>
+            </th>
+            <td>
+              <div class="sb-select w100">
+                <wj-combo-box
+                        id="branchCd"
+                        ng-model="hqEmpRegistInfo.branchCd"
+                        control="hqEmpBranchCdCombo"
+                        items-source="_getComboData('hqEmpBranchCdComboData')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        initialized="_initComboBox(s)">
+                </wj-combo-box>
+              </div>
+            </td>
+            <th></th>
+            <td></td>
           </tr>
           </tbody>
         </table>

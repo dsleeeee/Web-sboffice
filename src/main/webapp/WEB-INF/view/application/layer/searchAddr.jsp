@@ -8,7 +8,10 @@
     <img src="/resource/solbipos/css/img/fixedMenu_close_off.png" id="btnCloseLayer" style="cursor:pointer;position:absolute;right:-3px;top:-3px;z-index:1" onclick="closeDaumPostcode()" alt="닫기 버튼">
 </div>
 
+<%-- 우편번호 서비스 API --%>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<%-- KAKAO Maps API --%>
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=00a01cbae68d391a0f4b72950f33ada1&libraries=services"></script>
 <script>
 
     // 화면 구분자 값을 파악하여, 부모창의 element id명을 파악한다.
@@ -17,7 +20,7 @@
     // hqInfo : 본사등록
     // storeInfo : 매장등록
     // agencyInfo : 총판/대리점등록
-    // myInfo : 내정보관리
+    // myInfo : 본사정보관리(구: 내정보관리)
     // vendrRegist : 거래처등록
     // memberBasic : 회원등록
     var pageNm = $("#pageNm").val();
@@ -27,14 +30,21 @@
         elementId[0] = "rPostNo";
         elementId[1] = "rAddr";
         elementId[2] = "rAddrDtl";
+        elementId[3] = "";
+        elementId[4] = "";
     }else if(pageNm === "agencyInfo"){
         elementId[0] = "ai_postNo";
         elementId[1] = "ai_addr";
         elementId[2] = "ai_addrDtl";
+        elementId[3] = "";
+        elementId[4] = "";
     }else{
         elementId[0] = "postNo";
         elementId[1] = "addr";
         elementId[2] = "addrDtl";
+        elementId[3] = "latitude";
+        elementId[4] = "longitude";
+
     }
 
     // 우편번호 찾기 팝업을 띄울 때 background dimmed
@@ -42,6 +52,9 @@
 
     // 우편번호 찾기 화면을 넣을 element
     var element_layer = document.getElementById('layer');
+
+    // 주소-좌표 변환 객체를 생성합니다
+    var geocoder = new kakao.maps.services.Geocoder();
 
     // 우편번호 찾기 팝업 닫기
     function closeDaumPostcode() {
@@ -92,6 +105,20 @@
                 // 기존 상세주소 초기화 및 커서를 상세주소 필드로 이동한다.
                 document.getElementById(elementId[2]).value = "";
                 document.getElementById(elementId[2]).focus();
+
+                // 기본주소로 위도와 경도값 추출
+                geocoder.addressSearch(data.address, function(results, status) {
+                    // 정상적으로 검색이 완료됐으면
+                    if (status === kakao.maps.services.Status.OK) {
+                        var result = results[0]; //첫번째 결과의 값을 활용
+                        console.log("location :" + result.y + "," + result.x);
+
+                        if(elementId[3] !== "" && elementId[4] !== ""){
+                            document.getElementById(elementId[3]).value = result.y;
+                            document.getElementById(elementId[4]).value = result.x;
+                        }
+                    }
+                });
 
                 // iframe을 넣은 element를 안보이게 한다.
                 // (autoClose:false 기능을 이용한다면, 아래 코드를 제거해야 화면에서 사라지지 않는다.)

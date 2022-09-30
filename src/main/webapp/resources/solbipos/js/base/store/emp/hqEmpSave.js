@@ -42,6 +42,8 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._getComboDataQuery('007', 'hqEmpServiceFgComboData');
   // 본사 거래처 콤보박스
   $scope._setComboData('hqEmpVendrCdComboData', vendrList);
+  // 지사 콤보박스
+  $scope._setComboData('hqEmpBranchCdComboData', branchList);
 
   // 선택 사원 (사원 수정시)
   $scope.selectedHqEmp;
@@ -227,6 +229,7 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.hqEmpUseYnFgCombo.selectedIndex = 0;
     $scope.hqEmpMainSaleFgCombo.selectedIndex = 0;
     $scope.hqEmpVendrCdCombo.selectedIndex = 0;
+    $scope.hqEmpBranchCdCombo.selectedIndex = 0;
 
     $scope.hqEmpRegistLayer.hide();
   };

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    Mcoupn.xml
+    모바일쿠폰 승인 조회 (맘스터치)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.09.30     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.appr.mcoupn.service.impl.McoupnMapper">
+
+    <!-- 모바일쿠폰 승인 조회 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMcoupnList" parameterType="mcoupnVO" resultType="DefaultMap">
+        /* McoupnMapper.getMcoupnList */
+        SELECT	tsspm.SALE_DATE
+        -- 지사명
+        -- 지사코드
+        ,		tsspm.STORE_CD
+        ,		(SELECT tms.STORE_NM FROM TB_MS_STORE tms WHERE tms.STORE_CD = tsspm.STORE_CD) AS STORE_NM
+        ,		tsspm.POS_NO
+        ,		tsspm.BILL_NO
+        -- 품목명
+        ,		tsspm.SALE_FG
+        ,       tsspm.MCOUPN_BARCD_NO
+        ,       tsspm.SALE_AMT AS APPR_AMT
+        ,		tsspm.APPR_NO
+        ,		tsspm.APPR_DT
+        FROM 	TB_SL_SALE_PAY_MCOUPN tsspm
+        WHERE 	tsspm.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsspm.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY tsspm.SALE_DATE, tsspm.STORE_CD, tsspm.POS_NO, tsspm.BILL_NO
+    </select>
+
+</mapper>

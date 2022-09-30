@@ -83,6 +83,9 @@ public class HqEmpController {
         // 본사 거래처 콤보박스
         model.addAttribute("vendrList", convertToJson(hqEmpService.getHqVendrCombo(hqEmpVO, sessionInfoVO)));
 
+        // 지사 콤보박스
+        model.addAttribute("branchList", convertToJson(hqEmpService.getHqBranchCombo(hqEmpVO, sessionInfoVO)));
+
         return "base/store/emp/hqEmp";
     }
 

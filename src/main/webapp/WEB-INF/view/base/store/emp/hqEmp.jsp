@@ -226,6 +226,8 @@
 
   <%-- 본사 거래처 콤보박스 --%>
   var vendrList = ${vendrList};
+  <%-- 지사 콤보박스 --%>
+  var branchList = ${branchList};
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmp.js?ver=2018112103" charset="utf-8"></script>

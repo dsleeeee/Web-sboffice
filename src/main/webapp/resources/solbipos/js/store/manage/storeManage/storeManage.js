@@ -44,7 +44,14 @@ app.controller('storeManageCtrl', ['$scope', '$http', '$timeout', function ($sco
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
-        if (col.binding === "storeCd" || col.binding === "storeNm") {
+
+        // 지도보기 팝업 버튼 set
+        if( col.binding === "storeLocation"){
+          e.cell.innerHTML = messages["storeManage.storeLocation"];
+          wijmo.addClass(e.cell, 'wj-custom-readonly');
+        }
+
+        if (col.binding === "storeCd" || col.binding === "storeNm" || col.binding === "storeLocation") {
           wijmo.addClass(e.cell, 'wijLink');
         }
       }
@@ -55,7 +62,7 @@ app.controller('storeManageCtrl', ['$scope', '$http', '$timeout', function ($sco
       var ht = s.hitTest(e);
       if( ht.cellType === wijmo.grid.CellType.Cell) {
         var col = ht.panel.columns[ht.col];
-        // var selectedRow = s.rows[ht.row].dataItem;
+        var selectedRow = s.rows[ht.row].dataItem;
         if ( col.binding === "storeCd" ||  col.binding === "storeNm") {
           $scope.setSelectedStore(s.rows[ht.row].dataItem);
           /*var popup = $scope.storeInfoLayer;
@@ -72,8 +79,29 @@ app.controller('storeManageCtrl', ['$scope', '$http', '$timeout', function ($sco
 
           $scope.storeInfoLayer.show(true);
           $scope._broadcast('storeInfoCtrl');
-
           event.preventDefault();
+        }
+
+        // 지도보기 팝업
+        if(col.binding === "storeLocation") {
+
+          // 위도,경도 또는 주소가 있는지 체크
+          if(selectedRow.latitude === "" || selectedRow.longitude === "") {
+              if(selectedRow.addr === ""){
+                $scope._popMsg(messages["storeManage.mapOpen.msg"]); // 정확한 주소가 없어 지도를 조회할 수 없습니다.
+                return;
+              }
+          }
+
+          var params = {};
+          params.title = messages["storeManage.storeLocation"]; // 지도 팝업 title
+          params.markerNm = selectedRow.storeNm;                // 지도 위치 마커명
+          params.addr = selectedRow.addr;                       // 주소
+          params.latitude = selectedRow.latitude;               // 위도
+          params.longitude = selectedRow.longitude;             // 경도
+
+          $scope.mapPopLayer.show(true);
+          $scope._broadcast('mapPopCtrl', params);
         }
       }
     });

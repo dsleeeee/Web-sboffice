@@ -417,4 +417,12 @@ public class HqEmpServiceImpl implements HqEmpService {
 
         return hqEmpMapper.getHqVendrCombo(hqEmpVO);
     }
+
+    @Override
+    public List<DefaultMap<String>> getHqBranchCombo(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO) {
+
+        hqEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return hqEmpMapper.getHqBranchCombo(hqEmpVO);
+    }
 }

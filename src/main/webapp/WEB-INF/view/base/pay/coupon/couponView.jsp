@@ -137,6 +137,7 @@
           <wj-flex-grid-column header="<s:message code="coupon.coupnDcAmt"/>" binding="coupnDcAmt" max-length="7"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.coupnApplyFg"/>" binding="coupnApplyFg"  data-map="coupnApplyFgDataMap" align="center" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.coupnTargetFg"/>" binding="coupnTargetFg" data-map="coupnTargetFgDataMap" align="center" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="coupon.coupnProdFg"/>" binding="coupnProdFg" data-map="coupnProdFgDataMap" align="center" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.prodCnt"/>" binding="prodCnt" is-read-only="true" align="center"></wj-flex-grid-column>
 
           <c:if test="${orgnFg == 'HQ'}">
@@ -171,7 +172,7 @@ var coupnEnvstVal = "${coupnEnvstVal}";
 var mappingFg = "${mappingFg}";
 var mappingCd   = ${ccu.getCommCodeExcpAll("805")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/coupon.js?ver=2019012201.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/coupon.js?ver=2019012201.09" charset="utf-8"></script>
 
 <%-- 쿠폰별 상품 등록 레이어 팝업 --%>
 <c:import url="/WEB-INF/view/base/pay/coupon/couponProdView.jsp">

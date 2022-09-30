@@ -225,8 +225,13 @@
               <th><s:message code="storeManage.addr" /><em class="imp">*</em></th>
               <td colspan="3">
                 <input type="text" id="postNo" ng-model="store.postNo" class="sb-input w80px" maxlength="5" placeholder="우편번호" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" readonly/>
-                <a id="btnSrchAddr" href="#" class="btn_grayS ml5" onclick="searchAddr()">
+                <a id="btnSrchAddr" href="#" class="btn_grayS" onclick="searchAddr()">
                   <s:message code="storeManage.srchAddr" />
+                </a>
+                <input type="text" id="latitude" ng-model="store.latitude" class="sb-input w130px" placeholder="위도" style="margin:4px 0px;" readonly/>
+                <input type="text" id="longitude" ng-model="store.longitude" class="sb-input w130px" placeholder="경도" style="margin:4px 0px;" readonly/>
+                <a id="btnOpenMap" href="#" class="btn_grayS" ng-click="openMap()">
+                  <s:message code="storeManage.storeLocation" />
                 </a>
                 <br>
                 <input type="text" id="addr" ng-model="store.addr" class="sb-input w100" maxlength="60" placeholder="주소1" style="margin:4px 0px;" readonly/>
@@ -407,7 +412,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20220811.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20220928.02" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">

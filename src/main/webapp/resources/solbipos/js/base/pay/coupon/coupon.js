@@ -22,6 +22,12 @@ var coupnTargetFg = [
   {"name":"포함","value":"I"}
 ];
 
+// 쿠폰적용품목구분 코드
+var coupnProdFg = [
+  {"name":"전체상품적용","value":"0"},
+  {"name":"단일상품적용","value":"1"}
+];
+
 /**
  *  쿠폰분류등록 그리드 생성
  */
@@ -41,6 +47,7 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.coupnDcFgDataMap = new wijmo.grid.DataMap(coupnDcFg, 'value', 'name');
     $scope.coupnApplyFgDataMap = new wijmo.grid.DataMap(coupnApplyFg, 'value', 'name');
     $scope.coupnTargetFgDataMap = new wijmo.grid.DataMap(coupnTargetFg, 'value', 'name');
+    $scope.coupnProdFgDataMap = new wijmo.grid.DataMap(coupnProdFg, 'value', 'name');
     $scope.mappingCdDataMap = new wijmo.grid.DataMap(mappingCd, 'value', 'name');
 
     // ReadOnly 효과설정
@@ -261,6 +268,7 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.coupnDcFgDataMap = new wijmo.grid.DataMap(coupnDcFg, 'value', 'name');
     $scope.coupnApplyFgDataMap = new wijmo.grid.DataMap(coupnApplyFg, 'value', 'name');
     $scope.coupnTargetFgDataMap = new wijmo.grid.DataMap(coupnTargetFg, 'value', 'name');
+    $scope.coupnProdFgDataMap = new wijmo.grid.DataMap(coupnProdFg, 'value', 'name');
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
@@ -406,6 +414,7 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
     params.coupnDcFg = "1";
     params.coupnApplyFg = "1";
     params.coupnTargetFg = "A";
+    params.coupnProdFg = "0";
     params.useYn = "Y";
     params.prodCnt = "0";
     params.storeCnt = "0";

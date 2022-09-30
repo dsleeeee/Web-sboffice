@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    Gift.xml
+    상품권 승인 조회 (맘스터치)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.09.30     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.appr.momsGift.service.impl.MomsGiftMapper">
+
+    <!-- 모바일쿠폰 승인 조회 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getGiftList" parameterType="momsGiftVO" resultType="DefaultMap">
+        /* GiftMapper.getGiftList */
+        SELECT	tsspg.SALE_DATE
+        -- 지사명
+        ,		tsspg.STORE_CD
+        ,		(SELECT tms.STORE_NM FROM TB_MS_STORE tms WHERE tms.STORE_CD = tsspg.STORE_CD) AS STORE_NM
+        ,		tsspg.POS_NO
+        ,		tsspg.BILL_NO
+        ,		tsspg.SALE_FG
+        -- 상품권명
+        -- 상품권번호
+        -- 상품권금액
+        ,       tsspg.SALE_AMT AS APPR_AMT
+        -- 승인번호
+        -- 승인일시
+        -- 가맹번호
+        FROM 	TB_SL_SALE_PAY_GIFT tsspg
+        WHERE 	tsspg.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsspg.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY tsspg.SALE_DATE, tsspg.STORE_CD, tsspg.POS_NO, tsspg.BILL_NO
+    </select>
+
+</mapper>
