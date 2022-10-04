@@ -18,7 +18,7 @@
     -->
     <select id="getMcoupnList" parameterType="mcoupnVO" resultType="DefaultMap">
         /* McoupnMapper.getMcoupnList */
-        SELECT	tsspm.SALE_DATE
+        SELECT	TO_CHAR(TO_DATE(tsspm.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
         -- 지사명
         -- 지사코드
         ,		tsspm.STORE_CD
@@ -32,7 +32,8 @@
         ,		tsspm.APPR_NO
         ,		tsspm.APPR_DT
         FROM 	TB_SL_SALE_PAY_MCOUPN tsspm
-        WHERE 	tsspm.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        WHERE   tsspm.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsspm.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='storeCds != null and storeCds != ""'>
             AND tsspm.STORE_CD IN
             <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
