@@ -18,7 +18,7 @@
     -->
     <select id="getGiftList" parameterType="momsGiftVO" resultType="DefaultMap">
         /* GiftMapper.getGiftList */
-        SELECT	tsspg.SALE_DATE
+        SELECT	TO_CHAR(TO_DATE(tsspg.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
         -- 지사명
         ,		tsspg.STORE_CD
         ,		(SELECT tms.STORE_NM FROM TB_MS_STORE tms WHERE tms.STORE_CD = tsspg.STORE_CD) AS STORE_NM
@@ -33,7 +33,8 @@
         -- 승인일시
         -- 가맹번호
         FROM 	TB_SL_SALE_PAY_GIFT tsspg
-        WHERE 	tsspg.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        WHERE   tsspg.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsspg.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='storeCds != null and storeCds != ""'>
             AND tsspg.STORE_CD IN
             <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >

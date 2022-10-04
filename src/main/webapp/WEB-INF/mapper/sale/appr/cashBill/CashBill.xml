@@ -18,7 +18,7 @@
     -->
     <select id="getCashBillList" parameterType="cashBillVO" resultType="DefaultMap">
         /* CashBillMapper.getCashBillList */
-        SELECT	tsspc.SALE_DATE
+        SELECT	TO_CHAR(TO_DATE(tsspc.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
         -- 지사명
         -- 지사코드
         ,		tsspc.STORE_CD
@@ -31,14 +31,15 @@
         ,		tsspc.APPR_NO
         ,		tsspc.APPR_DT
         FROM 	TB_SL_SALE_PAY_CASH tsspc
-        WHERE 	tsspc.APPR_PROC_FG IN ('1','2','4')
+        WHERE   tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsspc.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND     tsspc.APPR_PROC_FG IN ('1','2','4')
         <if test='storeCds != null and storeCds != ""'>
             AND tsspc.STORE_CD IN
             <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
                 #{item}
             </foreach>
         </if>
-        AND     tsspc.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         ORDER BY tsspc.SALE_DATE, tsspc.STORE_CD, tsspc.POS_NO, tsspc.BILL_NO
     </select>
 

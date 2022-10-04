@@ -18,7 +18,7 @@
     -->
     <select id="getCardList" parameterType="cardVO" resultType="DefaultMap">
         /* CardMapper.getCardList */
-        SELECT	tsspc.SALE_DATE
+        SELECT	TO_CHAR(TO_DATE(tsspc.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
         -- 지사명
         -- 지사코드
         ,		tsspc.STORE_CD
@@ -34,7 +34,8 @@
         ,		tsspc.APPR_NO
         ,		tsspc.APPR_DT
         FROM 	TB_SL_SALE_PAY_CARD tsspc
-        WHERE 	tsspc.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        WHERE   tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsspc.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='storeCds != null and storeCds != ""'>
             AND tsspc.STORE_CD IN
             <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
