@@ -641,11 +641,37 @@
     -->
     <select id="getPaymentStatus1List" parameterType="dayCloseVO" resultType="DefaultMap">
         /* DailyTableMapper.getPaymentStatus1List */
-        SELECT  '월입금누계' AS MONTH_IN_AMT_SUM
-        ,       0 AS IN_AMT
-        ,       0 AS OUT_AMT
-        ,       0 AS REMAIN_AMT
-        FROM    DUAL
+        SELECT
+        MONTH_IN_AMT_SUM,
+        SUM(IN_AMT) AS IN_AMT,
+        SUM(OUT_AMT) AS OUT_AMT,
+        SUM(REMAIN_AMT) AS REMAIN_AMT
+        FROM
+        (
+            SELECT *
+            FROM
+            (
+                SELECT
+                '월입금 누계' AS MONTH_IN_AMT_SUM,
+                tpck.IN_AMT,
+                tpck.OUT_AMT,
+                (tpck.IN_AMT - tpck.OUT_AMT) AS REMAIN_AMT
+                FROM TB_PO_CLOSE_KWU tpck
+                WHERE 1=1
+                AND tpck.STORE_CD = #{storeCd}
+                AND tpck.CLOSE_DATE = #{startDate}
+              )
+            UNION ALL
+            (
+                SELECT
+                '월입금 누계' AS MONTH_IN_AMT_SUM,
+                0 AS IN_AMT,
+                0 AS OUT_AMT,
+                0 AS REMAIN_AMT
+                FROM dual
+            )
+        )
+        GROUP BY MONTH_IN_AMT_SUM
     </select>
 
     <!-- 츨납현황 목록조회
@@ -695,7 +721,7 @@
         ,       IN_SUM AS IN_AMT
         ,       '출금계' AS OUT_INFO
         ,       OUT_SUM AS OUT_AMT
-        ,       0 AS REMAIN_AMT
+        ,       (IN_SUM - OUT_SUM) AS REMAIN_AMT
         FROM    TB_PO_CLOSE_KWU
         WHERE   STORE_CD = #{storeCd}
         AND     CLOSE_DATE = #{startDate}
@@ -704,7 +730,7 @@
         ,       IN_MONTH_SUM AS IN_AMT
         ,       '월출금계' AS OUT_INFO
         ,       OUT_MONTH_SUM AS OUT_AMT
-        ,       0 AS REMAIN_AMT
+        ,       (IN_MONTH_SUM - OUT_MONTH_SUM) AS REMAIN_AMT
         FROM    TB_PO_CLOSE_KWU
         WHERE   STORE_CD = #{storeCd}
         AND     CLOSE_DATE = #{startDate}
@@ -713,7 +739,7 @@
         ,       IN_B_MONTH_SUM AS IN_AMT
         ,       '전월누계' AS OUT_INFO
         ,       OUT_B_MONTH_SUM AS OUT_AMT
-        ,       0 AS REMAIN_AMT
+        ,       (IN_B_MONTH_SUM - OUT_B_MONTH_SUM) AS REMAIN_AMT
         FROM    TB_PO_CLOSE_KWU
         WHERE   STORE_CD = #{storeCd}
         AND     CLOSE_DATE = #{startDate}
@@ -722,7 +748,7 @@
         ,       IN_TOTAL_SUM AS IN_AMT
         ,       '총누계' AS OUT_INFO
         ,       OUT_TOTAL_SUM AS OUT_AMT
-        ,       0 AS REMAIN_AMT
+        ,       (IN_TOTAL_SUM - OUT_TOTAL_SUM) AS REMAIN_AMT
         FROM    TB_PO_CLOSE_KWU
         WHERE   STORE_CD = #{storeCd}
         AND     CLOSE_DATE = #{startDate}
