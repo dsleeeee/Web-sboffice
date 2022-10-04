@@ -87,6 +87,10 @@ app.controller('cardCreditCtrl', ['$scope', '$http', '$timeout', function ($scop
             $("#lblStoreCd").text(params.storeCd);
             // 조회된 취소내역포함여부
             $("#lblRtnSaleFg").text(params.rtnSaleFg);
+
+            // 엑셀다운로드
+            var storeScope = agrid.getScope('cardCreditExcelSampleCtrl');
+            storeScope.searchCardCreditExcelSample(params);
         }, false);
     };
     // <-- //검색 호출 -->
@@ -248,14 +252,8 @@ app.controller('cardCreditCtrl', ['$scope', '$http', '$timeout', function ($scop
     $scope.excelSampleDownload = function(){
         // 조회 여부
         if(srchGubun) {
-            var params = {};
-            params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
-            params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
-            params.rtnSaleFg = $scope.rtnSaleFgCombo;
-            params.storeCd = $scope.storeCdCombo;
-
             // 엑셀다운로드
-            var storeScope = agrid.getScope('cardCreditExcelSampleCtrl', params);
+            var storeScope = agrid.getScope('cardCreditExcelSampleCtrl');
             storeScope.excelDownload();
         }
     };

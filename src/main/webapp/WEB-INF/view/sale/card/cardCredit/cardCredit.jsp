@@ -214,7 +214,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/card/cardCredit/cardCredit.js?ver=20220918.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/card/cardCredit/cardCredit.js?ver=20220918.05" charset="utf-8"></script>
 
 <%-- 신용카드입금관리 엑셀업로드 팝업 --%>
 <c:import url="/WEB-INF/view/sale/card/cardCredit/cardCreditExcelUploadAdd.jsp">
