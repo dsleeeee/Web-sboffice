@@ -95,12 +95,12 @@
                 id="wjGrid">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="instructorMembr.membrNo"/>" binding="membrNo" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="instructorMembr.membrNo"/>" binding="membrNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="instructorMembr.membrNm"/>" binding="membrNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="instructorMembr.registerDate"/>" binding="registerDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="instructorMembr.startDate"/>" binding="useStartDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="instructorMembr.endDate"/>" binding="useEndDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="instructorMembr.status"/>" binding="billNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="instructorMembr.registerDate"/>" binding="registerDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="instructorMembr.startDate"/>" binding="useStartDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="instructorMembr.endDate"/>" binding="useEndDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="instructorMembr.status"/>" binding="status" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
