@@ -334,6 +334,7 @@
          ,      tsspc.SALE_AMT AS APPR_AMT
          ,      tsspc.CASH_BILL_CARD_NO
          ,      tsspc.BILL_NO
+         ,      '' AS CLS_FG -- 현재 어떤 값인지 모름(광운대)
          FROM   TB_SL_SALE_PAY_CASH tsspc
          ,      TB_CM_NMCODE tcn
          ,      TB_MS_STORE tms
