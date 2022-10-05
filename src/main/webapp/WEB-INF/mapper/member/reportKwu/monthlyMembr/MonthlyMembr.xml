@@ -67,6 +67,7 @@
               , tmmak.USE_WEEK
               , tmmak.TEACHER_CD
               , tmm.REMARK
+              , 0 AS GRIND_AMT -- 현재 어떤 값인지 모름(광운대)
         FROM  TB_MB_MEMBER_ADDITORY_KWU tmmak,
               TB_MB_MEMBER tmm
        WHERE  1=1

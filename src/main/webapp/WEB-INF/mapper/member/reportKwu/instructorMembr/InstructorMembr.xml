@@ -42,6 +42,9 @@
               , TO_CHAR(TO_DATE(tmmak.REGISTER_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS REGISTER_DATE
               , TO_CHAR(TO_DATE(tmmak.USE_START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_START_DATE
               , TO_CHAR(TO_DATE(tmmak.USE_END_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_END_DATE
+              <![CDATA[
+              , (CASE WHEN tmmak.USE_END_DATE < TO_CHAR(SYSDATE, 'yyyyMMdd') THEN '종료회원' ELSE '' END) AS STATUS
+              ]]>
         FROM  TB_MB_MEMBER_ADDITORY_KWU tmmak,
               TB_MB_MEMBER tmm
        WHERE  1=1

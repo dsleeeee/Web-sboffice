@@ -69,21 +69,21 @@
                id="wjGrid">
 
                <!-- define columns -->
-               <wj-flex-grid-column header="<s:message code="monthlyMembr.registerDate"/>" binding="registerDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-               <wj-flex-grid-column header="<s:message code="monthlyMembr.membrNm"/>" binding="membrNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+               <wj-flex-grid-column header="<s:message code="monthlyMembr.registerDate"/>" binding="registerDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+               <wj-flex-grid-column header="<s:message code="monthlyMembr.membrNm"/>" binding="membrNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                <wj-flex-grid-column header="<s:message code="monthlyMembr.gender"/>" binding="gendrFg" width="50" align="center" is-read-only="true" data-map="gendrFgDataMap"></wj-flex-grid-column>
                <wj-flex-grid-column header="<s:message code="monthlyMembr.age"/>" binding="age" width="50" align="center" is-read-only="true"></wj-flex-grid-column>
                <wj-flex-grid-column header="<s:message code="monthlyMembr.addr"/>" binding="addr" width="250" align="left" is-read-only="true"></wj-flex-grid-column>
-               <wj-flex-grid-column header="<s:message code="monthlyMembr.telNo"/>" binding="telNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-               <wj-flex-grid-column header="<s:message code="monthlyMembr.startDate"/>" binding="useStartDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-               <wj-flex-grid-column header="<s:message code="monthlyMembr.endDate"/>" binding="useEndDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-               <wj-flex-grid-column header="<s:message code="monthlyMembr.useAmt"/>" binding="useAmt" width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-               <wj-flex-grid-column header="<s:message code="monthlyMembr.grindAmt"/>" binding="" width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-               <wj-flex-grid-column header="<s:message code="monthlyMembr.skateFg"/>" binding="skateFg" width="100" align="center" is-read-only="true" data-map="skateFgDataMap"></wj-flex-grid-column>
+               <wj-flex-grid-column header="<s:message code="monthlyMembr.telNo"/>" binding="telNo" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+               <wj-flex-grid-column header="<s:message code="monthlyMembr.startDate"/>" binding="useStartDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+               <wj-flex-grid-column header="<s:message code="monthlyMembr.endDate"/>" binding="useEndDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+               <wj-flex-grid-column header="<s:message code="monthlyMembr.useAmt"/>" binding="useAmt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+               <wj-flex-grid-column header="<s:message code="monthlyMembr.grindAmt"/>" binding="grindAmt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+               <wj-flex-grid-column header="<s:message code="monthlyMembr.skateFg"/>" binding="skateFg" width="90" align="center" is-read-only="true" data-map="skateFgDataMap"></wj-flex-grid-column>
                <wj-flex-grid-column header="<s:message code="monthlyMembr.classFg"/>" binding="classFg" width="70" align="center" is-read-only="true" data-map="classFgDataMap"></wj-flex-grid-column>
-               <wj-flex-grid-column header="<s:message code="monthlyMembr.useWeek"/>" binding="useWeek" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-               <wj-flex-grid-column header="<s:message code="monthlyMembr.instructorNm"/>" binding="teacherCd" width="100" align="center" is-read-only="true" data-map="teacherCdDataMap"></wj-flex-grid-column>
-               <wj-flex-grid-column header="<s:message code="monthlyMembr.remark"/>" binding="remark" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
+               <wj-flex-grid-column header="<s:message code="monthlyMembr.useWeek"/>" binding="useWeek" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+               <wj-flex-grid-column header="<s:message code="monthlyMembr.instructorNm"/>" binding="teacherCd" width="80" align="center" is-read-only="true" data-map="teacherCdDataMap"></wj-flex-grid-column>
+               <wj-flex-grid-column header="<s:message code="monthlyMembr.remark"/>" binding="remark" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
 
            </wj-flex-grid>
        </div>

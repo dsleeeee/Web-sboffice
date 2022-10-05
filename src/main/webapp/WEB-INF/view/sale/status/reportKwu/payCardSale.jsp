@@ -90,16 +90,16 @@
                 id="wjGrid">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="payCardSale.saleDate"/>" binding="saleDate" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="payCardSale.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="payCardSale.billNo"/>" binding="billNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="payCardSale.apprFg"/>" binding="apprGubun" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="payCardSale.cardNo"/>" binding="cardNo" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="payCardSale.apprFg"/>" binding="apprGubun" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="payCardSale.cardNo"/>" binding="cardNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="payCardSale.apprAmt"/>" binding="apprAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="payCardSale.acquireNm"/>" binding="acquireNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="payCardSale.apprNo"/>" binding="apprNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="payCardSale.membrJoinNo"/>" binding="membrJoinNo" width="130" align="left" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="payCardSale.instCnt"/>" binding="instCntNm" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="payCardSale.transactionType"/>" binding="" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="payCardSale.acquireNm"/>" binding="acquireNm" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="payCardSale.apprNo"/>" binding="apprNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="payCardSale.membrJoinNo"/>" binding="membrJoinNo" width="80" align="left" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="payCardSale.instCnt"/>" binding="instCntNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="payCardSale.transactionType"/>" binding="transactionType" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>

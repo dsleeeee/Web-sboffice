@@ -28,10 +28,14 @@
                    NVL(SUM(PAY_AMT_${item}), 0) AS PAY_AMT_${item}
                 </foreach>
         , 		NVL(SUM(PAY_AMT_021), 0) AS PAY_AMT_021
-        ,       SUM(PAY_AMT_03) + SUM(PAY_AMT_04)
-                + SUM(PAY_AMT_06) + SUM(PAY_AMT_07) + SUM(PAY_AMT_08) + SUM(PAY_AMT_09) + SUM(PAY_AMT_10)
-                + SUM(PAY_AMT_14) + SUM(PAY_AMT_15)
-                + SUM(PAY_AMT_16) + SUM(PAY_AMT_17) + SUM(PAY_AMT_18) + SUM(PAY_AMT_19) AS ETC_AMT
+--         ,       SUM(PAY_AMT_03) + SUM(PAY_AMT_04)
+--                 + SUM(PAY_AMT_06) + SUM(PAY_AMT_07) + SUM(PAY_AMT_08) + SUM(PAY_AMT_09) + SUM(PAY_AMT_10)
+--                 + SUM(PAY_AMT_14) + SUM(PAY_AMT_15)
+--                 + SUM(PAY_AMT_16) + SUM(PAY_AMT_17) + SUM(PAY_AMT_18) + SUM(PAY_AMT_19) AS ETC_AMT
+        ,       0 AS GIFT_AMT -- 현재 어떤 값인지 모름(광운대)
+        ,       0 AS POST_PAID_AMT -- 현재 어떤 값인지 모름(광운대)
+        ,       0 AS POINT_AMT -- 현재 어떤 값인지 모름(광운대)
+        ,       0 AS ETC_AMT -- 현재 어떤 값인지 모름(광운대)
         FROM    (
                 SELECT
                        <choose>
@@ -199,6 +203,8 @@
              </foreach>
       ,      tsshp.PAY02 AS PAY02   -- 현금
       ,      tsshp.PAY021 AS PAY021 -- 현금영수증
+      ,      0 AS POST_PAID_AMT -- 현재 어떤 값인지 모름(광운대)
+      ,      0 AS POINT_AMT -- 현재 어떤 값인지 모름(광운대)
         FROM (   SELECT tssh.SALE_DATE
                  ,      SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT
                  ,      SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT
@@ -281,6 +287,7 @@
         ,      DECODE(TSSPC.INST_CNT, 0 , '일시불', '할부') AS INST_CNT_NM
         ,      TSSPC.INST_CNT
         ,      TO_CHAR(TO_DATE(TSSPC.APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS APPR_DT
+        ,      '' AS TRANSACTION_TYPW -- 현재 어떤 값인지 모름(광운대)
         FROM   TB_SL_SALE_PAY_CARD TSSPC
         ,      TB_MS_STORE TMS
         WHERE  TSSPC.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -328,6 +335,7 @@
          ,      tsspc.SALE_AMT AS APPR_AMT
          ,      tsspc.CASH_BILL_CARD_NO
          ,      tsspc.BILL_NO
+         ,      '' AS CLS_FG -- 현재 어떤 값인지 모름(광운대)
          FROM   TB_SL_SALE_PAY_CASH tsspc
          ,      TB_CM_NMCODE tcn
          ,      TB_MS_STORE tms
