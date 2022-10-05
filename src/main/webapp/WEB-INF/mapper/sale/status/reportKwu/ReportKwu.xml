@@ -287,6 +287,7 @@
         ,      DECODE(TSSPC.INST_CNT, 0 , '일시불', '할부') AS INST_CNT_NM
         ,      TSSPC.INST_CNT
         ,      TO_CHAR(TO_DATE(TSSPC.APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS APPR_DT
+        ,      '' AS TRANSACTION_TYPW -- 현재 어떤 값인지 모름(광운대)
         FROM   TB_SL_SALE_PAY_CARD TSSPC
         ,      TB_MS_STORE TMS
         WHERE  TSSPC.HQ_OFFICE_CD = #{hqOfficeCd}
