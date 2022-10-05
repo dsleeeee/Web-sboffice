@@ -99,9 +99,9 @@
                 <wj-flex-grid-column header="<s:message code="prodClassPayFgSale.cashAmt"/>" binding="payAmt02" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodClassPayFgSale.cashBill"/>" binding="payAmt021" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodClassPayFgSale.cardAmt"/>" binding="payAmt01" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodClassPayFgSale.giftAmt"/>" binding="payAmt13" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodClassPayFgSale.postPaidAmt"/>" binding="payAmt11" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodClassPayFgSale.pointAmt"/>" binding="payAmt09" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodClassPayFgSale.giftAmt"/>" binding="giftAmt" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodClassPayFgSale.postPaidAmt"/>" binding="postPaidAmt" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodClassPayFgSale.pointAmt"/>" binding="pointAmt" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodClassPayFgSale.etcAmt"/>" binding="etcAmt" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>

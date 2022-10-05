@@ -28,10 +28,14 @@
                    NVL(SUM(PAY_AMT_${item}), 0) AS PAY_AMT_${item}
                 </foreach>
         , 		NVL(SUM(PAY_AMT_021), 0) AS PAY_AMT_021
-        ,       SUM(PAY_AMT_03) + SUM(PAY_AMT_04)
-                + SUM(PAY_AMT_06) + SUM(PAY_AMT_07) + SUM(PAY_AMT_08) + SUM(PAY_AMT_09) + SUM(PAY_AMT_10)
-                + SUM(PAY_AMT_14) + SUM(PAY_AMT_15)
-                + SUM(PAY_AMT_16) + SUM(PAY_AMT_17) + SUM(PAY_AMT_18) + SUM(PAY_AMT_19) AS ETC_AMT
+--         ,       SUM(PAY_AMT_03) + SUM(PAY_AMT_04)
+--                 + SUM(PAY_AMT_06) + SUM(PAY_AMT_07) + SUM(PAY_AMT_08) + SUM(PAY_AMT_09) + SUM(PAY_AMT_10)
+--                 + SUM(PAY_AMT_14) + SUM(PAY_AMT_15)
+--                 + SUM(PAY_AMT_16) + SUM(PAY_AMT_17) + SUM(PAY_AMT_18) + SUM(PAY_AMT_19) AS ETC_AMT
+        ,       0 AS GIFT_AMT
+        ,       0 AS POST_PAID_AMT
+        ,       0 AS POINT_AMT
+        ,       0 AS ETC_AMT
         FROM    (
                 SELECT
                        <choose>
