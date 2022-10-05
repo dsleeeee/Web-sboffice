@@ -72,7 +72,7 @@
                 id="wjGrid">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="payFgSale.saleDate"/>" binding="saleDate" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="payFgSale.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="payFgSale.cashAmt"/>" binding="pay02" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="payFgSale.cashBill"/>" binding="pay021" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="payFgSale.cardAmt"/>" binding="pay01" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

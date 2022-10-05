@@ -72,12 +72,12 @@
                 id="wjGrid">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="cashBillInfo.apprDate"/>" binding="apprDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="cashBillInfo.apprFg"/>" binding="apprGubun" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cashBillInfo.apprDate"/>" binding="apprDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cashBillInfo.apprFg"/>" binding="apprGubun" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cashBillInfo.apprAmt"/>" binding="apprAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="cashBillInfo.clsFg"/>" binding="clsFg" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="cashBillInfo.cashBillCardNo"/>" binding="cashBillCardNo" width="130" align="left" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="cashBillInfo.billNo"/>" binding="billNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cashBillInfo.clsFg"/>" binding="clsFg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cashBillInfo.cashBillCardNo"/>" binding="cashBillCardNo" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cashBillInfo.billNo"/>" binding="billNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
