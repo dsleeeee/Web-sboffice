@@ -6,7 +6,7 @@
     <div class="wj-dialog wj-dialog-columns title">
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font">
-          <label id="lblTitle"></label>
+          <label id="lblMapPopTitle"></label>
           <a href="#" class="wj-hide btn_close"></a>
         </div>
 
@@ -14,7 +14,7 @@
         <div class="wj-dialog-body" ng-controller="mapPopCtrl">
             <%-- 지도조회 DIV --%>
             <div id="map" style="width:100%;height:400px;display: none;"></div>
-            <%-- 좌표클릭 DIV --%>
+            <%-- 좌표클릭 DIV (미사용) --%>
             <div class="map_wrap" id="map_wrap">
                 <div id="mapCoordinate" style="width:100%;height:100%;position:relative;overflow:hidden;display: none;"></div>
                 <div class="hAddr">
@@ -25,7 +25,7 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/application/layer/mapPop.js?ver=20220928.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/layer/mapPop.js?ver=20221005.01" charset="utf-8"></script>
 
 <%-- KAKAO Maps API --%>
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=00a01cbae68d391a0f4b72950f33ada1&libraries=services"></script>
@@ -107,7 +107,7 @@
 
 
 
-
+    // 미사용 -----------------------------------------------------------------------------------------------------------
     // 좌표클릭으로 주소 및 위도,경도 조회
     function clickMap(markerNm, latitude, longitude){
 
@@ -160,9 +160,10 @@
     }
 
     // 중심 좌표나 확대 수준이 변경됐을 때 지도 중심 좌표에 대한 주소 정보를 표시하도록 이벤트를 등록합니다
-    kakao.maps.event.addListener(map, 'idle', function() {
+    // 일단 주석처리(지금은 사용안하는데 화면진입시 호출되는것 같은???, 좌표클릭 DIV 사용시 주석 해제하기)
+    /*kakao.maps.event.addListener(map, 'idle', function() {
         searchAddrFromCoords(map.getCenter(), displayCenterInfo);
-    });
+    });*/
 
     function searchAddrFromCoords(coords, callback) {
         // 좌표로 행정동 주소 정보를 요청합니다
@@ -188,6 +189,7 @@
             }
         }
     }
+    // 미사용 -----------------------------------------------------------------------------------------------------------
 
 </script>
 

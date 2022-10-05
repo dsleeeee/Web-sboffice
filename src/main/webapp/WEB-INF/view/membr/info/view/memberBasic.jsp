@@ -262,6 +262,11 @@
                         <a id="btnSrchAddr" href="#" class="btn_grayS ml5" onclick="searchAddr()">
                             <s:message code="regist.srchAddr"/>
                         </a>
+                        <input type="text" id="rLatitude" name="latitude" ng-model="member.latitude" class="sb-input w130px" placeholder="위도" style="margin:4px 0px;" readonly/>
+                        <input type="text" id="rLongitude" name="longitude" ng-model="member.longitude" class="sb-input w130px" placeholder="경도" style="margin:4px 0px;" readonly/>
+                        <a id="btnOpenMap" href="#" class="btn_grayS" ng-click="openMap()">
+                          <s:message code="regist.membr.openMap" />
+                        </a>
                         <br>
                         <input type="text" id="rAddr" name="addr" ng-model="member.addr" class="sb-input w100" placeholder="주소1" maxlength="60" style="margin:4px 0px;" readonly/>
                         <input type="text" id="rAddrDtl" name="addrDtl" ng-model="member.addrDtl" class="sb-input w100" placeholder="주소2" maxlength="60"/>
@@ -694,4 +699,4 @@
     var skateFgComboList = ${skateFgComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20220906.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20221005.01" charset="utf-8"></script>

@@ -131,6 +131,8 @@
         <span <c:if test="${orgnFg == 'HQ' and membrClassManageFg == '0'}">style="display: none;"</c:if>>
             <a href="#" class="btn_blue pd20" id="btnSave" ng-click="save()"><s:message code="cmm.save"/></a>
         </span>
+        <%-- 닫기 --%>
+        <span><a href="#" class="btn_gray" ng-click="close()"><s:message code="cmm.close" /></a></span>
     </div>
 </div>
 
@@ -144,4 +146,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberCard.js?ver=20201112.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberCard.js?ver=20221005.01" charset="utf-8"></script>

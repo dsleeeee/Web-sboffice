@@ -26,25 +26,36 @@
     var pageNm = $("#pageNm").val();
     var elementId = [];
 
-    if(pageNm === "hqInfo" || pageNm === "vendrRegist" || pageNm === "memberBasic") {
+    if(pageNm === "hqInfo" || pageNm === "vendrRegist"){
         elementId[0] = "rPostNo";
         elementId[1] = "rAddr";
         elementId[2] = "rAddrDtl";
         elementId[3] = "";
         elementId[4] = "";
+    }else if(pageNm === "memberBasic") {
+        elementId[0] = "rPostNo";
+        elementId[1] = "rAddr";
+        elementId[2] = "rAddrDtl";
+        elementId[3] = "rLatitude";
+        elementId[4] = "rLongitude";
     }else if(pageNm === "agencyInfo"){
         elementId[0] = "ai_postNo";
         elementId[1] = "ai_addr";
         elementId[2] = "ai_addrDtl";
         elementId[3] = "";
         elementId[4] = "";
-    }else{
+    }else if(pageNm === "storeInfo"){
         elementId[0] = "postNo";
         elementId[1] = "addr";
         elementId[2] = "addrDtl";
         elementId[3] = "latitude";
         elementId[4] = "longitude";
-
+    }else{
+        elementId[0] = "postNo";
+        elementId[1] = "addr";
+        elementId[2] = "addrDtl";
+        elementId[3] = "";
+        elementId[4] = "";
     }
 
     // 우편번호 찾기 팝업을 띄울 때 background dimmed

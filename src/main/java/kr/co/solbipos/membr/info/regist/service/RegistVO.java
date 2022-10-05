@@ -307,6 +307,12 @@ public class RegistVO extends PageVO {
     /** 소송수량 */
     private String transportationCnt;
 
+    /** 위도 */
+    private String latitude;
+
+    /** 경도 */
+    private String longitude;
+
 
 
     /**
@@ -1506,6 +1512,21 @@ public class RegistVO extends PageVO {
 
     public void setTransportationCnt(String transportationCnt) { this.transportationCnt = transportationCnt; }
 
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
 
     @Override
 	public String toString() {

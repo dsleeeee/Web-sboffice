@@ -172,6 +172,8 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.member.cdPartner = '';
             $scope.member.emailAddr = '';
             $scope.member.postNo = '';
+            $scope.member.latitude = '';
+            $scope.member.longitude = '';
             $scope.member.addr = '';
             $scope.member.addrDtl = '';
             $scope.emailRecvYnCombo.selectedIndex = 1;
@@ -535,6 +537,8 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
 
         var params = $scope.member;
         params.postNo  = $("#rPostNo").val();
+        params.latitude = $("#rLatitude").val();
+        params.longitude = $("#rLongitude").val();
         params.addr  = $("#rAddr").val();
         params.addrDtl  = $("#rAddrDtl").val();
 
@@ -714,5 +718,27 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
     //     });
     // });
 
+    // 지도보기 팝업
+    $scope.openMap = function () {
+
+        // 위도,경도 또는 주소가 있는지 체크
+        if($("#rLatitude").val() === "" || $("#rLongitude").val() === "") {
+          if($("#rAddr").val() === ""){
+            $scope._popMsg(messages["regist.membr.mapOpen.msg"]); // 정확한 주소가 없어 지도를 조회할 수 없습니다.
+            return;
+          }
+        }
+
+        var params = {};
+        params.title = messages["regist.membr.openMap"];              // 지도 팝업 title
+        params.markerNm = $("#rMembrNm").val() === "" ? messages["regist.addr"] + messages["regist.membr.location"] : $("#rMembrNm").val();   // 지도 위치 마커명
+        params.addr = $("#rAddr").val();                              // 주소
+        params.latitude = $("#rLatitude").val();                      // 위도
+        params.longitude = $("#rLongitude").val();                    // 경도
+
+        $scope.mapPopLayer.show(true);
+        $scope._broadcast('mapPopCtrl', params);
+
+    };
 
 }]);

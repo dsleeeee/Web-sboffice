@@ -741,3 +741,7 @@
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
+
+<%-- 지도보기 팝업 --%>
+<c:import url="/WEB-INF/view/application/layer/mapPop.jsp">
+</c:import>

@@ -12,7 +12,8 @@
     <div class="wj-dialog-header wj-dialog-header-font">
         <s:message code="regist.membr.info"/>
         <span id="memberInfoTitle" class="ml20"></span>
-        <a href="#" class="wj-hide btn_close"></a>
+        <%-- 닫을때 기본정보 form 초기화가 안됨 ㅡㅡ --%>
+        <%-- <a href="#" class="wj-hide btn_close"></a> --%>
     </div>
     <div class="con">
         <div class="tabType1">

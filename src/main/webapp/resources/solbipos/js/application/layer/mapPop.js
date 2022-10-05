@@ -21,7 +21,7 @@ app.controller('mapPopCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.$on("mapPopCtrl", function(event, data) {
 
         // title setting
-        $("#lblTitle").text(data.title);
+        $("#lblMapPopTitle").text(data.title);
 
         // 지도조회
         searchMap(data.markerNm === "" ? data.title : data.markerNm, data.addr, data.latitude, data.longitude);

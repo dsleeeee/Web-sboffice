@@ -254,6 +254,12 @@ app.controller('memberCardCtrl', ['$scope', '$http', function ($scope, $http) {
         });
     };
 
+    // 닫기
+    $scope.close = function () {
+        var scope = agrid.getScope('memberBasicCtrl');
+        scope.close();
+    };
+
     // 화면 ready 된 후 설정
     // angular.element(document).ready(function () {
     //     // 회원조회 팝업 핸들러 추가

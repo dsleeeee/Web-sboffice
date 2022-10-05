@@ -104,13 +104,7 @@
             <input type="text" id="postNo" name="postNo" class="sb-input w80px" maxlength="5" placeholder="우편번호" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" value="${myInfo.postNo}" readonly/>
             <a href="#" class="btn_grayS ml5" onclick="searchAddr()">
               <s:message code="myInfo.myInfo.addrSearch" />
-            </a>
-            <input type="text" id="latitude" ng-model="store.latitude" class="sb-input w130px" placeholder="위도" style="margin:4px 0px;" readonly/>
-            <input type="text" id="longitude" ng-model="store.longitude" class="sb-input w130px" placeholder="경도" style="margin:4px 0px;" readonly/>
-            <a id="btnOpenMap" href="#" class="btn_grayS" ng-click="openMap()">
-              <s:message code="storeManage.storeLocation" />
-            </a>
-            <br/>
+            </a><br/>
             <%-- 주소상세 --%>
             <input type="text" class="sb-input w100" id="addr" name="addr" placeholder="주소1" style="margin:4px 0px;" value="${myInfo.addr}" readonly/>
             <input type="text" class="sb-input w100" id="addrDtl" name="addrDtl" placeholder="주소2" value="${myInfo.addrDtl}"/>

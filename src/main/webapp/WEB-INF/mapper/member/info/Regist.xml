@@ -560,7 +560,9 @@
         tmmp.CD_PARTNER,
         tnsp.LN_PARTNER,
         tnsp.NO_COMPANY,
-        tnsp.NM_CEO
+        tnsp.NM_CEO,
+        tmm.LATITUDE,
+        tmm.LONGITUDE
         FROM TB_MB_MEMBER tmm,
               TB_MB_MEMBER_PTN tmmp,
                 <choose>
@@ -679,7 +681,9 @@
             tmm.REG_ID,
             tmm.MOD_DT,
             tmm.MOD_ID,
-            tmm.CST_CARD_USE_FG
+            tmm.CST_CARD_USE_FG,
+            tmm.LATITUDE,
+            tmm.LONGITUDE
         ) VALUES (
             #{membrOrgnCd},
             #{membrNo},
@@ -708,7 +712,9 @@
             #{regId},
             #{modDt},
             #{modId},
-            #{cstCardUseFg}
+            #{cstCardUseFg},
+            #{latitude},
+            #{longitude}
         )
         ]]>
     </insert>
@@ -784,7 +790,9 @@
                tmm.USE_YN = #{useYn},
                tmm.REMARK = #{remark},
                tmm.MOD_ID = #{modId},
-               tmm.MOD_DT = #{modDt}
+               tmm.MOD_DT = #{modDt},
+               tmm.LATITUDE = #{latitude},
+               tmm.LONGITUDE = #{longitude}
          WHERE tmm.MEMBR_NO = #{membrNo}
            AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
     </update>
