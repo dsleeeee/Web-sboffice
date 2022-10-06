@@ -849,6 +849,8 @@
 
     <!-- 맘스터치 > 매출분석 > 당일 매출 리스트 -->
     <typeAlias alias="todayMomsVO" type="kr.co.solbipos.sale.today.todayMoms.service.TodayMomsVO"/>
+    <!-- 맘스터치 > 매출분석 > 일별 매출 리스트 -->
+    <typeAlias alias="dayMomsVO" type="kr.co.solbipos.sale.day.dayMoms.service.DayMomsVO"/>
 
 
 
