@@ -35,7 +35,7 @@ public class McoupnServiceImpl implements McoupnService {
         this.mcoupnMapper = mcoupnMapper;
     }
 
-    /** 모바일쿠폰입금관리 - 매장 콤보박스 조회 */
+    /** 모바일쿠폰입금관리 - 조회 */
     @Override
     public List<DefaultMap<Object>> getMcoupnList(McoupnVO mcoupnVO, SessionInfoVO sessionInfoVO) {
 
@@ -51,6 +51,24 @@ public class McoupnServiceImpl implements McoupnService {
 
 
         return mcoupnMapper.getMcoupnList(mcoupnVO);
+    }
+
+    /** 모바일쿠폰입금관리 - 엑셀 조회 */
+    @Override
+    public List<DefaultMap<Object>> getMcoupnExcelList(McoupnVO mcoupnVO, SessionInfoVO sessionInfoVO) {
+
+        mcoupnVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            mcoupnVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        // 매장 array 값 세팅
+        String[] storeCds = mcoupnVO.getStoreCds().split(",");
+        mcoupnVO.setStoreCdList(storeCds);
+
+
+        return mcoupnMapper.getMcoupnExcelList(mcoupnVO);
     }
 
 }

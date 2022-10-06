@@ -24,5 +24,6 @@ public interface MomsGiftService {
 
     /** 모바일쿠폰 승인 조회 */
     List<DefaultMap<Object>> getGiftList(MomsGiftVO giftVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<Object>> getGiftExcelList(MomsGiftVO giftVO, SessionInfoVO sessionInfoVO);
 
 }

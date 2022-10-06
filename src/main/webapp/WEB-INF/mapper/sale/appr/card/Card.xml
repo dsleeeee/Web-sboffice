@@ -18,11 +18,11 @@
     -->
     <select id="getCardList" parameterType="cardVO" resultType="DefaultMap">
         /* CardMapper.getCardList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT	TO_CHAR(TO_DATE(tsspc.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
-        -- 지사명
-        -- 지사코드
+        ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
         ,		tsspc.STORE_CD
-        ,		(SELECT tms.STORE_NM FROM TB_MS_STORE tms WHERE tms.STORE_CD = tsspc.STORE_CD) AS STORE_NM
+        ,		tms.STORE_NM
         ,		tsspc.POS_NO
         ,		tsspc.BILL_NO
         ,		tsspc.SALE_FG
@@ -30,11 +30,52 @@
         ,		tsspc.CARD_NO
         ,		tsspc.APPR_AMT
         ,		tsspc.INST_CNT
-        -- 유효기간
+        -- 유효기간_맘스터치도 비어있음
+        ,		tsspc.APPR_NO
+        ,		tsspc.APPR_DT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	TB_SL_SALE_PAY_CARD tsspc
+        ,       TB_MS_STORE tms
+        WHERE   tsspc.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND     tsspc.STORE_CD = tms.STORE_CD
+        AND     tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsspc.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsspc.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY tsspc.SALE_DATE, tsspc.STORE_CD, tsspc.POS_NO, tsspc.BILL_NO
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 신용카드 승인 조회 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getCardExcelList" parameterType="cardVO" resultType="DefaultMap">
+        /* CardMapper.getCardExcelList */
+        SELECT	TO_CHAR(TO_DATE(tsspc.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+        ,		tsspc.STORE_CD
+        ,		tms.STORE_NM
+        ,		tsspc.POS_NO
+        ,		tsspc.BILL_NO
+        ,		tsspc.SALE_FG
+        ,       tsspc.ISSUE_NM
+        ,		tsspc.CARD_NO
+        ,		tsspc.APPR_AMT
+        ,		tsspc.INST_CNT
+        -- 유효기간_맘스터치도 비어있음
         ,		tsspc.APPR_NO
         ,		tsspc.APPR_DT
         FROM 	TB_SL_SALE_PAY_CARD tsspc
-        WHERE   tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
+        ,       TB_MS_STORE tms
+        WHERE   tsspc.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND     tsspc.STORE_CD = tms.STORE_CD
+        AND     tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     tsspc.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='storeCds != null and storeCds != ""'>
             AND tsspc.STORE_CD IN

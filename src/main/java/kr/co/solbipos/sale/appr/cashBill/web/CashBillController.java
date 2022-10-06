@@ -87,5 +87,28 @@ public class CashBillController {
         return ReturnUtil.returnListJson(Status.OK, result, cashBillVO);
     }
 
+    /**
+     * 현금영수증 승인 조회_엑셀
+     *
+     * @param cashBillVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2022. 09. 29.
+     */
+    @RequestMapping(value = "/cashBill/getCashBillExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCashBillExcelList(CashBillVO cashBillVO, HttpServletRequest request,
+                                  HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = cashBillService.getCashBillExcelList(cashBillVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, cashBillVO);
+    }
+
 
 }

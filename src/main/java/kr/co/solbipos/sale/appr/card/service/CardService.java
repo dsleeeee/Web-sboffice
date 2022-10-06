@@ -24,5 +24,6 @@ public interface CardService {
 
     /** 신용카드 승인 조회 */
     List<DefaultMap<Object>> getCardList(CardVO cardVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<Object>> getCardExcelList(CardVO cardVO, SessionInfoVO sessionInfoVO);
 
 }

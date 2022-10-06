@@ -28,5 +28,6 @@ public interface CardMapper {
 
     /** 신용카드 승인 조회 */
     List<DefaultMap<Object>> getCardList(CardVO cardVO);
+    List<DefaultMap<Object>> getCardExcelList(CardVO cardVO);
 
 }

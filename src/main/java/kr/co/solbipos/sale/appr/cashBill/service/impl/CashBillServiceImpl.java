@@ -52,4 +52,22 @@ public class CashBillServiceImpl implements CashBillService {
         return cashBillMapper.getCashBillList(cashBillVO);
     }
 
+    /** 신용카드입금관리 - 매장 콤보박스 조회 */
+    @Override
+    public List<DefaultMap<Object>> getCashBillExcelList(CashBillVO cashBillVO, SessionInfoVO sessionInfoVO) {
+
+        cashBillVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            cashBillVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        // 매장 array 값 세팅
+        String[] storeCds = cashBillVO.getStoreCds().split(",");
+        cashBillVO.setStoreCdList(storeCds);
+
+
+        return cashBillMapper.getCashBillExcelList(cashBillVO);
+    }
+
 }

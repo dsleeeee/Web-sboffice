@@ -34,7 +34,7 @@ public class MomsGiftServiceImpl implements MomsGiftService {
         this.giftMapper = giftMapper;
     }
 
-    /** 모바일쿠폰입금관리 - 매장 콤보박스 조회 */
+    /** 모바일쿠폰입금관리 - 조회 */
     @Override
     public List<DefaultMap<Object>> getGiftList(MomsGiftVO giftVO, SessionInfoVO sessionInfoVO) {
 
@@ -47,9 +47,25 @@ public class MomsGiftServiceImpl implements MomsGiftService {
         // 매장 array 값 세팅
         String[] storeCds = giftVO.getStoreCds().split(",");
         giftVO.setStoreCdList(storeCds);
-
-
+        
         return giftMapper.getGiftList(giftVO);
+    }
+
+    /** 모바일쿠폰입금관리 - 엑셀 조회 */
+    @Override
+    public List<DefaultMap<Object>> getGiftExcelList(MomsGiftVO giftVO, SessionInfoVO sessionInfoVO) {
+
+        giftVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            giftVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        // 매장 array 값 세팅
+        String[] storeCds = giftVO.getStoreCds().split(",");
+        giftVO.setStoreCdList(storeCds);
+        
+        return giftMapper.getGiftExcelList(giftVO);
     }
 
 }

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MonthProd.xml
+    월별 상품 매출 현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.10.04     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.prod.monthProd.service.impl.MonthProdMapper">
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMonthProdList" parameterType="monthProdVO" resultType="DefaultMap">
+        /* MonthProdMapper.getMonthProdList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT	TO_CHAR(TO_DATE(tsmp.SALE_YM, 'YYYYMM'), 'YYYY-MM') AS SALE_YM
+        ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+        ,		tsmp.STORE_CD
+        ,		tms.STORE_NM
+        ,       FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM
+        ,		(SELECT tmp.PROD_NM FROM TB_MS_PRODUCT tmp WHERE tmp.STORE_CD = tsmp.PROD_CD AND tmp.PROD_CD = tsmp.PROD_CD) AS PROD_NM
+        ,       tsmp.TOT_SALE_QTY AS SALE_QTY
+        ,       tsmp.TOT_DC_AMT AS DC_AMT
+        ,		tsmp.TOT_SALE_AMT
+        ,		tsmp.REAL_SALE_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	TB_SL_MONTHLY_PROD tsmp
+        ,       TB_MS_STORE tms
+        ,       TB_HQ_PRODUCT thp
+        WHERE 	tsmp.STORE_CD = tms.STORE_CD
+        AND     tsmp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND     tsmp.PROD_CD = thp.PROD_CD
+        AND     tsmp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsmp.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsmp.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND thp.PROD_CLASS_CD IN (
+            SELECT
+            PROD_CLASS_CD
+            FROM TB_HQ_PRODUCT_CLASS
+            WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+            CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+            )
+        </if>
+        ORDER BY tsmp.SALE_YM, tsmp.STORE_CD, tsmp.PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMonthProdExcelList" parameterType="monthProdVO" resultType="DefaultMap">
+        /* MonthProdMapper.getMonthProdExcelList */
+        SELECT	TO_CHAR(TO_DATE(tsmp.SALE_YM, 'YYYYMM'), 'YYYY-MM') AS SALE_YM
+        ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+        ,		tsmp.STORE_CD
+        ,		tms.STORE_NM
+        ,       FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM
+        ,		(SELECT tmp.PROD_NM FROM TB_MS_PRODUCT tmp WHERE tmp.STORE_CD = tsmp.PROD_CD AND tmp.PROD_CD = tsmp.PROD_CD) AS PROD_NM
+        ,       tsmp.TOT_SALE_QTY AS SALE_QTY
+        ,       tsmp.TOT_DC_AMT AS DC_AMT
+        ,		tsmp.TOT_SALE_AMT
+        ,		tsmp.REAL_SALE_AMT
+        FROM 	TB_SL_MONTHLY_PROD tsmp
+        ,       TB_MS_STORE tms
+        ,       TB_HQ_PRODUCT thp
+        WHERE 	tsmp.STORE_CD = tms.STORE_CD
+        AND     tsmp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND     tsmp.PROD_CD = thp.PROD_CD
+        AND     tsmp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsmp.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsmp.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND thp.PROD_CLASS_CD IN (
+            SELECT
+            PROD_CLASS_CD
+            FROM TB_HQ_PRODUCT_CLASS
+            WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+            CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+            )
+        </if>
+        ORDER BY tsmp.SALE_YM, tsmp.STORE_CD, tsmp.PROD_CD
+    </select>
+
+</mapper>

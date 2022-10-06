@@ -18,11 +18,47 @@
     -->
     <select id="getCashBillList" parameterType="cashBillVO" resultType="DefaultMap">
         /* CashBillMapper.getCashBillList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT	TO_CHAR(TO_DATE(tsspc.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
-        -- 지사명
-        -- 지사코드
+        ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
         ,		tsspc.STORE_CD
-        ,		(SELECT tms.STORE_NM FROM TB_MS_STORE tms WHERE tms.STORE_CD = tsspc.STORE_CD) AS STORE_NM
+        ,		tms.STORE_NM
+        ,		tsspc.POS_NO
+        ,		tsspc.BILL_NO
+        ,		tsspc.SALE_FG
+        ,		tsspc.CASH_BILL_CARD_NO
+        ,		tsspc.SALE_AMT AS APPR_AMT
+        ,		tsspc.APPR_NO
+        ,		tsspc.APPR_DT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	TB_SL_SALE_PAY_CASH tsspc
+        ,       TB_MS_STORE tms
+        WHERE   tsspc.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND     tsspc.STORE_CD = tms.STORE_CD
+        AND     tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsspc.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND     tsspc.APPR_PROC_FG IN ('1','2','4')
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsspc.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY tsspc.SALE_DATE, tsspc.STORE_CD, tsspc.POS_NO, tsspc.BILL_NO
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 현금영수증 승인 조회 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getCashBillExcelList" parameterType="cashBillVO" resultType="DefaultMap">
+        /* CashBillMapper.getCashBillExcelList */
+        SELECT	TO_CHAR(TO_DATE(tsspc.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+        ,		tsspc.STORE_CD
+        ,		tms.STORE_NM
         ,		tsspc.POS_NO
         ,		tsspc.BILL_NO
         ,		tsspc.SALE_FG
@@ -31,6 +67,7 @@
         ,		tsspc.APPR_NO
         ,		tsspc.APPR_DT
         FROM 	TB_SL_SALE_PAY_CASH tsspc
+        ,       TB_MS_STORE tms
         WHERE   tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     tsspc.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         AND     tsspc.APPR_PROC_FG IN ('1','2','4')

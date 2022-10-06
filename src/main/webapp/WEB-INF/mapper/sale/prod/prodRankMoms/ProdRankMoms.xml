@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ProdRankMoms.xml
+    상품별 매출 순위 (맘스터치)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현       2022.09.30     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.prod.prodRankMoms.service.impl.ProdRankMomsMapper">
+
+    <!-- 상품매출순위탭 - 조회 -->
+    <!--
+        TABLE    :
+        PARAM    : prodRankMomsVO
+        COMMENTS :
+    -->
+    <select id="getProdRankList" parameterType="prodRankMomsVO" resultType="DefaultMap">
+        /* USE : ProdRankMomsMapper.getProdRankList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT A.*
+        FROM (
+                    SELECT PATH_NM,
+                            PROD_CD,
+                            PROD_NM,
+                            BARCD_CD,
+                            SUM(TOT_SALE_QTY) AS TOT_SALE_QTY,
+                            SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+                            SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+                            SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+                    <include refid="CmmSQL.PagingTemplateCount"/>
+                    FROM
+                    (
+                        SELECT
+                        FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM, --NM_STR
+                        tsdp.PROD_CD,
+                        tmp.PROD_NM,
+                        tmpb.BARCD_CD,
+                        SUM(tsdp.TOT_SALE_QTY) AS TOT_SALE_QTY,
+                        SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT,
+                        SUM(tsdp.TOT_DC_AMT) AS TOT_DC_AMT,
+                        SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
+                        FROM TB_SL_DAILY_PROD tsdp,
+                        TB_MS_PRODUCT tmp,
+                        TB_MS_PRODUCT_BARCD tmpb
+                        WHERE 1=1
+                        AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+                        <if test='storeCds != null and storeCds != ""'>
+                            AND tsdp.STORE_CD IN
+                            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                                #{item}
+                            </foreach>
+                        </if>
+                        AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                        AND tmp.STORE_CD = tsdp.STORE_CD
+                        AND tmp.PROD_CD = tsdp.PROD_CD
+                        AND tmpb.STORE_CD (+)= tmp.STORE_CD
+                        AND tmpb.PROD_CD (+)= tmp.PROD_CD
+                        GROUP BY tsdp.PROD_CD, tmp.PROD_NM, tmpb.BARCD_CD, tmp.STORE_CD, tmp.PROD_CLASS_CD
+
+                    )
+                    GROUP BY PROD_CD, PROD_NM, BARCD_CD, PATH_NM
+              ) A
+        <if test='orderType != null and orderType == "1"'>
+            ORDER
+               BY A.TOT_SALE_QTY DESC, A.PROD_CD ASC
+        </if>
+        <if test='orderType != null and orderType == "2"'>
+            ORDER
+               BY A.REAL_SALE_AMT DESC, A.PROD_CD ASC
+        </if>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 상품매출순위탭 - 차트 조회 -->
+    <!--
+        TABLE    :
+        PARAM    : prodRankMomsVO
+        COMMENTS :
+    -->
+    <select id="getProdRankChartList" parameterType="prodRankMomsVO" resultType="DefaultMap">
+        /* USE : ProdRankMomsMapper.getProdRankChartList */
+        SELECT A.*
+          FROM (
+                    SELECT tsdp.PROD_CD,
+                            tmp.PROD_NM,
+                            SUM(tsdp.TOT_SALE_QTY) AS TOT_SALE_QTY,
+                            SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT,
+                            SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
+                      FROM TB_SL_DAILY_PROD tsdp,
+                            TB_MS_PRODUCT tmp
+                     WHERE 1=1
+                       AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    <if test='storeCds != null and storeCds != ""'>
+                        AND tsdp.STORE_CD IN
+                        <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                    <if test='orgnFg != null and orgnFg == "H"'>
+                        AND (
+                                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                            OR  tsdp.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                            )
+                    </if>
+                        AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                        AND tmp.STORE_CD = tsdp.STORE_CD
+                        AND tmp.PROD_CD = tsdp.PROD_CD
+                      GROUP
+                         BY tsdp.PROD_CD, tmp.PROD_NM
+
+               ) A
+        <if test='orderType != null and orderType == "1"'>
+            ORDER
+            BY A.TOT_SALE_QTY DESC, A.PROD_CD ASC
+        </if>
+        <if test='orderType != null and orderType == "2"'>
+            ORDER
+            BY A.REAL_SALE_AMT DESC, A.PROD_CD ASC
+        </if>
+    </select>
+
+    <!-- 상품매출순위탭 - 엑셀 조회 -->
+    <!--
+        TABLE    :
+        PARAM    : prodRankMomsVO
+        COMMENTS :
+    -->
+    <select id="getProdRankExcelList" parameterType="prodRankMomsVO" resultType="DefaultMap">
+        /* USE : ProdRankMomsMapper.getProdRankExcelList */
+        SELECT A.*
+        FROM (
+                SELECT PATH_NM,
+                        PROD_CD,
+                        PROD_NM,
+                        BARCD_CD,
+                        SUM(TOT_SALE_QTY) AS TOT_SALE_QTY,
+                        SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+                        SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+                        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+                FROM
+                (
+                    SELECT FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM, --NM_STR
+                            tsdp.PROD_CD,
+                            tmp.PROD_NM,
+                            tmpb.BARCD_CD,
+                            SUM(tsdp.TOT_SALE_QTY) AS TOT_SALE_QTY,
+                            SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT,
+                            SUM(tsdp.TOT_DC_AMT) AS TOT_DC_AMT,
+                            SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
+                      FROM TB_SL_DAILY_PROD tsdp,
+                            TB_MS_PRODUCT tmp,
+                            TB_MS_PRODUCT_BARCD tmpb
+                     WHERE 1=1
+                       AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+                        <if test='storeCds != null and storeCds != ""'>
+                            AND tsdp.STORE_CD IN
+                            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                                #{item}
+                            </foreach>
+                        </if>
+                        <if test='orgnFg != null and orgnFg == "H"'>
+                            AND (
+                                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                                OR  tsdp.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                                )
+                        </if>
+                        AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                        AND tmp.STORE_CD = tsdp.STORE_CD
+                        AND tmp.PROD_CD = tsdp.PROD_CD
+                        AND tmpb.STORE_CD (+)= tmp.STORE_CD
+                        AND tmpb.PROD_CD (+)= tmp.PROD_CD
+                        GROUP BY tsdp.PROD_CD, tmp.PROD_NM, tmpb.BARCD_CD, tmp.STORE_CD, tmp.PROD_CLASS_CD
+                )
+                GROUP BY PROD_CD, PROD_NM, BARCD_CD, PATH_NM
+        ) A
+        <if test='orderType != null and orderType == "1"'>
+            ORDER
+               BY A.TOT_SALE_QTY DESC, A.PROD_CD ASC
+        </if>
+        <if test='orderType != null and orderType == "2"'>
+            ORDER
+               BY A.REAL_SALE_AMT DESC, A.PROD_CD ASC
+        </if>
+    </select>
+
+</mapper>

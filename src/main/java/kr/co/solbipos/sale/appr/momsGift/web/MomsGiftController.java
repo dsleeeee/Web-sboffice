@@ -86,6 +86,28 @@ public class MomsGiftController {
 
         return ReturnUtil.returnListJson(Status.OK, result, giftVO);
     }
+    /**
+     * 상품권 승인 조회
+     *
+     * @param giftVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2022. 09. 30.
+     */
+    @RequestMapping(value = "/gift/getGiftExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getGiftExcelList(MomsGiftVO giftVO, HttpServletRequest request,
+                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = giftService.getGiftExcelList(giftVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, giftVO);
+    }
 
 
 }

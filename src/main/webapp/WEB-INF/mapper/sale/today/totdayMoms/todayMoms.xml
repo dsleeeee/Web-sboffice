@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    TodayMoms.xml
+    당일 매출 리스트
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.10.06     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.today.todayMoms.service.impl.TodayMomsMapper">
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getTodayMomsList" parameterType="todayMomsVO" resultType="DefaultMap">
+        /* TodayMomsMapper.getTodayMomsList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT	(SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+        ,		tssh.STORE_CD
+        ,		tms.STORE_NM
+        ,		tssh.POS_NO
+        ,		tssh.BILL_NO
+        ,		TO_CHAR(TO_DATE(tssh.BILL_DT, 'YYYYMMDDHH24MISS'), 'HH24:MI:SS') AS BILL_TIME
+        ,		tssh.SALE_FG
+        ,		(
+                    SELECT	COUNT(*)
+                    FROM 	TB_SL_SALE_DTL tssd
+                    WHERE	tssd.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+                    AND		tssd.STORE_CD = tssh.STORE_CD
+                    AND		tssd.SALE_DATE = tssh.SALE_DATE
+                    AND		tssd.POS_NO = tssh.POS_NO
+                    AND		tssd.BILL_NO  = tssh.BILL_NO
+                ) AS SALE_QTY
+        ,		tssh.TOT_SALE_AMT
+        ,		tssh.TOT_DC_AMT
+        ,		CASE WHEN tsshp.PAY_CD = '01' THEN tsshp.PAY_AMT ELSE 0 END AS CARD_AMT
+        ,		CASE WHEN tsshp.PAY_CD = '02' THEN tsshp.PAY_AMT ELSE 0 END AS CASH_AMT
+        ,		CASE WHEN tsshp.PAY_CD NOT IN ('01','02') THEN tsshp.PAY_AMT ELSE 0 END AS ETC_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	TB_SL_SALE_HDR tssh
+        ,       TB_SL_SALE_HDR_PAY tsshp
+        ,       TB_MS_STORE tms
+        WHERE   tssh.HQ_OFFICE_CD = tsshp.HQ_OFFICE_CD
+        AND 	tssh.STORE_CD = tsshp.STORE_CD
+        AND 	tssh.SALE_DATE = tsshp.SALE_DATE
+        AND 	tssh.BILL_NO = tsshp.BILL_NO
+        AND 	tssh.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND 	tssh.STORE_CD = tms.STORE_CD
+        AND     tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tssh.SALE_DATE = #{startDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tssh.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY tssh.STORE_CD, tssh.POS_NO, tssh.BILL_NO
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getTodayMomsExcelList" parameterType="todayMomsVO" resultType="DefaultMap">
+        /* TodayMomsMapper.getTodayMomsExcelList */
+        SELECT	(SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+        ,		tssh.STORE_CD
+        ,		tms.STORE_NM
+        ,		tssh.POS_NO
+        ,		tssh.BILL_NO
+        ,		TO_CHAR(TO_DATE(tssh.BILL_DT, 'YYYYMMDDHH24MISS'), 'HH24:MI:SS') AS BILL_TIME
+        ,		tssh.SALE_FG
+        ,		(
+        SELECT	COUNT(*)
+        FROM 	TB_SL_SALE_DTL tssd
+        WHERE	tssd.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+        AND		tssd.STORE_CD = tssh.STORE_CD
+        AND		tssd.SALE_DATE = tssh.SALE_DATE
+        AND		tssd.POS_NO = tssh.POS_NO
+        AND		tssd.BILL_NO  = tssh.BILL_NO
+        ) AS SALE_QTY
+        ,		tssh.TOT_SALE_AMT
+        ,		tssh.TOT_DC_AMT
+        ,		CASE WHEN tsshp.PAY_CD = '01' THEN tsshp.PAY_AMT ELSE 0 END AS CARD_AMT
+        ,		CASE WHEN tsshp.PAY_CD = '02' THEN tsshp.PAY_AMT ELSE 0 END AS CASH_AMT
+        ,		CASE WHEN tsshp.PAY_CD NOT IN ('01','02') THEN tsshp.PAY_AMT ELSE 0 END AS ETC_AMT
+        FROM 	TB_SL_SALE_HDR tssh
+        ,       TB_SL_SALE_HDR_PAY tsshp
+        ,       TB_MS_STORE tms
+        WHERE   tssh.HQ_OFFICE_CD = tsshp.HQ_OFFICE_CD
+        AND 	tssh.STORE_CD = tsshp.STORE_CD
+        AND 	tssh.SALE_DATE = tsshp.SALE_DATE
+        AND 	tssh.BILL_NO = tsshp.BILL_NO
+        AND 	tssh.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND 	tssh.STORE_CD = tms.STORE_CD
+        AND     tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tssh.SALE_DATE = #{startDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tssh.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY tssh.STORE_CD, tssh.POS_NO, tssh.BILL_NO
+    </select>
+
+</mapper>
