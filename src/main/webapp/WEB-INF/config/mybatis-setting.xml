@@ -828,6 +828,30 @@
     <!-- 맘스터치 > 승인관리2 > 상품권 승인 조회 -->
     <typeAlias alias="momsGiftVO" type="kr.co.solbipos.sale.appr.momsGift.service.MomsGiftVO"/>
 
+    <!-- 맘스터치 > 상품매출분석 > 상품별 매출 순위 -->
+    <typeAlias alias="prodRankMomsVO" type="kr.co.solbipos.sale.prod.prodRankMoms.service.ProdRankMomsVO"/>
+    <!-- 맘스터치 > 상품매출분석 > 일별 상품 매출 현황 -->
+    <typeAlias alias="dayProdVO" type="kr.co.solbipos.sale.prod.dayProd.service.DayProdVO"/>
+    <!-- 맘스터치 > 상품매출분석 > 월별 상품 매출 현황 -->
+    <typeAlias alias="monthProdVO" type="kr.co.solbipos.sale.prod.monthProd.service.MonthProdVO"/>
+    <!-- 맘스터치 > 상품매출분석 > 대비기간별 상품 매출 -->
+    <typeAlias alias="periodProdVO" type="kr.co.solbipos.sale.prod.periodProd.service.PeriodProdVO"/>
+    <!-- 맘스터치 > 상품매출분석 > 월별 상품 판매량 -->
+    <typeAlias alias="monthSalesVolumeVO" type="kr.co.solbipos.sale.prod.monthSalesVolume.service.MonthSalesVolumeVO"/>
+    <!-- 맘스터치 > 상품매출분석 > 상품판매순위(점포) -->
+    <typeAlias alias="prodRankStoreVO" type="kr.co.solbipos.sale.prod.prodRankStore.service.ProdRankStoreVO"/>
+    <!-- 맘스터치 > 상품매출분석 > 상품 판매 비율 -->
+    <typeAlias alias="prodSaleRateVO" type="kr.co.solbipos.sale.prod.prodSaleRate.service.ProdSaleRateVO"/>
+    <!-- 맘스터치 > 상품매출분석 > 상품군 판매비율 -->
+    <typeAlias alias="prodClassSaleRateVO" type="kr.co.solbipos.sale.prod.prodClassSaleRate.service.ProdClassSaleRateVO"/>
+    <!-- 맘스터치 > 상품매출분석 > 상품별 점포매출 현황 -->
+    <typeAlias alias="prodStoreVO" type="kr.co.solbipos.sale.prod.prodStore.service.ProdStoreVO"/>
+
+    <!-- 맘스터치 > 매출분석 > 당일 매출 리스트 -->
+    <typeAlias alias="todayMomsVO" type="kr.co.solbipos.sale.today.todayMoms.service.TodayMomsVO"/>
+
+
+
 
     <!-- 매출관리 > 배달현황 > 내점/배달/포장 현황 -->
     <typeAlias alias="dlvrFgVO" type="kr.co.solbipos.sale.dlvr.dlvrFg.service.DlvrFgVO"/>

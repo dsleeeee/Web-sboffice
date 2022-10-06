@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ProdStore.xml
+    상품별 점포매출 현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.10.06     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.prod.prodStore.service.impl.ProdStoreMapper">
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getProdStoreList" parameterType="prodStoreVO" resultType="DefaultMap">
+        /* ProdStoreMapper.getProdStoreList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT 	#{startDate} AS START_DATE
+        ,       #{endDate} AS END_DATE
+        ,       tsdp.STORE_CD
+        ,       tms.STORE_NM
+        ,		FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM
+        ,       tsdp.PROD_CD
+        ,       thp.PROD_NM
+        ,		SUM(tsdp.TOT_SALE_QTY) AS SALE_QTY
+        ,		SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	TB_SL_DAILY_PROD tsdp
+        ,       TB_HQ_PRODUCT thp
+        ,       TB_MS_STORE tms
+        WHERE   thp.HQ_OFFICE_CD = tsdp.HQ_OFFICE_CD
+        AND     thp.PROD_CD = tsdp.PROD_CD
+        AND     tms.HQ_OFFICE_CD = tsdp.HQ_OFFICE_CD
+        AND     tms.STORE_CD = tsdp.STORE_CD
+        AND     tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND 	tsdp.SALE_DATE BETWEEN #{startDate}  AND #{startDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsdp.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND thp.PROD_CLASS_CD IN (
+            SELECT
+            PROD_CLASS_CD
+            FROM TB_HQ_PRODUCT_CLASS
+            WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+            CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+            )
+        </if>
+        GROUP BY thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, tsdp.STORE_CD, tms.STORE_NM, tsdp.PROD_CD, thp.PROD_NM
+        ORDER BY thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getProdStoreExcelList" parameterType="prodStoreVO" resultType="DefaultMap">
+        /* ProdStoreMapper.getProdStoreExcelList */
+        SELECT 	#{startDate} AS START_DATE
+        ,       #{endDate} AS END_DATE
+        ,       tsdp.STORE_CD
+        ,       tms.STORE_NM
+        ,		FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM
+        ,       tsdp.PROD_CD
+        ,       thp.PROD_NM
+        ,		SUM(tsdp.TOT_SALE_QTY) AS SALE_QTY
+        ,		SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT
+        FROM 	TB_SL_DAILY_PROD tsdp
+        ,       TB_HQ_PRODUCT thp
+        ,       TB_MS_STORE tms
+        WHERE   thp.HQ_OFFICE_CD = tsdp.HQ_OFFICE_CD
+        AND     thp.PROD_CD = tsdp.PROD_CD
+        AND     tms.HQ_OFFICE_CD = tsdp.HQ_OFFICE_CD
+        AND     tms.STORE_CD = tsdp.STORE_CD
+        AND     tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND 	tsdp.SALE_DATE BETWEEN #{startDate}  AND #{startDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsdp.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND thp.PROD_CLASS_CD IN (
+            SELECT
+            PROD_CLASS_CD
+            FROM TB_HQ_PRODUCT_CLASS
+            WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+            CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+            )
+        </if>
+        GROUP BY thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, tsdp.STORE_CD, tms.STORE_NM, tsdp.PROD_CD, thp.PROD_NM
+        ORDER BY thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD
+    </select>
+
+</mapper>
