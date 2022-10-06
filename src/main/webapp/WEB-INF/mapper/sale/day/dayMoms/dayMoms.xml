@@ -3,7 +3,7 @@
 
 <!--
     DayMoms.xml
-    당일 매출 리스트
+    일별 매출 현황
     ======================================================
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
@@ -51,7 +51,7 @@
         WHERE   tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
         AND 	tsdt.STORE_CD = tms.STORE_CD
         AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND     tsdt.SALE_DATE = #{startDate}
+        AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='storeCds != null and storeCds != ""'>
             AND tsdt.STORE_CD IN
             <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
@@ -100,7 +100,7 @@
         WHERE   tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
         AND 	tsdt.STORE_CD = tms.STORE_CD
         AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND     tsdt.SALE_DATE = #{startDate}
+        AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='storeCds != null and storeCds != ""'>
             AND tsdt.STORE_CD IN
             <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
