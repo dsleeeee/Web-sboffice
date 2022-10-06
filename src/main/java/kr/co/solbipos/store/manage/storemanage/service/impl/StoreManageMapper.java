@@ -446,4 +446,7 @@ public interface StoreManageMapper {
 
     /** 특이매장 데이터 처리 */
     String unusualStoreRegInfo(StoreManageVO storeManageVO);
+
+    /** 본사-지사 조회(콤보박스용) */
+    List<DefaultMap<String>> getBranchCombo(StoreManageVO storeManageVO);
 }

@@ -252,6 +252,26 @@
                 <input type="hidden" name="agencyCd" id="agencyCd" ng-model="store.agencyCd">
               </td>
             </tr>
+            <tr>
+              <%-- 지사 --%>
+              <th><s:message code="storeManage.branch" /></th>
+              <td>
+                <div class="sb-select">
+                  <wj-combo-box
+                    id="branchCd"
+                    ng-model="store.branchCd"
+                    control="branchCdCombo"
+                    items-source="_getComboData('branchCd')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)">
+                  </wj-combo-box>
+                </div>
+              </td>
+              <th></th>
+              <td></td>
+            </tr>
             </tbody>
           </table>
           <%-- 비고 --%>
@@ -412,7 +432,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20220928.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20221006.02" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">

@@ -971,4 +971,24 @@ public class StoreManageController {
         return returnJson(Status.OK, result);
     }
 
+    /**
+     * 본사-지사 조회(콤보박스용)
+     * @param storeManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2022.10.05
+     */
+    @RequestMapping(value = "storeManage/getBranchCombo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getBranchCombo(StoreManageVO storeManageVO, HttpServletRequest request,
+                                       HttpServletResponse response, Model model) {
+
+        List<DefaultMap<String>> getBranchList = service.getBranchCombo(storeManageVO);
+
+        return returnListJson(Status.OK, getBranchList);
+    }
+
 }

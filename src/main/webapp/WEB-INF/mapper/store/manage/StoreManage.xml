@@ -179,7 +179,8 @@
                tms.DIRECT_MANAGE_YN,
                tms.MAP_STORE_CD,
                tms.LATITUDE,
-               tms.LONGITUDE
+               tms.LONGITUDE,
+               tms.BRANCH_CD
           FROM TB_MS_STORE tms,
                TB_HQ_OFFICE tho,
                TB_CM_AGENCY tca,
@@ -354,6 +355,7 @@
             MAP_STORE_CD,
             LATITUDE,
             LONGITUDE,
+            BRANCH_CD,
             REG_DT,
             REG_ID,
             MOD_DT,
@@ -388,6 +390,7 @@
             #{mapStoreCd},
             #{latitude},
             #{longitude},
+            #{branchCd},
             #{regDt},
             #{regId},
             #{modDt},
@@ -429,6 +432,7 @@
                MAP_STORE_CD = #{mapStoreCd},
                LATITUDE = #{latitude},
                LONGITUDE = #{longitude},
+               BRANCH_CD = #{branchCd},
                MOD_DT = #{modDt},
                MOD_ID = #{modId}
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
@@ -6514,6 +6518,26 @@
                 #{result, mode=OUT, jdbcType=VARCHAR}
             )
         }
+    </select>
+
+    <!-- 본사-지사 조회(콤보박스용) -->
+    <!--
+        TABLE    : TB_HQ_BRANCH_MOMS
+        PARAM    : storeManageVO
+        COMMENTS : 본사-지사(콤보박스용) 데이터를 조회한다.
+    -->
+    <select id="getBranchCombo" parameterType="storeManageVO" resultType="DefaultMap">
+        /* StoreManageMapper.getBranchCombo */
+        SELECT ''    AS VALUE,
+               '선택' AS NAME
+          FROM DUAL
+         UNION
+        SELECT BRANCH_CD AS VALUE,
+               BRANCH_NM AS NAME
+          FROM TB_HQ_BRANCH_MOMS
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+         ORDER
+            BY VALUE NULLS FIRST
     </select>
 
 </mapper>

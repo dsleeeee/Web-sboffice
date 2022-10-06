@@ -169,6 +169,9 @@ public class StoreManageVO extends PageVO {
     /** 경도 */
     private String longitude;
 
+    /** 지사코드 */
+    private String branchCd;
+
 
 
     public String getOrgnFg() {
@@ -850,5 +853,13 @@ public class StoreManageVO extends PageVO {
 
     public void setLongitude(String longitude) {
         this.longitude = longitude;
+    }
+
+    public String getBranchCd() {
+        return branchCd;
+    }
+
+    public void setBranchCd(String branchCd) {
+        this.branchCd = branchCd;
     }
 }

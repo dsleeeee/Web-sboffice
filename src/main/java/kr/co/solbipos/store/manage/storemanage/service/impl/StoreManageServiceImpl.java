@@ -1470,4 +1470,10 @@ public class StoreManageServiceImpl implements StoreManageService{
             LOGGER.info("판매터치키_재정렬_오류 : " + e.getMessage());
         }
     }
+
+    /** 본사-지사 조회(콤보박스용) */
+    @Override
+    public List<DefaultMap<String>> getBranchCombo(StoreManageVO storeManageVO){
+        return mapper.getBranchCombo(storeManageVO);
+    }
 }

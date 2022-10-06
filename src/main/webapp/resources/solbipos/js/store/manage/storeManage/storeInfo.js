@@ -18,6 +18,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData("clsFg", clsFg);
   $scope._setComboData("sysStatFg", sysStatFg);
   $scope._setComboData("areaCd", areaCd);
+  $scope._setComboData("branchCd", [{"name": messages["cmm.select"], "value": ""}]);
 
   // 관리자의 경우, 모든 본사(데모까지) 나오고, 총판의 경우, 자기가 관리하는 본사만 나오도록
   if(orgnFg === "AGENCY") {
@@ -250,6 +251,10 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.store.agencyCd = "";
     $scope.store.agencyNm = "";
 
+    $scope._setComboData("branchCd", [{"name": messages["cmm.select"], "value": ""}]);
+    $scope.branchCdCombo.selectedIndex = 0;
+    $scope.store.branchCd = "";
+
     // 총판계정으로 접속한 경우, 해당 총판의 데이터만 조회되도록 함.
     // if(orgnFg === "AGENCY" && pAgencyCd !== "00000"){
     if(orgnFg === "AGENCY"){
@@ -304,6 +309,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
       var installPosCnt   = response.data.data.instPosCnt;
       var storeDetailInfo = response.data.data.storeDtlInfo;
+      var vBranchCd = storeDetailInfo.branchCd; // 지사 (콤보 먼저 셋팅 후 바인딩시 사용)
 
       console.log('storeDetailInfo',storeDetailInfo);
 
@@ -359,6 +365,14 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.store.mapStoreCd = storeDetailInfo.mapStoreCd;
       $scope.store.latitude = storeDetailInfo.latitude;
       $scope.store.longitude = storeDetailInfo.longitude;
+
+      // 본사-지사 콤보박스 set 후 -> 지사정보 set
+      $scope.setBranchDropdownList();
+
+      // 콤보박스 먼저 set할 시간을 벌기 위해
+      setTimeout(function() {
+        $scope.branchCdCombo.selectedValue = vBranchCd;  // 지사
+      }, 500);
 
     });
 
@@ -827,6 +841,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
           // 매장환경복사 체크 disabled
           $scope.copyStoreSettingChk();
+
+          // 본사-지사 콤보박스 set
+          $scope.setBranchDropdownList();
         }
       });
       
@@ -1198,6 +1215,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 매장환경복사 체크 disabled
     $scope.copyStoreSettingChk();
+
+    // 본사-지사 콤보박스 set
+    $scope.setBranchDropdownList();
     
     // ERP 연동 매장 셋팅 팝업 관련 visible 처리
     $("#lblErpStoreSet").text(hqOfficeNm + " 매장");
@@ -1320,6 +1340,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $("#manageVanCd").val("");
           $("#agencyNm").val("");
           $("#agencyCd").val("");
+          $scope._setComboData("branchCd", [{"name": messages["cmm.select"], "value": ""}]);
+          $scope.branchCdCombo.selectedIndex = 0;
           $("#mapStoreCd").val("");
           $("#latitude").val("");
           $("#longitude").val("");
@@ -1347,6 +1369,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $scope.store.vanCd = "";
           $scope.store.agencyNm = "";
           $scope.store.agencyCd = "";
+          $scope.store.branchCd = "";
           $scope.store.mapStoreCd = "";
           $scope.store.latitude = "";
           $scope.store.longitude = "";
@@ -1438,6 +1461,19 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.mapPopLayer.show(true);
     $scope._broadcast('mapPopCtrl', params);
 
+  };
+  
+  // 본사-지사 콤보박스 set
+  $scope.setBranchDropdownList = function(){
+
+    var params = {};
+    params.hqOfficeCd = $scope.store.hqOfficeCd;
+
+    $scope._postJSONQuery.withOutPopUp( "/store/manage/storeManage/storeManage/getBranchCombo.sb", params,
+        function(response){
+          $scope._setComboData("branchCd", response.data.data.list);
+        }
+    );
   };
 
   // 팝업 닫기 전 초기화
