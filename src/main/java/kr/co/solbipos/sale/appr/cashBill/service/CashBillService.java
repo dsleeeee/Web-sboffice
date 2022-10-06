@@ -24,5 +24,6 @@ public interface CashBillService {
 
     /** 현금영수증 승인 조회 */
     List<DefaultMap<Object>> getCashBillList(CashBillVO cashBillVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<Object>> getCashBillExcelList(CashBillVO cashBillVO, SessionInfoVO sessionInfoVO);
 
 }

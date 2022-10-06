@@ -24,5 +24,6 @@ public interface McoupnService {
 
     /** 모바일쿠폰 승인 조회 */
     List<DefaultMap<Object>> getMcoupnList(McoupnVO mcoupnVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<Object>> getMcoupnExcelList(McoupnVO mcoupnVO, SessionInfoVO sessionInfoVO);
 
 }

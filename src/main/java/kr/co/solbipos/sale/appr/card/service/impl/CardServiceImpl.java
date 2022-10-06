@@ -34,7 +34,7 @@ public class CardServiceImpl implements CardService {
         this.cardMapper = cardMapper;
     }
 
-    /** 신용카드입금관리 - 매장 콤보박스 조회 */
+    /** 신용카드입금관리 - 조회 */
     @Override
     public List<DefaultMap<Object>> getCardList(CardVO cardVO, SessionInfoVO sessionInfoVO) {
 
@@ -50,6 +50,24 @@ public class CardServiceImpl implements CardService {
 
 
         return cardMapper.getCardList(cardVO);
+    }
+
+    /** 신용카드입금관리 - 엑셀 조회 */
+    @Override
+    public List<DefaultMap<Object>> getCardExcelList(CardVO cardVO, SessionInfoVO sessionInfoVO) {
+
+        cardVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            cardVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        // 매장 array 값 세팅
+        String[] storeCds = cardVO.getStoreCds().split(",");
+        cardVO.setStoreCdList(storeCds);
+
+
+        return cardMapper.getCardExcelList(cardVO);
     }
 
 }

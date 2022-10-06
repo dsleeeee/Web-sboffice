@@ -28,5 +28,6 @@ public interface McoupnMapper {
 
     /** 모바일쿠폰 승인 조회 */
     List<DefaultMap<Object>> getMcoupnList(McoupnVO mcoupnVO);
+    List<DefaultMap<Object>> getMcoupnExcelList(McoupnVO mcoupnVO);
 
 }

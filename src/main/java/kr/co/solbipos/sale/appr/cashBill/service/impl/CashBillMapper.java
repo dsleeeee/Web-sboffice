@@ -28,5 +28,6 @@ public interface CashBillMapper {
 
     /** 현금영수증 승인 조회 */
     List<DefaultMap<Object>> getCashBillList(CashBillVO cashBillVO);
+    List<DefaultMap<Object>> getCashBillExcelList(CashBillVO cashBillVO);
 
 }

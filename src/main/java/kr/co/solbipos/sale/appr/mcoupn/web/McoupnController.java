@@ -87,5 +87,28 @@ public class McoupnController {
         return ReturnUtil.returnListJson(Status.OK, result, mcoupnVO);
     }
 
+    /**
+     * 모바일쿠폰 승인 조회_엑셀
+     *
+     * @param mcoupnVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2022. 09. 30.
+     */
+    @RequestMapping(value = "/mcoupn/getMcoupnExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMcoupnExcelList(McoupnVO mcoupnVO, HttpServletRequest request,
+                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = mcoupnService.getMcoupnExcelList(mcoupnVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, mcoupnVO);
+    }
+
 
 }

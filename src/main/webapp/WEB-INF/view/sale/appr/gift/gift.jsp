@@ -58,12 +58,11 @@
       </c:if>
       </tbody>
     </table>
-    <div style="clear: both;"></div>
 
-<%--    <div class="mt10 oh sb-select dkbr">--%>
-<%--      &lt;%&ndash; 엑셀다운로드 &ndash;%&gt;--%>
-<%--      <button class="btn_skyblue ml5 fr" ng-click="excelDownloadInfo()"><s:message code="cmm.excel.down"/></button>--%>
-<%--    </div>--%>
+    <div class="mt10 oh sb-select dkbr">
+      <%-- 엑셀다운로드 --%>
+      <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCondition"/></button>
+    </div>
 
     <div class="w100 mt10">
       <%--위즈모 테이블--%>
@@ -87,11 +86,10 @@
           <wj-flex-grid-column header="<s:message code="gift.saleFg"/>"   binding="saleFg" width="80" align="center" is-read-only="true" data-map="saleFgMap"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="gift.giftNm"/>"   binding="giftNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="gift.giftCd"/>"   binding="giftCd" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="gift.giftAmt"/>"  binding="giftAmt" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="gift.apprAmt"/>"  binding="apprAmt" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="gift.giftAmt"/>"  binding="giftAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="gift.apprAmt"/>"  binding="apprAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="gift.apprNo"/>"   binding="apprNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="gift.apprDt"/>"   binding="apprDt" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="gift.No"/>"       binding="apprDt" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         </wj-flex-grid>
         <%-- ColumnPicker 사용시 include --%>
         <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
@@ -102,11 +100,52 @@
       <%--//위즈모 테이블--%>
     </div>
   </div>
+
+  <%-- 페이지 리스트 --%>
+  <div class="pageNum mt20">
+    <%-- id --%>
+    <ul id="giftCtrlPager" data-size="10">
+    </ul>
+  </div>
+  <%--//페이지 리스트--%>
+
+  <%--엑셀 리스트--%>
+  <div class="w100 mt10" style="display:none;" ng-controller="giftExcelCtrl">
+    <%--위즈모 테이블--%>
+    <div class="wj-gridWrap" style="height: 350px; overflow-x: hidden; overflow-y: hidden;">
+      <wj-flex-grid
+              autoGenerateColumns="false"
+              selection-mode="Row"
+              items-source="data"
+              control="flex"
+              initialized="initGrid(s,e)"
+              is-read-only="true"
+              item-formatter="_itemFormatter">
+
+        <!-- define columns -->
+        <wj-flex-grid-column header="<s:message code="gift.saleDate"/>" binding="saleDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="gift.branchNm"/>" binding="branchNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="gift.storeCd"/>"  binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="gift.storeNm"/>"  binding="storeNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="gift.posNo"/>"    binding="posNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="gift.billNo"/>"   binding="billNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="gift.saleFg"/>"   binding="saleFg" width="80" align="center" is-read-only="true" data-map="saleFgMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="gift.giftNm"/>"   binding="giftNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="gift.giftCd"/>"   binding="giftCd" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="gift.giftAmt"/>"  binding="giftAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="gift.apprAmt"/>"  binding="apprAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="gift.apprNo"/>"   binding="apprNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="gift.apprDt"/>"   binding="apprDt" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+      </wj-flex-grid>
+    </div>
+    <%--//위즈모 테이블--%>
+  </div>
+  <%--//엑셀 리스트--%>
 </div>
 
 <script type="text/javascript">
   var orgnFg = "${orgnFg}";
   var storeCd = "${storeCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/appr/gift/gift.js?ver=20220930.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/appr/gift/gift.js?ver=20221005.01" charset="utf-8"></script>
 

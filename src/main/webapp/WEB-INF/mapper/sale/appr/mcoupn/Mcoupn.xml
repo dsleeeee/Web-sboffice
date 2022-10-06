@@ -18,21 +18,60 @@
     -->
     <select id="getMcoupnList" parameterType="mcoupnVO" resultType="DefaultMap">
         /* McoupnMapper.getMcoupnList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT	TO_CHAR(TO_DATE(tsspm.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
-        -- 지사명
-        -- 지사코드
+        ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
         ,		tsspm.STORE_CD
-        ,		(SELECT tms.STORE_NM FROM TB_MS_STORE tms WHERE tms.STORE_CD = tsspm.STORE_CD) AS STORE_NM
+        ,		tms.STORE_NM
         ,		tsspm.POS_NO
         ,		tsspm.BILL_NO
-        -- 품목명
+        -- 품목명_상품권명
+        ,		tsspm.SALE_FG
+        ,       tsspm.MCOUPN_BARCD_NO
+        ,       tsspm.SALE_AMT AS APPR_AMT
+        ,		tsspm.APPR_NO
+        ,		tsspm.APPR_DT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	TB_SL_SALE_PAY_MCOUPN tsspm
+        ,       TB_MS_STORE tms
+        WHERE   tsspm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND     tsspm.STORE_CD = tms.STORE_CD
+        AND     tsspm.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsspm.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsspm.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY tsspm.SALE_DATE, tsspm.STORE_CD, tsspm.POS_NO, tsspm.BILL_NO
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 모바일쿠폰 승인 조회 - 엑셀조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMcoupnExcelList" parameterType="mcoupnVO" resultType="DefaultMap">
+        /* McoupnMapper.getMcoupnExcelList */
+        SELECT	TO_CHAR(TO_DATE(tsspm.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+        ,		tsspm.STORE_CD
+        ,		tms.STORE_NM
+        ,		tsspm.POS_NO
+        ,		tsspm.BILL_NO
+        -- 품목명_상품권명
         ,		tsspm.SALE_FG
         ,       tsspm.MCOUPN_BARCD_NO
         ,       tsspm.SALE_AMT AS APPR_AMT
         ,		tsspm.APPR_NO
         ,		tsspm.APPR_DT
         FROM 	TB_SL_SALE_PAY_MCOUPN tsspm
-        WHERE   tsspm.HQ_OFFICE_CD = #{hqOfficeCd}
+        ,       TB_MS_STORE tms
+        WHERE   tsspm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND     tsspm.STORE_CD = tms.STORE_CD
+        AND     tsspm.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     tsspm.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='storeCds != null and storeCds != ""'>
             AND tsspm.STORE_CD IN

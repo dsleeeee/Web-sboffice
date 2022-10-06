@@ -88,4 +88,28 @@ public class CardController {
     }
 
 
+    /**
+     * 신용카드 승인 조회_엑셀
+     *
+     * @param cardVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2022. 09. 30.
+     */
+    @RequestMapping(value = "/card/getCardExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCardExcelList(CardVO cardVO, HttpServletRequest request,
+                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = cardService.getCardExcelList(cardVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, cardVO);
+    }
+
+
 }
