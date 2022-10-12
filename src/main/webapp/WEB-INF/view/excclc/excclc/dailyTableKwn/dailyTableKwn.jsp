@@ -95,7 +95,7 @@
                 <wj-flex-grid-column header="<s:message code="dailyTableKwn.monthDcAmt"/>" binding="monthDcAmt" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dailyTableKwn.monthNetSaleAmt"/>" binding="monthNetSaleAmt"	width="100" is-read-only="true" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dailyTableKwn.monthMembrSaleAmt"/>" binding="monthMembrSaleAmt" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dailyTableKwn.guestCnt"/>" inding="guestCnt" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dailyTableKwn.guestCnt"/>" binding="guestCnt" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dailyTableKwn.guestUprc"/>" binding="guestUprc" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dailyTableKwn.monthGuestCnt"/>" binding="monthGuestCnt" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dailyTableKwn.monthGuestUprc"/>" binding="monthGuestUprc" width="100" is-read-only="true" align="right"></wj-flex-grid-column>

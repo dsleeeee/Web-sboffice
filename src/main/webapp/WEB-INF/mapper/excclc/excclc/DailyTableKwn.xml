@@ -31,9 +31,9 @@
          ,		tsmt.MONTH_DC_AMT
          ,		tsmt.MONTH_NET_SALE_AMT
          ,		tsdt.TOT_GUEST_CNT AS GUEST_CNT
-         ,		DECODE(tsdt.TOT_GUEST_CNT, 0, 0, FLOOR(tsdt.TOT_SALE_AMT/tsdt.TOT_GUEST_CNT)) AS
-         ,		tsmt.MONTH_GUEST_CNTGUEST_UPRC
-         ,		tsmt.MONTH_GUEST_UPRC
+         ,		DECODE(tsdt.TOT_GUEST_CNT, 0, 0, FLOOR(tsdt.TOT_SALE_AMT/tsdt.TOT_GUEST_CNT)) AS GUEST_UPRC
+         ,		tsmt.MONTH_GUEST_CNT
+         ,		tsmt.MONTH_GUEST_AMT AS MONTH_GUEST_UPRC
         FROM 	TB_SL_DAILY_TOTAL tsdt
         ,       (
                     SELECT HQ_OFFICE_CD
@@ -42,7 +42,7 @@
                     ,		SUM(TOT_DC_AMT) AS MONTH_DC_AMT
                     ,		SUM(NET_SALE_AMT) AS MONTH_NET_SALE_AMT
                     ,		SUM(TOT_GUEST_CNT) AS MONTH_GUEST_CNT
-                    ,		SUM(DECODE(TOT_GUEST_CNT, 0, 0, FLOOR(TOT_SALE_AMT/TOT_GUEST_CNT))) AS MONTH_GUEST_ANT
+                    ,		SUM(DECODE(TOT_GUEST_CNT, 0, 0, FLOOR(TOT_SALE_AMT/TOT_GUEST_CNT))) AS MONTH_GUEST_AMT
                     FROM 	TB_SL_DAILY_TOTAL tsdt2
                     WHERE	tsdt2.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND 	tsdt2.STORE_CD     = #{storeCd}

@@ -607,42 +607,29 @@ app.controller('dailyTableReportKwnCtrl', ['$scope', '$http', function ($scope, 
             }
         }
 
-        paymentStatus2ListHtml += '</table>';
-
-
-        // 출납현황3 리스트 HTML 생성
-        var paymentStatus3ListHtml = '';
-        var paymentStatus3ListHeaderHtml = '';
-        paymentStatus3ListHeaderHtml += '<table class="w100 mt5">' // 출납현황3 header html
-            + '<colgroup>'
-            + '<col style="width:20%;">'
-            + '<col style="width:80%;">'
-            + '</colgroup>';
-
         for (var i = 0; i < $scope.dailyTableKwnCtrl_paymentStatus3.length; i++) {
             // null표시
             var item = $scope.dailyTableKwnCtrl_paymentStatus3[i];
             var content = nvl(item.content,'');
             if(i === 0) {
-                paymentStatus3ListHtml += '<tr class="h25">'
+                paymentStatus2ListHtml += '<tr class="h25">'
                     + '<td class="tc" rowspan="6" style="background-color: lightgrey;">비고</td>'
-                    + '<td class="tl">' + content + '</td>'
+                    + '<td class="tl" colspan="4">' + content + '</td>'
                     + '</tr>';
             } else {
-                paymentStatus3ListHtml += '<tr class="h25">'
-                    + '<td class="tl">' + content + '</td>'
+                paymentStatus2ListHtml += '<tr class="h25">'
+                    + '<td class="tl" colspan="4">' + content + '</td>'
                     + '</tr>';
             }
         }
 
-        paymentStatus3ListHtml += '</table>';
+        paymentStatus2ListHtml += '</table>';
 
 
         // 전체 HTML 생성
         dailyTableKwnHtml += titleHtml + infoHtml
                             + paymentStatus1ListHeaderHtml + paymentStatus1ListHtml
                             + paymentStatus2ListHeaderHtml + paymentStatus2ListHtml
-                            + paymentStatus3ListHeaderHtml + paymentStatus3ListHtml
                             ;
         $('#dailyTableKwnReport2').append(dailyTableKwnHtml);
     };
