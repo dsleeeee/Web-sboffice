@@ -267,6 +267,10 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
 
             // [1246 광운대아이스링크]
             if(kwuEnvstVal === "1") {
+                $scope.member.registerDate = new Date();
+                $scope.member.useStartDate = new Date();
+                $scope.member.useEndDate = new Date();
+
                 // 광운대아이스링크 추가정보 조회
                 $scope.getMemberInfoAddKWU(params);
             }
