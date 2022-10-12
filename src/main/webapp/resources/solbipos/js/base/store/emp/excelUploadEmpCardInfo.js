@@ -157,7 +157,9 @@ app.controller('excelUploadEmpCardInfoCtrl', ['$scope', '$http', '$timeout', fun
             // 카드사용구분
             if (jsonData[i].useFg == "정상") {
                 jsonData[i].useFg = "1";
-            } else {
+            } else if (jsonData[i].useFg == "사용불가") {
+                jsonData[i].useFg = "0";
+            } else if ( !(jsonData[i].useFg == "정상" || jsonData[i].useFg == "사용불가" || jsonData[i].useFg == "1" || jsonData[i].useFg == "0") ) {
                 jsonData[i].useFg = "0";
             }
         }
