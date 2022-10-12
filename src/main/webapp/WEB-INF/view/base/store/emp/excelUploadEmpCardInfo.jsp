@@ -20,12 +20,12 @@
                 is-read-only="true">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="empCardInfo.empCardNo"/>" binding="employeeCardNo" width="150" align="center" data-type="String"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="empCardInfo.empNo"/>" binding="employeeNo" width="150" align="center" data-type="String"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="empCardInfo.empNm"/>" binding="employeeNm" width="150" align="center" data-type="String"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="empCardInfo.divNm"/>" binding="divNm" width="150" align="center" data-type="String"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="empCardInfo.deptNm"/>" binding="deptNm" width="150" align="center" data-type="String"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="empCardInfo.positionNm"/>" binding="positionNm" width="150" align="center" data-type="String"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="empCardInfo.empCardNo"/>" binding="employeeCardNo" width="130" align="center" data-type="String"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="empCardInfo.empNo"/>" binding="employeeNo" width="130" align="center" data-type="String"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="empCardInfo.empNm"/>" binding="employeeNm" width="130" align="center" data-type="String"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="empCardInfo.divNm"/>" binding="divNm" width="130" align="center" data-type="String"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="empCardInfo.deptNm"/>" binding="deptNm" width="130" align="center" data-type="String"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="empCardInfo.positionNm"/>" binding="positionNm" width="130" align="center" data-type="String"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="empCardInfo.useFg"/>" binding="useFg" width="90" align="center" data-type="String"></wj-flex-grid-column>
 
         </wj-flex-grid>
@@ -34,4 +34,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/excelUploadEmpCardInfo.js?ver=20220816.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/excelUploadEmpCardInfo.js?ver=20221013.01" charset="utf-8"></script>
