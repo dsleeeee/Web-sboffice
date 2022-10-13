@@ -689,4 +689,19 @@ public class ProdController {
         return ReturnUtil.returnJson(Status.OK, result);
     }
 
+    /**
+     * KIOSK 판매시간 시간설정 조회
+     * @param prodVO
+     * @param request
+     * @return
+     * @author  이다솜
+     * @since   2022. 10. 11.
+     */
+    @RequestMapping(value = "/getProdSaleTime.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdSaleTime(ProdVO prodVO, HttpServletRequest request) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        return returnJson(Status.OK, "list", prodService.getProdSaleTime(prodVO, sessionInfoVO));
+    }
 }

@@ -314,6 +314,45 @@ public class ProdServiceImpl implements ProdService {
             prodMapper.saveProdInfo(prodVO);
         }
 
+        // KIOSK 판매여부
+        if(prodVO.getSaleTimeFg() != null && "Y".equals(prodVO.getSaleTimeFg())){
+            if(prodVO.getSaleTime() != null && prodVO.getSaleTime().length() > 0){
+
+                String[] arrSaleTime = prodVO.getSaleTime().split(",");
+
+                if (arrSaleTime.length > 0) {
+
+                    // 기존 KIOSK 판매시간 시간설정 삭제
+                    prodMapper.deleteProdSaleTime(prodVO);
+
+                    for(int i=0; i < arrSaleTime.length; i++) {
+
+                        int iSeq = i+1;
+                        ProdVO stProdVo = new ProdVO();
+                        stProdVo.setOrgnFg(orgnFg);
+                        stProdVo.setHqOfficeCd(prodVO.getHqOfficeCd());
+                        stProdVo.setStoreCd(prodVO.getStoreCd());
+                        stProdVo.setProdCd(prodVO.getProdCd());
+                        stProdVo.setTimeSeq(iSeq);
+                        stProdVo.setIncludeFg("1");
+                        stProdVo.setsSaleTime(arrSaleTime[i].split("-")[0]);
+                        stProdVo.seteSaleTime(arrSaleTime[i].split("-")[1]);
+                        stProdVo.setRegDt(currentDt);
+                        stProdVo.setModDt(currentDt);
+                        stProdVo.setRegId(sessionInfoVO.getUserId());
+                        stProdVo.setModId(sessionInfoVO.getUserId());
+
+                        // KIOSK 판매시간 시간설정 등록
+                        prodMapper.insertProdSaleTime(stProdVo);
+                    }
+                }
+            }
+        }else{
+
+            // KIOSK 판매시간 시간설정 삭제
+            prodMapper.deleteProdSaleTime(prodVO);
+        }
+
         // [상품등록 - 본사통제시] 본사에서 상품정보 수정시 매장에 수정정보 내려줌
 //        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ  && prodEnvstVal == ProdEnvFg.HQ) {
         // 본사신규상품매장생성 [0 전매장]일 경우 매장에 수정정보 내려줌
@@ -344,6 +383,14 @@ public class ProdServiceImpl implements ProdService {
 
             if(prodVO.getProdInfo() != null && prodVO.getProdInfo().length() > 0){
                 prodMapper.saveProdInfo(prodVO);
+            }
+
+            //매장 KIOSK 판매시간 시간설정 저장(KIOSK 판매시간을 사용하는 경우만)
+            if(prodVO.getSaleTimeFg() != null && "Y".equals(prodVO.getSaleTimeFg())){
+                prodMapper.deleteStoreProdSaleTime(prodVO);
+                prodMapper.insertStoreProdSaleTime(prodVO);
+            }else{
+                prodMapper.deleteStoreProdSaleTime(prodVO);
             }
 
             // 매장 사이드 선택메뉴 그룹/분류/상품 저장(사이드 선택메뉴를 사용하는 경우만)
@@ -570,6 +617,9 @@ public class ProdServiceImpl implements ProdService {
         // 해당 상품이 바코드를 사용하는지 파악
         int prodBarCdYn = prodMapper.getProdBarCdCnt(prodVOs[0]);
 
+        // 해당 상품의 KIOSK 판매시간 사용여부 파악
+        String prodSaleTimeFg = prodMapper.getProdSaleTimeFg(prodVOs[0]);
+
         // 해당 상품이 사이드 선택메뉴를 사용하는지 파악
         String sideSelYn = "N";
         String SideGrpCd = "";
@@ -609,6 +659,15 @@ public class ProdServiceImpl implements ProdService {
             if(prodBarCdYn > 0){
                 int hqProdBarcdResult = prodMapper.insertProdBarcdStoreDetail(prodVO);
                 if (hqProdBarcdResult <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
+
+            // 해당 매장에 본사 KIOSK 판매시간 시간설정 등록
+            // 본사 상품이 KIOSK 판매시간을 사용하는 경우, 매장에도 KIOSK 판매시간 시간설정을 넣어준다.
+            if("Y".equals(prodSaleTimeFg)){
+                prodMapper.deleteProdStoreProdSaleTime(prodVO);
+                prodMapper.insertProdStoreProdSaleTime(prodVO);
+            }else{
+                prodMapper.deleteProdStoreProdSaleTime(prodVO);
             }
 
             // [판매가 - 본사통제시] 본사에서 상품정보 수정시 매장에 수정정보 내려줌
@@ -869,6 +928,7 @@ public class ProdServiceImpl implements ProdService {
             prodVO.setProdClassCd(prodDtl.getStr("prodClassCd"));
             prodVO.setSdselGrpCd(prodDtl.getStr("sdselGrpCd"));
             prodVO.setSideProdYn(prodDtl.getStr("sideProdYn"));
+            prodVO.setSaleTimeFg(prodDtl.getStr("saleTimeFg"));
 
             // 적용 매장 등록(혹시 남아있을지 모르기 때문에(중복키 입력 방지) DELETE - INSERT 실행)
             prodMapper.deleteProdStore(prodVO);
@@ -886,6 +946,14 @@ public class ProdServiceImpl implements ProdService {
             if(prodVO.getBarCd() != null && prodVO.getBarCd().length() > 0){
                 int hqProdBarcdResult = prodMapper.insertProdBarcdStoreDetail(prodVO);
                 if (hqProdBarcdResult <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
+
+            // 본사 상품이 KIOSK 판매시간을 사용하는 경우, 매장에도 KIOSK 판매시간 시간설정을 넣어준다.
+            if(prodVO.getSaleTimeFg() != null && "Y".equals(prodVO.getSaleTimeFg())){
+                prodMapper.deleteProdStoreProdSaleTime(prodVO);
+                prodMapper.insertProdStoreProdSaleTime(prodVO);
+            }else{
+                prodMapper.deleteProdStoreProdSaleTime(prodVO);
             }
 
             // [판매가 - 본사통제시] 본사에서 상품정보 수정시 매장에 수정정보 내려줌
@@ -1915,6 +1983,17 @@ public class ProdServiceImpl implements ProdService {
         prodMapper.deleteAllTmpDelProduct(prodVO);
 
         return result;
+    }
+
+    /** KIOSK 판매시간 시간설정 조회 */
+    @Override
+    public List<DefaultMap<String>> getProdSaleTime(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return prodMapper.getProdSaleTime(prodVO);
     }
 
 }

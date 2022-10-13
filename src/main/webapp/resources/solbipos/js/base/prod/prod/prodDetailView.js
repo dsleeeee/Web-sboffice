@@ -86,6 +86,31 @@ app.controller('prodDetailCtrl', ['$scope', '$http', function ($scope, $http) {
                 if(prodDetail.dcYn === null){
                     prodDetail.dcYn = "Y";
                 }
+
+                // KIOSK 시간설정 셋팅
+                if($scope.prodDetail.saleTimeFg === 'Y'){
+
+                    var vParams = {};
+                    vParams.prodCd = $scope.prodDetail.prodCd;
+
+                    $scope._postJSONQuery.withOutPopUp("/base/prod/prod/prod/getProdSaleTime.sb", vParams, function(response){
+                        if(response.data.data.list.length > 0){
+                            var data = response.data.data.list;
+                            var str = "";
+
+                            for(var i=0; i<data.length; i++){
+                                if(i > 0){
+                                    str += '</br>';
+                                }
+                                str += data[i].sSaleTime.substring(0, 2) + ":" + data[i].sSaleTime.substring(2, 4) + " ~ "
+                                     + data[i].eSaleTime.substring(0, 2) + ":" + data[i].eSaleTime.substring(2, 4);
+                            }
+                            $("#divSaleTime").html(str);
+                        }
+                    });
+                }else{
+                    $("#divSaleTime").text("");
+                }
             }
         );
         // 기능수행 종료 : 반드시 추가

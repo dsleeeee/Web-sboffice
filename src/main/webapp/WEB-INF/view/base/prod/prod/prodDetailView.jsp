@@ -525,15 +525,38 @@
             <div class="tblBr">
                 <table class="tblType01">
                     <colgroup>
-                        <col width="15%"/>
-                        <col width="85%"/>
+                        <col class="w15" />
+                        <col class="w35" />
+                        <col class="w15" />
+                        <col class="w35" />
                     </colgroup>
                     <tbody>
                     <tr>
                         <%-- 매핑상품코드 --%>
                         <th><s:message code="prod.mapProdCd"/></th>
-                        <td>
+                        <td colspan="3">
                             {{prodDetail.mapProdCd}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <%-- KIOSK 판매시간 --%>
+                        <th><s:message code="prod.kioskSaleTime"/></th>
+                        <td>
+                            <wj-combo-box
+                                ng-model="prodDetail.saleTimeFg"
+                                ng-hide="true"
+                                text="_saleTimeFg"
+                                items-source="_getComboData('useYnComboData')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false">
+                            </wj-combo-box>
+                            {{_saleTimeFg}}
+                        </td>
+                        <%-- KIOSK 시간설정 --%>
+                        <th><s:message code="prod.kioskSaleTimeSetting"/></th>
+                        <td>
+                            <div id="divSaleTime"></div>
                         </td>
                     </tr>
                     </tbody>
@@ -622,4 +645,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20210826.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20221013.01" charset="utf-8"></script>

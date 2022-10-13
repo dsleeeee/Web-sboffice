@@ -687,15 +687,47 @@
       <div class="tblBr">
         <table class="tblType01">
           <colgroup>
-            <col width="15%"/>
-            <col width="85%"/>
+            <col class="w15" />
+            <col class="w35" />
+            <col class="w15" />
+            <col class="w35" />
           </colgroup>
           <tbody>
           <tr>
             <%-- 매핑상품코드 --%>
             <th><s:message code="prod.mapProdCd"/></th>
-            <td>
+            <td colspan="3">
               <input type="text" id="_mapProdCd" name="mapProdCd" class="sb-input w100" ng-model="prodModifyInfo.mapProdCd"/>
+            </td>
+          </tr>
+          <tr>
+            <%-- KIOSK 판매시간 --%>
+            <th><s:message code="prod.kioskSaleTime"/></th>
+            <td>
+                <div class="sb-select">
+                  <wj-combo-box
+                        id="_saleTimeFg"
+                        name="saleTimeFg"
+                        ng-model="prodModifyInfo.saleTimeFg"
+                        items-source="_getComboData('useYnComboData')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        initialized="_initComboBox(s)"
+                        control="saleTimeFgCombo"
+                        selected-index="1">
+                  </wj-combo-box>
+                </div>
+            </td>
+            <%-- KIOSK 시간설정 --%>
+            <th><s:message code="prod.kioskSaleTimeSetting"/></th>
+            <td id="dataKioskTime">
+               <%--<input id="P_KIOSK_TIME" name="P_KIOSK_TIME" type="hidden">--%>
+               <div class="divDataKioskTime">
+                 <input class="inputKioskTimeStart" type="text" style="width: 55px;" onfocus="this.style.background='#FFE08C';" onblur="this.style.background='';" onkeyup="onKeyupKioskTime(this)"> ~
+                 <input class="inputKioskTimeEnd" type="text" style="width: 55px;" onfocus="this.style.background='#FFE08C';" onblur="this.style.background='';" onkeyup="onKeyupKioskTime(this)">
+                 <button input type="button" class="btn_skyblue" id="btnKioskTimeAdd" onclick="addNewKioskTimeHtml()">＋</button>
+               </div>
             </td>
           </tr>
           </tbody>
@@ -810,9 +842,102 @@
       $(this).val($(this).val().replace(/[^A-za-z0-9]/g,""));
     });
   });
+
+
+  // KIOSK 시간설정 추가
+  function addNewKioskTimeHtml() {
+    var html = '';
+    html += '<div class="divDataKioskTime">';
+    html += '   <input class="inputKioskTimeStart" type=text style="width:55px" onfocus="this.style.background=\'#FFE08C\';" onblur="this.style.background=\'\';" onkeyup="onKeyupKioskTime(this)" > ~ ';
+    html += '   <input class="inputKioskTimeEnd" type=text style="width:55px" onfocus="this.style.background=\'#FFE08C\';" onblur="this.style.background=\'\';" onkeyup="onKeyupKioskTime(this)" >';
+    html += '   <button input type="button" class="btn_skyblue" id="btnKioskTimeRemove" onclick="removeTimeDiv(this)">－</button> ';
+    html += '</div>';
+
+    $("#dataKioskTime").append(html);
+  }
+
+  // KIOSK 시간설정 숫자만 입력되도록
+  function onKeyupKioskTime(e) {
+    if (!(event.keyCode >=37 && event.keyCode<=40)) {
+       var inputVal = $(e).val();
+       var tempVal = inputVal.replace(/[^0-9]/gi,'');
+       $(e).val(getFormatKioskTime(tempVal));
+    }
+  }
+
+  // KIOSK 시간설정 시 분 사이 ':' 추가
+  function getFormatKioskTime(tempVal) {
+    if (tempVal.length < 2) {
+       return tempVal;
+    } else if (tempVal.length == 2) {
+       return tempVal + ":";
+    } else {
+       return tempVal.substring(0, 2) + ":" + tempVal.substring(2, 4);
+    }
+  }
+
+  // KIOSK 시간설정 제거
+  function removeTimeDiv(e) {
+    $(e).parent().remove();
+  }
+
+  // KIOSK 시간설정 값 변수에 담기
+  function getKioskTimeValue() {
+    var returnStr = "";
+
+    var timeDivs = $("#dataKioskTime").children(".divDataKioskTime");
+    var cnt = 0;
+    for (var i=0; i<timeDivs.length; i++) {
+       var startTime = $($(timeDivs[i]).children(".inputKioskTimeStart")[0]).val().replace(':', '');
+       var endTime = $($(timeDivs[i]).children(".inputKioskTimeEnd")[0]).val().replace(':', '');
+
+       if (startTime.length == 4 && endTime.length == 4) {
+          if (cnt != 0) returnStr += ",";
+          returnStr += startTime + "-" + endTime;
+          cnt++;
+       }
+    }
+
+    return returnStr;
+  }
+
+  // KIOSK 시간설정 View에 셋팅
+  function setKioskTimeValue(timeVal) {
+    if (timeVal == null || timeVal == "") return;
+    try {
+       var timeArr = timeVal.split(",");
+       for (var i=0; i<timeArr.length; i++) {
+          var timeArrDetail = timeArr[i].split("-");
+          var startTime = timeArrDetail[0];
+          var endTime = timeArrDetail[1];
+
+          if (i != 0) {
+             addNewKioskTimeHtml();
+          }
+          var timeDivs = $("#dataKioskTime").children(".divDataKioskTime");
+          $($(timeDivs[timeDivs.length-1]).children(".inputKioskTimeStart")[0]).val(getFormatKioskTime(startTime));
+          $($(timeDivs[timeDivs.length-1]).children(".inputKioskTimeEnd")[0]).val(getFormatKioskTime(endTime));
+       }
+    } catch (e) {
+       console.log(e);
+    }
+ }
+
+  // KIOSK 시간설정 초기화
+  function resetKioskTimeHtml() {
+    var html = '';
+    html += '<div class="divDataKioskTime">';
+    html += '   <input class="inputKioskTimeStart" type=text style="width:55px" onfocus="this.style.background=\'#FFE08C\';" onblur="this.style.background=\'\';" onkeyup="onKeyupKioskTime(this)" > ~ ';
+    html += '   <input class="inputKioskTimeEnd" type=text style="width:55px" onfocus="this.style.background=\'#FFE08C\';" onblur="this.style.background=\'\';" onkeyup="onKeyupKioskTime(this)" >';
+    html += '   <button input type="button" class="btn_skyblue" id="btnKioskTimeAdd" onclick="addNewKioskTimeHtml()">＋</button> ';
+    html += '</div>';
+
+    $("#dataKioskTime").html(html);
+  }
+
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20220810.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20221013.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

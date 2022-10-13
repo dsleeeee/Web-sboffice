@@ -470,4 +470,27 @@ public interface ProdMapper {
     /** 상품 삭제 팝업 - 상품 전체리스트 조회*/
     List<DefaultMap<String>> getAllProdList(ProdVO prodVO);
 
+    /** KIOSK 판매시간 시간설정 등록 */
+    int insertProdSaleTime(ProdVO prodVO);
+
+    /** KIOSK 판매시간 시간설정 삭제 */
+    int deleteProdSaleTime(ProdVO prodVO);
+
+    /** KIOSK 판매시간 시간설정 조회 */
+    List<DefaultMap<String>> getProdSaleTime(ProdVO prodVO);
+
+    /** 본사상품 매장적용시, 기존 매장의 KIOSK 판매시간 시간설정 삭제 */
+    int deleteStoreProdSaleTime(ProdVO prodVO);
+
+    /** 본사상품 매장적용시, 본사의 KIOSK 판매시간 시간설정 매장적용 */
+    int insertStoreProdSaleTime(ProdVO prodVO);
+
+    /** 해당 상품의 KIOSK 판매시간 사용여부 파악 */
+    String getProdSaleTimeFg(ProdVO prodVO);
+
+    /** 상품 등록매장 적용시, 기존 매장의 KIOSK 판매시간 시간설정 삭제 */
+    int deleteProdStoreProdSaleTime(ProdVO prodVO);
+
+    /** 상품 등록매장 적용시, 본사의 KIOSK 판매시간 시간설정 매장적용 */
+    int insertProdStoreProdSaleTime(ProdVO prodVO);
 }

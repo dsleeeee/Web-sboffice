@@ -130,6 +130,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             params.poMinQty = $("#prodModifyPoMinQty").val(); // 최소발주수량
             params.startStockQty = $("#prodModifyStartStockQty").val(); // 초기재고
             params.safeStockQty = $("#prodModifySafeStockQty").val(); // 안전재고
+            // 기타정보
+            params.saleTimeFg = "N";
+            resetKioskTimeHtml();
             // 비고
             params.remark = ""; // 비고
             params.prodInfo = ""; // 상품 상세 설명
@@ -304,7 +307,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                 $scope.setConfigProdChk();
             }
         }
-    }
+    };
 
     // 상품저장
     $scope.saveProdSave = function() {
@@ -321,6 +324,13 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         params.startStockQty = $("#prodModifyStartStockQty").val(); // 초기재고
         params.safeStockQty = $("#prodModifySafeStockQty").val(); // 안전재고
         params.chkVendrCd = $scope.prodModifyInfo.vendrCd;
+
+        // KIOSK 판매시간 사용여부에 따라 시간설정
+        if($scope.prodModifyInfo.saleTimeFg === "Y"){
+            params.saleTime = getKioskTimeValue(); // KIOSK 시간설정
+        }else{
+            params.saleTime = "";
+        }
 
         // 저장수행
         $scope._postJSONSave.withPopUp("/base/prod/prod/prod/save.sb", params, function (response) {
@@ -639,6 +649,44 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                 return false;
             }
         }
+        // KIOSK 판매시간
+        if($scope.saleTimeFgCombo.selectedValue === "Y"){
+
+            var timeDivs = $("#dataKioskTime").children(".divDataKioskTime");
+
+            for (var i=0; i<timeDivs.length; i++) {
+                var startTime = $($(timeDivs[i]).children(".inputKioskTimeStart")[0]).val();
+                var endTime = $($(timeDivs[i]).children(".inputKioskTimeEnd")[0]).val();
+
+                if(startTime === "" || endTime === ""){
+                    $scope._popMsg(messages["prod.kioskSaleTimeInput.msg"]); // KIOSK 시간설정을 입력하세요.
+                    return false;
+                }
+
+                if (startTime.length != 5 || endTime.length != 5) {
+                    $scope._popMsg(messages["prod.kioskSaleTime4Digit.msg"]); // KIOSK 판매시간은 4자리(시-2자리, 분-2자리)로 입력해주세요.
+                    return false;
+                }
+
+                if(startTime === endTime){
+                    $scope._popMsg(messages["prod.kioskSaleTimeDiff.msg"]); // KIOSK 판매시간은 시작시간과 종료시간이 같을 수 없습니다. 다시 입력하세요.
+                    return false;
+                }
+
+                var st = startTime.split(":");
+                var et = endTime.split(":");
+
+                if(Number(st[0]) > 23 || Number(et[0]) > 23){
+                    $scope._popMsg(messages["prod.kioskSaleTimeHh.msg"]); // KIOSK 판매시간 시는 00~23 사이로 입력해주세요.
+                    return false;
+                }
+
+                if(Number(st[1]) > 59 || Number(et[1]) > 59){
+                    $scope._popMsg(messages["prod.kioskSaleTimeMm.msg"]); // KIOSK 판매시간 분은 00~59 사이로 입력해주세요.
+                    return false;
+                }
+            }
+        }
 
         return true;
     };
@@ -652,6 +700,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         } else {
             $("#_prcCtrlFg").attr("disabled", true);
         }
+        
+        // KIOSK 시간설정 초기화
+        resetKioskTimeHtml();
 
         // 수정 모드 시
         if(data.prodCd !== null && data.prodCd !== undefined && data.prodCd !== ""){
@@ -660,62 +711,85 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             var params = data;
             // 조회 수행 : 조회URL, 파라미터, 콜백함수
             $scope._postJSONQuery.withPopUp("/base/prod/prod/prod/detail.sb", params, function(response){
-                    // 상품정보
-                    var prodModify = response.data.data.list;
+                // 상품정보
+                var prodModify = response.data.data.list;
 
-                    // 상품정보 set
-                    $scope.setProdModifyInfo(prodModify);
+                // 상품정보 set
+                $scope.setProdModifyInfo(prodModify);
 
-                    // 브랜드가 없는 경우, 가장 맨앞 브랜드로 셋팅
-                    if($scope.prodModifyInfo.hqBrandCd === null || $scope.prodModifyInfo.hqBrandCd === ""){
-                        $scope.hqBrandCdCombo.selectedIndex = 0;
-                    }
+                // 브랜드가 없는 경우, 가장 맨앞 브랜드로 셋팅
+                if($scope.prodModifyInfo.hqBrandCd === null || $scope.prodModifyInfo.hqBrandCd === ""){
+                    $scope.hqBrandCdCombo.selectedIndex = 0;
+                }
 
-                    // 상품 이미지
-                    if(prodModify.imgUrl === null){
-                        $("#goodsNo").css('display', 'block');
-                        $("#goodsYes").css('display', 'none');
+                // 상품 이미지
+                if(prodModify.imgUrl === null){
+                    $("#goodsNo").css('display', 'block');
+                    $("#goodsYes").css('display', 'none');
 
-                    } else {
-                        $("#goodsNo").css('display', 'none');
-                        $("#goodsYes").css('display', 'block');
+                } else {
+                    $("#goodsNo").css('display', 'none');
+                    $("#goodsYes").css('display', 'block');
 
-                        try {
-                            $("#imgProdImage").attr("src", prodModify.imgUrl);
-                        } catch (e) {
-                            alert(e);
-                        }
-                    }
-
-                    // 세트구성상품 등록버튼 visible 처리
-                    if($scope.prodModifyInfo.setProdFg === "1"){
-                        $("#btnSetConfigProd").css("display", "none");
-                    }else{
-                        $("#btnSetConfigProd").css("display", "");
-                    }
-
-                    // 기존 세트상품구분 값 갖고 있기(수정시, 변경여부 비교하여 세트구성상품 팝업 띄우기 위해)
-                    vSetProdFg = $scope.prodModifyInfo.setProdFg;
-
-                    // 사이드상품여부가 '미사용'인 경우 선택메뉴 값이 있더라도 빈칸으로 셋팅
-                    if($scope.prodModifyInfo.sideProdYn === 'N'){
-                        $scope.prodModifyInfo.sdselGrpNm = "";
-                        $scope.prodModifyInfo.sdselGrpCd = "";
-                    }
-
-                    if($scope.prodModifyInfo.depositCupFg === null){
-                        $scope.prodModifyInfo.depositCupFg = "";
-                    }
-
-                    if($scope.prodModifyInfo.pointUseYn === null){
-                        $scope.prodModifyInfo.pointUseYn = "Y";
-                    }
-
-                    if($scope.prodModifyInfo.dcYn === null){
-                        $scope.prodModifyInfo.dcYn = "Y";
+                    try {
+                        $("#imgProdImage").attr("src", prodModify.imgUrl);
+                    } catch (e) {
+                        alert(e);
                     }
                 }
-            );
+
+                // 세트구성상품 등록버튼 visible 처리
+                if($scope.prodModifyInfo.setProdFg === "1"){
+                    $("#btnSetConfigProd").css("display", "none");
+                }else{
+                    $("#btnSetConfigProd").css("display", "");
+                }
+
+                // 기존 세트상품구분 값 갖고 있기(수정시, 변경여부 비교하여 세트구성상품 팝업 띄우기 위해)
+                vSetProdFg = $scope.prodModifyInfo.setProdFg;
+
+                // 사이드상품여부가 '미사용'인 경우 선택메뉴 값이 있더라도 빈칸으로 셋팅
+                if($scope.prodModifyInfo.sideProdYn === 'N'){
+                    $scope.prodModifyInfo.sdselGrpNm = "";
+                    $scope.prodModifyInfo.sdselGrpCd = "";
+                }
+
+                if($scope.prodModifyInfo.depositCupFg === null){
+                    $scope.prodModifyInfo.depositCupFg = "";
+                }
+
+                if($scope.prodModifyInfo.pointUseYn === null){
+                    $scope.prodModifyInfo.pointUseYn = "Y";
+                }
+
+                if($scope.prodModifyInfo.dcYn === null){
+                    $scope.prodModifyInfo.dcYn = "Y";
+                }
+
+                // KIOSK 시간설정 셋팅
+                if($scope.prodModifyInfo.saleTimeFg === 'Y'){
+
+                    var vParams = {};
+                    vParams.prodCd = $scope.prodModifyInfo.prodCd;
+
+                    $scope._postJSONQuery.withOutPopUp("/base/prod/prod/prod/getProdSaleTime.sb", vParams, function(response){
+                        if(response.data.data.list.length > 0){
+                            var data = response.data.data.list;
+                            var str = "";
+
+                            for(var i=0; i<data.length; i++){
+                                if(i > 0){
+                                    str += ",";
+                                }
+                                str += data[i].sSaleTime + "-" + data[i].eSaleTime;
+                            }
+                            setKioskTimeValue(str);
+                        }
+                    });
+                }else{
+                    resetKioskTimeHtml();
+                }
+            });
 
             $("#prodCd").attr("readonly",true);
             $("#prodCd").css("width", "100%");

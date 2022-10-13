@@ -260,6 +260,20 @@ public class ProdVO extends PageVO {
     /** 매장상품 */
     private String originalStore;
 
+    /** KIOSK 판매시간 사용여부 */
+    private String saleTimeFg;
+    /** KIOSK 판매시간 시간설정 */
+    private String saleTime;
+    /** KIOSK 판매시간 등록순번 */
+    private int timeSeq;
+    /** KIOSK 판매시간 시간설정구분 [1:시간내적용 2:시간내제외] */
+    private String includeFg;
+    /** KIOSK 판매시간 시작시간*/
+    private String sSaleTime;
+    /** KIOSK 판매시간 종료시간 */
+    private String eSaleTime;
+
+
     /**
      * @return the hqOfficeCd
      */
@@ -1213,5 +1227,53 @@ public class ProdVO extends PageVO {
 
     public void setOriginalStore(String originalStore) {
         this.originalStore = originalStore;
+    }
+
+    public String getSaleTimeFg() {
+        return saleTimeFg;
+    }
+
+    public void setSaleTimeFg(String saleTimeFg) {
+        this.saleTimeFg = saleTimeFg;
+    }
+
+    public String getSaleTime() {
+        return saleTime;
+    }
+
+    public void setSaleTime(String saleTime) {
+        this.saleTime = saleTime;
+    }
+
+    public int getTimeSeq() {
+        return timeSeq;
+    }
+
+    public void setTimeSeq(int timeSeq) {
+        this.timeSeq = timeSeq;
+    }
+
+    public String getIncludeFg() {
+        return includeFg;
+    }
+
+    public void setIncludeFg(String includeFg) {
+        this.includeFg = includeFg;
+    }
+
+    public String getsSaleTime() {
+        return sSaleTime;
+    }
+
+    public void setsSaleTime(String sSaleTime) {
+        this.sSaleTime = sSaleTime;
+    }
+
+    public String geteSaleTime() {
+        return eSaleTime;
+    }
+
+    public void seteSaleTime(String eSaleTime) {
+        this.eSaleTime = eSaleTime;
     }
 }

@@ -117,4 +117,7 @@ public interface ProdService {
 
     /** 전체상품삭제 */
     int allProdDelete(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
+    /** KIOSK 판매시간 시간설정 조회 */
+    List<DefaultMap<String>> getProdSaleTime(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 }

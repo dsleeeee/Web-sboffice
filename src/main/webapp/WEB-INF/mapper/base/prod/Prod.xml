@@ -451,7 +451,8 @@
                 NVL(thp.DEPOSIT_CUP_FG, '') AS DEPOSIT_CUP_FG,
                 thp.POINT_USE_YN,
                 thp.DC_YN,
-                ( SELECT PROD_INFO FROM TB_HQ_PRODUCT_INFO WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = #{prodCd}) AS PROD_INFO
+                ( SELECT PROD_INFO FROM TB_HQ_PRODUCT_INFO WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = #{prodCd}) AS PROD_INFO,
+                NVL(thp.SALE_TIME_FG, 'N') AS SALE_TIME_FG
                 FROM
                 TB_HQ_PRODUCT thp
                 LEFT OUTER JOIN TB_HQ_BRAND thb ON
@@ -566,7 +567,8 @@
                 NVL(tmp.DEPOSIT_CUP_FG, '') AS DEPOSIT_CUP_FG,
                 tmp.POINT_USE_YN,
                 tmp.DC_YN,
-                ( SELECT PROD_INFO FROM TB_MS_PRODUCT_INFO WHERE STORE_CD = #{storeCd} AND PROD_CD = #{prodCd}) AS PROD_INFO
+                ( SELECT PROD_INFO FROM TB_MS_PRODUCT_INFO WHERE STORE_CD = #{storeCd} AND PROD_CD = #{prodCd}) AS PROD_INFO,
+                NVL(tmp.SALE_TIME_FG, 'N') AS SALE_TIME_FG
                 FROM
                 TB_MS_PRODUCT tmp
                 LEFT OUTER JOIN TB_MS_BRAND tmb ON
@@ -778,7 +780,8 @@
                 MAP_PROD_CD = #{mapProdCd},
                 DEPOSIT_CUP_FG = #{depositCupFg},
                 POINT_USE_YN = #{pointUseYn},
-                DC_YN = #{dcYn}
+                DC_YN = #{dcYn},
+                SALE_TIME_FG = #{saleTimeFg}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -823,7 +826,8 @@
                 MAP_PROD_CD,
                 DEPOSIT_CUP_FG,
                 POINT_USE_YN,
-                DC_YN
+                DC_YN,
+                SALE_TIME_FG
                 ) VALUES (
                 #{hqOfficeCd},
                 TRIM(REPLACE(REPLACE(REPLACE(#{prodCd}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL)),
@@ -866,7 +870,8 @@
                 #{mapProdCd},
                 #{depositCupFg},
                 #{pointUseYn},
-                #{dcYn}
+                #{dcYn},
+                #{saleTimeFg}
                 )
             </when>
             <!-- 매장 -->
@@ -918,7 +923,8 @@
                 MAP_PROD_CD = #{mapProdCd},
                 DEPOSIT_CUP_FG = #{depositCupFg},
                 POINT_USE_YN = #{pointUseYn},
-                DC_YN = #{dcYn}
+                DC_YN = #{dcYn},
+                SALE_TIME_FG = #{saleTimeFg}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -964,7 +970,8 @@
                 MAP_PROD_CD,
                 DEPOSIT_CUP_FG,
                 POINT_USE_YN,
-                DC_YN
+                DC_YN,
+                SALE_TIME_FG
                 ) VALUES (
                 #{storeCd},
                 TRIM(REPLACE(REPLACE(REPLACE(#{prodCd}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL)),
@@ -1008,7 +1015,8 @@
                 #{mapProdCd},
                 #{depositCupFg},
                 #{pointUseYn},
-                #{dcYn}
+                #{dcYn},
+                #{saleTimeFg}
                 )
             </when>
         </choose>
@@ -1604,7 +1612,8 @@
                     thp.MAP_PROD_CD,
                     thp.DEPOSIT_CUP_FG,
                     thp.POINT_USE_YN,
-                    thp.DC_YN
+                    thp.DC_YN,
+                    thp.SALE_TIME_FG
                FROM
                    TB_HQ_PRODUCT thp
                WHERE
@@ -1652,7 +1661,8 @@
                tmp.MAP_PROD_CD         = thp.MAP_PROD_CD,
                tmp.DEPOSIT_CUP_FG      = thp.DEPOSIT_CUP_FG,
                tmp.POINT_USE_YN        = thp.POINT_USE_YN,
-               tmp.DC_YN               = thp.DC_YN
+               tmp.DC_YN               = thp.DC_YN,
+               tmp.SALE_TIME_FG        = thp.SALE_TIME_FG
         WHEN NOT MATCHED THEN
             INSERT
             (
@@ -1698,7 +1708,8 @@
                 tmp.MAP_PROD_CD,
                 tmp.DEPOSIT_CUP_FG,
                 tmp.POINT_USE_YN,
-                tmp.DC_YN
+                tmp.DC_YN,
+                tmp.SALE_TIME_FG
             )
             VALUES
             (
@@ -1745,7 +1756,8 @@
                 thp.MAP_PROD_CD,
                 thp.DEPOSIT_CUP_FG,
                 thp.POINT_USE_YN,
-                thp.DC_YN
+                thp.DC_YN,
+                thp.SALE_TIME_FG
             )
     </insert>
 
@@ -6141,4 +6153,248 @@
         </choose>
     </select>
 
+    <!-- KIOSK 판매시간 시간설정 등록 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SALE_TIME, TB_MS_PRODUCT_SALE_TIME
+        PARAM    : prodVO
+        COMMENTS : 상품별 KIOSK 판매시간을 등록한다.
+    -->
+    <insert id="insertProdSaleTime" parameterType="prodVO">
+        /* USE : ProdMapper.insertProdSaleTime */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+              INSERT INTO TB_HQ_PRODUCT_SALE_TIME
+              (   HQ_OFFICE_CD
+                , PROD_CD
+                , TIME_SEQ
+                , INCLUDE_FG
+                , S_SALE_TIME
+                , E_SALE_TIME
+                , REG_DT
+                , REG_ID
+                , MOD_DT
+                , MOD_ID
+              )
+              VALUES
+              (   #{hqOfficeCd}
+                , #{prodCd}
+                , #{timeSeq}
+                , #{includeFg}
+                , #{sSaleTime}
+                , #{eSaleTime}
+                , #{regDt}
+                , #{regId}
+                , #{modDt}
+                , #{modId}
+              )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+              INSERT INTO TB_MS_PRODUCT_SALE_TIME
+              (   STORE_CD
+                , PROD_CD
+                , TIME_SEQ
+                , INCLUDE_FG
+                , S_SALE_TIME
+                , E_SALE_TIME
+                , REG_DT
+                , REG_ID
+                , MOD_DT
+                , MOD_ID
+              )
+              VALUES
+              (   #{storeCd}
+                , #{prodCd}
+                , #{timeSeq}
+                , #{includeFg}
+                , #{sSaleTime}
+                , #{eSaleTime}
+                , #{regDt}
+                , #{regId}
+                , #{modDt}
+                , #{modId}
+              )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- KIOSK 판매시간 시간설정 삭제 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SALE_TIME, TB_MS_PRODUCT_SALE_TIME
+        PARAM    : prodVO
+        COMMENTS : 상품별 KIOSK 판매시간을 삭제한다.
+    -->
+    <delete id="deleteProdSaleTime" parameterType="prodVO">
+        /* USE : ProdMapper.deleteProdSaleTime */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                FROM  TB_HQ_PRODUCT_SALE_TIME
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND   PROD_CD = #{prodCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                FROM TB_MS_PRODUCT_SALE_TIME
+                WHERE STORE_CD = #{storeCd}
+                AND PROD_CD = #{prodCd}
+            </when>
+        </choose>
+    </delete>
+
+    <!-- KIOSK 판매시간 시간설정 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SALE_TIME, TB_MS_PRODUCT_SALE_TIME
+        PARAM    : prodVO
+        COMMENTS : 상품별 KIOSK 판매시간을 조회한다.
+    -->
+    <select id="getProdSaleTime" parameterType="prodVO" resultType="DefaultMap">
+        /* USE : ProdMapper.getProdSaleTime */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  HQ_OFFICE_CD
+                      , PROD_CD
+                      , TIME_SEQ
+                      , INCLUDE_FG
+                      , S_SALE_TIME
+                      , E_SALE_TIME
+                 FROM TB_HQ_PRODUCT_SALE_TIME
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                  AND PROD_CD = #{prodCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+               SELECT  STORE_CD
+                     , PROD_CD
+                     , TIME_SEQ
+                     , INCLUDE_FG
+                     , S_SALE_TIME
+                     , E_SALE_TIME
+                FROM TB_MS_PRODUCT_SALE_TIME
+               WHERE STORE_CD = #{storeCd}
+                 AND PROD_CD = #{prodCd}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 본사상품 매장적용시, 기존 매장의 KIOSK 판매시간 시간설정 삭제 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SALE_TIME
+        PARAM    : prodVO
+        COMMENTS : 본사상품 매장적용시, 기존 매장의 KIOSK 판매시간 시간설정을 삭제한다.
+    -->
+    <delete id="deleteStoreProdSaleTime" parameterType="prodVO">
+        /* USE : ProdMapper.deleteStoreProdSaleTime */
+        DELETE
+          FROM TB_MS_PRODUCT_SALE_TIME
+         WHERE STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+           AND PROD_CD = #{prodCd}
+    </delete>
+
+    <!-- 본사상품 매장적용시, 본사의 KIOSK 판매시간 시간설정 매장적용 -->
+    <!--
+        TABLE    : TB_MS_STORE, TB_HQ_PRODUCT_SALE_TIME, TB_MS_PRODUCT_SALE_TIME
+        PARAM    : prodVO
+        COMMENTS : 본사상품 매장적용시, 본사의 KIOSK 판매시간 시간설정을 매장에 적용한다.
+    -->
+    <insert id="insertStoreProdSaleTime" parameterType="prodVO">
+        /* USE : ProdMapper.insertStoreProdSaleTime */
+        INSERT INTO TB_MS_PRODUCT_SALE_TIME
+        ( STORE_CD,
+          PROD_CD,
+          TIME_SEQ,
+          INCLUDE_FG,
+          S_SALE_TIME,
+          E_SALE_TIME,
+          REG_DT,
+          REG_ID,
+          MOD_DT,
+          MOD_ID
+        )
+        SELECT A.STORE_CD,
+               B.PROD_CD,
+               B.TIME_SEQ,
+               B.INCLUDE_FG,
+               B.S_SALE_TIME,
+               B.E_SALE_TIME,
+               #{regDt},
+               #{regId},
+               #{modDt},
+               #{modId}
+        FROM TB_MS_STORE A,
+             TB_HQ_PRODUCT_SALE_TIME B,
+             TB_MS_PRODUCT C
+        WHERE B.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND B.PROD_CD = #{prodCd}
+        AND A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+        AND C.STORE_CD = A.STORE_CD
+        AND C.PROD_CD = B.PROD_CD
+    </insert>
+
+    <!-- 해당 상품의 KIOSK 판매시간 사용여부 파악 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : 해당 상품의 KIOSK 판매시간 사용여부를 파악한다.
+    -->
+    <select id="getProdSaleTimeFg" parameterType="prodVO" resultType="String">
+        /* USE : ProdMapper.getProdSaleTimeFg */
+        SELECT NVL(MAX(SALE_TIME_FG), 'N') AS SALE_TIME_FG
+          FROM TB_HQ_PRODUCT
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND PROD_CD = #{prodCd}
+    </select>
+
+    <!-- 상품 등록매장 적용시, 기존 매장의 KIOSK 판매시간 시간설정 삭제 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SALE_TIME
+        PARAM    : prodVO
+        COMMENTS : 상품 등록매장 적용시, 기존 매장의 KIOSK 판매시간 시간설정을 삭제한다.
+    -->
+    <delete id="deleteProdStoreProdSaleTime" parameterType="prodVO">
+        /* USE : ProdMapper.deleteProdStoreProdSaleTime */
+        DELETE
+        FROM TB_MS_PRODUCT_SALE_TIME
+        WHERE STORE_CD = #{storeCd}
+        AND PROD_CD = #{prodCd}
+    </delete>
+
+    <!-- 상품 등록매장 적용시, 본사의 KIOSK 판매시간 시간설정 매장적용 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SALE_TIME, TB_MS_PRODUCT_SALE_TIME
+        PARAM    : prodVO
+        COMMENTS : 상품 등록매장 적용시, 본사의 KIOSK 판매시간 시간설정을 매장적용한다.
+    -->
+    <insert id="insertProdStoreProdSaleTime" parameterType="prodVO">
+        /* USE : ProdMapper.insertProdStoreProdSaleTime */
+        INSERT INTO TB_MS_PRODUCT_SALE_TIME
+        ( STORE_CD,
+          PROD_CD,
+          TIME_SEQ,
+          INCLUDE_FG,
+          S_SALE_TIME,
+          E_SALE_TIME,
+          REG_DT,
+          REG_ID,
+          MOD_DT,
+          MOD_ID
+        )
+        SELECT #{storeCd},
+               PROD_CD,
+               TIME_SEQ,
+               INCLUDE_FG,
+               S_SALE_TIME,
+               E_SALE_TIME,
+               #{regDt},
+               #{regId},
+               #{modDt},
+               #{modId}
+        FROM TB_HQ_PRODUCT_SALE_TIME
+        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+        AND PROD_CD = #{prodCd}
+    </insert>
 </mapper>
