@@ -431,7 +431,7 @@
                 AND tsspcck.STORE_CD = #{storeCd}
                 AND tsspc.APPR_DT IS NOT NULL
                 AND SUBSTR(tsspc.APPR_DT, 1, 8) BETWEEN TO_CHAR((TO_DATE(SUBSTR(#{startDate}, 1, 6), 'YYYYMM') -1), 'YYYYMM')||'01' AND TO_CHAR((TO_DATE(SUBSTR(#{startDate}, 1, 6), 'YYYYMM') -1), 'YYYYMM')||'31'
-                AND tsspcck.CREDIT_AMT = #{startDate}
+                AND tsspcck.CREDIT_DATE = #{startDate}
                 AND tsspcck.HQ_OFFICE_CD (+)= tsspc.HQ_OFFICE_CD
                 AND tsspcck.HQ_BRAND_CD (+)= tsspc.HQ_BRAND_CD
                 AND tsspcck.STORE_CD (+)= tsspc.STORE_CD
@@ -459,7 +459,7 @@
                 AND tsspcck.STORE_CD = #{storeCd}
                 AND tsspc.APPR_DT IS NOT NULL
                 AND SUBSTR(tsspc.APPR_DT, 1, 8) = #{startDate}
-                AND tsspcck.CREDIT_AMT IS NULL
+                AND tsspcck.CREDIT_DATE IS NULL
                 AND tsspcck.HQ_OFFICE_CD (+)= tsspc.HQ_OFFICE_CD
                 AND tsspcck.HQ_BRAND_CD (+)= tsspc.HQ_BRAND_CD
                 AND tsspcck.STORE_CD (+)= tsspc.STORE_CD
@@ -524,7 +524,7 @@
                 AND tsspcck.STORE_CD = #{storeCd}
                 AND tsspc.APPR_DT IS NOT NULL
                 AND SUBSTR(tsspc.APPR_DT, 1, 8) BETWEEN TO_CHAR((TO_DATE(SUBSTR(#{startDate}, 1, 6), 'YYYYMM') -1), 'YYYYMM')||'01' AND TO_CHAR((TO_DATE(SUBSTR(#{startDate}, 1, 6), 'YYYYMM') -1), 'YYYYMM')||'31'
-                AND tsspcck.CREDIT_AMT BETWEEN SUBSTR(#{startDate}, 1, 6)||'01' AND #{startDate}
+                AND tsspcck.CREDIT_DATE BETWEEN SUBSTR(#{startDate}, 1, 6)||'01' AND #{startDate}
                 AND tsspcck.HQ_OFFICE_CD (+)= tsspc.HQ_OFFICE_CD
                 AND tsspcck.HQ_BRAND_CD (+)= tsspc.HQ_BRAND_CD
                 AND tsspcck.STORE_CD (+)= tsspc.STORE_CD
@@ -552,7 +552,7 @@
                 AND tsspcck.STORE_CD = #{storeCd}
                 AND tsspc.APPR_DT IS NOT NULL
                 AND SUBSTR(tsspc.APPR_DT, 1, 8) BETWEEN SUBSTR(#{startDate}, 1, 6)||'01' AND #{startDate}
-                AND tsspcck.CREDIT_AMT IS NULL
+                AND tsspcck.CREDIT_DATE IS NULL
                 AND tsspcck.HQ_OFFICE_CD (+)= tsspc.HQ_OFFICE_CD
                 AND tsspcck.HQ_BRAND_CD (+)= tsspc.HQ_BRAND_CD
                 AND tsspcck.STORE_CD (+)= tsspc.STORE_CD
