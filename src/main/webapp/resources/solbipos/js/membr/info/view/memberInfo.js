@@ -399,7 +399,7 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         } else {
             params.membrClassManageFg = "1";
         }
-        console.log($scope.storeMembr);
+        // console.log($scope.storeMembr);
         // params.useYn = 'Y';
 
         // console.log('params ', params);
