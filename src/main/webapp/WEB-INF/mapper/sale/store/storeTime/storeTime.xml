@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StoreTime.xml
+    점포-시간대별 매출
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.10.14     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.store.storeTime.service.impl.StoreTimeMapper">
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getStoreTimeList" parameterType="storeTimeVO" resultType="DefaultMap">
+        /* StoreTimeMapper.getStoreTimeList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT 	STORE_CD
+        ,       STORE_NM
+        ,       TOT_SALE_CNT
+        ,       TOT_SALE_AMT
+                ${sQuery1}
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	(
+                SELECT 	(SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+                ,       tsdt.STORE_CD
+                ,		tms.STORE_NM
+                ,		SUM(tsdt.SALE_CNT) AS TOT_SALE_CNT
+                ,		SUM(tsdt.TOT_SALE_AMT) AS TOT_SALE_AMT
+                        ${sQuery2}
+                FROM 	TB_SL_DAILY_TIME tsdt
+                ,		TB_MS_STORE tms
+                WHERE 	tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                AND 	tsdt.STORE_CD = tms.STORE_CD
+                AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                <if test='storeCds != null and storeCds != ""'>
+                    AND tsdt.STORE_CD IN
+                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                GROUP BY tsdt.STORE_CD, tms.STORE_NM, tms.HQ_OFFICE_CD, tms.BRANCH_CD
+                )
+        ORDER BY STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getStoreTimeExcelList" parameterType="storeTimeVO" resultType="DefaultMap">
+        /* StoreTimeMapper.getStoreTimeExcelList */
+        SELECT 	STORE_CD
+        ,       STORE_NM
+        ,       PROD_CD
+        ,       PROD_NM
+        ,       TOT_SALE_CNT
+        ,       TOT_SALE_AMT
+        ${sQuery1}
+        FROM 	(
+                SELECT 	tsdt.STORE_CD
+                ,		tms.STORE_NM
+                ,		tsdt.PROD_CD
+                ,		thp.PROD_NM
+                ,		SUM(tsdt.SALE_CNT) AS TOT_SALE_CNT
+                ,		SUM(tsdt.TOT_SALE_AMT) AS TOT_SALE_AMT
+                ${sQuery2}
+                FROM 	TB_SL_DAILY_PROD_TIME tsdt
+                ,		TB_MS_STORE tms
+                ,       TB_HQ_PRODUCT thp
+                WHERE 	tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                AND 	tsdt.STORE_CD = tms.STORE_CD
+                AND     thp.HQ_OFFICE_CD = tsdt.HQ_OFFICE_CD
+                AND     thp.PROD_CD = tsdt.PROD_CD
+                AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                <if test='storeCds != null and storeCds != ""'>
+                    AND tsdt.STORE_CD IN
+                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                <if test='prodCd != null and prodCd != ""'>
+                    AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND thp.PROD_CLASS_CD IN (
+                    SELECT
+                    PROD_CLASS_CD
+                    FROM TB_HQ_PRODUCT_CLASS
+                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                    START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    )
+                </if>
+                GROUP BY tsdt.STORE_CD, tms.STORE_NM, tsdt.PROD_CD, thp.PROD_NM
+                )
+        ORDER BY STORE_CD, PROD_CD
+    </select>
+
+</mapper>

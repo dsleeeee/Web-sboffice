@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    Time.xml
+    시간대별 일 매출
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.10.12     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.time.time.service.impl.TimeMapper">
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getTimeList" parameterType="timeVO" resultType="DefaultMap">
+        /* TimeMapper.getTimeList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT 	SALE_HOUR || '시' AS SALE_HOUR
+        -- 총 판매량 테이블에 총 판매량 컬럼 없음 DTL이랑 조인해서 쓰면 되는지
+        ,		SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+        ,		SUM(TOT_SALE_AMT) AS TOT_SALE_AMT
+        ,		SUM(TOT_DC_AMT) AS TOT_DC_AMT
+        ,		SUM(SALE_CNT) AS BILL_CNT
+        , 		DECODE(SUM(tsdt.GUEST_CNT_1 + GUEST_CNT_2 + GUEST_CNT_3 + GUEST_CNT_4 + GUEST_CNT_5 + GUEST_CNT_6), 0, 0, ROUND(SUM(tsdt.TOT_SALE_AMT)/SUM(tsdt.GUEST_CNT_1 + GUEST_CNT_2 + GUEST_CNT_3 + GUEST_CNT_4 + GUEST_CNT_5 + GUEST_CNT_6))) AS GUEST_UPRC
+        --,		ROUND(RATIO_TO_REPORT(SALE_CNT) OVER(), 4) * 100 AS SALE_CNT_RATE
+        ,		ROUND(RATIO_TO_REPORT(SUM(REAL_SALE_AMT)) OVER(), 4) * 100 AS REAL_SALE_AMT_RATE
+        ,		ROUND(RATIO_TO_REPORT(SUM(SALE_CNT)) OVER(), 4) * 100 AS SALE_CNT_RATE
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	TB_SL_DAILY_TIME tsdt
+        ,		TB_MS_STORE tms
+        WHERE   tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND 	tsdt.STORE_CD = tms.STORE_CD
+        AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsdt.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY tsdt.SALE_HOUR
+        ORDER BY tsdt.SALE_HOUR
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getTimeExcelList" parameterType="timeVO" resultType="DefaultMap">
+        /* TimeMapper.getTimeExcelList */
+        SELECT 	SALE_HOUR || '시' AS SALE_HOUR
+        -- 총 판매량 테이블에 총 판매량 컬럼 없음 DTL이랑 조인해서 쓰면 되는지
+        ,		SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+        ,		SUM(TOT_SALE_AMT) AS TOT_SALE_AMT
+        ,		SUM(TOT_DC_AMT) AS TOT_DC_AMT
+        ,		SUM(SALE_CNT) AS BILL_CNT
+        , 		DECODE(SUM(tsdt.GUEST_CNT_1 + GUEST_CNT_2 + GUEST_CNT_3 + GUEST_CNT_4 + GUEST_CNT_5 + GUEST_CNT_6), 0, 0, ROUND(SUM(tsdt.TOT_SALE_AMT)/SUM(tsdt.GUEST_CNT_1 + GUEST_CNT_2 + GUEST_CNT_3 + GUEST_CNT_4 + GUEST_CNT_5 + GUEST_CNT_6))) AS GUEST_UPRC
+        --,		ROUND(RATIO_TO_REPORT(SALE_CNT) OVER(), 4) * 100 AS SALE_CNT_RATE
+        ,		ROUND(RATIO_TO_REPORT(SUM(REAL_SALE_AMT)) OVER(), 4) * 100 AS REAL_SALE_AMT_RATE
+        ,		ROUND(RATIO_TO_REPORT(SUM(SALE_CNT)) OVER(), 4) * 100 AS SALE_CNT_RATE
+        FROM 	TB_SL_DAILY_TIME tsdt
+        ,		TB_MS_STORE tms
+        WHERE   tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND 	tsdt.STORE_CD = tms.STORE_CD
+        AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsdt.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY tsdt.SALE_HOUR
+        ORDER BY tsdt.SALE_HOUR
+    </select>
+
+</mapper>

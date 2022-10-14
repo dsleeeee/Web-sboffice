@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StoreMoms.xml
+    점포별 매출 현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.10.13     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.store.storeMoms.service.impl.StoreMomsMapper">
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getStoreMomsList" parameterType="storeMomsVO" resultType="DefaultMap">
+        /* StoreMomsMapper.getStoreMomsList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT	(SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+        ,       tsdtd.STORE_CD
+        ,		tms.STORE_NM
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN tsdtd.BILL_CNT ELSE 0 END) AS BILL_CNT_IN
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN tsdtd.BILL_CNT ELSE 0 END) AS BILL_CNT_DLVR
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN tsdtd.BILL_CNT ELSE 0 END) AS BILL_CNT_PACK
+        ,		SUM(tsdtd.BILL_CNT) AS BILL_CNT_TOT
+        ,		DECODE(SUM(tsdtd.BILL_CNT), 0, 0, ROUND(SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN tsdtd.REAL_SALE_AMT ELSE 0 END) / SUM(tsdtd.BILL_CNT))) AS BILL_UPRC_IN
+        ,		DECODE(SUM(tsdtd.BILL_CNT), 0, 0, ROUND(SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN tsdtd.REAL_SALE_AMT ELSE 0 END) / SUM(tsdtd.BILL_CNT))) AS BILL_UPRC_DLVR
+        ,		DECODE(SUM(tsdtd.BILL_CNT), 0, 0, ROUND(SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN tsdtd.REAL_SALE_AMT ELSE 0 END) / SUM(tsdtd.BILL_CNT))) AS BILL_UPRC_PACK
+        ,		DECODE(SUM(tsdtd.BILL_CNT), 0, 0, ROUND(SUM(tsdtd.REAL_SALE_AMT) / SUM(tsdtd.BILL_CNT))) AS BILL_UPRC_TOT
+        ,		SUM(tsdtd.TOT_GUEST_CNT) AS TOT_GUEST_CNT
+        ,		DECODE(SUM(tsdtd.BILL_CNT), 0, 0, ROUND(SUM(tsdtd.REAL_SALE_AMT) / SUM(tsdtd.TOT_GUEST_CNT))) AS GUEST_UPRC
+        ,		SUM(tsdtd.SALE_CNT) AS SALE_CNT
+        -- 판매수량
+        ,		SUM(tsdtd.TOT_SALE_AMT) AS TOT_SALE_AMT
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN tsdtd.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_IN
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN tsdtd.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_DLVR
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN tsdtd.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_PACK
+        ,		SUM(tsdtd.REAL_SALE_AMT) AS REAL_SALE_AMT_TOT
+        ,		SUM(tsdtd.TOT_DC_AMT) AS TOT_DC_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	TB_SL_DAILY_TOTAL_DLVR tsdtd
+        ,		TB_MS_STORE tms
+        WHERE	tsdtd.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND 	tsdtd.STORE_CD = tms.STORE_CD
+        AND     tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsdtd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsdtd.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY tsdtd.STORE_CD, tms.STORE_NM, tms.HQ_OFFICE_CD, tms.BRANCH_CD
+        ORDER BY tsdtd.STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getStoreMomsExcelList" parameterType="storeMomsVO" resultType="DefaultMap">
+        /* StoreMomsMapper.getStoreMomsExcelList */
+        SELECT	(SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+        ,       tsdtd.STORE_CD
+        ,		tms.STORE_NM
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN tsdtd.BILL_CNT ELSE 0 END) AS BILL_CNT_IN
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN tsdtd.BILL_CNT ELSE 0 END) AS BILL_CNT_DLVR
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN tsdtd.BILL_CNT ELSE 0 END) AS BILL_CNT_PACK
+        ,		SUM(tsdtd.BILL_CNT) AS BILL_CNT_TOT
+        ,		DECODE(SUM(tsdtd.BILL_CNT), 0, 0, ROUND(SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN tsdtd.REAL_SALE_AMT ELSE 0 END) / SUM(tsdtd.BILL_CNT))) AS BILL_UPRC_IN
+        ,		DECODE(SUM(tsdtd.BILL_CNT), 0, 0, ROUND(SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN tsdtd.REAL_SALE_AMT ELSE 0 END) / SUM(tsdtd.BILL_CNT))) AS BILL_UPRC_DLVR
+        ,		DECODE(SUM(tsdtd.BILL_CNT), 0, 0, ROUND(SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN tsdtd.REAL_SALE_AMT ELSE 0 END) / SUM(tsdtd.BILL_CNT))) AS BILL_UPRC_PACK
+        ,		DECODE(SUM(tsdtd.BILL_CNT), 0, 0, ROUND(SUM(tsdtd.REAL_SALE_AMT) / SUM(tsdtd.BILL_CNT))) AS BILL_UPRC_TOT
+        ,		SUM(tsdtd.TOT_GUEST_CNT) AS TOT_GUEST_CNT
+        ,		DECODE(SUM(tsdtd.BILL_CNT), 0, 0, ROUND(SUM(tsdtd.REAL_SALE_AMT) / SUM(tsdtd.TOT_GUEST_CNT))) AS GUEST_UPRC
+        ,		SUM(tsdtd.SALE_CNT) AS SALE_CNT
+        -- 판매수량
+        ,		SUM(tsdtd.TOT_SALE_AMT) AS TOT_SALE_AMT
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN tsdtd.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_IN
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN tsdtd.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_DLVR
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN tsdtd.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_PACK
+        ,		SUM(tsdtd.REAL_SALE_AMT) AS REAL_SALE_AMT_TOT
+        ,		SUM(tsdtd.BILL_CNT) AS BILL_CNT
+        ,		SUM(tsdtd.TOT_DC_AMT) AS TOT_DC_AMT
+        FROM 	TB_SL_DAILY_TOTAL_DLVR tsdtd
+        ,		TB_MS_STORE tms
+        WHERE	tsdtd.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND 	tsdtd.STORE_CD = tms.STORE_CD
+        AND     tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsdtd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsdtd.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY tsdtd.STORE_CD, tms.STORE_NM, tms.HQ_OFFICE_CD, tms.BRANCH_CD
+        ORDER BY tsdtd.STORE_CD
+    </select>
+
+</mapper>

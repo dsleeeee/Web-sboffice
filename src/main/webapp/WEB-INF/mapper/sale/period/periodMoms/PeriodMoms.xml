@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    PeriodMoms.xml
+    대비기간별매출
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.10.11     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.period.periodMoms.service.impl.PeriodMomsMapper">
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getPeriodMomsList" parameterType="periodMomsVO" resultType="DefaultMap">
+        /* PeriodMomsMapper.getPeriodMomsList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT	A.YOIL
+        ,		A.TOT_SALE_QTY
+        ,		A.TOT_SALE_AMT
+        ,		A.REAL_SALE_AMT
+        ,       ROUND(RATIO_TO_REPORT(A.TOT_SALE_QTY) OVER(), 4) * 100 AS RATE
+        ,		B.TOT_SALE_QTY AS TOT_SALE_QTY1
+        ,		B.TOT_SALE_AMT AS TOT_SALE_AMT1
+        ,		B.REAL_SALE_AMT AS REAL_SALE_AMT1
+        ,       ROUND(RATIO_TO_REPORT(B.TOT_SALE_QTY) OVER(), 4) * 100 AS RATE1
+        ,       DECODE(B.TOT_SALE_QTY, 0, 0, ROUND(A.TOT_SALE_QTY/B.TOT_SALE_QTY * 100), 2) AS RATE_SALE_QTY
+        ,       DECODE(B.TOT_SALE_AMT, 0, 0, ROUND(A.TOT_SALE_AMT/B.TOT_SALE_AMT * 100), 2)  AS RATE_SALE_AMT
+        ,       DECODE(B.REAL_SALE_AMT, 0, 0, ROUND(A.REAL_SALE_AMT/B.REAL_SALE_AMT * 100), 2) AS RATE_REAL_SALE_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	(
+                SELECT 	TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+                ,		tsdt.SALE_CNT AS TOT_SALE_QTY
+                ,		tsdt.TOT_SALE_AMT
+                ,		tsdt.REAL_SALE_AMT
+                FROM	TB_SL_DAILY_TOTAL tsdt
+                WHERE   tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND 	SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                <if test='storeCds != null and storeCds != ""'>
+                    AND STORE_CD IN
+                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                ) A
+        ,       (
+                SELECT 	TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+                ,		tsdt.SALE_CNT AS TOT_SALE_QTY
+                ,		tsdt.TOT_SALE_AMT
+                ,		tsdt.REAL_SALE_AMT
+                FROM	TB_SL_DAILY_TOTAL tsdt
+                WHERE   tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND 	SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate}
+                <if test='storeCds != null and storeCds != ""'>
+                    AND STORE_CD IN
+                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                ) B
+        WHERE	A.YOIL = B.YOIL(+)
+        ORDER BY A.YOIL
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getPeriodMomsExcelList" parameterType="periodMomsVO" resultType="DefaultMap">
+        /* PeriodMomsMapper.getPeriodMomsExcelList */
+        SELECT	A.YOIL
+        ,		A.TOT_SALE_QTY
+        ,		A.TOT_SALE_AMT
+        ,		A.REAL_SALE_AMT
+        ,       ROUND(RATIO_TO_REPORT(A.TOT_SALE_QTY) OVER(), 4) * 100 AS RATE
+        ,		B.TOT_SALE_QTY AS TOT_SALE_QTY1
+        ,		B.TOT_SALE_AMT AS TOT_SALE_AMT1
+        ,		B.REAL_SALE_AMT AS REAL_SALE_AMT1
+        ,       ROUND(RATIO_TO_REPORT(B.TOT_SALE_QTY) OVER(), 4) * 100 AS RATE1
+        ,       DECODE(B.TOT_SALE_QTY, 0, 0, ROUND(A.TOT_SALE_QTY/B.TOT_SALE_QTY * 100), 2) AS RATE_SALE_QTY
+        ,       DECODE(B.TOT_SALE_AMT, 0, 0, ROUND(A.TOT_SALE_AMT/B.TOT_SALE_AMT * 100), 2)  AS RATE_SALE_AMT
+        ,       DECODE(B.REAL_SALE_AMT, 0, 0, ROUND(A.REAL_SALE_AMT/B.REAL_SALE_AMT * 100), 2) AS RATE_REAL_SALE_AMT
+        FROM 	(
+        SELECT 	TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+        ,		tsdt.SALE_CNT AS TOT_SALE_QTY
+        ,		tsdt.TOT_SALE_AMT
+        ,		tsdt.REAL_SALE_AMT
+        FROM	TB_SL_DAILY_TOTAL tsdt
+        WHERE   tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND 	SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        ) A
+        ,       (
+        SELECT 	TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+        ,		tsdt.SALE_CNT AS TOT_SALE_QTY
+        ,		tsdt.TOT_SALE_AMT
+        ,		tsdt.REAL_SALE_AMT
+        FROM	TB_SL_DAILY_TOTAL tsdt
+        WHERE   tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND 	SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        ) B
+        WHERE	A.YOIL = B.YOIL(+)
+        ORDER BY A.YOIL
+    </select>
+
+</mapper>

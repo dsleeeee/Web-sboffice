@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    DayDevice.xml
+    일별 매출 현황(기기별)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.10.06     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.day.dayDevice.service.impl.DayDeviceMapper">
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getDayDeviceList" parameterType="dayDeviceVO" resultType="DefaultMap">
+        /* DayDeviceMapper.getDayDeviceList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT	TO_CHAR(TO_DATE(tsdp.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,		TO_CHAR(TO_DATE(tsdp.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+        ,		(SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+        ,		tsdp.STORE_CD
+        ,		tms.STORE_NM
+        ,		(
+                    SELECT 	ENVST_VAL
+                    FROM 	TB_MS_POS_ENVST tmpe
+                    WHERE 	tmpe.STORE_CD = tsdp.STORE_CD
+                    AND 	tmpe.POS_NO = tsdp.POS_NO
+                    AND 	tmpe.ENVST_CD = '4019'
+                ) AS POS_FG
+        ,		tsdp.POS_NO
+        ,		tssh.BILL_CNT
+        ,		DECODE(tssh.BILL_CNT, 0, 0, ROUND(SUM(tsdp.TOT_SALE_AMT)/tssh.BILL_CNT)) AS BILL_UPRC
+        ,		tssh.TOT_GUEST_CNT
+        ,		DECODE(tssh.TOT_GUEST_CNT, 0, 0, ROUND(SUM(tsdp.TOT_SALE_AMT)/tssh.TOT_GUEST_CNT)) AS GUEST_UPRC
+        ,		(
+                    SELECT 	COUNT(*)
+                    FROM	TB_SL_SALE_DTL tssd
+                    WHERE  	tssd.HQ_OFFICE_CD = tsdp.HQ_OFFICE_CD
+                    AND  	tssd.STORE_CD = tsdp.STORE_CD
+                    AND 	tssd.POS_NO = tsdp.POS_NO
+                ) AS SALE_QTY
+        ,		SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT
+        ,		SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
+        ,		SUM(tsdp.TOT_DC_AMT) AS TOT_DC_AMT
+        ,		SUM(tsdp.PAY_AMT_02) AS CASH_ATM
+        ,		SUM(tsdp.PAY_AMT_01) AS CARD_AMT
+        ,		SUM(tsdp.PAY_AMT_03 + tsdp.PAY_AMT_04 + tsdp.PAY_AMT_05 + tsdp.PAY_AMT_06 + tsdp.PAY_AMT_07 + tsdp.PAY_AMT_08 + tsdp.PAY_AMT_09 + tsdp.PAY_AMT_10 + tsdp.PAY_AMT_11 + tsdp.PAY_AMT_12 + tsdp.PAY_AMT_13 + tsdp.PAY_AMT_14 + tsdp.PAY_AMT_15 + tsdp.PAY_AMT_16 + tsdp.PAY_AMT_17 + tsdp.PAY_AMT_18 + tsdp.PAY_AMT_19 + tsdp.PAY_AMT_20) AS ETC_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	TB_SL_DAILY_POS tsdp
+        ,		TB_MS_STORE tms
+        ,		(
+                    SELECT 	STORE_CD
+                    ,		SALE_DATE
+                    ,		POS_NO
+                    ,		COUNT(*) AS BILL_CNT
+                    ,		SUM(TOT_GUEST_CNT) AS TOT_GUEST_CNT
+                    FROM	TB_SL_SALE_HDR tssh
+                    WHERE  	tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND 	tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    AND 	tssh.SALE_FG = '1'
+                    <if test='storeCds != null and storeCds != ""'>
+                        AND tssh.STORE_CD IN
+                        <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                    GROUP BY STORE_CD, SALE_DATE, POS_NO
+                ) tssh
+        WHERE 	tsdp.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND 	tsdp.STORE_CD = tms.STORE_CD
+        AND 	tsdp.STORE_CD = tssh.STORE_CD
+        AND 	tsdp.SALE_DATE = tssh.SALE_DATE
+        AND 	tsdp.POS_NO = tssh.POS_NO
+        AND     tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsdp.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY tsdp.SALE_DATE, tms.HQ_OFFICE_CD, tms.BRANCH_CD, tsdp.HQ_OFFICE_CD, tsdp.STORE_CD, tms.STORE_NM, tsdp.POS_NO, tssh.BILL_CNT, tssh.TOT_GUEST_CNT
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getDayDeviceExcelList" parameterType="dayDeviceVO" resultType="DefaultMap">
+        /* DayDeviceMapper.getDayDeviceExcelList */
+        SELECT	TO_CHAR(TO_DATE(tsdp.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,		TO_CHAR(TO_DATE(tsdp.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+        ,		(SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+        ,		tsdp.STORE_CD
+        ,		tms.STORE_NM
+        ,		(
+                    SELECT 	ENVST_VAL
+                    FROM 	TB_MS_POS_ENVST tmpe
+                    WHERE 	tmpe.STORE_CD = tsdp.STORE_CD
+                    AND 	tmpe.POS_NO = tsdp.POS_NO
+                    AND 	tmpe.ENVST_CD = '4019'
+                ) AS POS_FG
+        ,		tsdp.POS_NO
+        ,		tssh.BILL_CNT
+        ,		DECODE(tssh.BILL_CNT, 0, 0, ROUND(SUM(tsdp.TOT_SALE_AMT)/tssh.BILL_CNT)) AS BILL_UPRC
+        ,		tssh.TOT_GUEST_CNT
+        ,		DECODE(tssh.TOT_GUEST_CNT, 0, 0, ROUND(SUM(tsdp.TOT_SALE_AMT)/tssh.TOT_GUEST_CNT)) AS GUEST_UPRC
+        ,		(
+                    SELECT 	COUNT(*)
+                    FROM	TB_SL_SALE_DTL tssd
+                    WHERE  	tssd.HQ_OFFICE_CD = tsdp.HQ_OFFICE_CD
+                    AND  	tssd.STORE_CD = tsdp.STORE_CD
+                    AND 	tssd.POS_NO = tsdp.POS_NO
+                ) AS SALE_QTY
+        ,		SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT
+        ,		SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
+        ,		SUM(tsdp.TOT_DC_AMT) AS TOT_DC_AMT
+        ,		SUM(tsdp.PAY_AMT_02) AS CASH_ATM
+        ,		SUM(tsdp.PAY_AMT_01) AS CARD_AMT
+        ,		SUM(tsdp.PAY_AMT_03 + tsdp.PAY_AMT_04 + tsdp.PAY_AMT_05 + tsdp.PAY_AMT_06 + tsdp.PAY_AMT_07 + tsdp.PAY_AMT_08 + tsdp.PAY_AMT_09 + tsdp.PAY_AMT_10 + tsdp.PAY_AMT_11 + tsdp.PAY_AMT_12 + tsdp.PAY_AMT_13 + tsdp.PAY_AMT_14 + tsdp.PAY_AMT_15 + tsdp.PAY_AMT_16 + tsdp.PAY_AMT_17 + tsdp.PAY_AMT_18 + tsdp.PAY_AMT_19 + tsdp.PAY_AMT_20) AS ETC_AMT
+        FROM 	TB_SL_DAILY_POS tsdp
+        ,		TB_MS_STORE tms
+        ,		(
+                    SELECT 	STORE_CD
+                    ,		SALE_DATE
+                    ,		POS_NO
+                    ,		COUNT(*) AS BILL_CNT
+                    ,		SUM(TOT_GUEST_CNT) AS TOT_GUEST_CNT
+                    FROM	TB_SL_SALE_HDR tssh
+                    WHERE  	tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND 	tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    AND 	tssh.SALE_FG = '1'
+                    <if test='storeCds != null and storeCds != ""'>
+                        AND tssh.STORE_CD IN
+                        <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                    GROUP BY STORE_CD, SALE_DATE, POS_NO
+                ) tssh
+        WHERE 	tsdp.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND 	tsdp.STORE_CD = tms.STORE_CD
+        AND 	tsdp.STORE_CD = tssh.STORE_CD
+        AND 	tsdp.SALE_DATE = tssh.SALE_DATE
+        AND 	tsdp.POS_NO = tssh.POS_NO
+        AND     tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsdp.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY tsdp.SALE_DATE, tms.HQ_OFFICE_CD, tms.BRANCH_CD, tsdp.HQ_OFFICE_CD, tsdp.STORE_CD, tms.STORE_NM, tsdp.POS_NO, tssh.BILL_CNT, tssh.TOT_GUEST_CNT
+    </select>
+
+</mapper>

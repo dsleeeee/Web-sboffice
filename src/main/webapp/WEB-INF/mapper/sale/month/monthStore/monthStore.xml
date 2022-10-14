@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MonthStore.xml
+    월별 매출 현황(매장합산)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.10.11     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.month.monthStore.service.impl.MonthStoreMapper">
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMonthStoreList" parameterType="monthStoreVO" resultType="DefaultMap">
+        /* MonthStoreMapper.getMonthStoreList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT	TO_CHAR(TO_DATE(tsmt.SALE_YM, 'yyyymm'), 'yyyy-mm') AS SALE_YM
+        ,		(SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+        ,		tsmt.BILL_CNT
+        ,		DECODE(tsmt.BILL_CNT, 0, 0, ROUND(tsmt.TOT_SALE_AMT/tsmt.BILL_CNT)) AS BILL_UPRC
+        ,		tsmt.TOT_GUEST_CNT
+        ,		DECODE(tsmt.TOT_GUEST_CNT, 0, 0, ROUND(tsmt.TOT_SALE_AMT/tsmt.TOT_GUEST_CNT)) AS GUEST_UPRC
+        ,       tsmt.SALE_CNT
+        ,		tsmt.TOT_SALE_AMT
+        ,		tsmt.REAL_SALE_AMT
+        ,		tsmt.TOT_DC_AMT
+        ,       tsmt.RTN_SALE_AMT
+        ,		tsmt.PAY_AMT_02 AS CASH_ATM
+        ,		tsmt.PAY_AMT_01 AS CARD_AMT
+        ,		(tsmt.PAY_AMT_03 + tsmt.PAY_AMT_04 + tsmt.PAY_AMT_05 + tsmt.PAY_AMT_06 + tsmt.PAY_AMT_07 + tsmt.PAY_AMT_08 + tsmt.PAY_AMT_09 + tsmt.PAY_AMT_10 + tsmt.PAY_AMT_11 + tsmt.PAY_AMT_12 + tsmt.PAY_AMT_13 + tsmt.PAY_AMT_14 + tsmt.PAY_AMT_15 + tsmt.PAY_AMT_16 + tsmt.PAY_AMT_17 + tsmt.PAY_AMT_18 + tsmt.PAY_AMT_19 + tsmt.PAY_AMT_20) AS ETC_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM   	TB_SL_MONTHLY_TOTAL tsmt
+        ,		TB_MS_STORE tms
+        WHERE   tsmt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND 	tsmt.STORE_CD = tms.STORE_CD
+        AND     tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsmt.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY tsmt.SALE_YM
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMonthStoreExcelList" parameterType="monthStoreVO" resultType="DefaultMap">
+        /* MonthStoreMapper.getMonthStoreExcelList */
+        SELECT	TO_CHAR(TO_DATE(tsmt.SALE_YM, 'yyyymm'), 'yyyy-mm') AS SALE_YM
+        ,		(SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+        ,		tsmt.BILL_CNT
+        ,		DECODE(tsmt.BILL_CNT, 0, 0, ROUND(tsmt.TOT_SALE_AMT/tsmt.BILL_CNT)) AS BILL_UPRC
+        ,		tsmt.TOT_GUEST_CNT
+        ,		DECODE(tsmt.TOT_GUEST_CNT, 0, 0, ROUND(tsmt.TOT_SALE_AMT/tsmt.TOT_GUEST_CNT)) AS GUEST_UPRC
+        ,       tsmt.SALE_CNT
+        ,		tsmt.TOT_SALE_AMT
+        ,		tsmt.REAL_SALE_AMT
+        ,		tsmt.TOT_DC_AMT
+        ,       tsmt.RTN_SALE_AMT
+        ,		tsmt.PAY_AMT_02 AS CASH_ATM
+        ,		tsmt.PAY_AMT_01 AS CARD_AMT
+        ,		(tsmt.PAY_AMT_03 + tsmt.PAY_AMT_04 + tsmt.PAY_AMT_05 + tsmt.PAY_AMT_06 + tsmt.PAY_AMT_07 + tsmt.PAY_AMT_08 + tsmt.PAY_AMT_09 + tsmt.PAY_AMT_10 + tsmt.PAY_AMT_11 + tsmt.PAY_AMT_12 + tsmt.PAY_AMT_13 + tsmt.PAY_AMT_14 + tsmt.PAY_AMT_15 + tsmt.PAY_AMT_16 + tsmt.PAY_AMT_17 + tsmt.PAY_AMT_18 + tsmt.PAY_AMT_19 + tsmt.PAY_AMT_20) AS ETC_AMT
+        FROM   	TB_SL_MONTHLY_TOTAL tsmt
+        ,		TB_MS_STORE tms
+        WHERE   tsmt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND 	tsmt.STORE_CD = tms.STORE_CD
+        AND     tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsmt.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY tsmt.SALE_YM
+    </select>
+
+</mapper>

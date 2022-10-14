@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    PayFg.xml
+    결제수단별 일 매출현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.10.13     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.pay.payFg.service.impl.PayFgMapper">
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getPayFgList" parameterType="payFgVO" resultType="DefaultMap">
+        /* PayFgMapper.getPayFgList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT 	tsdp.STORE_CD
+        ,		tms.STORE_NM
+        ,		tsdp.PAY_CD
+        ,		SUM(tsdp.TOT_SALE_QTY) AS TOT_SALE_QTY
+        ,		SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT
+        ,		ROUND(RATIO_TO_REPORT(SUM(tsdp.TOT_SALE_AMT)) OVER(), 4) * 100 AS RATE
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	TB_SL_DAILY_PAY tsdp
+        ,		TB_MS_STORE tms
+        WHERE 	tsdp.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND  	tsdp.STORE_CD = tms.STORE_CD
+        AND 	tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsdp.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY tsdp.STORE_CD, tms.STORE_NM, tsdp.PAY_CD
+        ORDER BY RATE DESC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getPayFgExcelList" parameterType="payFgVO" resultType="DefaultMap">
+        /* PayFgMapper.getPayFgExcelList */
+        SELECT 	tsdp.STORE_CD
+        ,		tms.STORE_NM
+        ,		tsdp.PAY_CD
+        ,		SUM(tsdp.TOT_SALE_QTY) AS TOT_SALE_QTY
+        ,		SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT
+        ,		ROUND(RATIO_TO_REPORT(SUM(tsdp.TOT_SALE_AMT)) OVER(), 4) * 100 AS RATE
+        FROM 	TB_SL_DAILY_PAY tsdp
+        ,		TB_MS_STORE tms
+        WHERE 	tsdp.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND  	tsdp.STORE_CD = tms.STORE_CD
+        AND 	tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsdp.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY tsdp.STORE_CD, tms.STORE_NM, tsdp.PAY_CD
+        ORDER BY RATE DESC
+    </select>
+
+</mapper>

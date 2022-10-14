@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    PeriodStore.xml
+    대비기간별매출(매장합산)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.10.11     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.period.periodStore.service.impl.PeriodStoreMapper">
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getPeriodStoreList" parameterType="periodStoreVO" resultType="DefaultMap">
+        /* PeriodStoreMapper.getPeriodStoreList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT	A.YOIL
+        ,       A.BRANCH_NM
+        ,		SUM(A.TOT_SALE_QTY) AS TOT_SALE_QTY
+        ,		SUM(A.TOT_SALE_AMT) AS TOT_SALE_AMT
+        ,		SUM(A.REAL_SALE_AMT) AS REAL_SALE_AMT
+        ,       ROUND(RATIO_TO_REPORT(SUM(A.TOT_SALE_QTY)) OVER(), 4) * 100 AS RATE
+        ,		SUM(B.TOT_SALE_QTY) AS TOT_SALE_QTY1
+        ,		SUM(B.TOT_SALE_AMT) AS TOT_SALE_AMT1
+        ,		SUM(B.REAL_SALE_AMT) AS REAL_SALE_AMT1
+        ,       ROUND(RATIO_TO_REPORT(SUM(B.TOT_SALE_QTY)) OVER(), 4) * 100 AS RATE1
+        ,       DECODE(SUM(B.TOT_SALE_QTY), 0, 0, ROUND(SUM(A.TOT_SALE_QTY)/SUM(B.TOT_SALE_QTY) * 100), 2) AS RATE_SALE_QTY
+        ,       DECODE(SUM(B.TOT_SALE_AMT), 0, 0, ROUND(SUM(A.TOT_SALE_AMT)/SUM(B.TOT_SALE_AMT) * 100), 2)  AS RATE_SALE_AMT
+        ,       DECODE(SUM(B.REAL_SALE_AMT), 0, 0, ROUND(SUM(A.REAL_SALE_AMT)/SUM(B.REAL_SALE_AMT) * 100), 2) AS RATE_REAL_SALE_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	(
+                SELECT 	TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+                ,		(SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+                ,		tsdt.SALE_CNT AS TOT_SALE_QTY
+                ,		tsdt.TOT_SALE_AMT
+                ,		tsdt.REAL_SALE_AMT
+                FROM	TB_SL_DAILY_TOTAL tsdt
+                ,       TB_MS_STORE tms
+                WHERE   tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                AND     tsdt.STORE_CD = tms.STORE_CD
+                AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND 	tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                <if test='storeCds != null and storeCds != ""'>
+                    AND tsdt.STORE_CD IN
+                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                ) A
+        ,       (
+                SELECT 	TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+                ,		(SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+                ,		tsdt.SALE_CNT AS TOT_SALE_QTY
+                ,		tsdt.TOT_SALE_AMT
+                ,		tsdt.REAL_SALE_AMT
+                FROM	TB_SL_DAILY_TOTAL tsdt
+                ,       TB_MS_STORE tms
+                WHERE   tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                AND     tsdt.STORE_CD = tms.STORE_CD
+                AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND 	tsdt.SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate}
+                <if test='storeCds != null and storeCds != ""'>
+                    AND tsdt.STORE_CD IN
+                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                ) B
+        WHERE	A.YOIL = B.YOIL(+)
+        AND	    A.BRANCH_NM = B.BRANCH_NM(+)
+        GROUP BY A.YOIL, A.BRANCH_NM
+        ORDER BY A.YOIL
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getPeriodStoreExcelList" parameterType="periodStoreVO" resultType="DefaultMap">
+        /* PeriodStoreMapper.getPeriodStoreExcelList */
+        SELECT	A.YOIL
+        ,       A.BRANCH_NM
+        ,		SUM(A.TOT_SALE_QTY) AS TOT_SALE_QTY
+        ,		SUM(A.TOT_SALE_AMT) AS TOT_SALE_AMT
+        ,		SUM(A.REAL_SALE_AMT) AS REAL_SALE_AMT
+        ,       ROUND(RATIO_TO_REPORT(SUM(A.TOT_SALE_QTY)) OVER(), 4) * 100 AS RATE
+        ,		SUM(B.TOT_SALE_QTY) AS TOT_SALE_QTY1
+        ,		SUM(B.TOT_SALE_AMT) AS TOT_SALE_AMT1
+        ,		SUM(B.REAL_SALE_AMT) AS REAL_SALE_AMT1
+        ,       ROUND(RATIO_TO_REPORT(SUM(B.TOT_SALE_QTY)) OVER(), 4) * 100 AS RATE1
+        ,       DECODE(SUM(B.TOT_SALE_QTY), 0, 0, ROUND(SUM(A.TOT_SALE_QTY)/SUM(B.TOT_SALE_QTY) * 100), 2) AS RATE_SALE_QTY
+        ,       DECODE(SUM(B.TOT_SALE_AMT), 0, 0, ROUND(SUM(A.TOT_SALE_AMT)/SUM(B.TOT_SALE_AMT) * 100), 2)  AS RATE_SALE_AMT
+        ,       DECODE(SUM(B.REAL_SALE_AMT), 0, 0, ROUND(SUM(A.REAL_SALE_AMT)/SUM(B.REAL_SALE_AMT) * 100), 2) AS RATE_REAL_SALE_AMT
+        FROM 	(
+        SELECT 	TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+        ,		(SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+        ,		tsdt.SALE_CNT AS TOT_SALE_QTY
+        ,		tsdt.TOT_SALE_AMT
+        ,		tsdt.REAL_SALE_AMT
+        FROM	TB_SL_DAILY_TOTAL tsdt
+        ,       TB_MS_STORE tms
+        WHERE   tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND     tsdt.STORE_CD = tms.STORE_CD
+        AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND 	tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsdt.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        ) A
+        ,       (
+        SELECT 	TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+        ,		(SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+        ,		tsdt.SALE_CNT AS TOT_SALE_QTY
+        ,		tsdt.TOT_SALE_AMT
+        ,		tsdt.REAL_SALE_AMT
+        FROM	TB_SL_DAILY_TOTAL tsdt
+        ,       TB_MS_STORE tms
+        WHERE   tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND     tsdt.STORE_CD = tms.STORE_CD
+        AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND 	tsdt.SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsdt.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        ) B
+        WHERE	A.YOIL = B.YOIL(+)
+        AND	    A.BRANCH_NM = B.BRANCH_NM(+)
+        GROUP BY A.YOIL, A.BRANCH_NM
+        ORDER BY A.YOIL
+    </select>
+
+</mapper>

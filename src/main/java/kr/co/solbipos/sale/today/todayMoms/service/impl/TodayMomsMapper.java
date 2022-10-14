@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * @Class Name : TodayMomsMapper.java
- * @Description : 맘스터치 > 매출분석 > 당일 매출 리스트
+ * @Description : 맘스터치 > 매출분석 > 당일 매출 현황
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
