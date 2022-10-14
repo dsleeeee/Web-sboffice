@@ -9,7 +9,7 @@
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
 <c:set var="userId" value="${sessionScope.sessionInfo.userId}" />
 
-<wj-popup control="versionRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:350px;">
+<wj-popup control="versionRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:380px;">
   <div class="wj-dialog wj-dialog-columns title">
     <%-- header --%>
     <div class="wj-dialog-header wj-dialog-header-font">
@@ -21,15 +21,15 @@
     <%-- body --%>
     <div class="wj-dialog-body" ng-controller="verRegistCtrl">
       <div>
-        <div style="height:220px; overflow-y: auto;">
+        <div style="height:250px; overflow-y: auto;">
           <f:form id="regForm" name="regForm" >
             <h3 class="h3_tbl"><s:message code="media.verInfo" /></h3>
             <table class="searchTbl">
               <colgroup>
-                <col class="w13" />
-                <col class="w37" />
-                <col class="w13" />
-                <col class="w37" />
+                <col class="w15" />
+                <col class="w35" />
+                <col class="w15" />
+                <col class="w35" />
               </colgroup>
               <tbody>
               <tr>
@@ -104,6 +104,13 @@
                   </div>
                 </td>
               </tr>
+              <tr>
+                <%-- 이미지출력시간 --%>
+                <th><s:message code="media.dispTime" /></th>
+                <td><input type="text" class="sb-input w100" id="dispTime" ng-model="version.dispTime"></td>
+                <th></th>
+                <td></td>
+              </tr>
               </tbody>
             </table>
           </f:form>
@@ -129,6 +136,6 @@
   var storeCd      = "${storeCd}";
   var userId       = "${userId}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/verRegist.js?ver=20220705.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/verRegist.js?ver=20221014.05" charset="utf-8"></script>
 
 

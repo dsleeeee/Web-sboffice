@@ -24,12 +24,13 @@
         <when test='orgnFg != null and orgnFg == "H"'>
             <include refid="CmmSQL.PagingTemplateHeader"/>
             SELECT ADVER_FILE_NO AS VER_SER_NO,
-                   TO_CHAR(TO_DATE(ADVER_S_DATE, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(ADVER_E_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_DATE,
-                   FILE_DESC AS VER_SER_NM,
-                   FILE_USE_TYPE,
-                   FILE_SIZE,
-                   USE_YN,
-                   FILE_ORG_NM || '.' || FILE_EXT AS FILE_ORG_NM
+                    TO_CHAR(TO_DATE(ADVER_S_DATE, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(ADVER_E_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_DATE,
+                    FILE_DESC AS VER_SER_NM,
+                    FILE_USE_TYPE,
+                    FILE_SIZE,
+                    USE_YN,
+                    FILE_ORG_NM || '.' || FILE_EXT AS FILE_ORG_NM,
+                    DISP_TIME
             <include refid="CmmSQL.PagingTemplateCount"/>
                  FROM TB_HQ_POS_ADVER_FILE
                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
@@ -58,12 +59,14 @@
         <when test='orgnFg != null and orgnFg == "S"'>
             <include refid="CmmSQL.PagingTemplateHeader"/>
             SELECT ADVER_FILE_NO AS VER_SER_NO,
-                   TO_CHAR(TO_DATE(ADVER_S_DATE, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(ADVER_E_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_DATE,
-                   FILE_DESC AS VER_SER_NM,
-                   FILE_USE_TYPE,
-                   FILE_SIZE,
-                   USE_YN,
-                   FILE_ORG_NM || '.' || FILE_EXT AS FILE_ORG_NM
+                    TO_CHAR(TO_DATE(ADVER_S_DATE, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(ADVER_E_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_DATE,
+                    FILE_DESC AS VER_SER_NM,
+                    FILE_USE_TYPE,
+                    FILE_SIZE,
+                    USE_YN,
+                    FILE_ORG_NM || '.' || FILE_EXT AS FILE_ORG_NM,
+                    DISP_SEQ,
+                    DISP_TIME
             <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_MS_POS_ADVER_FILE
                 WHERE STORE_CD = #{storeCd}
@@ -102,20 +105,21 @@
         <!-- 본사 -->
         <when test='orgnFg != null and orgnFg == "H"'>
         SELECT ADVER_FILE_NO AS VER_SER_NO,
-               FILE_USE_TYPE AS FILE_TYPE,
-               TO_CHAR(TO_DATE(ADVER_S_DATE, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(ADVER_E_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_DATE,
-               ADVER_S_DATE AS START_DATE,
-               ADVER_E_DATE AS END_DATE,
-               FILE_DIR,
-               FILE_NM,
-               FILE_EXT,
-               FILE_ORG_NM || '.' || FILE_EXT AS FILE_ORG_NM,
-               FILE_SIZE,
-               FILE_MIME_TYPE,
-               FILE_ORG_NM,
-               FILE_DESC AS VER_SER_NM,
-               USE_YN,
-               REG_DT
+                FILE_USE_TYPE AS FILE_TYPE,
+                TO_CHAR(TO_DATE(ADVER_S_DATE, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(ADVER_E_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_DATE,
+                ADVER_S_DATE AS START_DATE,
+                ADVER_E_DATE AS END_DATE,
+                FILE_DIR,
+                FILE_NM,
+                FILE_EXT,
+                FILE_ORG_NM || '.' || FILE_EXT AS FILE_ORG_NM,
+                FILE_SIZE,
+                FILE_MIME_TYPE,
+                FILE_ORG_NM,
+                FILE_DESC AS VER_SER_NM,
+                USE_YN,
+                REG_DT,
+                DISP_TIME
           FROM TB_HQ_POS_ADVER_FILE
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
            AND ADVER_FILE_NO = #{verSerNo}
@@ -123,20 +127,21 @@
         <!-- 본사 -->
         <when test='orgnFg != null and orgnFg == "S"'>
             SELECT ADVER_FILE_NO AS VER_SER_NO,
-                   FILE_USE_TYPE AS FILE_TYPE,
-                   TO_CHAR(TO_DATE(ADVER_S_DATE, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(ADVER_E_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_DATE,
-                   ADVER_S_DATE AS START_DATE,
-                   ADVER_E_DATE AS END_DATE,
-                   FILE_DIR,
-                   FILE_NM,
-                   FILE_EXT,
-                   FILE_ORG_NM || '.' || FILE_EXT AS FILE_ORG_NM,
-                   FILE_SIZE,
-                   FILE_MIME_TYPE,
-                   FILE_ORG_NM,
-                   FILE_DESC AS VER_SER_NM,
-                   USE_YN,
-                   REG_DT
+                    FILE_USE_TYPE AS FILE_TYPE,
+                    TO_CHAR(TO_DATE(ADVER_S_DATE, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(ADVER_E_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_DATE,
+                    ADVER_S_DATE AS START_DATE,
+                    ADVER_E_DATE AS END_DATE,
+                    FILE_DIR,
+                    FILE_NM,
+                    FILE_EXT,
+                    FILE_ORG_NM || '.' || FILE_EXT AS FILE_ORG_NM,
+                    FILE_SIZE,
+                    FILE_MIME_TYPE,
+                    FILE_ORG_NM,
+                    FILE_DESC AS VER_SER_NM,
+                    USE_YN,
+                    REG_DT,
+                    DISP_TIME
               FROM TB_MS_POS_ADVER_FILE
              WHERE STORE_CD = #{storeCd}
                AND ADVER_FILE_NO = #{verSerNo}
@@ -215,7 +220,9 @@
                REG_DT,
                REG_ID,
                MOD_DT,
-               MOD_ID
+               MOD_ID,
+               DISP_SEQ,
+               DISP_TIME
             )
             VALUES
             (
@@ -236,7 +243,9 @@
                 #{regDt},
                 #{regId},
                 #{modDt},
-                #{modId}
+                #{modId},
+                #{dispSeq},
+                #{dispTime}
             )
             ]]>
         </if>
@@ -288,7 +297,6 @@
             )
             ]]>
         </if>
-
     </insert>
 
     <!-- 버전 수정   -->
@@ -318,7 +326,8 @@
                FILE_DESC        = #{verSerNm},
                USE_YN           = #{useYn},
                MOD_DT           = #{modDt},
-               MOD_ID           = #{modId}
+               MOD_ID           = #{modId},
+               DISP_TIME        = #{dispTime}
          WHERE HQ_OFFICE_CD     = #{hqOfficeCd}
            AND ADVER_FILE_NO    = #{verSerNo}
          ]]>
@@ -343,7 +352,8 @@
                FILE_DESC        = #{verSerNm},
                USE_YN           = #{useYn},
                MOD_DT           = #{modDt},
-               MOD_ID           = #{modId}
+               MOD_ID           = #{modId},
+               DISP_TIME        = #{dispTime}
          WHERE STORE_CD         = #{storeCd}
            AND ADVER_FILE_NO    = #{verSerNo}
          ]]>
@@ -530,6 +540,27 @@
            AND STORE_CD = #{storeCd}
         ]]>
     </delete>
+
+    <!-- 동영상출력순서 자동채번   -->
+    <!--
+        TABLE    : TB_CM_POS_ADDR_VERSN
+        COMMENTS : 파일 확장자명를 조회한다.
+    -->
+    <select id="getDispSeq" parameterType="MediaVO" resultType="String">
+        /* USE : Media.getDispSeq */
+        <if test='hqOfficeCd != null and hqOfficeCd != "" and hqOfficeCd != "00000"'>
+            SELECT NVL(MAX(DISP_SEQ), 0) +1 AS DISP_SEQ
+            FROM TB_HQ_POS_ADVER_FILE
+            WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+            AND FILE_USE_TYPE = #{fileType}
+        </if>
+        <if test='hqOfficeCd != null and (hqOfficeCd == "" or hqOfficeCd == "00000")'>
+            SELECT NVL(MAX(DISP_SEQ), 0) +1 AS DISP_SEQ
+            FROM TB_MS_POS_ADVER_FILE
+            WHERE STORE_CD = #{storeCd}
+            AND FILE_USE_TYPE = #{fileType}
+        </if>
+    </select>
 
 </mapper>
 

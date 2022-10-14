@@ -70,6 +70,10 @@ public class MediaVO extends PageVO {
     private String endDate;
     /** 확장자 체크 결과 */
     private String result;
+    /** 동영상출력순서 */
+    private String dispSeq;
+    /** 이미지출력시간 */
+    private String dispTime;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -358,5 +362,17 @@ public class MediaVO extends PageVO {
 
     public void setResult(String result) {
         this.result = result;
+    }
+
+    public String getDispSeq() { return dispSeq; }
+
+    public void setDispSeq(String dispSeq) { this.dispSeq = dispSeq; }
+
+    public String getDispTime() {
+        return dispTime;
+    }
+
+    public void setDispTime(String dispTime) {
+        this.dispTime = dispTime;
     }
 }
