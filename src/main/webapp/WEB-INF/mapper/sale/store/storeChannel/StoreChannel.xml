@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.store.storeChannel.service.impl.StoreChannelMapper">
+
+    <!-- 맘스터치 > 점포매출 > 채널별 매출 현황 - 결제수단 컬럼 리스트 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : storeChannelVO
+        COMMENTS : 채널별 매출 현황 - 결제수단 컬럼 리스트를 조회한다.
+    -->
+    <select id="getPayColList" parameterType="storeChannelVO" resultType="DefaultMap">
+      /* USE : StoreChannelMapper.getPayColList */
+        SELECT tcn.NMCODE_CD AS PAY_CD,
+                tcn.NMCODE_NM AS PAY_NM,
+                tcn.NMCODE_ITEM_1 AS PAY_METHOD
+          FROM TB_CM_NMCODE tcn
+         WHERE tcn.NMCODE_GRP_CD = '024'
+           AND tcn.NMCODE_CD NOT IN ('05', '12') /* 쿠폰은 결제수단이 아닌 할인내역으로 들어가므로 하드코딩으로 결제수단에 나오지 않도록 함. */
+         ORDER
+            BY tcn.NMCODE_CD
+    </select>
+
+    <!-- 맘스터치 > 점포매출 > 채널별 매출 현황 - 할인수단 컬럼 리스트 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : storeChannelVO
+        COMMENTS : 채널별 매출 현황 - 할인수단 컬럼 리스트를 조회한다.
+    -->
+    <select id="getDcColList" parameterType="storeChannelVO" resultType="DefaultMap">
+        /* USE : StoreChannelMapper.getDcColList */
+          SELECT tcn.NMCODE_CD AS DC_CD,
+                  tcn.NMCODE_NM AS DC_NM,
+                  tcn.NMCODE_ITEM_1 AS DC_METHOD
+            FROM TB_CM_NMCODE tcn
+           WHERE tcn.NMCODE_GRP_CD = '041'
+           ORDER
+              BY tcn.NMCODE_CD
+    </select>
+
+    <!-- 맘스터치 > 점포매출 > 채널별 매출 현황 - 객수 컬럼 리스트 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE, TB_HQ_NMCODE, TB_MS_STORE_NMCODE
+        PARAM    : storeChannelVO
+        COMMENTS : 채널별 매출 현황 - 객수 컬럼 리스트를 조회한다.
+    -->
+    <select id="getGuestColList" parameterType="storeChannelVO" resultType="DefaultMap">
+      /* USE : StoreChannelMapper.getGuestColList */
+        <choose>
+            <when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
+                SELECT A.NMCODE_CD AS GUEST_CD,
+                        NVL(B.NMCODE_NM, '미등록') AS GUEST_NM
+                  FROM TB_CM_NMCODE A,
+                        TB_HQ_NMCODE B
+                 WHERE 1=1
+                   AND A.NMCODE_GRP_CD = '119'
+                   AND B.HQ_OFFICE_CD (+)= #{hqOfficeCd}
+                   AND B.NMCODE_GRP_CD (+)= A.NMCODE_GRP_CD
+                   AND B.NMCODE_CD (+)= A.NMCODE_CD
+                ORDER
+                    BY A.NMCODE_CD
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>    <!-- 매장 -->
+                SELECT A.NMCODE_CD AS GUEST_CD,
+                        NVL(B.NMCODE_NM, '미등록') AS GUEST_NM
+                  FROM TB_CM_NMCODE A,
+                        TB_MS_STORE_NMCODE B
+                 WHERE 1=1
+                   AND A.NMCODE_GRP_CD = '119'
+                   AND B.STORE_CD (+)= #{storeCd}
+                   AND B.NMCODE_GRP_CD (+)= A.NMCODE_GRP_CD
+                   AND B.NMCODE_CD (+)= A.NMCODE_CD
+                 ORDER
+                    BY A.NMCODE_CD
+            </when>
+        </choose>
+    </select>
+
+    <!-- 맘스터치 > 점포매출 > 채널별 매출 현황 - 주문채널 구분자 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE, TB_MS_NMCODE, TB_HQ_NMCODE
+        PARAM    : storeChannelVO
+        COMMENTS : 채널별 매출 현황 - 주문채널 구분자를 조회한다.
+    -->
+    <select id="getDlvrInFgColList" parameterType="storeChannelVO" resultType="DefaultMap">
+        /* USE : StoreChannelMapper.getDlvrInFgColList */
+        <choose>
+            <when test='hqOfficeCd != "A0001"'>
+                SELECT *
+                  FROM (
+                            SELECT '0' AS DLVR_IN_FG,
+                                    '일반' AS DLVR_IN_FG_NM
+                              FROM DUAL
+                             UNION
+                            SELECT NMCODE_CD AS DLVR_IN_FG,
+                                    NMCODE_NM AS DLVR_IN_FG_NM
+                              FROM TB_CM_NMCODE
+                             WHERE NMCODE_GRP_CD = '112'
+                        ) A
+                 ORDER
+                    BY TO_NUMBER(A.DLVR_IN_FG)
+            </when>
+            <otherwise>
+                <if test='orgnFg != null and orgnFg == "H"'>
+                    SELECT *
+                      FROM (
+                                SELECT '0' AS DLVR_IN_FG,
+                                        '일반' AS DLVR_IN_FG_NM,
+                                        1 AS RNUM
+                                  FROM DUAL
+                                 UNION
+                                SELECT '1' AS DLVR_IN_FG,
+                                        'CID' AS DLVR_IN_FG_NM,
+                                        2 AS RNUM
+                                  FROM DUAL
+                                 UNION
+                                SELECT *
+                                  FROM (
+                                        SELECT NMCODE_CD AS DLVR_IN_FG,
+                                                NMCODE_NM AS DLVR_IN_FG_NM,
+                                                (ROWNUM + 2) AS RNUM
+                                          FROM TB_HQ_NMCODE
+                                         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                           AND NMCODE_GRP_CD = '113'
+                                         ORDER
+                                            BY NMCODE_CD
+                                        ) B
+                            ) A
+                     ORDER
+                        BY TO_NUMBER(A.RNUM)
+                </if>
+                <if test='orgnFg != null and orgnFg == "S"'>
+                    SELECT *
+                      FROM (
+                                SELECT '0' AS DLVR_IN_FG,
+                                        '일반' AS DLVR_IN_FG_NM,
+                                        1 AS RNUM
+                                  FROM DUAL
+                                 UNION
+                                SELECT '1' AS DLVR_IN_FG,
+                                        'CID' AS DLVR_IN_FG_NM,
+                                        2 AS RNUM
+                                  FROM DUAL
+                                 UNION
+                                SELECT *
+                                  FROM (
+                                            SELECT NMCODE_CD AS DLVR_IN_FG,
+                                                    NMCODE_NM AS DLVR_IN_FG_NM,
+                                                    (ROWNUM + 2) AS RNUM
+                                              FROM TB_MS_STORE_NMCODE
+                                             WHERE STORE_CD = #{storeCd}
+                                               AND NMCODE_GRP_CD = '113'
+                                             ORDER
+                                                BY NMCODE_CD
+                                        ) B
+                            ) A
+                     ORDER
+                        BY TO_NUMBER(A.RNUM)
+                </if>
+            </otherwise>
+        </choose>
+    </select>
+
+    <!--  맘스터치 > 점포매출 > 채널별 매출 현황 - 기간별 탭 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL_ORDAPP
+        PARAM    : storeChannelVO
+        COMMENTS : 채널별 매출 현황 - 기간별 데이터를 조회한다.
+    -->
+    <select id="getStoreChannelPeriodList" parameterType="storeChannelVO" resultType="DefaultMap">
+      /* USE : StoreChannelMapper.getStoreChannelPeriodList */
+        SELECT tsdto.DLVR_IN_FG,
+                tcn.NMCODE_NM AS DLVR_IN_FG_NM,
+                SUM(tsdto.TOT_SALE_AMT) AS TOT_SALE_AMT,
+                SUM(tsdto.TOT_DC_AMT) AS TOT_DC_AMT,
+                SUM(tsdto.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                SUM(tsdto.REAL_SALE_AMT) - SUM(tsdto.VAT_AMT) AS GA_AMT,
+                SUM(tsdto.VAT_AMT) AS VAT_AMT,
+                SUM(tsdto.TOT_TIP_AMT) AS TOT_TIP_AMT,
+                SUM(tsdto.TOT_ETC_AMT) AS TOT_ETC_AMT,
+                SUM(tsdto.BILL_CNT) AS BILL_CNT,
+                DECODE(SUM(tsdto.BILL_CNT), 0, 0, ROUND(SUM(tsdto.REAL_SALE_AMT) / SUM(tsdto.BILL_CNT))) AS BILL_UPRC,
+                <foreach collection="arrPayCol" item="item" separator="+">
+                    NVL(SUM(tsdto.PAY_AMT_${item}), 0)
+                </foreach> AS TOT_PAY_AMT,
+                <foreach collection="arrPayCol" item="item" separator=",">
+                    NVL(SUM(tsdto.PAY_AMT_${item}), 0) AS PAY${item}
+                </foreach>,
+                <foreach collection="arrDcCol" item="item" separator=",">
+                    NVL(SUM(tsdto.DC_AMT_${item}), 0) AS DC${item}
+                </foreach>,
+                SUM(tsdto.TOT_GUEST_CNT) AS TOT_GUEST_CNT,
+                SUM(tsdto.GUEST_CNT_1) AS GUEST01,
+                SUM(tsdto.GUEST_CNT_2) AS GUEST02,
+                SUM(tsdto.GUEST_CNT_3) AS GUEST03,
+                SUM(tsdto.GUEST_CNT_4) AS GUEST04,
+                SUM(tsdto.GUEST_CNT_5) AS GUEST05,
+                SUM(tsdto.GUEST_CNT_6) AS GUEST06,
+                DECODE(NVL(SUM(tsdto.TOT_GUEST_CNT),0), 0, 0, ROUND(SUM(tsdto.REAL_SALE_AMT) / SUM(tsdto.TOT_GUEST_CNT))) AS GUEST_UPRC
+          FROM TB_SL_DAILY_TOTAL_ORDAPP tsdto,
+                (
+                <choose>
+                    <when test='hqOfficeCd != "A0001"'>
+                        SELECT '0' AS NMCODE_CD,
+                                '일반' AS NMCODE_NM
+                          FROM DUAL
+                         UNION
+                        SELECT NMCODE_CD,
+                                NMCODE_NM
+                          FROM TB_CM_NMCODE
+                         WHERE NMCODE_GRP_CD = '112'
+                    </when>
+                    <otherwise>
+                        <if test='orgnFg != null and orgnFg == "H"'>
+                            SELECT '0' AS NMCODE_CD,
+                                    '일반' AS NMCODE_NM
+                              FROM DUAL
+                             UNION
+                            SELECT '1' AS NMCODE_CD,
+                                    'CID' AS NMCODE_NM
+                              FROM DUAL
+                             UNION
+                            SELECT NMCODE_CD,
+                                    NMCODE_NM
+                              FROM TB_HQ_NMCODE
+                             WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                               AND NMCODE_GRP_CD = '113'
+                        </if>
+                        <if test='orgnFg != null and orgnFg == "S"'>
+                            SELECT '0' AS NMCODE_CD,
+                                    '일반' AS NMCODE_NM
+                              FROM DUAL
+                             UNION
+                            SELECT '1' AS NMCODE_CD,
+                                    'CID' AS NMCODE_NM
+                              FROM DUAL
+                             UNION
+                            SELECT NMCODE_CD,
+                                    NMCODE_NM
+                              FROM TB_MS_STORE_NMCODE
+                             WHERE STORE_CD = #{storeCd}
+                               AND NMCODE_GRP_CD = '113'
+                        </if>
+                    </otherwise>
+                </choose>
+                ) tcn
+         WHERE tsdto.HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test='arrStoreCd != null and arrStoreCd != ""'>
+                AND tsdto.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                  #{item}
+                </foreach>
+            </if>
+           AND tsdto.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+           AND tsdto.DLVR_IN_FG = tcn.NMCODE_CD
+         GROUP
+            BY tsdto.DLVR_IN_FG,
+                tcn.NMCODE_NM
+         ORDER
+            BY TO_NUMBER(tsdto.DLVR_IN_FG)
+    </select>
+
+    <!-- 매맘스터치 > 점포매출 > 채널별 매출 현황 - 일별 탭 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL_ORDAPP
+        PARAM    : storeChannelVO
+        COMMENTS : 채널별 매출 현황 - 일별 데이터를 조회한다.
+    -->
+    <select id="getStoreChannelDayList" parameterType="storeChannelVO" resultType="DefaultMap">
+        /* USE : StoreChannelMapper.getStoreChannelDayList */
+        SELECT TO_CHAR(TO_DATE(tsdto.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        SUM(tsdto.BILL_CNT) AS TOT_BILL_CNT,
+        SUM(tsdto.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT,
+        <foreach collection="arrDlvrInFgCol" item="item" separator=",">
+            SUM(CASE WHEN tsdto.DLVR_IN_FG = #{item} THEN tsdto.BILL_CNT ELSE 0 END) AS BILL_CNT_${item},
+            SUM(CASE WHEN tsdto.DLVR_IN_FG = #{item} THEN tsdto.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_${item}
+        </foreach>
+        FROM TB_SL_DAILY_TOTAL_ORDAPP tsdto
+        WHERE 1=1
+        AND tsdto.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tsdto.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        AND tsdto.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        GROUP
+        BY tsdto.SALE_DATE
+        ORDER
+        BY tsdto.SALE_DATE DESC
+    </select>
+
+    <!-- 맘스터치 > 점포매출 > 채널별 매출 현황 - 일별 상세 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL_ORDAPP
+        PARAM    : storeChannelVO
+        COMMENTS : 채널별 매출 현황 - 일별 상세 데이터를 조회한다.
+    -->
+    <select id="getStoreChannelDtlList" parameterType="storeChannelVO" resultType="DefaultMap">
+        /* USE : StoreChannelMapper.getStoreChannelDtlList */
+        SELECT 	tssh.STORE_CD,
+                tms.STORE_NM,
+                tssh.POS_NO,
+                tssh.BILL_NO,
+                tssh.REAL_SALE_AMT,
+                TO_CHAR(TO_DATE(tssh.BILL_DT,'yyyy/mm/dd hh24:mi:ss'),'YYYY-MM-DD hh24:mi:SS') AS BILL_DT,
+                tsshd.CHANNEL_ORDER_NO,
+                tsshd.VORDER_NO
+        FROM 	TB_SL_SALE_HDR tssh,
+                TB_SL_SALE_HDR_DLVR tsshd,
+                TB_MS_STORE tms
+        WHERE 1=1
+        AND tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tssh.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        AND     tssh.SALE_DATE = #{saleDate}
+        AND     tsshd.DLVR_IN_FG = #{dlvrInFg}
+        AND 	tsshd.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+        AND 	tsshd.STORE_CD = tssh.STORE_CD
+        AND 	tsshd.SALE_DATE = tssh.SALE_DATE
+        AND 	tsshd.POS_NO = tssh.POS_NO
+        AND 	tsshd.BILL_NO = tssh.BILL_NO
+        AND 	tms.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+        AND 	tms.STORE_CD = tssh.STORE_CD
+        ORDER BY tssh.STORE_CD, tms.STORE_NM, tssh.POS_NO, tssh.BILL_NO
+    </select>
+
+    <!-- 맘스터치 > 점포매출 > 채널별 매출 현황 - 월별 탭 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL_ORDAPP
+        PARAM    : storeChannelVO
+        COMMENTS : 채널별 매출 현황 - 월별 데이터를 조회한다.
+    -->
+    <select id="getStoreChannelMonthList" parameterType="storeChannelVO" resultType="DefaultMap">
+        /* USE : StoreChannelMapper.getStoreChannelMonthList */
+        SELECT TO_CHAR(TO_DATE(tsdto.SALE_DATE, 'yyyymmdd'), 'yyyy-mm') AS SALE_DATE,
+                SUM(tsdto.BILL_CNT) AS TOT_BILL_CNT,
+                SUM(tsdto.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT,
+                <foreach collection="arrDlvrInFgCol" item="item" separator=",">
+                    SUM(CASE WHEN tsdto.DLVR_IN_FG = #{item} THEN tsdto.BILL_CNT ELSE 0 END) AS BILL_CNT_${item},
+                    SUM(CASE WHEN tsdto.DLVR_IN_FG = #{item} THEN tsdto.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_${item}
+                </foreach>
+         FROM TB_SL_DAILY_TOTAL_ORDAPP tsdto
+        WHERE 1=1
+          AND tsdto.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tsdto.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+          AND tsdto.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        GROUP
+           BY TO_CHAR(TO_DATE(tsdto.SALE_DATE, 'yyyymmdd'), 'yyyy-mm')
+        ORDER
+           BY TO_CHAR(TO_DATE(tsdto.SALE_DATE, 'yyyymmdd'), 'yyyy-mm') ASC
+    </select>
+
+</mapper>

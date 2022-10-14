@@ -900,6 +900,8 @@
     <typeAlias alias="storeDayPayVO" type="kr.co.solbipos.sale.store.storeDayPay.service.StoreDayPayVO"/>
     <!-- 맘스터치 > 점포매출 > 점포-월별 결제 수단 매출 -->
     <typeAlias alias="storeMonthPayVO" type="kr.co.solbipos.sale.store.storeMonthPay.service.StoreMonthPayVO"/>
+    <!-- 맘스터치 > 점포매출 > 채널별 매출 현황 -->
+    <typeAlias alias="storeChannelVO" type="kr.co.solbipos.sale.store.storeChannel.service.StoreChannelVO"/>
 
 
 
