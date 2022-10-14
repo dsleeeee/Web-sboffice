@@ -38,26 +38,26 @@ app.controller('dayMomsCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
     //첫째줄 Header 생성
     var dataItem = {};
-    dataItem.saleDate     = messages["periodProd.saleDate"];
-    dataItem.yoil         = messages["periodProd.yoil"];
-    dataItem.branchNm     = messages["periodProd.branchNm"];
-    dataItem.storeCd      = messages["periodProd.storeCd"];
-    dataItem.storeNm      = messages["periodProd.storeNm"];
-    dataItem.area         = messages["periodProd.area"];
-    dataItem.area2        = messages["periodProd.area2"];
-    dataItem.bizArea      = messages["periodProd.bizArea"];
-    dataItem.bizArea2     = messages["periodProd.bizArea2"];
-    dataItem.billCnt      = messages["periodProd.sale"];
-    dataItem.billUprc     = messages["periodProd.sale"];
-    dataItem.totGuestCnt  = messages["periodProd.sale"];
-    dataItem.guestUprc    = messages["periodProd.sale"];
-    dataItem.saleQty      = messages["periodProd.sale"];
-    dataItem.totSaleAmt   = messages["periodProd.sale"];
-    dataItem.realSaleAmt  = messages["periodProd.sale"];
-    dataItem.dcAmt        = messages["periodProd.sale"];
-    dataItem.cashAmt      = messages["periodProd.pay"];
-    dataItem.cardAmt      = messages["periodProd.pay"];
-    dataItem.etcAmt       = messages["periodProd.pay"];
+    dataItem.saleDate     = messages["dayMoms.saleDate"];
+    dataItem.yoil         = messages["dayMoms.yoil"];
+    dataItem.branchNm     = messages["dayMoms.branchNm"];
+    dataItem.storeCd      = messages["dayMoms.storeCd"];
+    dataItem.storeNm      = messages["dayMoms.storeNm"];
+    dataItem.area         = messages["dayMoms.area"];
+    dataItem.area2        = messages["dayMoms.area2"];
+    dataItem.bizArea      = messages["dayMoms.bizArea"];
+    dataItem.bizArea2     = messages["dayMoms.bizArea2"];
+    dataItem.billCnt      = messages["dayMoms.sale"];
+    dataItem.billUprc     = messages["dayMoms.sale"];
+    dataItem.totGuestCnt  = messages["dayMoms.sale"];
+    dataItem.guestUprc    = messages["dayMoms.sale"];
+    dataItem.saleQty      = messages["dayMoms.sale"];
+    dataItem.totSaleAmt   = messages["dayMoms.sale"];
+    dataItem.realSaleAmt  = messages["dayMoms.sale"];
+    dataItem.dcAmt        = messages["dayMoms.sale"];
+    dataItem.cashAmt      = messages["dayMoms.pay"];
+    dataItem.cardAmt      = messages["dayMoms.pay"];
+    dataItem.etcAmt       = messages["dayMoms.pay"];
     s.columnHeaders.rows[0].dataItem = dataItem;
     //Grid Header 2줄 - END		----------------------------------------------------------------
 
@@ -158,6 +158,75 @@ app.controller('dayMomsExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+
+    //Grid Header 2줄 - START	----------------------------------------------------------------
+    s.allowMerging = 2;
+    s.columnHeaders.rows.push(new wijmo.grid.Row());
+
+    //첫째줄 Header 생성
+    var dataItem = {};
+    dataItem.saleDate     = messages["dayMoms.saleDate"];
+    dataItem.yoil         = messages["dayMoms.yoil"];
+    dataItem.branchNm     = messages["dayMoms.branchNm"];
+    dataItem.storeCd      = messages["dayMoms.storeCd"];
+    dataItem.storeNm      = messages["dayMoms.storeNm"];
+    dataItem.area         = messages["dayMoms.area"];
+    dataItem.area2        = messages["dayMoms.area2"];
+    dataItem.bizArea      = messages["dayMoms.bizArea"];
+    dataItem.bizArea2     = messages["dayMoms.bizArea2"];
+    dataItem.billCnt      = messages["dayMoms.sale"];
+    dataItem.billUprc     = messages["dayMoms.sale"];
+    dataItem.totGuestCnt  = messages["dayMoms.sale"];
+    dataItem.guestUprc    = messages["dayMoms.sale"];
+    dataItem.saleQty      = messages["dayMoms.sale"];
+    dataItem.totSaleAmt   = messages["dayMoms.sale"];
+    dataItem.realSaleAmt  = messages["dayMoms.sale"];
+    dataItem.dcAmt        = messages["dayMoms.sale"];
+    dataItem.cashAmt      = messages["dayMoms.pay"];
+    dataItem.cardAmt      = messages["dayMoms.pay"];
+    dataItem.etcAmt       = messages["dayMoms.pay"];
+    s.columnHeaders.rows[0].dataItem = dataItem;
+    //Grid Header 2줄 - END		----------------------------------------------------------------
+
+    s.itemFormatter = function (panel, r, c, cell) {
+      if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {		//align in center horizontally and vertically
+        panel.rows   [r].allowMerging	= true;
+        panel.columns[c].allowMerging	= true;
+
+        wijmo.setCss(cell, {
+              display    : 'table',
+              tableLayout: 'fixed'
+            }
+        );
+
+        cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+
+        wijmo.setCss(cell.children[0], {
+              display      : 'table-cell',
+              verticalAlign: 'middle',
+              textAlign    : 'center'
+            }
+        );
+      }
+      else if (panel.cellType === wijmo.grid.CellType.RowHeader) {	//Row헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+        if (panel.rows[r] instanceof wijmo.grid.GroupRow) {			//GroupRow 인 경우는 표시하지 않음
+          cell.textContent = '';
+        } else {
+          if (!isEmpty(panel._rows[r]._data.rnum)) {
+            cell.textContent = (panel._rows[r]._data.rnum).toString();
+          } else {
+            cell.textContent = (r + 1).toString();
+          }
+        }
+      }
+      else if (panel.cellType === wijmo.grid.CellType.Cell) {			//readOnly 배경색 표시
+        var col = panel.columns[c];
+        if (col.isReadOnly) {
+          wijmo.addClass(cell, 'wj-custom-readonly');
+        }
+      }
+    }	//s.itemFormatter = function (panel, r, c, cell) {
+
     // add the new GroupRow to the grid's 'columnFooters' panel
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row

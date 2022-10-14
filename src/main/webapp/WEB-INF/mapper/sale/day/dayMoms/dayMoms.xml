@@ -32,13 +32,7 @@
         ,		DECODE(tsdt.BILL_CNT, 0, 0, ROUND(tsdt.TOT_SALE_AMT/tsdt.BILL_CNT)) AS BILL_UPRC
         ,		tsdt.TOT_GUEST_CNT
         ,		DECODE(tsdt.TOT_GUEST_CNT, 0, 0, ROUND(tsdt.TOT_SALE_AMT/tsdt.TOT_GUEST_CNT)) AS GUEST_UPRC
-        ,		(
-        SELECT 	COUNT(*)
-        FROM	TB_SL_SALE_DTL tssd
-        WHERE 	tssd.HQ_OFFICE_CD = tsdt.HQ_OFFICE_CD
-        AND 	tssd.STORE_CD = tsdt.STORE_CD
-        AND 	tssd.SALE_DATE = tsdt.SALE_DATE
-        ) AS SALE_QTY
+        ,		tsdt.SALE_CNT
         ,		tsdt.TOT_SALE_AMT
         ,		tsdt.REAL_SALE_AMT
         ,		tsdt.TOT_DC_AMT
