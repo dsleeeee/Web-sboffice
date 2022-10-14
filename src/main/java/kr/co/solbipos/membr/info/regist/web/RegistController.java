@@ -142,24 +142,24 @@ public class RegistController {
             System.out.println("kwuEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1246"), "0"));
         }
         // 코드별 본사 공통코드 콤보박스 조회
-        // 회원구분
-        List memberFgComboList = registService.getHqNmcodeComboList(sessionInfoVO, "142");
-        String memberFgComboListAll = "";
-        if (memberFgComboList.isEmpty()) {
+        // 회원추가정보-회원구분
+        List membrFgComboList = registService.getHqNmcodeComboList(sessionInfoVO, "142");
+        String membrFgComboListAll = "";
+        if (membrFgComboList.isEmpty()) {
             List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
             HashMap<String, String> m = new HashMap<>();
             m.put("name", "선택");
             m.put("value", "");
             list.add(m);
-            memberFgComboListAll = convertToJson(list);
+            membrFgComboListAll = convertToJson(list);
         } else {
-            memberFgComboListAll = cmmCodeUtil.assmblObj(memberFgComboList, "name", "value", UseYn.N);
+            membrFgComboListAll = cmmCodeUtil.assmblObj(membrFgComboList, "name", "value", UseYn.SELECT);
         }
-        model.addAttribute("memberFgComboList", memberFgComboListAll);
+        model.addAttribute("membrFgComboList", membrFgComboListAll);
         // 단체구분
         List groupFgComboList = registService.getHqNmcodeComboList(sessionInfoVO, "143");
         String groupFgComboListAll = "";
-        if (memberFgComboList.isEmpty()) {
+        if (groupFgComboList.isEmpty()) {
             List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
             HashMap<String, String> m = new HashMap<>();
             m.put("name", "선택");
@@ -167,13 +167,13 @@ public class RegistController {
             list.add(m);
             groupFgComboListAll = convertToJson(list);
         } else {
-            groupFgComboListAll = cmmCodeUtil.assmblObj(groupFgComboList, "name", "value", UseYn.N);
+            groupFgComboListAll = cmmCodeUtil.assmblObj(groupFgComboList, "name", "value", UseYn.SELECT);
         }
         model.addAttribute("groupFgComboList", groupFgComboListAll);
         // 강사명
         List teacherCdComboList = registService.getHqNmcodeComboList(sessionInfoVO, "139");
         String teacherCdComboListAll = "";
-        if (memberFgComboList.isEmpty()) {
+        if (teacherCdComboList.isEmpty()) {
             List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
             HashMap<String, String> m = new HashMap<>();
             m.put("name", "선택");
@@ -187,7 +187,7 @@ public class RegistController {
         // 강습구분
         List classFgComboList = registService.getHqNmcodeComboList(sessionInfoVO, "140");
         String classFgComboListAll = "";
-        if (memberFgComboList.isEmpty()) {
+        if (classFgComboList.isEmpty()) {
             List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
             HashMap<String, String> m = new HashMap<>();
             m.put("name", "선택");
@@ -201,7 +201,7 @@ public class RegistController {
         // 스케이트종류
         List skateFgComboList = registService.getHqNmcodeComboList(sessionInfoVO, "144");
         String skateFgComboListAll = "";
-        if (memberFgComboList.isEmpty()) {
+        if (skateFgComboList.isEmpty()) {
             List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
             HashMap<String, String> m = new HashMap<>();
             m.put("name", "선택");
@@ -212,7 +212,7 @@ public class RegistController {
             skateFgComboListAll = cmmCodeUtil.assmblObj(skateFgComboList, "name", "value", UseYn.N);
         }
         model.addAttribute("skateFgComboList", skateFgComboListAll);
-        /** 광운대 아이스링크 */
+        /** //광운대 아이스링크 */
 
 
 

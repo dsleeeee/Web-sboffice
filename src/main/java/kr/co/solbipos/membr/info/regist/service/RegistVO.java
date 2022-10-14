@@ -239,7 +239,7 @@ public class RegistVO extends PageVO {
     private String nmcodeGrpCd;
 
     /** 회원구분 */
-    private String memberFg;
+    private String membrFg;
 
     /** 회원-구분 */
     private String privateFg;
@@ -1398,12 +1398,12 @@ public class RegistVO extends PageVO {
         this.nmcodeGrpCd = nmcodeGrpCd;
     }
 
-    public String getMemberFg() {
-        return memberFg;
+    public String getMembrFg() {
+        return membrFg;
     }
 
-    public void setMemberFg(String memberFg) {
-        this.memberFg = memberFg;
+    public void setMembrFg(String membrFg) {
+        this.membrFg = membrFg;
     }
 
     public String getPrivateFg() {
@@ -1428,10 +1428,10 @@ public class RegistVO extends PageVO {
         this.peopleCnt = peopleCnt;
     }
 
-    public String getGroupFg() { return groupTypeFg; }
+    public String getGroupFg() { return groupFg; }
 
-    public void setGroupFg(String groupTypeFg) {
-        this.groupTypeFg = groupTypeFg;
+    public void setGroupFg(String groupFg) {
+        this.groupFg = groupFg;
     }
 
     public String getGroupTypeFg() { return groupTypeFg; }

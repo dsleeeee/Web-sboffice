@@ -9,29 +9,33 @@
  *
  * **************************************************************/
 
-// 구분
+// 회원추가정보-구분
 var privateFgComboData = [
+    {"name":"선택","value":""},
     {"name":"개인","value":"1"},
     {"name":"단체","value":"2"}
 ];
-// 외상가능
+// 회원추가정보-외상가능
 var postpaidFgComboData = [
+    {"name":"선택","value":""},
     {"name":"허용안함","value":"0"},
     {"name":"외상허용","value":"1"}
 ];
 // 단체-구분
 var groupTypeFgComboData = [
+    {"name":"선택","value":""},
     {"name":"단체","value":"1"},
     {"name":"하키","value":"2"},
     {"name":"기타","value":"3"}
 ];
-// 납부상태
+// 단체-납부상태
 var paymentFgComboData = [
+    {"name":"선택","value":""},
     {"name":"미납","value":"0"},
     {"name":"납부완료","value":"1"},
     {"name":"부분납부","value":"2"}
 ];
-// 사용기간 구분
+// 이용정보-사용기간 구분
 var useDateFgComboData = [
     {"name":"직접입력","value":"0"},
     {"name":"1개월","value":"1"},
@@ -68,16 +72,16 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // [1246 광운대아이스링크]
     // 콤보박스 데이터
-    $scope._setComboData("memberFgCombo", memberFgComboList); // 회원구분
-    $scope._setComboData("privateFgCombo", privateFgComboData); // 회원-구분
-    $scope._setComboData("postpaidFgCombo", postpaidFgComboData); // 외상가능
-    $scope._setComboData("groupFgCombo", groupFgComboList); // 단체구분
+    $scope._setComboData("membrFgCombo", membrFgComboList); // 회원추가정보-회원구분
+    $scope._setComboData("privateFgCombo", privateFgComboData); // 회원추가정보-구분
+    $scope._setComboData("postpaidFgCombo", postpaidFgComboData); // 회원추가정보-외상가능
+    $scope._setComboData("groupFgCombo", groupFgComboList); // 단체-단체구분
     $scope._setComboData("groupTypeFgCombo", groupTypeFgComboData); // 단체-구분
-    $scope._setComboData("paymentFgCombo", paymentFgComboData); // 납부상태
-    $scope._setComboData("teacherCdCombo", teacherCdComboList); // 강사명
-    $scope._setComboData("classFgCombo", classFgComboList); // 강습구분
-    $scope._setComboData("skateFgCombo", skateFgComboList); // 스케이트종류
-    $scope._setComboData("useDateFgCombo", useDateFgComboData); // 사용기간 구분
+    $scope._setComboData("paymentFgCombo", paymentFgComboData); // 단체-납부상태
+    $scope._setComboData("teacherCdCombo", teacherCdComboList); // 강사,강습구분현황-강사명
+    $scope._setComboData("classFgCombo", classFgComboList); // 강사,강습구분현황-강습구분
+    $scope._setComboData("skateFgCombo", skateFgComboList); // 강사,강습구분현황-스케이트종류
+    $scope._setComboData("useDateFgCombo", useDateFgComboData); // 이용정보-사용기간 구분
 
 
     $scope.selectedMember;
@@ -186,20 +190,23 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             // [1246 광운대아이스링크]
             if(kwuEnvstVal === "1") {
                 // 데이터 바인딩
-                $scope.member.memberFg = "";
-                $scope.member.privateFg = "";
-                $scope.member.postpaidFg = "";
+                $scope.srchMembrFgCombo.selectedIndex = 0;
+                $scope.srchPrivateFgCombo.selectedIndex = 0;
+                $scope.srchPostpaidFgCombo.selectedIndex = 0;
                 $scope.member.peopleCnt = "";
-                $scope.member.groupFg = "";
-                $scope.member.groupTypeFg = "";
-                $scope.member.paymentFg = "";
-                $scope.member.teacherCd = "";
-                $scope.member.classFg = "";
-                $scope.member.skateFg = "";
+                $scope.srchGroupFgCombo.selectedIndex = 0;
+                $scope.srchGroupTypeFgCombo.selectedIndex = 0;
+                $scope.srchPaymentFgCombo.selectedIndex = 0;
+                $scope.srchTeacherCdCombo.selectedIndex = 0;
+                $scope.srchClassFgCombo.selectedIndex = 0;
+                $scope.srchSkateFgCombo.selectedIndex = 0;
                 $scope.member.registerDate = new Date();
-                $scope.member.useDateFg = "";
+                $scope.member.useDateFg = "0";
                 $scope.member.useStartDate = new Date();
                 $scope.member.useEndDate = new Date();
+                $("input:checkbox[id='useDateChk']").prop("checked", false);
+                $("#trUseDate").css("display", "none");
+                $("#divUseDate").css("display", "none");
                 $scope.member.useWeek = "";
                 $scope.member.useProdNm = "";
                 $scope.member.useAmt = "";
@@ -270,6 +277,9 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
                 $scope.member.registerDate = new Date();
                 $scope.member.useStartDate = new Date();
                 $scope.member.useEndDate = new Date();
+                $("input:checkbox[id='useDateChk']").prop("checked", false);
+                $("#trUseDate").css("display", "none");
+                $("#divUseDate").css("display", "none");
 
                 // 광운대아이스링크 추가정보 조회
                 $scope.getMemberInfoAddKWU(params);
@@ -285,7 +295,7 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
                 var memberDetailInfoAddKWU = response.data.data;
 
                 // 데이터 바인딩
-                $scope.member.memberFg = memberDetailInfoAddKWU.memberFg;
+                $scope.member.membrFg = memberDetailInfoAddKWU.membrFg;
                 $scope.member.privateFg = memberDetailInfoAddKWU.privateFg;
                 $scope.member.postpaidFg = memberDetailInfoAddKWU.postpaidFg;
                 $scope.member.peopleCnt = memberDetailInfoAddKWU.peopleCnt;
@@ -297,8 +307,19 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
                 $scope.member.skateFg = memberDetailInfoAddKWU.skateFg;
                 $scope.member.registerDate = stringToDate(memberDetailInfoAddKWU.registerDate);
                 $scope.member.useDateFg = memberDetailInfoAddKWU.useDateFg;
-                $scope.member.useStartDate = stringToDate(memberDetailInfoAddKWU.useStartDate);
-                $scope.member.useEndDate = stringToDate(memberDetailInfoAddKWU.useEndDate);
+                if(memberDetailInfoAddKWU.useStartDate === "" || memberDetailInfoAddKWU.useStartDate === null) {
+                    $scope.member.useStartDate = new Date();
+                    $scope.member.useEndDate = new Date();
+                    $("input:checkbox[id='useDateChk']").prop("checked", false);
+                    $("#trUseDate").css("display", "none");
+                    $("#divUseDate").css("display", "none");
+                } else {
+                    $scope.member.useStartDate = stringToDate(memberDetailInfoAddKWU.useStartDate);
+                    $scope.member.useEndDate = stringToDate(memberDetailInfoAddKWU.useEndDate);
+                    $("input:checkbox[id='useDateChk']").prop("checked", true);
+                    $("#trUseDate").css("display", "");
+                    $("#divUseDate").css("display", "");
+                }
                 $scope.member.useWeek = memberDetailInfoAddKWU.useWeek;
                 $scope.member.useProdNm = memberDetailInfoAddKWU.useProdNm;
                 $scope.member.useAmt = memberDetailInfoAddKWU.useAmt;
@@ -583,9 +604,18 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
         // [1246 광운대아이스링크]
         if(kwuEnvstVal === "1") {
             params.registerDate = dateToDaystring($scope.member.registerDate).replaceAll("-", "");
-            params.useStartDate = dateToDaystring($scope.member.useStartDate).replaceAll("-", "");
-            params.useEndDate = dateToDaystring($scope.member.useEndDate).replaceAll("-", "");
+
+            if($("input:checkbox[id='useDateChk']").is(":checked")){
+                params.useDateFg = $scope.member.useDateFg;
+                params.useStartDate = dateToDaystring($scope.member.useStartDate).replaceAll("-", "");
+                params.useEndDate = dateToDaystring($scope.member.useEndDate).replaceAll("-", "");
+            }else{
+                params.useDateFg = "0";
+                params.useStartDate = "";
+                params.useEndDate = "";
+            }
         }
+
 
         // 회원 신규 등록시
         if ($.isEmptyObject($scope.selectedMember)) {
@@ -684,7 +714,6 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
                 $("#thBirthday3").css("display", "none");
             }
         }
-
     }
 
 
@@ -743,6 +772,17 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.mapPopLayer.show(true);
         $scope._broadcast('mapPopCtrl', params);
 
+    };
+
+    // 시작일자, 만료일자 입력 CheckBox 클릭에 따른 VIEW 변화
+    $scope.showUseDate = function () {
+        if($("input:checkbox[id='useDateChk']").is(":checked")){
+            $("#trUseDate").css("display", "");
+            $("#divUseDate").css("display", "");
+        }else{
+            $("#trUseDate").css("display", "none");
+            $("#divUseDate").css("display", "none");
+        }
     };
 
 }]);
