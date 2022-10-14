@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    TimeDay.xml
+    일자별 시간대 매출
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.10.13     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.time.timeDay.service.impl.TimeDayMapper">
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getTimeDayList" parameterType="timeDayVO" resultType="DefaultMap">
+        /* TimeDayMapper.getTimeDayList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT 	SALE_DATE
+        ,       TOT_SALE_CNT
+        ,       TOT_SALE_AMT
+                ${sQuery1}
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	(
+                SELECT 	tsdt.SALE_DATE
+                ,		SUM(tsdt.SALE_CNT) AS TOT_SALE_CNT
+                ,		SUM(tsdt.TOT_SALE_AMT) AS TOT_SALE_AMT
+                        ${sQuery2}
+                FROM 	TB_SL_DAILY_TIME tsdt
+                WHERE 	tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                <if test='storeCds != null and storeCds != ""'>
+                    AND tsdt.STORE_CD IN
+                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                GROUP BY tsdt.SALE_DATE
+                )
+        ORDER BY SALE_DATE
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getTimeDayExcelList" parameterType="timeDayVO" resultType="DefaultMap">
+        /* TimeDayMapper.getTimeDayExcelList */
+        SELECT 	SALE_DATE
+        ,       TOT_SALE_CNT
+        ,       TOT_SALE_AMT
+                ${sQuery1}
+        FROM 	(
+        SELECT 	tsdt.SALE_DATE
+        ,		SUM(tsdt.SALE_CNT) AS TOT_SALE_CNT
+        ,		SUM(tsdt.TOT_SALE_AMT) AS TOT_SALE_AMT
+                ${sQuery2}
+        FROM 	TB_SL_DAILY_TIME tsdt
+        WHERE 	tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsdt.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY tsdt.SALE_DATE
+        )
+        ORDER BY SALE_DATE
+    </select>
+
+</mapper>

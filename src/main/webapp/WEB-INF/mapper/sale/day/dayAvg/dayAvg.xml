@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    DayAvg.xml
+    일별 매출 현황(테스트)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.10.12     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.day.dayAvg.service.impl.DayAvgMapper">
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getDayAvgList" parameterType="dayAvgVO" resultType="DefaultMap">
+        /* DayAvgMapper.getDayAvgList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT	TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,		TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+        ,		(SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+        ,		AVG(tsdt.BILL_CNT) AS BILL_CNT
+        ,		DECODE(AVG(tsdt.BILL_CNT), 0, 0, ROUND(AVG(tsdt.TOT_SALE_AMT)/AVG(tsdt.BILL_CNT))) AS BILL_UPRC
+        ,		AVG(tsdt.TOT_GUEST_CNT) AS TOT_GUEST_CNT
+        ,		DECODE(AVG(tsdt.TOT_GUEST_CNT), 0, 0, ROUND(AVG(tsdt.TOT_SALE_AMT)/AVG(tsdt.TOT_GUEST_CNT))) AS GUEST_UPRC
+        ,		AVG(tsdt.SALE_CNT) AS SALE_CNT
+        ,		AVG(tsdt.TOT_SALE_AMT) AS TOT_SALE_AMT
+        ,		AVG(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT
+        ,		AVG(tsdt.TOT_DC_AMT) AS TOT_DC_AMT
+        ,		AVG(tsdt.PAY_AMT_02) AS CASH_ATM
+        ,		AVG(tsdt.PAY_AMT_01) AS CARD_AMT
+        ,		AVG(tsdt.PAY_AMT_03 + tsdt.PAY_AMT_04 + tsdt.PAY_AMT_05 + tsdt.PAY_AMT_06 + tsdt.PAY_AMT_07 + tsdt.PAY_AMT_08 + tsdt.PAY_AMT_09 + tsdt.PAY_AMT_10 + tsdt.PAY_AMT_11 + tsdt.PAY_AMT_12 + tsdt.PAY_AMT_13 + tsdt.PAY_AMT_14 + tsdt.PAY_AMT_15 + tsdt.PAY_AMT_16 + tsdt.PAY_AMT_17 + tsdt.PAY_AMT_18 + tsdt.PAY_AMT_19 + tsdt.PAY_AMT_20) AS ETC_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	TB_SL_DAILY_TOTAL tsdt
+        ,		TB_MS_STORE tms
+        WHERE   tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND 	tsdt.STORE_CD = tms.STORE_CD
+        AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsdt.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY tsdt.SALE_DATE, tms.HQ_OFFICE_CD, tms.BRANCH_CD
+        ORDER BY tsdt.SALE_DATE
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getDayAvgExcelList" parameterType="dayAvgVO" resultType="DefaultMap">
+        /* DayAvgMapper.getDayAvgExcelList */
+        SELECT	TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,		TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+        ,		(SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+        ,		AVG(tsdt.BILL_CNT) AS BILL_CNT
+        ,		DECODE(AVG(tsdt.BILL_CNT), 0, 0, ROUND(AVG(tsdt.TOT_SALE_AMT)/AVG(tsdt.BILL_CNT))) AS BILL_UPRC
+        ,		AVG(tsdt.TOT_GUEST_CNT) AS TOT_GUEST_CNT
+        ,		DECODE(AVG(tsdt.TOT_GUEST_CNT), 0, 0, ROUND(AVG(tsdt.TOT_SALE_AMT)/AVG(tsdt.TOT_GUEST_CNT))) AS GUEST_UPRC
+        ,		AVG(tsdt.SALE_CNT) AS SALE_CNT
+        ,		AVG(tsdt.TOT_SALE_AMT) AS TOT_SALE_AMT
+        ,		AVG(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT
+        ,		AVG(tsdt.TOT_DC_AMT) AS TOT_DC_AMT
+        ,		AVG(tsdt.PAY_AMT_02) AS CASH_ATM
+        ,		AVG(tsdt.PAY_AMT_01) AS CARD_AMT
+        ,		AVG(tsdt.PAY_AMT_03 + tsdt.PAY_AMT_04 + tsdt.PAY_AMT_05 + tsdt.PAY_AMT_06 + tsdt.PAY_AMT_07 + tsdt.PAY_AMT_08 + tsdt.PAY_AMT_09 + tsdt.PAY_AMT_10 + tsdt.PAY_AMT_11 + tsdt.PAY_AMT_12 + tsdt.PAY_AMT_13 + tsdt.PAY_AMT_14 + tsdt.PAY_AMT_15 + tsdt.PAY_AMT_16 + tsdt.PAY_AMT_17 + tsdt.PAY_AMT_18 + tsdt.PAY_AMT_19 + tsdt.PAY_AMT_20) AS ETC_AMT
+        FROM 	TB_SL_DAILY_TOTAL tsdt
+        ,		TB_MS_STORE tms
+        WHERE   tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND 	tsdt.STORE_CD = tms.STORE_CD
+        AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsdt.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY tsdt.SALE_DATE, tms.HQ_OFFICE_CD, tms.BRANCH_CD
+        ORDER BY tsdt.SALE_DATE
+    </select>
+
+</mapper>

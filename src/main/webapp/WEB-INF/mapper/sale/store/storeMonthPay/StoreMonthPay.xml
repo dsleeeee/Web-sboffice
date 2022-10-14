@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StoreMonthPay.xml
+    점포-월별 결제 수단 매출
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.10.14     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.store.storeMonthPay.service.impl.StoreMonthPayMapper">
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getStoreMonthPayList" parameterType="storeMonthPayVO" resultType="DefaultMap">
+        /* StoreMonthPayMapper.getStoreMonthPayList */
+        SELECT  TO_CHAR(TO_DATE(tsdt.SALE_YM, 'yyyymm'), 'yyyy-mm') YEAR_MONTH,
+        tsdt.SALE_CNT,
+        tsdt.STORE_CD,
+        (SELECT STORE_NM FROM TB_MS_STORE tms WHERE tms.STORE_CD = tsdt.STORE_CD) AS STORE_NM,
+        tsdt.TOT_SALE_AMT,
+        tsdt.TOT_DC_AMT,
+        tsdt.REAL_SALE_AMT,
+        tsdt.BILL_CNT,
+        tsdt.BILL_UPRC,
+        tsdt.GA_AMT,
+        tsdt.VAT_AMT,
+        tsdt.TOT_TIP_AMT,
+        tsdt.TOT_ETC_AMT,
+        <foreach collection="arrPayCol" item="item" separator=",">
+            tsdt.PAY_AMT_${item} AS PAY${item}
+        </foreach> ,
+        tsdt.TOT_PAY_AMT,
+        tsddd.GEN_REAL_SALE_AMT,
+        DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsddd.GEN_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS GEN_REAL_SALE_RATE,
+        tsddd.DLVR_REAL_SALE_AMT,
+        DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsddd.DLVR_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS DLVR_REAL_SALE_RATE,
+        tsddd.PACK_REAL_SALE_AMT,
+        DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsddd.PACK_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS PACK_REAL_SALE_RATE
+        FROM    (
+        SELECT  SUBSTR(SALE_DATE,0,6) AS SALE_YM,
+        COUNT(DISTINCT SALE_DATE) AS SALE_CNT,
+        STORE_CD,
+        SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+        SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+        SUM(BILL_CNT) AS BILL_CNT,
+        ROUND(SUM(REAL_SALE_AMT) / SUM(BILL_CNT)) AS BILL_UPRC,
+        SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT,
+        SUM(VAT_AMT) AS VAT_AMT,
+        SUM(TOT_TIP_AMT) AS TOT_TIP_AMT,
+        SUM(TOT_ETC_AMT) AS TOT_ETC_AMT,
+        <foreach collection="arrPayCol" item="item" separator="+">
+            <if test="item != '02' and item != '021'">
+                SUM(NVL(PAY_AMT_${item}, 0))
+            </if>
+        </foreach> +  SUM(NVL(NON_CASH_AMT, 0)) +  SUM(NVL(APPR_CASH_AMT, 0)) AS TOT_PAY_AMT,
+        <foreach collection="arrPayCol" item="item" separator=",">
+            <if test="item != '02' and item != '021'">
+                SUM(NVL(PAY_AMT_${item}, 0)) AS PAY_AMT_${item}
+            </if>
+        </foreach>,
+        SUM(NVL(NON_CASH_AMT, 0)) AS PAY_AMT_02,
+        SUM(NVL(APPR_CASH_AMT, 0)) AS PAY_AMT_021
+        FROM    TB_SL_DAILY_TOTAL
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth}||'31'
+        <if test='storeCds != null and storeCds != ""'>
+            AND STORE_CD IN
+            <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+            'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+            OR   STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+            )
+        </if>
+        GROUP BY    SUBSTR(SALE_DATE,0,6), STORE_CD
+        ) tsdt,
+        (
+        SELECT 	SUBSTR(SALE_DATE,0,6) AS SALE_YM,
+        STORE_CD,
+        SUM(CASE WHEN DLVR_PACK_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT,
+        SUM(CASE WHEN DLVR_PACK_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
+        SUM(CASE WHEN DLVR_PACK_FG = '3' THEN REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
+        FROM 	TB_SL_DAILY_DTL_DLVR
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth}||'31'
+        <if test='storeCds != null and storeCds != ""'>
+            AND STORE_CD IN
+            <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+            'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+            OR   STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+            )
+        </if>
+        GROUP BY    SUBSTR(SALE_DATE,0,6), STORE_CD
+        ) tsddd
+        WHERE   tsdt.SALE_YM = tsddd.SALE_YM (+)  -- TB_SL_DAILY_PROD_DLVR 테이블이 생기기 전 매출이 없는 경우 나오지 않음
+        AND     tsdt.STORE_CD = tsddd.STORE_CD (+)
+        ORDER
+        BY      tsdt.SALE_YM, tsdt.STORE_CD
+    </select>
+
+</mapper>

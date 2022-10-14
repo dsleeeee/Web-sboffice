@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StoreAvg.xml
+    점포별 매출 평균 현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.10.14     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.store.storeAvg.service.impl.StoreAvgMapper">
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getStoreAvgList" parameterType="storeAvgVO" resultType="DefaultMap">
+        /* StoreAvgMapper.getStoreAvgList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT 	(SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+        ,       tsdt.STORE_CD
+        ,		tms.STORE_NM
+        ,		COUNT(DISTINCT tsdt.SALE_DATE) AS DATE_CNT
+        ,		ROUND(AVG(NVL(tsdt.BILL_CNT, 0))) AS BILL_CNT
+        ,		ROUND(AVG(NVL(tsdt.REAL_SALE_AMT, 0)) / AVG(NVL(tsdt.BILL_CNT, 0))) AS BILL_UPRC
+        -- 총 판매량
+        ,		ROUND(AVG(NVL(tsdt.TOT_SALE_AMT, 0))) AS TOT_SALE_AMT
+        ,		ROUND(AVG(NVL(tsdt.REAL_SALE_AMT, 0))) AS REAL_SALE_AMT
+        ,		ROUND(AVG(NVL(tsdt.TOT_DC_AMT, 0))) AS TOT_DC_AMT
+        ,		ROUND(AVG(NVL(tsdt.NET_SALE_AMT, 0))) AS NET_SALE_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	TB_SL_DAILY_TOTAL tsdt
+        ,		TB_MS_STORE tms
+        WHERE 	tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND 	tsdt.STORE_CD = tms.STORE_CD
+        AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsdt.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY tsdt.STORE_CD, tms.STORE_NM, tms.HQ_OFFICE_CD, tms.BRANCH_CD
+        ORDER BY tsdt.STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getStoreAvgExcelList" parameterType="storeAvgVO" resultType="DefaultMap">
+        /* StoreAvgMapper.getStoreAvgExcelList */
+        SELECT 	(SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+        ,       tsdt.STORE_CD
+        ,		tms.STORE_NM
+        ,		COUNT(DISTINCT tsdt.SALE_DATE) AS DATE_CNT
+        ,		ROUND(AVG(NVL(tsdt.BILL_CNT, 0))) AS BILL_CNT
+        ,		ROUND(AVG(NVL(tsdt.REAL_SALE_AMT, 0)) / AVG(NVL(tsdt.BILL_CNT, 0))) AS BILL_UPRC
+        -- 총 판매량
+        ,		ROUND(AVG(NVL(tsdt.TOT_SALE_AMT, 0))) AS TOT_SALE_AMT
+        ,		ROUND(AVG(NVL(tsdt.REAL_SALE_AMT, 0))) AS REAL_SALE_AMT
+        ,		ROUND(AVG(NVL(tsdt.TOT_DC_AMT, 0))) AS TOT_DC_AMT
+        ,		ROUND(AVG(NVL(tsdt.NET_SALE_AMT, 0))) AS NET_SALE_AMT
+        FROM 	TB_SL_DAILY_TOTAL tsdt
+        ,		TB_MS_STORE tms
+        WHERE 	tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND 	tsdt.STORE_CD = tms.STORE_CD
+        AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsdt.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY tsdt.STORE_CD, tms.STORE_NM, tms.HQ_OFFICE_CD, tms.BRANCH_CD
+        ORDER BY tsdt.STORE_CD
+    </select>
+
+</mapper>
