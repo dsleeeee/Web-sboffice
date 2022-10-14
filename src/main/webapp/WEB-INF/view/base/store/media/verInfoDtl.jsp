@@ -83,6 +83,13 @@
                   {{_useYn}}
                 </td>
               </tr>
+              <tr>
+                <%-- 이미지출력시간 --%>
+                <th><s:message code="media.dispTime" /></th>
+                <td>{{version.dispTime}}</td>
+                <th></th>
+                <td></td>
+              </tr>
               </tbody>
             </table>
           </f:form>

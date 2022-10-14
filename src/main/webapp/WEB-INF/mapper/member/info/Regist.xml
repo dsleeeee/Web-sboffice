@@ -2677,7 +2677,7 @@
         )
         WHEN MATCHED THEN
             UPDATE
-            SET MEMBR_FG = #{memberFg},
+            SET MEMBR_FG = #{membrFg},
             PRIVATE_FG = #{privateFg},
             POSTPAID_FG = #{postpaidFg},
             PEOPLE_CNT = #{peopleCnt},
@@ -2739,7 +2739,7 @@
             ) VALUES (
                 #{membrOrgnCd},
                 #{membrNo},
-                #{memberFg},
+                #{membrFg},
                 #{privateFg},
                 #{postpaidFg},
                 #{peopleCnt},

@@ -170,6 +170,13 @@ public class MediaServiceImpl implements MediaService {
             mediaVO.setModDt(insertDt);
             mediaVO.setModId((String)multi.getParameter("userId"));
 
+            mediaVO.setDispTime((String)multi.getParameter("dispTime"));
+
+            // 동영상출력순서 자동채번
+            String dispSeq = mediaMapper.getDispSeq(mediaVO);
+            mediaVO.setDispSeq(dispSeq);
+            System.out.println("파일타입 : " +fileType + " / 동영상출력순서 : " + dispSeq);
+
             if(mediaMapper.verRegist(mediaVO) > 0) {
                 isSuccess = "0";
             } else {
@@ -233,6 +240,8 @@ public class MediaServiceImpl implements MediaService {
 
             mediaVO.setModDt(insertDt);
             mediaVO.setModId((String)multi.getParameter("userId"));
+
+            mediaVO.setDispTime((String)multi.getParameter("dispTime"));
 
             mediaMapper.verModify(mediaVO);
 

@@ -157,7 +157,7 @@
                     <td>
                         <div class="sb-input">
                             <div style="float: left; padding-right: 10px;">
-                            <s:message code="vendrInstock.procFg0"/><input type="checkbox" name="birthChk" id="birthChk" ng-click="showBirthday()">
+                            <s:message code="cmm.input"/><input type="checkbox" name="birthChk" id="birthChk" ng-click="showBirthday()">
                             </div>
                             <div id="divBirthday1" style="display: none;">
                             <input type="radio" name="lunarYn" ng-model="member.lunarYn" value="N">
@@ -346,18 +346,18 @@
                     <tbody>
                     <tr>
                         <%-- 회원구분 --%>
-                        <th><s:message code="regist.kuw.memberFg"/></th>
+                        <th><s:message code="regist.kuw.membrFg"/></th>
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
-                                        id="srchMemberFgCombo"
-                                        ng-model="member.memberFg"
-                                        items-source="_getComboData('memberFgCombo')"
+                                        id="srchMembrFgCombo"
+                                        ng-model="member.membrFg"
+                                        items-source="_getComboData('membrFgCombo')"
                                         display-member-path="name"
                                         selected-value-path="value"
                                         is-editable="false"
                                         initialized="_initComboBox(s)"
-                                        control="srchMemberFgCombo">
+                                        control="srchMembrFgCombo">
                                 </wj-combo-box>
                             </div>
                         </td>
@@ -565,21 +565,28 @@
                         <th><s:message code="regist.kuw.useDateFg"/></th>
                         <td>
                             <div class="sb-select">
-                                <wj-combo-box
-                                        id="srchUseDateFgCombo"
-                                        ng-model="member.useDateFg"
-                                        items-source="_getComboData('useDateFgCombo')"
-                                        display-member-path="name"
-                                        selected-value-path="value"
-                                        is-editable="false"
-                                        initialized="_initComboBox(s)"
-                                        selected-index-changed="srchUseDateFgComboChange(s)"
-                                        control="srchUseDateFgCombo">
-                                </wj-combo-box>
+                                <div class="sb-select w20 fl">
+                                    <div style="float: left; padding-right: 10px;">
+                                        <s:message code="cmm.input"/><input type="checkbox" name="useDateChk" id="useDateChk" ng-click="showUseDate()">
+                                    </div>
+                                </div>
+                                <div class="sb-select w80 fr" id="divUseDate" style="display: none;">
+                                    <wj-combo-box
+                                            id="srchUseDateFgCombo"
+                                            ng-model="member.useDateFg"
+                                            items-source="_getComboData('useDateFgCombo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            selected-index-changed="srchUseDateFgComboChange(s)"
+                                            control="srchUseDateFgCombo">
+                                    </wj-combo-box>
+                                </div>
                             </div>
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="trUseDate" style="display: none;">
                         <%-- 시작일자 --%>
                         <th><s:message code="regist.kuw.useStartDate"/></th>
                         <td>
@@ -692,11 +699,11 @@
     // [1246 광운대아이스링크] 환경설정값
     var kwuEnvstVal = "${kwuEnvstVal}";
     // List 형식("" 안붙임)
-    var memberFgComboList = ${memberFgComboList};
+    var membrFgComboList = ${membrFgComboList};
     var groupFgComboList = ${groupFgComboList};
     var teacherCdComboList = ${teacherCdComboList};
     var classFgComboList = ${classFgComboList};
     var skateFgComboList = ${skateFgComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20221006.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20221014.01" charset="utf-8"></script>

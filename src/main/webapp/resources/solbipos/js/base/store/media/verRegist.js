@@ -119,6 +119,22 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       return;
     }
 
+    // 이미지출력시간
+    if($("#dispTime").val() === null || $("#dispTime").val() === undefined || $("#dispTime").val() === "") {
+    } else {
+      // 숫자만 입력
+      var numChkexp = /[^0-9]/g;
+      if (numChkexp.test($("#dispTime").val())) {
+        $scope._popMsg(messages["media.dispTimeInChk"]); // 이미지출력시간은 숫자만 입력해주세요.
+        return;
+      }
+
+      // 길이체크
+      if (nvl($("#dispTime").val(), '').length > 2) {
+        $scope._popMsg(messages["media.dispTimeLengthChk"]); // 이미지출력시간 길이가 너무 깁니다.
+        return;
+      }
+    }
 
     if( isEmptyObject($scope.getSelectVersion()) ) { // 신규등록
       // 파일 체크
@@ -231,7 +247,7 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     formData.append("fileType", $scope.versionFileTypeCombo.selectedValue);
     formData.append("fileSize", $scope.version.fileSize);
     formData.append("useYn", $scope.versionUseYnCombo.selectedValue);
-
+    formData.append("dispTime", $scope.version.dispTime);
 
     var url = '';
 

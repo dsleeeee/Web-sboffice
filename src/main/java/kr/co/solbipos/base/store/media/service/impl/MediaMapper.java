@@ -72,4 +72,7 @@ public interface MediaMapper {
 
     /** 버전 적용 매장 삭제 */
     int removeStore(MediaApplcStoreVO applcStore);
+
+    /** 동영상출력순서 자동채번 */
+    String getDispSeq(MediaVO mediaVO);
 }

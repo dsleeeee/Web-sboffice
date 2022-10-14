@@ -135,8 +135,8 @@
         <wj-flex-grid-column header="<s:message code="media.fileSize"/>" binding="fileSize"  width="80" align="right" is-read-only="true" ></wj-flex-grid-column>
 <%--        <wj-flex-grid-column header="<s:message code="media.regCnt"/>" binding="regCnt" align="center" width="80"  is-read-only="true"></wj-flex-grid-column>--%>
 <%--        <wj-flex-grid-column header="<s:message code="media.recvCnt"/>" binding="recvCnt" align="center" width="80"  is-read-only="true"></wj-flex-grid-column>--%>
-        <wj-flex-grid-column header="<s:message code="media.useYn"/>" binding="useYn" data-map="useYnDataMap" align="center" width="80"  is-read-only="true"></wj-flex-grid-column>
-
+        <wj-flex-grid-column header="<s:message code="media.useYn"/>" binding="useYn" data-map="useYnDataMap" align="center" width="80" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="media.dispTime"/>" binding="dispTime" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
   </div>
