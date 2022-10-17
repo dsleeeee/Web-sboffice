@@ -140,6 +140,9 @@ public class RegistController {
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             model.addAttribute("kwuEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1246"), "0"));
             System.out.println("kwuEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1246"), "0"));
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            model.addAttribute("kwuEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1246"), "0"));
+            System.out.println("kwuEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1246"), "0"));
         }
         // 코드별 본사 공통코드 콤보박스 조회
         // 회원추가정보-회원구분
