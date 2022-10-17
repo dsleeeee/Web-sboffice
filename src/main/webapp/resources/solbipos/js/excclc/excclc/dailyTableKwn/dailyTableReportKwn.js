@@ -391,13 +391,11 @@ app.controller('dailyTableReportKwnCtrl', ['$scope', '$http', function ($scope, 
         for (var i = 0; i < $scope.dailyTableKwnCtrl_groupCourse.length; i++) {
             // 금액표시(,)
             var item = $scope.dailyTableKwnCtrl_groupCourse[i];
-            var amt = (item.amt === undefined || item.cashAmamtt == null || item.amt.length <= 0) ? nvl(item.amt,0) : addComma(item.amt);
-            // 날짜 표시
-            var saleDate = item.saleDate.substr(0, 4) + '-' + item.saleDate.substr(4, 2) + '-' + item.saleDate.substr(6, 2)
+            var amt = (item.amt === undefined || item.amt == null || item.amt.length <= 0) ? nvl(item.amt,0) : addComma(item.amt);
             groupCourseListHtml += '<tr class="h25">'
                 + '<td class="tc">' + item.fg + '</td>'
                 + '<td class="tr">' + item.groupNm + '</td>'
-                + '<td class="tr">' + saleDate + '</td>'
+                + '<td class="tr">' + item.saleDate + '</td>'
                 + '<td class="tr">' + item.summary + '</td>'
                 + '<td class="tr">' + amt + '</td>'
                 + '</tr>';
