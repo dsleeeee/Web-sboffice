@@ -314,14 +314,17 @@ public class RegistServiceImpl implements RegistService {
         }
 
         // [1246 광운대아이스링크] 환경설정값 조회
+        String kwuEnvstVal = "0";
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            String kwuEnvstVal = CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1246"), "0");
-            System.out.println("kwuEnvstVal : " + kwuEnvstVal);
-
-            if(("1").equals(kwuEnvstVal)) {
-                result = mapper.mergeMemberInfoAddKwu(registVO);
-            }
+            kwuEnvstVal = CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1246"), "0");
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            kwuEnvstVal = CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1246"), "0");
         }
+        System.out.println("kwuEnvstVal : " + kwuEnvstVal);
+        if(("1").equals(kwuEnvstVal)) {
+            result = mapper.mergeMemberInfoAddKwu(registVO);
+        }
+
 
         return membrNo;
     }
@@ -380,14 +383,18 @@ public class RegistServiceImpl implements RegistService {
         }
 
         // [1246 광운대아이스링크] 환경설정값 조회
+        String kwuEnvstVal = "0";
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            String kwuEnvstVal = CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1246"), "0");
-            System.out.println("kwuEnvstVal : " + kwuEnvstVal);
+            kwuEnvstVal = CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1246"), "0");
 
-            if(("1").equals(kwuEnvstVal)) {
-                result = mapper.mergeMemberInfoAddKwu(registVO);
-            }
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            kwuEnvstVal = CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1246"), "0");
         }
+        System.out.println("kwuEnvstVal : " + kwuEnvstVal);
+        if(("1").equals(kwuEnvstVal)) {
+            result = mapper.mergeMemberInfoAddKwu(registVO);
+        }
+
 
         return result;
     }
