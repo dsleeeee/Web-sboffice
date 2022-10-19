@@ -1375,17 +1375,38 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $scope.store.longitude = "";
 
           // ERP 연동 매장 정보 셋팅
+          // 매장코드 수동입력 시
           if($scope.store.storeCdInputType === "1") {
-            $("#storeCd").val(erpStoreScope.getErpStore().bbqStoreCd);
-            $scope.store.storeCd = erpStoreScope.getErpStore().bbqStoreCd;
+            // 아트박스(운영H0345)(개발DS012)
+            if($scope.store.hqOfficeCd === "H0345" || $scope.store.hqOfficeCd === "DS012") {
+              $("#storeCd").val("P" + erpStoreScope.getErpStore().bbqStoreCd);
+              $scope.store.storeCd = "P" + erpStoreScope.getErpStore().bbqStoreCd;
+              $("#storeCd").attr("readonly", true);
+            } else {
+              $("#storeCd").val(erpStoreScope.getErpStore().bbqStoreCd);
+              $scope.store.storeCd = erpStoreScope.getErpStore().bbqStoreCd;
+            }
           }
 
           $("#storeNm").val(erpStoreScope.getErpStore().storeNm);
           $("#bizStoreNm").val(erpStoreScope.getErpStore().bizStoreNm);
           $("#ownerNm").val(erpStoreScope.getErpStore().ownerNm);
-          $("#userId").val(erpStoreScope.getErpStore().bbqStoreCd.toLowerCase());
-          $("#userPwd").val(erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234");
-          $("#userPwdConf").val(erpStoreScope.getErpStore().bbqStoreCd.toLowerCase()  + "1234");
+          // 아트박스(운영H0345)(개발DS012)
+          if($scope.store.hqOfficeCd === "H0345" || $scope.store.hqOfficeCd === "DS012") {
+            $("#userId").val("p" + erpStoreScope.getErpStore().bbqStoreCd.toLowerCase());
+            $("#userPwd").val("p" + erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234");
+            $("#userPwdConf").val("p" + erpStoreScope.getErpStore().bbqStoreCd.toLowerCase()  + "1234");
+            $scope.store.userId = "p" + erpStoreScope.getErpStore().bbqStoreCd.toLowerCase();
+            $scope.store.userPwd = "p" + erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234";
+            $scope.store.userPwdConf = "p" + erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234";
+          } else {
+            $("#userId").val(erpStoreScope.getErpStore().bbqStoreCd.toLowerCase());
+            $("#userPwd").val(erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234");
+            $("#userPwdConf").val(erpStoreScope.getErpStore().bbqStoreCd.toLowerCase()  + "1234");
+            $scope.store.userId = erpStoreScope.getErpStore().bbqStoreCd.toLowerCase();
+            $scope.store.userPwd = erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234";
+            $scope.store.userPwdConf = erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234";
+          }
           $scope.areaCdCombo.selectedValue = erpStoreScope.getErpStore().areaCd;
           $("#installPosCnt").val(erpStoreScope.getErpStore().posCnt);
           $("#bizNo1").val(erpStoreScope.getErpStore().bizNo.substring(0, 3));
@@ -1404,9 +1425,6 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $scope.store.storeNm = erpStoreScope.getErpStore().storeNm;
           $scope.store.bizStoreNm = erpStoreScope.getErpStore().bizStoreNm;
           $scope.store.ownerNm = erpStoreScope.getErpStore().ownerNm;
-          $scope.store.userId = erpStoreScope.getErpStore().bbqStoreCd.toLowerCase();
-          $scope.store.userPwd = erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234";
-          $scope.store.userPwdConf = erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234";
           $scope.store.areaCd = erpStoreScope.getErpStore().areaCd;
           $scope.store.directManageYn = erpStoreScope.getErpStore().directManageYn;
           $scope.store.installPosCnt = erpStoreScope.getErpStore().posCnt;
