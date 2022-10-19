@@ -27,7 +27,7 @@ import java.util.List;
 public interface ProdRankMomsMapper {
 
     /** 상품별 매출 순위 */
-    List<DefaultMap<String>> getProdRankMomsList(ProdRankMomsVO prodRankMomsVO);
+    List<DefaultMap<String>> getProdRankList(ProdRankMomsVO prodRankMomsVO);
 
     /** 상품매출순위탭 - 차트 조회 */
     List<DefaultMap<String>> getProdRankChartList(ProdRankMomsVO prodRankMomsVO);

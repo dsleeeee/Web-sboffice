@@ -44,6 +44,9 @@ app.controller('prodRankStoreCtrl', ['$scope', '$http', '$timeout', function ($s
   $scope._setComboData("startTimeCombo", vSaleTime);
   $scope._setComboData("endTimeCombo", vSaleTime);
 
+  // 브랜드 콤보박스 셋팅
+  $scope._setComboData("hqBrandCd", hqBrandList);
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     $scope.endTimeCombo.selectedValue = '23';
@@ -75,6 +78,7 @@ app.controller('prodRankStoreCtrl', ['$scope', '$http', '$timeout', function ($s
     params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM'); // 조회기간
     params.startTime  = $scope.startTime;
     params.endTime    = $scope.endTime;
+    params.hqBrandCd = $scope.hqBrandCd;
     params.listScale = 500;
 
     console.log(params);
@@ -120,6 +124,7 @@ app.controller('prodRankStoreCtrl', ['$scope', '$http', '$timeout', function ($s
 
   // 엑셀 다운로드
   $scope.excelDownload = function () {
+
     var params = {};
     params.storeCds   = $("#prodRankStoreStoreCd").val();
     params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM'); // 조회기간
@@ -128,6 +133,7 @@ app.controller('prodRankStoreCtrl', ['$scope', '$http', '$timeout', function ($s
     params.prodCd = $scope.prodCd;
     params.prodNm = $scope.prodNm;
     params.prodClassCd = $scope.prodClassCd;
+    params.hqBrandCd = $scope.hqBrandCd;
 
     $scope._broadcast('prodRankStoreExcelCtrl',params);
   }
@@ -181,6 +187,7 @@ app.controller('prodRankStoreExcelCtrl', ['$scope', '$http', '$timeout', functio
     params.prodCd = data.prodCd;
     params.prodNm = data.prodNm;
     params.prodClassCd = data.prodClassCd;
+    params.hqBrandCd = data.hqBrandCd;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/prod/prodRankStore/prodRankStore/getProdRankStoreExcelList.sb", params, function() {

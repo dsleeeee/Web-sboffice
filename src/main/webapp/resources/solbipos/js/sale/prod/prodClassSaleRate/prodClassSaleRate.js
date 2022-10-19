@@ -3,7 +3,6 @@
  */
 var app = agrid.getApp();
 
-/** 현금영수증 승인 controller */
 app.controller('prodClassSaleRateCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('prodClassSaleRateCtrl', $scope, $http, true));
@@ -16,6 +15,9 @@ app.controller('prodClassSaleRateCtrl', ['$scope', '$http', '$timeout', function
     {id: "1", name: messages["todayBillSaleDtl.saleY"]},
     {id: "-1", name: messages["todayBillSaleDtl.saleN"]}
   ], 'id', 'name');
+
+  // 브랜드 콤보박스 셋팅
+  $scope._setComboData("hqBrandCd", hqBrandList);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -56,11 +58,27 @@ app.controller('prodClassSaleRateCtrl', ['$scope', '$http', '$timeout', function
   // 영수증별매출상세현황 리스트 조회
   $scope.searchprodClassSaleRateList = function () {
 
+    var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
+    var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
+    var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+    // 시작일자가 종료일자보다 빠른지 확인
+    if(startDt.getTime() > endDt.getTime()){
+      $scope._popMsg(messages['cmm.dateChk.error']);
+      return false;
+    }
+    // 조회일자 최대 7일 제한
+    if (diffDay > 7) {
+      $scope._popMsg(messages['cmm.dateOver.7day.error']);
+      return false;
+    }
+
     // 파라미터
     var params       = {};
     params.storeCds   = $("#prodClassSaleRateStoreCd").val();
     params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
     params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+    params.hqBrandCd = $scope.hqBrandCd;
     params.listScale = 500;
 
     console.log(params);
@@ -105,6 +123,22 @@ app.controller('prodClassSaleRateCtrl', ['$scope', '$http', '$timeout', function
   
   // 엑셀 다운로드
   $scope.excelDownload = function () {
+
+    var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
+    var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
+    var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+    // 시작일자가 종료일자보다 빠른지 확인
+    if(startDt.getTime() > endDt.getTime()){
+      $scope._popMsg(messages['cmm.dateChk.error']);
+      return false;
+    }
+    // 조회일자 최대 7일 제한
+    if (diffDay > 7) {
+      $scope._popMsg(messages['cmm.dateOver.7day.error']);
+      return false;
+    }
+
     var params = {};
     params.storeCds   = $("#prodClassSaleRateStoreCd").val();
     params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
@@ -112,6 +146,7 @@ app.controller('prodClassSaleRateCtrl', ['$scope', '$http', '$timeout', function
     params.prodCd = $scope.prodCd;
     params.prodNm = $scope.prodNm;
     params.prodClassCd = $scope.prodClassCd;
+    params.hqBrandCd = $scope.hqBrandCd;
 
     $scope._broadcast('prodClassSaleRateExcelCtrl',params);
   }
@@ -149,6 +184,7 @@ app.controller('prodClassSaleRateExcelCtrl', ['$scope', '$http', '$timeout', fun
     params.prodCd = data.prodCd;
     params.prodNm = data.prodNm;
     params.prodClassCd = data.prodClassCd;
+    params.hqBrandCd = data.hqBrandCd;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/prod/prodClassSaleRate/prodClassSaleRate/getProdClassSaleRateExcelList.sb", params, function() {

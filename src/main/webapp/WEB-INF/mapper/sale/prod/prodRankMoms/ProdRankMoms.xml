@@ -53,6 +53,9 @@
                                 #{item}
                             </foreach>
                         </if>
+                        <if test='hqBrandCd != null and hqBrandCd != ""'>
+                            AND tsdp.HQ_BRAND_CD = #{hqBrandCd}
+                        </if>
                         AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                         AND tmp.STORE_CD = tsdp.STORE_CD
                         AND tmp.PROD_CD = tsdp.PROD_CD
@@ -104,6 +107,9 @@
                                 'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
                             OR  tsdp.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                             )
+                    </if>
+                    <if test='hqBrandCd != null and hqBrandCd != ""'>
+                        AND tsdp.HQ_BRAND_CD = #{hqBrandCd}
                     </if>
                         AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                         AND tmp.STORE_CD = tsdp.STORE_CD
@@ -166,6 +172,9 @@
                                     'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
                                 OR  tsdp.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                                 )
+                        </if>
+                        <if test='hqBrandCd != null and hqBrandCd != ""'>
+                            AND tsdp.HQ_BRAND_CD = #{hqBrandCd}
                         </if>
                         AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                         AND tmp.STORE_CD = tsdp.STORE_CD
