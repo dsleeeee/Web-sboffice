@@ -131,7 +131,13 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
       // 길이체크
       if (nvl($("#dispTime").val(), '').length > 2) {
-        $scope._popMsg(messages["media.dispTimeLengthChk"]); // 이미지출력시간 길이가 너무 깁니다.
+        $scope._popMsg(messages["media.dispTimeLengthChk"]); // 이미지출력시간 길이가 너무 깁니다. 1~99 입력가능합니다.
+        return;
+      }
+
+      // 숫자입력 제한체크
+      if (parseInt($("#dispTime").val(), 0) < 1 || parseInt($("#dispTime").val(), 0) > 99) {
+        $scope._popMsg(messages["media.dispTimeLengthChk2"]); // 이미지출력시간은 1~99 입력가능합니다.
         return;
       }
     }
@@ -247,7 +253,7 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     formData.append("fileType", $scope.versionFileTypeCombo.selectedValue);
     formData.append("fileSize", $scope.version.fileSize);
     formData.append("useYn", $scope.versionUseYnCombo.selectedValue);
-    formData.append("dispTime", $scope.version.dispTime);
+    formData.append("dispTime", nvl($scope.version.dispTime, 3));
 
     var url = '';
 
