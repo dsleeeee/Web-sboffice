@@ -60,6 +60,9 @@
             CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
             )
         </if>
+        <if test='hqBrandCd != null and hqBrandCd != ""'>
+            AND tsdp.HQ_BRAND_CD = #{hqBrandCd}
+        </if>
         GROUP BY thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, tsdp.STORE_CD, tms.STORE_NM, tsdp.PROD_CD, thp.PROD_NM
         ORDER BY thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -111,6 +114,9 @@
             START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
             CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
             )
+        </if>
+        <if test='hqBrandCd != null and hqBrandCd != ""'>
+            AND tsdp.HQ_BRAND_CD = #{hqBrandCd}
         </if>
         GROUP BY thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, tsdp.STORE_CD, tms.STORE_NM, tsdp.PROD_CD, thp.PROD_NM
         ORDER BY thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD

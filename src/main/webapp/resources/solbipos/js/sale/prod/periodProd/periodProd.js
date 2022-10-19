@@ -13,6 +13,9 @@ app.controller('periodProdCtrl', ['$scope', '$http', '$timeout', function ($scop
   $scope.compStartDate  = wcombo.genDateVal("#compStartDate", gvStartDate);
   $scope.compEndDate    = wcombo.genDateVal("#compEndDate", gvEndDate);
 
+  // 브랜드 콤보박스 셋팅
+  $scope._setComboData("hqBrandCd", hqBrandList);
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
@@ -97,6 +100,36 @@ app.controller('periodProdCtrl', ['$scope', '$http', '$timeout', function ($scop
   // 영수증별매출상세현황 리스트 조회
   $scope.searchCashBillList = function () {
 
+    var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
+    var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
+    var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+    // 시작일자가 종료일자보다 빠른지 확인
+    if(startDt.getTime() > endDt.getTime()){
+      $scope._popMsg(messages['cmm.dateChk.error']);
+      return false;
+    }
+    // 조회일자 최대 1달(31일) 제한
+    if (diffDay > 31) {
+      $scope._popMsg(messages['cmm.dateOver.1month.error']);
+      return false;
+    }
+
+    var compStartDt = new Date(wijmo.Globalize.format($scope.compStartDate.value, 'yyyy-MM-dd'));
+    var compEndDt = new Date(wijmo.Globalize.format($scope.compEndDate.value, 'yyyy-MM-dd'));
+    var compDiffDay = (compEndDt.getTime() - compStartDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+    // 시작일자가 종료일자보다 빠른지 확인
+    if(compStartDt.getTime() > compEndDt.getTime()){
+      $scope._popMsg(messages['cmm.dateChk.error']);
+      return false;
+    }
+    // 조회일자 최대 1달(31일) 제한
+    if (compDiffDay > 31) {
+      $scope._popMsg(messages['cmm.dateOver.1month.error']);
+      return false;
+    }
+    
     // 파라미터
     var params       = {};
     params.storeCds   = $("#periodProdStoreCd").val();
@@ -104,6 +137,7 @@ app.controller('periodProdCtrl', ['$scope', '$http', '$timeout', function ($scop
     params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
     params.compStartDate = wijmo.Globalize.format($scope.compStartDate.value, 'yyyyMMdd');
     params.compEndDate = wijmo.Globalize.format($scope.compEndDate.value, 'yyyyMMdd');
+    params.hqBrandCd = $scope.hqBrandCd;
     params.listScale = 500;
 
     console.log(params);
@@ -156,6 +190,37 @@ app.controller('periodProdCtrl', ['$scope', '$http', '$timeout', function ($scop
 
   // 엑셀 다운로드
   $scope.excelDownload = function () {
+
+    var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
+    var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
+    var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+    // 시작일자가 종료일자보다 빠른지 확인
+    if(startDt.getTime() > endDt.getTime()){
+      $scope._popMsg(messages['cmm.dateChk.error']);
+      return false;
+    }
+    // 조회일자 최대 1달(31일) 제한
+    if (diffDay > 31) {
+      $scope._popMsg(messages['cmm.dateOver.1month.error']);
+      return false;
+    }
+
+    var compStartDt = new Date(wijmo.Globalize.format($scope.compStartDate.value, 'yyyy-MM-dd'));
+    var compEndDt = new Date(wijmo.Globalize.format($scope.compEndDate.value, 'yyyy-MM-dd'));
+    var compDiffDay = (compEndDt.getTime() - compStartDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+    // 시작일자가 종료일자보다 빠른지 확인
+    if(compStartDt.getTime() > compEndDt.getTime()){
+      $scope._popMsg(messages['cmm.dateChk.error']);
+      return false;
+    }
+    // 조회일자 최대 1달(31일) 제한
+    if (compDiffDay > 31) {
+      $scope._popMsg(messages['cmm.dateOver.1month.error']);
+      return false;
+    }
+
     var params = {};
     params.storeCds   = $("#periodProdStoreCd").val();
     params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
@@ -165,6 +230,7 @@ app.controller('periodProdCtrl', ['$scope', '$http', '$timeout', function ($scop
     params.prodCd = $scope.prodCd;
     params.prodNm = $scope.prodNm;
     params.prodClassCd = $scope.prodClassCd;
+    params.hqBrandCd = $scope.hqBrandCd;
 
     $scope._broadcast('periodProdExcelCtrl',params);
   }
@@ -219,6 +285,7 @@ app.controller('periodProdExcelCtrl', ['$scope', '$http', '$timeout', function (
     params.prodCd = data.prodCd;
     params.prodNm = data.prodNm;
     params.prodClassCd = data.prodClassCd;
+    params.hqBrandCd = data.hqBrandCd;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/prod/periodProd/periodProd/getPeriodProdExcelList.sb", params, function() {

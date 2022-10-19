@@ -73,6 +73,73 @@ public class IostockCmmController {
 
 
     /**
+     * 수불&재고관련 공통 - 매장선택 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   iostockCmmVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 09. 03.
+     */
+    @RequestMapping(value = "/selectStoreMomsList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectStoreMomsList(HttpServletRequest request, HttpServletResponse response,
+        Model model, IostockCmmVO iostockCmmVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = iostockCmmService.selectStoreMomsList(iostockCmmVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
+    }
+
+    /**
+     * 수불&재고관련 공통 - 상품선택 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   iostockCmmVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 09. 03.
+     */
+    @RequestMapping(value = "/selectProdMomsList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectProdMomsList(HttpServletRequest request, HttpServletResponse response,
+        Model model, IostockCmmVO iostockCmmVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = iostockCmmService.selectProdMomsList(iostockCmmVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
+    }
+
+    /**
+     * 수불&재고관련 공통 - 매장선택 팝업 브랜드 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   iostockCmmVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 09. 03.
+     */
+    @RequestMapping(value = "/selectBrandMomsList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectBrandMomsList(HttpServletRequest request, HttpServletResponse response,
+        Model model, IostockCmmVO iostockCmmVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = iostockCmmService.selectBrandMomsList(iostockCmmVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
+    }
+
+
+    /**
      * 수불&재고관련 공통 - 거래처 선택모듈 리스트 조회
      * @param   request
      * @param   response

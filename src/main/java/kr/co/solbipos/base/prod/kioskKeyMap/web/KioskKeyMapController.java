@@ -7,6 +7,7 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapService;
@@ -74,6 +75,13 @@ public class KioskKeyMapController {
 
         KioskKeyMapVO kioskKeyMapVO = new KioskKeyMapVO();
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // KIOSK-매장수정여부
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("kioskKeyEnvstVal", "1");
+        } else {
+            model.addAttribute("kioskKeyEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1249"), "1"));
+        }
 
         // 키오스크용 포스 조회
         List<DefaultMap<String>> kioskPosList = kioskKeyMapService.getKioskPosList(kioskKeyMapVO, sessionInfoVO);

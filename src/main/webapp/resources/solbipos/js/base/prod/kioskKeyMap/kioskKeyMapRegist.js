@@ -134,10 +134,11 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
         params.tuClsType = $scope.tuClsTypeCombo.selectedValue;
 
         $scope._inquiryMain("/base/prod/kioskKeyMap/kioskKeyMap/getKioskCategory.sb", params, function() {
-
-            // 카테고리(분류)가 정상조회 되면 관련 버튼 보이도록
-            var divBtnCls = document.getElementById('divBtnCls');
-            divBtnCls.style.visibility='visible'
+            if(orgnFg === "HQ" || kioskKeyEnvstVal === "1"){
+                // 카테고리(분류)가 정상조회 되면 관련 버튼 보이도록
+                var divBtnCls = document.getElementById('divBtnCls');
+                divBtnCls.style.visibility='visible'
+            }
 
         }, false);
     };
@@ -670,11 +671,11 @@ app.controller('categoryClsMCtrl', ['$scope', '$http', '$timeout', function ($sc
         params.tuClsCd = $("#hdTuClsCd").val();
 
         $scope._inquiryMain("/base/prod/kioskKeyMap/kioskKeyMap/getKioskCategoryM.sb", params, function() {
-
-            // 카테고리(중분류)가 정상조회 되면 관련 버튼 보이도록
-            var divBtnClsM = document.getElementById('divBtnClsM');
-            divBtnClsM.style.visibility='visible'
-
+            if(orgnFg === "HQ" || kioskKeyEnvstVal === "1"){
+                // 카테고리(중분류)가 정상조회 되면 관련 버튼 보이도록
+                var divBtnClsM = document.getElementById('divBtnClsM');
+                divBtnClsM.style.visibility='visible'
+            }
         }, false);
     };
 
@@ -876,22 +877,23 @@ app.controller('kioskKeyMapCtrl', ['$scope', '$http', '$timeout', function ($sco
 
         $scope._inquirySub("/base/prod/kioskKeyMap/kioskKeyMap/getKioskKeyMap.sb", params, function() {
 
-            // 카테고리(분류)가 정상조회 되면 키맵관련 버튼 보이도록
-            var divBtnKeyMap = document.getElementById('divBtnKeyMap');
-            divBtnKeyMap.style.visibility='visible'
+            if(orgnFg === "HQ" || kioskKeyEnvstVal === "1"){
+                // 카테고리(분류)가 정상조회 되면 키맵관련 버튼 보이도록
+                var divBtnKeyMap = document.getElementById('divBtnKeyMap');
+                divBtnKeyMap.style.visibility='visible'
 
-            // 카테고리(분류)가 정상조회 되면 상품관련 버튼 보이도록
-            var divBtnProd = document.getElementById('divBtnProd');
-            divBtnProd.style.visibility='visible'
+                // 카테고리(분류)가 정상조회 되면 상품관련 버튼 보이도록
+                var divBtnProd = document.getElementById('divBtnProd');
+                divBtnProd.style.visibility='visible'
+
+                // paging 영역 보이도록
+                var kioskProdCtrlPager = document.getElementById('kioskProdCtrlPager');
+                kioskProdCtrlPager.style.visibility='visible'
+            }
 
             // 상품 조회
             var kioskProdGrid = agrid.getScope("kioskProdCtrl");
             kioskProdGrid._pageView('kioskProdCtrl', 1);
-
-            // paging 영역 보이도록
-            var kioskProdCtrlPager = document.getElementById('kioskProdCtrlPager');
-            kioskProdCtrlPager.style.visibility='visible'
-            
         }, false);
     }
 

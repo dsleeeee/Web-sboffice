@@ -45,6 +45,9 @@
                 #{item}
             </foreach>
         </if>
+        <if test='hqBrandCd != null and hqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{hqBrandCd}
+        </if>
         ORDER BY tsspg.SALE_DATE, tsspg.STORE_CD, tsspg.POS_NO, tsspg.BILL_NO
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -79,6 +82,9 @@
             <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
                 #{item}
             </foreach>
+        </if>
+        <if test='hqBrandCd != null and hqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{hqBrandCd}
         </if>
         ORDER BY tsspg.SALE_DATE, tsspg.STORE_CD, tsspg.POS_NO, tsspg.BILL_NO
     </select>

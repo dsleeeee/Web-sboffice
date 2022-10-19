@@ -12,6 +12,9 @@ import java.util.List;
 public interface IostockCmmMapper {
     /** 수불&재고관련 공통 - 매장선택 리스트 조회 */
     List<DefaultMap<String>> selectStoreList(IostockCmmVO iostockCmmVO);
+    List<DefaultMap<String>> selectStoreMomsList(IostockCmmVO iostockCmmVO);
+    List<DefaultMap<String>> selectProdMomsList(IostockCmmVO iostockCmmVO);
+    List<DefaultMap<String>> selectBrandMomsList(IostockCmmVO iostockCmmVO);
 
     /** 수불&재고관련 공통 - 거래처 선택모듈 리스트 조회 */
     List<DefaultMap<String>> getVendrList(IostockCmmVO iostockCmmVO);

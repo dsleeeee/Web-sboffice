@@ -902,6 +902,11 @@
     <typeAlias alias="storeMonthPayVO" type="kr.co.solbipos.sale.store.storeMonthPay.service.StoreMonthPayVO"/>
     <!-- 맘스터치 > 점포매출 > 채널별 매출 현황 -->
     <typeAlias alias="storeChannelVO" type="kr.co.solbipos.sale.store.storeChannel.service.StoreChannelVO"/>
+    <!-- 맘스터치 > 점포매출 > 배달방문비중 -->
+    <typeAlias alias="dlvrRateVO" type="kr.co.solbipos.sale.dlvr.dlvrRate.service.DlvrRateVO"/>
+
+    <!-- 맘스터치 > 기타관리 > 점포별 파일 버전현황 -->
+    <typeAlias alias="fileVersnVO" type="kr.co.solbipos.base.store.fileVersn.service.FileVersnVO"/>
 
 
 

@@ -7,6 +7,7 @@
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="touchKeyEnvstVal" value="${touchKeyEnvstVal}" />
+<c:set var="touchKeyEnvstVal2" value="${touchKeyEnvstVal2}" />
 <c:set var="touchKeyGrp" value="${touchKeyGrp}" />
 <c:set var="brandUseFg" value="${brandUseFg}" />
 <c:set var="fontSizeEnvstVal" value="${fontSizeEnvstVal}" />
@@ -47,9 +48,9 @@
                     </wj-combo-box>
                 </div>
                 <%-- 추가터치키생성 --%>
-                <button class="btn_skyblue fl ml20" id="btnNewGrp" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.newGrp"/></button>
+                <button class="btn_skyblue fl ml20" id="btnNewGrp" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.newGrp"/></button>
                 <%-- 터치키복사 --%>
-                <button class="btn_skyblue fl ml20" id="btnCopyTouchKey" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose> ng-click="$broadcast('showPopUpCopy')">
+                <button class="btn_skyblue fl ml20" id="btnCopyTouchKey" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose> ng-click="$broadcast('showPopUpCopy')">
                     <s:message code="touchKey.copy" />
                 </button>
                 <%-- 터치키미적용상품 --%>
@@ -57,7 +58,7 @@
                     <s:message code="touchKey.noTouchKey" />
                 </button>
                 <%-- 초기화 --%>
-                <button class="btn_skyblue fl ml5" id="btnInti">
+                <button class="btn_skyblue fl ml5" id="btnInti"<c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>>
                     <s:message code="cmm.init"/>
                 </button>
 
@@ -180,12 +181,12 @@
             <%--포스에서 1024*768 사이즈에 보이지 않아 위치변경함(스타일적용, 저장)--%>
             <div class="updownSet oh mb10">
                 <div class="fl txtIn">
-                    <div class="sb-select dkbr fl w120px" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise></c:otherwise></c:choose>>
+                    <div class="sb-select dkbr fl w120px" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise></c:otherwise></c:choose>>
                         <div id="selectStyle" ng-model="selectStyle"></div>
                     </div>
-                    <button class="btn_skyblue fl ml5" id="btnApplyStyle" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.applyStyle"/></button>
-                    <button class="btn_skyblue fl ml5" id="btnViewStyle" ng-click="viewStyle()" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.viewStyle"/></button>
-                    <button class="btn_skyblue fl ml20" id="btnSave" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="cmm.save"/></button>
+                    <button class="btn_skyblue fl ml5" id="btnApplyStyle" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.applyStyle"/></button>
+                    <button class="btn_skyblue fl ml5" id="btnViewStyle" ng-click="viewStyle()" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.viewStyle"/></button>
+                    <button class="btn_skyblue fl ml20" id="btnSave" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="cmm.save"/></button>
                     <%--포스에서 1024*768 사이즈에 보이지 않아 위치변경함(초기화, 삭제)--%>
                     <div id="keyStyleAd" class="fl hideNav" style="margin-left : 4px;">
                         <button class="btn_skyblue mb5" id="btnReset" ng-click="$broadcast('btnReset')">

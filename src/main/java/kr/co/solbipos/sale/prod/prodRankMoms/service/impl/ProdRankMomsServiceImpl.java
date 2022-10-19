@@ -49,7 +49,7 @@ public class ProdRankMomsServiceImpl implements ProdRankMomsService {
         String[] storeCds = prodRankMomsVO.getStoreCds().split(",");
         prodRankMomsVO.setStoreCdList(storeCds);
 
-        return prodRankMomsMapper.getProdRankMomsList(prodRankMomsVO);
+        return prodRankMomsMapper.getProdRankList(prodRankMomsVO);
     }
 
 

@@ -27,18 +27,33 @@
       <tr>
         <%-- 조회일자 --%>
         <th><s:message code="cmm.search.date"/></th>
-        <td colspan="3">
+        <td>
           <div class="sb-select">
             <span class="txtIn"><input id="srchStartDate" class="w110px"></span>
             <span class="rg">~</span>
             <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
           </div>
         </td>
+        <%-- 매장브랜드 --%>
+        <th><s:message code="mcoupn.hqBrand"/></th>
+        <td>
+          <div class="sb-select">
+            <wj-combo-box
+                    id="hqBrandCd"
+                    ng-model="hqBrandCd"
+                    items-source="_getComboData('hqBrandCd')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    control="hqBrandCdCombo">
+            </wj-combo-box>
+          </div>
+        </td>
       </tr>
       <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <tr>
             <%-- 매장코드 --%>
-          <th><s:message code="todayBillSaleDtl.store"/></th>
+          <th><s:message code="cmm.store"/></th>
           <td colspan="3">
               <%-- 매장선택 모듈 싱글 선택 사용시 include
                    param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
@@ -46,7 +61,7 @@
                                 modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
                                 closeFunc - 팝업 닫기시 호출할 함수
               --%>
-            <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+            <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreSMoms.jsp" flush="true">
               <jsp:param name="targetId" value="giftStore"/>
             </jsp:include>
               <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
@@ -146,6 +161,7 @@
 <script type="text/javascript">
   var orgnFg = "${orgnFg}";
   var storeCd = "${storeCd}";
+  var hqBrandList = ${hqBrandList};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/appr/gift/gift.js?ver=20221005.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/appr/gift/gift.js?ver=20221018.01" charset="utf-8"></script>
 

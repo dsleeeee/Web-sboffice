@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    DlvrRate.xml
+    점포별 매출 평균 현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.10.14     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.dlvr.dlvrRate.service.impl.DlvrRateMapper">
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getDlvrRateList" parameterType="dlvrRateVO" resultType="DefaultMap">
+        /* DlvrRateMapper.getDlvrRateList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT 	SALE_DATE
+        ,		COUNT(STORE_CD) AS STORE_CNT
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN BILL_CNT ELSE 0 END) AS BILL_CNT_STIN
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN BILL_CNT ELSE 0 END) AS BILL_CNT_DLVR
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN BILL_CNT ELSE 0 END) AS BILL_CNT_PICK
+        ,		SUM(BILL_CNT) AS BILL_CNT
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_STIN
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_DLVR
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_PICK
+        ,		SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+        ,		DECODE(SUM(REAL_SALE_AMT), 0, 0, NVL(ROUND(SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) / SUM(REAL_SALE_AMT) * 100, 2), 0)) AS STIN_RATE
+        ,		DECODE(SUM(REAL_SALE_AMT), 0, 0, NVL(ROUND(SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) / SUM(REAL_SALE_AMT) * 100, 2), 0)) AS DLVR_RATE
+        ,		DECODE(SUM(REAL_SALE_AMT), 0, 0, NVL(ROUND(SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN REAL_SALE_AMT ELSE 0 END) / SUM(REAL_SALE_AMT) * 100, 2), 0)) AS PICK_RATE
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	TB_SL_DAILY_TOTAL_DLVR tsdtd
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY SALE_DATE
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getDlvrRateExcelList" parameterType="dlvrRateVO" resultType="DefaultMap">
+        /* DlvrRateMapper.getDlvrRateExcelList */
+        SELECT 	SALE_DATE
+        ,		COUNT(STORE_CD) AS STORE_CNT
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN BILL_CNT ELSE 0 END) AS BILL_CNT_STIN
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN BILL_CNT ELSE 0 END) AS BILL_CNT_DLVR
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN BILL_CNT ELSE 0 END) AS BILL_CNT_PICK
+        ,		SUM(BILL_CNT) AS BILL_CNT
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_STIN
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_DLVR
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_PICK
+        ,		SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+        ,		DECODE(SUM(REAL_SALE_AMT), 0, 0, NVL(ROUND(SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) / SUM(REAL_SALE_AMT) * 100, 2), 0)) AS STIN_RATE
+        ,		DECODE(SUM(REAL_SALE_AMT), 0, 0, NVL(ROUND(SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) / SUM(REAL_SALE_AMT) * 100, 2), 0)) AS DLVR_RATE
+        ,		DECODE(SUM(REAL_SALE_AMT), 0, 0, NVL(ROUND(SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN REAL_SALE_AMT ELSE 0 END) / SUM(REAL_SALE_AMT) * 100, 2), 0)) AS PICK_RATE
+        FROM 	TB_SL_DAILY_TOTAL_DLVR tsdtd
+        WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY SALE_DATE
+    </select>
+
+</mapper>

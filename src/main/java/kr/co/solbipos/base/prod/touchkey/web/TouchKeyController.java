@@ -117,6 +117,13 @@ public class TouchKeyController {
         String touchKeyEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, envstCd));
         model.addAttribute("touchKeyEnvstVal", touchKeyEnvstVal);
 
+        // 터치키본사통제시매장수정허용
+        if ( "H".equals(sessionInfoVO.getOrgnFg().getCode()) ) {
+            model.addAttribute("touchKeyEnvstVal2", "0");
+        } else {
+            model.addAttribute("touchKeyEnvstVal2", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1248"), "0"));
+        }
+
         // 터치키 그룹 가져오기
         List<DefaultMap<String>> touchKeyGrpList = touchkeyService.getTouchKeyGrp(params, sessionInfoVO);
         model.addAttribute("touchKeyGrp", convertToJson(touchKeyGrpList));

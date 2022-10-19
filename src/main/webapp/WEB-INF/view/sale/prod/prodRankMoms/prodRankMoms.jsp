@@ -68,7 +68,7 @@
 				<%-- 매장코드 --%>
 				<th><s:message code="todayBillSaleDtl.store"/></th>
 				<td colspan="3">
-					<jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+					<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreMMoms.jsp" flush="true">
 						<jsp:param name="targetId" value="prodRankSelectStore"/>
 					</jsp:include>
 				  <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
@@ -78,6 +78,23 @@
 			<c:if test="${sessionInfo.orgnFg == 'STORE'}">
 				<input type="hidden" id="prodRankSelectStoreCd" value="${sessionInfo.storeCd}"/>
 			</c:if>
+			<tr>
+				<%-- 매장브랜드 --%>
+				<th><s:message code="prodRankMoms.hqBrand"/></th>
+				<td>
+					<div class="sb-select">
+						<wj-combo-box
+								id="hqBrandCd"
+								ng-model="hqBrandCd"
+								items-source="_getComboData('hqBrandCd')"
+								display-member-path="name"
+								selected-value-path="value"
+								is-editable="false"
+								control="hqBrandCdCombo">
+						</wj-combo-box>
+					</div>
+				</td>
+			</tr>
 			</tbody>
 		</table>
     	<div style="clear: both;"></div>
@@ -90,7 +107,7 @@
 				<%-- 차트 --%>
 				<button class="btn_skyblue" id="btnShowChart" ng-click=""><s:message code="cmm.chart" /></button>
 				<%-- 엑셀 다운로드 //TODO --%>
-				<button class="btn_skyblue" ng-click="excelDownloadRank()"><s:message code="cmm.excel.down" /></button>
+				<button class="btn_skyblue" ng-click="excelDownloadRank()"><s:message code="cmm.excel.downCondition" /></button>
 		    </div>
 		</div>
 		
@@ -223,7 +240,7 @@
 
 <%--//layer:For Center screen--%>
 
-<script>
+<script type="text/javascript">
 $(document).ready(function() {
 
     $("#btnShowChart").click(function(e) {
@@ -238,6 +255,7 @@ $(document).ready(function() {
     });
 
 });
+	var hqBrandList = ${hqBrandList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/prodRankMoms/prodRankMoms.js?ver=20220930.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/prodRankMoms/prodRankMoms.js?ver=20221018.01" charset="utf-8"></script>

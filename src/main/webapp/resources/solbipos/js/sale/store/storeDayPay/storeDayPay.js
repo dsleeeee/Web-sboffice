@@ -223,7 +223,7 @@ app.controller('storeDayPayCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.payCol    = payCol;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquirySub("/sale/store/storeDayPay/storeDayPay/getStoreDayPayList.sb", params);
+    $scope._inquiryMain("/sale/store/storeDayPay/storeDayPay/getStoreDayPayList.sb", params);
   };
 
 

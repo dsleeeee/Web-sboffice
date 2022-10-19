@@ -209,7 +209,7 @@ app.controller('payDayDeviceCtrl', ['$scope', '$http', '$timeout', function ($sc
     params.payCol    = payCol;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquirySub("/sale/pay/payDayDevice/payDayDevice/getPayDayDeviceList.sb", params);
+    $scope._inquiryMain("/sale/pay/payDayDevice/payDayDevice/getPayDayDeviceList.sb", params);
   };
 
 

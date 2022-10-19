@@ -32,6 +32,9 @@ app.controller('prodRankCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	$scope._setComboData('prodRanklistScaleBox', gvListScaleBoxData);
 	$scope._setComboData("orderType", orderTypeFg);
 
+	// 브랜드 콤보박스 셋팅
+	$scope._setComboData("hqBrandCd", hqBrandList);
+
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
 		// picker 사용시 호출 : 미사용시 호출안함
@@ -52,12 +55,29 @@ app.controller('prodRankCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
 	// 상품매출순위 리스트 조회
 	$scope.searchProdRankList = function () {
+
+		var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
+		var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
+		var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+		// 시작일자가 종료일자보다 빠른지 확인
+		if(startDt.getTime() > endDt.getTime()){
+			$scope._popMsg(messages['cmm.dateChk.error']);
+			return false;
+		}
+		// 조회일자 최대 7일 제한
+		if (diffDay > 7) {
+			$scope._popMsg(messages['cmm.dateOver.7day.error']);
+			return false;
+		}
+
 		// 파라미터
 		var params       = {};
-		params.storeCd   = $("#prodRankSelectStoreCd").val();
+		params.storeCds   = $("#prodRankSelectStoreCd").val();
 		params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
 		params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
 		params.orderType = $scope.orderTypeCombo.selectedValue; // 정렬기준
+		params.hqBrandCd = $scope.hqBrandCd;
 		params.listScale = 500; //-페이지 스케일 갯수
 
 		if(params.startDate > params.endDate){
@@ -66,7 +86,7 @@ app.controller('prodRankCtrl', ['$scope', '$http', '$timeout', function ($scope,
 		}
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
-		$scope._inquiryMain("/sale/status/prod/rank/getProdRankList.sb", params, function() {});
+		$scope._inquiryMain("/sale/prod/prodRankMoms/prodRankMoms/getProdRankList.sb", params, function() {});
 
 		// 상품매출순위별 바 차트
 		$scope._broadcast("prodRankChartCtrl", params);
@@ -82,11 +102,28 @@ app.controller('prodRankCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
 	// 엑셀 다운로드
 	$scope.excelDownloadRank = function () {
+
+		var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
+		var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
+		var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+		// 시작일자가 종료일자보다 빠른지 확인
+		if(startDt.getTime() > endDt.getTime()){
+			$scope._popMsg(messages['cmm.dateChk.error']);
+			return false;
+		}
+		// 조회일자 최대 7일 제한
+		if (diffDay > 7) {
+			$scope._popMsg(messages['cmm.dateOver.7day.error']);
+			return false;
+		}
+
 		var params       = {};
-		params.storeCd   = $("#prodRankSelectStoreCd").val();
+		params.storeCds   = $("#prodRankSelectStoreCd").val();
 		params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
 		params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
 		params.orderType = $scope.orderTypeCombo.selectedValue; // 정렬기준
+		params.hqBrandCd = $scope.hqBrandCd;
 
 		$scope._broadcast('prodRankExcelCtrl', params);
 	};
@@ -126,10 +163,11 @@ app.controller('prodRankChartCtrl', ['$scope', '$http','$timeout', function ($sc
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("prodRankChartCtrl", function (event, data) {
 		if(data != undefined) {
-            $scope.storeCd = data.storeCd;
+            $scope.storeCds = data.storeCds;
 			$scope.startDate = data.startDate;
 			$scope.endDate = data.endDate;
 			$scope.orderType = data.orderType;
+			$scope.hqBrandCd = data.hqBrandCd;
 		}
 	    $scope.prodRankBarChartList(data);
 	    // 기능수행 종료 : 반드시 추가
@@ -140,13 +178,14 @@ app.controller('prodRankChartCtrl', ['$scope', '$http','$timeout', function ($sc
 	$scope.prodRankBarChartList = function (data) {
 		// 파라미터
 		var params          = {};
-        params.storeCd = data.storeCd;
+        params.storeCds = data.storeCds;
         params.startDate = data.startDate;
         params.endDate = data.endDate;
         params.orderType = data.orderType;
+		params.hqBrandCd = data.hqBrandCd;
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
-		$scope._inquiryMain("/sale/status/prod/rank/getProdRankChartList.sb", params);
+		$scope._inquiryMain("/sale/prod/prodRankMoms/prodRankMoms/getProdRankChartList.sb", params);
 	};
 
 	$scope.rendered = function(s, e) {
@@ -234,15 +273,16 @@ app.controller('prodRankExcelCtrl', ['$scope', '$http', '$timeout', function ($s
 	$scope.searchProdRankExcelList = function (data) {
 		// 파라미터
 		var params       = {};
-		params.storeCd = data.storeCd;
+		params.storeCds = data.storeCds;
 		params.startDate = data.startDate;
 		params.endDate = data.endDate;
 		params.orderType = data.orderType;
+		params.hqBrandCd = data.hqBrandCd;
 
 		$scope.isChkProdClassDisplay();
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
-		$scope._inquiryMain("/sale/status/prod/rank/getProdRankExcelList.sb", params, function() {
+		$scope._inquiryMain("/sale/prod/prodRankMoms/prodRankMoms/getProdRankExcelList.sb", params, function() {
 			if ($scope.excelFlexSec.rows.length <= 0) {
 			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 			return false;
