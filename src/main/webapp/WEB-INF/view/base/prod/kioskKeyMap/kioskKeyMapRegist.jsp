@@ -70,33 +70,34 @@
                             </wj-combo-box>
                         </div>
                     </c:if>
-                    <button class="btn_skyblue" id="btnTuClsTypeAdd" ng-click="tuClsTypeAdd()">
-                        <s:message code="kioskKeyMap.tuClsTypeAdd" />
-                    </button>
-                    <c:if test="${kioskKeyMapGrpFg == '1'}">
-                        <c:if test="${orgnFg == 'HQ'}">
-                            <button class="btn_skyblue" id="btnTuClsTypeCopyHq" ng-click="tuClsTypeCopy()">
-                                <s:message code="kioskKeyMap.tuClsTypeCopy" />
-                            </button>
-                        </c:if>
-                        <c:if test="${orgnFg == 'STORE'}">
-                            <button class="btn_skyblue" id="btnTuClsTypeCopyStore" ng-click="tuClsTypeCopy()">
-                                <s:message code="kioskKeyMap.tuClsTypeCopy" />
-                            </button>
-                        </c:if>
-                    </c:if>
-                    <c:if test="${orgnFg == 'HQ'}">
-                        <button class="btn_skyblue" id="btnTuClsTypeStore" ng-click="tuClsTypeStore()">
-                            <s:message code="kioskKeyMap.tuClsTypeStore" />
+                    <div <c:choose><c:when test="${orgnFg == 'STORE' && kioskKeyEnvstVal == '0'}">style="visibility: hidden"</c:when><c:otherwise></c:otherwise></c:choose>>
+                        <button class="btn_skyblue" id="btnTuClsTypeAdd" ng-click="tuClsTypeAdd()">
+                            <s:message code="kioskKeyMap.tuClsTypeAdd" />
                         </button>
-                    </c:if>
-                    <button class="btn_skyblue" id="btnTuClsTypeStore" ng-click="tuRecmd()">
-                        <s:message code="kioskKeyMap.tuRecmd" />
-                    </button>
+                        <c:if test="${kioskKeyMapGrpFg == '1'}">
+                            <c:if test="${orgnFg == 'HQ'}">
+                                <button class="btn_skyblue" id="btnTuClsTypeCopyHq" ng-click="tuClsTypeCopy()">
+                                    <s:message code="kioskKeyMap.tuClsTypeCopy" />
+                                </button>
+                            </c:if>
+                            <c:if test="${orgnFg == 'STORE'}">
+                                <button class="btn_skyblue" id="btnTuClsTypeCopyStore" ng-click="tuClsTypeCopy()">
+                                    <s:message code="kioskKeyMap.tuClsTypeCopy" />
+                                </button>
+                            </c:if>
+                        </c:if>
+                        <c:if test="${orgnFg == 'HQ'}">
+                            <button class="btn_skyblue" id="btnTuClsTypeStore" ng-click="tuClsTypeStore()">
+                                <s:message code="kioskKeyMap.tuClsTypeStore" />
+                            </button>
+                        </c:if>
+                        <button class="btn_skyblue" id="btnTuClsTypeStore" ng-click="tuRecmd()">
+                            <s:message code="kioskKeyMap.tuRecmd" />
+                        </button>
 
-                    <button class="btn_skyblue fr mt5 mr5" id="btnEnv4069" ng-click="envConfg('4069')"><s:message code="kioskKeymap.envConfgPack"/></button>
-                    <button class="btn_skyblue fr mt5 mr5" id="btnEnv4068" ng-click="envConfg('4068')"><s:message code="kioskKeymap.envConfgStore"/></button>
-
+                        <button class="btn_skyblue fr mt5 mr5" id="btnEnv4069" ng-click="envConfg('4069')"><s:message code="kioskKeymap.envConfgPack"/></button>
+                        <button class="btn_skyblue fr mt5 mr5" id="btnEnv4068" ng-click="envConfg('4068')"><s:message code="kioskKeymap.envConfgStore"/></button>
+                    </div>
                 </td>
             </tr>
             </tbody>
@@ -108,24 +109,26 @@
                     <label id="lbTuClsType"></label>
                 </div>
                 <div class="updownSet oh mb10 pd5" id="divBtnCls" style="visibility: hidden;">
-                    <button class="btn_up" id="btnUpCls" ng-click="rowMoveUpCls()" >
-                        <s:message code="cmm.up" />
-                    </button>
-                    <button class="btn_down" id="btnDownCls" ng-click="rowMoveDownCls()">
-                        <s:message code="cmm.down" />
-                    </button>
-                    <button class="btn_skyblue" id="btnBlankCls" ng-click="blankRowCls()" style="display: none;">
-                        <s:message code="kioskKeyMap.blank" />
-                    </button>
-                    <button class="btn_skyblue" id="btnAddCls" ng-click="addRowCls()">
-                        <s:message code="cmm.add" />
-                    </button>
-                    <button class="btn_skyblue" id="btnDelCls" ng-click="delRowCls()">
-                        <s:message code="cmm.delete" />
-                    </button>
-                    <button class="btn_skyblue" id="btnSaveCls" ng-click="saveCls()">
-                        <s:message code="cmm.save" />
-                    </button>
+                    <div <c:choose><c:when test="${orgnFg == 'STORE' && kioskKeyEnvstVal == '0'}">style="visibility: hidden"</c:when><c:otherwise></c:otherwise></c:choose>>
+                        <button class="btn_up" id="btnUpCls" ng-click="rowMoveUpCls()" >
+                            <s:message code="cmm.up" />
+                        </button>
+                        <button class="btn_down" id="btnDownCls" ng-click="rowMoveDownCls()">
+                            <s:message code="cmm.down" />
+                        </button>
+                        <button class="btn_skyblue" id="btnBlankCls" ng-click="blankRowCls()" style="display: none;">
+                            <s:message code="kioskKeyMap.blank" />
+                        </button>
+                        <button class="btn_skyblue" id="btnAddCls" ng-click="addRowCls()">
+                            <s:message code="cmm.add" />
+                        </button>
+                        <button class="btn_skyblue" id="btnDelCls" ng-click="delRowCls()">
+                            <s:message code="cmm.delete" />
+                        </button>
+                        <button class="btn_skyblue" id="btnSaveCls" ng-click="saveCls()">
+                            <s:message code="cmm.save" />
+                        </button>
+                    </div>
                 </div>
                 <div class="w100 mt10 mb20">
                     <div class="wj-gridWrap" style="height:200px; overflow-x: hidden; overflow-y: hidden;">
@@ -398,9 +401,12 @@
 
     // 키오스크 키맵그룹 사용여부 0: 미사용 1: 사용
     var kioskKeyMapGrpFg = "${kioskKeyMapGrpFg}";
+
+    // KIOSK-매장수정여부 0:미사용 1:사용
+    var kioskKeyEnvstVal = "${kioskKeyEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20220823.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20220823.04" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
