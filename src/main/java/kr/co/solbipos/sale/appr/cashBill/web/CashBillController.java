@@ -6,6 +6,8 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.store.storeType.service.StoreTypeService;
+import kr.co.solbipos.base.store.storeType.service.StoreTypeVO;
 import kr.co.solbipos.sale.appr.cashBill.service.CashBillService;
 import kr.co.solbipos.sale.appr.cashBill.service.CashBillVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 
 /**
@@ -41,14 +45,16 @@ public class CashBillController {
 
     private final SessionService sessionService;
     private final CashBillService cashBillService;
+    private final StoreTypeService storeTypeService;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public CashBillController(SessionService sessionService, CashBillService cashBillService) {
+    public CashBillController(SessionService sessionService, CashBillService cashBillService, StoreTypeService storeTypeService) {
         this.sessionService = sessionService;
         this.cashBillService = cashBillService;
+        this.storeTypeService = storeTypeService;
     }
 
     /**
@@ -60,6 +66,12 @@ public class CashBillController {
      */
     @RequestMapping(value = "/cashBill/list.sb", method = RequestMethod.GET)
     public String cashBillView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 브랜드조회(콤보박스용)
+        StoreTypeVO storeTypeVO = new StoreTypeVO();
+        model.addAttribute("hqBrandList", convertToJson(storeTypeService.getBrandList(storeTypeVO, sessionInfoVO)));
 
         return "sale/appr/cashBill/cashBill";
     }
