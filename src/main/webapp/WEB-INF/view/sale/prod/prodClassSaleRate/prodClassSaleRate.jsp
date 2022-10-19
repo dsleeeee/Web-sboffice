@@ -56,7 +56,7 @@
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
           <th><s:message code="todayBillSaleDtl.store"/></th>
           <td>
-            <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+            <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreMMoms.jsp" flush="true">
               <jsp:param name="targetId" value="prodClassSaleRateStore"/>
             </jsp:include>
               <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
@@ -65,6 +65,23 @@
         <c:if test="${sessionInfo.orgnFg == 'STORE'}">
           <input type="hidden" id="prodClassSaleRateStoreCd" value="${sessionInfo.storeCd}"/>
         </c:if>
+      </tr>
+      <tr>
+        <%-- 매장브랜드 --%>
+        <th><s:message code="prodClassSaleRate.hqBrand"/></th>
+        <td>
+          <div class="sb-select">
+            <wj-combo-box
+                    id="hqBrandCd"
+                    ng-model="hqBrandCd"
+                    items-source="_getComboData('hqBrandCd')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    control="hqBrandCdCombo">
+            </wj-combo-box>
+          </div>
+        </td>
       </tr>
       </tbody>
     </table>
@@ -137,8 +154,9 @@
 <script type="text/javascript">
   var orgnFg = "${orgnFg}";
   var storeCd = "${storeCd}";
+  var hqBrandList = ${hqBrandList};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/prodClassSaleRate/prodClassSaleRate.js?ver=20221004.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/prodClassSaleRate/prodClassSaleRate.js?ver=20221018.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
