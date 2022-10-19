@@ -31,6 +31,123 @@
         ORDER BY tms.STORE_CD
     </select>
 
+    <!-- 매장선택 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : iostockCmmVO
+        COMMENTS : 매장선택 리스트를 조회한다.
+    -->
+    <select id="selectStoreMomsList" parameterType="iostockCmmVO" resultType="DefaultMap">
+    /* USE : IostockCmmMapper.selectStoreMomsList */
+        <![CDATA[
+        SELECT  tms.HQ_OFFICE_CD, tms.STORE_CD, tms.STORE_NM
+        FROM    TB_MS_STORE tms
+        WHERE   tms.HQ_OFFICE_CD =   #{hqOfficeCd}
+        ]]>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR   tms.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test='hqBrandCd != null and hqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{hqBrandCd}
+        </if>
+        ORDER BY tms.STORE_CD
+    </select>
+
+    <!-- 상품선택 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : iostockCmmVO
+        COMMENTS : 상품선택 리스트를 조회한다.
+    -->
+    <select id="selectProdMomsList" parameterType="iostockCmmVO" resultType="DefaultMap">
+    /* USE : IostockCmmMapper.selectProdMomsList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  PROD_CD
+                ,       PROD_NM
+                FROM    TB_HQ_PRODUCT
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='prodCd != null and prodCd != ""'>
+                    AND PROD_CD LIKE '%'||#{prodCd}||'%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND PROD_NM LIKE '%'||#{prodNm}||'%'
+                </if>
+                <if test='hqBrandCd != null and hqBrandCd != ""'>
+                    AND HQ_BRAND_CD = #{hqBrandCd}
+                </if>
+                ORDER BY PROD_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  PROD_CD
+                ,       PROD_NM
+                FROM    TB_MS_PRODUCT
+                WHERE   STORE_CD = #{storeCd}
+                <if test='prodCd != null and prodCd != ""'>
+                    AND PROD_CD LIKE '%'||#{prodCd}||'%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND PROD_NM LIKE '%'||#{prodNm}||'%'
+                </if>
+                <if test='hqBrandCd != null and hqBrandCd != ""'>
+                    AND HQ_BRAND_CD = #{hqBrandCd}
+                </if>
+                ORDER BY PROD_CD
+            </when>
+        </choose>
+    </select>
+
+
+    <!-- 메뉴그룹관리 - 브랜드조회(콤보박스용) -->
+    <!--
+        TABLE    : TB_HQ_BRAND
+        PARAM    : storeTypeVO
+        COMMENTS : 콤보박스에서 사용할 브랜드를 조회한다.
+    -->
+    <select id="selectBrandMomsList" parameterType="iostockCmmVO" resultType="DefaultMap">
+        /* USE : IostockCmmMapper.selectBrandMomsList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT '' AS VALUE,
+                '전체' AS NAME
+                FROM DUAL
+                UNION
+                SELECT HQ_BRAND_CD AS VALUE,
+                HQ_BRAND_NM AS NAME
+                FROM TB_HQ_BRAND
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND USE_YN = 'Y'
+                ORDER
+                BY VALUE NULLS FIRST
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT '' AS VALUE,
+                '전체' AS NAME
+                FROM DUAL
+                UNION
+                SELECT MS_BRAND_CD AS VALUE,
+                MS_BRAND_NM AS NAME
+                FROM TB_MS_BRAND
+                WHERE STORE_CD = #{storeCd}
+                AND USE_YN = 'Y'
+                ORDER
+                BY VALUE NULLS FIRST
+            </when>
+        </choose>
+    </select>
 
     <!-- 거래처 선택모듈 리스트 조회 -->
     <!--

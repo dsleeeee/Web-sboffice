@@ -32,6 +32,36 @@ public class IostockCmmServiceImpl implements IostockCmmService {
         return iostockCmmMapper.selectStoreList(iostockCmmVO);
     }
 
+    /** 수불&재고관련 공통 - 매장선택 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> selectStoreMomsList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
+        iostockCmmVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        iostockCmmVO.setEmpNo(sessionInfoVO.getEmpNo());
+        iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return iostockCmmMapper.selectStoreMomsList(iostockCmmVO);
+    }
+
+    /** 수불&재고관련 공통 - 상품선택 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> selectProdMomsList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
+        iostockCmmVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        iostockCmmVO.setEmpNo(sessionInfoVO.getEmpNo());
+        iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(iostockCmmVO.getOrgnFg() == OrgnFg.STORE.getCode()){
+            iostockCmmVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        return iostockCmmMapper.selectProdMomsList(iostockCmmVO);
+    }
+
+    /** 수불&재고관련 공통 - 매장선택 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> selectBrandMomsList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
+        iostockCmmVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        iostockCmmVO.setEmpNo(sessionInfoVO.getEmpNo());
+        iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return iostockCmmMapper.selectBrandMomsList(iostockCmmVO);
+    }
+
     /** 수불&재고관련 공통 - 거래처 선택모듈 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getVendrList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
