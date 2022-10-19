@@ -562,5 +562,86 @@
         </if>
     </select>
 
-</mapper>
+    <!-- 재생순서관리 탭 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMediaPlaySeqList" parameterType="MediaVO" resultType="DefaultMap">
+        /* MediaMapper.getMediaPlaySeqList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                ADVER_FILE_NO AS VER_SER_NO,
+                TO_CHAR(TO_DATE(ADVER_S_DATE, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(ADVER_E_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_DATE,
+                FILE_DESC AS VER_SER_NM,
+                FILE_USE_TYPE,
+                FILE_SIZE,
+                USE_YN,
+                FILE_ORG_NM || '.' || FILE_EXT AS FILE_ORG_NM,
+                DISP_TIME,
+                DISP_SEQ
+                FROM TB_HQ_POS_ADVER_FILE
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{hqOfficeCd}
+                AND FILE_USE_TYPE = #{fileType}
+                ORDER BY DISP_SEQ
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                ADVER_FILE_NO AS VER_SER_NO,
+                TO_CHAR(TO_DATE(ADVER_S_DATE, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(ADVER_E_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_DATE,
+                FILE_DESC AS VER_SER_NM,
+                FILE_USE_TYPE,
+                FILE_SIZE,
+                USE_YN,
+                FILE_ORG_NM || '.' || FILE_EXT AS FILE_ORG_NM,
+                DISP_TIME,
+                DISP_SEQ
+                FROM TB_MS_POS_ADVER_FILE
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND FILE_USE_TYPE = #{fileType}
+                ORDER BY DISP_SEQ
+            </when>
+        </choose>
+    </select>
 
+    <!-- 재생순서관리 탭 - 저장 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getMediaPlaySeqSaveUpdate" parameterType="MediaVO">
+        /* MediaMapper.getMediaPlaySeqSaveUpdate */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE
+                TB_HQ_POS_ADVER_FILE
+                SET
+                DISP_SEQ = #{dispSeq},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{hqOfficeCd}
+                AND ADVER_FILE_NO = #{verSerNo}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE
+                TB_MS_POS_ADVER_FILE
+                SET
+                DISP_SEQ = #{dispSeq},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND ADVER_FILE_NO = #{verSerNo}
+            </when>
+        </choose>
+    </update>
+
+</mapper>

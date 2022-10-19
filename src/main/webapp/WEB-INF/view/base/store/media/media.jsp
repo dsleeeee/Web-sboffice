@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
-<div class="subCon" ng-controller="mediaCtrl">
+<div class="subCon" ng-controller="mediaCtrl" id="mediaView" style="display: none;">
   <div class="searchBar">
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
@@ -135,7 +135,7 @@
         <wj-flex-grid-column header="<s:message code="media.fileSize"/>" binding="fileSize"  width="80" align="right" is-read-only="true" ></wj-flex-grid-column>
 <%--        <wj-flex-grid-column header="<s:message code="media.regCnt"/>" binding="regCnt" align="center" width="80"  is-read-only="true"></wj-flex-grid-column>--%>
 <%--        <wj-flex-grid-column header="<s:message code="media.recvCnt"/>" binding="recvCnt" align="center" width="80"  is-read-only="true"></wj-flex-grid-column>--%>
-        <wj-flex-grid-column header="<s:message code="media.useYn"/>" binding="useYn" data-map="useYnDataMap" align="center" width="80" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="media.useYn"/>" binding="useYn" data-map="useYnDataMap" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="media.dispTime"/>" binding="dispTime" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>

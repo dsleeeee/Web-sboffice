@@ -5,6 +5,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.media.service.MediaApplcStoreVO;
 import kr.co.solbipos.base.store.media.service.MediaService;
@@ -70,7 +71,7 @@ public class MediaController {
                        Model model) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        return "base/store/media/media";
+        return "base/store/media/mediaTab";
     }
 
     /**
@@ -257,6 +258,52 @@ public class MediaController {
         SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
 
         int result = mediaService.removeStore(applcStore, sessionInfo);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 재생순서관리 탭 - 조회
+     *
+     * @param mediaVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 10. 17.
+     */
+    @RequestMapping(value = "/mediaPlaySeq/getMediaPlaySeqList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMediaPlaySeqList(MediaVO mediaVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = mediaService.getMediaPlaySeqList(mediaVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, mediaVO);
+    }
+
+    /**
+     * 재생순서관리 탭 - 저장
+     *
+     * @param mediaVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 10. 17.
+     */
+    @RequestMapping(value = "/mediaPlaySeq/getMediaPlaySeqSaveUpdate.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMediaPlaySeqSaveUpdate(@RequestBody MediaVO[] mediaVOs, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = mediaService.getMediaPlaySeqSaveUpdate(mediaVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

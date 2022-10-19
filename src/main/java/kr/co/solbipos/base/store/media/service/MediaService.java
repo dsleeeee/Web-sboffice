@@ -58,4 +58,10 @@ public interface MediaService {
 
     /** 버전 적용 매장 삭제 */
     int removeStore(MediaApplcStoreVO[] applcStores, SessionInfoVO sessionInfo);
+
+    /** 재생순서관리 탭 - 조회 */
+    List<DefaultMap<Object>> getMediaPlaySeqList(MediaVO mediaVO, SessionInfoVO sessionInfoVO);
+
+    /** 재생순서관리 탭 - 저장 */
+    int getMediaPlaySeqSaveUpdate(MediaVO[] mediaVOs, SessionInfoVO sessionInfoVO);
 }

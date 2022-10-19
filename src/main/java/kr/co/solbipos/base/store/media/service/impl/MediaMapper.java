@@ -75,4 +75,10 @@ public interface MediaMapper {
 
     /** 동영상출력순서 자동채번 */
     String getDispSeq(MediaVO mediaVO);
+
+    /** 재생순서관리 탭 - 조회 */
+    List<DefaultMap<Object>> getMediaPlaySeqList(MediaVO mediaVO);
+
+    /** 재생순서관리 탭 - 저장 */
+    int getMediaPlaySeqSaveUpdate(MediaVO mediaVO);
 }

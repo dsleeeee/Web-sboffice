@@ -400,4 +400,42 @@ public class MediaServiceImpl implements MediaService {
         }
         return procCnt;
     }
+
+    /** 재생순서관리 탭 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getMediaPlaySeqList(MediaVO mediaVO, SessionInfoVO sessionInfoVO) {
+
+        mediaVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        mediaVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            mediaVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return mediaMapper.getMediaPlaySeqList(mediaVO);
+    }
+
+    /** 재생순서관리 탭 - 저장 */
+    @Override
+    public int getMediaPlaySeqSaveUpdate(MediaVO[] mediaVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+
+        String currentDt = currentDateTimeString();
+
+        for(MediaVO mediaVO : mediaVOs) {
+
+            mediaVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            mediaVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+                mediaVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+
+            mediaVO.setModDt(currentDt);
+            mediaVO.setModId(sessionInfoVO.getUserId());
+
+            procCnt = mediaMapper.getMediaPlaySeqSaveUpdate(mediaVO);
+        }
+
+        return procCnt;
+    }
 }
