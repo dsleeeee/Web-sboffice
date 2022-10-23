@@ -145,6 +145,12 @@ public class PromotionVO extends PageVO {
     private String userId;
     /** 프로모션 종류 */
     private String promoType;
+    /** 본사부담금 */
+    private int hqChargeUprc;
+    /** 매장부담금 */
+    private int msChargeUprc;
+    /** 제휴부담금 */
+    private int partnerChargeUprc;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -616,5 +622,29 @@ public class PromotionVO extends PageVO {
 
     public void setPromoType(String promoType) {
         this.promoType = promoType;
+    }
+
+    public int getHqChargeUprc() {
+        return hqChargeUprc;
+    }
+
+    public void setHqChargeUprc(int hqChargeUprc) {
+        this.hqChargeUprc = hqChargeUprc;
+    }
+
+    public int getMsChargeUprc() {
+        return msChargeUprc;
+    }
+
+    public void setMsChargeUprc(int msChargeUprc) {
+        this.msChargeUprc = msChargeUprc;
+    }
+
+    public int getPartnerChargeUprc() {
+        return partnerChargeUprc;
+    }
+
+    public void setPartnerChargeUprc(int partnerChargeUprc) {
+        this.partnerChargeUprc = partnerChargeUprc;
     }
 }

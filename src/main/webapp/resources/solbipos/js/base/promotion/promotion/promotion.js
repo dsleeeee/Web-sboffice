@@ -327,21 +327,24 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                 if(orgnFg === "STORE") { // 매장권한 일 때
                     if (info.regFg === 'S') { // 등록자가 매장일 때,
 
-                        $(".updownSet").css("display", "");
-
                         if(modPromotionEnvstVal === "1"){ // 본사 또는 매장의 환경변수(진행중인프로모션수정여부 - 1097)이 '수정가능'인 경우 버튼 보임
+                            $(".updownSet").css("display", "");
                             $scope.setButtonVisible("Y");
                         }else{
                             if(info.dateYn === "Y"){ // 프로모션 기간이 있는 경우, 오늘날짜가 프로모션 시작날짜보다 크거나 같으면 일부 버튼 숨김
                                 if(Number(now) >= Number(info.startYmd)){
+                                    $(".updownSet").css("display", "none");
                                     $scope.setButtonVisible("N");
                                 }else{
+                                    $(".updownSet").css("display", "");
                                     $scope.setButtonVisible("Y");
                                 }
                             }else{ // 프로모션 기간이 없는 경우, 오늘날짜가 프로모션 등록날짜보다 크면 일부 버튼 숨김
                                 if(Number(now) > Number(info.regDt)) {
+                                    $(".updownSet").css("display", "none");
                                     $scope.setButtonVisible("N");
                                 }else{
+                                    $(".updownSet").css("display", "");
                                     $scope.setButtonVisible("Y");
                                 }
                             }
@@ -349,6 +352,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                     } else { // 등록자가 본사일 때
                         $("#btnSave").css("display", "none");
                         $(".updownSet").css("display", "none");
+                        $("#divBatchBtn").css("display", "none");
                     }
                 }else{ // 본사권한 일 때
                     if(modPromotionEnvstVal === "1"){ // 본사 또는 매장의 환경변수(진행중인프로모션수정여부 - 1097)이 '수정가능'인 경우 버튼 보임
@@ -489,6 +493,24 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                     $("input:checkbox[id='chkMinSaleAmt']").prop("checked", false);
                     $scope.isCheckedMinSaleAmt = false;
                     $("#divChkMinSaleAmt").css("display", "none");
+                }
+
+                if(info.hqChargeUprc !== "" && info.hqChargeUprc !== "0" && info.hqChargeUprc !== 0){ // 본사부담금
+                    $("#hqChargeUprc").val(info.hqChargeUprc);
+                }else{
+                    $("#hqChargeUprc").val("");
+                }
+
+                if(info.msChargeUprc !== "" && info.msChargeUprc !== "0" && info.msChargeUprc !== 0){ // 매장부담금
+                    $("#msChargeUprc").val(info.msChargeUprc);
+                }else{
+                    $("#msChargeUprc").val("");
+                }
+
+                if(info.partnerChargeUprc !== "" && info.partnerChargeUprc !== "0" && info.partnerChargeUprc !== 0){ // 제휴부담금
+                    $("#partnerChargeUprc").val(info.partnerChargeUprc);
+                }else{
+                    $("#partnerChargeUprc").val("");
                 }
 
                 // ------------ 적용상품 ------------
@@ -663,6 +685,10 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                 params.minSaleAmt = "";
                 params.maxSaleAmt = "";
             }
+            
+            params.hqChargeUprc = $("#hqChargeUprc").val(); // 본사부담금
+            params.msChargeUprc = $("#msChargeUprc").val(); // 매장부담금
+            params.partnerChargeUprc = $("#partnerChargeUprc").val(); // 제휴부담금
 
             // ------------ 적용상품 ------------
             params.prodCdYn = $("#chkProd").is(":checked") === true ? 'Y' : 'N'; // 적용상품
@@ -918,6 +944,10 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
         $("#maxSaleAmt").val("");
         $scope.isCheckedMinSaleAmt = false;
         $("#divChkMinSaleAmt").css("display", "none");
+        
+        $("#hqChargeUprc").val(""); // 본사부담금
+        $("#msChargeUprc").val(""); // 매장부담금
+        $("#partnerChargeUprc").val(""); // 제휴부담금
 
         // ------------ 적용상품 ------------
         $("input:checkbox[id='chkProd']").prop("checked", false); // 적용상품
@@ -981,6 +1011,8 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             $("#btnClassAdd").css("display", "none");
             $("#btnProdSave").css("display", "none");
             $("#btnProdDel").css("display", "none");
+            $("#divSelectProdBatch").css("display", "none");
+            $("#divBatchBtn").css("display", "none");
 
             // 적용매장 grid 버튼
             $("#btnStoreAdd").css("display", "");
@@ -1001,6 +1033,8 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             $("#btnClassAdd").css("display", "");
             $("#btnProdSave").css("display", "");
             $("#btnProdDel").css("display", "");
+            $("#divSelectProdBatch").css("display", "");
+            $("#divBatchBtn").css("display", "");
 
             // 적용매장 grid 버튼
             $("#btnStoreAdd").css("display", "");
@@ -1223,6 +1257,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
     $scope.setForm= function(promoType){
         if (promoType === "001") { // 영수증전체할인
             $("#tblProd").css("display", "none"); // 적용상품 사용안함
+            $("#divSelectProdBatch").css("display", "none"); // 할인구분, 할인값 일괄적용;
             $scope.typeCdCombo.itemsSource = new wijmo.collections.CollectionView(typeCdFgData.slice(0, 1)); // 적용혜택 - 혜택유형
             $scope.applyDcDsCombo.itemsSource = new wijmo.collections.CollectionView(applyDcDsData.slice(0, 1)); // 적용혜택 - 할인구분
             $("#trApplyDcDs").css("display", "");
@@ -1231,15 +1266,17 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             $("#thDcSet").css("display", "");
         } else if (promoType === "101") { // 적용품목할인
             $("#tblProd").css("display", "");
+            //$("#divSelectProdBatch").css("display", ""); // 할인구분, 할인값 일괄적용;
             $scope.selectProdDsCombo.itemsSource = new wijmo.collections.CollectionView(selectProdDsFgData.slice(0, 1).concat(selectProdDsFgData.slice(2, 3))); // 적용상품 - 구매대상
             $scope.typeCdCombo.itemsSource = new wijmo.collections.CollectionView(typeCdFgData.slice(1, 2)); // 적용혜택 - 혜택유형
             $scope.applyDcDsCombo.itemsSource = new wijmo.collections.CollectionView(applyDcDsData); // 적용혜택 - 할인구분
-            $("#trApplyDcDs").css("display", "");
+            $("#trApplyDcDs").css("display", "none");
             $("#lblApplyDcDs").text(messages["promotion.applyDcDs"]);
             $("#tdApplyDcDs").css("display", "");
             $("#thDcSet").css("display", "");
         } else if (promoType === "201") { // 1+1 할인
             $("#tblProd").css("display", "");
+            $("#divSelectProdBatch").css("display", "none"); // 할인구분, 할인값 일괄적용;
             $scope.selectProdDsCombo.itemsSource = new wijmo.collections.CollectionView(selectProdDsFgData.slice(0, 1)); // 적용상품 - 구매대상
             $scope.typeCdCombo.itemsSource = new wijmo.collections.CollectionView(typeCdFgData.slice(2, 3)); // 적용혜택 - 혜택유형
             $scope.applyDcDsCombo.itemsSource = new wijmo.collections.CollectionView(applyDcDsData.slice(0, 1)); // 적용혜택 - 할인구분
@@ -1250,12 +1287,14 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             $("#thDcSet").css("display", "");
         } else if (promoType === "301") { // 1+1 증정
             $("#tblProd").css("display", "");
+            $("#divSelectProdBatch").css("display", "none"); // 할인구분, 할인값 일괄적용;
             $scope.selectProdDsCombo.itemsSource = new wijmo.collections.CollectionView(selectProdDsFgData.slice(0, 1).concat(selectProdDsFgData.slice(2, 3))); // 적용상품 - 구매대상
             $scope.typeCdCombo.itemsSource = new wijmo.collections.CollectionView(typeCdFgData.slice(3, 4)); // 적용혜택 - 혜택유형
             $scope.presentDsCombo.itemsSource = new wijmo.collections.CollectionView(presentDsFgData); // 혜택상품 - 구분
             $("#trApplyDcDs").css("display", "none");
         } else { // 특별가
             $("#tblProd").css("display", "");
+            $("#divSelectProdBatch").css("display", "none"); // 할인구분, 할인값 일괄적용;
             $scope.selectProdDsCombo.itemsSource = new wijmo.collections.CollectionView(selectProdDsFgData.slice(0, 1)); // 적용상품 - 구매대상
             $scope.typeCdCombo.itemsSource = new wijmo.collections.CollectionView(typeCdFgData.slice(4, 5)); // 적용혜택 - 혜택유형
 
@@ -1333,8 +1372,12 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
     
     // 적용혜택 - 혜택유형 선택에 따른 할인구분, 할인율, 혜택상품 입력영역 disabled 여부
     $scope.setApplyDcDs = function (s) {
-        if(s.selectedValue === "1" || s.selectedValue === "2"){
+        if(s.selectedValue === "1"){
             $("#trApplyDcDs").css("display", "");
+            $("#tblBene").css("display", "none");
+
+        }else if (s.selectedValue === "2"){
+            $("#trApplyDcDs").css("display", "none");
             $("#tblBene").css("display", "none");
 
         }else if (s.selectedValue === "3"){
@@ -1469,10 +1512,14 @@ app.controller('promotionSelectProdGridCtrl', ['$scope', '$http','$timeout', fun
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('promotionSelectProdGridCtrl', $scope, $http, $timeout, true));
 
+    // 프로모션 등록 Ctrl 참조
+    var scope = agrid.getScope('promotionRegCtrl');
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
         $scope.gubunDsFgDataMap = new wijmo.grid.DataMap(gubunDsFgData, 'value', 'name'); //상품코드/분류 구분
+        $scope.applyDcDsDataMap = new wijmo.grid.DataMap(applyDcDsData, 'value', 'name'); //할인구분
     };
 
     //
@@ -1489,20 +1536,46 @@ app.controller('promotionSelectProdGridCtrl', ['$scope', '$http','$timeout', fun
         var params = {};
         params.promotionCd = $("#hdPromotionCd").val();
 
-        $scope._inquirySub("/base/promotion/promotion/getPromotionProdList.sb", params, function () {});
+        $scope._inquirySub("/base/promotion/promotion/getPromotionProdList.sb", params, function () {
 
+            var grid = wijmo.Control.getControl("#wjGridSelectProd");
+            var columns = grid.columns;
+
+            // 프로모션 종류가 '적용품목할인' 인 경우만 할인구분, 할인값 상품별 개별입력 가능.
+            if(scope.promotionTypeCombo.selectedValue === "101"){
+                columns[4].width = 180;   // 할인구분, 할인값 컬럼추가로 인한 명칭 컬럼 width 값 조정
+                columns[6].visible = true;
+                columns[7].visible = true;
+            }else {
+                columns[4].width = 250;
+                columns[6].visible = false;
+                columns[7].visible = false;
+            }
+
+            // 일괄등록 입력값 초기화
+            $scope.applyDcDsBatchCombo.selectedIndex = 0; // 할인구분
+            $("#dcSetBatch").val(""); // 할인값
+        });
     };
 
     // 적용상품 추가 팝업
     $scope.prodAdd = function () {
         $scope.promotionProdRegLayer.show(true);
-        $scope._broadcast('promotionProdRegCtrl', $scope.selectProdDsCombo.selectedValue);
+
+        var params = {};
+        params.selectProdDs = $scope.selectProdDsCombo.selectedValue;
+        params.promotionType = scope.promotionTypeCombo.selectedValue;
+        $scope._broadcast('promotionProdRegCtrl', params);
     };
 
     // 적용분류 추가 팝업
     $scope.classAdd = function () {
         $scope.promotionClassRegLayer.show(true);
-        $scope._broadcast('promotionClassRegCtrl', $scope.selectProdDsCombo.selectedValue);
+
+        var params = {};
+        params.selectProdDs = $scope.selectProdDsCombo.selectedValue;
+        params.promotionType = scope.promotionTypeCombo.selectedValue;
+        $scope._broadcast('promotionClassRegCtrl', params);
     };
 
     // 적용상품 저장
@@ -1544,17 +1617,55 @@ app.controller('promotionSelectProdGridCtrl', ['$scope', '$http','$timeout', fun
                 }
             }
 
+            // 프로모션 종류가 '적용품목할인' 인 경우만 할인구분, 할인값 체크
+            if(scope.promotionTypeCombo.selectedValue === "101"){
+                if (item.gChk === true && (item.applyDcDs === null || item.applyDcDs === "" || item.applyDcDs === undefined)) {
+                    $scope._popMsg(messages["promotion.chk.applyDcDs"]); // 선택한 상품의 할인구분을 반드시 입력하세요.
+                    return false;
+                }
+
+                if (item.gChk === true && (item.dcSet === null || item.dcSet === "" || item.dcSet === "0" || item.dcSet === 0)) {
+                    $scope._popMsg(messages["promotion.chk.dcSetVal"]); // 선택한 상품의 할인값을 반드시 입력하세요.
+                    return false;
+                }
+
+                // 정률할인의 할인값은 0~100 사이의 숫자만 입력하세요.
+                if(item.gChk === true && item.applyDcDs === "1") {
+                    if (0 > item.dcSet || item.dcSet > 100) {
+                        $scope._popMsg(messages["promotion.chk.dcSet.limit1"]);
+                        return false;
+                    }
+                }
+
+                // 정액할인의 할인값은 1원단위를 입력할 수 없습니다.
+                if(item.gChk === true && item.applyDcDs === "2") {
+                    if(Number(item.dcSet) % 10 > 0){
+                        $scope._popMsg(messages["promotion.chk.dcSet.limit2"]);
+                        return false;
+                    }
+                }
+            }
+
             if(item.gChk === true) {
                 var obj = {};
                 obj.status = "U";
                 obj.promotionCd = $("#hdPromotionCd").val();
                 obj.condiProdSeq = item.condiProdSeq;
 
-                // 구매대상 선택값이 전체구매, 일부구매(종류+수량)인 경우만 조건수량 체크
+                // 구매대상 선택값이 전체구매, 일부구매(종류+수량)인 경우만 조건수량 입력
                 if($scope.selectProdDsCombo.selectedValue === "1" || $scope.selectProdDsCombo.selectedValue === "2") {
                     obj.prodQty = item.prodQty;
                 }else{
                     obj.prodQty = 1;
+                }
+
+                // 프로모션 종류가 '적용품목할인' 인 경우만 할인구분, 할인값 입력
+                if(scope.promotionTypeCombo.selectedValue === "101"){
+                    obj.applyDcDs = item.applyDcDs;
+                    obj.dcSet = item.dcSet;
+                }else{
+                    obj.applyDcDs = "";
+                    obj.dcSet = 0;
                 }
 
                 params.push(obj);
@@ -1632,6 +1743,55 @@ app.controller('promotionSelectProdGridCtrl', ['$scope', '$http','$timeout', fun
             $scope._popMsg(err.message);
         });
     }
+
+    // 할인구분 일괄적용
+    $scope.batchApplyDcDs = function () {
+
+        var selectCnt = 0;
+        for(var i = $scope.flexSelectProdGrid.collectionView.items.length-1; i >= 0; i-- ){
+          var item = $scope.flexSelectProdGrid.collectionView.items[i];
+          if(item.gChk === true) selectCnt++;
+        }
+
+        if(selectCnt < 1) {
+          $scope._popMsg(messages["promotion.chk.batch"]); // 상품 또는 분류를 선택해주세요.
+          return false;
+        }
+
+        for(var i = $scope.flexSelectProdGrid.collectionView.items.length-1; i >= 0; i-- ) {
+            if ($scope.flexSelectProdGrid.collectionView.items[i].gChk) {
+                $scope.flexSelectProdGrid.collectionView.items[i].applyDcDs = $scope.applyDcDsBatchCombo.selectedValue;
+            }
+        }
+
+        $scope.flexSelectProdGrid.collectionView.commitEdit();
+        $scope.flexSelectProdGrid.collectionView.refresh();
+    };
+
+    // 할인값 일괄적용
+    $scope.batchDcSet = function () {
+
+        var selectCnt = 0;
+        for(var i = $scope.flexSelectProdGrid.collectionView.items.length-1; i >= 0; i-- ){
+          var item = $scope.flexSelectProdGrid.collectionView.items[i];
+          if(item.gChk === true) selectCnt++;
+        }
+
+        if(selectCnt < 1) {
+          $scope._popMsg(messages["promotion.chk.batch"]); // 상품 또는 분류를 선택해주세요.
+          return false;
+        }
+
+        for(var i = $scope.flexSelectProdGrid.collectionView.items.length-1; i >= 0; i-- ) {
+            if ($scope.flexSelectProdGrid.collectionView.items[i].gChk) {
+                $scope.flexSelectProdGrid.collectionView.items[i].dcSet = $("#dcSetBatch").val();
+            }
+        }
+
+        $scope.flexSelectProdGrid.collectionView.commitEdit();
+        $scope.flexSelectProdGrid.collectionView.refresh();
+    };
+
 }]);
 
 /**

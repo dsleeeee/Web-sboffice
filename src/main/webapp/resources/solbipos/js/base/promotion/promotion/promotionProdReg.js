@@ -24,6 +24,7 @@ app.controller('promotionProdRegCtrl', ['$scope', '$http', function ($scope, $ht
     $scope.initGrid = function (s, e) {
 
         $scope.prodUseYnFgDataMap = new wijmo.grid.DataMap(useYnFgData, 'value', 'name'); //사용여부
+        $scope.applyDcDsDataMap = new wijmo.grid.DataMap(applyDcDsData, 'value', 'name'); //할인구분
 
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
@@ -43,7 +44,9 @@ app.controller('promotionProdRegCtrl', ['$scope', '$http', function ($scope, $ht
     $scope.$on("promotionProdRegCtrl", function(event, data) {
 
         // 구매대상 선택값에 따라 조건수량 입력여부 결정
-        $("#hdSelectProdDs1").val(data);
+        $("#hdSelectProdDs1").val(data.selectProdDs);
+        // 프로모션 종류에 따라 할인구분, 할인값 입력여부 결정
+        $("#hdPromotionType1").val(data.promotionType);
 
         // 구매대상 선택값이 전체구매, 일부구매(종류+수량)인 경우만 조건수량 입력가능
         var grid = wijmo.Control.getControl("#wjGridPromotionProdReg");
@@ -52,6 +55,17 @@ app.controller('promotionProdRegCtrl', ['$scope', '$http', function ($scope, $ht
             columns[6].visible = true;
         }else{
             columns[6].visible = false;
+        }
+        
+        // 프로모션종류가 적용품목할인인 경우만 할인구분, 할인값 입력가능
+        if($("#hdPromotionType1").val() === "101"){
+            columns[7].visible = true;
+            columns[8].visible = true;
+            $("#divBatchProd").css("display", "");
+        }else{
+            columns[7].visible = false;
+            columns[8].visible = false;
+            $("#divBatchProd").css("display", "none");
         }
 
         // 상품조회
@@ -120,6 +134,35 @@ app.controller('promotionProdRegCtrl', ['$scope', '$http', function ($scope, $ht
                 }
             }
 
+            // 프로모션 종류가 '적용품목할인' 인 경우만 할인구분, 할인값 체크
+            if($("#hdPromotionType1").val() === "101"){
+                if (item.gChk === true && (item.applyDcDs === null || item.applyDcDs === "" || item.applyDcDs === undefined)) {
+                    $scope._popMsg(messages["promotion.chk.applyDcDs"]); // 선택한 상품의 할인구분을 반드시 입력하세요.
+                    return false;
+                }
+
+                if (item.gChk === true && (item.dcSet === null || item.dcSet === "" || item.dcSet === "0" || item.dcSet === 0)) {
+                    $scope._popMsg(messages["promotion.chk.dcSetVal"]); // 선택한 상품의 할인값을 반드시 입력하세요.
+                    return false;
+                }
+
+                // 정률할인의 할인값은 0~100 사이의 숫자만 입력하세요.
+                if(item.gChk === true && item.applyDcDs === "1") {
+                    if (0 > item.dcSet || item.dcSet > 100) {
+                        $scope._popMsg(messages["promotion.chk.dcSet.limit1"]);
+                        return false;
+                    }
+                }
+
+                // 정액할인의 할인값은 1원단위를 입력할 수 없습니다.
+                if(item.gChk === true && item.applyDcDs === "2") {
+                    if(Number(item.dcSet) % 10 > 0){
+                        $scope._popMsg(messages["promotion.chk.dcSet.limit2"]);
+                        return false;
+                    }
+                }
+            }
+
             if(item.gChk === true) {
                 var obj = {};
                 obj.status = "I";
@@ -134,12 +177,22 @@ app.controller('promotionProdRegCtrl', ['$scope', '$http', function ($scope, $ht
                     obj.prodQty = 1;
                 }
 
+                // 프로모션 종류가 '적용품목할인' 인 경우만 할인구분, 할인값 입력
+                if($("#hdPromotionType1").val() === "101"){
+                    obj.applyDcDs = item.applyDcDs;
+                    obj.dcSet = item.dcSet;
+                }else{
+                    obj.applyDcDs = "";
+                    obj.dcSet = 0;
+                }
+
                 params.push(obj);
             }
         }
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/base/promotion/promotion/savePromotionProd.sb", params, function () {
 
+            $scope.closeProd();
             $scope.promotionProdRegLayer.hide(true);
 
             // 적용상품 목록 재조회
@@ -147,7 +200,64 @@ app.controller('promotionProdRegCtrl', ['$scope', '$http', function ($scope, $ht
 
         });
     }
-    
 
+    // 할인구분 일괄적용
+    $scope.batchApplyDcDsProd = function () {
+
+        var selectCnt = 0;
+        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+          var item = $scope.flex.collectionView.items[i];
+          if(item.gChk === true) selectCnt++;
+        }
+
+        if(selectCnt < 1) {
+          $scope._popMsg(messages["promotion.chk.prod"]); // 상품 또는 분류를 선택해주세요.
+          return false;
+        }
+
+        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ) {
+            if ($scope.flex.collectionView.items[i].gChk) {
+                $scope.flex.collectionView.items[i].applyDcDs = $scope.applyDcDsBatch1Combo.selectedValue;
+            }
+        }
+
+        $scope.flex.collectionView.commitEdit();
+        $scope.flex.collectionView.refresh();
+    };
+
+    // 할인값 일괄적용
+    $scope.batchDcSetProd = function () {
+
+        var selectCnt = 0;
+        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+          var item = $scope.flex.collectionView.items[i];
+          if(item.gChk === true) selectCnt++;
+        }
+
+        if(selectCnt < 1) {
+          $scope._popMsg(messages["promotion.chk.prod"]); // 상품 또는 분류를 선택해주세요.
+          return false;
+        }
+
+        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ) {
+            if ($scope.flex.collectionView.items[i].gChk) {
+                $scope.flex.collectionView.items[i].dcSet = $("#dcSetBatch1").val();
+            }
+        }
+
+        $scope.flex.collectionView.commitEdit();
+        $scope.flex.collectionView.refresh();
+    };
+
+    // 닫기 시 초기화
+    $scope.closeProd = function () {
+        $scope.srchProdBrandCombo.selectedIndex = 0;
+        $scope.srchProdStoreGroupCombo.selectedIndex = 0;
+        $("#srchProdCd").val("");
+        $("#srchProdNm").val("");
+        $scope.srchProdUseYnCombo.selectedIndex = 0;
+        $scope.applyDcDsBatch1Combo.selectedIndex = 0;
+        $("#dcSetBatch1").val("");
+    }
 
 }]);

@@ -259,6 +259,9 @@
                                       #{memberClassCd} AS MEMBER_CLASS_CD,
                                       #{minSaleAmt} AS MIN_SALE_AMT,
                                       #{maxSaleAmt} AS MAX_SALE_AMT,
+                                      #{hqChargeUprc} AS HQ_CHARGE_UPRC,
+                                      #{msChargeUprc} AS MS_CHARGE_UPRC,
+                                      #{partnerChargeUprc} AS PARTNER_CHARGE_UPRC,
                                       #{prodCdYn} AS PROD_CD_YN,
                                       #{selectProdDs} AS SELECT_PROD_DS,
                                       <!-- #{selectProdCrossFg} AS SELECT_CROSS_FG, -->
@@ -297,6 +300,9 @@
                            A.MEMBER_CLASS_CD = B.MEMBER_CLASS_CD,
                            A.MIN_SALE_AMT = B.MIN_SALE_AMT,
                            A.MAX_SALE_AMT = B.MAX_SALE_AMT,
+                           A.HQ_CHARGE_UPRC = B.HQ_CHARGE_UPRC,
+                           A.MS_CHARGE_UPRC = B.MS_CHARGE_UPRC,
+                           A.PARTNER_CHARGE_UPRC = B.PARTNER_CHARGE_UPRC,
                            A.PROD_CD_YN = B.PROD_CD_YN,
                            A.SELECT_PROD_DS = B.SELECT_PROD_DS,
                            <!-- A.SELECT_CROSS_FG = B.SELECT_CROSS_FG, -->
@@ -332,6 +338,9 @@
                            A.MEMBER_CLASS_CD,
                            A.MIN_SALE_AMT,
                            A.MAX_SALE_AMT,
+                           A.HQ_CHARGE_UPRC,
+                           A.MS_CHARGE_UPRC,
+                           A.PARTNER_CHARGE_UPRC,
                            A.PROD_CD_YN,
                            A.SELECT_PROD_DS,
                            <!-- A.SELECT_CROSS_FG, -->
@@ -369,6 +378,9 @@
                            B.MEMBER_CLASS_CD,
                            B.MIN_SALE_AMT,
                            B.MAX_SALE_AMT,
+                           B.HQ_CHARGE_UPRC,
+                           B.MS_CHARGE_UPRC,
+                           B.PARTNER_CHARGE_UPRC,
                            B.PROD_CD_YN,
                            B.SELECT_PROD_DS,
                            <!-- B.SELECT_CROSS_FG, -->
@@ -409,6 +421,9 @@
                                       #{memberClassCd} AS MEMBER_CLASS_CD,
                                       #{minSaleAmt} AS MIN_SALE_AMT,
                                       #{maxSaleAmt} AS MAX_SALE_AMT,
+                                      #{hqChargeUprc} AS HQ_CHARGE_UPRC,
+                                      #{msChargeUprc} AS MS_CHARGE_UPRC,
+                                      #{partnerChargeUprc} AS PARTNER_CHARGE_UPRC,
                                       #{prodCdYn} AS PROD_CD_YN,
                                       #{selectProdDs} AS SELECT_PROD_DS,
                                       <!-- #{selectProdCrossFg} AS SELECT_CROSS_FG, -->
@@ -446,6 +461,9 @@
                             A.MEMBER_CLASS_CD = B.MEMBER_CLASS_CD,
                             A.MIN_SALE_AMT = B.MIN_SALE_AMT,
                             A.MAX_SALE_AMT = B.MAX_SALE_AMT,
+                            A.HQ_CHARGE_UPRC = B.HQ_CHARGE_UPRC,
+                            A.MS_CHARGE_UPRC = B.MS_CHARGE_UPRC,
+                            A.PARTNER_CHARGE_UPRC = B.PARTNER_CHARGE_UPRC,
                             A.PROD_CD_YN = B.PROD_CD_YN,
                             A.SELECT_PROD_DS = B.SELECT_PROD_DS,
                             <!-- A.SELECT_CROSS_FG = B.SELECT_CROSS_FG, -->
@@ -480,6 +498,9 @@
                             A.MEMBER_CLASS_CD,
                             A.MIN_SALE_AMT,
                             A.MAX_SALE_AMT,
+                            A.HQ_CHARGE_UPRC,
+                            A.MS_CHARGE_UPRC,
+                            A.PARTNER_CHARGE_UPRC,
                             A.PROD_CD_YN,
                             A.SELECT_PROD_DS,
                             <!-- A.SELECT_CROSS_FG, -->
@@ -516,6 +537,9 @@
                             B.MEMBER_CLASS_CD,
                             B.MIN_SALE_AMT,
                             B.MAX_SALE_AMT,
+                            B.HQ_CHARGE_UPRC,
+                            B.MS_CHARGE_UPRC,
+                            B.PARTNER_CHARGE_UPRC,
                             B.PROD_CD_YN,
                             B.SELECT_PROD_DS,
                             <!-- B.SELECT_CROSS_FG, -->
@@ -780,7 +804,10 @@
                         thpb.PRINT_MESSAGE,
                         thpb.PRESENT_DS,
                         thpb.SELECT_CROSS_FG,
-                        thpb.SELECT_GIFT_CNT
+                        thpb.SELECT_GIFT_CNT,
+                        thpc.HQ_CHARGE_UPRC,
+                        thpc.MS_CHARGE_UPRC,
+                        thpc.PARTNER_CHARGE_UPRC
                   FROM TB_HQ_PROMO_H thph,
                         TB_HQ_PROMO_CONDI thpc,
                         TB_HQ_PROMO_BENE thpb
@@ -835,7 +862,10 @@
                         tmpb.PRINT_MESSAGE,
                         tmpb.PRESENT_DS,
                         tmpb.SELECT_CROSS_FG,
-                        tmpb.SELECT_GIFT_CNT
+                        tmpb.SELECT_GIFT_CNT,
+                        tmpc.HQ_CHARGE_UPRC,
+                        tmpc.MS_CHARGE_UPRC,
+                        tmpc.PARTNER_CHARGE_UPRC
                   FROM TB_MS_PROMO_H tmph,
                         TB_MS_PROMO_CONDI tmpc,
                         TB_MS_PROMO_BENE tmpb
@@ -875,7 +905,9 @@
                                    END
                         )
                         END AS PROD_NM,
-                        thpcp.PROD_QTY
+                        thpcp.PROD_QTY,
+                        thpcp.APPLY_DC_DS,
+                        thpcp.DC_SET
                   FROM TB_HQ_PROMO_CONDI_PROD thpcp,
                         TB_HQ_PRODUCT thp,
                         TB_HQ_PRODUCT_CLASS thpc
@@ -903,7 +935,9 @@
                                    END
                         )
                         END AS PROD_NM,
-                        tmpcp.PROD_QTY
+                        tmpcp.PROD_QTY,
+                        tmpcp.APPLY_DC_DS,
+                        tmpcp.DC_SET
                   FROM TB_MS_PROMO_CONDI_PROD tmpcp,
                         TB_MS_PRODUCT tmp,
                         TB_MS_PRODUCT_CLASS tmpc
@@ -936,6 +970,8 @@
                         C.PROD_CD,
                         C.PROD_NM,
                         C.PROD_QTY,
+                        C.APPLY_DC_DS,
+                        C.DC_SET,
                         C.USE_YN,
                         C.STORE_GROUP_NMS,
                         C.STORE_GROUP_CDS
@@ -946,6 +982,8 @@
                                       thp.PROD_CD,
                                       thp.PROD_NM,
                                       '1' AS PROD_QTY,
+                                      '1' AS APPLY_DC_DS,
+                                      '0' AS DC_SET,
                                       thp.USE_YN,
                                       LISTAGG(thspgd.STORE_GROUP_NM || '(' || thspgd.STORE_GROUP_CD || ')', ', ') WITHIN GROUP (ORDER BY thspgd.STORE_GROUP_CD) AS STORE_GROUP_NMS,
                                       LISTAGG(thspgd.STORE_GROUP_CD, ', ') WITHIN GROUP (ORDER BY thspgd.STORE_GROUP_CD) AS STORE_GROUP_CDS
@@ -1089,7 +1127,9 @@
                               THEN FN_GET_PROD_CLASS_CD_NM_STR(thpc.HQ_OFFICE_CD, thpc.PROD_CLASS_CD, 'NM_STR')
                               ELSE thpc.PROD_CLASS_NM
                                END AS PROD_CLASS_NM,
-                        '1' AS PROD_QTY
+                        '1' AS PROD_QTY,
+                        '1' AS APPLY_DC_DS,
+                        '0' AS DC_SET
                    FROM TB_HQ_PRODUCT_CLASS thpc
                   WHERE thpc.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test="prodClassCd != null and prodClassCd != ''">
@@ -1149,7 +1189,9 @@
                     REG_ID,
                     REG_DT,
                     MOD_ID,
-                    MOD_DT
+                    MOD_DT,
+                    APPLY_DC_DS,
+                    DC_SET
                 )
                 VALUES
                 (
@@ -1163,7 +1205,9 @@
                     #{regId},
                     #{regDt},
                     #{modId},
-                    #{modDt}
+                    #{modDt},
+                    #{applyDcDs},
+                    #{dcSet}
                 )
             </when>
             <!-- 매장 -->
@@ -1180,7 +1224,9 @@
                     REG_ID,
                     REG_DT,
                     MOD_ID,
-                    MOD_DT
+                    MOD_DT,
+                    APPLY_DC_DS,
+                    DC_SET
                 )
                 VALUES
                 (
@@ -1194,7 +1240,9 @@
                     #{regId},
                     #{regDt},
                     #{modId},
-                    #{modDt}
+                    #{modDt},
+                    #{applyDcDs},
+                    #{dcSet}
                 )
             </when>
         </choose>
@@ -1214,7 +1262,9 @@
                 UPDATE TB_HQ_PROMO_CONDI_PROD
                    SET PROD_QTY = #{prodQty},
                         MOD_DT = #{modDt},
-                        MOD_ID = #{modId}
+                        MOD_ID = #{modId},
+                        APPLY_DC_DS = #{applyDcDs},
+                        DC_SET = #{dcSet}
                  WHERE HQ_OFFICE_CD = #{hqOfficeCd}
                    AND PROMOTION_CD = #{promotionCd}
                    AND CONDI_PROD_SEQ = #{condiProdSeq}
@@ -1224,7 +1274,9 @@
                 UPDATE TB_MS_PROMO_CONDI_PROD
                     SET PROD_QTY = #{prodQty},
                         MOD_DT = #{modDt},
-                        MOD_ID = #{modId}
+                        MOD_ID = #{modId},
+                        APPLY_DC_DS = #{applyDcDs},
+                        DC_SET = #{dcSet}
                  WHERE STORE_CD = #{storeCd}
                    AND PROMOTION_CD = #{promotionCd}
                    AND CONDI_PROD_SEQ = #{condiProdSeq}
