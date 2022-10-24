@@ -30,7 +30,8 @@
                     FILE_SIZE,
                     USE_YN,
                     FILE_ORG_NM || '.' || FILE_EXT AS FILE_ORG_NM,
-                    DISP_TIME
+                    DISP_TIME,
+                    FILE_NM AS FILE_NM_EXT
             <include refid="CmmSQL.PagingTemplateCount"/>
                  FROM TB_HQ_POS_ADVER_FILE
                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
@@ -66,7 +67,8 @@
                     USE_YN,
                     FILE_ORG_NM || '.' || FILE_EXT AS FILE_ORG_NM,
                     DISP_SEQ,
-                    DISP_TIME
+                    DISP_TIME,
+                    FILE_NM AS FILE_NM_EXT
             <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_MS_POS_ADVER_FILE
                 WHERE STORE_CD = #{storeCd}
@@ -271,7 +273,9 @@
                REG_DT,
                REG_ID,
                MOD_DT,
-               MOD_ID
+               MOD_ID,
+               DISP_SEQ,
+               DISP_TIME
             )
             VALUES
             (
@@ -293,7 +297,9 @@
                 #{regDt},
                 #{regId},
                 #{modDt},
-                #{modId}
+                #{modId},
+                #{dispSeq},
+                #{dispTime}
             )
             ]]>
         </if>
@@ -561,6 +567,47 @@
             AND FILE_USE_TYPE = #{fileType}
         </if>
     </select>
+
+    <!-- 듀얼모니터영상관리 탭 - 삭제 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getMediaDelete" parameterType="MediaVO">
+        /* MediaMapper.getMediaDelete */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                TB_HQ_POS_ADVER_FILE
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{hqOfficeCd}
+                AND ADVER_FILE_NO = #{verSerNo}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                TB_MS_POS_ADVER_FILE
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND ADVER_FILE_NO = #{verSerNo}
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 듀얼모니터영상관리 탭 - 적용매장 삭제 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getMediaHqStoreDelete" parameterType="MediaVO">
+        /* MediaMapper.getMediaHqStoreDelete */
+        DELETE
+        TB_HQ_POS_ADVER_STORE
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND ADVER_FILE_NO = #{verSerNo}
+    </delete>
 
     <!-- 재생순서관리 탭 - 조회 -->
     <!--

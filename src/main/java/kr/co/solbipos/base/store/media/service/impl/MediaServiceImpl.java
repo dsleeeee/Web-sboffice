@@ -265,6 +265,7 @@ public class MediaServiceImpl implements MediaService {
         // 저장 경로 설정 (개발시 로컬)
 //        String root = multi.getSession().getServletContext().getRealPath("/");
 //        String path = root+"resources/upload/";
+//        String path = "D:\\Workspace\\javaWeb\\testMediaImg\\";
 
         // 파일서버 대응 경로 지정 (운영)
         String path = BaseEnv.FILE_UPLOAD_DIR + "Media/";
@@ -398,6 +399,44 @@ public class MediaServiceImpl implements MediaService {
             procCnt = mediaMapper.removeStore(applcStore);
             if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
+        return procCnt;
+    }
+
+    /** 듀얼모니터영상관리 탭 - 삭제 */
+    @Override
+    public int getMediaDelete(MediaVO[] mediaVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+
+        for(MediaVO mediaVO : mediaVOs) {
+
+            mediaVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            mediaVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
+                mediaVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+
+            System.out.println("듀얼모니터영상관리 탭 >>> 삭제 >>> verSerNo : " + mediaVO.getVerSerNo());
+
+            procCnt = mediaMapper.getMediaDelete(mediaVO);
+            if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+            // 적용매장 삭제
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
+                procCnt = mediaMapper.getMediaHqStoreDelete(mediaVO);
+            }
+
+            System.out.println("듀얼모니터영상관리 탭 >>> 삭제 >>> fileNmExt : " + mediaVO.getFileNmExt());
+
+//            String path = "D:\\Workspace\\javaWeb\\testMediaImg\\";
+            String path = BaseEnv.FILE_UPLOAD_DIR + "Media/";
+            String pathFull = path + mediaVO.getFileNmExt();
+            File delFile = new File(pathFull);
+            if(delFile.exists()) {
+                delFile.delete();
+            }
+        }
+
         return procCnt;
     }
 

@@ -74,6 +74,8 @@ public class MediaVO extends PageVO {
     private String dispSeq;
     /** 이미지출력시간 */
     private String dispTime;
+    /** 저장된파일명 */
+    private String fileNmExt;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -368,11 +370,11 @@ public class MediaVO extends PageVO {
 
     public void setDispSeq(String dispSeq) { this.dispSeq = dispSeq; }
 
-    public String getDispTime() {
-        return dispTime;
-    }
+    public String getDispTime() { return dispTime; }
 
-    public void setDispTime(String dispTime) {
-        this.dispTime = dispTime;
-    }
+    public void setDispTime(String dispTime) { this.dispTime = dispTime; }
+
+    public String getFileNmExt() { return fileNmExt; }
+
+    public void setFileNmExt(String fileNmExt) { this.fileNmExt = fileNmExt; }
 }

@@ -76,6 +76,12 @@ public interface MediaMapper {
     /** 동영상출력순서 자동채번 */
     String getDispSeq(MediaVO mediaVO);
 
+    /** 듀얼모니터영상관리 탭 - 삭제 */
+    int getMediaDelete(MediaVO mediaVO);
+
+    /** 듀얼모니터영상관리 탭 - 적용매장 삭제 */
+    int getMediaHqStoreDelete(MediaVO mediaVO);
+
     /** 재생순서관리 탭 - 조회 */
     List<DefaultMap<Object>> getMediaPlaySeqList(MediaVO mediaVO);
 

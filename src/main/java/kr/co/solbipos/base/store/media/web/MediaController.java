@@ -263,6 +263,29 @@ public class MediaController {
     }
 
     /**
+     * 듀얼모니터영상관리 탭 - 삭제
+     *
+     * @param mediaVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 10. 17.
+     */
+    @RequestMapping(value = "/media/getMediaDelete.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMediaDelete(@RequestBody MediaVO[] mediaVOs, HttpServletRequest request,
+                                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = mediaService.getMediaDelete(mediaVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
      * 재생순서관리 탭 - 조회
      *
      * @param mediaVO
