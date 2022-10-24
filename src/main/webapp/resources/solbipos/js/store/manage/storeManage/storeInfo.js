@@ -315,6 +315,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
       $("#storeInfoTitle").text("[" + storeDetailInfo.storeCd + "] " + storeDetailInfo.storeNm);
 
+
       $scope.store                        = storeDetailInfo;
       $scope.store.hqOfficeNm             = storeDetailInfo.hqOfficeNm;
       $scope.store.installPosCnt          = installPosCnt;
@@ -1179,7 +1180,11 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#storeCd").removeAttr("readonly");
       $("#storeCd").css("width", "60%");
       $("#btnChkStoreCd").css("display", "");
-      
+      // 아트박스(운영H0345,H0094)(개발DS012)
+      if($scope.store.hqOfficeCd === "H0345" || $scope.store.hqOfficeCd === "H0094" || $scope.store.hqOfficeCd === "DS012") {
+        $("#storeCd").attr("readonly", true);
+      }
+
       // 매장코드8이상 사용매장인 경우만 웹 사용자 직접등록
       if($("#hdDigit8Store").val() === "" || $("#hdDigit8Store").val() === null || $("#hdDigit8Store").val() === undefined){
           // 웹 사용자 자동 등록
@@ -1377,8 +1382,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           // ERP 연동 매장 정보 셋팅
           // 매장코드 수동입력 시
           if($scope.store.storeCdInputType === "1") {
-            // 아트박스(운영H0345)(개발DS012)
-            if($scope.store.hqOfficeCd === "H0345" || $scope.store.hqOfficeCd === "DS012") {
+            // 아트박스(운영H0345,H0094)(개발DS012)
+            if($scope.store.hqOfficeCd === "H0345" || $scope.store.hqOfficeCd === "H0094" || $scope.store.hqOfficeCd === "DS012") {
               $("#storeCd").val("P" + erpStoreScope.getErpStore().bbqStoreCd);
               $scope.store.storeCd = "P" + erpStoreScope.getErpStore().bbqStoreCd;
               $("#storeCd").attr("readonly", true);
@@ -1391,8 +1396,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $("#storeNm").val(erpStoreScope.getErpStore().storeNm);
           $("#bizStoreNm").val(erpStoreScope.getErpStore().bizStoreNm);
           $("#ownerNm").val(erpStoreScope.getErpStore().ownerNm);
-          // 아트박스(운영H0345)(개발DS012)
-          if($scope.store.hqOfficeCd === "H0345" || $scope.store.hqOfficeCd === "DS012") {
+          // 아트박스(운영H0345,H0094)(개발DS012)
+          if($scope.store.hqOfficeCd === "H0345" || $scope.store.hqOfficeCd === "H0094" || $scope.store.hqOfficeCd === "DS012") {
             $("#userId").val("p" + erpStoreScope.getErpStore().bbqStoreCd.toLowerCase());
             $("#userPwd").val("p" + erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234");
             $("#userPwdConf").val("p" + erpStoreScope.getErpStore().bbqStoreCd.toLowerCase()  + "1234");
