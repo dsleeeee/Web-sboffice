@@ -1908,7 +1908,8 @@
             #{modDt} AS MOD_DT,
             #{modId} AS MOD_ID,
             'H' AS REG_FG,
-            MAP_PROD_CD
+            MAP_PROD_CD,
+            SALE_TIME_FG
             FROM TB_HQ_PRODUCT
             WHERE 1=1
             AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -1953,7 +1954,8 @@
             USE_YN = B.USE_YN,
             REMARK = B.REMARK,
             MOD_DT = B.MOD_DT,
-            MOD_ID = B.MOD_ID
+            MOD_ID = B.MOD_ID,
+            SALE_TIME_FG = B.SALE_TIME_FG
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -1995,7 +1997,8 @@
                 A.MOD_DT,
                 A.MOD_ID,
                 A.REG_FG,
-                A.MAP_PROD_CD
+                A.MAP_PROD_CD,
+                A.SALE_TIME_FG
             ) VALUES (
                 B.STORE_CD,
                 B.PROD_CD,
@@ -2036,7 +2039,8 @@
                 B.MOD_DT,
                 B.MOD_ID,
                 B.REG_FG,
-                B.MAP_PROD_CD
+                B.MAP_PROD_CD,
+                B.SALE_TIME_FG
             )
     </insert>
 
@@ -2726,6 +2730,71 @@
                 B.STORE_CD,
                 B.PROD_CD,
                 B.PROD_INFO,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
+            )
+    </insert>
+
+    <!-- 상품 KIOSK 판매 시간설정 복사 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SALE_TIME
+        PARAM    : storeManageVO
+        COMMENTS : 본사의 상품 KIOSK 판매 시간설정을 복사한다
+    -->
+    <insert id="insertStoreHqKioskSaleTime" parameterType="storeManageVO">
+        /* USE : StoreManageMapper.insertStoreHqKioskSaleTime */
+        MERGE INTO TB_MS_PRODUCT_SALE_TIME A
+        USING
+        (
+            SELECT
+            #{storeCd} AS STORE_CD,
+            PROD_CD,
+            TIME_SEQ,
+            INCLUDE_FG,
+            S_SALE_TIME,
+            E_SALE_TIME,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID
+            FROM TB_HQ_PRODUCT_SALE_TIME
+            WHERE 1=1
+            AND HQ_OFFICE_CD = #{hqOfficeCd}
+        ) B
+        ON  (
+                A.STORE_CD = B.STORE_CD
+                AND A.PROD_CD = B.PROD_CD
+                AND A.TIME_SEQ = B.TIME_SEQ
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            INCLUDE_FG = B.INCLUDE_FG,
+            S_SALE_TIME = B.S_SALE_TIME,
+            E_SALE_TIME = B.E_SALE_TIME,
+            MOD_DT = B.MOD_DT,
+            MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.STORE_CD,
+                A.PROD_CD,
+                A.TIME_SEQ,
+                A.INCLUDE_FG,
+                A.S_SALE_TIME,
+                A.E_SALE_TIME,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+            ) VALUES (
+                B.STORE_CD,
+                B.PROD_CD,
+                B.TIME_SEQ,
+                B.INCLUDE_FG,
+                B.S_SALE_TIME,
+                B.E_SALE_TIME,
                 B.REG_DT,
                 B.REG_ID,
                 B.MOD_DT,

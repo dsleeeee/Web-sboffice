@@ -158,6 +158,9 @@ public interface StoreManageMapper {
     /** 상품상세설명 복사 */
     int insertStoreHqProdInfo(StoreManageVO storeManageVO);
 
+    /** 상품 KIOSK 판매 시간설정 */
+    int insertStoreHqKioskSaleTime(StoreManageVO storeManageVO);
+
     /** 취급상품 복사  */
     int insertStoreHqProductStore(StoreManageVO storeManageVO);
     int deleteStoreProductStore(StoreManageVO storeManageVO);
