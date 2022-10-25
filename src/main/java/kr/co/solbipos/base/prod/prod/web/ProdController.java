@@ -132,6 +132,11 @@ public class ProdController {
         model.addAttribute("prodAuthEnvstVal", prodAuthEnvstVal);
         model.addAttribute("prodNoEnvFg", prodNoEnvFg);
 
+        // POS에서 해당 WEB 화면 재접속한 경우(이전 접속 session 그대로 존재), 'posLoginReconnect'값울 판단하여 view화면 처리
+        if(request.getParameter("posLoginReconnect") != null && request.getParameter("posLoginReconnect").length() > 0){
+            model.addAttribute("posLoginReconnect", request.getParameter("posLoginReconnect"));
+        }
+
         return "base/prod/prod/prod";
     }
 
