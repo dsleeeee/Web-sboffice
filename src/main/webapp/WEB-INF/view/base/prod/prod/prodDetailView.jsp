@@ -520,6 +520,97 @@
                     </tbody>
                 </table>
             </div>
+            <%-- 영양정보 --%>
+            <h3 class="h3_tbl"><s:message code="prod.title.nuInfo"/></h3>
+            <div class="tblBr">
+                <table class="tblType01">
+                    <colgroup>
+                        <col class="w15" />
+                        <col class="w35" />
+                        <col class="w15" />
+                        <col class="w35" />
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <%-- 총중량 --%>
+                        <th><s:message code="prod.nuTotWt"/></th>
+                        <td>
+                            <div class="sb-select w80 fl">
+                                {{prodDetail.nuTotWt}}
+                            </div>
+                            <div class="sb-select w20 fr">
+                                (g)
+                            </div>
+                        </td>
+                        <%-- 총열량 --%>
+                        <th><s:message code="prod.nuKcal"/></th>
+                        <td>
+                            <div class="sb-select w80 fl">
+                                {{prodDetail.nuKcal}}
+                            </div>
+                            <div class="sb-select w20 fr">
+                                (kcal)
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <%-- 단백질 --%>
+                        <th><s:message code="prod.nuProtein"/></th>
+                        <td>
+                            <div class="sb-select w80 fl">
+                                {{prodDetail.nuProtein}}
+                            </div>
+                            <div class="sb-select w20 fr">
+                                (g)
+                            </div>
+                        </td>
+                        <%-- 나트륨 --%>
+                        <th><s:message code="prod.nuSodium"/></th>
+                        <td>
+                            <div class="sb-select w80 fl">
+                                {{prodDetail.nuSodium}}
+                            </div>
+                            <div class="sb-select w20 fr">
+                                (mg)
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <%-- 당류 --%>
+                        <th><s:message code="prod.nuSugars"/></th>
+                        <td>
+                            <div class="sb-select w80 fl">
+                                {{prodDetail.nuSugars}}
+                            </div>
+                            <div class="sb-select w20 fr">
+                                (g)
+                            </div>
+                        </td>
+                        <%-- 포화지방 --%>
+                        <th><s:message code="prod.nuSatFat"/></th>
+                        <td>
+                            <div class="sb-select w80 fl">
+                                {{prodDetail.nuSatFat}}
+                            </div>
+                            <div class="sb-select w20 fr">
+                                (g)
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <%-- 카페인 --%>
+                        <th><s:message code="prod.nuCaffeine"/></th>
+                        <td>
+                            <div class="sb-select w80 fl">
+                                {{prodDetail.nuCaffeine}}
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
             <%-- 기타정보 --%>
             <h3 class="h3_tbl"><s:message code="prod.title.etcInfo"/></h3>
             <div class="tblBr">

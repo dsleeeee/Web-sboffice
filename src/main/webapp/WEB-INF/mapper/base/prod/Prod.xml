@@ -451,7 +451,14 @@
                 NVL(thp.DEPOSIT_CUP_FG, '') AS DEPOSIT_CUP_FG,
                 thp.POINT_USE_YN,
                 thp.DC_YN,
-                ( SELECT PROD_INFO FROM TB_HQ_PRODUCT_INFO WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = #{prodCd}) AS PROD_INFO,
+                thpi.PROD_INFO,
+                thpi.NU_TOT_WT,
+                thpi.NU_KCAL,
+                thpi.NU_PROTEIN,
+                thpi.NU_SODIUM,
+                thpi.NU_SUGARS,
+                thpi.NU_SAT_FAT,
+                thpi.NU_CAFFEINE,
                 NVL(thp.SALE_TIME_FG, 'N') AS SALE_TIME_FG
                 FROM
                 TB_HQ_PRODUCT thp
@@ -510,6 +517,9 @@
                 thp.HQ_OFFICE_CD = thpsg.HQ_OFFICE_CD
                 AND thp.SDSEL_GRP_CD = thpsg.SDSEL_GRP_CD
                 AND thpsg.USE_YN = 'Y'
+                LEFT OUTER JOIN TB_HQ_PRODUCT_INFO thpi ON
+                thp.HQ_OFFICE_CD = thpi.HQ_OFFICE_CD
+                AND thp.PROD_CD = thpi.PROD_CD
                 WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND thp.PROD_CD = #{prodCd}
             </when>
@@ -567,7 +577,14 @@
                 NVL(tmp.DEPOSIT_CUP_FG, '') AS DEPOSIT_CUP_FG,
                 tmp.POINT_USE_YN,
                 tmp.DC_YN,
-                ( SELECT PROD_INFO FROM TB_MS_PRODUCT_INFO WHERE STORE_CD = #{storeCd} AND PROD_CD = #{prodCd}) AS PROD_INFO,
+                tmpi.PROD_INFO,
+                tmpi.NU_TOT_WT,
+                tmpi.NU_KCAL,
+                tmpi.NU_PROTEIN,
+                tmpi.NU_SODIUM,
+                tmpi.NU_SUGARS,
+                tmpi.NU_SAT_FAT,
+                tmpi.NU_CAFFEINE,
                 NVL(tmp.SALE_TIME_FG, 'N') AS SALE_TIME_FG
                 FROM
                 TB_MS_PRODUCT tmp
@@ -626,6 +643,9 @@
                 tmp.STORE_CD = tmpsg.STORE_CD
                 AND tmp.SDSEL_GRP_CD = tmpsg.SDSEL_GRP_CD
                 AND tmpsg.USE_YN = 'Y'
+                LEFT OUTER JOIN TB_MS_PRODUCT_INFO tmpi ON
+                tmp.STORE_CD = tmpi.STORE_CD
+                AND tmp.PROD_CD = tmpi.PROD_CD
                 WHERE tmp.STORE_CD = #{storeCd}
                 AND tmp.PROD_CD = #{prodCd}
             </when>
@@ -1043,27 +1063,48 @@
                 WHEN MATCHED THEN
                 UPDATE
                 SET
-                thpi.PROD_INFO = #{prodInfo},
-                thpi.MOD_DT = #{modDt},
-                thpi.MOD_ID = #{modId}
+                    thpi.PROD_INFO = #{prodInfo},
+                    thpi.MOD_DT = #{modDt},
+                    thpi.MOD_ID = #{modId},
+                    thpi.NU_TOT_WT = #{nuTotWt},
+                    thpi.NU_KCAL = #{nuKcal},
+                    thpi.NU_PROTEIN = #{nuProtein},
+                    thpi.NU_SODIUM = #{nuSodium},
+                    thpi.NU_SUGARS = #{nuSugars},
+                    thpi.NU_SAT_FAT = #{nuSatFat},
+                    thpi.NU_CAFFEINE = #{nuCaffeine}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
-                HQ_OFFICE_CD,
-                PROD_CD,
-                PROD_INFO,
-                REG_DT,
-                REG_ID,
-                MOD_DT,
-                MOD_ID
+                    HQ_OFFICE_CD,
+                    PROD_CD,
+                    PROD_INFO,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID,
+                    NU_TOT_WT,
+                    NU_KCAL,
+                    NU_PROTEIN,
+                    NU_SODIUM,
+                    NU_SUGARS,
+                    NU_SAT_FAT,
+                    NU_CAFFEINE
                 ) VALUES (
-                #{hqOfficeCd},
-                #{prodCd},
-                #{prodInfo},
-                #{regDt},
-                #{regId},
-                #{modDt},
-                #{modId}
+                    #{hqOfficeCd},
+                    #{prodCd},
+                    #{prodInfo},
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId},
+                    #{nuTotWt},
+                    #{nuKcal},
+                    #{nuProtein},
+                    #{nuSodium},
+                    #{nuSugars},
+                    #{nuSatFat},
+                    #{nuCaffeine}
                 )
             </when>
             <!-- 매장 -->
@@ -1079,25 +1120,46 @@
                 SET
                     tmpi.PROD_INFO = #{prodInfo},
                     tmpi.MOD_DT = #{modDt},
-                    tmpi.MOD_ID = #{modId}
+                    tmpi.MOD_ID = #{modId},
+                    tmpi.NU_TOT_WT = #{nuTotWt},
+                    tmpi.NU_KCAL = #{nuKcal},
+                    tmpi.NU_PROTEIN = #{nuProtein},
+                    tmpi.NU_SODIUM = #{nuSodium},
+                    tmpi.NU_SUGARS = #{nuSugars},
+                    tmpi.NU_SAT_FAT = #{nuSatFat},
+                    tmpi.NU_CAFFEINE = #{nuCaffeine}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
-                STORE_CD,
-                PROD_CD,
-                PROD_INFO,
-                REG_DT,
-                REG_ID,
-                MOD_DT,
-                MOD_ID
+                    STORE_CD,
+                    PROD_CD,
+                    PROD_INFO,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID,
+                    NU_TOT_WT,
+                    NU_KCAL,
+                    NU_PROTEIN,
+                    NU_SODIUM,
+                    NU_SUGARS,
+                    NU_SAT_FAT,
+                    NU_CAFFEINE
                 ) VALUES (
-                #{storeCd},
-                #{prodCd},
-                #{prodInfo},
-                #{regDt},
-                #{regId},
-                #{modDt},
-                #{modId}
+                    #{storeCd},
+                    #{prodCd},
+                    #{prodInfo},
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId},
+                    #{nuTotWt},
+                    #{nuKcal},
+                    #{nuProtein},
+                    #{nuSodium},
+                    #{nuSugars},
+                    #{nuSatFat},
+                    #{nuCaffeine}
                 )
             </when>
         </choose>

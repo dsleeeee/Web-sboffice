@@ -136,6 +136,15 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             // 비고
             params.remark = ""; // 비고
             params.prodInfo = ""; // 상품 상세 설명
+            // 영양정보
+            params.nuTotWt = "";
+            params.nuKcal = "";
+            params.nuProtein = "";
+            params.nuSodium = "";
+            params.nuSugars = "";
+            params.nuSatFat = "";
+            params.nuCaffeine = "";
+
             // 상품정보 set (초기값 셋팅)
             $scope.setProdModifyInfo(params);
         }
@@ -685,6 +694,83 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                     $scope._popMsg(messages["prod.kioskSaleTimeMm.msg"]); // KIOSK 판매시간 분은 00~59 사이로 입력해주세요.
                     return false;
                 }
+            }
+        }
+
+        // 총중량
+        if($scope.prodModifyInfo.nuTotWt === null || $scope.prodModifyInfo.nuTotWt === undefined || $scope.prodModifyInfo.nuTotWt === "") {
+        } else {
+            // 숫자만 입력
+            var numChkexp = /[^0-9]/g;
+            if (numChkexp.test(nvl($scope.prodModifyInfo.nuTotWt, 0))) {
+                $scope._popMsg(messages["prod.nuTotWtInChk"]); // 총중량은 숫자만 입력해주세요.
+                return false;
+            }
+        }
+
+        // 총열량
+        if($scope.prodModifyInfo.nuKcal === null || $scope.prodModifyInfo.nuKcal === undefined || $scope.prodModifyInfo.nuKcal === "") {
+        } else {
+            // 숫자만 입력
+            var numChkexp = /[^0-9]/g;
+            if (numChkexp.test(nvl($scope.prodModifyInfo.nuKcal, 0))) {
+                $scope._popMsg(messages["prod.nuKcalInChk"]); // 총열량은 숫자만 입력해주세요.
+                return false;
+            }
+        }
+
+        // 단백질
+        if($scope.prodModifyInfo.nuProtein === null || $scope.prodModifyInfo.nuProtein === undefined || $scope.prodModifyInfo.nuProtein === "") {
+        } else {
+            // 숫자만 입력
+            var numChkexp = /[^0-9]/g;
+            if (numChkexp.test(nvl($scope.prodModifyInfo.nuProtein, 0))) {
+                $scope._popMsg(messages["prod.nuProteinInChk"]); // 단백질은 숫자만 입력해주세요.
+                return false;
+            }
+        }
+
+        // 나트륨
+        if($scope.prodModifyInfo.nuSodium === null || $scope.prodModifyInfo.nuSodium === undefined || $scope.prodModifyInfo.nuSodium === "") {
+        } else {
+            // 숫자만 입력
+            var numChkexp = /[^0-9]/g;
+            if (numChkexp.test(nvl($scope.prodModifyInfo.nuSodium, 0))) {
+                $scope._popMsg(messages["prod.nuSodiumInChk"]); // 나트륨은 숫자만 입력해주세요.
+                return false;
+            }
+        }
+
+        // 당류
+        if($scope.prodModifyInfo.nuSugars === null || $scope.prodModifyInfo.nuSugars === undefined || $scope.prodModifyInfo.nuSugars === "") {
+        } else {
+            // 숫자만 입력
+            var numChkexp = /[^0-9]/g;
+            if (numChkexp.test(nvl($scope.prodModifyInfo.nuSugars, 0))) {
+                $scope._popMsg(messages["prod.nuSugarsInChk"]); // 당류는 숫자만 입력해주세요.
+                return false;
+            }
+        }
+
+        // 포화지방
+        if($scope.prodModifyInfo.nuSatFat === null || $scope.prodModifyInfo.nuSatFat === undefined || $scope.prodModifyInfo.nuSatFat === "") {
+        } else {
+            // 숫자만 입력
+            var numChkexp = /[^0-9]/g;
+            if (numChkexp.test(nvl($scope.prodModifyInfo.nuSatFat, 0))) {
+                $scope._popMsg(messages["prod.nuSatFatInChk"]); // 포화지방은 숫자만 입력해주세요.
+                return false;
+            }
+        }
+
+        // 카페인
+        if($scope.prodModifyInfo.nuCaffeine === null || $scope.prodModifyInfo.nuCaffeine === undefined || $scope.prodModifyInfo.nuCaffeine === "") {
+        } else {
+            // 숫자만 입력
+            var numChkexp = /[^0-9]/g;
+            if (numChkexp.test(nvl($scope.prodModifyInfo.nuCaffeine, 0))) {
+                $scope._popMsg(messages["prod.nuCaffeineInChk"]); // 카페인은 숫자만 입력해주세요.
+                return false;
             }
         }
 
