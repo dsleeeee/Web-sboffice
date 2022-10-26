@@ -22,22 +22,23 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT NMCODE_GRP_CD
-                ,       NMCODE_CD
-                ,       NMCODE_NM
-                ,       'C' AS NMCODE_ITEM_1
-                ,       NMCODE_ITEM_2
-                ,       USE_COL_NM
-                ,       USE_TARGET_FG
-                ,       USE_SYSTEM_FG
-                ,       REG_DT
-                ,       REG_ID
-                ,       MOD_DT
-                ,       MOD_ID
-                FROM    TB_CM_NMCODE
-                WHERE   NMCODE_GRP_CD   =   '999'
---                 AND     NMCODE_ITEM_1   IN  ('C', 'H')
-                AND NMCODE_CD IN ('139', '140', '142', '143', '144', '145')
+                SELECT
+                NMCODE_GRP_CD,
+                NMCODE_CD,
+                NMCODE_NM,
+                'C' AS NMCODE_ITEM_1,
+                NMCODE_ITEM_2,
+                USE_COL_NM,
+                USE_TARGET_FG,
+                USE_SYSTEM_FG,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+                FROM TB_CM_NMCODE
+                WHERE 1=1
+                AND NMCODE_GRP_CD = '999'
+                AND NMCODE_ITEM_1 IN ('광운대')
                 <if test='nmcodeCd != null and nmcodeCd != ""'>
                     AND NMCODE_CD LIKE '%'||#{nmcodeCd}||'%'
                 </if>
@@ -47,27 +48,27 @@
                 <if test='useYn != null and useYn != ""'>
                     AND USE_YN = #{useYn}
                 </if>
-                ORDER
-                BY      NMCODE_GRP_CD, NMCODE_CD
+                ORDER BY NMCODE_GRP_CD, NMCODE_CD
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT NMCODE_GRP_CD
-                ,       NMCODE_CD
-                ,       NMCODE_NM
-                ,       'C' AS NMCODE_ITEM_1
-                ,       NMCODE_ITEM_2
-                ,       USE_COL_NM
-                ,       USE_TARGET_FG
-                ,       USE_SYSTEM_FG
-                ,       REG_DT
-                ,       REG_ID
-                ,       MOD_DT
-                ,       MOD_ID
-                FROM    TB_CM_NMCODE
-                WHERE   NMCODE_GRP_CD   =   '999'
---                 AND     NMCODE_ITEM_1   IN  ('C', 'S')
-                AND NMCODE_CD IN ('139', '140', '142', '143', '144', '145')
+                SELECT
+                NMCODE_GRP_CD,
+                NMCODE_CD,
+                NMCODE_NM,
+                'C' AS NMCODE_ITEM_1,
+                NMCODE_ITEM_2,
+                USE_COL_NM,
+                USE_TARGET_FG,
+                USE_SYSTEM_FG,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+                FROM TB_CM_NMCODE
+                WHERE 1=1
+                AND NMCODE_GRP_CD = '999'
+                AND NMCODE_ITEM_1 IN ('광운대')
                 <if test='nmcodeCd != null and nmcodeCd != ""'>
                     AND NMCODE_CD LIKE '%'||#{nmcodeCd}||'%'
                 </if>
@@ -77,8 +78,7 @@
                 <if test='useYn != null and useYn != ""'>
                     AND USE_YN = #{useYn}
                 </if>
-                ORDER
-                BY      NMCODE_GRP_CD, NMCODE_CD
+                ORDER BY NMCODE_GRP_CD, NMCODE_CD
             </when>
         </choose>
     </select>
@@ -101,10 +101,9 @@
                 thn.NMCODE_ITEM_1,
                 thn.NMCODE_ITEM_2,
                 thn.USE_YN
-                FROM
-                TB_HQ_NMCODE thn
-                WHERE
-                thn.HQ_OFFICE_CD = #{hqOfficeCd}
+                FROM TB_HQ_NMCODE thn
+                WHERE 1=1
+                AND thn.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND thn.NMCODE_GRP_CD = #{nmcodeGrpCd}
                 <if test='nmcodeCd != null and nmcodeCd != ""'>
                     AND thn.NMCODE_CD LIKE '%'||#{nmcodeCd}||'%'
@@ -120,10 +119,9 @@
                 tmsn.NMCODE_ITEM_1,
                 tmsn.NMCODE_ITEM_2,
                 tmsn.USE_YN
-                FROM
-                TB_MS_STORE_NMCODE tmsn
-                WHERE
-                tmsn.STORE_CD = #{storeCd}
+                FROM TB_MS_STORE_NMCODE tmsn
+                WHERE 1=1
+                AND tmsn.STORE_CD = #{storeCd}
                 AND tmsn.NMCODE_GRP_CD = #{nmcodeGrpCd}
                 <if test='nmcodeCd != null and nmcodeCd != ""'>
                     AND tmsn.NMCODE_CD LIKE '%'||#{nmcodeCd}||'%'
@@ -218,29 +216,27 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                UPDATE
-                TB_HQ_NMCODE
+                UPDATE TB_HQ_NMCODE
                 SET
                 NMCODE_NM = #{nmcodeNm,jdbcType=VARCHAR},
                 NMCODE_ITEM_1 = #{nmcodeItem1,jdbcType=VARCHAR},
                 NMCODE_ITEM_2 = #{nmcodeItem2,jdbcType=VARCHAR},
                 USE_YN = #{useYn}
-                WHERE
-                HQ_OFFICE_CD = #{hqOfficeCd}
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{hqOfficeCd}
                 AND NMCODE_GRP_CD = #{nmcodeGrpCd}
                 AND NMCODE_CD = #{nmcodeCd}
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                UPDATE
-                TB_MS_STORE_NMCODE
+                UPDATE TB_MS_STORE_NMCODE
                 SET
                 NMCODE_NM = #{nmcodeNm,jdbcType=VARCHAR},
                 NMCODE_ITEM_1 = #{nmcodeItem1,jdbcType=VARCHAR},
                 NMCODE_ITEM_2 = #{nmcodeItem2,jdbcType=VARCHAR},
                 USE_YN = #{useYn}
-                WHERE
-                STORE_CD = #{storeCd}
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
                 AND NMCODE_GRP_CD = #{nmcodeGrpCd}
                 AND NMCODE_CD = #{nmcodeCd}
             </when>
@@ -259,20 +255,18 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 DELETE
-                FROM
-                TB_HQ_NMCODE
-                WHERE
-                HQ_OFFICE_CD = #{hqOfficeCd}
+                FROM TB_HQ_NMCODE
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{hqOfficeCd}
                 AND NMCODE_GRP_CD = #{nmcodeGrpCd}
                 AND NMCODE_CD = #{nmcodeCd}
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 DELETE
-                FROM
-                TB_MS_STORE_NMCODE
-                WHERE
-                STORE_CD = #{storeCd}
+                FROM TB_MS_STORE_NMCODE
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
                 AND NMCODE_GRP_CD = #{nmcodeGrpCd}
                 AND NMCODE_CD = #{nmcodeCd}
             </when>
