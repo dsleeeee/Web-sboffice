@@ -2698,7 +2698,14 @@
             #{regDt} AS REG_DT,
             #{regId} AS REG_ID,
             #{modDt} AS MOD_DT,
-            #{modId} AS MOD_ID
+            #{modId} AS MOD_ID,
+            NU_TOT_WT,
+            NU_KCAL,
+            NU_PROTEIN,
+            NU_SODIUM,
+            NU_SUGARS,
+            NU_SAT_FAT,
+            NU_CAFFEINE
             FROM TB_HQ_PRODUCT_INFO
             WHERE 1=1
             AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -2721,7 +2728,14 @@
                 A.REG_DT,
                 A.REG_ID,
                 A.MOD_DT,
-                A.MOD_ID
+                A.MOD_ID,
+                A.NU_TOT_WT,
+                A.NU_KCAL,
+                A.NU_PROTEIN,
+                A.NU_SODIUM,
+                A.NU_SUGARS,
+                A.NU_SAT_FAT,
+                A.NU_CAFFEINE
             ) VALUES (
                 B.STORE_CD,
                 B.PROD_CD,
@@ -2729,7 +2743,14 @@
                 B.REG_DT,
                 B.REG_ID,
                 B.MOD_DT,
-                B.MOD_ID
+                B.MOD_ID,
+                B.NU_TOT_WT,
+                B.NU_KCAL,
+                B.NU_PROTEIN,
+                B.NU_SODIUM,
+                B.NU_SUGARS,
+                B.NU_SAT_FAT,
+                B.NU_CAFFEINE
             )
     </insert>
 

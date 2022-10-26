@@ -273,6 +273,20 @@ public class ProdVO extends PageVO {
     /** KIOSK 판매시간 종료시간 */
     private String eSaleTime;
 
+    /** 총중량 */
+    private String nuTotWt;
+    /** 총열량 */
+    private String nuKcal;
+    /** 단백질 */
+    private String nuProtein;
+    /** 나트륨 */
+    private String nuSodium;
+    /** 당류 */
+    private String nuSugars;
+    /** 포화지방 */
+    private String nuSatFat;
+    /** 카페인 */
+    private String nuCaffeine;
 
     /**
      * @return the hqOfficeCd
@@ -1276,4 +1290,32 @@ public class ProdVO extends PageVO {
     public void seteSaleTime(String eSaleTime) {
         this.eSaleTime = eSaleTime;
     }
+
+    public String getNuTotWt() { return nuTotWt; }
+
+    public void setNuTotWt(String nuTotWt) { this.nuTotWt = nuTotWt; }
+
+    public String getNuKcal() { return nuKcal; }
+
+    public void setNuKcal(String nuKcal) { this.nuKcal = nuKcal; }
+
+    public String getNuProtein() { return nuProtein; }
+
+    public void setNuProtein(String nuProtein) { this.nuProtein = nuProtein; }
+
+    public String getNuSodium() { return nuSodium; }
+
+    public void setNuSodium(String nuSodium) { this.nuSodium = nuSodium; }
+
+    public String getNuSugars() { return nuSugars; }
+
+    public void setNuSugars(String nuSugars) { this.nuSugars = nuSugars; }
+
+    public String getNuSatFat() { return nuSatFat; }
+
+    public void setNuSatFat(String nuSatFat) { this.nuSatFat = nuSatFat; }
+
+    public String getNuCaffeine() { return nuCaffeine; }
+
+    public void setNuCaffeine(String nuCaffeine) { this.nuCaffeine = nuCaffeine; }
 }

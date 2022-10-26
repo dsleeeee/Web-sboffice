@@ -309,10 +309,10 @@ public class ProdServiceImpl implements ProdService {
             prodMapper.deleteProdBarcd(prodVO);
         }
 
-        //상품 설명 상세
-        if(prodVO.getProdInfo() != null && prodVO.getProdInfo().length() > 0){
+        // 상품 설명 상세 + 영양정보
+//        if(prodVO.getProdInfo() != null && prodVO.getProdInfo().length() > 0){
             prodMapper.saveProdInfo(prodVO);
-        }
+//        }
 
         // KIOSK 판매여부
         if(prodVO.getSaleTimeFg() != null && "Y".equals(prodVO.getSaleTimeFg())){
@@ -381,9 +381,9 @@ public class ProdServiceImpl implements ProdService {
                 prodMapper.deleteProdBarcdStore(prodVO);
             }
 
-            if(prodVO.getProdInfo() != null && prodVO.getProdInfo().length() > 0){
-                prodMapper.saveProdInfo(prodVO);
-            }
+//            if(prodVO.getProdInfo() != null && prodVO.getProdInfo().length() > 0){
+//                prodMapper.saveProdInfo(prodVO);
+//            }
 
             //매장 KIOSK 판매시간 시간설정 저장(KIOSK 판매시간을 사용하는 경우만)
             if(prodVO.getSaleTimeFg() != null && "Y".equals(prodVO.getSaleTimeFg())){
