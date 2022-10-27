@@ -1,6 +1,6 @@
 /****************************************************************
  *
- * 파일명 : cdKwn.js
+ * 파일명 : cdKwu.js
  * 설  명 : 공통코드 (광운대 아이스링크) JavaScript
  *
  *    수정일      수정자      Version        Function 명
@@ -29,10 +29,10 @@ var useYnFgDataMap = new wijmo.grid.DataMap([
 /**
  * 대표명칭 그리드 생성
  */
-app.controller('cdKwnCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('cdKwuCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('cdKwnCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('cdKwuCtrl', $scope, $http, true));
 
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("srchUseYnFg", useYnFg);
@@ -40,7 +40,7 @@ app.controller('cdKwnCtrl', ['$scope', '$http', function ($scope, $http) {
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // picker 사용시 호출 : 미사용시 호출안함
-        $scope._makePickColumns("cdKwnCtrl");
+        $scope._makePickColumns("cdKwuCtrl");
 
         // 그리드 내 콤보박스 설정
         $scope.useYnFgDataMap = useYnFgDataMap;
@@ -79,21 +79,21 @@ app.controller('cdKwnCtrl', ['$scope', '$http', function ($scope, $http) {
                 var selectedRow = s.rows[ht.row].dataItem;
                 var col = ht.panel.columns[ht.col];
                 if( col.binding === "nmcodeCd" && selectedRow.status !== "I") {
-                    //$scope._broadcast('cdKwnDetailCtrl', selectedRow.nmcodeCd);
-                    $scope._broadcast('cdKwnDetailCtrl', selectedRow);
+                    //$scope._broadcast('cdKwuDetailCtrl', selectedRow.nmcodeCd);
+                    $scope._broadcast('cdKwuDetailCtrl', selectedRow);
                 }
             }
         });
     };
 
     // 대표명칭 그리드 조회
-    $scope.$on("cdKwnCtrl", function(event, data) {
+    $scope.$on("cdKwuCtrl", function(event, data) {
         // 파라미터
         var params = {};
         params.nmcodeGrpCd = "000";
         params.useYn = $scope.useYnFg;
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/adi/etc/cdKwn/cdKwn/getNmcodeCdKwnList.sb", params, function() {
+        $scope._inquiryMain("/adi/etc/cdKwu/cdKwu/getNmcodeCdKwuList.sb", params, function() {
             // 대표명칭 그리드 버튼 show
             //$("#btnAddRepresent").show();
             //$("#btnDelRepresent").show();
@@ -125,12 +125,12 @@ app.controller('cdKwnCtrl', ['$scope', '$http', function ($scope, $http) {
         for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
             var item = $scope.flex.collectionView.itemsAdded[i];
             if(item.nmcodeCd === undefined || item.nmcodeCd.length === 0){
-                $scope._popMsg(messages["cdKwn.represent.require.nmcodeCd"]); // 대표명칭의 코드를 입력해주세요
+                $scope._popMsg(messages["cdKwu.represent.require.nmcodeCd"]); // 대표명칭의 코드를 입력해주세요
                 return false;
             }
 
             if(item.nmcodeNm === undefined || item.nmcodeNm.length === 0){
-                $scope._popMsg(messages["cdKwn.represent.require.nmcodeNm"]); // 대표명칭의 코드명을 입력해주세요
+                $scope._popMsg(messages["cdKwu.represent.require.nmcodeNm"]); // 대표명칭의 코드명을 입력해주세요
                 return false;
             }
 
@@ -142,7 +142,7 @@ app.controller('cdKwnCtrl', ['$scope', '$http', function ($scope, $http) {
             params.push($scope.flex.collectionView.itemsRemoved[i]);
         }
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/adi/etc/cdKwn/cdKwn/getNmcodeCdKwnSave.sb", params);
+        $scope._save("/adi/etc/cdKwu/cdKwu/getNmcodeCdKwuSave.sb", params);
     };
 
     // 대표명칭 그리드 행 삭제
@@ -165,15 +165,15 @@ app.controller('cdKwnCtrl', ['$scope', '$http', function ($scope, $http) {
 /**
  * 세부명칭 그리드 생성
  */
-app.controller('cdKwnDetailCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('cdKwuDetailCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('cdKwnDetailCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('cdKwuDetailCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // picker 사용시 호출 : 미사용시 호출안함
-        $scope._makePickColumns("cdKwnDetailCtrl");
+        $scope._makePickColumns("cdKwuDetailCtrl");
 
         // 그리드 내 콤보박스 설정
         $scope.useYnFgDataMap = useYnFgDataMap;
@@ -226,14 +226,14 @@ app.controller('cdKwnDetailCtrl', ['$scope', '$http', function ($scope, $http) {
     });
 
     // 세부명칭 그리드 조회
-    $scope.$on("cdKwnDetailCtrl", function(event, data) {
+    $scope.$on("cdKwuDetailCtrl", function(event, data) {
         // 파라미터
         var params = {};
         params.nmcodeGrpCd = data.nmcodeCd;
         params.nmcodeItem1 = data.nmcodeItem1;
         params.nmcodeItem2 = data.nmcodeItem2;
         // 조회URL, 파라미터, 콜백함수 형태로 조회함수 호출
-        $scope._inquirySub("/adi/etc/cdKwn/cdKwn/getNmcodeCdKwnList.sb", params, function() {
+        $scope._inquirySub("/adi/etc/cdKwu/cdKwu/getNmcodeCdKwuList.sb", params, function() {
             // 세부명칭 그리드 버튼 show
             if( (gvOrgnFg == "H" && (params.nmcodeItem1 == "C" || params.nmcodeItem1 == "H"    )   )
                 ||  (gvOrgnFg == "S" && (params.nmcodeItem1 == "S" )                                   )
@@ -267,7 +267,7 @@ app.controller('cdKwnDetailCtrl', ['$scope', '$http', function ($scope, $http) {
         params.nmcodeItem2 = $("#s_nmcodeCd").val(data.nmcodeItem2);
 
         // 조회URL, 파라미터, 콜백함수 형태로 조회함수 호출
-        $scope._inquirySub("/adi/etc/cdKwn/cdKwn/getNmcodeCdKwnList.sb", params, function() {
+        $scope._inquirySub("/adi/etc/cdKwu/cdKwu/getNmcodeCdKwuList.sb", params, function() {
             // 세부명칭 그리드 버튼 show
             if( (gvOrgnFg == "H" && (params.nmcodeItem1 == "C" || params.nmcodeItem1 == "H"    )   )
                 ||  (gvOrgnFg == "S" && (params.nmcodeItem1 == "S" )                                   )
@@ -296,7 +296,7 @@ app.controller('cdKwnDetailCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 세부명칭 그리드 행 추가
     $scope.addRow = function() {
-        var gridRepresent = agrid.getScope('cdKwnCtrl');
+        var gridRepresent = agrid.getScope('cdKwuCtrl');
         var selectedRow = gridRepresent.flex.selectedRows[0]._data;
 
         var params = {};
@@ -318,17 +318,17 @@ app.controller('cdKwnDetailCtrl', ['$scope', '$http', function ($scope, $http) {
         for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
             var item = $scope.flex.collectionView.itemsAdded[i];
             if(item.nmcodeCd === undefined || item.nmcodeCd.length === 0){
-                $scope._popMsg(messages["cdKwn.detail.require.nmcodeCd"]); // 세부명칭의 코드를 입력해주세요
+                $scope._popMsg(messages["cdKwu.detail.require.nmcodeCd"]); // 세부명칭의 코드를 입력해주세요
                 return false;
             }
 
             if(item.nmcodeNm === undefined || item.nmcodeNm.length === 0){
-                $scope._popMsg(messages["cdKwn.detail.require.nmcodeNm"]); // 세부명칭의 코드명을 입력해주세요
+                $scope._popMsg(messages["cdKwu.detail.require.nmcodeNm"]); // 세부명칭의 코드명을 입력해주세요
                 return false;
             }
 
             if(item.nmcodeCd.length != $("#s_nmcodeItem2").val()){
-                $scope._popMsg(messages["cdKwn.detail.require.nmcodeCdLengthChk"]+' ('+$("#s_nmcodeItem2").val()+')'); // 세부명칭의 코드자릿수를 확인하여 주십시오.
+                $scope._popMsg(messages["cdKwu.detail.require.nmcodeCdLengthChk"]+' ('+$("#s_nmcodeItem2").val()+')'); // 세부명칭의 코드자릿수를 확인하여 주십시오.
                 return false;
             }
 
@@ -339,7 +339,7 @@ app.controller('cdKwnDetailCtrl', ['$scope', '$http', function ($scope, $http) {
                 }
             }
             if(check_nmcodeCd_cnt > 1){
-                $scope._popMsg(messages["cdKwn.detail.require.nmcodeCdChk"]+' ('+item.nmcodeCd+')'); // 코드중복 확인
+                $scope._popMsg(messages["cdKwu.detail.require.nmcodeCdChk"]+' ('+item.nmcodeCd+')'); // 코드중복 확인
                 return false;
             }
 
@@ -351,7 +351,7 @@ app.controller('cdKwnDetailCtrl', ['$scope', '$http', function ($scope, $http) {
             params.push($scope.flex.collectionView.itemsRemoved[i]);
         }
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/adi/etc/cdKwn/cdKwn/getNmcodeCdKwnSave.sb", params, function(){ $scope.allSearch() });
+        $scope._save("/adi/etc/cdKwu/cdKwu/getNmcodeCdKwuSave.sb", params, function(){ $scope.allSearch() });
 
         // 재조회
         $scope.allSearch = function () {
@@ -361,13 +361,13 @@ app.controller('cdKwnDetailCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 세부명칭 그리드 행 삭제
     $scope.deleteRow = function() {
-        $scope._popConfirm(messages["cdKwn.detail.require.delConfirm"], function() {
+        $scope._popConfirm(messages["cdKwu.detail.require.delConfirm"], function() {
             for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
                 var item = $scope.flex.collectionView.items[i];
                 if(item.gChk) {
                     if (item.nmcodeGrpCd == "093" && (item.nmcodeCd == "1" || item.nmcodeCd == "2"))
                     {
-                        $scope._popMsg(messages["cdKwn.detail.require.chk.093.1"]); // 093 발주단위 기본값 0 낱개 1 박스 는 삭제할 수 없습니다.
+                        $scope._popMsg(messages["cdKwu.detail.require.chk.093.1"]); // 093 발주단위 기본값 0 낱개 1 박스 는 삭제할 수 없습니다.
                         return false;
                     }
                     $scope.flex.collectionView.removeAt(i);

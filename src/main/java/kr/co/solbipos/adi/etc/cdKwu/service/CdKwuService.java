@@ -1,4 +1,4 @@
-package kr.co.solbipos.adi.etc.cdKwn.service;
+package kr.co.solbipos.adi.etc.cdKwu.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -6,7 +6,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import java.util.List;
 
 /**
- * @Class Name : CdKwnService.java
+ * @Class Name : CdKwuService.java
  * @Description : 광운대 > 공통코드 > 공통코드
  * @Modification Information
  * @
@@ -20,14 +20,14 @@ import java.util.List;
  *
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public interface CdKwnService {
+public interface CdKwuService {
 
     /** 대표명칭 코드목록 조회 */
-    List<DefaultMap<String>> getNmcodeGrpCdKwnList(CdKwnVO cdKwnVO);
+    List<DefaultMap<String>> getNmcodeGrpCdKwuList(CdKwuVO cdKwuVO);
 
     /** 세부명칭 코드목록 조회 */
-    List<DefaultMap<String>> getNmcodeCdKwnList(CdKwnVO cdKwnVO);
+    List<DefaultMap<String>> getNmcodeCdKwuList(CdKwuVO cdKwuVO);
 
     /** 코드목록 저장 */
-    int getNmcodeCdKwnSave(CdKwnVO[] cdKwnVOs, SessionInfoVO sessionInfoVO);
+    int getNmcodeCdKwuSave(CdKwuVO[] cdKwuVOs, SessionInfoVO sessionInfoVO);
 }

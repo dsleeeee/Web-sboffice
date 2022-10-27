@@ -1,12 +1,12 @@
-package kr.co.solbipos.adi.etc.cdKwn.web;
+package kr.co.solbipos.adi.etc.cdKwu.web;
 
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
-import kr.co.solbipos.adi.etc.cdKwn.service.CdKwnService;
-import kr.co.solbipos.adi.etc.cdKwn.service.CdKwnVO;
+import kr.co.solbipos.adi.etc.cdKwu.service.CdKwuService;
+import kr.co.solbipos.adi.etc.cdKwu.service.CdKwuVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ import java.util.List;
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 
 /**
- * @Class Name : CdKwnController.java
+ * @Class Name : CdKwuController.java
  * @Description : 광운대 > 공통코드 > 공통코드
  * @Modification Information
  * @
@@ -40,18 +40,18 @@ import static kr.co.common.utils.grid.ReturnUtil.returnJson;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
-@RequestMapping(value = "/adi/etc/cdKwn")
-public class CdKwnController {
+@RequestMapping(value = "/adi/etc/cdKwu")
+public class CdKwuController {
 
-    private final CdKwnService cdKwnService;
+    private final CdKwuService cdKwuService;
     private final SessionService sessionService;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public CdKwnController(CdKwnService cdKwnService, SessionService sessionService) {
-        this.cdKwnService = cdKwnService;
+    public CdKwuController(CdKwuService cdKwuService, SessionService sessionService) {
+        this.cdKwuService = cdKwuService;
         this.sessionService = sessionService;
     }
 
@@ -62,16 +62,16 @@ public class CdKwnController {
      * @param response
      * @param model
      */
-    @RequestMapping(value = "/cdKwn/view.sb", method = RequestMethod.GET)
-    public String cdKwnView(HttpServletRequest request, HttpServletResponse response, Model model) {
+    @RequestMapping(value = "/cdKwu/view.sb", method = RequestMethod.GET)
+    public String cdKwuView(HttpServletRequest request, HttpServletResponse response, Model model) {
 
-        return "adi/etc/cdKwn/cdKwn";
+        return "adi/etc/cdKwu/cdKwu";
     }
 
     /**
      * 시스템 명칭관리 - 조회
      *
-     * @param cdKwnVO
+     * @param cdKwuVO
      * @param request
      * @param response
      * @param model
@@ -79,38 +79,38 @@ public class CdKwnController {
      * @author  김설아
      * @since   2022. 09. 07.
      */
-    @RequestMapping(value = "/cdKwn/getNmcodeCdKwnList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/cdKwu/getNmcodeCdKwuList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getNmcodeCdKwnList(HttpServletRequest request, HttpServletResponse response,
-                                     CdKwnVO cdKwnVO, Model model) {
+    public Result getNmcodeCdKwuList(HttpServletRequest request, HttpServletResponse response,
+                                     CdKwuVO cdKwuVO, Model model) {
 
         // 세션정보 설정
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        cdKwnVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        cdKwuVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
-            cdKwnVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
+            cdKwuVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
         } else if ( sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
-            cdKwnVO.setStoreCd(sessionInfoVO.getOrgnCd());
+            cdKwuVO.setStoreCd(sessionInfoVO.getOrgnCd());
         }
 
         List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
         // Parameter 값으로 대표/세부 명칭 코드목록을 조회 분기처리
-        if ( "000".equals(cdKwnVO.getNmcodeGrpCd()) ) {
+        if ( "000".equals(cdKwuVO.getNmcodeGrpCd()) ) {
             // 대표명칭 코드목록 조회
             //20201.01.05 999 의 내역 중 코드항목 1  C:공통(본사기준, 단독매장수정가능), H:본사전용, S:매장전용
-            list = cdKwnService.getNmcodeGrpCdKwnList(cdKwnVO);
+            list = cdKwuService.getNmcodeGrpCdKwuList(cdKwuVO);
         } else {
             // 세부명칭 코드목록 조회
-            list = cdKwnService.getNmcodeCdKwnList(cdKwnVO);
+            list = cdKwuService.getNmcodeCdKwuList(cdKwuVO);
         }
 
-        return ReturnUtil.returnListJson(Status.OK, list, cdKwnVO);
+        return ReturnUtil.returnListJson(Status.OK, list, cdKwuVO);
     }
 
     /**
      * 시스템 명칭관리 - 저장
      *
-     * @param cdKwnVOs
+     * @param cdKwuVOs
      * @param request
      * @param response
      * @param model
@@ -118,14 +118,14 @@ public class CdKwnController {
      * @author  김설아
      * @since   2022. 09. 07.
      */
-    @RequestMapping(value = "/cdKwn/getNmcodeCdKwnSave.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/cdKwu/getNmcodeCdKwuSave.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getNmcodeCdKwnSave(@RequestBody CdKwnVO[] cdKwnVOs, HttpServletRequest request,
-                       HttpServletResponse response, Model model) {
+    public Result getNmcodeCdKwuSave(@RequestBody CdKwuVO[] cdKwuVOs, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = cdKwnService.getNmcodeCdKwnSave(cdKwnVOs, sessionInfoVO);
+        int result = cdKwuService.getNmcodeCdKwuSave(cdKwuVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

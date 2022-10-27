@@ -1,11 +1,11 @@
-package kr.co.solbipos.adi.etc.cdKwn.service.impl;
+package kr.co.solbipos.adi.etc.cdKwu.service.impl;
 
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
-import kr.co.solbipos.adi.etc.cdKwn.service.CdKwnService;
-import kr.co.solbipos.adi.etc.cdKwn.service.CdKwnVO;
+import kr.co.solbipos.adi.etc.cdKwu.service.CdKwuService;
+import kr.co.solbipos.adi.etc.cdKwu.service.CdKwuVO;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
@@ -17,7 +17,7 @@ import java.util.List;
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
- * @Class Name : CdKwnServiceImpl.java
+ * @Class Name : CdKwuServiceImpl.java
  * @Description : 광운대 > 공통코드 > 공통코드
  * @Modification Information
  * @
@@ -31,65 +31,65 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  *
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-@Service("cdKwnService")
-public class CdKwnServiceImpl implements CdKwnService {
+@Service("cdKwuService")
+public class CdKwuServiceImpl implements CdKwuService {
 
     // Constructor Injection
-    private final CdKwnMapper cdKwnMapper;
+    private final CdKwuMapper cdKwuMapper;
     private final MessageService messageService;
 
     /** 생성자 주입 */
     @Autowired
-    public CdKwnServiceImpl(MessageService messageService, CdKwnMapper cdKwnMapper) {
+    public CdKwuServiceImpl(MessageService messageService, CdKwuMapper cdKwuMapper) {
         this.messageService = messageService;
-        this.cdKwnMapper = cdKwnMapper;
+        this.cdKwuMapper = cdKwuMapper;
     }
 
     /** 대표명칭 코드목록 조회 */
     @Override
-    public List<DefaultMap<String>> getNmcodeGrpCdKwnList(CdKwnVO cdKwnVO) {
-        return cdKwnMapper.getNmcodeGrpCdKwnList(cdKwnVO);
+    public List<DefaultMap<String>> getNmcodeGrpCdKwuList(CdKwuVO cdKwuVO) {
+        return cdKwuMapper.getNmcodeGrpCdKwuList(cdKwuVO);
     }
 
     /** 세부명칭 코드목록 조회 */
     @Override
-    public List<DefaultMap<String>> getNmcodeCdKwnList(CdKwnVO cdKwnVO) {
-        return cdKwnMapper.getNmcodeCdKwnList(cdKwnVO);
+    public List<DefaultMap<String>> getNmcodeCdKwuList(CdKwuVO cdKwuVO) {
+        return cdKwuMapper.getNmcodeCdKwuList(cdKwuVO);
     }
 
     /** 코드목록 저장 */
     @Override
-    public int getNmcodeCdKwnSave(CdKwnVO[] cdKwnVOs, SessionInfoVO sessionInfoVO) {
+    public int getNmcodeCdKwuSave(CdKwuVO[] cdKwuVOs, SessionInfoVO sessionInfoVO) {
 
         int result = 0;
         String currentDt = currentDateTimeString();
 
-        for ( CdKwnVO cdKwnVO : cdKwnVOs ) {
+        for ( CdKwuVO cdKwuVO : cdKwuVOs ) {
 
-            cdKwnVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            cdKwuVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
-                cdKwnVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
+                cdKwuVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
             } else if ( sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
-                cdKwnVO.setStoreCd(sessionInfoVO.getOrgnCd());
+                cdKwuVO.setStoreCd(sessionInfoVO.getOrgnCd());
             }
-            cdKwnVO.setRegDt(currentDt);
-            cdKwnVO.setRegId(sessionInfoVO.getUserId());
-            cdKwnVO.setModDt(currentDt);
-            cdKwnVO.setModId(sessionInfoVO.getUserId());
+            cdKwuVO.setRegDt(currentDt);
+            cdKwuVO.setRegId(sessionInfoVO.getUserId());
+            cdKwuVO.setModDt(currentDt);
+            cdKwuVO.setModId(sessionInfoVO.getUserId());
 
             // 추가
-            if ( cdKwnVO.getStatus() == GridDataFg.INSERT ) {
-                result += cdKwnMapper.getNmcodeCdKwnSaveInsert(cdKwnVO);
-            // 수정
-            } else if ( cdKwnVO.getStatus() == GridDataFg.UPDATE ) {
-                result += cdKwnMapper.getNmcodeCdKwnSaveUpdate(cdKwnVO);
-            // 삭제
-            } else if ( cdKwnVO.getStatus() == GridDataFg.DELETE ) {
-                result += cdKwnMapper.getNmcodeCdKwnSaveDelete(cdKwnVO);
+            if ( cdKwuVO.getStatus() == GridDataFg.INSERT ) {
+                result += cdKwuMapper.getNmcodeCdKwuSaveInsert(cdKwuVO);
+                // 수정
+            } else if ( cdKwuVO.getStatus() == GridDataFg.UPDATE ) {
+                result += cdKwuMapper.getNmcodeCdKwuSaveUpdate(cdKwuVO);
+                // 삭제
+            } else if ( cdKwuVO.getStatus() == GridDataFg.DELETE ) {
+                result += cdKwuMapper.getNmcodeCdKwuSaveDelete(cdKwuVO);
             }
         }
 
-        if ( result == cdKwnVOs.length) {
+        if ( result == cdKwuVOs.length) {
             return result;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));

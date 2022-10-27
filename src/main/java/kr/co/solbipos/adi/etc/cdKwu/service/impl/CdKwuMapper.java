@@ -1,14 +1,14 @@
-package kr.co.solbipos.adi.etc.cdKwn.service.impl;
+package kr.co.solbipos.adi.etc.cdKwu.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.adi.etc.cdKwn.service.CdKwnVO;
+import kr.co.solbipos.adi.etc.cdKwu.service.CdKwuVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
- * @Class Name : CdKwnMapper.java
+ * @Class Name : CdKwuMapper.java
  * @Description : 광운대 > 공통코드 > 공통코드
  * @Modification Information
  * @
@@ -24,20 +24,20 @@ import java.util.List;
  */
 @Mapper
 @Repository
-public interface CdKwnMapper {
+public interface CdKwuMapper {
 
     /** 대표명칭 코드목록 조회 */
-    List<DefaultMap<String>> getNmcodeGrpCdKwnList(CdKwnVO cdKwnVO);
+    List<DefaultMap<String>> getNmcodeGrpCdKwuList(CdKwuVO cdKwuVO);
 
     /** 세부명칭 코드목록 조회 */
-    List<DefaultMap<String>> getNmcodeCdKwnList(CdKwnVO cdKwnVO);
+    List<DefaultMap<String>> getNmcodeCdKwuList(CdKwuVO cdKwuVO);
 
     /** 코드목록 추가 */
-    int getNmcodeCdKwnSaveInsert(CdKwnVO cdKwnVO);
+    int getNmcodeCdKwuSaveInsert(CdKwuVO cdKwuVO);
 
     /** 코드목록 저장 */
-    int getNmcodeCdKwnSaveUpdate(CdKwnVO cdKwnVO);
+    int getNmcodeCdKwuSaveUpdate(CdKwuVO cdKwuVO);
 
     /** 코드목록 삭제 */
-    int getNmcodeCdKwnSaveDelete(CdKwnVO cdKwnVO);
+    int getNmcodeCdKwuSaveDelete(CdKwuVO cdKwuVO);
 }

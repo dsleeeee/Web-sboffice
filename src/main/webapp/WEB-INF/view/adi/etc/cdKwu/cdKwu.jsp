@@ -15,7 +15,7 @@
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_broadcast('cdKwnCtrl')" id="nxBtnSearch">
+            <button class="btn_blue fr" ng-click="_broadcast('cdKwuCtrl')" id="nxBtnSearch">
                 <s:message code="cmm.search" />
             </button>
         </div>
@@ -30,19 +30,19 @@
         <tbody>
         <tr>
             <%-- 코드 --%>
-            <th><s:message code="cdKwn.nmcodeCd" /></th>
+            <th><s:message code="cdKwu.nmcodeCd" /></th>
             <td>
                 <input type="text" class="sb-input w100" id="srchNmcodeCd" ng-model="nmcodeCd" onkeyup="fnNxBtnSearch();"/>
             </td>
             <%-- 코드명 --%>
-            <th><s:message code="cdKwn.nmcodeNm" /></th>
+            <th><s:message code="cdKwu.nmcodeNm" /></th>
             <td>
                 <input type="text" class="sb-input w100" id="srchNmcodeNm" ng-model="nmcodeNm" onkeyup="fnNxBtnSearch();"/>
             </td>
         </tr>
         <tr style='display:none;'>
             <%-- 사용여부 --%>
-            <th><s:message code="cdKwn.useYnFg" /></th>
+            <th><s:message code="cdKwu.useYnFg" /></th>
             <td>
                 <div class="sb-select">
                     <wj-combo-box
@@ -67,11 +67,11 @@
     <input type="hidden" id="s_nmcodeItem1" name="s_nmcodeItem1" value="" />
     <input type="hidden" id="s_nmcodeItem2" name="s_nmcodeItem2" value="" />
 
-    <div id="gridRepresent" class="w40 fl" ng-controller="cdKwnCtrl">
+    <div id="gridRepresent" class="w40 fl" ng-controller="cdKwuCtrl">
         <%--위즈모 테이블--%>
         <div class="wj-TblWrapBr mr10 pd20" style="height: 400px;">
             <div class="updownSet oh mb10">
-                <span class="fl bk lh30"><s:message code='cdKwn.grpGridNm' /></span>
+                <span class="fl bk lh30"><s:message code='cdKwu.grpGridNm' /></span>
                 <button class="btn_skyblue" id="btnAddRepresent" style="display: none;" ng-click="addRow()">
                     <s:message code="cmm.add" />
                 </button>
@@ -98,17 +98,17 @@
                             ime-enabled="true">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="cdKwn.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="cdKwn.nmcodeGrpCd"/>" binding="nmcodeGrpCd" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="cdKwn.nmcodeCd"/>" binding="nmcodeCd" width="40" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="cdKwn.nmcodeNm"/>" binding="nmcodeNm" width="100" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="cdKwn.nmcodeItem1"/>" binding="nmcodeItem1" width="50" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="cdKwn.nmcodeItem2Cd"/>" binding="nmcodeItem2" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="cdKwn.useYnFg"/>" binding="useYn" data-map="useYnFgDataMap" width="100" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cdKwu.nmcodeGrpCd"/>" binding="nmcodeGrpCd" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cdKwu.nmcodeCd"/>" binding="nmcodeCd" width="40" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cdKwu.nmcodeNm"/>" binding="nmcodeNm" width="100" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cdKwu.nmcodeItem1"/>" binding="nmcodeItem1" width="50" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cdKwu.nmcodeItem2Cd"/>" binding="nmcodeItem2" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cdKwu.useYnFg"/>" binding="useYn" data-map="useYnFgDataMap" width="100" visible="false"></wj-flex-grid-column>
                     </wj-flex-grid>
                     <%-- ColumnPicker 사용시 include --%>
                     <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-                        <jsp:param name="pickerTarget" value="cdKwnCtrl"/>
+                        <jsp:param name="pickerTarget" value="cdKwuCtrl"/>
                     </jsp:include>
                     <%--// ColumnPicker 사용시 include --%>
                 </div>
@@ -117,11 +117,11 @@
         <%--//위즈모 테이블--%>
     </div>
 
-    <div id="gridDetail" class="w60 fr" ng-controller="cdKwnDetailCtrl">
+    <div id="gridDetail" class="w60 fr" ng-controller="cdKwuDetailCtrl">
         <%--위즈모 테이블--%>
         <div class="wj-TblWrapBr ml10 pd20" style="height: 400px;">
             <div class="updownSet oh mb10">
-                <span class="fl bk lh30"><s:message code='cdKwn.gridNm' /></span>
+                <span class="fl bk lh30"><s:message code='cdKwu.gridNm' /></span>
                 <button class="btn_skyblue" id="btnAddDetail" style="display: none;" ng-click="addRow()">
                     <s:message code="cmm.add" />
                 </button>
@@ -147,16 +147,16 @@
                         ime-enabled="true">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="cdKwn.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="cdKwn.nmcodeCd"/>" binding="nmcodeCd" width="50" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="cdKwn.nmcodeNm"/>" binding="nmcodeNm" width="150"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="cdKwn.nmcodeItem1"/>" binding="nmcodeItem1" width="100"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="cdKwn.nmcodeItem2"/>" binding="nmcodeItem2" width="100"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="cdKwn.useYnFg"/>" binding="useYn" data-map="useYnFgDataMap" width="100"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cdKwu.nmcodeCd"/>" binding="nmcodeCd" width="50" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cdKwu.nmcodeNm"/>" binding="nmcodeNm" width="150"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cdKwu.nmcodeItem1"/>" binding="nmcodeItem1" width="100"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cdKwu.nmcodeItem2"/>" binding="nmcodeItem2" width="100"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cdKwu.useYnFg"/>" binding="useYn" data-map="useYnFgDataMap" width="100"></wj-flex-grid-column>
                 </wj-flex-grid>
                 <%-- ColumnPicker 사용시 include --%>
                 <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-                    <jsp:param name="pickerTarget" value="cdKwnDetailCtrl"/>
+                    <jsp:param name="pickerTarget" value="cdKwuDetailCtrl"/>
                 </jsp:include>
                 <%--// ColumnPicker 사용시 include --%>
             </div>
@@ -166,4 +166,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cdKwn/cdKwn.js?ver=20220907.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cdKwu/cdKwu.js?ver=20221027.03" charset="utf-8"></script>

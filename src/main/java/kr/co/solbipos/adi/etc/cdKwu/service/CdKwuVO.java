@@ -1,9 +1,9 @@
-package kr.co.solbipos.adi.etc.cdKwn.service;
+package kr.co.solbipos.adi.etc.cdKwu.service;
 
 import kr.co.solbipos.application.common.service.CmmVO;
 
 /**
- * @Class Name : CdKwnVO.java
+ * @Class Name : CdKwuVO.java
  * @Description : 광운대 > 공통코드 > 공통코드
  * @Modification Information
  * @
@@ -17,7 +17,7 @@ import kr.co.solbipos.application.common.service.CmmVO;
  *
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public class CdKwnVO extends CmmVO {
+public class CdKwuVO extends CmmVO {
 
     private static final long serialVersionUID = -1046090570078823455L;
 
