@@ -548,9 +548,14 @@
     <typeAlias alias="planVO" type="kr.co.solbipos.adi.dclz.plan.service.PlanVO"/>
     <typeAlias alias="adjVO" type="kr.co.solbipos.adi.dclz.adj.service.AdjVO"/>
 -->
+
+    <!-- 부가서비스 > 기타관리 > 명칭관리 -->
     <typeAlias alias="cdVO" type="kr.co.solbipos.adi.etc.cd.service.CdVO"/>
     <!-- 광운대 > 공통코드 > 공통코드 -->
     <typeAlias alias="cdKwnVO" type="kr.co.solbipos.adi.etc.cdKwn.service.CdKwnVO"/>
+    <!-- 맘스터치 > 기타관리 > 명칭관리 -->
+    <typeAlias alias="cdMomsVO" type="kr.co.solbipos.adi.etc.cdMoms.service.CdMomsVO"/>
+
 <!--
     <typeAlias alias="resveVO" type="kr.co.solbipos.adi.etc.resve.service.ResveVO"/>
 -->

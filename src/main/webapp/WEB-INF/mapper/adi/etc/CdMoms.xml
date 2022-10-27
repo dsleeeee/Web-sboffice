@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    CdMoms.xml
+    명칭관리 (맘스터치)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2022.10.27      최초작성
+-->
+<mapper namespace="kr.co.solbipos.adi.etc.cdMoms.service.impl.CdMomsMapper">
+
+    <!-- 대표명칭 코드목록 조회 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
+        PARAM    : cdMomsVO
+        COMMENTS : 대표명칭 코드 목록을 조회한다.
+    -->
+    <select id="getNmcodeGrpCdMomsList" parameterType="cdMomsVO" resultType="DefaultMap">
+        /* USE : CdMomsMapper.getNmcodeGrpCdMomsList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                NMCODE_GRP_CD,
+                NMCODE_CD,
+                NMCODE_NM,
+                'C' AS NMCODE_ITEM_1,
+                NMCODE_ITEM_2,
+                USE_COL_NM,
+                USE_TARGET_FG,
+                USE_SYSTEM_FG,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+                FROM TB_CM_NMCODE
+                WHERE 1=1
+                AND NMCODE_GRP_CD = '999'
+                AND NMCODE_ITEM_1 IN ('맘스터치')
+                <if test='nmcodeCd != null and nmcodeCd != ""'>
+                    AND NMCODE_CD LIKE '%'||#{nmcodeCd}||'%'
+                </if>
+                <if test='nmcodeNm != null and nmcodeNm != ""'>
+                    AND NMCODE_NM LIKE '%'||#{nmcodeNm}||'%'
+                </if>
+                <if test='useYn != null and useYn != ""'>
+                    AND USE_YN = #{useYn}
+                </if>
+                ORDER BY NMCODE_GRP_CD, NMCODE_CD
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                NMCODE_GRP_CD,
+                NMCODE_CD,
+                NMCODE_NM,
+                'C' AS NMCODE_ITEM_1,
+                NMCODE_ITEM_2,
+                USE_COL_NM,
+                USE_TARGET_FG,
+                USE_SYSTEM_FG,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+                FROM TB_CM_NMCODE
+                WHERE 1=1
+                AND NMCODE_GRP_CD = '999'
+                AND NMCODE_ITEM_1 IN ('맘스터치')
+                <if test='nmcodeCd != null and nmcodeCd != ""'>
+                    AND NMCODE_CD LIKE '%'||#{nmcodeCd}||'%'
+                </if>
+                <if test='nmcodeNm != null and nmcodeNm != ""'>
+                    AND NMCODE_NM LIKE '%'||#{nmcodeNm}||'%'
+                </if>
+                <if test='useYn != null and useYn != ""'>
+                    AND USE_YN = #{useYn}
+                </if>
+                ORDER BY NMCODE_GRP_CD, NMCODE_CD
+            </when>
+        </choose>
+    </select>
+
+    <!-- 세부명칭 코드목록 조회 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
+        PARAM    : cdMomsVO
+        COMMENTS : 세부명칭 코드 목록을 조회한다.
+    -->
+    <select id="getNmcodeCdMomsList" parameterType="cdMomsVO" resultType="DefaultMap">
+        /* USE : CdMomsMapper.getNmcodeCdMomsList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                thn.NMCODE_GRP_CD,
+                thn.NMCODE_CD,
+                thn.NMCODE_NM,
+                thn.NMCODE_ITEM_1,
+                thn.NMCODE_ITEM_2,
+                thn.USE_YN
+                FROM TB_HQ_NMCODE thn
+                WHERE 1=1
+                AND thn.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND thn.NMCODE_GRP_CD = #{nmcodeGrpCd}
+                <if test='nmcodeCd != null and nmcodeCd != ""'>
+                    AND thn.NMCODE_CD LIKE '%'||#{nmcodeCd}||'%'
+                </if>
+                ORDER BY thn.NMCODE_CD
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                tmsn.NMCODE_GRP_CD,
+                tmsn.NMCODE_CD,
+                tmsn.NMCODE_NM,
+                tmsn.NMCODE_ITEM_1,
+                tmsn.NMCODE_ITEM_2,
+                tmsn.USE_YN
+                FROM TB_MS_STORE_NMCODE tmsn
+                WHERE 1=1
+                AND tmsn.STORE_CD = #{storeCd}
+                AND tmsn.NMCODE_GRP_CD = #{nmcodeGrpCd}
+                <if test='nmcodeCd != null and nmcodeCd != ""'>
+                    AND tmsn.NMCODE_CD LIKE '%'||#{nmcodeCd}||'%'
+                </if>
+                ORDER BY tmsn.NMCODE_CD
+            </when>
+        </choose>
+    </select>
+
+    <!-- 코드목록 생성 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : cdMomsVO
+        COMMENTS : 코드를 생성한다.
+    -->
+    <insert id="getNmcodeCdMomsSaveInsert" parameterType="cdMomsVO">
+        /* USE : CdMomsMapper.getNmcodeCdMomsSaveInsert */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_NMCODE
+                (
+                HQ_OFFICE_CD,
+                NMCODE_GRP_CD,
+                NMCODE_CD,
+                PARENT_CD,
+                NMCODE_NM,
+                NMCODE_ITEM_1,
+                NMCODE_ITEM_2,
+                USE_YN,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+                ) VALUES (
+                #{hqOfficeCd},
+                #{nmcodeGrpCd},
+                #{nmcodeCd},
+                #{nmcodeGrpCd},
+                #{nmcodeNm},
+                #{nmcodeItem1,jdbcType=VARCHAR},
+                #{nmcodeItem2,jdbcType=VARCHAR},
+                'Y',
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+                )
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_STORE_NMCODE
+                (
+                STORE_CD,
+                NMCODE_GRP_CD,
+                NMCODE_CD,
+                PARENT_CD,
+                NMCODE_NM,
+                NMCODE_ITEM_1,
+                NMCODE_ITEM_2,
+                USE_YN,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+                ) VALUES (
+                #{storeCd},
+                #{nmcodeGrpCd},
+                #{nmcodeCd},
+                #{nmcodeGrpCd},
+                #{nmcodeNm},
+                #{nmcodeItem1,jdbcType=VARCHAR},
+                #{nmcodeItem2,jdbcType=VARCHAR},
+                'Y',
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+                )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 코드목록 업데이트 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
+        PARAM    : cdMomsVO
+        COMMENTS : 코드 목록을 수정한다.
+    -->
+    <update id="getNmcodeCdMomsSaveUpdate" parameterType="cdMomsVO">
+        /* USE : CdMomsMapper.getNmcodeCdMomsSaveUpdate */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE TB_HQ_NMCODE
+                SET
+                NMCODE_NM = #{nmcodeNm,jdbcType=VARCHAR},
+                NMCODE_ITEM_1 = #{nmcodeItem1,jdbcType=VARCHAR},
+                NMCODE_ITEM_2 = #{nmcodeItem2,jdbcType=VARCHAR},
+                USE_YN = #{useYn}
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{hqOfficeCd}
+                AND NMCODE_GRP_CD = #{nmcodeGrpCd}
+                AND NMCODE_CD = #{nmcodeCd}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE TB_MS_STORE_NMCODE
+                SET
+                NMCODE_NM = #{nmcodeNm,jdbcType=VARCHAR},
+                NMCODE_ITEM_1 = #{nmcodeItem1,jdbcType=VARCHAR},
+                NMCODE_ITEM_2 = #{nmcodeItem2,jdbcType=VARCHAR},
+                USE_YN = #{useYn}
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND NMCODE_GRP_CD = #{nmcodeGrpCd}
+                AND NMCODE_CD = #{nmcodeCd}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 코드목록 삭제 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
+        PARAM    : cdMomsVO
+        COMMENTS : 코드 목록을 삭제한다.
+    -->
+    <delete id="getNmcodeCdMomsSaveDelete" parameterType="cdMomsVO">
+        /* USE : CdMomsMapper.getNmcodeCdMomsSaveDelete */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                FROM TB_HQ_NMCODE
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{hqOfficeCd}
+                AND NMCODE_GRP_CD = #{nmcodeGrpCd}
+                AND NMCODE_CD = #{nmcodeCd}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                FROM TB_MS_STORE_NMCODE
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND NMCODE_GRP_CD = #{nmcodeGrpCd}
+                AND NMCODE_CD = #{nmcodeCd}
+            </when>
+        </choose>
+    </delete>
+
+</mapper>
