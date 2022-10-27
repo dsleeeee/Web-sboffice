@@ -1,8 +1,8 @@
-package kr.co.solbipos.excclc.excclc.dailyTableKwn.service;
+package kr.co.solbipos.excclc.excclc.dailyTableKwu.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 /**
- * @Class Name : DailyTableKwnVO.java
+ * @Class Name : DailyTableKwuVO.java
  * @Description : 광운대 > 광운대일마감 > 일일일계표2
  * @Modification Information
  * @
@@ -17,7 +17,7 @@ import kr.co.solbipos.application.common.service.PageVO;
  *
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public class DailyTableKwnVO extends PageVO {
+public class DailyTableKwuVO extends PageVO {
 
     private static final long serialVersionUID = -6606377306049900821L;
 

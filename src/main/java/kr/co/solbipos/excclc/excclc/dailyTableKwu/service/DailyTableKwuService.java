@@ -1,14 +1,14 @@
-package kr.co.solbipos.excclc.excclc.dailyTableKwn.service;
+package kr.co.solbipos.excclc.excclc.dailyTableKwu.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.excclc.excclc.dailyTableKwn.service.DailyTableKwnVO;
+import kr.co.solbipos.excclc.excclc.dailyTableKwu.service.DailyTableKwuVO;
 
 import java.util.List;
 import java.util.Map;
 
 /**
- * @Class Name : DailyTableKwnService.java
+ * @Class Name : DailyTableKwuService.java
  * @Description : 광운대 > 광운대일마감 > 일일일계표2
  * @Modification Information
  * @
@@ -23,14 +23,14 @@ import java.util.Map;
  *
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public interface DailyTableKwnService {
+public interface DailyTableKwuService {
 
     /** 일일일계표2 - 조회 */
-    Map<String, Object> getDailyTableKwnList(DailyTableKwnVO dailyTableKwnVO, SessionInfoVO sessionInfoVO);
+    Map<String, Object> getDailyTableKwuList(DailyTableKwuVO dailyTableKwuVO, SessionInfoVO sessionInfoVO);
 
     /** 일일일계표2 - 조회 */
-    Map<String, Object> getDailyTableKwnList1(DailyTableKwnVO dailyTableKwnVO, SessionInfoVO sessionInfoVO);
+    Map<String, Object> getDailyTableKwuList1(DailyTableKwuVO dailyTableKwuVO, SessionInfoVO sessionInfoVO);
 
     /** 일일일계표2 - 조회 */
-    Map<String, Object> getDailyTableKwnList2(DailyTableKwnVO dailyTableKwnVO, SessionInfoVO sessionInfoVO);
+    Map<String, Object> getDailyTableKwuList2(DailyTableKwuVO dailyTableKwuVO, SessionInfoVO sessionInfoVO);
 }

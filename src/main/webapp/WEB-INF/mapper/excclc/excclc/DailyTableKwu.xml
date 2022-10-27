@@ -2,23 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!--
-    DailyTableKwn.xml
+    DailyTableKwu.xml
     일일일계표2 (광운대 아이스링크)
     ======================================================
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
     1       김설아     2022.10.05     최초작성
 -->
-<mapper namespace="kr.co.solbipos.excclc.excclc.dailyTableKwn.service.impl.DailyTableKwnMapper">
+<mapper namespace="kr.co.solbipos.excclc.excclc.dailyTableKwu.service.impl.DailyTableKwuMapper">
 
     <!-- 매출 조회 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_MONEY, TB_MS_STORE, TB_CM_DATEM
-        PARAM    : dailyTableKwnVO
+        PARAM    : dailyTableKwuVO
         COMMENTS : 매출 조회
     -->
-    <select id="getSaleList" parameterType="dailyTableKwnVO" resultType="DefaultMap">
-        /* DailyTableKwnMapper.getSaleList */
+    <select id="getSaleList" parameterType="dailyTableKwuVO" resultType="DefaultMap">
+        /* DailyTableKwuMapper.getSaleList */
         SELECT	tsdt.TOT_SALE_AMT AS SALE_AMT
          ,		tsdt.TOT_DC_AMT	AS DC_AMT
          ,		tsdt.NET_SALE_AMT
@@ -59,11 +59,11 @@
     <!-- 분류 조회 -->
     <!--
         TABLE    : TB_SL_SALE_HDR_INFO, TB_SL_SALE_HDR, TB_MB_MEMBER
-        PARAM    : dailyTableKwnVO
+        PARAM    : dailyTableKwuVO
         COMMENTS : 분류별 조회
     -->
-    <select id="getProdClassList" parameterType="dailyTableKwnVO" resultType="DefaultMap">
-        /* DailyTableKwnMapper.getProdClassList */
+    <select id="getProdClassList" parameterType="dailyTableKwuVO" resultType="DefaultMap">
+        /* DailyTableKwuMapper.getProdClassList */
         SELECT A.PROD_CLASS_CD
         ,		FN_GET_PROD_CLASS_CD_NM_STR(#{storeCd}, A.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
         ,		SALE_QTY
@@ -113,11 +113,11 @@
     <!-- 결제수단별 조회 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_MONEY, TB_MS_STORE, TB_CM_DATEM
-        PARAM    : dailyTableKwnVO
+        PARAM    : dailyTableKwuVO
         COMMENTS : 결제수단별 조회
     -->
-    <select id="getPayList" parameterType="dailyTableKwnVO" resultType="DefaultMap">
-        /* DailyTableKwnMapper.getPayList */
+    <select id="getPayList" parameterType="dailyTableKwuVO" resultType="DefaultMap">
+        /* DailyTableKwuMapper.getPayList */
         SELECT tsdt.PAY_AMT_02 AS CASH_AMT
         ,		tsdt.PAY_AMT_01 AS CARD_AMT
         ,		tsdt.PAY_AMT_11 AS POSTPAID_AMT
@@ -138,11 +138,11 @@
     <!-- 반품출납 조회 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_MONEY, TB_MS_STORE, TB_CM_DATEM
-        PARAM    : dailyTableKwnVO
+        PARAM    : dailyTableKwuVO
         COMMENTS : 반품출납 조회
     -->
-    <select id="getRtnList" parameterType="dailyTableKwnVO" resultType="DefaultMap">
-        /* DailyTableKwnMapper.getRtnList */
+    <select id="getRtnList" parameterType="dailyTableKwuVO" resultType="DefaultMap">
+        /* DailyTableKwuMapper.getRtnList */
         SELECT RTN_SALE_CNT
         ,		RTN_SALE_AMT
         FROM 	TB_SL_DAILY_TOTAL tsdt
@@ -153,29 +153,29 @@
 
     <!-- 결재라인 목록조회
         TABLE    : TB_SL_SALE_PAY_LINE, TB_MS_STORE
-        PARAM    : dailyTableKwnVO
+        PARAM    : dailyTableKwuVO
         COMMENTS : 결재라인 목록을 조회한다.
     -->
-    <!--<select id="getPayLineList" parameterType="dailyTableKwnVO" resultType="DefaultMap">-->
-        <!--/* DailyTableKwnMapper.getPayLineList */-->
-        <!--SELECT  HQ_OFFICE_CD    AS CFG_HQ_OFFICE_CD,-->
-                <!--HQ_BRAND_CD     AS CFG_HQ_BRAND_CD,-->
-                <!--STORE_CD        AS CFG_STORE_CD,-->
-                <!--PAY_LINE_NO     AS CFG_PAY_LINE_NO,-->
-                <!--PAY_LINE_SEQ    AS CFG_PAY_LINE_SEQ,-->
-                <!--PAY_LINE_NM     AS CFG_PAY_LINE_NM,-->
-                <!--USE_YN          AS CFG_USE_YN-->
-        <!--FROM    TB_SL_SALE_PAY_LINE-->
-        <!--WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}-->
-        <!--AND     STORE_CD        = #{storeCd}-->
-        <!--AND     HQ_BRAND_CD     = (-->
-                                    <!--SELECT  HQ_BRAND_CD-->
-                                    <!--FROM    TB_MS_STORE-->
-                                    <!--WHERE   HQ_OFFICE_CD= #{hqOfficeCd}-->
-                                    <!--AND     STORE_CD	= #{storeCd}-->
-                                    <!--)-->
-        <!--AND		USE_YN			= 'Y'-->
-        <!--ORDER BY CFG_PAY_LINE_SEQ-->
+    <!--<select id="getPayLineList" parameterType="dailyTableKwuVO" resultType="DefaultMap">-->
+    <!--/* DailyTableKwuMapper.getPayLineList */-->
+    <!--SELECT  HQ_OFFICE_CD    AS CFG_HQ_OFFICE_CD,-->
+    <!--HQ_BRAND_CD     AS CFG_HQ_BRAND_CD,-->
+    <!--STORE_CD        AS CFG_STORE_CD,-->
+    <!--PAY_LINE_NO     AS CFG_PAY_LINE_NO,-->
+    <!--PAY_LINE_SEQ    AS CFG_PAY_LINE_SEQ,-->
+    <!--PAY_LINE_NM     AS CFG_PAY_LINE_NM,-->
+    <!--USE_YN          AS CFG_USE_YN-->
+    <!--FROM    TB_SL_SALE_PAY_LINE-->
+    <!--WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}-->
+    <!--AND     STORE_CD        = #{storeCd}-->
+    <!--AND     HQ_BRAND_CD     = (-->
+    <!--SELECT  HQ_BRAND_CD-->
+    <!--FROM    TB_MS_STORE-->
+    <!--WHERE   HQ_OFFICE_CD= #{hqOfficeCd}-->
+    <!--AND     STORE_CD	= #{storeCd}-->
+    <!--)-->
+    <!--AND		USE_YN			= 'Y'-->
+    <!--ORDER BY CFG_PAY_LINE_SEQ-->
     <!--</select>-->
 
     <!-- 수강현황 목록조회
@@ -183,8 +183,8 @@
         PARAM    : dailyReportVO
         COMMENTS : 결재라인 목록을 조회한다.
     -->
-    <select id="getCourseStatusList" parameterType="dailyTableKwnVO" resultType="DefaultMap">
-        /* DailyTableKwnMapper.getCourseStatusList */
+    <select id="getCourseStatusList" parameterType="dailyTableKwuVO" resultType="DefaultMap">
+        /* DailyTableKwuMapper.getCourseStatusList */
         SELECT *
         FROM
         (
@@ -220,11 +220,11 @@
 
     <!-- 수강유형 목록조회
         TABLE    : TB_SL_SALE_PAY_LINE, TB_MS_STORE
-        PARAM    : dailyTableKwnVO
+        PARAM    : dailyTableKwuVO
         COMMENTS : 결재라인 목록을 조회한다.
     -->
-    <select id="getCourseTypeList" parameterType="dailyTableKwnVO" resultType="DefaultMap">
-        /* DailyTableKwnMapper.getCourseTypeList */
+    <select id="getCourseTypeList" parameterType="dailyTableKwuVO" resultType="DefaultMap">
+        /* DailyTableKwuMapper.getCourseTypeList */
         WITH t AS
         (
             SELECT
@@ -384,11 +384,11 @@
 
     <!-- 수강료현황 목록조회
         TABLE    : TB_SL_SALE_PAY_LINE, TB_MS_STORE
-        PARAM    : dailyTableKwnVO
+        PARAM    : dailyTableKwuVO
         COMMENTS : 수강료현황 목록을 조회한다.
     -->
-    <select id="getTuition1List" parameterType="dailyTableKwnVO" resultType="DefaultMap">
-        /* DailyTableKwnMapper.getTuition1List */
+    <select id="getTuition1List" parameterType="dailyTableKwuVO" resultType="DefaultMap">
+        /* DailyTableKwuMapper.getTuition1List */
         SELECT *
         FROM
         (
@@ -425,11 +425,11 @@
     </select>
     <!-- 수강료현황 목록조회
         TABLE    : TB_SL_SALE_PAY_LINE, TB_MS_STORE
-        PARAM    : dailyTableKwnVO
+        PARAM    : dailyTableKwuVO
         COMMENTS : 수강료현황 목록을 조회한다.
     -->
-    <select id="getTuition2List" parameterType="dailyTableKwnVO" resultType="DefaultMap">
-        /* DailyTableKwnMapper.getTuition2List */
+    <select id="getTuition2List" parameterType="dailyTableKwuVO" resultType="DefaultMap">
+        /* DailyTableKwuMapper.getTuition2List */
         SELECT *
         FROM
         (
@@ -621,11 +621,11 @@
 
     <!-- 단체수강 목록조회
         TABLE    : TB_SL_SALE_PAY_LINE, TB_MS_STORE
-        PARAM    : dailyTableKwnVO
+        PARAM    : dailyTableKwuVO
         COMMENTS : 단체수강 목록을 조회한다.
     -->
-    <select id="getGroupCourseList" parameterType="dailyTableKwnVO" resultType="DefaultMap">
-        /* DailyTableKwnMapper.getGroupCourseList */
+    <select id="getGroupCourseList" parameterType="dailyTableKwuVO" resultType="DefaultMap">
+        /* DailyTableKwuMapper.getGroupCourseList */
         SELECT
         (CASE WHEN tmmak.GROUP_TYPE_FG = '1' THEN '단체'
                WHEN tmmak.GROUP_TYPE_FG = '2' THEN '하키'
@@ -657,11 +657,11 @@
 
     <!-- 츨납현황 목록조회
         TABLE    : TB_SL_SALE_PAY_LINE, TB_MS_STORE
-        PARAM    : dailyTableKwnVO
+        PARAM    : dailyTableKwuVO
         COMMENTS : 츨납현황 목록을 조회한다.
     -->
-    <select id="getPaymentStatus1List" parameterType="dailyTableKwnVO" resultType="DefaultMap">
-        /* DailyTableKwnMapper.getPaymentStatus1List */
+    <select id="getPaymentStatus1List" parameterType="dailyTableKwuVO" resultType="DefaultMap">
+        /* DailyTableKwuMapper.getPaymentStatus1List */
         SELECT
         MONTH_IN_AMT_SUM,
         SUM(IN_AMT) AS IN_AMT,
@@ -697,11 +697,11 @@
 
     <!-- 츨납현황 목록조회
         TABLE    : TB_SL_SALE_PAY_LINE, TB_MS_STORE
-        PARAM    : dailyTableKwnVO
+        PARAM    : dailyTableKwuVO
         COMMENTS : 츨납현황 목록을 조회한다.
     -->
-    <select id="getPaymentStatus2List" parameterType="dailyTableKwnVO" resultType="DefaultMap">
-        /* DailyTableKwnMapper.getPaymentStatus2List */
+    <select id="getPaymentStatus2List" parameterType="dailyTableKwuVO" resultType="DefaultMap">
+        /* DailyTableKwuMapper.getPaymentStatus2List */
         SELECT
         A.IN_INFO,
         SUM(A.IN_AMT) AS IN_AMT,
@@ -828,11 +828,11 @@
 
     <!-- 츨납현황 목록조회
         TABLE    : TB_SL_SALE_PAY_LINE, TB_MS_STORE
-        PARAM    : dailyTableKwnVO
+        PARAM    : dailyTableKwuVO
         COMMENTS : 츨납현황 목록을 조회한다.
     -->
-    <select id="getPaymentStatus3List" parameterType="dailyTableKwnVO" resultType="DefaultMap">
-        /* DailyTableKwnMapper.getPaymentStatus3List */
+    <select id="getPaymentStatus3List" parameterType="dailyTableKwuVO" resultType="DefaultMap">
+        /* DailyTableKwuMapper.getPaymentStatus3List */
         SELECT
         '비고' AS REMARK,
         CONTENT

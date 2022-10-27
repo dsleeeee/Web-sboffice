@@ -1,4 +1,4 @@
-package kr.co.solbipos.excclc.excclc.dailyTableKwn.web;
+package kr.co.solbipos.excclc.excclc.dailyTableKwu.web;
 
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
@@ -6,8 +6,8 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.excclc.excclc.dailyTableKwn.service.DailyTableKwnService;
-import kr.co.solbipos.excclc.excclc.dailyTableKwn.service.DailyTableKwnVO;
+import kr.co.solbipos.excclc.excclc.dailyTableKwu.service.DailyTableKwuService;
+import kr.co.solbipos.excclc.excclc.dailyTableKwu.service.DailyTableKwuVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -23,7 +23,7 @@ import java.util.Map;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 /**
- * @Class Name : DailyTableKwnController.java
+ * @Class Name : DailyTableKwuController.java
  * @Description : 광운대 > 광운대일마감 > 일일일계표2
  * @Modification Information
  * @
@@ -39,18 +39,18 @@ import static kr.co.common.utils.grid.ReturnUtil.returnJson;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
-@RequestMapping("/excclc/excclc/dailyTableKwn")
-public class DailyTableKwnController {
+@RequestMapping("/excclc/excclc/dailyTableKwu")
+public class DailyTableKwuController {
 
     private final SessionService sessionService;
-    private final DailyTableKwnService dailyTableKwnService;
+    private final DailyTableKwuService dailyTableKwuService;
 
     /**
      * Constructor Injection
      */
-    public DailyTableKwnController(SessionService sessionService, DailyTableKwnService dailyTableKwnService) {
+    public DailyTableKwuController(SessionService sessionService, DailyTableKwuService dailyTableKwuService) {
         this.sessionService = sessionService;
-        this.dailyTableKwnService = dailyTableKwnService;
+        this.dailyTableKwuService = dailyTableKwuService;
     }
 
     /**
@@ -60,27 +60,27 @@ public class DailyTableKwnController {
      * @param response
      * @param model
      */
-    @RequestMapping(value = "/dailyTableKwn/view.sb", method = RequestMethod.GET)
-    public String dailyTableKwnView(HttpServletRequest request, HttpServletResponse response, Model model) {
+    @RequestMapping(value = "/dailyTableKwu/view.sb", method = RequestMethod.GET)
+    public String dailyTableKwuView(HttpServletRequest request, HttpServletResponse response, Model model) {
 
-        return "excclc/excclc/dailyTableKwn/dailyTableKwn";
+        return "excclc/excclc/dailyTableKwu/dailyTableKwu";
     }
 
     /**
      * 일일일계표2 - 조회
      *
-     * @param dailyTableKwnVO
+     * @param dailyTableKwuVO
      * @param request
      * @return  Object
      * @author  김설아
      * @since   2022. 10. 05.
      */
-    @RequestMapping(value="/dailyTableKwn/getDailyTableKwnList.sb", method=RequestMethod.POST)
+    @RequestMapping(value="/dailyTableKwu/getDailyTableKwuList.sb", method=RequestMethod.POST)
     @ResponseBody
-    public Result getDailyTableKwnList(DailyTableKwnVO dailyTableKwnVO, HttpServletRequest request) {
+    public Result getDailyTableKwuList(DailyTableKwuVO dailyTableKwuVO, HttpServletRequest request) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        Map<String, Object> rtnMap = dailyTableKwnService.getDailyTableKwnList(dailyTableKwnVO, sessionInfoVO);
+        Map<String, Object> rtnMap = dailyTableKwuService.getDailyTableKwuList(dailyTableKwuVO, sessionInfoVO);
 
         return returnJson(Status.OK, rtnMap);
     }
@@ -88,18 +88,18 @@ public class DailyTableKwnController {
     /**
      * 일일일계표2 - 조회
      *
-     * @param dailyTableKwnVO
+     * @param dailyTableKwuVO
      * @param request
      * @return  Object
      * @author  김설아
      * @since   2022. 10. 05.
      */
-    @RequestMapping(value="/dailyTableKwn/getDailyTableKwnList1.sb", method=RequestMethod.POST)
+    @RequestMapping(value="/dailyTableKwu/getDailyTableKwuList1.sb", method=RequestMethod.POST)
     @ResponseBody
-    public Result getDailyTableKwnList1(DailyTableKwnVO dailyTableKwnVO, HttpServletRequest request) {
+    public Result getDailyTableKwuList1(DailyTableKwuVO dailyTableKwuVO, HttpServletRequest request) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        Map<String, Object> rtnMap = dailyTableKwnService.getDailyTableKwnList1(dailyTableKwnVO, sessionInfoVO);
+        Map<String, Object> rtnMap = dailyTableKwuService.getDailyTableKwuList1(dailyTableKwuVO, sessionInfoVO);
 
         return returnJson(Status.OK, rtnMap);
     }
@@ -107,18 +107,18 @@ public class DailyTableKwnController {
     /**
      * 일일일계표2 - 조회
      *
-     * @param dailyTableKwnVO
+     * @param dailyTableKwuVO
      * @param request
      * @return  Object
      * @author  김설아
      * @since   2022. 10. 05.
      */
-    @RequestMapping(value="/dailyTableKwn/getDailyTableKwnList2.sb", method=RequestMethod.POST)
+    @RequestMapping(value="/dailyTableKwu/getDailyTableKwuList2.sb", method=RequestMethod.POST)
     @ResponseBody
-    public Result getDailyTableKwnList2(DailyTableKwnVO dailyTableKwnVO, HttpServletRequest request) {
+    public Result getDailyTableKwuList2(DailyTableKwuVO dailyTableKwuVO, HttpServletRequest request) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        Map<String, Object> rtnMap = dailyTableKwnService.getDailyTableKwnList2(dailyTableKwnVO, sessionInfoVO);
+        Map<String, Object> rtnMap = dailyTableKwuService.getDailyTableKwuList2(dailyTableKwuVO, sessionInfoVO);
 
         return returnJson(Status.OK, rtnMap);
     }

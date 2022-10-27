@@ -1,6 +1,6 @@
 /****************************************************************
  *
- * 파일명 : dailyTableReportKwn.js
+ * 파일명 : dailyTableReportKwu.js
  * 설  명 : 일일일계표2 인쇄 (광운대 아이스링크) JavaScript
  *
  *    수정일      수정자      Version        Function 명
@@ -16,38 +16,38 @@ var app = agrid.getApp();
 /**
  *  일일일계표 인쇄 팝업 조회 그리드 생성
  */
-app.controller('dailyTableReportKwnCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('dailyTableReportKwuCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('dailyTableReportKwnCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('dailyTableReportKwuCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
     };
 
     // <-- 검색 호출 -->
-    $scope.$on("dailyTableReportKwnCtrl", function(event, data) {
+    $scope.$on("dailyTableReportKwuCtrl", function(event, data) {
         $scope.printNum = data.printNum;
         $scope.startDate = data.startDate;
         $scope.storeCd = data.storeCd;
 
         if($scope.printNum === "1") {
-            // dailyTableKwnReport html 내용 초기화
-            $("#dailyTableKwnReport").html('');
+            // dailyTableKwuReport html 내용 초기화
+            $("#dailyTableKwuReport").html('');
 
             $("#divPrintNum1").css("display", "");
             $("#divPrintNum2").css("display", "none");
 
-            $scope.searchDailyTableReportKwn();
+            $scope.searchDailyTableReportKwu();
 
         } else if($scope.printNum === "2") {
-            // dailyTableKwnReport html 내용 초기화
-            $("#dailyTableKwnReport2").html('');
+            // dailyTableKwuReport html 내용 초기화
+            $("#dailyTableKwuReport2").html('');
 
             $("#divPrintNum1").css("display", "none");
             $("#divPrintNum2").css("display", "");
 
-            $scope.searchDailyTableReportKwn2();
+            $scope.searchDailyTableReportKwu2();
         }
 
         event.preventDefault();
@@ -56,33 +56,33 @@ app.controller('dailyTableReportKwnCtrl', ['$scope', '$http', function ($scope, 
 
 
     // <-- 첫째 장 인쇄 -->
-    $scope.searchDailyTableReportKwn = function(){
+    $scope.searchDailyTableReportKwu = function(){
         var params = {};
         params.startDate = $scope.startDate;
         params.storeCd = $scope.storeCd;
 
         $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);	//'데이터 처리 중입니다.' 시작	//cmm.progress=데이터 처리 중입니다.
 
-        $scope._postJSONQuery.withOutPopUp ( "/excclc/excclc/dailyTableKwn/dailyTableKwn/getDailyTableKwnList1.sb",	//영업일보 구성 조회
-                params,
-                function(response)	{
-                    //데이터 setting > 영업일보
-                    $scope.dailyTableKwnCtrl_courseStatus = response.data.data.courseStatus; // 수강현황
-                    $scope.dailyTableKwnCtrl_courseType = response.data.data.courseType; // 수강유형
-                    $scope.dailyTableKwnCtrl_tuition1 = response.data.data.tuition1; // 수강료현황
-                    $scope.dailyTableKwnCtrl_tuition2 = response.data.data.tuition2; // 수강료현황
-                    $scope.dailyTableKwnCtrl_groupCourse = response.data.data.groupCourse; // 단체수강내역
+        $scope._postJSONQuery.withOutPopUp ( "/excclc/excclc/dailyTableKwu/dailyTableKwu/getDailyTableKwuList1.sb",	//영업일보 구성 조회
+            params,
+            function(response)	{
+                //데이터 setting > 영업일보
+                $scope.dailyTableKwuCtrl_courseStatus = response.data.data.courseStatus; // 수강현황
+                $scope.dailyTableKwuCtrl_courseType = response.data.data.courseType; // 수강유형
+                $scope.dailyTableKwuCtrl_tuition1 = response.data.data.tuition1; // 수강료현황
+                $scope.dailyTableKwuCtrl_tuition2 = response.data.data.tuition2; // 수강료현황
+                $scope.dailyTableKwuCtrl_groupCourse = response.data.data.groupCourse; // 단체수강내역
 
-                    $scope.$broadcast('loadingPopupInactive');	//'데이터 처리 중입니다.' 중지
+                $scope.$broadcast('loadingPopupInactive');	//'데이터 처리 중입니다.' 중지
 
-                    // report html 생성
-                    $scope.reportRender();
-                }, false);
+                // report html 생성
+                $scope.reportRender();
+            }, false);
     };
 
     // report html 생성
     $scope.reportRender = function () {
-        var dailyTableKwnHtml = '';
+        var dailyTableKwuHtml = '';
         var nextPageHtml  = '<p class="nextPage mt5"></p>'; // 프린트 출력시 다음 페이지로 넘기기 위한 html
 
 
@@ -164,9 +164,9 @@ app.controller('dailyTableReportKwnCtrl', ['$scope', '$http', function ($scope, 
             + '<th class="tc" style="background-color: lightgrey;">정규수강료</th>'
             + '</tr>';
 
-        for (var i = 0; i < $scope.dailyTableKwnCtrl_courseStatus.length; i++) {
+        for (var i = 0; i < $scope.dailyTableKwuCtrl_courseStatus.length; i++) {
             // 금액표시(,)
-            var item = $scope.dailyTableKwnCtrl_courseStatus[i];
+            var item = $scope.dailyTableKwuCtrl_courseStatus[i];
             var totTuition = (item.totTuition === undefined || item.totTuition == null || item.totTuition.length <= 0) ? nvl(item.totTuition,0) : addComma(item.totTuition);
             var studentCnt = (item.studentCnt === undefined || item.studentCnt == null || item.studentCnt.length <= 0) ? nvl(item.studentCnt,0) : addComma(item.studentCnt);
             var dcTuition = (item.dcTuition === undefined || item.dcTuition == null || item.dcTuition.length <= 0) ? nvl(item.dcTuition,0) : addComma(item.dcTuition);
@@ -223,9 +223,9 @@ app.controller('dailyTableReportKwnCtrl', ['$scope', '$http', function ($scope, 
             + '<th class="tc" style="background-color: lightgrey;">총계</th>'
             + '</tr>';
 
-        for (var i = 0; i < $scope.dailyTableKwnCtrl_courseType.length; i++) {
+        for (var i = 0; i < $scope.dailyTableKwuCtrl_courseType.length; i++) {
             // 금액표시(,)
-            var item = $scope.dailyTableKwnCtrl_courseType[i];
+            var item = $scope.dailyTableKwuCtrl_courseType[i];
             var cashAmt = (item.cashAmt === undefined || item.cashAmt == null || item.cashAmt.length <= 0) ? nvl(item.cashAmt,0) : addComma(item.cashAmt);
             var cardAmt = (item.cardAmt === undefined || item.cardAmt == null || item.cardAmt.length <= 0) ? nvl(item.cardAmt,0) : addComma(item.cardAmt);
             var daySaleQty = (item.daySaleQty === undefined || item.daySaleQty == null || item.daySaleQty.length <= 0) ? nvl(item.daySaleQty,0) : addComma(item.daySaleQty);
@@ -283,9 +283,9 @@ app.controller('dailyTableReportKwnCtrl', ['$scope', '$http', function ($scope, 
             + '<th class="tc" colspan="2" style="background-color: lightgrey">수강취소 현황</th>'
             + '</tr>';
 
-        for (var i = 0; i < $scope.dailyTableKwnCtrl_tuition1.length; i++) {
+        for (var i = 0; i < $scope.dailyTableKwuCtrl_tuition1.length; i++) {
             // 금액표시(,)
-            var item = $scope.dailyTableKwnCtrl_tuition1[i];
+            var item = $scope.dailyTableKwuCtrl_tuition1[i];
             var cashAmt = (item.cashAmt === undefined || item.cashAmt == null || item.cashAmt.length <= 0) ? nvl(item.cashAmt,0) : addComma(item.cashAmt);
             var cardAmt = (item.cardAmt === undefined || item.cardAmt == null || item.cardAmt.length <= 0) ? nvl(item.cardAmt,0) : addComma(item.cardAmt);
             var catAmt = (item.catAmt === undefined || item.catAmt == null || item.catAmt.length <= 0) ? nvl(item.catAmt,0) : addComma(item.catAmt);
@@ -328,9 +328,9 @@ app.controller('dailyTableReportKwnCtrl', ['$scope', '$http', function ($scope, 
             + '<th class="tc" style="background-color: lightgrey">카드입금계</th>'
             + '</tr>';
 
-        for (var i = 0; i < $scope.dailyTableKwnCtrl_tuition2.length; i++) {
+        for (var i = 0; i < $scope.dailyTableKwuCtrl_tuition2.length; i++) {
             // 금액표시(,)
-            var item = $scope.dailyTableKwnCtrl_tuition2[i];
+            var item = $scope.dailyTableKwuCtrl_tuition2[i];
             var bMonthUnpaidAmt = (item.bMonthUnpaidAmt === undefined || item.bMonthUnpaidAmt == null || item.bMonthUnpaidAmt.length <= 0) ? nvl(item.bMonthUnpaidAmt,0) : addComma(item.bMonthUnpaidAmt);
             var monthUnpaidAmt = (item.monthUnpaidAmt === undefined || item.monthUnpaidAmt == null || item.monthUnpaidAmt.length <= 0) ? nvl(item.monthUnpaidAmt,0) : addComma(item.monthUnpaidAmt);
             var commissionAmt = (item.commissionAmt === undefined || item.commissionAmt == null || item.commissionAmt.length <= 0) ? nvl(item.commissionAmt,0) : addComma(item.commissionAmt);
@@ -388,9 +388,9 @@ app.controller('dailyTableReportKwnCtrl', ['$scope', '$http', function ($scope, 
             + '<th class="tc" style="background-color: lightgrey;">금액</th>'
             + '</tr>';
 
-        for (var i = 0; i < $scope.dailyTableKwnCtrl_groupCourse.length; i++) {
+        for (var i = 0; i < $scope.dailyTableKwuCtrl_groupCourse.length; i++) {
             // 금액표시(,)
-            var item = $scope.dailyTableKwnCtrl_groupCourse[i];
+            var item = $scope.dailyTableKwuCtrl_groupCourse[i];
             var amt = (item.amt === undefined || item.amt == null || item.amt.length <= 0) ? nvl(item.amt,0) : addComma(item.amt);
             groupCourseListHtml += '<tr class="h25">'
                 + '<td class="tc">' + item.fg + '</td>'
@@ -405,14 +405,14 @@ app.controller('dailyTableReportKwnCtrl', ['$scope', '$http', function ($scope, 
 
 
         // 전체 HTML 생성
-        dailyTableKwnHtml += titleHtml + infoHtml
-                            + courseStatusListHeaderHtml + courseStatusListHtml
-                            + courseTypeListHeaderHtml + courseTypeListHtml
-                            + tuition1ListHeaderHtml + tuition1ListHtml
-                            + tuition2ListHeaderHtml + tuition2ListHtml + tuition2ListFooterHtml
-                            + groupCourseListHeaderHtml + groupCourseListHtml
-                            ;
-        $('#dailyTableKwnReport').append(dailyTableKwnHtml);
+        dailyTableKwuHtml += titleHtml + infoHtml
+            + courseStatusListHeaderHtml + courseStatusListHtml
+            + courseTypeListHeaderHtml + courseTypeListHtml
+            + tuition1ListHeaderHtml + tuition1ListHtml
+            + tuition2ListHeaderHtml + tuition2ListHtml + tuition2ListFooterHtml
+            + groupCourseListHeaderHtml + groupCourseListHtml
+        ;
+        $('#dailyTableKwuReport').append(dailyTableKwuHtml);
     };
 
     // 인쇄
@@ -429,7 +429,7 @@ app.controller('dailyTableReportKwnCtrl', ['$scope', '$http', function ($scope, 
         }
 
         // add content to it
-        var view = document.querySelector('#dailyTableKwnReport');
+        var view = document.querySelector('#dailyTableKwuReport');
         doc.append(view);
 
         // and print it
@@ -439,20 +439,20 @@ app.controller('dailyTableReportKwnCtrl', ['$scope', '$http', function ($scope, 
 
 
     // <-- 둘째 장 인쇄 -->
-    $scope.searchDailyTableReportKwn2 = function(){
+    $scope.searchDailyTableReportKwu2 = function(){
         var params = {};
         params.startDate = $scope.startDate;
         params.storeCd = $scope.storeCd;
 
         $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);	//'데이터 처리 중입니다.' 시작	//cmm.progress=데이터 처리 중입니다.
 
-        $scope._postJSONQuery.withOutPopUp ( "/excclc/excclc/dailyTableKwn/dailyTableKwn/getDailyTableKwnList2.sb",	//영업일보 구성 조회
+        $scope._postJSONQuery.withOutPopUp ( "/excclc/excclc/dailyTableKwu/dailyTableKwu/getDailyTableKwuList2.sb",	//영업일보 구성 조회
             params,
             function(response)	{
                 //데이터 setting > 영업일보
-                $scope.dailyTableKwnCtrl_paymentStatus1 = response.data.data.paymentStatus1; // 출납현황
-                $scope.dailyTableKwnCtrl_paymentStatus2 = response.data.data.paymentStatus2; // 출납현황
-                $scope.dailyTableKwnCtrl_paymentStatus3 = response.data.data.paymentStatus3; // 출납현황
+                $scope.dailyTableKwuCtrl_paymentStatus1 = response.data.data.paymentStatus1; // 출납현황
+                $scope.dailyTableKwuCtrl_paymentStatus2 = response.data.data.paymentStatus2; // 출납현황
+                $scope.dailyTableKwuCtrl_paymentStatus3 = response.data.data.paymentStatus3; // 출납현황
 
                 $scope.$broadcast('loadingPopupInactive');	//'데이터 처리 중입니다.' 중지
 
@@ -463,7 +463,7 @@ app.controller('dailyTableReportKwnCtrl', ['$scope', '$http', function ($scope, 
 
     // report html 생성
     $scope.reportRender2 = function () {
-        var dailyTableKwnHtml = '';
+        var dailyTableKwuHtml = '';
         var nextPageHtml  = '<p class="nextPage mt5"></p>'; // 프린트 출력시 다음 페이지로 넘기기 위한 html
 
 
@@ -536,9 +536,9 @@ app.controller('dailyTableReportKwnCtrl', ['$scope', '$http', function ($scope, 
             + '<th class="tc" style="background-color: lightgrey;">잔액</th>'
             + '</tr>';
 
-        for (var i = 0; i < $scope.dailyTableKwnCtrl_paymentStatus1.length; i++) {
+        for (var i = 0; i < $scope.dailyTableKwuCtrl_paymentStatus1.length; i++) {
             // 금액표시(,)
-            var item = $scope.dailyTableKwnCtrl_paymentStatus1[i];
+            var item = $scope.dailyTableKwuCtrl_paymentStatus1[i];
             var inAmt = (item.inAmt === undefined || item.inAmt == null || item.inAmt.length <= 0) ? nvl(item.inAmt,0) : addComma(item.inAmt);
             var outAmt = (item.outAmt === undefined || item.outAmt == null || item.outAmt.length <= 0) ? nvl(item.outAmt,0) : addComma(item.outAmt);
             var remainAmt = (item.remainAmt === undefined || item.remainAmt == null || item.remainAmt.length <= 0) ? nvl(item.remainAmt,0) : addComma(item.remainAmt);
@@ -575,9 +575,9 @@ app.controller('dailyTableReportKwnCtrl', ['$scope', '$http', function ($scope, 
             + '<th class="tc" style="background-color: lightgrey;">금액</th>'
             + '</tr>';
 
-        for (var i = 0; i < $scope.dailyTableKwnCtrl_paymentStatus2.length; i++) {
+        for (var i = 0; i < $scope.dailyTableKwuCtrl_paymentStatus2.length; i++) {
             // 금액표시(,)
-            var item = $scope.dailyTableKwnCtrl_paymentStatus2[i];
+            var item = $scope.dailyTableKwuCtrl_paymentStatus2[i];
             var inAmt = (item.inAmt === undefined || item.inAmt == null || item.inAmt.length <= 0) ? nvl(item.inAmt,0) : addComma(item.inAmt);
             var outAmt = (item.outAmt === undefined || item.outAmt == null || item.outAmt.length <= 0) ? nvl(item.outAmt,0) : addComma(item.outAmt);
             var remainAmt = (item.remainAmt === undefined || item.remainAmt == null || item.remainAmt.length <= 0) ? nvl(item.remainAmt,0) : addComma(item.remainAmt);
@@ -605,9 +605,9 @@ app.controller('dailyTableReportKwnCtrl', ['$scope', '$http', function ($scope, 
             }
         }
 
-        for (var i = 0; i < $scope.dailyTableKwnCtrl_paymentStatus3.length; i++) {
+        for (var i = 0; i < $scope.dailyTableKwuCtrl_paymentStatus3.length; i++) {
             // null표시
-            var item = $scope.dailyTableKwnCtrl_paymentStatus3[i];
+            var item = $scope.dailyTableKwuCtrl_paymentStatus3[i];
             var content = nvl(item.content,'');
             if(i === 0) {
                 paymentStatus2ListHtml += '<tr class="h25">'
@@ -625,11 +625,11 @@ app.controller('dailyTableReportKwnCtrl', ['$scope', '$http', function ($scope, 
 
 
         // 전체 HTML 생성
-        dailyTableKwnHtml += titleHtml + infoHtml
-                            + paymentStatus1ListHeaderHtml + paymentStatus1ListHtml
-                            + paymentStatus2ListHeaderHtml + paymentStatus2ListHtml
-                            ;
-        $('#dailyTableKwnReport2').append(dailyTableKwnHtml);
+        dailyTableKwuHtml += titleHtml + infoHtml
+            + paymentStatus1ListHeaderHtml + paymentStatus1ListHtml
+            + paymentStatus2ListHeaderHtml + paymentStatus2ListHtml
+        ;
+        $('#dailyTableKwuReport2').append(dailyTableKwuHtml);
     };
 
     // 인쇄
@@ -646,7 +646,7 @@ app.controller('dailyTableReportKwnCtrl', ['$scope', '$http', function ($scope, 
         }
 
         // add content to it
-        var view = document.querySelector('#dailyTableKwnReport2');
+        var view = document.querySelector('#dailyTableKwuReport2');
         doc.append(view);
 
         // and print it
@@ -657,6 +657,6 @@ app.controller('dailyTableReportKwnCtrl', ['$scope', '$http', function ($scope, 
 
     // 팝업 닫기
     $scope.close = function(){
-        $scope.wjDailyTableReportKwnLayer.hide();
+        $scope.wjDailyTableReportKwuLayer.hide();
     };
 }]);

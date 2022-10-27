@@ -982,7 +982,7 @@
     <!-- 광운대 > 광운대일마감 > 일일일계표 -->
     <typeAlias alias="dailyTableVO" type="kr.co.solbipos.excclc.excclc.dailyTable.service.DailyTableVO"/>
     <!-- 광운대 > 광운대일마감 > 일일일계표2 -->
-    <typeAlias alias="dailyTableKwnVO" type="kr.co.solbipos.excclc.excclc.dailyTableKwn.service.DailyTableKwnVO"/>
+    <typeAlias alias="dailyTableKwuVO" type="kr.co.solbipos.excclc.excclc.dailyTableKwu.service.DailyTableKwuVO"/>
     <!-- 광운대 > 후방매출등록 > 후방매출등록 -->
     <typeAlias alias="saleRegistKwuVO" type="kr.co.solbipos.excclc.excclc.saleRegistKwu.service.SaleRegistKwuVO"/>
 

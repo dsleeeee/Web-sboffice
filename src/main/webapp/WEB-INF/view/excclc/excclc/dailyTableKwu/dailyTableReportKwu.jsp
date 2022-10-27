@@ -6,8 +6,8 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 
-<wj-popup id="wjDailyTableReportKwnLayer" control="wjDailyTableReportKwnLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
-    <div id="dailyTableReportKwnLayer" class="wj-dialog wj-dialog-columns" ng-controller="dailyTableReportKwnCtrl">
+<wj-popup id="wjDailyTableReportKwuLayer" control="wjDailyTableReportKwuLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+    <div id="dailyTableReportKwuLayer" class="wj-dialog wj-dialog-columns" ng-controller="dailyTableReportKwuCtrl">
         <div class="wj-dialog-header wj-dialog-header-font">
             <span id="spanDtlTitle"></span>
             <a href="#" class="wj-hide btn_close"></a>
@@ -19,7 +19,7 @@
                     <%-- 인쇄 --%>
                     <button type="button" class="btn_skyblue ml5" id="btnPrint" ng-click="print()"><s:message code="cmm.print"/></button>
                 </div>
-                <div class="dailyTableKwnReport reportPrint w100" id="dailyTableKwnReport">
+                <div class="dailyTableKwuReport reportPrint w100" id="dailyTableKwuReport">
                 </div>
             </div>
             <%-- 둘째 장 인쇄 --%>
@@ -28,11 +28,11 @@
                     <%-- 인쇄 --%>
                     <button type="button" class="btn_skyblue ml5" id="btnPrint" ng-click="print2()"><s:message code="cmm.print"/></button>
                 </div>
-                <div class="dailyTableKwnReport2 reportPrint w100" id="dailyTableKwnReport2">
+                <div class="dailyTableKwuReport2 reportPrint w100" id="dailyTableKwuReport2">
                 </div>
             </div>
         </div>
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/dailyTableKwn/dailyTableReportKwn.js?ver=20221012.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/dailyTableKwu/dailyTableReportKwu.js?ver=20221027.02" charset="utf-8"></script>
