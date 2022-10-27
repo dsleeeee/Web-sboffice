@@ -2,8 +2,6 @@ package kr.co.solbipos.adi.etc.cdKwn.service;
 
 import kr.co.solbipos.application.common.service.CmmVO;
 
-import java.util.Date;
-
 /**
  * @Class Name : CdKwnVO.java
  * @Description : 광운대 > 공통코드 > 공통코드

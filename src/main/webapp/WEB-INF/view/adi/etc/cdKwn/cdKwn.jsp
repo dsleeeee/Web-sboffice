@@ -15,7 +15,7 @@
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_broadcast('representKwnCtrl')" id="nxBtnSearch">
+            <button class="btn_blue fr" ng-click="_broadcast('cdKwnCtrl')" id="nxBtnSearch">
                 <s:message code="cmm.search" />
             </button>
         </div>
@@ -67,7 +67,7 @@
     <input type="hidden" id="s_nmcodeItem1" name="s_nmcodeItem1" value="" />
     <input type="hidden" id="s_nmcodeItem2" name="s_nmcodeItem2" value="" />
 
-    <div id="gridRepresent" class="w40 fl" ng-controller="representKwnCtrl">
+    <div id="gridRepresent" class="w40 fl" ng-controller="cdKwnCtrl">
         <%--위즈모 테이블--%>
         <div class="wj-TblWrapBr mr10 pd20" style="height: 400px;">
             <div class="updownSet oh mb10">
@@ -108,7 +108,7 @@
                     </wj-flex-grid>
                     <%-- ColumnPicker 사용시 include --%>
                     <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-                        <jsp:param name="pickerTarget" value="representKwnCtrl"/>
+                        <jsp:param name="pickerTarget" value="cdKwnCtrl"/>
                     </jsp:include>
                     <%--// ColumnPicker 사용시 include --%>
                 </div>
@@ -117,7 +117,7 @@
         <%--//위즈모 테이블--%>
     </div>
 
-    <div id="gridDetail" class="w60 fr" ng-controller="detailKwnCtrl">
+    <div id="gridDetail" class="w60 fr" ng-controller="cdKwnDetailCtrl">
         <%--위즈모 테이블--%>
         <div class="wj-TblWrapBr ml10 pd20" style="height: 400px;">
             <div class="updownSet oh mb10">
@@ -156,7 +156,7 @@
                 </wj-flex-grid>
                 <%-- ColumnPicker 사용시 include --%>
                 <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-                    <jsp:param name="pickerTarget" value="detailKwnCtrl"/>
+                    <jsp:param name="pickerTarget" value="cdKwnDetailCtrl"/>
                 </jsp:include>
                 <%--// ColumnPicker 사용시 include --%>
             </div>
@@ -166,4 +166,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cdKwn/cdKwn.js?ver=20220907.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cdKwn/cdKwn.js?ver=20220907.02" charset="utf-8"></script>

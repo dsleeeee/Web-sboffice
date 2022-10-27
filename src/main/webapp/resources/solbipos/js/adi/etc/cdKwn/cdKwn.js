@@ -29,10 +29,10 @@ var useYnFgDataMap = new wijmo.grid.DataMap([
 /**
  * 대표명칭 그리드 생성
  */
-app.controller('representKwnCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('cdKwnCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('representKwnCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('cdKwnCtrl', $scope, $http, true));
 
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("srchUseYnFg", useYnFg);
@@ -40,7 +40,7 @@ app.controller('representKwnCtrl', ['$scope', '$http', function ($scope, $http) 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // picker 사용시 호출 : 미사용시 호출안함
-        $scope._makePickColumns("representKwnCtrl");
+        $scope._makePickColumns("cdKwnCtrl");
 
         // 그리드 내 콤보박스 설정
         $scope.useYnFgDataMap = useYnFgDataMap;
@@ -79,15 +79,15 @@ app.controller('representKwnCtrl', ['$scope', '$http', function ($scope, $http) 
                 var selectedRow = s.rows[ht.row].dataItem;
                 var col = ht.panel.columns[ht.col];
                 if( col.binding === "nmcodeCd" && selectedRow.status !== "I") {
-                    //$scope._broadcast('detailKwnCtrl', selectedRow.nmcodeCd);
-                    $scope._broadcast('detailKwnCtrl', selectedRow);
+                    //$scope._broadcast('cdKwnDetailCtrl', selectedRow.nmcodeCd);
+                    $scope._broadcast('cdKwnDetailCtrl', selectedRow);
                 }
             }
         });
     };
 
     // 대표명칭 그리드 조회
-    $scope.$on("representKwnCtrl", function(event, data) {
+    $scope.$on("cdKwnCtrl", function(event, data) {
         // 파라미터
         var params = {};
         params.nmcodeGrpCd = "000";
@@ -165,15 +165,15 @@ app.controller('representKwnCtrl', ['$scope', '$http', function ($scope, $http) 
 /**
  * 세부명칭 그리드 생성
  */
-app.controller('detailKwnCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('cdKwnDetailCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('detailKwnCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('cdKwnDetailCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // picker 사용시 호출 : 미사용시 호출안함
-        $scope._makePickColumns("detailKwnCtrl");
+        $scope._makePickColumns("cdKwnDetailCtrl");
 
         // 그리드 내 콤보박스 설정
         $scope.useYnFgDataMap = useYnFgDataMap;
@@ -226,7 +226,7 @@ app.controller('detailKwnCtrl', ['$scope', '$http', function ($scope, $http) {
     });
 
     // 세부명칭 그리드 조회
-    $scope.$on("detailKwnCtrl", function(event, data) {
+    $scope.$on("cdKwnDetailCtrl", function(event, data) {
         // 파라미터
         var params = {};
         params.nmcodeGrpCd = data.nmcodeCd;
@@ -296,7 +296,7 @@ app.controller('detailKwnCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 세부명칭 그리드 행 추가
     $scope.addRow = function() {
-        var gridRepresent = agrid.getScope('representKwnCtrl');
+        var gridRepresent = agrid.getScope('cdKwnCtrl');
         var selectedRow = gridRepresent.flex.selectedRows[0]._data;
 
         var params = {};
@@ -357,7 +357,6 @@ app.controller('detailKwnCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.allSearch = function () {
             $scope.searchDetailCtrl();
         };
-
     };
 
     // 세부명칭 그리드 행 삭제
