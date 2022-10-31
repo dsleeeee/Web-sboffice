@@ -723,7 +723,7 @@
                 WHERE  STORE_CD = #{storeCd}
                 AND    CLOSE_DATE = #{startDate}
                 UNION ALL
-                SELECT '하키훈련' AS IN_INFO
+                SELECT '하키' AS IN_INFO
                 ,       HOCKEY_AMT AS IN_AMT
                 ,       '' AS OUT_INFO
                 ,       0 AS OUT_AMT

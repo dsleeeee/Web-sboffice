@@ -394,9 +394,9 @@ app.controller('dailyTableReportKwuCtrl', ['$scope', '$http', function ($scope, 
             var amt = (item.amt === undefined || item.amt == null || item.amt.length <= 0) ? nvl(item.amt,0) : addComma(item.amt);
             groupCourseListHtml += '<tr class="h25">'
                 + '<td class="tc">' + item.fg + '</td>'
-                + '<td class="tr">' + item.groupNm + '</td>'
-                + '<td class="tr">' + item.saleDate + '</td>'
-                + '<td class="tr">' + item.summary + '</td>'
+                + '<td class="tl">' + item.groupNm + '</td>'
+                + '<td class="tl">' + item.saleDate + '</td>'
+                + '<td class="tl">' + item.summary + '</td>'
                 + '<td class="tr">' + amt + '</td>'
                 + '</tr>';
         }
