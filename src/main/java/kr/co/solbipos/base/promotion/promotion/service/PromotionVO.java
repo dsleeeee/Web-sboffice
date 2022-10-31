@@ -145,11 +145,11 @@ public class PromotionVO extends PageVO {
     private String userId;
     /** 프로모션 종류 */
     private String promoType;
-    /** 본사부담금 */
+    /** 본사분담금 */
     private int hqChargeUprc;
-    /** 매장부담금 */
+    /** 매장분담금 */
     private int msChargeUprc;
-    /** 제휴부담금 */
+    /** 제휴분담금 */
     private int partnerChargeUprc;
 
     public String getOrgnFg() {

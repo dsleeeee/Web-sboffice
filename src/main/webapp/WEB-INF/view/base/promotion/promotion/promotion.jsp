@@ -360,19 +360,19 @@
                         </td>
                     </tr>
                     <tr>
-                        <%--본사부담금--%>
+                        <%--본사분담금--%>
                         <th><s:message code="promotion.hqChargeUprc" /></th>
                         <td>
                             <input type="text" class="sb-input w150px" id="hqChargeUprc" ng-model="hqChargeUprc" maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
                         </td>
-                        <%--매장부담금--%>
+                        <%--매장분담금--%>
                         <th><s:message code="promotion.msChargeUprc" /></th>
                         <td>
                             <input type="text" class="sb-input w150px" id="msChargeUprc" ng-model="msChargeUprc" maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
                         </td>
                     </tr>
                     <tr>
-                        <%-- 제휴부담금 --%>
+                        <%-- 제휴분담금 --%>
                         <th><s:message code="promotion.partnerChargeUprc" /></th>
                         <td>
                             <input type="text" class="sb-input w150px" id="partnerChargeUprc" ng-model="partnerChargeUprc" maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
@@ -434,26 +434,24 @@
                              <button class="btn_skyblue" id="btnProdDel" ng-click="prodDel()"><s:message code='cmm.del' /></button>
                         </div>
                         <div class="updownSet mt5 mb5" id="divSelectProdBatch">
-                            <div id="divBatchBtn"> <%--버튼 hidden 제어를 위한 div --%>
-                                <%-- 할인값 일괄적용 --%>
-                                <div style="float: right; padding:0 0 0 5px;"><button class="btn_skyblue" ng-click="batchDcSet()"><s:message code='promotion.batch' /></button></div>
-                                <div style="float: right;"><input type="text" class="sb-input w60px" id="dcSetBatch" maxlength="5" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/></div>
-                                <div style="float: right; padding: 6px;"><label><s:message code='promotion.dcSetVal' /></label></div>
-                                <%-- 할인구분 일괄적용 --%>
-                                <div style="float: right; padding:0 15px 0 5px;"><button class="btn_skyblue" ng-click="batchApplyDcDs()"><s:message code='promotion.batch' /></button></div>
-                                <div class="sb-select w100px" style="float: right;">
-                                    <wj-combo-box
-                                        id="applyDcDsBatch"
-                                        ng-model="applyDcDsBatch"
-                                        items-source="_getComboData('applyDcDs')"
-                                        display-member-path="name"
-                                        selected-value-path="value"
-                                        is-editable="false"
-                                        control="applyDcDsBatchCombo">
-                                    </wj-combo-box>
-                                </div>
-                                <div style="float: right; padding: 6px;"><label><s:message code='promotion.applyDcDs' /></label></div>
+                            <%-- 할인값 일괄적용 --%>
+                            <div style="float: right; padding:0 0 0 5px;"><button class="btn_skyblue" ng-click="batchDcSet()"><s:message code='promotion.batch' /></button></div>
+                            <div style="float: right;"><input type="text" class="sb-input w60px" id="dcSetBatch" maxlength="5" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/></div>
+                            <div style="float: right; padding: 6px;"><label><s:message code='promotion.dcSetVal' /></label></div>
+                            <%-- 할인구분 일괄적용 --%>
+                            <div style="float: right; padding:0 15px 0 5px;"><button class="btn_skyblue" ng-click="batchApplyDcDs()"><s:message code='promotion.batch' /></button></div>
+                            <div class="sb-select w100px" style="float: right;">
+                                <wj-combo-box
+                                    id="applyDcDsBatch"
+                                    ng-model="applyDcDsBatch"
+                                    items-source="_getComboData('applyDcDs')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="applyDcDsBatchCombo">
+                                </wj-combo-box>
                             </div>
+                            <div style="float: right; padding: 6px;"><label><s:message code='promotion.applyDcDs' /></label></div>
                         </div>
                         <div class="wj-gridWrap" style="height:200px; overflow-x: hidden; overflow-y: hidden;">
                                 <wj-flex-grid
@@ -728,7 +726,7 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20221023.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20221031.01" charset="utf-8"></script>
 
 <%-- 적용상품 상품추가 --%>
 <c:import url="/WEB-INF/view/base/promotion/promotion/promotionProdReg.jsp">

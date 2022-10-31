@@ -141,10 +141,8 @@
 
         <%--구매대상 선택값 --%>
         <input type="hidden" id="hdSelectProdDs1" />
-        <%--프로모션 종류 선택값--%>
-        <input type="hidden" id="hdPromotionType1"/>
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotionProdReg.js?ver=20221021.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotionProdReg.js?ver=20221031.01" charset="utf-8"></script>
 

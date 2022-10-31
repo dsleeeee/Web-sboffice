@@ -983,7 +983,7 @@
                                       thp.PROD_NM,
                                       '1' AS PROD_QTY,
                                       '1' AS APPLY_DC_DS,
-                                      '0' AS DC_SET,
+                                      '1' AS DC_SET,
                                       thp.USE_YN,
                                       LISTAGG(thspgd.STORE_GROUP_NM || '(' || thspgd.STORE_GROUP_CD || ')', ', ') WITHIN GROUP (ORDER BY thspgd.STORE_GROUP_CD) AS STORE_GROUP_NMS,
                                       LISTAGG(thspgd.STORE_GROUP_CD, ', ') WITHIN GROUP (ORDER BY thspgd.STORE_GROUP_CD) AS STORE_GROUP_CDS
@@ -1129,7 +1129,7 @@
                                END AS PROD_CLASS_NM,
                         '1' AS PROD_QTY,
                         '1' AS APPLY_DC_DS,
-                        '0' AS DC_SET
+                        '1' AS DC_SET
                    FROM TB_HQ_PRODUCT_CLASS thpc
                   WHERE thpc.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test="prodClassCd != null and prodClassCd != ''">

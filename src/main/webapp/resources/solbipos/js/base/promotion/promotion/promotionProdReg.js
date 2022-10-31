@@ -44,9 +44,7 @@ app.controller('promotionProdRegCtrl', ['$scope', '$http', function ($scope, $ht
     $scope.$on("promotionProdRegCtrl", function(event, data) {
 
         // 구매대상 선택값에 따라 조건수량 입력여부 결정
-        $("#hdSelectProdDs1").val(data.selectProdDs);
-        // 프로모션 종류에 따라 할인구분, 할인값 입력여부 결정
-        $("#hdPromotionType1").val(data.promotionType);
+        $("#hdSelectProdDs1").val(data);
 
         // 구매대상 선택값이 전체구매, 일부구매(종류+수량)인 경우만 조건수량 입력가능
         var grid = wijmo.Control.getControl("#wjGridPromotionProdReg");
@@ -57,8 +55,8 @@ app.controller('promotionProdRegCtrl', ['$scope', '$http', function ($scope, $ht
             columns[6].visible = false;
         }
         
-        // 프로모션종류가 적용품목할인인 경우만 할인구분, 할인값 입력가능
-        if($("#hdPromotionType1").val() === "101"){
+        // 적용상품 구매대상이 '품목개별할인' 인 경우만 할인구분, 할인값 입력가능
+        if($("#hdSelectProdDs1").val() === "5"){
             columns[7].visible = true;
             columns[8].visible = true;
             $("#divBatchProd").css("display", "");
@@ -134,8 +132,8 @@ app.controller('promotionProdRegCtrl', ['$scope', '$http', function ($scope, $ht
                 }
             }
 
-            // 프로모션 종류가 '적용품목할인' 인 경우만 할인구분, 할인값 체크
-            if($("#hdPromotionType1").val() === "101"){
+            // 적용상품 구매대상이 '품목개별할인' 인 경우만 할인구분, 할인값 체크
+            if($("#hdSelectProdDs1").val() === "5"){
                 if (item.gChk === true && (item.applyDcDs === null || item.applyDcDs === "" || item.applyDcDs === undefined)) {
                     $scope._popMsg(messages["promotion.chk.applyDcDs"]); // 선택한 상품의 할인구분을 반드시 입력하세요.
                     return false;
@@ -177,13 +175,13 @@ app.controller('promotionProdRegCtrl', ['$scope', '$http', function ($scope, $ht
                     obj.prodQty = 1;
                 }
 
-                // 프로모션 종류가 '적용품목할인' 인 경우만 할인구분, 할인값 입력
-                if($("#hdPromotionType1").val() === "101"){
+                // 적용상품 구매대상이 '품목개별할인' 인 경우만 할인구분, 할인값 입력
+                if($("#hdSelectProdDs1").val() === "5"){
                     obj.applyDcDs = item.applyDcDs;
                     obj.dcSet = item.dcSet;
                 }else{
-                    obj.applyDcDs = "";
-                    obj.dcSet = 0;
+                    obj.applyDcDs = "1";
+                    obj.dcSet = 1;
                 }
 
                 params.push(obj);
@@ -199,7 +197,7 @@ app.controller('promotionProdRegCtrl', ['$scope', '$http', function ($scope, $ht
             $scope._pageView('promotionSelectProdGridCtrl', 1);
 
         });
-    }
+    };
 
     // 할인구분 일괄적용
     $scope.batchApplyDcDsProd = function () {
