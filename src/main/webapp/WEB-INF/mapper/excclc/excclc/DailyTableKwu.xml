@@ -806,7 +806,7 @@
                 (
                     SELECT '단체' AS IN_INFO, '' AS OUT_INFO, 1 AS ROW_NUM FROM dual
                     UNION ALL
-                    SELECT '하키훈련' AS IN_INFO, '' AS OUT_INFO, 2 AS ROW_NUM FROM dual
+                    SELECT '하키' AS IN_INFO, '' AS OUT_INFO, 2 AS ROW_NUM FROM dual
                     UNION ALL
                     SELECT '기타' AS IN_INFO, '' AS OUT_INFO, 3 AS ROW_NUM FROM dual
                     UNION ALL
