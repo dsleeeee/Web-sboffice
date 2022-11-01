@@ -144,6 +144,7 @@ public class RegistController {
             model.addAttribute("kwuEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1246"), "0"));
             System.out.println("kwuEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1246"), "0"));
         }
+
         // 코드별 본사 공통코드 콤보박스 조회
         // 회원추가정보-회원구분
         List membrFgComboList = registService.getHqNmcodeComboList(sessionInfoVO, "142");
@@ -216,6 +217,7 @@ public class RegistController {
         }
         model.addAttribute("skateFgComboList", skateFgComboListAll);
         /** //광운대 아이스링크 */
+
 
         // POS에서 해당 WEB 화면 재접속한 경우(이전 접속 session 그대로 존재), 'posLoginReconnect'값울 판단하여 view화면 처리
         if(request.getParameter("posLoginReconnect") != null && request.getParameter("posLoginReconnect").length() > 0){

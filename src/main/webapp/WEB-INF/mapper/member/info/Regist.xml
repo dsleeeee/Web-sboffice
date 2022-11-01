@@ -2646,9 +2646,9 @@
            AND A.MEMBR_NO = B.MEMBR_NO
     </delete>
 
-    <!-- 알림톡 전송유형 콤보박스 조회 -->
+    <!-- 코드별 본사 공통코드 콤보박스 조회 -->
     <!--
-        TABLE    :
+        TABLE    : TB_HQ_NMCODE
         COMMENTS :
     -->
     <select id="getHqNmcodeComboList" parameterType="registVO" resultType="DefaultMap">
