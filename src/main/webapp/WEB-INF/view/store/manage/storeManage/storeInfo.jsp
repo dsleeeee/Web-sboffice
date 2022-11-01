@@ -356,7 +356,7 @@
                   </tr>
                   <tr>
                     <%-- 점포유형 --%>
-                    <th><s:message code="storeManage.moms.momsAreaFg"/></th>
+                    <th><s:message code="storeManage.moms.momsShopType"/></th>
                     <td>
                       <div class="sb-select">
                         <wj-combo-box
