@@ -452,4 +452,10 @@ public interface StoreManageMapper {
 
     /** 본사-지사 조회(콤보박스용) */
     List<DefaultMap<String>> getBranchCombo(StoreManageVO storeManageVO);
+
+    /** 코드별 본사 공통코드 콤보박스 조회 */
+    List<DefaultMap<Object>> getHqNmcodeComboList(StoreManageVO storeManageVO);
+
+    /** 매장정보 저장 (맘스터치 추가정보) */
+    int mergeStoreInfoAddMoms(StoreManageVO storeManageVO);
 }

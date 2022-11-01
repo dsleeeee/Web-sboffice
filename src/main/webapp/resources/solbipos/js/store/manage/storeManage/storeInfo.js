@@ -20,6 +20,16 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData("areaCd", areaCd);
   $scope._setComboData("branchCd", [{"name": messages["cmm.select"], "value": ""}]);
 
+  // [1250 맘스터치]
+  // 콤보박스 데이터
+  $scope._setComboData("momsTeamCombo", momsTeamComboList); // 추가정보-팀별
+  $scope._setComboData("momsAcShopCombo", momsAcShopComboList); // 추가정보-AC점포별
+  $scope._setComboData("momsAreaFgCombo", momsAreaFgComboList); // 추가정보-지역구분
+  $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 추가정보-상권
+  $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 추가정보-점포유형
+  $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 추가정보-매장관리타입
+
+
   // 관리자의 경우, 모든 본사(데모까지) 나오고, 총판의 경우, 자기가 관리하는 본사만 나오도록
   if(orgnFg === "AGENCY") {
     $scope._setComboData("envHqOfficeCd", authHqList);
@@ -289,6 +299,16 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $("#hdBbqStoreCd").val("");
 
     $scope.envHqOfficeCdCombo.selectedIndex = 0;
+
+    // [1250 맘스터치]
+    if(momsEnvstVal === "1") {
+      $scope.srchMomsTeamCombo.selectedIndex = 0;
+      $scope.srchMomsAcShopCombo.selectedIndex = 0;
+      $scope.srchMomsAreaFgCombo.selectedIndex = 0;
+      $scope.srchMomsCommercialCombo.selectedIndex = 0;
+      $scope.srchMomsShopTypeCombo.selectedIndex = 0;
+      $scope.srchMomsStoreManageTypeCombo.selectedIndex = 0;
+    }
   };
 
   /*********************************************************
@@ -366,6 +386,16 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.store.mapStoreCd = storeDetailInfo.mapStoreCd;
       $scope.store.latitude = storeDetailInfo.latitude;
       $scope.store.longitude = storeDetailInfo.longitude;
+
+      // [1250 맘스터치]
+      if(momsEnvstVal === "1") {
+        $scope.store.momsTeam = nvl(storeDetailInfo.momsTeam, "");
+        $scope.store.momsAcShop = nvl(storeDetailInfo.momsAcShop, "");
+        $scope.store.momsAreaFg = nvl(storeDetailInfo.momsAreaFg, "");
+        $scope.store.momsCommercial = nvl(storeDetailInfo.momsCommercial, "");
+        $scope.store.momsShopType = nvl(storeDetailInfo.momsShopType, "");
+        $scope.store.momsStoreManageType = nvl(storeDetailInfo.momsStoreManageType, "");
+      }
 
       // 본사-지사 콤보박스 set 후 -> 지사정보 set
       $scope.setBranchDropdownList();
