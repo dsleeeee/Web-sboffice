@@ -109,4 +109,7 @@ public interface PromotionMapper {
 
     /** 프로모션 종류 변경에 따른 적용혜택 필수값 저장 */
     int updatePromotionBeneDefaultSet(PromotionVO promotionVO);
+
+    /** 프로모션 적용매장 전체삭제 */
+    int deletePromotionStoreAll(PromotionVO promotionVO);
 }

@@ -69,6 +69,12 @@ public interface PromotionService {
 
     /** 프로모션 종류 변경에 따른 필수값 저장 */
     String savePromotionDefaultSet(PromotionVO promotionVO, SessionInfoVO sessionInfoVO);
+
+    /** 프로모션 적용매장 전체삭제 */
+    int deletePromotionStoreAll(PromotionVO promotionVO, SessionInfoVO sessionInfoVO);
+
+    /** 프로모션 적용매장 매장 엑셀업로드 */
+    int excelUploadPromotionStore(PromotionVO[] promotionVOs, SessionInfoVO sessionInfoVO);
 }
 
 

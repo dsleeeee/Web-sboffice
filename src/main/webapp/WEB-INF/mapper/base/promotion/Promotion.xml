@@ -1471,26 +1471,42 @@
     -->
     <insert id="insertPromotionStore" parameterType="promotionVO">
         /* PromotionMapper.insertPromotionStore */
-        INSERT INTO TB_HQ_PROMO_STORE
-        (
-            HQ_OFFICE_CD,
-            PROMOTION_CD,
-            STORE_CD,
-            REG_ID,
-            REG_DT,
-            MOD_ID,
-            MOD_DT
-        )
-        VALUES
-        (
-            #{hqOfficeCd},
-            #{promotionCd},
-            #{storeCd},
-            #{regId},
-            #{regDt},
-            #{modId},
-            #{modDt}
-        )
+        MERGE INTO TB_HQ_PROMO_STORE A
+             USING ( SELECT #{hqOfficeCd} AS HQ_OFFICE_CD,
+                              #{promotionCd} AS PROMOTION_CD,
+                              STORE_CD,
+                              #{regId} AS REG_ID,
+                              #{regDt} AS REG_DT,
+                              #{modId} AS MOD_ID,
+                              #{modDt} AS MOD_DT
+                        FROM TB_MS_STORE
+                       WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                         AND STORE_CD = #{storeCd}
+                    ) B
+                ON (A.HQ_OFFICE_CD = B.HQ_OFFICE_CD AND A.PROMOTION_CD = B.PROMOTION_CD AND A.STORE_CD = B.STORE_CD)
+              WHEN MATCHED THEN
+            UPDATE
+               SET A.MOD_ID = B.MOD_ID,
+                   A.MOD_DT = B.MOD_DT
+             WHEN NOT MATCHED THEN
+            INSERT
+                    (      A.HQ_OFFICE_CD,
+                           A.PROMOTION_CD,
+                           A.STORE_CD,
+                           A.REG_DT,
+                           A.REG_ID,
+                           A.MOD_DT,
+                           A.MOD_ID
+                    )
+            VALUES
+                    (      B.HQ_OFFICE_CD,
+                           B.PROMOTION_CD,
+                           B.STORE_CD,
+                           B.REG_DT,
+                           B.REG_ID,
+                           B.MOD_DT,
+                           B.MOD_ID
+                    )
     </insert>
 
     <!-- 프로모션 적용매장 삭제 -->
@@ -1935,4 +1951,19 @@
             </when>
         </choose>
     </update>
+
+    <!-- 프로모션 적용매장 전체삭제 -->
+    <!--
+        TABLE    : TB_HQ_PROMO_STORE
+        PARAM    : promotionVO
+        COMMENTS : 프로모션 적용매장을 모두 삭제한다.
+    -->
+    <delete id="deletePromotionStoreAll" parameterType="promotionVO">
+        /* USE : PromotionMapper.deletePromotionStoreAll */
+        DELETE
+          FROM TB_HQ_PROMO_STORE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND PROMOTION_CD = #{promotionCd}
+    </delete>
+
 </mapper>

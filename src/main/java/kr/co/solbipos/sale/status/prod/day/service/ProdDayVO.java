@@ -22,6 +22,8 @@ public class ProdDayVO extends PageVO {
     private String orgnFg;
     /** 사원번호 */
     private String empNo;
+    /** 상품분류 */
+    private String prodClassCd;
     
     /**
      * @return the hqOfficeCd
@@ -121,5 +123,13 @@ public class ProdDayVO extends PageVO {
 
     public void setEmpNo(String empNo) {
         this.empNo = empNo;
+    }
+
+    public String getProdClassCd() {
+        return prodClassCd;
+    }
+
+    public void setProdClassCd(String prodClassCd) {
+        this.prodClassCd = prodClassCd;
     }
 }

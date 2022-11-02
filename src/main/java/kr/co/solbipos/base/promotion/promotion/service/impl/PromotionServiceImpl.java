@@ -480,4 +480,55 @@ public class PromotionServiceImpl implements PromotionService {
             return "";
         }
     }
+
+    /** 프로모션 적용매장 전체삭제 */
+    @Override
+    public int deletePromotionStoreAll(PromotionVO promotionVO, SessionInfoVO sessionInfoVO){
+
+        promotionVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        int result = promotionMapper.deletePromotionStoreAll(promotionVO);
+        if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        return result;
+    }
+
+    /** 프로모션 적용매장 매장 엑셀업로드 */
+    @Override
+    public int excelUploadPromotionStore(PromotionVO[] promotionVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        // 업로드 프로모션 적용매장 등록
+        for (PromotionVO promotionVO : promotionVOs) {
+
+            promotionVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            promotionVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            promotionVO.setRegDt(currentDt);
+            promotionVO.setRegId(sessionInfoVO.getUserId());
+            promotionVO.setModDt(currentDt);
+            promotionVO.setModId(sessionInfoVO.getUserId());
+
+            // "'" 제거
+            promotionVO.setStoreCd(promotionVO.getStoreCd() != null ? promotionVO.getStoreCd().replaceAll("'","") : "");
+
+            // 프로모션 적용매장 추가
+            if(!"".equals(promotionVO.getStoreCd())){
+                result = promotionMapper.insertPromotionStore(promotionVO);
+               if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
+
+            procCnt ++;
+        }
+
+        if (procCnt == promotionVOs.length) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+
+    }
+
 }

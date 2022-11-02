@@ -182,7 +182,7 @@
 	</div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/day/prodDay.js?ver=20200111.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/day/prodDay.js?ver=20221102.02" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품정보 입력/수정 --%>
 <%-- <c:import url="/WEB-INF/view/base/prod/prod/prodModifyView.jsp"> --%>

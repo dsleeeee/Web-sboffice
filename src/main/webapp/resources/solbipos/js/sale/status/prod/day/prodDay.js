@@ -52,6 +52,7 @@ app.controller('prodDayCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         params.storeCd   = $("#pordDaySelectStoreCd").val();
         params.prodCd    = $("#srchDayProdCd").val();
         params.prodNm    = $("#srchDayProdNm").val();
+        params.prodClassCd	= $scope.prodDayCdModel;
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
         params.prodDayCd	= $scope.prodDayCdModel;

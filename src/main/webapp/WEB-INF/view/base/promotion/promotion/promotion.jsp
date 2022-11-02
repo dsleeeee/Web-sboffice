@@ -517,6 +517,12 @@
                 <tr>
                     <td colspan="4" style="border-left: 1px solid #CCCCCC;" ng-controller="promotionSelectStoreGridCtrl">
                         <div class="updownSet mt5 mb5" style="font-size: 15px;">
+                            <%--양식다운로드--%>
+                            <button class="btn_skyblue" id="btnStoreSampleDown" ng-click="storeSampleDown()"><s:message code='cmm.excel.sampleDown' /></button>
+                            <%--엑셀업로드--%>
+                            <button class="btn_skyblue" id="btnStoreExcelUpload" ng-click="storeExcelUpload()"><s:message code='cmm.excel.excelUpload' /></button>
+                            <%--엑셀다운로드--%>
+                            <button class="btn_skyblue" id="btnStoreExcelDown" ng-click="storeExcelDown()"><s:message code='cmm.excel.down' /></button>
                             <%-- 매장추가 --%>
                             <button class="btn_skyblue" id="btnStoreAdd" ng-click="storeAdd()"><s:message code='promotion.storeAdd' /></button>
                             <%-- 매장삭제 --%>
@@ -726,7 +732,7 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20221031.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20221102.02" charset="utf-8"></script>
 
 <%-- 적용상품 상품추가 --%>
 <c:import url="/WEB-INF/view/base/promotion/promotion/promotionProdReg.jsp">
@@ -746,4 +752,8 @@
 
 <%-- 프로모션 예시사례 안내 팝업 --%>
 <c:import url="/WEB-INF/view/base/promotion/promotion/promotionExample.jsp">
+</c:import>
+
+<%-- 적용매장 엑셀업로드 --%>
+<c:import url="/WEB-INF/view/base/promotion/promotion/excelUploadPromotion.jsp">
 </c:import>

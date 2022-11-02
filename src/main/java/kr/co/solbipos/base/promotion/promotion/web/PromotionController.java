@@ -436,4 +436,48 @@ public class PromotionController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 프로모션 적용매장 전체삭제
+     * @param promotionVO
+     * @param request
+     * @param response
+     * @param model
+     * @author 이다솜
+     * @since 2022.11.01
+     * @return
+     */
+    @RequestMapping(value = "/deletePromotionStoreAll.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result deletePromotionStoreAll(@RequestBody PromotionVO promotionVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = promotionService.deletePromotionStoreAll(promotionVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 프로모션 적용매장 매장 엑셀업로드
+     * @param promotionVOs
+     * @param request
+     * @param response
+     * @param model
+     * @author 이다솜
+     * @since 2022.11.01
+     * @return
+     */
+    @RequestMapping(value = "/excelUploadPromotionStore.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result excelUploadPromotionStore(@RequestBody PromotionVO[] promotionVOs, HttpServletRequest request,
+                                  HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = promotionService.excelUploadPromotionStore(promotionVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

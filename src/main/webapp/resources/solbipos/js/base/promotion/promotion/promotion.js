@@ -1897,6 +1897,62 @@ app.controller('promotionSelectStoreGridCtrl', ['$scope', '$http','$timeout', fu
         });
     };
 
+    // 양식다운로드
+    $scope.storeSampleDown = function () {
+        var vScope = agrid.getScope('excelUploadPromotionCtrl');
+        vScope.excelFormDownload();
+    };
+
+    // 엑셀업로드
+    $scope.storeExcelUpload = function () {
+
+       var vScope = agrid.getScope('excelUploadPromotionCtrl');
+       var msg = messages["promotion.excelUpload.confmMsg"];  // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
+
+       s_alert.popConf(msg, function () {
+
+           /* 부모컨트롤러 값을 넣으면 업로드가 완료된 후 uploadCallBack 이라는 함수를 호출해준다. */
+           vScope.parentCtrl = 'promotionSelectStoreGridCtrl';
+
+           $("#excelUpFile").val('');
+           $("#excelUpFile").trigger('click');
+
+       });
+    };
+
+    /** 업로드 완료 후 callback 함수. 업로드 이후 로직 작성. */
+    $scope.uploadCallBack = function () {
+        $scope._pageView('promotionSelectStoreGridCtrl', 1);
+    };
+
+    // 엑셀다운로드
+    $scope.storeExcelDown = function () {
+        if($scope.flexSelectStoreGrid.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        // 엑셀 데이터에 체크박스 컬럼은 안나오도록 숨김
+        $scope.flexSelectStoreGrid.columns[0].visible = false;
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flexSelectStoreGrid, {
+                includeColumnHeaders: true,
+                includeCellStyles   : true,
+                includeColumns      : function (column) {
+                    return column.visible;
+                }
+            }, '프로모션[' + $("#promotionNm").val() + ']_적용매장_' + getToday() + '.xlsx', function () {
+                $timeout(function () {
+                    $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                    // 체크박스 컬럼 다시 보이게 처리
+                    $scope.flexSelectStoreGrid.columns[0].visible = true;
+                }, 10);
+            });
+        }, 10);
+    };
+
 }]);
 
 /**
