@@ -2646,21 +2646,34 @@
            AND A.MEMBR_NO = B.MEMBR_NO
     </delete>
 
-    <!-- 코드별 본사 공통코드 콤보박스 조회 -->
+    <!-- 코드별 공통코드 콤보박스 조회 -->
     <!--
-        TABLE    : TB_HQ_NMCODE
+        TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
         COMMENTS :
     -->
-    <select id="getHqNmcodeComboList" parameterType="registVO" resultType="DefaultMap">
-        /* RegistMapper.getHqNmcodeComboList */
-        SELECT
-        thn.NMCODE_CD AS VALUE,
-        thn.NMCODE_NM AS NAME
-        FROM TB_HQ_NMCODE thn
-        WHERE 1=1
-        AND thn.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND thn.NMCODE_GRP_CD = #{nmcodeGrpCd}
-        ORDER BY thn.NMCODE_CD
+    <select id="getNmcodeComboList" parameterType="registVO" resultType="DefaultMap">
+        /* RegistMapper.getNmcodeComboList */
+        <!-- 본사 -->
+        <if test='orgnFg != null and orgnFg.toString() == "HQ"'>
+            SELECT
+            thn.NMCODE_CD AS VALUE,
+            thn.NMCODE_NM AS NAME
+            FROM TB_HQ_NMCODE thn
+            WHERE 1=1
+            AND thn.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND thn.NMCODE_GRP_CD = #{nmcodeGrpCd}
+            ORDER BY thn.NMCODE_CD
+        </if>
+        <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+            SELECT
+            tmsn.NMCODE_CD AS VALUE,
+            tmsn.NMCODE_NM AS NAME
+            FROM TB_MS_STORE_NMCODE tmsn
+            WHERE 1=1
+            AND tmsn.STORE_CD = #{storeCd}
+            AND tmsn.NMCODE_GRP_CD = #{nmcodeGrpCd}
+            ORDER BY tmsn.NMCODE_CD
+        </if>
     </select>
 
     <!-- 회원정보 저장 (광운대아이스링크 추가정보) -->

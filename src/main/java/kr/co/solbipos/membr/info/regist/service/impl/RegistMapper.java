@@ -307,8 +307,8 @@ public interface RegistMapper {
     /** 회원 삭제 팝업 - 전체회원 선/후불 잔액 영구삭제 */
     int deleteAllMemberPaidBalance(RegistVO registVO);
 
-    /** 코드별 본사 공통코드 콤보박스 조회 */
-    List<DefaultMap<Object>> getHqNmcodeComboList(RegistVO registVO);
+    /** 코드별 공통코드 콤보박스 조회 */
+    List<DefaultMap<Object>> getNmcodeComboList(RegistVO registVO);
 
     /** 회원정보 저장 (광운대아이스링크 추가정보) */
     int mergeMemberInfoAddKwu(RegistVO registVO);
