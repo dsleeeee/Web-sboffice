@@ -252,6 +252,51 @@ public class KioskKeyMapController {
         return ReturnUtil.returnListJson(Status.OK, result, kioskKeyMapVO);
     }
 
+    /**
+     * 키오스크 키맵그룹 조회
+     *
+     * @param kioskKeyMapVO
+     * @param request
+     * @param response
+     * @param model
+     * @author  권지현
+     * @since   2022.10.21
+     */
+    @RequestMapping(value = "/kioskKeyMap/getStoreModGrpList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreModGrpList(KioskKeyMapVO kioskKeyMapVO, HttpServletRequest request,
+                                 HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = kioskKeyMapService.getStoreModGrpList(kioskKeyMapVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, kioskKeyMapVO);
+    }
+
+    /**
+     * 매장수정허용분류_저장
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param kioskKeyMapVOs KioskKeyMapVO
+     * @param model Model
+     * @return Result
+     * @author 권지현
+     * @since 2022.10.21
+     */
+    @RequestMapping(value = "/kioskKeyMap/saveStoreModGrp.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveStoreModGrp(HttpServletRequest request, HttpServletResponse response,
+                                  @RequestBody KioskKeyMapVO[] kioskKeyMapVOs, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = kioskKeyMapService.saveStoreModGrp(kioskKeyMapVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+
+    }
 
     /**
      * 키오스크 키맵 신규그룹추가

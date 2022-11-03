@@ -303,16 +303,21 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
 
                 var list = data.data.list;
                 var comboArray = [];
+                var comboArrayAll = [];
                 var comboData  = {};
+
+                comboArrayAll.unshift({name: "전체", value: ""});
 
                 for (var i = 0; i < list.length; i++) {
                   comboData       = {};
                   comboData.name  = list[i].name;
                   comboData.value = list[i].value;
                   comboArray.push(comboData);
+                  comboArrayAll.push(comboData);
                 }
 
                 touchKeyGrpData = comboArray;
+                tukeyGrpData = comboArrayAll;
                 scope._setComboData("touchKeyGrpCombo", touchKeyGrpData);
                 scope._setComboData("applyTouchKeyGrpCombo", touchKeyGrpData);
                 scope._setComboData("copyTouchKeyGrpCombo", touchKeyGrpData);
@@ -353,6 +358,15 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.popUpNoTouchKeyLayer.show();
     $scope._broadcast('popUpNoTouchKeyCtrl', tukeyGrpCd);
     event.preventDefault();
+  });
+
+  // 매장수정허용분류 팝업
+  $scope.$on("showPopUpStoreModGrp", function(event, data) {
+
+    $scope.popUpStoreModGrpLayer.show();
+    $scope._broadcast('popUpStoreModGrpCtrl');
+    event.preventDefault();
+
   });
 
 }]);
@@ -1442,6 +1456,47 @@ Graph.prototype.initStyle = function() {
 };
 
 /**
+ * 터치키분류영역 셀 삭제 전 매장수정허용분류 체크
+ * @param format
+ */
+function deleteClassChk(format) {
+  var graph = format.graph;
+  var cells = graph.getSelectionCells();
+  // 터치키분류영역에 버튼없을때 삭제버튼을 누르는 경우 오류 방지
+  if (cells.length > 0) {
+    var classCd = cells[0].style.substr(8,5);
+
+    var params = {};
+    var scope = agrid.getScope("touchKeyCtrl");
+    params.tukeyGrpCd = scope.touchKeyGrp;
+    params.tukeyClassCd = classCd;
+
+    // 가상로그인 대응
+    if (document.getElementsByName('sessionId')[0]) {
+      params.sid = document.getElementsByName('sessionId')[0].value;
+    }
+
+    $.postJSON("/base/prod/touchKey/touchKey/getDeleteClassChk.sb", params, function (result) {
+      // 228 N or null
+      if(orgnFg === "HQ"){
+        deleteClassCell(format);
+      } else {
+        scope._popMsg("[매장수정허용분류] 에 등록된 터치키분류만 삭제 할 수 있습니다.");
+        return false;
+      }
+    }, function (){
+      // 228에 Y
+      if(orgnFg === "HQ") {
+        scope._popMsg("[매장수정허용분류] 에 등록된 터치키분류는 삭제 할 수 없습니다.");
+        return false;
+      } else {
+        deleteClassCell(format);
+      }
+    });
+  }
+}
+
+/**
  * 터치키분류영역 셀 삭제
  * @param format
  */
@@ -1846,7 +1901,11 @@ Format.prototype.initElements = function () {
     scope.$apply(function(){
       if (format.graph.isClassArea) {
         scope._popConfirm("해당 분류키를 삭제하시겠습니까?<br>분류키에 포함된 하위 모든 터치키가 삭제됩니다.", function() {
-          deleteClassCell(format);
+          if(orgnFg === "HQ" || (orgnFg === "STORE" && touchKeyEnvstVal2 === "2")){
+            deleteClassChk(format);
+          } else {
+            deleteClassCell(format);
+          }
         });
       } else {
         scope._popConfirm("해당 터치키를 삭제하시겠습니까?", function() {
@@ -2431,16 +2490,21 @@ Format.prototype.save = function () {
 
               var list = data.data.list;
               var comboArray = [];
+              var comboArrayAll = [];
               var comboData  = {};
+
+              comboArrayAll.unshift({name: "전체", value: ""});
 
               for (var i = 0; i < list.length; i++) {
                 comboData       = {};
                 comboData.name  = list[i].name;
                 comboData.value = list[i].value;
                 comboArray.push(comboData);
+                comboArrayAll.push(comboData);
               }
 
               touchKeyGrpData = comboArray;
+              tukeyGrpData = comboArrayAll;
               scope._setComboData("touchKeyGrpCombo", touchKeyGrpData);
               scope._setComboData("applyTouchKeyGrpCombo", touchKeyGrpData);
               scope._setComboData("copyTouchKeyGrpCombo", touchKeyGrpData);
@@ -2663,6 +2727,10 @@ Graph.prototype.initClassArea = function (prodArea) {
         var pos = graph.findPosition(pt);
         // 가능한 위치가 아닌경우...
         if (pos == null) {
+          mxEvent.consume(me);
+          return false;
+        }
+        if (orgnFg === "STORE" && touchKeyEnvstVal2 === "2"){
           mxEvent.consume(me);
           return false;
         }
@@ -2987,4 +3055,3 @@ Graph.prototype.initProdArea = function (classArea, sidebar) {
   mxConstants.HIGHLIGHT_OPACITY = 30;
   mxConstants.HIGHLIGHT_SIZE = 8;
 })();
-

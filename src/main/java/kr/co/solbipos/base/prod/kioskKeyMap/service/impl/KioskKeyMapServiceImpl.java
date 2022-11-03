@@ -10,6 +10,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapService;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapVO;
+import kr.co.solbipos.base.prod.touchkey.service.TouchKeyVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,47 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         }
 
         return kioskKeyMapMapper.getKioskTuClsTypeList(kioskKeyMapVO);
+    }
+
+    /** 키오스크 키맵그룹 조회 */
+    @Override
+    public List<DefaultMap<String>> getStoreModGrpList(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
+
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+            kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return kioskKeyMapMapper.getStoreModGrpList(kioskKeyMapVO);
+    }
+
+    @Override
+    public int saveStoreModGrp(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        for ( KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs ) {
+
+            // 소속구분 설정
+            kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            // 기본입력정보 설정
+            kioskKeyMapVO.setRegDt(currentDt);
+            kioskKeyMapVO.setRegId(sessionInfoVO.getUserId());
+            kioskKeyMapVO.setModDt(currentDt);
+            kioskKeyMapVO.setModId(sessionInfoVO.getUserId());
+
+            // 매장에 터치키 XML 정보 업데이트
+            kioskKeyMapMapper.saveStoreModGrp(kioskKeyMapVO);
+
+        }
+
+        if ( result >= 0 ) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
     }
 
     /** 키오스크 카테고리(분류) 조회 */

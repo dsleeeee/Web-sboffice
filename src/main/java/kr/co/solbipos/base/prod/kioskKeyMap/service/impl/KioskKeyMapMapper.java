@@ -1,6 +1,7 @@
 package kr.co.solbipos.base.prod.kioskKeyMap.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapService;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -31,6 +32,9 @@ public interface KioskKeyMapMapper {
 
     /** 키오스크 키맵그룹 조회 */
     List<DefaultMap<String>> getKioskTuClsTypeList(KioskKeyMapVO kioskKeyMapVO);
+    List<DefaultMap<String>> getStoreModGrpList(KioskKeyMapVO kioskKeyMapVO);
+
+    int saveStoreModGrp(KioskKeyMapVO kioskKeyMapVO);
 
     /** 키오스크 키맵그룹코드 생성 */
     String getKiosTuClsTypeCode(KioskKeyMapVO kioskKeyMapVO);

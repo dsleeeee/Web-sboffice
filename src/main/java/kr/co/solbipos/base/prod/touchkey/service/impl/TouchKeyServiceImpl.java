@@ -16,6 +16,7 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.common.enums.ConfgFg;
 import kr.co.solbipos.base.common.enums.InFg;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyClassVO;
@@ -333,16 +334,37 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         tcParams.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         tcParams.setStoreCd(sessionInfoVO.getStoreCd());
         tcParams.setTukeyGrpCd(tukeyGrpCd);
-        // 매장/본사의 현재 터치키분류 정보 삭제
-        keyMapper.deleteTouchKeyClass(tcParams);
+        String envstVal1248 = StringUtil.getOrBlank(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1248"));
 
-        TouchKeyVO tParams = new TouchKeyVO();
-        tParams.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        tParams.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        tParams.setStoreCd(sessionInfoVO.getStoreCd());
-        tParams.setTukeyGrpCd(tukeyGrpCd);
-        // 매장/본사의 현재 터치키 정보 삭제
-        keyMapper.deleteTouchKey(tParams);
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ || (sessionInfoVO.getOrgnFg() == OrgnFg.STORE && !envstVal1248.equals("2"))){
+
+            // 매장/본사의 현재 설정정보 삭제
+            // 매장/본사의 현재 터치키분류 정보 삭제
+            keyMapper.deleteTouchKeyClass(tcParams);
+
+            TouchKeyVO tParams = new TouchKeyVO();
+            tParams.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            tParams.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            tParams.setStoreCd(sessionInfoVO.getStoreCd());
+            tParams.setTukeyGrpCd(tukeyGrpCd);
+            // 매장/본사의 현재 터치키 정보 삭제
+            keyMapper.deleteTouchKey(tParams);
+
+        } else {
+
+            // 매장/본사의 현재 설정정보 삭제
+            // 매장/본사의 현재 터치키분류 정보 삭제
+            keyMapper.deleteTouchKeyClass2(tcParams);
+
+            TouchKeyVO tParams = new TouchKeyVO();
+            tParams.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            tParams.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            tParams.setStoreCd(sessionInfoVO.getStoreCd());
+            tParams.setTukeyGrpCd(tukeyGrpCd);
+            // 매장/본사의 현재 터치키 정보 삭제
+            keyMapper.deleteTouchKey2(tParams);
+
+        }
 
         //저장할 터치키 분류 없는 경우 xml/터치키분류 기본값으로 변경
         if(touchKeyClassVOS.size() == 0)
@@ -357,7 +379,6 @@ public class TouchKeyServiceImpl implements TouchKeyService {
 
         // 리스트의 아이템을 DB에 Merge
         for(TouchKeyClassVO touchKeyClassVO : touchKeyClassVOS) {
-
             // 터치 분류(그룹) 저장 파라미터 설정
             touchKeyClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             touchKeyClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -371,17 +392,50 @@ public class TouchKeyServiceImpl implements TouchKeyService {
             nParams.put("storeCd", sessionInfoVO.getStoreCd());
             nParams.put("tukeyGrpCd", tukeyGrpCd);
 
-            String nTukeyClassCd = keyMapper.getTouchKeyClassCd(nParams);
-            touchKeyClassVO.setTukeyClassCd(nTukeyClassCd);
+            String nTukeyClassCd="";
+            int insertChk = keyMapper.insertTouchKeyChk(touchKeyClassVO);
 
-            // 터치 분류(그룹) 저장
-            if( keyMapper.insertTouchKeyClass(touchKeyClassVO) != 1 ) {
-                System.out.println("터치키 저장 에러 : insertTouchKeyClass");
-                result = false;
-                throw new BizException( messageService.get("label.modifyFail") );
+            // 본사 저장 시 228이 Y인 터치키 분류는 저장X
+            // 매장 저장 시 1248옵션이 !2 or 2 and 228이 Y
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ && insertChk == 0) {
+
+                nTukeyClassCd = keyMapper.getTouchKeyClassCd(nParams);
+                touchKeyClassVO.setTukeyClassCd(nTukeyClassCd);
+
+                // 터치 분류(그룹) 저장
+                if (keyMapper.insertTouchKeyClass(touchKeyClassVO) != 1) {
+                    System.out.println("터치키 저장 에러 : insertTouchKeyClass");
+                    result = false;
+                    throw new BizException(messageService.get("label.modifyFail"));
+                }
+
+            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE && !envstVal1248.equals("2")) {
+
+                nTukeyClassCd = keyMapper.getTouchKeyClassCd(nParams);
+                touchKeyClassVO.setTukeyClassCd(nTukeyClassCd);
+
+                // 터치 분류(그룹) 저장
+                if (keyMapper.insertTouchKeyClass(touchKeyClassVO) != 1) {
+                    System.out.println("터치키 저장 에러 : insertTouchKeyClass");
+                    result = false;
+                    throw new BizException(messageService.get("label.modifyFail"));
+                }
+
+            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE && envstVal1248.equals("2") && insertChk == 1) {
+
+                nTukeyClassCd = keyMapper.getTouchKeyClassCd2(nParams);
+                touchKeyClassVO.setTukeyClassCd(nTukeyClassCd);
+
+                // 터치 분류(그룹) 저장
+                if (keyMapper.insertTouchKeyClass(touchKeyClassVO) != 1) {
+                    System.out.println("터치키 저장 에러 : insertTouchKeyClass");
+                    result = false;
+                    throw new BizException(messageService.get("label.modifyFail"));
+                }
+
             }
 
-            for(TouchKeyVO touchKeyVO : touchKeyClassVO.getTouchs()) {
+            for (TouchKeyVO touchKeyVO : touchKeyClassVO.getTouchs()) {
                 // 터치키 저장 파라미터 설정
                 touchKeyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
                 touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -390,11 +444,21 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                 touchKeyVO.setTukeyGrpCd(tukeyGrpCd);
                 touchKeyVO.setTukeyClassCd(nTukeyClassCd);
 
-                // 터치키 저장
-                if( keyMapper.insertTouchKey(touchKeyVO) != 1 ) {
-                    System.out.println("터치키 저장 에러 : insertTouchKey");
-                    result = false;
-                    throw new BizException( messageService.get("label.modifyFail") );
+                // 본사 저장 시 228이 Y인 터치키 분류는 저장X
+                if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ && insertChk == 0){
+                    // 터치키 저장
+                    if (keyMapper.insertTouchKey(touchKeyVO) != 1) {
+                        System.out.println("터치키 저장 에러 : insertTouchKey");
+                        result = false;
+                        throw new BizException(messageService.get("label.modifyFail"));
+                    }
+                } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE && (!envstVal1248.equals("2") || envstVal1248.equals("2") && insertChk == 1)) {
+                    // 터치키 저장
+                    if (keyMapper.insertTouchKey(touchKeyVO) != 1) {
+                        System.out.println("터치키 저장 에러 : insertTouchKey");
+                        result = false;
+                        throw new BizException(messageService.get("label.modifyFail"));
+                    }
                 }
             }
         }
@@ -415,6 +479,52 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         touchKeyVO.setStoreCd(sessionInfoVO.getStoreCd());
 
         return keyMapper.getNoTouchKey(touchKeyVO);
+    }
+
+    /** 매장수정허용분류_조회 */
+    @Override
+    public List<DefaultMap<String>> getStoreModGrpList(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO) {
+
+        touchKeyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        touchKeyVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return keyMapper.getStoreModGrpList(touchKeyVO);
+    }
+
+    /** 매장수정허용분류_저장 */
+    @Override
+    public int saveStoreModGrp(TouchKeyVO[] touchKeyVOs, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        for ( TouchKeyVO touchKeyVO : touchKeyVOs ) {
+
+            // 소속구분 설정
+            touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            // 기본입력정보 설정
+            touchKeyVO.setRegDt(currentDt);
+            touchKeyVO.setRegId(sessionInfoVO.getUserId());
+            touchKeyVO.setModDt(currentDt);
+            touchKeyVO.setModId(sessionInfoVO.getUserId());
+
+            // 매장에 터치키 XML 정보 업데이트
+            keyMapper.saveStoreModGrp(touchKeyVO);
+
+        }
+
+        if ( result >= 0 ) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
+
+    /** 분류 삭제 전 매장수정허용분류 체크 */
+    @Override
+    public int getDeleteClassChk(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO) {
+        touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return keyMapper.getDeleteClassChk(touchKeyVO);
     }
 
     /** 매장목록 조회 */
@@ -554,10 +664,10 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                             continue;
                         }
                         switch(TouchKeyStyle.getEnum(styleKeyValue[0])) {
-                            //case CLASS_CD:
+                            case CLASS_CD:
                                 // 그룹코드는 layer 처리 문제로 커스텀태그의 값 활용하여 설정한다. : 20180920 노현수
-                                //touchKeyClassVO.setTukeyClassCd(styleKeyValue[1]);
-                                //break;
+                                touchKeyClassVO.setTukeyClassCd(styleKeyValue[1]);
+                                break;
                             case STYLE_CD:
                                 touchKeyClassVO.setStyleCd(styleKeyValue[1]);
                                 break;
