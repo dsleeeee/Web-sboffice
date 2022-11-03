@@ -439,7 +439,7 @@
   var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpSave.js?ver=20221101.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpSave.js?ver=20221101.02" charset="utf-8"></script>
 
 <%-- 관리브랜드 조회 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/emp/searchUserHqBrand.jsp">

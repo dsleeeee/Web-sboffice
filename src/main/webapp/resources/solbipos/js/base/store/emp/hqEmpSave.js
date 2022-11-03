@@ -95,12 +95,14 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.hqEmpRegistInfo.mainSaleFg = '0';
 
       // [1250 맘스터치]
-      $scope.srchMomsTeamCombo.selectedIndex = 0;
-      $scope.srchMomsAcShopCombo.selectedIndex = 0;
-      $scope.srchMomsAreaFgCombo.selectedIndex = 0;
-      $scope.srchMomsCommercialCombo.selectedIndex = 0;
-      $scope.srchMomsShopTypeCombo.selectedIndex = 0;
-      $scope.srchMomsStoreManageTypeCombo.selectedIndex = 0;
+      if(momsEnvstVal === "1") {
+        $scope.srchMomsTeamCombo.selectedIndex = 0;
+        $scope.srchMomsAcShopCombo.selectedIndex = 0;
+        $scope.srchMomsAreaFgCombo.selectedIndex = 0;
+        $scope.srchMomsCommercialCombo.selectedIndex = 0;
+        $scope.srchMomsShopTypeCombo.selectedIndex = 0;
+        $scope.srchMomsStoreManageTypeCombo.selectedIndex = 0;
+      }
 
     } else {
 
