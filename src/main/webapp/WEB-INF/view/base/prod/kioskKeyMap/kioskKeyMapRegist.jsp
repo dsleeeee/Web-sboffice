@@ -5,6 +5,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
 <div id="kioskKeyMapRegistView" name="kioskKeyMapRegistView" class="subCon" style="display: none;">
 
@@ -94,14 +95,21 @@
                         <button class="btn_skyblue" id="btnTuClsTypeStore" ng-click="tuRecmd()">
                             <s:message code="kioskKeyMap.tuRecmd" />
                         </button>
-
-                        <button class="btn_skyblue fr mt5 mr5" id="btnEnv4069" ng-click="envConfg('4069')"><s:message code="kioskKeymap.envConfgPack"/></button>
-                        <button class="btn_skyblue fr mt5 mr5" id="btnEnv4068" ng-click="envConfg('4068')"><s:message code="kioskKeymap.envConfgStore"/></button>
-                    </div>
+                        <c:if test="${orgnFg == 'HQ' || (orgnFg == 'STORE' && hqOfficeCd != '00000' && kioskKeyEnvstVal == '2')}">
+                        <button class="btn_skyblue" id="btnStoreMod" ng-click="storeMod()">
+                            <s:message code="kioskKeyMap.storeMod" />
+                        </button>
+                        </c:if>
+                       </div>
                 </td>
             </tr>
             </tbody>
         </table>
+
+        <div class="mt10 oh sb-select dkbr">
+            <button class="btn_skyblue fr mt5 mr5" id="btnEnv4069" ng-click="envConfg('4069')"><s:message code="kioskKeymap.envConfgPack"/></button>
+            <button class="btn_skyblue fr mt5 mr5" id="btnEnv4068" ng-click="envConfg('4068')"><s:message code="kioskKeymap.envConfgStore"/></button>
+        </div>
 
         <div class="wj-TblWrap mt20 mb20 w25 fl">
             <div class="wj-TblWrapBr mr10 pd20" style="height:600px;">
@@ -149,12 +157,14 @@
                             <wj-flex-grid-column header="<s:message code="kioskKeyMap.tuClsNm"/>" binding="tuClsNm" width="140"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="kioskKeyMap.clsMemo"/>" binding="clsMemo" width="90"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="kioskKeyMap.tuMClsFg"/>" binding="tuMClsFg" data-map="tuMClsFgDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="kioskKeyMap.storeModYn"/>" binding="storeModYn" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         </wj-flex-grid>
                     </div>
                 </div>
                 <input type="hidden" id="hdPosNo" />
                 <input type="hidden" id="hdTuClsType" />
                 <input type="hidden" id="hdTuMClsFg" />
+                <input type="hidden" id="storeMod" />
                 <%-- 중분류그리드 --%>
                 <div id="divGridCategoryClsM" style="display: none;" ng-controller="categoryClsMCtrl">
                     <div class="w100 mt10 mb20 bt">
@@ -389,12 +399,17 @@
 
 <script type="text/javascript">
     var orgnFg = "${orgnFg}";
+    var hqOfficeCd = "${hqOfficeCd}";
 
     // 키오스크용 포스 목록
     var kioskPosList = ${kioskPosList};
 
     // 키오스크 키맵그룹 목록
     var kioskTuClsTypeList = ${kioskTuClsTypeList};
+
+    var kioskTuClsTypeListAll = ${kioskTuClsTypeList};
+    kioskTuClsTypeListAll.unshift({name: "01", value: "01"});
+    kioskTuClsTypeListAll.unshift({name: "전체", value: ""});
 
     // 상품유형구분
     var prodTypeFg = ${ccu.getCommCode("008")};
@@ -406,7 +421,7 @@
     var kioskKeyEnvstVal = "${kioskKeyEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20220823.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20220823.05" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
@@ -434,4 +449,8 @@
 
 <%-- 추천메뉴매장적용 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskRecmdStoreRegist.jsp">
+</c:import>
+
+<%-- 매장수정허용카테고리 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskKeyMapStoreMod.jsp">
 </c:import>

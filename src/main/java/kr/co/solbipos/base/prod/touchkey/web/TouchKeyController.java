@@ -303,6 +303,80 @@ public class TouchKeyController {
     }
 
     /**
+     * 매장수정허용분류_조회
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param touchKeyVO TouchKeyVO
+     * @param model Model
+     * @return Result
+     * @author 권지현
+     * @since 2022.10.20
+     */
+    @RequestMapping(value = "/getStoreModGrpList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreModGrpList(HttpServletRequest request, HttpServletResponse response,
+                               TouchKeyVO touchKeyVO, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
+        // 매장 목록 조회
+        list = touchkeyService.getStoreModGrpList(touchKeyVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, touchKeyVO);
+
+    }
+
+    /**
+     * 매장수정허용분류_저장
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param touchKeyVOs TouchKeyVO
+     * @param model Model
+     * @return Result
+     * @author 권지현
+     * @since 2022.10.20
+     */
+    @RequestMapping(value = "/saveStoreModGrp.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveStoreModGrp(HttpServletRequest request, HttpServletResponse response,
+                                     @RequestBody TouchKeyVO[] touchKeyVOs, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = touchkeyService.saveStoreModGrp(touchKeyVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+
+    }
+
+    /**
+     * 분류 삭제 전 매장수정허용분류 체크
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param model   Model
+     * @return
+     */
+    @RequestMapping(value = "/getDeleteClassChk.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDeleteClassChk(HttpServletRequest request, HttpServletResponse response,
+            TouchKeyVO touchKeyVO, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        if(touchkeyService.getDeleteClassChk(touchKeyVO, sessionInfoVO) == 0){
+            System.out.println("성공");
+            return returnJson(Status.OK);
+        }
+        System.out.println("실패");
+        return returnJson(Status.FAIL);
+
+    }
+
+    /**
      * 판매 터치키 매장적용 - 매장조회
      *
      * @param request HttpServletRequest

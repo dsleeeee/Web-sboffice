@@ -108,6 +108,12 @@ public class KioskKeyMapVO extends PageVO {
     /** 키오스크터치분류키설명 */
     private String mmClsMemo;
 
+    /** 매장수정허용여부 */
+    private String storeModYn;
+
+    /** 명칭코드코드 */
+    private String nmcodeCd;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -457,4 +463,20 @@ public class KioskKeyMapVO extends PageVO {
     public String getMmClsMemo() { return mmClsMemo; }
 
     public void setMmClsMemo(String mmClsMemo) { this.mmClsMemo = mmClsMemo; }
+
+    public String getStoreModYn() {
+        return storeModYn;
+    }
+
+    public void setStoreModYn(String storeModYn) {
+        this.storeModYn = storeModYn;
+    }
+
+    public String getNmcodeCd() {
+        return nmcodeCd;
+    }
+
+    public void setNmcodeCd(String nmcodeCd) {
+        this.nmcodeCd = nmcodeCd;
+    }
 }

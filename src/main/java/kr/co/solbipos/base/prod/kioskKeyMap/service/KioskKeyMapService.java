@@ -27,6 +27,9 @@ public interface KioskKeyMapService {
 
     /** 키오스크 키맵그룹 조회 */
     List<DefaultMap<String>> getKioskTuClsTypeList(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<String>> getStoreModGrpList(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
+
+    int saveStoreModGrp(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
 
     /** 키오스크 카테고리(분류) 조회 */
     List<DefaultMap<Object>> getKioskCategory(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);

@@ -71,18 +71,35 @@ public interface TouchKeyMapper {
 
     /** 판매터치키 분류 삭제 */
     int deleteTouchKeyClass(TouchKeyClassVO touchKeyClassVO);
+    int deleteTouchKeyClass2(TouchKeyClassVO touchKeyClassVO);
 
     /** 판매터치키 분류 기본값 세팅 */
     int defaultTouchKeyClass(TouchKeyClassVO touchKeyClassVO);
+
+    /** 판매터치키 생성 전 체크 */
+    int insertTouchKeyChk(TouchKeyClassVO touchKeyClassVO);
 
     /** 판매터치키 생성 */
     int insertTouchKey(TouchKeyVO touchKeyVO);
 
     /** 판매터치키 삭제 */
     int deleteTouchKey(TouchKeyVO touchKeyVO);
+    int deleteTouchKey2(TouchKeyVO touchKeyVO);
 
     /** 터치키미적용상품 조회 */
     List<DefaultMap<String>> getNoTouchKey(TouchKeyVO touchKeyVO);
+
+    /** 매장수정허용분류 조회 */
+    List<DefaultMap<String>> getStoreModGrpList(TouchKeyVO touchKeyVO);
+
+    /** 매장수정허용분류 저장 */
+    int saveStoreModGrp(TouchKeyVO touchKeyVO);
+
+    /** 분류 삭제 전 매장수정허용분류 체크 */
+    int getDeleteClassChk(TouchKeyVO touchKeyVO);
+
+    /** 저장 전 매장수정허용분류 체크 */
+    int getSaveClassChk(TouchKeyClassVO touchKeyClassVO);
 
     /** 매장목록 조회 */
     List<DefaultMap<String>> getStoreList(TouchKeyVO touchKeyVO);
@@ -122,5 +139,6 @@ public interface TouchKeyMapper {
 
     /** 터치키 분류코드 생성 */
     String getTouchKeyClassCd(DefaultMap<String> param);
+    String getTouchKeyClassCd2(DefaultMap<String> param);
 
 }

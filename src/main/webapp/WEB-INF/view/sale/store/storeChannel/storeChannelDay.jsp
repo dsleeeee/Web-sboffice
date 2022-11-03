@@ -50,7 +50,7 @@
     <div class="wj-TblWrap mt10">
         <div class="oh sb-select mb10">
             <%-- 엑셀다운로드 --%>
-            <button class="btn_skyblue ml5 fr" ng-click="excelDownloadDay()"><s:message code="cmm.excel.storeChannel"/></button>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownloadDay()"><s:message code="cmm.excel.downCondition"/></button>
         </div>
         <div class="wj-TblWrapBr">
             <%--위즈모 테이블--%>

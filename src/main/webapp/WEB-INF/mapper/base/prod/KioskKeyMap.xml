@@ -72,6 +72,122 @@
         </choose>
     </select>
 
+    <!-- 매장수정허용분류 조회 -->
+    <!--
+        TABLE    : TB_HQ_TOUCH_KEY_CLASS, TB_HQ_NMCODE
+        PARAM    : touchKeyVO
+        COMMENTS : 매장수정허용분류를 조회한다.
+    -->
+    <select id="getStoreModGrpList" parameterType="kioskKeyMapVO" resultType="DefaultMap">
+        /* USE : KioskKeyMapMapper.getStoreModGrpList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT 	thkc.TU_CLS_TYPE
+                ,		thkc.TU_CLS_CD
+                ,		thkc.TU_CLS_NM
+                ,		NVL(thn.NMCODE_ITEM_2, 'N') AS STORE_MOD_YN
+                FROM 	TB_HQ_KIOSK_CLS thkc
+                ,		TB_HQ_NMCODE thn
+                WHERE 	thkc.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND 	thkc.HQ_OFFICE_CD = thn.HQ_OFFICE_CD(+)
+                AND 	thkc.TU_CLS_TYPE = thn.NMCODE_NM(+)
+                AND 	thkc.TU_CLS_CD = thn.NMCODE_ITEM_1(+)
+                AND 	'229' = thn.NMCODE_GRP_CD(+)
+                <if test='tuClsType != null and tuClsType != ""'>
+                    AND thkc.TU_CLS_TYPE = #{tuClsType}
+                </if>
+                <if test='storeModYn != null and storeModYn == "Y"'>
+                    AND thn.NMCODE_ITEM_2 = 'Y'
+                </if>
+                <if test='storeModYn != null and storeModYn == "N"'>
+                    AND (thn.NMCODE_ITEM_2 = 'N' OR thn.NMCODE_ITEM_2 IS NULL)
+                </if>
+                ORDER BY thkc.TU_CLS_TYPE, thkc.TU_CLS_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT 	thkc.TU_CLS_TYPE
+                ,		thkc.TU_CLS_CD
+                ,		thkc.TU_CLS_NM
+                ,		NVL(thn.NMCODE_ITEM_2, 'N') AS STORE_MOD_YN
+                FROM 	TB_HQ_KIOSK_CLS thkc
+                ,		TB_HQ_NMCODE thn
+                WHERE 	thkc.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND 	thkc.HQ_OFFICE_CD = thn.HQ_OFFICE_CD(+)
+                AND 	thkc.TU_CLS_TYPE = thn.NMCODE_NM(+)
+                AND 	thkc.TU_CLS_CD = thn.NMCODE_ITEM_1(+)
+                AND 	'229' = thn.NMCODE_GRP_CD(+)
+                <if test='tuClsType != null and tuClsType != ""'>
+                    AND thtkc.TU_CLS_TYPE = #{tuClsType}
+                </if>
+                AND thn.NMCODE_ITEM_2 = 'Y'
+                ORDER BY thkc.TU_CLS_TYPE, thkc.TU_CLS_CD
+            </when>
+        </choose>
+    </select>
+
+
+    <!-- 매장수정허용분류 저장 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 매장수정허용분류를 저장한다.
+    -->
+    <insert id="saveStoreModGrp" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.saveStoreModGrp */
+        <selectKey keyProperty="nmcodeCd" resultType="String" order="BEFORE">
+            SELECT  LPAD(NVL(MAX(TO_NUMBER(NMCODE_CD)), 0) + 1, 4, '0')
+            FROM    TB_HQ_NMCODE
+            WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+            AND     NMCODE_GRP_CD = '229'
+        </selectKey>
+        MERGE INTO TB_HQ_NMCODE thn
+        USING DUAL
+        ON (
+            HQ_OFFICE_CD = #{hqOfficeCd}
+        AND NMCODE_GRP_CD = '229'
+        AND NMCODE_NM = #{tuClsType}
+        AND NMCODE_ITEM_1 = #{tuClsCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            NMCODE_ITEM_2   = #{storeModYn}
+        ,   MOD_DT          = #{modDt}
+        ,   MOD_ID          = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+            HQ_OFFICE_CD
+        ,   NMCODE_GRP_CD
+        ,   NMCODE_CD
+        ,   PARENT_CD
+        ,   NMCODE_NM
+        ,   NMCODE_ITEM_1
+        ,   NMCODE_ITEM_2
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd}
+        ,   '229'
+        ,   #{nmcodeCd}
+        ,   '229'
+        ,   #{tuClsType}
+        ,   #{tuClsCd}
+        ,   #{storeModYn}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+    </insert>
+
+
     <!-- 키오스크 키맵그룹코드 생성 -->
     <!--
         TABLE    : TB_HQ_KIOSK_CLS, TB_MS_KIOSK_CLS
@@ -124,7 +240,15 @@
                             MOD_DT,
                             MOD_ID,
                             CLS_MEMO,
-                            TU_M_CLS_FG
+                            TU_M_CLS_FG,
+                            NVL((
+                            SELECT  NMCODE_ITEM_2
+                            FROM    TB_HQ_NMCODE thn
+                            WHERE   thn.HQ_OFFICE_CD = tmkc.HQ_OFFICE_CD
+                            AND     thn.NMCODE_GRP_CD = '229'
+                            AND     thn.NMCODE_NM = tmkc.TU_CLS_TYPE
+                            AND     thn.NMCODE_ITEM_1 = tmkc.TU_CLS_CD
+                            ), 'N') AS STORE_MOD_YN
                      FROM TB_HQ_KIOSK_CLS tmkc
                     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
                       AND TU_CLS_TYPE = #{tuClsType}
@@ -149,7 +273,15 @@
                             MOD_DT,
                             MOD_ID,
                             CLS_MEMO,
-                            NVL((SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = tmkc.STORE_CD AND POS_NO = tmkc.POS_NO AND ENVST_CD = '4101'), 0) AS TU_M_CLS_FG
+                            NVL((SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = tmkc.STORE_CD AND POS_NO = tmkc.POS_NO AND ENVST_CD = '4101'), 0) AS TU_M_CLS_FG,
+                            NVL((
+                            SELECT  NMCODE_ITEM_2
+                            FROM    TB_HQ_NMCODE thn
+                            WHERE   thn.HQ_OFFICE_CD = #{hqOfficeCd}
+                            AND     thn.NMCODE_GRP_CD = '229'
+                            AND     thn.NMCODE_NM = tmkc.TU_CLS_TYPE
+                            AND     thn.NMCODE_ITEM_1 = tmkc.TU_CLS_CD
+                            ), 'N') AS STORE_MOD_YN
                     FROM TB_MS_KIOSK_CLS tmkc
                    WHERE STORE_CD = #{storeCd}
                      AND POS_NO = #{posNo}

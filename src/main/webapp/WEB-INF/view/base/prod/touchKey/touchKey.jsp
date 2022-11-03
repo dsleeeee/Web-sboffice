@@ -6,6 +6,7 @@
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 <c:set var="touchKeyEnvstVal" value="${touchKeyEnvstVal}" />
 <c:set var="touchKeyEnvstVal2" value="${touchKeyEnvstVal2}" />
 <c:set var="touchKeyGrp" value="${touchKeyGrp}" />
@@ -61,7 +62,12 @@
                 <button class="btn_skyblue fl ml5" id="btnInti"<c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>>
                     <s:message code="cmm.init"/>
                 </button>
-
+                <c:if test="${orgnFg == 'STORE' && hqOfficeCd != '00000' && touchKeyEnvstVal2 == '2'}">
+                    <%-- 매장수정허용분류 --%>
+                    <button class="btn_blk ml5 fr"  id="storeModGrpMs" ng-click="$broadcast('showPopUpStoreModGrp')">
+                        <s:message code="touchKey.storeModGrp" />
+                    </button>
+                </c:if>
                 <%-- 신규생성 취소 --%>
                 <%--<button class="btn_skyblue fl ml20" id="btnCancleNewGrp" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.cancle"/></button>--%>
                 <%-- 터치키 신규 등록인지 수정인지 여부 파악을 위해--%>
@@ -77,6 +83,10 @@
                 <%-- 터치키 매장복사 --%>
                 <button class="btn_blk ml5 fl"  id="copyTouchKey" ng-click="copyStoreTouchKey()">
                     <s:message code="touchKey.storeCopy" />
+                </button>
+                <%-- 매장수정허용분류 --%>
+                <button class="btn_blk ml5 fl"  id="storeModGrpHq" ng-click="$broadcast('showPopUpStoreModGrp')">
+                    <s:message code="touchKey.storeModGrp" />
                 </button>
             </td>
         </tr>
@@ -306,6 +316,12 @@
         <c:param name="menuNm" value="${menuNm}"/>
     </c:import>
 
+    <%-- 매장수정허용분류 팝업 --%>
+    <c:import url="/WEB-INF/view/base/prod/touchKey/popUpStoreModGrp.jsp">
+        <c:param name="menuCd" value="${menuCd}"/>
+        <c:param name="menuNm" value="${menuNm}"/>
+    </c:import>
+
     <%-- 매장 판매터치키복사 --%>
     <c:import url="/WEB-INF/view/base/store/view/copyStoreTouchKey.jsp">
     </c:import>
@@ -336,6 +352,11 @@
     // 브랜드
     var brandList = ${brandList};
     var touchKeyGrpData = ${touchKeyGrp};
+    var tukeyGrpData = ${touchKeyGrp};
+    tukeyGrpData.unshift({name: "전체", value: ""});
+
+    // 매장 [1248]
+    var touchKeyEnvstVal2 = "${touchKeyEnvstVal2}";
 
     // 본사 환경설정값 - 터치메뉴 폰트크기[1236]
     var fontSizeEnvstVal = ${fontSizeEnvstVal};

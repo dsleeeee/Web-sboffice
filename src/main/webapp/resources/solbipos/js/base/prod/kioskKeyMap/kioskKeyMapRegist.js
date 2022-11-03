@@ -65,6 +65,8 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
                 var selectedRow = s.rows[ht.row].dataItem;
                 if (col.binding === "tuClsCd") {
                     if(selectedRow.tuClsCd !== '자동채번') {
+
+                        $("#storeMod").val(selectedRow.storeModYn);
                         // KIOSK중분류사용
                         // 미사용
                         if(selectedRow.tuMClsFg === "0") {
@@ -134,10 +136,28 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
         params.tuClsType = $scope.tuClsTypeCombo.selectedValue;
 
         $scope._inquiryMain("/base/prod/kioskKeyMap/kioskKeyMap/getKioskCategory.sb", params, function() {
-            if(orgnFg === "HQ" || kioskKeyEnvstVal === "1"){
+            if(orgnFg === "HQ" || (orgnFg === "STORE" && kioskKeyEnvstVal !== "0")){
                 // 카테고리(분류)가 정상조회 되면 관련 버튼 보이도록
                 var divBtnCls = document.getElementById('divBtnCls');
                 divBtnCls.style.visibility='visible'
+
+                if(orgnFg === "STORE" && kioskKeyEnvstVal === "2"){
+                    var divBtnCls = document.getElementById('btnAddCls');
+                    divBtnCls.style.visibility='hidden'
+                }
+            }
+
+            // 본사일때 매장수정가능한 키맵인 경우 수정X
+            var grid = wijmo.Control.getControl("#wjGridCategoryCls");
+            var rows = grid.rows;
+
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                var item = $scope.flex.collectionView.items[i];
+
+                if((orgnFg === "HQ" && item.storeModYn === "Y") || (orgnFg === "STORE" && kioskKeyEnvstVal === "2" && item.storeModYn === "N")){
+                    item.gChk = false;
+                    rows[i].isReadOnly = true;
+                }
             }
 
         }, false);
@@ -505,6 +525,12 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
         recmdScope.btnSearchRecmd();
     };
 
+    // 매장수정허용카테고리
+    $scope.storeMod = function(){
+        $scope.storeModLayer.show(true);
+        $scope._broadcast('storeModCtrl');
+    };
+
     // 매장권한) POS번호 선택 시, 키맵그룹 dropdown 조회
     $scope.setTuClsType = function (s) {
 
@@ -537,13 +563,22 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
                 if (!$.isEmptyObject(response.data.data.list)) {
                     var list = response.data.data.list;
                     var comboArray = [];
+                    var comboArrayAll = [];
                     var comboData  = {};
+
+                    comboArrayAll.unshift({name: "01", value: "01"});
+                    comboArrayAll.unshift({name: "전체", value: ""});
 
                     for (var i = 0; i < list.length; i++) {
                         comboData = {};
                         comboData.name  = list[i].name;
                         comboData.value = list[i].value;
                         comboArray.push(comboData);
+                        comboArrayAll.push(comboData);
+                    // }
+                    //
+                    // if(type === "L"){
+                    //     kioskTuClsTypeListAll = comboArrayAll;
                     }
 
                     $scope._setComboData("tuClsType", comboArray);
@@ -671,10 +706,20 @@ app.controller('categoryClsMCtrl', ['$scope', '$http', '$timeout', function ($sc
         params.tuClsCd = $("#hdTuClsCd").val();
 
         $scope._inquiryMain("/base/prod/kioskKeyMap/kioskKeyMap/getKioskCategoryM.sb", params, function() {
-            if(orgnFg === "HQ" || kioskKeyEnvstVal === "1"){
+            // 본사 : storeMod = N
+            // 프차매장 : 1249가 1 or 2인데 storeMod = Y
+            // 단독매장
+            if((orgnFg === "HQ" && $("#storeMod").val() === "N")
+                || (orgnFg === "STORE" && hqOfficeCd != "00000" && kioskKeyEnvstVal ==="1")
+                || (orgnFg === "STORE" && hqOfficeCd != "00000" && kioskKeyEnvstVal ==="2" && $("#storeMod").val() === "Y")
+                || (orgnFg === "STORE" && hqOfficeCd == "00000")){
                 // 카테고리(중분류)가 정상조회 되면 관련 버튼 보이도록
                 var divBtnClsM = document.getElementById('divBtnClsM');
                 divBtnClsM.style.visibility='visible'
+            } else {
+                // 카테고리(중분류)가 정상조회 되면 관련 버튼 보이도록
+                var divBtnClsM = document.getElementById('divBtnClsM');
+                divBtnClsM.style.visibility='hidden'
             }
         }, false);
     };
@@ -876,8 +921,14 @@ app.controller('kioskKeyMapCtrl', ['$scope', '$http', '$timeout', function ($sco
         params.tuClsCd = $("#hdTuClsCd").val();
 
         $scope._inquirySub("/base/prod/kioskKeyMap/kioskKeyMap/getKioskKeyMap.sb", params, function() {
+            // 본사 : storeMod = N
+            // 프차매장 : 1249가 1 or 2인데 storeMod = Y
+            // 단독매장
+            if((orgnFg === "HQ" && $("#storeMod").val() === "N")
+            || (orgnFg === "STORE" && hqOfficeCd != "00000" && kioskKeyEnvstVal ==="1")
+            || (orgnFg === "STORE" && hqOfficeCd != "00000" && kioskKeyEnvstVal ==="2" && $("#storeMod").val() === "Y")
+            || (orgnFg === "STORE" && hqOfficeCd == "00000")){
 
-            if(orgnFg === "HQ" || kioskKeyEnvstVal === "1"){
                 // 카테고리(분류)가 정상조회 되면 키맵관련 버튼 보이도록
                 var divBtnKeyMap = document.getElementById('divBtnKeyMap');
                 divBtnKeyMap.style.visibility='visible'
@@ -889,11 +940,23 @@ app.controller('kioskKeyMapCtrl', ['$scope', '$http', '$timeout', function ($sco
                 // paging 영역 보이도록
                 var kioskProdCtrlPager = document.getElementById('kioskProdCtrlPager');
                 kioskProdCtrlPager.style.visibility='visible'
-            }
 
-            // 상품 조회
-            var kioskProdGrid = agrid.getScope("kioskProdCtrl");
-            kioskProdGrid._pageView('kioskProdCtrl', 1);
+                // 상품 조회
+                var kioskProdGrid = agrid.getScope("kioskProdCtrl");
+                kioskProdGrid._pageView('kioskProdCtrl', 1);
+            } else {
+                // 카테고리(분류)가 정상조회 되면 키맵관련 버튼 보이도록
+                var divBtnKeyMap = document.getElementById('divBtnKeyMap');
+                divBtnKeyMap.style.visibility='hidden'
+
+                // 카테고리(분류)가 정상조회 되면 상품관련 버튼 보이도록
+                var divBtnProd = document.getElementById('divBtnProd');
+                divBtnProd.style.visibility='hidden'
+
+                // paging 영역 보이도록
+                var kioskProdCtrlPager = document.getElementById('kioskProdCtrlPager');
+                kioskProdCtrlPager.style.visibility='hidden'
+            }
         }, false);
     }
 

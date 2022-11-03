@@ -95,6 +95,12 @@ public class TouchKeyVO extends CmmVO {
     /** 브랜드 코드 */
     private String hqBrandCd;
 
+    /** 매장수정허용여부 */
+    private String storeModYn;
+
+    /** 명칭코드코드 */
+    private String nmcodeCd;
+
     /**
      * @return the orgnFg
      */
@@ -424,5 +430,21 @@ public class TouchKeyVO extends CmmVO {
 
     public void setHqBrandCd(String hqBrandCd) {
         this.hqBrandCd = hqBrandCd;
+    }
+
+    public String getStoreModYn() {
+        return storeModYn;
+    }
+
+    public void setStoreModYn(String storeModYn) {
+        this.storeModYn = storeModYn;
+    }
+
+    public String getNmcodeCd() {
+        return nmcodeCd;
+    }
+
+    public void setNmcodeCd(String nmcodeCd) {
+        this.nmcodeCd = nmcodeCd;
     }
 }
