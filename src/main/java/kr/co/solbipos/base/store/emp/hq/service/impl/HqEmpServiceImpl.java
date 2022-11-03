@@ -425,4 +425,15 @@ public class HqEmpServiceImpl implements HqEmpService {
 
         return hqEmpMapper.getHqBranchCombo(hqEmpVO);
     }
+
+    /** 코드별 본사 공통코드 콤보박스 조회 */
+    @Override
+    public List<DefaultMap<Object>> getHqNmcodeComboList(SessionInfoVO sessionInfoVO, String nmcodeGrpCd) {
+
+        HqEmpVO hqEmpVO = new HqEmpVO();
+        hqEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        hqEmpVO.setNmcodeGrpCd(nmcodeGrpCd);
+
+        return hqEmpMapper.getHqNmcodeComboList(hqEmpVO);
+    }
 }

@@ -6,6 +6,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.security.EncUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
@@ -71,12 +72,14 @@ public class StoreManageServiceImpl implements StoreManageService{
 
     private final StoreManageMapper mapper;
     private final MessageService messageService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public StoreManageServiceImpl(StoreManageMapper mapper, MessageService messageService) {
+    public StoreManageServiceImpl(StoreManageMapper mapper, MessageService messageService, CmmEnvUtil cmmEnvUtil) {
         this.mapper = mapper;
         this.messageService = messageService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /** 매장 목록 조회 */
@@ -616,6 +619,19 @@ public class StoreManageServiceImpl implements StoreManageService{
 
 
             // todo 환경변수 중 본사통제여부 관련 변수 내려받기 (프로시져)
+
+            
+            // [1250 맘스터치] 환경설정값 조회
+            String momsEnvstVal = "0";
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                momsEnvstVal = CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0");
+            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                momsEnvstVal = CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0");
+            }
+            System.out.println("momsEnvstVal : " + momsEnvstVal);
+            if(("1").equals(momsEnvstVal)) {
+                procCnt += mapper.mergeStoreInfoAddMoms(storeManageVO);
+            }
         }
 
         return storeCd;
@@ -627,6 +643,8 @@ public class StoreManageServiceImpl implements StoreManageService{
 
         String dt = currentDateTimeString();
 
+        storeManageVO.setRegDt(dt);
+        storeManageVO.setRegId(sessionInfoVO.getUserId());
         storeManageVO.setModDt(dt);
         storeManageVO.setModId(sessionInfoVO.getUserId());
 
@@ -640,6 +658,18 @@ public class StoreManageServiceImpl implements StoreManageService{
 
         // 매장 정보 수정
         int procCnt = mapper.updateStoreInfo(storeManageVO);
+
+        // [1250 맘스터치] 환경설정값 조회
+        String momsEnvstVal = "0";
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            momsEnvstVal = CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0");
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            momsEnvstVal = CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0");
+        }
+        System.out.println("momsEnvstVal : " + momsEnvstVal);
+        if(("1").equals(momsEnvstVal)) {
+            procCnt += mapper.mergeStoreInfoAddMoms(storeManageVO);
+        }
 
         return procCnt;
     }
@@ -1477,5 +1507,16 @@ public class StoreManageServiceImpl implements StoreManageService{
     @Override
     public List<DefaultMap<String>> getBranchCombo(StoreManageVO storeManageVO){
         return mapper.getBranchCombo(storeManageVO);
+    }
+
+    /** 코드별 본사 공통코드 콤보박스 조회 */
+    @Override
+    public List<DefaultMap<Object>> getHqNmcodeComboList(SessionInfoVO sessionInfoVO, String nmcodeGrpCd) {
+
+        StoreManageVO storeManageVO = new StoreManageVO();
+        storeManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        storeManageVO.setNmcodeGrpCd(nmcodeGrpCd);
+
+        return mapper.getHqNmcodeComboList(storeManageVO);
     }
 }

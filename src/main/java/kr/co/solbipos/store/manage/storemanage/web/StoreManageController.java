@@ -6,6 +6,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,13 +62,15 @@ public class StoreManageController {
     private final StoreManageService service;
     private final SessionService sessionService;
     private final CmmEnvUtil cmmEnvUtil;
+    private final CmmCodeUtil cmmCodeUtil;
 
     /** Constructor Injection */
     @Autowired
-    public StoreManageController(StoreManageService service, SessionService sessionService, CmmEnvUtil cmmEnvUtil) {
+    public StoreManageController(StoreManageService service, SessionService sessionService, CmmEnvUtil cmmEnvUtil, CmmCodeUtil cmmCodeUtil) {
         this.service = service;
         this.sessionService = sessionService;
         this.cmmEnvUtil = cmmEnvUtil;
+        this.cmmCodeUtil = cmmCodeUtil;
     }
 
     /**
@@ -100,6 +104,104 @@ public class StoreManageController {
             // ERP를 연동하는 본사인지 확인
             model.addAttribute("erpLinkHq", CmmUtil.nvl(service.getErpLinkHq(storeManageVO, sessionInfoVO), ""));
         }
+
+
+        /** 맘스터치 */
+        // [1250 맘스터치] 환경설정값 조회
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0"));
+            System.out.println("momsEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0"));
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
+            System.out.println("momsEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
+        }
+
+        // 코드별 본사 공통코드 콤보박스 조회
+        // 추가정보-팀별
+        List momsTeamComboList = service.getHqNmcodeComboList(sessionInfoVO, "151");
+        String momsTeamComboListAll = "";
+        if (momsTeamComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "선택");
+            m.put("value", "");
+            list.add(m);
+            momsTeamComboListAll = convertToJson(list);
+        } else {
+            momsTeamComboListAll = cmmCodeUtil.assmblObj(momsTeamComboList, "name", "value", UseYn.SELECT);
+        }
+        model.addAttribute("momsTeamComboList", momsTeamComboListAll);
+        // 추가정보-AC점포별
+        List momsAcShopComboList = service.getHqNmcodeComboList(sessionInfoVO, "152");
+        String momsAcShopComboListAll = "";
+        if (momsAcShopComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "선택");
+            m.put("value", "");
+            list.add(m);
+            momsAcShopComboListAll = convertToJson(list);
+        } else {
+            momsAcShopComboListAll = cmmCodeUtil.assmblObj(momsAcShopComboList, "name", "value", UseYn.SELECT);
+        }
+        model.addAttribute("momsAcShopComboList", momsAcShopComboListAll);
+        // 추가정보-지역구분
+        List momsAreaFgComboList = service.getHqNmcodeComboList(sessionInfoVO, "153");
+        String momsAreaFgComboListAll = "";
+        if (momsAreaFgComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "선택");
+            m.put("value", "");
+            list.add(m);
+            momsAreaFgComboListAll = convertToJson(list);
+        } else {
+            momsAreaFgComboListAll = cmmCodeUtil.assmblObj(momsAreaFgComboList, "name", "value", UseYn.SELECT);
+        }
+        model.addAttribute("momsAreaFgComboList", momsAreaFgComboListAll);
+        // 추가정보-상권
+        List momsCommercialComboList = service.getHqNmcodeComboList(sessionInfoVO, "154");
+        String momsCommercialComboListAll = "";
+        if (momsCommercialComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "선택");
+            m.put("value", "");
+            list.add(m);
+            momsCommercialComboListAll = convertToJson(list);
+        } else {
+            momsCommercialComboListAll = cmmCodeUtil.assmblObj(momsCommercialComboList, "name", "value", UseYn.SELECT);
+        }
+        model.addAttribute("momsCommercialComboList", momsCommercialComboListAll);
+        // 추가정보-점포유형
+        List momsShopTypeComboList = service.getHqNmcodeComboList(sessionInfoVO, "155");
+        String momsShopTypeComboListAll = "";
+        if (momsShopTypeComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "선택");
+            m.put("value", "");
+            list.add(m);
+            momsShopTypeComboListAll = convertToJson(list);
+        } else {
+            momsShopTypeComboListAll = cmmCodeUtil.assmblObj(momsShopTypeComboList, "name", "value", UseYn.SELECT);
+        }
+        model.addAttribute("momsShopTypeComboList", momsShopTypeComboListAll);
+        // 추가정보-매장관리타입
+        List momsStoreManageTypeComboList = service.getHqNmcodeComboList(sessionInfoVO, "156");
+        String momsStoreManageTypeComboListAll = "";
+        if (momsStoreManageTypeComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "선택");
+            m.put("value", "");
+            list.add(m);
+            momsStoreManageTypeComboListAll = convertToJson(list);
+        } else {
+            momsStoreManageTypeComboListAll = cmmCodeUtil.assmblObj(momsStoreManageTypeComboList, "name", "value", UseYn.SELECT);
+        }
+        model.addAttribute("momsStoreManageTypeComboList", momsStoreManageTypeComboListAll);
+        /** //맘스터치 */
 
         return "store/manage/storeManage/storeManage";
     }

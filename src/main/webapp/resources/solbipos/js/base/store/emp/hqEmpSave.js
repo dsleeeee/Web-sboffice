@@ -45,6 +45,15 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   // 지사 콤보박스
   $scope._setComboData('hqEmpBranchCdComboData', branchList);
 
+  // [1250 맘스터치]
+  // 콤보박스 데이터
+  $scope._setComboData("momsTeamCombo", momsTeamComboList); // 추가정보-팀별
+  $scope._setComboData("momsAcShopCombo", momsAcShopComboList); // 추가정보-AC점포별
+  $scope._setComboData("momsAreaFgCombo", momsAreaFgComboList); // 추가정보-지역구분
+  $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 추가정보-상권
+  $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 추가정보-점포유형
+  $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 추가정보-매장관리타입
+
   // 선택 사원 (사원 수정시)
   $scope.selectedHqEmp;
 
@@ -85,6 +94,14 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.newEmpYn                   = true;
       $scope.hqEmpRegistInfo.mainSaleFg = '0';
 
+      // [1250 맘스터치]
+      $scope.srchMomsTeamCombo.selectedIndex = 0;
+      $scope.srchMomsAcShopCombo.selectedIndex = 0;
+      $scope.srchMomsAreaFgCombo.selectedIndex = 0;
+      $scope.srchMomsCommercialCombo.selectedIndex = 0;
+      $scope.srchMomsShopTypeCombo.selectedIndex = 0;
+      $scope.srchMomsStoreManageTypeCombo.selectedIndex = 0;
+
     } else {
 
       $scope.getHqEmpList();
@@ -103,6 +120,14 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.hqEmpRegistInfo                    = response.data.data;
       $scope.hqEmpRegistInfo.empInfo            = ' [' + response.data.data.empNo + ']' + response.data.data.empNm;
       $scope.hqEmpRegistInfo.originalWebUserId  = response.data.data.userId;
+
+      // [1250 맘스터치]
+      $scope.hqEmpRegistInfo.momsTeam = nvl(response.data.data.momsTeam, "");
+      $scope.hqEmpRegistInfo.momsAcShop = nvl(response.data.data.momsAcShop, "");
+      $scope.hqEmpRegistInfo.momsAreaFg = nvl(response.data.data.momsAreaFg, "");
+      $scope.hqEmpRegistInfo.momsCommercial = nvl(response.data.data.momsCommercial, "");
+      $scope.hqEmpRegistInfo.momsShopType = nvl(response.data.data.momsShopType, "");
+      $scope.hqEmpRegistInfo.momsStoreManageType = nvl(response.data.data.momsStoreManageType, "");
     });
   };
 

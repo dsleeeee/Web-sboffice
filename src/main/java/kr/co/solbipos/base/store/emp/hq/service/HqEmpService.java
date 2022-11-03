@@ -69,4 +69,7 @@ public interface HqEmpService {
 
     /** 지사 조회(콤보박스용) */
     List<DefaultMap<String>> getHqBranchCombo(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
+
+    /** 코드별 본사 공통코드 콤보박스 조회 */
+    List<DefaultMap<Object>> getHqNmcodeComboList(SessionInfoVO sessionInfoVO, String nmcodeGrpCd);
 }

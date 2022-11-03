@@ -164,4 +164,6 @@ public interface StoreManageService {
     /** 본사-지사 조회(콤보박스용) */
     List<DefaultMap<String>> getBranchCombo(StoreManageVO storeManageVO);
 
+    /** 코드별 본사 공통코드 콤보박스 조회 */
+    List<DefaultMap<Object>> getHqNmcodeComboList(SessionInfoVO sessionInfoVO, String nmcodeGrpCd);
 }

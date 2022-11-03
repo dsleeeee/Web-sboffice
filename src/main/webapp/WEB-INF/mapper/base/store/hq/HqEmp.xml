@@ -113,7 +113,13 @@
         NVL(the.MAIN_SALE_FG, '0') AS MAIN_SALE_FG,
         the.VENDR_CD,
         NVL((SELECT VENDR_NM FROM TB_HQ_VENDOR WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND VENDR_CD = the.VENDR_CD), '본사') AS VENDR_NM,
-        NVL((SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND BRANCH_CD = the.BRANCH_CD), '지사없음') AS BRANCH_NM
+        NVL((SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND BRANCH_CD = the.BRANCH_CD), '지사없음') AS BRANCH_NM,
+        the.MOMS_TEAM,
+        the.MOMS_AC_SHOP,
+        the.MOMS_AREA_FG,
+        the.MOMS_COMMERCIAL,
+        the.MOMS_SHOP_TYPE,
+        the.MOMS_STORE_MANAGE_TYPE
         FROM TB_HQ_EMPLOYEE the,
         (
             SELECT
@@ -184,7 +190,13 @@
             MOD_DT,
             MOD_ID,
             VENDR_CD,
-            BRANCH_CD
+            BRANCH_CD,
+            MOMS_TEAM,
+            MOMS_AC_SHOP,
+            MOMS_AREA_FG,
+            MOMS_COMMERCIAL,
+            MOMS_SHOP_TYPE,
+            MOMS_STORE_MANAGE_TYPE
         )
         VALUES
         (
@@ -204,7 +216,13 @@
             #{modDt},
             #{modId},
             #{vendrCd},
-            #{branchCd}
+            #{branchCd},
+            #{momsTeam},
+            #{momsAcShop},
+            #{momsAreaFg},
+            #{momsCommercial},
+            #{momsShopType},
+            #{momsStoreManageType}
         )
     </insert>
 
@@ -278,7 +296,13 @@
                the.MOD_DT = #{modDt},
                the.MOD_ID = #{modId},
                the.VENDR_CD = #{vendrCd},
-               the.BRANCH_CD = #{branchCd}
+               the.BRANCH_CD = #{branchCd},
+               the.MOMS_TEAM = #{momsTeam},
+               the.MOMS_AC_SHOP = #{momsAcShop},
+               the.MOMS_AREA_FG = #{momsAreaFg},
+               the.MOMS_COMMERCIAL = #{momsCommercial},
+               the.MOMS_SHOP_TYPE = #{momsShopType},
+               the.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
          WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
            AND the.EMP_NO = #{empNo}
     </update>
@@ -768,6 +792,23 @@
         FROM TB_HQ_BRANCH_MOMS
        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
        ORDER BY VALUE NULLS FIRST, VALUE ASC
+    </select>
+
+    <!-- 코드별 본사 공통코드 콤보박스 조회 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE
+        COMMENTS :
+    -->
+    <select id="getHqNmcodeComboList" parameterType="hqEmpVO" resultType="DefaultMap">
+        /* HqEmpMapper.getHqNmcodeComboList */
+        SELECT
+        thn.NMCODE_CD AS VALUE,
+        thn.NMCODE_NM AS NAME
+        FROM TB_HQ_NMCODE thn
+        WHERE 1=1
+        AND thn.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thn.NMCODE_GRP_CD = #{nmcodeGrpCd}
+        ORDER BY thn.NMCODE_CD
     </select>
 
 </mapper>

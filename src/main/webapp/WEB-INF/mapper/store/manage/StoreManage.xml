@@ -180,17 +180,25 @@
                tms.MAP_STORE_CD,
                tms.LATITUDE,
                tms.LONGITUDE,
-               tms.BRANCH_CD
+               tms.BRANCH_CD,
+               tmsi.MOMS_TEAM,
+               tmsi.MOMS_AC_SHOP,
+               tmsi.MOMS_AREA_FG,
+               tmsi.MOMS_COMMERCIAL,
+               tmsi.MOMS_SHOP_TYPE,
+               tmsi.MOMS_STORE_MANAGE_TYPE
           FROM TB_MS_STORE tms,
                TB_HQ_OFFICE tho,
                TB_CM_AGENCY tca,
-               TB_CM_VAN_CMPNY tcvc
+               TB_CM_VAN_CMPNY tcvc,
+               TB_MS_STORE_INFO tmsi
          WHERE tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
            AND tms.STORE_CD = #{storeCd}
            AND tca.AGENCY_CD = tms.AGENCY_CD
            AND tcvc.VAN_CD = tms.VAN_CD
            AND tcvc.VAN_FG = '01' -- VAN만
+           AND tmsi.STORE_CD (+)= tms.STORE_CD
         ]]>
     </select>
 
@@ -6629,5 +6637,74 @@
          ORDER
             BY VALUE NULLS FIRST
     </select>
+
+    <!-- 코드별 본사 공통코드 콤보박스 조회 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE
+        COMMENTS :
+    -->
+    <select id="getHqNmcodeComboList" parameterType="storeManageVO" resultType="DefaultMap">
+        /* StoreManageMapper.getHqNmcodeComboList */
+        SELECT
+        thn.NMCODE_CD AS VALUE,
+        thn.NMCODE_NM AS NAME
+        FROM TB_HQ_NMCODE thn
+        WHERE 1=1
+        AND thn.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thn.NMCODE_GRP_CD = #{nmcodeGrpCd}
+        ORDER BY thn.NMCODE_CD
+    </select>
+
+    <!-- 매장정보 저장 (맘스터치 추가정보) -->
+    <!--
+        TABLE    : TB_MS_STORE_INFO
+        COMMENTS : 매장정보 저장 (맘스터치 추가정보)
+    -->
+    <insert id="mergeStoreInfoAddMoms" parameterType="storeManageVO">
+        /* StoreManageMapper.mergeStoreInfoAddMoms */
+        MERGE INTO TB_MS_STORE_INFO
+        USING DUAL ON
+        (
+            STORE_CD = #{storeCd}
+        )
+        WHEN MATCHED THEN
+            UPDATE
+            SET MOMS_TEAM = #{momsTeam},
+            MOMS_AC_SHOP = #{momsAcShop},
+            MOMS_AREA_FG = #{momsAreaFg},
+            MOMS_COMMERCIAL = #{momsCommercial},
+            MOMS_SHOP_TYPE = #{momsShopType},
+            MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType},
+            MOD_ID = #{modId},
+            MOD_DT = #{modDt}
+            WHERE 1=1
+            AND STORE_CD = #{storeCd}
+        WHEN NOT MATCHED THEN
+            INSERT (
+                STORE_CD,
+                MOMS_TEAM,
+                MOMS_AC_SHOP,
+                MOMS_AREA_FG,
+                MOMS_COMMERCIAL,
+                MOMS_SHOP_TYPE,
+                MOMS_STORE_MANAGE_TYPE,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            ) VALUES (
+                #{storeCd},
+                #{momsTeam},
+                #{momsAcShop},
+                #{momsAreaFg},
+                #{momsCommercial},
+                #{momsShopType},
+                #{momsStoreManageType},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
+    </insert>
 
 </mapper>

@@ -1144,15 +1144,19 @@ public class RegistServiceImpl implements RegistService {
         return result;
     }
 
-    /** 코드별 본사 공통코드 콤보박스 조회 */
+    /** 코드별 공통코드 콤보박스 조회 */
     @Override
-    public List<DefaultMap<Object>> getHqNmcodeComboList(SessionInfoVO sessionInfoVO, String nmcodeGrpCd) {
+    public List<DefaultMap<Object>> getNmcodeComboList(SessionInfoVO sessionInfoVO, String nmcodeGrpCd) {
 
         RegistVO registVO = new RegistVO();
+        registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
         registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            registVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
         registVO.setNmcodeGrpCd(nmcodeGrpCd);
 
-        return mapper.getHqNmcodeComboList(registVO);
+        return mapper.getNmcodeComboList(registVO);
     }
 
     /** 회원정보 조회 (광운대아이스링크 추가정보) */

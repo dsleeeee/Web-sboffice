@@ -144,9 +144,10 @@ public class RegistController {
             model.addAttribute("kwuEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1246"), "0"));
             System.out.println("kwuEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1246"), "0"));
         }
-        // 코드별 본사 공통코드 콤보박스 조회
+
+        // 코드별 공통코드 콤보박스 조회
         // 회원추가정보-회원구분
-        List membrFgComboList = registService.getHqNmcodeComboList(sessionInfoVO, "142");
+        List membrFgComboList = registService.getNmcodeComboList(sessionInfoVO, "142");
         String membrFgComboListAll = "";
         if (membrFgComboList.isEmpty()) {
             List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
@@ -160,7 +161,7 @@ public class RegistController {
         }
         model.addAttribute("membrFgComboList", membrFgComboListAll);
         // 단체구분
-        List groupFgComboList = registService.getHqNmcodeComboList(sessionInfoVO, "143");
+        List groupFgComboList = registService.getNmcodeComboList(sessionInfoVO, "143");
         String groupFgComboListAll = "";
         if (groupFgComboList.isEmpty()) {
             List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
@@ -174,7 +175,7 @@ public class RegistController {
         }
         model.addAttribute("groupFgComboList", groupFgComboListAll);
         // 강사명
-        List teacherCdComboList = registService.getHqNmcodeComboList(sessionInfoVO, "139");
+        List teacherCdComboList = registService.getNmcodeComboList(sessionInfoVO, "139");
         String teacherCdComboListAll = "";
         if (teacherCdComboList.isEmpty()) {
             List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
@@ -188,7 +189,7 @@ public class RegistController {
         }
         model.addAttribute("teacherCdComboList", teacherCdComboListAll);
         // 강습구분
-        List classFgComboList = registService.getHqNmcodeComboList(sessionInfoVO, "140");
+        List classFgComboList = registService.getNmcodeComboList(sessionInfoVO, "140");
         String classFgComboListAll = "";
         if (classFgComboList.isEmpty()) {
             List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
@@ -202,7 +203,7 @@ public class RegistController {
         }
         model.addAttribute("classFgComboList", classFgComboListAll);
         // 스케이트종류
-        List skateFgComboList = registService.getHqNmcodeComboList(sessionInfoVO, "144");
+        List skateFgComboList = registService.getNmcodeComboList(sessionInfoVO, "144");
         String skateFgComboListAll = "";
         if (skateFgComboList.isEmpty()) {
             List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
@@ -216,6 +217,7 @@ public class RegistController {
         }
         model.addAttribute("skateFgComboList", skateFgComboListAll);
         /** //광운대 아이스링크 */
+
 
         // POS에서 해당 WEB 화면 재접속한 경우(이전 접속 session 그대로 존재), 'posLoginReconnect'값울 판단하여 view화면 처리
         if(request.getParameter("posLoginReconnect") != null && request.getParameter("posLoginReconnect").length() > 0){
