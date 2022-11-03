@@ -104,4 +104,7 @@ public interface HqEmpMapper {
 
     /** 지사 조회(콤보박스용) */
     List<DefaultMap<String>> getHqBranchCombo(HqEmpVO hqEmpVO);
+
+    /** 코드별 본사 공통코드 콤보박스 조회 */
+    List<DefaultMap<Object>> getHqNmcodeComboList(HqEmpVO hqEmpVO);
 }

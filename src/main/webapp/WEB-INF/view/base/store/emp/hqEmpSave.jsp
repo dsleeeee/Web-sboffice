@@ -26,9 +26,9 @@
       </div>
 
       <%-- 상세 --%>
-      <div id="dtlArea" style="height: 290px; overflow-y: auto;">
+      <div id="dtlArea" style="height: 410px; overflow-y: auto;">
 
-        <table class="tblType01">
+        <table class="searchTbl">
           <colgroup>
             <col class="w20" />
             <col class="w30" />
@@ -295,6 +295,123 @@
           </tr>
           </tbody>
         </table>
+        <%-- [1250 맘스터치] --%>
+        <c:if test="${momsEnvstVal == '1'}">
+          <%-- 추가정보 --%>
+          <h3 class="h3_tbl"><s:message code="hqEmp.moms.member" /></h3>
+          <table class="searchTbl">
+            <colgroup>
+              <col class="w15"/>
+              <col class="w35"/>
+              <col class="w15"/>
+              <col class="w35"/>
+            </colgroup>
+            <tbody>
+            <tr>
+              <%-- 팀별 --%>
+              <th><s:message code="hqEmp.moms.momsTeam"/></th>
+              <td>
+                <div class="sb-select">
+                  <wj-combo-box
+                          id="srchMomsTeamCombo"
+                          ng-model="hqEmpRegistInfo.momsTeam"
+                          items-source="_getComboData('momsTeamCombo')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          initialized="_initComboBox(s)"
+                          control="srchMomsTeamCombo">
+                  </wj-combo-box>
+                </div>
+              </td>
+              <%-- AC점포별 --%>
+              <th><s:message code="hqEmp.moms.momsAcShop"/></th>
+              <td>
+                <div class="sb-select">
+                  <wj-combo-box
+                          id="srchMomsAcShopCombo"
+                          ng-model="hqEmpRegistInfo.momsAcShop"
+                          items-source="_getComboData('momsAcShopCombo')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          initialized="_initComboBox(s)"
+                          control="srchMomsAcShopCombo">
+                  </wj-combo-box>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <%-- 지역구분 --%>
+              <th><s:message code="hqEmp.moms.momsAreaFg"/></th>
+              <td>
+                <div class="sb-select">
+                  <wj-combo-box
+                          id="srchMomsAreaFgCombo"
+                          ng-model="hqEmpRegistInfo.momsAreaFg"
+                          items-source="_getComboData('momsAreaFgCombo')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          initialized="_initComboBox(s)"
+                          control="srchMomsAreaFgCombo">
+                  </wj-combo-box>
+                </div>
+              </td>
+              <%-- 상권 --%>
+              <th><s:message code="hqEmp.moms.momsCommercial"/></th>
+              <td>
+                <div class="sb-select">
+                  <wj-combo-box
+                          id="srchMomsCommercialCombo"
+                          ng-model="hqEmpRegistInfo.momsCommercial"
+                          items-source="_getComboData('momsCommercialCombo')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          initialized="_initComboBox(s)"
+                          control="srchMomsCommercialCombo">
+                  </wj-combo-box>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <%-- 점포유형 --%>
+              <th><s:message code="hqEmp.moms.momsShopType"/></th>
+              <td>
+                <div class="sb-select">
+                  <wj-combo-box
+                          id="srchMomsShopTypeCombo"
+                          ng-model="hqEmpRegistInfo.momsShopType"
+                          items-source="_getComboData('momsShopTypeCombo')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          initialized="_initComboBox(s)"
+                          control="srchMomsShopTypeCombo">
+                  </wj-combo-box>
+                </div>
+              </td>
+              <%-- 매장관리타입 --%>
+              <th><s:message code="hqEmp.moms.momsStoreManageType"/></th>
+              <td>
+                <div class="sb-select">
+                  <wj-combo-box
+                          id="srchMomsStoreManageTypeCombo"
+                          ng-model="hqEmpRegistInfo.momsStoreManageType"
+                          items-source="_getComboData('momsStoreManageTypeCombo')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          initialized="_initComboBox(s)"
+                          control="srchMomsStoreManageTypeCombo">
+                  </wj-combo-box>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </c:if>
       </div>
     </div>
 
@@ -310,11 +427,22 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpSave.js?ver=20220713.02" charset="utf-8"></script>
+<script>
+  // [1250 맘스터치] 환경설정값
+  var momsEnvstVal = "${momsEnvstVal}";
+  // List 형식("" 안붙임)
+  var momsTeamComboList = ${momsTeamComboList};
+  var momsAcShopComboList = ${momsAcShopComboList};
+  var momsAreaFgComboList = ${momsAreaFgComboList};
+  var momsCommercialComboList = ${momsCommercialComboList};
+  var momsShopTypeComboList = ${momsShopTypeComboList};
+  var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpSave.js?ver=20221101.01" charset="utf-8"></script>
 
 <%-- 관리브랜드 조회 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/emp/searchUserHqBrand.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
-

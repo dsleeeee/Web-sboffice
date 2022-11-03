@@ -30,6 +30,15 @@ app.controller('hqEmpDetailCtrl', ['$scope', '$http', function ($scope, $http) {
     $("#trUserHqBrandYnDtl").css("display", "none")
   }
 
+  // [1250 맘스터치]
+  // 콤보박스 데이터
+  $scope._setComboData("momsTeamDtlCombo", momsTeamComboList); // 추가정보-팀별
+  $scope._setComboData("momsAcShopDtlCombo", momsAcShopComboList); // 추가정보-AC점포별
+  $scope._setComboData("momsAreaFgDtlCombo", momsAreaFgComboList); // 추가정보-지역구분
+  $scope._setComboData("momsCommercialDtlCombo", momsCommercialComboList); // 추가정보-상권
+  $scope._setComboData("momsShopTypeDtlCombo", momsShopTypeComboList); // 추가정보-점포유형
+  $scope._setComboData("momsStoreManageTypeDtlCombo", momsStoreManageTypeComboList); // 추가정보-매장관리타입
+
   // _broadcast
   $scope.$on("hqEmpDetailCtrl", function(event, data) {
     $scope.selectedHqEmp = data;
@@ -56,6 +65,14 @@ app.controller('hqEmpDetailCtrl', ['$scope', '$http', function ($scope, $http) {
       } else {
         $scope.hqEmp.mainSaleFg = "미사용";
       }
+
+      // [1250 맘스터치]
+      $scope.hqEmp.momsTeam = nvl(data.momsTeam, "");
+      $scope.hqEmp.momsAcShop = nvl(data.momsAcShop, "");
+      $scope.hqEmp.momsAreaFg = nvl(data.momsAreaFg, "");
+      $scope.hqEmp.momsCommercial = nvl(data.momsCommercial, "");
+      $scope.hqEmp.momsShopType = nvl(data.momsShopType, "");
+      $scope.hqEmp.momsStoreManageType = nvl(data.momsStoreManageType, "");
     });
   };
 
