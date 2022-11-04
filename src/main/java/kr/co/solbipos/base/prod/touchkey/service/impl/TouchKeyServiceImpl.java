@@ -424,8 +424,8 @@ public class TouchKeyServiceImpl implements TouchKeyService {
 //                매장, envstVal1248 2 이면 [매장수정허용분류] 있으면 수정
             } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE && envstVal1248.equals("2") && insertChk > 0) {
 
-                System.out.println("저장 할 분류코드 " + touchKeyClassVO.getTukeyClassCd());
                 nTukeyClassCd = touchKeyClassVO.getTukeyClassCd();
+                touchKeyClassVO.setTukeyClassCd(nTukeyClassCd);
 
                 // 터치 분류(그룹) 저장
                 if (keyMapper.insertTouchKeyClass(touchKeyClassVO) != 1) {
@@ -453,7 +453,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                         result = false;
                         throw new BizException(messageService.get("label.modifyFail"));
                     }
-                } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE && (!envstVal1248.equals("2") || envstVal1248.equals("2") && insertChk == 1)) {
+                } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE && (envstVal1248.equals("0") || envstVal1248.equals("1") || envstVal1248.equals("2") && insertChk > 0)) {
                     // 터치키 저장
                     if (keyMapper.insertTouchKey(touchKeyVO) != 1) {
                         System.out.println("터치키 저장 에러 : insertTouchKey");

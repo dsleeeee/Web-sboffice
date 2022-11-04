@@ -1480,11 +1480,17 @@ function deleteClassChk(format) {
       // 228 N or null
       if(orgnFg === "HQ"){
         deleteClassCell(format);
+      } else if(orgnFg === "STORE") {
+        scope._popMsg("분류는 삭제 할 수 없습니다.");
+        return false;
       }
     }, function (){
       // 228에 Y
       if(orgnFg === "HQ") {
         scope._popMsg("[매장수정허용분류] 에 등록된 터치키분류는 삭제 할 수 없습니다.");
+        return false;
+      } else if(orgnFg === "STORE") {
+        scope._popMsg("분류는 삭제 할 수 없습니다.");
         return false;
       }
     });
