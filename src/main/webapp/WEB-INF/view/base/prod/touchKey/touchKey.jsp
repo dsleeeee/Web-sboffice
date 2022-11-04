@@ -201,7 +201,7 @@
                     <div id="keyStyleAd" class="fl hideNav" style="margin-left : 4px;">
                         <button class="btn_skyblue mb5" id="btnReset" ng-click="$broadcast('btnReset')">
                             <s:message code="touchKey.reset"/></button>
-                        <button class="btn_skyblue" id="btnDelete" ng-click="$broadcast('btnDelete')"  <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>>
+                        <button class="btn_skyblue" id="btnDelete" ng-click="$broadcast('btnDelete')">
                             <s:message code="touchKey.delete"/></button>
                     </div>
                 </div>
