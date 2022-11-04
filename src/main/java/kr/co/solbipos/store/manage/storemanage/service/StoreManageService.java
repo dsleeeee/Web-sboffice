@@ -166,4 +166,7 @@ public interface StoreManageService {
 
     /** 코드별 본사 공통코드 콤보박스 조회 */
     List<DefaultMap<Object>> getHqNmcodeComboList(SessionInfoVO sessionInfoVO, String nmcodeGrpCd);
+
+    /** 브랜드 콤보박스 조회 */
+    List<DefaultMap<Object>> getHqBrandCdComboList(SessionInfoVO sessionInfoVO);
 }

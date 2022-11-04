@@ -28,7 +28,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 추가정보-상권
   $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 추가정보-점포유형
   $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 추가정보-매장관리타입
-
+  $scope._setComboData("hqBrandCdCombo", hqBrandCdComboList); // 브랜드
 
   // 관리자의 경우, 모든 본사(데모까지) 나오고, 총판의 경우, 자기가 관리하는 본사만 나오도록
   if(orgnFg === "AGENCY") {
@@ -308,6 +308,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.srchMomsCommercialCombo.selectedIndex = 0;
       $scope.srchMomsShopTypeCombo.selectedIndex = 0;
       $scope.srchMomsStoreManageTypeCombo.selectedIndex = 0;
+      $scope.srchHqBrandCdCombo.selectedIndex = 0;
     }
   };
 
@@ -395,6 +396,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.store.momsCommercial = nvl(storeDetailInfo.momsCommercial, "");
         $scope.store.momsShopType = nvl(storeDetailInfo.momsShopType, "");
         $scope.store.momsStoreManageType = nvl(storeDetailInfo.momsStoreManageType, "");
+        $scope.store.hqBrandCd = nvl(storeDetailInfo.hqBrandCd, "");
       }
 
       // 본사-지사 콤보박스 set 후 -> 지사정보 set
@@ -718,6 +720,14 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             params.bbqStoreCd = $("#hdBbqStoreCd").val();
         }
      }
+
+
+    // [1250 맘스터치]
+    if(momsEnvstVal === "0") {
+      if(params.hqBrandCd === "" || params.hqBrandCd === null) {
+        params.hqBrandCd = "0000000";
+      }
+    }
 
     console.log('params',params);
 

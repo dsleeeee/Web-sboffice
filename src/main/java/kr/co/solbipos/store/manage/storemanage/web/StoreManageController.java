@@ -201,6 +201,21 @@ public class StoreManageController {
             momsStoreManageTypeComboListAll = cmmCodeUtil.assmblObj(momsStoreManageTypeComboList, "name", "value", UseYn.SELECT);
         }
         model.addAttribute("momsStoreManageTypeComboList", momsStoreManageTypeComboListAll);
+
+        // 브랜드 콤보박스 조회
+        List hqBrandCdComboList = service.getHqBrandCdComboList(sessionInfoVO);
+        String hqBrandCdComboListAll = "";
+        if (hqBrandCdComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "기본브랜드");
+            m.put("value", "0000000");
+            list.add(m);
+            hqBrandCdComboListAll = convertToJson(list);
+        } else {
+            hqBrandCdComboListAll = cmmCodeUtil.assmblObj(hqBrandCdComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("hqBrandCdComboList", hqBrandCdComboListAll);
         /** //맘스터치 */
 
         return "store/manage/storeManage/storeManage";

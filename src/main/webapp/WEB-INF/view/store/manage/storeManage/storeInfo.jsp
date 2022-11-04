@@ -130,6 +130,29 @@
                 <input type="hidden" id="hdSysStatFg" />
               </td>
             </tr>
+              <%-- [1250 맘스터치] --%>
+            <c:if test="${momsEnvstVal == '1'}">
+              <tr>
+                <%-- 브랜드 --%>
+                <th><s:message code="storeManage.moms.hqBrandCd" /></th>
+                <td>
+                  <div class="sb-select">
+                    <wj-combo-box
+                            id="srchHqBrandCdCombo"
+                            ng-model="store.hqBrandCd"
+                            items-source="_getComboData('hqBrandCdCombo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)"
+                            control="srchHqBrandCdCombo">
+                    </wj-combo-box>
+                  </div>
+                </td>
+                <th></th>
+                <td></td>
+              </tr>
+            </c:if>
             <tr>
               <%-- 용도 --%>
               <th><s:message code="storeManage.cls" /><em class="imp">*</em></th>
@@ -557,9 +580,10 @@
   var momsCommercialComboList = ${momsCommercialComboList};
   var momsShopTypeComboList = ${momsShopTypeComboList};
   var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
+  var hqBrandCdComboList = ${hqBrandCdComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20221101.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20221103.01" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">

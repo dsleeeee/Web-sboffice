@@ -1519,4 +1519,15 @@ public class StoreManageServiceImpl implements StoreManageService{
 
         return mapper.getHqNmcodeComboList(storeManageVO);
     }
+
+    /** 브랜드 콤보박스 조회 */
+    @Override
+    public List<DefaultMap<Object>> getHqBrandCdComboList(SessionInfoVO sessionInfoVO) {
+
+        StoreManageVO storeManageVO = new StoreManageVO();
+        storeManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return mapper.getHqBrandCdComboList(storeManageVO);
+    }
+
 }

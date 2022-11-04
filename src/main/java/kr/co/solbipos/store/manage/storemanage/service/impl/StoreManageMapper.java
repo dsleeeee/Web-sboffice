@@ -458,4 +458,7 @@ public interface StoreManageMapper {
 
     /** 매장정보 저장 (맘스터치 추가정보) */
     int mergeStoreInfoAddMoms(StoreManageVO storeManageVO);
+
+    /** 브랜드 콤보박스 조회 */
+    List<DefaultMap<Object>> getHqBrandCdComboList(StoreManageVO storeManageVO);
 }

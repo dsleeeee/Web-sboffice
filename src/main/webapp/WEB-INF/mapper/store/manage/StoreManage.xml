@@ -152,6 +152,7 @@
                tms.OWNER_NM,
                tms.HQ_OFFICE_CD,
                tho.HQ_OFFICE_NM,
+               tms.HQ_BRAND_CD,
                tms.BIZ_STORE_NM,
                tms.BIZ_NO,
                SUBSTR(tms.BIZ_NO, 0, 3) AS BIZ_NO1,
@@ -340,6 +341,7 @@
             STORE_NM,
             OWNER_NM,
             HQ_OFFICE_CD,
+            HQ_BRAND_CD,
             BIZ_NO,
             BIZ_STORE_NM,
             TEL_NO,
@@ -375,6 +377,7 @@
             #{storeNm},
             #{ownerNm},
             #{hqOfficeCd},
+            #{hqBrandCd},
             #{bizNo},
             #{bizStoreNm},
             #{telNo},
@@ -417,6 +420,7 @@
         UPDATE TB_MS_STORE
            SET STORE_NM = #{storeNm},
                OWNER_NM = #{ownerNm},
+               HQ_BRAND_CD = #{hqBrandCd},
                BIZ_NO = #{bizNo},
                BIZ_STORE_NM = #{bizStoreNm},
                TEL_NO = #{telNo},
@@ -6706,5 +6710,22 @@
                 #{modId}
             )
     </insert>
+
+    <!-- 브랜드 콤보박스 조회 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE
+        COMMENTS :
+    -->
+    <select id="getHqBrandCdComboList" parameterType="storeManageVO" resultType="DefaultMap">
+        /* StoreManageMapper.getHqBrandCdComboList */
+        SELECT
+        thb.HQ_BRAND_CD AS VALUE,
+        thb.HQ_BRAND_NM AS NAME
+        FROM TB_HQ_BRAND thb
+        WHERE 1=1
+        AND thb.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thb.USE_YN = 'Y'
+        ORDER BY thb.HQ_BRAND_CD
+    </select>
 
 </mapper>
