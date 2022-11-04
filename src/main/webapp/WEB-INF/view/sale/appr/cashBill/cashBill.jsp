@@ -77,6 +77,8 @@
     <div class="mt10 oh sb-select dkbr">
       <%-- 엑셀다운로드 --%>
       <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCondition"/></button>
+      <%-- spring poi를 이용한 엑셀다운로드 --%>
+      <button class="btn_skyblue ml5 fr" ng-click="excelDownload2()"><s:message code="cmm.excel.downCondition"/>(POI)</button>
     </div>
 
     <div class="w100 mt10">
@@ -159,5 +161,5 @@
   var storeCd = "${storeCd}";
   var hqBrandList = ${hqBrandList};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/appr/cashBill/cashBill.js?ver=20221018.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/appr/cashBill/cashBill.js?ver=20221018.02" charset="utf-8"></script>
 
