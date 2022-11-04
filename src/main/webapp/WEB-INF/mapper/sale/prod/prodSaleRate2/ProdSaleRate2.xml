@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ProdSaleRate2.xml
+    상품 판매 비율2
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.11.03     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.prod.prodSaleRate2.service.impl.ProdSaleRate2Mapper">
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getProdSaleRate2List" parameterType="prodSaleRate2VO" resultType="DefaultMap">
+        /* ProdSaleRate2Mapper.getProdSaleRate2List */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT 	#{startDate} AS START_DATE
+        ,       #{endDate} AS END_DATE
+        ,		FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM
+        ,		tsdpd.PROD_CD
+        ,		thp.PROD_NM
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN TOT_SALE_QTY END)	AS STIN_QTY
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN REAL_SALE_AMT END)	AS STIN_AMT
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN TOT_SALE_QTY END)	AS DLVR_QTY
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN REAL_SALE_AMT END)	AS DLVR_AMT
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN TOT_SALE_QTY END)	AS PACK_QTY
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN REAL_SALE_AMT END)	AS PACK_AMT
+        ${sQuery1}
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	TB_SL_DAILY_PROD_DLVR tsdpd
+        ,		TB_HQ_PRODUCT thp
+        WHERE 	thp.HQ_OFFICE_CD = tsdpd.HQ_OFFICE_CD
+        AND     thp.PROD_CD = tsdpd.PROD_CD
+        AND     tsdpd.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND 	tsdpd.SALE_DATE BETWEEN #{startDate}  AND #{startDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsdpd.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND thp.PROD_CLASS_CD IN (
+            SELECT
+            PROD_CLASS_CD
+            FROM TB_HQ_PRODUCT_CLASS
+            WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+            CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+            )
+        </if>
+        <if test='hqBrandCd != null and hqBrandCd != ""'>
+            AND tsdpd.HQ_BRAND_CD = #{hqBrandCd}
+        </if>
+        GROUP BY thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, tsdpd.PROD_CD, thp.PROD_NM
+        ORDER BY tsdpd.PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getProdSaleRate2ExcelList" parameterType="prodSaleRate2VO" resultType="DefaultMap">
+        /* ProdSaleRate2Mapper.getProdSaleRate2ExcelList */
+        SELECT 	#{startDate} AS START_DATE
+        ,       #{endDate} AS END_DATE
+        ,		FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM
+        ,		tsdpd.PROD_CD
+        ,		thp.PROD_NM
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN TOT_SALE_QTY END)	AS STIN_QTY
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN REAL_SALE_AMT END)	AS STIN_AMT
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN TOT_SALE_QTY END)	AS DLVR_QTY
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN REAL_SALE_AMT END)	AS DLVR_AMT
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN TOT_SALE_QTY END)	AS PACK_QTY
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN REAL_SALE_AMT END)	AS PACK_AMT
+        ${sQuery1}
+        FROM 	TB_SL_DAILY_PROD_DLVR tsdpd
+        ,		TB_HQ_PRODUCT thp
+        WHERE 	thp.HQ_OFFICE_CD = tsdpd.HQ_OFFICE_CD
+        AND     thp.PROD_CD = tsdpd.PROD_CD
+        AND     tsdpd.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND 	tsdpd.SALE_DATE BETWEEN #{startDate}  AND #{startDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsdpd.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND thp.PROD_CLASS_CD IN (
+            SELECT
+            PROD_CLASS_CD
+            FROM TB_HQ_PRODUCT_CLASS
+            WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+            CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+            )
+        </if>
+        <if test='hqBrandCd != null and hqBrandCd != ""'>
+            AND tsdpd.HQ_BRAND_CD = #{hqBrandCd}
+        </if>
+        GROUP BY thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, tsdpd.PROD_CD, thp.PROD_NM
+        ORDER BY tsdpd.PROD_CD
+    </select>
+
+</mapper>
