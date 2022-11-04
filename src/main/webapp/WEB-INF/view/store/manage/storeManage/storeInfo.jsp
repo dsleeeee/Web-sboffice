@@ -68,6 +68,7 @@
                 <input type="hidden" id="envst0043" ng-model="store.envst0043"/>
                 <input type="hidden" id="hdDigit8Store"/>
                 <input type="hidden" id="hdBbqStoreCd" />
+                <input type="hidden" id="hdMomsEnvstVal" /> <%-- [1250 맘스터치] --%>
                 <a id="btnChkStoreCd" href="#" class="btn_grayS ml5" ng-click="chkStoreCd()" style="display: none;"><s:message code="storeManage.chk.duplicate" /></a><Br />
               </td>
               <%-- 매장명 --%>
@@ -130,29 +131,27 @@
                 <input type="hidden" id="hdSysStatFg" />
               </td>
             </tr>
-              <%-- [1250 맘스터치] --%>
-            <c:if test="${momsEnvstVal == '1'}">
-              <tr>
-                <%-- 브랜드 --%>
-                <th><s:message code="storeManage.moms.hqBrandCd" /></th>
-                <td>
-                  <div class="sb-select">
-                    <wj-combo-box
-                            id="srchHqBrandCdCombo"
-                            ng-model="store.hqBrandCd"
-                            items-source="_getComboData('hqBrandCdCombo')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)"
-                            control="srchHqBrandCdCombo">
-                    </wj-combo-box>
-                  </div>
-                </td>
-                <th></th>
-                <td></td>
-              </tr>
-            </c:if>
+            <%-- [1250 맘스터치] --%>
+            <tr id="trMomsEnvst" style="display: none;">
+              <%-- 브랜드 --%>
+              <th><s:message code="storeManage.moms.hqBrandCd" /></th>
+              <td>
+                <div class="sb-select">
+                  <wj-combo-box
+                          id="srchHqBrandCdCombo"
+                          ng-model="store.hqBrandCd"
+                          items-source="_getComboData('hqBrandCdCombo')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          initialized="_initComboBox(s)"
+                          control="srchHqBrandCdCombo">
+                  </wj-combo-box>
+                </div>
+              </td>
+              <th></th>
+              <td></td>
+            </tr>
             <tr>
               <%-- 용도 --%>
               <th><s:message code="storeManage.cls" /><em class="imp">*</em></th>
@@ -298,7 +297,7 @@
             </tbody>
           </table>
           <%-- [1250 맘스터치] --%>
-          <c:if test="${momsEnvstVal == '1'}">
+          <div id="divMomsEnvst" style="display: none;">
             <%-- 추가정보 --%>
             <h3 class="h3_tbl"><s:message code="storeManage.moms.member" /></h3>
               <table class="searchTbl">
@@ -413,7 +412,7 @@
                   </tr>
                   </tbody>
               </table>
-          </c:if>
+          </div>
           <%-- 비고 --%>
           <h3 class="h3_tbl"><s:message code="storeManage.remark" /></h3>
           <table class="searchTbl">
@@ -570,20 +569,9 @@
 <script>
   var startDate = "${sessionScope.sessionInfo.startDate}";
   var hqList = ${ccu.getHqOfficeList()};
-
-  // [1250 맘스터치] 환경설정값
-  var momsEnvstVal = "${momsEnvstVal}";
-  // List 형식("" 안붙임)
-  var momsTeamComboList = ${momsTeamComboList};
-  var momsAcShopComboList = ${momsAcShopComboList};
-  var momsAreaFgComboList = ${momsAreaFgComboList};
-  var momsCommercialComboList = ${momsCommercialComboList};
-  var momsShopTypeComboList = ${momsShopTypeComboList};
-  var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
-  var hqBrandCdComboList = ${hqBrandCdComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20221103.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20221104.01" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">

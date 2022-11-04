@@ -193,6 +193,8 @@ public class StoreManageVO extends PageVO {
     /** 매장관리타입 */
     private String momsStoreManageType;
 
+    /** 환경설정 [1250 맘스터치] */
+    private String momsEnvstVal;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -937,5 +939,13 @@ public class StoreManageVO extends PageVO {
 
     public void setMomsStoreManageType(String momsStoreManageType) {
         this.momsStoreManageType = momsStoreManageType;
+    }
+
+    public String getMomsEnvstVal() {
+        return momsEnvstVal;
+    }
+
+    public void setMomsEnvstVal(String momsEnvstVal) {
+        this.momsEnvstVal = momsEnvstVal;
     }
 }

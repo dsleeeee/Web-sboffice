@@ -187,7 +187,8 @@
                tmsi.MOMS_AREA_FG,
                tmsi.MOMS_COMMERCIAL,
                tmsi.MOMS_SHOP_TYPE,
-               tmsi.MOMS_STORE_MANAGE_TYPE
+               tmsi.MOMS_STORE_MANAGE_TYPE,
+               NVL((SELECT ENVST_VAL FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '1250' AND USE_YN = 'Y'), '0') AS ENVST_1250
           FROM TB_MS_STORE tms,
                TB_HQ_OFFICE tho,
                TB_CM_AGENCY tca,
