@@ -139,6 +139,5 @@ public interface TouchKeyMapper {
 
     /** 터치키 분류코드 생성 */
     String getTouchKeyClassCd(DefaultMap<String> param);
-    String getTouchKeyClassCd2(DefaultMap<String> param);
 
 }

@@ -2392,33 +2392,6 @@
         PARAM    : DefaultMap
         COMMENTS : 터치키 분류코드를 생성한다. (본사/매장)
     -->
-    <select id="getTouchKeyClassCd2" parameterType="DefaultMap" resultType="String">
-        /* USE : TouchkeyMapper.getTouchKeyClassCd2 */
-        <choose>
-            <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT 	MIN(TUKEY_CLASS_CD) AS TUKEY_CLASS_CD
-                FROM	(
-                        SELECT 	TUKEY_CLASS_CD
-                        FROM 	TB_HQ_TOUCH_KEY_CLASS thn
-                        WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
-                        AND 	TUKEY_GRP_CD = #{tukeyGrpCd}
-                        MINUS
-                        SELECT 	TUKEY_CLASS_CD
-                        FROM 	TB_MS_TOUCH_KEY_CLASS thn
-                        WHERE 	STORE_CD = #{storeCd}
-                        AND 	TUKEY_GRP_CD = #{tukeyGrpCd}
-                        )
-            </when>
-        </choose>
-    </select>
-
-
-    <!-- 터치키 분류코드 생성 -->
-    <!--
-        TABLE    : TB_HQ_TOUCH_KEY_CLASS, TB_MS_TOUCH_KEY_CLASS
-        PARAM    : DefaultMap
-        COMMENTS : 터치키 분류코드를 생성한다. (본사/매장)
-    -->
     <select id="insertTouchKeyChk" parameterType="DefaultMap" resultType="Integer">
         /* USE : TouchkeyMapper.insertTouchKeyChk */
         SELECT  COUNT(*)
