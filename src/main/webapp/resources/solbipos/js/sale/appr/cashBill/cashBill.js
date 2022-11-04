@@ -117,6 +117,40 @@ app.controller('cashBillCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
     $scope._broadcast('cashBillExcelCtrl',params);
   }
+
+  // spring poi를 이용한 엑셀 다운로드
+  $scope.excelDownload2 = function () {
+
+    var params = {};
+    params.storeCds   = $("#cashBillStoreCd").val();
+    params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+    params.hqBrandCd = $scope.hqBrandCd;
+
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+      params.sid = document.getElementsByName('sessionId')[0].value;
+    }
+
+    var keys = Object.keys(params);
+    var values = Object.values(params);
+    var form = document.createElement("form");
+    form.setAttribute("charset", "UTF-8");
+    form.setAttribute("method", "POST");
+    form.setAttribute("action", "/sale/appr/cashBill/cashBill/poiExcelDown.sb");
+
+    var hiddenField = null;
+    for (var i = 0; i < keys.length; i++) {
+      hiddenField = document.createElement("input");
+      hiddenField.setAttribute("type", "hidden");
+      hiddenField.setAttribute("name", keys[i]);
+      hiddenField.setAttribute("value", values[i]);
+      form.appendChild(hiddenField);
+    }
+    document.body.appendChild(form);
+    form.submit();
+  };
+
 }]);
 
 
