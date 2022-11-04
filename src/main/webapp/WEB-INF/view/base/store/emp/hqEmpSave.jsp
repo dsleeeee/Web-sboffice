@@ -301,10 +301,10 @@
           <h3 class="h3_tbl"><s:message code="hqEmp.moms.member" /></h3>
           <table class="searchTbl">
             <colgroup>
-              <col class="w15"/>
-              <col class="w35"/>
-              <col class="w15"/>
-              <col class="w35"/>
+              <col class="w20" />
+              <col class="w30" />
+              <col class="w20" />
+              <col class="w30" />
             </colgroup>
             <tbody>
             <tr>
