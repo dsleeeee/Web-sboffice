@@ -144,6 +144,9 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
                 if(orgnFg === "STORE" && kioskKeyEnvstVal === "2"){
                     var divBtnCls = document.getElementById('btnAddCls');
                     divBtnCls.style.visibility='hidden'
+
+                    var divBtnCls2 = document.getElementById('btnDelCls');
+                    divBtnCls2.style.visibility='hidden'
                 }
             }
 
