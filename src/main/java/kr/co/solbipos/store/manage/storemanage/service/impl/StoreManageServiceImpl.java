@@ -620,16 +620,10 @@ public class StoreManageServiceImpl implements StoreManageService{
 
             // todo 환경변수 중 본사통제여부 관련 변수 내려받기 (프로시져)
 
-            
+
             // [1250 맘스터치] 환경설정값 조회
-            String momsEnvstVal = "0";
-            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-                momsEnvstVal = CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0");
-            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-                momsEnvstVal = CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0");
-            }
-            System.out.println("momsEnvstVal : " + momsEnvstVal);
-            if(("1").equals(momsEnvstVal)) {
+            System.out.println("momsEnvstVal : " + storeManageVO.getMomsEnvstVal());
+            if(("1").equals(storeManageVO.getMomsEnvstVal())) {
                 procCnt += mapper.mergeStoreInfoAddMoms(storeManageVO);
             }
         }
@@ -660,14 +654,8 @@ public class StoreManageServiceImpl implements StoreManageService{
         int procCnt = mapper.updateStoreInfo(storeManageVO);
 
         // [1250 맘스터치] 환경설정값 조회
-        String momsEnvstVal = "0";
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            momsEnvstVal = CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0");
-        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-            momsEnvstVal = CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0");
-        }
-        System.out.println("momsEnvstVal : " + momsEnvstVal);
-        if(("1").equals(momsEnvstVal)) {
+        System.out.println("momsEnvstVal : " + storeManageVO.getMomsEnvstVal());
+        if(("1").equals(storeManageVO.getMomsEnvstVal())) {
             procCnt += mapper.mergeStoreInfoAddMoms(storeManageVO);
         }
 
@@ -1511,21 +1499,14 @@ public class StoreManageServiceImpl implements StoreManageService{
 
     /** 코드별 본사 공통코드 콤보박스 조회 */
     @Override
-    public List<DefaultMap<Object>> getHqNmcodeComboList(SessionInfoVO sessionInfoVO, String nmcodeGrpCd) {
-
-        StoreManageVO storeManageVO = new StoreManageVO();
-        storeManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        storeManageVO.setNmcodeGrpCd(nmcodeGrpCd);
+    public List<DefaultMap<Object>> getHqNmcodeComboList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO) {
 
         return mapper.getHqNmcodeComboList(storeManageVO);
     }
 
     /** 브랜드 콤보박스 조회 */
     @Override
-    public List<DefaultMap<Object>> getHqBrandCdComboList(SessionInfoVO sessionInfoVO) {
-
-        StoreManageVO storeManageVO = new StoreManageVO();
-        storeManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    public List<DefaultMap<Object>> getHqBrandCdComboList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO) {
 
         return mapper.getHqBrandCdComboList(storeManageVO);
     }

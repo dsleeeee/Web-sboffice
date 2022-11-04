@@ -189,22 +189,23 @@
 </div>
 
 <script>
-var clsFg = ${ccu.getCommCodeSelect("001")};
-var sysStatFg = ${ccu.getCommCodeSelect("005")};
-var areaCd = ${ccu.getCommCodeSelect("061")};
-var orgnFg = "${orgnFg}";
-var orgnCd = "${orgnCd}";
-var orgnNm = "${orgnNm}";
-var pAgencyCd = "${pAgencyCd}";
-var authHqList = ${authHqList};
-var hqOfficeNm = "${hqOfficeNm}";
+  var clsFg = ${ccu.getCommCodeSelect("001")};
+  var sysStatFg = ${ccu.getCommCodeSelect("005")};
+  var areaCd = ${ccu.getCommCodeSelect("061")};
+  var orgnFg = "${orgnFg}";
+  var orgnCd = "${orgnCd}";
+  var orgnNm = "${orgnNm}";
+  var pAgencyCd = "${pAgencyCd}";
+  var authHqList = ${authHqList};
+  var hqOfficeNm = "${hqOfficeNm}";
 
-// 본사에서 등록시 본사정보 자동셋팅
-var hqEnvst0027 = "${hqEnvst0027}"; // 매장코드 채번방식 [0:자동(기본) / 1:수동]
-var hqEnvst0043 = "${hqEnvst0043}"; // 본사신규상품매장생성 [0:자동(기본) / 1:수동]
-var hqSysStatFg = "${hqSysStatFg}"; // 본사 상태구분 값
-var digit8Store = "${digit8Store}"; // 매장코드 8 자리 이상 사용하는 본사인지 조회
-var erpLinkHq = "${erpLinkHq}"; // ERP를 연동하는 본사인지 확인
+  // 본사에서 등록시 본사정보 자동셋팅
+  var hqEnvst0027 = "${hqEnvst0027}"; // 매장코드 채번방식 [0:자동(기본) / 1:수동]
+  var hqEnvst0043 = "${hqEnvst0043}"; // 본사신규상품매장생성 [0:자동(기본) / 1:수동]
+  var hqSysStatFg = "${hqSysStatFg}"; // 본사 상태구분 값
+  var digit8Store = "${digit8Store}"; // 매장코드 8 자리 이상 사용하는 본사인지 조회
+  var erpLinkHq = "${erpLinkHq}"; // ERP를 연동하는 본사인지 확인
+  var momsEnvstVal = "${momsEnvstVal}"; // [1250 맘스터치] 환경설정값
 
 </script>
 
