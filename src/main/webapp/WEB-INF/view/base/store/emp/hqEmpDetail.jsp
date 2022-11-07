@@ -241,16 +241,4 @@
   </div>
 </wj-popup>
 
-<script>
-  // [1250 맘스터치] 환경설정값
-  var momsEnvstVal = "${momsEnvstVal}";
-  // List 형식("" 안붙임)
-  var momsTeamComboList = ${momsTeamComboList};
-  var momsAcShopComboList = ${momsAcShopComboList};
-  var momsAreaFgComboList = ${momsAreaFgComboList};
-  var momsCommercialComboList = ${momsCommercialComboList};
-  var momsShopTypeComboList = ${momsShopTypeComboList};
-  var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
-</script>
-
 <script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpDetail.js?ver=20221101.01" charset="utf-8"></script>
