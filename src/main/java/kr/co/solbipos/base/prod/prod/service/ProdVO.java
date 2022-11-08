@@ -288,6 +288,9 @@ public class ProdVO extends PageVO {
     /** 카페인 */
     private String nuCaffeine;
 
+    /** KIOSK 엣지 */
+    private String momsKioskEdge;
+
     /**
      * @return the hqOfficeCd
      */
@@ -1318,4 +1321,9 @@ public class ProdVO extends PageVO {
     public String getNuCaffeine() { return nuCaffeine; }
 
     public void setNuCaffeine(String nuCaffeine) { this.nuCaffeine = nuCaffeine; }
+
+    public String getMomsKioskEdge() { return momsKioskEdge; }
+
+    public void setMomsKioskEdge(String momsKioskEdge) { this.momsKioskEdge = momsKioskEdge; }
+
 }

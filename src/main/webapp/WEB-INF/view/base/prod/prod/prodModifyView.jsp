@@ -826,6 +826,27 @@
                  </div>
               </td>
             </tr>
+            <tr>
+              <%-- KIOSK 엣지 --%>
+              <th><s:message code="prod.momsKioskEdge"/></th>
+              <td>
+                  <div class="sb-select">
+                      <wj-combo-box
+                              id="_momsKioskEdge"
+                              name="momsKioskEdge"
+                              ng-model="prodModifyInfo.momsKioskEdge"
+                              items-source="_getComboData('momsKioskEdgeComboData')"
+                              display-member-path="name"
+                              selected-value-path="value"
+                              is-editable="false"
+                              initialized="_initComboBox(s)"
+                              control="momsKioskEdgeCombo">
+                      </wj-combo-box>
+                  </div>
+              </td>
+              <td></td>
+              <td></td>
+              </tr>
           </c:if>
           </tbody>
         </table>

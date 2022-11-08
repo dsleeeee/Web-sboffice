@@ -41,6 +41,14 @@ var depositCupFgComboData = [
   {"name": "보증컵기타", "value": "4"}
 ];
 
+// KIOSK 엣지
+var momsKioskEdgeComboData = [
+  {"name": "미사용", "value": ""},
+  {"name": "NEW", "value": "0"},
+  {"name": "BEST", "value": "1"},
+  {"name": "EVENT", "value": "2"}
+];
+
 /**
  * 상품정보관리 그리드 생성
  */
@@ -119,6 +127,8 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
   $scope._getComboDataQuery('058', 'prodTipYnComboData');
   // 가격관리구분 콤보박스
   $scope._getComboDataQuery('045', 'prcCtrlFgComboData');
+  // KIOSK 엣지 콤보박스
+  $scope._setComboData('momsKioskEdgeComboData', momsKioskEdgeComboData);
 
   // 등록일자 셋팅
   $scope.srchStartDate = wcombo.genDateVal("#srchTimeStartDate", gvStartDate);

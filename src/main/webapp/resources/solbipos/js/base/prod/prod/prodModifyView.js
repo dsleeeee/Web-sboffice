@@ -130,12 +130,16 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             params.poMinQty = $("#prodModifyPoMinQty").val(); // 최소발주수량
             params.startStockQty = $("#prodModifyStartStockQty").val(); // 초기재고
             params.safeStockQty = $("#prodModifySafeStockQty").val(); // 안전재고
-            // 기타정보
-            params.saleTimeFg = "N";
-            resetKioskTimeHtml();
             // 비고
             params.remark = ""; // 비고
             params.prodInfo = ""; // 상품 상세 설명
+
+            // [1250 맘스터치]
+            // 기타정보
+            params.saleTimeFg = "N";
+            resetKioskTimeHtml();
+            // KIOSK 엣지
+            params.momsKioskEdge = "";
             // 영양정보
             params.nuTotWt = "";
             params.nuKcal = "";
@@ -346,6 +350,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             // KIOSK 판매시간
             params.saleTimeFg = "N";
             params.saleTime = "";
+            // KIOSK 엣지
+            params.momsKioskEdge = "";
 
             // 영양정보
             params.nuTotWt = "";
@@ -894,6 +900,11 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                     });
                 }else{
                     resetKioskTimeHtml();
+                }
+
+                // [1250 맘스터치]
+                if($scope.prodModifyInfo.momsKioskEdge === null || $scope.prodModifyInfo.momsKioskEdge === ""){
+                    $scope.prodModifyInfo.momsKioskEdge = "";
                 }
             });
 

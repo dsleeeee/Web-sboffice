@@ -111,6 +111,11 @@ app.controller('prodDetailCtrl', ['$scope', '$http', function ($scope, $http) {
                 }else{
                     $("#divSaleTime").text("");
                 }
+
+                // [1250 맘스터치]
+                if($scope.prodDetail.momsKioskEdge === null || $scope.prodDetail.momsKioskEdge === ""){
+                    $scope.prodDetail.momsKioskEdge = "";
+                }
             }
         );
         // 기능수행 종료 : 반드시 추가

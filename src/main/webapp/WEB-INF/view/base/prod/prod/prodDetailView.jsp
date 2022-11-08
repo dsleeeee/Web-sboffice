@@ -655,6 +655,24 @@
                                 <div id="divSaleTime"></div>
                             </td>
                         </tr>
+                        <tr>
+                            <%-- KIOSK 엣지 --%>
+                            <th><s:message code="prod.momsKioskEdge"/></th>
+                            <td>
+                                <wj-combo-box
+                                        ng-model="prodDetail.momsKioskEdge"
+                                        ng-hide="true"
+                                        text="_momsKioskEdge"
+                                        items-source="_getComboData('momsKioskEdgeComboData')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false">
+                                </wj-combo-box>
+                                {{_momsKioskEdge}}
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
                     </c:if>
                     </tbody>
                 </table>
@@ -742,4 +760,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20221013.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20221107.01" charset="utf-8"></script>
