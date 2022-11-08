@@ -2722,7 +2722,8 @@
             NU_SODIUM,
             NU_SUGARS,
             NU_SAT_FAT,
-            NU_CAFFEINE
+            NU_CAFFEINE,
+            MOMS_KIOSK_EDGE
             FROM TB_HQ_PRODUCT_INFO
             WHERE 1=1
             AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -2752,7 +2753,8 @@
                 A.NU_SODIUM,
                 A.NU_SUGARS,
                 A.NU_SAT_FAT,
-                A.NU_CAFFEINE
+                A.NU_CAFFEINE,
+                A.MOMS_KIOSK_EDGE
             ) VALUES (
                 B.STORE_CD,
                 B.PROD_CD,
@@ -2767,7 +2769,8 @@
                 B.NU_SODIUM,
                 B.NU_SUGARS,
                 B.NU_SAT_FAT,
-                B.NU_CAFFEINE
+                B.NU_CAFFEINE,
+                B.MOMS_KIOSK_EDGE
             )
     </insert>
 
