@@ -79,6 +79,7 @@ public class TouchKeyVO extends CmmVO {
 
     /** 터치키그룹코드 : 시즌,행사별 등 일종의 템플릿 */
     private String tukeyGrpCd;
+    private String tukeyGrpNm;
 
     /** 상품명  */
     private String prodNm;
@@ -390,6 +391,14 @@ public class TouchKeyVO extends CmmVO {
 
     public void setTukeyGrpCd(String tukeyGrpCd) {
         this.tukeyGrpCd = tukeyGrpCd;
+    }
+
+    public String getTukeyGrpNm() {
+        return tukeyGrpNm;
+    }
+
+    public void setTukeyGrpNm(String tukeyGrpNm) {
+        this.tukeyGrpNm = tukeyGrpNm;
     }
 
     public String getProdNm() {

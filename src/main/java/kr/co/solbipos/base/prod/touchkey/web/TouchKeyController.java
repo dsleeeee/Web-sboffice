@@ -271,7 +271,7 @@ public class TouchKeyController {
         String xml = CmmUtil.decoder(request.getParameter("xml"));
         xml.replace("\n", "&#xa;");
 
-        result = touchkeyService.saveTouchkey(sessionInfoVO, XssPreventer.unescape(xml), request.getParameter("tukeyGrpCd"));
+        result = touchkeyService.saveTouchkey(sessionInfoVO, XssPreventer.unescape(xml), request.getParameter("tukeyGrpCd"), request.getParameter("tukeyGrpNm"));
 
         return result;
     }
@@ -347,6 +347,57 @@ public class TouchKeyController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = touchkeyService.saveStoreModGrp(touchKeyVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+
+    }
+
+
+    /**
+     * 터치키그룹 조회
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param touchKeyVO TouchKeyVO
+     * @param model Model
+     * @return Result
+     * @author 권지현
+     * @since 2022.11.07
+     */
+    @RequestMapping(value = "/getGrpList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getGrpList(HttpServletRequest request, HttpServletResponse response,
+                                     TouchKeyVO touchKeyVO, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
+        // 매장 목록 조회
+        list = touchkeyService.getGrpList(touchKeyVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, touchKeyVO);
+
+    }
+
+    /**
+     * 터치키그룹 저장
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param touchKeyVOs TouchKeyVO
+     * @param model Model
+     * @return Result
+     * @author 권지현
+     * @since 2022.10.20
+     */
+    @RequestMapping(value = "/saveGrpNm.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveGrpNm(HttpServletRequest request, HttpServletResponse response,
+                                  @RequestBody TouchKeyVO[] touchKeyVOs, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = touchkeyService.saveGrpNm(touchKeyVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
 

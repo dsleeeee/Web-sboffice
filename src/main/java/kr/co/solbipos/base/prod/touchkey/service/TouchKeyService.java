@@ -44,7 +44,7 @@ public interface TouchKeyService {
     List<DefaultMap<String>> getTouchKeyProdInfoList(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO);
 
     /** 판매터치키 저장 */
-    Result saveTouchkey(SessionInfoVO sessionInfoVO, String xml, String tukeyGrpCd);
+    Result saveTouchkey(SessionInfoVO sessionInfoVO, String xml, String tukeyGrpCd, String tukeyGrpNm);
 
     /** 터치키미적용 상품 */
     List<DefaultMap<String>> getNoTouchKey(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO);
@@ -54,6 +54,12 @@ public interface TouchKeyService {
 
     /** 매장수정허용분류_저장 */
     int saveStoreModGrp(TouchKeyVO[] touchKeyVOs, SessionInfoVO sessionInfoVO);
+
+    /** 터치키그룹_조회 */
+    List<DefaultMap<String>> getGrpList(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장수정허용분류_저장 */
+    int saveGrpNm(TouchKeyVO[] touchKeyVOs, SessionInfoVO sessionInfoVO);
 
     /** 분류 삭제 전 매장수정허용분류 체크 */
     int getDeleteClassChk(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO);

@@ -451,11 +451,13 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
         // 신규그룹을 생성하시겠습니까?
         $scope._popConfirm(messages["kioskKeyMap.tuClsTypeAdd.msg"], function() {
 
+            var tuClsTypeNm = prompt('그룹명을 입력하세요','그룹명');
             // 파라미터 설정
             var params = {};
             if(orgnFg === "STORE") {params.posNo = $scope.posNoCombo.selectedValue;}
             params.tuClsNm = "기본";
             params.indexNo = "1";
+            params.tuClsTypeNm = tuClsTypeNm;
             if(orgnFg === "HQ") {params.tuMClsFg = $scope.tuMClsFgCombo.selectedValue;}
 
             $scope._postJSONSave.withPopUp("/base/prod/kioskKeyMap/kioskKeyMap/createKioskTuClsType.sb", params, function (response) {
@@ -487,7 +489,7 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
         if(orgnFg === "HQ"){
 
             // '01' 그룹을 복사하여 새 그룹을 생성하시겠습니까?
-            $scope._popConfirm( "'" + $scope.tuClsTypeCombo.selectedValue + "' " + messages["kioskKeyMap.tuClsTypeCopy.msg"], function() {
+            $scope._popConfirm( "'" + $scope.tuClsTypeCombo.selectedItem.name + "' " + messages["kioskKeyMap.tuClsTypeCopy.msg"], function() {
 
                 // 파라미터 설정
                 var params = {};
@@ -534,6 +536,16 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
         $scope._broadcast('storeModCtrl');
     };
 
+    // 매장수정허용카테고리
+    $scope.clsTypeNm = function(){
+        $scope.clsTypeNmLayer.show(true);
+        if(orgnFg === "HQ"){
+            $scope._broadcast('clsTypeNmCtrl', null);
+        } else {
+            $scope._broadcast('clsTypeNmCtrl', $scope.posNoCombo.selectedValue);
+        }
+    };
+
     // 매장권한) POS번호 선택 시, 키맵그룹 dropdown 조회
     $scope.setTuClsType = function (s) {
 
@@ -569,7 +581,6 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
                     var comboArrayAll = [];
                     var comboData  = {};
 
-                    comboArrayAll.unshift({name: "01", value: "01"});
                     comboArrayAll.unshift({name: "전체", value: ""});
 
                     for (var i = 0; i < list.length; i++) {

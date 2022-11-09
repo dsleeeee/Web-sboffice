@@ -87,7 +87,7 @@ app.controller('kioskKeyMapCopyStoreCtrl', ['$scope', '$http', function ($scope,
         // 복사 할 POS번호와 붙여 넣을 POS번호가 동일(새로운 그룹)
         if($scope.orgStorePosNoCombo.selectedValue === $scope.storePosNoCombo.selectedValue){
             // '01' 그룹을 복사하여 새 그룹을 생성하시겠습니까?
-            $scope._popConfirm( "'" + $scope.orgStoreTuClsTypeCombo.selectedValue + "' " + messages["kioskKeyMap.tuClsTypeCopy.msg"], function() {
+            $scope._popConfirm( "'" + $scope.orgStoreTuClsTypeCombo.selectedItem.name + "' " + messages["kioskKeyMap.tuClsTypeCopy.msg"], function() {
 
                 // 파라미터 설정
                 var params = {};
@@ -106,7 +106,7 @@ app.controller('kioskKeyMapCopyStoreCtrl', ['$scope', '$http', function ($scope,
         } else {
             // 01번 포스 01번 그룹을 02번 포스 01번 그룹으로 복사하시겠습니까?
             $scope._popConfirm( $scope.orgStorePosNoCombo.selectedValue + messages["kioskKeyMap.copy.msg1"] + " " +
-                                    $scope.orgStoreTuClsTypeCombo.selectedValue + messages["kioskKeyMap.copy.msg2"] + " " +
+                                    $scope.orgStoreTuClsTypeCombo.selectedItem.name + messages["kioskKeyMap.copy.msg2"] + " " +
                                     $scope.storePosNoCombo.selectedValue + messages["kioskKeyMap.copy.msg3"], function() {
 
                 var params = {};

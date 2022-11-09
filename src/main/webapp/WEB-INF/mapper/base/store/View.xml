@@ -625,12 +625,14 @@
     -->
     <select id="getStoreTouchKeyGrpCombo" parameterType="viewVO" resultType="DefaultMap">
         /* ViewMapper.getStoreTouchKeyGrpCombo */
-        SELECT TUKEY_GRP_CD AS NAME,
-               TUKEY_GRP_CD AS VALUE
-          FROM TB_MS_TOUCH_KEY_CLASS
-         WHERE STORE_CD = #{storeCd}
-         GROUP
-            BY TUKEY_GRP_CD
+        SELECT  DISTINCT tmtkc.TUKEY_GRP_CD AS VALUE,
+                NVL(tmtkg.TUKEY_GRP_NM, tmtkc.TUKEY_GRP_CD) AS NAME
+        FROM 	TB_MS_TOUCH_KEY_CLASS tmtkc
+        ,		TB_MS_TOUCH_KEY_GROUP tmtkg
+        WHERE   tmtkc.STORE_CD = #{storeCd}
+        AND		tmtkc.STORE_CD = tmtkg.STORE_CD(+)
+        AND		tmtkc.TUKEY_GRP_CD = tmtkg.TUKEY_GRP_CD(+)
+        ORDER BY tmtkc.TUKEY_GRP_CD
     </select>
 
     <!-- 판매터치키 선택그룹 복사 프로시져 호출 -->

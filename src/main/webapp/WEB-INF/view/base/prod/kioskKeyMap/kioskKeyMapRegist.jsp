@@ -72,16 +72,18 @@
                         </div>
                     </c:if>
                     <div <c:choose><c:when test="${orgnFg == 'STORE' && kioskKeyEnvstVal == '0'}">style="visibility: hidden"</c:when><c:otherwise></c:otherwise></c:choose>>
-                        <button class="btn_skyblue" id="btnTuClsTypeAdd" ng-click="tuClsTypeAdd()">
-                            <s:message code="kioskKeyMap.tuClsTypeAdd" />
-                        </button>
+                        <c:if test="${orgnFg == 'HQ' || (orgnFg == 'STORE' && kioskKeyEnvstVal == '1')}">
+                            <button class="btn_skyblue" id="btnTuClsTypeAdd" ng-click="tuClsTypeAdd()">
+                                <s:message code="kioskKeyMap.tuClsTypeAdd" />
+                            </button>
+                        </c:if>
                         <c:if test="${kioskKeyMapGrpFg == '1'}">
                             <c:if test="${orgnFg == 'HQ'}">
                                 <button class="btn_skyblue" id="btnTuClsTypeCopyHq" ng-click="tuClsTypeCopy()">
                                     <s:message code="kioskKeyMap.tuClsTypeCopy" />
                                 </button>
                             </c:if>
-                            <c:if test="${orgnFg == 'STORE'}">
+                            <c:if test="${orgnFg == 'STORE' && kioskKeyEnvstVal == '1'}">
                                 <button class="btn_skyblue" id="btnTuClsTypeCopyStore" ng-click="tuClsTypeCopy()">
                                     <s:message code="kioskKeyMap.tuClsTypeCopy" />
                                 </button>
@@ -100,6 +102,11 @@
                             <s:message code="kioskKeyMap.storeMod" />
                         </button>
                         </c:if>
+                        <c:if test="${orgnFg == 'HQ' || (orgnFg == 'STORE' && hqOfficeCd != '00000' && kioskKeyEnvstVal == '1')}">
+                            <button class="btn_skyblue" id="btnClsTypeNm" ng-click="clsTypeNm()">
+                                <s:message code="kioskKeyMap.tuClsTypeNm" />
+                            </button>
+                        </c:if>
                        </div>
                 </td>
             </tr>
@@ -107,11 +114,11 @@
         </table>
 
         <div class="mt10 oh sb-select dkbr">
-            <button class="btn_skyblue fr mt5 mr5" id="btnEnv4069" ng-click="envConfg('4069')"><s:message code="kioskKeymap.envConfgPack"/></button>
-            <button class="btn_skyblue fr mt5 mr5" id="btnEnv4068" ng-click="envConfg('4068')"><s:message code="kioskKeymap.envConfgStore"/></button>
+            <button class="btn_skyblue fr mr5" id="btnEnv4069" ng-click="envConfg('4069')"><s:message code="kioskKeymap.envConfgPack"/></button>
+            <button class="btn_skyblue fr mr5" id="btnEnv4068" ng-click="envConfg('4068')"><s:message code="kioskKeymap.envConfgStore"/></button>
         </div>
 
-        <div class="wj-TblWrap mt20 mb20 w25 fl">
+        <div class="wj-TblWrap mt10 mb20 w25 fl">
             <div class="wj-TblWrapBr mr10 pd20" style="height:600px;">
                 <div class="mb5">
                     <label id="lbTuClsType"></label>
@@ -213,7 +220,7 @@
         </div>
     </div>
 
-    <div class="wj-TblWrap mt20 mb20 w35 fl" ng-controller="kioskKeyMapCtrl">
+    <div class="wj-TblWrap mt10 mb20 w35 fl" ng-controller="kioskKeyMapCtrl">
         <div class="wj-TblWrapBr ml10 pd20" style="height:600px; overflow-y: hidden;">
             <span class="fl bk lh30" id="spanTuKeyCls"></span>
             <div class="updownSet oh mb10 pd5" id="divBtnKeyMap" style="visibility: hidden;">
@@ -254,7 +261,7 @@
         </div>
     </div>
 
-    <div class="wj-TblWrap mt20 mb20 w40 fl" ng-controller="kioskProdCtrl">
+    <div class="wj-TblWrap mt10 mb20 w40 fl" ng-controller="kioskProdCtrl">
         <div class="wj-TblWrapBr ml10 pd20" style="height:600px; overflow-y: hidden;">
             <table class="tblType01">
                 <colgroup>
@@ -408,7 +415,6 @@
     var kioskTuClsTypeList = ${kioskTuClsTypeList};
 
     var kioskTuClsTypeListAll = ${kioskTuClsTypeList};
-    kioskTuClsTypeListAll.unshift({name: "01", value: "01"});
     kioskTuClsTypeListAll.unshift({name: "전체", value: ""});
 
     // 상품유형구분
@@ -421,7 +427,7 @@
     var kioskKeyEnvstVal = "${kioskKeyEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20220823.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20220823.07" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
@@ -453,4 +459,8 @@
 
 <%-- 매장수정허용카테고리 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskKeyMapStoreMod.jsp">
+</c:import>
+
+<%-- 매장수정허용카테고리 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskKeyMapClsTypeNm.jsp">
 </c:import>

@@ -71,10 +71,12 @@ public interface TouchKeyMapper {
 
     /** 판매터치키 분류 삭제 */
     int deleteTouchKeyClass(TouchKeyClassVO touchKeyClassVO);
-    int deleteTouchKeyClass2(TouchKeyClassVO touchKeyClassVO);
 
     /** 판매터치키 분류 기본값 세팅 */
     int defaultTouchKeyClass(TouchKeyClassVO touchKeyClassVO);
+
+    /** 판매터치키 그룹 삭제 */
+    int deleteTouchkeyGrp(TouchKeyVO touchKeyVO);
 
     /** 판매터치키 생성 전 체크 */
     int insertTouchKeyChk(TouchKeyClassVO touchKeyClassVO);
@@ -95,6 +97,18 @@ public interface TouchKeyMapper {
     /** 매장수정허용분류 저장 */
     int saveStoreModGrp(TouchKeyVO touchKeyVO);
 
+    /** 터치키그룹 조회 */
+    List<DefaultMap<String>> getClsTypeList(TouchKeyVO touchKeyVO);
+
+    /** 터치키그룹 저장 */
+    int saveClsType(TouchKeyVO touchKeyVO);
+
+    /** 터치키그룹_조회 */
+    List<DefaultMap<String>> getGrpList(TouchKeyVO touchKeyVO);
+
+    /** 터치키그룹 저장 */
+    int saveGrpNm(TouchKeyVO touchKeyVO);
+
     /** 분류 삭제 전 매장수정허용분류 체크 */
     int getDeleteClassChk(TouchKeyVO touchKeyVO);
 
@@ -112,12 +126,17 @@ public interface TouchKeyMapper {
 
     /** 터치키 매장삭제 */
     int deleteTouchKeyToStore(TouchKeyVO touchKeyVO);
+    int deleteTouchKeyToStore2(TouchKeyVO touchKeyVO);
+
+    /** 터치키그룹 매장 업데이트 */
+    int insertTouchKeyGroupToStore(TouchKeyVO touchKeyVO);
 
     /** 터치키 분류 매장생성 */
     int insertTouchKeyClassToStore(TouchKeyVO touchKeyVO);
 
     /** 터치키 매장생성 */
     int insertTouchKeyToStore(TouchKeyVO touchKeyVO);
+    int insertTouchKeyToStore2(TouchKeyVO touchKeyVO);
 
     /** 판매터치키 그룹 조회 */
     List<DefaultMap<String>> getTouchKeyGrp(TouchKeyVO touchKeyVO);

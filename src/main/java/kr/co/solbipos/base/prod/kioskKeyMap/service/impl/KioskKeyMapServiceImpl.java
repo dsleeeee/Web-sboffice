@@ -90,6 +90,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         return kioskKeyMapMapper.getStoreModGrpList(kioskKeyMapVO);
     }
 
+    /** 키오스크 키맵그룹 저장 */
     @Override
     public int saveStoreModGrp(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO) {
 
@@ -107,7 +108,48 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             kioskKeyMapVO.setModId(sessionInfoVO.getUserId());
 
             // 매장에 터치키 XML 정보 업데이트
-            kioskKeyMapMapper.saveStoreModGrp(kioskKeyMapVO);
+            result += kioskKeyMapMapper.saveStoreModGrp(kioskKeyMapVO);
+
+        }
+
+        if ( result >= 0 ) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
+
+    /** 키오스크 터치키그룹 조회 */
+    @Override
+    public List<DefaultMap<String>> getClsTypeList(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
+
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return kioskKeyMapMapper.getClsTypeList(kioskKeyMapVO);
+    }
+
+    /** 키오스크 터치키그룹 저장 */
+    @Override
+    public int saveClsType(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        for ( KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs ) {
+            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            // 소속구분 설정
+            kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+            // 기본입력정보 설정
+            kioskKeyMapVO.setRegDt(currentDt);
+            kioskKeyMapVO.setRegId(sessionInfoVO.getUserId());
+            kioskKeyMapVO.setModDt(currentDt);
+            kioskKeyMapVO.setModId(sessionInfoVO.getUserId());
+
+            // 매장에 터치키 XML 정보 업데이트
+            result += kioskKeyMapMapper.saveClsType(kioskKeyMapVO);
 
         }
 
@@ -305,6 +347,8 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         // 키맵 새 그룹코드 생성
         kioskKeyMapVO.setTuClsType(kioskKeyMapMapper.getKiosTuClsTypeCode(kioskKeyMapVO));
 
+        kioskKeyMapMapper.saveClsType(kioskKeyMapVO);
+
         // 카테고리 새 분류코드 생성
         kioskKeyMapVO.setTuClsCd(kioskKeyMapMapper.getKioskCategoryCode(kioskKeyMapVO));
 
@@ -339,6 +383,8 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         // 새 키맵그룹 코드 생성
         kioskKeyMapVO.setOrgTuClsType(kioskKeyMapVO.getTuClsType());
         kioskKeyMapVO.setTuClsType(kioskKeyMapMapper.getKiosTuClsTypeCode(kioskKeyMapVO));
+
+        kioskKeyMapMapper.copyKioskTuClsTypeNm(kioskKeyMapVO);
 
         // 기존 키맵그룹으로 새 키맵그룹 등록(현재 포스로 복제)
         result = kioskKeyMapMapper.copyKioskCategory(kioskKeyMapVO);
@@ -382,6 +428,8 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         // 기존 키맵그룹으로 새 키맵그룹 등록(다른 포스로 복제)
         result = kioskKeyMapMapper.copyPosKioskCategory(kioskKeyMapVO);
         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        kioskKeyMapMapper.copyKioskTuClsTypeNm(kioskKeyMapVO);
 
         // 기존 키맵그룹에 맵핑된 상품이 있으면 상품도 새 키맵그룹에 등록(다른 포스로 복제)
         result = kioskKeyMapMapper.copyPosKioskKeyMap(kioskKeyMapVO);
@@ -435,6 +483,8 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
                     // 새 키맵그룹과 카테고리(분류)코드로 INSERT
                     result = kioskKeyMapMapper.insertKioskCategoryStoreReg(kioskKeyMapVO);
                     if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                    result = kioskKeyMapMapper.copyKioskStoreTuClsTypeNm(kioskKeyMapVO);
 
                     // 기존 카테고리(분류)에 맵핑된 상품이 있으면 상품도 INSERT
                     result = kioskKeyMapMapper.copyKioskKeyMapStoreReg(kioskKeyMapVO);
