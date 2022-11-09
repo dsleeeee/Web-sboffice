@@ -62,6 +62,7 @@ public class KioskKeyMapVO extends PageVO {
     private String tuKeyCd;
     /** 카테고리그룹 */
     private String tuClsType;
+    private String tuClsTypeNm;
     /** 복사원본의 카테고리그룹 */
     private String orgTuClsType;
     /** 매장명 */
@@ -312,6 +313,14 @@ public class KioskKeyMapVO extends PageVO {
 
     public void setTuClsType(String tuClsType) {
         this.tuClsType = tuClsType;
+    }
+
+    public String getTuClsTypeNm() {
+        return tuClsTypeNm;
+    }
+
+    public void setTuClsTypeNm(String tuClsTypeNm) {
+        this.tuClsTypeNm = tuClsTypeNm;
     }
 
     public String getOrgTuClsType() {

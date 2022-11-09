@@ -369,6 +369,15 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
 
   });
 
+  // 매장수정허용분류 팝업
+  $scope.$on("showGrpNm", function(event, data) {
+
+    $scope.popUpGrpNmLayer.show();
+    $scope._broadcast('popUpGrpNmCtrl');
+    event.preventDefault();
+
+  });
+
 }]);
 
 
@@ -2548,7 +2557,9 @@ Format.prototype.save = function () {
 
       // 수정인지 신규저장인지 파악하기 위해
       if($("#hdNewGrp").val() === 'Y'){
+        var grpNm = prompt('그룹명을 입력하세요','그룹명');
         params += '&tukeyGrpCd=';
+        params += '&tukeyGrpNm=' + grpNm;
       }else{
         params += '&tukeyGrpCd=' + scope.touchKeyGrp;
       }

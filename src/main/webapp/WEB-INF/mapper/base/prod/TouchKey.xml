@@ -747,11 +747,6 @@
                 <if test="tukeyGrpCd != null and tukeyGrpCd != ''">
                     AND TUKEY_GRP_CD = #{tukeyGrpCd}
                 </if>
-                AND 	TUKEY_GRP_CD || TUKEY_CLASS_CD NOT IN ( SELECT 	NMCODE_NM || NMCODE_ITEM_1
-                                                                FROM 	TB_HQ_NMCODE thn
-                                                                WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
-                                                                AND     NMCODE_GRP_CD = '228'
-                                                                AND 	NMCODE_ITEM_2 = 'Y')
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -760,6 +755,40 @@
                     TB_MS_TOUCH_KEY_CLASS
                 WHERE
                     STORE_CD = #{storeCd}
+                <if test="tukeyGrpCd != null and tukeyGrpCd != ''">
+                    AND TUKEY_GRP_CD = #{tukeyGrpCd}
+                </if>
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 판매터치키 그룹 삭제 -->
+    <!--
+        TABLE    : TB_HQ_TOUCH_KEY_CLASS, TB_MS_TOUCH_KEY_CLASS
+        PARAM    : touchKeyClassVO
+        COMMENTS : 판매터치키 그룹 정보를 삭제한다.
+    -->
+    <delete id="deleteTouchkeyGrp" parameterType="touchKeyClassVO">
+        /* USE : TouchkeyMapper.deleteTouchkeyGrp */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                FROM
+                TB_HQ_TOUCH_KEY_GROUP
+                WHERE
+                HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test="tukeyGrpCd != null and tukeyGrpCd != ''">
+                    AND TUKEY_GRP_CD = #{tukeyGrpCd}
+                </if>
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                FROM
+                TB_MS_TOUCH_KEY_GROUP
+                WHERE
+                STORE_CD = #{storeCd}
                 <if test="tukeyGrpCd != null and tukeyGrpCd != ''">
                     AND TUKEY_GRP_CD = #{tukeyGrpCd}
                 </if>
@@ -1305,6 +1334,124 @@
             )
     </insert>
 
+    <!-- 터치키그룹_조회 -->
+    <!--
+        TABLE    : TB_MS_TOUCH_KEY_CLASS, TB_HQ_TOUCH_KEY_GROUP
+        PARAM    : touchKeyVO
+        COMMENTS : 터치키그룹을 조회한다.
+    -->
+    <select id="getGrpList" parameterType="touchKeyVO" resultType="DefaultMap">
+        /* USE : TouchkeyMapper.getGrpList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT 	DISTINCT thtkc.TUKEY_GRP_CD
+                ,       thtkg.TUKEY_GRP_NM
+                FROM 	TB_HQ_TOUCH_KEY_CLASS thtkc
+                ,		TB_HQ_TOUCH_KEY_GROUP thtkg
+                WHERE	thtkc.HQ_OFFICE_CD = thtkg.HQ_OFFICE_CD (+)
+                AND 	thtkc.TUKEY_GRP_CD = thtkg.TUKEY_GRP_CD (+)
+                AND     thtkc.HQ_OFFICE_CD = #{hqOfficeCd}
+                ORDER BY thtkc.TUKEY_GRP_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT	DISTINCT tmtkc.TUKEY_GRP_CD
+                ,       tmtkg.TUKEY_GRP_NM
+                FROM 	TB_MS_TOUCH_KEY_CLASS tmtkc
+                ,		TB_MS_TOUCH_KEY_GROUP tmtkg
+                WHERE	tmtkc.STORE_CD = tmtkg.STORE_CD (+)
+                AND 	tmtkc.TUKEY_GRP_CD = tmtkg.TUKEY_GRP_CD (+)
+                AND     tmtkc.STORE_CD = #{storeCd}
+                ORDER BY tmtkc.TUKEY_GRP_CD
+            </when>
+        </choose>
+    </select>
+
+    <!-- 터치키그룹 저장 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : touchKeyVO
+        COMMENTS : 터치키그룹을 저장한다.
+    -->
+    <insert id="saveGrpNm" parameterType="touchKeyVO">
+        /* USE : TouchkeyMapper.saveGrpNm */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+            MERGE INTO TB_HQ_TOUCH_KEY_GROUP thtkg
+            USING DUAL
+            ON (
+                HQ_OFFICE_CD = #{hqOfficeCd}
+            AND TUKEY_GRP_CD = #{tukeyGrpCd}
+            )
+            WHEN MATCHED THEN
+            UPDATE
+            SET
+                TUKEY_GRP_NM   = #{tukeyGrpNm}
+            ,   MOD_DT      = #{modDt}
+            ,   MOD_ID      = #{modId}
+            WHEN NOT MATCHED THEN
+            INSERT
+            (
+                HQ_OFFICE_CD
+            ,   TUKEY_GRP_CD
+            ,   TUKEY_GRP_NM
+            ,   REG_DT
+            ,   REG_ID
+            ,   MOD_DT
+            ,   MOD_ID
+            )
+            VALUES
+            (
+                #{hqOfficeCd}
+            ,   #{tukeyGrpCd}
+            ,   #{tukeyGrpNm}
+            ,   #{regDt}
+            ,   #{regId}
+            ,   #{modDt}
+            ,   #{modId}
+            )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+            MERGE INTO TB_MS_TOUCH_KEY_GROUP thtkg
+            USING DUAL
+            ON (
+                STORE_CD = #{storeCd}
+            AND TUKEY_GRP_CD = #{tukeyGrpCd}
+            )
+            WHEN MATCHED THEN
+            UPDATE
+            SET
+                TUKEY_GRP_NM   = #{tukeyGrpNm}
+            ,   MOD_DT      = #{modDt}
+            ,   MOD_ID      = #{modId}
+            WHEN NOT MATCHED THEN
+            INSERT
+            (
+                STORE_CD
+            ,   TUKEY_GRP_CD
+            ,   TUKEY_GRP_NM
+            ,   REG_DT
+            ,   REG_ID
+            ,   MOD_DT
+            ,   MOD_ID
+            )
+            VALUES
+            (
+                #{storeCd}
+            ,   #{tukeyGrpCd}
+            ,   #{tukeyGrpNm}
+            ,   #{regDt}
+            ,   #{regId}
+            ,   #{modDt}
+            ,   #{modId}
+            )
+            </when>
+        </choose>
+    </insert>
+
     <!-- 분류 삭제 전 매장수정허용분류 체크 -->
     <!--
         TABLE    : TB_HQ_NMCODE
@@ -1406,6 +1553,27 @@
             AND TUKEY_GRP_CD  = #{tukeyGrpCd}
     </delete>
 
+    <!-- 판매터치키 매장삭제 -->
+    <!--
+        TABLE    : TB_MS_TOUCH_KEY
+        PARAM    : touchKeyVO
+        COMMENTS : 매장에 적용되어 있는 판매터치키 정보를 삭제한다.
+    -->
+    <delete id="deleteTouchKeyToStore2" parameterType="touchKeyVO">
+        /* USE : TouchkeyMapper.deleteTouchKeyToStore2 */
+        DELETE
+        FROM
+            TB_MS_TOUCH_KEY
+        WHERE
+            STORE_CD = #{storeCd}
+            AND TUKEY_GRP_CD  = #{tukeyGrpCd}
+        AND 	TUKEY_GRP_CD || TUKEY_CLASS_CD NOT IN ( SELECT 	NMCODE_NM || NMCODE_ITEM_1
+                                                        FROM 	TB_HQ_NMCODE thn
+                                                        WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                                                        AND     NMCODE_GRP_CD = '228'
+                                                        AND 	NMCODE_ITEM_2 = 'Y')
+    </delete>
+
     <!-- 터치키 매장적용 본사 라인수 적용(HQ: 0041, MS:1041) -->
     <!--
         TABLE    : TB_MS_STORE_ENVST
@@ -1465,6 +1633,36 @@
             )
     </insert>
 
+    <!-- 판매터치키 그룹 생성 -->
+    <!--
+        TABLE    : TB_MS_TOUCH_KEY_CLASS
+        PARAM    : touchKeyVO
+        COMMENTS : 매장에 판매터치키 그룹 정보를 생성한다.
+    -->
+    <insert id="insertTouchKeyGroupToStore" parameterType="touchKeyVO">
+        /* USE : TouchkeyMapper.insertTouchKeyGroupToStore */
+            INSERT INTO TB_MS_TOUCH_KEY_GROUP
+            (
+                STORE_CD
+            ,   TUKEY_GRP_CD
+            ,   TUKEY_GRP_NM
+            ,   REG_DT
+            ,   REG_ID
+            ,   MOD_DT
+            ,   MOD_ID
+            )
+            SELECT  #{storeCd} AS STORE_CD
+            ,       TUKEY_GRP_CD
+            ,       TUKEY_GRP_NM
+            ,       REG_DT
+            ,       REG_ID
+            ,       MOD_DT
+            ,       MOD_ID
+            FROM    TB_HQ_TOUCH_KEY_GROUP
+            WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+            AND     TUKEY_GRP_CD = #{tukeyGrpCd}
+    </insert>
+
     <!-- 판매터치키 분류 생성 -->
     <!--
         TABLE    : TB_MS_TOUCH_KEY_CLASS
@@ -1522,7 +1720,6 @@
         WHERE
             HQ_OFFICE_CD = #{hqOfficeCd}
             AND TUKEY_GRP_CD = #{tukeyGrpCd}
-
     </insert>
 
     <!-- 판매터치키 생성 -->
@@ -1584,7 +1781,73 @@
         WHERE
             HQ_OFFICE_CD = #{hqOfficeCd}
             AND TUKEY_GRP_CD = #{tukeyGrpCd}
+    </insert>
 
+
+    <!-- 판매터치키 생성 -->
+    <!--
+        TABLE    : TB_MS_TOUCH_KEY
+        PARAM    : touchKeyVO
+        COMMENTS : 매장에 판매터치키 정보를 생성한다.
+    -->
+    <insert id="insertTouchKeyToStore2" parameterType="touchKeyVO">
+        /* USE : TouchkeyMapper.insertTouchKeyToStore2 */
+        INSERT INTO TB_MS_TOUCH_KEY thtk
+        (
+            thtk.STORE_CD,
+            thtk.TUKEY_CLASS_CD,
+            thtk.TUKEY_CD,
+            thtk.TUKEY_FG,
+            thtk.PROD_CD,
+            thtk.PAGE_NO,
+            thtk.X,
+            thtk.Y,
+            thtk.WIDTH,
+            thtk.HEIGHT,
+            thtk.STYLE_CD,
+            thtk.FONT_SIZE,
+            thtk.FONT_COLOR,
+            thtk.FILL_COLOR,
+            thtk.IMG_NM,
+            thtk.IN_FG,
+            thtk.REG_DT,
+            thtk.REG_ID,
+            thtk.MOD_DT,
+            thtk.MOD_ID,
+            thtk.TUKEY_GRP_CD
+        )
+        SELECT
+            #{storeCd} AS STORE_CD,
+            TUKEY_CLASS_CD,
+            TUKEY_CD,
+            TUKEY_FG,
+            PROD_CD,
+            PAGE_NO,
+            X,
+            Y,
+            WIDTH,
+            HEIGHT,
+            STYLE_CD,
+            FONT_SIZE,
+            FONT_COLOR,
+            FILL_COLOR,
+            IMG_NM,
+            'H',
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID,
+            TUKEY_GRP_CD
+        FROM
+            TB_HQ_TOUCH_KEY
+        WHERE
+            HQ_OFFICE_CD = #{hqOfficeCd}
+            AND TUKEY_GRP_CD = #{tukeyGrpCd}
+          AND 	TUKEY_GRP_CD || TUKEY_CLASS_CD NOT IN ( SELECT 	NMCODE_NM || NMCODE_ITEM_1
+                                                         FROM 	TB_HQ_NMCODE thn
+                                                         WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                                                           AND     NMCODE_GRP_CD = '228'
+                                                           AND 	NMCODE_ITEM_2 = 'Y')
     </insert>
 
     <!-- 판매터치키 XML 정보생성 -->
@@ -1658,25 +1921,25 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT
-                      TUKEY_GRP_CD AS NAME,
-                      TUKEY_GRP_CD AS VALUE
-                FROM
-                      TB_HQ_TOUCH_KEY_CLASS
-                WHERE
-                      HQ_OFFICE_CD = #{hqOfficeCd}
-                GROUP BY TUKEY_GRP_CD
+                SELECT  DISTINCT thtkc.TUKEY_GRP_CD AS VALUE
+                ,       NVL(thtkg.TUKEY_GRP_NM, thtkc.TUKEY_GRP_CD) AS NAME
+                FROM    TB_HQ_TOUCH_KEY_CLASS thtkc
+                ,       TB_HQ_TOUCH_KEY_GROUP thtkg
+                WHERE   thtkc.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     thtkc.HQ_OFFICE_CD = thtkg.HQ_OFFICE_CD(+)
+                AND     thtkc.TUKEY_GRP_CD = thtkg.TUKEY_GRP_CD(+)
+                ORDER BY thtkc.TUKEY_GRP_CD
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT
-                      TUKEY_GRP_CD AS NAME,
-                      TUKEY_GRP_CD AS VALUE
-                FROM
-                      TB_MS_TOUCH_KEY_CLASS
-                WHERE
-                      STORE_CD = #{storeCd}
-                GROUP BY TUKEY_GRP_CD
+                SELECT  DISTINCT tmtkc.TUKEY_GRP_CD AS VALUE
+                ,       NVL(tmtkg.TUKEY_GRP_NM, tmtkc.TUKEY_GRP_CD) AS NAME
+                FROM    TB_MS_TOUCH_KEY_CLASS tmtkc
+                ,       TB_MS_TOUCH_KEY_GROUP tmtkg
+                WHERE   tmtkc.STORE_CD = #{storeCd}
+                AND     tmtkc.STORE_CD = tmtkg.STORE_CD(+)
+                AND     tmtkc.TUKEY_GRP_CD = tmtkg.TUKEY_GRP_CD(+)
+                ORDER BY tmtkc.TUKEY_GRP_CD
             </when>
         </choose>
     </select>
@@ -2357,24 +2620,10 @@
         /* USE : TouchkeyMapper.getTouchKeyClassCd */
         <choose>
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT 	MIN(TUKEY_CLASS_CD) AS TUKEY_CLASS_CD
-                FROM	(
-                        SELECT 	'G' || LPAD(LEVEL, 4, '0') AS TUKEY_CLASS_CD
-                        FROM	DUAL
-                        CONNECT BY LEVEL <![CDATA[<= ]]> 9999
-                        MINUS
-                        SELECT 	NMCODE_ITEM_1
-                        FROM 	TB_HQ_NMCODE thn
-                        WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
-                        AND     NMCODE_GRP_CD = '228'
-                        AND 	NMCODE_NM = #{tukeyGrpCd}
-                        AND 	NMCODE_ITEM_2 = 'Y'
-                        MINUS
-                        SELECT 	TUKEY_CLASS_CD
-                        FROM 	TB_HQ_TOUCH_KEY_CLASS thn
-                        WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
-                        AND 	TUKEY_GRP_CD = #{tukeyGrpCd}
-                        )
+                SELECT 'G' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(TUKEY_CLASS_CD, 2, 4))), 1) + 1, 4, '0') AS TUKEY_CLASS_CD
+                FROM TB_HQ_TOUCH_KEY_CLASS
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND TUKEY_GRP_CD = #{tukeyGrpCd}
             </when>
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT 'G' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(TUKEY_CLASS_CD, 2, 4))), 1) + 1, 4, '0') AS TUKEY_CLASS_CD

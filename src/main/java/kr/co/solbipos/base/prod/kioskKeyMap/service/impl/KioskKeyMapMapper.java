@@ -36,6 +36,14 @@ public interface KioskKeyMapMapper {
 
     int saveStoreModGrp(KioskKeyMapVO kioskKeyMapVO);
 
+    /** 키오스크 터치키그룹 조회 */
+    List<DefaultMap<String>> getClsTypeList(KioskKeyMapVO kioskKeyMapVO);
+    int saveClsType(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 터치키그룹명 복사 */
+    int copyKioskTuClsTypeNm(KioskKeyMapVO kioskKeyMapVO);
+    int copyKioskStoreTuClsTypeNm(KioskKeyMapVO kioskKeyMapVO);
+
     /** 키오스크 키맵그룹코드 생성 */
     String getKiosTuClsTypeCode(KioskKeyMapVO kioskKeyMapVO);
 

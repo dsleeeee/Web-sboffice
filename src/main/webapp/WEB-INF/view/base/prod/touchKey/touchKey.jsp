@@ -49,9 +49,9 @@
                     </wj-combo-box>
                 </div>
                 <%-- 추가터치키생성 --%>
-                <button class="btn_skyblue fl ml20" id="btnNewGrp" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.newGrp"/></button>
+                <button class="btn_skyblue fl ml20" id="btnNewGrp" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && (touchKeyEnvstVal2 == '0' || touchKeyEnvstVal2 == '2')}">style="margin-left : 4px;visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.newGrp"/></button>
                 <%-- 터치키복사 --%>
-                <button class="btn_skyblue fl ml20" id="btnCopyTouchKey" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose> ng-click="$broadcast('showPopUpCopy')">
+                <button class="btn_skyblue fl ml20" id="btnCopyTouchKey" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && (touchKeyEnvstVal2 == '0' || touchKeyEnvstVal2 == '2')}">style="margin-left : 4px;visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose> ng-click="$broadcast('showPopUpCopy')">
                     <s:message code="touchKey.copy" />
                 </button>
                 <%-- 터치키미적용상품 --%>
@@ -61,6 +61,10 @@
                 <%-- 초기화 --%>
                 <button class="btn_skyblue fl ml5" id="btnInti"<c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>>
                     <s:message code="cmm.init"/>
+                </button>
+                <%-- 터치키 그룹명 --%>
+                <button class="btn_skyblue fl ml5" id="btnGrpNm"<c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && (touchKeyEnvstVal2 == '0' || touchKeyEnvstVal2 == '2')}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose> ng-click="$broadcast('showGrpNm')">
+                    <s:message code="touchKey.grpNm"/>
                 </button>
                 <c:if test="${orgnFg == 'STORE' && hqOfficeCd != '00000' && touchKeyEnvstVal2 == '2'}">
                     <%-- 매장수정허용분류 --%>
@@ -322,6 +326,12 @@
         <c:param name="menuNm" value="${menuNm}"/>
     </c:import>
 
+    <%-- 그룹명 팝업 --%>
+    <c:import url="/WEB-INF/view/base/prod/touchKey/popUpGrpNm.jsp">
+        <c:param name="menuCd" value="${menuCd}"/>
+        <c:param name="menuNm" value="${menuNm}"/>
+    </c:import>
+
     <%-- 매장 판매터치키복사 --%>
     <c:import url="/WEB-INF/view/base/store/view/copyStoreTouchKey.jsp">
     </c:import>
@@ -446,7 +456,7 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20220527.02"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20220527.03"
         charset="utf-8"></script>
 
 <%-- 스타일미리보기 팝업 --%>

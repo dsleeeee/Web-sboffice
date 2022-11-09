@@ -304,6 +304,52 @@ public class KioskKeyMapController {
     }
 
     /**
+     * 키오스크 터치키그룹 조회
+     *
+     * @param kioskKeyMapVO
+     * @param request
+     * @param response
+     * @param model
+     * @author  권지현
+     * @since   2022.11.08
+     */
+    @RequestMapping(value = "/kioskKeyMap/getClsTypeList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getClsTypeList(KioskKeyMapVO kioskKeyMapVO, HttpServletRequest request,
+                                 HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = kioskKeyMapService.getClsTypeList(kioskKeyMapVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, kioskKeyMapVO);
+    }
+
+    /**
+     * 키오스크 터치키그룹 조회
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param kioskKeyMapVOs KioskKeyMapVO
+     * @param model Model
+     * @return Result
+     * @author 권지현
+     * @since 2022.11.08
+     */
+    @RequestMapping(value = "/kioskKeyMap/saveClsType.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveClsType(HttpServletRequest request, HttpServletResponse response,
+                                  @RequestBody KioskKeyMapVO[] kioskKeyMapVOs, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = kioskKeyMapService.saveClsType(kioskKeyMapVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+
+    }
+
+    /**
      * 키오스크 키맵 신규그룹추가
      *
      * @param kioskKeyMapVO
