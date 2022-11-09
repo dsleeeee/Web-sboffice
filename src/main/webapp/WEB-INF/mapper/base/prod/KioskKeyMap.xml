@@ -1514,6 +1514,22 @@
         AND TU_CLS_TYPE = #{tuClsType}
     </delete>
 
+    <!-- 키오스크 키맵매장적용 - 매장에서 사용중인 기존 키맵그룹명 삭제 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_GROUP
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 매장별 키맵그룹을 삭제한다.
+    -->
+    <delete id="deleteStoreTuClsTypeNm" parameterType="kioskKeyMapVO" >
+        /* USE : KioskKeyMapMapper.deleteStoreTuClsTypeNm */
+        DELETE TB_MS_KIOSK_GROUP
+        WHERE STORE_CD = #{storeCd}
+        <if test="posNo != null and posNo != ''">
+            AND POS_NO = #{posNo}
+        </if>
+        AND TU_CLS_TYPE = #{tuClsType}
+    </delete>
+
     <!-- 키오스크 키맵매장적용 - 키맵 매장적용 전 기존 키맵그룹에 엮어있는 상품 삭제 -->
     <!--
         TABLE    : TB_MS_KIOSK_KEY

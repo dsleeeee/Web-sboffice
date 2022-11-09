@@ -462,6 +462,9 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             kioskKeyMapVO.setModDt(currentDt);
             kioskKeyMapVO.setModId(sessionInfoVO.getUserId());
 
+            // 기존 키맵분류명 삭제
+            kioskKeyMapMapper.deleteStoreTuClsTypeNm(kioskKeyMapVO);
+
             // 기존 카테고리(분류) 삭제
             kioskKeyMapMapper.deleteStoreTuClsType(kioskKeyMapVO);
 

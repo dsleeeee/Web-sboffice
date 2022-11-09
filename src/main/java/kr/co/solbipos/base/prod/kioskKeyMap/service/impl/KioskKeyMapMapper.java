@@ -104,6 +104,9 @@ public interface KioskKeyMapMapper {
     /** 키오스크 키맵매장적용 - 매장리스트 조회 */
     List<DefaultMap<String>> getStoreList(KioskKeyMapVO kioskKeyMapVO);
 
+    /** 키오스크 키맵매장적용 - 매장에서 사용중인 기존 키맵그룹명 삭제 */
+    int deleteStoreTuClsTypeNm(KioskKeyMapVO kioskKeyMapVO);
+
     /** 키오스크 키맵매장적용 - 매장에서 사용중인 기존 키맵그룹 삭제 */
     int deleteStoreTuClsType(KioskKeyMapVO kioskKeyMapVO);
 
