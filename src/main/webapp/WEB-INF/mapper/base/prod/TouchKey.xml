@@ -1232,12 +1232,16 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
             SELECT  thtkc.TUKEY_GRP_CD
+            ,       thtkg.TUKEY_GRP_NM
             ,       thtkc.TUKEY_CLASS_CD
             ,       thtkc.TUKEY_CLASS_NM
             ,       NVL(thn.NMCODE_ITEM_2,'N') AS STORE_MOD_YN
             FROM	TB_HQ_TOUCH_KEY_CLASS thtkc
+            ,       TB_HQ_TOUCH_KEY_GROUP thtkg
             ,		TB_HQ_NMCODE thn
             WHERE   thtkc.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND	    thtkc.HQ_OFFICE_CD = thtkg.HQ_OFFICE_CD (+)
+            AND 	thtkc.TUKEY_GRP_CD = thtkg.TUKEY_GRP_CD (+)
             AND 	thtkc.HQ_OFFICE_CD = thn.HQ_OFFICE_CD(+)
             AND 	thtkc.TUKEY_GRP_CD = thn.NMCODE_NM(+)
             AND 	thtkc.TUKEY_CLASS_CD = thn.NMCODE_ITEM_1(+)
@@ -1256,12 +1260,16 @@
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT  thtkc.TUKEY_GRP_CD
+                ,       thtkg.TUKEY_GRP_NM
                 ,       thtkc.TUKEY_CLASS_CD
                 ,       thtkc.TUKEY_CLASS_NM
                 ,       NVL(thn.NMCODE_ITEM_2,'N') AS STORE_MOD_YN
                 FROM	TB_HQ_TOUCH_KEY_CLASS thtkc
+                ,       TB_HQ_TOUCH_KEY_GROUP thtkg
                 ,		TB_HQ_NMCODE thn
                 WHERE   thtkc.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND	    thtkc.HQ_OFFICE_CD = thtkg.HQ_OFFICE_CD (+)
+                AND 	thtkc.TUKEY_GRP_CD = thtkg.TUKEY_GRP_CD (+)
                 AND 	thtkc.HQ_OFFICE_CD = thn.HQ_OFFICE_CD(+)
                 AND 	thtkc.TUKEY_GRP_CD = thn.NMCODE_NM(+)
                 AND 	thtkc.TUKEY_CLASS_CD = thn.NMCODE_ITEM_1(+)

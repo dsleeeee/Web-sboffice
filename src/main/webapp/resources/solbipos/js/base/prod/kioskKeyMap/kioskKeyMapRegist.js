@@ -142,11 +142,10 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
                 divBtnCls.style.visibility='visible'
 
                 if(orgnFg === "STORE" && kioskKeyEnvstVal === "2"){
-                    var divBtnCls = document.getElementById('btnAddCls');
-                    divBtnCls.style.visibility='hidden'
-
-                    var divBtnCls2 = document.getElementById('btnDelCls');
-                    divBtnCls2.style.visibility='hidden'
+                    $("#btnUpCls").css("display", "none");
+                    $("#btnDownCls").css("display", "none");
+                    $("#btnAddCls").css("display", "none");
+                    $("#btnDelCls").css("display", "none");
                 }
             }
 

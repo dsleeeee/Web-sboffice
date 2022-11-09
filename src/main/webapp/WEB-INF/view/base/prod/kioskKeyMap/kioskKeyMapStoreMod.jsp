@@ -78,6 +78,7 @@
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="kioskKeyMap.tuClsType"/>"     binding="tuClsType" width="*" align="center" is-read-only="true" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="kioskKeyMap.tuClsTypeNm"/>"   binding="tuClsTypeNm" width="*" align="center" is-read-only="true" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="kioskKeyMap.tuClsCd"/>"       binding="tuClsCd" width="*" align="center" is-read-only="true" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="kioskKeyMap.tuClsNm"/>"       binding="tuClsNm" width="*" align="center" is-read-only="true" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="kioskKeyMap.storeModYn"/>"    binding="storeModYn" width="*" align="center" data-map="useYnDataMap" ></wj-flex-grid-column>
@@ -87,7 +88,7 @@
         </div>
         <div class="wj-dialog-footer">
             <c:if test="${orgnFg == 'HQ'}">
-                <button class="btn_blue" ng-click="saveStoreModGrp()"><s:message code="cmm.apply" /></button>
+                <button class="btn_blue" ng-click="saveStoreModGrp()"><s:message code="cmm.save" /></button>
             </c:if>
         </div>
     </div>
