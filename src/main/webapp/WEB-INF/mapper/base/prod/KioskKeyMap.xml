@@ -78,12 +78,16 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT 	thkc.TU_CLS_TYPE
+                ,       thkg.TU_CLS_TYPE_NM
                 ,		thkc.TU_CLS_CD
                 ,		thkc.TU_CLS_NM
                 ,		NVL(thn.NMCODE_ITEM_2, 'N') AS STORE_MOD_YN
                 FROM 	TB_HQ_KIOSK_CLS thkc
+                ,       TB_HQ_KIOSK_GROUP thkg
                 ,		TB_HQ_NMCODE thn
                 WHERE 	thkc.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     thkc.HQ_OFFICE_CD = thkg.HQ_OFFICE_CD(+)
+                AND     thkc.TU_CLS_TYPE = thkg.TU_CLS_TYPE(+)
                 AND 	thkc.HQ_OFFICE_CD = thn.HQ_OFFICE_CD(+)
                 AND 	thkc.TU_CLS_TYPE = thn.NMCODE_NM(+)
                 AND 	thkc.TU_CLS_CD = thn.NMCODE_ITEM_1(+)
@@ -102,12 +106,16 @@
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT 	thkc.TU_CLS_TYPE
+                ,       thkg.TU_CLS_TYPE_NM
                 ,		thkc.TU_CLS_CD
                 ,		thkc.TU_CLS_NM
                 ,		NVL(thn.NMCODE_ITEM_2, 'N') AS STORE_MOD_YN
                 FROM 	TB_HQ_KIOSK_CLS thkc
+                ,       TB_HQ_KIOSK_GROUP thkg
                 ,		TB_HQ_NMCODE thn
                 WHERE 	thkc.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     thkc.HQ_OFFICE_CD = thkg.HQ_OFFICE_CD(+)
+                AND     thkc.TU_CLS_TYPE = thkg.TU_CLS_TYPE(+)
                 AND 	thkc.HQ_OFFICE_CD = thn.HQ_OFFICE_CD(+)
                 AND 	thkc.TU_CLS_TYPE = thn.NMCODE_NM(+)
                 AND 	thkc.TU_CLS_CD = thn.NMCODE_ITEM_1(+)
