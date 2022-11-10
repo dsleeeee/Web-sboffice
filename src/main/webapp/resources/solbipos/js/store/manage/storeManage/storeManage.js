@@ -21,7 +21,7 @@ app.controller('storeManageCtrl', ['$scope', '$http', '$timeout', function ($sco
   angular.extend(this, new RootController('storeManageCtrl', $scope, $http, true));
 
   // 조회조건 콤보박스 데이터 Set
-  $scope._setComboData("srchClsFg", clsFg);
+  $scope._setComboData("srchClsFg", clsFgAll);
   $scope._setComboData("srchSysStatFg", sysStatFg);
 
   // 선택 매장
