@@ -190,6 +190,7 @@
 
 <script>
   var clsFg = ${ccu.getCommCodeSelect("001")};
+  var clsFgAll = ${ccu.getCommCode("001")}; // 전체 포함
   var sysStatFg = ${ccu.getCommCodeSelect("005")};
   var areaCd = ${ccu.getCommCodeSelect("061")};
   var orgnFg = "${orgnFg}";
@@ -209,7 +210,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeManage.js?ver=20220928.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeManage.js?ver=20221109.01" charset="utf-8"></script>
 
 <%-- 매장정보 --%>
 <c:import url="/WEB-INF/view/store/manage/storeManage/storeInfo.jsp">
