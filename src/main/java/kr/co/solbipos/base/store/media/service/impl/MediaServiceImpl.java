@@ -163,7 +163,13 @@ public class MediaServiceImpl implements MediaService {
             }
 
             String fileType = mediaMapper.getFileTypeNm(mediaVO);
-            mediaVO.setFileOrgNm(fileType + "_" + mediaVO.getVerSerNo());
+
+            if(mediaVO.getFileOrgNm().length() > 0){
+                String orgFileNm[] = mediaVO.getFileOrgNm().split("\\\\");
+                mediaVO.setFileOrgNm(orgFileNm[orgFileNm.length-1]);
+            } else {
+                mediaVO.setFileOrgNm(fileType + "_" + mediaVO.getVerSerNo());
+            }
 
             mediaVO.setRegDt(insertDt);
             mediaVO.setRegId((String)multi.getParameter("userId"));
@@ -234,9 +240,15 @@ public class MediaServiceImpl implements MediaService {
                         delFile.delete();
                     }
                 }
-            }
 
-            mediaVO.setFileOrgNm(fileType + "_" + mediaVO.getVerSerNo());
+                if(mediaVO.getFileOrgNm().length() > 0){
+                    String orgFileNm[] = mediaVO.getFileOrgNm().split("\\\\");
+                    mediaVO.setFileOrgNm(orgFileNm[orgFileNm.length-1]);
+                } else {
+                    mediaVO.setFileOrgNm(fileType + "_" + mediaVO.getVerSerNo());
+                }
+
+            }
 
             mediaVO.setModDt(insertDt);
             mediaVO.setModId((String)multi.getParameter("userId"));
