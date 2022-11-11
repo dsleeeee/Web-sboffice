@@ -142,6 +142,10 @@ public class TerminalManageServiceImpl implements TerminalManageService{
             } else if(storeTerminalVO.getStatus() == GridDataFg.UPDATE) {
 
                 result += mapper.updatePosTerminalInfo(storeTerminalVO);
+
+            } else if(storeTerminalVO.getStatus() == GridDataFg.DELETE) {
+
+                result += mapper.deletePosTerminalInfo(storeTerminalVO);
             }
         }
         return result;
@@ -169,6 +173,10 @@ public class TerminalManageServiceImpl implements TerminalManageService{
             } else if (storeTerminalVO.getStatus() == GridDataFg.UPDATE) {
 
                 result += mapper.updateCornerTerminalInfo(storeTerminalVO);
+
+            } else if(storeTerminalVO.getStatus() == GridDataFg.DELETE) {
+
+                result += mapper.deleteCornerTerminalInfo(storeTerminalVO);
             }
         }
 

@@ -180,13 +180,22 @@
 
         <div class="fr mb10" id="posBtnArea" style="display:none">
           <%--<button class="btn_skyblue" ng-click="copyEnv()"><s:message code="terminalManage.copy.posEnvst"/></button>--%>
+          <%-- 추가 --%>
           <button class="btn_skyblue" ng-click="posAddRow()"><s:message code="cmm.add"/></button>
+          <%-- 저장 --%>
           <button class="btn_skyblue" ng-click="posSave()"><s:message code="cmm.save"/></button>
+          <%-- 삭제 --%>
+          <button class="btn_skyblue" ng-click="posDel()"><s:message code="cmm.del"/></button>
         </div>
         <div class="fr mb10" id="cornerBtnArea" style="display:none">
+          <%-- 코너추가 --%>
           <button class="btn_skyblue" ng-click="cornerAdd()"><s:message code="terminalManage.cornrAdd"/></button>
+          <%-- 추가 --%>
           <button class="btn_skyblue" ng-click="cornerAddRow()"><s:message code="cmm.add"/></button>
+          <%-- 저장 --%>
           <button class="btn_skyblue" ng-click="cornerSave()"><s:message code="cmm.save"/></button>
+          <%-- 삭제 --%>
+          <button class="btn_skyblue" ng-click="cornerDel()"><s:message code="cmm.del"/></button>
         </div>
 
       </div>
@@ -205,7 +214,7 @@
               beginning-edit="changeVendorFg(s,e)"
               ime-enabled="true">
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="terminalManage.storeCd"/>" binding="storeCd" width="*" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="terminalManage.posNo"/>" binding="posNo" width="*" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="terminalManage.vendorFg"/>" binding="vendorFg" data-map="vendorFgDataMap" width="*"></wj-flex-grid-column>
@@ -255,7 +264,7 @@
   var sysStatFg = ${ccu.getCommCodeSelect("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/terminal.js?ver=20210830.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/terminal.js?ver=20221110.01" charset="utf-8"></script>
 
 <%-- 매장선택 레이어 팝업 --%>
 <%--<c:import url="/WEB-INF/view/store/manage/terminalManage/store.jsp">--%>
