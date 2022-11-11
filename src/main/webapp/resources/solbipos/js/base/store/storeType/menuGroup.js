@@ -118,7 +118,7 @@ app.controller('menuGroupCtrl', ['$scope', '$http', '$timeout', function ($scope
         $scope._inquirySub("/base/store/storeType/storeType/getMenuGroup.sb", params, function() {
 
             // 선택한 매장타입 초기화
-            $("#hdStoreTypeCd").val("");
+            // $("#hdStoreTypeCd").val("");
             $("#lblMenuGroup").text("");
 
             // 버튼 visible 셋팅 - 매장타입관리 grid 버튼은 보이고 나머지 grid 버튼은 숨길것.
