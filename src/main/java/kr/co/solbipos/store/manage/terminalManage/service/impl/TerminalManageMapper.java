@@ -60,11 +60,17 @@ public interface TerminalManageMapper {
     /** 포스 터미널 정보 수정 */
     int updatePosTerminalInfo(StoreTerminalVO storeTerminalVO);
 
+    /** 포스 터미널 정보 삭제 */
+    int deletePosTerminalInfo(StoreTerminalVO storeTerminalVO);
+
     /** 코너 터미널 정보 등록 */
     int insertCornerTerminalInfo(StoreTerminalVO storeTerminalVO);
 
     /** 코너 터미널 정보 수정 */
     int updateCornerTerminalInfo(StoreTerminalVO storeTerminalVO);
+
+    /** 코너 터미널 정보 삭제 */
+    int deleteCornerTerminalInfo(StoreTerminalVO storeTerminalVO);
 
     /** 코너 저장 */
     int insertCorner(StoreCornerVO storeCornerVO);

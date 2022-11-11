@@ -320,6 +320,15 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
     posScope.save();
   };
 
+  // 포스 삭제
+  $scope.posDel = function(){
+    $scope._popConfirm(messages["cmm.choo.delete"], function() {
+      // 포스 저장
+      var posScope = agrid.getScope('posCtrl');
+      posScope.savePosDel();
+    });
+  };
+
   // 코너 터미널 그리드 행 추가
   $scope.cornerAddRow = function(){
 
@@ -377,6 +386,15 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
 
     });
   }
+
+  // 코너 삭제
+  $scope.cornerDel = function(){
+    $scope._popConfirm(messages["cmm.choo.delete"], function() {
+      // 코너 저장
+      var cornerScope = agrid.getScope('cornerCtrl');
+      cornerScope.saveCornerDel();
+    });
+  };
 
 }]);
 
@@ -542,6 +560,12 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.flex.collectionView.itemsAdded[i].posNo = terminalScope.getPosFgVal();
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
+    for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
+      $scope.flex.collectionView.itemsRemoved[i].status = "D";
+      $scope.flex.collectionView.itemsRemoved[i].storeCd = $("#lblStoreCd").text();
+      $scope.flex.collectionView.itemsRemoved[i].posNo = terminalScope.getPosFgVal();
+      params.push($scope.flex.collectionView.itemsRemoved[i]);
+    }
 
     // 필수값 체크
     for(var i=0; i<params.length; i++) {
@@ -611,6 +635,21 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
     //   // "complete" code here
     // });
   };
+
+  // 포스 정보 삭제
+  $scope.savePosDel = function(){
+    for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+      var item = $scope.flex.collectionView.items[i];
+
+      if(item.gChk) {
+        $scope.flex.collectionView.removeAt(i);
+      }
+    }
+
+    // 포스 정보 저장
+    $scope.save();
+  };
+
 }]);
 
 /***************************************************************************
@@ -755,6 +794,12 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.flex.collectionView.itemsAdded[i].cornrCd = terminalScope.getCornerFgVal();
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
+    for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
+      $scope.flex.collectionView.itemsRemoved[i].status = "D";
+      $scope.flex.collectionView.itemsRemoved[i].storeCd = $("#lblStoreCd").text();
+      $scope.flex.collectionView.itemsRemoved[i].cornrCd = terminalScope.getCornerFgVal();
+      params.push($scope.flex.collectionView.itemsRemoved[i]);
+    }
 
     //필수값 체크
     for(var i=0; i<params.length; i++) {
@@ -826,4 +871,19 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
     //   // "complete" code here
     // });
   };
+
+  // 코너 정보 삭제
+  $scope.saveCornerDel = function(){
+    for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+      var item = $scope.flex.collectionView.items[i];
+
+      if(item.gChk) {
+        $scope.flex.collectionView.removeAt(i);
+      }
+    }
+
+    // 코너 정보 저장
+    $scope.save();
+  };
+
 }]);

@@ -263,6 +263,20 @@
            AND VENDOR_CD = #{vendorCd}
     </update>
 
+    <!-- 포스 터미널 정보 삭제 -->
+    <!--
+        TABLE    : TB_MS_POS_TERMNL
+        COMMENTS : 포스 터미널의 정보를 삭제한다.
+    -->
+    <delete id="deletePosTerminalInfo" parameterType="storeTerminalVO">
+        /* TerminalManageMapper.deletePosTerminalInfo */
+        DELETE
+        FROM TB_MS_POS_TERMNL
+        WHERE STORE_CD = #{storeCd}
+        AND POS_NO = #{posNo}
+        AND VENDOR_FG = #{vendorFg}
+        AND VENDOR_CD = #{vendorCd}
+    </delete>
 
     <!-- 코너 터미널 정보 등록 -->
     <!--
@@ -319,6 +333,21 @@
            AND VENDOR_FG = #{vendorFg}
            AND VENDOR_CD = #{vendorCd}
     </update>
+
+    <!-- 코너 터미널 정보 삭제 -->
+    <!--
+        TABLE    : TB_MS_CORNER_TERMNL
+        COMMENTS : 코너 터미널의 정보를 삭제한다.
+    -->
+    <delete id="deleteCornerTerminalInfo" parameterType="storeTerminalVO">
+        /* TerminalManageMapper.deleteCornerTerminalInfo */
+        DELETE
+        FROM TB_MS_CORNER_TERMNL
+        WHERE STORE_CD = #{storeCd}
+        AND CORNR_CD = #{cornrCd}
+        AND VENDOR_FG = #{vendorFg}
+        AND VENDOR_CD = #{vendorCd}
+    </delete>
 
     <!-- 코너 저장 -->
     <!--
