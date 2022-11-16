@@ -226,6 +226,15 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
     $scope.dlvFgInStore = true;
     $scope.dlvFgDelivery = false;
     $scope.dlvFgPacking = false;
+    $scope.dlvFgYogiyo = false;
+    $scope.dlvFgCoupangeats = false;
+    $scope.dlvFgWmpo = false;
+    $scope.dlvFgPayco = false;
+    $scope.dlvFgSpecialdelivery = false;
+    $scope.dlvFgKakao = false;
+    $scope.dlvFgBaemin = false;
+    $scope.dlvFgDdangyo = false;
+    $scope.dlvFgNpaysmartorder = false;
 
     // 적용조건 - 적용기간 셋팅
     $scope.isCheckedPeriod = false;
@@ -389,6 +398,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                 $scope.promotionTypeCombo.selectedValue = info.promoType; // 프로모션 종류
 
                 // ------------ 적용조건 ------------
+                $scope.getImg();// 프로모션 키오스크 배너 이미지 셋팅
                 if(info.dlv1Yn === "Y"){
                     $("input:checkbox[id='chkDlvFgInStore']").prop("checked", true); // 적용구분(내점)
                 }else{
@@ -403,6 +413,51 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                     $("input:checkbox[id='chkDlvFgPacking']").prop("checked", true); // 적용구분(포장)
                 }else{
                     $("input:checkbox[id='chkDlvFgPacking']").prop("checked", false); // 적용구분(포장)
+                }
+                if(info.dlv4Yn === "Y"){
+                    $("input:checkbox[id='chkDlvFgYogiyo']").prop("checked", true); // 적용구분(요기요)
+                }else{
+                    $("input:checkbox[id='chkDlvFgYogiyo']").prop("checked", false); // 적용구분(요기요)
+                }
+                if(info.dlv5Yn === "Y"){
+                    $("input:checkbox[id='chkDlvFgCoupangeats']").prop("checked", true); // 적용구분(쿠팡이츠)
+                }else{
+                    $("input:checkbox[id='chkDlvFgCoupangeats']").prop("checked", false); // 적용구분(쿠팡이츠)
+                }
+                if(info.dlv6Yn === "Y"){
+                    $("input:checkbox[id='chkDlvFgWmpo']").prop("checked", true); // 적용구분(위메프오)
+                }else{
+                    $("input:checkbox[id='chkDlvFgWmpo']").prop("checked", false); // 적용구분(위메프오)
+                }
+                if(info.dlv7Yn === "Y"){
+                    $("input:checkbox[id='chkDlvFgPayco']").prop("checked", true); // 적용구분(페이코)
+                }else{
+                    $("input:checkbox[id='chkDlvFgPayco']").prop("checked", false); // 적용구분(페이코)
+                }
+                if(info.dlv8Yn === "Y"){
+                    $("input:checkbox[id='chkDlvFgSpecialdelivery']").prop("checked", true); // 적용구분(배달특급)
+                }else{
+                    $("input:checkbox[id='chkDlvFgSpecialdelivery']").prop("checked", false); // 적용구분(배달특급)
+                }
+                if(info.dlv9Yn === "Y"){
+                    $("input:checkbox[id='chkDlvFgKakao']").prop("checked", true); // 적용구분(카카오)
+                }else{
+                    $("input:checkbox[id='chkDlvFgKakao']").prop("checked", false); // 적용구분(카카오)
+                }
+                if(info.dlv10Yn === "Y"){
+                    $("input:checkbox[id='chkDlvFgBaemin']").prop("checked", true); // 적용구분(배달의민족)
+                }else{
+                    $("input:checkbox[id='chkDlvFgBaemin']").prop("checked", false); // 적용구분(배달의민족)
+                }
+                if(info.dlv11Yn === "Y"){
+                    $("input:checkbox[id='chkDlvFgDdangyo']").prop("checked", true); // 적용구분(땡겨요)
+                }else{
+                    $("input:checkbox[id='chkDlvFgDdangyo']").prop("checked", false); // 적용구분(땡겨요)
+                }
+                if(info.dlv12Yn === "Y"){
+                    $("input:checkbox[id='chkDlvFgNpaysmartorder']").prop("checked", true); // 적용구분(네이버주문)
+                }else{
+                    $("input:checkbox[id='chkDlvFgNpaysmartorder']").prop("checked", false); // 적용구분(네이버주문)
                 }
 
                 if(info.dateYn === "Y"){
@@ -511,6 +566,18 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                     $("#partnerChargeUprc").val("");
                 }
 
+                if(info.momsPurchsCntLimit !== "" && info.momsPurchsCntLimit !== "0" && info.momsPurchsCntLimit !== 0){ // 구매횟수제한
+                    $("#momsPurchsCntLimit").val(info.momsPurchsCntLimit);
+                }else{
+                    $("#momsPurchsCntLimit").val("");
+                }
+
+                if(info.momsPurchsQtyLimit !== "" && info.momsPurchsQtyLimit !== "0" && info.momsPurchsQtyLimit !== 0){ // 구매갯수제한
+                    $("#momsPurchsQtyLimit").val(info.momsPurchsQtyLimit);
+                }else{
+                    $("#momsPurchsQtyLimit").val("");
+                }
+
                 // ------------ 적용상품 ------------
 
                 // 프로모션종류 '영수증 전체할인'은 적용상품 사용 안함
@@ -615,6 +682,15 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             params.dlv1Yn = $("#chkDlvFgInStore").is(":checked") === true ? 'Y' : 'N'; // 적용구분(내점)
             params.dlv2Yn = $("#chkDlvFgDelivery").is(":checked") === true ? 'Y' : 'N'; // 적용구분(배달)
             params.dlv3Yn = $("#chkDlvFgPacking").is(":checked") === true ? 'Y' : 'N'; // 적용구분(포장)
+            params.dlv4Yn = $("#chkDlvFgYogiyo").is(":checked") === true ? 'Y' : 'N'; // 적용구분(요기요)
+            params.dlv5Yn = $("#chkDlvFgCoupangeats").is(":checked") === true ? 'Y' : 'N'; // 적용구분(쿠팡이츠)
+            params.dlv6Yn = $("#chkDlvFgWmpo").is(":checked") === true ? 'Y' : 'N'; // 적용구분(위메프오)
+            params.dlv7Yn = $("#chkDlvFgPayco").is(":checked") === true ? 'Y' : 'N'; // 적용구분(페이코)
+            params.dlv8Yn = $("#chkDlvFgSpecialdelivery").is(":checked") === true ? 'Y' : 'N'; // 적용구분(배달특급)
+            params.dlv9Yn = $("#chkDlvFgKakao").is(":checked") === true ? 'Y' : 'N'; // 적용구분(카카오)
+            params.dlv10Yn = $("#chkDlvFgBaemin").is(":checked") === true ? 'Y' : 'N'; // 적용구분(배달의민족)
+            params.dlv11Yn = $("#chkDlvFgDdangyo").is(":checked") === true ? 'Y' : 'N'; // 적용구분(땡겨요)
+            params.dlv12Yn = $("#chkDlvFgNpaysmartorder").is(":checked") === true ? 'Y' : 'N'; // 적용구분(네이버주문)
             params.dateYn = $("#chkPeriod").is(":checked") === true ? 'Y' : 'N'; // 적용기간 사용여부
             params.startYmd = $("#chkPeriod").is(":checked") === true ? wijmo.Globalize.format(promotionStartDate.value, 'yyyyMMdd') : '00010101'; // 적용기간 시작일
             params.endYmd = $("#chkPeriod").is(":checked") === true ? wijmo.Globalize.format(promotionEndDate.value, 'yyyyMMdd') : '99991231'; // 적용기간 종료일
@@ -687,6 +763,8 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             params.hqChargeUprc = $("#hqChargeUprc").val(); // 본사분담금
             params.msChargeUprc = $("#msChargeUprc").val(); // 매장분담금
             params.partnerChargeUprc = $("#partnerChargeUprc").val(); // 제휴분담금
+            params.momsPurchsCntLimit = $("#momsPurchsCntLimit").val(); // 구매횟수제한
+            params.momsPurchsQtyLimit = $("#momsPurchsQtyLimit").val(); // 구매갯수제한
 
             // ------------ 적용상품 ------------
             params.prodCdYn = $("#chkProd").is(":checked") === true ? 'Y' : 'N'; // 적용상품
@@ -738,23 +816,122 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $.postJSONArray("/base/promotion/promotion/save.sb", params, function (result) {
                 if (result.status === "OK") {
-                    $scope.$broadcast('loadingPopupInactive');
 
-                    // 저장되었습니다.
-                    $scope._popMsg(messages["cmm.saveSucc"]);
+                    // 새 프로모션 배너를 등록하는 경우
+                    if (!isNull($("#fileKioskBanner")[0].files[0])) {
 
-                    // 입력 폼 초기화
-                    $scope.reset();
+                        var formData = new FormData($("#regForm")[0]);
 
-                    // 리스트 재조회
-                    $scope._broadcast('promotionCtrl');
+                        formData.append("orgnFg", orgnFg); // sessionInfoVO에 있는 orgnFg 값을 제대로 읽어오지 못하는 현상때문에 추가, form태그가 원인??
+                        formData.append("orgnCd", orgnCd);
+                        formData.append("hqOfficeCd", hqOfficeCd);
+                        formData.append("storeCd", storeCd);
+                        formData.append("fileType", "009");
+                        formData.append("useYn", $scope.useYnCombo.selectedValue);
+                        formData.append("startDate", params.startYmd);
+                        formData.append("endDate", params.endYmd);
+                        formData.append("timeYn", params.timeYn);
+                        formData.append("startTime", params.startTime);
+                        formData.append("endTime", params.endTime);
+                        formData.append("weekYn", params.weekYn);
+                        formData.append("monYn", params.monYn);
+                        formData.append("tueYn", params.tueYn);
+                        formData.append("wedYn", params.wedYn);
+                        formData.append("thuYn", params.thuYn);
+                        formData.append("friYn", params.friYn);
+                        formData.append("satYn", params.satYn);
+                        formData.append("sunYn", params.sunYn);
+                        formData.append("promotionCd", $("#hdPromotionCd").val());
+                        formData.append("regId", userId);
+                        formData.append("modId", userId);
+                        formData.append("verSerNo", $("#hdFileNo").val()); // 기존 파일이 있는지 확인하여, 등록 or 수정
 
-                    // 상세 재조회
-                    var params    = {};
-                    params.hqOfficeCd = hqOfficeCd;
-                    params.promotionCd = result.data;
-                    $scope._broadcast('promotionRegCtrl', params);
-                    
+                        $.ajax({
+                            url: "/base/promotion/promotion/savePromotionBanner.sb",
+                            type: "POST",
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            cache: false,
+                            success: function(result2) {
+                                if (result2.status === "OK") {
+                                    console.log("이미지 저장 OK");
+                                }
+                                else if (result2.status === "FAIL") {
+                                    var msg = result2.status + " : " + result2.data.msg;
+                                    $scope._popMsg(msg);
+                                    $scope.$broadcast('loadingPopupInactive');
+                                }
+                                else if (result2.status === "SERVER_ERROR") {
+                                    $scope._popMsg(result2.message);
+                                    $scope.$broadcast('loadingPopupInactive');
+                                }
+                                /*else if(result2.status === undefined) {
+                                    location.href = "/";
+                                }*/
+                                else {
+                                    var msg = result2.status + " : " + result2.message;
+                                    $scope._popMsg(msg);
+                                    $scope.$broadcast('loadingPopupInactive');
+                                }
+                            },
+                            error : function(result2){
+                                $scope._popMsg("error");
+                                $scope.$broadcast('loadingPopupInactive');
+                            }
+                        },function(){
+                            $scope._popMsg("Ajax Fail By HTTP Request 2");
+                            $scope.$broadcast('loadingPopupInactive');
+                        });
+                        
+                    }else{
+                        if ($("#hdFileNo").val() !== "") { // 기존 이미지 파일이 있는 경우
+
+                            // 파일 정보 테이블에 프로모션 정보만 UPDATE
+
+                            var params3 = {};
+                            params3.fileType = "009";
+                            params3.useYn = $scope.useYnCombo.selectedValue;
+                            params3.startDate = params.startYmd;
+                            params3.endDate = params.endYmd;
+                            params3.timeYn = params.timeYn;
+                            params3.startTime = params.startTime;
+                            params3.endTime = params.endTime;
+                            params3.weekYn = params.weekYn;
+                            params3.monYn = params.monYn;
+                            params3.tueYn = params.tueYn;
+                            params3.wedYn = params.wedYn;
+                            params3.thuYn = params.thuYn;
+                            params3.friYn = params.friYn;
+                            params3.satYn = params.satYn;
+                            params3.sunYn = params.sunYn;
+                            params3.promotionCd = $("#hdPromotionCd").val();
+                            params3.verSerNo = $("#hdFileNo").val();
+
+                            $scope._postJSONSave.withPopUp("/base/promotion/promotion/modPromotionBanner.sb", params3, function () {});
+                        }
+                    }
+
+                    setTimeout(function() {
+
+                        $scope.$broadcast('loadingPopupInactive');
+
+                        // 저장되었습니다.
+                        $scope._popMsg(messages["cmm.saveSucc"]);
+
+                        // 입력 폼 초기화
+                        $scope.reset();
+
+                        // 리스트 재조회
+                        $scope._broadcast('promotionCtrl');
+
+                        // 상세 재조회
+                        var params2    = {};
+                        params2.hqOfficeCd = hqOfficeCd;
+                        params2.promotionCd = result.data;
+                        $scope._broadcast('promotionRegCtrl', params2);
+
+                    }, 500);
 
                 } else {
                     $scope.$broadcast('loadingPopupInactive');
@@ -778,12 +955,48 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             return false;
         }
 
+        // 키오스크 배너 이미지가 있는 경우, 체크
+        if (!isNull($("#fileKioskBanner")[0].files[0])) {
+
+            // 상품이미지 크기제한 체크
+            var maxSize = 20 * 1024 * 1024;
+            var fileSize = document.getElementById("fileKioskBanner").files[0].size;
+            if (fileSize > maxSize) {
+                $scope._popMsg(messages["promotion.fileSize.max"]); // 파일사이즈는 최대 20MB까지 가능합니다.
+                return;
+            }
+
+            // 이미지명 형식 체크
+            var imgFullNm = $("#fileKioskBanner").val().substring($("#fileKioskBanner").val().lastIndexOf('\\') + 1);
+            if(1 > imgFullNm.lastIndexOf('.')){
+                $scope._popMsg(messages["promotion.fileNmChk.msg"]); // 파일명 또는 확장자가 올바르지 않습니다. 다시 확인해주세요.
+                return;
+            }
+
+            // 이미지 확장자 체크
+            var reg = /(.*?)\.(png|PNG|jpg|JPG|gif|GIF)$/;
+
+            if(!$("#fileKioskBanner").val().match(reg)) {
+               $scope._popMsg(messages["promotion.fileExtensionChk.msg"]); // 확장자가 .png .PNG 또는 .jpg .JPG 또는 .gif .GIF 인 파일만 등록가능합니다.
+               return;
+            }
+        }
+
         // 적용구분은 한 개 이상 선택하세요.
         var chkDlvFg = 0;
 
         if($("#chkDlvFgInStore").is(":checked")) chkDlvFg++;
         if($("#chkDlvFgDelivery").is(":checked")) chkDlvFg++;
         if($("#chkDlvFgPacking").is(":checked")) chkDlvFg++;
+        if($("#chkDlvFgYogiyo").is(":checked")) chkDlvFg++;
+        if($("#chkDlvFgCoupangeats").is(":checked")) chkDlvFg++;
+        if($("#chkDlvFgWmpo").is(":checked")) chkDlvFg++;
+        if($("#chkDlvFgPayco").is(":checked")) chkDlvFg++;
+        if($("#chkDlvFgSpecialdelivery").is(":checked")) chkDlvFg++;
+        if($("#chkDlvFgKakao").is(":checked")) chkDlvFg++;
+        if($("#chkDlvFgBaemin").is(":checked")) chkDlvFg++;
+        if($("#chkDlvFgDdangyo").is(":checked")) chkDlvFg++;
+        if($("#chkDlvFgNpaysmartorder").is(":checked")) chkDlvFg++;
 
         if(chkDlvFg === 0){
             $scope._popMsg(messages["promotion.chk.DlvFg"]);
@@ -905,9 +1118,22 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
         $scope.promotionTypeCombo.selectedIndex = 0; // 프로모션 종류
 
         // ------------ 적용조건 ------------
+        $("#lblFileNm").text("");
+        $("#hdFileNo").val("");
+        $("#lblFileSize").text("");
+        $scope.resetFile("fileKioskBanner"); // 프로모션 키오스크 배너 이미지
         $("input:checkbox[id='chkDlvFgInStore']").prop("checked", true); // 적용구분(내점)
         $("input:checkbox[id='chkDlvFgDelivery']").prop("checked", false); // 적용구분(배달)
         $("input:checkbox[id='chkDlvFgPacking']").prop("checked", false); // 적용구분(포장)
+        $("input:checkbox[id='chkDlvFgYogiyo']").prop("checked", false); // 적용구분(요기요)
+        $("input:checkbox[id='chkDlvFgCoupangeats']").prop("checked", false); // 적용구분(쿠팡이츠)
+        $("input:checkbox[id='chkDlvFgWmpo']").prop("checked", false); // 적용구분(위메프오)
+        $("input:checkbox[id='chkDlvFgPayco']").prop("checked", false); // 적용구분(페이코)
+        $("input:checkbox[id='chkDlvFgSpecialdelivery']").prop("checked", false); // 적용구분(배달특급)
+        $("input:checkbox[id='chkDlvFgKakao']").prop("checked", false); // 적용구분(카카오)
+        $("input:checkbox[id='chkDlvFgBaemin']").prop("checked", false); // 적용구분(배민)
+        $("input:checkbox[id='chkDlvFgDdangyo']").prop("checked", false); // 적용구분(땡겨요)
+        $("input:checkbox[id='chkDlvFgNpaysmartorder']").prop("checked", false); // 적용구분(네이버주문)
 
         $("input:checkbox[id='chkPeriod']").prop("checked", false); // 적용기간
         promotionStartDate.value = getCurDate('-');
@@ -946,6 +1172,8 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
         $("#hqChargeUprc").val(""); // 본사분담금
         $("#msChargeUprc").val(""); // 매장분담금
         $("#partnerChargeUprc").val(""); // 제휴분담금
+        $("#momsPurchsCntLimit").val(""); // 구매횟수제한
+        $("#momsPurchsQtyLimit").val(""); // 구매갯수제한
 
         // ------------ 적용상품 ------------
         $("input:checkbox[id='chkProd']").prop("checked", false); // 적용상품
@@ -1528,6 +1756,180 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
         $scope.promotionExampleLayer.show(true);
         $scope._broadcast('promotionExampleCtrl');
     };
+
+    // 파일업로드시 파일사이즈 변경
+    $scope.uploadChange = function(){
+        $scope.$apply(function() {
+          var maxSize = 20 * 1024 * 1024;
+          var fileSize = document.getElementById("fileKioskBanner").files[0].size;
+          if(fileSize > maxSize) {
+            $scope._popMsg(messages["promotion.fileSize.max"]); // 파일사이즈는 최대 20MB까지 가능합니다.
+
+            // 첨부파일 리셋
+            var agent = navigator.userAgent.toLowerCase();
+            if ((navigator.appName == 'Netscape' && navigator.userAgent.search('Trident') != -1) || (agent.indexOf("msie") != -1)){
+              // ie 일때
+              $("#fileKioskBanner").replaceWith( $("#fileKioskBanner").clone(true) );
+              $scope.fileKioskBanner = "";
+            } else {
+              // other browser 일때
+              $("#fileKioskBanner").val("");
+              $scope.fileKioskBanner = "";
+            }
+            $("#lblFileSize").text("");
+            return false;
+          } else {
+            $("#lblFileSize").text(fileSize);
+          }
+        });
+    };
+
+    // 이미지 조회
+    $scope.getImg = function () {
+
+        // 이미지와 첨부파일 초기화
+        $scope.imgCancel("009", 'A');
+
+        var params = [];
+        params.fileType = "009";
+        params.promotionCd = $("#hdPromotionCd").val();
+
+        $scope._postJSONQuery.withOutPopUp("/base/promotion/promotion/getPromotionBanner.sb", params, function (response) {
+
+            if (response.data.data.list.length > 0) {
+                var list = response.data.data.list;
+
+                for (var i = 0; i < list.length; i++) {
+
+                    if(list[i].fileUseType === "009"){
+                        $("#lblFileNm").text(list[i].fileOrgNm);
+                        $("#hdFileNo").val(list[i].adverFileNo);
+                    }
+                }
+            }
+
+        });
+
+    };
+
+    // 이미지 선택취소
+    $scope.imgCancel = function(imgFg, type){
+
+        // type - A: 무조건 이미지 관련 데이터 초기화(프로모션 리스트 조회, 프로모션코드 클릭 시 해당)
+        // type - F: 이미지 파일이 등록되어있으면 '선택취소' 버튼 클릭 시 동작 안하도록
+        if(type === "F"){
+            if(imgFg === "009") {
+                if ($("#hdFileNo").val() !== "") { // 기존 이미지 파일이 있는 경우
+                    if ($("#fileKioskBanner").val() !== "") { // 새 첨부 이미지를 넣고 선택 취소 시,
+                        // 재조회
+                        $scope.getImg();
+                        return;
+                    } else {
+                        return;
+                    }
+                }
+            }
+        }
+
+        var element = "";
+
+        // 첨부파일 초기화
+        if (imgFg === "009") {
+            $("#lblFileNm").text("");
+            $("#hdFileNo").val("");
+            $("#lblFileSize").text("");
+            element = "fileKioskBanner";
+        }
+
+        $scope.resetFile(element);
+    };
+
+    // 브라우저에 따른 첨부파일 초기화
+    $scope.resetFile = function(element){
+
+        var agent = navigator.userAgent.toLowerCase();
+
+        if ( (navigator.appName == 'Netscape' && navigator.userAgent.search('Trident') != -1) || (agent.indexOf("msie") != -1) ){
+            // ie 일때
+            //$("#" + element).replaceWith( $("#" + element).clone(true) );
+            $("#" + element).val("");
+        } else {
+            // other browser 일때
+            $("#" + element).val("");
+        }
+    };
+
+    // 이미지 삭제
+    $scope.delImg = function (imgFg) {
+
+        // 등록한 이미지가 없을때 삭제버튼 클릭 시 동작 안하도록
+        if(imgFg === "009"){
+            if($("#hdFileNo").val() === ""){
+                return;
+            }
+        }
+
+        // 이미지를 삭제하시겠습니까?
+        var msg = messages["promotion.fileDel.msg"];
+        s_alert.popConf(msg, function () {
+
+            var formData = new FormData($("#regForm")[0]);
+
+            formData.append("orgnFg", orgnFg); // sessionInfoVO에 있는 orgnFg 값을 제대로 읽어오지 못하는 현상때문에 추가, form태그가 원인??
+            formData.append("orgnCd", orgnCd);
+            formData.append("hqOfficeCd", hqOfficeCd);
+            formData.append("storeCd", storeCd);
+            formData.append("fileType", "009");
+            formData.append("promotionCd", $("#hdPromotionCd").val());
+            formData.append("verSerNo", $("#hdFileNo").val());
+
+            $scope.$broadcast('loadingPopupActive');
+
+            $.ajax({
+                url: "/base/promotion/promotion/delPromotionBanner.sb",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function(result) {
+
+                    if (result.status === "OK") {
+                        // 삭제 되었습니다.
+                        $scope._popMsg(messages["cmm.delSucc"]);
+
+                        // 재조회
+                        $scope.getImg();
+
+                        $scope.$broadcast('loadingPopupInactive');
+                    }
+                    else if (result.status === "FAIL") {
+                        $scope._popMsg('Ajax Fail By HTTP Request');
+                        $scope.$broadcast('loadingPopupInactive');
+                    }
+                    else if (result.status === "SERVER_ERROR") {
+                        $scope._popMsg(result.message);
+                        $scope.$broadcast('loadingPopupInactive');
+                    }
+                    /*else if(result.status === undefined) {
+                        location.href = "/";
+                    }*/
+                    else {
+                        var msg = result.status + " : " + result.message;
+                        $scope._popMsg(msg);
+                        $scope.$broadcast('loadingPopupInactive');
+                    }
+                },
+                error : function(result){
+                    $scope._popMsg("error");
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+            },function(){
+                $scope._popMsg("Ajax Fail By HTTP Request");
+                $scope.$broadcast('loadingPopupInactive');
+            });
+        });
+    }
 
 }]);
 

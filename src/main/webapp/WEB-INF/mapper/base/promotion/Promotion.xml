@@ -262,6 +262,8 @@
                                       #{hqChargeUprc} AS HQ_CHARGE_UPRC,
                                       #{msChargeUprc} AS MS_CHARGE_UPRC,
                                       #{partnerChargeUprc} AS PARTNER_CHARGE_UPRC,
+                                      #{momsPurchsCntLimit} AS MOMS_PURCHS_CNT_LIMIT,
+                                      #{momsPurchsQtyLimit} AS MOMS_PURCHS_QTY_LIMIT,
                                       #{prodCdYn} AS PROD_CD_YN,
                                       #{selectProdDs} AS SELECT_PROD_DS,
                                       <!-- #{selectProdCrossFg} AS SELECT_CROSS_FG, -->
@@ -273,6 +275,15 @@
                                       #{dlv1Yn} AS DLV1_YN,
                                       #{dlv2Yn} AS DLV2_YN,
                                       #{dlv3Yn} AS DLV3_YN,
+                                      #{dlv4Yn} AS DLV4_YN,
+                                      #{dlv5Yn} AS DLV5_YN,
+                                      #{dlv6Yn} AS DLV6_YN,
+                                      #{dlv7Yn} AS DLV7_YN,
+                                      #{dlv8Yn} AS DLV8_YN,
+                                      #{dlv9Yn} AS DLV9_YN,
+                                      #{dlv10Yn} AS DLV10_YN,
+                                      #{dlv11Yn} AS DLV11_YN,
+                                      #{dlv12Yn} AS DLV12_YN,
                                       #{regDt} AS REG_DT,
                                       #{regId} AS REG_ID,
                                       #{modDt} AS MOD_DT,
@@ -303,6 +314,8 @@
                            A.HQ_CHARGE_UPRC = B.HQ_CHARGE_UPRC,
                            A.MS_CHARGE_UPRC = B.MS_CHARGE_UPRC,
                            A.PARTNER_CHARGE_UPRC = B.PARTNER_CHARGE_UPRC,
+                           A.MOMS_PURCHS_CNT_LIMIT = B.MOMS_PURCHS_CNT_LIMIT,
+                           A.MOMS_PURCHS_QTY_LIMIT = B.MOMS_PURCHS_QTY_LIMIT,
                            A.PROD_CD_YN = B.PROD_CD_YN,
                            A.SELECT_PROD_DS = B.SELECT_PROD_DS,
                            <!-- A.SELECT_CROSS_FG = B.SELECT_CROSS_FG, -->
@@ -314,6 +327,15 @@
                            A.DLV1_YN = B.DLV1_YN,
                            A.DLV2_YN = B.DLV2_YN,
                            A.DLV3_YN = B.DLV3_YN,
+                           A.DLV4_YN = B.DLV4_YN,
+                           A.DLV5_YN = B.DLV5_YN,
+                           A.DLV6_YN = B.DLV6_YN,
+                           A.DLV7_YN = B.DLV7_YN,
+                           A.DLV8_YN = B.DLV8_YN,
+                           A.DLV9_YN = B.DLV9_YN,
+                           A.DLV10_YN = B.DLV10_YN,
+                           A.DLV11_YN = B.DLV11_YN,
+                           A.DLV12_YN = B.DLV12_YN,
                            A.MOD_DT = B.MOD_DT,
                            A.MOD_ID = B.MOD_ID
                      WHEN NOT MATCHED THEN
@@ -341,6 +363,8 @@
                            A.HQ_CHARGE_UPRC,
                            A.MS_CHARGE_UPRC,
                            A.PARTNER_CHARGE_UPRC,
+                           A.MOMS_PURCHS_CNT_LIMIT,
+                           A.MOMS_PURCHS_QTY_LIMIT,
                            A.PROD_CD_YN,
                            A.SELECT_PROD_DS,
                            <!-- A.SELECT_CROSS_FG, -->
@@ -352,6 +376,15 @@
                            A.DLV1_YN,
                            A.DLV2_YN,
                            A.DLV3_YN,
+                           A.DLV4_YN,
+                           A.DLV5_YN,
+                           A.DLV6_YN,
+                           A.DLV7_YN,
+                           A.DLV8_YN,
+                           A.DLV9_YN,
+                           A.DLV10_YN,
+                           A.DLV11_YN,
+                           A.DLV12_YN,
                            A.REG_DT,
                            A.REG_ID,
                            A.MOD_DT,
@@ -381,6 +414,8 @@
                            B.HQ_CHARGE_UPRC,
                            B.MS_CHARGE_UPRC,
                            B.PARTNER_CHARGE_UPRC,
+                           B.MOMS_PURCHS_CNT_LIMIT,
+                           B.MOMS_PURCHS_QTY_LIMIT,
                            B.PROD_CD_YN,
                            B.SELECT_PROD_DS,
                            <!-- B.SELECT_CROSS_FG, -->
@@ -392,6 +427,15 @@
                            B.DLV1_YN,
                            B.DLV2_YN,
                            B.DLV3_YN,
+                           B.DLV4_YN,
+                           B.DLV5_YN,
+                           B.DLV6_YN,
+                           B.DLV7_YN,
+                           B.DLV8_YN,
+                           B.DLV9_YN,
+                           B.DLV10_YN,
+                           B.DLV11_YN,
+                           B.DLV12_YN,
                            B.REG_DT,
                            B.REG_ID,
                            B.MOD_DT,
@@ -424,6 +468,8 @@
                                       #{hqChargeUprc} AS HQ_CHARGE_UPRC,
                                       #{msChargeUprc} AS MS_CHARGE_UPRC,
                                       #{partnerChargeUprc} AS PARTNER_CHARGE_UPRC,
+                                      #{momsPurchsCntLimit} AS MOMS_PURCHS_CNT_LIMIT,
+                                      #{momsPurchsQtyLimit} AS MOMS_PURCHS_QTY_LIMIT,
                                       #{prodCdYn} AS PROD_CD_YN,
                                       #{selectProdDs} AS SELECT_PROD_DS,
                                       <!-- #{selectProdCrossFg} AS SELECT_CROSS_FG, -->
@@ -434,6 +480,15 @@
                                       #{dlv1Yn} AS DLV1_YN,
                                       #{dlv2Yn} AS DLV2_YN,
                                       #{dlv3Yn} AS DLV3_YN,
+                                      #{dlv4Yn} AS DLV4_YN,
+                                      #{dlv5Yn} AS DLV5_YN,
+                                      #{dlv6Yn} AS DLV6_YN,
+                                      #{dlv7Yn} AS DLV7_YN,
+                                      #{dlv8Yn} AS DLV8_YN,
+                                      #{dlv9Yn} AS DLV9_YN,
+                                      #{dlv10Yn} AS DLV10_YN,
+                                      #{dlv11Yn} AS DLV11_YN,
+                                      #{dlv12Yn} AS DLV12_YN,
                                       #{regDt} AS REG_DT,
                                       #{regId} AS REG_ID,
                                       #{modDt} AS MOD_DT,
@@ -464,6 +519,8 @@
                             A.HQ_CHARGE_UPRC = B.HQ_CHARGE_UPRC,
                             A.MS_CHARGE_UPRC = B.MS_CHARGE_UPRC,
                             A.PARTNER_CHARGE_UPRC = B.PARTNER_CHARGE_UPRC,
+                            A.MOMS_PURCHS_CNT_LIMIT = B.MOMS_PURCHS_CNT_LIMIT,
+                            A.MOMS_PURCHS_QTY_LIMIT = B.MOMS_PURCHS_QTY_LIMIT,
                             A.PROD_CD_YN = B.PROD_CD_YN,
                             A.SELECT_PROD_DS = B.SELECT_PROD_DS,
                             <!-- A.SELECT_CROSS_FG = B.SELECT_CROSS_FG, -->
@@ -474,6 +531,15 @@
                             A.DLV1_YN = B.DLV1_YN,
                             A.DLV2_YN = B.DLV2_YN,
                             A.DLV3_YN = B.DLV3_YN,
+                            A.DLV4_YN = B.DLV4_YN,
+                            A.DLV5_YN = B.DLV5_YN,
+                            A.DLV6_YN = B.DLV6_YN,
+                            A.DLV7_YN = B.DLV7_YN,
+                            A.DLV8_YN = B.DLV8_YN,
+                            A.DLV9_YN = B.DLV9_YN,
+                            A.DLV10_YN = B.DLV10_YN,
+                            A.DLV11_YN = B.DLV11_YN,
+                            A.DLV12_YN = B.DLV12_YN,
                             A.MOD_DT = B.MOD_DT,
                             A.MOD_ID = B.MOD_ID
                       WHEN NOT MATCHED THEN
@@ -501,6 +567,8 @@
                             A.HQ_CHARGE_UPRC,
                             A.MS_CHARGE_UPRC,
                             A.PARTNER_CHARGE_UPRC,
+                            A.MOMS_PURCHS_CNT_LIMIT,
+                            A.MOMS_PURCHS_QTY_LIMIT,
                             A.PROD_CD_YN,
                             A.SELECT_PROD_DS,
                             <!-- A.SELECT_CROSS_FG, -->
@@ -511,6 +579,15 @@
                             A.DLV1_YN,
                             A.DLV2_YN,
                             A.DLV3_YN,
+                            A.DLV4_YN,
+                            A.DLV5_YN,
+                            A.DLV6_YN,
+                            A.DLV7_YN,
+                            A.DLV8_YN,
+                            A.DLV9_YN,
+                            A.DLV10_YN,
+                            A.DLV11_YN,
+                            A.DLV12_YN,
                             A.REG_DT,
                             A.REG_ID,
                             A.MOD_DT,
@@ -540,6 +617,8 @@
                             B.HQ_CHARGE_UPRC,
                             B.MS_CHARGE_UPRC,
                             B.PARTNER_CHARGE_UPRC,
+                            B.MOMS_PURCHS_CNT_LIMIT,
+                            B.MOMS_PURCHS_QTY_LIMIT,
                             B.PROD_CD_YN,
                             B.SELECT_PROD_DS,
                             <!-- B.SELECT_CROSS_FG, -->
@@ -550,6 +629,15 @@
                             B.DLV1_YN,
                             B.DLV2_YN,
                             B.DLV3_YN,
+                            B.DLV4_YN,
+                            B.DLV5_YN,
+                            B.DLV6_YN,
+                            B.DLV7_YN,
+                            B.DLV8_YN,
+                            B.DLV9_YN,
+                            B.DLV10_YN,
+                            B.DLV11_YN,
+                            B.DLV12_YN,
                             B.REG_DT,
                             B.REG_ID,
                             B.MOD_DT,
@@ -798,6 +886,15 @@
                         thpc.DLV1_YN,
                         thpc.DLV2_YN,
                         thpc.DLV3_YN,
+                        thpc.DLV4_YN,
+                        thpc.DLV5_YN,
+                        thpc.DLV6_YN,
+                        thpc.DLV7_YN,
+                        thpc.DLV8_YN,
+                        thpc.DLV9_YN,
+                        thpc.DLV10_YN,
+                        thpc.DLV11_YN,
+                        thpc.DLV12_YN,
                         thpb.TYPE_CD,
                         thpb.APPLY_DC_DS,
                         thpb.DC_SET,
@@ -807,7 +904,9 @@
                         thpb.SELECT_GIFT_CNT,
                         thpc.HQ_CHARGE_UPRC,
                         thpc.MS_CHARGE_UPRC,
-                        thpc.PARTNER_CHARGE_UPRC
+                        thpc.PARTNER_CHARGE_UPRC,
+                        thpc.MOMS_PURCHS_CNT_LIMIT,
+                        thpc.MOMS_PURCHS_QTY_LIMIT
                   FROM TB_HQ_PROMO_H thph,
                         TB_HQ_PROMO_CONDI thpc,
                         TB_HQ_PROMO_BENE thpb
@@ -856,6 +955,15 @@
                         tmpc.DLV1_YN,
                         tmpc.DLV2_YN,
                         tmpc.DLV3_YN,
+                        tmpc.DLV4_YN,
+                        tmpc.DLV5_YN,
+                        tmpc.DLV6_YN,
+                        tmpc.DLV7_YN,
+                        tmpc.DLV8_YN,
+                        tmpc.DLV9_YN,
+                        tmpc.DLV10_YN,
+                        tmpc.DLV11_YN,
+                        tmpc.DLV12_YN,
                         tmpb.TYPE_CD,
                         tmpb.APPLY_DC_DS,
                         tmpb.DC_SET,
@@ -865,7 +973,9 @@
                         tmpb.SELECT_GIFT_CNT,
                         tmpc.HQ_CHARGE_UPRC,
                         tmpc.MS_CHARGE_UPRC,
-                        tmpc.PARTNER_CHARGE_UPRC
+                        tmpc.PARTNER_CHARGE_UPRC,
+                        tmpc.MOMS_PURCHS_CNT_LIMIT,
+                        tmpc.MOMS_PURCHS_QTY_LIMIT
                   FROM TB_MS_PROMO_H tmph,
                         TB_MS_PROMO_CONDI tmpc,
                         TB_MS_PROMO_BENE tmpb
@@ -1965,5 +2075,404 @@
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
            AND PROMOTION_CD = #{promotionCd}
     </delete>
+
+    <!-- 프로모션 키오스크 배너 조회 -->
+    <!--
+        TABLE    : TB_HQ_POS_ADVER_FILE, TB_MS_POS_ADVER_FILE
+        PARAM    : mediaVO
+        COMMENTS : 프로모션 키오스크 배너를 조회한다. (본사/매장)
+    -->
+    <select id="getPromotionBanner" parameterType="mediaVO" resultType="DefaultMap">
+        /* USE : PromotionMapper.getPromotionBanner */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+             SELECT ADVER_FILE_NO,
+                    FILE_USE_TYPE,
+                    FILE_DIR,
+                    FILE_NM,
+                    FILE_EXT,
+                    FILE_ORG_NM || '.' || FILE_EXT AS FILE_ORG_NM,
+                    FILE_SIZE,
+                    FILE_MIME_TYPE
+              FROM TB_HQ_POS_ADVER_FILE
+             WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+               AND FILE_USE_TYPE = #{fileType}
+               AND PROMOTION_CD = #{promotionCd}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+             SELECT ADVER_FILE_NO,
+                    FILE_USE_TYPE,
+                    FILE_DIR,
+                    FILE_NM,
+                    FILE_EXT,
+                    FILE_ORG_NM || '.' || FILE_EXT AS FILE_ORG_NM,
+                    FILE_SIZE,
+                    FILE_MIME_TYPE
+              FROM TB_MS_POS_ADVER_FILE
+             WHERE STORE_CD = #{storeCd}
+               AND FILE_USE_TYPE = #{fileType}
+               AND PROMOTION_CD = #{promotionCd}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 프로모션 키오스크 배너 등록   -->
+    <!--
+        TABLE    : TB_HQ_POS_ADDR_VERSN, TB_MS_POS_ADDR_VERSN
+        COMMENTS : 프로모션 키오스크 배너를 등록한다. (본사/매장)
+    -->
+    <insert id="verRegist" parameterType="mediaVO">
+        /* USE : PromotionMapper.verRegist */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "HQ"'>
+                <![CDATA[
+                INSERT INTO TB_HQ_POS_ADVER_FILE
+                (
+                   HQ_OFFICE_CD,
+                   ADVER_FILE_NO,
+                   FILE_USE_TYPE,
+                   ADVER_S_DATE,
+                   ADVER_E_DATE,
+                   FILE_DIR,
+                   FILE_NM,
+                   FILE_EXT,
+                   FILE_SIZE,
+                   FILE_MIME_TYPE,
+                   FILE_ORG_NM,
+                   FILE_DESC,
+                   FILE_CHG_DT,
+                   USE_YN,
+                   REG_DT,
+                   REG_ID,
+                   MOD_DT,
+                   MOD_ID,
+                   DISP_SEQ,
+                   DISP_TIME,
+                   TIME_YN,
+                   START_TIME,
+                   END_TIME,
+                   WEEK_YN,
+                   MON_YN,
+                   TUE_YN,
+                   WED_YN,
+                   THU_YN,
+                   FRI_YN,
+                   SAT_YN,
+                   SUN_YN,
+                   PROMOTION_CD
+                )
+                VALUES
+                (
+                    #{hqOfficeCd},
+                    #{verSerNo},
+                    #{fileType},
+                    #{startDate},
+                    #{endDate},
+                    #{fileDir},
+                    #{fileNm},
+                    #{fileExt},
+                    #{fileSize},
+                    #{fileMimeType},
+                    #{fileOrgNm},
+                    #{verSerNm},
+                    #{regDt},
+                    #{useYn},
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId},
+                    #{dispSeq},
+                    #{dispTime},
+                    #{timeYn},
+                    #{startTime},
+                    #{endTime},
+                    #{weekYn},
+                    #{monYn},
+                    #{tueYn},
+                    #{wedYn},
+                    #{thuYn},
+                    #{friYn},
+                    #{satYn},
+                    #{sunYn},
+                    #{promotionCd}
+                )
+                ]]>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "STORE"'>
+                <![CDATA[
+                INSERT INTO TB_MS_POS_ADVER_FILE
+                (
+                   STORE_CD,
+                   ADVER_FILE_NO,
+                   FILE_USE_TYPE,
+                   ADVER_S_DATE,
+                   ADVER_E_DATE,
+                   FILE_DIR,
+                   FILE_NM,
+                   FILE_EXT,
+                   FILE_SIZE,
+                   FILE_MIME_TYPE,
+                   FILE_ORG_NM,
+                   FILE_DESC,
+                   FILE_CHG_DT,
+                   USE_YN,
+                   REG_FG,
+                   REG_DT,
+                   REG_ID,
+                   MOD_DT,
+                   MOD_ID,
+                   DISP_SEQ,
+                   DISP_TIME,
+                   TIME_YN,
+                   START_TIME,
+                   END_TIME,
+                   WEEK_YN,
+                   MON_YN,
+                   TUE_YN,
+                   WED_YN,
+                   THU_YN,
+                   FRI_YN,
+                   SAT_YN,
+                   SUN_YN,
+                   PROMOTION_CD
+                )
+                VALUES
+                (
+                    #{storeCd},
+                    #{verSerNo},
+                    #{fileType},
+                    #{startDate},
+                    #{endDate},
+                    #{fileDir},
+                    #{fileNm},
+                    #{fileExt},
+                    #{fileSize},
+                    #{fileMimeType},
+                    #{fileOrgNm},
+                    #{verSerNm},
+                    #{regDt},
+                    #{useYn},
+                    'S',
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId},
+                    #{dispSeq},
+                    #{dispTime},
+                    #{timeYn},
+                    #{startTime},
+                    #{endTime},
+                    #{weekYn},
+                    #{monYn},
+                    #{tueYn},
+                    #{wedYn},
+                    #{thuYn},
+                    #{friYn},
+                    #{satYn},
+                    #{sunYn},
+                    #{promotionCd}
+                )
+                ]]>
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 파일 출력순서 자동채번 -->
+    <!--
+        TABLE    :  TB_HQ_POS_ADDR_VERSN, TB_MS_POS_ADDR_VERSN
+        COMMENTS : 파일 출력순서를 채번한다.
+    -->
+    <select id="getDispSeq" parameterType="mediaVO" resultType="String">
+        /* USE : PromotionMapper.getDispSeq */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "HQ"'>
+                SELECT NVL(MAX(DISP_SEQ), 0) +1 AS DISP_SEQ
+                FROM TB_HQ_POS_ADVER_FILE
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND FILE_USE_TYPE = #{fileType}
+                AND PROMOTION_CD = #{promotionCd}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "STORE"'>
+                SELECT NVL(MAX(DISP_SEQ), 0) +1 AS DISP_SEQ
+                FROM TB_MS_POS_ADVER_FILE
+                WHERE STORE_CD = #{storeCd}
+                AND FILE_USE_TYPE = #{fileType}
+                AND PROMOTION_CD = #{promotionCd}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 파일 확장자 체크   -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        COMMENTS : 파일 확장자를 조회한다.
+    -->
+    <select id="getFileType" parameterType="mediaVO" resultType="String">
+        /* USE : PromotionMapper.getFileType */
+        SELECT TRIM(NMCODE_ITEM_2)
+          FROM TB_CM_NMCODE
+         WHERE NMCODE_GRP_CD ='303'
+           AND NMCODE_CD = #{fileType}
+    </select>
+
+    <!-- 파일 타입 조회   -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        COMMENTS : 파일 타입을 조회한다.
+    -->
+    <select id="getFileTypeNm" parameterType="mediaVO" resultType="String">
+        /* USE : PromotionMapper.getFileTypeNm */
+        SELECT NMCODE_NM
+        FROM TB_CM_NMCODE
+        WHERE NMCODE_GRP_CD ='303'
+          AND NMCODE_CD = #{fileType}
+    </select>
+
+    <!-- 파일코드 채번  -->
+    <!--
+        TABLE    : TB_HQ_POS_ADVER_FILE, TB_MS_POS_ADVER_FILE
+        COMMENTS : 파일코드 채번
+    -->
+    <select id="getFileCd" parameterType="mediaVO" resultType="String">
+        /* USE : PromotionMapper.getFileCd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "HQ"'>
+                SELECT LPAD(NVL(MAX(ADVER_FILE_NO), 0) +1, 4, '0')
+                FROM TB_HQ_POS_ADVER_FILE
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "STORE"'>
+                SELECT LPAD(NVL(MAX(ADVER_FILE_NO), 7999) +1, 4, '0')
+                FROM TB_MS_POS_ADVER_FILE
+                WHERE STORE_CD = #{storeCd}
+                AND ADVER_FILE_NO > 7999
+             </when>
+        </choose>
+    </select>
+
+    <!-- 기존 파일 정보가 있는지 확인 -->
+    <!--
+        TABLE    : TB_HQ_POS_ADVER_FILE, TB_MS_POS_ADVER_FILE
+        PARAM    : mediaVO
+        COMMENTS : 기존 파일 정보가 있는지 확인한다. (본사/매장)
+    -->
+    <select id="getFileChk"  parameterType="mediaVO" resultType="String">
+        /* PromotionMapper.getFileChk */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "HQ"'>
+                SELECT FILE_NM
+                FROM TB_HQ_POS_ADVER_FILE
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND FILE_USE_TYPE = #{fileType}
+                AND PROMOTION_CD = #{promotionCd}
+                AND ADVER_FILE_NO = #{verSerNo}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "STORE"'>
+                SELECT FILE_NM
+                FROM TB_MS_POS_ADVER_FILE
+                WHERE STORE_CD = #{storeCd}
+                AND FILE_USE_TYPE = #{fileType}
+                AND PROMOTION_CD = #{promotionCd}
+                AND ADVER_FILE_NO = #{verSerNo}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 파일 삭제 -->
+    <!--
+        TABLE    : TB_HQ_POS_ADVER_FILE, TB_MS_POS_ADVER_FILE
+        PARAM    : mediaVO
+        COMMENTS : 파일을 삭제한다. (본사/매장)
+    -->
+    <delete id="delFile" parameterType="mediaVO">
+        /* PromotionMapper.delFile */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "HQ"'>
+                DELETE TB_HQ_POS_ADVER_FILE
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND FILE_USE_TYPE = #{fileType}
+                AND PROMOTION_CD = #{promotionCd}
+                AND ADVER_FILE_NO = #{verSerNo}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "STORE"'>
+                DELETE TB_MS_POS_ADVER_FILE
+                WHERE STORE_CD = #{storeCd}
+                AND FILE_USE_TYPE = #{fileType}
+                AND PROMOTION_CD = #{promotionCd}
+                AND ADVER_FILE_NO = #{verSerNo}
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 프로모션 키오스크 배너 수정(프로모션관련 정보만 수정) -->
+    <!--
+        TABLE    : TB_HQ_POS_ADDR_VERSN, TB_MS_POS_ADDR_VERSN
+        COMMENTS : 프로모션 키오스크 배너를 수정한다.(프로모션관련 정보만 수정) (본사/매장)
+    -->
+    <update id="modPromotionBanner" parameterType="mediaVO">
+        /* USE : PromotionMapper.modPromotionBanner */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE TB_HQ_POS_ADVER_FILE
+                SET ADVER_S_DATE = #{startDate},
+                    ADVER_E_DATE = #{endDate},
+                    USE_YN = #{useYn},
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId},
+                    TIME_YN = #{timeYn},
+                    START_TIME = #{startTime},
+                    END_TIME = #{endTime},
+                    WEEK_YN = #{weekYn},
+                    MON_YN = #{monYn},
+                    TUE_YN = #{tueYn},
+                    WED_YN = #{wedYn},
+                    THU_YN = #{thuYn},
+                    FRI_YN = #{friYn},
+                    SAT_YN = #{satYn},
+                    SUN_YN = #{sunYn}
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND FILE_USE_TYPE = #{fileType}
+                AND PROMOTION_CD = #{promotionCd}
+                AND ADVER_FILE_NO = #{verSerNo}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE TB_MS_POS_ADVER_FILE
+                SET ADVER_S_DATE = #{startDate},
+                    ADVER_E_DATE = #{endDate},
+                    USE_YN = #{useYn},
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId},
+                    TIME_YN = #{timeYn},
+                    START_TIME = #{startTime},
+                    END_TIME = #{endTime},
+                    WEEK_YN = #{weekYn},
+                    MON_YN = #{monYn},
+                    TUE_YN = #{tueYn},
+                    WED_YN = #{wedYn},
+                    THU_YN = #{thuYn},
+                    FRI_YN = #{friYn},
+                    SAT_YN = #{satYn},
+                    SUN_YN = #{sunYn}
+                WHERE STORE_CD = #{storeCd}
+                AND FILE_USE_TYPE = #{fileType}
+                AND PROMOTION_CD = #{promotionCd}
+                AND ADVER_FILE_NO = #{verSerNo}
+            </when>
+        </choose>
+    </update>
 
 </mapper>

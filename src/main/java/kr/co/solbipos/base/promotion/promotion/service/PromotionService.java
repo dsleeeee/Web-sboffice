@@ -2,6 +2,8 @@ package kr.co.solbipos.base.promotion.promotion.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.store.media.service.MediaVO;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.List;
 
@@ -75,6 +77,19 @@ public interface PromotionService {
 
     /** 프로모션 적용매장 매장 엑셀업로드 */
     int excelUploadPromotionStore(PromotionVO[] promotionVOs, SessionInfoVO sessionInfoVO);
+
+    /** 프로모션 키오스크 배너 조회 */
+    List<DefaultMap<String>> getPromotionBanner(MediaVO mediaVO, SessionInfoVO sessionInfoVO);
+
+    /** 프로모션 키오스크 배너 등록 */
+    String savePromotionBanner(MultipartHttpServletRequest multi, MediaVO mediaVO, SessionInfoVO sessionInfoVO);
+
+    /** 프로모션 키오스크 배너 삭제 */
+    boolean delPromotionBanner(MediaVO mediaVO, SessionInfoVO sessionInfoVO);
+
+    /** 프로모션 키오스크 배너 수정(프로모션관련 정보만 수정) */
+    int modPromotionBanner(MediaVO mediaVO, SessionInfoVO sessionInfoVO);
+
 }
 
 

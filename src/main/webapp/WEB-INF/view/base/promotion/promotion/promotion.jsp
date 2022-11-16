@@ -4,7 +4,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
+<c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
+<c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 <c:set var="promotionEnvstVal" value="${promotionEnvstVal}" />
 <c:set var="modPromotionEnvstVal" value="${modPromotionEnvstVal}" />
 
@@ -192,16 +195,65 @@
                             <span style="font-size: 13px;"><s:message code="promotion.condition" /></span>
                         </th>
                     </tr>
+                    <tr <c:if test="${momsEnvstVal == '0'}">style="display: none;"</c:if>>
+                        <th><s:message code="promotion.kioskBanner" /></th>
+                        <td colspan="3">
+                            <div class="pd5">
+                                <label id="lblFileNm"></label>
+                                <input type="hidden" id="hdFileNo"/>
+                            </div>
+                            <f:form id="regForm" name="regForm" method="post" enctype="multipart/form-data">
+                                <input type="file" id="fileKioskBanner" name="fileKioskBanner" class="form-control" ng-model="fileKioskBanner"
+                                       onchange="angular.element(this).scope().uploadChange()" accept="image/x-png, image/gif, image/jpeg"/>
+                            </f:form>
+                            <div class="pd5">
+                                <button type="button" class="btn_skyblue ml5" ng-click="imgCancel('009','F')"><s:message code="cmm.selectCancel" /></button>
+                                <button type="button" class="btn_skyblue" ng-click="delImg('009')"><s:message code="cmm.del" /></button>
+                            </div>
+                            <div class="pd5">
+                                <label style="color: red;"><s:message code="promotion.fileSize.max"/></label>
+                                <label id="lblFileSize"></label>
+                            </div>
+                        </td>
+                    </tr>
                     <tr>
                         <th><s:message code="promotion.dlvFg" /></th>
                         <td colspan="3" style="height: 35px;">
-                            <div class="fl pd5" style="padding-right: 15px;" id="divChkDlvFg">
+                            <div class="fl pd5" style="padding-right: 15px;">
                                 <div style="float: left;"><input type="checkbox" id="chkDlvFgInStore" ng-model="dlvFgInStore"/></div>
                                 <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="promotion.inStore" /></label></div>
                                 <div style="float: left;"><input type="checkbox" id="chkDlvFgDelivery" ng-model="dlvFgDelivery"/></div>
                                 <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="promotion.delivery" /> </label></div>
                                 <div style="float: left;"><input type="checkbox" id="chkDlvFgPacking" ng-model="dlvFgPacking"/></div>
                                 <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="promotion.packing" /> </label></div>
+
+                                <span <c:if test="${momsEnvstVal == '0'}">style="display: none"</c:if>>
+                                    <div style="float: left;"><input type="checkbox" id="chkDlvFgYogiyo" ng-model="dlvFgYogiyo"/></div>
+                                    <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="promotion.yogiyo" /></label></div>
+                                    <div style="float: left;"><input type="checkbox" id="chkDlvFgCoupangeats" ng-model="dlvFgCoupangeats"/></div>
+                                    <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="promotion.coupangeats" /></label></div>
+                                    <div style="float: left;"><input type="checkbox" id="chkDlvFgWmpo" ng-model="dlvFgWmpo"/></div>
+                                    <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="promotion.wmpo" /></label></div>
+                                    <div style="float: left;"><input type="checkbox" id="chkDlvFgPayco" ng-model="dlvFgPayco"/></div>
+                                    <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="promotion.payco" /></label></div>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr <c:if test="${momsEnvstVal == '0'}">style="display: none"</c:if>>
+                        <th></th>
+                        <td colspan="3" style="height: 35px;">
+                            <div class="fl pd5" style="padding-right: 15px;">
+                                <div style="float: left;"><input type="checkbox" id="chkDlvFgSpecialdelivery" ng-model="dlvFgSpecialdelivery"/></div>
+                                <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="promotion.specialdelivery" /></label></div>
+                                <div style="float: left;"><input type="checkbox" id="chkDlvFgKakao" ng-model="dlvFgKakao"/></div>
+                                <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="promotion.kakao" /></label></div>
+                                <div style="float: left;"><input type="checkbox" id="chkDlvFgBaemin" ng-model="dlvFgBaemin"/></div>
+                                <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="promotion.baemin" /></label></div>
+                                <div style="float: left;"><input type="checkbox" id="chkDlvFgDdangyo" ng-model="dlvFgDdangyo"/></div>
+                                <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="promotion.ddangyo" /></label></div>
+                                <div style="float: left;"><input type="checkbox" id="chkDlvFgNpaysmartorder" ng-model="dlvFgNpaysmartorder"/></div>
+                                <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="promotion.npaysmartorder" /></label></div>
                             </div>
                         </td>
                     </tr>
@@ -359,7 +411,19 @@
                             </div>
                         </td>
                     </tr>
-                    <tr>
+                    <tr <c:if test="${momsEnvstVal == '0'}">style="display: none"</c:if>>
+                        <%-- 구매횟수제한 --%>
+                        <th><s:message code="promotion.momsPurchsCntLimit" /></th>
+                        <td>
+                            <input type="text" class="sb-input w150px" id="momsPurchsCntLimit" ng-model="momsPurchsCntLimit" maxlength="2" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
+                        </td>
+                        <%-- 구매갯수제한 --%>
+                        <th><s:message code="promotion.momsPurchsQtyLimit" /></th>
+                        <td>
+                            <input type="text" class="sb-input w150px" id="momsPurchsQtyLimit" ng-model="momsPurchsQtyLimit" maxlength="2" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
+                        </td>
+                    </tr>
+                    <tr <c:if test="${momsEnvstVal == '0'}">style="display: none"</c:if>>
                         <%--본사분담금--%>
                         <th><s:message code="promotion.hqChargeUprc" /></th>
                         <td>
@@ -371,7 +435,7 @@
                             <input type="text" class="sb-input w150px" id="msChargeUprc" ng-model="msChargeUprc" maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
                         </td>
                     </tr>
-                    <tr>
+                    <tr <c:if test="${momsEnvstVal == '0'}">style="display: none"</c:if>>
                         <%-- 제휴분담금 --%>
                         <th><s:message code="promotion.partnerChargeUprc" /></th>
                         <td>
@@ -705,7 +769,10 @@
 
 <script language="JavaScript">
     var orgnFg = "${orgnFg}";
+    var orgnCd = "${orgnCd}";
     var hqOfficeCd = "${hqOfficeCd}";
+    var storeCd = "${storeCd}";
+    var userId = "${userId}";
     var promotionEnvstVal = "${promotionEnvstVal}";
     var modPromotionEnvstVal = "${modPromotionEnvstVal}";
 
@@ -717,6 +784,8 @@
     var storeGroupList = ${storeGroupList};
     // 프로모션 종류
     var promotionTypeList  = ${promotionTypeList};
+    // [1250 맘스터치] 환경설정값
+    var momsEnvstVal = "${momsEnvstVal}";
 
     // POS에서 해당 WEB 화면 최초 접속한 경우(접속하면서 session 생성), 왼쪽 메뉴영역은 접어두기.
     // 최초 접속시에는 이전 URL 인자값으로 판별가능
@@ -732,7 +801,15 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20221102.02" charset="utf-8"></script>
+<style type="text/css">
+    input[type=file]  {
+        font-size: 12px;
+        width:70%;
+        float:left;
+    }
+</style>
+
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20221116.01" charset="utf-8"></script>
 
 <%-- 적용상품 상품추가 --%>
 <c:import url="/WEB-INF/view/base/promotion/promotion/promotionProdReg.jsp">

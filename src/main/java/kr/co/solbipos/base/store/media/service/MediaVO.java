@@ -76,6 +76,33 @@ public class MediaVO extends PageVO {
     private String dispTime;
     /** 저장된파일명 */
     private String fileNmExt;
+    /** 적용시간 사용여부 */
+    private String timeYn;
+    /** 적용시간 시작시간 */
+    private String startTime;
+    /** 적용시간 종료시간 */
+    private String endTime;
+    /** 요일 사용여부 */
+    private String weekYn;
+    /** 월요일 */
+    private String monYn;
+    /** 화요일 */
+    private String tueYn;
+    /** 수요일 */
+    private String wedYn;
+    /** 목요일 */
+    private String thuYn;
+    /** 금요일 */
+    private String friYn;
+    /** 토요일 */
+    private String satYn;
+    /** 일요일 */
+    private String sunYn;
+    /** 프로모션코드 */
+    private String promotionCd;
+    /** 소속코드 */
+    private String orgnCd;
+
 
     public String getOrgnFg() {
         return orgnFg;
@@ -377,4 +404,108 @@ public class MediaVO extends PageVO {
     public String getFileNmExt() { return fileNmExt; }
 
     public void setFileNmExt(String fileNmExt) { this.fileNmExt = fileNmExt; }
+
+    public String getTimeYn() {
+        return timeYn;
+    }
+
+    public void setTimeYn(String timeYn) {
+        this.timeYn = timeYn;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getWeekYn() {
+        return weekYn;
+    }
+
+    public void setWeekYn(String weekYn) {
+        this.weekYn = weekYn;
+    }
+
+    public String getMonYn() {
+        return monYn;
+    }
+
+    public void setMonYn(String monYn) {
+        this.monYn = monYn;
+    }
+
+    public String getTueYn() {
+        return tueYn;
+    }
+
+    public void setTueYn(String tueYn) {
+        this.tueYn = tueYn;
+    }
+
+    public String getWedYn() {
+        return wedYn;
+    }
+
+    public void setWedYn(String wedYn) {
+        this.wedYn = wedYn;
+    }
+
+    public String getThuYn() {
+        return thuYn;
+    }
+
+    public void setThuYn(String thuYn) {
+        this.thuYn = thuYn;
+    }
+
+    public String getFriYn() {
+        return friYn;
+    }
+
+    public void setFriYn(String friYn) {
+        this.friYn = friYn;
+    }
+
+    public String getSatYn() {
+        return satYn;
+    }
+
+    public void setSatYn(String satYn) {
+        this.satYn = satYn;
+    }
+
+    public String getSunYn() {
+        return sunYn;
+    }
+
+    public void setSunYn(String sunYn) {
+        this.sunYn = sunYn;
+    }
+
+    public String getPromotionCd() {
+        return promotionCd;
+    }
+
+    public void setPromotionCd(String promotionCd) {
+        this.promotionCd = promotionCd;
+    }
+
+    public String getOrgnCd() {
+        return orgnCd;
+    }
+
+    public void setOrgnCd(String orgnCd) {
+        this.orgnCd = orgnCd;
+    }
 }

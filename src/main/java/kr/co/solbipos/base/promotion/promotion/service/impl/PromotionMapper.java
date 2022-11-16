@@ -2,6 +2,7 @@ package kr.co.solbipos.base.promotion.promotion.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.base.promotion.promotion.service.PromotionVO;
+import kr.co.solbipos.base.store.media.service.MediaVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -112,4 +113,31 @@ public interface PromotionMapper {
 
     /** 프로모션 적용매장 전체삭제 */
     int deletePromotionStoreAll(PromotionVO promotionVO);
+
+    /** 프로모션 키오스크 배너 조회 */
+    List<DefaultMap<String>> getPromotionBanner(MediaVO mediaVO);
+
+    /** 파일 출력순서 자동채번 */
+    String getDispSeq(MediaVO mediaVO);
+
+    /** 프로모션 키오스크 배너 등록 */
+    int verRegist(MediaVO mediaVO);
+
+    /** 파일 확장자 체크 */
+    String getFileType(MediaVO mediaVO);
+
+    /** 파일 타입 조회 */
+    String getFileTypeNm(MediaVO mediaVO);
+
+    /** 파일 코드 채번 */
+    String getFileCd(MediaVO mediaVO);
+
+    /** 기존 파일 정보가 있는지 확인 */
+    String getFileChk(MediaVO mediaVO);
+
+    /** 파일 삭제 */
+    int delFile(MediaVO mediaVO);
+
+    /** 프로모션 키오스크 배너 수정(프로모션관련 정보만 수정) */
+    int modPromotionBanner(MediaVO mediaVO);
 }

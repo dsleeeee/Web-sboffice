@@ -3,13 +3,16 @@ package kr.co.solbipos.base.promotion.promotion.web;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
+import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.promotion.promotion.service.PromotionService;
 import kr.co.solbipos.base.promotion.promotion.service.PromotionVO;
+import kr.co.solbipos.base.store.media.service.MediaVO;
 import kr.co.solbipos.base.store.storeType.service.StoreTypeService;
 import kr.co.solbipos.base.store.storeType.service.StoreTypeVO;
 import org.slf4j.Logger;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -54,14 +58,16 @@ public class PromotionController {
     private final SessionService sessionService;
     private final PromotionService promotionService;
     private final StoreTypeService storeTypeService;
+    private final MessageService messageService;
     private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public PromotionController(SessionService sessionService, PromotionService promotionService, StoreTypeService storeTypeService, CmmEnvUtil cmmEnvUtil) {
+    public PromotionController(SessionService sessionService, PromotionService promotionService, StoreTypeService storeTypeService, MessageService messageService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.promotionService = promotionService;
         this.storeTypeService = storeTypeService;
+        this.messageService = messageService;
         this.cmmEnvUtil = cmmEnvUtil;
     }
 
@@ -91,6 +97,12 @@ public class PromotionController {
 
         model.addAttribute("modPromotionEnvstVal", modPromotionEnvstVal);
 
+        // [1250 맘스터치] 환경설정값 조회
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0"));
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
+        }
 
         StoreTypeVO storeTypeVO = new StoreTypeVO();
 
@@ -477,6 +489,93 @@ public class PromotionController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = promotionService.excelUploadPromotionStore(promotionVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 프로모션 키오스크 배너 조회
+     * @param mediaVO
+     * @param request
+     * @author 이다솜
+     * @since 2022.11.08
+     * @return
+     */
+    @RequestMapping(value = "/getPromotionBanner.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPromotionBanner(MediaVO mediaVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = promotionService.getPromotionBanner(mediaVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, mediaVO);
+    }
+
+    /**
+     * 프로모션 키오스크 배너 등록
+     * @param mediaVO
+     * @param request
+     * @author 이다솜
+     * @since 2022.11.08
+     * @return
+     */
+    @RequestMapping(value = "/savePromotionBanner.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result savePromotionBanner(MediaVO mediaVO, MultipartHttpServletRequest request) {
+
+        SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
+
+        String result = promotionService.savePromotionBanner(request, mediaVO, sessionInfo);
+
+        if(result.equals("0")) {
+            return returnJson(Status.OK);
+        } else if(result.equals("1")) {
+            return returnJson(Status.FAIL);
+        } else if(result.equals("2")) {
+            return returnJson(Status.FAIL, "msg", messageService.get("promotion.fileExtensionChk.msg"));
+        } else {
+            return returnJson(Status.FAIL);
+        }
+    }
+
+    /**
+     * 프로모션 키오스크 배너 삭제
+     * @param mediaVO
+     * @param request
+     * @author 이다솜
+     * @since 2022.11.08
+     * @return
+     */
+    @RequestMapping(value = "/delPromotionBanner.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result delPromotionBanner(MediaVO mediaVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        if(promotionService.delPromotionBanner(mediaVO, sessionInfoVO)) {
+            return returnJson(Status.OK);
+        } else {
+            return returnJson(Status.FAIL);
+        }
+    }
+
+    /**
+     * 프로모션 키오스크 배너 수정(프로모션관련 정보만 수정)
+     * @param mediaVO
+     * @param request
+     * @author 이다솜
+     * @since 2022.11.08
+     * @return
+     */
+    @RequestMapping(value = "/modPromotionBanner.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result modPromotionBanner(@RequestBody MediaVO mediaVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = promotionService.modPromotionBanner(mediaVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

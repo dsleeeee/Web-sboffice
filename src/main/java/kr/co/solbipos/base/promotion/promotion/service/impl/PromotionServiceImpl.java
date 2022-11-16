@@ -4,17 +4,24 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.system.BaseEnv;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.promotion.promotion.service.PromotionService;
 import kr.co.solbipos.base.promotion.promotion.service.PromotionVO;
+import kr.co.solbipos.base.store.media.service.MediaVO;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.io.File;
+import java.util.Iterator;
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
@@ -531,4 +538,214 @@ public class PromotionServiceImpl implements PromotionService {
 
     }
 
+    /**  프로모션 키오스크 배너 조회 */
+    @Override
+    public List<DefaultMap<String>> getPromotionBanner(MediaVO mediaVO, SessionInfoVO sessionInfoVO) {
+
+        mediaVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        mediaVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+            mediaVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return promotionMapper.getPromotionBanner(mediaVO);
+    }
+
+    /**  프로모션 키오스크 배너 등록 */
+    @Override
+    public String savePromotionBanner(MultipartHttpServletRequest multi, MediaVO mediaVO, SessionInfoVO sessionInfoVO) {
+
+        String isSuccess;
+        String dt = currentDateTimeString();
+
+        // 기존파일이 있는경우, 먼저 삭제
+        if(!"".equals(mediaVO.getVerSerNo())){
+            LOGGER.info("기존파일삭제 : " + mediaVO.getVerSerNo());
+            delPromotionBanner(mediaVO, sessionInfoVO);
+        }
+
+        try{
+             mediaVO = uploadFile(multi, mediaVO);
+            if (!mediaVO.getResult().equals("T")){ // 파일 확장자체크 결과 오류인경우
+                isSuccess = "2";
+                return isSuccess;
+            }
+
+            mediaVO.setVerSerNo(promotionMapper.getFileCd(mediaVO));
+
+            String fileType = promotionMapper.getFileTypeNm(mediaVO);
+            if(mediaVO.getFileOrgNm().length() > 0){
+                String orgFileNm[] = mediaVO.getFileOrgNm().split("\\\\");
+                mediaVO.setFileOrgNm(orgFileNm[orgFileNm.length-1]);
+            } else {
+                mediaVO.setFileOrgNm(fileType + "_" + mediaVO.getVerSerNo());
+            }
+
+            mediaVO.setVerSerNm(mediaVO.getFileOrgNm());
+            mediaVO.setRegDt(dt);
+            mediaVO.setModDt(dt);
+            mediaVO.setDispTime("3");
+            mediaVO.setDispSeq(promotionMapper.getDispSeq(mediaVO));
+
+            // 파일 등록
+            if(promotionMapper.verRegist(mediaVO) > 0) {
+                isSuccess = "0";
+            } else {
+                isSuccess = "1";
+            }
+
+        }catch(Exception e){
+            isSuccess = "1";
+        }
+        return isSuccess;
+
+    }
+
+    /** 파일 업로드 (등록, 수정) */
+    private MediaVO uploadFile(MultipartHttpServletRequest multi, MediaVO mediaVO) {
+
+        String isSuccess = "";
+
+        // 저장 경로 설정 (개발시 로컬)
+        //String path = "D:\\prod_img/";
+
+        // 파일서버 대응 경로 지정 (운영)
+        String path = BaseEnv.FILE_UPLOAD_DIR + "Media/";
+
+        // 업로드 되는 파일명
+        String newFileName = "";
+
+        File dir = new File(path);
+        if(!dir.isDirectory()){
+            dir.mkdir();
+        }
+
+        Iterator<String> files = multi.getFileNames();
+
+        while(files.hasNext()){
+
+            String uploadFile = files.next();
+
+            String rndNm = "";
+
+            for(int i=0; i<8; i++) {
+                int rndVal = (int)(Math.random() * 62);
+                if(rndVal < 10) {
+                    rndNm += rndVal;
+                }
+            }
+
+            // 파일명 orgnCd + 기존 + 8자리 난수
+            newFileName = mediaVO.getOrgnCd() + String.valueOf(System.currentTimeMillis() + rndNm);
+
+            MultipartFile mFile = multi.getFile(uploadFile);
+            String orgFileName = mFile.getOriginalFilename();
+            String fileExt = FilenameUtils.getExtension(orgFileName);
+
+            if (!"".equals(orgFileName)) {
+
+                String type = promotionMapper.getFileType(mediaVO);
+                String[] typeList = type.split(",");
+
+                // 확장자 확인
+                for(int i = 0; i < typeList.length; i++){
+                    if(fileExt.equals(typeList[i].replace(".",""))){
+                        mediaVO.setResult("T");
+                    }
+                }
+
+                if (mFile.getOriginalFilename().lastIndexOf('.') > 0) { // 파일명 최소 한글자 이상은 되어야함.
+
+                    orgFileName = mFile.getOriginalFilename().substring(0, mFile.getOriginalFilename().lastIndexOf('.'));
+                    // 파일경로
+                    mediaVO.setFileDir(path);
+                    // 파일명 (물리적으로 저장되는 파일명)
+                    mediaVO.setFileNm(newFileName);
+                    // 파일확장자
+                    mediaVO.setFileExt(fileExt);
+                    // 파일사이즈
+                    Long fileSize = mFile.getSize();
+                    mediaVO.setFileSize(fileSize.intValue());
+                    // 파일 MIME_TYPE
+                    mediaVO.setFileMimeType(mFile.getContentType());
+                    // 원본 파일명
+                    mediaVO.setFileOrgNm(orgFileName);
+                }
+
+                try {
+                    // 파일 서버에 업로드
+                    mFile.transferTo(new File(path + newFileName));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return mediaVO;
+    }
+
+    /**  프로모션 키오스크 배너 삭제 */
+    @Override
+    public boolean delPromotionBanner(MediaVO mediaVO, SessionInfoVO sessionInfoVO){
+
+        boolean isSuccess = true;
+
+        try{
+
+            // 저장 경로 설정
+            //String path = "D:\\prod_img/";
+            String path = BaseEnv.FILE_UPLOAD_DIR + "Media/";
+
+            // 기존 파일 정보가 있는지 확인
+            String imgFileNm = promotionMapper.getFileChk(mediaVO);
+
+            if(imgFileNm.length() > 0){
+
+                // 파일 delete
+                if(promotionMapper.delFile(mediaVO) > 0) {
+                    // 서버 파일 삭제
+                    File delFile = new File(path + imgFileNm);
+                    if(delFile.exists()) {
+                        delFile.delete();
+                    }
+                    isSuccess = true;
+                } else {
+                    isSuccess = false;
+                }
+
+            }else{
+                isSuccess = false;
+            }
+
+        }catch(Exception e){
+
+            isSuccess = false;
+        }
+        return isSuccess;
+    }
+
+    /** 프로모션 키오스크 배너 수정(프로모션관련 정보만 수정) */
+    @Override
+    public int modPromotionBanner(MediaVO mediaVO, SessionInfoVO sessionInfoVO){
+
+        int result = 0;
+        String dt = currentDateTimeString();
+
+        mediaVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        mediaVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            mediaVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        mediaVO.setRegDt(dt);
+        mediaVO.setRegId(sessionInfoVO.getUserId());
+        mediaVO.setModDt(dt);
+        mediaVO.setModId(sessionInfoVO.getUserId());
+
+        // 파일 정보 테이블에 프로모션 정보만 UPDATE
+        result = promotionMapper.modPromotionBanner(mediaVO);
+        if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        return result;
+    }
 }

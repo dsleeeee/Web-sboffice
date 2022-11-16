@@ -151,6 +151,28 @@ public class PromotionVO extends PageVO {
     private int msChargeUprc;
     /** 제휴분담금 */
     private int partnerChargeUprc;
+    /** 구매횟수제한 */
+    private int momsPurchsCntLimit;
+    /** 구매갯수제한 */
+    private int momsPurchsQtyLimit;
+    /** 프로모션 적용 구분(요기요) */
+    private String dlv4Yn;
+    /** 프로모션 적용 구분(쿠팡이츠) */
+    private String dlv5Yn;
+    /** 프로모션 적용 구분(위메프오) */
+    private String dlv6Yn;
+    /** 프로모션 적용 구분(페이코) */
+    private String dlv7Yn;
+    /** 프로모션 적용 구분(배달특급) */
+    private String dlv8Yn;
+    /** 프로모션 적용 구분(카카오) */
+    private String dlv9Yn;
+    /** 프로모션 적용 구분(배달의민족) */
+    private String dlv10Yn;
+    /** 프로모션 적용 구분(땡겨요) */
+    private String dlv11Yn;
+    /** 프로모션 적용 구분(네이버주문) */
+    private String dlv12Yn;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -646,5 +668,93 @@ public class PromotionVO extends PageVO {
 
     public void setPartnerChargeUprc(int partnerChargeUprc) {
         this.partnerChargeUprc = partnerChargeUprc;
+    }
+
+    public int getMomsPurchsCntLimit() {
+        return momsPurchsCntLimit;
+    }
+
+    public void setMomsPurchsCntLimit(int momsPurchsCntLimit) {
+        this.momsPurchsCntLimit = momsPurchsCntLimit;
+    }
+
+    public int getMomsPurchsQtyLimit() {
+        return momsPurchsQtyLimit;
+    }
+
+    public void setMomsPurchsQtyLimit(int momsPurchsQtyLimit) {
+        this.momsPurchsQtyLimit = momsPurchsQtyLimit;
+    }
+
+    public String getDlv4Yn() {
+        return dlv4Yn;
+    }
+
+    public void setDlv4Yn(String dlv4Yn) {
+        this.dlv4Yn = dlv4Yn;
+    }
+
+    public String getDlv5Yn() {
+        return dlv5Yn;
+    }
+
+    public void setDlv5Yn(String dlv5Yn) {
+        this.dlv5Yn = dlv5Yn;
+    }
+
+    public String getDlv6Yn() {
+        return dlv6Yn;
+    }
+
+    public void setDlv6Yn(String dlv6Yn) {
+        this.dlv6Yn = dlv6Yn;
+    }
+
+    public String getDlv7Yn() {
+        return dlv7Yn;
+    }
+
+    public void setDlv7Yn(String dlv7Yn) {
+        this.dlv7Yn = dlv7Yn;
+    }
+
+    public String getDlv8Yn() {
+        return dlv8Yn;
+    }
+
+    public void setDlv8Yn(String dlv8Yn) {
+        this.dlv8Yn = dlv8Yn;
+    }
+
+    public String getDlv9Yn() {
+        return dlv9Yn;
+    }
+
+    public void setDlv9Yn(String dlv9Yn) {
+        this.dlv9Yn = dlv9Yn;
+    }
+
+    public String getDlv10Yn() {
+        return dlv10Yn;
+    }
+
+    public void setDlv10Yn(String dlv10Yn) {
+        this.dlv10Yn = dlv10Yn;
+    }
+
+    public String getDlv11Yn() {
+        return dlv11Yn;
+    }
+
+    public void setDlv11Yn(String dlv11Yn) {
+        this.dlv11Yn = dlv11Yn;
+    }
+
+    public String getDlv12Yn() {
+        return dlv12Yn;
+    }
+
+    public void setDlv12Yn(String dlv12Yn) {
+        this.dlv12Yn = dlv12Yn;
     }
 }
