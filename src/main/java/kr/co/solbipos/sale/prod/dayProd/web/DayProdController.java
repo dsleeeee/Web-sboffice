@@ -88,7 +88,7 @@ public class DayProdController {
             list.add(m);
             momsTeamComboListAll = convertToJson(list);
         } else {
-            momsTeamComboListAll = cmmCodeUtil.assmblObj(momsTeamComboList, "name", "value", UseYn.ALL);
+            momsTeamComboListAll = cmmCodeUtil.assmblObj(momsTeamComboList, "name", "value", UseYn.N);
         }
         model.addAttribute("momsTeamComboList", momsTeamComboListAll);
         // AC점포별
@@ -102,7 +102,7 @@ public class DayProdController {
             list.add(m);
             momsAcShopComboListAll = convertToJson(list);
         } else {
-            momsAcShopComboListAll = cmmCodeUtil.assmblObj(momsAcShopComboList, "name", "value", UseYn.ALL);
+            momsAcShopComboListAll = cmmCodeUtil.assmblObj(momsAcShopComboList, "name", "value", UseYn.N);
         }
         model.addAttribute("momsAcShopComboList", momsAcShopComboListAll);
         // 지역구분
@@ -116,7 +116,7 @@ public class DayProdController {
             list.add(m);
             momsAreaFgComboListAll = convertToJson(list);
         } else {
-            momsAreaFgComboListAll = cmmCodeUtil.assmblObj(momsAreaFgComboList, "name", "value", UseYn.ALL);
+            momsAreaFgComboListAll = cmmCodeUtil.assmblObj(momsAreaFgComboList, "name", "value", UseYn.N);
         }
         model.addAttribute("momsAreaFgComboList", momsAreaFgComboListAll);
         // 상권
@@ -130,7 +130,7 @@ public class DayProdController {
             list.add(m);
             momsCommercialComboListAll = convertToJson(list);
         } else {
-            momsCommercialComboListAll = cmmCodeUtil.assmblObj(momsCommercialComboList, "name", "value", UseYn.ALL);
+            momsCommercialComboListAll = cmmCodeUtil.assmblObj(momsCommercialComboList, "name", "value", UseYn.N);
         }
         model.addAttribute("momsCommercialComboList", momsCommercialComboListAll);
         // 점포유형
@@ -144,7 +144,7 @@ public class DayProdController {
             list.add(m);
             momsShopTypeComboListAll = convertToJson(list);
         } else {
-            momsShopTypeComboListAll = cmmCodeUtil.assmblObj(momsShopTypeComboList, "name", "value", UseYn.ALL);
+            momsShopTypeComboListAll = cmmCodeUtil.assmblObj(momsShopTypeComboList, "name", "value", UseYn.N);
         }
         model.addAttribute("momsShopTypeComboList", momsShopTypeComboListAll);
         // 매장관리타입
@@ -158,7 +158,7 @@ public class DayProdController {
             list.add(m);
             momsStoreManageTypeComboListAll = convertToJson(list);
         } else {
-            momsStoreManageTypeComboListAll = cmmCodeUtil.assmblObj(momsStoreManageTypeComboList, "name", "value", UseYn.ALL);
+            momsStoreManageTypeComboListAll = cmmCodeUtil.assmblObj(momsStoreManageTypeComboList, "name", "value", UseYn.N);
         }
         model.addAttribute("momsStoreManageTypeComboList", momsStoreManageTypeComboListAll);
 
@@ -174,7 +174,7 @@ public class DayProdController {
             list.add(m);
             branchCdComboListAll = convertToJson(list);
         } else {
-            branchCdComboListAll = cmmCodeUtil.assmblObj(branchCdComboList, "name", "value", UseYn.ALL);
+            branchCdComboListAll = cmmCodeUtil.assmblObj(branchCdComboList, "name", "value", UseYn.N);
         }
         model.addAttribute("branchCdComboList", branchCdComboListAll);
 

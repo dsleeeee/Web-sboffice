@@ -74,9 +74,6 @@
         <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
             AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드
         </if>
-        <if test='branchCd != null and branchCd != ""'>
-            AND tms.BRANCH_CD = #{branchCd}
-        </if>
         <if test='momsTeam != null and momsTeam != ""'>
             AND tmsi.MOMS_TEAM = #{momsTeam}
         </if>
@@ -94,6 +91,9 @@
         </if>
         <if test='momsStoreManageType != null and momsStoreManageType != ""'>
             AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
         </if>
         AND tms.STORE_CD = tsdp.STORE_CD
         AND tmsi.STORE_CD (+)= tms.STORE_CD
@@ -164,9 +164,6 @@
         <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
             AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드
         </if>
-        <if test='branchCd != null and branchCd != ""'>
-            AND tms.BRANCH_CD = #{branchCd}
-        </if>
         <if test='momsTeam != null and momsTeam != ""'>
             AND tmsi.MOMS_TEAM = #{momsTeam}
         </if>
@@ -184,6 +181,9 @@
         </if>
         <if test='momsStoreManageType != null and momsStoreManageType != ""'>
             AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
         </if>
         AND tms.STORE_CD = tsdp.STORE_CD
         AND tmsi.STORE_CD (+)= tms.STORE_CD
@@ -331,8 +331,16 @@
                 AND thn.NMCODE_GRP_CD = #{nmcodeGrpCd}
                 <if test='userHqNmcodeCd != null and userHqNmcodeCd != ""'>
                     AND thn.NMCODE_CD = #{userHqNmcodeCd}
+                    ORDER BY thn.NMCODE_CD
                 </if>
-                ORDER BY thn.NMCODE_CD
+                <if test='userHqNmcodeCd == null'>
+                    UNION
+                    SELECT
+                    '' AS VALUE,
+                    '전체' AS NAME
+                    FROM DUAL
+                    ORDER BY VALUE NULLS FIRST
+                </if>
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -343,7 +351,12 @@
                 WHERE 1=1
                 AND tmsn.STORE_CD = #{storeCd}
                 AND tmsn.NMCODE_GRP_CD = #{nmcodeGrpCd}
-                ORDER BY tmsn.NMCODE_CD
+                UNION
+                SELECT
+                '' AS VALUE,
+                '전체' AS NAME
+                FROM DUAL
+                ORDER BY VALUE NULLS FIRST
             </when>
         </choose>
     </select>
@@ -380,9 +393,17 @@
                 WHERE 1=1
                 AND thbm.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test='userHqNmcodeCd != null and userHqNmcodeCd != ""'>
-                    AND thn.BRANCH_CD = #{userHqNmcodeCd}
+                    AND thbm.BRANCH_CD = #{userHqNmcodeCd}
+                    ORDER BY thbm.BRANCH_CD
                 </if>
-                ORDER BY thbm.BRANCH_CD
+                <if test='userHqNmcodeCd == null'>
+                    UNION
+                    SELECT
+                    '' AS VALUE,
+                    '전체' AS NAME
+                    FROM DUAL
+                    ORDER BY VALUE NULLS FIRST
+                </if>
             </when>
         </choose>
     </select>
