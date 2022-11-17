@@ -34,4 +34,18 @@ public interface IostockCmmMapper {
     /** 수불&재고관련 공통 - 다이나믹 콤보조회 */
     List<DefaultMap<String>> selectDynamicCodeList(IostockCmmVO iostockCmmVO);
 
+    /** 사용자별 브랜드 사용 조회 */
+    String getUserBrandCdList(IostockCmmVO iostockCmmVO);
+
+    /** 사용자별 코드별 공통코드 조회 */
+    String getUserHqNmcodeCdList(IostockCmmVO iostockCmmVO);
+
+    /** 사용자별 코드별 공통코드 콤보박스 조회 */
+    List<DefaultMap<String>> selectHqNmcodeMomsList(IostockCmmVO iostockCmmVO);
+
+    /** 사용자별 지사 조회 */
+    String getUserBranchCdList(IostockCmmVO iostockCmmVO);
+
+    /** 사용자별 지사 콤보박스 조회 */
+    List<DefaultMap<String>> selectBranchMomsList(IostockCmmVO iostockCmmVO);
 }
