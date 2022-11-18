@@ -16,7 +16,7 @@
 	        	<button class="btn_blue fr" ng-click="_broadcast('dailyTableCtrl')"><s:message code="cmm.search" /></button>
 	        </div>
 	    </div>
-	
+
 	    <table class="searchTbl" ng-controller="dailyTableCtrl_store">
 	        <colgroup>
 	            <col class="w15" />
@@ -35,7 +35,7 @@
 	                    </div>
 	                </td>
 	            </tr>
-	
+
 	            <c:if test="${orgnFg == 'HQ'}">
 	            <tr>
 	                <th><s:message code="cmm.store"/></th>	<%-- 매장코드 --%>
@@ -49,7 +49,7 @@
 	                    <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
 	                        <jsp:param name="targetId" value="dailyTableSelectStore"/>
 	                    </jsp:include>
-	                    
+
 	                </td>
 	            </tr>
 	            </c:if>
@@ -210,7 +210,7 @@
 	</div>
 
 	<%-- 결재라인 --%>
-	<div id="gridRepresent" class="w50 fl" style="display: none" ng-controller="configCtrl_1">
+	<div id="gridRepresent" class="w50 fl" style="display: " ng-controller="configCtrl_1">
 		<div class="wj-TblWrapBr mr10 pd20" style="height: 400px;">
 			<div class="updownSet oh mb10">
 				<span class="fl bk lh30"><s:message code='dailyReport.cfgPayLine' /></span>	<%-- 결재라인 --%>
@@ -257,7 +257,7 @@
 	</div>
 
 	<%-- 첫째장_수강현황 --%>
-	<div id="div_sort_id_courseStatus" style="display: none" class="div_sort_class" data-sort="5">
+	<div id="div_sort_id_courseStatus" style="display: " class="div_sort_class" data-sort="5">
 		<div class="w100 mt10 flddUnfld_courseStatus" ng-controller="dailyTableCtrl_courseStatus">
 			<div id="div_COURSESTATUS">
 				<div class="w100 mt10 mb20">
@@ -289,7 +289,7 @@
 	</div>
 
 	<%-- 첫째장_수강유형 --%>
-	<div id="div_sort_id_courseType" style="display: none" class="div_sort_class" data-sort="6">
+	<div id="div_sort_id_courseType" style="display: " class="div_sort_class" data-sort="6">
 		<div class="w100 mt10 flddUnfld_courseType" ng-controller="dailyTableCtrl_courseType">
 			<div id="div_COURSETYPE">
 				<div class="w100 mt10 mb20">
@@ -324,7 +324,7 @@
 	</div>
 
 	<%-- 첫째장_수강료현황--%>
-	<div id="div_sort_id_tuition1" style="display: none" class="div_sort_class" data-sort="7">
+	<div id="div_sort_id_tuition1" style="display: " class="div_sort_class" data-sort="7">
 		<div class="w100 mt10 flddUnfld_courseType" ng-controller="dailyTableCtrl_tuition1">
 			<div id="div_TUITION1">
 				<div class="w100 mt10 mb20">
@@ -357,7 +357,7 @@
 	</div>
 
 	<%-- 첫째장_수강료현황--%>
-	<div id="div_sort_id_tuition2" style="display: none" class="div_sort_class" data-sort="8">
+	<div id="div_sort_id_tuition2" style="display: " class="div_sort_class" data-sort="8">
 		<div class="w100 mt10 flddUnfld_courseType" ng-controller="dailyTableCtrl_tuition2">
 			<div id="div_TUITION2">
 				<div class="w100 mt10 mb20">
@@ -389,7 +389,7 @@
 	</div>
 
 	<%-- 첫째장_단체수강내역--%>
-	<div id="div_sort_id_groupCourse" style="display: none" class="div_sort_class" data-sort="9">
+	<div id="div_sort_id_groupCourse" style="display: " class="div_sort_class" data-sort="9">
 		<div class="w100 mt10 flddUnfld_courseType" ng-controller="dailyTableCtrl_groupCourse">
 			<div id="div_GROUPCOURSE">
 				<div class="w100 mt10 mb20">
@@ -420,7 +420,7 @@
 	</div>
 
 	<%-- 둘째장_출납현황--%>
-	<div id="div_sort_id_paymentStatus1" style="display: none" class="div_sort_class" data-sort="10">
+	<div id="div_sort_id_paymentStatus1" style="display: " class="div_sort_class" data-sort="10">
 		<div class="w100 mt10 flddUnfld_courseType" ng-controller="dailyTableCtrl_paymentStatus1">
 			<div id="div_PAYMENTSTATUS1">
 				<div class="w100 mt10 mb20">
@@ -450,7 +450,7 @@
 	</div>
 
 	<%-- 둘째장_출납현황--%>
-	<div id="div_sort_id_paymentStatus2" style="display: none" class="div_sort_class" data-sort="11">
+	<div id="div_sort_id_paymentStatus2" style="display: " class="div_sort_class" data-sort="11">
 		<div class="w100 mt10 flddUnfld_courseType" ng-controller="dailyTableCtrl_paymentStatus2">
 			<div id="div_PAYMENTSTATUS2">
 				<div class="w100 mt10 mb20">
@@ -481,7 +481,7 @@
 	</div>
 
 	<%-- 둘째장_출납현황--%>
-	<div id="div_sort_id_paymentStatus3" style="display: none" class="div_sort_class" data-sort="12">
+	<div id="div_sort_id_paymentStatus3" style="display: " class="div_sort_class" data-sort="12">
 		<div class="w100 mt10 flddUnfld_courseType" ng-controller="dailyTableCtrl_paymentStatus3">
 			<div id="div_PAYMENTSTATUS3">
 				<div class="w100 mt10 mb20">
@@ -522,8 +522,8 @@
 	            item.value  = $(this).data("sort");
 	        values.push(item);
 	    });
-	    
-	    values.sort( function(a, b){return(b.value - a.value);} );	    
+
+	    values.sort( function(a, b){return(b.value - a.value);} );
 	    var container = $("#" + containerID);
 	    for (var i=0; i<values.length; i++) {
 	        var self = $( values[i].obj );

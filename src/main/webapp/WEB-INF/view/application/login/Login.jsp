@@ -4,6 +4,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%
+  String getVersion = org.springframework.core.SpringVersion.getVersion();
+  System.out.println("kjs:"+getVersion);
 String mobile_url = "";
 System.out.println(request.getRequestURL());
 if     (request.getRequestURL().indexOf("://192") > 0 || request.getRequestURL().indexOf("://localhost") > 0 )  { mobile_url = "http://192.168.0.85:10001/mobile/auth/login.sb"; }

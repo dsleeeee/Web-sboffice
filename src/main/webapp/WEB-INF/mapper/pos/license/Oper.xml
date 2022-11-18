@@ -156,6 +156,7 @@
                     ,       TB_MS_POS B
                     WHERE   A.VENDOR_FG =   '01'
                     AND     B.STORE_CD  =   A.STORE_CD
+                    AND     B.POS_NO    =   A.POS_NO
                     AND     B.USE_YN    =   'Y'
                     GROUP
                     BY      A.STORE_CD
@@ -409,6 +410,7 @@
                     ,       TB_MS_POS B
                     WHERE   A.VENDOR_FG =   '01'
                     AND     B.STORE_CD  =   A.STORE_CD
+                    AND     B.POS_NO    =   A.POS_NO
                     AND     B.USE_YN    =   'Y'
                     GROUP
                     BY      A.STORE_CD
