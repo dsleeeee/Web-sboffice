@@ -10,6 +10,7 @@
 <c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 <c:set var="promotionEnvstVal" value="${promotionEnvstVal}" />
 <c:set var="modPromotionEnvstVal" value="${modPromotionEnvstVal}" />
+<c:set var="storePromoRegYnVal" value="${storePromoRegYnVal}" />
 
 <%-- 리스트 영역 --%>
 <div class="subCon" ng-controller="promotionCtrl" style="padding-bottom: 0;">
@@ -18,7 +19,7 @@
         <a href="#" class="fl"><s:message code="promotion.manage"/></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue" id="btnRegist" ng-click="openPromotionReg()">
+            <button class="btn_blue" id="btnRegist" ng-click="openPromotionReg()" <c:if test="${orgnFg == 'STORE' && storePromoRegYnVal == '0'}">style="display: none;"</c:if>>
                 <s:message code="cmm.new.add" />
             </button>
             <button class="btn_blue mr3" id="btnSearch" ng-click="_pageView('promotionCtrl',1)">
@@ -206,9 +207,9 @@
                                 <input type="file" id="fileKioskBanner" name="fileKioskBanner" class="form-control" ng-model="fileKioskBanner"
                                        onchange="angular.element(this).scope().uploadChange()" accept="image/x-png, image/gif, image/jpeg"/>
                             </f:form>
-                            <div class="pd5">
-                                <button type="button" class="btn_skyblue ml5" ng-click="imgCancel('009','F')"><s:message code="cmm.selectCancel" /></button>
-                                <button type="button" class="btn_skyblue" ng-click="delImg('009')"><s:message code="cmm.del" /></button>
+                            <div class="pd5" style="height: 35px;">
+                                <button type="button" id="btnImgCancel" class="btn_skyblue ml5" ng-click="imgCancel('003','F')"><s:message code="cmm.selectCancel" /></button>
+                                <button type="button" id="btnDelImg" class="btn_skyblue" ng-click="delImg('003')"><s:message code="cmm.del" /></button>
                             </div>
                             <div class="pd5">
                                 <label style="color: red;"><s:message code="promotion.fileSize.max"/></label>
@@ -441,8 +442,24 @@
                         <td>
                             <input type="text" class="sb-input w150px" id="partnerChargeUprc" ng-model="partnerChargeUprc" maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
                         </td>
-                        <th></th>
-                        <td></td>
+                        <%-- 입금일 --%>
+                        <th>
+                            <div style="float: left;"><input type="checkbox" id="chkDepositYmd" ng-model="isCheckedDepositYmd" ng-change="isChkDepositYmd()"/></div>
+                            <div style="padding-top: 3px; padding-left: 20px;"><s:message code="promotion.depositYmd" /></div>
+                        </th>
+                        <td>
+                            <div class="sb-select" id="divChkDepositYmd" style="display: none;">
+                                <span class="txtIn"><input id="depositYmd" class="w150px"></span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr <c:if test="${momsEnvstVal == '0'}">style="display: none"</c:if>>
+                        <%-- 제한된 결제 --%>
+                        <th><s:message code="promotion.blockPay" /></th>
+                        <td colspan="3" style="height: 35px;">
+                            <div style="float: left;"><input type="checkbox" id="chkPayFgMomsGiftcard" ng-model="payFgMomsGiftcard"/></div>
+                            <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="promotion.momsGiftcard" /></label></div>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -786,6 +803,8 @@
     var promotionTypeList  = ${promotionTypeList};
     // [1250 맘스터치] 환경설정값
     var momsEnvstVal = "${momsEnvstVal}";
+    // [1253 매장프로모션생성] 환경설정값 조회
+    var storePromoRegYnVal = "${storePromoRegYnVal}";
 
     // POS에서 해당 WEB 화면 최초 접속한 경우(접속하면서 session 생성), 왼쪽 메뉴영역은 접어두기.
     // 최초 접속시에는 이전 URL 인자값으로 판별가능
@@ -809,7 +828,7 @@
     }
 </style>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20221116.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20221117.02" charset="utf-8"></script>
 
 <%-- 적용상품 상품추가 --%>
 <c:import url="/WEB-INF/view/base/promotion/promotion/promotionProdReg.jsp">
