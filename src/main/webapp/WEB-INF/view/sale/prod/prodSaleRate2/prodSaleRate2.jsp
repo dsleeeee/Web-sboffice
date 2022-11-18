@@ -173,8 +173,12 @@
         <c:forEach var="dlvrInFgCol" items="${dlvrInFgColList}">
           <wj-flex-grid-column header="<s:message code="prodSaleRate2.saleQty"/>"     binding="stinQty${dlvrInFgCol.dlvrInFg}" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodSaleRate2.realSaleAmt"/>" binding="stinAmt${dlvrInFgCol.dlvrInFg}" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        </c:forEach>
+        <c:forEach var="dlvrInFgCol" items="${dlvrInFgColList}">
           <wj-flex-grid-column header="<s:message code="prodSaleRate2.saleQty"/>"     binding="dlvrQty${dlvrInFgCol.dlvrInFg}" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodSaleRate2.realSaleAmt"/>" binding="dlvrAmt${dlvrInFgCol.dlvrInFg}" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        </c:forEach>
+        <c:forEach var="dlvrInFgCol" items="${dlvrInFgColList}">
           <wj-flex-grid-column header="<s:message code="prodSaleRate2.saleQty"/>"     binding="packQty${dlvrInFgCol.dlvrInFg}" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodSaleRate2.realSaleAmt"/>" binding="packAmt${dlvrInFgCol.dlvrInFg}" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         </c:forEach>
