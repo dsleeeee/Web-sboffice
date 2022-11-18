@@ -3,7 +3,13 @@
  */
 var app = agrid.getApp();
 
-/** 현금영수증 승인 controller */
+var optionData = [
+  {"name":"단품/세트","value":"1"},
+  {"name":"단품/구성","value":"2"},
+  {"name":"단품/세트/구성","value":"3"},
+  {"name":"모두표시","value":"4"}
+];
+/** controller */
 app.controller('monthProdCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('monthProdCtrl', $scope, $http, true));
@@ -20,6 +26,7 @@ app.controller('monthProdCtrl', ['$scope', '$http', '$timeout', function ($scope
 
   // 브랜드 콤보박스 셋팅
   $scope._setComboData("hqBrandCd", hqBrandList);
+  $scope._setComboData("option", optionData);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -66,20 +73,57 @@ app.controller('monthProdCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM'); // 조회기간
     params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');// 조회기간
     params.hqBrandCd = $scope.hqBrandCd;
+    params.option = $scope.option;
     params.listScale = 500;
 
     console.log(params);
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/sale/prod/monthProd/monthProd/getMonthProdList.sb", params);
+    $scope._inquiryMain("/sale/prod/monthProd/monthProd/getMonthProdList.sb", params, function (){
+
+      // <-- 그리드 visible -->
+      // 선택한 테이블에 따른 리스트 항목 visible
+      var grid = wijmo.Control.getControl("#wjGridList");
+      var columns = grid.columns;
+
+      // 컬럼 총갯수
+      var columnsCnt = 16;
+
+      // 합계가 0이면 해당 컬럼 숨기기
+      for (var j = 0; j < columnsCnt; j++) {
+        if($scope.option === "1"){  // 단품+세트
+          if(columns[j].binding == "saleQty2" || columns[j].binding == "saleQty3" || columns[j].binding == "realSaleAmt2" || columns[j].binding == "realSaleAmt3") {
+            columns[j].visible = false;
+          } else {
+            columns[j].visible = true;
+          }
+        } else if($scope.option === "2"){  // 단품+구성
+          if(columns[j].binding == "saleQty1" || columns[j].binding == "saleQty3" || columns[j].binding == "realSaleAmt1" || columns[j].binding == "realSaleAmt3") {
+            columns[j].visible = false;
+          } else {
+            columns[j].visible = true;
+          }
+        } else if($scope.option === "3"){  // 단품+세트+구성
+          if(columns[j].binding == "saleQty1" || columns[j].binding == "saleQty2" || columns[j].binding == "realSaleAmt1" || columns[j].binding == "realSaleAmt2") {
+            columns[j].visible = false;
+          } else {
+            columns[j].visible = true;
+          }
+        } else if($scope.option === "4"){  // 모두 표시
+          columns[j].visible = true;
+        }
+      }
+      // <-- //그리드 visible -->
+    });
   };
-  
+
   // 매장선택 모듈 팝업 사용시 정의
   // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
   // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
   $scope.monthProdStoreShow = function () {
     $scope._broadcast('monthProdStoreCtrl');
   };
+
   // 상품분류정보 팝업
   $scope.popUpProdClass = function() {
     var popUp = $scope.prodClassPopUpLayer;
@@ -133,6 +177,7 @@ app.controller('monthProdCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.prodNm = $scope.prodNm;
     params.prodClassCd = $scope.prodClassCd;
     params.hqBrandCd = $scope.hqBrandCd;
+    params.option = $scope.option;
 
     $scope._broadcast('monthProdExcelCtrl',params);
   }
@@ -170,6 +215,7 @@ app.controller('monthProdExcelCtrl', ['$scope', '$http', '$timeout', function ($
     params.prodNm = data.prodNm;
     params.prodClassCd = data.prodClassCd;
     params.hqBrandCd = data.hqBrandCd;
+    params.option = data.option;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/prod/monthProd/monthProd/getMonthProdExcelList.sb", params, function() {
@@ -177,6 +223,40 @@ app.controller('monthProdExcelCtrl', ['$scope', '$http', '$timeout', function ($
         $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
         return false;
       }
+
+      // <-- 그리드 visible -->
+      // 선택한 테이블에 따른 리스트 항목 visible
+      var grid = wijmo.Control.getControl("#wjGridExcelList");
+      var columns = grid.columns;
+
+      // 컬럼 총갯수
+      var columnsCnt = 16;
+
+      // 합계가 0이면 해당 컬럼 숨기기
+      for (var j = 0; j < columnsCnt; j++) {
+        if($scope.option === "1"){  // 단품+세트
+          if(columns[j].binding == "saleQty2" || columns[j].binding == "saleQty3" || columns[j].binding == "realSaleAmt2" || columns[j].binding == "realSaleAmt3") {
+            columns[j].visible = false;
+          } else {
+            columns[j].visible = true;
+          }
+        } else if($scope.option === "2"){  // 단품+구성
+          if(columns[j].binding == "saleQty1" || columns[j].binding == "saleQty3" || columns[j].binding == "realSaleAmt1" || columns[j].binding == "realSaleAmt3") {
+            columns[j].visible = false;
+          } else {
+            columns[j].visible = true;
+          }
+        } else if($scope.option === "3"){  // 단품+세트+구성
+          if(columns[j].binding == "saleQty1" || columns[j].binding == "saleQty2" || columns[j].binding == "realSaleAmt1" || columns[j].binding == "realSaleAmt2") {
+            columns[j].visible = false;
+          } else {
+            columns[j].visible = true;
+          }
+        } else if($scope.option === "4"){  // 모두 표시
+          columns[j].visible = true;
+        }
+      }
+      // <-- //그리드 visible -->
 
       $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
       $timeout(function () {
