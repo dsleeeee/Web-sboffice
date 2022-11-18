@@ -173,6 +173,10 @@ public class PromotionVO extends PageVO {
     private String dlv11Yn;
     /** 프로모션 적용 구분(네이버주문) */
     private String dlv12Yn;
+    /** 입금일 */
+    private String depositYmd;
+    /** 제한된 결제*/
+    private String blockPayCd;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -756,5 +760,21 @@ public class PromotionVO extends PageVO {
 
     public void setDlv12Yn(String dlv12Yn) {
         this.dlv12Yn = dlv12Yn;
+    }
+
+    public String getDepositYmd() {
+        return depositYmd;
+    }
+
+    public void setDepositYmd(String depositYmd) {
+        this.depositYmd = depositYmd;
+    }
+
+    public String getBlockPayCd() {
+        return blockPayCd;
+    }
+
+    public void setBlockPayCd(String blockPayCd) {
+        this.blockPayCd = blockPayCd;
     }
 }

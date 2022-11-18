@@ -44,11 +44,20 @@ app.controller('verDetailCtrl', ['$scope', '$http', function ($scope, $http) {
       var data = response.data.data;
       $scope.version = data;
 
-      if(orgnFg === "STORE" && $scope.version.verSerNo < 8000){
+      // 수정 버튼 막기
+      if((orgnFg === "STORE" && $scope.version.verSerNo < 8000) || ($scope.version.promotionCd !== undefined && $scope.version.promotionCd !== null && $scope.version.promotionCd !== "")){
         $("#btnMod").hide();
       } else {
         $("#btnMod").show();
       }
+
+      // 적용매장 탭 막기
+      if($scope.version.promotionCd !== undefined && $scope.version.promotionCd !== null && $scope.version.promotionCd !== ""){
+        $("#storeEnv").hide();
+      }else{
+        $("#storeEnv").show();
+      }
+
     });
   };
 
