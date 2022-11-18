@@ -48,6 +48,8 @@ app.controller('monthCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
         // 첫째줄 헤더 생성
         var dataItem         = {};
         dataItem.yearMonth    = messages["month.yearMonth"];
+        dataItem.storeCd     = messages["day.dayTotal.storeCd"];
+        dataItem.storeNm     = messages["day.dayTotal.storeNm"];
         dataItem.storeCnt    = messages["month.storeCnt"];
         dataItem.saleCnt    = messages["month.saleCnt"];
         dataItem.totSaleAmt    = messages["month.sale"];

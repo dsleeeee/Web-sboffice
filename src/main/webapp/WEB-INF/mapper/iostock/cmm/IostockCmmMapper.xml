@@ -58,7 +58,16 @@
             AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
         </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
-            AND tms.HQ_BRAND_CD = #{storeHqBrandCd}
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
         </if>
         <if test='momsTeam != null and momsTeam != ""'>
             AND tmsi.MOMS_TEAM = #{momsTeam}
@@ -107,7 +116,16 @@
                     AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
                 </if>
                 <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
-                    AND thp.HQ_BRAND_CD = #{prodHqBrandCd}
+                    AND thp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+                </if>
+                <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                    <if test='userBrands != null and userBrands != ""'>
+                        -- 상품브랜드 전체일때
+                        AND thp.HQ_BRAND_CD IN
+                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
                 </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND thp.PROD_CLASS_CD IN (
@@ -132,9 +150,6 @@
                 </if>
                 <if test='prodNm != null and prodNm != ""'>
                     AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
-                </if>
-                <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
-                    AND tmp.HQ_BRAND_CD = #{prodHqBrandCd}
                 </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND tmp.PROD_CLASS_CD IN (
@@ -462,7 +477,7 @@
                     AND thn.NMCODE_CD = #{userHqNmcodeCd}
                     ORDER BY thn.NMCODE_CD
                 </if>
-                <if test='userHqNmcodeCd == null'>
+                <if test='userHqNmcodeCd == null or userHqNmcodeCd == ""'>
                     UNION
                     SELECT
                     '' AS VALUE,
@@ -509,7 +524,7 @@
                     AND thbm.BRANCH_CD = #{userHqNmcodeCd}
                     ORDER BY thbm.BRANCH_CD
                 </if>
-                <if test='userHqNmcodeCd == null'>
+                <if test='userHqNmcodeCd == null or userHqNmcodeCd == ""'>
                     UNION
                     SELECT
                     '' AS VALUE,

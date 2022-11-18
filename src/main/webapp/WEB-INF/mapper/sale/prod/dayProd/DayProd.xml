@@ -47,7 +47,16 @@
             </foreach>
         </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
-            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
         </if>
         <if test='prodCd != null and prodCd != ""'>
             AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
@@ -72,7 +81,16 @@
             </foreach>
         </if>
         <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
-            AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드
+            AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+        </if>
+        <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 상품브랜드 전체일때
+                AND tmp.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
         </if>
         <if test='momsTeam != null and momsTeam != ""'>
             AND tmsi.MOMS_TEAM = #{momsTeam}
@@ -137,7 +155,16 @@
             </foreach>
         </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
-            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
         </if>
         <if test='prodCd != null and prodCd != ""'>
             AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
@@ -162,7 +189,16 @@
             </foreach>
         </if>
         <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
-            AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드
+            AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+        </if>
+        <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 상품브랜드 전체일때
+                AND tmp.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
         </if>
         <if test='momsTeam != null and momsTeam != ""'>
             AND tmsi.MOMS_TEAM = #{momsTeam}
@@ -333,7 +369,7 @@
                     AND thn.NMCODE_CD = #{userHqNmcodeCd}
                     ORDER BY thn.NMCODE_CD
                 </if>
-                <if test='userHqNmcodeCd == null'>
+                <if test='userHqNmcodeCd == null or userHqNmcodeCd == ""'>
                     UNION
                     SELECT
                     '' AS VALUE,
@@ -380,7 +416,7 @@
                     AND thbm.BRANCH_CD = #{userHqNmcodeCd}
                     ORDER BY thbm.BRANCH_CD
                 </if>
-                <if test='userHqNmcodeCd == null'>
+                <if test='userHqNmcodeCd == null or userHqNmcodeCd == ""'>
                     UNION
                     SELECT
                     '' AS VALUE,

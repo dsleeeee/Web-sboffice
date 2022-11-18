@@ -247,8 +247,12 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
     // 적용조건 - 적용요일 셋팅
     $scope.isCheckedDayOfWeek = false;
 
-    // 구매금액 셋팅
+    // 적용조건 - 구매금액 셋팅
     $scope.isCheckedMinSaleAmt = false;
+
+    // 적용조건 - 입금일 셋팅
+    $scope.isCheckedDepositYmd = false;
+    var depositYmd = wcombo.genDateVal("#depositYmd", gvStartDate);
 
     // 적용상품 셋팅
     $scope.isCheckedProd = false;
@@ -343,30 +347,30 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                 var now = year + "" + month + "" + day;
 
                 if(orgnFg === "STORE") { // 매장권한 일 때
-                    if (info.regFg === 'S') { // 등록자가 매장일 때,
-
-                        $(".updownSet").css("display", "");
-
-                        if(modPromotionEnvstVal === "1"){ // 본사 또는 매장의 환경변수(진행중인프로모션수정여부 - 1097)이 '수정가능'인 경우 버튼 보임
-                            $scope.setButtonVisible("Y");
-                        }else{
-                            if(info.dateYn === "Y"){ // 프로모션 기간이 있는 경우, 오늘날짜가 프로모션 시작날짜보다 크거나 같으면 일부 버튼 숨김
-                                if(Number(now) >= Number(info.startYmd)){
-                                    $scope.setButtonVisible("N");
-                                }else{
-                                    $scope.setButtonVisible("Y");
-                                }
-                            }else{ // 프로모션 기간이 없는 경우, 오늘날짜가 프로모션 등록날짜보다 크면 일부 버튼 숨김
-                                if(Number(now) > Number(info.regDt)) {
-                                    $scope.setButtonVisible("N");
-                                }else{
-                                    $scope.setButtonVisible("Y");
+                    if(storePromoRegYnVal === '0'){ // 본사 환경변수(매장프로모션생성 - 1253)이 '미사용'인 경우 프로모션 생성, 수정 불가
+                        $scope.setButtonVisible("N");
+                    } else {
+                        if (info.regFg === 'S') { // 등록자가 매장일 때,
+                            if (modPromotionEnvstVal === "1") { // 본사 또는 매장의 환경변수(진행중인프로모션수정여부 - 1097)이 '수정가능'인 경우 버튼 보임
+                                $scope.setButtonVisible("Y");
+                            } else {
+                                if (info.dateYn === "Y") { // 프로모션 기간이 있는 경우, 오늘날짜가 프로모션 시작날짜보다 크거나 같으면 일부 버튼 숨김
+                                    if (Number(now) >= Number(info.startYmd)) {
+                                        $scope.setButtonVisible("N");
+                                    } else {
+                                        $scope.setButtonVisible("Y");
+                                    }
+                                } else { // 프로모션 기간이 없는 경우, 오늘날짜가 프로모션 등록날짜보다 크면 일부 버튼 숨김
+                                    if (Number(now) > Number(info.regDt)) {
+                                        $scope.setButtonVisible("N");
+                                    } else {
+                                        $scope.setButtonVisible("Y");
+                                    }
                                 }
                             }
+                        } else { // 등록자가 본사일 때
+                            $scope.setButtonVisible("N");
                         }
-                    } else { // 등록자가 본사일 때
-                        $("#btnSave").css("display", "none");
-                        $(".updownSet").css("display", "none");
                     }
                 }else{ // 본사권한 일 때
                     if(modPromotionEnvstVal === "1"){ // 본사 또는 매장의 환경변수(진행중인프로모션수정여부 - 1097)이 '수정가능'인 경우 버튼 보임
@@ -500,7 +504,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                     $("input:checkbox[id='chkDayOfWeekThu']").prop("checked", info.thuYn === 'Y' ? true : false);
                     $("input:checkbox[id='chkDayOfWeekFri']").prop("checked", info.friYn === 'Y' ? true : false);
                     $("input:checkbox[id='chkDayOfWeekSat']").prop("checked", info.satYn === 'Y' ? true : false);
-                    $("input:checkbox[id='chkDayOfWeekSun']").prop("checked", info.sunYn === 'Y' ? true : false);;
+                    $("input:checkbox[id='chkDayOfWeekSun']").prop("checked", info.sunYn === 'Y' ? true : false);
                     $scope.isCheckedDayOfWeek = true;
                     $("#divChkDayOfWeek").css("display", "");
                 }else{
@@ -576,6 +580,27 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                     $("#momsPurchsQtyLimit").val(info.momsPurchsQtyLimit);
                 }else{
                     $("#momsPurchsQtyLimit").val("");
+                }
+
+                if(info.depositYmd !== "" && info.depositYmd !== null && info.depositYmd !== undefined){ // 입금일
+                    $("input:checkbox[id='chkDepositYmd']").prop("checked", true);
+                    depositYmd.value = new Date(getFormatDate(info.depositYmd, "-"));
+                    $scope.isCheckedDepositYmd = true;
+                    $("#divChkDepositYmd").css("display", "");
+                }else{
+                    $("input:checkbox[id='chkDepositYmd']").prop("checked", false);
+                    depositYmd.value = getCurDate('-');
+                    $scope.isCheckedDepositYmd = false;
+                    $("#divChkDepositYmd").css("display", "none");
+                }
+
+                $("input:checkbox[id='chkPayFgMomsGiftcard']").prop("checked", false);
+
+                if(info.blockPayCd !== "" && info.blockPayCd !== null && info.blockPayCd !== undefined){ // 제한된 결제
+                    var arrBlockPayCd = info.blockPayCd.split(',');
+                    for(var i = 0; i < arrBlockPayCd.length; i++) {
+                        if(arrBlockPayCd[i] === "13"){$("input:checkbox[id='chkPayFgMomsGiftcard']").prop("checked", true);}
+                    }
                 }
 
                 // ------------ 적용상품 ------------
@@ -765,8 +790,14 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             params.partnerChargeUprc = $("#partnerChargeUprc").val(); // 제휴분담금
             params.momsPurchsCntLimit = $("#momsPurchsCntLimit").val(); // 구매횟수제한
             params.momsPurchsQtyLimit = $("#momsPurchsQtyLimit").val(); // 구매갯수제한
+            params.depositYmd = $("#chkDepositYmd").is(":checked") === true ? wijmo.Globalize.format(depositYmd.value, 'yyyyMMdd') : ''; // 입금일
 
-            // ------------ 적용상품 ------------
+            var vChkBlockPayCd = "";
+            if($("#chkPayFgMomsGiftcard").is(":checked")){ vChkBlockPayCd += "13,"; }
+            params.blockPayCd = vChkBlockPayCd.substr(0, vChkBlockPayCd.length - 1); // 제한된 결제
+
+
+           // ------------ 적용상품 ------------
             params.prodCdYn = $("#chkProd").is(":checked") === true ? 'Y' : 'N'; // 적용상품
             if ($("#chkProd").is(":checked")) {
                 params.selectProdDs = $scope.selectProdDsCombo.selectedValue; // 적용상품 - 구매대상
@@ -826,7 +857,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                         formData.append("orgnCd", orgnCd);
                         formData.append("hqOfficeCd", hqOfficeCd);
                         formData.append("storeCd", storeCd);
-                        formData.append("fileType", "009");
+                        formData.append("fileType", "003");
                         formData.append("useYn", $scope.useYnCombo.selectedValue);
                         formData.append("startDate", params.startYmd);
                         formData.append("endDate", params.endYmd);
@@ -890,7 +921,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                             // 파일 정보 테이블에 프로모션 정보만 UPDATE
 
                             var params3 = {};
-                            params3.fileType = "009";
+                            params3.fileType = "003";
                             params3.useYn = $scope.useYnCombo.selectedValue;
                             params3.startDate = params.startYmd;
                             params3.endDate = params.endYmd;
@@ -1001,6 +1032,14 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
         if(chkDlvFg === 0){
             $scope._popMsg(messages["promotion.chk.DlvFg"]);
             return false;
+        }
+
+        // 적용기간 종료일자가 시작일자보다 빠릅니다.
+        if($("#chkPeriod").is(":checked")) {
+            if(wijmo.Globalize.format(promotionStartDate.value, 'yyyyMMdd') > wijmo.Globalize.format(promotionEndDate.value, 'yyyyMMdd')){
+                $scope._popMsg(messages["promotion.periodChk"]);
+                return false;
+            }
         }
 
         // 적용요일을(를) 선택하세요.
@@ -1175,6 +1214,13 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
         $("#momsPurchsCntLimit").val(""); // 구매횟수제한
         $("#momsPurchsQtyLimit").val(""); // 구매갯수제한
 
+        $("input:checkbox[id='chkDepositYmd']").prop("checked", false); // 입금일
+        depositYmd.value = getCurDate('-');
+        $scope.isCheckedDepositYmd = false;
+        $("#divChkDepositYmd").css("display", "none");
+
+        $("input:checkbox[id='chkPayFgMomsGiftcard']").prop("checked", false); // 제한된 결제
+
         // ------------ 적용상품 ------------
         $("input:checkbox[id='chkProd']").prop("checked", false); // 적용상품
         $scope.selectProdDsCombo.selectedIndex = 0; // 구매대상
@@ -1232,6 +1278,10 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             // 저장 버튼
             $("#btnSave").css("display", "none");
 
+            // 키오스크배너 선택취소, 삭제버튼
+            $("#btnImgCancel").css("display", "none");
+            $("#btnDelImg").css("display", "none");
+
             // 적용상품 grid 버튼
             $("#btnProdAdd").css("display", "none");
             $("#btnClassAdd").css("display", "none");
@@ -1240,6 +1290,9 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             $("#divSelectProdBatch").css("display", "none");
 
             // 적용매장 grid 버튼
+            $("#btnStoreSampleDown").css("display", "");
+            $("#btnStoreExcelUpload").css("display", "");
+            $("#btnStoreExcelDown").css("display", "");
             $("#btnStoreAdd").css("display", "");
             $("#btnStoreDel").css("display", "none");
 
@@ -1253,6 +1306,10 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             // 저장 버튼
             $("#btnSave").css("display", "");
 
+            // 키오스크배너 선택취소, 삭제버튼
+            $("#btnImgCancel").css("display", "");
+            $("#btnDelImg").css("display", "");
+
             // 적용상품 grid 버튼
             $("#btnProdAdd").css("display", "");
             $("#btnClassAdd").css("display", "");
@@ -1265,6 +1322,9 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             }
 
             // 적용매장 grid 버튼
+            $("#btnStoreSampleDown").css("display", "");
+            $("#btnStoreExcelUpload").css("display", "");
+            $("#btnStoreExcelDown").css("display", "");
             $("#btnStoreAdd").css("display", "");
             $("#btnStoreDel").css("display", "");
 
@@ -1706,12 +1766,21 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
         }
     };
 
-    // 구매금액 입력 사용/미사용 체크박스
+    // 적용조건 - 구매금액 입력 사용/미사용 체크박스
     $scope.isChkMinSaleAmt = function(){
         if($scope.isCheckedMinSaleAmt){
             $("#divChkMinSaleAmt").css("display", "");
         }else{
             $("#divChkMinSaleAmt").css("display", "none");
+        }
+    };
+
+    // 적용조건 - 입금일 입력 사용/미사용 체크박스
+    $scope.isChkDepositYmd = function(){
+        if($scope.isCheckedDepositYmd){
+            $("#divChkDepositYmd").css("display", "");
+        }else{
+            $("#divChkDepositYmd").css("display", "none");
         }
     };
 
@@ -1788,10 +1857,10 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
     $scope.getImg = function () {
 
         // 이미지와 첨부파일 초기화
-        $scope.imgCancel("009", 'A');
+        $scope.imgCancel("003", 'A');
 
         var params = [];
-        params.fileType = "009";
+        params.fileType = "003";
         params.promotionCd = $("#hdPromotionCd").val();
 
         $scope._postJSONQuery.withOutPopUp("/base/promotion/promotion/getPromotionBanner.sb", params, function (response) {
@@ -1801,7 +1870,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
 
                 for (var i = 0; i < list.length; i++) {
 
-                    if(list[i].fileUseType === "009"){
+                    if(list[i].fileUseType === "003"){
                         $("#lblFileNm").text(list[i].fileOrgNm);
                         $("#hdFileNo").val(list[i].adverFileNo);
                     }
@@ -1818,7 +1887,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
         // type - A: 무조건 이미지 관련 데이터 초기화(프로모션 리스트 조회, 프로모션코드 클릭 시 해당)
         // type - F: 이미지 파일이 등록되어있으면 '선택취소' 버튼 클릭 시 동작 안하도록
         if(type === "F"){
-            if(imgFg === "009") {
+            if(imgFg === "003") {
                 if ($("#hdFileNo").val() !== "") { // 기존 이미지 파일이 있는 경우
                     if ($("#fileKioskBanner").val() !== "") { // 새 첨부 이미지를 넣고 선택 취소 시,
                         // 재조회
@@ -1834,7 +1903,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
         var element = "";
 
         // 첨부파일 초기화
-        if (imgFg === "009") {
+        if (imgFg === "003") {
             $("#lblFileNm").text("");
             $("#hdFileNo").val("");
             $("#lblFileSize").text("");
@@ -1863,7 +1932,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
     $scope.delImg = function (imgFg) {
 
         // 등록한 이미지가 없을때 삭제버튼 클릭 시 동작 안하도록
-        if(imgFg === "009"){
+        if(imgFg === "003"){
             if($("#hdFileNo").val() === ""){
                 return;
             }
@@ -1879,7 +1948,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             formData.append("orgnCd", orgnCd);
             formData.append("hqOfficeCd", hqOfficeCd);
             formData.append("storeCd", storeCd);
-            formData.append("fileType", "009");
+            formData.append("fileType", "003");
             formData.append("promotionCd", $("#hdPromotionCd").val());
             formData.append("verSerNo", $("#hdFileNo").val());
 

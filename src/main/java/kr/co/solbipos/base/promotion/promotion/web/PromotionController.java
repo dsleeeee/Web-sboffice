@@ -104,6 +104,9 @@ public class PromotionController {
             model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
         }
 
+        // [1253 매장프로모션생성] 환경설정값 조회
+        model.addAttribute("storePromoRegYnVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1253"), "0"));
+
         StoreTypeVO storeTypeVO = new StoreTypeVO();
 
         // 브랜드조회(콤보박스용)

@@ -287,7 +287,9 @@
                                       #{regDt} AS REG_DT,
                                       #{regId} AS REG_ID,
                                       #{modDt} AS MOD_DT,
-                                      #{modId} AS MOD_ID
+                                      #{modId} AS MOD_ID,
+                                      #{blockPayCd} AS BLOCK_PAY_CD,
+                                      #{depositYmd} AS DEPOSIT_YMD
                                 FROM DUAL
                             ) B
                         ON (A.HQ_OFFICE_CD = B.HQ_OFFICE_CD AND A.PROMOTION_CD = B.PROMOTION_CD)
@@ -337,7 +339,9 @@
                            A.DLV11_YN = B.DLV11_YN,
                            A.DLV12_YN = B.DLV12_YN,
                            A.MOD_DT = B.MOD_DT,
-                           A.MOD_ID = B.MOD_ID
+                           A.MOD_ID = B.MOD_ID,
+                           A.BLOCK_PAY_CD = B.BLOCK_PAY_CD,
+                           A.DEPOSIT_YMD = B.DEPOSIT_YMD
                      WHEN NOT MATCHED THEN
                    INSERT
                     (      A.HQ_OFFICE_CD,
@@ -388,7 +392,9 @@
                            A.REG_DT,
                            A.REG_ID,
                            A.MOD_DT,
-                           A.MOD_ID
+                           A.MOD_ID,
+                           A.BLOCK_PAY_CD,
+                           A.DEPOSIT_YMD
                     )
                     VALUES
                     (      B.HQ_OFFICE_CD,
@@ -439,7 +445,9 @@
                            B.REG_DT,
                            B.REG_ID,
                            B.MOD_DT,
-                           B.MOD_ID
+                           B.MOD_ID,
+                           B.BLOCK_PAY_CD,
+                           B.DEPOSIT_YMD
                     )
             </when>
             <!-- 매장 -->
@@ -492,7 +500,9 @@
                                       #{regDt} AS REG_DT,
                                       #{regId} AS REG_ID,
                                       #{modDt} AS MOD_DT,
-                                      #{modId} AS MOD_ID
+                                      #{modId} AS MOD_ID,
+                                      #{blockPayCd} AS BLOCK_PAY_CD,
+                                      #{depositYmd} AS DEPOSIT_YMD
                                 FROM DUAL
                             ) B
                         ON (A.STORE_CD = B.STORE_CD AND A.PROMOTION_CD = B.PROMOTION_CD)
@@ -541,7 +551,9 @@
                             A.DLV11_YN = B.DLV11_YN,
                             A.DLV12_YN = B.DLV12_YN,
                             A.MOD_DT = B.MOD_DT,
-                            A.MOD_ID = B.MOD_ID
+                            A.MOD_ID = B.MOD_ID,
+                            A.BLOCK_PAY_CD = B.BLOCK_PAY_CD,
+                            A.DEPOSIT_YMD = B.DEPOSIT_YMD
                       WHEN NOT MATCHED THEN
                     INSERT
                         (   A.STORE_CD,
@@ -591,7 +603,9 @@
                             A.REG_DT,
                             A.REG_ID,
                             A.MOD_DT,
-                            A.MOD_ID
+                            A.MOD_ID,
+                            A.BLOCK_PAY_CD,
+                            A.DEPOSIT_YMD
                     )
                     VALUES
                     (       B.STORE_CD,
@@ -641,7 +655,9 @@
                             B.REG_DT,
                             B.REG_ID,
                             B.MOD_DT,
-                            B.MOD_ID
+                            B.MOD_ID,
+                            B.BLOCK_PAY_CD,
+                            B.DEPOSIT_YMD
                     )
             </when>
         </choose>
@@ -906,7 +922,9 @@
                         thpc.MS_CHARGE_UPRC,
                         thpc.PARTNER_CHARGE_UPRC,
                         thpc.MOMS_PURCHS_CNT_LIMIT,
-                        thpc.MOMS_PURCHS_QTY_LIMIT
+                        thpc.MOMS_PURCHS_QTY_LIMIT,
+                        thpc.BLOCK_PAY_CD,
+                        thpc.DEPOSIT_YMD
                   FROM TB_HQ_PROMO_H thph,
                         TB_HQ_PROMO_CONDI thpc,
                         TB_HQ_PROMO_BENE thpb
@@ -975,7 +993,9 @@
                         tmpc.MS_CHARGE_UPRC,
                         tmpc.PARTNER_CHARGE_UPRC,
                         tmpc.MOMS_PURCHS_CNT_LIMIT,
-                        tmpc.MOMS_PURCHS_QTY_LIMIT
+                        tmpc.MOMS_PURCHS_QTY_LIMIT,
+                        tmpc.BLOCK_PAY_CD,
+                        tmpc.DEPOSIT_YMD
                   FROM TB_MS_PROMO_H tmph,
                         TB_MS_PROMO_CONDI tmpc,
                         TB_MS_PROMO_BENE tmpb

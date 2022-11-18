@@ -121,7 +121,8 @@
                 FILE_DESC AS VER_SER_NM,
                 USE_YN,
                 REG_DT,
-                DISP_TIME
+                DISP_TIME,
+                PROMOTION_CD
           FROM TB_HQ_POS_ADVER_FILE
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
            AND ADVER_FILE_NO = #{verSerNo}
@@ -143,7 +144,8 @@
                     FILE_DESC AS VER_SER_NM,
                     USE_YN,
                     REG_DT,
-                    DISP_TIME
+                    DISP_TIME,
+                    PROMOTION_CD
               FROM TB_MS_POS_ADVER_FILE
              WHERE STORE_CD = #{storeCd}
                AND ADVER_FILE_NO = #{verSerNo}
