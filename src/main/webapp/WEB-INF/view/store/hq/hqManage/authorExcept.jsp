@@ -29,7 +29,7 @@
             <%-- 웹사이트 메뉴 --%>
             <li><a id="webMenu" href="#" class="on"><s:message code="hqManage.webMenu" /></a></li>
             <%-- 모바일 메뉴 --%>
-            <li><a id="mobMenu" href="#"><s:message code="hqManage.mobMenu" /></a></li>
+<%--            <li><a id="mobMenu" href="#"><s:message code="hqManage.mobMenu" /></a></li>--%>
           </ul>
         </div>
 
