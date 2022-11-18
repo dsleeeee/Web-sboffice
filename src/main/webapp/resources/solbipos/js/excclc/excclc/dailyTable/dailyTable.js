@@ -43,24 +43,24 @@ dailyTableSelectStoreShow = function () {
 
 //dailyTableCtrl		START	############################################################################################################################################################################
 app.controller('dailyTableCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
-
+		
 	//상위 객체 상속 : T/F 는 picker
 	angular.extend(this, new RootController('dailyTableCtrl', $scope, $http, true));
 
 	$scope.orgnFg = gvOrgnFg;
-
+	
 	$scope.init            = function () {
-		$scope.configCtrlList();
+		$scope.configCtrlList();        
         event.preventDefault();	//기능수행 종료 (반드시 추가해야 함)
 	};
 
     //[조회] - START			--------------------------------------------------------------------------------------------------------------------------
     $scope.$on("dailyTableCtrl", function(event, data) {	//판매추이분석 Grid 조회
-
+        
     	$scope.dailyTableCtrlList();
-
+        
         event.preventDefault();	//기능수행 종료 (반드시 추가해야 함)
-
+        
 	});
 
     $scope.configCtrlList = function(data){
@@ -85,18 +85,18 @@ app.controller('dailyTableCtrl', ['$scope', '$http', '$timeout', function ($scop
 
     																    		$("#btnSave2"	).show();
     																    		$("#btnUp"	 	).show();
-    																    		$("#btnDown"	).show();
+    																    		$("#btnDown"	).show();																    		
     															    		}
 
     															            sortByDataItem("dailyTableView");	//화면의 Grid 정렬 변경
 
     															            //$scope.$broadcast('loadingPopupInactive');
     																	},	//callBack function
-    												false);
+    												false);    		
     };	//$scope.dailyTableCtrlList = function(data){
     //[조회] - END			--------------------------------------------------------------------------------------------------------------------------
 
-
+    
     $scope.dailyTableCtrlList = function(data){
     	console.log("scope.orgnFg : " + $scope.orgnFg					);
     	console.log("매장                 : " + $("#dailyTableSelectStoreCd").val()	);
@@ -149,14 +149,14 @@ app.controller('dailyTableCtrl', ['$scope', '$http', '$timeout', function ($scop
 
 																    		$("#btnSave2"	).show();
 																    		$("#btnUp"	 	).show();
-																    		$("#btnDown"	).show();
+																    		$("#btnDown"	).show();																    		
 															    		}
 
 															            sortByDataItem("dailyTableView");
 
-//----------------------------------------------------------------------------------------------------------------------------------------------------
-
-
+//----------------------------------------------------------------------------------------------------------------------------------------------------															        	
+															    	    
+															            
 															            $scope.$broadcast('loadingPopupInactive');	//'데이터 처리 중입니다.' 중지
 																	},	//callBack function
 												false);
@@ -171,7 +171,7 @@ app.controller('dailyTableCtrl_sl', ['$scope', '$http', function ($scope, $http)
 	angular.extend(this, new RootController('dailyTableCtrl_sl', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
 	$scope.initGrid = function (s, e) {
-
+		
         $scope._makePickColumns("dailyTableCtrl_sl");   	        //picker 사용시 호출
 
 		//Grid Header 2줄 - START	----------------------------------------------------------------
@@ -592,30 +592,6 @@ app.controller('dailyTableCtrl_excel', ['$scope', '$http', '$timeout', function 
 
         doc.print();
 	};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	//print2				STATT	----------------------------------------------------------------------------------------------------------------------
 	$scope.print2 = function(){
@@ -1129,42 +1105,5 @@ app.controller('dailyTableCtrl_paymentStatus3', ['$scope', '$http', function ($s
 				}
 			}
 		});
-
-
-
-
-	// <-- 그리드 합치기 -->
-		s.allowMerging = 'Cells';
-		s.itemFormatter = function (panel, r, c, cell) {
-			if (panel.cellType === wijmo.grid.CellType.Cell) {
-
-				// 컬럼 병합(그리드 합치기)
-				if(panel.columns[c].binding == "remark") {
-					panel.columns[c].allowMerging = true;
-				}
-
-				// 합쳐진 컬럼 데이터 가운데 정렬
-				wijmo.setCss(cell, {
-					display    : 'table',
-					tableLayout: 'fixed'
-				});
-				cell.innerHTML = '<div>' + cell.innerHTML + '</div>';
-				wijmo.setCss(cell.children[0], {
-					display      : 'table-cell',
-					verticalAlign: 'middle',
-					textAlign    : 'center'
-				});
-
-				// readOnly 배경색 표시
-				var col = panel.columns[c];
-				if (col.isReadOnly) {
-					wijmo.addClass(cell, 'wj-custom-readonly');
-				}
-			}
-		}
-		// <-- //그리드 합치기 -->
-
-
-
 	}
 }]);
