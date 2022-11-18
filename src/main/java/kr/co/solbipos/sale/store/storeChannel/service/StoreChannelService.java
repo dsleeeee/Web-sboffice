@@ -12,7 +12,7 @@ import java.util.List;
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 202D:\work\sboffice\src\main\java\kr\co\solbipos\sale\store\storeChannel\service\StoreChannelService.java  권지현      최초생성
+ * @ 2022.10.14  권지현      최초생성
  *
  * @author 솔비포스 개발본부 WEB개발팀 권지현
  * @since 2022.10.14

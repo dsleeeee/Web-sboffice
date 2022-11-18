@@ -14,10 +14,10 @@ import java.util.List;
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2021.09.01  이다솜      최초생성
+ * @ 2022.10.14  권지현      최초생성
  *
- * @author 솔비포스 개발본부 WEB개발팀 이다솜
- * @since 2021.09.01
+ * @author 솔비포스 개발본부 WEB개발팀 권지현
+ * @since 2022.10.14
  * @version 1.0
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
