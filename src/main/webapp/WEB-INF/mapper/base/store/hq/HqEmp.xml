@@ -113,6 +113,7 @@
         NVL(the.MAIN_SALE_FG, '0') AS MAIN_SALE_FG,
         the.VENDR_CD,
         NVL((SELECT VENDR_NM FROM TB_HQ_VENDOR WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND VENDR_CD = the.VENDR_CD), '본사') AS VENDR_NM,
+        the.BRANCH_CD,
         NVL((SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND BRANCH_CD = the.BRANCH_CD), '지사없음') AS BRANCH_NM,
         the.MOMS_TEAM,
         the.MOMS_AC_SHOP,
