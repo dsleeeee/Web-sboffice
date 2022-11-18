@@ -1880,8 +1880,17 @@ Format.prototype.initElements = function () {
   addClickHandler(document.getElementById('btnSave'), function () {
 
     var scope = agrid.getScope("touchKeyCtrl");
+
+    var saveMsg = "해당 그룹의 터치키를 저장하시겠습니까?";
+
+    if(orgnFg === "HQ"){
+      saveMsg += '<br/>매장수정허용분류에 등록된 분류의 터치키는 저장되지 않습니다.';
+    } else if(orgnFg === "STORE" && touchKeyEnvstVal2 === "2"){
+      saveMsg += '<br/>매장수정허용분류에 등록된 분류의 터치키만 저장됩니다.';
+    }
+
     scope.$apply(function(){
-      scope._popConfirm("해당 그룹의 터치키를 저장하시겠습니까?", function() {
+      scope._popConfirm(saveMsg, function() {
 
         // 저장
         format.save(format.touchkey.classArea, format.touchkey.prodArea);
