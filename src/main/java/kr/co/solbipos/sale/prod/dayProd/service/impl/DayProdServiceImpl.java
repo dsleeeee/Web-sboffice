@@ -54,6 +54,15 @@ public class DayProdServiceImpl implements DayProdService {
             dayProdVO.setProdCdList(prodCdList);
         }
 
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 매장브랜드, 상품브랜드가 '전체' 일때
+            if (dayProdVO.getStoreHqBrandCd() == "" || dayProdVO.getStoreHqBrandCd() == null || dayProdVO.getProdHqBrandCd() == "" || dayProdVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = dayProdVO.getUserBrands().split(",");
+                dayProdVO.setUserBrandList(userBrandList);
+            }
+        }
+
         return dayProdMapper.getDayProdList(dayProdVO);
     }
     
@@ -74,6 +83,15 @@ public class DayProdServiceImpl implements DayProdService {
         if (dayProdVO.getProdCds() != null && !"".equals(dayProdVO.getProdCds())) {
             String[] prodCdList = dayProdVO.getProdCds().split(",");
             dayProdVO.setProdCdList(prodCdList);
+        }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 매장브랜드, 상품브랜드가 '전체' 일때
+            if (dayProdVO.getStoreHqBrandCd() == "" || dayProdVO.getStoreHqBrandCd() == null || dayProdVO.getProdHqBrandCd() == "" || dayProdVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = dayProdVO.getUserBrands().split(",");
+                dayProdVO.setUserBrandList(userBrandList);
+            }
         }
 
         return dayProdMapper.getDayProdExcelList(dayProdVO);

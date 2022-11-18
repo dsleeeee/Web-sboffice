@@ -113,6 +113,9 @@
    */
   var app = agrid.getApp();
 
+  // 상품브랜드 콤보박스 항목 저장시 쓰려고
+  var momsHqBrandCdComboList;
+
   /** 매장선택 controller */
   app.controller('${param.targetId}Ctrl', ['$scope', '$http', function ($scope, $http) {
     var targetId = '${param.targetId}';
@@ -130,6 +133,8 @@
         if (response.data.data.list.length > 0) {
           var list = response.data.data.list;
           $scope._setComboData("popProdHqBrandCdCombo", list);
+          // 상품브랜드 콤보박스 항목 저장시 쓰려고
+          momsHqBrandCdComboList = list;
         }
       });
     };
@@ -170,6 +175,16 @@
       params.prodNm = $scope.srchProdNm;
       params.prodHqBrandCd = $scope.popProdHqBrandCd;
       params.prodClassCd = $scope.popProdClassCd;
+      // '전체' 일때
+      if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+        var momsHqBrandCd = "";
+        for(var i=0; i < momsHqBrandCdComboList.length; i++){
+          if(momsHqBrandCdComboList[i].value !== null) {
+            momsHqBrandCd += momsHqBrandCdComboList[i].value + ","
+          }
+        }
+        params.userBrands = momsHqBrandCd;
+      }
 
       $scope._inquirySub("/iostock/cmm/iostockCmm/selectProdMomsList.sb", params, function () {
         $scope.searchFg = "Y";

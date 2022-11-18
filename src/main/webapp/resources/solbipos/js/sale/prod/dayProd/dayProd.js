@@ -167,6 +167,16 @@ app.controller('dayProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         params.momsShopType = $scope.momsShopType;
         params.momsStoreManageType = $scope.momsStoreManageType;
         params.branchCd = $scope.branchCd;
+        // '전체' 일때
+        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+            var momsHqBrandCd = "";
+            for(var i=0; i < momsHqBrandCdComboList.length; i++){
+                if(momsHqBrandCdComboList[i].value !== null) {
+                    momsHqBrandCd += momsHqBrandCdComboList[i].value + ","
+                }
+            }
+            params.userBrands = momsHqBrandCd;
+        }
         params.listScale = 500;
 
         console.log(params);
@@ -250,6 +260,16 @@ app.controller('dayProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         params.momsShopType = $scope.momsShopType;
         params.momsStoreManageType = $scope.momsStoreManageType;
         params.branchCd = $scope.branchCd;
+        // '전체' 일때
+        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+            var momsHqBrandCd = "";
+            for(var i=0; i < momsHqBrandCdComboList.length; i++){
+                if(momsHqBrandCdComboList[i].value !== null) {
+                    momsHqBrandCd += momsHqBrandCdComboList[i].value + ","
+                }
+            }
+            params.userBrands = momsHqBrandCd;
+        }
 
         $scope._broadcast('dayProdExcelCtrl',params);
     };
