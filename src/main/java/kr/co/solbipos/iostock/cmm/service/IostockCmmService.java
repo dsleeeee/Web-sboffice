@@ -9,6 +9,7 @@ public interface IostockCmmService {
 
     /** 수불&재고관련 공통 - 매장선택 리스트 조회 */
     List<DefaultMap<String>> selectStoreList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO);
+
     List<DefaultMap<String>> selectStoreMomsList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO);
     List<DefaultMap<String>> selectProdMomsList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO);
     List<DefaultMap<String>> selectBrandMomsList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO);
@@ -34,4 +35,9 @@ public interface IostockCmmService {
     /** 수불&재고관련 공통 - 다이나믹 콤보조회 */
     List<DefaultMap<String>> selectDynamicCodeList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO);
 
+    /** 사용자별 코드별 공통코드 콤보박스 조회 */
+    List<DefaultMap<String>> selectHqNmcodeMomsList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO);
+
+    /** 사용자별 지사 콤보박스 조회 */
+    List<DefaultMap<String>> selectBranchMomsList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO);
 }

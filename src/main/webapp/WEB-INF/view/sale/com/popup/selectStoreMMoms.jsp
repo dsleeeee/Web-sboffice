@@ -11,7 +11,7 @@
        ng-click="<c:out value="${param.targetId}"/>Show()"
        readonly/>
 
-<wj-popup id="wj<c:out value="${param.targetId}"/>LayerM" control="wj<c:out value="${param.targetId}"/>LayerM" show-trigger="Click" hide-trigger="Click" style="display:none;width:500px;">
+<wj-popup id="wj<c:out value="${param.targetId}"/>LayerM" control="wj<c:out value="${param.targetId}"/>LayerM" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;">
   <div class="wj-dialog wj-dialog-columns">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="cmm.store.select"/>
@@ -40,21 +40,142 @@
             </td>
           </tr>
           <tr>
-            <th><s:message code="outstockReqDate.hqBrand" /></th>
+            <%-- 매장브랜드 --%>
+            <th><s:message code="outstockReqDate.storeHqBrand" /></th>
             <td>
               <div class="sb-select">
                 <wj-combo-box
-                        id="hqBrand"
-                        ng-model="hqBrand"
-                        items-source="_getComboData('hqBrand')"
+                        id="srchPopStoreHqBrandCdCombo"
+                        ng-model="popStoreHqBrandCd"
+                        items-source="_getComboData('popStoreHqBrandCdCombo')"
                         display-member-path="name"
                         selected-value-path="value"
                         is-editable="false"
-                        control="hqBrandCombo">
+                        control="srchPopStoreHqBrandCdCombo">
                 </wj-combo-box>
               </div>
             </td>
+            <%-- 지사 --%>
+            <th><s:message code="outstockReqDate.branchCd"/></th>
+            <td>
+                <div class="sb-select">
+                    <wj-combo-box
+                            id="srchPopBranchCdComboo"
+                            ng-model="popBranchCd"
+                            items-source="_getComboData('popBranchCdCombo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)"
+                            control="srchPopBranchCdComboo">
+                    </wj-combo-box>
+                </div>
+            </td>
           </tr>
+          <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+              <tr>
+                  <%-- 팀별 --%>
+                  <th><s:message code="outstockReqDate.momsTeam"/></th>
+                  <td>
+                      <div class="sb-select">
+                          <wj-combo-box
+                                  id="srchPopMomsTeamCombo"
+                                  ng-model="popMomsTeam"
+                                  items-source="_getComboData('popMomsTeamCombo')"
+                                  display-member-path="name"
+                                  selected-value-path="value"
+                                  is-editable="false"
+                                  initialized="_initComboBox(s)"
+                                  control="srchPopMomsTeamCombo">
+                          </wj-combo-box>
+                      </div>
+                  </td>
+                  <%-- AC점포별 --%>
+                  <th><s:message code="outstockReqDate.momsAcShop"/></th>
+                  <td>
+                      <div class="sb-select">
+                          <wj-combo-box
+                                  id="srchPopMomsAcShopCombo"
+                                  ng-model="popMomsAcShop"
+                                  items-source="_getComboData('popMomsAcShopCombo')"
+                                  display-member-path="name"
+                                  selected-value-path="value"
+                                  is-editable="false"
+                                  initialized="_initComboBox(s)"
+                                  control="srchPopMomsAcShopCombo">
+                          </wj-combo-box>
+                      </div>
+                  </td>
+              </tr>
+              <tr>
+                  <%-- 지역구분 --%>
+                  <th><s:message code="outstockReqDate.momsAreaFg"/></th>
+                  <td>
+                      <div class="sb-select">
+                          <wj-combo-box
+                                  id="srchPopMomsAreaFgCombo"
+                                  ng-model="popMomsAreaFg"
+                                  items-source="_getComboData('popMomsAreaFgCombo')"
+                                  display-member-path="name"
+                                  selected-value-path="value"
+                                  is-editable="false"
+                                  initialized="_initComboBox(s)"
+                                  control="srchPopMomsAreaFgCombo">
+                          </wj-combo-box>
+                      </div>
+                  </td>
+                  <%-- 상권 --%>
+                  <th><s:message code="outstockReqDate.momsCommercial"/></th>
+                  <td>
+                      <div class="sb-select">
+                          <wj-combo-box
+                                  id="srchPopMomsCommercialCombo"
+                                  ng-model="popMomsCommercial"
+                                  items-source="_getComboData('popMomsCommercialCombo')"
+                                  display-member-path="name"
+                                  selected-value-path="value"
+                                  is-editable="false"
+                                  initialized="_initComboBox(s)"
+                                  control="srchPopMomsCommercialCombo">
+                          </wj-combo-box>
+                      </div>
+                  </td>
+              </tr>
+              <tr>
+                  <%-- 점포유형 --%>
+                  <th><s:message code="outstockReqDate.momsShopType"/></th>
+                  <td>
+                      <div class="sb-select">
+                          <wj-combo-box
+                                  id="srchPopMomsShopTypeCombo"
+                                  ng-model="popMomsShopType"
+                                  items-source="_getComboData('popMomsShopTypeCombo')"
+                                  display-member-path="name"
+                                  selected-value-path="value"
+                                  is-editable="false"
+                                  initialized="_initComboBox(s)"
+                                  control="srchPopMomsShopTypeCombo">
+                          </wj-combo-box>
+                      </div>
+                  </td>
+                  <%-- 매장관리타입 --%>
+                  <th><s:message code="outstockReqDate.momsStoreManageType"/></th>
+                  <td>
+                      <div class="sb-select">
+                          <wj-combo-box
+                                  id="srchPopMomsStoreManageTypeCombo"
+                                  ng-model="popMomsStoreManageType"
+                                  items-source="_getComboData('popMomsStoreManageTypeCombo')"
+                                  display-member-path="name"
+                                  selected-value-path="value"
+                                  is-editable="false"
+                                  initialized="_initComboBox(s)"
+                                  control="srchPopMomsStoreManageTypeCombo">
+                          </wj-combo-box>
+                      </div>
+                  </td>
+              </tr>
+          </c:if>
           </tbody>
         </table>
 
@@ -106,13 +227,139 @@
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-      var params = {};
-      $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectBrandMomsList.sb', params, function (response) {
-        if (response.data.data.list.length > 0) {
-          var list = response.data.data.list;
-          $scope._setComboData("hqBrand", list);
-        }
-      });
+        // 매장브랜드
+        var params = {};
+        $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectBrandMomsList.sb', params, function (response) {
+            if (response.data.data.list.length > 0) {
+                var list = response.data.data.list;
+                $scope._setComboData("popStoreHqBrandCdCombo", list);
+            }
+        });
+
+        // 팀별
+        var params = {};
+        params.nmcodeGrpCd = "151";
+        $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectHqNmcodeMomsList.sb', params, function (response) {
+            if (response.data.data.list.length > 0) {
+                var list = response.data.data.list;
+                $scope._setComboData("popMomsTeamCombo", list);
+                // 팀별
+                if(list.length <= 1) {
+                    $("#srchPopMomsTeamCombo").css('background-color', '#F0F0F0');
+                    $("#srchPopMomsTeamCombo").attr("disabled", true);
+                } else {
+                    $("#srchPopMomsTeamCombo").css('background-color', '#FFFFFF');
+                    $("#srchPopMomsTeamCombo").attr("disabled", false);
+                }
+            }
+        });
+
+        // AC점포별
+        var params = {};
+        params.nmcodeGrpCd = "152";
+        $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectHqNmcodeMomsList.sb', params, function (response) {
+            if (response.data.data.list.length > 0) {
+                var list = response.data.data.list;
+                $scope._setComboData("popMomsAcShopCombo", list);
+                // AC점포별
+                if(list.length <= 1) {
+                    $("#srchPopMomsAcShopCombo").css('background-color', '#F0F0F0');
+                    $("#srchPopMomsAcShopCombo").attr("disabled", true);
+                } else {
+                    $("#srchPopMomsAcShopCombo").css('background-color', '#FFFFFF');
+                    $("#srchPopMomsAcShopCombo").attr("disabled", false);
+                }
+            }
+        });
+
+        // 지역구분
+        var params = {};
+        params.nmcodeGrpCd = "153";
+        $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectHqNmcodeMomsList.sb', params, function (response) {
+            if (response.data.data.list.length > 0) {
+                var list = response.data.data.list;
+                $scope._setComboData("popMomsAreaFgCombo", list);
+                // 지역구분
+                if(list.length <= 1) {
+                    $("#srchPopMomsAreaFgCombo").css('background-color', '#F0F0F0');
+                    $("#srchPopMomsAreaFgCombo").attr("disabled", true);
+                } else {
+                    $("#srchPopMomsAreaFgCombo").css('background-color', '#FFFFFF');
+                    $("#srchPopMomsAreaFgCombo").attr("disabled", false);
+                }
+            }
+        });
+
+        // 상권
+        var params = {};
+        params.nmcodeGrpCd = "154";
+        $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectHqNmcodeMomsList.sb', params, function (response) {
+            if (response.data.data.list.length > 0) {
+                var list = response.data.data.list;
+                $scope._setComboData("popMomsCommercialCombo", list);
+                // 상권
+                if(list.length <= 1) {
+                    $("#srchPopMomsCommercialCombo").css('background-color', '#F0F0F0');
+                    $("#srchPopMomsCommercialCombo").attr("disabled", true);
+                } else {
+                    $("#srchPopMomsCommercialCombo").css('background-color', '#FFFFFF');
+                    $("#srchPopMomsCommercialCombo").attr("disabled", false);
+                }
+            }
+        });
+
+        // 점포유형
+        var params = {};
+        params.nmcodeGrpCd = "155";
+        $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectHqNmcodeMomsList.sb', params, function (response) {
+            if (response.data.data.list.length > 0) {
+                var list = response.data.data.list;
+                $scope._setComboData("popMomsShopTypeCombo", list);
+                // 점포유형
+                if(list.length <= 1) {
+                    $("#srchPopMomsShopTypeCombo").css('background-color', '#F0F0F0');
+                    $("#srchPopMomsShopTypeCombo").attr("disabled", true);
+                } else {
+                    $("#srchPopMomsShopTypeCombo").css('background-color', '#FFFFFF');
+                    $("#srchPopMomsShopTypeCombo").attr("disabled", false);
+                }
+            }
+        });
+
+        // 매장관리타입
+        var params = {};
+        params.nmcodeGrpCd = "156";
+        $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectHqNmcodeMomsList.sb', params, function (response) {
+            if (response.data.data.list.length > 0) {
+                var list = response.data.data.list;
+                $scope._setComboData("popMomsStoreManageTypeCombo", list);
+                // 매장관리타입
+                if(list.length <= 1) {
+                    $("#srchPopMomsStoreManageTypeCombo").css('background-color', '#F0F0F0');
+                    $("#srchPopMomsStoreManageTypeCombo").attr("disabled", true);
+                } else {
+                    $("#srchPopMomsStoreManageTypeCombo").css('background-color', '#FFFFFF');
+                    $("#srchPopMomsStoreManageTypeCombo").attr("disabled", false);
+                }
+            }
+        });
+
+        // 지사
+        var params = {};
+        $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectBranchMomsList.sb', params, function (response) {
+            if (response.data.data.list.length > 0) {
+                var list = response.data.data.list;
+                $scope._setComboData("popBranchCdCombo", list);
+                // 지사
+                if(list.length <= 1) {
+                    $("#srchPopBranchCdComboo").css('background-color', '#F0F0F0');
+                    $("#srchPopBranchCdComboo").attr("disabled", true);
+                } else {
+                    $("#srchPopBranchCdComboo").css('background-color', '#FFFFFF');
+                    $("#srchPopBranchCdComboo").attr("disabled", false);
+                }
+            }
+        });
     };
 
     $scope.searchFg = "N";
@@ -134,7 +381,14 @@
                 eval('$scope.${param.closeFunc}()');                            
             }
         }
-        $scope.hqBrandCombo.selectedIndex = 0;
+        $scope.srchPopStoreHqBrandCdCombo.selectedIndex = 0;
+        $scope.srchPopMomsTeamCombo.selectedIndex = 0;
+        $scope.srchPopMomsAcShopCombo.selectedIndex = 0;
+        $scope.srchPopMomsAreaFgCombo.selectedIndex = 0;
+        $scope.srchPopMomsCommercialCombo.selectedIndex = 0;
+        $scope.srchPopMomsShopTypeCombo.selectedIndex = 0;
+        $scope.srchPopMomsStoreManageTypeCombo.selectedIndex = 0;
+        $scope.srchPopBranchCdComboo.selectedIndex = 0;
       });
 
       if ($scope.searchFg == "N") {
@@ -145,15 +399,22 @@
     });
 
     $scope.searchStore = function () {
-      // 파라미터
-      var params = {};
-      params.storeCd = $scope.srchStoreCd;
-      params.storeNm = $scope.srchStoreNm;
-      params.hqBrandCd = $scope.hqBrand;
+        // 파라미터
+        var params = {};
+        params.storeCd = $scope.srchStoreCd;
+        params.storeNm = $scope.srchStoreNm;
+        params.storeHqBrandCd = $scope.popStoreHqBrandCd;
+        params.momsTeam = $scope.popMomsTeam;
+        params.momsAcShop = $scope.popMomsAcShop;
+        params.momsAreaFg = $scope.popMomsAreaFg;
+        params.momsCommercial = $scope.popMomsCommercial;
+        params.momsShopType = $scope.popMomsShopType;
+        params.momsStoreManageType = $scope.popMomsStoreManageType;
+        params.branchCd = $scope.popBranchCd;
 
-      $scope._inquirySub("/iostock/cmm/iostockCmm/selectStoreMomsList.sb", params, function () {
-        $scope.searchFg = "Y";
-      });
+        $scope._inquirySub("/iostock/cmm/iostockCmm/selectStoreMomsList.sb", params, function () {
+            $scope.searchFg = "Y";
+        });
     };
 
     $scope.storeSelected = function () {

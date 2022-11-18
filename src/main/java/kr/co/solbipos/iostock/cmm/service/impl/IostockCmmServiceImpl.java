@@ -56,9 +56,26 @@ public class IostockCmmServiceImpl implements IostockCmmService {
     /** 수불&재고관련 공통 - 매장선택 리스트 조회 */
     @Override
     public List<DefaultMap<String>> selectBrandMomsList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
+
         iostockCmmVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        iostockCmmVO.setEmpNo(sessionInfoVO.getEmpNo());
         iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            iostockCmmVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        iostockCmmVO.setUserId(sessionInfoVO.getUserId());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 사용자별 브랜드 사용 조회
+            String userBrands = iostockCmmMapper.getUserBrandCdList(iostockCmmVO);
+            iostockCmmVO.setUserBrands(userBrands);
+
+            if (iostockCmmVO.getUserBrands() != null && !"".equals(iostockCmmVO.getUserBrands())) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = iostockCmmVO.getUserBrands().split(",");
+                iostockCmmVO.setUserBrandList(userBrandList);
+            }
+        }
+
         return iostockCmmMapper.selectBrandMomsList(iostockCmmVO);
     }
 
@@ -127,5 +144,54 @@ public class IostockCmmServiceImpl implements IostockCmmService {
     @Override
     public List<DefaultMap<String>> selectDynamicCodeList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
         return iostockCmmMapper.selectDynamicCodeList(iostockCmmVO);
+    }
+
+
+    /** 사용자별 코드별 공통코드 콤보박스 조회 */
+    @Override
+    public List<DefaultMap<String>> selectHqNmcodeMomsList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
+
+        iostockCmmVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            iostockCmmVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        iostockCmmVO.setUserId(sessionInfoVO.getUserId());
+
+        List<DefaultMap<String>> resultList = new ArrayList<DefaultMap<String>>();
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 사용자별 코드별 공통코드 조회
+            String userHqNmcodeCd = iostockCmmMapper.getUserHqNmcodeCdList(iostockCmmVO);
+            iostockCmmVO.setUserHqNmcodeCd(userHqNmcodeCd);
+
+            resultList = iostockCmmMapper.selectHqNmcodeMomsList(iostockCmmVO);
+        }
+
+        return resultList;
+    }
+
+    /** 사용자별 지사 콤보박스 조회 */
+    @Override
+    public List<DefaultMap<String>> selectBranchMomsList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
+
+        iostockCmmVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
+            iostockCmmVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        iostockCmmVO.setUserId(sessionInfoVO.getUserId());
+
+        List<DefaultMap<String>> resultList = new ArrayList<DefaultMap<String>>();
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
+            // 사사용자별 지사 조회
+            String userHqNmcodeCd = iostockCmmMapper.getUserBranchCdList(iostockCmmVO);
+            iostockCmmVO.setUserHqNmcodeCd(userHqNmcodeCd);
+
+            resultList = iostockCmmMapper.selectBranchMomsList(iostockCmmVO);
+        }
+
+        return resultList;
     }
 }

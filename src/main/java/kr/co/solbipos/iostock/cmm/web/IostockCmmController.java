@@ -79,8 +79,8 @@ public class IostockCmmController {
      * @param   model
      * @param   iostockCmmVO
      * @return  String
-     * @author  안동관
-     * @since   2018. 09. 03.
+     * @author  권지현
+     * @since   2022. 10. 19.
      */
     @RequestMapping(value = "/selectStoreMomsList.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -101,8 +101,8 @@ public class IostockCmmController {
      * @param   model
      * @param   iostockCmmVO
      * @return  String
-     * @author  안동관
-     * @since   2018. 09. 03.
+     * @author  권지현
+     * @since   2022. 10. 19.
      */
     @RequestMapping(value = "/selectProdMomsList.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -123,8 +123,8 @@ public class IostockCmmController {
      * @param   model
      * @param   iostockCmmVO
      * @return  String
-     * @author  안동관
-     * @since   2018. 09. 03.
+     * @author  권지현
+     * @since   2022. 10. 19.
      */
     @RequestMapping(value = "/selectBrandMomsList.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -137,7 +137,6 @@ public class IostockCmmController {
 
         return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
     }
-
 
     /**
      * 수불&재고관련 공통 - 거래처 선택모듈 리스트 조회
@@ -297,4 +296,47 @@ public class IostockCmmController {
         return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
     }
 
+    /**
+     * 사용자별 브랜드 콤보박스 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   iostockCmmVO
+     * @return  String
+     * @author  김설아
+     * @since   2022. 11. 17.
+     */
+    @RequestMapping(value = "/selectHqNmcodeMomsList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectHqNmcodeMomsList(HttpServletRequest request, HttpServletResponse response,
+                                       Model model, IostockCmmVO iostockCmmVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = iostockCmmService.selectHqNmcodeMomsList(iostockCmmVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
+    }
+
+    /**
+     * 사용자별 지사 콤보박스 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   iostockCmmVO
+     * @return  String
+     * @author  김설아
+     * @since   2022. 11. 17.
+     */
+    @RequestMapping(value = "/selectBranchMomsList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectBranchMomsList(HttpServletRequest request, HttpServletResponse response,
+                                      Model model, IostockCmmVO iostockCmmVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = iostockCmmService.selectBranchMomsList(iostockCmmVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
+    }
 }
