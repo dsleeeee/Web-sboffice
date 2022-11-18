@@ -49,90 +49,90 @@
                         <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
                         <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
                     </td>
-                    </tr>
+                </tr>
+                <tr>
+                    <%-- 상품코드 --%>
+                    <th><s:message code="dayProd.prodCd" /></th>
+                    <td>
+                        <input type="text" id="srchProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13" onkeyup="fnNxBtnSearch('1');"/>
+                    </td>
+                    <%-- 상품명 --%>
+                    <th><s:message code="dayProd.prodNm" /></th>
+                    <td>
+                        <input type="text" id="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="100" onkeyup="fnNxBtnSearch('1');"/>
+                    </td>
+                </tr>
+                <c:if test="${sessionInfo.orgnFg == 'HQ'}">
                     <tr>
-                        <%-- 상품코드 --%>
-                        <th><s:message code="dayProd.prodCd" /></th>
+                        <%-- 매장브랜드 --%>
+                        <th><s:message code="dayProd.storeHqBrand"/></th>
                         <td>
-                            <input type="text" id="srchProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13" onkeyup="fnNxBtnSearch('1');"/>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchStoreHqBrandCdCombo"
+                                        ng-model="storeHqBrandCd"
+                                        items-source="_getComboData('storeHqBrandCdCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        control="srchStoreHqBrandCdCombo">
+                                </wj-combo-box>
+                            </div>
                         </td>
-                        <%-- 상품명 --%>
-                        <th><s:message code="dayProd.prodNm" /></th>
+                        <%-- 매장코드 --%>
+                        <th><s:message code="cmm.store"/></th>
                         <td>
-                            <input type="text" id="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="100" onkeyup="fnNxBtnSearch('1');"/>
-                        </td>
-                    </tr>
-                    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-                        <tr>
-                            <%-- 매장브랜드 --%>
-                            <th><s:message code="dayProd.storeHqBrand"/></th>
-                            <td>
-                                <div class="sb-select">
-                                    <wj-combo-box
-                                            id="srchStoreHqBrandCdCombo"
-                                            ng-model="storeHqBrandCd"
-                                            items-source="_getComboData('storeHqBrandCdCombo')"
-                                            display-member-path="name"
-                                            selected-value-path="value"
-                                            is-editable="false"
-                                            control="srchStoreHqBrandCdCombo">
-                                    </wj-combo-box>
-                                </div>
-                            </td>
-                            <%-- 매장코드 --%>
-                            <th><s:message code="cmm.store"/></th>
-                            <td>
-                                <%-- 매장선택 모듈 싱글 선택 사용시 include param 정의 :
-                                              targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-                                              displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
-                                              modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
-                                              closeFunc - 팝업 닫기시 호출할 함수--%>
-                                <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreMMoms.jsp" flush="true">
-                                  <jsp:param name="targetId" value="dayProdStore"/>
-                                </jsp:include>
-                                <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-                            </td>
-                        </tr>
-                    </c:if>
-                    <c:if test="${sessionInfo.orgnFg == 'STORE'}">
-                        <input type="hidden" id="dayProdStoreCd" value="${sessionInfo.storeCd}"/>
-                    </c:if>
-                    <tr>
-                        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-                           <%-- 상품브랜드 --%>
-                            <th><s:message code="dayProd.prodHqBrand"/></th>
-                            <td>
-                                <div class="sb-select">
-                                    <wj-combo-box
-                                            id="srchProdHqBrandCombo"
-                                            ng-model="prodHqBrandCd"
-                                            items-source="_getComboData('prodHqBrandCdCombo')"
-                                            display-member-path="name"
-                                            selected-value-path="value"
-                                            is-editable="false"
-                                            control="srchProdHqBrandCombo">
-                                    </wj-combo-box>
-                                </div>
-                            </td>
-                        </c:if>
-                        <%-- 상품 --%>
-                        <th><s:message code="dayProd.prod"/></th>
-                        <td>
-                            <%-- 상품선택 모듈 싱글 선택 사용시 include param 정의 :
-                                             targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-                                             displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
-                                             modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
-                                             closeFunc - 팝업 닫기시 호출할 함수--%>
-                            <jsp:include page="/WEB-INF/view/sale/com/popup/selectProdMMoms.jsp" flush="true">
-                            <jsp:param name="targetId" value="dayProdSelect"/>
+                            <%-- 매장선택 모듈 싱글 선택 사용시 include param 정의 :
+                                          targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+                                          displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+                                          modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+                                          closeFunc - 팝업 닫기시 호출할 함수--%>
+                            <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreMMoms.jsp" flush="true">
+                                <jsp:param name="targetId" value="dayProdStore"/>
                             </jsp:include>
-                            <%--// 상품선택 모듈 멀티 선택 사용시 include --%>
-                            <c:if test="${sessionInfo.orgnFg == 'STORE'}">
-                      <td></td>
-                      <td></td>
-                  </c:if>
-                </td>
-              </tr>
+                            <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+                        </td>
+                    </tr>
+                </c:if>
+                <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+                    <input type="hidden" id="dayProdStoreCd" value="${sessionInfo.storeCd}"/>
+                </c:if>
+                <tr>
+                    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                       <%-- 상품브랜드 --%>
+                        <th><s:message code="dayProd.prodHqBrand"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchProdHqBrandCombo"
+                                        ng-model="prodHqBrandCd"
+                                        items-source="_getComboData('prodHqBrandCdCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        control="srchProdHqBrandCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                    </c:if>
+                    <%-- 상품 --%>
+                    <th><s:message code="dayProd.prod"/></th>
+                    <td>
+                        <%-- 상품선택 모듈 싱글 선택 사용시 include param 정의 :
+                                         targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+                                         displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+                                         modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+                                         closeFunc - 팝업 닫기시 호출할 함수--%>
+                        <jsp:include page="/WEB-INF/view/sale/com/popup/selectProdMMoms.jsp" flush="true">
+                            <jsp:param name="targetId" value="dayProdSelect"/>
+                        </jsp:include>
+                        <%--// 상품선택 모듈 멀티 선택 사용시 include --%>
+                    </td>
+                    <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+                        <td></td>
+                        <td></td>
+                    </c:if>
+                </tr>
             </tbody>
         </table>
         <table class="searchTbl" id="tblSearchAddShow" style="display: none;">
@@ -359,6 +359,7 @@
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/prod/dayProd/dayProd.js?ver=20221116.01" charset="utf-8"></script>
 
+<%-- 20221117 상품분류 팝업 주석처리함 -> 상품 멀티 팝업에 상품분류가 들어감으로 오류 --%>
 <%-- 상품분류 팝업 --%>
-<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
-</c:import>
+<%--<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">--%>
+<%--</c:import>--%>

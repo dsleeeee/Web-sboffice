@@ -96,37 +96,57 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT  PROD_CD
-                ,       PROD_NM
-                FROM    TB_HQ_PRODUCT
-                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                SELECT thp.PROD_CD
+                ,       thp.PROD_NM
+                FROM    TB_HQ_PRODUCT thp
+                WHERE   thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test='prodCd != null and prodCd != ""'>
-                    AND PROD_CD LIKE '%'||#{prodCd}||'%'
+                    AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
                 </if>
                 <if test='prodNm != null and prodNm != ""'>
-                    AND PROD_NM LIKE '%'||#{prodNm}||'%'
+                    AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
                 </if>
-                <if test='hqBrandCd != null and hqBrandCd != ""'>
-                    AND HQ_BRAND_CD = #{hqBrandCd}
+                <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                    AND thp.HQ_BRAND_CD = #{prodHqBrandCd}
                 </if>
-                ORDER BY PROD_CD
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND thp.PROD_CLASS_CD IN (
+                                                    SELECT
+                                                    PROD_CLASS_CD
+                                                    FROM TB_HQ_PRODUCT_CLASS
+                                                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                                    START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                )
+                </if>
+                ORDER BY thp.PROD_CD
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT  PROD_CD
-                ,       PROD_NM
-                FROM    TB_MS_PRODUCT
-                WHERE   STORE_CD = #{storeCd}
+                SELECT tmp.PROD_CD
+                ,       tmp.PROD_NM
+                FROM    TB_MS_PRODUCT tmp
+                WHERE   tmp.STORE_CD = #{storeCd}
                 <if test='prodCd != null and prodCd != ""'>
-                    AND PROD_CD LIKE '%'||#{prodCd}||'%'
+                    AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
                 </if>
                 <if test='prodNm != null and prodNm != ""'>
-                    AND PROD_NM LIKE '%'||#{prodNm}||'%'
+                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
                 </if>
-                <if test='hqBrandCd != null and hqBrandCd != ""'>
-                    AND HQ_BRAND_CD = #{hqBrandCd}
+                <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                    AND tmp.HQ_BRAND_CD = #{prodHqBrandCd}
                 </if>
-                ORDER BY PROD_CD
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND tmp.PROD_CLASS_CD IN (
+                                                    SELECT
+                                                    PROD_CLASS_CD
+                                                    FROM TB_MS_PRODUCT_CLASS
+                                                    WHERE STORE_CD = #{storeCd}
+                                                    START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                                    CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                                                )
+                </if>
+                ORDER BY tmp.PROD_CD
             </when>
         </choose>
     </select>

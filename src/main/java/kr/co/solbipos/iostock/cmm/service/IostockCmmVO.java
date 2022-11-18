@@ -83,6 +83,12 @@ public class IostockCmmVO extends PageVO {
     /** 지사코드 */
     private String branchCd;
 
+    /** 상품브랜드코드 */
+    private String prodHqBrandCd;
+
+    /** 상품분류 */
+    private String prodClassCd;
+
     /**
      * @return the orgnFg
      */
@@ -146,6 +152,14 @@ public class IostockCmmVO extends PageVO {
     public void setStoreNm(String storeNm) {
         this.storeNm = storeNm;
     }
+
+    public String getProdCd() { return prodCd; }
+
+    public void setProdCd(String prodCd) { this.prodCd = prodCd; }
+
+    public String getProdNm() { return prodNm; }
+
+    public void setProdNm(String prodNm) { this.prodNm = prodNm; }
 
     /**
      * @return the nmcodeGrpCd
@@ -347,5 +361,19 @@ public class IostockCmmVO extends PageVO {
 
     public void setBranchCd(String branchCd) {
         this.branchCd = branchCd;
+    }
+
+    public String getProdHqBrandCd() {
+        return prodHqBrandCd;
+    }
+
+    public void setProdHqBrandCd(String prodHqBrandCd) { this.prodHqBrandCd = prodHqBrandCd; }
+
+    public String getProdClassCd() {
+        return prodClassCd;
+    }
+
+    public void setProdClassCd(String prodClassCd) {
+        this.prodClassCd = prodClassCd;
     }
 }
