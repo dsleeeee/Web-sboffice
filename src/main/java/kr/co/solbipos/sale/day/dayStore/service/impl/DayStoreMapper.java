@@ -29,4 +29,6 @@ public interface DayStoreMapper {
     /** 상품별 매출 순위 */
     List<DefaultMap<Object>> getDayStoreList(DayStoreVO dayStoreVO);
     List<DefaultMap<Object>> getDayStoreExcelList(DayStoreVO dayStoreVO);
+
+    List<DefaultMap<String>> getBranchMomsComboList(DayStoreVO dayStoreVO);
 }

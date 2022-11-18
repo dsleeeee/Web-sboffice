@@ -5,7 +5,6 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.prod.prodSaleRate2.service.ProdSaleRate2Service;
 import kr.co.solbipos.sale.prod.prodSaleRate2.service.ProdSaleRate2VO;
-import kr.co.solbipos.sale.prod.prodSaleRate2.service.impl.ProdSaleRate2Mapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +12,7 @@ import java.util.List;
 
 /**
  * @Class Name : ProdSaleRate2ServiceImpl.java
- * @Description : 맘스터치 > 승인관리2 > 상품 판매 비율
+ * @Description : 맘스터치 > 상품매출분석 > 상품 판매 비율
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용

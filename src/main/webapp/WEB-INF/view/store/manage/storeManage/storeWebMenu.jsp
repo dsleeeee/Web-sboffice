@@ -14,7 +14,7 @@
             <%-- 웹사이트 메뉴 --%>
             <li><a href="#" id="webMenu" class="on"><s:message code="storeManage.webMenu" /></a></li>
             <%-- 모바일 메뉴 --%>
-            <li><a href="#" id="mobileMenu" onclick="changeMobileTab();"><s:message code="storeManage.mobMenu" /></a></li>
+<%--            <li><a href="#" id="mobileMenu" onclick="changeMobileTab();"><s:message code="storeManage.mobMenu" /></a></li>--%>
         </ul>
     </div>
 

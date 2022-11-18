@@ -82,6 +82,21 @@
             </wj-combo-box>
           </div>
         </td>
+        <%-- 옵션 --%>
+        <th><s:message code="monthProd.option"/></th>
+        <td>
+          <div class="sb-select">
+            <wj-combo-box
+                    id="option"
+                    ng-model="option"
+                    items-source="_getComboData('option')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    control="optionCombo">
+            </wj-combo-box>
+          </div>
+        </td>
       </tr>
       </tbody>
     </table>
@@ -95,6 +110,7 @@
       <%--위즈모 테이블--%>
       <div class="wj-gridWrap" style="height: 380px; overflow-x: hidden; overflow-y: hidden;">
         <wj-flex-grid
+          id="wjGridList"
           autoGenerateColumns="false"
           selection-mode="Row"
           items-source="data"
@@ -104,16 +120,22 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="monthProd.saleYm"/>"      binding="saleYm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="monthProd.branchNm"/>"    binding="branchNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="monthProd.storeCd"/>"     binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="monthProd.storeNm"/>"     binding="storeNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="monthProd.prodClassNm"/>" binding="pathNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="monthProd.prodNm"/>"      binding="prodNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="monthProd.saleQty"/>"     binding="saleQty" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="monthProd.dcAmt"/>"       binding="dcAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="monthProd.totSaleAmt"/>"  binding="totSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="monthProd.realSaleAmt"/>" binding="realSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="monthProd.saleYm"/>"       binding="saleYm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="monthProd.branchNm"/>"     binding="branchNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="monthProd.storeCd"/>"      binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="monthProd.storeNm"/>"      binding="storeNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="monthProd.prodClassNm"/>"  binding="pathNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="monthProd.prodNm"/>"       binding="prodNm" width="80" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="monthProd.sideProdNm"/>"   binding="sideProdNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="monthProd.selTypeFg"/>"    binding="selTypeFg" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="monthProd.saleQty1"/>"     binding="saleQty1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="monthProd.saleQty2"/>"     binding="saleQty2" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="monthProd.saleQty3"/>"     binding="saleQty3" width="120" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="monthProd.totSaleAmt"/>"   binding="totSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="monthProd.dcAmt"/>"        binding="dcAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="monthProd.realSaleAmt1"/>" binding="realSaleAmt1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="monthProd.realSaleAmt2"/>" binding="realSaleAmt2" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="monthProd.realSaleAmt3"/>" binding="realSaleAmt3" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
       <%--//위즈모 테이블--%>
@@ -133,6 +155,7 @@
     <%--위즈모 테이블--%>
     <div class="wj-gridWrap" style="height: 350px; overflow-x: hidden; overflow-y: hidden;">
       <wj-flex-grid
+              id="wjGridExcelList"
               autoGenerateColumns="false"
               selection-mode="Row"
               items-source="data"
@@ -142,16 +165,22 @@
               item-formatter="_itemFormatter">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="monthProd.saleYm"/>"      binding="saleYm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="monthProd.branchNm"/>"    binding="branchNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="monthProd.storeCd"/>"     binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="monthProd.storeNm"/>"     binding="storeNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="monthProd.prodClassNm"/>" binding="pathNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="monthProd.prodNm"/>"      binding="prodNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="monthProd.saleQty"/>"     binding="saleQty" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="monthProd.dcAmt"/>"       binding="dcAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="monthProd.totSaleAmt"/>"  binding="totSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="monthProd.realSaleAmt"/>" binding="realSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="monthProd.saleYm"/>"       binding="saleYm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="monthProd.branchNm"/>"     binding="branchNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="monthProd.storeCd"/>"      binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="monthProd.storeNm"/>"      binding="storeNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="monthProd.prodClassNm"/>"  binding="pathNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="monthProd.prodNm"/>"       binding="prodNm" width="80" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="monthProd.sideProdNm"/>"   binding="sideProdNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="monthProd.selTypeFg"/>"    binding="selTypeFg" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="monthProd.saleQty1"/>"     binding="saleQty1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="monthProd.saleQty2"/>"     binding="saleQty2" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="monthProd.saleQty3"/>"     binding="saleQty3" width="120" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="monthProd.totSaleAmt"/>"   binding="totSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="monthProd.dcAmt"/>"        binding="dcAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="monthProd.realSaleAmt1"/>" binding="realSaleAmt1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="monthProd.realSaleAmt2"/>" binding="realSaleAmt2" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="monthProd.realSaleAmt3"/>" binding="realSaleAmt3" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
     <%--//위즈모 테이블--%>
@@ -164,7 +193,7 @@
   var storeCd = "${storeCd}";
   var hqBrandList = ${hqBrandList};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/monthProd/monthProd.js?ver=20221018.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/monthProd/monthProd.js?ver=20221018.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

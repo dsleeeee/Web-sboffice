@@ -33,6 +33,21 @@ public class DayMomsVO extends PageVO {
     /** 조회매장 */
     private String storeCds;
 
+    /** 결제수단컬럼 */
+    private String payCol;
+
+    /** 결제수단 array */
+    private String arrPayCol[];
+
+    /** 쿼리문의 PIVOT IN에 사용할 결제수단 컬럼 문자열 */
+    private String pivotPayCol;
+
+    /** 주문채널 구분자 컬럼 */
+    private String dlvrInFgCol;
+
+    /** 주문채널 구분자 array */
+    private String arrDlvrInFgCol[];
+
     public String getHqOfficeCd() { return hqOfficeCd; }
 
     public void setHqOfficeCd(String hqOfficeCd) { this.hqOfficeCd = hqOfficeCd; }
@@ -57,4 +72,43 @@ public class DayMomsVO extends PageVO {
         this.storeCds = storeCds;
     }
 
+    public String getPayCol() {
+        return payCol;
+    }
+
+    public void setPayCol(String payCol) {
+        this.payCol = payCol;
+    }
+
+    public String[] getArrPayCol() {
+        return arrPayCol;
+    }
+
+    public void setArrPayCol(String[] arrPayCol) {
+        this.arrPayCol = arrPayCol;
+    }
+
+    public String getPivotPayCol() {
+        return pivotPayCol;
+    }
+
+    public void setPivotPayCol(String pivotPayCol) {
+        this.pivotPayCol = pivotPayCol;
+    }
+
+    public String getDlvrInFgCol() {
+        return dlvrInFgCol;
+    }
+
+    public void setDlvrInFgCol(String dlvrInFgCol) {
+        this.dlvrInFgCol = dlvrInFgCol;
+    }
+
+    public String[] getArrDlvrInFgCol() {
+        return arrDlvrInFgCol;
+    }
+
+    public void setArrDlvrInFgCol(String[] arrDlvrInFgCol) {
+        this.arrDlvrInFgCol = arrDlvrInFgCol;
+    }
 }

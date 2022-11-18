@@ -49,6 +49,29 @@ public class DayMomsServiceImpl implements DayMomsService {
         String[] storeCds = dayMomsVO.getStoreCds().split(",");
         dayMomsVO.setStoreCdList(storeCds);
 
+        // 결제수단 array 값 세팅
+        String payCol= "";
+        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+        String pivotPayCol = "";
+        String arrPayCol[] = dayMomsVO.getPayCol().split(",");
+        for(int i=0; i < arrPayCol.length; i++) {
+            // 현금,현금영수증 제외
+            if(! (("02").equals(arrPayCol[i]) || ("021").equals(arrPayCol[i])) ) {
+                pivotPayCol += (pivotPayCol.equals("") ? "" : ",") + "'" + arrPayCol[i] + "'" + " AS PAY" + arrPayCol[i];
+                payCol += (payCol.equals("") ? "" : ",") + arrPayCol[i];
+            }
+        }
+        dayMomsVO.setPivotPayCol(pivotPayCol);
+        dayMomsVO.setArrPayCol(payCol.split(","));
+
+        String[] arrDlvrInFgCol = dayMomsVO.getDlvrInFgCol().split(",");
+
+        if(arrDlvrInFgCol.length > 0){
+            if(arrDlvrInFgCol[0] != null && !"".equals(arrDlvrInFgCol[0])){
+                dayMomsVO.setArrDlvrInFgCol(arrDlvrInFgCol);
+            }
+        }
+
         return dayMomsMapper.getDayMomsList(dayMomsVO);
     }
     

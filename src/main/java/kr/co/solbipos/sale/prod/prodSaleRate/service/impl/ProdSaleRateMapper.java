@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * @Class Name : ProdSaleRateMapper.java
- * @Description : 맘스터치 > 승인관리2 > 상품 판매 비율
+ * @Description : 맘스터치 > 상품매출분석 > 상품 판매 비율
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용

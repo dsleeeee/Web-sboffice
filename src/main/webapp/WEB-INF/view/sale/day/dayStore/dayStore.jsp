@@ -27,18 +27,34 @@
       <tr>
         <%-- 조회일자 --%>
         <th><s:message code="cmm.search.date"/></th>
-        <td colspan="3">
+        <td>
           <div class="sb-select">
             <span class="txtIn"><input id="srchStartDate" class="w110px"></span>
             <span class="rg">~</span>
             <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
           </div>
         </td>
+        <%-- 지사 --%>
+        <th><s:message code="dayStore.branch"/></th>
+        <td>
+          <div class="sb-select">
+            <wj-combo-box
+                    id="srchBranch"
+                    ng-model="branchCd"
+                    control="branchCombo"
+                    items-source="_getComboData('branchCombo')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)">
+            </wj-combo-box>
+          </div>
+        </td>
       </tr>
       <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <tr>
             <%-- 매장코드 --%>
-          <th><s:message code="todayBillSaleDtl.store"/></th>
+          <th><s:message code="cmm.store"/></th>
           <td colspan="3">
               <%-- 매장선택 모듈 싱글 선택 사용시 include
                    param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
@@ -143,6 +159,8 @@
 <script type="text/javascript">
   var orgnFg = "${orgnFg}";
   var storeCd = "${storeCd}";
+
+  var branchMomsComboList = ${branchMomsComboList};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayStore/dayStore.js?ver=20221011.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayStore/dayStore.js?ver=20221011.02" charset="utf-8"></script>
 

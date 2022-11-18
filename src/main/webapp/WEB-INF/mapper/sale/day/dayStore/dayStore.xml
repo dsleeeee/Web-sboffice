@@ -21,7 +21,7 @@
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT	TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
         ,		TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
-        ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE	thbm.HQ_OFFICE_CD = tsdt.HQ_OFFICE_CD AND thbm.BRANCH_CD = #{branchCd}) AS BEANCH_NM
+        ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE	thbm.HQ_OFFICE_CD = tsdt.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BEANCH_NM
         ,		SUM(tsdt.BILL_CNT) AS BILL_CNT
         ,		DECODE(SUM(tsdt.BILL_CNT), 0, 0, ROUND(SUM(tsdt.TOT_SALE_AMT)/SUM(tsdt.BILL_CNT))) AS BILL_UPRC
         ,		SUM(tsdt.TOT_GUEST_CNT) AS TOT_GUEST_CNT
@@ -40,14 +40,16 @@
         AND 	tsdt.STORE_CD = tms.STORE_CD
         AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        -- 지사조건 추가
         <if test='storeCds != null and storeCds != ""'>
             AND tsdt.STORE_CD IN
             <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
                 #{item}
             </foreach>
         </if>
-        GROUP BY tsdt.SALE_DATE, tsdt.HQ_OFFICE_CD
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        GROUP BY tsdt.SALE_DATE, tsdt.HQ_OFFICE_CD, tms.BRANCH_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -60,7 +62,7 @@
         /* DayStoreMapper.getDayStoreExcelList */
         SELECT	TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
         ,		TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
-        ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE	thbm.HQ_OFFICE_CD = tsdt.HQ_OFFICE_CD AND thbm.BRANCH_CD = #{branchCd}) AS BEANCH_NM
+        ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE	thbm.HQ_OFFICE_CD = tsdt.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BEANCH_NM
         ,		SUM(tsdt.BILL_CNT) AS BILL_CNT
         ,		DECODE(SUM(tsdt.BILL_CNT), 0, 0, ROUND(SUM(tsdt.TOT_SALE_AMT)/SUM(tsdt.BILL_CNT))) AS BILL_UPRC
         ,		SUM(tsdt.TOT_GUEST_CNT) AS TOT_GUEST_CNT
@@ -78,14 +80,33 @@
         AND 	tsdt.STORE_CD = tms.STORE_CD
         AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        -- 지사조건 추가
         <if test='storeCds != null and storeCds != ""'>
             AND tsdt.STORE_CD IN
             <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
                 #{item}
             </foreach>
         </if>
-        GROUP BY tsdt.SALE_DATE, tsdt.HQ_OFFICE_CD
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        GROUP BY tsdt.SALE_DATE, tsdt.HQ_OFFICE_CD, tms.BRANCH_CD
     </select>
 
+    <!-- 지사코드 콤보박스 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getBranchMomsComboList" parameterType="dayStoreVO" resultType="DefaultMap">
+        /* DayStoreMapper.getBranchMomsComboList */
+        SELECT 	'' AS VALUE
+        ,		'전체' AS NAME
+        FROM DUAL
+        UNION
+        SELECT 	BRANCH_CD AS VALUE
+        ,		BRANCH_NM AS NAME
+        FROM 	TB_HQ_BRANCH_MOMS
+        WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+        ORDER BY VALUE NULLS FIRST
+    </select>
 </mapper>

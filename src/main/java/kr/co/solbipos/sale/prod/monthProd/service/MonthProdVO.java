@@ -4,7 +4,7 @@ import kr.co.solbipos.application.common.service.PageVO;
 
 /**
  * @Class Name : MonthProdVO.java
- * @Description : 맘스터치 > 승인관리2 > 월별 상품 매출 현황
+ * @Description : 맘스터치 > 상품매출분석 > 월별 상품 매출 현황
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -45,6 +45,9 @@ public class MonthProdVO extends PageVO {
 
     /** 상품분류 */
     private String prodClassCd;
+
+    /** 옵션션 */
+    private String option;
 
     public String getHqOfficeCd() { return hqOfficeCd; }
 
@@ -108,5 +111,13 @@ public class MonthProdVO extends PageVO {
 
     public void setProdClassCd(String prodClassCd) {
         this.prodClassCd = prodClassCd;
+    }
+
+    public String getOption() {
+        return option;
+    }
+
+    public void setOption(String option) {
+        this.option = option;
     }
 }

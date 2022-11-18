@@ -11,6 +11,8 @@ app.controller('dayStoreCtrl', ['$scope', '$http', '$timeout', function ($scope,
   $scope.srchStartDate  = wcombo.genDateVal("#srchStartDate", gvStartDate);
   $scope.srchEndDate    = wcombo.genDateVal("#srchEndDate", gvEndDate);
 
+  $scope._setComboData("branchCombo", branchMomsComboList);
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
@@ -118,6 +120,7 @@ app.controller('dayStoreCtrl', ['$scope', '$http', '$timeout', function ($scope,
     params.storeCds   = $("#dayStoreStoreCd").val();
     params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
     params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+    params.branchCd = $scope.branchCombo.selectedValue;
     params.listScale = 500;
     
     console.log(params);
@@ -140,6 +143,7 @@ app.controller('dayStoreCtrl', ['$scope', '$http', '$timeout', function ($scope,
     params.storeCds   = $("#dayStoreStoreCd").val();
     params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
     params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+    params.branchCd = $scope.branchCombo.selectedValue;
 
     $scope._broadcast('dayStoreExcelCtrl',params);
   }
@@ -237,6 +241,7 @@ app.controller('dayStoreExcelCtrl', ['$scope', '$http', '$timeout', function ($s
     params.storeCds = data.storeCds;
     params.startDate = data.startDate;
     params.endDate = data.endDate;
+    params.branchCd = data.branchCd;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/day/dayStore/dayStore/getDayStoreExcelList.sb", params, function() {
