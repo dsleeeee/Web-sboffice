@@ -9,6 +9,9 @@
  *
  * **************************************************************/
 
+// 브랜드
+var bHdHqBrandCd;
+
 app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 상위 객체 상속 : T/F 는 picker
@@ -427,7 +430,11 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope._setComboData("momsCommercialCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-상권
         $scope._setComboData("momsShopTypeCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-점포유형
         $scope._setComboData("momsStoreManageTypeCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장관리타입
-        $scope._setComboData("hqBrandCdCombo", [{"name": "기본브랜드", "value": "0000000"}]); // 브랜드
+        if(vHqBrandCd === "" || vHqBrandCd === null) {
+          $scope._setComboData("hqBrandCdCombo", [{"name": "기본브랜드", "value": "0000000"}]); // 브랜드
+        } else {
+          bHdHqBrandCd = vHqBrandCd;
+        }
 
         $("#trMomsEnvst").css("display", "none");
         $("#divMomsEnvst").css("display", "none");
@@ -763,15 +770,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         }
      }
 
-    // [1250 맘스터치]
-    params.momsEnvstVal = nvl($("#hdMomsEnvstVal").val(), "0");
-    if($("#hdMomsEnvstVal").val() !== "1") {
-      if(params.hqBrandCd === "" || params.hqBrandCd === null) {
-        params.hqBrandCd = "0000000";
-      }
-    }
-
     console.log('params',params);
+
 
     // 사업자번호 중복체크
     $scope._postJSONQuery.withOutPopUp( "/store/manage/storeManage/storeManage/bizNoCheckCount.sb", params, function(response){
@@ -794,6 +794,15 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
   // 매장정보 저장
   $scope.storeSave = function(data){
     var params         = data;
+
+    // [1250 맘스터치]
+    params.momsEnvstVal = nvl($("#hdMomsEnvstVal").val(), "0");
+    if($("#hdMomsEnvstVal").val() === "0") {
+      params.hqBrandCd = bHdHqBrandCd;
+    }
+    if(params.hqBrandCd === "" || params.hqBrandCd === null) {
+      params.hqBrandCd = "0000000";
+    }
 
     var storeScope = agrid.getScope('storeManageCtrl');
 
@@ -959,6 +968,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope._setComboData("momsShopTypeCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-점포유형
             $scope._setComboData("momsStoreManageTypeCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장관리타입
             $scope._setComboData("hqBrandCdCombo", [{"name": "기본브랜드", "value": "0000000"}]); // 브랜드
+            bHdHqBrandCd = "";
 
             $("#trMomsEnvst").css("display", "none");
             $("#divMomsEnvst").css("display", "none");
@@ -1383,6 +1393,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope._setComboData("momsShopTypeCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-점포유형
       $scope._setComboData("momsStoreManageTypeCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장관리타입
       $scope._setComboData("hqBrandCdCombo", [{"name": "기본브랜드", "value": "0000000"}]); // 브랜드
+      bHdHqBrandCd = "";
 
       $("#trMomsEnvst").css("display", "none");
       $("#divMomsEnvst").css("display", "none");
