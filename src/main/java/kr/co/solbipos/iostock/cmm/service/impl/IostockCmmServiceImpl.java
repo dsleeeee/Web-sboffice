@@ -35,21 +35,41 @@ public class IostockCmmServiceImpl implements IostockCmmService {
     /** 수불&재고관련 공통 - 매장선택 리스트 조회 */
     @Override
     public List<DefaultMap<String>> selectStoreMomsList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
+
         iostockCmmVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         iostockCmmVO.setEmpNo(sessionInfoVO.getEmpNo());
         iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        // 매장브랜드가 '전체' 일때
+        if (iostockCmmVO.getStoreHqBrandCd() == "" || iostockCmmVO.getStoreHqBrandCd() == null) {
+            // 사용자별 브랜드 array 값 세팅
+            String[] userBrandList = iostockCmmVO.getUserBrands().split(",");
+            iostockCmmVO.setUserBrandList(userBrandList);
+        }
+
         return iostockCmmMapper.selectStoreMomsList(iostockCmmVO);
     }
 
     /** 수불&재고관련 공통 - 상품선택 리스트 조회 */
     @Override
     public List<DefaultMap<String>> selectProdMomsList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
+
         iostockCmmVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         iostockCmmVO.setEmpNo(sessionInfoVO.getEmpNo());
         iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(iostockCmmVO.getOrgnFg() == OrgnFg.STORE.getCode()){
             iostockCmmVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 상품브랜드가 '전체' 일때
+            if (iostockCmmVO.getProdHqBrandCd() == "" || iostockCmmVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = iostockCmmVO.getUserBrands().split(",");
+                iostockCmmVO.setUserBrandList(userBrandList);
+            }
+        }
+
         return iostockCmmMapper.selectProdMomsList(iostockCmmVO);
     }
 
