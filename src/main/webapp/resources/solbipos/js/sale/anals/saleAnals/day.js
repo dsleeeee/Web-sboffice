@@ -125,6 +125,7 @@ app.controller('dayCtrl', ['$scope', '$http', '$timeout', function ($scope, $htt
     dataItem.yoil        = messages["day.dayTotal.yoil"];
     dataItem.storeCnt    = messages["day.dayTotal.storeCnt"];
     dataItem.storeCd     = messages["day.dayTotal.storeCd"];
+    dataItem.storeNm     = messages["day.dayTotal.storeNm"];
     dataItem.totSaleAmt  = messages["day.dayTotal.saleInfo"];
     dataItem.totDcAmt    = messages["day.dayTotal.saleInfo"];
     dataItem.realSaleAmt = messages["day.dayTotal.saleInfo"];
