@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
+
 
 /**
  * @Class Name : DayStoreController.java
@@ -60,6 +62,12 @@ public class DayStoreController {
      */
     @RequestMapping(value = "/dayStore/list.sb", method = RequestMethod.GET)
     public String dayStoreView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        DayStoreVO dayStoreVO = new DayStoreVO();
+
+        // 지사 콤보박스
+        model.addAttribute("branchMomsComboList", convertToJson(dayStoreService.getBranchMomsComboList(dayStoreVO, sessionInfoVO)));
 
         return "sale/day/dayStore/dayStore";
     }

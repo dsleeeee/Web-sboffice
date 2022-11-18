@@ -60,4 +60,11 @@ public class DayStoreVO extends PageVO {
         this.storeCds = storeCds;
     }
 
+    public String getBranchCd() {
+        return branchCd;
+    }
+
+    public void setBranchCd(String branchCd) {
+        this.branchCd = branchCd;
+    }
 }

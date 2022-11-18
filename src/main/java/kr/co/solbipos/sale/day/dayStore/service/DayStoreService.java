@@ -27,4 +27,6 @@ public interface DayStoreService {
     List<DefaultMap<Object>> getDayStoreList(DayStoreVO dayStoreVO, SessionInfoVO sessionInfoVO);
     List<DefaultMap<Object>> getDayStoreExcelList(DayStoreVO dayStoreVO, SessionInfoVO sessionInfoVO);
 
+    List<DefaultMap<String>> getBranchMomsComboList(DayStoreVO dayStoreVO, SessionInfoVO sessionInfoVO);
+
 }

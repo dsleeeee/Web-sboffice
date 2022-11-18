@@ -68,4 +68,11 @@ public class DayStoreServiceImpl implements DayStoreService {
 
         return dayStoreMapper.getDayStoreExcelList(dayStoreVO);
     }
+
+    @Override
+    public List<DefaultMap<String>> getBranchMomsComboList(DayStoreVO dayStoreVO, SessionInfoVO sessionInfoVO) {
+        dayStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return dayStoreMapper.getBranchMomsComboList(dayStoreVO);
+    }
+
 }
