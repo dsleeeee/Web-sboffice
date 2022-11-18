@@ -158,13 +158,17 @@ public class IostockCmmServiceImpl implements IostockCmmService {
         }
         iostockCmmVO.setUserId(sessionInfoVO.getUserId());
 
+        List<DefaultMap<String>> resultList = new ArrayList<DefaultMap<String>>();
+
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             // 사용자별 코드별 공통코드 조회
             String userHqNmcodeCd = iostockCmmMapper.getUserHqNmcodeCdList(iostockCmmVO);
             iostockCmmVO.setUserHqNmcodeCd(userHqNmcodeCd);
+
+            resultList = iostockCmmMapper.selectHqNmcodeMomsList(iostockCmmVO);
         }
 
-        return iostockCmmMapper.selectHqNmcodeMomsList(iostockCmmVO);
+        return resultList;
     }
 
     /** 사용자별 지사 콤보박스 조회 */

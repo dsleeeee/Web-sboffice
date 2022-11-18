@@ -342,22 +342,6 @@
                     ORDER BY VALUE NULLS FIRST
                 </if>
             </when>
-            <!-- 매장 -->
-            <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT
-                tmsn.NMCODE_CD AS VALUE,
-                tmsn.NMCODE_NM AS NAME
-                FROM TB_MS_STORE_NMCODE tmsn
-                WHERE 1=1
-                AND tmsn.STORE_CD = #{storeCd}
-                AND tmsn.NMCODE_GRP_CD = #{nmcodeGrpCd}
-                UNION
-                SELECT
-                '' AS VALUE,
-                '전체' AS NAME
-                FROM DUAL
-                ORDER BY VALUE NULLS FIRST
-            </when>
         </choose>
     </select>
 

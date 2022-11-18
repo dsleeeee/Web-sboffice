@@ -118,13 +118,17 @@ public class DayProdServiceImpl implements DayProdService {
         dayProdVO.setUserId(sessionInfoVO.getUserId());
         dayProdVO.setNmcodeGrpCd(nmcodeGrpCd);
 
+        List<DefaultMap<Object>> resultList = new ArrayList<DefaultMap<Object>>();
+
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             // 사용자별 코드별 공통코드 조회
             String userHqNmcodeCd = dayProdMapper.getUserHqNmcodeCdList(dayProdVO);
             dayProdVO.setUserHqNmcodeCd(userHqNmcodeCd);
+
+            resultList = dayProdMapper.getUserHqNmcodeComboList(dayProdVO);
         }
 
-        return dayProdMapper.getUserHqNmcodeComboList(dayProdVO);
+        return resultList;
     }
 
     /** 사용자별 지사 콤보박스 조회 */

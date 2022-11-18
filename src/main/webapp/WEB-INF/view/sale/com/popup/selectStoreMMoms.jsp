@@ -72,108 +72,110 @@
                 </div>
             </td>
           </tr>
-          <tr>
-              <%-- 팀별 --%>
-              <th><s:message code="outstockReqDate.momsTeam"/></th>
-              <td>
-                  <div class="sb-select">
-                      <wj-combo-box
-                              id="srchPopMomsTeamCombo"
-                              ng-model="popMomsTeam"
-                              items-source="_getComboData('popMomsTeamCombo')"
-                              display-member-path="name"
-                              selected-value-path="value"
-                              is-editable="false"
-                              initialized="_initComboBox(s)"
-                              control="srchPopMomsTeamCombo">
-                      </wj-combo-box>
-                  </div>
-              </td>
-              <%-- AC점포별 --%>
-              <th><s:message code="outstockReqDate.momsAcShop"/></th>
-              <td>
-                  <div class="sb-select">
-                      <wj-combo-box
-                              id="srchPopMomsAcShopCombo"
-                              ng-model="popMomsAcShop"
-                              items-source="_getComboData('popMomsAcShopCombo')"
-                              display-member-path="name"
-                              selected-value-path="value"
-                              is-editable="false"
-                              initialized="_initComboBox(s)"
-                              control="srchPopMomsAcShopCombo">
-                      </wj-combo-box>
-                  </div>
-              </td>
-          </tr>
-          <tr>
-              <%-- 지역구분 --%>
-              <th><s:message code="outstockReqDate.momsAreaFg"/></th>
-              <td>
-                  <div class="sb-select">
-                      <wj-combo-box
-                              id="srchPopMomsAreaFgCombo"
-                              ng-model="popMomsAreaFg"
-                              items-source="_getComboData('popMomsAreaFgCombo')"
-                              display-member-path="name"
-                              selected-value-path="value"
-                              is-editable="false"
-                              initialized="_initComboBox(s)"
-                              control="srchPopMomsAreaFgCombo">
-                      </wj-combo-box>
-                  </div>
-              </td>
-              <%-- 상권 --%>
-              <th><s:message code="outstockReqDate.momsCommercial"/></th>
-              <td>
-                  <div class="sb-select">
-                      <wj-combo-box
-                              id="srchPopMomsCommercialCombo"
-                              ng-model="popMomsCommercial"
-                              items-source="_getComboData('popMomsCommercialCombo')"
-                              display-member-path="name"
-                              selected-value-path="value"
-                              is-editable="false"
-                              initialized="_initComboBox(s)"
-                              control="srchPopMomsCommercialCombo">
-                      </wj-combo-box>
-                  </div>
-              </td>
-          </tr>
-          <tr>
-              <%-- 점포유형 --%>
-              <th><s:message code="outstockReqDate.momsShopType"/></th>
-              <td>
-                  <div class="sb-select">
-                      <wj-combo-box
-                              id="srchPopMomsShopTypeCombo"
-                              ng-model="popMomsShopType"
-                              items-source="_getComboData('popMomsShopTypeCombo')"
-                              display-member-path="name"
-                              selected-value-path="value"
-                              is-editable="false"
-                              initialized="_initComboBox(s)"
-                              control="srchPopMomsShopTypeCombo">
-                      </wj-combo-box>
-                  </div>
-              </td>
-              <%-- 매장관리타입 --%>
-              <th><s:message code="outstockReqDate.momsStoreManageType"/></th>
-              <td>
-                  <div class="sb-select">
-                      <wj-combo-box
-                              id="srchPopMomsStoreManageTypeCombo"
-                              ng-model="popMomsStoreManageType"
-                              items-source="_getComboData('popMomsStoreManageTypeCombo')"
-                              display-member-path="name"
-                              selected-value-path="value"
-                              is-editable="false"
-                              initialized="_initComboBox(s)"
-                              control="srchPopMomsStoreManageTypeCombo">
-                      </wj-combo-box>
-                  </div>
-              </td>
-          </tr>
+          <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+              <tr>
+                  <%-- 팀별 --%>
+                  <th><s:message code="outstockReqDate.momsTeam"/></th>
+                  <td>
+                      <div class="sb-select">
+                          <wj-combo-box
+                                  id="srchPopMomsTeamCombo"
+                                  ng-model="popMomsTeam"
+                                  items-source="_getComboData('popMomsTeamCombo')"
+                                  display-member-path="name"
+                                  selected-value-path="value"
+                                  is-editable="false"
+                                  initialized="_initComboBox(s)"
+                                  control="srchPopMomsTeamCombo">
+                          </wj-combo-box>
+                      </div>
+                  </td>
+                  <%-- AC점포별 --%>
+                  <th><s:message code="outstockReqDate.momsAcShop"/></th>
+                  <td>
+                      <div class="sb-select">
+                          <wj-combo-box
+                                  id="srchPopMomsAcShopCombo"
+                                  ng-model="popMomsAcShop"
+                                  items-source="_getComboData('popMomsAcShopCombo')"
+                                  display-member-path="name"
+                                  selected-value-path="value"
+                                  is-editable="false"
+                                  initialized="_initComboBox(s)"
+                                  control="srchPopMomsAcShopCombo">
+                          </wj-combo-box>
+                      </div>
+                  </td>
+              </tr>
+              <tr>
+                  <%-- 지역구분 --%>
+                  <th><s:message code="outstockReqDate.momsAreaFg"/></th>
+                  <td>
+                      <div class="sb-select">
+                          <wj-combo-box
+                                  id="srchPopMomsAreaFgCombo"
+                                  ng-model="popMomsAreaFg"
+                                  items-source="_getComboData('popMomsAreaFgCombo')"
+                                  display-member-path="name"
+                                  selected-value-path="value"
+                                  is-editable="false"
+                                  initialized="_initComboBox(s)"
+                                  control="srchPopMomsAreaFgCombo">
+                          </wj-combo-box>
+                      </div>
+                  </td>
+                  <%-- 상권 --%>
+                  <th><s:message code="outstockReqDate.momsCommercial"/></th>
+                  <td>
+                      <div class="sb-select">
+                          <wj-combo-box
+                                  id="srchPopMomsCommercialCombo"
+                                  ng-model="popMomsCommercial"
+                                  items-source="_getComboData('popMomsCommercialCombo')"
+                                  display-member-path="name"
+                                  selected-value-path="value"
+                                  is-editable="false"
+                                  initialized="_initComboBox(s)"
+                                  control="srchPopMomsCommercialCombo">
+                          </wj-combo-box>
+                      </div>
+                  </td>
+              </tr>
+              <tr>
+                  <%-- 점포유형 --%>
+                  <th><s:message code="outstockReqDate.momsShopType"/></th>
+                  <td>
+                      <div class="sb-select">
+                          <wj-combo-box
+                                  id="srchPopMomsShopTypeCombo"
+                                  ng-model="popMomsShopType"
+                                  items-source="_getComboData('popMomsShopTypeCombo')"
+                                  display-member-path="name"
+                                  selected-value-path="value"
+                                  is-editable="false"
+                                  initialized="_initComboBox(s)"
+                                  control="srchPopMomsShopTypeCombo">
+                          </wj-combo-box>
+                      </div>
+                  </td>
+                  <%-- 매장관리타입 --%>
+                  <th><s:message code="outstockReqDate.momsStoreManageType"/></th>
+                  <td>
+                      <div class="sb-select">
+                          <wj-combo-box
+                                  id="srchPopMomsStoreManageTypeCombo"
+                                  ng-model="popMomsStoreManageType"
+                                  items-source="_getComboData('popMomsStoreManageTypeCombo')"
+                                  display-member-path="name"
+                                  selected-value-path="value"
+                                  is-editable="false"
+                                  initialized="_initComboBox(s)"
+                                  control="srchPopMomsStoreManageTypeCombo">
+                          </wj-combo-box>
+                      </div>
+                  </td>
+              </tr>
+          </c:if>
           </tbody>
         </table>
 
