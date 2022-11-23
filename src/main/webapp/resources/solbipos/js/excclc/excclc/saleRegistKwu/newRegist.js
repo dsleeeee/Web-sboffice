@@ -367,18 +367,26 @@ app.controller('newRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         }
         if(params.length == 0){
             $scope._popMsg(messages["saleRegistKwu.not.data"]);
+            // 닫기
+            $scope.close();
             return false;
         }
         console.log(params);
         $scope._save("/excclc/excclc/saleRegistKwu/saleRegistKwu/getNewRegistList.sb", params, function (){
-            $scope.newRegistLayer.hide();
-
-            var scope = agrid.getScope('saleRegistCtrl');
-            scope.searchSaleRegistList();
-
-            $("#membrNo").val("");
-            $("#membrNm").val("선택");
+            // 닫기
+            $scope.close();
         });
+    };
+
+    // 닫기
+    $scope.close = function (){
+        $scope.newRegistLayer.hide();
+
+        var scope = agrid.getScope('saleRegistCtrl');
+        scope.searchSaleRegistList();
+
+        $("#membrNo").val("");
+        $("#membrNm").val("선택");
     };
 
     // 조회
