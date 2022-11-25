@@ -993,6 +993,12 @@ div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; 
     cursor:pointer;
 }
 
+.wijLink-blue {
+    color: #0000ff !important;
+    text-decoration:underline;
+    cursor:pointer;
+}
+
 
 /* 그리드 텍스트 컬러 추가 /블루/블랙/레드 */
 .wij_gridText-blue {
