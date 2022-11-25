@@ -253,6 +253,9 @@ public class ViewServiceImpl implements ViewService {
                 copyStoreEnvVO.setConfgFg(ConfgFg.TOUCH_KEY.getCode());
                 procResult = viewMapper.copyTouchKeyXML(copyStoreEnvVO);
 
+                viewMapper.deleteTouchKeyGrpNm(copyStoreEnvVO);
+                viewMapper.copyTouchKeyGrpNm(copyStoreEnvVO);
+
             }else{ // 선택그룹 복사
 
                 // 터치키 클래스와 터치키 선택그룹 복사
@@ -261,6 +264,9 @@ public class ViewServiceImpl implements ViewService {
                 // 터치키 선택그룹 XML 복사
                 copyStoreEnvVO.setConfgFg(ConfgFg.TOUCH_KEY.getCode());
                 procResult = viewMapper.copyTouchKeyGrpXML(copyStoreEnvVO);
+
+                viewMapper.deleteTouchKeyGrpNm(copyStoreEnvVO);
+                viewMapper.copyTouchKeyGrpNm(copyStoreEnvVO);
             }
         }
 
