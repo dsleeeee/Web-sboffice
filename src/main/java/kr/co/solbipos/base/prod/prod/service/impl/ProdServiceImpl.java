@@ -1532,6 +1532,8 @@ public class ProdServiceImpl implements ProdService {
 
             prodVO1.setDelTypeFg("0"); // 영구삭제가능
 
+            prodMapper.deleteProdInfoProdInfo(prodVO1);            // 상품추가정보
+            prodMapper.deleteProdInfoSaleTime(prodVO1);            // 키오스크판매시간대정보
             prodMapper.deleteProdInfoCouponProd(prodVO1);          // 쿠폰적용상품
             prodMapper.deleteProdInfoKioskKey(prodVO1);            // 키오스크 키맵설정
             prodMapper.deleteProdInfoKioskRecmd(prodVO1);          // 키오스크 추천메뉴정보
@@ -1627,6 +1629,8 @@ public class ProdServiceImpl implements ProdService {
             // 본사인경우, 본사에 속한 매장상품정보도 영구삭제
             if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
 
+                prodMapper.deleteProdInfoProdInfoAllStore(prodVO1);            // 상품추가정보
+                prodMapper.deleteProdInfoSaleTimeAllStore(prodVO1);            // 키오스크판매시간대정보
                 prodMapper.deleteProdInfoCouponProdAllStore(prodVO1);          // 쿠폰적용상품
                 prodMapper.deleteProdInfoKioskKeyAllStore(prodVO1);            // 키오스크 키맵설정
                 prodMapper.deleteProdInfoKioskRecmdAllStore(prodVO1);          // 키오스크 추천메뉴정보
@@ -1823,6 +1827,8 @@ public class ProdServiceImpl implements ProdService {
 
             prodVO.setDelTypeFg("0"); // 영구삭제가능
 
+            prodMapper.deleteProdInfoProdInfo(prodVO);            // 상품추가정보
+            prodMapper.deleteProdInfoSaleTime(prodVO);            // 키오스크판매시간대정보
             prodMapper.deleteProdInfoCouponProd(prodVO);          // 쿠폰적용상품
             prodMapper.deleteProdInfoKioskKey(prodVO);            // 키오스크 키맵설정
             prodMapper.deleteProdInfoKioskRecmd(prodVO);          // 키오스크 추천메뉴정보
@@ -1918,6 +1924,8 @@ public class ProdServiceImpl implements ProdService {
             // 본사인경우, 본사에 속한 매장상품정보도 영구삭제
             if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
 
+                prodMapper.deleteProdInfoProdInfoAllStore(prodVO);            // 상품추가정보
+                prodMapper.deleteProdInfoSaleTimeAllStore(prodVO);            // 키오스크판매시간대정보
                 prodMapper.deleteProdInfoCouponProdAllStore(prodVO);          // 쿠폰적용상품
                 prodMapper.deleteProdInfoKioskKeyAllStore(prodVO);            // 키오스크 키맵설정
                 prodMapper.deleteProdInfoKioskRecmdAllStore(prodVO);          // 키오스크 추천메뉴정보

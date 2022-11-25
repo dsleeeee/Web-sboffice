@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.store.storeMonthChannel.service.impl.StoreMonthChannelMapper">
+
+    <!-- 매장별 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY, TB_SL_SALE_HDR_DC
+        PARAM    : storeMonthChannelVO
+        COMMENTS : 매장별 리스트를 조회한다.
+    -->
+    <select id="getMonthList"  parameterType="storeMonthChannelVO" resultType="DefaultMap">
+        /* StoreMonthChannelMapper.storeMonthChannelVO */
+        SELECT  TO_CHAR(TO_DATE(tsdt.SALE_YM, 'yyyymm'), 'yyyy-mm') YEAR_MONTH,
+                tsdt.SALE_CNT,
+                tsdt.STORE_CNT,
+                tsdt.BRANCH_CD,
+                (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = tsdt.BRANCH_CD) AS BRANCH_NM,
+        <if test='option != null and option != "" and option == "store"'>
+                tsdt.STORE_CD,
+                (SELECT STORE_NM FROM TB_MS_STORE tms WHERE tms.STORE_CD = tsdt.STORE_CD) AS STORE_NM,
+        </if>
+                tsdt.TOT_SALE_AMT,
+                tsdt.TOT_DC_AMT,
+                tsdt.REAL_SALE_AMT,
+                tsdt.BILL_CNT,
+                tsdt.BILL_UPRC,
+                tsdt.GA_AMT,
+                tsdt.VAT_AMT,
+                tsdt.TOT_TIP_AMT,
+                tsdt.TOT_ETC_AMT,
+                tsdt.CUP_AMT,
+                <foreach collection="arrPayCol" item="item" separator=",">
+                    tsdt.PAY_AMT_${item} AS PAY${item}
+                </foreach> ,
+                tsdt.TOT_PAY_AMT,
+                tsdt.GEN_REAL_SALE_AMT,
+                DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsdt.GEN_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS GEN_REAL_SALE_RATE,
+                tsdt.DLVR_REAL_SALE_AMT,
+                DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsdt.DLVR_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS DLVR_REAL_SALE_RATE,
+                tsdt.PACK_REAL_SALE_AMT,
+                DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsdt.PACK_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS PACK_REAL_SALE_RATE
+        ,
+        <foreach collection="arrDlvrInFgCol" item="item" separator=",">
+                tsdto.SALE_QTY${item} AS SALE_QTY${item}
+        ,       tsdto.REAL_SALE_AMT${item} AS REAL_SALE_AMT${item}
+        </foreach>
+        FROM    (
+                SELECT  SUBSTR(tsdt.SALE_DATE,0,6) AS SALE_YM,
+                        COUNT(DISTINCT tsdt.SALE_DATE) AS SALE_CNT,
+                        COUNT(DISTINCT tsdt.STORE_CD) AS STORE_CNT,
+                        tms.BRANCH_CD,
+                    <if test='option != null and option != "" and option == "store"'>
+                         tsdt.STORE_CD,
+                    </if>
+                        SUM(tsdt.TOT_SALE_AMT) AS TOT_SALE_AMT,
+                        SUM(tsdt.TOT_DC_AMT) AS TOT_DC_AMT,
+                        SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                        SUM(tsdt.REAL_SALE_CNT) AS BILL_CNT,
+                        ROUND(SUM(tsdt.REAL_SALE_AMT) / SUM(tsdt.BILL_CNT)) AS BILL_UPRC,
+                        SUM(tsdt.REAL_SALE_AMT) - SUM(tsdt.VAT_AMT) AS GA_AMT,
+                        SUM(tsdt.VAT_AMT) AS VAT_AMT,
+                        SUM(tsdt.TOT_TIP_AMT) AS TOT_TIP_AMT,
+                        SUM(tsdt.TOT_ETC_AMT) AS TOT_ETC_AMT,
+                        SUM(tsdt.CUP_AMT) AS CUP_AMT,
+                        <foreach collection="arrPayCol" item="item" separator="+">
+                            <if test="item != '02' and item != '021'">
+                                SUM(NVL(tsdt.PAY_AMT_${item}, 0))
+                            </if>
+                        </foreach> +  SUM(NVL(tsdt.NON_CASH_AMT, 0)) +  SUM(NVL(tsdt.APPR_CASH_AMT, 0)) AS TOT_PAY_AMT,
+                        <foreach collection="arrPayCol" item="item" separator=",">
+                            <if test="item != '02' and item != '021'">
+                                SUM(NVL(tsdt.PAY_AMT_${item}, 0)) AS PAY_AMT_${item}
+                            </if>
+                        </foreach>,
+                        SUM(NVL(tsdt.NON_CASH_AMT, 0)) AS PAY_AMT_02,
+                        SUM(NVL(tsdt.APPR_CASH_AMT, 0)) AS PAY_AMT_021,
+                        SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT,
+                        SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
+                        SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
+                FROM    TB_SL_DAILY_TOTAL_DLVR tsdt
+                ,       TB_MS_STORE tms
+                WHERE   tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     tsdt.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth}||'31'
+                <if test='storeCds != null and storeCds != ""'>
+                    AND tsdt.STORE_CD IN
+                    <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                AND     tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                AND     tsdt.STORE_CD = tms.STORE_CD
+                GROUP BY SUBSTR(tsdt.SALE_DATE,0,6), tms.BRANCH_CD
+                <if test='option != null and option != "" and option == "store"'>
+                    , tsdt.STORE_CD
+                </if>
+                ) tsdt
+        ,       (   SELECT  tsdto.SALE_YM
+                    ,       tms.BRANCH_CD
+                    <if test='option != null and option != "" and option == "store"'>
+                    ,       tsdto.STORE_CD
+                    </if>
+                    ,       <foreach collection="arrDlvrInFgCol" item="item" separator=",">
+                    SUM(CASE WHEN DLVR_IN_FG = ${item} THEN SALE_QTY END) AS SALE_QTY${item}
+                    ,		SUM(CASE WHEN DLVR_IN_FG = ${item} THEN REAL_SALE_AMT END) AS REAL_SALE_AMT${item}
+                    </foreach>
+                    FROM    TB_SL_MONTHLY_TOTAL_ORDAPP tsdto
+                    ,       TB_MS_STORE tms
+                    WHERE   tsdto.HQ_OFFICE_CD  = #{hqOfficeCd}
+                    <if test='storeCds != null and storeCds != ""'>
+                        AND tsdto.STORE_CD IN
+                        <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                    AND     tsdto.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+                    AND     tsdto.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                    AND     tsdto.STORE_CD = tms.STORE_CD
+                    GROUP BY tms.BRANCH_CD, tsdto.SALE_YM
+                    <if test='option != null and option != "" and option == "store"'>
+                        ,       tsdto.STORE_CD
+                    </if>
+                    ) tsdto
+        WHERE   tsdt.SALE_YM = tsdto.SALE_YM (+)
+--         AND     tsdt.BRANCH_CD = tsdto.BRANCH_CD (+)
+        <if test='option != null and option != "" and option == "store"'>
+        AND     tsdt.STORE_CD = tsdto.STORE_CD (+)
+        </if>
+        ORDER
+        BY      tsdt.SALE_YM, tsdt.BRANCH_CD
+        <if test='option != null and option != "" and option == "store"'>
+            ,       tsdt.STORE_CD
+        </if>
+    </select>
+</mapper>

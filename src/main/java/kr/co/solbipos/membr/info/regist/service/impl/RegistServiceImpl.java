@@ -1067,6 +1067,8 @@ public class RegistServiceImpl implements RegistService {
             registVO2.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
             registVO2.setArrMembrNo(delMemberNo.split(","));
 
+            // 회원 추가정보 (광운대 아이스링크) 영구삭제
+            mapper.deleteMemberKwu(registVO2);
             // 회원 카드정보 영구삭제
             mapper.deleteMemberCard(registVO2);
             // 회원 포인트 변경내역 영구삭제
@@ -1120,6 +1122,8 @@ public class RegistServiceImpl implements RegistService {
         // 삭제불가회원을 제외한 전체회원 영구삭제
         // 강제삭제시 전체회원 영구삭제
 
+        // 전체회원 추가정보 (광운대 아이스링크) 영구삭제
+        mapper.deleteAllMemberKwu(registVO);
         // 전체회원 회원 카드정보 영구삭제
         mapper.deleteAllMemberCard(registVO);
         // 전체회원 회원 포인트 변경내역 영구삭제

@@ -247,6 +247,9 @@ public interface RegistMapper {
     /** 회원 삭제 팝업 - 회원정보 영구삭제 */
     int deleteMember(RegistVO registVO);
 
+    /** 회원 삭제 팝업 - 회원 추가정보 (광운대 아이스링크) 영구삭제 */
+    int deleteMemberKwu(RegistVO registVO);
+
     /** 회원 삭제 팝업 - 회원카드정보 영구삭제 */
     int deleteMemberCard(RegistVO registVO);
 
@@ -279,6 +282,9 @@ public interface RegistMapper {
 
     /** 회원 삭제 팝업 - 전체회원 회원정보 영구삭제 */
     int deleteAllMember(RegistVO registVO);
+
+    /** 회원 삭제 팝업 - 체회원 추가정보 (광운대 아이스링크) 영구삭제 */
+    int deleteAllMemberKwu(RegistVO registVO);
 
     /** 회원 삭제 팝업 - 전체회원 회원카드정보 영구삭제 */
     int deleteAllMemberCard(RegistVO registVO);

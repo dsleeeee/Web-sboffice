@@ -114,4 +114,8 @@ public interface ViewMapper {
     /** 판매터치키 선택그룹 XML 복사 */
     String copyTouchKeyGrpXML(CopyStoreEnvVO copyStoreEnvVO);
 
+    /** 판매터치키 그룹명 삭제 */
+    int deleteTouchKeyGrpNm(CopyStoreEnvVO copyStoreEnvVO);
+    /** 판매터치키 그룹명 복사 */
+    int copyTouchKeyGrpNm(CopyStoreEnvVO copyStoreEnvVO);
 }

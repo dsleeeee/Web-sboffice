@@ -1793,6 +1793,21 @@
         </foreach>
     </delete>
 
+    <!-- 회원 삭제 팝업 - 회원 추가정보 (광운대 아이스링크) 영구삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_ADDITORY_KWU
+        COMMENTS : 회원 추가정보 (광운대 아이스링크) 영구삭제
+    -->
+    <delete id="deleteMemberKwu" parameterType="registVO">
+        /* USE : RegistMapper.deleteMemberKwu */
+        DELETE TB_MB_MEMBER_ADDITORY_KWU
+         WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+           AND MEMBR_NO IN
+        <foreach collection="arrMembrNo" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
     <!-- 회원 삭제 팝업 - 회원 카드정보 영구삭제 -->
     <!--
         TABLE    : TB_MB_MEMBER_CARD
@@ -2038,6 +2053,66 @@
                                 </if>
                                  GROUP
                                     BY MEMBR_NO
+                            ) tmmpb
+                     WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
+                    <if test='forcedDeleteYn == "N"'>
+                        AND tmmp.FIRST_SALE_DATE IS NULL
+                        AND NVL(tmmpb.CNT, 0) = 0
+                    </if>
+                ) B
+            ON (
+                  A.MEMBR_ORGN_CD = B.MEMBR_ORGN_CD
+                  AND A.MEMBR_NO = B.MEMBR_NO
+                )
+          WHEN MATCHED THEN
+        UPDATE
+           SET A.MOD_DT = #{modDt},
+                A.MOD_ID = #{modId}
+        DELETE
+         WHERE A.MEMBR_ORGN_CD = B.MEMBR_ORGN_CD
+           AND A.MEMBR_NO = B.MEMBR_NO
+    </delete>
+
+    <!-- 회원 삭제 팝업 - 전체회원 회원 추가정보 (광운대 아이스링크) 영구삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_ADDITORY_KWU, TB_MB_MEMBER, TB_MB_MEMBER_POINT, TB_MB_MEMBER_PAID_BALANCE
+        COMMENTS : 전체회원 회원 추가정보 (광운대 아이스링크) 영구삭제
+    -->
+    <delete id="deleteAllMemberKwu" parameterType="registVO">
+        /* USE : RegistMapper.deleteAllMemberKwu */
+        MERGE INTO TB_MB_MEMBER_ADDITORY_KWU A
+          USING (
+                    SELECT tmmp.MEMBR_ORGN_CD,
+                            tmmp.MEMBR_NO
+                      FROM (
+                                SELECT A.MEMBR_ORGN_CD,
+                                        A.MEMBR_NO,
+                                        B.FIRST_SALE_DATE
+                                  FROM TB_MB_MEMBER A,
+                                        TB_MB_MEMBER_POINT B
+                                 WHERE 1=1
+                                   AND A.MEMBR_ORGN_CD = #{membrOrgnCd}
+                                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                    <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                                        AND A.REG_STORE_CD = #{storeCd}
+                                    </if>
+                                </if>
+                                   AND B.MEMBR_ORGN_CD (+)= A.MEMBR_ORGN_CD
+                                   AND B.MEMBR_NO (+)= A.MEMBR_NO
+                            ) tmmp,
+                            (
+                                SELECT MEMBR_NO,
+                                        COUNT(1) AS CNT
+                                  FROM TB_MB_MEMBER_PAID_BALANCE
+                                 WHERE 1=1
+                                   AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                    <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                                        AND STORE_CD = #{storeCd}
+                                    </if>
+                                </if>
+                                GROUP
+                                   BY MEMBR_NO
                             ) tmmpb
                      WHERE tmmpb.MEMBR_NO (+)= tmmp.MEMBR_NO
                     <if test='forcedDeleteYn == "N"'>

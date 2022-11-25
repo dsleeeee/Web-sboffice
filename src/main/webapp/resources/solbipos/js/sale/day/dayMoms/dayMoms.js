@@ -8,8 +8,8 @@ app.controller('dayMomsCtrl', ['$scope', '$http', '$timeout', function ($scope, 
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('dayMomsCtrl', $scope, $http, true));
 
-  $scope.srchStartDate  = wcombo.genDateVal("#srchStartDate", gvStartDate);
-  $scope.srchEndDate    = wcombo.genDateVal("#srchEndDate", gvEndDate);
+  var startDate = wcombo.genDateVal("#srchStartDate", gvStartDate);
+  var endDate   = wcombo.genDateVal("#srchEndDate", gvEndDate);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -64,7 +64,7 @@ app.controller('dayMomsCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         var params      = {};
-        params.storeCd  = $("#dayTotalSelectStoreCd").val();
+        params.storeCd  = $("#dayMomsStoreCd").val();
         params.saleDate = selectedRow.saleDate.replaceAll("-","");
         params.gubun = "day";
 
@@ -206,11 +206,26 @@ app.controller('dayMomsCtrl', ['$scope', '$http', '$timeout', function ($scope, 
   // 영수증별매출상세현황 리스트 조회
   $scope.searchDayMomsList = function () {
 
+    var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
+    var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
+    var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+    // 시작일자가 종료일자보다 빠른지 확인
+    if(startDt.getTime() > endDt.getTime()){
+      $scope._popMsg(messages['cmm.dateChk.error']);
+      return false;
+    }
+    // 조회일자 최대 1달(31일) 제한
+    if (diffDay > 30) {
+      $scope._popMsg(messages['cmm.dateOver.1month.error']);
+      return false;
+    }
+
     // 파라미터
-    var params        = {};
+    var params       = {};
+    params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
+    params.endDate   = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
     params.storeCds     = $("#dayMomsStoreCd").val();
-    params.startDate    = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-    params.endDate      = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
     params.payCol       = payCol;
     params.dlvrInFgCol  = dlvrInFgCol;
     

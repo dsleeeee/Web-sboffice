@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    DayTime.xml
+    일별시간대
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.11.23     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.day.dayTime.service.impl.DayTimeMapper">
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getDayTimeList" parameterType="dayTimeVO" resultType="DefaultMap">
+        /* DayTimeMapper.getDayTimeList */
+        <if test="optionFg != null and optionFg.toString() == 'time'">
+            SELECT  COUNT(DISTINCT STORE_CD) AS STORE_CNT
+            <if test='option != null and option != "" and option == "day"'>
+            ,       TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+            ,       TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+            </if>
+            ,       SUM(SALE_QTY) AS SALE_QTY
+            ,       SUM(TOT_SALE_AMT) AS TOT_SALE_AMT
+            ,       SUM(TOT_DC_AMT) AS TOT_DC_AMT
+            ,       SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+            ,       SUM(SALE_CNT) AS SALE_CNT
+            ,       SUM(RTN_SALE_CNT) AS RTN_SALE_CNT
+            ,       SUM(REAL_SALE_CNT) AS REAL_SALE_CNT
+            ,       DECODE(SUM(REAL_SALE_CNT), 0, 0, ROUND(SUM(REAL_SALE_AMT) / SUM(REAL_SALE_CNT))) AS BILL_UPRC
+            ,       <foreach collection="arrTimeCol" item="item" separator=",">
+                        SUM(CASE WHEN SALE_HOUR = ${item} THEN SALE_QTY END) AS SALE_QTY${item}
+            ,           SUM(CASE WHEN SALE_HOUR = ${item} THEN REAL_SALE_AMT END) AS REAL_SALE_AMT${item}
+                    </foreach>
+            FROM    TB_SL_DAILY_TIME tssh
+            WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+            AND     SALE_DATE  BETWEEN #{startDate} AND #{endDate}
+            <if test='storeCds != null and storeCds != ""'>
+                AND STORE_CD IN
+                <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test='startTime != "0" or endTime != "23"'>
+                AND SALE_HOUR BETWEEN #{startTime} AND #{endTime}
+            </if>
+            HAVING SUM(TOT_SALE_AMT) IS NOT NULL
+            <if test='option != null and option != "" and option == "day"'>
+                GROUP BY SALE_DATE
+                ORDER BY SALE_DATE DESC
+            </if>
+        </if>
+        <if test="optionFg != null and optionFg.toString() == 'timeSlot'">
+            SELECT  STORE_CNT
+            <if test='option != null and option != "" and option == "day"'>
+            ,       TO_CHAR(TO_DATE(tssh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+            ,       TO_CHAR(TO_DATE(tssh.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+            </if>
+            ,       SUM(SALE_QTY) AS SALE_QTY
+            ,       SUM(TOT_SALE_AMT) AS TOT_SALE_AMT
+            ,       SUM(TOT_DC_AMT) AS TOT_DC_AMT
+            ,       SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+            ,       SUM(SALE_CNT) AS SALE_CNT
+            ,       SUM(RTN_SALE_CNT) AS RTN_SALE_CNT
+            ,       SUM(REAL_SALE_CNT) AS REAL_SALE_CNT
+            ,       DECODE(SUM(REAL_SALE_CNT), 0, 0, ROUND(SUM(REAL_SALE_AMT) / SUM(REAL_SALE_CNT))) AS BILL_UPRC
+            ,       <foreach collection="arrTimeCol" item="item" separator=",">
+                        NVL(SUM(SALE_QTY${item}), 0) AS SALE_QTY${item}
+            ,           NVL(SUM(REAL_SALE_AMT${item}), 0) AS REAL_SALE_AMT${item}
+                    </foreach>
+            FROM    (
+                    SELECT  COUNT(DISTINCT STORE_CD) AS STORE_CNT
+                    <if test='option != null and option != "" and option == "day"'>
+                    ,       SALE_DATE
+                    </if>
+                    ,       SUM(SALE_QTY) AS SALE_QTY
+                    ,		SUM(TOT_SALE_AMT) AS TOT_SALE_AMT
+                    ,		SUM(TOT_DC_AMT) AS TOT_DC_AMT
+                    ,		SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+                    ,		SUM(SALE_CNT) AS SALE_CNT
+                    ,		SUM(RTN_SALE_CNT) AS RTN_SALE_CNT
+                    ,		SUM(REAL_SALE_CNT) AS REAL_SALE_CNT
+                    ,       <foreach collection="arrTimeCol" item="item" separator=",">
+                                SUM(CASE WHEN TIME_SLOT = ${item} THEN SALE_QTY END)AS SALE_QTY${item}
+                    ,           SUM(CASE WHEN TIME_SLOT = ${item} THEN REAL_SALE_AMT END) AS REAL_SALE_AMT${item}
+                            </foreach>
+                    FROM   (
+                            SELECT  STORE_CD
+                            <if test='option != null and option != "" and option == "day"'>
+                            ,       SALE_DATE
+                            </if>
+                            ,       SUM(SALE_QTY) AS SALE_QTY
+                            ,		SUM(TOT_SALE_AMT) AS TOT_SALE_AMT
+                            ,		SUM(TOT_DC_AMT) AS TOT_DC_AMT
+                            ,		SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+                            ,		SUM(SALE_CNT) AS SALE_CNT
+                            ,		SUM(RTN_SALE_CNT) AS RTN_SALE_CNT
+                            ,		SUM(REAL_SALE_CNT) AS REAL_SALE_CNT
+                            ,	    thn.TIME_SLOT
+                            FROM 	TB_SL_DAILY_TIME tsdt,
+                                    (SELECT MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) || LPAD(MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) + 1, 2, '0') AS TIME_SLOT,
+                                            MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) AS START_TIME,
+                                            MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) AS END_TIME
+                                    FROM 	TB_HQ_NMCODE
+                                    WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                                    AND		NMCODE_GRP_CD ='001'
+                                    GROUP BY NMCODE_NM
+                                    ) thn
+                            WHERE 	tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+                            AND 	tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                            AND     tsdt.SALE_HOUR BETWEEN thn.START_TIME AND thn.END_TIME
+                            <if test='storeCds != null and storeCds != ""'>
+                                AND STORE_CD IN
+                                <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <if test='timeSlot != null and timeSlot != ""'>
+                                AND TIME_SLOT = replace(#{timeSlot},'~','')
+                            </if>
+                            GROUP BY STORE_CD, TIME_SLOT
+                            <if test='option != null and option != "" and option == "day"'>
+                                   , SALE_DATE
+                            </if>
+                            )
+                    <if test='option != null and option != "" and option == "day"'>
+                        GROUP BY  SALE_DATE
+                    </if>
+                    ) tssh
+            HAVING SUM(TOT_SALE_AMT) IS NOT NULL
+            GROUP BY STORE_CNT
+            <if test='option != null and option != "" and option == "day"'>
+                , SALE_DATE
+                ORDER BY SALE_DATE DESC
+            </if>
+        </if>
+    </select>
+
+</mapper>

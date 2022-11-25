@@ -50,13 +50,13 @@
                     SUM(TOT_DC_AMT) AS TOT_DC_AMT,
                     SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
                     SUM(VAT_AMT) AS VAT_AMT,
-                    COUNT(BILL_NO) AS BILL_CNT,
-                    ROUND(SUM(REAL_SALE_AMT) / COUNT(BILL_NO)) AS BILL_UPRC,
+                    SUM(BILL_CNT) AS BILL_CNT,
+                    ROUND(SUM(REAL_SALE_AMT) / SUM(BILL_CNT)) AS BILL_UPRC,
                     SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT,
                     SUM(TOT_TIP_AMT) AS TOT_TIP_AMT,
                     SUM(TOT_ETC_AMT) AS TOT_ETC_AMT,
                     SUM(CUP_AMT) AS CUP_AMT
-            FROM    TB_SL_SALE_HDR
+            FROM    TB_SL_DAILY_TOTAL
             WHERE   HQ_OFFICE_CD = #{membrOrgnCd}
             AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
             <if test='storeCds != null and storeCds != ""'>

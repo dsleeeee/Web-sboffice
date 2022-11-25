@@ -344,6 +344,12 @@ public interface ProdMapper {
     /** 상품 삭제 팝업 - 상품삭제 전 데이터 확인 : 거래처-업체발주전표 상세 */
     int getPoStoreVendrOrderDtlCnt(ProdVO prodVO);
 
+    /** 상품 삭제 팝업 - 상품추가정보 영구삭제 */
+    int deleteProdInfoProdInfo(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 키오스크판매시간대정보 영구삭제 */
+    int deleteProdInfoSaleTime(ProdVO prodVO);
+
     /** 상품 삭제 팝업 - 쿠폰적용상품 영구삭제 */
     int deleteProdInfoCouponProd(ProdVO prodVO);
 
@@ -400,6 +406,12 @@ public interface ProdMapper {
 
     /** 상품 삭제 팝업 - 상품정보 영구삭제 */
     int deleteProdInfo(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품추가정보 영구삭제 (전매장) */
+    int deleteProdInfoProdInfoAllStore(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 키오스크판매시간대정보 영구삭제 (전매장) */
+    int deleteProdInfoSaleTimeAllStore(ProdVO prodVO);
 
     /** 상품 삭제 팝업 - 쿠폰적용상품 영구삭제 (전매장) */
     int deleteProdInfoCouponProdAllStore(ProdVO prodVO);
