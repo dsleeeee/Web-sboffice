@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StoreSaleArea.xml
+    점포 영업 지역 관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2022.11.21      최초작성
+-->
+<mapper namespace="kr.co.solbipos.store.storeMoms.storeSaleArea.service.impl.StoreSaleAreaMapper">
+
+    <!-- 매장목록 조회 -->
+    <!--
+        TABLE    : TB_HQ_BRANCH_MOMS, TB_MS_STORE
+        PARAM    : storeSaleAreaVO
+        COMMENTS : 매장목록을 조회한다.
+    -->
+    <select id="getStoreList" parameterType="storeSaleAreaVO" resultType="DefaultMap">
+      /* USE : StoreSaleAreaMapper.getStoreList */
+      <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tms.BRANCH_CD,
+               thbm.BRANCH_NM,
+               tms.STORE_CD,
+               tms.STORE_NM,
+               tms.AREA_CD,
+               tms.ADDR,
+               tms.SYS_STAT_FG
+      <include refid="CmmSQL.PagingTemplateCount"/>
+          FROM TB_MS_STORE tms,
+               TB_HQ_BRANCH_MOMS thbm
+         WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND thbm.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
+           AND thbm.BRANCH_CD (+)= tms.BRANCH_CD
+        <if test='branchCd != null and branchCd != ""'>
+           AND tms.BRANCH_CD LIKE '%'|| #{branchCd} || '%'
+        </if>
+        <if test='branchNm != null and branchNm != ""'>
+           AND thbm.BRANCH_NM LIKE '%'|| #{branchNm} || '%'
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+           AND tms.STORE_CD LIKE '%'||#{storeCd}|| '%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+          AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test='areaCd != null and areaCd.toString() != ""'>
+          AND tms.AREA_CD = #{areaCd}
+        </if>
+        <if test='sysStatFg != null and sysStatFg.toString() != ""'>
+          AND tms.SYS_STAT_FG = #{sysStatFg}
+        </if>
+        ORDER
+           BY tms.STORE_CD
+      <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 지사 조회(콤보박스용) -->
+    <!--
+        TABLE    : TB_HQ_BRANCH_MOMS
+        PARAM    : storeSaleAreaVO
+        COMMENTS : 지사를 조회한다.(콤보박스용)
+    -->
+    <select id="getBranchCombo" parameterType="storeSaleAreaVO" resultType="DefaultMap">
+        /* StoreSaleAreaMapper.getBranchCombo */
+        SELECT ''    AS VALUE,
+               '지사 선택' AS NAME
+          FROM DUAL
+         UNION
+        SELECT BRANCH_CD AS VALUE,
+               BRANCH_NM AS NAME
+          FROM TB_HQ_BRANCH_MOMS
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND USE_YN = 'Y'
+         ORDER
+            BY VALUE NULLS FIRST
+    </select>
+
+    <!-- 매장 조회(콤보박스용) -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : storeSaleAreaVO
+        COMMENTS : 매장을 조회한다.(콤보박스용)
+    -->
+    <select id="getStoreCombo" parameterType="storeSaleAreaVO" resultType="DefaultMap">
+        /* StoreSaleAreaMapper.getStoreCombo */
+        SELECT ''    AS VALUE,
+               '매장 선택' AS NAME
+          FROM DUAL
+         UNION
+        SELECT STORE_CD AS VALUE,
+               STORE_NM AS NAME
+          FROM TB_MS_STORE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND BRANCH_CD = #{branchCd}
+         ORDER
+            BY VALUE NULLS FIRST
+    </select>
+
+    <!-- 매장 영업지역 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : storeSaleAreaVO
+        COMMENTS : 매장 영업지역을 조회한다.
+    -->
+    <select id="getStoreSaleArea" parameterType="storeSaleAreaVO" resultType="DefaultMap">
+        /* StoreSaleAreaMapper.getStoreSaleArea */
+        SELECT LATITUDE,
+               LONGITUDE,
+               SALE_AREA
+          FROM TB_MS_STORE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND STORE_CD = #{storeCd}
+    </select>
+
+    <!-- 매장 영업지역 저장 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : storeSaleAreaVO
+        COMMENTS : 매장 영업지역을 저장한다.
+    -->
+    <update id="saveStoreSaleArea" parameterType="storeSaleAreaVO">
+        /* USE : StoreSaleAreaMapper.saveStoreSaleArea */
+        UPDATE TB_MS_STORE
+           SET SALE_AREA = #{saleArea},
+               MOD_DT = #{modDt},
+               MOD_ID = #{modId}
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND STORE_CD = #{storeCd}
+    </update>
+
+    <!-- 서울, 경기 매장 영업지역 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : storeSaleAreaVO
+        COMMENTS : 서울, 경기 매장 영업지역을 조회한다.
+    -->
+    <select id="getMetropolitanSaleArea" parameterType="storeSaleAreaVO" resultType="DefaultMap">
+      /* USE : StoreSaleAreaMapper.getMetropolitanSaleArea */
+      SELECT STORE_CD,
+             STORE_NM,
+             LATITUDE,
+             LONGITUDE,
+             SALE_AREA
+        FROM TB_MS_STORE
+       WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+         AND STORE_CD != #{storeCd}
+         AND AREA_CD IN ('11', '41')
+    </select>
+
+</mapper>

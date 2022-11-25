@@ -28,7 +28,7 @@
 <script type="text/javascript" src="/resource/solbipos/js/application/layer/mapPop.js?ver=20221005.01" charset="utf-8"></script>
 
 <%-- KAKAO Maps API --%>
-<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=00a01cbae68d391a0f4b72950f33ada1&libraries=services"></script>
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1151239a9ff1ce860e3af6ba25465ee9&libraries=services"></script>
 
 <script>
 
