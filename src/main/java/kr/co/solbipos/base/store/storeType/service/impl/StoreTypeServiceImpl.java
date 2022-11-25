@@ -502,4 +502,46 @@ public class StoreTypeServiceImpl implements StoreTypeService {
         return storeTypeMapper.getMenuGroupChgHist(storeTypeVO);
     }
 
+    /** 매장적용이력 탭 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getStoreApplyChgHistList(StoreTypeVO storeTypeVO, SessionInfoVO sessionInfoVO) {
+
+        storeTypeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        storeTypeVO.setUserId(sessionInfoVO.getUserId());
+
+        // 매장 array 값 세팅
+        String[] storeCds = storeTypeVO.getStoreCds().split(",");
+        storeTypeVO.setStoreCdList(storeCds);
+
+        return storeTypeMapper.getStoreApplyChgHistList(storeTypeVO);
+    }
+
+    /** 매장적용이력 탭 - 취소 */
+    @Override
+    public int getStoreApplyChgHistSaveUpdate(StoreTypeVO[] storeTypeVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(StoreTypeVO storeTypeVO : storeTypeVOs) {
+
+            storeTypeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            storeTypeVO.setModDt(currentDt);
+            storeTypeVO.setModId(sessionInfoVO.getUserId());
+
+            procCnt = storeTypeMapper.getStoreApplyChgHistSaveUpdate(storeTypeVO);
+        }
+
+        return procCnt;
+    }
+
+    /** 매장적용이력 상세 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getStoreApplyChgHistDtlList(StoreTypeVO storeTypeVO, SessionInfoVO sessionInfoVO) {
+
+        storeTypeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        storeTypeVO.setUserId(sessionInfoVO.getUserId());
+
+        return storeTypeMapper.getStoreApplyChgHistDtlList(storeTypeVO);
+    }
 }

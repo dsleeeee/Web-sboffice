@@ -1141,4 +1141,223 @@
             BY A.PROC_DT DESC
     </select>
 
+    <!-- 매장적용이력 탭 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getStoreApplyChgHistList" parameterType="storeTypeVO" resultType="DefaultMap">
+        /* StoreTypeMapper.getStoreApplyChgHistList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        A.STORE_TYPE_CD,
+        (SELECT STORE_TYPE_NM FROM TB_HQ_STORE_TYPE WHERE HQ_OFFICE_CD = A.HQ_OFFICE_CD AND STORE_TYPE_CD = A.STORE_TYPE_CD) AS STORE_TYPE_NM,
+        A.STORE_GROUP_CD,
+        C.STORE_GROUP_NM,
+        A.STORE_CD,
+        (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = A.HQ_OFFICE_CD AND STORE_CD = A.STORE_CD) AS STORE_NM,
+        A.PROC_DT,
+        TO_CHAR(TO_DATE(A.PROC_DT ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS CHG_PROC_DT,
+        A.MOD_ID,
+        A.APPLY_PROC_FG,
+        (CASE WHEN A.APPLY_PROC_FG IN ('1', '2', '3')
+                    THEN (CASE A.B_APPLY_PROC_FG WHEN '0' THEN '매장적용요청(예약)' WHEN '1' THEN '적용완료' WHEN '2' THEN '적용오류' WHEN '3' THEN '적용취소' WHEN '5' THEN '매장적용요청(즉시)' ELSE '' END)
+                    || ' -> ' || (CASE A.APPLY_PROC_FG WHEN '0' THEN '매장적용요청(예약)' WHEN '1' THEN '적용완료' WHEN '2' THEN '적용오류' WHEN '3' THEN '적용취소' WHEN '5' THEN '매장적용요청(즉시)' ELSE '' END)
+                ELSE '' END
+        ) AS APPLY_INFO,
+        (SELECT NVL2(MAX(STORE_CD), 'Y', 'N') FROM TB_HQ_STORE_TYPE_APP WHERE HQ_OFFICE_CD = A.HQ_OFFICE_CD AND STORE_CD = A.STORE_CD AND MOD_DT = A.MOD_DT AND APPLY_PROC_FG = '0') AS APPLY_PROC_FG_YN
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_LG_HQ_STORE_TYPE_APP_LOG A,
+        (
+            SELECT
+            AB.HQ_OFFICE_CD, AB.STORE_CD, AB.PROC_DT, AB.STORE_TYPE_CD,
+            LISTAGG(AB.STORE_GROUP_CD, ',') WITHIN GROUP (ORDER BY AB.STORE_GROUP_CD) AS STORE_GROUP_CD,
+            LISTAGG(AB.STORE_GROUP_NM, ',') WITHIN GROUP (ORDER BY AB.STORE_GROUP_NM) AS STORE_GROUP_NM
+            FROM
+            (
+                SELECT A.HQ_OFFICE_CD, A.STORE_GROUP_CD, A.STORE_GROUP_NM, B.STORE_CD, B.PROC_DT, B.STORE_TYPE_CD
+                FROM
+                (
+                    SELECT HQ_OFFICE_CD, STORE_GROUP_CD, STORE_GROUP_NM
+                    FROM TB_HQ_STORE_PROD_GROUP
+                    WHERE 1=1
+                    AND HQ_OFFICE_CD = #{hqOfficeCd}
+                ) A
+                INNER JOIN
+                (
+                    SELECT
+                    HQ_OFFICE_CD,
+                    STORE_GROUP_CD AS STORE_GROUP_CD_LIST,
+                    STORE_CD,
+                    PROC_DT,
+                    STORE_TYPE_CD
+                    FROM TB_LG_HQ_STORE_TYPE_APP_LOG
+                    WHERE 1=1
+                    AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    <if test='storeCds != null and storeCds != ""'>
+                        AND STORE_CD IN
+                        <foreach collection="storeCdList" item="item" open="(" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                    AND PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
+                    <if test='storeTypeCd != null and storeTypeCd != ""'>
+                        AND STORE_TYPE_CD = #{storeTypeCd}
+                    </if>
+                    <if test='storeGroupCd != null and storeGroupCd != ""'>
+                        AND STORE_GROUP_CD = #{storeGroupCd}
+                    </if>
+                ) B
+                ON A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                WHERE 1=1
+                AND A.STORE_GROUP_CD IN (
+                                            SELECT TRIM(REGEXP_SUBSTR(B.STORE_GROUP_CD_LIST,'[^,]+',1,LEVEL)) AS  LIST_TO_ROW
+                                            FROM DUAL
+                                            CONNECT BY INSTR(B.STORE_GROUP_CD_LIST, ',', 1, LEVEL-1 ) > 0
+                                        )
+            ) AB
+            GROUP BY AB.HQ_OFFICE_CD, AB.STORE_CD, AB.PROC_DT, AB.STORE_TYPE_CD
+        ) C
+        WHERE 1=1
+        AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCds != null and storeCds != ""'>
+            AND A.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open="(" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        AND A.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
+        <if test='storeTypeCd != null and storeTypeCd != ""'>
+            AND A.STORE_TYPE_CD = #{storeTypeCd}
+        </if>
+        <if test='storeGroupCd != null and storeGroupCd != ""'>
+            AND A.STORE_GROUP_CD = #{storeGroupCd}
+        </if>
+        AND C.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+        AND C.STORE_CD (+)= A.STORE_CD
+        AND C.PROC_DT (+)= A.PROC_DT
+        AND C.STORE_TYPE_CD (+)= A.STORE_TYPE_CD
+        ORDER BY A.PROC_DT DESC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 매장적용이력 탭 - 취소 update -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getStoreApplyChgHistSaveUpdate" parameterType="storeTypeVO">
+        /* StoreTypeMapper.getStoreApplyChgHistSaveUpdate */
+        UPDATE
+        TB_HQ_STORE_TYPE_APP
+        SET
+        APPLY_PROC_FG = '3',
+        APPLY_PROC_REMARK = '적용취소',
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND STORE_CD = #{storeCd}
+    </update>
+
+    <!-- 매장적용이력 상세 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getStoreApplyChgHistDtlList" parameterType="storeTypeVO" resultType="DefaultMap">
+        /* StoreTypeMapper.getStoreApplyChgHistDtlList */
+        SELECT
+        A.STORE_TYPE_CD,
+        (SELECT STORE_TYPE_NM FROM TB_HQ_STORE_TYPE WHERE HQ_OFFICE_CD = A.HQ_OFFICE_CD AND STORE_TYPE_CD = A.STORE_TYPE_CD) AS STORE_TYPE_NM,
+        A.STORE_GROUP_CD,
+        C.STORE_GROUP_NM,
+        B.PROD_CD,
+        B.PROD_NM,
+        B.SALE_UPRC,
+        B.STIN_SALE_UPRC,
+        B.DLVR_SALE_UPRC,
+        B.PACK_SALE_UPRC,
+        A.PROC_DT,
+        TO_CHAR(TO_DATE(A.PROC_DT ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS CHG_PROC_DT,
+        A.MOD_ID,
+        A.APPLY_PROC_FG
+        FROM TB_LG_HQ_STORE_TYPE_APP_LOG A,
+        (
+            SELECT
+            thspgd.HQ_OFFICE_CD,
+            thspgd.STORE_GROUP_CD,
+            thspgd.PROD_CD,
+            thp.PROD_NM,
+            thspgd.SALE_UPRC,
+            thspgd.STIN_SALE_UPRC,
+            thspgd.DLVR_SALE_UPRC,
+            thspgd.PACK_SALE_UPRC
+            FROM TB_HQ_STORE_PROD_GROUP_DTL thspgd,
+            TB_HQ_PRODUCT thp
+            WHERE thspgd.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND thspgd.USE_YN = 'Y'
+            AND thp.HQ_OFFICE_CD = thspgd.HQ_OFFICE_CD
+            AND thp.PROD_CD = thspgd.PROD_CD
+            AND (
+                    ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                    OR
+                    ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                )
+            ORDER BY thspgd.PROD_CD ASC
+        ) B,
+        (
+            SELECT
+            AB.HQ_OFFICE_CD, AB.STORE_CD, AB.PROC_DT, AB.STORE_TYPE_CD,
+            LISTAGG(AB.STORE_GROUP_CD, ',') WITHIN GROUP (ORDER BY AB.STORE_GROUP_CD) AS STORE_GROUP_CD,
+            LISTAGG(AB.STORE_GROUP_NM, ',') WITHIN GROUP (ORDER BY AB.STORE_GROUP_NM) AS STORE_GROUP_NM
+            FROM
+            (
+                SELECT A.HQ_OFFICE_CD, A.STORE_GROUP_CD, A.STORE_GROUP_NM, B.STORE_CD, B.PROC_DT, B.STORE_TYPE_CD
+                FROM
+                (
+                    SELECT HQ_OFFICE_CD, STORE_GROUP_CD, STORE_GROUP_NM
+                    FROM TB_HQ_STORE_PROD_GROUP
+                    WHERE 1=1
+                    AND HQ_OFFICE_CD = #{hqOfficeCd}
+                ) A
+                INNER JOIN
+                (
+                    SELECT
+                    HQ_OFFICE_CD,
+                    STORE_GROUP_CD AS STORE_GROUP_CD_LIST,
+                    STORE_CD,
+                    PROC_DT,
+                    STORE_TYPE_CD
+                    FROM TB_LG_HQ_STORE_TYPE_APP_LOG
+                    WHERE 1=1
+                    AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND STORE_CD = #{storeCd}
+                    AND PROC_DT = #{procDt}
+                    AND STORE_TYPE_CD = #{storeTypeCd}
+                ) B
+                ON A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                WHERE 1=1
+                AND A.STORE_GROUP_CD IN (
+                                            SELECT TRIM(REGEXP_SUBSTR(B.STORE_GROUP_CD_LIST,'[^,]+',1,LEVEL)) AS  LIST_TO_ROW
+                                            FROM DUAL
+                                            CONNECT BY INSTR(B.STORE_GROUP_CD_LIST, ',', 1, LEVEL-1 ) > 0
+                                        )
+            ) AB
+            GROUP BY AB.HQ_OFFICE_CD, AB.STORE_CD, AB.PROC_DT, AB.STORE_TYPE_CD
+        ) C
+        WHERE 1=1
+        AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND A.STORE_CD = #{storeCd}
+        AND A.PROC_DT = #{procDt}
+        AND A.STORE_TYPE_CD = #{storeTypeCd}
+        AND B.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+        AND B.STORE_GROUP_CD (+)= A.STORE_GROUP_CD
+        AND C.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+        AND C.STORE_CD (+)= A.STORE_CD
+        AND C.PROC_DT (+)= A.PROC_DT
+        AND C.STORE_TYPE_CD (+)= A.STORE_TYPE_CD
+        ORDER BY A.PROC_DT DESC
+    </select>
+
 </mapper>
