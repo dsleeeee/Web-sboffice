@@ -137,7 +137,7 @@
             <s:message code="prod.title.storeProdBatch" />
         </button>
         <%-- 상품삭제 --%>
-        <button class="btn_skyblue ml5 fr" id="btnDelProd" ng-click="delProd()">
+        <button class="btn_skyblue ml5 fr" id="btnDelProd" ng-click="delProd()" ng-show="btnShowFg">
             <s:message code="prod.title.delProd" />
         </button>
     </div>

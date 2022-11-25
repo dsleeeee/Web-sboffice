@@ -10,6 +10,7 @@ app.controller('storeTypeTabCtrl', ['$scope', function ($scope) {
         $("#menuGroupView").hide();
         $("#storeTypeChgHistView").hide();
         $("#menuGroupChgHistView").hide();
+        $("#storeApplyChgHistView").hide();
     };
 
     // 매장타입 탭 보이기
@@ -18,11 +19,13 @@ app.controller('storeTypeTabCtrl', ['$scope', function ($scope) {
         $("#menuGroupTab").removeClass("on");
         $("#storeTypeChgHistTab").removeClass("on");
         $("#menuGroupChgHistTab").removeClass("on");
+        $("#storeApplyChgHistTab").removeClass("on");
 
         $("#storeTypeView").show();
         $("#menuGroupView").hide();
         $("#storeTypeChgHistView").hide();
         $("#menuGroupChgHistView").hide();
+        $("#storeApplyChgHistView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("storeTypeCtrl");
@@ -35,11 +38,13 @@ app.controller('storeTypeTabCtrl', ['$scope', function ($scope) {
         $("#menuGroupTab").addClass("on");
         $("#storeTypeChgHistTab").removeClass("on");
         $("#menuGroupChgHistTab").removeClass("on");
+        $("#storeApplyChgHistTab").removeClass("on");
 
         $("#storeTypeView").hide();
         $("#menuGroupView").show();
         $("#storeTypeChgHistView").hide();
         $("#menuGroupChgHistView").hide();
+        $("#storeApplyChgHistView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("menuGroupCtrl");
@@ -52,11 +57,13 @@ app.controller('storeTypeTabCtrl', ['$scope', function ($scope) {
         $("#menuGroupTab").removeClass("on");
         $("#storeTypeChgHistTab").addClass("on");
         $("#menuGroupChgHistTab").removeClass("on");
+        $("#storeApplyChgHistTab").removeClass("on");
 
         $("#storeTypeView").hide();
         $("#menuGroupView").hide();
         $("#storeTypeChgHistView").show();
         $("#menuGroupChgHistView").hide();
+        $("#storeApplyChgHistView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("storeTypeChgHistCtrl");
@@ -69,14 +76,35 @@ app.controller('storeTypeTabCtrl', ['$scope', function ($scope) {
         $("#menuGroupTab").removeClass("on");
         $("#storeTypeChgHistTab").removeClass("on");
         $("#menuGroupChgHistTab").addClass("on");
+        $("#storeApplyChgHistTab").removeClass("on");
 
         $("#storeTypeView").hide();
         $("#menuGroupView").hide();
         $("#storeTypeChgHistView").hide();
         $("#menuGroupChgHistView").show();
+        $("#storeApplyChgHistView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("menuGroupChgHistCtrl");
+        scope.flex.refresh();
+    };
+
+    // 매장적용이력 탭 보이기
+    $scope.storeApplyChgHistShow = function () {
+        $("#storeTypeTab").removeClass("on");
+        $("#menuGroupTab").removeClass("on");
+        $("#storeTypeChgHistTab").removeClass("on");
+        $("#menuGroupChgHistTab").removeClass("on");
+        $("#storeApplyChgHistTab").addClass("on");
+
+        $("#storeTypeView").hide();
+        $("#menuGroupView").hide();
+        $("#storeTypeChgHistView").hide();
+        $("#menuGroupChgHistView").hide();
+        $("#storeApplyChgHistView").show();
+
+        // angular 그리드 hide 시 깨지므로 refresh()
+        var scope = agrid.getScope("storeApplyChgHistCtrl");
         scope.flex.refresh();
     };
 
