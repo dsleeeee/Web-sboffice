@@ -824,6 +824,9 @@
     <!-- 광운대 > 신용카드입금관리 > 신용카드입금현황 -->
     <typeAlias alias="cardCreditStatusVO" type="kr.co.solbipos.sale.card.cardCreditStatus.service.CardCreditStatusVO"/>
 
+    <!-- 맘스터치 > 점포관리 > 점포 영업 지역 관리 -->
+    <typeAlias alias="storeSaleAreaVO" type="kr.co.solbipos.store.storeMoms.storeSaleArea.service.StoreSaleAreaVO"/>
+
     <!-- 맘스터치 > 승인관리2 > 현금영수증 승인 조회 -->
     <typeAlias alias="cashBillVO" type="kr.co.solbipos.sale.appr.cashBill.service.CashBillVO"/>
     <!-- 맘스터치 > 승인관리2 > 신용카드 승인 조회 -->

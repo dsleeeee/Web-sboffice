@@ -11,7 +11,7 @@
 <%-- 우편번호 서비스 API --%>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <%-- KAKAO Maps API --%>
-<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=00a01cbae68d391a0f4b72950f33ada1&libraries=services"></script>
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1151239a9ff1ce860e3af6ba25465ee9&libraries=services"></script>
 <script>
 
     // 화면 구분자 값을 파악하여, 부모창의 element id명을 파악한다.
