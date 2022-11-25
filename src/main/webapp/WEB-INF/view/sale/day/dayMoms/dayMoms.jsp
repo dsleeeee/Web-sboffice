@@ -47,7 +47,7 @@
                                 modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
                                 closeFunc - 팝업 닫기시 호출할 함수
               --%>
-            <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+            <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreMMoms.jsp" flush="true">
               <jsp:param name="targetId" value="dayMomsStore"/>
             </jsp:include>
               <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
@@ -118,14 +118,6 @@
     </div>
   </div>
 
-  <%-- 페이지 리스트 --%>
-  <div class="pageNum mt20">
-    <%-- id --%>
-    <ul id="dayMomsCtrlPager" data-size="10">
-    </ul>
-  </div>
-  <%--//페이지 리스트--%>
-
 </div>
 
 <script type="text/javascript">
@@ -172,7 +164,7 @@
   var dlvrInFgCol = '${dlvrInFgCol}';
   var arrDlvrInFgCol = dlvrInFgCol.split(',');
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayMoms/dayMoms.js?ver=20221006.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayMoms/dayMoms.js?ver=20221006.03" charset="utf-8"></script>
 
 <%-- 팝업 레이어 시작 --%>
 <%-- 매장별 매출현황 팝업 레이어 --%>
