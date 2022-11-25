@@ -18,76 +18,91 @@
     -->
     <select id="getMonthMomsList" parameterType="monthMomsVO" resultType="DefaultMap">
         /* MonthMomsMapper.getMonthMomsList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT	TO_CHAR(TO_DATE(tsmt.SALE_YM, 'yyyymm'), 'yyyy-mm') AS SALE_YM
-        ,		(SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
-        ,       tsmt.STORE_CD
-        ,       tms.STORE_NM
-        ,		tsmt.BILL_CNT
-        ,		DECODE(tsmt.BILL_CNT, 0, 0, ROUND(tsmt.TOT_SALE_AMT/tsmt.BILL_CNT)) AS BILL_UPRC
-        ,		tsmt.TOT_GUEST_CNT
-        ,		DECODE(tsmt.TOT_GUEST_CNT, 0, 0, ROUND(tsmt.TOT_SALE_AMT/tsmt.TOT_GUEST_CNT)) AS GUEST_UPRC
-        ,       tsmt.SALE_CNT
-        ,		tsmt.TOT_SALE_AMT
-        ,		tsmt.REAL_SALE_AMT
-        ,		tsmt.TOT_DC_AMT
-        ,       tsmt.RTN_SALE_AMT
-        ,		tsmt.PAY_AMT_02 AS CASH_ATM
-        ,		tsmt.PAY_AMT_01 AS CARD_AMT
-        ,		(tsmt.PAY_AMT_03 + tsmt.PAY_AMT_04 + tsmt.PAY_AMT_05 + tsmt.PAY_AMT_06 + tsmt.PAY_AMT_07 + tsmt.PAY_AMT_08 + tsmt.PAY_AMT_09 + tsmt.PAY_AMT_10 + tsmt.PAY_AMT_11 + tsmt.PAY_AMT_12 + tsmt.PAY_AMT_13 + tsmt.PAY_AMT_14 + tsmt.PAY_AMT_15 + tsmt.PAY_AMT_16 + tsmt.PAY_AMT_17 + tsmt.PAY_AMT_18 + tsmt.PAY_AMT_19 + tsmt.PAY_AMT_20) AS ETC_AMT
-        <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM   	TB_SL_MONTHLY_TOTAL tsmt
-        ,		TB_MS_STORE tms
-        WHERE   tsmt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
-        AND 	tsmt.STORE_CD = tms.STORE_CD
-        AND     tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND     tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
-        <if test='storeCds != null and storeCds != ""'>
-            AND tsmt.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                #{item}
-            </foreach>
-        </if>
-        ORDER BY tsmt.SALE_YM
-        <include refid="CmmSQL.PagingTemplateBottom"/>
-    </select>
-
-    <!-- 조회 -->
-    <!--
-        TABLE    :
-        COMMENTS :
-    -->
-    <select id="getMonthMomsExcelList" parameterType="monthMomsVO" resultType="DefaultMap">
-        /* MonthMomsMapper.getMonthMomsExcelList */
-        SELECT	TO_CHAR(TO_DATE(tsmt.SALE_YM, 'yyyymm'), 'yyyy-mm') AS SALE_YM
-        ,		(SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
-        ,       tsmt.STORE_CD
-        ,       tms.STORE_NM
-        ,		tsmt.BILL_CNT
-        ,		DECODE(tsmt.BILL_CNT, 0, 0, ROUND(tsmt.TOT_SALE_AMT/tsmt.BILL_CNT)) AS BILL_UPRC
-        ,		tsmt.TOT_GUEST_CNT
-        ,		DECODE(tsmt.TOT_GUEST_CNT, 0, 0, ROUND(tsmt.TOT_SALE_AMT/tsmt.TOT_GUEST_CNT)) AS GUEST_UPRC
-        ,       tsmt.SALE_CNT
-        ,		tsmt.TOT_SALE_AMT
-        ,		tsmt.REAL_SALE_AMT
-        ,		tsmt.TOT_DC_AMT
-        ,       tsmt.RTN_SALE_AMT
-        ,		tsmt.PAY_AMT_02 AS CASH_ATM
-        ,		tsmt.PAY_AMT_01 AS CARD_AMT
-        ,		(tsmt.PAY_AMT_03 + tsmt.PAY_AMT_04 + tsmt.PAY_AMT_05 + tsmt.PAY_AMT_06 + tsmt.PAY_AMT_07 + tsmt.PAY_AMT_08 + tsmt.PAY_AMT_09 + tsmt.PAY_AMT_10 + tsmt.PAY_AMT_11 + tsmt.PAY_AMT_12 + tsmt.PAY_AMT_13 + tsmt.PAY_AMT_14 + tsmt.PAY_AMT_15 + tsmt.PAY_AMT_16 + tsmt.PAY_AMT_17 + tsmt.PAY_AMT_18 + tsmt.PAY_AMT_19 + tsmt.PAY_AMT_20) AS ETC_AMT
-        FROM   	TB_SL_MONTHLY_TOTAL tsmt
-        ,		TB_MS_STORE tms
-        WHERE   tsmt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
-        AND 	tsmt.STORE_CD = tms.STORE_CD
-        AND     tsmt.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND     tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
-        <if test='storeCds != null and storeCds != ""'>
-            AND tsmt.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                #{item}
-            </foreach>
-        </if>
-        ORDER BY tsmt.SALE_YM
+        SELECT  TO_CHAR(TO_DATE(tsdt.SALE_YM, 'yyyymm'), 'yyyy-mm') YEAR_MONTH,
+                tsdt.STORE_CNT,
+                tsdt.SALE_CNT,
+                tsdt.TOT_SALE_AMT,
+                tsdt.TOT_DC_AMT,
+                tsdt.REAL_SALE_AMT,
+                tsdt.BILL_CNT,
+                tsdt.BILL_UPRC,
+                tsdt.GA_AMT,
+                tsdt.VAT_AMT,
+                tsdt.TOT_TIP_AMT,
+                tsdt.TOT_ETC_AMT,
+                tsdt.CUP_AMT,
+                <foreach collection="arrPayCol" item="item" separator=",">
+                    tsdt.PAY_AMT_${item} AS PAY${item}
+                </foreach> ,
+                tsdt.TOT_PAY_AMT,
+                tsdt.GEN_REAL_SALE_AMT,
+                DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsdt.GEN_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS GEN_REAL_SALE_RATE,
+                tsdt.DLVR_REAL_SALE_AMT,
+                DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsdt.DLVR_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS DLVR_REAL_SALE_RATE,
+                tsdt.PACK_REAL_SALE_AMT,
+                DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsdt.PACK_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS PACK_REAL_SALE_RATE
+        ,       <foreach collection="arrDlvrInFgCol" item="item" separator=",">
+                    tsdto.SALE_QTY${item} AS SALE_QTY${item}
+        ,           tsdto.REAL_SALE_AMT${item} AS REAL_SALE_AMT${item}
+                </foreach>
+        FROM    (
+                SELECT SUBSTR(SALE_DATE,0,6) AS SALE_YM,
+                COUNT(DISTINCT STORE_CD) AS STORE_CNT,
+                COUNT(DISTINCT SALE_DATE) AS SALE_CNT,
+                SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+                SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+                SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+                SUM(REAL_SALE_CNT) AS BILL_CNT,
+                ROUND(SUM(REAL_SALE_AMT) / SUM(REAL_SALE_CNT)) AS BILL_UPRC,
+                SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT,
+                SUM(VAT_AMT) AS VAT_AMT,
+                SUM(TOT_TIP_AMT) AS TOT_TIP_AMT,
+                SUM(TOT_ETC_AMT) AS TOT_ETC_AMT,
+                SUM(CUP_AMT) AS CUP_AMT,
+                <foreach collection="arrPayCol" item="item" separator="+">
+                    <if test="item != '02' and item != '021'">
+                        SUM(NVL(PAY_AMT_${item}, 0))
+                    </if>
+                </foreach> +  SUM(NVL(NON_CASH_AMT, 0)) +  SUM(NVL(APPR_CASH_AMT, 0)) AS TOT_PAY_AMT,
+                <foreach collection="arrPayCol" item="item" separator=",">
+                    <if test="item != '02' and item != '021'">
+                        SUM(NVL(PAY_AMT_${item}, 0)) AS PAY_AMT_${item}
+                    </if>
+                </foreach>,
+                SUM(NVL(NON_CASH_AMT, 0)) AS PAY_AMT_02,
+                SUM(NVL(APPR_CASH_AMT, 0)) AS PAY_AMT_021,
+                SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT,
+                SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
+                SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
+                FROM    TB_SL_DAILY_TOTAL_DLVR
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth}||'31'
+                <if test='storeCds != null and storeCds != ""'>
+                    AND STORE_CD IN
+                    <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                GROUP BY    SUBSTR(SALE_DATE,0,6)
+                ) tsdt
+        ,       (
+                SELECT  tsdto.SALE_YM
+                ,       <foreach collection="arrDlvrInFgCol" item="item" separator=",">
+                        SUM(CASE WHEN DLVR_IN_FG = ${item} THEN SALE_QTY END) AS SALE_QTY${item}
+                ,		SUM(CASE WHEN DLVR_IN_FG = ${item} THEN REAL_SALE_AMT END) AS REAL_SALE_AMT${item}
+                </foreach>
+                FROM    TB_SL_MONTHLY_TOTAL_ORDAPP tsdto
+                WHERE   tsdto.HQ_OFFICE_CD  = #{hqOfficeCd}
+                <if test='storeCds != null and storeCds != ""'>
+                    AND tsdto.STORE_CD IN
+                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                AND     tsdto.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+                GROUP BY tsdto.SALE_YM
+                ) tsdto
+        WHERE   tsdt.SALE_YM = tsdto.SALE_YM (+)
     </select>
 
 </mapper>
