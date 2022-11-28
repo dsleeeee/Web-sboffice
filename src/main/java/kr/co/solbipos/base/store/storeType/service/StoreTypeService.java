@@ -91,4 +91,12 @@ public interface StoreTypeService {
     /** 매장타입관리 - 메뉴그룹변경이력조회 */
     List<DefaultMap<Object>> getMenuGroupChgHist(StoreTypeVO storeTypeVO, SessionInfoVO sessionInfoVO);
 
+    /** 매장적용이력 탭 - 조회 */
+    List<DefaultMap<Object>> getStoreApplyChgHistList(StoreTypeVO storeTypeVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장적용이력 탭 - 취소 */
+    int getStoreApplyChgHistSaveUpdate(StoreTypeVO[] storeTypeVOs, SessionInfoVO sessionInfoVO);
+
+    /** 매장적용이력 상세 팝업 - 조회 */
+    List<DefaultMap<Object>> getStoreApplyChgHistDtlList(StoreTypeVO storeTypeVO, SessionInfoVO sessionInfoVO);
 }

@@ -79,6 +79,15 @@ public class StoreTypeVO extends PageVO {
     /** 처리구분 */
     private String applyProcFg;
 
+    /** 매장코드 */
+    private String[] storeCdList;
+
+    /** 조회매장 */
+    private String storeCds;
+
+    /** 변경일시 */
+    private String procDt;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -342,4 +351,18 @@ public class StoreTypeVO extends PageVO {
     public void setApplyProcFg(String applyProcFg) {
         this.applyProcFg = applyProcFg;
     }
+
+    public String[] getStoreCdList() {
+        return storeCdList;
+    }
+
+    public void setStoreCdList(String[] storeCdList) { this.storeCdList = storeCdList; }
+
+    public String getStoreCds() { return storeCds; }
+
+    public void setStoreCds(String storeCds) { this.storeCds = storeCds; }
+
+    public String getProcDt() { return procDt; }
+
+    public void setProcDt(String procDt) { this.procDt = procDt; }
 }

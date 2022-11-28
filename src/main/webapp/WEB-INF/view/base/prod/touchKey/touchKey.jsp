@@ -456,7 +456,7 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20220527.04"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20220527.05"
         charset="utf-8"></script>
 
 <%-- 스타일미리보기 팝업 --%>

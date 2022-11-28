@@ -21,6 +21,10 @@
             <li>
                 <a id="menuGroupChgHistTab" href="#" ng-click="menuGroupChgHistShow()"><s:message code="storeType.menuGroupChgHist"/></a>
             </li>
+            <%-- 매장적용이력 탭 --%>
+            <li>
+                <a id="storeApplyChgHistTab" href="#" ng-click="storeApplyChgHistShow()"><s:message code="storeType.storeApplyChgHist"/></a>
+            </li>
         </ul>
     </div>
 </div>
@@ -40,7 +44,7 @@
     var subPriceFg = "${subPriceFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeTypeTab.js?ver=20211119.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeTypeTab.js?ver=20221124.01" charset="utf-8"></script>
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 매장타입 탭 레이어 --%>
 <c:import url="/WEB-INF/view/base/store/storeType/storeType.jsp">
@@ -66,4 +70,9 @@
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
+<%-- 매장적용이력 탭 레이어 --%>
+<c:import url="/WEB-INF/view/base/store/storeType/storeApplyChgHist.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
 <%-- 탭페이지 레이어 끝--%>

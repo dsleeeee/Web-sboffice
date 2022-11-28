@@ -267,14 +267,28 @@ public class StoreManageServiceImpl implements StoreManageService{
             if(!"".equals(storeManageVO.getInstallPosCnt())){
                 int installPosCnt =  Integer.parseInt(storeManageVO.getInstallPosCnt());
 
-                for(int i=0; i<installPosCnt; i++){
-                    posNoStr += String.valueOf(i+1);
-                    if(i != (installPosCnt-1)) {
-                        posNoStr += ",";
-                    }
+                // 아트박스의 경우 포스 번호가 11로 시작해서 생성 DS012개발/H0345운영
+                if(storeManageVO.getHqOfficeCd().equals("DS012") || storeManageVO.getHqOfficeCd().equals("H0345")){
+                    installPosCnt += 10;
+                    for(int i=10; i<installPosCnt; i++){
+                        posNoStr += String.valueOf(i+1);
+                        if(i != (installPosCnt-1)) {
+                            posNoStr += ",";
+                        }
 
-                    storeManageVO.setPosNo((i+1));
-                    procCnt += mapper.insertPosInfo(storeManageVO);
+                        storeManageVO.setPosNo((i+1));
+                        procCnt += mapper.insertPosInfo(storeManageVO);
+                    }
+                } else {
+                    for(int i=0; i<installPosCnt; i++){
+                        posNoStr += String.valueOf(i+1);
+                        if(i != (installPosCnt-1)) {
+                            posNoStr += ",";
+                        }
+
+                        storeManageVO.setPosNo((i+1));
+                        procCnt += mapper.insertPosInfo(storeManageVO);
+                    }
                 }
             }
 
@@ -567,6 +581,9 @@ public class StoreManageServiceImpl implements StoreManageService{
                         touchkeyClassVO.setModId(sessionInfoVO.getUserId());
 
                         procCnt += mapper.copyFnkeyClassCopy(touchkeyClassVO);
+                        
+                        // 터치키 그룹명 복사
+                        procCnt += mapper.copyFnkeyGrpCopy(touchkeyClassVO);
 
                         // 터치키 복사
                         TouchKeyVO touchkeyVO = new TouchKeyVO();

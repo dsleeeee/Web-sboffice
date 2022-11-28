@@ -87,6 +87,7 @@
         WHERE 	tood.STORE_CD = #{storeCd}
         AND 	tood.SALE_DATE = #{saleDate}
         AND     tood.ORDER_NO = #{orderNo}
+        AND     tmp.STORE_CD (+) = tood.STORE_CD
         AND     tmp.PROD_CD (+) = tood.PROD_CD
 
     </select>

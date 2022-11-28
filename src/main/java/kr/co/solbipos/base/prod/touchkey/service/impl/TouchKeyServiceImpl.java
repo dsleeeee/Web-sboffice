@@ -970,6 +970,9 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         // 3. 터치키 복사
         result += keyMapper.copyTouchKeyGrp(touchKeyVO);
 
+        // 4. 터치키 그룹명 복사
+        result += keyMapper.copyTouchKeyGrpNm(touchKeyVO);
+
         if ( result >= 0 ) {
             return new Result(Status.OK, tukeyGrpCd);
         } else {

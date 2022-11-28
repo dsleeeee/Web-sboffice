@@ -824,6 +824,9 @@
     <!-- 광운대 > 신용카드입금관리 > 신용카드입금현황 -->
     <typeAlias alias="cardCreditStatusVO" type="kr.co.solbipos.sale.card.cardCreditStatus.service.CardCreditStatusVO"/>
 
+    <!-- 맘스터치 > 점포관리 > 점포 영업 지역 관리 -->
+    <typeAlias alias="storeSaleAreaVO" type="kr.co.solbipos.store.storeMoms.storeSaleArea.service.StoreSaleAreaVO"/>
+
     <!-- 맘스터치 > 승인관리2 > 현금영수증 승인 조회 -->
     <typeAlias alias="cashBillVO" type="kr.co.solbipos.sale.appr.cashBill.service.CashBillVO"/>
     <!-- 맘스터치 > 승인관리2 > 신용카드 승인 조회 -->
@@ -856,14 +859,10 @@
 
     <!-- 맘스터치 > 매출분석 > 당일 매출 현황 -->
     <typeAlias alias="todayMomsVO" type="kr.co.solbipos.sale.today.todayMoms.service.TodayMomsVO"/>
-    <!-- 맘스터치 > 매출분석 > 일별 매출 현황 -->
-    <typeAlias alias="dayMomsVO" type="kr.co.solbipos.sale.day.dayMoms.service.DayMomsVO"/>
     <!-- 맘스터치 > 매출분석 > 일별 매출 현황(기기별) -->
     <typeAlias alias="dayDeviceVO" type="kr.co.solbipos.sale.day.dayDevice.service.DayDeviceVO"/>
     <!-- 맘스터치 > 매출분석 > 일별 매출 현황(매장합산) -->
     <typeAlias alias="dayStoreVO" type="kr.co.solbipos.sale.day.dayStore.service.DayStoreVO"/>
-    <!-- 맘스터치 > 매출분석 > 월별 매출 현황 -->
-    <typeAlias alias="monthMomsVO" type="kr.co.solbipos.sale.month.monthMoms.service.MonthMomsVO"/>
     <!-- 맘스터치 > 매출분석 > 월별 매출 현황(매장합산) -->
     <typeAlias alias="monthStoreVO" type="kr.co.solbipos.sale.month.monthStore.service.MonthStoreVO"/>
     <!-- 맘스터치 > 매출분석 > 대비기간별매출 -->
@@ -913,6 +912,21 @@
     <typeAlias alias="dlvrRateVO" type="kr.co.solbipos.sale.dlvr.dlvrRate.service.DlvrRateVO"/>
     <!-- 맘스터치 > 점포매출 > 매장 오픈/마감 현황 -->
     <typeAlias alias="storeOpenCloseVO" type="kr.co.solbipos.sale.store.storeOpenClose.service.StoreOpenCloseVO"/>
+
+    <!-- 맘스터치 > 매출분석 > 일별 매출 현황(채널별) -->
+    <typeAlias alias="dayMomsVO" type="kr.co.solbipos.sale.day.dayMoms.service.DayMomsVO"/>
+    <!-- 맘스터치 > 매출분석 > 월별 매출 현황(채널별) -->
+    <typeAlias alias="monthMomsVO" type="kr.co.solbipos.sale.month.monthMoms.service.MonthMomsVO"/>
+    <!-- 맘스터치 > 매출분석 > 일별시간대 -->
+    <typeAlias alias="dayTimeVO" type="kr.co.solbipos.sale.day.dayTime.service.DayTimeVO"/>
+
+    <!-- 맘스터치 > 매장분석 > 매장-일별매출현황(채널별) -->
+    <typeAlias alias="storeDayChannelVO" type="kr.co.solbipos.sale.store.storeDayChannel.service.StoreDayChannelVO"/>
+    <!-- 맘스터치 > 매장분석 > 매장-월별매출현황(채널별) -->
+    <typeAlias alias="storeMonthChannelVO" type="kr.co.solbipos.sale.store.storeMonthChannel.service.StoreMonthChannelVO"/>
+    <!-- 맘스터치 > 매장분석 > 매장-일별시간대 -->
+    <typeAlias alias="storeDayTimeVO" type="kr.co.solbipos.sale.store.storeDayTime.service.StoreDayTimeVO"/>
+
 
     <!-- 맘스터치 > 기타관리 > 점포별 파일 버전현황 -->
     <typeAlias alias="fileVersnVO" type="kr.co.solbipos.base.store.fileVersn.service.FileVersnVO"/>

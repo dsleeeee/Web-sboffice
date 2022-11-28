@@ -201,6 +201,9 @@ public interface StoreManageMapper {
     /** 터치키 분류 복사 TODO */
     int copyFnkeyClassCopy(TouchKeyClassVO touchkeyClassVO);
 
+    /** 터치키 그룹명 복사 TODO */
+    int copyFnkeyGrpCopy(TouchKeyClassVO touchkeyClassVO);
+
     /** 터치키 복사 TODO */
     int copyFnkeyCopy(TouchKeyVO touchkeyVO);
 

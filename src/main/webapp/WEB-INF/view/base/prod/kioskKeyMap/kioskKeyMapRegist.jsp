@@ -102,7 +102,7 @@
                             <s:message code="kioskKeyMap.storeMod" />
                         </button>
                         </c:if>
-                        <c:if test="${orgnFg == 'HQ' || (orgnFg == 'STORE' && hqOfficeCd != '00000' && kioskKeyEnvstVal == '1')}">
+                        <c:if test="${orgnFg == 'HQ' || (orgnFg == 'STORE' && kioskKeyEnvstVal == '1')}">
                             <button class="btn_skyblue" id="btnClsTypeNm" ng-click="clsTypeNm()">
                                 <s:message code="kioskKeyMap.tuClsTypeNm" />
                             </button>

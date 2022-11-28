@@ -131,4 +131,12 @@ public interface StoreTypeMapper {
     /** 매장타입관리 - 메뉴그룹변경이력조회 */
     List<DefaultMap<Object>> getMenuGroupChgHist(StoreTypeVO storeTypeVO);
 
+    /** 매장적용이력 탭 - 조회 */
+    List<DefaultMap<Object>> getStoreApplyChgHistList(StoreTypeVO storeTypeVO);
+
+    /** 매장적용이력 탭 - 취소 update */
+    int getStoreApplyChgHistSaveUpdate(StoreTypeVO storeTypeVO);
+
+    /** 매장적용이력 상세 팝업 - 조회 */
+    List<DefaultMap<Object>> getStoreApplyChgHistDtlList(StoreTypeVO storeTypeVO);
 }

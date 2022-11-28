@@ -3890,6 +3890,37 @@
         ]]>
     </insert>
 
+    <!-- 터치키 그룹명 복사 -->
+    <!--
+        TABLE    : TB_WB_STORE_CONFG_XML
+        PARAM    : touchkeyClassVO
+        COMMENTS : 매장의 설정 XML을 복사한다.
+    -->
+    <insert id="copyFnkeyGrpCopy" parameterType="touchkeyClassVO" >
+        /* USE : StoreManageMapper.copyFnkeyGrpCopy */
+        <![CDATA[
+        INSERT INTO TB_MS_TOUCH_KEY_GROUP
+        (
+            STORE_CD,
+            TUKEY_GRP_CD,
+            TUKEY_GRP_NM,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        SELECT  #{storeCd} AS STORE_CD,
+                TUKEY_GRP_CD,
+                TUKEY_GRP_NM,
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+        FROM    TB_MS_TOUCH_KEY_GROUP
+        WHERE   STORE_CD = #{copyStoreCd}
+        ]]>
+    </insert>
+
     <!-- 터치키 분류 복사 -->
     <!--
         TABLE    : TB_WB_STORE_CONFG_XML

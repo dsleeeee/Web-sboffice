@@ -686,4 +686,53 @@
         }
     </select>
 
+    <!-- 터치키 그룹명 복사 -->
+    <!--
+        TABLE    : TB_HQ_TOUCH_KEY_GROUP, TB_MS_TOUCH_KEY_GROUP
+        PARAM    : touchKeyVO
+        COMMENTS : 터치키 그룹명 복사
+    -->
+    <insert id="copyTouchKeyGrpNm" parameterType="copyStoreEnvVO">
+        /* USE : ViewMapper.copyTouchKeyGrpNm */
+        INSERT INTO TB_MS_TOUCH_KEY_GROUP
+        (
+            STORE_CD
+        ,   TUKEY_GRP_CD
+        ,   TUKEY_GRP_NM
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        SELECT  #{targetStoreCd}
+        ,       TUKEY_GRP_CD
+        ,		TUKEY_GRP_NM
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        FROM    TB_MS_TOUCH_KEY_GROUP
+        WHERE   STORE_CD = #{originalStoreCd}
+        <if test="tukeyGrpCd != null and tukeyGrpCd != ''">
+        AND     TUKEY_GRP_CD = #{tukeyGrpCd}
+        </if>
+    </insert>
+
+    <!-- 판매터치키 그룹 삭제 -->
+    <!--
+        TABLE    : TB_HQ_TOUCH_KEY_CLASS, TB_MS_TOUCH_KEY_CLASS
+        PARAM    : touchKeyClassVO
+        COMMENTS : 판매터치키 그룹 정보를 삭제한다.
+    -->
+    <delete id="deleteTouchKeyGrpNm" parameterType="copyStoreEnvVO">
+        /* USE : TouchkeyMapper.deleteTouchKeyGrpNm */
+            DELETE
+            FROM
+            TB_MS_TOUCH_KEY_GROUP
+            WHERE
+            STORE_CD = #{targetStoreCd}
+            <if test="tukeyGrpCd != null and tukeyGrpCd != ''">
+                AND TUKEY_GRP_CD = #{tukeyGrpCd}
+            </if>
+    </delete>
 </mapper>

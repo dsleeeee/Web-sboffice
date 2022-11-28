@@ -558,4 +558,73 @@ public class StoreTypeController {
         return ReturnUtil.returnListJson(Status.OK, result, result);
     }
 
+    /**
+     * 매장적용이력 탭 - 조회
+     *
+     * @param storeTypeVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 11. 21.
+     */
+    @RequestMapping(value = "/storeApplyChgHist/getStoreApplyChgHistList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreApplyChgHistList(StoreTypeVO storeTypeVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = storeTypeService.getStoreApplyChgHistList(storeTypeVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, storeTypeVO);
+    }
+
+    /**
+     * 매장적용이력 탭 - 취소
+     *
+     * @param storeTypeVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 11. 21.
+     */
+    @RequestMapping(value = "/storeApplyChgHist/getStoreApplyChgHistSaveUpdate.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreApplyChgHistSaveUpdate(@RequestBody StoreTypeVO[] storeTypeVOs, HttpServletRequest request,
+                                               HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = storeTypeService.getStoreApplyChgHistSaveUpdate(storeTypeVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 매장적용이력 상세 팝업 - 조회
+     *
+     * @param storeTypeVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2022. 11. 21.
+     */
+    @RequestMapping(value = "/storeApplyChgHist/getStoreApplyChgHistDtlList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreApplyChgHistDtlList(StoreTypeVO storeTypeVO, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = storeTypeService.getStoreApplyChgHistDtlList(storeTypeVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, storeTypeVO);
+    }
+
 }

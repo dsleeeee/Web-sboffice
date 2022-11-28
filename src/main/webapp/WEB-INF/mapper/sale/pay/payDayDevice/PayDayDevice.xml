@@ -18,127 +18,93 @@
     -->
     <select id="getPayDayDeviceList" parameterType="payDayDeviceVO" resultType="DefaultMap">
         /* PayDayDeviceMapper.getPayDayDeviceList */
-        SELECT  TO_CHAR(TO_DATE(tssh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
-        ,       tssh.YOIL
-        ,       tssh.STORE_CNT
-        ,       tssh.TOT_SALE_AMT
-        ,       tssh.TOT_DC_AMT
-        ,       tssh.REAL_SALE_AMT
-        ,       tssh.GA_AMT
-        ,       tssh.VAT_AMT
-        ,       tssh.TOT_TIP_AMT
-        ,       tssh.TOT_ETC_AMT
-        ,       tssh.CUP_AMT
-        ,       tssh.BILL_CNT
-        ,       tssh.BILL_UPRC
+        SELECT  TO_CHAR(TO_DATE(tsshp.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,       TO_CHAR(TO_DATE(tsshp.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+        ,       tsshp.STORE_CNT
+        ,       tsshp.TOT_SALE_AMT
+        ,       tsshp.TOT_DC_AMT
+        ,       tsshp.REAL_SALE_AMT
+        ,       tsshp.GA_AMT
+        ,       tsshp.VAT_AMT
+        ,       tsshp.TOT_TIP_AMT
+        ,       tsshp.TOT_ETC_AMT
+        ,       tsshp.CUP_AMT
+        ,       tsshp.BILL_CNT
+        ,       tsshp.BILL_UPRC
         ,       tssddp.GEN_REAL_SALE_AMT
-        ,       DECODE(tssh.REAL_SALE_AMT, 0, 0, (tssddp.GEN_REAL_SALE_AMT / tssh.REAL_SALE_AMT)*100) AS GEN_REAL_SALE_RATE
+        ,       DECODE(tsshp.REAL_SALE_AMT, 0, 0, (tssddp.GEN_REAL_SALE_AMT / tsshp.REAL_SALE_AMT)*100) AS GEN_REAL_SALE_RATE
         ,       tssddp.DLVR_REAL_SALE_AMT
-        ,       DECODE(tssh.REAL_SALE_AMT, 0, 0, (tssddp.DLVR_REAL_SALE_AMT / tssh.REAL_SALE_AMT)*100) AS DLVR_REAL_SALE_RATE
+        ,       DECODE(tsshp.REAL_SALE_AMT, 0, 0, (tssddp.DLVR_REAL_SALE_AMT / tsshp.REAL_SALE_AMT)*100) AS DLVR_REAL_SALE_RATE
         ,       tssddp.PACK_REAL_SALE_AMT
-        ,       DECODE(tssh.REAL_SALE_AMT, 0, 0, (tssddp.PACK_REAL_SALE_AMT / tssh.REAL_SALE_AMT)*100) AS PACK_REAL_SALE_RATE
+        ,       DECODE(tsshp.REAL_SALE_AMT, 0, 0, (tssddp.PACK_REAL_SALE_AMT / tsshp.REAL_SALE_AMT)*100) AS PACK_REAL_SALE_RATE
         ,       <foreach collection="arrPayCol" item="item" separator="+">
-        NVL(tsshp.PAY${item}, 0)
-    </foreach> +  NVL(tsshp.PAY02, 0) +  NVL(tsshp.PAY021, 0) AS TOT_PAY_AMT
+                NVL(tsshp.PAY${item}, 0)
+                </foreach> +  NVL(tsshp.PAY02, 0) +  NVL(tsshp.PAY021, 0) AS TOT_PAY_AMT
         ,       <foreach collection="arrPayCol" item="item" separator=",">
-        tsshp.PAY${item} AS PAY${item}
-    </foreach>
+                tsshp.PAY${item} AS PAY${item}
+                </foreach>
         ,       tsshp.PAY02 AS PAY02 -- 현금
         ,       tsshp.PAY021 AS PAY021 -- 현금영수증
-        FROM    (   SELECT  tssh.SALE_DATE
-        ,       TO_CHAR(TO_DATE(tssh.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
-        ,       COUNT(tssh.STORE_CD) AS STORE_CNT
-        ,       SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT
-        ,       SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT
-        ,       SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
-        ,       SUM(tssh.REAL_SALE_AMT) - SUM(tssh.VAT_AMT) AS GA_AMT
-        ,       SUM(tssh.VAT_AMT) AS VAT_AMT
-        ,       SUM(tssh.TOT_TIP_AMT) AS TOT_TIP_AMT
-        ,       SUM(tssh.TOT_ETC_AMT) AS TOT_ETC_AMT
-        ,       SUM(tssh.CUP_AMT) AS CUP_AMT
-        ,       SUM(tssh.BILL_CNT) AS BILL_CNT
-        ,       DECODE(SUM(tssh.BILL_CNT), 0, 0, ROUND(SUM(tssh.REAL_SALE_AMT) / SUM(tssh.BILL_CNT))) AS BILL_UPRC
-        FROM    (   SELECT  tssh.SALE_DATE, tssh.STORE_CD
-        ,       SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT
-        ,       SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT
-        ,       SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
-        ,       SUM(tssh.REAL_SALE_AMT) - SUM(tssh.VAT_AMT) AS GA_AMT
-        ,       SUM(tssh.VAT_AMT) AS VAT_AMT
-        ,       SUM(tssh.TOT_TIP_AMT) AS TOT_TIP_AMT
-        ,       SUM(tssh.TOT_ETC_AMT) AS TOT_ETC_AMT
-        ,       SUM(tssh.CUP_AMT) AS CUP_AMT
-        ,       COUNT(tssh.BILL_NO) AS BILL_CNT
-        FROM    TB_SL_SALE_HDR tssh
-        WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND tssh.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
-        </if>
-        <if test='orgnFg != null and orgnFg == "H"'>
-            AND (
-            'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-            OR  tssh.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
-            )
-        </if>
-        AND     tssh.SALE_DATE  BETWEEN #{startDate} AND #{endDate}
-        GROUP
-        BY      tssh.SALE_DATE, tssh.STORE_CD
-        ) tssh
-        GROUP
-        BY      tssh.SALE_DATE
-        ) tssh
-        ,       (
-        SELECT  SALE_DATE
-        ,       <foreach collection="arrPayCol" item="item" separator=",">
-        SUM(PAY_AMT_${item}) AS PAY${item}
-    </foreach>,
-        SUM(NON_CASH_AMT) AS PAY02,
-        SUM(APPR_CASH_AMT) AS PAY021
-        FROM    TB_SL_DAILY_TOTAL tsdt
-        WHERE   tsdt.HQ_OFFICE_CD  = #{hqOfficeCd}
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND tsdt.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
-        </if>
-        <if test='orgnFg != null and orgnFg == "H"'>
-            AND (
-            'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-            OR  tsdt.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
-            )
-        </if>
-        AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        GROUP BY SALE_DATE
-        ) tsshp
+        FROM    (
+                SELECT  SALE_DATE
+                ,       COUNT(DISTINCT STORE_CD) AS STORE_CNT
+                ,       SUM(TOT_SALE_AMT) AS TOT_SALE_AMT
+                ,       SUM(TOT_DC_AMT) AS TOT_DC_AMT
+                ,       SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+                ,       SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT
+                ,       SUM(VAT_AMT) AS VAT_AMT
+                ,       SUM(TOT_TIP_AMT) AS TOT_TIP_AMT
+                ,       SUM(TOT_ETC_AMT) AS TOT_ETC_AMT
+                ,       SUM(CUP_AMT) AS CUP_AMT
+                ,       SUM(BILL_CNT) AS BILL_CNT
+                ,       DECODE(SUM(BILL_CNT), 0, 0, ROUND(SUM(REAL_SALE_AMT) / SUM(BILL_CNT))) AS BILL_UPRC
+                ,       <foreach collection="arrPayCol" item="item" separator=",">
+                            SUM(PAY_AMT_${item}) AS PAY${item}
+                        </foreach>,
+                        SUM(NON_CASH_AMT) AS PAY02,
+                        SUM(APPR_CASH_AMT) AS PAY021
+                FROM    TB_SL_DAILY_TOTAL tsdt
+                WHERE   tsdt.HQ_OFFICE_CD  = #{hqOfficeCd}
+                <if test='arrStoreCd != null and arrStoreCd != ""'>
+                    AND tsdt.STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+                </if>
+                <if test='orgnFg != null and orgnFg == "H"'>
+                    AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                    OR  tsdt.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                    )
+                </if>
+                AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                GROUP BY SALE_DATE
+                ) tsshp
         ,       (   SELECT	tssd.SALE_DATE
-        , SUM(CASE WHEN tssd.DLVR_PACK_FG = '1' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT
-        , SUM(CASE WHEN tssd.DLVR_PACK_FG = '2' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT
-        , SUM(CASE WHEN tssd.DLVR_PACK_FG = '3' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
-        FROM	TB_SL_DAILY_DTL_DLVR tssd
-        WHERE	tssd.HQ_OFFICE_CD	=	#{hqOfficeCd}
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND tssd.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
-        </if>
-        <if test='orgnFg != null and orgnFg == "H"'>
-            AND (
-            'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-            OR  tssd.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
-            )
-        </if>
-        AND     tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        GROUP
-        BY      tssd.SALE_DATE
-        ) tssddp
-        WHERE   tsshp.SALE_DATE  (+) = tssh.SALE_DATE
-        AND     tssddp.SALE_DATE (+) = tssh.SALE_DATE
+                    ,       SUM(CASE WHEN tssd.DLVR_PACK_FG = '1' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT
+                    ,       SUM(CASE WHEN tssd.DLVR_PACK_FG = '2' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT
+                    ,       SUM(CASE WHEN tssd.DLVR_PACK_FG = '3' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
+                    FROM	TB_SL_DAILY_DTL_DLVR tssd
+                    WHERE	tssd.HQ_OFFICE_CD	=	#{hqOfficeCd}
+                    <if test='arrStoreCd != null and arrStoreCd != ""'>
+                        AND tssd.STORE_CD IN
+                        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                            #{item}
+                        </foreach>
+                    </if>
+                    <if test='orgnFg != null and orgnFg == "H"'>
+                        AND (
+                        'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                        OR  tssd.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                        )
+                    </if>
+                    AND     tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    GROUP
+                    BY      tssd.SALE_DATE
+                ) tssddp
+        WHERE   tssddp.SALE_DATE (+) = tsshp.SALE_DATE
         ORDER
-        BY      tssh.SALE_DATE DESC
+        BY      tsshp.SALE_DATE DESC
     </select>
 
 </mapper>
