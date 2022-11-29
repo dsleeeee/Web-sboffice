@@ -105,20 +105,20 @@ app.controller('storeApplyChgHistCtrl', ['$scope', '$http', function ($scope, $h
     });
 
     $scope.searchStoreApplyChgHist = function(){
-        // var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
-        // var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
-        // var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
-        //
-        // // 시작일자가 종료일자보다 빠른지 확인
-        // if(startDt.getTime() > endDt.getTime()){
-        //     $scope._popMsg(messages['cmm.dateChk.error']);
-        //     return false;
-        // }
-        // // 조회일자 최대 3달(93일) 제한
-        // if (diffDay > 93) {
-        //     $scope._popMsg(messages['cmm.dateOver.3month.error']);
-        //     return false;
-        // }
+        var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+        // 조회일자 최대 3달(93일) 제한
+        if (diffDay > 93) {
+            $scope._popMsg(messages['cmm.dateOver.3month.error']);
+            return false;
+        }
 
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
