@@ -114,7 +114,7 @@ app.controller('prodDetailCtrl', ['$scope', '$http', function ($scope, $http) {
 
                 // [1250 맘스터치]
                 if($scope.prodDetail.momsKioskEdge === null || $scope.prodDetail.momsKioskEdge === ""){
-                    $scope.prodDetail.momsKioskEdge = "";
+                    $scope.prodDetail.momsKioskEdge = "0";
                 }
             }
         );

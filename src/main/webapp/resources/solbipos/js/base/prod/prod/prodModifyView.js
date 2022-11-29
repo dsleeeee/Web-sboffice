@@ -139,7 +139,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             params.saleTimeFg = "N";
             resetKioskTimeHtml();
             // KIOSK 엣지
-            params.momsKioskEdge = "";
+            params.momsKioskEdge = "0";
             // 영양정보
             params.nuTotWt = "";
             params.nuKcal = "";
@@ -351,7 +351,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             params.saleTimeFg = "N";
             params.saleTime = "";
             // KIOSK 엣지
-            params.momsKioskEdge = "";
+            params.momsKioskEdge = "0";
 
             // 영양정보
             params.nuTotWt = "";
@@ -904,7 +904,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
 
                 // [1250 맘스터치]
                 if($scope.prodModifyInfo.momsKioskEdge === null || $scope.prodModifyInfo.momsKioskEdge === ""){
-                    $scope.prodModifyInfo.momsKioskEdge = "";
+                    $scope.prodModifyInfo.momsKioskEdge = "0";
                 }
             });
 
