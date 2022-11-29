@@ -4,12 +4,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%
-  String getVersion = org.springframework.core.SpringVersion.getVersion();
-  System.out.println("kjs:"+getVersion);
-String mobile_url = "";
-System.out.println(request.getRequestURL());
-if     (request.getRequestURL().indexOf("://192") > 0 || request.getRequestURL().indexOf("://localhost") > 0 )  { mobile_url = "http://192.168.0.85:10001/mobile/auth/login.sb"; }
-else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )                                           { mobile_url = "http://neo.solbipos.com/mobile/auth/login.sb"; }
+  String mobile_url = "";
+  System.out.println(request.getRequestURL());
+  if     (request.getRequestURL().indexOf("://192") > 0 || request.getRequestURL().indexOf("://localhost") > 0 )  { mobile_url = "http://192.168.0.85:10001/mobile/auth/login.sb"; }
+  else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )                                           { mobile_url = "http://neo.solbipos.com/mobile/auth/login.sb"; }
 %>
 
 <div class="loginArea">
@@ -33,14 +31,14 @@ else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )           
     <div class="writeInfo">
       <div>
         <input class="id" type="text" id="userId" name="userId"
-          placeholder="<s:message code="login.userId"/>" value="${cid}" maxlength="20" /><label
-          for="userId"></label>
+               placeholder="<s:message code="login.userId"/>" value="${cid}" maxlength="20" /><label
+              for="userId"></label>
         <f:errors path="userId" id="userIdError" class="errorMsg" />
       </div>
       <div>
         <input class="pw" type="password" id="userPwd" name="userPwd"
-          placeholder="<s:message code="login.userPasswd"/>" maxlength="100" /><label
-          for="userPwd"></label>
+               placeholder="<s:message code="login.userPasswd"/>" maxlength="100" /><label
+              for="userPwd"></label>
         <f:errors path="userPwd" id="userPwdError" class="errorMsg" />
       </div>
     </div>
@@ -96,37 +94,37 @@ else if(request.getRequestURL().indexOf("://neo.solbipos.com") > 0  )           
 </c:import>
 
 <script>
-	genEventSingle($("#userId"));
-  	genEventSingle($("#userPwd"));
-  	<c:if test="${type == 'pwChg' || type == 'pwExpire'}">
-  		var id = "${cid}";
-  		$("#labelUserId").text(id);
-  		$("#pwdUserId").val(id);
-  		$("#fullDimmedPw").show();
-      	$("#layerpw").show();
-	</c:if>
-    /////////////////////////////////////// window.onload ///////////////////////////////////////
-    window.onload = function() { setTimeout("onloadFunctions()",0); }; function onloadFunctions()
+  genEventSingle($("#userId"));
+  genEventSingle($("#userPwd"));
+  <c:if test="${type == 'pwChg' || type == 'pwExpire'}">
+  var id = "${cid}";
+  $("#labelUserId").text(id);
+  $("#pwdUserId").val(id);
+  $("#fullDimmedPw").show();
+  $("#layerpw").show();
+  </c:if>
+  /////////////////////////////////////// window.onload ///////////////////////////////////////
+  window.onload = function() { setTimeout("onloadFunctions()",0); }; function onloadFunctions()
+  {
+    var ACCESS_CD = document.getElementById("accessCd").value;
+    if(typeof ACCESS_CD != "undefined" && ACCESS_CD != null && ACCESS_CD != "null" && ACCESS_CD != "")
     {
-        var ACCESS_CD = document.getElementById("accessCd").value;
-        if(typeof ACCESS_CD != "undefined" && ACCESS_CD != null && ACCESS_CD != "null" && ACCESS_CD != "")
-        {
-            document.getElementById("userPwd").style.display    = 'none';
-            document.getElementById("userId").value             = document.getElementById("s_userId").value;
-            document.getElementById("userPwd").value            = document.getElementById("accessCd").value;
-            document.getElementById("accessCd").value           = "";
-            document.getElementById("resrceCd").value           = document.getElementById("resrceCd").value;
-            $('#nxBtnSearchn').click();
-        }
+      document.getElementById("userPwd").style.display    = 'none';
+      document.getElementById("userId").value             = document.getElementById("s_userId").value;
+      document.getElementById("userPwd").value            = document.getElementById("accessCd").value;
+      document.getElementById("accessCd").value           = "";
+      document.getElementById("resrceCd").value           = document.getElementById("resrceCd").value;
+      $('#nxBtnSearchn').click();
     }
+  }
 
 
-    // 이용약관
-    $("#termsOfUse").bind("click", function () {
-      $("#fullDimmedTermsOfUsePop").show();
-      $("#layerTermsOfUsePop").show();
-      return false;
-    });
+  // 이용약관
+  $("#termsOfUse").bind("click", function () {
+    $("#fullDimmedTermsOfUsePop").show();
+    $("#layerTermsOfUsePop").show();
+    return false;
+  });
 </script>
 
 
