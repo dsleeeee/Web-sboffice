@@ -1045,7 +1045,7 @@
     </update>
 
 
-    <!-- 상품정보 저장 -->
+    <!-- 상품정보 추가 저장 -->
     <!--
         TABLE    : TB_HQ_PRODUCT_INFO, TB_HQ_PRODUCT_INFO
         PARAM    : prodVO
@@ -6587,4 +6587,33 @@
         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
         AND PROD_CD = #{prodCd}
     </insert>
+
+    <!-- 상품정보 추가 테이블 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getProdInfoRowCount"  parameterType="prodVO" resultType="String">
+        /* ProdMapper.getProdInfoRowCount */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                COUNT(PROD_CD) AS ROW_COUNT
+                FROM TB_HQ_PRODUCT_INFO
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{hqOfficeCd}
+                AND PROD_CD = #{prodCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                COUNT(PROD_CD) AS ROW_COUNT
+                FROM TB_MS_PRODUCT_INFO
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND PROD_CD = #{prodCd}
+            </when>
+        </choose>
+    </select>
 </mapper>

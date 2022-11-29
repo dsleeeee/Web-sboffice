@@ -309,10 +309,26 @@ public class ProdServiceImpl implements ProdService {
             prodMapper.deleteProdBarcd(prodVO);
         }
 
-        // 상품 설명 상세 + 영양정보
-//        if(prodVO.getProdInfo() != null && prodVO.getProdInfo().length() > 0){
+        // 상품정보 추가 테이블 조회
+        String prodInfoRowCount = prodMapper.getProdInfoRowCount(prodVO);
+        if(prodInfoRowCount.equals("0")) {
+            if( (prodVO.getProdInfo() != null && prodVO.getProdInfo().length() > 0)
+                    || (prodVO.getNuTotWt() != null && prodVO.getNuTotWt().length() > 0)
+                    || (prodVO.getNuKcal() != null && prodVO.getNuKcal().length() > 0)
+                    || (prodVO.getNuProtein() != null && prodVO.getNuProtein().length() > 0)
+                    || (prodVO.getNuSodium() != null && prodVO.getNuSodium().length() > 0)
+                    || (prodVO.getNuSugars() != null && prodVO.getNuSugars().length() > 0)
+                    || (prodVO.getNuSatFat() != null && prodVO.getNuSatFat().length() > 0)
+                    || (prodVO.getNuCaffeine() != null && prodVO.getNuCaffeine().length() > 0)
+                    || (prodVO.getMomsKioskEdge() != null && prodVO.getMomsKioskEdge().length() > 0 && Integer.parseInt(prodVO.getMomsKioskEdge()) > 0) )
+            {
+                // 상품 설명 상세 + 영양정보
+                prodMapper.saveProdInfo(prodVO);
+            }
+        } else {
+            // 상품 설명 상세 + 영양정보
             prodMapper.saveProdInfo(prodVO);
-//        }
+        }
 
         // KIOSK 판매여부
         if(prodVO.getSaleTimeFg() != null && "Y".equals(prodVO.getSaleTimeFg())){

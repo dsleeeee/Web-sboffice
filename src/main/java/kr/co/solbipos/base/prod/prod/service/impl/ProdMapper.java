@@ -57,6 +57,8 @@ public interface ProdMapper {
 
     /** 상품정보 저장 */
     int saveProductInfo(ProdVO prodVO);
+
+    /** 상품정보 추가 저장 */
     int saveProdInfo(ProdVO prodVO);
 
     /** 본사에서는 프로시저 호출에 사용할 상품의 존재여부를 미리 체크함 */
@@ -505,4 +507,7 @@ public interface ProdMapper {
 
     /** 상품 등록매장 적용시, 본사의 KIOSK 판매시간 시간설정 매장적용 */
     int insertProdStoreProdSaleTime(ProdVO prodVO);
+
+    /** 상품정보 추가 테이블 조회 */
+    String getProdInfoRowCount(ProdVO prodVO);
 }

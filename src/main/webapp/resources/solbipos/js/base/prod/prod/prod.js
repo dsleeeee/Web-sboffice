@@ -43,10 +43,10 @@ var depositCupFgComboData = [
 
 // KIOSK 엣지
 var momsKioskEdgeComboData = [
-  {"name": "미사용", "value": ""},
-  {"name": "NEW", "value": "0"},
-  {"name": "BEST", "value": "1"},
-  {"name": "EVENT", "value": "2"}
+  {"name": "미사용", "value": "0"},
+  {"name": "NEW", "value": "1"},
+  {"name": "BEST", "value": "2"},
+  {"name": "EVENT", "value": "3"}
 ];
 
 /**
