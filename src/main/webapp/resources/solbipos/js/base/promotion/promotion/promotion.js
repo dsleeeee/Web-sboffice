@@ -1290,14 +1290,14 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             $("#divSelectProdBatch").css("display", "none");
 
             // 적용매장 grid 버튼
-            $("#btnStoreSampleDown").css("display", "");
-            $("#btnStoreExcelUpload").css("display", "");
-            $("#btnStoreExcelDown").css("display", "");
-            $("#btnStoreAdd").css("display", "");
+            $("#btnStoreSampleDown").css("display", "none");
+            $("#btnStoreExcelUpload").css("display", "none");
+            $("#btnStoreExcelDown").css("display", "none");
+            $("#btnStoreAdd").css("display", "none");
             $("#btnStoreDel").css("display", "none");
 
             // 혜택상품 grid 버튼
-            $("#btnPresentAdd").css("display", "");
+            $("#btnPresentAdd").css("display", "none");
             $("#btnPresentSave").css("display", "none");
             $("#btnPresentDel").css("display", "none");
             
@@ -2343,6 +2343,7 @@ app.controller('promotionSelectStoreGridCtrl', ['$scope', '$http','$timeout', fu
                 obj.status = "D";
                 obj.promotionCd = $("#hdPromotionCd").val();
                 obj.storeCd = item.storeCd;
+                obj.verSerNo = $("#hdFileNo").val();
 
                 params.push(obj);
             }

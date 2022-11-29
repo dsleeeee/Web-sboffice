@@ -95,6 +95,7 @@ app.controller('promotionStoreRegCtrl', ['$scope', '$http', function ($scope, $h
                 obj.status = "I";
                 obj.promotionCd = $("#hdPromotionCd").val();
                 obj.storeCd = item.storeCd;
+                obj.verSerNo = $("#hdFileNo").val();
 
                 params.push(obj);
             }
@@ -117,6 +118,7 @@ app.controller('promotionStoreRegCtrl', ['$scope', '$http', function ($scope, $h
         $scope._popConfirm(messages["promotion.chk.setAllStore"], function() {
             var params = {};
             params.promotionCd = $("#hdPromotionCd").val();
+            params.verSerNo = $("#hdFileNo").val();
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._save("/base/promotion/promotion/insertPromotionStoreAll.sb", params, function () {

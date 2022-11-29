@@ -129,6 +129,7 @@ app.controller('excelUploadPromotionCtrl', ['$scope', '$http', '$timeout', funct
                     item[colBinding] = cellValue;
                     item["status"] = "I";
                     item["promotionCd"] = $("#hdPromotionCd").val();
+                    item["verSerNo"] = $("#hdFileNo").val();
                 }
             }
             jsonData.push(item);
@@ -138,6 +139,7 @@ app.controller('excelUploadPromotionCtrl', ['$scope', '$http', '$timeout', funct
             // 기존 데이터 삭제
             var params = {};
             params.promotionCd = $("#hdPromotionCd").val();
+            params.verSerNo = $("#hdFileNo").val();
             $scope._postJSONSave.withOutPopUp("/base/promotion/promotion/deletePromotionStoreAll.sb", params, function(){
 
                 setTimeout(function() {

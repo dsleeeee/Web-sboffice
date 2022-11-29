@@ -2495,4 +2495,75 @@
         </choose>
     </update>
 
+    <!-- 키오스크 배너 적용매장 등록   -->
+    <!--
+        TABLE    : TB_HQ_POS_ADVER_STORE
+        COMMENTS : 키오스크 배너 적용매장을 등록한다.
+    -->
+    <insert id="insertPromotionBannerStore" parameterType="mediaVO">
+        /* USE : PromotionMapper.insertPromotionBannerStore */
+        MERGE INTO TB_HQ_POS_ADVER_STORE A
+        USING (
+                    SELECT  #{hqOfficeCd} AS HQ_OFFICE_CD
+                    ,       #{verSerNo} AS ADVER_FILE_NO
+                    ,       STORE_CD AS STORE_CD
+                    ,       #{regDt} AS REG_DT
+                    ,       #{regId} AS REG_ID
+                    ,       #{modDt} AS MOD_DT
+                    ,       #{modId} AS MOD_ID
+                    FROM    TB_MS_STORE
+                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='storeCd != null and storeCd != ""'>
+                    AND     STORE_CD = #{storeCd}
+                </if>
+
+              ) B
+           ON (
+                        A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                    AND A.ADVER_FILE_NO = B.ADVER_FILE_NO
+                    AND A.STORE_CD = B.STORE_CD
+              )
+        WHEN MATCHED THEN
+          UPDATE
+          SET     A.MOD_DT = B.MOD_DT
+          ,       A.MOD_ID = B.MOD_ID
+
+        WHEN NOT MATCHED THEN
+          INSERT
+          (
+               A.HQ_OFFICE_CD
+             , A.ADVER_FILE_NO
+             , A.STORE_CD
+             , A.REG_DT
+             , A.REG_ID
+             , A.MOD_DT
+             , A.MOD_ID
+          )
+          VALUES
+          (
+               B.HQ_OFFICE_CD
+             , B.ADVER_FILE_NO
+             , B.STORE_CD
+             , B.REG_DT
+             , B.REG_ID
+             , B.MOD_DT
+             , B.MOD_ID
+          )
+    </insert>
+
+    <!-- 키오스크 배너 적용매장 삭제   -->
+    <!--
+        TABLE    : TB_HQ_POS_ADVER_STORE
+        COMMENTS : 키오스크 배너 적용매장을 삭제한다.
+    -->
+    <delete id="deletePromotionBannerStore" parameterType="mediaVO" >
+        /* USE : PromotionMapper.deletePromotionBannerStore */
+        DELETE TB_HQ_POS_ADVER_STORE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND ADVER_FILE_NO = #{verSerNo}
+        <if test='storeCd != null and storeCd != ""'>
+           AND STORE_CD = #{storeCd}
+        </if>
+    </delete>
+
 </mapper>
