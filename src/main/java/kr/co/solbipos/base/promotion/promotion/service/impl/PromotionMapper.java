@@ -140,4 +140,10 @@ public interface PromotionMapper {
 
     /** 프로모션 키오스크 배너 수정(프로모션관련 정보만 수정) */
     int modPromotionBanner(MediaVO mediaVO);
+
+    /** 키오스크 배너 적용매장 등록 */
+    int insertPromotionBannerStore(MediaVO mediaVO);
+
+    /** 키오스크 배너 적용매장 삭제 */
+    int deletePromotionBannerStore(MediaVO mediaVO);
 }

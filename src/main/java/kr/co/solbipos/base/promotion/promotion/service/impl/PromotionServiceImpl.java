@@ -290,13 +290,27 @@ public class PromotionServiceImpl implements PromotionService {
         promotionVO.setModDt(currentDt);
         promotionVO.setModId(sessionInfoVO.getUserId());
 
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-            promotionVO.setStoreCd(sessionInfoVO.getStoreCd());
-        }
-
         // 프로모션 전매장적용
         result = promotionMapper.insertPromotionStoreAll(promotionVO);
         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        // 본사인 경우,
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 키오스크 배너 파일이 있는경우, 매장적용 등록
+            if (!"".equals(promotionVO.getVerSerNo())) {
+
+                MediaVO mediaVO = new MediaVO();
+                mediaVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+                mediaVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                mediaVO.setVerSerNo(promotionVO.getVerSerNo());
+                mediaVO.setRegDt(currentDt);
+                mediaVO.setRegId(sessionInfoVO.getUserId());
+                mediaVO.setModDt(currentDt);
+                mediaVO.setModId(sessionInfoVO.getUserId());
+
+                promotionMapper.insertPromotionBannerStore(mediaVO);
+            }
+        }
 
         return result;
     }
@@ -318,15 +332,30 @@ public class PromotionServiceImpl implements PromotionService {
             promotionVO.setModDt(currentDt);
             promotionVO.setModId(sessionInfoVO.getUserId());
 
-            if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-                promotionVO.setStoreCd(sessionInfoVO.getStoreCd());
-            }
-
             if ( promotionVO.getStatus() == GridDataFg.INSERT ) {
 
                 // 프로모션 적용매장 추가
                 result = promotionMapper.insertPromotionStore(promotionVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                // 본사인 경우,
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    // 키오스크 배너 파일이 있는경우, 매장적용 등록
+                    if (!"".equals(promotionVO.getVerSerNo())) {
+
+                        MediaVO mediaVO = new MediaVO();
+                        mediaVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+                        mediaVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                        mediaVO.setVerSerNo(promotionVO.getVerSerNo());
+                        mediaVO.setStoreCd(promotionVO.getStoreCd());
+                        mediaVO.setRegDt(currentDt);
+                        mediaVO.setRegId(sessionInfoVO.getUserId());
+                        mediaVO.setModDt(currentDt);
+                        mediaVO.setModId(sessionInfoVO.getUserId());
+
+                        promotionMapper.insertPromotionBannerStore(mediaVO);
+                    }
+                }
 
                 procCnt ++;
 
@@ -335,6 +364,21 @@ public class PromotionServiceImpl implements PromotionService {
                 // 프로모션 적용매장 삭제
                 result = promotionMapper.deletePromotionStore(promotionVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                // 본사인 경우,
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    // 키오스크 배너 파일이 있는경우, 매장적용 삭제
+                    if (!"".equals(promotionVO.getVerSerNo())) {
+
+                        MediaVO mediaVO = new MediaVO();
+                        mediaVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+                        mediaVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                        mediaVO.setVerSerNo(promotionVO.getVerSerNo());
+                        mediaVO.setStoreCd(promotionVO.getStoreCd());
+
+                        promotionMapper.deletePromotionBannerStore(mediaVO);
+                    }
+                }
 
                 procCnt ++;
 
@@ -497,6 +541,20 @@ public class PromotionServiceImpl implements PromotionService {
         int result = promotionMapper.deletePromotionStoreAll(promotionVO);
         if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
+        // 본사인 경우,
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 키오스크 배너 파일이 있는경우, 매장적용 삭제
+            if (!"".equals(promotionVO.getVerSerNo())) {
+
+                MediaVO mediaVO = new MediaVO();
+                mediaVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+                mediaVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                mediaVO.setVerSerNo(promotionVO.getVerSerNo());
+
+                promotionMapper.deletePromotionBannerStore(mediaVO);
+            }
+        }
+
         return result;
     }
 
@@ -525,6 +583,25 @@ public class PromotionServiceImpl implements PromotionService {
             if(!"".equals(promotionVO.getStoreCd())){
                 result = promotionMapper.insertPromotionStore(promotionVO);
                if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                // 본사인 경우,
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    // 키오스크 배너 파일이 있는경우, 매장적용 등록
+                    if (!"".equals(promotionVO.getVerSerNo())) {
+
+                        MediaVO mediaVO = new MediaVO();
+                        mediaVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+                        mediaVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                        mediaVO.setVerSerNo(promotionVO.getVerSerNo());
+                        mediaVO.setStoreCd(promotionVO.getStoreCd());
+                        mediaVO.setRegDt(currentDt);
+                        mediaVO.setRegId(sessionInfoVO.getUserId());
+                        mediaVO.setModDt(currentDt);
+                        mediaVO.setModId(sessionInfoVO.getUserId());
+
+                        promotionMapper.insertPromotionBannerStore(mediaVO);
+                    }
+                }
             }
 
             procCnt ++;
@@ -589,6 +666,13 @@ public class PromotionServiceImpl implements PromotionService {
 
             // 파일 등록
             if(promotionMapper.verRegist(mediaVO) > 0) {
+
+                // 본사인 경우만, 적용매장 등록
+                if(OrgnFg.HQ.toString().equals(mediaVO.getOrgnFg())){
+                    int result = promotionMapper.insertPromotionBannerStore(mediaVO);
+                    if (result < 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+                }
+
                 isSuccess = "0";
             } else {
                 isSuccess = "1";
@@ -700,6 +784,12 @@ public class PromotionServiceImpl implements PromotionService {
             String imgFileNm = promotionMapper.getFileChk(mediaVO);
 
             if(imgFileNm.length() > 0){
+
+                // 본사인 경우만, 적용매장 삭제
+                if(OrgnFg.HQ.toString().equals(mediaVO.getOrgnFg())){
+                    int result = promotionMapper.deletePromotionBannerStore(mediaVO);
+                    if (result < 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+                }
 
                 // 파일 delete
                 if(promotionMapper.delFile(mediaVO) > 0) {

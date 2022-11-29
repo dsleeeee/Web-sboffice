@@ -177,6 +177,8 @@ public class PromotionVO extends PageVO {
     private String depositYmd;
     /** 제한된 결제*/
     private String blockPayCd;
+    /** 버전일련번호 */
+    private String verSerNo;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -776,5 +778,13 @@ public class PromotionVO extends PageVO {
 
     public void setBlockPayCd(String blockPayCd) {
         this.blockPayCd = blockPayCd;
+    }
+
+    public String getVerSerNo() {
+        return verSerNo;
+    }
+
+    public void setVerSerNo(String verSerNo) {
+        this.verSerNo = verSerNo;
     }
 }
