@@ -72,6 +72,15 @@ public class DayMomsServiceImpl implements DayMomsService {
             }
         }
 
+        // 매장브랜드 '전체' 일때
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            if (dayMomsVO.getStoreHqBrandCd() == "" || dayMomsVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = dayMomsVO.getUserBrands().split(",");
+                dayMomsVO.setUserBrandList(userBrandList);
+            }
+        }
+
         return dayMomsMapper.getDayMomsList(dayMomsVO);
     }
     

@@ -15,17 +15,105 @@
             ,       A.MIN
             ,       A.MAX
             ,       #{saleDate} AS SALE_DATE
-            ,		(	SELECT	COUNT(DISTINCT STORE_CD)
+            ,		(	SELECT	COUNT(DISTINCT tpe.STORE_CD)
                         FROM	TB_PS_EXACTCALC tpe
-                        WHERE	tpe.HQ_OFFICE_CD = #{hqOfficeCd}
+                        ,       TB_MS_STORE tms
+                        ,       TB_MS_STORE_INFO tmsi
+                        WHERE   tpe.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                        AND     tpe.STORE_CD = tms.STORE_CD
+                        AND     tpe.STORE_CD = tmsi.STORE_CD (+)
+                        AND     tpe.HQ_OFFICE_CD = #{hqOfficeCd}
                         AND		tpe.SALE_DATE = #{saleDate}
                         AND     TPE.REG_SEQ = '00'
+                        <if test='storeCds != null and storeCds != ""'>
+                            AND tpe.STORE_CD IN
+                            <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
+                                #{item}
+                            </foreach>
+                        </if>
+                        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                        </if>
+                        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                            <if test='userBrands != null and userBrands != ""'>
+                                -- 매장브랜드 전체일때
+                                AND tms.HQ_BRAND_CD IN
+                                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                        </if>
+                        <if test='momsTeam != null and momsTeam != ""'>
+                            AND tmsi.MOMS_TEAM = #{momsTeam}
+                        </if>
+                        <if test='momsAcShop != null and momsAcShop != ""'>
+                            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                        </if>
+                        <if test='momsAreaFg != null and momsAreaFg != ""'>
+                            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                        </if>
+                        <if test='momsCommercial != null and momsCommercial != ""'>
+                            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                        </if>
+                        <if test='momsShopType != null and momsShopType != ""'>
+                            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                        </if>
+                        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                        </if>
+                        <if test='branchCd != null and branchCd != ""'>
+                            AND tms.BRANCH_CD = #{branchCd}
+                        </if>
                         AND		EXTRACT(HOUR FROM TO_TIMESTAMP(tpe.OPEN_DT, 'YYYYMMDDHH24MISS')) BETWEEN A.MIN AND A.MAX) AS OPEN_CNT
-            ,		(	SELECT	COUNT(DISTINCT STORE_CD)
+            ,		(	SELECT	COUNT(DISTINCT tpe.STORE_CD)
                         FROM	TB_PS_EXACTCALC tpe
-                        WHERE	tpe.HQ_OFFICE_CD = #{hqOfficeCd}
+                        ,       TB_MS_STORE tms
+                        ,       TB_MS_STORE_INFO tmsi
+                        WHERE   tpe.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                        AND     tpe.STORE_CD = tms.STORE_CD
+                        AND     tpe.STORE_CD = tmsi.STORE_CD (+)
+                        AND     tpe.HQ_OFFICE_CD = #{hqOfficeCd}
                         AND		tpe.SALE_DATE = #{saleDate}
                         AND     TPE.REG_SEQ = '00'
+                        <if test='storeCds != null and storeCds != ""'>
+                            AND tpe.STORE_CD IN
+                            <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
+                                #{item}
+                            </foreach>
+                        </if>
+                        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                        </if>
+                        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                            <if test='userBrands != null and userBrands != ""'>
+                                -- 매장브랜드 전체일때
+                                AND tms.HQ_BRAND_CD IN
+                                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                        </if>
+                        <if test='momsTeam != null and momsTeam != ""'>
+                            AND tmsi.MOMS_TEAM = #{momsTeam}
+                        </if>
+                        <if test='momsAcShop != null and momsAcShop != ""'>
+                            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                        </if>
+                        <if test='momsAreaFg != null and momsAreaFg != ""'>
+                            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                        </if>
+                        <if test='momsCommercial != null and momsCommercial != ""'>
+                            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                        </if>
+                        <if test='momsShopType != null and momsShopType != ""'>
+                            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                        </if>
+                        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                        </if>
+                        <if test='branchCd != null and branchCd != ""'>
+                            AND tms.BRANCH_CD = #{branchCd}
+                        </if>
                         AND		EXTRACT(HOUR FROM TO_TIMESTAMP(tpe.CLOSE_DT, 'YYYYMMDDHH24MISS')) BETWEEN A.MIN AND A.MAX) AS CLOSE_CNT
             FROM 	(
                 <if test='optionFg != null and optionFg == "timeSlot"'>
@@ -213,8 +301,52 @@
                         ,       TPE.REG_SEQ
                         ,       TPE.OPEN_DT   AS REG_DT
                         FROM    TB_PS_EXACTCALC TPE
-                        WHERE   TPE.HQ_OFFICE_CD = #{hqOfficeCd}
+                        ,       TB_MS_STORE tms
+                        ,       TB_MS_STORE_INFO tmsi
+                        WHERE   TPE.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                        AND     TPE.STORE_CD = tms.STORE_CD
+                        AND     TPE.STORE_CD = tmsi.STORE_CD (+)
+                        AND     TPE.HQ_OFFICE_CD = #{hqOfficeCd}
                         AND     TPE.SALE_DATE = #{saleDate}
+                        <if test='storeCds != null and storeCds != ""'>
+                            AND TPE.STORE_CD IN
+                            <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
+                                #{item}
+                            </foreach>
+                        </if>
+                        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                        </if>
+                        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                            <if test='userBrands != null and userBrands != ""'>
+                                -- 매장브랜드 전체일때
+                                AND tms.HQ_BRAND_CD IN
+                                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                        </if>
+                        <if test='momsTeam != null and momsTeam != ""'>
+                            AND tmsi.MOMS_TEAM = #{momsTeam}
+                        </if>
+                        <if test='momsAcShop != null and momsAcShop != ""'>
+                            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                        </if>
+                        <if test='momsAreaFg != null and momsAreaFg != ""'>
+                            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                        </if>
+                        <if test='momsCommercial != null and momsCommercial != ""'>
+                            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                        </if>
+                        <if test='momsShopType != null and momsShopType != ""'>
+                            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                        </if>
+                        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                        </if>
+                        <if test='branchCd != null and branchCd != ""'>
+                            AND tms.BRANCH_CD = #{branchCd}
+                        </if>
                         <if test='gubun != null and gubun != "" and gubun.toString() == "open"'>
                             AND EXTRACT(HOUR FROM TO_TIMESTAMP(tpe.OPEN_DT, 'YYYYMMDDHH24MISS')) BETWEEN #{min} AND #{max}
                         </if>
@@ -235,8 +367,52 @@
                         ,       TPE.REG_SEQ
                         ,       TPE.CLOSE_DT AS REG_DT
                         FROM    TB_PS_EXACTCALC TPE
-                        WHERE   TPE.HQ_OFFICE_CD = #{hqOfficeCd}
+                        ,       TB_MS_STORE tms
+                        ,       TB_MS_STORE_INFO tmsi
+                        WHERE   TPE.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                        AND     TPE.STORE_CD = tms.STORE_CD
+                        AND     TPE.STORE_CD = tmsi.STORE_CD (+)
+                        AND     TPE.HQ_OFFICE_CD = #{hqOfficeCd}
                         AND     TPE.SALE_DATE = #{saleDate}
+                        <if test='storeCds != null and storeCds != ""'>
+                            AND TPE.STORE_CD IN
+                            <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
+                                #{item}
+                            </foreach>
+                        </if>
+                        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                        </if>
+                        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                            <if test='userBrands != null and userBrands != ""'>
+                                -- 매장브랜드 전체일때
+                                AND tms.HQ_BRAND_CD IN
+                                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                        </if>
+                        <if test='momsTeam != null and momsTeam != ""'>
+                            AND tmsi.MOMS_TEAM = #{momsTeam}
+                        </if>
+                        <if test='momsAcShop != null and momsAcShop != ""'>
+                            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                        </if>
+                        <if test='momsAreaFg != null and momsAreaFg != ""'>
+                            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                        </if>
+                        <if test='momsCommercial != null and momsCommercial != ""'>
+                            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                        </if>
+                        <if test='momsShopType != null and momsShopType != ""'>
+                            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                        </if>
+                        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                        </if>
+                        <if test='branchCd != null and branchCd != ""'>
+                            AND tms.BRANCH_CD = #{branchCd}
+                        </if>
                         <if test='gubun != null and gubun != "" and gubun.toString() == "close"'>
                             AND EXTRACT(HOUR FROM TO_TIMESTAMP(tpe.CLOSE_DT, 'YYYYMMDDHH24MISS')) BETWEEN #{min} AND #{max}
                         </if>
@@ -269,14 +445,49 @@
     -->
     <select id="getStoreOpenCloseDayDtlNoneList" parameterType="storeOpenCloseVO" resultType="DefaultMap">
     /** storeOpenCloseMapper.getStoreOpenCloseDayDtlNoneList */
-        SELECT 	STORE_CD
-        ,       STORE_NM
+        SELECT 	tms.STORE_CD
+        ,       tms.STORE_NM
         FROM 	TB_MS_STORE tms
-        WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
-        AND 	STORE_CD NOT IN (   SELECT	DISTINCT STORE_CD
-                                    FROM	TB_PS_EXACTCALC tpe
-                                    WHERE	tpe.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
-                                    AND		SALE_DATE = #{saleDate})
+        ,       TB_MS_STORE_INFO tmsi
+        WHERE 	tms.STORE_CD = tmsi.STORE_CD (+)
+        AND     tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND 	tms.STORE_CD NOT IN (   SELECT	DISTINCT STORE_CD
+                                        FROM	TB_PS_EXACTCALC tpe
+                                        WHERE	tpe.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                                        AND		SALE_DATE = #{saleDate})
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
     </select>
 
     <!-- 맘스터치 > 점포매출 > 매장 오픈/마감 현황 - 월별 탭 조회 -->
@@ -288,36 +499,289 @@
     <select id="getStoreOpenCloseMonthList" parameterType="storeOpenCloseVO" resultType="DefaultMap">
         /* USE : StoreOpenCloseMapper.getStoreOpenCloseMonthList */
         SELECT 	TO_CHAR(TO_DATE(tcd.YYYYMMDD, 'YYYYMMDD'), 'YYYY-MM-DD') AS YYYYMMDD
-        ,		(	SELECT	COUNT(DISTINCT STORE_CD)
+        ,		(	SELECT	COUNT(DISTINCT tpe.STORE_CD)
                     FROM	TB_PS_EXACTCALC tpe
-                    WHERE	tpe.HQ_OFFICE_CD = #{hqOfficeCd}
+                    ,       TB_MS_STORE tms
+                    ,       TB_MS_STORE_INFO tmsi
+                    WHERE	tpe.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                    AND     tpe.STORE_CD = tms.STORE_CD
+                    AND     tpe.STORE_CD = tmsi.STORE_CD (+)
+                    AND     tpe.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND		tpe.SALE_DATE = tcd.YYYYMMDD
-                    AND     TPE.REG_SEQ = '00') AS OPEN_CNT
-        ,		(	SELECT	COUNT(DISTINCT STORE_CD)
+                    AND     TPE.REG_SEQ = '00'
+                    <if test='storeCds != null and storeCds != ""'>
+                        AND tms.STORE_CD IN
+                        <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
+                            #{item}
+                        </foreach>
+                    </if>
+                    <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                        AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                    </if>
+                    <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                        <if test='userBrands != null and userBrands != ""'>
+                            -- 매장브랜드 전체일때
+                            AND tms.HQ_BRAND_CD IN
+                            <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                #{item}
+                            </foreach>
+                        </if>
+                    </if>
+                    <if test='momsTeam != null and momsTeam != ""'>
+                        AND tmsi.MOMS_TEAM = #{momsTeam}
+                    </if>
+                    <if test='momsAcShop != null and momsAcShop != ""'>
+                        AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                    </if>
+                    <if test='momsAreaFg != null and momsAreaFg != ""'>
+                        AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                    </if>
+                    <if test='momsCommercial != null and momsCommercial != ""'>
+                        AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                    </if>
+                    <if test='momsShopType != null and momsShopType != ""'>
+                        AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                    </if>
+                    <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                        AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                    </if>
+                    <if test='branchCd != null and branchCd != ""'>
+                        AND tms.BRANCH_CD = #{branchCd}
+                    </if>
+                ) AS OPEN_CNT
+        ,		(	SELECT	COUNT(DISTINCT tpe.STORE_CD)
                     FROM	TB_PS_EXACTCALC tpe
-                    WHERE	tpe.HQ_OFFICE_CD = #{hqOfficeCd}
+                    ,       TB_MS_STORE tms
+                    ,       TB_MS_STORE_INFO tmsi
+                    WHERE	tpe.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                    AND     tpe.STORE_CD = tms.STORE_CD
+                    AND     tpe.STORE_CD = tmsi.STORE_CD (+)
+                    AND     tpe.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND		tpe.SALE_DATE = tcd.YYYYMMDD
-                    AND     TPE.REG_SEQ = '00') AS CLOSE_CNT
-        ,		(	SELECT 	COUNT(STORE_CD)
+                    AND     TPE.REG_SEQ = '00'
+                    <if test='storeCds != null and storeCds != ""'>
+                        AND tms.STORE_CD IN
+                        <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
+                            #{item}
+                        </foreach>
+                    </if>
+                    <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                        AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                    </if>
+                    <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                        <if test='userBrands != null and userBrands != ""'>
+                            -- 매장브랜드 전체일때
+                            AND tms.HQ_BRAND_CD IN
+                            <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                #{item}
+                            </foreach>
+                        </if>
+                    </if>
+                    <if test='momsTeam != null and momsTeam != ""'>
+                        AND tmsi.MOMS_TEAM = #{momsTeam}
+                    </if>
+                    <if test='momsAcShop != null and momsAcShop != ""'>
+                        AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                    </if>
+                    <if test='momsAreaFg != null and momsAreaFg != ""'>
+                        AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                    </if>
+                    <if test='momsCommercial != null and momsCommercial != ""'>
+                        AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                    </if>
+                    <if test='momsShopType != null and momsShopType != ""'>
+                        AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                    </if>
+                    <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                        AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                    </if>
+                    <if test='branchCd != null and branchCd != ""'>
+                        AND tms.BRANCH_CD = #{branchCd}
+                    </if>
+                ) AS CLOSE_CNT
+        ,		(	SELECT 	COUNT(tms.STORE_CD)
                     FROM 	TB_MS_STORE tms
-                    WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND 	STORE_CD NOT IN (   SELECT	DISTINCT STORE_CD
+                    ,       TB_MS_STORE_INFO tmsi
+                    WHERE	tms.STORE_CD = tmsi.STORE_CD (+)
+
+                    AND     tms.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND 	tms.STORE_CD NOT IN (   SELECT	DISTINCT tpe.STORE_CD
                                                 FROM	TB_PS_EXACTCALC tpe
+                                                ,       TB_MS_STORE tms
+                                                ,       TB_MS_STORE_INFO tmsi
                                                 WHERE	tpe.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
-                                                AND		SALE_DATE = tcd.YYYYMMDD)) AS NO_OPEN_CNT
-        ,		NVL((	SELECT	COUNT(DISTINCT STORE_CD)
+                                                AND 	tpe.STORE_CD = tms.STORE_CD
+                                                AND	    tpe.STORE_CD = tmsi.STORE_CD(+)
+                                                AND		SALE_DATE = tcd.YYYYMMDD
+                                                <if test='storeCds != null and storeCds != ""'>
+                                                    AND tms.STORE_CD IN
+                                                    <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
+                                                        #{item}
+                                                    </foreach>
+                                                </if>
+                                                <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                                                    AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                                                </if>
+                                                <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                                                    <if test='userBrands != null and userBrands != ""'>
+                                                        -- 매장브랜드 전체일때
+                                                        AND tms.HQ_BRAND_CD IN
+                                                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                                            #{item}
+                                                        </foreach>
+                                                    </if>
+                                                </if>
+                                                <if test='momsTeam != null and momsTeam != ""'>
+                                                    AND tmsi.MOMS_TEAM = #{momsTeam}
+                                                </if>
+                                                <if test='momsAcShop != null and momsAcShop != ""'>
+                                                    AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                                                </if>
+                                                <if test='momsAreaFg != null and momsAreaFg != ""'>
+                                                    AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                                                </if>
+                                                <if test='momsCommercial != null and momsCommercial != ""'>
+                                                    AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                                                </if>
+                                                <if test='momsShopType != null and momsShopType != ""'>
+                                                    AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                                                </if>
+                                                <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                                                    AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                                                </if>
+                                                <if test='branchCd != null and branchCd != ""'>
+                                                    AND tms.BRANCH_CD = #{branchCd}
+                                                </if>
+                                                )
+                    <if test='storeCds != null and storeCds != ""'>
+                        AND tms.STORE_CD IN
+                        <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
+                            #{item}
+                        </foreach>
+                    </if>
+                    <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                        AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                    </if>
+                    <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                        <if test='userBrands != null and userBrands != ""'>
+                            -- 매장브랜드 전체일때
+                            AND tms.HQ_BRAND_CD IN
+                            <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                #{item}
+                            </foreach>
+                        </if>
+                    </if>
+                    <if test='momsTeam != null and momsTeam != ""'>
+                        AND tmsi.MOMS_TEAM = #{momsTeam}
+                    </if>
+                    <if test='momsAcShop != null and momsAcShop != ""'>
+                        AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                    </if>
+                    <if test='momsAreaFg != null and momsAreaFg != ""'>
+                        AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                    </if>
+                    <if test='momsCommercial != null and momsCommercial != ""'>
+                        AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                    </if>
+                    <if test='momsShopType != null and momsShopType != ""'>
+                        AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                    </if>
+                    <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                        AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                    </if>
+                    <if test='branchCd != null and branchCd != ""'>
+                        AND tms.BRANCH_CD = #{branchCd}
+                    </if>
+                ) AS NO_OPEN_CNT
+        ,		NVL((	SELECT	COUNT(DISTINCT tpe.STORE_CD)
                         FROM	TB_PS_EXACTCALC tpe
-                        WHERE	tpe.HQ_OFFICE_CD = #{hqOfficeCd}
+                        ,       TB_MS_STORE tms
+                        ,       TB_MS_STORE_INFO tmsi
+                        WHERE   tpe.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                        AND     tpe.STORE_CD = tms.STORE_CD
+                        AND     tpe.STORE_CD = tmsi.STORE_CD (+)
+                        AND     tpe.HQ_OFFICE_CD = #{hqOfficeCd}
                         AND		tpe.SALE_DATE = tcd.YYYYMMDD
                         AND 	tpe.CLOSE_FG = '1'
                         AND     TPE.REG_SEQ = '00'
+                        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                        </if>
+                        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                            <if test='userBrands != null and userBrands != ""'>
+                                -- 매장브랜드 전체일때
+                                AND tms.HQ_BRAND_CD IN
+                                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                        </if>
+                        <if test='momsTeam != null and momsTeam != ""'>
+                            AND tmsi.MOMS_TEAM = #{momsTeam}
+                        </if>
+                        <if test='momsAcShop != null and momsAcShop != ""'>
+                            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                        </if>
+                        <if test='momsAreaFg != null and momsAreaFg != ""'>
+                            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                        </if>
+                        <if test='momsCommercial != null and momsCommercial != ""'>
+                            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                        </if>
+                        <if test='momsShopType != null and momsShopType != ""'>
+                            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                        </if>
+                        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                        </if>
+                        <if test='branchCd != null and branchCd != ""'>
+                            AND tms.BRANCH_CD = #{branchCd}
+                        </if>
                         MINUS
-                        SELECT	COUNT(DISTINCT STORE_CD)
+                        SELECT	COUNT(DISTINCT tpe.STORE_CD)
                         FROM	TB_PS_EXACTCALC tpe
-                        WHERE	tpe.HQ_OFFICE_CD = #{hqOfficeCd}
+                        ,       TB_MS_STORE tms
+                        ,       TB_MS_STORE_INFO tmsi
+                        WHERE   tpe.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                        AND     tpe.STORE_CD = tms.STORE_CD
+                        AND     tpe.STORE_CD = tmsi.STORE_CD (+)
+                        AND     tpe.HQ_OFFICE_CD = #{hqOfficeCd}
                         AND		tpe.SALE_DATE = tcd.YYYYMMDD
                         AND 	tpe.CLOSE_FG = '2'
-                        AND     TPE.REG_SEQ = '00'), 0) AS NO_CLOSE_CNT
+                        AND     TPE.REG_SEQ = '00'
+                        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                        </if>
+                        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                            <if test='userBrands != null and userBrands != ""'>
+                                -- 매장브랜드 전체일때
+                                AND tms.HQ_BRAND_CD IN
+                                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                        </if>
+                        <if test='momsTeam != null and momsTeam != ""'>
+                            AND tmsi.MOMS_TEAM = #{momsTeam}
+                        </if>
+                        <if test='momsAcShop != null and momsAcShop != ""'>
+                            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                        </if>
+                        <if test='momsAreaFg != null and momsAreaFg != ""'>
+                            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                        </if>
+                        <if test='momsCommercial != null and momsCommercial != ""'>
+                            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                        </if>
+                        <if test='momsShopType != null and momsShopType != ""'>
+                            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                        </if>
+                        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                        </if>
+                        <if test='branchCd != null and branchCd != ""'>
+                            AND tms.BRANCH_CD = #{branchCd}
+                        </if>), 0) AS NO_CLOSE_CNT
         FROM 	TB_CM_DATEM tcd
         WHERE 	YYYYMMDD BETWEEN #{startDate} and #{endDate}
         ORDER BY YYYYMMDD
@@ -341,61 +805,61 @@
         ,       TO_CHAR(TO_DATE(TPE.REG_DT,'YYYYMMDDHH24MISS'),'YYYY.MM.DD HH24:MI:SS') AS REG_DT
                 ----------------------------
         ,       NVL((SELECT SUM(NVL(TPES.TOT_SALE_AMT,0))
-                FROM    TB_PS_EXACTCALC_SALE TPES
-                WHERE   TPE.HQ_OFFICE_CD = TPES.HQ_OFFICE_CD
-                AND     TPE.HQ_BRAND_CD = TPES.HQ_BRAND_CD
-                AND     TPE.STORE_CD = TPES.STORE_CD
-                AND     TPE.SALE_DATE = TPES.SALE_DATE
-                AND     TPE.POS_NO = TPES.POS_NO
-                AND     TPE.REG_SEQ = TPES.REG_SEQ
+                     FROM   TB_PS_EXACTCALC_SALE TPES
+                     WHERE  TPE.HQ_OFFICE_CD = TPES.HQ_OFFICE_CD
+                     AND    TPE.HQ_BRAND_CD = TPES.HQ_BRAND_CD
+                     AND    TPE.STORE_CD = TPES.STORE_CD
+                     AND    TPE.SALE_DATE = TPES.SALE_DATE
+                     AND    TPE.POS_NO = TPES.POS_NO
+                     AND    TPE.REG_SEQ = TPES.REG_SEQ
                 ),0) AS TOT_SALE_AMT
         ,       NVL((SELECT SUM(NVL(TPES.TOT_DC_AMT,0))
-                FROM TB_PS_EXACTCALC_SALE TPES
-                WHERE TPE.HQ_OFFICE_CD = TPES.HQ_OFFICE_CD
-                AND TPE.HQ_BRAND_CD = TPES.HQ_BRAND_CD
-                AND TPE.STORE_CD = TPES.STORE_CD
-                AND TPE.SALE_DATE = TPES.SALE_DATE
-                AND TPE.POS_NO = TPES.POS_NO
-                AND TPE.REG_SEQ = TPES.REG_SEQ
+                     FROM   TB_PS_EXACTCALC_SALE TPES
+                     WHERE  TPE.HQ_OFFICE_CD = TPES.HQ_OFFICE_CD
+                     AND    TPE.HQ_BRAND_CD = TPES.HQ_BRAND_CD
+                     AND    TPE.STORE_CD = TPES.STORE_CD
+                     AND    TPE.SALE_DATE = TPES.SALE_DATE
+                     AND    TPE.POS_NO = TPES.POS_NO
+                     AND    TPE.REG_SEQ = TPES.REG_SEQ
                 ),0) AS TOT_DC_AMT
         ,       NVL((SELECT SUM(NVL(TPES.REAL_SALE_AMT,0))
-                FROM TB_PS_EXACTCALC_SALE TPES
-                WHERE TPE.HQ_OFFICE_CD = TPES.HQ_OFFICE_CD
-                AND TPE.HQ_BRAND_CD = TPES.HQ_BRAND_CD
-                AND TPE.STORE_CD = TPES.STORE_CD
-                AND TPE.SALE_DATE = TPES.SALE_DATE
-                AND TPE.POS_NO = TPES.POS_NO
-                AND TPE.REG_SEQ = TPES.REG_SEQ
+                     FROM   TB_PS_EXACTCALC_SALE TPES
+                     WHERE  TPE.HQ_OFFICE_CD = TPES.HQ_OFFICE_CD
+                     AND    TPE.HQ_BRAND_CD = TPES.HQ_BRAND_CD
+                     AND    TPE.STORE_CD = TPES.STORE_CD
+                     AND    TPE.SALE_DATE = TPES.SALE_DATE
+                     AND    TPE.POS_NO = TPES.POS_NO
+                     AND    TPE.REG_SEQ = TPES.REG_SEQ
                 ),0) AS REAL_SALE_AMT
         ------------------------------
         ,       NVL((SELECT SUM(TPEF.FUND_AMT)
-                FROM TB_PS_EXACTCALC_FUND TPEF
-                WHERE TPE.HQ_OFFICE_CD = TPEF.HQ_OFFICE_CD
-                AND TPE.HQ_BRAND_CD = TPEF.HQ_BRAND_CD
-                AND TPE.STORE_CD = TPEF.STORE_CD
-                AND TPE.SALE_DATE = TPEF.SALE_DATE
-                AND TPE.POS_NO = TPEF.POS_NO
-                AND TPE.REG_SEQ = TPEF.REG_SEQ
+                     FROM   TB_PS_EXACTCALC_FUND TPEF
+                     WHERE  TPE.HQ_OFFICE_CD = TPEF.HQ_OFFICE_CD
+                     AND    TPE.HQ_BRAND_CD = TPEF.HQ_BRAND_CD
+                     AND    TPE.STORE_CD = TPEF.STORE_CD
+                     AND    TPE.SALE_DATE = TPEF.SALE_DATE
+                     AND    TPE.POS_NO = TPEF.POS_NO
+                     AND    TPE.REG_SEQ = TPEF.REG_SEQ
                 ),0) AS FUND_AMT
         ------------------------------     -- 기존 현금 금액 - 현금영수 금액
         ,       NVL((SELECT SUM(TPEC.CASH_EXACT_AMT)
-                FROM TB_PS_EXACTCALC_CASH TPEC --현금
-                WHERE TPE.HQ_OFFICE_CD = TPEC.HQ_OFFICE_CD
-                AND TPE.HQ_BRAND_CD = TPEC.HQ_BRAND_CD
-                AND TPE.STORE_CD = TPEC.STORE_CD
-                AND TPE.SALE_DATE = TPEC.SALE_DATE
-                AND TPE.POS_NO = TPEC.POS_NO
-                AND TPE.REG_SEQ = TPEC.REG_SEQ
-                AND TPEC.CASH_EXACT_CD = '02' <!-- 현금정산구분(NM_GRP_CD: 064) - [02 : 현금판매]  -->
-                )
-                -
-                (SELECT	SUM(CASE WHEN TSSPC.APPR_PROC_FG IN ('1','2','4') THEN TSSPC.SALE_AMT ELSE 0 END)<!-- 현금영수증 -->
-                FROM	TB_SL_SALE_PAY_CASH TSSPC
-                WHERE	TPE.HQ_OFFICE_CD = TSSPC.HQ_OFFICE_CD
-                AND		TPE.HQ_BRAND_CD = TSSPC.HQ_BRAND_CD
-                AND		TPE.STORE_CD = TSSPC.STORE_CD
-                AND		TPE.SALE_DATE = TSSPC.SALE_DATE
-                -- 				AND		TPE.POS_NO = TSSPC.POS_NO
+                     FROM   TB_PS_EXACTCALC_CASH TPEC --현금
+                     WHERE  TPE.HQ_OFFICE_CD = TPEC.HQ_OFFICE_CD
+                     AND    TPE.HQ_BRAND_CD = TPEC.HQ_BRAND_CD
+                     AND    TPE.STORE_CD = TPEC.STORE_CD
+                     AND    TPE.SALE_DATE = TPEC.SALE_DATE
+                     AND    TPE.POS_NO = TPEC.POS_NO
+                     AND    TPE.REG_SEQ = TPEC.REG_SEQ
+                     AND    TPEC.CASH_EXACT_CD = '02' <!-- 현금정산구분(NM_GRP_CD: 064) - [02 : 현금판매]  -->
+                     )
+                     -
+                    (SELECT SUM(CASE WHEN TSSPC.APPR_PROC_FG IN ('1','2','4') THEN TSSPC.SALE_AMT ELSE 0 END)<!-- 현금영수증 -->
+                     FROM   TB_SL_SALE_PAY_CASH TSSPC
+                     WHERE  TPE.HQ_OFFICE_CD = TSSPC.HQ_OFFICE_CD
+                     AND    TPE.HQ_BRAND_CD = TSSPC.HQ_BRAND_CD
+                     AND    TPE.STORE_CD = TSSPC.STORE_CD
+                     AND    TPE.SALE_DATE = TSSPC.SALE_DATE
+                     -- AND		TPE.POS_NO = TSSPC.POS_NO
                 ), 0) AS CASH_EXACT_AMT
         ------------------------------ -- 기존 현금 금액이 없으면 현금영수 금액도 0원으로 출력
         ,       CASE WHEN NVL((SELECT SUM(TPEC.CASH_EXACT_AMT)
@@ -458,12 +922,53 @@
                 ),0) AS LOST_AMT
         ------------------------------
         FROM	TB_MS_STORE tms
+        ,       TB_MS_STORE_INFO tmsi
         ,       TB_PS_EXACTCALC tpe
         WHERE 	tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND 	tms.STORE_CD = tmsi.STORE_CD(+)
         AND 	tms.HQ_OFFICE_CD = tpe.HQ_OFFICE_CD(+)
         AND 	tms.STORE_CD = tpe.STORE_CD(+)
         AND 	#{saleDate} = tpe.SALE_DATE(+)
         AND     '00' = TPE.REG_SEQ(+)
+        <if test='storeCds != null and storeCds != ""'>
+            AND tms.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
         ORDER BY tms.STORE_CD
     </select>
 

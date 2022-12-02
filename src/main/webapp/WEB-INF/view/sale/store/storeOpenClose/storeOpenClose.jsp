@@ -18,9 +18,20 @@
 </div>
 
 <script type="text/javascript">
+
+    // List 형식("" 안붙임)
+    var momsHqBrandCdComboList = ${momsHqBrandCdComboList};
+    var branchCdComboList = ${branchCdComboList};
+    var momsTeamComboList = ${momsTeamComboList};
+    var momsAcShopComboList = ${momsAcShopComboList};
+    var momsAreaFgComboList = ${momsAreaFgComboList};
+    var momsCommercialComboList = ${momsCommercialComboList};
+    var momsShopTypeComboList = ${momsShopTypeComboList};
+    var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
+
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeOpenClose/storeOpenClose.js?ver=20221111.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeOpenClose/storeOpenClose.js?ver=20221129.05" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 일별 레이어 --%>

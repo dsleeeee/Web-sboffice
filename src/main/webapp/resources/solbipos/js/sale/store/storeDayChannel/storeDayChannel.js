@@ -17,6 +17,16 @@ app.controller('storeDayChannelCtrl', ['$scope', '$http', '$timeout', function (
   $scope._setComboData("option", optionData);
   $scope.orgnFg        = gvOrgnFg;
 
+  // 브랜드 콤보박스 셋팅
+  $scope._setComboData("storeHqBrandCdCombo", momsHqBrandCdComboList); // 매장브랜드
+  $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
+  $scope._setComboData("momsAcShopCombo", momsAcShopComboList); // AC점포별
+  $scope._setComboData("momsAreaFgCombo", momsAreaFgComboList); // 지역구분
+  $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
+  $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
+  $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
+  $scope._setComboData("branchCdCombo", branchCdComboList); // 지사
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
@@ -24,103 +34,103 @@ app.controller('storeDayChannelCtrl', ['$scope', '$http', '$timeout', function (
     $scope._makePickColumns("storeDayChannelCtrl");
 
     // 그리드 링크 효과
-    s.formatItem.addHandler(function (s, e) {
-      if (e.panel === s.cells) {
-        var col = s.columns[e.col];
-        if (col.binding === "saleDate") { // 일자
-          wijmo.addClass(e.cell, 'wijLink');
-          wijmo.addClass(e.cell, 'wj-custom-readonly');
-        }
-        if (col.binding === "billCnt") { // 영수건수
-          wijmo.addClass(e.cell, 'wijLink');
-          wijmo.addClass(e.cell, 'wj-custom-readonly');
-        }
-        if (col.binding === "totDcAmt") { // 총할인
-          wijmo.addClass(e.cell, 'wijLink');
-          wijmo.addClass(e.cell, 'wj-custom-readonly');
-        }
-
-        // 결제수단
-        for (var i = 0; i < payColList.length; i++) {
-          if (col.binding === ("pay" + payColList[i].payCd)) {
-            var item = s.rows[e.row].dataItem;
-
-            // 값이 있으면 링크 효과
-            if (nvl(item[("pay" + payColList[i].payCd)], '') !== '') {
-              wijmo.addClass(e.cell, 'wijLink');
-              wijmo.addClass(e.cell, 'wj-custom-readonly');
-            }
-          }
-        }
-
-        if (col.format === "date") {
-          e.cell.innerHTML = getFormatDate(e.cell.innerText);
-        } else if (col.format === "dateTime") {
-          e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
-        } else if (col.format === "time") {
-          e.cell.innerHTML = getFormatTime(e.cell.innerText, 'hms');
-        }
-      }
-    });
+    // s.formatItem.addHandler(function (s, e) {
+    //   if (e.panel === s.cells) {
+    //     var col = s.columns[e.col];
+    //     if (col.binding === "saleDate") { // 일자
+    //       wijmo.addClass(e.cell, 'wijLink');
+    //       wijmo.addClass(e.cell, 'wj-custom-readonly');
+    //     }
+    //     if (col.binding === "billCnt") { // 영수건수
+    //       wijmo.addClass(e.cell, 'wijLink');
+    //       wijmo.addClass(e.cell, 'wj-custom-readonly');
+    //     }
+    //     if (col.binding === "totDcAmt") { // 총할인
+    //       wijmo.addClass(e.cell, 'wijLink');
+    //       wijmo.addClass(e.cell, 'wj-custom-readonly');
+    //     }
+    //
+    //     // 결제수단
+    //     for (var i = 0; i < payColList.length; i++) {
+    //       if (col.binding === ("pay" + payColList[i].payCd)) {
+    //         var item = s.rows[e.row].dataItem;
+    //
+    //         // 값이 있으면 링크 효과
+    //         if (nvl(item[("pay" + payColList[i].payCd)], '') !== '') {
+    //           wijmo.addClass(e.cell, 'wijLink');
+    //           wijmo.addClass(e.cell, 'wj-custom-readonly');
+    //         }
+    //       }
+    //     }
+    //
+    //     if (col.format === "date") {
+    //       e.cell.innerHTML = getFormatDate(e.cell.innerText);
+    //     } else if (col.format === "dateTime") {
+    //       e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
+    //     } else if (col.format === "time") {
+    //       e.cell.innerHTML = getFormatTime(e.cell.innerText, 'hms');
+    //     }
+    //   }
+    // });
 
     // 그리드 클릭 이벤트
-    s.addEventListener(s.hostElement, 'mousedown', function (e) {
-      var ht = s.hitTest(e);
-      if (ht.cellType === wijmo.grid.CellType.Cell) {
-        var col         = ht.panel.columns[ht.col];
-        var selectedRow = s.rows[ht.row].dataItem;
-        var params      = {};
-        if(nvl(selectedRow.storeCd, '') === ''){
-          $scope._popMsg("본사별 조회시에만 팝업창 확인 가능합니다");
-          return false;
-        }
-
-        params.storeCd  = selectedRow.storeCd;
-        params.saleDate = selectedRow.saleDate.replaceAll("-","");
-        params.gubun = "day";
-
-        if (col.binding === "saleDate") { // 일자 클릭
-          if(orgnFg ==="HQ") {
-            $scope._broadcast('dayStoreDtlCtrl', params);
-          } else if(orgnFg === "STORE"){
-            $scope._broadcast('dayProdDtlCtrl', params);
-          }
-        }
-        if (col.binding === "billCnt") { // 영수건수 클릭
-          if(orgnFg ==="HQ") {
-            $scope._broadcast('dayStoreBillCtrl', params);
-          } else if(orgnFg === "STORE"){
-            $scope._broadcast('dayStoreBill2Ctrl', params);
-          }
-        }
-        if (col.binding === "totDcAmt") { // 총할인 클릭
-          $scope._broadcast('dayStoreDcCtrl', params);
-        }
-
-        // 결제수단
-        for (var i = 0; i < payColList.length; i++) {
-          if (col.binding === ("pay" + payColList[i].payCd)) {
-            // var item = s.rows[e.row].dataItem;
-            var callCtrl = '';
-
-            // 값이 있으면 링크
-            if (nvl(selectedRow[("pay" + payColList[i].payCd)], '') !== '') {
-              callCtrl = 'day'+ (payColList[i].payMethod.substr(0,1).toUpperCase() + payColList[i].payMethod.substr(1).toLowerCase()).replaceAll("_", "") + 'Ctrl';
-              if(callCtrl == 'dayCashCtrl') {
-                params.cashGubun = "02"
-              }
-              // 현금영수증 클릭시 -> 현금 팝업
-              if(callCtrl == 'dayCashbillCtrl') {
-                params.cashGubun = "021";
-                callCtrl = 'dayCashCtrl';
-              }
-              $scope._broadcast(callCtrl, params);
-            }
-          }
-        }
-
-      }
-    });
+    // s.addEventListener(s.hostElement, 'mousedown', function (e) {
+    //   var ht = s.hitTest(e);
+    //   if (ht.cellType === wijmo.grid.CellType.Cell) {
+    //     var col         = ht.panel.columns[ht.col];
+    //     var selectedRow = s.rows[ht.row].dataItem;
+    //     var params      = {};
+    //     if(nvl(selectedRow.storeCd, '') === ''){
+    //       $scope._popMsg("매장별 조회시에만 팝업창 확인 가능합니다");
+    //       return false;
+    //     }
+    //
+    //     params.storeCd  = selectedRow.storeCd;
+    //     params.saleDate = selectedRow.saleDate.replaceAll("-","");
+    //     params.gubun = "day";
+    //
+    //     if (col.binding === "saleDate") { // 일자 클릭
+    //       if(orgnFg ==="HQ") {
+    //         $scope._broadcast('dayStoreDtlCtrl', params);
+    //       } else if(orgnFg === "STORE"){
+    //         $scope._broadcast('dayProdDtlCtrl', params);
+    //       }
+    //     }
+    //     if (col.binding === "billCnt") { // 영수건수 클릭
+    //       if(orgnFg ==="HQ") {
+    //         $scope._broadcast('dayStoreBillCtrl', params);
+    //       } else if(orgnFg === "STORE"){
+    //         $scope._broadcast('dayStoreBill2Ctrl', params);
+    //       }
+    //     }
+    //     if (col.binding === "totDcAmt") { // 총할인 클릭
+    //       $scope._broadcast('dayStoreDcCtrl', params);
+    //     }
+    //
+    //     // 결제수단
+    //     for (var i = 0; i < payColList.length; i++) {
+    //       if (col.binding === ("pay" + payColList[i].payCd)) {
+    //         // var item = s.rows[e.row].dataItem;
+    //         var callCtrl = '';
+    //
+    //         // 값이 있으면 링크
+    //         if (nvl(selectedRow[("pay" + payColList[i].payCd)], '') !== '') {
+    //           callCtrl = 'day'+ (payColList[i].payMethod.substr(0,1).toUpperCase() + payColList[i].payMethod.substr(1).toLowerCase()).replaceAll("_", "") + 'Ctrl';
+    //           if(callCtrl == 'dayCashCtrl') {
+    //             params.cashGubun = "02"
+    //           }
+    //           // 현금영수증 클릭시 -> 현금 팝업
+    //           if(callCtrl == 'dayCashbillCtrl') {
+    //             params.cashGubun = "021";
+    //             callCtrl = 'dayCashCtrl';
+    //           }
+    //           $scope._broadcast(callCtrl, params);
+    //         }
+    //       }
+    //     }
+    //
+    //   }
+    // });
 
     // add the new GroupRow to the grid's 'columnFooters' panel
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
@@ -150,12 +160,19 @@ app.controller('storeDayChannelCtrl', ['$scope', '$http', '$timeout', function (
     dataItem.totEtcAmt   = messages["day.dayTotal.totEtcAmt"];
     dataItem.cupAmt   = messages["day.dayTotal.cupAmt"];
     dataItem.totPayAmt   = messages["day.dayTotal.payMethod"];
-    dataItem.genRealSaleAmt   = messages["day.dayTotal.dlvrPack"];
-    dataItem.genRealSaleRate   = messages["day.dayTotal.dlvrPack"];
-    dataItem.dlvrRealSaleAmt   = messages["day.dayTotal.dlvrPack"];
-    dataItem.dlvrRealSaleRate   = messages["day.dayTotal.dlvrPack"];
-    dataItem.packRealSaleAmt   = messages["day.dayTotal.dlvrPack"];
-    dataItem.packRealSaleRate   = messages["day.dayTotal.dlvrPack"];
+
+    dataItem.stinBillCnt      = messages["storeDayChannel.stin"];
+    dataItem.stinBillUprc     = messages["storeDayChannel.stin"];
+    dataItem.stinRealSaleAmt  = messages["storeDayChannel.stin"];
+    dataItem.stinRate         = messages["storeDayChannel.stin"];
+    dataItem.dlvrBillCnt      = messages["storeDayChannel.dlvr"];
+    dataItem.dlvrBillUprc     = messages["storeDayChannel.dlvr"];
+    dataItem.dlvrRealSaleAmt  = messages["storeDayChannel.dlvr"];
+    dataItem.dlvrRate         = messages["storeDayChannel.dlvr"];
+    dataItem.packBillCnt      = messages["storeDayChannel.pack"];
+    dataItem.packBillUprc     = messages["storeDayChannel.pack"];
+    dataItem.packRealSaleAmt  = messages["storeDayChannel.pack"];
+    dataItem.packRate         = messages["storeDayChannel.pack"];
 
     // 결제수단 헤더머지 컬럼 생성
     for (var i = 0; i < arrPayCol.length; i++) {
@@ -250,6 +267,26 @@ app.controller('storeDayChannelCtrl', ['$scope', '$http', '$timeout', function (
     params.payCol    = payCol;
     params.dlvrInFgCol = dlvrInFgCol;
     params.option = $scope.option;
+    params.prodHqBrandCd = $scope.prodHqBrandCd;
+    params.momsTeam = $scope.momsTeam;
+    params.momsAcShop = $scope.momsAcShop;
+    params.momsAreaFg = $scope.momsAreaFg;
+    params.momsCommercial = $scope.momsCommercial;
+    params.momsShopType = $scope.momsShopType;
+    params.momsStoreManageType = $scope.momsStoreManageType;
+    params.branchCd = $scope.branchCd;
+    params.storeHqBrandCd = $scope.storeHqBrandCd;
+    // '전체' 일때
+    if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+      var momsHqBrandCd = "";
+      for(var i=0; i < momsHqBrandCdComboList.length; i++){
+        if(momsHqBrandCdComboList[i].value !== null) {
+          momsHqBrandCd += momsHqBrandCdComboList[i].value + ","
+        }
+      }
+      params.userBrands = momsHqBrandCd;
+    }
+    console.log(params);
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/store/storeDayChannel/storeDayChannel/getDayList.sb", params, function (){
@@ -280,11 +317,21 @@ app.controller('storeDayChannelCtrl', ['$scope', '$http', '$timeout', function (
     });
   };
 
+  // 확장조회 숨김/보임
+  $scope.searchAddShowChange = function(){
+    if( $("#tblSearchAddShow").css("display") === 'none') {
+      $("#tblSearchAddShow").show();
+    } else {
+      $("#tblSearchAddShow").hide();
+    }
+  };
+
+  // 옵션(지사별/매장별)에 따라 매장선택 숨김/보임
   $scope.changeOption = function (s){
     if(s.selectedValue === "branch"){
-      $("#dayStore").hide();
+      $(".dayStore").hide();
     } else if(s.selectedValue === "store"){
-      $("#dayStore").show();
+      $(".dayStore").show();
     }
   }
 

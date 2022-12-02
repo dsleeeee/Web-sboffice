@@ -10,12 +10,20 @@
 
 <div class="subCon">
   <div ng-controller="dayMomsCtrl">
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
       <a href="#" class="open fl">${menuNm}</a>
-      <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('dayMomsCtrl')">
-        <s:message code="cmm.search"/>
-      </button>
+      <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+        <%-- 조회 --%>
+        <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('dayMomsCtrl')">
+          <s:message code="cmm.search"/>
+        </button>
+        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+          <%-- 확장조회 --%>
+          <button class="btn_blue mr5 fl" id="btnSearchAddShow" ng-click="searchAddShowChange()">
+            <s:message code="cmm.search.addShow" />
+          </button>
+        </c:if>
+      </div>
     </div>
     <table class="searchTbl">
       <colgroup>
@@ -38,9 +46,24 @@
       </tr>
       <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <tr>
-            <%-- 매장코드 --%>
+          <%-- 매장브랜드 --%>
+          <th><s:message code="dayProd.storeHqBrand"/></th>
+          <td>
+            <div class="sb-select">
+              <wj-combo-box
+                      id="srchStoreHqBrandCdCombo"
+                      ng-model="storeHqBrandCd"
+                      items-source="_getComboData('storeHqBrandCdCombo')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      control="srchStoreHqBrandCdCombo">
+              </wj-combo-box>
+            </div>
+          </td>
+          <%-- 매장코드 --%>
           <th><s:message code="cmm.store"/></th>
-          <td colspan="3">
+          <td>
               <%-- 매장선택 모듈 싱글 선택 사용시 include
                    param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
                                 displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
@@ -59,6 +82,142 @@
       </c:if>
       </tbody>
     </table>
+    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+      <table class="searchTbl" id="tblSearchAddShow" style="display: none;">
+        <colgroup>
+          <col class="w15"/>
+          <col class="w35"/>
+          <col class="w15"/>
+          <col class="w35"/>
+        </colgroup>
+        <tbody>
+        <tr>
+            <%-- 팀별 --%>
+          <th><s:message code="dayProd.momsTeam"/></th>
+          <td>
+            <div class="sb-select">
+              <wj-combo-box
+                      id="srchMomsTeamCombo"
+                      ng-model="momsTeam"
+                      items-source="_getComboData('momsTeamCombo')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      initialized="_initComboBox(s)"
+                      control="srchMomsTeamCombo">
+              </wj-combo-box>
+            </div>
+          </td>
+            <%-- AC점포별 --%>
+          <th><s:message code="dayProd.momsAcShop"/></th>
+          <td>
+            <div class="sb-select">
+              <wj-combo-box
+                      id="srchMomsAcShopCombo"
+                      ng-model="momsAcShop"
+                      items-source="_getComboData('momsAcShopCombo')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      initialized="_initComboBox(s)"
+                      control="srchMomsAcShopCombo">
+              </wj-combo-box>
+            </div>
+          </td>
+        </tr>
+        <tr>
+            <%-- 지역구분 --%>
+          <th><s:message code="dayProd.momsAreaFg"/></th>
+          <td>
+            <div class="sb-select">
+              <wj-combo-box
+                      id="srchMomsAreaFgCombo"
+                      ng-model="momsAreaFg"
+                      items-source="_getComboData('momsAreaFgCombo')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      initialized="_initComboBox(s)"
+                      control="srchMomsAreaFgCombo">
+              </wj-combo-box>
+            </div>
+          </td>
+            <%-- 상권 --%>
+          <th><s:message code="dayProd.momsCommercial"/></th>
+          <td>
+            <div class="sb-select">
+              <wj-combo-box
+                      id="srchMomsCommercialCombo"
+                      ng-model="momsCommercial"
+                      items-source="_getComboData('momsCommercialCombo')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      initialized="_initComboBox(s)"
+                      control="srchMomsCommercialCombo">
+              </wj-combo-box>
+            </div>
+          </td>
+        </tr>
+        <tr>
+            <%-- 점포유형 --%>
+          <th><s:message code="dayProd.momsShopType"/></th>
+          <td>
+            <div class="sb-select">
+              <wj-combo-box
+                      id="srchMomsShopTypeCombo"
+                      ng-model="momsShopType"
+                      items-source="_getComboData('momsShopTypeCombo')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      initialized="_initComboBox(s)"
+                      control="srchMomsShopTypeCombo">
+              </wj-combo-box>
+            </div>
+          </td>
+            <%-- 매장관리타입 --%>
+          <th><s:message code="dayProd.momsStoreManageType"/></th>
+          <td>
+            <div class="sb-select">
+              <wj-combo-box
+                      id="srchMomsStoreManageTypeCombo"
+                      ng-model="momsStoreManageType"
+                      items-source="_getComboData('momsStoreManageTypeCombo')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      initialized="_initComboBox(s)"
+                      control="srchMomsStoreManageTypeCombo">
+              </wj-combo-box>
+            </div>
+          </td>
+        </tr>
+        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+          <tr>
+              <%-- 지사 --%>
+            <th><s:message code="dayProd.branchCd"/></th>
+            <td>
+              <div class="sb-select">
+                <wj-combo-box
+                        id="srchBranchCdComboo"
+                        ng-model="branchCd"
+                        items-source="_getComboData('branchCdCombo')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        initialized="_initComboBox(s)"
+                        control="srchBranchCdComboo">
+                </wj-combo-box>
+              </div>
+            </td>
+            <td></td>
+            <td></td>
+          </tr>
+        </c:if>
+        </tbody>
+      </table>
+    </c:if>
 
     <div class="mt10 oh sb-select dkbr">
       <%-- 엑셀다운로드 --%>
@@ -125,6 +284,16 @@
   var hqOfficeCd = "${hqOfficeCd}";
   var storeCd = "${storeCd}";
 
+  // List 형식("" 안붙임)
+  var momsHqBrandCdComboList = ${momsHqBrandCdComboList};
+  var branchCdComboList = ${branchCdComboList};
+  var momsTeamComboList = ${momsTeamComboList};
+  var momsAcShopComboList = ${momsAcShopComboList};
+  var momsAreaFgComboList = ${momsAreaFgComboList};
+  var momsCommercialComboList = ${momsCommercialComboList};
+  var momsShopTypeComboList = ${momsShopTypeComboList};
+  var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
+
   // 결제수단
   var payColList = [];
   <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
@@ -164,7 +333,7 @@
   var dlvrInFgCol = '${dlvrInFgCol}';
   var arrDlvrInFgCol = dlvrInFgCol.split(',');
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayMoms/dayMoms.js?ver=20221006.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayMoms/dayMoms.js?ver=20221129.01" charset="utf-8"></script>
 
 <%-- 팝업 레이어 시작 --%>
 <%-- 매장별 매출현황 팝업 레이어 --%>
@@ -213,101 +382,101 @@
 </c:import>
 <%-- //팝업 레이어 --%>
 
-
+<%-- 팝업 추후 개발 --%>
 <%-- 결제수단 팝업 레이어 시작 --%>
 <%-- 신용카드 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayCard.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayCard.jsp">--%>
+<%--  <c:param name="menuCd" value="${menuCd}"/>--%>
+<%--  <c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
 
-<%-- 현금 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayCash.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--&lt;%&ndash; 현금 상세 레이어 &ndash;%&gt;--%>
+<%--<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayCash.jsp">--%>
+<%--  <c:param name="menuCd" value="${menuCd}"/>--%>
+<%--  <c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
 
-<%-- PAYCO 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayPayco.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--&lt;%&ndash; PAYCO 상세 레이어 &ndash;%&gt;--%>
+<%--<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayPayco.jsp">--%>
+<%--  <c:param name="menuCd" value="${menuCd}"/>--%>
+<%--  <c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
 
-<%-- VMEM 포인트 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayVpoint.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--&lt;%&ndash; VMEM 포인트 상세 레이어 &ndash;%&gt;--%>
+<%--<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayVpoint.jsp">--%>
+<%--  <c:param name="menuCd" value="${menuCd}"/>--%>
+<%--  <c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
 
-<%-- VMEM 전자상품권 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayVcharge.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--&lt;%&ndash; VMEM 전자상품권 상세 레이어 &ndash;%&gt;--%>
+<%--<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayVcharge.jsp">--%>
+<%--  <c:param name="menuCd" value="${menuCd}"/>--%>
+<%--  <c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
 
-<%-- 모바일페이 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayMpay.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--&lt;%&ndash; 모바일페이 상세 레이어 &ndash;%&gt;--%>
+<%--<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayMpay.jsp">--%>
+<%--  <c:param name="menuCd" value="${menuCd}"/>--%>
+<%--  <c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
 
-<%-- 모바일쿠폰 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayMcoupn.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--&lt;%&ndash; 모바일쿠폰 상세 레이어 &ndash;%&gt;--%>
+<%--<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayMcoupn.jsp">--%>
+<%--  <c:param name="menuCd" value="${menuCd}"/>--%>
+<%--  <c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
 
-<%-- 포인트 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayPoint.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--&lt;%&ndash; 포인트 상세 레이어 &ndash;%&gt;--%>
+<%--<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayPoint.jsp">--%>
+<%--  <c:param name="menuCd" value="${menuCd}"/>--%>
+<%--  <c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
 
-<%-- 회원선불 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayPrepaid.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--&lt;%&ndash; 회원선불 상세 레이어 &ndash;%&gt;--%>
+<%--<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayPrepaid.jsp">--%>
+<%--  <c:param name="menuCd" value="${menuCd}"/>--%>
+<%--  <c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
 
-<%-- 회원후불 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayPostpaid.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--&lt;%&ndash; 회원후불 상세 레이어 &ndash;%&gt;--%>
+<%--<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayPostpaid.jsp">--%>
+<%--  <c:param name="menuCd" value="${menuCd}"/>--%>
+<%--  <c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
 
-<%-- 상품권 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayGift.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--&lt;%&ndash; 상품권 상세 레이어 &ndash;%&gt;--%>
+<%--<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayGift.jsp">--%>
+<%--  <c:param name="menuCd" value="${menuCd}"/>--%>
+<%--  <c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
 
-<%-- 식권 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayFstmp.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--&lt;%&ndash; 식권 상세 레이어 &ndash;%&gt;--%>
+<%--<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayFstmp.jsp">--%>
+<%--  <c:param name="menuCd" value="${menuCd}"/>--%>
+<%--  <c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
 
-<%-- 제휴카드 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayPartner.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--&lt;%&ndash; 제휴카드 상세 레이어 &ndash;%&gt;--%>
+<%--<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayPartner.jsp">--%>
+<%--  <c:param name="menuCd" value="${menuCd}"/>--%>
+<%--  <c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
 
-<%-- 사원카드 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayEmpCard.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--&lt;%&ndash; 사원카드 상세 레이어 &ndash;%&gt;--%>
+<%--<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayEmpCard.jsp">--%>
+<%--  <c:param name="menuCd" value="${menuCd}"/>--%>
+<%--  <c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
 
-<%-- 가승인 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayTemporary.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--&lt;%&ndash; 가승인 상세 레이어 &ndash;%&gt;--%>
+<%--<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayTemporary.jsp">--%>
+<%--  <c:param name="menuCd" value="${menuCd}"/>--%>
+<%--  <c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
 
-<%-- 스마트오더 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayVorder.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--&lt;%&ndash; 스마트오더 상세 레이어 &ndash;%&gt;--%>
+<%--<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayPayInfo/dayVorder.jsp">--%>
+<%--  <c:param name="menuCd" value="${menuCd}"/>--%>
+<%--  <c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
 <%-- //결제수단 팝업 레이어 --%>

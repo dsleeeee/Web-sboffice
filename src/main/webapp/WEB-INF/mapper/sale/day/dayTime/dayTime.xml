@@ -19,7 +19,7 @@
     <select id="getDayTimeList" parameterType="dayTimeVO" resultType="DefaultMap">
         /* DayTimeMapper.getDayTimeList */
         <if test="optionFg != null and optionFg.toString() == 'time'">
-            SELECT  COUNT(DISTINCT STORE_CD) AS STORE_CNT
+            SELECT  COUNT(DISTINCT tssh.STORE_CD) AS STORE_CNT
             <if test='option != null and option != "" and option == "day"'>
             ,       TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
             ,       TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
@@ -37,16 +37,54 @@
             ,           SUM(CASE WHEN SALE_HOUR = ${item} THEN REAL_SALE_AMT END) AS REAL_SALE_AMT${item}
                     </foreach>
             FROM    TB_SL_DAILY_TIME tssh
-            WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+            ,       TB_MS_STORE tms
+            ,       TB_MS_STORE_INFO tmsi
+            WHERE   tssh.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+            AND     tssh.STORE_CD = tms.STORE_CD
+            AND     tssh.STORE_CD = tmsi.STORE_CD (+)
+            AND     tssh.HQ_OFFICE_CD = #{hqOfficeCd}
             AND     SALE_DATE  BETWEEN #{startDate} AND #{endDate}
             <if test='storeCds != null and storeCds != ""'>
-                AND STORE_CD IN
+                AND tssh.STORE_CD IN
                 <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
                     #{item}
                 </foreach>
             </if>
             <if test='startTime != "0" or endTime != "23"'>
                 AND SALE_HOUR BETWEEN #{startTime} AND #{endTime}
+            </if>
+            <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+            </if>
+            <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                <if test='userBrands != null and userBrands != ""'>
+                    -- 매장브랜드 전체일때
+                    AND tms.HQ_BRAND_CD IN
+                    <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+            </if>
+            <if test='momsTeam != null and momsTeam != ""'>
+                AND tmsi.MOMS_TEAM = #{momsTeam}
+            </if>
+            <if test='momsAcShop != null and momsAcShop != ""'>
+                AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+            </if>
+            <if test='momsAreaFg != null and momsAreaFg != ""'>
+                AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+            </if>
+            <if test='momsCommercial != null and momsCommercial != ""'>
+                AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+            </if>
+            <if test='momsShopType != null and momsShopType != ""'>
+                AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+            </if>
+            <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+            </if>
+            <if test='branchCd != null and branchCd != ""'>
+                AND tms.BRANCH_CD = #{branchCd}
             </if>
             HAVING SUM(TOT_SALE_AMT) IS NOT NULL
             <if test='option != null and option != "" and option == "day"'>
@@ -89,7 +127,7 @@
                     ,           SUM(CASE WHEN TIME_SLOT = ${item} THEN REAL_SALE_AMT END) AS REAL_SALE_AMT${item}
                             </foreach>
                     FROM   (
-                            SELECT  STORE_CD
+                            SELECT  tsdt.STORE_CD
                             <if test='option != null and option != "" and option == "day"'>
                             ,       SALE_DATE
                             </if>
@@ -110,11 +148,16 @@
                                     AND		NMCODE_GRP_CD ='001'
                                     GROUP BY NMCODE_NM
                                     ) thn
-                            WHERE 	tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+                            ,       TB_MS_STORE tms
+                            ,       TB_MS_STORE_INFO tmsi
+                            WHERE   tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                            AND     tsdt.STORE_CD = tms.STORE_CD
+                            AND     tsdt.STORE_CD = tmsi.STORE_CD (+)
+                            AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
                             AND 	tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                             AND     tsdt.SALE_HOUR BETWEEN thn.START_TIME AND thn.END_TIME
                             <if test='storeCds != null and storeCds != ""'>
-                                AND STORE_CD IN
+                                AND tsdt.STORE_CD IN
                                 <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
                                     #{item}
                                 </foreach>
@@ -122,7 +165,40 @@
                             <if test='timeSlot != null and timeSlot != ""'>
                                 AND TIME_SLOT = replace(#{timeSlot},'~','')
                             </if>
-                            GROUP BY STORE_CD, TIME_SLOT
+                            <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                                AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                            </if>
+                            <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                                <if test='userBrands != null and userBrands != ""'>
+                                    -- 매장브랜드 전체일때
+                                    AND tms.HQ_BRAND_CD IN
+                                    <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                            </if>
+                            <if test='momsTeam != null and momsTeam != ""'>
+                                AND tmsi.MOMS_TEAM = #{momsTeam}
+                            </if>
+                            <if test='momsAcShop != null and momsAcShop != ""'>
+                                AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                            </if>
+                            <if test='momsAreaFg != null and momsAreaFg != ""'>
+                                AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                            </if>
+                            <if test='momsCommercial != null and momsCommercial != ""'>
+                                AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                            </if>
+                            <if test='momsShopType != null and momsShopType != ""'>
+                                AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                            </if>
+                            <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                                AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                            </if>
+                            <if test='branchCd != null and branchCd != ""'>
+                                AND tms.BRANCH_CD = #{branchCd}
+                            </if>
+                            GROUP BY tsdt.STORE_CD, TIME_SLOT
                             <if test='option != null and option != "" and option == "day"'>
                                    , SALE_DATE
                             </if>

@@ -2,11 +2,10 @@ package kr.co.solbipos.sale.store.storeDayChannel.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
-import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.store.storeDayChannel.service.StoreDayChannelService;
 import kr.co.solbipos.sale.store.storeDayChannel.service.StoreDayChannelVO;
-import kr.co.solbipos.sale.store.storeMonthChannel.service.StoreMonthChannelVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,6 +54,15 @@ public class StoreDayChannelServiceImpl implements StoreDayChannelService {
         if(arrDlvrInFgCol.length > 0){
             if(arrDlvrInFgCol[0] != null && !"".equals(arrDlvrInFgCol[0])){
                 storeDayChannelVO.setArrDlvrInFgCol(arrDlvrInFgCol);
+            }
+        }
+
+        // 매장브랜드 '전체' 일때
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            if (storeDayChannelVO.getStoreHqBrandCd() == "" || storeDayChannelVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = storeDayChannelVO.getUserBrands().split(",");
+                storeDayChannelVO.setUserBrandList(userBrandList);
             }
         }
 

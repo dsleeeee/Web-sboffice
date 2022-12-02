@@ -52,6 +52,45 @@ public class MonthMomsVO extends PageVO {
     /** 주문채널 구분자 array */
     private String arrDlvrInFgCol[];
 
+    /** 사용자 아이디 */
+    private String userId;
+
+    /** 사용자별 브랜드코드 */
+    private String[] userBrandList;
+
+    /** 사용자별 브랜드코드 */
+    private String userBrands;
+
+    /** 매장브랜드코드 */
+    private String storeHqBrandCd;
+
+    /** 명칭코드그룹코드 */
+    private String nmcodeGrpCd;
+
+    /** 사용자별 본사 공통코드 */
+    private String userHqNmcodeCd;
+
+    /** 팀별 */
+    private String momsTeam;
+
+    /** AC점포별 */
+    private String momsAcShop;
+
+    /** 지역구분 */
+    private String momsAreaFg;
+
+    /** 상권 */
+    private String momsCommercial;
+
+    /** 점포유형 */
+    private String momsShopType;
+
+    /** 매장관리타입 */
+    private String momsStoreManageType;
+
+    /** 지사코드 */
+    private String branchCd;
+
     public String getHqOfficeCd() { return hqOfficeCd; }
 
     public void setHqOfficeCd(String hqOfficeCd) { this.hqOfficeCd = hqOfficeCd; }
@@ -130,5 +169,109 @@ public class MonthMomsVO extends PageVO {
 
     public void setArrDlvrInFgCol(String[] arrDlvrInFgCol) {
         this.arrDlvrInFgCol = arrDlvrInFgCol;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String[] getUserBrandList() {
+        return userBrandList;
+    }
+
+    public void setUserBrandList(String[] userBrandList) {
+        this.userBrandList = userBrandList;
+    }
+
+    public String getUserBrands() {
+        return userBrands;
+    }
+
+    public void setUserBrands(String userBrands) {
+        this.userBrands = userBrands;
+    }
+
+    public String getStoreHqBrandCd() {
+        return storeHqBrandCd;
+    }
+
+    public void setStoreHqBrandCd(String storeHqBrandCd) {
+        this.storeHqBrandCd = storeHqBrandCd;
+    }
+
+    public String getNmcodeGrpCd() {
+        return nmcodeGrpCd;
+    }
+
+    public void setNmcodeGrpCd(String nmcodeGrpCd) {
+        this.nmcodeGrpCd = nmcodeGrpCd;
+    }
+
+    public String getUserHqNmcodeCd() {
+        return userHqNmcodeCd;
+    }
+
+    public void setUserHqNmcodeCd(String userHqNmcodeCd) {
+        this.userHqNmcodeCd = userHqNmcodeCd;
+    }
+
+    public String getMomsTeam() {
+        return momsTeam;
+    }
+
+    public void setMomsTeam(String momsTeam) {
+        this.momsTeam = momsTeam;
+    }
+
+    public String getMomsAcShop() {
+        return momsAcShop;
+    }
+
+    public void setMomsAcShop(String momsAcShop) {
+        this.momsAcShop = momsAcShop;
+    }
+
+    public String getMomsAreaFg() {
+        return momsAreaFg;
+    }
+
+    public void setMomsAreaFg(String momsAreaFg) {
+        this.momsAreaFg = momsAreaFg;
+    }
+
+    public String getMomsCommercial() {
+        return momsCommercial;
+    }
+
+    public void setMomsCommercial(String momsCommercial) {
+        this.momsCommercial = momsCommercial;
+    }
+
+    public String getMomsShopType() {
+        return momsShopType;
+    }
+
+    public void setMomsShopType(String momsShopType) {
+        this.momsShopType = momsShopType;
+    }
+
+    public String getMomsStoreManageType() {
+        return momsStoreManageType;
+    }
+
+    public void setMomsStoreManageType(String momsStoreManageType) {
+        this.momsStoreManageType = momsStoreManageType;
+    }
+
+    public String getBranchCd() {
+        return branchCd;
+    }
+
+    public void setBranchCd(String branchCd) {
+        this.branchCd = branchCd;
     }
 }

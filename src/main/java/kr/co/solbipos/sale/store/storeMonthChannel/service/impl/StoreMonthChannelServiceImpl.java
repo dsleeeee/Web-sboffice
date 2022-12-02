@@ -76,6 +76,15 @@ public class StoreMonthChannelServiceImpl implements StoreMonthChannelService {
             }
         }
 
+        // 매장브랜드 '전체' 일때
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            if (storeMonthChannelVO.getStoreHqBrandCd() == "" || storeMonthChannelVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = storeMonthChannelVO.getUserBrands().split(",");
+                storeMonthChannelVO.setUserBrandList(userBrandList);
+            }
+        }
+
         return storeMonthChannelMapper.getMonthList(storeMonthChannelVO);
     }
 }

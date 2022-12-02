@@ -47,7 +47,7 @@
                 </foreach>
         FROM    (
                 SELECT SUBSTR(SALE_DATE,0,6) AS SALE_YM,
-                COUNT(DISTINCT STORE_CD) AS STORE_CNT,
+                COUNT(DISTINCT tsdtd.STORE_CD) AS STORE_CNT,
                 COUNT(DISTINCT SALE_DATE) AS SALE_CNT,
                 SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
                 SUM(TOT_DC_AMT) AS TOT_DC_AMT,
@@ -74,14 +74,52 @@
                 SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT,
                 SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
                 SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
-                FROM    TB_SL_DAILY_TOTAL_DLVR
-                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                FROM    TB_SL_DAILY_TOTAL_DLVR tsdtd
+                ,       TB_MS_STORE tms
+                ,       TB_MS_STORE_INFO tmsi
+                WHERE   tsdtd.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                AND     tsdtd.STORE_CD = tms.STORE_CD
+                AND     tsdtd.STORE_CD = tmsi.STORE_CD (+)
+                AND     tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND     SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth}||'31'
                 <if test='storeCds != null and storeCds != ""'>
-                    AND STORE_CD IN
+                    AND tsdtd.STORE_CD IN
                     <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
                         #{item}
                     </foreach>
+                </if>
+                <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                    AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                </if>
+                <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                    <if test='userBrands != null and userBrands != ""'>
+                        -- 매장브랜드 전체일때
+                        AND tms.HQ_BRAND_CD IN
+                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                </if>
+                <if test='momsTeam != null and momsTeam != ""'>
+                    AND tmsi.MOMS_TEAM = #{momsTeam}
+                </if>
+                <if test='momsAcShop != null and momsAcShop != ""'>
+                    AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                </if>
+                <if test='momsAreaFg != null and momsAreaFg != ""'>
+                    AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                </if>
+                <if test='momsCommercial != null and momsCommercial != ""'>
+                    AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                </if>
+                <if test='momsShopType != null and momsShopType != ""'>
+                    AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                </if>
+                <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                    AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                </if>
+                <if test='branchCd != null and branchCd != ""'>
+                    AND tms.BRANCH_CD = #{branchCd}
                 </if>
                 GROUP BY    SUBSTR(SALE_DATE,0,6)
                 ) tsdt
@@ -92,12 +130,50 @@
                 ,		SUM(CASE WHEN DLVR_IN_FG = ${item} THEN REAL_SALE_AMT END) AS REAL_SALE_AMT${item}
                 </foreach>
                 FROM    TB_SL_MONTHLY_TOTAL_ORDAPP tsdto
-                WHERE   tsdto.HQ_OFFICE_CD  = #{hqOfficeCd}
+                ,       TB_MS_STORE tms
+                ,       TB_MS_STORE_INFO tmsi
+                WHERE   tsdto.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                AND     tsdto.STORE_CD = tms.STORE_CD
+                AND     tsdto.STORE_CD = tmsi.STORE_CD (+)
+                AND     tsdto.HQ_OFFICE_CD  = #{hqOfficeCd}
                 <if test='storeCds != null and storeCds != ""'>
                     AND tsdto.STORE_CD IN
                     <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
                         #{item}
                     </foreach>
+                </if>
+                <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                    AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                </if>
+                <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                    <if test='userBrands != null and userBrands != ""'>
+                        -- 매장브랜드 전체일때
+                        AND tms.HQ_BRAND_CD IN
+                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                </if>
+                <if test='momsTeam != null and momsTeam != ""'>
+                    AND tmsi.MOMS_TEAM = #{momsTeam}
+                </if>
+                <if test='momsAcShop != null and momsAcShop != ""'>
+                    AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                </if>
+                <if test='momsAreaFg != null and momsAreaFg != ""'>
+                    AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                </if>
+                <if test='momsCommercial != null and momsCommercial != ""'>
+                    AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                </if>
+                <if test='momsShopType != null and momsShopType != ""'>
+                    AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                </if>
+                <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                    AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                </if>
+                <if test='branchCd != null and branchCd != ""'>
+                    AND tms.BRANCH_CD = #{branchCd}
                 </if>
                 AND     tsdto.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
                 GROUP BY tsdto.SALE_YM
