@@ -44,6 +44,19 @@ public class StoreOpenCloseServiceImpl implements StoreOpenCloseService {
         storeOpenCloseVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         storeOpenCloseVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
+        // 매장 array 값 세팅
+        String[] storeCds = storeOpenCloseVO.getStoreCds().split(",");
+        storeOpenCloseVO.setStoreCdList(storeCds);
+
+        // 매장브랜드 '전체' 일때
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            if (storeOpenCloseVO.getStoreHqBrandCd() == "" || storeOpenCloseVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = storeOpenCloseVO.getUserBrands().split(",");
+                storeOpenCloseVO.setUserBrandList(userBrandList);
+            }
+        }
+
         return storeOpenCloseMapper.getStoreOpenCloseDayList(storeOpenCloseVO);
     }
 
@@ -53,6 +66,19 @@ public class StoreOpenCloseServiceImpl implements StoreOpenCloseService {
 
         storeOpenCloseVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         storeOpenCloseVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        // 매장 array 값 세팅
+        String[] storeCds = storeOpenCloseVO.getStoreCds().split(",");
+        storeOpenCloseVO.setStoreCdList(storeCds);
+
+        // 매장브랜드 '전체' 일때
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            if (storeOpenCloseVO.getStoreHqBrandCd() == "" || storeOpenCloseVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = storeOpenCloseVO.getUserBrands().split(",");
+                storeOpenCloseVO.setUserBrandList(userBrandList);
+            }
+        }
 
         if(storeOpenCloseVO.getGubun().equals("none")) {    // 미개점
             return storeOpenCloseMapper.getStoreOpenCloseDayDtlNoneList(storeOpenCloseVO);
@@ -68,6 +94,19 @@ public class StoreOpenCloseServiceImpl implements StoreOpenCloseService {
         storeOpenCloseVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         storeOpenCloseVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
+        // 매장 array 값 세팅
+        String[] storeCds = storeOpenCloseVO.getStoreCds().split(",");
+        storeOpenCloseVO.setStoreCdList(storeCds);
+
+        // 매장브랜드 '전체' 일때
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            if (storeOpenCloseVO.getStoreHqBrandCd() == "" || storeOpenCloseVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = storeOpenCloseVO.getUserBrands().split(",");
+                storeOpenCloseVO.setUserBrandList(userBrandList);
+            }
+        }
+
         return storeOpenCloseMapper.getStoreOpenCloseMonthList(storeOpenCloseVO);
     }
 
@@ -77,6 +116,19 @@ public class StoreOpenCloseServiceImpl implements StoreOpenCloseService {
 
         storeOpenCloseVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         storeOpenCloseVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        // 매장 array 값 세팅
+        String[] storeCds = storeOpenCloseVO.getStoreCds().split(",");
+        storeOpenCloseVO.setStoreCdList(storeCds);
+
+        // 매장브랜드 '전체' 일때
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            if (storeOpenCloseVO.getStoreHqBrandCd() == "" || storeOpenCloseVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = storeOpenCloseVO.getUserBrands().split(",");
+                storeOpenCloseVO.setUserBrandList(userBrandList);
+            }
+        }
 
         return storeOpenCloseMapper.getStoreOpenCloseMonthDtlList(storeOpenCloseVO);
     }

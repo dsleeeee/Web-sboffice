@@ -80,6 +80,15 @@ public class StoreDayTimeServiceImpl implements StoreDayTimeService {
             }
         }
 
+        // 매장브랜드 '전체' 일때
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            if (storeDayTimeVO.getStoreHqBrandCd() == "" || storeDayTimeVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = storeDayTimeVO.getUserBrands().split(",");
+                storeDayTimeVO.setUserBrandList(userBrandList);
+            }
+        }
+
         return storeDayTimeMapper.getStoreDayTimeList(storeDayTimeVO);
     }
 

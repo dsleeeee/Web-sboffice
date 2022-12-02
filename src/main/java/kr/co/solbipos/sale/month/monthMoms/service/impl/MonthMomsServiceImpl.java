@@ -72,6 +72,15 @@ public class MonthMomsServiceImpl implements MonthMomsService {
             }
         }
 
+        // 매장브랜드 '전체' 일때
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            if (monthMomsVO.getStoreHqBrandCd() == "" || monthMomsVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = monthMomsVO.getUserBrands().split(",");
+                monthMomsVO.setUserBrandList(userBrandList);
+            }
+        }
+
         return monthMomsMapper.getMonthMomsList(monthMomsVO);
     }
     

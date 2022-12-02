@@ -32,8 +32,10 @@ app.controller('storeOpenCloseCtrl', ['$scope', '$http', '$timeout', function ($
         $("#storeOpenCloseMonthView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
-        var scope = agrid.getScope("storeOpenCloseDayCtrl");
+        var scope = agrid.getScope("storeOpenCloseDayTimeCtrl");
         scope.flex.refresh();
+        var scope1 = agrid.getScope("storeOpenCloseDayCtrl");
+        scope1.flex.refresh();
         var scope2 = agrid.getScope("storeOpenCloseDayDtlCtrl");
         scope2.flex.refresh();
     };
@@ -46,9 +48,11 @@ app.controller('storeOpenCloseCtrl', ['$scope', '$http', '$timeout', function ($
         $("#storeOpenCloseDayView").hide();
         $("#storeOpenCloseMonthView").show();
 
+        var scope = agrid.getScope("storeOpenCloseMonthTimeCtrl");
+        // scope.flex.refresh();
         // angular 그리드 hide 시 깨지므로 refresh()
-        var scope = agrid.getScope("storeOpenCloseMonthCtrl");
-        scope.flex.refresh();
+        var scope1 = agrid.getScope("storeOpenCloseMonthCtrl");
+        scope1.flex.refresh();
         var scope2 = agrid.getScope("storeOpenCloseMonthDtlCtrl");
         scope2.flex.refresh();
     };

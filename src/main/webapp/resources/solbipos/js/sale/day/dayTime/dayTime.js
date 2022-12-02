@@ -46,6 +46,16 @@ app.controller('dayTimeCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     $scope.startTime     = "0";
     $scope.endTime       = "23";
 
+    // 브랜드 콤보박스 셋팅
+    $scope._setComboData("storeHqBrandCdCombo", momsHqBrandCdComboList); // 매장브랜드
+    $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
+    $scope._setComboData("momsAcShopCombo", momsAcShopComboList); // AC점포별
+    $scope._setComboData("momsAreaFgCombo", momsAreaFgComboList); // 지역구분
+    $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
+    $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
+    $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
+    $scope._setComboData("branchCdCombo", branchCdComboList); // 지사
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
@@ -195,6 +205,25 @@ app.controller('dayTimeCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         params.endTime = $scope.endTime;
         params.timeSlot = $scope.timeSlot;
         params.timeCol= timeSlotCol;
+        params.momsTeam = $scope.momsTeam;
+        params.momsAcShop = $scope.momsAcShop;
+        params.momsAreaFg = $scope.momsAreaFg;
+        params.momsCommercial = $scope.momsCommercial;
+        params.momsShopType = $scope.momsShopType;
+        params.momsStoreManageType = $scope.momsStoreManageType;
+        params.branchCd = $scope.branchCd;
+        params.storeHqBrandCd = $scope.storeHqBrandCd;
+        // '전체' 일때
+        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+            var momsHqBrandCd = "";
+            for(var i=0; i < momsHqBrandCdComboList.length; i++){
+                if(momsHqBrandCdComboList[i].value !== null) {
+                    momsHqBrandCd += momsHqBrandCdComboList[i].value + ","
+                }
+            }
+            params.userBrands = momsHqBrandCd;
+        }
+        console.log(params);
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/day/dayTime/dayTime/getDayTimeList.sb", params, function (){
@@ -243,6 +272,15 @@ app.controller('dayTimeCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             }
 
         });
+    };
+
+    // 확장조회 숨김/보임
+    $scope.searchAddShowChange = function(){
+        if( $("#tblSearchAddShow").css("display") === 'none') {
+            $("#tblSearchAddShow").show();
+        } else {
+            $("#tblSearchAddShow").hide();
+        }
     };
 
     // 매장선택 모듈 팝업 사용시 정의

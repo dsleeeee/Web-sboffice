@@ -532,8 +532,8 @@
                     <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" id="kitchenPrintChk" value="kitchenPrint"/> <%-- 주방프린터 --%>
                     <label for="kitchenPrintChk" ><s:message code="storeManage.kitchenPrint" /></label>
                   </span>
-                    <span class="chk mr10 pdb5 txtIn" style="display: none;"><input type="checkbox" name="copyChk" id="productChk" value="product"/><%-- 상품 --%>
-                    <label for="productChk" ><s:message code="storeManage.product" /></label>
+                      <span class="chk mr10 pdb5 txtIn" <c:if test="${momsEnvstVal == '0'}"> style="display: none;"</c:if>><input type="checkbox" name="copyChk" id="productChk" value="product"/><%-- 상품 --%>
+                      <label for="productChk" ><s:message code="storeManage.product" /></label>
                   </span>
                     <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" id="salePriceChk" value="salePrice"/><%-- 판매가격 --%>
                     <label for="salePriceChk" ><s:message code="storeManage.salePrice" /></label>
@@ -571,7 +571,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20221118.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20221118.02" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">

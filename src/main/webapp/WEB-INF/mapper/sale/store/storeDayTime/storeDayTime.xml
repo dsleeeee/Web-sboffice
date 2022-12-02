@@ -38,10 +38,12 @@
                     </foreach>
             FROM    TB_SL_DAILY_TIME tssh
             ,       TB_MS_STORE tms
+            ,       TB_MS_STORE_INFO tmsi
             WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
             AND     tssh.SALE_DATE  BETWEEN #{startDate} AND #{endDate}
             AND     tssh.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
             AND     tssh.STORE_CD = tms.STORE_CD
+            AND     tssh.STORE_CD = tmsi.STORE_CD(+)
             <if test='storeCds != null and storeCds != ""'>
                 AND tssh.STORE_CD IN
                 <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
@@ -50,6 +52,39 @@
             </if>
             <if test='startTime != "0" or endTime != "23"'>
                 AND SALE_HOUR BETWEEN #{startTime} AND #{endTime}
+            </if>
+            <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+            </if>
+            <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                <if test='userBrands != null and userBrands != ""'>
+                    -- 매장브랜드 전체일때
+                    AND tms.HQ_BRAND_CD IN
+                    <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+            </if>
+            <if test='momsTeam != null and momsTeam != ""'>
+                AND tmsi.MOMS_TEAM = #{momsTeam}
+            </if>
+            <if test='momsAcShop != null and momsAcShop != ""'>
+                AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+            </if>
+            <if test='momsAreaFg != null and momsAreaFg != ""'>
+                AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+            </if>
+            <if test='momsCommercial != null and momsCommercial != ""'>
+                AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+            </if>
+            <if test='momsShopType != null and momsShopType != ""'>
+                AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+            </if>
+            <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+            </if>
+            <if test='branchCd != null and branchCd != ""'>
+                AND tms.BRANCH_CD = #{branchCd}
             </if>
             HAVING SUM(TOT_SALE_AMT) IS NOT NULL
             GROUP BY tms.BRANCH_CD
@@ -136,11 +171,13 @@
                                     GROUP BY NMCODE_NM
                                     ) thn
                             ,       TB_MS_STORE tms
+                            ,       TB_MS_STORE_INFO tmsi
                             WHERE 	tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
                             AND 	tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                             AND     tsdt.SALE_HOUR BETWEEN thn.START_TIME AND thn.END_TIME
                             AND     tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
                             AND     tsdt.STORE_CD = tms.STORE_CD
+                            AND     tsdt.STORE_CD = tmsi.STORE_CD(+)
                             <if test='storeCds != null and storeCds != ""'>
                                 AND tsdt.STORE_CD IN
                                 <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
@@ -149,6 +186,39 @@
                             </if>
                             <if test='timeSlot != null and timeSlot != ""'>
                                 AND TIME_SLOT = replace(#{timeSlot},'~','')
+                            </if>
+                            <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                                AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                            </if>
+                            <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                                <if test='userBrands != null and userBrands != ""'>
+                                    -- 매장브랜드 전체일때
+                                    AND tms.HQ_BRAND_CD IN
+                                    <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                            </if>
+                            <if test='momsTeam != null and momsTeam != ""'>
+                                AND tmsi.MOMS_TEAM = #{momsTeam}
+                            </if>
+                            <if test='momsAcShop != null and momsAcShop != ""'>
+                                AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                            </if>
+                            <if test='momsAreaFg != null and momsAreaFg != ""'>
+                                AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                            </if>
+                            <if test='momsCommercial != null and momsCommercial != ""'>
+                                AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                            </if>
+                            <if test='momsShopType != null and momsShopType != ""'>
+                                AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                            </if>
+                            <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                                AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                            </if>
+                            <if test='branchCd != null and branchCd != ""'>
+                                AND tms.BRANCH_CD = #{branchCd}
                             </if>
                             GROUP BY tms.BRANCH_CD, tsdt.STORE_CD, TIME_SLOT
                             <if test='option != null and option != "" and option == "day"'>

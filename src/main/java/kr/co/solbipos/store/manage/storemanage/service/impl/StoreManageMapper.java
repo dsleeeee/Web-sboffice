@@ -180,6 +180,11 @@ public interface StoreManageMapper {
     int insertStoreSdselClass(StoreManageVO storeManageVO);
     int insertStoreSdselProd(StoreManageVO storeManageVO);
 
+    /** 상품 설명 복사 */
+    int insertStoreProdInfo(StoreManageVO storeManageVO);
+    /** 상품 판매 시간대 복사 */
+    int insertStoreSaleTime(StoreManageVO storeManageVO);
+
     /** 매장 기능키 복사  */
     int copyStoreFnkey(StoreFnkeyVO storeFnkeyVO);
 

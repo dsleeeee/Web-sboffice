@@ -18,6 +18,16 @@ app.controller('monthMomsCtrl', ['$scope', '$http', '$timeout', function ($scope
     selectionMode: "2" // 달력 선택 모드(1:day 2:month)
   });
 
+  // 브랜드 콤보박스 셋팅
+  $scope._setComboData("storeHqBrandCdCombo", momsHqBrandCdComboList); // 매장브랜드
+  $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
+  $scope._setComboData("momsAcShopCombo", momsAcShopComboList); // AC점포별
+  $scope._setComboData("momsAreaFgCombo", momsAreaFgComboList); // 지역구분
+  $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
+  $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
+  $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
+  $scope._setComboData("branchCdCombo", branchCdComboList); // 지사
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
@@ -112,96 +122,96 @@ app.controller('monthMomsCtrl', ['$scope', '$http', '$timeout', function ($scope
 
     //그리드 링크설정
     // ReadOnly 효과설정
-    s.formatItem.addHandler(function (s, e) {
-      if (e.panel === s.cells) {
-        var col = s.columns[e.col];
-        if (col.binding === "yearMonth" || col.binding === "totDcAmt" || col.binding === "billCnt") {
-          wijmo.addClass(e.cell, 'wijLink');
-        }
-
-        // 결제수단
-        for (var i = 0; i < payColList.length; i++) {
-          if (col.binding === ("pay" + payColList[i].payCd)) {
-            var item = s.rows[e.row].dataItem;
-
-            // 값이 있으면 링크 효과
-            if (nvl(item[("pay" + payColList[i].payCd)], '') !== '' && nvl(item[("pay" + payColList[i].payCd)], '') != "0") {
-              wijmo.addClass(e.cell, 'wijLink');
-              wijmo.addClass(e.cell, 'wj-custom-readonly');
-            }
-          }
-        }
-      }
-    });
+    // s.formatItem.addHandler(function (s, e) {
+    //   if (e.panel === s.cells) {
+    //     var col = s.columns[e.col];
+    //     if (col.binding === "yearMonth" || col.binding === "totDcAmt" || col.binding === "billCnt") {
+    //       wijmo.addClass(e.cell, 'wijLink');
+    //     }
+    //
+    //     // 결제수단
+    //     for (var i = 0; i < payColList.length; i++) {
+    //       if (col.binding === ("pay" + payColList[i].payCd)) {
+    //         var item = s.rows[e.row].dataItem;
+    //
+    //         // 값이 있으면 링크 효과
+    //         if (nvl(item[("pay" + payColList[i].payCd)], '') !== '' && nvl(item[("pay" + payColList[i].payCd)], '') != "0") {
+    //           wijmo.addClass(e.cell, 'wijLink');
+    //           wijmo.addClass(e.cell, 'wj-custom-readonly');
+    //         }
+    //       }
+    //     }
+    //   }
+    // });
 
     // 그리드 선택 이벤트
-    s.addEventListener(s.hostElement, 'mousedown', function(e) {
-      var ht = s.hitTest(e);
-      if (ht.cellType === wijmo.grid.CellType.Cell) {
-        var col = ht.panel.columns[ht.col];
-
-        var selectedRow = s.rows[ht.row].dataItem;
-        var params = {};
-        params.yearMonth = selectedRow.yearMonth.replace("-", "");
-        params.storeCd = $("#monthMomsStoreCd").val();
-        if (orgnFg == "STORE") {
-          params.storeCd = storeCd;
-        }
-        params.gubun = "month";
-
-        // 년월 클릭시 상세정보 조회
-        if (col.binding === "yearMonth") {
-          if (orgnFg === "HQ") {
-            $scope._broadcast('dayStoreDtlCtrl', params);
-          } else if (orgnFg === "STORE") {
-            $scope._broadcast('dayDtlCtrl', params);
-          }
-        }
-
-        // 총할인 클릭시 상세정보 조회
-        if (col.binding === "totDcAmt") {
-          $scope._broadcast('dayStoreDcCtrl', params);
-        }
-
-        // 영수건수 클릭시 상세정보 조회
-        if (col.binding === "billCnt") {
-          if (orgnFg === "HQ") {
-            $scope._broadcast('dayStoreBillCtrl', params);
-          } else if (orgnFg === "STORE") {
-            $scope._broadcast('daySumAvgCtrl', params);
-          }
-        }
-
-        // 결제수단
-        for (var i = 0; i < payColList.length; i++) {
-          if (col.binding === ("pay" + payColList[i].payCd)) {
-            var callCtrl = '';
-
-            // 값이 있으면 링크
-            if (nvl(selectedRow[("pay" + payColList[i].payCd)], '') !== '' && nvl(selectedRow[("pay" + payColList[i].payCd)], '') != "0") {
-              callCtrl = 'day' + (payColList[i].payMethod.substr(0, 1).toUpperCase() + payColList[i].payMethod.substr(1).toLowerCase()).replaceAll("_", "") + 'Ctrl';
-              // 포인트 이름이 안맞음(dayMembr->dayPoint)
-              if (callCtrl == 'dayMembrCtrl') {
-                callCtrl = 'dayPointCtrl';
-              }
-              // 사원카드 이름이 안맞음(dayEmp_Card->dayEmpCard)
-              if (callCtrl == 'dayEmp_cardCtrl') {
-                callCtrl = 'dayEmpCardCtrl';
-              }
-              if (callCtrl == "dayCashCtrl") {
-                params.cashGubun = "02";
-              }
-              if (callCtrl == "dayCashbillCtrl") {
-                params.cashGubun = "021";
-                callCtrl = 'dayCashCtrl';
-              }
-              console.log(callCtrl);
-              $scope._broadcast(callCtrl, params);
-            }
-          }
-        }
-      }
-    });
+    // s.addEventListener(s.hostElement, 'mousedown', function(e) {
+    //   var ht = s.hitTest(e);
+    //   if (ht.cellType === wijmo.grid.CellType.Cell) {
+    //     var col = ht.panel.columns[ht.col];
+    //
+    //     var selectedRow = s.rows[ht.row].dataItem;
+    //     var params = {};
+    //     params.yearMonth = selectedRow.yearMonth.replace("-", "");
+    //     params.storeCd = $("#monthMomsStoreCd").val();
+    //     if (orgnFg == "STORE") {
+    //       params.storeCd = storeCd;
+    //     }
+    //     params.gubun = "month";
+    //
+    //     // 년월 클릭시 상세정보 조회
+    //     if (col.binding === "yearMonth") {
+    //       if (orgnFg === "HQ") {
+    //         $scope._broadcast('dayStoreDtlCtrl', params);
+    //       } else if (orgnFg === "STORE") {
+    //         $scope._broadcast('dayDtlCtrl', params);
+    //       }
+    //     }
+    //
+    //     // 총할인 클릭시 상세정보 조회
+    //     if (col.binding === "totDcAmt") {
+    //       $scope._broadcast('dayStoreDcCtrl', params);
+    //     }
+    //
+    //     // 영수건수 클릭시 상세정보 조회
+    //     if (col.binding === "billCnt") {
+    //       if (orgnFg === "HQ") {
+    //         $scope._broadcast('dayStoreBillCtrl', params);
+    //       } else if (orgnFg === "STORE") {
+    //         $scope._broadcast('daySumAvgCtrl', params);
+    //       }
+    //     }
+    //
+    //     // 결제수단
+    //     for (var i = 0; i < payColList.length; i++) {
+    //       if (col.binding === ("pay" + payColList[i].payCd)) {
+    //         var callCtrl = '';
+    //
+    //         // 값이 있으면 링크
+    //         if (nvl(selectedRow[("pay" + payColList[i].payCd)], '') !== '' && nvl(selectedRow[("pay" + payColList[i].payCd)], '') != "0") {
+    //           callCtrl = 'day' + (payColList[i].payMethod.substr(0, 1).toUpperCase() + payColList[i].payMethod.substr(1).toLowerCase()).replaceAll("_", "") + 'Ctrl';
+    //           // 포인트 이름이 안맞음(dayMembr->dayPoint)
+    //           if (callCtrl == 'dayMembrCtrl') {
+    //             callCtrl = 'dayPointCtrl';
+    //           }
+    //           // 사원카드 이름이 안맞음(dayEmp_Card->dayEmpCard)
+    //           if (callCtrl == 'dayEmp_cardCtrl') {
+    //             callCtrl = 'dayEmpCardCtrl';
+    //           }
+    //           if (callCtrl == "dayCashCtrl") {
+    //             params.cashGubun = "02";
+    //           }
+    //           if (callCtrl == "dayCashbillCtrl") {
+    //             params.cashGubun = "021";
+    //             callCtrl = 'dayCashCtrl';
+    //           }
+    //           console.log(callCtrl);
+    //           $scope._broadcast(callCtrl, params);
+    //         }
+    //       }
+    //     }
+    //   }
+    // });
   };
 
 
@@ -237,13 +247,38 @@ app.controller('monthMomsCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.storeCds   = $("#monthMomsStoreCd").val();
     params.payCol       = payCol;
     params.dlvrInFgCol  = dlvrInFgCol;
-
+    params.momsTeam = $scope.momsTeam;
+    params.momsAcShop = $scope.momsAcShop;
+    params.momsAreaFg = $scope.momsAreaFg;
+    params.momsCommercial = $scope.momsCommercial;
+    params.momsShopType = $scope.momsShopType;
+    params.momsStoreManageType = $scope.momsStoreManageType;
+    params.branchCd = $scope.branchCd;
+    params.storeHqBrandCd = $scope.storeHqBrandCd;
+    // '전체' 일때
+    if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+      var momsHqBrandCd = "";
+      for(var i=0; i < momsHqBrandCdComboList.length; i++){
+        if(momsHqBrandCdComboList[i].value !== null) {
+          momsHqBrandCd += momsHqBrandCdComboList[i].value + ","
+        }
+      }
+      params.userBrands = momsHqBrandCd;
+    }
     console.log(params);
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/month/monthMoms/monthMoms/getMonthMomsList.sb", params);
   };
 
+  // 확장조회 숨김/보임
+  $scope.searchAddShowChange = function(){
+    if( $("#tblSearchAddShow").css("display") === 'none') {
+      $("#tblSearchAddShow").show();
+    } else {
+      $("#tblSearchAddShow").hide();
+    }
+  };
 
   // 매장선택 모듈 팝업 사용시 정의
   // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
@@ -268,7 +303,7 @@ app.controller('monthMomsCtrl', ['$scope', '$http', '$timeout', function ($scope
           return column.visible;
         }
       },
-          messages["monthMomsMoms.monthMomsMoms"] + getToday() + '.xlsx', function () {
+          messages["monthMomsMoms.monthMomsMoms"] + getCurDateTime() + '.xlsx', function () {
             $timeout(function () {
               $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
             }, 10);

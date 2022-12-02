@@ -112,6 +112,8 @@ public class StoreManageController {
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0"));
             System.out.println("momsEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0"));
+        } else {
+            model.addAttribute("momsEnvstVal", "0");
         }
         /** //맘스터치 */
 
