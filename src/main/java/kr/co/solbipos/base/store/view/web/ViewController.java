@@ -4,8 +4,10 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.view.service.CopyStoreEnvVO;
 import kr.co.solbipos.base.store.view.service.VanConfigVO;
@@ -57,13 +59,15 @@ public class ViewController {
     private final ViewService viewService;
     private final SessionService sessionService;
     private final CmmCodeUtil cmmCodeUtil;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public ViewController(ViewService viewService, SessionService sessionService, CmmCodeUtil cmmCodeUtil) {
+    public ViewController(ViewService viewService, SessionService sessionService, CmmCodeUtil cmmCodeUtil, CmmEnvUtil cmmEnvUtil) {
         this.viewService = viewService;
         this.sessionService = sessionService;
         this.cmmCodeUtil = cmmCodeUtil;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -224,6 +228,16 @@ public class ViewController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<String>> result = viewService.getStoreEnvInfoList(copyStoreEnvVO, sessionInfoVO);
+
+        // [1250] 맘스터치백오피스인경우 상품 복사기능 보이게 처리
+        if(CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0").equals("1")) {
+
+            DefaultMap<String> envProd = new DefaultMap<String>();
+            envProd.put("NMCODE_CD", "04");
+            envProd.put("NMCODE_NM", "상품");
+
+            result.add(3, envProd);
+        }
 
         return ReturnUtil.returnListJson(Status.OK, result, copyStoreEnvVO);
     }
