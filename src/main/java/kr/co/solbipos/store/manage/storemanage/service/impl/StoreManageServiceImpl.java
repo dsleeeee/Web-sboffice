@@ -435,7 +435,7 @@ public class StoreManageServiceImpl implements StoreManageService{
                         procCnt += mapper.insertStoreProductClass(storeManageVO);
                         // 상품 생성
                         procCnt += mapper.insertStoreProduct(storeManageVO);
-                        // 판매가 생성(상품정보 REG_FG가 S인 상품만)
+                        // 판매가 생성
                         procCnt += mapper.insertStoreSaleUprc(storeManageVO);
                         // 공급가 생성(아직 공급가 사용안함 개발필요)
 //                        procCnt += mapper.insertStoreSplyUprc(storeManageVO);
@@ -448,6 +448,10 @@ public class StoreManageServiceImpl implements StoreManageService{
                         procCnt += mapper.insertStoreSdselGroup(storeManageVO);
                         procCnt += mapper.insertStoreSdselClass(storeManageVO);
                         procCnt += mapper.insertStoreSdselProd(storeManageVO);
+                        // 상품 설명
+                        procCnt += mapper.insertStoreProdInfo(storeManageVO);
+                        // 상품 판매 시간대
+                        procCnt += mapper.insertStoreSaleTime(storeManageVO);
 
                         // 프랜차이즈매장
                         if(!storeManageVO.getHqOfficeCd().equals("00000")) {
@@ -459,7 +463,7 @@ public class StoreManageServiceImpl implements StoreManageService{
 
                     // 판매가 복사
                     if( "salePrice".equals(copyEnv[i]) ) {
-                        // 판매가 생성(상품정보 REG_FG가 S인 상품만)
+                        // 판매가 생성
                         procCnt += mapper.insertStoreSaleUprc(storeManageVO);
                     }
 
