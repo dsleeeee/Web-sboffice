@@ -15,6 +15,8 @@ import kr.co.solbipos.base.promotion.promotion.service.PromotionVO;
 import kr.co.solbipos.base.store.media.service.MediaVO;
 import kr.co.solbipos.base.store.storeType.service.StoreTypeService;
 import kr.co.solbipos.base.store.storeType.service.StoreTypeVO;
+import kr.co.solbipos.iostock.cmm.service.IostockCmmService;
+import kr.co.solbipos.iostock.cmm.service.IostockCmmVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,15 +60,17 @@ public class PromotionController {
     private final SessionService sessionService;
     private final PromotionService promotionService;
     private final StoreTypeService storeTypeService;
+    private final IostockCmmService iostockCmmService;
     private final MessageService messageService;
     private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public PromotionController(SessionService sessionService, PromotionService promotionService, StoreTypeService storeTypeService, MessageService messageService, CmmEnvUtil cmmEnvUtil) {
+    public PromotionController(SessionService sessionService, PromotionService promotionService, StoreTypeService storeTypeService, IostockCmmService iostockCmmService, MessageService messageService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.promotionService = promotionService;
         this.storeTypeService = storeTypeService;
+        this.iostockCmmService = iostockCmmService;
         this.messageService = messageService;
         this.cmmEnvUtil = cmmEnvUtil;
     }
@@ -106,6 +110,30 @@ public class PromotionController {
 
         // [1253 매장프로모션생성] 환경설정값 조회
         model.addAttribute("storePromoRegYnVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1253"), "0"));
+
+        // 맘스터치 적용매장추가 조회조건 콤보박스 데이터
+        IostockCmmVO iostockCmmVO = new IostockCmmVO();
+        model.addAttribute("momsStoreHqBrand", convertToJson(iostockCmmService.selectBrandMomsList(iostockCmmVO, sessionInfoVO)));         // 매장브랜드
+        model.addAttribute("momsBranch", convertToJson(iostockCmmService.selectBranchMomsList(iostockCmmVO, sessionInfoVO)));               // 지사
+
+        iostockCmmVO.setNmcodeGrpCd("151");
+        model.addAttribute("momsTeam", convertToJson(iostockCmmService.selectHqNmcodeMomsList(iostockCmmVO, sessionInfoVO)));               // 팀별
+
+        iostockCmmVO.setNmcodeGrpCd("152");
+        model.addAttribute("momsAcShop", convertToJson(iostockCmmService.selectHqNmcodeMomsList(iostockCmmVO, sessionInfoVO)));             // AC점포별
+
+        iostockCmmVO.setNmcodeGrpCd("153");
+        model.addAttribute("momsAreaFg", convertToJson(iostockCmmService.selectHqNmcodeMomsList(iostockCmmVO, sessionInfoVO)));             // 지역구분
+
+        iostockCmmVO.setNmcodeGrpCd("154");
+        model.addAttribute("momsCommercial", convertToJson(iostockCmmService.selectHqNmcodeMomsList(iostockCmmVO, sessionInfoVO)));         // 상권
+
+        iostockCmmVO.setNmcodeGrpCd("155");
+        model.addAttribute("momsShopType", convertToJson(iostockCmmService.selectHqNmcodeMomsList(iostockCmmVO, sessionInfoVO)));           // 점포유형
+
+        iostockCmmVO.setNmcodeGrpCd("156");
+        model.addAttribute("momsStoreManageType", convertToJson(iostockCmmService.selectHqNmcodeMomsList(iostockCmmVO, sessionInfoVO)));    // 매장관리타입
+
 
         StoreTypeVO storeTypeVO = new StoreTypeVO();
 
@@ -581,5 +609,26 @@ public class PromotionController {
         int result = promotionService.modPromotionBanner(mediaVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 맘스터치 프로모션 적용매장 선택팝업 매장리스트 조회
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @author 이다솜
+     * @since 2021.12.02
+     * @return
+     */
+    @RequestMapping(value = "/getMomsStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMomsStoreList(PromotionVO promotionVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = promotionService.getMomsStoreList(promotionVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, promotionVO);
     }
 }

@@ -155,30 +155,61 @@ public class PromotionVO extends PageVO {
     private int momsPurchsCntLimit;
     /** 구매갯수제한 */
     private int momsPurchsQtyLimit;
-    /** 프로모션 적용 구분(요기요) */
+    /** 프로모션 적용 구분(자사앱(내점)) */
     private String dlv4Yn;
-    /** 프로모션 적용 구분(쿠팡이츠) */
+    /** 프로모션 적용 구분(자사앱(배달)) */
     private String dlv5Yn;
-    /** 프로모션 적용 구분(위메프오) */
+    /** 프로모션 적용 구분(자사앱(포장)) */
     private String dlv6Yn;
-    /** 프로모션 적용 구분(페이코) */
+    /** 프로모션 적용 구분(요기요) */
     private String dlv7Yn;
-    /** 프로모션 적용 구분(배달특급) */
+    /** 프로모션 적용 구분(쿠팡이츠) */
     private String dlv8Yn;
-    /** 프로모션 적용 구분(카카오) */
+    /** 프로모션 적용 구분(위메프오) */
     private String dlv9Yn;
-    /** 프로모션 적용 구분(배달의민족) */
+    /** 프로모션 적용 구분(페이코) */
     private String dlv10Yn;
-    /** 프로모션 적용 구분(땡겨요) */
+    /** 프로모션 적용 구분(배달특급) */
     private String dlv11Yn;
-    /** 프로모션 적용 구분(네이버주문) */
+    /** 프로모션 적용 구분(카카오) */
     private String dlv12Yn;
+    /** 프로모션 적용 구분(배달의민족) */
+    private String dlv13Yn;
+    /** 프로모션 적용 구분(땡겨요) */
+    private String dlv14Yn;
+    /** 프로모션 적용 구분(네이버주문) */
+    private String dlv15Yn;
     /** 입금일 */
     private String depositYmd;
     /** 제한된 결제*/
     private String blockPayCd;
     /** 버전일련번호 */
     private String verSerNo;
+    /** 분담금구분 */
+    private String chargeDs;
+    /** 사용자별 브랜드코드 */
+    private String userBrands;
+    /** 사용자별 브랜드코드 */
+    private String[] userBrandList;
+    /** 매장브랜드코드 */
+    private String storeHqBrandCd;
+    /** 지사코드 */
+    private String branchCd;
+    /** 팀별 */
+    private String momsTeam;
+    /** AC점포별 */
+    private String momsAcShop;
+    /** 지역구분 */
+    private String momsAreaFg;
+    /** 상권 */
+    private String momsCommercial;
+    /** 점포유형 */
+    private String momsShopType;
+    /** 매장관리타입 */
+    private String momsStoreManageType;
+    /** 사원번호 */
+    private String empNo;
+
 
     public String getOrgnFg() {
         return orgnFg;
@@ -764,6 +795,30 @@ public class PromotionVO extends PageVO {
         this.dlv12Yn = dlv12Yn;
     }
 
+    public String getDlv13Yn() {
+        return dlv13Yn;
+    }
+
+    public void setDlv13Yn(String dlv13Yn) {
+        this.dlv13Yn = dlv13Yn;
+    }
+
+    public String getDlv14Yn() {
+        return dlv14Yn;
+    }
+
+    public void setDlv14Yn(String dlv14Yn) {
+        this.dlv14Yn = dlv14Yn;
+    }
+
+    public String getDlv15Yn() {
+        return dlv15Yn;
+    }
+
+    public void setDlv15Yn(String dlv15Yn) {
+        this.dlv15Yn = dlv15Yn;
+    }
+
     public String getDepositYmd() {
         return depositYmd;
     }
@@ -786,5 +841,101 @@ public class PromotionVO extends PageVO {
 
     public void setVerSerNo(String verSerNo) {
         this.verSerNo = verSerNo;
+    }
+
+    public String getChargeDs() {
+        return chargeDs;
+    }
+
+    public void setChargeDs(String chargeDs) {
+        this.chargeDs = chargeDs;
+    }
+
+    public String getUserBrands() {
+        return userBrands;
+    }
+
+    public void setUserBrands(String userBrands) {
+        this.userBrands = userBrands;
+    }
+
+    public String[] getUserBrandList() {
+        return userBrandList;
+    }
+
+    public void setUserBrandList(String[] userBrandList) {
+        this.userBrandList = userBrandList;
+    }
+
+    public String getStoreHqBrandCd() {
+        return storeHqBrandCd;
+    }
+
+    public void setStoreHqBrandCd(String storeHqBrandCd) {
+        this.storeHqBrandCd = storeHqBrandCd;
+    }
+
+    public String getBranchCd() {
+        return branchCd;
+    }
+
+    public void setBranchCd(String branchCd) {
+        this.branchCd = branchCd;
+    }
+
+    public String getMomsTeam() {
+        return momsTeam;
+    }
+
+    public void setMomsTeam(String momsTeam) {
+        this.momsTeam = momsTeam;
+    }
+
+    public String getMomsAcShop() {
+        return momsAcShop;
+    }
+
+    public void setMomsAcShop(String momsAcShop) {
+        this.momsAcShop = momsAcShop;
+    }
+
+    public String getMomsAreaFg() {
+        return momsAreaFg;
+    }
+
+    public void setMomsAreaFg(String momsAreaFg) {
+        this.momsAreaFg = momsAreaFg;
+    }
+
+    public String getMomsCommercial() {
+        return momsCommercial;
+    }
+
+    public void setMomsCommercial(String momsCommercial) {
+        this.momsCommercial = momsCommercial;
+    }
+
+    public String getMomsShopType() {
+        return momsShopType;
+    }
+
+    public void setMomsShopType(String momsShopType) {
+        this.momsShopType = momsShopType;
+    }
+
+    public String getMomsStoreManageType() {
+        return momsStoreManageType;
+    }
+
+    public void setMomsStoreManageType(String momsStoreManageType) {
+        this.momsStoreManageType = momsStoreManageType;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
     }
 }

@@ -179,6 +179,33 @@ public class SaleRegistKwuServiceImpl implements SaleRegistKwuService {
                 if(saleRegistKwuVO.getCardAmt() > 0){
                     saleRegistKwuMapper.getSalePayCard(saleRegistKwuVO);
                 }
+
+                // TB_SL_SALE_PAY
+                if(saleRegistKwuVO.getCashAmt() > 0){
+                    saleRegistKwuVO.setPayCd("02");
+                    saleRegistKwuVO.setPayAmt(saleRegistKwuVO.getCashAmt());
+                    saleRegistKwuMapper.getSalePay(saleRegistKwuVO);
+                }
+                if(saleRegistKwuVO.getCardAmt() > 0){
+                    saleRegistKwuVO.setPayCd("01");
+                    saleRegistKwuVO.setPayAmt(saleRegistKwuVO.getCardAmt());
+                    saleRegistKwuMapper.getSalePay(saleRegistKwuVO);
+                }
+
+                // TB_SL_SALE_PAY_SEQ
+                int iPaySeq = 0;
+                if(saleRegistKwuVO.getCashAmt() > 0){
+                    saleRegistKwuVO.setPaySeq(++iPaySeq);
+                    saleRegistKwuVO.setPayCd("02");
+                    saleRegistKwuVO.setPayAmt(saleRegistKwuVO.getCashAmt());
+                    saleRegistKwuMapper.getSalePaySeq(saleRegistKwuVO);
+                }
+                if(saleRegistKwuVO.getCardAmt() > 0){
+                    saleRegistKwuVO.setPaySeq(++iPaySeq);
+                    saleRegistKwuVO.setPayCd("01");
+                    saleRegistKwuVO.setPayAmt(saleRegistKwuVO.getCardAmt());
+                    saleRegistKwuMapper.getSalePaySeq(saleRegistKwuVO);
+                }
             }
 
             billDtlNo++;

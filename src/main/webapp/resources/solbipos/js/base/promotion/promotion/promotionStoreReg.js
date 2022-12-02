@@ -130,6 +130,15 @@ app.controller('promotionStoreRegCtrl', ['$scope', '$http', function ($scope, $h
 
             });
         });
-    }
+    };
+
+    // 닫기
+    $scope.closeStoreReg = function () {
+        $scope.srchStoreTypeCombo.selectedIndex = 0;
+        $scope.srchStoreGroupCombo.selectedIndex = 0;
+        $("#srchStoreCd").val("");
+        $("#srchStoreNm").val("");
+        $scope.srchSysStatFgCombo.selectedIndex = 0;
+    };
 
 }]);

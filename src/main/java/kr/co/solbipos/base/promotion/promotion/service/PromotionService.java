@@ -90,6 +90,9 @@ public interface PromotionService {
     /** 프로모션 키오스크 배너 수정(프로모션관련 정보만 수정) */
     int modPromotionBanner(MediaVO mediaVO, SessionInfoVO sessionInfoVO);
 
+    /** 맘스터치 프로모션 적용매장 선택팝업 매장리스트 조회 */
+    List<DefaultMap<String>> getMomsStoreList(PromotionVO promotionVO, SessionInfoVO sessionInfoVO);
+
 }
 
 

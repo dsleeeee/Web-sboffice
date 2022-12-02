@@ -146,4 +146,7 @@ public interface PromotionMapper {
 
     /** 키오스크 배너 적용매장 삭제 */
     int deletePromotionBannerStore(MediaVO mediaVO);
+
+    /** 맘스터치 프로모션 적용매장 선택팝업 매장리스트 조회 */
+    List<DefaultMap<String>> getMomsStoreList(PromotionVO promotionVO);
 }

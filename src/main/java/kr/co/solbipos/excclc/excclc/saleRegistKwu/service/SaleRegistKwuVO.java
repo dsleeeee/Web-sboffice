@@ -69,6 +69,7 @@ public class SaleRegistKwuVO extends PageVO {
     private long noTaxSaleAmt;
     private float cashPer;
     private float cardPer;
+    private int paySeq;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -452,5 +453,13 @@ public class SaleRegistKwuVO extends PageVO {
 
     public void setCardPer(float cardPer) {
         this.cardPer = cardPer;
+    }
+
+    public int getPaySeq() {
+        return paySeq;
+    }
+
+    public void setPaySeq(int paySeq) {
+        this.paySeq = paySeq;
     }
 }

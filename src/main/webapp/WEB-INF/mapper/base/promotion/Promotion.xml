@@ -284,12 +284,16 @@
                                       #{dlv10Yn} AS DLV10_YN,
                                       #{dlv11Yn} AS DLV11_YN,
                                       #{dlv12Yn} AS DLV12_YN,
+                                      #{dlv13Yn} AS DLV13_YN,
+                                      #{dlv14Yn} AS DLV14_YN,
+                                      #{dlv15Yn} AS DLV15_YN,
                                       #{regDt} AS REG_DT,
                                       #{regId} AS REG_ID,
                                       #{modDt} AS MOD_DT,
                                       #{modId} AS MOD_ID,
                                       #{blockPayCd} AS BLOCK_PAY_CD,
-                                      #{depositYmd} AS DEPOSIT_YMD
+                                      #{depositYmd} AS DEPOSIT_YMD,
+                                      #{chargeDs} AS CHARGE_DS
                                 FROM DUAL
                             ) B
                         ON (A.HQ_OFFICE_CD = B.HQ_OFFICE_CD AND A.PROMOTION_CD = B.PROMOTION_CD)
@@ -338,10 +342,14 @@
                            A.DLV10_YN = B.DLV10_YN,
                            A.DLV11_YN = B.DLV11_YN,
                            A.DLV12_YN = B.DLV12_YN,
+                           A.DLV13_YN = B.DLV13_YN,
+                           A.DLV14_YN = B.DLV14_YN,
+                           A.DLV15_YN = B.DLV15_YN,
                            A.MOD_DT = B.MOD_DT,
                            A.MOD_ID = B.MOD_ID,
                            A.BLOCK_PAY_CD = B.BLOCK_PAY_CD,
-                           A.DEPOSIT_YMD = B.DEPOSIT_YMD
+                           A.DEPOSIT_YMD = B.DEPOSIT_YMD,
+                           A.CHARGE_DS = B.CHARGE_DS
                      WHEN NOT MATCHED THEN
                    INSERT
                     (      A.HQ_OFFICE_CD,
@@ -389,12 +397,16 @@
                            A.DLV10_YN,
                            A.DLV11_YN,
                            A.DLV12_YN,
+                           A.DLV13_YN,
+                           A.DLV14_YN,
+                           A.DLV15_YN,
                            A.REG_DT,
                            A.REG_ID,
                            A.MOD_DT,
                            A.MOD_ID,
                            A.BLOCK_PAY_CD,
-                           A.DEPOSIT_YMD
+                           A.DEPOSIT_YMD,
+                           A.CHARGE_DS
                     )
                     VALUES
                     (      B.HQ_OFFICE_CD,
@@ -442,12 +454,16 @@
                            B.DLV10_YN,
                            B.DLV11_YN,
                            B.DLV12_YN,
+                           B.DLV13_YN,
+                           B.DLV14_YN,
+                           B.DLV15_YN,
                            B.REG_DT,
                            B.REG_ID,
                            B.MOD_DT,
                            B.MOD_ID,
                            B.BLOCK_PAY_CD,
-                           B.DEPOSIT_YMD
+                           B.DEPOSIT_YMD,
+                           B.CHARGE_DS
                     )
             </when>
             <!-- 매장 -->
@@ -497,12 +513,16 @@
                                       #{dlv10Yn} AS DLV10_YN,
                                       #{dlv11Yn} AS DLV11_YN,
                                       #{dlv12Yn} AS DLV12_YN,
+                                      #{dlv13Yn} AS DLV13_YN,
+                                      #{dlv14Yn} AS DLV14_YN,
+                                      #{dlv15Yn} AS DLV15_YN,
                                       #{regDt} AS REG_DT,
                                       #{regId} AS REG_ID,
                                       #{modDt} AS MOD_DT,
                                       #{modId} AS MOD_ID,
                                       #{blockPayCd} AS BLOCK_PAY_CD,
-                                      #{depositYmd} AS DEPOSIT_YMD
+                                      #{depositYmd} AS DEPOSIT_YMD,
+                                      #{chargeDs} AS CHARGE_DS
                                 FROM DUAL
                             ) B
                         ON (A.STORE_CD = B.STORE_CD AND A.PROMOTION_CD = B.PROMOTION_CD)
@@ -550,10 +570,14 @@
                             A.DLV10_YN = B.DLV10_YN,
                             A.DLV11_YN = B.DLV11_YN,
                             A.DLV12_YN = B.DLV12_YN,
+                            A.DLV13_YN = B.DLV13_YN,
+                            A.DLV14_YN = B.DLV14_YN,
+                            A.DLV15_YN = B.DLV15_YN,
                             A.MOD_DT = B.MOD_DT,
                             A.MOD_ID = B.MOD_ID,
                             A.BLOCK_PAY_CD = B.BLOCK_PAY_CD,
-                            A.DEPOSIT_YMD = B.DEPOSIT_YMD
+                            A.DEPOSIT_YMD = B.DEPOSIT_YMD,
+                            A.CHARGE_DS = B.CHARGE_DS
                       WHEN NOT MATCHED THEN
                     INSERT
                         (   A.STORE_CD,
@@ -600,12 +624,16 @@
                             A.DLV10_YN,
                             A.DLV11_YN,
                             A.DLV12_YN,
+                            A.DLV13_YN,
+                            A.DLV14_YN,
+                            A.DLV15_YN,
                             A.REG_DT,
                             A.REG_ID,
                             A.MOD_DT,
                             A.MOD_ID,
                             A.BLOCK_PAY_CD,
-                            A.DEPOSIT_YMD
+                            A.DEPOSIT_YMD,
+                            A.CHARGE_DS
                     )
                     VALUES
                     (       B.STORE_CD,
@@ -652,12 +680,16 @@
                             B.DLV10_YN,
                             B.DLV11_YN,
                             B.DLV12_YN,
+                            B.DLV13_YN,
+                            B.DLV14_YN,
+                            B.DLV15_YN,
                             B.REG_DT,
                             B.REG_ID,
                             B.MOD_DT,
                             B.MOD_ID,
                             B.BLOCK_PAY_CD,
-                            B.DEPOSIT_YMD
+                            B.DEPOSIT_YMD,
+                            B.CHARGE_DS
                     )
             </when>
         </choose>
@@ -911,6 +943,9 @@
                         thpc.DLV10_YN,
                         thpc.DLV11_YN,
                         thpc.DLV12_YN,
+                        thpc.DLV13_YN,
+                        thpc.DLV14_YN,
+                        thpc.DLV15_YN,
                         thpb.TYPE_CD,
                         thpb.APPLY_DC_DS,
                         thpb.DC_SET,
@@ -924,7 +959,8 @@
                         thpc.MOMS_PURCHS_CNT_LIMIT,
                         thpc.MOMS_PURCHS_QTY_LIMIT,
                         thpc.BLOCK_PAY_CD,
-                        thpc.DEPOSIT_YMD
+                        thpc.DEPOSIT_YMD,
+                        thpc.CHARGE_DS
                   FROM TB_HQ_PROMO_H thph,
                         TB_HQ_PROMO_CONDI thpc,
                         TB_HQ_PROMO_BENE thpb
@@ -982,6 +1018,9 @@
                         tmpc.DLV10_YN,
                         tmpc.DLV11_YN,
                         tmpc.DLV12_YN,
+                        tmpc.DLV13_YN,
+                        tmpc.DLV14_YN,
+                        tmpc.DLV15_YN,
                         tmpb.TYPE_CD,
                         tmpb.APPLY_DC_DS,
                         tmpb.DC_SET,
@@ -995,7 +1034,8 @@
                         tmpc.MOMS_PURCHS_CNT_LIMIT,
                         tmpc.MOMS_PURCHS_QTY_LIMIT,
                         tmpc.BLOCK_PAY_CD,
-                        tmpc.DEPOSIT_YMD
+                        tmpc.DEPOSIT_YMD,
+                        tmpc.CHARGE_DS
                   FROM TB_MS_PROMO_H tmph,
                         TB_MS_PROMO_CONDI tmpc,
                         TB_MS_PROMO_BENE tmpb
@@ -2565,5 +2605,71 @@
            AND STORE_CD = #{storeCd}
         </if>
     </delete>
+
+    <!-- 맘스터치 프로모션 적용매장 선택팝업 매장리스트 조회 -->
+    <!--
+          TABLE    : TB_MS_STORE
+          PARAM    : promotionVO
+          COMMENTS : 맘스터치 프로모션 매장선택팝업에서 매장리스트를 조회한다.
+    -->
+    <select id="getMomsStoreList" parameterType="promotionVO" resultType="DefaultMap">
+        /* PromotionMapper.getMomsStoreList */
+        SELECT  tms.HQ_OFFICE_CD
+        ,       tms.STORE_CD
+        ,       tms.STORE_NM
+        ,       tms.SYS_STAT_FG
+        FROM    TB_MS_STORE tms
+        ,       TB_MS_STORE_INFO tmsi
+        WHERE   tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR   tms.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택값이 있을때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 선택값이 없을때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        AND   tmsi.STORE_CD (+)= tms.STORE_CD
+        AND   tms.STORE_CD NOT IN (SELECT STORE_CD FROM TB_HQ_PROMO_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROMOTION_CD = #{promotionCd})
+        ORDER
+        BY    tms.STORE_CD
+    </select>
 
 </mapper>

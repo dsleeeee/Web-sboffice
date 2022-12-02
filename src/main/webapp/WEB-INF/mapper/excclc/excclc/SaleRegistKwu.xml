@@ -931,4 +931,159 @@
         AND     BILL_NO = #{billNo}
         AND     REG_ID like 'WEB_REG_%'
     </delete>
+
+
+    <!-- 매출수기등록 SALE_PAY 저장 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY, TB_SL_SALE_PAY_CASH, TB_SL_SALE_PAY_CARD
+        PARAM    : saleRegistKwuVO
+        COMMENTS : 매출수기등록 SALE_PAY 저장
+    -->
+    <insert id="getSalePay" parameterType="saleRegistKwuVO">
+        /* SaleRegistKwuMapper.getSalePay */
+        INSERT INTO TB_SL_SALE_PAY
+        (
+                HQ_OFFICE_CD
+              , HQ_BRAND_CD
+              , STORE_CD
+              , SALE_DATE
+              , POS_NO
+              , BILL_NO
+              , PAY_CD
+              , PAY_AMT
+              , TAX_AMT
+              , VAT_AMT
+              , TIP_AMT
+              , NO_TAX_AMT
+              , REG_DT
+              , REG_ID
+              , MOD_DT
+              , MOD_ID
+              , REG_SEQ
+              , SALE_YN
+              , RECV_AMT
+              , RTN_AMT
+        )
+          SELECT  HQ_OFFICE_CD
+                , HQ_BRAND_CD
+                , STORE_CD
+                , SALE_DATE
+                , POS_NO
+                , BILL_NO
+                , #{payCd}
+                , #{payAmt} * #{saleFg}
+                , TAX_AMT
+                , VAT_AMT
+                , TIP_AMT
+                , NO_TAX_AMT
+                , #{regDt}
+                , #{regId}
+                , #{modDt}
+                , #{modId}
+                , REG_SEQ
+                , SALE_YN
+    <if test='payCd != null and payCd != "" and payCd == "01"'>
+                , '0'
+                , '0'
+      FROM TB_SL_SALE_PAY_CARD
+    </if>
+    <if test='payCd != null and payCd != "" and payCd == "02"'>
+                , RECV_AMT
+                , RTN_AMT
+       FROM TB_SL_SALE_PAY_CASH
+    </if>
+      WHERE   STORE_CD = #{storeCd}
+      AND     SALE_DATE = #{saleDate}
+      AND     POS_NO = '99'
+      AND     BILL_NO = #{billNo}
+    </insert>
+
+    <!-- 매출수기등록 SALE_PAY_SEQ 저장 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_SEQ, TB_SL_SALE_PAY
+        PARAM    : saleRegistKwuVO
+        COMMENTS : 매출수기등록 SALE_PAY_SEQ 저장
+    -->
+    <insert id="getSalePaySeq" parameterType="saleRegistKwuVO">
+        /* SaleRegistKwuMapper.getSalePaySeq */
+        INSERT INTO TB_SL_SALE_PAY_SEQ
+        (
+                HQ_OFFICE_CD
+              , HQ_BRAND_CD
+              , STORE_CD
+              , SALE_DATE
+              , POS_NO
+              , BILL_NO
+              , PAY_SEQ
+              , REG_SEQ
+              , SALE_YN
+              , SALE_FG
+              , PAY_CD
+              , PAY_AMT
+              , TAX_AMT
+              , VAT_AMT
+              , TIP_AMT
+              , NO_TAX_AMT
+              , LINE_NO
+              , APPR_PROC_FG
+              , APPR_CARD_NO
+              , APPR_SEQ_NO
+              , CASH_BILL_APPR_PROC_FG
+              , CASH_BILL_CARD_NO
+              , REG_DT
+              , REG_ID
+              , MOD_DT
+              , MOD_ID
+              , CUP_AMT
+              , BILL_DT
+              , DLVR_ORDER_FG
+              , DLVR_IN_FG
+        )
+          SELECT  HQ_OFFICE_CD
+                , HQ_BRAND_CD
+                , STORE_CD
+                , SALE_DATE
+                , POS_NO
+                , BILL_NO
+                , #{paySeq}
+                , REG_SEQ
+                , SALE_YN
+                , SALE_FG
+                , #{payCd}
+                , #{payAmt} * #{saleFg}
+                , TAX_AMT
+                , VAT_AMT
+                , TIP_AMT
+                , NO_TAX_AMT
+                , LINE_NO
+                , APPR_PROC_FG
+    <if test='payCd != null and payCd != "" and payCd == "01"'>
+                , CARD_NO
+    </if>
+    <if test='payCd != null and payCd != "" and payCd == "02"'>
+                , ''
+    </if>
+                , '0001'
+                , '3'
+                , '0'
+                , #{regDt}
+                , #{regId}
+                , #{modDt}
+                , #{modId}
+                , CUP_AMT
+                , #{regDt}
+                , '1'
+                , '0'
+    <if test='payCd != null and payCd != "" and payCd == "01"'>
+       FROM   TB_SL_SALE_PAY_CARD
+    </if>
+    <if test='payCd != null and payCd != "" and payCd == "02"'>
+       FROM   TB_SL_SALE_PAY_CASH
+    </if>
+      WHERE   STORE_CD = #{storeCd}
+      AND     SALE_DATE = #{saleDate}
+      AND     POS_NO = '99'
+      AND     BILL_NO = #{billNo}
+    </insert>
+
 </mapper>

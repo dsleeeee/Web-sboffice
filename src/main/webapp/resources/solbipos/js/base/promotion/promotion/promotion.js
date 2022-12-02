@@ -53,11 +53,18 @@ var memberTargetDsFgData = [
     {"name":"회원등급","value":"3"}
 ];
 
-// 적용등급
+// 적용조건 - 적용등급
 var memberClassCdFgData = [
     {"name":"골드","value":"001"},
     {"name":"플래티넘","value":"002"},
     {"name":"VIP","value":"003"}
+];
+
+// 적용조건 - 분담금구분
+var chargeDsData = [
+    {"name":"미사용","value":""},
+    {"name":"정률","value":"1"},
+    {"name":"정액","value":"2"}
 ];
 
 // 적용상품 - 구매대상
@@ -216,6 +223,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
     $scope._setComboData("promotionEndMmCombo", Mm); // 적용조건 - 적용요일(종료 분)
     $scope._setComboData("memberTargetDs", memberTargetDsFgData); // 적용조건 - 적용대상
     $scope._setComboData("memberClassCd", memberClassCdFgData); // 적용조건 - 적용등급
+    $scope._setComboData("chargeDs", chargeDsData); // 적용조건 - 분담금구분
     //$scope._setComboData("selectProdDs", selectProdDsFgData); // 적용상품 - 구매대상
     $scope._setComboData("storeSelectExceptFg", storeSelectExceptFgData); // 적용매장 - 매장등록구분
     //$scope._setComboData("typeCd", typeCdFgData); // 혜택유형
@@ -226,6 +234,9 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
     $scope.dlvFgInStore = true;
     $scope.dlvFgDelivery = false;
     $scope.dlvFgPacking = false;
+    $scope.dlvFgAppInStore = false;
+    $scope.dlvFgAppDelivery = false;
+    $scope.dlvFgAppPacking = false;
     $scope.dlvFgYogiyo = false;
     $scope.dlvFgCoupangeats = false;
     $scope.dlvFgWmpo = false;
@@ -419,46 +430,61 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                     $("input:checkbox[id='chkDlvFgPacking']").prop("checked", false); // 적용구분(포장)
                 }
                 if(info.dlv4Yn === "Y"){
+                    $("input:checkbox[id='chkDlvFgAppInStore']").prop("checked", true); // 적용구분(자사앱(내점))
+                }else{
+                    $("input:checkbox[id='chkDlvFgAppInStore']").prop("checked", false); // 적용구분(자사앱(내점))
+                }
+                if(info.dlv5Yn === "Y"){
+                    $("input:checkbox[id='chkDlvFgAppDelivery']").prop("checked", true); // 적용구분(자사앱(배달))
+                }else{
+                    $("input:checkbox[id='chkDlvFgAppDelivery']").prop("checked", false); // 적용구분(자사앱(배달))
+                }
+                if(info.dlv6Yn === "Y"){
+                    $("input:checkbox[id='chkDlvFgAppPacking']").prop("checked", true); // 적용구분(자사앱(포장))
+                }else{
+                    $("input:checkbox[id='chkDlvFgAppPacking']").prop("checked", false); // 적용구분(자사앱(포장)
+                }
+                if(info.dlv7Yn === "Y"){
                     $("input:checkbox[id='chkDlvFgYogiyo']").prop("checked", true); // 적용구분(요기요)
                 }else{
                     $("input:checkbox[id='chkDlvFgYogiyo']").prop("checked", false); // 적용구분(요기요)
                 }
-                if(info.dlv5Yn === "Y"){
+                if(info.dlv8Yn === "Y"){
                     $("input:checkbox[id='chkDlvFgCoupangeats']").prop("checked", true); // 적용구분(쿠팡이츠)
                 }else{
                     $("input:checkbox[id='chkDlvFgCoupangeats']").prop("checked", false); // 적용구분(쿠팡이츠)
                 }
-                if(info.dlv6Yn === "Y"){
+                if(info.dlv9Yn === "Y"){
                     $("input:checkbox[id='chkDlvFgWmpo']").prop("checked", true); // 적용구분(위메프오)
                 }else{
                     $("input:checkbox[id='chkDlvFgWmpo']").prop("checked", false); // 적용구분(위메프오)
                 }
-                if(info.dlv7Yn === "Y"){
+                if(info.dlv10Yn === "Y"){
                     $("input:checkbox[id='chkDlvFgPayco']").prop("checked", true); // 적용구분(페이코)
                 }else{
                     $("input:checkbox[id='chkDlvFgPayco']").prop("checked", false); // 적용구분(페이코)
                 }
-                if(info.dlv8Yn === "Y"){
+                if(info.dlv11Yn === "Y"){
                     $("input:checkbox[id='chkDlvFgSpecialdelivery']").prop("checked", true); // 적용구분(배달특급)
                 }else{
                     $("input:checkbox[id='chkDlvFgSpecialdelivery']").prop("checked", false); // 적용구분(배달특급)
                 }
-                if(info.dlv9Yn === "Y"){
+                if(info.dlv12Yn === "Y"){
                     $("input:checkbox[id='chkDlvFgKakao']").prop("checked", true); // 적용구분(카카오)
                 }else{
                     $("input:checkbox[id='chkDlvFgKakao']").prop("checked", false); // 적용구분(카카오)
                 }
-                if(info.dlv10Yn === "Y"){
+                if(info.dlv13Yn === "Y"){
                     $("input:checkbox[id='chkDlvFgBaemin']").prop("checked", true); // 적용구분(배달의민족)
                 }else{
                     $("input:checkbox[id='chkDlvFgBaemin']").prop("checked", false); // 적용구분(배달의민족)
                 }
-                if(info.dlv11Yn === "Y"){
+                if(info.dlv14Yn === "Y"){
                     $("input:checkbox[id='chkDlvFgDdangyo']").prop("checked", true); // 적용구분(땡겨요)
                 }else{
                     $("input:checkbox[id='chkDlvFgDdangyo']").prop("checked", false); // 적용구분(땡겨요)
                 }
-                if(info.dlv12Yn === "Y"){
+                if(info.dlv15Yn === "Y"){
                     $("input:checkbox[id='chkDlvFgNpaysmartorder']").prop("checked", true); // 적용구분(네이버주문)
                 }else{
                     $("input:checkbox[id='chkDlvFgNpaysmartorder']").prop("checked", false); // 적용구분(네이버주문)
@@ -530,17 +556,14 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
 
                 var mCnt = 0; // 최소 또는 최대 구매금액이 있는지 파악
                 if(info.minSaleAmt !== "" && info.minSaleAmt !== "0" && info.minSaleAmt !== 0){ // 최소구매금액
-                    $("#minSaleAmt").val(info.minSaleAmt);
                     mCnt++;
-                }else{
-                    $("#minSaleAmt").val("");
                 }
+                $("#minSaleAmt").val(info.minSaleAmt);
+
                 if(info.maxSaleAmt !== "" && info.maxSaleAmt !== "0" && info.maxSaleAmt !== 0){ // 최대구매금액
-                    $("#maxSaleAmt").val(info.maxSaleAmt);
                     mCnt++;
-                }else{
-                    $("#maxSaleAmt").val("");
                 }
+                $("#maxSaleAmt").val(info.maxSaleAmt);
 
                 if(mCnt > 0){ // 최소 또는 최대 구매금액이 있으면 오픈
                     $("input:checkbox[id='chkMinSaleAmt']").prop("checked", true);
@@ -550,24 +573,6 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                     $("input:checkbox[id='chkMinSaleAmt']").prop("checked", false);
                     $scope.isCheckedMinSaleAmt = false;
                     $("#divChkMinSaleAmt").css("display", "none");
-                }
-
-                if(info.hqChargeUprc !== "" && info.hqChargeUprc !== "0" && info.hqChargeUprc !== 0){ // 본사분담금
-                    $("#hqChargeUprc").val(info.hqChargeUprc);
-                }else{
-                    $("#hqChargeUprc").val("");
-                }
-
-                if(info.msChargeUprc !== "" && info.msChargeUprc !== "0" && info.msChargeUprc !== 0){ // 매장분담금
-                    $("#msChargeUprc").val(info.msChargeUprc);
-                }else{
-                    $("#msChargeUprc").val("");
-                }
-
-                if(info.partnerChargeUprc !== "" && info.partnerChargeUprc !== "0" && info.partnerChargeUprc !== 0){ // 제휴분담금
-                    $("#partnerChargeUprc").val(info.partnerChargeUprc);
-                }else{
-                    $("#partnerChargeUprc").val("");
                 }
 
                 if(info.momsPurchsCntLimit !== "" && info.momsPurchsCntLimit !== "0" && info.momsPurchsCntLimit !== 0){ // 구매횟수제한
@@ -580,6 +585,34 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                     $("#momsPurchsQtyLimit").val(info.momsPurchsQtyLimit);
                 }else{
                     $("#momsPurchsQtyLimit").val("");
+                }
+
+                if(info.chargeDs !== null && info.chargeDs !== undefined && info.chargeDs !== "") { // 분담금구분
+                    $scope.chargeDsCombo.selectedValue = info.chargeDs;
+
+                    if(info.hqChargeUprc !== ""){ // 본사분담금
+                        $("#hqChargeUprc").val(info.hqChargeUprc);
+                    }else{
+                        $("#hqChargeUprc").val("");
+                    }
+
+                    if(info.msChargeUprc !== ""){ // 매장분담금
+                        $("#msChargeUprc").val(info.msChargeUprc);
+                    }else{
+                        $("#msChargeUprc").val("");
+                    }
+
+                    if(info.partnerChargeUprc !== ""){ // 제휴분담금
+                        $("#partnerChargeUprc").val(info.partnerChargeUprc);
+                    }else{
+                        $("#partnerChargeUprc").val("");
+                    }
+
+                }else{
+                    $scope.chargeDsCombo.selectedIndex = 0;
+                    $("#hqChargeUprc").val("");
+                    $("#msChargeUprc").val("");
+                    $("#partnerChargeUprc").val("");
                 }
 
                 if(info.depositYmd !== "" && info.depositYmd !== null && info.depositYmd !== undefined){ // 입금일
@@ -707,15 +740,18 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             params.dlv1Yn = $("#chkDlvFgInStore").is(":checked") === true ? 'Y' : 'N'; // 적용구분(내점)
             params.dlv2Yn = $("#chkDlvFgDelivery").is(":checked") === true ? 'Y' : 'N'; // 적용구분(배달)
             params.dlv3Yn = $("#chkDlvFgPacking").is(":checked") === true ? 'Y' : 'N'; // 적용구분(포장)
-            params.dlv4Yn = $("#chkDlvFgYogiyo").is(":checked") === true ? 'Y' : 'N'; // 적용구분(요기요)
-            params.dlv5Yn = $("#chkDlvFgCoupangeats").is(":checked") === true ? 'Y' : 'N'; // 적용구분(쿠팡이츠)
-            params.dlv6Yn = $("#chkDlvFgWmpo").is(":checked") === true ? 'Y' : 'N'; // 적용구분(위메프오)
-            params.dlv7Yn = $("#chkDlvFgPayco").is(":checked") === true ? 'Y' : 'N'; // 적용구분(페이코)
-            params.dlv8Yn = $("#chkDlvFgSpecialdelivery").is(":checked") === true ? 'Y' : 'N'; // 적용구분(배달특급)
-            params.dlv9Yn = $("#chkDlvFgKakao").is(":checked") === true ? 'Y' : 'N'; // 적용구분(카카오)
-            params.dlv10Yn = $("#chkDlvFgBaemin").is(":checked") === true ? 'Y' : 'N'; // 적용구분(배달의민족)
-            params.dlv11Yn = $("#chkDlvFgDdangyo").is(":checked") === true ? 'Y' : 'N'; // 적용구분(땡겨요)
-            params.dlv12Yn = $("#chkDlvFgNpaysmartorder").is(":checked") === true ? 'Y' : 'N'; // 적용구분(네이버주문)
+            params.dlv4Yn = $("#chkDlvFgAppInStore").is(":checked") === true ? 'Y' : 'N'; // 적용구분(자사앱(내점))
+            params.dlv5Yn = $("#chkDlvFgAppDelivery").is(":checked") === true ? 'Y' : 'N'; // 적용구분(자사앱(배달))
+            params.dlv6Yn = $("#chkDlvFgAppPacking").is(":checked") === true ? 'Y' : 'N'; // 적용구분(자사앱(포장))
+            params.dlv7Yn = $("#chkDlvFgYogiyo").is(":checked") === true ? 'Y' : 'N'; // 적용구분(요기요)
+            params.dlv8Yn = $("#chkDlvFgCoupangeats").is(":checked") === true ? 'Y' : 'N'; // 적용구분(쿠팡이츠)
+            params.dlv9Yn = $("#chkDlvFgWmpo").is(":checked") === true ? 'Y' : 'N'; // 적용구분(위메프오)
+            params.dlv10Yn = $("#chkDlvFgPayco").is(":checked") === true ? 'Y' : 'N'; // 적용구분(페이코)
+            params.dlv11Yn = $("#chkDlvFgSpecialdelivery").is(":checked") === true ? 'Y' : 'N'; // 적용구분(배달특급)
+            params.dlv12Yn = $("#chkDlvFgKakao").is(":checked") === true ? 'Y' : 'N'; // 적용구분(카카오)
+            params.dlv13Yn = $("#chkDlvFgBaemin").is(":checked") === true ? 'Y' : 'N'; // 적용구분(배달의민족)
+            params.dlv14Yn = $("#chkDlvFgDdangyo").is(":checked") === true ? 'Y' : 'N'; // 적용구분(땡겨요)
+            params.dlv15Yn = $("#chkDlvFgNpaysmartorder").is(":checked") === true ? 'Y' : 'N'; // 적용구분(네이버주문)
             params.dateYn = $("#chkPeriod").is(":checked") === true ? 'Y' : 'N'; // 적용기간 사용여부
             params.startYmd = $("#chkPeriod").is(":checked") === true ? wijmo.Globalize.format(promotionStartDate.value, 'yyyyMMdd') : '00010101'; // 적용기간 시작일
             params.endYmd = $("#chkPeriod").is(":checked") === true ? wijmo.Globalize.format(promotionEndDate.value, 'yyyyMMdd') : '99991231'; // 적용기간 종료일
@@ -784,12 +820,21 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                 params.minSaleAmt = "";
                 params.maxSaleAmt = "";
             }
-            
-            params.hqChargeUprc = $("#hqChargeUprc").val(); // 본사분담금
-            params.msChargeUprc = $("#msChargeUprc").val(); // 매장분담금
-            params.partnerChargeUprc = $("#partnerChargeUprc").val(); // 제휴분담금
+
             params.momsPurchsCntLimit = $("#momsPurchsCntLimit").val(); // 구매횟수제한
             params.momsPurchsQtyLimit = $("#momsPurchsQtyLimit").val(); // 구매갯수제한
+
+            params.chargeDs = $scope.chargeDsCombo.selectedValue; // 본사분담금
+            if($scope.chargeDsCombo.selectedValue === "1" || $scope.chargeDsCombo.selectedValue === "2") {
+                params.hqChargeUprc = $("#hqChargeUprc").val(); // 본사분담금
+                params.msChargeUprc = $("#msChargeUprc").val(); // 매장분담금
+                params.partnerChargeUprc = $("#partnerChargeUprc").val(); // 제휴분담금
+            }else{
+                params.hqChargeUprc = "";
+                params.msChargeUprc = "";
+                params.partnerChargeUprc = "";
+            }
+
             params.depositYmd = $("#chkDepositYmd").is(":checked") === true ? wijmo.Globalize.format(depositYmd.value, 'yyyyMMdd') : ''; // 입금일
 
             var vChkBlockPayCd = "";
@@ -1019,6 +1064,9 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
         if($("#chkDlvFgInStore").is(":checked")) chkDlvFg++;
         if($("#chkDlvFgDelivery").is(":checked")) chkDlvFg++;
         if($("#chkDlvFgPacking").is(":checked")) chkDlvFg++;
+        if($("#chkDlvFgAppInStore").is(":checked")) chkDlvFg++;
+        if($("#chkDlvFgAppDelivery").is(":checked")) chkDlvFg++;
+        if($("#chkDlvFgAppPacking").is(":checked")) chkDlvFg++;
         if($("#chkDlvFgYogiyo").is(":checked")) chkDlvFg++;
         if($("#chkDlvFgCoupangeats").is(":checked")) chkDlvFg++;
         if($("#chkDlvFgWmpo").is(":checked")) chkDlvFg++;
@@ -1063,10 +1111,66 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
 
         // 구매금액을(를) 입력하세요.
         if($("#chkMinSaleAmt").is(":checked")){
-            if ($("#minSaleAmt").val() === "" || $("#minSaleAmt").val() === null) {
-                if ($("#maxSaleAmt").val() === "" || $("#maxSaleAmt").val() === null) {
+            if ($("#minSaleAmt").val() === "" || $("#minSaleAmt").val() === null || $("#minSaleAmt").val() === "0") {
+                if ($("#maxSaleAmt").val() === "" || $("#maxSaleAmt").val() === null || $("#maxSaleAmt").val() === "0") {
                     $scope._popMsg(messages["promotion.minSaleAmt"] + messages["cmm.require.text"]);
                     return false;
+                }
+            }
+        }
+
+        // 본사/매장/제휴 분담율/분담금을(를) 입력하세요.
+        if($scope.chargeDsCombo.selectedValue === "1" || $scope.chargeDsCombo.selectedValue === "2"){
+            if (($("#hqChargeUprc").val() === "" || $("#hqChargeUprc").val() === null || $("#hqChargeUprc").val() === "0") &&
+                ($("#msChargeUprc").val() === "" || $("#msChargeUprc").val() === null || $("#msChargeUprc").val() === "0") &&
+                ($("#partnerChargeUprc").val() === "" || $("#partnerChargeUprc").val() === null || $("#partnerChargeUprc").val() === "0")) {
+                    if ($scope.chargeDsCombo.selectedValue === "1") {
+                        $scope._popMsg(messages["promotion.hq"] + "/" + messages["promotion.ms"] + "/" + messages["promotion.partner"] + " " + messages["promotion.chargeRate"] + messages["cmm.require.text"]);
+                    } else {
+                        $scope._popMsg(messages["promotion.hq"] + "/" + messages["promotion.ms"] + "/" + messages["promotion.partner"] + " " + messages["promotion.chargeUprc"] + messages["cmm.require.text"]);
+                    }
+                    return false;
+            }
+            // 본사/매장/제휴 분담율은(는) 0~100 사이의 숫자만 입력하세요.
+            if($scope.chargeDsCombo.selectedValue === "1") {
+                if($("#hqChargeUprc").val() !== "" && $("#hqChargeUprc").val() !== null) {
+                    if (0 > $("#hqChargeUprc").val() || $("#hqChargeUprc").val() > 100) {
+                        $scope._popMsg(messages["promotion.hq"] + " " + messages["promotion.chk.chargeRate"]);
+                        return false;
+                    }
+                }
+                if($("#msChargeUprc").val() !== "" && $("#msChargeUprc").val() !== null) {
+                    if (0 > $("#msChargeUprc").val() || $("#msChargeUprc").val() > 100) {
+                        $scope._popMsg(messages["promotion.ms"] + " " + messages["promotion.chk.chargeRate"]);
+                        return false;
+                    }
+                }
+                if($("#partnerChargeUprc").val() !== "" && $("#partnerChargeUprc").val() !== null) {
+                    if (0 > $("#partnerChargeUprc").val() || $("#partnerChargeUprc").val() > 100) {
+                        $scope._popMsg(messages["promotion.partner"] + " " + messages["promotion.chk.chargeRate"]);
+                        return false;
+                    }
+                }
+            }
+            // 본사/매장/제휴 분담금은(는) 1원단위를 입력할 수 없습니다.
+            if($scope.chargeDsCombo.selectedValue === "2") {
+                if($("#hqChargeUprc").val() !== "" && $("#hqChargeUprc").val() !== null) {
+                    if (Number($("#hqChargeUprc").val()) % 10 > 0) {
+                        $scope._popMsg(messages["promotion.hq"] + " " + messages["promotion.chk.chargeUprc"]);
+                        return false;
+                    }
+                }
+                if($("#msChargeUprc").val() !== "" && $("#msChargeUprc").val() !== null) {
+                    if (Number($("#msChargeUprc").val()) % 10 > 0) {
+                        $scope._popMsg(messages["promotion.ms"] + " " + messages["promotion.chk.chargeUprc"]);
+                        return false;
+                    }
+                }
+                if($("#partnerChargeUprc").val() !== "" && $("#partnerChargeUprc").val() !== null) {
+                    if (Number($("#partnerChargeUprc").val()) % 10 > 0) {
+                        $scope._popMsg(messages["promotion.partner"] + " " + messages["promotion.chk.chargeUprc"]);
+                        return false;
+                    }
                 }
             }
         }
@@ -1087,7 +1191,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
 
         if($scope.typeCdCombo.selectedValue < 4){
             // 적용혜택의 할인율/할인금액을(를) 입력하세요.
-            if($("#dcSet").val() === "" || $("#dcSet").val() === ""){
+            if($("#dcSet").val() === "" || $("#dcSet").val() === null){
                 if($scope.applyDcDsCombo.selectedValue === "1") {
                     $scope._popMsg(messages["promotion.bene"] + "의 " + messages["promotion.dcSet"] +  messages["cmm.require.text"]);
                 }else{
@@ -1118,7 +1222,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             }*/
         }else if($scope.typeCdCombo.selectedValue === "5"){ // 특별가(=세트가) 별도 체크
             // 적용혜택의 특별가(을)를 입력하세요.
-            if($("#dcSet").val() === "" || $("#dcSet").val() === "") {
+            if($("#dcSet").val() === "" || $("#dcSet").val() === null) {
                 $scope._popMsg(messages["promotion.bene"] + "의 " + messages["promotion.specialPrice"] +  messages["cmm.require.text"]);
                 return false;
             }
@@ -1164,6 +1268,9 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
         $("input:checkbox[id='chkDlvFgInStore']").prop("checked", true); // 적용구분(내점)
         $("input:checkbox[id='chkDlvFgDelivery']").prop("checked", false); // 적용구분(배달)
         $("input:checkbox[id='chkDlvFgPacking']").prop("checked", false); // 적용구분(포장)
+        $("input:checkbox[id='chkDlvFgAppInStore']").prop("checked", false); // 적용구분(자사앱(내점))
+        $("input:checkbox[id='chkDlvFgAppDelivery']").prop("checked", false); // 적용구분(자사앱(배달))
+        $("input:checkbox[id='chkDlvFgAppPacking']").prop("checked", false); // 적용구분(자사앱(포장))
         $("input:checkbox[id='chkDlvFgYogiyo']").prop("checked", false); // 적용구분(요기요)
         $("input:checkbox[id='chkDlvFgCoupangeats']").prop("checked", false); // 적용구분(쿠팡이츠)
         $("input:checkbox[id='chkDlvFgWmpo']").prop("checked", false); // 적용구분(위메프오)
@@ -1207,12 +1314,11 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
         $("#maxSaleAmt").val("");
         $scope.isCheckedMinSaleAmt = false;
         $("#divChkMinSaleAmt").css("display", "none");
-        
-        $("#hqChargeUprc").val(""); // 본사분담금
-        $("#msChargeUprc").val(""); // 매장분담금
-        $("#partnerChargeUprc").val(""); // 제휴분담금
+
         $("#momsPurchsCntLimit").val(""); // 구매횟수제한
         $("#momsPurchsQtyLimit").val(""); // 구매갯수제한
+
+        $scope.chargeDsCombo.selectedIndex = 0; // 분담금구분
 
         $("input:checkbox[id='chkDepositYmd']").prop("checked", false); // 입금일
         depositYmd.value = getCurDate('-');
@@ -1364,29 +1470,51 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
 
                 // 프로모션 종류 변경시 권한, 프로모션기간, 환경설정값에 따른 변경 가능/금지 처리
                 if(orgnFg === "STORE") { // 매장권한 일 때
-                    if (vRegFg === 'S') { // 등록자가 매장일 때,
-                        if(modPromotionEnvstVal !== "1"){ // 본사 또는 매장의 환경변수(진행중인프로모션수정여부 - 1097)이 '수정가능'이 아닌 경우
-                            if(vDateYn === "Y"){ // 프로모션 기간이 있는 경우, 오늘날짜가 프로모션 시작날짜보다 크거나 같으면 변경 불가능
-                                if(Number(now) >= Number(vStartYmd)){
-                                    return false;
-                                }
-                            }else{ // 프로모션 기간이 없는 경우, 오늘날짜가 프로모션 등록날짜보다 크면 변경 불가능
-                                if(Number(now) > Number(vRegDt)) {
-                                    return false;
+                    if(storePromoRegYnVal !== "0") {
+                        if (vRegFg === 'S') { // 등록자가 매장일 때,
+                            if (modPromotionEnvstVal !== "1") { // 본사 또는 매장의 환경변수(진행중인프로모션수정여부 - 1097)이 '수정가능'이 아닌 경우
+                                if (vDateYn === "Y") { // 프로모션 기간이 있는 경우, 오늘날짜가 프로모션 시작날짜보다 크거나 같으면 변경 불가능
+                                    if (Number(now) >= Number(vStartYmd)) {
+
+                                        // 다시 이전 값으로 재셋팅
+                                        s.selectedValue = vPromotionType;
+                                        return false;
+                                    }
+                                } else { // 프로모션 기간이 없는 경우, 오늘날짜가 프로모션 등록날짜보다 크면 변경 불가능
+                                    if (Number(now) > Number(vRegDt)) {
+
+                                        // 다시 이전 값으로 재셋팅
+                                        s.selectedValue = vPromotionType;
+                                        return false;
+                                    }
                                 }
                             }
+                        } else { // 등록자가 본사일 때
+
+                            // 다시 이전 값으로 재셋팅
+                            s.selectedValue = vPromotionType;
+                            return false;
                         }
-                    } else { // 등록자가 본사일 때
+                    } else { // 본사 환경변수(매장프로모션생성 - 1253)이 '미사용'인 경우 프로모션 생성, 수정 불가
+
+                        // 다시 이전 값으로 재셋팅
+                        s.selectedValue = vPromotionType;
                         return false;
                     }
                 }else{ // 본사권한 일 때
                     if(modPromotionEnvstVal !== "1"){ // 본사 또는 매장의 환경변수(진행중인프로모션수정여부 - 1097)이 '수정가능'이 아닌 경우
                         if(vDateYn === "Y"){ // 프로모션 기간이 있는 경우, 오늘날짜가 프로모션 시작날짜보다 크거나 같으면 변경 불가능
                             if(Number(now) >= Number(vStartYmd)){
+
+                                // 다시 이전 값으로 재셋팅
+                                s.selectedValue = vPromotionType;
                                 return false;
                             }
                         }else{ // 프로모션 기간이 없는 경우, 오늘날짜가 프로모션 등록날짜보다 크면 변경 불가능
                             if(Number(now) > Number(vRegDt)) {
+
+                                // 다시 이전 값으로 재셋팅
+                                s.selectedValue = vPromotionType;
                                 return false;
                             }
                         }
@@ -1629,6 +1757,42 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
        }
     };
 
+    // 적용조건 - 분담금구분 선택에 따른 본사/매장/제휴 chargeUprc 명칭(할인율, 할인금액) 변경
+    $scope.setChargeUprcSet = function(s) {
+
+        if(s.selectedValue === "" || momsEnvstVal === "0"){
+
+            $("#thHqChargeUprcY").css("display", "none");
+            $("#tdHqChargeUprcN").css("display", "");
+            $("#trChargeDs").css("display", "none");
+
+            $("#hqChargeUprc").css("display", "none");
+            $("#msChargeUprc").css("display", "none");
+            $("#partnerChargeUprc").css("display", "none");
+
+        }else{
+
+            if(s.selectedValue === "1"){
+                $("#lblHqChargeUprc").text(messages["promotion.hqChargeRate"]);
+                $("#lblMsChargeUprc").text(messages["promotion.msChargeRate"]);
+                $("#lblPartnerChargeUprc").text(messages["promotion.partnerChargeRate"]);
+            }else if(s.selectedValue === "2"){
+                $("#lblHqChargeUprc").text(messages["promotion.hqChargeUprc"]);
+                $("#lblMsChargeUprc").text(messages["promotion.msChargeUprc"]);
+                $("#lblPartnerChargeUprc").text(messages["promotion.partnerChargeUprc"]);
+            }
+
+            $("#thHqChargeUprcY").css("display", "");
+            $("#tdHqChargeUprcN").css("display", "none");
+            $("#trChargeDs").css("display", "");
+
+            $("#hqChargeUprc").css("display", "");
+            $("#msChargeUprc").css("display", "");
+            $("#partnerChargeUprc").css("display", "");
+
+        }
+    };
+
     // 적용상품 - 구매대상 선택에 따른 selectProdCnt 명칭(상품수, 수량) 변경
     $scope.setSelectProdCnt = function (s){
 
@@ -1709,7 +1873,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
         }
     };
 
-    // 적용혜택 - 할인구분 선택에 따른 dcSet 명칭(할인율, 할인금액, 판매금액) 변경
+    // 적용혜택 - 할인구분 선택에 따른 dcSet 명칭(할인율, 할인금액) 변경
     $scope.setDcSet = function (s) {
         if(s.selectedValue === "1"){
             $("#lblDcSet").text(messages["promotion.dcSet"]);
@@ -2312,8 +2476,14 @@ app.controller('promotionSelectStoreGridCtrl', ['$scope', '$http','$timeout', fu
     
     // 적용매장 추가 팝업
     $scope.storeAdd = function () {
-        $scope.promotionStoreRegLayer.show(true);
-        $scope._broadcast('promotionStoreRegCtrl');
+
+        if(momsEnvstVal === '1') { // [1250 맘스터치] 환경설정값 '사용'인 경우, 맘스터치용 적용매장 추가 팝업 호출
+            $scope.promotionMomsStoreRegLayer.show(true);
+            $scope._broadcast('promotionMomsStoreRegCtrl');
+        }else{
+            $scope.promotionStoreRegLayer.show(true);
+            $scope._broadcast('promotionStoreRegCtrl');
+        }
     };
 
     // 적용매장 삭제

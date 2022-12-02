@@ -838,4 +838,26 @@ public class PromotionServiceImpl implements PromotionService {
 
         return result;
     }
+
+    /** 맘스터치 프로모션 적용매장 선택팝업 매장리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getMomsStoreList(@RequestBody PromotionVO promotionVO, SessionInfoVO sessionInfoVO) {
+
+        promotionVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        promotionVO.setEmpNo(sessionInfoVO.getEmpNo());
+        promotionVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            promotionVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        // 매장브랜드가 '전체' 일때
+        if (promotionVO.getStoreHqBrandCd() == "" || promotionVO.getStoreHqBrandCd() == null) {
+            // 사용자별 브랜드 array 값 세팅
+            String[] userBrandList = promotionVO.getUserBrands().split(",");
+            promotionVO.setUserBrandList(userBrandList);
+        }
+
+        return promotionMapper.getMomsStoreList(promotionVO);
+    }
 }

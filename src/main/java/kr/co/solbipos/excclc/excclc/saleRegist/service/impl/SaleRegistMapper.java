@@ -51,6 +51,8 @@ public interface SaleRegistMapper {
     /** PAY 저장 */
     int getSalePayCash(SaleRegistVO saleRegistVO);
     int getSalePayCard(SaleRegistVO saleRegistVO);
+    int getSalePay(SaleRegistVO saleRegistVO);
+    int getSalePaySeq(SaleRegistVO saleRegistVO);
 
 
     /** 매출수기등록 특정 전표 조회 */
