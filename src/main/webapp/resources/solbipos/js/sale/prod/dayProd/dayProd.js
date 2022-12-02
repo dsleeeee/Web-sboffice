@@ -6,12 +6,26 @@
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
  * 2022.10.04     권지현      1.0
+ * 2022.11.11     김설아      1.0            전체수정
  *
  * **************************************************************/
 /**
  * get application
  */
 var app = agrid.getApp();
+
+// 상품표시옵션
+var prodOptionComboData = [
+    {"name":"단품/세트","value":"1"},
+    {"name":"단품/구성","value":"2"},
+    {"name":"단품/세트/구성","value":"3"},
+    {"name":"모두표시","value":"4"}
+];
+// 일자표시옵션
+var dayOptionComboData = [
+    {"name":"일자별","value":"1"},
+    {"name":"기간합","value":"2"}
+];
 
 /**
  *  일별 상품 매출 현황 그리드 생성
@@ -21,10 +35,11 @@ app.controller('dayProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('dayProdCtrl', $scope, $http, true));
 
-    $scope.srchStartDate  = wcombo.genDateVal("#srchStartDate", gvStartDate);
-    $scope.srchEndDate    = wcombo.genDateVal("#srchEndDate", gvEndDate);
+    // 조회일자
+    $scope.srchStartDate = wcombo.genDateVal("#srchStartDate", gvStartDate);
+    $scope.srchEndDate   = wcombo.genDateVal("#srchEndDate", gvEndDate);
 
-    // 브랜드 콤보박스 셋팅
+    // 콤보박스 셋팅
     $scope._setComboData("storeHqBrandCdCombo", momsHqBrandCdComboList); // 매장브랜드
     $scope._setComboData("prodHqBrandCdCombo", momsHqBrandCdComboList); // 상품브랜드
     $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
@@ -34,6 +49,8 @@ app.controller('dayProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 지사
+    $scope._setComboData("prodOptionCombo", prodOptionComboData); // 상품표시옵션
+    $scope._setComboData("dayOptionCombo", dayOptionComboData); // 일자표시옵션
 
     // 팀별
     if(momsTeamComboList.length <= 1) {
@@ -100,7 +117,6 @@ app.controller('dayProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
             if (e.panel == s.cells) {
@@ -177,12 +193,56 @@ app.controller('dayProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             }
             params.userBrands = momsHqBrandCd;
         }
+        params.prodOption = $scope.prodOption;
+        params.dayOption = $scope.dayOption;
         params.listScale = 500;
 
         console.log(params);
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/prod/dayProd/dayProd/getDayProdList.sb", params);
+        $scope._inquiryMain("/sale/prod/dayProd/dayProd/getDayProdList.sb", params, function (){
+            // <-- 그리드 visible -->
+            // 선택한 테이블에 따른 리스트 항목 visible
+            var grid = wijmo.Control.getControl("#wjGridList");
+            var columns = grid.columns;
+
+            // 컬럼 총갯수
+            var columnsCnt = 21;
+
+            for (var i = 0; i < columnsCnt; i++) {
+                columns[i].visible = true;
+            }
+
+            // 합계가 0이면 해당 컬럼 숨기기
+            for (var j = 0; j < columnsCnt; j++) {
+                // 상품표시옵션
+                if(params.prodOption === "1"){  // 단품+세트
+                    if(columns[j].binding == "saleQty2" || columns[j].binding == "saleQty3" || columns[j].binding == "realSaleAmt2" || columns[j].binding == "realSaleAmt3") {
+                        columns[j].visible = false;
+                    }
+                } else if(params.prodOption === "2"){  // 단품+구성
+                    if(columns[j].binding == "saleQty1" || columns[j].binding == "saleQty3" || columns[j].binding == "realSaleAmt1" || columns[j].binding == "realSaleAmt3") {
+                        columns[j].visible = false;
+                    }
+                } else if(params.prodOption === "3"){  // 단품+세트+구성
+                    if(columns[j].binding == "saleQty1" || columns[j].binding == "saleQty2" || columns[j].binding == "realSaleAmt1" || columns[j].binding == "realSaleAmt2") {
+                        columns[j].visible = false;
+                    }
+                }
+
+                // 일자표시옵션
+                if(params.dayOption === "1"){  // 일자별
+                    if(columns[j].binding == "dayFrom" || columns[j].binding == "dayTo") {
+                        columns[j].visible = false;
+                    }
+                } else if(params.dayOption === "2"){  // 기간합
+                    if(columns[j].binding == "saleDate" || columns[j].binding == "yoil") {
+                        columns[j].visible = false;
+                    }
+                }
+            }
+            // <-- //그리드 visible -->
+        });
     };
 
     // 매장선택 모듈 팝업 사용시 정의
@@ -270,8 +330,10 @@ app.controller('dayProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             }
             params.userBrands = momsHqBrandCd;
         }
+        params.prodOption = $scope.prodOption;
+        params.dayOption = $scope.dayOption;
 
-        $scope._broadcast('dayProdExcelCtrl',params);
+        $scope._broadcast('dayProdExcelCtrl', params);
     };
 
     // 확장조회 숨김/보임
@@ -296,7 +358,6 @@ app.controller('dayProdExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
             if (e.panel == s.cells) {
@@ -334,15 +395,57 @@ app.controller('dayProdExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
                 return false;
             }
 
+            // <-- 그리드 visible -->
+            // 선택한 테이블에 따른 리스트 항목 visible
+            var grid = wijmo.Control.getControl("#wjGridExcelList");
+            var columns = grid.columns;
+
+            // 컬럼 총갯수
+            var columnsCnt = 21;
+
+            for (var i = 0; i < columnsCnt; i++) {
+                columns[i].visible = true;
+            }
+
+            // 합계가 0이면 해당 컬럼 숨기기
+            for (var j = 0; j < columnsCnt; j++) {
+                // 상품표시옵션
+                if(params.prodOption === "1"){  // 단품+세트
+                    if(columns[j].binding == "saleQty2" || columns[j].binding == "saleQty3" || columns[j].binding == "realSaleAmt2" || columns[j].binding == "realSaleAmt3") {
+                        columns[j].visible = false;
+                    }
+                } else if(params.prodOption === "2"){  // 단품+구성
+                    if(columns[j].binding == "saleQty1" || columns[j].binding == "saleQty3" || columns[j].binding == "realSaleAmt1" || columns[j].binding == "realSaleAmt3") {
+                        columns[j].visible = false;
+                    }
+                } else if(params.prodOption === "3"){  // 단품+세트+구성
+                    if(columns[j].binding == "saleQty1" || columns[j].binding == "saleQty2" || columns[j].binding == "realSaleAmt1" || columns[j].binding == "realSaleAmt2") {
+                        columns[j].visible = false;
+                    }
+                }
+
+                // 일자표시옵션
+                if(params.dayOption === "1"){  // 일자별
+                    if(columns[j].binding == "dayFrom" || columns[j].binding == "dayTo") {
+                        columns[j].visible = false;
+                    }
+                } else if(params.dayOption === "2"){  // 기간합
+                    if(columns[j].binding == "saleDate" || columns[j].binding == "yoil") {
+                        columns[j].visible = false;
+                    }
+                }
+            }
+            // <-- //그리드 visible -->
+
             $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
             $timeout(function () {
                 wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
                     includeColumnHeaders: true,
                     includeCellStyles   : true,
                     includeColumns      : function (column) {
-                    return column.visible;
-                }
-                }, messages["dayProdMoms.dayProdMoms"]+getToday()+'.xlsx', function () {
+                        return column.visible;
+                    }
+                }, "일별상품매출현황_"+getToday()+'.xlsx', function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);
