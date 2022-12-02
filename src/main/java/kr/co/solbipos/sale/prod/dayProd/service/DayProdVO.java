@@ -102,6 +102,12 @@ public class DayProdVO extends PageVO {
     /** 지사코드 */
     private String branchCd;
 
+    /** 상품표시옵션 */
+    private String prodOption;
+
+    /** 일자표시옵션 */
+    private String dayOption;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -271,4 +277,18 @@ public class DayProdVO extends PageVO {
     public void setBranchCd(String branchCd) {
         this.branchCd = branchCd;
     }
+
+    public String getProdOption() {
+        return prodOption;
+    }
+
+    public void setProdOption(String prodOption) {
+        this.prodOption = prodOption;
+    }
+
+    public String getDayOption() {
+        return dayOption;
+    }
+
+    public void setDayOption(String dayOption) { this.dayOption = dayOption; }
 }
