@@ -630,7 +630,7 @@
         (CASE WHEN tmmak.GROUP_TYPE_FG = '1' THEN '단체'
                WHEN tmmak.GROUP_TYPE_FG = '2' THEN '하키'
                WHEN tmmak.GROUP_TYPE_FG = '3' THEN '기타'
-               ELSE null END
+               ELSE '' END
         ) AS FG,
         tsdmp.MEMBR_NO,
         SBPENC.D(tmm.MEMBR_NM) AS GROUP_NM,
