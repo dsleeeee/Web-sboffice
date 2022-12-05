@@ -87,7 +87,7 @@ app.controller('dailyTableReportKwuCtrl', ['$scope', '$http', function ($scope, 
 
 
         // 최상단 html
-        var titleHtml = '<table class="w100">'
+        var titleHtml = '<table class="w100 mt40">'
             + '<colgroup>'
             + '<col style="width: 30%">'
             + '<col style="width: 40%">'
@@ -111,7 +111,7 @@ app.controller('dailyTableReportKwuCtrl', ['$scope', '$http', function ($scope, 
             + '<col style="width: 10%">'
             + '</colgroup>'
             + '<tr class="h25">'
-            + '<td rowspan="3" class="tl br0"><p class="s15 bk">광운대학교<br><br>일 자 : ' + $scope.startDate.substr(0, 4) + '-' + $scope.startDate.substr(4, 2) + '-' + $scope.startDate.substr(6, 2) + '</p></td>'
+            + '<td rowspan="3" class="tl br0"><p class="s18 bk">광운대학교<br><br>일 자 : ' + $scope.startDate.substr(0, 4) + '-' + $scope.startDate.substr(4, 2) + '-' + $scope.startDate.substr(6, 2) + '</p></td>'
             + '<td rowspan="3" class="tc br0"></td>'
             + '<td class="tc">담당</td>'
             + '<td class="tc">팀장</td>'
@@ -137,9 +137,9 @@ app.controller('dailyTableReportKwuCtrl', ['$scope', '$http', function ($scope, 
             + '<col style="width: 15%">'
             + '</colgroup>'
             + '<tr class="h25">'
-            + '<td class="tl br0">1. 수강현황</td>'
+            + '<td class="tl br0 s15">1. 수강현황</td>'
             + '<td class="tc br0"></td>'
-            + '<td class="tr br0">[ VAT 포함 ]</td>'
+            + '<td class="tr br0 s15">[ VAT 포함 ]</td>'
             + '</tr>'
             + '</table>';
 
@@ -194,7 +194,7 @@ app.controller('dailyTableReportKwuCtrl', ['$scope', '$http', function ($scope, 
             + '<col style="width: 85%">'
             + '</colgroup>'
             + '<tr class="h25">'
-            + '<td class="tl br0">2. 수강유형</td>'
+            + '<td class="tl br0 s15">2. 수강유형</td>'
             + '<td class="tc br0"></td>'
             + '</tr>'
             + '</table>';
@@ -259,7 +259,7 @@ app.controller('dailyTableReportKwuCtrl', ['$scope', '$http', function ($scope, 
             + '<col style="width: 85%">'
             + '</colgroup>'
             + '<tr class="h25">'
-            + '<td class="tl br0">3. 수강료현황</td>'
+            + '<td class="tl br0 s15">3. 수강료현황</td>'
             + '<td class="tc br0"></td>'
             + '</tr>'
             + '</table>';
@@ -353,7 +353,7 @@ app.controller('dailyTableReportKwuCtrl', ['$scope', '$http', function ($scope, 
             + '<col style="width: 100%">'
             + '</colgroup>'
             + '<tr class="h25">'
-            + '<td class="tl br0" style="color: red">카드입금계 : (신용카드+신용단말기+전월미수+결산이자) - (당월미수+수수료)</td>'
+            + '<td class="tl br0 s15" style="color: red">카드입금계 : (신용카드+신용단말기+전월미수+결산이자) - (당월미수+수수료)</td>'
             + '</tr>'
             + '</table>';
 
@@ -367,7 +367,7 @@ app.controller('dailyTableReportKwuCtrl', ['$scope', '$http', function ($scope, 
             + '<col style="width: 85%">'
             + '</colgroup>'
             + '<tr class="h25">'
-            + '<td class="tl br0">4. 단체수강내역</td>'
+            + '<td class="tl br0 s15">4. 단체수강내역</td>'
             + '<td class="tc br0"></td>'
             + '</tr>'
             + '</table>';
@@ -468,7 +468,7 @@ app.controller('dailyTableReportKwuCtrl', ['$scope', '$http', function ($scope, 
 
 
         // 최상단 html
-        var titleHtml = '<table class="w100">'
+        var titleHtml = '<table class="w100 mt40">'
             + '<colgroup>'
             + '<col style="width: 30%">'
             + '<col style="width: 40%">'
@@ -492,7 +492,7 @@ app.controller('dailyTableReportKwuCtrl', ['$scope', '$http', function ($scope, 
             + '<col style="width: 10%">'
             + '</colgroup>'
             + '<tr class="h25">'
-            + '<td rowspan="3" class="tl br0"><p class="s15 bk">광운대학교<br><br>일 자 : ' + $scope.startDate.substr(0, 4) + '-' + $scope.startDate.substr(4, 2) + '-' + $scope.startDate.substr(6, 2) + '</p></td>'
+            + '<td rowspan="3" class="tl br0"><p class="s18 bk">광운대학교<br><br>일 자 : ' + $scope.startDate.substr(0, 4) + '-' + $scope.startDate.substr(4, 2) + '-' + $scope.startDate.substr(6, 2) + '</p></td>'
             + '<td rowspan="3" class="tc br0"></td>'
             + '<td class="tc">담당</td>'
             + '<td class="tc">팀장</td>'
@@ -517,7 +517,7 @@ app.controller('dailyTableReportKwuCtrl', ['$scope', '$http', function ($scope, 
             + '<col style="width: 85%">'
             + '</colgroup>'
             + '<tr class="h25">'
-            + '<td class="tl br0">5. 출납현황</td>'
+            + '<td class="tl br0 s15">5. 출납현황</td>'
             + '<td class="tc br0"></td>'
             + '</tr>'
             + '</table>';
