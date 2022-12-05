@@ -26,7 +26,7 @@ import java.util.List;
 @Repository
 public interface DayProdMapper {
 
-    /** 상품별 매출 순위 */
+    /** 조회 */
     List<DefaultMap<Object>> getDayProdList(DayProdVO dayProdVO);
     List<DefaultMap<Object>> getDayProdExcelList(DayProdVO dayProdVO);
 
