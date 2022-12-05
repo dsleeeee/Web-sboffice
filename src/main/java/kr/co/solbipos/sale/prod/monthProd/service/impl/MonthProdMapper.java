@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * @Class Name : MonthProdMapper.java
- * @Description : 맘스터치 > 승인관리2 > 일별 상품 매출 현황
+ * @Description : 맘스터치 > 상품매출분석 > 월별 상품 매출 현황
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -26,7 +26,7 @@ import java.util.List;
 @Repository
 public interface MonthProdMapper {
 
-    /** 상품별 매출 순위 */
+    /** 조회 */
     List<DefaultMap<Object>> getMonthProdList(MonthProdVO monthProdVO);
     List<DefaultMap<Object>> getMonthProdExcelList(MonthProdVO monthProdVO);
 }

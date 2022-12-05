@@ -5,10 +5,10 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.prod.monthProd.service.MonthProdService;
 import kr.co.solbipos.sale.prod.monthProd.service.MonthProdVO;
-import kr.co.solbipos.sale.prod.monthProd.service.impl.MonthProdMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,7 +40,6 @@ public class MonthProdServiceImpl implements MonthProdService {
     public List<DefaultMap<Object>> getMonthProdList(MonthProdVO monthProdVO, SessionInfoVO sessionInfoVO) {
 
         monthProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             monthProdVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
@@ -48,16 +47,30 @@ public class MonthProdServiceImpl implements MonthProdService {
         // 매장 array 값 세팅
         String[] storeCds = monthProdVO.getStoreCds().split(",");
         monthProdVO.setStoreCdList(storeCds);
+
+        // 상품 array 값 세팅
+        if (monthProdVO.getProdCds() != null && !"".equals(monthProdVO.getProdCds())) {
+            String[] prodCdList = monthProdVO.getProdCds().split(",");
+            monthProdVO.setProdCdList(prodCdList);
+        }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 매장브랜드, 상품브랜드가 '전체' 일때
+            if (monthProdVO.getStoreHqBrandCd() == "" || monthProdVO.getStoreHqBrandCd() == null || monthProdVO.getProdHqBrandCd() == "" || monthProdVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = monthProdVO.getUserBrands().split(",");
+                monthProdVO.setUserBrandList(userBrandList);
+            }
+        }
 
         return monthProdMapper.getMonthProdList(monthProdVO);
     }
 
-    /** 조회 */
+    /** 엑셀 조회 */
     @Override
     public List<DefaultMap<Object>> getMonthProdExcelList(MonthProdVO monthProdVO, SessionInfoVO sessionInfoVO) {
 
         monthProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             monthProdVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
@@ -65,6 +78,21 @@ public class MonthProdServiceImpl implements MonthProdService {
         // 매장 array 값 세팅
         String[] storeCds = monthProdVO.getStoreCds().split(",");
         monthProdVO.setStoreCdList(storeCds);
+
+        // 상품 array 값 세팅
+        if (monthProdVO.getProdCds() != null && !"".equals(monthProdVO.getProdCds())) {
+            String[] prodCdList = monthProdVO.getProdCds().split(",");
+            monthProdVO.setProdCdList(prodCdList);
+        }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 매장브랜드, 상품브랜드가 '전체' 일때
+            if (monthProdVO.getStoreHqBrandCd() == "" || monthProdVO.getStoreHqBrandCd() == null || monthProdVO.getProdHqBrandCd() == "" || monthProdVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = monthProdVO.getUserBrands().split(",");
+                monthProdVO.setUserBrandList(userBrandList);
+            }
+        }
 
         return monthProdMapper.getMonthProdExcelList(monthProdVO);
     }

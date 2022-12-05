@@ -2,7 +2,6 @@ package kr.co.solbipos.sale.prod.monthProd.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.sale.prod.monthProd.service.MonthProdVO;
 
 import java.util.List;
 
