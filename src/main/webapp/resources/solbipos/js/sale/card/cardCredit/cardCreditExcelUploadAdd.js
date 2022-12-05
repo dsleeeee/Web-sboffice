@@ -138,7 +138,7 @@ app.controller('cardCreditExcelUploadAddCtrl', ['$scope', '$http', '$timeout', f
         params.storeCd = $("#lblStoreCd").text();
 
         // 업로드시 임시테이블 저장
-        $scope._postJSONSave.withOutPopUp("/sale/card/cardCredit/cardCreditExcelUploadAdd/getCardCreditExcelUploadAddRealSave.sb", params, function () {
+        $scope._postJSONSave.withPopUp("/sale/card/cardCredit/cardCreditExcelUploadAdd/getCardCreditExcelUploadAddRealSave.sb", params, function () {
             $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
             // 저장기능 수행후 재조회
             $scope._broadcast('cardCreditCtrl');
