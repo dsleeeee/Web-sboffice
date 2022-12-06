@@ -88,6 +88,7 @@ public class PromotionController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         // 프로모션 특이사항 환경변수 값(본사의 환경변수 1095 사용)
+        // 본사,매장 모두 본사 환경설정값을 따른다.
         String promotionEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1095"));
         model.addAttribute("promotionEnvstVal", promotionEnvstVal);
 
