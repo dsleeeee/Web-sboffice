@@ -1687,6 +1687,19 @@
             )
     </insert>
 
+    <!-- 매장상품 복사 MERGE 전에 USE_YN='N' -->
+    <!--
+        TABLE    : TB_MS_PRODUCT
+        PARAM    : storeManageVO
+        COMMENTS : 매장의 상품을 복사 MERGE 전에 USE_YN='N'한다
+    -->
+    <update id="updateStoreProduct" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.updateStoreProduct */
+        UPDATE  TB_MS_PRODUCT
+        SET     USE_YN      =   'N'
+        WHERE   STORE_CD    =   #{storeCd}
+    </update>
+
     <!-- 매장상품 복사 -->
     <!--
         TABLE    : TB_MS_PRODUCT

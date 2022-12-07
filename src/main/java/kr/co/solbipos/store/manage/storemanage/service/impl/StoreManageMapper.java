@@ -139,6 +139,9 @@ public interface StoreManageMapper {
     int insertStoreProductClass(StoreManageVO storeManageVO);
     int insertStoreHqProductClass(StoreManageVO storeManageVO);
 
+    /** 상품복사 MERGE 전에 USE_YN='N' */
+    int updateStoreProduct(StoreManageVO storeManageVO);
+
     /** 상품 복사 */
     int insertStoreProduct(StoreManageVO storeManageVO);
     int insertStoreHqProduct(StoreManageVO storeManageVO);
