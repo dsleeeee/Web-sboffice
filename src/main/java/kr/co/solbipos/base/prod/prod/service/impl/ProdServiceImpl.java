@@ -837,6 +837,7 @@ public class ProdServiceImpl implements ProdService {
             prodVO.setModDt(currentDate);
             prodVO.setModId(sessionInfoVO.getUserId());
 
+            prodVO.setSaleResveFg("0");
 
             // 매장 상품 판매가 변경
             result = prodMapper.updateStoreSaleUprc(prodVO);
@@ -990,6 +991,8 @@ public class ProdServiceImpl implements ProdService {
                     result = prodMapper.updateStoreSaleUprcHistory(prodVO);
                     if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
+
+                prodVO.setSaleResveFg("0");
 
                 // 매장 상품 판매가 변경
                 result = prodMapper.updateStoreSaleUprc(prodVO);

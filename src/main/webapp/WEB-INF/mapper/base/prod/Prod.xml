@@ -1968,7 +1968,8 @@
             tmpsp.DLVR_SALE_UPRC = NVL(#{dlvrSaleUprc}, #{saleUprc}),
             tmpsp.PACK_SALE_UPRC = NVL(#{packSaleUprc}, #{saleUprc}),
             tmpsp.MOD_DT = #{modDt},
-            tmpsp.MOD_ID = #{modId}
+            tmpsp.MOD_ID = #{modId},
+            tmpsp.SALE_RESVE_FG = #{saleResveFg}
         WHEN NOT MATCHED THEN
         INSERT
         (
@@ -1984,7 +1985,8 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            SALE_RESVE_FG
         ) VALUES (
             #{storeCd},
             #{prodCd},
@@ -1998,7 +2000,8 @@
             #{regDt},
             #{regId},
             #{modDt},
-            #{modId}
+            #{modId},
+            #{saleResveFg}
         )
     </insert>
 

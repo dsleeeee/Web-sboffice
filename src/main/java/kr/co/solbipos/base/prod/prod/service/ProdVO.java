@@ -291,6 +291,9 @@ public class ProdVO extends PageVO {
     /** KIOSK 엣지 */
     private String momsKioskEdge;
 
+    /** 가격예약구분 - 0:일반, 1:예약 */
+    private String saleResveFg;
+
     /**
      * @return the hqOfficeCd
      */
@@ -1326,4 +1329,11 @@ public class ProdVO extends PageVO {
 
     public void setMomsKioskEdge(String momsKioskEdge) { this.momsKioskEdge = momsKioskEdge; }
 
+    public String getSaleResveFg() {
+        return saleResveFg;
+    }
+
+    public void setSaleResveFg(String saleResveFg) {
+        this.saleResveFg = saleResveFg;
+    }
 }
