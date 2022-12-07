@@ -116,7 +116,7 @@
                                 <!-- define columns -->
                                 <wj-flex-grid-column header="<s:message code="saleRegistKwu.prodCd"/>"     binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="saleRegistKwu.prodNm"/>"     binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="saleRegistKwu.saleUprc"/>"   binding="saleUprc" width="65" align="right" is-read-only="true"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="saleRegistKwu.saleUprc"/>"   binding="saleUprc" width="65" align="right"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="saleRegistKwu.saleQty"/>"    binding="saleQty" width="65" align="center" max-length="4"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="saleRegistKwu.saleAmt"/>"    binding="saleAmt" width="65" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="saleRegistKwu.dcAmt"/>"      binding="dcAmt" width="65" align="right" max-length="8" aggregate="Sum"></wj-flex-grid-column>
@@ -215,7 +215,7 @@
     });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/saleRegistKwu/newRegist.js?ver=20221206.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/saleRegistKwu/newRegist.js?ver=20221207.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

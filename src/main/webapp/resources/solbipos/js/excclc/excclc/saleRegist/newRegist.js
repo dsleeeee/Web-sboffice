@@ -111,12 +111,42 @@ app.controller('newRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         // add a sigma to the header to show that this is a summary row
         s.bottomLeftCells.setCellData(0, 0, '합계');
 
+        // 그리드 포맷 핸들러
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col  = s.columns[e.col];
+                var item = s.rows[e.row].dataItem;
+                // 판매단가
+                if (col.binding === "saleUprc") {
+                    if(item.prodTypeFg === 1 || item.prodTypeFg === "1") {
+                        wijmo.addClass(e.cell, 'wj-custom-readonly');
+
+                    } else if(item.prodTypeFg === 4 || item.prodTypeFg === "4") {
+                        wijmo.addClass(e.cell, 'wj-custom-readonly');
+                    }
+                }
+            }
+        });
+
+        // 그리드 에디팅 방지
+        s.beginningEdit.addHandler(function (sender, elements) {
+            var col = sender.columns[elements.col];
+            if (col.binding === "saleUprc") {
+                var dataItem = s.rows[elements.row].dataItem;
+                if (dataItem.prodTypeFg === 1 || dataItem.prodTypeFg === "1") {
+                    elements.cancel = true;
+                } else if (dataItem.prodTypeFg === 4 || dataItem.prodTypeFg === "4") {
+                    elements.cancel = true;
+                }
+            }
+        });
+
         s.cellEditEnded.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
                 var item = s.rows[e.row].dataItem;
                 // 수량
-                if (col.binding === "saleQty") {
+                if (col.binding === "saleQty" || col.binding === "saleUprc") {
                     if(item.saleQty === 0) {
                         item.saleAmt = "0";
                         item.dcAmt = "0";
