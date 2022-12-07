@@ -433,6 +433,8 @@ public class StoreManageServiceImpl implements StoreManageService{
                     if( "product".equals(copyEnv[i]) ) {
                         // 상품분류 생성
                         procCnt += mapper.insertStoreProductClass(storeManageVO);
+                        // 상품복사 MERGE 전에 USE_YN='N'
+                        mapper.updateStoreProduct(storeManageVO);
                         // 상품 생성
                         procCnt += mapper.insertStoreProduct(storeManageVO);
                         // 판매가 생성
