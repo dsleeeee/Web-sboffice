@@ -85,7 +85,7 @@
 
         <div class="mt10 oh sb-select dkbr">
             <div class="w100">
-                <div class="w50 fl">
+                <div class="w40 fl">
                     <p class="tl s14 mt5 lh15">※ 입력 항목</p>
                     <p class="tl s14 mt5 lh15">1. 입금일자 : '20900915' 형식으로 입력 가능</p>
                     <p class="tl s14 mt5 lh15">2. 입금금액 : 숫자만 입력 가능</p>
@@ -93,12 +93,13 @@
                     <p class="tl s14 mt5 lh15">4. 입금은행 : '국민은행', '하나은행' 만 입력 가능</p>
                     <p class="tl s14 mt5 lh15 red">※ 양식에 맞지 않는 데이터는 저장되지 않습니다.</p>
                 </div>
-                <div class="w50 fr">
+                <div class="w60 fr">
                     <p class="tl s14 mt5 lh15">※ 엑셀업로드</p>
                     <p class="tl s14 mt5 lh15">1. '양식다운로드' 버튼을 클릭하여 양식을 다운받아주세요.</p>
                     <p class="tl s14 mt5 lh15">2. 다운받은 양식을 입력해주세요.</p>
                     <p class="tl s14 mt5 lh15">3. 조회 후 '엑셀업로드' 버튼을 클릭하여 업로드 해주세요.</p>
                     <p class="tl s14 mt5 lh15">- 조회한 승인일자 내에 자료만 업로드 가능합니다.</p>
+                    <p class="tl s14 mt5 lh15 red">※ 업로드시 '승인일자, 승인번호, 입금일자, 입금금액, 수수료, 입금은행' 입력하시면 됩니다.</p>
                 </div>
             </div>
         </div>

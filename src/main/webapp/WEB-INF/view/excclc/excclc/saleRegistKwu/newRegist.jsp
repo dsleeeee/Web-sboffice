@@ -116,7 +116,7 @@
                                 <!-- define columns -->
                                 <wj-flex-grid-column header="<s:message code="saleRegistKwu.prodCd"/>"     binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="saleRegistKwu.prodNm"/>"     binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="saleRegistKwu.saleUprc"/>"   binding="saleUprc" width="65" align="right" is-read-only="true"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="saleRegistKwu.saleUprc"/>"   binding="saleUprc" width="65" align="right"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="saleRegistKwu.saleQty"/>"    binding="saleQty" width="65" align="center" max-length="4"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="saleRegistKwu.saleAmt"/>"    binding="saleAmt" width="65" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="saleRegistKwu.dcAmt"/>"      binding="dcAmt" width="65" align="right" max-length="8" aggregate="Sum"></wj-flex-grid-column>
@@ -125,7 +125,7 @@
                                 <wj-flex-grid-column header="<s:message code="saleRegistKwu.vatFg"/>"      binding="vatFg" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="saleRegistKwu.vatFg"/>"      binding="prodVatFg" width="80" data-map="vatFgDataMap" align="center"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="saleRegistKwu.saleFg"/>"     binding="prodSaleFg" width="80" data-map="saleFgDataMap" align="center"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="saleRegistKwu.prodTypeFg"/>" binding="prodTypeFg" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="saleRegistKwu.prodTypeFg"/>" binding="prodTypeFg" data-map="prodTypeFgDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                             </wj-flex-grid>
                         </div>
                     </div>
@@ -169,7 +169,7 @@
                             <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
                         </td>
                         <th><s:message code="saleRegistKwu.barCd"/></th>
-                        <td><input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" /></td>
+                        <td><input type="text" class="sb-input w100" id="srchBarcdCd" ng-model="barcdCd" /></td>
                     </tr>
                     </tbody>
                 </table>
@@ -193,7 +193,7 @@
                                     <wj-flex-grid-column header="<s:message code="saleRegistKwu.prodCd"/>"     binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                                     <wj-flex-grid-column header="<s:message code="saleRegistKwu.prodNm"/>"     binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
                                     <wj-flex-grid-column header="<s:message code="saleRegistKwu.barCd"/>"      binding="barCd" width="80" align="left" is-read-only="true"></wj-flex-grid-column>
-                                    <wj-flex-grid-column header="<s:message code="saleRegistKwu.prodTypeFg"/>" binding="prodTypeFg" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="saleRegistKwu.prodTypeFg"/>" binding="prodTypeFg" data-map="prodTypeFgDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                                     <wj-flex-grid-column header="<s:message code="saleRegistKwu.costUprc"/>"   binding="costUprc" align="right" is-read-only="true"></wj-flex-grid-column>
                                     <wj-flex-grid-column header="<s:message code="saleRegistKwu.splyUprc"/>"   binding="splyUprc" align="right" is-read-only="true"></wj-flex-grid-column>
                                     <wj-flex-grid-column header="<s:message code="saleRegistKwu.saleUprc"/>"   binding="saleUprc" align="right" is-read-only="true"></wj-flex-grid-column>
@@ -215,7 +215,7 @@
     });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/saleRegistKwu/newRegist.js?ver=20221123.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/saleRegistKwu/newRegist.js?ver=20221207.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

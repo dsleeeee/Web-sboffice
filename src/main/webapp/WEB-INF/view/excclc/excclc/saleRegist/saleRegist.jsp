@@ -91,6 +91,9 @@
   var orgnFg = "${orgnFg}";
   var storeNm = "${storeNm}";
   var storeCd = "${storeCd}";
+
+  <%-- 상품유형구분 --%>
+  var prodTypeFgData = ${ccu.getCommCodeExcpAll("008")};
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/saleRegist/saleRegist.js?ver=20220624.01" charset="utf-8"></script>
 

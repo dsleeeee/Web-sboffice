@@ -39,4 +39,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/card/cardCredit/cardCreditExcelUploadAdd.js?ver=20220918.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/card/cardCredit/cardCreditExcelUploadAdd.js?ver=20220918.02" charset="utf-8"></script>

@@ -3,11 +3,12 @@
 
 <!--
     MonthProd.xml
-    월별 상품 매출 현황
+    월별 상품 매출 현황 (맘스터치)
     ======================================================
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
     1       권지현     2022.10.04     최초작성
+    2       김설아     2022.11.11     전체수정
 -->
 <mapper namespace="kr.co.solbipos.sale.prod.monthProd.service.impl.MonthProdMapper">
 
@@ -19,157 +20,270 @@
     <select id="getMonthProdList" parameterType="monthProdVO" resultType="DefaultMap">
         /* MonthProdMapper.getMonthProdList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT	TO_CHAR(TO_DATE(tsmps.SALE_YM, 'YYYYMM'), 'YYYY-MM') AS SALE_YM
-        ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
-        ,		tsmps.STORE_CD
-        ,		tms.STORE_NM
-        , 		FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM
-        , 		tsmps.PROD_CD
-        , 		CASE tsmps.SEL_TYPE_FG
-                    WHEN 'S' THEN tsmps.SIDE_PROD_CD
-                    END AS SIDE_PROD_CD
-        ,		CASE tsmps.SEL_TYPE_FG
-                    WHEN 'P' THEN '사이드모상품'
-                    WHEN 'S' THEN '사이드상품'
-                    WHEN 'N' THEN '일반판매상품'
-                END AS SEL_TYPE_FG
-        , 		thp.PROD_NM
-        , 		CASE tsmps.SEL_TYPE_FG
-                    WHEN 'S' THEN 'ㅤ- ▶ ' || thps.PROD_NM
-                    ELSE thps.PROD_NM
-                END AS SIDE_PROD_NM
-        ,		SUM(CASE WHEN tsmps.SEL_TYPE_FG = 'N' OR tsmps.SEL_TYPE_FG = 'P' THEN tsmps.TOT_SALE_QTY END) AS SALE_QTY1
-        ,		SUM(CASE WHEN tsmps.SEL_TYPE_FG = 'N' OR tsmps.SEL_TYPE_FG = 'S' THEN tsmps.TOT_SALE_QTY END) AS SALE_QTY2
-        , 		SUM(tsmps.TOT_SALE_QTY) AS SALE_QTY3
-        , 		SUM(tsmps.TOT_SALE_AMT) AS TOT_SALE_AMT
-        , 		SUM(tsmps.TOT_DC_AMT) AS DC_AMT
-        ,		SUM(CASE WHEN tsmps.SEL_TYPE_FG = 'N' OR tsmps.SEL_TYPE_FG = 'P' THEN tsmps.REAL_SALE_AMT END) AS REAL_SALE_AMT1
-        ,		SUM(CASE WHEN tsmps.SEL_TYPE_FG = 'N' OR tsmps.SEL_TYPE_FG = 'S' THEN tsmps.REAL_SALE_AMT END) AS REAL_SALE_AMT2
-        , 		SUM(tsmps.REAL_SALE_AMT) AS REAL_SALE_AMT3
+        SELECT
+        <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
+            TO_CHAR(TO_DATE(tsmps.SALE_YM, 'YYYYMM'), 'YYYY-MM') AS SALE_YM,
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
+            TO_CHAR(TO_DATE(#{startMonth}, 'YYYYMM'), 'YYYY-MM') AS DAY_FROM,
+            TO_CHAR(TO_DATE(#{endMonth}, 'YYYYMM'), 'YYYY-MM') AS DAY_TO,
+        </if>
+        (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM,
+        tsmps.STORE_CD,
+        tms.STORE_NM,
+        FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+        tsmps.PROD_CD,
+        tmp.PROD_NM,
+        (CASE tsmps.SEL_TYPE_FG WHEN 'P' THEN '사이드모상품' WHEN 'S' THEN '사이드상품' WHEN 'N' THEN '일반판매상품' END) AS SEL_TYPE_FG,
+        (CASE tsmps.SEL_TYPE_FG WHEN 'S' THEN tsmps.SIDE_PROD_CD END) AS SIDE_PROD_CD,
+        (CASE tsmps.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmps2.PROD_NM ELSE tmps2.PROD_NM END) AS SIDE_PROD_NM,
+        SUM(CASE WHEN tsmps.SEL_TYPE_FG = 'N' OR tsmps.SEL_TYPE_FG = 'P' THEN tsmps.TOT_SALE_QTY END) AS SALE_QTY1,
+        SUM(CASE WHEN tsmps.SEL_TYPE_FG = 'N' OR tsmps.SEL_TYPE_FG = 'S' THEN tsmps.TOT_SALE_QTY END) AS SALE_QTY2,
+        SUM(tsmps.TOT_SALE_QTY) AS SALE_QTY3,
+        SUM(tsmps.TOT_SALE_AMT) AS TOT_SALE_AMT,
+        SUM(tsmps.TOT_DC_AMT) AS DC_AMT,
+        SUM(CASE WHEN tsmps.SEL_TYPE_FG = 'N' OR tsmps.SEL_TYPE_FG = 'P' THEN tsmps.REAL_SALE_AMT END) AS REAL_SALE_AMT1,
+        SUM(CASE WHEN tsmps.SEL_TYPE_FG = 'N' OR tsmps.SEL_TYPE_FG = 'S' THEN tsmps.REAL_SALE_AMT END) AS REAL_SALE_AMT2,
+        SUM(tsmps.REAL_SALE_AMT) AS REAL_SALE_AMT3
         <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM 	TB_SL_MONTHLY_PROD_SDSEL tsmps
-        ,		TB_HQ_PRODUCT thp
-        ,		TB_HQ_PRODUCT thps
-        ,		TB_MS_STORE tms
-        WHERE 	tsmps.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND     tsmps.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
-        AND 	thp.HQ_OFFICE_CD = tsmps.HQ_OFFICE_CD
-        AND 	thp.PROD_CD = tsmps.PROD_CD
-        AND 	thps.HQ_OFFICE_CD = tsmps.HQ_OFFICE_CD
-        AND 	thps.PROD_CD = tsmps.SIDE_PROD_CD
-        AND		tsmps.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
-        AND		tsmps.STORE_CD = tms.STORE_CD
+        FROM TB_SL_MONTHLY_PROD_SDSEL tsmps,
+        TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi,
+        TB_MS_PRODUCT tmp,
+        TB_MS_PRODUCT tmps2 -- 사이드
+        WHERE 1=1
+        AND tsmps.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsmps.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
         <if test='storeCds != null and storeCds != ""'>
             AND tsmps.STORE_CD IN
             <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
                 #{item}
             </foreach>
         </if>
-        <if test='prodCd != null and prodCd != ""'>
-            AND tsmps.SIDE_PROD_CD LIKE '%'|| #{prodCd} ||'%'
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
         </if>
-        <if test='prodNm != null and prodNm != ""'>
-            AND thps.PROD_NM LIKE '%'||#{prodNm}||'%'
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
         </if>
         <if test="prodClassCd != null and prodClassCd != ''">
-            AND thp.PROD_CLASS_CD IN (  SELECT  PROD_CLASS_CD
-                                        FROM    TB_HQ_PRODUCT_CLASS
-                                        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
-                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
-                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd})
+            AND tmps2.PROD_CLASS_CD IN (
+                                            SELECT
+                                            PROD_CLASS_CD
+                                            FROM TB_HQ_PRODUCT_CLASS
+                                            WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                            CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        )
         </if>
-        <if test='hqBrandCd != null and hqBrandCd != ""'>
-            AND tsmps.HQ_BRAND_CD = #{hqBrandCd}
+        <if test='prodCd != null and prodCd != ""'>
+            AND tmps2.PROD_CD LIKE '%'||#{prodCd}||'%'
         </if>
         <if test='prodNm != null and prodNm != ""'>
-            AND thps.PROD_NM LIKE '%'||#{prodNm}||'%'
+            AND tmps2.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
-        <if test='option != null and option != "" and option == "1"'>
+        <if test='prodCds != null and prodCds != ""'>
+            AND tmps2.PROD_CD IN
+            <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+            AND tmps2.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+        </if>
+        <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 상품브랜드 전체일때
+                AND tmps2.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='prodOption != null and prodOption != "" and prodOption == "1"'>
             AND tsmps.SEL_TYPE_FG IN ('N', 'P')
         </if>
-        <if test='option != null and option != "" and option == "2"'>
+        <if test='prodOption != null and prodOption != "" and prodOption == "2"'>
             AND tsmps.SEL_TYPE_FG IN ('N', 'S')
         </if>
-        GROUP BY TSMPS.SALE_YM, tms.HQ_OFFICE_CD, tms.BRANCH_CD, tsmps.STORE_CD, tms.STORE_NM, thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, tsmps.PROD_CD, thp.PROD_NM, tsmps.SEL_TYPE_FG, tsmps.SIDE_PROD_CD, thps.PROD_NM
+        AND tms.STORE_CD = tsmps.STORE_CD
+        AND tmsi.STORE_CD (+)= tms.STORE_CD
+        AND tmp.STORE_CD = tsmps.STORE_CD
+        AND tmp.PROD_CD = tsmps.PROD_CD
+        AND tmps2.STORE_CD = tsmps.STORE_CD
+        AND tmps2.PROD_CD = tsmps.PROD_CD
+        <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
+            GROUP BY tsmps.SALE_YM, tms.HQ_OFFICE_CD, tms.BRANCH_CD, tsmps.STORE_CD, tms.STORE_NM, tmp.STORE_CD, tmp.PROD_CLASS_CD, tsmps.PROD_CD, tmp.PROD_NM, tsmps.SEL_TYPE_FG, tsmps.SIDE_PROD_CD, tmps2.PROD_NM
+            ORDER BY tsmps.SALE_YM, tsmps.STORE_CD, tsmps.PROD_CD
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
+            GROUP BY tms.HQ_OFFICE_CD, tms.BRANCH_CD, tsmps.STORE_CD, tms.STORE_NM, tmp.STORE_CD, tmp.PROD_CLASS_CD, tsmps.PROD_CD, tmp.PROD_NM, tsmps.SEL_TYPE_FG, tsmps.SIDE_PROD_CD, tmps2.PROD_NM
+            ORDER BY tsmps.STORE_CD, tsmps.PROD_CD
+        </if>
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
-    <!-- 조회 -->
+    <!-- 엑셀 조회 -->
     <!--
         TABLE    :
         COMMENTS :
     -->
     <select id="getMonthProdExcelList" parameterType="monthProdVO" resultType="DefaultMap">
         /* MonthProdMapper.getMonthProdExcelList */
-        SELECT	TO_CHAR(TO_DATE(tsmps.SALE_YM, 'YYYYMM'), 'YYYY-MM') AS SALE_YM
-        ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
-        ,		tsmps.STORE_CD
-        ,		tms.STORE_NM
-        , 		FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM
-        , 		tsmps.PROD_CD
-        , 		CASE tsmps.SEL_TYPE_FG
-                    WHEN 'S' THEN tsmps.SIDE_PROD_CD
-                END AS SIDE_PROD_CD
-        ,		CASE tsmps.SEL_TYPE_FG
-                    WHEN 'P' THEN '사이드모상품'
-                    WHEN 'S' THEN '사이드상품'
-                    WHEN 'N' THEN '일반판매상품'
-                    END AS SEL_TYPE_FG
-        , 		thp.PROD_NM
-        , 		CASE tsmps.SEL_TYPE_FG
-                    WHEN 'S' THEN 'ㅤ- ▶ ' || thps.PROD_NM
-                    ELSE thps.PROD_NM
-                END AS SIDE_PROD_NM
-        ,		SUM(CASE WHEN tsmps.SEL_TYPE_FG = 'N' OR tsmps.SEL_TYPE_FG = 'P' THEN tsmps.TOT_SALE_QTY END) AS SALE_QTY1
-        ,		SUM(CASE WHEN tsmps.SEL_TYPE_FG = 'N' OR tsmps.SEL_TYPE_FG = 'S' THEN tsmps.TOT_SALE_QTY END) AS SALE_QTY2
-        , 		SUM(tsmps.TOT_SALE_QTY) AS SALE_QTY3
-        , 		SUM(tsmps.TOT_SALE_AMT) AS TOT_SALE_AMT
-        , 		SUM(tsmps.TOT_DC_AMT) AS DC_AMT
-        ,		SUM(CASE WHEN tsmps.SEL_TYPE_FG = 'N' OR tsmps.SEL_TYPE_FG = 'P' THEN tsmps.REAL_SALE_AMT END) AS REAL_SALE_AMT1
-        ,		SUM(CASE WHEN tsmps.SEL_TYPE_FG = 'N' OR tsmps.SEL_TYPE_FG = 'S' THEN tsmps.REAL_SALE_AMT END) AS REAL_SALE_AMT2
-        , 		SUM(tsmps.REAL_SALE_AMT) AS REAL_SALE_AMT3
-        FROM 	TB_SL_MONTHLY_PROD_SDSEL tsmps
-        ,		TB_HQ_PRODUCT thp
-        ,		TB_HQ_PRODUCT thps
-        ,		TB_MS_STORE tms
-        WHERE 	tsmps.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND     tsmps.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
-        AND 	thp.HQ_OFFICE_CD = tsmps.HQ_OFFICE_CD
-        AND 	thp.PROD_CD = tsmps.PROD_CD
-        AND 	thps.HQ_OFFICE_CD = tsmps.HQ_OFFICE_CD
-        AND 	thps.PROD_CD = tsmps.SIDE_PROD_CD
-        AND		tsmps.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
-        AND		tsmps.STORE_CD = tms.STORE_CD
+        SELECT
+        <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
+            TO_CHAR(TO_DATE(tsmps.SALE_YM, 'YYYYMM'), 'YYYY-MM') AS SALE_YM,
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
+            TO_CHAR(TO_DATE(#{startMonth}, 'YYYYMM'), 'YYYY-MM') AS DAY_FROM,
+            TO_CHAR(TO_DATE(#{endMonth}, 'YYYYMM'), 'YYYY-MM') AS DAY_TO,
+        </if>
+        (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM,
+        tsmps.STORE_CD,
+        tms.STORE_NM,
+        FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+        tsmps.PROD_CD,
+        tmp.PROD_NM,
+        (CASE tsmps.SEL_TYPE_FG WHEN 'P' THEN '사이드모상품' WHEN 'S' THEN '사이드상품' WHEN 'N' THEN '일반판매상품' END) AS SEL_TYPE_FG,
+        (CASE tsmps.SEL_TYPE_FG WHEN 'S' THEN tsmps.SIDE_PROD_CD END) AS SIDE_PROD_CD,
+        (CASE tsmps.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmps2.PROD_NM ELSE tmps2.PROD_NM END) AS SIDE_PROD_NM,
+        SUM(CASE WHEN tsmps.SEL_TYPE_FG = 'N' OR tsmps.SEL_TYPE_FG = 'P' THEN tsmps.TOT_SALE_QTY END) AS SALE_QTY1,
+        SUM(CASE WHEN tsmps.SEL_TYPE_FG = 'N' OR tsmps.SEL_TYPE_FG = 'S' THEN tsmps.TOT_SALE_QTY END) AS SALE_QTY2,
+        SUM(tsmps.TOT_SALE_QTY) AS SALE_QTY3,
+        SUM(tsmps.TOT_SALE_AMT) AS TOT_SALE_AMT,
+        SUM(tsmps.TOT_DC_AMT) AS DC_AMT,
+        SUM(CASE WHEN tsmps.SEL_TYPE_FG = 'N' OR tsmps.SEL_TYPE_FG = 'P' THEN tsmps.REAL_SALE_AMT END) AS REAL_SALE_AMT1,
+        SUM(CASE WHEN tsmps.SEL_TYPE_FG = 'N' OR tsmps.SEL_TYPE_FG = 'S' THEN tsmps.REAL_SALE_AMT END) AS REAL_SALE_AMT2,
+        SUM(tsmps.REAL_SALE_AMT) AS REAL_SALE_AMT3
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_SL_MONTHLY_PROD_SDSEL tsmps,
+        TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi,
+        TB_MS_PRODUCT tmp,
+        TB_MS_PRODUCT tmps2 -- 사이드
+        WHERE 1=1
+        AND tsmps.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsmps.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
         <if test='storeCds != null and storeCds != ""'>
             AND tsmps.STORE_CD IN
             <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
                 #{item}
             </foreach>
         </if>
-        <if test='prodCd != null and prodCd != ""'>
-            AND tsmps.SIDE_PROD_CD LIKE '%'|| #{prodCd} ||'%'
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
         </if>
-        <if test='prodNm != null and prodNm != ""'>
-            AND thps.PROD_NM LIKE '%'||#{prodNm}||'%'
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
         </if>
         <if test="prodClassCd != null and prodClassCd != ''">
-            AND thp.PROD_CLASS_CD IN (  SELECT  PROD_CLASS_CD
-            FROM    TB_HQ_PRODUCT_CLASS
-            WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
-            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
-            CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd})
+            AND tmps2.PROD_CLASS_CD IN (
+                                            SELECT
+                                            PROD_CLASS_CD
+                                            FROM TB_HQ_PRODUCT_CLASS
+                                            WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                            CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        )
         </if>
-        <if test='hqBrandCd != null and hqBrandCd != ""'>
-            AND tsmps.HQ_BRAND_CD = #{hqBrandCd}
+        <if test='prodCd != null and prodCd != ""'>
+            AND tmps2.PROD_CD LIKE '%'||#{prodCd}||'%'
         </if>
-        <if test='option != null and option != "" and option == "1"'>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmps2.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='prodCds != null and prodCds != ""'>
+            AND tmps2.PROD_CD IN
+            <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+            AND tmps2.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+        </if>
+        <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 상품브랜드 전체일때
+                AND tmps2.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='prodOption != null and prodOption != "" and prodOption == "1"'>
             AND tsmps.SEL_TYPE_FG IN ('N', 'P')
         </if>
-        <if test='option != null and option != "" and option == "2"'>
+        <if test='prodOption != null and prodOption != "" and prodOption == "2"'>
             AND tsmps.SEL_TYPE_FG IN ('N', 'S')
         </if>
-        GROUP BY TSMPS.SALE_YM, tms.HQ_OFFICE_CD, tms.BRANCH_CD, tsmps.STORE_CD, tms.STORE_NM, thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, tsmps.PROD_CD, thp.PROD_NM, tsmps.SEL_TYPE_FG, tsmps.SIDE_PROD_CD, thps.PROD_NM
-
+        AND tms.STORE_CD = tsmps.STORE_CD
+        AND tmsi.STORE_CD (+)= tms.STORE_CD
+        AND tmp.STORE_CD = tsmps.STORE_CD
+        AND tmp.PROD_CD = tsmps.PROD_CD
+        AND tmps2.STORE_CD = tsmps.STORE_CD
+        AND tmps2.PROD_CD = tsmps.PROD_CD
+        <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
+            GROUP BY tsmps.SALE_YM, tms.HQ_OFFICE_CD, tms.BRANCH_CD, tsmps.STORE_CD, tms.STORE_NM, tmp.STORE_CD, tmp.PROD_CLASS_CD, tsmps.PROD_CD, tmp.PROD_NM, tsmps.SEL_TYPE_FG, tsmps.SIDE_PROD_CD, tmps2.PROD_NM
+            ORDER BY tsmps.SALE_YM, tsmps.STORE_CD, tsmps.PROD_CD
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
+            GROUP BY tms.HQ_OFFICE_CD, tms.BRANCH_CD, tsmps.STORE_CD, tms.STORE_NM, tmp.STORE_CD, tmp.PROD_CLASS_CD, tsmps.PROD_CD, tmp.PROD_NM, tsmps.SEL_TYPE_FG, tsmps.SIDE_PROD_CD, tmps2.PROD_NM
+            ORDER BY tsmps.STORE_CD, tsmps.PROD_CD
+        </if>
     </select>
 
 </mapper>
