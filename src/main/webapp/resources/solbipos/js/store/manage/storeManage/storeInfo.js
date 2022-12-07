@@ -110,6 +110,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     $scope.envHqOfficeCdVal = s.selectedValue;
     $scope.envStoreCdVal = "";
+    $scope.store.copyStoreInfo = "";
     $scope.store.copyStoreCd = "";
     $scope.copyStoreSettingChk();
 
@@ -890,6 +891,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $scope.store.storeCdChkFg = "";
           $scope.store.envst0043 = hqScope.getHq().envst0043; // 본사신규상품매장생성
           $("#hdDigit8Store").val( hqScope.getHq().digit8Store); // 매장코드8이상사용
+
+          $scope.envHqOfficeCdCombo.selectedValue = $scope.store.hqOfficeCd;
 
           // 매장코드 채번방식
           if (hqScope.getHq().envst0027 === '1') { //수동
