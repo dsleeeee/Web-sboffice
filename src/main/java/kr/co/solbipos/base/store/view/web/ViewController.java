@@ -229,16 +229,6 @@ public class ViewController {
 
         List<DefaultMap<String>> result = viewService.getStoreEnvInfoList(copyStoreEnvVO, sessionInfoVO);
 
-        // [1250] 맘스터치백오피스인경우 상품 복사기능 보이게 처리
-        if(CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0").equals("1")) {
-
-            DefaultMap<String> envProd = new DefaultMap<String>();
-            envProd.put("NMCODE_CD", "04");
-            envProd.put("NMCODE_NM", "상품");
-
-            result.add(3, envProd);
-        }
-
         return ReturnUtil.returnListJson(Status.OK, result, copyStoreEnvVO);
     }
 
