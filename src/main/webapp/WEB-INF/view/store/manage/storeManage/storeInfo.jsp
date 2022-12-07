@@ -532,7 +532,7 @@
                     <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" id="kitchenPrintChk" value="kitchenPrint"/> <%-- 주방프린터 --%>
                     <label for="kitchenPrintChk" ><s:message code="storeManage.kitchenPrint" /></label>
                   </span>
-                      <span class="chk mr10 pdb5 txtIn" <c:if test="${momsEnvstVal == '0'}"> style="display: none;"</c:if>><input type="checkbox" name="copyChk" id="productChk" value="product"/><%-- 상품 --%>
+                      <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" id="productChk" value="product"/><%-- 상품 --%>
                       <label for="productChk" ><s:message code="storeManage.product" /></label>
                   </span>
                     <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" id="salePriceChk" value="salePrice"/><%-- 판매가격 --%>

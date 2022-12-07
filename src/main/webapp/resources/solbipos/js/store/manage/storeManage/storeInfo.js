@@ -1041,12 +1041,6 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         } else if($scope.store.copyHqOfficeCd !== "00000") {
           // 매장환경복사 본사와 같은 본사면
           if($scope.store.hqOfficeCd === $scope.store.copyHqOfficeCd) {
-            if(momsEnvstVal === '0'){
-              if ($("#productChk").is(":checked") === true) {
-                $("#productChk").prop("checked", false);
-              }
-              $("#productChk").attr("disabled", true);
-            }
             $("#salePriceChk").attr("disabled", false);
             $("#supplyPriceChk").attr("disabled", false);
             $("#touchKeyChk").attr("disabled", false);
