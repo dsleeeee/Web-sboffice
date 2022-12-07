@@ -776,6 +776,8 @@
     <typeAlias alias="dcfgPeriodSaleVO" type="kr.co.solbipos.sale.status.dcfgPeriodSale.service.DcfgPeriodSaleVO"/>
     <!-- 매출관리 > 매출현황2 > 기간매출상세 -->
     <typeAlias alias="periodSaleVO" type="kr.co.solbipos.sale.status.periodSale.service.PeriodSaleVO"/>
+    <!-- 매출관리 > 매출현황2 > 사원카드매출 -->
+    <typeAlias alias="empCardVO" type="kr.co.solbipos.sale.status.empCard.service.EmpCardVO"/>
 
     <!-- 매출관리 > 매출분석 > 매장별배출분석 -->
     <typeAlias alias="storeRankVO" 	type="kr.co.solbipos.sale.anals.store.rank.service.StoreRankVO"/>

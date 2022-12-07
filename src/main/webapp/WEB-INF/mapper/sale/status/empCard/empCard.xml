@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    EmpCard.xml
+    사원카드매출 화면
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.12.05     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.status.empCard.service.impl.EmpCardMapper">
+
+    <!-- 사원카드매출 리스트 조회 -->
+    <!--
+        TABLE    :
+        PARAM    : empCardVO
+        COMMENTS : 기간매출상세 리스트 조회
+    -->
+    <select id="getEmpCardList" parameterType="empCardVO" resultType="DefaultMap">
+        /* USE : EmpCardMapper.getEmpCardList */
+        <![CDATA[
+        SELECT  tssh.STORE_CD
+        ,       (SELECT STORE_NM FROM TB_MS_STORE tms WHERE tms.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD AND tms.STORE_CD = tssh.STORE_CD) AS STORE_NM
+        ,       TO_CHAR(TO_DATE(tssh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,       TO_CHAR(TO_DATE(tssh.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+        ,       tssh.POS_NO
+        ,       tssh.BILL_NO
+--         ,       SUBSTR(tssh.BILL_DT, 9, 6) AS BILL_DT
+	    , 		TO_CHAR(TO_DATE(tssh.BILL_DT,'yyyy/mm/dd hh24:mi:ss'),'hh24:mi:ss') AS BILL_DT
+        ,       tssh.SALE_YN
+        ,       tssh.TOT_SALE_AMT
+        ,       tssh.TOT_DC_AMT
+        ,       tssh.REAL_SALE_AMT
+        ,       (tssh.REAL_SALE_AMT - tssh.VAT_AMT) AS GA_AMT
+        ,       tssh.VAT_AMT
+        ,       tssh.TOT_TIP_AMT
+        ,       tssh.TOT_ETC_AMT
+        ,       tssh.CUP_AMT
+        ,       teec.EMPLOYEE_CARD_NO
+        ,		teec.EMPLOYEE_NO
+        ,		teec.EMPLOYEE_NM
+        ,		teec.DIV_NM
+        ,		teec.DEPT_NM
+        ,		teec.POSITION_NM
+        ,       tssh.TOT_GUEST_CNT
+        ,       DECODE(NVL(tssh.TOT_GUEST_CNT,0), 0, 0, DECODE(tssh.SALE_YN, 'Y', ROUND(tssh.REAL_SALE_AMT / tssh.TOT_GUEST_CNT), -(ROUND(tssh.REAL_SALE_AMT / tssh.TOT_GUEST_CNT)))) AS GUEST_UPRC
+        ,       tssh.REG_DT AS FIRST_ORDER_DT
+        ,       tsshg.GUEST01
+        ,       tsshg.GUEST02
+        ,       tsshg.GUEST03
+        ,       tsshg.GUEST04
+        ,       tsshg.GUEST05
+        ,       tsshg.GUEST06
+        ,       tssh.TOT_OFFADD_AMT
+        ]]>
+        ,       <foreach collection="arrPayCol" item="item" separator="+">
+        NVL(tsshp.PAY${item}, 0)
+    </foreach>  +  NVL(tsspc.PAY02, 0) +  NVL(tsspc.PAY021, 0) AS TOT_PAY_AMT
+        ,       <foreach collection="arrPayCol" item="item" separator=",">
+        tsshp.PAY${item} AS PAY${item}
+    </foreach>
+        ,       <foreach collection="arrDcCol" item="item" separator=",">
+        tsshd.DC${item} AS DC${item}
+    </foreach>
+        ,       tsspc.PAY02 AS PAY02 -- 현금
+        ,       tsspc.PAY021 AS PAY021 -- 현금영수증
+        ,       CASE
+        WHEN tssh.REG_ID LIKE 'WEB_REG_%' THEN 'Y'
+        ELSE 'N'
+        END AS WEB_REG
+        <![CDATA[
+        FROM    TB_SL_SALE_HDR tssh
+        ,       (   SELECT  SALE_DATE, POS_NO, BILL_NO
+        ]]>
+        ,       <foreach collection="arrPayCol" item="item" separator=",">
+        PAY${item} AS PAY${item}
+    </foreach>
+        <![CDATA[
+                    FROM    (   SELECT  tsshp.SALE_DATE, tsshp.POS_NO, tsshp.BILL_NO, tsshp.PAY_CD, tsshp.PAY_AMT
+                                FROM    TB_SL_SALE_HDR_PAY tsshp
+                                WHERE   tsshp.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                AND     tsshp.STORE_CD      = #{storeCd}
+                                AND     tsshp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                                AND     tsshp.PAY_CD != '02' -- 현금,현금영수증 분리
+        ]]>
+        <if test='saleYn != null and saleYn != ""'>
+            AND   tsshp.SALE_YN    = #{saleYn}
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND   tsshp.POS_NO       = #{posNo}
+        </if>
+        <![CDATA[
+                            )
+                    PIVOT   (
+                                SUM(PAY_AMT)
+                                FOR PAY_CD
+                                IN (${pivotPayCol})
+                            )
+                ) tsshp
+        ,       (   SELECT  SALE_DATE, POS_NO, BILL_NO
+        ]]>
+        ,       <foreach collection="arrDcCol" item="item" separator=",">
+        DC${item} AS DC${item}
+    </foreach>
+        <![CDATA[
+                    FROM    (   SELECT  tsshd.SALE_DATE, tsshd.POS_NO, tsshd.BILL_NO, tsshd.DC_CD, tsshd.DC_AMT
+                                FROM    TB_SL_SALE_HDR_DC tsshd
+                                WHERE   tsshd.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                AND     tsshd.STORE_CD      = #{storeCd}
+                                AND     tsshd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    ]]>
+                                <if test='saleYn != null and saleYn != ""'>
+                                    AND   tsshd.SALE_YN    = #{saleYn}
+                                </if>
+                                <if test='posNo != null and posNo != ""'>
+                                    AND   tsshd.POS_NO       = #{posNo}
+                                </if>
+                    <![CDATA[
+                            )
+                    PIVOT   (
+                                SUM(DC_AMT)
+                                FOR DC_CD
+                                IN (${pivotDcCol})
+                            )
+                ) tsshd
+        ,       (   SELECT  tsshg.SALE_DATE, tsshg.POS_NO, tsshg.BILL_NO
+                    ,       NVL(tsshg.GUEST_CNT_1 * tsshg.SALE_FG, 0) AS GUEST01
+                    ,       NVL(tsshg.GUEST_CNT_2 * tsshg.SALE_FG, 0) AS GUEST02
+                    ,       NVL(tsshg.GUEST_CNT_3 * tsshg.SALE_FG, 0) AS GUEST03
+                    ,       NVL(tsshg.GUEST_CNT_4 * tsshg.SALE_FG, 0) AS GUEST04
+                    ,       NVL(tsshg.GUEST_CNT_5 * tsshg.SALE_FG, 0) AS GUEST05
+                    ,       NVL(tsshg.GUEST_CNT_6 * tsshg.SALE_FG, 0) AS GUEST06
+                    FROM    TB_SL_SALE_HDR_GUEST tsshg
+                    WHERE   tsshg.HQ_OFFICE_CD  = #{hqOfficeCd}
+                    AND     tsshg.STORE_CD      = #{storeCd}
+                    AND     tsshg.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        ]]>
+        <if test='saleYn != null and saleYn != ""'>
+            AND   tsshg.SALE_YN    = #{saleYn}
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND   tsshg.POS_NO       = #{posNo}
+        </if>
+        <![CDATA[
+                ) tsshg
+        ]]>
+        ,       (
+        -- 현금,현금영수증 분리
+        SELECT  tsspc.SALE_DATE, tsspc.POS_NO, tsspc.BILL_NO,
+        SUM(tsspc.SALE_AMT) - SUM(CASE WHEN tsspc.APPR_PROC_FG IN ('1','2','4') THEN tsspc.SALE_AMT ELSE 0 END) AS PAY02, -- 현금
+        SUM(CASE WHEN tsspc.APPR_PROC_FG IN ('1','2','4') THEN tsspc.SALE_AMT ELSE 0 END) AS PAY021 -- 현금영수증
+        FROM    TB_SL_SALE_PAY_CASH tsspc
+        WHERE   tsspc.HQ_OFFICE_CD =    #{hqOfficeCd}
+        AND     tsspc.STORE_CD =        #{storeCd}
+        AND     tsspc.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='saleYn != null and saleYn != ""'>
+            AND   tsspc.SALE_YN    = #{saleYn}
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND   tsspc.POS_NO  = #{posNo}
+        </if>
+        GROUP BY tsspc.SALE_DATE, tsspc.POS_NO, tsspc.BILL_NO
+        ) tsspc
+        <![CDATA[
+        ,       TB_MS_TABLE_V01 tmt
+        ,       TB_SL_SALE_PAY_EMP_CARD tsspec
+        ,       TB_EM_EMPLOYEE_CARD teec
+        WHERE   tsspec.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsspec.STORE_CD     = #{storeCd}
+        AND     tsspec.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        ]]>
+        <if test='saleYn != null and saleYn != ""'>
+            AND   tsspec.SALE_YN    = #{saleYn}
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND   tsspec.POS_NO       = #{posNo}
+        </if>
+        AND     tsspec.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+        AND     tsspec.STORE_CD     = tssh.STORE_CD
+        AND     tsspec.SALE_DATE    = tssh.SALE_DATE
+        AND     tsspec.SALE_YN      = tssh.SALE_YN
+        AND     tsspec.POS_NO       = tssh.POS_NO
+        AND     tsspec.BILL_NO      = tssh.BILL_NO
+        AND     tsspec.OFFICE_EMP_CARD_NO = teec.EMPLOYEE_CARD_NO(+)
+        <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+            AND tsspec.HQ_OFFICE_CD = teec.EMPLOYEE_ORGN_CD(+)
+        </if>
+        <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+            AND tsspec.STORE_CD  = teec.EMPLOYEE_ORGN_CD(+)
+        </if>
+        <![CDATA[
+        AND     tsshp.SALE_DATE   (+) = tssh.SALE_DATE
+        AND     tsshp.POS_NO      (+) = tssh.POS_NO
+        AND     tsshp.BILL_NO     (+) = tssh.BILL_NO
+        AND     tsshd.SALE_DATE   (+) = tssh.SALE_DATE
+        AND     tsshd.POS_NO      (+) = tssh.POS_NO
+        AND     tsshd.BILL_NO     (+) = tssh.BILL_NO
+        AND     tsshg.SALE_DATE   (+) = tssh.SALE_DATE
+        AND     tsshg.POS_NO      (+) = tssh.POS_NO
+        AND     tsshg.BILL_NO     (+) = tssh.BILL_NO
+        AND     tmt.STORE_CD      (+) = tssh.STORE_CD
+        AND     tmt.TBL_CD        (+) = tssh.TBL_CD
+        AND     tsspc.SALE_DATE   (+) = tssh.SALE_DATE
+        AND     tsspc.POS_NO      (+) = tssh.POS_NO
+        AND     tsspc.BILL_NO     (+) = tssh.BILL_NO
+        ORDER
+        BY      tssh.STORE_CD, tssh.SALE_DATE, tssh.POS_NO, tssh.BILL_NO DESC
+        ]]>
+    </select>
+
+</mapper>
