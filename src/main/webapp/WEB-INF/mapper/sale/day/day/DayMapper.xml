@@ -1838,6 +1838,11 @@
         ,       B.OFFICE_EMP_NO
         ,       B.OFFICE_EMP_NM
         ,		C.PROD_NM
+        ,		teec.EMPLOYEE_NO
+        ,		teec.EMPLOYEE_NM
+        ,		teec.DIV_NM
+        ,		teec.DEPT_NM
+        ,		teec.POSITION_NM
         ,		SUM(DECODE(A.SALE_AMT, 0, 0, ROUND(C.PAY_AMT*B.SALE_AMT/A.SALE_AMT, 0))) AS SALE_AMT
           FROM (
                     SELECT  STORE_CD
@@ -1875,6 +1880,7 @@
                     ,       OFFICE_DEPT_NM
                     ,       OFFICE_EMP_NO
                     ,       OFFICE_EMP_NM
+                    ,       OFFICE_EMP_CARD_NO
                     ,       SUM(SALE_AMT) AS SALE_AMT
                       FROM TB_SL_SALE_PAY_EMP_CARD
                      WHERE HQ_OFFICE_CD = #{hqOfficeCd}
@@ -1900,6 +1906,7 @@
                     ,     OFFICE_DEPT_NM
                     ,     OFFICE_EMP_NO
                     ,     OFFICE_EMP_NM
+                    ,     OFFICE_EMP_CARD_NO
                 ) B,
                 (
                     SELECT A.STORE_CD
@@ -1943,6 +1950,7 @@
                      WHERE B.STORE_CD = A.STORE_CD
                        AND B.PROD_CD  = A.PROD_CD
                 ) C
+        ,      TB_EM_EMPLOYEE_CARD teec
          WHERE B.STORE_CD = A.STORE_CD
            AND B.SALE_DATE = A.SALE_DATE
            AND B.POS_NO = A.POS_NO
@@ -1951,6 +1959,13 @@
            AND C.SALE_DATE = A.SALE_DATE
            AND C.POS_NO = A.POS_NO
            AND C.BILL_NO = A.BILL_NO
+        AND teec.EMPLOYEE_CARD_NO (+) = B.OFFICE_EMP_CARD_NO
+        <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+            AND teec.EMPLOYEE_ORGN_CD (+) = #{hqOfficeCd}
+        </if>
+        <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+            AND teec.EMPLOYEE_ORGN_CD (+) = B.STORE_CD
+        </if>
          GROUP
             BY B.SALE_DATE
          ,     B.OFFICE_NM
@@ -1958,6 +1973,11 @@
          ,     B.OFFICE_EMP_NO
          ,     B.OFFICE_EMP_NM
          ,     C.PROD_NM
+        ,		teec.EMPLOYEE_NO
+        ,		teec.EMPLOYEE_NM
+        ,		teec.DIV_NM
+        ,		teec.DEPT_NM
+        ,		teec.POSITION_NM
         ORDER
            BY B.SALE_DATE
         ,     B.OFFICE_NM
@@ -1965,6 +1985,11 @@
         ,     B.OFFICE_EMP_NO
         ,     B.OFFICE_EMP_NM
         ,     C.PROD_NM
+        ,		teec.EMPLOYEE_NO
+        ,		teec.EMPLOYEE_NM
+        ,		teec.DIV_NM
+        ,		teec.DEPT_NM
+        ,		teec.POSITION_NM
     </select>
 
 </mapper>

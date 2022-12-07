@@ -87,6 +87,12 @@
                     <wj-flex-grid-column header="<s:message code="day.empCard.prodNm"/>" binding="prodNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="day.empCard.saleAmt"/>" binding="saleAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
 
+                    <wj-flex-grid-column header="<s:message code="day.empCard.employeeNo"/>" binding="employeeNo" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="day.empCard.employeeNm"/>" binding="employeeNm" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="day.empCard.divNm"/>" binding="divNm" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="day.empCard.deptNm"/>" binding="deptNm" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="day.empCard.positionNm"/>" binding="positionNm" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+
                 </wj-flex-grid>
 
                 <%-- ColumnPicker 사용시 include --%>
