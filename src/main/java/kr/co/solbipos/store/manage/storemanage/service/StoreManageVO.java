@@ -196,6 +196,9 @@ public class StoreManageVO extends PageVO {
     /** 환경설정 [1250 맘스터치] */
     private String momsEnvstVal;
 
+    /** 사이트코드 */
+    private String siteCd;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -947,5 +950,13 @@ public class StoreManageVO extends PageVO {
 
     public void setMomsEnvstVal(String momsEnvstVal) {
         this.momsEnvstVal = momsEnvstVal;
+    }
+
+    public String getSiteCd() {
+        return siteCd;
+    }
+
+    public void setSiteCd(String siteCd) {
+        this.siteCd = siteCd;
     }
 }

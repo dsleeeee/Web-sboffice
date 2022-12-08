@@ -188,7 +188,8 @@
                tmsi.MOMS_COMMERCIAL,
                tmsi.MOMS_SHOP_TYPE,
                tmsi.MOMS_STORE_MANAGE_TYPE,
-               NVL((SELECT ENVST_VAL FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '1250' AND USE_YN = 'Y'), '0') AS ENVST_1250
+               NVL((SELECT ENVST_VAL FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '1250' AND USE_YN = 'Y'), '0') AS ENVST_1250,
+               tms.SITE_CD
           FROM TB_MS_STORE tms,
                TB_HQ_OFFICE tho,
                TB_CM_AGENCY tca,
@@ -367,6 +368,7 @@
             LATITUDE,
             LONGITUDE,
             BRANCH_CD,
+            SITE_CD,
             REG_DT,
             REG_ID,
             MOD_DT,
@@ -403,6 +405,7 @@
             #{latitude},
             #{longitude},
             #{branchCd},
+            #{siteCd},
             #{regDt},
             #{regId},
             #{modDt},
@@ -446,6 +449,7 @@
                LATITUDE = #{latitude},
                LONGITUDE = #{longitude},
                BRANCH_CD = #{branchCd},
+               SITE_CD = #{siteCd},
                MOD_DT = #{modDt},
                MOD_ID = #{modId}
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
