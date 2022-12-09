@@ -391,12 +391,14 @@ app.controller('dailyTableReportKwuCtrl', ['$scope', '$http', function ($scope, 
         for (var i = 0; i < $scope.dailyTableKwuCtrl_groupCourse.length; i++) {
             // 금액표시(,)
             var item = $scope.dailyTableKwuCtrl_groupCourse[i];
+            var fg = nvl(item.fg, '');
+            var summary = nvl(item.summary, '');
             var amt = (item.amt === undefined || item.amt == null || item.amt.length <= 0) ? nvl(item.amt,0) : addComma(item.amt);
             groupCourseListHtml += '<tr class="h25">'
-                + '<td class="tc">' + item.fg + '</td>'
+                + '<td class="tc">' + fg + '</td>'
                 + '<td class="tl">' + item.groupNm + '</td>'
                 + '<td class="tl">' + item.saleDate + '</td>'
-                + '<td class="tl">' + item.summary + '</td>'
+                + '<td class="tl">' + summary + '</td>'
                 + '<td class="tr">' + amt + '</td>'
                 + '</tr>';
         }

@@ -166,6 +166,7 @@
         <if test='membrNm != null and membrNm != ""'>
             AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
         </if>
+        AND tmm.MEMBR_CLASS_CD = '002' -- 단체
         ORDER BY tmm.MEMBR_NO
     </select>
 

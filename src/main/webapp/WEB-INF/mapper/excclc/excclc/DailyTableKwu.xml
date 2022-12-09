@@ -443,52 +443,19 @@
             FROM
             (
                 SELECT
-                SUM(tsspc.SALE_FG * tsspc.APPR_AMT) AS B_MONTH_UNPAID_AMT
-                FROM TB_SL_SALE_PAY_CARD tsspc,
-                TB_SL_SALE_PAY_CARD_CREDIT_KWU tsspcck,
-                TB_SL_SALE_HDR tssh
-                WHERE 1=1
-                AND tsspcck.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tsspcck.STORE_CD = #{storeCd}
-                AND tsspc.APPR_DT IS NOT NULL
-                AND SUBSTR(tsspc.APPR_DT, 1, 8) BETWEEN TO_CHAR((TO_DATE(SUBSTR(#{startDate}, 1, 6), 'YYYYMM') -1), 'YYYYMM')||'01' AND TO_CHAR((TO_DATE(SUBSTR(#{startDate}, 1, 6), 'YYYYMM') -1), 'YYYYMM')||'31'
-                AND tsspcck.CREDIT_DATE = #{startDate}
-                AND tsspcck.HQ_OFFICE_CD (+)= tsspc.HQ_OFFICE_CD
-                AND tsspcck.HQ_BRAND_CD (+)= tsspc.HQ_BRAND_CD
-                AND tsspcck.STORE_CD (+)= tsspc.STORE_CD
-                AND tsspcck.SALE_DATE (+)= tsspc.SALE_DATE
-                AND tsspcck.POS_NO (+)= tsspc.POS_NO
-                AND tsspcck.BILL_NO (+)= tsspc.BILL_NO
-                AND tsspcck.LINE_NO (+)= tsspc.LINE_NO
-                AND tsspcck.LINE_SEQ_NO (+)= tsspc.LINE_SEQ_NO
-                AND tssh.ORG_BILL_NO IS NULL
-                AND tssh.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
-                AND tssh.HQ_BRAND_CD = tsspc.HQ_BRAND_CD
-                AND tssh.STORE_CD = tsspc.STORE_CD
-                AND tssh.SALE_DATE = tsspc.SALE_DATE
-                AND tssh.POS_NO = tsspc.POS_NO
-                AND tssh.BILL_NO = tsspc.BILL_NO
+                0 AS B_MONTH_UNPAID_AMT
+                FROM dual
             ) A,
             (
                 SELECT
                 SUM(tsspc.SALE_FG * tsspc.APPR_AMT) AS MONTH_UNPAID_AMT
                 FROM TB_SL_SALE_PAY_CARD tsspc,
-                TB_SL_SALE_PAY_CARD_CREDIT_KWU tsspcck,
                 TB_SL_SALE_HDR tssh
                 WHERE 1=1
-                AND tsspcck.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tsspcck.STORE_CD = #{storeCd}
+                AND tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsspc.STORE_CD = #{storeCd}
                 AND tsspc.APPR_DT IS NOT NULL
                 AND SUBSTR(tsspc.APPR_DT, 1, 8) = #{startDate}
-                AND tsspcck.CREDIT_DATE = #{startDate}
-                AND tsspcck.HQ_OFFICE_CD (+)= tsspc.HQ_OFFICE_CD
-                AND tsspcck.HQ_BRAND_CD (+)= tsspc.HQ_BRAND_CD
-                AND tsspcck.STORE_CD (+)= tsspc.STORE_CD
-                AND tsspcck.SALE_DATE (+)= tsspc.SALE_DATE
-                AND tsspcck.POS_NO (+)= tsspc.POS_NO
-                AND tsspcck.BILL_NO (+)= tsspc.BILL_NO
-                AND tsspcck.LINE_NO (+)= tsspc.LINE_NO
-                AND tsspcck.LINE_SEQ_NO (+)= tsspc.LINE_SEQ_NO
                 AND tssh.ORG_BILL_NO IS NULL
                 AND tssh.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
                 AND tssh.HQ_BRAND_CD = tsspc.HQ_BRAND_CD
@@ -536,16 +503,23 @@
             FROM
             (
                 SELECT
-                SUM(tsspc.SALE_FG * tsspc.APPR_AMT) AS B_MONTH_UNPAID_AMT
+                SUM(DECODE(NVL(tsspcck.CREDIT_DATE, 0), 0, tsspc.SALE_FG * tsspc.APPR_AMT, 0)) AS B_MONTH_UNPAID_AMT
                 FROM TB_SL_SALE_PAY_CARD tsspc,
-                TB_SL_SALE_PAY_CARD_CREDIT_KWU tsspcck,
-                TB_SL_SALE_HDR tssh
+                TB_SL_SALE_HDR tssh,
+                TB_SL_SALE_PAY_CARD_CREDIT_KWU tsspcck
                 WHERE 1=1
-                AND tsspcck.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tsspcck.STORE_CD = #{storeCd}
+                AND tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsspc.STORE_CD = #{storeCd}
                 AND tsspc.APPR_DT IS NOT NULL
                 AND SUBSTR(tsspc.APPR_DT, 1, 8) BETWEEN TO_CHAR((TO_DATE(SUBSTR(#{startDate}, 1, 6), 'YYYYMM') -1), 'YYYYMM')||'01' AND TO_CHAR((TO_DATE(SUBSTR(#{startDate}, 1, 6), 'YYYYMM') -1), 'YYYYMM')||'31'
-                AND tsspcck.CREDIT_DATE BETWEEN SUBSTR(#{startDate}, 1, 6)||'01' AND #{startDate}
+                AND tssh.ORG_BILL_NO IS NULL
+                AND tssh.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
+                AND tssh.HQ_BRAND_CD = tsspc.HQ_BRAND_CD
+                AND tssh.STORE_CD = tsspc.STORE_CD
+                AND tssh.SALE_DATE = tsspc.SALE_DATE
+                AND tssh.POS_NO = tsspc.POS_NO
+                AND tssh.BILL_NO = tsspc.BILL_NO
+                AND tsspcck.CREDIT_DATE (+) BETWEEN TO_CHAR((TO_DATE(SUBSTR(#{startDate}, 1, 6), 'YYYYMM') -1), 'YYYYMM')||'01' AND TO_CHAR((TO_DATE(SUBSTR(#{startDate}, 1, 6), 'YYYYMM') -1), 'YYYYMM')||'31'
                 AND tsspcck.HQ_OFFICE_CD (+)= tsspc.HQ_OFFICE_CD
                 AND tsspcck.HQ_BRAND_CD (+)= tsspc.HQ_BRAND_CD
                 AND tsspcck.STORE_CD (+)= tsspc.STORE_CD
@@ -554,26 +528,26 @@
                 AND tsspcck.BILL_NO (+)= tsspc.BILL_NO
                 AND tsspcck.LINE_NO (+)= tsspc.LINE_NO
                 AND tsspcck.LINE_SEQ_NO (+)= tsspc.LINE_SEQ_NO
-                AND tssh.ORG_BILL_NO IS NULL
-                AND tssh.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
-                AND tssh.HQ_BRAND_CD = tsspc.HQ_BRAND_CD
-                AND tssh.STORE_CD = tsspc.STORE_CD
-                AND tssh.SALE_DATE = tsspc.SALE_DATE
-                AND tssh.POS_NO = tsspc.POS_NO
-                AND tssh.BILL_NO = tsspc.BILL_NO
             ) A,
             (
                 SELECT
-                SUM(tsspc.SALE_FG * tsspc.APPR_AMT) AS MONTH_UNPAID_AMT
+                SUM(DECODE(NVL(tsspcck.CREDIT_DATE, 0), 0, tsspc.SALE_FG * tsspc.APPR_AMT, 0)) AS MONTH_UNPAID_AMT
                 FROM TB_SL_SALE_PAY_CARD tsspc,
-                TB_SL_SALE_PAY_CARD_CREDIT_KWU tsspcck,
-                TB_SL_SALE_HDR tssh
+                TB_SL_SALE_HDR tssh,
+                TB_SL_SALE_PAY_CARD_CREDIT_KWU tsspcck
                 WHERE 1=1
-                AND tsspcck.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tsspcck.STORE_CD = #{storeCd}
+                AND tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsspc.STORE_CD = #{storeCd}
                 AND tsspc.APPR_DT IS NOT NULL
                 AND SUBSTR(tsspc.APPR_DT, 1, 8) BETWEEN SUBSTR(#{startDate}, 1, 6)||'01' AND #{startDate}
-                AND tsspcck.CREDIT_DATE BETWEEN SUBSTR(#{startDate}, 1, 6)||'01' AND #{startDate}
+                AND tssh.ORG_BILL_NO IS NULL
+                AND tssh.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
+                AND tssh.HQ_BRAND_CD = tsspc.HQ_BRAND_CD
+                AND tssh.STORE_CD = tsspc.STORE_CD
+                AND tssh.SALE_DATE = tsspc.SALE_DATE
+                AND tssh.POS_NO = tsspc.POS_NO
+                AND tssh.BILL_NO = tsspc.BILL_NO
+                AND tsspcck.CREDIT_DATE (+) BETWEEN SUBSTR(#{startDate}, 1, 6)||'01' AND #{startDate}
                 AND tsspcck.HQ_OFFICE_CD (+)= tsspc.HQ_OFFICE_CD
                 AND tsspcck.HQ_BRAND_CD (+)= tsspc.HQ_BRAND_CD
                 AND tsspcck.STORE_CD (+)= tsspc.STORE_CD
@@ -582,13 +556,6 @@
                 AND tsspcck.BILL_NO (+)= tsspc.BILL_NO
                 AND tsspcck.LINE_NO (+)= tsspc.LINE_NO
                 AND tsspcck.LINE_SEQ_NO (+)= tsspc.LINE_SEQ_NO
-                AND tssh.ORG_BILL_NO IS NULL
-                AND tssh.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
-                AND tssh.HQ_BRAND_CD = tsspc.HQ_BRAND_CD
-                AND tssh.STORE_CD = tsspc.STORE_CD
-                AND tssh.SALE_DATE = tsspc.SALE_DATE
-                AND tssh.POS_NO = tsspc.POS_NO
-                AND tssh.BILL_NO = tsspc.BILL_NO
             ) B,
             (
                 SELECT
@@ -632,27 +599,49 @@
                WHEN tmmak.GROUP_TYPE_FG = '3' THEN '기타'
                ELSE '' END
         ) AS FG,
-        tsdmp.MEMBR_NO,
+        tsshi.MEMBR_NO,
         SBPENC.D(tmm.MEMBR_NM) AS GROUP_NM,
-        SUBSTR(tsdmp.SALE_DATE, 1, 4)||'-'||SUBSTR(tsdmp.SALE_DATE, 5, 2)||'-'||SUBSTR(tsdmp.SALE_DATE, 7, 2) AS SALE_DATE,
-        LISTAGG(tsdmp.PROD_CD, ',') WITHIN GROUP (ORDER BY tsdmp.PROD_CD) AS PROD_CD,
+        SUBSTR(tsshi.SALE_DATE, 1, 4)||'-'||SUBSTR(tsshi.SALE_DATE, 5, 2)||'-'||SUBSTR(tsshi.SALE_DATE, 7, 2) AS SALE_DATE,
+        LISTAGG(tssd.PROD_CD, ',') WITHIN GROUP (ORDER BY tssd.PROD_CD) AS PROD_CD,
         LISTAGG(tmp.PROD_NM, ',') WITHIN GROUP (ORDER BY tmp.PROD_NM) AS SUMMARY,
-        SUM(tsdmp.REAL_SALE_AMT) AS AMT
-        FROM TB_SL_DAILY_MEMBR_PROD tsdmp,
+        SUM(tssd.REAL_SALE_AMT) AS AMT
+        FROM TB_SL_SALE_HDR_INFO tsshi,
+        (
+            SELECT
+            HQ_OFFICE_CD,
+            STORE_CD,
+            SALE_DATE,
+            POS_NO,
+            BILL_NO,
+            PROD_CD,
+            SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+            FROM TB_SL_SALE_DTL
+            WHERE 1=1
+            AND HQ_OFFICE_CD = #{hqOfficeCd}
+            AND STORE_CD = #{storeCd}
+            AND SALE_DATE = #{startDate}
+            AND PROD_CD IN ('210000000031', '210000000063', '260050', '210000000064', '210000000016', '210000000035')
+            GROUP BY HQ_OFFICE_CD, STORE_CD, SALE_DATE, POS_NO, BILL_NO, PROD_CD
+        ) tssd,
         TB_MS_PRODUCT tmp,
         TB_MB_MEMBER tmm,
         TB_MB_MEMBER_ADDITORY_KWU tmmak
         WHERE 1=1
-        AND tsdmp.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND tsdmp.STORE_CD = #{storeCd}
-        AND tsdmp.SALE_DATE = #{startDate}
-        AND tmp.STORE_CD (+)= tsdmp.STORE_CD
-        AND tmp.PROD_CD (+)= tsdmp.PROD_CD
+        AND tsshi.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsshi.STORE_CD = #{storeCd}
+        AND tsshi.SALE_DATE = #{startDate}
+        AND tssd.HQ_OFFICE_CD (+)= tsshi.HQ_OFFICE_CD
+        AND tssd.STORE_CD (+)= tsshi.STORE_CD
+        AND tssd.SALE_DATE (+)= tsshi.SALE_DATE
+        AND tssd.POS_NO (+)= tsshi.POS_NO
+        AND tssd.BILL_NO (+)= tsshi.BILL_NO
+        AND tmp.STORE_CD (+)= tssd.STORE_CD
+        AND tmp.PROD_CD (+)= tssd.PROD_CD
         AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
-        AND tmm.MEMBR_NO (+)= tsdmp.MEMBR_NO
+        AND tmm.MEMBR_NO (+)= tsshi.MEMBR_NO
         AND tmmak.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
         AND tmmak.MEMBR_NO (+)= tmm.MEMBR_NO
-        GROUP BY tmmak.GROUP_TYPE_FG, tsdmp.MEMBR_NO, tmm.MEMBR_NM, tsdmp.SALE_DATE
+        GROUP BY tmmak.GROUP_TYPE_FG, tsshi.MEMBR_NO, tmm.MEMBR_NM, tsshi.SALE_DATE
     </select>
 
     <!-- 츨납현황 목록조회
