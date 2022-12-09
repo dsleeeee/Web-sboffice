@@ -207,7 +207,7 @@ app.controller('dayProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             var columns = grid.columns;
 
             // 컬럼 총갯수
-            var columnsCnt = 21;
+            var columnsCnt = 20;
 
             for (var i = 0; i < columnsCnt; i++) {
                 columns[i].visible = true;
@@ -401,7 +401,7 @@ app.controller('dayProdExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
             var columns = grid.columns;
 
             // 컬럼 총갯수
-            var columnsCnt = 21;
+            var columnsCnt = 20;
 
             for (var i = 0; i < columnsCnt; i++) {
                 columns[i].visible = true;
