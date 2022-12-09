@@ -110,6 +110,7 @@
         tmt.TBL_NM
         FROM TB_MS_TABLE_V01 tmt
         WHERE 1=1
+        AND     USE_YN ='Y'
         <if test='storeCd != null and storeCd != ""'>
             <![CDATA[
                 AND tmt.STORE_CD = #{storeCd}
