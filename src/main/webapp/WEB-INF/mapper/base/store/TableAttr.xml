@@ -323,7 +323,7 @@
         /* TableAttrMapper.deleteTabConfg */
         DELETE  TB_WB_STORE_TABLE_CONFG_XML
         WHERE   STORE_CD = #{storeCd}
-        <if test='gubun != null and gubun="delAttr"'>
+        <if test='gubun != null and gubun == "delAttr"'>
             AND CONFG_FG = '30'
         </if>
     </delete>
@@ -473,7 +473,7 @@
                #{modId}
         FROM    TB_WB_STORE_TABLE_CONFG_XML
         WHERE   STORE_CD = '0000000'
-        <if test='gubun != null and gubun="delAttr"'>
+        <if test='gubun != null and gubun == "delAttr"'>
             AND CONFG_FG = '30'
         </if>
     </insert>
