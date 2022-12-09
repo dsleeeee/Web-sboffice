@@ -396,6 +396,13 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                                 $scope.kitchenprintLinkLayer.show(true);
                                 var scope = agrid.getScope('kitchenprintLinkCtrl');
                                 scope._broadcast('kitchenprintLinkCtrl');
+                            } else if (orgnFg === "HQ" && kitchenprintLink === "2"){   // 상품그룹프린터연결창 사용(본사만)
+                                $scope.setKitchenprrint(result);
+                                $scope.printerGroupPopupLayer.show(true);
+                                var scope = agrid.getScope('printerGroupPopupCtrl');
+                                scope._broadcast('printerGroupPopupCtrl');
+                            } else if (orgnFg === "STORE" && kitchenprintLink === "2"){   // 상품그룹프린터연결창 사용(매장은 1110값 2면 그냥 닫기)
+                                $scope.prodModifyLayer.hide();
                             }
 
                             // 세트상품구분이 일반상품이 아니면, 세트구성상품 팝업오픈

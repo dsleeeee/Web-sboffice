@@ -953,7 +953,7 @@ FormatAttr.prototype.initElements = function() {
             sid = document.getElementsByName('sessionId')[0].value;
         }
 
-        if (confirm("최초 매장생성시 구성으로 돌아갑니다. 초기화 하시겠습니까?")) {
+        if (confirm("최초 테이블 속성 구성으로 돌아갑니다. 초기화 하시겠습니까?")) {
             $.ajax({
                 type: "POST",
                 url: "/base/store/tableLayout/tableNewLayout/delAttr.sb?sid=" + sid,

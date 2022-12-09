@@ -211,7 +211,7 @@ public class TableAttrNewServiceImpl implements TableAttrNewService {
     }
 
 
-    /** 테이블 기존 데이터 삭제 후 매장생성시로 초기화 */
+    /** 테이블 기존 데이터 삭제 후 매장생성시로 초기화(테이블 전체) */
     @Override
     public int initLayout(SessionInfoVO sessionInfoVO, TableAttrVO tableAttrVO) {
 
@@ -251,6 +251,7 @@ public class TableAttrNewServiceImpl implements TableAttrNewService {
         return storeManageMapper.insertTabGroup(tableGroupVO);
     }
 
+    /** 테이블 기존 데이터 삭제 후 매장생성시로 초기화(테이블 속성) */
     @Override
     public int delAttr(SessionInfoVO sessionInfoVO, TableAttrVO tableAttrVO) {
         String currentDt = currentDateTimeString();

@@ -401,6 +401,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#posFnkeyChk").prop("checked", false);
       $("#touchKeyChk").prop("checked", false);
 
+      $scope.store.siteCd = storeDetailInfo.siteCd;
       $scope.store.mapStoreCd = storeDetailInfo.mapStoreCd;
       $scope.store.latitude = storeDetailInfo.latitude;
       $scope.store.longitude = storeDetailInfo.longitude;
@@ -742,6 +743,13 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope._popMsg(msg);
         return false;
       }
+    }
+
+    // 대리점를 선택해주세요.
+    var msg = messages["storeManage.siteCd"] + "는 " +messages["cmm.max50Chk"];
+    if(nvl($("#siteCd").val(), '').getByteLengthForOracle() > 50) {
+      $scope._popMsg(msg);
+      return false;
     }
 
     return true;
@@ -1512,6 +1520,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $("#agencyCd").val("");
           $scope._setComboData("branchCd", [{"name": messages["cmm.select"], "value": ""}]);
           $scope.branchCdCombo.selectedIndex = 0;
+          $("#siteCd").val("");
           $("#mapStoreCd").val("");
           $("#latitude").val("");
           $("#longitude").val("");
@@ -1540,6 +1549,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $scope.store.agencyNm = "";
           $scope.store.agencyCd = "";
           $scope.store.branchCd = "";
+          $scope.store.siteCd = "";
           $scope.store.mapStoreCd = "";
           $scope.store.latitude = "";
           $scope.store.longitude = "";

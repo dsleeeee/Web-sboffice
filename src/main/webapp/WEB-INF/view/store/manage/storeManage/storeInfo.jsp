@@ -291,8 +291,11 @@
                   </wj-combo-box>
                 </div>
               </td>
-              <th></th>
-              <td></td>
+              <%-- 사이트코드 --%>
+              <th><s:message code="storeManage.siteCd" /></th>
+              <td>
+                  <input type="text" id="siteCd" class="sb-input w100" ng-model="store.siteCd" />
+              </td>
             </tr>
             </tbody>
           </table>
@@ -571,7 +574,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20221118.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20221118.04" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">

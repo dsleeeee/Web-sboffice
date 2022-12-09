@@ -1055,7 +1055,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20221129.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20221129.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
@@ -1069,6 +1069,10 @@
 
 <%-- 프린터연결 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/kitchenprintLink.jsp">
+</c:import>
+
+<%-- 상품그룹-프린터연결 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/prod/printerGroupPopup.jsp">
 </c:import>
 
 <%-- 세트구성상품 팝업 --%>
