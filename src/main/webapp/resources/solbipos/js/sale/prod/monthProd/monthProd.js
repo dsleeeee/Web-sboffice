@@ -147,12 +147,12 @@ app.controller('monthProdCtrl', ['$scope', '$http', '$timeout', function ($scope
 
         // 시작일자가 종료일자보다 빠른지 확인
         if(startDt.getTime() > endDt.getTime()){
-            $scope._popMsg(messages['mobile.cmm.dateChk.error']);
+            $scope._popMsg(messages['cmm.dateChk.error']);
             return false;
         }
-        // 조회일자 최대 1년(12개월) 제한
-        if (diffMonth > 12) {
-            $scope._popMsg(messages['mobile.cmm.dateOver.1year.error']);
+        // 조회일자 최대 7달 제한
+        if (diffMonth > 7) {
+            $scope._popMsg(messages['cmm.dateOver.7month.error']);
             return false;
         }
 
@@ -198,7 +198,7 @@ app.controller('monthProdCtrl', ['$scope', '$http', '$timeout', function ($scope
             var columns = grid.columns;
 
             // 컬럼 총갯수
-            var columnsCnt = 20;
+            var columnsCnt = 19;
 
             for (var i = 0; i < columnsCnt; i++) {
                 columns[i].visible = true;
@@ -285,12 +285,12 @@ app.controller('monthProdCtrl', ['$scope', '$http', '$timeout', function ($scope
 
         // 시작일자가 종료일자보다 빠른지 확인
         if(startDt.getTime() > endDt.getTime()){
-            $scope._popMsg(messages['mobile.cmm.dateChk.error']);
+            $scope._popMsg(messages['cmm.dateChk.error']);
             return false;
         }
-        // 조회일자 최대 1년(12개월) 제한
-        if (diffMonth > 12) {
-            $scope._popMsg(messages['mobile.cmm.dateOver.1year.error']);
+        // 조회일자 최대 7달 제한
+        if (diffMonth > 7) {
+            $scope._popMsg(messages['cmm.dateOver.7month.error']);
             return false;
         }
 
@@ -378,7 +378,7 @@ app.controller('monthProdExcelCtrl', ['$scope', '$http', '$timeout', function ($
             var columns = grid.columns;
 
             // 컬럼 총갯수
-            var columnsCnt = 20;
+            var columnsCnt = 19;
 
             for (var i = 0; i < columnsCnt; i++) {
                 columns[i].visible = true;
