@@ -172,7 +172,7 @@
   var dcCol       = '${dcCol}';
   var arrDcCol    = dcCol.split(',');
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/empCard/empCard.js?ver=20221205.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/empCard/empCard.js?ver=20221205.02" charset="utf-8"></script>
 <%-- 영수증 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/cmmSalePopup/billInfo/billInfo.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
