@@ -31,18 +31,6 @@ app.controller('empCardCtrl', ['$scope', '$http', '$timeout', function ($scope, 
           wijmo.addClass(e.cell, 'wijLink');
           wijmo.addClass(e.cell, 'wj-custom-readonly');
         }
-        // if (col.binding === "saleYn") { // 구분
-        //   var item = s.rows[e.row].dataItem;
-        //
-        //   // 구분이 반품이면 글씨색을 red 로 변경한다.
-        //   if (item.saleYn === 'Y') {
-        //     wijmo.addClass(e.cell, 'wijLink');
-        //     wijmo.addClass(e.cell, 'wj-custom-readonly');
-        //   } else if (item.saleYn === 'N') {
-        //     wijmo.addClass(e.cell, 'wijLink');
-        //     wijmo.addClass(e.cell, 'red');
-        //   }
-        // }
 
         // 결제수단
         for (var i = 0; i < payColList.length; i++) {
@@ -243,6 +231,21 @@ app.controller('empCardCtrl', ['$scope', '$http', '$timeout', function ($scope, 
   $scope.searchEmpCardList = function () {
     if ($("#empCardStoreCd").val() === '') {
       $scope._popMsg(messages["todayDtl.require.selectStore"]); // 매장을 선택해주세요.
+      return false;
+    }
+
+    var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
+    var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
+    var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+    // 시작일자가 종료일자보다 빠른지 확인
+    if(startDt.getTime() > endDt.getTime()){
+      $scope._popMsg(messages['cmm.dateChk.error']);
+      return false;
+    }
+    // 조회일자 최대 1달(31일) 제한
+    if (diffDay >= 31) {
+      $scope._popMsg(messages['cmm.dateOver.1month.error']);
       return false;
     }
 
