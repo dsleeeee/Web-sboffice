@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ComparePeriodMoms.xml
+    대비기간별매출
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2022.12.06     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.period.comparePeriodMoms.service.impl.ComparePeriodMomsMapper">
+
+    <!-- 대비기간별 매출 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL
+        PARAM    : comparePeriodMomsVO
+        COMMENTS : 대비기간별 매출을 조회한다.
+    -->
+    <select id="getComparePeriodList" parameterType="comparePeriodMomsVO" resultType="DefaultMap">
+      /* ComparePeriodMomsMapper.getComparePeriodList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  YOIL
+        ,       YOIL_ORDER
+        ,		REAL_SALE_CNT
+        ,		BILL_UPRC
+        ,		SALE_QTY
+        ,		TOT_SALE_AMT
+        ,		TOT_DC_AMT
+        ,		REAL_SALE_AMT
+        , 		TO_CHAR(ROUND(NVL(RATIO_TO_REPORT(REAL_SALE_AMT) OVER() * 100, 0), 1), 'FM9990.09') || '%'  AS RATE
+        ,		REAL_SALE_CNT1
+        ,		BILL_UPRC1
+        ,		SALE_QTY1
+        ,		TOT_SALE_AMT1
+        ,		TOT_DC_AMT1
+        ,		REAL_SALE_AMT1
+        , 		TO_CHAR(ROUND(NVL(RATIO_TO_REPORT(REAL_SALE_AMT1) OVER() * 100, 0), 1), 'FM9990.09') || '%'  AS RATE1
+        , 		DECODE(REAL_SALE_CNT, 0, '0', TO_CHAR(ROUND(NVL((REAL_SALE_CNT - REAL_SALE_CNT1) / DECODE(REAL_SALE_CNT1, 0, NULL, REAL_SALE_CNT1) * 100, 0), 1), 'FM9990.09')) || '%'  AS RATE_REAL_SALE_CNT
+        , 		DECODE(BILL_UPRC, 0, '0', TO_CHAR(ROUND(NVL((BILL_UPRC - BILL_UPRC1) / DECODE(BILL_UPRC1, 0, NULL, BILL_UPRC1) * 100, 0), 1), 'FM9990.09')) || '%'                      AS RATE_BILL_UPRC
+        , 		DECODE(SALE_QTY, 0, '0', TO_CHAR(ROUND(NVL((SALE_QTY - SALE_QTY1) / DECODE(SALE_QTY1, 0, NULL, SALE_QTY1) * 100, 0), 1), 'FM9990.09')) || '%'                           AS RATE_SALE_QTY
+        , 		DECODE(TOT_SALE_AMT, 0, '0', TO_CHAR(ROUND(NVL((TOT_SALE_AMT - TOT_SALE_AMT1) / DECODE(TOT_SALE_AMT1, 0, NULL, TOT_SALE_AMT1) * 100, 0), 1), 'FM9990.09')) || '%'       AS RATE_TOT_SALE_AMT
+        , 		DECODE(REAL_SALE_AMT, 0, '0', TO_CHAR(ROUND(NVL((REAL_SALE_AMT - REAL_SALE_AMT1) / DECODE(REAL_SALE_AMT1, 0, NULL, REAL_SALE_AMT1) * 100, 0), 1), 'FM9990.09')) || '%'  AS RATE_REAL_SALE_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    (
+                    SELECT	A.YOIL
+                    ,       A.YOIL_ORDER
+                    ,		NVL(A.REAL_SALE_CNT, 0) AS REAL_SALE_CNT
+                    ,		NVL(A.BILL_UPRC, 0)     AS BILL_UPRC
+                    ,		NVL(A.SALE_QTY, 0)      AS SALE_QTY
+                    ,		NVL(A.TOT_SALE_AMT, 0)  AS TOT_SALE_AMT
+                    ,		NVL(A.TOT_DC_AMT, 0)    AS TOT_DC_AMT
+                    ,		NVL(A.REAL_SALE_AMT, 0) AS REAL_SALE_AMT
+                    ,		NVL(B.REAL_SALE_CNT, 0) AS REAL_SALE_CNT1
+                    ,		NVL(B.BILL_UPRC, 0)     AS BILL_UPRC1
+                    ,		NVL(B.SALE_QTY, 0)      AS SALE_QTY1
+                    ,		NVL(B.TOT_SALE_AMT, 0)  AS TOT_SALE_AMT1
+                    ,		NVL(B.TOT_DC_AMT, 0)    AS TOT_DC_AMT1
+                    ,		NVL(B.REAL_SALE_AMT, 0) AS REAL_SALE_AMT1
+                    FROM 	(
+                                SELECT 	TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+                                ,		TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'd') AS YOIL_ORDER
+                                ,       SUM(NVL(tsdt.REAL_SALE_CNT, 0)) AS REAL_SALE_CNT
+                                , 		ROUND(SUM(NVL(tsdt.REAL_SALE_AMT,0)) / SUM(NVL(tsdt.REAL_SALE_CNT,0))) AS BILL_UPRC
+                                ,		SUM(NVL(tsdt.SALE_QTY, 0)) AS SALE_QTY
+                                ,		SUM(NVL(tsdt.TOT_SALE_AMT, 0)) AS TOT_SALE_AMT
+                                ,		SUM(NVL(tsdt.TOT_DC_AMT, 0)) AS TOT_DC_AMT
+                                ,		SUM(NVL(tsdt.REAL_SALE_AMT, 0)) AS REAL_SALE_AMT
+                                FROM	TB_SL_DAILY_TOTAL tsdt
+                                ,       TB_MS_STORE tms
+                                ,       TB_MS_STORE_INFO tmsi
+                                WHERE   1=1
+                                AND     tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                                AND     tsdt.STORE_CD = tms.STORE_CD
+                                AND     tms.STORE_CD = tmsi.STORE_CD
+                                AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+                                AND 	tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                               <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                                    AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                                </if>
+                                <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                                    <if test='userBrands != null and userBrands != ""'>
+                                        -- 매장브랜드 전체일때
+                                        AND tms.HQ_BRAND_CD IN
+                                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                            #{item}
+                                        </foreach>
+                                    </if>
+                                </if>
+                                <if test='storeCds != null and storeCds != ""'>
+                                    AND tsdt.STORE_CD IN
+                                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                                <if test='momsTeam != null and momsTeam != ""'>
+                                    AND tmsi.MOMS_TEAM = #{momsTeam}
+                                </if>
+                                <if test='momsAcShop != null and momsAcShop != ""'>
+                                    AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                                </if>
+                                <if test='momsAreaFg != null and momsAreaFg != ""'>
+                                    AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                                </if>
+                                <if test='momsCommercial != null and momsCommercial != ""'>
+                                    AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                                </if>
+                                <if test='momsShopType != null and momsShopType != ""'>
+                                    AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                                </if>
+                                <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                                    AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                                </if>
+                                <if test='branchCd != null and branchCd != ""'>
+                                    AND tms.BRANCH_CD = #{branchCd}
+                                </if>
+                                GROUP BY TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY')
+                                ,		 TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'd')
+                            ) A
+                    ,       (
+                                SELECT 	TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+                                ,		TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'd') AS YOIL_ORDER
+                                ,       SUM(NVL(tsdt.REAL_SALE_CNT, 0)) AS REAL_SALE_CNT
+                                , 		ROUND(SUM(NVL(tsdt.REAL_SALE_AMT,0)) / SUM(NVL(tsdt.REAL_SALE_CNT,0))) AS BILL_UPRC
+                                ,		SUM(NVL(tsdt.SALE_QTY, 0)) AS SALE_QTY
+                                ,		SUM(NVL(tsdt.TOT_SALE_AMT, 0)) AS TOT_SALE_AMT
+                                ,		SUM(NVL(tsdt.TOT_DC_AMT, 0)) AS TOT_DC_AMT
+                                ,		SUM(NVL(tsdt.REAL_SALE_AMT, 0)) AS REAL_SALE_AMT
+                                FROM	TB_SL_DAILY_TOTAL tsdt
+                                ,       TB_MS_STORE tms
+                                ,       TB_MS_STORE_INFO tmsi
+                                WHERE   1=1
+                                AND     tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                                AND     tsdt.STORE_CD = tms.STORE_CD
+                                AND     tms.STORE_CD = tmsi.STORE_CD
+                                AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+                                AND 	tsdt.SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate}
+                                <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                                    AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                                </if>
+                                <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                                    <if test='userBrands != null and userBrands != ""'>
+                                        -- 매장브랜드 전체일때
+                                        AND tms.HQ_BRAND_CD IN
+                                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                            #{item}
+                                        </foreach>
+                                    </if>
+                                </if>
+                                <if test='storeCds != null and storeCds != ""'>
+                                    AND tsdt.STORE_CD IN
+                                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                                <if test='momsTeam != null and momsTeam != ""'>
+                                    AND tmsi.MOMS_TEAM = #{momsTeam}
+                                </if>
+                                <if test='momsAcShop != null and momsAcShop != ""'>
+                                    AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                                </if>
+                                <if test='momsAreaFg != null and momsAreaFg != ""'>
+                                    AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                                </if>
+                                <if test='momsCommercial != null and momsCommercial != ""'>
+                                    AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                                </if>
+                                <if test='momsShopType != null and momsShopType != ""'>
+                                    AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                                </if>
+                                <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                                    AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                                </if>
+                                <if test='branchCd != null and branchCd != ""'>
+                                    AND tms.BRANCH_CD = #{branchCd}
+                                </if>
+                                GROUP BY TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY')
+                                ,		 TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'd')
+                            ) B
+                    WHERE	B.YOIL(+) = A.YOIL
+                    UNION
+                    SELECT	B.YOIL
+                    ,       B.YOIL_ORDER
+                    ,		NVL(A.REAL_SALE_CNT, 0) AS REAL_SALE_CNT
+                    ,		NVL(A.BILL_UPRC, 0)     AS BILL_UPRC
+                    ,		NVL(A.SALE_QTY, 0)      AS SALE_QTY
+                    ,		NVL(A.TOT_SALE_AMT, 0)  AS TOT_SALE_AMT
+                    ,		NVL(A.TOT_DC_AMT, 0)    AS TOT_DC_AMT
+                    ,		NVL(A.REAL_SALE_AMT, 0) AS REAL_SALE_AMT
+                    ,		NVL(B.REAL_SALE_CNT, 0) AS REAL_SALE_CNT1
+                    ,		NVL(B.BILL_UPRC, 0)     AS BILL_UPRC1
+                    ,		NVL(B.SALE_QTY, 0)      AS SALE_QTY1
+                    ,		NVL(B.TOT_SALE_AMT, 0)  AS TOT_SALE_AMT1
+                    ,		NVL(B.TOT_DC_AMT, 0)    AS TOT_DC_AMT1
+                    ,		NVL(B.REAL_SALE_AMT, 0) AS REAL_SALE_AMT1
+                    FROM 	(
+                                SELECT 	TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+                                ,		TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'd') AS YOIL_ORDER
+                                ,       SUM(NVL(tsdt.REAL_SALE_CNT, 0)) AS REAL_SALE_CNT
+                                , 		ROUND(SUM(NVL(tsdt.REAL_SALE_AMT,0)) / SUM(NVL(tsdt.REAL_SALE_CNT,0))) AS BILL_UPRC
+                                ,		SUM(NVL(tsdt.SALE_QTY, 0)) AS SALE_QTY
+                                ,		SUM(NVL(tsdt.TOT_SALE_AMT, 0)) AS TOT_SALE_AMT
+                                ,		SUM(NVL(tsdt.TOT_DC_AMT, 0)) AS TOT_DC_AMT
+                                ,		SUM(NVL(tsdt.REAL_SALE_AMT, 0)) AS REAL_SALE_AMT
+                                FROM	TB_SL_DAILY_TOTAL tsdt
+                                ,       TB_MS_STORE tms
+                                ,       TB_MS_STORE_INFO tmsi
+                                WHERE   1=1
+                                AND     tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                                AND     tsdt.STORE_CD = tms.STORE_CD
+                                AND     tms.STORE_CD = tmsi.STORE_CD
+                                AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+                                AND 	tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                                <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                                    AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                                </if>
+                                <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                                    <if test='userBrands != null and userBrands != ""'>
+                                        -- 매장브랜드 전체일때
+                                        AND tms.HQ_BRAND_CD IN
+                                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                            #{item}
+                                        </foreach>
+                                    </if>
+                                </if>
+                                <if test='storeCds != null and storeCds != ""'>
+                                    AND tsdt.STORE_CD IN
+                                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                                <if test='momsTeam != null and momsTeam != ""'>
+                                    AND tmsi.MOMS_TEAM = #{momsTeam}
+                                </if>
+                                <if test='momsAcShop != null and momsAcShop != ""'>
+                                    AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                                </if>
+                                <if test='momsAreaFg != null and momsAreaFg != ""'>
+                                    AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                                </if>
+                                <if test='momsCommercial != null and momsCommercial != ""'>
+                                    AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                                </if>
+                                <if test='momsShopType != null and momsShopType != ""'>
+                                    AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                                </if>
+                                <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                                    AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                                </if>
+                                <if test='branchCd != null and branchCd != ""'>
+                                    AND tms.BRANCH_CD = #{branchCd}
+                                </if>
+                                GROUP BY TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY')
+                                ,		 TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'd')
+                            ) A
+                    ,       (
+                                SELECT 	TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+                                ,		TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'd') AS YOIL_ORDER
+                                ,       SUM(NVL(tsdt.REAL_SALE_CNT, 0)) AS REAL_SALE_CNT
+                                , 		ROUND(SUM(NVL(tsdt.REAL_SALE_AMT,0)) / SUM(NVL(tsdt.REAL_SALE_CNT,0))) AS BILL_UPRC
+                                ,		SUM(NVL(tsdt.SALE_QTY, 0)) AS SALE_QTY
+                                ,		SUM(NVL(tsdt.TOT_SALE_AMT, 0)) AS TOT_SALE_AMT
+                                ,		SUM(NVL(tsdt.TOT_DC_AMT, 0)) AS TOT_DC_AMT
+                                ,		SUM(NVL(tsdt.REAL_SALE_AMT, 0)) AS REAL_SALE_AMT
+                                FROM	TB_SL_DAILY_TOTAL tsdt
+                                ,       TB_MS_STORE tms
+                                ,       TB_MS_STORE_INFO tmsi
+                                WHERE   1=1
+                                AND     tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                                AND     tsdt.STORE_CD = tms.STORE_CD
+                                AND     tms.STORE_CD = tmsi.STORE_CD
+                                AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+                                AND 	tsdt.SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate}
+                                <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                                    AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                                </if>
+                                <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                                    <if test='userBrands != null and userBrands != ""'>
+                                        -- 매장브랜드 전체일때
+                                        AND tms.HQ_BRAND_CD IN
+                                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                            #{item}
+                                        </foreach>
+                                    </if>
+                                </if>
+                                <if test='storeCds != null and storeCds != ""'>
+                                    AND tsdt.STORE_CD IN
+                                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                                <if test='momsTeam != null and momsTeam != ""'>
+                                    AND tmsi.MOMS_TEAM = #{momsTeam}
+                                </if>
+                                <if test='momsAcShop != null and momsAcShop != ""'>
+                                    AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                                </if>
+                                <if test='momsAreaFg != null and momsAreaFg != ""'>
+                                    AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                                </if>
+                                <if test='momsCommercial != null and momsCommercial != ""'>
+                                    AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                                </if>
+                                <if test='momsShopType != null and momsShopType != ""'>
+                                    AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                                </if>
+                                <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                                    AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                                </if>
+                                <if test='branchCd != null and branchCd != ""'>
+                                    AND tms.BRANCH_CD = #{branchCd}
+                                </if>
+                                GROUP BY TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY')
+                                ,		 TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'd')
+                            ) B
+                    WHERE	A.YOIL(+) = B.YOIL
+                ) C
+        ORDER
+           BY YOIL_ORDER
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+</mapper>
