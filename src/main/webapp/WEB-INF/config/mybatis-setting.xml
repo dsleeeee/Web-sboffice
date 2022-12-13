@@ -840,6 +840,7 @@
 
     <!-- 맘스터치 > 상품매출분석 > 상품별 매출 순위 -->
     <typeAlias alias="prodRankMomsVO" type="kr.co.solbipos.sale.prod.prodRankMoms.service.ProdRankMomsVO"/>
+    <typeAlias alias="saleProdRankMomsVO" type="kr.co.solbipos.sale.prod.saleProdRankMoms.service.SaleProdRankMomsVO"/>
     <!-- 맘스터치 > 상품매출분석 > 일별 상품 매출 현황 -->
     <typeAlias alias="dayProdVO" type="kr.co.solbipos.sale.prod.dayProd.service.DayProdVO"/>
     <!-- 맘스터치 > 상품매출분석 > 월별 상품 매출 현황 -->
@@ -921,6 +922,8 @@
     <typeAlias alias="monthMomsVO" type="kr.co.solbipos.sale.month.monthMoms.service.MonthMomsVO"/>
     <!-- 맘스터치 > 매출분석 > 일별시간대 -->
     <typeAlias alias="dayTimeVO" type="kr.co.solbipos.sale.day.dayTime.service.DayTimeVO"/>
+    <!-- 맘스터치 > 매출분석 > 대비기간별매출 -->
+    <typeAlias alias="comparePeriodMomsVO" type="kr.co.solbipos.sale.period.comparePeriodMoms.service.ComparePeriodMomsVO"/>
 
     <!-- 맘스터치 > 매장분석 > 매장-일별매출현황(채널별) -->
     <typeAlias alias="storeDayChannelVO" type="kr.co.solbipos.sale.store.storeDayChannel.service.StoreDayChannelVO"/>
