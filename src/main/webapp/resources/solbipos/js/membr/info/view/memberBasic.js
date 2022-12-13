@@ -309,13 +309,19 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
                 $scope.member.useDateFg = memberDetailInfoAddKWU.useDateFg;
                 if(memberDetailInfoAddKWU.useStartDate === "" || memberDetailInfoAddKWU.useStartDate === null) {
                     $scope.member.useStartDate = new Date();
+                } else {
+                    $scope.member.useStartDate = stringToDate(memberDetailInfoAddKWU.useStartDate);
+                }
+                if(memberDetailInfoAddKWU.useEndDate === "" || memberDetailInfoAddKWU.useEndDate === null) {
                     $scope.member.useEndDate = new Date();
+                } else {
+                    $scope.member.useEndDate = stringToDate(memberDetailInfoAddKWU.useEndDate);
+                }
+                if( (memberDetailInfoAddKWU.useStartDate === "" || memberDetailInfoAddKWU.useStartDate === null) && (memberDetailInfoAddKWU.useEndDate === "" || memberDetailInfoAddKWU.useEndDate === null) ) {
                     $("input:checkbox[id='useDateChk']").prop("checked", false);
                     $("#trUseDate").css("display", "none");
                     $("#divUseDate").css("display", "none");
                 } else {
-                    $scope.member.useStartDate = stringToDate(memberDetailInfoAddKWU.useStartDate);
-                    $scope.member.useEndDate = stringToDate(memberDetailInfoAddKWU.useEndDate);
                     $("input:checkbox[id='useDateChk']").prop("checked", true);
                     $("#trUseDate").css("display", "");
                     $("#divUseDate").css("display", "");

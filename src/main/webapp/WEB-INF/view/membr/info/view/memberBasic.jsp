@@ -706,4 +706,4 @@
     var skateFgComboList = ${skateFgComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20221014.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20221213.01" charset="utf-8"></script>
