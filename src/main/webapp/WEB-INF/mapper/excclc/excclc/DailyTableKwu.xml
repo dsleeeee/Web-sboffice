@@ -389,88 +389,38 @@
     -->
     <select id="getTuition1List" parameterType="dailyTableKwuVO" resultType="DefaultMap">
         /* DailyTableKwuMapper.getTuition1List */
-        SELECT *
+       SELECT *
         FROM
         (
             SELECT
             '일계' AS FG,
-            A.CASH_AMT,
-            B.CARD_AMT,
+            SUM(tsdt.PAY_AMT_02) AS CASH_AMT,
+            SUM(tsdt.PAY_AMT_01) AS CARD_AMT,
             0 AS CAT_AMT, -- 신용단말기
-            (A.CASH_AMT + B.CARD_AMT) AS TOT_IN_AMT,
-            A.CANCEL_CNT,
-            A.CANCEL_AMT
-            FROM
-            (
-                SELECT
-                SUM(tsdt.PAY_AMT_02) AS CASH_AMT,
-                SUM(tsdt.RTN_SALE_CNT) AS CANCEL_CNT,
-                SUM(tsdt.RTN_REAL_SALE_AMT) AS CANCEL_AMT
-                FROM TB_SL_DAILY_TOTAL tsdt
-                WHERE 1=1
-                AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tsdt.STORE_CD = #{storeCd}
-                AND tsdt.SALE_DATE = #{startDate}
-            ) A,
-            (
-                SELECT
-                SUM(tsspc.SALE_FG * tsspc.APPR_AMT) AS CARD_AMT
-                FROM TB_SL_SALE_PAY_CARD tsspc,
-                TB_SL_SALE_HDR tssh
-                WHERE 1=1
-                AND tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tsspc.STORE_CD = #{storeCd}
-                AND tsspc.APPR_DT IS NOT NULL
-                AND SUBSTR(tsspc.APPR_DT, 1, 8) = #{startDate}
-                AND tssh.ORG_BILL_NO IS NULL
-                AND tssh.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
-                AND tssh.HQ_BRAND_CD = tsspc.HQ_BRAND_CD
-                AND tssh.STORE_CD = tsspc.STORE_CD
-                AND tssh.SALE_DATE = tsspc.SALE_DATE
-                AND tssh.POS_NO = tsspc.POS_NO
-                AND tssh.BILL_NO = tsspc.BILL_NO
-            ) B
+            SUM(tsdt.PAY_AMT_02) + SUM(tsdt.PAY_AMT_01) AS TOT_IN_AMT,
+            SUM(tsdt.RTN_SALE_CNT) AS CANCEL_CNT,
+            SUM(tsdt.RTN_REAL_SALE_AMT) AS CANCEL_AMT
+            FROM TB_SL_DAILY_TOTAL tsdt
+            WHERE 1=1
+            AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsdt.STORE_CD = #{storeCd}
+            AND tsdt.SALE_DATE = #{startDate}
         )
         UNION ALL
         (
             SELECT
             '월계' AS FG,
-            A.CASH_AMT,
-            B.CARD_AMT,
+            SUM(tsdt.PAY_AMT_02) AS CASH_AMT,
+            SUM(tsdt.PAY_AMT_01) AS CARD_AMT,
             0 AS CAT_AMT, -- 신용단말기
-            (A.CASH_AMT + B.CARD_AMT) AS TOT_IN_AMT,
-            A.CANCEL_CNT,
-            A.CANCEL_AMT
-            FROM
-            (
-                SELECT
-                SUM(tsdt.PAY_AMT_02) AS CASH_AMT,
-                SUM(tsdt.RTN_SALE_CNT) AS CANCEL_CNT,
-                SUM(tsdt.RTN_REAL_SALE_AMT) AS CANCEL_AMT
-                FROM TB_SL_DAILY_TOTAL tsdt
-                WHERE 1=1
-                AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tsdt.STORE_CD = #{storeCd}
-                AND tsdt.SALE_DATE BETWEEN SUBSTR(#{startDate}, 1, 6)||'01' AND #{startDate}
-            ) A,
-            (
-                SELECT
-                SUM(tsspc.SALE_FG * tsspc.APPR_AMT) AS CARD_AMT
-                FROM TB_SL_SALE_PAY_CARD tsspc,
-                TB_SL_SALE_HDR tssh
-                WHERE 1=1
-                AND tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tsspc.STORE_CD = #{storeCd}
-                AND tsspc.APPR_DT IS NOT NULL
-                AND SUBSTR(tsspc.APPR_DT, 1, 8) BETWEEN SUBSTR(#{startDate}, 1, 6)||'01' AND #{startDate}
-                AND tssh.ORG_BILL_NO IS NULL
-                AND tssh.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
-                AND tssh.HQ_BRAND_CD = tsspc.HQ_BRAND_CD
-                AND tssh.STORE_CD = tsspc.STORE_CD
-                AND tssh.SALE_DATE = tsspc.SALE_DATE
-                AND tssh.POS_NO = tsspc.POS_NO
-                AND tssh.BILL_NO = tsspc.BILL_NO
-            ) B
+            SUM(tsdt.PAY_AMT_02) + SUM(tsdt.PAY_AMT_01) AS TOT_IN_AMT,
+            SUM(tsdt.RTN_SALE_CNT) AS CANCEL_CNT,
+            SUM(tsdt.RTN_REAL_SALE_AMT) AS CANCEL_AMT
+            FROM TB_SL_DAILY_TOTAL tsdt
+            WHERE 1=1
+            AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsdt.STORE_CD = #{storeCd}
+            AND tsdt.SALE_DATE BETWEEN SUBSTR(#{startDate}, 1, 6)||'01' AND #{startDate}
         )
     </select>
     <!-- 수강료현황 목록조회
@@ -502,7 +452,7 @@
                 AND tsspc.STORE_CD = #{storeCd}
                 AND tsspc.APPR_DT IS NOT NULL
                 AND SUBSTR(tsspc.APPR_DT, 1, 8) BETWEEN TO_CHAR((TO_DATE(SUBSTR(#{startDate}, 1, 6), 'YYYYMM') -1), 'YYYYMM')||'01' AND TO_CHAR((TO_DATE(SUBSTR(#{startDate}, 1, 6), 'YYYYMM') -1), 'YYYYMM')||'31'
-                AND tssh.ORG_BILL_NO IS NULL
+--                 AND tssh.ORG_BILL_NO IS NULL
                 AND tssh.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
                 AND tssh.HQ_BRAND_CD = tsspc.HQ_BRAND_CD
                 AND tssh.STORE_CD = tsspc.STORE_CD
@@ -529,7 +479,7 @@
                 AND tsspc.STORE_CD = #{storeCd}
                 AND tsspc.APPR_DT IS NOT NULL
                 AND SUBSTR(tsspc.APPR_DT, 1, 8) = #{startDate}
-                AND tssh.ORG_BILL_NO IS NULL
+--                 AND tssh.ORG_BILL_NO IS NULL
                 AND tssh.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
                 AND tssh.HQ_BRAND_CD = tsspc.HQ_BRAND_CD
                 AND tssh.STORE_CD = tsspc.STORE_CD
@@ -585,7 +535,7 @@
                 AND tsspc.STORE_CD = #{storeCd}
                 AND tsspc.APPR_DT IS NOT NULL
                 AND SUBSTR(tsspc.APPR_DT, 1, 8) BETWEEN TO_CHAR((TO_DATE(SUBSTR(#{startDate}, 1, 6), 'YYYYMM') -1), 'YYYYMM')||'01' AND TO_CHAR((TO_DATE(SUBSTR(#{startDate}, 1, 6), 'YYYYMM') -1), 'YYYYMM')||'31'
-                AND tssh.ORG_BILL_NO IS NULL
+--                 AND tssh.ORG_BILL_NO IS NULL
                 AND tssh.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
                 AND tssh.HQ_BRAND_CD = tsspc.HQ_BRAND_CD
                 AND tssh.STORE_CD = tsspc.STORE_CD
@@ -613,7 +563,7 @@
                 AND tsspc.STORE_CD = #{storeCd}
                 AND tsspc.APPR_DT IS NOT NULL
                 AND SUBSTR(tsspc.APPR_DT, 1, 8) BETWEEN SUBSTR(#{startDate}, 1, 6)||'01' AND #{startDate}
-                AND tssh.ORG_BILL_NO IS NULL
+--                 AND tssh.ORG_BILL_NO IS NULL
                 AND tssh.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
                 AND tssh.HQ_BRAND_CD = tsspc.HQ_BRAND_CD
                 AND tssh.STORE_CD = tsspc.STORE_CD
