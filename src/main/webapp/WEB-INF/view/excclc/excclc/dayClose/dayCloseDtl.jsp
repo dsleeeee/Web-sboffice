@@ -166,8 +166,9 @@
   $(function(){
     $("input:text[numberOnly]").on("keyup", function() {
       $(this).val($(this).val().replace(/[^-|^0-9]/g,""));
+      $(this).val($(this).val().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
     });
   });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/dayClose/dayCloseDtl.js?ver=20220928.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/dayClose/dayCloseDtl.js?ver=20221213.01" charset="utf-8"></script>
