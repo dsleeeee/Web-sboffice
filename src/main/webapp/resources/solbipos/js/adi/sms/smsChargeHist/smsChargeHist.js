@@ -218,6 +218,11 @@ app.controller('smsChargeHistCtrl', ['$scope', '$http', '$timeout', function ($s
         window.open(url, "", "width=470,height=" + height + ",resizable=yes,scrollbars=yes");
     };
 
+    // 현재잔여금액
+    $scope.restSmsAmtPopup = function(){
+        $scope.wjRestSmsAmtLayer.show(true);
+    };
+
     // 선택
     $scope.selectedSmsChargeHist;
     $scope.setSelectedSmsChargeHist = function(store) {
@@ -241,6 +246,13 @@ app.controller('smsChargeHistCtrl', ['$scope', '$http', '$timeout', function ($s
         $scope.wjSmsChargeDtlLayer.shown.addHandler(function (s) {
             setTimeout(function() {
                 $scope._broadcast('smsChargeDtlCtrl', $scope.getSelectedSmsChargeHist());
+            }, 50)
+        });
+
+        // 현재잔여금액 팝업 핸들러 추가
+        $scope.wjRestSmsAmtLayer.shown.addHandler(function (s) {
+            setTimeout(function() {
+                $scope._broadcast('restSmsAmtCtrl', null);
             }, 50)
         });
     });
