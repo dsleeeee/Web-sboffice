@@ -369,8 +369,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.store.beforeBizNo            = storeDetailInfo.bizNo;
 
       // 시스템 오픈일자 / 포스개점일자
-      $("#sysOpenDate").attr("disabled", true);
-      $("#sysOpenDate").css('background-color', '#F0F0F0');
+      // $("#sysOpenDate").attr("disabled", true);
+      // $("#sysOpenDate").css('background-color', '#F0F0F0');
       sysOpenDate.value = new Date(getFormatDate(storeDetailInfo.sysOpenDate, "-"));
       sysClosureDate.value = new Date(getFormatDate(storeDetailInfo.sysClosureDate, "-"));
       // 시스템 폐점일자
