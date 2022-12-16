@@ -3,7 +3,7 @@
 
 <!--
     StoreSaleArea.xml
-    점포 영업 지역 관리
+    점포영업지역관리
     ======================================================
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
@@ -29,27 +29,50 @@
                tms.SYS_STAT_FG
       <include refid="CmmSQL.PagingTemplateCount"/>
           FROM TB_MS_STORE tms,
-               TB_HQ_BRANCH_MOMS thbm
+               TB_HQ_BRANCH_MOMS thbm,
+               TB_MS_STORE_INFO tmsi
          WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
            AND thbm.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
            AND thbm.BRANCH_CD (+)= tms.BRANCH_CD
+        AND     tms.STORE_CD = tmsi.STORE_CD (+)
+        <if test="storeCd != null and storeCd != ''">
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%' --매장명
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
         <if test='branchCd != null and branchCd != ""'>
-           AND tms.BRANCH_CD LIKE '%'|| #{branchCd} || '%'
-        </if>
-        <if test='branchNm != null and branchNm != ""'>
-           AND thbm.BRANCH_NM LIKE '%'|| #{branchNm} || '%'
-        </if>
-        <if test='storeCd != null and storeCd != ""'>
-           AND tms.STORE_CD LIKE '%'||#{storeCd}|| '%'
-        </if>
-        <if test='storeNm != null and storeNm != ""'>
-          AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
-        </if>
-        <if test='areaCd != null and areaCd.toString() != ""'>
-          AND tms.AREA_CD = #{areaCd}
-        </if>
-        <if test='sysStatFg != null and sysStatFg.toString() != ""'>
-          AND tms.SYS_STAT_FG = #{sysStatFg}
+            AND tms.BRANCH_CD = #{branchCd}
         </if>
         ORDER
            BY tms.STORE_CD

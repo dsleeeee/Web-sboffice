@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * @Class Name : StoreSaleAreaMapper.java
- * @Description : 맘스터치 > 점포관리 > 점포 영업 지역 관리
+ * @Description : 맘스터치 > 매장관리 > 점포영업지역관리
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용

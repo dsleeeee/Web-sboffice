@@ -18,7 +18,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : StoreSaleAreaServiceImpl.java
- * @Description : 맘스터치 > 점포관리 > 점포 영업 지역 관리
+ * @Description : 맘스터치 > 매장관리 > 점포영업지역관리
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -52,6 +52,13 @@ public class StoreSaleAreaServiceImpl implements StoreSaleAreaService {
     public List<DefaultMap<String>> getStoreList(StoreSaleAreaVO storeSaleAreaVO, SessionInfoVO sessionInfoVO) {
 
         storeSaleAreaVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        // 매장브랜드 '전체' 일때
+        if (storeSaleAreaVO.getStoreHqBrandCd() == "" || storeSaleAreaVO.getStoreHqBrandCd() == null) {
+            // 사용자별 브랜드 array 값 세팅
+            String[] userBrandList = storeSaleAreaVO.getUserBrands().split(",");
+            storeSaleAreaVO.setUserBrandList(userBrandList);
+        }
 
         return storeSaleAreaMapper.getStoreList(storeSaleAreaVO);
     }
