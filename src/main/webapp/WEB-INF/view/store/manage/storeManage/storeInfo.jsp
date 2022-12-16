@@ -105,17 +105,12 @@
               </td>
             </tr>
             <tr>
-              <%-- 시스템 오픈일자 / 포스개점일자 --%>
-              <th><s:message code="storeManage.posOpenDate" /></th>
-              <td>
-                <div class="sb-select">
-                    <span class="txtIn"><input id="sysOpenDate" ng-model="store.sysOpenDate" style="width: 245px;"></span>
-                </div>
-              </td>
               <%-- 매장상태구분 --%>
+              <%-- 시스템 오픈일자 / 포스개점일자 --%>
+              <%-- 시스템 폐점일자 --%>
               <th><s:message code="storeManage.sysStatFg" /><em class="imp">*</em></th>
-              <td>
-                <div class="sb-select">
+              <td colspan="3">
+                <div class="sb-select w130px fl">
                   <wj-combo-box
                     id="sysStatFg"
                     ng-model="store.sysStatFg"
@@ -129,6 +124,14 @@
                   </wj-combo-box>
                 </div>
                 <input type="hidden" id="hdSysStatFg" />
+                <span class="fl mt5 mr10 ml20"><s:message code="storeManage.openDate" /></span>
+                <div class="sb-select fl">
+                  <span class="txtIn"><input id="sysOpenDate" ng-model="store.sysOpenDate" class="w130px"></span>
+                </div>
+                <span class="sysClosureDate fl mt5 mr10 ml20" style="display:none;"><s:message code="storeManage.sysClosureDate" /></span>
+                <div class="sysClosureDate sb-select" style="display:none;">
+                  <span class="txtIn"><input id="sysClosureDate" ng-model="store.sysClosureDate" class="w130px"></span>
+                </div>
               </td>
             </tr>
             <%-- [1250 맘스터치] --%>
@@ -226,6 +229,13 @@
               <th><s:message code="storeManage.faxNo" /></th>
               <td>
                 <input type="text" id="faxNo" ng-model="store.faxNo" class="sb-input w100" maxlength="11" placeholder="<s:message code='storeManage.bizNo.comment' />" />
+              </td>
+            </tr>
+            <tr>
+                <%-- 핸드폰번호 --%>
+              <th><s:message code="storeManage.mpNo" /></th>
+              <td>
+                <input type="text" id="mpNo" ng-model="store.mpNo" class="sb-input w100" maxlength="11" placeholder="<s:message code='storeManage.bizNo.comment' />" />
               </td>
             </tr>
             <tr>
@@ -574,7 +584,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20221118.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20221118.05" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">

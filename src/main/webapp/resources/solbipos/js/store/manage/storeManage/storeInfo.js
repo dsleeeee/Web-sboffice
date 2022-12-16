@@ -42,6 +42,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 시스템 오픈일자 / 포스개점일자
   var sysOpenDate = wcombo.genDateVal("#sysOpenDate", gvStartDate);
+  var sysClosureDate = wcombo.genDateVal("#sysClosureDate", gvStartDate);
 
   // 사업자번호 중복체크 여부
   $scope.isBizChk = false;
@@ -69,6 +70,11 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
   // 매장상태
   $scope.sysStatFgVal;
   $scope.setSysStatFgVal = function(s){
+    if(s.selectedValue === "2"){
+      $(".sysClosureDate").css("display", "");
+    } else {
+      $(".sysClosureDate").css("display", "none");
+    }
 
      // 데모매장이 아닌 매장은 데모매장으로 수정 불가
     if($("#hdSysStatFg").val() !== null && $("#hdSysStatFg").val() !== "" && $("#hdSysStatFg").val() !== "9"){
@@ -223,9 +229,11 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.store.ownerNm ="";
 
     // 시스템 오픈일자 / 포스개점일자
-    $("#sysOpenDate").attr("disabled", false);
-    $("#sysOpenDate").css('background-color', '#FFFFFF');
+    // $("#sysOpenDate").attr("disabled", false);
+    // $("#sysOpenDate").css('background-color', '#FFFFFF');
     sysOpenDate.value = getCurDate('-');
+    // 시스템 폐점일자
+    sysClosureDate.value = getCurDate('-');
 
     $scope.sysStatFgCombo.isReadOnly    = false;
     $scope.sysStatFgCombo.selectedIndex = 0;
@@ -244,6 +252,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.store.beforeBizNo ="";
     $scope.store.telNo ="";
     $scope.store.faxNo ="";
+    $scope.store.mpNo ="";
     $scope.store.emailAddr ="";
     $scope.store.hmpgAddr ="";
 
@@ -363,6 +372,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#sysOpenDate").attr("disabled", true);
       $("#sysOpenDate").css('background-color', '#F0F0F0');
       sysOpenDate.value = new Date(getFormatDate(storeDetailInfo.sysOpenDate, "-"));
+      sysClosureDate.value = new Date(getFormatDate(storeDetailInfo.sysClosureDate, "-"));
+      // 시스템 폐점일자
 
       $scope.areaCdCombo.selectedValue    = storeDetailInfo.areaCd;
       $scope.clsFgCombo.selectedValue     = storeDetailInfo.clsFg;
@@ -707,6 +718,14 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       return false;
     }
 
+    // 핸드폰번호는 숫자만 입력할 수 있습니다.
+    var msg = messages["storeManage.mpNo"]+messages["cmm.require.number"];
+    var numChkregexp = /[^0-9]/g;
+    if( (!$.isEmptyObject($scope.store.mpNo)) && numChkregexp.test( $scope.store.mpNo )) {
+      $scope._popMsg(msg);
+      return false;
+    }
+
     // 주소를 입력해주세요.
     var msg = messages["storeManage.addr"]+messages["cmm.require.text"];
     if($("#postNo").val() === "" || $("#addr").val() === "" || $("#addrDtl").val() === "") {
@@ -765,6 +784,10 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     var params         = $scope.store;
     params.sysOpenDate = wijmo.Globalize.format(sysOpenDate.value, 'yyyyMMdd');
+    // 폐점일때만 폐점 날짜 저장
+    if($scope.store.sysStatFg === "2"){
+      params.sysClosureDate = wijmo.Globalize.format(sysClosureDate.value, 'yyyyMMdd');
+    }
     params.postNo = $("#postNo").val();
     params.addr = $("#addr").val();
     params.addrdtl = $("#addrDtl").val();

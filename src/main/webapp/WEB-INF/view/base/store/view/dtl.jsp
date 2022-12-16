@@ -52,6 +52,10 @@
             <td>{{storeInfo.faxNo}}</td>
           </tr>
           <tr>
+            <th><s:message code="storeView.mpNo" /></th>
+            <td>{{storeInfo.mpNo}}</td>
+          </tr>
+          <tr>
             <th><s:message code="storeView.emailAddr" /></th>
             <td>{{storeInfo.emailAddr}}</td>
             <th><s:message code="storeView.hmpgAddr" /></th>
