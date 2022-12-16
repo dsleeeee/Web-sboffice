@@ -320,4 +320,4 @@
    #red:hover {background-color:#ed5565; color:#FFFFFF;}
 </style>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeOpenClose/storeOpenCloseDay.js?ver=20221129.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeOpenClose/storeOpenCloseDay.js?ver=20221129.02" charset="utf-8"></script>

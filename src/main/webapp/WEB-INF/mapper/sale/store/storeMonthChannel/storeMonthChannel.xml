@@ -33,25 +33,26 @@
                 tsdt.CUP_AMT,
                 <foreach collection="arrPayCol" item="item" separator=",">
                     tsdt.PAY_AMT_${item} AS PAY${item}
-                </foreach> ,
+                </foreach>,
+                tsdt.PAY_AMT_02 AS PAY02,
+                tsdt.PAY_AMT_021 AS PAY021,
                 tsdt.TOT_PAY_AMT,
                 tsdt.STIN_BILL_CNT,
-                tsdt.STIN_BILL_UPRC,
+                DECODE(tsdt.STIN_BILL_CNT , 0, 0, ROUND(tsdt.STIN_REAL_SALE_AMT / tsdt.STIN_BILL_CNT)) AS STIN_BILL_UPRC,
                 tsdt.STIN_REAL_SALE_AMT,
                 DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsdt.STIN_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS STIN_RATE,
                 tsdt.DLVR_BILL_CNT,
-                tsdt.DLVR_BILL_UPRC,
+                DECODE(tsdt.DLVR_BILL_CNT , 0, 0, ROUND(tsdt.DLVR_REAL_SALE_AMT / tsdt.DLVR_BILL_CNT)) AS DLVR_BILL_UPRC,
                 tsdt.DLVR_REAL_SALE_AMT,
                 DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsdt.DLVR_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS DLVR_RATE,
                 tsdt.PACK_BILL_CNT,
-                tsdt.PACK_BILL_UPRC,
+                DECODE(tsdt.PACK_BILL_CNT , 0, 0, ROUND(tsdt.PACK_REAL_SALE_AMT / tsdt.PACK_BILL_CNT)) AS PACK_BILL_UPRC,
                 tsdt.PACK_REAL_SALE_AMT,
                 DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsdt.PACK_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS PACK_RATE
-        ,
-        <foreach collection="arrDlvrInFgCol" item="item" separator=",">
+        ,       <foreach collection="arrDlvrInFgCol" item="item" separator=",">
                 tsdto.SALE_QTY${item} AS SALE_QTY${item}
         ,       tsdto.REAL_SALE_AMT${item} AS REAL_SALE_AMT${item}
-        </foreach>
+                </foreach>
         FROM    (
                 SELECT  SUBSTR(tsdt.SALE_DATE,0,6) AS SALE_YM,
                         COUNT(DISTINCT tsdt.SALE_DATE) AS SALE_CNT,
@@ -71,25 +72,18 @@
                         SUM(tsdt.TOT_ETC_AMT) AS TOT_ETC_AMT,
                         SUM(tsdt.CUP_AMT) AS CUP_AMT,
                         <foreach collection="arrPayCol" item="item" separator="+">
-                            <if test="item != '02' and item != '021'">
-                                SUM(NVL(tsdt.PAY_AMT_${item}, 0))
-                            </if>
+                            SUM(NVL(tsdt.PAY_AMT_${item}, 0))
                         </foreach> +  SUM(NVL(tsdt.NON_CASH_AMT, 0)) +  SUM(NVL(tsdt.APPR_CASH_AMT, 0)) AS TOT_PAY_AMT,
                         <foreach collection="arrPayCol" item="item" separator=",">
-                            <if test="item != '02' and item != '021'">
-                                SUM(NVL(tsdt.PAY_AMT_${item}, 0)) AS PAY_AMT_${item}
-                            </if>
+                            SUM(NVL(tsdt.PAY_AMT_${item}, 0)) AS PAY_AMT_${item}
                         </foreach>,
                         SUM(NVL(tsdt.NON_CASH_AMT, 0)) AS PAY_AMT_02,
                         SUM(NVL(tsdt.APPR_CASH_AMT, 0)) AS PAY_AMT_021,
                         SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN REAL_SALE_CNT ELSE 0 END) AS STIN_BILL_CNT
-                ,       SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN DECODE(REAL_SALE_CNT , 0, 0, ROUND(REAL_SALE_AMT / REAL_SALE_CNT)) ELSE 0 END) AS STIN_BILL_UPRC
                 ,       SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) AS STIN_REAL_SALE_AMT
                 ,       SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN REAL_SALE_CNT ELSE 0 END) AS DLVR_BILL_CNT
-                ,       SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN DECODE(REAL_SALE_CNT , 0, 0, ROUND(REAL_SALE_AMT / REAL_SALE_CNT)) ELSE 0 END) AS DLVR_BILL_UPRC
                 ,       SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT
                 ,       SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN REAL_SALE_CNT ELSE 0 END) AS PACK_BILL_CNT
-                ,       SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN DECODE(REAL_SALE_CNT , 0, 0, ROUND(REAL_SALE_AMT / REAL_SALE_CNT)) ELSE 0 END) AS PACK_BILL_UPRC
                 ,       SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
                 FROM    TB_SL_DAILY_TOTAL_DLVR tsdt
                 ,       TB_MS_STORE tms

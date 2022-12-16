@@ -34,6 +34,8 @@
                 <foreach collection="arrPayCol" item="item" separator=",">
                     tsdt.PAY_AMT_${item} AS PAY${item}
                 </foreach> ,
+                tsdt.PAY_AMT_02 AS PAY02,
+                tsdt.PAY_AMT_021 AS PAY021,
                 tsdt.TOT_PAY_AMT,
                 tsdt.GEN_REAL_SALE_AMT,
                 DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsdt.GEN_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS GEN_REAL_SALE_RATE,
@@ -60,14 +62,10 @@
                 SUM(TOT_ETC_AMT) AS TOT_ETC_AMT,
                 SUM(CUP_AMT) AS CUP_AMT,
                 <foreach collection="arrPayCol" item="item" separator="+">
-                    <if test="item != '02' and item != '021'">
-                        SUM(NVL(PAY_AMT_${item}, 0))
-                    </if>
+                    SUM(NVL(PAY_AMT_${item}, 0))
                 </foreach> +  SUM(NVL(NON_CASH_AMT, 0)) +  SUM(NVL(APPR_CASH_AMT, 0)) AS TOT_PAY_AMT,
                 <foreach collection="arrPayCol" item="item" separator=",">
-                    <if test="item != '02' and item != '021'">
-                        SUM(NVL(PAY_AMT_${item}, 0)) AS PAY_AMT_${item}
-                    </if>
+                    SUM(NVL(PAY_AMT_${item}, 0)) AS PAY_AMT_${item}
                 </foreach>,
                 SUM(NVL(NON_CASH_AMT, 0)) AS PAY_AMT_02,
                 SUM(NVL(APPR_CASH_AMT, 0)) AS PAY_AMT_021,

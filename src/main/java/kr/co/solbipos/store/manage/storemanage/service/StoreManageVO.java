@@ -62,6 +62,8 @@ public class StoreManageVO extends PageVO {
     private String telNo;
     /** 팩스번호 */
     private String faxNo;
+    /** 핸드폰번호 */
+    private String mpNo;
     /** 이메일주소 */
     private String emailAddr;
     /** 홈페이지주소 */
@@ -405,6 +407,15 @@ public class StoreManageVO extends PageVO {
     public void setFaxNo(String faxNo) {
         this.faxNo = faxNo;
     }
+
+    public String getMpNo() {
+        return mpNo;
+    }
+
+    public void setMpNo(String mpNo) {
+        this.mpNo = mpNo;
+    }
+
     /**
      * @return the emailAddr
      */

@@ -1,4 +1,4 @@
-package kr.co.solbipos.store.storeMoms.storeSaleArea.web;
+package kr.co.solbipos.store.storeMoms.storeInfo.web;
 
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
@@ -8,16 +8,15 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.store.storeMoms.storeInfo.service.StoreInfoService;
+import kr.co.solbipos.store.storeMoms.storeInfo.service.StoreInfoVO;
 import kr.co.solbipos.sale.day.day.service.DayVO;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import kr.co.solbipos.sale.store.storeChannel.service.StoreChannelVO;
-import kr.co.solbipos.store.storeMoms.storeSaleArea.service.StoreSaleAreaService;
-import kr.co.solbipos.store.storeMoms.storeSaleArea.service.StoreSaleAreaVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,57 +27,53 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static kr.co.common.utils.grid.ReturnUtil.returnJson;
-import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
- * @Class Name : StoreSaleAreaController.java
- * @Description : 맘스터치 > 매장관리 > 점포영업지역관리
+ * @Class Name : StoreInfoController.java
+ * @Description : 맘스터치 > 매장관리 > 매장정보조회
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2022.11.21  이다솜      최초생성
+ * @ 2022.12.14  권지현      최초생성
  *
- * @author 솔비포스 WEB개발팀 이다솜
- * @since 2022.11.21
+ * @author 솔비포스 
+ * @since 2022.12.14
  * @version 1.0
+ * @see
  *
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 
 @Controller
-@RequestMapping(value="/store/storeMoms/storeSaleArea/")
-public class StoreSaleAreaController {
-
-    private final StoreSaleAreaService storeSaleAreaService;
+@RequestMapping("/store/storeMoms/storeInfo")
+public class StoreInfoController {
     private final SessionService sessionService;
+    private final StoreInfoService storeInfoService;
     private final DayProdService dayProdService;
     private final CmmCodeUtil cmmCodeUtil;
 
-    /** Constructor Injection */
     @Autowired
-    public StoreSaleAreaController(StoreSaleAreaService storeSaleAreaService, SessionService sessionService, DayProdService dayProdService, CmmCodeUtil cmmCodeUtil) {
-        this.storeSaleAreaService = storeSaleAreaService;
+    public StoreInfoController(SessionService sessionService, StoreInfoService storeInfoService, DayProdService dayProdService, CmmCodeUtil cmmCodeUtil) {
         this.sessionService = sessionService;
+        this.storeInfoService = storeInfoService;
         this.dayProdService = dayProdService;
         this.cmmCodeUtil = cmmCodeUtil;
     }
 
+
     /**
-     * 점포영업지역관리 화면 이동
+     * 페이지 이동
      * @param   request
      * @param   response
      * @param   model
      * @return  String
-     * @author  이다솜
-     * @since   2022.11.21
+     * @author  권지현
+     * @since   2022.12.14
      */
-    @RequestMapping(value = "view.sb", method = RequestMethod.GET)
-    public String view(StoreSaleAreaVO storeSaleAreaVO, HttpServletRequest request,
-                       HttpServletResponse response, Model model) {
-
+    @RequestMapping(value = "/storeInfo/view.sb", method = RequestMethod.GET)
+    public String empMonthView(HttpServletRequest request, HttpServletResponse response, Model model) {
 
         DayVO dayVO = new DayVO();
         StoreChannelVO storeChannelVO = new StoreChannelVO();
@@ -192,119 +187,29 @@ public class StoreSaleAreaController {
         }
         model.addAttribute("branchCdComboList", branchCdComboListAll);
 
-        // 지사 조회(콤보박스용)
-        model.addAttribute("branchCombo", convertToJson(storeSaleAreaService.getBranchCombo(storeSaleAreaVO, sessionInfoVO)));
-
-        return "store/storeMoms/storeSaleArea/storeSaleArea";
+        return "store/storeMoms/storeInfo/storeInfo";
     }
 
     /**
-     * 매장목록 조회
-     * @param   storeSaleAreaVO
+     * 리스트 조회
      * @param   request
      * @param   response
      * @param   model
-     * @return  Result
-     * @author  이다솜
-     * @since   2022.11.21
+     * @param   storeInfoVO
+     * @return  String
+     * @author  권지현
+     * @since   2022.12.14
      */
-    @RequestMapping(value = "getStoreList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/storeInfo/getStoreInfoList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getStoreList(StoreSaleAreaVO storeSaleAreaVO, HttpServletRequest request,
-                       HttpServletResponse response, Model model) {
+    public Result getStoreInfoList(HttpServletRequest request, HttpServletResponse response,
+                             Model model, StoreInfoVO storeInfoVO) {
 
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> list = storeSaleAreaService.getStoreList(storeSaleAreaVO, sessionInfoVO);
+        List<DefaultMap<String>> list = storeInfoService.getStoreInfoList(storeInfoVO, sessionInfoVO);
 
-        return returnListJson(Status.OK, list, storeSaleAreaVO);
+        return ReturnUtil.returnListJson(Status.OK, list, storeInfoVO);
     }
 
-    /**
-     * 매장 조회(콤보박스용)
-     * @param storeSaleAreaVO
-     * @param request
-     * @param response
-     * @param model
-     * @return
-     * @author  이다솜
-     * @since   2022.11.22
-     */
-    @RequestMapping(value = "getStoreCombo.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getStoreCombo(StoreSaleAreaVO storeSaleAreaVO, HttpServletRequest request,
-                                 HttpServletResponse response, Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-
-        List<DefaultMap<String>> storeCombo = storeSaleAreaService.getStoreCombo(storeSaleAreaVO, sessionInfoVO);
-
-        return returnListJson(Status.OK, storeCombo);
-    }
-
-    /**
-     * 매장 영업지역 조회
-     * @param storeSaleAreaVO
-     * @param request
-     * @param response
-     * @param model
-     * @return
-     * @author  이다솜
-     * @since   2022.11.22
-     */
-    @RequestMapping(value = "getStoreSaleArea.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getStoreSaleArea(StoreSaleAreaVO storeSaleAreaVO, HttpServletRequest request,
-                                 HttpServletResponse response, Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-
-        DefaultMap<String> result = storeSaleAreaService.getStoreSaleArea(storeSaleAreaVO, sessionInfoVO);
-
-        return ReturnUtil.returnJson(Status.OK, result);
-    }
-
-    /**
-     * 매장 영업지역 저장
-     * @param storeSaleAreaVO
-     * @param request
-     * @param response
-     * @param model
-     * @return
-     * @author  이다솜
-     * @since   2022.11.22
-     */
-    @RequestMapping(value = "saveStoreSaleArea.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result saveStoreSaleArea(@RequestBody StoreSaleAreaVO storeSaleAreaVO, HttpServletRequest request,
-                                     HttpServletResponse response, Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-
-        int result = storeSaleAreaService.saveStoreSaleArea(storeSaleAreaVO, sessionInfoVO);
-
-        return returnJson(Status.OK, result);
-    }
-
-    /**
-     * 서울, 경기 매장 영업지역 조회
-     * @param storeSaleAreaVO
-     * @param request
-     * @param response
-     * @param model
-     * @return
-     * @author  이다솜
-     * @since   2022.11.22
-     */
-    @RequestMapping(value = "getMetropolitanSaleArea.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getMetropolitanSaleArea(StoreSaleAreaVO storeSaleAreaVO, HttpServletRequest request,
-                       HttpServletResponse response, Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-
-        List<DefaultMap<String>> list = storeSaleAreaService.getMetropolitanSaleArea(storeSaleAreaVO, sessionInfoVO);
-
-        return returnListJson(Status.OK, list, storeSaleAreaVO);
-    }
 }

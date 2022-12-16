@@ -179,7 +179,7 @@ public class StoreManageServiceImpl implements StoreManageService{
         storeManageVO.setModId(sessionInfoVO.getUserId());
 
         if(SysStatFg.CLOSE == storeManageVO.getSysStatFg()) {
-            storeManageVO.setSysClosureDate(SYS_CLOSURE_DATE);
+//            storeManageVO.setSysClosureDate(SYS_CLOSURE_DATE);
         } else  if(SysStatFg.DEMO == storeManageVO.getSysStatFg() ) {
             storeManageVO.setSysClosureDate(SYS_CLOSURE_DATE);
         } else {
@@ -666,7 +666,7 @@ public class StoreManageServiceImpl implements StoreManageService{
         storeManageVO.setModId(sessionInfoVO.getUserId());
 
         if(SysStatFg.CLOSE == storeManageVO.getSysStatFg()) {
-            storeManageVO.setSysClosureDate(SYS_CLOSURE_DATE);
+//            storeManageVO.setSysClosureDate(SYS_CLOSURE_DATE);
         } else  if(SysStatFg.DEMO == storeManageVO.getSysStatFg() ) {
             storeManageVO.setSysClosureDate(SYS_CLOSURE_DATE);
         } else {

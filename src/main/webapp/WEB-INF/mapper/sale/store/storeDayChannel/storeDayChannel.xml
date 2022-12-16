@@ -32,15 +32,15 @@
         ,       tsshp.BILL_CNT
         ,       tsshp.BILL_UPRC
         ,       tsshp.STIN_BILL_CNT
-        ,       tsshp.STIN_BILL_UPRC
+        ,       DECODE(tsshp.STIN_BILL_CNT , 0, 0, ROUND(tsshp.STIN_REAL_SALE_AMT / tsshp.STIN_BILL_CNT)) AS STIN_BILL_UPRC
         ,       tsshp.STIN_REAL_SALE_AMT
         ,       DECODE(tsshp.REAL_SALE_AMT, 0, 0, (tsshp.STIN_REAL_SALE_AMT / tsshp.REAL_SALE_AMT)*100) AS STIN_RATE
         ,       tsshp.DLVR_BILL_CNT
-        ,       tsshp.DLVR_BILL_UPRC
+        ,       DECODE(tsshp.DLVR_BILL_CNT , 0, 0, ROUND(tsshp.DLVR_REAL_SALE_AMT / tsshp.DLVR_BILL_CNT)) AS DLVR_BILL_UPRC
         ,       tsshp.DLVR_REAL_SALE_AMT
         ,       DECODE(tsshp.REAL_SALE_AMT, 0, 0, (tsshp.DLVR_REAL_SALE_AMT / tsshp.REAL_SALE_AMT)*100) AS DLVR_RATE
         ,       tsshp.PACK_BILL_CNT
-        ,       tsshp.PACK_BILL_UPRC
+        ,       DECODE(tsshp.PACK_BILL_CNT , 0, 0, ROUND(tsshp.PACK_REAL_SALE_AMT / tsshp.PACK_BILL_CNT)) AS PACK_BILL_UPRC
         ,       tsshp.PACK_REAL_SALE_AMT
         ,       DECODE(tsshp.REAL_SALE_AMT, 0, 0, (tsshp.PACK_REAL_SALE_AMT / tsshp.REAL_SALE_AMT)*100) AS PACK_RATE
         ,       <foreach collection="arrPayCol" item="item" separator="+">
@@ -79,13 +79,10 @@
                     ,       SUM(REAL_SALE_CNT) AS BILL_CNT
                     ,       DECODE(SUM(REAL_SALE_CNT), 0, 0, ROUND(SUM(REAL_SALE_AMT) / SUM(REAL_SALE_CNT))) AS BILL_UPRC
                     ,       SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN REAL_SALE_CNT ELSE 0 END) AS STIN_BILL_CNT
-                    ,       SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN DECODE(REAL_SALE_CNT , 0, 0, ROUND(REAL_SALE_AMT / REAL_SALE_CNT)) ELSE 0 END) AS STIN_BILL_UPRC
                     ,       SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) AS STIN_REAL_SALE_AMT
                     ,       SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN REAL_SALE_CNT ELSE 0 END) AS DLVR_BILL_CNT
-                    ,       SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN DECODE(REAL_SALE_CNT , 0, 0, ROUND(REAL_SALE_AMT / REAL_SALE_CNT)) ELSE 0 END) AS DLVR_BILL_UPRC
                     ,       SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT
                     ,       SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN REAL_SALE_CNT ELSE 0 END) AS PACK_BILL_CNT
-                    ,       SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN DECODE(REAL_SALE_CNT , 0, 0, ROUND(REAL_SALE_AMT / REAL_SALE_CNT)) ELSE 0 END) AS PACK_BILL_UPRC
                     ,       SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
                     FROM    TB_SL_DAILY_TOTAL_DLVR tsdt
                     ,       TB_MS_STORE tms
