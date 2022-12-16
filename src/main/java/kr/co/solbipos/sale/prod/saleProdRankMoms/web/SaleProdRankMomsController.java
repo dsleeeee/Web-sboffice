@@ -133,11 +133,29 @@ public class SaleProdRankMomsController {
         return ReturnUtil.returnListJson(Status.OK, list, saleProdRankMomsVO);
     }
 
+    /**
+     * 상품별매출순위 조회(엑셀용)
+     * @param request
+     * @param response
+     * @param model
+     * @param saleProdRankMomsVO
+     * @return
+     * @author  이다솜
+     * @since   2022.12.06
+     */
+    @RequestMapping(value = "/saleProdRankMoms/getSaleProdRankExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSaleProdRankExcelList(HttpServletRequest request, HttpServletResponse response, Model model, SaleProdRankMomsVO saleProdRankMomsVO) {
 
-    
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = saleProdRankMomsService.getSaleProdRankExcelList(saleProdRankMomsVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, saleProdRankMomsVO);
+    }
 
     /**
-     * 콤보박스 셋팅
+     * 빈 콤보박스 셋팅
      * @return
      */
     public String comboListAll(){

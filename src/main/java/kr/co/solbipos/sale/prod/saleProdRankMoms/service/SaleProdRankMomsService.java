@@ -25,4 +25,7 @@ public interface SaleProdRankMomsService {
     /** 상품별매출순위 조회 */
     List<DefaultMap<String>> getSaleProdRankList(SaleProdRankMomsVO saleProdRankMomsVO, SessionInfoVO sessionInfoVO);
 
+    /** 상품별매출순위 조회(엑셀용) */
+    List<DefaultMap<String>> getSaleProdRankExcelList(SaleProdRankMomsVO saleProdRankMomsVO, SessionInfoVO sessionInfoVO);
+
 }

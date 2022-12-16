@@ -13,7 +13,7 @@
 
     <!-- 대비기간별 매출 조회 -->
     <!--
-        TABLE    : TB_SL_DAILY_TOTAL
+        TABLE    : TB_SL_DAILY_TOTAL, TB_MS_STORE, TB_MS_STORE_INFO
         PARAM    : comparePeriodMomsVO
         COMMENTS : 대비기간별 매출을 조회한다.
     -->

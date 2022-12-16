@@ -853,6 +853,7 @@
     <typeAlias alias="prodRankStoreVO" type="kr.co.solbipos.sale.prod.prodRankStore.service.ProdRankStoreVO"/>
     <!-- 맘스터치 > 상품매출분석 > 상품 판매 비율 -->
     <typeAlias alias="prodSaleRateVO" type="kr.co.solbipos.sale.prod.prodSaleRate.service.ProdSaleRateVO"/>
+    <typeAlias alias="prodSaleRateMomsVO" type="kr.co.solbipos.sale.prod.prodSaleRateMoms.service.ProdSaleRateMomsVO"/>
     <!-- 맘스터치 > 상품매출분석 > 상품군 판매비율 -->
     <typeAlias alias="prodClassSaleRateVO" type="kr.co.solbipos.sale.prod.prodClassSaleRate.service.ProdClassSaleRateVO"/>
     <!-- 맘스터치 > 상품매출분석 > 상품별 점포매출 현황 -->

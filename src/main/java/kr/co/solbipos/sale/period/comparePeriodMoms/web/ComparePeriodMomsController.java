@@ -137,7 +137,7 @@ public class ComparePeriodMomsController {
     }
 
     /**
-     * 콤보박스 셋팅
+     * 빈 콤보박스 셋팅
      * @return
      */
     public String comboListAll(){

@@ -66,4 +66,37 @@ public class SaleProdRankMomsServiceImpl implements SaleProdRankMomsService {
 
         return saleProdRankMomsMapper.getSaleProdRankList(saleProdRankMomsVO);
     }
+
+    /** 상품별매출순위 조회(엑셀용) */
+    @Override
+    public List<DefaultMap<String>> getSaleProdRankExcelList(SaleProdRankMomsVO saleProdRankMomsVO, SessionInfoVO sessionInfoVO){
+        saleProdRankMomsVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        saleProdRankMomsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            saleProdRankMomsVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        // 매장 array 값 세팅
+        String[] storeCds = saleProdRankMomsVO.getStoreCds().split(",");
+        saleProdRankMomsVO.setStoreCdList(storeCds);
+
+        // 상품 array 값 세팅
+        if (saleProdRankMomsVO.getProdCds() != null && !"".equals(saleProdRankMomsVO.getProdCds())) {
+            String[] prodCdList = saleProdRankMomsVO.getProdCds().split(",");
+            saleProdRankMomsVO.setProdCdList(prodCdList);
+        }
+
+        // 매장브랜드 '전체' 일때
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            if (saleProdRankMomsVO.getStoreHqBrandCd() == "" || saleProdRankMomsVO.getStoreHqBrandCd() == null || saleProdRankMomsVO.getProdHqBrandCd() == "" || saleProdRankMomsVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = saleProdRankMomsVO.getUserBrands().split(",");
+                saleProdRankMomsVO.setUserBrandList(userBrandList);
+            }
+        }
+
+        return saleProdRankMomsMapper.getSaleProdRankExcelList(saleProdRankMomsVO);
+
+    }
 }

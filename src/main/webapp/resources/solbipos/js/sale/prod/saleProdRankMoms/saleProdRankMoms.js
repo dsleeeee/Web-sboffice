@@ -171,6 +171,7 @@ app.controller('saleProdRankMomsCtrl', ['$scope', '$http', '$timeout', function 
        params.prodCd = $("#srchProdCd").val();
        params.prodNm = $("#srchProdNm").val();
        params.prodCds = $("#saleProdRankMomsSelectCd").val();
+       params.listScale=500;
 
        if(orgnFg === "HQ"){
            params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
@@ -245,25 +246,59 @@ app.controller('saleProdRankMomsCtrl', ['$scope', '$http', '$timeout', function 
     // 엑셀 다운로드
     $scope.excelDownload = function(){
 
-        if ($scope.flex.rows.length <= 0) {
-            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-            return false;
+        // 조회기간
+        var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+           $scope._popMsg(messages['cmm.dateChk.error']);
+           return false;
         }
 
-        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-        $timeout(function () {
-            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-                includeColumnHeaders: true,
-                includeCellStyles   : true,
-                includeColumns      : function (column) {
-                return column.visible;
-                }
-            }, messages["prodRankMoms.prodRankMoms"]+getToday()+'.xlsx', function () {
-                $timeout(function () {
-                $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-                }, 10);
-            });
-        }, 10);
+        // 조회일자 최대 한달(31일) 제한
+        if (diffDay > 7) {
+           s_alert.pop(messages['cmm.dateOver.7day.error']);
+           return false;
+        }
+
+        // 파라미터
+        var params = {};
+        params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+        params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+        params.prodClassCd = $scope.prodClassCd;
+        params.dayOption = $scope.srchDayOptionCombo.selectedValue;
+        params.prodOption = $scope.srchProdOptionCombo.selectedValue;
+        params.prodCd = $("#srchProdCd").val();
+        params.prodNm = $("#srchProdNm").val();
+        params.prodCds = $("#saleProdRankMomsSelectCd").val();
+
+        if(orgnFg === "HQ"){
+           params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
+           params.storeCds = $("#saleProdRankMomsStoreCd").val();
+           params.prodHqBrandCd = $scope.srchProdHqBrandCombo.selectedValue;
+           params.momsTeam = $scope.srchMomsTeamCombo.selectedValue;
+           params.momsAcShop = $scope.srchMomsAcShopCombo.selectedValue;
+           params.momsAreaFg = $scope.srchMomsAreaFgCombo.selectedValue;
+           params.momsCommercial = $scope.srchMomsCommercialCombo.selectedValue;
+           params.momsShopType = $scope.srchMomsShopTypeCombo.selectedValue;
+           params.momsStoreManageType = $scope.srchMomsStoreManageTypeCombo.selectedValue;
+           params.branchCd = $scope.srchBranchCdCombo.selectedValue;
+
+           // '전체' 일때
+           if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+             var momsHqBrandCd = "";
+             for(var i=0; i < momsHqBrandCdComboList.length; i++){
+               if(momsHqBrandCdComboList[i].value !== null) {
+                 momsHqBrandCd += momsHqBrandCdComboList[i].value + ","
+               }
+             }
+             params.userBrands = momsHqBrandCd;
+           }
+        }
+
+        $scope._broadcast('saleProdRankMomsExcelCtrl', params);
     };
     
     // 확장조회 숨김/보임
@@ -314,6 +349,120 @@ app.controller('saleProdRankMomsCtrl', ['$scope', '$http', '$timeout', function 
     $scope.delProdClass = function(){
         $scope.prodClassCd = "";
         $scope.prodClassNm = "";
+    };
+
+}]);
+
+/**
+ *  엑셀다운로드 그리드 생성
+ */
+app.controller('saleProdRankMomsExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('saleProdRankMomsExcelCtrl', $scope, $http, false));
+
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+
+        // 그리드 링크 효과
+        s.formatItem.addHandler(function (s, e) {
+          if (e.panel == s.cells) {
+            var col = s.columns[e.col];
+            var item = s.rows[e.row].dataItem;
+            if (col.binding === "yoil") {
+              if(item.yoil === "토") {
+                wijmo.addClass(e.cell, 'blue');
+              } else if(item.yoil === "일") {
+                wijmo.addClass(e.cell, 'red');
+              }
+            }
+          }
+        });
+
+        // picker 사용시 호출 : 미사용시 호출안함
+        $scope._makePickColumns("saleProdRankMomsCtrl");
+
+        // add the new GroupRow to the grid's 'columnFooters' panel
+        s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+        // add a sigma to the header to show that this is a summary row
+        s.bottomLeftCells.setCellData(0, 0, '합계');
+    };
+
+    // 다른 컨트롤러의 broadcast 받기
+    $scope.$on("saleProdRankMomsExcelCtrl", function (event, data) {
+
+        $scope.searchExcelList(data);
+
+        // 기능수행 종료 : 반드시 추가
+        event.preventDefault();
+    });
+
+    // 엑셀 리스트 조회
+    $scope.searchExcelList = function (params) {
+
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $scope._inquiryMain("/sale/prod/saleProdRankMoms/saleProdRankMoms/getSaleProdRankExcelList.sb", params, function() {
+
+            if ($scope.excelFlex.rows.length <= 0) {
+                $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+                return false;
+            }
+
+            // 선택한 테이블에 따른 리스트 항목 visible
+            var grid = wijmo.Control.getControl("#wjGridExcelList");
+            var columns = grid.columns;
+
+            // 컬럼 총갯수
+            var columnsCnt = 21;
+
+            for (var i = 0; i < columnsCnt; i++) {
+               columns[i].visible = true;
+            }
+
+            // 합계가 0이면 해당 컬럼 숨기기
+            for (var j = 0; j < columnsCnt; j++) {
+               // 상품표시옵션
+               if(params.prodOption === "1"){  // 단품+세트
+                   if(columns[j].binding == "saleQty2" || columns[j].binding == "saleQty3" || columns[j].binding == "realSaleAmt2" || columns[j].binding == "realSaleAmt3") {
+                       columns[j].visible = false;
+                   }
+               } else if(params.prodOption === "2"){  // 단품+구성
+                   if(columns[j].binding == "saleQty1" || columns[j].binding == "saleQty3" || columns[j].binding == "realSaleAmt1" || columns[j].binding == "realSaleAmt3") {
+                       columns[j].visible = false;
+                   }
+               } else if(params.prodOption === "3"){  // 단품+세트+구성
+                   if(columns[j].binding == "saleQty1" || columns[j].binding == "saleQty2" || columns[j].binding == "realSaleAmt1" || columns[j].binding == "realSaleAmt2") {
+                       columns[j].visible = false;
+                   }
+               }
+
+               // 일자표시옵션
+               if(params.dayOption === "1"){  // 일자별
+                   if(columns[j].binding == "dayFrom" || columns[j].binding == "dayTo") {
+                       columns[j].visible = false;
+                   }
+               } else if(params.dayOption === "2"){  // 기간합
+                   if(columns[j].binding == "saleDate" || columns[j].binding == "yoil") {
+                       columns[j].visible = false;
+                   }
+               }
+            }
+
+            $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+            $timeout(function () {
+                wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
+                    includeColumnHeaders: true,
+                    includeCellStyles   : true,
+                    includeColumns      : function (column) {
+                        return column.visible;
+                    }
+                }, messages["prodRankMoms.prodRankMoms"] + "_" + getCurDateTime() +'.xlsx', function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                });
+            }, 10);
+        });
     };
 
 }]);
