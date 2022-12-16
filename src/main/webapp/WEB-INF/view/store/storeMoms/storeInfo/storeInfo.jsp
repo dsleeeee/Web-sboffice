@@ -218,7 +218,7 @@
         <wj-flex-grid-column header="<s:message code="storeInfo.storeNm"/>" binding="storeNm" width="80" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeInfo.ownerNm"/>" binding="ownerNm" width="80" align="left" is-read-only="true"></wj-flex-grid-column>
 <%--        <wj-flex-grid-column header="<s:message code="storeInfo.hqOfficeCd"/>" binding="hqOfficeCd" width="80" align="left" is-read-only="true"></wj-flex-grid-column>--%>
-        <wj-flex-grid-column header="<s:message code="storeInfo.hqOfficeNm"/>" binding="hqOfficeNm" width="80" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeInfo.hqBrandCd"/>" binding="hqBrandCd" width="80" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeInfo.bizNo"/>" binding="bizNo" width="80" align="left" is-read-only="true"></wj-flex-grid-column>
 <%--        <wj-flex-grid-column header="<s:message code="storeInfo.bizTypeCd"/>" binding="bizTypeCd" width="80" align="left" is-read-only="true"></wj-flex-grid-column>--%>
 <%--        <wj-flex-grid-column header="<s:message code="storeInfo.bizItemCd"/>" binding="bizItemCd" width="80" align="left" is-read-only="true"></wj-flex-grid-column>--%>

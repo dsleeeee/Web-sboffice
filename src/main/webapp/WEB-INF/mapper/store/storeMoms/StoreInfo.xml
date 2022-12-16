@@ -24,7 +24,7 @@
         ,       tms.STORE_NM
         ,       tms.OWNER_NM
         ,       tms.HQ_OFFICE_CD
-        ,       tms.HQ_BRAND_CD
+        ,       (SELECT HQ_BRAND_NM FROM TB_HQ_BRAND thb WHERE thb.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thb.HQ_BRAND_CD = tms.HQ_BRAND_CD) AS HQ_BRAND_CD
         ,       tms.BIZ_NO
         ,       tms.BIZ_TYPE_CD
         ,       tms.BIZ_ITEM_CD
@@ -48,7 +48,7 @@
         ,       tms.REMARK
         ,       tms.SYS_REMARK
         ,       tms.HD_REMARK
-        ,       tms.DIRECT_MANAGE_YN
+        ,       DECODE(tms.DIRECT_MANAGE_YN,'Y','직영','N','가맹') AS DIRECT_MANAGE_YN
         ,       tms.MAP_STORE_CD
         ,       tms.LATITUDE
         ,       tms.LONGITUDE
