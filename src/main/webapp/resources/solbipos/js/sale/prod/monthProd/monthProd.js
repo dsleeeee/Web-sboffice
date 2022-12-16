@@ -422,7 +422,7 @@ app.controller('monthProdExcelCtrl', ['$scope', '$http', '$timeout', function ($
                     includeColumns      : function (column) {
                         return column.visible;
                     }
-                }, "월별상품매출현황_"+getToday()+'.xlsx', function () {
+                }, "월별상품매출현황_"+getCurDateTime()+'.xlsx', function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);

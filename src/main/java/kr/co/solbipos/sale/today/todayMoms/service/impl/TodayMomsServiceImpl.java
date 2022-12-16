@@ -105,6 +105,43 @@ public class TodayMomsServiceImpl implements TodayMomsService {
         todayMomsVO.setStoreCdList(storeCds);
 
 
+        /** PAY_CD = 02 현금,현금영수증 분리 */
+        // 결제수단 array 값 세팅
+//        todayDtlVO.setArrPayCol(todayDtlVO.getPayCol().split(","));
+        String payCol= "";
+        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+        String pivotPayCol = "";
+        String arrPayCol[] = todayMomsVO.getPayCol().split(",");
+        for(int i=0; i < arrPayCol.length; i++) {
+            // 현금,현금영수증 제외
+            if(! (("02").equals(arrPayCol[i]) || ("021").equals(arrPayCol[i])) ) {
+                pivotPayCol += (pivotPayCol.equals("") ? "" : ",") + "'"+arrPayCol[i]+"'"+" AS PAY"+arrPayCol[i];
+                payCol += (payCol.equals("") ? "" : ",") + arrPayCol[i];
+            }
+        }
+        todayMomsVO.setPivotPayCol(pivotPayCol);
+        todayMomsVO.setArrPayCol(payCol.split(","));
+
+
+        // 할인구분 array 값 세팅
+        todayMomsVO.setArrDcCol(todayMomsVO.getDcCol().split(","));
+        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+        String pivotDcCol = "";
+        String arrDcCol[] = todayMomsVO.getDcCol().split(",");
+        for(int i=0; i < arrDcCol.length; i++) {
+            pivotDcCol += (pivotDcCol.equals("") ? "" : ",") + "'"+arrDcCol[i]+"'"+" AS DC"+arrDcCol[i];
+        }
+        todayMomsVO.setPivotDcCol(pivotDcCol);
+
+        // 매장브랜드 '전체' 일때
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            if (todayMomsVO.getStoreHqBrandCd() == "" || todayMomsVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = todayMomsVO.getUserBrands().split(",");
+                todayMomsVO.setUserBrandList(userBrandList);
+            }
+        }
+
         return todayMomsMapper.getTodayMomsExcelList(todayMomsVO);
     }
 

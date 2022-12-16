@@ -52,11 +52,11 @@
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM    TB_SL_SALE_HDR tssh
         ,       (
-                    SELECT  STORE_CD, POS_NO, BILL_NO
+                    SELECT  STORE_CD, SALE_DATE, POS_NO, BILL_NO
                     ,       <foreach collection="arrPayCol" item="item" separator=",">
                                 PAY${item} AS PAY${item}
                             </foreach>
-                    FROM    (   SELECT  tsshp.STORE_CD, tsshp.POS_NO, tsshp.BILL_NO, tsshp.PAY_CD, tsshp.PAY_AMT
+                    FROM    (   SELECT  tsshp.STORE_CD, tsshp.SALE_DATE, tsshp.POS_NO, tsshp.BILL_NO, tsshp.PAY_CD, tsshp.PAY_AMT
                                 FROM    TB_SL_SALE_HDR_PAY tsshp
                                 WHERE   tsshp.HQ_OFFICE_CD  = #{hqOfficeCd}
                                 <if test='storeCds != null and storeCds != ""'>
@@ -75,11 +75,11 @@
                             )
                 ) tsshp
         ,       (
-                    SELECT  STORE_CD, POS_NO, BILL_NO
+                    SELECT  STORE_CD, SALE_DATE, POS_NO, BILL_NO
                     ,       <foreach collection="arrDcCol" item="item" separator=",">
                                 DC${item} AS DC${item}
                             </foreach>
-                    FROM    (   SELECT  tsshd.STORE_CD, tsshd.POS_NO, tsshd.BILL_NO, tsshd.DC_CD, tsshd.DC_AMT
+                    FROM    (   SELECT  tsshd.STORE_CD, tsshd.SALE_DATE, tsshd.POS_NO, tsshd.BILL_NO, tsshd.DC_CD, tsshd.DC_AMT
                                 FROM    TB_SL_SALE_HDR_DC tsshd
                                 WHERE   tsshd.HQ_OFFICE_CD  = #{hqOfficeCd}
                                 <if test='storeCds != null and storeCds != ""'>
@@ -98,7 +98,7 @@
                 ) tsshd
         ,       (
                 -- 현금,현금영수증 분리
-                    SELECT  tsspc.STORE_CD, tsspc.POS_NO, tsspc.BILL_NO,
+                    SELECT  tsspc.STORE_CD, tsspc.SALE_DATE, tsspc.POS_NO, tsspc.BILL_NO,
                     SUM(tsspc.SALE_AMT) - SUM(CASE WHEN tsspc.APPR_PROC_FG IN ('1','2','4') THEN tsspc.SALE_AMT ELSE 0 END) AS PAY02, -- 현금
                     SUM(CASE WHEN tsspc.APPR_PROC_FG IN ('1','2','4') THEN tsspc.SALE_AMT ELSE 0 END) AS PAY021 -- 현금영수증
                     FROM    TB_SL_SALE_PAY_CASH tsspc
@@ -110,7 +110,7 @@
                         </foreach>
                     </if>
                     AND     tsspc.SALE_DATE =       #{startDate}
-                    GROUP BY tsspc.STORE_CD, tsspc.POS_NO, tsspc.BILL_NO
+                    GROUP BY tsspc.STORE_CD, tsspc.SALE_DATE, tsspc.POS_NO, tsspc.BILL_NO
                 ) tsspc
         ,       TB_MS_TABLE_V01 tmt
         ,       TB_MS_STORE tms
@@ -159,12 +159,18 @@
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
         </if>
+        AND     tsshp.STORE_CD    (+) = tssh.STORE_CD
+        AND     tsshp.SALE_DATE   (+) = tssh.SALE_DATE
         AND     tsshp.POS_NO      (+) = tssh.POS_NO
         AND     tsshp.BILL_NO     (+) = tssh.BILL_NO
+        AND     tsshd.STORE_CD    (+) = tssh.STORE_CD
+        AND     tsshd.SALE_DATE   (+) = tssh.SALE_DATE
         AND     tsshd.POS_NO      (+) = tssh.POS_NO
         AND     tsshd.BILL_NO     (+) = tssh.BILL_NO
         AND     tmt.STORE_CD      (+) = tssh.STORE_CD
         AND     tmt.TBL_CD        (+) = tssh.TBL_CD
+        AND     tsspc.STORE_CD    (+) = tssh.STORE_CD
+        AND     tsspc.SALE_DATE   (+) = tssh.SALE_DATE
         AND     tsspc.POS_NO      (+) = tssh.POS_NO
         AND     tsspc.BILL_NO     (+) = tssh.BILL_NO
         ORDER
@@ -211,11 +217,11 @@
         ,       tsspc.PAY021 AS PAY021 -- 현금영수증
         FROM    TB_SL_SALE_HDR tssh
         ,       (
-                SELECT  STORE_CD, POS_NO, BILL_NO
+                SELECT  STORE_CD, SALE_DATE, POS_NO, BILL_NO
                 ,       <foreach collection="arrPayCol" item="item" separator=",">
                             PAY${item} AS PAY${item}
                         </foreach>
-                FROM    (   SELECT  tsshp.STORE_CD, tsshp.POS_NO, tsshp.BILL_NO, tsshp.PAY_CD, tsshp.PAY_AMT
+                FROM    (   SELECT  tsshp.STORE_CD, tsshp.SALE_DATE, tsshp.POS_NO, tsshp.BILL_NO, tsshp.PAY_CD, tsshp.PAY_AMT
                             FROM    TB_SL_SALE_HDR_PAY tsshp
                             WHERE   tsshp.HQ_OFFICE_CD  = #{hqOfficeCd}
                             <if test='storeCds != null and storeCds != ""'>
@@ -234,11 +240,11 @@
                         )
                 ) tsshp
         ,       (
-                SELECT  STORE_CD, POS_NO, BILL_NO
+                SELECT  STORE_CD, SALE_DATE, POS_NO, BILL_NO
                 ,       <foreach collection="arrDcCol" item="item" separator=",">
                             DC${item} AS DC${item}
                         </foreach>
-                FROM    (   SELECT  tsshd.STORE_CD, tsshd.POS_NO, tsshd.BILL_NO, tsshd.DC_CD, tsshd.DC_AMT
+                FROM    (   SELECT  tsshd.STORE_CD, tsshd.SALE_DATE, tsshd.POS_NO, tsshd.BILL_NO, tsshd.DC_CD, tsshd.DC_AMT
                             FROM    TB_SL_SALE_HDR_DC tsshd
                             WHERE   tsshd.HQ_OFFICE_CD  = #{hqOfficeCd}
                             <if test='storeCds != null and storeCds != ""'>
@@ -257,7 +263,7 @@
                 ) tsshd
         ,       (
                 -- 현금,현금영수증 분리
-                SELECT  tsspc.STORE_CD, tsspc.POS_NO, tsspc.BILL_NO,
+                SELECT  tsspc.STORE_CD, tsspc.SALE_DATE, tsspc.POS_NO, tsspc.BILL_NO,
                 SUM(tsspc.SALE_AMT) - SUM(CASE WHEN tsspc.APPR_PROC_FG IN ('1','2','4') THEN tsspc.SALE_AMT ELSE 0 END) AS PAY02, -- 현금
                 SUM(CASE WHEN tsspc.APPR_PROC_FG IN ('1','2','4') THEN tsspc.SALE_AMT ELSE 0 END) AS PAY021 -- 현금영수증
                 FROM    TB_SL_SALE_PAY_CASH tsspc
@@ -269,7 +275,7 @@
                     </foreach>
                 </if>
                 AND     tsspc.SALE_DATE =       #{startDate}
-                GROUP BY tsspc.STORE_CD, tsspc.POS_NO, tsspc.BILL_NO
+                GROUP BY tsspc.STORE_CD, tsspc.SALE_DATE, tsspc.POS_NO, tsspc.BILL_NO
                 ) tsspc
         ,       TB_MS_TABLE_V01 tmt
         ,       TB_MS_STORE tms
@@ -318,12 +324,18 @@
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
         </if>
+        AND     tsshp.STORE_CD    (+) = tssh.STORE_CD
+        AND     tsshp.SALE_DATE   (+) = tssh.SALE_DATE
         AND     tsshp.POS_NO      (+) = tssh.POS_NO
         AND     tsshp.BILL_NO     (+) = tssh.BILL_NO
+        AND     tsshd.STORE_CD    (+) = tssh.STORE_CD
+        AND     tsshd.SALE_DATE   (+) = tssh.SALE_DATE
         AND     tsshd.POS_NO      (+) = tssh.POS_NO
         AND     tsshd.BILL_NO     (+) = tssh.BILL_NO
         AND     tmt.STORE_CD      (+) = tssh.STORE_CD
         AND     tmt.TBL_CD        (+) = tssh.TBL_CD
+        AND     tsspc.STORE_CD    (+) = tssh.STORE_CD
+        AND     tsspc.SALE_DATE   (+) = tssh.SALE_DATE
         AND     tsspc.POS_NO      (+) = tssh.POS_NO
         AND     tsspc.BILL_NO     (+) = tssh.BILL_NO
         ORDER

@@ -258,7 +258,7 @@ app.controller('storeOpenCloseDayCtrl', ['$scope', '$http', '$timeout', function
                 includeColumns      : function (column) {
                     return column.visible;
                 }
-            }, messages["storeOpenCloseMoms.storeOpenCloseMoms"] + messages["storeOpenCloseMoms.day"] + '_' + getCurDateTime() + '.xlsx', function () {
+            }, messages["storeOpenCloseMoms.storeOpenCloseMoms"] + messages["storeOpenClose.day"] + '_' + getCurDateTime() + '.xlsx', function () {
                 $timeout(function () {
                     $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 }, 10);
@@ -453,7 +453,7 @@ app.controller('storeOpenCloseDayDtlCtrl', ['$scope', '$http', '$timeout', funct
                 includeColumns      : function (column) {
                     return column.visible;
                 }
-            }, messages["storeOpenCloseMoms.storeOpenCloseMoms"] + messages["storeOpenCloseMoms.day"] + '_(상세)' + getCurDateTime() + '.xlsx', function () {
+            }, messages["storeOpenCloseMoms.storeOpenCloseMoms"] + messages["storeOpenClose.day"] + '_(상세)' + getCurDateTime() + '.xlsx', function () {
                 $timeout(function () {
                     $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 }, 10);
