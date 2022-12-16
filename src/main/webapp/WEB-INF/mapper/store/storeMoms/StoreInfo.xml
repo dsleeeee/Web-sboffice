@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StoreInfo.xml
+    점포영업지역관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.12.14      최초작성
+-->
+<mapper namespace="kr.co.solbipos.store.storeMoms.storeInfo.service.impl.StoreInfoMapper">
+
+    <!-- 매장목록 조회 -->
+    <!--
+        TABLE    : TB_HQ_BRANCH_MOMS, TB_MS_STORE
+        PARAM    : storeInfoVO
+        COMMENTS : 매장목록을 조회한다.
+    -->
+    <select id="getStoreInfoList" parameterType="storeInfoVO" resultType="DefaultMap">
+    /* USE : StoreInfoMapper.getStoreInfoList */
+    <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  tms.STORE_CD
+        ,       tms.STORE_NM
+        ,       tms.OWNER_NM
+        ,       tms.HQ_OFFICE_CD
+        ,       tms.HQ_BRAND_CD
+        ,       tms.BIZ_NO
+        ,       tms.BIZ_TYPE_CD
+        ,       tms.BIZ_ITEM_CD
+        ,       tms.BIZ_STORE_NM
+        ,       tms.TEL_NO
+        ,       tms.MP_NO
+        ,       tms.FAX_NO
+        ,       tms.EMAIL_ADDR
+        ,       tms.HMPG_ADDR
+        ,       tms.POST_NO
+        ,       tms.ADDR
+        ,       tms.ADDR_DTL
+        ,       tms.AREA_CD
+        ,       tms.STORE_TYPE
+        ,       tms.CLS_FG
+        ,       tms.SYS_STAT_FG
+        ,       TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SYS_OPEN_DATE
+        ,       (CASE WHEN tms.SYS_CLOSURE_DATE = '99991231' THEN null ELSE tms.SYS_CLOSURE_DATE END) AS SYS_CLOSURE_DATE
+        ,       (SELECT tcvc.VAN_NM FROM TB_CM_VAN_CMPNY tcvc WHERE tcvc.VAN_FG ='01' AND  tcvc.VAN_CD = tms.VAN_CD) AS VAN_CD
+        ,       (SELECT tca.AGENCY_NM FROM TB_CM_AGENCY tca WHERE tca.AGENCY_CD = tms.AGENCY_CD) AS AGENCY_CD
+        ,       tms.REMARK
+        ,       tms.SYS_REMARK
+        ,       tms.HD_REMARK
+        ,       tms.DIRECT_MANAGE_YN
+        ,       tms.MAP_STORE_CD
+        ,       tms.LATITUDE
+        ,       tms.LONGITUDE
+        ,       tms.BRANCH_CD
+        ,       tms.SALE_AREA
+        ,       tms.SITE_CD
+        ,       tmsi.INDEX_NO
+        ,       tmsi.MOMS_TEAM
+        ,       tmsi.MOMS_AC_SHOP
+        ,       tmsi.MOMS_AREA_FG
+        ,       tmsi.MOMS_COMMERCIAL
+        ,       tmsi.MOMS_SHOP_TYPE
+        ,       tmsi.MOMS_STORE_MANAGE_TYPE
+    <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    TB_MS_STORE tms
+        ,       TB_MS_STORE_INFO tmsi
+        WHERE   tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tms.STORE_CD = tmsi.STORE_CD (+)
+        <if test="storeCd != null and storeCd != ''">
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%' --매장명
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        ORDER
+        BY tms.STORE_CD
+    <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+</mapper>
