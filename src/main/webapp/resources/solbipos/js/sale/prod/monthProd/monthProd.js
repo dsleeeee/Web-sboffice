@@ -33,7 +33,7 @@ var dayOptionComboData = [
 app.controller('monthProdCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('monthProdCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('monthProdCtrl', $scope, $http, false));
 
     // 조회일자
     var startMonth = new wijmo.input.InputDate('#startMonth', {
@@ -123,9 +123,6 @@ app.controller('monthProdCtrl', ['$scope', '$http', '$timeout', function ($scope
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-        // picker 사용시 호출 : 미사용시 호출안함
-        $scope._makePickColumns("monthProdCtrl");
-
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
         // add a sigma to the header to show that this is a summary row
