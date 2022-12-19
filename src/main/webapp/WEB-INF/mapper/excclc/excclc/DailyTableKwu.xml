@@ -627,7 +627,8 @@
         SUBSTR(tsshi.SALE_DATE, 1, 4)||'-'||SUBSTR(tsshi.SALE_DATE, 5, 2)||'-'||SUBSTR(tsshi.SALE_DATE, 7, 2) AS SALE_DATE,
         LISTAGG(tssd.PROD_CD, ',') WITHIN GROUP (ORDER BY tssd.PROD_CD) AS PROD_CD,
         LISTAGG(tmp.PROD_NM, ',') WITHIN GROUP (ORDER BY tmp.PROD_NM) AS SUMMARY,
-        SUM(tssd.REAL_SALE_AMT) AS AMT
+        SUM(tssd.REAL_SALE_AMT) AS AMT,
+        tsshi.BILL_NO
         FROM TB_SL_SALE_HDR_INFO tsshi,
         (
             SELECT
@@ -663,7 +664,8 @@
         AND tmm.MEMBR_NO (+)= tsshi.MEMBR_NO
         AND tmmak.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
         AND tmmak.MEMBR_NO (+)= tmm.MEMBR_NO
-        GROUP BY tmmak.GROUP_TYPE_FG, tsshi.MEMBR_NO, tmm.MEMBR_NM, tsshi.SALE_DATE
+        GROUP BY tmmak.GROUP_TYPE_FG, tsshi.MEMBR_NO, tmm.MEMBR_NM, tsshi.SALE_DATE, tsshi.BILL_NO
+        ORDER BY tsshi.BILL_NO
     </select>
 
     <!-- 츨납현황 목록조회
