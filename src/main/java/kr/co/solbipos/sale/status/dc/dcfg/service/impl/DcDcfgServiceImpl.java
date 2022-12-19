@@ -60,6 +60,7 @@ public class DcDcfgServiceImpl implements DcDcfgService {
     /** 할일구분별매출 - 상세 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getDcDcfgDtlList(DcDcfgVO dcDcfgVO, SessionInfoVO sessionInfoVO) {
+		dcDcfgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		dcDcfgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
 		if(!StringUtil.getOrBlank(dcDcfgVO.getStoreCd()).equals("")) {
