@@ -33,7 +33,7 @@ var dayOptionComboData = [
 app.controller('dayProdCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('dayProdCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('dayProdCtrl', $scope, $http, false));
 
     // 조회일자
     $scope.srchStartDate = wcombo.genDateVal("#srchStartDate", gvStartDate);
@@ -131,9 +131,6 @@ app.controller('dayProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                 }
             }
         });
-
-        // picker 사용시 호출 : 미사용시 호출안함
-        $scope._makePickColumns("dayProdCtrl");
 
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());

@@ -40,7 +40,6 @@ public class TimeProdServiceImpl implements TimeProdService {
     public List<DefaultMap<Object>> getTimeProdList(TimeProdVO timeProdVO, SessionInfoVO sessionInfoVO) {
 
         timeProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             timeProdVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
@@ -49,21 +48,31 @@ public class TimeProdServiceImpl implements TimeProdService {
         String[] storeCds = timeProdVO.getStoreCds().split(",");
         timeProdVO.setStoreCdList(storeCds);
 
-        // 매출 발생 시간대 기준, 동적 컬럼 생성을 위한 쿼리 변수;
-        String sQuery1 = "";
-        String sQuery2 = "";
-
-        for(int i = 0; i <= 23; i++) {
-            sQuery1 += ", NVL(SALE_CNT" + i + ", 0) AS SALE_CNT"  + i +  "\n";
-            sQuery1 += ", NVL(SALE_AMT" + i + ", 0) AS SALE_AMT"  + i +  "\n";
-            sQuery1 += ", ROUND(RATIO_TO_REPORT(SALE_AMT" + i + ") OVER(), 4) * 100 AS RATE"  + i +  "\n";
-
-            sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN SALE_CNT ELSE 0 END) AS SALE_CNT"  + i +  "\n";
-            sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN TOT_SALE_AMT ELSE 0 END) AS SALE_AMT"  + i +  "\n";
+        // 상품 array 값 세팅
+        if (timeProdVO.getProdCds() != null && !"".equals(timeProdVO.getProdCds())) {
+            String[] prodCdList = timeProdVO.getProdCds().split(",");
+            timeProdVO.setProdCdList(prodCdList);
         }
 
-        timeProdVO.setsQuery1(sQuery1);
-        timeProdVO.setsQuery2(sQuery2);
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 매장브랜드, 상품브랜드가 '전체' 일때
+            if (timeProdVO.getStoreHqBrandCd() == "" || timeProdVO.getStoreHqBrandCd() == null || timeProdVO.getProdHqBrandCd() == "" || timeProdVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = timeProdVO.getUserBrands().split(",");
+                timeProdVO.setUserBrandList(userBrandList);
+            }
+        }
+
+        // 매출 발생 시간대 기준, 동적 컬럼 생성을 위한 쿼리 변수
+        String timeCol = "";
+        for(int i = 0; i <= 23; i++) {
+            timeCol += Integer.toString(i);
+            if(i != 23){
+                timeCol += ",";
+            }
+        }
+        String[] arrTimeCol = timeCol.split(",");
+        timeProdVO.setArrTimeCol(arrTimeCol);
 
         return timeProdMapper.getTimeProdList(timeProdVO);
     }
@@ -73,7 +82,6 @@ public class TimeProdServiceImpl implements TimeProdService {
     public List<DefaultMap<Object>> getTimeProdExcelList(TimeProdVO timeProdVO, SessionInfoVO sessionInfoVO) {
 
         timeProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             timeProdVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
@@ -82,21 +90,31 @@ public class TimeProdServiceImpl implements TimeProdService {
         String[] storeCds = timeProdVO.getStoreCds().split(",");
         timeProdVO.setStoreCdList(storeCds);
 
-        // 매출 발생 시간대 기준, 동적 컬럼 생성을 위한 쿼리 변수;
-        String sQuery1 = "";
-        String sQuery2 = "";
-
-        for(int i = 0; i <= 23; i++) {
-            sQuery1 += ", NVL(SALE_CNT" + i + ", 0) AS SALE_CNT"  + i +  "\n";
-            sQuery1 += ", NVL(SALE_AMT" + i + ", 0) AS SALE_AMT"  + i +  "\n";
-            sQuery1 += ", ROUND(RATIO_TO_REPORT(SALE_AMT" + i + ") OVER(), 4) * 100 AS RATE"  + i +  "\n";
-
-            sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN SALE_CNT ELSE 0 END) AS SALE_CNT"  + i +  "\n";
-            sQuery2 += ", SUM(CASE WHEN SALE_HOUR = " + i + " THEN TOT_SALE_AMT ELSE 0 END) AS SALE_AMT"  + i +  "\n";
+        // 상품 array 값 세팅
+        if (timeProdVO.getProdCds() != null && !"".equals(timeProdVO.getProdCds())) {
+            String[] prodCdList = timeProdVO.getProdCds().split(",");
+            timeProdVO.setProdCdList(prodCdList);
         }
 
-        timeProdVO.setsQuery1(sQuery1);
-        timeProdVO.setsQuery2(sQuery2);
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 매장브랜드, 상품브랜드가 '전체' 일때
+            if (timeProdVO.getStoreHqBrandCd() == "" || timeProdVO.getStoreHqBrandCd() == null || timeProdVO.getProdHqBrandCd() == "" || timeProdVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = timeProdVO.getUserBrands().split(",");
+                timeProdVO.setUserBrandList(userBrandList);
+            }
+        }
+
+        // 매출 발생 시간대 기준, 동적 컬럼 생성을 위한 쿼리 변수
+        String timeCol = "";
+        for(int i = 0; i <= 23; i++) {
+            timeCol += Integer.toString(i);
+            if(i != 23){
+                timeCol += ",";
+            }
+        }
+        String[] arrTimeCol = timeCol.split(",");
+        timeProdVO.setArrTimeCol(arrTimeCol);
 
         return timeProdMapper.getTimeProdExcelList(timeProdVO);
     }

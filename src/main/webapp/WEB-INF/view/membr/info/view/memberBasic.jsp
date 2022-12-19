@@ -588,9 +588,14 @@
                     </tr>
                     <tr id="trUseDate" style="display: none;">
                         <%-- 시작일자 --%>
-                        <th><s:message code="regist.kuw.useStartDate"/></th>
+                        <th>
+                            <s:message code="regist.kuw.useStartDate"/>
+                            <span class="ml5">
+                                <input type="checkbox" name="useStartDateChk" id="useStartDateChk" ng-click="showUseStartDate()">
+                            </span>
+                        </th>
                         <td>
-                            <div class="sb-select">
+                            <div class="sb-select" id="divUseStartDate" style="display: none;">
                                 <wj-input-date
                                         value="rUseStartDate"
                                         ng-model="member.useStartDate"
@@ -603,9 +608,14 @@
                             </div>
                         </td>
                         <%-- 만료일자 --%>
-                        <th><s:message code="regist.kuw.useEndDate"/></th>
+                        <th>
+                            <s:message code="regist.kuw.useEndDate"/>
+                            <span class="ml5">
+                                <input type="checkbox" name="useEndDateChk" id="useEndDateChk" ng-click="showUseEndDate()">
+                            </span>
+                        </th>
                         <td>
-                            <div class="sb-select">
+                            <div class="sb-select" id="divUseEndDate" style="display: none;">
                                 <wj-input-date
                                         value="rUseEndDate"
                                         ng-model="member.useEndDate"
@@ -706,4 +716,4 @@
     var skateFgComboList = ${skateFgComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20221213.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20221219.01" charset="utf-8"></script>

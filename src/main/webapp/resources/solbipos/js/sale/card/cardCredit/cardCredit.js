@@ -147,8 +147,13 @@ app.controller('cardCreditCtrl', ['$scope', '$http', '$timeout', function ($scop
                 // 숫자만 입력
                 var numChkexp = /[^0-9]/g;
                 if (numChkexp.test($scope.flex.collectionView.itemsEdited[i].creditAmt)) {
-                    $scope._popMsg(messages["cardCredit.creditAmtInChk"]); // 입금금액는 숫자만 입력해주세요.
-                    return false;
+                    // 음수 가능
+                    var numChkexp2 = /^-[0-9]/g;
+                    if (numChkexp2.test($scope.flex.collectionView.itemsEdited[i].creditAmt)) {
+                    } else if (numChkexp2.test($scope.flex.collectionView.itemsEdited[i].creditAmt) == false) {
+                        $scope._popMsg(messages["cardCredit.creditAmtInChk"]); // 입금금액는 숫자만 입력해주세요.
+                        return false;
+                    }
                 }
             }
             // 수수료
@@ -163,9 +168,14 @@ app.controller('cardCreditCtrl', ['$scope', '$http', '$timeout', function ($scop
                 }
                 // 숫자만 입력
                 var numChkexp = /[^0-9]/g;
-                if (numChkexp.test($scope.flex.collectionView.itemsEdited[i].creditAmt)) {
-                    $scope._popMsg(messages["cardCredit.creditFeeInChk"]); // 수수료는 숫자만 입력해주세요.
-                    return false;
+                if (numChkexp.test($scope.flex.collectionView.itemsEdited[i].creditFee)) {
+                    // 음수 가능
+                    var numChkexp2 = /^-[0-9]/g;
+                    if (numChkexp2.test($scope.flex.collectionView.itemsEdited[i].creditFee)) {
+                    } else if (numChkexp2.test($scope.flex.collectionView.itemsEdited[i].creditFee) == false) {
+                        $scope._popMsg(messages["cardCredit.creditFeeInChk"]); // 수수료는 숫자만 입력해주세요.
+                        return false;
+                    }
                 }
             }
             // 입금은행

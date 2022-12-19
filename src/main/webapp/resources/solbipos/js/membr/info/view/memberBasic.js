@@ -207,6 +207,10 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
                 $("input:checkbox[id='useDateChk']").prop("checked", false);
                 $("#trUseDate").css("display", "none");
                 $("#divUseDate").css("display", "none");
+                $("input:checkbox[id='useStartDateChk']").prop("checked", false);
+                $("#divUseStartDate").css("display", "none");
+                $("input:checkbox[id='useEndDateChk']").prop("checked", false);
+                $("#divUseEndDate").css("display", "none");
                 $scope.member.useWeek = "";
                 $scope.member.useProdNm = "";
                 $scope.member.useAmt = "";
@@ -280,6 +284,10 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
                 $("input:checkbox[id='useDateChk']").prop("checked", false);
                 $("#trUseDate").css("display", "none");
                 $("#divUseDate").css("display", "none");
+                $("input:checkbox[id='useStartDateChk']").prop("checked", false);
+                $("#divUseStartDate").css("display", "none");
+                $("input:checkbox[id='useEndDateChk']").prop("checked", false);
+                $("#divUseEndDate").css("display", "none");
 
                 // 광운대아이스링크 추가정보 조회
                 $scope.getMemberInfoAddKWU(params);
@@ -309,13 +317,21 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
                 $scope.member.useDateFg = memberDetailInfoAddKWU.useDateFg;
                 if(memberDetailInfoAddKWU.useStartDate === "" || memberDetailInfoAddKWU.useStartDate === null) {
                     $scope.member.useStartDate = new Date();
+                    $("input:checkbox[id='useStartDateChk']").prop("checked", false);
+                    $("#divUseStartDate").css("display", "none");
                 } else {
                     $scope.member.useStartDate = stringToDate(memberDetailInfoAddKWU.useStartDate);
+                    $("input:checkbox[id='useStartDateChk']").prop("checked", true);
+                    $("#divUseStartDate").css("display", "");
                 }
                 if(memberDetailInfoAddKWU.useEndDate === "" || memberDetailInfoAddKWU.useEndDate === null) {
                     $scope.member.useEndDate = new Date();
+                    $("input:checkbox[id='useEndDateChk']").prop("checked", false);
+                    $("#divUseEndDate").css("display", "none");
                 } else {
                     $scope.member.useEndDate = stringToDate(memberDetailInfoAddKWU.useEndDate);
+                    $("input:checkbox[id='useEndDateChk']").prop("checked", true);
+                    $("#divUseEndDate").css("display", "");
                 }
                 if( (memberDetailInfoAddKWU.useStartDate === "" || memberDetailInfoAddKWU.useStartDate === null) && (memberDetailInfoAddKWU.useEndDate === "" || memberDetailInfoAddKWU.useEndDate === null) ) {
                     $("input:checkbox[id='useDateChk']").prop("checked", false);
@@ -613,8 +629,19 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
 
             if($("input:checkbox[id='useDateChk']").is(":checked")){
                 params.useDateFg = $scope.member.useDateFg;
-                params.useStartDate = dateToDaystring($scope.member.useStartDate).replaceAll("-", "");
-                params.useEndDate = dateToDaystring($scope.member.useEndDate).replaceAll("-", "");
+
+                if($("input:checkbox[id='useStartDateChk']").is(":checked")){
+                    params.useStartDate = dateToDaystring($scope.member.useStartDate).replaceAll("-", "");
+                }else{
+                    params.useStartDate = "";
+                }
+
+                if($("input:checkbox[id='useEndDateChk']").is(":checked")){
+                    params.useEndDate = dateToDaystring($scope.member.useEndDate).replaceAll("-", "");
+                }else{
+                    params.useEndDate = "";
+                }
+
             }else{
                 params.useDateFg = "0";
                 params.useStartDate = "";
@@ -785,9 +812,34 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
         if($("input:checkbox[id='useDateChk']").is(":checked")){
             $("#trUseDate").css("display", "");
             $("#divUseDate").css("display", "");
+            // 신규
+            if ($scope.saveMode === "REG") {
+                $("input:checkbox[id='useStartDateChk']").prop("checked", true);
+                $("#divUseStartDate").css("display", "");
+                $("input:checkbox[id='useEndDateChk']").prop("checked", true);
+                $("#divUseEndDate").css("display", "");
+            }
         }else{
             $("#trUseDate").css("display", "none");
             $("#divUseDate").css("display", "none");
+        }
+    };
+
+    // 시작일자 입력 CheckBox 클릭에 따른 VIEW 변화
+    $scope.showUseStartDate = function () {
+        if($("input:checkbox[id='useStartDateChk']").is(":checked")){
+            $("#divUseStartDate").css("display", "");
+        }else{
+            $("#divUseStartDate").css("display", "none");
+        }
+    };
+
+    // 만료일자 입력 CheckBox 클릭에 따른 VIEW 변화
+    $scope.showUseEndDate = function () {
+        if($("input:checkbox[id='useEndDateChk']").is(":checked")){
+            $("#divUseEndDate").css("display", "");
+        }else{
+            $("#divUseEndDate").css("display", "none");
         }
     };
 
