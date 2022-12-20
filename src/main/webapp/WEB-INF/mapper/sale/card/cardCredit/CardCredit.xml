@@ -314,27 +314,34 @@
                     #{modId} AS MOD_ID
                     FROM TB_SL_SALE_PAY_CARD tsspc,
                     (
-                        SELECT
-                        REPLACE(C.APPR_DATE, '-', '') AS APPR_DATE,
-                        C.APPR_NO,
-                        REPLACE(C.CREDIT_DATE, '-', '') AS CREDIT_DATE,
-                        C.CREDIT_AMT,
-                        C.CREDIT_FEE,
-                        C.CREDIT_BANK
-                        FROM TB_TMP_EXCEL_CARD_CREDIT_KWU C,
-                        TB_CM_DATEM D
+                        SELECT *
+                        FROM
+                        (
+                            SELECT
+                            REPLACE(C.APPR_DATE, '-', '') AS APPR_DATE,
+                            C.APPR_NO,
+                            REPLACE(C.CREDIT_DATE, '-', '') AS CREDIT_DATE,
+                            C.CREDIT_AMT,
+                            C.CREDIT_FEE,
+                            C.CREDIT_BANK
+                            FROM TB_TMP_EXCEL_CARD_CREDIT_KWU C,
+                            TB_CM_DATEM D
+                            WHERE 1=1
+                            AND C.SESSION_ID = #{sessionId}
+                            AND D.YYYYMMDD = REPLACE(C.CREDIT_DATE, '-', '')
+                            AND FN_IS_NUMBER_CHK(C.CREDIT_AMT) = 1
+                            AND FN_IS_NUMBER_CHK(C.CREDIT_FEE) = 1
+                            AND C.CREDIT_AMT IS NOT NULL
+                            AND C.CREDIT_FEE IS NOT NULL
+                            <![CDATA[
+                                AND LENGTHB(C.CREDIT_AMT) <= 13
+                                AND LENGTHB(C.CREDIT_FEE) <= 13
+                            ]]>
+                            AND C.CREDIT_BANK IN ('국민은행', '하나은행')
+                            ORDER BY C.REG_DT
+                        )
                         WHERE 1=1
-                        AND C.SESSION_ID = #{sessionId}
-                        AND D.YYYYMMDD = REPLACE(C.CREDIT_DATE, '-', '')
-                        AND FN_IS_NUMBER_CHK(C.CREDIT_AMT) = 1
-                        AND FN_IS_NUMBER_CHK(C.CREDIT_FEE) = 1
-                        AND C.CREDIT_AMT IS NOT NULL
-                        AND C.CREDIT_FEE IS NOT NULL
-                        <![CDATA[
-                            AND LENGTHB(C.CREDIT_AMT) <= 13
-                            AND LENGTHB(C.CREDIT_FEE) <= 13
-                        ]]>
-                        AND C.CREDIT_BANK IN ('국민은행', '하나은행')
+                        AND ROWNUM = 1
                     ) ttecck,
                     TB_SL_SALE_HDR tssh
                     WHERE 1=1
