@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * @Class Name : PayDayServiceImpl.java
- * @Description : 맘스터치 > 결제수단별 매출 > 일별 결제수단 매출
+ * @Description : 맘스터치 > 결제수단매출 > 일별결제수단매출
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -41,11 +41,23 @@ public class PayDayServiceImpl implements PayDayService {
     @Override
     public List<DefaultMap<Object>> getPayDayList(PayDayVO payDayVO, SessionInfoVO sessionInfoVO) {
         payDayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        payDayVO.setEmpNo(sessionInfoVO.getEmpNo());
         payDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        if(!StringUtil.getOrBlank(payDayVO.getStoreCd()).equals("")) {
-            payDayVO.setArrStoreCd(payDayVO.getStoreCd().split(","));
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            payDayVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        // 매장 array 값 세팅
+        String[] storeCds = payDayVO.getStoreCds().split(",");
+        payDayVO.setStoreCdList(storeCds);
+
+        // 매장브랜드 '전체' 일때
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            if (payDayVO.getStoreHqBrandCd() == "" || payDayVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = payDayVO.getUserBrands().split(",");
+                payDayVO.setUserBrandList(userBrandList);
+            }
         }
 
         String payCol= "";
@@ -53,11 +65,8 @@ public class PayDayServiceImpl implements PayDayService {
         String pivotPayCol = "";
         String arrPayCol[] = payDayVO.getPayCol().split(",");
         for(int i=0; i < arrPayCol.length; i++) {
-            // 현금,현금영수증 제외
-            if(! (("02").equals(arrPayCol[i]) || ("021").equals(arrPayCol[i])) ) {
-                pivotPayCol += (pivotPayCol.equals("") ? "" : ",") + "'" + arrPayCol[i] + "'" + " AS PAY" + arrPayCol[i];
-                payCol += (payCol.equals("") ? "" : ",") + arrPayCol[i];
-            }
+            pivotPayCol += (pivotPayCol.equals("") ? "" : ",") + "'" + arrPayCol[i] + "'" + " AS PAY" + arrPayCol[i];
+            payCol += (payCol.equals("") ? "" : ",") + arrPayCol[i];
         }
         payDayVO.setPivotPayCol(pivotPayCol);
         payDayVO.setArrPayCol(payCol.split(","));

@@ -4,7 +4,7 @@ import kr.co.solbipos.application.common.service.PageVO;
 
 /**
  * @Class Name : PayDayVO.java
- * @Description : 맘스터치 > 결제수단별 매출 > 일별 결제수단 매출
+ * @Description : 맘스터치 > 결제수단매출 > 일별결제수단매출
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -36,9 +36,9 @@ public class PayDayVO extends PageVO {
     /** 본사브랜드코드 */
     private String hqBrandCd;
     /** 매장코드 */
-    private String storeCd;
-    /** 매장코드 array */
-    private String arrStoreCd[];
+    private String[] storeCdList;
+    /** 조회매장 */
+    private String storeCds;
     /** 결제수단컬럼 */
     private String payCol;
     /** 결제수단 array */
@@ -47,6 +47,42 @@ public class PayDayVO extends PageVO {
     private String empNo;
     /** 쿼리문의 PIVOT IN에 사용할 결제수단 컬럼 문자열 */
     private String pivotPayCol;
+
+    /** 사용자별 브랜드코드 */
+    private String[] userBrandList;
+
+    /** 사용자별 브랜드코드 */
+    private String userBrands;
+
+    /** 매장브랜드코드 */
+    private String storeHqBrandCd;
+
+    /** 명칭코드그룹코드 */
+    private String nmcodeGrpCd;
+
+    /** 사용자별 본사 공통코드 */
+    private String userHqNmcodeCd;
+
+    /** 팀별 */
+    private String momsTeam;
+
+    /** AC점포별 */
+    private String momsAcShop;
+
+    /** 지역구분 */
+    private String momsAreaFg;
+
+    /** 상권 */
+    private String momsCommercial;
+
+    /** 점포유형 */
+    private String momsShopType;
+
+    /** 매장관리타입 */
+    private String momsStoreManageType;
+
+    /** 지사코드 */
+    private String branchCd;
 
     public String getHqOfficeCd() { return hqOfficeCd; }
 
@@ -64,20 +100,20 @@ public class PayDayVO extends PageVO {
         this.orgnFg = orgnFg;
     }
 
-    public String getStoreCd() {
-        return storeCd;
+    public String[] getStoreCdList() {
+        return storeCdList;
     }
 
-    public void setStoreCd(String storeCd) {
-        this.storeCd = storeCd;
+    public void setStoreCdList(String[] storeCdList) {
+        this.storeCdList = storeCdList;
     }
 
-    public String[] getArrStoreCd() {
-        return arrStoreCd;
+    public String getStoreCds() {
+        return storeCds;
     }
 
-    public void setArrStoreCd(String[] arrStoreCd) {
-        this.arrStoreCd = arrStoreCd;
+    public void setStoreCds(String storeCds) {
+        this.storeCds = storeCds;
     }
 
     public String getPayCol() {
@@ -110,5 +146,101 @@ public class PayDayVO extends PageVO {
 
     public void setPivotPayCol(String pivotPayCol) {
         this.pivotPayCol = pivotPayCol;
+    }
+
+    public String[] getUserBrandList() {
+        return userBrandList;
+    }
+
+    public void setUserBrandList(String[] userBrandList) {
+        this.userBrandList = userBrandList;
+    }
+
+    public String getUserBrands() {
+        return userBrands;
+    }
+
+    public void setUserBrands(String userBrands) {
+        this.userBrands = userBrands;
+    }
+
+    public String getStoreHqBrandCd() {
+        return storeHqBrandCd;
+    }
+
+    public void setStoreHqBrandCd(String storeHqBrandCd) {
+        this.storeHqBrandCd = storeHqBrandCd;
+    }
+
+    public String getNmcodeGrpCd() {
+        return nmcodeGrpCd;
+    }
+
+    public void setNmcodeGrpCd(String nmcodeGrpCd) {
+        this.nmcodeGrpCd = nmcodeGrpCd;
+    }
+
+    public String getUserHqNmcodeCd() {
+        return userHqNmcodeCd;
+    }
+
+    public void setUserHqNmcodeCd(String userHqNmcodeCd) {
+        this.userHqNmcodeCd = userHqNmcodeCd;
+    }
+
+    public String getMomsTeam() {
+        return momsTeam;
+    }
+
+    public void setMomsTeam(String momsTeam) {
+        this.momsTeam = momsTeam;
+    }
+
+    public String getMomsAcShop() {
+        return momsAcShop;
+    }
+
+    public void setMomsAcShop(String momsAcShop) {
+        this.momsAcShop = momsAcShop;
+    }
+
+    public String getMomsAreaFg() {
+        return momsAreaFg;
+    }
+
+    public void setMomsAreaFg(String momsAreaFg) {
+        this.momsAreaFg = momsAreaFg;
+    }
+
+    public String getMomsCommercial() {
+        return momsCommercial;
+    }
+
+    public void setMomsCommercial(String momsCommercial) {
+        this.momsCommercial = momsCommercial;
+    }
+
+    public String getMomsShopType() {
+        return momsShopType;
+    }
+
+    public void setMomsShopType(String momsShopType) {
+        this.momsShopType = momsShopType;
+    }
+
+    public String getMomsStoreManageType() {
+        return momsStoreManageType;
+    }
+
+    public void setMomsStoreManageType(String momsStoreManageType) {
+        this.momsStoreManageType = momsStoreManageType;
+    }
+
+    public String getBranchCd() {
+        return branchCd;
+    }
+
+    public void setBranchCd(String branchCd) {
+        this.branchCd = branchCd;
     }
 }

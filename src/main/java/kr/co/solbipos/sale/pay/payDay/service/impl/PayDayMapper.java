@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * @Class Name : PayDayMapper.java
- * @Description : 맘스터치 > 결제수단별 매출 > 일별 결제수단 매출
+ * @Description : 맘스터치 > 결제수단매출 > 일별결제수단매출
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
