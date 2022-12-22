@@ -115,6 +115,13 @@ public class TimeProdVO extends PageVO {
     /** 시간대 Array */
     private String[] arrTimeCol;
 
+    /** 일/월 구분 */
+    private String dayGubun;
+
+    /** 조회월 */
+    private String startMonth;
+    private String endMonth;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -321,5 +328,25 @@ public class TimeProdVO extends PageVO {
 
     public void setArrTimeCol(String[] arrTimeCol) {
         this.arrTimeCol = arrTimeCol;
+    }
+
+    public String getDayGubun() { return dayGubun; }
+
+    public void setDayGubun(String dayGubun) { this.dayGubun = dayGubun; }
+
+    public String getStartMonth() {
+        return startMonth;
+    }
+
+    public void setStartMonth(String startMonth) {
+        this.startMonth = startMonth;
+    }
+
+    public String getEndMonth() {
+        return endMonth;
+    }
+
+    public void setEndMonth(String endMonth) {
+        this.endMonth = endMonth;
     }
 }
