@@ -24,6 +24,7 @@ app.controller('saleApprMpayCtrl', ['$scope', '$http', '$timeout', function ($sc
     var dataItem         	= {};
     dataItem.saleDate      	= messages["saleComPopup.mpay.saleDate"];
     dataItem.posNo  		= messages["saleComPopup.mpay.posNo"];
+    dataItem.billNo  		= messages["saleComPopup.mpay.billNo"];
     dataItem.apprGubun    	= messages["saleComPopup.mpay.appr"];
     dataItem.apprProcFg 	= messages["saleComPopup.mpay.appr"]; 
     dataItem.coupnNm      	= messages["saleComPopup.mpay.coupn"];

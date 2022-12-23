@@ -50,6 +50,27 @@ public class PayFgServiceImpl implements PayFgService {
         String[] storeCds = payFgVO.getStoreCds().split(",");
         payFgVO.setStoreCdList(storeCds);
 
+        // 매장브랜드 '전체' 일때
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            if (payFgVO.getStoreHqBrandCd() == "" || payFgVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = payFgVO.getUserBrands().split(",");
+                payFgVO.setUserBrandList(userBrandList);
+            }
+        }
+
+        // 결제수단 array 값 세팅
+        String payCol= "";
+        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+        String pivotPayCol = "";
+        String arrPayCol[] = payFgVO.getPayCol().split(",");
+        for(int i=0; i < arrPayCol.length; i++) {
+            pivotPayCol += (pivotPayCol.equals("") ? "" : ",") + "'" + arrPayCol[i] + "'" + " AS PAY" + arrPayCol[i];
+            payCol += (payCol.equals("") ? "" : ",") + arrPayCol[i];
+        }
+        payFgVO.setPivotPayCol(pivotPayCol);
+        payFgVO.setArrPayCol(payCol.split(","));
+
         return payFgMapper.getPayFgList(payFgVO);
     }
     
@@ -66,6 +87,27 @@ public class PayFgServiceImpl implements PayFgService {
         // 매장 array 값 세팅
         String[] storeCds = payFgVO.getStoreCds().split(",");
         payFgVO.setStoreCdList(storeCds);
+
+        // 매장브랜드 '전체' 일때
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            if (payFgVO.getStoreHqBrandCd() == "" || payFgVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = payFgVO.getUserBrands().split(",");
+                payFgVO.setUserBrandList(userBrandList);
+            }
+        }
+
+        // 결제수단 array 값 세팅
+        String payCol= "";
+        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+        String pivotPayCol = "";
+        String arrPayCol[] = payFgVO.getPayCol().split(",");
+        for(int i=0; i < arrPayCol.length; i++) {
+            pivotPayCol += (pivotPayCol.equals("") ? "" : ",") + "'" + arrPayCol[i] + "'" + " AS PAY" + arrPayCol[i];
+            payCol += (payCol.equals("") ? "" : ",") + arrPayCol[i];
+        }
+        payFgVO.setPivotPayCol(pivotPayCol);
+        payFgVO.setArrPayCol(payCol.split(","));
 
         return payFgMapper.getPayFgExcelList(payFgVO);
     }

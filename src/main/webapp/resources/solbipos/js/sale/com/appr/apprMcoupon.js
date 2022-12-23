@@ -24,6 +24,7 @@ app.controller('saleApprMcouponCtrl', ['$scope', '$http', '$timeout', function (
     var dataItem         		= {};
     dataItem.saleDate      		= messages["saleComPopup.mcoupn.saleDate"];
     dataItem.posNo  			= messages["saleComPopup.mcoupn.posNo"];
+    dataItem.billNo  			= messages["saleComPopup.mcoupn.billNo"];
     dataItem.saleFg    			= messages["saleComPopup.mcoupn.appr"];
     dataItem.saleAmt    		= messages["saleComPopup.mcoupn.appr"];
     dataItem.tipAmt 			= messages["saleComPopup.mcoupn.appr"]; 

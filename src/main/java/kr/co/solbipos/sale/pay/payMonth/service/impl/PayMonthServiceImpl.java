@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * @Class Name : PayMonthServiceImpl.java
- * @Description : 맘스터치 > 결제수단별 매출 > 월별 결제수단 매출
+ * @Description : 맘스터치 > 결제수단매출 > 월별결제수단매출
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -43,9 +43,7 @@ public class PayMonthServiceImpl implements PayMonthService {
 
         payMonthVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         payMonthVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        payMonthVO.setEmpNo(sessionInfoVO.getEmpNo());
 
-        payMonthVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             payMonthVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
@@ -53,6 +51,15 @@ public class PayMonthServiceImpl implements PayMonthService {
         // 매장 array 값 세팅
         String[] storeCds = payMonthVO.getStoreCds().split(",");
         payMonthVO.setStoreCdList(storeCds);
+
+        // 매장브랜드 '전체' 일때
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            if (payMonthVO.getStoreHqBrandCd() == "" || payMonthVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = payMonthVO.getUserBrands().split(",");
+                payMonthVO.setUserBrandList(userBrandList);
+            }
+        }
 
         // 결제수단 array 값 세팅
         payMonthVO.setArrPayCol(payMonthVO.getPayCol().split(","));

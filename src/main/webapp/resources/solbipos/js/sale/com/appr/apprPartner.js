@@ -24,6 +24,7 @@ app.controller('saleApprPartnerCtrl', ['$scope', '$http', '$timeout', function (
     var dataItem         	= {};
     dataItem.saleDate      	= messages["saleComPopup.partner.saleDate"];
     dataItem.posNo  		= messages["saleComPopup.partner.posNo"];
+    dataItem.billNo  		= messages["saleComPopup.partner.billNo"];
     dataItem.saleFg    		= messages["saleComPopup.partner.appr"];
     dataItem.apprProcFg 	= messages["saleComPopup.partner.appr"];  
     dataItem.saleAmt   		= messages["saleComPopup.partner.apprSaleAmt"];

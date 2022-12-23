@@ -1078,6 +1078,7 @@
 		  	, TMS.STORE_NM
 		  	, TO_CHAR(TO_DATE(TSSPC.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
 			, TSSPC.POS_NO
+			, TSSPC.BILL_NO
 			, DECODE(TSSPC.SALE_FG, 1, '승인', -1, '취소') AS APPR_GUBUN
 			, DECODE(TSSPC.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
 			, TSSPC.ACQUIRE_NM
@@ -1134,7 +1135,7 @@
 		</if>
 		AND TMS.HQ_OFFICE_CD = TSSPC.HQ_OFFICE_CD
 		AND TMS.STORE_CD = TSSPC.STORE_CD
-		ORDER BY TSSPC.STORE_CD, TSSPC.SALE_DATE, TSSPC.POS_NO
+		ORDER BY TSSPC.STORE_CD, TSSPC.SALE_DATE, TSSPC.POS_NO, TSSPC.BILL_NO
     </select>
 
     <!-- 매출공통팝업 - 승인현황(매장현황) 팝업(현금) -->
@@ -1147,6 +1148,7 @@
         /* USE : SaleComPopupMapper.getCashApprPopList */
 		SELECT TO_CHAR(TO_DATE(TSSPC.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
 			,TSSPC.POS_NO
+			,TSSPC.BILL_NO
 			,TSSPC.REG_SEQ
 			,DECODE(TSSPC.SALE_FG, 1, '승인', -1, '취소') AS SALE_FG
 			,TSSPC.SALE_AMT
@@ -1202,6 +1204,7 @@
         /* USE : SaleComPopupMapper.getPaycoApprPopList */
         SELECT 	TO_CHAR(TO_DATE(TSSPP.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
 			,	TSSPP.POS_NO
+			,	TSSPP.BILL_NO
 			,	DECODE(TSSPP.SALE_YN, 'Y', '승인', 'N',  '취소') AS APPR_GUBUN
 			,	DECODE(TSSPP.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
 			,	TSSPP.APPR_COMPANY_NM
@@ -1247,6 +1250,7 @@
 		UNION ALL
 		SELECT 	TO_CHAR(TO_DATE(TSSPP.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
 			,	TSSPP.POS_NO
+			,	TSSPP.BILL_NO
 			,	DECODE(TSSPP.SALE_YN, 'Y', '승인', 'N',  '취소') AS APPR_GUBUN
 			,	DECODE(TSSPP.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
 			,	'PAYCO-쿠폰' AS APPR_COMPANY_NM
@@ -1292,6 +1296,7 @@
 		UNION ALL
 		SELECT 	TO_CHAR(TO_DATE(TSSPP.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
 			,	TSSPP.POS_NO
+			,	TSSPP.BILL_NO
 			,	DECODE(TSSPP.SALE_YN, 'Y', '승인', 'N',  '취소') AS APPR_GUBUN
 			,	DECODE(TSSPP.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
 			,	'PAYCO-포인트' AS APPR_COMPANY_NM
@@ -1347,6 +1352,7 @@
         /* USE : SaleComPopupMapper.getMpayApprPopList */
 		SELECT TO_CHAR(TO_DATE(TSSPM.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
 			,TSSPM.POS_NO
+			,TSSPM.BILL_NO
 			,DECODE(TSSPM.SALE_YN, 'Y', '승인', 'N',  '취소') AS APPR_GUBUN
 			,DECODE(TSSPM.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
 			,TSSPM.MPAY_CD
@@ -1402,6 +1408,7 @@
         /* USE : SaleComPopupMapper.getMcouponApprPopList */
 		SELECT TO_CHAR(TO_DATE(TSSPM.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
 			,TSSPM.POS_NO
+			,TSSPM.BILL_NO
 			,DECODE(TSSPM.SALE_FG, 1, '승인', -1, '취소') AS SALE_FG
 			,TSSPM.SALE_AMT
 			,TSSPM.TIP_AMT
@@ -1460,6 +1467,7 @@
         /* USE : SaleComPopupMapper.getPartnerApprPopList */
 		SELECT TO_CHAR(TO_DATE(TSSPP.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
 				,TSSPP.POS_NO
+				,TSSPP.BILL_NO
 				,DECODE(TSSPP.SALE_FG, 1, '승인 ', -1, '취소') AS SALE_FG
 				,DECODE(TSSPP.APPR_PROC_FG,'', '미승인', '승인') AS APPR_PROC
 				,DECODE(TSSPP.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
@@ -1514,6 +1522,7 @@
         /* USE : SaleComPopupMapper.getNcardApprPopList */
 		SELECT TO_CHAR(TO_DATE(TNNPC.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
 				,TNNPC.POS_NO
+				,TNNPC.BILL_NO
 				,DECODE(TNNPC.SALE_YN, 'Y', '승인', 'N',  '취소') AS APPR_PROC
 				,DECODE(TNNPC.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
 				,TNNPC.ACQUIRE_NM

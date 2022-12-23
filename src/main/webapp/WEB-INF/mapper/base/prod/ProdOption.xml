@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ProdOption.xml
+    옵션관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.12.19     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.prod.prodOption.service.impl.ProdOptionMapper">
+
+    <!-- 옵션그룹조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_OPTION_GROUP, TB_HQ_PRODUCT_OPTION_VAL, TB_MS_PRODUCT_OPTION_GROUP, TB_MS_PRODUCT_OPTION_VAL
+        PARAM    : prodOptionVO
+        COMMENTS : 옵션그룹 목록을 조회한다.
+    -->
+    <select id="getProdOptionGroup" parameterType="prodOptionVO" resultType="DefaultMap">
+        /* USE : ProdOptionMapper.getProdOptionGroup */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  OPTION_GRP_CD
+                ,       OPTION_GRP_NM
+                ,       USE_YN
+                ,       (SELECT COUNT(*) FROM TB_HQ_PRODUCT_OPTION_VAL thpov WHERE thpov.HQ_OFFICE_CD = thpog.HQ_OFFICE_CD AND thpov.OPTION_GRP_CD = thpog.OPTION_GRP_CD) AS CNT
+                FROM    TB_HQ_PRODUCT_OPTION_GROUP thpog
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                ORDER BY OPTION_GRP_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  OPTION_GRP_CD
+                ,       OPTION_GRP_NM
+                ,       USE_YN
+                ,       (SELECT COUNT(*) FROM TB_MS_PRODUCT_OPTION_VAL tmpov WHERE tmpov.STORE_CD = tmpog.STORE_CD AND tmpov.OPTION_GRP_CD = tmpog.OPTION_GRP_CD) AS CNT
+                FROM    TB_MS_PRODUCT_OPTION_GROUP tmpog
+                WHERE   STORE_CD = #{storeCd}
+                ORDER BY OPTION_GRP_CD
+            </when>
+        </choose>
+    </select>
+
+    <!-- 옵션그룹 코드 채번 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_OPTION_GROUP, TB_MS_PRODUCT_OPTION_GROUP
+        PARAM    : storeTypeVO
+        COMMENTS : 새로운 그룹 생성시 코드를 생성한다.
+    -->
+    <select id="getProdOptionGroupCode" parameterType="storeTypeVO" resultType="String">
+        /* USE : ProdOptionMapper.getProdOptionGroupCode */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  LPAD(NVL(MAX(OPTION_GRP_CD), '0') + 1, 4, '0')
+                FROM    TB_HQ_PRODUCT_OPTION_GROUP
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  LPAD(NVL(MAX(OPTION_GRP_CD), '7999') + 1, 4, '0')
+                FROM    TB_MS_PRODUCT_OPTION_GROUP
+                WHERE   STORE_CD = #{storeCd}
+                AND     OPTION_GRP_CD > 7999
+            </when>
+        </choose>
+    </select>
+
+    <!-- 프린터그룹 저장 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_OPTION_GROUP, TB_MS_PRODUCT_OPTION_GROUP
+        PARAM    : prodOptionVO
+        COMMENTS : 프린터그룹을 저장한다.
+    -->
+    <insert id="saveProdOptionGroup" parameterType="prodOptionVO">
+        /* USE : ProdOptionMapper.saveProdOptionGroup */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+            MERGE INTO  TB_HQ_PRODUCT_OPTION_GROUP A
+                USING   DUAL
+                ON (    A.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND A.OPTION_GRP_CD = #{optionGrpCd})
+                WHEN MATCHED THEN
+                    UPDATE
+                        SET A.OPTION_GRP_NM = #{optionGrpNm},
+                            A.USE_YN = #{useYn},
+                            A.MOD_DT = #{modDt},
+                            A.MOD_ID = #{modId}
+                WHEN NOT MATCHED THEN
+                    INSERT (
+                            A.HQ_OFFICE_CD,
+                            A.OPTION_GRP_CD,
+                            A.OPTION_GRP_NM,
+                            A.USE_YN,
+                            A.REG_DT,
+                            A.REG_ID,
+                            A.MOD_DT,
+                            A.MOD_ID
+                        )
+                        VALUES (
+                           #{hqOfficeCd},
+                           #{optionGrpCd},
+                           #{optionGrpNm},
+                           #{useYn},
+                           #{regDt},
+                           #{regId},
+                           #{modDt},
+                           #{modId}
+                       )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+            MERGE INTO  TB_MS_PRODUCT_OPTION_GROUP A
+                USING   DUAL
+                ON (    A.STORE_CD = #{storeCd}
+                    AND A.OPTION_GRP_CD = #{optionGrpCd})
+                WHEN MATCHED THEN
+                    UPDATE
+                        SET A.OPTION_GRP_NM = #{optionGrpNm},
+                            A.USE_YN = #{useYn},
+                            A.MOD_DT = #{modDt},
+                            A.MOD_ID = #{modId}
+                WHEN NOT MATCHED THEN
+                    INSERT (
+                            A.STORE_CD,
+                            A.OPTION_GRP_CD,
+                            A.OPTION_GRP_NM,
+                            A.USE_YN,
+                            A.REG_FG,
+                            A.REG_DT,
+                            A.REG_ID,
+                            A.MOD_DT,
+                            A.MOD_ID
+                        )
+                        VALUES (
+                           #{storeCd},
+                           #{optionGrpCd},
+                           #{optionGrpNm},
+                           #{useYn},
+                           #{regFg},
+                           #{regDt},
+                           #{regId},
+                           #{modDt},
+                           #{modId}
+                       )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 옵션그룹삭제 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_OPTION_GROUP, TB_MS_PRODUCT_OPTION_GROUP
+        PARAM    : prodOptionVO
+        COMMENTS : 옵션그룹을 삭제한다.
+    -->
+    <delete id="deleteProdOptionGroup" parameterType="DefaultMap">
+        /* USE : ProdOptionMapper.deleteProdOptionGroup */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE  TB_HQ_PRODUCT_OPTION_GROUP thpog
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     OPTION_GRP_CD = #{optionGrpCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE  TB_MS_PRODUCT_OPTION_GROUP tmpog
+                WHERE   STORE_CD = #{storeCd}
+                AND     OPTION_GRP_CD = #{optionGrpCd}
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 옵션속성조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_OPTION_VAL, TB_MS_PRODUCT_OPTION_VAL
+        PARAM    : prodOptionVO
+        COMMENTS : 옵션속성 목록을 조회한다.
+    -->
+    <select id="getProdOptionVal" parameterType="prodOptionVO" resultType="DefaultMap">
+        /* USE : ProdOptionMapper.getProdOptionVal */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  OPTION_GRP_CD
+                ,       OPTION_VAL_CD
+                ,       OPTION_VAL_NM
+                FROM    TB_HQ_PRODUCT_OPTION_VAL
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     OPTION_GRP_CD = #{optionGrpCd}
+                ORDER BY OPTION_VAL_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  OPTION_GRP_CD
+                ,       OPTION_VAL_CD
+                ,       OPTION_VAL_NM
+                FROM    TB_MS_PRODUCT_OPTION_VAL
+                WHERE   STORE_CD = #{storeCd}
+                AND     OPTION_GRP_CD = #{optionGrpCd}
+                ORDER BY OPTION_VAL_CD
+            </when>
+        </choose>
+    </select>
+
+    <!-- 옵션속성 코드 채번 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_OPTION_VAL, TB_MS_PRODUCT_OPTION_VAL
+        PARAM    : storeTypeVO
+        COMMENTS : 새로운 속성 생성시 코드를 생성한다.
+    -->
+    <select id="getProdOptionValCode" parameterType="storeTypeVO" resultType="String">
+        /* USE : ProdOptionMapper.getProdOptionValCode */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  LPAD(NVL(MAX(OPTION_VAL_CD), '0') + 1, 2, '0')
+                FROM    TB_HQ_PRODUCT_OPTION_VAL
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     OPTION_GRP_CD = #{optionGrpCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  LPAD(NVL(MAX(OPTION_VAL_CD), '0') + 1, 2, '0')
+                FROM    TB_MS_PRODUCT_OPTION_VAL
+                WHERE   STORE_CD = #{storeCd}
+                AND     OPTION_GRP_CD = #{optionGrpCd}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 옵션속성저장 저장 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_OPTION_VAL, TB_MS_PRODUCT_OPTION_VAL
+        PARAM    : prodOptionVO
+        COMMENTS : 옵션속성을 저장한다.
+    -->
+    <insert id="saveProdOptionVal" parameterType="prodOptionVO">
+        /* USE : ProdOptionMapper.saveProdOptionVal */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                MERGE INTO  TB_HQ_PRODUCT_OPTION_VAL A
+                USING   DUAL
+                ON (    A.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND A.OPTION_GRP_CD = #{optionGrpCd}
+                AND A.OPTION_VAL_CD = #{optionValCd})
+                WHEN MATCHED THEN
+                UPDATE
+                SET A.OPTION_VAL_NM = #{optionValNm},
+                A.MOD_DT = #{modDt},
+                A.MOD_ID = #{modId}
+                WHEN NOT MATCHED THEN
+                INSERT (
+                A.HQ_OFFICE_CD,
+                A.OPTION_GRP_CD,
+                A.OPTION_VAL_CD,
+                A.OPTION_VAL_NM,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+                )
+                VALUES (
+                #{hqOfficeCd},
+                #{optionGrpCd},
+                #{optionValCd},
+                #{optionValNm},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                MERGE INTO  TB_MS_PRODUCT_OPTION_VAL A
+                USING   DUAL
+                ON (    A.STORE_CD = #{storeCd}
+                AND A.OPTION_GRP_CD = #{optionGrpCd}
+                AND A.OPTION_VAL_CD = #{optionValCd})
+                WHEN MATCHED THEN
+                UPDATE
+                SET A.OPTION_VAL_NM = #{optionValNm},
+                A.MOD_DT = #{modDt},
+                A.MOD_ID = #{modId}
+                WHEN NOT MATCHED THEN
+                INSERT (
+                A.STORE_CD,
+                A.OPTION_GRP_CD,
+                A.OPTION_VAL_CD,
+                A.OPTION_VAL_NM,
+                A.REG_FG,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+                )
+                VALUES (
+                #{storeCd},
+                #{optionGrpCd},
+                #{optionValCd},
+                #{optionValNm},
+                #{regFg},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+                )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 옵션속성삭제 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_OPTION_VAL, TB_MS_PRODUCT_OPTION_VAL
+        PARAM    : prodOptionVO
+        COMMENTS : 옵션그룹을 삭제한다.
+    -->
+    <delete id="deleteProdOptionVal" parameterType="DefaultMap">
+        /* USE : ProdOptionMapper.deleteProdOptionVal */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE  TB_HQ_PRODUCT_OPTION_VAL
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     OPTION_GRP_CD = #{optionGrpCd}
+                AND     OPTION_VAL_CD = #{optionValCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE  TB_MS_PRODUCT_OPTION_VAL
+                WHERE   STORE_CD = #{storeCd}
+                AND     OPTION_GRP_CD = #{optionGrpCd}
+                AND     OPTION_VAL_CD = #{optionValCd}
+            </when>
+        </choose>
+    </delete>
+
+</mapper>

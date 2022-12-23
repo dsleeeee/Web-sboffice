@@ -24,6 +24,7 @@ app.controller('saleApprNcardCtrl', ['$scope', '$http', '$timeout', function ($s
     var dataItem         	= {};
     dataItem.saleDate      	= messages["saleComPopup.ncard.saleDate"];
     dataItem.posNo  		= messages["saleComPopup.ncard.posNo"];
+    dataItem.billNo  		= messages["saleComPopup.ncard.billNo"];
     dataItem.apprProc    	= messages["saleComPopup.ncard.appr"];
     dataItem.apprProcFg 	= messages["saleComPopup.ncard.appr"]; 
     dataItem.acquireNm      = messages["saleComPopup.ncard.acquireNm"];
