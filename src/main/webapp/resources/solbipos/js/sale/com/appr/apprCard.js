@@ -23,8 +23,11 @@ app.controller('saleApprCardCtrl', ['$scope', '$http', '$timeout', function ($sc
     
     // 첫째줄 헤더 생성
     var dataItem         	= {};
+    dataItem.storeCd      	= messages["saleComPopup.card.storeCd"];
+    dataItem.storeNm      	= messages["saleComPopup.card.storeNm"];
     dataItem.saleDate      	= messages["saleComPopup.card.saleDate"];
     dataItem.posNo  		= messages["saleComPopup.card.posNo"];
+    dataItem.billNo  		= messages["saleComPopup.card.billNo"];
     dataItem.apprGubun    	= messages["saleComPopup.card.appr"];
     dataItem.apprProcFg 	= messages["saleComPopup.card.appr"]; 
     dataItem.acquireNm      = messages["saleComPopup.card.acquireNm"];

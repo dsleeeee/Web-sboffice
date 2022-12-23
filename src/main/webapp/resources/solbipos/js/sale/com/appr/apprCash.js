@@ -24,6 +24,7 @@ app.controller('saleApprCashCtrl', ['$scope', '$http', '$timeout', function ($sc
     var dataItem         	= {};
     dataItem.saleDate      	= messages["saleComPopup.cash.saleDate"];
     dataItem.posNo  		= messages["saleComPopup.cash.posNo"];
+    dataItem.billNo  		= messages["saleComPopup.cash.billNo"];
     dataItem.regSeq    		= messages["saleComPopup.cash.apprGuBun"];
     dataItem.saleFg 		= messages["saleComPopup.cash.apprGuBun"]; 
     dataItem.saleAmt      	= messages["saleComPopup.cash.apprSaleAmt"];
