@@ -312,6 +312,8 @@
     <typeAlias alias="prodBarcdVO" type="kr.co.solbipos.base.prod.prodBarcd.service.ProdBarcdVO"/>
     <!-- 기초관리 > 상품관리 > 품절관리 -->
     <typeAlias alias="soldOutVO" type="kr.co.solbipos.base.prod.soldOut.service.SoldOutVO"/>
+    <!-- 기초관리 > 상품관리 > 옵션관리 -->
+    <typeAlias alias="prodOptionVO" type="kr.co.solbipos.base.prod.prodOption.service.ProdOptionVO"/>
     <!--
     <typeAlias alias="prodBarcdVO" type="kr.co.solbipos.base.prod.prodbarcd.service.ProdBarcdVO"/>
     <typeAlias alias="supplyVO" type="kr.co.solbipos.base.prod.supply.service.SupplyVO"/>
@@ -893,12 +895,16 @@
 
     <!-- 맘스터치 > 결제수단별 매출 > 결제수단별 일 매출현황 -->
     <typeAlias alias="payFgVO" type="kr.co.solbipos.sale.pay.payFg.service.PayFgVO"/>
-    <!-- 맘스터치 > 결제수단별 매출 > 일별 결제수단 매출 -->
+    <!-- 맘스터치 > 결제수단매출 > 일별결제수단매출 -->
     <typeAlias alias="payDayVO" type="kr.co.solbipos.sale.pay.payDay.service.PayDayVO"/>
+    <!-- 맘스터치 > 결제수단매출 > 매장-일별결제수단매출 -->
+    <typeAlias alias="storePayDayVO" type="kr.co.solbipos.sale.pay.storePayDay.service.StorePayDayVO"/>
     <!-- 맘스터치 > 결제수단별 매출 > 일별 결제수단 매출(기기별) -->
     <typeAlias alias="payDayDeviceVO" type="kr.co.solbipos.sale.pay.payDayDevice.service.PayDayDeviceVO"/>
-    <!-- 맘스터치 > 결제수단별 매출 > 월별 결제수단 매출 -->
+    <!-- 맘스터치 > 결제수단매출 > 월별결제수단매출 -->
     <typeAlias alias="payMonthVO" type="kr.co.solbipos.sale.pay.payMonth.service.PayMonthVO"/>
+    <!-- 맘스터치 > 결제수단매출 > 매장월별결제수단매출 -->
+    <typeAlias alias="storePayMonthVO" type="kr.co.solbipos.sale.pay.storePayMonth.service.StorePayMonthVO"/>
     <!-- 맘스터치 > 결제수단별 매출 > 월별 결제수단 매출(기기별) -->
     <typeAlias alias="payMonthDeviceVO" type="kr.co.solbipos.sale.pay.payMonthDevice.service.PayMonthDeviceVO"/>
 
