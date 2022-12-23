@@ -529,7 +529,7 @@
             <col class="w35"/>
           </colgroup>
           <tbody>
-            <tr>
+            <tr <c:if test="${momsEnvstVal == '1' && orgnFg == 'STORE'}">style="display: none"</c:if>> <%-- 맘스터치 매장은 공금단가와 원가단가를 hidden 처리 --%>
               <%--공급단가--%>
               <th><s:message code="prod.splyUprc"/></th>
               <td>
@@ -844,9 +844,80 @@
                       </wj-combo-box>
                   </div>
               </td>
+              <%-- 상품옵션그룹 --%>
+              <th><s:message code="prod.optionGrp"/></th>
+              <td>
+                <input type="text" class="sb-input w70" id="_optionGrpNm" ng-model="prodModifyInfo.optionGrpNm" ng-click="popUpOptionGrp()" style="float: left; width: 69%;"
+                       placeholder="<s:message code="prod.optionGrp" /> 선택" readonly/>
+                <input type="hidden" id="_optionGrpCd" name="optionGrpCd" ng-model="prodModifyInfo.optionGrpCd" disabled />
+                <button type="button" class="btn_skyblue fl mr5" id="btnCancelOptionGrp" style="margin-left: 5px;" ng-click="delOptionGrp()"><s:message code="cmm.selectCancel"/></button>
+              </td>
+            </tr>
+            <tr>
+              <%-- 출시일 --%>
+              <th><s:message code="prod.releaseDate"/></th>
+              <td>
+                <div class="sb-select w200px">
+                  <span class="txtIn"><input id="releaseDate" class="w110px"></span>
+                </div>
+              </td>
+              <%-- 단종 --%>
+              <th>
+                  <div style="float: left;"><input type="checkbox" id="chkDisconYn" ng-model="isCheckedDisconYn" ng-change="isChkDisconYn()"/></div>
+                  <div style="padding-top: 3px; padding-left: 20px;"><s:message code="prod.discon" /></div>
+              </th>
+              <td>
+                <div class="sb-select w200px" id="divChkDiscon">
+                   <span class="txtIn"><input id="disconDate" class="w110px"></span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <%-- 판매방식 --%>
+              <th><s:message code="prod.saleType"/></th>
+              <td>
+                 <div class="fl pd5" style="padding-right: 15px;">
+                   <div style="float: left;"><input type="checkbox" id="chkSaleTypeYnSin" ng-model="prodModifyInfo.saleTypeYnSin"/></div>
+                   <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="prod.inStore" /></label></div>
+                   <div style="float: left;"><input type="checkbox" id="chkSaleTypeYnDlv" ng-model="prodModifyInfo.saleTypeYnDlv"/></div>
+                   <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="prod.delivery" /> </label></div>
+                   <div style="float: left;"><input type="checkbox" id="chkSaleTypeYnPkg" ng-model="prodModifyInfo.saleTypeYnPkg"/></div>
+                   <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="prod.packing" /> </label></div>
+                 </div>
+              </td>
+              <th></th>
               <td></td>
-              <td></td>
-              </tr>
+            </tr>
+            <tr>
+              <%-- 판매채널 --%>
+              <th><s:message code="prod.saleChannel"/></th>
+              <td colspan="3" style="height: 35px;">
+                <div class="fl pd5" style="padding-right: 15px;">
+                   <div style="float: left;"><input type="checkbox" id="chkSaleChnYnPos" ng-model="prodModifyInfo.saleChnYnPos"/></div>
+                   <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="prod.pos" /></label></div>
+                   <div style="float: left;"><input type="checkbox" id="chkSaleChnYnKsk" ng-model="prodModifyInfo.saleChnYnKsk"/></div>
+                   <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="prod.kiosk" /></label></div>
+                   <div style="float: left;"><input type="checkbox" id="chkSaleChnYnCmp" ng-model="prodModifyInfo.saleChnYnCmp"/></div>
+                   <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="prod.app" /></label></div>
+                   <div style="float: left;"><input type="checkbox" id="chkSaleChnYnBae" ng-model="prodModifyInfo.saleChnYnBae"/></div>
+                   <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="prod.baemin" /></label></div>
+                   <div style="float: left;"><input type="checkbox" id="chkSaleChnYnBao" ng-model="prodModifyInfo.saleChnYnBao"/></div>
+                   <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="prod.baemin1" /></label></div>
+                   <div style="float: left;"><input type="checkbox" id="chkSaleChnYnYgy" ng-model="prodModifyInfo.saleChnYnYgy"/></div>
+                   <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="prod.yogiyo" /></label></div>
+                   <div style="float: left;"><input type="checkbox" id="chkSaleChnYnYge" ng-model="prodModifyInfo.saleChnYnYge"/></div>
+                   <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="prod.yogiyoExp" /></label></div>
+                </div>
+                <div class="fl pd5" style="padding-right: 15px;">
+                   <div style="float: left;"><input type="checkbox" id="chkSaleChnYnCpn" ng-model="prodModifyInfo.saleChnYnCpn"/></div>
+                   <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="prod.coupang" /></label></div>
+                   <div style="float: left;"><input type="checkbox" id="chkSaleChnYnTng" ng-model="prodModifyInfo.saleChnYnTng"/></div>
+                   <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="prod.baedaltong" /></label></div>
+                   <div style="float: left;"><input type="checkbox" id="chkSaleChnYnDdn" ng-model="prodModifyInfo.saleChnYnDdn"/></div>
+                   <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="prod.ddangyo" /></label></div>
+                </div>
+              </td>
+            </tr>
           </c:if>
           </tbody>
         </table>
@@ -1055,7 +1126,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20221129.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20221223.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
@@ -1083,4 +1154,8 @@
 <c:import url="/WEB-INF/view/base/prod/prod/searchSdselGrp.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 상품옵션그룹 팝업--%>
+<c:import url="/WEB-INF/view/base/prod/prod/searchOptionGrp.jsp">
 </c:import>

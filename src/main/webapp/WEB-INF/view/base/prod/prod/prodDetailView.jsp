@@ -2,6 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 
 <%-- 팝업 부분 설정 - width 는 강제 해주어야함.. 해결방법? 확인 필요 : 20180829 노현수 --%>
 <wj-popup control="prodDetailLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:800px;">
@@ -420,7 +421,7 @@
                         <col class="w35"/>
                     </colgroup>
                     <tbody>
-                    <tr>
+                    <tr <c:if test="${momsEnvstVal == '1' && orgnFg == 'STORE'}">style="display: none"</c:if>> <%-- 맘스터치 매장은 공금단가와 원가단가를 hidden 처리 --%>
                         <%--공급단가--%>
                         <th>
                             <s:message code="prod.splyUprc"/>
@@ -670,8 +671,39 @@
                                 </wj-combo-box>
                                 {{_momsKioskEdge}}
                             </td>
+                            <%-- 상품옵션그룹 --%>
+                            <th><s:message code="prod.optionGrp"/></th>
+                            <td>
+                                {{prodDetail.optionGrpNm}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <%-- 출시일 --%>
+                            <th><s:message code="prod.releaseDate"/></th>
+                            <td>
+                                <label id="lblReleaseDate" />
+                            </td>
+                            <%-- 단종일 --%>
+                            <th><s:message code="rpdo.disconDate"/></th>
+                            <td>
+                                <label id="lblDisconDate" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <%-- 판매방식 --%>
+                            <th><s:message code="prod.saleType"/></th>
+                            <td>
+                                <label id="lblSaleType" />
+                            </td>
+                            <th></th>
                             <td></td>
-                            <td></td>
+                        </tr>
+                        <tr>
+                            <%-- 판매채널 --%>
+                            <th><s:message code="prod.saleChannel"/></th>
+                            <td colspan="3" style="height: 35px;">
+                                <label id="lblSaleChannel" />
+                            </td>
                         </tr>
                     </c:if>
                     </tbody>
@@ -760,4 +792,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20221129.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20221223.01" charset="utf-8"></script>

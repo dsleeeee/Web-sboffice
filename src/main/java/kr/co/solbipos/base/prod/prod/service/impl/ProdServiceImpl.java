@@ -320,7 +320,20 @@ public class ProdServiceImpl implements ProdService {
                     || (prodVO.getNuSugars() != null && prodVO.getNuSugars().length() > 0)
                     || (prodVO.getNuSatFat() != null && prodVO.getNuSatFat().length() > 0)
                     || (prodVO.getNuCaffeine() != null && prodVO.getNuCaffeine().length() > 0)
-                    || (prodVO.getMomsKioskEdge() != null && prodVO.getMomsKioskEdge().length() > 0 && Integer.parseInt(prodVO.getMomsKioskEdge()) > 0) )
+                    || (prodVO.getMomsKioskEdge() != null && prodVO.getMomsKioskEdge().length() > 0 && Integer.parseInt(prodVO.getMomsKioskEdge()) > 0)
+                    || (prodVO.getSaleTypeYnSin() != null && prodVO.getSaleTypeYnSin().length() > 0)
+                    || (prodVO.getSaleTypeYnDlv() != null && prodVO.getSaleTypeYnDlv().length() > 0)
+                    || (prodVO.getSaleTypeYnPkg() != null && prodVO.getSaleTypeYnPkg().length() > 0)
+                    || (prodVO.getSaleChnYnPos() != null && prodVO.getSaleChnYnPos().length() > 0)
+                    || (prodVO.getSaleChnYnKsk() != null && prodVO.getSaleChnYnKsk().length() > 0)
+                    || (prodVO.getSaleChnYnCmp() != null && prodVO.getSaleChnYnCmp().length() > 0)
+                    || (prodVO.getSaleChnYnBae() != null && prodVO.getSaleChnYnBae().length() > 0)
+                    || (prodVO.getSaleChnYnBao() != null && prodVO.getSaleChnYnBao().length() > 0)
+                    || (prodVO.getSaleChnYnYgy() != null && prodVO.getSaleChnYnYgy().length() > 0)
+                    || (prodVO.getSaleChnYnYge() != null && prodVO.getSaleChnYnYge().length() > 0)
+                    || (prodVO.getSaleChnYnCpn() != null && prodVO.getSaleChnYnCpn().length() > 0)
+                    || (prodVO.getSaleChnYnTng() != null && prodVO.getSaleChnYnTng().length() > 0)
+                    || (prodVO.getSaleChnYnDdn() != null && prodVO.getSaleChnYnDdn().length() > 0))
             {
                 // 상품 설명 상세 + 영양정보
                 prodMapper.saveProdInfo(prodVO);
@@ -2021,6 +2034,19 @@ public class ProdServiceImpl implements ProdService {
         prodVO.setStoreCd(sessionInfoVO.getStoreCd());
 
         return prodMapper.getProdSaleTime(prodVO);
+    }
+
+    /** 상품옵션그룹 조회 팝업 */
+    @Override
+    public List<DefaultMap<String>> getSearchOptionGrpList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return prodMapper.getSearchOptionGrpList(prodVO);
     }
 
 }

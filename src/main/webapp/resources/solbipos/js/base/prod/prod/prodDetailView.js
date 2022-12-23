@@ -116,6 +116,49 @@ app.controller('prodDetailCtrl', ['$scope', '$http', function ($scope, $http) {
                 if($scope.prodDetail.momsKioskEdge === null || $scope.prodDetail.momsKioskEdge === ""){
                     $scope.prodDetail.momsKioskEdge = "0";
                 }
+
+                // 출시일
+                if($scope.prodDetail.releaseDate !== null && $scope.prodDetail.releaseDate !== undefined && $scope.prodDetail.releaseDate !== ""){
+                    $("#lblReleaseDate").text(getFormatDate($scope.prodDetail.releaseDate, "-"));
+                }else{
+                    $("#lblReleaseDate").text("");
+                }
+
+                // 단종
+                if($scope.prodDetail.disconYn !== null && $scope.prodDetail.disconYn !== undefined && $scope.prodDetail.disconYn !== "" && $scope.prodDetail.disconYn === 'Y'){
+                    $("#lblDisconDate").text(getFormatDate($scope.prodDetail.disconDate, "-"));
+                }else{
+                    $("#lblDisconDate").text("");
+                }
+
+                // 판매방식
+                var vStr = "";
+                vStr += $scope.prodDetail.saleTypeYnSin === 'Y' ? messages["prod.inStore"]  + ", " : "";
+                vStr += $scope.prodDetail.saleTypeYnDlv === 'Y' ? messages["prod.delivery"] + ", " : "";
+                vStr += $scope.prodDetail.saleTypeYnPkg === 'Y' ? messages["prod.packing"] + ", " : "";
+                if(vStr.length > 0){
+                    $("#lblSaleType").text(vStr.substring(0, vStr.length-2));
+                }else{
+                    $("#lblSaleType").text("");
+                }
+
+                // 판매채널
+                vStr = "";
+                vStr += $scope.prodDetail.saleChnYnPos === 'Y' ? messages["prod.pos"]  + ", " : "";
+                vStr += $scope.prodDetail.saleChnYnKsk === 'Y' ? messages["prod.kiosk"]  + ", " : "";
+                vStr += $scope.prodDetail.saleChnYnCmp === 'Y' ? messages["prod.app"]  + ", " : "";
+                vStr += $scope.prodDetail.saleChnYnBae === 'Y' ? messages["prod.baemin"]  + ", " : "";
+                vStr += $scope.prodDetail.saleChnYnBao === 'Y' ? messages["prod.baemin1"]  + ", " : "";
+                vStr += $scope.prodDetail.saleChnYnYgy === 'Y' ? messages["prod.yogiyo"]  + ", " : "";
+                vStr += $scope.prodDetail.saleChnYnYge === 'Y' ? messages["prod.yogiyoExp"]  + ", " : "";
+                vStr += $scope.prodDetail.saleChnYnCpn === 'Y' ? messages["prod.coupang"]  + ", " : "";
+                vStr += $scope.prodDetail.saleChnYnTng === 'Y' ? messages["prod.baedaltong"]  + ", " : "";
+                vStr += $scope.prodDetail.saleChnYnDdn === 'Y' ? messages["prod.ddangyo"]  + ", " : "";
+                if(vStr.length > 0){
+                    $("#lblSaleChannel").text(vStr.substring(0, vStr.length-2));
+                }else{
+                    $("#lblSaleChannel").text("");
+                }
             }
         );
         // 기능수행 종료 : 반드시 추가

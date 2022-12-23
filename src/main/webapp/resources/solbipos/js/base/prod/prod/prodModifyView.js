@@ -54,6 +54,34 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
     // 판매가 내점/배달/포장에 적용
     $scope.saleUprcApply = true;
 
+    // [1250 맘스터치] 사용시 기본 셋팅
+    if(momsEnvstVal === "1") {
+        // 단종여부 체크박스
+        $scope.isCheckedDisconYn = false;
+        $("#divChkDiscon").css("display", "none");
+
+        // 출시일, 단종일
+        var releaseDate = wcombo.genDateVal("#releaseDate", gvStartDate);
+        var disconDate = wcombo.genDateVal("#disconDate", gvEndDate);
+
+        // 판매방식
+        $scope.prodModifyInfo.saleTypeYnSin = false;
+        $scope.prodModifyInfo.saleTypeYnDlv = false;
+        $scope.prodModifyInfo.saleTypeYnPkg = false;
+
+        // 판매채널
+        $scope.prodModifyInfo.saleChnYnPos = false;
+        $scope.prodModifyInfo.saleChnYnKsk = false;
+        $scope.prodModifyInfo.saleChnYnCmp = false;
+        $scope.prodModifyInfo.saleChnYnBae = false;
+        $scope.prodModifyInfo.saleChnYnBao = false;
+        $scope.prodModifyInfo.saleChnYnYgy = false;
+        $scope.prodModifyInfo.saleChnYnYge = false;
+        $scope.prodModifyInfo.saleChnYnCpn = false;
+        $scope.prodModifyInfo.saleChnYnTng = false;
+        $scope.prodModifyInfo.saleChnYnDdn = false;
+    }
+
     // 상품정보 조회
     $scope.$on("prodModifyCtrl", function(event, data) {
         // data 조회하지 않고 상세정보와 동일하므로 파라미터로 처리
@@ -134,12 +162,31 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             params.remark = ""; // 비고
             params.prodInfo = ""; // 상품 상세 설명
 
-            // [1250 맘스터치]
+            // [1250 맘스터치] 사용시 기본 셋팅
             // 기타정보
             params.saleTimeFg = "N";
             resetKioskTimeHtml();
             // KIOSK 엣지
             params.momsKioskEdge = "0";
+            // 상품옵션그룹
+            params.optionGrpNm = "";
+            params.optionGrpCd = "";
+            // 판매방식
+            params.saleTypeYnSin = false;
+            params.saleTypeYnDlv = false;
+            params.saleTypeYnPkg = false;
+            // 판매채널
+            params.saleChnYnPos = false;
+            params.saleChnYnksk = false;
+            params.saleChnYnCmp = false;
+            params.saleChnYnBae = false;
+            params.saleChnYnBao = false;
+            params.saleChnYnYgy = false;
+            params.saleChnYnYge = false;
+            params.saleChnYnCpn = false;
+            params.saleChnYnTng = false;
+            params.saleChnYnDdn = false;
+
             // 영양정보
             params.nuTotWt = "";
             params.nuKcal = "";
@@ -338,7 +385,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         params.safeStockQty = $("#prodModifySafeStockQty").val(); // 안전재고
         params.chkVendrCd = $scope.prodModifyInfo.vendrCd;
 
-        // [1250 맘스터치]
+        // [1250 맘스터치] 사용시 저장
         if(momsEnvstVal === "1") {
             // KIOSK 판매시간 사용여부에 따라 시간설정
             if($scope.prodModifyInfo.saleTimeFg === "Y"){
@@ -346,12 +393,67 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             }else{
                 params.saleTime = "";
             }
+            
+            // 상품옵션그룹
+            params.optionGrpCd = $("#_optionGrpCd").val();
+
+            // 출시일
+            params.releaseDate = wijmo.Globalize.format(releaseDate.value, 'yyyyMMdd');
+
+            // 단종
+            params.disconYn = $("#chkDisconYn").is(":checked") === true ? 'Y' : 'N';
+            params.disconDate = $("#chkDisconYn").is(":checked") === true ? wijmo.Globalize.format(disconDate.value, 'yyyyMMdd') : '';
+
+            // 판매방식
+            params.saleTypeYnSin = $("#chkSaleTypeYnSin").is(":checked") === true ? 'Y' : 'N';  // 판매방식(내점)
+            params.saleTypeYnDlv = $("#chkSaleTypeYnDlv").is(":checked") === true ? 'Y' : 'N'; // 판매방식(배달)
+            params.saleTypeYnPkg = $("#chkSaleTypeYnPkg").is(":checked") === true ? 'Y' : 'N';  // 판매방식(포장)
+
+            // 판매채널
+            params.saleChnYnPos = $("#chkSaleChnYnPos").is(":checked") === true ? 'Y' : 'N';        // 판매채널(포스)
+            params.saleChnYnKsk = $("#chkSaleChnYnKsk").is(":checked") === true ? 'Y' : 'N';      // 판매채널(키오스크)
+            params.saleChnYnCmp = $("#chkSaleChnYnCmp").is(":checked") === true ? 'Y' : 'N';        // 판매채널(자사앱)
+            params.saleChnYnBae = $("#chkSaleChnYnBae").is(":checked") === true ? 'Y' : 'N';     // 판매채널(배민)
+            params.saleChnYnBao = $("#chkSaleChnYnBao").is(":checked") === true ? 'Y' : 'N';    // 판매채널(배민1)
+            params.saleChnYnYgy = $("#chkSaleChnYnYgy").is(":checked") === true ? 'Y' : 'N';     // 판매채널(요기요)
+            params.saleChnYnYge = $("#chkSaleChnYnYge").is(":checked") === true ? 'Y' : 'N';  // 판매채널(요기요익스프레스)
+            params.saleChnYnCpn = $("#chkSaleChnYnCpn").is(":checked") === true ? 'Y' : 'N';    // 판매채널(쿠팡)
+            params.saleChnYnTng = $("#chkSaleChnYnTng").is(":checked") === true ? 'Y' : 'N'; // 판매채널(배달통)
+            params.saleChnYnDdn = $("#chkSaleChnYnDdn").is(":checked") === true ? 'Y' : 'N';    // 판매채널(땡겨요)
+
         } else {
             // KIOSK 판매시간
             params.saleTimeFg = "N";
             params.saleTime = "";
             // KIOSK 엣지
             params.momsKioskEdge = "0";
+
+            // 상품옵션그룹
+            params.optionGrpCd = "";
+
+            // 출시일
+            params.releaseDate = "";
+
+            // 단종
+            params.disconYn = "";
+            params.disconDate = "";
+
+            // 판매방식
+            params.saleTypeYnSin = "";
+            params.saleTypeYnDlv = "";
+            params.saleTypeYnPkg = "";
+
+            // 판매채널
+            params.saleChnYnPos = "";
+            params.saleChnYnKsk = "";
+            params.saleChnYnCmp = "";
+            params.saleChnYnBae = "";
+            params.saleChnYnBao = "";
+            params.saleChnYnYgy = "";
+            params.saleChnYnYge = "";
+            params.saleChnYnCpn = "";
+            params.saleChnYnTng = "";
+            params.saleChnYnDdn = "";
 
             // 영양정보
             params.nuTotWt = "";
@@ -823,6 +925,41 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         // KIOSK 시간설정 초기화
         resetKioskTimeHtml();
 
+        // 기존정보 셋팅 초기화
+        // [1250 맘스터치] 사용시 초기화
+        if(momsEnvstVal === "1") {
+
+            // 상품옵션그룹
+            $("#_optionGrpCd").val("");
+            $("#_optionGrpNm").val("");
+            
+            // 단종여부 체크박스
+            $scope.isCheckedDisconYn = false;
+            $("input:checkbox[id='chkDisconYn']").prop("checked", false);
+            $("#divChkDiscon").css("display", "none");
+
+            // 출시일, 단종일
+            releaseDate.value = getCurDate('-');
+            disconDate.value = getCurDate('-');
+
+            // 판매방식
+            $("input:checkbox[id='chkSaleTypeYnSin']").prop("checked", false);  // 판매방식(내점)
+            $("input:checkbox[id='chkSaleTypeYnDlv']").prop("checked", false);  // 판매방식(배달)
+            $("input:checkbox[id='chkSaleTypeYnPkg']").prop("checked", false);  // 판매방식(포장)
+
+            // 판매채널
+            $("input:checkbox[id='chkSaleChnYnPos']").prop("checked", false);   // 판매채널(포스)
+            $("input:checkbox[id='chkSaleChnYnKsk']").prop("checked", false);   // 판매채널(키오스크)
+            $("input:checkbox[id='chkSaleChnYnCmp']").prop("checked", false);   // 판매채널(자사앱)
+            $("input:checkbox[id='chkSaleChnYnBae']").prop("checked", false);   // 판매채널(배민)
+            $("input:checkbox[id='chkSaleChnYnBao']").prop("checked", false);   // 판매채널(배민1)
+            $("input:checkbox[id='chkSaleChnYnYgy']").prop("checked", false);   // 판매채널(요기요)
+            $("input:checkbox[id='chkSaleChnYnYge']").prop("checked", false);   // 판매채널(요기요익스프레스)
+            $("input:checkbox[id='chkSaleChnYnCpn']").prop("checked", false);   // 판매채널(쿠팡)
+            $("input:checkbox[id='chkSaleChnYnTng']").prop("checked", false);   // 판매채널(배달통)
+            $("input:checkbox[id='chkSaleChnYnDdn']").prop("checked", false);   // 판매채널(땡겨요)
+        }
+
         // 수정 모드 시
         if(data.prodCd !== null && data.prodCd !== undefined && data.prodCd !== ""){
             $scope.setMode("U");
@@ -885,33 +1022,73 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                     $scope.prodModifyInfo.dcYn = "Y";
                 }
 
-                // KIOSK 시간설정 셋팅
-                if($scope.prodModifyInfo.saleTimeFg === 'Y'){
+                // [1250 맘스터치] 사용시 기존정보 셋팅
+                if(momsEnvstVal === "1") {
 
-                    var vParams = {};
-                    vParams.prodCd = $scope.prodModifyInfo.prodCd;
+                    // KIOSK 판매시간 사용여부에 따른 시간설정 셋팅
+                    if ($scope.prodModifyInfo.saleTimeFg === 'Y') {
 
-                    $scope._postJSONQuery.withOutPopUp("/base/prod/prod/prod/getProdSaleTime.sb", vParams, function(response){
-                        if(response.data.data.list.length > 0){
-                            var data = response.data.data.list;
-                            var str = "";
+                        var vParams = {};
+                        vParams.prodCd = $scope.prodModifyInfo.prodCd;
 
-                            for(var i=0; i<data.length; i++){
-                                if(i > 0){
-                                    str += ",";
+                        $scope._postJSONQuery.withOutPopUp("/base/prod/prod/prod/getProdSaleTime.sb", vParams, function (response) {
+                            if (response.data.data.list.length > 0) {
+                                var data = response.data.data.list;
+                                var str = "";
+
+                                for (var i = 0; i < data.length; i++) {
+                                    if (i > 0) {
+                                        str += ",";
+                                    }
+                                    str += data[i].sSaleTime + "-" + data[i].eSaleTime;
                                 }
-                                str += data[i].sSaleTime + "-" + data[i].eSaleTime;
+                                setKioskTimeValue(str);
                             }
-                            setKioskTimeValue(str);
-                        }
-                    });
-                }else{
-                    resetKioskTimeHtml();
-                }
+                        });
+                    } else {
+                        resetKioskTimeHtml();
+                    }
 
-                // [1250 맘스터치]
-                if($scope.prodModifyInfo.momsKioskEdge === null || $scope.prodModifyInfo.momsKioskEdge === ""){
-                    $scope.prodModifyInfo.momsKioskEdge = "0";
+                    // KIOSK 엣지
+                    if ($scope.prodModifyInfo.momsKioskEdge === null || $scope.prodModifyInfo.momsKioskEdge === "") {
+                        $scope.prodModifyInfo.momsKioskEdge = "0";
+                    }
+
+                    // 상품옵션그룹
+                    if ($scope.prodModifyInfo.optionGrpCd !== null && $scope.prodModifyInfo.optionGrpCd !== undefined && $scope.prodModifyInfo.optionGrpCd !== "") {
+                        $("#_optionGrpNm").val($scope.prodModifyInfo.optionGrpNm);
+                        $("#_optionGrpCd").val($scope.prodModifyInfo.optionGrpCd);
+                    }
+
+                    // 출시일
+                    if ($scope.prodModifyInfo.releaseDate !== null && $scope.prodModifyInfo.releaseDate !== undefined && $scope.prodModifyInfo.releaseDate !== "") {
+                        releaseDate.value = new Date(getFormatDate($scope.prodModifyInfo.releaseDate, "-"));
+                    }
+
+                    // 단종
+                    if ($scope.prodModifyInfo.disconYn !== null && $scope.prodModifyInfo.disconYn !== undefined && $scope.prodModifyInfo.disconYn !== "" && $scope.prodModifyInfo.disconYn === 'Y') {
+                        $scope.isCheckedDisconYn = true;
+                        $("input:checkbox[id='chkDisconYn']").prop("checked", true);
+                        disconDate.value = new Date(getFormatDate($scope.prodModifyInfo.disconDate, '-'));
+                        $("#divChkDiscon").css("display", "");
+                    }
+
+                    // 판매방식
+                    $("input:checkbox[id='chkSaleTypeYnSin']").prop("checked", $scope.prodModifyInfo.saleTypeYnSin === 'Y' ? true : false);
+                    $("input:checkbox[id='chkSaleTypeYnDlv']").prop("checked", $scope.prodModifyInfo.saleTypeYnDlv === 'Y' ? true : false);
+                    $("input:checkbox[id='chkSaleTypeYnPkg']").prop("checked", $scope.prodModifyInfo.saleTypeYnPkg === 'Y' ? true : false);
+
+                    // 판매채널
+                    $("input:checkbox[id='chkSaleChnYnPos']").prop("checked", $scope.prodModifyInfo.saleChnYnPos === 'Y' ? true : false);
+                    $("input:checkbox[id='chkSaleChnYnKsk']").prop("checked", $scope.prodModifyInfo.saleChnYnKsk === 'Y' ? true : false);
+                    $("input:checkbox[id='chkSaleChnYnCmp']").prop("checked", $scope.prodModifyInfo.saleChnYnCmp === 'Y' ? true : false);
+                    $("input:checkbox[id='chkSaleChnYnBae']").prop("checked", $scope.prodModifyInfo.saleChnYnBae === 'Y' ? true : false);
+                    $("input:checkbox[id='chkSaleChnYnBao']").prop("checked", $scope.prodModifyInfo.saleChnYnBao === 'Y' ? true : false);
+                    $("input:checkbox[id='chkSaleChnYnYgy']").prop("checked", $scope.prodModifyInfo.saleChnYnYgy === 'Y' ? true : false);
+                    $("input:checkbox[id='chkSaleChnYnYge']").prop("checked", $scope.prodModifyInfo.saleChnYnYge === 'Y' ? true : false);
+                    $("input:checkbox[id='chkSaleChnYnCpn']").prop("checked", $scope.prodModifyInfo.saleChnYnCpn === 'Y' ? true : false);
+                    $("input:checkbox[id='chkSaleChnYnTng']").prop("checked", $scope.prodModifyInfo.saleChnYnTng === 'Y' ? true : false);
+                    $("input:checkbox[id='chkSaleChnYnDdn']").prop("checked", $scope.prodModifyInfo.saleChnYnDdn === 'Y' ? true : false);
                 }
             });
 
@@ -1174,6 +1351,28 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             $scope.saveProdSave();
         }
     };
+    
+    // 단종여부 체크박스 클릭시
+    $scope.isChkDisconYn = function () {
+        if($scope.isCheckedDisconYn){
+            $("#divChkDiscon").css("display", "");
+        }else{
+            $("#divChkDiscon").css("display", "none");
+        }
+    };
 
-
+    // 상품옵션그룹코드 선택 팝업
+    $scope.popUpOptionGrp = function () {
+        $scope.wjSearchOtionGrpLayer.show(true);
+        $scope._broadcast('searchOptionGrpCtrl');
+    };
+    
+    // 상품옵션그룹코드 선택 취소 버튼
+    $scope.delOptionGrp = function () {
+        $("#_optionGrpNm").val("");
+        $("#_optionGrpCd").val("");
+        $scope.prodModifyInfo.optionGrpCd = "";
+        $scope.prodModifyInfo.optionGrpNm = "";
+    };
+    
 }]);

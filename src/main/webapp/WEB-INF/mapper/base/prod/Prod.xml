@@ -460,7 +460,25 @@
                 thpi.NU_SUGARS,
                 thpi.NU_SAT_FAT,
                 thpi.NU_CAFFEINE,
-                thpi.MOMS_KIOSK_EDGE
+                thpi.MOMS_KIOSK_EDGE,
+                (SELECT OPTION_GRP_NM FROM TB_HQ_PRODUCT_OPTION_GROUP WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND OPTION_GRP_CD = thp.OPTION_GRP_CD) AS OPTION_GRP_NM,
+                thp.OPTION_GRP_CD,
+                thp.RELEASE_DATE,
+                thp.DISCON_DATE,
+                thp.DISCON_YN,
+                thpi.SALE_TYPE_YN_SIN,
+                thpi.SALE_TYPE_YN_DLV,
+                thpi.SALE_TYPE_YN_PKG,
+                thpi.SALE_CHN_YN_POS,
+                thpi.SALE_CHN_YN_KSK,
+                thpi.SALE_CHN_YN_CMP,
+                thpi.SALE_CHN_YN_BAE,
+                thpi.SALE_CHN_YN_BAO,
+                thpi.SALE_CHN_YN_YGY,
+                thpi.SALE_CHN_YN_YGE,
+                thpi.SALE_CHN_YN_CPN,
+                thpi.SALE_CHN_YN_TNG,
+                thpi.SALE_CHN_YN_DDN
                 FROM
                 TB_HQ_PRODUCT thp
                 LEFT OUTER JOIN TB_HQ_BRAND thb ON
@@ -587,7 +605,25 @@
                 tmpi.NU_SUGARS,
                 tmpi.NU_SAT_FAT,
                 tmpi.NU_CAFFEINE,
-                tmpi.MOMS_KIOSK_EDGE
+                tmpi.MOMS_KIOSK_EDGE,
+                (SELECT OPTION_GRP_NM FROM TB_MS_PRODUCT_OPTION_GROUP WHERE STORE_CD = #{storeCd} AND OPTION_GRP_CD = tmp.OPTION_GRP_CD) AS OPTION_GRP_NM,
+                tmp.OPTION_GRP_CD,
+                tmp.RELEASE_DATE,
+                tmp.DISCON_DATE,
+                tmp.DISCON_YN,
+                tmpi.SALE_TYPE_YN_SIN,
+                tmpi.SALE_TYPE_YN_DLV,
+                tmpi.SALE_TYPE_YN_PKG,
+                tmpi.SALE_CHN_YN_POS,
+                tmpi.SALE_CHN_YN_KSK,
+                tmpi.SALE_CHN_YN_CMP,
+                tmpi.SALE_CHN_YN_BAE,
+                tmpi.SALE_CHN_YN_BAO,
+                tmpi.SALE_CHN_YN_YGY,
+                tmpi.SALE_CHN_YN_YGE,
+                tmpi.SALE_CHN_YN_CPN,
+                tmpi.SALE_CHN_YN_TNG,
+                tmpi.SALE_CHN_YN_DDN
                 FROM
                 TB_MS_PRODUCT tmp
                 LEFT OUTER JOIN TB_MS_BRAND tmb ON
@@ -803,7 +839,11 @@
                 DEPOSIT_CUP_FG = #{depositCupFg},
                 POINT_USE_YN = #{pointUseYn},
                 DC_YN = #{dcYn},
-                SALE_TIME_FG = #{saleTimeFg}
+                SALE_TIME_FG = #{saleTimeFg},
+                OPTION_GRP_CD = #{optionGrpCd},
+                RELEASE_DATE = #{releaseDate},
+                DISCON_DATE = #{disconDate},
+                DISCON_YN =  #{disconYn}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -849,7 +889,11 @@
                 DEPOSIT_CUP_FG,
                 POINT_USE_YN,
                 DC_YN,
-                SALE_TIME_FG
+                SALE_TIME_FG,
+                OPTION_GRP_CD,
+                RELEASE_DATE,
+                DISCON_DATE,
+                DISCON_YN
                 ) VALUES (
                 #{hqOfficeCd},
                 TRIM(REPLACE(REPLACE(REPLACE(#{prodCd}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL)),
@@ -893,7 +937,11 @@
                 #{depositCupFg},
                 #{pointUseYn},
                 #{dcYn},
-                #{saleTimeFg}
+                #{saleTimeFg},
+                #{optionGrpCd},
+                #{releaseDate},
+                #{disconDate},
+                #{disconYn}
                 )
             </when>
             <!-- 매장 -->
@@ -946,7 +994,11 @@
                 DEPOSIT_CUP_FG = #{depositCupFg},
                 POINT_USE_YN = #{pointUseYn},
                 DC_YN = #{dcYn},
-                SALE_TIME_FG = #{saleTimeFg}
+                SALE_TIME_FG = #{saleTimeFg},
+                OPTION_GRP_CD = #{optionGrpCd},
+                RELEASE_DATE = #{releaseDate},
+                DISCON_DATE = #{disconDate},
+                DISCON_YN =  #{disconYn}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -993,7 +1045,11 @@
                 DEPOSIT_CUP_FG,
                 POINT_USE_YN,
                 DC_YN,
-                SALE_TIME_FG
+                SALE_TIME_FG,
+                OPTION_GRP_CD,
+                RELEASE_DATE,
+                DISCON_DATE,
+                DISCON_YN
                 ) VALUES (
                 #{storeCd},
                 TRIM(REPLACE(REPLACE(REPLACE(#{prodCd}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL)),
@@ -1038,7 +1094,11 @@
                 #{depositCupFg},
                 #{pointUseYn},
                 #{dcYn},
-                #{saleTimeFg}
+                #{saleTimeFg},
+                #{optionGrpCd},
+                #{releaseDate},
+                #{disconDate},
+                #{disconYn}
                 )
             </when>
         </choose>
@@ -1075,7 +1135,20 @@
                     thpi.NU_SUGARS = #{nuSugars},
                     thpi.NU_SAT_FAT = #{nuSatFat},
                     thpi.NU_CAFFEINE = #{nuCaffeine},
-                    thpi.MOMS_KIOSK_EDGE = #{momsKioskEdge}
+                    thpi.MOMS_KIOSK_EDGE = #{momsKioskEdge},
+                    thpi.SALE_TYPE_YN_SIN = #{saleTypeYnSin},
+                    thpi.SALE_TYPE_YN_DLV = #{saleTypeYnDlv},
+                    thpi.SALE_TYPE_YN_PKG = #{saleTypeYnPkg},
+                    thpi.SALE_CHN_YN_POS = #{saleChnYnPos},
+                    thpi.SALE_CHN_YN_KSK = #{saleChnYnKsk},
+                    thpi.SALE_CHN_YN_CMP = #{saleChnYnCmp},
+                    thpi.SALE_CHN_YN_BAE = #{saleChnYnBae},
+                    thpi.SALE_CHN_YN_BAO = #{saleChnYnBao},
+                    thpi.SALE_CHN_YN_YGY = #{saleChnYnYgy},
+                    thpi.SALE_CHN_YN_YGE = #{saleChnYnYge},
+                    thpi.SALE_CHN_YN_CPN = #{saleChnYnCpn},
+                    thpi.SALE_CHN_YN_TNG = #{saleChnYnTng},
+                    thpi.SALE_CHN_YN_DDN = #{saleChnYnDdn}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -1093,7 +1166,20 @@
                     NU_SUGARS,
                     NU_SAT_FAT,
                     NU_CAFFEINE,
-                    MOMS_KIOSK_EDGE
+                    MOMS_KIOSK_EDGE,
+                    SALE_TYPE_YN_SIN,
+                    SALE_TYPE_YN_DLV,
+                    SALE_TYPE_YN_PKG,
+                    SALE_CHN_YN_POS,
+                    SALE_CHN_YN_KSK,
+                    SALE_CHN_YN_CMP,
+                    SALE_CHN_YN_BAE,
+                    SALE_CHN_YN_BAO,
+                    SALE_CHN_YN_YGY,
+                    SALE_CHN_YN_YGE,
+                    SALE_CHN_YN_CPN,
+                    SALE_CHN_YN_TNG,
+                    SALE_CHN_YN_DDN
                 ) VALUES (
                     #{hqOfficeCd},
                     #{prodCd},
@@ -1109,7 +1195,20 @@
                     #{nuSugars},
                     #{nuSatFat},
                     #{nuCaffeine},
-                    #{momsKioskEdge}
+                    #{momsKioskEdge},
+                    #{saleTypeYnSin},
+                    #{saleTypeYnDlv},
+                    #{saleTypeYnPkg},
+                    #{saleChnYnPos},
+                    #{saleChnYnKsk},
+                    #{saleChnYnCmp},
+                    #{saleChnYnBae},
+                    #{saleChnYnBao},
+                    #{saleChnYnYgy},
+                    #{saleChnYnYge},
+                    #{saleChnYnCpn},
+                    #{saleChnYnTng},
+                    #{saleChnYnDdn}
                 )
             </when>
             <!-- 매장 -->
@@ -1133,7 +1232,20 @@
                     tmpi.NU_SUGARS = #{nuSugars},
                     tmpi.NU_SAT_FAT = #{nuSatFat},
                     tmpi.NU_CAFFEINE = #{nuCaffeine},
-                    tmpi.MOMS_KIOSK_EDGE = #{momsKioskEdge}
+                    tmpi.MOMS_KIOSK_EDGE = #{momsKioskEdge},
+                    tmpi.SALE_TYPE_YN_SIN = #{saleTypeYnSin},
+                    tmpi.SALE_TYPE_YN_DLV = #{saleTypeYnDlv},
+                    tmpi.SALE_TYPE_YN_PKG = #{saleTypeYnPkg},
+                    tmpi.SALE_CHN_YN_POS = #{saleChnYnPos},
+                    tmpi.SALE_CHN_YN_KSK = #{saleChnYnKsk},
+                    tmpi.SALE_CHN_YN_CMP = #{saleChnYnCmp},
+                    tmpi.SALE_CHN_YN_BAE = #{saleChnYnBae},
+                    tmpi.SALE_CHN_YN_BAO = #{saleChnYnBao},
+                    tmpi.SALE_CHN_YN_YGY = #{saleChnYnYgy},
+                    tmpi.SALE_CHN_YN_YGE = #{saleChnYnYge},
+                    tmpi.SALE_CHN_YN_CPN = #{saleChnYnCpn},
+                    tmpi.SALE_CHN_YN_TNG = #{saleChnYnTng},
+                    tmpi.SALE_CHN_YN_DDN = #{saleChnYnDdn}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -1151,7 +1263,20 @@
                     NU_SUGARS,
                     NU_SAT_FAT,
                     NU_CAFFEINE,
-                    MOMS_KIOSK_EDGE
+                    MOMS_KIOSK_EDGE,
+                    SALE_TYPE_YN_SIN,
+                    SALE_TYPE_YN_DLV,
+                    SALE_TYPE_YN_PKG,
+                    SALE_CHN_YN_POS,
+                    SALE_CHN_YN_KSK,
+                    SALE_CHN_YN_CMP,
+                    SALE_CHN_YN_BAE,
+                    SALE_CHN_YN_BAO,
+                    SALE_CHN_YN_YGY,
+                    SALE_CHN_YN_YGE,
+                    SALE_CHN_YN_CPN,
+                    SALE_CHN_YN_TNG,
+                    SALE_CHN_YN_DDN
                 ) VALUES (
                     #{storeCd},
                     #{prodCd},
@@ -1167,7 +1292,20 @@
                     #{nuSugars},
                     #{nuSatFat},
                     #{nuCaffeine},
-                    #{momsKioskEdge}
+                    #{momsKioskEdge},
+                    #{saleTypeYnSin},
+                    #{saleTypeYnDlv},
+                    #{saleTypeYnPkg},
+                    #{saleChnYnPos},
+                    #{saleChnYnKsk},
+                    #{saleChnYnCmp},
+                    #{saleChnYnBae},
+                    #{saleChnYnBao},
+                    #{saleChnYnYgy},
+                    #{saleChnYnYge},
+                    #{saleChnYnCpn},
+                    #{saleChnYnTng},
+                    #{saleChnYnDdn}
                 )
             </when>
         </choose>
@@ -6616,6 +6754,41 @@
                 WHERE 1=1
                 AND STORE_CD = #{storeCd}
                 AND PROD_CD = #{prodCd}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 상품옵션그룹 조회 팝업 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_OPTION_GROUP, TB_MS_PRODUCT_OPTION_GROUP
+        PARAM    : prodVO
+        COMMENTS : 상품옵션그룹 리스트를 조회한다.
+    -->
+    <select id="getSearchOptionGrpList" parameterType="prodVO" resultType="DefaultMap">
+        /* ProdMapper.getSearchOptionGrpList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT OPTION_GRP_CD,
+                       OPTION_GRP_NM
+                  FROM TB_HQ_PRODUCT_OPTION_GROUP
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND USE_YN = 'Y'
+                <if test='optionGrpNm != null and optionGrpNm != ""'>
+                   AND OPTION_GRP_NM LIKE '%' || #{optionGrpNm} || '%'
+                </if>
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT OPTION_GRP_CD,
+                       OPTION_GRP_NM,
+                       REG_FG
+                  FROM TB_MS_PRODUCT_OPTION_GROUP
+                 WHERE STORE_CD = #{storeCd}
+                   AND USE_YN = 'Y'
+                <if test='optionGrpNm != null and optionGrpNm != ""'>
+                    AND OPTION_GRP_NM LIKE '%' || #{optionGrpNm} || '%'
+                </if>
             </when>
         </choose>
     </select>
