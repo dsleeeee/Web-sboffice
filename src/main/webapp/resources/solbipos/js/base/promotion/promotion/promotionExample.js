@@ -33,6 +33,7 @@ app.controller('promotionExampleCtrl', ['$scope', '$http', function ($scope, $ht
         divClose("ex12");
         divClose("ex13");
         divClose("ex14");
+        divClose("ex15");
     });
 
 }]);
