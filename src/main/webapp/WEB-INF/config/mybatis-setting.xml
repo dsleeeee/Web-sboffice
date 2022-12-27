@@ -314,6 +314,8 @@
     <typeAlias alias="soldOutVO" type="kr.co.solbipos.base.prod.soldOut.service.SoldOutVO"/>
     <!-- 기초관리 > 상품관리 > 옵션관리 -->
     <typeAlias alias="prodOptionVO" type="kr.co.solbipos.base.prod.prodOption.service.ProdOptionVO"/>
+    <!-- 기초관리 > 상품관리 > 상품정보조회 -->
+    <typeAlias alias="prodInfoSearchVO" type="kr.co.solbipos.base.prod.prodInfoSearch.service.ProdInfoSearchVO"/>
     <!--
     <typeAlias alias="prodBarcdVO" type="kr.co.solbipos.base.prod.prodbarcd.service.ProdBarcdVO"/>
     <typeAlias alias="supplyVO" type="kr.co.solbipos.base.prod.supply.service.SupplyVO"/>
