@@ -180,8 +180,9 @@ public class SaleRegistKwuServiceImpl implements SaleRegistKwuService {
                     saleRegistKwuMapper.getSalePayCard(saleRegistKwuVO);
                 }
 
+                // 2022.12.27 INSERT 막음
                 // TB_SL_SALE_PAY
-                if(saleRegistKwuVO.getCashAmt() > 0){
+                /*if(saleRegistKwuVO.getCashAmt() > 0){
                     saleRegistKwuVO.setPayCd("02");
                     saleRegistKwuVO.setPayAmt(saleRegistKwuVO.getCashAmt());
                     saleRegistKwuMapper.getSalePay(saleRegistKwuVO);
@@ -190,7 +191,7 @@ public class SaleRegistKwuServiceImpl implements SaleRegistKwuService {
                     saleRegistKwuVO.setPayCd("01");
                     saleRegistKwuVO.setPayAmt(saleRegistKwuVO.getCardAmt());
                     saleRegistKwuMapper.getSalePay(saleRegistKwuVO);
-                }
+                }*/
 
                 // TB_SL_SALE_PAY_SEQ
                 int iPaySeq = 0;

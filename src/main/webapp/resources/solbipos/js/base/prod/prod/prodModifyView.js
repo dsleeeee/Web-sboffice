@@ -465,50 +465,53 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             params.nuCaffeine = "";
         }
 
-        // 저장수행
-        $scope._postJSONSave.withPopUp("/base/prod/prod/prod/save.sb", params, function (response) {
-            var result = response.data.data;
+        // params에 있는 값으로 한번더 value check
+        if($scope.paramsValueCheck(params)) {
 
-            if(result < 1){
-                $scope._popMsg(messages["cmm.registFail"]);
+            // 저장수행
+            $scope._postJSONSave.withPopUp("/base/prod/prod/prod/save.sb", params, function (response) {
+                var result = response.data.data;
 
-            }else{
-                $scope._popMsg(messages["cmm.saveSucc"]);
+                if (result < 1) {
+                    $scope._popMsg(messages["cmm.registFail"]);
 
-                // 이미지파일 저장
-                $scope.prodImageFileSave(result);
+                } else {
+                    $scope._popMsg(messages["cmm.saveSucc"]);
 
-                    if($scope.getMode() == "I"){
+                    // 이미지파일 저장
+                    $scope.prodImageFileSave(result);
+
+                    if ($scope.getMode() == "I") {
 
                         /* 1. kitchenprintLink 값은 본사/매장 환경코드 [0043 본사신규상품 매장생성기준]이 '0 : 자동생성' 인 경우, 
                               본사/매장 환경코드 [1110 상품생성시주방프린터연결여부]의 값을 조회함('0 : 자동생성' 또는 '1 : 생성안함' 값이 들어오게 됨)
                            2. 본사/매장 환경코드 [0043 본사신규상품 매장생성기준]이 '1 : 생성안함' 인 경우 kitchenprintLink에 값이 없으므로,
                               상품등록팝업 닫힘으로 처리함.
                         */
-                        if(kitchenprintLink === null || kitchenprintLink === "" || kitchenprintLink === undefined){
+                        if (kitchenprintLink === null || kitchenprintLink === "" || kitchenprintLink === undefined) {
                             $scope.prodModifyLayer.hide();
 
-                        }else if(kitchenprintLink ==="0" && $scope.prodModifyInfo.setProdFg ==="1"){
+                        } else if (kitchenprintLink === "0" && $scope.prodModifyInfo.setProdFg === "1") {
                             $scope.prodModifyLayer.hide();
 
-                        }else{
+                        } else {
                             // 프린터연결팝업창 사용시, 팝업 오픈
-                            if(kitchenprintLink === "1"){
+                            if (kitchenprintLink === "1") {
                                 $scope.setKitchenprrint(result);
                                 $scope.kitchenprintLinkLayer.show(true);
                                 var scope = agrid.getScope('kitchenprintLinkCtrl');
                                 scope._broadcast('kitchenprintLinkCtrl');
-                            } else if (orgnFg === "HQ" && kitchenprintLink === "2"){   // 상품그룹프린터연결창 사용(본사만)
+                            } else if (orgnFg === "HQ" && kitchenprintLink === "2") {   // 상품그룹프린터연결창 사용(본사만)
                                 $scope.setKitchenprrint(result);
                                 $scope.printerGroupPopupLayer.show(true);
                                 var scope = agrid.getScope('printerGroupPopupCtrl');
                                 scope._broadcast('printerGroupPopupCtrl');
-                            } else if (orgnFg === "STORE" && kitchenprintLink === "2"){   // 상품그룹프린터연결창 사용(매장은 1110값 2면 그냥 닫기)
+                            } else if (orgnFg === "STORE" && kitchenprintLink === "2") {   // 상품그룹프린터연결창 사용(매장은 1110값 2면 그냥 닫기)
                                 $scope.prodModifyLayer.hide();
                             }
 
                             // 세트상품구분이 일반상품이 아니면, 세트구성상품 팝업오픈
-                            if($scope.prodModifyInfo.setProdFg !== "1"){
+                            if ($scope.prodModifyInfo.setProdFg !== "1") {
                                 var params = {};
                                 params.prodCd = result;
                                 params.setProdFg = $scope.prodModifyInfo.setProdFg;
@@ -522,10 +525,10 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                     } else {
 
                         // 기존 세트상품구분값과 변경된 세트상품구분값 비교하여 세트구성상품 팝업 띄우기
-                        if(vSetProdFg === "1"){
+                        if (vSetProdFg === "1") {
 
                             // 세트상품구분이 일반상품이 아니면, 세트구성상품 팝업오픈
-                            if($scope.prodModifyInfo.setProdFg !== "1"){
+                            if ($scope.prodModifyInfo.setProdFg !== "1") {
                                 var params = {};
                                 params.prodCd = result;
                                 params.setProdFg = $scope.prodModifyInfo.setProdFg;
@@ -534,20 +537,21 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                                 $scope.setConfigProdLayer.show(true);
                                 $scope._broadcast('setConfigProdCtrl', params);
 
-                            }else{
+                            } else {
                                 $scope.prodModifyLayer.hide();
                             }
 
-                        }else {
+                        } else {
                             $scope.prodModifyLayer.hide();
                         }
                     }
 
-                // 저장기능 수행후 재조회
-                $scope._broadcast('prodCtrl');
-            }
-        });
-    }
+                    // 저장기능 수행후 재조회
+                    $scope._broadcast('prodCtrl');
+                }
+            });
+        }
+    };
 
     // 사이드 체크
     $scope.sideCheck = function () {
@@ -903,6 +907,346 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                 // 숫자만 입력
                 var numChkexp = /[^0-9]/g;
                 if (numChkexp.test(nvl($scope.prodModifyInfo.nuCaffeine, 0))) {
+                    $scope._popMsg(messages["prod.nuCaffeineInChk"]); // 카페인은 숫자만 입력해주세요.
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    };
+
+    // parameter 값 체크(INSERT 전 한번 더 체크)
+    $scope.paramsValueCheck = function (vParams) {
+
+        // 상품코드 수동입력 시
+        if(vParams.saveMode === "REG") {
+            if ($("#prodCdInputType").val() === "1") { // 'MANUAL'
+                //  상품코드
+                if (isNull(vParams.prodCd)) {
+                    $scope._popMsg(messages["prod.prodCdChk.msg"]);
+                    return false;
+                }
+                // 상품코드 중복체크를 해주세요.
+                var msg = messages["prod.prodCdDuplicateChk.msg"];
+                if (isNull(vParams.prodCdChkFg)) {
+                    $scope._popMsg(msg);
+                    return false;
+                }
+                // 상품코드 중복체크를 다시 해주세요.
+                var msg = messages["prod.prodCdDuplicateChkAgain.msg"];
+                if (vParams.prodCd !== vParams.prodCdChkFg) {
+                    $scope._popMsg(msg);
+                    return false;
+                }
+            }
+        }
+        // 이미지파일이 있을 때
+        if($("#file").val() !== null && $("#file").val() !== undefined && $("#file").val() !== "") {
+
+            // 이미지명 형식 체크
+            var imgFullNm = $("#file").val().substring($("#file").val().lastIndexOf('\\') + 1);
+            if (1 > imgFullNm.lastIndexOf('.')) {
+                $scope._popMsg(messages["prod.fileNmChk.msg"]);
+                return false;
+            }
+
+            // 이미지(.png) 확장자 체크
+            var reg = /(.*?)\.(png|PNG|jpg|JPG)$/;
+
+            if(! $("#file").val().match(reg)) {
+                $scope._popMsg(messages["prod.fileExtensionChk.msg"]);
+                return;
+            }
+        }
+
+        // 상품유형
+        if (vParams.prodTypeFg === "4"){
+            /*// 보증금 상품은 강제로 면세 + 포인트사용여부 N + 할인여부 N
+            $scope.prodModifyInfo.vatFg = "2";
+            $scope.prodModifyInfo.pointUseYn = "N";
+            $scope.prodModifyInfo.dcYn = "N";*/
+            if(vParams.depositCupFg === "" || vParams.depositCupFg === null){
+                $scope._popMsg(messages["prod.depositCupFgChk.none"]);
+                return false;
+            }
+        } else if(vParams.prodTypeFg !== "4") {
+            if(vParams.depositCupFg !== "") {
+                $scope._popMsg(messages["prod.depositCupFgChk.msg"]);
+                return false;
+            }
+        }
+        // 분류조회
+        if (isNull(vParams.prodClassCd)) {
+            $scope._popMsg(messages["prod.prodClassCdNmChk.msg"]);
+            return false;
+        }
+        //  상품명
+        if (isNull(vParams.prodNm)) {
+            $scope._popMsg(messages["prod.prodNmChk.msg"]);
+            return false;
+        }
+        // 상품명 길이 체크
+        if(nvl(vParams.prodNm, '').getByteLengthForOracle() > 100){
+            $scope._popMsg(messages['prod.prodNm'] + "은 " + messages["cmm.max100Chk"]);
+            return; false;
+        }
+        // 상품명 큰따옴표(") 입력 불가
+        if(nvl(vParams.prodNm, '').indexOf("\"") >= 0){
+            $scope._popMsg(messages["prod.prodNmTextChk.msg"]); // 상품명에 큰따옴표(")를 입력할 수 없습니다.
+            return; false;
+        }
+        // 판매단가
+        if (isNull(vParams.saleUprc)) {
+            $scope._popMsg(messages["prod.saleUprcChk.msg"]);
+            $("#prodModifySaleUprc").focus();
+            return false;
+        }
+        // 판매단가 최대값/특수문자(-) 체크
+        if(vParams.saleUprc >= 1000000000 || /[^0-9]/.test(vParams.saleUprc.toString().substring(1))){
+            $scope._popMsg(messages["prod.saleUprcFilter.msg"]);
+            $("#prodModifySaleUprc").focus();
+            return false;
+        }
+
+        // 내점/배달/포장 판매가 사용 시
+        if(subPriceFg === "1") {
+            // 내점가를 입력한 경우, 최대값/특수문자(-) 체크
+            if (vParams.stinSaleUprc !== null && vParams.stinSaleUprc !== "") {
+                if (vParams.stinSaleUprc >= 1000000000 || /[^0-9]/.test(vParams.stinSaleUprc.toString().substring(1))) {
+                    $scope._popMsg(messages["prod.stinSaleUprc"] + messages["prod.uprcFilter.msg"]);
+                    $("#stinSaleUprc").focus();
+                    return false;
+                }
+            }
+            // 배달가를 입력한 경우, 최대값/특수문자(-) 체크
+            if (vParams.dlvrSaleUprc !== null && vParams.dlvrSaleUprc !== "") {
+                if (vParams.dlvrSaleUprc >= 1000000000 || /[^0-9]/.test(vParams.dlvrSaleUprc.toString().substring(1))) {
+                    $scope._popMsg(messages["prod.dlvrSaleUprc"] + messages["prod.uprcFilter.msg"]);
+                    $("#dlvrSaleUprc").focus();
+                    return false;
+                }
+            }
+            // 포장가를 입력한 경우, 최대값/특수문자(-) 체크
+            if (vParams.packSaleUprc !== null && vParams.packSaleUprc !== "") {
+                if (vParams.packSaleUprc >= 1000000000 || /[^0-9]/.test(vParams.packSaleUprc.toString().substring(1))) {
+                    $scope._popMsg(messages["prod.packSaleUprc"] + messages["prod.uprcFilter.msg"]);
+                    $("#packSaleUprc").focus();
+                    return false;
+                }
+            }
+        }else{
+            // 내점가를 입력한 경우, 최대값/특수문자(-) 체크
+            if (vParams.stinSaleUprc !== null && vParams.stinSaleUprc !== "") {
+                if (vParams.stinSaleUprc >= 1000000000 || /[^0-9]/.test(vParams.stinSaleUprc.toString().substring(1))) {
+                    $scope._popMsg(messages["prod.saleUprc"] + messages["prod.uprcFilter.msg"]);
+                    $("#prodModifySaleUprc").focus();
+                    return false;
+                }
+            }
+            // 배달가를 입력한 경우, 최대값/특수문자(-) 체크
+            if (vParams.dlvrSaleUprc !== null && vParams.dlvrSaleUprc !== "") {
+                if (vParams.dlvrSaleUprc >= 1000000000 || /[^0-9]/.test(vParams.dlvrSaleUprc.toString().substring(1))) {
+                    $scope._popMsg(messages["prod.saleUprc"] + messages["prod.uprcFilter.msg"]);
+                    $("#prodModifySaleUprc").focus();
+                    return false;
+                }
+            }
+            // 포장가를 입력한 경우, 최대값/특수문자(-) 체크
+            if (vParams.packSaleUprc !== null && vParams.packSaleUprc !== "") {
+                if (vParams.packSaleUprc >= 1000000000 || /[^0-9]/.test(vParams.packSaleUprc.toString().substring(1))) {
+                    $scope._popMsg(messages["prod.saleUprc"] + messages["prod.uprcFilter.msg"]);
+                    $("#prodModifySaleUprc").focus();
+                    return false;
+                }
+            }
+        }
+
+        // 공급단가
+        if (isNull(vParams.splyUprc)) {
+            $scope._popMsg(messages["prod.splyUprcChk.msg"]);
+            $("#prodModifySplyUprc").focus();
+            return false;
+        }
+        // 원가단가
+        if (isNull(vParams.costUprc)) {
+            $scope._popMsg(messages["prod.costUprcChk.msg"]);
+            $("#prodModifyCostUprc").focus();
+            return false;
+        }
+        // 최종원가단가
+        if (isNull(vParams.lastCostUprc)) {
+            $scope._popMsg(messages["prod.lastCostUprcChk.msg"]);
+            $("#prodModifyLastCostUprc").focus();
+            return false;
+        }
+        // 발주단위수량
+        if (isNull(vParams.poUnitQty)) {
+            $scope._popMsg(messages["prod.poUnitQtyChk.msg"]);
+            $("#prodModifyPoUnitQty").focus();
+            return false;
+        } else if (vParams.poUnitQty < 1) {
+            $scope._popMsg(messages["prod.poUnitQtySizeChk.msg"]);
+            $("#prodModifyPoUnitQty").focus();
+            return false;
+        }
+        // 발주단위
+        if(vParams.poUnitFg !== "" || vParams.poUnitFg !== null) {
+            if(vParams.poUnitFg === "1"){
+                // 발주단위수량
+                if ($("#prodModifyPoUnitQty").val() !== "1") {
+                    $scope._popMsg(messages["prod.poUnitFgeChk.msg"]);
+                    return false;
+                }
+            }
+        }
+        // 최소발주수량
+        if (isNull(vParams.poMinQty)) {
+            $scope._popMsg(messages["prod.poMinQtyChk.msg"]);
+            $("#prodModifyPoMinQty").focus();
+            return false;
+        } else if (vParams.poMinQty < 1) {
+            $scope._popMsg(messages["prod.poMinQtySizeChk.msg"]);
+            $("#prodModifyPoMinQty").focus();
+            return false;
+        }
+        // 초기재고
+        if(vParams.saveMode === "REG") { // 신규일때만
+            if (isNull(vParams.startStockQty)) {
+                $scope._popMsg(messages["prod.startStockQtyChk.msg"]);
+                $("#prodModifyStartStockQty").focus();
+                return false;
+            }
+        }
+        // 안전재고
+        if (isNull(vParams.safeStockQty)) {
+            $scope._popMsg(messages["prod.safeStockQtyChk.msg"]);
+            $("#prodModifySafeStockQty").focus();
+            return false;
+        }
+        // 상품 이미지
+        if (!isNull($("#file")[0].files[0])) {
+            var maxSize = 500 * 1024; // 500KB
+            var fileSize = $("#file")[0].files[0].size;
+            if (fileSize > maxSize) {
+                $scope._popMsg(messages["prod.fileSizeChk.msg"]);
+                return false;
+            }
+        }
+
+        // [1250 맘스터치]
+        if(momsEnvstVal === "1") {
+            // KIOSK 판매시간
+            if($scope.saleTimeFgCombo.selectedValue === "Y"){
+
+                var timeDivs = $("#dataKioskTime").children(".divDataKioskTime");
+
+                for (var i=0; i<timeDivs.length; i++) {
+                    var startTime = $($(timeDivs[i]).children(".inputKioskTimeStart")[0]).val();
+                    var endTime = $($(timeDivs[i]).children(".inputKioskTimeEnd")[0]).val();
+
+                    if(startTime === "" || endTime === ""){
+                        $scope._popMsg(messages["prod.kioskSaleTimeInput.msg"]); // KIOSK 시간설정을 입력하세요.
+                        return false;
+                    }
+
+                    if (startTime.length != 5 || endTime.length != 5) {
+                        $scope._popMsg(messages["prod.kioskSaleTime4Digit.msg"]); // KIOSK 판매시간은 4자리(시-2자리, 분-2자리)로 입력해주세요.
+                        return false;
+                    }
+
+                    if(startTime === endTime){
+                        $scope._popMsg(messages["prod.kioskSaleTimeDiff.msg"]); // KIOSK 판매시간은 시작시간과 종료시간이 같을 수 없습니다. 다시 입력하세요.
+                        return false;
+                    }
+
+                    var st = startTime.split(":");
+                    var et = endTime.split(":");
+
+                    if(Number(st[0]) > 23 || Number(et[0]) > 23){
+                        $scope._popMsg(messages["prod.kioskSaleTimeHh.msg"]); // KIOSK 판매시간 시는 00~23 사이로 입력해주세요.
+                        return false;
+                    }
+
+                    if(Number(st[1]) > 59 || Number(et[1]) > 59){
+                        $scope._popMsg(messages["prod.kioskSaleTimeMm.msg"]); // KIOSK 판매시간 분은 00~59 사이로 입력해주세요.
+                        return false;
+                    }
+                }
+            }
+
+            // 총중량
+            if (vParams.nuTotWt === null || vParams.nuTotWt === undefined || vParams.nuTotWt === "") {
+            } else {
+                // 숫자만 입력
+                var numChkexp = /[^0-9]/g;
+                if (numChkexp.test(nvl(vParams.nuTotWt, 0))) {
+                    $scope._popMsg(messages["prod.nuTotWtInChk"]); // 총중량은 숫자만 입력해주세요.
+                    return false;
+                }
+            }
+
+            // 총열량
+            if (vParams.nuKcal === null || vParams.nuKcal === undefined || vParams.nuKcal === "") {
+            } else {
+                // 숫자만 입력
+                var numChkexp = /[^0-9]/g;
+                if (numChkexp.test(nvl(vParams.nuKcal, 0))) {
+                    $scope._popMsg(messages["prod.nuKcalInChk"]); // 총열량은 숫자만 입력해주세요.
+                    return false;
+                }
+            }
+
+            // 단백질
+            if (vParams.nuProtein === null || vParams.nuProtein === undefined || vParams.nuProtein === "") {
+            } else {
+                // 숫자만 입력
+                var numChkexp = /[^0-9]/g;
+                if (numChkexp.test(nvl(vParams.nuProtein, 0))) {
+                    $scope._popMsg(messages["prod.nuProteinInChk"]); // 단백질은 숫자만 입력해주세요.
+                    return false;
+                }
+            }
+
+            // 나트륨
+            if (vParams.nuSodium === null || vParams.nuSodium === undefined || vParams.nuSodium === "") {
+            } else {
+                // 숫자만 입력
+                var numChkexp = /[^0-9]/g;
+                if (numChkexp.test(nvl(vParams.nuSodium, 0))) {
+                    $scope._popMsg(messages["prod.nuSodiumInChk"]); // 나트륨은 숫자만 입력해주세요.
+                    return false;
+                }
+            }
+
+            // 당류
+            if (vParams.nuSugars === null || vParams.nuSugars === undefined || vParams.nuSugars === "") {
+            } else {
+                // 숫자만 입력
+                var numChkexp = /[^0-9]/g;
+                if (numChkexp.test(nvl(vParams.nuSugars, 0))) {
+                    $scope._popMsg(messages["prod.nuSugarsInChk"]); // 당류는 숫자만 입력해주세요.
+                    return false;
+                }
+            }
+
+            // 포화지방
+            if (vParams.nuSatFat === null || vParams.nuSatFat === undefined || vParams.nuSatFat === "") {
+            } else {
+                // 숫자만 입력
+                var numChkexp = /[^0-9]/g;
+                if (numChkexp.test(nvl(vParams.nuSatFat, 0))) {
+                    $scope._popMsg(messages["prod.nuSatFatInChk"]); // 포화지방은 숫자만 입력해주세요.
+                    return false;
+                }
+            }
+
+            // 카페인
+            if (vParams.nuCaffeine === null || vParams.nuCaffeine === undefined || vParams.nuCaffeine === "") {
+            } else {
+                // 숫자만 입력
+                var numChkexp = /[^0-9]/g;
+                if (numChkexp.test(nvl(vParams.nuCaffeine, 0))) {
                     $scope._popMsg(messages["prod.nuCaffeineInChk"]); // 카페인은 숫자만 입력해주세요.
                     return false;
                 }
