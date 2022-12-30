@@ -163,8 +163,9 @@ public class SaleRegistServiceImpl implements SaleRegistService {
                     saleRegistMapper.getSalePayCard(saleRegistVO);
                 }
 
+                // 2022.12.27 INSERT 막음
                 // TB_SL_SALE_PAY
-                if(saleRegistVO.getCashAmt() > 0){
+                /*if(saleRegistVO.getCashAmt() > 0){
                     saleRegistVO.setPayCd("02");
                     saleRegistVO.setPayAmt(saleRegistVO.getCashAmt());
                     saleRegistMapper.getSalePay(saleRegistVO);
@@ -173,7 +174,7 @@ public class SaleRegistServiceImpl implements SaleRegistService {
                     saleRegistVO.setPayCd("01");
                     saleRegistVO.setPayAmt(saleRegistVO.getCardAmt());
                     saleRegistMapper.getSalePay(saleRegistVO);
-                }
+                }*/
 
                 // TB_SL_SALE_PAY_SEQ
                 int iPaySeq = 0;
