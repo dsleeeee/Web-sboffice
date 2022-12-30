@@ -219,8 +219,8 @@
                 </div>
               </td>
                 <%--사용여부--%>
-                <th><s:message code="cmm.useYn"/></th>
-                <td>
+                <th <c:if test="${momsEnvstVal == '1'}">style="display: none"</c:if>><s:message code="cmm.useYn"/></th>
+                <td <c:if test="${momsEnvstVal == '1'}">style="display: none"</c:if>>
                   <div class="sb-select">
                     <wj-combo-box id="_useYn" name="useYn"
                                   ng-model="prodModifyInfo.useYn"
@@ -1126,7 +1126,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20221231.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20221231.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

@@ -156,10 +156,10 @@
                             {{_vatFg}}
                         </td>
                         <%--사용여부--%>
-                        <th>
+                        <th <c:if test="${momsEnvstVal == '1'}">style="display: none"</c:if>>
                             <s:message code="useYn"/>
                         </th>
-                        <td>
+                        <td <c:if test="${momsEnvstVal == '1'}">style="display: none"</c:if>>
                             <wj-combo-box
                                     ng-model="prodDetail.useYn"
                                     ng-hide="true"
