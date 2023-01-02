@@ -279,8 +279,12 @@
                 ,		thpsg.SDSEL_GRP_NM
                 ,		thpsc.SDSEL_CLASS_CD
                 ,		thpsc.SDSEL_CLASS_NM
+                ,		thpsc.SDSEL_QTY
                 ,		thpsp.PROD_CD
                 ,		thp.PROD_NM
+                ,       thpsp.ADD_PROD_UPRC
+                ,       thpsp.ADD_PROD_QTY
+                ,       DECODE(thpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM 	TB_HQ_PRODUCT_SDSEL_GROUP thpsg
                 ,		TB_HQ_PRODUCT_SDSEL_CLASS thpsc
@@ -293,6 +297,7 @@
                 AND 	thpsc.SDSEL_CLASS_CD = thpsp.SDSEL_CLASS_CD (+)
                 AND 	thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD (+)
                 AND 	thpsp.PROD_CD = thp.PROD_CD (+)
+                AND     thpsp.USE_YN = 'Y'
                 ORDER BY thpsg.SDSEL_GRP_CD, thpsc.SDSEL_CLASS_CD, thpsp.PROD_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -303,8 +308,12 @@
                 ,		tmpsg.SDSEL_GRP_NM
                 ,		tmpsc.SDSEL_CLASS_CD
                 ,		tmpsc.SDSEL_CLASS_NM
+                ,		tmpsc.SDSEL_QTY
                 ,		tmpsp.PROD_CD
                 ,		tmp.PROD_NM
+                ,       tmpsp.ADD_PROD_UPRC
+                ,       tmpsp.ADD_PROD_QTY
+                ,       DECODE(tmpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM 	TB_MS_PRODUCT_SDSEL_GROUP tmpsg
                 ,		TB_MS_PRODUCT_SDSEL_CLASS tmpsc
@@ -317,6 +326,7 @@
                 AND 	tmpsc.SDSEL_CLASS_CD = tmpsp.SDSEL_CLASS_CD (+)
                 AND 	tmpsp.STORE_CD = tmp.STORE_CD (+)
                 AND 	tmpsp.PROD_CD = tmp.PROD_CD (+)
+                AND     tmpsp.USE_YN = 'Y'
                 ORDER BY tmpsg.SDSEL_GRP_CD, tmpsc.SDSEL_CLASS_CD, tmpsp.PROD_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -338,8 +348,12 @@
                 ,		thpsg.SDSEL_GRP_NM
                 ,		thpsc.SDSEL_CLASS_CD
                 ,		thpsc.SDSEL_CLASS_NM
+                ,		thpsc.SDSEL_QTY
                 ,		thpsp.PROD_CD
                 ,		thp.PROD_NM
+                ,       thpsp.ADD_PROD_UPRC
+                ,       thpsp.ADD_PROD_QTY
+                ,       DECODE(thpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
                 FROM 	TB_HQ_PRODUCT_SDSEL_GROUP thpsg
                 ,		TB_HQ_PRODUCT_SDSEL_CLASS thpsc
                 ,		TB_HQ_PRODUCT_SDSEL_PROD thpsp
@@ -351,6 +365,7 @@
                 AND 	thpsc.SDSEL_CLASS_CD = thpsp.SDSEL_CLASS_CD (+)
                 AND 	thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD (+)
                 AND 	thpsp.PROD_CD = thp.PROD_CD (+)
+                AND     thpsp.USE_YN = 'Y'
                 ORDER BY thpsg.SDSEL_GRP_CD, thpsc.SDSEL_CLASS_CD, thpsp.PROD_CD
             </when>
             <!-- 매장 -->
@@ -359,8 +374,12 @@
                 ,		tmpsg.SDSEL_GRP_NM
                 ,		tmpsc.SDSEL_CLASS_CD
                 ,		tmpsc.SDSEL_CLASS_NM
+                ,		tmpsc.SDSEL_QTY
                 ,		tmpsp.PROD_CD
                 ,		tmp.PROD_NM
+                ,       tmpsp.ADD_PROD_UPRC
+                ,       tmpsp.ADD_PROD_QTY
+                ,       DECODE(tmpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
                 FROM 	TB_MS_PRODUCT_SDSEL_GROUP tmpsg
                 ,		TB_MS_PRODUCT_SDSEL_CLASS tmpsc
                 ,		TB_MS_PRODUCT_SDSEL_PROD tmpsp
@@ -372,6 +391,7 @@
                 AND 	tmpsc.SDSEL_CLASS_CD = tmpsp.SDSEL_CLASS_CD (+)
                 AND 	tmpsp.STORE_CD = tmp.STORE_CD (+)
                 AND 	tmpsp.PROD_CD = tmp.PROD_CD (+)
+                AND     tmpsp.USE_YN = 'Y'
                 ORDER BY tmpsg.SDSEL_GRP_CD, tmpsc.SDSEL_CLASS_CD, tmpsp.PROD_CD
             </when>
         </choose>
@@ -474,7 +494,11 @@
                 SELECT 	A.*
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM 	(
-                        SELECT 	thp.PROD_CD
+                        SELECT  thp.HQ_BRAND_CD
+                        ,	    (SELECT HQ_BRAND_NM FROM TB_HQ_BRAND thb WHERE thb.HQ_OFFICE_CD = #{hqOfficeCd} AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD) AS HQ_BRAND_NM
+                        ,       FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'CD_STR') AS PROD_CLASS_CD
+                        ,       FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+                        ,       thp.PROD_CD
                         ,		thp.PROD_NM
                         ,       '속성' AS GUBUN
                         ,		thp.SDATTR_CLASS_CD
@@ -485,8 +509,12 @@
                         ,		'' AS SDSEL_GRP_NM
                         ,		'' AS SDSEL_CLASS_CD
                         ,		'' AS SDSEL_CLASS_NM
+                        ,		0 AS SDSEL_QTY
                         ,		'' AS SDSEL_PROD_CD
                         ,		'' AS SDSEL_PROD_NM
+                        ,		0 AS ADD_PROD_UPRC
+                        ,		0 AS ADD_PROD_QTY
+                        ,		'' AS FIX_PROD_FG
                         ,		'' AS OPTION_GRP_CD
                         ,		'' AS OPTION_GRP_NM
                         ,		'' AS OPTION_VAL_CD
@@ -500,7 +528,11 @@
                         AND 	thpsc.HQ_OFFICE_CD = thps.HQ_OFFICE_CD (+)
                         AND 	thpsc.SDATTR_CLASS_CD = thps.SDATTR_CLASS_CD (+)
                         UNION ALL
-                        SELECT 	thp.PROD_CD
+                        SELECT  thp.HQ_BRAND_CD
+                        ,		(SELECT HQ_BRAND_NM FROM TB_HQ_BRAND thb WHERE thb.HQ_OFFICE_CD = #{hqOfficeCd} AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD) AS HQ_BRAND_NM
+                        ,       FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'CD_STR') AS PROD_CLASS_CD
+                        ,       FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+                        ,       thp.PROD_CD
                         ,		thp.PROD_NM
                         ,       '선택메뉴' AS GUBUN
                         ,		'' AS SDATTR_CLASS_CD
@@ -511,8 +543,12 @@
                         ,		thpsg.SDSEL_GRP_NM
                         ,		thpsc.SDSEL_CLASS_CD
                         ,		thpsc.SDSEL_CLASS_NM
+                        ,		thpsc.SDSEL_QTY
                         ,		thpsp.PROD_CD AS SDSEL_PROD_CD
                         ,		thp2.PROD_NM AS SDSEL_PROD_NM
+                        ,       thpsp.ADD_PROD_UPRC
+                        ,       thpsp.ADD_PROD_QTY
+                        ,       DECODE(thpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
                         ,		'' AS OPTION_GRP_CD
                         ,		'' AS OPTION_GRP_NM
                         ,		'' AS OPTION_VAL_CD
@@ -531,8 +567,13 @@
                         AND 	thpsc.SDSEL_CLASS_CD = thpsp.SDSEL_CLASS_CD (+)
                         AND 	thpsp.HQ_OFFICE_CD = thp2.HQ_OFFICE_CD (+)
                         AND 	thpsp.PROD_CD = thp2.PROD_CD (+)
+                        AND 	thpsp.USE_YN = 'Y'
                         UNION ALL
-                        SELECT 	thp.PROD_CD
+                        SELECT 	thp.HQ_BRAND_CD
+                        ,		(SELECT HQ_BRAND_NM FROM TB_HQ_BRAND thb WHERE thb.HQ_OFFICE_CD = #{hqOfficeCd} AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD) AS HQ_BRAND_NM
+                        ,       FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'CD_STR') AS PROD_CLASS_CD
+                        ,       FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+                        ,       thp.PROD_CD
                         ,		thp.PROD_NM
                         ,       '옵션' AS GUBUN
                         ,		'' AS SDATTR_CLASS_CD
@@ -543,8 +584,12 @@
                         ,		'' AS SDSEL_GRP_NM
                         ,		'' AS SDSEL_CLASS_CD
                         ,		'' AS SDSEL_CLASS_NM
+                        ,		0 AS SDSEL_QTY
                         ,		'' AS SDSEL_PROD_CD
                         ,		'' AS SDSEL_PROD_NM
+                        ,		0 AS ADD_PROD_UPRC
+                        ,		0 AS ADD_PROD_QTY
+                        ,		'' AS FIX_PROD_FG
                         ,		thpog.OPTION_GRP_CD
                         ,		thpog.OPTION_GRP_NM
                         ,		thpov.OPTION_VAL_CD
@@ -604,7 +649,11 @@
                 SELECT 	A.*
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM 	(
-                        SELECT 	tmp.PROD_CD
+                        SELECT 	tmp.HQ_BRAND_CD
+                        ,		(SELECT HQ_BRAND_NM FROM TB_HQ_BRAND thb WHERE thb.HQ_OFFICE_CD = #{hqOfficeCd} AND thb.HQ_BRAND_CD = tmp.HQ_BRAND_CD) AS HQ_BRAND_NM
+                        ,       FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'CD_STR') AS PROD_CLASS_CD
+                        ,       FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+                        ,       tmp.PROD_CD
                         ,		tmp.PROD_NM
                         ,       '속성' AS GUBUN
                         ,		tmp.SDATTR_CLASS_CD
@@ -615,8 +664,12 @@
                         ,		'' AS SDSEL_GRP_NM
                         ,		'' AS SDSEL_CLASS_CD
                         ,		'' AS SDSEL_CLASS_NM
+                        ,		0 AS SDSEL_QTY
                         ,		'' AS SDSEL_PROD_CD
                         ,		'' AS SDSEL_PROD_NM
+                        ,		0 AS ADD_PROD_UPRC
+                        ,		0 AS ADD_PROD_QTY
+                        ,		'' AS FIX_PROD_FG
                         ,		'' AS OPTION_GRP_CD
                         ,		'' AS OPTION_GRP_NM
                         ,		'' AS OPTION_VAL_CD
@@ -630,7 +683,11 @@
                         AND 	tmpsc.STORE_CD = tmps.STORE_CD (+)
                         AND 	tmpsc.SDATTR_CLASS_CD = tmps.SDATTR_CLASS_CD (+)
                         UNION ALL
-                        SELECT 	tmp.PROD_CD
+                        SELECT 	tmp.HQ_BRAND_CD
+                        ,		(SELECT HQ_BRAND_NM FROM TB_HQ_BRAND thb WHERE thb.HQ_OFFICE_CD = #{hqOfficeCd} AND thb.HQ_BRAND_CD = tmp.HQ_BRAND_CD) AS HQ_BRAND_NM
+                        ,       FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'CD_STR') AS PROD_CLASS_CD
+                        ,       FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+                        ,       tmp.PROD_CD
                         ,		tmp.PROD_NM
                         ,       '선택메뉴' AS GUBUN
                         ,		'' AS SDATTR_CLASS_CD
@@ -641,8 +698,12 @@
                         ,		tmpsg.SDSEL_GRP_NM
                         ,		tmpsc.SDSEL_CLASS_CD
                         ,		tmpsc.SDSEL_CLASS_NM
+                        ,		tmpsc.SDSEL_QTY
                         ,		tmpsp.PROD_CD AS SDSEL_PROD_CD
                         ,		tmp2.PROD_NM AS SDSEL_PROD_NM
+                        ,       tmpsp.ADD_PROD_UPRC
+                        ,       tmpsp.ADD_PROD_QTY
+                        ,       DECODE(tmpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
                         ,		'' AS OPTION_GRP_CD
                         ,		'' AS OPTION_GRP_NM
                         ,		'' AS OPTION_VAL_CD
@@ -661,8 +722,13 @@
                         AND 	tmpsc.SDSEL_CLASS_CD = tmpsp.SDSEL_CLASS_CD (+)
                         AND 	tmpsp.STORE_CD = tmp2.STORE_CD (+)
                         AND 	tmpsp.PROD_CD = tmp2.PROD_CD (+)
+                        AND 	tmpsp.USE_YN = 'Y'
                         UNION ALL
-                        SELECT 	tmp.PROD_CD
+                        SELECT 	tmp.HQ_BRAND_CD
+                        ,		(SELECT HQ_BRAND_NM FROM TB_HQ_BRAND thb WHERE thb.HQ_OFFICE_CD = #{hqOfficeCd} AND thb.HQ_BRAND_CD = tmp.HQ_BRAND_CD) AS HQ_BRAND_NM
+                        ,       FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'CD_STR') AS PROD_CLASS_CD
+                        ,       FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+                        ,       tmp.PROD_CD
                         ,		tmp.PROD_NM
                         ,       '옵션' AS GUBUN
                         ,		'' AS SDATTR_CLASS_CD
@@ -673,8 +739,12 @@
                         ,		'' AS SDSEL_GRP_NM
                         ,		'' AS SDSEL_CLASS_CD
                         ,		'' AS SDSEL_CLASS_NM
+                        ,		0 AS SDSEL_QTY
                         ,		'' AS SDSEL_PROD_CD
                         ,		'' AS SDSEL_PROD_NM
+                        ,		0 AS ADD_PROD_UPRC
+                        ,		0 AS ADD_PROD_QTY
+                        ,		'' AS FIX_PROD_FG
                         ,		tmpog.OPTION_GRP_CD
                         ,		tmpog.OPTION_GRP_NM
                         ,		tmpov.OPTION_VAL_CD
@@ -732,7 +802,11 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT 	A.*
                 FROM 	(
-                SELECT 	thp.PROD_CD
+                SELECT 	thp.HQ_BRAND_CD
+                ,		(SELECT HQ_BRAND_NM FROM TB_HQ_BRAND thb WHERE thb.HQ_OFFICE_CD = #{hqOfficeCd} AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD) AS HQ_BRAND_NM
+                ,       FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'CD_STR') AS PROD_CLASS_CD
+                ,       FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+                ,       thp.PROD_CD
                 ,		thp.PROD_NM
                 ,       '속성' AS GUBUN
                 ,		thp.SDATTR_CLASS_CD
@@ -743,8 +817,12 @@
                 ,		'' AS SDSEL_GRP_NM
                 ,		'' AS SDSEL_CLASS_CD
                 ,		'' AS SDSEL_CLASS_NM
+                ,		0 AS SDSEL_QTY
                 ,		'' AS SDSEL_PROD_CD
                 ,		'' AS SDSEL_PROD_NM
+                ,		0 AS ADD_PROD_UPRC
+                ,		0 AS ADD_PROD_QTY
+                ,		'' AS FIX_PROD_FG
                 ,		'' AS OPTION_GRP_CD
                 ,		'' AS OPTION_GRP_NM
                 ,		'' AS OPTION_VAL_CD
@@ -758,7 +836,11 @@
                 AND 	thpsc.HQ_OFFICE_CD = thps.HQ_OFFICE_CD (+)
                 AND 	thpsc.SDATTR_CLASS_CD = thps.SDATTR_CLASS_CD (+)
                 UNION ALL
-                SELECT 	thp.PROD_CD
+                SELECT 	thp.HQ_BRAND_CD
+                ,		(SELECT HQ_BRAND_NM FROM TB_HQ_BRAND thb WHERE thb.HQ_OFFICE_CD = #{hqOfficeCd} AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD) AS HQ_BRAND_NM
+                ,       FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'CD_STR') AS PROD_CLASS_CD
+                ,       FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+                ,       thp.PROD_CD
                 ,		thp.PROD_NM
                 ,       '선택메뉴' AS GUBUN
                 ,		'' AS SDATTR_CLASS_CD
@@ -769,8 +851,12 @@
                 ,		thpsg.SDSEL_GRP_NM
                 ,		thpsc.SDSEL_CLASS_CD
                 ,		thpsc.SDSEL_CLASS_NM
+                ,		thpsc.SDSEL_QTY
                 ,		thpsp.PROD_CD AS SDSEL_PROD_CD
                 ,		thp2.PROD_NM AS SDSEL_PROD_NM
+                ,       thpsp.ADD_PROD_UPRC
+                ,       thpsp.ADD_PROD_QTY
+                ,       DECODE(thpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
                 ,		'' AS OPTION_GRP_CD
                 ,		'' AS OPTION_GRP_NM
                 ,		'' AS OPTION_VAL_CD
@@ -789,8 +875,13 @@
                 AND 	thpsc.SDSEL_CLASS_CD = thpsp.SDSEL_CLASS_CD (+)
                 AND 	thpsp.HQ_OFFICE_CD = thp2.HQ_OFFICE_CD (+)
                 AND 	thpsp.PROD_CD = thp2.PROD_CD (+)
+                AND     thpsp.USE_YN = 'Y'
                 UNION ALL
-                SELECT 	thp.PROD_CD
+                SELECT 	thp.HQ_BRAND_CD
+                ,		(SELECT HQ_BRAND_NM FROM TB_HQ_BRAND thb WHERE thb.HQ_OFFICE_CD = #{hqOfficeCd} AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD) AS HQ_BRAND_NM
+                ,       FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'CD_STR') AS PROD_CLASS_CD
+                ,       FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+                ,       thp.PROD_CD
                 ,		thp.PROD_NM
                 ,       '옵션' AS GUBUN
                 ,		'' AS SDATTR_CLASS_CD
@@ -801,8 +892,12 @@
                 ,		'' AS SDSEL_GRP_NM
                 ,		'' AS SDSEL_CLASS_CD
                 ,		'' AS SDSEL_CLASS_NM
+                ,		0 AS SDSEL_QTY
                 ,		'' AS SDSEL_PROD_CD
                 ,		'' AS SDSEL_PROD_NM
+                ,		0 AS ADD_PROD_UPRC
+                ,		0 AS ADD_PROD_QTY
+                ,		'' AS FIX_PROD_FG
                 ,		thpog.OPTION_GRP_CD
                 ,		thpog.OPTION_GRP_NM
                 ,		thpov.OPTION_VAL_CD
@@ -859,7 +954,11 @@
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT 	A.*
                 FROM 	(
-                SELECT 	tmp.PROD_CD
+                SELECT 	tmp.HQ_BRAND_CD
+                ,		(SELECT HQ_BRAND_NM FROM TB_HQ_BRAND thb WHERE thb.HQ_OFFICE_CD = #{hqOfficeCd} AND thb.HQ_BRAND_CD = tmp.HQ_BRAND_CD) AS HQ_BRAND_NM
+                ,       FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'CD_STR') AS PROD_CLASS_CD
+                ,       FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+                ,       tmp.PROD_CD
                 ,		tmp.PROD_NM
                 ,       '속성' AS GUBUN
                 ,		tmp.SDATTR_CLASS_CD
@@ -870,8 +969,12 @@
                 ,		'' AS SDSEL_GRP_NM
                 ,		'' AS SDSEL_CLASS_CD
                 ,		'' AS SDSEL_CLASS_NM
+                ,		0 AS SDSEL_QTY
                 ,		'' AS SDSEL_PROD_CD
                 ,		'' AS SDSEL_PROD_NM
+                ,		0 AS ADD_PROD_UPRC
+                ,		0 AS ADD_PROD_QTY
+                ,		'' AS FIX_PROD_FG
                 ,		'' AS OPTION_GRP_CD
                 ,		'' AS OPTION_GRP_NM
                 ,		'' AS OPTION_VAL_CD
@@ -879,13 +982,20 @@
                 FROM 	TB_MS_PRODUCT tmp
                 ,		TB_MS_PRODUCT_SDATTR_CLASS tmpsc
                 ,		TB_MS_PRODUCT_SDATTR tmps
+                ,		TB_HQ_BRAND thb
                 WHERE 	tmp.STORE_CD = #{storeCd}
                 AND 	tmp.STORE_CD = tmpsc.STORE_CD
                 AND 	tmp.SDATTR_CLASS_CD = tmpsc.SDATTR_CLASS_CD
                 AND 	tmpsc.STORE_CD = tmps.STORE_CD (+)
                 AND 	tmpsc.SDATTR_CLASS_CD = tmps.SDATTR_CLASS_CD (+)
+                AND 	thb.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND 	tmp.HQ_BRAND_CD = thb.HQ_BRAND_CD
                 UNION ALL
-                SELECT 	tmp.PROD_CD
+                SELECT 	tmp.HQ_BRAND_CD
+                ,		(SELECT HQ_BRAND_NM FROM TB_HQ_BRAND thb WHERE thb.HQ_OFFICE_CD = #{hqOfficeCd} AND thb.HQ_BRAND_CD = tmp.HQ_BRAND_CD) AS HQ_BRAND_NM
+                ,       FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'CD_STR') AS PROD_CLASS_CD
+                ,       FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+                ,       tmp.PROD_CD
                 ,		tmp.PROD_NM
                 ,       '선택메뉴' AS GUBUN
                 ,		'' AS SDATTR_CLASS_CD
@@ -896,8 +1006,12 @@
                 ,		tmpsg.SDSEL_GRP_NM
                 ,		tmpsc.SDSEL_CLASS_CD
                 ,		tmpsc.SDSEL_CLASS_NM
+                ,		tmpsc.SDSEL_QTY
                 ,		tmpsp.PROD_CD AS SDSEL_PROD_CD
                 ,		tmp2.PROD_NM AS SDSEL_PROD_NM
+                ,       tmpsp.ADD_PROD_UPRC
+                ,       tmpsp.ADD_PROD_QTY
+                ,       DECODE(tmpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
                 ,		'' AS OPTION_GRP_CD
                 ,		'' AS OPTION_GRP_NM
                 ,		'' AS OPTION_VAL_CD
@@ -916,8 +1030,13 @@
                 AND 	tmpsc.SDSEL_CLASS_CD = tmpsp.SDSEL_CLASS_CD (+)
                 AND 	tmpsp.STORE_CD = tmp2.STORE_CD (+)
                 AND 	tmpsp.PROD_CD = tmp2.PROD_CD (+)
+                AND     tmpsp.USE_YN = 'Y'
                 UNION ALL
-                SELECT 	tmp.PROD_CD
+                SELECT 	tmp.HQ_BRAND_CD
+                ,		(SELECT HQ_BRAND_NM FROM TB_HQ_BRAND thb WHERE thb.HQ_OFFICE_CD = #{hqOfficeCd} AND thb.HQ_BRAND_CD = tmp.HQ_BRAND_CD) AS HQ_BRAND_NM
+                ,       FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'CD_STR') AS PROD_CLASS_CD
+                ,       FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+                ,       tmp.PROD_CD
                 ,		tmp.PROD_NM
                 ,       '옵션' AS GUBUN
                 ,		'' AS SDATTR_CLASS_CD
@@ -928,8 +1047,12 @@
                 ,		'' AS SDSEL_GRP_NM
                 ,		'' AS SDSEL_CLASS_CD
                 ,		'' AS SDSEL_CLASS_NM
+                ,		0 AS SDSEL_QTY
                 ,		'' AS SDSEL_PROD_CD
                 ,		'' AS SDSEL_PROD_NM
+                ,		0 AS ADD_PROD_UPRC
+                ,		0 AS ADD_PROD_QTY
+                ,		'' AS FIX_PROD_FG
                 ,		tmpog.OPTION_GRP_CD
                 ,		tmpog.OPTION_GRP_NM
                 ,		tmpov.OPTION_VAL_CD

@@ -24,12 +24,30 @@ app.controller('prodInfoCtrl', ['$scope', '$http', function ($scope, $http) {
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
+    s.formatItem.addHandler(function (s, e) {
+      if (e.panel === s.cells) {
+        var col = s.columns[e.col];
+        if (col.binding === "gubun") {
+          var item = s.rows[e.row].dataItem;
+          if (item.gubun != "선택메뉴") {
+            item.sdselQty = '';
+            item.addProdUprc = '';
+            item.addProdQty = '';
+          }
+        }
+      }
+    });
+
     //Grid Header 2줄 - START	----------------------------------------------------------------
     s.allowMerging = 2;
     s.columnHeaders.rows.push(new wijmo.grid.Row());
 
     //첫째줄 Header 생성
     var dataItem = {};
+    dataItem.hqBrandCd      = messages["prodInfoSearch.prodInfo.hqBrandCd"];
+    dataItem.hqBrandNm      = messages["prodInfoSearch.prodInfo.hqBrandNm"];
+    dataItem.prodClassCd    = messages["prodInfoSearch.prodInfo.prodClassCd"];
+    dataItem.prodClassNm    = messages["prodInfoSearch.prodInfo.prodClassNm"];
     dataItem.prodCd         = messages["prodInfoSearch.prodInfo.prodCd"];
     dataItem.prodNm         = messages["prodInfoSearch.prodInfo.prodNm"];
     dataItem.gubun 	        = messages["prodInfoSearch.prodInfo.gubun"];
@@ -41,8 +59,12 @@ app.controller('prodInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     dataItem.sdselGrpNm 	= messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselClassCd   = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselClassNm   = messages["prodInfoSearch.prodInfo.sdsel"];
+    dataItem.sdselQty       = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselProdCd    = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselProdNm 	= messages["prodInfoSearch.prodInfo.sdsel"];
+    dataItem.addProdUprc	= messages["prodInfoSearch.prodInfo.sdsel"];
+    dataItem.addProdQty	    = messages["prodInfoSearch.prodInfo.sdsel"];
+    dataItem.fixProdFg	    = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.optionGrpCd 	= messages["prodInfoSearch.prodInfo.option"];
     dataItem.optionGrpNm    = messages["prodInfoSearch.prodInfo.option"];
     dataItem.optionValCd    = messages["prodInfoSearch.prodInfo.option"];
@@ -189,12 +211,31 @@ app.controller('prodInfoExcelCtrl', ['$scope', '$http', '$timeout', function ($s
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+
+    s.formatItem.addHandler(function (s, e) {
+      if (e.panel === s.cells) {
+        var col = s.columns[e.col];
+        if (col.binding === "gubun") {
+          var item = s.rows[e.row].dataItem;
+          if (item.gubun != "선택메뉴") {
+            item.sdselQty = '';
+            item.addProdUprc = '';
+            item.addProdQty = '';
+          }
+        }
+      }
+    });
+
     //Grid Header 2줄 - START	----------------------------------------------------------------
     s.allowMerging = 2;
     s.columnHeaders.rows.push(new wijmo.grid.Row());
 
     //첫째줄 Header 생성
     var dataItem = {};
+    dataItem.hqBrandCd      = messages["prodInfoSearch.prodInfo.hqBrandCd"];
+    dataItem.hqBrandNm      = messages["prodInfoSearch.prodInfo.hqBrandNm"];
+    dataItem.prodClassCd    = messages["prodInfoSearch.prodInfo.prodClassCd"];
+    dataItem.prodClassNm    = messages["prodInfoSearch.prodInfo.prodClassNm"];
     dataItem.prodCd         = messages["prodInfoSearch.prodInfo.prodCd"];
     dataItem.prodNm         = messages["prodInfoSearch.prodInfo.prodNm"];
     dataItem.gubun 	        = messages["prodInfoSearch.prodInfo.gubun"];
@@ -206,8 +247,12 @@ app.controller('prodInfoExcelCtrl', ['$scope', '$http', '$timeout', function ($s
     dataItem.sdselGrpNm 	= messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselClassCd   = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselClassNm   = messages["prodInfoSearch.prodInfo.sdsel"];
+    dataItem.sdselQty       = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselProdCd    = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselProdNm 	= messages["prodInfoSearch.prodInfo.sdsel"];
+    dataItem.addProdUprc	= messages["prodInfoSearch.prodInfo.sdsel"];
+    dataItem.addProdQty	    = messages["prodInfoSearch.prodInfo.sdsel"];
+    dataItem.fixProdFg	    = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.optionGrpCd 	= messages["prodInfoSearch.prodInfo.option"];
     dataItem.optionGrpNm    = messages["prodInfoSearch.prodInfo.option"];
     dataItem.optionValCd    = messages["prodInfoSearch.prodInfo.option"];
