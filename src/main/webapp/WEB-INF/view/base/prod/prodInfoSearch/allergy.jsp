@@ -105,9 +105,9 @@
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.allergy.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.allergy.prodNm"/>" binding="prodNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodInfoSearch.allergy.recipeslCd"/>" binding="recipeslCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodInfoSearch.allergy.recipeslNm"/>" binding="recipeslNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodInfoSearch.allergy.allergyNm"/>" binding="allergyNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.allergy.recipesCd"/>" binding="recipesCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.allergy.recipesNm"/>" binding="recipesNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.allergy.allergieNm"/>" binding="allergieNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
       <%--//위즈모 테이블--%>
@@ -136,9 +136,9 @@
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.allergy.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.allergy.prodNm"/>" binding="prodNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodInfoSearch.allergy.recipeslCd"/>" binding="recipeslCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodInfoSearch.allergy.recipeslNm"/>" binding="recipeslNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodInfoSearch.allergy.allergyNm"/>" binding="allergyNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.allergy.recipesCd"/>" binding="recipesCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.allergy.recipesNm"/>" binding="recipesNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.allergy.allergieNm"/>" binding="allergieNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
     </div>
