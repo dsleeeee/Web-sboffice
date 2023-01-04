@@ -30,19 +30,15 @@
                 tsdt.VAT_AMT,
                 tsdt.TOT_TIP_AMT,
                 tsdt.TOT_ETC_AMT,
-        <foreach collection="arrPayCol" item="item" separator=",">
-            tsdt.PAY_AMT_${item} AS PAY${item}
-        </foreach> ,
                 tsdt.TOT_PAY_AMT,
-                tsddd.GEN_REAL_SALE_AMT,
-                DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsddd.GEN_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS GEN_REAL_SALE_RATE,
-                tsddd.DLVR_REAL_SALE_AMT,
-                DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsddd.DLVR_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS DLVR_REAL_SALE_RATE,
-                tsddd.PACK_REAL_SALE_AMT,
-                DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsddd.PACK_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS PACK_REAL_SALE_RATE
-        FROM    (
+        <foreach collection="arrPayCol" item="item" separator=",">
+                tsdt.PAY_CNT${item} AS PAY_CNT${item},
+                tsdt.PAY_AMT${item} AS PAY_AMT${item},
+                DECODE(tsdt.TOT_PAY_AMT, 0, 0, ROUND(tsdt.PAY_AMT${item}/tsdt.TOT_PAY_AMT, 4) * 100) AS PAY_RATE${item}
+        </foreach>
+       FROM    (
                 SELECT  SUBSTR(SALE_DATE,0,6) AS SALE_YM,
-                COUNT(DISTINCT STORE_CD) AS STORE_CNT,
+                COUNT(DISTINCT tsdt.STORE_CD) AS STORE_CNT,
                 COUNT(DISTINCT SALE_DATE) AS SALE_CNT,
                 SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
                 SUM(TOT_DC_AMT) AS TOT_DC_AMT,
@@ -54,56 +50,63 @@
                 SUM(TOT_TIP_AMT) AS TOT_TIP_AMT,
                 SUM(TOT_ETC_AMT) AS TOT_ETC_AMT,
                 <foreach collection="arrPayCol" item="item" separator="+">
-                    <if test="item != '02' and item != '021'">
                         SUM(NVL(PAY_AMT_${item}, 0))
-                    </if>
-                </foreach> +  SUM(NVL(NON_CASH_AMT, 0)) +  SUM(NVL(APPR_CASH_AMT, 0)) AS TOT_PAY_AMT,
+                </foreach> AS TOT_PAY_AMT,
                 <foreach collection="arrPayCol" item="item" separator=",">
-                    <if test="item != '02' and item != '021'">
-                        SUM(NVL(PAY_AMT_${item}, 0)) AS PAY_AMT_${item}
+                        SUM(NVL(PAY_CNT_${item}, 0)) AS PAY_CNT${item},
+                        SUM(NVL(PAY_AMT_${item}, 0)) AS PAY_AMT${item}
+                </foreach>
+                FROM    TB_SL_DAILY_TOTAL tsdt
+                ,		TB_MS_STORE tms
+                ,       TB_MS_STORE_INFO tmsi
+                WHERE   tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                AND  	tsdt.STORE_CD = tms.STORE_CD
+                AND     tsdt.STORE_CD = tmsi.STORE_CD(+)
+                AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     tsdt.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth}||'31'
+                <if test='storeCds != null and storeCds != ""'>
+                    AND tsdt.STORE_CD IN
+                    <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                    AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                </if>
+                <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                    <if test='userBrands != null and userBrands != ""'>
+                        -- 매장브랜드 전체일때
+                        AND tms.HQ_BRAND_CD IN
+                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
                     </if>
-                </foreach>,
-                SUM(NVL(NON_CASH_AMT, 0)) AS PAY_AMT_02,
-                SUM(NVL(APPR_CASH_AMT, 0)) AS PAY_AMT_021
-                FROM    TB_SL_DAILY_TOTAL
-                WHERE   HQ_OFFICE_CD = #{membrOrgnCd}
-                AND     SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth}||'31'
-                <if test='storeCds != null and storeCds != ""'>
-                    AND STORE_CD IN
-                    <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                        #{item}
-                    </foreach>
                 </if>
-                <if test='orgnFg != null and orgnFg == "H"'>
-                    AND (
-                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                    OR   STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
-                    )
+                <if test='momsTeam != null and momsTeam != ""'>
+                    AND tmsi.MOMS_TEAM = #{momsTeam}
                 </if>
-                GROUP BY    SUBSTR(SALE_DATE,0,6)
-                ) tsdt,
-                (	SELECT 	SUBSTR(SALE_DATE,0,6) AS SALE_YM,
-                SUM(CASE WHEN DLVR_PACK_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT,
-                SUM(CASE WHEN DLVR_PACK_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
-                SUM(CASE WHEN DLVR_PACK_FG = '3' THEN REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
-                FROM 	TB_SL_DAILY_DTL_DLVR
-                WHERE   HQ_OFFICE_CD = #{membrOrgnCd}
-                AND     SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth}||'31'
-                <if test='storeCds != null and storeCds != ""'>
-                    AND STORE_CD IN
-                    <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                        #{item}
-                    </foreach>
+                <if test='momsAcShop != null and momsAcShop != ""'>
+                    AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
                 </if>
-                <if test='orgnFg != null and orgnFg == "H"'>
-                    AND (
-                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                    OR   STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
-                    )
+                <if test='momsAreaFg != null and momsAreaFg != ""'>
+                    AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
                 </if>
-                GROUP BY    SUBSTR(SALE_DATE,0,6)
-                ) tsddd
-        WHERE   tsdt.SALE_YM = tsddd.SALE_YM (+)  -- TB_SL_DAILY_PROD_DLVR 테이블이 생기기 전 매출이 없는 경우 나오지 않음
+                <if test='momsCommercial != null and momsCommercial != ""'>
+                    AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                </if>
+                <if test='momsShopType != null and momsShopType != ""'>
+                    AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                </if>
+                <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                    AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                </if>
+                <if test='branchCd != null and branchCd != ""'>
+                    AND tms.BRANCH_CD = #{branchCd}
+                </if>
+                GROUP BY    SUBSTR(tsdt.SALE_DATE,0,6)
+                ) tsdt
+        ORDER
+        BY      tsdt.SALE_YM DESC
     </select>
 
 </mapper>

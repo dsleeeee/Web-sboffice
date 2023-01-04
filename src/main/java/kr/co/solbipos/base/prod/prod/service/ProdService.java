@@ -120,4 +120,7 @@ public interface ProdService {
 
     /** KIOSK 판매시간 시간설정 조회 */
     List<DefaultMap<String>> getProdSaleTime(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
+    /** 상품옵션그룹 조회 팝업 */
+    List<DefaultMap<String>> getSearchOptionGrpList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 }

@@ -36,6 +36,7 @@
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="saleComPopup.partner.saleDate"/>" 	binding="saleDate" 		width="80" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.partner.posNo"/>" 		binding="posNo"			width="60" 		align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.partner.billNo"/>" 		binding="billNo"		width="60" 		align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.partner.apprProc"/>" 	binding="saleFg"		width="70" 		align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.partner.apprProcFg"/>" 	binding="apprProcFg" 	width="80" 		align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.partner.saleAmt"/>" 		binding="saleAmt" 		width="80" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -57,4 +58,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/com/appr/apprPartner.js?ver=20210415.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/com/appr/apprPartner.js?ver=20210415.04" charset="utf-8"></script>

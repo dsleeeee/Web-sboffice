@@ -510,4 +510,7 @@ public interface ProdMapper {
 
     /** 상품정보 추가 테이블 조회 */
     String getProdInfoRowCount(ProdVO prodVO);
+
+    /** 상품옵션그룹 조회 팝업 */
+    List<DefaultMap<String>> getSearchOptionGrpList(ProdVO prodVO);
 }

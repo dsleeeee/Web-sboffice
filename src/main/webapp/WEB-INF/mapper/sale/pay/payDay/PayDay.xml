@@ -31,78 +31,81 @@
         ,       tsshp.CUP_AMT
         ,       tsshp.BILL_CNT
         ,       tsshp.BILL_UPRC
-        ,       tssddp.GEN_REAL_SALE_AMT
-        ,       DECODE(tsshp.REAL_SALE_AMT, 0, 0, (tssddp.GEN_REAL_SALE_AMT / tsshp.REAL_SALE_AMT)*100) AS GEN_REAL_SALE_RATE
-        ,       tssddp.DLVR_REAL_SALE_AMT
-        ,       DECODE(tsshp.REAL_SALE_AMT, 0, 0, (tssddp.DLVR_REAL_SALE_AMT / tsshp.REAL_SALE_AMT)*100) AS DLVR_REAL_SALE_RATE
-        ,       tssddp.PACK_REAL_SALE_AMT
-        ,       DECODE(tsshp.REAL_SALE_AMT, 0, 0, (tssddp.PACK_REAL_SALE_AMT / tsshp.REAL_SALE_AMT)*100) AS PACK_REAL_SALE_RATE
-        ,       <foreach collection="arrPayCol" item="item" separator="+">
-        NVL(tsshp.PAY${item}, 0)
-    </foreach> +  NVL(tsshp.PAY02, 0) +  NVL(tsshp.PAY021, 0) AS TOT_PAY_AMT
+        ,       tsshp.TOT_PAY_AMT
         ,       <foreach collection="arrPayCol" item="item" separator=",">
-        tsshp.PAY${item} AS PAY${item}
-    </foreach>
-        ,       tsshp.PAY02 AS PAY02 -- 현금
-        ,       tsshp.PAY021 AS PAY021 -- 현금영수증
+                    tsshp.PAY_CNT${item} AS PAY_CNT${item}
+                ,   tsshp.PAY_AMT${item} AS PAY_AMT${item}
+                ,   DECODE(tsshp.TOT_PAY_AMT, 0, 0, ROUND(tsshp.PAY_AMT${item}/tsshp.TOT_PAY_AMT, 4) * 100) AS PAY_RATE${item}
+                </foreach>
         FROM    (
-        SELECT  SALE_DATE
-        ,       COUNT(DISTINCT STORE_CD) AS STORE_CNT
-        ,       SUM(TOT_SALE_AMT) AS TOT_SALE_AMT
-        ,       SUM(TOT_DC_AMT) AS TOT_DC_AMT
-        ,       SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
-        ,       SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT
-        ,       SUM(VAT_AMT) AS VAT_AMT
-        ,       SUM(TOT_TIP_AMT) AS TOT_TIP_AMT
-        ,       SUM(TOT_ETC_AMT) AS TOT_ETC_AMT
-        ,       SUM(CUP_AMT) AS CUP_AMT
-        ,       SUM(BILL_CNT) AS BILL_CNT
-        ,       DECODE(SUM(BILL_CNT), 0, 0, ROUND(SUM(REAL_SALE_AMT) / SUM(BILL_CNT))) AS BILL_UPRC
-        ,       <foreach collection="arrPayCol" item="item" separator=",">
-                    SUM(PAY_AMT_${item}) AS PAY${item}
-                </foreach>,
-                SUM(NON_CASH_AMT) AS PAY02,
-                SUM(APPR_CASH_AMT) AS PAY021
-        FROM    TB_SL_DAILY_TOTAL tsdt
-        WHERE   tsdt.HQ_OFFICE_CD  = #{hqOfficeCd}
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND tsdt.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
-        </if>
-        <if test='orgnFg != null and orgnFg == "H"'>
-            AND (
-            'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-            OR  tsdt.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
-            )
-        </if>
-        AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        GROUP BY SALE_DATE
-        ) tsshp
-        ,       (   SELECT	tssd.SALE_DATE
-                    ,       SUM(CASE WHEN tssd.DLVR_PACK_FG = '1' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT
-                    ,       SUM(CASE WHEN tssd.DLVR_PACK_FG = '2' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT
-                    ,       SUM(CASE WHEN tssd.DLVR_PACK_FG = '3' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
-                    FROM	TB_SL_DAILY_DTL_DLVR tssd
-                    WHERE	tssd.HQ_OFFICE_CD	=	#{hqOfficeCd}
-                    <if test='arrStoreCd != null and arrStoreCd != ""'>
-                        AND tssd.STORE_CD IN
-                        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                SELECT  SALE_DATE
+                ,       COUNT(DISTINCT tsdt.STORE_CD) AS STORE_CNT
+                ,       SUM(TOT_SALE_AMT) AS TOT_SALE_AMT
+                ,       SUM(TOT_DC_AMT) AS TOT_DC_AMT
+                ,       SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+                ,       SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT
+                ,       SUM(VAT_AMT) AS VAT_AMT
+                ,       SUM(TOT_TIP_AMT) AS TOT_TIP_AMT
+                ,       SUM(TOT_ETC_AMT) AS TOT_ETC_AMT
+                ,       SUM(CUP_AMT) AS CUP_AMT
+                ,       SUM(BILL_CNT) AS BILL_CNT
+                ,       DECODE(SUM(BILL_CNT), 0, 0, ROUND(SUM(REAL_SALE_AMT) / SUM(BILL_CNT))) AS BILL_UPRC
+                ,       <foreach collection="arrPayCol" item="item" separator="+">
+                            SUM(PAY_AMT_${item})
+                        </foreach> AS TOT_PAY_AMT
+                ,       <foreach collection="arrPayCol" item="item" separator=",">
+                            SUM(PAY_CNT_${item}) AS PAY_CNT${item}
+                        ,   SUM(PAY_AMT_${item}) AS PAY_AMT${item}
+                        </foreach>
+                FROM    TB_SL_DAILY_TOTAL tsdt
+                ,		TB_MS_STORE tms
+                ,       TB_MS_STORE_INFO tmsi
+                WHERE 	tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                AND  	tsdt.STORE_CD = tms.STORE_CD
+                AND     tsdt.STORE_CD = tmsi.STORE_CD(+)
+                AND     tsdt.HQ_OFFICE_CD  = #{hqOfficeCd}
+                AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                <if test='storeCds != null and storeCds != ""'>
+                    AND tsdt.STORE_CD IN
+                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                    AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                </if>
+                <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                    <if test='userBrands != null and userBrands != ""'>
+                        -- 매장브랜드 전체일때
+                        AND tms.HQ_BRAND_CD IN
+                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
                             #{item}
                         </foreach>
                     </if>
-                    <if test='orgnFg != null and orgnFg == "H"'>
-                        AND (
-                        'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                        OR  tssd.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
-                        )
-                    </if>
-                    AND     tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-                    GROUP
-                    BY      tssd.SALE_DATE
-                    ) tssddp
-        WHERE   tssddp.SALE_DATE (+) = tsshp.SALE_DATE
+                </if>
+                <if test='momsTeam != null and momsTeam != ""'>
+                    AND tmsi.MOMS_TEAM = #{momsTeam}
+                </if>
+                <if test='momsAcShop != null and momsAcShop != ""'>
+                    AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                </if>
+                <if test='momsAreaFg != null and momsAreaFg != ""'>
+                    AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                </if>
+                <if test='momsCommercial != null and momsCommercial != ""'>
+                    AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                </if>
+                <if test='momsShopType != null and momsShopType != ""'>
+                    AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                </if>
+                <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                    AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                </if>
+                <if test='branchCd != null and branchCd != ""'>
+                    AND tms.BRANCH_CD = #{branchCd}
+                </if>
+                GROUP BY SALE_DATE
+                ) tsshp
         ORDER
         BY      tsshp.SALE_DATE DESC
     </select>

@@ -36,6 +36,7 @@
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="saleComPopup.ncash.saleDate"/>" 		binding="saleDate" 		width="80" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.ncash.posNo"/>" 			binding="posNo"			width="60" 		align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.ncash.billNo"/>" 		binding="billNo"		width="60" 		align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.ncard.apprProc"/>" 		binding="apprProc"		width="60" 		align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.ncash.saleAmt"/>" 		binding="saleAmt" 		width="80" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.ncash.tipAmt"/>" 		binding="tipAmt" 		width="80" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -55,4 +56,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/com/appr/apprNcash.js?ver=20210415.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/com/appr/apprNcash.js?ver=20210415.03" charset="utf-8"></script>

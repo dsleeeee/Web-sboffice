@@ -101,6 +101,6 @@
   var orgnFg = "${orgnFg}";
   var hqOfficeCd = "${hqOfficeCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuAttr.js?ver=2018122003.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuAttr.js?ver=20181223.06" charset="utf-8"></script>
 
 

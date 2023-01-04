@@ -144,7 +144,7 @@
         FROM    TB_SL_SALE_HDR
         WHERE   STORE_CD = #{storeCd}
         AND     SALE_DATE = #{saleDate}
-        AND     POS_NO = '01'
+        AND     POS_NO = '99'
         AND     BILL_NO > '9000'
     </select>
 
@@ -202,7 +202,7 @@
             '0000000',
             #{storeCd},
             #{saleDate},
-            '01',
+            '99',
             #{billNo},
             LPAD(#{billDtlNo}, 4, '0'),
             '01',
@@ -415,7 +415,7 @@
             '0000000',
             #{storeCd},
             #{saleDate},
-            '01',
+            '99',
             #{billNo},
             '01',
             #{saleYn},
@@ -486,7 +486,7 @@
             '0000000',
             #{storeCd},
             #{saleDate},
-            '01',
+            '99',
             #{billNo},
             #{payCd},
             '01',
@@ -536,7 +536,7 @@
             '0000000',
             #{storeCd},
             #{saleDate},
-            '01',
+            '99',
             #{billNo},
             '01',
             '01',
@@ -757,7 +757,7 @@
         DELETE  TB_SL_SALE_HDR
         WHERE   STORE_CD = #{storeCd}
         AND     SALE_DATE = #{saleDate}
-        AND     POS_NO = '01'
+        AND     POS_NO = '99'
         AND     BILL_NO = #{billNo}
         AND     REG_ID like 'WEB_REG_%'
     </delete>
@@ -823,7 +823,7 @@
     </if>
       WHERE   STORE_CD = #{storeCd}
       AND     SALE_DATE = #{saleDate}
-      AND     POS_NO = '01'
+      AND     POS_NO = '99'
       AND     BILL_NO = #{billNo}
     </insert>
 
@@ -911,7 +911,7 @@
     </if>
       WHERE   STORE_CD = #{storeCd}
       AND     SALE_DATE = #{saleDate}
-      AND     POS_NO = '01'
+      AND     POS_NO = '99'
       AND     BILL_NO = #{billNo}
     </insert>
 

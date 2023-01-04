@@ -36,6 +36,7 @@
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="saleComPopup.payco.saleDate"/>" 	binding="saleDate" 		width="80" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.payco.posNo"/>" 		binding="posNo"			width="60" 		align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.payco.billNo"/>" 	binding="billNo"		width="60" 		align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.payco.apprGuBun"/>" 	binding="apprGubun"		width="60" 		align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.payco.apprProcFg"/>" binding="apprProcFg" 	width="70" 		align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.payco.apprCompanyNm"/>" 	binding="apprCompanyNm" 	width="130" 	align="center"  is-read-only="true"></wj-flex-grid-column>
@@ -57,4 +58,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/com/appr/apprPayco.js?ver=20240415.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/com/appr/apprPayco.js?ver=20240415.03" charset="utf-8"></script>

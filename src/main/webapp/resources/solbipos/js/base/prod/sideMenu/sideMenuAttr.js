@@ -113,11 +113,21 @@ app.controller('sideMenuAttrClassCtrl', ['$scope', '$http', function ($scope, $h
               $scope.flex.collectionView.removeAt(i);
             } else {
               $scope._popMsg(messages["sideMenu.attr.class.notNull"]);
+              // 재조회
+              $scope._broadcast('sideMenuAttrClassCtrl');
+              $("#sideMenuAttrTitle").html("");
+              var attrScope = agrid.getScope('sideMenuAttrAttrCtrl');
+              attrScope._gridDataInit();   // 그리드 초기화
               return false;
             }
           } else  {
             $scope._popMsg(messages["sideMenu.selectMenu.edited"]);
             $scope._broadcast('sideMenuAttrClassCtrl');
+            // 재조회
+            $scope._broadcast('sideMenuAttrClassCtrl');
+            $("#sideMenuAttrTitle").html("");
+            var attrScope = agrid.getScope('sideMenuAttrAttrCtrl');
+            attrScope._gridDataInit();   // 그리드 초기화
             return false;
           }
         }

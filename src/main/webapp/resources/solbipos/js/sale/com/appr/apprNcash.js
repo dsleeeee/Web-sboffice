@@ -24,6 +24,7 @@ app.controller('saleApprNcashCtrl', ['$scope', '$http', '$timeout', function ($s
     var dataItem         	= {};
     dataItem.saleDate      	= messages["saleComPopup.ncash.saleDate"];
     dataItem.posNo  		= messages["saleComPopup.ncash.posNo"];
+    dataItem.billNo  		= messages["saleComPopup.ncash.billNo"];
     dataItem.apprProc      	= messages["saleComPopup.ncash.apprSaleAmt"];
     dataItem.saleAmt      	= messages["saleComPopup.ncash.apprSaleAmt"];
     dataItem.tipAmt    		= messages["saleComPopup.ncash.apprSaleAmt"];   

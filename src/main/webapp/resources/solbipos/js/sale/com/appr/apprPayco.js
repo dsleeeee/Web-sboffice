@@ -24,6 +24,7 @@ app.controller('saleApprPaycoCtrl', ['$scope', '$http', '$timeout', function ($s
     var dataItem         	= {};
     dataItem.saleDate      	= messages["saleComPopup.payco.saleDate"];
     dataItem.posNo  		= messages["saleComPopup.payco.posNo"];
+    dataItem.billNo  		= messages["saleComPopup.payco.billNo"];
     dataItem.apprGubun    	= messages["saleComPopup.card.appr"];
     dataItem.apprProcFg 	= messages["saleComPopup.card.appr"]; 
     dataItem.apprCompanyNm  = messages["saleComPopup.payco.apprCompanyNm"];

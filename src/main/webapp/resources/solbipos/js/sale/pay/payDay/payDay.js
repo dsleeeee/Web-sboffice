@@ -8,109 +8,25 @@ app.controller('payDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('payDayCtrl', $scope, $http, true));
 
-  $scope.srchStartDate = wcombo.genDateVal("#srchPayDayStartDate", gvStartDate);
-  $scope.srchEndDate   = wcombo.genDateVal("#srchPayDayEndDate", gvEndDate);
+  var startDate = wcombo.genDateVal("#srchPayDayStartDate", gvStartDate);
+  var endDate   = wcombo.genDateVal("#srchPayDayEndDate", gvEndDate);
   $scope.orgnFg        = gvOrgnFg;
+
+  // 브랜드 콤보박스 셋팅
+  $scope._setComboData("storeHqBrandCdCombo", momsHqBrandCdComboList); // 매장브랜드
+  $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
+  $scope._setComboData("momsAcShopCombo", momsAcShopComboList); // AC점포별
+  $scope._setComboData("momsAreaFgCombo", momsAreaFgComboList); // 지역구분
+  $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
+  $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
+  $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
+  $scope._setComboData("branchCdCombo", branchCdComboList); // 지사
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("payDayCtrl");
-
-    // 그리드 링크 효과
-    s.formatItem.addHandler(function (s, e) {
-      if (e.panel === s.cells) {
-        var col = s.columns[e.col];
-        if (col.binding === "saleDate") { // 일자
-          wijmo.addClass(e.cell, 'wijLink');
-          wijmo.addClass(e.cell, 'wj-custom-readonly');
-        }
-        if (col.binding === "billCnt") { // 영수건수
-          wijmo.addClass(e.cell, 'wijLink');
-          wijmo.addClass(e.cell, 'wj-custom-readonly');
-        }
-        if (col.binding === "totDcAmt") { // 총할인
-          wijmo.addClass(e.cell, 'wijLink');
-          wijmo.addClass(e.cell, 'wj-custom-readonly');
-        }
-
-        // 결제수단
-        for (var i = 0; i < payColList.length; i++) {
-          if (col.binding === ("pay" + payColList[i].payCd)) {
-            var item = s.rows[e.row].dataItem;
-
-            // 값이 있으면 링크 효과
-            if (nvl(item[("pay" + payColList[i].payCd)], '') !== '') {
-              wijmo.addClass(e.cell, 'wijLink');
-              wijmo.addClass(e.cell, 'wj-custom-readonly');
-            }
-          }
-        }
-
-        if (col.format === "date") {
-          e.cell.innerHTML = getFormatDate(e.cell.innerText);
-        } else if (col.format === "dateTime") {
-          e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
-        } else if (col.format === "time") {
-          e.cell.innerHTML = getFormatTime(e.cell.innerText, 'hms');
-        }
-      }
-    });
-
-    // 그리드 클릭 이벤트
-    s.addEventListener(s.hostElement, 'mousedown', function (e) {
-      var ht = s.hitTest(e);
-      if (ht.cellType === wijmo.grid.CellType.Cell) {
-        var col         = ht.panel.columns[ht.col];
-        var selectedRow = s.rows[ht.row].dataItem;
-        var params      = {};
-        params.storeCd  = $("#payDaySelectStoreCd").val();
-        params.saleDate = selectedRow.saleDate.replaceAll("-","");
-        params.gubun = "day";
-
-        if (col.binding === "saleDate") { // 일자 클릭
-          if(orgnFg ==="HQ") {
-            $scope._broadcast('dayStoreDtlCtrl', params);
-          } else if(orgnFg === "STORE"){
-            $scope._broadcast('dayProdDtlCtrl', params);
-          }
-        }
-        if (col.binding === "billCnt") { // 영수건수 클릭
-          if(orgnFg ==="HQ") {
-            $scope._broadcast('dayStoreBillCtrl', params);
-          } else if(orgnFg === "STORE"){
-            $scope._broadcast('dayStoreBill2Ctrl', params);
-          }
-        }
-        if (col.binding === "totDcAmt") { // 총할인 클릭
-          $scope._broadcast('dayStoreDcCtrl', params);
-        }
-
-        // 결제수단
-        for (var i = 0; i < payColList.length; i++) {
-          if (col.binding === ("pay" + payColList[i].payCd)) {
-            // var item = s.rows[e.row].dataItem;
-            var callCtrl = '';
-
-            // 값이 있으면 링크
-            if (nvl(selectedRow[("pay" + payColList[i].payCd)], '') !== '') {
-              callCtrl = 'day'+ (payColList[i].payMethod.substr(0,1).toUpperCase() + payColList[i].payMethod.substr(1).toLowerCase()).replaceAll("_", "") + 'Ctrl';
-              if(callCtrl == 'dayCashCtrl') {
-                params.cashGubun = "02"
-              }
-              // 현금영수증 클릭시 -> 현금 팝업
-              if(callCtrl == 'dayCashbillCtrl') {
-                params.cashGubun = "021";
-                callCtrl = 'dayCashCtrl';
-              }
-              $scope._broadcast(callCtrl, params);
-            }
-          }
-        }
-
-      }
-    });
 
     // add the new GroupRow to the grid's 'columnFooters' panel
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
@@ -120,6 +36,7 @@ app.controller('payDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     // 헤더머지
     s.allowMerging = 2;
     s.columnHeaders.rows.push(new wijmo.grid.Row());
+
     // 첫째줄 헤더 생성
     var dataItem         = {};
     dataItem.saleDate    = messages["payDay.saleDate"];
@@ -135,18 +52,14 @@ app.controller('payDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     dataItem.vatAmt      = messages["payDay.saleInfo"];
     dataItem.totTipAmt   = messages["payDay.totTipAmt"];
     dataItem.totEtcAmt   = messages["payDay.totEtcAmt"];
-    dataItem.cupAmt   = messages["payDay.cupAmt"];
-    dataItem.totPayAmt   = messages["payDay.payMethod"];
-    dataItem.genRealSaleAmt   = messages["payDay.dlvrPack"];
-    dataItem.genRealSaleRate   = messages["payDay.dlvrPack"];
-    dataItem.dlvrRealSaleAmt   = messages["payDay.dlvrPack"];
-    dataItem.dlvrRealSaleRate   = messages["payDay.dlvrPack"];
-    dataItem.packRealSaleAmt   = messages["payDay.dlvrPack"];
-    dataItem.packRealSaleRate   = messages["payDay.dlvrPack"];
+    dataItem.cupAmt      = messages["payDay.cupAmt"];
+    dataItem.totPayAmt   = messages["payDay.totPayAmt"];
 
     // 결제수단 헤더머지 컬럼 생성
     for (var i = 0; i < arrPayCol.length; i++) {
-      dataItem['pay' + arrPayCol[i]] = messages["payDay.payMethod"];
+      dataItem['payCnt' + arrPayCol[i]] = payColList[i].payNm;
+      dataItem['payAmt' + arrPayCol[i]] = payColList[i].payNm;
+      dataItem['payRate' + arrPayCol[i]] = payColList[i].payNm;
     }
     s.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -189,7 +102,6 @@ app.controller('payDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     }
   };
 
-
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("payDayCtrl", function (event, data) {
     $scope.searchPayDayList();
@@ -200,24 +112,66 @@ app.controller('payDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
   // 일별종합 리스트 조회
   $scope.searchPayDayList = function () {
-    $scope.searchedStoreCd = $("#payDaySelectStoreCd").val();
+    var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
+    var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
+    var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+    // 시작일자가 종료일자보다 빠른지 확인
+    if(startDt.getTime() > endDt.getTime()){
+      $scope._popMsg(messages['cmm.dateChk.error']);
+      return false;
+    }
+
+    // 조회일자 최대 1달(31일) 제한
+    if (diffDay > 30) {
+      $scope._popMsg(messages['cmm.dateOver.1month.error']);
+      return false;
+    }
+
     // 파라미터
     var params       = {};
-    params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-    params.endDate   = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
-    params.storeCd   = $scope.searchedStoreCd;
-    params.payCol    = payCol;
+    params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
+    params.endDate   = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+    params.storeCds   = $("#payDayStoreCd").val();
+    params.payCol = payCol;
+    params.prodHqBrandCd = $scope.prodHqBrandCd;
+    params.momsTeam = $scope.momsTeam;
+    params.momsAcShop = $scope.momsAcShop;
+    params.momsAreaFg = $scope.momsAreaFg;
+    params.momsCommercial = $scope.momsCommercial;
+    params.momsShopType = $scope.momsShopType;
+    params.momsStoreManageType = $scope.momsStoreManageType;
+    params.branchCd = $scope.branchCd;
+    params.storeHqBrandCd = $scope.storeHqBrandCd;
+    // '전체' 일때
+    if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+      var momsHqBrandCd = "";
+      for(var i=0; i < momsHqBrandCdComboList.length; i++){
+        if(momsHqBrandCdComboList[i].value !== null) {
+          momsHqBrandCd += momsHqBrandCdComboList[i].value + ","
+        }
+      }
+      params.userBrands = momsHqBrandCd;
+    }
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/pay/payDay/payDay/getPayDayList.sb", params);
   };
 
+  // 확장조회 숨김/보임
+  $scope.searchAddShowChange = function(){
+    if( $("#tblSearchAddShow").css("display") === 'none') {
+      $("#tblSearchAddShow").show();
+    } else {
+      $("#tblSearchAddShow").hide();
+    }
+  };
 
   // 매장선택 모듈 팝업 사용시 정의
   // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
   // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.payDaySelectStoreShow = function () {
-    $scope._broadcast('payDaySelectStoreCtrl');
+  $scope.payDayStoreShow = function () {
+    $scope._broadcast('payDayStoreCtrl');
   };
 
   // 엑셀 다운로드

@@ -294,6 +294,61 @@ public class ProdVO extends PageVO {
     /** 가격예약구분 - 0:일반, 1:예약 */
     private String saleResveFg;
 
+    /** 상품옵션그룹코드 */
+    private String optionGrpCd;
+
+    /** 상품옵션그룹명 */
+    private String optionGrpNm;
+
+    /** 출시일 */
+    private String releaseDate;
+
+    /** 단종일 */
+    private String disconDate;
+
+    /** 단종여부 */
+    private String disconYn;
+
+    /** 판매방식 - 내점 */
+    private String saleTypeYnSin;
+
+    /** 판매방식 - 배달 */
+    private String saleTypeYnDlv;
+
+    /** 판매방식 - 포장 */
+    private String saleTypeYnPkg;
+
+    /** 판매채널 - POS */
+    private String saleChnYnPos;
+
+    /** 판매채널 - KIOSK */
+    private String saleChnYnKsk;
+
+    /** 판매채널 - 자사앱 */
+    private String saleChnYnCmp;
+
+    /** 판매채널 - 배민 */
+    private String saleChnYnBae;
+
+    /** 판매채널 - 배민1 */
+    private String saleChnYnBao;
+
+    /** 판매채널 - 요기요 */
+    private String saleChnYnYgy;
+
+    /** 판매채널 - 요기요익스프레스 */
+    private String saleChnYnYge;
+
+    /** 판매채널 - 쿠팡 */
+    private String saleChnYnCpn;
+
+    /** 판매채널 - 배달통 */
+    private String saleChnYnTng;
+
+    /** 판매채널 - 땡겨요 */
+    private String saleChnYnDdn;
+
+
     /**
      * @return the hqOfficeCd
      */
@@ -1335,5 +1390,149 @@ public class ProdVO extends PageVO {
 
     public void setSaleResveFg(String saleResveFg) {
         this.saleResveFg = saleResveFg;
+    }
+
+    public String getOptionGrpCd() {
+        return optionGrpCd;
+    }
+
+    public void setOptionGrpCd(String optionGrpCd) {
+        this.optionGrpCd = optionGrpCd;
+    }
+
+    public String getOptionGrpNm() {
+        return optionGrpNm;
+    }
+
+    public void setOptionGrpNm(String optionGrpNm) {
+        this.optionGrpNm = optionGrpNm;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public String getDisconDate() {
+        return disconDate;
+    }
+
+    public void setDisconDate(String disconDate) {
+        this.disconDate = disconDate;
+    }
+
+    public String getDisconYn() {
+        return disconYn;
+    }
+
+    public void setDisconYn(String disconYn) {
+        this.disconYn = disconYn;
+    }
+
+    public String getSaleTypeYnSin() {
+        return saleTypeYnSin;
+    }
+
+    public void setSaleTypeYnSin(String saleTypeYnSin) {
+        this.saleTypeYnSin = saleTypeYnSin;
+    }
+
+    public String getSaleTypeYnDlv() {
+        return saleTypeYnDlv;
+    }
+
+    public void setSaleTypeYnDlv(String saleTypeYnDlv) {
+        this.saleTypeYnDlv = saleTypeYnDlv;
+    }
+
+    public String getSaleTypeYnPkg() {
+        return saleTypeYnPkg;
+    }
+
+    public void setSaleTypeYnPkg(String saleTypeYnPkg) {
+        this.saleTypeYnPkg = saleTypeYnPkg;
+    }
+
+    public String getSaleChnYnPos() {
+        return saleChnYnPos;
+    }
+
+    public void setSaleChnYnPos(String saleChnYnPos) {
+        this.saleChnYnPos = saleChnYnPos;
+    }
+
+    public String getSaleChnYnKsk() {
+        return saleChnYnKsk;
+    }
+
+    public void setSaleChnYnKsk(String saleChnYnKsk) {
+        this.saleChnYnKsk = saleChnYnKsk;
+    }
+
+    public String getSaleChnYnCmp() {
+        return saleChnYnCmp;
+    }
+
+    public void setSaleChnYnCmp(String saleChnYnCmp) {
+        this.saleChnYnCmp = saleChnYnCmp;
+    }
+
+    public String getSaleChnYnBae() {
+        return saleChnYnBae;
+    }
+
+    public void setSaleChnYnBae(String saleChnYnBae) {
+        this.saleChnYnBae = saleChnYnBae;
+    }
+
+    public String getSaleChnYnBao() {
+        return saleChnYnBao;
+    }
+
+    public void setSaleChnYnBao(String saleChnYnBao) {
+        this.saleChnYnBao = saleChnYnBao;
+    }
+
+    public String getSaleChnYnYgy() {
+        return saleChnYnYgy;
+    }
+
+    public void setSaleChnYnYgy(String saleChnYnYgy) {
+        this.saleChnYnYgy = saleChnYnYgy;
+    }
+
+    public String getSaleChnYnYge() {
+        return saleChnYnYge;
+    }
+
+    public void setSaleChnYnYge(String saleChnYnYge) {
+        this.saleChnYnYge = saleChnYnYge;
+    }
+
+    public String getSaleChnYnCpn() {
+        return saleChnYnCpn;
+    }
+
+    public void setSaleChnYnCpn(String saleChnYnCpn) {
+        this.saleChnYnCpn = saleChnYnCpn;
+    }
+
+    public String getSaleChnYnTng() {
+        return saleChnYnTng;
+    }
+
+    public void setSaleChnYnTng(String saleChnYnTng) {
+        this.saleChnYnTng = saleChnYnTng;
+    }
+
+    public String getSaleChnYnDdn() {
+        return saleChnYnDdn;
+    }
+
+    public void setSaleChnYnDdn(String saleChnYnDdn) {
+        this.saleChnYnDdn = saleChnYnDdn;
     }
 }

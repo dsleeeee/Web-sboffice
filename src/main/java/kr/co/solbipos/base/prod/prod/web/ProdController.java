@@ -722,4 +722,26 @@ public class ProdController {
 
         return returnJson(Status.OK, "list", prodService.getProdSaleTime(prodVO, sessionInfoVO));
     }
+
+    /**
+     * 상품옵션그룹 조회 팝업
+     * @param prodVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2022. 12. 19.
+     */
+    @RequestMapping(value = "/getSearchOptionGrpList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSearchOptionGrpList(ProdVO prodVO, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = prodService.getSearchOptionGrpList(prodVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodVO);
+    }
 }

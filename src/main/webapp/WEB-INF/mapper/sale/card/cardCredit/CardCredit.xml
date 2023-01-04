@@ -341,7 +341,6 @@
                             ORDER BY C.REG_DT
                         )
                         WHERE 1=1
-                        AND ROWNUM = 1
                     ) ttecck,
                     TB_SL_SALE_HDR tssh
                     WHERE 1=1
