@@ -675,6 +675,8 @@
     <typeAlias alias="productVO" type="kr.co.solbipos.stock.product.product.service.ProductVO" />
     <typeAlias alias="stockVO" type="kr.co.solbipos.stock.product.stock.service.StockVO"/>
     <typeAlias alias="weightStockVO" type="kr.co.solbipos.stock.product.weightStock.service.WeightStockVO"/>
+    <!-- 재고관리 > 생산관리 > 재고현황(매장-기간별) -->
+    <!--<typeAlias alias="stockPeriodVO" type="kr.co.solbipos.stock.product.stockPeriod.service.StockPeriodVO"/>-->
 
     <!-- 공통팝업 수불/재고 엑셀업로드 -->
     <typeAlias alias="excelUploadVO" type="kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO"/>
