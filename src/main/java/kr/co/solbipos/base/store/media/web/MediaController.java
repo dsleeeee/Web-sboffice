@@ -10,6 +10,8 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.media.service.MediaApplcStoreVO;
 import kr.co.solbipos.base.store.media.service.MediaService;
 import kr.co.solbipos.base.store.media.service.MediaVO;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,11 +23,11 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : mediaController.java
@@ -50,11 +52,13 @@ public class MediaController {
 
     private final SessionService sessionService;
     private final MediaService mediaService;
+    private final DayProdService dayProdService;
     private final MessageService messageService;
 
-    public MediaController(SessionService sessionService, MediaService mediaService, MessageService messageService) {
+    public MediaController(SessionService sessionService, MediaService mediaService, DayProdService dayProdService, MessageService messageService) {
         this.sessionService = sessionService;
         this.mediaService = mediaService;
+        this.dayProdService = dayProdService;
         this.messageService = messageService;
     }
 
@@ -69,6 +73,13 @@ public class MediaController {
     @RequestMapping(value = "/media/list.sb", method = RequestMethod.GET)
     public String list(HttpServletRequest request, HttpServletResponse response,
                        Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 사용자별 브랜드 콤보박스 조회
+        // 파일 적용매장 등록팝업에서 사용하며, 적용매장은 본사권한만 가능.
+        DayProdVO dayProdVO = new DayProdVO();
+        model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
 
         // POS에서 해당 WEB 화면 재접속한 경우(이전 접속 session 그대로 존재), 'posLoginReconnect'값울 판단하여 view화면 처리
         if(request.getParameter("posLoginReconnect") != null && request.getParameter("posLoginReconnect").length() > 0){

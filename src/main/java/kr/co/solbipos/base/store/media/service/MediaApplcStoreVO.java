@@ -57,6 +57,12 @@ public class MediaApplcStoreVO extends PageVO {
     private String result;
     /** 복수검색여부 */
     private String chkMulti;
+    /** 사용자별 브랜드코드 */
+    private String[] userBrandList;
+    /** 사용자별 브랜드코드 */
+    private String userBrands;
+    /** 매장브랜드코드 */
+    private String storeHqBrandCd;
 
 
     /**
@@ -273,5 +279,29 @@ public class MediaApplcStoreVO extends PageVO {
 
     public void setChkMulti(String chkMulti) {
         this.chkMulti = chkMulti;
+    }
+
+    public String[] getUserBrandList() {
+        return userBrandList;
+    }
+
+    public void setUserBrandList(String[] userBrandList) {
+        this.userBrandList = userBrandList;
+    }
+
+    public String getUserBrands() {
+        return userBrands;
+    }
+
+    public void setUserBrands(String userBrands) {
+        this.userBrands = userBrands;
+    }
+
+    public String getStoreHqBrandCd() {
+        return storeHqBrandCd;
+    }
+
+    public void setStoreHqBrandCd(String storeHqBrandCd) {
+        this.storeHqBrandCd = storeHqBrandCd;
     }
 }

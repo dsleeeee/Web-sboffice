@@ -90,7 +90,7 @@ public class PosFuncController {
             model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
         }
 
-        // 매장정보관리 화면은 관리자, 총판, 본사가 사용
+        // 포스기능정의 화면은 관리자, 총판, 본사가 사용
         // 관리자 또는 총판은 매장브랜드 값이 없으므로 사용자별 브랜드 빈값으로 셋팅(view script 오류 방지를 위해)
         if(sessionInfoVO.getOrgnFg() == OrgnFg.MASTER || sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY) {
             model.addAttribute("userHqBrandCdComboList", convertToJson(""));

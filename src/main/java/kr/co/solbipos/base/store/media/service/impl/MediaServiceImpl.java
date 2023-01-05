@@ -374,6 +374,15 @@ public class MediaServiceImpl implements MediaService {
             }
         }
 
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 매장브랜드가 없을 때 (매장브랜드가 '전체' 일때)
+            if (applcStore.getStoreHqBrandCd() == "" || applcStore.getStoreHqBrandCd() == null) {
+              // 사용자별 브랜드 array 값 세팅
+              String[] userBrandList = applcStore.getUserBrands().split(",");
+              applcStore.setUserBrandList(userBrandList);
+            }
+        }
+
         return mediaMapper.srchStoreList(applcStore);
     }
 

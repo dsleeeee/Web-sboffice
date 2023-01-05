@@ -8,6 +8,7 @@ import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.store.view.service.CopyStoreEnvVO;
 import kr.co.solbipos.base.store.view.service.VanConfigVO;
 import kr.co.solbipos.base.store.view.service.ViewService;
@@ -88,9 +89,11 @@ public class ViewController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        // 사용자별 브랜드 콤보박스 조회
-        DayProdVO dayProdVO = new DayProdVO();
-        model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 사용자별 브랜드 콤보박스 조회
+            DayProdVO dayProdVO = new DayProdVO();
+            model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
+        }
 
         return "base/store/view/view";
     }

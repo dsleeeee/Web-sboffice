@@ -35,6 +35,9 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.hqOfficeCd = gvHqOfficeCd;
   // 조회조건
   $scope._setComboData("hqOffice", hqList);
+  if(orgnFg === "HQ"){
+    $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
+  }
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -86,10 +89,29 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     params.hqOfficeCd  = $scope.hqOfficeCd;
     params.sysStatFg = $scope.sysStatFg;
     params.storeCd = $("#addStoreChoiceCd").val();
+
+    if(orgnFg === "HQ"){
+
+        // 선택한 매장브랜드가 있을 때
+        params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
+
+        // 선택한 매장브랜드가 없을 때('전체' 일때)
+        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+            var userHqBrandCd = "";
+            for(var i=0; i < userHqBrandCdComboList.length; i++){
+                if(userHqBrandCdComboList[i].value !== null) {
+                    userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                }
+            }
+            params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+        }
+    }
+
     $scope._inquiryMain("/base/store/media/applcStore/srchStoreList.sb", params, function() {
       // 적용매장 조회 후, 미적용 매장 조회
       var allStoreScope = agrid.getScope("allStoreCtrl");
-      allStoreScope._pageView('allStoreCtrl', 1);
+      allStoreScope._broadcast('allStoreCtrl', orgnFg === "HQ" ? $scope.srchStoreHqBrandCdCombo.selectedValue : ""); // 미적용매장 조회시, 본사권한은 검색조건 매장브랜드 값 넘기기
+      //allStoreScope._pageView('allStoreCtrl', 1);
 
     }, false);
   };
@@ -156,12 +178,12 @@ app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 조회 버튼 클릭
   $scope.$on("allStoreCtrl", function(event, data) {
-    $scope.allStoreSearch();
+    $scope.allStoreSearch(data);
     event.preventDefault();
   });
 
   // 미적용매장 목록 조회
-  $scope.allStoreSearch = function(){
+  $scope.allStoreSearch = function(vStoreHqBrandCd){
 
     var params = {};
     var scope  = agrid.getScope('mediaCtrl');
@@ -180,6 +202,23 @@ app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
       params.chkMulti = "Y";
     }else{
       params.chkMulti = "N";
+    }
+
+    if(orgnFg === "HQ"){
+
+        // 선택한 매장브랜드가 있을 때
+        params.storeHqBrandCd = vStoreHqBrandCd;
+
+        // 선택한 매장브랜드가 없을 때('전체' 일때)
+        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+            var userHqBrandCd = "";
+            for(var i=0; i < userHqBrandCdComboList.length; i++){
+                if(userHqBrandCdComboList[i].value !== null) {
+                    userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                }
+            }
+            params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+        }
     }
 
     $scope._inquiryMain("/base/store/media/applcStore/srchStoreList.sb", params, function() {

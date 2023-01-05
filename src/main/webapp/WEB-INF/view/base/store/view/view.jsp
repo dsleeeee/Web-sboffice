@@ -221,7 +221,7 @@ var areaCd = ${ccu.getCommCodeSelect("061")};
 var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/view/view.js?ver=20230105.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/view/view.js?ver=20230105.02" charset="utf-8"></script>
 
 <%-- 매장 상세정보 --%>
 <c:import url="/WEB-INF/view/base/store/view/dtl.jsp">

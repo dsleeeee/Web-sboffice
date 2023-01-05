@@ -24,7 +24,9 @@ app.controller('storeListCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
   $scope._setComboData("clsFg", clsFg);
   $scope._setComboData("sysStatFg", sysStatFg);
-  $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList);
+  if(orgnFg === "HQ"){
+      $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList);
+  }
 
   // 선택 매장
   $scope.selectedStore;
