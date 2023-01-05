@@ -23,6 +23,9 @@ app.controller('storeManageCtrl', ['$scope', '$http', '$timeout', function ($sco
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("srchClsFg", clsFgAll);
   $scope._setComboData("srchSysStatFg", sysStatFg);
+  if(orgnFg === 'HQ') {
+    $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
+  }
 
   // 선택 매장
   $scope.selectedStore;
@@ -116,11 +119,26 @@ app.controller('storeManageCtrl', ['$scope', '$http', '$timeout', function ($sco
   // 매장목록 조회
   $scope.getStoreList = function(){
     var params = {};
-    if(orgnFg == 'HQ') {
-      params.hqOfficeCd = hqOfficeCd;
+
+    if(orgnFg === "HQ"){
+        params.hqOfficeCd = hqOfficeCd;
+
+        // 선택한 매장브랜드가 있을 때
+        params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
+
+        // 선택한 매장브랜드가 없을 때('전체' 일때)
+        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+            var userHqBrandCd = "";
+            for(var i=0; i < userHqBrandCdComboList.length; i++){
+                if(userHqBrandCdComboList[i].value !== null) {
+                    userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                }
+            }
+            params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+        }
     }
-    $scope._inquiryMain("/store/manage/storeManage/storeManage/getStoreList.sb", params, function() {
-    });
+
+    $scope._inquiryMain("/store/manage/storeManage/storeManage/getStoreList.sb", params, function() {});
   };
 
   // 매장 추가 팝업 오픈
@@ -185,9 +203,25 @@ app.controller('storeManageExcelCtrl', ['$scope', '$http', '$timeout', function 
 
     $scope.getStoreExcelList = function(){
       var params = {};
+
       if(orgnFg == 'HQ') {
         params.hqOfficeCd = hqOfficeCd;
+
+        // 선택한 매장브랜드가 있을 때
+        params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
+
+        // 선택한 매장브랜드가 없을 때('전체' 일때)
+        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+            var userHqBrandCd = "";
+            for(var i=0; i < userHqBrandCdComboList.length; i++){
+                if(userHqBrandCdComboList[i].value !== null) {
+                    userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                }
+            }
+            params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+        }
       }
+
       $scope._inquiryMain("/store/manage/storeManage/storeManage/getStoreExcelList.sb", params, function() {
 
         if ($scope.excelFlex.rows.length <= 0) {

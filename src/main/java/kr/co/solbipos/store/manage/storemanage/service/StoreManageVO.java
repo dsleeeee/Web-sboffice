@@ -201,6 +201,15 @@ public class StoreManageVO extends PageVO {
     /** 사이트코드 */
     private String siteCd;
 
+    /** 사용자별 브랜드코드 */
+    private String[] userBrandList;
+
+    /** 사용자별 브랜드코드 */
+    private String userBrands;
+
+    /** 매장브랜드코드 */
+    private String storeHqBrandCd;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -969,5 +978,29 @@ public class StoreManageVO extends PageVO {
 
     public void setSiteCd(String siteCd) {
         this.siteCd = siteCd;
+    }
+
+    public String[] getUserBrandList() {
+        return userBrandList;
+    }
+
+    public void setUserBrandList(String[] userBrandList) {
+        this.userBrandList = userBrandList;
+    }
+
+    public String getUserBrands() {
+        return userBrands;
+    }
+
+    public void setUserBrands(String userBrands) {
+        this.userBrands = userBrands;
+    }
+
+    public String getStoreHqBrandCd() {
+        return storeHqBrandCd;
+    }
+
+    public void setStoreHqBrandCd(String storeHqBrandCd) {
+        this.storeHqBrandCd = storeHqBrandCd;
     }
 }

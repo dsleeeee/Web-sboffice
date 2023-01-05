@@ -9,8 +9,11 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.store.posfunc.service.PosFuncService;
 import kr.co.solbipos.base.store.posfunc.service.PosFuncVO;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageService;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,7 @@ import java.net.URLDecoder;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : PosFuncController.java
@@ -52,14 +56,16 @@ public class PosFuncController {
     /** service */
     private final PosFuncService service;
     private final StoreManageService storeService;
+    private final DayProdService dayProdService;
     private final SessionService sessionService;
     private final CmmCodeUtil cmmCodeUtil;
 
     /** Constructor Injection*/
     @Autowired
-    public PosFuncController(PosFuncService service, StoreManageService storeService, SessionService sessionService, CmmCodeUtil cmmCodeUtil) {
+    public PosFuncController(PosFuncService service, StoreManageService storeService, DayProdService dayProdService, SessionService sessionService, CmmCodeUtil cmmCodeUtil) {
         this.service = service;
         this.storeService = storeService;
+        this.dayProdService = dayProdService;
         this.sessionService = sessionService;
         this.cmmCodeUtil = cmmCodeUtil;
     }
@@ -75,6 +81,21 @@ public class PosFuncController {
      */
     @RequestMapping(value = "/use/view.sb", method = RequestMethod.GET)
     public String list(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 사용자별 브랜드 콤보박스 조회
+            DayProdVO dayProdVO = new DayProdVO();
+            model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
+        }
+
+        // 매장정보관리 화면은 관리자, 총판, 본사가 사용
+        // 관리자 또는 총판은 매장브랜드 값이 없으므로 사용자별 브랜드 빈값으로 셋팅(view script 오류 방지를 위해)
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.MASTER || sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY) {
+            model.addAttribute("userHqBrandCdComboList", convertToJson(""));
+        }
+
         return "base/store/posFunc/posFunc";
     }
 

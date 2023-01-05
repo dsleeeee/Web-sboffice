@@ -4,7 +4,6 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
-import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
@@ -14,6 +13,8 @@ import kr.co.solbipos.base.store.view.service.VanConfigVO;
 import kr.co.solbipos.base.store.view.service.ViewService;
 import kr.co.solbipos.base.store.view.service.ViewVO;
 import kr.co.solbipos.base.store.view.service.enums.CornerUseYn;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ import java.util.Map;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
 * @Class Name : ViewController.java
@@ -57,14 +59,16 @@ public class ViewController {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final ViewService viewService;
+    private final DayProdService dayProdService;
     private final SessionService sessionService;
     private final CmmCodeUtil cmmCodeUtil;
     private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public ViewController(ViewService viewService, SessionService sessionService, CmmCodeUtil cmmCodeUtil, CmmEnvUtil cmmEnvUtil) {
+    public ViewController(ViewService viewService, DayProdService dayProdService, SessionService sessionService, CmmCodeUtil cmmCodeUtil, CmmEnvUtil cmmEnvUtil) {
         this.viewService = viewService;
+        this.dayProdService = dayProdService;
         this.sessionService = sessionService;
         this.cmmCodeUtil = cmmCodeUtil;
         this.cmmEnvUtil = cmmEnvUtil;
@@ -81,6 +85,13 @@ public class ViewController {
     @RequestMapping(value = "/view/list.sb", method = RequestMethod.GET)
     public String list(HttpServletRequest request, HttpServletResponse response,
             Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 사용자별 브랜드 콤보박스 조회
+        DayProdVO dayProdVO = new DayProdVO();
+        model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
+
         return "base/store/view/view";
     }
 

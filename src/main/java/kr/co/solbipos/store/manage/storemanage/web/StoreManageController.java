@@ -12,6 +12,8 @@ import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.store.emp.enums.EmpResult;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
 import kr.co.solbipos.store.manage.storemanage.service.*;
 import org.apache.commons.lang3.StringUtils;
@@ -61,14 +63,16 @@ public class StoreManageController {
 
     /** service */
     private final StoreManageService service;
+    private final DayProdService dayProdService;
     private final SessionService sessionService;
     private final CmmEnvUtil cmmEnvUtil;
     private final CmmCodeUtil cmmCodeUtil;
 
     /** Constructor Injection */
     @Autowired
-    public StoreManageController(StoreManageService service, SessionService sessionService, CmmEnvUtil cmmEnvUtil, CmmCodeUtil cmmCodeUtil) {
+    public StoreManageController(StoreManageService service, DayProdService dayProdService, SessionService sessionService, CmmEnvUtil cmmEnvUtil, CmmCodeUtil cmmCodeUtil) {
         this.service = service;
+        this.dayProdService = dayProdService;
         this.sessionService = sessionService;
         this.cmmEnvUtil = cmmEnvUtil;
         this.cmmCodeUtil = cmmCodeUtil;
@@ -104,8 +108,16 @@ public class StoreManageController {
             model.addAttribute("digit8Store", CmmUtil.nvl(service.getUseDigit8Store(storeManageVO, sessionInfoVO), ""));
             // ERP를 연동하는 본사인지 확인
             model.addAttribute("erpLinkHq", CmmUtil.nvl(service.getErpLinkHq(storeManageVO, sessionInfoVO), ""));
+            // 사용자별 브랜드 콤보박스 조회
+            DayProdVO dayProdVO = new DayProdVO();
+            model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
         }
 
+        // 매장정보관리 화면은 관리자, 총판, 본사가 사용
+        // 관리자 또는 총판은 매장브랜드 값이 없으므로 사용자별 브랜드 빈값으로 셋팅(view script 오류 방지를 위해)
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.MASTER || sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY) {
+            model.addAttribute("userHqBrandCdComboList", convertToJson(""));
+        }
 
         /** 맘스터치 */
         // [1250 맘스터치] 환경설정값 조회

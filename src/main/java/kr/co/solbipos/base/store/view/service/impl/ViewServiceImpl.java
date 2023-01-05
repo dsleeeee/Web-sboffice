@@ -5,6 +5,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.common.enums.ConfgFg;
 import kr.co.solbipos.base.store.view.service.CopyStoreEnvVO;
 import kr.co.solbipos.base.store.view.service.VanConfigVO;
@@ -59,6 +60,15 @@ public class ViewServiceImpl implements ViewService {
 
         viewVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 매장브랜드가 없을 때 (매장브랜드가 '전체' 일때)
+            if (viewVO.getStoreHqBrandCd() == "" || viewVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = viewVO.getUserBrands().split(",");
+                viewVO.setUserBrandList(userBrandList);
+            }
+        }
+
         return viewMapper.getViewList(viewVO);
     }
 
@@ -67,6 +77,15 @@ public class ViewServiceImpl implements ViewService {
     public List<DefaultMap<String>> getStoreListExcel(ViewVO viewVO, SessionInfoVO sessionInfoVO){
 
         viewVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 매장브랜드가 없을 때 (매장브랜드가 '전체' 일때)
+            if (viewVO.getStoreHqBrandCd() == "" || viewVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = viewVO.getUserBrands().split(",");
+                viewVO.setUserBrandList(userBrandList);
+            }
+        }
 
         return viewMapper.getStoreListExcel(viewVO);
     }

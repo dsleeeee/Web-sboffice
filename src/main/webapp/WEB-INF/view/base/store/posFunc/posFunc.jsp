@@ -45,6 +45,29 @@
       <th><s:message code="posFunc.storeNm" /></th>
       <td><input type="text" id="srchStoreNm" class="sb-input w100" onkeyup="fnNxBtnSearch();"/></td>
     </tr>
+    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+      <tr>
+        <%-- 매장브랜드 --%>
+        <th><s:message code="posFunc.storeHqBrand" /></th>
+        <td>
+          <div class="sb-select">
+            <wj-combo-box
+              id="srchStoreHqBrandCd"
+              ng-model="storeHqBrandCd"
+              items-source="_getComboData('srchStoreHqBrandCd')"
+              display-member-path="name"
+              selected-value-path="value"
+              is-editable="false"
+              control="srchStoreHqBrandCdCombo"
+              selected-index-changed="setStoreHqBrandCd(s)">
+            </wj-combo-box>
+          </div>
+          <input type="hidden" id="hdStoreHqBrandCd" />
+        </td>
+        <th></th>
+        <td></td>
+      </tr>
+    </c:if>
     </tbody>
   </table>
 
@@ -112,7 +135,7 @@
   }else{
     hqList = ${ccu.getHqOfficeListChkAgency(orgnCd, "A")};
   }
-
+  var userHqBrandCdComboList = ${userHqBrandCdComboList};
   var posList;
   var selectedStore;
 
@@ -196,6 +219,20 @@
         param.hqOfficeCd = $("#srchHqOfficeCd").val();
       } else if(orgnFg == 'HQ'){
         param.hqOfficeCd = hqOfficeCd;
+
+        // 선택한 매장브랜드가 있을 때
+        param.storeHqBrandCd = $("#hdStoreHqBrandCd").val();
+
+        // 선택한 매장브랜드가 없을 때('전체' 일때)
+        if(param.storeHqBrandCd === "" || param.storeHqBrandCd === null) {
+            var userHqBrandCd = "";
+            for(var i=0; i < userHqBrandCdComboList.length; i++){
+                if(userHqBrandCdComboList[i].value !== null) {
+                    userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                }
+            }
+            param.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+        }
       }
 
       param.hqOfficeNm = $("#srchHqOfficeNm").val();
@@ -277,6 +314,10 @@
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('posFuncCtrl', $scope, $http, true));
 
+    if(orgnFg === "HQ"){
+      $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
+    }
+
     $scope.$on('posFuncCtrl', function (event, data) {
 
     });
@@ -305,6 +346,14 @@
       });
 
       event.preventDefault();
+    };
+
+    // 매장브랜드 선택시, hidden에 선택한 브랜드의 코드 셋팅
+    // script 코드에서 $scope.combobox value를 가져오기 어려워, combobox select change시 hidden에 값에 셋팅해 이것으로 사용.
+    $scope.setStoreHqBrandCd = function(s){
+        if(orgnFg === "HQ"){
+          $("#hdStoreHqBrandCd").val(s.selectedValue);
+        }
     };
 
   }]);

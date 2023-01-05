@@ -2,6 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 
@@ -10,7 +11,7 @@
 
 <div class="subCon" ng-controller="storeListCtrl">
 
-  <div class="searchBar flddUnfld">
+  <div class="searchBar">
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -88,6 +89,27 @@
           </div>
         </td>
       </tr>
+      <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+        <tr>
+          <%-- 매장브랜드 --%>
+          <th><s:message code="storeView.storeHqBrand" /></th>
+          <td>
+            <div class="sb-select">
+              <wj-combo-box
+                id="srchStoreHqBrandCd"
+                ng-model="storeHqBrandCd"
+                items-source="_getComboData('srchStoreHqBrandCd')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                control="srchStoreHqBrandCdCombo">
+              </wj-combo-box>
+            </div>
+          </td>
+          <th></th>
+          <td></td>
+        </tr>
+      </c:if>
       </tbody>
   </table>
 
@@ -192,12 +214,14 @@
 </div>
 
 <script>
+var orgnFg = "${orgnFg}";
 var clsFg = ${ccu.getCommCodeSelect("001")};
 var sysStatFg = ${ccu.getCommCodeSelect("005")};
 var areaCd = ${ccu.getCommCodeSelect("061")};
+var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/view/view.js?ver=20220928.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/view/view.js?ver=20230105.01" charset="utf-8"></script>
 
 <%-- 매장 상세정보 --%>
 <c:import url="/WEB-INF/view/base/store/view/dtl.jsp">

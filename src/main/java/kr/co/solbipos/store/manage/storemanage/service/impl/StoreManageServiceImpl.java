@@ -95,6 +95,16 @@ public class StoreManageServiceImpl implements StoreManageService{
             storeManageVO.setAgencyCd(sessionInfoVO.getOrgnCd());
         }
 
+        // 본사인 경우, 브랜드 체크
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 매장브랜드가 없을 때 (매장브랜드가 '전체' 일때)
+            if (storeManageVO.getStoreHqBrandCd() == "" || storeManageVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = storeManageVO.getUserBrands().split(",");
+                storeManageVO.setUserBrandList(userBrandList);
+            }
+        }
+
         return mapper.getStoreList(storeManageVO);
     }
 
@@ -109,6 +119,16 @@ public class StoreManageServiceImpl implements StoreManageService{
         // 총판인 경우, session의 AgencyCode 값 넣기
         if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY) {
             storeManageVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
+        // 본사인 경우, 브랜드 체크
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 매장브랜드가 없을 때 (매장브랜드가 '전체' 일때)
+            if (storeManageVO.getStoreHqBrandCd() == "" || storeManageVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = storeManageVO.getUserBrands().split(",");
+                storeManageVO.setUserBrandList(userBrandList);
+            }
         }
 
         return mapper.getStoreExcelList(storeManageVO);
