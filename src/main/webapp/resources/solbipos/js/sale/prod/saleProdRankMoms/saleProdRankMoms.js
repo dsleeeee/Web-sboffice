@@ -205,7 +205,7 @@ app.controller('saleProdRankMomsCtrl', ['$scope', '$http', '$timeout', function 
            var columns = grid.columns;
 
            // 컬럼 총갯수
-           var columnsCnt = 21;
+           var columnsCnt = columns.length;
 
            for (var i = 0; i < columnsCnt; i++) {
                columns[i].visible = true;
@@ -413,7 +413,7 @@ app.controller('saleProdRankMomsExcelCtrl', ['$scope', '$http', '$timeout', func
             var columns = grid.columns;
 
             // 컬럼 총갯수
-            var columnsCnt = 21;
+            var columnsCnt = columns.length;
 
             for (var i = 0; i < columnsCnt; i++) {
                columns[i].visible = true;

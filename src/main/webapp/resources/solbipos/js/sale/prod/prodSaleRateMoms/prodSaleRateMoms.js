@@ -138,7 +138,12 @@ app.controller('prodSaleRateMomsCtrl', ['$scope', '$http', '$timeout', function 
         dataItem.branchNm = messages["prodRankMoms.branchNm"];
         dataItem.storeCd = messages["prodRankMoms.storeCd"];
         dataItem.storeNm = messages["prodRankMoms.storeNm"];
-        dataItem.pathNm = messages["prodRankMoms.prodClassNm"];
+        dataItem.lClassCd = messages["prodRankMoms.lClassCd"];
+        dataItem.lClassNm = messages["prodRankMoms.lClassNm"];
+        dataItem.mClassCd = messages["prodRankMoms.mClassCd"];
+        dataItem.mClassNm = messages["prodRankMoms.mClassNm"];
+        dataItem.sClassCd = messages["prodRankMoms.sClassCd"];
+        dataItem.sClassNm = messages["prodRankMoms.sClassNm"];
         dataItem.prodCd = messages["prodRankMoms.prodCd"];
         dataItem.sideProdCd = messages["prodRankMoms.sideProdCd"];
         dataItem.selTypeFg = messages["prodRankMoms.selTypeFg"];
@@ -189,7 +194,12 @@ app.controller('prodSaleRateMomsCtrl', ['$scope', '$http', '$timeout', function 
         dataItem1.branchNm = messages["prodRankMoms.branchNm"];
         dataItem1.storeCd = messages["prodRankMoms.storeCd"];
         dataItem1.storeNm = messages["prodRankMoms.storeNm"];
-        dataItem1.pathNm = messages["prodRankMoms.prodClassNm"];
+        dataItem1.lClassCd = messages["prodRankMoms.lClassCd"];
+        dataItem1.lClassNm = messages["prodRankMoms.lClassNm"];
+        dataItem1.mClassCd = messages["prodRankMoms.mClassCd"];
+        dataItem1.mClassNm = messages["prodRankMoms.mClassNm"];
+        dataItem1.sClassCd = messages["prodRankMoms.sClassCd"];
+        dataItem1.sClassNm = messages["prodRankMoms.sClassNm"];
         dataItem1.prodCd = messages["prodRankMoms.prodCd"];
         dataItem1.sideProdCd = messages["prodRankMoms.sideProdCd"];
         dataItem1.selTypeFg = messages["prodRankMoms.selTypeFg"];
@@ -386,7 +396,7 @@ app.controller('prodSaleRateMomsCtrl', ['$scope', '$http', '$timeout', function 
            var columns = grid.columns;
 
            // 컬럼 총갯수
-           var columnsCnt = 273;
+           var columnsCnt = columns.length;
 
            for (var i = 0; i < columnsCnt; i++) {
                columns[i].visible = true;
@@ -606,7 +616,12 @@ app.controller('prodSaleRateMomsExcelCtrl', ['$scope', '$http', '$timeout', func
         dataItem.branchNm = messages["prodRankMoms.branchNm"];
         dataItem.storeCd = messages["prodRankMoms.storeCd"];
         dataItem.storeNm = messages["prodRankMoms.storeNm"];
-        dataItem.pathNm = messages["prodRankMoms.prodClassNm"];
+        dataItem.lClassCd = messages["prodRankMoms.lClassCd"];
+        dataItem.lClassNm = messages["prodRankMoms.lClassNm"];
+        dataItem.mClassCd = messages["prodRankMoms.mClassCd"];
+        dataItem.mClassNm = messages["prodRankMoms.mClassNm"];
+        dataItem.sClassCd = messages["prodRankMoms.sClassCd"];
+        dataItem.sClassNm = messages["prodRankMoms.sClassNm"];
         dataItem.prodCd = messages["prodRankMoms.prodCd"];
         dataItem.sideProdCd = messages["prodRankMoms.sideProdCd"];
         dataItem.selTypeFg = messages["prodRankMoms.selTypeFg"];
@@ -657,7 +672,12 @@ app.controller('prodSaleRateMomsExcelCtrl', ['$scope', '$http', '$timeout', func
         dataItem1.branchNm = messages["prodRankMoms.branchNm"];
         dataItem1.storeCd = messages["prodRankMoms.storeCd"];
         dataItem1.storeNm = messages["prodRankMoms.storeNm"];
-        dataItem1.pathNm = messages["prodRankMoms.prodClassNm"];
+        dataItem1.lClassCd = messages["prodRankMoms.lClassCd"];
+        dataItem1.lClassNm = messages["prodRankMoms.lClassNm"];
+        dataItem1.mClassCd = messages["prodRankMoms.mClassCd"];
+        dataItem1.mClassNm = messages["prodRankMoms.mClassNm"];
+        dataItem1.sClassCd = messages["prodRankMoms.sClassCd"];
+        dataItem1.sClassNm = messages["prodRankMoms.sClassNm"];
         dataItem1.prodCd = messages["prodRankMoms.prodCd"];
         dataItem1.sideProdCd = messages["prodRankMoms.sideProdCd"];
         dataItem1.selTypeFg = messages["prodRankMoms.selTypeFg"];
@@ -806,7 +826,7 @@ app.controller('prodSaleRateMomsExcelCtrl', ['$scope', '$http', '$timeout', func
            var columns = grid.columns;
 
            // 컬럼 총갯수
-           var columnsCnt = 273;
+            var columnsCnt = columns.length;
 
            for (var i = 0; i < columnsCnt; i++) {
                columns[i].visible = true;

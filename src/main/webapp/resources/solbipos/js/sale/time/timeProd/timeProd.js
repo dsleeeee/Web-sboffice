@@ -167,7 +167,12 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
         dataItem.branchNm = messages["timeProd.branchNm"];
         dataItem.storeCd = messages["timeProd.storeCd"];
         dataItem.storeNm = messages["timeProd.storeNm"];
-        dataItem.pathNm = messages["timeProd.prodClassNm"];
+        dataItem.lClassCd = messages["timeProd.lClassCd"];
+        dataItem.lClassNm = messages["timeProd.lClassNm"];
+        dataItem.mClassCd = messages["timeProd.mClassCd"];
+        dataItem.mClassNm = messages["timeProd.mClassNm"];
+        dataItem.sClassCd = messages["timeProd.sClassCd"];
+        dataItem.sClassNm = messages["timeProd.sClassNm"];
         dataItem.prodCd = messages["timeProd.prodCd"];
         dataItem.sideProdCd = messages["timeProd.sideProdCd"];
         dataItem.selTypeFg = messages["timeProd.selTypeFg"];
@@ -317,7 +322,7 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
             var columns = grid.columns;
 
             // 컬럼 총갯수
-            var columnsCnt = 231;
+            var columnsCnt = columns.length;
 
             for (var i = 0; i < columnsCnt; i++) {
                 columns[i].visible = true;
@@ -557,7 +562,12 @@ app.controller('timeProdExcelCtrl', ['$scope', '$http', '$timeout', function ($s
         dataItem.branchNm = messages["timeProd.branchNm"];
         dataItem.storeCd = messages["timeProd.storeCd"];
         dataItem.storeNm = messages["timeProd.storeNm"];
-        dataItem.pathNm = messages["timeProd.prodClassNm"];
+        dataItem.lClassCd = messages["timeProd.lClassCd"];
+        dataItem.lClassNm = messages["timeProd.lClassNm"];
+        dataItem.mClassCd = messages["timeProd.mClassCd"];
+        dataItem.mClassNm = messages["timeProd.mClassNm"];
+        dataItem.sClassCd = messages["timeProd.sClassCd"];
+        dataItem.sClassNm = messages["timeProd.sClassNm"];
         dataItem.prodCd = messages["timeProd.prodCd"];
         dataItem.sideProdCd = messages["timeProd.sideProdCd"];
         dataItem.selTypeFg = messages["timeProd.selTypeFg"];
@@ -642,7 +652,7 @@ app.controller('timeProdExcelCtrl', ['$scope', '$http', '$timeout', function ($s
             var columns = grid.columns;
 
             // 컬럼 총갯수
-            var columnsCnt = 231;
+            var columnsCnt = columns.length;
 
             for (var i = 0; i < columnsCnt; i++) {
                 columns[i].visible = true;
