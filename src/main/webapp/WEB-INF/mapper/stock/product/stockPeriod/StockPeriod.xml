@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StockPeriod.xml
+    재고현황(매장-기간별)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2022.12.22     최초작성
+-->
+<mapper namespace="kr.co.solbipos.stock.product.stockPeriod.service.impl.StockPeriodMapper">
+
+    <!-- 재고현황(매장-기간별) - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getStockPeriodList"  parameterType="StockPeriodVO" resultType="DefaultMap">
+        /* StockPeriodMapper.getStockPeriodList */
+        SELECT
+        <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
+            TO_CHAR(TO_DATE(tsssd.IOSTOCK_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+            TO_CHAR(TO_DATE(tsssd.IOSTOCK_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
+            TO_CHAR(TO_DATE(#{startDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_FROM,
+            TO_CHAR(TO_DATE(#{endDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_TO,
+        </if>
+        A.LV1_CD,
+        A.LV1_NM,
+        A.LV2_CD,
+        A.LV2_NM,
+        A.LV3_CD,
+        A.LV3_NM,
+        tsssc.PROD_CD,
+        tmp.PROD_NM,
+        tsssc.STORE_CD,
+        (SELECT STORE_NM FROM TB_MS_STORE Z WHERE Z.STORE_CD = tsssc.STORE_CD) AS STORE_NM,
+        tmpb.BARCD_CD,
+        <if test='unitFg == "1"'>
+            SF_ZERO_TO_NULL(SUM(tsssc.CURR_QTY) / tmp.PO_UNIT_QTY) AS CURR_QTY,
+            SF_ZERO_TO_NULL(SUM(tsssd.STORE_SALE_QTY) / tmp.PO_UNIT_QTY) AS ACC_STORE_SALE_QTY,
+        </if>
+        <if test='unitFg == "0"'>
+            SF_ZERO_TO_NULL(SUM(tsssc.CURR_QTY)) AS CURR_QTY,
+            SF_ZERO_TO_NULL(SUM(tsssd.STORE_SALE_QTY)) AS ACC_STORE_SALE_QTY,
+        </if>
+        SF_ZERO_TO_NULL(SUM(tsssd.PRDTION_IN_QTY)) AS ACC_PRDTION_IN_QTY,
+        SF_ZERO_TO_NULL(SUM(tsssd.PRDTION_OUT_QTY)) AS ACC_PRDTION_OUT_QTY,
+        SF_ZERO_TO_NULL(SUM(tsssd.MALL_SALE_QTY)) AS ACC_MALL_SALE_QTY,
+        SF_ZERO_TO_NULL(SUM(tsssd.MALL_RTN_QTY)) AS ACC_MALL_RTN_QTY
+        FROM    (
+        <![CDATA[
+            SELECT  A.HQ_OFFICE_CD
+            ,       A.PROD_CLASS_CD
+            ,		NULL	LV1_CD
+            ,		NULL	LV2_CD
+            ,		NULL	LV3_CD
+            ,       DECODE	(A.LV ,1  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,LENGTH(A.AC))
+                                ,    SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,INSTR(A.AC,'^',2,1)-2)
+                            )  AS  LV1_NM
+            ,       DECODE	(A.LV ,1  ,NULL
+                                ,2  ,SUBSTR(A.AC,INSTR(A.AC,'^',2,1)+1,LENGTH(A.AC))
+                                ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,2)+1,(INSTR(A.AC,'^',1,3)-1)-INSTR(A.AC,'^',1,2))
+                            )  AS  LV2_NM
+            ,       DECODE	(A.LV ,1  ,NULL
+                                ,2  ,NULL
+                                ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1)
+                            )  AS  LV3_NM
+            FROM    (
+                    SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
+                    FROM    (
+                                SELECT  HQ_OFFICE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
+                                FROM    TB_HQ_PRODUCT_CLASS
+                                WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+                            )
+                    START WITH  P_PROD_CLASS_CD ='00000'
+                    AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
+                    CONNECT BY
+                    PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+                    AND         HQ_OFFICE_CD    =   #{hqOfficeCd}
+                    )   A
+            ]]>
+        )  A,
+        TB_ST_STORE_STOCK_CUR tsssc,
+        TB_MS_PRODUCT tmp,
+        TB_MS_PRODUCT_BARCD tmpb,
+        TB_ST_STORE_STOCK_DAILY tsssd
+        WHERE 1=1
+        AND tmp.STORE_CD = tsssc.STORE_CD
+        AND	 EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.STORE_CD = tmp.STORE_CD AND Z.HQ_OFFICE_CD = #{hqOfficeCd})
+        AND tsssc.STORAGE_CD = '999'
+        AND tmp.PROD_CD = tsssc.PROD_CD
+        AND tmp.STOCK_PROD_YN = 'Y'
+        AND tmp.USE_YN = 'Y'
+        AND tmpb.STORE_CD (+) = tsssc.STORE_CD
+        AND tmpb.PROD_CD (+) = tsssc.PROD_CD
+        AND tmp.PROD_CLASS_CD = A.PROD_CLASS_CD (+)
+        AND tsssd.IOSTOCK_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tsssd.STORE_CD (+)= tsssc.STORE_CD
+        AND tsssd.STORAGE_CD (+)= tsssc.STORAGE_CD
+        AND tsssd.HQ_BRAND_CD (+)= tsssc.HQ_BRAND_CD
+        AND tsssd.PROD_CD (+)= tsssc.PROD_CD
+        <if test="storeCd != null and storeCd != ''">
+            AND tmp.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tsssc.PROD_CD = #{prodCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='barcdCd != null and barcdCd != ""'>
+            AND tmpb.BARCD_CD = #{barcdCd}
+        </if>
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND tmp.PROD_CLASS_CD IN  (
+                                            SELECT PROD_CLASS_CD
+                                            FROM TB_MS_PRODUCT_CLASS
+                                            WHERE STORE_CD = tsssc.STORE_CD
+                                            START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = tsssc.STORE_CD
+                                            CONNECT BY PRIOR  PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = tsssc.STORE_CD
+                                        )
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
+            GROUP BY tsssd.IOSTOCK_DATE, A.LV1_CD, A.LV1_NM, A.LV2_CD, A.LV2_NM, A.LV3_CD, A.LV3_NM, tsssc.PROD_CD, tmp.PROD_NM, tsssc.STORE_CD, tsssc.STORE_CD, tmpb.BARCD_CD, tmp.PO_UNIT_QTY
+            ORDER BY tsssd.IOSTOCK_DATE, tsssc.PROD_CD, tsssc.STORE_CD
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
+            GROUP BY A.LV1_CD, A.LV1_NM, A.LV2_CD, A.LV2_NM, A.LV3_CD, A.LV3_NM, tsssc.PROD_CD, tmp.PROD_NM, tsssc.STORE_CD, tsssc.STORE_CD, tmpb.BARCD_CD, tmp.PO_UNIT_QTY
+            ORDER BY tsssc.PROD_CD, tsssc.STORE_CD
+        </if>
+    </select>
+
+</mapper>
