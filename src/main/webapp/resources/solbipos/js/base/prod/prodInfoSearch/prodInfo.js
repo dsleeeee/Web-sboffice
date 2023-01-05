@@ -46,8 +46,12 @@ app.controller('prodInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     var dataItem = {};
     dataItem.hqBrandCd      = messages["prodInfoSearch.prodInfo.hqBrandCd"];
     dataItem.hqBrandNm      = messages["prodInfoSearch.prodInfo.hqBrandNm"];
-    dataItem.prodClassCd    = messages["prodInfoSearch.prodInfo.prodClassCd"];
-    dataItem.prodClassNm    = messages["prodInfoSearch.prodInfo.prodClassNm"];
+    dataItem.lClassCd       = messages["prodInfoSearch.prodInfo.lClassCd"];
+    dataItem.lClassNm       = messages["prodInfoSearch.prodInfo.lClassNm"];
+    dataItem.mClassCd       = messages["prodInfoSearch.prodInfo.mClassCd"];
+    dataItem.mClassNm       = messages["prodInfoSearch.prodInfo.mClassNm"];
+    dataItem.sClassCd       = messages["prodInfoSearch.prodInfo.sClassCd"];
+    dataItem.sClassNm       = messages["prodInfoSearch.prodInfo.sClassNm"];
     dataItem.prodCd         = messages["prodInfoSearch.prodInfo.prodCd"];
     dataItem.prodNm         = messages["prodInfoSearch.prodInfo.prodNm"];
     dataItem.gubun 	        = messages["prodInfoSearch.prodInfo.gubun"];
@@ -226,6 +230,7 @@ app.controller('prodInfoExcelCtrl', ['$scope', '$http', '$timeout', function ($s
       }
     });
 
+
     //Grid Header 2줄 - START	----------------------------------------------------------------
     s.allowMerging = 2;
     s.columnHeaders.rows.push(new wijmo.grid.Row());
@@ -234,8 +239,12 @@ app.controller('prodInfoExcelCtrl', ['$scope', '$http', '$timeout', function ($s
     var dataItem = {};
     dataItem.hqBrandCd      = messages["prodInfoSearch.prodInfo.hqBrandCd"];
     dataItem.hqBrandNm      = messages["prodInfoSearch.prodInfo.hqBrandNm"];
-    dataItem.prodClassCd    = messages["prodInfoSearch.prodInfo.prodClassCd"];
-    dataItem.prodClassNm    = messages["prodInfoSearch.prodInfo.prodClassNm"];
+    dataItem.lClassCd       = messages["prodInfoSearch.prodInfo.lClassCd"];
+    dataItem.lClassNm       = messages["prodInfoSearch.prodInfo.lClassNm"];
+    dataItem.mClassCd       = messages["prodInfoSearch.prodInfo.mClassCd"];
+    dataItem.mClassNm       = messages["prodInfoSearch.prodInfo.mClassNm"];
+    dataItem.sClassCd       = messages["prodInfoSearch.prodInfo.sClassCd"];
+    dataItem.sClassNm       = messages["prodInfoSearch.prodInfo.sClassNm"];
     dataItem.prodCd         = messages["prodInfoSearch.prodInfo.prodCd"];
     dataItem.prodNm         = messages["prodInfoSearch.prodInfo.prodNm"];
     dataItem.gubun 	        = messages["prodInfoSearch.prodInfo.gubun"];

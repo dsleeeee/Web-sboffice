@@ -195,7 +195,7 @@ app.controller('monthProdCtrl', ['$scope', '$http', '$timeout', function ($scope
             var columns = grid.columns;
 
             // 컬럼 총갯수
-            var columnsCnt = 19;
+            var columnsCnt = columns.length;
 
             for (var i = 0; i < columnsCnt; i++) {
                 columns[i].visible = true;
@@ -375,7 +375,7 @@ app.controller('monthProdExcelCtrl', ['$scope', '$http', '$timeout', function ($
             var columns = grid.columns;
 
             // 컬럼 총갯수
-            var columnsCnt = 19;
+            var columnsCnt = columns.length;
 
             for (var i = 0; i < columnsCnt; i++) {
                 columns[i].visible = true;
