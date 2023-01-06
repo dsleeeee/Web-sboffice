@@ -67,7 +67,12 @@ public class PosHwInfoVO extends PageVO {
     private String userIdCkeck;
     /** 권한확인 유저 아이디 버추얼로그인 실행자*/
     private String vUserIdCkeck;
-
+    /** 사용자별 브랜드코드 */
+    private String[] userBrandList;
+    /** 사용자별 브랜드코드 */
+    private String userBrands;
+    /** 매장브랜드코드 */
+    private String storeHqBrandCd;
 
     /**
      * @return the hqOfficeCd
@@ -325,4 +330,28 @@ public class PosHwInfoVO extends PageVO {
     public String getvUserIdCkeck() { return vUserIdCkeck; }
 
     public void setvUserIdCkeck(String vUserIdCkeck) { this.vUserIdCkeck = vUserIdCkeck; }
+
+    public String[] getUserBrandList() {
+        return userBrandList;
+    }
+
+    public void setUserBrandList(String[] userBrandList) {
+        this.userBrandList = userBrandList;
+    }
+
+    public String getUserBrands() {
+        return userBrands;
+    }
+
+    public void setUserBrands(String userBrands) {
+        this.userBrands = userBrands;
+    }
+
+    public String getStoreHqBrandCd() {
+        return storeHqBrandCd;
+    }
+
+    public void setStoreHqBrandCd(String storeHqBrandCd) {
+        this.storeHqBrandCd = storeHqBrandCd;
+    }
 }

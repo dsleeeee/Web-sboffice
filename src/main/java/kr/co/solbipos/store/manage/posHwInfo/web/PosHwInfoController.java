@@ -4,12 +4,15 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import kr.co.solbipos.store.manage.posHwInfo.service.PosHwInfoService;
 import kr.co.solbipos.store.manage.posHwInfo.service.PosHwInfoVO;
-import kr.co.solbipos.store.manage.virtuallogin.service.VirtualLoginService;
-import kr.co.solbipos.store.manage.virtuallogin.service.VirtualLoginVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : PosHwInfoController.java
@@ -47,17 +52,21 @@ public class PosHwInfoController {
 
     /** service */
     private final PosHwInfoService posHwInfoService;
+    private final DayProdService dayProdService;
     private final SessionService sessionService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public PosHwInfoController(PosHwInfoService posHwInfoService, SessionService sessionService) {
+    public PosHwInfoController(PosHwInfoService posHwInfoService, DayProdService dayProdService, SessionService sessionService, CmmEnvUtil cmmEnvUtil) {
         this.posHwInfoService = posHwInfoService;
+        this.dayProdService = dayProdService;
         this.sessionService = sessionService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
-     * 가상로그인 - 페이지 이동
+     * 포스 H/W정보 현황 - 페이지 이동
      * @param   request
      * @param   response
      * @param   model
@@ -68,11 +77,25 @@ public class PosHwInfoController {
     @RequestMapping(value = "/posHwInfo/view.sb", method = RequestMethod.GET)
     public String virtualLoginView(HttpServletRequest request, HttpServletResponse response,
             Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ || sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            // 브랜드사용여부
+            model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
+            // 사용자별 브랜드 콤보박스 조회
+            DayProdVO dayProdVO = new DayProdVO();
+            model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
+        }else{
+            // 관리자 또는 총판은 매장브랜드 값이 없으므로 사용자별 브랜드 빈 콤보박스 셋팅
+            model.addAttribute("userHqBrandCdComboList", CmmUtil.comboListAll());
+        }
+
         return "store/manage/posHwInfo/posHwInfo";
     }
 
     /**
-     * 가상로그인 - 조회
+     * 포스 H/W정보 현황 - 조회
      * @param   request
      * @param   response
      * @param   posHwInfoVO

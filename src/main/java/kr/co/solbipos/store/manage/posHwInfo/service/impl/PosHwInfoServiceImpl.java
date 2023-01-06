@@ -40,13 +40,24 @@ public class PosHwInfoServiceImpl implements PosHwInfoService {
         this.authMapper = authMapper;
     }
 
-    /** 가상로그인 목록 조회 */
+    /** 포스 H/W정보 현황 - 조회 */
     @Override
     public List<DefaultMap<String>> getPosHwInfo(PosHwInfoVO posHwInfoVO, SessionInfoVO sessionInfoVO) {
         posHwInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
         if("H".equals(posHwInfoVO.getOrgnFg())) { // 본사권한으로 해당 본사코드로만 조회
             posHwInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+            // 선택한 매장브랜드가 없을 때 (매장브랜드가 '전체' 일때)
+            if (posHwInfoVO.getStoreHqBrandCd() == "" || posHwInfoVO.getStoreHqBrandCd() == null) {
+              // 사용자별 브랜드 array 값 세팅
+              if (posHwInfoVO.getUserBrands() != null && !"".equals(posHwInfoVO.getUserBrands())) {
+                  String[] userBrandList = posHwInfoVO.getUserBrands().split(",");
+                  if (userBrandList.length > 0) {
+                      posHwInfoVO.setUserBrandList(userBrandList);
+                  }
+              }
+            }
         }
 
         if("A".equals(posHwInfoVO.getOrgnFg())) { //총판권한으로 해당 총판코드로만 조회

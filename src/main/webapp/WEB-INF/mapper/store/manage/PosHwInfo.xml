@@ -25,6 +25,7 @@
             tms.HQ_OFFICE_NM,
             tms.STORE_CD,
             tms.STORE_NM,
+            tms.HQ_BRAND_CD,
             tca.AGENCY_CD,
             tca.AGENCY_NM,
             tpphoi.POS_NO,
@@ -54,6 +55,7 @@
                 ,       B.AGENCY_CD
                 ,       B.SYS_OPEN_DATE
                 ,       B.SYS_CLOSURE_DATE
+                ,       B.HQ_BRAND_CD
                 FROM   TB_HQ_OFFICE A
                 ,       TB_MS_STORE B
                 WHERE  B.HQ_OFFICE_CD (+) = A.HQ_OFFICE_CD
@@ -97,6 +99,18 @@
         </if>
         <if test='sysStatFg != null and sysStatFg != ""'>
             AND tms.SYS_STAT_FG = #{sysStatFg}
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 선택한 매장브랜드가 있을 때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 선택한 매장브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
         </if>
         ORDER BY tms.HQ_OFFICE_CD ASC, tms.STORE_CD ASC, tca.AGENCY_CD ASC
         <include refid="CmmSQL.PagingTemplateBottom"/>

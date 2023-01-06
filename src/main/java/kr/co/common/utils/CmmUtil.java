@@ -6,10 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 import static org.springframework.util.StringUtils.isEmpty;
 
 /**
@@ -470,5 +473,20 @@ public class CmmUtil {
         if(inputStr.toLowerCase().indexOf("onwaiting"                 )   !=-1){ inputStr = inputStr.toLowerCase().replaceAll("onwaiting"               , "사용할 수 없는 문자열"); }
 
         return inputStr;
+    }
+
+    /**
+     * 빈 콤보박스 셋팅
+     * @return
+     */
+    public static String comboListAll(){
+
+        List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+        HashMap<String, String> m = new HashMap<>();
+        m.put("name", "전체");
+        m.put("value", "");
+        list.add(m);
+
+        return convertToJson(list);
     }
 }
