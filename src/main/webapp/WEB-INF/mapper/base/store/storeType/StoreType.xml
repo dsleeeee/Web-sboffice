@@ -165,6 +165,18 @@
         <if test="sysStatFg != null and sysStatFg != ''">
             AND SYS_STAT_FG = #{sysStatFg} --매장상태구분
         </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND HQ_BRAND_CD = #{storeHqBrandCd} -- 선택한 매장브랜드가 있을 때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 선택한 매장브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                AND HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
         AND STORE_CD NOT IN (SELECT STORE_CD FROM TB_HQ_STORE_TYPE_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
         ORDER
         BY STORE_CD ASC
@@ -681,6 +693,7 @@
                 C.STORE_NM,
                 C.STORE_CD,
                 C.SYS_STAT_FG,
+                C.HQ_BRAND_CD,
                 C.APPLY_DT,
                 C.STORE_GROUP_NMS,
                 C.STORE_GROUP_CDS
@@ -690,6 +703,7 @@
                                     tms.STORE_NM,
                                     tms.STORE_CD,
                                     tms.SYS_STAT_FG,
+                                    tms.HQ_BRAND_CD,
                                     TO_CHAR(TO_DATE(thsta.APPLY_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS APPLY_DT,
                                     LISTAGG(thstpg.STORE_GROUP_NM || '(' || thstpg.STORE_GROUP_CD || ')', ', ') WITHIN GROUP (ORDER BY thstpg.STORE_GROUP_CD) AS STORE_GROUP_NMS,
                                     LISTAGG(thstpg.STORE_GROUP_CD, ', ') WITHIN GROUP (ORDER BY thstpg.STORE_GROUP_CD) AS STORE_GROUP_CDS
@@ -732,6 +746,7 @@
                                   tms.STORE_NM,
                                   tms.STORE_CD,
                                   tms.SYS_STAT_FG,
+                                  tms.HQ_BRAND_CD,
                                   thsta.APPLY_DT
                     ) C
                  WHERE 1=1
@@ -749,6 +764,18 @@
                 </if>
                 <if test="sysStatFg != null and sysStatFg != ''">
                     AND C.SYS_STAT_FG = #{sysStatFg} --매장상태구분
+                </if>
+                <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                    AND C.HQ_BRAND_CD = #{storeHqBrandCd} -- 선택한 매장브랜드가 있을 때
+                </if>
+                <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                    <if test='userBrands != null and userBrands != ""'>
+                        -- 선택한 매장브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                        AND C.HQ_BRAND_CD IN
+                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
                 </if>
                 ORDER
                    BY C.STORE_CD ASC
@@ -1168,6 +1195,7 @@
         (SELECT NVL2(MAX(STORE_CD), 'Y', 'N') FROM TB_HQ_STORE_TYPE_APP WHERE HQ_OFFICE_CD = A.HQ_OFFICE_CD AND STORE_CD = A.STORE_CD AND MOD_DT = A.MOD_DT AND APPLY_PROC_FG = '0') AS APPLY_PROC_FG_YN
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_LG_HQ_STORE_TYPE_APP_LOG A,
+        TB_MS_STORE tms,
         (
             SELECT
             AB.HQ_OFFICE_CD, AB.STORE_CD, AB.PROC_DT, AB.STORE_TYPE_CD,
@@ -1233,10 +1261,24 @@
         <if test='storeGroupCd != null and storeGroupCd != ""'>
             AND A.STORE_GROUP_CD = #{storeGroupCd}
         </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 선택한 매장브랜드가 있을 때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 선택한 매장브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
         AND C.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
         AND C.STORE_CD (+)= A.STORE_CD
         AND C.PROC_DT (+)= A.PROC_DT
         AND C.STORE_TYPE_CD (+)= A.STORE_TYPE_CD
+        AND tms.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+        AND tms.STORE_CD = A.STORE_CD
         ORDER BY A.PROC_DT DESC
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>

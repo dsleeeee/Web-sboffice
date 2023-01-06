@@ -77,8 +77,27 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                    <th></th>
-                    <td></td>
+                    <c:if test="${sessionInfo.orgnFg != 'HQ'}">
+                        <th></th>
+                        <td></td>
+                    </c:if>
+                    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                        <%-- 매장브랜드 --%>
+                        <th><s:message code="storeType.storeHqBrand" /></th>
+                        <td>
+                          <div class="sb-select">
+                            <wj-combo-box
+                              id="srchPopStoreHqBrandCd"
+                              ng-model="storeHqBrandCd"
+                              items-source="_getComboData('srchPopStoreHqBrandCd')"
+                              display-member-path="name"
+                              selected-value-path="value"
+                              is-editable="false"
+                              control="srchPopStoreHqBrandCdCombo">
+                            </wj-combo-box>
+                          </div>
+                        </td>
+                    </c:if>
                 </tr>
                 </tbody>
             </table>
@@ -175,4 +194,4 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeTypeApplyStore.js?ver=20211202.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeTypeApplyStore.js?ver=20230106.01" charset="utf-8"></script>

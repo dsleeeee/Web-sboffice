@@ -8,8 +8,11 @@ import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.store.storeType.service.StoreTypeService;
 import kr.co.solbipos.base.store.storeType.service.StoreTypeVO;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,15 +50,17 @@ public class StoreTypeController {
 
     private final SessionService sessionService;
     private final StoreTypeService storeTypeService;
+    private final DayProdService dayProdService;
     private final CmmEnvUtil cmmEnvUtil;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public StoreTypeController(SessionService sessionService, StoreTypeService storeTypeService, CmmEnvUtil cmmEnvUtil) {
+    public StoreTypeController(SessionService sessionService, StoreTypeService storeTypeService, DayProdService dayProdService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.storeTypeService = storeTypeService;
+        this.dayProdService = dayProdService;
         this.cmmEnvUtil = cmmEnvUtil;
     }
 
@@ -93,6 +98,12 @@ public class StoreTypeController {
 
         // 내점/배달/포장가격관리(0044)
         model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0044"), "0"));
+
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 사용자별 브랜드 콤보박스 조회
+            DayProdVO dayProdVO = new DayProdVO();
+            model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
+        }
 
         return "base/store/storeType/storeTypeTab";
     }

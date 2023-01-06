@@ -334,6 +334,9 @@ app.controller('storeSelectCtrl', ['$scope', '$http', '$timeout', function ($sco
     angular.extend(this, new RootController('storeSelectCtrl', $scope, $http, true));
 
     $scope._setComboData("searchSysStatFg", sysStatFg);
+    if(orgnFg === "HQ"){
+      $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
+    }
 
     $scope.initGrid = function (s, e) {
 
@@ -354,6 +357,23 @@ app.controller('storeSelectCtrl', ['$scope', '$http', '$timeout', function ($sco
         params.storeCd = $("#searchStoreCd").val();
         params.storeNm = $("#searchStoreNm").val();
         params.sysStatFg = $scope.searchSysStatFgCombo.selectedValue;
+
+        if(orgnFg === "HQ"){
+
+            // 선택한 매장브랜드가 있을 때
+            params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
+
+            // 선택한 매장브랜드가 없을 때('전체' 일때)
+            if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+                var userHqBrandCd = "";
+                for(var i=0; i < userHqBrandCdComboList.length; i++){
+                    if(userHqBrandCdComboList[i].value !== null) {
+                        userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                    }
+                }
+                params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+            }
+        }
 
         $scope._inquirySub("/base/store/storeType/storeType/getStoreList.sb", params, function() {}, false);
     };

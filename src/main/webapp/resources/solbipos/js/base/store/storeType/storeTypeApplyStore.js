@@ -32,6 +32,9 @@ app.controller('storeTypeApplyStoreCtrl', ['$scope', '$http', '$timeout', functi
     $scope._setComboData("srchPopStoreType", storeTypeList);
     $scope._setComboData("srchPopStoreGroup", storeGroupList);
     $scope._setComboData("srchPopSysStatFg", sysStatFg);
+    if(orgnFg === "HQ"){
+      $scope._setComboData("srchPopStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
+    }
 
     // 적용일시
     var applyDay = wcombo.genDateVal("#applyDay", gvStartDate);
@@ -80,6 +83,23 @@ app.controller('storeTypeApplyStoreCtrl', ['$scope', '$http', '$timeout', functi
         params.storeCd = $("#srchPopStoreCd").val();
         params.storeNm = $("#srchPopStoreNm").val();
         params.sysStatFg = $scope.srchPopSysStatFgCombo.selectedValue;
+
+        if(orgnFg === "HQ"){
+
+            // 선택한 매장브랜드가 있을 때
+            params.storeHqBrandCd = $scope.srchPopStoreHqBrandCdCombo.selectedValue;
+
+            // 선택한 매장브랜드가 없을 때('전체' 일때)
+            if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+                var userHqBrandCd = "";
+                for(var i=0; i < userHqBrandCdComboList.length; i++){
+                    if(userHqBrandCdComboList[i].value !== null) {
+                        userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                    }
+                }
+                params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+            }
+        }
 
         $scope._inquirySub("/base/store/storeType/storeType/getStoreTypeApplyStoreList.sb", params, function () {
 

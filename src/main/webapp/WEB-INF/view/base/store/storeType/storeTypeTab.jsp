@@ -42,6 +42,8 @@
     var storeTypeApplyEnvstVal = "${storeTypeApplyEnvstVal}";
     // 내점/배달/포장가격관리(0044)
     var subPriceFg = "${subPriceFg}";
+    // 사용자 매장브랜드
+    var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeTypeTab.js?ver=20221124.01" charset="utf-8"></script>

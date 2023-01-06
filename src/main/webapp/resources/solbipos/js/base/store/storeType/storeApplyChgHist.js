@@ -41,6 +41,9 @@ app.controller('storeApplyChgHistCtrl', ['$scope', '$http', function ($scope, $h
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("srchSachStoreType", storeTypeList);
     $scope._setComboData("srchSachStoreGroup", storeGroupList);
+    if(orgnFg === "HQ"){
+      $scope._setComboData("srchSachStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
+    }
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -127,6 +130,23 @@ app.controller('storeApplyChgHistCtrl', ['$scope', '$http', function ($scope, $h
         params.storeTypeCd = $scope.srchSachStoreTypeCombo.selectedValue;
         params.storeGroupCd = $scope.srchSachStoreGroupCombo.selectedValue;
         params.listScale = $scope.listScaleCombo5.text;
+
+        if(orgnFg === "HQ"){
+
+            // 선택한 매장브랜드가 있을 때
+            params.storeHqBrandCd = $scope.srchSachStoreHqBrandCdCombo.selectedValue;
+
+            // 선택한 매장브랜드가 없을 때('전체' 일때)
+            if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+                var userHqBrandCd = "";
+                for(var i=0; i < userHqBrandCdComboList.length; i++){
+                    if(userHqBrandCdComboList[i].value !== null) {
+                        userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                    }
+                }
+                params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+            }
+        }
 
         $scope._inquiryMain("/base/store/storeType/storeApplyChgHist/getStoreApplyChgHistList.sb", params, function() {}, false);
     };

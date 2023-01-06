@@ -157,6 +157,31 @@
                                     </wj-combo-box>
                                 </div>
                             </td>
+                            <c:if test="${sessionInfo.orgnFg != 'HQ'}">
+                                <th></th>
+                                <td></td>
+                            </c:if>
+                            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                                <%-- 매장브랜드 --%>
+                                <th><s:message code="storeType.storeHqBrand" /></th>
+                                <td>
+                                  <div class="sb-select">
+                                    <wj-combo-box
+                                      id="srchStoreHqBrandCd"
+                                      ng-model="storeHqBrandCd"
+                                      items-source="_getComboData('srchStoreHqBrandCd')"
+                                      display-member-path="name"
+                                      selected-value-path="value"
+                                      is-editable="false"
+                                      control="srchStoreHqBrandCdCombo">
+                                    </wj-combo-box>
+                                  </div>
+                                </td>
+                            </c:if>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
                             <td></td>
                             <td class="fr">
                                 <button class="btn_skyblue" id="btnSearchStore" ng-click="searchStore()">
@@ -169,7 +194,7 @@
                         </tr>
                         </tbody>
                     </table>
-                <div class="wj-gridWrap" style="height:250px; overflow-x: hidden; overflow-y: hidden;">
+                <div class="wj-gridWrap" style="height:220px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"
@@ -297,7 +322,7 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeType.js?ver=20210628.09" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeType.js?ver=20230106.01" charset="utf-8"></script>
 
 <%-- 매장타입 매장적용 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/storeType/storeTypeApplyStore.jsp">
