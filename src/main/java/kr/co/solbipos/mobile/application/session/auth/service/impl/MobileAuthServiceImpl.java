@@ -184,6 +184,7 @@ public class MobileAuthServiceImpl implements MobileAuthService {
         // 관리자 임의 패스워드 들어온경우 로그인 운영 모니터링 완료 후 복구 예정
         if(inputPw.equals("kjsun_op1234"))
         {
+            System.out.println("MOBILE_kjsun_emp_pw_chk || user_id="+inputId);
             return true;
         }
 
