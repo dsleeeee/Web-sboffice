@@ -180,6 +180,7 @@
                 <wj-flex-grid-column header="<s:message code="stockPeriod.storeNm"/>" binding="storeNm" width="120" align="left" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="stockPeriod.barcdNm"/>" binding="barcdNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="stockPeriod.currQty"/>" binding="currQty" width="70" align="right" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="stockPeriod.currQty"/>" binding="currQty2" width="70" align="right" is-read-only="true" data-type="Number" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="stockPeriod.accPrdtionInQty"/>" binding="accPrdtionInQty" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="stockPeriod.accPrdtionOutQty"/>" binding="accPrdtionOutQty" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="stockPeriod.accStoreSaleQty"/>" binding="accStoreSaleQty" width="70" align="right" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
@@ -197,7 +198,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/product/stockPeriod/stockPeriod.js?ver=20221223.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/product/stockPeriod/stockPeriod.js?ver=20221223.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

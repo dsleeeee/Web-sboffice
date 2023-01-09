@@ -87,7 +87,7 @@ app.controller('stockPeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
             var columns = grid.columns;
 
             // 컬럼 총갯수
-            var columnsCnt = 18;
+            var columnsCnt = 19;
 
             for (var i = 0; i < columnsCnt; i++) {
                 columns[i].visible = true;
@@ -97,11 +97,11 @@ app.controller('stockPeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
             for (var j = 0; j < columnsCnt; j++) {
                 // 일자표시옵션
                 if(params.dayOption === "1"){  // 일자별
-                    if(columns[j].binding == "dayFrom" || columns[j].binding == "dayTo") {
+                    if(columns[j].binding == "dayFrom" || columns[j].binding == "dayTo" || columns[j].binding == "currQty") {
                         columns[j].visible = false;
                     }
                 } else if(params.dayOption === "2"){  // 기간합
-                    if(columns[j].binding == "saleDate" || columns[j].binding == "yoil") {
+                    if(columns[j].binding == "saleDate" || columns[j].binding == "yoil" || columns[j].binding == "currQty2") {
                         columns[j].visible = false;
                     }
                 }
