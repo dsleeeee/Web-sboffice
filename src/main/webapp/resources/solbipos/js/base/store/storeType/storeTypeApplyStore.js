@@ -32,9 +32,7 @@ app.controller('storeTypeApplyStoreCtrl', ['$scope', '$http', '$timeout', functi
     $scope._setComboData("srchPopStoreType", storeTypeList);
     $scope._setComboData("srchPopStoreGroup", storeGroupList);
     $scope._setComboData("srchPopSysStatFg", sysStatFg);
-    if(orgnFg === "HQ"){
-      $scope._setComboData("srchPopStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
-    }
+    $scope._setComboData("srchPopStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
 
     // 적용일시
     var applyDay = wcombo.genDateVal("#applyDay", gvStartDate);
@@ -84,7 +82,7 @@ app.controller('storeTypeApplyStoreCtrl', ['$scope', '$http', '$timeout', functi
         params.storeNm = $("#srchPopStoreNm").val();
         params.sysStatFg = $scope.srchPopSysStatFgCombo.selectedValue;
 
-        if(orgnFg === "HQ"){
+        if(brandUseFg === "1" && orgnFg === "HQ"){
 
             // 선택한 매장브랜드가 있을 때
             params.storeHqBrandCd = $scope.srchPopStoreHqBrandCdCombo.selectedValue;

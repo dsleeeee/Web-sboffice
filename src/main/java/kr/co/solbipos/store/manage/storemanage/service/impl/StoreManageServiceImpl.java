@@ -100,8 +100,12 @@ public class StoreManageServiceImpl implements StoreManageService{
             // 선택한 매장브랜드가 없을 때 (매장브랜드가 '전체' 일때)
             if (storeManageVO.getStoreHqBrandCd() == "" || storeManageVO.getStoreHqBrandCd() == null) {
                 // 사용자별 브랜드 array 값 세팅
-                String[] userBrandList = storeManageVO.getUserBrands().split(",");
-                storeManageVO.setUserBrandList(userBrandList);
+                if (storeManageVO.getUserBrands() != null && !"".equals(storeManageVO.getUserBrands())) {
+                    String[] userBrandList = storeManageVO.getUserBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        storeManageVO.setUserBrandList(userBrandList);
+                    }
+                }
             }
         }
 
@@ -126,8 +130,12 @@ public class StoreManageServiceImpl implements StoreManageService{
             // 선택한 매장브랜드가 없을 때 (매장브랜드가 '전체' 일때)
             if (storeManageVO.getStoreHqBrandCd() == "" || storeManageVO.getStoreHqBrandCd() == null) {
                 // 사용자별 브랜드 array 값 세팅
-                String[] userBrandList = storeManageVO.getUserBrands().split(",");
-                storeManageVO.setUserBrandList(userBrandList);
+                if (storeManageVO.getUserBrands() != null && !"".equals(storeManageVO.getUserBrands())) {
+                    String[] userBrandList = storeManageVO.getUserBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        storeManageVO.setUserBrandList(userBrandList);
+                    }
+                }
             }
         }
 

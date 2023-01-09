@@ -35,9 +35,7 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.hqOfficeCd = gvHqOfficeCd;
   // 조회조건
   $scope._setComboData("hqOffice", hqList);
-  if(orgnFg === "HQ"){
-    $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
-  }
+  $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -90,7 +88,7 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     params.sysStatFg = $scope.sysStatFg;
     params.storeCd = $("#addStoreChoiceCd").val();
 
-    if(orgnFg === "HQ"){
+    if(brandUseFg === "1" && orgnFg === "HQ"){
 
         // 선택한 매장브랜드가 있을 때
         params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
@@ -110,7 +108,7 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._inquiryMain("/base/store/media/applcStore/srchStoreList.sb", params, function() {
       // 적용매장 조회 후, 미적용 매장 조회
       var allStoreScope = agrid.getScope("allStoreCtrl");
-      allStoreScope._broadcast('allStoreCtrl', orgnFg === "HQ" ? $scope.srchStoreHqBrandCdCombo.selectedValue : ""); // 미적용매장 조회시, 본사권한은 검색조건 매장브랜드 값 넘기기
+      allStoreScope._broadcast('allStoreCtrl', brandUseFg === "1" && orgnFg === "HQ" ? $scope.srchStoreHqBrandCdCombo.selectedValue : ""); // 미적용매장 조회시, 본사권한은 검색조건 매장브랜드 값 넘기기
       //allStoreScope._pageView('allStoreCtrl', 1);
 
     }, false);
@@ -204,7 +202,7 @@ app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
       params.chkMulti = "N";
     }
 
-    if(orgnFg === "HQ"){
+    if(brandUseFg === "1" && orgnFg === "HQ"){
 
         // 선택한 매장브랜드가 있을 때
         params.storeHqBrandCd = vStoreHqBrandCd;

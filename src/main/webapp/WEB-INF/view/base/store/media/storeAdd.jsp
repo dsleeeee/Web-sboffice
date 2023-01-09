@@ -6,7 +6,7 @@
 <c:set var="gvHqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
 <%-- 매장추가 레이어 --%>
-<wj-popup control="storeAddLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:710px;">
+<wj-popup control="storeAddLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:680px;">
   <div class="wj-dialog wj-dialog-columns title">
 
     <%-- header --%>
@@ -69,26 +69,28 @@
                 </div>
               </td>
             </tr>
-            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-              <tr>
-                <%-- 매장브랜드 --%>
-                <th><s:message code="media.storeHqBrand" /></th>
-                <td>
-                  <div class="sb-select">
-                    <wj-combo-box
-                      id="srchStoreHqBrandCd"
-                      ng-model="storeHqBrandCd"
-                      items-source="_getComboData('srchStoreHqBrandCd')"
-                      display-member-path="name"
-                      selected-value-path="value"
-                      is-editable="false"
-                      control="srchStoreHqBrandCdCombo">
-                    </wj-combo-box>
-                  </div>
-                </td>
-                <th></th>
-                <td></td>
-              </tr>
+            <c:if test="${brandUseFg == '1'}">
+              <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                <tr>
+                  <%-- 매장브랜드 --%>
+                  <th><s:message code="media.storeHqBrand" /></th>
+                  <td>
+                    <div class="sb-select">
+                      <wj-combo-box
+                        id="srchStoreHqBrandCd"
+                        ng-model="storeHqBrandCd"
+                        items-source="_getComboData('srchStoreHqBrandCd')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        control="srchStoreHqBrandCdCombo">
+                      </wj-combo-box>
+                    </div>
+                  </td>
+                  <th></th>
+                  <td></td>
+                </tr>
+              </c:if>
             </c:if>
             </tbody>
           </table>
@@ -161,7 +163,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/storeAdd.js?ver=20230105.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/storeAdd.js?ver=20230109.02" charset="utf-8"></script>
 
 <script>
   $(document).ready(function(){
@@ -175,5 +177,9 @@
 
   var orgnFg = "${orgnFg}";
   var sysStatFgTotal = ${ccu.getCommCodeSelect("005")};
+  // 브랜드 사용여부
+  var brandUseFg = "${brandUseFg}";
+  // 사용자 매장브랜드
   var userHqBrandCdComboList = ${userHqBrandCdComboList};
+
 </script>

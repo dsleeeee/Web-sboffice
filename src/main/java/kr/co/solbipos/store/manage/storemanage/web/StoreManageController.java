@@ -108,15 +108,14 @@ public class StoreManageController {
             model.addAttribute("digit8Store", CmmUtil.nvl(service.getUseDigit8Store(storeManageVO, sessionInfoVO), ""));
             // ERP를 연동하는 본사인지 확인
             model.addAttribute("erpLinkHq", CmmUtil.nvl(service.getErpLinkHq(storeManageVO, sessionInfoVO), ""));
+            // 브랜드사용여부
+            model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
             // 사용자별 브랜드 콤보박스 조회
             DayProdVO dayProdVO = new DayProdVO();
             model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
-        }
-
-        // 매장정보관리 화면은 관리자, 총판, 본사가 사용
-        // 관리자 또는 총판은 매장브랜드 값이 없으므로 사용자별 브랜드 빈값으로 셋팅(view script 오류 방지를 위해)
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.MASTER || sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY) {
-            model.addAttribute("userHqBrandCdComboList", convertToJson(""));
+        }else{
+          // 관리자 또는 총판은 매장브랜드 값이 없으므로 사용자별 브랜드 빈 콤보박스 셋팅
+          model.addAttribute("userHqBrandCdComboList", CmmUtil.comboListAll());
         }
 
         /** 맘스터치 */

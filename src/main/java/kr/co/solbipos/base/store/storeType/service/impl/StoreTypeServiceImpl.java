@@ -144,11 +144,15 @@ public class StoreTypeServiceImpl implements StoreTypeService {
         storeTypeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-          // 선택한 매장브랜드가 없을 때 (매장브랜드가 '전체' 일때)
+            // 선택한 매장브랜드가 없을 때 (매장브랜드가 '전체' 일때)
           if (storeTypeVO.getStoreHqBrandCd() == "" || storeTypeVO.getStoreHqBrandCd() == null) {
-              // 사용자별 브랜드 array 값 세팅
-              String[] userBrandList = storeTypeVO.getUserBrands().split(",");
-              storeTypeVO.setUserBrandList(userBrandList);
+            // 사용자별 브랜드 array 값 세팅
+            if (storeTypeVO.getUserBrands() != null && !"".equals(storeTypeVO.getUserBrands())) {
+                String[] userBrandList = storeTypeVO.getUserBrands().split(",");
+                if (userBrandList.length > 0) {
+                    storeTypeVO.setUserBrandList(userBrandList);
+                }
+            }
           }
         }
 
@@ -427,11 +431,15 @@ public class StoreTypeServiceImpl implements StoreTypeService {
         storeTypeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-          // 선택한 매장브랜드가 없을 때 (매장브랜드가 '전체' 일때)
+        // 선택한 매장브랜드가 없을 때 (매장브랜드가 '전체' 일때)
           if (storeTypeVO.getStoreHqBrandCd() == "" || storeTypeVO.getStoreHqBrandCd() == null) {
-              // 사용자별 브랜드 array 값 세팅
-              String[] userBrandList = storeTypeVO.getUserBrands().split(",");
-              storeTypeVO.setUserBrandList(userBrandList);
+            // 사용자별 브랜드 array 값 세팅
+            if (storeTypeVO.getUserBrands() != null && !"".equals(storeTypeVO.getUserBrands())) {
+                String[] userBrandList = storeTypeVO.getUserBrands().split(",");
+                if (userBrandList.length > 0) {
+                    storeTypeVO.setUserBrandList(userBrandList);
+                }
+            }
           }
         }
 
@@ -533,11 +541,15 @@ public class StoreTypeServiceImpl implements StoreTypeService {
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             // 선택한 매장브랜드가 없을 때 (매장브랜드가 '전체' 일때)
-            if (storeTypeVO.getStoreHqBrandCd() == "" || storeTypeVO.getStoreHqBrandCd() == null) {
-                // 사용자별 브랜드 array 값 세팅
+          if (storeTypeVO.getStoreHqBrandCd() == "" || storeTypeVO.getStoreHqBrandCd() == null) {
+            // 사용자별 브랜드 array 값 세팅
+            if (storeTypeVO.getUserBrands() != null && !"".equals(storeTypeVO.getUserBrands())) {
                 String[] userBrandList = storeTypeVO.getUserBrands().split(",");
-                storeTypeVO.setUserBrandList(userBrandList);
+                if (userBrandList.length > 0) {
+                    storeTypeVO.setUserBrandList(userBrandList);
+                }
             }
+          }
         }
 
         return storeTypeMapper.getStoreApplyChgHistList(storeTypeVO);

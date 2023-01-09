@@ -99,11 +99,12 @@ public class StoreTypeController {
         // 내점/배달/포장가격관리(0044)
         model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0044"), "0"));
 
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            // 사용자별 브랜드 콤보박스 조회
-            DayProdVO dayProdVO = new DayProdVO();
-            model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
-        }
+        // 브랜드사용여부
+        model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
+
+        // 사용자별 브랜드 콤보박스 조회
+        DayProdVO dayProdVO = new DayProdVO();
+        model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
 
         return "base/store/storeType/storeTypeTab";
     }
