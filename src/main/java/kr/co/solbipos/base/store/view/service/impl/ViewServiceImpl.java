@@ -64,8 +64,12 @@ public class ViewServiceImpl implements ViewService {
             // 선택한 매장브랜드가 없을 때 (매장브랜드가 '전체' 일때)
             if (viewVO.getStoreHqBrandCd() == "" || viewVO.getStoreHqBrandCd() == null) {
                 // 사용자별 브랜드 array 값 세팅
-                String[] userBrandList = viewVO.getUserBrands().split(",");
-                viewVO.setUserBrandList(userBrandList);
+                if (viewVO.getUserBrands() != null && !"".equals(viewVO.getUserBrands())) {
+                    String[] userBrandList = viewVO.getUserBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        viewVO.setUserBrandList(userBrandList);
+                    }
+                }
             }
         }
 
@@ -82,8 +86,12 @@ public class ViewServiceImpl implements ViewService {
             // 선택한 매장브랜드가 없을 때 (매장브랜드가 '전체' 일때)
             if (viewVO.getStoreHqBrandCd() == "" || viewVO.getStoreHqBrandCd() == null) {
                 // 사용자별 브랜드 array 값 세팅
-                String[] userBrandList = viewVO.getUserBrands().split(",");
-                viewVO.setUserBrandList(userBrandList);
+                if (viewVO.getUserBrands() != null && !"".equals(viewVO.getUserBrands())) {
+                    String[] userBrandList = viewVO.getUserBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        viewVO.setUserBrandList(userBrandList);
+                    }
+                }
             }
         }
 

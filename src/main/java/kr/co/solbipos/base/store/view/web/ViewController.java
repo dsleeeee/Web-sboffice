@@ -4,6 +4,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
@@ -90,6 +91,8 @@ public class ViewController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 브랜드사용여부
+            model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
             // 사용자별 브랜드 콤보박스 조회
             DayProdVO dayProdVO = new DayProdVO();
             model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));

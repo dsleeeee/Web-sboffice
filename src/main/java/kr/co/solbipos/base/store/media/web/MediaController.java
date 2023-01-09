@@ -5,7 +5,9 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.media.service.MediaApplcStoreVO;
 import kr.co.solbipos.base.store.media.service.MediaService;
@@ -54,12 +56,14 @@ public class MediaController {
     private final MediaService mediaService;
     private final DayProdService dayProdService;
     private final MessageService messageService;
+    private final CmmEnvUtil cmmEnvUtil;
 
-    public MediaController(SessionService sessionService, MediaService mediaService, DayProdService dayProdService, MessageService messageService) {
+    public MediaController(SessionService sessionService, MediaService mediaService, DayProdService dayProdService, MessageService messageService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.mediaService = mediaService;
         this.dayProdService = dayProdService;
         this.messageService = messageService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -76,8 +80,9 @@ public class MediaController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
+        // 브랜드사용여부
+        model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
         // 사용자별 브랜드 콤보박스 조회
-        // 파일 적용매장 등록팝업에서 사용하며, 적용매장은 본사권한만 가능.
         DayProdVO dayProdVO = new DayProdVO();
         model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
 

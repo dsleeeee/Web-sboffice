@@ -6,8 +6,10 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.store.posfunc.service.PosFuncService;
@@ -59,15 +61,17 @@ public class PosFuncController {
     private final DayProdService dayProdService;
     private final SessionService sessionService;
     private final CmmCodeUtil cmmCodeUtil;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection*/
     @Autowired
-    public PosFuncController(PosFuncService service, StoreManageService storeService, DayProdService dayProdService, SessionService sessionService, CmmCodeUtil cmmCodeUtil) {
+    public PosFuncController(PosFuncService service, StoreManageService storeService, DayProdService dayProdService, SessionService sessionService, CmmCodeUtil cmmCodeUtil, CmmEnvUtil cmmEnvUtil) {
         this.service = service;
         this.storeService = storeService;
         this.dayProdService = dayProdService;
         this.sessionService = sessionService;
         this.cmmCodeUtil = cmmCodeUtil;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -84,16 +88,15 @@ public class PosFuncController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 브랜드사용여부
+            model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
             // 사용자별 브랜드 콤보박스 조회
             DayProdVO dayProdVO = new DayProdVO();
             model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
-        }
-
-        // 포스기능정의 화면은 관리자, 총판, 본사가 사용
-        // 관리자 또는 총판은 매장브랜드 값이 없으므로 사용자별 브랜드 빈값으로 셋팅(view script 오류 방지를 위해)
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.MASTER || sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY) {
-            model.addAttribute("userHqBrandCdComboList", convertToJson(""));
+        } else {
+            // 관리자 또는 총판은 매장브랜드 값이 없으므로 사용자별 브랜드 빈 콤보박스 셋팅
+            model.addAttribute("userHqBrandCdComboList", CmmUtil.comboListAll());
         }
 
         return "base/store/posFunc/posFunc";

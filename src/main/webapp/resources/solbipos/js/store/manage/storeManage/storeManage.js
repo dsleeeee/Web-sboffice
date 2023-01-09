@@ -23,9 +23,7 @@ app.controller('storeManageCtrl', ['$scope', '$http', '$timeout', function ($sco
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("srchClsFg", clsFgAll);
   $scope._setComboData("srchSysStatFg", sysStatFg);
-  if(orgnFg === 'HQ') {
-    $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
-  }
+  $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
 
   // 선택 매장
   $scope.selectedStore;
@@ -123,18 +121,21 @@ app.controller('storeManageCtrl', ['$scope', '$http', '$timeout', function ($sco
     if(orgnFg === "HQ"){
         params.hqOfficeCd = hqOfficeCd;
 
-        // 선택한 매장브랜드가 있을 때
-        params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
+        if(brandUseFg === "1"){
 
-        // 선택한 매장브랜드가 없을 때('전체' 일때)
-        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
-            var userHqBrandCd = "";
-            for(var i=0; i < userHqBrandCdComboList.length; i++){
-                if(userHqBrandCdComboList[i].value !== null) {
-                    userHqBrandCd += userHqBrandCdComboList[i].value + ","
-                }
-            }
-            params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+          // 선택한 매장브랜드가 있을 때
+          params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
+
+          // 선택한 매장브랜드가 없을 때('전체' 일때)
+          if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+              var userHqBrandCd = "";
+              for(var i=0; i < userHqBrandCdComboList.length; i++){
+                  if(userHqBrandCdComboList[i].value !== null) {
+                      userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                  }
+              }
+              params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+          }
         }
     }
 
@@ -207,18 +208,21 @@ app.controller('storeManageExcelCtrl', ['$scope', '$http', '$timeout', function 
       if(orgnFg == 'HQ') {
         params.hqOfficeCd = hqOfficeCd;
 
-        // 선택한 매장브랜드가 있을 때
-        params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
+        if (brandUseFg === "1") {
 
-        // 선택한 매장브랜드가 없을 때('전체' 일때)
-        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+          // 선택한 매장브랜드가 있을 때
+          params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
+
+          // 선택한 매장브랜드가 없을 때('전체' 일때)
+          if (params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
             var userHqBrandCd = "";
-            for(var i=0; i < userHqBrandCdComboList.length; i++){
-                if(userHqBrandCdComboList[i].value !== null) {
-                    userHqBrandCd += userHqBrandCdComboList[i].value + ","
-                }
+            for (var i = 0; i < userHqBrandCdComboList.length; i++) {
+              if (userHqBrandCdComboList[i].value !== null) {
+                userHqBrandCd += userHqBrandCdComboList[i].value + ","
+              }
             }
             params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+          }
         }
       }
 
