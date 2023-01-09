@@ -188,21 +188,25 @@
                     </f:form>
                     <tr>
                         <td align="center">
+                            <p class="s12 red mb10"><s:message code="prodImg.fileSize.max" /></p>
                             <button type="button" class="btn_skyblue" ng-click="imgCancel('001', 'F')"><s:message code="cmm.selectCancel" /></button>
                             <button type="button" class="btn_skyblue" ng-click="regImg('001')"><s:message code="prodImg.regImg" /></button>
                             <button type="button" class="btn_skyblue" ng-click="delImg('001')"><s:message code="cmm.del" /></button>
                         </td>
                         <td>
+                            <p class="s12 red mb10"><s:message code="prodImg.fileSize.max" /></p>
                             <button type="button" class="btn_skyblue" ng-click="imgCancel('002', 'F')"><s:message code="cmm.selectCancel" /></button>
                             <button type="button" class="btn_skyblue" ng-click="regImg('002')"><s:message code="prodImg.regImg" /></button>
                             <button type="button" class="btn_skyblue" ng-click="delImg('002')"><s:message code="cmm.del" /></button>
                         </td>
                         <td>
+                            <p class="s12 red mb10"><s:message code="prodImg.fileSize.max" /></p>
                             <button type="button" class="btn_skyblue" ng-click="imgCancel('003', 'F')"><s:message code="cmm.selectCancel" /></button>
                             <button type="button" class="btn_skyblue" ng-click="regImg('003')"><s:message code="prodImg.regImg" /></button>
                             <button type="button" class="btn_skyblue" ng-click="delImg('003')"><s:message code="cmm.del" /></button>
                         </td>
                         <td>
+                            <p class="s12 red mb10"><s:message code="prodImg.fileSize.max" /></p>
                             <button type="button" class="btn_skyblue" ng-click="imgCancel('004', 'F')"><s:message code="cmm.selectCancel" /></button>
                             <button type="button" class="btn_skyblue" ng-click="regImg('004')"><s:message code="prodImg.regImg" /></button>
                             <button type="button" class="btn_skyblue" ng-click="delImg('004')"><s:message code="cmm.del" /></button>
