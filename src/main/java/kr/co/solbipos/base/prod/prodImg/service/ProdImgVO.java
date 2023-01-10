@@ -58,6 +58,12 @@ public class ProdImgVO extends PageVO {
     private String arrImgFg[];
     /** 복사구분 */
     private String gubun;
+    /** 사용자별 브랜드코드(상품) */
+    private String[] userProdBrandList;
+    /** 사용자별 브랜드코드(상품) */
+    private String userProdBrands;
+    /** 상품브랜드코드 */
+    private String prodHqBrandCd;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -241,5 +247,29 @@ public class ProdImgVO extends PageVO {
 
     public void setGubun(String gubun) {
         this.gubun = gubun;
+    }
+
+    public String[] getUserProdBrandList() {
+        return userProdBrandList;
+    }
+
+    public void setUserProdBrandList(String[] userProdBrandList) {
+        this.userProdBrandList = userProdBrandList;
+    }
+
+    public String getUserProdBrands() {
+        return userProdBrands;
+    }
+
+    public void setUserProdBrands(String userProdBrands) {
+        this.userProdBrands = userProdBrands;
+    }
+
+    public String getProdHqBrandCd() {
+        return prodHqBrandCd;
+    }
+
+    public void setProdHqBrandCd(String prodHqBrandCd) {
+        this.prodHqBrandCd = prodHqBrandCd;
     }
 }

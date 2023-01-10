@@ -5,9 +5,13 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.prod.prodImg.service.ProdImgService;
 import kr.co.solbipos.base.prod.prodImg.service.ProdImgVO;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +27,7 @@ import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : ProdImgController.java
@@ -45,14 +50,18 @@ public class ProdImgController {
 
     private final SessionService sessionService;
     private final ProdImgService prodImgService;
+    private final DayProdService dayProdService;
     private final MessageService messageService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     @Autowired
-    public ProdImgController(SessionService sessionService, ProdImgService prodImgService, MessageService messageService) {
+    public ProdImgController(SessionService sessionService, ProdImgService prodImgService, DayProdService dayProdService, MessageService messageService, CmmEnvUtil cmmEnvUtil) {
 
         this.sessionService = sessionService;
         this.prodImgService = prodImgService;
+        this.dayProdService = dayProdService;
         this.messageService = messageService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -67,6 +76,14 @@ public class ProdImgController {
      */
     @RequestMapping(value = "/prodImg/view.sb", method = RequestMethod.GET)
     public String view(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 브랜드사용여부
+        model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
+        // 사용자별 브랜드 콤보박스 조회
+        DayProdVO dayProdVO = new DayProdVO();
+        model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
 
         // POS에서 해당 WEB 화면 재접속한 경우(이전 접속 session 그대로 존재), 'posLoginReconnect'값울 판단하여 view화면 처리
         if(request.getParameter("posLoginReconnect") != null && request.getParameter("posLoginReconnect").length() > 0){

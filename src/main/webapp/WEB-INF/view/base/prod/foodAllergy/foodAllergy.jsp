@@ -101,9 +101,17 @@
 
 <script type="text/javascript">
     var hqOfficeCd = "${hqOfficeCd}";
+    // 브랜드 사용여부
+    var brandUseFg = "${brandUseFg}";
+    // 사용자 매장브랜드
+    var userHqBrandCdComboList = ${userHqBrandCdComboList};
+    // 사용자 매장브랜드(리스트 DataMap용)
+    var userHqBrandCdComboList2 = ${userHqBrandCdComboList};
+    userHqBrandCdComboList2[0].name = "선택";
+    userHqBrandCdComboList2[0].value = 0;
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/foodAllergy/foodAllergy.js?ver=20210327.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/foodAllergy/foodAllergy.js?ver=20230110.01" charset="utf-8"></script>
 
 <%-- 알레르기-상품 등록 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/foodAllergy/foodAllergyProd.jsp">

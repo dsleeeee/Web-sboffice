@@ -178,6 +178,19 @@ public class RecpOriginServiceImpl implements RecpOriginService {
         }
         recpOriginVO.setUserId(sessionInfoVO.getUserId());
 
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
+            if (recpOriginVO.getProdHqBrandCd() == "" || recpOriginVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (recpOriginVO.getUserProdBrands() != null && !"".equals(recpOriginVO.getUserProdBrands())) {
+                    String[] userBrandList = recpOriginVO.getUserProdBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        recpOriginVO.setUserProdBrandList(userBrandList);
+                    }
+                }
+            }
+        }
+
         return recpOriginMapper.getProdRecpOriginList(recpOriginVO);
     }
 

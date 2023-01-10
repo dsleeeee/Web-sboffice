@@ -18,6 +18,7 @@ app.controller('sideMenuProdCtrl', ['$scope', '$http', 'sdselClassCd', function 
   angular.extend(this, new RootController('sideMenuProdCtrl', $scope, $http, false));
   // 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
+  $scope._setComboData("srchProdHqBrandCd", userHqBrandCdComboList); // 상품브랜드
   // 상품 선택여부
   $scope.itemChecked = false;
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -45,6 +46,21 @@ app.controller('sideMenuProdCtrl', ['$scope', '$http', 'sdselClassCd', function 
     params.prodClassCd = $scope.prodClassCd;
     if(typeof gubun !== "undefined"){
       params.sideEnvstVal = gubun;
+    }
+    if(brandUseFg === "1" && orgnFg === "HQ"){
+      // 선택한 상품브랜드가 있을 때
+      params.prodHqBrandCd = $scope.srchProdHqBrandCdCombo.selectedValue;
+
+      // 선택한 상품브랜드가 없을 때('전체' 일때)
+      if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+          var userHqBrandCd = "";
+          for(var i=0; i < userHqBrandCdComboList.length; i++){
+              if(userHqBrandCdComboList[i].value !== null) {
+                  userHqBrandCd += userHqBrandCdComboList[i].value + ","
+              }
+          }
+          params.userProdBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+      }
     }
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquiryMain('/base/prod/sideMenu/menuProd/getProdList.sb', params);

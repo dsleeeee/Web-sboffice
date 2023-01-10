@@ -36,6 +36,29 @@
           </td>
           <td></td>
         </tr>
+        <c:if test="${brandUseFg == '1'}">
+            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+              <tr>
+                <%-- 상품브랜드 --%>
+                <th><s:message code="sideMenu.selectMenu.prodHqBrand" /></th>
+                <td>
+                  <div class="sb-select">
+                    <wj-combo-box
+                      id="srchProdHqBrandCd"
+                      ng-model="storeHqBrandCd"
+                      items-source="_getComboData('srchProdHqBrandCd')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      control="srchProdHqBrandCdCombo">
+                    </wj-combo-box>
+                  </div>
+                </td>
+                <th></th>
+                <td></td>
+              </tr>
+            </c:if>
+          </c:if>
         </tbody>
       </table>
       <%-- 조회 --%>
@@ -100,5 +123,9 @@
 <script type="text/javascript">
   var gvListScaleBoxData = ${ccu.getListScale()};
   var gubun = "${param.gubun}";
+  // 브랜드 사용여부
+  var brandUseFg = "${brandUseFg}";
+  // 사용자 브랜드
+  var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuProdView.js?ver=2018112106" charset="utf-8"></script>

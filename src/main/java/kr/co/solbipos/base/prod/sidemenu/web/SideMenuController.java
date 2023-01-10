@@ -8,10 +8,11 @@ import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.sidemenu.service.*;
 import kr.co.solbipos.base.store.storeType.service.StoreTypeService;
 import kr.co.solbipos.base.store.storeType.service.StoreTypeVO;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,14 +51,16 @@ public class SideMenuController {
 
     private final SideMenuService sideMenuService;
     private final StoreTypeService storeTypeService;
+    private final DayProdService dayProdService;
     private final SessionService sessionService;
     private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public SideMenuController(SideMenuService sideMenuService, StoreTypeService storeTypeService, SessionService sessionService, CmmEnvUtil cmmEnvUtil) {
+    public SideMenuController(SideMenuService sideMenuService, StoreTypeService storeTypeService, DayProdService dayProdService, SessionService sessionService, CmmEnvUtil cmmEnvUtil) {
         this.sideMenuService = sideMenuService;
         this.storeTypeService = storeTypeService;
+        this.dayProdService = dayProdService;
         this.sessionService = sessionService;
         this.cmmEnvUtil = cmmEnvUtil;
     }
@@ -92,6 +95,10 @@ public class SideMenuController {
         // 브랜드조회(콤보박스용)
         StoreTypeVO storeTypeVO = new StoreTypeVO();
         model.addAttribute("brandList", convertToJson(storeTypeService.getBrandList(storeTypeVO, sessionInfoVO)));
+
+        // 사용자별 브랜드 콤보박스 조회
+        DayProdVO dayProdVO = new DayProdVO();
+        model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
 
         // 속성, 선택메뉴조회(콤보박스용)
         SideMenuManageVO sideMenuManageVO = new SideMenuManageVO();

@@ -127,7 +127,7 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpOrigin.js?ver=20210327.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpOrigin.js?ver=20230110.02" charset="utf-8"></script>
 
 <%-- 재료-상품 등록 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/recpOrigin/recpProd.jsp">

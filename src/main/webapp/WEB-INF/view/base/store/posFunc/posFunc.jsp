@@ -139,7 +139,7 @@
   }
   // 브랜드 사용여부
   var brandUseFg = "${brandUseFg}";
-  // 사용자 매장브랜드
+  // 사용자 브랜드
   var userHqBrandCdComboList = ${userHqBrandCdComboList};
   var posList;
   var selectedStore;

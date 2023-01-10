@@ -8,6 +8,7 @@ import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.prodImg.service.ProdImgService;
 import kr.co.solbipos.base.prod.prodImg.service.ProdImgVO;
 import org.apache.commons.io.FilenameUtils;
@@ -53,6 +54,19 @@ public class ProdImgServiceImpl implements ProdImgService {
         prodImgVO.setHqOfficeCd(hqOfficeCd);
         prodImgVO.setStoreCd(storeCd);
         prodImgVO.setUserId(sessionInfoVO.getUserId());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
+            if (prodImgVO.getProdHqBrandCd() == "" || prodImgVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (prodImgVO.getUserProdBrands() != null && !"".equals(prodImgVO.getUserProdBrands())) {
+                    String[] userBrandList = prodImgVO.getUserProdBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        prodImgVO.setUserProdBrandList(userBrandList);
+                    }
+                }
+            }
+        }
 
         return prodImgMapper.getProdList(prodImgVO);
     }

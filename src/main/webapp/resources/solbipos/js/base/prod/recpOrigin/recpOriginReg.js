@@ -23,10 +23,15 @@ app.controller('recpOriginRegCtrl', ['$scope', '$http', function ($scope, $http)
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-        var url                = '/base/prod/recpOrigin/recpOrigin/getBrandComboList.sb';
-        var comboParams        = {};
-        comboParams.hqOfficeCd = hqOfficeCd;
-        $scope._queryCombo("map", null, "hqBrandFgMap", url, comboParams, "S"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+
+        if(brandUseFg === "1") {
+            $scope.hqBrandFgMap = new wijmo.grid.DataMap(userHqBrandCdComboList2, 'value', 'name');
+        }else{
+            var url                = '/base/prod/recpOrigin/recpOrigin/getBrandComboList.sb';
+            var comboParams        = {};
+            comboParams.hqOfficeCd = hqOfficeCd;
+            $scope._queryCombo("map", null, "hqBrandFgMap", url, comboParams, "S"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+        }
     };
 
     $scope.$on("recpOriginRegCtrl", function(event, data) {

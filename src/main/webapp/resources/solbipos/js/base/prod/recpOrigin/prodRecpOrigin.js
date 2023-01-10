@@ -38,6 +38,7 @@ app.controller('prodRecpOriginCtrl', ['$scope', '$http', function ($scope, $http
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("useYnCombo", useYnComboData); // 사용여부
     $scope._setComboData("recpOriginUseYnCombo", recpOriginUseYnComboData); // 원산지등록 사용여부
+    $scope._setComboData("srchProdHqBrandCd", userHqBrandCdComboList); // 상품브랜드
 
     $scope.isChecked = true;
 
@@ -53,10 +54,14 @@ app.controller('prodRecpOriginCtrl', ['$scope', '$http', function ($scope, $http
         $scope.startDateCombo.isReadOnly = $scope.isChecked;
         $scope.endDateCombo.isReadOnly = $scope.isChecked;
 
-        var url                = '/base/prod/recpOrigin/recpOrigin/getBrandComboList.sb';
-        var comboParams        = {};
-        comboParams.hqOfficeCd = hqOfficeCd;
-        $scope._queryCombo("map", null, "hqBrandFgMap", url, comboParams, "S"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+        if(brandUseFg === "1"){
+            $scope.hqBrandFgMap = new wijmo.grid.DataMap(userHqBrandCdComboList2, 'value', 'name');
+        }else{
+            var url                = '/base/prod/recpOrigin/recpOrigin/getBrandComboList.sb';
+            var comboParams        = {};
+            comboParams.hqOfficeCd = hqOfficeCd;
+            $scope._queryCombo("map", null, "hqBrandFgMap", url, comboParams, "S"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+        }
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
@@ -124,6 +129,23 @@ app.controller('prodRecpOriginCtrl', ['$scope', '$http', function ($scope, $http
         params.chkDt = $scope.isChecked;
         params.useYn = $scope.useYn;
         params.recpOriginUseYn = $scope.recpOriginUseYn;
+
+        if(brandUseFg === "1" && orgnFg === "HQ"){
+
+          // 선택한 상품브랜드가 있을 때
+          params.prodHqBrandCd = $scope.srchProdHqBrandCdCombo.selectedValue;
+
+          // 선택한 상품브랜드가 없을 때('전체' 일때)
+          if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+              var userHqBrandCd = "";
+              for(var i=0; i < userHqBrandCdComboList.length; i++){
+                  if(userHqBrandCdComboList[i].value !== null) {
+                      userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                  }
+              }
+              params.userProdBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+          }
+        }
 
         $scope._inquiryMain("/base/prod/recpOrigin/prodRecpOrigin/getProdRecpOriginList.sb", params, function() {
             

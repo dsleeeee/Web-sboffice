@@ -33,6 +33,7 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('prodImgCtrl', $scope, $http, true));
+    $scope._setComboData("srchProdHqBrandCd", userHqBrandCdComboList); // 상품브랜드
 
     // 등록일자 셋팅
     $scope.srchStartDate = wcombo.genDateVal("#srchTimeStartDate", gvStartDate);
@@ -114,6 +115,24 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
             params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
             params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
         }
+
+        if(brandUseFg === "1" && orgnFg === "H"){
+
+          // 선택한 상품브랜드가 있을 때
+          params.prodHqBrandCd = $scope.srchProdHqBrandCdCombo.selectedValue;
+
+          // 선택한 상품브랜드가 없을 때('전체' 일때)
+          if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+              var userHqBrandCd = "";
+              for(var i=0; i < userHqBrandCdComboList.length; i++){
+                  if(userHqBrandCdComboList[i].value !== null) {
+                      userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                  }
+              }
+              params.userProdBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+          }
+        }
+
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
         $scope._inquiryMain("/base/prod/prodImg/prodImg/list.sb", params, function(){

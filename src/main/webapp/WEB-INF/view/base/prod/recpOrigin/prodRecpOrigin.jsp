@@ -140,6 +140,29 @@
                     </div>
                 </td>
             </tr>
+            <c:if test="${brandUseFg == '1'}">
+                <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                  <tr>
+                    <%-- 상품브랜드 --%>
+                    <th><s:message code="prodRecpOrigin.prodHqBrand" /></th>
+                    <td>
+                      <div class="sb-select">
+                        <wj-combo-box
+                          id="srchProdHqBrandCd"
+                          ng-model="storeHqBrandCd"
+                          items-source="_getComboData('srchProdHqBrandCd')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          control="srchProdHqBrandCdCombo">
+                        </wj-combo-box>
+                      </div>
+                    </td>
+                    <th></th>
+                    <td></td>
+                  </tr>
+                </c:if>
+              </c:if>
             </tbody>
         </table>
 
@@ -294,9 +317,17 @@
 <script type="text/javascript">
     var orgnCd = "${orgnCd}";
     var hqOfficeCd = "${hqOfficeCd}";
+    // 브랜드 사용여부
+    var brandUseFg = "${brandUseFg}";
+    // 사용자 매장브랜드
+    var userHqBrandCdComboList = ${userHqBrandCdComboList};
+    // 사용자 매장브랜드(리스트 DataMap용)
+    var userHqBrandCdComboList2 = ${userHqBrandCdComboList};
+    userHqBrandCdComboList2[0].name = "선택";
+    userHqBrandCdComboList2[0].value = 0;
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/prodRecpOrigin.js?ver=20210327.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/prodRecpOrigin.js?ver=20230110.02" charset="utf-8"></script>
 
 <%-- 원산지신규등록 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/recpOrigin/recpOriginReg.jsp">

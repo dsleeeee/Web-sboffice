@@ -81,4 +81,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpOriginReg.js?ver=20210527.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpOriginReg.js?ver=20230110.02" charset="utf-8"></script>
