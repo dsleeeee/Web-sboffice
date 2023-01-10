@@ -15,7 +15,7 @@
 
 <div class="subCon" ng-controller="prodCtrl" id="prodView">
     <%--searchTbl--%>
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl"><s:message code="storeSideMenu.prod" /></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -95,16 +95,38 @@
                     </wj-combo-box>
                 </div>
             </td>
-            <%-- 브랜드 --%>
-            <c:if test="${brandUseFg == '1'}">
-                <th><s:message code="prod.brandNm" /></th>
-                <td><input type="text" class="sb-input w100" id="srchBrandNm" ng-model="hqBrandNm" onkeyup="fnNxBtnSearch('2');"/></td>
-            </c:if>
-            <c:if test="${brandUseFg == '0'}">
-                <th></th>
-                <td></td>
-            </c:if>
-        </tr>
+                <%-- 브랜드 --%>
+                <%--<c:if test="${brandUseFg == '1'}">
+                    <th><s:message code="prod.brandNm" /></th>
+                    <td><input type="text" class="sb-input w100" id="srchBrandNm" ng-model="hqBrandNm" onkeyup="fnNxBtnSearch('2');"/></td>
+                </c:if>
+                <c:if test="${brandUseFg == '0'}">
+                    <th></th>
+                    <td></td>
+                </c:if>--%>
+                <c:if test="${brandUseFg != '1' or sessionInfo.orgnFg != 'HQ'}">
+                    <th></th>
+                    <td></td>
+                </c:if>
+                <c:if test="${brandUseFg == '1'}">
+                    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                        <%-- 상품브랜드 --%>
+                        <th><s:message code="prod.prodHqBrand"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                    id="srchProdHqBrand"
+                                    items-source="_getComboData('srchProdHqBrand')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="srchProdHqBrandCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                    </c:if>
+                </c:if>
+            </tr>
         </tbody>
     </table>
     <%--//searchTbl--%>
@@ -273,6 +295,9 @@
     // [1250 맘스터치] 환경설정값
     var momsEnvstVal = "${momsEnvstVal}";
 
+    // 사용자 매장브랜드(조회용)
+    var userHqBrandCdComboList = ${userHqBrandCdComboList};
+
     // POS에서 해당 WEB 화면 최초 접속한 경우(접속하면서 session 생성), 왼쪽 메뉴영역은 접어두기.
     // 최초 접속시에는 이전 URL 인자값으로 판별가능
     var referrer = document.referrer;
@@ -287,7 +312,7 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20221129.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20230110.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">

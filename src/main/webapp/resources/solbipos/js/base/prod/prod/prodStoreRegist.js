@@ -17,6 +17,8 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('regStoreCtrl', $scope, $http, true));
 
+  $scope._setComboData("srchPsrStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
+
   $scope.prodSaleUprcApply = true;
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -81,6 +83,25 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     params.hqBrandCd  = $scope.hqBrandCd;
     // params.hqBrandCd     = prodScope.getProdInfo().hqBrandCd;
     params.storeRegFg = 'Y';
+
+    if(hqOfficeCd !== 'A0001'){
+        if(brandUseFg === "1" && orgnFg === "HQ"){
+
+            // 선택한 매장브랜드가 있을 때
+            params.storeHqBrandCd = $("#hdSrchPsrStoreHqBrandCd").val();
+
+            // 선택한 매장브랜드가 없을 때('전체' 일때)
+            if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+                var userHqBrandCd = "";
+                for(var i=0; i < userHqBrandCdComboList.length; i++){
+                    if(userHqBrandCdComboList[i].value !== null) {
+                        userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                    }
+                }
+                params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+            }
+        }
+    }
 
     $scope._inquirySub("/base/prod/prod/prod/getRegStoreList.sb", params, function() {}, false);
   };
@@ -216,6 +237,13 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     });
   };
 
+  // 매장브랜드 선택시, hidden에 선택한 브랜드의 코드 셋팅
+  // script 코드에서 $scope.combobox value를 가져오기 어려워, combobox select change시 hidden에 값에 셋팅해 이것으로 사용.
+  $scope.setPsrStoreHqBrandCd = function(s) {
+    $('#hdSrchPsrStoreHqBrandCd').val(s.selectedValue);
+  };
+
+
 }]);
 
 /**
@@ -249,6 +277,25 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     params.hqBrandCd  = $scope.hqBrandCd;
     // params.hqBrandCd     = prodScope.getProdInfo().hqBrandCd;
     params.storeRegFg = 'N';
+
+    if(hqOfficeCd !== 'A0001') {
+      if (brandUseFg === "1" && orgnFg === "HQ") {
+
+          // 선택한 매장브랜드가 있을 때
+          params.storeHqBrandCd = $("#hdSrchPsrStoreHqBrandCd").val();
+
+          // 선택한 매장브랜드가 없을 때('전체' 일때)
+          if (params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+              var userHqBrandCd = "";
+              for (var i = 0; i < userHqBrandCdComboList.length; i++) {
+                  if (userHqBrandCdComboList[i].value !== null) {
+                      userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                  }
+              }
+              params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+          }
+      }
+    }
 
     $scope._inquirySub("/base/prod/prod/prod/getRegStoreList.sb", params, function() {}, false);
   };

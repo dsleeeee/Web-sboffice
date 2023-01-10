@@ -129,6 +129,8 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
   $scope._getComboDataQuery('045', 'prcCtrlFgComboData');
   // KIOSK 엣지 콤보박스
   $scope._setComboData('momsKioskEdgeComboData', momsKioskEdgeComboData);
+  // 상품브랜드
+  $scope._setComboData("srchProdHqBrand", userHqBrandCdComboList);
 
   // 등록일자 셋팅
   $scope.srchStartDate = wcombo.genDateVal("#srchTimeStartDate", gvStartDate);
@@ -222,6 +224,23 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
     if(!$scope.isChecked){
       params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
       params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+    }
+
+    if(brandUseFg === "1" && orgnFg === "HQ"){
+
+      // 선택한 상품브랜드가 있을 때
+      params.prodHqBrandCd = $scope.srchProdHqBrandCombo.selectedValue;
+
+      // 선택한 상품브랜드가 없을 때('전체' 일때)
+      if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+          var userHqBrandCd = "";
+          for(var i=0; i < userHqBrandCdComboList.length; i++){
+              if(userHqBrandCdComboList[i].value !== null) {
+                  userHqBrandCd += userHqBrandCdComboList[i].value + ","
+              }
+          }
+          params.userProdBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+      }
     }
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
@@ -445,7 +464,24 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
     params.prodClassCd = $scope.prodClassCd;
     params.barCd = $scope.barCd;
     params.useYn = $scope.useYn;
-    params.hqBrandNm = $scope.hqBrandNm;
+    //params.hqBrandNm = $scope.hqBrandNm;
+
+    if(brandUseFg === "1" && orgnFg === "HQ"){
+
+      // 선택한 상품브랜드가 있을 때
+      params.prodHqBrandCd = $scope.srchProdHqBrandCombo.selectedValue;
+
+      // 선택한 상품브랜드가 없을 때('전체' 일때)
+      if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+          var userHqBrandCd = "";
+          for(var i=0; i < userHqBrandCdComboList.length; i++){
+              if(userHqBrandCdComboList[i].value !== null) {
+                  userHqBrandCd += userHqBrandCdComboList[i].value + ","
+              }
+          }
+          params.userProdBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+      }
+    }
 
     $scope._popConfirm(messages["prod.totalExceDownload"], function() {
       $scope._broadcast('totalExcelCtrl', params);
@@ -487,10 +523,10 @@ app.controller('totalExcelCtrl', ['$scope', '$http', '$timeout', function ($scop
   // 상품매출순위 리스트 조회
   $scope.searchProdExcelList = function (data) {
     // 파라미터
-    var params       = {};
-    params.startDate = data.startDate;
+    var params       = data;
+    /*params.startDate = data.startDate;
     params.endDate = data.endDate;
-    params.excelGubun = data.excelGubun;
+    params.excelGubun = data.excelGubun;*/
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/base/prod/prod/prod/getProdExcelList.sb", params, function() {

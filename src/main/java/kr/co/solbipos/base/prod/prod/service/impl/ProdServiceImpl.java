@@ -16,8 +16,6 @@ import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.WorkModeFg;
-import kr.co.solbipos.base.prod.prodBarcd.service.ProdBarcdVO;
-import kr.co.solbipos.base.prod.prodBarcd.service.impl.ProdBarcdMapper;
 import kr.co.solbipos.stock.adj.adj.service.AdjVO;
 import kr.co.solbipos.stock.adj.adj.service.impl.AdjMapper;
 import org.apache.commons.io.FilenameUtils;
@@ -88,6 +86,19 @@ public class ProdServiceImpl implements ProdService {
         prodVO.setHqOfficeCd(hqOfficeCd);
         prodVO.setStoreCd(storeCd);
 
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
+            if (prodVO.getProdHqBrandCd() == "" || prodVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (prodVO.getUserProdBrands() != null && !"".equals(prodVO.getUserProdBrands())) {
+                    String[] userBrandList = prodVO.getUserProdBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        prodVO.setUserProdBrandList(userBrandList);
+                    }
+                }
+            }
+        }
+
         /*
           단독매장의 경우 SALE_PRC_FG = '2'
           프랜차이즈의 경우, 상품 판매가 본사통제여부 조회하여
@@ -126,6 +137,19 @@ public class ProdServiceImpl implements ProdService {
         prodVO.setHqOfficeCd(hqOfficeCd);
         prodVO.setStoreCd(storeCd);
 
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
+            if (prodVO.getProdHqBrandCd() == "" || prodVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (prodVO.getUserProdBrands() != null && !"".equals(prodVO.getUserProdBrands())) {
+                    String[] userBrandList = prodVO.getUserProdBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        prodVO.setUserProdBrandList(userBrandList);
+                    }
+                }
+            }
+        }
+
         if (prodVO.getExcelGubun().equals("T")) { // 전체 엑셀다운로드시(T) 조회조건 날림
             prodVO.setProdCd(null);
             prodVO.setProdNm(null);
@@ -133,6 +157,9 @@ public class ProdServiceImpl implements ProdService {
             prodVO.setBarCd(null);
             prodVO.setUseYn(null);
             prodVO.setHqBrandNm(null);
+            prodVO.setProdHqBrandCd(null);
+            prodVO.setUserProdBrands(null);
+            prodVO.setUserProdBrandList(null);
         }
 
         /*
@@ -631,6 +658,19 @@ public class ProdServiceImpl implements ProdService {
     public List<DefaultMap<String>> getStoreList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
 
         prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 매장브랜드가 없을 때 (매장브랜드가 '전체' 일때)
+            if (prodVO.getStoreHqBrandCd() == "" || prodVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (prodVO.getUserBrands() != null && !"".equals(prodVO.getUserBrands())) {
+                    String[] userBrandList = prodVO.getUserBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        prodVO.setUserBrandList(userBrandList);
+                    }
+                }
+            }
+        }
 
         return prodMapper.getStoreList(prodVO);
     }
@@ -2047,6 +2087,29 @@ public class ProdServiceImpl implements ProdService {
         }
 
         return prodMapper.getSearchOptionGrpList(prodVO);
+    }
+
+    /** 매장상품일괄등록 - 매장목록 조회 */
+    @Override
+    public List<DefaultMap<String>> selectStoreList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setEmpNo(sessionInfoVO.getEmpNo());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 매장브랜드가 없을 때 (매장브랜드가 '전체' 일때)
+            if (prodVO.getStoreHqBrandCd() == "" || prodVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (prodVO.getUserBrands() != null && !"".equals(prodVO.getUserBrands())) {
+                    String[] userBrandList = prodVO.getUserBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        prodVO.setUserBrandList(userBrandList);
+                    }
+                }
+            }
+        }
+
+        return prodMapper.selectStoreList(prodVO);
     }
 
 }

@@ -38,6 +38,7 @@
           <th><s:message code="prod.storeNm"/></th>
           <td><input type="text" id="srchStoreNm" ng-model="storeNm" /></td>
         </tr>
+        <%-- 아티제용 검색조건--%>
         <c:if test="${hqOfficeCd eq 'A0001' and orgnFg eq 'HQ'}">
           <tr> <%-- 매장상태 --%>
             <th><s:message code="prod.sysStatFg"/></th>
@@ -71,6 +72,36 @@
             </td>
           </tr>
         </c:if>
+
+        <%-- 아티제 외 검색조건--%>
+        <c:if test="${hqOfficeCd ne 'A0001'}">
+          <c:if test="${brandUseFg == '1'}">
+           <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+             <tr>
+               <%-- 매장브랜드 --%>
+               <th><s:message code="prod.storeHqBrand" /></th>
+               <td>
+                 <div class="sb-select">
+                   <wj-combo-box
+                     id="srchPsrStoreHqBrandCd"
+                     ng-model="storeHqBrandCd"
+                     items-source="_getComboData('srchPsrStoreHqBrandCd')"
+                     display-member-path="name"
+                     selected-value-path="value"
+                     is-editable="false"
+                     control="srchPsrStoreHqBrandCdCombo"
+                     selected-index-changed="setPsrStoreHqBrandCd(s)">
+                   </wj-combo-box>
+                   <input type="hidden" id="hdSrchPsrStoreHqBrandCd" />
+                 </div>
+               </td>
+               <th></th>
+               <td></td>
+             </tr>
+           </c:if>
+          </c:if>
+        </c:if>
+
         <c:if test="${subPriceFg == '1'}">
           <tr>
             <th><input type="checkbox" id="prodSaleUprcApply" ng-model="prodSaleUprcApply"/> <s:message code="salePrice.batchChange"/></th>
@@ -182,4 +213,4 @@
   var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodStoreRegist.js?ver=20210526.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodStoreRegist.js?ver=20230110.01" charset="utf-8"></script>

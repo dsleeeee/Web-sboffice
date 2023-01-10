@@ -14,6 +14,8 @@ import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdAuthEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,13 +55,15 @@ public class ProdController {
 
     private final SessionService sessionService;
     private final ProdService prodService;
+    private final DayProdService dayProdService;
     private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public ProdController(SessionService sessionService, ProdService prodService, CmmEnvUtil cmmEnvUtil) {
+    public ProdController(SessionService sessionService, ProdService prodService, CmmEnvUtil cmmEnvUtil, DayProdService dayProdService) {
         this.sessionService = sessionService;
         this.prodService = prodService;
+        this.dayProdService = dayProdService;
         this.cmmEnvUtil = cmmEnvUtil;
     }
 
@@ -126,6 +130,10 @@ public class ProdController {
         // 브랜드 리스트 조회(선택 콤보박스용)
         ProdVO prodVO = new ProdVO();
         model.addAttribute("brandList", convertToJson(prodService.getBrandList(prodVO, sessionInfoVO)));
+
+        // 사용자별 브랜드 콤보박스 조회(조회용)
+        DayProdVO dayProdVO = new DayProdVO();
+        model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
 
 //        model.addAttribute("prodEnvstVal", prodEnvstVal);
 //        model.addAttribute("priceEnvstVal", priceEnvstVal);
@@ -743,5 +751,25 @@ public class ProdController {
         List<DefaultMap<String>> result = prodService.getSearchOptionGrpList(prodVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, prodVO);
+    }
+
+    /**
+     * 매장상품일괄등록 - 매장목록 조회
+     * @param prodVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/selectStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectStoreList(ProdVO prodVO, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = prodService.selectStoreList(prodVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, prodVO);
     }
 }

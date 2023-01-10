@@ -348,6 +348,26 @@ public class ProdVO extends PageVO {
     /** 판매채널 - 땡겨요 */
     private String saleChnYnDdn;
 
+    /** 사용자별 브랜드코드(상품) */
+    private String[] userProdBrandList;
+
+    /** 사용자별 브랜드코드(상품) */
+    private String userProdBrands;
+
+    /** 상품브랜드코드 */
+    private String prodHqBrandCd;
+
+    /** 사용자별 브랜드코드(매장) */
+        private String[] userBrandList;
+
+    /** 사용자별 브랜드코드(매장) */
+    private String userBrands;
+
+    /** 매장브랜드코드 */
+    private String storeHqBrandCd;
+
+    /** 사원번호 */
+    private String empNo;
 
     /**
      * @return the hqOfficeCd
@@ -1534,5 +1554,61 @@ public class ProdVO extends PageVO {
 
     public void setSaleChnYnDdn(String saleChnYnDdn) {
         this.saleChnYnDdn = saleChnYnDdn;
+    }
+
+    public String[] getUserProdBrandList() {
+        return userProdBrandList;
+    }
+
+    public void setUserProdBrandList(String[] userProdBrandList) {
+        this.userProdBrandList = userProdBrandList;
+    }
+
+    public String getUserProdBrands() {
+        return userProdBrands;
+    }
+
+    public void setUserProdBrands(String userProdBrands) {
+        this.userProdBrands = userProdBrands;
+    }
+
+    public String getProdHqBrandCd() {
+        return prodHqBrandCd;
+    }
+
+    public void setProdHqBrandCd(String prodHqBrandCd) {
+        this.prodHqBrandCd = prodHqBrandCd;
+    }
+
+    public String[] getUserBrandList() {
+        return userBrandList;
+    }
+
+    public void setUserBrandList(String[] userBrandList) {
+        this.userBrandList = userBrandList;
+    }
+
+    public String getUserBrands() {
+        return userBrands;
+    }
+
+    public void setUserBrands(String userBrands) {
+        this.userBrands = userBrands;
+    }
+
+    public String getStoreHqBrandCd() {
+        return storeHqBrandCd;
+    }
+
+    public void setStoreHqBrandCd(String storeHqBrandCd) {
+        this.storeHqBrandCd = storeHqBrandCd;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
     }
 }
