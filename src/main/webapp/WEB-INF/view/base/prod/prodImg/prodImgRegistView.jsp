@@ -105,7 +105,7 @@
                       <div class="sb-select">
                         <wj-combo-box
                           id="srchProdHqBrandCd"
-                          ng-model="storeHqBrandCd"
+                          ng-model="prodHqBrandCd"
                           items-source="_getComboData('srchProdHqBrandCd')"
                           display-member-path="name"
                           selected-value-path="value"

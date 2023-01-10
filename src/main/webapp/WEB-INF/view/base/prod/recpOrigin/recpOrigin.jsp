@@ -43,6 +43,31 @@
                         <input type="text" class="sb-input w100" ng-model="orgplceNm" onkeyup="fnNxBtnSearch('2');"/>
                     </td>
                 </tr>
+                <c:if test="${brandUseFg == '1'}">
+                    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                      <tr>
+                        <%-- 상품브랜드 --%>
+                        <th><s:message code="recpOrigin.prodHqBrand" /></th>
+                        <td>
+                          <div class="sb-select">
+                              <div class="sb-select">
+                                  <wj-combo-box
+                                      id="srchRoProdHqBrandCd"
+                                      ng-model="prodHqBrandCd"
+                                      items-source="_getComboData('srchRoProdHqBrandCd')"
+                                      display-member-path="name"
+                                      selected-value-path="value"
+                                      is-editable="false"
+                                      control="srchRoProdHqBrandCdCombo">
+                                  </wj-combo-box>
+                              </div>
+                          </div>
+                        </td>
+                        <th></th>
+                        <td></td>
+                      </tr>
+                    </c:if>
+                  </c:if>
             </tbody>
         </table>
         <%--//searchTbl--%>
@@ -127,7 +152,7 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpOrigin.js?ver=20230110.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpOrigin.js?ver=20230110.03" charset="utf-8"></script>
 
 <%-- 재료-상품 등록 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/recpOrigin/recpProd.jsp">

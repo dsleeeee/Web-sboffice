@@ -24,6 +24,8 @@ app.controller('foodAllergyCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('foodAllergyCtrl', $scope, $http, true));
 
+    $scope._setComboData("srchProdHqBrandCd", userHqBrandCdComboList); // 상품브랜드
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
@@ -82,6 +84,22 @@ app.controller('foodAllergyCtrl', ['$scope', '$http', function ($scope, $http) {
 
     $scope.searchFoodAllergy = function(){
         var params = {};
+
+        if(brandUseFg === "1" && orgnFg === "HQ"){
+          // 선택한 상품브랜드가 있을 때
+          params.prodHqBrandCd = $scope.srchProdHqBrandCdCombo.selectedValue;
+
+          // 선택한 상품브랜드가 없을 때('전체' 일때)
+          if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+              var userHqBrandCd = "";
+              for(var i=0; i < userHqBrandCdComboList.length; i++){
+                  if(userHqBrandCdComboList[i].value !== null) {
+                      userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                  }
+              }
+              params.userProdBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+          }
+        }
 
         $scope._inquiryMain("/base/prod/foodAllergy/foodAllergy/getFoodAllergyList.sb", params, function() {
             addSelected = "N";

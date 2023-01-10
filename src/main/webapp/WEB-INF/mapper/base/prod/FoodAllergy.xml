@@ -31,6 +31,18 @@
                 AND thpai.HQ_OFFICE_CD = #{membrOrgnCd}
                 AND thb.HQ_OFFICE_CD (+)= thpai.HQ_OFFICE_CD
                 AND thb.HQ_BRAND_CD (+)= thpai.HQ_BRAND_CD
+                <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                    AND thpai.HQ_BRAND_CD = #{prodHqBrandCd} -- 선택한 상품브랜드가 있을 때
+                </if>
+                <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                    <if test='userProdBrands != null and userProdBrands != ""'>
+                        -- 선택한 상품브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                        AND thpai.HQ_BRAND_CD IN
+                        <foreach collection="userProdBrandList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                </if>
                 ORDER BY thpai.RECIPES_CD
             </when>
             <!-- 매장 -->

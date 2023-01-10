@@ -22,6 +22,41 @@
                 </button>
             </div>
         </div>
+        <table class="searchTbl">
+            <colgroup>
+                <col class="w10" />
+                <col class="w40" />
+                <col class="w10" />
+                <col class="w40" />
+            </colgroup>
+            <tbody>
+            <c:if test="${brandUseFg == '1'}">
+                <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                  <tr>
+                    <%-- 상품브랜드 --%>
+                    <th><s:message code="foodAllergy.prodHqBrand" /></th>
+                    <td>
+                      <div class="sb-select">
+                          <div class="sb-select">
+                              <wj-combo-box
+                                  id="srchProdHqBrandCd"
+                                  ng-model="prodHqBrandCd"
+                                  items-source="_getComboData('srchProdHqBrandCd')"
+                                  display-member-path="name"
+                                  selected-value-path="value"
+                                  is-editable="false"
+                                  control="srchProdHqBrandCdCombo">
+                              </wj-combo-box>
+                          </div>
+                      </div>
+                    </td>
+                    <th></th>
+                    <td></td>
+                  </tr>
+                </c:if>
+              </c:if>
+            </tbody>
+        </table>
 
         <%-- left --%>
         <div class="wj-TblWrap mt20 mb20 w40 fl">
@@ -111,7 +146,7 @@
     userHqBrandCdComboList2[0].value = 0;
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/foodAllergy/foodAllergy.js?ver=20230110.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/foodAllergy/foodAllergy.js?ver=20230110.02" charset="utf-8"></script>
 
 <%-- 알레르기-상품 등록 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/foodAllergy/foodAllergyProd.jsp">
