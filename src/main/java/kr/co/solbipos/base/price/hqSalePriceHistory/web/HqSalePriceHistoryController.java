@@ -7,9 +7,10 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.price.hqSalePriceHistory.service.HqSalePriceHistoryService;
 import kr.co.solbipos.base.price.hqSalePriceHistory.service.HqSalePriceHistoryVO;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : HqSalePriceHistoryController.java
@@ -44,13 +46,15 @@ public class HqSalePriceHistoryController {
 
     private final SessionService sessionService;
     private final HqSalePriceHistoryService hqSalePriceHistoryService;
+    private final DayProdService dayProdService;
     private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public HqSalePriceHistoryController(SessionService sessionService, HqSalePriceHistoryService hqSalePriceHistoryService, CmmEnvUtil cmmEnvUtil) {
+    public HqSalePriceHistoryController(SessionService sessionService, HqSalePriceHistoryService hqSalePriceHistoryService, DayProdService dayProdService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.hqSalePriceHistoryService = hqSalePriceHistoryService;
+        this.dayProdService = dayProdService;
         this.cmmEnvUtil = cmmEnvUtil;
     }
 
@@ -68,7 +72,14 @@ public class HqSalePriceHistoryController {
     public String view(HttpServletRequest request, HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
         model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0044"), "0"));
+
+        // 브랜드사용여부
+        model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
+        // 사용자별 브랜드 콤보박스 조회
+        DayProdVO dayProdVO = new DayProdVO();
+        model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
 
         return "base/price/hqSalePriceHistory/salePriceHistory";
     }

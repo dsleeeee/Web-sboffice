@@ -72,6 +72,31 @@
         <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" onkeyup="fnNxBtnSearch('1');"/>
       </td>
     </tr>
+    <c:if test="${brandUseFg == '1'}">
+      <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+        <tr>
+          <%-- 상품브랜드 --%>
+          <th><s:message code="salePrice.prodHqBrand" /></th>
+          <td>
+            <div class="sb-select">
+                <div class="sb-select">
+                    <wj-combo-box
+                        id="srchProdHqBrandCd"
+                        ng-model="prodHqBrandCd"
+                        items-source="_getComboData('srchProdHqBrandCd')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        control="srchProdHqBrandCdCombo">
+                    </wj-combo-box>
+                </div>
+            </div>
+          </td>
+          <th></th>
+          <td></td>
+        </tr>
+      </c:if>
+    </c:if>
    </tbody>
   </table>
   <%--//searchTbl--%>
@@ -179,4 +204,4 @@
     <%--//엑셀 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/hqSalePriceHistory/storeSalePriceHistory.js?ver=20210910.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/hqSalePriceHistory/storeSalePriceHistory.js?ver=20230111.01" charset="utf-8"></script>

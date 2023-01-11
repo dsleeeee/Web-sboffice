@@ -439,6 +439,10 @@
     var coercionFg = "${coercionFg}";
     <%-- 가격관리구분 --%>
     var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
+    // 브랜드 사용여부
+    var brandUseFg = "${brandUseFg}";
+    // 사용자 브랜드
+    var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/hqSalePriceResve.js?ver=20220509.01" charset="utf-8"></script>

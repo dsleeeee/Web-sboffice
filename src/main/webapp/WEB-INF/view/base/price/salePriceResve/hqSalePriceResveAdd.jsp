@@ -43,6 +43,24 @@
                         <input type="text" id="srchPopProdNm" ng-model="prodNm" onkeyup="fnNxBtnSearch('1');"/>
                     </td>
                 </tr>
+                <c:if test="${brandUseFg == '1'}">
+                    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                        <%-- 상품브랜드 --%>
+                        <th><s:message code="salePriceResve.prodHqBrand"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                    id="srchProdHqBrandCd"
+                                    items-source="_getComboData('srchProdHqBrandCd')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="srchProdHqBrandCdCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                    </c:if>
+                </c:if>
                 <c:if test="${subPriceFg == '1'}">
                     <tr>
                         <th><input type="checkbox" id="popSaleUprcApply" ng-model="popSaleUprcApply"/> <s:message code="salePriceResve.batchChange"/></th>
@@ -176,4 +194,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/hqSalePriceResveAdd.js?ver=20220418.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/hqSalePriceResveAdd.js?ver=20230111.01" charset="utf-8"></script>

@@ -160,6 +160,19 @@ public class PopupServiceImpl implements PopupService{
 
         prodVO.setUserId(sessionInfoVO.getUserId());
 
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
+            if (prodVO.getProdHqBrandCd() == "" || prodVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (prodVO.getUserProdBrands() != null && !"".equals(prodVO.getUserProdBrands())) {
+                    String[] userBrandList = prodVO.getUserProdBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        prodVO.setUserProdBrandList(userBrandList);
+                    }
+                }
+            }
+        }
+
         return popupMapper.getProductList(prodVO);
     }
 

@@ -161,4 +161,11 @@
     <%--//엑셀 리스트--%>
 </div>
 
+<script>
+  // 브랜드 사용여부
+  var brandUseFg = "${brandUseFg}";
+  // 사용자 브랜드
+  var userHqBrandCdComboList = ${userHqBrandCdComboList};
+</script>
+
 <script type="text/javascript" src="/resource/solbipos/js/base/price/hqSalePriceHistory/hqSalePriceHistory.js?ver=20210910.01" charset="utf-8"></script>
