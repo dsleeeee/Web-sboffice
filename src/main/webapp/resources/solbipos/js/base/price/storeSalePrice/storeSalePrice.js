@@ -21,6 +21,8 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('storeSalePriceCtrl', $scope, $http, false));
 
+  $scope._setComboData("srchProdHqBrandCd", userHqBrandCdComboList); // 상품브랜// 상품브랜드
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
@@ -107,6 +109,22 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
     params.dlvrSaleUprc = $("#dlvrSaleUprc").prop("checked");
     params.packSaleUprc = $("#packSaleUprc").prop("checked");
 
+    if(brandUseFg === "1" && orgnFg === "HQ"){
+        // 선택한 상품브랜드가 있을 때
+        params.prodHqBrandCd = $scope.srchProdHqBrandCdCombo.selectedValue;
+
+        // 선택한 상품브랜드가 없을 때('전체' 일때)
+        if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+            var userHqBrandCd = "";
+            for(var i=0; i < userHqBrandCdComboList.length; i++){
+                if(userHqBrandCdComboList[i].value !== null) {
+                    userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                }
+            }
+            params.userProdBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+        }
+    }
+
     $scope._inquiryMain('/base/price/storeSalePrice/storeSalePrice/getSalePriceList.sb', params);
   };
   // <-- //검색 호출 -->
@@ -180,6 +198,22 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
         params.dlvrSaleUprc = $("#dlvrSaleUprc").prop("checked");
         params.packSaleUprc = $("#packSaleUprc").prop("checked");
 
+        if(brandUseFg === "1" && orgnFg === "HQ"){
+            // 선택한 상품브랜드가 있을 때
+            params.prodHqBrandCd = $scope.srchProdHqBrandCdCombo.selectedValue;
+
+            // 선택한 상품브랜드가 없을 때('전체' 일때)
+            if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+                var userHqBrandCd = "";
+                for(var i=0; i < userHqBrandCdComboList.length; i++){
+                    if(userHqBrandCdComboList[i].value !== null) {
+                        userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                    }
+                }
+                params.userProdBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+            }
+        }
+
         $scope._broadcast('excelCtrl',params);
     }
 }]);
@@ -208,15 +242,15 @@ app.controller('excelCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
     // 상품매출순위 리스트 조회
     $scope.searchExcelList = function (data) {
         // 파라미터
-        var params       = {};
-        params.storeCd = data.storeCd;
+        var params       = data;
+        /*params.storeCd = data.storeCd;
         params.prodClassCd = data.prodClassCd;
         params.prodCd = data.prodCd;
         params.prodNm = data.prodNm;
         params.saleUprc = data.saleUprc;
         params.stinSaleUprc = data.stinSaleUprc;
         params.dlvrSaleUprc = data.dlvrSaleUprc;
-        params.packSaleUprc = data.packSaleUprc;
+        params.packSaleUprc = data.packSaleUprc;*/
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/base/price/storeSalePrice/storeSalePrice/getSalePriceExcelList.sb", params, function() {

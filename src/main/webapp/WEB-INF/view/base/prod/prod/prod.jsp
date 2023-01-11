@@ -295,7 +295,7 @@
     // [1250 맘스터치] 환경설정값
     var momsEnvstVal = "${momsEnvstVal}";
 
-    // 사용자 매장브랜드(조회용)
+    // 사용자 브랜드(조회용)
     var userHqBrandCdComboList = ${userHqBrandCdComboList};
 
     // POS에서 해당 WEB 화면 최초 접속한 경우(접속하면서 session 생성), 왼쪽 메뉴영역은 접어두기.

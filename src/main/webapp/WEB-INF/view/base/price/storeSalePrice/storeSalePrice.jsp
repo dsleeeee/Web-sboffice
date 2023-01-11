@@ -62,6 +62,28 @@
         <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" onkeyup="fnNxBtnSearch();"/>
       </td>
     </tr>
+    <c:if test="${brandUseFg == '1'}">
+        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+          <tr>
+          <%-- 상품브랜드 --%>
+            <th><s:message code="salePrice.prodHqBrand"/></th>
+            <td>
+                <div class="sb-select">
+                    <wj-combo-box
+                        id="srchProdHqBrandCd"
+                        items-source="_getComboData('srchProdHqBrandCd')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        control="srchProdHqBrandCdCombo">
+                    </wj-combo-box>
+                </div>
+            </td>
+            <th></th>
+            <td></td>
+          </tr>
+        </c:if>
+    </c:if>
     <tr>
       <th><s:message code="salePrice.uprcComparison"/></th>
       <td colspan="3">
@@ -161,9 +183,13 @@
   var subPriceFg = "${subPriceFg}";
   <%-- 가격관리구분 --%>
   var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
+  // 브랜드 사용여부
+  var brandUseFg = "${brandUseFg}";
+  // 사용자 브랜드
+  var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/storeSalePrice/storeSalePrice.js?ver=20210910.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/storeSalePrice/storeSalePrice.js?ver=20230111.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

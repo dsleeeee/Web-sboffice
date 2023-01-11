@@ -319,9 +319,9 @@
     var hqOfficeCd = "${hqOfficeCd}";
     // 브랜드 사용여부
     var brandUseFg = "${brandUseFg}";
-    // 사용자 매장브랜드
+    // 사용자 브랜드
     var userHqBrandCdComboList = ${userHqBrandCdComboList};
-    // 사용자 매장브랜드(리스트 DataMap용)
+    // 사용자 브랜드(리스트 DataMap용)
     var userHqBrandCdComboList2 = ${userHqBrandCdComboList};
     userHqBrandCdComboList2[0].name = "선택";
     userHqBrandCdComboList2[0].value = 0;

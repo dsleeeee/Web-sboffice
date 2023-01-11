@@ -89,6 +89,9 @@ public class IostockCmmVO extends PageVO {
     /** 상품분류 */
     private String prodClassCd;
 
+    /** 환경설정코드 */
+    private String envstCd;
+
     /**
      * @return the orgnFg
      */
@@ -375,5 +378,13 @@ public class IostockCmmVO extends PageVO {
 
     public void setProdClassCd(String prodClassCd) {
         this.prodClassCd = prodClassCd;
+    }
+
+    public String getEnvstCd() {
+        return envstCd;
+    }
+
+    public void setEnvstCd(String envstCd) {
+        this.envstCd = envstCd;
     }
 }
