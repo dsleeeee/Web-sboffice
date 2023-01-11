@@ -115,6 +115,24 @@ public class KioskKeyMapVO extends PageVO {
     /** 명칭코드코드 */
     private String nmcodeCd;
 
+    /** 사용자별 브랜드코드(매장) */
+    private String[] userBrandList;
+
+    /** 사용자별 브랜드코드(매장) */
+    private String userBrands;
+
+    /** 매장브랜드코드 */
+    private String storeHqBrandCd;
+
+    /** 사용자별 브랜드코드(상품) */
+    private String[] userProdBrandList;
+
+    /** 사용자별 브랜드코드(상품) */
+    private String userProdBrands;
+
+    /** 상품브랜드코드 */
+    private String prodHqBrandCd;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -487,5 +505,53 @@ public class KioskKeyMapVO extends PageVO {
 
     public void setNmcodeCd(String nmcodeCd) {
         this.nmcodeCd = nmcodeCd;
+    }
+
+    public String[] getUserBrandList() {
+        return userBrandList;
+    }
+
+    public void setUserBrandList(String[] userBrandList) {
+        this.userBrandList = userBrandList;
+    }
+
+    public String getUserBrands() {
+        return userBrands;
+    }
+
+    public void setUserBrands(String userBrands) {
+        this.userBrands = userBrands;
+    }
+
+    public String getStoreHqBrandCd() {
+        return storeHqBrandCd;
+    }
+
+    public void setStoreHqBrandCd(String storeHqBrandCd) {
+        this.storeHqBrandCd = storeHqBrandCd;
+    }
+
+    public String[] getUserProdBrandList() {
+        return userProdBrandList;
+    }
+
+    public void setUserProdBrandList(String[] userProdBrandList) {
+        this.userProdBrandList = userProdBrandList;
+    }
+
+    public String getUserProdBrands() {
+        return userProdBrands;
+    }
+
+    public void setUserProdBrands(String userProdBrands) {
+        this.userProdBrands = userProdBrands;
+    }
+
+    public String getProdHqBrandCd() {
+        return prodHqBrandCd;
+    }
+
+    public void setProdHqBrandCd(String prodHqBrandCd) {
+        this.prodHqBrandCd = prodHqBrandCd;
     }
 }

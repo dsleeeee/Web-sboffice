@@ -62,8 +62,24 @@
                     <td>
                         <input type="text" class="sb-input w100" id="srchKioskOptionProdBarCd" ng-model="barCd" />
                     </td>
-                    <td></td>
-                    <td></td>
+                    <c:if test="${brandUseFg == '1'}">
+                        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                            <%-- 상품브랜드 --%>
+                            <th><s:message code="kioskOption.prodHqBrand"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                        id="srchProdHqBrandCd"
+                                        items-source="_getComboData('srchProdHqBrandCd')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        control="srchProdHqBrandCdCombo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                        </c:if>
+                    </c:if>
                 </tr>
                 </tbody>
             </table>
@@ -133,4 +149,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskOption/kioskOptionProd.js?ver=20200824.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskOption/kioskOptionProd.js?ver=20220111.01" charset="utf-8"></script>

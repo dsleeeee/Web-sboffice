@@ -12,6 +12,8 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapService;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapVO;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,15 +51,17 @@ public class KioskKeyMapController {
 
     private final SessionService sessionService;
     private final KioskKeyMapService kioskKeyMapService;
+    private final DayProdService dayProdService;
     private final CmmEnvUtil cmmEnvUtil;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public KioskKeyMapController(SessionService sessionService, KioskKeyMapService kioskKeyMapService, CmmEnvUtil cmmEnvUtil) {
+    public KioskKeyMapController(SessionService sessionService, KioskKeyMapService kioskKeyMapService, DayProdService dayProdService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.kioskKeyMapService = kioskKeyMapService;
+        this.dayProdService = dayProdService;
         this.cmmEnvUtil = cmmEnvUtil;
     }
 
@@ -97,6 +101,12 @@ public class KioskKeyMapController {
         }else{
             model.addAttribute("kioskKeyMapGrpFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1104") , "0"));
         }
+
+        // 브랜드사용여부
+        model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
+        // 사용자별 브랜드 콤보박스 조회
+        DayProdVO dayProdVO = new DayProdVO();
+        model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
 
         // POS에서 해당 WEB 화면 재접속한 경우(이전 접속 session 그대로 존재), 'posLoginReconnect'값울 판단하여 view화면 처리
         if(request.getParameter("posLoginReconnect") != null && request.getParameter("posLoginReconnect").length() > 0){

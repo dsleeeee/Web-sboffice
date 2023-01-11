@@ -4,10 +4,14 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.prod.kioskOption.service.KioskOptionService;
 import kr.co.solbipos.base.prod.kioskOption.service.KioskOptionVO;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 @Controller
 @RequestMapping("/base/prod/kioskOption")
@@ -28,14 +33,18 @@ public class KioskOptionController {
 
     private final SessionService sessionService;
     private final KioskOptionService kioskOptionService;
+    private final DayProdService dayProdService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public KioskOptionController(SessionService sessionService, KioskOptionService kioskOptionService) {
+    public KioskOptionController(SessionService sessionService, KioskOptionService kioskOptionService, DayProdService dayProdService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.kioskOptionService = kioskOptionService;
+        this.dayProdService = dayProdService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -47,6 +56,14 @@ public class KioskOptionController {
      */
     @RequestMapping(value = "/kioskOption/list.sb", method = RequestMethod.GET)
     public String kioskOptionView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 브랜드사용여부
+        model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
+        // 사용자별 브랜드 콤보박스 조회
+        DayProdVO dayProdVO = new DayProdVO();
+        model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
 
         return "base/prod/kioskOption/kioskOption";
     }

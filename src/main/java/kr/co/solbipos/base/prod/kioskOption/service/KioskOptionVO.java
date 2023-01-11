@@ -72,6 +72,15 @@ public class KioskOptionVO extends PageVO {
     /** 본사코드 */
     private String hqOfficeCd;
 
+    /** 사용자별 브랜드코드(상품) */
+    private String[] userProdBrandList;
+
+    /** 사용자별 브랜드코드(상품) */
+    private String userProdBrands;
+
+    /** 상품브랜드코드 */
+    private String prodHqBrandCd;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -154,5 +163,29 @@ public class KioskOptionVO extends PageVO {
 
     public void setHqOfficeCd(String hqOfficeCd) {
         this.hqOfficeCd = hqOfficeCd;
+    }
+
+    public String[] getUserProdBrandList() {
+        return userProdBrandList;
+    }
+
+    public void setUserProdBrandList(String[] userProdBrandList) {
+        this.userProdBrandList = userProdBrandList;
+    }
+
+    public String getUserProdBrands() {
+        return userProdBrands;
+    }
+
+    public void setUserProdBrands(String userProdBrands) {
+        this.userProdBrands = userProdBrands;
+    }
+
+    public String getProdHqBrandCd() {
+        return prodHqBrandCd;
+    }
+
+    public void setProdHqBrandCd(String prodHqBrandCd) {
+        this.prodHqBrandCd = prodHqBrandCd;
     }
 }

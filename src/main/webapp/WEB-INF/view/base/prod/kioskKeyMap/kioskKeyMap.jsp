@@ -19,6 +19,11 @@
 
 <script type="text/javascript">
 
+    // 브랜드 사용여부
+    var brandUseFg = "${brandUseFg}";
+    // 사용자 매장브랜드
+    var userHqBrandCdComboList = ${userHqBrandCdComboList};
+
     // POS에서 해당 WEB 화면 최초 접속한 경우(접속하면서 session 생성), 왼쪽 메뉴영역은 접어두기.
     // 최초 접속시에는 이전 URL 인자값으로 판별가능
     var referrer = document.referrer;
@@ -34,7 +39,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMap.js?ver=20200903.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMap.js?ver=20220111.01" charset="utf-8"></script>
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 키오스크키맵등록 레이어 --%>
 <c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskKeyMapRegist.jsp">

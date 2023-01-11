@@ -1084,6 +1084,7 @@ app.controller('kioskProdCtrl', ['$scope', '$http', '$timeout', function ($scope
     $scope._setComboData('useYnAllComboData', useYnAllComboData);
     $scope._setComboData('prodTypeFg', prodTypeFg);
     $scope._setComboData('regYn', regYn);
+    $scope._setComboData("srchProdHqBrandCd", userHqBrandCdComboList); // 상품브랜드
     
     // 등록일자 기본 '전체기간'으로
     $scope.isChecked = true;
@@ -1153,6 +1154,22 @@ app.controller('kioskProdCtrl', ['$scope', '$http', '$timeout', function ($scope
         params.useYn = $scope.useYn;
         params.prodTypeFg = $scope.prodTypeFg;
         params.regYn = $scope.regYn;
+
+        if(brandUseFg === "1" && orgnFg === "HQ"){
+          // 선택한 상품브랜드가 있을 때
+          params.prodHqBrandCd = $scope.srchProdHqBrandCdCombo.selectedValue;
+
+          // 선택한 상품브랜드가 없을 때('전체' 일때)
+          if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+              var userHqBrandCd = "";
+              for(var i=0; i < userHqBrandCdComboList.length; i++){
+                  if(userHqBrandCdComboList[i].value !== null) {
+                      userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                  }
+              }
+              params.userProdBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+          }
+        }
 
         $scope._inquiryMain("/base/prod/kioskKeyMap/kioskKeyMap/getKioskProdList.sb", params, function() {
 
