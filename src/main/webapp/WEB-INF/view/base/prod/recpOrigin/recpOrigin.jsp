@@ -47,7 +47,7 @@
                     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
                       <tr>
                         <%-- 상품브랜드 --%>
-                        <th><s:message code="recpOrigin.prodHqBrand" /></th>
+                        <th><s:message code="recpOrigin.hqBrandNm" /></th>
                         <td>
                           <div class="sb-select">
                               <div class="sb-select">

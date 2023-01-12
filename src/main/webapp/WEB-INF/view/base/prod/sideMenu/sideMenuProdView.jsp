@@ -36,9 +36,9 @@
           </td>
           <td></td>
         </tr>
-        <c:if test="${brandUseFg == '1'}">
-            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-              <tr>
+<%--        <c:if test="${brandUseFg == '1'}">
+            <c:if test="${sessionInfo.orgnFg == 'HQ'}">--%>
+              <tr id="trProdHqBrand" style="display: none;">
                 <%-- 상품브랜드 --%>
                 <th><s:message code="sideMenu.selectMenu.prodHqBrand" /></th>
                 <td>
@@ -57,8 +57,8 @@
                 <th></th>
                 <td></td>
               </tr>
-            </c:if>
-          </c:if>
+<%--            </c:if>
+          </c:if>--%>
         </tbody>
       </table>
       <%-- 조회 --%>
@@ -128,4 +128,4 @@
   // 사용자 브랜드
   var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuProdView.js?ver=2018112106" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuProdView.js?ver=20230112.01" charset="utf-8"></script>

@@ -40,7 +40,16 @@ app.controller('sideMenuProdCtrl', ['$scope', '$http', 'sdselClassCd', function 
 
   // 사이드메뉴 상품선택 그리드 조회
   $scope.$on("sideMenuProdCtrl", function(event, data) {
+
     $("#lblsdselClassCd").text(data);
+
+    // 상품브랜드 검색조건 show/hidden
+    if(brandUseFg === "1" && orgnFg === "HQ"){
+      $("#trProdHqBrand").css("display", "");
+    }else{
+      $("#trProdHqBrand").css("display", "none");
+    }
+
     var params = {};
     params.sdselClassCd = $("#lblsdselClassCd").text();
     params.prodClassCd = $scope.prodClassCd;

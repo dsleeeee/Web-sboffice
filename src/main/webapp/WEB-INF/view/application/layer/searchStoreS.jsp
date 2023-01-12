@@ -32,7 +32,7 @@
             <th><s:message code="cmm.storeNm"/></th>
             <td><input type="text" id="srchStoreNm" ng-model="storeNm"/></td>
           </tr>
-          <tr id="trSStoreHqBrand">
+          <tr id="tr<c:out value="${param.targetId}"/>SStoreHqBrand" style="display: none;">
             <%-- 매장브랜드 --%>
             <th><s:message code="outstockReqDate.storeHqBrand" /></th>
             <td>
@@ -98,9 +98,9 @@
    */
   var app = agrid.getApp();
   // 브랜드 사용여부
-  var brandUseFg = "";
+  var sSBrandUseFg = "";
   // 사용자 브랜드
-  var userHqBrandCdComboList = "";
+  var sSUserHqBrandCdComboList = "";
 
   /** 매장선택 controller */
   app.controller('${param.targetId}Ctrl', ['$scope', '$http', function ($scope, $http) {
@@ -122,9 +122,12 @@
       params.envstCd = "1114";
       $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/getHqEnvSt.sb', params, function (response) {
 
-        brandUseFg = response.data.data ;
+        sSBrandUseFg = response.data.data ;
 
-        if(brandUseFg === "1"){
+        if(sSBrandUseFg === "1"){
+
+          // 매장브랜드 show
+          eval('$("#tr' + $scope.targetId + 'SStoreHqBrand").css("display", "")');
 
           // 매장브랜드
           params = {};
@@ -134,16 +137,13 @@
                   $scope._setComboData("popSStoreHqBrandCdCombo", list);
 
                   // 매장브랜드 콤보박스 항목 저장시 쓰려고
-                  userHqBrandCdComboList = list;
-
-                  // 매장브랜드 show
-                  $("#trSStoreHqBrand").css("display", "");
+                  sSUserHqBrandCdComboList = list;
               }
           });
 
         }else{
           // 매장브랜드 hidden
-          $("#trSStoreHqBrand").css("display", "none");
+          eval('$("#tr' + $scope.targetId + 'SStoreHqBrand").css("display", "none")');
         }
 
       });
@@ -206,7 +206,7 @@
       params.storeCd = $scope.storeCd;
       params.storeNm = $scope.storeNm;
 
-      if(brandUseFg === "1" && orgnFg === "HQ"){
+      if(sSBrandUseFg === "1" && orgnFg === "HQ"){
 
           // 선택한 매장브랜드가 있을 때
           params.storeHqBrandCd = $scope.srchPopSStoreHqBrandCdCombo.selectedValue;
@@ -214,9 +214,9 @@
           // 선택한 매장브랜드가 없을 때('전체' 일때)
           if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
               var userHqBrandCd = "";
-              for(var i=0; i < userHqBrandCdComboList.length; i++){
-                  if(userHqBrandCdComboList[i].value !== null) {
-                      userHqBrandCd += userHqBrandCdComboList[i].value + ","
+              for(var i=0; i < sSUserHqBrandCdComboList.length; i++){
+                  if(sSUserHqBrandCdComboList[i].value !== null) {
+                      userHqBrandCd += sSUserHqBrandCdComboList[i].value + ","
                   }
               }
               params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
