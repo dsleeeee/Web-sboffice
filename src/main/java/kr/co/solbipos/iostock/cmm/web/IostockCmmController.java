@@ -4,7 +4,9 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.cmm.service.IostockCmmService;
 import kr.co.solbipos.iostock.cmm.service.IostockCmmVO;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 
 /**
  * @Class Name : IostockCmmController.java
@@ -41,11 +45,13 @@ import java.util.List;
 public class IostockCmmController {
     private final SessionService sessionService;
     private final IostockCmmService iostockCmmService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     @Autowired
-    public IostockCmmController(SessionService sessionService, IostockCmmService iostockCmmService) {
+    public IostockCmmController(SessionService sessionService, IostockCmmService iostockCmmService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.iostockCmmService = iostockCmmService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
 
@@ -338,5 +344,27 @@ public class IostockCmmController {
         List<DefaultMap<String>> list = iostockCmmService.selectBranchMomsList(iostockCmmVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
+    }
+
+    /**
+     * 본사 환경설정 값 조회
+     * @param request
+     * @param response
+     * @param model
+     * @param iostockCmmVO
+     * @return
+     * @author  이다솜
+     * @since   2023. 01. 11.
+     */
+    @RequestMapping(value = "/getHqEnvSt.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getHqEnvSt(HttpServletRequest request, HttpServletResponse response,
+                                          Model model, IostockCmmVO iostockCmmVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        String result = CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, iostockCmmVO.getEnvstCd()), "0");
+
+        return returnJson(Status.OK, result);
     }
 }

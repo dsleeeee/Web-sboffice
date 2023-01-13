@@ -282,6 +282,19 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
+            if (kioskKeyMapVO.getProdHqBrandCd() == "" || kioskKeyMapVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (kioskKeyMapVO.getUserProdBrands() != null && !"".equals(kioskKeyMapVO.getUserProdBrands())) {
+                    String[] userBrandList = kioskKeyMapVO.getUserProdBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        kioskKeyMapVO.setUserProdBrandList(userBrandList);
+                    }
+                }
+            }
+        }
+
         return kioskKeyMapMapper.getKioskProdList(kioskKeyMapVO);
     }
 
@@ -443,6 +456,19 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
     public List<DefaultMap<String>> getStoreList(@RequestBody KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
 
         kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 매장브랜드가 없을 때 (매장브랜드가 '전체' 일때)
+            if (kioskKeyMapVO.getStoreHqBrandCd() == "" || kioskKeyMapVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (kioskKeyMapVO.getUserBrands() != null && !"".equals(kioskKeyMapVO.getUserBrands())) {
+                    String[] userBrandList = kioskKeyMapVO.getUserBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        kioskKeyMapVO.setUserBrandList(userBrandList);
+                    }
+                }
+            }
+        }
 
         return kioskKeyMapMapper.getStoreList(kioskKeyMapVO);
     }
@@ -692,6 +718,19 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
             kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
+            if (kioskKeyMapVO.getProdHqBrandCd() == "" || kioskKeyMapVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (kioskKeyMapVO.getUserProdBrands() != null && !"".equals(kioskKeyMapVO.getUserProdBrands())) {
+                    String[] userBrandList = kioskKeyMapVO.getUserProdBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        kioskKeyMapVO.setUserProdBrandList(userBrandList);
+                    }
+                }
+            }
         }
 
         return kioskKeyMapMapper.getRecmdProdList(kioskKeyMapVO);

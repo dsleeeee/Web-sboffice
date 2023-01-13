@@ -82,26 +82,28 @@
                     </div>
                 </td>
             </tr>
-            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-              <tr>
-                <%-- 매장브랜드 --%>
-                <th><s:message code="storeType.storeHqBrand" /></th>
-                <td>
-                  <div class="sb-select">
-                    <wj-combo-box
-                      id="srchSachStoreHqBrandCd"
-                      ng-model="storeHqBrandCd"
-                      items-source="_getComboData('srchSachStoreHqBrandCd')"
-                      display-member-path="name"
-                      selected-value-path="value"
-                      is-editable="false"
-                      control="srchSachStoreHqBrandCdCombo">
-                    </wj-combo-box>
-                  </div>
-                </td>
-                <th></th>
-                <td></td>
-              </tr>
+            <c:if test="${brandUseFg == '1'}">
+                <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                  <tr>
+                    <%-- 매장브랜드 --%>
+                    <th><s:message code="storeType.storeHqBrand" /></th>
+                    <td>
+                      <div class="sb-select">
+                        <wj-combo-box
+                          id="srchSachStoreHqBrandCd"
+                          ng-model="storeHqBrandCd"
+                          items-source="_getComboData('srchSachStoreHqBrandCd')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          control="srchSachStoreHqBrandCdCombo">
+                        </wj-combo-box>
+                      </div>
+                    </td>
+                    <th></th>
+                    <td></td>
+                  </tr>
+                </c:if>
             </c:if>
             </tbody>
         </table>
@@ -166,7 +168,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeApplyChgHist.js?ver=20230106.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeApplyChgHist.js?ver=20230109.01" charset="utf-8"></script>
 
 <%-- 매장적용이력 상세 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/storeType/storeApplyChgHistDtl.jsp">

@@ -5,8 +5,7 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.base.price.salePrice.service.SalePriceVO;
-import kr.co.solbipos.base.price.salePrice.service.impl.SalePriceMapper;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.price.storeSalePrice.service.StoreSalePriceService;
 import kr.co.solbipos.base.price.storeSalePrice.service.StoreSalePriceVO;
 import org.slf4j.Logger;
@@ -56,6 +55,19 @@ public class StoreSalePriceServiceImpl implements StoreSalePriceService {
         }
         storeSalePriceVO.setUserId(sessionInfoVO.getUserId());
 
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
+            if (storeSalePriceVO.getProdHqBrandCd() == "" || storeSalePriceVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (storeSalePriceVO.getUserProdBrands() != null && !"".equals(storeSalePriceVO.getUserProdBrands())) {
+                    String[] userBrandList = storeSalePriceVO.getUserProdBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        storeSalePriceVO.setUserProdBrandList(userBrandList);
+                    }
+                }
+            }
+        }
+
         return storeSalePriceMapper.getSalePriceList(storeSalePriceVO);
     }
 
@@ -68,6 +80,19 @@ public class StoreSalePriceServiceImpl implements StoreSalePriceService {
             storeSalePriceVO.setArrStoreCd(storeSalePriceVO.getStoreCd().split(","));
         }
         storeSalePriceVO.setUserId(sessionInfoVO.getUserId());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
+            if (storeSalePriceVO.getProdHqBrandCd() == "" || storeSalePriceVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (storeSalePriceVO.getUserProdBrands() != null && !"".equals(storeSalePriceVO.getUserProdBrands())) {
+                    String[] userBrandList = storeSalePriceVO.getUserProdBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        storeSalePriceVO.setUserProdBrandList(userBrandList);
+                    }
+                }
+            }
+        }
 
         return storeSalePriceMapper.getSalePriceExcelList(storeSalePriceVO);
     }

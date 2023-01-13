@@ -86,26 +86,28 @@
             </wj-combo-box>
           </div>
         </td>
-          <c:if test="${orgnFg != 'HQ'}">
+          <c:if test="${brandUseFg != '1' or orgnFg != 'HQ'}">
             <td></td>
             <td></td>
           </c:if>
-          <c:if test="${orgnFg == 'HQ'}">
-              <%-- 매장브랜드 --%>
-              <th><s:message code="storeManage.storeHqBrand" /></th>
-              <td>
-                <div class="sb-select">
-                  <wj-combo-box
-                    id="srchStoreHqBrandCd"
-                    ng-model="storeHqBrandCd"
-                    items-source="_getComboData('srchStoreHqBrandCd')"
-                    display-member-path="name"
-                    selected-value-path="value"
-                    is-editable="false"
-                    control="srchStoreHqBrandCdCombo">
-                  </wj-combo-box>
-                </div>
-              </td>
+          <c:if test="${brandUseFg == '1'}">
+            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                <%-- 매장브랜드 --%>
+                <th><s:message code="storeManage.storeHqBrand" /></th>
+                <td>
+                  <div class="sb-select">
+                    <wj-combo-box
+                      id="srchStoreHqBrandCd"
+                      ng-model="storeHqBrandCd"
+                      items-source="_getComboData('srchStoreHqBrandCd')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      control="srchStoreHqBrandCdCombo">
+                    </wj-combo-box>
+                  </div>
+                </td>
+            </c:if>
           </c:if>
       </tr>
     </tbody>
@@ -226,11 +228,14 @@
   var digit8Store = "${digit8Store}"; // 매장코드 8 자리 이상 사용하는 본사인지 조회
   var erpLinkHq = "${erpLinkHq}"; // ERP를 연동하는 본사인지 확인
   var momsEnvstVal = "${momsEnvstVal}"; // [1250 맘스터치] 환경설정값
+  // 브랜드 사용여부
+  var brandUseFg = "${brandUseFg}";
+  // 사용자 브랜드
   var userHqBrandCdComboList = ${userHqBrandCdComboList};
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeManage.js?ver=20230105.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeManage.js?ver=20230109.01" charset="utf-8"></script>
 
 <%-- 매장정보 --%>
 <c:import url="/WEB-INF/view/store/manage/storeManage/storeInfo.jsp">

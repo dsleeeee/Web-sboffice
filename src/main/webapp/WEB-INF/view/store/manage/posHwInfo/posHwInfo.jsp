@@ -191,7 +191,7 @@
   var orgnFg = "${orgnFg}";
   // 브랜드 사용여부
   var brandUseFg = "${brandUseFg}";
-  // 사용자 매장브랜드
+  // 사용자 브랜드
   var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/store/manage/posHwInfo/posHwInfo.js?ver=2018120601.06" charset="utf-8"></script>

@@ -12,7 +12,7 @@
 
     <div ng-controller="kioskOptionCtrl">
         <%-- 조회조건 --%>
-        <div class="searchBar flddUnfld">
+        <div class="searchBar">
             <a href="#" class="open fl">${menuNm}</a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -205,7 +205,14 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskOption/kioskOption.js?ver=20220120.01" charset="utf-8"></script>
+<script>
+    // 브랜드 사용여부
+    var brandUseFg = "${brandUseFg}";
+    // 사용자 브랜드
+    var userHqBrandCdComboList = ${userHqBrandCdComboList};
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskOption/kioskOption.js?ver=20220111.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

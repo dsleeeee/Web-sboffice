@@ -130,6 +130,19 @@ public class KioskOptionServiceImpl implements KioskOptionService {
             kioskOptionVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
+            if (kioskOptionVO.getProdHqBrandCd() == "" || kioskOptionVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (kioskOptionVO.getUserProdBrands() != null && !"".equals(kioskOptionVO.getUserProdBrands())) {
+                    String[] userBrandList = kioskOptionVO.getUserProdBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        kioskOptionVO.setUserProdBrandList(userBrandList);
+                    }
+                }
+            }
+        }
+
         return kioskOptionMapper.getKioskOptionProdList(kioskOptionVO);
     }
 

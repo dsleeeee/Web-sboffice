@@ -942,6 +942,18 @@
                     </when>
                     <otherwise></otherwise>
                 </choose>
+                <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                    AND thp.HQ_BRAND_CD = #{prodHqBrandCd} -- 선택한 상품브랜드가 있을 때
+                </if>
+                <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                    <if test='userProdBrands != null and userProdBrands != ""'>
+                        -- 선택한 상품브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                        AND thp.HQ_BRAND_CD IN
+                        <foreach collection="userProdBrandList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                </if>
                 ORDER BY thp.PROD_CD ASC
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -1497,6 +1509,18 @@
             </if>
             <if test="sysStatFg != null and sysStatFg != ''">
                 AND tms.SYS_STAT_FG = #{sysStatFg} --매장상태구분
+            </if>
+            <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 선택한 매장브랜드가 있을 때
+            </if>
+            <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                <if test='userBrands != null and userBrands != ""'>
+                    -- 선택한 매장브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                    AND tms.HQ_BRAND_CD IN
+                    <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
             </if>
             ORDER BY tms.STORE_CD, tmp.POS_NO ASC
         )
@@ -2195,6 +2219,18 @@
                 </if>
                 <if test="prodTypeFg != null and prodTypeFg != ''">
                     AND thp.PROD_TYPE_FG = #{prodTypeFg} --상품유형
+                </if>
+                <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                    AND thp.HQ_BRAND_CD = #{prodHqBrandCd} -- 선택한 상품브랜드가 있을 때
+                </if>
+                <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                    <if test='userProdBrands != null and userProdBrands != ""'>
+                        -- 선택한 상품브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                        AND thp.HQ_BRAND_CD IN
+                        <foreach collection="userProdBrandList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
                 </if>
                 AND thkk.RECMD_PROD_CD IS NULL
                 ORDER BY thp.PROD_CD ASC

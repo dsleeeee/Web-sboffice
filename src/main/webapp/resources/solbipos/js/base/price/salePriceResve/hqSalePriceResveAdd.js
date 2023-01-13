@@ -23,6 +23,7 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
 
     // 콤보박스 데이터 Set
     $scope._setComboData("listScaleBox2", gvListScaleBoxData);
+    $scope._setComboData("srchProdHqBrandCd", userHqBrandCdComboList); // 상품브랜드
 
     $scope.popApplyFg = true;
     $scope.popSaleUprcApply = true;
@@ -136,6 +137,22 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
         params.listScale = $scope.listScaleCombo2.text;
         params.prodCd = $("#srchPopProdCd").val();
         params.prodNm = $("#srchPopProdNm").val();
+
+        if(brandUseFg === "1" && orgnFg === "HQ"){
+          // 선택한 상품브랜드가 있을 때
+          params.prodHqBrandCd = $scope.srchProdHqBrandCdCombo.selectedValue;
+
+          // 선택한 상품브랜드가 없을 때('전체' 일때)
+          if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+              var userHqBrandCd = "";
+              for(var i=0; i < userHqBrandCdComboList.length; i++){
+                  if(userHqBrandCdComboList[i].value !== null) {
+                      userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                  }
+              }
+              params.userProdBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+          }
+        }
 
         $scope._inquirySub('/base/price/salePrice/hqSalePrice/getHqSalePriceList.sb', params, function() {
 

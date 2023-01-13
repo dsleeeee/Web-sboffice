@@ -24,9 +24,7 @@ app.controller('storeListCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
   $scope._setComboData("clsFg", clsFg);
   $scope._setComboData("sysStatFg", sysStatFg);
-  if(orgnFg === "HQ"){
-      $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList);
-  }
+  $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList);
 
   // 선택 매장
   $scope.selectedStore;
@@ -131,7 +129,7 @@ app.controller('storeListCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = {};
     params.listScale = $scope.listScale;
 
-    if(orgnFg === "HQ"){
+    if(brandUseFg === "1" && orgnFg === "HQ"){
 
         // 선택한 매장브랜드가 있을 때
         params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
@@ -288,7 +286,7 @@ app.controller('storeListExcelCtrl', ['$scope', '$http', '$timeout', function ($
   $scope.getStoreListExcel = function(){
     var params = {};
 
-    if(orgnFg === "HQ"){
+    if(brandUseFg === "1" && orgnFg === "HQ"){
 
       // 선택한 매장브랜드가 있을 때
       params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;

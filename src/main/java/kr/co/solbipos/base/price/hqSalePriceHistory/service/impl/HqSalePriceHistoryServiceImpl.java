@@ -5,6 +5,7 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.price.hqSalePriceHistory.service.HqSalePriceHistoryService;
 import kr.co.solbipos.base.price.hqSalePriceHistory.service.HqSalePriceHistoryVO;
 import org.slf4j.Logger;
@@ -54,6 +55,19 @@ public class HqSalePriceHistoryServiceImpl implements HqSalePriceHistoryService 
         }
         hqSalePriceHistoryVO.setUserId(sessionInfoVO.getUserId());
 
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
+            if (hqSalePriceHistoryVO.getProdHqBrandCd() == "" || hqSalePriceHistoryVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (hqSalePriceHistoryVO.getUserProdBrands() != null && !"".equals(hqSalePriceHistoryVO.getUserProdBrands())) {
+                    String[] userBrandList = hqSalePriceHistoryVO.getUserProdBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        hqSalePriceHistoryVO.setUserProdBrandList(userBrandList);
+                    }
+                }
+            }
+        }
+
         return hqSalePriceHistoryMapper.getStoreSalePriceHistoryList(hqSalePriceHistoryVO);
     }
 
@@ -66,6 +80,19 @@ public class HqSalePriceHistoryServiceImpl implements HqSalePriceHistoryService 
             hqSalePriceHistoryVO.setArrStoreCd(hqSalePriceHistoryVO.getStoreCd().split(","));
         }
         hqSalePriceHistoryVO.setUserId(sessionInfoVO.getUserId());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
+            if (hqSalePriceHistoryVO.getProdHqBrandCd() == "" || hqSalePriceHistoryVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (hqSalePriceHistoryVO.getUserProdBrands() != null && !"".equals(hqSalePriceHistoryVO.getUserProdBrands())) {
+                    String[] userBrandList = hqSalePriceHistoryVO.getUserProdBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        hqSalePriceHistoryVO.setUserProdBrandList(userBrandList);
+                    }
+                }
+            }
+        }
 
         return hqSalePriceHistoryMapper.getStoreSalePriceHistoryExcelList(hqSalePriceHistoryVO);
     }

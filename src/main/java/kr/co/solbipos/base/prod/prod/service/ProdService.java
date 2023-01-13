@@ -123,4 +123,7 @@ public interface ProdService {
 
     /** 상품옵션그룹 조회 팝업 */
     List<DefaultMap<String>> getSearchOptionGrpList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장상품일괄등록 - 매장목록 조회 */
+    List<DefaultMap<String>> selectStoreList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 }

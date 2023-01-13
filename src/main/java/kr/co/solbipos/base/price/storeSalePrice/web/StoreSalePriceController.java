@@ -10,6 +10,8 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.price.storeSalePrice.service.StoreSalePriceService;
 import kr.co.solbipos.base.price.storeSalePrice.service.StoreSalePriceVO;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,11 +21,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.util.List;
 
-import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : StoreSalePriceController.java
@@ -46,13 +47,15 @@ public class StoreSalePriceController {
 
     private final SessionService sessionService;
     private final StoreSalePriceService storeSalePriceService;
+    private final DayProdService dayProdService;
     private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public StoreSalePriceController(SessionService sessionService, StoreSalePriceService storeSalePriceService, CmmEnvUtil cmmEnvUtil) {
+    public StoreSalePriceController(SessionService sessionService, StoreSalePriceService storeSalePriceService, DayProdService dayProdService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.storeSalePriceService = storeSalePriceService;
+        this.dayProdService = dayProdService;
         this.cmmEnvUtil = cmmEnvUtil;
     }
 
@@ -79,6 +82,12 @@ public class StoreSalePriceController {
             // 내점/배달/포장 가격관리 사용여부
             model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0044") , "0"));
         }
+
+        // 브랜드사용여부
+        model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
+        // 사용자별 브랜드 콤보박스 조회
+        DayProdVO dayProdVO = new DayProdVO();
+        model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
 
         return "base/price/storeSalePrice/storeSalePrice";
     }

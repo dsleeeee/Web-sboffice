@@ -37,6 +37,31 @@
                         <input type="text" class="sb-input w100" ng-model="orgplceNm" />
                     </td>
                 </tr>
+                <c:if test="${brandUseFg == '1'}">
+                    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                      <tr>
+                        <%-- 상품브랜드 --%>
+                        <th><s:message code="recpOrigin.hqBrandNm" /></th>
+                        <td>
+                          <div class="sb-select">
+                              <div class="sb-select">
+                                  <wj-combo-box
+                                      id="srchRorProdHqBrandCd"
+                                      ng-model="prodHqBrandCd"
+                                      items-source="_getComboData('srchRorProdHqBrandCd')"
+                                      display-member-path="name"
+                                      selected-value-path="value"
+                                      is-editable="false"
+                                      control="srchRorProdHqBrandCdCombo">
+                                  </wj-combo-box>
+                              </div>
+                          </div>
+                        </td>
+                        <th></th>
+                        <td></td>
+                      </tr>
+                    </c:if>
+                  </c:if>
                 </tbody>
             </table>
             <%-- 버튼영역 --%>
@@ -81,4 +106,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpOriginReg.js?ver=20210527.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpOriginReg.js?ver=20230110.03" charset="utf-8"></script>

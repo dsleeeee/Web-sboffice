@@ -48,8 +48,29 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                    <th></th>
-                    <td></td>
+                    <c:if test="${brandUseFg != '1' or sessionInfo.orgnFg != 'HQ'}">
+                        <th></th>
+                        <td></td>
+                    </c:if>
+                    <c:if test="${brandUseFg == '1'}">
+                      <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                          <%-- 매장브랜드 --%>
+                          <th><s:message code="kioskOption.storeHqBrand" /></th>
+                          <td>
+                            <div class="sb-select">
+                              <wj-combo-box
+                                id="srchStoreHqBrandCd"
+                                ng-model="storeHqBrandCd"
+                                items-source="_getComboData('srchStoreHqBrandCd')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                control="srchStoreHqBrandCdCombo">
+                              </wj-combo-box>
+                            </div>
+                          </td>
+                      </c:if>
+                    </c:if>
                 </tr>
                 </tbody>
             </table>
@@ -94,4 +115,4 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskOption/kioskOptionProdStore.js?ver=20220124.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskOption/kioskOptionProdStore.js?ver=20220111.01" charset="utf-8"></script>

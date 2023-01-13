@@ -18,6 +18,8 @@ app.controller('storeProdBatchListCtrl', ['$scope', '$http', function ($scope, $
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('storeProdBatchListCtrl', $scope, $http, true));
 
+    $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
@@ -64,7 +66,25 @@ app.controller('storeProdBatchListCtrl', ['$scope', '$http', function ($scope, $
         var params = {};
         params.storeCd = $scope.storeCd;
         params.storeNm = $scope.storeNm;
-        $scope._inquirySub("/iostock/cmm/iostockCmm/selectStoreList.sb", params, function () {
+
+        if(brandUseFg === "1" && orgnFg === "HQ"){
+
+          // 선택한 매장브랜드가 있을 때
+          params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
+
+          // 선택한 매장브랜드가 없을 때('전체' 일때)
+          if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+              var userHqBrandCd = "";
+              for(var i=0; i < userHqBrandCdComboList.length; i++){
+                  if(userHqBrandCdComboList[i].value !== null) {
+                      userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                  }
+              }
+              params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+          }
+        }
+
+        $scope._inquirySub("/base/prod/prod/prod/selectStoreList.sb", params, function () {
         });
     };
 

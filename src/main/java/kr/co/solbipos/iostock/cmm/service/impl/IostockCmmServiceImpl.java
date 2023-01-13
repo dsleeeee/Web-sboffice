@@ -29,6 +29,21 @@ public class IostockCmmServiceImpl implements IostockCmmService {
         iostockCmmVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         iostockCmmVO.setEmpNo(sessionInfoVO.getEmpNo());
         iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        // 본사인 경우, 브랜드 체크
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 매장브랜드가 없을 때 (매장브랜드가 '전체' 일때)
+            if (iostockCmmVO.getStoreHqBrandCd() == "" || iostockCmmVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (iostockCmmVO.getUserBrands() != null && !"".equals(iostockCmmVO.getUserBrands())) {
+                    String[] userBrandList = iostockCmmVO.getUserBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        iostockCmmVO.setUserBrandList(userBrandList);
+                    }
+                }
+            }
+        }
+
         return iostockCmmMapper.selectStoreList(iostockCmmVO);
     }
 

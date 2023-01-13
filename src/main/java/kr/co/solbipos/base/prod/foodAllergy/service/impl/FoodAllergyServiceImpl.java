@@ -52,6 +52,19 @@ public class FoodAllergyServiceImpl implements FoodAllergyService {
             foodAllergyVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
+            if (foodAllergyVO.getProdHqBrandCd() == "" || foodAllergyVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (foodAllergyVO.getUserProdBrands() != null && !"".equals(foodAllergyVO.getUserProdBrands())) {
+                    String[] userBrandList = foodAllergyVO.getUserProdBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        foodAllergyVO.setUserProdBrandList(userBrandList);
+                    }
+                }
+            }
+        }
+
         return foodAllergyMapper.getFoodAllergyList(foodAllergyVO);
     }
 

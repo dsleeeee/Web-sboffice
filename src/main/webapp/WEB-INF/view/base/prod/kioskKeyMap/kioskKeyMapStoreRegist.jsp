@@ -64,6 +64,29 @@
                         </div>
                     </td>
                 </tr>
+                <c:if test="${brandUseFg == '1'}">
+                  <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                      <tr>
+                          <%-- 매장브랜드 --%>
+                          <th><s:message code="kioskKeyMap.storeHqBrand" /></th>
+                          <td>
+                            <div class="sb-select">
+                              <wj-combo-box
+                                id="srchStoreHqBrandCd"
+                                ng-model="storeHqBrandCd"
+                                items-source="_getComboData('srchStoreHqBrandCd')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                control="srchStoreHqBrandCdCombo">
+                              </wj-combo-box>
+                            </div>
+                          </td>
+                          <th></th>
+                          <td></td>
+                      </tr>
+                  </c:if>
+                </c:if>
                 </tbody>
             </table>
             <%-- 버튼영역 --%>
@@ -143,4 +166,4 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapStoreRegist.js?ver=20220823.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapStoreRegist.js?ver=20220111.01" charset="utf-8"></script>

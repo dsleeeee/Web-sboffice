@@ -28,6 +28,25 @@
             <th><s:message code="cmm.storeNm"/></th>
             <td><input type="text" id="srchStoreNm" ng-model="storeNm" maxlength="16" /></td>
           </tr>
+          <tr id="tr<c:out value="${param.targetId}"/>MStoreHqBrand" style="display: none;">
+            <%-- 매장브랜드 --%>
+            <th><s:message code="outstockReqDate.storeHqBrand" /></th>
+            <td>
+              <div class="sb-select">
+                <wj-combo-box
+                        id="srchPopMStoreHqBrandCdCombo"
+                        ng-model="popStoreHqBrandCd"
+                        items-source="_getComboData('popMStoreHqBrandCdCombo')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        control="srchPopMStoreHqBrandCdCombo">
+                </wj-combo-box>
+              </div>
+            </td>
+            <th></th>
+            <td></td>
+          </tr>
           </tbody>
         </table>
 
@@ -92,6 +111,10 @@
    * get application
    */
   var app = agrid.getApp();
+  // 브랜드 사용여부
+  var sMBrandUseFg = "";
+  // 사용자 브랜드
+  var sMUserHqBrandCdComboList = "";
 
   /** 매장선택 controller */
   app.controller('${param.targetId}Ctrl', ['$scope', '$http', function ($scope, $http) {
@@ -104,6 +127,38 @@
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+
+      // 브랜드 사용여부
+      var params = {};
+      params.envstCd = "1114";
+      $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/getHqEnvSt.sb', params, function (response) {
+
+        sMBrandUseFg = response.data.data ;
+
+        if(sMBrandUseFg === "1"){
+
+          // 매장브랜드 show
+          eval('$("#tr' + targetId + 'MStoreHqBrand").css("display", "")');
+
+
+          // 매장브랜드
+          params = {};
+          $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectBrandMomsList.sb', params, function (response) {
+              if (response.data.data.list.length > 0) {
+                  var list = response.data.data.list;
+                  $scope._setComboData("popMStoreHqBrandCdCombo", list);
+
+                  // 매장브랜드 콤보박스 항목 저장시 쓰려고
+                  sMUserHqBrandCdComboList = list;
+              }
+          });
+
+        }else{
+          // 매장브랜드 hidden
+          eval('$("#tr' + targetId + 'MStoreHqBrand").css("display", "none")');
+        }
+
+      });
     };
 
     // 리스트 조회여부(기본 'N')
@@ -129,6 +184,24 @@
       params.storeCd = $scope.storeCd;
       params.storeNm = $scope.storeNm;
       //params.listScale  = $scope.listScale;
+
+      if(sMBrandUseFg === "1" && orgnFg === "HQ"){
+
+          // 선택한 매장브랜드가 있을 때
+          params.storeHqBrandCd = $scope.srchPopMStoreHqBrandCdCombo.selectedValue;
+
+          // 선택한 매장브랜드가 없을 때('전체' 일때)
+          if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+              var userHqBrandCd = "";
+              for(var i=0; i < sMUserHqBrandCdComboList.length; i++){
+                  if(sMUserHqBrandCdComboList[i].value !== null) {
+                      userHqBrandCd += sMUserHqBrandCdComboList[i].value + ","
+                  }
+              }
+              params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+          }
+      }
+
       $scope._inquirySub("/iostock/cmm/iostockCmm/selectStoreList.sb", params, function () {
 
         // 리스트 조회여부 'Y'로 변경

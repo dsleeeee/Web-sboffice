@@ -25,6 +25,7 @@ app.controller('kioskKeyMapStoreRegCtrl', ['$scope', '$http', function ($scope, 
     $scope._setComboData("srchSysStatFg", sysStatFg);
     $scope._setComboData("applyTuClsType", kioskTuClsTypeList); // 키오스크용 키맵그룹 목록
     $scope._setComboData("tuMClsFgStoreRegist", tuMClsFgStoreRegistComboData); // KIOSK중분류사용
+    $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -56,6 +57,23 @@ app.controller('kioskKeyMapStoreRegCtrl', ['$scope', '$http', function ($scope, 
         params.storeNm = $("#srchStoreNm").val();
         params.sysStatFg = $scope.srchSysStatFgCombo.selectedValue;
         params.tuMClsFg = $scope.tuMClsFgStoreRegistCombo.selectedValue;
+
+        if(brandUseFg === "1" && orgnFg === "HQ"){
+
+          // 선택한 매장브랜드가 있을 때
+          params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
+
+          // 선택한 매장브랜드가 없을 때('전체' 일때)
+          if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+              var userHqBrandCd = "";
+              for(var i=0; i < userHqBrandCdComboList.length; i++){
+                  if(userHqBrandCdComboList[i].value !== null) {
+                      userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                  }
+              }
+              params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+          }
+        }
 
         $scope._inquirySub("/base/prod/kioskKeyMap/kioskKeyMap/getStoreList.sb", params, function () {
 

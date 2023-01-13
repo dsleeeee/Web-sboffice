@@ -149,6 +149,40 @@
                                     <input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" />
                                 </td>
                             </tr>
+                            <tr>
+                                <c:if test="${brandUseFg == '1'}">
+                                    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                                        <%-- 상품브랜드 --%>
+                                        <th><s:message code="prod.prodHqBrand"/></th>
+                                        <td>
+                                            <div class="sb-select">
+                                                <wj-combo-box
+                                                    id="srchRmProdHqBrandCd"
+                                                    items-source="_getComboData('srchRmProdHqBrandCd')"
+                                                    display-member-path="name"
+                                                    selected-value-path="value"
+                                                    is-editable="false"
+                                                    control="srchRmProdHqBrandCdCombo">
+                                                </wj-combo-box>
+                                            </div>
+                                        </td>
+                                    </c:if>
+                                </c:if>
+                                <c:if test="${brandUseFg != '1' or sessionInfo.orgnFg != 'HQ'}">
+                                    <td></td>
+                                    <td></td>
+                                </c:if>
+                                <td colspan="2" align="right">
+                                    <div id="divBtnProdSearch" style="visibility: hidden;">
+                                        <button class="btn_skyblue" id="btnSearchProd" ng-click="_pageView('recmdProdListCtrl', 1)">
+                                            <s:message code="cmm.search" />
+                                        </button>
+                                        <button class="btn_skyblue" id="btnRegRecmdProd" ng-click="regRecmdProd()">
+                                            <s:message code="kioskKeyMap.prodReg" />
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
 <%--                            <tr>--%>
 <%--                                <th><s:message code="kioskKeyMap.useYn" /></th>&lt;%&ndash;사용여부&ndash;%&gt;--%>
 <%--                                <td>--%>
@@ -181,7 +215,6 @@
 <%--                                    </div>--%>
 <%--                                </td>--%>
 <%--                            </tr>--%>
-                            <tr>
 <%--                                <th><s:message code="kioskKeyMap.regYn" /></th>&lt;%&ndash;등록여부&ndash;%&gt;--%>
 <%--                                <td>--%>
 <%--                                    <div class="sb-select">--%>
@@ -197,17 +230,6 @@
 <%--                                        </wj-combo-box>--%>
 <%--                                    </div>--%>
 <%--                                </td>--%>
-                                <td colspan="4" align="right">
-                                    <div id="divBtnProdSearch" style="visibility: hidden;">
-                                        <button class="btn_skyblue" id="btnSearchProd" ng-click="_pageView('recmdProdListCtrl', 1)">
-                                            <s:message code="cmm.search" />
-                                        </button>
-                                        <button class="btn_skyblue" id="btnRegRecmdProd" ng-click="regRecmdProd()">
-                                            <s:message code="kioskKeyMap.prodReg" />
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
                             </tbody>
                         </table>
                         <div class="w100 mt10 mb20">
@@ -246,7 +268,7 @@
 <script type="text/javascript">
     var useYn = ${ccu.getCommCodeExcpAll("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskRecmd.js?ver=20220120.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskRecmd.js?ver=20220111.01" charset="utf-8"></script>
 
 
 <%-- 상품선택 모듈 멀티 선택 사용시 include --%>

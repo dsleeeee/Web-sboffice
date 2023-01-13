@@ -41,9 +41,7 @@ app.controller('storeApplyChgHistCtrl', ['$scope', '$http', function ($scope, $h
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("srchSachStoreType", storeTypeList);
     $scope._setComboData("srchSachStoreGroup", storeGroupList);
-    if(orgnFg === "HQ"){
-      $scope._setComboData("srchSachStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
-    }
+    $scope._setComboData("srchSachStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -131,7 +129,7 @@ app.controller('storeApplyChgHistCtrl', ['$scope', '$http', function ($scope, $h
         params.storeGroupCd = $scope.srchSachStoreGroupCombo.selectedValue;
         params.listScale = $scope.listScaleCombo5.text;
 
-        if(orgnFg === "HQ"){
+        if(brandUseFg === "1" && orgnFg === "HQ"){
 
             // 선택한 매장브랜드가 있을 때
             params.storeHqBrandCd = $scope.srchSachStoreHqBrandCdCombo.selectedValue;

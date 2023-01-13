@@ -21,12 +21,19 @@ app.controller('recpOriginRegCtrl', ['$scope', '$http', function ($scope, $http)
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('recpOriginRegCtrl', $scope, $http, true));
 
+    $scope._setComboData("srchRorProdHqBrandCd", userHqBrandCdComboList); // 상품브랜드
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-        var url                = '/base/prod/recpOrigin/recpOrigin/getBrandComboList.sb';
-        var comboParams        = {};
-        comboParams.hqOfficeCd = hqOfficeCd;
-        $scope._queryCombo("map", null, "hqBrandFgMap", url, comboParams, "S"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+
+        if(brandUseFg === "1") {
+            $scope.hqBrandFgMap = new wijmo.grid.DataMap(userHqBrandCdComboList2, 'value', 'name');
+        }else{
+            var url                = '/base/prod/recpOrigin/recpOrigin/getBrandComboList.sb';
+            var comboParams        = {};
+            comboParams.hqOfficeCd = hqOfficeCd;
+            $scope._queryCombo("map", null, "hqBrandFgMap", url, comboParams, "S"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+        }
     };
 
     $scope.$on("recpOriginRegCtrl", function(event, data) {
@@ -45,6 +52,22 @@ app.controller('recpOriginRegCtrl', ['$scope', '$http', function ($scope, $http)
         var params = {};
         params.recipesNm = $scope.recipesNm;
         params.orgplceNm = $scope.orgplceNm;
+
+        if(brandUseFg === "1" && orgnFg === "HQ"){
+          // 선택한 상품브랜드가 있을 때
+          params.prodHqBrandCd = $scope.srchRorProdHqBrandCdCombo.selectedValue;
+
+          // 선택한 상품브랜드가 없을 때('전체' 일때)
+          if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+              var userHqBrandCd = "";
+              for(var i=0; i < userHqBrandCdComboList.length; i++){
+                  if(userHqBrandCdComboList[i].value !== null) {
+                      userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                  }
+              }
+              params.userProdBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+          }
+        }
 
         $scope._inquirySub("/base/prod/recpOrigin/recpOrigin/getRecpOriginList.sb", params, function() {}, false);
     };

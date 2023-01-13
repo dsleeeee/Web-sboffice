@@ -334,9 +334,7 @@ app.controller('storeSelectCtrl', ['$scope', '$http', '$timeout', function ($sco
     angular.extend(this, new RootController('storeSelectCtrl', $scope, $http, true));
 
     $scope._setComboData("searchSysStatFg", sysStatFg);
-    if(orgnFg === "HQ"){
-      $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
-    }
+    $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
 
     $scope.initGrid = function (s, e) {
 
@@ -358,7 +356,7 @@ app.controller('storeSelectCtrl', ['$scope', '$http', '$timeout', function ($sco
         params.storeNm = $("#searchStoreNm").val();
         params.sysStatFg = $scope.searchSysStatFgCombo.selectedValue;
 
-        if(orgnFg === "HQ"){
+        if(brandUseFg === "1" && orgnFg === "HQ"){
 
             // 선택한 매장브랜드가 있을 때
             params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;

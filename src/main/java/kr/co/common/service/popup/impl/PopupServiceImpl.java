@@ -89,6 +89,21 @@ public class PopupServiceImpl implements PopupService{
     @Override
     public List<DefaultMap<String>> getStoreList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO) {
         storeManageVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        // 본사인 경우, 브랜드 체크
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 매장브랜드가 없을 때 (매장브랜드가 '전체' 일때)
+            if (storeManageVO.getStoreHqBrandCd() == "" || storeManageVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (storeManageVO.getUserBrands() != null && !"".equals(storeManageVO.getUserBrands())) {
+                    String[] userBrandList = storeManageVO.getUserBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        storeManageVO.setUserBrandList(userBrandList);
+                    }
+                }
+            }
+        }
+
         return popupMapper.getStoreList(storeManageVO);
     }
 
@@ -144,6 +159,19 @@ public class PopupServiceImpl implements PopupService{
         prodVO.setStoreCd(storeCd);
 
         prodVO.setUserId(sessionInfoVO.getUserId());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
+            if (prodVO.getProdHqBrandCd() == "" || prodVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (prodVO.getUserProdBrands() != null && !"".equals(prodVO.getUserProdBrands())) {
+                    String[] userBrandList = prodVO.getUserProdBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        prodVO.setUserProdBrandList(userBrandList);
+                    }
+                }
+            }
+        }
 
         return popupMapper.getProductList(prodVO);
     }

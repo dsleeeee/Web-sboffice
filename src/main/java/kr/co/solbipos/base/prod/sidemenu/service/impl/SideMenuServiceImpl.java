@@ -369,6 +369,19 @@ public class SideMenuServiceImpl implements SideMenuService {
             }
         }
 
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
+            if (sideMenuSelProdVO.getProdHqBrandCd() == "" || sideMenuSelProdVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (sideMenuSelProdVO.getUserProdBrands() != null && !"".equals(sideMenuSelProdVO.getUserProdBrands())) {
+                    String[] userBrandList = sideMenuSelProdVO.getUserProdBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        sideMenuSelProdVO.setUserProdBrandList(userBrandList);
+                    }
+                }
+            }
+        }
+
         return sideMenuMapper.getProdList(sideMenuSelProdVO);
 
     }

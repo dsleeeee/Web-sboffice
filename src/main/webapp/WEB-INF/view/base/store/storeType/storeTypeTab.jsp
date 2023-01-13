@@ -42,7 +42,9 @@
     var storeTypeApplyEnvstVal = "${storeTypeApplyEnvstVal}";
     // 내점/배달/포장가격관리(0044)
     var subPriceFg = "${subPriceFg}";
-    // 사용자 매장브랜드
+    // 브랜드 사용여부
+    var brandUseFg = "${brandUseFg}";
+    // 사용자 브랜드
     var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
 

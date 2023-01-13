@@ -12,7 +12,7 @@
 
 <div class="subCon" ng-controller="prodImgCtrl">
     <%--searchTbl--%>
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -93,17 +93,40 @@
                     </wj-combo-box>
                 </div>
             </td>
-            <td colspan="2" >
-                <button class="btn_skyblue fl mr5" ng-click="deleteAll()" ><s:message code="prodImg.deleteAll"/></button>
-                <button class="btn_skyblue fl mr5" ng-click="copy('A')" ><s:message code="prodImg.copyAll"/></button>
-                <p class="s12 fl">등록된 이미지만 복사됩니다.</p>
-            </td>
+            <c:if test="${brandUseFg != '1' or sessionInfo.orgnFg != 'HQ'}">
+                <th></th>
+                <td></td>
+            </c:if>
+            <c:if test="${brandUseFg == '1'}">
+                <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                    <%-- 상품브랜드 --%>
+                    <th><s:message code="prodImg.prodHqBrand" /></th>
+                    <td>
+                      <div class="sb-select">
+                        <wj-combo-box
+                          id="srchProdHqBrandCd"
+                          ng-model="prodHqBrandCd"
+                          items-source="_getComboData('srchProdHqBrandCd')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          control="srchProdHqBrandCdCombo">
+                        </wj-combo-box>
+                      </div>
+                    </td>
+                </c:if>
+            </c:if>
         </tr>
         </tbody>
     </table>
     <%--//searchTbl--%>
+    <div class="mt10 oh sb-select dkbr">
+        <button class="btn_skyblue fr mr5" ng-click="deleteAll()" ><s:message code="prodImg.deleteAll"/></button>
+        <button class="btn_skyblue fr mr5" ng-click="copy('A')" ><s:message code="prodImg.copyAll"/></button>
+        <p class="s12 fr pd5">등록된 이미지만 복사됩니다.</p>
+    </div>
 
-    <div class="wj-TblWrap mt20 mb20 w40 fl">
+    <div class="wj-TblWrap mt10 mb20 w40 fl">
         <div class="wj-TblWrapBr mr10 pd20" style="height:480px;">
             <div class="sb-select dkbr mb10 oh">
             </div>
@@ -138,7 +161,7 @@
         </div>
     </div>
 
-    <div class="wj-TblWrap mt20 mb20 w60 fr">
+    <div class="wj-TblWrap mt10 mb20 w60 fr">
         <div class="wj-TblWrapBr ml10 pd20" style="height:480px; overflow-y: hidden;">
 
             <label id="prodInfo"></label>
@@ -249,6 +272,10 @@
     var hqOfficeCd = "${hqOfficeCd}";
     var storeCd = "${storeCd}";
     var userId = "${userId}";
+    // 브랜드 사용여부
+    var brandUseFg = "${brandUseFg}";
+    // 사용자 브랜드
+    var userHqBrandCdComboList = ${userHqBrandCdComboList};
 
     // POS에서 해당 WEB 화면 최초 접속한 경우(접속하면서 session 생성), 왼쪽 메뉴영역은 접어두기.
     // 최초 접속시에는 이전 URL 인자값으로 판별가능
