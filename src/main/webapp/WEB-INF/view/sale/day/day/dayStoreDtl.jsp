@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sale/day/day/dayStoreDtl/"/>
 
-<wj-popup control="wjDayStoreDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:780px;height:480px;" fade-in="false" fade-out="false">
+<wj-popup control="wjDayStoreDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:870px;height:480px;" fade-in="false" fade-out="false">
     <div ng-controller="dayStoreDtlCtrl">
 
         <%-- header --%>
@@ -37,13 +37,15 @@
                         is-read-only="true">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="day.dayStoreDtl.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="day.dayStoreDtl.storeNm"/>" binding="storeNm" width="140" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="day.dayStoreDtl.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="day.dayStoreDtl.storeNm"/>" binding="storeNm" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="day.dayStoreDtl.totSaleAmt"/>" binding="totSaleAmt" width="90" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="day.dayStoreDtl.totDcAmt"/>" binding="totDcAmt" width="90" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="day.dayStoreDtl.realSaleAmt"/>" binding="realSaleAmt" width="90" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="day.dayStoreDtl.billCnt"/>" binding="billCnt" width="90" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="day.dayStoreDtl.billUprc"/>" binding="billUprc" width="90" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="day.dayStoreDtl.saleCnt"/>" binding="saleCnt" width="70" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="day.dayStoreDtl.rtnSaleCnt"/>" binding="rtnSaleCnt" width="70" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="day.dayStoreDtl.billCnt"/>" binding="billCnt" width="70" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="day.dayStoreDtl.billUprc"/>" binding="billUprc" width="80" is-read-only="true" align="right"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>
@@ -53,4 +55,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayStoreDtl.js?ver=20210719.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayStoreDtl.js?ver=20210719.02" charset="utf-8"></script>

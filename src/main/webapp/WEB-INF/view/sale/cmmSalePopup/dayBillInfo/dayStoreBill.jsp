@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sale/cmmSalePopup/dayBillInfo/dayStoreBill/"/>
 
-<wj-popup control="wjDayStoreBillLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;height:480px;" fade-in="false" fade-out="false">
+<wj-popup control="wjDayStoreBillLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:840px;height:480px;" fade-in="false" fade-out="false">
     <div ng-controller="dayStoreBillCtrl">
 
         <%-- header --%>
@@ -37,16 +37,15 @@
                         is-read-only="true">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="dayStoreBill.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dayStoreBill.storeNm"/>" binding="storeNm" width="140" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dayStoreBill.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dayStoreBill.storeNm"/>" binding="storeNm" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dayStoreBill.realSaleAmt"/>" binding="realSaleAmt" width="90" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dayStoreBill.realSaleCnt"/>" binding="realSaleCnt" width="70" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dayStoreBill.saleCnt"/>" binding="saleCnt" width="70" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dayStoreBill.returnSaleCnt"/>" binding="returnSaleCnt" width="90" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dayStoreBill.billUprc"/>" binding="billUprc" width="90" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dayStoreBill.rtnSaleCnt"/>" binding="rtnSaleCnt" width="70" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dayStoreBill.billCnt"/>" binding="billCnt" width="70" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dayStoreBill.billUprc"/>" binding="billUprc" width="80" is-read-only="true" align="right"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dayStoreBill.totGuestCnt"/>" binding="totGuestCnt" width="70" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dayStoreBill.guestUprc"/>" binding="guestUprc" width="90" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-
+                        <wj-flex-grid-column header="<s:message code="dayStoreBill.guestUprc"/>" binding="guestUprc" width="80" is-read-only="true" align="right"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>

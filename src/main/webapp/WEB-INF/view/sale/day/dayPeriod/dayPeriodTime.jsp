@@ -118,7 +118,7 @@
           </table>
 
           <%--left--%>
-          <div class="wj-TblWrap mt20 mb20 w50 fl">
+          <div class="wj-TblWrap mt20 mb20 w45 fl">
                <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
                     <div class="updownSet oh mb10">
                          <span class="fl bk lh30"><s:message code="dayPeriod.time"/></span>
@@ -136,19 +136,16 @@
                                    item-formatter="_itemFormatter">
 
                                    <!-- define columns -->
-                                   <wj-flex-grid-column header="<s:message code="dayPeriod.saleTime"/>" binding="saleTime" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                                   <wj-flex-grid-column header="<s:message code="dayPeriod.saleCnt"/>" binding="saleCnt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                                   <wj-flex-grid-column header="<s:message code="dayPeriod.saleTime"/>" binding="saleTime" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+                                   <wj-flex-grid-column header="<s:message code="dayPeriod.billCnt"/>" binding="billCnt" width="75" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                                    <wj-flex-grid-column header="<s:message code="dayPeriod.realSaleAmt"/>" binding="realSaleAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                                   <wj-flex-grid-column header="<s:message code="dayPeriod.billUprc"/>" binding="billUprc" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-
+                                   <wj-flex-grid-column header="<s:message code="dayPeriod.billUprc"/>" binding="billUprc" width="80" is-read-only="true" align="right"></wj-flex-grid-column>
                               </wj-flex-grid>
-
                               <%-- ColumnPicker 사용시 include --%>
                               <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
                                    <jsp:param name="pickerTarget" value="dayPeriodTimeCtrl"/>
                               </jsp:include>
                               <%--// ColumnPicker 사용시 include --%>
-
                          </div>
                     </div>
                </div>
@@ -157,7 +154,7 @@
      </div>
 
      <%--right--%>
-     <div class="wj-TblWrap mt20 mb20 w50 fr" ng-controller="dayPeriodTimeDetailCtrl">
+     <div class="wj-TblWrap mt20 mb20 w55 fr" ng-controller="dayPeriodTimeDetailCtrl">
           <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
                <div class="updownSet oh mb10">
                     <span class="fl bk lh30"><s:message code="dayPeriod.saleDtl"/></span>
@@ -176,18 +173,15 @@
 
                               <!-- define columns -->
                               <wj-flex-grid-column header="<s:message code="dayPeriod.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
-                              <wj-flex-grid-column header="<s:message code="dayPeriod.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
-                              <wj-flex-grid-column header="<s:message code="dayPeriod.saleQty"/>" binding="saleQty" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                              <wj-flex-grid-column header="<s:message code="dayPeriod.prodNm"/>" binding="prodNm" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
+                              <wj-flex-grid-column header="<s:message code="dayPeriod.saleQty"/>" binding="saleQty" width="75" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                               <wj-flex-grid-column header="<s:message code="dayPeriod.realSaleAmt"/>" binding="realSaleAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-
                          </wj-flex-grid>
-
                          <%-- ColumnPicker 사용시 include --%>
                          <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
                               <jsp:param name="pickerTarget" value="dayPeriodTimeDetailCtrl"/>
                          </jsp:include>
                          <%--// ColumnPicker 사용시 include --%>
-
                     </div>
                </div>
           </div>

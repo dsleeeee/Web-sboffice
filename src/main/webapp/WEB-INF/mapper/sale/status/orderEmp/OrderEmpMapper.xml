@@ -13,12 +13,12 @@
     <select id="getOrderEmpPeriodList" parameterType="orderEmpVO" resultType="DefaultMap">
 		/** OrderEmpMapper.getOrderEmpPeriodList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT 	tssd.STORE_CD,
+        SELECT tssd.STORE_CD,
                	tms.STORE_NM,
 				tssd.ORDER_EMP_NO,
 				tme.EMP_NM,
-				COUNT(tssd.BILL_NO) AS BILL_CNT,
-				SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+				SUM(CASE WHEN tssd.SALE_FG = '1' THEN 1 ELSE 0 END) + SUM(CASE WHEN tssd.SALE_FG = '-1' THEN -1 ELSE 0 END) AS BILL_CNT,
+				SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
 		<include refid="CmmSQL.PagingTemplateCount"/>
 	 	FROM 	TB_SL_SALE_DTL tssd,
 				TB_MS_EMPLOYEE tme,
@@ -58,12 +58,12 @@
     -->
     <select id="getOrderEmpPeriodExcelList" parameterType="orderEmpVO" resultType="DefaultMap">
 		/** OrderEmpMapper.getOrderEmpPeriodExcelList */
-		SELECT 	tssd.STORE_CD,
+		SELECT tssd.STORE_CD,
 				tms.STORE_NM,
 				tssd.ORDER_EMP_NO,
 				tme.EMP_NM,
-				COUNT(tssd.BILL_NO) AS BILL_CNT,
-				SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+				SUM(CASE WHEN tssd.SALE_FG = '1' THEN 1 ELSE 0 END) + SUM(CASE WHEN tssd.SALE_FG = '-1' THEN -1 ELSE 0 END) AS BILL_CNT,
+				SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
 		FROM 	TB_SL_SALE_DTL tssd,
 				TB_MS_EMPLOYEE tme,
 				TB_MS_STORE tms
@@ -244,44 +244,44 @@
     -->
 	<select id="getOrderEmpDayExcelList" parameterType="orderEmpVO" resultType="DefaultMap">
 		/* USE : EmpDayMapper.getOrderEmpDayExcelList */
-		SELECT TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
-		, A.STORE_CNT
-		, TO_CHAR(TO_DATE(A.SALE_DATE, 'YYYYMMDD'),'DY') YOIL
-		, SUM(A.REAL_SALE_AMT_TOT) AS REAL_SALE_AMT_TOT
-		, SUM(A.TOT_BILL_CNT) AS TOT_BILL_CNT
+		SELECT 	TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+		, 		A.STORE_CNT
+		, 		TO_CHAR(TO_DATE(A.SALE_DATE, 'YYYYMMDD'),'DY') YOIL
+		, 		SUM(A.REAL_SALE_AMT_TOT) AS REAL_SALE_AMT_TOT
+		, 		SUM(A.TOT_BILL_CNT) AS TOT_BILL_CNT
 		${sQuery1}
 		FROM
 		(
-		SELECT TSDE.SALE_DATE
+		SELECT tssd.SALE_DATE
 		,( SELECT COUNT(TMS.STORE_CD)
 		FROM TB_MS_STORE TMS
 		WHERE TMS.HQ_OFFICE_CD = #{hqOfficeCd}
 		<if test='storeCd != null and storeCd != ""'>
-			AND TMS.STORE_CD	IN
+			AND TMS.STORE_CD IN
 			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
 				#{item}
 			</foreach>
 		</if>
 		) AS STORE_CNT
-		, SUM(TSDE.REAL_SALE_AMT) AS REAL_SALE_AMT_TOT
-		, SUM(TSDE.BILL_CNT) AS TOT_BILL_CNT
+		, SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT_TOT
+		, COUNT(tssd.BILL_NO) AS TOT_BILL_CNT
 		${sQuery2}
-		FROM TB_SL_DAILY_EMPLOYEE TSDE
-		WHERE TSDE.HQ_OFFICE_CD = #{hqOfficeCd}
+		FROM TB_SL_SALE_DTL tssd
+		WHERE tssd.HQ_OFFICE_CD = #{hqOfficeCd}
 		<if test='storeCd != null and storeCd != ""'>
-			AND TSDE.STORE_CD	IN
+			AND tssd.STORE_CD	IN
 			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
 				#{item}
 			</foreach>
 		</if>
 		<if test='startDate != null and startDate != ""'>
-			AND TSDE.SALE_DATE >= #{startDate}
+			AND tssd.SALE_DATE >= #{startDate}
 		</if>
 		<if test='endDate != null and endDate != ""'>
-			AND TSDE.SALE_DATE <![CDATA[<= ]]> #{endDate}
+			AND tssd.SALE_DATE <![CDATA[<= ]]> #{endDate}
 		</if>
-		GROUP BY TSDE.SALE_DATE, TSDE.ORDER_EMP_NO, TSDE.STORE_CD
-		ORDER BY TSDE.SALE_DATE ASC
+		GROUP BY tssd.SALE_DATE, tssd.ORDER_EMP_NO, tssd.STORE_CD
+		ORDER BY tssd.SALE_DATE ASC
 		) A
 		WHERE 1 = 1
 		GROUP BY A.SALE_DATE, A.STORE_CNT

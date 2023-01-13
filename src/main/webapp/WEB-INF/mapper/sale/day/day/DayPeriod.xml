@@ -19,10 +19,10 @@
     <select id="getDayPeriodTimeList"  parameterType="DayPeriodVO" resultType="DefaultMap">
         /* DayPeriodMapper.getDayPeriodTimeList */
         <if test="optionFg != null and optionFg.toString() == 'time'">
-         SELECT  SALE_HOUR AS SALE_TIME,
-                SUM(SALE_CNT) AS SALE_CNT,
+        SELECT SALE_HOUR AS SALE_TIME,
+                SUM(REAL_SALE_CNT) AS BILL_CNT,
                 SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
-                DECODE(SUM(SALE_CNT), 0, 0, ROUND(SUM(TOT_SALE_AMT) / SUM(SALE_CNT))) AS BILL_UPRC
+                DECODE(SUM(REAL_SALE_CNT), 0, 0, ROUND(SUM(REAL_SALE_AMT) / SUM(REAL_SALE_CNT))) AS BILL_UPRC
         FROM    TB_SL_DAILY_TIME
         WHERE   HQ_OFFICE_CD = #{membrOrgnCd}
         <if test='storeCds != null and storeCds != ""'>
@@ -45,10 +45,10 @@
         ORDER BY SALE_HOUR
         </if>
         <if test="optionFg != null and optionFg.toString() == 'timeSlot'">
-         SELECT  TIME_SLOT AS SALE_TIME,
-                SUM(SALE_CNT) AS SALE_CNT,
+        SELECT TIME_SLOT AS SALE_TIME,
+                SUM(REAL_SALE_CNT) AS BILL_CNT,
                 SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
-                DECODE(SUM(SALE_CNT), 0, 0, ROUND(SUM(TOT_SALE_AMT) / SUM(SALE_CNT))) AS BILL_UPRC
+                DECODE(SUM(REAL_SALE_CNT), 0, 0, ROUND(SUM(REAL_SALE_AMT) / SUM(REAL_SALE_CNT))) AS BILL_UPRC
         FROM    TB_SL_DAILY_TIME,
                 (SELECT MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) || '~' || LPAD(MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) + 1, 2, '0') AS TIME_SLOT,
                         MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) AS START_TIME,

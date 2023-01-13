@@ -113,10 +113,12 @@ public class OrderEmpServiceImpl implements OrderEmpService {
         for(int i = 0; i < empNo.size(); i++) {
             String j = empNo.get(i).get("nmcodeCd");
             String k = empNo.get(i).get("storeCd");
+
             sQuery1 +=", NVL(SUM(A.REAL_SALE_AMT" + i + "), 0) AS REAL_SALE_AMT" + i +  "\n";
             sQuery1 +=", NVL(SUM(A.BILL_CNT" + i + "), 0) AS BILL_CNT" + i +  "\n";
+
             sQuery2 +=", CASE WHEN tssd.STORE_CD =" + "'"+k+"'" + " AND tssd.ORDER_EMP_NO = " + "'"+j+"'" + " THEN SUM(tssd.REAL_SALE_AMT) ELSE NULL END AS REAL_SALE_AMT" + i +  "\n";
-            sQuery2 +=", CASE WHEN tssd.STORE_CD =" + "'"+k+"'" + " AND tssd.ORDER_EMP_NO = " + "'"+j+"'" + " THEN COUNT(tssd.BILL_NO) ELSE NULL END AS BILL_CNT" + i +  "\n";
+            sQuery2 +=", CASE WHEN tssd.STORE_CD =" + "'"+k+"'" + " AND tssd.ORDER_EMP_NO = " + "'"+j+"'" + " THEN SUM(CASE WHEN tssd.SALE_FG = '1' THEN 1 ELSE 0 END) + SUM(CASE WHEN tssd.SALE_FG = '-1' THEN -1 ELSE 0 END) ELSE NULL END AS BILL_CNT" + i +  "\n";
         }
 
         orderEmpVO.setsQuery1(sQuery1);
@@ -129,13 +131,32 @@ public class OrderEmpServiceImpl implements OrderEmpService {
     @Override
     public List<DefaultMap<String>> getOrderEmpDayExcelList(OrderEmpVO orderEmpVO, SessionInfoVO sessionInfoVO) {
 
-        orderEmpVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         orderEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        orderEmpVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(orderEmpVO.getStoreCd()).equals("")) {
             orderEmpVO.setArrStoreCd(orderEmpVO.getStoreCd().split(","));
         }
+
+        // 판매자별 쿼리 변수
+        String sQuery1 = "";
+        String sQuery2 = "";
+
+        List<DefaultMap<String>> empNo = orderEmpMapper.getEmpMebList(orderEmpVO);
+
+        for(int i = 0; i < empNo.size(); i++) {
+            String j = empNo.get(i).get("nmcodeCd");
+            String k = empNo.get(i).get("storeCd");
+
+            sQuery1 +=", NVL(SUM(A.REAL_SALE_AMT" + i + "), 0) AS REAL_SALE_AMT" + i +  "\n";
+            sQuery1 +=", NVL(SUM(A.BILL_CNT" + i + "), 0) AS BILL_CNT" + i +  "\n";
+
+            sQuery2 +=", CASE WHEN tssd.STORE_CD =" + "'"+k+"'" + " AND tssd.ORDER_EMP_NO = " + "'"+j+"'" + " THEN SUM(tssd.REAL_SALE_AMT) ELSE NULL END AS REAL_SALE_AMT" + i +  "\n";
+            sQuery2 +=", CASE WHEN tssd.STORE_CD =" + "'"+k+"'" + " AND tssd.ORDER_EMP_NO = " + "'"+j+"'" + " THEN SUM(CASE WHEN tssd.SALE_FG = '1' THEN 1 ELSE 0 END) + SUM(CASE WHEN tssd.SALE_FG = '-1' THEN -1 ELSE 0 END) ELSE NULL END AS BILL_CNT" + i +  "\n";
+        }
+
+        orderEmpVO.setsQuery1(sQuery1);
+        orderEmpVO.setsQuery2(sQuery2);
+
         return orderEmpMapper.getOrderEmpDayExcelList(orderEmpVO);
     }
 

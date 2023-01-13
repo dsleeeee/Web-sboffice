@@ -62,6 +62,7 @@ app.controller('monthTotalCtrl', ['$scope', '$http', '$timeout', function ($scop
         dataItem.vatAmt   = messages["month.sale"];
         dataItem.totTipAmt   = messages["month.totTipAmt"];
         dataItem.totEtcAmt   = messages["month.totEtcAmt"];
+        dataItem.cupAmt   = messages["month.cupAmt"];
         dataItem.totPayAmt   = messages["month.payMethod"];
         dataItem.genRealSaleAmt   = messages["month.dlvrPack"];
         dataItem.genRealSaleRate   = messages["month.dlvrPack"];

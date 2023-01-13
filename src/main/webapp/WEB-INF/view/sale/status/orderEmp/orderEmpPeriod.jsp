@@ -87,9 +87,9 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>"             binding="storeNm"           width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>"             binding="storeNm"           width="130" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="orderEmp.orderEmp2"/>"      binding="empNm"             width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="orderEmp.billCnt"/>"        binding="billCnt"           width="150" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.billCnt"/>"        binding="billCnt"           width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="orderEmp.realSaleAmt"/>"    binding="realSaleAmt"       width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         </wj-flex-grid>
         <%-- ColumnPicker 사용시 include --%>
@@ -122,9 +122,9 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>"             binding="storeNm"           width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>"             binding="storeNm"           width="130" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="orderEmp.orderEmp2"/>"      binding="empNm"             width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="orderEmp.billCnt"/>"        binding="billCnt"           width="150" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.billCnt"/>"        binding="billCnt"           width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="orderEmp.realSaleAmt"/>"    binding="realSaleAmt"       width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         </wj-flex-grid>
         </div>
@@ -158,11 +158,11 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="orderEmp.saleDate"/>"    binding="saleDate"         width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="orderEmp.posNo"/>"       binding="posNo"            width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="orderEmp.billNo"/>"      binding="billNo"           width="100" align="center" is-read-only="true" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="orderEmp.saleFg"/>"      binding="saleYn"           width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="orderEmp.tblCd"/>"       binding="tblCd"            width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.saleDate"/>"    binding="saleDate"         width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.posNo"/>"       binding="posNo"            width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.billNo"/>"      binding="billNo"           width="80" align="center" is-read-only="true" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.saleFg"/>"      binding="saleYn"           width="60" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.tblCd"/>"       binding="tblCd"            width="90" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="orderEmp.billDt"/>"      binding="billDt"           width="130" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="orderEmp.totSaleAmt"/>"  binding="totSaleAmt"       width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="orderEmp.dcAmt"/>"       binding="totDcAmt"         width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -183,28 +183,30 @@
       	<ul id="orderEmpPeriodDtlCtrlPager" data-size="10"></ul>
       </div>
       <%--//페이지 리스트--%>
+
   	  <%-- 엑셀 리스트 --%>
       <div class="w100 mt10" id="wjWrapType3" style="display:none;" ng-controller="orderEmpPeriodDtlExcelCtrl">
         <div class="wj-gridWrap">
-        <wj-flex-grid
-          id="orderEmpPeriodDtlExcelGrid"
-          autoGenerateColumns="false"
-          selection-mode="Row"
-          items-source="data"
-          control="excelFlex"
-          initialized="initGrid(s,e)"
-          is-read-only="false"
-          item-formatter="_itemFormatter">
+            <wj-flex-grid
+              id="orderEmpPeriodDtlExcelGrid"
+              autoGenerateColumns="false"
+              selection-mode="Row"
+              items-source="data"
+              control="excelFlex"
+              initialized="initGrid(s,e)"
+              is-read-only="false"
+              item-formatter="_itemFormatter">
 
-          <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="empday.saleDate"/>"          binding="saleDate"         width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="saleComPopup.posNo"/>"       binding="posNo"            width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="saleComPopup.billNo"/>"      binding="billNo"           width="100" align="center" is-read-only="true" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="saleComPopup.saleFg"/>"      binding="saleYn"           width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="orderEmp.tblCd"/>"         binding="tblCd"            width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="saleComPopup.totSaleAmt"/>"  binding="totSaleAmt"       width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="billInfo.dcAmt"/>"           binding="totDcAmt"         width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="empday.realSaleAmt"/>"       binding="realSaleAmt"      width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <!-- define columns -->
+            <wj-flex-grid-column header="<s:message code="orderEmp.saleDate"/>"    binding="saleDate"         width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="orderEmp.posNo"/>"       binding="posNo"            width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="orderEmp.billNo"/>"      binding="billNo"           width="80" align="center" is-read-only="true" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="orderEmp.saleFg"/>"      binding="saleYn"           width="60" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="orderEmp.tblCd"/>"       binding="tblCd"            width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="orderEmp.billDt"/>"      binding="billDt"           width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="orderEmp.totSaleAmt"/>"  binding="totSaleAmt"       width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="orderEmp.dcAmt"/>"       binding="totDcAmt"         width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="orderEmp.realSaleAmt"/>" binding="realSaleAmt"      width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         </wj-flex-grid>
         </div>
   	 </div>
@@ -215,5 +217,5 @@
 
 <script type="text/javascript">
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderEmp/orderEmpPeriod.js?ver=20220610.01" charset="utf-8"></script>
 
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderEmp/orderEmpPeriod.js?ver=20220610.01" charset="utf-8"></script>

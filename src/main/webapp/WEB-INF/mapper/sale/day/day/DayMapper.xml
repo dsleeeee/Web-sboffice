@@ -225,8 +225,8 @@
                     ,       SUM(TOT_TIP_AMT) AS TOT_TIP_AMT
                     ,       SUM(TOT_ETC_AMT) AS TOT_ETC_AMT
                     ,       SUM(CUP_AMT) AS CUP_AMT
-                    ,       SUM(BILL_CNT) AS BILL_CNT
-                    ,       DECODE(SUM(BILL_CNT), 0, 0, ROUND(SUM(REAL_SALE_AMT) / SUM(BILL_CNT))) AS BILL_UPRC
+                    ,       SUM(REAL_SALE_CNT) AS BILL_CNT
+                    ,       DECODE(SUM(REAL_SALE_CNT), 0, 0, ROUND(SUM(REAL_SALE_AMT) / SUM(REAL_SALE_CNT))) AS BILL_UPRC
                     ,       <foreach collection="arrPayCol" item="item" separator=",">
                                 SUM(PAY_AMT_${item}) AS PAY${item}
                             </foreach>,
@@ -420,17 +420,21 @@
         SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT,
         SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT,
         SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT,
-        COUNT(tssh.BILL_NO) AS BILL_CNT,
-        ROUND(SUM(tssh.REAL_SALE_AMT) / COUNT(tssh.BILL_NO)) AS BILL_UPRC
+        SUM(tssh.SALE_CNT) AS SALE_CNT,
+        SUM(tssh.RTN_SALE_CNT) AS RTN_SALE_CNT,
+        SUM(tssh.BILL_CNT) AS BILL_CNT,
+        ROUND( SUM(tssh.REAL_SALE_AMT) / SUM(tssh.BILL_CNT) ) AS BILL_UPRC
         FROM
         (
             SELECT
             HQ_OFFICE_CD,
             STORE_CD,
-            TOT_SALE_AMT,
-            TOT_DC_AMT,
-            REAL_SALE_AMT,
-            BILL_NO
+            SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+            SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+            SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+            SUM(CASE WHEN SALE_FG = '1' THEN 1 ELSE 0 END) AS SALE_CNT,
+            SUM(CASE WHEN SALE_FG = '-1' THEN -1 ELSE 0 END) AS RTN_SALE_CNT,
+            SUM(CASE WHEN SALE_FG = '1' THEN 1 ELSE 0 END) + SUM(CASE WHEN SALE_FG = '-1' THEN -1 ELSE 0 END)  AS BILL_CNT
             FROM TB_SL_SALE_HDR
             WHERE 1=1
             AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -462,6 +466,7 @@
                 OR  STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                 )
             </if>
+            GROUP BY HQ_OFFICE_CD, STORE_CD, SALE_FG
         ) tssh
         WHERE 1=1
         GROUP BY tssh.HQ_OFFICE_CD, tssh.STORE_CD
@@ -494,14 +499,14 @@
                 <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
                 <if test='gubun == "day"'>
                     <![CDATA[
-                                AND SALE_DATE = #{saleDate}
-                            ]]>
+                        AND SALE_DATE = #{saleDate}
+                    ]]>
                 </if>
                 <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
                 <if test='gubun == "month"'>
                     <![CDATA[
-                                AND SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
-                            ]]>
+                        AND SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                    ]]>
                 </if>
             </when>
         </choose>
@@ -525,14 +530,14 @@
     -->
     <select id="getDayDtlList" parameterType="dayVO" resultType="DefaultMap">
         /* USE : DayMapper.getDayDtlList */
-        SELECT  TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        SELECT TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
                 TOT_SALE_AMT,
                 TOT_DC_AMT,
                 REAL_SALE_AMT,
-                REAL_SALE_CNT,
                 SALE_CNT,
                 RTN_SALE_CNT,
-                ROUND(TOT_SALE_AMT/SALE_CNT) AS BILL_UPRC
+                REAL_SALE_CNT AS BILL_CNT,
+                ROUND(TOT_SALE_AMT / REAL_SALE_CNT) AS BILL_UPRC
         FROM 	TB_SL_DAILY_TOTAL
         WHERE   1=1
         AND     HQ_OFFICE_CD = #{hqOfficeCd}
@@ -541,14 +546,14 @@
                 <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
                 <if test='gubun == "day"'>
                     <![CDATA[
-                                AND SALE_DATE = #{saleDate}
-                            ]]>
+                        AND SALE_DATE = #{saleDate}
+                    ]]>
                 </if>
                 <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
                 <if test='gubun == "month"'>
                     <![CDATA[
-                                AND SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
-                            ]]>
+                        AND SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                    ]]>
                 </if>
             </when>
         </choose>

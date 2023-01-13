@@ -40,11 +40,6 @@
 						</label>
 					</span>
 				</div>
-				<%-- 판매자 전체보기 --%>
-				<span class="chk ml10">
-					<input type="checkbox"  ng-model="isCheckedEmpAll" ng-change="totalEmpDay()" />
-					<label for="totalEmpDay()">판매자 전체보기</label>
-				</span>
         	</td>
         </tr>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
@@ -103,9 +98,9 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="orderEmp.saleDate"/>" 		binding="saleDate" 			width="90"  align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="orderEmp.yoil"/>" 			binding="yoil" 				width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="orderEmp.storeCnt"/>" 		binding="storeCnt" 			width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.saleDate"/>" 		binding="saleDate" 			width="80"  align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.yoil"/>" 			binding="yoil" 				width="60"  align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.storeCnt"/>" 		binding="storeCnt" 			width="60"  align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="orderEmp.realSaleAmtTot"/>"	binding="realSaleAmtTot" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="orderEmp.totBillCnt"/>" 	binding="totBillCnt" 		width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         </wj-flex-grid>
@@ -126,6 +121,7 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
+
   <%-- 엑셀 리스트 --%>
   <div class="w100 mt10" id="wjWrapType3" style="display:none;" ng-controller="orderEmpDayExcelCtrl">
       <div class="wj-gridWrap">
@@ -141,9 +137,9 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="orderEmp.saleDate"/>" 		binding="saleDate" 			width="90"  align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="orderEmp.yoil"/>" 			binding="yoil" 				width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="orderEmp.storeCnt"/>" 		binding="storeCnt" 			width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.saleDate"/>" 		binding="saleDate" 			width="80"  align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.yoil"/>" 			binding="yoil" 				width="60"  align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="orderEmp.storeCnt"/>" 		binding="storeCnt" 			width="60"  align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="orderEmp.realSaleAmtTot"/>"	binding="realSaleAmtTot" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="orderEmp.totBillCnt"/>" 	binding="totBillCnt" 		width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         </wj-flex-grid>
@@ -151,7 +147,8 @@
   </div>
   <%--//엑셀 리스트 --%>
 </div>
+
 <script type="text/javascript">
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderEmp/orderEmpDay.js?ver=20220610.01" charset="utf-8"></script>
 
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderEmp/orderEmpDay.js?ver=20220610.01" charset="utf-8"></script>
