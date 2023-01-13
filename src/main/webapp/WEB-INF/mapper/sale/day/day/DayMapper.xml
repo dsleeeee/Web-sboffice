@@ -53,6 +53,23 @@
         ORDER BY PAY_CD
     </select>
 
+    <!-- 일자별 - 모바일페이상세 컬럼 리스트 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : dayVO
+        COMMENTS : 일자별 - 모바일페이상세 컬럼 리스트를 조회한다.
+    -->
+    <select id="getMpayColList" parameterType="dayVO" resultType="DefaultMap">
+        /* USE : DayMapper.getMpayColList */
+        <![CDATA[
+        SELECT  tcn.NMCODE_CD AS MPAY_CD, tcn.NMCODE_NM AS MPAY_NM, tcn.NMCODE_ITEM_1 AS MPAY_METHOD
+        FROM    TB_CM_NMCODE tcn
+        WHERE   tcn.NMCODE_GRP_CD   =   '109'
+        ORDER
+            BY      tcn.NMCODE_CD
+        ]]>
+    </select>
+
     <!-- 일자별 - 할인 컬럼 리스트 조회 -->
     <!--
         TABLE    : TB_CM_NMCODE

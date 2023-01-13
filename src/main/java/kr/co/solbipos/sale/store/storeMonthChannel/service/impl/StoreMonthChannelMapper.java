@@ -13,5 +13,6 @@ public interface StoreMonthChannelMapper {
 
     /** 월별 리스트 조회 */
     List<DefaultMap<String>> getMonthList(StoreMonthChannelVO storeMonthChannelVO);
+    List<DefaultMap<String>> getMonthExcelList(StoreMonthChannelVO storeMonthChannelVO);
 
 }

@@ -273,6 +273,10 @@
         <c:forEach var="payCol" items="${payColList}">
           <wj-flex-grid-column header="${payCol.payNm}" binding="pay${payCol.payCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         </c:forEach>
+        <%-- 모바일페이상세 컬럼 생성--%>
+        <c:forEach var="mpayCol" items="${mpayColList}">
+          <wj-flex-grid-column header="${mpayCol.mpayNm}" binding="mpay${mpayCol.mpayCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        </c:forEach>
         <wj-flex-grid-column header="<s:message code="day.dayTotal.billCnt"/>" binding="stinBillCnt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="day.dayTotal.billUprc"/>" binding="stinBillUprc" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="day.dayTotal.realSaleAmt"/>" binding="stinRealSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -293,10 +297,77 @@
       </wj-flex-grid>
     </div>
     <%--//위즈모 테이블--%>
+
+      <%--위즈모 테이블--%>
+      <div class="wj-gridWrap" style="display: none;" ng-controller="storeDayChannelExcelCtrl">
+        <wj-flex-grid
+                id="wjGridExcelList"
+                autoGenerateColumns="false"
+                selection-mode="Row"
+                items-source="data"
+                control="excelFlex"
+                initialized="initGrid(s,e)"
+                is-read-only="true"
+                item-formatter="_itemFormatter">
+
+          <!-- define columns -->
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.yoil"/>" binding="yoil" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storeDayChannel.branchCd"/>" binding="branchCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storeDayChannel.branchNm"/>" binding="branchNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.storeCnt"/>" binding="storeCnt" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.storeNm"/>" binding="storeNm" width="100" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.totSaleAmt"/>" binding="totSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.totDcAmt"/>" binding="totDcAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.realSaleAmt"/>" binding="realSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.billCnt"/>" binding="billCnt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.billUprc"/>" binding="billUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.gaAmt"/>" binding="gaAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.vatAmt"/>" binding="vatAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.totTipAmt"/>" binding="totTipAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.totEtcAmt"/>" binding="totEtcAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.cupAmt"/>" binding="cupAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.totPayAmt"/>" binding="totPayAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <%-- 결제수단 컬럼 생성--%>
+          <c:forEach var="payCol" items="${payColList}">
+            <wj-flex-grid-column header="${payCol.payNm}" binding="pay${payCol.payCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          </c:forEach>
+          <%-- 모바일페이상세 컬럼 생성--%>
+          <c:forEach var="mpayCol" items="${mpayColList}">
+            <wj-flex-grid-column header="${mpayCol.mpayNm}" binding="mpay${mpayCol.mpayCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          </c:forEach>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.billCnt"/>" binding="stinBillCnt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.billUprc"/>" binding="stinBillUprc" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.realSaleAmt"/>" binding="stinRealSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storeDayChannel.rate"/>" binding="stinRate" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.billCnt"/>" binding="dlvrBillCnt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.billUprc"/>" binding="dlvrBillUprc" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.realSaleAmt"/>" binding="dlvrRealSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storeDayChannel.rate"/>" binding="dlvrRate" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.billCnt"/>" binding="packBillCnt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.billUprc"/>" binding="packBillUprc" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.realSaleAmt"/>" binding="packRealSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storeDayChannel.rate"/>" binding="packRate" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
+          <%-- 채널 컬럼 생성--%>
+          <c:forEach var="dlvrInFgCol" items="${dlvrInFgColList}">
+            <wj-flex-grid-column header="<s:message code="storeDayChannel.saleQty"/>"     binding="saleQty${dlvrInFgCol.dlvrInFg}" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeDayChannel.realSaleAmt"/>" binding="realSaleAmt${dlvrInFgCol.dlvrInFg}" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          </c:forEach>
+        </wj-flex-grid>
+      </div>
+      <%--//위즈모 테이블--%>
   </div>
+
+  <%-- 페이지 리스트 --%>
+  <div class="pageNum mt20">
+    <ul id="storeDayChannelCtrlPager" data-size="10">
+    </ul>
+  </div>
+  <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeDayChannel/storeDayChannel.js?ver=20221118.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeDayChannel/storeDayChannel.js?ver=20221118.04" charset="utf-8"></script>
 
 <script type="text/javascript">
   var orgnFg = "${orgnFg}";
@@ -325,6 +396,18 @@
   var payCol    = '${payCol}';
   var arrPayCol = payCol.split(',');
 
+  // 모바일페이상세
+  var mpayColList = [];
+  <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
+  <c:forEach var="mpayCol" items="${mpayColList}">
+  var mpayParam       = {};
+  mpayParam.payCd     = "${mpayCol.mpayCd}";
+  mpayParam.payMethod = "${mpayCol.mpayMethod}";
+  mpayColList.push(mpayParam);
+  </c:forEach>
+
+  var mpayCol    = '${mpayCol}';
+  var arrMpayCol = mpayCol.split(',');
 
   // 할인
   var dcColList = [];

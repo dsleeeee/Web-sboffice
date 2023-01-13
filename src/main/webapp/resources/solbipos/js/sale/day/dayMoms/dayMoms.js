@@ -158,6 +158,11 @@ app.controller('dayMomsCtrl', ['$scope', '$http', '$timeout', function ($scope, 
       dataItem['pay' + arrPayCol[i]] = messages["day.dayTotal.payMethod"];
     }
 
+    // 모바일페이상세 헤더머지 컬럼 생성
+    for (var i = 0; i < arrMpayCol.length; i++) {
+      dataItem['mpay' + arrMpayCol[i]] = messages["day.dayTotal.mpayMethod"];
+    }
+
     // 주문채널별 header 셋팅
     for (var i = 0; i < arrDlvrInFgCol.length; i++) {
       dataItem['saleQty' + arrDlvrInFgCol[i]] = dlvrInFgColList[i].dlvrInFgNm;
@@ -237,6 +242,7 @@ app.controller('dayMomsCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     params.endDate   = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
     params.storeCds     = $("#dayMomsStoreCd").val();
     params.payCol       = payCol;
+    params.mpayCol      = mpayCol;
     params.dlvrInFgCol  = dlvrInFgCol;
     params.momsTeam = $scope.momsTeam;
     params.momsAcShop = $scope.momsAcShop;

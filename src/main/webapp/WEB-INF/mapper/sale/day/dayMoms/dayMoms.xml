@@ -43,6 +43,9 @@
         ,       <foreach collection="arrPayCol" item="item" separator=",">
                     tsshp.PAY${item} AS PAY${item}
                 </foreach>
+        ,       <foreach collection="arrMpayCol" item="item" separator=",">
+                    tsshp.MPAY${item} AS MPAY${item}
+                </foreach>
         ,       tsshp.PAY02 AS PAY02 -- 현금
         ,       tsshp.PAY021 AS PAY021 -- 현금영수증
         ,       <foreach collection="arrDlvrInFgCol" item="item" separator=",">
@@ -54,6 +57,9 @@
                     ,       COUNT(DISTINCT tsdt.STORE_CD) AS STORE_CNT
                     ,       <foreach collection="arrPayCol" item="item" separator=",">
                                 SUM(PAY_AMT_${item}) AS PAY${item}
+                            </foreach>
+                    ,       <foreach collection="arrMpayCol" item="item" separator=",">
+                                SUM(MPAY_AMT_${item}) AS MPAY${item}
                             </foreach>
                     ,       SUM(NON_CASH_AMT) AS PAY02
                     ,       SUM(APPR_CASH_AMT) AS PAY021

@@ -44,6 +44,9 @@
         ,       <foreach collection="arrPayCol" item="item" separator=",">
                     tsshp.PAY${item} AS PAY${item}
                 </foreach>
+        ,       <foreach collection="arrMpayCol" item="item" separator=",">
+                    tsspm.MPAY${item} AS MPAY${item}
+                </foreach>
         ,       <foreach collection="arrDcCol" item="item" separator=",">
                     tsshd.DC${item} AS DC${item}
                 </foreach>
@@ -74,6 +77,28 @@
                                 IN (${pivotPayCol})
                             )
                 ) tsshp
+        ,       (
+                SELECT  STORE_CD, SALE_DATE, POS_NO, BILL_NO
+                ,       <foreach collection="arrMpayCol" item="item" separator=",">
+                            MPAY${item} AS MPAY${item}
+                        </foreach>
+                            FROM    (   SELECT  tsspm.STORE_CD, tsspm.SALE_DATE, tsspm.POS_NO, tsspm.BILL_NO, tsspm.MPAY_CD, tsspm.SALE_AMT
+                            FROM    TB_SL_SALE_PAY_MPAY tsspm
+                            WHERE   tsspm.HQ_OFFICE_CD  = #{hqOfficeCd}
+                            <if test='storeCds != null and storeCds != ""'>
+                                AND tsspm.STORE_CD IN
+                                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                            AND     tsspm.SALE_DATE     = #{startDate}
+                            )
+                            PIVOT   (
+                                    SUM(SALE_AMT)
+                                    FOR MPAY_CD
+                                    IN (${pivotMpayCol})
+                            )
+                ) tsspm
         ,       (
                     SELECT  STORE_CD, SALE_DATE, POS_NO, BILL_NO
                     ,       <foreach collection="arrDcCol" item="item" separator=",">
@@ -163,6 +188,10 @@
         AND     tsshp.SALE_DATE   (+) = tssh.SALE_DATE
         AND     tsshp.POS_NO      (+) = tssh.POS_NO
         AND     tsshp.BILL_NO     (+) = tssh.BILL_NO
+        AND     tsspm.STORE_CD    (+) = tssh.STORE_CD
+        AND     tsspm.SALE_DATE   (+) = tssh.SALE_DATE
+        AND     tsspm.POS_NO      (+) = tssh.POS_NO
+        AND     tsspm.BILL_NO     (+) = tssh.BILL_NO
         AND     tsshd.STORE_CD    (+) = tssh.STORE_CD
         AND     tsshd.SALE_DATE   (+) = tssh.SALE_DATE
         AND     tsshd.POS_NO      (+) = tssh.POS_NO
@@ -210,7 +239,10 @@
         ,       <foreach collection="arrPayCol" item="item" separator=",">
                     tsshp.PAY${item} AS PAY${item}
                 </foreach>
-        ,       <foreach collection="arrDcCol" item="item" separator=",">
+        ,       <foreach collection="arrMpayCol" item="item" separator=",">
+                    tsspm.MPAY${item} AS MPAY${item}
+                </foreach>
+         ,       <foreach collection="arrDcCol" item="item" separator=",">
                     tsshd.DC${item} AS DC${item}
                 </foreach>
         ,       tsspc.PAY02 AS PAY02 -- 현금
@@ -239,6 +271,28 @@
                         IN (${pivotPayCol})
                         )
                 ) tsshp
+        ,       (
+                SELECT  STORE_CD, SALE_DATE, POS_NO, BILL_NO
+                ,       <foreach collection="arrMpayCol" item="item" separator=",">
+                            MPAY${item} AS MPAY${item}
+                        </foreach>
+                FROM    (   SELECT  tsspm.STORE_CD, tsspm.SALE_DATE, tsspm.POS_NO, tsspm.BILL_NO, tsspm.MPAY_CD, tsspm.SALE_AMT
+                            FROM    TB_SL_SALE_PAY_MPAY tsspm
+                            WHERE   tsspm.HQ_OFFICE_CD  = #{hqOfficeCd}
+                            <if test='storeCds != null and storeCds != ""'>
+                                AND tsspm.STORE_CD IN
+                                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                            AND     tsspm.SALE_DATE     = #{startDate}
+                            )
+                            PIVOT   (
+                                    SUM(SALE_AMT)
+                                    FOR MPAY_CD
+                                    IN (${pivotMpayCol})
+                            )
+                ) tsspm
         ,       (
                 SELECT  STORE_CD, SALE_DATE, POS_NO, BILL_NO
                 ,       <foreach collection="arrDcCol" item="item" separator=",">
@@ -328,6 +382,10 @@
         AND     tsshp.SALE_DATE   (+) = tssh.SALE_DATE
         AND     tsshp.POS_NO      (+) = tssh.POS_NO
         AND     tsshp.BILL_NO     (+) = tssh.BILL_NO
+        AND     tsspm.STORE_CD    (+) = tssh.STORE_CD
+        AND     tsspm.SALE_DATE   (+) = tssh.SALE_DATE
+        AND     tsspm.POS_NO      (+) = tssh.POS_NO
+        AND     tsspm.BILL_NO     (+) = tssh.BILL_NO
         AND     tsshd.STORE_CD    (+) = tssh.STORE_CD
         AND     tsshd.SALE_DATE   (+) = tssh.SALE_DATE
         AND     tsshd.POS_NO      (+) = tssh.POS_NO

@@ -254,6 +254,10 @@
           <c:forEach var="payCol" items="${payColList}">
             <wj-flex-grid-column header="${payCol.payNm}" binding="pay${payCol.payCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           </c:forEach>
+          <%-- 모바일페이상세 컬럼 생성--%>
+          <c:forEach var="mpayCol" items="${mpayColList}">
+            <wj-flex-grid-column header="${mpayCol.mpayNm}" binding="mpay${mpayCol.mpayCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          </c:forEach>
           <%-- 할인 컬럼 생성--%>
           <c:forEach var="dcCol" items="${dcColList}">
             <wj-flex-grid-column header="${dcCol.dcNm}" binding="dc${dcCol.dcCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -311,6 +315,10 @@
         <c:forEach var="payCol" items="${payColList}">
           <wj-flex-grid-column header="${payCol.payNm}" binding="pay${payCol.payCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         </c:forEach>
+        <%-- 모바일페이상세 컬럼 생성--%>
+        <c:forEach var="mpayCol" items="${mpayColList}">
+          <wj-flex-grid-column header="${mpayCol.mpayNm}" binding="mpay${mpayCol.mpayCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        </c:forEach>
         <%-- 할인 컬럼 생성--%>
         <c:forEach var="dcCol" items="${dcColList}">
           <wj-flex-grid-column header="${dcCol.dcNm}" binding="dc${dcCol.dcCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -349,6 +357,19 @@
   var payCol      = '${payCol}';
   var arrPayCol   = payCol.split(',');
 
+  // 모바일페이상세
+  var mpayColList = [];
+  <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
+  <c:forEach var="mpayCol" items="${mpayColList}">
+  var mpayParam       = {};
+  mpayParam.payCd     = "${mpayCol.mpayCd}";
+  mpayParam.payMethod = "${mpayCol.mpayMethod}";
+  mpayColList.push(mpayParam);
+  </c:forEach>
+
+  var mpayCol    = '${mpayCol}';
+  var arrMpayCol = mpayCol.split(',');
+
   // 할인
   var dcColList  = [];
   <%--javascript에서 사용할 할인 json 데이터 생성--%>
@@ -362,5 +383,5 @@
   var dcCol       = '${dcCol}';
   var arrDcCol    = dcCol.split(',');
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayMoms/todayMoms.js?ver=20221128.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayMoms/todayMoms.js?ver=20221128.02" charset="utf-8"></script>
 
