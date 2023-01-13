@@ -37,9 +37,9 @@
             <th><s:message code="prod.regDate" /></th>
             <td colspan="3">
                 <div class="sb-select">
-                <span class="txtIn"><input id="srchTimeStartDate" ng-model="startDate" class="w120px"></span>
-                <span class="rg">~</span>
-                <span class="txtIn"><input id="srchTimeEndDate" ng-model="endDate" class="w120px"></span>
+                    <span class="txtIn"><input id="srchTimeStartDate" ng-model="startDate" class="w120px"></span>
+                    <span class="rg">~</span>
+                    <span class="txtIn"><input id="srchTimeEndDate" ng-model="endDate" class="w120px"></span>
                     <%--전체기간--%>
                     <span class="chk ml10">
                       <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />
@@ -96,13 +96,35 @@
                 </div>
             </td>
             <%-- 브랜드 --%>
-            <c:if test="${brandUseFg == '1'}">
+            <%--<c:if test="${brandUseFg == '1'}">
                 <th><s:message code="prod.brandNm" /></th>
                 <td><input type="text" class="sb-input w100" id="srchBrandNm" ng-model="hqBrandNm" onkeyup="fnNxBtnSearch('2');"/></td>
             </c:if>
             <c:if test="${brandUseFg == '0'}">
                 <th></th>
                 <td></td>
+            </c:if>--%>
+            <c:if test="${brandUseFg != '1' or sessionInfo.orgnFg != 'HQ'}">
+                <th></th>
+                <td></td>
+            </c:if>
+            <c:if test="${brandUseFg == '1'}">
+                <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                    <%-- 상품브랜드 --%>
+                    <th><s:message code="prod.prodHqBrand"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchProdHqBrand"
+                                    items-source="_getComboData('srchProdHqBrand')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="srchProdHqBrandCombo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </c:if>
             </c:if>
         </tr>
         </tbody>
@@ -273,7 +295,7 @@
     // [1250 맘스터치] 환경설정값
     var momsEnvstVal = "${momsEnvstVal}";
 
-    // 사용자 브랜드(조회용)
+    // 사용자 매장브랜드(조회용)
     var userHqBrandCdComboList = ${userHqBrandCdComboList};
 
     // POS에서 해당 WEB 화면 최초 접속한 경우(접속하면서 session 생성), 왼쪽 메뉴영역은 접어두기.
