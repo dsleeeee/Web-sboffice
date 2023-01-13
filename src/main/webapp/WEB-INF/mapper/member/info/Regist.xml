@@ -68,6 +68,8 @@
         SELECT
         tmm.MEMBR_NO,
         SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
+        tmmp2.CD_PARTNER AS MAPPING_CD,
+        tnsp.LN_PARTNER AS MAPPING_NM,
         tmm.MEMBR_CLASS_CD,
         tmmc.MEMBR_CLASS_NM,
         tmm.MEMBR_CARD_NO,
@@ -159,7 +161,16 @@
         <if test='visitStoreMembr == "true" or (regUseStoreCd != null and !regUseStoreCd.equals(""))'>
             TB_MB_MEMBER_POINT_STORE tmmps,
         </if>
-        TB_MB_MEMBER_POINT tmmp
+        TB_MB_MEMBER_POINT tmmp,
+        TB_MB_MEMBER_PTN tmmp2,
+        <choose>
+            <when test='hqOfficeCd != null and hqOfficeCd == "A0007"'>
+                VITIS.TB_NEOE_SPOS_PTN tnsp
+            </when>
+            <otherwise>
+                TB_NEOE_SPOS_PTN tnsp
+            </otherwise>
+        </choose>
         WHERE tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
         AND tmmc.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
         AND tmmc.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
@@ -170,6 +181,10 @@
         AND tmmcpr.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
         AND tmmcpr.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
         AND tmmcpr.MEMBR_NO (+)= tmm.MEMBR_NO
+        AND tmmp2.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
+        AND tmmp2.MEMBR_NO (+)= tmm.MEMBR_NO
+        AND tnsp.CD_COMPANY (+)= tmmp2.CD_COMPANY
+        AND tnsp.CD_PARTNER (+)= tmmp2.CD_PARTNER
         <if test='visitStoreMembr == "true" or (regUseStoreCd != null and !regUseStoreCd.equals(""))'>
             AND tmmps.MEMBR_ORGN_CD (+) = tmm.REG_STORE_CD
             AND tmmps.CHG_MEMBR_ORGN_CD (+)= tmm.REG_STORE_CD
@@ -300,6 +315,8 @@
         SELECT
         tmm.MEMBR_NO,
         RPAD(SUBSTR(SBPENC.D(tmm.MEMBR_NM),0,1), LENGTHB(CONVERT(SBPENC.D(tmm.MEMBR_NM), 'KO16MSWIN949')), '*') AS MEMBR_NM,
+        tmmp2.CD_PARTNER AS MAPPING_CD,
+        tnsp.LN_PARTNER AS MAPPING_NM,
         tmm.MEMBR_CLASS_CD,
         tmmc.MEMBR_CLASS_NM,
         tmm.MEMBR_CARD_NO,
@@ -390,7 +407,16 @@
         <if test='visitStoreMembr == "true" or (regUseStoreCd != null and !regUseStoreCd.equals(""))'>
             TB_MB_MEMBER_POINT_STORE tmmps,
         </if>
-        TB_MB_MEMBER_POINT tmmp
+        TB_MB_MEMBER_POINT tmmp,
+        TB_MB_MEMBER_PTN tmmp2,
+        <choose>
+            <when test='hqOfficeCd != null and hqOfficeCd == "A0007"'>
+                VITIS.TB_NEOE_SPOS_PTN tnsp
+            </when>
+            <otherwise>
+                TB_NEOE_SPOS_PTN tnsp
+            </otherwise>
+        </choose>
         WHERE tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
         AND tmmc.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
         AND tmmc.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
@@ -401,6 +427,10 @@
         AND tmmcpr.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
         AND tmmcpr.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
         AND tmmcpr.MEMBR_NO (+)= tmm.MEMBR_NO
+        AND tmmp2.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
+        AND tmmp2.MEMBR_NO (+)= tmm.MEMBR_NO
+        AND tnsp.CD_COMPANY (+)= tmmp2.CD_COMPANY
+        AND tnsp.CD_PARTNER (+)= tmmp2.CD_PARTNER
         <if test='visitStoreMembr == "true" or (regUseStoreCd != null and !regUseStoreCd.equals(""))'>
             AND tmmps.MEMBR_ORGN_CD (+) = tmm.REG_STORE_CD
             AND tmmps.CHG_MEMBR_ORGN_CD (+)= tmm.REG_STORE_CD

@@ -92,6 +92,10 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+        if(orgnFg === "HQ" && (hqOfficeCd === 'A0001' || hqOfficeCd === 'A0007')) {
+            s.frozenColumns = 6;
+        }
+
         $scope.useYnDataMap = new wijmo.grid.DataMap(useDataMap, 'value', 'name');
 
         // ReadOnly 효과설정
@@ -166,6 +170,10 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         dataItem.gChk = messages["cmm.chk"];
         dataItem.membrNo = messages["regist.membr.no"];
         dataItem.membrNm = messages["regist.membr.nm"];
+        if(orgnFg === "HQ" && (hqOfficeCd === 'A0001' || hqOfficeCd === 'A0007')){
+            dataItem.mappingCd = messages["regist.membr.mappingCd"];
+            dataItem.mappingNm = messages["regist.membr.mappingNm"];
+        }
         dataItem.regStoreNm = messages["regist.membr.regStore"];
         dataItem.membrClassCd = messages["regist.class.cd"];
         dataItem.membrClassNm = messages["regist.class.nm"];
@@ -219,6 +227,10 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         dataItem1.gChk = messages["cmm.chk"];
         dataItem1.membrNo = messages["regist.membr.no"];
         dataItem1.membrNm = messages["regist.membr.nm"];
+        if(orgnFg === "HQ" && (hqOfficeCd === 'A0001' || hqOfficeCd === 'A0007')){
+            dataItem1.mappingCd = messages["regist.membr.mappingCd"];
+            dataItem1.mappingNm = messages["regist.membr.mappingNm"];
+        }
         dataItem1.membrClassCd = messages["regist.class.cd"];
         dataItem1.membrClassNm = messages["regist.class.nm"];
         dataItem1.membrCardNo = messages["regist.card.no"];
@@ -618,6 +630,11 @@ app.controller('memberExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+
+        if(orgnFg === "HQ" && (hqOfficeCd === 'A0001' || hqOfficeCd === 'A0007')) {
+            s.frozenColumns = 6;
+        }
+
         $scope.useYnDataMap = new wijmo.grid.DataMap(useDataMap, 'value', 'name');
 
         // <-- 그리드 헤더3줄 -->
@@ -630,6 +647,10 @@ app.controller('memberExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
         dataItem.gChk = messages["cmm.chk"];
         dataItem.membrNo = messages["regist.membr.no"];
         dataItem.membrNm = messages["regist.membr.nm"];
+        if(orgnFg === "HQ" && (hqOfficeCd === 'A0001' || hqOfficeCd === 'A0007')){
+            dataItem.mappingCd = messages["regist.membr.mappingCd"];
+            dataItem.mappingNm = messages["regist.membr.mappingNm"];
+        }
         dataItem.regStoreNm = messages["regist.membr.regStore"];
         dataItem.membrClassCd = messages["regist.class.cd"];
         dataItem.membrClassNm = messages["regist.class.nm"];
@@ -683,6 +704,10 @@ app.controller('memberExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
         dataItem1.gChk = messages["cmm.chk"];
         dataItem1.membrNo = messages["regist.membr.no"];
         dataItem1.membrNm = messages["regist.membr.nm"];
+        if(orgnFg === "HQ" && (hqOfficeCd === 'A0001' || hqOfficeCd === 'A0007')){
+            dataItem1.mappingCd = messages["regist.membr.mappingCd"];
+            dataItem1.mappingNm = messages["regist.membr.mappingNm"];
+        }
         dataItem1.membrClassCd = messages["regist.class.cd"];
         dataItem1.membrClassNm = messages["regist.class.nm"];
         dataItem1.membrCardNo = messages["regist.card.no"];
