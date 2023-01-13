@@ -9,4 +9,5 @@ public interface StoreDayChannelService {
 
     /** 일별 리스트 조회 */
     List<DefaultMap<String>> getDayList(StoreDayChannelVO storeDayChannelVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<String>> getDayExcelList(StoreDayChannelVO storeDayChannelVO, SessionInfoVO sessionInfoVO);
 }

@@ -121,6 +121,12 @@ app.controller('todayMomsCtrl', ['$scope', '$http', '$timeout', function ($scope
     for (var i = 0; i < arrPayCol.length; i++) {
       dataItem['pay' + arrPayCol[i]] = messages["todayDtl.dtl.payMethod"];
     }
+
+    // 모바일페이상세 헤더머지 컬럼 생성
+    for (var i = 0; i < arrMpayCol.length; i++) {
+      dataItem['mpay' + arrMpayCol[i]] = messages["month.mpayMethod"];
+    }
+
     // 할인구분 헤더머지 컬럼 생성
     for (var i = 0; i < arrDcCol.length; i++) {
       dataItem['dc' + arrDcCol[i]] = messages["todayDtl.dcInfo"];
@@ -184,6 +190,7 @@ app.controller('todayMomsCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.storeCds   = $("#todayMomsStoreCd").val();
     params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
     params.payCol    = payCol;
+    params.mpayCol   = mpayCol;
     params.dcCol     = dcCol;
     params.momsTeam = $scope.momsTeam;
     params.momsAcShop = $scope.momsAcShop;
@@ -233,6 +240,7 @@ app.controller('todayMomsCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.storeCds   = $("#todayMomsStoreCd").val();
     params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
     params.payCol    = payCol;
+    params.mpayCol   = mpayCol;
     params.dcCol     = dcCol;
     params.momsTeam = $scope.momsTeam;
     params.momsAcShop = $scope.momsAcShop;
@@ -275,6 +283,83 @@ app.controller('todayMomsExcelCtrl', ['$scope', '$http', '$timeout', function ($
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
     s.bottomLeftCells.setCellData(0, 0, '합계');
+
+    // 헤더머지
+    s.allowMerging = 2;
+    s.columnHeaders.rows.push(new wijmo.grid.Row());
+    // 첫째줄 헤더 생성
+    var dataItem         = {};
+    dataItem.branchNm    = messages["todayMoms.branchNm"];
+    dataItem.storeCd     = messages["todayMoms.storeCd"];
+    dataItem.storeNm     = messages["todayMoms.storeNm"];
+    dataItem.posNo       = messages["todayDtl.dtl.posNo"];
+    dataItem.billNo      = messages["todayDtl.dtl.billNo"];
+    dataItem.billDt      = messages["todayDtl.dtl.billDt"];
+    dataItem.saleYn      = messages["todayDtl.dtl.saleYn"];
+    dataItem.totSaleAmt  = messages["todayDtl.dtl.totSaleAmt"];
+    dataItem.totDcAmt    = messages["todayDtl.dtl.totDcAmt"];
+    dataItem.realSaleAmt = messages["todayDtl.dtl.realSaleAmt"];
+    dataItem.gaAmt       = messages["todayDtl.dtl.gaAmt"];
+    dataItem.vatAmt      = messages["todayDtl.dtl.vatAmt"];
+    dataItem.totTipAmt   = messages["todayDtl.dtl.totTipAmt"];
+    dataItem.totEtcAmt   = messages["todayDtl.dtl.totEtcAmt"];
+    dataItem.cupAmt      = messages["todayDtl.dtl.cupAmt"];
+    dataItem.totPayAmt   = messages["todayDtl.dtl.payMethod"];
+
+    // 결제수단 헤더머지 컬럼 생성
+    for (var i = 0; i < arrPayCol.length; i++) {
+      dataItem['pay' + arrPayCol[i]] = messages["todayDtl.dtl.payMethod"];
+    }
+
+    // 모바일페이상세 헤더머지 컬럼 생성
+    for (var i = 0; i < arrMpayCol.length; i++) {
+      dataItem['mpay' + arrMpayCol[i]] = messages["month.mpayMethod"];
+    }
+
+    // 할인구분 헤더머지 컬럼 생성
+    for (var i = 0; i < arrDcCol.length; i++) {
+      dataItem['dc' + arrDcCol[i]] = messages["todayDtl.dcInfo"];
+    }
+
+    s.columnHeaders.rows[0].dataItem = dataItem;
+
+    s.itemFormatter = function (panel, r, c, cell) {
+      if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+        //align in center horizontally and vertically
+        panel.rows[r].allowMerging    = true;
+        panel.columns[c].allowMerging = true;
+        wijmo.setCss(cell, {
+          display    : 'table',
+          tableLayout: 'fixed'
+        });
+        cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+        wijmo.setCss(cell.children[0], {
+          display      : 'table-cell',
+          verticalAlign: 'middle',
+          textAlign    : 'center'
+        });
+      }
+      // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+      else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+        // GroupRow 인 경우에는 표시하지 않는다.
+        if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+          cell.textContent = '';
+        } else {
+          if (!isEmpty(panel._rows[r]._data.rnum)) {
+            cell.textContent = (panel._rows[r]._data.rnum).toString();
+          } else {
+            cell.textContent = (r + 1).toString();
+          }
+        }
+      }
+      // readOnly 배경색 표시
+      else if (panel.cellType === wijmo.grid.CellType.Cell) {
+        var col = panel.columns[c];
+        if (col.isReadOnly) {
+          wijmo.addClass(cell, 'wj-custom-readonly');
+        }
+      }
+    }
   };
 
   // 다른 컨트롤러의 broadcast 받기
@@ -285,31 +370,7 @@ app.controller('todayMomsExcelCtrl', ['$scope', '$http', '$timeout', function ($
   });
 
   // 엑셀 리스트 조회
-  $scope.searchExcelList = function (data) {
-    // 파라미터
-    var params       = {};
-    params.storeCds = data.storeCds;
-    params.startDate = data.startDate;
-    params.payCol    = data.payCol;
-    params.dcCol     = data.dcCol;
-    params.momsTeam = data.momsTeam;
-    params.momsAcShop = data.momsAcShop;
-    params.momsAreaFg = data.momsAreaFg;
-    params.momsCommercial = data.momsCommercial;
-    params.momsShopType = data.momsShopType;
-    params.momsStoreManageType = data.momsStoreManageType;
-    params.branchCd = data.branchCd;
-    params.storeHqBrandCd = data.storeHqBrandCd;
-    // '전체' 일때
-    if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
-      var momsHqBrandCd = "";
-      for(var i=0; i < momsHqBrandCdComboList.length; i++){
-        if(momsHqBrandCdComboList[i].value !== null) {
-          momsHqBrandCd += momsHqBrandCdComboList[i].value + ","
-        }
-      }
-      params.userBrands = momsHqBrandCd;
-    }
+  $scope.searchExcelList = function (params) {
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/today/todayMoms/todayMoms/getTodayMomsExcelList.sb", params, function() {

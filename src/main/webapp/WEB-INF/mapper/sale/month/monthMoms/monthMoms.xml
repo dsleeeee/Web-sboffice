@@ -34,6 +34,9 @@
                 <foreach collection="arrPayCol" item="item" separator=",">
                     tsdt.PAY_AMT_${item} AS PAY${item}
                 </foreach> ,
+                <foreach collection="arrMpayCol" item="item" separator=",">
+                    tsdt.MPAY${item} AS MPAY${item}
+                </foreach>,
                 tsdt.PAY_AMT_02 AS PAY02,
                 tsdt.PAY_AMT_021 AS PAY021,
                 tsdt.TOT_PAY_AMT,
@@ -66,6 +69,9 @@
                 </foreach> +  SUM(NVL(NON_CASH_AMT, 0)) +  SUM(NVL(APPR_CASH_AMT, 0)) AS TOT_PAY_AMT,
                 <foreach collection="arrPayCol" item="item" separator=",">
                     SUM(NVL(PAY_AMT_${item}, 0)) AS PAY_AMT_${item}
+                </foreach>,
+                <foreach collection="arrMpayCol" item="item" separator=",">
+                    SUM(MPAY_AMT_${item}) AS MPAY${item}
                 </foreach>,
                 SUM(NVL(NON_CASH_AMT, 0)) AS PAY_AMT_02,
                 SUM(NVL(APPR_CASH_AMT, 0)) AS PAY_AMT_021,

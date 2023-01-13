@@ -226,6 +226,17 @@ public class MonthMomsController {
         model.addAttribute("dlvrInFgColList", dlvrInFgColList);
         model.addAttribute("dlvrInFgCol", dlvrInFgCol);
 
+        // 모바일페이상세 조회(현금영수증 포함)
+        List<DefaultMap<String>> mpayColList = dayService.getMpayColList(dayVO, sessionInfoVO);
+
+        // 모바일페이상세 코드를 , 로 연결하는 문자열 생성
+        String mpayCol = "";
+        for(int i=0; i < mpayColList.size(); i++) {
+            mpayCol += (mpayCol.equals("") ? "" : ",") + mpayColList.get(i).getStr("mpayCd");
+        }
+        model.addAttribute("mpayColList", mpayColList);
+        model.addAttribute("mpayCol", mpayCol);
+
         return "sale/month/monthMoms/monthMoms";
     }
 

@@ -300,6 +300,17 @@ public class StoreDayChannelController {
         model.addAttribute("dlvrInFgColList", dlvrInFgColList);
         model.addAttribute("dlvrInFgCol", dlvrInFgCol);
 
+        // 모바일페이상세 조회(현금영수증 포함)
+        List<DefaultMap<String>> mpayColList = dayService.getMpayColList(dayVO, sessionInfoVO);
+
+        // 모바일페이상세 코드를 , 로 연결하는 문자열 생성
+        String mpayCol = "";
+        for(int i=0; i < mpayColList.size(); i++) {
+            mpayCol += (mpayCol.equals("") ? "" : ",") + mpayColList.get(i).getStr("mpayCd");
+        }
+        model.addAttribute("mpayColList", mpayColList);
+        model.addAttribute("mpayCol", mpayCol);
+
         return "sale/store/storeDayChannel/storeDayChannel";
     }
 
@@ -321,6 +332,29 @@ public class StoreDayChannelController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<String>> list = storeDayChannelService.getDayList(storeDayChannelVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, storeDayChannelVO);
+    }
+
+
+    /**
+     * 일별 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   storeDayChannelVO
+     * @return  String
+     * @author  권지현
+     * @since   2022.11.18
+     */
+    @RequestMapping(value = "/storeDayChannel/getDayExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDayExcelList(HttpServletRequest request, HttpServletResponse response,
+                             Model model, StoreDayChannelVO storeDayChannelVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = storeDayChannelService.getDayExcelList(storeDayChannelVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, storeDayChannelVO);
     }

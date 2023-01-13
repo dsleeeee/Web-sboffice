@@ -87,6 +87,18 @@ public class TodayMomsServiceImpl implements TodayMomsService {
             }
         }
 
+        // 모바일페이상세 array 값 세팅
+        String mpayCol= "";
+        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+        String pivotMpayCol = "";
+        String arrMpayCol[] = todayMomsVO.getMpayCol().split(",");
+        for(int i=0; i < arrMpayCol.length; i++) {
+            pivotMpayCol += (pivotMpayCol.equals("") ? "" : ",") + "'" + arrMpayCol[i] + "'" + " AS MPAY" + arrMpayCol[i];
+            mpayCol += (mpayCol.equals("") ? "" : ",") + arrMpayCol[i];
+        }
+        todayMomsVO.setPivotMpayCol(pivotMpayCol);
+        todayMomsVO.setArrMpayCol(mpayCol.split(","));
+
         return todayMomsMapper.getTodayMomsList(todayMomsVO);
     }
 
@@ -141,6 +153,18 @@ public class TodayMomsServiceImpl implements TodayMomsService {
                 todayMomsVO.setUserBrandList(userBrandList);
             }
         }
+
+        // 모바일페이상세 array 값 세팅
+        String mpayCol= "";
+        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+        String pivotMpayCol = "";
+        String arrMpayCol[] = todayMomsVO.getMpayCol().split(",");
+        for(int i=0; i < arrMpayCol.length; i++) {
+            pivotMpayCol += (pivotMpayCol.equals("") ? "" : ",") + "'" + arrMpayCol[i] + "'" + " AS MPAY" + arrMpayCol[i];
+            mpayCol += (mpayCol.equals("") ? "" : ",") + arrMpayCol[i];
+        }
+        todayMomsVO.setPivotMpayCol(pivotMpayCol);
+        todayMomsVO.setArrMpayCol(mpayCol.split(","));
 
         return todayMomsMapper.getTodayMomsExcelList(todayMomsVO);
     }

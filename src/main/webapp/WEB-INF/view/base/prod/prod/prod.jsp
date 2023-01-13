@@ -95,38 +95,16 @@
                     </wj-combo-box>
                 </div>
             </td>
-                <%-- 브랜드 --%>
-                <%--<c:if test="${brandUseFg == '1'}">
-                    <th><s:message code="prod.brandNm" /></th>
-                    <td><input type="text" class="sb-input w100" id="srchBrandNm" ng-model="hqBrandNm" onkeyup="fnNxBtnSearch('2');"/></td>
-                </c:if>
-                <c:if test="${brandUseFg == '0'}">
-                    <th></th>
-                    <td></td>
-                </c:if>--%>
-                <c:if test="${brandUseFg != '1' or sessionInfo.orgnFg != 'HQ'}">
-                    <th></th>
-                    <td></td>
-                </c:if>
-                <c:if test="${brandUseFg == '1'}">
-                    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-                        <%-- 상품브랜드 --%>
-                        <th><s:message code="prod.prodHqBrand"/></th>
-                        <td>
-                            <div class="sb-select">
-                                <wj-combo-box
-                                    id="srchProdHqBrand"
-                                    items-source="_getComboData('srchProdHqBrand')"
-                                    display-member-path="name"
-                                    selected-value-path="value"
-                                    is-editable="false"
-                                    control="srchProdHqBrandCombo">
-                                </wj-combo-box>
-                            </div>
-                        </td>
-                    </c:if>
-                </c:if>
-            </tr>
+            <%-- 브랜드 --%>
+            <c:if test="${brandUseFg == '1'}">
+                <th><s:message code="prod.brandNm" /></th>
+                <td><input type="text" class="sb-input w100" id="srchBrandNm" ng-model="hqBrandNm" onkeyup="fnNxBtnSearch('2');"/></td>
+            </c:if>
+            <c:if test="${brandUseFg == '0'}">
+                <th></th>
+                <td></td>
+            </c:if>
+        </tr>
         </tbody>
     </table>
     <%--//searchTbl--%>

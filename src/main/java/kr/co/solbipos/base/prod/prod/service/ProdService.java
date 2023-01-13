@@ -31,6 +31,13 @@ public interface ProdService {
     List<DefaultMap<String>> getProdList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 
     /**
+     * 세션의 가맹점코드로 해당 가맹점의 상품명 조회
+     * @param prodVO 세션정보
+     * @return XML_String
+     */
+    List<DefaultMap<String>> getProdNmList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
+    /**
      * 세션의 가맹점코드로 해당 가맹점의 상품정보 조회(엑셀다운로드용)
      * @param prodVO 세션정보
      * @return XML_String

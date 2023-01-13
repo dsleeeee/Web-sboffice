@@ -36,6 +36,12 @@ public class DayServiceImpl implements DayService {
         return dayMapper.getPayColAddList(dayVO);
     }
 
+    /** 일자별 - 모바일페이상세 컬럼 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getMpayColList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
+        return dayMapper.getMpayColList(dayVO);
+    }
+
 
     /** 일자별 - 할인 컬럼 리스트 조회 */
     @Override

@@ -81,6 +81,18 @@ public class MonthMomsServiceImpl implements MonthMomsService {
             }
         }
 
+        // 모바일페이상세 array 값 세팅
+        String mpayCol= "";
+        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+        String pivotMpayCol = "";
+        String arrMpayCol[] = monthMomsVO.getMpayCol().split(",");
+        for(int i=0; i < arrMpayCol.length; i++) {
+            pivotMpayCol += (pivotMpayCol.equals("") ? "" : ",") + "'" + arrMpayCol[i] + "'" + " AS MPAY" + arrMpayCol[i];
+            mpayCol += (mpayCol.equals("") ? "" : ",") + arrMpayCol[i];
+        }
+        monthMomsVO.setPivotMpayCol(pivotMpayCol);
+        monthMomsVO.setArrMpayCol(mpayCol.split(","));
+
         return monthMomsMapper.getMonthMomsList(monthMomsVO);
     }
     

@@ -69,4 +69,16 @@ public interface ProdInfoSearchMapper {
     /* 알레르기 엑셀 조회 */
     List<DefaultMap<String>> getAllergyExcelList(ProdInfoSearchVO prodInfoSearchVO);
 
+    /* 판매터치키 조회 */
+    List<DefaultMap<String>> getTouchKeyList(ProdInfoSearchVO prodInfoSearchVO);
+
+    /* 판매터치키 엑셀 조회 */
+    List<DefaultMap<String>> getTouchKeyExcelList(ProdInfoSearchVO prodInfoSearchVO);
+
+    /* 키오스크키맵 조회 */
+    List<DefaultMap<String>> getKioskKeyMapList(ProdInfoSearchVO prodInfoSearchVO);
+
+    /* 키오스크키맵 엑셀 조회 */
+    List<DefaultMap<String>> getKioskKeyMapExcelList(ProdInfoSearchVO prodInfoSearchVO);
+
 }

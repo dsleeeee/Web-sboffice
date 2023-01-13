@@ -298,7 +298,7 @@
                 AND 	thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD (+)
                 AND 	thpsp.PROD_CD = thp.PROD_CD (+)
                 AND     thpsp.USE_YN = 'Y'
-                ORDER BY thpsg.SDSEL_GRP_CD, thpsc.SDSEL_CLASS_CD, thpsp.PROD_CD
+                ORDER BY thpsg.SDSEL_GRP_CD, thpsc.DISP_SEQ, thpsp.DISP_SEQ
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
             <!-- 매장 -->
@@ -327,7 +327,7 @@
                 AND 	tmpsp.STORE_CD = tmp.STORE_CD (+)
                 AND 	tmpsp.PROD_CD = tmp.PROD_CD (+)
                 AND     tmpsp.USE_YN = 'Y'
-                ORDER BY tmpsg.SDSEL_GRP_CD, tmpsc.SDSEL_CLASS_CD, tmpsp.PROD_CD
+                ORDER BY tmpsg.SDSEL_GRP_CD, tmpsc.DISP_SEQ, tmpsp.DISP_SEQ
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
         </choose>
@@ -363,10 +363,10 @@
                 AND 	thpsg.SDSEL_GRP_CD = thpsc.SDSEL_GRP_CD (+)
                 AND 	thpsc.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD (+)
                 AND 	thpsc.SDSEL_CLASS_CD = thpsp.SDSEL_CLASS_CD (+)
-                AND 	thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD (+)
-                AND 	thpsp.PROD_CD = thp.PROD_CD (+)
+                AND 	thpsp.HQ_OFFICE_CD (+) = thp.HQ_OFFICE_CD
+                AND 	thpsp.PROD_CD (+) = thp.PROD_CD
                 AND     thpsp.USE_YN = 'Y'
-                ORDER BY thpsg.SDSEL_GRP_CD, thpsc.SDSEL_CLASS_CD, thpsp.PROD_CD
+                ORDER BY thpsg.SDSEL_GRP_CD, thpsc.DISP_SEQ, thpsp.DISP_SEQ
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -392,7 +392,7 @@
                 AND 	tmpsp.STORE_CD = tmp.STORE_CD (+)
                 AND 	tmpsp.PROD_CD = tmp.PROD_CD (+)
                 AND     tmpsp.USE_YN = 'Y'
-                ORDER BY tmpsg.SDSEL_GRP_CD, tmpsc.SDSEL_CLASS_CD, tmpsp.PROD_CD
+                ORDER BY tmpsg.SDSEL_GRP_CD, tmpsc.DISP_SEQ, tmpsp.DISP_SEQ
             </when>
         </choose>
     </select>
@@ -1593,6 +1593,306 @@
                     </foreach>
                 </if>
                 ORDER BY tmpap.PROD_CD, tmpai.RECIPES_CD
+            </when>
+        </choose>
+    </select>
+
+    <!-- 판매터치키 조회 -->
+    <!--
+        TABLE    : TB_HQ_TOUCH_KEY_CLASS, TB_HQ_TOUCH_KEY_GROUP, TB_HQ_TOUCH_KEY, TB_HQ_PRODUCT, TB_MS_TOUCH_KEY_CLASS, TB_MS_TOUCH_KEY_GROUP, TB_MS_TOUCH_KEY, TB_MS_PRODUCT
+        PARAM    : prodInfoSearchVO
+        COMMENTS : 판매터치키 목록을 조회한다.
+    -->
+    <select id="getTouchKeyList" parameterType="prodInfoSearchVO" resultType="DefaultMap">
+        /* USE : ProdInfoSearchMapper.getTouchKeyList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT  A.TUKEY_GRP_CD
+                ,		B.TUKEY_GRP_NM
+                ,		A.TUKEY_CLASS_CD
+                ,		A.TUKEY_CLASS_NM
+                ,		C.PROD_CD
+                ,		D.PROD_NM
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM    TB_HQ_TOUCH_KEY_CLASS A
+                ,       TB_HQ_TOUCH_KEY_GROUP B
+                ,       TB_HQ_TOUCH_KEY C
+                ,		TB_HQ_PRODUCT D
+                WHERE 	A.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND 	B.HQ_OFFICE_CD (+) = A.HQ_OFFICE_CD
+                AND 	B.TUKEY_GRP_CD (+) = A.TUKEY_GRP_CD
+                AND 	C.HQ_OFFICE_CD (+) = A.HQ_OFFICE_CD
+                AND 	C.TUKEY_GRP_CD (+) = A.TUKEY_GRP_CD
+                AND 	C.TUKEY_CLASS_CD (+) = A.TUKEY_CLASS_CD
+                AND 	C.TUKEY_FG (+) = '01'
+                AND 	D.HQ_OFFICE_CD (+) = A.HQ_OFFICE_CD
+                AND 	D.PROD_CD (+) = C.PROD_CD
+                <if test='tukeyGrpCd != null and tukeyGrpCd != ""'>
+                    AND A.TUKEY_GRP_CD = #{tukeyGrpCd}
+                </if>
+                ORDER BY A.TUKEY_GRP_CD, A.TUKEY_CLASS_CD, C.PROD_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT  A.TUKEY_GRP_CD
+                ,		B.TUKEY_GRP_NM
+                ,		A.TUKEY_CLASS_CD
+                ,		A.TUKEY_CLASS_NM
+                ,		C.PROD_CD
+                ,		D.PROD_NM
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM    TB_MS_TOUCH_KEY_CLASS A
+                ,       TB_MS_TOUCH_KEY_GROUP B
+                ,       TB_MS_TOUCH_KEY C
+                ,		TB_MS_PRODUCT D
+                WHERE 	A.STORE_CD = #{storeCd}
+                AND 	B.STORE_CD (+) = A.STORE_CD
+                AND 	B.TUKEY_GRP_CD (+) = A.TUKEY_GRP_CD
+                AND 	C.STORE_CD (+) = A.STORE_CD
+                AND 	C.TUKEY_GRP_CD (+) = A.TUKEY_GRP_CD
+                AND 	C.TUKEY_CLASS_CD (+) = A.TUKEY_CLASS_CD
+                AND 	C.TUKEY_FG (+) = '01'
+                AND 	D.STORE_CD (+) = A.STORE_CD
+                AND 	D.PROD_CD (+) = C.PROD_CD
+                <if test='tukeyGrpCd != null and tukeyGrpCd != ""'>
+                    AND A.TUKEY_GRP_CD = #{tukeyGrpCd}
+                </if>
+                ORDER BY A.TUKEY_GRP_CD, A.TUKEY_CLASS_CD, C.PROD_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 판매터치키 엑셀 조회 -->
+    <!--
+        TABLE    : TB_HQ_TOUCH_KEY_CLASS, TB_HQ_TOUCH_KEY_GROUP, TB_HQ_TOUCH_KEY, TB_HQ_PRODUCT, TB_MS_TOUCH_KEY_CLASS, TB_MS_TOUCH_KEY_GROUP, TB_MS_TOUCH_KEY, TB_MS_PRODUCT
+        PARAM    : prodInfoSearchVO
+        COMMENTS : 판매터치키 목록을 조회한다.
+    -->
+    <select id="getTouchKeyExcelList" parameterType="prodInfoSearchVO" resultType="DefaultMap">
+        /* USE : ProdInfoSearchMapper.getTouchKeyExcelList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  A.TUKEY_GRP_CD
+                ,		B.TUKEY_GRP_NM
+                ,		A.TUKEY_CLASS_CD
+                ,		A.TUKEY_CLASS_NM
+                ,		C.PROD_CD
+                ,		D.PROD_NM
+                FROM    TB_HQ_TOUCH_KEY_CLASS A
+                ,       TB_HQ_TOUCH_KEY_GROUP B
+                ,       TB_HQ_TOUCH_KEY C
+                ,		TB_HQ_PRODUCT D
+                WHERE 	A.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND 	B.HQ_OFFICE_CD (+) = A.HQ_OFFICE_CD
+                AND 	B.TUKEY_GRP_CD (+) = A.TUKEY_GRP_CD
+                AND 	C.HQ_OFFICE_CD (+) = A.HQ_OFFICE_CD
+                AND 	C.TUKEY_GRP_CD (+) = A.TUKEY_GRP_CD
+                AND 	C.TUKEY_CLASS_CD (+) = A.TUKEY_CLASS_CD
+                AND 	C.TUKEY_FG (+) = '01'
+                AND 	D.HQ_OFFICE_CD (+) = A.HQ_OFFICE_CD
+                AND 	D.PROD_CD (+) = C.PROD_CD
+                <if test='tukeyGrpCd != null and tukeyGrpCd != ""'>
+                    AND A.TUKEY_GRP_CD = #{tukeyGrpCd}
+                </if>
+                ORDER BY A.TUKEY_GRP_CD, A.TUKEY_CLASS_CD, C.PROD_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  A.TUKEY_GRP_CD
+                ,		B.TUKEY_GRP_NM
+                ,		A.TUKEY_CLASS_CD
+                ,		A.TUKEY_CLASS_NM
+                ,		C.PROD_CD
+                ,		D.PROD_NM
+                FROM    TB_MS_TOUCH_KEY_CLASS A
+                ,       TB_MS_TOUCH_KEY_GROUP B
+                ,       TB_MS_TOUCH_KEY C
+                ,		TB_MS_PRODUCT D
+                WHERE 	A.STORE_CD = #{storeCd}
+                AND 	B.STORE_CD (+) = A.STORE_CD
+                AND 	B.TUKEY_GRP_CD (+) = A.TUKEY_GRP_CD
+                AND 	C.STORE_CD (+) = A.STORE_CD
+                AND 	C.TUKEY_GRP_CD (+) = A.TUKEY_GRP_CD
+                AND 	C.TUKEY_CLASS_CD (+) = A.TUKEY_CLASS_CD
+                AND 	C.TUKEY_FG (+) = '01'
+                AND 	D.STORE_CD (+) = A.STORE_CD
+                AND 	D.PROD_CD (+) = C.PROD_CD
+                <if test='tukeyGrpCd != null and tukeyGrpCd != ""'>
+                    AND A.TUKEY_GRP_CD = #{tukeyGrpCd}
+                </if>
+                ORDER BY A.TUKEY_GRP_CD, A.TUKEY_CLASS_CD, C.PROD_CD
+            </when>
+        </choose>
+    </select>
+
+    <!-- 키오스크키맵 조회 -->
+    <!--
+        TABLE    : TB_HQ_KIOSK_CLS, TB_HQ_KIOSK_GROUP, TB_HQ_KIOSK_M_CLS, TB_HQ_KIOSK_KEY, ,TB_HQ_PRODUCT, TB_MS_KIOSK_CLS, TB_MS_KIOSK_GROUP, TB_MS_KIOSK_M_CLS, TB_MS_KIOSK_KEY, TB_MS_PRODUCT
+        PARAM    : prodInfoSearchVO
+        COMMENTS : 키오스크키맵 목록을 조회한다.
+    -->
+    <select id="getKioskKeyMapList" parameterType="prodInfoSearchVO" resultType="DefaultMap">
+        /* USE : ProdInfoSearchMapper.getKioskKeyMapList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT  A.TU_CLS_TYPE
+                ,		B.TU_CLS_TYPE_NM
+                ,       A.TU_CLS_CD
+                ,		A.TU_CLS_NM
+                ,       DECODE(A.TU_M_CLS_FG, '2', '사용', '미사용') AS TU_M_CLS_FG
+                ,       DECODE(A.TU_M_CLS_FG, '2', C.TU_M_CLS_CD, NULL) AS TU_M_CLS_CD
+                ,       DECODE(A.TU_M_CLS_FG, '2', C.TU_M_CLS_NM, NULL) AS TU_M_CLS_NM
+                ,       D.PROD_CD
+                ,		E.PROD_NM
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM    TB_HQ_KIOSK_CLS A
+                ,       TB_HQ_KIOSK_GROUP B
+                ,       TB_HQ_KIOSK_M_CLS C
+                ,       TB_HQ_KIOSK_KEY D
+                ,		TB_HQ_PRODUCT E
+                WHERE   A.HQ_OFFICE_CD      =   #{hqOfficeCd}
+                AND     B.HQ_OFFICE_CD  (+) =   A.HQ_OFFICE_CD
+                AND     B.TU_CLS_TYPE   (+) =   A.TU_CLS_TYPE
+                AND     C.HQ_OFFICE_CD  (+) =   A.HQ_OFFICE_CD
+                AND     C.TU_CLS_TYPE   (+) =   A.TU_CLS_TYPE
+                AND     C.TU_CLS_CD	    (+) =   A.TU_CLS_CD
+                AND     D.HQ_OFFICE_CD  (+) =   A.HQ_OFFICE_CD
+                AND     D.TU_CLS_TYPE  	(+) =   DECODE(A.TU_M_CLS_FG, '0', A.TU_CLS_TYPE, '2', C.TU_CLS_TYPE, A.TU_CLS_TYPE)
+                AND     D.TU_CLS_CD     (+) =   DECODE(A.TU_M_CLS_FG, '0', A.TU_CLS_CD, '2', C.TU_M_CLS_CD, A.TU_CLS_CD)
+                AND 	E.HQ_OFFICE_CD  (+) = 	A.HQ_OFFICE_CD
+                AND 	E.PROD_CD  		(+) = 	D.PROD_CD
+                <if test='tuClsType != null and tuClsType != ""'>
+                    AND A.TU_CLS_TYPE = #{tuClsType}
+                </if>
+                ORDER BY A.TU_CLS_TYPE, A.INDEX_NO, C.INDEX_NO, D.INDEX_NO
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT  A.TU_CLS_TYPE
+                ,		B.TU_CLS_TYPE_NM
+                ,       A.TU_CLS_CD
+                ,		A.TU_CLS_NM
+                ,       DECODE(A.TU_M_CLS_FG, '2', '사용', '미사용') AS TU_M_CLS_FG
+                ,       DECODE(A.TU_M_CLS_FG, '2', C.TU_M_CLS_CD, NULL) AS TU_M_CLS_CD
+                ,       DECODE(A.TU_M_CLS_FG, '2', C.TU_M_CLS_NM, NULL) AS TU_M_CLS_NM
+                ,       D.PROD_CD
+                ,		E.PROD_NM
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM    TB_MS_KIOSK_CLS A
+                ,       TB_MS_KIOSK_GROUP B
+                ,       TB_MS_KIOSK_M_CLS C
+                ,       TB_MS_KIOSK_KEY D
+                ,		TB_MS_PRODUCT E
+                WHERE   A.STORE_CD          =   #{storeCd}
+                AND     A.POS_NO            =   #{posNo}
+                AND     B.STORE_CD      (+) =   A.STORE_CD
+                AND     B.POS_NO        (+) =   A.POS_NO
+                AND     B.TU_CLS_TYPE   (+) =   A.TU_CLS_TYPE
+                AND     C.STORE_CD      (+) =   A.STORE_CD
+                AND     C.POS_NO        (+) =   A.POS_NO
+                AND     C.TU_CLS_TYPE   (+) =   A.TU_CLS_TYPE
+                AND     C.TU_CLS_CD	    (+) =   A.TU_CLS_CD
+                AND     D.STORE_CD      (+) =   A.STORE_CD
+                AND     D.POS_NO        (+) =   A.POS_NO
+                AND     D.TU_CLS_TYPE  	(+) =   DECODE(A.TU_M_CLS_FG, '0', A.TU_CLS_TYPE, '2', C.TU_CLS_TYPE, A.TU_CLS_TYPE)
+                AND     D.TU_CLS_CD     (+) =   DECODE(A.TU_M_CLS_FG, '0', A.TU_CLS_CD, '2', C.TU_M_CLS_CD, A.TU_CLS_CD)
+                AND 	E.STORE_CD      (+) = 	A.STORE_CD
+                AND 	E.PROD_CD  		(+) = 	D.PROD_CD
+                <if test='tuClsType != null and tuClsType != ""'>
+                    AND A.TU_CLS_TYPE = #{tuClsType}
+                </if>
+                ORDER BY A.TU_CLS_TYPE, A.INDEX_NO, C.INDEX_NO, D.INDEX_NO
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 키오스크키맵 엑셀 조회 -->
+    <!--
+        TABLE    : TB_HQ_KIOSK_CLS, TB_HQ_KIOSK_GROUP, TB_HQ_KIOSK_M_CLS, TB_HQ_KIOSK_KEY, ,TB_HQ_PRODUCT, TB_MS_KIOSK_CLS, TB_MS_KIOSK_GROUP, TB_MS_KIOSK_M_CLS, TB_MS_KIOSK_KEY, TB_MS_PRODUCT
+        PARAM    : prodInfoSearchVO
+        COMMENTS : 키오스크키맵 목록을 조회한다.
+    -->
+    <select id="getKioskKeyMapExcelList" parameterType="prodInfoSearchVO" resultType="DefaultMap">
+        /* USE : ProdInfoSearchMapper.getKioskKeyMapExcelList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  A.TU_CLS_TYPE
+                ,		B.TU_CLS_TYPE_NM
+                ,       A.TU_CLS_CD
+                ,		A.TU_CLS_NM
+                ,       DECODE(A.TU_M_CLS_FG, '2', '사용', '미사용') AS TU_M_CLS_FG
+                ,       DECODE(A.TU_M_CLS_FG, '2', C.TU_M_CLS_CD, NULL) AS TU_M_CLS_CD
+                ,       DECODE(A.TU_M_CLS_FG, '2', C.TU_M_CLS_NM, NULL) AS TU_M_CLS_NM
+                ,       D.PROD_CD
+                ,		E.PROD_NM
+                FROM    TB_HQ_KIOSK_CLS A
+                ,       TB_HQ_KIOSK_GROUP B
+                ,       TB_HQ_KIOSK_M_CLS C
+                ,       TB_HQ_KIOSK_KEY D
+                ,		TB_HQ_PRODUCT E
+                WHERE   A.HQ_OFFICE_CD      =   #{hqOfficeCd}
+                AND     B.HQ_OFFICE_CD  (+) =   A.HQ_OFFICE_CD
+                AND     B.TU_CLS_TYPE   (+) =   A.TU_CLS_TYPE
+                AND     C.HQ_OFFICE_CD  (+) =   A.HQ_OFFICE_CD
+                AND     C.TU_CLS_TYPE   (+) =   A.TU_CLS_TYPE
+                AND     C.TU_CLS_CD	    (+) =   A.TU_CLS_CD
+                AND     D.HQ_OFFICE_CD  (+) =   A.HQ_OFFICE_CD
+                AND     D.TU_CLS_TYPE  	(+) =   DECODE(A.TU_M_CLS_FG, '0', A.TU_CLS_TYPE, '2', C.TU_CLS_TYPE, A.TU_CLS_TYPE)
+                AND     D.TU_CLS_CD     (+) =   DECODE(A.TU_M_CLS_FG, '0', A.TU_CLS_CD, '2', C.TU_M_CLS_CD, A.TU_CLS_CD)
+                AND 	E.HQ_OFFICE_CD  (+) = 	A.HQ_OFFICE_CD
+                AND 	E.PROD_CD  		(+) = 	D.PROD_CD
+                <if test='tuClsType != null and tuClsType != ""'>
+                    AND A.TU_CLS_TYPE = #{tuClsType}
+                </if>
+                ORDER BY A.TU_CLS_TYPE, A.INDEX_NO, C.INDEX_NO, D.INDEX_NO
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  A.TU_CLS_TYPE
+                ,		B.TU_CLS_TYPE_NM
+                ,       A.TU_CLS_CD
+                ,		A.TU_CLS_NM
+                ,       DECODE(A.TU_M_CLS_FG, '2', '사용', '미사용') AS TU_M_CLS_FG
+                ,       DECODE(A.TU_M_CLS_FG, '2', C.TU_M_CLS_CD, NULL) AS TU_M_CLS_CD
+                ,       DECODE(A.TU_M_CLS_FG, '2', C.TU_M_CLS_NM, NULL) AS TU_M_CLS_NM
+                ,       D.PROD_CD
+                ,		E.PROD_NM
+                FROM    TB_MS_KIOSK_CLS A
+                ,       TB_MS_KIOSK_GROUP B
+                ,       TB_MS_KIOSK_M_CLS C
+                ,       TB_MS_KIOSK_KEY D
+                ,		TB_MS_PRODUCT E
+                WHERE   A.STORE_CD          =   #{storeCd}
+                AND     A.POS_NO            =   #{posNo}
+                AND     B.STORE_CD      (+) =   A.STORE_CD
+                AND     B.POS_NO        (+) =   A.POS_NO
+                AND     B.TU_CLS_TYPE   (+) =   A.TU_CLS_TYPE
+                AND     C.STORE_CD      (+) =   A.STORE_CD
+                AND     C.POS_NO        (+) =   A.POS_NO
+                AND     C.TU_CLS_TYPE   (+) =   A.TU_CLS_TYPE
+                AND     C.TU_CLS_CD	    (+) =   A.TU_CLS_CD
+                AND     D.STORE_CD      (+) =   A.STORE_CD
+                AND     D.POS_NO        (+) =   A.POS_NO
+                AND     D.TU_CLS_TYPE  	(+) =   DECODE(A.TU_M_CLS_FG, '0', A.TU_CLS_TYPE, '2', C.TU_CLS_TYPE, A.TU_CLS_TYPE)
+                AND     D.TU_CLS_CD     (+) =   DECODE(A.TU_M_CLS_FG, '0', A.TU_CLS_CD, '2', C.TU_M_CLS_CD, A.TU_CLS_CD)
+                AND 	E.STORE_CD      (+) = 	A.STORE_CD
+                AND 	E.PROD_CD  		(+) = 	D.PROD_CD
+                <if test='tuClsType != null and tuClsType != ""'>
+                    AND A.TU_CLS_TYPE = #{tuClsType}
+                </if>
+                ORDER BY A.TU_CLS_TYPE, A.INDEX_NO, C.INDEX_NO, D.INDEX_NO
             </when>
         </choose>
     </select>

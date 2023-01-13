@@ -64,6 +64,18 @@ public class DayMomsServiceImpl implements DayMomsService {
         dayMomsVO.setPivotPayCol(pivotPayCol);
         dayMomsVO.setArrPayCol(payCol.split(","));
 
+        // 모바일페이상세 array 값 세팅
+        String mpayCol= "";
+        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+        String pivotMpayCol = "";
+        String arrMpayCol[] = dayMomsVO.getMpayCol().split(",");
+        for(int i=0; i < arrMpayCol.length; i++) {
+            pivotMpayCol += (pivotMpayCol.equals("") ? "" : ",") + "'" + arrMpayCol[i] + "'" + " AS MPAY" + arrMpayCol[i];
+            mpayCol += (mpayCol.equals("") ? "" : ",") + arrMpayCol[i];
+        }
+        dayMomsVO.setPivotMpayCol(pivotMpayCol);
+        dayMomsVO.setArrMpayCol(mpayCol.split(","));
+
         String[] arrDlvrInFgCol = dayMomsVO.getDlvrInFgCol().split(",");
 
         if(arrDlvrInFgCol.length > 0){

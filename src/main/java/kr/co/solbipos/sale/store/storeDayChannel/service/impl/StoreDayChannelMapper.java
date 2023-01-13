@@ -13,5 +13,6 @@ public interface StoreDayChannelMapper {
 
     /** 일별 리스트 조회 */
     List<DefaultMap<String>> getDayList(StoreDayChannelVO storeDayChannelVO);
+    List<DefaultMap<String>> getDayExcelList(StoreDayChannelVO storeDayChannelVO);
 
 }

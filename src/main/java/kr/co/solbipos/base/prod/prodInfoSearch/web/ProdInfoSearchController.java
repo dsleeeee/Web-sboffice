@@ -5,8 +5,12 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapService;
+import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapVO;
 import kr.co.solbipos.base.prod.prodInfoSearch.service.ProdInfoSearchService;
 import kr.co.solbipos.base.prod.prodInfoSearch.service.ProdInfoSearchVO;
+import kr.co.solbipos.base.prod.touchkey.service.TouchKeyService;
+import kr.co.solbipos.base.prod.touchkey.service.TouchKeyVO;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,13 +49,17 @@ public class ProdInfoSearchController {
     private final SessionService sessionService;
     private final ProdInfoSearchService prodInfoSearchService;
     private final DayProdService dayProdService;
+    private final TouchKeyService touchkeyService;
+    private final KioskKeyMapService kioskKeyMapService;
 
     /** Constructor Injection */
     @Autowired
-    public ProdInfoSearchController(SessionService sessionService, ProdInfoSearchService prodInfoSearchService, DayProdService dayProdService) {
+    public ProdInfoSearchController(SessionService sessionService, ProdInfoSearchService prodInfoSearchService, DayProdService dayProdService, TouchKeyService touchkeyService, KioskKeyMapService kioskKeyMapService) {
         this.sessionService = sessionService;
         this.prodInfoSearchService = prodInfoSearchService;
         this.dayProdService = dayProdService;
+        this.touchkeyService = touchkeyService;
+        this.kioskKeyMapService = kioskKeyMapService;
     }
 
     /**
@@ -72,6 +80,22 @@ public class ProdInfoSearchController {
         DayProdVO dayProdVO = new DayProdVO();
         String momsHqBrandCdComboList = convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO));
         model.addAttribute("momsHqBrandCdComboList", momsHqBrandCdComboList);
+
+        // 터치키 그룹 가져오기
+        TouchKeyVO params = new TouchKeyVO();
+        params.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        params.setStoreCd(sessionInfoVO.getStoreCd());
+        params.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        List<DefaultMap<String>> touchKeyGrpList = touchkeyService.getTouchKeyGrp(params, sessionInfoVO);
+        model.addAttribute("touchKeyGrp", convertToJson(touchKeyGrpList));
+
+        KioskKeyMapVO kioskKeyMapVO = new KioskKeyMapVO();
+        // 키오스크용 포스 조회
+        List<DefaultMap<String>> kioskPosList = kioskKeyMapService.getKioskPosList(kioskKeyMapVO, sessionInfoVO);
+        model.addAttribute("kioskPosList", convertToJson(kioskPosList));
+        // 키오스크 키맵그룹 조회
+        List<DefaultMap<String>> kioskTuClsTypeList = kioskKeyMapService.getKioskTuClsTypeList(kioskKeyMapVO, sessionInfoVO);
+        model.addAttribute("kioskTuClsTypeList", convertToJson(kioskTuClsTypeList)  );
 
         return "base/prod/prodInfoSearch/prodInfoSearchTab";
     }
@@ -324,6 +348,78 @@ public class ProdInfoSearchController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<String>> list = prodInfoSearchService.getAllergyExcelList(prodInfoSearchVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, prodInfoSearchVO);
+    }
+
+    /**
+     * 판매터치키 조회
+     *
+     * @param prodInfoSearchVO HttpServletRequest
+     * @param request HttpServletRequest
+     * @return
+     */
+    @RequestMapping(value = "/touchKey/getTouchKeyList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getTouchKeyList(ProdInfoSearchVO prodInfoSearchVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = prodInfoSearchService.getTouchKeyList(prodInfoSearchVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, prodInfoSearchVO);
+    }
+
+    /**
+     * 판매터치키 엑셀 조회
+     *
+     * @param prodInfoSearchVO HttpServletRequest
+     * @param request HttpServletRequest
+     * @return
+     */
+    @RequestMapping(value = "/touchKey/getTouchKeyExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getTouchKeyExcelList(ProdInfoSearchVO prodInfoSearchVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = prodInfoSearchService.getTouchKeyExcelList(prodInfoSearchVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, prodInfoSearchVO);
+    }
+
+    /**
+     * 키오스크키맵 조회
+     *
+     * @param prodInfoSearchVO HttpServletRequest
+     * @param request HttpServletRequest
+     * @return
+     */
+    @RequestMapping(value = "/kioskKeyMap/getKioskKeyMapList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getKioskKeyMapList(ProdInfoSearchVO prodInfoSearchVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = prodInfoSearchService.getKioskKeyMapList(prodInfoSearchVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, prodInfoSearchVO);
+    }
+
+    /**
+     * 키오스크키맵 엑셀 조회
+     *
+     * @param prodInfoSearchVO HttpServletRequest
+     * @param request HttpServletRequest
+     * @return
+     */
+    @RequestMapping(value = "/kioskKeyMap/getKioskKeyMapExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getKioskKeyMapExcelList(ProdInfoSearchVO prodInfoSearchVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = prodInfoSearchService.getKioskKeyMapExcelList(prodInfoSearchVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list, prodInfoSearchVO);
     }

@@ -39,6 +39,12 @@ public class TodayMomsVO extends PageVO {
     private String arrPayCol[];
     /** 쿼리문의 PIVOT IN에 사용할 결제수단 컬럼 문자열 */
     private String pivotPayCol;
+    /** 모바일페이상세컬럼 */
+    private String mpayCol;
+    /** 모바일페이상세 array */
+    private String arrMpayCol[];
+    /** 쿼리문의 PIVOT IN에 사용할 모바일페이상세 컬럼 문자열 */
+    private String pivotMpayCol;
     /** 할인컬럼 */
     private String dcCol;
     /** 할인구분 array */
@@ -131,6 +137,30 @@ public class TodayMomsVO extends PageVO {
 
     public void setPivotPayCol(String pivotPayCol) {
         this.pivotPayCol = pivotPayCol;
+    }
+
+    public String getMpayCol() {
+        return mpayCol;
+    }
+
+    public void setMpayCol(String mpayCol) {
+        this.mpayCol = mpayCol;
+    }
+
+    public String[] getArrMpayCol() {
+        return arrMpayCol;
+    }
+
+    public void setArrMpayCol(String[] arrMpayCol) {
+        this.arrMpayCol = arrMpayCol;
+    }
+
+    public String getPivotMpayCol() {
+        return pivotMpayCol;
+    }
+
+    public void setPivotMpayCol(String pivotMpayCol) {
+        this.pivotMpayCol = pivotMpayCol;
     }
 
     public String getDcCol() {

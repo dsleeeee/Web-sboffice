@@ -8,6 +8,8 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.sale.day.day.service.DayService;
+import kr.co.solbipos.sale.day.day.service.DayVO;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import kr.co.solbipos.sale.today.todayDtl.service.TodayDtlService;
@@ -54,17 +56,19 @@ public class TodayMomsController {
     private final TodayDtlService todayDtlService;
     private final DayProdService dayProdService;
     private final CmmCodeUtil cmmCodeUtil;
+    private final DayService dayService;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public TodayMomsController(SessionService sessionService, TodayMomsService todayMomsService, TodayDtlService todayDtlService, DayProdService dayProdService, CmmCodeUtil cmmCodeUtil) {
+    public TodayMomsController(SessionService sessionService, TodayMomsService todayMomsService, TodayDtlService todayDtlService, DayProdService dayProdService, CmmCodeUtil cmmCodeUtil, DayService dayService) {
         this.sessionService = sessionService;
         this.todayMomsService = todayMomsService;
         this.todayDtlService = todayDtlService;
         this.dayProdService = dayProdService;
         this.cmmCodeUtil = cmmCodeUtil;
+        this.dayService = dayService;
     }
 
     /**
@@ -77,7 +81,7 @@ public class TodayMomsController {
     @RequestMapping(value = "/todayMoms/list.sb", method = RequestMethod.GET)
     public String todayMomsView(HttpServletRequest request, HttpServletResponse response, Model model) {
         TodayDtlVO todayDtlVO = new TodayDtlVO();
-
+        DayVO dayVO = new DayVO();
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         // 사용자별 브랜드 조회(콤보박스용)
@@ -209,6 +213,17 @@ public class TodayMomsController {
         }
         model.addAttribute("dcColList", dcColList);
         model.addAttribute("dcCol", dcCol);
+
+        // 모바일페이상세 조회(현금영수증 포함)
+        List<DefaultMap<String>> mpayColList = dayService.getMpayColList(dayVO, sessionInfoVO);
+
+        // 모바일페이상세 코드를 , 로 연결하는 문자열 생성
+        String mpayCol = "";
+        for(int i=0; i < mpayColList.size(); i++) {
+            mpayCol += (mpayCol.equals("") ? "" : ",") + mpayColList.get(i).getStr("mpayCd");
+        }
+        model.addAttribute("mpayColList", mpayColList);
+        model.addAttribute("mpayCol", mpayCol);
 
         return "sale/today/todayMoms/todayMoms";
     }

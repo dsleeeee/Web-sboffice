@@ -58,6 +58,15 @@ public class ProdInfoSearchVO extends PageVO {
     /** 사용자별 브랜드코드 */
     private String[] userBrandList;
 
+    /** 터치키그룹코드 */
+    private String tukeyGrpCd;
+
+    /** 키오스크 포스번호 */
+    private String posNo;
+
+    /** 키오스크 카테고리그룹 */
+    private String tuClsType;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -144,5 +153,29 @@ public class ProdInfoSearchVO extends PageVO {
 
     public void setUserBrandList(String[] userBrandList) {
         this.userBrandList = userBrandList;
+    }
+
+    public String getTukeyGrpCd() {
+        return tukeyGrpCd;
+    }
+
+    public void setTukeyGrpCd(String tukeyGrpCd) {
+        this.tukeyGrpCd = tukeyGrpCd;
+    }
+
+    public String getPosNo() {
+        return posNo;
+    }
+
+    public void setPosNo(String posNo) {
+        this.posNo = posNo;
+    }
+
+    public String getTuClsType() {
+        return tuClsType;
+    }
+
+    public void setTuClsType(String tuClsType) {
+        this.tuClsType = tuClsType;
     }
 }
