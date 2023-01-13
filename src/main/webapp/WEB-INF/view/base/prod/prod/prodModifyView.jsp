@@ -107,11 +107,13 @@
               <td>
                 <input type="text" id="_prodNm" name="prodNm" class="sb-input w100"
                        ng-model="prodModifyInfo.prodNm"
+                       ng-change="searchProdNm($event)"
                        required
                        popover-enable="myForm.prodNm.$invalid"
                        popover-placement="bottom-left"
                        popover-trigger="'mouseenter'"
                        uib-popover="<s:message code="prod.prodNm" />은(는) 필수 입력항목 입니다."/>
+                <div id='_prodNmList'></div>
               </td>
             </tr>
             <tr>
@@ -1008,7 +1010,18 @@
     </form>
   </div>
 </wj-popup>
-
+<style>
+  #_prodNmList{
+    padding : 3px;
+    position: absolute; width: 242px;
+    height: auto;
+    color: #ad1414;
+    background-color: #e2e2e2;
+    margin-top: 3px; cursor:pointer;
+    border: 1px solid black;
+    z-index: 99;
+  }
+</style>
 <script type="text/javascript">
   var orgnFg = "${orgnFg}";
   var hqOfficeCd = "${hqOfficeCd}";
@@ -1126,7 +1139,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20221231.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20221231.03" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

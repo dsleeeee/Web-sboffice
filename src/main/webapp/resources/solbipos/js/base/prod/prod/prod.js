@@ -392,6 +392,25 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
           $scope._broadcast('prodModifyCtrl', $scope.getProdInfo());
           // 팝업에 속성 추가 : 상품정보
           s.data = $scope.getProdInfo();
+
+          var url = "/base/prod/prod/prod/getProdNmList.sb";
+          if (document.getElementsByName('sessionId')[0]) {
+            url += '?sid=' + document.getElementsByName("sessionId")[0].value;
+          }
+          // 상품명 조회
+          $.ajax({
+            type: 'POST',
+            async: false,
+            cache: false,
+            dataType: 'json',
+            url: url,
+            data: params,
+            success: function(data){
+              var scope = agrid.getScope("prodModifyCtrl");
+              scope.prodNmList = data.data.list;
+            }
+          });
+
         });
       }, 50);
     });

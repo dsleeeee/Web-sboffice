@@ -24,6 +24,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
     // 상품 이미지 삭제여부 (DEL:삭제)
     var prodImageDelFg;
 
+    // 상품명 리스트
+    var prodNmList;
+
     // 수정 신규 모드 구분 I:신규/U:수정
     $scope.mode = "";
     $scope.setMode = function(data){
@@ -50,6 +53,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
     $scope.getProdModifyInfo = function(){
         return $scope.prodModifyInfo;
     };
+
+    $scope.prodNmList;
 
     // 판매가 내점/배달/포장에 적용
     $scope.saleUprcApply = true;
@@ -81,6 +86,31 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         $scope.prodModifyInfo.saleChnYnTng = false;
         $scope.prodModifyInfo.saleChnYnDdn = false;
     }
+
+    // 상품명 입력 시 같은 이름의 상품 검색
+    $scope.searchProdNm = function (event) {
+        if(hqOfficeCd === "H0360" || hqOfficeCd === "DS021" ){
+            $('#_prodNmList').children().remove();
+            $('#_prodNmList').show();
+
+            var txt = $scope.prodModifyInfo.prodNm;
+
+            $scope.prodNmList.forEach(function(arg){
+                if(arg.prodNm.indexOf(txt) > -1 ){
+                    $('#_prodNmList').append(
+                        $('<div>').text(arg.prodNm)
+                    );
+                }
+            });
+        }
+    };
+
+    document.addEventListener('click', function(e) {
+        var container = document.getElementById('_prodNmList');
+        if (!container.contains(e.target)) {
+            container.style.display = 'none';
+        }
+    });
 
     // 상품정보 조회
     $scope.$on("prodModifyCtrl", function(event, data) {

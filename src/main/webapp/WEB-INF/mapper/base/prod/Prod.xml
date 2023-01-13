@@ -210,6 +210,31 @@
         </choose>
     </select>
 
+    <!-- 상품명 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE,
+                   TB_MS_PRODUCT, TB_MS_PRODUCT_SALE_PRICE
+        PARAM    : prodVO
+        COMMENTS : 상품명을 조회한다. ( 본사/매장 )
+    -->
+    <select id="getProdNmList" parameterType="prodVO" resultType="DefaultMap">
+        /* USE : ProdMapper.getProdNmList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  thp.PROD_NM
+                FROM    TB_HQ_PRODUCT thp
+                WHERE   thp.HQ_OFFICE_CD = #{hqOfficeCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  tmp.PROD_NM
+                FROM    TB_MS_PRODUCT tmp
+                WHERE   tmp.STORE_CD = #{storeCd}
+            </when>
+        </choose>
+    </select>
+
     <!-- 상품 조회(엑셀다운로드용) -->
     <!--
         TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE,

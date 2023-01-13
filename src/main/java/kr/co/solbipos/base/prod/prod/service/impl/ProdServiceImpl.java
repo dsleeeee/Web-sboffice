@@ -113,6 +113,22 @@ public class ProdServiceImpl implements ProdService {
         return prodMapper.getProdList(prodVO);
     }
 
+    /** 상품목록 조회 */
+    @Override
+    public List<DefaultMap<String>> getProdNmList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+
+        String orgnFg = sessionInfoVO.getOrgnFg().getCode();
+        String hqOfficeCd = sessionInfoVO.getHqOfficeCd();
+        String storeCd = sessionInfoVO.getStoreCd();
+
+        // 소속구분 설정
+        prodVO.setOrgnFg(orgnFg);
+        prodVO.setHqOfficeCd(hqOfficeCd);
+        prodVO.setStoreCd(storeCd);
+
+        return prodMapper.getProdNmList(prodVO);
+    }
+
     /** 상품목록 조회(엑셀다운로드용) */
     @Override
     public List<DefaultMap<String>> getProdExcelList(@RequestBody ProdVO prodVO, SessionInfoVO sessionInfoVO) {

@@ -172,6 +172,24 @@ public class ProdController {
     }
 
     /**
+     * 상품명조회
+     *
+     * @param prodVO HttpServletRequest
+     * @param request HttpServletRequest
+     * @return
+     */
+    @RequestMapping(value = "/getProdNmList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdNmList(ProdVO prodVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = prodService.getProdNmList(prodVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, prodVO);
+    }
+
+    /**
      * 상품전체조회(엑셀다운로드용)
      *
      * @param prodVO HttpServletRequest
