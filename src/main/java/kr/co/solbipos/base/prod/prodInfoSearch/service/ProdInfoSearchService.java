@@ -64,4 +64,16 @@ public interface ProdInfoSearchService {
     /** 알레르기 엑셀 조회 */
     List<DefaultMap<String>> getAllergyExcelList(ProdInfoSearchVO prodInfoSearchVO, SessionInfoVO sessionInfoVO);
 
+    /** 판매터치키 조회 */
+    List<DefaultMap<String>> getTouchKeyList(ProdInfoSearchVO prodInfoSearchVO, SessionInfoVO sessionInfoVO);
+
+    /** 판매터치키 엑셀 조회 */
+    List<DefaultMap<String>> getTouchKeyExcelList(ProdInfoSearchVO prodInfoSearchVO, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크키맵 조회 */
+    List<DefaultMap<String>> getKioskKeyMapList(ProdInfoSearchVO prodInfoSearchVO, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크키맵 엑셀 조회 */
+    List<DefaultMap<String>> getKioskKeyMapExcelList(ProdInfoSearchVO prodInfoSearchVO, SessionInfoVO sessionInfoVO);
+
 }

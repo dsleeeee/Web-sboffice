@@ -279,4 +279,48 @@ public class ProdInfoSearchServiceImpl implements ProdInfoSearchService {
         return prodInfoSearchMapper.getAllergyExcelList(prodInfoSearchVO);
     }
 
+    /** 판매터치키 조회 */
+    @Override
+    public List<DefaultMap<String>> getTouchKeyList(ProdInfoSearchVO prodInfoSearchVO, SessionInfoVO sessionInfoVO) {
+
+        prodInfoSearchVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodInfoSearchVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodInfoSearchVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return prodInfoSearchMapper.getTouchKeyList(prodInfoSearchVO);
+    }
+
+    /** 판매터치키 엑셀 조회 */
+    @Override
+    public List<DefaultMap<String>> getTouchKeyExcelList(ProdInfoSearchVO prodInfoSearchVO, SessionInfoVO sessionInfoVO) {
+
+        prodInfoSearchVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodInfoSearchVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodInfoSearchVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return prodInfoSearchMapper.getTouchKeyExcelList(prodInfoSearchVO);
+    }
+
+    /** 키오스크키맵 조회 */
+    @Override
+    public List<DefaultMap<String>> getKioskKeyMapList(ProdInfoSearchVO prodInfoSearchVO, SessionInfoVO sessionInfoVO) {
+
+        prodInfoSearchVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodInfoSearchVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodInfoSearchVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return prodInfoSearchMapper.getKioskKeyMapList(prodInfoSearchVO);
+    }
+
+    /** 키오스크키맵 엑셀 조회 */
+    @Override
+    public List<DefaultMap<String>> getKioskKeyMapExcelList(ProdInfoSearchVO prodInfoSearchVO, SessionInfoVO sessionInfoVO) {
+
+        prodInfoSearchVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodInfoSearchVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodInfoSearchVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return prodInfoSearchMapper.getKioskKeyMapExcelList(prodInfoSearchVO);
+    }
+
 }

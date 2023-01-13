@@ -24,6 +24,8 @@ app.controller('prodInfoSearchCtrl', ['$scope', function ($scope) {
         $("#prodInfoView").hide();
         $("#orgplceView").hide();
         $("#allergyView").hide();
+        $("#touchKeyView").hide();
+        $("#kioskKeyMapView").hide();
     };
 
     // 상품분류 탭 보이기
@@ -35,6 +37,8 @@ app.controller('prodInfoSearchCtrl', ['$scope', function ($scope) {
         $("#prodInfoTab").removeClass("on");
         $("#orgplceTab").removeClass("on");
         $("#allergyTab").removeClass("on");
+        $("#touchKeyTab").removeClass("on");
+        $("#kioskKeyMapTab").removeClass("on");
 
         $("#prodClassView").show();
         $("#sideAttrView").hide();
@@ -43,6 +47,8 @@ app.controller('prodInfoSearchCtrl', ['$scope', function ($scope) {
         $("#prodInfoView").hide();
         $("#orgplceView").hide();
         $("#allergyView").hide();
+        $("#touchKeyView").hide();
+        $("#kioskKeyMapView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("prodClassCtrl");
@@ -58,6 +64,8 @@ app.controller('prodInfoSearchCtrl', ['$scope', function ($scope) {
         $("#prodInfoTab").removeClass("on");
         $("#orgplceTab").removeClass("on");
         $("#allergyTab").removeClass("on");
+        $("#touchKeyTab").removeClass("on");
+        $("#kioskKeyMapTab").removeClass("on");
 
         $("#prodClassView").hide();
         $("#sideAttrView").show();
@@ -66,6 +74,8 @@ app.controller('prodInfoSearchCtrl', ['$scope', function ($scope) {
         $("#prodInfoView").hide();
         $("#orgplceView").hide();
         $("#allergyView").hide();
+        $("#touchKeyView").hide();
+        $("#kioskKeyMapView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("sideAttrCtrl");
@@ -81,6 +91,8 @@ app.controller('prodInfoSearchCtrl', ['$scope', function ($scope) {
         $("#prodInfoTab").removeClass("on");
         $("#orgplceTab").removeClass("on");
         $("#allergyTab").removeClass("on");
+        $("#touchKeyTab").removeClass("on");
+        $("#kioskKeyMapTab").removeClass("on");
 
         $("#prodClassView").hide();
         $("#sideAttrView").hide();
@@ -89,6 +101,8 @@ app.controller('prodInfoSearchCtrl', ['$scope', function ($scope) {
         $("#prodInfoView").hide();
         $("#orgplceView").hide();
         $("#allergyView").hide();
+        $("#touchKeyView").hide();
+        $("#kioskKeyMapView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("sideMenuCtrl");
@@ -104,6 +118,8 @@ app.controller('prodInfoSearchCtrl', ['$scope', function ($scope) {
         $("#prodInfoTab").removeClass("on");
         $("#orgplceTab").removeClass("on");
         $("#allergyTab").removeClass("on");
+        $("#touchKeyTab").removeClass("on");
+        $("#kioskKeyMapTab").removeClass("on");
 
         $("#prodClassView").hide();
         $("#sideAttrView").hide();
@@ -112,6 +128,8 @@ app.controller('prodInfoSearchCtrl', ['$scope', function ($scope) {
         $("#prodInfoView").hide();
         $("#orgplceView").hide();
         $("#allergyView").hide();
+        $("#touchKeyView").hide();
+        $("#kioskKeyMapView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("optionCtrl");
@@ -130,6 +148,8 @@ app.controller('prodInfoSearchCtrl', ['$scope', function ($scope) {
         $("#prodInfoTab").addClass("on");
         $("#orgplceTab").removeClass("on");
         $("#allergyTab").removeClass("on");
+        $("#touchKeyTab").removeClass("on");
+        $("#kioskKeyMapTab").removeClass("on");
 
         $("#prodClassView").hide();
         $("#sideAttrView").hide();
@@ -138,6 +158,8 @@ app.controller('prodInfoSearchCtrl', ['$scope', function ($scope) {
         $("#prodInfoView").show();
         $("#orgplceView").hide();
         $("#allergyView").hide();
+        $("#touchKeyView").hide();
+        $("#kioskKeyMapView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("prodInfoCtrl");
@@ -156,6 +178,8 @@ app.controller('prodInfoSearchCtrl', ['$scope', function ($scope) {
         $("#prodInfoTab").removeClass("on");
         $("#orgplceTab").addClass("on");
         $("#allergyTab").removeClass("on");
+        $("#touchKeyTab").removeClass("on");
+        $("#kioskKeyMapTab").removeClass("on");
 
         $("#prodClassView").hide();
         $("#sideAttrView").hide();
@@ -164,6 +188,8 @@ app.controller('prodInfoSearchCtrl', ['$scope', function ($scope) {
         $("#prodInfoView").hide();
         $("#orgplceView").show();
         $("#allergyView").hide();
+        $("#touchKeyView").hide();
+        $("#kioskKeyMapView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("orgplceCtrl");
@@ -182,6 +208,8 @@ app.controller('prodInfoSearchCtrl', ['$scope', function ($scope) {
         $("#prodInfoTab").removeClass("on");
         $("#orgplceTab").removeClass("on");
         $("#allergyTab").addClass("on");
+        $("#touchKeyTab").removeClass("on");
+        $("#kioskKeyMapTab").removeClass("on");
 
         $("#prodClassView").hide();
         $("#sideAttrView").hide();
@@ -190,9 +218,65 @@ app.controller('prodInfoSearchCtrl', ['$scope', function ($scope) {
         $("#prodInfoView").hide();
         $("#orgplceView").hide();
         $("#allergyView").show();
+        $("#touchKeyView").hide();
+        $("#kioskKeyMapView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("allergyCtrl");
+        scope.flex.refresh();
+    };
+
+    // 판매터치키 탭 보이기
+    $scope.touchKeyShow = function () {
+        $("#prodClassTab").removeClass("on");
+        $("#sideAttrTab").removeClass("on");
+        $("#sideMenuTab").removeClass("on");
+        $("#optionTab").removeClass("on");
+        $("#prodInfoTab").removeClass("on");
+        $("#orgplceTab").removeClass("on");
+        $("#allergyTab").removeClass("on");
+        $("#touchKeyTab").addClass("on");
+        $("#kioskKeyMapTab").removeClass("on");
+
+        $("#prodClassView").hide();
+        $("#sideAttrView").hide();
+        $("#sideMenuView").hide();
+        $("#optionView").hide();
+        $("#prodInfoView").hide();
+        $("#orgplceView").hide();
+        $("#allergyView").hide();
+        $("#touchKeyView").show();
+        $("#kioskKeyMapView").hide();
+
+        // angular 그리드 hide 시 깨지므로 refresh()
+        var scope = agrid.getScope("touchKeyCtrl");
+        scope.flex.refresh();
+    };
+
+    // 키오스크키맵 탭 보이기
+    $scope.kioskKeyMapShow = function () {
+        $("#prodClassTab").removeClass("on");
+        $("#sideAttrTab").removeClass("on");
+        $("#sideMenuTab").removeClass("on");
+        $("#optionTab").removeClass("on");
+        $("#prodInfoTab").removeClass("on");
+        $("#orgplceTab").removeClass("on");
+        $("#allergyTab").removeClass("on");
+        $("#touchKeyTab").removeClass("on");
+        $("#kioskKeyMapTab").addClass("on");
+
+        $("#prodClassView").hide();
+        $("#sideAttrView").hide();
+        $("#sideMenuView").hide();
+        $("#optionView").hide();
+        $("#prodInfoView").hide();
+        $("#orgplceView").hide();
+        $("#allergyView").hide();
+        $("#touchKeyView").hide();
+        $("#kioskKeyMapView").show();
+
+        // angular 그리드 hide 시 깨지므로 refresh()
+        var scope = agrid.getScope("kioskKeyMapCtrl");
         scope.flex.refresh();
     };
 

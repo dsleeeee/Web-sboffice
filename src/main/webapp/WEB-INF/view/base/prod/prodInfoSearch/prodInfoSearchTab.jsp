@@ -5,6 +5,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="touchKeyGrp" value="${touchKeyGrp}" />
 
 <div class="con">
     <div class="tabType1" ng-controller="prodInfoSearchCtrl" ng-init="init()">
@@ -37,14 +38,33 @@
             <li>
                 <a id="allergyTab" href="#" ng-click="allergyShow()"><s:message code="prodInfoSearch.allergy"/></a>
             </li>
+            <%-- 판매터치키 탭 --%>
+            <li>
+                <a id="touchKeyTab" href="#" ng-click="touchKeyShow()"><s:message code="prodInfoSearch.touchKey"/></a>
+            </li>
+            <%-- 키오스크키맵 탭 --%>
+            <li>
+                <a id="kioskKeyMapTab" href="#" ng-click="kioskKeyMapShow()"><s:message code="prodInfoSearch.kioskKeyMap"/></a>
+            </li>
         </ul>
     </div>
 </div>
 <script type="text/javascript">
     // List 형식("" 안붙임)
     var momsHqBrandCdComboList = ${momsHqBrandCdComboList};
+
+    //터치키그룹
+    var touchKeyGrpData = ${touchKeyGrp};
+    touchKeyGrpData.unshift({name: "전체", value: ""});
+
+    // 키오스크용 포스 목록
+    var kioskPosList = ${kioskPosList};
+
+    // 키오스크 키맵그룹
+    var kioskTuClsTypeList = ${kioskTuClsTypeList};
+    kioskTuClsTypeList.unshift({name: "전체", value: ""});
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodInfoSearch/prodInfoSearchTab.js?ver=20221223.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodInfoSearch/prodInfoSearchTab.js?ver=20221223.02" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 상품분류 레이어 --%>
@@ -85,6 +105,18 @@
 
 <%-- 알레르기 레이어 --%>
 <c:import url="/WEB-INF/view/base/prod/prodInfoSearch/allergy.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 판매터치키 레이어 --%>
+<c:import url="/WEB-INF/view/base/prod/prodInfoSearch/touchKey.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 키오스크키맵 레이어 --%>
+<c:import url="/WEB-INF/view/base/prod/prodInfoSearch/kioskKeyMap.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
