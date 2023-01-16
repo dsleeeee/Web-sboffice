@@ -260,7 +260,7 @@
                     </tr>
                     <tr <c:if test="${momsEnvstVal == '0'}">style="display: none"</c:if>>
                         <th></th>
-                        <td colspan="3" style="height: 35px;">
+                       <td colspan="3" style="height: 35px;">
                            <div class="fl pd5" style="padding-right: 15px;">
                                <div style="float: left;"><input type="checkbox" id="chkDlvFgBaemin" ng-model="dlvFgBaemin"/></div>
                                <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="promotion.baemin" /></label></div>
@@ -270,6 +270,27 @@
                                <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="promotion.npaysmartorder" /></label></div>
                            </div>
                         </td>
+                    </tr>
+                    <tr <c:if test="${momsEnvstVal == '0'}">style="display: none"</c:if>>
+                        <%-- 쿠폰사용여부 --%>
+                        <th><s:message code="promotion.couponYn"/></th>
+                        <td style="height: 35px;">
+                            <div class="sb-select w100">
+                                <wj-combo-box
+                                    id="couponYn"
+                                    ng-model="couponYn"
+                                    items-source="_getComboData('couponYn')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="initComboBox(s)"
+                                    control="couponYnCombo"
+                                    selected-index="1">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     <tr>
                         <%-- 적용기간 --%>
@@ -872,7 +893,7 @@
     }
 </style>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20221227.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20230116.01" charset="utf-8"></script>
 
 <%-- 적용상품 상품추가 --%>
 <c:import url="/WEB-INF/view/base/promotion/promotion/promotionProdReg.jsp">

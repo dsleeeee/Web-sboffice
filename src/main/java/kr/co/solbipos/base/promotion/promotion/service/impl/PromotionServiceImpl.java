@@ -101,7 +101,7 @@ public class PromotionServiceImpl implements PromotionService {
             }*/
 
             // 수정모드 시, 혜택유형 선택에 따른 혜택상품 리스트 데이터 삭제
-            if("1".equals(promotionVO.getTypeCd()) || "2".equals(promotionVO.getTypeCd()) || "5".equals(promotionVO.getTypeCd()) || "6".equals(promotionVO.getTypeCd()) || "7".equals(promotionVO.getTypeCd())){
+            if("1".equals(promotionVO.getTypeCd()) || "2".equals(promotionVO.getTypeCd()) || "5".equals(promotionVO.getTypeCd()) || "6".equals(promotionVO.getTypeCd())){
                 result = promotionMapper.deletePromotionPresentAll(promotionVO);
             }
 
@@ -507,7 +507,7 @@ public class PromotionServiceImpl implements PromotionService {
         if(!"".equals(promotionCd) && promotionCd != null){
 
             // 수정모드 시, 혜택유형 선택에 따른 혜택상품 리스트 데이터 삭제
-            if("1".equals(promotionVO.getTypeCd()) || "2".equals(promotionVO.getTypeCd()) || "5".equals(promotionVO.getTypeCd()) || "6".equals(promotionVO.getTypeCd()) || "7".equals(promotionVO.getTypeCd())){
+            if("1".equals(promotionVO.getTypeCd()) || "2".equals(promotionVO.getTypeCd()) || "5".equals(promotionVO.getTypeCd()) || "6".equals(promotionVO.getTypeCd())){
                 result = promotionMapper.deletePromotionPresentAll(promotionVO);
             }
 

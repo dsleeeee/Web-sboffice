@@ -83,8 +83,7 @@ var typeCdFgData = [
     {"name":"혜택품목할인","value":"3"},
     {"name":"증정","value":"4"},
     {"name":"특별가(=세트가)","value":"5"},
-    {"name":"품목개별할인","value":"6"},
-    {"name":"쿠폰할인","value":"7"}
+    {"name":"품목개별할인","value":"6"}
 ];
 
 // 할인구분
@@ -218,6 +217,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
     // 콤보박스 데이터 Set
     $scope._setComboData("useYn", useYnFgData); // 기본정보 - 사용여부
     $scope._setComboData("promotionType", promotionTypeList); // 기본정보 - 프로모션 종류
+    $scope._setComboData("couponYn", useYnFgData); // 적용조건 - 쿠폰사용여부
     $scope._setComboData("promotionStartHhCombo", Hh); // 적용조건 - 적용요일(시작 시)
     $scope._setComboData("promotionStartMmCombo", Mm); // 적용조건 - 적용요일(시작 분)
     $scope._setComboData("promotionEndHhCombo", Hh); // 적용조건 - 적용요일(종료 시)
@@ -491,6 +491,8 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                     $("input:checkbox[id='chkDlvFgNpaysmartorder']").prop("checked", false); // 적용구분(네이버주문)
                 }
 
+                $scope.couponYnCombo.selectedValue = info.couponYn; // 쿠폰사용여부
+                
                 if(info.dateYn === "Y"){
                     $("input:checkbox[id='chkPeriod']").prop("checked", true); // 적용기간
                     promotionStartDate.value = new Date(getFormatDate(info.startYmd, "-"));
@@ -639,8 +641,8 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
 
                 // ------------ 적용상품 ------------
 
-                // 프로모션종류 '영수증 전체할인', '쿠폰할인'은 적용상품 사용 안함
-                if((vPromotionType === "001" && info.prodCdYn !== "N") || (vPromotionType === "601" && info.prodCdYn !== "N")){
+                // 프로모션종류 '영수증 전체할인'은 적용상품 사용 안함
+                if(vPromotionType === "001" && info.prodCdYn !== "N"){
                     info.prodCdYn = "N";
                 }
 
@@ -686,7 +688,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                 // ------------ 적용혜택 ------------
                 $scope.typeCdCombo.selectedValue = info.typeCd; // 혜택유형
 
-                if(info.typeCd === "1" || info.typeCd === "2" || info.typeCd === "3" || info.typeCd === "7") {
+                if(info.typeCd === "1" || info.typeCd === "2" || info.typeCd === "3") {
                     $scope.applyDcDsCombo.selectedValue = info.applyDcDs; // 할인구분
                     $("#dcSet").val(info.dcSet); // 할인율 or 할인금액
                 }else if(info.typeCd === "5"){ // 특별가(=세트가) 별도 체크
@@ -753,6 +755,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             params.dlv13Yn = $("#chkDlvFgBaemin").is(":checked") === true ? 'Y' : 'N'; // 적용구분(배달의민족)
             params.dlv14Yn = $("#chkDlvFgDdangyo").is(":checked") === true ? 'Y' : 'N'; // 적용구분(땡겨요)
             params.dlv15Yn = $("#chkDlvFgNpaysmartorder").is(":checked") === true ? 'Y' : 'N'; // 적용구분(네이버주문)
+            params.couponYn = $scope.couponYnCombo.selectedValue; // 쿠폰사용여부
             params.dateYn = $("#chkPeriod").is(":checked") === true ? 'Y' : 'N'; // 적용기간 사용여부
             params.startYmd = $("#chkPeriod").is(":checked") === true ? wijmo.Globalize.format(promotionStartDate.value, 'yyyyMMdd') : '00010101'; // 적용기간 시작일
             params.endYmd = $("#chkPeriod").is(":checked") === true ? wijmo.Globalize.format(promotionEndDate.value, 'yyyyMMdd') : '99991231'; // 적용기간 종료일
@@ -864,7 +867,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
 
             // ------------ 적용혜택 ------------
             params.typeCd = $scope.typeCdCombo.selectedValue; // 혜택유형
-            if($scope.typeCdCombo.selectedValue === "1" || $scope.typeCdCombo.selectedValue === "2" || $scope.typeCdCombo.selectedValue === "3" || $scope.typeCdCombo.selectedValue === "7"){
+            if($scope.typeCdCombo.selectedValue === "1" || $scope.typeCdCombo.selectedValue === "2" || $scope.typeCdCombo.selectedValue === "3"){
                 params.applyDcDs = $scope.applyDcDsCombo.selectedValue; // 할인구분
                 params.dcSet = $("#dcSet").val(); // 할인율 or 할인금액
             } else if($scope.typeCdCombo.selectedValue === "5"){ // 특별가(=세트가) 별도 체크
@@ -1190,7 +1193,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             }
         }
 
-        if($scope.typeCdCombo.selectedValue === "1" || $scope.typeCdCombo.selectedValue === "2" || $scope.typeCdCombo.selectedValue === "3" || $scope.typeCdCombo.selectedValue === "7"){
+        if($scope.typeCdCombo.selectedValue === "1" || $scope.typeCdCombo.selectedValue === "2" || $scope.typeCdCombo.selectedValue === "3"){
             // 적용혜택의 할인율/할인금액을(를) 입력하세요.
             if($("#dcSet").val() === "" || $("#dcSet").val() === null){
                 if($scope.applyDcDsCombo.selectedValue === "1") {
@@ -1281,6 +1284,8 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
         $("input:checkbox[id='chkDlvFgBaemin']").prop("checked", false); // 적용구분(배민)
         $("input:checkbox[id='chkDlvFgDdangyo']").prop("checked", false); // 적용구분(땡겨요)
         $("input:checkbox[id='chkDlvFgNpaysmartorder']").prop("checked", false); // 적용구분(네이버주문)
+
+        $scope.couponYnCombo.selectedIndex = 1; // 쿠폰사용여부
 
         $("input:checkbox[id='chkPeriod']").prop("checked", false); // 적용기간
         promotionStartDate.value = getCurDate('-');
@@ -1588,15 +1593,6 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                         params.dcSet = "";
                         params.presentDs = "";
                         params.selectGiftCnt = "";
-                    }else if (s.selectedValue === "601"){
-                        params.prodCdYn = "N";
-                        params.selectProdDs = "";
-                        params.selectProdCnt = "";
-                        params.typeCd = "7";
-                        params.applyDcDs = "1";
-                        params.dcSet = "1";
-                        params.presentDs = "";
-                        params.selectGiftCnt = "";
                     }
 
                     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
@@ -1692,15 +1688,6 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                 $("#dcSet").val("");
                 //$scope.presentDsCombo.selectedValue = "";
                 $("#selectGiftCnt").val("");
-            }else if(s.selectedValue === "601"){
-                $("input:checkbox[id='chkProd']").prop("checked", false);
-                //$scope.selectProdDsCombo.selectedValue = "";
-                $("#selectProdCnt").val("");
-                $scope.typeCdCombo.selectedValue = "7";
-                $scope.applyDcDsCombo.selectedValue= "1";
-                $("#dcSet").val("1");
-                //$scope.presentDsCombo.selectedValue = "";
-                $("#selectGiftCnt").val("");
             }
         }
     };
@@ -1760,14 +1747,6 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             //$("#lblApplyDcDs").text(messages["promotion.applyDcDs"]);
             //$("#tdApplyDcDs").css("display", "");
             //$("#thDcSet").css("display", "");
-        } else if (promoType === "601") { // 쿠폰할인
-            $("#tblProd").css("display", "none"); // 적용상품 사용안함
-            $scope.typeCdCombo.itemsSource = new wijmo.collections.CollectionView(typeCdFgData.slice(6, 7)); // 적용혜택 - 혜택유형
-            $scope.applyDcDsCombo.itemsSource = new wijmo.collections.CollectionView(applyDcDsData.slice(0, 1)); // 적용혜택 - 할인구분
-            $("#trApplyDcDs").css("display", "");
-            $("#lblApplyDcDs").text(messages["promotion.applyDcDs"]);
-            $("#tdApplyDcDs").css("display", "");
-            $("#thDcSet").css("display", "");
         }
     };
 
@@ -1897,9 +1876,6 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
         }else if(s.selectedValue === "6") {
             $("#trApplyDcDs").css("display", "none");
             $("#tblBene").css("display", "none");
-        }else if(s.selectedValue === "7") {
-            $("#trApplyDcDs").css("display", "");
-            $("#tblBene").css("display", "none");
         }
     };
 
@@ -1981,8 +1957,8 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
     // 적용상품 입력 사용/미사용 체크박스
     $scope.isChkProd = function () {
 
-        // 프로모션 종류 '영수증전체할인', '쿠폰할인'은 적용상품 사용안함.
-        if(vPromotionType === "001" || vPromotionType === "601"){
+        // 프로모션 종류 '영수증전체할인'은 적용상품 사용안함.
+        if(vPromotionType === "001"){
             $("input:checkbox[id='chkProd']").prop("checked", false);
             $scope.isCheckedProd = false;
             return false;

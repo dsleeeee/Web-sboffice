@@ -140,14 +140,14 @@
                 <img src="/resource/solbipos/css/img/promotion/example2/ex14.JPG" style="width:100%" alt="ex14" />
             </div>
 
-            <div class="divBar mt10" id="ex15" onclick="divFldUnfld('ex15')">
+           <%-- <div class="divBar mt10" id="ex15" onclick="divFldUnfld('ex15')">
                 <a href="#" class="open">
                     (사례15) <span style="color:red;">[쿠폰 할인]</span> 2022년 12월26일부터 2023년 1월31일까지 모든 고객을 대상으로 쿠폰사용시 구매 금액의 15%를 할인해 주는 행사
                 </a>
             </div>
             <div class="w100" id="ex15Div">
                 <img src="/resource/solbipos/css/img/promotion/example2/ex15.JPG" style="width:100%" alt="ex15" />
-            </div>
+            </div>--%>
 
         </div>
 

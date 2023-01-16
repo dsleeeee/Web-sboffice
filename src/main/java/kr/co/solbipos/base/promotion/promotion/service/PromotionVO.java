@@ -209,6 +209,8 @@ public class PromotionVO extends PageVO {
     private String momsStoreManageType;
     /** 사원번호 */
     private String empNo;
+    /** 쿠폰사용여부 */
+    private String couponYn;
 
 
     public String getOrgnFg() {
@@ -937,5 +939,13 @@ public class PromotionVO extends PageVO {
 
     public void setEmpNo(String empNo) {
         this.empNo = empNo;
+    }
+
+    public String getCouponYn() {
+        return couponYn;
+    }
+
+    public void setCouponYn(String couponYn) {
+        this.couponYn = couponYn;
     }
 }

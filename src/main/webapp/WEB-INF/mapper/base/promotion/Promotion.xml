@@ -293,7 +293,8 @@
                                       #{modId} AS MOD_ID,
                                       #{blockPayCd} AS BLOCK_PAY_CD,
                                       #{depositYmd} AS DEPOSIT_YMD,
-                                      #{chargeDs} AS CHARGE_DS
+                                      #{chargeDs} AS CHARGE_DS,
+                                      #{couponYn} AS COUPON_YN
                                 FROM DUAL
                             ) B
                         ON (A.HQ_OFFICE_CD = B.HQ_OFFICE_CD AND A.PROMOTION_CD = B.PROMOTION_CD)
@@ -349,7 +350,8 @@
                            A.MOD_ID = B.MOD_ID,
                            A.BLOCK_PAY_CD = B.BLOCK_PAY_CD,
                            A.DEPOSIT_YMD = B.DEPOSIT_YMD,
-                           A.CHARGE_DS = B.CHARGE_DS
+                           A.CHARGE_DS = B.CHARGE_DS,
+                           A.COUPON_YN = B.COUPON_YN
                      WHEN NOT MATCHED THEN
                    INSERT
                     (      A.HQ_OFFICE_CD,
@@ -406,7 +408,8 @@
                            A.MOD_ID,
                            A.BLOCK_PAY_CD,
                            A.DEPOSIT_YMD,
-                           A.CHARGE_DS
+                           A.CHARGE_DS,
+                           A.COUPON_YN
                     )
                     VALUES
                     (      B.HQ_OFFICE_CD,
@@ -463,7 +466,8 @@
                            B.MOD_ID,
                            B.BLOCK_PAY_CD,
                            B.DEPOSIT_YMD,
-                           B.CHARGE_DS
+                           B.CHARGE_DS,
+                           B.COUPON_YN
                     )
             </when>
             <!-- 매장 -->
@@ -522,7 +526,8 @@
                                       #{modId} AS MOD_ID,
                                       #{blockPayCd} AS BLOCK_PAY_CD,
                                       #{depositYmd} AS DEPOSIT_YMD,
-                                      #{chargeDs} AS CHARGE_DS
+                                      #{chargeDs} AS CHARGE_DS,
+                                      #{couponYn} AS COUPON_YN
                                 FROM DUAL
                             ) B
                         ON (A.STORE_CD = B.STORE_CD AND A.PROMOTION_CD = B.PROMOTION_CD)
@@ -577,7 +582,8 @@
                             A.MOD_ID = B.MOD_ID,
                             A.BLOCK_PAY_CD = B.BLOCK_PAY_CD,
                             A.DEPOSIT_YMD = B.DEPOSIT_YMD,
-                            A.CHARGE_DS = B.CHARGE_DS
+                            A.CHARGE_DS = B.CHARGE_DS,
+                            A.COUPON_YN = B.COUPON_YN
                       WHEN NOT MATCHED THEN
                     INSERT
                         (   A.STORE_CD,
@@ -633,7 +639,8 @@
                             A.MOD_ID,
                             A.BLOCK_PAY_CD,
                             A.DEPOSIT_YMD,
-                            A.CHARGE_DS
+                            A.CHARGE_DS,
+                            A.COUPON_YN
                     )
                     VALUES
                     (       B.STORE_CD,
@@ -689,7 +696,8 @@
                             B.MOD_ID,
                             B.BLOCK_PAY_CD,
                             B.DEPOSIT_YMD,
-                            B.CHARGE_DS
+                            B.CHARGE_DS,
+                            B.COUPON_YN
                     )
             </when>
         </choose>
@@ -960,7 +968,8 @@
                         thpc.MOMS_PURCHS_QTY_LIMIT,
                         thpc.BLOCK_PAY_CD,
                         thpc.DEPOSIT_YMD,
-                        thpc.CHARGE_DS
+                        thpc.CHARGE_DS,
+                        NVL(thpc.COUPON_YN,'N') AS COUPON_YN
                   FROM TB_HQ_PROMO_H thph,
                         TB_HQ_PROMO_CONDI thpc,
                         TB_HQ_PROMO_BENE thpb
@@ -1035,7 +1044,8 @@
                         tmpc.MOMS_PURCHS_QTY_LIMIT,
                         tmpc.BLOCK_PAY_CD,
                         tmpc.DEPOSIT_YMD,
-                        tmpc.CHARGE_DS
+                        tmpc.CHARGE_DS,
+                        NVL(tmpc.COUPON_YN,'N') AS COUPON_YN
                   FROM TB_MS_PROMO_H tmph,
                         TB_MS_PROMO_CONDI tmpc,
                         TB_MS_PROMO_BENE tmpb
