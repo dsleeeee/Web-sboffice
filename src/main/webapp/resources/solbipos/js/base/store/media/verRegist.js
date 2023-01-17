@@ -203,6 +203,13 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 파일 타입 변경 시 첨부파일 확장자 변경
   $scope.fileTypeChg = function(s){
+    // 키오스크(인트로)
+    if(s.selectedValue === "003") {
+      $("#lblFileSizeMax").text(messages["media.fileSize.max2"]);
+    } else {
+      $("#lblFileSizeMax").text("");
+    }
+
     if($("#file").val() === null || $("#file").val() === undefined || $("#file").val() === "") {
     } else {
       // 첨부파일 리셋

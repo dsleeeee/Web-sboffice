@@ -213,6 +213,7 @@
                             </div>
                             <div class="pd5">
                                 <label style="color: red;"><s:message code="promotion.fileSize.max"/></label>
+                                <label style="color: red;"><s:message code="promotion.fileSize.max2"/></label>
                                 <label id="lblFileSize"></label>
                             </div>
                         </td>

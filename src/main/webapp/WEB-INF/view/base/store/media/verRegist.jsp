@@ -57,9 +57,13 @@
                 </td>
               </tr>
               <tr>
-                  <%-- 파일사이즈 --%>
+                <%-- 파일사이즈 --%>
                 <th><s:message code="media.fileSize" /></th>
-                <td><p class="s12 red mb10" id="fileSizeMax"><s:message code="media.fileSize.max" /></p>	{{version.fileSize}}</td>
+                <td>
+                  <p class="s12 red mb10" id="fileSizeMax"><s:message code="media.fileSize.max" /></p>
+                  <p class="s12 red mb10"><label id="lblFileSizeMax"></label></p>
+                  {{version.fileSize}}
+                </td>
               </tr>
               <tr> <%-- 사용기한 --%>
                 <th><s:message code="media.useDate" /></th>
@@ -72,7 +76,8 @@
                   </div>
                 </td>
               </tr>
-              <tr> <%-- 파일타입 --%>
+              <tr>
+                <%-- 파일타입 --%>
                 <th><s:message code="media.fileType" /></th>
                 <td>
                   <div class="sb-select">
@@ -136,6 +141,6 @@
   var storeCd      = "${storeCd}";
   var userId       = "${userId}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/verRegist.js?ver=20221019.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/verRegist.js?ver=20230117.011" charset="utf-8"></script>
 
 

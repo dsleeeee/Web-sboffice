@@ -71,7 +71,7 @@
                                     <s:message code="memberTermsRegist.fileSize" />
                                 </th>
                                 <td>
-                                    <p class="s12 red mb10" id="fileSizeMax"><s:message code="media.fileSize.max" /></p>
+                                    <p class="s12 red mb10" id="fileSizeMax"><s:message code="memberTermsRegist.fileSize.max" /></p>
                                     {{version.fileSize}}
                                 </td>
                             </tr>
