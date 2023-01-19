@@ -836,6 +836,8 @@
     <typeAlias alias="storeInfoVO" type="kr.co.solbipos.store.storeMoms.storeInfo.service.StoreInfoVO"/>
     <!-- 맘스터치 > 매장관리 > 점포영업지역관리 -->
     <typeAlias alias="storeSaleAreaVO" type="kr.co.solbipos.store.storeMoms.storeSaleArea.service.StoreSaleAreaVO"/>
+    <!-- 맘스터치 > 매장관리 > 매장정보일괄변경 -->
+    <typeAlias alias="storeBatchChangeVO" type="kr.co.solbipos.store.storeMoms.storeBatchChange.service.StoreBatchChangeVO"/>
 
     <!-- 맘스터치 > 승인관리2 > 현금영수증 승인 조회 -->
     <typeAlias alias="cashBillVO" type="kr.co.solbipos.sale.appr.cashBill.service.CashBillVO"/>
