@@ -33,7 +33,12 @@ app.controller('sysConnectCtrl', ['$scope', '$http', function ($scope, $http) {
     
     // 시스템 접속
     $scope.sysConnect = function(){
-        window.open(envst1260 + storeCd);
+        console.log(envst1260);
+        if(orgnFg === "HQ"){
+            window.open(envst1260 + hqOfficeCd);
+        } else if(orgnFg === "STORE"){
+            window.open(envst1260 + storeCd);
+        }
     };
 
 }]);

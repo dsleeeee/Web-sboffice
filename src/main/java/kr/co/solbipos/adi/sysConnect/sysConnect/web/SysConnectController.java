@@ -5,6 +5,7 @@ import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,7 +54,11 @@ public class SysConnectController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
-        model.addAttribute("envst1260", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1260"), ""));
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("envst1260", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1260"), ""));
+        } else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
+            model.addAttribute("envst1260", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1260"), ""));
+        }
 
         return "adi/sysConnect/sysConnect/sysConnect";
     }
