@@ -201,6 +201,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             // 상품옵션그룹
             params.optionGrpNm = "";
             params.optionGrpCd = "";
+            // 단품/세트선택설정
+            params.groupProdNm = "";
+            params.groupProdCd = "";
             // 판매방식
             params.saleTypeYnSin = false;
             params.saleTypeYnDlv = false;
@@ -427,6 +430,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             // 상품옵션그룹
             params.optionGrpCd = $("#_optionGrpCd").val();
 
+            // 단품/세트선택설정
+            params.groupProdCd = $("#_groupProdCd").val();
+
             // 출시일
             params.releaseDate = wijmo.Globalize.format(releaseDate.value, 'yyyyMMdd');
 
@@ -461,6 +467,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
 
             // 상품옵션그룹
             params.optionGrpCd = "";
+
+            // 단품/세트선택설정
+            params.groupProdCd = "";
 
             // 출시일
             params.releaseDate = "";
@@ -1307,6 +1316,10 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             // 상품옵션그룹
             $("#_optionGrpCd").val("");
             $("#_optionGrpNm").val("");
+
+            // 단품/세트선택설정
+            $("#_groupProdCd").val("");
+            $("#_groupProdNm").val("");
             
             // 단종여부 체크박스
             $scope.isCheckedDisconYn = false;
@@ -1433,6 +1446,12 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                     if ($scope.prodModifyInfo.optionGrpCd !== null && $scope.prodModifyInfo.optionGrpCd !== undefined && $scope.prodModifyInfo.optionGrpCd !== "") {
                         $("#_optionGrpNm").val($scope.prodModifyInfo.optionGrpNm);
                         $("#_optionGrpCd").val($scope.prodModifyInfo.optionGrpCd);
+                    }
+
+                    // 단품/세트선택설정
+                    if ($scope.prodModifyInfo.groupProdCd !== null && $scope.prodModifyInfo.groupProdCd !== undefined && $scope.prodModifyInfo.groupProdCd !== "") {
+                        $("#_groupProdNm").val($scope.prodModifyInfo.groupProdNm);
+                        $("#_groupProdCd").val($scope.prodModifyInfo.groupProdCd);
                     }
 
                     // 출시일
@@ -1749,5 +1768,18 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         $scope.prodModifyInfo.optionGrpCd = "";
         $scope.prodModifyInfo.optionGrpNm = "";
     };
-    
+
+    // 단품/세트선택설정 선택 팝업
+    $scope.popUpGroupProdCd = function () {
+        $scope.wjSearchGroupProdLayer.show(true);
+        $scope._broadcast('searchGroupProdCtrl');
+    };
+
+    // 단품/세트선택설정 선택 취소 버튼
+    $scope.delGroupProdCd = function () {
+        $("#_groupProdNm").val("");
+        $("#_groupProdCd").val("");
+        $scope.prodModifyInfo.groupProdCd = "";
+        $scope.prodModifyInfo.groupProdNm = "";
+    };
 }]);

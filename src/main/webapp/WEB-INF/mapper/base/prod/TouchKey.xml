@@ -35,7 +35,8 @@
                     thpc.PROD_CLASS_CD,
                     thpc.PROD_CLASS_NM,
                     NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC,
-                    'N' AS TOUCHKEY_USED
+                    'N' AS TOUCHKEY_USED,
+                (SELECT PROD_NM FROM TB_HQ_PRODUCT thp2 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = thp.GROUP_PROD_CD) AS GROUP_PROD_NM
                 FROM
                     TB_HQ_PRODUCT thp
                 LEFT OUTER JOIN TB_HQ_PRODUCT_CLASS thpc ON
@@ -94,7 +95,8 @@
                     tmpc.PROD_CLASS_CD,
                     tmpc.PROD_CLASS_NM,
                     NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC,
-                    'N' AS TOUCHKEY_USED
+                    'N' AS TOUCHKEY_USED,
+                (SELECT PROD_NM FROM TB_MS_PRODUCT tmp2 WHERE STORE_CD = #{storeCd} AND PROD_CD = tmp.GROUP_PROD_CD) AS GROUP_PROD_NM
                 FROM
                     TB_MS_PRODUCT tmp
                 LEFT OUTER JOIN TB_MS_PRODUCT_CLASS tmpc ON

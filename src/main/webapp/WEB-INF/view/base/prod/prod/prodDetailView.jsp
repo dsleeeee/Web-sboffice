@@ -364,6 +364,16 @@
                             {{_sdselGrpCd}}
                         </td>
                     </tr>
+                    <%-- [1250 맘스터치] --%>
+                    <c:if test="${momsEnvstVal == '1'}">
+                        <tr ng-if="prodDetail.sideProdYn === 'N'">
+                            <%--사이드속성분류코드(속성) --%>
+                            <th><s:message code="prod.groupProdCd"/></th>
+                            <td>
+                                {{prodDetail.groupProdNm}}
+                            </td>
+                        </tr>
+                    </c:if>
                     <tr>
                         <!-- 보증컵유형 -->
                         <th><s:message code="prod.depositCupFg"/></th>

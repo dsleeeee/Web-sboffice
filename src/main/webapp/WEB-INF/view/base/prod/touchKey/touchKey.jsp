@@ -185,6 +185,11 @@
                                          binding="prodClassNm" width="100"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="touchKey.grid.saleUprc"/>"
                                          binding="saleUprc" width="*" visible="false"></wj-flex-grid-column>
+                    <%-- [1250 맘스터치] --%>
+                    <c:if test="${momsEnvstVal == '1'}">
+                        <wj-flex-grid-column header="<s:message code="touchKey.grid.groupProdNm"/>"
+                                             binding="groupProdNm" width="100"></wj-flex-grid-column>
+                    </c:if>
                 </wj-flex-grid>
             </div>
         </div>
@@ -370,6 +375,9 @@
 
     // 본사 환경설정값 - 터치메뉴 폰트크기[1236]
     var fontSizeEnvstVal = ${fontSizeEnvstVal};
+
+    // [1250 맘스터치] 환경설정값
+    var momsEnvstVal = "${momsEnvstVal}";
 
     // 기존 터치키 그룹이 있을 떄/ 없을 때 버튼, selectBox 설정
     if(touchKeyGrpData.length === 0){

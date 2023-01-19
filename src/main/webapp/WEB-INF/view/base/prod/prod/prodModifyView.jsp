@@ -471,6 +471,19 @@
                   <input type="hidden" id="_sdselGrpCd" name="sdselGrpCd" ng-model="prodModifyInfo.sdselGrpCd" disabled />
               </td>
             </tr>
+            <%-- [1250 맘스터치] --%>
+            <c:if test="${momsEnvstVal == '1'}">
+                <tr ng-if="prodModifyInfo.sideProdYn === 'N'">
+                  <%--단품/세트선택설정 --%>
+                  <th><s:message code="prod.groupProdCd"/></th>
+                  <td>
+                    <input type="text" class="sb-input w70" id="_groupProdNm" ng-model="prodModifyInfo.groupProdCd" ng-click="popUpGroupProdCd()" style="float: left; width: 69%;"
+                           placeholder="<s:message code="prod.groupProdCd" /> 선택" readonly/>
+                    <input type="hidden" id="_groupProdCd" name="groupProdCd" ng-model="prodModifyInfo.groupProdCd" disabled />
+                    <button type="button" class="btn_skyblue fl mr5" id="btnCancelGroupProdCd" style="margin-left: 5px;" ng-click="delGroupProdCd()"><s:message code="cmm.selectCancel"/></button>
+                  </td>
+                </tr>
+            </c:if>
             <tr>
               <!-- 보증금상품유형 -->
               <th><s:message code="prod.depositCupFg"/></th>
@@ -1139,7 +1152,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20221231.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20221231.04" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
@@ -1171,4 +1184,8 @@
 
 <%-- 상품옵션그룹 팝업--%>
 <c:import url="/WEB-INF/view/base/prod/prod/searchOptionGrp.jsp">
+</c:import>
+
+<%-- 단품/세트선택설정 팝업--%>
+<c:import url="/WEB-INF/view/base/prod/prod/searchGroupProd.jsp">
 </c:import>

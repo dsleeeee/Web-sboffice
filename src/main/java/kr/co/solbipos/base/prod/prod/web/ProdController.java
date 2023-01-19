@@ -772,6 +772,28 @@ public class ProdController {
     }
 
     /**
+     * 단품/세트선택설정 조회 팝업
+     * @param prodVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  권지현
+     * @since   2023.01.16
+     */
+    @RequestMapping(value = "/getSearchGroupProdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSearchGroupProdList(ProdVO prodVO, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = prodService.getSearchGroupProdList(prodVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodVO);
+    }
+
+    /**
      * 매장상품일괄등록 - 매장목록 조회
      * @param prodVO
      * @param request
