@@ -254,6 +254,10 @@
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.tuKeyCd"/>" binding="tuKeyCd" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.prodCd"/>" binding="prodCd" width="105" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.prodNm"/>" binding="prodNm" width="180" is-read-only="true"></wj-flex-grid-column>
+                        <%-- [1250 맘스터치] --%>
+                        <c:if test="${momsEnvstVal == '1'}">
+                            <wj-flex-grid-column header="<s:message code="kioskKeyMap.groupProdNm"/>" binding="groupProdNm" width="100" is-read-only="true"></wj-flex-grid-column>
+                        </c:if>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -411,6 +415,10 @@
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.prodCd"/>" binding="prodCd" width="105" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.prodNm"/>" binding="prodNm" width="175" is-read-only="true"></wj-flex-grid-column>
+                        <%-- [1250 맘스터치] --%>
+                        <c:if test="${momsEnvstVal == '1'}">
+                            <wj-flex-grid-column header="<s:message code="kioskKeyMap.groupProdNm"/>" binding="groupProdNm" width="100" is-read-only="true"></wj-flex-grid-column>
+                        </c:if>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.saleUprc"/>" binding="saleUprc" width="60" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.regYn"/>" binding="regYn" align="center"data-map="regYnDataMap" width="60" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>

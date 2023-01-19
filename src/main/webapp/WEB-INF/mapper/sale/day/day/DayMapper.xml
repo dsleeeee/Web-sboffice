@@ -440,7 +440,7 @@
         SUM(tssh.SALE_CNT) AS SALE_CNT,
         SUM(tssh.RTN_SALE_CNT) AS RTN_SALE_CNT,
         SUM(tssh.BILL_CNT) AS BILL_CNT,
-        ROUND( SUM(tssh.REAL_SALE_AMT) / SUM(tssh.BILL_CNT) ) AS BILL_UPRC
+        DECODE(SUM(tssh.BILL_CNT), 0, 0, ROUND( SUM(tssh.REAL_SALE_AMT) / SUM(tssh.BILL_CNT))) AS BILL_UPRC
         FROM
         (
             SELECT

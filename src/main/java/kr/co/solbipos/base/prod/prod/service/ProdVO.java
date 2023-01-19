@@ -41,6 +41,10 @@ public class ProdVO extends PageVO {
     private String prodCd;
     /** 상품명 */
     private String prodNm;
+    /** 상품코드 */
+    private String searchProdCd;
+    /** 상품명 */
+    private String searchProdNm;
     /** 상품분류코드 */
     private String prodClassCd;
     /** 코너코드 */
@@ -73,6 +77,8 @@ public class ProdVO extends PageVO {
     private String stockProdYn;
     /** 사이드상품여부 */
     private String sideProdYn;
+    /** 단품상품여부 */
+    private String singleYn;
     /** 세트상품구분 */
     private String setProdFg;
     /** 가격관리구분 */
@@ -300,6 +306,9 @@ public class ProdVO extends PageVO {
     /** 상품옵션그룹명 */
     private String optionGrpNm;
 
+    /** 단품/세트선택설정 */
+    private String groupProdCd;
+
     /** 출시일 */
     private String releaseDate;
 
@@ -468,6 +477,22 @@ public class ProdVO extends PageVO {
      */
     public void setProdNm(String prodNm) {
         this.prodNm = prodNm;
+    }
+
+    public String getSearchProdCd() {
+        return searchProdCd;
+    }
+
+    public void setSearchProdCd(String searchProdCd) {
+        this.searchProdCd = searchProdCd;
+    }
+
+    public String getSearchProdNm() {
+        return searchProdNm;
+    }
+
+    public void setSearchProdNm(String searchProdNm) {
+        this.searchProdNm = searchProdNm;
     }
 
     /**
@@ -686,6 +711,14 @@ public class ProdVO extends PageVO {
      */
     public void setSideProdYn(String sideProdYn) {
         this.sideProdYn = sideProdYn;
+    }
+
+    public String getSingleYn() {
+        return singleYn;
+    }
+
+    public void setSingleYn(String singleYn) {
+        this.singleYn = singleYn;
     }
 
     /**
@@ -1426,6 +1459,14 @@ public class ProdVO extends PageVO {
 
     public void setOptionGrpNm(String optionGrpNm) {
         this.optionGrpNm = optionGrpNm;
+    }
+
+    public String getGroupProdCd() {
+        return groupProdCd;
+    }
+
+    public void setGroupProdCd(String groupProdCd) {
+        this.groupProdCd = groupProdCd;
     }
 
     public String getReleaseDate() {
