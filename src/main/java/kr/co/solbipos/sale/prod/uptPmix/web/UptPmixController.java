@@ -1,4 +1,4 @@
-package kr.co.solbipos.sale.prod.saleProdRankMoms.web;
+package kr.co.solbipos.sale.prod.uptPmix.web;
 
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
@@ -11,8 +11,8 @@ import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
-import kr.co.solbipos.sale.prod.saleProdRankMoms.service.SaleProdRankMomsService;
-import kr.co.solbipos.sale.prod.saleProdRankMoms.service.SaleProdRankMomsVO;
+import kr.co.solbipos.sale.prod.uptPmix.service.UptPmixService;
+import kr.co.solbipos.sale.prod.uptPmix.service.UptPmixVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,26 +27,26 @@ import java.util.List;
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
- * @Class Name : SaleProdRankMomsController.java
- * @Description : 맘스터치 > 상품매출분석 > 상품별매출순위
+ * @Class Name : UptPmixController.java
+ * @Description : 맘스터치 > 상품매출분석 > UPT & P.mix
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2022.12.06   이다솜      최초생성
+ * @ 2023.01.17   이다솜      최초생성
  *
  * @author 솔비포스 개발본부 WEB개발팀 이다솜
- * @since 2022.12.06
+ * @since 2023.01.17
  * @version 1.0
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
-@RequestMapping("/sale/prod/saleProdRankMoms")
-public class SaleProdRankMomsController {
+@RequestMapping("/sale/prod/uptPmix")
+public class UptPmixController {
 
     private final SessionService sessionService;
-    private final SaleProdRankMomsService saleProdRankMomsService;
+    private final UptPmixService uptPmixService;
     private final DayProdService dayProdService;
     private final CmmCodeUtil cmmCodeUtil;
 
@@ -54,9 +54,9 @@ public class SaleProdRankMomsController {
      * Constructor Injection
      */
     @Autowired
-    public SaleProdRankMomsController(SessionService sessionService, SaleProdRankMomsService saleProdRankMomsService, DayProdService dayProdService, CmmCodeUtil cmmCodeUtil){
+    public UptPmixController(SessionService sessionService, UptPmixService uptPmixService, DayProdService dayProdService, CmmCodeUtil cmmCodeUtil){
         this.sessionService = sessionService;
-        this.saleProdRankMomsService = saleProdRankMomsService;
+        this.uptPmixService = uptPmixService;
         this.dayProdService = dayProdService;
         this.cmmCodeUtil = cmmCodeUtil;
     }
@@ -68,9 +68,9 @@ public class SaleProdRankMomsController {
      * @param response
      * @param model
      * @author  이다솜
-     * @since   2022.12.06
+     * @since   2023.01.17
      */
-    @RequestMapping(value = "/saleProdRankMoms/view.sb", method = RequestMethod.GET)
+    @RequestMapping(value = "/uptPmix/view.sb", method = RequestMethod.GET)
     public String view(HttpServletRequest request, HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
@@ -108,49 +108,48 @@ public class SaleProdRankMomsController {
         List momsStoreManageTypeComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "156");
         model.addAttribute("momsStoreManageTypeComboList", momsStoreManageTypeComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsStoreManageTypeComboList, "name", "value", UseYn.N));
 
-        return "sale/prod/saleProdRankMoms/saleProdRankMoms";
+        return "sale/prod/uptPmix/uptPmix";
     }
 
     /**
-     * 상품별매출순위 조회
+     * UPT & P.mix 리스트 조회
      * @param request
      * @param response
      * @param model
-     * @param saleProdRankMomsVO
+     * @param uptPmixVO
      * @return
      * @author  이다솜
-     * @since   2022.12.06
+     * @since   2023.01.17
      */
-    @RequestMapping(value = "/saleProdRankMoms/getSaleProdRankList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/uptPmix/getUptPmixList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getSaleProdRankList(HttpServletRequest request, HttpServletResponse response, Model model, SaleProdRankMomsVO saleProdRankMomsVO) {
+    public Result getUptPmixList(HttpServletRequest request, HttpServletResponse response, Model model, UptPmixVO uptPmixVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> list = saleProdRankMomsService.getSaleProdRankList(saleProdRankMomsVO, sessionInfoVO);
+        List<DefaultMap<Object>> list = uptPmixService.getUptPmixList(uptPmixVO, sessionInfoVO);
 
-        return ReturnUtil.returnListJson(Status.OK, list, saleProdRankMomsVO);
+        return ReturnUtil.returnListJson(Status.OK, list, uptPmixVO);
     }
 
     /**
-     * 상품별매출순위 조회(엑셀용)
+     * UPT & P.mix 엑셀 다운로드 리스트 조회
      * @param request
      * @param response
      * @param model
-     * @param saleProdRankMomsVO
+     * @param uptPmixVO
      * @return
      * @author  이다솜
-     * @since   2022.12.06
+     * @since   2023.01.17
      */
-    @RequestMapping(value = "/saleProdRankMoms/getSaleProdRankExcelList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/uptPmix/getUptPmixExcelList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getSaleProdRankExcelList(HttpServletRequest request, HttpServletResponse response, Model model, SaleProdRankMomsVO saleProdRankMomsVO) {
+    public Result getUptPmixExcelList(HttpServletRequest request, HttpServletResponse response, Model model, UptPmixVO uptPmixVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> list = saleProdRankMomsService.getSaleProdRankExcelList(saleProdRankMomsVO, sessionInfoVO);
+        List<DefaultMap<Object>> list = uptPmixService.getUptPmixExcelList(uptPmixVO, sessionInfoVO);
 
-        return ReturnUtil.returnListJson(Status.OK, list, saleProdRankMomsVO);
+        return ReturnUtil.returnListJson(Status.OK, list, uptPmixVO);
     }
-
 }

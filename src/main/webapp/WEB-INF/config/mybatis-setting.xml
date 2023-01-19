@@ -870,6 +870,9 @@
     <typeAlias alias="prodSaleRate2VO" type="kr.co.solbipos.sale.prod.prodSaleRate2.service.ProdSaleRate2VO"/>
     <!-- 맘스터치 > 상품매출분석 > 매출상세현황(채널별) -->
     <typeAlias alias="saleDtlChannelVO" type="kr.co.solbipos.sale.prod.saleDtlChannel.service.SaleDtlChannelVO"/>
+    <!-- 맘스터치 > 상품매출분석 > UPT & P.mix -->
+    <typeAlias alias="uptPmixVO" type="kr.co.solbipos.sale.prod.uptPmix.service.UptPmixVO"/>
+
 
     <!-- 맘스터치 > 매출분석 > 당일 매출 현황 -->
     <typeAlias alias="todayMomsVO" type="kr.co.solbipos.sale.today.todayMoms.service.TodayMomsVO"/>
