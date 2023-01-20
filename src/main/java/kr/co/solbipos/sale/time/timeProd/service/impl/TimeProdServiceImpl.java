@@ -63,16 +63,37 @@ public class TimeProdServiceImpl implements TimeProdService {
             }
         }
 
-        // 매출 발생 시간대 기준, 동적 컬럼 생성을 위한 쿼리 변수
-        String timeCol = "";
-        for(int i = 0; i <= 23; i++) {
-            timeCol += Integer.toString(i);
-            if(i != 23){
-                timeCol += ",";
+        if(timeProdVO.getOptionFg().equals("time")){ // 시간대
+            // 매출 시간대 설정
+            int iSaleDateStart = Integer.parseInt(timeProdVO.getStartTime());
+            int iSaleDateEnd = Integer.parseInt(timeProdVO.getEndTime());
+
+            String timeCol = "";
+
+            for(int i = iSaleDateStart; i <= iSaleDateEnd; i++) {
+                timeCol += Integer.toString(i);
+                if(i != iSaleDateEnd){
+                    timeCol += ",";
+                }
+            }
+
+            String[] arrTimeCol = timeCol.split(",");
+
+            if(arrTimeCol.length > 0){
+                if(arrTimeCol[0] != null && !"".equals(arrTimeCol[0])){
+                    timeProdVO.setArrTimeCol(arrTimeCol);
+                }
+            }
+        } else if(timeProdVO.getOptionFg().equals("timeSlot")){
+
+            String[] arrTimeCol = timeProdVO.getTimeCol().replace("~","").split(",");
+
+            if(arrTimeCol.length > 0){
+                if(arrTimeCol[0] != null && !"".equals(arrTimeCol[0])){
+                    timeProdVO.setArrTimeCol(arrTimeCol);
+                }
             }
         }
-        String[] arrTimeCol = timeCol.split(",");
-        timeProdVO.setArrTimeCol(arrTimeCol);
 
         return timeProdMapper.getTimeProdList(timeProdVO);
     }
@@ -105,16 +126,37 @@ public class TimeProdServiceImpl implements TimeProdService {
             }
         }
 
-        // 매출 발생 시간대 기준, 동적 컬럼 생성을 위한 쿼리 변수
-        String timeCol = "";
-        for(int i = 0; i <= 23; i++) {
-            timeCol += Integer.toString(i);
-            if(i != 23){
-                timeCol += ",";
+        if(timeProdVO.getOptionFg().equals("time")){ // 시간대
+            // 매출 시간대 설정
+            int iSaleDateStart = Integer.parseInt(timeProdVO.getStartTime());
+            int iSaleDateEnd = Integer.parseInt(timeProdVO.getEndTime());
+
+            String timeCol = "";
+
+            for(int i = iSaleDateStart; i <= iSaleDateEnd; i++) {
+                timeCol += Integer.toString(i);
+                if(i != iSaleDateEnd){
+                    timeCol += ",";
+                }
+            }
+
+            String[] arrTimeCol = timeCol.split(",");
+
+            if(arrTimeCol.length > 0){
+                if(arrTimeCol[0] != null && !"".equals(arrTimeCol[0])){
+                    timeProdVO.setArrTimeCol(arrTimeCol);
+                }
+            }
+        } else if(timeProdVO.getOptionFg().equals("timeSlot")){
+
+            String[] arrTimeCol = timeProdVO.getTimeCol().replace("~","").split(",");
+
+            if(arrTimeCol.length > 0){
+                if(arrTimeCol[0] != null && !"".equals(arrTimeCol[0])){
+                    timeProdVO.setArrTimeCol(arrTimeCol);
+                }
             }
         }
-        String[] arrTimeCol = timeCol.split(",");
-        timeProdVO.setArrTimeCol(arrTimeCol);
 
         return timeProdMapper.getTimeProdExcelList(timeProdVO);
     }

@@ -287,7 +287,7 @@
                     , 	   TB_MS_STORE_INFO tmsi
                     , 	   TB_MS_PRODUCT tmp
                     , 	   TB_MS_PRODUCT tmps2 -- 사이드
-                    S,      TB_MS_PRODUCT_CLASS_V02 tmpcv
+                    ,      TB_MS_PRODUCT_CLASS_V02 tmpcv
                     WHERE 1=1
                     AND   tsdpsd.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND   tsdpsd.SALE_DATE BETWEEN #{startDate} AND #{endDate}

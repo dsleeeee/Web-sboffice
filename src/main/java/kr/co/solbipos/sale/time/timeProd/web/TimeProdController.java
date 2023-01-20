@@ -8,6 +8,7 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.sale.day.day.service.DayService;
 import kr.co.solbipos.sale.time.timeProd.service.TimeProdService;
 import kr.co.solbipos.sale.time.timeProd.service.TimeProdVO;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
@@ -49,16 +50,18 @@ public class TimeProdController {
     private final TimeProdService timeProdService;
     private final CmmCodeUtil cmmCodeUtil;
     private final DayProdService dayProdService;
+    private final DayService dayService;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public TimeProdController(SessionService sessionService, TimeProdService timeProdService, CmmCodeUtil cmmCodeUtil, DayProdService dayProdService) {
+    public TimeProdController(SessionService sessionService, TimeProdService timeProdService, CmmCodeUtil cmmCodeUtil, DayProdService dayProdService, DayService dayService) {
         this.sessionService = sessionService;
         this.timeProdService = timeProdService;
         this.cmmCodeUtil = cmmCodeUtil;
         this.dayProdService = dayProdService;
+        this.dayService = dayService;
     }
 
     /**
@@ -180,6 +183,17 @@ public class TimeProdController {
             branchCdComboListAll = cmmCodeUtil.assmblObj(branchCdComboList, "name", "value", UseYn.N);
         }
         model.addAttribute("branchCdComboList", branchCdComboListAll);
+
+        // 시간대 조회
+        List<DefaultMap<String>> timeSlotColList = dayService.getTimeSlotList(sessionInfoVO);
+        // 시간대를 , 로 연결하는 문자열 생성
+        String timeSlotCol = "";
+        for(int i=0; i < timeSlotColList.size(); i++) {
+            timeSlotCol += (timeSlotCol.equals("") ? "" : ",") + timeSlotColList.get(i).getStr("value");
+        }
+
+        model.addAttribute("timeSlotColList", timeSlotColList);
+        model.addAttribute("timeSlotCol", timeSlotCol);
 
         return "sale/time/timeProd/timeProd";
     }

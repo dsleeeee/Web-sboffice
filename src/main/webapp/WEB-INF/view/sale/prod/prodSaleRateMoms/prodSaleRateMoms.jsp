@@ -321,7 +321,6 @@
               <wj-flex-grid-column header="<s:message code="prodRankMoms.sideProdCd"/>" binding="sideProdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="prodRankMoms.selTypeFg"/>" binding="selTypeFg" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="prodRankMoms.prodNm"/>" binding="prodNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="prodRankMoms.sideProdNm"/>" binding="sideProdNm" width="150" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
 
               <wj-flex-grid-column header="<s:message code="prodRankMoms.saleQty1"/>" binding="saleQty1" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="prodRankMoms.saleQty2"/>" binding="saleQty2" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
@@ -421,7 +420,6 @@
             <wj-flex-grid-column header="<s:message code="prodRankMoms.sideProdCd"/>" binding="sideProdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="prodRankMoms.selTypeFg"/>" binding="selTypeFg" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="prodRankMoms.prodNm"/>" binding="prodNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="prodRankMoms.sideProdNm"/>" binding="sideProdNm" width="150" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
 
             <wj-flex-grid-column header="<s:message code="prodRankMoms.saleQty1"/>" binding="saleQty1" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="prodRankMoms.saleQty2"/>" binding="saleQty2" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
@@ -524,4 +522,4 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/prodSaleRateMoms/prodSaleRateMoms.js?ver=20221216.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/prodSaleRateMoms/prodSaleRateMoms.js?ver=20230120.01" charset="utf-8"></script>

@@ -148,7 +148,6 @@ app.controller('prodSaleRateMomsCtrl', ['$scope', '$http', '$timeout', function 
         dataItem.sideProdCd = messages["prodRankMoms.sideProdCd"];
         dataItem.selTypeFg = messages["prodRankMoms.selTypeFg"];
         dataItem.prodNm = messages["prodRankMoms.prodNm"];
-        dataItem.sideProdNm = messages["prodRankMoms.sideProdNm"];
         dataItem.saleQty1 = messages["prodRankMoms.totSaleQty"];
         dataItem.saleQty2 = messages["prodRankMoms.totSaleQty"];
         dataItem.saleQty3 = messages["prodRankMoms.totSaleQty"];
@@ -204,7 +203,6 @@ app.controller('prodSaleRateMomsCtrl', ['$scope', '$http', '$timeout', function 
         dataItem1.sideProdCd = messages["prodRankMoms.sideProdCd"];
         dataItem1.selTypeFg = messages["prodRankMoms.selTypeFg"];
         dataItem1.prodNm = messages["prodRankMoms.prodNm"];
-        dataItem1.sideProdNm = messages["prodRankMoms.sideProdNm"];
         dataItem1.saleQty1 = messages["prodRankMoms.saleQty1"];
         dataItem1.saleQty2 = messages["prodRankMoms.saleQty2"];
         dataItem1.saleQty3 = messages["prodRankMoms.saleQty3"];
@@ -419,14 +417,14 @@ app.controller('prodSaleRateMomsCtrl', ['$scope', '$http', '$timeout', function 
            if(params.prodOption === "1"){  // 단품+세트
 
                // 총계
-               columns[14].visible = false;
-               columns[15].visible = false;
+               columns[18].visible = false;
                columns[19].visible = false;
-               columns[20].visible = false;
+               columns[23].visible = false;
+               columns[24].visible = false;
 
                // 내점,포장,배달 계
-               for(j = 21 ; j < columnsCnt; j++){
-                   if(0 < j%3){
+               for(j = 25 ; j < columnsCnt; j++){
+                   if(j%3 !== 1){
                        columns[j].visible = false;
                    }
                }
@@ -434,14 +432,14 @@ app.controller('prodSaleRateMomsCtrl', ['$scope', '$http', '$timeout', function 
            }else if(params.prodOption === "2"){   // 단품+구성
 
                // 총계
-               columns[13].visible = false;
-               columns[15].visible = false;
-               columns[18].visible = false;
-               columns[20].visible = false;
+               columns[17].visible = false;
+               columns[19].visible = false;
+               columns[22].visible = false;
+               columns[24].visible = false;
 
                // 내점,포장,배달 계
-               for(j = 21 ; j < columnsCnt; j++){
-                   if(j%3 !== 1){
+               for(j = 25 ; j < columnsCnt; j++){
+                   if(j%3 < 2){
                        columns[j].visible = false;
                    }
                }
@@ -449,14 +447,14 @@ app.controller('prodSaleRateMomsCtrl', ['$scope', '$http', '$timeout', function 
            }else if(params.prodOption === "3") {  // 단품+세트+구성
 
                // 총계
-               columns[13].visible = false;
-               columns[14].visible = false;
+               columns[17].visible = false;
                columns[18].visible = false;
-               columns[19].visible = false;
+               columns[22].visible = false;
+               columns[23].visible = false;
 
                // 내점,포장,배달 계
-               for(j = 21 ; j < columnsCnt; j++){
-                   if(j%3 < 2){
+               for(j = 25 ; j < columnsCnt; j++){
+                   if(0 < j%3){
                        columns[j].visible = false;
                    }
                }
@@ -626,7 +624,6 @@ app.controller('prodSaleRateMomsExcelCtrl', ['$scope', '$http', '$timeout', func
         dataItem.sideProdCd = messages["prodRankMoms.sideProdCd"];
         dataItem.selTypeFg = messages["prodRankMoms.selTypeFg"];
         dataItem.prodNm = messages["prodRankMoms.prodNm"];
-        dataItem.sideProdNm = messages["prodRankMoms.sideProdNm"];
         dataItem.saleQty1 = messages["prodRankMoms.totSaleQty"];
         dataItem.saleQty2 = messages["prodRankMoms.totSaleQty"];
         dataItem.saleQty3 = messages["prodRankMoms.totSaleQty"];
@@ -682,7 +679,6 @@ app.controller('prodSaleRateMomsExcelCtrl', ['$scope', '$http', '$timeout', func
         dataItem1.sideProdCd = messages["prodRankMoms.sideProdCd"];
         dataItem1.selTypeFg = messages["prodRankMoms.selTypeFg"];
         dataItem1.prodNm = messages["prodRankMoms.prodNm"];
-        dataItem1.sideProdNm = messages["prodRankMoms.sideProdNm"];
         dataItem1.saleQty1 = messages["prodRankMoms.saleQty1"];
         dataItem1.saleQty2 = messages["prodRankMoms.saleQty2"];
         dataItem1.saleQty3 = messages["prodRankMoms.saleQty3"];
@@ -845,18 +841,18 @@ app.controller('prodSaleRateMomsExcelCtrl', ['$scope', '$http', '$timeout', func
                columns[3].visible = true;
            }
 
-           // 상품표시옵션에 따른 컬럼 제어
+            // 상품표시옵션에 따른 컬럼 제어
            if(params.prodOption === "1"){  // 단품+세트
 
                // 총계
-               columns[14].visible = false;
-               columns[15].visible = false;
+               columns[18].visible = false;
                columns[19].visible = false;
-               columns[20].visible = false;
+               columns[23].visible = false;
+               columns[24].visible = false;
 
                // 내점,포장,배달 계
-               for(j = 21 ; j < columnsCnt; j++){
-                   if(0 < j%3){
+               for(j = 25 ; j < columnsCnt; j++){
+                   if(j%3 !== 1){
                        columns[j].visible = false;
                    }
                }
@@ -864,14 +860,14 @@ app.controller('prodSaleRateMomsExcelCtrl', ['$scope', '$http', '$timeout', func
            }else if(params.prodOption === "2"){   // 단품+구성
 
                // 총계
-               columns[13].visible = false;
-               columns[15].visible = false;
-               columns[18].visible = false;
-               columns[20].visible = false;
+               columns[17].visible = false;
+               columns[19].visible = false;
+               columns[22].visible = false;
+               columns[24].visible = false;
 
                // 내점,포장,배달 계
-               for(j = 21 ; j < columnsCnt; j++){
-                   if(j%3 !== 1){
+               for(j = 25 ; j < columnsCnt; j++){
+                   if(j%3 < 2){
                        columns[j].visible = false;
                    }
                }
@@ -879,14 +875,14 @@ app.controller('prodSaleRateMomsExcelCtrl', ['$scope', '$http', '$timeout', func
            }else if(params.prodOption === "3") {  // 단품+세트+구성
 
                // 총계
-               columns[13].visible = false;
-               columns[14].visible = false;
+               columns[17].visible = false;
                columns[18].visible = false;
-               columns[19].visible = false;
+               columns[22].visible = false;
+               columns[23].visible = false;
 
                // 내점,포장,배달 계
-               for(j = 21 ; j < columnsCnt; j++){
-                   if(j%3 < 2){
+               for(j = 25 ; j < columnsCnt; j++){
+                   if(0 < j%3){
                        columns[j].visible = false;
                    }
                }

@@ -122,6 +122,21 @@ public class TimeProdVO extends PageVO {
     private String startMonth;
     private String endMonth;
 
+    /** 검색 시작 시간 */
+    private String startTime;
+
+    /** 검색 종료 시간 */
+    private String endTime;
+
+    /** 검색옵션 */
+    private String optionFg;
+
+    /** 시간대분류 */
+    private String timeSlot;
+
+    /** 시간대 */
+    private String timeCol;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -348,5 +363,45 @@ public class TimeProdVO extends PageVO {
 
     public void setEndMonth(String endMonth) {
         this.endMonth = endMonth;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getOptionFg() {
+        return optionFg;
+    }
+
+    public void setOptionFg(String optionFg) {
+        this.optionFg = optionFg;
+    }
+
+    public String getTimeSlot() {
+        return timeSlot;
+    }
+
+    public void setTimeSlot(String timeSlot) {
+        this.timeSlot = timeSlot;
+    }
+
+    public String getTimeCol() {
+        return timeCol;
+    }
+
+    public void setTimeCol(String timeCol) {
+        this.timeCol = timeCol;
     }
 }

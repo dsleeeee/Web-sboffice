@@ -108,6 +108,65 @@
                         </div>
                     </td>
                 </tr>
+
+                <tr>
+                    <%-- 옵션(시간대/시간대분류) --%>
+                    <th><s:message code="timeProd.optionFg"/></th>
+                    <td>
+                        <span class="sb-radio"><input type="radio" id="optionFgTime" name="optionFg" value="time" checked /><label for="time">시간대</label></span>
+                        <span class="sb-radio"><input type="radio" id="optionFgTimeSlot" name="optionFg" value="timeSlot" /><label for="timeSlot">시간대분류</label></span>
+                    </td>
+                    <%-- 옵션에 따른 조회조건 --%>
+                    <th><s:message code="timeProd.time"/></th>
+                    <td>
+                        <div id="timeOption">
+                            <div class="sb-select fl w200px">
+                                <div class="sb-slect fl" style="width:65px;">
+                                    <wj-combo-box
+                                            id="startTime"
+                                            ng-model="startTime"
+                                            items-source="_getComboData('startTimeCombo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            control="startTimeCombo"
+                                            initialized="_initComboBox(s)">
+                                            </wj-combo-box>
+                                </div>
+                                <div class="fl pd5" style="padding-right: 15px;">
+                                    <label> ~ </label>
+                                </div>
+                                <div class="sb-select fl" style="width:65px;">
+                                    <wj-combo-box
+                                            id="endTime"
+                                            ng-model="endTime"
+                                            items-source="_getComboData('endTimeCombo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            control="endTimeCombo"
+                                            initialized="_initComboBox(s)">
+                                    </wj-combo-box>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="timeSlotOption" style="display: none">
+                            <div class="sb-select fl w120px" >
+                                <wj-combo-box
+                                        id="timeSlotCombo"
+                                        ng-model="timeSlot"
+                                        control="timeSlotCombo"
+                                        items-source="_getComboData('timeSlotCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)">
+                                </wj-combo-box>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
                 <tr>
                     <%-- 상품코드 --%>
                     <th><s:message code="timeProd.prodCd" /></th>
@@ -380,6 +439,19 @@
                         <wj-flex-grid-column header="<s:message code="timeProd.rate2"/>" binding="rate2T${i}" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="timeProd.rate3"/>" binding="rate3T${i}" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
                     </c:forEach>
+
+                    <%-- 시간대분류 컬럼 생성--%>
+                    <c:forEach var="timeSlotCol" items="${timeSlotColList}">
+                        <wj-flex-grid-column header="<s:message code="timeProd.saleQty1"/>" binding="saleQty1T${timeSlotCol.value.replace("~","")}" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="timeProd.saleQty2"/>" binding="saleQty2T${timeSlotCol.value.replace("~","")}" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="timeProd.saleQty3"/>" binding="saleQty3T${timeSlotCol.value.replace("~","")}" width="110" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="timeProd.realSaleAmt1"/>" binding="realSaleAmt1T${timeSlotCol.value.replace("~","")}" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="timeProd.realSaleAmt2"/>" binding="realSaleAmt2T${timeSlotCol.value.replace("~","")}" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="timeProd.realSaleAmt3"/>" binding="realSaleAmt3T${timeSlotCol.value.replace("~","")}" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="timeProd.rate1"/>" binding="rate1T${timeSlotCol.value.replace("~","")}" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="timeProd.rate2"/>" binding="rate2T${timeSlotCol.value.replace("~","")}" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="timeProd.rate3"/>" binding="rate3T${timeSlotCol.value.replace("~","")}" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+                    </c:forEach>
                 </wj-flex-grid>
             </div>
         </div>
@@ -439,6 +511,19 @@
                     <wj-flex-grid-column header="<s:message code="timeProd.rate2"/>" binding="rate2T${i}" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="timeProd.rate3"/>" binding="rate3T${i}" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
                 </c:forEach>
+
+                <%-- 시간대분류 컬럼 생성--%>
+                <c:forEach var="timeSlotCol" items="${timeSlotColList}">
+                    <wj-flex-grid-column header="<s:message code="timeProd.saleQty1"/>" binding="saleQty1T${timeSlotCol.value.replace("~","")}" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProd.saleQty2"/>" binding="saleQty2T${timeSlotCol.value.replace("~","")}" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProd.saleQty3"/>" binding="saleQty3T${timeSlotCol.value.replace("~","")}" width="110" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProd.realSaleAmt1"/>" binding="realSaleAmt1T${timeSlotCol.value.replace("~","")}" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProd.realSaleAmt2"/>" binding="realSaleAmt2T${timeSlotCol.value.replace("~","")}" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProd.realSaleAmt3"/>" binding="realSaleAmt3T${timeSlotCol.value.replace("~","")}" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProd.rate1"/>" binding="rate1T${timeSlotCol.value.replace("~","")}" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProd.rate2"/>" binding="rate2T${timeSlotCol.value.replace("~","")}" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProd.rate3"/>" binding="rate3T${timeSlotCol.value.replace("~","")}" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+                </c:forEach>
             </wj-flex-grid>
         </div>
     </div>
@@ -459,9 +544,22 @@
   var momsCommercialComboList = ${momsCommercialComboList};
   var momsShopTypeComboList = ${momsShopTypeComboList};
   var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
+
+  // 시간대분류
+  var timeSlotColList = [];
+  <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
+  <c:forEach var="timeSlotCol" items="${timeSlotColList}">
+  var timeSlotParam   = {};
+  timeSlotParam.name  = "${timeSlotCol.name}";
+  timeSlotParam.value = "${timeSlotCol.value}";
+  timeSlotColList.push(timeSlotParam);
+  </c:forEach>
+
+  var timeSlotCol    = '${timeSlotCol}';
+  var arrTimeSlotCol = timeSlotCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/time/timeProd/timeProd.js?ver=20221221.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/time/timeProd/timeProd.js?ver=20230120.01" charset="utf-8"></script>
 
 <%-- 20221117 상품분류 팝업 주석처리함 -> 상품 멀티 팝업에 상품분류가 들어감으로 오류 --%>
 <%-- 상품분류 팝업 --%>
