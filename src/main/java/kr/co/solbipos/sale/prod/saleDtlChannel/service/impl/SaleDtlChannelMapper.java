@@ -30,5 +30,18 @@ public interface SaleDtlChannelMapper {
     List<DefaultMap<String>> getSaleDtlChannelList(SaleDtlChannelVO saleDtlChannelVO);
 
     /** 매출상세현황(채널별) 조회(엑셀용) */
-    List<DefaultMap<String>> getSaleDtlChannelExcelList(SaleDtlChannelVO saleDtlChannelVO);
+//    List<DefaultMap<String>> getSaleDtlChannelExcelList(SaleDtlChannelVO saleDtlChannelVO);
+
+    /** 매출상세현황(채널별) 매출 다운로드 탭 - 조회 */
+    List<DefaultMap<Object>> getSaleDtlChannelExcelList(SaleDtlChannelVO saleDtlChannelVO);
+
+    /** 매출상세현황(채널별) 매출 다운로드 탭 - 자료생성 저장 insert */
+    int getSaleDtlChannelSaveInsert(SaleDtlChannelVO saleDtlChannelVO);
+
+    /** 매출상세현황(채널별) 매출 다운로드 탭 - 삭제 */
+    int getSaleDtlChannelDel(SaleDtlChannelVO saleDtlChannelVO);
+
+    /** 매출상세현황(채널별) 매출 다운로드 탭 - 자료생성 요청건 존재여부 확인 */
+    DefaultMap<String> getSaleDtlChannelChk(SaleDtlChannelVO saleDtlChannelVO);
+
 }

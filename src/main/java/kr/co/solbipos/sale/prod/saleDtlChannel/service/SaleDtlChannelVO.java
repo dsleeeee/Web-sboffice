@@ -104,6 +104,32 @@ public class SaleDtlChannelVO extends PageVO {
     /** 주문채널 구분자 array */
     private String arrDlvrInFgCol[];
 
+    /** 조회월 */
+    private String startMonth;
+
+    /** 조회월 */
+    private String endMonth;
+
+    /** 엑셀파일명 */
+    private String fileName;
+
+    /** 요청일자 */
+    private String reqDate;
+
+    /** 요청시간 */
+    private String reqTime;
+
+    /** 자료생성 월 */
+    private String dataCreateMonth;
+
+    /** 자료생성 월의 마지막날 */
+    private String dataCreateMonthLastDate;
+
+    /** 영업시작일 */
+    private String fromSaleDate;
+
+    /** 영업최종일 */
+    private String toSaleDate;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -319,5 +345,77 @@ public class SaleDtlChannelVO extends PageVO {
 
     public void setArrDlvrInFgCol(String[] arrDlvrInFgCol) {
         this.arrDlvrInFgCol = arrDlvrInFgCol;
+    }
+
+    public String getStartMonth() {
+        return startMonth;
+    }
+
+    public void setStartMonth(String startMonth) {
+        this.startMonth = startMonth;
+    }
+
+    public String getEndMonth() {
+        return endMonth;
+    }
+
+    public void setEndMonth(String endMonth) {
+        this.endMonth = endMonth;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getReqDate() {
+        return reqDate;
+    }
+
+    public void setReqDate(String reqDate) {
+        this.reqDate = reqDate;
+    }
+
+    public String getReqTime() {
+        return reqTime;
+    }
+
+    public void setReqTime(String reqTime) {
+        this.reqTime = reqTime;
+    }
+
+    public String getDataCreateMonth() {
+        return dataCreateMonth;
+    }
+
+    public void setDataCreateMonth(String dataCreateMonth) {
+        this.dataCreateMonth = dataCreateMonth;
+    }
+
+    public String getDataCreateMonthLastDate() {
+        return dataCreateMonthLastDate;
+    }
+
+    public void setDataCreateMonthLastDate(String dataCreateMonthLastDate) {
+        this.dataCreateMonthLastDate = dataCreateMonthLastDate;
+    }
+
+    public String getFromSaleDate() {
+        return fromSaleDate;
+    }
+
+    public void setFromSaleDate(String fromSaleDate) {
+        this.fromSaleDate = fromSaleDate;
+    }
+
+    public String getToSaleDate() {
+        return toSaleDate;
+    }
+
+    public void setToSaleDate(String toSaleDate) {
+        this.toSaleDate = toSaleDate;
     }
 }
