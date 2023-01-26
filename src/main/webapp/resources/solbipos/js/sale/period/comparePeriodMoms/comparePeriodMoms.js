@@ -236,10 +236,10 @@ app.controller('comparePeriodMomsCtrl', ['$scope', '$http', '$timeout', function
        params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
        params.compStartDate = wijmo.Globalize.format($scope.compStartDate.value, 'yyyyMMdd');
        params.compEndDate = wijmo.Globalize.format($scope.compEndDate.value, 'yyyyMMdd');
+       params.storeCds = $("#comparePeriodMomsStoreCd").val();
 
        if(orgnFg === "HQ") {
            params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
-           params.storeCds = $("#comparePeriodMomsStoreCd").val();
            params.momsTeam = $scope.srchMomsTeamCombo.selectedValue;
            params.momsAcShop = $scope.srchMomsAcShopCombo.selectedValue;
            params.momsAreaFg = $scope.srchMomsAreaFgCombo.selectedValue;

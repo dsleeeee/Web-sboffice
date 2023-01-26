@@ -407,4 +407,4 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/saleProdRankMoms/saleProdRankMoms.js?ver=20221216.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/saleProdRankMoms/saleProdRankMoms.js?ver=20230125.01" charset="utf-8"></script>

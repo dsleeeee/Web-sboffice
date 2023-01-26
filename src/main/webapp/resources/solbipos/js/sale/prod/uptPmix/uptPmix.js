@@ -164,12 +164,12 @@ app.controller('uptPmixCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         params.prodOption = $scope.prodOption;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
+        params.storeCds = $("#uptPmixStoreCd").val();
         params.prodCds = $("#uptPmixSelectCd").val();
         params.listScale = 500;
 
         if(orgnFg === "HQ"){
             params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
-            params.storeCds = $("#uptPmixStoreCd").val();
             params.prodHqBrandCd = $scope.srchProdHqBrandCombo.selectedValue;
             params.momsTeam = $scope.srchMomsTeamCombo.selectedValue;
             params.momsAcShop = $scope.srchMomsAcShopCombo.selectedValue;
@@ -324,12 +324,11 @@ app.controller('uptPmixCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         params.prodOption = $scope.prodOption;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
+        params.storeCds = $("#uptPmixStoreCd").val();
         params.prodCds = $("#uptPmixSelectCd").val();
-        params.listScale = 500;
 
         if(orgnFg === "HQ"){
             params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
-            params.storeCds = $("#uptPmixStoreCd").val();
             params.prodHqBrandCd = $scope.srchProdHqBrandCombo.selectedValue;
             params.momsTeam = $scope.srchMomsTeamCombo.selectedValue;
             params.momsAcShop = $scope.srchMomsAcShopCombo.selectedValue;

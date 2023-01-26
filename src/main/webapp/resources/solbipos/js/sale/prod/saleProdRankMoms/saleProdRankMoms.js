@@ -170,12 +170,12 @@ app.controller('saleProdRankMomsCtrl', ['$scope', '$http', '$timeout', function 
        params.prodOption = $scope.srchProdOptionCombo.selectedValue;
        params.prodCd = $("#srchProdCd").val();
        params.prodNm = $("#srchProdNm").val();
+       params.storeCds = $("#saleProdRankMomsStoreCd").val();
        params.prodCds = $("#saleProdRankMomsSelectCd").val();
        params.listScale=500;
 
        if(orgnFg === "HQ"){
            params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
-           params.storeCds = $("#saleProdRankMomsStoreCd").val();
            params.prodHqBrandCd = $scope.srchProdHqBrandCombo.selectedValue;
            params.momsTeam = $scope.srchMomsTeamCombo.selectedValue;
            params.momsAcShop = $scope.srchMomsAcShopCombo.selectedValue;
@@ -272,11 +272,11 @@ app.controller('saleProdRankMomsCtrl', ['$scope', '$http', '$timeout', function 
         params.prodOption = $scope.srchProdOptionCombo.selectedValue;
         params.prodCd = $("#srchProdCd").val();
         params.prodNm = $("#srchProdNm").val();
+        params.storeCds = $("#saleProdRankMomsStoreCd").val();
         params.prodCds = $("#saleProdRankMomsSelectCd").val();
 
         if(orgnFg === "HQ"){
            params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
-           params.storeCds = $("#saleProdRankMomsStoreCd").val();
            params.prodHqBrandCd = $scope.srchProdHqBrandCombo.selectedValue;
            params.momsTeam = $scope.srchMomsTeamCombo.selectedValue;
            params.momsAcShop = $scope.srchMomsAcShopCombo.selectedValue;

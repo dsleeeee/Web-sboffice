@@ -44,6 +44,10 @@ public class UptPmixServiceImpl implements UptPmixService {
             uptPmixVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
 
+        // 매장 array 값 세팅
+        String[] storeCds = uptPmixVO.getStoreCds().split(",");
+        uptPmixVO.setStoreCdList(storeCds);
+
         // 상품 array 값 세팅
         if (uptPmixVO.getProdCds() != null && !"".equals(uptPmixVO.getProdCds())) {
             String[] prodCdList = uptPmixVO.getProdCds().split(",");
@@ -51,13 +55,6 @@ public class UptPmixServiceImpl implements UptPmixService {
         }
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-
-            // 매장 array 값 세팅
-            if(uptPmixVO.getStoreCds() != null && !"".equals(uptPmixVO.getStoreCds())){
-                String[] storeCds = uptPmixVO.getStoreCds().split(",");
-                uptPmixVO.setStoreCdList(storeCds);
-            }
-
             // 매장브랜드, 상품브랜드가 '전체' 일때
             if (uptPmixVO.getStoreHqBrandCd() == "" || uptPmixVO.getStoreHqBrandCd() == null || uptPmixVO.getProdHqBrandCd() == "" || uptPmixVO.getProdHqBrandCd() == null) {
                 // 사용자별 브랜드 array 값 세팅
@@ -87,6 +84,10 @@ public class UptPmixServiceImpl implements UptPmixService {
             uptPmixVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
 
+        // 매장 array 값 세팅
+        String[] storeCds = uptPmixVO.getStoreCds().split(",");
+        uptPmixVO.setStoreCdList(storeCds);
+
         // 상품 array 값 세팅
         if (uptPmixVO.getProdCds() != null && !"".equals(uptPmixVO.getProdCds())) {
             String[] prodCdList = uptPmixVO.getProdCds().split(",");
@@ -94,13 +95,6 @@ public class UptPmixServiceImpl implements UptPmixService {
         }
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-
-            // 매장 array 값 세팅
-            if(uptPmixVO.getStoreCds() != null && !"".equals(uptPmixVO.getStoreCds())){
-                String[] storeCds = uptPmixVO.getStoreCds().split(",");
-                uptPmixVO.setStoreCdList(storeCds);
-            }
-
             // 매장브랜드, 상품브랜드가 '전체' 일때
             if (uptPmixVO.getStoreHqBrandCd() == "" || uptPmixVO.getStoreHqBrandCd() == null || uptPmixVO.getProdHqBrandCd() == "" || uptPmixVO.getProdHqBrandCd() == null) {
                 // 사용자별 브랜드 array 값 세팅
