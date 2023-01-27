@@ -79,13 +79,26 @@ public class StoreBatchChangeServiceImpl implements StoreBatchChangeService {
 
             storeBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
+            storeBatchChangeVO.setRegDt(currentDt);
+            storeBatchChangeVO.setRegId(sessionInfoVO.getUserId());
             storeBatchChangeVO.setModDt(currentDt);
             storeBatchChangeVO.setModId(sessionInfoVO.getUserId());
 
 
             if(storeBatchChangeVO.getStatus() == GridDataFg.UPDATE) {
-                storeCnt += storeBatchChangeMapper.getStoreBatchChangeSave(storeBatchChangeVO);
-                storeCnt += storeBatchChangeMapper.getStoreInfoBatchChangeSave(storeBatchChangeVO);
+                // TB_MS_STORE 저장
+                if(storeBatchChangeVO.getBranchCd() != null && !storeBatchChangeVO.getBranchCd().equals("")) {
+                    storeCnt += storeBatchChangeMapper.getStoreBatchChangeSave(storeBatchChangeVO);
+                }
+                // TB_MS_STORE_INFO 저장
+                if((storeBatchChangeVO.getMomsTeam() != null && !storeBatchChangeVO.getMomsTeam().equals(""))
+                        || (storeBatchChangeVO.getMomsAcShop() != null && !storeBatchChangeVO.getMomsAcShop().equals(""))
+                        || (storeBatchChangeVO.getMomsAreaFg() != null && !storeBatchChangeVO.getMomsAreaFg().equals(""))
+                        || (storeBatchChangeVO.getMomsCommercial() != null && !storeBatchChangeVO.getMomsCommercial().equals(""))
+                        || (storeBatchChangeVO.getMomsShopType() != null && !storeBatchChangeVO.getMomsShopType().equals(""))
+                        || (storeBatchChangeVO.getMomsStoreManageType() != null && !storeBatchChangeVO.getMomsStoreManageType().equals(""))) {
+                    storeCnt += storeBatchChangeMapper.getStoreInfoBatchChangeSave(storeBatchChangeVO);
+                }
             }
         }
 
@@ -227,6 +240,8 @@ public class StoreBatchChangeServiceImpl implements StoreBatchChangeService {
         for(StoreBatchChangeVO storeBatchChangeVO : storeBatchChangeVOs) {
 
             storeBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            storeBatchChangeVO.setRegDt(currentDt);
+            storeBatchChangeVO.setRegId(sessionInfoVO.getUserId());
             storeBatchChangeVO.setModDt(currentDt);
             storeBatchChangeVO.setModId(sessionInfoVO.getUserId());
 
