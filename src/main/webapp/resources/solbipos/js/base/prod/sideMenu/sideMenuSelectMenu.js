@@ -15,6 +15,12 @@ var fixProdFgDataMap = new wijmo.grid.DataMap([
   {id: "1", name: "고정"}
 ], 'id', 'name');
 
+// 필수선택여부
+var requireYnDataMap = new wijmo.grid.DataMap([
+    {id: "N", name: "선택안함"},
+    {id: "Y", name: "필수선택"}
+], 'id', 'name');
+
 /**
  * 사이드메뉴 선택그룹 그리드 생성
  */
@@ -40,16 +46,20 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
     $scope.flex.refresh();
   });
 
-  $scope.selectedSdselGrpCd;
-  $scope.setSelectedSdselGrpCd = function(sdselGrpCd) {
-    $scope.selectedSdselGrpCd = sdselGrpCd;
+  // 선택
+  $scope.selectedSelGroup;
+  $scope.setSelectedSelGroup = function(data) {
+    $scope.selectedSelGroup = data;
   };
-  $scope.getSelectedSdselGrpCd = function() {
-    return $scope.selectedSdselGrpCd;
+  $scope.getSelectedSelGroup = function(){
+    return $scope.selectedSelGroup;
   };
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+    // 그리드 내 콤보박스 설정
+    $scope.fixProdFgDataMap = fixProdFgDataMap;
+
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
@@ -107,8 +117,9 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
               $("#btnDelSelProd").hide();
               $("#btnSaveSelProd").hide();
             }
-            $scope.setSelectedSdselGrpCd(selectedRow.sdselGrpCd);
-            $scope._broadcast('sideMenuSelectClassCtrl', selectedRow.sdselGrpCd);
+
+            $scope.setSelectedSelGroup(selectedRow);
+            $scope._broadcast('sideMenuSelectClassCtrl', selectedRow);
             var prodGrid = agrid.getScope('sideMenuSelectProdCtrl');
             prodGrid._gridDataInit();
           }
@@ -118,11 +129,6 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
   };
   // 선택그룹 그리드 조회
   $scope.$on('sideMenuSelectGroupCtrl', function(event, data) {
-    // 파라미터
-    var params = {};
-    // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-    $scope._inquiryMain('/base/prod/sideMenu/menuGrp/list.sb', params);
-
     // 초기 버튼 셋팅
     // 선택분류 버튼
     $("#btnUpSelClass").hide();
@@ -137,7 +143,39 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
     $("#btnAddSelProd").hide();
     $("#btnDelSelProd").hide();
     $("#btnSaveSelProd").hide();
-    
+
+    // 파라미터
+    var params = {};
+    // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
+    $scope._inquiryMain('/base/prod/sideMenu/menuGrp/list.sb', params,function() {
+      // <-- 그리드 visible -->
+      // 선택한 테이블에 따른 리스트 항목 visible
+      var grid = wijmo.Control.getControl("#wjGridSelGroupList");
+      var columns = grid.columns;
+
+      // 컬럼 총갯수
+      var columnsCnt = 5;
+      if(hqOfficeCd == 'A0001' && orgnFg == 'HQ') {
+        // 컬럼 총갯수
+        columnsCnt = 6;
+      }
+
+      // 합계가 0이면 해당 컬럼 숨기기
+      for (var j = 0; j < columnsCnt; j++) {
+        // [1014 포스프로그램구분]
+        if(posVerEnvstVal === "1") {
+          if(columns[j].binding == "fixProdFg") {
+            columns[j].visible = false;
+          }
+        } else if(posVerEnvstVal === "2") {
+          if(columns[j].binding == "fixProdFg") {
+            columns[j].visible = true;
+          }
+        }
+      }
+      // <-- //그리드 visible -->
+    }, false);
+
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
@@ -149,6 +187,8 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
     params.status = 'I';
     params.gChk = true;
     params.sdselGrpCd = '자동채번';
+    params.fixProdFg = 0;
+    
     // 추가기능 수행 : 파라미터
     $scope._addRow(params, 2);
   };
@@ -329,6 +369,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
   $scope.$on('selectMenuRefresh', function (event, data) {
     $scope.flex.refresh();
   });
+
   // sdselGrpCd Data Setter
   $scope.setSdselGrpCd = function (value) {
     sdselGrpCd.set(value);
@@ -337,8 +378,21 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
   $scope.getSdselGrpCd = function () {
     return sdselGrpCd.get();
   };
+
+  // 선택
+  $scope.selectedSelClassFixProdFg;
+  $scope.setSelectedSelClassFixProdFg = function(fixProdFg) {
+    $scope.selectedSelClassFixProdFg = fixProdFg;
+  };
+  $scope.getSelectedSelClassFixProdFg = function(){
+    return $scope.selectedSelClassFixProdFg;
+  };
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+    // 그리드 내 콤보박스 설정
+    $scope.requireYnDataMap = requireYnDataMap;
+
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
@@ -388,25 +442,69 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
             var params = {};
             params.sdselClassCd = selectedRow.sdselClassCd;
             params.sdselQty = selectedRow.sdselQty;
+            params.selGroupFixProdFg = $scope.getSelectedSelClassFixProdFg();
             $scope._broadcast('sideMenuSelectProdCtrl', params);
           }
         }
       }
     });
   };
+
   // 선택분류 그리드 조회
   $scope.$on('sideMenuSelectClassCtrl', function(event, data) {
     // scope 영역에 변수 Set
-    $scope.setSdselGrpCd(data);
+    $scope.setSdselGrpCd(data.sdselGrpCd);
+
+    // 변수 set - 고정여부
+    $scope.setSelectedSelClassFixProdFg(data.fixProdFg);
 
     // 파라미터
     var params = {};
-    params.sdselGrpCd = data;
+    params.sdselGrpCd = data.sdselGrpCd;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-    $scope._inquiryMain('/base/prod/sideMenu/menuClass/list.sb', params);
+    $scope._inquiryMain('/base/prod/sideMenu/menuClass/list.sb', params,function() {
+        // <-- 그리드 visible -->
+        // 선택한 테이블에 따른 리스트 항목 visible
+        var grid = wijmo.Control.getControl("#wjGridSelClassList");
+        var columns = grid.columns;
+
+        // 컬럼 총갯수
+        var columnsCnt = 7;
+
+        // 합계가 0이면 해당 컬럼 숨기기
+        for (var j = 0; j < columnsCnt; j++) {
+          // [1014 포스프로그램구분]
+          if(posVerEnvstVal === "1") {
+            if(columns[j].binding == "requireYn") {
+              columns[j].visible = false;
+            }
+          } else if(posVerEnvstVal === "2") {
+            // [1261 필수선택사용여부]
+            if(requireYnEnvstVal === "1") {
+              // 선택그룹 그리드에 고정여부
+              if($scope.getSelectedSelClassFixProdFg() === "1") {
+                if(columns[j].binding == "requireYn" || columns[j].binding == "sdselQty") {
+                  columns[j].visible = false;
+                }
+              } else {
+                if(columns[j].binding == "requireYn" || columns[j].binding == "sdselQty") {
+                  columns[j].visible = true;
+                }
+              }
+            } else if(requireYnEnvstVal === "0") {
+              if(columns[j].binding == "requireYn") {
+                columns[j].visible = false;
+              }
+            }
+          }
+        }
+        // <-- //그리드 visible -->
+    }, false);
+
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
+
   // 선택분류 그리드 행 추가
   $scope.addRow = function() {
     if($("#sideSelectGroupTitle").html() == ""){
@@ -420,6 +518,8 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     params.status = 'I';
     params.gChk = true;
     params.sdselClassCd = '자동채번';
+    params.requireYn = "N";
+
     // 추가기능 수행 : 파라미터
     $scope._addRow(params, 2);
   };
@@ -450,7 +550,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
       }
       $scope._save('/base/prod/sideMenu/menuClass/save.sb', params, function() {
         $scope._broadcast("sideMenuSelectGroupCtrl");
-        $scope._broadcast('sideMenuSelectClassCtrl', $scope.getSdselGrpCd());
+        $scope._broadcast('sideMenuSelectClassCtrl', $scope.getSelectedSelGroup());
         $("#sideClassTitle").html("");
         var prodScope = agrid.getScope('sideMenuSelectProdCtrl');
         prodScope._gridDataInit();   // 그리드 초기화
@@ -494,6 +594,15 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
           return false;
         }
 
+        // 필수선택여부가 'Y'이면 수량은 1 이상
+        if($scope.flex.collectionView.itemsEdited[u].requireYn === "Y") {
+          if(parseInt(nvl($scope.flex.collectionView.itemsEdited[u].sdselQty, 0)) > 1) {
+          } else {
+            $scope._popMsg(messages["sideMenu.selectMenu.requireYnQtyChk.msg"]); // 필수선택시 수량은 1 이상 입력해주세요.
+            return false;
+          }
+        }
+
         if($scope.maxChk($scope.flex.collectionView.itemsEdited[u].sdselClassNm)){
           $scope.flex.collectionView.itemsEdited[u].status = 'U';
           params.push($scope.flex.collectionView.itemsEdited[u]);
@@ -502,6 +611,8 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
           return false;
         }
       }
+
+
       for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
         if($scope.flex.collectionView.itemsAdded[i].sdselClassNm == ""){
           $scope._popMsg(messages["sideMenu.selectMenu.sdselClassNm"] + messages["sideMenu.selectMenu.inputEnv"]);
@@ -537,7 +648,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
         // // 선택분류가 없을 경우 선택그룹까지 재조회 해야한다.
         // if($scope.flex.collectionView.itemCount > 0){
         //   // 그리드 저장 후 재조회
-        $scope._broadcast('sideMenuSelectClassCtrl', $scope.getSdselGrpCd());
+        $scope._broadcast('sideMenuSelectClassCtrl', $scope.getSelectedSelGroup());
         // $scope._broadcast("sideMenuSelectGroupCtrl");
         $("#sideClassTitle").html("");
         var prodScope = agrid.getScope('sideMenuSelectProdCtrl');
@@ -705,11 +816,37 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
     // scope 영역에 변수 Set
     $scope.setSdselClassCd(data.sdselClassCd); // 선택분류코드
     $scope.sdselQty = parseInt(data.sdselQty); // 선택분류의 수량
+    var selGroupFixProdFg = data.selGroupFixProdFg; // 선택그룹의 고정여부
+
     // 파라미터
     var params = {};
     params.sdselClassCd = data.sdselClassCd;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-    $scope._inquiryMain('/base/prod/sideMenu/menuProd/list.sb', params);
+    $scope._inquiryMain('/base/prod/sideMenu/menuProd/list.sb', params,function() {
+      // <-- 그리드 visible -->
+      // 선택한 테이블에 따른 리스트 항목 visible
+      var grid = wijmo.Control.getControl("#wjGridSelProdList");
+      var columns = grid.columns;
+
+      // 컬럼 총갯수
+      var columnsCnt = 6;
+
+      // 합계가 0이면 해당 컬럼 숨기기
+      for (var j = 0; j < columnsCnt; j++) {
+          // 선택그룹 그리드에 고정여부
+          if(selGroupFixProdFg === "1") {
+            if(columns[j].binding == "fixProdFg") {
+              columns[j].visible = false;
+            }
+          } else {
+            if(columns[j].binding == "fixProdFg") {
+              columns[j].visible = true;
+            }
+          }
+      }
+      // <-- //그리드 visible -->
+    }, false);
+
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
@@ -749,8 +886,8 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
         
         // 선택분류 리스트 재조회
         var grpGrid = agrid.getScope('sideMenuSelectGroupCtrl');
-        var sdselGrpCd = grpGrid.getSelectedSdselGrpCd();
-        $scope._broadcast('sideMenuSelectClassCtrl', sdselGrpCd);
+        var selectedSelGroup = grpGrid.getSelectedSelGroup();
+        $scope._broadcast('sideMenuSelectClassCtrl', selectedSelGroup);
         // $scope._broadcast("sideMenuSelectGroupCtrl");
       });
     });
@@ -824,8 +961,8 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
           params.sdselQty = $scope.sdselQty;
           $scope._broadcast('sideMenuSelectProdCtrl', params);
           var grpGrid = agrid.getScope('sideMenuSelectGroupCtrl');
-          var sdselGrpCd = grpGrid.getSelectedSdselGrpCd();
-          $scope._broadcast('sideMenuSelectClassCtrl', sdselGrpCd);
+          var selectedSelGroup = grpGrid.getSelectedSelGroup();
+          $scope._broadcast('sideMenuSelectClassCtrl', selectedSelGroup);
           // $scope._broadcast("sideMenuSelectGroupCtrl");
         // } else {
         //   var grpGrid = agrid.getScope('sideMenuSelectGroupCtrl');
