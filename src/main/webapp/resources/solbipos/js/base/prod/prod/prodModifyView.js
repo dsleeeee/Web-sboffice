@@ -204,6 +204,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             // 단품/세트선택설정
             params.groupProdNm = "";
             params.groupProdCd = "";
+            // 보증금상품코드
+            params.depositProdNm = "";
+            params.depositProdCd = "";
             // 판매방식
             params.saleTypeYnSin = false;
             params.saleTypeYnDlv = false;
@@ -433,6 +436,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             // 단품/세트선택설정
             params.groupProdCd = $("#_groupProdCd").val();
 
+            // 보증금상품코드
+            params.depositProdCd = $("#_depositProdCd").val();
+
             // 출시일
             params.releaseDate = wijmo.Globalize.format(releaseDate.value, 'yyyyMMdd');
 
@@ -470,6 +476,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
 
             // 단품/세트선택설정
             params.groupProdCd = "";
+
+            // 보증금상품코드
+            params.depositProdCd = "";
 
             // 출시일
             params.releaseDate = "";
@@ -1010,6 +1019,11 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                 $scope._popMsg(messages["prod.depositCupFgChk.none"]);
                 return false;
             }
+
+            if(!isNull(vParams.depositProdCd)){
+                $scope._popMsg(messages["prod.depositCupFgChk.msg2"]);
+                return false;
+            }
         } else if(vParams.prodTypeFg !== "4") {
             if(vParams.depositCupFg !== "") {
                 $scope._popMsg(messages["prod.depositCupFgChk.msg"]);
@@ -1029,7 +1043,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         // 상품명 길이 체크
         if(nvl(vParams.prodNm, '').getByteLengthForOracle() > 100){
             $scope._popMsg(messages['prod.prodNm'] + "은 " + messages["cmm.max100Chk"]);
-            return; false;
+            return; false;``
         }
         // 상품명 큰따옴표(") 입력 불가
         if(nvl(vParams.prodNm, '').indexOf("\"") >= 0){
@@ -1320,6 +1334,10 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             // 단품/세트선택설정
             $("#_groupProdCd").val("");
             $("#_groupProdNm").val("");
+
+            // 보증금상품코드
+            $("#_depositProdCd").val("");
+            $("#_depositProdNm").val("");
             
             // 단종여부 체크박스
             $scope.isCheckedDisconYn = false;
@@ -1452,6 +1470,12 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                     if ($scope.prodModifyInfo.groupProdCd !== null && $scope.prodModifyInfo.groupProdCd !== undefined && $scope.prodModifyInfo.groupProdCd !== "") {
                         $("#_groupProdNm").val($scope.prodModifyInfo.groupProdNm);
                         $("#_groupProdCd").val($scope.prodModifyInfo.groupProdCd);
+                    }
+
+                    // 보증금상품코드
+                    if ($scope.prodModifyInfo.depositProdCd !== null && $scope.prodModifyInfo.depositProdCd !== undefined && $scope.prodModifyInfo.depositProdCd !== "") {
+                        $("#_depositProdNm").val($scope.prodModifyInfo.depositProdNm);
+                        $("#_depositProdCd").val($scope.prodModifyInfo.depositProdCd);
                     }
 
                     // 출시일
@@ -1781,5 +1805,22 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         $("#_groupProdCd").val("");
         $scope.prodModifyInfo.groupProdCd = "";
         $scope.prodModifyInfo.groupProdNm = "";
+    };
+    // 보증금상품코드 선택 팝업
+    $scope.popUpDepositProdCd = function () {
+        if($scope.prodModifyInfo.prodTypeFg === "4"){
+            $scope._popMsg(messages["prod.depositProdCd.msg"]);
+        } else {
+            $scope.wjSearchDepositProdLayer.show(true);
+            $scope._broadcast('searchDepositProdCtrl');
+        }
+    };
+
+    // 보증금상품코드 선택 취소 버튼
+    $scope.delDepositProdCd = function () {
+        $("#_depositProdNm").val("");
+        $("#_depositProdCd").val("");
+        $scope.prodModifyInfo.depositProdCd = "";
+        $scope.prodModifyInfo.depositProdNm = "";
     };
 }]);

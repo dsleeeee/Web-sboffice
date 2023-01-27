@@ -375,6 +375,12 @@
                         </tr>
                     </c:if>
                     <tr>
+                        <th><s:message code="prod.depositProdCd"/></th>
+                        <td>
+                            {{prodDetail.depositProdNm}}
+                        </td>
+                    </tr>
+                    <tr>
                         <!-- 보증컵유형 -->
                         <th><s:message code="prod.depositCupFg"/></th>
                         <td>

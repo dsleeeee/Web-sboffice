@@ -794,6 +794,28 @@ public class ProdController {
     }
 
     /**
+     * 보증금상품코드 조회 팝업
+     * @param prodVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  권지현
+     * @since   2023.01.26
+     */
+    @RequestMapping(value = "/getSearchDepositProdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSearchDepositProdList(ProdVO prodVO, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = prodService.getSearchDepositProdList(prodVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodVO);
+    }
+
+    /**
      * 매장상품일괄등록 - 매장목록 조회
      * @param prodVO
      * @param request
