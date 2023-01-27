@@ -503,7 +503,7 @@
         SELECT  FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
                 tssd.PROD_CD,
                 tmp.PROD_NM,
-                AVG(tssd.SALE_UPRC) AS SALE_UPRC,
+                DECODE(SUM(tssd.SALE_QTY), 0, 0, SUM(tssd.SALE_AMT)/SUM(tssd.SALE_QTY)) AS SALE_UPRC,
                 SUM(tssd.SALE_QTY) AS SALE_QTY,
                 SUM(tssd.SALE_AMT) AS TOT_SALE_AMT,
                 SUM(tssd.DC_AMT) AS TOT_DC_AMT,
