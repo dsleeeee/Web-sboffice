@@ -34,7 +34,8 @@
             selection-mode="Row"
             items-source="data"
             item-formatter="_itemFormatter"
-            ime-enabled="true">
+            ime-enabled="true"
+            id="wjGridSelGroupList">
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
@@ -43,6 +44,7 @@
             <c:if test="${hqOfficeCd == 'A0001' and orgnFg == 'HQ'}">
                 <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.prodCd"/>" binding="prodCd" width="100"></wj-flex-grid-column>
             </c:if>
+            <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.fixProdFg"/>" binding="fixProdFg" data-map="fixProdFgDataMap" width="50"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselQty"/>" binding="cnt" width="*" visible="false"></wj-flex-grid-column>
           </wj-flex-grid>
         </div>
@@ -84,12 +86,14 @@
             selection-mode="Row"
             items-source="data"
             item-formatter="_itemFormatter"
-            ime-enabled="true">
+            ime-enabled="true"
+            id="wjGridSelClassList">
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselClassCd"/>" binding="sdselClassCd" width="70" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselClassNm"/>" binding="sdselClassNm" width="*"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.requireYn"/>" binding="requireYn" data-map="requireYnDataMap" width="85" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselQty"/>" binding="sdselQty" width="50" max-length="3"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselQty"/>" binding="cnt" width="*" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselQty"/>" binding="fixProdCnt" width="*" visible="false"></wj-flex-grid-column>
@@ -135,7 +139,8 @@
             selection-mode="Row"
             items-source="data"
             item-formatter="_itemFormatter"
-            ime-enabled="true">
+            ime-enabled="true"
+            id="wjGridSelProdList">
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="30"></wj-flex-grid-column>
@@ -154,14 +159,16 @@
     </div>
     </div>
   </div>
+
 <script>
     var orgnFg = "${orgnFg}";
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
-  <script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenu.js?ver=20210820.04" charset="utf-8"></script>
 
-  <%-- 레이어 팝업 : 상품선택 --%>
-  <c:import url="/WEB-INF/view/base/prod/sideMenu/sideMenuProdView.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-  </c:import>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenu.js?ver=20230127.01" charset="utf-8"></script>
+
+<%-- 레이어 팝업 : 상품선택 --%>
+<c:import url="/WEB-INF/view/base/prod/sideMenu/sideMenuProdView.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

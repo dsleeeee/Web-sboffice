@@ -49,6 +49,9 @@ public class SideMenuSelGroupVO extends CmmVO {
     /** 프로시져 결과 */
     private String result;
 
+    /** 고정여부 */
+    private String fixProdFg;
+
     /**
      * @return the hqOfficeCd
      */
@@ -175,4 +178,8 @@ public class SideMenuSelGroupVO extends CmmVO {
     public void setResult(String result) {
         this.result = result;
     }
+
+    public String getFixProdFg() { return fixProdFg; }
+
+    public void setFixProdFg(String fixProdFg) { this.fixProdFg = fixProdFg; }
 }

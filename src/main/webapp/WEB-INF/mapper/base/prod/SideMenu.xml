@@ -543,7 +543,8 @@
                     thpsg.SDSEL_GRP_CD,
                     thpsg.SDSEL_GRP_NM,
                     thpsg.PROD_CD,
-                    (SELECT COUNT(*) FROM TB_HQ_PRODUCT_SDSEL_CLASS WHERE HQ_OFFICE_CD = thpsg.HQ_OFFICE_CD  AND SDSEL_GRP_CD = thpsg.SDSEL_GRP_CD AND USE_YN  = 'Y') AS CNT
+                    (SELECT COUNT(*) FROM TB_HQ_PRODUCT_SDSEL_CLASS WHERE HQ_OFFICE_CD = thpsg.HQ_OFFICE_CD  AND SDSEL_GRP_CD = thpsg.SDSEL_GRP_CD AND USE_YN  = 'Y') AS CNT,
+                    NVL(thpsg.FIX_PROD_FG, '0') AS FIX_PROD_FG
                 FROM
                     TB_HQ_PRODUCT_SDSEL_GROUP thpsg
                 WHERE
@@ -558,7 +559,8 @@
                     tmpsg.MS_BRAND_CD,
                     tmpsg.SDSEL_GRP_CD,
                     tmpsg.SDSEL_GRP_NM,
-                    (SELECT COUNT(*) FROM TB_MS_PRODUCT_SDSEL_CLASS WHERE STORE_CD = tmpsg.STORE_CD  AND SDSEL_GRP_CD = tmpsg.SDSEL_GRP_CD AND USE_YN  = 'Y') AS CNT
+                    (SELECT COUNT(*) FROM TB_MS_PRODUCT_SDSEL_CLASS WHERE STORE_CD = tmpsg.STORE_CD  AND SDSEL_GRP_CD = tmpsg.SDSEL_GRP_CD AND USE_YN  = 'Y') AS CNT,
+                    NVL(tmpsg.FIX_PROD_FG, '0') AS FIX_PROD_FG
                 FROM
                     TB_MS_PRODUCT_SDSEL_GROUP tmpsg
                 WHERE
@@ -613,7 +615,8 @@
                     REG_DT,
                     REG_ID,
                     MOD_DT,
-                    MOD_ID
+                    MOD_ID,
+                    FIX_PROD_FG
                 ) VALUES (
                     #{hqOfficeCd},
                     #{hqBrandCd},
@@ -623,7 +626,8 @@
                     #{regDt},
                     #{regId},
                     #{modDt},
-                    #{modId}
+                    #{modId},
+                    #{fixProdFg}
                 )
             </when>
             <!-- 매장 -->
@@ -638,7 +642,8 @@
                     REG_DT,
                     REG_ID,
                     MOD_DT,
-                    MOD_ID
+                    MOD_ID,
+                    FIX_PROD_FG
                 ) VALUES (
                     #{storeCd},
                     #{msBrandCd},
@@ -648,7 +653,8 @@
                     #{regDt},
                     #{regId},
                     #{modDt},
-                    #{modId}
+                    #{modId},
+                    #{fixProdFg}
                 )
             </when>
         </choose>
@@ -670,7 +676,8 @@
                     SDSEL_GRP_NM = #{sdselGrpNm},
                     HQ_BRAND_CD = #{hqBrandCd},
                     MOD_DT = #{modDt},
-                    MOD_ID = #{modId}
+                    MOD_ID = #{modId},
+                    FIX_PROD_FG = #{fixProdFg}
                 WHERE
                     HQ_OFFICE_CD = #{hqOfficeCd}
                     AND SDSEL_GRP_CD = #{sdselGrpCd}
@@ -682,7 +689,8 @@
                     SDSEL_GRP_NM = #{sdselGrpNm},
                     MS_BRAND_CD = #{msBrandCd},
                     MOD_DT = #{modDt},
-                    MOD_ID = #{modId}
+                    MOD_ID = #{modId},
+                    FIX_PROD_FG = #{fixProdFg}
                 WHERE
                     STORE_CD = #{storeCd}
                     AND SDSEL_GRP_CD = #{sdselGrpCd}
@@ -799,7 +807,8 @@
                     thpsc.DISP_SEQ,
                     thpsc.SDSEL_QTY,
                     (SELECT COUNT(*) FROM TB_HQ_PRODUCT_SDSEL_PROD WHERE HQ_OFFICE_CD = thpsc.HQ_OFFICE_CD AND SDSEL_CLASS_CD = thpsc.SDSEL_CLASS_CD AND USE_YN = 'Y') AS CNT,
-                    (SELECT SUM(ADD_PROD_QTY) FROM TB_HQ_PRODUCT_SDSEL_PROD WHERE HQ_OFFICE_CD = thpsc.HQ_OFFICE_CD AND SDSEL_CLASS_CD = thpsc.SDSEL_CLASS_CD AND USE_YN = 'Y' AND FIX_PROD_FG = '1') AS FIX_PROD_CNT
+                    (SELECT SUM(ADD_PROD_QTY) FROM TB_HQ_PRODUCT_SDSEL_PROD WHERE HQ_OFFICE_CD = thpsc.HQ_OFFICE_CD AND SDSEL_CLASS_CD = thpsc.SDSEL_CLASS_CD AND USE_YN = 'Y' AND FIX_PROD_FG = '1') AS FIX_PROD_CNT,
+                    NVL(thpsc.REQUIRE_YN, 'N') AS REQUIRE_YN
                 FROM
                     TB_HQ_PRODUCT_SDSEL_CLASS thpsc
                 WHERE
@@ -818,7 +827,8 @@
                     tmpsc.DISP_SEQ,
                     tmpsc.SDSEL_QTY,
                     (SELECT COUNT(*) FROM TB_MS_PRODUCT_SDSEL_PROD WHERE STORE_CD = tmpsc.STORE_CD AND SDSEL_CLASS_CD = tmpsc.SDSEL_CLASS_CD AND USE_YN = 'Y') AS CNT,
-                    (SELECT SUM(ADD_PROD_QTY) FROM TB_MS_PRODUCT_SDSEL_PROD WHERE STORE_CD = tmpsc.STORE_CD AND SDSEL_CLASS_CD = tmpsc.SDSEL_CLASS_CD AND USE_YN = 'Y' AND FIX_PROD_FG = '1') AS FIX_PROD_CNT
+                    (SELECT SUM(ADD_PROD_QTY) FROM TB_MS_PRODUCT_SDSEL_PROD WHERE STORE_CD = tmpsc.STORE_CD AND SDSEL_CLASS_CD = tmpsc.SDSEL_CLASS_CD AND USE_YN = 'Y' AND FIX_PROD_FG = '1') AS FIX_PROD_CNT,
+                    NVL(tmpsc.REQUIRE_YN, 'N') AS REQUIRE_YN
                 FROM
                     TB_MS_PRODUCT_SDSEL_CLASS tmpsc
                 WHERE
@@ -876,7 +886,8 @@
                     REG_DT,
                     REG_ID,
                     MOD_DT,
-                    MOD_ID
+                    MOD_ID,
+                    REQUIRE_YN
                 ) VALUES (
                     #{hqOfficeCd},
                     #{sdselClassCd},
@@ -888,7 +899,8 @@
                     #{regDt},
                     #{regId},
                     #{modDt},
-                    #{modId}
+                    #{modId},
+                    #{requireYn}
                 )
             </when>
             <!-- 매장 -->
@@ -905,7 +917,8 @@
                     REG_DT,
                     REG_ID,
                     MOD_DT,
-                    MOD_ID
+                    MOD_ID,
+                    REQUIRE_YN
                 ) VALUES (
                     #{storeCd},
                     #{sdselClassCd},
@@ -917,7 +930,8 @@
                     #{regDt},
                     #{regId},
                     #{modDt},
-                    #{modId}
+                    #{modId},
+                    #{requireYn}
                 )
             </when>
         </choose>
@@ -940,7 +954,8 @@
                     DISP_SEQ = #{dispSeq},
                     SDSEL_QTY = #{sdselQty},
                     MOD_DT = #{modDt},
-                    MOD_ID = #{modId}
+                    MOD_ID = #{modId},
+                    REQUIRE_YN = #{requireYn}
                 WHERE
                     HQ_OFFICE_CD = #{hqOfficeCd}
                     AND SDSEL_CLASS_CD = #{sdselClassCd}
@@ -954,7 +969,8 @@
                     DISP_SEQ = #{dispSeq},
                     SDSEL_QTY = #{sdselQty},
                     MOD_DT = #{modDt},
-                    MOD_ID = #{modId}
+                    MOD_ID = #{modId},
+                    REQUIRE_YN = #{requireYn}
                 WHERE
                     STORE_CD = #{storeCd}
                     AND SDSEL_CLASS_CD = #{sdselClassCd}

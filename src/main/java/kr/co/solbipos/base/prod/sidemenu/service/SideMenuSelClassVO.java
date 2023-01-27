@@ -51,6 +51,9 @@ public class SideMenuSelClassVO extends CmmVO {
     /** 프로시져 결과 */
     private String result;
 
+    /** 필수선택여부 */
+    private String requireYn;
+
     /**
      * @return the hqOfficeCd
      */
@@ -191,4 +194,8 @@ public class SideMenuSelClassVO extends CmmVO {
     public void setResult(String result) {
         this.result = result;
     }
+
+    public String getRequireYn() { return requireYn; }
+
+    public void setRequireYn(String requireYn) { this.requireYn = requireYn; }
 }
