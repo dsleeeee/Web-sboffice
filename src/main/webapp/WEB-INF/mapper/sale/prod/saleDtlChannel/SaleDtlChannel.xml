@@ -549,12 +549,13 @@
       PROC_FG,
       PROC_MSG,
       PROC_DT,
+      EXCEL_TYPE,
       FILE_NAME,
       PROD_CLASS_CD,
       PROD_OPTION,
       PROD_CD,
       PROD_NM,
-      STORE_HQ_BRAND_CD,
+      STORE_HQ_BRAND_CD_LIST,
       STORE_CD_LIST,
       PROD_HQ_BRAND_CD,
       PROD_CD_LIST,
@@ -581,13 +582,20 @@
        '',
        '',
        '',
+       #{prodOption},
        #{prodClassCd},
        #{prodOption},
        #{prodCd},
        #{prodNm},
-       #{storeHqBrandCd},
+      <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+        #{storeHqBrandCd:CLOB}, -- 매장브랜드 선택일때
+      </if>
+      <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+        -- 매장브랜드 전체일때
+        #{userBrands:CLOB},
+      </if>
        #{storeCds:CLOB},
-       #{prodHqBrandCd},
+       #{prodHqBrandCd}, -- 상품브랜드 선택일때
        #{prodCds:CLOB},
        #{momsTeam},
        #{momsAcShop},

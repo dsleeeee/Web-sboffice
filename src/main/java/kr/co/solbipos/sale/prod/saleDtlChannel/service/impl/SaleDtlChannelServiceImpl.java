@@ -260,6 +260,8 @@ public class SaleDtlChannelServiceImpl implements SaleDtlChannelService {
             }
         }
 
+        // 매장브랜드 뒤에 , 제거용
+        saleDtlChannelVO.setUserBrands(saleDtlChannelVO.getUserBrands().substring(0, saleDtlChannelVO.getUserBrands().length()-1));
 
         procCnt = saleDtlChannelMapper.getSaleDtlChannelSaveInsert(saleDtlChannelVO);
 
