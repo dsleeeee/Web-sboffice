@@ -125,17 +125,17 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="store.indexNo"/>" 		binding="indexNo" 		width="65" align="center" is-read-only="true" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="store.storeNm"/>" 		binding="storeNm" 		width="120" align="center" is-read-only="true" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="store.totSaleAmt"/>" 	binding="totSaleAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="store.totDcAmt"/>"		binding="totDcAmt" 		width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="store.realSaleAmt"/>" 	binding="realSaleAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
- 		  <wj-flex-grid-column header="<s:message code="store.openDay"/>" 		binding="saleDateCnt" 		width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-  		  <wj-flex-grid-column header="<s:message code="store.openDayAmt"/>" 	binding="realSaleAmtAvg" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-   		  <wj-flex-grid-column header="<s:message code="store.billCnt"/>" 		binding="billCnt" 		width="70" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-   		  <wj-flex-grid-column header="<s:message code="store.totBillAmt"/>" 	binding="totBillAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-   		  <wj-flex-grid-column header="<s:message code="store.totGuestCnt"/>" 	binding="totGuestCnt" 	width="60" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-   		  <wj-flex-grid-column header="<s:message code="store.storeRat"/>" 		binding="storeRat" 		width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="store.indexNo"/>" 		binding="indexNo" 		  width="65" align="center" is-read-only="true" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="store.storeNm"/>" 		binding="storeNm" 		 width="120" align="center" is-read-only="true" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="store.totSaleAmt"/>" 	binding="totSaleAmt" 	 width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="store.totDcAmt"/>"		binding="totDcAmt" 		 width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="store.realSaleAmt"/>" 	binding="realSaleAmt" 	 width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+ 		  <wj-flex-grid-column header="<s:message code="store.openDay"/>" 		binding="saleDateCnt" 	 width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+  		  <wj-flex-grid-column header="<s:message code="store.openDayAmt"/>" 	binding="realSaleAmtAvg" width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+   		  <wj-flex-grid-column header="<s:message code="store.billCnt"/>" 		binding="billCnt" 		 width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+   		  <wj-flex-grid-column header="<s:message code="store.billUprc"/>" 	binding="billUprc" 	     width="100" align="right"  is-read-only="true"></wj-flex-grid-column>
+   		  <wj-flex-grid-column header="<s:message code="store.totGuestCnt"/>" 	binding="totGuestCnt" 	 width="60" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+   		  <wj-flex-grid-column header="<s:message code="store.storeRat"/>" 	binding="storeRat" 		 width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         </wj-flex-grid>
 
         <%-- ColumnPicker 사용시 include --%>
@@ -197,7 +197,7 @@
     });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/rank/storeRank.js?ver=20190126.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/rank/storeRank.js?ver=20190126.04" charset="utf-8"></script>
 
 <c:import url="/WEB-INF/view/sale/anals/store/rank/storeIndexNo.jsp">
 	<c:param name="menuCd" value="${menuCd}"/>
