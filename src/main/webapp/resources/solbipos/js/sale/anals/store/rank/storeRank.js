@@ -50,7 +50,7 @@ app.controller('storeRankCtrl', ['$scope', '$http', '$timeout', function ($scope
 	    dataItem.saleDateCnt  	= messages["store.openDay"];
 	    dataItem.realSaleAmtAvg = messages["store.openDayAmt"];
 	    dataItem.billCnt 		= messages["store.billCnt"];
-	    dataItem.totBillAmt 	= messages["store.totBillAmt"];
+	    dataItem.billUprc 	= messages["store.billUprc"];
 	    dataItem.totGuestCnt 	= messages["store.totGuestCnt"];
 	    dataItem.storeRat 		= messages["store.storeRat"];
 

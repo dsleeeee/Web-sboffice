@@ -37,12 +37,12 @@ app.controller('storeMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 	    s.columnHeaders.rows.push(new wijmo.grid.Row());
 
 	    // 첫째줄 헤더 생성
-	    var dataItem         = {};
+	    var dataItem           = {};
 	    dataItem.indexNo  		= messages["store.indexNo"];
 	    dataItem.storeNm  		= messages["store.storeNm"];
 	    dataItem.realSaleAmt 	= messages["store.realSaleAmt"];
 	    dataItem.billCnt 		= messages["store.billCnt"];
-	    dataItem.totBillAmt 	= messages["store.totBillAmt"];
+	    dataItem.billUprc 	    = messages["store.billUprc"];
 	    dataItem.storeRat 		= messages["store.storeRat"];
 
 	    s.columnHeaders.rows[0].dataItem = dataItem;
@@ -154,7 +154,7 @@ app.controller('storeMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 			   		grid.columns.push(new wijmo.grid.Column({header: messages["store.storeNm"], 	binding: 'storeNm'+month, 		align: "center", isReadOnly: "true"}));
 			   		grid.columns.push(new wijmo.grid.Column({header: messages["store.realSaleAmt"], binding: 'realSaleAmt'+month, 	align: "right" , isReadOnly: "true", aggregate: "Sum"}));
 			   		grid.columns.push(new wijmo.grid.Column({header: messages["store.billCnt"], 	binding: 'billCnt'+month, 		align: "right" , isReadOnly: "true", aggregate: "Sum"}));
-			   		grid.columns.push(new wijmo.grid.Column({header: messages["store.totBillAmt"], 	binding: 'totBillAmt'+month, 	align: "right" , isReadOnly: "true", aggregate: "Sum"}));
+			   		grid.columns.push(new wijmo.grid.Column({header: messages["store.billUprc"], 	binding: 'billUprc'+month, 	    align: "right" , isReadOnly: "true"}));
 			   		grid.columns.push(new wijmo.grid.Column({header: messages["store.storeRat"], 	binding: 'storeRat'+month, 		align: "right" , isReadOnly: "true", aggregate: "Sum"}));
 			   		
 			   		grid.columnHeaders.setCellData(0, 0+(i*6), date);
@@ -211,7 +211,7 @@ app.controller('storeMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 			   		grid.columns.push(new wijmo.grid.Column({header: messages["store.storeNm"], 	binding: 'storeNm'+month, 		align: "center", isReadOnly: "true"}));
 			   		grid.columns.push(new wijmo.grid.Column({header: messages["store.realSaleAmt"], binding: 'realSaleAmt'+month, 	align: "right" , isReadOnly: "true", aggregate: "Sum"}));
 			   		grid.columns.push(new wijmo.grid.Column({header: messages["store.billCnt"], 	binding: 'billCnt'+month, 		align: "right" , isReadOnly: "true", aggregate: "Sum"}));
-			   		grid.columns.push(new wijmo.grid.Column({header: messages["store.totBillAmt"], 	binding: 'totBillAmt'+month, 	align: "right" , isReadOnly: "true", aggregate: "Sum"}));
+			   		grid.columns.push(new wijmo.grid.Column({header: messages["store.billUprc"], 	binding: 'billUprc'+month,   	align: "right" , isReadOnly: "true"}));
 			   		grid.columns.push(new wijmo.grid.Column({header: messages["store.storeRat"], 	binding: 'storeRat'+month, 		align: "right" , isReadOnly: "true", aggregate: "Sum"}));
 			   		
 			   		grid.columnHeaders.setCellData(0, 5+(i*5), response.data.data.list[i].month);
