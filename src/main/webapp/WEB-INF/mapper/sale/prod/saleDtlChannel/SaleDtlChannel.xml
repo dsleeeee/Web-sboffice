@@ -164,6 +164,12 @@
         AND   	tssh.STORE_CD         = tms.STORE_CD
         AND   	tmsi.STORE_CD     (+) = tms.STORE_CD
         AND     tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+          AND tssh.STORE_CD IN
+          <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+            #{item}
+          </foreach>
+        </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
         </if>
@@ -258,237 +264,379 @@
         PARAM    : saleDtlChannelVO
         COMMENTS : 매출상세현황(채널별)을 조회한다.
     -->
-    <select id="getSaleDtlChannelExcelList" parameterType="saleDtlChannelVO" resultType="DefaultMap">
-      /* SaleDtlChannelMapper.getSaleDtlChannelExcelList */
-      SELECT TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
-      ,      YOIL
-      ,      BRANCH_NM
-      ,      STORE_CD
-      ,      STORE_NM
-      ,      POS_NO
-      ,      BILL_NO
-      ,      SIDE_P_DTL_NO
-      ,      BILL_DTL_NO
-      ,      SALE_YN
-      ,      TBL_NM
-      ,      BILL_DT
-      ,      L_CLASS_CD
-      ,	   L_CLASS_NM
-      ,	   M_CLASS_CD
-      ,	   M_CLASS_NM
-      ,	   S_CLASS_CD
-      ,	   S_CLASS_NM
-      ,      PROD_CD
-      ,      PROD_NM
-      ,      SEL_TYPE_FG
-      ,      SIDE_PROD_CD
-      ,      SALE_QTY1
-      ,      SALE_QTY2
-      ,      SALE_QTY3
-      ,      TOT_SALE_AMT1
-      ,      TOT_SALE_AMT2
-      ,      TOT_SALE_AMT3
-      ,      DC_AMT1
-      ,      DC_AMT2
-      ,      DC_AMT3
-      ,      REAL_SALE_AMT1
-      ,      REAL_SALE_AMT2
-      ,      REAL_SALE_AMT3
-      ,      GA_AMT1
-      ,      GA_AMT2
-      ,      GA_AMT3
-      ,      VAT_AMT1
-      ,      VAT_AMT2
-      ,      VAT_AMT3
-      ${sQuery1}
-      FROM   (
-      SELECT tsdpsd.SALE_DATE
-      ,      TO_CHAR(TO_DATE(tsdpsd.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
-      ,      (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tsdpsd.HQ_OFFICE_CD AND thbm.BRANCH_CD = tsdpsd.BRANCH_CD) AS BRANCH_NM
-      ,      tsdpsd.STORE_CD
-      ,      tsdpsd.STORE_NM
-      ,      tsdpsd.POS_NO
-      ,      tsdpsd.BILL_NO
-      ,      tsdpsd.SIDE_P_DTL_NO
-      ,      tsdpsd.BILL_DTL_NO
-      ,      tsdpsd.SALE_YN
-      ,      tsdpsd.TBL_NM
-      ,      tsdpsd.BILL_DT
-      ,      tmpcv.L_CLASS_CD
-      ,	   tmpcv.L_CLASS_NM
-      ,	   tmpcv.M_CLASS_CD
-      ,	   tmpcv.M_CLASS_NM
-      ,	   tmpcv.S_CLASS_CD
-      ,	   tmpcv.S_CLASS_NM
-      ,      tsdpsd.PROD_CD
-      ,	   (CASE tsdpsd.SEL_TYPE_FG WHEN 'P' THEN '사이드모상품' WHEN 'S' THEN '사이드상품' WHEN 'N' THEN '일반판매상품' END) AS SEL_TYPE_FG
-      ,	   (CASE tsdpsd.SEL_TYPE_FG WHEN 'S' THEN tsdpsd.SIDE_PROD_CD END) AS SIDE_PROD_CD
-      ,	   (CASE tsdpsd.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmps2.PROD_NM ELSE tmps2.PROD_NM END) AS PROD_NM
-      ,	   (CASE WHEN tsdpsd.SEL_TYPE_FG = 'N' OR tsdpsd.SEL_TYPE_FG = 'P' THEN tsdpsd.SALE_QTY END) AS SALE_QTY1
-      ,	   (CASE WHEN tsdpsd.SEL_TYPE_FG = 'N' OR tsdpsd.SEL_TYPE_FG = 'S' THEN tsdpsd.SALE_QTY END) AS SALE_QTY2
-      ,	   (tsdpsd.SALE_QTY) AS SALE_QTY3
-      ,	   (CASE WHEN tsdpsd.SEL_TYPE_FG = 'N' OR tsdpsd.SEL_TYPE_FG = 'P' THEN tsdpsd.SALE_AMT END) AS TOT_SALE_AMT1
-      ,	   (CASE WHEN tsdpsd.SEL_TYPE_FG = 'N' OR tsdpsd.SEL_TYPE_FG = 'S' THEN tsdpsd.SALE_AMT END) AS TOT_SALE_AMT2
-      ,	   (tsdpsd.SALE_AMT) AS TOT_SALE_AMT3
-      ,	   (CASE WHEN tsdpsd.SEL_TYPE_FG = 'N' OR tsdpsd.SEL_TYPE_FG = 'P' THEN tsdpsd.DC_AMT END) AS DC_AMT1
-      ,	   (CASE WHEN tsdpsd.SEL_TYPE_FG = 'N' OR tsdpsd.SEL_TYPE_FG = 'S' THEN tsdpsd.DC_AMT END) AS DC_AMT2
-      ,	   (tsdpsd.DC_AMT) AS DC_AMT3
-      ,	   (CASE WHEN tsdpsd.SEL_TYPE_FG = 'N' OR tsdpsd.SEL_TYPE_FG = 'P' THEN tsdpsd.REAL_SALE_AMT END) AS REAL_SALE_AMT1
-      ,	   (CASE WHEN tsdpsd.SEL_TYPE_FG = 'N' OR tsdpsd.SEL_TYPE_FG = 'S' THEN tsdpsd.REAL_SALE_AMT END) AS REAL_SALE_AMT2
-      ,	   (tsdpsd.REAL_SALE_AMT) AS REAL_SALE_AMT3
-      ,	   (CASE WHEN tsdpsd.SEL_TYPE_FG = 'N' OR tsdpsd.SEL_TYPE_FG = 'P' THEN tsdpsd.GA_AMT END) AS GA_AMT1
-      ,	   (CASE WHEN tsdpsd.SEL_TYPE_FG = 'N' OR tsdpsd.SEL_TYPE_FG = 'S' THEN tsdpsd.GA_AMT END) AS GA_AMT2
-      ,	   (tsdpsd.GA_AMT) AS GA_AMT3
-      ,	   (CASE WHEN tsdpsd.SEL_TYPE_FG = 'N' OR tsdpsd.SEL_TYPE_FG = 'P' THEN tsdpsd.VAT_AMT END) AS VAT_AMT1
-      ,	   (CASE WHEN tsdpsd.SEL_TYPE_FG = 'N' OR tsdpsd.SEL_TYPE_FG = 'S' THEN tsdpsd.VAT_AMT END) AS VAT_AMT2
-      ,	   (tsdpsd.VAT_AMT) AS VAT_AMT3
-      ${sQuery2}
-      FROM   (
-      SELECT  tssh.HQ_OFFICE_CD
-      ,       tms.BRANCH_CD
-      ,       tssh.STORE_CD
-      ,       tms.STORE_NM
-      ,       tssh.SALE_DATE
-      ,       tssh.POS_NO
-      ,       tssh.BILL_NO
-      ,       tssd.SIDE_P_DTL_NO
-      ,       tssd.BILL_DTL_NO
-      ,       tssh.SALE_YN
-      ,       tmt.TBL_NM AS TBL_NM
-      , 		TO_CHAR(TO_DATE(tssh.BILL_DT,'yyyy/mm/dd hh24:mi:ss'),'hh24:mi:ss') AS BILL_DT
-      ,       tssd.SALE_QTY
-      ,       tssd.SALE_AMT
-      ,       tssd.DC_AMT
-      ,       tssd.REAL_SALE_AMT
-      ,       (tssd.REAL_SALE_AMT - tssd.VAT_AMT) AS GA_AMT
-      ,       tssd.VAT_AMT
-      ,		CASE
-      WHEN 	SIDE_P_DTL_NO = BILL_DTL_NO
-      OR 		SIDE_P_PROD_CD = PROD_CD
-      OR 		(SIDE_P_DTL_NO IS NOT NULL AND TRIM(SIDE_P_PROD_CD) IS NULL)
-      THEN 	'P'
-      WHEN 	SIDE_P_DTL_NO != BILL_DTL_NO
-      AND 	TRIM(SIDE_P_PROD_CD) IS NOT NULL
-      THEN 	'S'
-      ELSE 	'N'
-      END AS SEL_TYPE_FG
-      ,       tssd.DLVR_IN_FG
-      ,       tssd.DLVR_ORDER_FG
-      ,		CASE
-      WHEN 	SIDE_P_DTL_NO != BILL_DTL_NO
-      AND 	TRIM(SIDE_P_PROD_CD) IS NOT NULL
-      THEN 	SIDE_P_PROD_CD
-      ELSE	PROD_CD
-      END AS PROD_CD
-      ,       CASE
-      WHEN 	SIDE_P_DTL_NO != BILL_DTL_NO
-      AND 	TRIM(SIDE_P_PROD_CD) IS NOT NULL
-      THEN 	PROD_CD
-      ELSE 	PROD_CD
-      END AS SIDE_PROD_CD
-      FROM    TB_SL_SALE_HDR tssh
-      ,       TB_SL_SALE_DTL tssd
-      ,       TB_MS_TABLE_V01 tmt
-      ,       TB_MS_STORE tms
-      , 	    TB_MS_STORE_INFO tmsi
-      WHERE   tssd.HQ_OFFICE_CD     = tssh.HQ_OFFICE_CD
-      AND     tssd.STORE_CD         = tssh.STORE_CD
-      AND     tssd.SALE_DATE        = tssh.SALE_DATE
-      AND     tssd.POS_NO           = tssh.POS_NO
-      AND     tssd.BILL_NO          = tssh.BILL_NO
-      AND     tmt.STORE_CD      (+) = tssd.STORE_CD
-      AND     tmt.TBL_CD        (+) = tssh.TBL_CD
-      AND     tms.HQ_OFFICE_CD = #{hqOfficeCd}
-      AND     tssh.HQ_OFFICE_CD     = tms.HQ_OFFICE_CD
-      AND   	tssh.STORE_CD         = tms.STORE_CD
-      AND   	tmsi.STORE_CD     (+) = tms.STORE_CD
-      AND     tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+<!--    <select id="getSaleDtlChannelExcelList" parameterType="saleDtlChannelVO" resultType="DefaultMap">-->
+<!--      /* SaleDtlChannelMapper.getSaleDtlChannelExcelList */-->
+<!--      SELECT TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE-->
+<!--      ,      YOIL-->
+<!--      ,      BRANCH_NM-->
+<!--      ,      STORE_CD-->
+<!--      ,      STORE_NM-->
+<!--      ,      POS_NO-->
+<!--      ,      BILL_NO-->
+<!--      ,      SIDE_P_DTL_NO-->
+<!--      ,      BILL_DTL_NO-->
+<!--      ,      SALE_YN-->
+<!--      ,      TBL_NM-->
+<!--      ,      BILL_DT-->
+<!--      ,      L_CLASS_CD-->
+<!--      ,	   L_CLASS_NM-->
+<!--      ,	   M_CLASS_CD-->
+<!--      ,	   M_CLASS_NM-->
+<!--      ,	   S_CLASS_CD-->
+<!--      ,	   S_CLASS_NM-->
+<!--      ,      PROD_CD-->
+<!--      ,      PROD_NM-->
+<!--      ,      SEL_TYPE_FG-->
+<!--      ,      SIDE_PROD_CD-->
+<!--      ,      SALE_QTY1-->
+<!--      ,      SALE_QTY2-->
+<!--      ,      SALE_QTY3-->
+<!--      ,      TOT_SALE_AMT1-->
+<!--      ,      TOT_SALE_AMT2-->
+<!--      ,      TOT_SALE_AMT3-->
+<!--      ,      DC_AMT1-->
+<!--      ,      DC_AMT2-->
+<!--      ,      DC_AMT3-->
+<!--      ,      REAL_SALE_AMT1-->
+<!--      ,      REAL_SALE_AMT2-->
+<!--      ,      REAL_SALE_AMT3-->
+<!--      ,      GA_AMT1-->
+<!--      ,      GA_AMT2-->
+<!--      ,      GA_AMT3-->
+<!--      ,      VAT_AMT1-->
+<!--      ,      VAT_AMT2-->
+<!--      ,      VAT_AMT3-->
+<!--      ${sQuery1}-->
+<!--      FROM   (-->
+<!--      SELECT tsdpsd.SALE_DATE-->
+<!--      ,      TO_CHAR(TO_DATE(tsdpsd.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL-->
+<!--      ,      (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tsdpsd.HQ_OFFICE_CD AND thbm.BRANCH_CD = tsdpsd.BRANCH_CD) AS BRANCH_NM-->
+<!--      ,      tsdpsd.STORE_CD-->
+<!--      ,      tsdpsd.STORE_NM-->
+<!--      ,      tsdpsd.POS_NO-->
+<!--      ,      tsdpsd.BILL_NO-->
+<!--      ,      tsdpsd.SIDE_P_DTL_NO-->
+<!--      ,      tsdpsd.BILL_DTL_NO-->
+<!--      ,      tsdpsd.SALE_YN-->
+<!--      ,      tsdpsd.TBL_NM-->
+<!--      ,      tsdpsd.BILL_DT-->
+<!--      ,      tmpcv.L_CLASS_CD-->
+<!--      ,	   tmpcv.L_CLASS_NM-->
+<!--      ,	   tmpcv.M_CLASS_CD-->
+<!--      ,	   tmpcv.M_CLASS_NM-->
+<!--      ,	   tmpcv.S_CLASS_CD-->
+<!--      ,	   tmpcv.S_CLASS_NM-->
+<!--      ,      tsdpsd.PROD_CD-->
+<!--      ,	   (CASE tsdpsd.SEL_TYPE_FG WHEN 'P' THEN '사이드모상품' WHEN 'S' THEN '사이드상품' WHEN 'N' THEN '일반판매상품' END) AS SEL_TYPE_FG-->
+<!--      ,	   (CASE tsdpsd.SEL_TYPE_FG WHEN 'S' THEN tsdpsd.SIDE_PROD_CD END) AS SIDE_PROD_CD-->
+<!--      ,	   (CASE tsdpsd.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmps2.PROD_NM ELSE tmps2.PROD_NM END) AS PROD_NM-->
+<!--      ,	   (CASE WHEN tsdpsd.SEL_TYPE_FG = 'N' OR tsdpsd.SEL_TYPE_FG = 'P' THEN tsdpsd.SALE_QTY END) AS SALE_QTY1-->
+<!--      ,	   (CASE WHEN tsdpsd.SEL_TYPE_FG = 'N' OR tsdpsd.SEL_TYPE_FG = 'S' THEN tsdpsd.SALE_QTY END) AS SALE_QTY2-->
+<!--      ,	   (tsdpsd.SALE_QTY) AS SALE_QTY3-->
+<!--      ,	   (CASE WHEN tsdpsd.SEL_TYPE_FG = 'N' OR tsdpsd.SEL_TYPE_FG = 'P' THEN tsdpsd.SALE_AMT END) AS TOT_SALE_AMT1-->
+<!--      ,	   (CASE WHEN tsdpsd.SEL_TYPE_FG = 'N' OR tsdpsd.SEL_TYPE_FG = 'S' THEN tsdpsd.SALE_AMT END) AS TOT_SALE_AMT2-->
+<!--      ,	   (tsdpsd.SALE_AMT) AS TOT_SALE_AMT3-->
+<!--      ,	   (CASE WHEN tsdpsd.SEL_TYPE_FG = 'N' OR tsdpsd.SEL_TYPE_FG = 'P' THEN tsdpsd.DC_AMT END) AS DC_AMT1-->
+<!--      ,	   (CASE WHEN tsdpsd.SEL_TYPE_FG = 'N' OR tsdpsd.SEL_TYPE_FG = 'S' THEN tsdpsd.DC_AMT END) AS DC_AMT2-->
+<!--      ,	   (tsdpsd.DC_AMT) AS DC_AMT3-->
+<!--      ,	   (CASE WHEN tsdpsd.SEL_TYPE_FG = 'N' OR tsdpsd.SEL_TYPE_FG = 'P' THEN tsdpsd.REAL_SALE_AMT END) AS REAL_SALE_AMT1-->
+<!--      ,	   (CASE WHEN tsdpsd.SEL_TYPE_FG = 'N' OR tsdpsd.SEL_TYPE_FG = 'S' THEN tsdpsd.REAL_SALE_AMT END) AS REAL_SALE_AMT2-->
+<!--      ,	   (tsdpsd.REAL_SALE_AMT) AS REAL_SALE_AMT3-->
+<!--      ,	   (CASE WHEN tsdpsd.SEL_TYPE_FG = 'N' OR tsdpsd.SEL_TYPE_FG = 'P' THEN tsdpsd.GA_AMT END) AS GA_AMT1-->
+<!--      ,	   (CASE WHEN tsdpsd.SEL_TYPE_FG = 'N' OR tsdpsd.SEL_TYPE_FG = 'S' THEN tsdpsd.GA_AMT END) AS GA_AMT2-->
+<!--      ,	   (tsdpsd.GA_AMT) AS GA_AMT3-->
+<!--      ,	   (CASE WHEN tsdpsd.SEL_TYPE_FG = 'N' OR tsdpsd.SEL_TYPE_FG = 'P' THEN tsdpsd.VAT_AMT END) AS VAT_AMT1-->
+<!--      ,	   (CASE WHEN tsdpsd.SEL_TYPE_FG = 'N' OR tsdpsd.SEL_TYPE_FG = 'S' THEN tsdpsd.VAT_AMT END) AS VAT_AMT2-->
+<!--      ,	   (tsdpsd.VAT_AMT) AS VAT_AMT3-->
+<!--      ${sQuery2}-->
+<!--      FROM   (-->
+<!--      SELECT  tssh.HQ_OFFICE_CD-->
+<!--      ,       tms.BRANCH_CD-->
+<!--      ,       tssh.STORE_CD-->
+<!--      ,       tms.STORE_NM-->
+<!--      ,       tssh.SALE_DATE-->
+<!--      ,       tssh.POS_NO-->
+<!--      ,       tssh.BILL_NO-->
+<!--      ,       tssd.SIDE_P_DTL_NO-->
+<!--      ,       tssd.BILL_DTL_NO-->
+<!--      ,       tssh.SALE_YN-->
+<!--      ,       tmt.TBL_NM AS TBL_NM-->
+<!--      , 		TO_CHAR(TO_DATE(tssh.BILL_DT,'yyyy/mm/dd hh24:mi:ss'),'hh24:mi:ss') AS BILL_DT-->
+<!--      ,       tssd.SALE_QTY-->
+<!--      ,       tssd.SALE_AMT-->
+<!--      ,       tssd.DC_AMT-->
+<!--      ,       tssd.REAL_SALE_AMT-->
+<!--      ,       (tssd.REAL_SALE_AMT - tssd.VAT_AMT) AS GA_AMT-->
+<!--      ,       tssd.VAT_AMT-->
+<!--      ,		CASE-->
+<!--      WHEN 	SIDE_P_DTL_NO = BILL_DTL_NO-->
+<!--      OR 		SIDE_P_PROD_CD = PROD_CD-->
+<!--      OR 		(SIDE_P_DTL_NO IS NOT NULL AND TRIM(SIDE_P_PROD_CD) IS NULL)-->
+<!--      THEN 	'P'-->
+<!--      WHEN 	SIDE_P_DTL_NO != BILL_DTL_NO-->
+<!--      AND 	TRIM(SIDE_P_PROD_CD) IS NOT NULL-->
+<!--      THEN 	'S'-->
+<!--      ELSE 	'N'-->
+<!--      END AS SEL_TYPE_FG-->
+<!--      ,       tssd.DLVR_IN_FG-->
+<!--      ,       tssd.DLVR_ORDER_FG-->
+<!--      ,		CASE-->
+<!--      WHEN 	SIDE_P_DTL_NO != BILL_DTL_NO-->
+<!--      AND 	TRIM(SIDE_P_PROD_CD) IS NOT NULL-->
+<!--      THEN 	SIDE_P_PROD_CD-->
+<!--      ELSE	PROD_CD-->
+<!--      END AS PROD_CD-->
+<!--      ,       CASE-->
+<!--      WHEN 	SIDE_P_DTL_NO != BILL_DTL_NO-->
+<!--      AND 	TRIM(SIDE_P_PROD_CD) IS NOT NULL-->
+<!--      THEN 	PROD_CD-->
+<!--      ELSE 	PROD_CD-->
+<!--      END AS SIDE_PROD_CD-->
+<!--      FROM    TB_SL_SALE_HDR tssh-->
+<!--      ,       TB_SL_SALE_DTL tssd-->
+<!--      ,       TB_MS_TABLE_V01 tmt-->
+<!--      ,       TB_MS_STORE tms-->
+<!--      , 	    TB_MS_STORE_INFO tmsi-->
+<!--      WHERE   tssd.HQ_OFFICE_CD     = tssh.HQ_OFFICE_CD-->
+<!--      AND     tssd.STORE_CD         = tssh.STORE_CD-->
+<!--      AND     tssd.SALE_DATE        = tssh.SALE_DATE-->
+<!--      AND     tssd.POS_NO           = tssh.POS_NO-->
+<!--      AND     tssd.BILL_NO          = tssh.BILL_NO-->
+<!--      AND     tmt.STORE_CD      (+) = tssd.STORE_CD-->
+<!--      AND     tmt.TBL_CD        (+) = tssh.TBL_CD-->
+<!--      AND     tms.HQ_OFFICE_CD = #{hqOfficeCd}-->
+<!--      AND     tssh.HQ_OFFICE_CD     = tms.HQ_OFFICE_CD-->
+<!--      AND   	tssh.STORE_CD         = tms.STORE_CD-->
+<!--      AND   	tmsi.STORE_CD     (+) = tms.STORE_CD-->
+<!--      AND     tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}-->
+<!--  <if test='storeCds != null and storeCds != ""'>-->
+<!--    AND tssh.STORE_CD IN-->
+<!--    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >-->
+<!--      #{item}-->
+<!--    </foreach>-->
+<!--  </if>-->
+<!--      <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>-->
+<!--        AND tms.HQ_BRAND_CD = #{storeHqBrandCd} &#45;&#45; 매장브랜드 선택일때-->
+<!--      </if>-->
+<!--      <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>-->
+<!--        <if test='userBrands != null and userBrands != ""'>-->
+<!--          &#45;&#45; 매장브랜드 전체일때-->
+<!--          AND tms.HQ_BRAND_CD IN-->
+<!--          <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >-->
+<!--            #{item}-->
+<!--          </foreach>-->
+<!--        </if>-->
+<!--      </if>-->
+<!--      <if test='momsTeam != null and momsTeam != ""'>-->
+<!--        AND tmsi.MOMS_TEAM = #{momsTeam}-->
+<!--      </if>-->
+<!--      <if test='momsAcShop != null and momsAcShop != ""'>-->
+<!--        AND tmsi.MOMS_AC_SHOP = #{momsAcShop}-->
+<!--      </if>-->
+<!--      <if test='momsAreaFg != null and momsAreaFg != ""'>-->
+<!--        AND tmsi.MOMS_AREA_FG = #{momsAreaFg}-->
+<!--      </if>-->
+<!--      <if test='momsCommercial != null and momsCommercial != ""'>-->
+<!--        AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}-->
+<!--      </if>-->
+<!--      <if test='momsShopType != null and momsShopType != ""'>-->
+<!--        AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}-->
+<!--      </if>-->
+<!--      <if test='momsStoreManageType != null and momsStoreManageType != ""'>-->
+<!--        AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}-->
+<!--      </if>-->
+<!--      <if test='branchCd != null and branchCd != ""'>-->
+<!--        AND tms.BRANCH_CD = #{branchCd}-->
+<!--      </if>-->
+<!--      ) tsdpsd-->
+<!--      , 	   TB_MS_PRODUCT tmp-->
+<!--      , 	   TB_MS_PRODUCT tmps2 &#45;&#45; 사이드-->
+<!--      ,      TB_MS_PRODUCT_CLASS_V02 tmpcv-->
+<!--      WHERE 1=1-->
+<!--      <if test="prodClassCd != null and prodClassCd != ''">-->
+<!--        AND tmps2.PROD_CLASS_CD IN (-->
+<!--        SELECT PROD_CLASS_CD-->
+<!--        FROM   TB_MS_PRODUCT_CLASS-->
+<!--        WHERE STORE_CD = tmp.STORE_CD-->
+<!--        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD =  tmp.STORE_CD-->
+<!--        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = tmp.STORE_CD-->
+<!--        )-->
+<!--      </if>-->
+<!--      <if test='prodCd != null and prodCd != ""'>-->
+<!--        AND tmps2.PROD_CD LIKE '%'||#{prodCd}||'%'-->
+<!--      </if>-->
+<!--      <if test='prodNm != null and prodNm != ""'>-->
+<!--        AND tmps2.PROD_NM LIKE '%'||#{prodNm}||'%'-->
+<!--      </if>-->
+<!--      <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>-->
+<!--        AND tmps2.HQ_BRAND_CD = #{prodHqBrandCd} &#45;&#45; 상품브랜드 선택일때-->
+<!--      </if>-->
+<!--      <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>-->
+<!--        <if test='userBrands != null and userBrands != ""'>-->
+<!--          &#45;&#45; 상품브랜드 전체일때-->
+<!--          AND tmps2.HQ_BRAND_CD IN-->
+<!--          <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >-->
+<!--            #{item}-->
+<!--          </foreach>-->
+<!--        </if>-->
+<!--      </if>-->
+<!--      <if test='prodCds != null and prodCds != ""'>-->
+<!--        AND tmps2.PROD_CD IN-->
+<!--        <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >-->
+<!--          #{item}-->
+<!--        </foreach>-->
+<!--      </if>-->
+<!--      <if test='prodOption != null and prodOption != "" and prodOption == "1"'>-->
+<!--        AND tsdpsd.SEL_TYPE_FG IN ('N', 'P')-->
+<!--      </if>-->
+<!--      <if test='prodOption != null and prodOption != "" and prodOption == "2"'>-->
+<!--        AND tsdpsd.SEL_TYPE_FG IN ('N', 'S')-->
+<!--      </if>-->
+<!--      AND   tmp.STORE_CD = tsdpsd.STORE_CD-->
+<!--      AND   tmp.PROD_CD = tsdpsd.PROD_CD-->
+<!--      AND   tmps2.STORE_CD = tsdpsd.STORE_CD-->
+<!--      AND   tmps2.PROD_CD = tsdpsd.PROD_CD-->
+<!--      AND   tmps2.STORE_CD = tmpcv.STORE_CD-->
+<!--      AND   tmps2.PROD_CD = tmpcv.PROD_CD-->
+<!--      AND   tmps2.PROD_CD = tmpcv.PROD_CD-->
+<!--      ) A-->
+<!--      ORDER BY A.STORE_CD ASC, A.SALE_DATE, A.POS_NO, A.BILL_NO, A.SIDE_P_DTL_NO, A.BILL_DTL_NO-->
+<!--    </select>-->
+
+  <!-- 기간별 매장-상품 매출 다운로드 탭 - 조회 -->
+  <!--
+      TABLE    :
+      COMMENTS :
+  -->
+  <select id="getSaleDtlChannelExcelList"  parameterType="SaleDtlChannelVO" resultType="DefaultMap">
+    /* SaleDtlChannelMapper.getSaleDtlChannelExcelList */
+    SELECT  SUBSTR(thsrm.FROM_SALE_DATE, 0, 6) AS SALE_MONTH
+    ,       '전체매장통합파일' AS PROC_GUBUN
+    ,       thsrm.PROC_DT
+    ,       (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = thsrm.REG_ID) AS USER_NM
+    ,       thsrm.PROC_FG
+    ,       thsrm.PROC_MSG
+    ,       '다운로드' AS DOWNLOAD
+    ,       thsrm.FROM_SALE_DATE
+    ,       thsrm.TO_SALE_DATE
+    ,       thsrm.FILE_NAME
+    FROM    TB_HQ_SALE_REPORT_MOMS thsrm
+    WHERE   thsrm.HQ_OFFICE_CD = #{hqOfficeCd}
+    <![CDATA[
+    AND     thsrm.FROM_SALE_DATE >= #{startMonth}||'01'
+    AND     thsrm.TO_SALE_DATE <= #{endMonth}||'31'
+    ]]>
+    AND     thsrm.REPORT_TYPE = '01'
+    ORDER BY thsrm.FROM_SALE_DATE DESC
+  </select>
+
+  <!-- 기간별 매장-상품 매출 다운로드 탭 - 자료생성 저장 insert -->
+  <!--
+      TABLE    :
+      COMMENTS :
+  -->
+  <insert id="getSaleDtlChannelSaveInsert" parameterType="SaleDtlChannelVO">
+    /* SaleDtlChannelMapper.getSaleDtlChannelSaveInsert */
+    INSERT INTO TB_HQ_SALE_REPORT_MOMS
+    (
+      HQ_OFFICE_CD,
+      HQ_BRAND_CD,
+      REQ_DATE,
+      REQ_TIME,
+      REPORT_TYPE,
+      FROM_SALE_DATE,
+      TO_SALE_DATE,
+      PROC_FG,
+      PROC_MSG,
+      PROC_DT,
+      EXCEL_TYPE,
+      FILE_NAME,
+      PROD_CLASS_CD,
+      PROD_OPTION,
+      PROD_CD,
+      PROD_NM,
+      STORE_HQ_BRAND_CD_LIST,
+      STORE_CD_LIST,
+      PROD_HQ_BRAND_CD,
+      PROD_CD_LIST,
+      MOMS_TEAM,
+      MOMS_AC_SHOP,
+      MOMS_AREA_FG,
+      MOMS_COMMERCIAL,
+      MOMS_SHOP_TYPE,
+      MOMS_STORE_MANAGE_TYPE,
+      BRANCH_CD,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    ) VALUES (
+       #{hqOfficeCd},
+       '0000000',
+       #{reqDate},
+       #{reqTime},
+       '01',
+       #{dataCreateMonth}||'01',
+       #{dataCreateMonth}||#{dataCreateMonthLastDate},
+       '0',
+       '',
+       '',
+       '',
+       #{prodOption},
+       #{prodClassCd},
+       #{prodOption},
+       #{prodCd},
+       #{prodNm},
       <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
-        AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        #{storeHqBrandCd:CLOB}, -- 매장브랜드 선택일때
       </if>
       <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
-        <if test='userBrands != null and userBrands != ""'>
-          -- 매장브랜드 전체일때
-          AND tms.HQ_BRAND_CD IN
-          <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
-            #{item}
-          </foreach>
-        </if>
+        -- 매장브랜드 전체일때
+        #{userBrands:CLOB},
       </if>
-      <if test='momsTeam != null and momsTeam != ""'>
-        AND tmsi.MOMS_TEAM = #{momsTeam}
-      </if>
-      <if test='momsAcShop != null and momsAcShop != ""'>
-        AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
-      </if>
-      <if test='momsAreaFg != null and momsAreaFg != ""'>
-        AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
-      </if>
-      <if test='momsCommercial != null and momsCommercial != ""'>
-        AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
-      </if>
-      <if test='momsShopType != null and momsShopType != ""'>
-        AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
-      </if>
-      <if test='momsStoreManageType != null and momsStoreManageType != ""'>
-        AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
-      </if>
-      <if test='branchCd != null and branchCd != ""'>
-        AND tms.BRANCH_CD = #{branchCd}
-      </if>
-      ) tsdpsd
-      , 	   TB_MS_PRODUCT tmp
-      , 	   TB_MS_PRODUCT tmps2 -- 사이드
-      ,      TB_MS_PRODUCT_CLASS_V02 tmpcv
-      WHERE 1=1
-      <if test="prodClassCd != null and prodClassCd != ''">
-        AND tmps2.PROD_CLASS_CD IN (
-        SELECT PROD_CLASS_CD
-        FROM   TB_MS_PRODUCT_CLASS
-        WHERE STORE_CD = tmp.STORE_CD
-        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD =  tmp.STORE_CD
-        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = tmp.STORE_CD
-        )
-      </if>
-      <if test='prodCd != null and prodCd != ""'>
-        AND tmps2.PROD_CD LIKE '%'||#{prodCd}||'%'
-      </if>
-      <if test='prodNm != null and prodNm != ""'>
-        AND tmps2.PROD_NM LIKE '%'||#{prodNm}||'%'
-      </if>
-      <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
-        AND tmps2.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
-      </if>
-      <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
-        <if test='userBrands != null and userBrands != ""'>
-          -- 상품브랜드 전체일때
-          AND tmps2.HQ_BRAND_CD IN
-          <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
-            #{item}
-          </foreach>
-        </if>
-      </if>
-      <if test='prodCds != null and prodCds != ""'>
-        AND tmps2.PROD_CD IN
-        <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-          #{item}
-        </foreach>
-      </if>
-      <if test='prodOption != null and prodOption != "" and prodOption == "1"'>
-        AND tsdpsd.SEL_TYPE_FG IN ('N', 'P')
-      </if>
-      <if test='prodOption != null and prodOption != "" and prodOption == "2"'>
-        AND tsdpsd.SEL_TYPE_FG IN ('N', 'S')
-      </if>
-      AND   tmp.STORE_CD = tsdpsd.STORE_CD
-      AND   tmp.PROD_CD = tsdpsd.PROD_CD
-      AND   tmps2.STORE_CD = tsdpsd.STORE_CD
-      AND   tmps2.PROD_CD = tsdpsd.PROD_CD
-      AND   tmps2.STORE_CD = tmpcv.STORE_CD
-      AND   tmps2.PROD_CD = tmpcv.PROD_CD
-      AND   tmps2.PROD_CD = tmpcv.PROD_CD
-      ) A
-      ORDER BY A.STORE_CD ASC, A.SALE_DATE, A.POS_NO, A.BILL_NO, A.SIDE_P_DTL_NO, A.BILL_DTL_NO
-    </select>
+       #{storeCds:CLOB},
+       #{prodHqBrandCd}, -- 상품브랜드 선택일때
+       #{prodCds:CLOB},
+       #{momsTeam},
+       #{momsAcShop},
+       #{momsAreaFg},
+       #{momsCommercial},
+       #{momsShopType},
+       #{momsStoreManageType},
+       #{branchCd},
+       #{regDt},
+       #{regId},
+       #{modDt},
+       #{modId}
+     )
+  </insert>
 
+  <!-- 기간별 매장-상품 매출 다운로드 탭 - 삭제 -->
+  <!--
+      TABLE    :
+      COMMENTS :
+  -->
+  <delete id="getSaleDtlChannelDel" parameterType="SaleDtlChannelVO">
+    /* SaleDtlChannelMapper.getSaleDtlChannelDel */
+    DELETE  TB_HQ_SALE_REPORT_MOMS
+    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+    AND     FROM_SALE_DATE = #{fromSaleDate}
+    AND     TO_SALE_DATE = #{toSaleDate}
+    AND     REPORT_TYPE = '01'
+  </delete>
+
+  <!-- 기간별 매장-상품 매출 다운로드 탭 - 자료생성 요청건 존재여부 확인 -->
+  <!--
+      TABLE    :
+      COMMENTS :
+  -->
+  <select id="getSaleDtlChannelChk" parameterType="SaleDtlChannelVO" resultType="DefaultMap">
+    /* SaleDtlChannelMapper.getSaleDtlChannelChk */
+    SELECT  COUNT(thsrm.REPORT_TYPE) AS CNT
+    FROM    TB_HQ_SALE_REPORT_MOMS thsrm
+    WHERE   thsrm.HQ_OFFICE_CD = #{hqOfficeCd}
+    AND     thsrm.FROM_SALE_DATE = #{dataCreateMonth}||'01'
+    AND     thsrm.TO_SALE_DATE = #{dataCreateMonth}||#{dataCreateMonthLastDate}
+    AND     thsrm.REPORT_TYPE = '01'
+  </select>
 </mapper>

@@ -12,7 +12,7 @@
 <div class="subCon" ng-controller="sysConnectCtrl" ng-init="init()">
 
     <button class="btn_skyblue" ng-click="sysConnect()">
-        매입정산시스템접속
+        정산시스템접속
     </button>
 </div>
 <script>

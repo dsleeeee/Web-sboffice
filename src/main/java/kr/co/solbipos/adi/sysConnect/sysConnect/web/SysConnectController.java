@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * @Class Name : SysConnectController.java
- * @Description : 부가서비스 > 매입정산 > 매입정산시스템접속
+ * @Description : 부가서비스 > 정산 > 정산시스템접속
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용

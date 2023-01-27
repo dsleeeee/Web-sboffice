@@ -511,6 +511,8 @@
                 thp.DISCON_YN,
                 (SELECT PROD_NM FROM TB_HQ_PRODUCT thp2 WHERE thp2.HQ_OFFICE_CD = #{hqOfficeCd} AND thp2.PROD_CD = thp.GROUP_PROD_CD) AS GROUP_PROD_NM,
                 thp.GROUP_PROD_CD,
+                (SELECT PROD_NM FROM TB_HQ_PRODUCT thp2 WHERE thp2.HQ_OFFICE_CD = #{hqOfficeCd} AND thp2.PROD_CD = thp.DEPOSIT_PROD_CD) AS DEPOSIT_PROD_NM,
+                thp.DEPOSIT_PROD_CD,
                 thpi.SALE_TYPE_YN_SIN,
                 thpi.SALE_TYPE_YN_DLV,
                 thpi.SALE_TYPE_YN_PKG,
@@ -658,6 +660,8 @@
                 tmp.DISCON_YN,
                 (SELECT PROD_NM FROM TB_MS_PRODUCT tmp2 WHERE tmp2.STORE_CD = #{storeCd} AND tmp2.PROD_CD = tmp.GROUP_PROD_CD) AS GROUP_PROD_NM,
                 tmp.GROUP_PROD_CD,
+                (SELECT PROD_NM FROM TB_MS_PRODUCT tmp2 WHERE tmp2.STORE_CD = #{storeCd} AND tmp2.PROD_CD = tmp.DEPOSIT_PROD_CD) AS DEPOSIT_PROD_NM,
+                tmp.DEPOSIT_PROD_CD,
                 tmpi.SALE_TYPE_YN_SIN,
                 tmpi.SALE_TYPE_YN_DLV,
                 tmpi.SALE_TYPE_YN_PKG,
@@ -891,7 +895,8 @@
                 RELEASE_DATE = #{releaseDate},
                 DISCON_DATE = #{disconDate},
                 DISCON_YN =  #{disconYn},
-                GROUP_PROD_CD =  #{groupProdCd}
+                GROUP_PROD_CD =  #{groupProdCd},
+                DEPOSIT_PROD_CD =  #{depositProdCd}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -942,7 +947,8 @@
                 RELEASE_DATE,
                 DISCON_DATE,
                 DISCON_YN,
-                GROUP_PROD_CD
+                GROUP_PROD_CD,
+                DEPOSIT_PROD_CD
                 ) VALUES (
                 #{hqOfficeCd},
                 TRIM(REPLACE(REPLACE(REPLACE(#{prodCd}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL)),
@@ -991,7 +997,8 @@
                 #{releaseDate},
                 #{disconDate},
                 #{disconYn},
-                #{groupProdCd}
+                #{groupProdCd},
+                #{depositProdCd}
                 )
             </when>
             <!-- 매장 -->
@@ -1049,7 +1056,8 @@
                 RELEASE_DATE = #{releaseDate},
                 DISCON_DATE = #{disconDate},
                 DISCON_YN =  #{disconYn},
-                GROUP_PROD_CD =  #{groupProdCd}
+                GROUP_PROD_CD =  #{groupProdCd},
+                DEPOSIT_PROD_CD =  #{depositProdCd}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -1101,7 +1109,8 @@
                 RELEASE_DATE,
                 DISCON_DATE,
                 DISCON_YN,
-                GROUP_PROD_CD
+                GROUP_PROD_CD,
+                DEPOSIT_PROD_CD
                 ) VALUES (
                 #{storeCd},
                 TRIM(REPLACE(REPLACE(REPLACE(#{prodCd}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL)),
@@ -1151,7 +1160,8 @@
                 #{releaseDate},
                 #{disconDate},
                 #{disconYn},
-                #{groupProdCd}
+                #{groupProdCd},
+                #{depositProdCd}
                 )
             </when>
         </choose>
@@ -6933,6 +6943,70 @@
                     AND     A.SDSEL_GRP_CD  = tmp.SDSEL_GRP_CD
                     AND     A.PROD_CD       = #{prodCd}
                     )
+                </if>
+                <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                    AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 선택한 상품브랜드가 있을 때
+                </if>
+                <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                    <if test='userProdBrands != null and userProdBrands != ""'>
+                        -- 선택한 상품브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                        AND tmp.HQ_BRAND_CD IN
+                        <foreach collection="userProdBrandList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                </if>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 보증금상품코드 조회 팝업 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : 보증금상품코드 리스트를 조회한다.
+    -->
+    <select id="getSearchDepositProdList" parameterType="prodVO" resultType="DefaultMap">
+        /* ProdMapper.getSearchDepositProdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT 	PROD_CD
+                ,		PROD_NM
+                FROM 	TB_HQ_PRODUCT thp
+                WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                AND 	PROD_TYPE_FG = #{prodTypeFg}
+                <if test='searchProdCd != null and searchProdCd != ""'>
+                    AND PROD_CD LIKE '%'||#{searchProdCd}||'%'
+                </if>
+                <if test='searchProdNm != null and searchProdNm != ""'>
+                    AND PROD_NM LIKE '%'||#{searchProdNm}||'%'
+                </if>
+                <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                    AND thp.HQ_BRAND_CD = #{prodHqBrandCd} -- 선택한 상품브랜드가 있을 때
+                </if>
+                <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                    <if test='userProdBrands != null and userProdBrands != ""'>
+                        -- 선택한 상품브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                        AND thp.HQ_BRAND_CD IN
+                        <foreach collection="userProdBrandList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                </if>
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT 	PROD_CD
+                ,		PROD_NM
+                FROM 	TB_MS_PRODUCT tmp
+                WHERE 	STORE_CD = #{storeCd}
+                AND 	PROD_TYPE_FG = #{prodTypeFg}
+                <if test='searchProdCd != null and searchProdCd != ""'>
+                    AND PROD_CD LIKE '%'||#{searchProdCd}||'%'
+                </if>
+                <if test='searchProdNm != null and searchProdNm != ""'>
+                    AND PROD_NM LIKE '%'||#{searchProdNm}||'%'
                 </if>
                 <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
                     AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 선택한 상품브랜드가 있을 때

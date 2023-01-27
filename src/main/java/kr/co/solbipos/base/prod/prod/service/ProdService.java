@@ -134,6 +134,9 @@ public interface ProdService {
     /** 단품/세트선택설정 조회 팝업 */
     List<DefaultMap<String>> getSearchGroupProdList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 
+    /** 보증금상품코드 조회 팝업 */
+    List<DefaultMap<String>> getSearchDepositProdList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
     /** 매장상품일괄등록 - 매장목록 조회 */
     List<DefaultMap<String>> selectStoreList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 }

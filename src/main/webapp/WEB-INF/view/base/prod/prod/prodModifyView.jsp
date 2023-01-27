@@ -477,13 +477,23 @@
                   <%--단품/세트선택설정 --%>
                   <th><s:message code="prod.groupProdCd"/></th>
                   <td>
-                    <input type="text" class="sb-input w70" id="_groupProdNm" ng-model="prodModifyInfo.groupProdCd" ng-click="popUpGroupProdCd()" style="float: left; width: 69%;"
+                    <input type="text" class="sb-input w70" id="_groupProdNm" ng-model="prodModifyInfo.groupProdNm" ng-click="popUpGroupProdCd()" style="float: left; width: 69%;"
                            placeholder="<s:message code="prod.groupProdCd" /> 선택" readonly/>
                     <input type="hidden" id="_groupProdCd" name="groupProdCd" ng-model="prodModifyInfo.groupProdCd" disabled />
                     <button type="button" class="btn_skyblue fl mr5" id="btnCancelGroupProdCd" style="margin-left: 5px;" ng-click="delGroupProdCd()"><s:message code="cmm.selectCancel"/></button>
                   </td>
                 </tr>
             </c:if>
+            <tr>
+              <%--보증금상품코드 --%>
+              <th><s:message code="prod.depositProdCd"/></th>
+              <td>
+                <input type="text" class="sb-input w70" id="_depositProdNm" ng-model="prodModifyInfo.depositProdNm" ng-click="popUpDepositProdCd()" style="float: left; width: 69%;"
+                       placeholder="<s:message code="prod.depositProdCd" /> 선택" readonly/>
+                <input type="hidden" id="_depositProdCd" name="depositProdCd" ng-model="prodModifyInfo.depositProdCd" disabled />
+                <button type="button" class="btn_skyblue fl mr5" id="btnCancelDepositProdCd" style="margin-left: 5px;" ng-click="delDepositProdCd()"><s:message code="cmm.selectCancel"/></button>
+              </td>
+            </tr>
             <tr>
               <!-- 보증금상품유형 -->
               <th><s:message code="prod.depositCupFg"/></th>
@@ -1152,7 +1162,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20221231.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20221231.05" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
@@ -1188,4 +1198,8 @@
 
 <%-- 단품/세트선택설정 팝업--%>
 <c:import url="/WEB-INF/view/base/prod/prod/searchGroupProd.jsp">
+</c:import>
+
+<%-- 보증금상품코드 팝업--%>
+<c:import url="/WEB-INF/view/base/prod/prod/searchDepositProd.jsp">
 </c:import>

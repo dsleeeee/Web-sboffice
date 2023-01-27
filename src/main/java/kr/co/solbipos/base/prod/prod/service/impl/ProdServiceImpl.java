@@ -2131,6 +2131,32 @@ public class ProdServiceImpl implements ProdService {
         return prodMapper.getSearchGroupProdList(prodVO);
     }
 
+    /** 보증금상품코드 조회 팝업 */
+    @Override
+    public List<DefaultMap<String>> getSearchDepositProdList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
+            if (prodVO.getProdHqBrandCd() == "" || prodVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (prodVO.getUserProdBrands() != null && !"".equals(prodVO.getUserProdBrands())) {
+                    String[] userBrandList = prodVO.getUserProdBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        prodVO.setUserProdBrandList(userBrandList);
+                    }
+                }
+            }
+        }
+
+        return prodMapper.getSearchDepositProdList(prodVO);
+    }
+
     /** 매장상품일괄등록 - 매장목록 조회 */
     @Override
     public List<DefaultMap<String>> selectStoreList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {

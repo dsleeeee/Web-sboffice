@@ -309,6 +309,9 @@ public class ProdVO extends PageVO {
     /** 단품/세트선택설정 */
     private String groupProdCd;
 
+    /** 보증금상품코드 */
+    private String depositProdCd;
+
     /** 출시일 */
     private String releaseDate;
 
@@ -1467,6 +1470,14 @@ public class ProdVO extends PageVO {
 
     public void setGroupProdCd(String groupProdCd) {
         this.groupProdCd = groupProdCd;
+    }
+
+    public String getDepositProdCd() {
+        return depositProdCd;
+    }
+
+    public void setDepositProdCd(String depositProdCd) {
+        this.depositProdCd = depositProdCd;
     }
 
     public String getReleaseDate() {
