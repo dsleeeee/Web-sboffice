@@ -421,6 +421,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         params.safeStockQty = $("#prodModifySafeStockQty").val(); // 안전재고
         params.chkVendrCd = $scope.prodModifyInfo.vendrCd;
 
+        // 보증금상품코드
+        params.depositProdCd = $("#_depositProdCd").val();
+
         // [1250 맘스터치] 사용시 저장
         if(momsEnvstVal === "1") {
             // KIOSK 판매시간 사용여부에 따라 시간설정
@@ -435,9 +438,6 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
 
             // 단품/세트선택설정
             params.groupProdCd = $("#_groupProdCd").val();
-
-            // 보증금상품코드
-            params.depositProdCd = $("#_depositProdCd").val();
 
             // 출시일
             params.releaseDate = wijmo.Globalize.format(releaseDate.value, 'yyyyMMdd');
@@ -476,9 +476,6 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
 
             // 단품/세트선택설정
             params.groupProdCd = "";
-
-            // 보증금상품코드
-            params.depositProdCd = "";
 
             // 출시일
             params.releaseDate = "";
@@ -703,6 +700,11 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             $scope.prodModifyInfo.dcYn = "N";
             if($scope.prodModifyInfo.depositCupFg === "" || $scope.prodModifyInfo.depositCupFg === null){
                 $scope._popMsg(messages["prod.depositCupFgChk.none"]);
+                return false;
+            }
+
+            if(!isNull($("#_depositProdCd").val())){
+                $scope._popMsg(messages["prod.depositCupFgChk.msg2"]);
                 return false;
             }
         } else if($scope.prodModifyInfo.prodTypeFg !== "4") {
@@ -1324,6 +1326,11 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         resetKioskTimeHtml();
 
         // 기존정보 셋팅 초기화
+
+        // 보증금상품코드
+        $("#_depositProdCd").val("");
+        $("#_depositProdNm").val("");
+
         // [1250 맘스터치] 사용시 초기화
         if(momsEnvstVal === "1") {
 
@@ -1334,10 +1341,6 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             // 단품/세트선택설정
             $("#_groupProdCd").val("");
             $("#_groupProdNm").val("");
-
-            // 보증금상품코드
-            $("#_depositProdCd").val("");
-            $("#_depositProdNm").val("");
             
             // 단종여부 체크박스
             $scope.isCheckedDisconYn = false;
@@ -1428,6 +1431,12 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                     $scope.prodModifyInfo.dcYn = "Y";
                 }
 
+                // 보증금상품코드
+                if ($scope.prodModifyInfo.depositProdCd !== null && $scope.prodModifyInfo.depositProdCd !== undefined && $scope.prodModifyInfo.depositProdCd !== "") {
+                    $("#_depositProdNm").val($scope.prodModifyInfo.depositProdNm);
+                    $("#_depositProdCd").val($scope.prodModifyInfo.depositProdCd);
+                }
+
                 // [1250 맘스터치] 사용시 기존정보 셋팅
                 if(momsEnvstVal === "1") {
 
@@ -1470,12 +1479,6 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                     if ($scope.prodModifyInfo.groupProdCd !== null && $scope.prodModifyInfo.groupProdCd !== undefined && $scope.prodModifyInfo.groupProdCd !== "") {
                         $("#_groupProdNm").val($scope.prodModifyInfo.groupProdNm);
                         $("#_groupProdCd").val($scope.prodModifyInfo.groupProdCd);
-                    }
-
-                    // 보증금상품코드
-                    if ($scope.prodModifyInfo.depositProdCd !== null && $scope.prodModifyInfo.depositProdCd !== undefined && $scope.prodModifyInfo.depositProdCd !== "") {
-                        $("#_depositProdNm").val($scope.prodModifyInfo.depositProdNm);
-                        $("#_depositProdCd").val($scope.prodModifyInfo.depositProdCd);
                     }
 
                     // 출시일
