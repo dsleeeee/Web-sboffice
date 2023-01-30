@@ -56,7 +56,27 @@ app.controller('storeBatchChangeCtrl', ['$scope', '$http', function ($scope, $ht
             var ht = s.hitTest(e);
             s.allowSorting = false;
         });
+
+
+        s.cellEditEnded.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                var item = s.rows[e.row].dataItem;
+                // 가격 변경시 체크박스 체크
+                if (col.binding === "branchCd" || col.binding === "momsTeam" || col.binding === "momsAcShop"
+                    || col.binding === "momsAreaFg" || col.binding === "momsCommercial" || col.binding === "momsShopType"
+                    || col.binding === "momsStoreManageType") {
+                    $scope.checked(item);
+                }
+            }
+            s.collectionView.commitEdit();
+        });
     };
+
+    //수정시 체크박스 체크
+    $scope.checked = function (item){
+        item.gChk = true;
+    }
 
     // 확장조회 숨김/보임
     $scope.searchAddShowChange = function(){

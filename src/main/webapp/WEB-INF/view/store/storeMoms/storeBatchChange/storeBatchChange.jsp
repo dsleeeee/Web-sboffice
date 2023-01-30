@@ -415,4 +415,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storeBatchChange/storeBatchChange.js?ver=20230117.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storeBatchChange/storeBatchChange.js?ver=20230117.03" charset="utf-8"></script>
