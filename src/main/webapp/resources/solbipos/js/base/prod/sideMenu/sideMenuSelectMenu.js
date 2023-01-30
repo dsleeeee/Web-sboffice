@@ -596,7 +596,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
 
         // 필수선택여부가 'Y'이면 수량은 1 이상
         if($scope.flex.collectionView.itemsEdited[u].requireYn === "Y") {
-          if(parseInt(nvl($scope.flex.collectionView.itemsEdited[u].sdselQty, 0)) > 1) {
+          if(parseInt(nvl($scope.flex.collectionView.itemsEdited[u].sdselQty, 0)) >= 1) {
           } else {
             $scope._popMsg(messages["sideMenu.selectMenu.requireYnQtyChk.msg"]); // 필수선택시 수량은 1 이상 입력해주세요.
             return false;
