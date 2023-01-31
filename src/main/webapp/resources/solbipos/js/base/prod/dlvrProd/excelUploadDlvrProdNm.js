@@ -13,6 +13,11 @@
  */
 var app = agrid.getApp();
 
+var dlvrMappingFgData = [
+    {"name": "상품명", "value": "1"},
+    {"name": "상품코드", "value": "2"}
+];
+
 /**
  *  엑셀업로드 그리드 생성
  */
@@ -23,6 +28,7 @@ app.controller('excelUploadDlvrProdNmCtrl', ['$scope', '$http','$timeout', funct
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+        $scope.dlvrMappingFgDataMap = new wijmo.grid.DataMap(dlvrMappingFgData, 'value', 'name'); // 맵핑기준
 
         // 컬럼헤더:바인딩명 형태의 JSON 데이터 생성.
         $scope.colHeaderBind = {};
@@ -65,12 +71,19 @@ app.controller('excelUploadDlvrProdNmCtrl', ['$scope', '$http','$timeout', funct
         exNm[1] = 'Coffee';
         exNm[2] = 'COFFEE';
         for(var i=3; i<=20; i++){ exNm[i] = ""; }
+        // 샘플양식 예시 값(대충 20개만 생성)
+        var exFg = new Array(20);
+        exFg[0] = '상품명';
+        exFg[1] = '상품명';
+        exFg[2] = '상품명';
+        for(var i=3; i<=20; i++){ exFg[i] = ""; }
 
         // 샘플양식에 값 넣기
         var params = {};
         params.prodCd = '0000000000001';
         for(var i=0; i<dlvrCd.length; i++){
             eval("params.dlvrProdNm" + dlvrCd[i] + "='" + exNm[i] + "'");
+            eval("params.dlvrMappingFg" + dlvrCd[i] + "='" + exFg[i] + "'");
         }
 
         var newRow = flex.collectionView.addNew(); 
@@ -145,27 +158,36 @@ app.controller('excelUploadDlvrProdNmCtrl', ['$scope', '$http','$timeout', funct
                     var colBinding = $scope.colHeaderBind[$scope.flex.columns[c].header];
                     var cellValue  = $scope.flex.getCellData(r, c, false);
 
-                    if(colBinding === "prodCd"){
-                        if(cellValue !== null && cellValue !== "") {
-                            vProdCd = cellValue.toString().replaceAll("'", "").replaceAll(" ", "");
-                            strProdCd += (strProdCd === '' ? '' : ',') + vProdCd;
-                        }else{ continue; }
-                    }else{
-                        if(vProdCd !== null && vProdCd !== "") {
-                            if (cellValue !== null && cellValue !== "") {
-                                item["prodCd"] = vProdCd;
-                                item["dlvrNameCd"] = colBinding.replaceAll("dlvrProdNm", "");
-                                item["dlvrProdNm"] = cellValue;
-                                item["status"] = "U";
 
-                                jsonData.push(item);
+                    if(colBinding != "" && colBinding != undefined){
+                        console.log(colBinding);
+                        if(colBinding === "prodCd"){
+                            if(cellValue !== null && cellValue !== "") {
+                                vProdCd = cellValue.toString().replaceAll("'", "").replaceAll(" ", "");
+                                strProdCd += (strProdCd === '' ? '' : ',') + vProdCd;
+                            }else{ continue; }
+                        }else if(colBinding.indexOf("dlvrProdNm") !== -1){
+                            if(vProdCd !== null && vProdCd !== "") {
+                                if (cellValue !== null && cellValue !== "") {
+                                    item["prodCd"] = vProdCd;
+                                    item["dlvrNameCd"] = colBinding.replaceAll("dlvrProdNm", "");
+                                    item["dlvrProdNm"] = cellValue;
+                                    if($scope.flex.getCellData(r, c+1, false) === "상품명"){
+                                        item["dlvrMappingFg"] = "1";
+                                    } else if($scope.flex.getCellData(r, c+1, false) === "상품코드"){
+                                        item["dlvrMappingFg"] = "2";
+                                    }
+                                    item["status"] = "U";
+
+                                    jsonData.push(item);
+                                }
                             }
                         }
                     }
                 }
             }
         }
-        
+
         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         $timeout(function () {
             // 유효한 상품코드인지 체크
@@ -225,8 +247,15 @@ app.controller('excelUploadDlvrProdNmCtrl', ['$scope', '$http','$timeout', funct
             }
 
             // 배달앱별 상품명칭 길이 체크하여 30자 이상이면 문자 자르기
-            if(nvl(item.dlvrProdNm, '') !== '' && nvl(item.dlvrProdNm, '').getByteLengthForOracle() > 100) {
-                item.dlvrProdNm = item.dlvrProdNm.substr(0, 30);
+            if(nvl(String(item.dlvrProdNm), '') !== '' && nvl(String(item.dlvrProdNm), '').getByteLengthForOracle() > 100) {
+                item.dlvrProdNm = String(item.dlvrProdNm).substr(0, 30);
+            }
+
+            // 상품명은 있으나 매핑구분이 없으면 경고창
+            if(nvl(item.dlvrMappingFg, '') === ''){
+                msg = messages["dlvrProd.prodCd"] + "[" + item.prodCd + messages["dlvrProd.require.mappingFg"]; // 상품코드 [0000000000001] 매핑기준 [상품코드 또는 상품명] 로 입력하여 주십시오.
+                $scope.valueCheckErrPopup(msg);
+                return false;
             }
 
             params.push(item);

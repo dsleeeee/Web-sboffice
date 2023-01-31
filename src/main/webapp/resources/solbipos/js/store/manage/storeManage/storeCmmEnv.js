@@ -138,6 +138,16 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
       return false;
     }
 
+    // 1221이 개별DB(1)일때 1102이 사용(1)이면 저장 막기
+    var env1221 = $("#env1221").val();
+    var env1102 = $("#env1102").val();
+    console.log(env1221);
+    console.log(env1102);
+    if(env1221 === '1' && env1102 === '1'){
+      $scope._popMsg(messages["storeManage.require.serviceDb"]);
+      return false;
+    }
+
     var chngCnt  = 0; // 변경된 건수
     var arrChg = []; //  변경된 환경변수 배열 Key 값
     var params = [];
