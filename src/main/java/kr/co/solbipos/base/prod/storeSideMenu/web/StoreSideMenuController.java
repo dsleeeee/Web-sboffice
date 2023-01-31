@@ -17,6 +17,8 @@ import kr.co.solbipos.base.prod.touchkey.service.TouchKeyClassVO;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyService;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyStyleVO;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyVO;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,13 +54,15 @@ public class StoreSideMenuController {
     private final TouchKeyService touchkeyService;
     private final ProdService prodService;
     private final SideMenuService sideMenuService;
+    private final DayProdService dayProdService;
 
-    public StoreSideMenuController(SessionService sessionService, CmmEnvUtil cmmEnvUtil, TouchKeyService touchkeyService, ProdService prodService, SideMenuService sideMenuService) {
+    public StoreSideMenuController(SessionService sessionService, CmmEnvUtil cmmEnvUtil, TouchKeyService touchkeyService, ProdService prodService, SideMenuService sideMenuService, DayProdService dayProdService) {
         this.sessionService = sessionService;
         this.cmmEnvUtil = cmmEnvUtil;
         this.touchkeyService = touchkeyService;
         this.prodService = prodService;
         this.sideMenuService = sideMenuService;
+        this.dayProdService = dayProdService;
     }
 
 
@@ -125,6 +129,11 @@ public class StoreSideMenuController {
         // 브랜드 리스트 조회(선택 콤보박스용)
         ProdVO prodVO = new ProdVO();
         model.addAttribute("brandList", convertToJson(prodService.getBrandList(prodVO, sessionInfoVO)));
+
+        // 사용자별 브랜드 콤보박스 조회(조회용)
+        DayProdVO dayProdVO = new DayProdVO();
+        model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
+
 
         // 속성, 선택메뉴조회(콤보박스용)
         SideMenuManageVO sideMenuManageVO = new SideMenuManageVO();
