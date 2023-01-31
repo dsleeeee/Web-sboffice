@@ -25,6 +25,7 @@
             <%-- 배달앱 구분코드 컬럼 생성--%>
             <c:forEach var="dlvrCol" items="${dlvrColList}">
                 <wj-flex-grid-column header="${dlvrCol.dlvrNm}[${dlvrCol.dlvrCd}]" binding="dlvrProdNm${dlvrCol.dlvrCd}" width="120" data-type="String"></wj-flex-grid-column>
+                <wj-flex-grid-column header="${dlvrCol.dlvrNm}[${dlvrCol.dlvrCd}]_매핑기준" binding="dlvrMappingFg${dlvrCol.dlvrCd}" width="150" data-map="dlvrMappingFgDataMap" ></wj-flex-grid-column>
             </c:forEach>
 
         </wj-flex-grid>

@@ -45,20 +45,24 @@
                 SELECT thp.PROD_CD,
                         thp.PROD_NM,
                         <foreach collection="arrDlvrCol" item="item" separator=",">
-                            thpdpn.DLVR_PROD_NM_${item}
+                            thpdpn.DLVR_${item}_PROD_NM AS DLVR_PROD_NM_${item},
+                            thpdpn.DLVR_${item}_MAPPING_FG AS DLVR_MAPPING_FG_${item}
                         </foreach>
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_HQ_PRODUCT thp,
                     ( SELECT *
                         FROM (
-                                SELECT HQ_OFFICE_CD,
+                                SELECT  HQ_OFFICE_CD,
                                         PROD_CD,
                                         DLVR_NAME_CD,
-                                        DLVR_PROD_NM
-                                FROM TB_HQ_PRODUCT_DLVR_PROD_NM
+                                        MIN(DLVR_PROD_NM) AS DLVR_PROD_NM,
+                                        MIN(DLVR_MAPPING_FG) AS DLVR_MAPPING_FG
+                                FROM    TB_HQ_PRODUCT_DLVR_PROD_NM
+                                GROUP BY HQ_OFFICE_CD, PROD_CD, DLVR_NAME_CD
                               )
                         PIVOT (
-                                MIN(DLVR_PROD_NM)
+                                MIN(DLVR_PROD_NM) AS PROD_NM,
+                                MIN(DLVR_MAPPING_FG) AS MAPPING_FG
                                 FOR DLVR_NAME_CD
                                 IN (${pivotDlvrCol})
                               )
@@ -115,7 +119,8 @@
                 SELECT tmp.PROD_CD,
                         tmp.PROD_NM,
                         <foreach collection="arrDlvrCol" item="item" separator=",">
-                            tmpdpn.DLVR_PROD_NM_${item}
+                            tmpdpn.DLVR_${item}_PROD_NM AS DLVR_PROD_NM_${item},
+                            tmpdpn.DLVR_${item}_MAPPING_FG AS DLVR_MAPPING_FG_${item}
                         </foreach>
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_MS_PRODUCT tmp,
@@ -124,11 +129,14 @@
                                     SELECT STORE_CD,
                                             PROD_CD,
                                             DLVR_NAME_CD,
-                                            DLVR_PROD_NM
-                                      FROM TB_MS_PRODUCT_DLVR_PROD_NM
+                                            MIN(DLVR_PROD_NM) AS DLVR_PROD_NM,
+                                            MIN(DLVR_MAPPING_FG) AS DLVR_MAPPING_FG
+                                    FROM TB_MS_PRODUCT_DLVR_PROD_NM
+                                    GROUP BY STORE_CD, PROD_CD, DLVR_NAME_CD
                                )
                          PIVOT (
-                                    MIN(DLVR_PROD_NM)
+                                    MIN(DLVR_PROD_NM) AS PROD_NM,
+                                    MIN(DLVR_MAPPING_FG) AS MAPPING_FG
                                     FOR DLVR_NAME_CD
                                     IN (${pivotDlvrCol})
                                )
@@ -232,7 +240,8 @@
                     REG_ID,
                     REG_DT,
                     MOD_ID,
-                    MOD_DT
+                    MOD_DT,
+                    DLVR_MAPPING_FG
                 )
                 VALUES
                 (
@@ -243,7 +252,8 @@
                     #{regId},
                     #{regDt},
                     #{modId},
-                    #{modDt}
+                    #{modDt},
+                    #{dlvrMappingFg}
                 )
             </when>
             <!-- 가맹점 -->
@@ -257,7 +267,8 @@
                     REG_ID,
                     REG_DT,
                     MOD_ID,
-                    MOD_DT
+                    MOD_DT,
+                    DLVR_MAPPING_FG
                 )
                 VALUES
                 (
@@ -268,7 +279,8 @@
                     #{regId},
                     #{regDt},
                     #{modId},
-                    #{modDt}
+                    #{modDt},
+                    #{dlvrMappingFg}
                 )
             </when>
         </choose>
@@ -305,6 +317,7 @@
 		, REG_ID
 		, MOD_DT
 		, MOD_ID
+		, DLVR_MAPPING_FG
       )
       <choose>
         <!-- 기준매장이 본사인 경우 -->
@@ -317,6 +330,7 @@
                     , #{regId}
                     , #{modDt}
                     , #{modId}
+                    , DLVR_MAPPING_FG
               FROM TB_HQ_PRODUCT_DLVR_PROD_NM
              WHERE HQ_OFFICE_CD = #{originalStoreCd}
                AND DLVR_NAME_CD IN (SELECT NMCODE_CD
@@ -334,6 +348,7 @@
                    , #{regId}
                    , #{modDt}
                    , #{modId}
+                   , DLVR_MAPPING_FG
             FROM TB_MS_PRODUCT_DLVR_PROD_NM
            WHERE STORE_CD = #{originalStoreCd}
              AND DLVR_NAME_CD IN (SELECT NMCODE_CD

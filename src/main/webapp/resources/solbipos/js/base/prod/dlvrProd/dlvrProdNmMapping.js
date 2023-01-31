@@ -20,6 +20,11 @@ var useYnAllComboData = [
     {"name": "미사용", "value": "N"}
 ];
 
+var dlvrMappingFgData = [
+    {"name": "상품명", "value": "1"},
+    {"name": "상품코드", "value": "2"}
+];
+
 app.controller('dlvrProdNmMappingCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
@@ -43,7 +48,7 @@ app.controller('dlvrProdNmMappingCtrl', ['$scope', '$http', function ($scope, $h
     $scope._setComboData('useYnAllComboData', useYnAllComboData);
 
     $scope.initGrid = function (s, e) {
-
+        $scope.dlvrMappingFgDataMap = new wijmo.grid.DataMap(dlvrMappingFgData, 'value', 'name'); // 맵핑기준
     };
 
     $scope.$on("dlvrProdNmMappingCtrl", function (event, data) {
