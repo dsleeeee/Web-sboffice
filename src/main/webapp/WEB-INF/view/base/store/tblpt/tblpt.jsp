@@ -76,5 +76,5 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/tblpt/tblpt.js?ver=20220401.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/tblpt/tblpt.js?ver=20220401.02" charset="utf-8"></script>
 

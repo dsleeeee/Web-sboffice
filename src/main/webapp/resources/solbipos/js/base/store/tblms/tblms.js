@@ -48,6 +48,7 @@ app.controller('tblmsListCtrl', ['$scope', '$http', '$timeout', function ($scope
     var tblmsTempPwDate = getCurDateTime();
 
     if(hrefChk.indexOf("neo.solbipos.com") != -1)   open_url = 'https://mob.solbipos.com/login/login_check_tbl.jsp?';
+    else if(hrefChk.indexOf("moms.solbipos.com") != -1)  open_url = 'http://moms.solbipos.com/login/login_check_tbl.jsp?';
     else if(hrefChk.indexOf("192.168.0.85") != -1)  open_url = 'http://192.168.0.85:22001/login/login_check_tbl.jsp?';
     else if(hrefChk.indexOf("192.168.0.72") != -1)  open_url = 'http://192.168.0.72:2020/login/login_check_tbl.jsp?';
     else if(hrefChk.indexOf("localhost") != -1)     open_url = 'http://localhost:2020/login/login_check_tbl.jsp?';
@@ -119,6 +120,7 @@ app.controller('tblmsListCtrl', ['$scope', '$http', '$timeout', function ($scope
     var tblptTempPwDate = getCurDateTime();
 
     if(hrefChk.indexOf("neo.solbipos.com") != -1)   open_url = 'https://mob.solbipos.com/login/login_check_tbl.jsp?';
+    else if(hrefChk.indexOf("moms.solbipos.com") != -1)  open_url = 'http://moms.solbipos.com/login/login_check_tbl.jsp?';
     else if(hrefChk.indexOf("192.168.0.85") != -1)  open_url = 'http://192.168.0.85:22001/login/login_check_tbl.jsp?';
     else if(hrefChk.indexOf("192.168.0.72") != -1)  open_url = 'http://192.168.0.72:2020/login/login_check_tbl.jsp?';
     else if(hrefChk.indexOf("localhost") != -1)     open_url = 'http://localhost:2020/login/login_check_tbl.jsp?';
