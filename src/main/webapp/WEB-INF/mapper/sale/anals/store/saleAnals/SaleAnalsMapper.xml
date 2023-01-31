@@ -51,8 +51,8 @@
                     ,       SUM(TOT_TIP_AMT) AS TOT_TIP_AMT
                     ,       SUM(TOT_ETC_AMT) AS TOT_ETC_AMT
                     ,       SUM(CUP_AMT) AS CUP_AMT
-                    ,       SUM(BILL_CNT) AS BILL_CNT
-                    ,       DECODE(SUM(BILL_CNT), 0, 0, ROUND(SUM(REAL_SALE_AMT) / SUM(BILL_CNT))) AS BILL_UPRC
+                    ,       SUM(REAL_SALE_CNT) AS BILL_CNT
+                    ,       DECODE(SUM(REAL_SALE_CNT), 0, 0, ROUND(SUM(REAL_SALE_AMT) / SUM(REAL_SALE_CNT))) AS BILL_UPRC
                     ,       <foreach collection="arrPayCol" item="item" separator=",">
                                 SUM(PAY_AMT_${item}) AS PAY${item}
                             </foreach>,
@@ -125,6 +125,7 @@
                 tsdt.VAT_AMT,
                 tsdt.TOT_TIP_AMT,
                 tsdt.TOT_ETC_AMT,
+                tsdt.CUP_AMT,
         <foreach collection="arrPayCol" item="item" separator=",">
                 tsdt.PAY_AMT_${item} AS PAY${item}
         </foreach> ,
@@ -142,12 +143,13 @@
                         SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
                         SUM(TOT_DC_AMT) AS TOT_DC_AMT,
                         SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
-                        SUM(BILL_CNT) AS BILL_CNT,
-                        ROUND(SUM(REAL_SALE_AMT) / SUM(BILL_CNT)) AS BILL_UPRC,
+                        SUM(REAL_SALE_CNT) AS BILL_CNT,
+                        ROUND(SUM(REAL_SALE_AMT) / SUM(REAL_SALE_CNT)) AS BILL_UPRC,
                         SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT,
                         SUM(VAT_AMT) AS VAT_AMT,
                         SUM(TOT_TIP_AMT) AS TOT_TIP_AMT,
                         SUM(TOT_ETC_AMT) AS TOT_ETC_AMT,
+                        SUM(CUP_AMT) AS CUP_AMT,
                 <foreach collection="arrPayCol" item="item" separator="+">
                     <if test="item != '02' and item != '021'">
                         SUM(NVL(PAY_AMT_${item}, 0))
