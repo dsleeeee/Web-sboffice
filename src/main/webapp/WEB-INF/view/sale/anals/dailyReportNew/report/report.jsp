@@ -136,10 +136,10 @@
 							<wj-flex-grid-column header="<s:message code="dailyReport.slVatAmt"     	/>"		binding="slVatAmt"	    	width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
 							<wj-flex-grid-column header="<s:message code="dailyReport.slTotTipAmt"  	/>"		binding="slTotTipAmt"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
 							<wj-flex-grid-column header="<s:message code="dailyReport.slTotEtcAmt"  	/>"		binding="slTotEtcAmt"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
-							<wj-flex-grid-column header="<s:message code="dailyReport.slTotBillCnt"		/>"		binding="slTotBillCnt"		width="100" is-read-only="true" align="center" 	aggregate="Sum" ></wj-flex-grid-column>
+							<wj-flex-grid-column header="<s:message code="dailyReport.slTotBillCnt"	/>"		binding="slTotBillCnt"		width="100" is-read-only="true" align="center" 	aggregate="Sum" ></wj-flex-grid-column>
 							<wj-flex-grid-column header="<s:message code="dailyReport.slTotGuestCnt"	/>"		binding="slTotGuestCnt"		width="100" is-read-only="true" align="center" 	aggregate="Sum" ></wj-flex-grid-column>
-							<wj-flex-grid-column header="<s:message code="dailyReport.slBillUnprc"  	/>"		binding="slBillUnprc"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
-							<wj-flex-grid-column header="<s:message code="dailyReport.slGuestUnprc" 	/>"		binding="slGuestUnprc"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+							<wj-flex-grid-column header="<s:message code="dailyReport.slBillUnprc"  	/>"		binding="slBillUnprc"		width="100" is-read-only="true" align="right"                   ></wj-flex-grid-column>
+							<wj-flex-grid-column header="<s:message code="dailyReport.slGuestUnprc" 	/>"		binding="slGuestUnprc"		width="100" is-read-only="true" align="right"                   ></wj-flex-grid-column>
 			            </wj-flex-grid>
 	
 				        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
@@ -233,12 +233,12 @@
 							<wj-flex-grid-column header="<s:message code="dailyReport.nslTotSaleAmt"	/>"		binding="nslTotSaleAmt"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
 							<wj-flex-grid-column header="<s:message code="dailyReport.nslTotDcAmt"		/>"		binding="nslTotDcAmt"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
 							<wj-flex-grid-column header="<s:message code="dailyReport.nslRealSaleAmt"	/>"		binding="nslRealSaleAmt"    width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
-							<wj-flex-grid-column header="<s:message code="dailyReport.nslGaAmt"		    />"		binding="nslGaAmt"			width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+							<wj-flex-grid-column header="<s:message code="dailyReport.nslGaAmt"		/>"		binding="nslGaAmt"			width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
 							<wj-flex-grid-column header="<s:message code="dailyReport.nslVatAmt"		/>"		binding="nslVatAmt"			width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
 						<%--<wj-flex-grid-column header="<s:message code="dailyReport.nslTotTipAmt"	    />"		binding="nslTotTipAmt"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>--%>
 						<%--<wj-flex-grid-column header="<s:message code="dailyReport.nslTotEtcAmt"	    />"		binding="nslTotEtcAmt"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>--%>
 							<wj-flex-grid-column header="<s:message code="dailyReport.nslTotBillCnt"	/>"		binding="nslTotBillCnt"    	width="100" is-read-only="true" align="center" 	aggregate="Sum" ></wj-flex-grid-column>
-							<wj-flex-grid-column header="<s:message code="dailyReport.nslBillUnprc"	    />"		binding="nslBillUnprc"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+							<wj-flex-grid-column header="<s:message code="dailyReport.nslBillUnprc"	 />"	binding="nslBillUnprc"		width="100" is-read-only="true" align="right" 	                ></wj-flex-grid-column>
 			            </wj-flex-grid>
 	
 				        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
