@@ -21,6 +21,13 @@ var requireYnDataMap = new wijmo.grid.DataMap([
     {id: "Y", name: "필수선택"}
 ], 'id', 'name');
 
+// 선택그룹사용정보
+var sdselTypeFgDataMap = new wijmo.grid.DataMap([
+  {id: "C", name: "공통"},
+  {id: "K", name: "KIOSK전용"},
+  {id: "P", name: "POS전용"}
+], 'id', 'name');
+
 /**
  * 사이드메뉴 선택그룹 그리드 생성
  */
@@ -59,6 +66,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
   $scope.initGrid = function (s, e) {
     // 그리드 내 콤보박스 설정
     $scope.fixProdFgDataMap = fixProdFgDataMap;
+    $scope.sdselTypeFgDataMap = sdselTypeFgDataMap;
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
@@ -154,10 +162,10 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
       var columns = grid.columns;
 
       // 컬럼 총갯수
-      var columnsCnt = 5;
+      var columnsCnt = 6;
       if(hqOfficeCd == 'A0001' && orgnFg == 'HQ') {
         // 컬럼 총갯수
-        columnsCnt = 6;
+        columnsCnt = 7;
       }
 
       // 합계가 0이면 해당 컬럼 숨기기
@@ -188,7 +196,8 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
     params.gChk = true;
     params.sdselGrpCd = '자동채번';
     params.fixProdFg = 0;
-    
+    params.sdselTypeFg = "C";
+
     // 추가기능 수행 : 파라미터
     $scope._addRow(params, 2);
   };
