@@ -210,7 +210,7 @@
   var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProd/dlvrProdNmMapping.js?ver=20201016.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProd/dlvrProdNmMapping.js?ver=20201016.04" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

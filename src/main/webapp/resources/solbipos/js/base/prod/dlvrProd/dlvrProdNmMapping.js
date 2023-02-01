@@ -92,6 +92,7 @@ app.controller('dlvrProdNmMappingCtrl', ['$scope', '$http', function ($scope, $h
                 obj.prodCd = $scope.flex.collectionView.itemsEdited[i].prodCd;
                 obj.dlvrNameCd = arr[j];
                 obj.dlvrProdNm = eval('$scope.flex.collectionView.itemsEdited[i].dlvrProdNm' + arr[j]);
+                obj.dlvrMappingFg = eval('$scope.flex.collectionView.itemsEdited[i].dlvrMappingFg' + arr[j]);
 
                 params.push(obj);
             }
