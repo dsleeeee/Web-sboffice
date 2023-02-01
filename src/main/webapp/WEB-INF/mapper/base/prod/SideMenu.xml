@@ -544,7 +544,8 @@
                     thpsg.SDSEL_GRP_NM,
                     thpsg.PROD_CD,
                     (SELECT COUNT(*) FROM TB_HQ_PRODUCT_SDSEL_CLASS WHERE HQ_OFFICE_CD = thpsg.HQ_OFFICE_CD  AND SDSEL_GRP_CD = thpsg.SDSEL_GRP_CD AND USE_YN  = 'Y') AS CNT,
-                    NVL(thpsg.FIX_PROD_FG, '0') AS FIX_PROD_FG
+                    NVL(thpsg.FIX_PROD_FG, '0') AS FIX_PROD_FG,
+                    NVL(thpsg.SDSEL_TYPE_FG, 'C') AS SDSEL_TYPE_FG
                 FROM
                     TB_HQ_PRODUCT_SDSEL_GROUP thpsg
                 WHERE
@@ -560,7 +561,8 @@
                     tmpsg.SDSEL_GRP_CD,
                     tmpsg.SDSEL_GRP_NM,
                     (SELECT COUNT(*) FROM TB_MS_PRODUCT_SDSEL_CLASS WHERE STORE_CD = tmpsg.STORE_CD  AND SDSEL_GRP_CD = tmpsg.SDSEL_GRP_CD AND USE_YN  = 'Y') AS CNT,
-                    NVL(tmpsg.FIX_PROD_FG, '0') AS FIX_PROD_FG
+                    NVL(tmpsg.FIX_PROD_FG, '0') AS FIX_PROD_FG,
+                    NVL(tmpsg.SDSEL_TYPE_FG, 'C') AS SDSEL_TYPE_FG
                 FROM
                     TB_MS_PRODUCT_SDSEL_GROUP tmpsg
                 WHERE
@@ -677,7 +679,8 @@
                     HQ_BRAND_CD = #{hqBrandCd},
                     MOD_DT = #{modDt},
                     MOD_ID = #{modId},
-                    FIX_PROD_FG = #{fixProdFg}
+                    FIX_PROD_FG = #{fixProdFg},
+                    SDSEL_TYPE_FG = #{sdselTypeFg}
                 WHERE
                     HQ_OFFICE_CD = #{hqOfficeCd}
                     AND SDSEL_GRP_CD = #{sdselGrpCd}
@@ -690,7 +693,8 @@
                     MS_BRAND_CD = #{msBrandCd},
                     MOD_DT = #{modDt},
                     MOD_ID = #{modId},
-                    FIX_PROD_FG = #{fixProdFg}
+                    FIX_PROD_FG = #{fixProdFg},
+                    SDSEL_TYPE_FG = #{sdselTypeFg}
                 WHERE
                     STORE_CD = #{storeCd}
                     AND SDSEL_GRP_CD = #{sdselGrpCd}

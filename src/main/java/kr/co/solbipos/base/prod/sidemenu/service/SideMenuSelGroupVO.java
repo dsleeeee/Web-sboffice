@@ -52,6 +52,9 @@ public class SideMenuSelGroupVO extends CmmVO {
     /** 고정여부 */
     private String fixProdFg;
 
+    /** 선택그룹사용정보 */
+    private String sdselTypeFg;
+
     /**
      * @return the hqOfficeCd
      */
@@ -182,4 +185,8 @@ public class SideMenuSelGroupVO extends CmmVO {
     public String getFixProdFg() { return fixProdFg; }
 
     public void setFixProdFg(String fixProdFg) { this.fixProdFg = fixProdFg; }
+
+    public String getSdselTypeFg() { return sdselTypeFg; }
+
+    public void setSdselTypeFg(String sdselTypeFg) { this.sdselTypeFg = sdselTypeFg; }
 }
