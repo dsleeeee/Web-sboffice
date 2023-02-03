@@ -67,9 +67,8 @@ public class DlvrProdVO extends PageVO {
     private String prodCdCol;
     /** 업로드 상품코드 array */
     private String arrProdCdCol[];
-    /** 매핑기준 */
-    private String dlvrMappingFg;
-   /* *//** 페이코앱 *//*
+
+    /* *//** 페이코앱 *//*
     private String dlvrProdNm2;
     *//** 배달의민족앱 *//*
     private String dlvrProdNm3;
@@ -239,13 +238,5 @@ public class DlvrProdVO extends PageVO {
 
     public void setArrProdCdCol(String[] arrProdCdCol) {
         this.arrProdCdCol = arrProdCdCol;
-    }
-
-    public String getDlvrMappingFg() {
-        return dlvrMappingFg;
-    }
-
-    public void setDlvrMappingFg(String dlvrMappingFg) {
-        this.dlvrMappingFg = dlvrMappingFg;
     }
 }
