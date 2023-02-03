@@ -437,4 +437,53 @@
         ORDER BY tho.HQ_OFFICE_CD, tms.STORE_CD
     </select>
 
+    <!-- 포스 터미널 정보 삭제 -->
+    <!--
+        TABLE    : TB_MS_POS_TERMNL
+        COMMENTS : 포스 터미널의 정보를 삭제한다.
+    -->
+    <delete id="deleteTerminalInfo" parameterType="storeTerminalVO">
+        /* TerminalManageMapper.deleteTerminalInfo */
+        DELETE
+        FROM TB_MS_POS_TERMNL
+        WHERE STORE_CD = #{storeCd}
+          AND POS_NO = #{pastePosNo}
+    </delete>
+
+    <!-- 터미널 정보 복사 -->
+    <!--
+        TABLE    : TB_MS_POS_TERMNL
+        COMMENTS : 터미널 정보 복사한다.
+    -->
+    <insert id="copyTerminalInfo" parameterType="storeTerminalVO">
+        /* TerminalManageMapper.copyTerminalInfo */
+        INSERT INTO TB_MS_POS_TERMNL
+        (   STORE_CD,
+            POS_NO,
+            VENDOR_FG,
+            VENDOR_CD,
+            VENDOR_NM,
+            VENDOR_TERMNL_NO,
+            VENDOR_SER_NO,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        SELECT  STORE_CD,
+                #{pastePosNo},
+                VENDOR_FG,
+                VENDOR_CD,
+                VENDOR_NM,
+                VENDOR_TERMNL_NO,
+                VENDOR_SER_NO,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+        FROM    TB_MS_POS_TERMNL
+        WHERE   STORE_CD = #{storeCd}
+        AND     POS_NO = #{copyPosNo}
+    </insert>
+
 </mapper>

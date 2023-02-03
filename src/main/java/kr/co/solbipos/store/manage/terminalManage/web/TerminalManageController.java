@@ -305,4 +305,31 @@ public class TerminalManageController {
 
         return ReturnUtil.returnListJson(Status.OK, result, storeTerminalVO);
     }
+
+    /**
+     * 터미널정보복사
+     * @param storeTerminalVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "copyTerminalInfo/copyTerminalInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result copyTerminalInfo(@RequestBody StoreTerminalVO storeTerminalVO, HttpServletRequest request,
+                               HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = 0;
+
+        try{
+            // 코너 저장
+            result = service.copyTerminalInfo(storeTerminalVO, sessionInfoVO);
+
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        return returnListJson(Status.OK, result);
+    }
 }

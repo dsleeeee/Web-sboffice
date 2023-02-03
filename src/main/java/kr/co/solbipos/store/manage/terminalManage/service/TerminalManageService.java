@@ -60,4 +60,8 @@ public interface TerminalManageService {
 
     /** 매장터미널관리 조회 */
     List<DefaultMap<Object>> getTerminalManageList(StoreTerminalVO storeTerminalVO, SessionInfoVO sessionInfoVO);
+
+
+    /** 터미널 정보 복사 */
+    int copyTerminalInfo(StoreTerminalVO storeTerminalVO, SessionInfoVO sessionInfoVO);
 }

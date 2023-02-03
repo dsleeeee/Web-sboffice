@@ -77,5 +77,11 @@ public interface TerminalManageMapper {
 
     /** 매장터미널관리 조회 */
     List<DefaultMap<Object>> getTerminalManageList(StoreTerminalVO storeTerminalVO);
+
+    /** 터미널 정보 삭제 */
+    int deleteTerminalInfo(StoreTerminalVO storeTerminalVO);
+    
+    /** 터미널 정보 복사 */
+    int copyTerminalInfo(StoreTerminalVO storeTerminalVO);
 }
 

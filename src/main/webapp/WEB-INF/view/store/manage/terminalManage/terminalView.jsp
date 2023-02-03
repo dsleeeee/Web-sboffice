@@ -180,6 +180,8 @@
 
         <div class="fr mb10" id="posBtnArea" style="display:none">
           <%--<button class="btn_skyblue" ng-click="copyEnv()"><s:message code="terminalManage.copy.posEnvst"/></button>--%>
+          <%-- 터미널정보복사 --%>
+          <button class="btn_skyblue" ng-click="copyTerminalInfo()"><s:message code="terminalManage.copy.terminal"/></button>
           <%-- 추가 --%>
           <button class="btn_skyblue" ng-click="posAddRow()"><s:message code="cmm.add"/></button>
           <%-- 저장 --%>
@@ -187,7 +189,9 @@
           <%-- 삭제 --%>
           <button class="btn_skyblue" ng-click="posDel()"><s:message code="cmm.del"/></button>
         </div>
-        <div class="fr mb10" id="cornerBtnArea" style="display:none">
+        <div class="fr mb10" id="cornerBtnArea" style="display:none">-
+          <%-- 터미널정보복사 --%>
+          <button class="btn_skyblue" ng-click="copyTerminalInfo()"><s:message code="terminalManage.copy.terminal"/></button>
           <%-- 코너추가 --%>
           <button class="btn_skyblue" ng-click="cornerAdd()"><s:message code="terminalManage.cornrAdd"/></button>
           <%-- 추가 --%>
@@ -272,4 +276,8 @@
 
 <%-- 코너추가 레이어 팝업 --%>
 <c:import url="/WEB-INF/view/store/manage/terminalManage/cornerAdd.jsp">
+</c:import>
+
+<%-- 터미널정보복사 레이어 팝업 --%>
+<c:import url="/WEB-INF/view/store/manage/terminalManage/copyTerminalInfo.jsp">
 </c:import>
