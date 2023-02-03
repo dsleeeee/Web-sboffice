@@ -64,6 +64,11 @@ public class StoreTerminalVO extends CmmVO {
     /** 업체코드 */
     private String agencyCd;
 
+    /** 복사할 포스번호 */
+    private String copyPosNo;
+    /** 붙여넣을 포스번호 */
+    private String pastePosNo;
+
     /**
      * @return the storeCd
      */
@@ -239,5 +244,21 @@ public class StoreTerminalVO extends CmmVO {
 
     public void setAgencyCd(String agencyCd) {
         this.agencyCd = agencyCd;
+    }
+
+    public String getCopyPosNo() {
+        return copyPosNo;
+    }
+
+    public void setCopyPosNo(String copyPosNo) {
+        this.copyPosNo = copyPosNo;
+    }
+
+    public String getPastePosNo() {
+        return pastePosNo;
+    }
+
+    public void setPastePosNo(String pastePosNo) {
+        this.pastePosNo = pastePosNo;
     }
 }

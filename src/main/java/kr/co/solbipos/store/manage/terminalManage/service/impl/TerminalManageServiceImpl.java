@@ -216,4 +216,26 @@ public class TerminalManageServiceImpl implements TerminalManageService{
 
         return mapper.getTerminalManageList(storeTerminalVO);
     }
+
+
+    /** 터미널 정보 복사 */
+    @Override
+    public int copyTerminalInfo(StoreTerminalVO storeTerminalVO, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String dt = currentDateTimeString();
+
+        storeTerminalVO.setRegDt(dt);
+        storeTerminalVO.setRegId(sessionInfoVO.getUserId());
+        storeTerminalVO.setModDt(dt);
+        storeTerminalVO.setModId(sessionInfoVO.getUserId());
+
+        // 기존터미널정보 삭제
+        result += mapper.deleteTerminalInfo(storeTerminalVO);
+        
+        // 터미널정보 복사
+        result += mapper.copyTerminalInfo(storeTerminalVO);
+
+        return result;
+    }
 }

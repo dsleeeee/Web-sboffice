@@ -69,6 +69,7 @@
                 <input type="hidden" id="hdDigit8Store"/>
                 <input type="hidden" id="hdBbqStoreCd" />
                 <input type="hidden" id="hdMomsEnvstVal" /> <%-- [1250 맘스터치] --%>
+                <input type="hidden" id="envst1262" />
                 <a id="btnChkStoreCd" href="#" class="btn_grayS ml5" ng-click="chkStoreCd()" style="display: none;"><s:message code="storeManage.chk.duplicate" /></a><Br />
               </td>
               <%-- 매장명 --%>
@@ -560,6 +561,12 @@
                   <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" id="touchKeyChk" value="touchKey"/><%-- 터치키(판매) --%>
                     <label for="touchKeyChk" ><s:message code="storeManage.touchKey" /></label>
                   </span>
+                  <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" id="prtFormChk" value="prtForm"/><%-- 실제출력물 --%>
+                    <label for="prtFormChk" ><s:message code="storeManage.prtForm" /></label>
+                  </span>
+                  <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" id="promotionChk" value="promotion"/><%-- 프로모션 --%>
+                    <label for="promotionChk" ><s:message code="storeManage.promotion" /></label>
+                  </span>
                   </div>
                 </td>
               </tr>
@@ -584,7 +591,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20221118.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20221118.06" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">

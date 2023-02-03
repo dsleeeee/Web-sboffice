@@ -114,6 +114,12 @@ public interface StoreManageMapper {
     /** 쿠폰 생성 */
     int insertTbMsCoupon(StoreManageVO storeManageVO);
 
+    /** 쿠폰 적용상품 생성 */
+    int insertTbMsCouponProd(StoreManageVO storeManageVO);
+
+    /** 쿠폰 사용매장 등록 */
+    int insertHqCouponStore(StoreManageVO storeManageVO);
+
     /** 테이블 기본 그룹 생성 */
     int insertTabGroup(TableGroupVO tableGroupVO);
 
@@ -183,6 +189,10 @@ public interface StoreManageMapper {
     int insertStoreSdselClass(StoreManageVO storeManageVO);
     int insertStoreSdselProd(StoreManageVO storeManageVO);
 
+    /** 옵션 복사 */
+    int insertStoreHqOptionGroup(StoreManageVO storeManageVO);
+    int insertStoreHqOptionVal(StoreManageVO storeManageVO);
+
     /** 상품 설명 복사 */
     int insertStoreProdInfo(StoreManageVO storeManageVO);
     /** 상품 판매 시간대 복사 */
@@ -214,6 +224,17 @@ public interface StoreManageMapper {
 
     /** 터치키 복사 TODO */
     int copyFnkeyCopy(TouchKeyVO touchkeyVO);
+
+    /** 실제출력물 복사 TODO */
+    int copyPrtFormCopy(StoreManageVO storeManageVO);
+
+    /** 프로모션 복사 TODO */
+    int copyPromoStoreCopy(StoreManageVO storeManageVO);
+    int copyPromoHCopy(StoreManageVO storeManageVO);
+    int copyPromoBeneCopy(StoreManageVO storeManageVO);
+    int copyPromoBeneProdCopy(StoreManageVO storeManageVO);
+    int copyPromoCondiCopy(StoreManageVO storeManageVO);
+    int copyPromoCondiProdCopy(StoreManageVO storeManageVO);
 
     /** 매장환경 정보 조회 */
     List<DefaultMap<String>> getEnvGroupList(StoreEnvVO storeEnvVO);
@@ -421,6 +442,12 @@ public interface StoreManageMapper {
 
     /** 상품-알레르기 매핑정보 복사  */
     int insertStoreHqProductAlgiProd(StoreManageVO storeManageVO);
+
+    /** 상품이미지 정보 복사  */
+    int insertStoreHqProductImage(StoreManageVO storeManageVO);
+
+    /** 배달시스템상품명칭매핑 정보 복사  */
+    int insertStoreHqProductDlvrProdNm(StoreManageVO storeManageVO);
 
     /** 판매터치키 메뉴 임시테이블 삭제 */
     int deleteAllTmpTouchKeyClass(StoreEnvVO storeEnvVO);

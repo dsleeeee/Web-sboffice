@@ -369,8 +369,12 @@ public class StoreManageServiceImpl implements StoreManageService{
                 procCnt += mapper.insertTbMsPayMethodClass(storeManageVO);
                 // 본사 상품권 매장에 생성
                 procCnt += mapper.insertTbMsGift(storeManageVO);
-                //쿠폰 생성하지 않음
-                //procCnt += mapper.insertTbMsCoupon(storeManageVO);
+                //쿠폰 생성하지 않음 < 생성함으로 변경 20230131
+                procCnt += mapper.insertTbMsCoupon(storeManageVO);
+                // 쿠폰 적용 상품 매장에 생성
+                procCnt += mapper.insertTbMsCouponProd(storeManageVO);
+                // 쿠폰별 사용 매장으로 등록
+                procCnt += mapper.insertHqCouponStore(storeManageVO);
 
                 // 본사 상품분류 매장에 생성
                 procCnt += mapper.insertStoreHqProductClass(storeManageVO);
@@ -381,6 +385,9 @@ public class StoreManageServiceImpl implements StoreManageService{
                 procCnt += mapper.insertStoreHqSdselGroup(storeManageVO);
                 procCnt += mapper.insertStoreHqSdselClass(storeManageVO);
                 procCnt += mapper.insertStoreHqSdselProd(storeManageVO);
+                // 본사 옵션 매장에 생성
+                procCnt += mapper.insertStoreHqOptionGroup(storeManageVO);
+                procCnt += mapper.insertStoreHqOptionVal(storeManageVO);
 
                // 본사신규상품매장생성(0:자동생성, 1:생성안함)
                 if(storeManageVO.getEnvst0043().equals("0")) {
@@ -400,6 +407,7 @@ public class StoreManageServiceImpl implements StoreManageService{
                     procCnt += mapper.insertStoreHqProdInfo(storeManageVO);
                     // 본사 상품 KIOSK 판매 시간설정 매장에 생성
                     procCnt += mapper.insertStoreHqKioskSaleTime(storeManageVO);
+
 
                 }
             }
@@ -426,6 +434,13 @@ public class StoreManageServiceImpl implements StoreManageService{
                 procCnt += mapper.insertStoreHqProductAlgiInfo(storeManageVO);
                 /** 본사 상품-알레르기 매핑정보 매장에 생성  */
                 procCnt += mapper.insertStoreHqProductAlgiProd(storeManageVO);
+
+                /** 본사 상품이미지 정보 매장에 생성  */
+                procCnt += mapper.insertStoreHqProductImage(storeManageVO);
+
+                /** 배달시스템상품명칭매핑 정보 매장에 생성  */
+                procCnt += mapper.insertStoreHqProductDlvrProdNm(storeManageVO);
+
             }
 
             // 매장환경 복사 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
@@ -478,6 +493,7 @@ public class StoreManageServiceImpl implements StoreManageService{
                         procCnt += mapper.insertStoreSdselGroup(storeManageVO);
                         procCnt += mapper.insertStoreSdselClass(storeManageVO);
                         procCnt += mapper.insertStoreSdselProd(storeManageVO);
+
                         // 상품 설명
                         procCnt += mapper.insertStoreProdInfo(storeManageVO);
                         // 상품 판매 시간대
@@ -629,6 +645,29 @@ public class StoreManageServiceImpl implements StoreManageService{
 
                         touchkeyVO.setCopyStoreCd(storeManageVO.getCopyStoreCd());
                         procCnt += mapper.copyFnkeyCopy(touchkeyVO);
+                    }
+
+                    // 실제출력물 복사
+                    if( "prtForm".equals(copyEnv[i]) ) {
+                        procCnt += mapper.copyPrtFormCopy(storeManageVO);
+                    }
+
+                    // 프로모션 복사
+                    if( "promotion".equals(copyEnv[i]) ) {
+                        // TB_HQ_PROMO_STORE
+                        procCnt += mapper.copyPromoStoreCopy(storeManageVO);
+                        // 본사에서 등록한 정보는 copyPromoStoreCopy입력 시 트리거타고 알아서 입력
+                        // 아래쿼리는 매장에서 등록한 프로모션을 복사하기위한 쿼리
+                        // TB_MS_PROMO_H
+                        procCnt += mapper.copyPromoHCopy(storeManageVO);
+                        // TB_MS_PROMO_BENE
+                        procCnt += mapper.copyPromoBeneCopy(storeManageVO);
+                        // TB_MS_PROMO_BENE_PROD
+                        procCnt += mapper.copyPromoBeneProdCopy(storeManageVO);
+                        // TB_MS_PROMO_CONDI
+                        procCnt += mapper.copyPromoCondiCopy(storeManageVO);
+                        // TB_MS_PROMO_CONDI_PROD
+                        procCnt += mapper.copyPromoCondiProdCopy(storeManageVO);
                     }
                 }
             }

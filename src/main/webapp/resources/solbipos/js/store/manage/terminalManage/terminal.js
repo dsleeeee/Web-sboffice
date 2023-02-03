@@ -212,7 +212,9 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
 
       // 조회한 데이터 붙이기
       for(var i=0; i<=posList.length; i++){
-        $scope.posFgArr.push(posList[i]);
+        if(posList[i] !== undefined){
+          $scope.posFgArr.push(posList[i]);
+        }
       }
       $scope.comboDt.posCombo.itemsSource = new wijmo.collections.CollectionView( $scope.posFgArr);
 
@@ -301,6 +303,24 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
   //   $scope._popMsg(messages["terminalManage.no.open"]);
   //   return false;
   // };
+
+  // 터미널정보복사
+  $scope.copyTerminalInfo = function (){
+
+    var params = {};
+    params.storeCd = $("#lblStoreCd").text();
+
+    $scope._postJSONQuery.withOutPopUp( baseUrl + "terminalManage/getTerminalEnv.sb", params, function(result) {
+
+      var posList = result.data.data.posList;
+
+      var scope = agrid.getScope("copyTerminalInfoCtrl");
+      scope.copyPosNoCombo.itemsSource = new wijmo.collections.CollectionView(posList);
+      scope.pastePosNoCombo.itemsSource = new wijmo.collections.CollectionView(posList);
+    });
+    $scope.copyTerminalInfoLayer.show();
+    $scope._broadcast('copyTerminalInfoCtrl', params);
+  };
 
   // 포스 터미널 그리드 행 추가
   $scope.posAddRow = function(){
