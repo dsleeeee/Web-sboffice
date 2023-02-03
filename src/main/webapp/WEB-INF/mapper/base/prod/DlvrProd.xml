@@ -21,11 +21,11 @@
     <select id="getDlvrColList" parameterType="dlvrProdVO" resultType="DefaultMap">
         /* USE : DlvrProdMapper.getDlvrColList */
         SELECT  tcn.NMCODE_CD AS DLVR_CD,
-                 tcn.NMCODE_NM AS DLVR_NM
-           FROM TB_CM_NMCODE tcn
-          WHERE tcn.NMCODE_GRP_CD = '112'
-            AND tcn.NMCODE_CD NOT IN ('1') /* 코드 1(포스앱)은 포스에서 사용하는 코드이므로 나오지 않도록 함 */
-      ORDER BY TO_NUMBER(tcn.NMCODE_CD)
+                tcn.NMCODE_NM AS DLVR_NM
+        FROM TB_CM_NMCODE tcn
+        WHERE tcn.NMCODE_GRP_CD = '112'
+          AND tcn.NMCODE_CD NOT IN ('1') /* 코드 1(포스앱)은 포스에서 사용하는 코드이므로 나오지 않도록 함 */
+        ORDER BY TO_NUMBER(tcn.NMCODE_CD)
 
     </select>
 
@@ -43,33 +43,29 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 <include refid="CmmSQL.PagingTemplateHeader"/>
                 SELECT thp.PROD_CD,
-                        thp.PROD_NM,
-                        <foreach collection="arrDlvrCol" item="item" separator=",">
-                            thpdpn.DLVR_${item}_PROD_NM AS DLVR_PROD_NM_${item},
-                            thpdpn.DLVR_${item}_MAPPING_FG AS DLVR_MAPPING_FG_${item}
-                        </foreach>
+                thp.PROD_NM,
+                <foreach collection="arrDlvrCol" item="item" separator=",">
+                    thpdpn.DLVR_PROD_NM_${item}
+                </foreach>
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_HQ_PRODUCT thp,
-                    ( SELECT *
-                        FROM (
-                                SELECT  HQ_OFFICE_CD,
-                                        PROD_CD,
-                                        DLVR_NAME_CD,
-                                        MIN(DLVR_PROD_NM) AS DLVR_PROD_NM,
-                                        MIN(DLVR_MAPPING_FG) AS DLVR_MAPPING_FG
-                                FROM    TB_HQ_PRODUCT_DLVR_PROD_NM
-                                GROUP BY HQ_OFFICE_CD, PROD_CD, DLVR_NAME_CD
-                              )
-                        PIVOT (
-                                MIN(DLVR_PROD_NM) AS PROD_NM,
-                                MIN(DLVR_MAPPING_FG) AS MAPPING_FG
-                                FOR DLVR_NAME_CD
-                                IN (${pivotDlvrCol})
-                              )
-                    ) thpdpn
+                ( SELECT *
+                FROM (
+                SELECT HQ_OFFICE_CD,
+                PROD_CD,
+                DLVR_NAME_CD,
+                DLVR_PROD_NM
+                FROM TB_HQ_PRODUCT_DLVR_PROD_NM
+                )
+                PIVOT (
+                MIN(DLVR_PROD_NM)
+                FOR DLVR_NAME_CD
+                IN (${pivotDlvrCol})
+                )
+                ) thpdpn
                 WHERE thpdpn.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
-                  AND thpdpn.PROD_CD (+)= thp.PROD_CD
-                  AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND thpdpn.PROD_CD (+)= thp.PROD_CD
+                AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test="chkDt == false">
                     <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                         <![CDATA[
@@ -84,32 +80,32 @@
                     AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
                 </if>
                 <if test="barCd != null and barCd != ''">
-                     AND EXISTS (
-                  SELECT 1
+                    AND EXISTS (
+                    SELECT 1
                     FROM TB_HQ_PRODUCT_BARCD
-                   WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                     AND PROD_CD = thp.PROD_CD
-                     AND BARCD_CD = #{barCd}
+                    WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND PROD_CD = thp.PROD_CD
+                    AND BARCD_CD = #{barCd}
                     ) --바코드
                 </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
-                     AND thp.PROD_CLASS_CD IN (
-                  SELECT PROD_CLASS_CD
+                    AND thp.PROD_CLASS_CD IN (
+                    SELECT PROD_CLASS_CD
                     FROM TB_HQ_PRODUCT_CLASS
-                   WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-              START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
-             CONNECT BY
-                   PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD  AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                    START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    CONNECT BY
+                    PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD  AND HQ_OFFICE_CD = #{hqOfficeCd}
                     )
                 </if>
                 <if test="useYn != null and useYn != ''">
                     AND thp.USE_YN = #{useYn} --사용여부
                 </if>
                 AND (
-                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-                        OR
-                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-                    )
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                )
                 ORDER BY thp.PROD_CD ASC
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -117,33 +113,29 @@
             <when test='orgnFg != null and orgnFg == "S"'>
                 <include refid="CmmSQL.PagingTemplateHeader"/>
                 SELECT tmp.PROD_CD,
-                        tmp.PROD_NM,
-                        <foreach collection="arrDlvrCol" item="item" separator=",">
-                            tmpdpn.DLVR_${item}_PROD_NM AS DLVR_PROD_NM_${item},
-                            tmpdpn.DLVR_${item}_MAPPING_FG AS DLVR_MAPPING_FG_${item}
-                        </foreach>
+                tmp.PROD_NM,
+                <foreach collection="arrDlvrCol" item="item" separator=",">
+                    tmpdpn.DLVR_PROD_NM_${item}
+                </foreach>
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_MS_PRODUCT tmp,
-                    (  SELECT *
-                         FROM (
-                                    SELECT STORE_CD,
-                                            PROD_CD,
-                                            DLVR_NAME_CD,
-                                            MIN(DLVR_PROD_NM) AS DLVR_PROD_NM,
-                                            MIN(DLVR_MAPPING_FG) AS DLVR_MAPPING_FG
-                                    FROM TB_MS_PRODUCT_DLVR_PROD_NM
-                                    GROUP BY STORE_CD, PROD_CD, DLVR_NAME_CD
-                               )
-                         PIVOT (
-                                    MIN(DLVR_PROD_NM) AS PROD_NM,
-                                    MIN(DLVR_MAPPING_FG) AS MAPPING_FG
-                                    FOR DLVR_NAME_CD
-                                    IN (${pivotDlvrCol})
-                               )
-                     ) tmpdpn
-               WHERE tmpdpn.STORE_CD (+)= tmp.STORE_CD
-                 AND tmpdpn.PROD_CD (+)= tmp.PROD_CD
-                 AND tmp.STORE_CD = #{storeCd}
+                (  SELECT *
+                FROM (
+                SELECT STORE_CD,
+                PROD_CD,
+                DLVR_NAME_CD,
+                DLVR_PROD_NM
+                FROM TB_MS_PRODUCT_DLVR_PROD_NM
+                )
+                PIVOT (
+                MIN(DLVR_PROD_NM)
+                FOR DLVR_NAME_CD
+                IN (${pivotDlvrCol})
+                )
+                ) tmpdpn
+                WHERE tmpdpn.STORE_CD (+)= tmp.STORE_CD
+                AND tmpdpn.PROD_CD (+)= tmp.PROD_CD
+                AND tmp.STORE_CD = #{storeCd}
                 <if test="chkDt == false">
                     <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                         <![CDATA[
@@ -158,32 +150,32 @@
                     AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
                 </if>
                 <if test="barCd != null and barCd != ''">
-                     AND EXISTS (
-                  SELECT 1
+                    AND EXISTS (
+                    SELECT 1
                     FROM TB_MS_PRODUCT_BARCD
-                   WHERE STORE_CD = tmp.STORE_CD
-                     AND PROD_CD = tmp.PROD_CD
-                     AND BARCD_CD = #{barCd}
-                  ) --바코드
+                    WHERE STORE_CD = tmp.STORE_CD
+                    AND PROD_CD = tmp.PROD_CD
+                    AND BARCD_CD = #{barCd}
+                    ) --바코드
                 </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
-                     AND tmp.PROD_CLASS_CD IN (
-                  SELECT PROD_CLASS_CD
+                    AND tmp.PROD_CLASS_CD IN (
+                    SELECT PROD_CLASS_CD
                     FROM TB_MS_PRODUCT_CLASS
-                   WHERE STORE_CD = #{storeCd}
-              START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
-             CONNECT BY
-                  PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                    WHERE STORE_CD = #{storeCd}
+                    START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                    CONNECT BY
+                    PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
                     )
                 </if>
                 <if test="useYn != null and useYn != ''">
                     AND tmp.USE_YN = #{useYn} --사용여부
                 </if>
                 AND (
-                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-                        OR
-                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-                    )
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                )
                 ORDER BY tmp.PROD_CD ASC
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -203,18 +195,18 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 DELETE
-                  FROM TB_HQ_PRODUCT_DLVR_PROD_NM
-                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                   AND PROD_CD = #{prodCd}
-                   AND DLVR_NAME_CD = #{dlvrNameCd}
+                FROM TB_HQ_PRODUCT_DLVR_PROD_NM
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND PROD_CD = #{prodCd}
+                AND DLVR_NAME_CD = #{dlvrNameCd}
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 DELETE
-                  FROM TB_MS_PRODUCT_DLVR_PROD_NM
-                 WHERE STORE_CD = #{storeCd}
-                   AND PROD_CD = #{prodCd}
-                   AND DLVR_NAME_CD = #{dlvrNameCd}
+                FROM TB_MS_PRODUCT_DLVR_PROD_NM
+                WHERE STORE_CD = #{storeCd}
+                AND PROD_CD = #{prodCd}
+                AND DLVR_NAME_CD = #{dlvrNameCd}
             </when>
         </choose>
     </delete>
@@ -233,54 +225,50 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 INSERT INTO TB_HQ_PRODUCT_DLVR_PROD_NM
                 (
-                    HQ_OFFICE_CD,
-                    PROD_CD,
-                    DLVR_NAME_CD,
-                    DLVR_PROD_NM,
-                    REG_ID,
-                    REG_DT,
-                    MOD_ID,
-                    MOD_DT,
-                    DLVR_MAPPING_FG
+                HQ_OFFICE_CD,
+                PROD_CD,
+                DLVR_NAME_CD,
+                DLVR_PROD_NM,
+                REG_ID,
+                REG_DT,
+                MOD_ID,
+                MOD_DT
                 )
                 VALUES
                 (
-                    #{hqOfficeCd},
-                    #{prodCd},
-                    #{dlvrNameCd},
-                    #{dlvrProdNm},
-                    #{regId},
-                    #{regDt},
-                    #{modId},
-                    #{modDt},
-                    #{dlvrMappingFg}
+                #{hqOfficeCd},
+                #{prodCd},
+                #{dlvrNameCd},
+                #{dlvrProdNm},
+                #{regId},
+                #{regDt},
+                #{modId},
+                #{modDt}
                 )
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 INSERT INTO TB_MS_PRODUCT_DLVR_PROD_NM
                 (
-                    STORE_CD,
-                    PROD_CD,
-                    DLVR_NAME_CD,
-                    DLVR_PROD_NM,
-                    REG_ID,
-                    REG_DT,
-                    MOD_ID,
-                    MOD_DT,
-                    DLVR_MAPPING_FG
+                STORE_CD,
+                PROD_CD,
+                DLVR_NAME_CD,
+                DLVR_PROD_NM,
+                REG_ID,
+                REG_DT,
+                MOD_ID,
+                MOD_DT
                 )
                 VALUES
                 (
-                    #{storeCd},
-                    #{prodCd},
-                    #{dlvrNameCd},
-                    #{dlvrProdNm},
-                    #{regId},
-                    #{regDt},
-                    #{modId},
-                    #{modDt},
-                    #{dlvrMappingFg}
+                #{storeCd},
+                #{prodCd},
+                #{dlvrNameCd},
+                #{dlvrProdNm},
+                #{regId},
+                #{regDt},
+                #{modId},
+                #{modDt}
                 )
             </when>
         </choose>
@@ -295,8 +283,8 @@
     <delete id="deleteStoreDlvrProdNm" parameterType="dlvrProdVO">
         /* DlvrProdMapper.deleteAllDlvrProdNm */
         DELETE
-          FROM TB_MS_PRODUCT_DLVR_PROD_NM
-         WHERE STORE_CD = #{targetStoreCd}
+        FROM TB_MS_PRODUCT_DLVR_PROD_NM
+        WHERE STORE_CD = #{targetStoreCd}
     </delete>
 
     <!-- 배달시스템 상품 명칭 매핑 - 배달상품명칭 복사 -->
@@ -306,57 +294,54 @@
         COMMENTS : 기준매장의 배달상품명칭을 복사하여 적용대상매장에 등록한다.
     -->
     <insert id="copyStoreDlvrProdNm" parameterType="dlvrProdVO">
-      /* USE : DlvrProdMapper.copyStoreDlvrProdNm */
-      INSERT INTO TB_MS_PRODUCT_DLVR_PROD_NM
-      (
-          STORE_CD
+        /* USE : DlvrProdMapper.copyStoreDlvrProdNm */
+        INSERT INTO TB_MS_PRODUCT_DLVR_PROD_NM
+        (
+        STORE_CD
         , PROD_CD
         , DLVR_NAME_CD
         , DLVR_PROD_NM
         , REG_DT
-		, REG_ID
-		, MOD_DT
-		, MOD_ID
-		, DLVR_MAPPING_FG
-      )
-      <choose>
-        <!-- 기준매장이 본사인 경우 -->
-        <when test='originalStoreFg != null and originalStoreFg == "H"'>
-            SELECT  #{targetStoreCd} AS STORE_CD
-                    , PROD_CD
-                    , DLVR_NAME_CD
-                    , DLVR_PROD_NM
-                    , #{regDt}
-                    , #{regId}
-                    , #{modDt}
-                    , #{modId}
-                    , DLVR_MAPPING_FG
-              FROM TB_HQ_PRODUCT_DLVR_PROD_NM
-             WHERE HQ_OFFICE_CD = #{originalStoreCd}
-               AND DLVR_NAME_CD IN (SELECT NMCODE_CD
-                                       FROM TB_CM_NMCODE
-                                      WHERE NMCODE_GRP_CD = '112'
-                                        AND NMCODE_CD != '1')
-        </when>
-        <!-- 기준매장이 매장인 경우 -->
-        <when test='originalStoreFg != null and originalStoreFg == "S"'>
-          SELECT  #{targetStoreCd} AS STORE_CD
-                   , PROD_CD
-                   , DLVR_NAME_CD
-                   , DLVR_PROD_NM
-                   , #{regDt}
-                   , #{regId}
-                   , #{modDt}
-                   , #{modId}
-                   , DLVR_MAPPING_FG
-            FROM TB_MS_PRODUCT_DLVR_PROD_NM
-           WHERE STORE_CD = #{originalStoreCd}
-             AND DLVR_NAME_CD IN (SELECT NMCODE_CD
-                                     FROM TB_CM_NMCODE
-                                    WHERE NMCODE_GRP_CD = '112'
-                                      AND NMCODE_CD != '1')
-        </when>
-      </choose>
+        , REG_ID
+        , MOD_DT
+        , MOD_ID
+        )
+        <choose>
+            <!-- 기준매장이 본사인 경우 -->
+            <when test='originalStoreFg != null and originalStoreFg == "H"'>
+                SELECT  #{targetStoreCd} AS STORE_CD
+                , PROD_CD
+                , DLVR_NAME_CD
+                , DLVR_PROD_NM
+                , #{regDt}
+                , #{regId}
+                , #{modDt}
+                , #{modId}
+                FROM TB_HQ_PRODUCT_DLVR_PROD_NM
+                WHERE HQ_OFFICE_CD = #{originalStoreCd}
+                AND DLVR_NAME_CD IN (SELECT NMCODE_CD
+                FROM TB_CM_NMCODE
+                WHERE NMCODE_GRP_CD = '112'
+                AND NMCODE_CD != '1')
+            </when>
+            <!-- 기준매장이 매장인 경우 -->
+            <when test='originalStoreFg != null and originalStoreFg == "S"'>
+                SELECT  #{targetStoreCd} AS STORE_CD
+                , PROD_CD
+                , DLVR_NAME_CD
+                , DLVR_PROD_NM
+                , #{regDt}
+                , #{regId}
+                , #{modDt}
+                , #{modId}
+                FROM TB_MS_PRODUCT_DLVR_PROD_NM
+                WHERE STORE_CD = #{originalStoreCd}
+                AND DLVR_NAME_CD IN (SELECT NMCODE_CD
+                FROM TB_CM_NMCODE
+                WHERE NMCODE_GRP_CD = '112'
+                AND NMCODE_CD != '1')
+            </when>
+        </choose>
     </insert>
 
     <!-- 배달시스템 상품 명칭 매핑 - 상품명칭 엑셀 업로드 전 상품코드 유효여부 체크  -->
@@ -371,9 +356,9 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT COUNT(PROD_CD)
-                  FROM TB_HQ_PRODUCT
-                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                   AND PROD_CD IN
+                FROM TB_HQ_PRODUCT
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND PROD_CD IN
                 <foreach collection="arrProdCdCol" item="item" open="(" close=")" separator=",">
                     #{item}
                 </foreach>
@@ -381,9 +366,9 @@
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT COUNT(PROD_CD)
-                  FROM TB_MS_PRODUCT
-                 WHERE STORE_CD = #{storeCd}
-                   AND PROD_CD IN
+                FROM TB_MS_PRODUCT
+                WHERE STORE_CD = #{storeCd}
+                AND PROD_CD IN
                 <foreach collection="arrProdCdCol" item="item" open="(" close=")" separator=",">
                     #{item}
                 </foreach>

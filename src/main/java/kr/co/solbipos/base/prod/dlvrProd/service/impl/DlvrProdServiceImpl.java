@@ -62,7 +62,7 @@ public class DlvrProdServiceImpl implements DlvrProdService {
         String pivotDlvrCol = "";
         String arrDlvrCol[] = dlvrProdVO.getDlvrCol().split(",");
         for(int i=0; i < arrDlvrCol.length; i++) {
-            pivotDlvrCol += (pivotDlvrCol.equals("") ? "" : ",") + "'"+arrDlvrCol[i]+"'"+" AS DLVR_"+arrDlvrCol[i];
+            pivotDlvrCol += (pivotDlvrCol.equals("") ? "" : ",") + "'"+arrDlvrCol[i]+"'"+" AS DLVR_PROD_NM_"+arrDlvrCol[i];
         }
         dlvrProdVO.setPivotDlvrCol(pivotDlvrCol);
 
@@ -94,17 +94,17 @@ public class DlvrProdServiceImpl implements DlvrProdService {
 
             if ( dlvrProdVO.getStatus() == GridDataFg.UPDATE ) {
 
-                    // 1. 기존 배달상품명칭 삭제
-                    dlvrProdMapper.deleteDlvrProdNm(dlvrProdVO);
+                // 1. 기존 배달상품명칭 삭제
+                dlvrProdMapper.deleteDlvrProdNm(dlvrProdVO);
 
-                    // 2. 값이 있는 경우, 배달상품명칭 INSERT
-                    if(dlvrProdVO.getDlvrProdNm() != null && dlvrProdVO.getDlvrProdNm() != "" && dlvrProdVO.getDlvrProdNm().length() > 0){
+                // 2. 값이 있는 경우, 배달상품명칭 INSERT
+                if(dlvrProdVO.getDlvrProdNm() != null && dlvrProdVO.getDlvrProdNm() != "" && dlvrProdVO.getDlvrProdNm().length() > 0){
 
-                        result = dlvrProdMapper.insertDlvrProdNm(dlvrProdVO);
-                        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-                    }
+                    result = dlvrProdMapper.insertDlvrProdNm(dlvrProdVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
 
-                    procCnt ++;
+                procCnt ++;
             }
         }
 
@@ -130,8 +130,8 @@ public class DlvrProdServiceImpl implements DlvrProdService {
 
         // 필수 값 체크
         if(dlvrProdVO.getOriginalStoreFg() != null && !"".equals(dlvrProdVO.getOriginalStoreFg()) &&
-            dlvrProdVO.getOriginalStoreCd() != null && !"".equals(dlvrProdVO.getOriginalStoreCd()) &&
-            dlvrProdVO.getTargetStoreCd() != null && !"".equals(dlvrProdVO.getTargetStoreCd())){
+                dlvrProdVO.getOriginalStoreCd() != null && !"".equals(dlvrProdVO.getOriginalStoreCd()) &&
+                dlvrProdVO.getTargetStoreCd() != null && !"".equals(dlvrProdVO.getTargetStoreCd())){
 
             // 1. 배달상품명칭 복사 전 기존데이터 삭제
             dlvrProdMapper.deleteStoreDlvrProdNm(dlvrProdVO);

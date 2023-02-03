@@ -122,14 +122,14 @@
         </colgroup>
         <tbody>
         <tr class="brt">
-            <th class="oh gr fl w70" style="height: 75px;">
+            <th class="oh gr fl w50" style="height: 75px;">
                 <p class="s12 bk lh20">
-                     * 정상 매핑된 명칭만 저장됩니다.<br />
-                     * 최대 30자 입니다.(30자 이상 인 경우, 잘라서 저장됩니다.)<br />
-                     * 공백이 들어가지 않도록 주의하세요.<br />
+                    * 상품코드와 정상 매핑된 명칭만 저장됩니다.<br />
+                    * 매핑명칭은 최대 30자 입니다.(30자 이상 인 경우, 잘라서 저장됩니다.)<br />
+                    * 상품코드에 공백이 들어가지 않도록 주의하세요.<br />
                 </p>
             </th>
-            <th class="oh gr fr w30" style="height: 75px; font-size:15px">
+            <th class="oh gr fr w50" style="height: 75px; font-size:15px">
                 <%-- excel 업로드 --%>
                 <button class="btn_skyblue ml5 fr" id="btnExcelUpload" ng-click="excelUpload()">
                     <s:message code="dlvrProd.excelUpload" />
@@ -188,7 +188,6 @@
                     <%-- 배달앱 구분코드 컬럼 생성--%>
                     <c:forEach var="dlvrCol" items="${dlvrColList}">
                         <wj-flex-grid-column header="${dlvrCol.dlvrNm}[${dlvrCol.dlvrCd}]" binding="dlvrProdNm${dlvrCol.dlvrCd}" width="150" max-length=30></wj-flex-grid-column>
-                        <wj-flex-grid-column header="${dlvrCol.dlvrNm}[${dlvrCol.dlvrCd}]_매핑기준" binding="dlvrMappingFg${dlvrCol.dlvrCd}" width="150" data-map="dlvrMappingFgDataMap" ></wj-flex-grid-column>
                     </c:forEach>
 
                 </wj-flex-grid>
@@ -205,12 +204,12 @@
 </div>
 
 <script type="text/javascript">
-  var dlvrCol = '${dlvrCol}';
-  var orgnFg = "${orgnFg}";
-  var hqOfficeCd = "${hqOfficeCd}";
+    var dlvrCol = '${dlvrCol}';
+    var orgnFg = "${orgnFg}";
+    var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProd/dlvrProdNmMapping.js?ver=20201016.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProd/dlvrProdNmMapping.js?ver=20201016.03" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
