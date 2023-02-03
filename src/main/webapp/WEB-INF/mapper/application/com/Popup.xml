@@ -84,7 +84,8 @@
         NVL(thq.ENVST_VAL, '0') AS ENVST_0027,
         NVL(thq43.ENVST_VAL, '0') AS ENVST_0043,
         NVL(tcm124.NMCODE_CD, '') AS DIGIT8_STORE,
-        NVL(thq1250.ENVST_VAL, '0') AS ENVST_1250
+        NVL(thq1250.ENVST_VAL, '0') AS ENVST_1250,
+        NVL(thq1262.ENVST_VAL, '0') AS ENVST_1262
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_HQ_OFFICE tho,
         (
@@ -113,11 +114,19 @@
             FROM TB_HQ_ENVST
             WHERE ENVST_CD = '1250'
             AND USE_YN = 'Y'
-        ) thq1250
+        ) thq1250,
+        (
+            SELECT HQ_OFFICE_CD,
+            ENVST_VAL
+            FROM TB_HQ_ENVST
+            WHERE ENVST_CD = '1262'
+            AND USE_YN = 'Y'
+        ) thq1262
         WHERE thq.HQ_OFFICE_CD (+)= tho.HQ_OFFICE_CD
         AND thq43.HQ_OFFICE_CD (+)= tho.HQ_OFFICE_CD
         AND tcm124.NMCODE_ITEM_1 (+)= tho.HQ_OFFICE_CD
         AND thq1250.HQ_OFFICE_CD (+)= tho.HQ_OFFICE_CD
+        AND thq1262.HQ_OFFICE_CD (+)= tho.HQ_OFFICE_CD
         <if test='hqOfficeCd != null and hqOfficeCd != ""'>
             AND tho.HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
         </if>

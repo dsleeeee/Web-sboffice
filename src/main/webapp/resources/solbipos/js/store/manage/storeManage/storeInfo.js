@@ -411,6 +411,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#supplyPriceChk").prop("checked", false);
       $("#posFnkeyChk").prop("checked", false);
       $("#touchKeyChk").prop("checked", false);
+      $("#prtFormChk").prop("checked", false);
+      $("#promotionChk").prop("checked", false);
 
       $scope.store.siteCd = storeDetailInfo.siteCd;
       $scope.store.mapStoreCd = storeDetailInfo.mapStoreCd;
@@ -507,6 +509,13 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       // 본사를 선택해주세요.
       var msg = messages["storeManage.hqOffice"] + messages["cmm.require.select"];
       if (isNull($scope.store.hqOfficeCd) || isNull($scope.store.hqOfficeNm) || isNull($scope.store.storeCdInputType)) {
+        $scope._popMsg(msg);
+        return false;
+      }
+
+      // [1262] 매장복사필수여부 사용 시 매장환경을 복사해야지만 저장 가능
+     var msg = messages["storeManage.1262.msg"];
+      if($("#envst1262").val() === "1" && isNull( $scope.envStoreCdVal)){
         $scope._popMsg(msg);
         return false;
       }
@@ -1008,6 +1017,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             $("#divMomsEnvst").css("display", "none");
           }
 
+            $("#envst1262").val(hqScope.getHq().envst1262);
+
         }
       });
       
@@ -1033,10 +1044,17 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       if ($("#touchKeyChk").is(":checked") === true) {
         $("#touchKeyChk").prop("checked", false);
       }
+      if ($("#prtFormChk").is(":checked") === true) {
+        $("#prtFormChk").prop("checked", false);
+      }
+      if ($("#promotionChk").is(":checked") === true) {
+        $("#promotionChk").prop("checked", false);
+      }
       $("#productChk").attr("disabled", true);
       $("#salePriceChk").attr("disabled", true);
       $("#supplyPriceChk").attr("disabled", true);
       $("#touchKeyChk").attr("disabled", true);
+      $("#promotionChk").attr("disabled", true);
 
     // 신규등록할 매장이 프랜매장일 경우
     } else if($scope.store.hqOfficeCd !== "00000") {
@@ -1046,6 +1064,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#salePriceChk").attr("disabled", false);
         $("#supplyPriceChk").attr("disabled", false);
         $("#touchKeyChk").attr("disabled", false);
+        $("#promotionChk").attr("disabled", false);
 
       // 매장환경복사의 매장을 선택 후 신규등록할 매장을 수정하면
       } else {
@@ -1063,10 +1082,17 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             if ($("#touchKeyChk").is(":checked") === true) {
                 $("#touchKeyChk").prop("checked", false);
             }
+            if ($("#prtFormChk").is(":checked") === true) {
+                $("#prtFormChk").prop("checked", false);
+            }
+            if ($("#promotionChk").is(":checked") === true) {
+                $("#promotionChk").prop("checked", false);
+            }
             $("#productChk").attr("disabled", true);
             $("#salePriceChk").attr("disabled", true);
             $("#supplyPriceChk").attr("disabled", true);
             $("#touchKeyChk").attr("disabled", true);
+            $("#promotionChk").attr("disabled", true);
 
         // 매장환경복사 매장이 프랜매장일 경우
         } else if($scope.store.copyHqOfficeCd !== "00000") {
@@ -1075,6 +1101,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             $("#salePriceChk").attr("disabled", false);
             $("#supplyPriceChk").attr("disabled", false);
             $("#touchKeyChk").attr("disabled", false);
+            $("#promotionChk").attr("disabled", false);
 
           // 매장환경복사 본사와 다른 본사면
           } else if($scope.store.hqOfficeCd !== $scope.store.copyHqOfficeCd) {
@@ -1090,10 +1117,17 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             if ($("#touchKeyChk").is(":checked") === true) {
               $("#touchKeyChk").prop("checked", false);
             }
+            if ($("#prtFormChk").is(":checked") === true) {
+              $("#prtFormChk").prop("checked", false);
+            }
+            if ($("#promotionChk").is(":checked") === true) {
+              $("#promotionChk").prop("checked", false);
+            }
             $("#productChk").attr("disabled", true);
             $("#salePriceChk").attr("disabled", true);
             $("#supplyPriceChk").attr("disabled", true);
             $("#touchKeyChk").attr("disabled", true);
+            $("#promotionChk").attr("disabled", true);
           }
         }
       }

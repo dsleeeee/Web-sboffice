@@ -1151,7 +1151,7 @@
         MERGE INTO TB_MS_COUPON A
         USING   (
                     SELECT  #{storeCd}          AS STORE_CD
-                    ,       'H'                 AS COUPN_DC_FG
+                    ,       'H'                 AS COUPN_REG_FG
                     ,       PAY_CLASS_CD
                     ,       COUPN_CD
                     ,       COUPN_NM
@@ -1173,7 +1173,7 @@
                     WHERE   HQ_OFFICE_CD        =   #{hqOfficeCd}
                 ) B
         ON      (           A.STORE_CD          =   B.STORE_CD
-                AND         A.COUPN_DC_FG       =   B.COUPN_DC_FG
+                AND         A.COUPN_REG_FG      =   B.COUPN_REG_FG
                 AND         A.PAY_CLASS_CD      =   B.PAY_CLASS_CD
                 AND         A.COUPN_CD          =   B.COUPN_CD
                 )
@@ -1196,7 +1196,7 @@
         INSERT
         (
                 A.STORE_CD
-        ,       A.COUPN_DC_FG
+        ,       A.COUPN_REG_FG
         ,       A.PAY_CLASS_CD
         ,       A.COUPN_CD
         ,       A.COUPN_NM
@@ -1218,7 +1218,7 @@
         VALUES
         (
                 B.STORE_CD
-        ,       B.COUPN_DC_FG
+        ,       B.COUPN_REG_FG
         ,       B.PAY_CLASS_CD
         ,       B.COUPN_CD
         ,       B.COUPN_NM
@@ -1238,6 +1238,92 @@
         ,       B.DISP_SEQ_NO
         )
     </insert>
+
+    <!-- 쿠폰 적용상품 생성 -->
+    <!--
+        TABLE    : TB_HQ_COUPON_PROD
+        PARAM    : storeManageVO
+        COMMENTS : 쿠폰 적용상품 생성
+    -->
+    <insert id="insertTbMsCouponProd" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertTbMsCouponProd */
+        MERGE INTO TB_MS_COUPON_PROD A
+        USING   (
+                    SELECT  #{storeCd}          AS STORE_CD
+                    ,       'H'                 AS COUPN_REG_FG
+                    ,       PAY_CLASS_CD
+                    ,       COUPN_CD
+                    ,       PROD_CD
+                    ,       #{regDt}            AS REG_DT
+                    ,       #{regId}            AS REG_ID
+                    ,       #{modDt}            AS MOD_DT
+                    ,       #{modId}            AS MOD_ID
+                    FROM    TB_HQ_COUPON_PROD
+                    WHERE   HQ_OFFICE_CD        =   #{hqOfficeCd}
+                ) B
+        ON      (           A.STORE_CD          =   B.STORE_CD
+                AND         A.COUPN_REG_FG      =   B.COUPN_REG_FG
+                AND         A.PAY_CLASS_CD      =   B.PAY_CLASS_CD
+                AND         A.COUPN_CD          =   B.COUPN_CD
+                AND         A.PROD_CD           =   B.PROD_CD
+                )
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                A.STORE_CD
+        ,       A.COUPN_REG_FG
+        ,       A.PAY_CLASS_CD
+        ,       A.COUPN_CD
+        ,       A.PROD_CD
+        ,       A.REG_DT
+        ,       A.REG_ID
+        ,       A.MOD_DT
+        ,       A.MOD_ID
+        )
+        VALUES
+        (
+                B.STORE_CD
+        ,       B.COUPN_REG_FG
+        ,       B.PAY_CLASS_CD
+        ,       B.COUPN_CD
+        ,       B.PROD_CD
+        ,       B.REG_DT
+        ,       B.REG_ID
+        ,       B.MOD_DT
+        ,       B.MOD_ID
+        )
+    </insert>
+
+    <!-- 쿠폰별 사용 매장으로 등록 -->
+    <!--
+        TABLE    : TB_HQ_COUPON_STORE
+        PARAM    : tableGroupVO
+        COMMENTS : 쿠폰별 사용 매장으로 등록한다.
+    -->
+    <insert id="insertHqCouponStore" parameterType="tableGroupVO">
+        /* USE : StoreManageMapper.insertHqCouponStore */
+        INSERT INTO TB_HQ_COUPON_STORE
+        (
+            HQ_OFFICE_CD,
+            PAY_CLASS_CD,
+            COUPN_CD,
+            STORE_CD,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        SELECT #{hqOfficeCd},
+               PAY_CLASS_CD,
+               COUPN_CD,
+               STORE_CD,
+               #{regDt},
+               #{regId},
+               #{modDt},
+               #{modId}
+          FROM TB_MS_COUPON
+         WHERE STORE_CD = #{storeCd}
+  </insert>
 
     <!-- 테이블 기본 그룹 생성 -->
     <!--
@@ -1788,7 +1874,13 @@
             DEPOSIT_CUP_FG,
             POINT_USE_YN,
             DC_YN,
-            SALE_TIME_FG
+            SALE_TIME_FG,
+            OPTION_GRP_CD,
+            RELEASE_DATE,
+            DISCON_DATE,
+            DISCON_YN,
+            GROUP_PROD_CD,
+            DEPOSIT_PROD_CD
             FROM TB_MS_PRODUCT
             WHERE 1=1
             AND STORE_CD = #{copyStoreCd}
@@ -1840,7 +1932,13 @@
             DEPOSIT_CUP_FG = B.DEPOSIT_CUP_FG,
             POINT_USE_YN = B.POINT_USE_YN,
             DC_YN = B.DC_YN,
-            SALE_TIME_FG = B.SALE_TIME_FG
+            SALE_TIME_FG = B.SALE_TIME_FG,
+            OPTION_GRP_CD = B.OPTION_GRP_CD,
+            RELEASE_DATE = B.RELEASE_DATE,
+            DISCON_DATE = B.DISCON_DATE,
+            DISCON_YN = B.DISCON_YN,
+            GROUP_PROD_CD = B.GROUP_PROD_CD,
+            DEPOSIT_PROD_CD = B.DEPOSIT_PROD_CD
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -1887,7 +1985,13 @@
                 A.DEPOSIT_CUP_FG,
                 A.POINT_USE_YN,
                 A.DC_YN,
-                A.SALE_TIME_FG
+                A.SALE_TIME_FG,
+                A.OPTION_GRP_CD,
+                A.RELEASE_DATE,
+                A.DISCON_DATE,
+                A.DISCON_YN,
+                A.GROUP_PROD_CD,
+                A.DEPOSIT_PROD_CD
             ) VALUES (
                 B.STORE_CD,
                 B.PROD_CD,
@@ -1933,7 +2037,13 @@
                 B.DEPOSIT_CUP_FG,
                 B.POINT_USE_YN,
                 B.DC_YN,
-                B.SALE_TIME_FG
+                B.SALE_TIME_FG,
+                B.OPTION_GRP_CD,
+                B.RELEASE_DATE,
+                B.DISCON_DATE,
+                B.DISCON_YN,
+                B.GROUP_PROD_CD,
+                B.DEPOSIT_PROD_CD
             )
     </insert>
 
@@ -1989,7 +2099,13 @@
             #{modId} AS MOD_ID,
             'H' AS REG_FG,
             MAP_PROD_CD,
-            SALE_TIME_FG
+            SALE_TIME_FG,
+            OPTION_GRP_CD,
+            RELEASE_DATE,
+            DISCON_DATE,
+            DISCON_YN,
+            GROUP_PROD_CD,
+            DEPOSIT_PROD_CD
             FROM TB_HQ_PRODUCT
             WHERE 1=1
             AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -2035,7 +2151,13 @@
             REMARK = B.REMARK,
             MOD_DT = B.MOD_DT,
             MOD_ID = B.MOD_ID,
-            SALE_TIME_FG = B.SALE_TIME_FG
+            SALE_TIME_FG = B.SALE_TIME_FG,
+            OPTION_GRP_CD = B.OPTION_GRP_CD,
+            RELEASE_DATE = B.RELEASE_DATE,
+            DISCON_DATE = B.DISCON_DATE,
+            DISCON_YN = B.DISCON_YN,
+            GROUP_PROD_CD = B.GROUP_PROD_CD,
+            DEPOSIT_PROD_CD = B.DEPOSIT_PROD_CD
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -2078,7 +2200,13 @@
                 A.MOD_ID,
                 A.REG_FG,
                 A.MAP_PROD_CD,
-                A.SALE_TIME_FG
+                A.SALE_TIME_FG,
+                A.OPTION_GRP_CD,
+                A.RELEASE_DATE,
+                A.DISCON_DATE,
+                A.DISCON_YN,
+                A.GROUP_PROD_CD,
+                A.DEPOSIT_PROD_CD
             ) VALUES (
                 B.STORE_CD,
                 B.PROD_CD,
@@ -2120,7 +2248,13 @@
                 B.MOD_ID,
                 B.REG_FG,
                 B.MAP_PROD_CD,
-                B.SALE_TIME_FG
+                B.SALE_TIME_FG,
+                B.OPTION_GRP_CD,
+                B.RELEASE_DATE,
+                B.DISCON_DATE,
+                B.DISCON_YN,
+                B.GROUP_PROD_CD,
+                B.DEPOSIT_PROD_CD
             )
     </insert>
 
@@ -2794,7 +2928,20 @@
             NU_SUGARS,
             NU_SAT_FAT,
             NU_CAFFEINE,
-            MOMS_KIOSK_EDGE
+            MOMS_KIOSK_EDGE,
+            SALE_TYPE_YN_SIN,
+            SALE_TYPE_YN_DLV,
+            SALE_TYPE_YN_PKG,
+            SALE_CHN_YN_POS,
+            SALE_CHN_YN_KSK,
+            SALE_CHN_YN_CMP,
+            SALE_CHN_YN_BAE,
+            SALE_CHN_YN_BAO,
+            SALE_CHN_YN_YGY,
+            SALE_CHN_YN_YGE,
+            SALE_CHN_YN_CPN,
+            SALE_CHN_YN_TNG,
+            SALE_CHN_YN_DDN
             FROM TB_HQ_PRODUCT_INFO
             WHERE 1=1
             AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -2825,7 +2972,20 @@
                 A.NU_SUGARS,
                 A.NU_SAT_FAT,
                 A.NU_CAFFEINE,
-                A.MOMS_KIOSK_EDGE
+                A.MOMS_KIOSK_EDGE,
+                A.SALE_TYPE_YN_SIN,
+                A.SALE_TYPE_YN_DLV,
+                A.SALE_TYPE_YN_PKG,
+                A.SALE_CHN_YN_POS,
+                A.SALE_CHN_YN_KSK,
+                A.SALE_CHN_YN_CMP,
+                A.SALE_CHN_YN_BAE,
+                A.SALE_CHN_YN_BAO,
+                A.SALE_CHN_YN_YGY,
+                A.SALE_CHN_YN_YGE,
+                A.SALE_CHN_YN_CPN,
+                A.SALE_CHN_YN_TNG,
+                A.SALE_CHN_YN_DDN
             ) VALUES (
                 B.STORE_CD,
                 B.PROD_CD,
@@ -2841,7 +3001,20 @@
                 B.NU_SUGARS,
                 B.NU_SAT_FAT,
                 B.NU_CAFFEINE,
-                B.MOMS_KIOSK_EDGE
+                B.MOMS_KIOSK_EDGE,
+                B.SALE_TYPE_YN_SIN,
+                B.SALE_TYPE_YN_DLV,
+                B.SALE_TYPE_YN_PKG,
+                B.SALE_CHN_YN_POS,
+                B.SALE_CHN_YN_KSK,
+                B.SALE_CHN_YN_CMP,
+                B.SALE_CHN_YN_BAE,
+                B.SALE_CHN_YN_BAO,
+                B.SALE_CHN_YN_YGY,
+                B.SALE_CHN_YN_YGE,
+                B.SALE_CHN_YN_CPN,
+                B.SALE_CHN_YN_TNG,
+                B.SALE_CHN_YN_DDN
             )
     </insert>
 
@@ -3057,7 +3230,9 @@
             #{regId} AS REG_ID,
             #{modDt} AS MOD_DT,
             #{modId} AS MOD_ID,
-            RCVKIND
+            RCVKIND,
+            FIX_PROD_FG,
+            SDSEL_TYPE_FG
             FROM TB_HQ_PRODUCT_SDSEL_GROUP
             WHERE 1=1
             AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -3074,7 +3249,9 @@
             USE_YN = B.USE_YN,
             MOD_DT = B.MOD_DT,
             MOD_ID = B.MOD_ID,
-            RCVKIND = B.RCVKIND
+            RCVKIND = B.RCVKIND,
+            FIX_PROD_FG = B.FIX_PROD_FG,
+            SDSEL_TYPE_FG = B.SDSEL_TYPE_FG
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -3086,7 +3263,9 @@
                 A.REG_ID,
                 A.MOD_DT,
                 A.MOD_ID,
-                A.RCVKIND
+                A.RCVKIND,
+                A.FIX_PROD_FG,
+                A.SDSEL_TYPE_FG
             ) VALUES (
                 B.STORE_CD,
                 B.HQ_BRAND_CD,
@@ -3097,7 +3276,9 @@
                 B.REG_ID,
                 B.MOD_DT,
                 B.MOD_ID,
-                B.RCVKIND
+                B.RCVKIND,
+                B.FIX_PROD_FG,
+                B.SDSEL_TYPE_FG
             )
     </insert>
 
@@ -3125,7 +3306,8 @@
             #{modDt} AS MOD_DT,
             #{modId} AS MOD_ID,
             MAP_CLASS_CD,
-            RCVKIND
+            RCVKIND,
+            REQUIRE_YN
             FROM TB_HQ_PRODUCT_SDSEL_CLASS
             WHERE 1=1
             AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -3145,7 +3327,8 @@
             MOD_DT = B.MOD_DT,
             MOD_ID = B.MOD_ID,
             MAP_CLASS_CD = B.MAP_CLASS_CD,
-            RCVKIND = B.RCVKIND
+            RCVKIND = B.RCVKIND,
+            REQUIRE_YN = B.REQUIRE_YN
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -3160,7 +3343,8 @@
                 A.MOD_DT,
                 A.MOD_ID,
                 A.MAP_CLASS_CD,
-                A.RCVKIND
+                A.RCVKIND,
+                A.REQUIRE_YN
             ) VALUES (
                 B.STORE_CD,
                 B.SDSEL_CLASS_CD,
@@ -3174,7 +3358,8 @@
                 B.MOD_DT,
                 B.MOD_ID,
                 B.MAP_CLASS_CD,
-                B.RCVKIND
+                B.RCVKIND,
+                B.REQUIRE_YN
             )
     </insert>
 
@@ -3272,7 +3457,9 @@
             #{regId} AS REG_ID,
             #{modDt} AS MOD_DT,
             #{modId} AS MOD_ID,
-            RCVKIND
+            RCVKIND,
+            FIX_PROD_FG,
+            SDSEL_TYPE_FG
             FROM TB_MS_PRODUCT_SDSEL_GROUP
             WHERE 1=1
             AND STORE_CD = #{copyStoreCd}
@@ -3289,7 +3476,9 @@
             USE_YN = B.USE_YN,
             MOD_DT = B.MOD_DT,
             MOD_ID = B.MOD_ID,
-            RCVKIND = B.RCVKIND
+            RCVKIND = B.RCVKIND,
+            FIX_PROD_FG = B.FIX_PROD_FG,
+            SDSEL_TYPE_FG = B.SDSEL_TYPE_FG
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -3301,7 +3490,9 @@
                 A.REG_ID,
                 A.MOD_DT,
                 A.MOD_ID,
-                A.RCVKIND
+                A.RCVKIND,
+                A.FIX_PROD_FG,
+                A.SDSEL_TYPE_FG
             ) VALUES (
                 B.STORE_CD,
                 B.MS_BRAND_CD,
@@ -3312,7 +3503,9 @@
                 B.REG_ID,
                 B.MOD_DT,
                 B.MOD_ID,
-                B.RCVKIND
+                B.RCVKIND,
+                B.FIX_PROD_FG,
+                B.SDSEL_TYPE_FG
             )
     </insert>
 
@@ -3340,7 +3533,8 @@
             #{modDt} AS MOD_DT,
             #{modId} AS MOD_ID,
             MAP_CLASS_CD,
-            RCVKIND
+            RCVKIND,
+            REQUIRE_YN
             FROM TB_MS_PRODUCT_SDSEL_CLASS
             WHERE 1=1
             AND STORE_CD = #{copyStoreCd}
@@ -3360,7 +3554,8 @@
             MOD_DT = B.MOD_DT,
             MOD_ID = B.MOD_ID,
             MAP_CLASS_CD = B.MAP_CLASS_CD,
-            RCVKIND = B.RCVKIND
+            RCVKIND = B.RCVKIND,
+            REQUIRE_YN = B.REQUIRE_YN
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -3375,7 +3570,8 @@
                 A.MOD_DT,
                 A.MOD_ID,
                 A.MAP_CLASS_CD,
-                A.RCVKIND
+                A.RCVKIND,
+                A.REQUIRE_YN
             ) VALUES (
                 B.STORE_CD,
                 B.SDSEL_CLASS_CD,
@@ -3389,7 +3585,8 @@
                 B.MOD_DT,
                 B.MOD_ID,
                 B.MAP_CLASS_CD,
-                B.RCVKIND
+                B.RCVKIND,
+                B.REQUIRE_YN
             )
     </insert>
 
@@ -3474,6 +3671,123 @@
             )
     </insert>
 
+    <!-- 옵션그룹 복사 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_OPTION_GROUP
+        PARAM    : storeManageVO
+        COMMENTS : 옵션그룹를 복사한다
+    -->
+    <insert id="insertStoreHqOptionGroup" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStoreHqOptionGroup */
+        MERGE INTO TB_MS_PRODUCT_OPTION_GROUP A
+            USING
+                (
+                    SELECT  #{storeCd} AS STORE_CD,
+                            OPTION_GRP_CD,
+                            OPTION_GRP_NM,
+                            USE_YN,
+                            'H' AS REG_FG,
+                            #{regDt} AS REG_DT,
+                            #{regId} AS REG_ID,
+                            #{modDt} AS MOD_DT,
+                            #{modId} AS MOD_ID
+                    FROM    TB_HQ_PRODUCT_OPTION_GROUP
+                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                ) B
+            ON  (
+                        A.STORE_CD = B.STORE_CD
+                    AND A.OPTION_GRP_CD = B.OPTION_GRP_CD
+                )
+            WHEN MATCHED THEN
+                UPDATE
+                    SET
+                        OPTION_GRP_NM = B.OPTION_GRP_NM,
+                        MOD_DT = B.MOD_DT,
+                        MOD_ID = B.MOD_ID
+            WHEN NOT MATCHED THEN
+                INSERT (
+                        A.STORE_CD,
+                        A.OPTION_GRP_CD,
+                        A.OPTION_GRP_NM,
+                        A.USE_YN,
+                        A.REG_FG,
+                        A.REG_DT,
+                        A.REG_ID,
+                        A.MOD_DT,
+                        A.MOD_ID
+                    ) VALUES (
+                        B.STORE_CD,
+                        B.OPTION_GRP_CD,
+                        B.OPTION_GRP_NM,
+                        B.USE_YN,
+                        B.REG_FG,
+                        B.REG_DT,
+                        B.REG_ID,
+                        B.MOD_DT,
+                        B.MOD_ID
+                     )
+    </insert>
+
+    <!-- 옵션 복사 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_OPTION_VAL
+        PARAM    : storeManageVO
+        COMMENTS : 옵션을 복사한다
+    -->
+    <insert id="insertStoreHqOptionVal" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStoreHqOptionVal */
+        MERGE INTO TB_MS_PRODUCT_OPTION_VAL A
+            USING
+                (
+                    SELECT  #{storeCd} AS STORE_CD,
+                            OPTION_GRP_CD,
+                            OPTION_VAL_CD,
+                            OPTION_VAL_NM,
+                            'H' AS REG_FG,
+                            #{regDt} AS REG_DT,
+                            #{regId} AS REG_ID,
+                            #{modDt} AS MOD_DT,
+                            #{modId} AS MOD_ID,
+                            OPT_PROD_CD
+                    FROM    TB_HQ_PRODUCT_OPTION_VAL
+                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                ) B
+            ON  (
+                        A.STORE_CD = B.STORE_CD
+                    AND A.OPTION_GRP_CD = B.OPTION_GRP_CD
+                    AND A.OPTION_VAL_CD = B.OPTION_VAL_CD
+                )
+            WHEN MATCHED THEN
+                UPDATE
+                    SET
+                        MOD_DT = B.MOD_DT,
+                        MOD_ID = B.MOD_ID,
+                        OPT_PROD_CD = B.OPT_PROD_CD
+            WHEN NOT MATCHED THEN
+                INSERT (
+                        A.STORE_CD,
+                        A.OPTION_GRP_CD,
+                        A.OPTION_VAL_CD,
+                        A.OPTION_VAL_NM,
+                        A.REG_FG,
+                        A.REG_DT,
+                        A.REG_ID,
+                        A.MOD_DT,
+                        A.MOD_ID,
+                        A.OPT_PROD_CD
+                    ) VALUES (
+                        B.STORE_CD,
+                        B.OPTION_GRP_CD,
+                        B.OPTION_VAL_CD,
+                        B.OPTION_VAL_NM,
+                        B.REG_FG,
+                        B.REG_DT,
+                        B.REG_ID,
+                        B.MOD_DT,
+                        B.MOD_ID,
+                        B.OPT_PROD_CD
+                     )
+    </insert>
 
     <!-- 상품 상세 설명 복사 -->
     <!--
@@ -3501,7 +3815,20 @@
             NU_SUGARS,
             NU_SAT_FAT,
             NU_CAFFEINE,
-            MOMS_KIOSK_EDGE
+            MOMS_KIOSK_EDGE,
+            SALE_TYPE_YN_SIN,
+            SALE_TYPE_YN_DLV,
+            SALE_TYPE_YN_PKG,
+            SALE_CHN_YN_POS,
+            SALE_CHN_YN_KSK,
+            SALE_CHN_YN_CMP,
+            SALE_CHN_YN_BAE,
+            SALE_CHN_YN_BAO,
+            SALE_CHN_YN_YGY,
+            SALE_CHN_YN_YGE,
+            SALE_CHN_YN_CPN,
+            SALE_CHN_YN_TNG,
+            SALE_CHN_YN_DDN
             FROM TB_MS_PRODUCT_INFO
             WHERE 1=1
             AND STORE_CD = #{copyStoreCd}
@@ -3523,7 +3850,20 @@
             NU_SUGARS = B.NU_SUGARS,
             NU_SAT_FAT = B.NU_SAT_FAT,
             NU_CAFFEINE = B.NU_CAFFEINE,
-            MOMS_KIOSK_EDGE = B.MOMS_KIOSK_EDGE
+            MOMS_KIOSK_EDGE = B.MOMS_KIOSK_EDGE,
+            SALE_TYPE_YN_SIN = B.SALE_TYPE_YN_SIN,
+            SALE_TYPE_YN_DLV = B.SALE_TYPE_YN_DLV,
+            SALE_TYPE_YN_PKG = B.SALE_TYPE_YN_PKG,
+            SALE_CHN_YN_POS = B.SALE_CHN_YN_POS,
+            SALE_CHN_YN_KSK = B.SALE_CHN_YN_KSK,
+            SALE_CHN_YN_CMP = B.SALE_CHN_YN_CMP,
+            SALE_CHN_YN_BAE = B.SALE_CHN_YN_BAE,
+            SALE_CHN_YN_BAO = B.SALE_CHN_YN_BAO,
+            SALE_CHN_YN_YGY = B.SALE_CHN_YN_YGY,
+            SALE_CHN_YN_YGE = B.SALE_CHN_YN_YGE,
+            SALE_CHN_YN_CPN = B.SALE_CHN_YN_CPN,
+            SALE_CHN_YN_TNG = B.SALE_CHN_YN_TNG,
+            SALE_CHN_YN_DDN = B.SALE_CHN_YN_DDN
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -3540,7 +3880,20 @@
                 A.NU_SUGARS,
                 A.NU_SAT_FAT,
                 A.NU_CAFFEINE,
-                A.MOMS_KIOSK_EDGE
+                A.MOMS_KIOSK_EDGE,
+                A.SALE_TYPE_YN_SIN,
+                A.SALE_TYPE_YN_DLV,
+                A.SALE_TYPE_YN_PKG,
+                A.SALE_CHN_YN_POS,
+                A.SALE_CHN_YN_KSK,
+                A.SALE_CHN_YN_CMP,
+                A.SALE_CHN_YN_BAE,
+                A.SALE_CHN_YN_BAO,
+                A.SALE_CHN_YN_YGY,
+                A.SALE_CHN_YN_YGE,
+                A.SALE_CHN_YN_CPN,
+                A.SALE_CHN_YN_TNG,
+                A.SALE_CHN_YN_DDN
             ) VALUES (
                 B.STORE_CD,
                 B.PROD_CD,
@@ -3556,7 +3909,20 @@
                 B.NU_SUGARS,
                 B.NU_SAT_FAT,
                 B.NU_CAFFEINE,
-                B.MOMS_KIOSK_EDGE
+                B.MOMS_KIOSK_EDGE,
+                B.SALE_TYPE_YN_SIN,
+                B.SALE_TYPE_YN_DLV,
+                B.SALE_TYPE_YN_PKG,
+                B.SALE_CHN_YN_POS,
+                B.SALE_CHN_YN_KSK,
+                B.SALE_CHN_YN_CMP,
+                B.SALE_CHN_YN_BAE,
+                B.SALE_CHN_YN_BAO,
+                B.SALE_CHN_YN_YGY,
+                B.SALE_CHN_YN_YGE,
+                B.SALE_CHN_YN_CPN,
+                B.SALE_CHN_YN_TNG,
+                B.SALE_CHN_YN_DDN
             )
     </insert>
 
@@ -4206,6 +4572,537 @@
           FROM TB_MS_TOUCH_KEY tmtk
          WHERE tmtk.STORE_CD = #{copyStoreCd}
         ]]>
+    </insert>
+
+    <!-- 실제출력물 복사 -->
+    <!--
+        TABLE    : TB_HQ_PROMO_STORE
+        PARAM    : storeManageVO
+        COMMENTS : 실제출력물을 복사한다
+    -->
+    <insert id="copyPrtFormCopy" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.copyPrtFormCopy */
+        MERGE INTO TB_MS_PRINT A
+            USING   (
+                SELECT  #{storeCd} AS STORE_CD
+                ,       PRT_CLASS_CD
+                ,       TEMPLT_REG_FG
+                ,       TEMPLT_CD
+                ,       PRT_FORM
+                ,       #{regDt} AS REG_DT
+                ,       #{regId} AS REG_ID
+                ,       #{modDt} AS MOD_DT
+                ,       #{modId} AS MOD_ID
+                FROM    TB_MS_PRINT A
+                WHERE   STORE_CD = #{copyStoreCd}
+            ) B
+            ON  (   B.STORE_CD  =   A.STORE_CD
+                AND B.PRT_CLASS_CD  =   A.PRT_CLASS_CD
+                )
+            WHEN MATCHED THEN
+                UPDATE
+                SET
+                        A.TEMPLT_REG_FG =   B.TEMPLT_REG_FG
+                ,       A.TEMPLT_CD     =   B.TEMPLT_CD
+                ,       A.PRT_FORM      =   B.PRT_FORM
+                ,       A.MOD_DT        =   B.MOD_DT
+                ,       A.MOD_ID        =   B.MOD_ID
+            WHEN NOT MATCHED THEN
+                INSERT
+                (
+                        A.STORE_CD
+                ,       A.PRT_CLASS_CD
+                ,       A.TEMPLT_REG_FG
+                ,       A.TEMPLT_CD
+                ,       A.PRT_FORM
+                ,       A.REG_DT
+                ,       A.REG_ID
+                ,       A.MOD_DT
+                ,       A.MOD_ID
+                )
+                VALUES
+                (
+                        B.STORE_CD
+                ,       B.PRT_CLASS_CD
+                ,       B.TEMPLT_REG_FG
+                ,       B.TEMPLT_CD
+                ,       B.PRT_FORM
+                ,       B.REG_DT
+                ,       B.REG_ID
+                ,       B.MOD_DT
+                ,       B.MOD_ID
+                )
+    </insert>
+
+    <!-- 프로모션 복사 -->
+    <!--
+        TABLE    : TB_HQ_PROMO_STORE
+        PARAM    : storeManageVO
+        COMMENTS : 프로모션을 복사한다
+    -->
+    <insert id="copyPromoStoreCopy" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.copyPromoStoreCopy */
+        INSERT INTO TB_HQ_PROMO_STORE
+        (
+            HQ_OFFICE_CD,
+            PROMOTION_CD,
+            STORE_CD,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        SELECT  HQ_OFFICE_CD,
+                PROMOTION_CD,
+                #{storeCd} AS STORE_CD,
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+        FROM    TB_HQ_PROMO_STORE
+        WHERE   STORE_CD = #{copyStoreCd}
+    </insert>
+
+    <!-- 프로모션 복사 -->
+    <!--
+        TABLE    : TB_MS_PROMO_H
+        PARAM    : storeManageVO
+        COMMENTS : 프로모션을 복사한다
+    -->
+    <insert id="copyPromoHCopy" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.copyPromoHCopy */
+        MERGE INTO TB_MS_PROMO_H A
+            USING   (
+                SELECT  #{storeCd} AS STORE_CD
+                ,       PROMOTION_CD
+                ,       PROMOTION_NM
+                ,       MEMO
+                ,       AUTO_YN
+                ,       USE_YN
+                ,       OVERLAP_YN
+                ,       REG_FG
+                ,       #{regDt} AS REG_DT
+                ,       #{regId} AS REG_ID
+                ,       #{modDt} AS MOD_DT
+                ,       #{modId} AS MOD_ID
+                ,       PROMO_TYPE
+                FROM    TB_MS_PROMO_H A
+                WHERE   STORE_CD = #{copyStoreCd}
+            ) B
+            ON  (
+                    B.STORE_CD  =   A.STORE_CD
+                AND B.PROMOTION_CD  =   A.PROMOTION_CD
+            )
+            WHEN NOT MATCHED THEN
+                INSERT
+                    (
+                            A.STORE_CD
+                    ,       A.PROMOTION_CD
+                    ,       A.PROMOTION_NM
+                    ,       A.MEMO
+                    ,       A.AUTO_YN
+                    ,       A.USE_YN
+                    ,       A.OVERLAP_YN
+                    ,       A.REG_FG
+                    ,       A.REG_DT
+                    ,       A.REG_ID
+                    ,       A.MOD_DT
+                    ,       A.MOD_ID
+                    ,       A.PROMO_TYPE
+                    )
+                    VALUES
+                    (
+                            B.STORE_CD
+                    ,       B.PROMOTION_CD
+                    ,       B.PROMOTION_NM
+                    ,       B.MEMO
+                    ,       B.AUTO_YN
+                    ,       B.USE_YN
+                    ,       B.OVERLAP_YN
+                    ,       B.REG_FG
+                    ,       B.REG_DT
+                    ,       B.REG_ID
+                    ,       B.MOD_DT
+                    ,       B.MOD_ID
+                    ,       B.PROMO_TYPE
+                    )
+    </insert>
+
+    <!-- 프로모션 복사 -->
+    <!--
+        TABLE    : TB_MS_PROMO_BENE
+        PARAM    : storeManageVO
+        COMMENTS : 프로모션을 복사한다
+    -->
+    <insert id="copyPromoBeneCopy" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.copyPromoBeneCopy */
+        MERGE INTO TB_MS_PROMO_BENE A
+            USING   (
+                SELECT  #{storeCd} AS STORE_CD
+                ,       PROMOTION_CD
+                ,       BENE_SEQ
+                ,       TYPE_CD
+                ,       APPLY_DC_DS
+                ,       DC_SET
+                ,       PRESENT_DS
+                ,       SELECT_GIFT_CNT
+                ,       SELECT_CROSS_FG
+                ,       PRINT_MESSAGE
+                ,       #{regDt} AS REG_DT
+                ,       #{regId} AS REG_ID
+                ,       #{modDt} AS MOD_DT
+                ,       #{modId} AS MOD_ID
+                FROM    TB_MS_PROMO_BENE A
+                WHERE   STORE_CD = #{copyStoreCd}
+            ) B
+            ON  (
+                    B.STORE_CD  =   A.STORE_CD
+                AND B.PROMOTION_CD  =   A.PROMOTION_CD
+                AND B.BENE_SEQ  =   A.BENE_SEQ
+            )
+            WHEN NOT MATCHED THEN
+                INSERT
+                    (
+                            A.STORE_CD
+                    ,       A.PROMOTION_CD
+                    ,       A.BENE_SEQ
+                    ,       A.TYPE_CD
+                    ,       A.APPLY_DC_DS
+                    ,       A.DC_SET
+                    ,       A.PRESENT_DS
+                    ,       A.SELECT_GIFT_CNT
+                    ,       A.SELECT_CROSS_FG
+                    ,       A.PRINT_MESSAGE
+                    ,       A.REG_DT
+                    ,       A.REG_ID
+                    ,       A.MOD_DT
+                    ,       A.MOD_ID
+                    )
+                    VALUES
+                    (
+                            B.STORE_CD
+                    ,       B.PROMOTION_CD
+                    ,       B.BENE_SEQ
+                    ,       B.TYPE_CD
+                    ,       B.APPLY_DC_DS
+                    ,       B.DC_SET
+                    ,       B.PRESENT_DS
+                    ,       B.SELECT_GIFT_CNT
+                    ,       B.SELECT_CROSS_FG
+                    ,       B.PRINT_MESSAGE
+                    ,       B.REG_DT
+                    ,       B.REG_ID
+                    ,       B.MOD_DT
+                    ,       B.MOD_ID
+                    )
+    </insert>
+
+    <!-- 프로모션 복사 -->
+    <!--
+        TABLE    : TB_MS_PROMO_BENE_PROD
+        PARAM    : storeManageVO
+        COMMENTS : 프로모션을 복사한다
+    -->
+    <insert id="copyPromoBeneProdCopy" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.copyPromoBeneProdCopy */
+        MERGE INTO TB_MS_PROMO_BENE_PROD A
+            USING   (
+                SELECT  #{storeCd} AS STORE_CD
+                ,       PROMOTION_CD
+                ,       PROD_CD
+                ,       GIFT_QTY
+                ,       #{regDt} AS REG_DT
+                ,       #{regId} AS REG_ID
+                ,       #{modDt} AS MOD_DT
+                ,       #{modId} AS MOD_ID
+                FROM    TB_MS_PROMO_BENE_PROD A
+                WHERE   STORE_CD = #{copyStoreCd}
+            ) B
+            ON  (
+                    B.STORE_CD  =   A.STORE_CD
+                AND B.PROMOTION_CD  =   A.PROMOTION_CD
+                AND B.PROD_CD  =   A.PROD_CD
+            )
+            WHEN NOT MATCHED THEN
+                INSERT
+                    (
+                            A.STORE_CD
+                    ,       A.PROMOTION_CD
+                    ,       A.PROD_CD
+                    ,       A.GIFT_QTY
+                    ,       A.REG_DT
+                    ,       A.REG_ID
+                    ,       A.MOD_DT
+                    ,       A.MOD_ID
+                    )
+                    VALUES
+                    (
+                            B.STORE_CD
+                    ,       B.PROMOTION_CD
+                    ,       B.PROD_CD
+                    ,       B.GIFT_QTY
+                    ,       B.REG_DT
+                    ,       B.REG_ID
+                    ,       B.MOD_DT
+                    ,       B.MOD_ID
+                    )
+    </insert>
+
+    <!-- 프로모션 복사 -->
+    <!--
+        TABLE    : TB_MS_PROMO_CONDI
+        PARAM    : storeManageVO
+        COMMENTS : 프로모션을 복사한다
+    -->
+    <insert id="copyPromoCondiCopy" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.copyPromoCondiCopy */
+        MERGE INTO TB_MS_PROMO_CONDI A
+            USING   (
+                SELECT  #{storeCd} AS STORE_CD
+                ,       PROMOTION_CD
+                ,       DATE_YN
+                ,       START_YMD
+                ,       END_YMD
+                ,       TIME_YN
+                ,       START_TIME
+                ,       END_TIME
+                ,       WEEK_YN
+                ,       MON_YN
+                ,       TUE_YN
+                ,       WED_YN
+                ,       THU_YN
+                ,       FRI_YN
+                ,       SAT_YN
+                ,       SUN_YN
+                ,       MEMBER_TARGET_DS
+                ,       MEMBER_CLASS_CD
+                ,       MIN_SALE_AMT
+                ,       PROD_CD_YN
+                ,       SELECT_PROD_DS
+                ,       SELECT_CROSS_FG
+                ,       SELECT_PROD_CNT
+                ,       STORE_USE_YN
+                ,       SIDE_PROD_FG
+                ,       #{regDt} AS REG_DT
+                ,       #{regId} AS REG_ID
+                ,       #{modDt} AS MOD_DT
+                ,       #{modId} AS MOD_ID
+                ,       PROD_SELECT_EXCEPT_FG
+                ,       DLV1_YN
+                ,       DLV2_YN
+                ,       DLV3_YN
+                ,       MAX_SALE_AMT
+                ,       HQ_CHARGE_UPRC
+                ,       MS_CHARGE_UPRC
+                ,       PARTNER_CHARGE_UPRC
+                ,       DLV4_YN
+                ,       DLV5_YN
+                ,       DLV6_YN
+                ,       DLV7_YN
+                ,       DLV8_YN
+                ,       DLV9_YN
+                ,       DLV10_YN
+                ,       DLV11_YN
+                ,       DLV12_YN
+                ,       MOMS_PURCHS_CNT_LIMIT
+                ,       MOMS_PURCHS_QTY_LIMIT
+                ,       BLOCK_PAY_CD
+                ,       DEPOSIT_YMD
+                ,       DLV13_YN
+                ,       DLV14_YN
+                ,       DLV15_YN
+                ,       CHARGE_DS
+                ,       COUPON_YN
+                FROM    TB_MS_PROMO_CONDI A
+                WHERE   STORE_CD = #{copyStoreCd}
+            ) B
+            ON  (
+                    B.STORE_CD  =   A.STORE_CD
+                AND B.PROMOTION_CD  =   A.PROMOTION_CD
+            )
+            WHEN NOT MATCHED THEN
+                INSERT
+                    (
+                            A.STORE_CD
+                    ,       A.PROMOTION_CD
+                    ,       A.DATE_YN
+                    ,       A.START_YMD
+                    ,       A.END_YMD
+                    ,       A.TIME_YN
+                    ,       A.START_TIME
+                    ,       A.END_TIME
+                    ,       A.WEEK_YN
+                    ,       A.MON_YN
+                    ,       A.TUE_YN
+                    ,       A.WED_YN
+                    ,       A.THU_YN
+                    ,       A.FRI_YN
+                    ,       A.SAT_YN
+                    ,       A.SUN_YN
+                    ,       A.MEMBER_TARGET_DS
+                    ,       A.MEMBER_CLASS_CD
+                    ,       A.MIN_SALE_AMT
+                    ,       A.PROD_CD_YN
+                    ,       A.SELECT_PROD_DS
+                    ,       A.SELECT_CROSS_FG
+                    ,       A.SELECT_PROD_CNT
+                    ,       A.STORE_USE_YN
+                    ,       A.SIDE_PROD_FG
+                    ,       A.REG_DT
+                    ,       A.REG_ID
+                    ,       A.MOD_DT
+                    ,       A.MOD_ID
+                    ,       A.PROD_SELECT_EXCEPT_FG
+                    ,       A.DLV1_YN
+                    ,       A.DLV2_YN
+                    ,       A.DLV3_YN
+                    ,       A.MAX_SALE_AMT
+                    ,       A.HQ_CHARGE_UPRC
+                    ,       A.MS_CHARGE_UPRC
+                    ,       A.PARTNER_CHARGE_UPRC
+                    ,       A.DLV4_YN
+                    ,       A.DLV5_YN
+                    ,       A.DLV6_YN
+                    ,       A.DLV7_YN
+                    ,       A.DLV8_YN
+                    ,       A.DLV9_YN
+                    ,       A.DLV10_YN
+                    ,       A.DLV11_YN
+                    ,       A.DLV12_YN
+                    ,       A.MOMS_PURCHS_CNT_LIMIT
+                    ,       A.MOMS_PURCHS_QTY_LIMIT
+                    ,       A.BLOCK_PAY_CD
+                    ,       A.DEPOSIT_YMD
+                    ,       A.DLV13_YN
+                    ,       A.DLV14_YN
+                    ,       A.DLV15_YN
+                    ,       A.CHARGE_DS
+                    ,       A.COUPON_YN
+                    )
+                    VALUES
+                    (
+                            B.STORE_CD
+                    ,       B.PROMOTION_CD
+                    ,       B.DATE_YN
+                    ,       B.START_YMD
+                    ,       B.END_YMD
+                    ,       B.TIME_YN
+                    ,       B.START_TIME
+                    ,       B.END_TIME
+                    ,       B.WEEK_YN
+                    ,       B.MON_YN
+                    ,       B.TUE_YN
+                    ,       B.WED_YN
+                    ,       B.THU_YN
+                    ,       B.FRI_YN
+                    ,       B.SAT_YN
+                    ,       B.SUN_YN
+                    ,       B.MEMBER_TARGET_DS
+                    ,       B.MEMBER_CLASS_CD
+                    ,       B.MIN_SALE_AMT
+                    ,       B.PROD_CD_YN
+                    ,       B.SELECT_PROD_DS
+                    ,       B.SELECT_CROSS_FG
+                    ,       B.SELECT_PROD_CNT
+                    ,       B.STORE_USE_YN
+                    ,       B.SIDE_PROD_FG
+                    ,       B.REG_DT
+                    ,       B.REG_ID
+                    ,       B.MOD_DT
+                    ,       B.MOD_ID
+                    ,       B.PROD_SELECT_EXCEPT_FG
+                    ,       B.DLV1_YN
+                    ,       B.DLV2_YN
+                    ,       B.DLV3_YN
+                    ,       B.MAX_SALE_AMT
+                    ,       B.HQ_CHARGE_UPRC
+                    ,       B.MS_CHARGE_UPRC
+                    ,       B.PARTNER_CHARGE_UPRC
+                    ,       B.DLV4_YN
+                    ,       B.DLV5_YN
+                    ,       B.DLV6_YN
+                    ,       B.DLV7_YN
+                    ,       B.DLV8_YN
+                    ,       B.DLV9_YN
+                    ,       B.DLV10_YN
+                    ,       B.DLV11_YN
+                    ,       B.DLV12_YN
+                    ,       B.MOMS_PURCHS_CNT_LIMIT
+                    ,       B.MOMS_PURCHS_QTY_LIMIT
+                    ,       B.BLOCK_PAY_CD
+                    ,       B.DEPOSIT_YMD
+                    ,       B.DLV13_YN
+                    ,       B.DLV14_YN
+                    ,       B.DLV15_YN
+                    ,       B.CHARGE_DS
+                    ,       B.COUPON_YN
+                    )
+    </insert>
+
+    <!-- 프로모션 복사 -->
+    <!--
+        TABLE    : TB_MS_PROMO_CONDI_PROD
+        PARAM    : storeManageVO
+        COMMENTS : 프로모션을 복사한다
+    -->
+    <insert id="copyPromoCondiProdCopy" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.copyPromoCondiProdCopy */
+        MERGE INTO TB_MS_PROMO_CONDI_PROD A
+            USING   (
+                SELECT  #{storeCd} AS STORE_CD
+                ,       PROMOTION_CD
+                ,       CONDI_PROD_SEQ
+                ,       GUBUN_DS
+                ,       PROD_CD
+                ,       PROD_CLASS_CD
+                ,       PROD_QTY
+                ,       #{regDt} AS REG_DT
+                ,       #{regId} AS REG_ID
+                ,       #{modDt} AS MOD_DT
+                ,       #{modId} AS MOD_ID
+                ,       APPLY_DC_DS
+                ,       DC_SET
+                FROM    TB_MS_PROMO_CONDI_PROD A
+                WHERE   STORE_CD = #{copyStoreCd}
+            ) B
+            ON  (
+                        B.STORE_CD  =   A.STORE_CD
+                    AND B.PROMOTION_CD  =   A.PROMOTION_CD
+                    AND B.CONDI_PROD_SEQ  =   A.CONDI_PROD_SEQ
+                )
+            WHEN NOT MATCHED THEN
+                INSERT
+                    (
+                            A.STORE_CD
+                    ,       A.PROMOTION_CD
+                    ,       A.CONDI_PROD_SEQ
+                    ,       A.GUBUN_DS
+                    ,       A.PROD_CD
+                    ,       A.PROD_CLASS_CD
+                    ,       A.PROD_QTY
+                    ,       A.REG_DT
+                    ,       A.REG_ID
+                    ,       A.MOD_DT
+                    ,       A.MOD_ID
+                    ,       A.APPLY_DC_DS
+                    ,       A.DC_SET
+                    )
+                    VALUES
+                    (
+                            B.STORE_CD
+                    ,       B.PROMOTION_CD
+                    ,       B.CONDI_PROD_SEQ
+                    ,       B.GUBUN_DS
+                    ,       B.PROD_CD
+                    ,       B.PROD_CLASS_CD
+                    ,       B.PROD_QTY
+                    ,       B.REG_DT
+                    ,       B.REG_ID
+                    ,       B.MOD_DT
+                    ,       B.MOD_ID
+                    ,       B.APPLY_DC_DS
+                    ,       B.DC_SET
+                    )
     </insert>
 
     <!-- 공통코드 복사   -->
@@ -6282,6 +7179,136 @@
                 B.RECP_SEQ
             )
     </insert>
+
+
+    <!-- 상품이미지 정보 복사 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_IMAGE
+        PARAM    : storeManageVO
+        COMMENTS : 상품이미지 정보를 복사한다
+    -->
+    <insert id="insertStoreHqProductImage" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStoreHqProductImage */
+        MERGE INTO TB_MS_PRODUCT_IMAGE A
+            USING
+                (
+                    SELECT #{storeCd} AS STORE_CD,
+                           PROD_CD,
+                           IMG_FG,
+                           IMG_URL,
+                           IMG_FILE_NM,
+                           IMG_CHG_DT,
+                           REMARK,
+                           #{regDt} AS REG_DT,
+                           #{regId} AS REG_ID,
+                           #{modDt} AS MOD_DT,
+                           #{modId} AS MOD_ID
+                    FROM TB_HQ_PRODUCT_IMAGE
+                    WHERE 1=1
+                      AND HQ_OFFICE_CD = #{hqOfficeCd}
+                ) B
+            ON  (
+                    A.STORE_CD = B.STORE_CD
+                    AND A.PROD_CD = B.PROD_CD
+                    AND A.IMG_FG = B.IMG_FG
+                )
+            WHEN MATCHED THEN
+                UPDATE
+                    SET
+                        IMG_URL = B.IMG_URL,
+                        IMG_FILE_NM = B.IMG_FILE_NM,
+                        IMG_CHG_DT = B.IMG_CHG_DT,
+                        REMARK = B.REMARK,
+                        MOD_DT = B.MOD_DT,
+                        MOD_ID = B.MOD_ID
+            WHEN NOT MATCHED THEN
+                INSERT (
+                        A.STORE_CD,
+                        A.PROD_CD,
+                        A.IMG_FG,
+                        A.IMG_URL,
+                        A.IMG_FILE_NM,
+                        A.IMG_CHG_DT,
+                        A.REMARK,
+                        A.REG_DT,
+                        A.REG_ID,
+                        A.MOD_DT,
+                        A.MOD_ID
+                    ) VALUES (
+                        B.STORE_CD,
+                        B.PROD_CD,
+                        B.IMG_FG,
+                        B.IMG_URL,
+                        B.IMG_FILE_NM,
+                        B.IMG_CHG_DT,
+                        B.REMARK,
+                        B.REG_DT,
+                        B.REG_ID,
+                        B.MOD_DT,
+                        B.MOD_ID
+                    )
+    </insert>
+
+    <!-- 배달시스템상품명칭매핑 정보 복사 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_DLVR_PROD_NM
+        PARAM    : storeManageVO
+        COMMENTS : 배달시스템상품명칭매핑 정보를 복사한다
+    -->
+    <insert id="insertStoreHqProductDlvrProdNm" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStoreHqProductDlvrProdNm */
+        MERGE INTO TB_MS_PRODUCT_DLVR_PROD_NM A
+            USING
+                (
+                    SELECT #{storeCd} AS STORE_CD,
+                           PROD_CD,
+                           DLVR_NAME_CD,
+                           DLVR_PROD_NM,
+                           #{regDt} AS REG_DT,
+                           #{regId} AS REG_ID,
+                           #{modDt} AS MOD_DT,
+                           #{modId} AS MOD_ID,
+                           DLVR_MAPPING_FG
+                    FROM TB_HQ_PRODUCT_DLVR_PROD_NM
+                    WHERE 1=1
+                      AND HQ_OFFICE_CD = #{hqOfficeCd}
+                ) B
+            ON  (
+                    A.STORE_CD = B.STORE_CD
+                    AND A.DLVR_NAME_CD = B.DLVR_NAME_CD
+                    AND A.PROD_CD = B.PROD_CD
+                )
+            WHEN MATCHED THEN
+                UPDATE
+                    SET
+                        DLVR_PROD_NM = B.DLVR_PROD_NM,
+                        MOD_DT = B.MOD_DT,
+                        MOD_ID = B.MOD_ID,
+                        DLVR_MAPPING_FG = B.DLVR_MAPPING_FG
+            WHEN NOT MATCHED THEN
+                INSERT (
+                        A.STORE_CD,
+                        A.PROD_CD,
+                        A.DLVR_NAME_CD,
+                        A.DLVR_PROD_NM,
+                        A.REG_DT,
+                        A.REG_ID,
+                        A.MOD_DT,
+                        A.MOD_ID,
+                        A.DLVR_MAPPING_FG
+                    ) VALUES (
+                        B.STORE_CD,
+                        B.PROD_CD,
+                        B.DLVR_NAME_CD,
+                        B.DLVR_PROD_NM,
+                        B.REG_DT,
+                        B.REG_ID,
+                        B.MOD_DT,
+                        B.MOD_ID,
+                        B.DLVR_MAPPING_FG
+                    )
+    </insert>
+
 
     <!-- 판매터치키 메뉴 임시테이블 삭제 -->
     <!--
