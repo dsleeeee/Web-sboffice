@@ -448,15 +448,15 @@
                         </td>
                     </tr>
                     <tr <c:if test="${momsEnvstVal == '0'}">style="display: none"</c:if>>
-                        <%-- 구매횟수제한 --%>
-                        <th><s:message code="promotion.momsPurchsCntLimit" /></th>
-                        <td>
-                            <input type="text" class="sb-input w100" id="momsPurchsCntLimit" ng-model="momsPurchsCntLimit" maxlength="2" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
-                        </td>
                         <%-- 구매갯수제한 --%>
                         <th><s:message code="promotion.momsPurchsQtyLimit" /></th>
                         <td>
                             <input type="text" class="sb-input w100" id="momsPurchsQtyLimit" ng-model="momsPurchsQtyLimit" maxlength="2" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
+                        </td>
+                        <%-- 구매횟수제한 --%>
+                        <th style="display: none"><s:message code="promotion.momsPurchsCntLimit" /></th>
+                        <td style="display: none">
+                            <input type="text" class="sb-input w100" id="momsPurchsCntLimit" ng-model="momsPurchsCntLimit" maxlength="2" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
                         </td>
                     </tr>
                     <tr <c:if test="${momsEnvstVal == '0'}">style="display: none"</c:if>>
