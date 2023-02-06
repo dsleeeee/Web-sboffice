@@ -793,6 +793,9 @@
                 <div class="sb-select w80 fl">
                   <input type="text" id="_nuCaffeine" name="nuCaffeine" class="sb-input w100" ng-model="prodModifyInfo.nuCaffeine"/>
                 </div>
+                <div class="sb-select w20 fr">
+                  (mg)
+                </div>
               </td>
               <td></td>
               <td></td>

@@ -623,6 +623,9 @@
                                 <div class="sb-select w80 fl">
                                     {{prodDetail.nuCaffeine}}
                                 </div>
+                                <div class="sb-select w20 fr">
+                                    (mg)
+                                </div>
                             </td>
                             <td></td>
                             <td></td>
