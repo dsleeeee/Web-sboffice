@@ -477,10 +477,10 @@
                 VENDOR_NM,
                 VENDOR_TERMNL_NO,
                 VENDOR_SER_NO,
-                REG_DT,
-                REG_ID,
-                MOD_DT,
-                MOD_ID
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
         FROM    TB_MS_POS_TERMNL
         WHERE   STORE_CD = #{storeCd}
         AND     POS_NO = #{copyPosNo}
