@@ -48,4 +48,7 @@ public interface IostockCmmMapper {
 
     /** 사용자별 지사 콤보박스 조회 */
     List<DefaultMap<String>> selectBranchMomsList(IostockCmmVO iostockCmmVO);
+
+    /** 프로모션 조회 */
+    List<DefaultMap<String>> selectPromotionList(IostockCmmVO iostockCmmVO);
 }

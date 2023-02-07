@@ -166,12 +166,15 @@
 
     <!-- 기초관리 > 프로모션관리 > 매장자체프로모션현황 -->
     <typeAlias alias="storeSelfPromotionVO" type="kr.co.solbipos.base.promotion.storeSelfPromotion.service.StoreSelfPromotionVO"/>
-<!--
-    <typeAlias alias="storeViewVO" type="kr.co.solbipos.store.manage.storeview.service.StoreViewVO"/>
-    <typeAlias alias="storeConfgVO" type="kr.co.solbipos.store.manage.storeconfg.service.StoreConfgVO"/>
-    <typeAlias alias="confgBatchVO" type="kr.co.solbipos.store.manage.confgbatch.service.ConfgBatchVO"/>
-    <typeAlias alias="statusVO" type="kr.co.solbipos.store.manage.status.service.StatusVO"/>
--->
+    <!-- 기초관리 > 프로모션관리 > 프로모션정산 -->
+    <typeAlias alias="promotionReportVO" type="kr.co.solbipos.base.promotion.promotionReport.service.PromotionReportVO"/>
+
+    <!--
+        <typeAlias alias="storeViewVO" type="kr.co.solbipos.store.manage.storeview.service.StoreViewVO"/>
+        <typeAlias alias="storeConfgVO" type="kr.co.solbipos.store.manage.storeconfg.service.StoreConfgVO"/>
+        <typeAlias alias="confgBatchVO" type="kr.co.solbipos.store.manage.confgbatch.service.ConfgBatchVO"/>
+        <typeAlias alias="statusVO" type="kr.co.solbipos.store.manage.status.service.StatusVO"/>
+    -->
     <!-- 기초관리 > 가상로그인 -->
     <typeAlias alias="virtualLoginVO" type="kr.co.solbipos.store.manage.virtuallogin.service.VirtualLoginVO"/>
     <!-- 기초관리 > 총판/대리점 가상로그인 -->

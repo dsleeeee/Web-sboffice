@@ -229,4 +229,15 @@ public class IostockCmmServiceImpl implements IostockCmmService {
 
         return resultList;
     }
+
+    @Override
+    public List<DefaultMap<String>> selectPromotionList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
+
+        iostockCmmVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        iostockCmmVO.setEmpNo(sessionInfoVO.getEmpNo());
+        iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        iostockCmmVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return iostockCmmMapper.selectPromotionList(iostockCmmVO);
+    }
 }

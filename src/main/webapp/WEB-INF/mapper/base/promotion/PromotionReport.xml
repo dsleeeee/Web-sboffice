@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    PromotionReport.xml
+    프로모션정산
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2023.02.06     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.promotion.promotionReport.service.impl.PromotionReportMapper">
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getPromotionReportList" parameterType="promotionReportVO" resultType="DefaultMap">
+        /* PromotionReportMapper.getPromotionReportList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+            <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT 	thph.PROMOTION_NM
+                ,		tsdp.PROMOTION_CD
+                ,		TO_CHAR(TO_DATE(thpc.START_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS START_YMD
+                ,		TO_CHAR(TO_DATE(thpc.END_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS END_YMD
+                ,		tsdp.STORE_CD
+                ,		tms.STORE_NM
+                ,       (SUBSTR(tms.BIZ_NO, 1,3) || '-' || SUBSTR(tms.BIZ_NO, 4,2) || '-' || SUBSTR(tms.BIZ_NO, 6)) AS BIZ_NO
+                ,		TO_CHAR(TO_DATE(thpc.DEPOSIT_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS DEPOSIT_YMD
+                ,		DECODE(tms.DIRECT_MANAGE_YN,'Y','직영점','N','가맹점') AS REMARK
+                ,		SUM(tsdp.HD_REAL_SALE_CNT) AS HD_REAL_SALE_CNT
+                ,		SUM(tsdp.DT_REAL_SALE_CNT) AS DT_REAL_SALE_CNT
+                ,		SUM(tsdp.REAL_SALE_QTY) AS REAL_SALE_QTY
+                ,		NVL2(thpc.CHARGE_DS, DECODE(thpc.CHARGE_DS, '1', '정율', '2', '정액'), '미사용') AS CHARGE_DS
+                ,		NVL2(thpc.CHARGE_DS, thpc.HQ_CHARGE_UPRC, '') AS HQ_CHARGE_UPRC_M
+                ,		NVL2(thpc.CHARGE_DS, thpc.MS_CHARGE_UPRC, '') AS MS_CHARGE_UPRC_M
+                ,		NVL2(thpc.CHARGE_DS, thpc.PARTNER_CHARGE_UPRC, '') AS PARTNER_CHARGE_UPRC_M
+                ,		NVL2(thpc.CHARGE_DS, DECODE(thpc.CHARGE_DS, '1', '', '2', (thpc.HQ_CHARGE_UPRC * SUM(tsdp.DT_REAL_SALE_CNT))), '') AS TOT_HQ_CHARGE_UPRC_M
+                ,		NVL2(thpc.CHARGE_DS, DECODE(thpc.CHARGE_DS, '1', '', '2', (thpc.MS_CHARGE_UPRC * SUM(tsdp.DT_REAL_SALE_CNT))), '') AS TOT_MS_CHARGE_UPRC_M
+                ,		NVL2(thpc.CHARGE_DS, DECODE(thpc.CHARGE_DS, '1', '', '2', (thpc.PARTNER_CHARGE_UPRC * SUM(tsdp.DT_REAL_SALE_CNT))), '') AS TOT_PARTNER_CHARGE_UPRC_M
+                ,		DECODE(NVL(SUM(tsdp.DT_REAL_SALE_CNT), ''), 0, 0, SUM(tsdp.HQ_CHARGE_UPRC)/SUM(tsdp.DT_REAL_SALE_CNT)) AS HQ_CHARGE_UPRC
+                ,		DECODE(NVL(SUM(tsdp.DT_REAL_SALE_CNT), ''), 0, 0, SUM(tsdp.MS_CHARGE_UPRC)/SUM(tsdp.DT_REAL_SALE_CNT)) AS MS_CHARGE_UPRC
+                ,		DECODE(NVL(SUM(tsdp.DT_REAL_SALE_CNT), ''), 0, 0, SUM(tsdp.PARTNER_CHARGE_UPRC)/SUM(tsdp.DT_REAL_SALE_CNT)) AS PARTNER_CHARGE_UPRC
+                ,		SUM(tsdp.HQ_CHARGE_UPRC) AS TOT_HQ_CHARGE_UPRC
+                ,		SUM(tsdp.MS_CHARGE_UPRC) AS TOT_MS_CHARGE_UPRC
+                ,		SUM(tsdp.PARTNER_CHARGE_UPRC) AS TOT_PARTNER_CHARGE_UPRC
+            <include refid="CmmSQL.PagingTemplateCount"/>
+            FROM 	TB_SL_DAILY_PROMO tsdp
+            ,		TB_HQ_PROMO_H thph
+            ,		TB_HQ_PROMO_CONDI thpc
+            ,		TB_MS_STORE tms
+            WHERE 	tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND     thpc.DEPOSIT_YMD BETWEEN #{startDate} AND #{endDate}
+            AND 	tsdp.HQ_OFFICE_CD = thph.HQ_OFFICE_CD
+            AND 	tsdp.PROMOTION_CD = thph.PROMOTION_CD
+            AND 	tsdp.HQ_OFFICE_CD = thpc.HQ_OFFICE_CD
+            AND 	tsdp.PROMOTION_CD = thpc.PROMOTION_CD
+            AND 	tsdp.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+            AND 	tsdp.STORE_CD = tms.STORE_CD
+            <if test='promotionCds != null and promotionCds != ""'>
+                AND tsdp.PROMOTION_CD IN
+                <foreach collection="promotionCdList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+            <if test='storeCds != null and storeCds != ""'>
+                AND tsdp.STORE_CD IN
+                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+            <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+            </if>
+            <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                <if test='userBrands != null and userBrands != ""'>
+                    -- 매장브랜드 전체일때
+                    AND tms.HQ_BRAND_CD IN
+                    <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+            </if>
+            <if test='momsTeam != null and momsTeam != ""'>
+                AND tmsi.MOMS_TEAM = #{momsTeam}
+            </if>
+            <if test='momsAcShop != null and momsAcShop != ""'>
+                AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+            </if>
+            <if test='momsAreaFg != null and momsAreaFg != ""'>
+                AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+            </if>
+            <if test='momsCommercial != null and momsCommercial != ""'>
+                AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+            </if>
+            <if test='momsShopType != null and momsShopType != ""'>
+                AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+            </if>
+            <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+            </if>
+            <if test='branchCd != null and branchCd != ""'>
+                AND tms.BRANCH_CD = #{branchCd}
+            </if>
+            GROUP BY thph.PROMOTION_NM
+            ,		tsdp.PROMOTION_CD
+            ,		thpc.START_YMD
+            ,		thpc.END_YMD
+            ,		tsdp.STORE_CD
+            ,		tms.STORE_NM
+            ,       tms.BIZ_NO
+            ,		thpc.DEPOSIT_YMD
+            ,		tms.DIRECT_MANAGE_YN
+            ,		thpc.CHARGE_DS
+            ,		thpc.HQ_CHARGE_UPRC
+            ,		thpc.MS_CHARGE_UPRC
+            ,		thpc.PARTNER_CHARGE_UPRC
+            ORDER BY tsdp.PROMOTION_CD, tsdp.STORE_CD
+            <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT 	thph.PROMOTION_NM
+                ,		tsdp.PROMOTION_CD
+                ,		TO_CHAR(TO_DATE(thpc.START_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS START_YMD
+                ,		TO_CHAR(TO_DATE(thpc.END_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS END_YMD
+                ,		tsdp.STORE_CD
+                ,		tms.STORE_NM
+                ,       (SUBSTR(tms.BIZ_NO, 1,3) || '-' || SUBSTR(tms.BIZ_NO, 4,2) || '-' || SUBSTR(tms.BIZ_NO, 6)) AS BIZ_NO
+                ,		TO_CHAR(TO_DATE(thpc.DEPOSIT_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS DEPOSIT_YMD
+                ,		DECODE(tms.DIRECT_MANAGE_YN,'Y','직영점','N','가맹점') AS REMARK
+                ,		SUM(tsdp.HD_REAL_SALE_CNT) AS HD_REAL_SALE_CNT
+                ,		SUM(tsdp.DT_REAL_SALE_CNT) AS DT_REAL_SALE_CNT
+                ,		SUM(tsdp.REAL_SALE_QTY) AS REAL_SALE_QTY
+                ,		NVL2(thpc.CHARGE_DS, DECODE(thpc.CHARGE_DS, '1', '정율', '2', '정액'), '미사용') AS CHARGE_DS
+                ,		NVL2(thpc.CHARGE_DS, thpc.HQ_CHARGE_UPRC, '') AS HQ_CHARGE_UPRC_M
+                ,		NVL2(thpc.CHARGE_DS, thpc.MS_CHARGE_UPRC, '') AS MS_CHARGE_UPRC_M
+                ,		NVL2(thpc.CHARGE_DS, thpc.PARTNER_CHARGE_UPRC, '') AS PARTNER_CHARGE_UPRC_M
+                ,		NVL2(thpc.CHARGE_DS, DECODE(thpc.CHARGE_DS, '1', '', '2', (thpc.HQ_CHARGE_UPRC * SUM(tsdp.DT_REAL_SALE_CNT))), '') AS TOT_HQ_CHARGE_UPRC_M
+                ,		NVL2(thpc.CHARGE_DS, DECODE(thpc.CHARGE_DS, '1', '', '2', (thpc.MS_CHARGE_UPRC * SUM(tsdp.DT_REAL_SALE_CNT))), '') AS TOT_MS_CHARGE_UPRC_M
+                ,		NVL2(thpc.CHARGE_DS, DECODE(thpc.CHARGE_DS, '1', '', '2', (thpc.PARTNER_CHARGE_UPRC * SUM(tsdp.DT_REAL_SALE_CNT))), '') AS TOT_PARTNER_CHARGE_UPRC_M
+                ,		DECODE(NVL(SUM(tsdp.DT_REAL_SALE_CNT), ''), 0, 0, SUM(tsdp.HQ_CHARGE_UPRC)/SUM(tsdp.DT_REAL_SALE_CNT)) AS HQ_CHARGE_UPRC
+                ,		DECODE(NVL(SUM(tsdp.DT_REAL_SALE_CNT), ''), 0, 0, SUM(tsdp.MS_CHARGE_UPRC)/SUM(tsdp.DT_REAL_SALE_CNT)) AS MS_CHARGE_UPRC
+                ,		DECODE(NVL(SUM(tsdp.DT_REAL_SALE_CNT), ''), 0, 0, SUM(tsdp.PARTNER_CHARGE_UPRC)/SUM(tsdp.DT_REAL_SALE_CNT)) AS PARTNER_CHARGE_UPRC
+                ,		SUM(tsdp.HQ_CHARGE_UPRC) AS TOT_HQ_CHARGE_UPRC
+                ,		SUM(tsdp.MS_CHARGE_UPRC) AS TOT_MS_CHARGE_UPRC
+                ,		SUM(tsdp.PARTNER_CHARGE_UPRC) AS TOT_PARTNER_CHARGE_UPRC
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM 	TB_SL_DAILY_PROMO tsdp
+                ,		TB_MS_PROMO_H thph
+                ,		TB_MS_PROMO_CONDI thpc
+                ,		TB_MS_STORE tms
+                WHERE 	tsdp.STORE_CD = #{storeCds}
+                AND     thpc.DEPOSIT_YMD BETWEEN #{startDate} AND #{endDate}
+                AND 	tsdp.STORE_CD = thph.STORE_CD
+                AND 	tsdp.PROMOTION_CD = thph.PROMOTION_CD
+                AND 	tsdp.STORE_CD = thpc.STORE_CD
+                AND 	tsdp.PROMOTION_CD = thpc.PROMOTION_CD
+                AND 	tsdp.STORE_CD = tms.STORE_CD
+                <if test='promotionCds != null and promotionCds != ""'>
+                    AND tsdp.PROMOTION_CD IN
+                    <foreach collection="promotionCdList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                    AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                </if>
+                <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                    <if test='userBrands != null and userBrands != ""'>
+                        -- 매장브랜드 전체일때
+                        AND tms.HQ_BRAND_CD IN
+                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                </if>
+                GROUP BY thph.PROMOTION_NM
+                ,		tsdp.PROMOTION_CD
+                ,		thpc.START_YMD
+                ,		thpc.END_YMD
+                ,		tsdp.STORE_CD
+                ,		tms.STORE_NM
+                ,       tms.BIZ_NO
+                ,		thpc.DEPOSIT_YMD
+                ,		tms.DIRECT_MANAGE_YN
+                ,		thpc.CHARGE_DS
+                ,		thpc.HQ_CHARGE_UPRC
+                ,		thpc.MS_CHARGE_UPRC
+                ,		thpc.PARTNER_CHARGE_UPRC
+                ORDER BY tsdp.PROMOTION_CD, tsdp.STORE_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getPromotionReportExcelList" parameterType="promotionReportVO" resultType="DefaultMap">
+        /* PromotionReportMapper.getPromotionReportExcelList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT 	thph.PROMOTION_NM
+                ,		tsdp.PROMOTION_CD
+                ,		TO_CHAR(TO_DATE(thpc.START_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS START_YMD
+                ,		TO_CHAR(TO_DATE(thpc.END_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS END_YMD
+                ,		tsdp.STORE_CD
+                ,		tms.STORE_NM
+                ,       (SUBSTR(tms.BIZ_NO, 1,3) || '-' || SUBSTR(tms.BIZ_NO, 4,2) || '-' || SUBSTR(tms.BIZ_NO, 6)) AS BIZ_NO
+                ,		TO_CHAR(TO_DATE(thpc.DEPOSIT_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS DEPOSIT_YMD
+                ,		DECODE(tms.DIRECT_MANAGE_YN,'Y','직영점','N','가맹점') AS REMARK
+                ,		SUM(tsdp.HD_REAL_SALE_CNT) AS HD_REAL_SALE_CNT
+                ,		SUM(tsdp.DT_REAL_SALE_CNT) AS DT_REAL_SALE_CNT
+                ,		SUM(tsdp.REAL_SALE_QTY) AS REAL_SALE_QTY
+                ,		NVL2(thpc.CHARGE_DS, DECODE(thpc.CHARGE_DS, '1', '정율', '2', '정액'), '미사용') AS CHARGE_DS
+                ,		NVL2(thpc.CHARGE_DS, thpc.HQ_CHARGE_UPRC, '') AS HQ_CHARGE_UPRC_M
+                ,		NVL2(thpc.CHARGE_DS, thpc.MS_CHARGE_UPRC, '') AS MS_CHARGE_UPRC_M
+                ,		NVL2(thpc.CHARGE_DS, thpc.PARTNER_CHARGE_UPRC, '') AS PARTNER_CHARGE_UPRC_M
+                ,		NVL2(thpc.CHARGE_DS, DECODE(thpc.CHARGE_DS, '1', '', '2', (thpc.HQ_CHARGE_UPRC * SUM(tsdp.DT_REAL_SALE_CNT))), '') AS TOT_HQ_CHARGE_UPRC_M
+                ,		NVL2(thpc.CHARGE_DS, DECODE(thpc.CHARGE_DS, '1', '', '2', (thpc.MS_CHARGE_UPRC * SUM(tsdp.DT_REAL_SALE_CNT))), '') AS TOT_MS_CHARGE_UPRC_M
+                ,		NVL2(thpc.CHARGE_DS, DECODE(thpc.CHARGE_DS, '1', '', '2', (thpc.PARTNER_CHARGE_UPRC * SUM(tsdp.DT_REAL_SALE_CNT))), '') AS TOT_PARTNER_CHARGE_UPRC_M
+                ,		DECODE(NVL(SUM(tsdp.DT_REAL_SALE_CNT), ''), 0, 0, SUM(tsdp.HQ_CHARGE_UPRC)/SUM(tsdp.DT_REAL_SALE_CNT)) AS HQ_CHARGE_UPRC
+                ,		DECODE(NVL(SUM(tsdp.DT_REAL_SALE_CNT), ''), 0, 0, SUM(tsdp.MS_CHARGE_UPRC)/SUM(tsdp.DT_REAL_SALE_CNT)) AS MS_CHARGE_UPRC
+                ,		DECODE(NVL(SUM(tsdp.DT_REAL_SALE_CNT), ''), 0, 0, SUM(tsdp.PARTNER_CHARGE_UPRC)/SUM(tsdp.DT_REAL_SALE_CNT)) AS PARTNER_CHARGE_UPRC
+                ,		SUM(tsdp.HQ_CHARGE_UPRC) AS TOT_HQ_CHARGE_UPRC
+                ,		SUM(tsdp.MS_CHARGE_UPRC) AS TOT_MS_CHARGE_UPRC
+                ,		SUM(tsdp.PARTNER_CHARGE_UPRC) AS TOT_PARTNER_CHARGE_UPRC
+            FROM 	TB_SL_DAILY_PROMO tsdp
+            ,		TB_HQ_PROMO_H thph
+            ,		TB_HQ_PROMO_CONDI thpc
+            ,		TB_MS_STORE tms
+            WHERE 	tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND     thpc.DEPOSIT_YMD BETWEEN #{startDate} AND #{endDate}
+            AND 	tsdp.HQ_OFFICE_CD = thph.HQ_OFFICE_CD
+            AND 	tsdp.PROMOTION_CD = thph.PROMOTION_CD
+            AND 	tsdp.HQ_OFFICE_CD = thpc.HQ_OFFICE_CD
+            AND 	tsdp.PROMOTION_CD = thpc.PROMOTION_CD
+            AND 	tsdp.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+            AND 	tsdp.STORE_CD = tms.STORE_CD
+            <if test='promotionCds != null and promotionCds != ""'>
+                AND tsdp.PROMOTION_CD IN
+                <foreach collection="promotionCdList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+            <if test='storeCds != null and storeCds != ""'>
+                AND tsdp.STORE_CD IN
+                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+            <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+            </if>
+            <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                <if test='userBrands != null and userBrands != ""'>
+                    -- 매장브랜드 전체일때
+                    AND tms.HQ_BRAND_CD IN
+                    <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+            </if>
+            <if test='momsTeam != null and momsTeam != ""'>
+                AND tmsi.MOMS_TEAM = #{momsTeam}
+            </if>
+            <if test='momsAcShop != null and momsAcShop != ""'>
+                AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+            </if>
+            <if test='momsAreaFg != null and momsAreaFg != ""'>
+                AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+            </if>
+            <if test='momsCommercial != null and momsCommercial != ""'>
+                AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+            </if>
+            <if test='momsShopType != null and momsShopType != ""'>
+                AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+            </if>
+            <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+            </if>
+            <if test='branchCd != null and branchCd != ""'>
+                AND tms.BRANCH_CD = #{branchCd}
+            </if>
+            GROUP BY thph.PROMOTION_NM
+            ,		tsdp.PROMOTION_CD
+            ,		thpc.START_YMD
+            ,		thpc.END_YMD
+            ,		tsdp.STORE_CD
+            ,		tms.STORE_NM
+            ,       tms.BIZ_NO
+            ,		thpc.DEPOSIT_YMD
+            ,		tms.DIRECT_MANAGE_YN
+            ,		thpc.CHARGE_DS
+            ,		thpc.HQ_CHARGE_UPRC
+            ,		thpc.MS_CHARGE_UPRC
+            ,		thpc.PARTNER_CHARGE_UPRC
+            ORDER BY tsdp.PROMOTION_CD, tsdp.STORE_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT 	thph.PROMOTION_NM
+                ,		tsdp.PROMOTION_CD
+                ,		TO_CHAR(TO_DATE(thpc.START_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS START_YMD
+                ,		TO_CHAR(TO_DATE(thpc.END_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS END_YMD
+                ,		tsdp.STORE_CD
+                ,		tms.STORE_NM
+                ,       (SUBSTR(tms.BIZ_NO, 1,3) || '-' || SUBSTR(tms.BIZ_NO, 4,2) || '-' || SUBSTR(tms.BIZ_NO, 6)) AS BIZ_NO
+                ,		TO_CHAR(TO_DATE(thpc.DEPOSIT_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS DEPOSIT_YMD
+                ,		DECODE(tms.DIRECT_MANAGE_YN,'Y','직영점','N','가맹점') AS REMARK
+                ,		SUM(tsdp.HD_REAL_SALE_CNT) AS HD_REAL_SALE_CNT
+                ,		SUM(tsdp.DT_REAL_SALE_CNT) AS DT_REAL_SALE_CNT
+                ,		SUM(tsdp.REAL_SALE_QTY) AS REAL_SALE_QTY
+                ,		NVL2(thpc.CHARGE_DS, DECODE(thpc.CHARGE_DS, '1', '정율', '2', '정액'), '미사용') AS CHARGE_DS
+                ,		NVL2(thpc.CHARGE_DS, thpc.HQ_CHARGE_UPRC, '') AS HQ_CHARGE_UPRC_M
+                ,		NVL2(thpc.CHARGE_DS, thpc.MS_CHARGE_UPRC, '') AS MS_CHARGE_UPRC_M
+                ,		NVL2(thpc.CHARGE_DS, thpc.PARTNER_CHARGE_UPRC, '') AS PARTNER_CHARGE_UPRC_M
+                ,		NVL2(thpc.CHARGE_DS, DECODE(thpc.CHARGE_DS, '1', '', '2', (thpc.HQ_CHARGE_UPRC * SUM(tsdp.DT_REAL_SALE_CNT))), '') AS TOT_HQ_CHARGE_UPRC_M
+                ,		NVL2(thpc.CHARGE_DS, DECODE(thpc.CHARGE_DS, '1', '', '2', (thpc.MS_CHARGE_UPRC * SUM(tsdp.DT_REAL_SALE_CNT))), '') AS TOT_MS_CHARGE_UPRC_M
+                ,		NVL2(thpc.CHARGE_DS, DECODE(thpc.CHARGE_DS, '1', '', '2', (thpc.PARTNER_CHARGE_UPRC * SUM(tsdp.DT_REAL_SALE_CNT))), '') AS TOT_PARTNER_CHARGE_UPRC_M
+                ,		DECODE(NVL(SUM(tsdp.DT_REAL_SALE_CNT), ''), 0, 0, SUM(tsdp.HQ_CHARGE_UPRC)/SUM(tsdp.DT_REAL_SALE_CNT)) AS HQ_CHARGE_UPRC
+                ,		DECODE(NVL(SUM(tsdp.DT_REAL_SALE_CNT), ''), 0, 0, SUM(tsdp.MS_CHARGE_UPRC)/SUM(tsdp.DT_REAL_SALE_CNT)) AS MS_CHARGE_UPRC
+                ,		DECODE(NVL(SUM(tsdp.DT_REAL_SALE_CNT), ''), 0, 0, SUM(tsdp.PARTNER_CHARGE_UPRC)/SUM(tsdp.DT_REAL_SALE_CNT)) AS PARTNER_CHARGE_UPRC
+                ,		SUM(tsdp.HQ_CHARGE_UPRC) AS TOT_HQ_CHARGE_UPRC
+                ,		SUM(tsdp.MS_CHARGE_UPRC) AS TOT_MS_CHARGE_UPRC
+                ,		SUM(tsdp.PARTNER_CHARGE_UPRC) AS TOT_PARTNER_CHARGE_UPRC
+                FROM 	TB_SL_DAILY_PROMO tsdp
+                ,		TB_MS_PROMO_H thph
+                ,		TB_MS_PROMO_CONDI thpc
+                ,		TB_MS_STORE tms
+                WHERE 	tsdp.STORE_CD = #{storeCds}
+                AND     thpc.DEPOSIT_YMD BETWEEN #{startDate} AND #{endDate}
+                AND 	tsdp.STORE_CD = thph.STORE_CD
+                AND 	tsdp.PROMOTION_CD = thph.PROMOTION_CD
+                AND 	tsdp.STORE_CD = thpc.STORE_CD
+                AND 	tsdp.PROMOTION_CD = thpc.PROMOTION_CD
+                AND 	tsdp.STORE_CD = tms.STORE_CD
+                <if test='promotionCds != null and promotionCds != ""'>
+                    AND tsdp.PROMOTION_CD IN
+                    <foreach collection="promotionCdList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                    AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                </if>
+                <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                    <if test='userBrands != null and userBrands != ""'>
+                        -- 매장브랜드 전체일때
+                        AND tms.HQ_BRAND_CD IN
+                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                </if>
+                GROUP BY thph.PROMOTION_NM
+                ,		tsdp.PROMOTION_CD
+                ,		thpc.START_YMD
+                ,		thpc.END_YMD
+                ,		tsdp.STORE_CD
+                ,		tms.STORE_NM
+                ,       tms.BIZ_NO
+                ,		thpc.DEPOSIT_YMD
+                ,		tms.DIRECT_MANAGE_YN
+                ,		thpc.CHARGE_DS
+                ,		thpc.HQ_CHARGE_UPRC
+                ,		thpc.MS_CHARGE_UPRC
+                ,		thpc.PARTNER_CHARGE_UPRC
+                ORDER BY tsdp.PROMOTION_CD, tsdp.STORE_CD
+            </when>
+        </choose>
+    </select>
+
+</mapper>
