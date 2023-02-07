@@ -367,4 +367,26 @@ public class IostockCmmController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 프로모션 공통 - 프로모션선택 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   iostockCmmVO
+     * @return  String
+     * @author  권지현
+     * @since   2023.02.06
+     */
+    @RequestMapping(value = "/selectPromotionList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectPromotionList(HttpServletRequest request, HttpServletResponse response,
+                                      Model model, IostockCmmVO iostockCmmVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = iostockCmmService.selectPromotionList(iostockCmmVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
+    }
 }

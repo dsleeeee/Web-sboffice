@@ -548,4 +548,40 @@
         </choose>
     </select>
 
+    <!-- 프로모션 조회 -->
+    <!--
+        TABLE    : TB_HQ_PROMO_H, TB_MS_PROMO_H
+        PARAM    : iostockCmmVO
+        COMMENTS : 프로모션 리스트를 조회한다.
+    -->
+    <select id="selectPromotionList" parameterType="iostockCmmVO" resultType="DefaultMap">
+        /* USE : IostockCmmMapper.selectPromotionList */
+        SELECT  h.PROMOTION_CD
+        ,       h.PROMOTION_NM
+        ,       TO_CHAR(TO_DATE(c.DEPOSIT_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS DEPOSIT_YMD
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+            FROM    TB_HQ_PROMO_H h
+            ,       TB_HQ_PROMO_CONDI c
+            WHERE   h.HQ_OFFICE_CD =   #{hqOfficeCd}
+            AND     h.HQ_OFFICE_CD = c.HQ_OFFICE_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+            FROM    TB_MS_PROMO_H h
+            ,       TB_MS_PROMO_CONDI c
+            WHERE   h.STORE_CD =   #{storeCd}
+            AND     h.STORE_CD = c.STORE_CD
+            </when>
+        </choose>
+        AND     h.PROMOTION_CD = c.PROMOTION_CD
+        <if test='promotionCd != null and promotionCd != ""'>
+            AND h.PROMOTION_CD = #{promotionCd}
+        </if>
+        <if test='promotionNm != null and promotionNm != ""'>
+            AND h.PROMOTION_NM = #{promotionNm}
+        </if>
+        ORDER BY h.PROMOTION_CD
+    </select>
 </mapper>
