@@ -220,6 +220,16 @@ public class SaleDtlChannelServiceImpl implements SaleDtlChannelService {
 
         saleDtlChannelVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
+        // 매장 array 값 세팅
+        String[] storeCds = saleDtlChannelVO.getStoreCds().split(",");
+        saleDtlChannelVO.setStoreCdList(storeCds);
+
+        // 상품 array 값 세팅
+        if (saleDtlChannelVO.getProdCds() != null && !"".equals(saleDtlChannelVO.getProdCds())) {
+            String[] prodCdList = saleDtlChannelVO.getProdCds().split(",");
+            saleDtlChannelVO.setProdCdList(prodCdList);
+        }
+
         return saleDtlChannelMapper.getSaleDtlChannelExcelList(saleDtlChannelVO);
     }
 
@@ -257,11 +267,10 @@ public class SaleDtlChannelServiceImpl implements SaleDtlChannelService {
                 // 사용자별 브랜드 array 값 세팅
                 String[] userBrandList = saleDtlChannelVO.getUserBrands().split(",");
                 saleDtlChannelVO.setUserBrandList(userBrandList);
+                // 매장브랜드 뒤에 , 제거용
+                saleDtlChannelVO.setUserBrands(saleDtlChannelVO.getUserBrands().substring(0, saleDtlChannelVO.getUserBrands().length()-1));
             }
         }
-
-        // 매장브랜드 뒤에 , 제거용
-        saleDtlChannelVO.setUserBrands(saleDtlChannelVO.getUserBrands().substring(0, saleDtlChannelVO.getUserBrands().length()-1));
 
         procCnt = saleDtlChannelMapper.getSaleDtlChannelSaveInsert(saleDtlChannelVO);
 
@@ -297,6 +306,27 @@ public class SaleDtlChannelServiceImpl implements SaleDtlChannelService {
     public DefaultMap<String> getSaleDtlChannelChk(SaleDtlChannelVO saleDtlChannelVO, SessionInfoVO sessionInfoVO) {
 
         saleDtlChannelVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        // 매장 array 값 세팅
+        String[] storeCds = saleDtlChannelVO.getStoreCds().split(",");
+        saleDtlChannelVO.setStoreCdList(storeCds);
+
+        // 상품 array 값 세팅
+        if (saleDtlChannelVO.getProdCds() != null && !"".equals(saleDtlChannelVO.getProdCds())) {
+            String[] prodCdList = saleDtlChannelVO.getProdCds().split(",");
+            saleDtlChannelVO.setProdCdList(prodCdList);
+        }
+
+        // 매장브랜드 '전체' 일때
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            if (saleDtlChannelVO.getStoreHqBrandCd() == "" || saleDtlChannelVO.getStoreHqBrandCd() == null || saleDtlChannelVO.getProdHqBrandCd() == "" || saleDtlChannelVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = saleDtlChannelVO.getUserBrands().split(",");
+                saleDtlChannelVO.setUserBrandList(userBrandList);
+                // 매장브랜드 뒤에 , 제거용
+                saleDtlChannelVO.setUserBrands(saleDtlChannelVO.getUserBrands().substring(0, saleDtlChannelVO.getUserBrands().length()-1));
+            }
+        }
 
         return saleDtlChannelMapper.getSaleDtlChannelChk(saleDtlChannelVO);
     }

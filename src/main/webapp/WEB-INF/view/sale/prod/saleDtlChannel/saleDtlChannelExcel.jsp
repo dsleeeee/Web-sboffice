@@ -317,6 +317,21 @@
                     <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.procFg"/>" binding="procFg" data-map="procFgDataMap" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.procMsg"/>" binding="procMsg" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.download"/>" binding="download" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.prodClassCd"/>" binding="prodClassCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.prodOption"/>" binding="prodOption" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.prodCd"/>" binding="prodCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.prodNm"/>" binding="prodNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.storeHqBrandCdList"/>" binding="storeHqBrandCdList" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.storeCdList"/>" binding="storeCdList" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.prodHqBrandCd"/>" binding="prodHqBrandCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.prodCdList"/>" binding="prodCdList" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.momsTeam"/>" binding="momsTeam" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.momsAcShop"/>" binding="momsAcShop" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.momsAearFg"/>" binding="momsAearFg" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.momsCommercial"/>" binding="momsCommercial" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.momsShopType"/>" binding="momsShopType" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.momsStoreManageType"/>" binding="momsStoreManageType" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.branchCd"/>" binding="branchCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
 
                     <%--삭제시 필요--%>
                     <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.fromSaleDate"/>" binding="fromSaleDate" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
