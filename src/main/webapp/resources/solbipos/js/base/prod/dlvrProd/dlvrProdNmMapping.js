@@ -20,10 +20,19 @@ var useYnAllComboData = [
     {"name": "미사용", "value": "N"}
 ];
 
+// 등록일자 검색기준 콤보박스
+var regDtTypeComboData = [
+    {"name":"상품","value":"prod"},
+    {"name":"상품명칭","value":"dlvrProdNm"}
+];
+
 app.controller('dlvrProdNmMappingCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('dlvrProdNmMappingCtrl', $scope, $http, true));
+
+    // 등록일자 검색기준 콤보박스
+    $scope._setComboData("regDtType", regDtTypeComboData);
 
     // 등록일자 셋팅
     $scope.srchStartDate = wcombo.genDateVal("#srchTimeStartDate", gvStartDate);
@@ -44,6 +53,8 @@ app.controller('dlvrProdNmMappingCtrl', ['$scope', '$http', function ($scope, $h
 
     $scope.initGrid = function (s, e) {
 
+        // 전체기간 체크박스 선택에 따른 등록일자 검색기준 초기화
+        $scope.regDtTypeCombo.isReadOnly = $scope.isChecked;
     };
 
     $scope.$on("dlvrProdNmMappingCtrl", function (event, data) {
@@ -61,6 +72,7 @@ app.controller('dlvrProdNmMappingCtrl', ['$scope', '$http', function ($scope, $h
 
         // 등록일자 '전체기간' 선택에 따른 params
         if(!$scope.isChecked){
+            params.regDtType = $scope.regDtTypeCombo.selectedValue;
             params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
             params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
         }
@@ -100,6 +112,7 @@ app.controller('dlvrProdNmMappingCtrl', ['$scope', '$http', function ($scope, $h
 
     // 전체기간 체크박스 클릭이벤트
     $scope.isChkDt = function() {
+        $scope.regDtTypeCombo.isReadOnly = $scope.isChecked;
         $scope.srchStartDate.isReadOnly = $scope.isChecked;
         $scope.srchEndDate.isReadOnly = $scope.isChecked;
     };

@@ -10,7 +10,7 @@
 
 <div class="subCon" ng-controller="dlvrProdNmMappingCtrl">
     <%--searchTbl--%>
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -32,35 +32,47 @@
             <th><s:message code="dlvrProd.regDate" /></th>
             <td colspan="3" style="text-align: left;">
                 <div class="sb-select">
-            <span class="txtIn w110px">
-              <wj-input-date
-                      id="srchTimeStartDate"
-                      value="startDate"
-                      ng-model="startDate"
-                      control="startDateCombo"
-                      min="2000-01-01"
-                      max="2099-12-31"
-                      initialized="_initDateBox(s)">
-              </wj-input-date>
-            </span>
+                    <span class="txtIn w100px">
+                        <wj-combo-box
+                            id="regDtType"
+                            ng-model="regDtType"
+                            control="regDtTypeCombo"
+                            items-source="_getComboData('regDtType')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </span>
+                    <span class="txtIn w110px">
+                      <wj-input-date
+                              id="srchTimeStartDate"
+                              value="startDate"
+                              ng-model="startDate"
+                              control="startDateCombo"
+                              min="2000-01-01"
+                              max="2099-12-31"
+                              initialized="_initDateBox(s)">
+                      </wj-input-date>
+                    </span>
                     <span class="rg">~</span>
                     <span class="txtIn w110px">
-              <wj-input-date
-                      id="srchTimeEndDate"
-                      value="endDate"
-                      ng-model="endDate"
-                      control="endDateCombo"
-                      min="2000-01-01"
-                      max="2099-12-31"
-                      initialized="_initDateBox(s)">
-              </wj-input-date>
-            </span>
+                      <wj-input-date
+                              id="srchTimeEndDate"
+                              value="endDate"
+                              ng-model="endDate"
+                              control="endDateCombo"
+                              min="2000-01-01"
+                              max="2099-12-31"
+                              initialized="_initDateBox(s)">
+                      </wj-input-date>
+                    </span>
                     <span class="chk ml10">
-              <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />
-              <label for="chkDt">
-                <s:message code="cmm.all.day" />
-              </label>
-            </span>
+                      <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />
+                      <label for="chkDt">
+                        <s:message code="cmm.all.day" />
+                      </label>
+                    </span>
                 </div>
             </td>
         </tr>
@@ -209,7 +221,7 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProd/dlvrProdNmMapping.js?ver=20201016.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProd/dlvrProdNmMapping.js?ver=20230209.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

@@ -449,7 +449,7 @@
       <%--//페이지 리스트--%>
 
       <%--엑셀 리스트--%>
-      <<div class="wj-gridWrap" style="display: none;"  ng-controller="timeProdChannelExcelCtrl">
+      <div class="wj-gridWrap" style="display: none;"  ng-controller="timeProdChannelExcelCtrl">
         <wj-flex-grid
           id="wjGridExcelList"
           autoGenerateColumns="false"

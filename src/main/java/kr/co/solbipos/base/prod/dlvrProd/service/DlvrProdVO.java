@@ -67,6 +67,8 @@ public class DlvrProdVO extends PageVO {
     private String prodCdCol;
     /** 업로드 상품코드 array */
     private String arrProdCdCol[];
+    /** 등록일자 검색기준 */
+    private String regDtType;
 
     /* *//** 페이코앱 *//*
     private String dlvrProdNm2;
@@ -238,5 +240,13 @@ public class DlvrProdVO extends PageVO {
 
     public void setArrProdCdCol(String[] arrProdCdCol) {
         this.arrProdCdCol = arrProdCdCol;
+    }
+
+    public String getRegDtType() {
+        return regDtType;
+    }
+
+    public void setRegDtType(String regDtType) {
+        this.regDtType = regDtType;
     }
 }
