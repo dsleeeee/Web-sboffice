@@ -1,0 +1,1660 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SaleAnalsMomsBst.xml
+    매출분석(사업전략팀)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2023.01.27     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.sale.anals.saleAnalsMomsBst.service.impl.SaleAnalsMomsBstMapper">
+
+    <!-- 매출분석(사업전략팀) 조회 -->
+    <!--
+        TABLE    :
+        PARAM    : saleAnalsMomsBstVO
+        COMMENTS : 매출분석(사업전략팀)을 조회한다.
+    -->
+    <select id="getSaleAnalsMomsBstList" parameterType="saleAnalsMomsBstVO" resultType="DefaultMap">
+      /*  USE : SaleAnalsMomsBstMapper.getSaleAnalsMomsBstList */
+      <choose>
+        <when test='viewType != null and viewType == "store"'>
+            <if test='listType != null and listType == "all"'>
+                SELECT A.*
+                FROM (
+                        SELECT '' AS ORDER_SEQ
+                        ,      'R1' AS ROW_TYPE
+                        ,      A.STORE_CD
+                        ,      A.STORE_NM
+                        ,      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD='061' AND NMCODE_CD = A.AREA_CD) AS AREA_NM
+                               ${sQuery1}
+                        FROM (
+                              SELECT tsdpsd.STORE_CD
+                              , 	 tms.STORE_NM
+                              ,      tms.AREA_CD
+                              ,      tsdpsd.SALE_DATE
+                              ,      tsdpsd.SEL_TYPE_FG
+                                     ${sQuery2}
+                              ,      tsdpsd.TOT_SALE_QTY AS SALE_QTY
+                              ,      tsdpsd.REAL_SALE_AMT
+                              FROM   TB_SL_DAILY_PROD_SDSEL_DLVR tsdpsd
+                              ,	     TB_MS_STORE tms
+                              , 	 TB_MS_STORE_INFO tmsi
+                              ,      TB_MS_PRODUCT tmp
+                              WHERE  tsdpsd.HQ_OFFICE_CD = #{hqOfficeCd}
+                              AND    tsdpsd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                            <if test='dlvrInFgList != null and dlvrInFgList != ""'>
+                                AND tsdpsd.DLVR_IN_FG IN
+                                <foreach collection="dlvrInFgList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <if test='dlvrOrderFgList != null and dlvrOrderFgList != ""'>
+                                AND tsdpsd.DLVR_ORDER_FG IN
+                                <foreach collection="dlvrOrderFgList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                                AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                            </if>
+                            <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                                <if test='userBrands != null and userBrands != ""'>
+                                    -- 매장브랜드 전체일때
+                                    AND tms.HQ_BRAND_CD IN
+                                    <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                            </if>
+                            <if test='storeCds != null and storeCds != ""'>
+                                AND tsdpsd.STORE_CD IN
+                                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <if test='momsTeam != null and momsTeam != ""'>
+                               AND tmsi.MOMS_TEAM = #{momsTeam}
+                            </if>
+                            <if test='momsAcShop != null and momsAcShop != ""'>
+                               AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                            </if>
+                            <if test='momsAreaFg != null and momsAreaFg != ""'>
+                               AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                            </if>
+                            <if test='momsCommercial != null and momsCommercial != ""'>
+                               AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                            </if>
+                            <if test='momsShopType != null and momsShopType != ""'>
+                               AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                            </if>
+                            <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                               AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                            </if>
+                            <if test='branchCd != null and branchCd != ""'>
+                               AND tms.BRANCH_CD = #{branchCd}
+                            </if>
+                            <if test='prodOption != null and prodOption != "" and prodOption == "1"'>
+                               AND tsdpsd.SEL_TYPE_FG IN ('N', 'P')
+                            </if>
+                            <if test='prodOption != null and prodOption != "" and prodOption == "2"'>
+                               AND tsdpsd.SEL_TYPE_FG IN ('N', 'S')
+                            </if>
+                              AND  tsdpsd.STORE_CD = tms.STORE_CD
+                              AND  tmsi.STORE_CD (+)= tms.STORE_CD
+                              AND  tmp.STORE_CD = tsdpsd.STORE_CD
+                              AND  tmp.PROD_CD = tsdpsd.PROD_CD
+                            ) A
+                        WHERE 1=1
+                        GROUP
+                           BY A.STORE_CD
+                        ,     A.STORE_NM
+                        ,     A.AREA_CD
+                        ORDER
+                           BY A.STORE_CD
+                    ) A
+                UNION ALL
+                SELECT A.*
+                FROM (
+                        SELECT '' AS ORDER_SEQ
+                        ,      'R4' AS ROW_TYPE
+                        ,      '' AS STORE_CD
+                        ,      '' AS STORE_NM
+                        ,      '' AS AREA_NM
+                               ${sQuery1}
+                        FROM (
+                              SELECT tsdpsd.STORE_CD
+                              , 	 tms.STORE_NM
+                              ,      tms.AREA_CD
+                              ,      tsdpsd.SALE_DATE
+                              ,      tsdpsd.SEL_TYPE_FG
+                                     ${sQuery2}
+                              ,      tsdpsd.TOT_SALE_QTY AS SALE_QTY
+                              ,      tsdpsd.REAL_SALE_AMT
+                              FROM   TB_SL_DAILY_PROD_SDSEL_DLVR tsdpsd
+                              ,	     TB_MS_STORE tms
+                              , 	 TB_MS_STORE_INFO tmsi
+                              ,      TB_MS_PRODUCT tmp
+                              WHERE  tsdpsd.HQ_OFFICE_CD = #{hqOfficeCd}
+                              AND    tsdpsd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                            <if test='dlvrInFgList != null and dlvrInFgList != ""'>
+                                AND tsdpsd.DLVR_IN_FG IN
+                                <foreach collection="dlvrInFgList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <if test='dlvrOrderFgList != null and dlvrOrderFgList != ""'>
+                                AND tsdpsd.DLVR_ORDER_FG IN
+                                <foreach collection="dlvrOrderFgList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                                AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                            </if>
+                            <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                                <if test='userBrands != null and userBrands != ""'>
+                                    -- 매장브랜드 전체일때
+                                    AND tms.HQ_BRAND_CD IN
+                                    <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                            </if>
+                            <if test='storeCds != null and storeCds != ""'>
+                                AND tsdpsd.STORE_CD IN
+                                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <if test='momsTeam != null and momsTeam != ""'>
+                               AND tmsi.MOMS_TEAM = #{momsTeam}
+                            </if>
+                            <if test='momsAcShop != null and momsAcShop != ""'>
+                               AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                            </if>
+                            <if test='momsAreaFg != null and momsAreaFg != ""'>
+                               AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                            </if>
+                            <if test='momsCommercial != null and momsCommercial != ""'>
+                               AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                            </if>
+                            <if test='momsShopType != null and momsShopType != ""'>
+                               AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                            </if>
+                            <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                               AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                            </if>
+                            <if test='branchCd != null and branchCd != ""'>
+                               AND tms.BRANCH_CD = #{branchCd}
+                            </if>
+                            <if test='prodOption != null and prodOption != "" and prodOption == "1"'>
+                               AND tsdpsd.SEL_TYPE_FG IN ('N', 'P')
+                            </if>
+                            <if test='prodOption != null and prodOption != "" and prodOption == "2"'>
+                               AND tsdpsd.SEL_TYPE_FG IN ('N', 'S')
+                            </if>
+                              AND  tsdpsd.STORE_CD = tms.STORE_CD
+                              AND  tmsi.STORE_CD (+)= tms.STORE_CD
+                              AND  tmp.STORE_CD = tsdpsd.STORE_CD
+                              AND  tmp.PROD_CD = tsdpsd.PROD_CD
+                            ) A
+                        WHERE 1=1
+                    ) A
+            </if>
+            <if test='listType != null and listType == "part"'>
+                SELECT A.*
+                FROM (
+                        SELECT B.*
+                        FROM
+                        (
+                            SELECT A.PROD_CD || '_' || 1 || '_' || A.STORE_CD AS ORDER_SEQ
+                            ,      'R1' AS ROW_TYPE
+                            ,      A.L_CLASS_CD
+                            ,      A.L_CLASS_NM
+                            ,      A.M_CLASS_CD
+                            ,      A.M_CLASS_NM
+                            ,      A.S_CLASS_CD
+                            ,      A.S_CLASS_NM
+                            ,      A.PROD_CD
+                            ,      A.PROD_NM
+                            ,      A.STORE_CD
+                            ,      A.STORE_NM
+                            ,      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD='061' AND NMCODE_CD = A.AREA_CD) AS AREA_NM
+                                   ${sQuery1}
+                            FROM (
+                                  SELECT tmpcv.L_CLASS_CD
+                                  ,      tmpcv.L_CLASS_NM
+                                  ,      tmpcv.M_CLASS_CD
+                                  ,      tmpcv.M_CLASS_NM
+                                  ,      tmpcv.S_CLASS_CD
+                                  ,      tmpcv.S_CLASS_NM
+                                  ,      tsdpsd.PROD_CD
+                                  ,     (CASE tsdpsd.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmp.PROD_NM ELSE tmp.PROD_NM END) AS PROD_NM
+                                  ,      tsdpsd.STORE_CD
+                                  , 	 tms.STORE_NM
+                                  ,      tms.AREA_CD
+                                  ,      tsdpsd.SALE_DATE
+                                  ,      tsdpsd.SEL_TYPE_FG
+                                         ${sQuery2}
+                                  ,      tsdpsd.TOT_SALE_QTY AS SALE_QTY
+                                  ,      tsdpsd.REAL_SALE_AMT
+                                  FROM   TB_SL_DAILY_PROD_SDSEL_DLVR tsdpsd
+                                  ,	     TB_MS_STORE tms
+                                  , 	 TB_MS_STORE_INFO tmsi
+                                  ,      TB_MS_PRODUCT tmp
+                                  ,      TB_MS_PRODUCT_CLASS_V02 tmpcv
+                                  WHERE  tsdpsd.HQ_OFFICE_CD = #{hqOfficeCd}
+                                  AND    tsdpsd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                                 <if test='dlvrInFgList != null and dlvrInFgList != ""'>
+                                     AND tsdpsd.DLVR_IN_FG IN
+                                     <foreach collection="dlvrInFgList" item="item" open=" (" separator="," close=")" >
+                                         #{item}
+                                     </foreach>
+                                 </if>
+                                 <if test='dlvrOrderFgList != null and dlvrOrderFgList != ""'>
+                                     AND tsdpsd.DLVR_ORDER_FG IN
+                                     <foreach collection="dlvrOrderFgList" item="item" open=" (" separator="," close=")" >
+                                         #{item}
+                                     </foreach>
+                                 </if>
+                                 <if test="prodClassCd != null and prodClassCd != ''">
+                                    AND tmp.PROD_CLASS_CD IN (
+                                                                    SELECT PROD_CLASS_CD
+                                                                    FROM TB_MS_PRODUCT_CLASS
+                                                                    WHERE STORE_CD = tmp.STORE_CD
+                                                                    START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = tmp.STORE_CD
+                                                                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = tmp.STORE_CD
+                                                                )
+                                </if>
+                                <if test='prodCd != null and prodCd != ""'>
+                                    AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+                                </if>
+                                <if test='prodNm != null and prodNm != ""'>
+                                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                                </if>
+                                <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                                    AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                                </if>
+                                <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                                    <if test='userBrands != null and userBrands != ""'>
+                                        -- 매장브랜드 전체일때
+                                        AND tms.HQ_BRAND_CD IN
+                                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                            #{item}
+                                        </foreach>
+                                    </if>
+                                </if>
+                                <if test='storeCds != null and storeCds != ""'>
+                                    AND tsdpsd.STORE_CD IN
+                                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                                <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                                    AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+                                </if>
+                                <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                                    <if test='userBrands != null and userBrands != ""'>
+                                        -- 상품브랜드 전체일때
+                                        AND tmp.HQ_BRAND_CD IN
+                                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                            #{item}
+                                        </foreach>
+                                    </if>
+                                </if>
+                                <if test='prodCds != null and prodCds != ""'>
+                                    AND tmp.PROD_CD IN
+                                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                                <if test='momsTeam != null and momsTeam != ""'>
+                                   AND tmsi.MOMS_TEAM = #{momsTeam}
+                                </if>
+                                <if test='momsAcShop != null and momsAcShop != ""'>
+                                   AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                                </if>
+                                <if test='momsAreaFg != null and momsAreaFg != ""'>
+                                   AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                                </if>
+                                <if test='momsCommercial != null and momsCommercial != ""'>
+                                   AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                                </if>
+                                <if test='momsShopType != null and momsShopType != ""'>
+                                   AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                                </if>
+                                <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                                   AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                                </if>
+                                <if test='branchCd != null and branchCd != ""'>
+                                   AND tms.BRANCH_CD = #{branchCd}
+                                </if>
+                                <if test='prodOption != null and prodOption != "" and prodOption == "1"'>
+                                   AND tsdpsd.SEL_TYPE_FG IN ('N', 'P')
+                                </if>
+                                <if test='prodOption != null and prodOption != "" and prodOption == "2"'>
+                                   AND tsdpsd.SEL_TYPE_FG IN ('N', 'S')
+                                </if>
+                                  AND  tsdpsd.STORE_CD = tms.STORE_CD
+                                  AND  tmsi.STORE_CD (+)= tms.STORE_CD
+                                  AND  tmp.STORE_CD = tsdpsd.STORE_CD
+                                  AND  tmp.PROD_CD = tsdpsd.PROD_CD
+                                  AND  tmpcv.STORE_CD = tmp.STORE_CD
+                                  AND  tmpcv.PROD_CD = tmp.PROD_CD
+                                ) A
+                            WHERE 1=1
+                            GROUP
+                               BY A.L_CLASS_CD
+                            ,      A.L_CLASS_NM
+                            ,      A.M_CLASS_CD
+                            ,      A.M_CLASS_NM
+                            ,      A.S_CLASS_CD
+                            ,      A.S_CLASS_NM
+                            ,      A.PROD_CD
+                            ,      A.PROD_NM
+                            ,      A.STORE_CD
+                            ,      A.STORE_NM
+                            ,      A.AREA_CD
+                            UNION ALL
+                            SELECT A.PROD_CD || '_' || 2 AS ORDER_SEQ
+                            ,      'R2' AS ROW_TYPE
+                            ,      '' AS L_CLASS_CD
+                            ,      '' AS L_CLASS_NM
+                            ,      '' AS M_CLASS_CD
+                            ,      '' AS M_CLASS_NM
+                            ,      '' AS S_CLASS_CD
+                            ,      '' AS S_CLASS_NM
+                            ,      '' AS PROD_CD
+                            ,      '' AS PROD_NM
+                            ,      '' AS STORE_CD
+                            ,      '' AS STORE_NM
+                            ,      '' AS AREA_NM
+                                   ${sQuery1}
+                            FROM (
+                                  SELECT tmpcv.L_CLASS_CD
+                                  ,      tmpcv.L_CLASS_NM
+                                  ,      tmpcv.M_CLASS_CD
+                                  ,      tmpcv.M_CLASS_NM
+                                  ,      tmpcv.S_CLASS_CD
+                                  ,      tmpcv.S_CLASS_NM
+                                  ,      tsdpsd.PROD_CD
+                                  ,     (CASE tsdpsd.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmp.PROD_NM ELSE tmp.PROD_NM END) AS PROD_NM
+                                  ,      tsdpsd.STORE_CD
+                                  , 	 tms.STORE_NM
+                                  ,      tms.AREA_CD
+                                  ,      tsdpsd.SALE_DATE
+                                  ,      tsdpsd.SEL_TYPE_FG
+                                         ${sQuery2}
+                                  ,      tsdpsd.TOT_SALE_QTY AS SALE_QTY
+                                  ,      tsdpsd.REAL_SALE_AMT
+                                  FROM   TB_SL_DAILY_PROD_SDSEL_DLVR tsdpsd
+                                  ,	     TB_MS_STORE tms
+                                  , 	 TB_MS_STORE_INFO tmsi
+                                  ,      TB_MS_PRODUCT tmp
+                                  ,      TB_MS_PRODUCT_CLASS_V02 tmpcv
+                                  WHERE  tsdpsd.HQ_OFFICE_CD = #{hqOfficeCd}
+                                  AND    tsdpsd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                                 <if test='dlvrInFgList != null and dlvrInFgList != ""'>
+                                     AND tsdpsd.DLVR_IN_FG IN
+                                     <foreach collection="dlvrInFgList" item="item" open=" (" separator="," close=")" >
+                                         #{item}
+                                     </foreach>
+                                 </if>
+                                 <if test='dlvrOrderFgList != null and dlvrOrderFgList != ""'>
+                                     AND tsdpsd.DLVR_ORDER_FG IN
+                                      <foreach collection="dlvrOrderFgList" item="item" open=" (" separator="," close=")" >
+                                         #{item}
+                                     </foreach>
+                                 </if>
+                                 <if test="prodClassCd != null and prodClassCd != ''">
+                                    AND tmp.PROD_CLASS_CD IN (
+                                                                    SELECT PROD_CLASS_CD
+                                                                    FROM TB_MS_PRODUCT_CLASS
+                                                                    WHERE STORE_CD = tmp.STORE_CD
+                                                                    START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = tmp.STORE_CD
+                                                                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = tmp.STORE_CD
+                                                                )
+                                </if>
+                                <if test='prodCd != null and prodCd != ""'>
+                                    AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+                                </if>
+                                <if test='prodNm != null and prodNm != ""'>
+                                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                                </if>
+                                <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                                    AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                                </if>
+                                <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                                    <if test='userBrands != null and userBrands != ""'>
+                                        -- 매장브랜드 전체일때
+                                        AND tms.HQ_BRAND_CD IN
+                                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                            #{item}
+                                        </foreach>
+                                    </if>
+                                </if>
+                                <if test='storeCds != null and storeCds != ""'>
+                                    AND tsdpsd.STORE_CD IN
+                                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                                <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                                    AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+                                </if>
+                                <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                                    <if test='userBrands != null and userBrands != ""'>
+                                        -- 상품브랜드 전체일때
+                                        AND tmp.HQ_BRAND_CD IN
+                                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                            #{item}
+                                        </foreach>
+                                    </if>
+                                </if>
+                                <if test='prodCds != null and prodCds != ""'>
+                                    AND tmp.PROD_CD IN
+                                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                                <if test='momsTeam != null and momsTeam != ""'>
+                                   AND tmsi.MOMS_TEAM = #{momsTeam}
+                                </if>
+                                <if test='momsAcShop != null and momsAcShop != ""'>
+                                   AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                                </if>
+                                <if test='momsAreaFg != null and momsAreaFg != ""'>
+                                   AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                                </if>
+                                <if test='momsCommercial != null and momsCommercial != ""'>
+                                   AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                                </if>
+                                <if test='momsShopType != null and momsShopType != ""'>
+                                   AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                                </if>
+                                <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                                   AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                                </if>
+                                <if test='branchCd != null and branchCd != ""'>
+                                   AND tms.BRANCH_CD = #{branchCd}
+                                </if>
+                                <if test='prodOption != null and prodOption != "" and prodOption == "1"'>
+                                   AND tsdpsd.SEL_TYPE_FG IN ('N', 'P')
+                                </if>
+                                <if test='prodOption != null and prodOption != "" and prodOption == "2"'>
+                                   AND tsdpsd.SEL_TYPE_FG IN ('N', 'S')
+                                </if>
+                                  AND  tsdpsd.STORE_CD = tms.STORE_CD
+                                  AND  tmsi.STORE_CD (+)= tms.STORE_CD
+                                  AND  tmp.STORE_CD = tsdpsd.STORE_CD
+                                  AND  tmp.PROD_CD = tsdpsd.PROD_CD
+                                  AND  tmpcv.STORE_CD = tmp.STORE_CD
+                                  AND  tmpcv.PROD_CD = tmp.PROD_CD
+                                ) A
+                            WHERE 1=1
+                            GROUP
+                               BY A.PROD_CD
+                        ) B
+                    ORDER
+                       BY B.ORDER_SEQ
+                ) A
+                UNION ALL
+            SELECT A.*
+            FROM (
+                    SELECT B.*
+                    FROM
+                    (
+                            SELECT  3 || '_' || A.STORE_CD AS ORDER_SEQ
+                            ,      'R3' AS ROW_TYPE
+                            ,      '' AS L_CLASS_CD
+                            ,      '' AS L_CLASS_NM
+                            ,      '' AS M_CLASS_CD
+                            ,      '' AS M_CLASS_NM
+                            ,      '' AS S_CLASS_CD
+                            ,      '' AS S_CLASS_NM
+                            ,      '' AS PROD_CD
+                            ,      '' AS PROD_NM
+                            ,      A.STORE_CD
+                            ,      A.STORE_NM
+                            ,      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD='061' AND NMCODE_CD = A.AREA_CD) AS AREA_NM
+                                   ${sQuery1}
+                            FROM (
+                                  SELECT tmpcv.L_CLASS_CD
+                                  ,      tmpcv.L_CLASS_NM
+                                  ,      tmpcv.M_CLASS_CD
+                                  ,      tmpcv.M_CLASS_NM
+                                  ,      tmpcv.S_CLASS_CD
+                                  ,      tmpcv.S_CLASS_NM
+                                  ,      tsdpsd.PROD_CD
+                                  ,     (CASE tsdpsd.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmp.PROD_NM ELSE tmp.PROD_NM END) AS PROD_NM
+                                  ,      tsdpsd.STORE_CD
+                                  , 	 tms.STORE_NM
+                                  ,      tms.AREA_CD
+                                  ,      tsdpsd.SALE_DATE
+                                  ,      tsdpsd.SEL_TYPE_FG
+                                         ${sQuery2}
+                                  ,      tsdpsd.TOT_SALE_QTY AS SALE_QTY
+                                  ,      tsdpsd.REAL_SALE_AMT
+                                  FROM   TB_SL_DAILY_PROD_SDSEL_DLVR tsdpsd
+                                  ,	     TB_MS_STORE tms
+                                  , 	 TB_MS_STORE_INFO tmsi
+                                  ,      TB_MS_PRODUCT tmp
+                                  ,      TB_MS_PRODUCT_CLASS_V02 tmpcv
+                                  WHERE  tsdpsd.HQ_OFFICE_CD = #{hqOfficeCd}
+                                  AND    tsdpsd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                                 <if test='dlvrInFgList != null and dlvrInFgList != ""'>
+                                     AND tsdpsd.DLVR_IN_FG IN
+                                     <foreach collection="dlvrInFgList" item="item" open=" (" separator="," close=")" >
+                                         #{item}
+                                     </foreach>
+                                 </if>
+                                 <if test='dlvrOrderFgList != null and dlvrOrderFgList != ""'>
+                                     AND tsdpsd.DLVR_ORDER_FG IN
+                                     <foreach collection="dlvrOrderFgList" item="item" open=" (" separator="," close=")" >
+                                         #{item}
+                                     </foreach>
+                                 </if>
+                                 <if test="prodClassCd != null and prodClassCd != ''">
+                                    AND tmp.PROD_CLASS_CD IN (
+                                                                    SELECT PROD_CLASS_CD
+                                                                    FROM TB_MS_PRODUCT_CLASS
+                                                                    WHERE STORE_CD = tmp.STORE_CD
+                                                                    START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = tmp.STORE_CD
+                                                                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = tmp.STORE_CD
+                                                                )
+                                </if>
+                                <if test='prodCd != null and prodCd != ""'>
+                                    AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+                                </if>
+                                <if test='prodNm != null and prodNm != ""'>
+                                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                                </if>
+                                <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                                    AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                                </if>
+                                <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                                    <if test='userBrands != null and userBrands != ""'>
+                                        -- 매장브랜드 전체일때
+                                        AND tms.HQ_BRAND_CD IN
+                                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                            #{item}
+                                        </foreach>
+                                    </if>
+                                </if>
+                                <if test='storeCds != null and storeCds != ""'>
+                                    AND tsdpsd.STORE_CD IN
+                                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                                <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                                    AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+                                </if>
+                                <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                                    <if test='userBrands != null and userBrands != ""'>
+                                        -- 상품브랜드 전체일때
+                                        AND tmp.HQ_BRAND_CD IN
+                                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                            #{item}
+                                        </foreach>
+                                    </if>
+                                </if>
+                                <if test='prodCds != null and prodCds != ""'>
+                                    AND tmp.PROD_CD IN
+                                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                                <if test='momsTeam != null and momsTeam != ""'>
+                                   AND tmsi.MOMS_TEAM = #{momsTeam}
+                                </if>
+                                <if test='momsAcShop != null and momsAcShop != ""'>
+                                   AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                                </if>
+                                <if test='momsAreaFg != null and momsAreaFg != ""'>
+                                   AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                                </if>
+                                <if test='momsCommercial != null and momsCommercial != ""'>
+                                   AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                                </if>
+                                <if test='momsShopType != null and momsShopType != ""'>
+                                   AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                                </if>
+                                <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                                   AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                                </if>
+                                <if test='branchCd != null and branchCd != ""'>
+                                   AND tms.BRANCH_CD = #{branchCd}
+                                </if>
+                                <if test='prodOption != null and prodOption != "" and prodOption == "1"'>
+                                   AND tsdpsd.SEL_TYPE_FG IN ('N', 'P')
+                                </if>
+                                <if test='prodOption != null and prodOption != "" and prodOption == "2"'>
+                                   AND tsdpsd.SEL_TYPE_FG IN ('N', 'S')
+                                </if>
+                                  AND  tsdpsd.STORE_CD = tms.STORE_CD
+                                  AND  tmsi.STORE_CD (+)= tms.STORE_CD
+                                  AND  tmp.STORE_CD = tsdpsd.STORE_CD
+                                  AND  tmp.PROD_CD = tsdpsd.PROD_CD
+                                  AND  tmpcv.STORE_CD = tmp.STORE_CD
+                                  AND  tmpcv.PROD_CD = tmp.PROD_CD
+                                ) A
+                            WHERE 1=1
+                            GROUP
+                               BY A.STORE_CD
+                            ,     A.STORE_NM
+                            ,     A.AREA_CD
+                        UNION ALL
+                        SELECT 4 || '_' || '총계'  AS ORDER_SEQ
+                        ,      'R4' AS ROW_TYPE
+                        ,      '' AS L_CLASS_CD
+                        ,      '' AS L_CLASS_NM
+                        ,      '' AS M_CLASS_CD
+                        ,      '' AS M_CLASS_NM
+                        ,      '' AS S_CLASS_CD
+                        ,      '' AS S_CLASS_NM
+                        ,      '' AS PROD_CD
+                        ,      '' AS PROD_NM
+                        ,      '' AS STORE_CD
+                        ,      '' AS STORE_NM
+                        ,      '' AS AREA_NM
+                               ${sQuery1}
+                        FROM (
+                              SELECT tmpcv.L_CLASS_CD
+                              ,      tmpcv.L_CLASS_NM
+                              ,      tmpcv.M_CLASS_CD
+                              ,      tmpcv.M_CLASS_NM
+                              ,      tmpcv.S_CLASS_CD
+                              ,      tmpcv.S_CLASS_NM
+                              ,      tsdpsd.PROD_CD
+                              ,     (CASE tsdpsd.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmp.PROD_NM ELSE tmp.PROD_NM END) AS PROD_NM
+                              ,      tsdpsd.STORE_CD
+                              , 	 tms.STORE_NM
+                              ,      tms.AREA_CD
+                              ,      tsdpsd.SALE_DATE
+                              ,      tsdpsd.SEL_TYPE_FG
+                                     ${sQuery2}
+                              ,      tsdpsd.TOT_SALE_QTY AS SALE_QTY
+                              ,      tsdpsd.REAL_SALE_AMT
+                              FROM   TB_SL_DAILY_PROD_SDSEL_DLVR tsdpsd
+                              ,	     TB_MS_STORE tms
+                              , 	 TB_MS_STORE_INFO tmsi
+                              ,      TB_MS_PRODUCT tmp
+                              ,      TB_MS_PRODUCT_CLASS_V02 tmpcv
+                              WHERE  tsdpsd.HQ_OFFICE_CD = #{hqOfficeCd}
+                              AND    tsdpsd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                             <if test='dlvrInFgList != null and dlvrInFgList != ""'>
+                                 AND tsdpsd.DLVR_IN_FG IN
+                                 <foreach collection="dlvrInFgList" item="item" open=" (" separator="," close=")" >
+                                     #{item}
+                                 </foreach>
+                             </if>
+                             <if test='dlvrOrderFgList != null and dlvrOrderFgList != ""'>
+                                 AND tsdpsd.DLVR_ORDER_FG IN
+                                 <foreach collection="dlvrOrderFgList" item="item" open=" (" separator="," close=")" >
+                                     #{item}
+                                 </foreach>
+                             </if>
+                             <if test="prodClassCd != null and prodClassCd != ''">
+                                AND tmp.PROD_CLASS_CD IN (
+                                                                SELECT PROD_CLASS_CD
+                                                                FROM TB_MS_PRODUCT_CLASS
+                                                                WHERE STORE_CD = tmp.STORE_CD
+                                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = tmp.STORE_CD
+                                                                CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = tmp.STORE_CD
+                                                            )
+                            </if>
+                            <if test='prodCd != null and prodCd != ""'>
+                                AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+                            </if>
+                            <if test='prodNm != null and prodNm != ""'>
+                                AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                            </if>
+                            <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                                AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                            </if>
+                            <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                                <if test='userBrands != null and userBrands != ""'>
+                                    -- 매장브랜드 전체일때
+                                    AND tms.HQ_BRAND_CD IN
+                                    <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                            </if>
+                            <if test='storeCds != null and storeCds != ""'>
+                                AND tsdpsd.STORE_CD IN
+                                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                                AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+                            </if>
+                            <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                                <if test='userBrands != null and userBrands != ""'>
+                                    -- 상품브랜드 전체일때
+                                    AND tmp.HQ_BRAND_CD IN
+                                    <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                            </if>
+                            <if test='prodCds != null and prodCds != ""'>
+                                AND tmp.PROD_CD IN
+                                <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <if test='momsTeam != null and momsTeam != ""'>
+                               AND tmsi.MOMS_TEAM = #{momsTeam}
+                            </if>
+                            <if test='momsAcShop != null and momsAcShop != ""'>
+                               AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                            </if>
+                            <if test='momsAreaFg != null and momsAreaFg != ""'>
+                               AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                            </if>
+                            <if test='momsCommercial != null and momsCommercial != ""'>
+                               AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                            </if>
+                            <if test='momsShopType != null and momsShopType != ""'>
+                               AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                            </if>
+                            <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                               AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                            </if>
+                            <if test='branchCd != null and branchCd != ""'>
+                               AND tms.BRANCH_CD = #{branchCd}
+                            </if>
+                            <if test='prodOption != null and prodOption != "" and prodOption == "1"'>
+                               AND tsdpsd.SEL_TYPE_FG IN ('N', 'P')
+                            </if>
+                            <if test='prodOption != null and prodOption != "" and prodOption == "2"'>
+                               AND tsdpsd.SEL_TYPE_FG IN ('N', 'S')
+                            </if>
+                              AND  tsdpsd.STORE_CD = tms.STORE_CD
+                              AND  tmsi.STORE_CD (+)= tms.STORE_CD
+                              AND  tmp.STORE_CD = tsdpsd.STORE_CD
+                              AND  tmp.PROD_CD = tsdpsd.PROD_CD
+                              AND  tmpcv.STORE_CD = tmp.STORE_CD
+                              AND  tmpcv.PROD_CD = tmp.PROD_CD
+                            ) A
+                        WHERE 1=1
+                    ) B
+                    ORDER
+                       BY B.ORDER_SEQ
+                        , B.STORE_CD
+                 ) A
+            </if>
+        </when>
+        <when test='viewType != null and viewType == "prod"'>
+            <if test='listType != null and listType == "all"'>
+                SELECT A.*
+                FROM (
+                        SELECT '' AS ORDER_SEQ
+                        ,      'R1' AS ROW_TYPE
+                        ,      A.L_CLASS_CD
+                        ,      A.L_CLASS_NM
+                        ,      A.M_CLASS_CD
+                        ,      A.M_CLASS_NM
+                        ,      A.S_CLASS_CD
+                        ,      A.S_CLASS_NM
+                        ,      A.PROD_CD
+                        ,      A.PROD_NM
+                               ${sQuery1}
+                        FROM (
+                              SELECT tmpcv.L_CLASS_CD
+                              ,      tmpcv.L_CLASS_NM
+                              ,      tmpcv.M_CLASS_CD
+                              ,      tmpcv.M_CLASS_NM
+                              ,      tmpcv.S_CLASS_CD
+                              ,      tmpcv.S_CLASS_NM
+                              ,      tsdpsd.PROD_CD
+                              ,     (CASE tsdpsd.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmp.PROD_NM ELSE tmp.PROD_NM END) AS PROD_NM
+                              ,      tsdpsd.SALE_DATE
+                              ,      tsdpsd.SEL_TYPE_FG
+                                     ${sQuery2}
+                              ,      tsdpsd.TOT_SALE_QTY AS SALE_QTY
+                              ,      tsdpsd.REAL_SALE_AMT
+                              FROM   TB_SL_DAILY_PROD_SDSEL_DLVR tsdpsd
+                              ,	     TB_MS_STORE tms
+                              , 	 TB_MS_STORE_INFO tmsi
+                              ,      TB_MS_PRODUCT tmp
+                              ,      TB_MS_PRODUCT_CLASS_V02 tmpcv
+                              WHERE  tsdpsd.HQ_OFFICE_CD = #{hqOfficeCd}
+                              AND    tsdpsd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                            <if test='dlvrInFgList != null and dlvrInFgList != ""'>
+                                AND tsdpsd.DLVR_IN_FG IN
+                                <foreach collection="dlvrInFgList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <if test='dlvrOrderFgList != null and dlvrOrderFgList != ""'>
+                                AND tsdpsd.DLVR_ORDER_FG IN
+                                <foreach collection="dlvrOrderFgList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <if test="prodClassCd != null and prodClassCd != ''">
+                                AND tmp.PROD_CLASS_CD IN (
+                                                                SELECT PROD_CLASS_CD
+                                                                FROM TB_MS_PRODUCT_CLASS
+                                                                WHERE STORE_CD = tmp.STORE_CD
+                                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = tmp.STORE_CD
+                                                                CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = tmp.STORE_CD
+                                                            )
+                            </if>
+                            <if test='prodCd != null and prodCd != ""'>
+                                AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+                            </if>
+                            <if test='prodNm != null and prodNm != ""'>
+                                AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                            </if>
+                            <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                                AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+                            </if>
+                            <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                                <if test='userBrands != null and userBrands != ""'>
+                                    -- 상품브랜드 전체일때
+                                    AND tmp.HQ_BRAND_CD IN
+                                    <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                            </if>
+                            <if test='prodCds != null and prodCds != ""'>
+                                AND tmp.PROD_CD IN
+                                <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <if test='momsTeam != null and momsTeam != ""'>
+                               AND tmsi.MOMS_TEAM = #{momsTeam}
+                            </if>
+                            <if test='momsAcShop != null and momsAcShop != ""'>
+                               AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                            </if>
+                            <if test='momsAreaFg != null and momsAreaFg != ""'>
+                               AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                            </if>
+                            <if test='momsCommercial != null and momsCommercial != ""'>
+                               AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                            </if>
+                            <if test='momsShopType != null and momsShopType != ""'>
+                               AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                            </if>
+                            <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                               AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                            </if>
+                            <if test='branchCd != null and branchCd != ""'>
+                               AND tms.BRANCH_CD = #{branchCd}
+                            </if>
+                            <if test='prodOption != null and prodOption != "" and prodOption == "1"'>
+                               AND tsdpsd.SEL_TYPE_FG IN ('N', 'P')
+                            </if>
+                            <if test='prodOption != null and prodOption != "" and prodOption == "2"'>
+                               AND tsdpsd.SEL_TYPE_FG IN ('N', 'S')
+                            </if>
+                              AND  tsdpsd.STORE_CD = tms.STORE_CD
+                              AND  tmsi.STORE_CD (+)= tms.STORE_CD
+                              AND  tmp.STORE_CD = tsdpsd.STORE_CD
+                              AND  tmp.PROD_CD = tsdpsd.PROD_CD
+                              AND  tmpcv.STORE_CD = tmp.STORE_CD
+                              AND  tmpcv.PROD_CD = tmp.PROD_CD
+                            ) A
+                        WHERE 1=1
+                        GROUP
+                           BY A.L_CLASS_CD
+                       ,      A.L_CLASS_NM
+                       ,      A.M_CLASS_CD
+                       ,      A.M_CLASS_NM
+                       ,      A.S_CLASS_CD
+                       ,      A.S_CLASS_NM
+                       ,      A.PROD_CD
+                        ,     A.PROD_NM
+                        ORDER
+                           BY A.PROD_CD
+                    ) A
+                UNION ALL
+                SELECT A.*
+                FROM (
+                        SELECT '' AS ORDER_SEQ
+                        ,      'R4' AS ROW_TYPE
+                        ,      '' AS L_CLASS_CD
+                        ,      '' AS L_CLASS_NM
+                        ,      '' AS M_CLASS_CD
+                        ,      '' AS M_CLASS_NM
+                        ,      '' AS S_CLASS_CD
+                        ,      '' AS S_CLASS_NM
+                        ,      '' AS PROD_CD
+                        ,      '' AS PROD_NM
+                               ${sQuery1}
+                        FROM (
+                              SELECT tmpcv.L_CLASS_CD
+                              ,      tmpcv.L_CLASS_NM
+                              ,      tmpcv.M_CLASS_CD
+                              ,      tmpcv.M_CLASS_NM
+                              ,      tmpcv.S_CLASS_CD
+                              ,      tmpcv.S_CLASS_NM
+                              ,      tsdpsd.PROD_CD
+                              ,     (CASE tsdpsd.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmp.PROD_NM ELSE tmp.PROD_NM END) AS PROD_NM
+                              ,      tsdpsd.SALE_DATE
+                              ,      tsdpsd.SEL_TYPE_FG
+                                     ${sQuery2}
+                              ,      tsdpsd.TOT_SALE_QTY AS SALE_QTY
+                              ,      tsdpsd.REAL_SALE_AMT
+                              FROM   TB_SL_DAILY_PROD_SDSEL_DLVR tsdpsd
+                              ,	     TB_MS_STORE tms
+                              , 	 TB_MS_STORE_INFO tmsi
+                              ,      TB_MS_PRODUCT tmp
+                              ,      TB_MS_PRODUCT_CLASS_V02 tmpcv
+                              WHERE  tsdpsd.HQ_OFFICE_CD = #{hqOfficeCd}
+                              AND    tsdpsd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                             <if test='dlvrInFgList != null and dlvrInFgList != ""'>
+                                AND tsdpsd.DLVR_IN_FG IN
+                                <foreach collection="dlvrInFgList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <if test='dlvrOrderFgList != null and dlvrOrderFgList != ""'>
+                                AND tsdpsd.DLVR_ORDER_FG IN
+                                <foreach collection="dlvrOrderFgList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <if test="prodClassCd != null and prodClassCd != ''">
+                                AND tmp.PROD_CLASS_CD IN (
+                                                                SELECT PROD_CLASS_CD
+                                                                FROM TB_MS_PRODUCT_CLASS
+                                                                WHERE STORE_CD = tmp.STORE_CD
+                                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = tmp.STORE_CD
+                                                                CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = tmp.STORE_CD
+                                                          )
+                            </if>
+                            <if test='prodCd != null and prodCd != ""'>
+                                AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+                            </if>
+                            <if test='prodNm != null and prodNm != ""'>
+                                AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                            </if>
+                            <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                                AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+                            </if>
+                            <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                                <if test='userBrands != null and userBrands != ""'>
+                                    -- 상품브랜드 전체일때
+                                    AND tmp.HQ_BRAND_CD IN
+                                    <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                            </if>
+                            <if test='prodCds != null and prodCds != ""'>
+                                AND tmp.PROD_CD IN
+                                <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <if test='momsTeam != null and momsTeam != ""'>
+                               AND tmsi.MOMS_TEAM = #{momsTeam}
+                            </if>
+                            <if test='momsAcShop != null and momsAcShop != ""'>
+                               AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                            </if>
+                            <if test='momsAreaFg != null and momsAreaFg != ""'>
+                               AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                            </if>
+                            <if test='momsCommercial != null and momsCommercial != ""'>
+                               AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                            </if>
+                            <if test='momsShopType != null and momsShopType != ""'>
+                               AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                            </if>
+                            <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                               AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                            </if>
+                            <if test='branchCd != null and branchCd != ""'>
+                               AND tms.BRANCH_CD = #{branchCd}
+                            </if>
+                            <if test='prodOption != null and prodOption != "" and prodOption == "1"'>
+                               AND tsdpsd.SEL_TYPE_FG IN ('N', 'P')
+                            </if>
+                            <if test='prodOption != null and prodOption != "" and prodOption == "2"'>
+                               AND tsdpsd.SEL_TYPE_FG IN ('N', 'S')
+                            </if>
+                              AND  tsdpsd.STORE_CD = tms.STORE_CD
+                              AND  tmsi.STORE_CD (+)= tms.STORE_CD
+                              AND  tmp.STORE_CD = tsdpsd.STORE_CD
+                              AND  tmp.PROD_CD = tsdpsd.PROD_CD
+                              AND  tmpcv.STORE_CD = tmp.STORE_CD
+                              AND  tmpcv.PROD_CD = tmp.PROD_CD
+                            ) A
+                        WHERE 1=1
+                    ) A
+            </if>
+            <if test='listType != null and listType == "part"'>
+                SELECT A.*
+                FROM (
+                        SELECT B.*
+                        FROM
+                        (
+                                SELECT A.STORE_CD || '_' || 1 || '_' || A.PROD_CD AS ORDER_SEQ
+                                ,      'R1' AS ROW_TYPE
+                                ,	   A.STORE_CD
+                                ,      A.STORE_NM
+                                ,      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD='061' AND NMCODE_CD = A.AREA_CD) AS AREA_NM
+                                ,      A.L_CLASS_CD
+                                ,      A.L_CLASS_NM
+                                ,      A.M_CLASS_CD
+                                ,      A.M_CLASS_NM
+                                ,      A.S_CLASS_CD
+                                ,      A.S_CLASS_NM
+                                ,      A.PROD_CD
+                                ,      A.PROD_NM
+                                       ${sQuery1}
+                                FROM (
+                                      SELECT tsdpsd.STORE_CD
+                                      , 	 tms.STORE_NM
+                                      ,      tms.AREA_CD
+                                      ,      tmpcv.L_CLASS_CD
+                                      ,      tmpcv.L_CLASS_NM
+                                      ,      tmpcv.M_CLASS_CD
+                                      ,      tmpcv.M_CLASS_NM
+                                      ,      tmpcv.S_CLASS_CD
+                                      ,      tmpcv.S_CLASS_NM
+                                      ,      tsdpsd.PROD_CD
+                                      ,     (CASE tsdpsd.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmp.PROD_NM ELSE tmp.PROD_NM END) AS PROD_NM
+                                      ,      tsdpsd.SALE_DATE
+                                      ,      tsdpsd.SEL_TYPE_FG
+                                             ${sQuery2}
+                                      ,      tsdpsd.TOT_SALE_QTY AS SALE_QTY
+                                      ,      tsdpsd.REAL_SALE_AMT
+                                      FROM   TB_SL_DAILY_PROD_SDSEL_DLVR tsdpsd
+                                      ,	     TB_MS_STORE tms
+                                      , 	 TB_MS_STORE_INFO tmsi
+                                      ,      TB_MS_PRODUCT tmp
+                                      ,      TB_MS_PRODUCT_CLASS_V02 tmpcv
+                                      WHERE  tsdpsd.HQ_OFFICE_CD = #{hqOfficeCd}
+                                      AND    tsdpsd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                                 <if test='dlvrInFgList != null and dlvrInFgList != ""'>
+                                     AND tsdpsd.DLVR_IN_FG IN
+                                     <foreach collection="dlvrInFgList" item="item" open=" (" separator="," close=")" >
+                                         #{item}
+                                     </foreach>
+                                 </if>
+                                 <if test='dlvrOrderFgList != null and dlvrOrderFgList != ""'>
+                                     AND tsdpsd.DLVR_ORDER_FG IN
+                                     <foreach collection="dlvrOrderFgList" item="item" open=" (" separator="," close=")" >
+                                         #{item}
+                                     </foreach>
+                                 </if>
+                                 <if test="prodClassCd != null and prodClassCd != ''">
+                                    AND tmp.PROD_CLASS_CD IN (
+                                                                    SELECT PROD_CLASS_CD
+                                                                    FROM TB_MS_PRODUCT_CLASS
+                                                                    WHERE STORE_CD = tmp.STORE_CD
+                                                                    START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = tmp.STORE_CD
+                                                                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = tmp.STORE_CD
+                                                                )
+                                </if>
+                                <if test='prodCd != null and prodCd != ""'>
+                                    AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+                                </if>
+                                <if test='prodNm != null and prodNm != ""'>
+                                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                                </if>
+                                <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                                    AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                                </if>
+                                <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                                    <if test='userBrands != null and userBrands != ""'>
+                                        -- 매장브랜드 전체일때
+                                        AND tms.HQ_BRAND_CD IN
+                                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                            #{item}
+                                        </foreach>
+                                    </if>
+                                </if>
+                                <if test='storeCds != null and storeCds != ""'>
+                                    AND tsdpsd.STORE_CD IN
+                                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                                <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                                    AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+                                </if>
+                                <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                                    <if test='userBrands != null and userBrands != ""'>
+                                        -- 상품브랜드 전체일때
+                                        AND tmp.HQ_BRAND_CD IN
+                                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                            #{item}
+                                        </foreach>
+                                    </if>
+                                </if>
+                                <if test='prodCds != null and prodCds != ""'>
+                                    AND tmp.PROD_CD IN
+                                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                                <if test='momsTeam != null and momsTeam != ""'>
+                                   AND tmsi.MOMS_TEAM = #{momsTeam}
+                                </if>
+                                <if test='momsAcShop != null and momsAcShop != ""'>
+                                   AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                                </if>
+                                <if test='momsAreaFg != null and momsAreaFg != ""'>
+                                   AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                                </if>
+                                <if test='momsCommercial != null and momsCommercial != ""'>
+                                   AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                                </if>
+                                <if test='momsShopType != null and momsShopType != ""'>
+                                   AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                                </if>
+                                <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                                   AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                                </if>
+                                <if test='branchCd != null and branchCd != ""'>
+                                   AND tms.BRANCH_CD = #{branchCd}
+                                </if>
+                                <if test='prodOption != null and prodOption != "" and prodOption == "1"'>
+                                   AND tsdpsd.SEL_TYPE_FG IN ('N', 'P')
+                                </if>
+                                <if test='prodOption != null and prodOption != "" and prodOption == "2"'>
+                                   AND tsdpsd.SEL_TYPE_FG IN ('N', 'S')
+                                </if>
+                                  AND  tsdpsd.STORE_CD = tms.STORE_CD
+                                  AND  tmsi.STORE_CD (+)= tms.STORE_CD
+                                  AND  tmp.STORE_CD = tsdpsd.STORE_CD
+                                  AND  tmp.PROD_CD = tsdpsd.PROD_CD
+                                  AND  tmpcv.STORE_CD = tmp.STORE_CD
+                                  AND  tmpcv.PROD_CD = tmp.PROD_CD
+                                ) A
+                                WHERE 1=1
+                                GROUP
+                                   BY  A.STORE_CD
+                                ,      A.STORE_NM
+                                ,      A.AREA_CD
+                                ,      A.L_CLASS_CD
+                                ,      A.L_CLASS_NM
+                                ,      A.M_CLASS_CD
+                                ,      A.M_CLASS_NM
+                                ,      A.S_CLASS_CD
+                                ,      A.S_CLASS_NM
+                                ,      A.PROD_CD
+                                ,      A.PROD_NM
+                            UNION ALL
+                                SELECT A.STORE_CD || '_' || 2 AS ORDER_SEQ
+                                ,      'R2' AS ROW_TYPE
+                                ,      '' AS STORE_CD
+                                ,      '' AS STORE_NM
+                                ,      '' AS AREA_NM
+                                ,      '' AS L_CLASS_CD
+                                ,      '' AS L_CLASS_NM
+                                ,      '' AS M_CLASS_CD
+                                ,      '' AS M_CLASS_NM
+                                ,      '' AS S_CLASS_CD
+                                ,      '' AS S_CLASS_NM
+                                ,      '' AS PROD_CD
+                                ,      '' AS PROD_NM
+                                       ${sQuery1}
+                                FROM (
+                                      SELECT tsdpsd.STORE_CD
+                                      , 	 tms.STORE_NM
+                                      ,      tms.AREA_CD
+                                      ,      tmpcv.L_CLASS_CD
+                                      ,      tmpcv.L_CLASS_NM
+                                      ,      tmpcv.M_CLASS_CD
+                                      ,      tmpcv.M_CLASS_NM
+                                      ,      tmpcv.S_CLASS_CD
+                                      ,      tmpcv.S_CLASS_NM
+                                      ,      tsdpsd.PROD_CD
+                                      ,     (CASE tsdpsd.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmp.PROD_NM ELSE tmp.PROD_NM END) AS PROD_NM
+                                      ,      tsdpsd.SALE_DATE
+                                      ,      tsdpsd.SEL_TYPE_FG
+                                             ${sQuery2}
+                                      ,      tsdpsd.TOT_SALE_QTY AS SALE_QTY
+                                      ,      tsdpsd.REAL_SALE_AMT
+                                      FROM   TB_SL_DAILY_PROD_SDSEL_DLVR tsdpsd
+                                      ,	     TB_MS_STORE tms
+                                      , 	 TB_MS_STORE_INFO tmsi
+                                      ,      TB_MS_PRODUCT tmp
+                                      ,      TB_MS_PRODUCT_CLASS_V02 tmpcv
+                                      WHERE  tsdpsd.HQ_OFFICE_CD = #{hqOfficeCd}
+                                      AND    tsdpsd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                                 <if test='dlvrInFgList != null and dlvrInFgList != ""'>
+                                     AND tsdpsd.DLVR_IN_FG IN
+                                     <foreach collection="dlvrInFgList" item="item" open=" (" separator="," close=")" >
+                                         #{item}
+                                     </foreach>
+                                 </if>
+                                 <if test='dlvrOrderFgList != null and dlvrOrderFgList != ""'>
+                                     AND tsdpsd.DLVR_ORDER_FG IN
+                                     <foreach collection="dlvrOrderFgList" item="item" open=" (" separator="," close=")" >
+                                         #{item}
+                                     </foreach>
+                                 </if>
+                                 <if test="prodClassCd != null and prodClassCd != ''">
+                                    AND tmp.PROD_CLASS_CD IN (
+                                                                    SELECT PROD_CLASS_CD
+                                                                    FROM TB_MS_PRODUCT_CLASS
+                                                                    WHERE STORE_CD = tmp.STORE_CD
+                                                                    START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = tmp.STORE_CD
+                                                                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = tmp.STORE_CD
+                                                                )
+                                </if>
+                                <if test='prodCd != null and prodCd != ""'>
+                                    AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+                                </if>
+                                <if test='prodNm != null and prodNm != ""'>
+                                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                                </if>
+                                <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                                    AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                                </if>
+                                <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                                    <if test='userBrands != null and userBrands != ""'>
+                                        -- 매장브랜드 전체일때
+                                        AND tms.HQ_BRAND_CD IN
+                                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                            #{item}
+                                        </foreach>
+                                    </if>
+                                </if>
+                                <if test='storeCds != null and storeCds != ""'>
+                                    AND tsdpsd.STORE_CD IN
+                                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                                <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                                    AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+                                </if>
+                                <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                                    <if test='userBrands != null and userBrands != ""'>
+                                        -- 상품브랜드 전체일때
+                                        AND tmp.HQ_BRAND_CD IN
+                                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                            #{item}
+                                        </foreach>
+                                    </if>
+                                </if>
+                                <if test='prodCds != null and prodCds != ""'>
+                                    AND tmp.PROD_CD IN
+                                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                                <if test='momsTeam != null and momsTeam != ""'>
+                                   AND tmsi.MOMS_TEAM = #{momsTeam}
+                                </if>
+                                <if test='momsAcShop != null and momsAcShop != ""'>
+                                   AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                                </if>
+                                <if test='momsAreaFg != null and momsAreaFg != ""'>
+                                   AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                                </if>
+                                <if test='momsCommercial != null and momsCommercial != ""'>
+                                   AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                                </if>
+                                <if test='momsShopType != null and momsShopType != ""'>
+                                   AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                                </if>
+                                <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                                   AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                                </if>
+                                <if test='branchCd != null and branchCd != ""'>
+                                   AND tms.BRANCH_CD = #{branchCd}
+                                </if>
+                                <if test='prodOption != null and prodOption != "" and prodOption == "1"'>
+                                   AND tsdpsd.SEL_TYPE_FG IN ('N', 'P')
+                                </if>
+                                <if test='prodOption != null and prodOption != "" and prodOption == "2"'>
+                                   AND tsdpsd.SEL_TYPE_FG IN ('N', 'S')
+                                </if>
+                                  AND  tsdpsd.STORE_CD = tms.STORE_CD
+                                  AND  tmsi.STORE_CD (+)= tms.STORE_CD
+                                  AND  tmp.STORE_CD = tsdpsd.STORE_CD
+                                  AND  tmp.PROD_CD = tsdpsd.PROD_CD
+                                  AND  tmpcv.STORE_CD = tmp.STORE_CD
+                                  AND  tmpcv.PROD_CD = tmp.PROD_CD
+                                ) A
+                                WHERE 1=1
+                                GROUP
+                                   BY  A.STORE_CD
+                        ) B
+                    ORDER
+                       BY B.ORDER_SEQ
+                ) A
+            UNION ALL
+                SELECT A.*
+                FROM (
+                        SELECT B.*
+                        FROM
+                        (
+                                SELECT 3 || '_' || A.PROD_CD AS ORDER_SEQ
+                                ,      'R3' AS ROW_TYPE
+                                ,      '' AS STORE_CD
+                                ,      '' AS STORE_NM
+                                ,      '' AS AREA_NM
+                                ,      A.L_CLASS_CD
+                                ,      A.L_CLASS_NM
+                                ,      A.M_CLASS_CD
+                                ,      A.M_CLASS_NM
+                                ,      A.S_CLASS_CD
+                                ,      A.S_CLASS_NM
+                                ,      A.PROD_CD
+                                ,      A.PROD_NM
+                                       ${sQuery1}
+                                FROM (
+                                      SELECT tsdpsd.STORE_CD
+                                      , 	 tms.STORE_NM
+                                      ,      tms.AREA_CD
+                                      ,      tmpcv.L_CLASS_CD
+                                      ,      tmpcv.L_CLASS_NM
+                                      ,      tmpcv.M_CLASS_CD
+                                      ,      tmpcv.M_CLASS_NM
+                                      ,      tmpcv.S_CLASS_CD
+                                      ,      tmpcv.S_CLASS_NM
+                                      ,      tsdpsd.PROD_CD
+                                      ,     (CASE tsdpsd.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmp.PROD_NM ELSE tmp.PROD_NM END) AS PROD_NM
+                                      ,      tsdpsd.SALE_DATE
+                                      ,      tsdpsd.SEL_TYPE_FG
+                                             ${sQuery2}
+                                      ,      tsdpsd.TOT_SALE_QTY AS SALE_QTY
+                                      ,      tsdpsd.REAL_SALE_AMT
+                                      FROM   TB_SL_DAILY_PROD_SDSEL_DLVR tsdpsd
+                                      ,	     TB_MS_STORE tms
+                                      , 	 TB_MS_STORE_INFO tmsi
+                                      ,      TB_MS_PRODUCT tmp
+                                      ,      TB_MS_PRODUCT_CLASS_V02 tmpcv
+                                      WHERE  tsdpsd.HQ_OFFICE_CD = #{hqOfficeCd}
+                                      AND    tsdpsd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                                 <if test='dlvrInFgList != null and dlvrInFgList != ""'>
+                                     AND tsdpsd.DLVR_IN_FG IN
+                                     <foreach collection="dlvrInFgList" item="item" open=" (" separator="," close=")" >
+                                         #{item}
+                                     </foreach>
+                                 </if>
+                                 <if test='dlvrOrderFgList != null and dlvrOrderFgList != ""'>
+                                     AND tsdpsd.DLVR_ORDER_FG IN
+                                     <foreach collection="dlvrOrderFgList" item="item" open=" (" separator="," close=")" >
+                                         #{item}
+                                     </foreach>
+                                 </if>
+                                 <if test="prodClassCd != null and prodClassCd != ''">
+                                    AND tmp.PROD_CLASS_CD IN (
+                                                                    SELECT PROD_CLASS_CD
+                                                                    FROM TB_MS_PRODUCT_CLASS
+                                                                    WHERE STORE_CD = tmp.STORE_CD
+                                                                    START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = tmp.STORE_CD
+                                                                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = tmp.STORE_CD
+                                                                )
+                                </if>
+                                <if test='prodCd != null and prodCd != ""'>
+                                    AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+                                </if>
+                                <if test='prodNm != null and prodNm != ""'>
+                                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                                </if>
+                                <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                                    AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                                </if>
+                                <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                                    <if test='userBrands != null and userBrands != ""'>
+                                        -- 매장브랜드 전체일때
+                                        AND tms.HQ_BRAND_CD IN
+                                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                            #{item}
+                                        </foreach>
+                                    </if>
+                                </if>
+                                <if test='storeCds != null and storeCds != ""'>
+                                    AND tsdpsd.STORE_CD IN
+                                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                                <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                                    AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+                                </if>
+                                <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                                    <if test='userBrands != null and userBrands != ""'>
+                                        -- 상품브랜드 전체일때
+                                        AND tmp.HQ_BRAND_CD IN
+                                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                            #{item}
+                                        </foreach>
+                                    </if>
+                                </if>
+                                <if test='prodCds != null and prodCds != ""'>
+                                    AND tmp.PROD_CD IN
+                                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                                <if test='momsTeam != null and momsTeam != ""'>
+                                   AND tmsi.MOMS_TEAM = #{momsTeam}
+                                </if>
+                                <if test='momsAcShop != null and momsAcShop != ""'>
+                                   AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                                </if>
+                                <if test='momsAreaFg != null and momsAreaFg != ""'>
+                                   AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                                </if>
+                                <if test='momsCommercial != null and momsCommercial != ""'>
+                                   AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                                </if>
+                                <if test='momsShopType != null and momsShopType != ""'>
+                                   AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                                </if>
+                                <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                                   AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                                </if>
+                                <if test='branchCd != null and branchCd != ""'>
+                                   AND tms.BRANCH_CD = #{branchCd}
+                                </if>
+                                <if test='prodOption != null and prodOption != "" and prodOption == "1"'>
+                                   AND tsdpsd.SEL_TYPE_FG IN ('N', 'P')
+                                </if>
+                                <if test='prodOption != null and prodOption != "" and prodOption == "2"'>
+                                   AND tsdpsd.SEL_TYPE_FG IN ('N', 'S')
+                                </if>
+                                  AND  tsdpsd.STORE_CD = tms.STORE_CD
+                                  AND  tmsi.STORE_CD (+)= tms.STORE_CD
+                                  AND  tmp.STORE_CD = tsdpsd.STORE_CD
+                                  AND  tmp.PROD_CD = tsdpsd.PROD_CD
+                                  AND  tmpcv.STORE_CD = tmp.STORE_CD
+                                  AND  tmpcv.PROD_CD = tmp.PROD_CD
+                                ) A
+                            WHERE 1=1
+                            GROUP
+                               BY  A.L_CLASS_CD
+                            ,      A.L_CLASS_NM
+                            ,      A.M_CLASS_CD
+                            ,      A.M_CLASS_NM
+                            ,      A.S_CLASS_CD
+                            ,      A.S_CLASS_NM
+                            ,      A.PROD_CD
+                            ,      A.PROD_NM
+                            UNION ALL
+                            SELECT 4 || '_' || '총계'  AS ORDER_SEQ
+                            ,      'R4' AS ROW_TYPE
+                            ,      '' AS STORE_CD
+                            ,      '' AS STORE_NM
+                            ,      '' AS AREA_NM
+                            ,      '' AS L_CLASS_CD
+                            ,      '' AS L_CLASS_NM
+                            ,      '' AS M_CLASS_CD
+                            ,      '' AS M_CLASS_NM
+                            ,      '' AS S_CLASS_CD
+                            ,      '' AS S_CLASS_NM
+                            ,      '' AS PROD_CD
+                            ,      '' AS PROD_NM
+                                   ${sQuery1}
+                            FROM (
+                                  SELECT tsdpsd.STORE_CD
+                                  , 	 tms.STORE_NM
+                                  ,      tms.AREA_CD
+                                  ,      tmpcv.L_CLASS_CD
+                                  ,      tmpcv.L_CLASS_NM
+                                  ,      tmpcv.M_CLASS_CD
+                                  ,      tmpcv.M_CLASS_NM
+                                  ,      tmpcv.S_CLASS_CD
+                                  ,      tmpcv.S_CLASS_NM
+                                  ,      tsdpsd.PROD_CD
+                                  ,     (CASE tsdpsd.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmp.PROD_NM ELSE tmp.PROD_NM END) AS PROD_NM
+                                  ,      tsdpsd.SALE_DATE
+                                  ,      tsdpsd.SEL_TYPE_FG
+                                         ${sQuery2}
+                                  ,      tsdpsd.TOT_SALE_QTY AS SALE_QTY
+                                  ,      tsdpsd.REAL_SALE_AMT
+                                  FROM   TB_SL_DAILY_PROD_SDSEL_DLVR tsdpsd
+                                  ,	     TB_MS_STORE tms
+                                  , 	 TB_MS_STORE_INFO tmsi
+                                  ,      TB_MS_PRODUCT tmp
+                                  ,      TB_MS_PRODUCT_CLASS_V02 tmpcv
+                                  WHERE  tsdpsd.HQ_OFFICE_CD = #{hqOfficeCd}
+                                  AND    tsdpsd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                             <if test='dlvrInFgList != null and dlvrInFgList != ""'>
+                                 AND tsdpsd.DLVR_IN_FG IN
+                                 <foreach collection="dlvrInFgList" item="item" open=" (" separator="," close=")" >
+                                     #{item}
+                                 </foreach>
+                             </if>
+                             <if test='dlvrOrderFgList != null and dlvrOrderFgList != ""'>
+                                 AND tsdpsd.DLVR_ORDER_FG IN
+                                 <foreach collection="dlvrOrderFgList" item="item" open=" (" separator="," close=")" >
+                                     #{item}
+                                 </foreach>
+                             </if>
+                             <if test="prodClassCd != null and prodClassCd != ''">
+                                AND tmp.PROD_CLASS_CD IN (
+                                                                SELECT PROD_CLASS_CD
+                                                                FROM TB_MS_PRODUCT_CLASS
+                                                                WHERE STORE_CD = tmp.STORE_CD
+                                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = tmp.STORE_CD
+                                                                CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = tmp.STORE_CD
+                                                            )
+                            </if>
+                            <if test='prodCd != null and prodCd != ""'>
+                                AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+                            </if>
+                            <if test='prodNm != null and prodNm != ""'>
+                                AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                            </if>
+                            <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                                AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                            </if>
+                            <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                                <if test='userBrands != null and userBrands != ""'>
+                                    -- 매장브랜드 전체일때
+                                    AND tms.HQ_BRAND_CD IN
+                                    <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                            </if>
+                            <if test='storeCds != null and storeCds != ""'>
+                                AND tsdpsd.STORE_CD IN
+                                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                                AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+                            </if>
+                            <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                                <if test='userBrands != null and userBrands != ""'>
+                                    -- 상품브랜드 전체일때
+                                    AND tmp.HQ_BRAND_CD IN
+                                    <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                        #{item}
+                                    </foreach>
+                                </if>
+                            </if>
+                            <if test='prodCds != null and prodCds != ""'>
+                                AND tmp.PROD_CD IN
+                                <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <if test='momsTeam != null and momsTeam != ""'>
+                               AND tmsi.MOMS_TEAM = #{momsTeam}
+                            </if>
+                            <if test='momsAcShop != null and momsAcShop != ""'>
+                               AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                            </if>
+                            <if test='momsAreaFg != null and momsAreaFg != ""'>
+                               AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                            </if>
+                            <if test='momsCommercial != null and momsCommercial != ""'>
+                               AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                            </if>
+                            <if test='momsShopType != null and momsShopType != ""'>
+                               AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                            </if>
+                            <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                               AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                            </if>
+                            <if test='branchCd != null and branchCd != ""'>
+                               AND tms.BRANCH_CD = #{branchCd}
+                            </if>
+                            <if test='prodOption != null and prodOption != "" and prodOption == "1"'>
+                               AND tsdpsd.SEL_TYPE_FG IN ('N', 'P')
+                            </if>
+                            <if test='prodOption != null and prodOption != "" and prodOption == "2"'>
+                               AND tsdpsd.SEL_TYPE_FG IN ('N', 'S')
+                            </if>
+                              AND  tsdpsd.STORE_CD = tms.STORE_CD
+                              AND  tmsi.STORE_CD (+)= tms.STORE_CD
+                              AND  tmp.STORE_CD = tsdpsd.STORE_CD
+                              AND  tmp.PROD_CD = tsdpsd.PROD_CD
+                              AND  tmpcv.STORE_CD = tmp.STORE_CD
+                              AND  tmpcv.PROD_CD = tmp.PROD_CD
+                            ) A
+                        WHERE 1=1
+                    ) B
+                    ORDER
+                       BY B.ORDER_SEQ
+                        , B.STORE_CD
+                 ) A
+            </if>
+        </when>
+      </choose>
+    </select>
+
+    <!-- 해당 날짜의 총매출액 조회 -->
+    <!--
+        TABLE    :
+        PARAM    : saleAnalsMomsBstVO
+        COMMENTS : 해당 날짜의 총매출액을 조회한다.
+    -->
+    <select id="getRealSaleAmt" parameterType="saleAnalsMomsBstVO" resultType="Integer">
+      /*  USE : SaleAnalsMomsBstMapper.getRealSaleAmt */
+      SELECT NVL(SUM(tsdpsd.REAL_SALE_AMT),0)
+      FROM   TB_SL_DAILY_PROD_SDSEL_DLVR tsdpsd
+      ,	     TB_MS_STORE tms
+      ,      TB_MS_PRODUCT tmp
+      WHERE  tsdpsd.HQ_OFFICE_CD = #{hqOfficeCd}
+      AND    tsdpsd.SALE_DATE BETWEEN #{saleStartDate} and #{saleEndDate}
+    <if test='storeCds != null and storeCds != ""'>
+        AND tsdpsd.STORE_CD IN
+        <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+            #{item}
+        </foreach>
+    </if>
+      AND    tsdpsd.STORE_CD = tms.STORE_CD
+      AND    tmp.STORE_CD = tsdpsd.STORE_CD
+      AND    tmp.PROD_CD = tsdpsd.PROD_CD
+    </select>
+
+</mapper>

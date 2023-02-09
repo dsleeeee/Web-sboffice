@@ -54,7 +54,8 @@
                                 SELECT HQ_OFFICE_CD,
                                         PROD_CD,
                                         DLVR_NAME_CD,
-                                        DLVR_PROD_NM
+                                        DLVR_PROD_NM,
+                                        REG_DT
                                 FROM TB_HQ_PRODUCT_DLVR_PROD_NM
                               )
                         PIVOT (
@@ -68,9 +69,16 @@
                   AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test="chkDt == false">
                     <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
-                        <![CDATA[
-                        AND thp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
-                        ]]>
+                        <if test="regDtType != null and regDtType == 'prod'">
+                            <![CDATA[
+                            AND thp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                            ]]>
+                        </if>
+                        <if test="regDtType != null and regDtType == 'dlvrProdNm'">
+                            <![CDATA[
+                            AND thpdpn.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                            ]]>
+                        </if>
                     </if>
                 </if>
                 <if test="prodCd != null and prodCd != ''">

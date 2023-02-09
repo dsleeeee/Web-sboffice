@@ -549,11 +549,20 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
         params.push($scope.flex.collectionView.itemsRemoved[d]);
       }
       $scope._save('/base/prod/sideMenu/menuClass/save.sb', params, function() {
-        $scope._broadcast("sideMenuSelectGroupCtrl");
-        $scope._broadcast('sideMenuSelectClassCtrl', $scope.getSelectedSelGroup());
+
+        // 선택그룹 리스트 재조회
+        //$scope._broadcast("sideMenuSelectGroupCtrl");
+
+        // 선택분류 리스트 재조회
+        var grpGrid = agrid.getScope('sideMenuSelectGroupCtrl');
+        var selectedSelGroup = grpGrid.getSelectedSelGroup();
+        $scope._broadcast('sideMenuSelectClassCtrl', selectedSelGroup);
+
+        // 선택상품 리스트 재조회
         $("#sideClassTitle").html("");
         var prodScope = agrid.getScope('sideMenuSelectProdCtrl');
         prodScope._gridDataInit();   // 그리드 초기화
+
       });
     });
   };
@@ -645,22 +654,19 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
       // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
       $scope._save('/base/prod/sideMenu/menuClass/save.sb', params, function() {
 
-        // // 선택분류가 없을 경우 선택그룹까지 재조회 해야한다.
-        // if($scope.flex.collectionView.itemCount > 0){
-        //   // 그리드 저장 후 재조회
-        $scope._broadcast('sideMenuSelectClassCtrl', $scope.getSelectedSelGroup());
-        // $scope._broadcast("sideMenuSelectGroupCtrl");
+        // 선택그룹 리스트 재조회
+        //$scope._broadcast("sideMenuSelectGroupCtrl");
+
+        // 선택분류 리스트 재조회
+        var grpGrid = agrid.getScope('sideMenuSelectGroupCtrl');
+        var selectedSelGroup = grpGrid.getSelectedSelGroup();
+        $scope._broadcast('sideMenuSelectClassCtrl', selectedSelGroup);
+
+        // 선택상품 리스트 재조회
         $("#sideClassTitle").html("");
         var prodScope = agrid.getScope('sideMenuSelectProdCtrl');
         prodScope._gridDataInit();   // 그리드 초기화
-          // $scope._broadcast("sideMenuSelectGroupCtrl");
-        // } else {
-        //   var grpGrid = agrid.getScope('sideMenuSelectGroupCtrl');
-        //   $scope._broadcast('sideMenuSelectGroupCtrl');
-        //   $scope.$apply(function(){
-        //     $scope._gridDataInit();
-        //   });
-        // }
+
       });
     });
   };
@@ -953,26 +959,17 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
       // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
       $scope._save('/base/prod/sideMenu/menuProd/save.sb', params, function() {
 
-        // // 선택상품이 없을 경우 선택분류까지 재조회 해야한다.
-        // if($scope.flex.collectionView.itemCount > 0){
-          // 그리드 저장 후 재조회
+          // 선택상품 리스트 재조회
           var params = {};
           params.sdselClassCd = $scope.getSdselClassCd();
           params.sdselQty = $scope.sdselQty;
           $scope._broadcast('sideMenuSelectProdCtrl', params);
+
+          // 선택분류 리스트 재조회
           var grpGrid = agrid.getScope('sideMenuSelectGroupCtrl');
           var selectedSelGroup = grpGrid.getSelectedSelGroup();
           $scope._broadcast('sideMenuSelectClassCtrl', selectedSelGroup);
           // $scope._broadcast("sideMenuSelectGroupCtrl");
-        // } else {
-        //   var grpGrid = agrid.getScope('sideMenuSelectGroupCtrl');
-        //   var sdselGrpCd = grpGrid.getSelectedSdselGrpCd();
-        //   $scope._broadcast('sideMenuSelectClassCtrl', sdselGrpCd);
-        //   $scope.$apply(function(){
-        //     $scope._gridDataInit();
-        //
-        //   });
-        // }
       });
     });
   };
