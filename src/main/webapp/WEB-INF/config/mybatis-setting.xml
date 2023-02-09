@@ -901,6 +901,8 @@
     <typeAlias alias="dayTestVO" type="kr.co.solbipos.sale.day.dayTest.service.DayTestVO"/>
     <!-- 맘스터치 > 매출분석 > 일별 매출 현황(합산평균) -->
     <typeAlias alias="dayAvgVO" type="kr.co.solbipos.sale.day.dayAvg.service.DayAvgVO"/>
+    <!-- 맘스터치 > 매출분석 > 매출분석(사업전략팀) -->
+    <typeAlias alias="saleAnalsMomsBstVO" type="kr.co.solbipos.sale.anals.saleAnalsMomsBst.service.SaleAnalsMomsBstVO"/>
 
     <!-- 맘스터치 > 시간대별매출 > 시간대별 일 매출 -->
     <typeAlias alias="timeVO" type="kr.co.solbipos.sale.time.time.service.TimeVO"/>
