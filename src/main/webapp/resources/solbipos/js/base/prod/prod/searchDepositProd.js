@@ -69,14 +69,16 @@ app.controller('searchDepositProdCtrl', ['$scope', '$http', function ($scope, $h
     $scope.searchDepositProd = function () {
 
         var params = {};
-        params.searchProdCd = $("#searchProdCd").val();
-        params.searchProdNm = $("#searchProdNm").val();
+        params.searchProdCd = $("#searchDepositProdCd").val();
+        params.searchProdNm = $("#searchDepositProdNm").val();
         params.prodTypeFg   = $scope.searchProdTypeFg;
 
         if(brandUseFg === "1" && orgnFg === "HQ"){
 
+            var scope = agrid.getScope("prodCtrl");
+
             // 선택한 상품브랜드가 있을 때
-            params.prodHqBrandCd = $scope.srchProdHqBrandCombo.selectedValue;
+            params.prodHqBrandCd = scope.srchProdHqBrandCombo.selectedValue;
 
             // 선택한 상품브랜드가 없을 때('전체' 일때)
             if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {

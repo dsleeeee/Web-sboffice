@@ -80,8 +80,8 @@ app.controller('searchGroupProdCtrl', ['$scope', '$http', function ($scope, $htt
     $scope.searchGroupProd = function () {
 
         var params = {};
-        params.searchProdCd = $("#searchProdCd").val();
-        params.searchProdNm = $("#searchProdNm").val();
+        params.searchProdCd = $("#searchGroupProdCd").val();
+        params.searchProdNm = $("#searchGroupProdNm").val();
         params.sideProdYn   = $scope.searchSideProdYn;
         params.singleYn     = $scope.searchSingleYn;
         var scope = agrid.getScope("prodModifyCtrl");
@@ -89,8 +89,10 @@ app.controller('searchGroupProdCtrl', ['$scope', '$http', function ($scope, $htt
 
         if(brandUseFg === "1" && orgnFg === "HQ"){
 
+            var scope = agrid.getScope("prodCtrl");
+
             // 선택한 상품브랜드가 있을 때
-            params.prodHqBrandCd = $scope.srchProdHqBrandCombo.selectedValue;
+            params.prodHqBrandCd = scope.srchProdHqBrandCombo.selectedValue;
 
             // 선택한 상품브랜드가 없을 때('전체' 일때)
             if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
