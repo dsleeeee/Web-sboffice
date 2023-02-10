@@ -890,8 +890,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             if ($scope.prodModifyInfo.nuTotWt === null || $scope.prodModifyInfo.nuTotWt === undefined || $scope.prodModifyInfo.nuTotWt === "") {
             } else {
                 // 숫자만 입력
-                var numChkexp = /[^0-9]/g;
-                if (numChkexp.test(nvl($scope.prodModifyInfo.nuTotWt, 0))) {
+                var numChkexp = /[^-\.0-9]/g;
+                if (numChkexp.test(nvl($scope.prodModifyInfo.nuTotWt, 0)) || $scope.prodModifyInfo.nuTotWt.split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuTotWtInChk"]); // 총중량은 숫자만 입력해주세요.
                     return false;
                 }
@@ -901,8 +901,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             if ($scope.prodModifyInfo.nuKcal === null || $scope.prodModifyInfo.nuKcal === undefined || $scope.prodModifyInfo.nuKcal === "") {
             } else {
                 // 숫자만 입력
-                var numChkexp = /[^0-9]/g;
-                if (numChkexp.test(nvl($scope.prodModifyInfo.nuKcal, 0))) {
+                var numChkexp = /[^-\.0-9]/g;
+                if (numChkexp.test(nvl($scope.prodModifyInfo.nuKcal, 0)) || $scope.prodModifyInfo.nuKcal.split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuKcalInChk"]); // 총열량은 숫자만 입력해주세요.
                     return false;
                 }
@@ -912,8 +912,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             if ($scope.prodModifyInfo.nuProtein === null || $scope.prodModifyInfo.nuProtein === undefined || $scope.prodModifyInfo.nuProtein === "") {
             } else {
                 // 숫자만 입력
-                var numChkexp = /[^0-9]/g;
-                if (numChkexp.test(nvl($scope.prodModifyInfo.nuProtein, 0))) {
+                var numChkexp = /[^-\.0-9]/g;
+                if (numChkexp.test(nvl($scope.prodModifyInfo.nuProtein, 0)) || $scope.prodModifyInfo.nuProtein.split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuProteinInChk"]); // 단백질은 숫자만 입력해주세요.
                     return false;
                 }
@@ -923,8 +923,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             if ($scope.prodModifyInfo.nuSodium === null || $scope.prodModifyInfo.nuSodium === undefined || $scope.prodModifyInfo.nuSodium === "") {
             } else {
                 // 숫자만 입력
-                var numChkexp = /[^0-9]/g;
-                if (numChkexp.test(nvl($scope.prodModifyInfo.nuSodium, 0))) {
+                var numChkexp = /[^-\.0-9]/g;
+                if (numChkexp.test(nvl($scope.prodModifyInfo.nuSodium, 0)) || $scope.prodModifyInfo.nuSodium.split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuSodiumInChk"]); // 나트륨은 숫자만 입력해주세요.
                     return false;
                 }
@@ -934,8 +934,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             if ($scope.prodModifyInfo.nuSugars === null || $scope.prodModifyInfo.nuSugars === undefined || $scope.prodModifyInfo.nuSugars === "") {
             } else {
                 // 숫자만 입력
-                var numChkexp = /[^0-9]/g;
-                if (numChkexp.test(nvl($scope.prodModifyInfo.nuSugars, 0))) {
+                var numChkexp = /[^-\.0-9]/g;
+                if (numChkexp.test(nvl($scope.prodModifyInfo.nuSugars, 0)) || $scope.prodModifyInfo.nuSugars.split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuSugarsInChk"]); // 당류는 숫자만 입력해주세요.
                     return false;
                 }
@@ -945,8 +945,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             if ($scope.prodModifyInfo.nuSatFat === null || $scope.prodModifyInfo.nuSatFat === undefined || $scope.prodModifyInfo.nuSatFat === "") {
             } else {
                 // 숫자만 입력
-                var numChkexp = /[^0-9]/g;
-                if (numChkexp.test(nvl($scope.prodModifyInfo.nuSatFat, 0))) {
+                var numChkexp = /[^-\.0-9]/g;
+                if (numChkexp.test(nvl($scope.prodModifyInfo.nuSatFat, 0)) || $scope.prodModifyInfo.nuSatFat.split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuSatFatInChk"]); // 포화지방은 숫자만 입력해주세요.
                     return false;
                 }
@@ -956,8 +956,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             if ($scope.prodModifyInfo.nuCaffeine === null || $scope.prodModifyInfo.nuCaffeine === undefined || $scope.prodModifyInfo.nuCaffeine === "") {
             } else {
                 // 숫자만 입력
-                var numChkexp = /[^0-9]/g;
-                if (numChkexp.test(nvl($scope.prodModifyInfo.nuCaffeine, 0))) {
+                var numChkexp = /[^-\.0-9]/g;
+                if (numChkexp.test(nvl($scope.prodModifyInfo.nuCaffeine, 0)) || $scope.prodModifyInfo.nuCaffeine.split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuCaffeineInChk"]); // 카페인은 숫자만 입력해주세요.
                     return false;
                 }
@@ -1235,8 +1235,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             if (vParams.nuTotWt === null || vParams.nuTotWt === undefined || vParams.nuTotWt === "") {
             } else {
                 // 숫자만 입력
-                var numChkexp = /[^0-9]/g;
-                if (numChkexp.test(nvl(vParams.nuTotWt, 0))) {
+                var numChkexp = /[^-\.0-9]/g;
+                if (numChkexp.test(nvl(vParams.nuTotWt, 0)) || vParams.nuSugars.split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuTotWtInChk"]); // 총중량은 숫자만 입력해주세요.
                     return false;
                 }
@@ -1246,8 +1246,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             if (vParams.nuKcal === null || vParams.nuKcal === undefined || vParams.nuKcal === "") {
             } else {
                 // 숫자만 입력
-                var numChkexp = /[^0-9]/g;
-                if (numChkexp.test(nvl(vParams.nuKcal, 0))) {
+                var numChkexp = /[^-\.0-9]/g;
+                if (numChkexp.test(nvl(vParams.nuKcal, 0)) || vParams.nuKcal.split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuKcalInChk"]); // 총열량은 숫자만 입력해주세요.
                     return false;
                 }
@@ -1257,8 +1257,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             if (vParams.nuProtein === null || vParams.nuProtein === undefined || vParams.nuProtein === "") {
             } else {
                 // 숫자만 입력
-                var numChkexp = /[^0-9]/g;
-                if (numChkexp.test(nvl(vParams.nuProtein, 0))) {
+                var numChkexp = /[^-\.0-9]/g;
+                if (numChkexp.test(nvl(vParams.nuProtein, 0)) || vParams.nuProtein.split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuProteinInChk"]); // 단백질은 숫자만 입력해주세요.
                     return false;
                 }
@@ -1268,8 +1268,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             if (vParams.nuSodium === null || vParams.nuSodium === undefined || vParams.nuSodium === "") {
             } else {
                 // 숫자만 입력
-                var numChkexp = /[^0-9]/g;
-                if (numChkexp.test(nvl(vParams.nuSodium, 0))) {
+                var numChkexp = /[^-\.0-9]/g;
+                if (numChkexp.test(nvl(vParams.nuSodium, 0)) || vParams.nuSodium.split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuSodiumInChk"]); // 나트륨은 숫자만 입력해주세요.
                     return false;
                 }
@@ -1279,8 +1279,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             if (vParams.nuSugars === null || vParams.nuSugars === undefined || vParams.nuSugars === "") {
             } else {
                 // 숫자만 입력
-                var numChkexp = /[^0-9]/g;
-                if (numChkexp.test(nvl(vParams.nuSugars, 0))) {
+                var numChkexp = /[^-\.0-9]/g;
+                if (numChkexp.test(nvl(vParams.nuSugars, 0)) || vParams.nuSugars.split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuSugarsInChk"]); // 당류는 숫자만 입력해주세요.
                     return false;
                 }
@@ -1290,8 +1290,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             if (vParams.nuSatFat === null || vParams.nuSatFat === undefined || vParams.nuSatFat === "") {
             } else {
                 // 숫자만 입력
-                var numChkexp = /[^0-9]/g;
-                if (numChkexp.test(nvl(vParams.nuSatFat, 0))) {
+                var numChkexp = /[^-\.0-9]/g;
+                if (numChkexp.test(nvl(vParams.nuSatFat, 0)) || vParams.nuSatFat.split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuSatFatInChk"]); // 포화지방은 숫자만 입력해주세요.
                     return false;
                 }
@@ -1301,8 +1301,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             if (vParams.nuCaffeine === null || vParams.nuCaffeine === undefined || vParams.nuCaffeine === "") {
             } else {
                 // 숫자만 입력
-                var numChkexp = /[^0-9]/g;
-                if (numChkexp.test(nvl(vParams.nuCaffeine, 0))) {
+                var numChkexp = /[^-\.0-9]/g;
+                if (numChkexp.test(nvl(vParams.nuCaffeine, 0)) || vParams.nuCaffeine.split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuCaffeineInChk"]); // 카페인은 숫자만 입력해주세요.
                     return false;
                 }

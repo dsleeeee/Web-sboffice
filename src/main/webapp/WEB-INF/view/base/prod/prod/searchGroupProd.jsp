@@ -44,14 +44,14 @@
 <%--                    // 상품코드--%>
                     <th><s:message code="prod.prodCd"/></th>
                     <td>
-                        <input type="text" class="sb-input w100" id="searchProdCd" ng-model="searchProdCd" maxlength="13"/>
+                        <input type="text" class="sb-input w100" id="searchGroupProdCd" ng-model="searchGroupProdCd" maxlength="13"/>
                     </td>
                 </tr>
                 <tr>
 <%--                    // 상품명--%>
                     <th><s:message code="prod.prodNm"/></th>
                     <td>
-                        <input type="text" class="sb-input w100" id="searchProdNm" ng-model="searchProdNm" maxlength="10"/>
+                        <input type="text" class="sb-input w100" id="searchGroupProdNm" ng-model="searchGroupProdNm" maxlength="10"/>
                     </td>
                 </tr>
                 <tr>
@@ -121,7 +121,7 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/searchGroupProd.js?ver=20230116.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/searchGroupProd.js?ver=20230116.02" charset="utf-8"></script>
 
 <%-- 시스템이미지 팝업--%>
 <c:import url="/WEB-INF/view/base/prod/prod/systemImg00001.jsp">

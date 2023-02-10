@@ -105,23 +105,17 @@
                             twbi.APPR_FG = '2'
                         AND twbi.TARGET_FG = '6'
                         AND twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = #{boardCd} AND PART_ORGN_CD = #{hqOfficeCd} AND USE_YN = 'Y')
-                        AND twbi.START_DATE <= #{date}
-                        AND twbi.END_DATE >= #{date}
                     )
                 OR  (       -- 관리자가 등록한 글
                             twbi.APPR_FG = '2'
                         AND twuidv01.ORGN_FG = 'M'
                         AND twbi.TARGET_FG LIKE '%4%'
-                        AND twbi.START_DATE <= #{date}
-                        AND twbi.END_DATE >= #{date}
                     )
                 OR  (       -- 총판/대리점이 등록한 글
                             twbi.APPR_FG = '2'
                         AND twuidv01.ORGN_FG = 'A'
                         AND twbi.TARGET_FG LIKE '%4%'
                         AND twuidv01.ORGN_CD = (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
-                        AND twbi.START_DATE <= #{date}
-                        AND twbi.END_DATE >= #{date}
                     )
                 )
         ]]>
@@ -137,31 +131,23 @@
                             twbi.APPR_FG = '2'
                         AND twbi.TARGET_FG = '6'
                         AND twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = #{boardCd} AND PART_ORGN_CD = #{storeCd} AND USE_YN = 'Y')
-                        AND twbi.START_DATE <= #{date}
-                        AND twbi.END_DATE >= #{date}
                     )
                 OR  (       -- 관리자가 등록한 글
                             twbi.APPR_FG = '2'
                         AND twuidv01.ORGN_FG = 'M'
                         AND twbi.TARGET_FG LIKE '%5%'
-                        AND twbi.START_DATE <= #{date}
-                        AND twbi.END_DATE >= #{date}
                     )
                 OR  (       -- 총판/대리점이 등록한 글
                             twbi.APPR_FG = '2'
                         AND twuidv01.ORGN_FG = 'A'
                         AND twbi.TARGET_FG LIKE '%5%'
                         AND twuidv01.ORGN_CD = (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = #{storeCd})
-                        AND twbi.START_DATE <= #{date}
-                        AND twbi.END_DATE >= #{date}
                     )
                 OR  (       -- 본사가 등록한 글
                             twbi.APPR_FG = '2'
                         AND twuidv01.ORGN_FG = 'H'
                         AND twbi.TARGET_FG LIKE '%5%'
                         AND twuidv01.HQ_OFFICE_CD = (SELECT HQ_OFFICE_CD FROM TB_MS_STORE WHERE STORE_CD = #{storeCd})
-                        AND twbi.START_DATE <= #{date}
-                        AND twbi.END_DATE >= #{date}
                     )
                 )
         ]]>
@@ -186,8 +172,6 @@
                     OR (       -- 게시대상으로 설정된 글
                                 twbi.TARGET_FG = '6'
                             AND twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = #{boardCd} AND PART_ORGN_CD = #{orgnGrpCd} AND USE_YN = 'Y')
-                            AND twbi.START_DATE <= #{date}
-                            AND twbi.END_DATE >= #{date}
                         )
                     OR  (       -- 관리자가 등록한 글
                                 twbi.APPR_FG = '2'
@@ -198,8 +182,6 @@
                                                                         THEN '2'
                                                                         ELSE '3'
                                                                         END || '%'
-                            AND twbi.START_DATE <= #{date}
-                            AND twbi.END_DATE >= #{date}
                         )
                      OR (       -- 총판/대리점이 등록한 글
                                 twuidv01.ORGN_FG = 'A'
@@ -211,8 +193,6 @@
                                                                         THEN '2'
                                                                         ELSE '3'
                                                                         END || '%'
-                            AND twbi.START_DATE <= #{date}
-                            AND twbi.END_DATE >= #{date}
                         )
                     )
                 ]]>
