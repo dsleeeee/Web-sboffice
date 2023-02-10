@@ -344,7 +344,7 @@
     </div>
 </div>
 
-<form id="saleReport_info" name="saleReport_info" method="post" action="/sale/status/saleDtlChannel/saleDtlChannelExcel/getSaleDtlChannelDownload.sb" target="saleReportFrm">
+<form id="saleReport_info" name="saleReport_info" method="post" action="/sale/prod/saleDtlChannel/saleDtlChannelExcel/getSaleDtlChannelDownload.sb" target="saleReportFrm">
     <iframe name="saleReportFrm" style="display:none;"></iframe>
 
     <input type="hidden" name="fileName" value="" /> <%--파일명--%>
