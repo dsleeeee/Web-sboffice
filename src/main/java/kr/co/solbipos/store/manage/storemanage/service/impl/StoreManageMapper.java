@@ -449,6 +449,9 @@ public interface StoreManageMapper {
     /** 배달시스템상품명칭매핑 정보 복사  */
     int insertStoreHqProductDlvrProdNm(StoreManageVO storeManageVO);
 
+    /** 듀얼모니터영상 정보 복사  */
+    int insertStoreHqAdver(StoreManageVO storeManageVO);
+
     /** 판매터치키 메뉴 임시테이블 삭제 */
     int deleteAllTmpTouchKeyClass(StoreEnvVO storeEnvVO);
 

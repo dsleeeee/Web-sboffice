@@ -441,6 +441,9 @@ public class StoreManageServiceImpl implements StoreManageService{
                 /** 배달시스템상품명칭매핑 정보 매장에 생성  */
                 procCnt += mapper.insertStoreHqProductDlvrProdNm(storeManageVO);
 
+                /** 본사 듀얼모니터영상 정보 매장에 생성  */
+                procCnt += mapper.insertStoreHqAdver(storeManageVO);
+
             }
 
             // 매장환경 복사 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■

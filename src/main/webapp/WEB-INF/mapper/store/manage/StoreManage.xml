@@ -7309,6 +7309,52 @@
                     )
     </insert>
 
+    <!-- 듀얼모니터영상 정보 복사 -->
+    <!--
+        TABLE    : TB_HQ_POS_ADVER_STORE
+        PARAM    : storeManageVO
+        COMMENTS : 듀얼모니터영상 정보를 복사한다
+    -->
+    <insert id="insertStoreHqAdver" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStoreHqAdver */
+        MERGE INTO TB_HQ_POS_ADVER_STORE A
+            USING
+                (
+                    SELECT  #{hqOfficeCd} AS HQ_OFFICE_CD
+                    ,       ADVER_FILE_NO
+                    ,       #{storeCd} AS STORE_CD
+                    ,       #{regDt} AS REG_DT
+                    ,       #{regId} AS REG_ID
+                    ,       #{modDt} AS MOD_DT
+                    ,       #{modId} AS MOD_ID
+                    FROM    TB_HQ_POS_ADVER_FILE
+                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                ) B
+            ON  (
+                    A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                    AND A.ADVER_FILE_NO = B.ADVER_FILE_NO
+                    AND A.STORE_CD = B.STORE_CD
+                )
+            WHEN NOT MATCHED THEN
+                INSERT (
+                        A.HQ_OFFICE_CD
+                    ,   A.ADVER_FILE_NO
+                    ,   A.STORE_CD
+                    ,   A.REG_DT
+                    ,   A.REG_ID
+                    ,   A.MOD_DT
+                    ,   A.MOD_ID
+                    ) VALUES (
+                        B.HQ_OFFICE_CD
+                    ,   B.ADVER_FILE_NO
+                    ,   B.STORE_CD
+                    ,   B.REG_DT
+                    ,   B.REG_ID
+                    ,   B.MOD_DT
+                    ,   B.MOD_ID
+                    )
+    </insert>
+
 
     <!-- 판매터치키 메뉴 임시테이블 삭제 -->
     <!--
