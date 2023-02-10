@@ -1272,8 +1272,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       return false;
     }
 
-    // 관리자와 총판권한만 수정 가능
-    if(orgnFg !== "MASTER" && orgnFg !== "AGENCY"){
+    // 관리자, 총판, 본사 권한만 수정 가능
+    if(orgnFg !== "MASTER" && orgnFg !== "AGENCY" && orgnFg !== "HQ"){
       return false;
     }
 
