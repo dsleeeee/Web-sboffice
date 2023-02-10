@@ -64,7 +64,7 @@
                     tssh.STORE_CD,
                     SUM(CASE WHEN tssh.SALE_FG = '1' THEN 1 ELSE 0 END) AS SALE_CNT,
                     SUM(CASE WHEN tssh.SALE_FG = '-1' THEN 1 ELSE 0 END) AS RETURN_SALE_CNT,
-                    COUNT(tssh.BILL_NO) AS BILL_CNT,
+                    SUM(CASE WHEN tssh.SALE_FG = '1' THEN 1 ELSE 0 END) + SUM(CASE WHEN tssh.SALE_FG = '-1' THEN -1 ELSE 0 END) AS BILL_CNT,
                     SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT,
                     SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT,
                     SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT,
@@ -141,10 +141,10 @@
                     GROUP BY tsshd.HQ_OFFICE_CD, tsshd.STORE_CD
                 ) tsshd
                 WHERE 1=1
-                AND tsshp.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
-                AND tsshp.STORE_CD = tssh.STORE_CD
-                AND tsshd.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
-                AND tsshd.STORE_CD = tssh.STORE_CD
+                AND tsshp.HQ_OFFICE_CD (+)= tssh.HQ_OFFICE_CD
+                AND tsshp.STORE_CD (+)= tssh.STORE_CD
+                AND tsshd.HQ_OFFICE_CD (+)= tssh.HQ_OFFICE_CD
+                AND tsshd.STORE_CD (+)= tssh.STORE_CD
             )
             UNION ALL
             (
@@ -369,15 +369,15 @@
                 FROM
                 (
                     SELECT
-                    tsdp.DLVR_PACK_FG,
-                    COUNT(tsdp.SALE_DATE) AS AMT_CNT,
-                    NVL(SUM(tsdp.REAL_SALE_AMT), 0) AS REAL_SALE_AMT
-                    FROM TB_SL_DAILY_PROD tsdp
+                    tsdtd.DLVR_ORDER_FG AS DLVR_PACK_FG,
+                    COUNT(tsdtd.SALE_DATE) AS AMT_CNT,
+                    NVL(SUM(tsdtd.REAL_SALE_AMT), 0) AS REAL_SALE_AMT
+                    FROM TB_SL_DAILY_TOTAL_DLVR tsdtd
                     WHERE 1=1
-                    AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
                     <!-- 매장 -->
                     <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                        AND tsdp.STORE_CD IN
+                        AND tsdtd.STORE_CD IN
                         <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
                             #{item}
                         </foreach>
@@ -385,12 +385,12 @@
                     <if test='orgnFg != null and orgnFg == "H"'>
                         AND (
                                 'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                            OR	tsdp.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                            OR	tsdtd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                             )
                     </if>
-                    AND tsdp.SALE_DATE = #{startDate}
-                    GROUP BY tsdp.DLVR_PACK_FG
-                    ORDER BY tsdp.DLVR_PACK_FG
+                    AND tsdtd.SALE_DATE = #{startDate}
+                    GROUP BY tsdtd.DLVR_ORDER_FG
+                    ORDER BY tsdtd.DLVR_ORDER_FG
                 )
                 UNION ALL
                 (
@@ -409,13 +409,13 @@
         ) A,
         (
             SELECT
-            NVL(SUM(tsdp.REAL_SALE_AMT), 0) AS TOT_REAL_SALE_AMT
-            FROM TB_SL_DAILY_PROD tsdp
+            NVL(SUM(tsdtd.REAL_SALE_AMT), 0) AS TOT_REAL_SALE_AMT
+            FROM TB_SL_DAILY_TOTAL_DLVR tsdtd
             WHERE 1=1
-            AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tsdp.STORE_CD IN
+                AND tsdtd.STORE_CD IN
                 <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
                     #{item}
                 </foreach>
@@ -423,10 +423,10 @@
             <if test='orgnFg != null and orgnFg == "H"'>
                 AND (
                         'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                    OR	tsdp.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                    OR	tsdtd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                     )
             </if>
-            AND tsdp.SALE_DATE = #{startDate}
+            AND tsdtd.SALE_DATE = #{startDate}
         ) B
     </select>
 

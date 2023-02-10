@@ -198,10 +198,10 @@
     <select id="getOrderChannelSaleDtlList" parameterType="mobileOrderChannelSaleVO" resultType="DefaultMap">
       /* USE : MobileOrderChannelSaleMapper.getOrderChannelSaleDtlList */
            SELECT tsdto.SALE_DATE,
-                   SUM(tsdto.BILL_CNT) AS TOT_BILL_CNT,
+                   SUM(tsdto.REAL_SALE_CNT) AS TOT_BILL_CNT,
                    SUM(tsdto.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT,
                     <foreach collection="arrDlvrInFgCol" item="item" separator=",">
-                      SUM(CASE WHEN tsdto.DLVR_IN_FG = #{item} THEN tsdto.BILL_CNT ELSE 0 END) AS BILL_CNT_${item},
+                      SUM(CASE WHEN tsdto.DLVR_IN_FG = #{item} THEN tsdto.REAL_SALE_CNT ELSE 0 END) AS BILL_CNT_${item},
                       SUM(CASE WHEN tsdto.DLVR_IN_FG = #{item} THEN tsdto.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_${item}
                     </foreach>
              FROM TB_SL_DAILY_TOTAL_ORDAPP tsdto

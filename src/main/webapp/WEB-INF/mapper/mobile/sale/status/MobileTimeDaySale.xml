@@ -126,7 +126,7 @@
         (
             SELECT
             tsdt.SALE_HOUR AS SALE_TIME,
-            NVL(SUM(tsdt.SALE_CNT) + SUM(tsdt.RTN_SALE_CNT), 0) AS AMT_CNT,
+            NVL(SUM(tsdt.REAL_SALE_CNT), 0) AS AMT_CNT,
             NVL(SUM(tsdt.REAL_SALE_AMT), 0) AS REAL_SALE_AMT
             FROM TB_SL_DAILY_TIME tsdt
             WHERE 1=1

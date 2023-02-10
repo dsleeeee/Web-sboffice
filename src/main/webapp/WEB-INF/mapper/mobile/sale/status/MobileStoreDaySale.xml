@@ -13,8 +13,8 @@
 
     <!-- 일자별 매출현황 - 조회 -->
     <!--
-        TABLE    : TB_SL_DAILY_TOTAL, TB_SL_DAILY_PROD, TB_SL_DAILY_PAY, TB_SL_DAILY_DC, TB_SL_DAILY_DTL_DLVR, TB_SL_SALE_HDR
-        COMMENTS : [매출]일별_종합, [매출]일별_상품, [매출]일별_결제, [매출]일별_할인, [매출]일별_배달, [매출]헤더
+        TABLE    : TB_SL_DAILY_TOTAL, TB_SL_DAILY_PAY, TB_SL_DAILY_DC, TB_SL_DAILY_TOTAL_DLVR, TB_SL_SALE_HDR
+        COMMENTS : [매출]일별_종합, [매출]일별_결제, [매출]일별_할인, [매출]일별_종합_배달, [매출]헤더
     -->
     <select id="getMobileStoreDaySaleDtlList" parameterType="MobileStoreDaySaleVO" resultType="DefaultMap">
         /* MobileStoreDaySale.getMobileStoreDaySaleDtlList */
@@ -65,13 +65,13 @@
             ) A,
             (
             SELECT  tsddd.SALE_DATE, tsddd.STORE_CD,
-                    SUM(CASE WHEN tsddd.DLVR_PACK_FG = '1' THEN tsddd.REAL_SALE_AMT ELSE 0 END) AS SHOP_REAL_SALE_AMT,
-                    SUM(CASE WHEN tsddd.DLVR_PACK_FG = '2' THEN tsddd.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
-                    SUM(CASE WHEN tsddd.DLVR_PACK_FG = '3' THEN tsddd.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT,
-                    SUM(CASE WHEN tsddd.DLVR_PACK_FG = '1' THEN tsddd.BILL_CNT ELSE 0 END) AS SHOP_BILL_CNT,
-                    SUM(CASE WHEN tsddd.DLVR_PACK_FG = '2' THEN tsddd.BILL_CNT ELSE 0 END) AS DLVR_BILL_CNT,
-                    SUM(CASE WHEN tsddd.DLVR_PACK_FG = '3' THEN tsddd.BILL_CNT ELSE 0 END) AS PACK_BILL_CNT
-            FROM    TB_SL_DAILY_DTL_DLVR tsddd
+                    SUM(CASE WHEN tsddd.DLVR_ORDER_FG = '1' THEN tsddd.REAL_SALE_AMT ELSE 0 END) AS SHOP_REAL_SALE_AMT,
+                    SUM(CASE WHEN tsddd.DLVR_ORDER_FG = '2' THEN tsddd.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
+                    SUM(CASE WHEN tsddd.DLVR_ORDER_FG = '3' THEN tsddd.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT,
+                    SUM(CASE WHEN tsddd.DLVR_ORDER_FG = '1' THEN tsddd.REAL_SALE_CNT ELSE 0 END) AS SHOP_BILL_CNT,
+                    SUM(CASE WHEN tsddd.DLVR_ORDER_FG = '2' THEN tsddd.REAL_SALE_CNT ELSE 0 END) AS DLVR_BILL_CNT,
+                    SUM(CASE WHEN tsddd.DLVR_ORDER_FG = '3' THEN tsddd.REAL_SALE_CNT ELSE 0 END) AS PACK_BILL_CNT
+            FROM    TB_SL_DAILY_TOTAL_DLVR tsddd
             WHERE   tsddd.HQ_OFFICE_CD = #{hqOfficeCd}
             AND (
                     'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
