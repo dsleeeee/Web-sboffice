@@ -21,7 +21,7 @@
         SELECT  YOIL,
                 YOIL2,
                 COUNT(SALE_DATE) AS SALE_DATE,
-                SUM(SALE_CNT) AS SALE_CNT,
+                SUM(BILL_CNT) AS SALE_CNT,
                 SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
                 TRUNC(SUM(REAL_SALE_AMT) / COUNT(SALE_DATE)) AS DAY_AVR_SALE
         FROM
@@ -29,7 +29,7 @@
                 SELECT 	TO_CHAR(TO_DATE(SALE_DATE, 'YYYY-MM-DD'),'DY') AS YOIL,
                         TO_CHAR(TO_DATE(SALE_DATE, 'YYYY-MM-DD'),'d') AS YOIL2,
                         SALE_DATE,
-                        SALE_CNT,
+                        REAL_SALE_CNT AS BILL_CNT,
                         REAL_SALE_AMT
                 FROM 	TB_SL_DAILY_TOTAL tsdt
                 WHERE   HQ_OFFICE_CD = #{hqOfficeCd}

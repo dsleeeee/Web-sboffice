@@ -20,7 +20,7 @@
         /* MobileStoreSaleMapper.getMobileStoreSaleList */
         SELECT 	tsdt.STORE_CD,
                 tms.STORE_NM,
-                SUM(tsdt.BILL_CNT) AS BILL_CNT,
+                SUM(tsdt.REAL_SALE_CNT) AS BILL_CNT,
                 SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT
         FROM 	TB_SL_DAILY_TOTAL tsdt,
                 TB_MS_STORE tms
@@ -49,7 +49,7 @@
     <select id="getMobileStoreSaleDtlList" parameterType="mobileStoreSaleVO" resultType="DefaultMap">
         /* MobileStoreSaleMapper.getMobileStoreSaleDtlList */
         SELECT 	TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'),'YYYY-MM-DD') AS SALE_DATE,
-                BILL_CNT,
+                REAL_SALE_CNT AS BILL_CNT,
                 REAL_SALE_AMT
         FROM 	TB_SL_DAILY_TOTAL
         WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}

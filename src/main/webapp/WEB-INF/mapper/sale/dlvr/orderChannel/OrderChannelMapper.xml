@@ -178,8 +178,8 @@
                 SUM(tsdto.VAT_AMT) AS VAT_AMT,
                 SUM(tsdto.TOT_TIP_AMT) AS TOT_TIP_AMT,
                 SUM(tsdto.TOT_ETC_AMT) AS TOT_ETC_AMT,
-                SUM(tsdto.BILL_CNT) AS BILL_CNT,
-                DECODE(SUM(tsdto.BILL_CNT), 0, 0, ROUND(SUM(tsdto.REAL_SALE_AMT) / SUM(tsdto.BILL_CNT))) AS BILL_UPRC,
+                SUM(tsdto.REAL_SALE_CNT) AS BILL_CNT,
+                DECODE(SUM(tsdto.REAL_SALE_CNT), 0, 0, ROUND(SUM(tsdto.REAL_SALE_AMT) / SUM(tsdto.REAL_SALE_CNT))) AS BILL_UPRC,
                 <foreach collection="arrPayCol" item="item" separator="+">
                     NVL(SUM(tsdto.PAY_AMT_${item}), 0)
                 </foreach> AS TOT_PAY_AMT,
@@ -268,11 +268,12 @@
     -->
     <select id="getOrderChannelDayList" parameterType="orderChannelVO" resultType="DefaultMap">
         /* USE : OrderChannelMapper.getOrderChannelDayList */
-        SELECT TO_CHAR(TO_DATE(tsdto.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
-        SUM(tsdto.BILL_CNT) AS TOT_BILL_CNT,
+        SELECT
+        TO_CHAR(TO_DATE(tsdto.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        SUM(tsdto.REAL_SALE_CNT) AS TOT_BILL_CNT,
         SUM(tsdto.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT,
         <foreach collection="arrDlvrInFgCol" item="item" separator=",">
-            SUM(CASE WHEN tsdto.DLVR_IN_FG = #{item} THEN tsdto.BILL_CNT ELSE 0 END) AS BILL_CNT_${item},
+            SUM(CASE WHEN tsdto.DLVR_IN_FG = #{item} THEN tsdto.REAL_SALE_CNT ELSE 0 END) AS BILL_CNT_${item},
             SUM(CASE WHEN tsdto.DLVR_IN_FG = #{item} THEN tsdto.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_${item}
         </foreach>
         FROM TB_SL_DAILY_TOTAL_ORDAPP tsdto
@@ -285,10 +286,8 @@
             </foreach>
         </if>
         AND tsdto.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        GROUP
-        BY tsdto.SALE_DATE
-        ORDER
-        BY tsdto.SALE_DATE DESC
+        GROUP BY tsdto.SALE_DATE
+        ORDER BY tsdto.SALE_DATE DESC
     </select>
 
     <!-- 매출관리 > 배달현황 > 주문채널별현황 - 일별 상세 조회 -->
@@ -339,10 +338,10 @@
     <select id="getOrderChannelMonthList" parameterType="orderChannelVO" resultType="DefaultMap">
         /* USE : OrderChannelMapper.getOrderChannelMonthList */
         SELECT TO_CHAR(TO_DATE(tsdto.SALE_DATE, 'yyyymmdd'), 'yyyy-mm') AS SALE_DATE,
-                SUM(tsdto.BILL_CNT) AS TOT_BILL_CNT,
+                SUM(tsdto.REAL_SALE_CNT) AS TOT_BILL_CNT,
                 SUM(tsdto.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT,
                 <foreach collection="arrDlvrInFgCol" item="item" separator=",">
-                    SUM(CASE WHEN tsdto.DLVR_IN_FG = #{item} THEN tsdto.BILL_CNT ELSE 0 END) AS BILL_CNT_${item},
+                    SUM(CASE WHEN tsdto.DLVR_IN_FG = #{item} THEN tsdto.REAL_SALE_CNT ELSE 0 END) AS BILL_CNT_${item},
                     SUM(CASE WHEN tsdto.DLVR_IN_FG = #{item} THEN tsdto.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_${item}
                 </foreach>
          FROM TB_SL_DAILY_TOTAL_ORDAPP tsdto

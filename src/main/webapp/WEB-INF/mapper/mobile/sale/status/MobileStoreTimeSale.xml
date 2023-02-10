@@ -22,7 +22,7 @@
             SELECT 	tsdt.STORE_CD,
                     tms.STORE_NM,
                     tsdt.SALE_HOUR,
-                    SUM(tsdt.SALE_CNT) AS SALE_CNT,
+                    SUM(tsdt.REAL_SALE_CNT) AS SALE_CNT,
                     SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT
             FROM 	TB_SL_DAILY_TIME tsdt,
                     TB_MS_STORE tms
@@ -53,7 +53,7 @@
             SELECT 	tsdt.STORE_CD,
                     tms.STORE_NM,
                     TIME_SLOT AS SALE_HOUR,
-                    SUM(tsdt.SALE_CNT) AS SALE_CNT,
+                    SUM(tsdt.REAL_SALE_CNT) AS SALE_CNT,
                     SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT
             FROM 	TB_SL_DAILY_TIME tsdt,
                     TB_MS_STORE tms,

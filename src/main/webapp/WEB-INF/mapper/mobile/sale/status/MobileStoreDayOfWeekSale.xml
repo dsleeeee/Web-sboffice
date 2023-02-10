@@ -31,7 +31,7 @@
                         TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYY-MM-DD'),'DY') AS YOIL,
                         TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYY-MM-DD'),'d') AS YOIL2,
                         COUNT(tsdt.SALE_DATE) AS SALE_DATE,
-                        SUM(tsdt.BILL_CNT) AS BILL_CNT,
+                        SUM(tsdt.REAL_SALE_CNT) AS BILL_CNT,
                         SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT
                 FROM 	TB_SL_DAILY_TOTAL tsdt,
                         TB_MS_STORE tms

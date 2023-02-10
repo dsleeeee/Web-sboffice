@@ -395,7 +395,7 @@
     <select id="getAlimtalkIdRegisterAllChk" parameterType="AlimtalkSendTypeVO" resultType="DefaultMap">
         /* AlimtalkSendTypeMapper.getAlimtalkIdRegisterAllChk */
         SELECT
-        taa.SENDER_KEY
+        MAX(taa.SENDER_KEY) AS SENDER_KEY
         FROM TB_AL_ALIMTALK taa
         WHERE 1=1
         AND taa.ORGN_CD = #{orgnCd}
@@ -476,38 +476,51 @@
     -->
     <insert id="getAlimtalkSenderSaveInsert" parameterType="AlimtalkSendTypeVO">
         /* AlimtalkSendTypeMapper.getAlimtalkSenderSaveInsert */
-        INSERT INTO TB_AL_ALIMTALK
-        (
-            ORGN_CD,
-            PLUS_FRIEND_ID,
-            PHONE_NO,
-            CATEGORY_CODE,
-            TOKEN,
-            SENDER_KEY,
-            APP_KEY,
-            SECRET_KEY,
-            APPR_FG,
-            USE_YN,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
-        ) VALUES (
-            #{orgnCd},
-            #{plusFriendId},
-            #{phoneNo},
-            #{categoryCode},
-            '',
-            '',
-            #{appKey},
-            #{secretKey},
-            '',
-            'N',
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId}
-        )
+        MERGE INTO TB_AL_ALIMTALK
+        USING DUAL
+        ON  (
+                ORGN_CD = #{orgnCd}
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            PLUS_FRIEND_ID = #{plusFriendId},
+            PHONE_NO = #{phoneNo},
+            CATEGORY_CODE = #{categoryCode},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+            INSERT (
+                ORGN_CD,
+                PLUS_FRIEND_ID,
+                PHONE_NO,
+                CATEGORY_CODE,
+                TOKEN,
+                SENDER_KEY,
+                APP_KEY,
+                SECRET_KEY,
+                APPR_FG,
+                USE_YN,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            ) VALUES (
+                #{orgnCd},
+                #{plusFriendId},
+                #{phoneNo},
+                #{categoryCode},
+                '',
+                '',
+                #{appKey},
+                #{secretKey},
+                '',
+                'N',
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
     </insert>
 
     <!-- 알림톡 계정등록 팝업 - 알림톡 계정정보 저장 update -->

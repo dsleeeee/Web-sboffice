@@ -57,7 +57,7 @@
                     tsmt.HQ_OFFICE_CD,
                     SUM(tsmt.SALE_CNT) AS REAL_SALE_CNT,
                     SUM(tsmt.RTN_SALE_CNT) AS RTN_SALE_CNT,
-                    SUM(tsmt.BILL_CNT) AS BILL_CNT,
+                    SUM(tsmt.REAL_SALE_CNT) AS BILL_CNT,
                     COUNT(DISTINCT tsmt.SALE_YM) AS SALE_CNT,
                     SUM(tsmt.TOT_SALE_AMT) AS TOT_SALE_AMT,
                     SUM(tsmt.TOT_DC_AMT) AS TOT_DC_AMT,
@@ -325,8 +325,8 @@
 
     <!-- 내점현황 - 조회 -->
     <!--
-        TABLE    : TB_SL_MONTHLY_PROD, TB_SL_MONTHLY_TOTAL_DLVR
-        COMMENTS : [매출]월별_상품, [매출]월별_종합_배달
+        TABLE    : TB_SL_MONTHLY_TOTAL_DLVR
+        COMMENTS : [매출]월별_종합_배달
     -->
     <select id="getMobileMonthSaleShopList" parameterType="MobileMonthSaleVO" resultType="DefaultMap">
         /* MobileMonthSaleMapper.getMobileMonthSaleShopList */
@@ -350,15 +350,15 @@
                 FROM
                 (
                     SELECT
-                    tsmp.HQ_OFFICE_CD,
-                    SUM(tsmp.REAL_SALE_AMT) AS REAL_SALE_AMT,
-                    COUNT(DISTINCT tsmp.SALE_YM) AS SALE_CNT
-                    FROM TB_SL_MONTHLY_PROD tsmp
+                    tsmtd.HQ_OFFICE_CD,
+                    SUM(tsmtd.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                    COUNT(DISTINCT tsmtd.SALE_YM) AS SALE_CNT
+                    FROM TB_SL_MONTHLY_TOTAL_DLVR tsmtd
                     WHERE 1=1
-                    AND tsmp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND tsmtd.HQ_OFFICE_CD = #{hqOfficeCd}
                     <!-- 매장 -->
                     <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                        AND tsmp.STORE_CD IN
+                        AND tsmtd.STORE_CD IN
                         <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
                             #{item}
                         </foreach>
@@ -366,23 +366,23 @@
                     <if test='orgnFg != null and orgnFg == "H"'>
                         AND (
                                 'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                            OR	tsmp.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                            OR	tsmtd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                             )
                     </if>
-                    AND tsmp.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
-                    AND tsmp.DLVR_PACK_FG = '1'
-                    GROUP BY tsmp.HQ_OFFICE_CD
+                    AND tsmtd.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+                    AND tsmtd.DLVR_ORDER_FG = '1'
+                    GROUP BY tsmtd.HQ_OFFICE_CD
                 ) A,
                 (
                     SELECT
-                    tsmp.HQ_OFFICE_CD,
-                    SUM(tsmp.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
-                    FROM TB_SL_MONTHLY_PROD tsmp
+                    tsmtd.HQ_OFFICE_CD,
+                    SUM(tsmtd.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
+                    FROM TB_SL_MONTHLY_TOTAL_DLVR tsmtd
                     WHERE 1=1
-                    AND tsmp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND tsmtd.HQ_OFFICE_CD = #{hqOfficeCd}
                     <!-- 매장 -->
                     <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                        AND tsmp.STORE_CD IN
+                        AND tsmtd.STORE_CD IN
                         <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
                             #{item}
                         </foreach>
@@ -390,12 +390,12 @@
                     <if test='orgnFg != null and orgnFg == "H"'>
                         AND (
                                 'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                            OR	tsmp.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                            OR	tsmtd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                             )
                     </if>
-                    AND tsmp.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
-                    AND tsmp.DLVR_PACK_FG = '1'
-                    GROUP BY tsmp.HQ_OFFICE_CD
+                    AND tsmtd.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+                    AND tsmtd.DLVR_ORDER_FG = '1'
+                    GROUP BY tsmtd.HQ_OFFICE_CD
                 ) B,
                 (
                     SELECT
@@ -440,8 +440,8 @@
 
     <!-- 내점/배달/포장 - 조회 -->
     <!--
-        TABLE    : TB_SL_MONTHLY_PROD, TB_SL_MONTHLY_DTL_DLVR
-        COMMENTS : [매출]월별_상품, [매출]월별_배달
+        TABLE    : TB_SL_MONTHLY_TOTAL_DLVR
+        COMMENTS : [매출]월별_종합_배달
     -->
     <select id="getMobileMonthSaleDlvrList" parameterType="MobileMonthSaleVO" resultType="DefaultMap">
         /* MobileMonthSaleMapper.getMobileMonthSaleDlvrList */
@@ -465,20 +465,21 @@
                 A.DLVR_PACK_FG,
                 A.REAL_SALE_AMT,
                 DECODE(A.SALE_CNT, 0, 0, NVL(ROUND(B.TOT_REAL_SALE_AMT / A.SALE_CNT), 0)) AS MONTH_AVR_SALE,
-                C.BILL_CNT,
-                DECODE(C.BILL_CNT, 0, 0, ROUND(A.REAL_SALE_AMT / C.BILL_CNT)) AS BILL_UPRC
+                A.BILL_CNT,
+                DECODE(A.BILL_CNT, 0, 0, ROUND(A.REAL_SALE_AMT / A.BILL_CNT)) AS BILL_UPRC
                 FROM
                 (
                     SELECT
-                    tsmp.DLVR_PACK_FG,
-                    SUM(tsmp.REAL_SALE_AMT) AS REAL_SALE_AMT,
-                    COUNT(DISTINCT tsmp.SALE_YM) AS SALE_CNT
-                    FROM TB_SL_MONTHLY_PROD tsmp
+                    tsmtd.DLVR_ORDER_FG AS DLVR_PACK_FG,
+                    SUM(tsmtd.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                    COUNT(DISTINCT tsmtd.SALE_YM) AS SALE_CNT,
+                    SUM(tsmtd.REAL_SALE_CNT) AS BILL_CNT
+                    FROM TB_SL_MONTHLY_TOTAL_DLVR tsmtd
                     WHERE 1=1
-                    AND tsmp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND tsmtd.HQ_OFFICE_CD = #{hqOfficeCd}
                     <!-- 매장 -->
                     <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                        AND tsmp.STORE_CD IN
+                        AND tsmtd.STORE_CD IN
                         <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
                             #{item}
                         </foreach>
@@ -486,22 +487,22 @@
                     <if test='orgnFg != null and orgnFg == "H"'>
                         AND (
                                 'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                            OR	tsmp.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                            OR	tsmtd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                             )
                     </if>
-                    AND tsmp.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
-                    GROUP BY tsmp.DLVR_PACK_FG
+                    AND tsmtd.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+                    GROUP BY tsmtd.DLVR_ORDER_FG
                 ) A,
                 (
                     SELECT
-                    tsmp.DLVR_PACK_FG,
-                    SUM(tsmp.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
-                    FROM TB_SL_MONTHLY_PROD tsmp
+                    tsmtd.DLVR_ORDER_FG AS DLVR_PACK_FG,
+                    SUM(tsmtd.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
+                    FROM TB_SL_MONTHLY_TOTAL_DLVR tsmtd
                     WHERE 1=1
-                    AND tsmp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND tsmtd.HQ_OFFICE_CD = #{hqOfficeCd}
                     <!-- 매장 -->
                     <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                        AND tsmp.STORE_CD IN
+                        AND tsmtd.STORE_CD IN
                         <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
                             #{item}
                         </foreach>
@@ -509,38 +510,14 @@
                     <if test='orgnFg != null and orgnFg == "H"'>
                         AND (
                                 'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                            OR	tsmp.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                            OR	tsmtd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                             )
                     </if>
-                    AND tsmp.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
-                    GROUP BY tsmp.DLVR_PACK_FG
-                ) B,
-                (
-                    SELECT
-                    tsmdd.DLVR_PACK_FG,
-                    SUM(tsmdd.BILL_CNT) AS BILL_CNT
-                    FROM TB_SL_MONTHLY_DTL_DLVR tsmdd
-                    WHERE 1=1
-                    AND tsmdd.HQ_OFFICE_CD = #{hqOfficeCd}
-                    <!-- 매장 -->
-                    <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                        AND tsmdd.STORE_CD IN
-                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                            #{item}
-                        </foreach>
-                    </if>
-                    <if test='orgnFg != null and orgnFg == "H"'>
-                        AND (
-                                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                            OR	tsmdd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
-                            )
-                    </if>
-                    AND tsmdd.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
-                    GROUP BY tsmdd.DLVR_PACK_FG
-                ) C
+                    AND tsmtd.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+                    GROUP BY tsmtd.DLVR_ORDER_FG
+                ) B
                 WHERE 1=1
                 AND B.DLVR_PACK_FG = A.DLVR_PACK_FG
-                AND C.DLVR_PACK_FG = A.DLVR_PACK_FG
             )
             UNION ALL
             (
@@ -562,8 +539,8 @@
 
     <!-- 내점/배달/포장 - 차트조회 -->
     <!--
-        TABLE    : TB_SL_MONTHLY_PROD
-        COMMENTS : [매출]월별_상품
+        TABLE    : TB_SL_MONTHLY_TOTAL_DLVR
+        COMMENTS : [매출]월별_종합_배달
     -->
     <select id="getMobileMonthSaleDlvrChartList" parameterType="MobileMonthSaleVO" resultType="DefaultMap">
         /* MobileMonthSaleMapper.getMobileMonthSaleDlvrChartList */
@@ -578,16 +555,16 @@
             FROM
             (
                 SELECT
-                tsmp.SALE_YM,
-                SUM(CASE WHEN tsmp.DLVR_PACK_FG = '1' THEN tsmp.REAL_SALE_AMT ELSE 0 END) AS SHOP_REAL_SALE_AMT,
-                SUM(CASE WHEN tsmp.DLVR_PACK_FG = '2' THEN tsmp.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
-                SUM(CASE WHEN tsmp.DLVR_PACK_FG = '3' THEN tsmp.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
-                FROM TB_SL_MONTHLY_PROD tsmp
+                tsmtd.SALE_YM,
+                SUM(CASE WHEN tsmtd.DLVR_ORDER_FG = '1' THEN tsmtd.REAL_SALE_AMT ELSE 0 END) AS SHOP_REAL_SALE_AMT,
+                SUM(CASE WHEN tsmtd.DLVR_ORDER_FG = '2' THEN tsmtd.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
+                SUM(CASE WHEN tsmtd.DLVR_ORDER_FG = '3' THEN tsmtd.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
+                FROM TB_SL_MONTHLY_TOTAL_DLVR tsmtd
                 WHERE 1=1
-                AND tsmp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsmtd.HQ_OFFICE_CD = #{hqOfficeCd}
                 <!-- 매장 -->
                 <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                    AND tsmp.STORE_CD IN
+                    AND tsmtd.STORE_CD IN
                     <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
                         #{item}
                     </foreach>
@@ -595,11 +572,11 @@
                 <if test='orgnFg != null and orgnFg == "H"'>
                     AND (
                             'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                        OR	tsmp.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                        OR	tsmtd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                         )
                 </if>
-                AND tsmp.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
-                GROUP BY tsmp.SALE_YM, tsmp.DLVR_PACK_FG
+                AND tsmtd.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+                GROUP BY tsmtd.SALE_YM, tsmtd.DLVR_ORDER_FG
             )
             UNION ALL
             (
@@ -620,8 +597,8 @@
 
     <!-- 내점/배달/포장 - 차트조회 -->
     <!--
-        TABLE    : TB_SL_MONTHLY_PROD
-        COMMENTS : [매출]월별_상품
+        TABLE    : TB_SL_MONTHLY_TOTAL_DLVR
+        COMMENTS : [매출]월별_종합_배달
     -->
     <select id="getMobileMonthSaleDlvrChart2List" parameterType="MobileMonthSaleVO" resultType="DefaultMap">
         /* MobileMonthSaleMapper.getMobileMonthSaleDlvrChart2List */
@@ -639,14 +616,14 @@
                 FROM
                 (
                     SELECT
-                    tsmp.SALE_YM,
-                    SUM(tsmp.REAL_SALE_AMT) AS REAL_SALE_AMT
-                    FROM TB_SL_MONTHLY_PROD tsmp
+                    tsmtd.SALE_YM,
+                    SUM(tsmtd.REAL_SALE_AMT) AS REAL_SALE_AMT
+                    FROM TB_SL_MONTHLY_TOTAL_DLVR tsmtd
                     WHERE 1=1
-                    AND tsmp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND tsmtd.HQ_OFFICE_CD = #{hqOfficeCd}
                     <!-- 매장 -->
                     <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                        AND tsmp.STORE_CD IN
+                        AND tsmtd.STORE_CD IN
                         <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
                             #{item}
                         </foreach>
@@ -654,12 +631,12 @@
                     <if test='orgnFg != null and orgnFg == "H"'>
                         AND (
                                 'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                            OR	tsmp.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                            OR	tsmtd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                             )
                     </if>
-                    AND tsmp.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
-                    AND tsmp.DLVR_PACK_FG = #{gubun}
-                    GROUP BY tsmp.SALE_YM
+                    AND tsmtd.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+                    AND tsmtd.DLVR_ORDER_FG = #{gubun}
+                    GROUP BY tsmtd.SALE_YM
                 )
                 GROUP BY SALE_YM
             )
@@ -680,8 +657,8 @@
 
     <!-- 월자별 매출현황 - 조회 -->
     <!--
-        TABLE    : TB_SL_MONTHLY_TOTAL, TB_SL_MONTHLY_DTL_DLVR, TB_SL_SALE_HDR
-        COMMENTS : [매출]월별_종합, [매출]월별_배달, [매출]헤더
+        TABLE    : TB_SL_MONTHLY_TOTAL, TB_SL_MONTHLY_TOTAL_DLVR, TB_SL_SALE_HDR
+        COMMENTS : [매출]월별_종합, [매출]월별_종합_배달, [매출]헤더
     -->
     <select id="getMobileMonthSaleDtlList" parameterType="MobileMonthSaleVO" resultType="DefaultMap">
         /* MobileMonthSaleMapper.getMobileMonthSaleDtlList */
@@ -745,19 +722,19 @@
         ) A,
         (
             SELECT
-            tsmdd.SALE_YM,
-            SUM(CASE WHEN tsmdd.DLVR_PACK_FG = '1' THEN tsmdd.REAL_SALE_AMT ELSE 0 END) AS SHOP_REAL_SALE_AMT,
-            SUM(CASE WHEN tsmdd.DLVR_PACK_FG = '2' THEN tsmdd.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
-            SUM(CASE WHEN tsmdd.DLVR_PACK_FG = '3' THEN tsmdd.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT,
-            SUM(CASE WHEN tsmdd.DLVR_PACK_FG = '1' THEN tsmdd.BILL_CNT ELSE 0 END) AS SHOP_BILL_CNT,
-            SUM(CASE WHEN tsmdd.DLVR_PACK_FG = '2' THEN tsmdd.BILL_CNT ELSE 0 END) AS DLVR_BILL_CNT,
-            SUM(CASE WHEN tsmdd.DLVR_PACK_FG = '3' THEN tsmdd.BILL_CNT ELSE 0 END) AS PACK_BILL_CNT
-            FROM TB_SL_MONTHLY_DTL_DLVR tsmdd
+            tsmtd.SALE_YM,
+            SUM(CASE WHEN tsmtd.DLVR_ORDER_FG = '1' THEN tsmtd.REAL_SALE_AMT ELSE 0 END) AS SHOP_REAL_SALE_AMT,
+            SUM(CASE WHEN tsmtd.DLVR_ORDER_FG = '2' THEN tsmtd.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
+            SUM(CASE WHEN tsmtd.DLVR_ORDER_FG = '3' THEN tsmtd.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT,
+            SUM(CASE WHEN tsmtd.DLVR_ORDER_FG = '1' THEN tsmtd.REAL_SALE_CNT ELSE 0 END) AS SHOP_BILL_CNT,
+            SUM(CASE WHEN tsmtd.DLVR_ORDER_FG = '2' THEN tsmtd.REAL_SALE_CNT ELSE 0 END) AS DLVR_BILL_CNT,
+            SUM(CASE WHEN tsmtd.DLVR_ORDER_FG = '3' THEN tsmtd.REAL_SALE_CNT ELSE 0 END) AS PACK_BILL_CNT
+            FROM TB_SL_MONTHLY_TOTAL_DLVR tsmtd
             WHERE 1=1
-            AND tsmdd.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsmtd.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tsmdd.STORE_CD IN
+                AND tsmtd.STORE_CD IN
                 <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
                     #{item}
                 </foreach>
@@ -765,11 +742,11 @@
             <if test='orgnFg != null and orgnFg == "H"'>
                 AND (
                         'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                    OR	tsmdd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                    OR	tsmtd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                     )
             </if>
-            AND tsmdd.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
-            GROUP BY tsmdd.SALE_YM
+            AND tsmtd.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+            GROUP BY tsmtd.SALE_YM
         ) B,
         (
             SELECT
