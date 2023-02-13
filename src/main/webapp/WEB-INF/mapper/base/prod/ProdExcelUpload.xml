@@ -561,15 +561,19 @@
         ,       REGEXP_SUBSTR(PROD_CLASS_CD,'[^▶]+', 1, 3) AS Level3
         ,       REGEXP_SUBSTR(PROD_CLASS_CD,'[^▶]+', 1, 1) || REGEXP_SUBSTR(PROD_CLASS_CD,'[^▶]+', 1, 2) AS Level12
         ,       REGEXP_SUBSTR(PROD_CLASS_CD,'[^▶]+', 1, 1) || REGEXP_SUBSTR(PROD_CLASS_CD,'[^▶]+', 1, 2) || REGEXP_SUBSTR(PROD_CLASS_CD,'[^▶]+', 1, 3) AS Level123
-        FROM    TB_TMP_EXCEL_PRODUCT
-        WHERE   1=1
-        AND SESSION_ID = #{sessionId}
-        AND HQ_OFFICE_CD = #{hqOfficeCd}
-        <if test='storeCd != null and storeCd != ""'>
-            <![CDATA[
-                AND STORE_CD = #{storeCd}
-            ]]>
-        </if>
+        FROM
+        (
+            SELECT REPLACE(PROD_CLASS_CD, ' - 존재하지 않는 상품분류입니다.', '') AS PROD_CLASS_CD
+            FROM TB_TMP_EXCEL_PRODUCT
+            WHERE 1=1
+            AND SESSION_ID = #{sessionId}
+            AND HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test='storeCd != null and storeCd != ""'>
+                <![CDATA[
+                    AND STORE_CD = #{storeCd}
+                ]]>
+            </if>
+        )
         ORDER BY Level1, Level2, Level3
     </select>
 
