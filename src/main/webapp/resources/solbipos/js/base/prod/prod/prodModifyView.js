@@ -891,7 +891,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             } else {
                 // 숫자만 입력
                 var numChkexp = /[^-\.0-9]/g;
-                if (numChkexp.test(nvl($scope.prodModifyInfo.nuTotWt, 0)) || $scope.prodModifyInfo.nuTotWt.split('.').length -1 > 1) {
+                if (numChkexp.test(nvl($scope.prodModifyInfo.nuTotWt, 0)) || String($scope.prodModifyInfo.nuTotWt).split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuTotWtInChk"]); // 총중량은 숫자만 입력해주세요.
                     return false;
                 }
@@ -902,7 +902,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             } else {
                 // 숫자만 입력
                 var numChkexp = /[^-\.0-9]/g;
-                if (numChkexp.test(nvl($scope.prodModifyInfo.nuKcal, 0)) || $scope.prodModifyInfo.nuKcal.split('.').length -1 > 1) {
+                if (numChkexp.test(nvl($scope.prodModifyInfo.nuKcal, 0)) || String($scope.prodModifyInfo.nuKcal).split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuKcalInChk"]); // 총열량은 숫자만 입력해주세요.
                     return false;
                 }
@@ -913,7 +913,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             } else {
                 // 숫자만 입력
                 var numChkexp = /[^-\.0-9]/g;
-                if (numChkexp.test(nvl($scope.prodModifyInfo.nuProtein, 0)) || $scope.prodModifyInfo.nuProtein.split('.').length -1 > 1) {
+                if (numChkexp.test(nvl($scope.prodModifyInfo.nuProtein, 0)) || String($scope.prodModifyInfo.nuProtein).split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuProteinInChk"]); // 단백질은 숫자만 입력해주세요.
                     return false;
                 }
@@ -924,7 +924,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             } else {
                 // 숫자만 입력
                 var numChkexp = /[^-\.0-9]/g;
-                if (numChkexp.test(nvl($scope.prodModifyInfo.nuSodium, 0)) || $scope.prodModifyInfo.nuSodium.split('.').length -1 > 1) {
+                if (numChkexp.test(nvl($scope.prodModifyInfo.nuSodium, 0)) || String($scope.prodModifyInfo.nuSodium).split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuSodiumInChk"]); // 나트륨은 숫자만 입력해주세요.
                     return false;
                 }
@@ -935,7 +935,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             } else {
                 // 숫자만 입력
                 var numChkexp = /[^-\.0-9]/g;
-                if (numChkexp.test(nvl($scope.prodModifyInfo.nuSugars, 0)) || $scope.prodModifyInfo.nuSugars.split('.').length -1 > 1) {
+                if (numChkexp.test(nvl($scope.prodModifyInfo.nuSugars, 0)) || String($scope.prodModifyInfo.nuSugars).split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuSugarsInChk"]); // 당류는 숫자만 입력해주세요.
                     return false;
                 }
@@ -946,7 +946,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             } else {
                 // 숫자만 입력
                 var numChkexp = /[^-\.0-9]/g;
-                if (numChkexp.test(nvl($scope.prodModifyInfo.nuSatFat, 0)) || $scope.prodModifyInfo.nuSatFat.split('.').length -1 > 1) {
+                if (numChkexp.test(nvl($scope.prodModifyInfo.nuSatFat, 0)) || String($scope.prodModifyInfo.nuSatFat).split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuSatFatInChk"]); // 포화지방은 숫자만 입력해주세요.
                     return false;
                 }
@@ -957,7 +957,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             } else {
                 // 숫자만 입력
                 var numChkexp = /[^-\.0-9]/g;
-                if (numChkexp.test(nvl($scope.prodModifyInfo.nuCaffeine, 0)) || $scope.prodModifyInfo.nuCaffeine.split('.').length -1 > 1) {
+                if (numChkexp.test(nvl($scope.prodModifyInfo.nuCaffeine, 0)) || String($scope.prodModifyInfo.nuCaffeine).split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuCaffeineInChk"]); // 카페인은 숫자만 입력해주세요.
                     return false;
                 }
@@ -1236,7 +1236,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             } else {
                 // 숫자만 입력
                 var numChkexp = /[^-\.0-9]/g;
-                if (numChkexp.test(nvl(vParams.nuTotWt, 0)) || vParams.nuSugars.split('.').length -1 > 1) {
+                console.log(vParams.nuTotWt);
+                console.log(String(vParams.nuTotWt).split('.'));
+                if (numChkexp.test(nvl(vParams.nuTotWt, 0)) || String(vParams.nuSugars).split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuTotWtInChk"]); // 총중량은 숫자만 입력해주세요.
                     return false;
                 }
@@ -1247,7 +1249,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             } else {
                 // 숫자만 입력
                 var numChkexp = /[^-\.0-9]/g;
-                if (numChkexp.test(nvl(vParams.nuKcal, 0)) || vParams.nuKcal.split('.').length -1 > 1) {
+                if (numChkexp.test(nvl(vParams.nuKcal, 0)) || String(vParams.nuKcal).split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuKcalInChk"]); // 총열량은 숫자만 입력해주세요.
                     return false;
                 }
@@ -1258,7 +1260,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             } else {
                 // 숫자만 입력
                 var numChkexp = /[^-\.0-9]/g;
-                if (numChkexp.test(nvl(vParams.nuProtein, 0)) || vParams.nuProtein.split('.').length -1 > 1) {
+                if (numChkexp.test(nvl(vParams.nuProtein, 0)) || String(vParams.nuProtein).split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuProteinInChk"]); // 단백질은 숫자만 입력해주세요.
                     return false;
                 }
@@ -1269,7 +1271,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             } else {
                 // 숫자만 입력
                 var numChkexp = /[^-\.0-9]/g;
-                if (numChkexp.test(nvl(vParams.nuSodium, 0)) || vParams.nuSodium.split('.').length -1 > 1) {
+                if (numChkexp.test(nvl(vParams.nuSodium, 0)) || String(vParams.nuSodium).split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuSodiumInChk"]); // 나트륨은 숫자만 입력해주세요.
                     return false;
                 }
@@ -1280,7 +1282,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             } else {
                 // 숫자만 입력
                 var numChkexp = /[^-\.0-9]/g;
-                if (numChkexp.test(nvl(vParams.nuSugars, 0)) || vParams.nuSugars.split('.').length -1 > 1) {
+                if (numChkexp.test(nvl(vParams.nuSugars, 0)) || String(vParams.nuSugars).split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuSugarsInChk"]); // 당류는 숫자만 입력해주세요.
                     return false;
                 }
@@ -1291,7 +1293,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             } else {
                 // 숫자만 입력
                 var numChkexp = /[^-\.0-9]/g;
-                if (numChkexp.test(nvl(vParams.nuSatFat, 0)) || vParams.nuSatFat.split('.').length -1 > 1) {
+                if (numChkexp.test(nvl(vParams.nuSatFat, 0)) || String(vParams.nuSatFat).split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuSatFatInChk"]); // 포화지방은 숫자만 입력해주세요.
                     return false;
                 }
@@ -1302,7 +1304,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             } else {
                 // 숫자만 입력
                 var numChkexp = /[^-\.0-9]/g;
-                if (numChkexp.test(nvl(vParams.nuCaffeine, 0)) || vParams.nuCaffeine.split('.').length -1 > 1) {
+                if (numChkexp.test(nvl(vParams.nuCaffeine, 0)) || String(vParams.nuCaffeine).split('.').length -1 > 1) {
                     $scope._popMsg(messages["prod.nuCaffeineInChk"]); // 카페인은 숫자만 입력해주세요.
                     return false;
                 }
