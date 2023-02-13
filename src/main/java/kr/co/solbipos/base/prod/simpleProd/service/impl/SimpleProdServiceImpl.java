@@ -411,7 +411,7 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                 }
 
                 // 거래처
-                if (simpleProdVO.getVendrCd() != null && !"".equals(simpleProdVO.getVendrCd())) {
+                if (simpleProdVO.getVendrCd() != null && !"".equals(simpleProdVO.getVendrCd()) && !"선택".equals(simpleProdVO.getVendrCd())) {
                     // 거래처 저장
                     simpleProdMapper.getVendorProdSaveInsert(simpleProdVO);
                 }
