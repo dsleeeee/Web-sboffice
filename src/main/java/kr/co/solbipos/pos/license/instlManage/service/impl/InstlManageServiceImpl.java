@@ -27,8 +27,6 @@ import java.util.List;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-
-
 @Service("instlManageService")
 @Transactional
 public class InstlManageServiceImpl implements InstlManageService {
@@ -48,12 +46,18 @@ public class InstlManageServiceImpl implements InstlManageService {
     @Override
     public List<DefaultMap<Object>> getAgencyList(InstlManageVO instlManageVO, SessionInfoVO sessionInfoVO) {
 
+        instlManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        instlManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
         return instlManageMapper.getAgencyList(instlManageVO);
     }
 
     /** 업체현황탭 - 업체현황 상세조회 */
     @Override
     public List<DefaultMap<Object>> getAgencyDtlList(InstlManageVO instlManageVO, SessionInfoVO sessionInfoVO) {
+
+        instlManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        instlManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         return instlManageMapper.getAgencyDtlList(instlManageVO);
     }
@@ -62,12 +66,18 @@ public class InstlManageServiceImpl implements InstlManageService {
     @Override
     public List<DefaultMap<Object>> getAgencyPurchsList(InstlManageVO instlManageVO, SessionInfoVO sessionInfoVO) {
 
+        instlManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        instlManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
         return instlManageMapper.getAgencyPurchsList(instlManageVO);
     }
 
     /** 설치현황탭 - 설치현황조회 */
     @Override
     public List<DefaultMap<Object>> getInstlList(InstlManageVO instlManageVO, SessionInfoVO sessionInfoVO) {
+
+        instlManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        instlManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         return instlManageMapper.getInstlList(instlManageVO);
     }
@@ -76,12 +86,18 @@ public class InstlManageServiceImpl implements InstlManageService {
     @Override
     public List<DefaultMap<Object>> getInstlDetailList(InstlManageVO instlManageVO, SessionInfoVO sessionInfoVO) {
 
+        instlManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        instlManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
         return instlManageMapper.getInstlDetailList(instlManageVO);
     }
 
     /** 설치현황탭 - 설치현황 설치정보 상세조회 */
     @Override
     public List<DefaultMap<Object>> getInstlDtlList(InstlManageVO instlManageVO, SessionInfoVO sessionInfoVO) {
+
+        instlManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        instlManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         return instlManageMapper.getInstlDtlList(instlManageVO);
     }
@@ -92,7 +108,7 @@ public class InstlManageServiceImpl implements InstlManageService {
 
         // 소속구분, 총판의 부모총판 코드
         instlManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-
+        instlManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         // 총판인 경우, session의 AgencyCode 값 넣기
         if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY) {
             instlManageVO.setAgencyCd(sessionInfoVO.getOrgnCd());
@@ -104,6 +120,10 @@ public class InstlManageServiceImpl implements InstlManageService {
     /** 설치요청 목록 상세 */
     @Override
     public List<DefaultMap<String>> getInstlRequestDtl(InstlManageVO instlManageVO, SessionInfoVO sessionInfoVO) {
+
+        instlManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        instlManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
         return instlManageMapper.getInstlRequestDtl(instlManageVO);
     }
 
@@ -116,4 +136,5 @@ public class InstlManageServiceImpl implements InstlManageService {
         }
         return result;
     }
+
 }

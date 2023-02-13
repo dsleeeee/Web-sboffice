@@ -61,7 +61,14 @@ public class InstallManageServiceImpl implements InstallManageService {
 
     /** 포스 목록 */
     @Override
-    public List<DefaultMap<String>> getPosList(InstallVO installVO) {
+    public List<DefaultMap<String>> getPosList(InstallVO installVO, SessionInfoVO sessionInfoVO) {
+
+        installVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        // 검색조건에 본사코드가 있어서 본사일때만 들어가게 처리
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            installVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        }
+
         return installManageMapper.getPosList(installVO);
     }
 

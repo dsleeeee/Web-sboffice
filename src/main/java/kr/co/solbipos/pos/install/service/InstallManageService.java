@@ -26,7 +26,7 @@ public interface InstallManageService {
     List<DefaultMap<String>> getInstallRequestList(InstallVO installVO, SessionInfoVO sessionInfoVO);
 
     /** 포스 목록 조회 */
-    List<DefaultMap<String>> getPosList(InstallVO installVO);
+    List<DefaultMap<String>> getPosList(InstallVO installVO, SessionInfoVO sessionInfoVO);
 
     /** 설치요청 등록 */
     int saveInstallRequest(InstallVO[] installVOs, SessionInfoVO sessionInfoVO );

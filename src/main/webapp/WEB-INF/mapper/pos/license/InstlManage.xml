@@ -24,12 +24,16 @@
         tca.AGENCY_NM,
         <choose>
             <!-- 시스템 -->
-            <when test='orgnFg != null and orgnFg == "MASTER"'>
+            <when test='orgnFg != null and orgnFg == "M"'>
                 (CASE WHEN tca.P_AGENCY_CD = '00000' THEN '총판' WHEN tca.P_AGENCY_CD != '00000' THEN '대리점' ELSE '' END) AS AGENCY_FG,
             </when>
             <!-- 총판 -->
-            <when test='orgnFg != null and orgnFg == "AGENCY"'>
+            <when test='orgnFg != null and orgnFg == "A"'>
                 (CASE WHEN tca.AGENCY_CD = #{orgnCd} THEN '자사' WHEN tca.P_AGENCY_CD = #{orgnCd} THEN '대리점' ELSE '' END) AS AGENCY_FG,
+            </when>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                (CASE WHEN tca.P_AGENCY_CD = '00000' THEN '총판' WHEN tca.P_AGENCY_CD != '00000' THEN '대리점' ELSE '' END) AS AGENCY_FG,
             </when>
         </choose>
         tca.OWNER_NM,
@@ -53,6 +57,10 @@
             WHERE 1=1
             AND SEQ_NO = '1'
             AND INST_FG = '1'
+            <!-- 본사 -->
+            <if test='orgnFg != null and orgnFg == "H"'>
+                AND STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+            </if>
             GROUP BY AGENCY_CD
         ) tci,
         (
@@ -61,6 +69,11 @@
             COUNT(tms.AGENCY_CD) AS TOT_STORE_CNT,
             SUM(CASE WHEN tms.SYS_STAT_FG = 2 THEN 1 ELSE 0 END) AS SYS_STAT_FG_2
             FROM TB_MS_STORE tms
+            WHERE 1=1
+            <!-- 본사 -->
+            <if test='orgnFg != null and orgnFg == "H"'>
+                AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+            </if>
             GROUP BY tms.AGENCY_CD
         ) tms,
         (
@@ -70,8 +83,7 @@
                 SELECT
                 tms.AGENCY_CD,
                 tms.STORE_CD
-                FROM
-                TB_MS_STORE tms,
+                FROM TB_MS_STORE tms,
                 TB_CM_AGENCY tca
                 WHERE 1=1
                 AND tca.AGENCY_CD = tms.AGENCY_CD
@@ -80,10 +92,16 @@
             (
                 SELECT STORE_CD
                 FROM TB_SL_SALE_HDR
+                WHERE 1=1
                 GROUP BY STORE_CD
                 ORDER BY STORE_CD
             ) B
-            WHERE A.STORE_CD = B.STORE_CD
+            WHERE 1=1
+            AND A.STORE_CD = B.STORE_CD
+            <!-- 본사 -->
+            <if test='orgnFg != null and orgnFg == "H"'>
+                AND A.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+            </if>
             GROUP BY A.AGENCY_CD
         ) tsms
         WHERE 1=1
@@ -91,9 +109,15 @@
         AND tca.REG_DT BETWEEN #{startDate} AND #{endDate}
         <choose>
             <!-- 총판 -->
-            <when test='orgnFg != null and orgnFg == "AGENCY"'>
+            <when test='orgnFg != null and orgnFg == "A"'>
                 <![CDATA[
                     AND (tca.AGENCY_CD = #{orgnCd} OR tca.P_AGENCY_CD = #{orgnCd})
+                ]]>
+            </when>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <![CDATA[
+                    AND (tca.AGENCY_CD = (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = #{hqOfficeCd}) OR tca.P_AGENCY_CD = (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = #{hqOfficeCd}))
                 ]]>
             </when>
         </choose>
@@ -162,6 +186,10 @@
             WHERE 1=1
             AND SEQ_NO = '1'
             AND INST_FG = '1'
+            <!-- 본사 -->
+            <if test='orgnFg != null and orgnFg == "H"'>
+                AND STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+            </if>
             GROUP BY REG_DT, AGENCY_CD, STORE_CD, POS_NO, INST_FG
         ) tci
         WHERE 1=1
@@ -184,20 +212,28 @@
         tssh.SALE_DATE AS MAX_SALE_DATE,
         COUNT(tmp.POS_NO) AS POS_CNT,
         tms.AGENCY_CD
-        FROM
-        TB_MS_STORE tms,
+        FROM TB_MS_STORE tms,
         TB_CM_AGENCY tca,
         TB_MS_POS tmp,
         (
-          SELECT
-          tssh.STORE_CD,
-          MAX(tssh.SALE_DATE) AS SALE_DATE
-          FROM TB_SL_SALE_HDR tssh
-          GROUP BY tssh.STORE_CD
+            SELECT
+            tssh.STORE_CD,
+            MAX(tssh.SALE_DATE) AS SALE_DATE
+            FROM TB_SL_SALE_HDR tssh
+            WHERE 1=1
+            <!-- 본사 -->
+            <if test='orgnFg != null and orgnFg == "H"'>
+                AND tssh.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+            </if>
+            GROUP BY tssh.STORE_CD
         ) tssh
         WHERE 1=1
         AND tca.REG_DT BETWEEN #{startDate} AND #{endDate}
         AND tms.AGENCY_CD = #{agencyCd}
+        <!-- 본사 -->
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        </if>
         AND tca.AGENCY_CD = tms.AGENCY_CD
         AND tmp.STORE_CD (+)= tms.STORE_CD
         AND tssh.STORE_CD = tms.STORE_CD
@@ -226,25 +262,39 @@
             COUNT(tms.AGENCY_CD) AS TOT_STORE_CNT,
             SUM(CASE WHEN tms.SYS_STAT_FG = 2 THEN 1 ELSE 0 END) AS SYS_STAT_FG_2
             FROM TB_MS_STORE tms
+            WHERE 1=1
+            <!-- 본사 -->
+            <if test='orgnFg != null and orgnFg == "H"'>
+                AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+            </if>
             GROUP BY tms.AGENCY_CD
         ) tms,
         (
-          SELECT
-          tms.AGENCY_CD,
-          COUNT(tmp.POS_NO) AS POS_CNT
-          FROM TB_MS_POS tmp,
-          TB_MS_STORE tms
-          WHERE 1=1
-          AND tmp.STORE_CD (+)= tms.STORE_CD
-          GROUP BY tms.AGENCY_CD
+            SELECT
+            tms.AGENCY_CD,
+            COUNT(tmp.POS_NO) AS POS_CNT
+            FROM TB_MS_STORE tms,
+            TB_MS_POS tmp
+            WHERE 1=1
+            <!-- 본사 -->
+            <if test='orgnFg != null and orgnFg == "H"'>
+                AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+            </if>
+            AND tmp.STORE_CD (+)= tms.STORE_CD
+            GROUP BY tms.AGENCY_CD
         ) tmps,
         (
             SELECT
-            AGENCY_CD,
-            SUM(CASE WHEN INST_FG = 0 THEN 1 ELSE 0 END) AS INST_0,
-            MIN(INST_INS_DT) AS INST_INS_DT
-            FROM TB_CM_INSTLL
-            GROUP BY AGENCY_CD
+            tci.AGENCY_CD,
+            SUM(CASE WHEN tci.INST_FG = 0 THEN 1 ELSE 0 END) AS INST_0,
+            MIN(tci.INST_INS_DT) AS INST_INS_DT
+            FROM TB_CM_INSTLL tci
+            WHERE 1=1
+            <!-- 본사 -->
+            <if test='orgnFg != null and orgnFg == "H"'>
+                AND tci.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+            </if>
+            GROUP BY tci.AGENCY_CD
         ) tci
         WHERE 1=1
         AND tca.AGENCY_CD != '00000'
@@ -257,9 +307,15 @@
         </if>
         <choose>
             <!-- 총판 -->
-            <when test='orgnFg != null and orgnFg == "AGENCY"'>
+            <when test='orgnFg != null and orgnFg == "A"'>
                 <![CDATA[
-                    AND (tca.AGENCY_CD = #{agencyCd} OR tca.P_AGENCY_CD =  #{agencyCd})
+                    AND (tca.AGENCY_CD = #{agencyCd} OR tca.P_AGENCY_CD = #{agencyCd})
+                ]]>
+            </when>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <![CDATA[
+                    AND (tca.AGENCY_CD = (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = #{hqOfficeCd}) OR tca.P_AGENCY_CD = (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = #{hqOfficeCd}))
                 ]]>
             </when>
         </choose>
@@ -314,6 +370,10 @@
             COUNT(STORE_CD) AS INST_CNT
             FROM TB_CM_INSTLL
             WHERE 1=1
+            <!-- 본사 -->
+            <if test='orgnFg != null and orgnFg == "H"'>
+                AND STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+            </if>
             GROUP BY STORE_CD, POS_NO, AGENCY_CD, INST_INS_ID
             ORDER BY STORE_CD, POS_NO
         ) tci
@@ -323,6 +383,10 @@
             <![CDATA[
                 AND tca.REG_DT BETWEEN #{startDate} AND #{endDate}
             ]]>
+        </if>
+        <!-- 본사 -->
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
         </if>
         AND tca.AGENCY_CD (+)= tms.AGENCY_CD
         AND tms.STORE_CD (+)= tci.STORE_CD
@@ -349,6 +413,10 @@
         WHERE 1=1
         AND tci.STORE_CD = #{storeCd}
         AND tci.POS_NO = #{posNo}
+        <!-- 본사 -->
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND tci.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+        </if>
         AND tms.STORE_CD (+)= tci.STORE_CD
         ORDER BY tci.INST_REQ_DT, tci.INST_INS_DT
     </select>
@@ -361,7 +429,8 @@
     <select id="getInstlRequestList"  parameterType="instlManageVO" resultType="DefaultMap">
         /* InstlManageMapper.getInstlRequestList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT tms.HQ_OFFICE_CD,
+        SELECT
+        tms.HQ_OFFICE_CD,
         tho.HQ_OFFICE_NM,
         tms.STORE_NM,
         tmp.STORE_CD,
@@ -379,25 +448,30 @@
         tci.INST_REASON,
         tci.REMARK
         <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM  TB_MS_POS tmp,
+        FROM TB_MS_POS tmp,
         TB_MS_STORE tms,
         TB_HQ_OFFICE tho,
         (
-        SELECT STORE_CD, POS_NO,
-        MAX(SEQ_NO) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS SEQ_NO,
-        MAX(AGENCY_CD) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS AGENCY_CD,
-        MAX(INST_REQ_DT) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_REQ_DT,
-        MAX(INST_REQ_ID) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_REQ_ID,
-        MAX(INST_INS_DT) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_INS_DT,
-        MAX(INST_INS_ID) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_INS_ID,
-        MAX(INST_FG) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_FG,
-        MAX(INST_REASON) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_REASON,
-        MAX(REMARK) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS REMARK
-        FROM TB_CM_INSTLL
-        GROUP BY STORE_CD , POS_NO
+            SELECT STORE_CD, POS_NO,
+            MAX(SEQ_NO) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS SEQ_NO,
+            MAX(AGENCY_CD) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS AGENCY_CD,
+            MAX(INST_REQ_DT) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_REQ_DT,
+            MAX(INST_REQ_ID) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_REQ_ID,
+            MAX(INST_INS_DT) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_INS_DT,
+            MAX(INST_INS_ID) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_INS_ID,
+            MAX(INST_FG) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_FG,
+            MAX(INST_REASON) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_REASON,
+            MAX(REMARK) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS REMARK
+            FROM TB_CM_INSTLL
+            GROUP BY STORE_CD , POS_NO
         ) tci,
         TB_CM_AGENCY tca
-        WHERE tms.STORE_CD = tmp.STORE_CD
+        WHERE 1=1
+        <!-- 본사 -->
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND tmp.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+        </if>
+        AND tms.STORE_CD = tmp.STORE_CD
         AND tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
         AND tci.STORE_CD (+)= tmp.STORE_CD
         AND tci.POS_NO (+)= tmp.POS_NO
@@ -407,6 +481,10 @@
             <!-- 총판 -->
             <when test='orgnFg != null and orgnFg == "A"'>
                 AND (tci.AGENCY_CD = #{agencyCd} OR tca.AGENCY_CD = #{agencyCd})
+            </when>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                AND (tci.AGENCY_CD = (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = #{hqOfficeCd}) OR tca.P_AGENCY_CD = (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = #{hqOfficeCd}))
             </when>
         </choose>
         <if test='srchAgencyCd != null and srchAgencyCd.toString() != ""'>
@@ -463,12 +541,16 @@
                , TO_CHAR(TO_DATE(tci.INST_INS_DT ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS INST_INS_DT
                , tci.INST_REASON
                , tci.REMARK
-          FROM  TB_CM_INSTLL tci,
-                 TB_CM_AGENCY tca
-          WHERE 1=1
-            AND tca.AGENCY_CD (+)= tci.AGENCY_CD
-            AND STORE_CD = #{storeCd}
-            AND POS_NO = #{posNo}
+        FROM  TB_CM_INSTLL tci,
+               TB_CM_AGENCY tca
+        WHERE 1=1
+        AND tca.AGENCY_CD (+)= tci.AGENCY_CD
+        AND STORE_CD = #{storeCd}
+        AND POS_NO = #{posNo}
+        <!-- 본사 -->
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND tci.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+        </if>
     </select>
 
     <!-- 설치요청 삭제 -->

@@ -74,7 +74,7 @@
     -->
     <select id="getPosList"  parameterType="installVO" resultType="DefaultMap">
         /* InstallManageMapper.getPosList */
-      <include refid="CmmSQL.PagingTemplateHeader"/>
+        <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT tms.HQ_OFFICE_CD,
                tho.HQ_OFFICE_NM,
                tms.STORE_NM,
@@ -87,47 +87,56 @@
                tca.AGENCY_NM,
                tci.INST_REASON,
                tci.REMARK
-      <include refid="CmmSQL.PagingTemplateCount"/>
-          FROM TB_MS_POS tmp,
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_MS_POS tmp,
                TB_MS_STORE tms,
                TB_HQ_OFFICE tho,
                (
-               SELECT STORE_CD, POS_NO,
-                      MAX(SEQ_NO) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS SEQ_NO,
-                      MAX(INST_FG) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_FG,
-                      MAX(AGENCY_CD) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS AGENCY_CD,
-                      MAX(INST_REASON) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_REASON,
-                      MAX(REMARK) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS REMARK
-                 FROM TB_CM_INSTLL
-                GROUP BY STORE_CD , POS_NO
+                    SELECT STORE_CD, POS_NO,
+                    MAX(SEQ_NO) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS SEQ_NO,
+                    MAX(INST_FG) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_FG,
+                    MAX(AGENCY_CD) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS AGENCY_CD,
+                    MAX(INST_REASON) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_REASON,
+                    MAX(REMARK) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS REMARK
+                    FROM TB_CM_INSTLL
+                    WHERE 1=1
+                    <!-- 본사 -->
+                    <if test='orgnFg != null and orgnFg == "H"'>
+                        AND STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                    </if>
+                    GROUP BY STORE_CD , POS_NO
                ) tci,
                TB_CM_AGENCY tca
-         WHERE tms.STORE_CD = tmp.STORE_CD
-           AND tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
-           AND tci.STORE_CD (+)= tmp.STORE_CD
-           AND tci.POS_NO (+)= tmp.POS_NO
-           AND tca.AGENCY_CD (+)= tci.AGENCY_CD
-           AND (tci.INST_FG != 0 OR tci.INST_FG IS NULL) <!-- 설치의뢰는 목록에서 보이면 안됨 -->
-      <if test='hqOfficeCd != null and hqOfficeCd != ""'>
-           AND tms.HQ_OFFICE_CD LIKE '%' ||#{hqOfficeCd}|| '%'
-      </if>
-      <if test='hqOfficeNm != null and hqOfficeNm != ""'>
-           AND tho.HQ_OFFICE_NM LIKE '%' ||#{hqOfficeNm}|| '%'
-      </if>
-      <if test='storeCd != null and storeCd != ""'>
-           AND tms.STORE_CD LIKE '%' ||#{storeCd}|| '%'
-      </if>
-      <if test='storeNm != null and storeNm != ""'>
-           AND tms.STORE_NM LIKE '%' ||#{storeNm}|| '%'
-      </if>
-      <if test='agencyCd != null and agencyCd != ""'>
-           AND tms.AGENCY_CD = #{agencyCd}
-      </if>
-      <if test='instFg != null and instFg.toString() != ""'>
-           AND tci.INST_FG = #{instFg}
-      </if>
-      ORDER BY tms.HQ_OFFICE_CD, tmp.STORE_CD, tmp.POS_NO,tci.SEQ_NO DESC
-      <include refid="CmmSQL.PagingTemplateBottom"/>
+        WHERE tms.STORE_CD = tmp.STORE_CD
+        AND tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND tci.STORE_CD (+)= tmp.STORE_CD
+        AND tci.POS_NO (+)= tmp.POS_NO
+        AND tca.AGENCY_CD (+)= tci.AGENCY_CD
+        AND (tci.INST_FG != 0 OR tci.INST_FG IS NULL) <!-- 설치의뢰는 목록에서 보이면 안됨 -->
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+            AND tms.HQ_OFFICE_CD LIKE '%' ||#{hqOfficeCd}|| '%'
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+            AND tho.HQ_OFFICE_NM LIKE '%' ||#{hqOfficeNm}|| '%'
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD LIKE '%' ||#{storeCd}|| '%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND tms.STORE_NM LIKE '%' ||#{storeNm}|| '%'
+        </if>
+        <if test='agencyCd != null and agencyCd != ""'>
+            AND tms.AGENCY_CD = #{agencyCd}
+        </if>
+        <if test='instFg != null and instFg.toString() != ""'>
+            AND tci.INST_FG = #{instFg}
+        </if>
+        <!-- 본사 -->
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND tms.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+        </if>
+        ORDER BY tms.HQ_OFFICE_CD, tmp.STORE_CD, tmp.POS_NO,tci.SEQ_NO DESC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <!-- 설치요청 등록 -->
