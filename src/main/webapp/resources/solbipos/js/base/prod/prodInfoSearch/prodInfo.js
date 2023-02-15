@@ -128,7 +128,7 @@ app.controller('prodInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     params.prodClassCd = $scope.prodClassCd;
     params.prodCd = $scope.prodCd;
     params.prodNm = $scope.prodNm;
-    params.prodCds = $("#optionProdSelectCd").val();
+    params.prodCds = $("#prodInfoProdSelectCd").val();
     params.prodHqBrandCd = $scope.prodHqBrandCd;
     // '전체' 일때
     if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
@@ -187,7 +187,7 @@ app.controller('prodInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     params.prodClassCd = $scope.prodClassCd;
     params.prodCd = $scope.prodCd;
     params.prodNm = $scope.prodNm;
-    params.prodCds = $("#orgplceProdSelectCd").val();
+    params.prodCds = $("#prodInfoProdSelectCd").val();
     params.prodHqBrandCd = $scope.prodHqBrandCd;
     // '전체' 일때
     if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {

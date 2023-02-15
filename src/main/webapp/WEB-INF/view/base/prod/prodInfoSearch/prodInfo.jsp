@@ -194,4 +194,4 @@
     <%--//엑셀 리스트--%>
 
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodInfoSearch/prodInfo.js?ver=20221223.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodInfoSearch/prodInfo.js?ver=20221223.03" charset="utf-8"></script>
