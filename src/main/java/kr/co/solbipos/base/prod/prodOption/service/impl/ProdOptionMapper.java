@@ -50,4 +50,7 @@ public interface ProdOptionMapper {
 
     /* 옵션속성삭제 */
     int deleteProdOptionVal(ProdOptionVO prodOptionVO);
+
+    /* 추가(상품포함) 팝업 상품 리스트 조회 */
+    List<DefaultMap<String>> getProdList(ProdOptionVO prodOptionVO);
 }

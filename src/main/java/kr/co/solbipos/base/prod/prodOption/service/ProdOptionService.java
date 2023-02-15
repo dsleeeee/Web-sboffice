@@ -2,7 +2,6 @@ package kr.co.solbipos.base.prod.prodOption.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.base.prod.prodOption.service.ProdOptionVO;
 
 import java.util.List;
 
@@ -34,5 +33,8 @@ public interface ProdOptionService {
 
     /** 옵션속성저장 */
     int saveProdOptionVal(ProdOptionVO[] prodOptionVO, SessionInfoVO sessionInfoVO);
+
+    /** 추가(상품포함) 팝업 상품 리스트 조회 */
+    List<DefaultMap<String>> getProdList(ProdOptionVO prodOptionVO, SessionInfoVO sessionInfoVO);
 
 }

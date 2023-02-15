@@ -56,10 +56,12 @@ app.controller('prodOptionCtrl', ['$scope', '$http', function ($scope, $http) {
         if ( col.binding === 'optionGrpCd' && selectedRow.status !== 'I') {
           $("#optionGrpTitle").html(" [" + selectedRow.optionGrpCd+ "]" + selectedRow.optionGrpNm );
           if (orgnFg == 'STORE' && selectedRow.optionGrpCd <= 7999) {
+            $("#btnOptionValAddWithProd").hide();
             $("#btnOptionValAdd").hide();
             $("#btnOptionValDel").hide();
             $("#btnOptionValSave").hide();
           } else {
+            $("#btnOptionValAddWithProd").show();
             $("#btnOptionValAdd").show();
             $("#btnOptionValDel").show();
             $("#btnOptionValSave").show();
@@ -372,5 +374,53 @@ app.controller('prodOptionValCtrl', ['$scope', '$http', function ($scope, $http)
     }
     return true;
   };
+
+  // 추가(상품포함) 팝업
+  $scope.addRowWithProd = function(){
+
+    /* 옵션그룹을 선택하세요.*/
+    if($scope.optionGrpCd === null || $scope.optionGrpCd === undefined  || $scope.optionGrpCd === ""){
+      $scope._popMsg(messages["prodOption.chk.optionGrp"]);
+      return false;
+    }
+
+    var popUp = $scope.prodOptionAddWithProdLayer;
+    setTimeout(function() {
+      popUp.show(true, function (s) {
+        // 수정 버튼 눌렀을때만
+        if (s.dialogResult === "wj-hide-apply") {
+          var scope = agrid.getScope('prodOptionAddWithProdCtrl', $scope.optionGrpCd);
+          for (var i = 0; i < scope.flex.collectionView.items.length; i++) {
+            if (scope.flex.collectionView.items[i].gChk) {
+              var prodCd = scope.flex.collectionView.items[i].prodCd;
+              var prodNm = scope.flex.collectionView.items[i].prodNm;
+              var params = {};
+
+              params.status = 'I';
+              params.gChk = true;
+              params.optionGrpCd = $scope.optionGrpCd;
+              params.optionValCd = "자동채번";
+              params.optionValNm = prodNm;
+              params.optProdCd = prodCd;
+              params.prodNm = prodNm;
+
+              // 추가기능 수행 : 파라미터
+              $scope._addRow(params);
+            }
+          }
+        }
+      });
+    }, 50);
+
+    // 화면 ready 된 후 설정
+     angular.element(document).ready(function () {
+       // 상품상세정보 팝업 핸들러 추가
+       $scope.prodOptionAddWithProdLayer.shown.addHandler(function (s) {
+         setTimeout(function () {
+           $scope._broadcast('prodOptionAddWithProdCtrl', $scope.optionGrpCd);
+         }, 50);
+       });
+     });
+  }
 
 }]);

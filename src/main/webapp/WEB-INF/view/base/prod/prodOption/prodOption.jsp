@@ -59,6 +59,7 @@
     <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
       <s:message code="prodOption.optionVal"/><span id="optionGrpTitle"></span>
       <div class="updownSet oh mb10">
+        <button class="btn_skyblue" id="btnOptionValAddWithProd" ng-click="addRowWithProd()"><s:message code='prodOption.addWithProd' /></button>
         <button class="btn_skyblue" id="btnOptionValAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
         <button class="btn_skyblue" id="btnOptionValDel" ng-click="del()"><s:message code='cmm.del' /></button>
         <button class="btn_skyblue" id="btnOptionValSave" ng-click="save()"><s:message code='cmm.save' /></button>
@@ -79,7 +80,9 @@
           <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodOption.optionGrpCd"/>" binding="optionGrpCd" width="100" is-read-only="true" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodOption.optionValCd"/>" binding="optionValCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodOption.optionValNm"/>" binding="optionValNm" width="*"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodOption.optionValNm"/>" binding="optionValNm" width="150" align="left"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodOption.prodCd"/>" binding="optProdCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodOption.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
 
         </wj-flex-grid>
         </div>
@@ -93,8 +96,23 @@
   <%-- 사용여부 --%>
   var useYn = ${ccu.getCommCodeExcpAll("067")};
   var orgnFg = "${orgnFg}";
+  var gvListScaleBoxData = ${ccu.getListScale()};
+  // 매장상품제한구분 사용여부(매장에서 사용하지만 본사환경설정값으로 여부파악)
+  var storeProdUseFg = "${storeProdUseFg}";
+  // 브랜드 사용여부
+  var brandUseFg = "${brandUseFg}";
+  // 사용자 브랜드
+  var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodOption/prodOption.js?ver=20221219.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodOption/prodOption.js?ver=20230215.01" charset="utf-8"></script>
+
+<%-- 추가(상품포함) 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/prodOption/prodOptionAddWithProd.jsp">
+</c:import>
+
+<%-- 상품분류 팝업 --%>
+<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>
 
 

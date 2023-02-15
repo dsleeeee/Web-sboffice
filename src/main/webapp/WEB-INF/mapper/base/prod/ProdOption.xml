@@ -185,23 +185,33 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT  OPTION_GRP_CD
-                ,       OPTION_VAL_CD
-                ,       OPTION_VAL_NM
-                FROM    TB_HQ_PRODUCT_OPTION_VAL
-                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
-                AND     OPTION_GRP_CD = #{optionGrpCd}
-                ORDER BY OPTION_VAL_CD
+                SELECT  thpov.OPTION_GRP_CD
+                ,       thpov.OPTION_VAL_CD
+                ,       thpov.OPTION_VAL_NM
+                ,       thpov.OPT_PROD_CD
+                ,       thp.PROD_NM
+                FROM    TB_HQ_PRODUCT_OPTION_VAL thpov
+                ,       TB_HQ_PRODUCT thp
+                WHERE   thpov.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     thpov.OPTION_GRP_CD = #{optionGrpCd}
+                AND     thp.HQ_OFFICE_CD (+)= thpov.HQ_OFFICE_CD
+                AND     thp.PROD_CD (+)= thpov.OPT_PROD_CD
+                ORDER BY thpov.OPTION_VAL_CD
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT  OPTION_GRP_CD
-                ,       OPTION_VAL_CD
-                ,       OPTION_VAL_NM
-                FROM    TB_MS_PRODUCT_OPTION_VAL
-                WHERE   STORE_CD = #{storeCd}
-                AND     OPTION_GRP_CD = #{optionGrpCd}
-                ORDER BY OPTION_VAL_CD
+                SELECT  tmpov.OPTION_GRP_CD
+                ,       tmpov.OPTION_VAL_CD
+                ,       tmpov.OPTION_VAL_NM
+                ,       tmpov.OPT_PROD_CD
+                ,       tmp.PROD_NM
+                FROM    TB_MS_PRODUCT_OPTION_VAL tmpov
+                ,       TB_MS_PRODUCT tmp
+                WHERE   tmpov.STORE_CD = #{storeCd}
+                AND     tmpov.OPTION_GRP_CD = #{optionGrpCd}
+                AND     tmp.STORE_CD (+)= tmpov.STORE_CD
+                AND     tmp.PROD_CD (+)= tmpov.OPT_PROD_CD
+                ORDER BY tmpov.OPTION_VAL_CD
             </when>
         </choose>
     </select>
@@ -262,7 +272,8 @@
                 A.REG_DT,
                 A.REG_ID,
                 A.MOD_DT,
-                A.MOD_ID
+                A.MOD_ID,
+                A.OPT_PROD_CD
                 )
                 VALUES (
                 #{hqOfficeCd},
@@ -272,7 +283,8 @@
                 #{regDt},
                 #{regId},
                 #{modDt},
-                #{modId}
+                #{modId},
+                #{optProdCd}
                 )
             </when>
             <!-- 매장 -->
@@ -297,7 +309,8 @@
                 A.REG_DT,
                 A.REG_ID,
                 A.MOD_DT,
-                A.MOD_ID
+                A.MOD_ID,
+                A.OPT_PROD_CD
                 )
                 VALUES (
                 #{storeCd},
@@ -308,7 +321,8 @@
                 #{regDt},
                 #{regId},
                 #{modDt},
-                #{modId}
+                #{modId},
+                #{optProdCd}
                 )
             </when>
         </choose>
@@ -339,5 +353,131 @@
             </when>
         </choose>
     </delete>
+
+    <!-- 추가(상품포함) 팝업 상품 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_PROD, TB_MS_PRODUCT_SDSEL_PROD
+        PARAM    : prodOptionVO
+        COMMENTS : 옵션 추가(상품포함) 팝업의 상품 리스트를 조회한다. ( 본사/매장 )
+    -->
+    <select id="getProdList" parameterType="prodOptionVO" resultType="DefaultMap">
+        /* USE : ProdOptionMapper.getProdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT
+                    thp.HQ_OFFICE_CD,
+                    thp.PROD_CD,
+                    thp.PROD_NM,
+                    thp.PROD_CLASS_CD,
+                    ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
+                    thp.ORGPLCE_CD, -- TODO 원산지명 조회 필요
+                    thp.PO_UNIT_FG
+                    <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM
+                    TB_HQ_PRODUCT thp
+                WHERE
+                    thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    <if test="prodCd != null and prodCd != ''">
+                    AND thp.PROD_CD = #{prodCd} --상품코드
+                    </if>
+                    <if test="prodNm != null and prodNm != ''">
+                    AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                    </if>
+                    AND thp.USE_YN = 'Y'
+                    AND thp.SIDE_PROD_YN = 'N'
+                    AND thp.PROD_CD NOT IN (
+                                            SELECT OPT_PROD_CD
+                                              FROM TB_HQ_PRODUCT_OPTION_VAL
+                                             WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                               AND OPTION_GRP_CD = #{optionGrpCd}
+                                               AND OPT_PROD_CD IS NOT NULL
+                                            )
+                AND (
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                        OR
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                    )
+                <if test='prodClassCd != null and prodClassCd != ""'>
+                    AND thp.PROD_CLASS_CD IN (
+                                                    SELECT  PROD_CLASS_CD
+                                                      FROM  TB_HQ_PRODUCT_CLASS
+                                                     WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    )
+                </if>
+                <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                    AND thp.HQ_BRAND_CD = #{prodHqBrandCd} -- 선택한 상품브랜드가 있을 때
+                </if>
+                <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                    <if test='userProdBrands != null and userProdBrands != ""'>
+                        -- 선택한 상품브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                        AND thp.HQ_BRAND_CD IN
+                        <foreach collection="userProdBrandList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                </if>
+                ORDER BY
+                    thp.PROD_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT
+                    tmp.STORE_CD,
+                    tmp.PROD_CD,
+                    tmp.PROD_NM,
+                    tmp.PROD_CLASS_CD,
+                    ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
+                    tmp.ORGPLCE_CD, -- TODO 원산지명 조회 필요
+                    tmp.PO_UNIT_FG,
+                    tmp.REG_DT
+                    <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM
+                    TB_MS_PRODUCT tmp
+                WHERE
+                    tmp.STORE_CD = #{storeCd}
+                    <if test="prodCd != null and prodCd != ''">
+                    AND tmp.PROD_CD = #{prodCd} --상품코드
+                    </if>
+                    <if test="prodNm != null and prodNm != ''">
+                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                    </if>
+                    <if test='storeProdUseFg != null and storeProdUseFg == "1"'>
+                        AND tmp.REG_FG = 'H'
+                    </if>
+                    AND tmp.USE_YN = 'Y'
+                    AND tmp.SIDE_PROD_YN = 'N'
+                    AND tmp.PROD_CD NOT IN (
+                                            SELECT OPT_PROD_CD
+                                              FROM TB_MS_PRODUCT_OPTION_VAL
+                                             WHERE STORE_CD = #{storeCd}
+                                               AND OPTION_GRP_CD = #{optionGrpCd}
+                                               AND OPT_PROD_CD IS NOT NULL
+                                           )
+                    AND (
+                            ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                            OR
+                            ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                        )
+                <if test='prodClassCd != null and prodClassCd != ""'>
+                    AND tmp.PROD_CLASS_CD IN (
+                                                    SELECT PROD_CLASS_CD
+                                                      FROM TB_MS_PRODUCT_CLASS
+                                                     WHERE STORE_CD = #{storeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                               CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                    )
+                </if>
+                ORDER BY
+                    tmp.PROD_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
+    </select>
 
 </mapper>

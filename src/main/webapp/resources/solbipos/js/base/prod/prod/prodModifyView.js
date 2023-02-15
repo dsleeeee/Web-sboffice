@@ -1785,7 +1785,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
     // 상품옵션그룹코드 선택 팝업
     $scope.popUpOptionGrp = function () {
         $scope.wjSearchOtionGrpLayer.show(true);
-        $scope._broadcast('searchOptionGrpCtrl');
+        $scope._broadcast('searchOptionGrpCtrl', $scope.prodModifyInfo.prodCd);
     };
     
     // 상품옵션그룹코드 선택 취소 버튼
