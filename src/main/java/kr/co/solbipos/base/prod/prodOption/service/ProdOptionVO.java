@@ -53,6 +53,34 @@ public class ProdOptionVO extends PageVO {
     /** 등록구분 */
     private String regFg;
 
+    /** 맘스터치전용-옵션대응상품코드 */
+    private String optProdCd;
+
+    /** 사용자별 브랜드코드(상품) */
+    private String[] userProdBrandList;
+
+    /** 사용자별 브랜드코드(상품) */
+    private String userProdBrands;
+
+    /** 상품브랜드코드 */
+    private String prodHqBrandCd;
+
+    /** 상품코드 */
+    private String prodCd;
+
+    /** 상품명 */
+    private String prodNm;
+
+    /** 상품분류코드 */
+    private String prodClassCd;
+
+    /** 사용자 아이디 */
+    private String userId;
+
+    /** 매장상품제한구분 여부 */
+    private String storeProdUseFg;
+
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -123,5 +151,77 @@ public class ProdOptionVO extends PageVO {
 
     public void setRegFg(String regFg) {
         this.regFg = regFg;
+    }
+
+    public String getOptProdCd() {
+        return optProdCd;
+    }
+
+    public void setOptProdCd(String optProdCd) {
+        this.optProdCd = optProdCd;
+    }
+
+    public String[] getUserProdBrandList() {
+        return userProdBrandList;
+    }
+
+    public void setUserProdBrandList(String[] userProdBrandList) {
+        this.userProdBrandList = userProdBrandList;
+    }
+
+    public String getUserProdBrands() {
+        return userProdBrands;
+    }
+
+    public void setUserProdBrands(String userProdBrands) {
+        this.userProdBrands = userProdBrands;
+    }
+
+    public String getProdHqBrandCd() {
+        return prodHqBrandCd;
+    }
+
+    public void setProdHqBrandCd(String prodHqBrandCd) {
+        this.prodHqBrandCd = prodHqBrandCd;
+    }
+
+    public String getProdCd() {
+        return prodCd;
+    }
+
+    public void setProdCd(String prodCd) {
+        this.prodCd = prodCd;
+    }
+
+    public String getProdNm() {
+        return prodNm;
+    }
+
+    public void setProdNm(String prodNm) {
+        this.prodNm = prodNm;
+    }
+
+    public String getProdClassCd() {
+        return prodClassCd;
+    }
+
+    public void setProdClassCd(String prodClassCd) {
+        this.prodClassCd = prodClassCd;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getStoreProdUseFg() {
+        return storeProdUseFg;
+    }
+
+    public void setStoreProdUseFg(String storeProdUseFg) {
+        this.storeProdUseFg = storeProdUseFg;
     }
 }

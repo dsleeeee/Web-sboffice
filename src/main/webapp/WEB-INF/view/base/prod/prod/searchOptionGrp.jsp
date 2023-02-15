@@ -32,7 +32,7 @@
             <div class="mt10 tr">
                 <div class="oh sb-select dkbr">
                     <%--조회--%>
-                    <button class="btn_skyblue fr" id="btnSearch" ng-click="_broadcast('searchOptionGrpCtrl', 1)" ><s:message code="cmm.search" /></button>
+                    <button class="btn_skyblue fr" id="btnSearch" ng-click="searchOptionGrp()" ><s:message code="cmm.search" /></button>
                 </div>
             </div>
 
@@ -60,4 +60,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/searchOptionGrp.js?ver=20221223.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/searchOptionGrp.js?ver=20230215.01" charset="utf-8"></script>

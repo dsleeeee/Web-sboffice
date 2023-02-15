@@ -1,21 +1,16 @@
 package kr.co.solbipos.base.prod.prodOption.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.prodOption.service.ProdOptionService;
 import kr.co.solbipos.base.prod.prodOption.service.ProdOptionVO;
-import kr.co.solbipos.base.prod.prodOption.service.impl.ProdOptionMapper;
-import kr.co.solbipos.pos.loginstatus.enums.SysStatFg;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static kr.co.common.utils.DateUtil.currentDateString;
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
@@ -114,5 +109,31 @@ public class ProdOptionServiceImpl implements ProdOptionService {
         return result;
     }
 
+    /** 추가(상품포함) 팝업 상품 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getProdList(ProdOptionVO prodOptionVO, SessionInfoVO sessionInfoVO) {
+
+        // 소속구분 설정
+        prodOptionVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodOptionVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodOptionVO.setStoreCd(sessionInfoVO.getStoreCd());
+        prodOptionVO.setUserId(sessionInfoVO.getUserId());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
+            if (prodOptionVO.getProdHqBrandCd() == "" || prodOptionVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (prodOptionVO.getUserProdBrands() != null && !"".equals(prodOptionVO.getUserProdBrands())) {
+                    String[] userBrandList = prodOptionVO.getUserProdBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        prodOptionVO.setUserProdBrandList(userBrandList);
+                    }
+                }
+            }
+        }
+
+        return prodOptionMapper.getProdList(prodOptionVO);
+
+    }
 
 }

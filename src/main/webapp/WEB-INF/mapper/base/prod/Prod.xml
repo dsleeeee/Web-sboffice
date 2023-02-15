@@ -6852,6 +6852,14 @@
                 <if test='optionGrpNm != null and optionGrpNm != ""'>
                    AND OPTION_GRP_NM LIKE '%' || #{optionGrpNm} || '%'
                 </if>
+                   AND OPTION_GRP_CD NOT IN (
+                                                SELECT OPTION_GRP_CD
+                                                  FROM TB_HQ_PRODUCT_OPTION_VAL
+                                                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                                   AND OPT_PROD_CD = #{prodCd}
+                                            )
+                 ORDER
+                    BY OPTION_GRP_CD
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -6864,6 +6872,14 @@
                 <if test='optionGrpNm != null and optionGrpNm != ""'>
                     AND OPTION_GRP_NM LIKE '%' || #{optionGrpNm} || '%'
                 </if>
+                    AND OPTION_GRP_CD NOT IN (
+                                                SELECT OPTION_GRP_CD
+                                                  FROM TB_MS_PRODUCT_OPTION_VAL
+                                                 WHERE STORE_CD = #{storeCd}
+                                                   AND OPT_PROD_CD = #{prodCd}
+                                             )
+                  ORDER
+                     BY OPTION_GRP_CD
             </when>
         </choose>
     </select>

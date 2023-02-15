@@ -58,7 +58,11 @@ app.controller('searchOptionGrpCtrl', ['$scope', '$http', function ($scope, $htt
 
     };
 
+    $scope.selProdCd = '';
     $scope.$on("searchOptionGrpCtrl", function(event, data) {
+
+        // 선택한 상품코드 셋팅
+        $scope.selProdCd = data;
 
         // 상품옵션그룹 리스트 조회
         $scope.searchOptionGrp();
@@ -70,6 +74,7 @@ app.controller('searchOptionGrpCtrl', ['$scope', '$http', function ($scope, $htt
 
         var params = {};
         params.optionGrpNm = $("#searchOptionGrpNm").val();
+        params.prodCd = $scope.selProdCd;
 
         $scope._inquirySub("/base/prod/prod/prod/getSearchOptionGrpList.sb", params, function() {}, false);
     }
