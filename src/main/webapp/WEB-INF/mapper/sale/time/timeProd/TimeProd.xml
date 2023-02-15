@@ -85,10 +85,10 @@
                         SIDE_PROD_CD,
                         SIDE_PROD_NM,
                         <foreach collection="arrTimeCol" item="item" separator="+">
-                            SALE_QTY1_T${item} + SALE_QTY2_T${item} + SALE_QTY3_T${item}
+                            SALE_QTY3_T${item}
                         </foreach> AS TOT_SALE_QTY,
                         <foreach collection="arrTimeCol" item="item" separator="+">
-                            REAL_SALE_AMT1_T${item} + REAL_SALE_AMT2_T${item} + REAL_SALE_AMT3_T${item}
+                            REAL_SALE_AMT3_T${item}
                         </foreach> AS TOT_REAL_SALE_AMT,
                         <foreach collection="arrTimeCol" item="item" separator="+">
                             REAL_SALE_AMT1_T${item}
@@ -346,10 +346,10 @@
                         SIDE_PROD_CD,
                         SIDE_PROD_NM,
                         <foreach collection="arrTimeCol" item="item" separator="+">
-                            SALE_QTY1_T${item} + SALE_QTY2_T${item} + SALE_QTY3_T${item}
+                            SALE_QTY3_T${item}
                         </foreach> AS TOT_SALE_QTY,
                         <foreach collection="arrTimeCol" item="item" separator="+">
-                            REAL_SALE_AMT1_T${item} + REAL_SALE_AMT2_T${item} + REAL_SALE_AMT3_T${item}
+                             REAL_SALE_AMT3_T${item}
                         </foreach> AS TOT_REAL_SALE_AMT,
                         <foreach collection="arrTimeCol" item="item" separator="+">
                             REAL_SALE_AMT1_T${item}
@@ -611,10 +611,10 @@
                         SIDE_PROD_CD,
                         SIDE_PROD_NM,
                         <foreach collection="arrTimeCol" item="item" separator="+">
-                            SALE_QTY1_T${item} + SALE_QTY2_T${item} + SALE_QTY3_T${item}
+                            SALE_QTY3_T${item}
                         </foreach> AS TOT_SALE_QTY,
                         <foreach collection="arrTimeCol" item="item" separator="+">
-                            REAL_SALE_AMT1_T${item} + REAL_SALE_AMT2_T${item} + REAL_SALE_AMT3_T${item}
+                            REAL_SALE_AMT3_T${item}
                         </foreach> AS TOT_REAL_SALE_AMT,
                         <foreach collection="arrTimeCol" item="item" separator="+">
                             REAL_SALE_AMT1_T${item}
@@ -885,10 +885,10 @@
                         SIDE_PROD_CD,
                         SIDE_PROD_NM,
                         <foreach collection="arrTimeCol" item="item" separator="+">
-                            SALE_QTY1_T${item} + SALE_QTY2_T${item} + SALE_QTY3_T${item}
+                            SALE_QTY3_T${item}
                         </foreach> AS TOT_SALE_QTY,
                         <foreach collection="arrTimeCol" item="item" separator="+">
-                            REAL_SALE_AMT1_T${item} + REAL_SALE_AMT2_T${item} + REAL_SALE_AMT3_T${item}
+                            REAL_SALE_AMT3_T${item}
                         </foreach> AS TOT_REAL_SALE_AMT,
                         <foreach collection="arrTimeCol" item="item" separator="+">
                             REAL_SALE_AMT1_T${item}
@@ -1170,10 +1170,10 @@
                         SIDE_PROD_CD,
                         SIDE_PROD_NM,
                         <foreach collection="arrTimeCol" item="item" separator="+">
-                            SALE_QTY1_T${item} + SALE_QTY2_T${item} + SALE_QTY3_T${item}
+                            SALE_QTY3_T${item}
                         </foreach> AS TOT_SALE_QTY,
                         <foreach collection="arrTimeCol" item="item" separator="+">
-                            REAL_SALE_AMT1_T${item} + REAL_SALE_AMT2_T${item} + REAL_SALE_AMT3_T${item}
+                            REAL_SALE_AMT3_T${item}
                         </foreach> AS TOT_REAL_SALE_AMT,
                         <foreach collection="arrTimeCol" item="item" separator="+">
                             REAL_SALE_AMT1_T${item}
@@ -1428,10 +1428,10 @@
                         SIDE_PROD_CD,
                         SIDE_PROD_NM,
                         <foreach collection="arrTimeCol" item="item" separator="+">
-                            SALE_QTY1_T${item} + SALE_QTY2_T${item} + SALE_QTY3_T${item}
+                            SALE_QTY3_T${item}
                         </foreach> AS TOT_SALE_QTY,
                         <foreach collection="arrTimeCol" item="item" separator="+">
-                            REAL_SALE_AMT1_T${item} + REAL_SALE_AMT2_T${item} + REAL_SALE_AMT3_T${item}
+                            REAL_SALE_AMT3_T${item}
                         </foreach> AS TOT_REAL_SALE_AMT,
                         <foreach collection="arrTimeCol" item="item" separator="+">
                             REAL_SALE_AMT1_T${item}
@@ -1681,6 +1681,7 @@
                         L_CLASS_CD,
                         L_CLASS_NM,
                         M_CLASS_CD,
+
                         M_CLASS_NM,
                         S_CLASS_CD,
                         S_CLASS_NM,
@@ -1690,10 +1691,10 @@
                         SIDE_PROD_CD,
                         SIDE_PROD_NM,
                         <foreach collection="arrTimeCol" item="item" separator="+">
-                            SALE_QTY1_T${item} + SALE_QTY2_T${item} + SALE_QTY3_T${item}
+                            SALE_QTY3_T${item}
                         </foreach> AS TOT_SALE_QTY,
                         <foreach collection="arrTimeCol" item="item" separator="+">
-                            REAL_SALE_AMT1_T${item} + REAL_SALE_AMT2_T${item} + REAL_SALE_AMT3_T${item}
+                            REAL_SALE_AMT3_T${item}
                         </foreach> AS TOT_REAL_SALE_AMT,
                         <foreach collection="arrTimeCol" item="item" separator="+">
                             REAL_SALE_AMT1_T${item}
@@ -1961,10 +1962,10 @@
                         SIDE_PROD_CD,
                         SIDE_PROD_NM,
                         <foreach collection="arrTimeCol" item="item" separator="+">
-                            SALE_QTY1_T${item} + SALE_QTY2_T${item} + SALE_QTY3_T${item}
+                            SALE_QTY3_T${item}
                         </foreach> AS TOT_SALE_QTY,
                         <foreach collection="arrTimeCol" item="item" separator="+">
-                            REAL_SALE_AMT1_T${item} + REAL_SALE_AMT2_T${item} + REAL_SALE_AMT3_T${item}
+                            REAL_SALE_AMT3_T${item}
                         </foreach> AS TOT_REAL_SALE_AMT,
                         <foreach collection="arrTimeCol" item="item" separator="+">
                             REAL_SALE_AMT1_T${item}
