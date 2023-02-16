@@ -1042,6 +1042,13 @@
     <!-- 광운대 > 리포트 > 현금영수증 발행내역 -->
     <typeAlias alias="reportKwuVO" type="kr.co.solbipos.sale.status.reportKwu.service.ReportKwuVO"/>
 
+    <!-- 광운대 > 리포트 > 매출현황2 -->
+    <typeAlias alias="saleStatusKwuVO" type="kr.co.solbipos.sale.status.saleStatusKwu.service.SaleStatusKwuVO"/>
+
+
+
+
+
     <!-- ====================================== 모바일 시작 ====================================== -->
     <!-- (모바일) 매출현황 > 상품별매출현황 -->
     <typeAlias alias="mobileProdSaleVO" type="kr.co.solbipos.mobile.sale.status.prod.service.MobileProdSaleVO"/>
