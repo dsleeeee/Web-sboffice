@@ -50,7 +50,8 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="prod.sdselGrpCode"/>" binding="sdselGrpCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="prod.sdselGrpNm"/>" binding="sdselGrpNm" width="280" is-read-only="true" align="left"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prod.sdselGrpNm"/>" binding="sdselGrpNm" width="210" is-read-only="true" align="left"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prod.sdselTypeFg"/>" binding="sdselTypeFg" data-map="sdselTypeFgDataMap" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>
@@ -60,4 +61,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/searchSdselGrp.js?ver=20210913.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/searchSdselGrp.js?ver=20230216.03" charset="utf-8"></script>

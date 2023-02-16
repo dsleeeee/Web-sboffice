@@ -385,19 +385,25 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             // 수정일때 사이드메뉴관리의 선택상품인 상품은 사이드사용여부 Y 안되게
             if($("#saveMode").val() === "MOD" && $scope.prodModifyInfo.sideProdYn === "Y") {
                 var params    = {};
+                params.sdselGrpCd = $scope.prodModifyInfo.sdselGrpCd;
                 params.prodCd = $scope.prodModifyInfo.prodCd;
 
-                $scope._postJSONQuery.withOutPopUp("/base/prod/prod/prod/getSideProdChk.sb", params, function(response) {
-                    var list = response.data.data.list;
-
-                    if(list.length > 0) {
-                        $scope._popMsg(messages["prod.sideProdChk.msg"]); // 사이드메뉴관리에 선택상품으로 등록된 상품은 <br/> '사이드상품여부'를 '사용'으로 선택할 수 없습니다.
-                        return false;
-                    } else {
-                        // 수정일때 세트상품구분 '일반상품' 으로 설정시, 이전에 등록한 구성상품이 있는지 여부 확인
-                        $scope.setConfigProdChk();
-                    }
-                });
+                if(params.sdselGrpCd !== "" && params.prodCd !== ""){
+                    $scope._postJSONQuery.withOutPopUp("/base/prod/prod/prod/getSideMenuChk.sb", params, function(response) {
+                         if(response.data.status === "OK"){
+                            if(response.data.data === 'N'){
+                                $scope._popMsg(messages["prod.sideProdChk.msg"]); // 선택한 선택메뉴의 세트구분이 '세트' 이면서 <br/> 사이드메뉴관리에 선택상품으로 등록된 상품은 <br/> '사이드상품여부'를 '사용'으로 선택할 수 없습니다.
+                                return false;
+                            }else{
+                                // 수정일때 세트상품구분 '일반상품' 으로 설정시, 이전에 등록한 구성상품이 있는지 여부 확인
+                                $scope.setConfigProdChk();
+                            }
+                        }
+                    });
+                } else {
+                    // 수정일때 세트상품구분 '일반상품' 으로 설정시, 이전에 등록한 구성상품이 있는지 여부 확인
+                    $scope.setConfigProdChk();
+                }
             } else {
                 // 수정일때 세트상품구분 '일반상품' 으로 설정시, 이전에 등록한 구성상품이 있는지 여부 확인
                 $scope.setConfigProdChk();
