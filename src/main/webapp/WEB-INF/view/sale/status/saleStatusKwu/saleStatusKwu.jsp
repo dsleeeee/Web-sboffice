@@ -90,8 +90,8 @@
                 <wj-flex-grid-column header="<s:message code="saleStatusKwu.billDt"/>" binding="billDt" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleStatusKwu.billDtlNo"/>" binding="billDtlNo" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleStatusKwu.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleStatusKwu.prodNm"/>" binding="prodNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleStatusKwu.barCd"/>" binding="barCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="saleStatusKwu.prodNm"/>" binding="prodNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleStatusKwu.saleQty"/>" binding="saleQty" width="80" is-read-only="true" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleStatusKwu.saleAmt"/>" binding="saleAmt" width="90" is-read-only="true" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleStatusKwu.dcAmt"/>" binding="dcAmt" width="90" is-read-only="true" align="right"></wj-flex-grid-column>
