@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="promotionPresentRegLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:600px;">
+<wj-popup control="promotionPresentRegLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:800px;">
     <div class="wj-dialog wj-dialog-columns title" ng-controller="promotionPresentRegCtrl">
 
         <%-- header --%>
@@ -104,10 +104,10 @@
                             <!-- define columns -->
                             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="promotion.brand"/>" binding="brandNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="promotion.menuGroup"/>" binding="storeGroupNms" width="250" is-read-only="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="promotion.menuGroup"/>" binding="storeGroupCds" width="250" is-read-only="true" visible="false"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="promotion.menuGroup"/>" binding="storeGroupNms" width="200" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="promotion.menuGroup"/>" binding="storeGroupCds" width="200" is-read-only="true" visible="false"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="promotion.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="promotion.prodNm"/>" binding="prodNm" width="210" align="left" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="promotion.prodNm"/>" binding="prodNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="promotion.prodQty"/>" binding="prodQty" width="70" align="center"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="promotion.useYn"/>" binding="useYn" data-map="presentUseYnFgDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                         </wj-flex-grid>
