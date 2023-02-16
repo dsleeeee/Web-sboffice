@@ -303,9 +303,16 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
         return false;
       }
 
-      if(item.nmcodeCd.length != $("#s_nmcodeItem2").val()){
-        $scope._popMsg(messages["cd.detail.require.nmcodeCdLengthChk"]+' ('+$("#s_nmcodeItem2").val()+')'); // 세부명칭의 코드자릿수를 확인하여 주십시오.
-        return false;
+      if(item.nmcodeGrpCd === "160"){
+        if(item.nmcodeCd.length > $("#s_nmcodeItem2").val()){
+          $scope._popMsg(messages["cd.detail.require.nmcodeCdLengthChk"]+' ('+$("#s_nmcodeItem2").val()+')'); // 세부명칭의 코드자릿수를 확인하여 주십시오.
+          return false;
+        }
+      } else {
+        if(item.nmcodeCd.length != $("#s_nmcodeItem2").val()){
+          $scope._popMsg(messages["cd.detail.require.nmcodeCdLengthChk"]+' ('+$("#s_nmcodeItem2").val()+')'); // 세부명칭의 코드자릿수를 확인하여 주십시오.
+          return false;
+        }
       }
 
       var check_nmcodeCd_cnt = 0;
