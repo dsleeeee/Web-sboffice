@@ -473,7 +473,7 @@
             </tr>
             <%-- [1250 맘스터치] --%>
             <c:if test="${momsEnvstVal == '1'}">
-                <tr ng-if="prodModifyInfo.sideProdYn === 'N'">
+                <tr>
                   <%--단품/세트선택설정 --%>
                   <th><s:message code="prod.groupProdCd"/></th>
                   <td>
@@ -1165,7 +1165,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20230215.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20230216.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

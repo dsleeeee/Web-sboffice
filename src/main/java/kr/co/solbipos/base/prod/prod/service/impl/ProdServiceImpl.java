@@ -2180,4 +2180,17 @@ public class ProdServiceImpl implements ProdService {
         return prodMapper.selectStoreList(prodVO);
     }
 
+    /** 상품정보 저장 전 체크 - 선택한 선택메뉴코드가 세트('C')이면서, 나(현재 선택한 상품)를 가진 세트가 있는지 확인 */
+    @Override
+    public String getSideMenuChk(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return prodMapper.getSideMenuChk(prodVO);
+    }
+
 }

@@ -529,4 +529,7 @@ public interface ProdMapper {
 
     /** 매장상품일괄등록 - 매장목록 조회 */
     List<DefaultMap<String>> selectStoreList(ProdVO prodVO);
+
+    /** 상품정보 저장 전 체크 - 선택한 선택메뉴코드가 세트('C')이면서, 나(현재 선택한 상품)를 가진 세트가 있는지 확인 */
+    String getSideMenuChk(ProdVO prodVO);
 }

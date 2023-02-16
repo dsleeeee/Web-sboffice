@@ -13,6 +13,11 @@
  */
 var app = agrid.getApp();
 
+var sdselTypeFgData = [
+    {"name": "세트", "value": "C"},
+    {"name": "싱글세트", "value": "S"}
+];
+
 /**
  *  선택메뉴 조회 그리드 생성
  */
@@ -23,6 +28,9 @@ app.controller('searchSdselGrpCtrl', ['$scope', '$http', function ($scope, $http
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+
+        // 그리드 DataMap 설정
+        $scope.sdselTypeFgDataMap = new wijmo.grid.DataMap(sdselTypeFgData, 'value', 'name'); // 세트구분
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
