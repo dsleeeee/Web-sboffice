@@ -1568,6 +1568,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $("#bizNo2").val("");
           $("#bizNo3").val("");
           $("#telNo").val("");
+          $("#mpNo").val("");
           $("#postNo").val("");
           $("#addr").val("");
           $("#addrDtl").val("");
@@ -1598,6 +1599,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $scope.store.bizNo2 = "";
           $scope.store.bizNo3 = "";
           $scope.store.telNo = "";
+          $scope.store.mpNo = "";
           $scope.store.postNo = "";
           $scope.store.addr = "";
           $scope.store.addrDtl = "";
@@ -1650,6 +1652,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $("#bizNo2").val(erpStoreScope.getErpStore().bizNo.substring(3, 5));
           $("#bizNo3").val(erpStoreScope.getErpStore().bizNo.substring(5, 10));
           $("#telNo").val(erpStoreScope.getErpStore().telNo);
+          $("#mpNo").val(erpStoreScope.getErpStore().mpNo);
           $("#postNo").val(erpStoreScope.getErpStore().postNo);
           $("#addr").val(erpStoreScope.getErpStore().addr);
           $("#addrDtl").val(erpStoreScope.getErpStore().addrDtl);
@@ -1657,7 +1660,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $("#manageVanCd").val(erpStoreScope.getErpStore().vanCd);
           $("#agencyNm").val(erpStoreScope.getErpStore().agencyNm);
           $("#agencyCd").val(erpStoreScope.getErpStore().agencyCd);
-          $("#mapStoreCd").val(erpStoreScope.getErpStore().bbqStoreCd);
+          $("#mapStoreCd").val(erpStoreScope.getErpStore().mapStoreCd);
 
           $scope.store.storeNm = erpStoreScope.getErpStore().storeNm;
           $scope.store.bizStoreNm = erpStoreScope.getErpStore().bizStoreNm;
@@ -1669,6 +1672,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $scope.store.bizNo2 = erpStoreScope.getErpStore().bizNo.substring(3, 5);
           $scope.store.bizNo3 = erpStoreScope.getErpStore().bizNo.substring(5, 10);
           $scope.store.telNo = erpStoreScope.getErpStore().telNo;
+          $scope.store.mpNo = erpStoreScope.getErpStore().mpNo;
           $scope.store.postNo = erpStoreScope.getErpStore().postNo;
           $scope.store.addr = erpStoreScope.getErpStore().addr;
           $scope.store.addrDtl = erpStoreScope.getErpStore().addrDtl;
@@ -1676,7 +1680,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $scope.store.vanCd = erpStoreScope.getErpStore().vanCd;
           $scope.store.agencyNm = erpStoreScope.getErpStore().agencyNm;
           $scope.store.agencyCd = erpStoreScope.getErpStore().agencyCd;
-          $scope.store.mapStoreCd = erpStoreScope.getErpStore().bbqStoreCd;
+          $scope.store.mapStoreCd = erpStoreScope.getErpStore().mapStoreCd;
 
           // 매장환경복사에서 본사선택 콤보박스 자동셋팅
           $scope.envHqOfficeCdCombo.selectedValue = $("#hqOfficeCd").val();

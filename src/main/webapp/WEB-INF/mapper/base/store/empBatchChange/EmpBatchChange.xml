@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    EmpBatchChange.xml
+    사원정보일괄변경
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2023.02.16      최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.store.empBatchChanhe.service.impl.EmpBatchChangeMapper">
+
+    <!-- 매장목록 조회 -->
+    <!--
+        TABLE    : TB_HQ_BRANCH_MOMS, TB_MS_STORE
+        PARAM    : empBatchChangeVO
+        COMMENTS : 매장목록을 조회한다.
+    -->
+    <select id="getEmpList" parameterType="empBatchChangeVO" resultType="DefaultMap">
+    /* USE : EmpBatchChangeMapper.getEmpList  */
+    <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  the.EMP_NO
+        ,		the.EMP_NM
+        ,		the.USER_ID
+        ,		the.BRANCH_CD
+        ,		the.MOMS_TEAM
+        ,		the.MOMS_AC_SHOP
+        ,		the.MOMS_AREA_FG
+        ,		the.MOMS_COMMERCIAL
+        ,		the.MOMS_SHOP_TYPE
+        ,		the.MOMS_STORE_MANAGE_TYPE
+    <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    TB_HQ_EMPLOYEE the
+        WHERE   the.HQ_OFFICE_CD = #{hqOfficeCd}
+<!--        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>-->
+<!--            AND the.HQ_BRAND_CD = #{storeHqBrandCd} &#45;&#45; 매장브랜드 선택일때-->
+<!--        </if>-->
+<!--        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>-->
+<!--            <if test='userBrands != null and userBrands != ""'>-->
+<!--                &#45;&#45; 매장브랜드 전체일때-->
+<!--                AND the.HQ_BRAND_CD IN-->
+<!--                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >-->
+<!--                    #{item}-->
+<!--                </foreach>-->
+<!--            </if>-->
+<!--        </if>-->
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND the.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND the.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND the.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND the.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND the.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND the.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND the.BRANCH_CD = #{branchCd}
+        </if>
+        ORDER
+        BY the.EMP_NO
+    <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 매장정보 저장 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        COMMENTS :
+    -->
+    <update id="getEmpBatchChangeSave" parameterType="empBatchChangeVO">
+        /* EmpBatchChangeMapper.getEmpBatchChangeSave */
+        UPDATE  TB_HQ_EMPLOYEE
+        SET     BRANCH_CD = #{branchCd},
+                MOMS_TEAM = #{momsTeam},
+                MOMS_AC_SHOP = #{momsAcShop},
+                MOMS_AREA_FG = #{momsAreaFg},
+                MOMS_COMMERCIAL = #{momsCommercial},
+                MOMS_SHOP_TYPE = #{momsShopType},
+                MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     EMP_NO = #{empNo}
+    </update>
+
+    <!-- 검증결과 전체 삭제 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_EMPLOYEE
+        COMMENTS : [임시]매장엑셀업로드
+    -->
+    <delete id="getEmpExcelUploadCheckDeleteAll" parameterType="empBatchChangeVO">
+        /* EmpBatchChangeMapper.getEmpExcelUploadCheckDeleteAll */
+        DELETE  TB_TMP_EXCEL_EMPLOYEE
+        WHERE   SESSION_ID = #{sessionId}
+        AND     HQ_OFFICE_CD = #{hqOfficeCd}
+    </delete>
+
+    <!-- 매장코드 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        COMMENTS : 유요한 매장코드인지 체크
+    -->
+    <select id="getEmpNoChk"  parameterType="ProdExcelUploadVO" resultType="Integer">
+        /* EmpBatchChangeMapper.getEmpNoChk */
+        SELECT  COUNT(*)
+        FROM    TB_HQ_EMPLOYEE
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     EMP_NO = #{empNo}
+    </select>
+
+    <!-- 지사코드 -->
+    <!--
+        TABLE    : TB_HQ_BRANCH_MOMS
+        COMMENTS : 유효한 지사코드인지 체크
+    -->
+    <select id="getBranchCdChk"  parameterType="ProdExcelUploadVO" resultType="String">
+        /* EmpBatchChangeMapper.getBranchCdChk */
+        SELECT  BRANCH_CD
+        FROM    TB_HQ_BRANCH_MOMS
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     BRANCH_NM = #{branchCd}
+    </select>
+
+    <!-- 본사공통코드 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE
+        COMMENTS : 유효한 본사공통코드인지 체크
+    -->
+    <select id="getHqNmcodeChk"  parameterType="ProdExcelUploadVO" resultType="String">
+        /* EmpBatchChangeMapper.getHqNmcodeChk */
+        SELECT  NMCODE_CD
+        FROM    TB_HQ_NMCODE
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     NMCODE_GRP_CD = #{nmcodeGrpCd}
+        <if test='nmcodeGrpCd != null and nmcodeGrpCd == "151"'>
+            AND     NMCODE_NM = #{momsTeam}
+        </if>
+        <if test='nmcodeGrpCd != null and nmcodeGrpCd == "152"'>
+            AND     NMCODE_NM = #{momsAcShop}
+        </if>
+        <if test='nmcodeGrpCd != null and nmcodeGrpCd == "153"'>
+            AND     NMCODE_NM = #{momsAreaFg}
+        </if>
+        <if test='nmcodeGrpCd != null and nmcodeGrpCd == "154"'>
+            AND     NMCODE_NM = #{momsCommercial}
+        </if>
+        <if test='nmcodeGrpCd != null and nmcodeGrpCd == "155"'>
+            AND     NMCODE_NM = #{momsShopType}
+        </if>
+        <if test='nmcodeGrpCd != null and nmcodeGrpCd == "156"'>
+            AND     NMCODE_NM = #{momsStoreManageType}
+        </if>
+    </select>
+
+    <!-- 검증결과 저장 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_EMPLOYEE
+        COMMENTS : [임시]매장엑셀업로드
+    -->
+    <insert id="getEmpExcelUploadCheckSave" parameterType="empBatchChangeVO">
+        /* EmpBatchChangeMapper.getEmpExcelUploadCheckSave */
+        INSERT INTO TB_TMP_EXCEL_EMPLOYEE
+        (
+            SESSION_ID,
+            SEQ,
+            HQ_OFFICE_CD,
+            EMP_NO,
+            BRANCH_CD,
+            MOMS_TEAM,
+            MOMS_AC_SHOP,
+            MOMS_AREA_FG,
+            MOMS_COMMERCIAL,
+            MOMS_SHOP_TYPE,
+            MOMS_STORE_MANAGE_TYPE,
+            RESULT
+        ) VALUES (
+            #{sessionId},
+            #{seq},
+            #{hqOfficeCd},
+            #{empNo},
+            #{branchCd},
+            #{momsTeam},
+            #{momsAcShop},
+            #{momsAreaFg},
+            #{momsCommercial},
+            #{momsShopType},
+            #{momsStoreManageType},
+            #{result}
+         )
+    </insert>
+
+    <!-- 검증결과 조회 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_EMPLOYEE
+        PARAM    : empBatchChangeVO
+        COMMENTS : 엑셀업로드 검증결과를 조회한다.
+    -->
+    <select id="getEmpExcelUploadCheckList" parameterType="empBatchChangeVO" resultType="DefaultMap">
+        /* USE : EmpBatchChangeMapper.getEmpExcelUploadCheckList  */
+        SELECT  SESSION_ID,
+                SEQ,
+                HQ_OFFICE_CD,
+                EMP_NO,
+                BRANCH_CD,
+                MOMS_TEAM,
+                MOMS_AC_SHOP,
+                MOMS_AREA_FG,
+                MOMS_COMMERCIAL,
+                MOMS_SHOP_TYPE,
+                MOMS_STORE_MANAGE_TYPE,
+                RESULT
+        FROM    TB_TMP_EXCEL_EMPLOYEE
+        WHERE   SESSION_ID = #{sessionId}
+        AND     HQ_OFFICE_CD = #{hqOfficeCd}
+        ORDER
+        BY SEQ
+    </select>
+
+    <!-- 검증결과 삭제 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_EMPLOYEE
+        COMMENTS : [임시]매장엑셀업로드
+    -->
+    <delete id="getEmpExcelUploadCheckDelete" parameterType="empBatchChangeVO">
+        /* EmpBatchChangeMapper.getEmpExcelUploadCheckDelete */
+        DELETE  TB_TMP_EXCEL_EMPLOYEE
+        WHERE   SESSION_ID = #{sessionId}
+        AND     HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     EMP_NO = #{empNo}
+    </delete>
+
+</mapper>

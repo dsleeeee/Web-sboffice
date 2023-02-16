@@ -243,6 +243,8 @@
     <typeAlias alias="empCornerVO" type="kr.co.solbipos.base.store.empCorner.service.EmpCornerVO"/>
     <!-- 기초관리 > 매장관리 > 객층관리 -->
     <typeAlias alias="guestManageVO" type="kr.co.solbipos.base.store.guestManage.service.GuestManageVO"/>
+    <!-- 기초관리 > 사원관리 > 사원정보일괄변경 -->
+    <typeAlias alias="empBatchChangeVO" type="kr.co.solbipos.base.store.empBatchChanhe.service.EmpBatchChangeVO"/>
 
     <!-- 기초관리 매장관리 배달권역관리 -->
     <typeAlias alias="dlvrAddrVO" type="kr.co.solbipos.base.store.dlvrAddr.service.DlvrAddrVO"/>

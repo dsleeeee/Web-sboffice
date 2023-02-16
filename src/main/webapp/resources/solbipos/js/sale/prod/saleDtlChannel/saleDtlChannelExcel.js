@@ -126,6 +126,14 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', function ($scope, 
     $scope.initGrid = function (s, e) {
         // 그리드 DataMap 설정
         $scope.procFgDataMap = new wijmo.grid.DataMap(procFgData, 'value', 'name'); // 생성구분
+        $scope.prodOptionComboDataMap = new wijmo.grid.DataMap(prodOptionComboData, 'value', 'name'); // 지사
+        $scope.branchCdDataMap = new wijmo.grid.DataMap(branchCdComboList, 'value', 'name'); // 지사
+        $scope.momsTeamDataMap = new wijmo.grid.DataMap(momsTeamComboList, 'value', 'name'); // 팀별
+        $scope.momsAcShopDataMap = new wijmo.grid.DataMap(momsAcShopComboList, 'value', 'name'); // AC점포별
+        $scope.momsAreaFgDataMap = new wijmo.grid.DataMap(momsAreaFgComboList, 'value', 'name'); // 지역구분
+        $scope.momsCommercialDataMap = new wijmo.grid.DataMap(momsCommercialComboList, 'value', 'name'); // 상권
+        $scope.momsShopTypeDataMap = new wijmo.grid.DataMap(momsShopTypeComboList, 'value', 'name'); // 점포유형
+        $scope.momsStoreManageTypeDataMap = new wijmo.grid.DataMap(momsStoreManageTypeComboList, 'value', 'name'); // 매장관리타입
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {

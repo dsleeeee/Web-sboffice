@@ -6794,7 +6794,7 @@
     <select id="getErpStore" parameterType="storeManageVO" resultType="DefaultMap">
         /* USE : StoreManageMapper.getErpStore */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT A.BBQ_STORE_CD,
+        SELECT  A.BBQ_STORE_CD,
                 A.STORE_NM,
                 A.BIZ_STORE_NM,
                 A.OWNER_NM,
@@ -6803,6 +6803,7 @@
                 A.POS_CNT,
                 A.BIZ_NO,
                 A.TEL_NO,
+                A.MP_NO,
                 A.POST_NO,
                 A.ADDR,
                 A.ADDR_DTL,
@@ -6810,7 +6811,8 @@
                 A.VAN_CD,
                 C.AGENCY_NM,
                 A.AGENCY_CD,
-                CASE WHEN A.STORE_FG = '1' AND A.NXPOS_STORE_CD IS NOT NULL THEN 'Y' ELSE 'N' END AS REG_YN
+                CASE WHEN A.STORE_FG = '1' AND A.NXPOS_STORE_CD IS NOT NULL THEN 'Y' ELSE 'N' END AS REG_YN,
+                NVL(A.MAP_STORE_CD, A.BBQ_STORE_CD) AS MAP_STORE_CD
         <include refid="CmmSQL.PagingTemplateCount"/>
           FROM IFB_MS_BBQ_STORE A,
                 TB_CM_VAN_CMPNY B,

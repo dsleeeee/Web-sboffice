@@ -1,19 +1,18 @@
-package kr.co.solbipos.store.storeMoms.storeBatchChange.web;
+package kr.co.solbipos.base.store.empBatchChanhe.web;
 
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
-import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.store.empBatchChanhe.service.EmpBatchChangeService;
+import kr.co.solbipos.base.store.empBatchChanhe.service.EmpBatchChangeVO;
 import kr.co.solbipos.sale.day.day.service.DayVO;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import kr.co.solbipos.sale.store.storeChannel.service.StoreChannelVO;
-import kr.co.solbipos.store.storeMoms.storeBatchChange.service.StoreBatchChangeService;
-import kr.co.solbipos.store.storeMoms.storeBatchChange.service.StoreBatchChangeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,34 +32,34 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
- * @Class Name : StoreBatchChangeController.java
- * @Description : 맘스터치 > 매장관리 > 매장정보일괄변경
+ * @Class Name : EmpBatchChangeController.java
+ * @Description : 기초관리 > 사원관리 > 사원정보일괄변경
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2023.01.17  권지현      최초생성
+ * @ 2023.02.16  권지현      최초생성
  *
  * @author 솔비포스 WEB개발팀 권지현
- * @since 2023.01.17
+ * @since 2023.02.16
  * @version 1.0
  *
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 
 @Controller
-@RequestMapping(value="/store/storeMoms/storeBatchChange/")
-public class StoreBatchChangeController {
+@RequestMapping(value="/base/store/empBatchChange/")
+public class EmpBatchChangeController {
 
-    private final StoreBatchChangeService storeBatchChangeService;
+    private final EmpBatchChangeService empBatchChangeService;
     private final SessionService sessionService;
     private final DayProdService dayProdService;
     private final CmmCodeUtil cmmCodeUtil;
 
     /** Constructor Injection */
     @Autowired
-    public StoreBatchChangeController(StoreBatchChangeService storeBatchChangeService, SessionService sessionService, DayProdService dayProdService, CmmCodeUtil cmmCodeUtil) {
-        this.storeBatchChangeService = storeBatchChangeService;
+    public EmpBatchChangeController(EmpBatchChangeService empBatchChangeService, SessionService sessionService, DayProdService dayProdService, CmmCodeUtil cmmCodeUtil) {
+        this.empBatchChangeService = empBatchChangeService;
         this.sessionService = sessionService;
         this.dayProdService = dayProdService;
         this.cmmCodeUtil = cmmCodeUtil;
@@ -73,10 +72,10 @@ public class StoreBatchChangeController {
      * @param   model
      * @return  String
      * @author  권지현
-     * @since   2023.01.17
+     * @since   2023.02.16
      */
-    @RequestMapping(value = "storeBatchChange/view.sb", method = RequestMethod.GET)
-    public String view(StoreBatchChangeVO storeBatchChangeVO, HttpServletRequest request,
+    @RequestMapping(value = "empBatchChange/view.sb", method = RequestMethod.GET)
+    public String view(EmpBatchChangeVO empBatchChangeVO, HttpServletRequest request,
                        HttpServletResponse response, Model model) {
 
         DayVO dayVO = new DayVO();
@@ -193,7 +192,7 @@ public class StoreBatchChangeController {
         // 전체 없는 콤보박스 데이터
         // 사용자별 코드별 공통코드 콤보박스 조회
         // 팀별
-         if (momsTeamComboList.size() > 1) {
+        if (momsTeamComboList.size() > 1) {
             momsTeamComboList.remove(0);
             String momsTeamComboListAll2 = "";
             momsTeamComboListAll2 = cmmCodeUtil.assmblObj(momsTeamComboList, "name", "value", UseYn.N);
@@ -258,35 +257,35 @@ public class StoreBatchChangeController {
             model.addAttribute("branchCdComboList2", branchCdComboListAll);
         }
 
-        return "store/storeMoms/storeBatchChange/storeBatchChangeTab";
+        return "base/store/empBatchChange/empBatchChangeTab";
     }
 
     /**
      * 매장목록 조회
-     * @param   storeBatchChangeVO
+     * @param   empBatchChangeVO
      * @param   request
      * @param   response
      * @param   model
      * @return  Result
      * @author  권지현
-     * @since   2023.01.17
+     * @since   2023.02.16
      */
-    @RequestMapping(value = "storeBatchChange/getStoreList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "empBatchChange/getEmpList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getStoreList(StoreBatchChangeVO storeBatchChangeVO, HttpServletRequest request,
+    public Result getEmpList(EmpBatchChangeVO empBatchChangeVO, HttpServletRequest request,
                        HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
-        List<DefaultMap<String>> list = storeBatchChangeService.getStoreList(storeBatchChangeVO, sessionInfoVO);
+        List<DefaultMap<String>> list = empBatchChangeService.getEmpList(empBatchChangeVO, sessionInfoVO);
 
-        return returnListJson(Status.OK, list, storeBatchChangeVO);
+        return returnListJson(Status.OK, list, empBatchChangeVO);
     }
 
     /**
      * 매장정보 저장
      *
-     * @param storeBatchChangeVOs
+     * @param empBatchChangeVOs
      * @param request
      * @param response
      * @param model
@@ -294,14 +293,14 @@ public class StoreBatchChangeController {
      * @author  권지현
      * @since   2023.01.18
      */
-    @RequestMapping(value = "storeBatchChange/getStoreBatchChangeSave.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "empBatchChange/getEmpBatchChangeSave.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getStoreBatchChangeSave(@RequestBody StoreBatchChangeVO[] storeBatchChangeVOs, HttpServletRequest request,
+    public Result getEmpBatchChangeSave(@RequestBody EmpBatchChangeVO[] empBatchChangeVOs, HttpServletRequest request,
                                          HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = storeBatchChangeService.getStoreBatchChangeSave(storeBatchChangeVOs, sessionInfoVO);
+        int result = empBatchChangeService.getEmpBatchChangeSave(empBatchChangeVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }
@@ -309,68 +308,68 @@ public class StoreBatchChangeController {
     /**
      * 업로드시 임시테이블 삭제
      *
-     * @param storeBatchChangeVO
+     * @param empBatchChangeVO
      * @param request
      * @return  Object
      * @author  권지현
      * @since   2023.01.18
      */
-    @RequestMapping(value = "storeBatchChange/getStoreExcelUploadCheckDeleteAll.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "empBatchChange/getEmpExcelUploadCheckDeleteAll.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getStoreExcelUploadCheckDeleteAll(@RequestBody StoreBatchChangeVO storeBatchChangeVO, HttpServletRequest request) {
+    public Result getEmpExcelUploadCheckDeleteAll(@RequestBody EmpBatchChangeVO empBatchChangeVO, HttpServletRequest request) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = storeBatchChangeService.getStoreExcelUploadCheckDeleteAll(storeBatchChangeVO, sessionInfoVO);
+        int result = empBatchChangeService.getEmpExcelUploadCheckDeleteAll(empBatchChangeVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }
 
     /** 업로드시 임시테이블 저장 */
-    @RequestMapping(value = "storeBatchChange/getStoreExcelUploadCheckSave.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "empBatchChange/getEmpExcelUploadCheckSave.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getStoreExcelUploadCheckSave(@RequestBody StoreBatchChangeVO[] storeBatchChangeVOs, HttpServletRequest request) {
+    public Result getEmpExcelUploadCheckSave(@RequestBody EmpBatchChangeVO[] empBatchChangeVOs, HttpServletRequest request) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = storeBatchChangeService.getStoreExcelUploadCheckSave(storeBatchChangeVOs, sessionInfoVO);
+        int result = empBatchChangeService.getEmpExcelUploadCheckSave(empBatchChangeVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
 
     }
 
     /** 검증결과 조회 */
-    @RequestMapping(value = "storeBatchChange/getStoreExcelUploadCheckList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "empBatchChange/getEmpExcelUploadCheckList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getExcelList(StoreBatchChangeVO storeBatchChangeVO, HttpServletRequest request) {
+    public Result getExcelList(EmpBatchChangeVO empBatchChangeVO, HttpServletRequest request) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> list = storeBatchChangeService.getStoreExcelUploadCheckList(storeBatchChangeVO, sessionInfoVO);
+        List<DefaultMap<String>> list = empBatchChangeService.getEmpExcelUploadCheckList(empBatchChangeVO, sessionInfoVO);
 
-        return returnListJson(Status.OK, list, storeBatchChangeVO);
+        return returnListJson(Status.OK, list, empBatchChangeVO);
     }
 
     /** 검증결과 저장 */
-    @RequestMapping(value = "storeBatchChange/getStoreExcelUploadCheckSaveAdd.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "empBatchChange/getEmpExcelUploadCheckSaveAdd.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getStoreExcelUploadCheckSaveAdd(@RequestBody StoreBatchChangeVO[] storeBatchChangeVOs, HttpServletRequest request) {
+    public Result getEmpExcelUploadCheckSaveAdd(@RequestBody EmpBatchChangeVO[] empBatchChangeVOs, HttpServletRequest request) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = storeBatchChangeService.getStoreExcelUploadCheckSaveAdd(storeBatchChangeVOs, sessionInfoVO);
+        int result = empBatchChangeService.getEmpExcelUploadCheckSaveAdd(empBatchChangeVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }
 
     /** 엑셀 저장 */
-    @RequestMapping(value = "storeBatchChange/getSimpleSave.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "empBatchChange/getSimpleSave.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getSimpleSave(@RequestBody StoreBatchChangeVO[] storeBatchChangeVOs, HttpServletRequest request) {
+    public Result getSimpleSave(@RequestBody EmpBatchChangeVO[] empBatchChangeVOs, HttpServletRequest request) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = storeBatchChangeService.getSimpleSave(storeBatchChangeVOs, sessionInfoVO);
+        int result = empBatchChangeService.getSimpleSave(empBatchChangeVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

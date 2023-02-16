@@ -94,6 +94,7 @@
                         <wj-flex-grid-column header="<s:message code="storeManage.installPosCnt"/>" binding="posCnt" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeManage.bizNo"/>" binding="bizNo" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeManage.telNo"/>" binding="telNo" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeManage.mpNo"/>" binding="mpNo" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeManage.postNo"/>" binding="postNo" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeManage.addr"/>" binding="addr" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeManage.addrDtl"/>" binding="addrDtl" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -102,6 +103,7 @@
                         <wj-flex-grid-column header="<s:message code="storeManage.agency"/>" binding="agencyNm" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeManage.agency"/>" binding="agencyCd" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeManage.regYn"/>" binding="regYn" width="100" align="center" data-map="regYnDataMap"is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeManage.mapStoreCd"/>" binding="mapStoreCd" width="100" align="center" data-map="regYnDataMap"is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
                 <%--//위즈모 테이블--%>

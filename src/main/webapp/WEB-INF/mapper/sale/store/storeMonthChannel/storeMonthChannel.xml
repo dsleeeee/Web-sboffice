@@ -207,7 +207,7 @@
                     </if>
                     ) tsdto
         WHERE   tsdt.SALE_YM = tsdto.SALE_YM (+)
---         AND     tsdt.BRANCH_CD = tsdto.BRANCH_CD (+)
+        AND     tsdt.BRANCH_CD = tsdto.BRANCH_CD (+)
         <if test='option != null and option != "" and option == "store"'>
         AND     tsdt.STORE_CD = tsdto.STORE_CD (+)
         </if>
@@ -414,7 +414,7 @@
                     </if>
                     ) tsdto
         WHERE   tsdt.SALE_YM = tsdto.SALE_YM (+)
---         AND     tsdt.BRANCH_CD = tsdto.BRANCH_CD (+)
+        AND     tsdt.BRANCH_CD = tsdto.BRANCH_CD (+)
         <if test='option != null and option != "" and option == "store"'>
         AND     tsdt.STORE_CD = tsdto.STORE_CD (+)
         </if>
