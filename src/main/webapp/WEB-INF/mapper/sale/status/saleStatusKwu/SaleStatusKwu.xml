@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SaleStatusKwu.xml
+    매출현황2 (광운대 아이스링크)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2023.02.14     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.status.saleStatusKwu.service.impl.SaleStatusKwuMapper">
+
+    <!-- 매출현황2 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSaleStatusKwuList" parameterType="SaleStatusKwuVO" resultType="DefaultMap">
+        /* SaleStatusKwuMapper.getSaleStatusKwuList */
+        SELECT
+        A.STORE_CD,
+        A.SALE_DATE,
+        A.POS_NO,
+        A.BILL_NO,
+        A.SALE_YN,
+        TO_CHAR(TO_DATE(A.BILL_DT,'yyyy/mm/dd hh24:mi:ss'),'hh24:mi:ss') AS BILL_DT,
+        B.BILL_DTL_NO,
+        B.PROD_CD,
+        D.BARCD_CD AS BAR_CD,
+        C.PROD_NM,
+        B.SALE_QTY,
+        B.SALE_AMT,
+        B.DC_AMT,
+        B.REAL_SALE_AMT,
+        (B.REAL_SALE_AMT - B.VAT_AMT) AS GA_AMT,
+        B.VAT_AMT,
+        DECODE(F.PAY02, 0, 0, G.PAY_CD_02) AS CASH_AMT,
+        DECODE(F.PAY02, 0, G.PAY_CD_02, 0) AS CASH_BILL_AMT,
+        G.PAY_CD_01 AS CARD_AMT,
+        E.CREDIT_BANKS,
+        F.PAY02 AS HDR_CASH_AMT,
+        F.PAY021 AS HDR_CASH_BILL_AMT
+        FROM TB_SL_SALE_HDR A,
+        TB_SL_SALE_DTL B,
+        TB_MS_PRODUCT C,
+        TB_MS_PRODUCT_BARCD D,
+        (
+            SELECT
+            A.HQ_OFFICE_CD,
+            A.STORE_CD,
+            A.SALE_DATE,
+            A.POS_NO,
+            A.BILL_NO,
+            A.APPR_NO,
+            SUM(A.SALE_FG*NVL(A.APPR_AMT, 0)) AS APPR_AMT,
+            SUBSTR( XMLAGG( XMLELEMENT(COL ,',', B.CREDIT_BANK) ORDER BY B.CREDIT_BANK).EXTRACT('//text()').GETSTRINGVAL(), 2) AS CREDIT_BANKS
+            FROM TB_SL_SALE_PAY_CARD A,
+            TB_SL_SALE_PAY_CARD_CREDIT_KWU B
+            WHERE 1=1
+            AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test='storeCd != null and storeCd != ""'>
+                AND A.STORE_CD = #{storeCd}
+            </if>
+            AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            AND B.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+            AND B.STORE_CD (+)= A.STORE_CD
+            AND B.SALE_DATE (+)= A.SALE_DATE
+            AND B.POS_NO (+)= A.POS_NO
+            AND B.BILL_NO (+)= A.BILL_NO
+            AND B.LINE_NO (+)= A.LINE_NO
+            AND B.LINE_SEQ_NO (+)= A.LINE_SEQ_NO
+            GROUP BY  A.HQ_OFFICE_CD, A.STORE_CD, A.SALE_DATE, A.POS_NO, A.BILL_NO, A.APPR_NO
+        ) E,
+        (
+            SELECT
+            A.HQ_OFFICE_CD,
+            A.STORE_CD,
+            A.SALE_DATE,
+            A.POS_NO,
+            A.BILL_NO,
+            SUM(A.SALE_AMT) - SUM(CASE WHEN A.APPR_PROC_FG IN ('1','2','4') THEN A.SALE_AMT ELSE 0 END) AS PAY02,  -- 현금
+            SUM(CASE WHEN A.APPR_PROC_FG IN ('1','2','4') THEN A.SALE_AMT ELSE 0 END) AS PAY021 -- 현금영수증
+            FROM TB_SL_SALE_PAY_CASH A
+            WHERE 1=1
+            AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test='storeCd != null and storeCd != ""'>
+                AND A.STORE_CD = #{storeCd}
+            </if>
+            AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            GROUP BY  A.HQ_OFFICE_CD, A.STORE_CD, A.SALE_DATE, A.POS_NO, A.BILL_NO
+        ) F,
+        (
+            SELECT
+            E.HQ_OFFICE_CD,
+            E.STORE_CD,
+            E.SALE_DATE,
+            E.POS_NO,
+            E.BILL_NO,
+            E.BILL_DTL_NO,
+            SUM(DECODE(E.PAY_CD, '01', E.PAY_AMT, 0))  AS PAY_CD_01,
+            SUM(DECODE(E.PAY_CD, '02', E.PAY_AMT, 0))  AS PAY_CD_02,
+            SUM(DECODE(E.PAY_CD, '03', E.PAY_AMT, 0))  AS PAY_CD_03,
+            SUM(DECODE(E.PAY_CD, '04', E.PAY_AMT, 0))  AS PAY_CD_04,
+            SUM(DECODE(E.PAY_CD, '05', E.PAY_AMT, 0))  AS PAY_CD_05,
+            SUM(DECODE(E.PAY_CD, '06', E.PAY_AMT, 0))  AS PAY_CD_06,
+            SUM(DECODE(E.PAY_CD, '07', E.PAY_AMT, 0))  AS PAY_CD_07,
+            SUM(DECODE(E.PAY_CD, '08', E.PAY_AMT, 0))  AS PAY_CD_08,
+            SUM(DECODE(E.PAY_CD, '09', E.PAY_AMT, 0))  AS PAY_CD_09,
+            SUM(DECODE(E.PAY_CD, '10', E.PAY_AMT, 0))  AS PAY_CD_10,
+            SUM(DECODE(E.PAY_CD, '11', E.PAY_AMT, 0))  AS PAY_CD_11,
+            SUM(DECODE(E.PAY_CD, '12', E.PAY_AMT, 0))  AS PAY_CD_12,
+            SUM(DECODE(E.PAY_CD, '13', E.PAY_AMT, 0))  AS PAY_CD_13,
+            SUM(DECODE(E.PAY_CD, '14', E.PAY_AMT, 0))  AS PAY_CD_14,
+            SUM(DECODE(E.PAY_CD, '15', E.PAY_AMT, 0))  AS PAY_CD_15,
+            SUM(DECODE(E.PAY_CD, '16', E.PAY_AMT, 0))  AS PAY_CD_16,
+            SUM(DECODE(E.PAY_CD, '17', E.PAY_AMT, 0))  AS PAY_CD_17,
+            SUM(DECODE(E.PAY_CD, '18', E.PAY_AMT, 0))  AS PAY_CD_18,
+            SUM(DECODE(E.PAY_CD, '19', E.PAY_AMT, 0))  AS PAY_CD_19,
+            SUM(DECODE(E.PAY_CD, '20', E.PAY_AMT, 0))  AS PAY_CD_20
+            FROM TB_SL_SALE_DTL_PAY E
+            WHERE 1=1
+            AND E.HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test='storeCd != null and storeCd != ""'>
+                AND E.STORE_CD = #{storeCd}
+            </if>
+            AND E.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            GROUP BY  E.HQ_OFFICE_CD, E.STORE_CD, E.SALE_DATE, E.POS_NO, E.BILL_NO, E.BILL_DTL_NO
+        ) G
+        WHERE 1=1
+        AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCd != null and storeCd != ""'>
+            AND A.STORE_CD = #{storeCd}
+        </if>
+        AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+        AND B.STORE_CD = A.STORE_CD
+        AND B.SALE_DATE = A.SALE_DATE
+        AND B.POS_NO = A.POS_NO
+        AND B.BILL_NO = A.BILL_NO
+        AND C.STORE_CD (+)= B.STORE_CD
+        AND C.PROD_CD (+)= B.PROD_CD
+        AND D.STORE_CD (+)= B.STORE_CD
+        AND D.PROD_CD (+)= B.PROD_CD
+        AND E.HQ_OFFICE_CD (+)= B.HQ_OFFICE_CD
+        AND E.STORE_CD (+)= B.STORE_CD
+        AND E.SALE_DATE (+)= B.SALE_DATE
+        AND E.POS_NO (+)= B.POS_NO
+        AND E.BILL_NO (+)= B.BILL_NO
+        AND F.HQ_OFFICE_CD (+)= B.HQ_OFFICE_CD
+        AND F.STORE_CD (+)= B.STORE_CD
+        AND F.SALE_DATE (+)= B.SALE_DATE
+        AND F.POS_NO (+)= B.POS_NO
+        AND F.BILL_NO (+)= B.BILL_NO
+        AND G.HQ_OFFICE_CD (+)= B.HQ_OFFICE_CD
+        AND G.STORE_CD (+)= B.STORE_CD
+        AND G.SALE_DATE (+)= B.SALE_DATE
+        AND G.POS_NO (+)= B.POS_NO
+        AND G.BILL_NO (+)= B.BILL_NO
+        AND G.BILL_DTL_NO (+)= B.BILL_DTL_NO
+        ORDER BY A.STORE_CD, A.SALE_DATE, A.POS_NO, A.BILL_NO, B.BILL_DTL_NO
+    </select>
+
+</mapper>

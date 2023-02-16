@@ -105,7 +105,9 @@ public class InstallManageController {
     public Result getPosList(InstallVO installVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> list = installManageService.getPosList(installVO);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = installManageService.getPosList(installVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list, installVO);
     }
