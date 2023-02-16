@@ -197,6 +197,7 @@
                         </th>
                     </tr>
                     <tr <c:if test="${momsEnvstVal == '0'}">style="display: none;"</c:if>>
+                        <%-- 키오스크 배너 --%>
                         <th><s:message code="promotion.kioskBanner" /></th>
                         <td colspan="3">
                             <div class="pd5">
@@ -205,7 +206,7 @@
                             </div>
                             <f:form id="regForm" name="regForm" method="post" enctype="multipart/form-data">
                                 <input type="file" id="fileKioskBanner" name="fileKioskBanner" class="form-control" ng-model="fileKioskBanner"
-                                       onchange="angular.element(this).scope().uploadChange()" accept="image/x-png, image/gif, image/jpeg"/>
+                                       onchange="angular.element(this).scope().uploadChange()" accept="image/x-png,.avi,.wmv"/>
                             </f:form>
                             <div class="pd5" style="height: 35px;">
                                 <button type="button" id="btnImgCancel" class="btn_skyblue ml5" ng-click="imgCancel('003','F')"><s:message code="cmm.selectCancel" /></button>
@@ -894,7 +895,7 @@
     }
 </style>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20230116.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20230216.01" charset="utf-8"></script>
 
 <%-- 적용상품 상품추가 --%>
 <c:import url="/WEB-INF/view/base/promotion/promotion/promotionProdReg.jsp">
