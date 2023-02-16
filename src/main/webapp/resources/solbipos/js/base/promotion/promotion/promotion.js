@@ -1054,10 +1054,10 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
             }
 
             // 이미지 확장자 체크
-            var reg = /(.*?)\.(png|PNG|jpg|JPG|gif|GIF)$/;
+            var reg = /(.*?)\.(png|PNG|avi|AVI|wmv|WMV)$/;
 
             if(!$("#fileKioskBanner").val().match(reg)) {
-               $scope._popMsg(messages["promotion.fileExtensionChk.msg"]); // 확장자가 .png .PNG 또는 .jpg .JPG 또는 .gif .GIF 인 파일만 등록가능합니다.
+               $scope._popMsg(messages["promotion.fileExtensionChk.msg"]); // 확장자가 .png .PNG 또는 .avi .AVI 또는 .wmv .WMV 인 파일만 등록가능합니다.
                return;
             }
         }
