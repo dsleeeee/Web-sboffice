@@ -21,11 +21,10 @@ var requireYnDataMap = new wijmo.grid.DataMap([
     {id: "Y", name: "필수선택"}
 ], 'id', 'name');
 
-// 선택그룹사용정보
+// 선택그룹세트구분
 var sdselTypeFgDataMap = new wijmo.grid.DataMap([
-  {id: "C", name: "공통"},
-  {id: "K", name: "KIOSK전용"},
-  {id: "P", name: "POS전용"}
+  {id: "C", name: "세트"},
+  {id: "S", name: "싱글세트"}
 ], 'id', 'name');
 
 /**
@@ -154,6 +153,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
 
     // 파라미터
     var params = {};
+    params.sdselTypeFg = 'C';
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquiryMain('/base/prod/sideMenu/menuGrp/list.sb', params,function() {
       // <-- 그리드 visible -->
@@ -302,6 +302,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
           }
 
           $scope.flex.collectionView.itemsAdded[i].status = 'I';
+          $scope.flex.collectionView.itemsAdded[i].sdselTypeFg = 'C';
           params.push($scope.flex.collectionView.itemsAdded[i]);
         } else {
           $scope._popMsg(messages["cmm.max50Chk"]);
