@@ -551,6 +551,7 @@
                 WHERE
                     thpsg.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND thpsg.USE_YN = 'Y'
+                    AND thpsg.SDSEL_TYPE_FG = #{sdselTypeFg}
                 ORDER BY
                     thpsg.SDSEL_GRP_CD
             </when>
@@ -568,6 +569,7 @@
                 WHERE
                     tmpsg.STORE_CD = #{storeCd}
                     AND tmpsg.USE_YN = 'Y'
+                    AND tmpsg.SDSEL_TYPE_FG = #{sdselTypeFg}
                 ORDER BY
                     tmpsg.SDSEL_GRP_CD
             </when>
@@ -618,7 +620,8 @@
                     REG_ID,
                     MOD_DT,
                     MOD_ID,
-                    FIX_PROD_FG
+                    FIX_PROD_FG,
+                    SDSEL_TYPE_FG
                 ) VALUES (
                     #{hqOfficeCd},
                     #{hqBrandCd},
@@ -629,7 +632,8 @@
                     #{regId},
                     #{modDt},
                     #{modId},
-                    #{fixProdFg}
+                    #{fixProdFg},
+                    #{sdselTypeFg}
                 )
             </when>
             <!-- 매장 -->
@@ -645,7 +649,8 @@
                     REG_ID,
                     MOD_DT,
                     MOD_ID,
-                    FIX_PROD_FG
+                    FIX_PROD_FG,
+                    SDSEL_TYPE_FG
                 ) VALUES (
                     #{storeCd},
                     #{msBrandCd},
@@ -656,7 +661,8 @@
                     #{regId},
                     #{modDt},
                     #{modId},
-                    #{fixProdFg}
+                    #{fixProdFg},
+                    #{sdselTypeFg}
                 )
             </when>
         </choose>
@@ -1111,7 +1117,7 @@
                     AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
                     </if>
                     AND thp.USE_YN = 'Y'
-                    AND thp.SIDE_PROD_YN = 'N'
+                    <!-- AND thp.SIDE_PROD_YN = 'N' -->
                     AND thp.PROD_CD NOT IN (
                                             SELECT prod_cd
                                               FROM TB_HQ_PRODUCT_SDSEL_PROD thpsp
@@ -1119,6 +1125,7 @@
                                                AND thpsp.SDSEL_CLASS_CD = #{sdselClassCd}
                                                AND thpsp.USE_YN = 'Y'
                                             )
+                    AND FN_GET_SDSEL_TYPE_FG(#{hqOfficeCd}, thp.SDSEL_GRP_CD) = 'S'
                 AND (
                         ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
                         OR
@@ -1176,7 +1183,7 @@
                         AND tmp.REG_FG = 'H' --사이드메뉴생성구분이 세트상품만생성(BBQ)이면 본사에서 등록한 상품만 조회
                     </if>
                     AND tmp.USE_YN = 'Y'
-                    AND tmp.SIDE_PROD_YN = 'N'
+                    <!-- AND tmp.SIDE_PROD_YN = 'N' -->
                     AND tmp.PROD_CD NOT IN (
                                             SELECT prod_cd
                                             FROM TB_MS_PRODUCT_SDSEL_PROD tmpsp
@@ -1184,6 +1191,7 @@
                                             AND tmpsp.SDSEL_CLASS_CD = #{sdselClassCd}
                                             AND tmpsp.USE_YN = 'Y'
                                             )
+                    AND FN_GET_SDSEL_TYPE_FG(#{storeCd}, tmp.SDSEL_GRP_CD) = 'S'
                     AND (
                             ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
                             OR

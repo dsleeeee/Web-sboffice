@@ -23,6 +23,8 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.isAttrTab = false;
   // 선택메뉴 탭
   $scope.isSelectMenuTab = true;
+  // 선택메뉴(싱글) 탭
+  $scope.isSelectMenuSingleTab = true;
   // 사이드메뉴관리 탭
   $scope.isManageTab = true;
   // 탭변경
@@ -31,19 +33,23 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
     if ( type === 'A' ) {
       $("#sideMenuAttr").addClass("on");
       $("#sideMenuSelectMenu").removeClass("on");
+      $("#sideMenuSelectMenuSingle").removeClass("on");
       $("#sideMenuManage").removeClass("on");
       $scope.isAttrTab = false;
       $scope.isSelectMenuTab = true;
+      $scope.isSelectMenuSingleTab = true;
       $scope.isManageTab = true;
       // 속성 조회
       $scope._broadcast("sideMenuAttrClassCtrl");
     // 선택메뉴 탭
-    } else if ( type === 'S' ) {
+    } else if ( type === 'C' ) {
       $("#sideMenuAttr").removeClass("on");
       $("#sideMenuSelectMenu").addClass("on");
+      $("#sideMenuSelectMenuSingle").removeClass("on");
       $("#sideMenuManage").removeClass("on");
       $scope.isAttrTab = true;
       $scope.isSelectMenuTab = false;
+      $scope.isSelectMenuSingleTab = true;
       $scope.isManageTab = true;
       // 선택그룹 조회
       $scope._broadcast("sideMenuSelectGroupCtrl");
@@ -51,13 +57,31 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
       setTimeout(function () {
         $scope._broadcast("selectMenuRefresh");
       }, 10);
-    // 사이드메뉴관리 탭
-    } else if ( type === 'M' ) {
+    // 선택메뉴(싱글) 탭
+    } else if ( type === 'S' ) {
       $("#sideMenuAttr").removeClass("on");
       $("#sideMenuSelectMenu").removeClass("on");
+      $("#sideMenuSelectMenuSingle").addClass("on");
+      $("#sideMenuManage").removeClass("on");
+      $scope.isAttrTab = true;
+      $scope.isSelectMenuTab = true;
+      $scope.isSelectMenuSingleTab = false;
+      $scope.isManageTab = true;
+      // 선택그룹(싱글) 조회
+      $scope._broadcast("sideMenuSelectGroupSingleCtrl");
+      // 그리드 refresh
+      setTimeout(function () {
+        $scope._broadcast("selectMenuSingleRefresh");
+      }, 10);
+    // 사이드메뉴관리 탭
+    }else if ( type === 'M' ) {
+      $("#sideMenuAttr").removeClass("on");
+      $("#sideMenuSelectMenu").removeClass("on");
+      $("#sideMenuSelectMenuSingle").removeClass("on");
       $("#sideMenuManage").addClass("on");
       $scope.isAttrTab = true;
       $scope.isSelectMenuTab = true;
+      $scope.isSelectMenuSingleTab = true;
       $scope.isManageTab = false;
       // 사이드메뉴관리 조회
       $scope._broadcast("sideMenuManageCtrl");
@@ -88,6 +112,19 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
 
       // 선택그룹 조회
       $scope._broadcast("sideMenuSelectGroupCtrl");
+
+    } else if (!$scope.isSelectMenuSingleTab) {
+
+      $("#sideSelectGroupSingleTitle").html("");
+      var attrScope = agrid.getScope('sideMenuSelectClassSingleCtrl');
+      attrScope._gridDataInit();   // 선택분류(싱글) 그리드 초기화
+
+      $("#sideClassSingleTitle").html("");
+      var prodScope = agrid.getScope('sideMenuSelectProdSingleCtrl');
+      prodScope._gridDataInit();   // 선택상품(싱글) 그리드 초기화
+
+      // 선택그룹(싱글) 조회
+      $scope._broadcast("sideMenuSelectGroupSingleCtrl");
 
     } else if (!$scope.isManageTab) {
 
