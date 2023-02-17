@@ -48,8 +48,8 @@
                 ,       SUM(TOT_TIP_AMT) AS TOT_TIP_AMT
                 ,       SUM(TOT_ETC_AMT) AS TOT_ETC_AMT
                 ,       SUM(CUP_AMT) AS CUP_AMT
-                ,       SUM(BILL_CNT) AS BILL_CNT
-                ,       DECODE(SUM(BILL_CNT), 0, 0, ROUND(SUM(REAL_SALE_AMT) / SUM(BILL_CNT))) AS BILL_UPRC
+                ,       SUM(REAL_SALE_CNT) AS BILL_CNT
+                ,       DECODE(SUM(REAL_SALE_CNT), 0, 0, ROUND(SUM(REAL_SALE_AMT) / SUM(REAL_SALE_CNT))) AS BILL_UPRC
                 ,       <foreach collection="arrPayCol" item="item" separator="+">
                             SUM(PAY_AMT_${item})
                         </foreach> AS TOT_PAY_AMT
