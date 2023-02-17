@@ -227,7 +227,7 @@
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="periodMoms.yoil"/>" binding="yoil" width="50" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="periodMoms.realSaleCnt"/>" binding="realSaleCnt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="periodMoms.billUprc"/>" binding="billUprc" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="periodMoms.billUprc"/>" binding="billUprc" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="periodMoms.totSaleQty"/>" binding="saleQty" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="periodMoms.totSaleAmt"/>" binding="totSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="periodMoms.totDcAmt"/>" binding="totDcAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -235,7 +235,7 @@
         <wj-flex-grid-column header="<s:message code="periodMoms.rate"/>" binding="rate" width="60" align="right" is-read-only="true"></wj-flex-grid-column>
 
         <wj-flex-grid-column header="<s:message code="periodMoms.realSaleCnt"/>" binding="realSaleCnt1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="periodMoms.billUprc"/>" binding="billUprc1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="periodMoms.billUprc"/>" binding="billUprc1" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="periodMoms.totSaleQty"/>" binding="saleQty1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="periodMoms.totSaleAmt"/>" binding="totSaleAmt1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="periodMoms.totDcAmt"/>" binding="totDcAmt1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
