@@ -540,7 +540,6 @@
 </div>
 
 <script type="text/javascript">
-
     var orgnFg = "${orgnFg}";
     var hqOfficeCd = "${hqOfficeCd}";
     var storeCd = "${storeCd}";
@@ -596,7 +595,6 @@
 
     var timeSlotCol    = '${timeSlotCol}';
     var arrTimeSlotCol = timeSlotCol.split(',');
-
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/time/timeProdChannel/timeProdChannel.js?ver=20230126.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/time/timeProdChannel/timeProdChannel.js?ver=20230217.01" charset="utf-8"></script>

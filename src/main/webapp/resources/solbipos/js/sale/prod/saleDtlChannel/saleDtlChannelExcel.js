@@ -65,62 +65,62 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', function ($scope, 
     $scope._setComboData("srchMomsStoreManageType", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("srchBranchCd", branchCdComboList);                       // 지사
 
-    // 팀별
-    if(momsTeamComboList.length <= 1) {
-        $("#srchMomsTeam").css('background-color', '#F0F0F0');
-        $("#srchMomsTeam").attr("disabled", true);
-    } else {
-        $("#srchMomsTeam").css('background-color', '#FFFFFF');
-        $("#srchMomsTeam").attr("disabled", false);
-    }
-    // AC점포별
-    if(momsAcShopComboList.length <= 1) {
-        $("#srchMomsAcShop").css('background-color', '#F0F0F0');
-        $("#srchMomsAcShop").attr("disabled", true);
-    } else {
-        $("#srchMomsAcShop").css('background-color', '#FFFFFF');
-        $("#srchMomsAcShop").attr("disabled", false);
-    }
-    // 지역구분
-    if(momsAreaFgComboList.length <= 1) {
-        $("#srchMomsAreaFg").css('background-color', '#F0F0F0');
-        $("#srchMomsAreaFg").attr("disabled", true);
-    } else {
-        $("#srchMomsAreaFg").css('background-color', '#FFFFFF');
-        $("#srchMomsAreaFg").attr("disabled", false);
-    }
-    // 상권
-    if(momsCommercialComboList.length <= 1) {
-        $("#srchMomsCommercial").css('background-color', '#F0F0F0');
-        $("#srchMomsCommercial").attr("disabled", true);
-    } else {
-        $("#srchMomsCommercial").css('background-color', '#FFFFFF');
-        $("#srchMomsCommercial").attr("disabled", false);
-    }
-    // 점포유형
-    if(momsShopTypeComboList.length <= 1) {
-        $("#srchMomsShopType").css('background-color', '#F0F0F0');
-        $("#srchMomsShopType").attr("disabled", true);
-    } else {
-        $("#srchMomsShopType").css('background-color', '#FFFFFF');
-        $("#srchMomsShopType").attr("disabled", false);
-    }
-    // 매장관리타입
-    if(momsStoreManageTypeComboList.length <= 1) {
-        $("#srchMomsStoreManageType").css('background-color', '#F0F0F0');
-        $("#srchMomsStoreManageType").attr("disabled", true);
-    } else {
-        $("#srchMomsStoreManageType").css('background-color', '#FFFFFF');
-        $("#srchMomsStoreManageType").attr("disabled", false);
-    }
-    // 지사
-    if(branchCdComboList.length <= 1) {
-        $("#srchBranchCd").css('background-color', '#F0F0F0');
-        $("#srchBranchCd").attr("disabled", true);
-    } else {
-        $("#srchBranchCd").css('background-color', '#FFFFFF');
-        $("#srchBranchCd").attr("disabled", false);
-    }
+    // // 팀별
+    // if(momsTeamComboList.length <= 1) {
+    //     $("#srchMomsTeam").css('background-color', '#F0F0F0');
+    //     $("#srchMomsTeam").attr("disabled", true);
+    // } else {
+    //     $("#srchMomsTeam").css('background-color', '#FFFFFF');
+    //     $("#srchMomsTeam").attr("disabled", false);
+    // }
+    // // AC점포별
+    // if(momsAcShopComboList.length <= 1) {
+    //     $("#srchMomsAcShop").css('background-color', '#F0F0F0');
+    //     $("#srchMomsAcShop").attr("disabled", true);
+    // } else {
+    //     $("#srchMomsAcShop").css('background-color', '#FFFFFF');
+    //     $("#srchMomsAcShop").attr("disabled", false);
+    // }
+    // // 지역구분
+    // if(momsAreaFgComboList.length <= 1) {
+    //     $("#srchMomsAreaFg").css('background-color', '#F0F0F0');
+    //     $("#srchMomsAreaFg").attr("disabled", true);
+    // } else {
+    //     $("#srchMomsAreaFg").css('background-color', '#FFFFFF');
+    //     $("#srchMomsAreaFg").attr("disabled", false);
+    // }
+    // // 상권
+    // if(momsCommercialComboList.length <= 1) {
+    //     $("#srchMomsCommercial").css('background-color', '#F0F0F0');
+    //     $("#srchMomsCommercial").attr("disabled", true);
+    // } else {
+    //     $("#srchMomsCommercial").css('background-color', '#FFFFFF');
+    //     $("#srchMomsCommercial").attr("disabled", false);
+    // }
+    // // 점포유형
+    // if(momsShopTypeComboList.length <= 1) {
+    //     $("#srchMomsShopType").css('background-color', '#F0F0F0');
+    //     $("#srchMomsShopType").attr("disabled", true);
+    // } else {
+    //     $("#srchMomsShopType").css('background-color', '#FFFFFF');
+    //     $("#srchMomsShopType").attr("disabled", false);
+    // }
+    // // 매장관리타입
+    // if(momsStoreManageTypeComboList.length <= 1) {
+    //     $("#srchMomsStoreManageType").css('background-color', '#F0F0F0');
+    //     $("#srchMomsStoreManageType").attr("disabled", true);
+    // } else {
+    //     $("#srchMomsStoreManageType").css('background-color', '#FFFFFF');
+    //     $("#srchMomsStoreManageType").attr("disabled", false);
+    // }
+    // // 지사
+    // if(branchCdComboList.length <= 1) {
+    //     $("#srchBranchCd").css('background-color', '#F0F0F0');
+    //     $("#srchBranchCd").attr("disabled", true);
+    // } else {
+    //     $("#srchBranchCd").css('background-color', '#FFFFFF');
+    //     $("#srchBranchCd").attr("disabled", false);
+    // }
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {

@@ -412,7 +412,6 @@
 </style>
 
 <script type="text/javascript">
-
     // 콤보박스 데이터
     var momsHqBrandCdComboList = ${momsHqBrandCdComboList};
     var branchCdComboList = ${branchCdComboList};
@@ -422,7 +421,6 @@
     var momsCommercialComboList = ${momsCommercialComboList};
     var momsShopTypeComboList = ${momsShopTypeComboList};
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
-
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/saleAnalsMomsBst/saleAnalsMomsBst.js?ver=20230208.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/saleAnalsMomsBst/saleAnalsMomsBst.js?ver=20230217.01" charset="utf-8"></script>

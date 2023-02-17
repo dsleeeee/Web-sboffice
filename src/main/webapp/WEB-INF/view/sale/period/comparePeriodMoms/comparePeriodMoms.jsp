@@ -277,7 +277,6 @@
   var momsCommercialComboList = ${momsCommercialComboList};
   var momsShopTypeComboList = ${momsShopTypeComboList};
   var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
-
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/period/comparePeriodMoms/comparePeriodMoms.js?ver=20230125.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/period/comparePeriodMoms/comparePeriodMoms.js?ver=20230217.01" charset="utf-8"></script>

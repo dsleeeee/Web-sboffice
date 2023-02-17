@@ -486,7 +486,6 @@
 
 
 <script type="text/javascript">
-
     var orgnFg = "${orgnFg}";
     var hqOfficeCd = "${hqOfficeCd}";
     var storeCd = "${storeCd}";
@@ -519,7 +518,6 @@
 
     // header값 셋팅을 위한 변수
     var vDlvrOrderFg = ["stin", "dlvr", "pack"];
-
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/prodSaleRateMoms/prodSaleRateMoms.js?ver=20230125.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/prodSaleRateMoms/prodSaleRateMoms.js?ver=20230217.01" charset="utf-8"></script>
