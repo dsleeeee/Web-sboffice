@@ -5,7 +5,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
-<c:set var="baseUrl" value="/sale//status/daySaleReport"/>
+<c:set var="baseUrl" value="/sale/status/daySaleReport"/>
 
 <div class="con">
     <div class="tabType1" ng-controller="daySaleReportTabCtrl" ng-init="init()">
