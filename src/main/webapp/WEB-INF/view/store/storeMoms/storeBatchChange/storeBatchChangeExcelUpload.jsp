@@ -19,7 +19,6 @@
         <div class="mt10 oh sb-select dkbr">
             <p class="tl s14 mt5 lh15">1. '양식다운로드' 버튼을 클릭하여 양식을 다운받아주세요.</p>
             <p class="tl s14 mt5 lh15">2. 다운받은 양식을 입력해주세요.</p>
-            <p class="tl s14 mt5 lh15">- '양식 샘플 미리보기'를 꼭 참고해주세요.</p>
             <p class="tl s14 mt5 lh15">3. '엑셀업로드' 버튼을 클릭하여 업로드 해주세요.</p>
             <p class="tl s14 mt5 lh15">4. '매장정보'가 업로드되면 '저장'을 클릭하여 검증 및 저장을 해주세요.</p>
             <p class="tl s14 mt5 lh15">- 검증결과가 '검증성공'인 매장만 저장됩니다.</p>
