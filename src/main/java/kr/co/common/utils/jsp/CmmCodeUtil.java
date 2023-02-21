@@ -178,12 +178,12 @@ public class CmmCodeUtil {
 
         try {
             // 요청한 코드가 레디스에 있는지 확인
-            if (cmmCodeService.hasCode(nmcodeGrpCd)) {
+            /*if (cmmCodeService.hasCode(nmcodeGrpCd)) {
                 // 레디스에서 조회
                 commonCodeVO = cmmCodeService.getCodeList(nmcodeGrpCd);
-            }
+            }*/
             // 레디스에 없으면 디비에서 조회 후 레디스에 세팅
-            else {
+            /*else {*/
                 codeList = cmmCodeService.selectCmmCodeList(nmcodeGrpCd);
 
                 if (isEmpty(codeList)) { // 조회 결과 없으면 데이터 없음 리턴
@@ -193,7 +193,7 @@ public class CmmCodeUtil {
                 commonCodeVO.setCodeList(codeList);
                 // 레디스에 공통코드 세팅
                 cmmCodeService.setCodeList(commonCodeVO);
-            }
+            /*}*/
         } catch (Exception e) {
             LOGGER.warn("redis error.... 공통코드 디비에서 조회 : {}", nmcodeGrpCd);
 
