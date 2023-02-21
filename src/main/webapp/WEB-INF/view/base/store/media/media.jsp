@@ -96,7 +96,6 @@
   </table>
 
   <div class="mt20 oh sb-select dkbr">
-
     <%-- 페이지 스케일  --%>
     <wj-combo-box
             class="w100px fl"
@@ -129,16 +128,19 @@
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="media.verSerNo"/>" binding="verSerNo" align="center" width="80" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="media.verSerNo"/>" binding="verSerNo" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="media.verSerNm"/>" binding="verSerNm" align="left" width="*" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="media.useDate"/>" binding="useDate" align="center" width="160" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="media.fileNm"/>" binding="fileOrgNm" data-map="fileTypeDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="media.fileType"/>" binding="fileUseType" data-map="fileTypeDataMap" width="140" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="media.fileSize"/>" binding="fileSize"  width="80" align="right" is-read-only="true" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="media.fileType"/>" binding="fileUseType" data-map="fileTypeDataMap" width="135" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="media.fileSize"/>" binding="fileSize"  width="75" align="right" is-read-only="true"></wj-flex-grid-column>
 <%--        <wj-flex-grid-column header="<s:message code="media.regCnt"/>" binding="regCnt" align="center" width="80"  is-read-only="true"></wj-flex-grid-column>--%>
 <%--        <wj-flex-grid-column header="<s:message code="media.recvCnt"/>" binding="recvCnt" align="center" width="80"  is-read-only="true"></wj-flex-grid-column>--%>
         <wj-flex-grid-column header="<s:message code="media.useYn"/>" binding="useYn" data-map="useYnDataMap" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="media.dispTime"/>" binding="dispTime" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+            <wj-flex-grid-column header="<s:message code="media.storeCnt"/>" binding="storeCnt" align="center" width="75" is-read-only="true"></wj-flex-grid-column>
+        </c:if>
 
         <%-- 저장시 필요 --%>
         <wj-flex-grid-column header="<s:message code="media.fileNmExt"/>" binding="fileNmExt" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -154,6 +156,7 @@
   </div>
   <%--//페이지 리스트--%>
 </div>
+
 <script>
   <%--var fileType    = ${ccu.getCommCode("303")};--%>
   var useYn       = ${ccu.getCommCode("067")};
@@ -162,6 +165,7 @@
   var hqList      = ${ccu.getHqOfficeList()};
   var hqOfficeCd  = "${hqOfficeCd}";
 </script>
+
 <script type="text/javascript" src="/resource/solbipos/js/base/store/media/media.js?ver=20221023.01" charset="utf-8"></script>
 
 <%-- 버전 상세정보 레이어 --%>

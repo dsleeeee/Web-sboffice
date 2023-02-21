@@ -340,6 +340,7 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 닫기
   $scope.close = function(){
+    startDate.value = new Date(Date.now());
     endDate.value = new Date(Date.now());
 
     // 첨부파일 리셋

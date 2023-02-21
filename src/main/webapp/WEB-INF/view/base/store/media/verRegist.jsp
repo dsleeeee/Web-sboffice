@@ -132,6 +132,7 @@
     </div>
   </div>
 </wj-popup>
+
 <script type="text/javascript">
   <%--var fileTypeData = ${ccu.getCommCodeExcpAll("303")};--%>
   var useYnData    = ${ccu.getCommCodeExcpAll("067")};
@@ -141,6 +142,5 @@
   var storeCd      = "${storeCd}";
   var userId       = "${userId}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/verRegist.js?ver=20230117.011" charset="utf-8"></script>
 
-
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/verRegist.js?ver=20230220.01" charset="utf-8"></script>

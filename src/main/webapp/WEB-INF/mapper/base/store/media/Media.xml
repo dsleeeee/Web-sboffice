@@ -20,79 +20,91 @@
     <select id="getList" parameterType="MediaVO" resultType="DefaultMap">
         /* USE : Media.getList */
         <choose>
-        <!-- 본사 -->
-        <when test='orgnFg != null and orgnFg == "H"'>
-            <include refid="CmmSQL.PagingTemplateHeader"/>
-            SELECT ADVER_FILE_NO AS VER_SER_NO,
-                    TO_CHAR(TO_DATE(ADVER_S_DATE, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(ADVER_E_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_DATE,
-                    FILE_DESC AS VER_SER_NM,
-                    FILE_USE_TYPE,
-                    FILE_SIZE,
-                    USE_YN,
-                    FILE_ORG_NM || '.' || FILE_EXT AS FILE_ORG_NM,
-                    DISP_TIME,
-                    FILE_NM AS FILE_NM_EXT
-            <include refid="CmmSQL.PagingTemplateCount"/>
-                 FROM TB_HQ_POS_ADVER_FILE
-                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-            <if test='verSerNo != null and verSerNo != ""'>
-                AND ADVER_FILE_NO LIKE '%' || #{verSerNo} || '%'
-            </if>
-            <if test='verSerNm != null and verSerNm != ""'>
-                AND FILE_DESC LIKE '%' || #{verSerNm} || '%'
-            </if>
-            <if test='fileOrgNm != null and fileOrgNm != ""'>
-                AND FILE_ORG_NM LIKE '%' || #{fileOrgNm} || '%'
-            </if>
-            <if test='useYn != null and useYn.toString() != ""'>
-                AND USE_YN = #{useYn}
-            </if>
-            <if test='fileType != null and fileType.toString() != ""'>
-                AND FILE_USE_TYPE = #{fileType}
-            </if>
-            <if test='startDate != null and startDate != ""'>
-                AND #{startDate} BETWEEN ADVER_S_DATE AND ADVER_E_DATE
-            </if>
-            AND FILE_USE_TYPE != '008'
-            <include refid="CmmSQL.PagingTemplateBottom"/>
-        </when>
-        <!-- 매장 -->
-        <when test='orgnFg != null and orgnFg == "S"'>
-            <include refid="CmmSQL.PagingTemplateHeader"/>
-            SELECT ADVER_FILE_NO AS VER_SER_NO,
-                    TO_CHAR(TO_DATE(ADVER_S_DATE, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(ADVER_E_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_DATE,
-                    FILE_DESC AS VER_SER_NM,
-                    FILE_USE_TYPE,
-                    FILE_SIZE,
-                    USE_YN,
-                    FILE_ORG_NM || '.' || FILE_EXT AS FILE_ORG_NM,
-                    DISP_SEQ,
-                    DISP_TIME,
-                    FILE_NM AS FILE_NM_EXT
-            <include refid="CmmSQL.PagingTemplateCount"/>
-                FROM TB_MS_POS_ADVER_FILE
-                WHERE STORE_CD = #{storeCd}
-            <if test='verSerNo != null and verSerNo != ""'>
-                AND ADVER_FILE_NO LIKE '%' || #{verSerNo} || '%'
-            </if>
-            <if test='verSerNm != null and verSerNm != ""'>
-                AND FILE_DESC LIKE '%' || #{verSerNm} || '%'
-            </if>
-            <if test='fileOrgNm != null and fileOrgNm != ""'>
-                AND FILE_ORG_NM LIKE '%' || #{fileOrgNm} || '%'
-            </if>
-            <if test='useYn != null and useYn.toString() != ""'>
-                AND USE_YN = #{useYn}
-            </if>
-            <if test='fileType != null and fileType.toString() != ""'>
-                AND FILE_USE_TYPE = #{fileType}
-            </if>
-            <if test='startDate != null and startDate != ""'>
-                AND #{startDate} BETWEEN ADVER_S_DATE AND ADVER_E_DATE
-            </if>
-            AND FILE_USE_TYPE != '008'
-            <include refid="CmmSQL.PagingTemplateBottom"/>
-        </when>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT
+                A.ADVER_FILE_NO AS VER_SER_NO,
+                TO_CHAR(TO_DATE(A.ADVER_S_DATE, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(A.ADVER_E_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_DATE,
+                A.FILE_DESC AS VER_SER_NM,
+                A.FILE_USE_TYPE,
+                A.FILE_SIZE,
+                A.USE_YN,
+                A.FILE_ORG_NM || '.' || A.FILE_EXT AS FILE_ORG_NM,
+                A.DISP_TIME,
+                A.FILE_NM AS FILE_NM_EXT,
+                NVL(B.STORE_CNT, 0) AS STORE_CNT
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM TB_HQ_POS_ADVER_FILE A,
+                (
+                    SELECT
+                    ADVER_FILE_NO,
+                    COUNT(STORE_CD) AS STORE_CNT
+                    FROM TB_HQ_POS_ADVER_STORE
+                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                    GROUP BY ADVER_FILE_NO
+                ) B
+                WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='verSerNo != null and verSerNo != ""'>
+                    AND A.ADVER_FILE_NO LIKE '%' || #{verSerNo} || '%'
+                </if>
+                <if test='verSerNm != null and verSerNm != ""'>
+                    AND A.FILE_DESC LIKE '%' || #{verSerNm} || '%'
+                </if>
+                <if test='fileOrgNm != null and fileOrgNm != ""'>
+                    AND A.FILE_ORG_NM LIKE '%' || #{fileOrgNm} || '%'
+                </if>
+                <if test='useYn != null and useYn.toString() != ""'>
+                    AND A.USE_YN = #{useYn}
+                </if>
+                <if test='fileType != null and fileType.toString() != ""'>
+                    AND A.FILE_USE_TYPE = #{fileType}
+                </if>
+                <if test='startDate != null and startDate != ""'>
+                    AND #{startDate} BETWEEN A.ADVER_S_DATE AND A.ADVER_E_DATE
+                </if>
+                AND A.FILE_USE_TYPE != '008'
+                AND B.ADVER_FILE_NO (+)= A.ADVER_FILE_NO
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT
+                A.ADVER_FILE_NO AS VER_SER_NO,
+                TO_CHAR(TO_DATE(A.ADVER_S_DATE, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(A.ADVER_E_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_DATE,
+                A.FILE_DESC AS VER_SER_NM,
+                A.FILE_USE_TYPE,
+                A.FILE_SIZE,
+                A.USE_YN,
+                A.FILE_ORG_NM || '.' || A.FILE_EXT AS FILE_ORG_NM,
+                A.DISP_SEQ,
+                A.DISP_TIME,
+                A.FILE_NM AS FILE_NM_EXT
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM TB_MS_POS_ADVER_FILE A
+                WHERE A.STORE_CD = #{storeCd}
+                <if test='verSerNo != null and verSerNo != ""'>
+                    AND A.ADVER_FILE_NO LIKE '%' || #{verSerNo} || '%'
+                </if>
+                <if test='verSerNm != null and verSerNm != ""'>
+                    AND A.FILE_DESC LIKE '%' || #{verSerNm} || '%'
+                </if>
+                <if test='fileOrgNm != null and fileOrgNm != ""'>
+                    AND A.FILE_ORG_NM LIKE '%' || #{fileOrgNm} || '%'
+                </if>
+                <if test='useYn != null and useYn.toString() != ""'>
+                    AND A.USE_YN = #{useYn}
+                </if>
+                <if test='fileType != null and fileType.toString() != ""'>
+                    AND A.FILE_USE_TYPE = #{fileType}
+                </if>
+                <if test='startDate != null and startDate != ""'>
+                    AND #{startDate} BETWEEN A.ADVER_S_DATE AND A.ADVER_E_DATE
+                </if>
+                AND A.FILE_USE_TYPE != '008'
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
         </choose>
     </select>
 
