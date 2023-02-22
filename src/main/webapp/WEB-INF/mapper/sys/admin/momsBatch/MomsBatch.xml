@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MomsBatch.xml
+    맘스터치일괄처리 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2023.02.21      최초작성
+-->
+<mapper namespace="kr.co.solbipos.sys.admin.momsBatch.service.impl.MomsBatchMapper">
+
+    <!-- 일괄처리 -->
+    <!--
+        TABLE    :
+        PARAM    : momsBatchVO
+        COMMENTS : 일괄처리
+    -->
+    <select id="batchProc" statementType="CALLABLE"  parameterType="momsBatchVO" resultType="String">
+        /* USE : MomsBatchMapper.batchProc */
+        {
+            CALL PKG_ADMIN_CM_HQ_MS_IUD.SP_ADMIN_IUD_0001
+            (
+                #{hqOfficeCd},
+                #{storeCds},
+                #{nmcodeCd},
+                #{datas},
+                #{userId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
+    <!-- 매장코드 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE, TB_HQ_OFFICE
+        PARAM    : momsBatchVO
+        COMMENTS : 매장코드 리스트를 조회한다.
+    -->
+    <select id="selectStoreList" parameterType="momsBatchVO" resultType="DefaultMap">
+    /* USE : MomsBatchMapper.selectStoreList */
+        SELECT  tms.HQ_OFFICE_CD
+        ,       tho.HQ_OFFICE_NM
+        ,       tms.STORE_CD
+        ,       tms.STORE_NM
+        FROM    TB_MS_STORE tms
+        ,       TB_HQ_OFFICE tho
+        WHERE   tms.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+            AND tms.HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+            AND tho.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        ORDER BY tms.HQ_OFFICE_CD, tms.STORE_CD
+    </select>
+
+</mapper>
