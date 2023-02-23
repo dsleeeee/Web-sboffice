@@ -451,7 +451,10 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             // 단종
             params.disconYn = $("#chkDisconYn").is(":checked") === true ? 'Y' : 'N';
             params.disconDate = $("#chkDisconYn").is(":checked") === true ? wijmo.Globalize.format(disconDate.value, 'yyyyMMdd') : '';
-            params.useYn = $("#chkDisconYn").is(":checked") === true ? 'N' : 'Y'; // 맘스터치는 단종이면 사용여부 자동 '미사용' 처리
+
+            if(params.disconYn === 'N'){
+                params.useYn = 'Y' // 단종이 아닌경우, 사용여부 '사용' 처리
+            }
 
             // 판매방식
             params.saleTypeYnSin = $("#chkSaleTypeYnSin").is(":checked") === true ? 'Y' : 'N';  // 판매방식(내점)
