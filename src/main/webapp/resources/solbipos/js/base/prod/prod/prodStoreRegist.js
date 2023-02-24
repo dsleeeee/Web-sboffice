@@ -19,6 +19,16 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
 
   $scope._setComboData("srchPsrStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
 
+  // 브랜드 콤보박스 셋팅
+  $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
+  $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
+  $scope._setComboData("momsAcShopCombo", momsAcShopComboList); // AC점포별
+  $scope._setComboData("momsAreaFgCombo", momsAreaFgComboList); // 지역구분
+  $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
+  $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
+  $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
+  $scope._setComboData("branchCdCombo", branchCdComboList); // 지사
+
   $scope.prodSaleUprcApply = true;
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -243,7 +253,14 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     $('#hdSrchPsrStoreHqBrandCd').val(s.selectedValue);
   };
 
-
+  // 확장조회 숨김/보임
+  $scope.searchAddShowChangeReg = function(){
+    if( $("#tblSearchAddShowReg").css("display") === 'none') {
+      $("#tblSearchAddShowReg").show();
+    } else {
+      $("#tblSearchAddShowReg").hide();
+    }
+  };
 }]);
 
 /**
@@ -270,14 +287,20 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     var prodScope     = agrid.getScope("prodCtrl");
     var params        = {};
 
-    params.storeCd    = $("#srchStoreCd").val();
-    params.storeNm    = $("#srchStoreNm").val();
+    params.storeCd    = $("#srchRegStoreCd").val();
+    params.storeNm    = $("#srchRegStoreNm").val();
     params.prodCd     = prodScope.getProdInfo().prodCd;
     params.sysStatFg  = $scope.sysStatFg;
     params.hqBrandCd  = $scope.hqBrandCd;
     // params.hqBrandCd     = prodScope.getProdInfo().hqBrandCd;
     params.storeRegFg = 'N';
-
+    params.momsTeam = $scope.momsTeam;
+    params.momsAcShop = $scope.momsAcShop;
+    params.momsAreaFg = $scope.momsAreaFg;
+    params.momsCommercial = $scope.momsCommercial;
+    params.momsShopType = $scope.momsShopType;
+    params.momsStoreManageType = $scope.momsStoreManageType;
+    params.branchCd = $scope.branchCd;
     if(hqOfficeCd !== 'A0001') {
       if (brandUseFg === "1" && orgnFg === "HQ") {
 
@@ -296,6 +319,7 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
           }
       }
     }
+    console.log(params);
 
     $scope._inquirySub("/base/prod/prod/prod/getRegStoreList.sb", params, function() {}, false);
   };
