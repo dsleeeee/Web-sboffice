@@ -121,6 +121,12 @@ public class SalePriceResveVO extends PageVO {
      */
     private String orgnFg;
 
+    /** 세션ID */
+    private String sessionId;
+
+    /** 순번 */
+    private int seq;
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -356,4 +362,12 @@ public class SalePriceResveVO extends PageVO {
     public void setOrgnFg(String orgnFg) {
         this.orgnFg = orgnFg;
     }
+
+    public String getSessionId() { return sessionId; }
+
+    public void setSessionId(String sessionId) { this.sessionId = sessionId; }
+
+    public int getSeq() { return seq; }
+
+    public void setSeq(int seq) { this.seq = seq; }
 }

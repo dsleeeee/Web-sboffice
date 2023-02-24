@@ -103,7 +103,18 @@ public class SalePriceResveController {
         DayProdVO dayProdVO = new DayProdVO();
         model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
 
-        return "base/price/salePriceResve/hqSalePriceResve";
+        /** 맘스터치 */
+        // [1250 맘스터치] 환경설정값 조회
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0"));
+            System.out.println("momsEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0"));
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
+            System.out.println("momsEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
+        }
+        /** //맘스터치 */
+
+        return "base/price/salePriceResve/hqSalePriceResveTab";
     }
 
     /**
@@ -425,6 +436,29 @@ public class SalePriceResveController {
         List<DefaultMap<String>> result = salePriceResveService.getSalePriceInfo(salePriceResveVO, sessionInfoVO);
 
         return returnListJson(Status.OK, result, salePriceResveVO);
+    }
+
+    /**
+     * 가격예약(본사판매가) 엑셀업로드 탭 - 판매가 저장
+     *
+     * @param salePriceResveVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 02. 21.
+     */
+    @RequestMapping(value = "/hqSalePriceResveExcelUpload/getHqSalePriceResveExcelUploadSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getHqSalePriceResveExcelUploadSave(@RequestBody SalePriceResveVO[] salePriceResveVOs, HttpServletRequest request,
+                                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = salePriceResveService.getHqSalePriceResveExcelUploadSave(salePriceResveVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 
 }
