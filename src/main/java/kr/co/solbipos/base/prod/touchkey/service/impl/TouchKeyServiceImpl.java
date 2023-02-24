@@ -561,7 +561,15 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         // 소속구분 설정
         touchKeyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-
+        
+        if(touchKeyVO.getMomsEnvstVal().equals("1")) {
+            // 매장브랜드 '전체' 일때
+            if (touchKeyVO.getStoreHqBrandCd() == "" || touchKeyVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = touchKeyVO.getUserBrands().split(",");
+                touchKeyVO.setUserBrandList(userBrandList);
+            }
+        }
         return keyMapper.getStoreList(touchKeyVO);
     }
 

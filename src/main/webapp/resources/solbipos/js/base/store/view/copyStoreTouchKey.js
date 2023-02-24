@@ -13,6 +13,16 @@ app.controller('copyStoreTouchKeyCtrl', ['$scope', '$http', function ($scope, $h
 
     angular.extend(this, new RootController('copyStoreTouchKeyCtrl', $scope, $http, false));
 
+    // 브랜드 콤보박스 셋팅
+    $scope._setComboData("storeHqBrandCdCombo", brandList); // 매장브랜드
+    $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
+    $scope._setComboData("momsAcShopCombo", momsAcShopComboList); // AC점포별
+    $scope._setComboData("momsAreaFgCombo", momsAreaFgComboList); // 지역구분
+    $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
+    $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
+    $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
+    $scope._setComboData("branchCdCombo", branchCdComboList); // 지사
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
@@ -66,6 +76,28 @@ app.controller('copyStoreTouchKeyCtrl', ['$scope', '$http', function ($scope, $h
         params.storeCd = $("#srchStoreCd1").val();
         params.storeNm = $("#srchStoreNm1").val();
         params.originalStoreCd = "";
+        params.momsEnvstVal = momsEnvstVal;
+        if(momsEnvstVal === "1") {
+            params.momsTeam = $scope.momsTeam;
+            params.momsAcShop = $scope.momsAcShop;
+            params.momsAreaFg = $scope.momsAreaFg;
+            params.momsCommercial = $scope.momsCommercial;
+            params.momsShopType = $scope.momsShopType;
+            params.momsStoreManageType = $scope.momsStoreManageType;
+            params.branchCd = $scope.branchCd;
+            // 선택한 매장브랜드가 있을 때
+            params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
+            // 선택한 매장브랜드가 없을 때('전체' 일때)
+            if (params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+                var userHqBrandCd = "";
+                for (var i = 0; i < brandList.length; i++) {
+                    if (brandList[i].value !== null) {
+                        userHqBrandCd += brandList[i].value + ","
+                    }
+                }
+                params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+            }
+        }
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquirySub("/base/store/view/view/getStoreList.sb", params);
@@ -88,11 +120,29 @@ app.controller('copyStoreTouchKeyCtrl', ['$scope', '$http', function ($scope, $h
 
     };
 
+    // 확장조회 숨김/보임
+    $scope.searchAddShowChangeCopy = function(){
+        if( $("#tblSearchAddShowCopy").css("display") === 'none') {
+            $("#tblSearchAddShowCopy").show();
+        } else {
+            $("#tblSearchAddShowCopy").hide();
+        }
+    };
 }]);
 
 app.controller('copyStoreTouchKey2Ctrl', ['$scope', '$http', function ($scope, $http) {
 
     angular.extend(this, new RootController('copyStoreTouchKey2Ctrl', $scope, $http, false));
+
+    // 브랜드 콤보박스 셋팅
+    $scope._setComboData("storeHqBrandCdCombo2", brandList); // 매장브랜드
+    $scope._setComboData("momsTeamCombo2", momsTeamComboList); // 팀별
+    $scope._setComboData("momsAcShopCombo2", momsAcShopComboList); // AC점포별
+    $scope._setComboData("momsAreaFgCombo2", momsAreaFgComboList); // 지역구분
+    $scope._setComboData("momsCommercialCombo2", momsCommercialComboList); // 상권
+    $scope._setComboData("momsShopTypeCombo2", momsShopTypeComboList); // 점포유형
+    $scope._setComboData("momsStoreManageTypeCombo2", momsStoreManageTypeComboList); // 매장관리타입
+    $scope._setComboData("branchCdCombo2", branchCdComboList); // 지사
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -112,6 +162,31 @@ app.controller('copyStoreTouchKey2Ctrl', ['$scope', '$http', function ($scope, $
         params.storeCd = $("#srchStoreCd2").val();
         params.storeNm = $("#srchStoreNm2").val();
         params.originalStoreCd = $("#hdOrgStorecd").val();
+        params.momsEnvstVal = momsEnvstVal;
+        if(momsEnvstVal === "1") {
+            params.momsTeam = $scope.momsTeam2;
+            params.momsAcShop = $scope.momsAcShop2;
+            params.momsAreaFg = $scope.momsAreaFg2;
+            params.momsCommercial = $scope.momsCommercial2;
+            params.momsShopType = $scope.momsShopType2;
+            params.momsStoreManageType = $scope.momsStoreManageType2;
+            params.branchCd = $scope.branchCd2;
+
+            // 선택한 매장브랜드가 있을 때
+            params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo2.selectedValue;
+
+            // 선택한 매장브랜드가 없을 때('전체' 일때)
+            if (params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+                var userHqBrandCd = "";
+                for (var i = 0; i < brandList.length; i++) {
+                    if (brandList[i].value !== null) {
+                        userHqBrandCd += brandList[i].value + ","
+                    }
+                }
+                params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+            }
+        }
+        console.log(params);
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquirySub("/base/store/view/view/getStoreList.sb", params);
@@ -238,4 +313,12 @@ app.controller('copyStoreTouchKey2Ctrl', ['$scope', '$http', function ($scope, $
 
     };
 
+    // 확장조회 숨김/보임
+    $scope.searchAddShowChangeCopy2 = function(){
+        if( $("#tblSearchAddShowCopy2").css("display") === 'none') {
+            $("#tblSearchAddShowCopy2").show();
+        } else {
+            $("#tblSearchAddShowCopy2").hide();
+        }
+    };
 }]);

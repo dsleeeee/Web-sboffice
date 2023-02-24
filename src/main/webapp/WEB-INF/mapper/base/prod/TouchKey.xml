@@ -1504,21 +1504,21 @@
     -->
     <select id="getStoreList" parameterType="touchKeyVO" resultType="DefaultMap">
         /* USE : TouchkeyMapper.getStoreList */
-        SELECT
-            tms.STORE_CD,
-            tms.STORE_NM,
-            tcm_sys_stat_fg.NMCODE_NM AS sys_stat_fg_nm,
-            tcm_cls_stat_fg.NMCODE_NM AS cls_fg_nm
-        FROM
-            TB_MS_STORE tms
-        LEFT OUTER JOIN TB_CM_NMCODE tcm_sys_stat_fg ON
-            tms.SYS_STAT_FG = tcm_sys_stat_fg.NMCODE_CD
-            AND tcm_sys_stat_fg.NMCODE_GRP_CD = '005'
-        LEFT OUTER JOIN TB_CM_NMCODE tcm_cls_stat_fg ON
-            tms.CLS_FG = tcm_cls_stat_fg.NMCODE_CD
-            AND tcm_cls_stat_fg.NMCODE_GRP_CD = '001'
-        WHERE
-            tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        SELECT  (SELECT HQ_BRAND_NM FROM TB_HQ_BRAND thb WHERE thb.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thb.HQ_BRAND_CD = tms.HQ_BRAND_CD) AS BRAND,
+                tms.STORE_CD,
+                tms.STORE_NM,
+                tcm_sys_stat_fg.NMCODE_NM AS sys_stat_fg_nm,
+                tcm_cls_stat_fg.NMCODE_NM AS cls_fg_nm
+        FROM    TB_MS_STORE tms
+        ,       TB_CM_NMCODE tcm_sys_stat_fg
+        ,       TB_CM_NMCODE tcm_cls_stat_fg
+        ,       TB_MS_STORE_INFO tmsi
+        WHERE   tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tms.STORE_CD = tmsi.STORE_CD (+)
+        AND     tms.SYS_STAT_FG = tcm_sys_stat_fg.NMCODE_CD (+)
+        AND     tcm_sys_stat_fg.NMCODE_GRP_CD = '005'
+        AND     tms.CLS_FG = tcm_cls_stat_fg.NMCODE_CD (+)
+        AND     tcm_cls_stat_fg.NMCODE_GRP_CD = '001'
         <if test='storeNm != null and storeNm != ""'>
             AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
         </if>
@@ -1527,6 +1527,39 @@
         </if>
         <if test='clsFg != null and clsFg != ""'>
             AND tms.CLS_FG = #{clsFg}
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
         </if>
         ORDER BY tms.STORE_CD
     </select>

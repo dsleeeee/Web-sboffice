@@ -1,6 +1,7 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%-- 팝업 부분 설정 - width 는 강제 해주어야함.. 해결방법? 확인 필요 : 20180829 노현수 --%>
 <wj-popup control="popUpApplyStoreLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:700px;">
@@ -19,6 +20,26 @@
                         <col width="30%" />
                     </colgroup>
                     <tbody>
+                    <c:if test="${brandUseFg == '1'}">
+                        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                            <tr>
+                                <th><s:message code="touchKey.layer.brand" /></th>
+                                <td>
+                                    <div class="sb-select">
+                                        <wj-combo-box
+                                                id="srchStoreHqBrandCdCombo"
+                                                ng-model="storeHqBrandCd"
+                                                items-source="_getComboData('storeHqBrandCdCombo')"
+                                                display-member-path="name"
+                                                selected-value-path="value"
+                                                is-editable="false"
+                                                control="srchStoreHqBrandCdCombo">
+                                        </wj-combo-box>
+                                    </div>
+                                </td>
+                            </tr>
+                        </c:if>
+                    </c:if>
                     <tr>
                         <th><s:message code="touchKey.layer.srchStoreNm" /></th>
                         <td colspan="3">
@@ -54,13 +75,152 @@
                                 </wj-combo-box>
                             </div>
                         </td>
-
                     </tr>
                     </tbody>
                 </table>
+                <c:if test="${momsEnvstVal == '1'}">
+                <table class="searchTbl" id="tblSearchAddShow" style="display: none;">
+                    <colgroup>
+                        <col class="w20"/>
+                        <col class="w30"/>
+                        <col class="w20"/>
+                        <col class="w30"/>
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <%-- 팀별 --%>
+                        <th><s:message code="dayProd.momsTeam"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchMomsTeamCombo"
+                                        ng-model="momsTeam"
+                                        items-source="_getComboData('momsTeamCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchMomsTeamCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                        <%-- AC점포별 --%>
+                        <th><s:message code="dayProd.momsAcShop"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchMomsAcShopCombo"
+                                        ng-model="momsAcShop"
+                                        items-source="_getComboData('momsAcShopCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchMomsAcShopCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <%-- 지역구분 --%>
+                        <th><s:message code="dayProd.momsAreaFg"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchMomsAreaFgCombo"
+                                        ng-model="momsAreaFg"
+                                        items-source="_getComboData('momsAreaFgCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchMomsAreaFgCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                        <%-- 상권 --%>
+                        <th><s:message code="dayProd.momsCommercial"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchMomsCommercialCombo"
+                                        ng-model="momsCommercial"
+                                        items-source="_getComboData('momsCommercialCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchMomsCommercialCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <%-- 점포유형 --%>
+                        <th><s:message code="dayProd.momsShopType"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchMomsShopTypeCombo"
+                                        ng-model="momsShopType"
+                                        items-source="_getComboData('momsShopTypeCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchMomsShopTypeCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                        <%-- 매장관리타입 --%>
+                        <th><s:message code="dayProd.momsStoreManageType"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchMomsStoreManageTypeCombo"
+                                        ng-model="momsStoreManageType"
+                                        items-source="_getComboData('momsStoreManageTypeCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchMomsStoreManageTypeCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <%-- 지사 --%>
+                        <th><s:message code="dayProd.branchCd"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchBranchCdComboo"
+                                        ng-model="branchCd"
+                                        items-source="_getComboData('branchCdCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchBranchCdComboo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+                </c:if>
             </div>
             <%-- 조회 --%>
             <div class="tr mt10 pdb20 oh bb">
+                <c:if test="${momsEnvstVal == '1'}">
+                    <%-- 확장조회 --%>
+                    <button class="btn_blue mr5" id="btnSearchAddShow" ng-click="searchAddShowChange()">
+                        <s:message code="cmm.search.addShow" />
+                    </button>
+                </c:if>
                 <button class="btn_blue" id="btnSrchApplyStore" ng-click="_broadcast('popUpApplyStoreCtrl')">
                     <s:message code="touchKey.layer.srchBtn" />
                 </button>
@@ -77,10 +237,11 @@
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="touchKey.layer.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="touchKey.layer.brand"/>" binding="brand" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="touchKey.layer.storeCd"/>" binding="storeCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="touchKey.layer.storeNm"/>" binding="storeNm" width="280" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="touchKey.layer.sysStatFg"/>" binding="sysStatFgNm" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="touchKey.layer.clsFg"/>" binding="clsFgNm" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="touchKey.layer.storeNm"/>" binding="storeNm" width="*" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="touchKey.layer.sysStatFg"/>" binding="sysStatFgNm" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="touchKey.layer.clsFg"/>" binding="clsFgNm" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
 
                 </wj-flex-grid>
             </div>
