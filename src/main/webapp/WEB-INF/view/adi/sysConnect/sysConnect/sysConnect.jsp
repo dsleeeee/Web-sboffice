@@ -9,9 +9,9 @@
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
 
-<div class="subCon" ng-controller="sysConnectCtrl" ng-init="init()">
+<div class="subCon" ng-controller="sysConnectCtrl" ng-init="init()" style="text-align: center;padding:300px 0px;">
 
-    <button class="btn_skyblue" ng-click="sysConnect()">
+    <button class="btn_blue" ng-click="sysConnect()">
         정산시스템접속
     </button>
 </div>
