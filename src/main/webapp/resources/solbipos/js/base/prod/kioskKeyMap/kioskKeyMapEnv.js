@@ -26,6 +26,15 @@ app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', function ($scope, $http
     $scope._setComboData("envTuClsType", kioskTuClsTypeList); // 키오스크용 키맵그룹 목록
     $scope._setComboData("tuMClsFgMapEnv", tuMClsFgMapEnvComboData); // KIOSK중분류사용
 
+    // 브랜드 콤보박스 셋팅
+    $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
+    $scope._setComboData("momsAcShopCombo", momsAcShopComboList); // AC점포별
+    $scope._setComboData("momsAreaFgCombo", momsAreaFgComboList); // 지역구분
+    $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
+    $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
+    $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
+    $scope._setComboData("branchCdCombo", branchCdComboList); // 지사
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
@@ -73,6 +82,30 @@ app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', function ($scope, $http
         params.storeNm = $("#srchEnvStoreNm").val();
         params.sysStatFg = $scope.srchEnvSysStatFgCombo.selectedValue;
         params.tuMClsFg = $scope.tuMClsFgMapEnvCombo.selectedValue;
+        params.momsTeam = $scope.momsTeam;
+        params.momsAcShop = $scope.momsAcShop;
+        params.momsAreaFg = $scope.momsAreaFg;
+        params.momsCommercial = $scope.momsCommercial;
+        params.momsShopType = $scope.momsShopType;
+        params.momsStoreManageType = $scope.momsStoreManageType;
+        params.branchCd = $scope.branchCd;
+        if(brandUseFg === "1" && orgnFg === "HQ"){
+
+            // 선택한 매장브랜드가 있을 때
+            params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
+
+            // 선택한 매장브랜드가 없을 때('전체' 일때)
+            if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+                var userHqBrandCd = "";
+                for(var i=0; i < userHqBrandCdComboList.length; i++){
+                    if(userHqBrandCdComboList[i].value !== null) {
+                        userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                    }
+                }
+                params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+            }
+        }
+        console.log(params);
 
         $scope._inquirySub("/base/prod/kioskKeyMap/kioskKeyMap/getStoreKioskPosList.sb", params, function () {
 
@@ -231,4 +264,12 @@ app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', function ($scope, $http
         }, false);
     };
 
+    // 확장조회 숨김/보임
+    $scope.searchAddShowChangeEnv = function(){
+        if( $("#tblSearchAddShowEnv").css("display") === 'none') {
+            $("#tblSearchAddShowEnv").show();
+        } else {
+            $("#tblSearchAddShowEnv").hide();
+        }
+    };
 }]);

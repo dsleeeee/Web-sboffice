@@ -133,6 +133,27 @@ public class KioskKeyMapVO extends PageVO {
     /** 상품브랜드코드 */
     private String prodHqBrandCd;
 
+    /** 팀별 */
+    private String momsTeam;
+
+    /** AC점포별 */
+    private String momsAcShop;
+
+    /** 지역구분 */
+    private String momsAreaFg;
+
+    /** 상권 */
+    private String momsCommercial;
+
+    /** 점포유형 */
+    private String momsShopType;
+
+    /** 매장관리타입 */
+    private String momsStoreManageType;
+
+    /** 지사코드 */
+    private String branchCd;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -553,5 +574,61 @@ public class KioskKeyMapVO extends PageVO {
 
     public void setProdHqBrandCd(String prodHqBrandCd) {
         this.prodHqBrandCd = prodHqBrandCd;
+    }
+
+    public String getMomsTeam() {
+        return momsTeam;
+    }
+
+    public void setMomsTeam(String momsTeam) {
+        this.momsTeam = momsTeam;
+    }
+
+    public String getMomsAcShop() {
+        return momsAcShop;
+    }
+
+    public void setMomsAcShop(String momsAcShop) {
+        this.momsAcShop = momsAcShop;
+    }
+
+    public String getMomsAreaFg() {
+        return momsAreaFg;
+    }
+
+    public void setMomsAreaFg(String momsAreaFg) {
+        this.momsAreaFg = momsAreaFg;
+    }
+
+    public String getMomsCommercial() {
+        return momsCommercial;
+    }
+
+    public void setMomsCommercial(String momsCommercial) {
+        this.momsCommercial = momsCommercial;
+    }
+
+    public String getMomsShopType() {
+        return momsShopType;
+    }
+
+    public void setMomsShopType(String momsShopType) {
+        this.momsShopType = momsShopType;
+    }
+
+    public String getMomsStoreManageType() {
+        return momsStoreManageType;
+    }
+
+    public void setMomsStoreManageType(String momsStoreManageType) {
+        this.momsStoreManageType = momsStoreManageType;
+    }
+
+    public String getBranchCd() {
+        return branchCd;
+    }
+
+    public void setBranchCd(String branchCd) {
+        this.branchCd = branchCd;
     }
 }

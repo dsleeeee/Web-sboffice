@@ -27,6 +27,14 @@
     // [1250 맘스터치] 환경설정값
     var momsEnvstVal = "${momsEnvstVal}";
 
+    var branchCdComboList = ${branchCdComboList};
+    var momsTeamComboList = ${momsTeamComboList};
+    var momsAcShopComboList = ${momsAcShopComboList};
+    var momsAreaFgComboList = ${momsAreaFgComboList};
+    var momsCommercialComboList = ${momsCommercialComboList};
+    var momsShopTypeComboList = ${momsShopTypeComboList};
+    var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
+
     // POS에서 해당 WEB 화면 최초 접속한 경우(접속하면서 session 생성), 왼쪽 메뉴영역은 접어두기.
     // 최초 접속시에는 이전 URL 인자값으로 판별가능
     var referrer = document.referrer;
