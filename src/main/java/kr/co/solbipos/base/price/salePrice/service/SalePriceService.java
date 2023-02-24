@@ -39,4 +39,25 @@ public interface SalePriceService {
 
     /** 본사 판매가 저장 */
     int saveHqProdSalePrice(SalePriceVO[] salePriceVOs, SessionInfoVO sessionInfoVO);
+
+    /** 본사판매가관리 엑셀업로드 탭 - 엑셀 양식다운로드 조회 */
+    List<DefaultMap<String>> getHqSalePriceExcelUploadSampleList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO);
+
+    /** 검증결과 조회 */
+    List<DefaultMap<String>> getHqSalePriceExcelUploadCheckList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO);
+
+    /** 검증결과 전체 삭제 */
+    int getSalePriceExcelUploadCheckDeleteAll(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO);
+
+    /** 검증결과 삭제 */
+    int getSalePriceExcelUploadCheckDelete(SalePriceVO[] salePriceVOs, SessionInfoVO sessionInfoVO);
+
+    /** 업로드시 임시테이블 저장 */
+    int getSalePriceExcelUploadCheckSave(SalePriceVO[] salePriceVOs, SessionInfoVO sessionInfoVO);
+
+    /** 검증결과 저장 */
+    int getSalePriceExcelUploadCheckSaveAdd(SalePriceVO[] salePriceVOs, SessionInfoVO sessionInfoVO);
+
+    /** 본사판매가관리 엑셀업로드 탭 - 판매가 저장 */
+    int getHqSalePriceExcelUploadSave(SalePriceVO[] salePriceVOs, SessionInfoVO sessionInfoVO);
 }

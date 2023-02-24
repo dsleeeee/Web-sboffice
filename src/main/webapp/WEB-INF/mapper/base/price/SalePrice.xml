@@ -656,4 +656,130 @@
         )
     </insert>
 
+    <!-- 본사판매가관리 엑셀업로드 탭 - 엑셀 양식다운로드 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getHqSalePriceExcelUploadSampleList"  parameterType="salePriceVO" resultType="DefaultMap">
+        /* SalePriceMapper.getHqSalePriceExcelUploadSampleList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        thp.PROD_CD
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_HQ_PRODUCT thp
+        WHERE 1=1
+        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+        ORDER BY thp.PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 검증결과 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getHqSalePriceExcelUploadCheckList"  parameterType="salePriceVO" resultType="DefaultMap">
+        /* SalePriceMapper.getHqSalePriceExcelUploadCheckList */
+        SELECT
+        A.RESULT,
+        A.PROD_CD,
+        B.PROD_NM,
+        A.SALE_UPRC,
+        B.PRC_CTRL_FG,
+        A.SEQ
+        FROM TB_TMP_EXCEL_SALE_PRICE A,
+        TB_HQ_PRODUCT B
+        WHERE 1=1
+        AND A.SESSION_ID = #{sessionId}
+        AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND B.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+        AND B.PROD_CD (+)= A.PROD_CD
+        ORDER BY A.SEQ
+    </select>
+
+    <!-- 검증결과 전체 삭제 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getSalePriceExcelUploadCheckDeleteAll" parameterType="salePriceVO">
+        /* SalePriceMapper.getSalePriceExcelUploadCheckDeleteAll */
+        DELETE
+        TB_TMP_EXCEL_SALE_PRICE
+        WHERE 1=1
+        AND SESSION_ID = #{sessionId}
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+    </delete>
+
+    <!-- 검증결과 삭제 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getSalePriceExcelUploadCheckDelete" parameterType="salePriceVO">
+        /* SalePriceMapper.getSalePriceExcelUploadCheckDelete */
+        DELETE
+        TB_TMP_EXCEL_SALE_PRICE
+        WHERE 1=1
+        AND SESSION_ID = #{sessionId}
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND PROD_CD = #{prodCd}
+        AND SEQ = #{seq}
+    </delete>
+
+    <!-- 업로드시 임시테이블 저장 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getSalePriceExcelUploadCheckSave" parameterType="salePriceVO">
+        /* SalePriceMapper.getSalePriceExcelUploadCheckSave */
+        INSERT INTO TB_TMP_EXCEL_SALE_PRICE
+        (
+            SESSION_ID,
+            SEQ,
+            HQ_OFFICE_CD,
+            STORE_CD,
+            PROD_CD,
+            SALE_UPRC,
+            RESULT,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{sessionId},
+            #{seq},
+            #{hqOfficeCd},
+            #{storeCd},
+            #{prodCd},
+            #{saleUprc},
+            #{result},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+         )
+    </insert>
+
+    <!-- 상품코드 존재여부 체크 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getProdCdChk"  parameterType="salePriceVO" resultType="Integer">
+        /* SalePriceMapper.getProdCdChk */
+        SELECT COUNT(*)
+        FROM TB_HQ_PRODUCT
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND PROD_CD = #{prodCd}
+    </select>
+
 </mapper>

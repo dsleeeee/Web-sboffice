@@ -112,6 +112,12 @@ public class SalePriceVO extends PageVO {
     /** 상품브랜드코드 */
     private String prodHqBrandCd;
 
+    /** 세션ID */
+    private String sessionId;
+
+    /** 순번 */
+    private int seq;
+
     /**
      * @return the hqOfficeCd
      */
@@ -462,4 +468,12 @@ public class SalePriceVO extends PageVO {
     public void setProdHqBrandCd(String prodHqBrandCd) {
         this.prodHqBrandCd = prodHqBrandCd;
     }
+
+    public String getSessionId() { return sessionId; }
+
+    public void setSessionId(String sessionId) { this.sessionId = sessionId; }
+
+    public int getSeq() { return seq; }
+
+    public void setSeq(int seq) { this.seq = seq; }
 }
