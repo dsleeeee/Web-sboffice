@@ -33,9 +33,16 @@
       <th><s:message code="saleCopy.original.storeCd" /></th>
       <td  colspan="3">
         <%-- 매장선택 모듈 사용시 include --%>
-        <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
-          <jsp:param name="targetId" value="originalStore"/>
-        </jsp:include>
+        <c:if test="${momsEnvstVal == '0'}">
+          <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
+            <jsp:param name="targetId" value="originalStore"/>
+          </jsp:include>
+        </c:if>
+        <c:if test="${momsEnvstVal == '1'}">
+          <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreSMoms.jsp" flush="true">
+            <jsp:param name="targetId" value="originalStore"/>
+          </jsp:include>
+        </c:if>
         <%--// 매장선택 모듈 사용시 include --%>
       </td>
     </tr>
@@ -44,9 +51,16 @@
       <th><s:message code="saleCopy.target.storeCd" /></th>
       <td  colspan="3">
         <%-- 매장선택 모듈 사용시 include --%>
-        <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
-          <jsp:param name="targetId" value="targetStore"/>
-        </jsp:include>
+        <c:if test="${momsEnvstVal == '0'}">
+          <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
+            <jsp:param name="targetId" value="targetStore"/>
+          </jsp:include>
+        </c:if>
+        <c:if test="${momsEnvstVal == '1'}">
+          <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreSMoms.jsp" flush="true">
+            <jsp:param name="targetId" value="targetStore"/>
+          </jsp:include>
+        </c:if>
         <%--// 매장선택 모듈 사용시 include --%>
       </td>
     </tr>

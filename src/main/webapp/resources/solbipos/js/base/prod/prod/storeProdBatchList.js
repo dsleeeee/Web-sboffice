@@ -20,6 +20,16 @@ app.controller('storeProdBatchListCtrl', ['$scope', '$http', function ($scope, $
 
     $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
 
+    // 브랜드 콤보박스 셋팅
+    $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
+    $scope._setComboData("momsAcShopCombo", momsAcShopComboList); // AC점포별
+    $scope._setComboData("momsAreaFgCombo", momsAreaFgComboList); // 지역구분
+    $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
+    $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
+    $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
+    $scope._setComboData("branchCdCombo", branchCdComboList); // 지사
+
+    
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
@@ -66,7 +76,13 @@ app.controller('storeProdBatchListCtrl', ['$scope', '$http', function ($scope, $
         var params = {};
         params.storeCd = $scope.storeCd;
         params.storeNm = $scope.storeNm;
-
+        params.momsTeam = $scope.momsTeam;
+        params.momsAcShop = $scope.momsAcShop;
+        params.momsAreaFg = $scope.momsAreaFg;
+        params.momsCommercial = $scope.momsCommercial;
+        params.momsShopType = $scope.momsShopType;
+        params.momsStoreManageType = $scope.momsStoreManageType;
+        params.branchCd = $scope.branchCd;
         if(brandUseFg === "1" && orgnFg === "HQ"){
 
           // 선택한 매장브랜드가 있을 때
@@ -88,4 +104,12 @@ app.controller('storeProdBatchListCtrl', ['$scope', '$http', function ($scope, $
         });
     };
 
+    // 확장조회 숨김/보임
+    $scope.searchAddShowChange = function(){
+        if( $("#tblSearchAddShow").css("display") === 'none') {
+            $("#tblSearchAddShow").show();
+        } else {
+            $("#tblSearchAddShow").hide();
+        }
+    };
 }]);
