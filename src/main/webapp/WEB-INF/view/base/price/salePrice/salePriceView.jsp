@@ -35,5 +35,23 @@
   <c:import url="/WEB-INF/view/base/price/salePrice/storeSaleCopyView.jsp">
   </c:import>
 </div>
+<script type="text/javascript">
+
+    // 브랜드 사용여부
+    var brandUseFg = "${brandUseFg}";
+    // 사용자 브랜드
+    var userHqBrandCdComboList = ${userHqBrandCdComboList};
+
+    // [1250 맘스터치] 환경설정값
+    var momsEnvstVal = "${momsEnvstVal}";
+
+    var branchCdComboList = ${branchCdComboList};
+    var momsTeamComboList = ${momsTeamComboList};
+    var momsAcShopComboList = ${momsAcShopComboList};
+    var momsAreaFgComboList = ${momsAreaFgComboList};
+    var momsCommercialComboList = ${momsCommercialComboList};
+    var momsShopTypeComboList = ${momsShopTypeComboList};
+    var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
+</script>
 <script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/salePrice.js?ver=20181220.02" charset="utf-8"></script>
 

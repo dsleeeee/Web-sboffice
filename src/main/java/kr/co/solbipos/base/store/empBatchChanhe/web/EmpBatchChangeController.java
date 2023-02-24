@@ -158,7 +158,7 @@ public class EmpBatchChangeController {
             momsShopTypeComboListAll = cmmCodeUtil.assmblObj(momsShopTypeComboList, "name", "value", UseYn.N);
         }
         model.addAttribute("momsShopTypeComboList", momsShopTypeComboListAll);
-        // 매장관리타입
+        // 사원관리타입
         List momsStoreManageTypeComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "156");
         String momsStoreManageTypeComboListAll = "";
         if (momsStoreManageTypeComboList.isEmpty()) {
@@ -236,7 +236,7 @@ public class EmpBatchChangeController {
         } else {
             model.addAttribute("momsShopTypeComboList2", momsShopTypeComboListAll);
         }
-        // 매장관리타입
+        // 사원관리타입
         if(momsStoreManageTypeComboList.size() > 1) {
             momsStoreManageTypeComboList.remove(0);
             String momsStoreManageTypeComboListAll2 = "";
@@ -261,7 +261,7 @@ public class EmpBatchChangeController {
     }
 
     /**
-     * 매장목록 조회
+     * 사원목록 조회
      * @param   empBatchChangeVO
      * @param   request
      * @param   response
@@ -283,7 +283,7 @@ public class EmpBatchChangeController {
     }
 
     /**
-     * 매장정보 저장
+     * 사원정보 저장
      *
      * @param empBatchChangeVOs
      * @param request
@@ -373,5 +373,38 @@ public class EmpBatchChangeController {
 
         return returnJson(Status.OK, result);
     }
+    
+    /**
+     * 사원목록 조회
+     * @param   empBatchChangeVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  권지현
+     * @since   2023.02.16
+     */
+    @RequestMapping(value = "copyAuthorExcept/getEmpList2.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getEmpList2(EmpBatchChangeVO empBatchChangeVO, HttpServletRequest request,
+                             HttpServletResponse response, Model model) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        List<DefaultMap<String>> list = empBatchChangeService.getEmpList2(empBatchChangeVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, empBatchChangeVO);
+    }
+
+    /** 권한복사 */
+    @RequestMapping(value = "copyAuthorExcept/copyAuthorExcept.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result copyAuthorExcept(@RequestBody EmpBatchChangeVO[] empBatchChangeVOs, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = empBatchChangeService.copyAuthorExcept(empBatchChangeVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

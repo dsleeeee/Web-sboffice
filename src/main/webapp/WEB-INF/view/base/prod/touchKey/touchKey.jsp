@@ -457,6 +457,16 @@
     window.MAX_CLASS_ROW = '${maxClassRow}' || '2';
 
 </script>
+
+<script type="text/javascript">
+    var branchCdComboList = ${branchCdComboList};
+    var momsTeamComboList = ${momsTeamComboList};
+    var momsAcShopComboList = ${momsAcShopComboList};
+    var momsAreaFgComboList = ${momsAreaFgComboList};
+    var momsCommercialComboList = ${momsCommercialComboList};
+    var momsShopTypeComboList = ${momsShopTypeComboList};
+    var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
+</script>
 <script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js"
         charset="utf-8"></script>
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js"

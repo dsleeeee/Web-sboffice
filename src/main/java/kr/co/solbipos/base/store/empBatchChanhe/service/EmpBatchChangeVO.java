@@ -1,6 +1,7 @@
 package kr.co.solbipos.base.store.empBatchChanhe.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
+import kr.co.solbipos.sys.auth.authgroup.enums.IncldExcldFg;
 
 /**
  * @Class Name : EmpBatchChangeVO.java
@@ -38,6 +39,10 @@ public class EmpBatchChangeVO extends PageVO {
     private String sysStatFg;
     /** 영업지역좌표 */
     private String saleArea;
+    /** 사원번호 */
+    private String empNo;
+    /** 사원명 */
+    private String empNm;
 
     /** 사용자별 브랜드코드 */
     private String[] userBrandList;
@@ -78,8 +83,13 @@ public class EmpBatchChangeVO extends PageVO {
     /** 명칭코드그룹코드 */
     private String nmcodeGrpCd;
 
-    /** 사원번호 */
-    private String empNo;
+    /** 사원코드 */
+    private String originalEmpNo;
+    private String targetEmpNo;
+
+    private String resrceCd;
+    private IncldExcldFg incldExcldFg;
+    private String useYn;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -143,6 +153,14 @@ public class EmpBatchChangeVO extends PageVO {
 
     public void setSaleArea(String saleArea) {
         this.saleArea = saleArea;
+    }
+
+    public String getEmpNm() {
+        return empNm;
+    }
+
+    public void setEmpNm(String empNm) {
+        this.empNm = empNm;
     }
 
     public String[] getUserBrandList() {
@@ -255,5 +273,45 @@ public class EmpBatchChangeVO extends PageVO {
 
     public void setEmpNo(String empNo) {
         this.empNo = empNo;
+    }
+
+    public String getOriginalEmpNo() {
+        return originalEmpNo;
+    }
+
+    public void setOriginalEmpNo(String originalEmpNo) {
+        this.originalEmpNo = originalEmpNo;
+    }
+
+    public String getTargetEmpNo() {
+        return targetEmpNo;
+    }
+
+    public void setTargetEmpNo(String targetEmpNo) {
+        this.targetEmpNo = targetEmpNo;
+    }
+
+    public String getResrceCd() {
+        return resrceCd;
+    }
+
+    public void setResrceCd(String resrceCd) {
+        this.resrceCd = resrceCd;
+    }
+
+    public IncldExcldFg getIncldExcldFg() {
+        return incldExcldFg;
+    }
+
+    public void setIncldExcldFg(IncldExcldFg incldExcldFg) {
+        this.incldExcldFg = incldExcldFg;
+    }
+
+    public String getUseYn() {
+        return useYn;
+    }
+
+    public void setUseYn(String useYn) {
+        this.useYn = useYn;
     }
 }

@@ -35,14 +35,14 @@
             <tbody>
             <tr>
                 <%-- 매장코드 --%>
-                <th><s:message code="storeInfo.storeCd"/></th>
+                <th><s:message code="empBatchChange.empNo"/></th>
                 <td>
-                    <input type="text" id="srchStoreCd" name="srchStoreCd" ng-model="storeCd" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
+                    <input type="text" id="srchEmpNo" name="srchEmpNo" ng-model="empNo" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
                 </td>
                 <%-- 매장명 --%>
-                <th><s:message code="storeInfo.storeNm"/></th>
+                <th><s:message code="empBatchChange.empNm"/></th>
                 <td>
-                    <input type="text" id="srchStoreNm" name="srchStoreNm" ng-model="storeNm" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
+                    <input type="text" id="srchEmpNm" name="srchEmpNm" ng-model="empNm" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
                 </td>
             </tr>
 <%--            <tr>--%>
@@ -413,4 +413,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/empBatchChange/empBatchChange.js?ver=20230216.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/empBatchChange/empBatchChange.js?ver=20230216.02" charset="utf-8"></script>

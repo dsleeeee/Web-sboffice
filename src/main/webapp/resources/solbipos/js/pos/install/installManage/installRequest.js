@@ -39,6 +39,11 @@ app.controller('installRegistCtrl', ['$scope', '$http', function ($scope, $http)
       $("#pSrchAgencyNm").val(orgnNm);
       $("#agencyCd").val(orgnCd);
       $("#agencyNm").val(orgnNm);
+  } else if(orgnFg === "HQ"){
+      $("#pSrchAgencyCd").val(agencyCd);
+      $("#pSrchAgencyNm").val("[" + agencyCd + "]" + agencyNm);
+      $("#agencyCd").val(agencyCd);
+      $("#agencyNm").val("[" + agencyCd + "]" + agencyNm);
   }
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다

@@ -1492,6 +1492,7 @@
             tmp.POS_NO,
             NVL((SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = tms.STORE_CD AND POS_NO = tmp.POS_NO AND ENVST_CD = '4101'), 0) AS TU_M_CLS_FG
             FROM TB_MS_STORE tms,
+                 TB_MS_STORE_INFO tmsi,
             (
                 SELECT
                 tmp.STORE_CD,
@@ -1505,6 +1506,7 @@
             ) tmp
             WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
             AND tmp.STORE_CD = tms.STORE_CD
+            AND tms.STORE_CD = tmsi.STORE_CD(+)
             <if test="storeCd != null and storeCd != ''">
                 AND tms.STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
             </if>
@@ -1525,6 +1527,27 @@
                         #{item}
                     </foreach>
                 </if>
+            </if>
+            <if test='momsTeam != null and momsTeam != ""'>
+                AND tmsi.MOMS_TEAM = #{momsTeam}
+            </if>
+            <if test='momsAcShop != null and momsAcShop != ""'>
+                AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+            </if>
+            <if test='momsAreaFg != null and momsAreaFg != ""'>
+                AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+            </if>
+            <if test='momsCommercial != null and momsCommercial != ""'>
+                AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+            </if>
+            <if test='momsShopType != null and momsShopType != ""'>
+                AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+            </if>
+            <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+            </if>
+            <if test='branchCd != null and branchCd != ""'>
+                AND tms.BRANCH_CD = #{branchCd}
             </if>
             ORDER BY tms.STORE_CD, tmp.POS_NO ASC
         )
@@ -1763,6 +1786,7 @@
             (SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = tms.STORE_CD AND POS_NO = tmp.POS_NO AND ENVST_CD = '4069') AS ENV_4069,
             NVL((SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = tms.STORE_CD AND POS_NO = tmp.POS_NO AND ENVST_CD = '4101'), 0) AS TU_M_CLS_FG
             FROM TB_MS_STORE tms,
+                 TB_MS_STORE_INFO tmsi,
             (
                 SELECT tmp.STORE_CD,
                 tmp.POS_NO
@@ -1775,6 +1799,7 @@
             ) tmp
             WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
             AND tmp.STORE_CD = tms.STORE_CD
+            AND tms.STORE_CD = tmsi.STORE_CD(+)
             <if test="storeCd != null and storeCd != ''">
                 AND tms.STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
             </if>
@@ -1783,6 +1808,39 @@
             </if>
             <if test="sysStatFg != null and sysStatFg != ''">
                 AND tms.SYS_STAT_FG = #{sysStatFg} --매장상태구분
+            </if>
+            <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 선택한 매장브랜드가 있을 때
+            </if>
+            <if test='momsTeam != null and momsTeam != ""'>
+                AND tmsi.MOMS_TEAM = #{momsTeam}
+            </if>
+            <if test='momsAcShop != null and momsAcShop != ""'>
+                AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+            </if>
+            <if test='momsAreaFg != null and momsAreaFg != ""'>
+                AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+            </if>
+            <if test='momsCommercial != null and momsCommercial != ""'>
+                AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+            </if>
+            <if test='momsShopType != null and momsShopType != ""'>
+                AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+            </if>
+            <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+            </if>
+            <if test='branchCd != null and branchCd != ""'>
+                AND tms.BRANCH_CD = #{branchCd}
+            </if>
+            <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                <if test='userBrands != null and userBrands != ""'>
+                    -- 선택한 매장브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                    AND tms.HQ_BRAND_CD IN
+                    <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
             </if>
             ORDER BY tms.STORE_CD, tmp.POS_NO ASC
         )

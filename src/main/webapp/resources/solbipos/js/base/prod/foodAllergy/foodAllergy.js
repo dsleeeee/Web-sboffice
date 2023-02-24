@@ -64,7 +64,9 @@ app.controller('foodAllergyCtrl', ['$scope', '$http', function ($scope, $http) {
                     params.recipesCd = selectedRow.recipesCd;
                     params.recipesNm = selectedRow.recipesNm;
                     params.allergieNm = selectedRow.allergieNm;
-                    params.hqBrandCd = selectedRow.hqBrandCd;
+                    if(hqOfficeCd === 'A0001' && orgnFg === 'HQ') {
+                        params.hqBrandCd = selectedRow.hqBrandCd;
+                    }
                     var storeScope = agrid.getScope('foodAllergyDetailCtrl');
                     storeScope._broadcast('foodAllergyDetailCtrl', params);
                     event.preventDefault();
@@ -84,22 +86,6 @@ app.controller('foodAllergyCtrl', ['$scope', '$http', function ($scope, $http) {
 
     $scope.searchFoodAllergy = function(){
         var params = {};
-
-        if(brandUseFg === "1" && orgnFg === "HQ"){
-          // 선택한 상품브랜드가 있을 때
-          params.prodHqBrandCd = $scope.srchProdHqBrandCdCombo.selectedValue;
-
-          // 선택한 상품브랜드가 없을 때('전체' 일때)
-          if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
-              var userHqBrandCd = "";
-              for(var i=0; i < userHqBrandCdComboList.length; i++){
-                  if(userHqBrandCdComboList[i].value !== null) {
-                      userHqBrandCd += userHqBrandCdComboList[i].value + ","
-                  }
-              }
-              params.userProdBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
-          }
-        }
 
         $scope._inquiryMain("/base/prod/foodAllergy/foodAllergy/getFoodAllergyList.sb", params, function() {
             addSelected = "N";

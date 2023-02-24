@@ -1681,6 +1681,7 @@
         thps.STORE_CD,
         tmp.PRC_CTRL_FG
         FROM TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi,
         TB_HQ_OFFICE tho,
         TB_HQ_PRODUCT_STORE thps,
         TB_HQ_BRAND thb,
@@ -1764,6 +1765,7 @@
         AND thb.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
         AND thb.HQ_BRAND_CD (+)= tms.HQ_BRAND_CD
         AND tmp.STORE_CD (+)= tms.STORE_CD
+        AND tmsi.STORE_CD (+)= tms.STORE_CD
         <if test='sysStatFg != null and sysStatFg.toString() != ""'>
             AND tms.SYS_STAT_FG = #{sysStatFg}
         </if>
@@ -1793,6 +1795,27 @@
                     #{item}
                 </foreach>
             </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
         </if>
         ORDER BY tms.STORE_CD ASC
     </select>
@@ -7053,7 +7076,9 @@
         <![CDATA[
         SELECT  tms.HQ_OFFICE_CD, tms.STORE_CD, tms.STORE_NM
         FROM    TB_MS_STORE tms
+        ,       TB_MS_STORE_INFO tmsi
         WHERE   tms.HQ_OFFICE_CD =   #{hqOfficeCd}
+        AND     tms.STORE_CD = tmsi.STORE_CD (+)
         ]]>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
@@ -7078,6 +7103,27 @@
                     #{item}
                 </foreach>
             </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
         </if>
         ORDER BY tms.STORE_CD
     </select>

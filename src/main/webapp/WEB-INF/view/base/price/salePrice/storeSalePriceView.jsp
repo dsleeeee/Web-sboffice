@@ -36,9 +36,16 @@
       <th><s:message code="salePrice.select.store" /></th>
       <td>
         <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-        <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
-          <jsp:param name="targetId" value="searchStore"/>
-        </jsp:include>
+        <c:if test="${momsEnvstVal == '0'}">
+          <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
+            <jsp:param name="targetId" value="searchStore"/>
+          </jsp:include>
+        </c:if>
+        <c:if test="${momsEnvstVal == '1'}">
+          <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreSMoms.jsp" flush="true">
+            <jsp:param name="targetId" value="searchStore"/>
+          </jsp:include>
+        </c:if>
         <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
       </td>
       <th><s:message code="salePrice.select.prodClass" /></th>
@@ -77,10 +84,30 @@
         <td><s:message code="salePrice.saleUprcApply"/></td>
       </tr>
     </c:if>
+    <c:if test="${brandUseFg == '1'}">
+      <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+        <tr>
+            <%-- 매장브랜드 --%>
+          <th><s:message code="kioskKeyMap.prodHqBrand" /></th>
+          <td>
+            <div class="sb-select">
+              <wj-combo-box
+                      id="srchStoreHqBrandCd"
+                      ng-model="storeHqBrandCd"
+                      items-source="_getComboData('srchStoreHqBrandCd')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      control="srchStoreHqBrandCdCombo">
+              </wj-combo-box>
+            </div>
+          </td>
+        </tr>
+      </c:if>
+    </c:if>
    </tbody>
   </table>
   <%--//searchTbl--%>
-
 
   <table class="searchTbl mt10" id="tblStoreChange" style="display: none;">
     <colgroup>
@@ -452,7 +479,7 @@
   var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/storeSalePrice.js?ver=20220124.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/storeSalePrice.js?ver=20220124.03" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

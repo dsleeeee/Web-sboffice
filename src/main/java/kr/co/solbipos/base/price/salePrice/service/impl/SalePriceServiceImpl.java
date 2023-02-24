@@ -73,6 +73,29 @@ public class SalePriceServiceImpl implements SalePriceService {
             salePriceVO.setArrStoreCd(salePriceVO.getStoreCd().split(","));
         }
 
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 매장브랜드가 없을 때 (매장브랜드가 '전체' 일때)
+            if (salePriceVO.getStoreHqBrandCd() == "" || salePriceVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (salePriceVO.getUserBrands() != null && !"".equals(salePriceVO.getUserBrands())) {
+                    String[] userBrandList = salePriceVO.getUserBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        salePriceVO.setUserBrandList(userBrandList);
+                    }
+                }
+            }
+        }
+        System.out.println("값 체크_impl");
+        System.out.println(salePriceVO.getProdCd());
+        System.out.println(salePriceVO.getMomsAcShop());
+        System.out.println(salePriceVO.getMomsCommercial());
+        System.out.println(salePriceVO.getMomsTeam());
+        System.out.println(salePriceVO.getMomsStoreManageType());
+        System.out.println(salePriceVO.getMomsAreaFg());
+        System.out.println(salePriceVO.getMomsShopType());
+        System.out.println(salePriceVO.getBranchCd());
+        System.out.println(salePriceVO.getUserBrandList());
+
         return salePriceMapper.getProdSalePriceList(salePriceVO);
     }
 

@@ -73,6 +73,7 @@
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_MS_PRODUCT tmp,
         TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi,
         (
             SELECT STORE_CD, PROD_CD,
                     MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
@@ -108,6 +109,7 @@
         AND tmp.SALE_PROD_YN = 'Y'             -- 판매상품 여부
         AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
         AND tms.STORE_CD = tmp.STORE_CD
+        AND tms.STORE_CD = tmsi.STORE_CD(+)
         AND tmpsp.STORE_CD (+)= tmp.STORE_CD
         AND tmpsp.PROD_CD (+)= tmp.PROD_CD
         AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -119,6 +121,39 @@
             <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 선택한 매장브랜드가 있을 때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 선택한 매장브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
         </if>
         ORDER BY tms.STORE_CD, tmp.PROD_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>

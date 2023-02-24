@@ -38,18 +38,6 @@
                 <if test="orgplceNm != null and orgplceNm != ''">
                   AND thpro.ORGPLCE_NM LIKE '%' || #{orgplceNm} || '%'
                 </if>
-                <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
-                    AND thpro.HQ_BRAND_CD = #{prodHqBrandCd} -- 선택한 상품브랜드가 있을 때
-                </if>
-                <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
-                    <if test='userProdBrands != null and userProdBrands != ""'>
-                        -- 선택한 상품브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
-                        AND thpro.HQ_BRAND_CD IN
-                        <foreach collection="userProdBrandList" item="item" open=" (" separator="," close=")" >
-                            #{item}
-                        </foreach>
-                    </if>
-                </if>
                 ORDER BY thpro.RECIPES_CD
             </when>
             <!-- 매장 -->

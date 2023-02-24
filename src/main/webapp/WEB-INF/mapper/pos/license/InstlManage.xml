@@ -567,4 +567,19 @@
            AND INST_FG = '0'
     </delete>
 
+    <!-- 본사일때 대리점정보 -->
+    <!--
+        TABLE    : TB_HQ_OFFICE, TB_CM_AGENCY
+        COMMENTS : 본사일때 대리점정보
+    -->
+    <select id="getAgencyInfo"  parameterType="instlManageVO" resultType="DefaultMap">
+        /* USE : InstlManageMapper.getAgencyInfo */
+        SELECT 	tho.AGENCY_CD
+        ,			tca.AGENCY_NM
+        FROM 		TB_HQ_OFFICE tho
+        ,			TB_CM_AGENCY tca
+        WHERE 		tho.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND 		tho.AGENCY_CD = tca.AGENCY_CD
+    </select>
+
 </mapper>

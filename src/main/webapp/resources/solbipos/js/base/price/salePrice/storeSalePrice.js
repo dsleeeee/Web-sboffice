@@ -151,6 +151,7 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
   };
 
   // 콤보박스 데이터 Set
+$scope._setComboData("listScaleBox", gvListScaleBoxData);
   $scope._setComboData("saleAmtOption", saleAmtOptionFg);
   $scope._setComboData("changeUnit", unitFg);
   $scope._setComboData("changeMode", modeFg);
@@ -188,7 +189,20 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
     params.listScale = $scope.listScaleCombo.text;
     params.prodCd = $scope.prodCd;
     params.prodNm = $scope.prodNm;
-
+    if(brandUseFg === "1" && orgnFg === "HQ"){
+        // 선택한 매장브랜드가 있을 때
+        params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
+        // 선택한 매장브랜드가 없을 때('전체' 일때)
+        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+            var userHqBrandCd = "";
+            for(var i=0; i < userHqBrandCdComboList.length; i++){
+                if(userHqBrandCdComboList[i].value !== null) {
+                    userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                }
+            }
+            params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+        }
+    }
     console.log('params', params);
 
     $scope._inquirySub('/base/price/salePrice/storeSalePrice/getStoreSalePriceList.sb', params, function() {

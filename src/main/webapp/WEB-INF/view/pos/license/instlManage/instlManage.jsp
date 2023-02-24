@@ -26,6 +26,8 @@
 </div>
 
 <script type="text/javascript">
+    var agencyCd = "${agencyCd}";
+    var agencyNm = "${agencyNm}";
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/instlManage.js?ver=20191014.05" charset="utf-8"></script>

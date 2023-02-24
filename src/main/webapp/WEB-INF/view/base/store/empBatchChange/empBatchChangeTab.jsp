@@ -9,13 +9,17 @@
 <div class="con">
     <div class="tabType1" ng-controller="empBatchChangeTabCtrl" ng-init="init()">
         <ul>
-            <%-- 엑셀다운로드 탭 --%>
+            <%-- 조회 탭 --%>
             <li>
                 <a id="empBatchChangeTab" href="#" class="on" ng-click="empBatchChangeShow()"><s:message code="empBatchChange.empBatchChange"/></a>
             </li>
-            <%-- 조회 탭 --%>
+            <%-- 엑셀다운로드 탭 --%>
             <li>
                 <a id="empBatchChangeExcelUploadTab" href="#" ng-click="empBatchChangeExcelUploadShow()"><s:message code="empBatchChange.empBatchChangeExcelUpload"/></a>
+            </li>
+            <%-- 권한복사 탭 --%>
+            <li>
+                <a id="copyAuthorExceptTab" href="#" ng-click="copyAuthorExceptShow()"><s:message code="empBatchChange.copyAuthorExcept"/></a>
             </li>
         </ul>
     </div>
@@ -40,7 +44,7 @@
     var momsShopTypeComboList2 = ${momsShopTypeComboList2};
     var momsStoreManageTypeComboList2 = ${momsStoreManageTypeComboList2};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/store/empBatchChange/empBatchChangeTab.js?ver=20230216.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/empBatchChange/empBatchChangeTab.js?ver=20230216.02" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 일괄변경 레이어 --%>
@@ -51,6 +55,12 @@
 
 <%-- 엑셀업로드 레이어 --%>
     <c:import url="/WEB-INF/view/base/store/empBatchChange/empBatchChangeExcelUpload.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 권한복사 레이어 --%>
+    <c:import url="/WEB-INF/view/base/store/empBatchChange/copyAuthorExcept.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

@@ -244,6 +244,15 @@ public class ViewServiceImpl implements ViewService {
 
         viewVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
+        if(viewVO.getMomsEnvstVal().equals("1")) {
+            // 매장브랜드 '전체' 일때
+            if (viewVO.getStoreHqBrandCd() == "" || viewVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = viewVO.getUserBrands().split(",");
+                viewVO.setUserBrandList(userBrandList);
+            }
+        }
+
         return viewMapper.getStoreList(viewVO);
     }
 

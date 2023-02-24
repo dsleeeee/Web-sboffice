@@ -49,4 +49,7 @@ public interface InstlManageService {
 
     /** 설치요청 삭제 */
     int delRequestDtl(InstlManageVO[] instlManageVOs, SessionInfoVO sessionInfoVO);
+
+    /** 본사일때 대리점정보 */
+    List<DefaultMap<String>> getAgencyInfo(SessionInfoVO sessionInfoVO);
 }
