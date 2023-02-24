@@ -45,6 +45,12 @@
 <!--                </foreach>-->
 <!--            </if>-->
 <!--        </if>-->
+        <if test='empNo != null and empNo != ""'>
+            AND the.EMP_NO LIKE '%'|| #{empNo} ||'%'
+        </if>
+        <if test="empNm != null and empNm != ''">
+            AND the.EMP_NM LIKE '%'|| #{empNm} ||'%'
+        </if>
         <if test='momsTeam != null and momsTeam != ""'>
             AND the.MOMS_TEAM = #{momsTeam}
         </if>
@@ -69,6 +75,73 @@
         ORDER
         BY the.EMP_NO
     <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 매장목록 조회2 -->
+    <!--
+        TABLE    : TB_HQ_BRANCH_MOMS, TB_MS_STORE
+        PARAM    : empBatchChangeVO
+        COMMENTS : 매장목록을 조회한다.
+    -->
+    <select id="getEmpList2" parameterType="empBatchChangeVO" resultType="DefaultMap">
+    /* USE : EmpBatchChangeMapper.getEmpList2  */
+        SELECT  the.EMP_NO
+        ,		the.EMP_NM
+        ,		the.USER_ID
+        ,		the.BRANCH_CD
+        ,		the.MOMS_TEAM
+        ,		the.MOMS_AC_SHOP
+        ,		the.MOMS_AREA_FG
+        ,		the.MOMS_COMMERCIAL
+        ,		the.MOMS_SHOP_TYPE
+        ,		the.MOMS_STORE_MANAGE_TYPE
+        FROM    TB_HQ_EMPLOYEE the
+        WHERE   the.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     the.WEB_USE_YN = 'Y'
+<!--        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>-->
+<!--            AND the.HQ_BRAND_CD = #{storeHqBrandCd} &#45;&#45; 매장브랜드 선택일때-->
+<!--        </if>-->
+<!--        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>-->
+<!--            <if test='userBrands != null and userBrands != ""'>-->
+<!--                &#45;&#45; 매장브랜드 전체일때-->
+<!--                AND the.HQ_BRAND_CD IN-->
+<!--                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >-->
+<!--                    #{item}-->
+<!--                </foreach>-->
+<!--            </if>-->
+<!--        </if>-->
+        <if test='empNo != null and empNo != ""'>
+            AND the.EMP_NO LIKE '%'|| #{empNo} ||'%'
+        </if>
+        <if test="empNm != null and empNm != ''">
+            AND the.EMP_NM LIKE '%'|| #{empNm} ||'%'
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND the.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND the.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND the.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND the.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND the.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND the.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND the.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='originalEmpNo != null and originalEmpNo != ""'>
+            AND the.EMP_NO != #{originalEmpNo}
+        </if>
+        ORDER
+        BY the.EMP_NO
     </select>
 
     <!-- 매장정보 저장 -->
@@ -238,4 +311,107 @@
         AND     EMP_NO = #{empNo}
     </delete>
 
+
+    <!-- 메뉴권한복사-->
+    <!--
+        TABLE    : TB_WB_USER_INFO, TB_HQ_EMPLOYEE
+        PARAM    : empBatchChangeVO
+        COMMENTS : 메뉴권한을 복사한다.
+    -->
+    <update id="copyAuth" parameterType="empBatchChangeVO" >
+        /* USE : EmpBatchChangeMapper.copyAuth */
+        UPDATE TB_WB_USER_INFO
+        SET AUTH_GRP_CD = (SELECT twu.AUTH_GRP_CD
+                           FROM TB_HQ_EMPLOYEE the,
+                                TB_WB_USER_INFO twu
+                           WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
+                             AND the.EMP_NO = #{originalEmpNo}
+                             AND twu.USER_ID = the.USER_ID
+        )
+        WHERE USER_ID = (SELECT the.USER_ID
+                         FROM TB_HQ_EMPLOYEE the,
+                              TB_WB_USER_INFO twu
+                         WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
+                           AND the.EMP_NO = #{targetEmpNo}
+                           AND twu.USER_ID = the.USER_ID
+        )
+    </update>
+
+    <!-- 권한예외 복사-->
+    <!--
+        TABLE    : TB_WB_AUTHOR_EXCEPT, TB_HQ_EMPLOYEE, TB_WB_USER_INFO
+        PARAM    : empBatchChangeVO
+        COMMENTS : 예외 권한을 복사한다.
+    -->
+    <insert id="copyAuthExcp" parameterType="empBatchChangeVO" >
+        /* USE : EmpBatchChangeMapper.copyAuthExcp */
+        <![CDATA[
+        MERGE INTO TB_WB_AUTHOR_EXCEPT twa
+            USING DUAL
+            ON (
+                        twa.USER_ID = ( SELECT the.USER_ID
+                                        FROM TB_HQ_EMPLOYEE the,
+                                             TB_WB_USER_INFO twu
+                                        WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
+                                          AND the.EMP_NO = #{targetEmpNo}
+                                          AND twu.USER_ID = the.USER_ID)
+                    AND twa.RESRCE_CD = #{resrceCd}
+                )
+            WHEN MATCHED THEN
+                UPDATE
+                    SET twa.INCLD_EXCLD_FG = #{incldExcldFg},
+                        twa.USE_YN = #{useYn},
+                        twa.MOD_DT = #{modDt},
+                        twa.MOD_ID = #{modId}
+            WHEN NOT MATCHED THEN
+                INSERT (USER_ID, RESRCE_CD, INCLD_EXCLD_FG, USE_YN, REG_DT, REG_ID)
+                    VALUES (
+                               (SELECT the.USER_ID FROM TB_HQ_EMPLOYEE the, TB_WB_USER_INFO twu WHERE the.HQ_OFFICE_CD = #{hqOfficeCd} AND the.EMP_NO = #{targetEmpNo} AND twu.USER_ID = the.USER_ID),
+                               #{resrceCd},
+                               #{incldExcldFg},
+                               #{useYn},
+                               #{regDt},
+                               #{regId}
+                           )
+        ]]>
+    </insert>
+
+    <!-- 권한예외 복사 시, 복사기준본사의 권한예외 값 조회 -->
+    <!--
+        TABLE    : TB_WB_AUTHOR_EXCEPT_V01
+        PARAM    : empBatchChangeVO
+        COMMENTS : 권한예외 복사 시, 복사기준본사의 권한예외 값을 조회한다.
+    -->
+    <select id="exceptMenu" parameterType="empBatchChangeVO" resultType="DefaultMap">
+        /* USE : EmpBatchChangeMapper.exceptMenu */
+        SELECT USER_ID,
+        RESRCE_CD,
+        INCLD_EXCLD_FG,
+        USE_YN
+        FROM TB_WB_AUTHOR_EXCEPT_V01
+        WHERE USER_ID = (SELECT twu.USER_ID
+        FROM TB_HQ_EMPLOYEE the,
+        TB_WB_USER_INFO twu
+        WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND the.EMP_NO != '0000'              <!-- 본사 기본계정 제외 -->
+        AND the.EMP_NO = #{originalEmpNo}
+        AND twu.USER_ID = the.USER_ID)
+        AND USE_YN = 'Y'
+    </select>
+
+    <!-- 메뉴권한 전체삭제-->
+    <!--
+        TABLE    : TB_WB_AUTHOR_EXCEPT
+        COMMENTS : 해당 사원의 메뉴권한 전체를 삭제한다.
+    -->
+    <delete id="removeAuthAll" parameterType="DefaultMap">
+        /* EmpBatchChangeMapper.removeAuthAll */
+        DELETE TB_WB_AUTHOR_EXCEPT
+         WHERE USER_ID = (SELECT twu.USER_ID
+                            FROM TB_HQ_EMPLOYEE the,
+                                 TB_WB_USER_INFO twu
+                           WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND the.EMP_NO = #{targetEmpNo}
+        AND twu.USER_ID = the.USER_ID)
+    </delete>
 </mapper>

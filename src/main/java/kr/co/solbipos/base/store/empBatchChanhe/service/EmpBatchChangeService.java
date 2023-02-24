@@ -25,6 +25,7 @@ public interface EmpBatchChangeService {
 
     /** 사원목록 조회 */
     List<DefaultMap<String>> getEmpList(EmpBatchChangeVO empBatchChangeVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<String>> getEmpList2(EmpBatchChangeVO empBatchChangeVO, SessionInfoVO sessionInfoVO);
 
     /** 사원정보 저장 */
     int getEmpBatchChangeSave(EmpBatchChangeVO[] empBatchChangeVOs, SessionInfoVO sessionInfoVO);
@@ -43,5 +44,8 @@ public interface EmpBatchChangeService {
 
     /** 사원정보 저장 */
     int getSimpleSave(EmpBatchChangeVO[] empBatchChangeVOs, SessionInfoVO sessionInfoVO);
+
+    /** 사원 권한 복사 */
+    int copyAuthorExcept(EmpBatchChangeVO[] empBatchChangeVOs, SessionInfoVO sessionInfoVO);
 
 }

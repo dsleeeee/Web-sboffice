@@ -95,6 +95,8 @@ app.controller('empBatchChangeCtrl', ['$scope', '$http', function ($scope, $http
 
     $scope.searchEmpBatchChange = function(){
         var params = {};
+        params.empNo = $scope.empNo;
+        params.empNm = $scope.empNm;
         params.momsTeam = $scope.momsTeam;
         params.momsAcShop = $scope.momsAcShop;
         params.momsAreaFg = $scope.momsAreaFg;
