@@ -69,6 +69,7 @@ app.controller('dlvrProdNmMappingCtrl', ['$scope', '$http', function ($scope, $h
         var params = {};
         params.listScale = $scope.listScale; //-페이지 스케일 갯수
         params.dlvrCol = dlvrCol;
+        params.chkDt = $scope.isChecked;
 
         // 등록일자 '전체기간' 선택에 따른 params
         if(!$scope.isChecked){
