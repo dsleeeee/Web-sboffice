@@ -495,7 +495,7 @@
         PARAM    : hqNmcodeVO
         COMMENTS : 시스템 공통코드 테이블에서 본사용 공통코드를 복사함
     -->
-    <!--
+
     <select id="copyCmmNameCode" statementType="CALLABLE"  parameterType="hqNmcodeVO" resultType="String">
         /* USE : HqManageMapper.copyCmmNameCode */
         {
@@ -506,7 +506,6 @@
             )
         }
     </select>
-    -->
 
     <!-- TID 복사  -->
     <!--

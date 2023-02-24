@@ -215,10 +215,10 @@ public class HqManageServiceImpl implements HqManageService{
         result = mapper.registTimeSlot(nmcodeVO);
         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-        // 공통코드 복사 //todo
-//        HqNmcodeVO hqNmcodeVO = new HqNmcodeVO();
-//        hqNmcodeVO.setHqOfficeCd(hqOfficeCd);
-//        String copyNmcodeResult = mapper.copyCmmNameCode(nmcodeVO);
+        // 공통코드 복사
+        HqNmcodeVO hqNmcodeVO = new HqNmcodeVO();
+        hqNmcodeVO.setHqOfficeCd(hqOfficeCd);
+        String copyNmcodeResult = mapper.copyCmmNameCode(nmcodeVO);
 
         // 회원등급 생성
         MemberClassVO memberClassVO = new MemberClassVO();
