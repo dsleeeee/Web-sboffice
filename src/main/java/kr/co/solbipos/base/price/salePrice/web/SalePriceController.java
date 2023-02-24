@@ -236,6 +236,178 @@ public class SalePriceController {
             model.addAttribute("coercionFg", "0");
         }
 
-        return "base/price/salePrice/hqSalePriceView";
+        /** 맘스터치 */
+        // [1250 맘스터치] 환경설정값 조회
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0"));
+            System.out.println("momsEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0"));
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
+            System.out.println("momsEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
+        }
+        /** //맘스터치 */
+
+        return "base/price/salePrice/hqSalePriceTab";
+    }
+
+    /**
+     * 본사판매가관리 엑셀업로드 탭 - 엑셀 양식다운로드 조회
+     *
+     * @param salePriceVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 02. 21.
+     */
+    @RequestMapping(value = "/hqSalePriceExcelUpload/getHqSalePriceExcelUploadSampleList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdExcelUploadCheckList(SalePriceVO salePriceVO, HttpServletRequest request,
+                                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = salePriceService.getHqSalePriceExcelUploadSampleList(salePriceVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, result, salePriceVO);
+    }
+
+    /**
+     * 검증결과 조회
+     *
+     * @param salePriceVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 02. 21.
+     */
+    @RequestMapping(value = "/hqSalePriceExcelUpload/getHqSalePriceExcelUploadCheckList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getHqSalePriceExcelUploadCheckList(SalePriceVO salePriceVO, HttpServletRequest request,
+                                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = salePriceService.getHqSalePriceExcelUploadCheckList(salePriceVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, result, salePriceVO);
+    }
+
+    /**
+     * 검증결과 전체 삭제
+     *
+     * @param salePriceVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 02. 21.
+     */
+    @RequestMapping(value = "/hqSalePriceExcelUpload/getSalePriceExcelUploadCheckDeleteAll.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSalePriceExcelUploadCheckDeleteAll(@RequestBody SalePriceVO salePriceVO, HttpServletRequest request,
+                                                   HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = salePriceService.getSalePriceExcelUploadCheckDeleteAll(salePriceVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 검증결과 삭제
+     *
+     * @param salePriceVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 02. 21.
+     */
+    @RequestMapping(value = "/hqSalePriceExcelUpload/getSalePriceExcelUploadCheckDelete.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSalePriceExcelUploadCheckDelete(@RequestBody SalePriceVO[] salePriceVOs, HttpServletRequest request,
+                                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = salePriceService.getSalePriceExcelUploadCheckDelete(salePriceVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 업로드시 임시테이블 저장
+     *
+     * @param salePriceVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 02. 21.
+     */
+    @RequestMapping(value = "/hqSalePriceExcelUpload/getSalePriceExcelUploadCheckSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSalePriceExcelUploadCheckSave(@RequestBody SalePriceVO[] salePriceVOs, HttpServletRequest request,
+                                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = salePriceService.getSalePriceExcelUploadCheckSave(salePriceVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 검증결과 저장
+     *
+     * @param salePriceVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 02. 21.
+     */
+    @RequestMapping(value = "/hqSalePriceExcelUpload/getSalePriceExcelUploadCheckSaveAdd.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSalePriceExcelUploadCheckSaveAdd(@RequestBody SalePriceVO[] salePriceVOs, HttpServletRequest request,
+                                                   HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = salePriceService.getSalePriceExcelUploadCheckSaveAdd(salePriceVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 본사판매가관리 엑셀업로드 탭 - 판매가 저장
+     *
+     * @param salePriceVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 02. 21.
+     */
+    @RequestMapping(value = "/hqSalePriceExcelUpload/getHqSalePriceExcelUploadSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getHqSalePriceExcelUploadSave(@RequestBody SalePriceVO[] salePriceVOs, HttpServletRequest request,
+                                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = salePriceService.getHqSalePriceExcelUploadSave(salePriceVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 }
