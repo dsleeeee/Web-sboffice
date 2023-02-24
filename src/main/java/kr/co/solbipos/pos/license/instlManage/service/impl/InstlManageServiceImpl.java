@@ -137,4 +137,10 @@ public class InstlManageServiceImpl implements InstlManageService {
         return result;
     }
 
+    /** 본사일때 대리점정보 */
+    @Override
+    public List<DefaultMap<String>> getAgencyInfo(SessionInfoVO sessionInfoVO) {
+        return instlManageMapper.getAgencyInfo(sessionInfoVO);
+    }
+
 }

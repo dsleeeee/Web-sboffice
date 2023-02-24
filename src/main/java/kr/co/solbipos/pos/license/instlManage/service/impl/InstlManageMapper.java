@@ -1,6 +1,7 @@
 package kr.co.solbipos.pos.license.instlManage.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.pos.license.instlManage.service.InstlManageVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -37,4 +38,7 @@ public interface InstlManageMapper {
 
     /** 설치요청 목록 삭제 */
     int delRequestDtl(InstlManageVO instlManageVO);
+
+    /** 본사일때 대리점정보 */
+    List<DefaultMap<String>> getAgencyInfo(SessionInfoVO sessionInfoVO);
 }

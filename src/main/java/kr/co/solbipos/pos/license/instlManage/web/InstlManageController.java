@@ -6,8 +6,10 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.pos.license.instlManage.service.InstlManageService;
 import kr.co.solbipos.pos.license.instlManage.service.InstlManageVO;
+import kr.co.solbipos.sys.etc.vancard.service.CardCmpnyVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,9 +20,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 @Controller
 @RequestMapping("/pos/license/instlManage")
@@ -45,6 +50,15 @@ public class InstlManageController {
      * */
     @RequestMapping(value = "/list.sb", method = RequestMethod.GET)
     public String instlManageView(HttpServletRequest request, HttpServletResponse response, Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        /** 본사일때 대리점정보 */
+        if(sessionInfoVO.getOrgnFg().equals(OrgnFg.HQ)){
+            List<DefaultMap<String>> agencyInfo = instlManageService.getAgencyInfo(sessionInfoVO);
+            // 콤보박스용 데이터 생성
+            model.addAttribute("agencyCd", agencyInfo.get(0).get("agencyCd"));
+            model.addAttribute("agencyNm", agencyInfo.get(0).get("agencyNm"));
+        }
         return "pos/license/instlManage/instlManage";
     }
 
