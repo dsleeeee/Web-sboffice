@@ -57,6 +57,16 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
   $scope._setComboData("dlvrSaleUprcOption", dlvrSaleAmtOptionFg);
   $scope._setComboData("packSaleUprcOption", packSaleAmtOptionFg);
 
+    // 브랜드 콤보박스 셋팅
+    $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
+    $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
+    $scope._setComboData("momsAcShopCombo", momsAcShopComboList); // AC점포별
+    $scope._setComboData("momsAreaFgCombo", momsAreaFgComboList); // 지역구분
+    $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
+    $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
+    $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
+    $scope._setComboData("branchCdCombo", branchCdComboList); // 지사
+
   $scope.prodSaleUprcApply = true;
 
   // 상위 객체 상속 : T/F 는 picker
@@ -271,7 +281,27 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
     var params = {};
     params.prodCd = $("#prodCd").val();
     params.storeCd = $("#storeCd").val();
-
+    params.momsTeam = $scope.momsTeam;
+    params.momsAcShop = $scope.momsAcShop;
+    params.momsAreaFg = $scope.momsAreaFg;
+    params.momsCommercial = $scope.momsCommercial;
+    params.momsShopType = $scope.momsShopType;
+    params.momsStoreManageType = $scope.momsStoreManageType;
+    params.branchCd = $scope.branchCd;
+    if(brandUseFg === "1" && orgnFg === "HQ"){
+        // 선택한 매장브랜드가 있을 때
+        params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
+        // 선택한 매장브랜드가 없을 때('전체' 일때)
+        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+            var userHqBrandCd = "";
+            for(var i=0; i < userHqBrandCdComboList.length; i++){
+                if(userHqBrandCdComboList[i].value !== null) {
+                    userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                }
+            }
+            params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+        }
+    }
     // console.log(params);
 
     $scope._inquirySub('/base/price/salePrice/prodSalePrice/getProdSalePriceList.sb', params, function() {
@@ -694,4 +724,12 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
     $scope._broadcast('storeCtrl');
   };
 
+    // 확장조회 숨김/보임
+    $scope.searchAddShowChange = function(){
+        if( $("#tblSearchAddShow").css("display") === 'none') {
+            $("#tblSearchAddShow").show();
+        } else {
+            $("#tblSearchAddShow").hide();
+        }
+    };
 }]);
