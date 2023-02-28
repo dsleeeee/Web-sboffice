@@ -61,4 +61,6 @@ public interface SalePriceResveService {
     /** 가격예약(판매가관리) 상품가격정보 조회 */
     List<DefaultMap<String>> getSalePriceInfo(SalePriceResveVO salePriceResveVO, SessionInfoVO sessionInfoVO);
 
+    /** 가격예약(본사판매가) 엑셀업로드 탭 - 판매가 저장 */
+    int getHqSalePriceResveExcelUploadSave(SalePriceResveVO[] salePriceResveVOs, SessionInfoVO sessionInfoVO);
 }

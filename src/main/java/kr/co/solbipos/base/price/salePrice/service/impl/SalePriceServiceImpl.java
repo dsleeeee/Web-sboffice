@@ -366,6 +366,7 @@ public class SalePriceServiceImpl implements SalePriceService {
             salePriceVO.setModId(sessionInfoVO.getUserId());
 
             salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            salePriceVO.setSessionId(sessionInfoVO.getUserId());
             salePriceVO.setStartDate(currentDate);
             salePriceVO.setEndDate("99991231");
 
