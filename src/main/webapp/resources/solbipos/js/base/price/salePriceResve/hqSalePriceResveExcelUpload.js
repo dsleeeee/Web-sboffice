@@ -232,7 +232,7 @@ app.controller('hqSalePriceResveExcelUploadCtrl', ['$scope', '$http', '$timeout'
     };
 
     // <-- 엑셀다운로드 -->
-    $scope.storeExcelDownload = function(){
+    $scope.excelDownload = function(){
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
             return false;
