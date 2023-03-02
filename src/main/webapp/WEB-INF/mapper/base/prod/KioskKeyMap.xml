@@ -42,7 +42,7 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT  DISTINCT thkc.TU_CLS_TYPE AS VALUE
-                ,       NVL(thkg.TU_CLS_TYPE_NM, thkc.TU_CLS_TYPE)AS NAME
+                ,       NVL2(thkg.TU_CLS_TYPE_NM, '[' || thkc.TU_CLS_TYPE || ']' || thkg.TU_CLS_TYPE_NM, '[' || thkc.TU_CLS_TYPE || ']')AS NAME
                 FROM    TB_HQ_KIOSK_CLS thkc
                 ,       TB_HQ_KIOSK_GROUP thkg
                 WHERE   thkc.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -53,7 +53,7 @@
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT  DISTINCT thkc.TU_CLS_TYPE AS VALUE
-                ,       NVL(thkg.TU_CLS_TYPE_NM, thkc.TU_CLS_TYPE)AS NAME
+                ,       NVL2(thkg.TU_CLS_TYPE_NM, '[' || thkc.TU_CLS_TYPE || ']' || thkg.TU_CLS_TYPE_NM, '[' || thkc.TU_CLS_TYPE || ']')AS NAME
                 FROM    TB_MS_KIOSK_CLS thkc
                 ,       TB_MS_KIOSK_GROUP thkg
                 WHERE   thkc.STORE_CD = #{storeCd}

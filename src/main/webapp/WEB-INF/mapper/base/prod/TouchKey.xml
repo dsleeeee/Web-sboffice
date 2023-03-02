@@ -1965,7 +1965,7 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT  DISTINCT thtkc.TUKEY_GRP_CD AS VALUE
-                ,       NVL(thtkg.TUKEY_GRP_NM, thtkc.TUKEY_GRP_CD) AS NAME
+                ,       NVL2(thtkg.TUKEY_GRP_NM, '[' || thtkc.TUKEY_GRP_CD || ']' || thtkg.TUKEY_GRP_NM,  '[' ||thtkc.TUKEY_GRP_CD || ']') AS NAME
                 FROM    TB_HQ_TOUCH_KEY_CLASS thtkc
                 ,       TB_HQ_TOUCH_KEY_GROUP thtkg
                 WHERE   thtkc.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -1976,7 +1976,7 @@
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT  DISTINCT tmtkc.TUKEY_GRP_CD AS VALUE
-                ,       NVL(tmtkg.TUKEY_GRP_NM, tmtkc.TUKEY_GRP_CD) AS NAME
+                ,       NVL2(tmtkg.TUKEY_GRP_NM, '[' || tmtkc.TUKEY_GRP_CD || ']' || tmtkg.TUKEY_GRP_NM,  '[' ||tmtkc.TUKEY_GRP_CD || ']') AS NAME
                 FROM    TB_MS_TOUCH_KEY_CLASS tmtkc
                 ,       TB_MS_TOUCH_KEY_GROUP tmtkg
                 WHERE   tmtkc.STORE_CD = #{storeCd}
