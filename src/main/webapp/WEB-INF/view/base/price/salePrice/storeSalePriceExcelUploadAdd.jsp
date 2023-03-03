@@ -8,10 +8,10 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<div class="subCon" style="display: none" ng-controller="hqSalePriceExcelUploadAddCtrl">
+<div class="subCon" style="display: none" ng-controller="storeSalePriceExcelUploadAddCtrl">
 
-    <input type="file" class="form-control" id="hqSalePriceExcelUpFile"
-           ng-model="hqSalePriceExcelUpFile"
+    <input type="file" class="form-control" id="storeSalePriceExcelUpFile"
+           ng-model="storeSalePriceExcelUpFile"
            onchange="angular.element(this).scope().excelFileChanged()"
            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel.sheet.macroEnabled.12"/>
 
@@ -27,12 +27,13 @@
                     item-formatter="_itemFormatter">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="hqSalePriceExcelUpload.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="hqSalePriceExcelUpload.saleUprc"/>" binding="saleUprc" width="100" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeSalePriceExcelUpload.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeSalePriceExcelUpload.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeSalePriceExcelUpload.saleUprc"/>" binding="saleUprc" width="100" align="right"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/hqSalePriceExcelUploadAdd.js?ver=20230303.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/storeSalePriceExcelUploadAdd.js?ver=20230303.01" charset="utf-8"></script>

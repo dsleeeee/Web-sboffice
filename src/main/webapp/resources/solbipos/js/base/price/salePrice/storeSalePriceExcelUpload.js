@@ -1,7 +1,7 @@
 /****************************************************************
  *
- * 파일명 : hqSalePriceExcelUpload.js
- * 설  명 : 본사판매가관리 엑셀업로드 JavaScript
+ * 파일명 : storeSalePriceExcelUpload.js
+ * 설  명 : 매장판매가관리 엑셀업로드 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
@@ -14,19 +14,19 @@
 var app = agrid.getApp();
 
 /**
- *  본사판매가관리 엑셀업로드 샘플양식 조회 그리드 생성
+ *  매장판매가관리 엑셀업로드 샘플양식 조회 그리드 생성
  */
-app.controller('hqSalePriceExcelUploadSampleCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('storeSalePriceExcelUploadSampleCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('hqSalePriceExcelUploadSampleCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('storeSalePriceExcelUploadSampleCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
     };
 
     // <-- 검색 호출 -->
-    $scope.$on("hqSalePriceExcelUploadSampleCtrl", function(event, data) {
+    $scope.$on("storeSalePriceExcelUploadSampleCtrl", function(event, data) {
         event.preventDefault();
     });
     // <-- //검색 호출 -->
@@ -34,7 +34,7 @@ app.controller('hqSalePriceExcelUploadSampleCtrl', ['$scope', '$http', '$timeout
     // <-- 양식다운로드 -->
     $scope.sampleDownload = function(){
         var params = {};
-        params.salePriceOrgnFg = "H";
+        params.salePriceOrgnFg = "S";
         params.listScale = 5000;
 
         $scope._inquiryMain("/base/price/salePrice/salePriceExcelUpload/getSalePriceExcelUploadSampleList.sb", params, function (){
@@ -48,7 +48,7 @@ app.controller('hqSalePriceExcelUploadSampleCtrl', ['$scope', '$http', '$timeout
                             return column.visible;
                         }
                     },
-                    '본사판매가_엑셀업로드_'+getCurDateTime()+'.xlsx',
+                    '매장판매가_엑셀업로드_'+getCurDateTime()+'.xlsx',
                     function () {
                         $timeout(function () {
                             $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
@@ -63,8 +63,8 @@ app.controller('hqSalePriceExcelUploadSampleCtrl', ['$scope', '$http', '$timeout
     // <-- 엑셀업로드 -->
     $scope.excelUpload = function(){
         // 엑셀업로드 팝업
-        $("#hqSalePriceExcelUpFile").val('');
-        $("#hqSalePriceExcelUpFile").trigger('click');
+        $("#storeSalePriceExcelUpFile").val('');
+        $("#storeSalePriceExcelUpFile").trigger('click');
     };
     // <-- //엑셀업로드 -->
 
@@ -72,15 +72,12 @@ app.controller('hqSalePriceExcelUploadSampleCtrl', ['$scope', '$http', '$timeout
 
 
 /**
- *  본사판매가관리 엑셀업로드 조회 그리드 생성
+ *  매장판매가관리 엑셀업로드 조회 그리드 생성
  */
-app.controller('hqSalePriceExcelUploadCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('storeSalePriceExcelUploadCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('hqSalePriceExcelUploadCtrl', $scope, $http, false));
-
-    // 전매장적용
-    $scope.applyFg = true;
+    angular.extend(this, new RootController('storeSalePriceExcelUploadCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -107,15 +104,15 @@ app.controller('hqSalePriceExcelUploadCtrl', ['$scope', '$http', '$timeout', fun
     };
 
     // <-- 검색 호출 -->
-    $scope.$on("hqSalePriceExcelUploadCtrl", function(event, data) {
-        $scope.searchHqSalePriceExcelUpload();
+    $scope.$on("storeSalePriceExcelUploadCtrl", function(event, data) {
+        $scope.searchStoreSalePriceExcelUpload();
         event.preventDefault();
     });
 
     // 검증결과 조회
-    $scope.searchHqSalePriceExcelUpload = function() {
+    $scope.searchStoreSalePriceExcelUpload = function() {
         var params = {};
-        params.salePriceOrgnFg = "H";
+        params.salePriceOrgnFg = "S";
 
         $scope._inquiryMain("/base/price/salePrice/salePriceExcelUpload/getSalePriceExcelUploadCheckList.sb", params, function() {}, false);
     };
@@ -149,7 +146,7 @@ app.controller('hqSalePriceExcelUploadCtrl', ['$scope', '$http', '$timeout', fun
             // <-- 검증 -->
             var result = "";
             $scope.flex.collectionView.items[i].result = result;
-            $scope.flex.collectionView.items[i].salePriceOrgnFg = "H";
+            $scope.flex.collectionView.items[i].salePriceOrgnFg = "S";
 
             params.push($scope.flex.collectionView.items[i]);
         }
@@ -160,15 +157,10 @@ app.controller('hqSalePriceExcelUploadCtrl', ['$scope', '$http', '$timeout', fun
             $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
 
             // 검증결과 조회
-            $scope.searchHqSalePriceExcelUpload();
+            $scope.searchStoreSalePriceExcelUpload();
 
             // 검증을 통과한 판매가를 저장하시겠습니까?
-            var msg = messages["hqSalePriceExcelUpload.saveConfirm"];
-            // 전매장적용
-            if ($scope.applyFg) {
-                // 전체 매장에, 검증을 통과한 판매가를 저장하시겠습니까?
-                msg = messages["hqSalePriceExcelUpload.saveConfirm2"];
-            }
+            var msg = messages["storeSalePriceExcelUpload.saveConfirm"];
             $scope._popConfirm(msg, function() {
                 // 판매가 저장
                 $scope.salePriceExcelUploadSave();
@@ -183,15 +175,14 @@ app.controller('hqSalePriceExcelUploadCtrl', ['$scope', '$http', '$timeout', fun
         // 파라미터 설정
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            $scope.flex.collectionView.items[i].applyFg = $scope.applyFg;
-            $scope.flex.collectionView.items[i].salePriceOrgnFg = "H";
+            $scope.flex.collectionView.items[i].salePriceOrgnFg = "S";
             params.push($scope.flex.collectionView.items[i]);
         }
 
-        $scope._save("/base/price/salePrice/salePriceExcelUpload/getHqSalePriceExcelUploadSave.sb", params, function(){
+        $scope._save("/base/price/salePrice/salePriceExcelUpload/getStoreSalePriceExcelUploadSave.sb", params, function(){
             $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
             // 검증결과 조회
-            $scope.searchHqSalePriceExcelUpload();
+            $scope.searchStoreSalePriceExcelUpload();
         });
     };
 
@@ -213,7 +204,7 @@ app.controller('hqSalePriceExcelUploadCtrl', ['$scope', '$http', '$timeout', fun
                         return column.binding != 'gChk';
                     }
                 },
-                '본사판매가_엑셀업로드_'+getCurDateTime()+'.xlsx',
+                '매장판매가_엑셀업로드_'+getCurDateTime()+'.xlsx',
                 function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
@@ -246,7 +237,7 @@ app.controller('hqSalePriceExcelUploadCtrl', ['$scope', '$http', '$timeout', fun
         // 파라미터 설정
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
-            $scope.flex.collectionView.itemsRemoved[i].salePriceOrgnFg = "H";
+            $scope.flex.collectionView.itemsRemoved[i].salePriceOrgnFg = "S";
             $scope.flex.collectionView.itemsRemoved[i].status = "D";
             params.push($scope.flex.collectionView.itemsRemoved[i]);
         }

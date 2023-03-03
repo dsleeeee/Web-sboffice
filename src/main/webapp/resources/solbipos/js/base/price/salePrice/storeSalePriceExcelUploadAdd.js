@@ -1,7 +1,7 @@
 /****************************************************************
  *
- * 파일명 : hqSalePriceResveExcelUploadAdd.js
- * 설  명 : 가격예약(본사판매가) 엑셀업로드 팝업 JavaScript
+ * 파일명 : storeSalePriceExcelUploadAdd.js
+ * 설  명 : 매장판매가관리 엑셀업로드 팝업 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
@@ -14,12 +14,12 @@
 var app = agrid.getApp();
 
 /**
- *  가격예약(본사판매가) 엑셀업로드 팝업 조회 그리드 생성
+ *  매장판매가관리 엑셀업로드 팝업 조회 그리드 생성
  */
-app.controller('hqSalePriceResveExcelUploadAddCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('storeSalePriceExcelUploadAddCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('hqSalePriceResveExcelUploadAddCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('storeSalePriceExcelUploadAddCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -32,7 +32,7 @@ app.controller('hqSalePriceResveExcelUploadAddCtrl', ['$scope', '$http', '$timeo
     };
 
     // <-- 검색 호출 -->
-    $scope.$on("hqSalePriceResveExcelUploadAddCtrl", function(event, data) {
+    $scope.$on("storeSalePriceExcelUploadAddCtrl", function(event, data) {
         event.preventDefault();
     });
     // <-- //검색 호출 -->
@@ -57,8 +57,8 @@ app.controller('hqSalePriceResveExcelUploadAddCtrl', ['$scope', '$http', '$timeo
     // 엑셀 업로드
     $scope.excelUpload = function () {
         // 선택한 파일이 있으면
-        if ($('#hqSalePriceResveExcelUpFile')[0].files[0]) {
-            var file          = $('#hqSalePriceResveExcelUpFile')[0].files[0];
+        if ($('#storeSalePriceExcelUpFile')[0].files[0]) {
+            var file          = $('#storeSalePriceExcelUpFile')[0].files[0];
             var fileName      = file.name;
             var fileExtension = fileName.substring(fileName.lastIndexOf('.'));
 
@@ -68,7 +68,7 @@ app.controller('hqSalePriceResveExcelUploadAddCtrl', ['$scope', '$http', '$timeo
 
                 $timeout(function () {
                     var flex = $scope.flex;
-                    wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#hqSalePriceResveExcelUpFile')[0].files[0], {includeColumnHeaders: true}
+                    wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#storeSalePriceExcelUpFile')[0].files[0], {includeColumnHeaders: true}
                         , function () {
                             $timeout(function () {
                                 // 엑셀업로드 한 데이터를 JSON 형태로 변경한다.
@@ -78,7 +78,7 @@ app.controller('hqSalePriceResveExcelUploadAddCtrl', ['$scope', '$http', '$timeo
                     );
                 }, 10);
             } else {
-                $("#hqSalePriceResveExcelUpFile").val('');
+                $("#storeSalePriceExcelUpFile").val('');
                 $scope._popMsg(messages['excelUpload.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)
                 return false;
             }
@@ -123,7 +123,7 @@ app.controller('hqSalePriceResveExcelUploadAddCtrl', ['$scope', '$http', '$timeo
         $scope._postJSONSave.withOutPopUp("/base/price/salePrice/salePriceExcelUpload/getSalePriceExcelUploadCheckSave.sb", jsonData, function () {
             $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
             // 저장기능 수행후 재조회
-            $scope._broadcast('hqSalePriceResveExcelUploadCtrl');
+            $scope._broadcast('storeSalePriceExcelUploadCtrl');
         });
     };
 

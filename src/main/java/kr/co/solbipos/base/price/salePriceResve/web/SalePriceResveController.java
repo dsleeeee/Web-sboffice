@@ -449,7 +449,7 @@ public class SalePriceResveController {
      * @author  김설아
      * @since   2023. 02. 21.
      */
-    @RequestMapping(value = "/hqSalePriceResveExcelUpload/getHqSalePriceResveExcelUploadSave.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/salePriceResveExcelUpload/getHqSalePriceResveExcelUploadSave.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getHqSalePriceResveExcelUploadSave(@RequestBody SalePriceResveVO[] salePriceResveVOs, HttpServletRequest request,
                                                 HttpServletResponse response, Model model) {

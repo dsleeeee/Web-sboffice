@@ -54,7 +54,7 @@
     <div ng-controller="hqSalePriceExcelUploadCtrl">
         <div class="mt10 oh sb-select dkbr">
             <%-- 엑셀다운로드 --%>
-            <button class="btn_skyblue ml5 fr" ng-click="storeExcelDownload()">
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownload()">
                 <s:message code="cmm.excel.down" />
             </button>
             <%-- 삭제 --%>
@@ -106,7 +106,7 @@
     var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/hqSalePriceExcelUpload.js?ver=20230323.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/hqSalePriceExcelUpload.js?ver=20230303.01" charset="utf-8"></script>
 
 <%-- 본사판매가관리 엑셀업로드 팝업 --%>
 <c:import url="/WEB-INF/view/base/price/salePrice/hqSalePriceExcelUploadAdd.jsp">

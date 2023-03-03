@@ -148,6 +148,9 @@ public class SalePriceVO extends PageVO {
     /** 지사코드 */
     private String branchCd;
 
+    /** 엑셀업로드 구분 (H:본사판매가, S:매장판매가) */
+    private String salePriceOrgnFg;
+
     /**
      * @return the hqOfficeCd
      */
@@ -586,4 +589,13 @@ public class SalePriceVO extends PageVO {
     public void setBranchCd(String branchCd) {
         this.branchCd = branchCd;
     }
+
+    public String getSalePriceOrgnFg() {
+        return salePriceOrgnFg;
+    }
+
+    public void setSalePriceOrgnFg(String salePriceOrgnFg) {
+        this.salePriceOrgnFg = salePriceOrgnFg;
+    }
+
 }

@@ -35,10 +35,12 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#storeSalePrice").removeClass("on");
       $("#hqSalePrice").removeClass("on");
       $("#storeSaleCopy").removeClass("on");
+      $("#storeSalePriceExcelUpload").removeClass("on");
       $("#prodSalePriceArea").show();
       $("#storeSalePriceArea").hide();
       $("#hqSalePriceArea").hide();
       $("#storeSaleCopyArea").hide();
+      $("#storeSalePriceExcelUploadView").hide();
       $scope.isProdTab = false;
       $scope.isStoreTab = true;
       $scope.isHqTab = true;
@@ -55,10 +57,12 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#storeSalePrice").addClass("on");
       $("#hqSalePrice").removeClass("on");
       $("#storeSaleCopy").removeClass("on");
+      $("#storeSalePriceExcelUpload").removeClass("on");
       $("#prodSalePriceArea").hide();
       $("#storeSalePriceArea").show();
       $("#hqSalePriceArea").hide();
       $("#storeSaleCopyArea").hide();
+      $("#storeSalePriceExcelUploadView").hide();
       $scope.isProdTab = true;
       $scope.isStoreTab = false;
       $scope.isHqTab = true;
@@ -78,10 +82,37 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#storeSalePrice").removeClass("on");
       $("#hqSalePrice").removeClass("on");
       $("#storeSaleCopy").addClass("on");
+      $("#storeSalePriceExcelUpload").removeClass("on");
       $("#prodSalePriceArea").hide();
       $("#storeSalePriceArea").hide();
       $("#hqSalePriceArea").hide();
       $("#storeSaleCopyArea").show();
+      $("#storeSalePriceExcelUploadView").hide();
+      $scope.isProdTab = true;
+      $scope.isStoreTab = true;
+      $scope.isHqTab = true;
+      $scope.isCopyTab = false;
+      // 선택그룹 조회
+      // $scope._broadcast("storeSalePriceCtrl");
+      // // 그리드 refresh
+      // setTimeout(function () {
+      //   $scope._broadcast("selectMenuRefresh");
+      // }, 10);
+    }  else if ( type === 'U' ) {  // 매장판매가관리 엑셀업로드 탭
+
+      // $scope._popMsg("서비스 준비중입니다.");
+      // return false;
+
+      $("#prodSalePrice").removeClass("on");
+      $("#storeSalePrice").removeClass("on");
+      $("#hqSalePrice").removeClass("on");
+      $("#storeSaleCopy").removeClass("on");
+      $("#storeSalePriceExcelUpload").addClass("on");
+      $("#prodSalePriceArea").hide();
+      $("#storeSalePriceArea").hide();
+      $("#hqSalePriceArea").hide();
+      $("#storeSaleCopyArea").hide();
+      $("#storeSalePriceExcelUploadView").show();
       $scope.isProdTab = true;
       $scope.isStoreTab = true;
       $scope.isHqTab = true;
@@ -94,6 +125,7 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
       // }, 10);
     }
   };
+
   // // 탭 조회
   // $scope.queryTab = function() {
   //   if ( $scope.isProdTab ) {
@@ -104,5 +136,5 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
   //     $scope._broadcast("storeSalePriceCtrl");
   //   }
   // };
-}]);
 
+}]);
