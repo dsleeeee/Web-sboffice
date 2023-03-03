@@ -186,21 +186,22 @@ public class ViewServiceImpl implements ViewService {
                 // 포스 기능키 삭제 후, 복사
                 procResult = viewMapper.copyPosFnKey(copyStoreEnvVO);
 
+                // XML 정보 사용안함(20230302)
                 // 왼쪽 키 복사
-                copyStoreEnvVO.setConfgFg(ConfgFg.FUNC_KEY_LEFT.getCode());
-                procResult = viewMapper.copyPosFnKeyXML(copyStoreEnvVO);
+                /*copyStoreEnvVO.setConfgFg(ConfgFg.FUNC_KEY_LEFT.getCode());
+                procResult = viewMapper.copyPosFnKeyXML(copyStoreEnvVO);*/
 
                 // 오른쪽 키 복사
-                copyStoreEnvVO.setConfgFg(ConfgFg.FUNC_KEY_RIGHT.getCode());
-                procResult = viewMapper.copyPosFnKeyXML(copyStoreEnvVO);
+                /*copyStoreEnvVO.setConfgFg(ConfgFg.FUNC_KEY_RIGHT.getCode());
+                procResult = viewMapper.copyPosFnKeyXML(copyStoreEnvVO);*/
 
                 // 배달메뉴 키 복사
-                copyStoreEnvVO.setConfgFg(ConfgFg.FUNC_KEY_DELIVERY.getCode());
-                procResult = viewMapper.copyPosFnKeyXML(copyStoreEnvVO);
+                /*copyStoreEnvVO.setConfgFg(ConfgFg.FUNC_KEY_DELIVERY.getCode());
+                procResult = viewMapper.copyPosFnKeyXML(copyStoreEnvVO);*/
 
                 // 셀프키 복사
-                copyStoreEnvVO.setConfgFg(ConfgFg.FUNC_KEY_SELF.getCode());
-                procResult = viewMapper.copyPosFnKeyXML(copyStoreEnvVO);
+                /*copyStoreEnvVO.setConfgFg(ConfgFg.FUNC_KEY_SELF.getCode());
+                procResult = viewMapper.copyPosFnKeyXML(copyStoreEnvVO);*/
             }
             if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.POS_TOUCHKEY) { // 판매터치키
 

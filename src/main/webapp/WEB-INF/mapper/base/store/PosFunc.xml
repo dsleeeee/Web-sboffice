@@ -556,7 +556,61 @@
          )
     </update>
 
-
+    <!-- 포스기능키 조회 - 데이터 기준으로 XML 만들기 -->
+    <!--
+        TABLE    : TB_MS_POS_FNKEY, TB_CM_POS_FNKEY
+        PARAM    : DefaultMap
+        COMMENTS : 포스기능키 조회 - 데이터 기준으로 XML 만들기
+    -->
+    <select id="getFuncKeyXmlByData" parameterType="DefaultMap" resultType="java.lang.String">
+      /* USE : PosFuncMapper.getFuncKeyXmlByData */
+      SELECT XMLElement("mxGraphModel"
+              ,XMLElement("root"
+                  ,XMLElement("mxCell",XMLAttributes(0 AS "id"))
+                  ,XMLElement("mxCell",XMLAttributes(1 AS "id", 0 AS "parent"))
+                  ,XMLAGG(XMLElement("mxCell"
+                  ,XMLAttributes(id AS "id", FNKEY_NM AS "value", style AS "style", parent AS "parent", vertex AS "vertex")
+                  ,CASE WHEN X != 0 AND Y != 0 THEN
+                          XMLElement("mxGeometry",XMLAttributes( x AS "x" , y AS "y" ,width AS "width",height AS "height",geometry AS "as" ))
+                        WHEN X = 0 AND Y = 0 THEN
+                          XMLElement("mxGeometry",XMLAttributes( width AS "width",height AS "height",geometry AS "as" ))
+                        WHEN X != 0 AND Y = 0 THEN
+                          XMLElement("mxGeometry",XMLAttributes( x AS "x" ,width AS "width",height AS "height",geometry AS "as" ))
+                        WHEN X = 0 AND Y != 0 THEN
+                          XMLElement("mxGeometry",XMLAttributes(  y AS "y" ,width AS "width",height AS "height",geometry AS "as" ))
+                        ELSE
+                          XMLElement("mxGeometry",XMLAttributes( x AS "x" , y AS "y" ,width AS "width",height AS "height",geometry AS "as" ))
+                   END
+           )
+           )
+           )
+           ).getClobVal()
+      FROM (
+               SELECT TO_CHAR(( RANK() OVER(ORDER BY A.FNKEY_FG, A.FNKEY_NO ) ) + 1) ID
+                      , REPLACE(REPLACE(B.FNKEY_NM, CHR(10), '∧│enter│∧'), CHR(13), '∧│enter│∧') AS FNKEY_NM
+                      , 'fnkeyNo='||A.FNKEY_NO
+                      || ';dispSeq='||A.DISP_SEQ
+                      || ';styleCd='||A.STYLE_CD
+                      || ';rounded=0;fillColor='||'#006c8a'
+                      || ';fontColor='||'#ffffff'
+                      || ';fontSize=' ||'15'
+                      || ';' AS style
+                      , '1' parent
+                      , '1' vertex
+                      , A.width
+                      , A.height
+                      , 'geometry' as geometry
+                      , A.X
+                      , A.Y
+                  FROM TB_MS_POS_FNKEY A,
+      				 TB_CM_POS_FNKEY B
+      			WHERE A.STORE_CD = #{storeCd}
+      			AND A.POS_NO = #{posNo}
+      			AND A.FNKEY_FG = #{confgFg}
+      			AND B.FNKEY_FG = A.FNKEY_FG
+      			AND B.FNKEY_NO = A.FNKEY_NO
+            )
+    </select>
 
 
 </mapper>

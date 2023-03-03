@@ -940,7 +940,8 @@ public class StoreManageServiceImpl implements StoreManageService{
         procCnt += mapper.copyPosFunKeyInfo(storePosEnvVO);
 
         // 3-3) TB_MS_POS_FNKEY 포스 기능 XML 복사
-        DefaultMap<String> param = new DefaultMap<String>();
+        // XML 정보 사용안함(20230302)
+        /*DefaultMap<String> param = new DefaultMap<String>();
         param.put("storeCd", storePosEnvVO.getStoreCd());
         param.put("posNo", storePosEnvVO.getPosNo());
 
@@ -1002,7 +1003,7 @@ public class StoreManageServiceImpl implements StoreManageService{
         param.replace("confgFg", kr.co.solbipos.base.common.enums.ConfgFg.FUNC_KEY_SELF.getCode());
         param.replace("posNo", storePosEnvVO.getTargetPosNo());
 
-        procCnt = mapper.insertFuncKeyConfgXml(param);
+        procCnt = mapper.insertFuncKeyConfgXml(param);*/
 
 
         return procCnt;
