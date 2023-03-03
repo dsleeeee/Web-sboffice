@@ -34,9 +34,10 @@ app.controller('hqSalePriceExcelUploadSampleCtrl', ['$scope', '$http', '$timeout
     // <-- 양식다운로드 -->
     $scope.sampleDownload = function(){
         var params = {};
+        params.salePriceOrgnFg = "H";
         params.listScale = 5000;
 
-        $scope._inquiryMain("/base/price/salePrice/hqSalePriceExcelUpload/getHqSalePriceExcelUploadSampleList.sb", params, function (){
+        $scope._inquiryMain("/base/price/salePrice/salePriceExcelUpload/getSalePriceExcelUploadSampleList.sb", params, function (){
             $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
             $timeout(function()	{
                 wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(	$scope.excelFlex,
@@ -114,8 +115,9 @@ app.controller('hqSalePriceExcelUploadCtrl', ['$scope', '$http', '$timeout', fun
     // 검증결과 조회
     $scope.searchHqSalePriceExcelUpload = function() {
         var params = {};
+        params.salePriceOrgnFg = "H";
 
-        $scope._inquiryMain("/base/price/salePrice/hqSalePriceExcelUpload/getHqSalePriceExcelUploadCheckList.sb", params, function() {}, false);
+        $scope._inquiryMain("/base/price/salePrice/salePriceExcelUpload/getSalePriceExcelUploadCheckList.sb", params, function() {}, false);
     };
     // <-- //검색 호출 -->
 
@@ -125,7 +127,7 @@ app.controller('hqSalePriceExcelUploadCtrl', ['$scope', '$http', '$timeout', fun
         var params = {};
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._postJSONSave.withOutPopUp("/base/price/salePrice/hqSalePriceExcelUpload/getSalePriceExcelUploadCheckDeleteAll.sb", params, function(){
+        $scope._postJSONSave.withOutPopUp("/base/price/salePrice/salePriceExcelUpload/getSalePriceExcelUploadCheckDeleteAll.sb", params, function(){
             // 저장
             $scope.saveSave();
         });
@@ -147,13 +149,14 @@ app.controller('hqSalePriceExcelUploadCtrl', ['$scope', '$http', '$timeout', fun
             // <-- 검증 -->
             var result = "";
             $scope.flex.collectionView.items[i].result = result;
+            $scope.flex.collectionView.items[i].salePriceOrgnFg = "H";
 
             params.push($scope.flex.collectionView.items[i]);
         }
 
         // 검증결과 저장
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._postJSONSave.withOutPopUp("/base/price/salePrice/hqSalePriceExcelUpload/getSalePriceExcelUploadCheckSaveAdd.sb", params, function(){
+        $scope._postJSONSave.withOutPopUp("/base/price/salePrice/salePriceExcelUpload/getSalePriceExcelUploadCheckSaveAdd.sb", params, function(){
             $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
 
             // 검증결과 조회
@@ -181,10 +184,11 @@ app.controller('hqSalePriceExcelUploadCtrl', ['$scope', '$http', '$timeout', fun
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             $scope.flex.collectionView.items[i].applyFg = $scope.applyFg;
+            $scope.flex.collectionView.items[i].salePriceOrgnFg = "H";
             params.push($scope.flex.collectionView.items[i]);
         }
 
-        $scope._save("/base/price/salePrice/hqSalePriceExcelUpload/getHqSalePriceExcelUploadSave.sb", params, function(){
+        $scope._save("/base/price/salePrice/salePriceExcelUpload/getHqSalePriceExcelUploadSave.sb", params, function(){
             $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
             // 검증결과 조회
             $scope.searchHqSalePriceExcelUpload();
@@ -242,12 +246,13 @@ app.controller('hqSalePriceExcelUploadCtrl', ['$scope', '$http', '$timeout', fun
         // 파라미터 설정
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
+            $scope.flex.collectionView.itemsRemoved[i].salePriceOrgnFg = "H";
             $scope.flex.collectionView.itemsRemoved[i].status = "D";
             params.push($scope.flex.collectionView.itemsRemoved[i]);
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._postJSONSave.withOutPopUp("/base/price/salePrice/hqSalePriceExcelUpload/getSalePriceExcelUploadCheckDelete.sb", params, function(){
+        $scope._postJSONSave.withOutPopUp("/base/price/salePrice/salePriceExcelUpload/getSalePriceExcelUploadCheckDelete.sb", params, function(){
             $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
         });
     };

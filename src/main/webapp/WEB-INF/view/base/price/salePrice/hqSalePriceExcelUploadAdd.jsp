@@ -35,4 +35,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/hqSalePriceExcelUploadAdd.js?ver=20230323.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/hqSalePriceExcelUploadAdd.js?ver=20230303.01" charset="utf-8"></script>

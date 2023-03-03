@@ -220,24 +220,24 @@ public class SalePriceServiceImpl implements SalePriceService {
         return result;
     }
 
-    /** 본사판매가관리 엑셀업로드 탭 - 엑셀 양식다운로드 조회 */
+    /** 엑셀업로드 탭 - 엑셀 양식다운로드 조회 */
     @Override
-    public List<DefaultMap<String>> getHqSalePriceExcelUploadSampleList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<String>> getSalePriceExcelUploadSampleList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO) {
 
         salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         salePriceVO.setUserId(sessionInfoVO.getUserId());
 
-        return salePriceMapper.getHqSalePriceExcelUploadSampleList(salePriceVO);
+        return salePriceMapper.getSalePriceExcelUploadSampleList(salePriceVO);
     }
 
     /** 검증결과 조회 */
     @Override
-    public List<DefaultMap<String>> getHqSalePriceExcelUploadCheckList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<String>> getSalePriceExcelUploadCheckList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO) {
 
         salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        salePriceVO.setSessionId(sessionInfoVO.getUserId());
+        salePriceVO.setSessionId(sessionInfoVO.getSessionId());
 
-        return salePriceMapper.getHqSalePriceExcelUploadCheckList(salePriceVO);
+        return salePriceMapper.getSalePriceExcelUploadCheckList(salePriceVO);
     }
 
     /** 검증결과 전체 삭제 */
@@ -246,7 +246,7 @@ public class SalePriceServiceImpl implements SalePriceService {
 
         int procCnt = 0;
         salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        salePriceVO.setSessionId(sessionInfoVO.getUserId());
+        salePriceVO.setSessionId(sessionInfoVO.getSessionId());
 
         procCnt += salePriceMapper.getSalePriceExcelUploadCheckDeleteAll(salePriceVO);
 
@@ -261,7 +261,7 @@ public class SalePriceServiceImpl implements SalePriceService {
 
         for(SalePriceVO salePriceVO : salePriceVOs) {
             salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            salePriceVO.setSessionId(sessionInfoVO.getUserId());
+            salePriceVO.setSessionId(sessionInfoVO.getSessionId());
 
             procCnt += salePriceMapper.getSalePriceExcelUploadCheckDelete(salePriceVO);
         }
@@ -284,7 +284,7 @@ public class SalePriceServiceImpl implements SalePriceService {
             salePriceVO.setModId(sessionInfoVO.getUserId());
 
             salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            salePriceVO.setSessionId(sessionInfoVO.getUserId());
+            salePriceVO.setSessionId(sessionInfoVO.getSessionId());
             salePriceVO.setSeq(i);
 
             salePriceVO.setResult("검증전");
@@ -312,23 +312,11 @@ public class SalePriceServiceImpl implements SalePriceService {
             salePriceVO.setModId(sessionInfoVO.getUserId());
 
             salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            salePriceVO.setSessionId(sessionInfoVO.getUserId());
+            salePriceVO.setSessionId(sessionInfoVO.getSessionId());
             salePriceVO.setSeq(i);
 
-            // 상품코드
-            if(salePriceMapper.getProdCdChk(salePriceVO) > 0) {
-                // 가격관리구분이 본사인 경우만 수정
-                if(salePriceVO.getPrcCtrlFg() != null && !"".equals(salePriceVO.getPrcCtrlFg())) {
-                    if(("H").equals(salePriceVO.getPrcCtrlFg())) {
-                    } else {
-                        salePriceVO.setResult("가격관리구분이 본사인 상품만 수정 가능합니다.");
-                    }
-                }
-            } else {
-                salePriceVO.setResult("존재하지 않는 상품코드입니다");
-            }
-
             // 숫자가 입력되어야 하는 컬럼에 문자가 입력되면 null처리
+            // 판매가
             if(salePriceVO.getSaleUprc() != null && !"".equals(salePriceVO.getSaleUprc())) {
                 if(Pattern.matches(pattern, salePriceVO.getSaleUprc())) {
                     salePriceVO.setSaleUprc(salePriceVO.getSaleUprc());
@@ -337,6 +325,50 @@ public class SalePriceServiceImpl implements SalePriceService {
                 }
             } else {
                 salePriceVO.setResult("판매가를 입력해주세요.");
+            }
+
+            // 본사판매가
+            if(("H").equals(salePriceVO.getSalePriceOrgnFg())) {
+                // 상품코드 존재여부 체크
+                if(salePriceMapper.getProdCdChk(salePriceVO) > 0) {
+                    // 가격관리구분
+                    if(salePriceVO.getPrcCtrlFg() != null && !"".equals(salePriceVO.getPrcCtrlFg())) {
+                        // 가격관리구분이 본사인 경우만 수정
+                        if(("H").equals(salePriceVO.getPrcCtrlFg())) {
+                        } else {
+                            salePriceVO.setResult("가격관리구분이 본사인 상품만 수정 가능합니다.");
+                        }
+                    }
+                } else {
+                    salePriceVO.setResult("존재하지 않는 상품코드입니다");
+                }
+
+            // 매장판매가
+            } else if(("S").equals(salePriceVO.getSalePriceOrgnFg())) {
+                // 상품코드 존재여부 체크
+                if(salePriceMapper.getProdCdChk(salePriceVO) > 0) {
+                    // 가격관리구분
+                    if(salePriceVO.getPrcCtrlFg() != null && !"".equals(salePriceVO.getPrcCtrlFg())) {
+                        // 가격관리구분이 매장인 경우만 수정
+                        if (("S").equals(salePriceVO.getPrcCtrlFg())) {
+                        } else {
+                            salePriceVO.setResult("가격관리구분이 매장인 상품만 수정 가능합니다.");
+                        }
+                    }
+                } else {
+                    salePriceVO.setResult("존재하지 않는 상품코드입니다");
+                }
+
+                // 매장코드
+                if(salePriceVO.getStoreCd() != null && !"".equals(salePriceVO.getStoreCd())) {
+                    // 매장코드 존재여부 체크
+                    if(salePriceMapper.getStoreCdChk(salePriceVO) > 0) {
+                    } else {
+                        salePriceVO.setResult("존재하지 않는 매장코드입니다");
+                    }
+                } else {
+                    salePriceVO.setResult("매장코드를 입력해주세요.");
+                }
             }
 
             if (salePriceVO.getResult() == null || salePriceVO.getResult() == "") {
@@ -366,11 +398,12 @@ public class SalePriceServiceImpl implements SalePriceService {
             salePriceVO.setModId(sessionInfoVO.getUserId());
 
             salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            salePriceVO.setSessionId(sessionInfoVO.getUserId());
+            salePriceVO.setSessionId(sessionInfoVO.getSessionId());
             salePriceVO.setStartDate(currentDate);
             salePriceVO.setEndDate("99991231");
 
             if(("검증성공").equals(salePriceVO.getResult())) {
+                // 가격관리구분이 본사인 경우만 수정
                 if(("H").equals(salePriceVO.getPrcCtrlFg())) {
 
                     // 판매가 변경 히스토리 등록
@@ -388,9 +421,51 @@ public class SalePriceServiceImpl implements SalePriceService {
                     if(salePriceVO.getApplyFg().equals("true")){
                         salePriceVO.setWorkMode(WorkModeFg.MOD_PROD);
                         //전매장 적용, 상품이 있으면 머지 업데이트 처리
-                        //String storeSalePriceReulst = salePriceMapper.saveStoreSalePrice(salePriceVO);
                         result2 = salePriceMapper.modifyMsProdSalePrice(salePriceVO);
                     }
+
+                    // 저장완료된 검증결과만 삭제
+                    result += salePriceMapper.getSalePriceExcelUploadCheckDelete(salePriceVO);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /** 매장판매가관리 엑셀업로드 탭 - 판매가 저장 */
+    @Override
+    public int getStoreSalePriceExcelUploadSave(SalePriceVO[] salePriceVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String currentDt = currentDateTimeString();
+        String currentDate = currentDateString();
+
+        for(SalePriceVO salePriceVO : salePriceVOs) {
+            salePriceVO.setRegDt(currentDt);
+            salePriceVO.setRegId(sessionInfoVO.getUserId());
+            salePriceVO.setModDt(currentDt);
+            salePriceVO.setModId(sessionInfoVO.getUserId());
+
+            salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            salePriceVO.setSessionId(sessionInfoVO.getSessionId());
+            salePriceVO.setStartDate(currentDate);
+            salePriceVO.setEndDate("99991231");
+
+            if(("검증성공").equals(salePriceVO.getResult())) {
+                // 가격관리구분이 매장인 경우만 수정
+                if(("S").equals(salePriceVO.getPrcCtrlFg())) {
+
+                    // 판매가 변경 히스토리 등록
+                    int prodCnt = salePriceMapper.getRegistProdCount(salePriceVO);
+
+                    if(prodCnt > 0){
+                        result = salePriceMapper.updateStoreProdSalePriceHistory(salePriceVO);
+                        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                    }
+
+                    // 매장 판매가 변경
+                    result = salePriceMapper.modifyStoreProdSalePrice(salePriceVO);
 
                     // 저장완료된 검증결과만 삭제
                     result += salePriceMapper.getSalePriceExcelUploadCheckDelete(salePriceVO);

@@ -127,6 +127,9 @@ public class SalePriceResveVO extends PageVO {
     /** 순번 */
     private int seq;
 
+    /** 엑셀업로드 구분 (H:본사판매가, S:매장판매가) */
+    private String salePriceOrgnFg;
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -370,4 +373,12 @@ public class SalePriceResveVO extends PageVO {
     public int getSeq() { return seq; }
 
     public void setSeq(int seq) { this.seq = seq; }
+
+    public String getSalePriceOrgnFg() {
+        return salePriceOrgnFg;
+    }
+
+    public void setSalePriceOrgnFg(String salePriceOrgnFg) {
+        this.salePriceOrgnFg = salePriceOrgnFg;
+    }
 }

@@ -106,7 +106,7 @@
     var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/hqSalePriceExcelUpload.js?ver=20230323.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/hqSalePriceExcelUpload.js?ver=20230303.01" charset="utf-8"></script>
 
 <%-- 본사판매가관리 엑셀업로드 팝업 --%>
 <c:import url="/WEB-INF/view/base/price/salePrice/hqSalePriceExcelUploadAdd.jsp">

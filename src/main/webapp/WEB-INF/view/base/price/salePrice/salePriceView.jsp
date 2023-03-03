@@ -19,6 +19,11 @@
 <%--          <li><a id="hqSalePrice" href="#" ng-click="changeTab('H');"><s:message code="salePrice.hqSalePrice" /></a></li>--%>
           <%-- 매장판매가 복사 --%>
           <li><a id="storeSaleCopy" href="#" ng-click="changeTab('C');"><s:message code="salePrice.storeSaleCopy" /></a></li>
+          <%-- [1250 맘스터치] --%>
+          <c:if test="${momsEnvstVal == '1'}">
+              <%-- 매장판매가관리 엑셀업로드 탭 --%>
+              <li><a id="storeSalePriceExcelUpload" href="#" ng-click="changeTab('U');"><s:message code="salePrice.storeSalePriceExcelUpload" /></a></li>
+          </c:if>
         </ul>
     </div>
 </div>
@@ -34,7 +39,12 @@
   <%-- 매장판매가 복사 --%>
   <c:import url="/WEB-INF/view/base/price/salePrice/storeSaleCopyView.jsp">
   </c:import>
+
+  <%-- 매장판매가관리 엑셀업로드 레이어 --%>
+  <c:import url="/WEB-INF/view/base/price/salePrice/storeSalePriceExcelUpload.jsp">
+  </c:import>
 </div>
+
 <script type="text/javascript">
 
     // 브랜드 사용여부
@@ -53,5 +63,6 @@
     var momsShopTypeComboList = ${momsShopTypeComboList};
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/salePrice.js?ver=20181220.02" charset="utf-8"></script>
+
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/salePrice.js?ver=20230303.01" charset="utf-8"></script>
 

@@ -340,9 +340,7 @@ public class SalePriceResveServiceImpl implements SalePriceResveService {
     public int getHqSalePriceResveExcelUploadSave(SalePriceResveVO[] salePriceResveVOs, SessionInfoVO sessionInfoVO) {
 
         int result = 0;
-        int result2 = 0;
         String currentDt = currentDateTimeString();
-        String currentDate = currentDateString();
 
         for(SalePriceResveVO salePriceResveVO : salePriceResveVOs) {
             salePriceResveVO.setRegDt(currentDt);
@@ -351,10 +349,11 @@ public class SalePriceResveServiceImpl implements SalePriceResveService {
             salePriceResveVO.setModId(sessionInfoVO.getUserId());
 
             salePriceResveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            salePriceResveVO.setSessionId(sessionInfoVO.getUserId());
+            salePriceResveVO.setSessionId(sessionInfoVO.getSessionId());
             salePriceResveVO.setSaleResveFg("1"); // 가격예약구분 0:일반, 1:예약
 
             if(("검증성공").equals(salePriceResveVO.getResult())) {
+                // 가격관리구분이 본사인 경우만 수정
                 if(("H").equals(salePriceResveVO.getPrcCtrlFg())) {
 
                     // 해당 시작날짜에 등록된 가격이 있는지 조회(판매가 히스토리 등록을 위해)
@@ -377,8 +376,10 @@ public class SalePriceResveServiceImpl implements SalePriceResveService {
                     SalePriceVO salePriceVO = new SalePriceVO();
                     salePriceVO.setSessionId(salePriceResveVO.getSessionId());
                     salePriceVO.setHqOfficeCd(salePriceResveVO.getHqOfficeCd());
+                    salePriceVO.setStoreCd(salePriceResveVO.getStoreCd());
                     salePriceVO.setProdCd(salePriceResveVO.getProdCd());
                     salePriceVO.setSeq(salePriceResveVO.getSeq());
+                    salePriceVO.setSalePriceOrgnFg(salePriceResveVO.getSalePriceOrgnFg());
 
                     // 저장완료된 검증결과만 삭제
                     result += salePriceMapper.getSalePriceExcelUploadCheckDelete(salePriceVO);

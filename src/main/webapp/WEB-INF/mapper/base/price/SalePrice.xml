@@ -691,27 +691,50 @@
         )
     </insert>
 
-    <!-- 본사판매가관리 엑셀업로드 탭 - 엑셀 양식다운로드 조회 -->
+    <!-- 엑셀업로드 탭 - 엑셀 양식다운로드 조회 -->
     <!--
         TABLE    :
         COMMENTS :
     -->
-    <select id="getHqSalePriceExcelUploadSampleList"  parameterType="salePriceVO" resultType="DefaultMap">
-        /* SalePriceMapper.getHqSalePriceExcelUploadSampleList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT
-        thp.PROD_CD
-        <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM TB_HQ_PRODUCT thp
-        WHERE 1=1
-        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND (
-                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-                OR
-                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-            )
-        ORDER BY thp.PROD_CD
-        <include refid="CmmSQL.PagingTemplateBottom"/>
+    <select id="getSalePriceExcelUploadSampleList"  parameterType="salePriceVO" resultType="DefaultMap">
+        /* SalePriceMapper.getSalePriceExcelUploadSampleList */
+        <choose>
+            <!-- 본사판매가 -->
+            <when test='salePriceOrgnFg != null and salePriceOrgnFg != "" and salePriceOrgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT
+                thp.PROD_CD
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM TB_HQ_PRODUCT thp
+                WHERE 1=1
+                AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND (
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                        OR
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                    )
+                ORDER BY thp.PROD_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 매장판매가 -->
+            <when test='salePriceOrgnFg != null and salePriceOrgnFg != "" and salePriceOrgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT
+                tmp.STORE_CD,
+                tmp.PROD_CD
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM TB_MS_PRODUCT tmp
+                WHERE 1=1
+                AND tmp.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                AND (
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                        OR
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                    )
+                ORDER BY tmp.STORE_CD, tmp.PROD_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
     </select>
 
     <!-- 검증결과 조회 -->
@@ -719,23 +742,50 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getHqSalePriceExcelUploadCheckList"  parameterType="salePriceVO" resultType="DefaultMap">
-        /* SalePriceMapper.getHqSalePriceExcelUploadCheckList */
-        SELECT
-        A.RESULT,
-        A.PROD_CD,
-        B.PROD_NM,
-        A.SALE_UPRC,
-        B.PRC_CTRL_FG,
-        A.SEQ
-        FROM TB_TMP_EXCEL_SALE_PRICE A,
-        TB_HQ_PRODUCT B
-        WHERE 1=1
-        AND A.SESSION_ID = #{sessionId}
-        AND A.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND B.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
-        AND B.PROD_CD (+)= A.PROD_CD
-        ORDER BY A.SEQ
+    <select id="getSalePriceExcelUploadCheckList"  parameterType="salePriceVO" resultType="DefaultMap">
+        /* SalePriceMapper.getSalePriceExcelUploadCheckList */
+        <choose>
+            <!-- 본사판매가 -->
+            <when test='salePriceOrgnFg != null and salePriceOrgnFg != "" and salePriceOrgnFg == "H"'>
+                SELECT
+                A.RESULT,
+                A.PROD_CD,
+                B.PROD_NM,
+                A.SALE_UPRC,
+                B.PRC_CTRL_FG,
+                A.SEQ
+                FROM TB_TMP_EXCEL_SALE_PRICE A,
+                TB_HQ_PRODUCT B
+                WHERE 1=1
+                AND A.SESSION_ID = #{sessionId}
+                AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND B.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+                AND B.PROD_CD (+)= A.PROD_CD
+                ORDER BY A.SEQ
+            </when>
+            <!-- 매장판매가 -->
+            <when test='salePriceOrgnFg != null and salePriceOrgnFg != "" and salePriceOrgnFg == "S"'>
+                SELECT
+                A.RESULT,
+                A.STORE_CD,
+                C.STORE_NM,
+                A.PROD_CD,
+                B.PROD_NM,
+                A.SALE_UPRC,
+                B.PRC_CTRL_FG,
+                A.SEQ
+                FROM TB_TMP_EXCEL_SALE_PRICE A,
+                TB_MS_PRODUCT B,
+                TB_MS_STORE C
+                WHERE 1=1
+                AND A.SESSION_ID = #{sessionId}
+                AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND B.STORE_CD (+)= A.STORE_CD
+                AND B.PROD_CD (+)= A.PROD_CD
+                AND C.STORE_CD (+)= A.STORE_CD
+                ORDER BY A.SEQ
+            </when>
+        </choose>
     </select>
 
     <!-- 검증결과 전체 삭제 -->
@@ -759,13 +809,29 @@
     -->
     <delete id="getSalePriceExcelUploadCheckDelete" parameterType="salePriceVO">
         /* SalePriceMapper.getSalePriceExcelUploadCheckDelete */
-        DELETE
-        TB_TMP_EXCEL_SALE_PRICE
-        WHERE 1=1
-        AND SESSION_ID = #{sessionId}
-        AND HQ_OFFICE_CD = #{hqOfficeCd}
-        AND PROD_CD = #{prodCd}
-        AND SEQ = #{seq}
+        <choose>
+            <!-- 본사판매가 -->
+            <when test='salePriceOrgnFg != null and salePriceOrgnFg != "" and salePriceOrgnFg == "H"'>
+                DELETE
+                TB_TMP_EXCEL_SALE_PRICE
+                WHERE 1=1
+                AND SESSION_ID = #{sessionId}
+                AND HQ_OFFICE_CD = #{hqOfficeCd}
+                AND PROD_CD = #{prodCd}
+                AND SEQ = #{seq}
+            </when>
+            <!-- 매장판매가 -->
+            <when test='salePriceOrgnFg != null and salePriceOrgnFg != "" and salePriceOrgnFg == "S"'>
+                DELETE
+                TB_TMP_EXCEL_SALE_PRICE
+                WHERE 1=1
+                AND SESSION_ID = #{sessionId}
+                AND HQ_OFFICE_CD = #{hqOfficeCd}
+                AND STORE_CD = #{storeCd}
+                AND PROD_CD = #{prodCd}
+                AND SEQ = #{seq}
+            </when>
+        </choose>
     </delete>
 
     <!-- 업로드시 임시테이블 저장 -->
@@ -810,11 +876,38 @@
     -->
     <select id="getProdCdChk"  parameterType="salePriceVO" resultType="Integer">
         /* SalePriceMapper.getProdCdChk */
+        <choose>
+            <!-- 본사판매가 -->
+            <when test='salePriceOrgnFg != null and salePriceOrgnFg != "" and salePriceOrgnFg == "H"'>
+                SELECT COUNT(*)
+                FROM TB_HQ_PRODUCT
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{hqOfficeCd}
+                AND PROD_CD = #{prodCd}
+            </when>
+            <!-- 매장판매가 -->
+            <when test='salePriceOrgnFg != null and salePriceOrgnFg != "" and salePriceOrgnFg == "S"'>
+                SELECT COUNT(*)
+                FROM TB_MS_PRODUCT
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND PROD_CD = #{prodCd}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 매장코드 존재여부 체크 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getStoreCdChk"  parameterType="salePriceVO" resultType="Integer">
+        /* SalePriceMapper.getStoreCdChk */
         SELECT COUNT(*)
-        FROM TB_HQ_PRODUCT
+        FROM TB_MS_STORE
         WHERE 1=1
         AND HQ_OFFICE_CD = #{hqOfficeCd}
-        AND PROD_CD = #{prodCd}
+        AND STORE_CD = #{storeCd}
     </select>
 
 </mapper>

@@ -65,8 +65,8 @@ public interface SalePriceMapper {
     /** 매장 판매가 등록 */
     String saveStoreSalePrice(SalePriceVO salePriceVO);
 
-    /** 본사판매가관리 엑셀업로드 탭 - 엑셀 양식다운로드 조회 */
-    List<DefaultMap<String>> getHqSalePriceExcelUploadSampleList(SalePriceVO salePriceVO);
+    /** 엑셀업로드 탭 - 엑셀 양식다운로드 조회 */
+    List<DefaultMap<String>> getSalePriceExcelUploadSampleList(SalePriceVO salePriceVO);
 
     /** 검증결과 전체 삭제 */
     int getSalePriceExcelUploadCheckDeleteAll(SalePriceVO salePriceVO);
@@ -78,8 +78,11 @@ public interface SalePriceMapper {
     int getSalePriceExcelUploadCheckSave(SalePriceVO salePriceVO);
 
     /** 검증결과 조회 */
-    List<DefaultMap<String>> getHqSalePriceExcelUploadCheckList(SalePriceVO salePriceVO);
+    List<DefaultMap<String>> getSalePriceExcelUploadCheckList(SalePriceVO salePriceVO);
 
     /** 상품코드 존재여부 체크 */
     int getProdCdChk(SalePriceVO salePriceVO);
+
+    /** 매장코드 존재여부 체크 */
+    int getStoreCdChk(SalePriceVO salePriceVO);
 }
