@@ -217,7 +217,12 @@
                             <button type="button" class="btn_skyblue" ng-click="delImg('001')"><s:message code="cmm.del" /></button>
                         </td>
                         <td>
-                            <p class="s12 red mb10"><s:message code="prodImg.fileSize.max" /></p>
+                            <c:if test="${momsEnvstVal == '0'}">
+                                <p class="s12 red mb10"><s:message code="prodImg.fileSize.max" /></p>
+                            </c:if>
+                            <c:if test="${momsEnvstVal == '1'}">
+                                <p class="s12 red mb10"><s:message code="prodImg.fileSize.max2" /></p>
+                            </c:if>
                             <button type="button" class="btn_skyblue" ng-click="imgCancel('002', 'F')"><s:message code="cmm.selectCancel" /></button>
                             <button type="button" class="btn_skyblue" ng-click="regImg('002')"><s:message code="prodImg.regImg" /></button>
                             <button type="button" class="btn_skyblue" ng-click="delImg('002')"><s:message code="cmm.del" /></button>
@@ -276,6 +281,9 @@
     var brandUseFg = "${brandUseFg}";
     // 사용자 브랜드
     var userHqBrandCdComboList = ${userHqBrandCdComboList};
+
+    // [1250 맘스터치] 환경설정값
+    var momsEnvstVal = "${momsEnvstVal}";
 
     // POS에서 해당 WEB 화면 최초 접속한 경우(접속하면서 session 생성), 왼쪽 메뉴영역은 접어두기.
     // 최초 접속시에는 이전 URL 인자값으로 판별가능

@@ -56,7 +56,8 @@
             tce.TARGT_FG,
             tcn_targt_fg.NMCODE_NM AS TARGT_FG_NM,
             tce.USE_YN,
-            tce.REMARK
+            tce.REMARK,
+            tce.ENVST_REMARK
         FROM
             TB_CM_ENVST tce
         LEFT OUTER JOIN TB_CM_NMCODE tcn_envst_fg ON
@@ -107,6 +108,7 @@
             TARGT_FG = #{targtFg},
             USE_YN = #{useYn},
             REMARK = #{remark},
+            ENVST_REMARK = #{envstRemark},
             MOD_DT = #{modDt},
             MOD_ID = #{modId}
         WHERE
@@ -131,6 +133,7 @@
             TARGT_FG,
             USE_YN,
             REMARK,
+            ENVST_REMARK,
             REG_DT,
             REG_ID,
             MOD_DT,
@@ -144,6 +147,7 @@
             #{targtFg},
             #{useYn},
             #{remark,jdbcType=VARCHAR},
+            #{envstRemark,jdbcType=VARCHAR},
             #{regDt},
             #{regId},
             #{modDt},

@@ -43,6 +43,8 @@ public class EnvstVO extends CmmVO {
     private String useYn;
     /** 비고 */
     private String remark;
+    /** 비고2 */
+    private String envstRemark;
     /**  */
     private String requiredYn;
     
@@ -179,6 +181,15 @@ public class EnvstVO extends CmmVO {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    public String getEnvstRemark() {
+        return envstRemark;
+    }
+
+    public void setEnvstRemark(String envstRemark) {
+        this.envstRemark = envstRemark;
+    }
+
     /**
      * @return the requiredYn
      */

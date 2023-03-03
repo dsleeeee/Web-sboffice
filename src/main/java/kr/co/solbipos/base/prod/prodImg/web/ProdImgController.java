@@ -8,6 +8,7 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.prodImg.service.ProdImgService;
 import kr.co.solbipos.base.prod.prodImg.service.ProdImgVO;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
@@ -89,6 +90,15 @@ public class ProdImgController {
         if(request.getParameter("posLoginReconnect") != null && request.getParameter("posLoginReconnect").length() > 0){
             model.addAttribute("posLoginReconnect", request.getParameter("posLoginReconnect"));
         }
+
+        /** 맘스터치 */
+        // [1250 맘스터치] 환경설정값 조회
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0"));
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
+        }
+        /** //맘스터치 */
 
         return "base/prod/prodImg/prodImgRegistView";
     }
