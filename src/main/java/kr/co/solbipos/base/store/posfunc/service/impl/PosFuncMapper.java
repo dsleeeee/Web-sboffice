@@ -74,4 +74,7 @@ public interface PosFuncMapper {
     /** 포스기능 인증허용대상 저장 */
     int saveAuthEmp(PosFuncVO posFuncVO);
 
+    /** 포스기능키 조회 - 데이터 기준으로 XML 만들기 */
+    String getFuncKeyXmlByData(DefaultMap<String> param);
+
 }

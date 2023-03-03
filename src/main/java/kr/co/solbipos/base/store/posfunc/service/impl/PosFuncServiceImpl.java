@@ -121,7 +121,8 @@ public class PosFuncServiceImpl implements PosFuncService{
 //        if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         // 1. 포스기능키 XML 정보 복사 (6020)
-        DefaultMap<String> param = new DefaultMap<String>();
+        // XML 정보 사용안함(20230302)
+        /*DefaultMap<String> param = new DefaultMap<String>();
 
         param.put("storeCd", posFuncVO.getStoreCd());
         param.put("posNo", posFuncVO.getCopyPos());
@@ -175,7 +176,7 @@ public class PosFuncServiceImpl implements PosFuncService{
         param.replace("posNo", posFuncVO.getTargetPos());
 
         procCnt = mapper.insertFuncKeyConfgXml(param);
-//        if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("label.insertFail"));
+//        if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("label.insertFail"));*/
 
         return procCnt;
     }
@@ -215,7 +216,7 @@ public class PosFuncServiceImpl implements PosFuncService{
         }
 
         // 터치키 구성정보가 저장되어있는 XML
-        result = mapper.getFuncKeyXml(param);
+        result = mapper.getFuncKeyXmlByData(param);
 
         return result;
     }
@@ -225,7 +226,7 @@ public class PosFuncServiceImpl implements PosFuncService{
     public Result saveFunckey(PosFuncVO posFuncVO, SessionInfoVO sessionInfoVO) {
 
         // XML 저장
-        DefaultMap<String> param = new DefaultMap<String>();
+        /*DefaultMap<String> param = new DefaultMap<String>();
         param.put("storeCd", posFuncVO.getStoreCd());
         param.put("posNo", posFuncVO.getPosNo());
         param.put("confgFg", posFuncVO.getConfgFg());
@@ -242,7 +243,7 @@ public class PosFuncServiceImpl implements PosFuncService{
             if( mapper.insertFuncKeyConfgXml(param) != 1 ) {
                 throw new BizException( messageService.get("label.insertFail") );
             }
-        }
+        }*/
 
         //XML 분석, TouchClass, Touch Domain 생성
         //포스기능키 파싱 (TB_MS_POS_KEY)
