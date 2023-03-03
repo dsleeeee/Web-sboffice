@@ -1004,7 +1004,7 @@
                                       tce.ENVST_FG,
                                       tce.TARGT_FG,
                                       tce.DIRCT_IN_YN,
-                                      tce.REMARK,
+                                      tce.ENVST_REMARK AS REMARK,
                                       tcd.ENVST_VAL_CD,
                                       tcd.ENVST_VAL_NM,
                                       tcd.DEFLT_YN,

@@ -128,6 +128,7 @@
               <wj-flex-grid-column header="<s:message code="envConfg.targtFgNm"/>" binding="targtFg" data-map="targtFgDataMap"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="envConfg.useYn"/>" binding="useYn" width="80" data-map="useYnDataMap"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="envConfg.remark"/>" binding="remark" width="200"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="envConfg.envstRemark"/>" binding="envstRemark" width="200"></wj-flex-grid-column>
 
             </wj-flex-grid>
             <%-- ColumnPicker 사용시 include --%>
