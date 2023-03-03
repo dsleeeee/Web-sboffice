@@ -609,6 +609,7 @@
       			AND A.FNKEY_FG = #{confgFg}
       			AND B.FNKEY_FG = A.FNKEY_FG
       			AND B.FNKEY_NO = A.FNKEY_NO
+      			AND A.USE_YN = 'Y'
             )
     </select>
 
