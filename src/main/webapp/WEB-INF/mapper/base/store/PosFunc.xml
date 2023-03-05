@@ -603,13 +603,19 @@
                       , A.X
                       , A.Y
                   FROM TB_MS_POS_FNKEY A,
-      				 TB_CM_POS_FNKEY B
+      				   TB_CM_POS_FNKEY B,
+      				   TB_MS_STORE_FNKEY C
       			WHERE A.STORE_CD = #{storeCd}
       			AND A.POS_NO = #{posNo}
       			AND A.FNKEY_FG = #{confgFg}
       			AND B.FNKEY_FG = A.FNKEY_FG
-      			AND B.FNKEY_NO = A.FNKEY_NO
-      			AND A.USE_YN = 'Y'
+                AND B.FNKEY_NO = A.FNKEY_NO
+                AND C.STORE_CD = A.STORE_CD
+                AND C.FNKEY_FG = A.FNKEY_FG
+                AND C.FNKEY_NO = A.FNKEY_NO
+                AND A.USE_YN = 'Y'
+                AND B.USE_YN = 'Y'
+                AND C.USE_YN = 'Y'
             )
     </select>
 
