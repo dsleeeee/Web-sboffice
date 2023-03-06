@@ -27,7 +27,7 @@
         ,       D.AGENCY_NM
         ,       B.VAN_CD
         ,       E.VAN_NM
-        ,       F.POS_CNT
+        ,       O.POS_CNT
         ,       G.BILL_CNT
         ,       G.SALE_CNT
         ,       G.RTN_SALE_CNT
@@ -176,6 +176,16 @@
                     GROUP
                     BY      A.STORE_CD
                 ) N
+        ,       (
+                    SELECT  A.STORE_CD
+                    ,       COUNT(DISTINCT POS_NO)          POS_CNT
+                    FROM    TB_CM_INSTLL A
+                    <![CDATA[
+                    WHERE   A.INST_FG <>  '0'
+                    ]]>
+                    GROUP
+                    BY      A.STORE_CD
+                ) O
         WHERE   1 = 1
         AND     B.HQ_OFFICE_CD      =   A.HQ_OFFICE_CD
         <if test='hqOfficeCd != null and hqOfficeCd != ""'>
@@ -243,6 +253,7 @@
         AND     L.SOLBI_STORE_CD    (+) =   B.STORE_CD
         AND     M.STORE_CD          (+) =   B.STORE_CD
         AND     N.STORE_CD          (+) =   B.STORE_CD
+        AND     O.STORE_CD          (+) =   B.STORE_CD
         ORDER
         BY      A.HQ_OFFICE_CD, A.HQ_OFFICE_NM
         ,       B.STORE_CD, B.STORE_NM, B.SYS_STAT_FG
