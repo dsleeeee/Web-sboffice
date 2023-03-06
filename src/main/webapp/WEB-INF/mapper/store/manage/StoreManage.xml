@@ -4199,6 +4199,7 @@
         <foreach collection="arrPosNo" item="item" open="(" close=")" separator=",">
             LPAD(#{item}, 2, '0')
         </foreach>
+        AND tmpf.FNKEY_FG NOT IN ('6020', '6021', '6022', '6023')  <!-- 기능키 터치키 위치때문에 직접 셋팅이 필요.(결제메뉴(좌), 결제메뉴(우), 배달메뉴, 셀프결제메뉴) -->
         ) B
         ON
         (

@@ -561,7 +561,8 @@ public class StoreManageServiceImpl implements StoreManageService{
 
 
                         // 매장설정 XML, 포스기능 XML  복사 (TB_WB_STORE_CONFG_XML, TB_WB_POS_CONFG_XML)
-                        ConfgXmlVO confgXmlVO = new ConfgXmlVO();
+                        // XML 정보 사용안함(20230302)
+                        /*ConfgXmlVO confgXmlVO = new ConfgXmlVO();
                         confgXmlVO.setStoreCd(storeCd);
                         confgXmlVO.setCopyStoreCd(storeManageVO.getCopyStoreCd());
                         confgXmlVO.setRegDt(dt);
@@ -591,7 +592,7 @@ public class StoreManageServiceImpl implements StoreManageService{
                             LOGGER.info(">>>>>>>>>>>>>>>>>> SELF >>>>>>>>>>>>>>>");
                             confgXmlVO.setConfgFg(ConfgFg.FUNC_KEY_SELF); // 포스 기능키 (셀프키)
                             procCnt += mapper.copyPosConfXml(confgXmlVO);
-                        }
+                        }*/
 
                         // 포스기능키별 적용매장 등록(TB_CM_POS_FNKEY_STORE)
                         procCnt += mapper.registPosFnkeyStore(storeFnkeyVO);

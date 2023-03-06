@@ -215,9 +215,13 @@ public class FuncServiceImpl implements FuncService {
                 String storeResult = mapper.insertStoreFuncKey(funcStoreVO);
                 funStore.setResult(storeResult);
 
-                FuncStoreVO funcPos = new FuncStoreVO();
-                String posResult = mapper.insertPosFuncKey(funcStoreVO);
-                funcPos.setResult(posResult);
+                // 기능키 터치키 위치때문에 직접 셋팅이 필요.(결제메뉴(좌), 결제메뉴(우), 배달메뉴, 셀프결제메뉴)
+                if(!"6020".equals(funcStoreVO.getFnkeyFg()) && !"6021".equals(funcStoreVO.getFnkeyFg()) &&
+                   !"6022".equals(funcStoreVO.getFnkeyFg()) && !"6023".equals(funcStoreVO.getFnkeyFg())){
+                    FuncStoreVO funcPos = new FuncStoreVO();
+                    String posResult = mapper.insertPosFuncKey(funcStoreVO);
+                    funcPos.setResult(posResult);
+                }
 
             } else if(funcStoreVO.getStatus() == GridDataFg.DELETE) {
                 procCnt += mapper.deleteFuncStore(funcStoreVO);

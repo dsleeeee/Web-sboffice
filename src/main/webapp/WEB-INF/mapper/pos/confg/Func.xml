@@ -637,6 +637,7 @@
                 AND     TCPF.FNKEY_NO   =   TCPFS.FNKEY_NO
                 AND     TMS.STORE_CD    =   #{storeCd}
                 AND     TMP.STORE_CD    =   #{storeCd}
+                AND     TCPF.FNKEY_FG NOT IN ('6020', '6021', '6022', '6023')  <!-- 기능키 터치키 위치때문에 직접 셋팅이 필요.(결제메뉴(좌), 결제메뉴(우), 배달메뉴, 셀프결제메뉴) -->
             ) B
     ON      (           B.FNKEY_NO      =   A.FNKEY_NO
             AND         B.STORE_CD      =   A.STORE_CD
