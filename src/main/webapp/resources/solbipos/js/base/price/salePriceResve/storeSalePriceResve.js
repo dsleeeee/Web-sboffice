@@ -31,8 +31,10 @@ app.controller('storeSalePriceResveCtrl', ['$scope', '$http', function ($scope, 
 
             $("#prodSalePriceResve").addClass("on");
             $("#storeSalePriceResve").removeClass("on");
+            $("#storeSalePriceResveExcelUpload").removeClass("on");
             $("#prodSalePriceResveArea").show();
             $("#storeSalePriceResveArea").hide();
+            $("#storeSalePriceResveExcelUploadView").hide();
             $scope.isProdTab = false;
             $scope.isStoreTab = true;
 
@@ -40,8 +42,21 @@ app.controller('storeSalePriceResveCtrl', ['$scope', '$http', function ($scope, 
 
             $("#prodSalePriceResve").removeClass("on");
             $("#storeSalePriceResve").addClass("on");
+            $("#storeSalePriceResveExcelUpload").removeClass("on");
             $("#prodSalePriceResveArea").hide();
             $("#storeSalePriceResveArea").show();
+            $("#storeSalePriceResveExcelUploadView").hide();
+            $scope.isProdTab = true;
+            $scope.isStoreTab = false;
+
+        } else if ( type === 'U' ) {  // 가격예약(매장판매가) 엑셀업로드 탭
+
+            $("#prodSalePriceResve").removeClass("on");
+            $("#storeSalePriceResve").removeClass("on");
+            $("#storeSalePriceResveExcelUpload").addClass("on");
+            $("#prodSalePriceResveArea").hide();
+            $("#storeSalePriceResveArea").hide();
+            $("#storeSalePriceResveExcelUploadView").show();
             $scope.isProdTab = true;
             $scope.isStoreTab = false;
         }
