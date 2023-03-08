@@ -19,7 +19,7 @@ var app = agrid.getApp();
 app.controller('empBatchChangeExcelUploadCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('empBatchChangeExcelUploadCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('empBatchChangeExcelUploadCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -70,13 +70,14 @@ app.controller('empBatchChangeExcelUploadCtrl', ['$scope', '$http', '$timeout', 
 
     // <-- 엑셀업로드 -->
     $scope.excelUpload = function(){
-        // 매장엑셀업로드 팝업
-        $("#storeExcelUpFile").val('');
-        $("#storeExcelUpFile").trigger('click');
+        // 엑셀업로드 팝업
+        $("#empExcelUpFile").val('');
+        $("#empExcelUpFile").trigger('click');
     };
     // <-- //엑셀업로드 -->
 
 }]);
+
 
 /**
  *  매장목록 조회 그리드 생성
@@ -84,7 +85,7 @@ app.controller('empBatchChangeExcelUploadCtrl', ['$scope', '$http', '$timeout', 
 app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('storeExcelUploadCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('storeExcelUploadCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -148,7 +149,7 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
     // 저장
     $scope.saveSave = function() {
         if ($scope.flex.rows.length <= 0) {
-            $scope._popMsg(messages["storeExcelUpload.saveBlank"]);
+            $scope._popMsg(messages["cmm.empty.data"]); // 조회 데이터가 없습니다.
             return false;
         }
 
@@ -173,6 +174,7 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
             // 검증결과 조회
             $scope.searchStoreExcelUploadProd();
 
+            // 검증을 통과한 사원정보를 저장하시겠습니까?
             $scope._popConfirm(messages["empBatchChange.saveConfirm"], function() {
                 // 매장등록 저장
                 $scope.storeExcelUploadSave();
@@ -199,10 +201,8 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
 
     // <-- 엑셀다운로드 -->
     $scope.storeExcelDownload = function(){
-        var column_binding;
-
         if ($scope.flex.rows.length <= 0) {
-            $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+            $scope._popMsg(messages["excelUpload.not.downloadData"]);	// 다운로드 할 데이터가 없습니다.
             return false;
         }
 
@@ -230,7 +230,7 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
 
     // <-- 그리드 행 삭제 -->
     $scope.delete = function(){
-        $scope._popConfirm(messages["storeExcelUpload.delConfirm"], function() {
+        $scope._popConfirm(messages["cmm.choo.delete"], function() {
             for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
                 var item = $scope.flex.collectionView.items[i];
 

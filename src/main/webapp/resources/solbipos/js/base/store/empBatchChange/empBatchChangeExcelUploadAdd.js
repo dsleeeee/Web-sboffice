@@ -57,8 +57,8 @@ app.controller('storeExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functi
     // 엑셀 업로드
     $scope.excelUpload = function () {
         // 선택한 파일이 있으면
-        if ($('#storeExcelUpFile')[0].files[0]) {
-            var file          = $('#storeExcelUpFile')[0].files[0];
+        if ($('#empExcelUpFile')[0].files[0]) {
+            var file          = $('#empExcelUpFile')[0].files[0];
             var fileName      = file.name;
             var fileExtension = fileName.substring(fileName.lastIndexOf('.'));
 
@@ -68,7 +68,7 @@ app.controller('storeExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functi
 
                 $timeout(function () {
                     var flex = $scope.flex;
-                    wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#storeExcelUpFile')[0].files[0], {includeColumnHeaders: true}
+                    wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#empExcelUpFile')[0].files[0], {includeColumnHeaders: true}
                         , function () {
                             $timeout(function () {
                                 // 엑셀업로드 한 데이터를 JSON 형태로 변경한다.
@@ -78,8 +78,8 @@ app.controller('storeExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functi
                     );
                 }, 10);
             } else {
-                $("#storeExcelUpFile").val('');
-                $scope._popMsg(messages['storeExcelUpload.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)
+                $("#empExcelUpFile").val('');
+                $scope._popMsg(messages['excelUpload.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)
                 return false;
             }
         }
@@ -92,7 +92,7 @@ app.controller('storeExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functi
         var rowLength = $scope.flex.rows.length;
 
         if (rowLength === 0) {
-            $scope._popMsg(messages['storeExcelUpload.not.excelUploadData']); // 엑셀업로드 된 데이터가 없습니다.
+            $scope._popMsg(messages['excelUpload.not.excelUploadData']); // 엑셀업로드 된 데이터가 없습니다.
             return false;
         }
 

@@ -119,6 +119,21 @@ public class EmpBatchChangeServiceImpl implements EmpBatchChangeService {
         return result;
     }
 
+    /** 검증결과 삭제 */
+    @Override
+    public int getEmpExcelUploadCheckDelete(EmpBatchChangeVO[] empBatchChangeVOs, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+
+        for(EmpBatchChangeVO empBatchChangeVO : empBatchChangeVOs) {
+            empBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            empBatchChangeVO.setSessionId(sessionInfoVO.getUserId());
+
+            result += empBatchChangeMapper.getEmpExcelUploadCheckDelete(empBatchChangeVO);
+        }
+
+        return result;
+    }
+
     /** 임시테이블 검증 후 저장 */
     @Override
     public int getEmpExcelUploadCheckSave(EmpBatchChangeVO[] empBatchChangeVOs, SessionInfoVO sessionInfoVO) {
