@@ -79,7 +79,7 @@ app.controller('storeExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functi
                 }, 10);
             } else {
                 $("#storeExcelUpFile").val('');
-                $scope._popMsg(messages['storeExcelUpload.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)
+                $scope._popMsg(messages['excelUpload.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)
                 return false;
             }
         }
@@ -92,7 +92,7 @@ app.controller('storeExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functi
         var rowLength = $scope.flex.rows.length;
 
         if (rowLength === 0) {
-            $scope._popMsg(messages['storeExcelUpload.not.excelUploadData']); // 엑셀업로드 된 데이터가 없습니다.
+            $scope._popMsg(messages['excelUpload.not.excelUploadData']); // 엑셀업로드 된 데이터가 없습니다.
             return false;
         }
 
