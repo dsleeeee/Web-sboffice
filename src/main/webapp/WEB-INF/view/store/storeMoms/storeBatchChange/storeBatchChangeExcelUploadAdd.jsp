@@ -42,4 +42,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storeBatchChange/storeBatchChangeExcelUploadAdd.js?ver=20230118.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storeBatchChange/storeBatchChangeExcelUploadAdd.js?ver=20230307.01" charset="utf-8"></script>

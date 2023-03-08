@@ -117,6 +117,21 @@ public class StoreBatchChangeServiceImpl implements StoreBatchChangeService {
         return result;
     }
 
+    /** 검증결과 삭제 */
+    @Override
+    public int getStoreExcelUploadCheckDelete(StoreBatchChangeVO[] storeBatchChangeVOs, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+
+        for(StoreBatchChangeVO storeBatchChangeVO : storeBatchChangeVOs) {
+            storeBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            storeBatchChangeVO.setSessionId(sessionInfoVO.getUserId());
+
+            result += storeBatchChangeMapper.getStoreExcelUploadCheckDelete(storeBatchChangeVO);
+        }
+
+        return result;
+    }
+
     /** 임시테이블 검증 후 저장 */
     @Override
     public int getStoreExcelUploadCheckSave(StoreBatchChangeVO[] storeBatchChangeVOs, SessionInfoVO sessionInfoVO) {

@@ -348,8 +348,8 @@ public class SalePriceResveServiceImpl implements SalePriceResveService {
             salePriceResveVO.setModDt(currentDt);
             salePriceResveVO.setModId(sessionInfoVO.getUserId());
 
-            salePriceResveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             salePriceResveVO.setSessionId(sessionInfoVO.getSessionId());
+            salePriceResveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             salePriceResveVO.setSaleResveFg("1"); // 가격예약구분 0:일반, 1:예약
 
             if(("검증성공").equals(salePriceResveVO.getResult())) {
@@ -371,6 +371,56 @@ public class SalePriceResveServiceImpl implements SalePriceResveService {
                     if(salePriceResveVO.getApplyFg().equals("true")){
                         salePriceResveMapper.insertHqSalePriceToStore(salePriceResveVO);
                     }
+
+                    // 본사판매가관리
+                    SalePriceVO salePriceVO = new SalePriceVO();
+                    salePriceVO.setSessionId(salePriceResveVO.getSessionId());
+                    salePriceVO.setHqOfficeCd(salePriceResveVO.getHqOfficeCd());
+                    salePriceVO.setStoreCd(salePriceResveVO.getStoreCd());
+                    salePriceVO.setProdCd(salePriceResveVO.getProdCd());
+                    salePriceVO.setSeq(salePriceResveVO.getSeq());
+                    salePriceVO.setSalePriceOrgnFg(salePriceResveVO.getSalePriceOrgnFg());
+
+                    // 저장완료된 검증결과만 삭제
+                    result += salePriceMapper.getSalePriceExcelUploadCheckDelete(salePriceVO);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /** 가격예약(매장판매가) 엑셀업로드 탭 - 판매가 저장 */
+    @Override
+    public int getStoreSalePriceResveExcelUploadSave(SalePriceResveVO[] salePriceResveVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        for(SalePriceResveVO salePriceResveVO : salePriceResveVOs) {
+            salePriceResveVO.setRegDt(currentDt);
+            salePriceResveVO.setRegId(sessionInfoVO.getUserId());
+            salePriceResveVO.setModDt(currentDt);
+            salePriceResveVO.setModId(sessionInfoVO.getUserId());
+
+            salePriceResveVO.setSessionId(sessionInfoVO.getSessionId());
+            salePriceResveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            salePriceResveVO.setSaleResveFg("1"); // 가격예약구분 0:일반, 1:예약
+
+            if(("검증성공").equals(salePriceResveVO.getResult())) {
+                // 가격관리구분이 매장인 경우만 수정
+                if(("S").equals(salePriceResveVO.getPrcCtrlFg())) {
+
+                    // 해당 시작날짜에 등록된 가격이 있는지 조회(판매가 히스토리 등록을 위해)
+                    int prodCnt = salePriceResveMapper.getStoreSalePriceCnt(salePriceResveVO);
+
+                    if(prodCnt > 0){ // 기존 판매가 히스토리에 저장
+                        result = salePriceResveMapper.insertStoreSalePriceHistory(salePriceResveVO);
+                        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                    }
+
+                    // 새 예약 판매가 등록
+                    result = salePriceResveMapper.insertStoreSalePrice(salePriceResveVO);
 
                     // 본사판매가관리
                     SalePriceVO salePriceVO = new SalePriceVO();

@@ -33,6 +33,9 @@ public interface StoreBatchChangeService {
     /** 검증결과 삭제 */
     int getStoreExcelUploadCheckDeleteAll(StoreBatchChangeVO storeBatchChangeVO, SessionInfoVO sessionInfoVO);
 
+    /** 검증결과 삭제 */
+    int getStoreExcelUploadCheckDelete(StoreBatchChangeVO[] storeBatchChangeVOs, SessionInfoVO sessionInfoVO);
+
     /** 검증결과 저장 */
     int getStoreExcelUploadCheckSave(StoreBatchChangeVO[] storeBatchChangeVOs, SessionInfoVO sessionInfoVO);
 

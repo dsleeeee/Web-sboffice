@@ -234,8 +234,8 @@ public class SalePriceServiceImpl implements SalePriceService {
     @Override
     public List<DefaultMap<String>> getSalePriceExcelUploadCheckList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO) {
 
-        salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         salePriceVO.setSessionId(sessionInfoVO.getSessionId());
+        salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         return salePriceMapper.getSalePriceExcelUploadCheckList(salePriceVO);
     }
@@ -245,8 +245,8 @@ public class SalePriceServiceImpl implements SalePriceService {
     public int getSalePriceExcelUploadCheckDeleteAll(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO) {
 
         int procCnt = 0;
-        salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         salePriceVO.setSessionId(sessionInfoVO.getSessionId());
+        salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         procCnt += salePriceMapper.getSalePriceExcelUploadCheckDeleteAll(salePriceVO);
 
@@ -260,8 +260,8 @@ public class SalePriceServiceImpl implements SalePriceService {
         int procCnt = 0;
 
         for(SalePriceVO salePriceVO : salePriceVOs) {
-            salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             salePriceVO.setSessionId(sessionInfoVO.getSessionId());
+            salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
             procCnt += salePriceMapper.getSalePriceExcelUploadCheckDelete(salePriceVO);
         }
@@ -283,8 +283,8 @@ public class SalePriceServiceImpl implements SalePriceService {
             salePriceVO.setModDt(currentDt);
             salePriceVO.setModId(sessionInfoVO.getUserId());
 
-            salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             salePriceVO.setSessionId(sessionInfoVO.getSessionId());
+            salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             salePriceVO.setSeq(i);
 
             salePriceVO.setResult("검증전");
@@ -311,8 +311,8 @@ public class SalePriceServiceImpl implements SalePriceService {
             salePriceVO.setModDt(currentDt);
             salePriceVO.setModId(sessionInfoVO.getUserId());
 
-            salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             salePriceVO.setSessionId(sessionInfoVO.getSessionId());
+            salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             salePriceVO.setSeq(i);
 
             // 숫자가 입력되어야 하는 컬럼에 문자가 입력되면 null처리
@@ -397,8 +397,8 @@ public class SalePriceServiceImpl implements SalePriceService {
             salePriceVO.setModDt(currentDt);
             salePriceVO.setModId(sessionInfoVO.getUserId());
 
-            salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             salePriceVO.setSessionId(sessionInfoVO.getSessionId());
+            salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             salePriceVO.setStartDate(currentDate);
             salePriceVO.setEndDate("99991231");
 
@@ -447,8 +447,8 @@ public class SalePriceServiceImpl implements SalePriceService {
             salePriceVO.setModDt(currentDt);
             salePriceVO.setModId(sessionInfoVO.getUserId());
 
-            salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             salePriceVO.setSessionId(sessionInfoVO.getSessionId());
+            salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             salePriceVO.setStartDate(currentDate);
             salePriceVO.setEndDate("99991231");
 

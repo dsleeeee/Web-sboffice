@@ -229,6 +229,17 @@ public class SalePriceResveController {
         String dateStr = formatter.format(cal.getTime());
         model.addAttribute("tomorrowDate", dateStr);
 
+        /** 맘스터치 */
+        // [1250 맘스터치] 환경설정값 조회
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0"));
+            System.out.println("momsEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0"));
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
+            System.out.println("momsEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
+        }
+        /** //맘스터치 */
+
         return "base/price/salePriceResve/storeSalePriceResve";
     }
 
@@ -460,5 +471,29 @@ public class SalePriceResveController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 가격예약(매장판매가) 엑셀업로드 탭 - 판매가 저장
+     *
+     * @param salePriceResveVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 02. 21.
+     */
+    @RequestMapping(value = "/salePriceResveExcelUpload/getStoreSalePriceResveExcelUploadSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreSalePriceResveExcelUploadSave(@RequestBody SalePriceResveVO[] salePriceResveVOs, HttpServletRequest request,
+                                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = salePriceResveService.getStoreSalePriceResveExcelUploadSave(salePriceResveVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
 
 }

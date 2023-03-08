@@ -10,8 +10,8 @@
 
 <div class="subCon" style="display: none" ng-controller="storeExcelUploadAddCtrl">
 
-    <input type="file" class="form-control" id="storeExcelUpFile"
-        ng-model="storeExcelUpFile"
+    <input type="file" class="form-control" id="empExcelUpFile"
+        ng-model="empExcelUpFile"
         onchange="angular.element(this).scope().excelFileChanged()"
         accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel.sheet.macroEnabled.12"/>
 
@@ -42,4 +42,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/empBatchChange/empBatchChangeExcelUploadAdd.js?ver=20230216.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/empBatchChange/empBatchChangeExcelUploadAdd.js?ver=20230307.01" charset="utf-8"></script>

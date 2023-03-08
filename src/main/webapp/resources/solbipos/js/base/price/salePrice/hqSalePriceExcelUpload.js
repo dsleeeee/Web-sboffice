@@ -136,7 +136,7 @@ app.controller('hqSalePriceExcelUploadCtrl', ['$scope', '$http', '$timeout', fun
     // 저장
     $scope.saveSave = function() {
         if ($scope.flex.rows.length <= 0) {
-            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            $scope._popMsg(messages["cmm.empty.data"]); // 조회 데이터가 없습니다.
             return false;
         }
 

@@ -33,6 +33,9 @@ public interface EmpBatchChangeService {
     /** 검증결과 삭제 */
     int getEmpExcelUploadCheckDeleteAll(EmpBatchChangeVO empBatchChangeVO, SessionInfoVO sessionInfoVO);
 
+    /** 검증결과 삭제 */
+    int getEmpExcelUploadCheckDelete(EmpBatchChangeVO[] empBatchChangeVOs, SessionInfoVO sessionInfoVO);
+
     /** 검증결과 저장 */
     int getEmpExcelUploadCheckSave(EmpBatchChangeVO[] empBatchChangeVOs, SessionInfoVO sessionInfoVO);
 

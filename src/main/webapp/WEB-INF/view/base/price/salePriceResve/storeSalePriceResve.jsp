@@ -15,6 +15,11 @@
             <li><a id="prodSalePriceResve" href="#" class="on" ng-click="changeTab('P');"><s:message code="salePriceResve.prodSalePrice" /></a></li>
             <%-- 매장별 판매가관리 --%>
             <li><a id="storeSalePriceResve" href="#" ng-click="changeTab('S');"><s:message code="salePriceResve.storeSalePrice" /></a></li>
+            <%-- [1250 맘스터치] --%>
+            <c:if test="${momsEnvstVal == '1'}">
+                <%-- 가격예약(매장판매가) 엑셀업로드 탭 --%>
+                <li><a id="storeSalePriceResveExcelUpload" href="#" ng-click="changeTab('U');"><s:message code="salePriceResve.storeSalePriceResveExcelUpload" /></a></li>
+            </c:if>
         </ul>
     </div>
 </div>
@@ -27,4 +32,13 @@
 <c:import url="/WEB-INF/view/base/price/salePriceResve/storeStoreSalePriceResve.jsp">
 </c:import>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeSalePriceResve.js?ver=20220418.01" charset="utf-8"></script>
+<%-- 가격예약(매장판매가) 엑셀업로드 레이어 --%>
+<c:import url="/WEB-INF/view/base/price/salePriceResve/storeSalePriceResveExcelUpload.jsp">
+</c:import>
+
+<script>
+    // [1250 맘스터치] 환경설정값
+    var momsEnvstVal = "${momsEnvstVal}";
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeSalePriceResve.js?ver=20230306.01" charset="utf-8"></script>

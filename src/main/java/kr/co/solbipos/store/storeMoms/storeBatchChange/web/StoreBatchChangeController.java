@@ -326,6 +326,26 @@ public class StoreBatchChangeController {
         return returnJson(Status.OK, result);
     }
 
+    /**
+     * 검증결과 삭제
+     *
+     * @param storeBatchChangeVOs
+     * @param request
+     * @return  Object
+     * @author  김설아
+     * @since   2023.03.06
+     */
+    @RequestMapping(value = "storeBatchChange/getStoreExcelUploadCheckDelete.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreExcelUploadCheckDelete(@RequestBody StoreBatchChangeVO[] storeBatchChangeVOs, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = storeBatchChangeService.getStoreExcelUploadCheckDelete(storeBatchChangeVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
     /** 업로드시 임시테이블 저장 */
     @RequestMapping(value = "storeBatchChange/getStoreExcelUploadCheckSave.sb", method = RequestMethod.POST)
     @ResponseBody

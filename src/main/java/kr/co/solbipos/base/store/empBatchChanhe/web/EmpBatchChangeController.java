@@ -325,6 +325,26 @@ public class EmpBatchChangeController {
         return returnJson(Status.OK, result);
     }
 
+    /**
+     * 검증결과 삭제
+     *
+     * @param empBatchChangeVOs
+     * @param request
+     * @return  Object
+     * @author  김설아
+     * @since   2023.03.06
+     */
+    @RequestMapping(value = "empBatchChange/getEmpExcelUploadCheckDelete.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getEmpExcelUploadCheckDelete(@RequestBody EmpBatchChangeVO[] empBatchChangeVOs, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = empBatchChangeService.getEmpExcelUploadCheckDelete(empBatchChangeVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
     /** 업로드시 임시테이블 저장 */
     @RequestMapping(value = "empBatchChange/getEmpExcelUploadCheckSave.sb", method = RequestMethod.POST)
     @ResponseBody
