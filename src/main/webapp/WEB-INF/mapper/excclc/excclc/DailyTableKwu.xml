@@ -332,7 +332,8 @@
                         WHERE 1=1
                         AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
                         AND tsdp.STORE_CD = #{storeCd}
-                        AND tsdp.SALE_DATE BETWEEN SUBSTR(#{startDate}, 1, 4)||'0101' AND DECODE(SUBSTR(#{startDate}, 5, 2), '01', SUBSTR(#{startDate}, 1, 6), TO_CHAR((TO_DATE(SUBSTR(#{startDate}, 1, 6), 'YYYYMM') -1), 'YYYYMM'))||'31'
+                        -- 광운대의 경우 1년의 기준이 3월~2월임(그래서 3월 전월누계는 0임)
+                        AND tsdp.SALE_DATE BETWEEN TO_CHAR(ADD_MONTHS(TO_DATE(SUBSTR(#{startDate}, 1, 6), 'YYYYMM'), -2), 'YYYY') ||'0301' AND TO_CHAR(ADD_MONTHS(TO_DATE(SUBSTR(#{startDate}, 1, 6), 'YYYYMM'), -1), 'YYYYMM')||'31'
                         AND tmp.STORE_CD = tsdp.STORE_CD
                         AND tmp.PROD_CD = tsdp.PROD_CD
                         GROUP BY tsdp.STORE_CD, tmp.PROD_CLASS_CD, tsdp.PROD_CD
