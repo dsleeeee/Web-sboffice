@@ -79,10 +79,12 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
           var params      = {};
           params.storeCd = selectedRow.storeCd;
           params.storeNm = selectedRow.storeNm;
+          params.hqOfficeCd = selectedRow.hqOfficeCd;
 
           $("#lblStoreInfo").text("[" + params.storeCd + "] " + params.storeNm);
           $("#lblStoreCd").text(params.storeCd);
           $("#lblStoreNm").text(params.storeNm);
+          $("#lblHqOfficeCd").text(params.hqOfficeCd);
 
           $scope.search();
         }
@@ -98,6 +100,7 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#lblStoreInfo").text("");
       $("#lblStoreCd").text("");
       $("#lblStoreNm").text("");
+      $("#lblHqOfficeCd").text("");
 
       $scope.$apply(function() {
         // 그리드 초기화
@@ -619,6 +622,21 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
           return false;
         }
       }
+
+      // BBQ는 VAN - KCP 만 저장 가능
+      // 개발 DS011
+      // 운영 DS024 H0360
+      if(params[i].status !== "D") {
+        if($("#lblHqOfficeCd").text() == "DS011" || $("#lblHqOfficeCd").text() == "DS024" || $("#lblHqOfficeCd").text() == "H0360") {
+          if(params[i].vendorFg == "01" && params[i].vendorNm == "KCP") {
+          } else {
+            // BBQ 매장은 VAN - KCP 선택하여 주십시오.
+            $scope._popMsg(messages["terminalManage.bbqSave.msg"]);
+            return false;
+          }
+        }
+      }
+
     }
 
     var chkChanged = false;
@@ -853,6 +871,21 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
           return false;
         }
       }
+
+      // BBQ는 VAN - KCP 만 저장 가능
+      // 개발 DS011
+      // 운영 DS024 H0360
+      if(params[i].status !== "D") {
+        if($("#lblHqOfficeCd").text() == "DS011" || $("#lblHqOfficeCd").text() == "DS024" || $("#lblHqOfficeCd").text() == "H0360") {
+          if(params[i].vendorFg == "01" && params[i].vendorNm == "KCP") {
+          } else {
+            // BBQ 매장은 VAN - KCP 선택하여 주십시오.
+            $scope._popMsg(messages["terminalManage.bbqSave.msg"]);
+            return false;
+          }
+        }
+      }
+
     }
 
     var terminalScope = agrid.getScope('terminalCtrl');
