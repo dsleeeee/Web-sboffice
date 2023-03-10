@@ -41,6 +41,8 @@ public class DayMembrVO extends PageVO {
 
     /** 회원번호 */
     private String membrNo;
+    /** 회원명 */
+    private String membrNm;
 
     /** 판매구분 */
     private String saleFg;
@@ -113,6 +115,14 @@ public class DayMembrVO extends PageVO {
 
     public void setMembrNo(String membrNo) {
         this.membrNo = membrNo;
+    }
+
+    public String getMembrNm() {
+        return membrNm;
+    }
+
+    public void setMembrNm(String membrNm) {
+        this.membrNm = membrNm;
     }
 
     public String getSaleFg() {

@@ -41,6 +41,17 @@
                 </div>
             </td>
         </tr>
+        <tr>
+            <%-- 회원명 --%>
+            <th>
+                <s:message code="membrProd.srchMembrNm"/>
+            </th>
+            <td>
+                <input type="text" class="sb-input w100" id="srchMembrNm" ng-model="membrNm" onkeyup="fnNxBtnSearch();"/>
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
         </tbody>
     </table>
     <div class="mt20 oh sb-select dkbr">
