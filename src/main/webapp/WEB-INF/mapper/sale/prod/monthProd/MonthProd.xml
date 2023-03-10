@@ -37,10 +37,10 @@
         M_CLASS_NM,
         S_CLASS_CD,
         S_CLASS_NM,
-        tsmps.PROD_CD,
+        tsmps.SIDE_PROD_CD AS PROD_CD,
         tmp.PROD_NM,
         (CASE tsmps.SEL_TYPE_FG WHEN 'P' THEN '사이드모상품' WHEN 'S' THEN '사이드상품' WHEN 'N' THEN '일반판매상품' END) AS SEL_TYPE_FG,
-        (CASE tsmps.SEL_TYPE_FG WHEN 'S' THEN tsmps.SIDE_PROD_CD END) AS SIDE_PROD_CD,
+        (CASE tsmps.SEL_TYPE_FG WHEN 'S' THEN tsmps.PROD_CD END) AS SIDE_PROD_CD,
         (CASE tsmps.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmps2.PROD_NM ELSE tmps2.PROD_NM END) AS SIDE_PROD_NM,
         SUM(CASE WHEN tsmps.SEL_TYPE_FG = 'N' OR tsmps.SEL_TYPE_FG = 'P' THEN tsmps.TOT_SALE_QTY END) AS SALE_QTY1,
         SUM(CASE WHEN tsmps.SEL_TYPE_FG = 'N' OR tsmps.SEL_TYPE_FG = 'S' THEN tsmps.TOT_SALE_QTY END) AS SALE_QTY2,
@@ -149,11 +149,11 @@
         AND tmpcv.PROD_CD = tmps2.PROD_CD
         <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
             GROUP BY tsmps.SALE_YM, tms.HQ_OFFICE_CD, tms.BRANCH_CD, tsmps.STORE_CD, tms.STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, tsmps.PROD_CD, tmp.PROD_NM, tsmps.SEL_TYPE_FG, tsmps.SIDE_PROD_CD, tmps2.PROD_NM
-            ORDER BY tsmps.SALE_YM, tsmps.STORE_CD, tsmps.PROD_CD
+            ORDER BY tsmps.SALE_YM, tsmps.STORE_CD, tsmps.SIDE_PROD_CD, (CASE tsmps.SEL_TYPE_FG WHEN 'S' THEN tsmps.PROD_CD END) DESC
         </if>
         <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
             GROUP BY tms.HQ_OFFICE_CD, tms.BRANCH_CD, tsmps.STORE_CD, tms.STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, tsmps.PROD_CD, tmp.PROD_NM, tsmps.SEL_TYPE_FG, tsmps.SIDE_PROD_CD, tmps2.PROD_NM
-            ORDER BY tsmps.STORE_CD, tsmps.PROD_CD
+            ORDER BY tsmps.STORE_CD, tsmps.SIDE_PROD_CD, (CASE tsmps.SEL_TYPE_FG WHEN 'S' THEN tsmps.PROD_CD END) DESC
         </if>
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -182,10 +182,10 @@
         M_CLASS_NM,
         S_CLASS_CD,
         S_CLASS_NM,
-        tsmps.PROD_CD,
+        tsmps.SIDE_PROD_CD AS PROD_CD,
         tmp.PROD_NM,
         (CASE tsmps.SEL_TYPE_FG WHEN 'P' THEN '사이드모상품' WHEN 'S' THEN '사이드상품' WHEN 'N' THEN '일반판매상품' END) AS SEL_TYPE_FG,
-        (CASE tsmps.SEL_TYPE_FG WHEN 'S' THEN tsmps.SIDE_PROD_CD END) AS SIDE_PROD_CD,
+        (CASE tsmps.SEL_TYPE_FG WHEN 'S' THEN tsmps.PROD_CD END) AS SIDE_PROD_CD,
         (CASE tsmps.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmps2.PROD_NM ELSE tmps2.PROD_NM END) AS SIDE_PROD_NM,
         SUM(CASE WHEN tsmps.SEL_TYPE_FG = 'N' OR tsmps.SEL_TYPE_FG = 'P' THEN tsmps.TOT_SALE_QTY END) AS SALE_QTY1,
         SUM(CASE WHEN tsmps.SEL_TYPE_FG = 'N' OR tsmps.SEL_TYPE_FG = 'S' THEN tsmps.TOT_SALE_QTY END) AS SALE_QTY2,
@@ -294,11 +294,11 @@
         AND tmpcv.PROD_CD = tmps2.PROD_CD
         <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
             GROUP BY tsmps.SALE_YM, tms.HQ_OFFICE_CD, tms.BRANCH_CD, tsmps.STORE_CD, tms.STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, tsmps.PROD_CD, tmp.PROD_NM, tsmps.SEL_TYPE_FG, tsmps.SIDE_PROD_CD, tmps2.PROD_NM
-            ORDER BY tsmps.SALE_YM, tsmps.STORE_CD, tsmps.PROD_CD
+            ORDER BY tsmps.SALE_YM, tsmps.STORE_CD, tsmps.SIDE_PROD_CD, (CASE tsmps.SEL_TYPE_FG WHEN 'S' THEN tsmps.PROD_CD END) DESC
         </if>
         <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
             GROUP BY tms.HQ_OFFICE_CD, tms.BRANCH_CD, tsmps.STORE_CD, tms.STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, tsmps.PROD_CD, tmp.PROD_NM, tsmps.SEL_TYPE_FG, tsmps.SIDE_PROD_CD, tmps2.PROD_NM
-            ORDER BY tsmps.STORE_CD, tsmps.PROD_CD
+            ORDER BY tsmps.STORE_CD, tsmps.SIDE_PROD_CD, (CASE tsmps.SEL_TYPE_FG WHEN 'S' THEN tsmps.PROD_CD END) DESC
         </if>
     </select>
 
