@@ -47,6 +47,15 @@
                     ,		SUM(tsdp.HQ_CHARGE_UPRC) AS TOT_HQ_CHARGE_UPRC
                     ,		SUM(tsdp.MS_CHARGE_UPRC) AS TOT_MS_CHARGE_UPRC
                     ,		SUM(tsdp.PARTNER_CHARGE_UPRC) AS TOT_PARTNER_CHARGE_UPRC
+                    ,		SUM(tsdp.HD_REAL_SALE_CNT)                                                              AS HD_REAL_SALE_CNT_PROMO_CD
+                    ,		FN_DT_REAL_SALE_CNT_PROMO(tsdp.STORE_CD, tsdp.PROMOTION_CD, SUM(tsdp.REAL_SALE_QTY))    AS DT_REAL_SALE_CNT_PROMO_CD
+                    ,		SUM(tsdp.REAL_SALE_QTY)                                                                 AS REAL_SALE_QTY_PROMO_CD
+                    ,		NVL2(thpc.CHARGE_DS, thpc.HQ_CHARGE_UPRC, '') AS HQ_CHARGE_UPRC_M_PROMO_CD
+                    ,		NVL2(thpc.CHARGE_DS, thpc.MS_CHARGE_UPRC, '') AS MS_CHARGE_UPRC_M_PROMO_CD
+                    ,		NVL2(thpc.CHARGE_DS, thpc.PARTNER_CHARGE_UPRC, '') AS PARTNER_CHARGE_UPRC_M_PROMO_CD
+                    ,       FN_PROMO_CHARGE_UPRC(tsdp.STORE_CD, tsdp.PROMOTION_CD, SUM(tsdp.REAL_SALE_QTY), 'HQ')   AS HQ_CHARGE_UPRC_PROMO_CD
+                    ,       FN_PROMO_CHARGE_UPRC(tsdp.STORE_CD, tsdp.PROMOTION_CD, SUM(tsdp.REAL_SALE_QTY), 'MS')   AS MS_CHARGE_UPRC_PROMO_CD
+                    ,       FN_PROMO_CHARGE_UPRC(tsdp.STORE_CD, tsdp.PROMOTION_CD, SUM(tsdp.REAL_SALE_QTY), 'PN')   AS PARTNER_CHARGE_UPRC_PROMO_CD
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM 	TB_SL_DAILY_PROMO tsdp
                 ,		TB_HQ_PROMO_H thph
@@ -151,6 +160,15 @@
                 ,		SUM(tsdp.HQ_CHARGE_UPRC) AS TOT_HQ_CHARGE_UPRC
                 ,		SUM(tsdp.MS_CHARGE_UPRC) AS TOT_MS_CHARGE_UPRC
                 ,		SUM(tsdp.PARTNER_CHARGE_UPRC) AS TOT_PARTNER_CHARGE_UPRC
+                ,		SUM(tsdp.HD_REAL_SALE_CNT)                                                              AS HD_REAL_SALE_CNT_PROMO_CD
+                ,		FN_DT_REAL_SALE_CNT_PROMO(tsdp.STORE_CD, tsdp.PROMOTION_CD, SUM(tsdp.REAL_SALE_QTY))    AS DT_REAL_SALE_CNT_PROMO_CD
+                ,		SUM(tsdp.REAL_SALE_QTY)                                                                 AS REAL_SALE_QTY_PROMO_CD
+                ,		NVL2(thpc.CHARGE_DS, thpc.HQ_CHARGE_UPRC, '') AS HQ_CHARGE_UPRC_M_PROMO_CD
+                ,		NVL2(thpc.CHARGE_DS, thpc.MS_CHARGE_UPRC, '') AS MS_CHARGE_UPRC_M_PROMO_CD
+                ,		NVL2(thpc.CHARGE_DS, thpc.PARTNER_CHARGE_UPRC, '') AS PARTNER_CHARGE_UPRC_M_PROMO_CD
+                ,       FN_PROMO_CHARGE_UPRC(tsdp.STORE_CD, tsdp.PROMOTION_CD, SUM(tsdp.REAL_SALE_QTY), 'HQ')   AS HQ_CHARGE_UPRC_PROMO_CD
+                ,       FN_PROMO_CHARGE_UPRC(tsdp.STORE_CD, tsdp.PROMOTION_CD, SUM(tsdp.REAL_SALE_QTY), 'MS')   AS MS_CHARGE_UPRC_PROMO_CD
+                ,       FN_PROMO_CHARGE_UPRC(tsdp.STORE_CD, tsdp.PROMOTION_CD, SUM(tsdp.REAL_SALE_QTY), 'PN')   AS PARTNER_CHARGE_UPRC_PROMO_CD
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM 	TB_SL_DAILY_PROMO tsdp
                 ,		TB_MS_PROMO_H thph
@@ -235,6 +253,15 @@
                 ,		SUM(tsdp.HQ_CHARGE_UPRC) AS TOT_HQ_CHARGE_UPRC
                 ,		SUM(tsdp.MS_CHARGE_UPRC) AS TOT_MS_CHARGE_UPRC
                 ,		SUM(tsdp.PARTNER_CHARGE_UPRC) AS TOT_PARTNER_CHARGE_UPRC
+                ,		SUM(tsdp.HD_REAL_SALE_CNT)                                                              AS HD_REAL_SALE_CNT_PROMO_CD
+                ,		FN_DT_REAL_SALE_CNT_PROMO(tsdp.STORE_CD, tsdp.PROMOTION_CD, SUM(tsdp.REAL_SALE_QTY))    AS DT_REAL_SALE_CNT_PROMO_CD
+                ,		SUM(tsdp.REAL_SALE_QTY)                                                                 AS REAL_SALE_QTY_PROMO_CD
+                ,		NVL2(thpc.CHARGE_DS, thpc.HQ_CHARGE_UPRC, '') AS HQ_CHARGE_UPRC_M_PROMO_CD
+                ,		NVL2(thpc.CHARGE_DS, thpc.MS_CHARGE_UPRC, '') AS MS_CHARGE_UPRC_M_PROMO_CD
+                ,		NVL2(thpc.CHARGE_DS, thpc.PARTNER_CHARGE_UPRC, '') AS PARTNER_CHARGE_UPRC_M_PROMO_CD
+                ,       FN_PROMO_CHARGE_UPRC(tsdp.STORE_CD, tsdp.PROMOTION_CD, SUM(tsdp.REAL_SALE_QTY), 'HQ')   AS HQ_CHARGE_UPRC_PROMO_CD
+                ,       FN_PROMO_CHARGE_UPRC(tsdp.STORE_CD, tsdp.PROMOTION_CD, SUM(tsdp.REAL_SALE_QTY), 'MS')   AS MS_CHARGE_UPRC_PROMO_CD
+                ,       FN_PROMO_CHARGE_UPRC(tsdp.STORE_CD, tsdp.PROMOTION_CD, SUM(tsdp.REAL_SALE_QTY), 'PN')   AS PARTNER_CHARGE_UPRC_PROMO_CD
             FROM 	TB_SL_DAILY_PROMO tsdp
             ,		TB_HQ_PROMO_H thph
             ,		TB_HQ_PROMO_CONDI thpc
@@ -336,6 +363,15 @@
                 ,		SUM(tsdp.HQ_CHARGE_UPRC) AS TOT_HQ_CHARGE_UPRC
                 ,		SUM(tsdp.MS_CHARGE_UPRC) AS TOT_MS_CHARGE_UPRC
                 ,		SUM(tsdp.PARTNER_CHARGE_UPRC) AS TOT_PARTNER_CHARGE_UPRC
+                ,		SUM(tsdp.HD_REAL_SALE_CNT)                                                              AS HD_REAL_SALE_CNT_PROMO_CD
+                ,		FN_DT_REAL_SALE_CNT_PROMO(tsdp.STORE_CD, tsdp.PROMOTION_CD, SUM(tsdp.REAL_SALE_QTY))    AS DT_REAL_SALE_CNT_PROMO_CD
+                ,		SUM(tsdp.REAL_SALE_QTY)                                                                 AS REAL_SALE_QTY_PROMO_CD
+                ,		NVL2(thpc.CHARGE_DS, thpc.HQ_CHARGE_UPRC, '') AS HQ_CHARGE_UPRC_M_PROMO_CD
+                ,		NVL2(thpc.CHARGE_DS, thpc.MS_CHARGE_UPRC, '') AS MS_CHARGE_UPRC_M_PROMO_CD
+                ,		NVL2(thpc.CHARGE_DS, thpc.PARTNER_CHARGE_UPRC, '') AS PARTNER_CHARGE_UPRC_M_PROMO_CD
+                ,       FN_PROMO_CHARGE_UPRC(tsdp.STORE_CD, tsdp.PROMOTION_CD, SUM(tsdp.REAL_SALE_QTY), 'HQ')   AS HQ_CHARGE_UPRC_PROMO_CD
+                ,       FN_PROMO_CHARGE_UPRC(tsdp.STORE_CD, tsdp.PROMOTION_CD, SUM(tsdp.REAL_SALE_QTY), 'MS')   AS MS_CHARGE_UPRC_PROMO_CD
+                ,       FN_PROMO_CHARGE_UPRC(tsdp.STORE_CD, tsdp.PROMOTION_CD, SUM(tsdp.REAL_SALE_QTY), 'PN')   AS PARTNER_CHARGE_UPRC_PROMO_CD
                 FROM 	TB_SL_DAILY_PROMO tsdp
                 ,		TB_MS_PROMO_H thph
                 ,		TB_MS_PROMO_CONDI thpc

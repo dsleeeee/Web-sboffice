@@ -44,11 +44,20 @@ app.controller('promotionReportCtrl', ['$scope', '$http', '$timeout', function (
     dataItem.storeCd              = messages["promotionReport.storeCd"];
     dataItem.storeNm              = messages["promotionReport.storeNm"];
     dataItem.bizNo                = messages["promotionReport.bizNo"];
-    dataItem.hdRealSaleCnt        = messages["promotionReport.hdRealSaleCnt"];
+    /*dataItem.hdRealSaleCnt        = messages["promotionReport.hdRealSaleCnt"];
     dataItem.dtRealSaleCnt        = messages["promotionReport.dtRealSaleCnt"];
-    dataItem.realSaleQty          = messages["promotionReport.realSaleQty"];
+    dataItem.realSaleQty          = messages["promotionReport.realSaleQty"];*/
+    dataItem.hdRealSaleCntPromoCd = messages["promotionReport.hdRealSaleCntPromoCd"];
+    dataItem.dtRealSaleCntPromoCd = messages["promotionReport.dtRealSaleCntPromoCd"];
+    dataItem.realSaleQtyPromoCd   = messages["promotionReport.realSaleQtyPromoCd"];
     dataItem.chargeDs             = messages["promotionReport.chargeDs"];
-    dataItem.hqChargeUprcM         = messages["promotionReport.chargeUprcM"];
+    dataItem.hqChargeUprcMPromoCd      = messages["promotionReport.chargeUprc2"];
+    dataItem.msChargeUprcMPromoCd      = messages["promotionReport.chargeUprc2"];
+    dataItem.partnerChargeUprcMPromoCd = messages["promotionReport.chargeUprc2"];
+    dataItem.hqChargeUprcPromoCd       = messages["promotionReport.totChargeUprc2"];
+    dataItem.msChargeUprcPromoCd       = messages["promotionReport.totChargeUprc2"];
+    dataItem.partnerChargeUprcPromoCd  = messages["promotionReport.totChargeUprc2"];
+    /*dataItem.hqChargeUprcM         = messages["promotionReport.chargeUprcM"];
     dataItem.msChargeUprcM         = messages["promotionReport.chargeUprcM"];
     dataItem.partnerChargeUprcM    = messages["promotionReport.chargeUprcM"];
     dataItem.totHqChargeUprcM      = messages["promotionReport.totChargeUprcM"];
@@ -59,7 +68,7 @@ app.controller('promotionReportCtrl', ['$scope', '$http', '$timeout', function (
     dataItem.partnerChargeUprc    = messages["promotionReport.chargeUprc"];
     dataItem.totHqChargeUprc      = messages["promotionReport.totChargeUprc"];
     dataItem.totMsChargeUprc      = messages["promotionReport.totChargeUprc"];
-    dataItem.totPartnerChargeUprc = messages["promotionReport.totChargeUprc"];
+    dataItem.totPartnerChargeUprc = messages["promotionReport.totChargeUprc"];*/
     dataItem.depositYmd           = messages["promotionReport.depositYmd"];
     dataItem.remark               = messages["promotionReport.remark"];
 
@@ -249,11 +258,20 @@ app.controller('promotionReportExcelCtrl', ['$scope', '$http', '$timeout', funct
     dataItem.storeCd              = messages["promotionReport.storeCd"];
     dataItem.storeNm              = messages["promotionReport.storeNm"];
     dataItem.bizNo                = messages["promotionReport.bizNo"];
-    dataItem.hdRealSaleCnt        = messages["promotionReport.hdRealSaleCnt"];
+    /*dataItem.hdRealSaleCnt        = messages["promotionReport.hdRealSaleCnt"];
     dataItem.dtRealSaleCnt        = messages["promotionReport.dtRealSaleCnt"];
-    dataItem.realSaleQty          = messages["promotionReport.realSaleQty"];
+    dataItem.realSaleQty          = messages["promotionReport.realSaleQty"];*/
+    dataItem.hdRealSaleCntPromoCd = messages["promotionReport.hdRealSaleCntPromoCd"];
+    dataItem.dtRealSaleCntPromoCd = messages["promotionReport.dtRealSaleCntPromoCd"];
+    dataItem.realSaleQtyPromoCd   = messages["promotionReport.realSaleQtyPromoCd"];
     dataItem.chargeDs             = messages["promotionReport.chargeDs"];
-    dataItem.hqChargeUprcM         = messages["promotionReport.chargeUprcM"];
+    dataItem.hqChargeUprcMPromoCd      = messages["promotionReport.chargeUprc2"];
+    dataItem.msChargeUprcMPromoCd      = messages["promotionReport.chargeUprc2"];
+    dataItem.partnerChargeUprcMPromoCd = messages["promotionReport.chargeUprc2"];
+    dataItem.hqChargeUprcPromoCd       = messages["promotionReport.totChargeUprc2"];
+    dataItem.msChargeUprcPromoCd       = messages["promotionReport.totChargeUprc2"];
+    dataItem.partnerChargeUprcPromoCd  = messages["promotionReport.totChargeUprc2"];
+    /*dataItem.hqChargeUprcM         = messages["promotionReport.chargeUprcM"];
     dataItem.msChargeUprcM         = messages["promotionReport.chargeUprcM"];
     dataItem.partnerChargeUprcM    = messages["promotionReport.chargeUprcM"];
     dataItem.totHqChargeUprcM      = messages["promotionReport.totChargeUprcM"];
@@ -264,7 +282,7 @@ app.controller('promotionReportExcelCtrl', ['$scope', '$http', '$timeout', funct
     dataItem.partnerChargeUprc    = messages["promotionReport.chargeUprc"];
     dataItem.totHqChargeUprc      = messages["promotionReport.totChargeUprc"];
     dataItem.totMsChargeUprc      = messages["promotionReport.totChargeUprc"];
-    dataItem.totPartnerChargeUprc = messages["promotionReport.totChargeUprc"];
+    dataItem.totPartnerChargeUprc = messages["promotionReport.totChargeUprc"];*/
     dataItem.depositYmd           = messages["promotionReport.depositYmd"];
     dataItem.remark               = messages["promotionReport.remark"];
 

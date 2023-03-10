@@ -256,22 +256,31 @@
           <wj-flex-grid-column header="<s:message code="promotionReport.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="promotionReport.storeNm"/>" binding="storeNm" width="120" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="promotionReport.bizNo"/>" binding="bizNo" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="promotionReport.hdRealSaleCnt"/>" binding="hdRealSaleCnt" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="promotionReport.dtRealSaleCnt"/>" binding="dtRealSaleCnt" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="promotionReport.realSaleQty"/>" binding="realSaleQty" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
+          <%--<wj-flex-grid-column header="<s:message code="promotionReport.hdRealSaleCnt"/>" binding="hdRealSaleCnt" width="100" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="promotionReport.dtRealSaleCnt"/>" binding="dtRealSaleCnt" width="100" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="promotionReport.realSaleQty"/>" binding="realSaleQty" width="100" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>--%>
+          <wj-flex-grid-column header="<s:message code="promotionReport.hdRealSaleCntPromoCd"/>" binding="hdRealSaleCntPromoCd" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="promotionReport.dtRealSaleCntPromoCd"/>" binding="dtRealSaleCntPromoCd" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="promotionReport.realSaleQtyPromoCd"/>" binding="realSaleQtyPromoCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="promotionReport.chargeDs"/>" binding="chargeDs" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="promotionReport.hq"/>" binding="hqChargeUprcM" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="promotionReport.ms"/>" binding="msChargeUprcM" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="promotionReport.partner"/>" binding="partnerChargeUprcM" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="promotionReport.hq"/>" binding="totHqChargeUprcM" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="promotionReport.ms"/>" binding="totMsChargeUprcM" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="promotionReport.partner"/>" binding="totPartnerChargeUprcM" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="promotionReport.hq"/>" binding="hqChargeUprc" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="promotionReport.ms"/>" binding="msChargeUprc" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="promotionReport.partner"/>" binding="partnerChargeUprc" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="promotionReport.hq"/>" binding="totHqChargeUprc" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="promotionReport.ms"/>" binding="totMsChargeUprc" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="promotionReport.partner"/>" binding="totPartnerChargeUprc" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="promotionReport.hq"/>" binding="hqChargeUprcMPromoCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="promotionReport.ms"/>" binding="msChargeUprcMPromoCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="promotionReport.partner"/>" binding="partnerChargeUprcMPromoCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="promotionReport.hq"/>" binding="hqChargeUprcPromoCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="promotionReport.ms"/>" binding="msChargeUprcPromoCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="promotionReport.partner"/>" binding="partnerChargeUprcPromoCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <%--<wj-flex-grid-column header="<s:message code="promotionReport.hq"/>" binding="hqChargeUprcM" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="promotionReport.ms"/>" binding="msChargeUprcM" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="promotionReport.partner"/>" binding="partnerChargeUprcM" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="promotionReport.hq"/>" binding="totHqChargeUprcM" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="promotionReport.ms"/>" binding="totMsChargeUprcM" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="promotionReport.partner"/>" binding="totPartnerChargeUprcM" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="promotionReport.hq"/>" binding="hqChargeUprc" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="promotionReport.ms"/>" binding="msChargeUprc" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="promotionReport.partner"/>" binding="partnerChargeUprc" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="promotionReport.hq"/>" binding="totHqChargeUprc" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="promotionReport.ms"/>" binding="totMsChargeUprc" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="promotionReport.partner"/>" binding="totPartnerChargeUprc" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>--%>
           <wj-flex-grid-column header="<s:message code="promotionReport.depositYmd"/>" binding="depositYmd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
           <c:if test="${sessionInfo.orgnFg == 'HQ'}">
             <wj-flex-grid-column header="<s:message code="promotionReport.remark"/>" binding="remark" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -309,22 +318,31 @@
       <wj-flex-grid-column header="<s:message code="promotionReport.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="promotionReport.storeNm"/>" binding="storeNm" width="150" align="right" is-read-only="true"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="promotionReport.bizNo"/>" binding="bizNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="promotionReport.hdRealSaleCnt"/>" binding="hdRealSaleCnt" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="promotionReport.dtRealSaleCnt"/>" binding="dtRealSaleCnt" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="promotionReport.realSaleQty"/>" binding="realSaleQty" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
+      <%--<wj-flex-grid-column header="<s:message code="promotionReport.hdRealSaleCnt"/>" binding="hdRealSaleCnt" width="100" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="promotionReport.dtRealSaleCnt"/>" binding="dtRealSaleCnt" width="100" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="promotionReport.realSaleQty"/>" binding="realSaleQty" width="100" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>--%>
+      <wj-flex-grid-column header="<s:message code="promotionReport.hdRealSaleCntPromoCd"/>" binding="hdRealSaleCntPromoCd" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="promotionReport.dtRealSaleCntPromoCd"/>" binding="dtRealSaleCntPromoCd" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="promotionReport.realSaleQtyPromoCd"/>" binding="realSaleQtyPromoCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="promotionReport.chargeDs"/>" binding="chargeDs" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="promotionReport.hq"/>" binding="hqChargeUprcM" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="promotionReport.ms"/>" binding="msChargeUprcM" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="promotionReport.partner"/>" binding="partnerChargeUprcM" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="promotionReport.hq"/>" binding="totHqChargeUprcM" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="promotionReport.ms"/>" binding="totMsChargeUprcM" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="promotionReport.partner"/>" binding="totPartnerChargeUprcM" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="promotionReport.hq"/>" binding="hqChargeUprc" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="promotionReport.ms"/>" binding="msChargeUprc" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="promotionReport.partner"/>" binding="partnerChargeUprc" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="promotionReport.hq"/>" binding="totHqChargeUprc" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="promotionReport.ms"/>" binding="totMsChargeUprc" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="promotionReport.partner"/>" binding="totPartnerChargeUprc" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="promotionReport.hq"/>" binding="hqChargeUprcMPromoCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="promotionReport.ms"/>" binding="msChargeUprcMPromoCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="promotionReport.partner"/>" binding="partnerChargeUprcMPromoCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="promotionReport.hq"/>" binding="hqChargeUprcPromoCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="promotionReport.ms"/>" binding="msChargeUprcPromoCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="promotionReport.partner"/>" binding="partnerChargeUprcPromoCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+      <%--<wj-flex-grid-column header="<s:message code="promotionReport.hq"/>" binding="hqChargeUprcM" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="promotionReport.ms"/>" binding="msChargeUprcM" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="promotionReport.partner"/>" binding="partnerChargeUprcM" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="promotionReport.hq"/>" binding="totHqChargeUprcM" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="promotionReport.ms"/>" binding="totMsChargeUprcM" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="promotionReport.partner"/>" binding="totPartnerChargeUprcM" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="promotionReport.hq"/>" binding="hqChargeUprc" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="promotionReport.ms"/>" binding="msChargeUprc" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="promotionReport.partner"/>" binding="partnerChargeUprc" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="promotionReport.hq"/>" binding="totHqChargeUprc" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="promotionReport.ms"/>" binding="totMsChargeUprc" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="promotionReport.partner"/>" binding="totPartnerChargeUprc" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>--%>
       <wj-flex-grid-column header="<s:message code="promotionReport.depositYmd"/>" binding="depositYmd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
       <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <wj-flex-grid-column header="<s:message code="promotionReport.remark"/>" binding="remark" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -350,4 +368,4 @@
   var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotionReport/promotionReport.js?ver=20230206.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotionReport/promotionReport.js?ver=20230310.01" charset="utf-8"></script>
