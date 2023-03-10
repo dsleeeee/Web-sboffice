@@ -121,6 +121,19 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquirySub(baseUrl + "class/getCouponClassList.sb", params, function() {
+
+      var grid = wijmo.Control.getControl("#wjGridCouponClass");
+      var rows = grid.rows;
+
+      for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+        var item = $scope.flex.collectionView.items[i];
+
+        if(orgnFg === "STORE" && item.payClassCd < '800'){
+          item.gChk = false;
+          rows[i].isReadOnly = true;
+        }
+      }
+
       $("#couponSubTitle").text(" []");
       selectedCouponClass = null;
       selectedCoupon = null;
@@ -169,6 +182,24 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 추가기능 수행 : 파라미터
     $scope._addRow(params);
+  };
+
+  // 쿠폰분류 그리드 행 삭제
+  $scope.del = function(){
+
+    var params = new Array();
+
+    $scope._popConfirm(messages["coupon.exists.coupon"], function (){
+      for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+        if($scope.flex.collectionView.items[i].gChk) {
+          $scope.flex.collectionView.items[i].status = "D";
+          params.push($scope.flex.collectionView.items[i]);
+        }
+      }
+
+      // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+      $scope._save(baseUrl + "class/saveCouponClassList.sb", params, function(){ $scope.allSearch() });
+    });
   };
 
   // 쿠폰분류 그리드 저장
@@ -426,23 +457,18 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 쿠폰 그리드 행 삭제
   $scope.del = function(){
-    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-      var item = $scope.flex.collectionView.items[i];
+    // 파라미터 설정
+    var params = new Array();
 
-      if(item.gChk) {
-        if(item.prodCnt > 0 ) {
-          s_alert.pop(messages["coupon.exists.prod"]);
-          return;
-        }
-        if(orgnFg === "HQ") {
-          if(item.storeCd > 0 ) {
-            s_alert.pop(messages["coupon.exists.store"]);
-            return;
-          }
-        }
-        $scope.flex.collectionView.removeAt(i);
+    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+      if($scope.flex.collectionView.items[i].gChk) {
+        $scope.flex.collectionView.items[i].status = "D";
+        params.push($scope.flex.collectionView.items[i]);
       }
     }
+
+    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+    $scope._save(baseUrl + "class/saveCouponList.sb", params, function(){ $scope.searchCoupon(); });
   };
 
   $scope.maxChk = function (val){

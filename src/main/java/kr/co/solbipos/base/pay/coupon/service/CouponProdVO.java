@@ -22,6 +22,7 @@ import kr.co.solbipos.base.pay.coupon.service.enums.CoupnEnvFg;
  */
 public class CouponProdVO extends PageVO {
 
+    private String orgnFg;
     /** 본사코드 */
     private String hqOfficeCd;
     /** 매장코드 */
@@ -45,6 +46,14 @@ public class CouponProdVO extends PageVO {
 
     /** 사용자 아이디 */
     private String userId;
+
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
 
     /**
      * @return the hqOfficeCd
