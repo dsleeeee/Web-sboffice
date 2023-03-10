@@ -2,13 +2,15 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
+<c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
 
 <div class="subCon" ng-controller="saleProdRankMomsCtrl">
     <div class="searchBar">
-      <a href="#" class="open fl"><s:message code="prodRankMoms.prodRankMoms"/></a>
+      <a href="#" class="open fl">${menuNm}</a>
       <%-- 조회 --%>
       <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('saleProdRankMomsCtrl')">
         <s:message code="cmm.search"/>
