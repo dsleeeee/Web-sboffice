@@ -345,7 +345,9 @@ public class HqManageController {
     public Result configList(HqManageVO hqManageVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> list = service.getConfigList(hqManageVO);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        List<DefaultMap<String>> list = service.getConfigList(hqManageVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list, hqManageVO);
     }

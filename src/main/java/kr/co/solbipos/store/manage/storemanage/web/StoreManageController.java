@@ -311,8 +311,9 @@ public class StoreManageController {
    @ResponseBody
    public Result getStoreConfigList(StoreEnvVO storeEnvVO, HttpServletRequest request,
            HttpServletResponse response, Model model) {
+       SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-       List<DefaultMap<String>> envGroupList = service.getEnvGroupList(storeEnvVO);
+       List<DefaultMap<String>> envGroupList = service.getEnvGroupList(storeEnvVO, sessionInfoVO);
 
        return returnListJson(Status.OK, envGroupList);
    }
@@ -372,10 +373,12 @@ public class StoreManageController {
    public Result getPosConfigList(StorePosEnvVO storePosEnvVO, HttpServletRequest request,
            HttpServletResponse response, Model model) {
 
+       SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
        Map<String, Object> resultMap = new HashMap<String, Object>();
 
        // 포스 환경정보 조회
-       List<DefaultMap<String>> list = service.getPosEnvGroupList(storePosEnvVO);
+       List<DefaultMap<String>> list = service.getPosEnvGroupList(storePosEnvVO, sessionInfoVO);
 
        // 테이블 그룹
        List<DefaultMap<String>> groupList = service.getGroupList(storePosEnvVO);

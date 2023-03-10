@@ -64,7 +64,7 @@ public interface HqManageService {
     int removeAuth(HqMenuVO[] hqMenu, SessionInfoVO sessionInfoVO);
 
     /** 환경설정 조회 */
-    List<DefaultMap<String>> getConfigList(HqManageVO hqManageVO);
+    List<DefaultMap<String>> getConfigList(HqManageVO hqManageVO, SessionInfoVO sessionInfoVO);
 
     /** 환경설정 저장 */
     int saveConfig(HqEnvstVO[] hqEnvsts, SessionInfoVO sessionInfoVO);

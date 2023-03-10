@@ -54,7 +54,8 @@ public class StoreEnvVO extends CmmVO {
     private String envst;
     /** 세션ID */
     private String sessionId;
-
+    /** 환경설정사용등록 */
+    private String envst1266;
 
     /**
      * @return the storeCd
@@ -237,4 +238,11 @@ public class StoreEnvVO extends CmmVO {
         this.sessionId = sessionId;
     }
 
+    public String getEnvst1266() {
+        return envst1266;
+    }
+
+    public void setEnvst1266(String envst1266) {
+        this.envst1266 = envst1266;
+    }
 }

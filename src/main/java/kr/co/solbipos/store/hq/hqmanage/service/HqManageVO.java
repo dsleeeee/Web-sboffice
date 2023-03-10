@@ -96,7 +96,8 @@ public class HqManageVO extends PageVO {
     private String authGrpCd;
     /** 검색어 */
     private String envst;
-
+    /** 환경설정사용등록 */
+    private String envst1266;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -469,5 +470,13 @@ public class HqManageVO extends PageVO {
 
     public void setEnvst(String envst) {
         this.envst = envst;
+    }
+
+    public String getEnvst1266() {
+        return envst1266;
+    }
+
+    public void setEnvst1266(String envst1266) {
+        this.envst1266 = envst1266;
     }
 }

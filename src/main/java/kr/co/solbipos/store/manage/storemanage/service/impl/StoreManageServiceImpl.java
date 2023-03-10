@@ -776,7 +776,9 @@ public class StoreManageServiceImpl implements StoreManageService{
 
     /** 매장환경 정보 조회 */
     @Override
-    public List<DefaultMap<String>> getEnvGroupList(StoreEnvVO storeEnvVO) {
+    public List<DefaultMap<String>> getEnvGroupList(StoreEnvVO storeEnvVO, SessionInfoVO sessionInfoVO) {
+        sessionInfoVO.setStoreCd(storeEnvVO.getStoreCd());
+        storeEnvVO.setEnvst1266(CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1266"), "0"));
         return mapper.getEnvGroupList(storeEnvVO);
     }
 
@@ -817,7 +819,9 @@ public class StoreManageServiceImpl implements StoreManageService{
 
     /** 매장 포스환경 정보 조회 */
     @Override
-    public List<DefaultMap<String>> getPosEnvGroupList(StorePosEnvVO storePosEnvVO) {
+    public List<DefaultMap<String>> getPosEnvGroupList(StorePosEnvVO storePosEnvVO, SessionInfoVO sessionInfoVO) {
+        sessionInfoVO.setStoreCd(storePosEnvVO.getStoreCd());
+        storePosEnvVO.setEnvst1266(CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1266"), "0"));
 
         // 포스환경정보 조회시, 포스번호 없으면 기본 포스번호 넣어줌.
         if("".equals(storePosEnvVO.getPosNo()) || storePosEnvVO.getPosNo() == null){
