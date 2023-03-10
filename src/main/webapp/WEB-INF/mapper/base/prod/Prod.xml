@@ -1919,8 +1919,15 @@
                     thp.DEPOSIT_CUP_FG,
                     thp.POINT_USE_YN,
                     thp.DC_YN,
-                    thp.SALE_TIME_FG
-               FROM
+                    thp.SALE_TIME_FG,
+                    thp.OPTION_GRP_CD,
+                    thp.RELEASE_DATE,
+                    thp.DISCON_DATE,
+                    thp.DISCON_YN,
+                    thp.GROUP_PROD_CD,
+                    thp.DEPOSIT_PROD_CD,
+                    thp.ADD_GRP_CD
+                FROM
                    TB_HQ_PRODUCT thp
                WHERE
                    thp.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -1968,7 +1975,14 @@
                tmp.DEPOSIT_CUP_FG      = thp.DEPOSIT_CUP_FG,
                tmp.POINT_USE_YN        = thp.POINT_USE_YN,
                tmp.DC_YN               = thp.DC_YN,
-               tmp.SALE_TIME_FG        = thp.SALE_TIME_FG
+               tmp.SALE_TIME_FG        = thp.SALE_TIME_FG,
+               tmp.OPTION_GRP_CD       = thp.OPTION_GRP_CD,
+               tmp.RELEASE_DATE        = thp.RELEASE_DATE,
+               tmp.DISCON_DATE         = thp.DISCON_DATE,
+               tmp.DISCON_YN           = thp.DISCON_YN,
+               tmp.GROUP_PROD_CD       = thp.GROUP_PROD_CD,
+               tmp.DEPOSIT_PROD_CD     = thp.DEPOSIT_PROD_CD,
+               tmp.ADD_GRP_CD          = thp.ADD_GRP_CD
         WHEN NOT MATCHED THEN
             INSERT
             (
@@ -2015,7 +2029,14 @@
                 tmp.DEPOSIT_CUP_FG,
                 tmp.POINT_USE_YN,
                 tmp.DC_YN,
-                tmp.SALE_TIME_FG
+                tmp.SALE_TIME_FG,
+                tmp.OPTION_GRP_CD,
+                tmp.RELEASE_DATE,
+                tmp.DISCON_DATE,
+                tmp.DISCON_YN,
+                tmp.GROUP_PROD_CD,
+                tmp.DEPOSIT_PROD_CD,
+                tmp.ADD_GRP_CD
             )
             VALUES
             (
@@ -2063,7 +2084,14 @@
                 thp.DEPOSIT_CUP_FG,
                 thp.POINT_USE_YN,
                 thp.DC_YN,
-                thp.SALE_TIME_FG
+                thp.SALE_TIME_FG,
+                thp.OPTION_GRP_CD,
+                thp.RELEASE_DATE,
+                thp.DISCON_DATE,
+                thp.DISCON_YN,
+                thp.GROUP_PROD_CD,
+                thp.DEPOSIT_PROD_CD,
+                thp.ADD_GRP_CD
             )
     </insert>
 
