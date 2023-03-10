@@ -137,12 +137,28 @@ public class GiftServiceImpl implements GiftService {
                 }
                 else if(payMethodClassVO.getStatus() == GridDataFg.DELETE) {
 
+                    // 분류정보 삭제
                     // 본사 분류 삭제
                     result = giftMapper.deleteHqGiftClass(payMethodClassVO);
                     if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
                     // 본사 분류 삭제시 매장 분류에도 적용
                     procResult = giftMapper.deleteHqGiftClassToStoreGiftClass(payMethodClassVO);
+
+                    int giftCnt = giftMapper.getGiftCnt(payMethodClassVO);
+
+                    if(giftCnt > 0){
+                        // 분류하위정보 삭제
+                        GiftVO giftVO = new GiftVO();
+                        giftVO.setHqOfficeCd(payMethodClassVO.getHqOfficeCd());
+                        giftVO.setPayClassCd(payMethodClassVO.getPayClassCd());
+
+                        result = giftMapper.deleteHqGift(giftVO);
+                        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                        // 매장 상품권 테이블에도 적용
+                        result = giftMapper.deleteHqGiftToStoreGift2(giftVO);
+                    }
                 }
             }
             // 매장에서 접속시
@@ -161,9 +177,21 @@ public class GiftServiceImpl implements GiftService {
 
                 }
                 else if(payMethodClassVO.getStatus() == GridDataFg.DELETE) {
+                    // 분류정보 삭제
                     result = giftMapper.deleteStoreGiftClass(payMethodClassVO);
                     if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
+                    int giftCnt = giftMapper.getGiftCnt(payMethodClassVO);
+
+                    if(giftCnt > 0){
+                    // 분류하위정보 삭제
+                    GiftVO giftVO = new GiftVO();
+                    giftVO.setStoreCd(payMethodClassVO.getStoreCd());
+                    giftVO.setPayClassCd(payMethodClassVO.getPayClassCd());
+
+                    result = giftMapper.deleteStoreGift(giftVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                    }
                 }
             }
         }

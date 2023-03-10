@@ -42,12 +42,13 @@
           </wj-combo-box>
           <%--// 페이지 스케일  --%>
           <button class="btn_skyblue" id="btnClassAdd" ng-click="addRow()" ng-if="userUseYn"><s:message code='cmm.add' /></button>
-<%--          <button class="btn_skyblue" id="btnClassDel" ng-click="del()"><s:message code='cmm.del' /></button>--%>
+          <button class="btn_skyblue" id="btnClassDel" ng-click="del()" ng-if="userUseYn"><s:message code='cmm.del' /></button>
           <button class="btn_skyblue" id="btnClassSave" ng-click="save()" ng-if="userUseYn"><s:message code='cmm.save' /></button>
         </div>
         <%-- 상품권분류등록 그리드 --%>
         <div id="giftClassGrid" class="wj-gridWrap" style="height:280px; overflow-y: hidden;">
           <wj-flex-grid
+                  id="wjGridGiftClass"
                   autoGenerateColumns="false"
                   control="flex"
                   initialized="initGrid(s,e)"
@@ -58,6 +59,7 @@
                   ime-enabled="true">
 
             <!-- define columns -->
+            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="gift.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="gift.payTypeFg"/>" binding="payTypeFg" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="gift.payClassCd"/>" binding="payClassCd" width="100" maxLength="3" is-read-only="true"></wj-flex-grid-column>
@@ -99,7 +101,7 @@
                 visible="false">
         </wj-combo-box>
         <button class="btn_skyblue" id="btnGiftAdd" ng-click="addRow()" ng-if="userUseYn"><s:message code='cmm.add' /></button>
-<%--        <button class="btn_skyblue" id="btnGiftDel" ng-click="del()" ng-if="userUseYn"><s:message code='cmm.del' /></button>--%>
+        <button class="btn_skyblue" id="btnGiftDel" ng-click="del()" ng-if="userUseYn"><s:message code='cmm.del' /></button>
         <button class="btn_skyblue" id="btnGiftSave" ng-click="save()" ng-if="userUseYn"><s:message code='cmm.save' /></button>
       </div>
       <input type="hidden" id="hdPayClassCd"/>
@@ -116,7 +118,7 @@
                 ime-enabled="true">
 
           <!-- define columns -->
-<%--          <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>--%>
+          <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="gift.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="gift.giftCd"/>" binding="giftCd" width="*" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="gift.giftNm"/>" binding="giftNm" maxLength="15" width="*"></wj-flex-grid-column>
@@ -149,4 +151,4 @@ var baseUrl      = "${baseUrl}";
 var mappingFg = "${mappingFg}";
 var mappingCd   = ${ccu.getCommCodeExcpAll("801")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/gift/gift.js?ver=20180816" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/gift/gift.js?ver=20230309.01" charset="utf-8"></script>

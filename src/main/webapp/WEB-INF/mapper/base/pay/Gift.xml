@@ -196,16 +196,13 @@
         TABLE    : TB_HQ_PAY_METHOD_CLASS
         COMMENTS : 분류를 삭제한다.
     -->
-    <update id="deleteHqGiftClass" parameterType="DefaultMap">
+    <delete id="deleteHqGiftClass" parameterType="DefaultMap">
         /* USE : GiftMapper.deleteHqGiftClass */
-        UPDATE TB_HQ_PAY_METHOD_CLASS
-           SET USE_YN = 'N',
-               MOD_DT = #{modDt},
-               MOD_ID = #{modId}
+        DELETE TB_HQ_PAY_METHOD_CLASS
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
            AND PAY_CLASS_CD = #{payClassCd}
            AND PAY_TYPE_FG =  #{payTypeFg}
-    </update>
+    </delete>
 
     <!-- 본사 쿠폰분류 삭제 프로시져 호출 -->
     <!--
@@ -291,13 +288,10 @@
     -->
     <update id="deleteStoreGiftClass" parameterType="DefaultMap">
         /* USE : GiftMapper.deleteStoreGiftClass */
-        UPDATE TB_MS_PAY_METHOD_CLASS
-           SET USE_YN = 'N',
-               MOD_DT = #{modDt},
-               MOD_ID = #{modId}
-         WHERE STORE_CD = #{storeCd}
-           AND PAY_TYPE_FG = #{payTypeFg}
-           AND PAY_CLASS_CD = #{payClassCd}
+        DELETE  TB_MS_PAY_METHOD_CLASS
+        WHERE   STORE_CD = #{storeCd}
+        AND     PAY_TYPE_FG = #{payTypeFg}
+        AND     PAY_CLASS_CD = #{payClassCd}
     </update>
 
 
@@ -475,16 +469,15 @@
         TABLE    : TB_HQ_GIFT
         COMMENTS : 상품권을 삭제한다.
     -->
-    <update id="deleteHqGift" parameterType="DefaultMap">
+    <delete id="deleteHqGift" parameterType="DefaultMap">
         /* USE : GiftMapper.deleteHqGift */
-        UPDATE TB_HQ_GIFT
-           SET USE_YN = 'N',
-               MOD_DT = #{modDt},
-               MOD_ID = #{modId}
-         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-           AND PAY_CLASS_CD =  #{payClassCd}
-           AND GIFT_CD = #{giftCd}
-    </update>
+        DELETE  TB_HQ_GIFT
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     PAY_CLASS_CD =  #{payClassCd}
+        <if test="giftCd != null and giftCd != ''">
+            AND GIFT_CD = #{giftCd}
+        </if>
+    </delete>
 
     <!-- 본사 상품권 삭제시 프로시져 호출 -->
     <!--
@@ -504,6 +497,22 @@
         )
       }
     </select>
+
+    <!-- 본사 상품권 삭제시 매장 상품권 삭제 -->
+    <!--
+        TABLE    : TB_MS_GIFT
+        COMMENTS : 상품권을 삭제한다.
+    -->
+    <delete id="deleteHqGiftToStoreGift2" parameterType="DefaultMap">
+        /* USE : GiftMapper.deleteHqGiftToStoreGift2 */
+        DELETE  TB_MS_GIFT
+        WHERE   PAY_CLASS_CD =  #{payClassCd}
+        AND     STORE_CD IN (
+                                SELECT  STORE_CD
+                                FROM    TB_MS_STORE
+                                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                            )
+    </delete>
 
     <!-- 매장 상품권 등록 -->
     <!--
@@ -565,15 +574,38 @@
     -->
     <update id="deleteStoreGift" parameterType="DefaultMap">
         /* USE : GiftMapper.deleteStoreGift */
-        UPDATE TB_MS_GIFT
-           SET USE_YN = 'N',
-               MOD_DT = #{modDt},
-               MOD_ID = #{modId}
-         WHERE STORE_CD = #{storeCd}
-           AND PAY_CLASS_CD = #{payClassCd}
-           AND GIFT_CD = #{giftCd}
+        DELETE  TB_MS_GIFT
+        WHERE   STORE_CD = #{storeCd}
+        AND     PAY_CLASS_CD = #{payClassCd}
+        <if test="giftCd != null and giftCd != ''">
+            AND     GIFT_CD = #{giftCd}
+        </if>
     </update>
 
+    <!-- 매장 쿠폰 삭제 시 하위 분류가 있는지 조회 -->
+    <!--
+        TABLE    : TB_MS_COUPON
+        COMMENTS : 쿠폰을 삭제한다.
+    -->
+    <select id="getGiftCnt" parameterType="payMethodClassVO" resultType="Integer">
+        /* USE : GiftMapper.getGiftCnt */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg.toString() == "HQ"'>
+                SELECT  COUNT(*)
+                FROM    TB_HQ_GIFT
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     PAY_CLASS_CD = #{payClassCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                SELECT  COUNT(*)
+                FROM    TB_MS_GIFT
+                WHERE   STORE_CD = #{storeCd}
+                AND     PAY_CLASS_CD = #{payClassCd}
+            </when>
+        </choose>
+    </select>
 </mapper>
 
 
