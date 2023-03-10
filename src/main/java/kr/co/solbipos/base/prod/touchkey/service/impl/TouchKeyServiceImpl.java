@@ -1017,4 +1017,49 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         return result;
     }
 
+    /** 판매 터치키 포스에 조회 ENVST4038 */
+    @Override
+    public List<DefaultMap<String>> getTouchKeyEnv(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO) {
+
+        touchKeyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        touchKeyVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        if(touchKeyVO.getMomsEnvstVal().equals("1") && sessionInfoVO.getOrgnFg().equals(OrgnFg.HQ)) {
+            // 매장브랜드 '전체' 일때
+            if (touchKeyVO.getStoreHqBrandCd() == "" || touchKeyVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = touchKeyVO.getUserBrands().split(",");
+                touchKeyVO.setUserBrandList(userBrandList);
+            }
+        }
+        return keyMapper.getTouchKeyEnv(touchKeyVO);
+    }
+
+    /** 판매 터치키 포스에 적용 ENVST4038 */
+    @Override
+    public int saveTouchKeyEnv(TouchKeyVO[] TouchKeyVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        for ( TouchKeyVO touchKeyVO : TouchKeyVOs ) {
+
+            // 기본입력정보 설정
+            touchKeyVO.setRegDt(currentDt);
+            touchKeyVO.setRegId(sessionInfoVO.getUserId());
+            touchKeyVO.setModDt(currentDt);
+            touchKeyVO.setModId(sessionInfoVO.getUserId());
+
+            // 터치키 매장적용
+            result  = keyMapper.saveTouchKeyEnv(touchKeyVO);
+        }
+
+        if ( result >= 0 ) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
+
 }

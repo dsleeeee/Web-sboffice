@@ -97,6 +97,8 @@ app.controller('copyStoreTouchKeyCtrl', ['$scope', '$http', function ($scope, $h
                 }
                 params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
             }
+        } else if(brandUseFg === "1"){
+            params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
         }
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -185,6 +187,8 @@ app.controller('copyStoreTouchKey2Ctrl', ['$scope', '$http', function ($scope, $
                 }
                 params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
             }
+        } else if(brandUseFg === "1"){
+            params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo2.selectedValue;
         }
         console.log(params);
 

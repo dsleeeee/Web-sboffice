@@ -2752,4 +2752,131 @@
         AND 	NMCODE_ITEM_1 = #{tukeyClassCd}
         AND 	NMCODE_ITEM_2 = 'Y'
     </select>
+
+    <!-- 판매 터치키 포스 조회 ENVST4038 -->
+    <!--
+          TABLE    : TB_MS_STORE
+          PARAM    : kioskKeyMapVO
+          COMMENTS : 판매 터치키 포스 조회한다.
+    -->
+    <select id="getTouchKeyEnv" parameterType="touchKeyVO" resultType="DefaultMap">
+        /* USE : TouchkeyMapper.getTouchKeyEnv */
+        SELECT  tms.STORE_NM
+        ,       tms.STORE_CD
+        ,       tmp.POS_NO
+        ,       tms.SYS_STAT_FG
+        ,       (SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = tms.STORE_CD AND POS_NO = tmp.POS_NO AND ENVST_CD = '4038') AS ENV_4038
+        FROM    TB_MS_STORE tms
+        ,       TB_MS_STORE_INFO tmsi
+        ,       (
+                    SELECT  tmp.STORE_CD
+                    ,       tmp.POS_NO
+                    FROM    TB_MS_POS_ENVST tmpe
+                    ,       TB_MS_POS tmp
+                    WHERE   tmpe.STORE_CD = tmp.STORE_CD
+                    AND     tmpe.POS_NO = tmp.POS_NO
+                    AND     tmpe.ENVST_CD = '4019'
+                    AND     tmpe.ENVST_VAL IN ('1', '2', '3')
+                ) tmp
+        WHERE   tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='orgnFg != null and orgnFg == "S"'>
+            AND tms.STORE_CD = #{storeCd}
+        </if>
+        AND     tmp.STORE_CD = tms.STORE_CD
+        AND     tms.STORE_CD = tmsi.STORE_CD(+)
+        <if test="storeCd != null and storeCd != ''">
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%' --매장명
+        </if>
+        <if test="sysStatFg != null and sysStatFg != ''">
+            AND tms.SYS_STAT_FG = #{sysStatFg} --매장상태구분
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 선택한 매장브랜드가 있을 때
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 선택한 매장브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        ORDER
+        BY      tms.STORE_CD, tmp.POS_NO ASC
+    </select>
+
+
+    <!-- 판매 터치키 포스에 적용 ENVST4038 -->
+    <!--
+        TABLE    : TB_WB_HQ_CONFG_XML, TB_WB_STORE_CONFG_XML
+        PARAM    : DefaultMap
+        COMMENTS : 판매 터치키 포스에 적용한다.
+    -->
+    <update id="saveTouchKeyEnv" parameterType="DefaultMap">
+    /* USE : TouchkeyMapper.saveTouchKeyEnv */
+    MERGE INTO TB_MS_POS_ENVST
+        USING DUAL
+        ON  (
+                STORE_CD = #{storeCd}
+                AND POS_NO = #{posNo}
+                AND ENVST_CD = '4038'
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET     ENVST_VAL = #{envstVal}
+            ,       MOD_DT = #{modDt}
+            ,       MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+            INSERT
+            (
+                 STORE_CD
+            ,    POS_NO
+            ,    ENVST_CD
+            ,    ENVST_VAL
+            ,    DIRCT_IN_YN
+            ,    POS_FG
+            ,    USE_YN
+            ,    REG_DT
+            ,    REG_ID
+            ,    MOD_DT
+            ,    MOD_ID
+            ) VALUES (
+                #{storeCd}
+            ,   #{posNo}
+            ,   '4038'
+            ,   #{envstVal}
+            ,   'Y'
+            ,   'M'
+            ,   'Y'
+            ,   #{regDt}
+            ,   #{regId}
+            ,   #{modDt}
+            ,   #{modId}
+            )
+    </update>
 </mapper>
