@@ -9,6 +9,7 @@ public interface IostockCmmService {
 
     /** 수불&재고관련 공통 - 매장선택 리스트 조회 */
     List<DefaultMap<String>> selectStoreList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<String>> selectHqStoreList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO);
 
     List<DefaultMap<String>> selectStoreMomsList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO);
     List<DefaultMap<String>> selectProdMomsList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO);
