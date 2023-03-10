@@ -350,6 +350,8 @@ public class CouponServiceImpl implements CouponService {
                         CouponProdVO couponProdVO = new CouponProdVO();
                         couponProdVO.setStoreCd(couponVO.getStoreCd());
                         couponProdVO.setPayClassCd(couponVO.getPayClassCd());
+                        couponProdVO.setPayClassCd(couponVO.getPayClassCd());
+                        couponProdVO.setCoupnCd(couponVO.getCoupnCd());
                         procCnt += couponMapper.deleteStoreCouponProd(couponProdVO);
                     }
                 }
