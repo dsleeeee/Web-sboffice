@@ -156,10 +156,10 @@
                                 M_CLASS_NM,
                                 S_CLASS_CD,
                                 S_CLASS_NM,
-                                tsdpst.PROD_CD,
+                                tsdpst.SIDE_PROD_CD AS PROD_CD,
                                 tmp.PROD_NM,
                                 (CASE tsdpst.SEL_TYPE_FG WHEN 'P' THEN '사이드모상품' WHEN 'S' THEN '사이드상품' WHEN 'N' THEN '일반판매상품' END) AS SEL_TYPE_FG,
-                                (CASE tsdpst.SEL_TYPE_FG WHEN 'S' THEN tsdpst.SIDE_PROD_CD END) AS SIDE_PROD_CD,
+                                (CASE tsdpst.SEL_TYPE_FG WHEN 'S' THEN tsdpst.PROD_CD END) AS SIDE_PROD_CD,
                                 (CASE tsdpst.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmps2.PROD_NM ELSE tmps2.PROD_NM END) AS SIDE_PROD_NM,
                                 SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.TOT_SALE_QTY END) AS SALE_QTY1,
                                 SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'S' THEN tsdpst.TOT_SALE_QTY END) AS SALE_QTY2,
@@ -274,11 +274,11 @@
                             )
                             <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
                                 GROUP BY SALE_DATE, YOIL, BRANCH_NM, STORE_CD, STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, PROD_CD, PROD_NM, SEL_TYPE_FG, SIDE_PROD_CD, SIDE_PROD_NM
-                                ORDER BY SALE_DATE, STORE_CD, PROD_CD
+                                ORDER BY SALE_DATE, STORE_CD, PROD_CD, SIDE_PROD_CD DESC
                             </if>
                             <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
                                 GROUP BY DAY_FROM, DAY_TO, BRANCH_NM, STORE_CD, STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, PROD_CD, PROD_NM, SEL_TYPE_FG, SIDE_PROD_CD, SIDE_PROD_NM
-                                ORDER BY DAY_FROM, STORE_CD, PROD_CD
+                                ORDER BY DAY_FROM, STORE_CD, PROD_CD, SIDE_PROD_CD DESC
                             </if>
                         )
                     )
@@ -415,10 +415,10 @@
                                 M_CLASS_NM,
                                 S_CLASS_CD,
                                 S_CLASS_NM,
-                                tsdpst.PROD_CD,
+                                tsdpst.SIDE_PROD_CD AS PROD_CD,
                                 tmp.PROD_NM,
                                 (CASE tsdpst.SEL_TYPE_FG WHEN 'P' THEN '사이드모상품' WHEN 'S' THEN '사이드상품' WHEN 'N' THEN '일반판매상품' END) AS SEL_TYPE_FG,
-                                (CASE tsdpst.SEL_TYPE_FG WHEN 'S' THEN tsdpst.SIDE_PROD_CD END) AS SIDE_PROD_CD,
+                                (CASE tsdpst.SEL_TYPE_FG WHEN 'S' THEN tsdpst.PROD_CD END) AS SIDE_PROD_CD,
                                 (CASE tsdpst.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmps2.PROD_NM ELSE tmps2.PROD_NM END) AS SIDE_PROD_NM,
                                 SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.TOT_SALE_QTY END) AS SALE_QTY1,
                                 SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'S' THEN tsdpst.TOT_SALE_QTY END) AS SALE_QTY2,
@@ -533,11 +533,11 @@
                             )
                             <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
                                 GROUP BY SALE_YM, BRANCH_NM, STORE_CD, STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, PROD_CD, PROD_NM, SEL_TYPE_FG, SIDE_PROD_CD, SIDE_PROD_NM
-                                ORDER BY SALE_YM, STORE_CD, PROD_CD
+                                ORDER BY SALE_YM, STORE_CD, PROD_CD, SIDE_PROD_CD DESC
                             </if>
                             <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
                                 GROUP BY DAY_FROM, DAY_TO, BRANCH_NM, STORE_CD, STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, PROD_CD, PROD_NM, SEL_TYPE_FG, SIDE_PROD_CD, SIDE_PROD_NM
-                                ORDER BY DAY_FROM, STORE_CD, PROD_CD
+                                ORDER BY DAY_FROM, STORE_CD, PROD_CD, SIDE_PROD_CD DESC
                             </if>
                         )
                     )
@@ -682,10 +682,10 @@
                                 M_CLASS_NM,
                                 S_CLASS_CD,
                                 S_CLASS_NM,
-                                tsdpst.PROD_CD,
+                                tsdpst.SIDE_PROD_CD AS PROD_CD,
                                 tmp.PROD_NM,
                                 (CASE tsdpst.SEL_TYPE_FG WHEN 'P' THEN '사이드모상품' WHEN 'S' THEN '사이드상품' WHEN 'N' THEN '일반판매상품' END) AS SEL_TYPE_FG,
-                                (CASE tsdpst.SEL_TYPE_FG WHEN 'S' THEN tsdpst.SIDE_PROD_CD END) AS SIDE_PROD_CD,
+                                (CASE tsdpst.SEL_TYPE_FG WHEN 'S' THEN tsdpst.PROD_CD END) AS SIDE_PROD_CD,
                                 (CASE tsdpst.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmps2.PROD_NM ELSE tmps2.PROD_NM END) AS SIDE_PROD_NM,
                                 SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.TOT_SALE_QTY END) AS SALE_QTY1,
                                 SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'S' THEN tsdpst.TOT_SALE_QTY END) AS SALE_QTY2,
@@ -813,11 +813,11 @@
                             )
                             <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
                                 GROUP BY SALE_DATE, YOIL, BRANCH_NM, STORE_CD, STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, PROD_CD, PROD_NM, SEL_TYPE_FG, SIDE_PROD_CD, SIDE_PROD_NM
-                                ORDER BY SALE_DATE, STORE_CD, PROD_CD
+                                ORDER BY SALE_DATE, STORE_CD, PROD_CD, SIDE_PROD_CD DESC
                             </if>
                             <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
                                 GROUP BY DAY_FROM, DAY_TO, BRANCH_NM, STORE_CD, STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, PROD_CD, PROD_NM, SEL_TYPE_FG, SIDE_PROD_CD, SIDE_PROD_NM
-                                ORDER BY DAY_FROM, STORE_CD, PROD_CD
+                                ORDER BY DAY_FROM, STORE_CD, PROD_CD, SIDE_PROD_CD DESC
                             </if>
                         )
                     )
@@ -954,10 +954,10 @@
                                 M_CLASS_NM,
                                 S_CLASS_CD,
                                 S_CLASS_NM,
-                                tsdpst.PROD_CD,
+                                tsdpst.SIDE_PROD_CD AS PROD_CD,
                                 tmp.PROD_NM,
                                 (CASE tsdpst.SEL_TYPE_FG WHEN 'P' THEN '사이드모상품' WHEN 'S' THEN '사이드상품' WHEN 'N' THEN '일반판매상품' END) AS SEL_TYPE_FG,
-                                (CASE tsdpst.SEL_TYPE_FG WHEN 'S' THEN tsdpst.SIDE_PROD_CD END) AS SIDE_PROD_CD,
+                                (CASE tsdpst.SEL_TYPE_FG WHEN 'S' THEN tsdpst.PROD_CD END) AS SIDE_PROD_CD,
                                 (CASE tsdpst.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmps2.PROD_NM ELSE tmps2.PROD_NM END) AS SIDE_PROD_NM,
                                 SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.TOT_SALE_QTY END) AS SALE_QTY1,
                                 SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'S' THEN tsdpst.TOT_SALE_QTY END) AS SALE_QTY2,
@@ -1085,11 +1085,11 @@
                             )
                             <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
                                 GROUP BY SALE_YM, BRANCH_NM, STORE_CD, STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, PROD_CD, PROD_NM, SEL_TYPE_FG, SIDE_PROD_CD, SIDE_PROD_NM
-                                ORDER BY SALE_YM, STORE_CD, PROD_CD
+                                ORDER BY SALE_YM, STORE_CD, PROD_CD, SIDE_PROD_CD DESC
                             </if>
                             <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
                                 GROUP BY DAY_FROM, DAY_TO, BRANCH_NM, STORE_CD, STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, PROD_CD, PROD_NM, SEL_TYPE_FG, SIDE_PROD_CD, SIDE_PROD_NM
-                                ORDER BY DAY_FROM, STORE_CD, PROD_CD
+                                ORDER BY DAY_FROM, STORE_CD, PROD_CD, SIDE_PROD_CD DESC
                             </if>
                         )
                     )
@@ -1241,10 +1241,10 @@
                                 M_CLASS_NM,
                                 S_CLASS_CD,
                                 S_CLASS_NM,
-                                tsdpst.PROD_CD,
+                                tsdpst.SIDE_PROD_CD AS PROD_CD,
                                 tmp.PROD_NM,
                                 (CASE tsdpst.SEL_TYPE_FG WHEN 'P' THEN '사이드모상품' WHEN 'S' THEN '사이드상품' WHEN 'N' THEN '일반판매상품' END) AS SEL_TYPE_FG,
-                                (CASE tsdpst.SEL_TYPE_FG WHEN 'S' THEN tsdpst.SIDE_PROD_CD END) AS SIDE_PROD_CD,
+                                (CASE tsdpst.SEL_TYPE_FG WHEN 'S' THEN tsdpst.PROD_CD END) AS SIDE_PROD_CD,
                                 (CASE tsdpst.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmps2.PROD_NM ELSE tmps2.PROD_NM END) AS SIDE_PROD_NM,
                                 SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.TOT_SALE_QTY END) AS SALE_QTY1,
                                 SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'S' THEN tsdpst.TOT_SALE_QTY END) AS SALE_QTY2,
@@ -1359,11 +1359,11 @@
                             )
                             <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
                                 GROUP BY SALE_DATE, YOIL, BRANCH_NM, STORE_CD, STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, PROD_CD, PROD_NM, SEL_TYPE_FG, SIDE_PROD_CD, SIDE_PROD_NM
-                                ORDER BY SALE_DATE, STORE_CD, PROD_CD
+                                ORDER BY SALE_DATE, STORE_CD, PROD_CD, SIDE_PROD_CD DESC
                             </if>
                             <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
                                 GROUP BY DAY_FROM, DAY_TO, BRANCH_NM, STORE_CD, STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, PROD_CD, PROD_NM, SEL_TYPE_FG, SIDE_PROD_CD, SIDE_PROD_NM
-                                ORDER BY DAY_FROM, STORE_CD, PROD_CD
+                                ORDER BY DAY_FROM, STORE_CD, PROD_CD, SIDE_PROD_CD DESC
                             </if>
                         )
                     )
@@ -1497,10 +1497,10 @@
                                 M_CLASS_NM,
                                 S_CLASS_CD,
                                 S_CLASS_NM,
-                                tsdpst.PROD_CD,
+                                tsdpst.SIDE_PROD_CD AS PROD_CD,
                                 tmp.PROD_NM,
                                 (CASE tsdpst.SEL_TYPE_FG WHEN 'P' THEN '사이드모상품' WHEN 'S' THEN '사이드상품' WHEN 'N' THEN '일반판매상품' END) AS SEL_TYPE_FG,
-                                (CASE tsdpst.SEL_TYPE_FG WHEN 'S' THEN tsdpst.SIDE_PROD_CD END) AS SIDE_PROD_CD,
+                                (CASE tsdpst.SEL_TYPE_FG WHEN 'S' THEN tsdpst.PROD_CD END) AS SIDE_PROD_CD,
                                 (CASE tsdpst.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmps2.PROD_NM ELSE tmps2.PROD_NM END) AS SIDE_PROD_NM,
                                 SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.TOT_SALE_QTY END) AS SALE_QTY1,
                                 SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'S' THEN tsdpst.TOT_SALE_QTY END) AS SALE_QTY2,
@@ -1615,11 +1615,11 @@
                             )
                             <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
                                 GROUP BY SALE_YM, BRANCH_NM, STORE_CD, STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, PROD_CD, PROD_NM, SEL_TYPE_FG, SIDE_PROD_CD, SIDE_PROD_NM
-                                ORDER BY SALE_YM, STORE_CD, PROD_CD
+                                ORDER BY SALE_YM, STORE_CD, PROD_CD, SIDE_PROD_CD DESC
                             </if>
                             <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
                                 GROUP BY DAY_FROM, DAY_TO, BRANCH_NM, STORE_CD, STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, PROD_CD, PROD_NM, SEL_TYPE_FG, SIDE_PROD_CD, SIDE_PROD_NM
-                                ORDER BY DAY_FROM, STORE_CD, PROD_CD
+                                ORDER BY DAY_FROM, STORE_CD, PROD_CD, SIDE_PROD_CD DESC
                             </if>
                         )
                     )
@@ -1762,10 +1762,10 @@
                                 M_CLASS_NM,
                                 S_CLASS_CD,
                                 S_CLASS_NM,
-                                tsdpst.PROD_CD,
+                                tsdpst.SIDE_PROD_CD AS PROD_CD,
                                 tmp.PROD_NM,
                                 (CASE tsdpst.SEL_TYPE_FG WHEN 'P' THEN '사이드모상품' WHEN 'S' THEN '사이드상품' WHEN 'N' THEN '일반판매상품' END) AS SEL_TYPE_FG,
-                                (CASE tsdpst.SEL_TYPE_FG WHEN 'S' THEN tsdpst.SIDE_PROD_CD END) AS SIDE_PROD_CD,
+                                (CASE tsdpst.SEL_TYPE_FG WHEN 'S' THEN tsdpst.PROD_CD END) AS SIDE_PROD_CD,
                                 (CASE tsdpst.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmps2.PROD_NM ELSE tmps2.PROD_NM END) AS SIDE_PROD_NM,
                                 SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.TOT_SALE_QTY END) AS SALE_QTY1,
                                 SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'S' THEN tsdpst.TOT_SALE_QTY END) AS SALE_QTY2,
@@ -1893,11 +1893,11 @@
                             )
                             <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
                                 GROUP BY SALE_DATE, YOIL, BRANCH_NM, STORE_CD, STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, PROD_CD, PROD_NM, SEL_TYPE_FG, SIDE_PROD_CD, SIDE_PROD_NM
-                                ORDER BY SALE_DATE, STORE_CD, PROD_CD
+                                ORDER BY SALE_DATE, STORE_CD, PROD_CD, SIDE_PROD_CD DESC
                             </if>
                             <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
                                 GROUP BY DAY_FROM, DAY_TO, BRANCH_NM, STORE_CD, STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, PROD_CD, PROD_NM, SEL_TYPE_FG, SIDE_PROD_CD, SIDE_PROD_NM
-                                ORDER BY DAY_FROM, STORE_CD, PROD_CD
+                                ORDER BY DAY_FROM, STORE_CD, PROD_CD, SIDE_PROD_CD DESC
                             </if>
                         )
                     )
@@ -2031,10 +2031,10 @@
                                 M_CLASS_NM,
                                 S_CLASS_CD,
                                 S_CLASS_NM,
-                                tsdpst.PROD_CD,
+                                tsdpst.SIDE_PROD_CD AS PROD_CD,
                                 tmp.PROD_NM,
                                 (CASE tsdpst.SEL_TYPE_FG WHEN 'P' THEN '사이드모상품' WHEN 'S' THEN '사이드상품' WHEN 'N' THEN '일반판매상품' END) AS SEL_TYPE_FG,
-                                (CASE tsdpst.SEL_TYPE_FG WHEN 'S' THEN tsdpst.SIDE_PROD_CD END) AS SIDE_PROD_CD,
+                                (CASE tsdpst.SEL_TYPE_FG WHEN 'S' THEN tsdpst.PROD_CD END) AS SIDE_PROD_CD,
                                 (CASE tsdpst.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmps2.PROD_NM ELSE tmps2.PROD_NM END) AS SIDE_PROD_NM,
                                 SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.TOT_SALE_QTY END) AS SALE_QTY1,
                                 SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'S' THEN tsdpst.TOT_SALE_QTY END) AS SALE_QTY2,
@@ -2162,11 +2162,11 @@
                             )
                             <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
                                 GROUP BY SALE_YM, BRANCH_NM, STORE_CD, STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, PROD_CD, PROD_NM, SEL_TYPE_FG, SIDE_PROD_CD, SIDE_PROD_NM
-                                ORDER BY SALE_YM, STORE_CD, PROD_CD
+                                ORDER BY SALE_YM, STORE_CD, PROD_CD, SIDE_PROD_CD DESC
                             </if>
                             <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
                                 GROUP BY DAY_FROM, DAY_TO, BRANCH_NM, STORE_CD, STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, PROD_CD, PROD_NM, SEL_TYPE_FG, SIDE_PROD_CD, SIDE_PROD_NM
-                                ORDER BY DAY_FROM, STORE_CD, PROD_CD
+                                ORDER BY DAY_FROM, STORE_CD, PROD_CD, SIDE_PROD_CD DESC
                             </if>
                         )
                     )
