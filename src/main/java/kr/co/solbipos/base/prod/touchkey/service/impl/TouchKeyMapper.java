@@ -162,4 +162,9 @@ public interface TouchKeyMapper {
     /** 터치키 분류코드 생성 */
     String getTouchKeyClassCd(DefaultMap<String> param);
 
+    /** 판매 터치키 포스에 조회 ENVST4038 */
+    List<DefaultMap<String>> getTouchKeyEnv(TouchKeyVO touchKeyVO);
+
+    /** 판매 터치키 포스에 적용 ENVST4038 */
+    int saveTouchKeyEnv(TouchKeyVO touchKeyVO);
 }

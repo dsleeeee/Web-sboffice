@@ -96,6 +96,19 @@ app.controller('giftClassCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = {};
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquirySub(baseUrl + "class/getGiftClassList.sb", params, function() {
+
+      var grid = wijmo.Control.getControl("#wjGridGiftClass");
+      var rows = grid.rows;
+
+      for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+        var item = $scope.flex.collectionView.items[i];
+
+        if(orgnFg === "STORE" && item.payClassCd < '800'){
+          item.gChk = false;
+          rows[i].isReadOnly = true;
+        }
+      }
+
       $("#giftSubTitle").text(" []");
       var giftScope = agrid.getScope('giftCtrl');
       giftScope.$apply(function(){
@@ -120,20 +133,23 @@ app.controller('giftClassCtrl', ['$scope', '$http', function ($scope, $http) {
   };
 
   // 상품권 분류 그리드 행 삭제
-  // $scope.del = function(){
-  //   for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-  //     var item = $scope.flex.collectionView.items[i];
-  //
-  //     if(item.gChk) {
-  //       if(item.giftCnt > 0) {
-  //         // s_alert.pop("<s:message code='gift.exists.gift' />");
-  //         s_alert.pop("해당분류에 등록된 상품권이 존재합니다. 분류 삭제 전에 등록 상품권을 먼저 삭제해주세요.");
-  //         return;
-  //       }
-  //       $scope.flex.collectionView.removeAt(i);
-  //     }
-  //   }
-  // };
+  $scope.del = function(){
+
+    var params = new Array();
+
+    $scope._popConfirm(messages["gift.exists.gift"], function (){
+      for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+        if($scope.flex.collectionView.items[i].gChk) {
+          $scope.flex.collectionView.items[i].status = "D";
+          params.push($scope.flex.collectionView.items[i]);
+        }
+      }
+
+      // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+      $scope._save(baseUrl + "class/saveGiftClassList.sb", params, function(){ $scope.allSearch() });
+
+    });
+  };
 
 
   $scope.maxChk = function (val){
@@ -354,11 +370,11 @@ app.controller('giftCtrl', ['$scope', '$http', function ($scope, $http) {
     params.payClassCd = $("#hdPayClassCd").val();
     if((orgnFg != null && orgnFg == "STORE") && params.payClassCd <= 799) { // 본사에서 등록한 권종분류코드
       $('#btnGiftAdd').hide();
-      $('#btnClassDel').hide();
+      $('#btnGiftDel').hide();
       $('#btnGiftSave').hide();
     } else {
       $('#btnGiftAdd').show();
-      $('#btnClassDel').show();
+      $('#btnGiftDel').show();
       $('#btnGiftSave').show();
     }
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
@@ -390,12 +406,21 @@ app.controller('giftCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 상품권 그리드 행 삭제
   $scope.del = function(){
+
+    // 파라미터 설정
+    var params = new Array();
+
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-      var item = $scope.flex.collectionView.items[i];
-      if(item.gChk) {
-        $scope.flex.collectionView.removeAt(i);
+      if($scope.flex.collectionView.items[i].gChk) {
+        $scope.flex.collectionView.items[i].status = "D";
+        params.push($scope.flex.collectionView.items[i]);
       }
     }
+
+    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+    $scope._save(baseUrl + "class/saveGiftList.sb", params, function(){
+      $scope.searchGift();
+    });
   };
 
   $scope.maxChk = function (val){

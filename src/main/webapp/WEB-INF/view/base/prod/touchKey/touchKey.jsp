@@ -66,6 +66,10 @@
                 <button class="btn_skyblue fl ml5" id="btnGrpNm"<c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && (touchKeyEnvstVal2 == '0' || touchKeyEnvstVal2 == '2')}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose> ng-click="$broadcast('showGrpNm')">
                     <s:message code="touchKey.grpNm"/>
                 </button>
+                <%-- 터치키그룹코드 --%>
+                <button class="btn_skyblue fl ml5" id="btnTouchKeyEnv" ng-click="$broadcast('showPopUpTouchKeyEnv')">
+                    <s:message code="touchKey.grpCd"/>
+                </button>
                 <c:if test="${orgnFg == 'STORE' && hqOfficeCd != '00000' && touchKeyEnvstVal2 == '2'}">
                     <%-- 매장수정허용분류 --%>
                     <button class="btn_blk ml5 fr"  id="storeModGrpMs" ng-click="$broadcast('showPopUpStoreModGrp')">
@@ -337,6 +341,12 @@
         <c:param name="menuNm" value="${menuNm}"/>
     </c:import>
 
+    <%-- 터치키사용그룹코드 --%>
+    <c:import url="/WEB-INF/view/base/prod/touchKey/popUpTouchKeyEnv.jsp">
+        <c:param name="menuCd" value="${menuCd}"/>
+        <c:param name="menuNm" value="${menuNm}"/>
+    </c:import>
+
     <%-- 매장 판매터치키복사 --%>
     <c:import url="/WEB-INF/view/base/store/view/copyStoreTouchKey.jsp">
     </c:import>
@@ -459,6 +469,8 @@
 </script>
 
 <script type="text/javascript">
+    // 브랜드 사용여부
+    var brandUseFg = "${brandUseFg}";
     var branchCdComboList = ${branchCdComboList};
     var momsTeamComboList = ${momsTeamComboList};
     var momsAcShopComboList = ${momsAcShopComboList};
@@ -474,7 +486,7 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20220527.05"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20220527.06"
         charset="utf-8"></script>
 
 <%-- 스타일미리보기 팝업 --%>

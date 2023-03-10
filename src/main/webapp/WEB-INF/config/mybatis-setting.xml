@@ -194,6 +194,11 @@
     <typeAlias alias="vanCardVO" type="kr.co.solbipos.sys.etc.vancard.service.VanCardVO"/>
     <typeAlias alias="vanCmpnyVO" type="kr.co.solbipos.sys.etc.vancard.service.VanCmpnyVO"/>
 
+    <!-- 시스템관리 > 코드관리 > 환경설정기능설명 -->
+    <typeAlias alias="envstRemarkVO" type="kr.co.solbipos.sys.cd.envstRemark.service.EnvstRemarkVO"/>
+    <!-- 시스템관리 > 코드관리 > 환경설정사용설정 -->
+    <typeAlias alias="envstHqMsMngVO" type="kr.co.solbipos.sys.cd.envstHqMsMng.service.EnvstHqMsMngVO"/>
+
 <!--
     <typeAlias alias="exceptStoreRemoveVO" type="kr.co.solbipos.sys.etc.exceptstoreremove.service.ExceptStoreRemoveVO"/>
 -->

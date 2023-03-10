@@ -84,6 +84,8 @@ app.controller('popUpApplyStoreCtrl', ['$scope', '$http', function ($scope, $htt
         }
         params.userBrands = momsHqBrandCd;
       }
+    } else if(brandUseFg === "1"){
+      params.storeHqBrandCd = $scope.storeHqBrandCd;
     }
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/base/prod/touchKey/touchKey/storeList.sb", params, function() {

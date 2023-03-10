@@ -110,10 +110,45 @@ public class CouponServiceImpl implements CouponService {
                     String payMethodClassResult = couponMapper.updateHqCouponClassToStore(payMethodClassVO);
                     resultVO.setResult(payMethodClassResult);
                 } else if (payMethodClassVO.getStatus() == GridDataFg.DELETE) {
+
+                    // 분류 삭제
                     procCnt = couponMapper.deleteHqCouponClass(payMethodClassVO);
                     // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분류에도 본사의 쿠폰분류 적용. (매장 분류 먼저 삭제)
                     String payMethodClassResult = couponMapper.deleteHqCouponClassToStore(payMethodClassVO);
                     resultVO.setResult(payMethodClassResult);
+
+                    CouponVO couponVO = new CouponVO();
+                    couponVO.setOrgnFg(payMethodClassVO.getOrgnFg().toString());
+                    couponVO.setHqOfficeCd(payMethodClassVO.getHqOfficeCd());
+                    couponVO.setPayClassCd(payMethodClassVO.getPayClassCd());
+                    // 분류하위 삭제
+                    if(couponMapper.getCouponCnt(couponVO) > 0){
+                        procCnt = couponMapper.deleteHqCoupon(couponVO);
+
+                        int couponProdCnt = couponMapper.getCouponProdCnt(couponVO);
+                        int couponStoreCnt = couponMapper.getCouponStoreCnt(couponVO);
+                        CouponProdVO couponProdVO = new CouponProdVO();
+                        couponProdVO.setHqOfficeCd(payMethodClassVO.getHqOfficeCd());
+                        couponProdVO.setPayClassCd(payMethodClassVO.getPayClassCd());
+                        // 상품정보 체크 후 삭제
+                        if(couponProdCnt > 0) {
+                            procCnt = couponMapper.deleteHqCouponProd(couponProdVO);
+                        }
+                        // 등록매장 체크 후 삭제
+                        if(couponStoreCnt > 0){
+                            CouponStoreVO couponStoreVO = new CouponStoreVO();
+                            couponStoreVO.setHqOfficeCd(couponVO.getHqOfficeCd());
+                            couponStoreVO.setPayClassCd(couponVO.getPayClassCd());
+                            // 등록매장 테이블 정보 삭제
+                            couponMapper.deleteCouponStore(couponStoreVO);
+                            // 매장에 등록된 쿠폰 삭제
+                            couponMapper.deleteStoreCoupon(couponVO);
+                        }
+                        // 등록매장 체크 후 삭제
+                        if(couponProdCnt > 0 && couponStoreCnt > 0){
+                            couponMapper.deleteStoreCouponProd(couponProdVO);
+                        }
+                    }
                 }
             } else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE)  { //매장에서 등록
                 payMethodClassVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -133,7 +168,26 @@ public class CouponServiceImpl implements CouponService {
                     } else if(payMethodClassVO.getStatus() == GridDataFg.UPDATE) {
                         procCnt = couponMapper.updateStoreCouponClass(payMethodClassVO);
                     } else if (payMethodClassVO.getStatus() == GridDataFg.DELETE) {
+                        // 분류 삭제
                         procCnt = couponMapper.deleteStoreCouponClass(payMethodClassVO);
+
+                        CouponVO couponVO = new CouponVO();
+                        couponVO.setOrgnFg(payMethodClassVO.getOrgnFg().toString());
+                        couponVO.setStoreCd(payMethodClassVO.getStoreCd());
+                        couponVO.setPayClassCd(payMethodClassVO.getPayClassCd());
+                        // 분류 하위 삭제
+                        if(couponMapper.getCouponCnt(couponVO) > 0){
+                            procCnt = couponMapper.deleteStoreCoupon(couponVO);
+
+                            // 상품정보 있는지 체크 후 있으면 삭제
+                            if(couponMapper.getCouponProdCnt(couponVO) > 0) {
+                                CouponProdVO couponProdVO = new CouponProdVO();
+                                couponProdVO.setOrgnFg(payMethodClassVO.getOrgnFg().toString());
+                                couponProdVO.setStoreCd(payMethodClassVO.getStoreCd());
+                                couponProdVO.setPayClassCd(payMethodClassVO.getPayClassCd());
+                                procCnt = couponMapper.deleteStoreCouponProd(couponProdVO);
+                            }
+                        }
                     }
                 }
             }
@@ -247,6 +301,29 @@ public class CouponServiceImpl implements CouponService {
                     procCnt += couponMapper.deleteHqCoupon(couponVO);
                     // 본사통제여부가 'Y'일 경우, 매장쿠폰 삭제.
                     String couponResult = couponMapper.deleteHqCouponToStore01(couponVO);
+
+                    int couponProdCnt = couponMapper.getCouponProdCnt(couponVO);
+                    int couponStoreCnt = couponMapper.getCouponStoreCnt(couponVO);
+                    CouponProdVO couponProdVO = new CouponProdVO();
+                    couponProdVO.setHqOfficeCd(couponVO.getHqOfficeCd());
+                    couponProdVO.setPayClassCd(couponVO.getPayClassCd());
+                    couponProdVO.setCoupnCd(couponVO.getCoupnCd());
+                    // 상품수량 체크 후 삭제
+                    if(couponProdCnt > 0){
+                        couponMapper.deleteHqCouponProd(couponProdVO);
+                    }
+                    // 적용매장 수 체크 후 삭제
+                    if(couponStoreCnt > 0){
+                        CouponStoreVO couponStoreVO = new CouponStoreVO();
+                        couponStoreVO.setHqOfficeCd(couponVO.getHqOfficeCd());
+                        couponStoreVO.setPayClassCd(couponVO.getPayClassCd());
+                        couponStoreVO.setCoupnCd(couponVO.getCoupnCd());
+                        couponMapper.deleteCouponStore(couponStoreVO);
+                    }
+                    // 적용 매장의 상품수량 정보 삭제
+                    if(couponProdCnt > 0 && couponStoreCnt > 0){
+                        couponMapper.deleteStoreCouponProd(couponProdVO);
+                    }
                 }
             }
             // 매장
@@ -267,6 +344,14 @@ public class CouponServiceImpl implements CouponService {
                 }
                 else if(couponVO.getStatus() == GridDataFg.DELETE) {
                     procCnt += couponMapper.deleteStoreCoupon(couponVO);
+                    int couponProdCnt = couponMapper.getCouponProdCnt(couponVO);
+                    // 상품수량 체크 후 삭제
+                    if(couponProdCnt > 0){
+                        CouponProdVO couponProdVO = new CouponProdVO();
+                        couponProdVO.setStoreCd(couponVO.getStoreCd());
+                        couponProdVO.setPayClassCd(couponVO.getPayClassCd());
+                        procCnt += couponMapper.deleteStoreCouponProd(couponProdVO);
+                    }
                 }
             }
             // 권한 확인 필요

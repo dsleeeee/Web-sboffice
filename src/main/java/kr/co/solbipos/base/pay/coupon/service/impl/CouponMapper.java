@@ -140,4 +140,9 @@ public interface CouponMapper {
 
     /** 본사 쿠폰적용매장 삭제시, 해당 매장의 해당 쿠폰 삭제 프로시져 */
     String deleteHqCouponToStore02(CouponVO resultVO);
+
+    /** 매장 쿠폰 삭제 시 하위 상품이 있는지 조회 */
+    int getCouponCnt(CouponVO couponVO);
+    int getCouponProdCnt(CouponVO couponVO);
+    int getCouponStoreCnt(CouponVO couponVO);
 }

@@ -639,4 +639,50 @@ public class TouchKeyController {
         return result;
     }
 
+    /**
+     * 판매 터치키 포스 조회 ENVST4038
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param touchKeyVO TouchKeyVO
+     * @param model Model
+     * @return Result
+     * @author 권지현
+     * @since 2023.03.08
+     */
+    @RequestMapping(value = "/getTouchKeyEnv.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getTouchKeyEnv(HttpServletRequest request, HttpServletResponse response,
+                               TouchKeyVO touchKeyVO, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list =  touchkeyService.getTouchKeyEnv(touchKeyVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, touchKeyVO);
+
+    }
+
+    /**
+     * 판매 터치키 포스에 적용 ENVST4038
+     *
+     * @param touchKeyVOs TouchKeyVO[]
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param model Model
+     * @return Result
+     * @author 권지현
+     * @since 2023.03.08
+     */
+    @RequestMapping(value = "/saveTouchKeyEnv.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveTouchKeyEnv(@RequestBody TouchKeyVO[] touchKeyVOs, HttpServletRequest request, HttpServletResponse response,
+                                      Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        int result = touchkeyService.saveTouchKeyEnv(touchKeyVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+
+    }
 }

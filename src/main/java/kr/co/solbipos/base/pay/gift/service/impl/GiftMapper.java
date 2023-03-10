@@ -92,6 +92,7 @@ public interface GiftMapper {
 
     /** 본사 상품권 삭제시 매장에도 삭제 */
     String deleteHqGiftToStoreGift(GiftVO giftVO);
+    int deleteHqGiftToStoreGift2(GiftVO giftVO);
 
     /** 매장 상품권 등록 */
     int insertStoreGift(GiftVO GiftVO);
@@ -102,4 +103,6 @@ public interface GiftMapper {
     /** 매장 상품권 삭제 */
     int deleteStoreGift(GiftVO GiftVO);
 
+    /** 삭제 시 체크 */
+    int getGiftCnt(PayMethodClassVO payMethodClassVO);
 }

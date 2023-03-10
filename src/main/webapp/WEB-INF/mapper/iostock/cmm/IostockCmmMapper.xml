@@ -43,6 +43,50 @@
         ORDER BY tms.STORE_CD
     </select>
 
+    <!-- 본사/매장선택 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : iostockCmmVO
+        COMMENTS : 본사/매장선택 리스트를 조회한다.
+    -->
+    <select id="selectHqStoreList" parameterType="iostockCmmVO" resultType="DefaultMap">
+    /* USE : IostockCmmMapper.selectHqStoreList */
+        SELECT	ORGN_CD
+        ,		ORGN_NM
+        ,		ORGN_FG
+        FROM 	(
+                SELECT	HQ_OFFICE_CD
+                ,		HQ_OFFICE_CD AS ORGN_CD
+                ,		HQ_OFFICE_NM AS ORGN_NM
+                ,		'H' AS ORGN_FG
+                FROM	TB_HQ_OFFICE tho
+                <![CDATA[
+                WHERE 	HQ_OFFICE_CD <> '00000'
+                ]]>
+                UNION ALL
+                SELECT	HQ_OFFICE_CD
+                ,		HQ_OFFICE_CD AS ORGN_CD
+                ,		HQ_OFFICE_NM AS ORGN_NM
+                ,		'F' AS ORGN_FG
+                FROM	TB_HQ_OFFICE tho
+                UNION ALL
+                SELECT	HQ_OFFICE_CD
+                ,		STORE_CD AS ORGN_CD
+                ,		STORE_NM AS ORGN_NM
+                ,		'S' AS ORGN_FG
+                FROM	TB_MS_STORE tms
+                )
+        WHERE	1=1
+        <if test='storeCd != null and storeCd != ""'>
+            AND ORGN_CD LIKE '%'||#{storeCd}||'%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND ORGN_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        ORDER
+        BY      DECODE(ORGN_FG, 'H', 1, 'F', 2, 'S', 3), ORGN_CD
+    </select>
+
     <!-- 매장선택 조회 -->
     <!--
         TABLE    : TB_MS_STORE

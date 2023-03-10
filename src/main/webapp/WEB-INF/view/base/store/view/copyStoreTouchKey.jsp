@@ -507,4 +507,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/view/copyStoreTouchKey.js?ver=20220504.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/view/copyStoreTouchKey.js?ver=20220504.03" charset="utf-8"></script>

@@ -1880,7 +1880,8 @@
             DISCON_DATE,
             DISCON_YN,
             GROUP_PROD_CD,
-            DEPOSIT_PROD_CD
+            DEPOSIT_PROD_CD,
+            ADD_GRP_CD
             FROM TB_MS_PRODUCT
             WHERE 1=1
             AND STORE_CD = #{copyStoreCd}
@@ -1938,7 +1939,8 @@
             DISCON_DATE = B.DISCON_DATE,
             DISCON_YN = B.DISCON_YN,
             GROUP_PROD_CD = B.GROUP_PROD_CD,
-            DEPOSIT_PROD_CD = B.DEPOSIT_PROD_CD
+            DEPOSIT_PROD_CD = B.DEPOSIT_PROD_CD,
+            ADD_GRP_CD = B.ADD_GRP_CD
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -1991,7 +1993,8 @@
                 A.DISCON_DATE,
                 A.DISCON_YN,
                 A.GROUP_PROD_CD,
-                A.DEPOSIT_PROD_CD
+                A.DEPOSIT_PROD_CD,
+                A.ADD_GRP_CD
             ) VALUES (
                 B.STORE_CD,
                 B.PROD_CD,
@@ -2043,7 +2046,8 @@
                 B.DISCON_DATE,
                 B.DISCON_YN,
                 B.GROUP_PROD_CD,
-                B.DEPOSIT_PROD_CD
+                B.DEPOSIT_PROD_CD,
+                B.ADD_GRP_CD
             )
     </insert>
 
@@ -2105,7 +2109,8 @@
             DISCON_DATE,
             DISCON_YN,
             GROUP_PROD_CD,
-            DEPOSIT_PROD_CD
+            DEPOSIT_PROD_CD,
+            ADD_GRP_CD
             FROM TB_HQ_PRODUCT
             WHERE 1=1
             AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -2157,7 +2162,8 @@
             DISCON_DATE = B.DISCON_DATE,
             DISCON_YN = B.DISCON_YN,
             GROUP_PROD_CD = B.GROUP_PROD_CD,
-            DEPOSIT_PROD_CD = B.DEPOSIT_PROD_CD
+            DEPOSIT_PROD_CD = B.DEPOSIT_PROD_CD,
+            ADD_GRP_CD = B.ADD_GRP_CD
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -2206,7 +2212,8 @@
                 A.DISCON_DATE,
                 A.DISCON_YN,
                 A.GROUP_PROD_CD,
-                A.DEPOSIT_PROD_CD
+                A.DEPOSIT_PROD_CD,
+                A.ADD_GRP_CD
             ) VALUES (
                 B.STORE_CD,
                 B.PROD_CD,
@@ -2254,7 +2261,8 @@
                 B.DISCON_DATE,
                 B.DISCON_YN,
                 B.GROUP_PROD_CD,
-                B.DEPOSIT_PROD_CD
+                B.DEPOSIT_PROD_CD,
+                B.ADD_GRP_CD
             )
     </insert>
 
@@ -5222,9 +5230,17 @@
                 AND tce.ENVST_FG = #{envstFg}
                 AND tce.USE_YN = 'Y'
                 AND tcd.ENVST_CD (+)= tce.ENVST_CD
+             ]]>
+                <if test='envst1266 != null and envst1266 == "1"'>
+                    AND tce.ENVST_CD IN (
+                                        SELECT 	ENVST_CD
+                                        FROM 	TB_CM_ENVST_HQ_MS_MNG
+                                        WHERE 	ORGN_FG IN ('F', 'S')
+                                        AND 	(ORGN_CD = #{storeCd} OR ORGN_CD = (SELECT HQ_OFFICE_CD FROM TB_MS_STORE WHERE STORE_CD = #{storeCd}))
+                                        )
+                </if>
                  ) tce2
            WHERE tce2.DTL_USE_YN = 'Y'
-                     ]]>
            <if test='envst != null and envst != ""'>
                 AND (tce2.ENVST_CD LIKE '%'|| #{envst} ||'%'
                 OR 	tce2.ENVST_NM LIKE '%'|| #{envst} ||'%')
@@ -5380,9 +5396,17 @@
                                  AND tce.ENVST_FG = #{envstFg}
                                  AND tce.USE_YN = 'Y'
                                  AND tcd.ENVST_CD (+)= tce.ENVST_CD
+                              ]]>
+                                <if test='envst1266 != null and envst1266 == "1"'>
+                                    AND tce.ENVST_CD IN (
+                                                        SELECT 	ENVST_CD
+                                                        FROM 	TB_CM_ENVST_HQ_MS_MNG
+                                                        WHERE 	ORGN_FG IN ('F', 'S')
+                                                        AND 	(ORGN_CD = #{storeCd} OR ORGN_CD = (SELECT HQ_OFFICE_CD FROM TB_MS_STORE WHERE STORE_CD = #{storeCd}))
+                                )
+                                </if>
                           ) tce2
                   WHERE tce2.DTL_USE_YN = 'Y'
-                  ]]>
                   <if test='envst != null and envst != ""'>
                     AND (tce2.ENVST_CD LIKE '%'|| #{envst} ||'%'
                     OR 	tce2.ENVST_NM LIKE '%'|| #{envst} ||'%')

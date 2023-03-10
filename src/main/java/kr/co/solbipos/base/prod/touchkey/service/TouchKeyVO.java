@@ -134,6 +134,13 @@ public class TouchKeyVO extends CmmVO {
 
     /** 지사코드 */
     private String branchCd;
+
+    /** 포스번호 */
+    private String posNo;
+
+    /** 환경설정값 */
+    private String envstVal;
+
     /**
      * @return the orgnFg
      */
@@ -575,5 +582,21 @@ public class TouchKeyVO extends CmmVO {
 
     public void setBranchCd(String branchCd) {
         this.branchCd = branchCd;
+    }
+
+    public String getPosNo() {
+        return posNo;
+    }
+
+    public void setPosNo(String posNo) {
+        this.posNo = posNo;
+    }
+
+    public String getEnvstVal() {
+        return envstVal;
+    }
+
+    public void setEnvstVal(String envstVal) {
+        this.envstVal = envstVal;
     }
 }

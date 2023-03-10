@@ -1014,6 +1014,14 @@
                                WHERE tce.TARGT_FG IN ('H','X','C')
                                  AND tce.USE_YN = 'Y'
                                  AND tcd.ENVST_CD (+)= tce.ENVST_CD
+                                <if test='envst1266 != null and envst1266 == "1"'>
+                                    AND tce.ENVST_CD IN (
+                                                        SELECT ENVST_CD
+                                                        FROM TB_CM_ENVST_HQ_MS_MNG
+                                                        WHERE ORGN_FG = 'H'
+                                                        AND ORGN_CD = #{hqOfficeCd}
+                                                        )
+                                </if>
                             ) tcd
            			 WHERE tcd.DTL_USE_YN = 'Y'
                     <if test='envst != null and envst != ""'>

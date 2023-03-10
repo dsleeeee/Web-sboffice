@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    EnvstHqMsMng.xml
+    환경설정사용설정 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2023.03.06      최초작성
+-->
+<mapper namespace="kr.co.solbipos.sys.cd.envstHqMsMng.service.impl.EnvstHqMsMngMapper">
+
+    <!-- 사용 환결설정 조회 -->
+    <!--
+        TABLE    : TB_CM_ENVST_HQ_MS_MNG, TB_CM_ENVST
+        PARAM    : envstHqMsMngVO
+        COMMENTS : 사용 환결설정을 조회한다.
+    -->
+    <select id="getRegEnvstList" parameterType="envstHqMsMngVO" resultType="DefaultMap">
+        /* USE : EnvstHqMsMngMapper.getRegEnvstList */
+        SELECT 	tcehmm.ENVST_CD
+        ,		tce.ENVST_NM
+        ,		#{orgnCd} AS ORGN_CD
+        ,		#{orgnFg} AS ORGN_FG
+        FROM 	TB_CM_ENVST_HQ_MS_MNG tcehmm
+        ,		TB_CM_ENVST tce
+        WHERE 	tcehmm.ENVST_CD = tce.ENVST_CD (+)
+        AND 	tcehmm.ORGN_CD = #{orgnCd}
+        AND 	tcehmm.ORGN_FG = #{orgnFg}
+        ORDER
+        BY      tcehmm.ENVST_CD
+    </select>
+
+    <!-- 미사용 환결설정 조회 -->
+    <!--
+        TABLE    : TB_CM_ENVST, TB_CM_ENVST_HQ_MS_MNG
+        PARAM    : envstHqMsMngVO
+        COMMENTS : 미사용 환결설정을 조회한다.
+    -->
+    <select id="getNoRegEnvstList" parameterType="envstHqMsMngVO" resultType="DefaultMap">
+        /* USE : EnvstHqMsMngMapper.getNoRegEnvstList */
+        SELECT	tce.ENVST_CD
+        ,		tce.ENVST_NM
+        ,		#{orgnCd} AS ORGN_CD
+        ,		#{orgnFg} AS ORGN_FG
+        FROM 	TB_CM_ENVST tce
+        WHERE   tce.USE_YN = 'Y'
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND tce.TARGT_FG IN ('H','X','C')
+        </if>
+        <if test='orgnFg == "F" or orgnFg == "S"'>
+            AND tce.TARGT_FG IN ('S','C','X')
+        </if>
+        AND 	tce.ENVST_CD NOT IN (
+                                        SELECT 	tcehmm.ENVST_CD
+                                        FROM 	TB_CM_ENVST_HQ_MS_MNG tcehmm
+                                        ,		TB_CM_ENVST tce
+                                        WHERE 	tcehmm.ENVST_CD = tce.ENVST_CD (+)
+                                        AND 	tcehmm.ORGN_CD = #{orgnCd}
+                                        AND 	tcehmm.ORGN_FG = #{orgnFg}
+                                    )
+        ORDER
+        BY 		tce.ENVST_CD
+    </select>
+
+    <!-- 사용등록 환경설정 -->
+    <!--
+        TABLE    : TB_CM_ENVST_HQ_MS_MNG
+        PARAM    : envstHqMsMngVO
+        COMMENTS : 사용 환경설정으로 등록한다.
+    -->
+    <insert id="saveEnvstHqMsMng" parameterType="envstHqMsMngVO">
+        /* USE : EnvstHqMsMngMapper.saveEnvstHqMsMng */
+        INSERT INTO TB_CM_ENVST_HQ_MS_MNG
+        (
+            ORGN_CD
+        ,   ENVST_CD
+        ,   ORGN_FG
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        ) VALUES (
+            #{orgnCd}
+        ,   #{envstCd}
+        ,   #{orgnFg}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+    </insert>
+
+    <!-- 미사용등록 환경설정 -->
+    <!--
+        TABLE    : TB_CM_ENVST_HQ_MS_MNG
+        PARAM    : envstHqMsMngVO
+        COMMENTS : 미사용 환경설정으로 등록한다.
+    -->
+    <delete id="deleteEnvstHqMsMng" parameterType="envstHqMsMngVO">
+        /* USE : EnvstHqMsMngMapper.deleteEnvstHqMsMng */
+        DELETE  TB_CM_ENVST_HQ_MS_MNG
+        WHERE   ORGN_CD     =   #{orgnCd}
+        AND     ENVST_CD    =   #{envstCd}
+        AND     ORGN_FG     =   #{orgnFg}
+    </delete>
+</mapper>

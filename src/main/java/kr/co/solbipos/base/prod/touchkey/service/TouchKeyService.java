@@ -78,4 +78,11 @@ public interface TouchKeyService {
     
     /** 터치키 초기화 */
     int deleteTouchKey(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO);
+
+    /** 판매 터치키 포스에 조회 ENVST4038 */
+    List<DefaultMap<String>> getTouchKeyEnv(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO);
+
+    /** 판매 터치키 포스에 적용 ENVST4038 */
+    int saveTouchKeyEnv(TouchKeyVO[] TouchKeyVOs, SessionInfoVO sessionInfoVO);
+
 }

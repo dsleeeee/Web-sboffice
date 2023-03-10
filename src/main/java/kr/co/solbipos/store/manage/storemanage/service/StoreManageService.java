@@ -51,13 +51,13 @@ public interface StoreManageService {
     int saveStorePosVanInfo(StorePosVO[] storePosVOs, SessionInfoVO sessionInfoVO);
 
     /** 매장환경 정보 조회 */
-    List<DefaultMap<String>> getEnvGroupList(StoreEnvVO storeEnvVO);
+    List<DefaultMap<String>> getEnvGroupList(StoreEnvVO storeEnvVO, SessionInfoVO sessionInfoVO);
 
     /** 매장환경 정보 저장 */
     int saveStoreConfig(StoreEnvVO[] storeEnvVOs, SessionInfoVO sessionInfoVO);
 
     /** 매장 포스 환경정보 조회 */
-    List<DefaultMap<String>> getPosEnvGroupList(StorePosEnvVO storePosEnvVOs);
+    List<DefaultMap<String>> getPosEnvGroupList(StorePosEnvVO storePosEnvVOs, SessionInfoVO sessionInfoVO);
 
     /** 매장 포스 환경정보 저장 */
     int savePosConfig(StorePosEnvVO[] storePosEnvVOs, SessionInfoVO sessionInfoVO);

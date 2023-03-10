@@ -378,6 +378,14 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
 
   });
 
+  // 매장수정허용분류 팝업
+  $scope.$on("showPopUpTouchKeyEnv", function(event, data) {
+    $scope.popUpTouchKeyEnvLayer.show();
+    $scope._broadcast('popUpTouchKeyEnvCtrl');
+    event.preventDefault();
+
+  });
+
 }]);
 
 

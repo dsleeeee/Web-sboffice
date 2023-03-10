@@ -5,6 +5,8 @@ import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.security.EncUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
@@ -55,12 +57,14 @@ public class HqManageServiceImpl implements HqManageService{
 
     private final HqManageMapper mapper;
     private final MessageService messageService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public HqManageServiceImpl(HqManageMapper mapper, MessageService messageService) {
+    public HqManageServiceImpl(HqManageMapper mapper, MessageService messageService, CmmEnvUtil cmmEnvUtil) {
         this.mapper = mapper;
         this.messageService = messageService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /** 본사 목록 조회 */
@@ -405,7 +409,11 @@ public class HqManageServiceImpl implements HqManageService{
 
     /** 환경설정 조회 */
     @Override
-    public List<DefaultMap<String>> getConfigList(HqManageVO hqManageVO) {
+    public List<DefaultMap<String>> getConfigList(HqManageVO hqManageVO, SessionInfoVO sessionInfoVO) {
+        sessionInfoVO.setHqOfficeCd(hqManageVO.getHqOfficeCd());
+        // [1266 환경설정사용등록 사용여부] 환경설정값 조회
+        hqManageVO.setEnvst1266(CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1266"), "0"));
+
         return mapper.getConfigList(hqManageVO);
     }
 
