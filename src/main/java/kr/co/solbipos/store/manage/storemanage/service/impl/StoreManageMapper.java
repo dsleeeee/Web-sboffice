@@ -236,6 +236,9 @@ public interface StoreManageMapper {
     int copyPromoCondiCopy(StoreManageVO storeManageVO);
     int copyPromoCondiProdCopy(StoreManageVO storeManageVO);
 
+    /** 배달상품명칭매핑 복사 TODO */
+    int copyDlvrProdCopy(StoreManageVO storeManageVO);
+
     /** 매장환경 정보 조회 */
     List<DefaultMap<String>> getEnvGroupList(StoreEnvVO storeEnvVO);
 

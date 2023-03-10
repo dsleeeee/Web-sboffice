@@ -379,7 +379,17 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.clsFgCombo.selectedValue     = storeDetailInfo.clsFg;
       $scope.sysStatFgCombo.selectedValue = storeDetailInfo.sysStatFg;
 
-      $scope.directManageYn               = storeDetailInfo.directManageYn;
+      // 직영구분
+      if(storeDetailInfo.directManageYn === null || storeDetailInfo.directManageYn === undefined || storeDetailInfo.directManageYn === ""){
+        $("input:radio[id='directManageY']").prop("checked", false); // 직영
+        $("input:radio[id='directManageN']").prop("checked", false); // 가맹
+      }else{
+        if(storeDetailInfo.directManageYn === 'Y'){
+          $("input:radio[id='directManageY']").prop("checked", true); // 직영
+        }else if(storeDetailInfo.directManageYn === 'N'){
+          $("input:radio[id='directManageN']").prop("checked", true); // 가맹
+        }
+      }
 
       $scope.readOnlyStatus                  = true;
       //$scope.store.installPosCnt.isReadOnly = true;
@@ -413,6 +423,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#touchKeyChk").prop("checked", false);
       $("#prtFormChk").prop("checked", false);
       $("#promotionChk").prop("checked", false);
+      $("#dlvrProdChk").prop("checked", false);
 
       $scope.store.siteCd = storeDetailInfo.siteCd;
       $scope.store.mapStoreCd = storeDetailInfo.mapStoreCd;
@@ -797,6 +808,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     if($scope.store.sysStatFg === "2"){
       params.sysClosureDate = wijmo.Globalize.format(sysClosureDate.value, 'yyyyMMdd');
     }
+    params.directManageYn = $("input[name='directManage']:checked").val();
     params.postNo = $("#postNo").val();
     params.addr = $("#addr").val();
     params.addrdtl = $("#addrDtl").val();
@@ -1050,11 +1062,15 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       if ($("#promotionChk").is(":checked") === true) {
         $("#promotionChk").prop("checked", false);
       }
+      if ($("#dlvrProdChk").is(":checked") === true) {
+        $("#dlvrProdChk").prop("checked", false);
+      }
       $("#productChk").attr("disabled", true);
       $("#salePriceChk").attr("disabled", true);
       $("#supplyPriceChk").attr("disabled", true);
       $("#touchKeyChk").attr("disabled", true);
       $("#promotionChk").attr("disabled", true);
+      $("#dlvrProdChk").attr("disabled", true);
 
     // 신규등록할 매장이 프랜매장일 경우
     } else if($scope.store.hqOfficeCd !== "00000") {
@@ -1065,6 +1081,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#supplyPriceChk").attr("disabled", false);
         $("#touchKeyChk").attr("disabled", false);
         $("#promotionChk").attr("disabled", false);
+        $("#dlvrProdChk").attr("disabled", false);
 
       // 매장환경복사의 매장을 선택 후 신규등록할 매장을 수정하면
       } else {
@@ -1088,11 +1105,15 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             if ($("#promotionChk").is(":checked") === true) {
                 $("#promotionChk").prop("checked", false);
             }
+            if ($("#dlvrProdChk").is(":checked") === true) {
+                $("#dlvrProdChk").prop("checked", false);
+            }
             $("#productChk").attr("disabled", true);
             $("#salePriceChk").attr("disabled", true);
             $("#supplyPriceChk").attr("disabled", true);
             $("#touchKeyChk").attr("disabled", true);
             $("#promotionChk").attr("disabled", true);
+            $("#dlvrProdChk").attr("disabled", true);
 
         // 매장환경복사 매장이 프랜매장일 경우
         } else if($scope.store.copyHqOfficeCd !== "00000") {
@@ -1102,6 +1123,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             $("#supplyPriceChk").attr("disabled", false);
             $("#touchKeyChk").attr("disabled", false);
             $("#promotionChk").attr("disabled", false);
+            $("#dlvrProdChk").attr("disabled", false);
 
           // 매장환경복사 본사와 다른 본사면
           } else if($scope.store.hqOfficeCd !== $scope.store.copyHqOfficeCd) {
@@ -1123,11 +1145,15 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             if ($("#promotionChk").is(":checked") === true) {
               $("#promotionChk").prop("checked", false);
             }
+            if ($("#dlvrProdChk").is(":checked") === true) {
+              $("#dlvrProdChk").prop("checked", false);
+            }
             $("#productChk").attr("disabled", true);
             $("#salePriceChk").attr("disabled", true);
             $("#supplyPriceChk").attr("disabled", true);
             $("#touchKeyChk").attr("disabled", true);
             $("#promotionChk").attr("disabled", true);
+            $("#dlvrProdChk").attr("disabled", true);
           }
         }
       }
@@ -1568,6 +1594,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $("#userPwd").val("");
           $("#userPwdConf").val("");
           $scope.areaCdCombo.selectedIndex = 1; // 기본값: 서울특별시
+          $("input:radio[id='directManageY']").prop("checked", false); // 직영구분 - 직영
+          $("input:radio[id='directManageN']").prop("checked", false); // 직영구분 - 가맹
           $("#installPosCnt").val("");
           $("#bizNo1").val("");
           $("#bizNo2").val("");
@@ -1660,6 +1688,16 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
               $scope.store.userPwdConf = erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234";
           }
           $scope.areaCdCombo.selectedValue = erpStoreScope.getErpStore().areaCd;
+          if(erpStoreScope.getErpStore().directManageYn === null || erpStoreScope.getErpStore().directManageYn === undefined || erpStoreScope.getErpStore().directManageYn === ""){
+            $("input:radio[id='directManageY']").prop("checked", false); // 직영
+            $("input:radio[id='directManageN']").prop("checked", false); // 가맹
+          }else{
+            if(erpStoreScope.getErpStore().directManageYn === 'Y'){
+              $("input:radio[id='directManageY']").prop("checked", true); // 직영
+            }else if(erpStoreScope.getErpStore().directManageYn === 'N'){
+              $("input:radio[id='directManageN']").prop("checked", true); // 가맹
+            }
+          }
           $("#installPosCnt").val(erpStoreScope.getErpStore().posCnt);
           $("#bizNo1").val(erpStoreScope.getErpStore().bizNo.substring(0, 3));
           $("#bizNo2").val(erpStoreScope.getErpStore().bizNo.substring(3, 5));

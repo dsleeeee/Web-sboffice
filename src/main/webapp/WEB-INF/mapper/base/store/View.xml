@@ -600,6 +600,26 @@
         }
     </select>
 
+    <!-- 배달상품명칭매핑 복사 프로시져 호출 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_DLVR_PROD_NM
+        PARAM    :
+        COMMENTS : 배달상품명칭매핑 관련 정보를 복사한다.
+    -->
+    <select id="copyDlvrProd" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+          /* USE : ViewMapper.copyDlvrProd */
+        {
+            CALL PKG_MS_STORE_COPY.SP_MS_PRODUCT_DLVR_PROD
+            (
+                #{hqOfficeCd},
+                #{originalStoreCd},
+                #{targetStoreCd},
+                #{regId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
     <!-- 매장환경 복사를 위한 정보 조회 -->
     <!--
         TABLE    :

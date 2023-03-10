@@ -673,6 +673,11 @@ public class StoreManageServiceImpl implements StoreManageService{
                         // TB_MS_PROMO_CONDI_PROD
                         procCnt += mapper.copyPromoCondiProdCopy(storeManageVO);
                     }
+
+                    // 배달상품명칭매핑 복사
+                    if( "dlvrProd".equals(copyEnv[i]) ) {
+                        procCnt += mapper.copyDlvrProdCopy(storeManageVO);
+                    }
                 }
             }
 

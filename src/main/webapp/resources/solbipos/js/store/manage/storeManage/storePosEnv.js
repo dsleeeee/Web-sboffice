@@ -104,7 +104,7 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
 
   /*********************************************************
-   * 포스 선택값 변경
+   * 포스 목록 조회
    * *******************************************************/
   $scope.getStorePosList = function(){
 
@@ -125,7 +125,7 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.setPosList(response.data.data.list);
 
         $scope.$broadcast('loadingPopupInactive');
-        $scope.searchPosEnv();
+        //$scope.searchPosEnv();
       }
     });
   };

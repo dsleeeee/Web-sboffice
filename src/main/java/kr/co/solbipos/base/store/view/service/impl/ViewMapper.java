@@ -99,6 +99,9 @@ public interface ViewMapper {
     /** 식품 알레르기 복사 */
     String copyFoodAllergy(CopyStoreEnvVO copyStoreEnvVO);
 
+    /** 배달상품명칭매핑 복사 */
+    String copyDlvrProd(CopyStoreEnvVO copyStoreEnvVO);
+
     /** 매장환경 복사를 위한 정보 조회 */
     List<DefaultMap<String>> getStoreEnvInfoList(CopyStoreEnvVO copyStoreEnvVO);
 

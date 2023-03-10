@@ -50,7 +50,9 @@ public enum StoreEnv implements CodeEnum {
     /** 원산지 */
     RECP_ORIGIN("11"),
     /** 식품 알레르기 */
-    FOOD_ALLERGY("12");
+    FOOD_ALLERGY("12"),
+    /** 배달상품명칭매핑 */
+    DLVR_PROD("13");
 
     private String code;
     private StoreEnv[] values;

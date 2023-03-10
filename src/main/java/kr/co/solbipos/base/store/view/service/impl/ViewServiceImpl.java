@@ -227,6 +227,9 @@ public class ViewServiceImpl implements ViewService {
             if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.FOOD_ALLERGY) { // 식품 알레르기
                 procResult = viewMapper.copyFoodAllergy(copyStoreEnvVO);
             }
+            if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.DLVR_PROD) { // 배달상품명칭매핑
+                procResult = viewMapper.copyDlvrProd(copyStoreEnvVO);
+            }
         }
 
         return result;

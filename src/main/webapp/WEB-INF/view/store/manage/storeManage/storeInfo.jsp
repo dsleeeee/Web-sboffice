@@ -198,8 +198,8 @@
               <th><s:message code="storeManage.directManage" /><em class="imp">*</em></th>
               <td>
                 <div class="sb-input">
-                  <input type="radio" ng-model="store.directManageYn" value="Y" checked="checked"><label class="mr5"><s:message code="storeManage.directManageStore" /></label>
-                  <input type="radio" ng-model="store.directManageYn" value="N"><label><s:message code="storeManage.merchantStore" /></label>
+                  <input type="radio" id="directManageY" name="directManage" ng-model="store.directManageYn" value="Y" checked="checked"><label class="mr5"><s:message code="storeManage.directManageStore" /></label>
+                  <input type="radio" id="directManageN" name="directManage" ng-model="store.directManageYn" value="N"><label><s:message code="storeManage.merchantStore" /></label>
                 </div>
               </td>
               <%-- 설치포스수 --%>
@@ -567,6 +567,9 @@
                   <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" id="promotionChk" value="promotion"/><%-- 프로모션 --%>
                     <label for="promotionChk" ><s:message code="storeManage.promotion" /></label>
                   </span>
+                  <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" id="dlvrProdChk" value="dlvrProd"/><%-- 배달상품명칭매핑 --%>
+                    <label for="dlvrProdChk" ><s:message code="storeManage.dlvrProd" /></label>
+                  </span>
                   </div>
                 </td>
               </tr>
@@ -591,7 +594,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20230210.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20230310.01" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">
