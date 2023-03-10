@@ -71,10 +71,10 @@
                     ,      M_CLASS_NM
                     ,      S_CLASS_CD
                     ,      S_CLASS_NM
-                    ,      tsdps.PROD_CD
+                    ,      tsdps.SIDE_PROD_CD AS PROD_CD
                     ,	   (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmps2.PROD_NM ELSE tmps2.PROD_NM END) AS PROD_NM
                     ,	   (CASE tsdps.SEL_TYPE_FG WHEN 'P' THEN '사이드모상품' WHEN 'S' THEN '사이드상품' WHEN 'N' THEN '일반판매상품' END) AS SEL_TYPE_FG
-                    ,	   (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.SIDE_PROD_CD END) AS SIDE_PROD_CD
+                    ,	   (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.PROD_CD END) AS SIDE_PROD_CD
                     ,	   (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmps2.PROD_NM ELSE tmps2.PROD_NM END) AS SIDE_PROD_NM
                     ,	   SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.TOT_SALE_QTY END) AS SALE_QTY1
                     ,	   SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'S' THEN tsdps.TOT_SALE_QTY END) AS SALE_QTY2
@@ -193,16 +193,16 @@
                ORDER BY A.STORE_CD ASC
            </if>
            <if test='prodOption != null and prodOption != "" and prodOption == "1"'>
-               , A.SALE_QTY1 DESC, A.PROD_CD ASC
+               , A.SALE_QTY1 DESC, A.PROD_CD ASC, A.SIDE_PROD_CD DESC
            </if>
            <if test='prodOption != null and prodOption != "" and prodOption == "2"'>
-               , A.SALE_QTY2 DESC, A.PROD_CD ASC
+               , A.SALE_QTY2 DESC, A.PROD_CD ASC, A.SIDE_PROD_CD DESC
            </if>
            <if test='prodOption != null and prodOption != "" and prodOption == "3"'>
-               , A.SALE_QTY3 DESC, A.PROD_CD ASC
+               , A.SALE_QTY3 DESC, A.PROD_CD ASC, A.SIDE_PROD_CD DESC
            </if>
            <if test='prodOption != null and prodOption != "" and prodOption == "4"'>
-               , A.SALE_QTY3 DESC, A.PROD_CD ASC
+               , A.SALE_QTY3 DESC, A.PROD_CD ASC, A.SIDE_PROD_CD DESC
            </if>
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -265,10 +265,10 @@
                     ,       M_CLASS_NM
                     ,       S_CLASS_CD
                     ,       S_CLASS_NM
-                    ,      tsdps.PROD_CD
+                    ,      tsdps.SIDE_PROD_CD AS PROD_CD
                     ,	   (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmps2.PROD_NM ELSE tmps2.PROD_NM END) AS PROD_NM
                     ,	   (CASE tsdps.SEL_TYPE_FG WHEN 'P' THEN '사이드모상품' WHEN 'S' THEN '사이드상품' WHEN 'N' THEN '일반판매상품' END) AS SEL_TYPE_FG
-                    ,	   (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.SIDE_PROD_CD END) AS SIDE_PROD_CD
+                    ,	   (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.PROD_CD END) AS SIDE_PROD_CD
                     ,	   (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmps2.PROD_NM ELSE tmps2.PROD_NM END) AS SIDE_PROD_NM
                     ,	   SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.TOT_SALE_QTY END) AS SALE_QTY1
                     ,	   SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'S' THEN tsdps.TOT_SALE_QTY END) AS SALE_QTY2
@@ -387,16 +387,16 @@
                ORDER BY A.STORE_CD ASC
            </if>
            <if test='prodOption != null and prodOption != "" and prodOption == "1"'>
-               , A.SALE_QTY1 DESC, A.PROD_CD ASC
+               , A.SALE_QTY1 DESC, A.PROD_CD ASC, A.SIDE_PROD_CD DESC
            </if>
            <if test='prodOption != null and prodOption != "" and prodOption == "2"'>
-               , A.SALE_QTY2 DESC, A.PROD_CD ASC
+               , A.SALE_QTY2 DESC, A.PROD_CD ASC, A.SIDE_PROD_CD DESC
            </if>
            <if test='prodOption != null and prodOption != "" and prodOption == "3"'>
-               , A.SALE_QTY3 DESC, A.PROD_CD ASC
+               , A.SALE_QTY3 DESC, A.PROD_CD ASC, A.SIDE_PROD_CD DESC
            </if>
            <if test='prodOption != null and prodOption != "" and prodOption == "4"'>
-               , A.SALE_QTY3 DESC, A.PROD_CD ASC
+               , A.SALE_QTY3 DESC, A.PROD_CD ASC, A.SIDE_PROD_CD DESC
            </if>
     </select>
 
