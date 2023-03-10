@@ -48,12 +48,14 @@
 <%--          <button class="btn_skyblue" id="btnClassApply" ng-click="applyStore()"><s:message code='coupon.apply.class' /></button>--%>
 <%--       </c:if>--%>
           <button class="btn_skyblue" id="btnClassAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
+          <button class="btn_skyblue" id="btnClassDel" ng-click="del()"><s:message code='cmm.del' /></button>
           <button class="btn_skyblue" id="btnClassSave" ng-click="save()"><s:message code='cmm.save' /></button>
 
         </div>
         <%-- 쿠폰분류등록 그리드 --%>
         <div id="couponClassGrid" class="wj-gridWrap" style="height:280px;overflow-y: hidden;">
           <wj-flex-grid
+                  id="wjGridCouponClass"
                   autoGenerateColumns="false"
                   control="flex"
                   initialized="initGrid(s,e)"
@@ -64,7 +66,7 @@
                   ime-enabled="true">
 
             <!-- define columns -->
-<%--            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>--%>
+            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="coupon.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="coupon.payTypeFg"/>" binding="payTypeFg" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="coupon.payClassCd"/>" binding="payClassCd" maxLength="3" is-read-only="true"  width="*"></wj-flex-grid-column>
@@ -110,7 +112,7 @@
         </wj-combo-box>
         <%--// 페이지 스케일  --%>
         <button class="btn_skyblue" id="btnCouponAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
-<%--        <button class="btn_skyblue" id="btnCouponDel" ng-click="del()"><s:message code='cmm.del' /></button>--%>
+        <button class="btn_skyblue" id="btnCouponDel" ng-click="del()"><s:message code='cmm.del' /></button>
         <button class="btn_skyblue" id="btnCouponSave" ng-click="save()"><s:message code='cmm.save' /></button>
       </div>
       <%-- 쿠폰등록 그리드 --%>
@@ -127,7 +129,7 @@
                 ime-enabled="true">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.coupnCd"/>" binding="coupnCd" is-read-only="true" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.coupnNm"/>" binding="coupnNm" maxLength="15"></wj-flex-grid-column>
@@ -172,7 +174,7 @@ var coupnEnvstVal = "${coupnEnvstVal}";
 var mappingFg = "${mappingFg}";
 var mappingCd   = ${ccu.getCommCodeExcpAll("805")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/coupon.js?ver=2019012201.09" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/coupon.js?ver=20230309.01" charset="utf-8"></script>
 
 <%-- 쿠폰별 상품 등록 레이어 팝업 --%>
 <c:import url="/WEB-INF/view/base/pay/coupon/couponProdView.jsp">
