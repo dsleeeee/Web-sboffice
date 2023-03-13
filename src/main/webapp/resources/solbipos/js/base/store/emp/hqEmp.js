@@ -99,6 +99,7 @@ app.controller('hqEmpCtrl', ['$scope', '$http', function ($scope, $http) {
   // 본사사원정보관리 그리드 조회
   $scope.getHqEmpList = function(){
     var params = {};
+    params.listScale = $scope.listScale;
 
     // 등록일자 '전체기간' 선택에 따른 params
     if(!$scope.isChecked){

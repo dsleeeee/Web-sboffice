@@ -152,7 +152,7 @@
     </tbody>
   </table>
 
-  <div class="mt40 oh sb-select dkbr">
+  <div class="mt10 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <wj-combo-box
             class="w100px fl"
@@ -190,15 +190,15 @@
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqEmp.empNo"/>" binding="empNo" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqEmp.empNm"/>" binding="empNm" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqEmp.userId"/>" binding="userId" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqEmp.webUseYn"/>" binding="webUseYn" data-map="webUseYnDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqEmp.serviceFg"/>" binding="serviceFg" data-map="serviceFgDataMap" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqEmp.mpNo"/>" binding="mpNo" width="140" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqEmp.smsRecvYn"/>" binding="smsRecvYn" data-map="smsRecvYnDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqEmp.useYn"/>" binding="useYn" data-map="useYnDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqEmp.mainSaleFg"/>" binding="mainSaleFg" data-map="mainSaleFgDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="hqEmp.empNo"/>" binding="empNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="hqEmp.empNm"/>" binding="empNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="hqEmp.userId"/>" binding="userId" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="hqEmp.webUseYn"/>" binding="webUseYn" data-map="webUseYnDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="hqEmp.serviceFg"/>" binding="serviceFg" data-map="serviceFgDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="hqEmp.mpNo"/>" binding="mpNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="hqEmp.smsRecvYn"/>" binding="smsRecvYn" data-map="smsRecvYnDataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="hqEmp.useYn"/>" binding="useYn" data-map="useYnDataMap" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="hqEmp.mainSaleFg"/>" binding="mainSaleFg" data-map="mainSaleFgDataMap" width="110" align="center" is-read-only="true"></wj-flex-grid-column>
 
         <%--조회시 필요--%>
         <wj-flex-grid-column header="<s:message code="hqEmp.hqBrandCd"/>" binding="hqBrandCd" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
@@ -214,6 +214,7 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
+  
 </div>
 
 <script>
@@ -240,7 +241,7 @@
   var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmp.js?ver=2018112103" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmp.js?ver=20230313.01" charset="utf-8"></script>
 
 <%-- 사원기초정보 상세 Tab 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/emp/hqEmpDetail.jsp">
@@ -257,4 +258,3 @@
 <%-- 메뉴권한 Tab 팝업--%>
 <c:import url="/WEB-INF/view/base/store/emp/hqEmpAuth.jsp">
 </c:import>
-
