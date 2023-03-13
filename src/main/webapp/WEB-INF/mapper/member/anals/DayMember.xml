@@ -80,7 +80,7 @@
             AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
             AND tmm.MEMBR_NO = tsshm.MEMBR_NO
         <if test='membrNm != null and membrNm != ""'>
-            AND tmm.MEMBR_NO LIKE '%'||#{membrNm}||'%'
+            AND tmm.MEMBR_NM LIKE '%'||#{membrNm}||'%'
         </if>
         )
         PIVOT
