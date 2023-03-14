@@ -28,4 +28,7 @@ public interface PromotionReportMapper {
 
     List<DefaultMap<Object>> getPromotionReportList(PromotionReportVO promotionReportVO);
     List<DefaultMap<Object>> getPromotionReportExcelList(PromotionReportVO promotionReportVO);
+
+    /** 프로모션정산 상세 조회 */
+    List<DefaultMap<Object>> getPromotionReportDtlList(PromotionReportVO promotionReportVO);
 }

@@ -239,4 +239,25 @@ public class PromotionReportController {
         return ReturnUtil.returnListJson(Status.OK, list, promotionReportVO);
     }
 
+    /**
+     * 프로모션정산 상세 조회
+     * @param request
+     * @param response
+     * @param model
+     * @param promotionReportVO
+     * @return
+     * @author  이다솜
+     * @since   2023.03.13
+     */
+    @RequestMapping(value = "/promotionReport/getPromotionReportDtlList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPromotionReportDtlList(HttpServletRequest request, HttpServletResponse response, Model model, PromotionReportVO promotionReportVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> list = promotionReportService.getPromotionReportDtlList(promotionReportVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, promotionReportVO);
+    }
+
 }

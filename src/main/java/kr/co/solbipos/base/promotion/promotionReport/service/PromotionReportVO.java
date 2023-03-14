@@ -83,6 +83,9 @@ public class PromotionReportVO extends PageVO {
     /** 조회프로모션 */
     private String promotionCds;
 
+    /** 프로모션코드 */
+    private String promotionCd;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -241,5 +244,13 @@ public class PromotionReportVO extends PageVO {
 
     public void setPromotionCds(String promotionCds) {
         this.promotionCds = promotionCds;
+    }
+
+    public String getPromotionCd() {
+        return promotionCd;
+    }
+
+    public void setPromotionCd(String promotionCd) {
+        this.promotionCd = promotionCd;
     }
 }

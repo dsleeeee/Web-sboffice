@@ -419,4 +419,60 @@
         </choose>
     </select>
 
+
+    <!-- 프로모션정산 상세 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_DTL_DISCOUNT, TB_SL_SALE_HDR, TB_SL_SALE_DTL
+        COMMENTS : 프로모션정산 상세내역을 조회한다.
+    -->
+    <select id="getPromotionReportDtlList" parameterType="promotionReportVO" resultType="DefaultMap">
+        /* PromotionReportMapper.getPromotionReportDtlList */
+        SELECT  C.STORE_CD,
+                D.STORE_NM,
+                TO_CHAR(TO_DATE(C.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+                C.POS_NO,
+                C.BILL_NO,
+                C.BILL_DTL_NO,
+                C.REG_SEQ,
+                C.SALE_FG,
+                TO_CHAR(TO_DATE(A.BILL_DT,'yyyy/mm/dd hh24:mi:ss'),'yyyy-mm-dd hh24:ss') AS BILL_DT,
+                C.PROD_CD,
+                E.PROD_NM,
+                C.SALE_QTY,
+                A.TOT_SALE_AMT,
+                C.DC_AMT,
+                A.REAL_SALE_AMT
+        FROM    TB_SL_SALE_HDR A
+        ,       TB_SL_SALE_DTL B
+        ,       TB_SL_SALE_DTL_DISCOUNT C
+        ,       TB_MS_STORE D
+        ,       TB_MS_PRODUCT E
+        WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     A.STORE_CD = #{storeCd}
+        AND     A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND     C.DC_REASON_CD = #{promotionCd}
+        AND     B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+        AND     B.STORE_CD = A.STORE_CD
+        AND     B.SALE_DATE = A.SALE_DATE
+        AND     B.POS_NO = A.POS_NO
+        AND     B.BILL_NO = A.BILL_NO
+        AND     C.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+        AND     C.STORE_CD = B.STORE_CD
+        AND     C.SALE_DATE = B.SALE_DATE
+        AND     C.POS_NO = B.POS_NO
+        AND     C.BILL_NO = B.BILL_NO
+        AND     C.BILL_DTL_NO  = B.BILL_DTL_NO
+        AND     D.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+        AND     D.STORE_CD = A.STORE_CD
+        AND     E.STORE_CD = C.STORE_CD
+        AND     E.PROD_CD =  C.PROD_CD
+        ORDER
+        BY      C.HQ_OFFICE_CD,
+                C.STORE_CD,
+                C.SALE_DATE,
+                C.POS_NO,
+                C.BILL_NO,
+                C.BILL_DTL_NO
+    </select>
+
 </mapper>

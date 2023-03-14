@@ -27,6 +27,34 @@ app.controller('promotionReportCtrl', ['$scope', '$http', '$timeout', function (
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("promotionReportCtrl");
 
+    // 그리드 링크 효과
+    s.formatItem.addHandler(function (s, e) {
+      if (e.panel === s.cells) {
+        var col = s.columns[e.col];
+        if (col.binding === "promotionCd" || col.binding === "promotionNm") {
+          wijmo.addClass(e.cell, 'wijLink');
+        }
+      }
+    });
+
+    // 그리드 클릭 이벤트
+    s.addEventListener(s.hostElement, 'mousedown', function (e) {
+        var ht = s.hitTest(e);
+        if (ht.cellType === wijmo.grid.CellType.Cell) {
+            var col         = ht.panel.columns[ht.col];
+            var selectedRow = s.rows[ht.row].dataItem;
+            if (col.binding === "promotionCd" || col.binding === "promotionNm") {
+                var params = {};
+                params.promotionCd = selectedRow.promotionCd;
+                params.startYmd = selectedRow.startYmd.replaceAll('-', '');
+                params.endYmd = selectedRow.endYmd.replaceAll('-', '');
+                params.storeCd = selectedRow.storeCd;
+                $scope.promotionReportDtlLayer.show(true);
+                $scope._broadcast('promotionReportDtlCtrl', params);
+            }
+        }
+    });
+
     // add the new GroupRow to the grid's 'columnFooters' panel
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row

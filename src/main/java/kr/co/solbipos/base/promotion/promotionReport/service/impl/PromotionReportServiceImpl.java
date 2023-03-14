@@ -93,4 +93,17 @@ public class PromotionReportServiceImpl implements PromotionReportService {
 
         return promotionReportMapper.getPromotionReportExcelList(promotionReportVO);
     }
+
+    /** 프로모션정산 상세 조회 */
+    @Override
+    public List<DefaultMap<Object>> getPromotionReportDtlList(PromotionReportVO promotionReportVO, SessionInfoVO sessionInfoVO) {
+        promotionReportVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        promotionReportVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            promotionReportVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return promotionReportMapper.getPromotionReportDtlList(promotionReportVO);
+    }
 }
