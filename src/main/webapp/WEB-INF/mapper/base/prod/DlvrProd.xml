@@ -315,6 +315,7 @@
         , REG_ID
         , MOD_DT
         , MOD_ID
+        , DLVR_MAPPING_FG
         )
         <choose>
             <!-- 기준매장이 본사인 경우 -->
@@ -327,6 +328,7 @@
                 , #{regId}
                 , #{modDt}
                 , #{modId}
+                , DLVR_MAPPING_FG
                 FROM TB_HQ_PRODUCT_DLVR_PROD_NM
                 WHERE HQ_OFFICE_CD = #{originalStoreCd}
                 AND DLVR_NAME_CD IN (SELECT NMCODE_CD
@@ -344,6 +346,7 @@
                 , #{regId}
                 , #{modDt}
                 , #{modId}
+                , DLVR_MAPPING_FG
                 FROM TB_MS_PRODUCT_DLVR_PROD_NM
                 WHERE STORE_CD = #{originalStoreCd}
                 AND DLVR_NAME_CD IN (SELECT NMCODE_CD

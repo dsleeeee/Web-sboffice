@@ -5132,6 +5132,7 @@
                 ,       #{regId} AS REG_ID
                 ,       #{modDt} AS MOD_DT
                 ,       #{modId} AS MOD_ID
+                ,       DLVR_MAPPING_FG
                 FROM    TB_MS_PRODUCT_DLVR_PROD_NM
                 WHERE   STORE_CD = #{copyStoreCd}
                 AND     DLVR_NAME_CD IN (SELECT NMCODE_CD
@@ -5155,6 +5156,7 @@
                 ,     A.REG_ID
                 ,     A.MOD_DT
                 ,     A.MOD_ID
+                ,     A.DLVR_MAPPING_FG
                 )
                 VALUES
                 (
@@ -5166,6 +5168,7 @@
                 ,     B.REG_ID
                 ,     B.MOD_DT
                 ,     B.MOD_ID
+                ,     B.DLVR_MAPPING_FG
                 )
     </insert>
 
