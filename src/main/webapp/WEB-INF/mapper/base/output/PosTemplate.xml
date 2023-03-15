@@ -75,7 +75,7 @@
                     thpt.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND thpt.PRT_CLASS_CD = #{prtClassCd}
                 ORDER BY
-                    thpt.TEMPLT_CD, thpt.TEMPLT_REG_FG DESC
+                    thpt.TEMPLT_REG_FG, thpt.TEMPLT_CD
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -118,7 +118,7 @@
                         AND tmpt.PRT_CLASS_CD = #{prtClassCd}
                     ) sub
                 ORDER BY
-                    sub.TEMPLT_CD, sub.TEMPLT_REG_FG DESC
+                    sub.TEMPLT_REG_FG, sub.TEMPLT_CD
             </when>
         </choose>
     </select>

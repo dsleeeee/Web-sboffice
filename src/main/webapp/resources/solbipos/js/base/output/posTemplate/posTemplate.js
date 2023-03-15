@@ -306,9 +306,10 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
   };
   // 템플릿 매장 적용 버튼
   $scope.applyToStoreTemplate = function() {
-    $scope._popConfirm("전체 매장에 해당 템플릿을 적용하시겠습니까?<br>매장에 템플릿이 존재하는 경우, 업데이트 처리됩니다.",
+
+    var selectedRow = $scope.flex.selectedRows[0]._data;
+    $scope._popConfirm($scope.prtClassCdCombo.text + "의 '" + selectedRow.templtNm + "' 템플릿을 전매장에 적용하시겠습니까?<br>매장에 템플릿이 존재하는 경우, 업데이트 처리됩니다.",
       function() {
-        var selectedRow = $scope.flex.selectedRows[0]._data;
         var params = {};
         params.prtClassCd = $scope.prtClassCdCombo.selectedValue;
         params.templtRegFg = selectedRow.applyTempltRegFg;
@@ -346,13 +347,32 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
     // // 기능수행 종료 : 반드시 추가
     // event.preventDefault();
 
-    $scope.storePosTemplateLayer.show(true, function (s) {
+    //$scope.storePosTemplateLayer.show(true, function (s) {
       // var storePosTemplateGrid = agrid.getScope('storePosTemplateCtrl');
       // storePosTemplateGrid.$apply(function(){
       //   storePosTemplateGrid._gridDataInit();
       // });
       // $scope._pageView('templateCtrl');
-    });
+    //});
+
+    var selectedRow = $scope.flex.selectedRows[0]._data;
+
+    // 출력물종류와 템플릿을 선택하세요.
+    if($scope.prtClassCdCombo.selectedValue === null || $scope.prtClassCdCombo.selectedValue === undefined || $scope.prtClassCdCombo.selectedValue === "" ||
+       selectedRow.applyTempltRegFg === null || selectedRow.applyTempltRegFg === undefined || selectedRow.applyTempltRegFg === "" ||
+       selectedRow.templtCd === null || selectedRow.templtCd === undefined || selectedRow.templtCd === ""){
+       $scope._popMsg(messages["posTemplate.prtForm.select.chk.msg"]);
+       return false;
+    }
+
+    // 본사등록 템플릿만 실제출력물매장적용이 가능합니다.<br/> 템플릿을 먼저 등록하세요.
+    if(selectedRow.applyTempltRegFg === "C"){
+      $scope._popMsg(messages["posTemplate.prtFormToStore.chk.msg"]);
+      return false;
+    }
+
+    $scope.storePosTemplateLayer.show(true);
+    $scope._broadcast('storePosTemplateCtrl');
   };
 
   // 화면 ready 된 후 설정
@@ -363,6 +383,7 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#hdPrtClassCd").val($scope.prtClassCdCombo.selectedValue);
       $("#hdApplyTempltRegFg").val(selectedRow.applyTempltRegFg);
       $("#hdTempltCd").val(selectedRow.templtCd);
+      $("#lblApplyTempltNm").text(selectedRow.templtNm);
     });
   });
 

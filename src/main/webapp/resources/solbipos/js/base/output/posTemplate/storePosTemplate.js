@@ -34,29 +34,35 @@ app.controller('storePosTemplateCtrl', ['$scope', '$http', function ($scope, $ht
 
   // 선택 매장 전송
   $scope.storeApply = function() {
-    var templateScope = agrid.getScope("templateCtrl");
-    var params = [];
-    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-      var item = $scope.flex.collectionView.items[i];
-      if (item.gChk) {
-        item.storeCd = item.storeCd;
-        item.prtClassCd = $("#hdPrtClassCd").val();
-        item.templtRegFg = $("#hdApplyTempltRegFg").val();
-        item.templtCd = $("#hdTempltCd").val();
-        params.push(item);
-      }
-    }
-    $scope._postJSONSave.withPopUp("/base/output/posTemplate/template/applyToStoreReal.sb", params, function (response) {
 
-      var result = response.data.data;
+    // 템플릿을 매장의 실제출력물에 적용하시겠습니까?
+    $scope._popConfirm(messages["posTemplate.applyTemplt.chk.msg"], function () {
 
-      if(result === ""){
-        $scope._popMsg(messages["cmm.registFail"]);
-      }else{
-        $scope._popMsg(messages["cmm.saveSucc"]);
-        $scope.storePosTemplateLayer.hide();
+      var templateScope = agrid.getScope("templateCtrl");
+      var params = [];
+
+      for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+        var item = $scope.flex.collectionView.items[i];
+        if (item.gChk) {
+          item.storeCd = item.storeCd;
+          item.prtClassCd = $("#hdPrtClassCd").val();
+          item.templtRegFg = $("#hdApplyTempltRegFg").val();
+          item.templtCd = $("#hdTempltCd").val();
+          params.push(item);
+        }
       }
 
+      $scope._postJSONSave.withPopUp("/base/output/posTemplate/template/applyToStoreReal.sb", params, function (response) {
+
+        var result = response.data.data;
+
+        if(result === ""){
+          $scope._popMsg(messages["cmm.registFail"]);
+        }else{
+          $scope._popMsg(messages["cmm.saveSucc"]);
+          $scope.storePosTemplateLayer.hide();
+        }
+      });
     });
   };
 

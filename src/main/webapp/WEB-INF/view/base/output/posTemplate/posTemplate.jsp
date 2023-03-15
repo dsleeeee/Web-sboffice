@@ -10,7 +10,7 @@
 
 <div class="subCon" ng-controller="templateCtrl" style="overflow-y: hidden; overflow-x: auto;">
 
-  <div class="searchBar flddUnfld">
+  <div class="searchBar">
     <a href="#" class="open fl">${menuNm}
     </a>
     <%-- 조회 --%>
@@ -172,7 +172,7 @@
       $(".menuControl").trigger("click");
   }
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/output/posTemplate/posTemplate.js?ver=20181112.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/output/posTemplate/posTemplate.js?ver=20230315.01" charset="utf-8"></script>
 <%-- 레이어 팝업 : 적용매장 선택 팝업 --%>
 <c:import url="/WEB-INF/view/base/output/posTemplate/storePosTemplate.jsp">
   <c:param name="menuCd" value="${menuCd}"/>

@@ -11,7 +11,7 @@
 
     <%-- header --%>
     <div class="wj-dialog-header wj-dialog-header-font">
-      <s:message code="prod.regStore" />
+      <s:message code="posTemplate.prtFormToStore" />
       <a href="#" class="wj-hide btn_close"></a>
     </div>
 
@@ -27,6 +27,10 @@
           <col class="w70" />
         </colgroup>
         <tbody>
+        <tr><%-- 적용할 템플릿명 --%>
+          <th><s:message code="posTemplate.applyTempltNm"/></th>
+          <td><label id="lblApplyTempltNm"></label></td>
+        </tr>
         <tr><%-- 매장 --%>
           <th><s:message code="prod.storeCd"/></th>
           <td><input type="text" id="srchStoreCd" ng-model="storeCd" /></td>
@@ -99,4 +103,4 @@
   var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/output/posTemplate/storePosTemplate.js?ver=2019012101.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/output/posTemplate/storePosTemplate.js?ver=20230315.01" charset="utf-8"></script>
