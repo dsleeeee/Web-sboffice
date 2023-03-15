@@ -135,10 +135,10 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
    * *******************************************************/
   $scope.changePosNo = function(s){
     var selected = s.selectedItem.posNo;
-    if($scope.getSelectedPosNo() !== selected) {
+    //if($scope.getSelectedPosNo() !== selected) {
       $scope.setSelectedPosNo(selected);
       $scope.searchPosEnv();
-    }
+    //}
 
     // DB구성요소[1221] 값 조회
     $scope.getEnv1221();
