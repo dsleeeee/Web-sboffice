@@ -433,7 +433,7 @@
                 C.POS_NO,
                 C.BILL_NO,
                 C.BILL_DTL_NO,
-                C.REG_SEQ,
+                C.DC_SEQ,
                 C.SALE_FG,
                 TO_CHAR(TO_DATE(A.BILL_DT,'yyyy/mm/dd hh24:mi:ss'),'yyyy-mm-dd hh24:ss') AS BILL_DT,
                 C.PROD_CD,
@@ -450,7 +450,6 @@
         WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
         AND     A.STORE_CD = #{storeCd}
         AND     A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        AND     C.DC_REASON_CD = #{promotionCd}
         AND     B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
         AND     B.STORE_CD = A.STORE_CD
         AND     B.SALE_DATE = A.SALE_DATE
@@ -462,10 +461,12 @@
         AND     C.POS_NO = B.POS_NO
         AND     C.BILL_NO = B.BILL_NO
         AND     C.BILL_DTL_NO  = B.BILL_DTL_NO
+        AND     C.DC_CD = '06'
+        AND     C.DC_REASON_CD = #{promotionCd}
         AND     D.HQ_OFFICE_CD = A.HQ_OFFICE_CD
         AND     D.STORE_CD = A.STORE_CD
-        AND     E.STORE_CD = C.STORE_CD
-        AND     E.PROD_CD =  C.PROD_CD
+        AND     E.STORE_CD = B.STORE_CD
+        AND     E.PROD_CD =  B.PROD_CD
         ORDER
         BY      C.HQ_OFFICE_CD,
                 C.STORE_CD,

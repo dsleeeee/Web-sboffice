@@ -30,7 +30,7 @@
                 <wj-flex-grid-column header="<s:message code="promotionReport.posNo"/>" binding="posNo" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="promotionReport.billNo"/>" binding="billNo" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="promotionReport.billDtlNo"/>" binding="billDtlNo" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="promotionReport.regSeq"/>" binding="regSeq" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="promotionReport.dcSeq"/>" binding="dcSeq" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="promotionReport.saleFg"/>" binding="saleFg" data-map="saleFgDataMap" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="promotionReport.billDt"/>" binding="billDt" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="promotionReport.prodCd"/>" binding="prodCd" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
