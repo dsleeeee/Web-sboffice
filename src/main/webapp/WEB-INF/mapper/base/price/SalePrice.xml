@@ -637,6 +637,7 @@
                     FROM    TB_MS_STORE A
                     ,       TB_HQ_PRODUCT_SALE_PRICE B
                     WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    AND     A.STORE_CD NOT IN (SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '164' AND USE_YN = 'Y')
                     AND     B.HQ_OFFICE_CD  =   #{hqOfficeCd}
                     AND     B.PROD_CD       =   #{prodCd}
                     AND     B.SALE_PRC_FG   =   '1'
