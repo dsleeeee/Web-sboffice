@@ -67,13 +67,28 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
   // $scope.userStoreCd = gvStoreCd;
 
   $scope.btnShowFg = false;
+  $("#btnAddProd").css("display", "none");
+  $("#btnDelProd").css("display", "none");
+  $("#btnStoreProdBatchList").css("display", "none");
   // 단독매장
   if(hqOfficeCd == "00000") {
     $scope.btnShowFg = true;
-    // 프랜 본사,매장
+    $("#btnAddProd").css("display", "");
+    $("#btnDelProd").css("display", "");
+  // 프랜 본사,매장
   } else {
     if((prodAuthEnvstVal== "ALL") || (orgnFg === 'HQ' && prodAuthEnvstVal== "HQ") || (orgnFg === 'STORE' && prodAuthEnvstVal== "STORE")) {
       $scope.btnShowFg = true;
+      $("#btnAddProd").css("display", "");
+      $("#btnDelProd").css("display", "");
+    }
+    if(orgnFg === 'HQ' && hqOfficeCd== "A0001") {
+      $scope.btnShowFg = false;
+      $("#btnAddProd").css("display", "none");
+      $("#btnDelProd").css("display", "none");
+    }
+    if(orgnFg === 'HQ') {
+      $("#btnStoreProdBatchList").css("display", "");
     }
   }
   // $scope.btnShowFg = false; // 본사, 매장 모두 신규상품등록 가능하게 주석

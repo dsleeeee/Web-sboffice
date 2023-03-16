@@ -151,15 +151,15 @@
         <%-- 상품엑셀다운로드 --%>
         <button class="btn_skyblue ml5 fr" ng-click="excelDownload()" ><s:message code="cmm.excel.down"/></button>
         <%-- 신규상품등록 --%>
-        <button class="btn_skyblue ml5 fr" id="btnAddProd" ng-click="addProd()" ng-show="btnShowFg" <c:if test="${orgnFg == 'HQ' and hqOfficeCd == 'A0001'}">style="display: none;"</c:if>>
+        <button class="btn_skyblue ml5 fr" id="btnAddProd" ng-click="addProd()" ng-show="btnShowFg" style="display: none;">
             <s:message code="prod.title.addProd" />
         </button>
         <%-- 매장상품일괄등록 --%>
-        <button class="btn_skyblue ml5 fr" id="btnStoreProdBatchList" ng-click="storeProdBatchList()" <c:if test="${orgnFg != 'HQ'}">style="display: none;"</c:if>>
+        <button class="btn_skyblue ml5 fr" id="btnStoreProdBatchList" ng-click="storeProdBatchList()" style="display: none;">
             <s:message code="prod.title.storeProdBatch" />
         </button>
         <%-- 상품삭제 --%>
-        <button class="btn_skyblue ml5 fr" id="btnDelProd" ng-click="delProd()" ng-show="btnShowFg">
+        <button class="btn_skyblue ml5 fr" id="btnDelProd" ng-click="delProd()" ng-show="btnShowFg" style="display: none;">
             <s:message code="prod.title.delProd" />
         </button>
     </div>
@@ -320,7 +320,7 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20230110.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20230317.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">
