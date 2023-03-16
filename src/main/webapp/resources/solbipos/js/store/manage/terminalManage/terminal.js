@@ -628,11 +628,13 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
       // 운영 DS024 H0360
       if(params[i].status !== "D") {
         if($("#lblHqOfficeCd").text() == "DS011" || $("#lblHqOfficeCd").text() == "DS024" || $("#lblHqOfficeCd").text() == "H0360") {
-          if(params[i].vendorFg == "01" && params[i].vendorNm == "KCP") {
-          } else {
-            // BBQ 매장은 VAN - KCP 선택하여 주십시오.
-            $scope._popMsg(messages["terminalManage.bbqSave.msg"]);
-            return false;
+          if(params[i].vendorFg == "01") {
+            if(params[i].vendorNm == "KCP") {
+            } else {
+              // BBQ 매장은 VAN - KCP 선택하여 주십시오.
+              $scope._popMsg(messages["terminalManage.bbqSave.msg"]);
+              return false;
+            }
           }
         }
       }
@@ -877,11 +879,13 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
       // 운영 DS024 H0360
       if(params[i].status !== "D") {
         if($("#lblHqOfficeCd").text() == "DS011" || $("#lblHqOfficeCd").text() == "DS024" || $("#lblHqOfficeCd").text() == "H0360") {
-          if(params[i].vendorFg == "01" && params[i].vendorNm == "KCP") {
-          } else {
-            // BBQ 매장은 VAN - KCP 선택하여 주십시오.
-            $scope._popMsg(messages["terminalManage.bbqSave.msg"]);
-            return false;
+          if(params[i].vendorFg == "01") {
+            if(params[i].vendorNm == "KCP") {
+            } else {
+              // BBQ 매장은 VAN - KCP 선택하여 주십시오.
+              $scope._popMsg(messages["terminalManage.bbqSave.msg"]);
+              return false;
+            }
           }
         }
       }
