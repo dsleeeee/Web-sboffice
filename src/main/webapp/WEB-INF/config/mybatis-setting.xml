@@ -328,6 +328,8 @@
     <typeAlias alias="prodOptionVO" type="kr.co.solbipos.base.prod.prodOption.service.ProdOptionVO"/>
     <!-- 기초관리 > 상품관리 > 상품정보조회 -->
     <typeAlias alias="prodInfoSearchVO" type="kr.co.solbipos.base.prod.prodInfoSearch.service.ProdInfoSearchVO"/>
+    <!-- 기초관리 > 상품관리 > 비노출관리 -->
+    <typeAlias alias="kioskDisplayVO" type="kr.co.solbipos.base.prod.kioskDisplay.service.KioskDisplayVO"/>
     <!--
     <typeAlias alias="prodBarcdVO" type="kr.co.solbipos.base.prod.prodbarcd.service.ProdBarcdVO"/>
     <typeAlias alias="supplyVO" type="kr.co.solbipos.base.prod.supply.service.SupplyVO"/>
@@ -954,8 +956,12 @@
 
     <!-- 맘스터치 > 매출분석 > 일별 매출 현황(채널별) -->
     <typeAlias alias="dayMomsVO" type="kr.co.solbipos.sale.day.dayMoms.service.DayMomsVO"/>
+    <!-- 맘스터치 > 매출분석 > 일별 매출 현황(포스별) -->
+    <typeAlias alias="dayPosVO" type="kr.co.solbipos.sale.day.dayPos.service.DayPosVO"/>
     <!-- 맘스터치 > 매출분석 > 월별 매출 현황(채널별) -->
     <typeAlias alias="monthMomsVO" type="kr.co.solbipos.sale.month.monthMoms.service.MonthMomsVO"/>
+    <!-- 맘스터치 > 매출분석 > 월별 매출 현황(포스별) -->
+    <typeAlias alias="monthPosVO" type="kr.co.solbipos.sale.month.monthPos.service.MonthPosVO"/>
     <!-- 맘스터치 > 매출분석 > 일별시간대 -->
     <typeAlias alias="dayTimeVO" type="kr.co.solbipos.sale.day.dayTime.service.DayTimeVO"/>
     <!-- 맘스터치 > 매출분석 > 대비기간별매출 -->
@@ -967,6 +973,10 @@
     <typeAlias alias="storeMonthChannelVO" type="kr.co.solbipos.sale.store.storeMonthChannel.service.StoreMonthChannelVO"/>
     <!-- 맘스터치 > 매장분석 > 매장-일별시간대 -->
     <typeAlias alias="storeDayTimeVO" type="kr.co.solbipos.sale.store.storeDayTime.service.StoreDayTimeVO"/>
+    <!-- 맘스터치 > 매장분석 > 매장-일별매출현황(포스별) -->
+    <typeAlias alias="storeDayPosVO" type="kr.co.solbipos.sale.store.storeDayPos.service.StoreDayPosVO"/>
+    <!-- 맘스터치 > 매장분석 > 매장-월별매출현황(포스별) -->
+    <typeAlias alias="storeMonthPosVO" type="kr.co.solbipos.sale.store.storeMonthPos.service.StoreMonthPosVO"/>
 
 
     <!-- 맘스터치 > 기타관리 > 점포별 파일 버전현황 -->
