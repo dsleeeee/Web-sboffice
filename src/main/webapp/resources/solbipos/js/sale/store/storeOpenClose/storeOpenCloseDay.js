@@ -278,6 +278,10 @@ app.controller('storeOpenCloseDayDtlCtrl', ['$scope', '$http', '$timeout', funct
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
+        $scope.brandDataMap = new wijmo.grid.DataMap(momsHqBrandCdComboList, 'value', 'name');
+        $scope.momsTeamDataMap = new wijmo.grid.DataMap(momsTeamComboList, 'value', 'name');
+        $scope.momsAcShopDataMap = new wijmo.grid.DataMap(momsAcShopComboList, 'value', 'name');
+
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
@@ -328,6 +332,9 @@ app.controller('storeOpenCloseDayDtlCtrl', ['$scope', '$http', '$timeout', funct
         var dataItem			= {};
         dataItem.storeCd		= messages["storeOpenClose.storeCd"];
         dataItem.storeNm		= messages["storeOpenClose.storeNm"];
+        dataItem.brand          = messages["dayProd.brand"];
+        dataItem.momsTeam       = messages["dayProd.momsTeam"];
+        dataItem.momsAcShop     = messages["dayProd.momsAcShop"];
         dataItem.openTime		= messages["storeOpenClose.openTime"];
         dataItem.closeTime		= messages["storeOpenClose.closeTime"];
         dataItem.runTime		= messages["storeOpenClose.runTime"];

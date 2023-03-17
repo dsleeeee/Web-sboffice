@@ -19,6 +19,9 @@
             <if test='option2 != null and option2 != "" and option2 == "store"'>
             ,       tssh.STORE_CD
             ,       tms.STORE_NM
+            ,       tms.HQ_BRAND_CD AS BRAND
+            ,       tmsi.MOMS_TEAM
+            ,       tmsi.MOMS_AC_SHOP
             </if>
             <if test='option != null and option != "" and option == "day"'>
             ,       TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
@@ -90,6 +93,9 @@
             GROUP BY tms.BRANCH_CD
             <if test='option2 != null and option2 != "" and option2 == "store"'>
                 , tssh.STORE_CD, tms.STORE_NM
+                ,       tms.HQ_BRAND_CD
+                ,       tmsi.MOMS_TEAM
+                ,       tmsi.MOMS_AC_SHOP
             </if>
             <if test='option != null and option != "" and option == "day"'>
                 , SALE_DATE
@@ -97,6 +103,9 @@
             ORDER BY BRANCH_CD DESC
             <if test='option2 != null and option2 != "" and option2 == "store"'>
                 , tssh.STORE_CD
+                ,       tms.HQ_BRAND_CD
+                ,       tmsi.MOMS_TEAM
+                ,       tmsi.MOMS_AC_SHOP
             </if>
             <if test='option != null and option != "" and option == "day"'>
                 , SALE_DATE
@@ -109,6 +118,9 @@
             <if test='option2 != null and option2 != "" and option2 == "store"'>
             ,       tssh.STORE_CD
             ,       (SELECT STORE_NM FROM TB_MS_STORE tms WHERE tms.STORE_CD = tssh.STORE_CD) AS STORE_NM
+            ,       tssh.HQ_BRAND_CD
+            ,       tssh.MOMS_TEAM
+            ,       tssh.MOMS_AC_SHOP
             </if>
             <if test='option != null and option != "" and option == "day"'>
             ,       TO_CHAR(TO_DATE(tssh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
@@ -131,6 +143,9 @@
                     ,       COUNT(DISTINCT STORE_CD) AS STORE_CNT
                     <if test='option2 != null and option2 != "" and option2 == "store"'>
                     ,       STORE_CD
+                    ,       HQ_BRAND_CD
+                    ,       MOMS_TEAM
+                    ,       MOMS_AC_SHOP
                     </if>
                     <if test='option != null and option != "" and option == "day"'>
                     ,       SALE_DATE
@@ -228,6 +243,9 @@
                     GROUP BY  BRANCH_CD
                     <if test='option2 != null and option2 != "" and option2 == "store"'>
                         ,  STORE_CD
+                        ,  HQ_BRAND_CD
+                        ,  MOMS_TEAM
+                        ,  MOMS_AC_SHOP
                     </if>
                     <if test='option != null and option != "" and option == "day"'>
                         ,  SALE_DATE
@@ -237,6 +255,9 @@
             GROUP BY BRANCH_CD, STORE_CNT
             <if test='option2 != null and option2 != "" and option2 == "store"'>
                 , STORE_CD
+                ,  HQ_BRAND_CD
+                ,  MOMS_TEAM
+                ,  MOMS_AC_SHOP
             </if>
             <if test='option != null and option != "" and option == "day"'>
                 , SALE_DATE
@@ -244,6 +265,9 @@
             ORDER BY BRANCH_CD
             <if test='option2 != null and option2 != "" and option2 == "store"'>
                 , STORE_CD
+                , HQ_BRAND_CD
+                , MOMS_TEAM
+                , MOMS_AC_SHOP
             </if>
             <if test='option != null and option != "" and option == "day"'>
                 , SALE_DATE

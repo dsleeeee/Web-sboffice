@@ -21,6 +21,9 @@
         <if test='option != null and option != "" and option == "store"'>
                 tsdt.STORE_CD,
                 (SELECT STORE_NM FROM TB_MS_STORE tms WHERE tms.STORE_CD = tsdt.STORE_CD) AS STORE_NM,
+                tsdt.HQ_BRAND_CD AS BRAND,
+                tsdt.MOMS_TEAM,
+                tsdt.MOMS_AC_SHOP,
         </if>
                 tsdt.TOT_SALE_AMT,
                 tsdt.TOT_DC_AMT,
@@ -62,9 +65,12 @@
                 SELECT  SUBSTR(tsdt.SALE_DATE,0,6) AS SALE_YM,
                         COUNT(DISTINCT tsdt.SALE_DATE) AS SALE_CNT,
                         COUNT(DISTINCT tsdt.STORE_CD) AS STORE_CNT,
-                        tms.BRANCH_CD,
+                        NVL(tms.BRANCH_CD, ' ') AS BRANCH_CD,
                     <if test='option != null and option != "" and option == "store"'>
-                         tsdt.STORE_CD,
+                        tsdt.STORE_CD,
+                        tms.HQ_BRAND_CD,
+                        tmsi.MOMS_TEAM,
+                        tmsi.MOMS_AC_SHOP,
                     </if>
                         SUM(tsdt.TOT_SALE_AMT) AS TOT_SALE_AMT,
                         SUM(tsdt.TOT_DC_AMT) AS TOT_DC_AMT,
@@ -143,10 +149,13 @@
                 GROUP BY SUBSTR(tsdt.SALE_DATE,0,6), tms.BRANCH_CD
                 <if test='option != null and option != "" and option == "store"'>
                     , tsdt.STORE_CD
+                    , tms.HQ_BRAND_CD
+                    , tmsi.MOMS_TEAM
+                    , tmsi.MOMS_AC_SHOP
                 </if>
                 ) tsdt
         ,       (   SELECT  tsdto.SALE_YM
-                    ,       tms.BRANCH_CD
+                    ,       NVL(tms.BRANCH_CD, ' ') AS BRANCH_CD
                     <if test='option != null and option != "" and option == "store"'>
                     ,       tsdto.STORE_CD
                     </if>
@@ -215,6 +224,9 @@
         BY      tsdt.SALE_YM, tsdt.BRANCH_CD
         <if test='option != null and option != "" and option == "store"'>
             ,       tsdt.STORE_CD
+            ,       tsdt.HQ_BRAND_CD
+            ,       tsdt.MOMS_TEAM
+            ,       tsdt.MOMS_AC_SHOP
         </if>
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -229,6 +241,9 @@
         <if test='option != null and option != "" and option == "store"'>
                 tsdt.STORE_CD,
                 (SELECT STORE_NM FROM TB_MS_STORE tms WHERE tms.STORE_CD = tsdt.STORE_CD) AS STORE_NM,
+                tsdt.HQ_BRAND_CD AS BRAND,
+                tsdt.MOMS_TEAM,
+                tsdt.MOMS_AC_SHOP,
         </if>
                 tsdt.TOT_SALE_AMT,
                 tsdt.TOT_DC_AMT,
@@ -269,9 +284,12 @@
                 SELECT  SUBSTR(tsdt.SALE_DATE,0,6) AS SALE_YM,
                         COUNT(DISTINCT tsdt.SALE_DATE) AS SALE_CNT,
                         COUNT(DISTINCT tsdt.STORE_CD) AS STORE_CNT,
-                        tms.BRANCH_CD,
+                        NVL(tms.BRANCH_CD, ' ') AS BRANCH_CD,
                     <if test='option != null and option != "" and option == "store"'>
-                         tsdt.STORE_CD,
+                        tsdt.STORE_CD,
+                        tms.HQ_BRAND_CD,
+                        tmsi.MOMS_TEAM,
+                        tmsi.MOMS_AC_SHOP,
                     </if>
                         SUM(tsdt.TOT_SALE_AMT) AS TOT_SALE_AMT,
                         SUM(tsdt.TOT_DC_AMT) AS TOT_DC_AMT,
@@ -350,10 +368,13 @@
                 GROUP BY SUBSTR(tsdt.SALE_DATE,0,6), tms.BRANCH_CD
                 <if test='option != null and option != "" and option == "store"'>
                     , tsdt.STORE_CD
+                    , tms.HQ_BRAND_CD
+                    , tmsi.MOMS_TEAM
+                    , tmsi.MOMS_AC_SHOP
                 </if>
                 ) tsdt
         ,       (   SELECT  tsdto.SALE_YM
-                    ,       tms.BRANCH_CD
+                    ,       NVL(tms.BRANCH_CD, ' ') AS BRANCH_CD
                     <if test='option != null and option != "" and option == "store"'>
                     ,       tsdto.STORE_CD
                     </if>
@@ -422,6 +443,9 @@
         BY      tsdt.SALE_YM, tsdt.BRANCH_CD
         <if test='option != null and option != "" and option == "store"'>
             ,       tsdt.STORE_CD
+            ,       tsdt.HQ_BRAND_CD
+            ,       tsdt.MOMS_TEAM
+            ,       tsdt.MOMS_AC_SHOP
         </if>
     </select>
 </mapper>

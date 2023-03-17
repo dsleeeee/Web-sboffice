@@ -47,6 +47,10 @@ app.controller('storeMonthChannelCtrl', ['$scope', '$http', '$timeout', function
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
+        $scope.brandDataMap = new wijmo.grid.DataMap(momsHqBrandCdComboList, 'value', 'name');
+        $scope.momsTeamDataMap = new wijmo.grid.DataMap(momsTeamComboList, 'value', 'name');
+        $scope.momsAcShopDataMap = new wijmo.grid.DataMap(momsAcShopComboList, 'value', 'name');
+
         // 합계
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
@@ -67,6 +71,9 @@ app.controller('storeMonthChannelCtrl', ['$scope', '$http', '$timeout', function
         dataItem.storeCd     = messages["month.storeCd"];
         dataItem.storeNm     = messages["month.storeNm"];
         dataItem.storeCnt    = messages["month.storeCnt"];
+        dataItem.brand       = messages["dayProd.brand"];
+        dataItem.momsTeam    = messages["dayProd.momsTeam"];
+        dataItem.momsAcShop  = messages["dayProd.momsAcShop"];
         dataItem.saleCnt    = messages["month.saleCnt"];
         dataItem.totSaleAmt    = messages["month.sale"];
         dataItem.totDcAmt    = messages["month.sale"];
@@ -313,11 +320,11 @@ app.controller('storeMonthChannelCtrl', ['$scope', '$http', '$timeout', function
             var columns = grid.columns;
 
 
-            var columnsCnt = 8;
+            var columnsCnt = 10;
             // 옵션에 따라 매장정보 숨김
             for (var j = 0; j < columnsCnt; j++) {
                 if($scope.option === "branch"){
-                    if(columns[j].binding == "storeCd" || columns[j].binding == "storeNm") {
+                    if(columns[j].binding == "storeCd" || columns[j].binding == "storeNm" || columns[j].binding == "brand" || columns[j].binding == "momsTeam" || columns[j].binding == "momsAcShop") {
                         columns[j].visible = false;
                     } else {
                         columns[j].visible = true;
@@ -426,6 +433,10 @@ app.controller('storeMonthChannelExcelCtrl', ['$scope', '$http', '$timeout', fun
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
+        $scope.brandDataMap = new wijmo.grid.DataMap(momsHqBrandCdComboList, 'value', 'name');
+        $scope.momsTeamDataMap = new wijmo.grid.DataMap(momsTeamComboList, 'value', 'name');
+        $scope.momsAcShopDataMap = new wijmo.grid.DataMap(momsAcShopComboList, 'value', 'name');
+
         // 합계
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
@@ -446,6 +457,9 @@ app.controller('storeMonthChannelExcelCtrl', ['$scope', '$http', '$timeout', fun
         dataItem.storeCd     = messages["month.storeCd"];
         dataItem.storeNm     = messages["month.storeNm"];
         dataItem.storeCnt    = messages["month.storeCnt"];
+        dataItem.brand       = messages["dayProd.brand"];
+        dataItem.momsTeam    = messages["dayProd.momsTeam"];
+        dataItem.momsAcShop  = messages["dayProd.momsAcShop"];
         dataItem.saleCnt    = messages["month.saleCnt"];
         dataItem.totSaleAmt    = messages["month.sale"];
         dataItem.totDcAmt    = messages["month.sale"];
@@ -556,11 +570,11 @@ app.controller('storeMonthChannelExcelCtrl', ['$scope', '$http', '$timeout', fun
             var grid = wijmo.Control.getControl("#wjMonthGridExcelList");
             var columns = grid.columns;
 
-            var columnsCnt = 8;
+            var columnsCnt = 10;
             // 옵션에 따라 매장정보 숨김
             for (var j = 0; j < columnsCnt; j++) {
                 if($scope.option === "branch"){
-                    if(columns[j].binding == "storeCd" || columns[j].binding == "storeNm") {
+                    if(columns[j].binding == "storeCd" || columns[j].binding == "storeNm" || columns[j].binding == "brand" || columns[j].binding == "momsTeam" || columns[j].binding == "momsAcShop") {
                         columns[j].visible = false;
                     } else {
                         columns[j].visible = true;

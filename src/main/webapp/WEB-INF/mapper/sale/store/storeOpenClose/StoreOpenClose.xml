@@ -148,6 +148,9 @@
         SELECT 	TPE.HQ_OFFICE_CD
         ,		TPE.STORE_CD
         ,       (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = TPE.STORE_CD) AS STORE_NM
+        ,		TPE.HQ_BRAND_CD AS BRAND
+        ,		TPE.MOMS_TEAM
+        ,		TPE.MOMS_AC_SHOP
         ,       TO_CHAR(TO_DATE(TPE.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
         ,       TO_CHAR(TO_DATE(TPE.OPEN_DT, 'YYYYMMDDHH24MISS'), 'HH24:MI:SS') AS OPEN_TIME
         ,       TO_CHAR(TO_DATE(TPE.CLOSE_DT, 'YYYYMMDDHH24MISS'), 'HH24:MI:SS') AS CLOSE_TIME
@@ -281,6 +284,8 @@
                 ,       TPE.HQ_OFFICE_CD
                 ,       TPE.HQ_BRAND_CD
                 ,       TPE.STORE_CD
+                ,       TPE.MOMS_TEAM
+                ,       TPE.MOMS_AC_SHOP
                 ,       TPE.SALE_DATE
                 ,       TPE.OPEN_DT
                 ,       TPE.CLOSE_DT
@@ -294,6 +299,8 @@
                         ,       TPE.HQ_OFFICE_CD
                         ,       TPE.HQ_BRAND_CD
                         ,       TPE.STORE_CD
+                        ,       tmsi.MOMS_TEAM
+                        ,       tmsi.MOMS_AC_SHOP
                         ,       TPE.SALE_DATE
                         ,       TPE.OPEN_DT
                         ,       TPE.CLOSE_DT
@@ -360,6 +367,8 @@
                         ,       TPE.HQ_OFFICE_CD
                         ,       TPE.HQ_BRAND_CD
                         ,       TPE.STORE_CD
+                        ,       tmsi.MOMS_TEAM
+                        ,       tmsi.MOMS_AC_SHOP
                         ,       TPE.SALE_DATE
                         ,       TPE.OPEN_DT
                         ,       TPE.CLOSE_DT
@@ -425,6 +434,9 @@
         GROUP BY TPE.HQ_OFFICE_CD
         , TPE.HQ_BRAND_CD
         , TPE.STORE_CD
+        , TPE.HQ_BRAND_CD
+        , TPE.MOMS_TEAM
+        , TPE.MOMS_AC_SHOP
         , TPE.SALE_DATE
         , TPE.OPEN_DT
         , TPE.CLOSE_DT
@@ -447,6 +459,9 @@
     /** storeOpenCloseMapper.getStoreOpenCloseDayDtlNoneList */
         SELECT 	tms.STORE_CD
         ,       tms.STORE_NM
+        ,       tms.HQ_BRAND_CD AS BRAND
+        ,       tmsi.MOMS_TEAM
+        ,       tmsi.MOMS_AC_SHOP
         FROM 	TB_MS_STORE tms
         ,       TB_MS_STORE_INFO tmsi
         WHERE 	tms.STORE_CD = tmsi.STORE_CD (+)
@@ -798,6 +813,9 @@
         SELECT 	TO_CHAR(TO_DATE(#{saleDate}, 'YYYYMMDD'), 'YYYY-MM-DD') AS SALE_DATE
         ,		tms.STORE_CD
         ,		tms.STORE_NM
+        ,       tms.HQ_BRAND_CD AS BRAND
+        ,       tmsi.MOMS_TEAM
+        ,       tmsi.MOMS_AC_SHOP
         ,		tpe.POS_NO
         ,       TO_CHAR(TO_DATE(tpe.OPEN_DT, 'YYYYMMDDHH24MISS'), 'HH24:MI:SS') AS OPEN_TIME
         ,       TO_CHAR(TO_DATE(tpe.CLOSE_DT, 'YYYYMMDDHH24MISS'), 'HH24:MI:SS') AS CLOSE_TIME
