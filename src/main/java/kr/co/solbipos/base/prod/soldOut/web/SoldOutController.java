@@ -6,6 +6,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
@@ -13,6 +14,8 @@ import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.soldOut.service.SoldOutService;
 import kr.co.solbipos.base.prod.soldOut.service.SoldOutVO;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,14 +55,19 @@ public class SoldOutController {
     private final SoldOutService soldOutService;
     private final ProdService prodService;
     private final CmmEnvUtil cmmEnvUtil;
+    private final DayProdService dayProdService;
+    private final CmmCodeUtil cmmCodeUtil;
+
 
     /** Constructor Injection */
     @Autowired
-    public SoldOutController(SessionService sessionService, SoldOutService soldOutService, ProdService prodService, CmmEnvUtil cmmEnvUtil) {
+    public SoldOutController(SessionService sessionService, SoldOutService soldOutService, ProdService prodService, CmmEnvUtil cmmEnvUtil, DayProdService dayProdService, CmmCodeUtil cmmCodeUtil) {
         this.sessionService = sessionService;
         this.soldOutService = soldOutService;
         this.prodService = prodService;
         this.cmmEnvUtil = cmmEnvUtil;
+        this.dayProdService = dayProdService;
+        this.cmmCodeUtil = cmmCodeUtil;
     }
 
     /**
@@ -96,6 +104,19 @@ public class SoldOutController {
         // 브랜드 리스트 조회(선택 콤보박스용)
         ProdVO prodVO = new ProdVO();
         model.addAttribute("brandList", convertToJson(prodService.getBrandList(prodVO, sessionInfoVO)));
+
+        // 사용자별 브랜드 콤보박스 조회
+        DayProdVO dayProdVO = new DayProdVO();
+        model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
+
+        /** 맘스터치 */
+        // [1250 맘스터치] 환경설정값 조회
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0"));
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
+        }
+        /** //맘스터치 */
 
         return "base/prod/soldOut/soldOutTab";
     }

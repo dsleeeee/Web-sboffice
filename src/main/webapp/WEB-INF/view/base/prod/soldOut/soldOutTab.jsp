@@ -25,6 +25,7 @@
     // 브랜드
     var brandList = ${brandList};
     var orgnFg = "${orgnFg}";
+    var momsEnvstVal = "${momsEnvstVal}";
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOut/soldOutTab.js?ver=20220225.01" charset="utf-8"></script>
 
