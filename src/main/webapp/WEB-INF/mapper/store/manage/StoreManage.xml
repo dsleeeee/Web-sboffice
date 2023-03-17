@@ -416,7 +416,7 @@
             #{hmpgAddr},
             #{postNo},
             #{addr},
-            #{addrDtl},
+            NVL(#{addrDtl}, ' '),
             #{areaCd},
             #{clsFg, jdbcType=VARCHAR},
             #{sysStatFg, jdbcType=VARCHAR},
@@ -461,7 +461,7 @@
                HMPG_ADDR = #{hmpgAddr},
                POST_NO = #{postNo},
                ADDR = #{addr},
-               ADDR_DTL = #{addrDtl},
+               ADDR_DTL = NVL(#{addrDtl}, ' '),
                AREA_CD = #{areaCd},
                CLS_FG = #{clsFg, jdbcType=VARCHAR},
                SYS_STAT_FG = #{sysStatFg, jdbcType=VARCHAR},
@@ -576,7 +576,7 @@
             #{emailAddr},
             #{postNo},
             #{addr},
-            #{addrDtl},
+            NVL(#{addrDtl}, ' '),
             '1',
             'N',
             'Y',
@@ -1881,7 +1881,8 @@
             DISCON_YN,
             GROUP_PROD_CD,
             DEPOSIT_PROD_CD,
-            ADD_GRP_CD
+            ADD_GRP_CD,
+            KIOSK_DISPLAY_YN
             FROM TB_MS_PRODUCT
             WHERE 1=1
             AND STORE_CD = #{copyStoreCd}
@@ -1940,7 +1941,8 @@
             DISCON_YN = B.DISCON_YN,
             GROUP_PROD_CD = B.GROUP_PROD_CD,
             DEPOSIT_PROD_CD = B.DEPOSIT_PROD_CD,
-            ADD_GRP_CD = B.ADD_GRP_CD
+            ADD_GRP_CD = B.ADD_GRP_CD,
+            KIOSK_DISPLAY_YN = B.KIOSK_DISPLAY_YN
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -1994,7 +1996,8 @@
                 A.DISCON_YN,
                 A.GROUP_PROD_CD,
                 A.DEPOSIT_PROD_CD,
-                A.ADD_GRP_CD
+                A.ADD_GRP_CD,
+                A.KIOSK_DISPLAY_YN
             ) VALUES (
                 B.STORE_CD,
                 B.PROD_CD,
@@ -2047,7 +2050,8 @@
                 B.DISCON_YN,
                 B.GROUP_PROD_CD,
                 B.DEPOSIT_PROD_CD,
-                B.ADD_GRP_CD
+                B.ADD_GRP_CD,
+                B.KIOSK_DISPLAY_YN
             )
     </insert>
 
@@ -6996,7 +7000,7 @@
                      WHERE tmpe.STORE_CD = tmp.STORE_CD
                        AND tmpe.POS_NO = tmp.POS_NO
                        AND tmpe.ENVST_CD = '4019'
-                       AND tmpe.ENVST_VAL IN ('1', '3')  <!-- 결제전용, 결제+주문 포스만 메인포스로 사용가능 -->
+                       AND tmpe.ENVST_VAL != '6'  <!-- 결제전용, 결제+주문 포스만 메인포스로 사용가능 -->
                        AND tmp.STORE_CD = #{storeCd}
                        AND tmp.USE_YN = 'Y'
                      ORDER

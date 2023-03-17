@@ -224,7 +224,7 @@
               <%-- 전화번호 --%>
               <th><s:message code="storeManage.telNo" /><em class="imp">*</em></th>
               <td>
-                <input type="text" id="telNo" ng-model="store.telNo" class="sb-input w100" maxlength="11" placeholder="<s:message code='storeManage.bizNo.comment' />" />
+                <input type="text" id="telNo" ng-model="store.telNo" class="sb-input w100" maxlength="15" placeholder="<s:message code='storeManage.bizNo.comment' />" />
               </td>
               <%-- 팩스번호 --%>
               <th><s:message code="storeManage.faxNo" /></th>
@@ -236,7 +236,7 @@
                 <%-- 핸드폰번호 --%>
               <th><s:message code="storeManage.mpNo" /></th>
               <td>
-                <input type="text" id="mpNo" ng-model="store.mpNo" class="sb-input w100" maxlength="11" placeholder="<s:message code='storeManage.bizNo.comment' />" />
+                <input type="text" id="mpNo" ng-model="store.mpNo" class="sb-input w100" maxlength="15" placeholder="<s:message code='storeManage.bizNo.comment' />" />
               </td>
             </tr>
             <tr>
