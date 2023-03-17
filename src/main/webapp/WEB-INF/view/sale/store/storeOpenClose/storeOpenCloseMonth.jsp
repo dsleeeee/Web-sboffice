@@ -275,6 +275,9 @@
                         <wj-flex-grid-column header="<s:message code="storeOpenClose.date"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeOpenClose.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeOpenClose.storeNm"/>" binding="storeNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dayProd.brand"/>" binding="brand" width="100" align="left" is-read-only="true" data-map="brandDataMap"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dayProd.momsTeam"/>" binding="momsTeam" width="100" align="left" is-read-only="true" data-map="momsTeamDataMap"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dayProd.momsAcShop"/>" binding="momsAcShop" width="100" align="left" is-read-only="true" data-map="momsAcShopDataMap"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeOpenClose.openTime"/>" binding="openTime" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeOpenClose.closeTime"/>" binding="closeTime" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeOpenClose.runTime"/>" binding="runTime" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -309,4 +312,4 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeOpenClose/storeOpenCloseMonth.js?ver=20221129.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeOpenClose/storeOpenCloseMonth.js?ver=20221129.03" charset="utf-8"></script>

@@ -113,7 +113,7 @@
                        popover-placement="bottom-left"
                        popover-trigger="'mouseenter'"
                        uib-popover="<s:message code="prod.prodNm" />은(는) 필수 입력항목 입니다."/>
-                <div id='_prodNmList'></div>
+                <div id='_prodNmList' style="display: none"></div>
               </td>
             </tr>
             <tr>
@@ -1165,7 +1165,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20230223.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20230223.03" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

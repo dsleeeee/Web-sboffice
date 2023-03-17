@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MonthPos.xml
+    월별 매출 현황(포스별)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2023.03.14     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.month.monthPos.service.impl.MonthPosMapper">
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMonthPosList" parameterType="monthPosVO" resultType="DefaultMap">
+        /* MonthPosMapper.getMonthPosList */
+        SELECT  TO_CHAR(TO_DATE(tsdt.SALE_YM, 'yyyymm'), 'yyyy-mm') YEAR_MONTH,
+                tsdt.STORE_CNT,
+                tsdt.SALE_CNT,
+                tsdt.TOT_SALE_AMT,
+                tsdt.TOT_DC_AMT,
+                tsdt.REAL_SALE_AMT,
+                tsdt.BILL_CNT,
+                tsdt.BILL_UPRC,
+                tsdt.GA_AMT,
+                tsdt.VAT_AMT,
+                tsdt.TOT_TIP_AMT,
+                tsdt.TOT_ETC_AMT,
+                tsdt.CUP_AMT,
+                <foreach collection="arrPayCol" item="item" separator=",">
+                    tsdt.PAY_AMT_${item} AS PAY${item}
+                </foreach> ,
+                <foreach collection="arrMpayCol" item="item" separator=",">
+                    tsdt.MPAY${item} AS MPAY${item}
+                </foreach>,
+                tsdt.PAY_AMT_02 AS PAY02,
+                tsdt.PAY_AMT_021 AS PAY021,
+                tsdt.TOT_PAY_AMT,
+                tsdt.GEN_REAL_SALE_AMT,
+                DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsdt.GEN_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS GEN_REAL_SALE_RATE,
+                tsdt.DLVR_REAL_SALE_AMT,
+                DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsdt.DLVR_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS DLVR_REAL_SALE_RATE,
+                tsdt.PACK_REAL_SALE_AMT,
+                DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsdt.PACK_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS PACK_REAL_SALE_RATE
+        ,       <foreach collection="arrDlvrInFgCol" item="item" separator=",">
+                    tsdto.SALE_QTY${item} AS SALE_QTY${item}
+        ,           tsdto.REAL_SALE_AMT${item} AS REAL_SALE_AMT${item}
+                </foreach>
+        ,       GEN_REAL_SALE_CNT_POS
+        ,       GEN_REAL_SALE_AMT_POS
+        ,       DLVR_REAL_SALE_CNT_POS
+        ,       DLVR_REAL_SALE_AMT_POS
+        ,       PACK_REAL_SALE_CNT_POS
+        ,       PACK_REAL_SALE_AMT_POS
+        ,       GEN_REAL_SALE_CNT_CHANNEL
+        ,       GEN_REAL_SALE_AMT_CHANNEL
+        ,       DLVR_REAL_SALE_CNT_CHANNEL
+        ,       DLVR_REAL_SALE_AMT_CHANNEL
+        ,       PACK_REAL_SALE_CNT_CHANNEL
+        ,       PACK_REAL_SALE_AMT_CHANNEL
+        ,       GEN_REAL_SALE_CNT_KIOSK
+        ,       GEN_REAL_SALE_AMT_KIOSK
+        ,       DLVR_REAL_SALE_CNT_KIOSK
+        ,       DLVR_REAL_SALE_AMT_KIOSK
+        ,       PACK_REAL_SALE_CNT_KIOSK
+        ,       PACK_REAL_SALE_AMT_KIOSK
+        FROM    (
+                SELECT SUBSTR(SALE_DATE,0,6) AS SALE_YM,
+                COUNT(DISTINCT tsdtd.STORE_CD) AS STORE_CNT,
+                COUNT(DISTINCT SALE_DATE) AS SALE_CNT,
+                SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+                SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+                SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+                SUM(REAL_SALE_CNT) AS BILL_CNT,
+                ROUND(SUM(REAL_SALE_AMT) / SUM(REAL_SALE_CNT)) AS BILL_UPRC,
+                SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT,
+                SUM(VAT_AMT) AS VAT_AMT,
+                SUM(TOT_TIP_AMT) AS TOT_TIP_AMT,
+                SUM(TOT_ETC_AMT) AS TOT_ETC_AMT,
+                SUM(CUP_AMT) AS CUP_AMT,
+                <foreach collection="arrPayCol" item="item" separator="+">
+                    SUM(NVL(PAY_AMT_${item}, 0))
+                </foreach> +  SUM(NVL(NON_CASH_AMT, 0)) +  SUM(NVL(APPR_CASH_AMT, 0)) AS TOT_PAY_AMT,
+                <foreach collection="arrPayCol" item="item" separator=",">
+                    SUM(NVL(PAY_AMT_${item}, 0)) AS PAY_AMT_${item}
+                </foreach>,
+                <foreach collection="arrMpayCol" item="item" separator=",">
+                    SUM(MPAY_AMT_${item}) AS MPAY${item}
+                </foreach>,
+                SUM(NVL(NON_CASH_AMT, 0)) AS PAY_AMT_02,
+                SUM(NVL(APPR_CASH_AMT, 0)) AS PAY_AMT_021,
+                SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT,
+                SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
+                SUM(CASE WHEN DLVR_ORDER_FG = '3' THEN REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
+                FROM    TB_SL_DAILY_TOTAL_DLVR tsdtd
+                ,       TB_MS_STORE tms
+                ,       TB_MS_STORE_INFO tmsi
+                WHERE   tsdtd.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                AND     tsdtd.STORE_CD = tms.STORE_CD
+                AND     tsdtd.STORE_CD = tmsi.STORE_CD (+)
+                AND     tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth}||'31'
+                <if test='storeCds != null and storeCds != ""'>
+                    AND tsdtd.STORE_CD IN
+                    <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                    AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                </if>
+                <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                    <if test='userBrands != null and userBrands != ""'>
+                        -- 매장브랜드 전체일때
+                        AND tms.HQ_BRAND_CD IN
+                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                </if>
+                <if test='momsTeam != null and momsTeam != ""'>
+                    AND tmsi.MOMS_TEAM = #{momsTeam}
+                </if>
+                <if test='momsAcShop != null and momsAcShop != ""'>
+                    AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                </if>
+                <if test='momsAreaFg != null and momsAreaFg != ""'>
+                    AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                </if>
+                <if test='momsCommercial != null and momsCommercial != ""'>
+                    AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                </if>
+                <if test='momsShopType != null and momsShopType != ""'>
+                    AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                </if>
+                <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                    AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                </if>
+                <if test='branchCd != null and branchCd != ""'>
+                    AND tms.BRANCH_CD = #{branchCd}
+                </if>
+                GROUP BY    SUBSTR(SALE_DATE,0,6)
+                ) tsdt
+        ,       (
+                SELECT  tsdto.SALE_YM
+                ,       <foreach collection="arrDlvrInFgCol" item="item" separator=",">
+                        SUM(CASE WHEN DLVR_IN_FG = ${item} THEN SALE_QTY END) AS SALE_QTY${item}
+                ,		SUM(CASE WHEN DLVR_IN_FG = ${item} THEN REAL_SALE_AMT END) AS REAL_SALE_AMT${item}
+                </foreach>
+                FROM    TB_SL_MONTHLY_TOTAL_ORDAPP tsdto
+                ,       TB_MS_STORE tms
+                ,       TB_MS_STORE_INFO tmsi
+                WHERE   tsdto.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                AND     tsdto.STORE_CD = tms.STORE_CD
+                AND     tsdto.STORE_CD = tmsi.STORE_CD (+)
+                AND     tsdto.HQ_OFFICE_CD  = #{hqOfficeCd}
+                <if test='storeCds != null and storeCds != ""'>
+                    AND tsdto.STORE_CD IN
+                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                    AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                </if>
+                <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                    <if test='userBrands != null and userBrands != ""'>
+                        -- 매장브랜드 전체일때
+                        AND tms.HQ_BRAND_CD IN
+                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                </if>
+                <if test='momsTeam != null and momsTeam != ""'>
+                    AND tmsi.MOMS_TEAM = #{momsTeam}
+                </if>
+                <if test='momsAcShop != null and momsAcShop != ""'>
+                    AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                </if>
+                <if test='momsAreaFg != null and momsAreaFg != ""'>
+                    AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                </if>
+                <if test='momsCommercial != null and momsCommercial != ""'>
+                    AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                </if>
+                <if test='momsShopType != null and momsShopType != ""'>
+                    AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                </if>
+                <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                    AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                </if>
+                <if test='branchCd != null and branchCd != ""'>
+                    AND tms.BRANCH_CD = #{branchCd}
+                </if>
+                AND     tsdto.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+                GROUP BY tsdto.SALE_YM
+                ) tsdto
+        ,       (
+        SELECT  tsmpd.SALE_YM
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '1' AND tmpe.ENVST_VAL != '6' AND DLVR_IN_FG IN ('0', '1') THEN REAL_SALE_CNT ELSE 0 END) AS GEN_REAL_SALE_CNT_POS
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '1' AND tmpe.ENVST_VAL != '6' AND DLVR_IN_FG IN ('0', '1') THEN REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT_POS
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '2' AND tmpe.ENVST_VAL != '6' AND DLVR_IN_FG IN ('0', '1') THEN REAL_SALE_CNT ELSE 0 END) AS DLVR_REAL_SALE_CNT_POS
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '2' AND tmpe.ENVST_VAL != '6' AND DLVR_IN_FG IN ('0', '1') THEN REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT_POS
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '3' AND tmpe.ENVST_VAL != '6' AND DLVR_IN_FG IN ('0', '1') THEN REAL_SALE_CNT ELSE 0 END) AS PACK_REAL_SALE_CNT_POS
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '3' AND tmpe.ENVST_VAL != '6' AND DLVR_IN_FG IN ('0', '1') THEN REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT_POS
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '1' AND tmpe.ENVST_VAL != '6' AND DLVR_IN_FG NOT IN ('0', '1') THEN REAL_SALE_CNT ELSE 0 END) AS GEN_REAL_SALE_CNT_CHANNEL
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '1' AND tmpe.ENVST_VAL != '6' AND DLVR_IN_FG NOT IN ('0', '1') THEN REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT_CHANNEL
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '2' AND tmpe.ENVST_VAL != '6' AND DLVR_IN_FG NOT IN ('0', '1') THEN REAL_SALE_CNT ELSE 0 END) AS DLVR_REAL_SALE_CNT_CHANNEL
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '2' AND tmpe.ENVST_VAL != '6' AND DLVR_IN_FG NOT IN ('0', '1') THEN REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT_CHANNEL
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '3' AND tmpe.ENVST_VAL != '6' AND DLVR_IN_FG NOT IN ('0', '1') THEN REAL_SALE_CNT ELSE 0 END) AS PACK_REAL_SALE_CNT_CHANNEL
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '3' AND tmpe.ENVST_VAL != '6' AND DLVR_IN_FG NOT IN ('0', '1') THEN REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT_CHANNEL
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '1' AND tmpe.ENVST_VAL = '6' THEN REAL_SALE_CNT ELSE 0 END) AS GEN_REAL_SALE_CNT_KIOSK
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '1' AND tmpe.ENVST_VAL = '6' THEN REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT_KIOSK
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '2' AND tmpe.ENVST_VAL = '6' THEN REAL_SALE_CNT ELSE 0 END) AS DLVR_REAL_SALE_CNT_KIOSK
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '2' AND tmpe.ENVST_VAL = '6' THEN REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT_KIOSK
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '3' AND tmpe.ENVST_VAL = '6' THEN REAL_SALE_CNT ELSE 0 END) AS PACK_REAL_SALE_CNT_KIOSK
+        ,		SUM(CASE WHEN DLVR_ORDER_FG = '3' AND tmpe.ENVST_VAL = '6' THEN REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT_KIOSK
+        FROM    TB_SL_MONTHLY_POS_DLVR tsmpd
+        ,		TB_MS_POS_ENVST tmpe
+        ,       TB_MS_STORE tms
+        ,       TB_MS_STORE_INFO tmsi
+        WHERE   tsmpd.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND     tsmpd.STORE_CD = tms.STORE_CD
+        AND     tsmpd.STORE_CD = tmsi.STORE_CD (+)
+        AND 	tsmpd.STORE_CD = tmpe.STORE_CD
+        AND 	tsmpd.POS_NO = tmpe.POS_NO
+        AND 	tmpe.ENVST_CD = '4019'
+        AND     tsmpd.HQ_OFFICE_CD  = #{hqOfficeCd}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsmpd.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        AND     tsmpd.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+        GROUP BY tsmpd.SALE_YM
+        ) tsmpd
+        WHERE   tsdt.SALE_YM = tsdto.SALE_YM (+)
+        AND     tsdt.SALE_YM = tsmpd.SALE_YM (+)
+    </select>
+
+</mapper>

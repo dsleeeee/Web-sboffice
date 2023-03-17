@@ -43,6 +43,8 @@
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionGrpNm"/>" binding="optionGrpNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionValCd"/>" binding="optionValCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionValNm"/>" binding="optionValNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionProdCd"/>" binding="optionProdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionProdNm"/>" binding="optionProdNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
       <%--//위즈모 테이블--%>
@@ -73,6 +75,8 @@
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionGrpNm"/>" binding="optionGrpNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionValCd"/>" binding="optionValCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionValNm"/>" binding="optionValNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionProdCd"/>" binding="optionProdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionProdNm"/>" binding="optionProdNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
     </div>

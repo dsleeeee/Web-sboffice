@@ -65,6 +65,10 @@ app.controller('storeDayTimeCtrl', ['$scope', '$http', '$timeout', function ($sc
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
+        $scope.brandDataMap = new wijmo.grid.DataMap(momsHqBrandCdComboList, 'value', 'name');
+        $scope.momsTeamDataMap = new wijmo.grid.DataMap(momsTeamComboList, 'value', 'name');
+        $scope.momsAcShopDataMap = new wijmo.grid.DataMap(momsAcShopComboList, 'value', 'name');
+
        // picker 사용시 호출 : 미사용시 호출안함
        $scope._makePickColumns("storeDayTimeCtrl");
 
@@ -84,6 +88,9 @@ app.controller('storeDayTimeCtrl', ['$scope', '$http', '$timeout', function ($sc
         dataItem.storeCnt       = messages["storeDayTime.storeCnt"];
         dataItem.storeCd        = messages["storeDayTime.storeCd"];
         dataItem.storeNm        = messages["storeDayTime.storeNm"];
+        dataItem.brand          = messages["dayProd.brand"];
+        dataItem.momsTeam       = messages["dayProd.momsTeam"];
+        dataItem.momsAcShop     = messages["dayProd.momsAcShop"];
 
         dataItem.saleQty        = messages["storeDayTime.sale"];
         dataItem.totSaleAmt     = messages["storeDayTime.sale"];
@@ -262,11 +269,11 @@ app.controller('storeDayTimeCtrl', ['$scope', '$http', '$timeout', function ($sc
                 }
             }
 
-            columnsCnt = 6;
+            columnsCnt = 9;
             // 옵션(지사별/매장별)에 따라 매장정보 visible
             for (var j = 3; j < columnsCnt; j++) {
                 if($scope.option2 === "branch"){
-                    if(columns[j].binding == "storeCd" || columns[j].binding == "storeNm") {
+                    if(columns[j].binding == "storeCd" || columns[j].binding == "storeNm" || columns[j].binding == "brand" || columns[j].binding == "momsTeam" || columns[j].binding == "momsAcShop") {
                         columns[j].visible = false;
                     } else {
                         columns[j].visible = true;
@@ -280,7 +287,7 @@ app.controller('storeDayTimeCtrl', ['$scope', '$http', '$timeout', function ($sc
                 }
             }
 
-            columnsCnt = 14;
+            columnsCnt = 17;
             // 선택한 시간대에 따른 리스트 항목 visible
             for (var i = columnsCnt; i < columns.length; i++) {
                 columns[i].visible = false;

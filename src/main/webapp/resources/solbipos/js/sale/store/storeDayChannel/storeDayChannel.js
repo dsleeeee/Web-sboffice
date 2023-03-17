@@ -30,6 +30,10 @@ app.controller('storeDayChannelCtrl', ['$scope', '$http', '$timeout', function (
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
+    $scope.brandDataMap = new wijmo.grid.DataMap(momsHqBrandCdComboList, 'value', 'name');
+    $scope.momsTeamDataMap = new wijmo.grid.DataMap(momsTeamComboList, 'value', 'name');
+    $scope.momsAcShopDataMap = new wijmo.grid.DataMap(momsAcShopComboList, 'value', 'name');
+
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("storeDayChannelCtrl");
 
@@ -149,6 +153,9 @@ app.controller('storeDayChannelCtrl', ['$scope', '$http', '$timeout', function (
     dataItem.branchNm    = messages["storeDayChannel.branchNm"];
     dataItem.storeCd     = messages["day.dayTotal.storeCd"];
     dataItem.storeNm     = messages["day.dayTotal.storeNm"];
+    dataItem.brand       = messages["dayProd.brand"];
+    dataItem.momsTeam    = messages["dayProd.momsTeam"];
+    dataItem.momsAcShop  = messages["dayProd.momsAcShop"];
     dataItem.totSaleAmt  = messages["day.dayTotal.saleInfo"];
     dataItem.totDcAmt    = messages["day.dayTotal.saleInfo"];
     dataItem.realSaleAmt = messages["day.dayTotal.saleInfo"];
@@ -303,11 +310,11 @@ app.controller('storeDayChannelCtrl', ['$scope', '$http', '$timeout', function (
       var grid = wijmo.Control.getControl("#wjGridList");
       var columns = grid.columns;
 
-      var columnsCnt = 8;
+      var columnsCnt = 10;
       // 옵션에 따라 매장정보 숨기기
       for (var j = 0; j < columnsCnt; j++) {
         if($scope.option === "branch"){
-          if(columns[j].binding == "storeCd" || columns[j].binding == "storeNm") {
+          if(columns[j].binding == "storeCd" || columns[j].binding == "storeNm" || columns[j].binding == "brand" || columns[j].binding == "momsTeam" || columns[j].binding == "momsAcShop") {
             columns[j].visible = false;
           } else {
             columns[j].visible = true;
@@ -419,6 +426,10 @@ app.controller('storeDayChannelExcelCtrl', ['$scope', '$http', '$timeout', funct
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
+      $scope.brandDataMap = new wijmo.grid.DataMap(momsHqBrandCdComboList, 'value', 'name');
+      $scope.momsTeamDataMap = new wijmo.grid.DataMap(momsTeamComboList, 'value', 'name');
+      $scope.momsAcShopDataMap = new wijmo.grid.DataMap(momsAcShopComboList, 'value', 'name');
+
       // add the new GroupRow to the grid's 'columnFooters' panel
       s.columnFooters.rows.push(new wijmo.grid.GroupRow());
       // add a sigma to the header to show that this is a summary row
@@ -436,6 +447,9 @@ app.controller('storeDayChannelExcelCtrl', ['$scope', '$http', '$timeout', funct
       dataItem.branchNm    = messages["storeDayChannel.branchNm"];
       dataItem.storeCd     = messages["day.dayTotal.storeCd"];
       dataItem.storeNm     = messages["day.dayTotal.storeNm"];
+      dataItem.brand       = messages["dayProd.brand"];
+      dataItem.momsTeam    = messages["dayProd.momsTeam"];
+      dataItem.momsAcShop  = messages["dayProd.momsAcShop"];
       dataItem.totSaleAmt  = messages["day.dayTotal.saleInfo"];
       dataItem.totDcAmt    = messages["day.dayTotal.saleInfo"];
       dataItem.realSaleAmt = messages["day.dayTotal.saleInfo"];
@@ -543,11 +557,11 @@ app.controller('storeDayChannelExcelCtrl', ['$scope', '$http', '$timeout', funct
           var grid = wijmo.Control.getControl("#wjGridExcelList");
           var columns = grid.columns;
 
-          var columnsCnt = 8;
+          var columnsCnt = 10;
           // 옵션에 따라 매장정보 숨기기
           for (var j = 0; j < columnsCnt; j++) {
             if($scope.option === "branch"){
-              if(columns[j].binding == "storeCd" || columns[j].binding == "storeNm") {
+              if(columns[j].binding == "storeCd" || columns[j].binding == "storeNm" || columns[j].binding == "brand" || columns[j].binding == "momsTeam" || columns[j].binding == "momsAcShop") {
                 columns[j].visible = false;
               } else {
                 columns[j].visible = true;

@@ -61,9 +61,12 @@ app.controller('prodInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     dataItem.sdattrNm       = messages["prodInfoSearch.prodInfo.sdattr"];
     dataItem.sdselGrpCd 	= messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselGrpNm 	= messages["prodInfoSearch.prodInfo.sdsel"];
+    dataItem.grpFixProdFg 	= messages["prodInfoSearch.prodInfo.sdsel"];
+    dataItem.sdselTypeFg 	= messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselClassCd   = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselClassNm   = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselQty       = messages["prodInfoSearch.prodInfo.sdsel"];
+    dataItem.requireYn      = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselProdCd    = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselProdNm 	= messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.addProdUprc	= messages["prodInfoSearch.prodInfo.sdsel"];
@@ -73,6 +76,8 @@ app.controller('prodInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     dataItem.optionGrpNm    = messages["prodInfoSearch.prodInfo.option"];
     dataItem.optionValCd    = messages["prodInfoSearch.prodInfo.option"];
     dataItem.optionValNm    = messages["prodInfoSearch.prodInfo.option"];
+    dataItem.optionProdCd   = messages["prodInfoSearch.prodInfo.option"];
+    dataItem.optionProdNm   = messages["prodInfoSearch.prodInfo.option"];
     s.columnHeaders.rows[0].dataItem = dataItem;
     //Grid Header 2줄 - END		----------------------------------------------------------------
 
@@ -254,9 +259,12 @@ app.controller('prodInfoExcelCtrl', ['$scope', '$http', '$timeout', function ($s
     dataItem.sdattrNm       = messages["prodInfoSearch.prodInfo.sdattr"];
     dataItem.sdselGrpCd 	= messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselGrpNm 	= messages["prodInfoSearch.prodInfo.sdsel"];
+    dataItem.grpFixProdFg 	= messages["prodInfoSearch.prodInfo.sdsel"];
+    dataItem.sdselTypeFg 	= messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselClassCd   = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselClassNm   = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselQty       = messages["prodInfoSearch.prodInfo.sdsel"];
+    dataItem.requireYn      = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselProdCd    = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselProdNm 	= messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.addProdUprc	= messages["prodInfoSearch.prodInfo.sdsel"];
@@ -266,6 +274,8 @@ app.controller('prodInfoExcelCtrl', ['$scope', '$http', '$timeout', function ($s
     dataItem.optionGrpNm    = messages["prodInfoSearch.prodInfo.option"];
     dataItem.optionValCd    = messages["prodInfoSearch.prodInfo.option"];
     dataItem.optionValNm    = messages["prodInfoSearch.prodInfo.option"];
+    dataItem.optionProdCd   = messages["prodInfoSearch.prodInfo.option"];
+    dataItem.optionProdNm   = messages["prodInfoSearch.prodInfo.option"];
     s.columnHeaders.rows[0].dataItem = dataItem;
     //Grid Header 2줄 - END		----------------------------------------------------------------
 

@@ -277,9 +277,12 @@
                 <include refid="CmmSQL.PagingTemplateHeader"/>
                 SELECT 	thpsg.SDSEL_GRP_CD
                 ,		thpsg.SDSEL_GRP_NM
+                ,		DECODE(thpsg.FIX_PROD_FG, '0', '선택', '1', '고정') AS GRP_FIX_PROD_FG
+                ,		DECODE(thpsg.SDSEL_TYPE_FG, 'C', '세트', 'S', '싱글세트') AS SDSEL_TYPE_FG
                 ,		thpsc.SDSEL_CLASS_CD
                 ,		thpsc.SDSEL_CLASS_NM
                 ,		thpsc.SDSEL_QTY
+                ,		DECODE(thpsc.REQUIRE_YN, 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
                 ,		thpsp.PROD_CD
                 ,		thp.PROD_NM
                 ,       thpsp.ADD_PROD_UPRC
@@ -306,9 +309,12 @@
                 <include refid="CmmSQL.PagingTemplateHeader"/>
                 SELECT 	tmpsg.SDSEL_GRP_CD
                 ,		tmpsg.SDSEL_GRP_NM
+                ,		DECODE(tmpsg.FIX_PROD_FG, '0', '선택', '1', '고정') AS GRP_FIX_PROD_FG
+                ,		DECODE(tmpsg.SDSEL_TYPE_FG, 'C', '세트', 'S', '싱글세트') AS SDSEL_TYPE_FG
                 ,		tmpsc.SDSEL_CLASS_CD
                 ,		tmpsc.SDSEL_CLASS_NM
                 ,		tmpsc.SDSEL_QTY
+                ,		DECODE(tmpsc.REQUIRE_YN, 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
                 ,		tmpsp.PROD_CD
                 ,		tmp.PROD_NM
                 ,       tmpsp.ADD_PROD_UPRC
@@ -346,9 +352,12 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT 	thpsg.SDSEL_GRP_CD
                 ,		thpsg.SDSEL_GRP_NM
+                ,		DECODE(thpsg.FIX_PROD_FG, '0', '선택', '1', '고정') AS GRP_FIX_PROD_FG
+                ,		DECODE(thpsg.SDSEL_TYPE_FG, 'C', '세트', 'S', '싱글세트') AS SDSEL_TYPE_FG
                 ,		thpsc.SDSEL_CLASS_CD
                 ,		thpsc.SDSEL_CLASS_NM
                 ,		thpsc.SDSEL_QTY
+                ,		DECODE(thpsc.REQUIRE_YN, 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
                 ,		thpsp.PROD_CD
                 ,		thp.PROD_NM
                 ,       thpsp.ADD_PROD_UPRC
@@ -372,9 +381,12 @@
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT 	tmpsg.SDSEL_GRP_CD
                 ,		tmpsg.SDSEL_GRP_NM
+                ,		DECODE(tmpsg.FIX_PROD_FG, '0', '선택', '1', '고정') AS GRP_FIX_PROD_FG
+                ,		DECODE(tmpsg.SDSEL_TYPE_FG, 'C', '세트', 'S', '싱글세트') AS SDSEL_TYPE_FG
                 ,		tmpsc.SDSEL_CLASS_CD
                 ,		tmpsc.SDSEL_CLASS_NM
                 ,		tmpsc.SDSEL_QTY
+                ,		DECODE(tmpsc.REQUIRE_YN, 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
                 ,		tmpsp.PROD_CD
                 ,		tmp.PROD_NM
                 ,       tmpsp.ADD_PROD_UPRC
@@ -413,12 +425,17 @@
                 ,		thpog.OPTION_GRP_NM
                 ,		thpov.OPTION_VAL_CD
                 ,		thpov.OPTION_VAL_NM
+                ,		thpov.OPT_PROD_CD AS OPTION_PROD_CD
+                ,		thp.PROD_NM AS OPTION_PROD_NM
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM 	TB_HQ_PRODUCT_OPTION_GROUP thpog
                 ,		TB_HQ_PRODUCT_OPTION_VAL thpov
+                ,       TB_HQ_PRODUCT thp
                 WHERE 	thpog.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND 	thpog.HQ_OFFICE_CD = thpov.HQ_OFFICE_CD (+)
                 AND 	thpog.OPTION_GRP_CD = thpov.OPTION_GRP_CD (+)
+                AND 	thpog.HQ_OFFICE_CD = thp.HQ_OFFICE_CD (+)
+                AND 	thpov.OPT_PROD_CD = thp.PROD_CD (+)
                 ORDER BY thpog.OPTION_GRP_CD, thpov.OPTION_VAL_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -429,12 +446,17 @@
                 ,		tmpog.OPTION_GRP_NM
                 ,		tmpov.OPTION_VAL_CD
                 ,		tmpov.OPTION_VAL_NM
+                ,		tmpov.OPT_PROD_CD AS OPTION_PROD_CD
+                ,		tmp.PROD_NM AS OPTION_PROD_NM
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM 	TB_MS_PRODUCT_OPTION_GROUP tmpog
                 ,		TB_MS_PRODUCT_OPTION_VAL tmpov
+                ,		TB_MS_PRODUCT tmp
                 WHERE 	tmpog.STORE_CD = #{storeCd}
                 AND 	tmpog.STORE_CD = tmpov.STORE_CD (+)
                 AND 	tmpog.OPTION_GRP_CD = tmpov.OPTION_GRP_CD (+)
+                AND 	tmpog.STORE_CD = tmp.STORE_CD (+)
+                AND 	tmpov.OPT_PROD_CD = tmp.PROD_CD (+)
                 ORDER BY tmpog.OPTION_GRP_CD, tmpov.OPTION_VAL_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -456,11 +478,16 @@
                 ,		thpog.OPTION_GRP_NM
                 ,		thpov.OPTION_VAL_CD
                 ,		thpov.OPTION_VAL_NM
+                ,		thpov.OPT_PROD_CD AS OPTION_PROD_CD
+                ,		thp.PROD_NM AS OPTION_PROD_NM
                 FROM 	TB_HQ_PRODUCT_OPTION_GROUP thpog
                 ,		TB_HQ_PRODUCT_OPTION_VAL thpov
+                ,       TB_HQ_PRODUCT thp
                 WHERE 	thpog.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND 	thpog.HQ_OFFICE_CD = thpov.HQ_OFFICE_CD (+)
                 AND 	thpog.OPTION_GRP_CD = thpov.OPTION_GRP_CD (+)
+                AND 	thpog.HQ_OFFICE_CD = thp.HQ_OFFICE_CD (+)
+                AND 	thpov.OPT_PROD_CD = thp.PROD_CD (+)
                 ORDER BY thpog.OPTION_GRP_CD, thpov.OPTION_VAL_CD
             </when>
             <!-- 매장 -->
@@ -469,11 +496,16 @@
                 ,		tmpog.OPTION_GRP_NM
                 ,		tmpov.OPTION_VAL_CD
                 ,		tmpov.OPTION_VAL_NM
+                ,		tmpov.OPT_PROD_CD AS OPTION_PROD_CD
+                ,		tmp.PROD_NM AS OPTION_PROD_NM
                 FROM 	TB_MS_PRODUCT_OPTION_GROUP tmpog
                 ,		TB_MS_PRODUCT_OPTION_VAL tmpov
+                ,		TB_MS_PRODUCT tmp
                 WHERE 	tmpog.STORE_CD = #{storeCd}
                 AND 	tmpog.STORE_CD = tmpov.STORE_CD (+)
                 AND 	tmpog.OPTION_GRP_CD = tmpov.OPTION_GRP_CD (+)
+                AND 	tmpog.STORE_CD = tmp.STORE_CD (+)
+                AND 	tmpov.OPT_PROD_CD = tmp.PROD_CD (+)
                 ORDER BY tmpog.OPTION_GRP_CD, tmpov.OPTION_VAL_CD
             </when>
         </choose>
@@ -511,9 +543,12 @@
                         ,		thps.SDATTR_NM
                         ,		'' AS SDSEL_GRP_CD
                         ,		'' AS SDSEL_GRP_NM
+                        ,		'' AS GRP_FIX_PROD_FG
+                        ,		'' AS SDSEL_TYPE_FG
                         ,		'' AS SDSEL_CLASS_CD
                         ,		'' AS SDSEL_CLASS_NM
                         ,		0 AS SDSEL_QTY
+                        ,		'' AS REQUIRE_YN
                         ,		'' AS SDSEL_PROD_CD
                         ,		'' AS SDSEL_PROD_NM
                         ,		0 AS ADD_PROD_UPRC
@@ -523,6 +558,8 @@
                         ,		'' AS OPTION_GRP_NM
                         ,		'' AS OPTION_VAL_CD
                         ,		'' AS OPTION_VAL_NM
+                        ,		'' AS OPTION_PROD_CD
+                        ,		'' AS OPTION_PROD_NM
                         FROM 	TB_HQ_PRODUCT thp
                         ,		TB_HQ_PRODUCT_SDATTR_CLASS thpsc
                         ,		TB_HQ_PRODUCT_SDATTR thps
@@ -552,9 +589,12 @@
                         ,		'' AS SDATTR_NM
                         ,		thp.SDSEL_GRP_CD
                         ,		thpsg.SDSEL_GRP_NM
+                        ,		DECODE(thpsg.FIX_PROD_FG, '0', '선택', '1', '고정') AS GRP_FIX_PROD_FG
+                        ,		DECODE(thpsg.SDSEL_TYPE_FG, 'C', '세트', 'S', '싱글세트') AS SDSEL_TYPE_FG
                         ,		thpsc.SDSEL_CLASS_CD
                         ,		thpsc.SDSEL_CLASS_NM
                         ,		thpsc.SDSEL_QTY
+                        ,		DECODE(thpsc.REQUIRE_YN, 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
                         ,		thpsp.PROD_CD AS SDSEL_PROD_CD
                         ,		thp2.PROD_NM AS SDSEL_PROD_NM
                         ,       thpsp.ADD_PROD_UPRC
@@ -564,6 +604,8 @@
                         ,		'' AS OPTION_GRP_NM
                         ,		'' AS OPTION_VAL_CD
                         ,		'' AS OPTION_VAL_NM
+                        ,		'' AS OPTION_PROD_CD
+                        ,		'' AS OPTION_PROD_NM
                         FROM 	TB_HQ_PRODUCT thp
                         ,		TB_HQ_PRODUCT_SDSEL_GROUP thpsg
                         ,		TB_HQ_PRODUCT_SDSEL_CLASS thpsc
@@ -600,9 +642,12 @@
                         ,		'' AS SDATTR_NM
                         ,		'' AS SDSEL_GRP_CD
                         ,		'' AS SDSEL_GRP_NM
+                        ,		'' AS GRP_FIX_PROD_FG
+                        ,		'' AS SDSEL_TYPE_FG
                         ,		'' AS SDSEL_CLASS_CD
                         ,		'' AS SDSEL_CLASS_NM
                         ,		0 AS SDSEL_QTY
+                        ,		'' AS REQUIRE_YN
                         ,		'' AS SDSEL_PROD_CD
                         ,		'' AS SDSEL_PROD_NM
                         ,		0 AS ADD_PROD_UPRC
@@ -612,15 +657,20 @@
                         ,		thpog.OPTION_GRP_NM
                         ,		thpov.OPTION_VAL_CD
                         ,		thpov.OPTION_VAL_NM
+                        ,		thpov.OPT_PROD_CD AS OPTION_PROD_CD
+                        ,		thp2.PROD_NM AS OPTION_PROD_NM
                         FROM 	TB_HQ_PRODUCT thp
                         ,		TB_HQ_PRODUCT_OPTION_GROUP thpog
                         ,		TB_HQ_PRODUCT_OPTION_VAL thpov
                         ,       TB_HQ_PRODUCT_CLASS_V02 thpcv
+                        ,       TB_HQ_PRODUCT thp2
                         WHERE 	thp.HQ_OFFICE_CD = #{hqOfficeCd}
                         AND 	thp.HQ_OFFICE_CD = thpog.HQ_OFFICE_CD
                         AND 	thp.OPTION_GRP_CD = thpog.OPTION_GRP_CD
                         AND 	thpog.HQ_OFFICE_CD = thpov.HQ_OFFICE_CD (+)
                         AND 	thpog.OPTION_GRP_CD = thpov.OPTION_GRP_CD (+)
+                        AND 	thpog.HQ_OFFICE_CD = thp2.HQ_OFFICE_CD (+)
+                        AND 	thpov.OPT_PROD_CD = thp2.PROD_CD (+)
                         AND 	thpcv.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
                         AND 	thpcv.PROD_CD = thp.PROD_CD
                         ) A
@@ -687,9 +737,12 @@
                         ,		tmps.SDATTR_NM
                         ,		'' AS SDSEL_GRP_CD
                         ,		'' AS SDSEL_GRP_NM
+                        ,		'' AS GRP_FIX_PROD_FG
+                        ,		'' AS SDSEL_TYPE_FG
                         ,		'' AS SDSEL_CLASS_CD
                         ,		'' AS SDSEL_CLASS_NM
                         ,		0 AS SDSEL_QTY
+                        ,		'' AS REQUIRE_YN
                         ,		'' AS SDSEL_PROD_CD
                         ,		'' AS SDSEL_PROD_NM
                         ,		0 AS ADD_PROD_UPRC
@@ -699,6 +752,8 @@
                         ,		'' AS OPTION_GRP_NM
                         ,		'' AS OPTION_VAL_CD
                         ,		'' AS OPTION_VAL_NM
+                        ,		'' AS OPTION_PROD_CD
+                        ,		'' AS OPTION_PROD_NM
                         FROM 	TB_MS_PRODUCT tmp
                         ,		TB_MS_PRODUCT_SDATTR_CLASS tmpsc
                         ,		TB_MS_PRODUCT_SDATTR tmps
@@ -728,9 +783,12 @@
                         ,		'' AS SDATTR_NM
                         ,		tmp.SDSEL_GRP_CD
                         ,		tmpsg.SDSEL_GRP_NM
+                        ,		DECODE(tmpsg.FIX_PROD_FG, '0', '선택', '1', '고정') AS GRP_FIX_PROD_FG
+                        ,		DECODE(tmpsg.SDSEL_TYPE_FG, 'C', '세트', 'S', '싱글세트') AS SDSEL_TYPE_FG
                         ,		tmpsc.SDSEL_CLASS_CD
                         ,		tmpsc.SDSEL_CLASS_NM
                         ,		tmpsc.SDSEL_QTY
+                        ,		DECODE(tmpsc.REQUIRE_YN, 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
                         ,		tmpsp.PROD_CD AS SDSEL_PROD_CD
                         ,		tmp2.PROD_NM AS SDSEL_PROD_NM
                         ,       tmpsp.ADD_PROD_UPRC
@@ -740,6 +798,8 @@
                         ,		'' AS OPTION_GRP_NM
                         ,		'' AS OPTION_VAL_CD
                         ,		'' AS OPTION_VAL_NM
+                        ,		'' AS OPTION_PROD_CD
+                        ,		'' AS OPTION_PROD_NM
                         FROM 	TB_MS_PRODUCT tmp
                         ,		TB_MS_PRODUCT_SDSEL_GROUP tmpsg
                         ,		TB_MS_PRODUCT_SDSEL_CLASS tmpsc
@@ -776,9 +836,12 @@
                         ,		'' AS SDATTR_NM
                         ,		'' AS SDSEL_GRP_CD
                         ,		'' AS SDSEL_GRP_NM
+                        ,		'' AS GRP_FIX_PROD_FG
+                        ,		'' AS SDSEL_TYPE_FG
                         ,		'' AS SDSEL_CLASS_CD
                         ,		'' AS SDSEL_CLASS_NM
                         ,		0 AS SDSEL_QTY
+                        ,		'' AS REQUIRE_YN
                         ,		'' AS SDSEL_PROD_CD
                         ,		'' AS SDSEL_PROD_NM
                         ,		0 AS ADD_PROD_UPRC
@@ -788,15 +851,20 @@
                         ,		tmpog.OPTION_GRP_NM
                         ,		tmpov.OPTION_VAL_CD
                         ,		tmpov.OPTION_VAL_NM
+                        ,		tmpov.OPT_PROD_CD AS OPTION_PROD_CD
+                        ,		tmp2.PROD_NM AS OPTION_PROD_NM
                         FROM 	TB_MS_PRODUCT tmp
                         ,		TB_MS_PRODUCT_OPTION_GROUP tmpog
                         ,		TB_MS_PRODUCT_OPTION_VAL tmpov
                         ,       TB_MS_PRODUCT_CLASS_V02 tmpcv
+                        ,       TB_MS_PRODUCT tmp2
                         WHERE 	tmp.STORE_CD = #{storeCd}
                         AND 	tmp.STORE_CD = tmpog.STORE_CD
                         AND 	tmp.OPTION_GRP_CD = tmpog.OPTION_GRP_CD
                         AND 	tmpog.STORE_CD = tmpov.STORE_CD (+)
                         AND 	tmpog.OPTION_GRP_CD = tmpov.OPTION_GRP_CD (+)
+                        AND 	tmpog.STORE_CD = tmp2.STORE_CD (+)
+                        AND 	tmpov.OPT_PROD_CD = tmp2.PROD_CD (+)
                         AND 	tmpcv.STORE_CD = tmp.STORE_CD
                         AND 	tmpcv.PROD_CD = tmp.PROD_CD
                         ) A
@@ -861,9 +929,12 @@
                 ,		thps.SDATTR_NM
                 ,		'' AS SDSEL_GRP_CD
                 ,		'' AS SDSEL_GRP_NM
+                ,		'' AS GRP_FIX_PROD_FG
+                ,		'' AS SDSEL_TYPE_FG
                 ,		'' AS SDSEL_CLASS_CD
                 ,		'' AS SDSEL_CLASS_NM
                 ,		0 AS SDSEL_QTY
+                ,		'' AS REQUIRE_YN
                 ,		'' AS SDSEL_PROD_CD
                 ,		'' AS SDSEL_PROD_NM
                 ,		0 AS ADD_PROD_UPRC
@@ -873,6 +944,8 @@
                 ,		'' AS OPTION_GRP_NM
                 ,		'' AS OPTION_VAL_CD
                 ,		'' AS OPTION_VAL_NM
+                ,		'' AS OPTION_PROD_CD
+                ,		'' AS OPTION_PROD_NM
                 FROM 	TB_HQ_PRODUCT thp
                 ,		TB_HQ_PRODUCT_SDATTR_CLASS thpsc
                 ,		TB_HQ_PRODUCT_SDATTR thps
@@ -902,9 +975,12 @@
                 ,		'' AS SDATTR_NM
                 ,		thp.SDSEL_GRP_CD
                 ,		thpsg.SDSEL_GRP_NM
+                ,		DECODE(thpsg.FIX_PROD_FG, '0', '선택', '1', '고정') AS GRP_FIX_PROD_FG
+                ,		DECODE(thpsg.SDSEL_TYPE_FG, 'C', '세트', 'S', '싱글세트') AS SDSEL_TYPE_FG
                 ,		thpsc.SDSEL_CLASS_CD
                 ,		thpsc.SDSEL_CLASS_NM
                 ,		thpsc.SDSEL_QTY
+                ,		DECODE(thpsc.REQUIRE_YN, 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
                 ,		thpsp.PROD_CD AS SDSEL_PROD_CD
                 ,		thp2.PROD_NM AS SDSEL_PROD_NM
                 ,       thpsp.ADD_PROD_UPRC
@@ -914,6 +990,8 @@
                 ,		'' AS OPTION_GRP_NM
                 ,		'' AS OPTION_VAL_CD
                 ,		'' AS OPTION_VAL_NM
+                ,		'' AS OPTION_PROD_CD
+                ,		'' AS OPTION_PROD_NM
                 FROM 	TB_HQ_PRODUCT thp
                 ,		TB_HQ_PRODUCT_SDSEL_GROUP thpsg
                 ,		TB_HQ_PRODUCT_SDSEL_CLASS thpsc
@@ -950,9 +1028,12 @@
                 ,		'' AS SDATTR_NM
                 ,		'' AS SDSEL_GRP_CD
                 ,		'' AS SDSEL_GRP_NM
+                ,		'' AS GRP_FIX_PROD_FG
+                ,		'' AS SDSEL_TYPE_FG
                 ,		'' AS SDSEL_CLASS_CD
                 ,		'' AS SDSEL_CLASS_NM
                 ,		0 AS SDSEL_QTY
+                ,		'' AS REQUIRE_YN
                 ,		'' AS SDSEL_PROD_CD
                 ,		'' AS SDSEL_PROD_NM
                 ,		0 AS ADD_PROD_UPRC
@@ -962,15 +1043,20 @@
                 ,		thpog.OPTION_GRP_NM
                 ,		thpov.OPTION_VAL_CD
                 ,		thpov.OPTION_VAL_NM
+                ,		thpov.OPT_PROD_CD AS OPTION_PROD_CD
+                ,		thp2.PROD_NM AS OPTION_PROD_NM
                 FROM 	TB_HQ_PRODUCT thp
                 ,		TB_HQ_PRODUCT_OPTION_GROUP thpog
                 ,		TB_HQ_PRODUCT_OPTION_VAL thpov
                 ,       TB_HQ_PRODUCT_CLASS_V02 thpcv
+                ,       TB_HQ_PRODUCT thp2
                 WHERE 	thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND 	thp.HQ_OFFICE_CD = thpog.HQ_OFFICE_CD
                 AND 	thp.OPTION_GRP_CD = thpog.OPTION_GRP_CD
                 AND 	thpog.HQ_OFFICE_CD = thpov.HQ_OFFICE_CD (+)
                 AND 	thpog.OPTION_GRP_CD = thpov.OPTION_GRP_CD (+)
+                AND 	thpog.HQ_OFFICE_CD = thp2.HQ_OFFICE_CD (+)
+                AND 	thpov.OPT_PROD_CD = thp2.PROD_CD (+)
                 AND 	thpcv.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
                 AND 	thpcv.PROD_CD = thp.PROD_CD
                 ) A
@@ -1034,9 +1120,12 @@
                 ,		tmps.SDATTR_NM
                 ,		'' AS SDSEL_GRP_CD
                 ,		'' AS SDSEL_GRP_NM
+                ,		'' AS GRP_FIX_PROD_FG
+                ,		'' AS SDSEL_TYPE_FG
                 ,		'' AS SDSEL_CLASS_CD
                 ,		'' AS SDSEL_CLASS_NM
                 ,		0 AS SDSEL_QTY
+                ,		'' AS REQUIRE_YN
                 ,		'' AS SDSEL_PROD_CD
                 ,		'' AS SDSEL_PROD_NM
                 ,		0 AS ADD_PROD_UPRC
@@ -1046,6 +1135,8 @@
                 ,		'' AS OPTION_GRP_NM
                 ,		'' AS OPTION_VAL_CD
                 ,		'' AS OPTION_VAL_NM
+                ,		'' AS OPTION_PROD_CD
+                ,		'' AS OPTION_PROD_NM
                 FROM 	TB_MS_PRODUCT tmp
                 ,		TB_MS_PRODUCT_SDATTR_CLASS tmpsc
                 ,		TB_MS_PRODUCT_SDATTR tmps
@@ -1075,9 +1166,12 @@
                 ,		'' AS SDATTR_NM
                 ,		tmp.SDSEL_GRP_CD
                 ,		tmpsg.SDSEL_GRP_NM
+                ,		DECODE(tmpsg.FIX_PROD_FG, '0', '선택', '1', '고정') AS GRP_FIX_PROD_FG
+                ,		DECODE(tmpsg.SDSEL_TYPE_FG, 'C', '세트', 'S', '싱글세트') AS SDSEL_TYPE_FG
                 ,		tmpsc.SDSEL_CLASS_CD
                 ,		tmpsc.SDSEL_CLASS_NM
                 ,		tmpsc.SDSEL_QTY
+                ,		DECODE(tmpsc.REQUIRE_YN, 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
                 ,		tmpsp.PROD_CD AS SDSEL_PROD_CD
                 ,		tmp2.PROD_NM AS SDSEL_PROD_NM
                 ,       tmpsp.ADD_PROD_UPRC
@@ -1087,6 +1181,8 @@
                 ,		'' AS OPTION_GRP_NM
                 ,		'' AS OPTION_VAL_CD
                 ,		'' AS OPTION_VAL_NM
+                ,		'' AS OPTION_PROD_CD
+                ,		'' AS OPTION_PROD_NM
                 FROM 	TB_MS_PRODUCT tmp
                 ,		TB_MS_PRODUCT_SDSEL_GROUP tmpsg
                 ,		TB_MS_PRODUCT_SDSEL_CLASS tmpsc
@@ -1123,9 +1219,12 @@
                 ,		'' AS SDATTR_NM
                 ,		'' AS SDSEL_GRP_CD
                 ,		'' AS SDSEL_GRP_NM
+                ,		'' AS GRP_FIX_PROD_FG
+                ,		'' AS SDSEL_TYPE_FG
                 ,		'' AS SDSEL_CLASS_CD
                 ,		'' AS SDSEL_CLASS_NM
                 ,		0 AS SDSEL_QTY
+                ,		'' AS REQUIRE_YN
                 ,		'' AS SDSEL_PROD_CD
                 ,		'' AS SDSEL_PROD_NM
                 ,		0 AS ADD_PROD_UPRC
@@ -1135,15 +1234,20 @@
                 ,		tmpog.OPTION_GRP_NM
                 ,		tmpov.OPTION_VAL_CD
                 ,		tmpov.OPTION_VAL_NM
+                ,		tmpov.OPT_PROD_CD AS OPTION_PROD_CD
+                ,		tmp2.PROD_NM AS OPTION_PROD_NM
                 FROM 	TB_MS_PRODUCT tmp
                 ,		TB_MS_PRODUCT_OPTION_GROUP tmpog
                 ,		TB_MS_PRODUCT_OPTION_VAL tmpov
                 ,       TB_MS_PRODUCT_CLASS_V02 tmpcv
+                ,       TB_MS_PRODUCT tmp2
                 WHERE 	tmp.STORE_CD = #{storeCd}
                 AND 	tmp.STORE_CD = tmpog.STORE_CD
                 AND 	tmp.OPTION_GRP_CD = tmpog.OPTION_GRP_CD
                 AND 	tmpog.STORE_CD = tmpov.STORE_CD (+)
                 AND 	tmpog.OPTION_GRP_CD = tmpov.OPTION_GRP_CD (+)
+                AND 	tmpog.STORE_CD = tmp2.STORE_CD (+)
+                AND 	tmpov.OPT_PROD_CD = tmp2.PROD_CD (+)
                 AND 	tmpcv.STORE_CD = tmp.STORE_CD
                 AND 	tmpcv.PROD_CD = tmp.PROD_CD
                 ) A
@@ -1632,7 +1736,7 @@
                 <if test='tukeyGrpCd != null and tukeyGrpCd != ""'>
                     AND A.TUKEY_GRP_CD = #{tukeyGrpCd}
                 </if>
-                ORDER BY A.TUKEY_GRP_CD, A.TUKEY_CLASS_CD, C.PROD_CD
+                ORDER BY A.TUKEY_GRP_CD, A.PAGE_NO, A.Y, A.X, C.PAGE_NO, C.Y, C.X
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
             <!-- 매장 -->
@@ -1661,7 +1765,7 @@
                 <if test='tukeyGrpCd != null and tukeyGrpCd != ""'>
                     AND A.TUKEY_GRP_CD = #{tukeyGrpCd}
                 </if>
-                ORDER BY A.TUKEY_GRP_CD, A.TUKEY_CLASS_CD, C.PROD_CD
+                ORDER BY A.TUKEY_GRP_CD, A.PAGE_NO, A.Y, A.X, C.PAGE_NO, C.Y, C.X
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
         </choose>
@@ -1700,7 +1804,7 @@
                 <if test='tukeyGrpCd != null and tukeyGrpCd != ""'>
                     AND A.TUKEY_GRP_CD = #{tukeyGrpCd}
                 </if>
-                ORDER BY A.TUKEY_GRP_CD, A.TUKEY_CLASS_CD, C.PROD_CD
+                ORDER BY A.TUKEY_GRP_CD, A.PAGE_NO, A.Y, A.X, C.PAGE_NO, C.Y, C.X
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -1726,7 +1830,7 @@
                 <if test='tukeyGrpCd != null and tukeyGrpCd != ""'>
                     AND A.TUKEY_GRP_CD = #{tukeyGrpCd}
                 </if>
-                ORDER BY A.TUKEY_GRP_CD, A.TUKEY_CLASS_CD, C.PROD_CD
+                ORDER BY A.TUKEY_GRP_CD, A.PAGE_NO, A.Y, A.X, C.PAGE_NO, C.Y, C.X
             </when>
         </choose>
     </select>

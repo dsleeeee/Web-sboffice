@@ -105,7 +105,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         }
     };
 
-    document.addEventListener('click', function(e) {
+    document.getElementById('myForm').addEventListener('click', function(e) {
         var container = document.getElementById('_prodNmList');
         if (!container.contains(e.target)) {
             container.style.display = 'none';
