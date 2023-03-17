@@ -117,17 +117,20 @@
                 </div>
             </td>
             <c:if test="${orgnFg == 'HQ'}">
-            <th><s:message code="soldOut.store" /></th>
-            <td>
-                <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-                <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
-                    <jsp:param name="targetId" value="prodSoldOutStore"/>
-                </jsp:include>
-            </td>
-            </c:if>
-            <c:if test="${orgnFg != 'HQ'}">
-                <th></th>
-                <td></td>
+                <th><s:message code="soldOut.store" /></th>
+                <td>
+                <c:if test="${momsEnvstVal == '0'}">
+                        <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
+                        <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
+                            <jsp:param name="targetId" value="prodSoldOutStore"/>
+                        </jsp:include>
+                </c:if>
+                <c:if test="${momsEnvstVal == '1'}">
+                    <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreSMoms.jsp" flush="true">
+                        <jsp:param name="targetId" value="prodSoldOutStore"/>
+                    </jsp:include>
+                </c:if>
+                </td>
             </c:if>
         </tr>
         </tbody>
@@ -258,7 +261,7 @@
     var brandList = ${brandList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOut/prodSoldOut.js?ver=20220225.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOut/prodSoldOut.js?ver=20220225.02" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">
