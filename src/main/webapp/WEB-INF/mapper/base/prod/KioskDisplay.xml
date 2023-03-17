@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    KioskDisplay.xml
+    비노출관리 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2023.03.10     신규생성
+-->
+<mapper namespace="kr.co.solbipos.base.prod.kioskDisplay.service.impl.KioskDisplayMapper">
+
+    <!-- 상품 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE,
+                   TB_MS_PRODUCT, TB_MS_PRODUCT_SALE_PRICE
+        PARAM    : prodVO
+        COMMENTS : 상품의 목록을 조회한다. ( 매장 )
+    -->
+    <select id="getProdList" parameterType="kioskDisplayVO" resultType="DefaultMap">
+        /* USE : KioskDisplayMapper.getProdList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        tmp.STORE_CD,
+        tmp.PROD_CD,
+        tmp.PROD_NM,
+        NVL(tmp.KIOSK_DISPLAY_YN, 'Y') AS KIOSK_DISPLAY_YN,
+        NVL(tmp.SOLD_OUT_YN, 'N') AS SOLD_OUT_YN,
+        tms.HQ_OFFICE_CD,
+        tmp.HQ_BRAND_CD,
+        tmb.MS_BRAND_NM AS HQ_BRAND_NM,
+        tmp.PROD_CLASS_CD,
+        ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
+        NVL(tmp.COST_UPRC, 0) COST_UPRC,
+        NVL(tmp.SPLY_UPRC, 0) SPLY_UPRC,
+        NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
+        tmp.ORGPLCE_CD, -- TODO 원산지명 조회 필요
+        tmp.SIDE_PROD_YN,
+        tmp.SDATTR_CLASS_CD,
+        tmp.SDSEL_GRP_CD,
+        tmp.PO_UNIT_FG,
+        tmp.REG_DT,
+        tmp.USE_YN,
+        tmp.REG_FG,
+        tmpb.BARCD_CD AS BAR_CD
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM
+        TB_MS_PRODUCT tmp
+        LEFT OUTER JOIN (
+        SELECT
+        STORE_CD,
+        PROD_CD,
+        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+        FROM TB_MS_PRODUCT_SALE_PRICE
+        WHERE STORE_CD = #{storeCd}
+        <![CDATA[
+            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+        ]]>
+        AND SALE_PRC_FG = '1'
+        GROUP BY
+        STORE_CD, PROD_CD
+        ) thpsp ON
+        tmp.STORE_CD = thpsp.STORE_CD
+        AND tmp.PROD_CD = thpsp.PROD_CD
+        INNER JOIN TB_MS_STORE tms ON
+        tms.STORE_CD  = tmp.STORE_CD
+        LEFT OUTER JOIN TB_MS_BRAND tmb ON
+        tmb.STORE_CD = tmp.STORE_CD
+        AND tmb.MS_BRAND_CD = tmp.HQ_BRAND_CD
+        LEFT OUTER JOIN TB_MS_PRODUCT_BARCD tmpb ON
+        tmpb.STORE_CD = tmp.STORE_CD
+        AND tmpb.PROD_CD = tmp.PROD_CD
+        WHERE 1=1
+        AND tmp.STORE_CD = #{storeCd}
+        <if test="chkDt == false">
+            <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                <![CDATA[
+                    AND tmp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                ]]>
+            </if>
+        </if>
+        <if test="prodCd != null and prodCd != ''">
+            AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+        </if>
+        <if test="prodNm != null and prodNm != ''">
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+        </if>
+        <if test="barCd != null and barCd != ''">
+            AND tmpb.BARCD_CD LIKE '%'||#{barCd}||'%' --바코드
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND tmp.PROD_CLASS_CD IN (
+                                        SELECT
+                                        PROD_CLASS_CD
+                                        FROM TB_MS_PRODUCT_CLASS
+                                        WHERE STORE_CD = #{storeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                                    )
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND tmp.USE_YN = #{useYn} --사용여부
+        </if>
+        <if test="hqBrandNm != null and hqBrandNm != ''">
+            AND tmb.MS_BRAND_NM LIKE '%'||#{hqBrandNm}||'%' -- 브랜드명
+        </if>
+        <if test='kioskDisplayYn != null and kioskDisplayYn == "Y"'> -- 품절여부
+            AND (tmp.KIOSK_DISPLAY_YN = #{kioskDisplayYn}
+            OR  tmp.KIOSK_DISPLAY_YN IS NULL)
+        </if>
+        <if test='kioskDisplayYn != null and kioskDisplayYn == "N"'>-- 품절여부
+            AND tmp.KIOSK_DISPLAY_YN = #{kioskDisplayYn}
+        </if>
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+        ORDER BY tmp.PROD_CD ASC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 상품 상세 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE, TB_HQ_PRODUCT_IMAGE, TB_HQ_VENDOR_PROD, TB_HQ_VENDOR
+                   TB_MS_PRODUCT, TB_MS_PRODUCT_SALE_PRICE, TB_MS_PRODUCT_IMAGE, TB_MS_VENDOR_PROD, TB_MS_VENDOR
+        PARAM    : prodVO
+        COMMENTS : 상품의 상세정보를 조회한다. ( 매장 )
+    -->
+    <select id="getProdDetail" parameterType="kioskDisplayVO" resultType="DefaultMap">
+        /* USE : KioskDisplayMapper.getProdDetail */
+        SELECT
+            tmp.STORE_CD,           -- 매장코드
+            tmp.PROD_CD,            -- 상품코드
+            tmp.PROD_NM,            -- 상품명
+            tmp.HQ_BRAND_CD,        -- 브랜드명
+            tmb.MS_BRAND_NM AS HQ_BRAND_NM,
+            tmp.PROD_CLASS_CD,      -- 상품분류코드
+            ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_CD_NM,
+            ( SELECT BARCD_CD FROM TB_MS_PRODUCT_BARCD WHERE STORE_CD = #{storeCd} AND PROD_CD = #{prodCd}) AS BAR_CD,
+            tmp.CORNR_CD,           -- 코너코드
+            tmp.ORGPLCE_CD,         -- 원산지 구분 -- TODO 원산지명 조회 필요
+            tmp.SDATTR_CLASS_CD,
+            tmp.SDSEL_GRP_CD,
+            tmpsg.SDSEL_GRP_NM,
+            tmp.POINT_SAVE_YN,
+            tmp.PROD_DC_FG,
+            tmp.VAT_FG,                                     -- 과세여부
+            tmp.PROD_TIP_YN,
+            tmp.PROD_PACK_AMT,
+            tmp.PROD_DLVR_AMT,
+            tmp.PROD_TYPE_FG,                               -- 상품유형
+            tmp.SALE_PROD_YN,                               -- 판매상품여부
+            tmp.STOCK_PROD_YN,                              -- 재고관리여부
+            tmp.SIDE_PROD_YN,
+            tmp.SET_PROD_FG,                                -- 세트상품구분
+            NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC,           -- 최초판매단가
+            tmpsp.STIN_SALE_UPRC AS STIN_SALE_UPRC,         -- 내점가(NULL 허용가능)
+            tmpsp.DLVR_SALE_UPRC AS DLVR_SALE_UPRC,         -- 배달가(NULL 허용가능)
+            tmpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC,         -- 포장가(NULL 허용가능)
+            NVL(tmp.COST_UPRC, 0) AS COST_UPRC,             -- 원가단가
+            NVL(tmp.LAST_COST_UPRC, 0) AS LAST_COST_UPRC,   -- 최종원가단가
+            NVL(tmp.SPLY_UPRC, 0) AS SPLY_UPRC,             -- 판매단가
+            tmp.SPLY_UPRC_USE_YN,
+            tmp.PO_PROD_FG,                                 -- 주문상품구분
+            tmp.PO_UNIT_FG,                                 -- 주문단위
+            tmp.PO_UNIT_QTY,
+            tmp.PO_UNIT_ALLOW_FG,
+            tmp.PO_MIN_QTY,                 -- 최소주문
+            tmp.SAFE_STOCK_QTY,             -- 안전재고
+            0 AS DEFAULT_STOCK,             -- todo 초기재고
+            tmp.STOCK_UNIT_FG,
+            tmp.USE_YN,                     -- 사용여부
+            NVL(tmp.REMARK, '') AS REMARK,  -- 비고
+            tmp.REG_DT,
+            tmpi.IMG_URL,
+            tmvp.VENDR_CD,
+            tmvp.VENDR_NM,
+            tmp.PRC_CTRL_FG,
+            tmp.MAP_PROD_CD,
+            NVL(tmp.DEPOSIT_CUP_FG, '') AS DEPOSIT_CUP_FG,
+            tmp.POINT_USE_YN,
+            tmp.DC_YN,
+            tmpi.PROD_INFO,
+            NVL(tmp.SALE_TIME_FG, 'N') AS SALE_TIME_FG,
+            tmpi.NU_TOT_WT,
+            tmpi.NU_KCAL,
+            tmpi.NU_PROTEIN,
+            tmpi.NU_SODIUM,
+            tmpi.NU_SUGARS,
+            tmpi.NU_SAT_FAT,
+            tmpi.NU_CAFFEINE,
+            tmpi.MOMS_KIOSK_EDGE,
+            (SELECT OPTION_GRP_NM FROM TB_MS_PRODUCT_OPTION_GROUP WHERE STORE_CD = #{storeCd} AND OPTION_GRP_CD = tmp.OPTION_GRP_CD) AS OPTION_GRP_NM,
+            tmp.OPTION_GRP_CD,
+            tmp.RELEASE_DATE,
+            tmp.DISCON_DATE,
+            tmp.DISCON_YN,
+            (SELECT PROD_NM FROM TB_MS_PRODUCT tmp2 WHERE tmp2.STORE_CD = #{storeCd} AND tmp2.PROD_CD = tmp.GROUP_PROD_CD) AS GROUP_PROD_NM,
+            tmp.GROUP_PROD_CD,
+            (SELECT PROD_NM FROM TB_MS_PRODUCT tmp2 WHERE tmp2.STORE_CD = #{storeCd} AND tmp2.PROD_CD = tmp.DEPOSIT_PROD_CD) AS DEPOSIT_PROD_NM,
+            tmp.DEPOSIT_PROD_CD,
+            tmpi.SALE_TYPE_YN_SIN,
+            tmpi.SALE_TYPE_YN_DLV,
+            tmpi.SALE_TYPE_YN_PKG,
+            tmpi.SALE_CHN_YN_POS,
+            tmpi.SALE_CHN_YN_KSK,
+            tmpi.SALE_CHN_YN_CMP,
+            tmpi.SALE_CHN_YN_BAE,
+            tmpi.SALE_CHN_YN_BAO,
+            tmpi.SALE_CHN_YN_YGY,
+            tmpi.SALE_CHN_YN_YGE,
+            tmpi.SALE_CHN_YN_CPN,
+            tmpi.SALE_CHN_YN_TNG,
+            tmpi.SALE_CHN_YN_DDN
+        FROM
+            TB_MS_PRODUCT tmp
+                LEFT OUTER JOIN TB_MS_BRAND tmb ON
+                    tmb.STORE_CD = tmp.STORE_CD
+                    AND tmb.MS_BRAND_CD = tmp.HQ_BRAND_CD
+                LEFT OUTER JOIN (
+                SELECT
+                    STORE_CD,
+                    PROD_CD,
+                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+                    MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+                    MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
+                    MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
+                FROM TB_MS_PRODUCT_SALE_PRICE
+                WHERE STORE_CD = #{storeCd}
+                <![CDATA[
+                  AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                  AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                ]]>
+                AND SALE_PRC_FG = '1'
+                GROUP BY STORE_CD, PROD_CD
+            ) tmpsp ON
+                    tmp.STORE_CD = tmpsp.STORE_CD
+                    AND tmp.PROD_CD = tmpsp.PROD_CD
+                LEFT OUTER JOIN (
+                SELECT
+                    STORE_CD,
+                    PROD_CD,
+                    IMG_URL || '/' || IMG_FILE_NM AS IMG_URL
+                FROM TB_MS_PRODUCT_IMAGE
+                WHERE STORE_CD = #{storeCd}
+                  AND IMG_FG = '001'
+            ) tmpi ON
+                    tmp.STORE_CD = tmpi.STORE_CD
+                    AND tmp.PROD_CD = tmpi.PROD_CD
+                LEFT OUTER JOIN (
+                SELECT
+                    tmvp.STORE_CD,
+                    tmvp.PROD_CD,
+                    LISTAGG(tmvp.VENDR_CD, ',') WITHIN GROUP (ORDER BY tmvp.VENDR_CD) AS VENDR_CD,
+                LISTAGG(tmv.VENDR_NM, ',') WITHIN GROUP (ORDER BY tmvp.VENDR_CD) AS VENDR_NM
+                FROM TB_MS_VENDOR_PROD tmvp,
+                    TB_MS_VENDOR tmv
+                WHERE 1=1
+                  AND tmvp.STORE_CD = #{storeCd}
+                  AND tmvp.PROD_CD = #{prodCd}
+                  AND tmvp.USE_YN = 'Y'
+                  AND tmv.STORE_CD = tmvp.STORE_CD
+                  AND tmv.VENDR_CD = tmvp.VENDR_CD
+                GROUP BY tmvp.STORE_CD, tmvp.PROD_CD
+            ) tmvp ON
+                    tmp.STORE_CD = tmvp.STORE_CD
+                    AND tmp.PROD_CD = tmvp.PROD_CD
+                LEFT OUTER JOIN TB_MS_PRODUCT_SDSEL_GROUP tmpsg ON
+                    tmp.STORE_CD = tmpsg.STORE_CD
+                    AND tmp.SDSEL_GRP_CD = tmpsg.SDSEL_GRP_CD
+                    AND tmpsg.USE_YN = 'Y'
+                LEFT OUTER JOIN TB_MS_PRODUCT_INFO tmpi ON
+                    tmp.STORE_CD = tmpi.STORE_CD
+                    AND tmp.PROD_CD = tmpi.PROD_CD
+        WHERE tmp.STORE_CD = #{storeCd}
+          AND tmp.PROD_CD = #{prodCd}
+    </select>
+
+    <!-- 연결 상품 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_UNITST_PROD, TB_MS_PRODUCT_UNITST_PROD,
+        PARAM    : prodVO
+        COMMENTS : 상품의 연결상품을 조회한다. ( 매장 )
+    -->
+    <select id="getLinkedProdList" parameterType="kioskDisplayVO" resultType="DefaultMap">
+        /* USE : KioskDisplayMapper.getLinkedProdList */
+        SELECT
+        tmpup.STORE_CD,
+        tmpup.PROD_CD,
+        tmpup.UNIT_PROD_CD,
+        tmpup.SET_PROD_FG,
+        tmpup.UNIT_PROD_QTY,
+        tmpup.DISP_SEQ
+        FROM
+        TB_MS_PRODUCT_UNITST_PROD tmpup
+        WHERE
+        tmpup.STORE_CD = #{storeCd}
+        AND tmpup.PROD_CD = #{prodCd}
+        ORDER BY
+        tmpup.DISP_SEQ
+    </select>
+
+    <!-- 상품 품절여부 저장 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT
+        PARAM    : kioskDisplayVO
+        COMMENTS : 상품 품절여부 저장한다. ( 매장 )
+    -->
+    <update id="getProdKioskDisplaySave" parameterType="kioskDisplayVO">
+        /* USE : KioskDisplayMapper.getProdKioskDisplaySave */
+        UPDATE  TB_MS_PRODUCT
+        SET     KIOSK_DISPLAY_YN = #{kioskDisplayYn}
+        ,       MOD_DT      = #{modDt}
+        ,       MOD_ID      = #{modId}
+        WHERE   STORE_CD    = #{storeCd}
+        AND     PROD_CD     = #{prodCd}
+    </update>
+
+</mapper>
