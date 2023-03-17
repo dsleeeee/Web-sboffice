@@ -184,13 +184,11 @@ public class MemberExcelUploadServiceImpl implements MemberExcelUploadService {
                         // 선불 충전,사용
                         result = mapper.savePrePaid(memberExcelUploadVO);
                     }
-                    // 선불입금 시 집계 테이블(TB_MB_MEMBER_PAID_BALANCE)에 금액반영
-                    if(result > 0){
+                    if ( prepaidAmt != 0 || prepaidUseAmt != 0) {
                         // 선불 충전,사용 집계
                         result = mapper.savePrePaidBalance(memberExcelUploadVO);
-                    }
-                    // 선불회원 등록 (자점회원)
-                    if ( prepaidAmt != 0 || prepaidUseAmt != 0) {
+
+                        // 선불회원 등록 (자점회원)
                         result = registMapper.registMemberPrepaid(registVO);
                     }
 
