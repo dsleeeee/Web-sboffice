@@ -11,7 +11,7 @@
 
   <%--searchTbl--%>
   <div class="searchBar">
-    <a href="#" class="open fl"><s:message code="memberFg.prepaid" /></a>
+    <a href="#" class="open fl"><s:message code="memberFg.postpaid" /></a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
       <button class="btn_blue fr" id="nxBtnSearch2" ng-click="_pageView('memberPostpaidCtrl', 1)">

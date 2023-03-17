@@ -3,6 +3,8 @@ package kr.co.solbipos.membr.info.excelUpload.service;
 import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.PageVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.membr.anals.prepaid.enums.PrepaidFg;
+import kr.co.solbipos.membr.anals.prepaid.enums.PrepaidPayFg;
 import kr.co.solbipos.membr.info.regist.enums.WeddingYn;
 import kr.co.solbipos.membr.info.regist.service.enums.AnvType;
 import kr.co.solbipos.membr.info.regist.service.enums.PeriodType;
@@ -46,7 +48,31 @@ public class MemberExcelUploadVO extends PageVO {
   private String avablPoint;
   private String totAdjPoint;
 
-  public String getAvablPoint() {
+  /** 본사코드 */
+  private String hqOfficeCd;
+  /** 선불충전금액 */
+  private String prepaidAmt;
+  /** 선불사용금액 */
+  private String prepaidUseAmt;
+  /** 외상 입금 날짜 */
+  private String saleDate;
+  /** 외상 입금 일시 */
+  private String prepaidDt;
+  /** 외상 입금 구분 */
+  private PrepaidFg prepaidFg;
+  /** 외상 입금 구분 */
+  private PrepaidPayFg prepaidPayFg;
+  /** 비매출 승인번호 */
+  private String nonsaleTypeApprNo;
+  /** 원거래비매출승인번호 */
+  private String orgNonsaleTypeApprNo;
+  /** 비매출 영수증 번호 */
+  private String nonsaleBillNo;
+  /** 금액 */
+  private String amt;
+
+
+public String getAvablPoint() {
 	return avablPoint;
 }
 
@@ -331,4 +357,77 @@ public String getMembrOrgnCd() {
   public void setOrgCstCardNo(String orgCstCardNo) {
     this.orgCstCardNo = orgCstCardNo;
   }
+
+  public String getHqOfficeCd() {
+    return hqOfficeCd;
+  }
+
+  public void setHqOfficeCd(String hqOfficeCd) {
+    this.hqOfficeCd = hqOfficeCd;
+  }
+
+  public String getPrepaidAmt() { return prepaidAmt; }
+
+  public void setPrepaidAmt(String prepaidAmt) { this.prepaidAmt = prepaidAmt; }
+
+  public String getPrepaidUseAmt() { return prepaidUseAmt; }
+
+  public void setPrepaidUseAmt(String prepaidUseAmt) { this.prepaidUseAmt = prepaidUseAmt; }
+
+  public String getSaleDate() {
+    return saleDate;
+  }
+
+  public void setSaleDate(String saleDate) {
+    this.saleDate = saleDate;
+  }
+
+  public String getPrepaidDt() {
+    return prepaidDt;
+  }
+
+  public void setPrepaidDt(String prepaidDt) {
+    this.prepaidDt = prepaidDt;
+  }
+
+  public PrepaidFg getPrepaidFg() {
+    return prepaidFg;
+  }
+
+  public void setPrepaidFg(PrepaidFg prepaidInFg) {
+    this.prepaidFg = prepaidInFg;
+  }
+
+  public PrepaidPayFg getPrepaidPayFg() {
+    return prepaidPayFg;
+  }
+
+  public void setPrepaidPayFg(PrepaidPayFg prepaidPayFg) {
+    this.prepaidPayFg = prepaidPayFg;
+  }
+
+  public String getNonsaleTypeApprNo() {
+    return nonsaleTypeApprNo;
+  }
+
+  public void setNonsaleTypeApprNo(String nonsaleTypeApprNo) {
+    this.nonsaleTypeApprNo = nonsaleTypeApprNo;
+  }
+
+  public String getOrgNonsaleTypeApprNo() { return orgNonsaleTypeApprNo; }
+
+  public void setOrgNonsaleTypeApprNo(String orgNonsaleTypeApprNo) { this.orgNonsaleTypeApprNo = orgNonsaleTypeApprNo; }
+
+  public String getNonsaleBillNo() {
+    return nonsaleBillNo;
+  }
+
+  public void setNonsaleBillNo(String nonsaleBillNo) {
+    this.nonsaleBillNo = nonsaleBillNo;
+  }
+
+  public String getAmt() { return amt; }
+
+  public void setAmt(String amt) { this.amt = amt; }
+
 }

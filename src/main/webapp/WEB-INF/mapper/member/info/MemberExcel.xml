@@ -82,6 +82,7 @@
             #{memberEngNm}
         )
     </insert>
+
     <!--
      TABLE    : TB_MB_MEMBER_ADDR
      COMMENTS : 회원 엑셀 업로드 저장
@@ -182,5 +183,104 @@
 <!--        ]]>-->
 <!--    </insert>-->
 
+    <!-- 선불 충전,사용 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_PREPAID
+        COMMENTS : 선불금을 충전한다.
+    -->
+    <insert id="savePrePaid" parameterType="memberExcelUploadVO">
+    /* MemberExcelMapper.savePrePaid */
+    INSERT INTO TB_MB_MEMBER_PREPAID
+    (
+      HQ_OFFICE_CD,
+      STORE_CD,
+      SALE_DATE,
+      MEMBR_NO,
+      PREPAID_NO,
+      PREPAID_DT,
+      PREPAID_FG,
+      PREPAID_PAY_FG,
+      PREPAID_AMT,
+      NONSALE_TYPE_APPR_NO,
+      ORG_NONSALE_TYPE_APPR_NO,
+      NONSALE_BILL_NO,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    )
+    VALUES
+    (
+      #{hqOfficeCd},
+      #{regStoreCd},
+      #{saleDate},
+      #{membrNo},
+      (SELECT LPAD(NVL(MAX(PREPAID_NO), '0')+1, 4, '0')
+         FROM TB_MB_MEMBER_PREPAID
+        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+          AND STORE_CD = #{regStoreCd}
+          AND SALE_DATE = #{saleDate} ),
+      #{prepaidDt},
+      #{prepaidFg, jdbcType=VARCHAR},
+      #{prepaidPayFg, jdbcType=VARCHAR},
+      #{amt},
+      #{nonsaleTypeApprNo},
+      #{orgNonsaleTypeApprNo},
+      #{nonsaleBillNo},
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
+    )
+  </insert>
+
+    <!-- 선불 충전,사용 집계 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_PAID_BALANCE
+        COMMENTS : 선불금을 회원별로 집계 반영한다.
+    -->
+    <insert id="savePrePaidBalance" parameterType="DefaultMap">
+      /* MemberExcelMapper.savePrePaidBalance */
+        MERGE INTO TB_MB_MEMBER_PAID_BALANCE tmmpb
+        USING DUAL ON
+            (
+                tmmpb.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tmmpb.STORE_CD = #{regStoreCd}
+                AND tmmpb.MEMBR_NO = #{membrNo}
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+                tmmpb.PREPAID_AMT = #{prepaidAmt},
+                tmmpb.PREPAID_USE_AMT = #{prepaidUseAmt},
+                tmmpb.PREPAID_BAL_AMT = ( #{prepaidAmt} - #{prepaidUseAmt} ),
+                tmmpb.MOD_DT = #{modDt},
+                tmmpb.MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+            INSERT
+            (
+                tmmpb.HQ_OFFICE_CD,
+                tmmpb.STORE_CD,
+                tmmpb.MEMBR_NO,
+                tmmpb.PREPAID_AMT,
+                tmmpb.PREPAID_USE_AMT,
+                tmmpb.PREPAID_BAL_AMT,
+                tmmpb.REG_DT,
+                tmmpb.REG_ID,
+                tmmpb.MOD_DT,
+                tmmpb.MOD_ID
+            ) VALUES (
+                #{hqOfficeCd},
+                #{regStoreCd},
+                #{membrNo},
+                #{prepaidAmt},
+                #{prepaidUseAmt},
+                ( #{prepaidAmt} - #{prepaidUseAmt} ),
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
+    </insert>
 
 </mapper>

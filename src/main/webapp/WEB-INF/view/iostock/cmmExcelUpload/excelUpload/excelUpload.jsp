@@ -138,10 +138,15 @@
                                  width="100" align="left"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="memberPoint.totAdjPointAfter"/>" binding="totAdjPointAfter"
                                  data-type="String" visible="{{totAdjPointAfter}}"
-                                 width="100" align="left">
-            </wj-flex-grid-column>
+                                 width="100" align="left"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="memberPoint.totAdjPointAfter"/>" binding="tmpTotAdjPoint"
                                  data-type="String" visible="{{tmpTotAdjPoint}}"
+                                 width="100" align="left"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="member.excel.prepaidAmt"/>" binding="prepaidAmt"
+                                 data-type="String" visible="{{prepaidAmtVisibleFg}}"
+                                 width="100" align="left"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="member.excel.prepaidUseAmt"/>" binding="prepaidUseAmt"
+                                 data-type="String" visible="{{prepaidUseAmtVisibleFg}}"
                                  width="100" align="left"></wj-flex-grid-column>
 
         </wj-flex-grid>
@@ -278,6 +283,8 @@
                 $scope.qtyVisibleFg = false; // 수량
                 $scope.uprcVisibleFg = false; // 단가
                 $scope.remarkVisibleFg = false; // 비고
+                $scope.prepaidAmtVisibleFg = false; // 선불충전금액
+                $scope.prepaidUseAmtVisibleFg = false; // 선불사용금액
 
                 params.prodBarcdCd = '상품코드입력';
                 params.unitQty = 0;
@@ -293,6 +300,8 @@
                 $scope.qtyVisibleFg = false; // 수량
                 $scope.uprcVisibleFg = true;  // 단가
                 $scope.remarkVisibleFg = false; // 비고
+                $scope.prepaidAmtVisibleFg = false; // 선불충전금액
+                $scope.prepaidUseAmtVisibleFg = false; // 선불사용금액
 
                 params.prodBarcdCd = '상품코드입력';
                 params.unitQty = 0;
@@ -309,6 +318,8 @@
                 $scope.qtyVisibleFg = true;  // 수량
                 $scope.uprcVisibleFg = false; // 단가
                 $scope.remarkVisibleFg = true;  // 비고
+                $scope.prepaidAmtVisibleFg = false; // 선불충전금액
+                $scope.prepaidUseAmtVisibleFg = false; // 선불사용금액
 
                 params.prodBarcdCd = '상품코드입력';
                 params.qty = 0;
@@ -323,6 +334,8 @@
                 $scope.qtyVisibleFg = false; // 수량
                 $scope.uprcVisibleFg = true;  // 단가
                 $scope.remarkVisibleFg = false; // 비고
+                $scope.prepaidAmtVisibleFg = false; // 선불충전금액
+                $scope.prepaidUseAmtVisibleFg = false; // 선불사용금액
 
                 params.prodBarcdCd = '상품코드입력';
                 params.unitQty = 0;
@@ -361,6 +374,9 @@
                 $scope.smsRecvYn = true; // SMS수신
                 $scope.avablPoint = true; // 가용포인트
                 $scope.totSavePoint = true; // 누적포인트
+                $scope.prepaidAmtVisibleFg = true; // 선불충전금액
+                $scope.prepaidUseAmtVisibleFg = true; // 선불사용금액
+
                 //양식 샘플 초기값
                 // params.membrClassCd = '기본';
                 // params.membrStore = '매장명';
@@ -374,6 +390,8 @@
                 params.smsRecvYn = '미수신';
                 params.avablPoint = 0;
                 params.totSavePoint = 0;
+                params.prepaidAmt = 0; // 선불충전금액
+                params.prepaidUseAmt = 0; // 선불사용금액
             }
             // 회원포인트조정
             else if ($scope.uploadFg === 'memberPoint') {
@@ -395,7 +413,10 @@
                 $scope.totAdjPoint = true;
                 $scope.totAdjPointAfter = false;
                 $scope.tmpTotAdjPoint = false;
-                params.membrNo = "0000000001"
+                $scope.prepaidAmtVisibleFg = false; // 선불충전금액
+                $scope.prepaidUseAmtVisibleFg = false; // 선불사용금액
+
+                params.membrNo = "0000000001";
                 params.totAdjPoint = 0
             }
             var newRow = flex.collectionView.addNew();
@@ -1021,6 +1042,43 @@
                 if (parseInt(item.avablPoint) > parseInt(item.totSavePoint))
                 {
                     msg = messages["member.excel.upload.check.avablPoint"]; // 가용포인트는 누적포인트보다 클 수 없습니다.
+                    item.result = msg;
+                    failCnt++;
+                    continue;
+                }
+
+                // 선불충전금액
+                if (nvl(item.prepaidAmt, '') !== '') {
+                    // 선불충전금액 숫자가 아닌 값
+                    var numChkexp = /[^0-9]/g;
+                    if (numChkexp.test(nvl(item.prepaidAmt, 0))) {
+                        msg = messages["member.excel.prepaidAmt"] + messages["excelUpload.not.numberData"]; // 선불충전금액의 값에 숫자가 아닌 값이 존재합니다. 데이터 및 양식을 확인해주세요.
+                        item.result = msg;
+                        failCnt++;
+                        continue;
+                    }
+                } else {
+                    item.prepaidAmt = 0;
+                }
+
+                // 선불사용금액
+                if (nvl(item.prepaidUseAmt, '') !== '') {
+                    // 선불충전금액 숫자가 아닌 값
+                    var numChkexp = /[^0-9]/g;
+                    if (numChkexp.test(nvl(item.prepaidUseAmt, 0))) {
+                        msg = messages["member.excel.prepaidUseAmt"] + messages["excelUpload.not.numberData"]; // 선불충전금액의 값에 숫자가 아닌 값이 존재합니다. 데이터 및 양식을 확인해주세요.
+                        item.result = msg;
+                        failCnt++;
+                        continue;
+                    }
+                } else {
+                    item.prepaidUseAmt = 0;
+                }
+
+                // 선불사용금액는 선불충전금액보다 클 수 없습니다.
+                if (parseInt(item.prepaidUseAmt) > parseInt(item.prepaidAmt))
+                {
+                    msg = messages["member.excel.upload.check.prepaidAmt"]; // 선불사용금액는 선불충전금액보다 클 수 없습니다.
                     item.result = msg;
                     failCnt++;
                     continue;

@@ -15,8 +15,12 @@ public enum PrepaidFg implements CodeEnum {
 
     /** 충전 */
     CHARGE("1"),
-    /** 취소 */
-    CANCEL("2");
+    /** 충전취소 */
+    CANCEL("2"),
+    /** 사용 */
+    USE("3"),
+    /** 사용취소 */
+    USE_CANCEL("4");
 
     private String code;
 

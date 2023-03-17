@@ -1,6 +1,7 @@
 package kr.co.solbipos.membr.info.excelUpload.service.impl;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
+import static kr.co.common.utils.DateUtil.currentDateString;
 
 import java.util.Date;
 import java.util.List;
@@ -26,6 +27,8 @@ import kr.co.solbipos.membr.info.excelUpload.service.MemberExcelUploadVO;
 import kr.co.solbipos.membr.info.regist.enums.WeddingYn;
 import kr.co.solbipos.membr.info.regist.service.RegistVO;
 import kr.co.solbipos.membr.info.regist.service.impl.RegistMapper;
+import kr.co.solbipos.membr.anals.prepaid.enums.PrepaidFg;
+import kr.co.solbipos.membr.anals.prepaid.enums.PrepaidPayFg;
 
 @Service("memberExcelUploadService")
 @Transactional(rollbackFor = {Exception.class})
@@ -158,10 +161,39 @@ public class MemberExcelUploadServiceImpl implements MemberExcelUploadService {
 
                     registVO.setUseYn("Y");
 
+                    memberExcelUploadVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                    memberExcelUploadVO.setSaleDate(currentDateString());
+                    memberExcelUploadVO.setPrepaidDt(dt);
+                    memberExcelUploadVO.setPrepaidPayFg(PrepaidPayFg.CASH); // 현금
+                    memberExcelUploadVO.setNonsaleTypeApprNo(" "); // 비매출승인번호
+                    memberExcelUploadVO.setOrgNonsaleTypeApprNo(" "); // 원거래비매출승인번호
+                    memberExcelUploadVO.setNonsaleBillNo(" "); // 비매출영수증번호
+                    // 선불충전금액
+                    int prepaidAmt = StringUtils.isEmpty(memberExcelUploadVO.getPrepaidAmt()) ? 0 : Integer.parseInt( memberExcelUploadVO.getPrepaidAmt() );
+                    if ( prepaidAmt != 0) {
+                        memberExcelUploadVO.setPrepaidFg(PrepaidFg.CHARGE); // 충전
+                        memberExcelUploadVO.setAmt(memberExcelUploadVO.getPrepaidAmt()); // 선불충전금액
+                        // 선불 충전,사용
+                        result = mapper.savePrePaid(memberExcelUploadVO);
+                    }
+                    // 선불사용금액
+                    int prepaidUseAmt = StringUtils.isEmpty(memberExcelUploadVO.getPrepaidUseAmt()) ? 0 : Integer.parseInt( memberExcelUploadVO.getPrepaidUseAmt() );
+                    if ( prepaidUseAmt != 0) {
+                        memberExcelUploadVO.setPrepaidFg(PrepaidFg.USE); // 사용
+                        memberExcelUploadVO.setAmt(memberExcelUploadVO.getPrepaidUseAmt()); // 선불사용금액
+                        // 선불 충전,사용
+                        result = mapper.savePrePaid(memberExcelUploadVO);
+                    }
+                    // 선불입금 시 집계 테이블(TB_MB_MEMBER_PAID_BALANCE)에 금액반영
+                    if(result > 0){
+                        // 선불 충전,사용 집계
+                        result = mapper.savePrePaidBalance(memberExcelUploadVO);
+                    }
                     // 선불회원 등록 (자점회원)
-                    // 선불회원 등록 로직 임시 제외
-                    //result = registMapper.registMemberPrepaid(registVO);
-                    //if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                    if ( prepaidAmt != 0 || prepaidUseAmt != 0) {
+                        result = registMapper.registMemberPrepaid(registVO);
+                    }
+
                 }
 
                 if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));

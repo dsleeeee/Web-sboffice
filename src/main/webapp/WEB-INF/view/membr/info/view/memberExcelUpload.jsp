@@ -181,6 +181,10 @@
                                      width="80" is-read-only="false" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="member.excel.totPoint"/>" binding="totSavePoint"
                                      width="80" is-read-only="false" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="member.excel.prepaidAmt"/>" binding="prepaidAmt"
+                                     width="90" is-read-only="false" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="member.excel.prepaidUseAmt"/>" binding="prepaidUseAmt"
+                                     width="90" is-read-only="false" align="right"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
