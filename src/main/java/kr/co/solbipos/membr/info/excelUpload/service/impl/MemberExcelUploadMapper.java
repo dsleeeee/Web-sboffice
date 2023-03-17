@@ -20,4 +20,10 @@ public interface MemberExcelUploadMapper {
   int insertMemberAddr(MemberExcelUploadVO memberExcelUploadVO);
 
   int insertMemberPoint(MemberExcelUploadVO memberExcelUploadVO);
+
+  /** 선불 충전,사용 */
+  int savePrePaid(MemberExcelUploadVO memberExcelUploadVO);
+
+  /** 선불 충전,사용 집계 */
+  int savePrePaidBalance(MemberExcelUploadVO memberExcelUploadVO);
 }
