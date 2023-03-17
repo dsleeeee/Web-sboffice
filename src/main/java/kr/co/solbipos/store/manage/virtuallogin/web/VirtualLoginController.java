@@ -127,11 +127,6 @@ public class VirtualLoginController {
 
         String returnUrl = "/main.sb";
 
-        // 가상로그인시, 사용자가 따로 지정한 ULR이 있는 경우 해당화면으로 이동
-        if(request.getParameter("optUrl") != null && !"".equals(request.getParameter("optUrl"))){
-            returnUrl = request.getParameter("optUrl");
-        }
-
         // 기존 세션 조회
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
         // 기존세션 이용하여 권한조회
@@ -175,6 +170,12 @@ public class VirtualLoginController {
             sessionInfoVO.setLoginResult(LoginResult.SUCCESS);
             // sessionId 세팅
             sessionInfoVO.setSessionId( generateUUID() );
+            // 가상로그인시, 사용자가 따로 지정한 ULR이 있는 경우 해당화면으로 이동
+            if(request.getParameter("optUrl") != null && !"".equals(request.getParameter("optUrl"))){
+                returnUrl = request.getParameter("optUrl");
+                // 사용자의 메뉴 리스트 조회시 사용, 해당 URL은 메뉴권한에 상관없이 접근가능(20230316)
+                sessionInfoVO.setOptUrl(request.getParameter("optUrl"));
+            }
             // 사용자의 메뉴 리스트 Set : 권한포함
             sessionInfoVO.setMenuData(cmmMenuService.getUserMenuList(sessionInfoVO));
             // 즐겨찾기 메뉴 리스트 Set

@@ -169,6 +169,9 @@ public class SessionInfoVO extends CmmVO {
     /** POS 자동 로그인 return URL */
     private String resrceCd;
 
+    /** 가상로그인시, 사용자가 따로 지정한 return url */
+    private String optUrl;
+
 	/**
      * @return the sessionId
      */
@@ -675,5 +678,13 @@ public class SessionInfoVO extends CmmVO {
 
     public void setResrceCd(String resrceCd) {
         this.resrceCd = resrceCd;
+    }
+
+    public String getOptUrl() {
+        return optUrl;
+    }
+
+    public void setOptUrl(String optUrl) {
+        this.optUrl = optUrl;
     }
 }

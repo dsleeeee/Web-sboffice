@@ -35,9 +35,14 @@
     var momsShopTypeComboList = ${momsShopTypeComboList};
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 
+    // 본사권한 [기초관리] - [매장관리] - [매장정보조회]의 판매터치키변경을 클릭하여 접속한 경우, 왼쪽 메뉴영역은 접어두기.
+    var referrer = document.referrer;
+    if(orgnFg === "STORE" && referrer.indexOf("/base/store/view/view/list.sb") > 0){
+        $(".menuControl").trigger("click");
+    }
+
     // POS에서 해당 WEB 화면 최초 접속한 경우(접속하면서 session 생성), 왼쪽 메뉴영역은 접어두기.
     // 최초 접속시에는 이전 URL 인자값으로 판별가능
-    var referrer = document.referrer;
     if(referrer.indexOf("userId") > 0 && referrer.indexOf("resrceCd") > 0 && referrer.indexOf("accessCd") > 30 ){
         $(".menuControl").trigger("click");
     }

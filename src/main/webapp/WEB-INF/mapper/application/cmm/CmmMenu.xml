@@ -175,12 +175,17 @@
                                     SELECT
                                         twae.RESRCE_CD
                                     FROM
-                                        TB_WB_AUTHOR_EXCEPT_V01 twae
+                                        TB_WB_AUTHOR_EXCEPT_V01 twae,
+                                        TB_WB_RESRCE_INFO twri
                                     WHERE
                                         twae.USER_ID = #{userId}
                                         AND twae.INCLD_EXCLD_FG = 'E'
                                         AND twae.USE_YN = 'Y'
                                         AND twae.LOGIN_FG = NVL(#{loginFg}, 'W')
+                                        AND twae.RESRCE_CD = twri.RESRCE_CD
+                                    <if test='optUrl != null and optUrl != ""'> <!-- 해당 URL은 메뉴권한에 상관없이 접근가능(20230316) -->
+                                        AND twri.URL != #{optUrl}
+                                    </if>
                                 )
                 AND twri.RESRCE_FG = 'M'
                 AND twri.USE_YN = 'Y'

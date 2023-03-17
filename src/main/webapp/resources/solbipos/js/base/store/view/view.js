@@ -48,7 +48,7 @@ app.controller('storeListCtrl', ['$scope', '$http', function ($scope, $http) {
         var item = s.rows[e.row].dataItem;
 
         // 매장 판매터치키 변경 버튼 set
-        if( col.binding === "buttons"){
+        if( col.binding === "tukeyButtons" || col.binding === "keyMapButtons"){
           e.cell.innerHTML = "변경";
           e.cell.dataItem = item;
           wijmo.addClass(e.cell, 'wijLink');
@@ -89,12 +89,18 @@ app.controller('storeListCtrl', ['$scope', '$http', function ($scope, $http) {
         }
 
         // 매장 판매터치키 변경 버튼 클릭
-        if ( col.binding === "buttons") {
-            $scope.vLoginProcess(selectedRow.msUserId);
+        if ( col.binding === "tukeyButtons") {
+            $scope.vLoginProcess(selectedRow.msUserId, "/base/prod/touchKey/touchKey/view.sb");
         }
 
-          // 지도보기 팝업
-          if(col.binding === "storeLocation") {
+        // 매장 키오스크키맵 변경 버튼 클릭
+        if(col.binding === "keyMapButtons"){
+            $scope.vLoginProcess(selectedRow.msUserId, "/base/prod/kioskKeyMap/kioskKeyMap/view.sb");
+        }
+
+
+        // 지도보기 팝업
+        if(col.binding === "storeLocation") {
 
             // 위도,경도 또는 주소가 있는지 체크
             if(selectedRow.latitude === "" || selectedRow.longitude === "") {
@@ -113,7 +119,7 @@ app.controller('storeListCtrl', ['$scope', '$http', function ($scope, $http) {
 
             $scope.mapPopLayer.show(true);
             $scope._broadcast('mapPopCtrl', params);
-          }
+        }
       }
     });
   };
@@ -200,7 +206,7 @@ app.controller('storeListCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 가상로그인 수행
     // 최초 가상로그인으로 로그인시에는 vLoginId 가 아닌 vUserId 파라미터로 로그인 후 vLoginId로 사용한다.
-    $scope.vLoginProcess = function(value) {
+    $scope.vLoginProcess = function(value, url) {
 
         if (isEmpty(value)) {
             $scope.$apply(function() {
@@ -223,10 +229,12 @@ app.controller('storeListCtrl', ['$scope', '$http', function ($scope, $http) {
             formField.setAttribute("value", value);
             form.appendChild(formField);
 
+            // 가상로그인시, 사용자가 따로 지정한 ULR이 있으면 해당 URL로 이동
+            // 해당 URL은 메뉴권한에 상관없이 접근가능(20230316)
             formField = document.createElement("input");
             formField.setAttribute("type", "hidden");
             formField.setAttribute("name", "optUrl");
-            formField.setAttribute("value", "/base/prod/touchKey/touchKey/view.sb");
+            formField.setAttribute("value", url);
             form.appendChild(formField);
 
             document.body.appendChild(form);
