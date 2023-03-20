@@ -1076,13 +1076,13 @@
                 }
 
                 // 선불사용금액는 선불충전금액보다 클 수 없습니다.
-                if (parseInt(item.prepaidUseAmt) > parseInt(item.prepaidAmt))
-                {
-                    msg = messages["member.excel.upload.check.prepaidAmt"]; // 선불사용금액는 선불충전금액보다 클 수 없습니다.
-                    item.result = msg;
-                    failCnt++;
-                    continue;
-                }
+                // if (parseInt(item.prepaidUseAmt) > parseInt(item.prepaidAmt))
+                // {
+                //     msg = messages["member.excel.upload.check.prepaidAmt"]; // 선불사용금액는 선불충전금액보다 클 수 없습니다.
+                //     item.result = msg;
+                //     failCnt++;
+                //     continue;
+                // }
 
                 if (failCnt > 0) {
                     return false;
