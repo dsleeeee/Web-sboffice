@@ -45,13 +45,13 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="empBatchChange.empNo"/>" binding="empNo" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="empBatchChange.branchCd"/>" width="90" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="empBatchChange.momsTeam"/>" width="100" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="empBatchChange.momsAcShop"/>" width="90" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="empBatchChange.momsAreaFg"/>" width="90" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="empBatchChange.momsCommercial"/>" width="90" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="empBatchChange.momsShopType"/>" width="90" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="empBatchChange.momsStoreManageType"/>" width="90" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="empBatchChange.branchCd"/>" binding="branchCd" data-map="branchCdDataMap" width="90" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="empBatchChange.momsTeam"/>" binding="momsTeam" data-map="momsTeamDataMap" width="100" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="empBatchChange.momsAcShop"/>" binding="momsAcShop" data-map="momsAcShopDataMap" width="90" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="empBatchChange.momsAreaFg"/>" binding="momsAreaFg" data-map="momsAreaFgDataMap" width="90" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="empBatchChange.momsCommercial"/>" binding="momsCommercial" data-map="momsCommercialDataMap" width="90" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="empBatchChange.momsShopType"/>" binding="momsShopType" data-map="momsShopTypeDataMap" width="90" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="empBatchChange.momsStoreManageType"/>" binding="momsStoreManageType" data-map="momsStoreManageTypeDataMap" width="90" align="center"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
@@ -103,7 +103,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/empBatchChange/empBatchChangeExcelUpload.js?ver=20230307.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/empBatchChange/empBatchChangeExcelUpload.js?ver=20230322.01" charset="utf-8"></script>
 
 <%-- 상품엑셀업로드 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/empBatchChange/empBatchChangeExcelUploadAdd.jsp">
