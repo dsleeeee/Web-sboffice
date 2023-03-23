@@ -90,14 +90,19 @@ app.controller('storeListCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 매장 판매터치키 변경 버튼 클릭
         if ( col.binding === "tukeyButtons") {
-            $scope.vLoginProcess(selectedRow.msUserId, "/base/prod/touchKey/touchKey/view.sb");
+            $scope.vLoginProcess(selectedRow.msUserId, "/base/prod/touchKey/touchKey/view.sb", "000135"); // 판매터치키등록 리소스코드(개발/운영 DB 동일)
         }
 
         // 매장 키오스크키맵 변경 버튼 클릭
         if(col.binding === "keyMapButtons"){
-            $scope.vLoginProcess(selectedRow.msUserId, "/base/prod/kioskKeyMap/kioskKeyMap/view.sb");
-        }
 
+            var resrceCd = "001639"; // 키오스크키맵 리소스코드(운영 DB)
+            if(window.location.href.indexOf("://192") > 0 || window.location.href.indexOf("://localhost") > 0){
+                resrceCd = "001858"; // 키오스크키맵 리소스코드(개발 DB)
+            }
+
+            $scope.vLoginProcess(selectedRow.msUserId, "/base/prod/kioskKeyMap/kioskKeyMap/view.sb", resrceCd);
+        }
 
         // 지도보기 팝업
         if(col.binding === "storeLocation") {
@@ -206,7 +211,7 @@ app.controller('storeListCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 가상로그인 수행
     // 최초 가상로그인으로 로그인시에는 vLoginId 가 아닌 vUserId 파라미터로 로그인 후 vLoginId로 사용한다.
-    $scope.vLoginProcess = function(value, url) {
+    $scope.vLoginProcess = function(value, url, resrceCd) {
 
         if (isEmpty(value)) {
             $scope.$apply(function() {
@@ -230,11 +235,17 @@ app.controller('storeListCtrl', ['$scope', '$http', function ($scope, $http) {
             form.appendChild(formField);
 
             // 가상로그인시, 사용자가 따로 지정한 ULR이 있으면 해당 URL로 이동
-            // 해당 URL은 메뉴권한에 상관없이 접근가능(20230316)
             formField = document.createElement("input");
             formField.setAttribute("type", "hidden");
             formField.setAttribute("name", "optUrl");
             formField.setAttribute("value", url);
+            form.appendChild(formField);
+
+            // 가상로그인시, 해당 메뉴(사용자가 따로 지정한 ULR)는 사용자 메뉴권한에 상관없이 접근가능
+            formField = document.createElement("input");
+            formField.setAttribute("type", "hidden");
+            formField.setAttribute("name", "optResrceCd");
+            formField.setAttribute("value", resrceCd);
             form.appendChild(formField);
 
             document.body.appendChild(form);
