@@ -32,7 +32,7 @@
             </button>
         </div>
 
-        <div class="wj-gridWrap" style="display: none">
+        <div class="wj-gridWrap" style="display: none;">
             <wj-flex-grid
                     autoGenerateColumns="false"
                     control="excelFlex"
@@ -45,13 +45,13 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="storeBatchChange.storeCd"/>" binding="storeCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeBatchChange.branchCd"/>" width="90" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeBatchChange.momsTeam"/>" width="100" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeBatchChange.momsAcShop"/>" width="90" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeBatchChange.momsAreaFg"/>" width="90" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeBatchChange.momsCommercial"/>" width="90" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeBatchChange.momsShopType"/>" width="90" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeBatchChange.momsStoreManageType"/>" width="90" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeBatchChange.branchCd"/>" binding="branchCd" data-map="branchCdDataMap" width="90" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeBatchChange.momsTeam"/>" binding="momsTeam" data-map="momsTeamDataMap" width="100" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeBatchChange.momsAcShop"/>" binding="momsAcShop" data-map="momsAcShopDataMap" width="90" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeBatchChange.momsAreaFg"/>" binding="momsAreaFg" data-map="momsAreaFgDataMap" width="90" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeBatchChange.momsCommercial"/>" binding="momsCommercial" data-map="momsCommercialDataMap" width="90" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeBatchChange.momsShopType"/>" binding="momsShopType" data-map="momsShopTypeDataMap" width="90" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeBatchChange.momsStoreManageType"/>" binding="momsStoreManageType" data-map="momsStoreManageTypeDataMap" width="90" align="center"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
@@ -103,7 +103,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storeBatchChange/storeBatchChangeExcelUpload.js?ver=20230307.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storeBatchChange/storeBatchChangeExcelUpload.js?ver=20230322.01" charset="utf-8"></script>
 
 <%-- 상품엑셀업로드 팝업 --%>
 <c:import url="/WEB-INF/view/store/storeMoms/storeBatchChange/storeBatchChangeExcelUploadAdd.jsp">

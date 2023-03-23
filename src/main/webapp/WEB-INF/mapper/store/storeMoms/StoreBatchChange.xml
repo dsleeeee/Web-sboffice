@@ -284,58 +284,48 @@
     -->
     <update id="getSimpleStoreInfoSave" parameterType="storeBatchChangeVO">
         /* StoreBatchChangeMapper.getSimpleStoreInfoSave */
-        MERGE INTO  TB_MS_STORE_INFO A
-        USING   DUAL
-        ON (    A.STORE_CD = #{storeCd})
-        WHEN MATCHED THEN
-        UPDATE
-        SET
-        <if test="momsTeam != null and momsTeam != ''">
-            MOMS_TEAM = #{momsTeam},
-        </if>
-        <if test="momsAcShop != null and momsAcShop != ''">
-            MOMS_AC_SHOP = #{momsAcShop},
-        </if>
-        <if test="momsAreaFg != null and momsAreaFg != ''">
-            MOMS_AREA_FG = #{momsAreaFg},
-        </if>
-        <if test="momsCommercial != null and momsCommercial != ''">
-            MOMS_COMMERCIAL = #{momsCommercial},
-        </if>
-        <if test="momsShopType != null and momsShopType != ''">
-            MOMS_SHOP_TYPE = #{momsShopType},
-        </if>
-        <if test="momsStoreManageType != null and momsStoreManageType != ''">
-            MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType},
-        </if>
-        MOD_DT = #{modDt},
-        MOD_ID = #{modId}
-        WHEN NOT MATCHED THEN
-        INSERT (
-        STORE_CD,
-        REG_DT,
-        REG_ID,
-        MOD_DT,
-        MOD_ID,
-        MOMS_TEAM,
-        MOMS_AC_SHOP,
-        MOMS_AREA_FG,
-        MOMS_COMMERCIAL,
-        MOMS_SHOP_TYPE,
-        MOMS_STORE_MANAGE_TYPE
-        ) VALUES (
-        #{storeCd},
-        #{regDt},
-        #{regId},
-        #{modDt},
-        #{modId},
-        #{momsTeam},
-        #{momsAcShop},
-        #{momsAreaFg},
-        #{momsCommercial},
-        #{momsShopType},
-        #{momsStoreManageType}
+        MERGE INTO TB_MS_STORE_INFO A
+        USING DUAL ON
+        (
+            A.STORE_CD = #{storeCd}
         )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            MOMS_TEAM = #{momsTeam},
+            MOMS_AC_SHOP = #{momsAcShop},
+            MOMS_AREA_FG = #{momsAreaFg},
+            MOMS_COMMERCIAL = #{momsCommercial},
+            MOMS_SHOP_TYPE = #{momsShopType},
+            MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+            INSERT (
+                STORE_CD,
+                MOMS_TEAM,
+                MOMS_AC_SHOP,
+                MOMS_AREA_FG,
+                MOMS_COMMERCIAL,
+                MOMS_SHOP_TYPE,
+                MOMS_STORE_MANAGE_TYPE,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            ) VALUES (
+                #{storeCd},
+                #{momsTeam},
+                #{momsAcShop},
+                #{momsAreaFg},
+                #{momsCommercial},
+                #{momsShopType},
+                #{momsStoreManageType},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
     </update>
 
     <!-- 검증결과 삭제 -->

@@ -52,7 +52,7 @@ public interface StoreBatchChangeMapper {
     List<DefaultMap<String>> getStoreExcelUploadCheckList(StoreBatchChangeVO storeBatchChangeVO);
 
     /** 매장정보 저장 */
-    int getSimpleStoreSave(StoreBatchChangeVO storeBatchChangeVO);
+//    int getSimpleStoreSave(StoreBatchChangeVO storeBatchChangeVO);
     int getSimpleStoreInfoSave(StoreBatchChangeVO storeBatchChangeVO);
 
     /** 저장 완료된 검증결과 삭제 */

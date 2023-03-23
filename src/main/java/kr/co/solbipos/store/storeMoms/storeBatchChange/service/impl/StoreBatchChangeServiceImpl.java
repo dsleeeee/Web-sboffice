@@ -262,19 +262,13 @@ public class StoreBatchChangeServiceImpl implements StoreBatchChangeService {
 
             if(("검증성공").equals(storeBatchChangeVO.getResult())){
                 // TB_MS_STORE 저장
-                if(storeBatchChangeVO.getBranchCd() != null && !storeBatchChangeVO.getBranchCd().equals("")){
-                    // 여러개 컬럼 따로 업데이트 하려면 getSimpleStoreSave만들어서 쓰면 됨
-                    storeCnt += storeBatchChangeMapper.getStoreBatchChangeSave(storeBatchChangeVO);
-                }
+                // branchCd
+                // 여러개 컬럼 따로 업데이트 하려면 getSimpleStoreSave만들어서 쓰면 됨
+                storeCnt += storeBatchChangeMapper.getStoreBatchChangeSave(storeBatchChangeVO);
+
                 // TB_MS_STORE_INFO 저장
-                if((storeBatchChangeVO.getMomsTeam() != null && !storeBatchChangeVO.getMomsTeam().equals(""))
-                  || (storeBatchChangeVO.getMomsAcShop() != null && !storeBatchChangeVO.getMomsAcShop().equals(""))
-                  || (storeBatchChangeVO.getMomsAreaFg() != null && !storeBatchChangeVO.getMomsAreaFg().equals(""))
-                  || (storeBatchChangeVO.getMomsCommercial() != null && !storeBatchChangeVO.getMomsCommercial().equals(""))
-                  || (storeBatchChangeVO.getMomsShopType() != null && !storeBatchChangeVO.getMomsShopType().equals(""))
-                  || (storeBatchChangeVO.getMomsStoreManageType() != null && !storeBatchChangeVO.getMomsStoreManageType().equals(""))){
-                    storeCnt += storeBatchChangeMapper.getSimpleStoreInfoSave(storeBatchChangeVO);
-                }
+                // momsTeam, momsAcShop, momsAreaFg, momsCommercial, momsShopType, momsStoreManageType
+                storeCnt += storeBatchChangeMapper.getSimpleStoreInfoSave(storeBatchChangeVO);
 
                 // 저장 완료된 검증결과 삭제
                 storeBatchChangeMapper.getStoreExcelUploadCheckDelete(storeBatchChangeVO);

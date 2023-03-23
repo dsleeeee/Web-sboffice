@@ -23,6 +23,14 @@ app.controller('storeBatchChangeExcelUploadCtrl', ['$scope', '$http', '$timeout'
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+        // 그리드 DataMap 설정
+        $scope.branchCdDataMap = new wijmo.grid.DataMap(branchCdComboList, 'value', 'name'); // 지사
+        $scope.momsTeamDataMap = new wijmo.grid.DataMap(momsTeamComboList, 'value', 'name'); // 팀별
+        $scope.momsAcShopDataMap = new wijmo.grid.DataMap(momsAcShopComboList, 'value', 'name'); // AC점포별
+        $scope.momsAreaFgDataMap = new wijmo.grid.DataMap(momsAreaFgComboList, 'value', 'name'); // 지역구분
+        $scope.momsCommercialDataMap = new wijmo.grid.DataMap(momsCommercialComboList, 'value', 'name'); // 상권
+        $scope.momsShopTypeDataMap = new wijmo.grid.DataMap(momsShopTypeComboList, 'value', 'name'); // 점포유형
+        $scope.momsStoreManageTypeDataMap = new wijmo.grid.DataMap(momsStoreManageTypeComboList, 'value', 'name'); // 매장관리타입
     };
 
     // <-- 검색 호출 -->
@@ -184,6 +192,14 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
 
     // 매장등록 저장
     $scope.storeExcelUploadSave = function() {
+        // 검증성공 이 아닌 데이터가 1개라도 있으면 저장 안함
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            if($scope.flex.collectionView.items[i].result !== "검증성공") {
+                $scope._popMsg(messages["storeBatchChange.noSaveConfirm"] + (i+1) + messages["storeBatchChange.noSaveConfirm2"]); // 검증성공이 아닌 데이터가 있습니다. <br/> 검증실패 항목은 수정 또는 삭제 후 진행해주세요. <br/> 3번째 줄
+                return false;
+            }
+        }
+
         $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
 
         // 파라미터 설정
