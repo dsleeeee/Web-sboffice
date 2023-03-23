@@ -239,7 +239,7 @@ var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/view/view.js?ver=20230317.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/view/view.js?ver=20230223.01" charset="utf-8"></script>
 
 <%-- 매장 상세정보 --%>
 <c:import url="/WEB-INF/view/base/store/view/dtl.jsp">

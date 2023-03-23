@@ -161,6 +161,13 @@
                                     WHERE
                                         twagr.AUTH_GRP_CD = #{authGrpCd}
                                         AND twagi.USE_YN = 'Y'
+                                    <if test='optResrceCd != null and optResrceCd != ""'> <!-- 해당 메뉴(사용자가 따로 지정한 ULR)는 사용자 메뉴권한에 상관없이 접근가능 -->
+                                    UNION
+                                      SELECT
+                                        #{optResrceCd} AS RESRCE_CD
+                                      FROM
+                                          DUAL
+                                    </if>
                                     UNION ALL
                                     SELECT
                                         twae.RESRCE_CD
@@ -175,16 +182,14 @@
                                     SELECT
                                         twae.RESRCE_CD
                                     FROM
-                                        TB_WB_AUTHOR_EXCEPT_V01 twae,
-                                        TB_WB_RESRCE_INFO twri
+                                        TB_WB_AUTHOR_EXCEPT_V01 twae
                                     WHERE
                                         twae.USER_ID = #{userId}
                                         AND twae.INCLD_EXCLD_FG = 'E'
                                         AND twae.USE_YN = 'Y'
                                         AND twae.LOGIN_FG = NVL(#{loginFg}, 'W')
-                                        AND twae.RESRCE_CD = twri.RESRCE_CD
-                                    <if test='optUrl != null and optUrl != ""'> <!-- 해당 URL은 메뉴권한에 상관없이 접근가능(20230316) -->
-                                        AND twri.URL != #{optUrl}
+                                    <if test='optResrceCd != null and optResrceCd != ""'> <!-- 해당 메뉴(사용자가 따로 지정한 ULR)는 사용자 메뉴권한에 상관없이 접근가능 -->
+                                        AND twae.RESRCE_CD != #{optResrceCd}
                                     </if>
                                 )
                 AND twri.RESRCE_FG = 'M'
