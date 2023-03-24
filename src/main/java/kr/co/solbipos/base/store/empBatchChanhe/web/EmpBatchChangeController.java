@@ -370,18 +370,6 @@ public class EmpBatchChangeController {
         return returnListJson(Status.OK, list, empBatchChangeVO);
     }
 
-    /** 검증결과 저장 */
-    @RequestMapping(value = "empBatchChange/getEmpExcelUploadCheckSaveAdd.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getEmpExcelUploadCheckSaveAdd(@RequestBody EmpBatchChangeVO[] empBatchChangeVOs, HttpServletRequest request) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        int result = empBatchChangeService.getEmpExcelUploadCheckSaveAdd(empBatchChangeVOs, sessionInfoVO);
-
-        return returnJson(Status.OK, result);
-    }
-
     /** 엑셀 저장 */
     @RequestMapping(value = "empBatchChange/getSimpleSave.sb", method = RequestMethod.POST)
     @ResponseBody

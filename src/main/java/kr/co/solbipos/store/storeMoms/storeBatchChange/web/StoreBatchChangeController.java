@@ -371,17 +371,6 @@ public class StoreBatchChangeController {
         return returnListJson(Status.OK, list, storeBatchChangeVO);
     }
 
-    /** 검증결과 저장 */
-    @RequestMapping(value = "storeBatchChange/getStoreExcelUploadCheckSaveAdd.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getStoreExcelUploadCheckSaveAdd(@RequestBody StoreBatchChangeVO[] storeBatchChangeVOs, HttpServletRequest request) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        int result = storeBatchChangeService.getStoreExcelUploadCheckSaveAdd(storeBatchChangeVOs, sessionInfoVO);
-
-        return returnJson(Status.OK, result);
-    }
 
     /** 엑셀 저장 */
     @RequestMapping(value = "storeBatchChange/getSimpleSave.sb", method = RequestMethod.POST)

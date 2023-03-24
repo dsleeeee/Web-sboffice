@@ -42,9 +42,6 @@ public interface EmpBatchChangeService {
     /** 사원목록 조회 */
     List<DefaultMap<String>> getEmpExcelUploadCheckList(EmpBatchChangeVO empBatchChangeVO, SessionInfoVO sessionInfoVO);
 
-    /** 검증결과 저장 */
-    int getEmpExcelUploadCheckSaveAdd(EmpBatchChangeVO[] empBatchChangeVOs, SessionInfoVO sessionInfoVO);
-
     /** 사원정보 저장 */
     int getSimpleSave(EmpBatchChangeVO[] empBatchChangeVOs, SessionInfoVO sessionInfoVO);
 

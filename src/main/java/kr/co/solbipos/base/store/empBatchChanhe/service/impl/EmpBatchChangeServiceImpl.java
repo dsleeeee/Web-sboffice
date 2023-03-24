@@ -152,48 +152,82 @@ public class EmpBatchChangeServiceImpl implements EmpBatchChangeService {
             empBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             empBatchChangeVO.setSeq(i);
 
-            empBatchChangeVO.setResult("검증전");
+            String result = "";
 
             // 사원코드
             if(empBatchChangeMapper.getEmpNoChk(empBatchChangeVO) > 0){
-
                 // 지사코드
                 if(empBatchChangeVO.getBranchCd() != null && !"".equals(empBatchChangeVO.getBranchCd())){
-                    empBatchChangeVO.setBranchCd(empBatchChangeMapper.getBranchCdChk(empBatchChangeVO));
+                    String branchCd = empBatchChangeMapper.getBranchCdChk(empBatchChangeVO);
+                    // 잘못된 정보 입력시
+                    if(branchCd == null || branchCd == "") {
+                        result += "지사, ";
+                    }
                 }
                 // 팀별
                 if(empBatchChangeVO.getMomsTeam() != null && !"".equals(empBatchChangeVO.getMomsTeam())){
                     empBatchChangeVO.setNmcodeGrpCd("151");
-                    empBatchChangeVO.setMomsTeam(empBatchChangeMapper.getHqNmcodeChk(empBatchChangeVO));
+                    String hqNmcode = empBatchChangeMapper.getHqNmcodeChk(empBatchChangeVO);
+                    // 잘못된 정보 입력시
+                    if(hqNmcode == null || hqNmcode == "") {
+                        result += "팀별, ";
+                    }
                 }
                 // AC점포별
                 if(empBatchChangeVO.getMomsAcShop() != null && !"".equals(empBatchChangeVO.getMomsAcShop())){
                     empBatchChangeVO.setNmcodeGrpCd("152");
-                    empBatchChangeVO.setMomsAcShop(empBatchChangeMapper.getHqNmcodeChk(empBatchChangeVO));
+                    String hqNmcode = empBatchChangeMapper.getHqNmcodeChk(empBatchChangeVO);
+                    // 잘못된 정보 입력시
+                    if(hqNmcode == null || hqNmcode == "") {
+                        result += "AC점포별, ";
+                    }
                 }
                 // 지역구분
                 if(empBatchChangeVO.getMomsAreaFg() != null && !"".equals(empBatchChangeVO.getMomsAreaFg())){
                     empBatchChangeVO.setNmcodeGrpCd("153");
-                    empBatchChangeVO.setMomsAreaFg(empBatchChangeMapper.getHqNmcodeChk(empBatchChangeVO));
+                    String hqNmcode = empBatchChangeMapper.getHqNmcodeChk(empBatchChangeVO);
+                    // 잘못된 정보 입력시
+                    if(hqNmcode == null || hqNmcode == "") {
+                        result += "지역구분, ";
+                    }
                 }
                 // 상권
                 if(empBatchChangeVO.getMomsCommercial() != null && !"".equals(empBatchChangeVO.getMomsCommercial())){
                     empBatchChangeVO.setNmcodeGrpCd("154");
-                    empBatchChangeVO.setMomsCommercial(empBatchChangeMapper.getHqNmcodeChk(empBatchChangeVO));
+                    String hqNmcode = empBatchChangeMapper.getHqNmcodeChk(empBatchChangeVO);
+                    // 잘못된 정보 입력시
+                    if(hqNmcode == null || hqNmcode == "") {
+                        result += "상권, ";
+                    }
                 }
                 // 점포유형
                 if(empBatchChangeVO.getMomsShopType() != null && !"".equals(empBatchChangeVO.getMomsShopType())){
                     empBatchChangeVO.setNmcodeGrpCd("155");
-                    empBatchChangeVO.setMomsShopType(empBatchChangeMapper.getHqNmcodeChk(empBatchChangeVO));
+                    String hqNmcode = empBatchChangeMapper.getHqNmcodeChk(empBatchChangeVO);
+                    // 잘못된 정보 입력시
+                    if(hqNmcode == null || hqNmcode == "") {
+                        result += "점포유형, ";
+                    }
                 }
                 // 매장관리타입
                 if(empBatchChangeVO.getMomsStoreManageType() != null && !"".equals(empBatchChangeVO.getMomsStoreManageType())){
                     empBatchChangeVO.setNmcodeGrpCd("156");
-                    empBatchChangeVO.setMomsStoreManageType(empBatchChangeMapper.getHqNmcodeChk(empBatchChangeVO));
+                    String hqNmcode = empBatchChangeMapper.getHqNmcodeChk(empBatchChangeVO);
+                    // 잘못된 정보 입력시
+                    if(hqNmcode == null || hqNmcode == "") {
+                        result += "매장관리타입, ";
+                    }
                 }
             } else {
-                empBatchChangeVO.setResult("존재하지 않는 사원입니다");
+                result += "존재하지 않는 매장입니다";
             }
+
+            if(result == null || result == "") {
+                result = "검증성공";
+            } else {
+                result = result + "잘못된 정보가 입력되었습니다.";
+            }
+            empBatchChangeVO.setResult(result);
 
             // 검증결과 저장
             storeCnt += empBatchChangeMapper.getEmpExcelUploadCheckSave(empBatchChangeVO);
@@ -212,11 +246,10 @@ public class EmpBatchChangeServiceImpl implements EmpBatchChangeService {
         return empBatchChangeMapper.getEmpExcelUploadCheckList(empBatchChangeVO);
     }
 
-    /** 검증결과 저장 */
+    /** 사원정보 저장 */
     @Override
-    public int getEmpExcelUploadCheckSaveAdd(EmpBatchChangeVO[] empBatchChangeVOs, SessionInfoVO sessionInfoVO) {
+    public int getSimpleSave(EmpBatchChangeVO[] empBatchChangeVOs, SessionInfoVO sessionInfoVO) {
         int storeCnt = 0;
-        int i = 1;
         String currentDt = currentDateTimeString();
 
         for(EmpBatchChangeVO empBatchChangeVO : empBatchChangeVOs) {
@@ -229,48 +262,11 @@ public class EmpBatchChangeServiceImpl implements EmpBatchChangeService {
             empBatchChangeVO.setSessionId(sessionInfoVO.getUserId());
             empBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-            // 사원코드
-            if(empBatchChangeMapper.getEmpNoChk(empBatchChangeVO) > 0){
-                // 뭔가 추가되면 여기에 검증로직 넣으면 됨
-            } else {
-                empBatchChangeVO.setResult("존재하지 않는 사원입니다");
-            }
+           // 저장
+            storeCnt += empBatchChangeMapper.getEmpBatchChangeUploadSave(empBatchChangeVO);
 
-            if (empBatchChangeVO.getResult() == null || empBatchChangeVO.getResult() == "") {
-                empBatchChangeVO.setResult("검증성공");
-            }
-
-            // 검증결과 저장
-            storeCnt += empBatchChangeMapper.getEmpExcelUploadCheckSave(empBatchChangeVO);
-            i++;
-        }
-
-        return storeCnt;
-    }
-
-    /** 사원정보 저장 */
-    @Override
-    public int getSimpleSave(EmpBatchChangeVO[] empBatchChangeVOs, SessionInfoVO sessionInfoVO) {
-        int storeCnt = 0;
-        String currentDt = currentDateTimeString();
-
-        for(EmpBatchChangeVO empBatchChangeVO : empBatchChangeVOs) {
-
-            empBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            empBatchChangeVO.setRegDt(currentDt);
-            empBatchChangeVO.setRegId(sessionInfoVO.getUserId());
-            empBatchChangeVO.setModDt(currentDt);
-            empBatchChangeVO.setModId(sessionInfoVO.getUserId());
-
-            if(("검증성공").equals(empBatchChangeVO.getResult())){
-
-                // 저장
-                storeCnt += empBatchChangeMapper.getEmpBatchChangeSave(empBatchChangeVO);
-
-                // 저장 완료된 검증결과 삭제
-                empBatchChangeMapper.getEmpExcelUploadCheckDelete(empBatchChangeVO);
-            }
-
+            // 전체 삭제
+            empBatchChangeMapper.getEmpExcelUploadCheckDeleteAll(empBatchChangeVO);
         }
 
         return storeCnt;
