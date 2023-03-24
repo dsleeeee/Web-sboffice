@@ -640,7 +640,7 @@ app.controller('storeMonthPosExcelCtrl', ['$scope', '$http', '$timeout', functio
                         return column.visible;
                     }
                 },
-                    messages["storeMonthChannel.storeMonthPos"] + '_' + getCurDateTime() +'.xlsx', function () {
+                    messages["storeMonthPos.storeMonthPos"] + '_' + getCurDateTime() +'.xlsx', function () {
                         $timeout(function () {
                             $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                         }, 10);
