@@ -3,6 +3,13 @@
  */
 var app = agrid.getApp();
 
+// 구분
+var gubunComboData = [
+  {"name":"입금예정일","value":"D"},
+  {"name":"프로모션","value":"P"}
+];
+
+
 /** 승인 controller */
 app.controller('promotionReportCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
@@ -12,6 +19,7 @@ app.controller('promotionReportCtrl', ['$scope', '$http', '$timeout', function (
   var endDate   = wcombo.genDateVal("#srchEndDate", gvEndDate);
 
   // 브랜드 콤보박스 셋팅
+  $scope._setComboData("gubunCombo", gubunComboData); // 구분
   $scope._setComboData("storeHqBrandCdCombo", momsHqBrandCdComboList); // 매장브랜드
   $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
   $scope._setComboData("momsAcShopCombo", momsAcShopComboList); // AC점포별
@@ -162,18 +170,19 @@ app.controller('promotionReportCtrl', ['$scope', '$http', '$timeout', function (
       $scope._popMsg(messages['cmm.dateChk.error']);
       return false;
     }
-    // 조회일자 최대 1달(31일) 제한
-    if (diffDay > 30) {
-      $scope._popMsg(messages['cmm.dateOver.1month.error']);
+    // 조회일자 최대 3달(93일) 제한
+    if (diffDay > 93) {
+      $scope._popMsg(messages['cmm.dateOver.3month.error']);
       return false;
     }
 
     // 파라미터
     var params        = {};
-    params.startDate  = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
-    params.endDate    = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
-    params.storeCds   = $("#promotionReportStoreCd").val();
+    params.gubun = $scope.gubunCombo;
+    params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
+    params.endDate   = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
     params.promotionCds   = $("#promotionReportPromotionCd").val();
+    params.storeCds   = $("#promotionReportStoreCd").val();
     params.bizNo      = $scope.bizNo;
     params.momsTeam   = $scope.momsTeam;
     params.momsAcShop = $scope.momsAcShop;
@@ -226,12 +235,28 @@ app.controller('promotionReportCtrl', ['$scope', '$http', '$timeout', function (
   // 엑셀 다운로드
   $scope.excelDownload = function () {
 
+    var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
+    var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
+    var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+    // 시작일자가 종료일자보다 빠른지 확인
+    if(startDt.getTime() > endDt.getTime()){
+      $scope._popMsg(messages['cmm.dateChk.error']);
+      return false;
+    }
+    // 조회일자 최대 3달(93일) 제한
+    if (diffDay > 93) {
+      $scope._popMsg(messages['cmm.dateOver.3month.error']);
+      return false;
+    }
+
     // 파라미터
     var params       = {};
+    params.gubun = $scope.gubunCombo;
     params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
     params.endDate   = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
-    params.storeCds     = $("#promotionReportStoreCd").val();
     params.promotionCds   = $("#promotionReportPromotionCd").val();
+    params.storeCds     = $("#promotionReportStoreCd").val();
     params.momsTeam = $scope.momsTeam;
     params.momsAcShop = $scope.momsAcShop;
     params.momsAreaFg = $scope.momsAreaFg;
@@ -256,6 +281,15 @@ app.controller('promotionReportCtrl', ['$scope', '$http', '$timeout', function (
 
   };
 
+  $scope.changeGubun = function (s){
+    if(s.selectedValue === 'D') {
+      $("#depositYmd").show();
+      $("#promotion").hide();
+    } else {
+      $("#depositYmd").hide();
+      $("#promotion").show();
+    }
+  }
 }]);
 
 /**

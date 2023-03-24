@@ -86,6 +86,9 @@ public class PromotionReportVO extends PageVO {
     /** 프로모션코드 */
     private String promotionCd;
 
+    /** 구분값 */
+    private String gubun;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -252,5 +255,13 @@ public class PromotionReportVO extends PageVO {
 
     public void setPromotionCd(String promotionCd) {
         this.promotionCd = promotionCd;
+    }
+
+    public String getGubun() {
+        return gubun;
+    }
+
+    public void setGubun(String gubun) {
+        this.gubun = gubun;
     }
 }

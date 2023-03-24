@@ -34,13 +34,33 @@
       </colgroup>
       <tbody>
       <tr>
-        <%-- 조회일자 --%>
-        <th><s:message code="promotionReport.depositYmd"/></th>
-        <td colspan="3">
+        <th><s:message code="promotionReport.gubun"/></th>
+        <td>
           <div class="sb-select">
-            <span class="txtIn"><input id="srchStartDate" class="w110px"></span>
-            <span class="rg">~</span>
-            <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
+            <wj-combo-box
+                    id="srchGubunCombo"
+                    ng-model="gubunCombo"
+                    items-source="_getComboData('gubunCombo')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)"
+                    selected-index-changed="changeGubun(s)">
+            </wj-combo-box>
+          </div>
+        </td>
+        <td colspan="2">
+          <div id="depositYmd">
+            <div class="sb-select">
+              <span class="txtIn"><input id="srchStartDate" class="w110px"></span>
+              <span class="rg">~</span>
+              <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
+            </div>
+          </div>
+          <div id="promotion" style="display: none">
+            <jsp:include page="/WEB-INF/view/sale/com/popup/selectPromotionM.jsp" flush="true">
+              <jsp:param name="targetId" value="promotionReportPromotion"/>
+            </jsp:include>
           </div>
         </td>
       </tr>
@@ -81,12 +101,6 @@
         <input type="hidden" id="promotionReportStoreCd" value="${sessionInfo.storeCd}"/>
       </c:if>
       <tr>
-        <th><s:message code="promotionReport.promotion"/></th>
-        <td>
-          <jsp:include page="/WEB-INF/view/sale/com/popup/selectPromotionM.jsp" flush="true">
-            <jsp:param name="targetId" value="promotionReportPromotion"/>
-          </jsp:include>
-        </td>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
           <th><s:message code="promotionReport.bizNo"/></th>
           <td><input type="text" id="srchBizNo" class="sb-input w100" ng-model="bizNo"/></td>
