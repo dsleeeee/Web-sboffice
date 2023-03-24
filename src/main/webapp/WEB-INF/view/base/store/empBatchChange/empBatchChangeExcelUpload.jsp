@@ -20,8 +20,10 @@
             <p class="tl s14 mt5 lh15">1. '양식다운로드' 버튼을 클릭하여 양식을 다운받아주세요.</p>
             <p class="tl s14 mt5 lh15">2. 다운받은 양식을 입력해주세요.</p>
             <p class="tl s14 mt5 lh15">3. '엑셀업로드' 버튼을 클릭하여 업로드 해주세요.</p>
-            <p class="tl s14 mt5 lh15">4. '사원정보'가 업로드되면 '저장'을 클릭하여 검증 및 저장을 해주세요.</p>
-            <p class="tl s14 mt5 lh15">- 검증결과가 '검증성공'인 사원만 저장됩니다.</p>
+            <p class="tl s14 mt5 lh15">4. '사원정보'가 업로드되면 '저장'을 클릭하여 저장을 해주세요.</p>
+            <p class="tl s14 mt5 lh15">- 업로드된 검증결과가 전체 '검증성공'일때만 저장됩니다.</p>
+            <p class="tl s14 mt5 lh15 red">※ 검증결과가 실패 및 변경인 경우</p>
+            <p class="tl s14 mt5 lh15 red"> - 아래 해당 정보를 수정하신 후에 엑셀다운로드 하여 다시 업로드 해주세요.</p>
             <%-- 엑셀업로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelUpload()">
                 <s:message code="cmm.excel.excelUpload" />
@@ -103,7 +105,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/empBatchChange/empBatchChangeExcelUpload.js?ver=20230322.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/empBatchChange/empBatchChangeExcelUpload.js?ver=20230324.01" charset="utf-8"></script>
 
 <%-- 상품엑셀업로드 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/empBatchChange/empBatchChangeExcelUploadAdd.jsp">

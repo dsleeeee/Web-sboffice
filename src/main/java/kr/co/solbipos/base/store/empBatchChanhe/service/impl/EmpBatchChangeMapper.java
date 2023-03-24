@@ -35,8 +35,10 @@ public interface EmpBatchChangeMapper {
 
     /** 사원정보 저장 */
     int getEmpBatchChangeSave(EmpBatchChangeVO empBatchChangeVO);
-    int getEmpInfoBatchChangeSave(EmpBatchChangeVO empBatchChangeVO);
-    
+
+    /** 사원정보 저장 */
+    int getEmpBatchChangeUploadSave(EmpBatchChangeVO empBatchChangeVO);
+
     /** 검증결과 삭제 */
     int getEmpExcelUploadCheckDeleteAll(EmpBatchChangeVO empBatchChangeVO);
 

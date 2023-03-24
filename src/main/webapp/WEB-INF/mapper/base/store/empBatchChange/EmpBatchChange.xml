@@ -165,6 +165,73 @@
         AND     EMP_NO = #{empNo}
     </update>
 
+    <!-- 매장정보 저장 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        COMMENTS :
+    -->
+    <update id="getEmpBatchChangeUploadSave" parameterType="empBatchChangeVO">
+        /* EmpBatchChangeMapper.getEmpBatchChangeUploadSave */
+        MERGE INTO TB_HQ_EMPLOYEE A
+        USING
+        (
+            SELECT
+            C.EMP_NO,
+            (SELECT BRANCH_CD FROM TB_HQ_BRANCH_MOMS WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND BRANCH_NM = C.BRANCH_CD) AS BRANCH_CD,
+            (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '151' AND NMCODE_NM = C.MOMS_TEAM) AS MOMS_TEAM,
+            (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '152' AND NMCODE_NM = C.MOMS_AC_SHOP) AS MOMS_AC_SHOP,
+            (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '153' AND NMCODE_NM = C.MOMS_AREA_FG) AS MOMS_AREA_FG,
+            (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '154' AND NMCODE_NM = C.MOMS_COMMERCIAL) AS MOMS_COMMERCIAL,
+            (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '155' AND NMCODE_NM = C.MOMS_SHOP_TYPE) AS MOMS_SHOP_TYPE,
+            (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '156' AND NMCODE_NM = C.MOMS_STORE_MANAGE_TYPE) AS MOMS_STORE_MANAGE_TYPE
+            FROM TB_TMP_EXCEL_EMPLOYEE C
+            WHERE C.SESSION_ID = #{sessionId}
+            AND C.HQ_OFFICE_CD = #{hqOfficeCd}
+        ) B
+        ON (A.EMP_NO = B.EMP_NO)
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            A.BRANCH_CD = B.BRANCH_CD,
+            A.MOMS_TEAM = B.MOMS_TEAM,
+            A.MOMS_AC_SHOP = B.MOMS_AC_SHOP,
+            A.MOMS_AREA_FG = B.MOMS_AREA_FG,
+            A.MOMS_COMMERCIAL = B.MOMS_COMMERCIAL,
+            A.MOMS_SHOP_TYPE = B.MOMS_SHOP_TYPE,
+            A.MOMS_STORE_MANAGE_TYPE = B.MOMS_STORE_MANAGE_TYPE,
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+            INSERT
+            (
+                A.EMP_NO,
+                A.BRANCH_CD,
+                A.MOMS_TEAM,
+                A.MOMS_AC_SHOP,
+                A.MOMS_AREA_FG,
+                A.MOMS_COMMERCIAL,
+                A.MOMS_SHOP_TYPE,
+                A.MOMS_STORE_MANAGE_TYPE,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+            ) VALUES (
+                B.EMP_NO,
+                B.BRANCH_CD,
+                B.MOMS_TEAM,
+                B.MOMS_AC_SHOP,
+                B.MOMS_AREA_FG,
+                B.MOMS_COMMERCIAL,
+                B.MOMS_SHOP_TYPE,
+                B.MOMS_STORE_MANAGE_TYPE,
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
+    </update>
+
     <!-- 검증결과 전체 삭제 -->
     <!--
         TABLE    : TB_TMP_EXCEL_EMPLOYEE
