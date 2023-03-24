@@ -127,7 +127,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         if(data.prodCd !== null && data.prodCd !== undefined && data.prodCd !== "") {
 
             // 브랜드 콤보박스 셋팅
-            $scope.setbrandDropdownList(data.prodCd);
+            // $scope.setbrandDropdownList(data.prodCd);
 
             // 신규 모드 시
         } else {
@@ -1396,6 +1396,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                 // 브랜드가 없는 경우, 가장 맨앞 브랜드로 셋팅
                 if($scope.prodModifyInfo.hqBrandCd === null || $scope.prodModifyInfo.hqBrandCd === ""){
                     $scope.hqBrandCdCombo.selectedIndex = 0;
+                } else {
+                    $scope.hqBrandCdCombo.selectedValue = $scope.prodModifyInfo.hqBrandCd;
                 }
 
                 // 상품 이미지
