@@ -869,6 +869,10 @@
     <typeAlias alias="dayProdVO" type="kr.co.solbipos.sale.prod.dayProd.service.DayProdVO"/>
     <!-- 맘스터치 > 상품매출분석 > 월별 상품 매출 현황 -->
     <typeAlias alias="monthProdVO" type="kr.co.solbipos.sale.prod.monthProd.service.MonthProdVO"/>
+    <!-- 맘스터치 > 상품매출분석 > 일별 상품 매출 현황(매장별) -->
+    <typeAlias alias="dayProdStoreVO" type="kr.co.solbipos.sale.prod.dayProdStore.service.DayProdStoreVO"/>
+    <!-- 맘스터치 > 상품매출분석 > 월별 상품 매출 현황(매장별) -->
+    <typeAlias alias="monthProdStoreVO" type="kr.co.solbipos.sale.prod.monthProdStore.service.MonthProdStoreVO"/>
     <!-- 맘스터치 > 상품매출분석 > 대비기간별 상품 매출 -->
     <typeAlias alias="periodProdVO" type="kr.co.solbipos.sale.prod.periodProd.service.PeriodProdVO"/>
     <!-- 맘스터치 > 상품매출분석 > 월별 상품 판매량 -->
@@ -966,6 +970,9 @@
     <typeAlias alias="dayTimeVO" type="kr.co.solbipos.sale.day.dayTime.service.DayTimeVO"/>
     <!-- 맘스터치 > 매출분석 > 대비기간별매출 -->
     <typeAlias alias="comparePeriodMomsVO" type="kr.co.solbipos.sale.period.comparePeriodMoms.service.ComparePeriodMomsVO"/>
+
+    <!-- 맘스터치 > 매출분석2 > 가승인-상품권결제차액 -->
+    <typeAlias alias="payTemporaryVO" type="kr.co.solbipos.sale.status.payTemporary.service.PayTemporaryVO"/>
 
     <!-- 맘스터치 > 매장분석 > 매장-일별매출현황(채널별) -->
     <typeAlias alias="storeDayChannelVO" type="kr.co.solbipos.sale.store.storeDayChannel.service.StoreDayChannelVO"/>
