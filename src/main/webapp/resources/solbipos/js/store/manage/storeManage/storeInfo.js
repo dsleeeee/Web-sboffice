@@ -1388,6 +1388,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.store.envst0043 = hqEnvst0043; // 본사신규상품매장생성 [0:자동(기본) / 1:수동]
     $("#hdDigit8Store").val(digit8Store); // 매장코드8이상사용매장
 
+    $scope.envHqOfficeCdCombo.selectedValue = $scope.store.hqOfficeCd;
+
     // input에 값이 사라지는 현상방지
     $("#hqOfficeCd").val(hqOfficeCd);
     $("#hqOfficeNm").val(hqOfficeNm);

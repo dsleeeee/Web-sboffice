@@ -510,7 +510,9 @@
                         selected-value-path="value"
                         is-editable="false"
                         initialized="_initComboBox(s)"
-                        selected-index-changed="setEnvHqOfficeCdVal(s,e)">
+                        selected-index-changed="setEnvHqOfficeCdVal(s,e)"
+                        disabled
+                      >
                       </wj-combo-box>
                     </div>
                     <%-- 매장선택 --%>
@@ -594,7 +596,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20230310.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20230310.02" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">
