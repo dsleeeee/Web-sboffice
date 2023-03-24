@@ -330,7 +330,7 @@ app.controller('monthPosCtrl', ['$scope', '$http', '$timeout', function ($scope,
           return column.visible;
         }
       },
-          messages["monthPosMoms.monthPosMoms"] + getCurDateTime() + '.xlsx', function () {
+          messages["monthPos.monthPos"] + getCurDateTime() + '.xlsx', function () {
             $timeout(function () {
               $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
             }, 10);

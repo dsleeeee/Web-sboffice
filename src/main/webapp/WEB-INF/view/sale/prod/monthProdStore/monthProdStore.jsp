@@ -8,13 +8,13 @@
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
 
 <div class="subCon">
-    <div ng-controller="monthProdCtrl">
+    <div ng-controller="monthProdStoreCtrl">
         <%--<div class="searchBar flddUnfld">--%>
         <div class="searchBar">
             <a href="#" class="open fl">${menuNm}</a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('monthProdCtrl', 1)">
+                <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('monthProdStoreCtrl', 1)">
                     <s:message code="cmm.search"/>
                 </button>
                 <c:if test="${sessionInfo.orgnFg == 'HQ'}">
@@ -327,6 +327,9 @@
                     <wj-flex-grid-column header="<s:message code="monthProd.saleYm"/>" binding="saleYm" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="monthProd.dayFrom"/>" binding="dayFrom" width="60" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="monthProd.dayTo"/>" binding="dayTo" width="60" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="monthProd.branchNm"/>" binding="branchNm" width="80" align="left" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="monthProd.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="monthProd.storeNm"/>" binding="storeNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="monthProd.lClassCd"/>" binding="lClassCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="monthProd.lClassNm"/>" binding="lClassNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="monthProd.mClassCd"/>" binding="mClassCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -353,13 +356,13 @@
     <%-- 페이지 리스트 --%>
     <div class="pageNum mt20">
         <%-- id --%>
-        <ul id="monthProdCtrlPager" data-size="10">
+        <ul id="monthProdStoreCtrlPager" data-size="10">
         </ul>
     </div>
     <%-- //페이지 리스트 --%>
 
     <%--엑셀 리스트--%>
-    <div class="w100 mt10" style="display:none;" ng-controller="monthProdExcelCtrl">
+    <div class="w100 mt10" style="display:none;" ng-controller="monthProdStoreExcelCtrl">
         <div class="wj-gridWrap" style="height: 380px; overflow-x: hidden; overflow-y: hidden;">
             <wj-flex-grid
                     id="wjGridExcelList"
@@ -375,6 +378,9 @@
                 <wj-flex-grid-column header="<s:message code="monthProd.saleYm"/>" binding="saleYm" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="monthProd.dayFrom"/>" binding="dayFrom" width="60" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="monthProd.dayTo"/>" binding="dayTo" width="60" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="monthProd.branchNm"/>" binding="branchNm" width="80" align="left" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="monthProd.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="monthProd.storeNm"/>" binding="storeNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="monthProd.lClassCd"/>" binding="lClassCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="monthProd.lClassNm"/>" binding="lClassNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="monthProd.mClassCd"/>" binding="mClassCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -415,9 +421,4 @@
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/monthProd/monthProd.js?ver=20230217.01" charset="utf-8"></script>
-
-<%-- 20221117 상품분류 팝업 주석처리함 -> 상품 멀티 팝업에 상품분류가 들어감으로 오류 --%>
-<%-- 상품분류 팝업 --%>
-<%--<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">--%>
-<%--</c:import>--%>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/monthProdStore/monthProdStore.js?ver=20230323.01" charset="utf-8"></script>

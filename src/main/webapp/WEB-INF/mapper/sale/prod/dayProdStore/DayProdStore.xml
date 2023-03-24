@@ -2,23 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!--
-    DayProd.xml
-    일별 상품 매출 현황 (맘스터치)
+    DayProdStore.xml
+    일별 상품 매출 현황 (매장별)
     ======================================================
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
-    1       권지현     2022.10.04     최초작성
-    2       김설아     2022.11.11     전체수정
+    1       권지현     2023.03.23     최초작성
 -->
-<mapper namespace="kr.co.solbipos.sale.prod.dayProd.service.impl.DayProdMapper">
+<mapper namespace="kr.co.solbipos.sale.prod.dayProdStore.service.impl.DayProdStoreMapper">
 
     <!-- 조회 -->
     <!--
         TABLE    :
         COMMENTS :
     -->
-    <select id="getDayProdList" parameterType="dayProdVO" resultType="DefaultMap">
-        /* DayProdMapper.getDayProdList */
+    <select id="getDayProdStoreList" parameterType="dayProdStoreVO" resultType="DefaultMap">
+        /* DayProdStoreMapper.getDayProdStoreList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
         <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
@@ -29,6 +28,9 @@
             TO_CHAR(TO_DATE(#{startDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_FROM,
             TO_CHAR(TO_DATE(#{endDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_TO,
         </if>
+        (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM,
+        tsdps.STORE_CD,
+        tms.STORE_NM,
         L_CLASS_CD,
         L_CLASS_NM,
         M_CLASS_CD,
@@ -146,12 +148,12 @@
         AND tmpcv.STORE_CD = tmps2.STORE_CD
         AND tmpcv.PROD_CD = tmps2.PROD_CD
         <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
-            GROUP BY tsdps.SALE_DATE, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, tsdps.PROD_CD, tmp.PROD_NM, tsdps.SEL_TYPE_FG, tsdps.SIDE_PROD_CD, tmps2.PROD_NM
-            ORDER BY tsdps.SALE_DATE, tsdps.SIDE_PROD_CD, (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.PROD_CD END) DESC
+            GROUP BY tsdps.SALE_DATE, tms.HQ_OFFICE_CD, tms.BRANCH_CD, tsdps.STORE_CD, tms.STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, tsdps.PROD_CD, tmp.PROD_NM, tsdps.SEL_TYPE_FG, tsdps.SIDE_PROD_CD, tmps2.PROD_NM
+            ORDER BY tsdps.SALE_DATE, tsdps.STORE_CD, tsdps.SIDE_PROD_CD, (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.PROD_CD END) DESC
         </if>
         <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
-            GROUP BY L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, tsdps.PROD_CD, tmp.PROD_NM, tsdps.SEL_TYPE_FG, tsdps.SIDE_PROD_CD, tmps2.PROD_NM
-            ORDER BY tsdps.SIDE_PROD_CD, (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.PROD_CD END) DESC
+            GROUP BY tms.HQ_OFFICE_CD, tms.BRANCH_CD, tsdps.STORE_CD, tms.STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, tsdps.PROD_CD, tmp.PROD_NM, tsdps.SEL_TYPE_FG, tsdps.SIDE_PROD_CD, tmps2.PROD_NM
+            ORDER BY tsdps.STORE_CD, tsdps.SIDE_PROD_CD, (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.PROD_CD END) DESC
         </if>
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -161,8 +163,8 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getDayProdExcelList" parameterType="dayProdVO" resultType="DefaultMap">
-        /* DayProdMapper.getDayProdExcelList */
+    <select id="getDayProdStoreExcelList" parameterType="dayProdStoreVO" resultType="DefaultMap">
+        /* DayProdStoreMapper.getDayProdStoreExcelList */
         SELECT
         <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
             TO_CHAR(TO_DATE(tsdps.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
@@ -172,6 +174,9 @@
             TO_CHAR(TO_DATE(#{startDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_FROM,
             TO_CHAR(TO_DATE(#{endDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_TO,
         </if>
+        (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM,
+        tsdps.STORE_CD,
+        tms.STORE_NM,
         L_CLASS_CD,
         L_CLASS_NM,
         M_CLASS_CD,
@@ -288,12 +293,12 @@
         AND tmpcv.STORE_CD = tmps2.STORE_CD
         AND tmpcv.PROD_CD = tmps2.PROD_CD
         <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
-            GROUP BY tsdps.SALE_DATE, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, tsdps.PROD_CD, tmp.PROD_NM, tsdps.SEL_TYPE_FG, tsdps.SIDE_PROD_CD, tmps2.PROD_NM
-            ORDER BY tsdps.SALE_DATE, tsdps.SIDE_PROD_CD, (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.PROD_CD END) DESC
+            GROUP BY tsdps.SALE_DATE, tms.HQ_OFFICE_CD, tms.BRANCH_CD, tsdps.STORE_CD, tms.STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, tsdps.PROD_CD, tmp.PROD_NM, tsdps.SEL_TYPE_FG, tsdps.SIDE_PROD_CD, tmps2.PROD_NM
+            ORDER BY tsdps.SALE_DATE, tsdps.STORE_CD, tsdps.SIDE_PROD_CD, (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.PROD_CD END) DESC
         </if>
         <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
-            GROUP BY L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, tsdps.PROD_CD, tmp.PROD_NM, tsdps.SEL_TYPE_FG, tsdps.SIDE_PROD_CD, tmps2.PROD_NM
-            ORDER BY tsdps.SIDE_PROD_CD, (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.PROD_CD END) DESC
+            GROUP BY tms.HQ_OFFICE_CD, tms.BRANCH_CD, tsdps.STORE_CD, tms.STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, tsdps.PROD_CD, tmp.PROD_NM, tsdps.SEL_TYPE_FG, tsdps.SIDE_PROD_CD, tmps2.PROD_NM
+            ORDER BY tsdps.STORE_CD, tsdps.SIDE_PROD_CD, (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.PROD_CD END) DESC
         </if>
     </select>
 
@@ -303,8 +308,8 @@
         PARAM    : storeTypeVO
         COMMENTS : 콤보박스에서 사용할 브랜드를 조회한다.
     -->
-    <select id="getUserBrandCdList" parameterType="dayProdVO" resultType="String">
-        /* DayProdMapper.getUserBrandCdList */
+    <select id="getUserBrandCdList" parameterType="dayProdStoreVO" resultType="String">
+        /* DayProdStoreMapper.getUserBrandCdList */
         SELECT
         LISTAGG(twub.HQ_BRAND_CD, ',') WITHIN GROUP (ORDER BY twub.HQ_BRAND_CD) AS HQ_BRAND_CD
         FROM TB_WB_USER_BRAND twub
@@ -319,8 +324,8 @@
         PARAM    : storeTypeVO
         COMMENTS : 콤보박스에서 사용할 브랜드를 조회한다.
     -->
-    <select id="getUserBrandComboList" parameterType="dayProdVO" resultType="DefaultMap">
-        /* DayProdMapper.getUserBrandComboList */
+    <select id="getUserBrandComboList" parameterType="dayProdStoreVO" resultType="DefaultMap">
+        /* DayProdStoreMapper.getUserBrandComboList */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
@@ -369,8 +374,8 @@
         PARAM    : storeTypeVO
         COMMENTS : 콤보박스에서 사용할 브랜드를 조회한다.
     -->
-    <select id="getUserHqNmcodeCdList" parameterType="dayProdVO" resultType="String">
-        /* DayProdMapper.getUserHqNmcodeCdList */
+    <select id="getUserHqNmcodeCdList" parameterType="dayProdStoreVO" resultType="String">
+        /* DayProdStoreMapper.getUserHqNmcodeCdList */
         <if test='nmcodeGrpCd != null and nmcodeGrpCd != ""'>
             <if test='nmcodeGrpCd == "151"'>
                 SELECT
@@ -422,8 +427,8 @@
         TABLE    : TB_HQ_NMCODE
         COMMENTS :
     -->
-    <select id="getUserHqNmcodeComboList" parameterType="dayProdVO" resultType="DefaultMap">
-        /* DayProdMapper.getUserHqNmcodeComboList */
+    <select id="getUserHqNmcodeComboList" parameterType="dayProdStoreVO" resultType="DefaultMap">
+        /* DayProdStoreMapper.getUserHqNmcodeComboList */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
@@ -456,8 +461,8 @@
         PARAM    : storeTypeVO
         COMMENTS : 콤보박스에서 사용할 브랜드를 조회한다.
     -->
-    <select id="getUserBranchCdList" parameterType="dayProdVO" resultType="String">
-        /* DayProdMapper.getUserBranchCdList */
+    <select id="getUserBranchCdList" parameterType="dayProdStoreVO" resultType="String">
+        /* DayProdStoreMapper.getUserBranchCdList */
         SELECT
         the.BRANCH_CD
         FROM TB_HQ_EMPLOYEE the
@@ -470,8 +475,8 @@
         TABLE    : TB_HQ_NMCODE
         COMMENTS :
     -->
-    <select id="getUserBranchComboList" parameterType="dayProdVO" resultType="DefaultMap">
-        /* DayProdMapper.getUserBranchComboList */
+    <select id="getUserBranchComboList" parameterType="dayProdStoreVO" resultType="DefaultMap">
+        /* DayProdStoreMapper.getUserBranchComboList */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
