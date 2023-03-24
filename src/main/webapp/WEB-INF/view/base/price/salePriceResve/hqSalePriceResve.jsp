@@ -350,6 +350,7 @@
         <%-- 저장 --%>
         <button class="btn_skyblue fr" ng-click="addProdPrice()"><s:message code="salePriceResve.priceResve" /></button>
         <button class="btn_skyblue fr mr5" ng-click="saveProdPrice()"><s:message code="cmm.edit" /></button>
+        <button class="btn_skyblue fr mr5" ng-click="delProdPrice()"><s:message code="cmm.del" /></button>
         <span class="fr mr10"><input type="checkbox" id="applyFg" ng-model="applyFg" /> 전매장적용</span>
     </div>
 
@@ -445,7 +446,7 @@
     var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/hqSalePriceResve.js?ver=20220509.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/hqSalePriceResve.js?ver=20220509.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

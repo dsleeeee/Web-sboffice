@@ -594,6 +594,25 @@ app.controller('salePriceResveCtrl', ['$scope', '$http', function ($scope, $http
         item.gChk = true;
     };
 
+    // 삭제
+    $scope.delProdPrice = function(){
+
+        // 파라미터 설정
+        var params = new Array();
+
+        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ) {
+            if ($scope.flex.collectionView.items[i].gChk) {
+                $scope.flex.collectionView.items[i].orgStartDate = $scope.flex.collectionView.items[i].orgStartDate.replaceAll('-', ''); // 키값
+                params.push($scope.flex.collectionView.items[i]);
+            }
+        }
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._save('/base/price/salePriceResve/salePriceResve/delSalePriceResve.sb', params, function(){
+            $scope.searchSalePriceResveList();
+        });
+    }
+
     // 수정
     $scope.saveProdPrice = function(){
 

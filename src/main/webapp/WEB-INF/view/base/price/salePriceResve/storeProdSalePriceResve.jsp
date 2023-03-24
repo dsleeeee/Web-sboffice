@@ -207,7 +207,8 @@
         </wj-combo-box>
 
         <button class="btn_skyblue fr ml5" ng-click="addProdPrice()"><s:message code="salePriceResve.priceResve" /></button>
-        <button class="btn_skyblue fr" ng-click="saveProdPrice()"><s:message code="cmm.edit" /></button>
+        <button class="btn_skyblue fr ml5" ng-click="saveProdPrice()"><s:message code="cmm.edit" /></button>
+        <button class="btn_skyblue fr" ng-click="delProdPrice()"><s:message code="cmm.del" /></button>
     </div>
 
     <%--위즈모 테이블--%>
@@ -303,7 +304,7 @@
 </div>
 
 <script>
-    var subPriceFg = "${subPriceFg}";
+    var subPriceFg = "${subPriceFg}";ㅇ
     var coercionFg = "${coercionFg}";
 
     <%-- 가격관리구분 --%>
@@ -316,7 +317,7 @@
     });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeProdSalePriceResve.js?ver=20220509.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeProdSalePriceResve.js?ver=20220509.02" charset="utf-8"></script>
 
 <%-- 가격예약(매장판매가) [상품별 판매가관리] 상품가격정보 팝업 --%>
 <c:import url="/WEB-INF/view/base/price/salePriceResve/storeProdSalePriceInfo.jsp">
