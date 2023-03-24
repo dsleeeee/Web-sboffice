@@ -65,6 +65,7 @@
                 </if>
                 AND A.FILE_USE_TYPE != '008'
                 AND B.ADVER_FILE_NO (+)= A.ADVER_FILE_NO
+                ORDER BY A.ADVER_FILE_NO DESC
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
             <!-- 매장 -->
@@ -103,6 +104,7 @@
                     AND #{startDate} BETWEEN A.ADVER_S_DATE AND A.ADVER_E_DATE
                 </if>
                 AND A.FILE_USE_TYPE != '008'
+                ORDER BY A.ADVER_FILE_NO DESC
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
         </choose>
