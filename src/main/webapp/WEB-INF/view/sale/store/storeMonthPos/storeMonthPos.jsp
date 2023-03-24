@@ -427,7 +427,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeMonthPos/storeMonthPos.js?ver=20230314.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeMonthPos/storeMonthPos.js?ver=20230314.02" charset="utf-8"></script>
 
 <script type="text/javascript">
     var orgnFg = "${orgnFg}";

@@ -28,6 +28,9 @@ public interface SalePriceResveService {
     /** 가격예약(본사판매가) 추가 */
     int saveHqSalePriceResve(SalePriceResveVO[] salePriceResveVOs, SessionInfoVO sessionInfoVO);
 
+    /** 가격예약(본사판매가) 삭제 */
+    int delHqSalePriceResve(SalePriceResveVO[] salePriceResveVOs, SessionInfoVO sessionInfoVO);
+
     /** 가격예약(본사판매가) 수정 */
     int modHqSalePriceResve(SalePriceResveVO[] salePriceResveVOs, SessionInfoVO sessionInfoVO);
 
@@ -43,6 +46,9 @@ public interface SalePriceResveService {
     /** 가격예약(매장판매가) 추가 */
     int saveStoreProdSalePriceResve(SalePriceResveVO[] salePriceResveVOs, SessionInfoVO sessionInfoVO);
 
+    /** 가격예약(매장판매가) 삭제 */
+    int delStoreProdSalePriceResve(SalePriceResveVO[] salePriceResveVOs, SessionInfoVO sessionInfoVO);
+
     /** 가격예약(매장판매가) 수정 */
     int modStoreProdSalePriceResve(SalePriceResveVO[] salePriceResveVOs, SessionInfoVO sessionInfoVO);
 
@@ -54,6 +60,9 @@ public interface SalePriceResveService {
 
     /** 가격예약(판매가관리) 추가 */
     int saveSalePriceResve(SalePriceResveVO[] salePriceResveVOs, SessionInfoVO sessionInfoVO);
+
+    /** 가격예약(판매가관리) 삭제 */
+    int delSalePriceResve(SalePriceResveVO[] salePriceResveVOs, SessionInfoVO sessionInfoVO);
 
     /** 가격예약(판매가관리) 수정 */
     int modSalePriceResve(SalePriceResveVO[] salePriceResveVOs, SessionInfoVO sessionInfoVO);

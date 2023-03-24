@@ -366,6 +366,8 @@
             <button class="btn_skyblue fr mr5" ng-click="addProdPrice()"><s:message code="salePriceResve.priceResve" /></button>
             <%-- 수정 --%>
             <button class="btn_skyblue fr mr5" ng-click="saveProdPrice()"><s:message code="cmm.edit"/></button>
+            <%-- 삭제 --%>
+            <button class="btn_skyblue fr mr5" ng-click="delProdPrice()"><s:message code="cmm.del"/></button>
         </div>
 
         <%-- 그리드 --%>
@@ -485,7 +487,7 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/salePriceResve.js?ver=20220509.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/salePriceResve.js?ver=20220509.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

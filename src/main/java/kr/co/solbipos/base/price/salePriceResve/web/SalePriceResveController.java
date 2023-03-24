@@ -157,6 +157,26 @@ public class SalePriceResveController {
     }
 
     /**
+     * 가격예약(본사판매가) 삭제
+     * @param salePriceResveVOs
+     * @param request
+     * @return
+     * @author 권지현
+     * @since 2023.03.24
+     */
+    @RequestMapping(value = "/hqSalePriceResve/delHqSalePriceResve.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result delHqSalePriceResve(@RequestBody SalePriceResveVO[] salePriceResveVOs, HttpServletRequest request,
+                                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = salePriceResveService.delHqSalePriceResve(salePriceResveVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
      * 가격예약(본사판매가) 수정
      * @param salePriceResveVOs
      * @param request
@@ -302,6 +322,26 @@ public class SalePriceResveController {
     }
 
     /**
+     * 가격예약(매장판매가) 삭제
+     * @param salePriceResveVOs
+     * @param request
+     * @return
+     * @author 권지현
+     * @since 2023.03.24
+     */
+    @RequestMapping(value = "/storeSalePriceResve/delStoreProdSalePriceResve.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result delStoreProdSalePriceResve(@RequestBody SalePriceResveVO[] salePriceResveVOs, HttpServletRequest request,
+                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = salePriceResveService.delStoreProdSalePriceResve(salePriceResveVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
      * 가격예약(매장판매가) 수정
      * @param salePriceResveVOs
      * @param request
@@ -406,6 +446,26 @@ public class SalePriceResveController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = salePriceResveService.saveSalePriceResve(salePriceResveVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 가격예약(판매가관리) 삭제
+     * @param salePriceResveVOs
+     * @param request
+     * @return
+     * @author 권지현
+     * @since 2023.03.24
+     */
+    @RequestMapping(value = "/salePriceResve/delSalePriceResve.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result delSalePriceResve(@RequestBody SalePriceResveVO[] salePriceResveVOs, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = salePriceResveService.delSalePriceResve(salePriceResveVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

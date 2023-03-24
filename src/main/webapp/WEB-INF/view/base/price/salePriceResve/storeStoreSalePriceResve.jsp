@@ -352,7 +352,8 @@
 
         <%-- 저장 --%>
         <button class="btn_skyblue fr ml5" ng-click="addProdPrice2()"><s:message code="salePriceResve.priceResve" /></button>
-        <button class="btn_skyblue fr" ng-click="saveProdPrice2()"><s:message code="cmm.edit" /></button>
+        <button class="btn_skyblue fr ml5" ng-click="saveProdPrice2()"><s:message code="cmm.edit" /></button>
+        <button class="btn_skyblue fr" ng-click="delProdPrice2()"><s:message code="cmm.del" /></button>
     </div>
 
     <%--위즈모 테이블--%>
@@ -449,7 +450,7 @@
     var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeStoreSalePriceResve.js?ver=20220509.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeStoreSalePriceResve.js?ver=20220509.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

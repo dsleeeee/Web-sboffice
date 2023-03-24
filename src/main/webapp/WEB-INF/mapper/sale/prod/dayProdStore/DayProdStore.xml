@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    DayProdStore.xml
+    일별 상품 매출 현황 (매장별)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2023.03.23     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.prod.dayProdStore.service.impl.DayProdStoreMapper">
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getDayProdStoreList" parameterType="dayProdStoreVO" resultType="DefaultMap">
+        /* DayProdStoreMapper.getDayProdStoreList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
+            TO_CHAR(TO_DATE(tsdps.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+            TO_CHAR(TO_DATE(tsdps.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
+            TO_CHAR(TO_DATE(#{startDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_FROM,
+            TO_CHAR(TO_DATE(#{endDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_TO,
+        </if>
+        (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM,
+        tsdps.STORE_CD,
+        tms.STORE_NM,
+        L_CLASS_CD,
+        L_CLASS_NM,
+        M_CLASS_CD,
+        M_CLASS_NM,
+        S_CLASS_CD,
+        S_CLASS_NM,
+        tsdps.SIDE_PROD_CD AS PROD_CD,
+        tmp.PROD_NM,
+        (CASE tsdps.SEL_TYPE_FG WHEN 'P' THEN '사이드모상품' WHEN 'S' THEN '사이드상품' WHEN 'N' THEN '일반판매상품' END) AS SEL_TYPE_FG,
+        (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.PROD_CD END) AS SIDE_PROD_CD,
+        (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmps2.PROD_NM ELSE tmps2.PROD_NM END) AS SIDE_PROD_NM,
+        SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.TOT_SALE_QTY END) AS SALE_QTY1,
+        SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'S' THEN tsdps.TOT_SALE_QTY END) AS SALE_QTY2,
+        SUM(tsdps.TOT_SALE_QTY) AS SALE_QTY3,
+        SUM(tsdps.TOT_SALE_AMT) AS TOT_SALE_AMT,
+        SUM(tsdps.TOT_DC_AMT) AS DC_AMT,
+        SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.REAL_SALE_AMT END) AS REAL_SALE_AMT1,
+        SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'S' THEN tsdps.REAL_SALE_AMT END) AS REAL_SALE_AMT2,
+        SUM(tsdps.REAL_SALE_AMT) AS REAL_SALE_AMT3
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_SL_DAILY_PROD_SDSEL tsdps,
+        TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi,
+        TB_MS_PRODUCT tmp,
+        TB_MS_PRODUCT tmps2, -- 사이드
+        TB_MS_PRODUCT_CLASS_V02 tmpcv
+        WHERE 1=1
+        AND tsdps.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsdps.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsdps.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND tmps2.PROD_CLASS_CD IN (
+                                            SELECT
+                                            PROD_CLASS_CD
+                                            FROM TB_MS_PRODUCT_CLASS
+                                            WHERE STORE_CD = tmps2.STORE_CD
+                                            START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = tmps2.STORE_CD
+                                            CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = tmps2.STORE_CD
+                                        )
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tmps2.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmps2.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='prodCds != null and prodCds != ""'>
+            AND tmps2.PROD_CD IN
+            <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+            AND tmps2.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+        </if>
+        <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 상품브랜드 전체일때
+                AND tmps2.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='prodOption != null and prodOption != "" and prodOption == "1"'>
+            AND tsdps.SEL_TYPE_FG IN ('N', 'P')
+        </if>
+        <if test='prodOption != null and prodOption != "" and prodOption == "2"'>
+            AND tsdps.SEL_TYPE_FG IN ('N', 'S')
+        </if>
+        AND tms.STORE_CD = tsdps.STORE_CD
+        AND tmsi.STORE_CD (+)= tms.STORE_CD
+        AND tmp.STORE_CD = tsdps.STORE_CD
+        AND tmp.PROD_CD = tsdps.PROD_CD
+        AND tmps2.STORE_CD = tsdps.STORE_CD
+        AND tmps2.PROD_CD = tsdps.PROD_CD
+        AND tmpcv.STORE_CD = tmps2.STORE_CD
+        AND tmpcv.PROD_CD = tmps2.PROD_CD
+        <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
+            GROUP BY tsdps.SALE_DATE, tms.HQ_OFFICE_CD, tms.BRANCH_CD, tsdps.STORE_CD, tms.STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, tsdps.PROD_CD, tmp.PROD_NM, tsdps.SEL_TYPE_FG, tsdps.SIDE_PROD_CD, tmps2.PROD_NM
+            ORDER BY tsdps.SALE_DATE, tsdps.STORE_CD, tsdps.SIDE_PROD_CD, (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.PROD_CD END) DESC
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
+            GROUP BY tms.HQ_OFFICE_CD, tms.BRANCH_CD, tsdps.STORE_CD, tms.STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, tsdps.PROD_CD, tmp.PROD_NM, tsdps.SEL_TYPE_FG, tsdps.SIDE_PROD_CD, tmps2.PROD_NM
+            ORDER BY tsdps.STORE_CD, tsdps.SIDE_PROD_CD, (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.PROD_CD END) DESC
+        </if>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 엑셀 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getDayProdStoreExcelList" parameterType="dayProdStoreVO" resultType="DefaultMap">
+        /* DayProdStoreMapper.getDayProdStoreExcelList */
+        SELECT
+        <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
+            TO_CHAR(TO_DATE(tsdps.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+            TO_CHAR(TO_DATE(tsdps.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
+            TO_CHAR(TO_DATE(#{startDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_FROM,
+            TO_CHAR(TO_DATE(#{endDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_TO,
+        </if>
+        (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM,
+        tsdps.STORE_CD,
+        tms.STORE_NM,
+        L_CLASS_CD,
+        L_CLASS_NM,
+        M_CLASS_CD,
+        M_CLASS_NM,
+        S_CLASS_CD,
+        S_CLASS_NM,
+        tsdps.SIDE_PROD_CD AS PROD_CD,
+        tmp.PROD_NM,
+        (CASE tsdps.SEL_TYPE_FG WHEN 'P' THEN '사이드모상품' WHEN 'S' THEN '사이드상품' WHEN 'N' THEN '일반판매상품' END) AS SEL_TYPE_FG,
+        (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.PROD_CD END) AS SIDE_PROD_CD,
+        (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmps2.PROD_NM ELSE tmps2.PROD_NM END) AS SIDE_PROD_NM,
+        SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.TOT_SALE_QTY END) AS SALE_QTY1,
+        SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'S' THEN tsdps.TOT_SALE_QTY END) AS SALE_QTY2,
+        SUM(tsdps.TOT_SALE_QTY) AS SALE_QTY3,
+        SUM(tsdps.TOT_SALE_AMT) AS TOT_SALE_AMT,
+        SUM(tsdps.TOT_DC_AMT) AS DC_AMT,
+        SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.REAL_SALE_AMT END) AS REAL_SALE_AMT1,
+        SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'S' THEN tsdps.REAL_SALE_AMT END) AS REAL_SALE_AMT2,
+        SUM(tsdps.REAL_SALE_AMT) AS REAL_SALE_AMT3
+        FROM TB_SL_DAILY_PROD_SDSEL tsdps,
+        TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi,
+        TB_MS_PRODUCT tmp,
+        TB_MS_PRODUCT tmps2, -- 사이드
+        TB_MS_PRODUCT_CLASS_V02 tmpcv
+        WHERE 1=1
+        AND tsdps.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsdps.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsdps.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND tmps2.PROD_CLASS_CD IN (
+                                            SELECT
+                                            PROD_CLASS_CD
+                                            FROM TB_MS_PRODUCT_CLASS
+                                            WHERE STORE_CD = tmps2.STORE_CD
+                                            START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = tmps2.STORE_CD
+                                            CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = tmps2.STORE_CD
+                                        )
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tmps2.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmps2.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='prodCds != null and prodCds != ""'>
+            AND tmps2.PROD_CD IN
+            <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+            AND tmps2.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+        </if>
+        <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 상품브랜드 전체일때
+                AND tmps2.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='prodOption != null and prodOption != "" and prodOption == "1"'>
+            AND tsdps.SEL_TYPE_FG IN ('N', 'P')
+        </if>
+        <if test='prodOption != null and prodOption != "" and prodOption == "2"'>
+            AND tsdps.SEL_TYPE_FG IN ('N', 'S')
+        </if>
+        AND tms.STORE_CD = tsdps.STORE_CD
+        AND tmsi.STORE_CD (+)= tms.STORE_CD
+        AND tmp.STORE_CD = tsdps.STORE_CD
+        AND tmp.PROD_CD = tsdps.PROD_CD
+        AND tmps2.STORE_CD = tsdps.STORE_CD
+        AND tmps2.PROD_CD = tsdps.PROD_CD
+        AND tmpcv.STORE_CD = tmps2.STORE_CD
+        AND tmpcv.PROD_CD = tmps2.PROD_CD
+        <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
+            GROUP BY tsdps.SALE_DATE, tms.HQ_OFFICE_CD, tms.BRANCH_CD, tsdps.STORE_CD, tms.STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, tsdps.PROD_CD, tmp.PROD_NM, tsdps.SEL_TYPE_FG, tsdps.SIDE_PROD_CD, tmps2.PROD_NM
+            ORDER BY tsdps.SALE_DATE, tsdps.STORE_CD, tsdps.SIDE_PROD_CD, (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.PROD_CD END) DESC
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
+            GROUP BY tms.HQ_OFFICE_CD, tms.BRANCH_CD, tsdps.STORE_CD, tms.STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, tsdps.PROD_CD, tmp.PROD_NM, tsdps.SEL_TYPE_FG, tsdps.SIDE_PROD_CD, tmps2.PROD_NM
+            ORDER BY tsdps.STORE_CD, tsdps.SIDE_PROD_CD, (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.PROD_CD END) DESC
+        </if>
+    </select>
+
+    <!-- 사용자별 브랜드 사용 조회 -->
+    <!--
+        TABLE    : TB_HQ_BRAND
+        PARAM    : storeTypeVO
+        COMMENTS : 콤보박스에서 사용할 브랜드를 조회한다.
+    -->
+    <select id="getUserBrandCdList" parameterType="dayProdStoreVO" resultType="String">
+        /* DayProdStoreMapper.getUserBrandCdList */
+        SELECT
+        LISTAGG(twub.HQ_BRAND_CD, ',') WITHIN GROUP (ORDER BY twub.HQ_BRAND_CD) AS HQ_BRAND_CD
+        FROM TB_WB_USER_BRAND twub
+        WHERE 1=1
+        AND twub.USER_ID = #{userId}
+        GROUP BY twub.USER_ID
+    </select>
+
+    <!-- 사용자별 브랜드 조회(콤보박스용) -->
+    <!--
+        TABLE    : TB_HQ_BRAND
+        PARAM    : storeTypeVO
+        COMMENTS : 콤보박스에서 사용할 브랜드를 조회한다.
+    -->
+    <select id="getUserBrandComboList" parameterType="dayProdStoreVO" resultType="DefaultMap">
+        /* DayProdStoreMapper.getUserBrandComboList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                '' AS VALUE,
+                '전체' AS NAME
+                FROM DUAL
+                UNION
+                SELECT
+                HQ_BRAND_CD AS VALUE,
+                HQ_BRAND_NM AS NAME
+                FROM TB_HQ_BRAND
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND USE_YN = 'Y'
+                <if test='userBrands != null and userBrands != ""'>
+                    AND HQ_BRAND_CD IN
+                    <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                ORDER
+                BY VALUE NULLS FIRST
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                '' AS VALUE,
+                '전체' AS NAME
+                FROM DUAL
+                UNION
+                SELECT
+                MS_BRAND_CD AS VALUE,
+                MS_BRAND_NM AS NAME
+                FROM TB_MS_BRAND
+                WHERE STORE_CD = #{storeCd}
+                AND USE_YN = 'Y'
+                ORDER
+                BY VALUE NULLS FIRST
+            </when>
+        </choose>
+    </select>
+
+    <!-- 사용자별 코드별 공통코드 조회 -->
+    <!--
+        TABLE    : TB_HQ_BRAND
+        PARAM    : storeTypeVO
+        COMMENTS : 콤보박스에서 사용할 브랜드를 조회한다.
+    -->
+    <select id="getUserHqNmcodeCdList" parameterType="dayProdStoreVO" resultType="String">
+        /* DayProdStoreMapper.getUserHqNmcodeCdList */
+        <if test='nmcodeGrpCd != null and nmcodeGrpCd != ""'>
+            <if test='nmcodeGrpCd == "151"'>
+                SELECT
+                the.MOMS_TEAM
+                FROM TB_HQ_EMPLOYEE the
+                WHERE 1=1
+                AND the.USER_ID = #{userId}
+            </if>
+            <if test='nmcodeGrpCd == "152"'>
+                SELECT
+                the.MOMS_AC_SHOP
+                FROM TB_HQ_EMPLOYEE the
+                WHERE 1=1
+                AND the.USER_ID = #{userId}
+            </if>
+            <if test='nmcodeGrpCd == "153"'>
+                SELECT
+                the.MOMS_AREA_FG
+                FROM TB_HQ_EMPLOYEE the
+                WHERE 1=1
+                AND the.USER_ID = #{userId}
+            </if>
+            <if test='nmcodeGrpCd == "154"'>
+                SELECT
+                the.MOMS_COMMERCIAL
+                FROM TB_HQ_EMPLOYEE the
+                WHERE 1=1
+                AND the.USER_ID = #{userId}
+            </if>
+            <if test='nmcodeGrpCd == "155"'>
+                SELECT
+                the.MOMS_SHOP_TYPE
+                FROM TB_HQ_EMPLOYEE the
+                WHERE 1=1
+                AND the.USER_ID = #{userId}
+            </if>
+            <if test='nmcodeGrpCd == "156"'>
+                SELECT
+                the.MOMS_STORE_MANAGE_TYPE
+                FROM TB_HQ_EMPLOYEE the
+                WHERE 1=1
+                AND the.USER_ID = #{userId}
+            </if>
+        </if>
+    </select>
+
+    <!-- 사용자별 코드별 공통코드 콤보박스 조회 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE
+        COMMENTS :
+    -->
+    <select id="getUserHqNmcodeComboList" parameterType="dayProdStoreVO" resultType="DefaultMap">
+        /* DayProdStoreMapper.getUserHqNmcodeComboList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                thn.NMCODE_CD AS VALUE,
+                thn.NMCODE_NM AS NAME
+                FROM TB_HQ_NMCODE thn
+                WHERE 1=1
+                AND thn.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND thn.NMCODE_GRP_CD = #{nmcodeGrpCd}
+                <if test='userHqNmcodeCd != null and userHqNmcodeCd != ""'>
+                    AND thn.NMCODE_CD = #{userHqNmcodeCd}
+                    ORDER BY thn.NMCODE_CD
+                </if>
+                <if test='userHqNmcodeCd == null or userHqNmcodeCd == ""'>
+                    UNION
+                    SELECT
+                    '' AS VALUE,
+                    '전체' AS NAME
+                    FROM DUAL
+                    ORDER BY VALUE NULLS FIRST
+                </if>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 사용자별 지사 조회 -->
+    <!--
+        TABLE    : TB_HQ_BRAND
+        PARAM    : storeTypeVO
+        COMMENTS : 콤보박스에서 사용할 브랜드를 조회한다.
+    -->
+    <select id="getUserBranchCdList" parameterType="dayProdStoreVO" resultType="String">
+        /* DayProdStoreMapper.getUserBranchCdList */
+        SELECT
+        the.BRANCH_CD
+        FROM TB_HQ_EMPLOYEE the
+        WHERE 1=1
+        AND the.USER_ID = #{userId}
+    </select>
+
+    <!-- 사용자별 지사 콤보박스 조회 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE
+        COMMENTS :
+    -->
+    <select id="getUserBranchComboList" parameterType="dayProdStoreVO" resultType="DefaultMap">
+        /* DayProdStoreMapper.getUserBranchComboList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                thbm.BRANCH_CD AS VALUE,
+                thbm.BRANCH_NM AS NAME
+                FROM TB_HQ_BRANCH_MOMS thbm
+                WHERE 1=1
+                AND thbm.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='userHqNmcodeCd != null and userHqNmcodeCd != ""'>
+                    AND thbm.BRANCH_CD = #{userHqNmcodeCd}
+                    ORDER BY thbm.BRANCH_CD
+                </if>
+                <if test='userHqNmcodeCd == null or userHqNmcodeCd == ""'>
+                    UNION
+                    SELECT
+                    '' AS VALUE,
+                    '전체' AS NAME
+                    FROM DUAL
+                    ORDER BY VALUE NULLS FIRST
+                </if>
+            </when>
+        </choose>
+    </select>
+
+</mapper>

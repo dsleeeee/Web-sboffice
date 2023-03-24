@@ -19,7 +19,6 @@
     -->
     <select id="getStoreInfoList" parameterType="storeInfoVO" resultType="DefaultMap">
     /* USE : StoreInfoMapper.getStoreInfoList */
-    <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT  tms.STORE_CD
         ,       tms.STORE_NM
         ,       tms.OWNER_NM
@@ -62,7 +61,6 @@
         ,       tmsi.MOMS_COMMERCIAL
         ,       tmsi.MOMS_SHOP_TYPE
         ,       tmsi.MOMS_STORE_MANAGE_TYPE
-    <include refid="CmmSQL.PagingTemplateCount"/>
         FROM    TB_MS_STORE tms
         ,       TB_MS_STORE_INFO tmsi
         WHERE   tms.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -108,6 +106,5 @@
         </if>
         ORDER
         BY tms.STORE_CD
-    <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 </mapper>

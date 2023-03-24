@@ -63,7 +63,6 @@
                 ,		TB_MS_STORE tms
                 ,       TB_MS_STORE_INFO tmsi
                 WHERE 	tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND     thpc.DEPOSIT_YMD BETWEEN #{startDate} AND #{endDate}
                 AND 	tsdp.HQ_OFFICE_CD = thph.HQ_OFFICE_CD
                 AND 	tsdp.PROMOTION_CD = thph.PROMOTION_CD
                 AND 	tsdp.HQ_OFFICE_CD = thpc.HQ_OFFICE_CD
@@ -71,7 +70,10 @@
                 AND 	tsdp.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
                 AND 	tsdp.STORE_CD = tms.STORE_CD
                 AND     tmsi.STORE_CD (+)= tms.STORE_CD
-                <if test='promotionCds != null and promotionCds != ""'>
+                <if test='gubun != null and gubun == "D"'>
+                    AND thpc.DEPOSIT_YMD BETWEEN #{startDate} AND #{endDate}
+                </if>
+                <if test='promotionCds != null and promotionCds != "" and gubun != null and gubun == "P"'>
                     AND tsdp.PROMOTION_CD IN
                     <foreach collection="promotionCdList" item="item" open=" (" separator="," close=")" >
                         #{item}

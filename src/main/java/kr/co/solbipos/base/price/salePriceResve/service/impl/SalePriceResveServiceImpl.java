@@ -101,6 +101,21 @@ public class SalePriceResveServiceImpl implements SalePriceResveService {
         return result;
     }
 
+    /** 가격예약(본사판매가) 삭제 */
+    @Override
+    public int delHqSalePriceResve(SalePriceResveVO[] salePriceResveVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+
+        for(SalePriceResveVO salePriceResveVO : salePriceResveVOs) {
+            salePriceResveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            // 기존 예약 판매가 삭제
+            salePriceResveMapper.deleteHqSalePriceResve(salePriceResveVO);
+
+        }
+        return result;
+    }
+
     /** 가격예약(본사판매가) 수정 */
     @Override
     public int modHqSalePriceResve(SalePriceResveVO[] salePriceResveVOs, SessionInfoVO sessionInfoVO) {
@@ -203,6 +218,23 @@ public class SalePriceResveServiceImpl implements SalePriceResveService {
         return result;
     }
 
+    /** 가격예약(매장판매가) 삭제 */
+    @Override
+    public int delStoreProdSalePriceResve(SalePriceResveVO[] salePriceResveVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+
+        for(SalePriceResveVO salePriceResveVO : salePriceResveVOs) {
+
+            salePriceResveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+            // 기존 예약 판매가 삭제
+            salePriceResveMapper.deleteStoreSalePriceResve(salePriceResveVO);
+
+        }
+        return result;
+    }
+
     /** 가격예약(매장판매가) 수정 */
     @Override
     public int modStoreProdSalePriceResve(SalePriceResveVO[] salePriceResveVOs, SessionInfoVO sessionInfoVO) {
@@ -285,6 +317,24 @@ public class SalePriceResveServiceImpl implements SalePriceResveService {
 
             // 새 예약 판매가 등록
             result = salePriceResveMapper.insertStoreSalePrice(salePriceResveVO);
+
+        }
+        return result;
+    }
+
+    /** 가격예약(판매가관리) 삭제 */
+    @Override
+    public int delSalePriceResve(SalePriceResveVO[] salePriceResveVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+
+        for(SalePriceResveVO salePriceResveVO : salePriceResveVOs) {
+
+            salePriceResveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            salePriceResveVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+            // 기존 예약 판매가 삭제
+            salePriceResveMapper.deleteStoreSalePriceResve(salePriceResveVO);
 
         }
         return result;

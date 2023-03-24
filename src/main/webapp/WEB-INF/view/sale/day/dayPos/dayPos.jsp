@@ -374,7 +374,7 @@
   var dlvrInFgCol = '${dlvrInFgCol}';
   var arrDlvrInFgCol = dlvrInFgCol.split(',');
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayPos/dayPos.js?ver=20230314.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayPos/dayPos.js?ver=20230314.02" charset="utf-8"></script>
 
 <%-- 팝업 레이어 시작 --%>
 <%-- 매장별 매출현황 팝업 레이어 --%>

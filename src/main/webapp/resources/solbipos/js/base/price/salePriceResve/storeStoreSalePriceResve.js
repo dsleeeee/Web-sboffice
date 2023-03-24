@@ -629,6 +629,25 @@ app.controller('storeStoreSalePriceResveCtrl', ['$scope', '$http', function ($sc
         item.gChk = true;
     };
 
+    // 삭제
+    $scope.delProdPrice2 = function() {
+
+        // 파라미터 설정
+        var params = new Array();
+
+        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ) {
+            if ($scope.flex.collectionView.items[i].gChk) {
+                $scope.flex.collectionView.items[i].storeCd = $("#searchStoreCd").val();
+                $scope.flex.collectionView.items[i].orgStartDate = $scope.flex.collectionView.items[i].orgStartDate.replaceAll('-', ''); // 키값
+                params.push($scope.flex.collectionView.items[i]);
+            }
+        }
+
+        $scope._save('/base/price/salePriceResve/storeSalePriceResve/delStoreProdSalePriceResve.sb', params, function(){
+            $scope.searchSalePriceList2();
+        });
+    }
+
     // 수정
     $scope.saveProdPrice2 = function(){
 
