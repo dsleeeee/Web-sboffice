@@ -814,17 +814,35 @@
                 SELECT
                 A.RESULT,
                 A.PROD_CD,
-                B.PROD_NM,
-                A.SALE_UPRC,
-                B.PRC_CTRL_FG,
+                thp.PROD_NM,
+                thpsp.SALE_UPRC AS HQ_SALE_UPRC, -- 본사판매가
+                A.SALE_UPRC, -- 변경판매가
+                thp.PRC_CTRL_FG,
                 A.SEQ
                 FROM TB_TMP_EXCEL_SALE_PRICE A,
-                TB_HQ_PRODUCT B
+                TB_HQ_PRODUCT thp,
+                (
+                    SELECT HQ_OFFICE_CD, PROD_CD,
+                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+                    MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+                    MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
+                    MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
+                    FROM TB_HQ_PRODUCT_SALE_PRICE
+                    WHERE 1=1
+                    <![CDATA[
+                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    ]]>
+                    AND SALE_PRC_FG = '1'
+                    GROUP BY HQ_OFFICE_CD, PROD_CD
+                ) thpsp
                 WHERE 1=1
                 AND A.SESSION_ID = #{sessionId}
                 AND A.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND B.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
-                AND B.PROD_CD (+)= A.PROD_CD
+                AND thp.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+                AND thp.PROD_CD (+)= A.PROD_CD
+                AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND thpsp.PROD_CD = thp.PROD_CD
                 ORDER BY A.SEQ
             </when>
             <!-- 매장판매가 -->
@@ -832,21 +850,60 @@
                 SELECT
                 A.RESULT,
                 A.STORE_CD,
-                C.STORE_NM,
+                tms.STORE_NM,
                 A.PROD_CD,
-                B.PROD_NM,
+                tmp.PROD_NM,
+                thpsp.SALE_UPRC AS HQ_SALE_UPRC, -- 본사판매가
+                tmpsp.SALE_UPRC AS STORE_SALE_UPRC, -- 매장판매가
                 A.SALE_UPRC,
-                B.PRC_CTRL_FG,
+                tmp.PRC_CTRL_FG,
                 A.SEQ
                 FROM TB_TMP_EXCEL_SALE_PRICE A,
-                TB_MS_PRODUCT B,
-                TB_MS_STORE C
+                TB_MS_PRODUCT tmp,
+                TB_MS_STORE tms,
+                TB_HQ_PRODUCT thp,
+                (
+                    SELECT HQ_OFFICE_CD, PROD_CD,
+                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+                    MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+                    MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
+                    MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
+                    FROM TB_HQ_PRODUCT_SALE_PRICE
+                    WHERE 1=1
+                    <![CDATA[
+                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    ]]>
+                    AND SALE_PRC_FG = '1'
+                    GROUP BY HQ_OFFICE_CD, PROD_CD
+                ) thpsp,
+                (
+                    SELECT STORE_CD, PROD_CD,
+                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+                    MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+                    MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
+                    MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
+                    FROM TB_MS_PRODUCT_SALE_PRICE
+                    WHERE 1=1
+                    <![CDATA[
+                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    ]]>
+                    AND SALE_PRC_FG = '1'
+                    GROUP BY STORE_CD, PROD_CD
+                ) tmpsp
                 WHERE 1=1
                 AND A.SESSION_ID = #{sessionId}
                 AND A.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND B.STORE_CD (+)= A.STORE_CD
-                AND B.PROD_CD (+)= A.PROD_CD
-                AND C.STORE_CD (+)= A.STORE_CD
+                AND tmp.STORE_CD (+)= A.STORE_CD
+                AND tmp.PROD_CD (+)= A.PROD_CD
+                AND tms.STORE_CD (+)= A.STORE_CD
+                AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND thp.PROD_CD = tmp.PROD_CD
+                AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND thpsp.PROD_CD = thp.PROD_CD
+                AND tmpsp.STORE_CD = tmp.STORE_CD
+                AND tmpsp.PROD_CD = tmp.PROD_CD
                 ORDER BY A.SEQ
             </when>
         </choose>
