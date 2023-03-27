@@ -23,7 +23,7 @@
             <p class="tl s14 mt5 lh15">4. '매장정보'가 업로드되면 '저장'을 클릭하여 저장을 해주세요.</p>
             <p class="tl s14 mt5 lh15">- 업로드된 검증결과가 전체 '검증성공'일때만 저장됩니다.</p>
             <p class="tl s14 mt5 lh15 red">※ 검증결과가 실패인 경우</p>
-            <p class="tl s14 mt5 lh15 red"> - 아래 해당 정보를 수정하신 후에 엑셀다운로드 하여 다시 업로드 해주세요.</p>
+            <p class="tl s14 mt5 lh15 red">- 아래 해당 정보를 수정하신 후에 엑셀다운로드 하여 다시 업로드 해주세요.</p>
             <%-- 엑셀업로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelUpload()">
                 <s:message code="cmm.excel.excelUpload" />
