@@ -22,6 +22,7 @@
             <p class="tl s14 mt5 lh15">3. '엑셀업로드' 버튼을 클릭하여 업로드 해주세요.</p>
             <p class="tl s14 mt5 lh15">4. '판매가'가 업로드되면 '저장'을 클릭하여 검증 및 저장을 해주세요.</p>
             <p class="tl s14 mt5 lh15">- 검증결과가 '검증성공'인 판매가만 저장됩니다.</p>
+            <p class="tl s14 mt5 lh15 red">※ 업로드시 '매장코드, 상품코드, 변경판매가' 기준으로 처리됩니다.</p>
             <%-- 엑셀업로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelUpload()">
                 <s:message code="cmm.excel.excelUpload" />
@@ -46,7 +47,10 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="storeSalePriceExcelUpload.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeSalePriceExcelUpload.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeSalePriceExcelUpload.saleUprc"/>" width="100" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeSalePriceExcelUpload.prodNm"/>" binding="prodNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeSalePriceExcelUpload.hqSaleUprc"/>" binding="hqSaleUprc" width="100" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeSalePriceExcelUpload.storeSaleUprc"/>" binding="storeSaleUprc" width="100" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeSalePriceExcelUpload.saleUprc"/>" binding="saleUprc" width="100" align="right"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>

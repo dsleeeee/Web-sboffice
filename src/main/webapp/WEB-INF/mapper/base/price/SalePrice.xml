@@ -704,9 +704,27 @@
             <when test='salePriceOrgnFg != null and salePriceOrgnFg != "" and salePriceOrgnFg == "H"'>
                 <include refid="CmmSQL.PagingTemplateHeader"/>
                 SELECT
-                thp.PROD_CD
+                thp.PROD_CD,
+                thp.PROD_NM,
+                thpsp.SALE_UPRC AS HQ_SALE_UPRC, -- 본사판매가
+                thpsp.SALE_UPRC AS SALE_UPRC -- 변경판매가
                 <include refid="CmmSQL.PagingTemplateCount"/>
-                FROM TB_HQ_PRODUCT thp
+                FROM TB_HQ_PRODUCT thp,
+                (
+                    SELECT HQ_OFFICE_CD, PROD_CD,
+                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+                    MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+                    MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
+                    MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
+                    FROM TB_HQ_PRODUCT_SALE_PRICE
+                    WHERE 1=1
+                    <![CDATA[
+                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    ]]>
+                    AND SALE_PRC_FG = '1'
+                    GROUP BY HQ_OFFICE_CD, PROD_CD
+                ) thpsp
                 WHERE 1=1
                 AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND (
@@ -714,6 +732,8 @@
                         OR
                         ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
                     )
+                AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND thpsp.PROD_CD = thp.PROD_CD
                 ORDER BY thp.PROD_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -722,16 +742,59 @@
                 <include refid="CmmSQL.PagingTemplateHeader"/>
                 SELECT
                 tmp.STORE_CD,
-                tmp.PROD_CD
+                tmp.PROD_CD,
+                tmp.PROD_NM,
+                thpsp.SALE_UPRC AS HQ_SALE_UPRC, -- 본사판매가
+                tmpsp.SALE_UPRC AS STORE_SALE_UPRC, -- 매장판매가
+                tmpsp.SALE_UPRC AS SALE_UPRC -- 매장변경판매가
                 <include refid="CmmSQL.PagingTemplateCount"/>
-                FROM TB_MS_PRODUCT tmp
+                FROM TB_MS_PRODUCT tmp,
+                TB_HQ_PRODUCT thp,
+                (
+                    SELECT HQ_OFFICE_CD, PROD_CD,
+                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+                    MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+                    MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
+                    MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
+                    FROM TB_HQ_PRODUCT_SALE_PRICE
+                    WHERE 1=1
+                    <![CDATA[
+                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    ]]>
+                    AND SALE_PRC_FG = '1'
+                    GROUP BY HQ_OFFICE_CD, PROD_CD
+                ) thpsp,
+                (
+                    SELECT STORE_CD, PROD_CD,
+                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+                    MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+                    MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
+                    MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
+                    FROM TB_MS_PRODUCT_SALE_PRICE
+                    WHERE 1=1
+                    <![CDATA[
+                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    ]]>
+                    AND SALE_PRC_FG = '1'
+                    GROUP BY STORE_CD, PROD_CD
+                ) tmpsp
                 WHERE 1=1
-                AND tmp.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                <![CDATA[
+                    AND tmp.STORE_CD IN (SELECT STORE_CD FROM (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} ORDER BY STORE_CD) WHERE ROWNUM < 2)
+                ]]>
+                AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND (
                         ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
                         OR
                         ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
                     )
+                AND thp.PROD_CD = tmp.PROD_CD
+                AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND thpsp.PROD_CD = thp.PROD_CD
+                AND tmpsp.STORE_CD = tmp.STORE_CD
+                AND tmpsp.PROD_CD = tmp.PROD_CD
                 ORDER BY tmp.STORE_CD, tmp.PROD_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
