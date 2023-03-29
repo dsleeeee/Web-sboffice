@@ -103,6 +103,20 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
             } else {
               $scope.templtRegFgNm = "매장";
             }
+            // 편집영역의 '저장' 버튼 명칭 변경
+            if("S" === gvOrgnFg){
+              if (selectedRow.templtRegFg === "C") {
+                $("#btnSaveEditTemplate").text("실제출력물적용");
+              } else if (selectedRow.templtRegFg === "H") {
+                $("#btnSaveEditTemplate").text("실제출력물적용");
+              } else {
+                if(selectedRow.templtCd === "000"){
+                  $("#btnSaveEditTemplate").text("저장");
+                }else{
+                  $("#btnSaveEditTemplate").text("저장 및 실제출력물적용");
+                }
+              }
+            }
             $scope.showTempltRegFgNm = true;
             // 본사는 상위에서 내려준걸 수정 하지 못한다.
             if ( gvOrgnFg === selectedRow.templtRegFg ) {
@@ -169,6 +183,20 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
                   $scope.showBtnApplyStore = true;
                 } else {
                   $scope.templtRegFgNm = "매장";
+                }
+                // 편집영역의 '저장' 버튼 명칭 변경
+                if("S" === gvOrgnFg){
+                  if (selectedRow.templtRegFg === "C") {
+                    $("#btnSaveEditTemplate").text("실제출력물적용");
+                  } else if (selectedRow.templtRegFg === "H") {
+                    $("#btnSaveEditTemplate").text("실제출력물적용");
+                  } else {
+                    if(selectedRow.templtCd === "000"){
+                      $("#btnSaveEditTemplate").text("저장");
+                    }else{
+                      $("#btnSaveEditTemplate").text("저장 및 실제출력물적용");
+                    }
+                  }
                 }
                 $scope.showTempltRegFgNm = true;
                 // 자신이 등록한것만 수정 가능
@@ -254,34 +282,36 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 자신이 등록한것만 수정 가능하므로 분기처리
     if ( gvOrgnFg === selectedRow.templtRegFg ) {
-      $scope._postJSONSave.withOutPopUp("/base/output/posTemplate/template/save.sb", params,
-        function (response) {
-          // 본사 또는 실제출력물 인 경우 패스
-          if ( "H" !== gvOrgnFg && selectedRow.templtCd !== "000") {
-            $scope._popConfirm(messages['cmm.saveSucc'] + "<br><br>해당 템플릿을 실제출력물에 업데이트 하시겠습니까?",
-              function () {
-                var nParams = {};
-                nParams.prtClassCd = params.prtClassCd;
-                nParams.templtRegFg = params.templtRegFg;
-                nParams.templtCd = params.templtCd;
-                nParams.prtForm = params.prtForm;
+      $scope._popConfirm("저장하시겠습니까?",function () {
+          $scope._postJSONSave.withOutPopUp("/base/output/posTemplate/template/save.sb", params,
+              function (response) {
+                // 본사 또는 실제출력물 인 경우 패스
+                if ("H" !== gvOrgnFg && selectedRow.templtCd !== "000") {
+                  $scope._popConfirm(messages['cmm.saveSucc'] + "<br><br>해당 템플릿을 실제출력물에 업데이트 하시겠습니까?",
+                      function () {
+                        var nParams = {};
+                        nParams.prtClassCd = params.prtClassCd;
+                        nParams.templtRegFg = params.templtRegFg;
+                        nParams.templtCd = params.templtCd;
+                        nParams.prtForm = params.prtForm;
 
-                $scope._postJSONSave.withPopUp("/base/output/posTemplate/template/applyToPrint.sb", nParams,
-                  function (response) {
-                    // 저장 후 재조회
-                    $scope._broadcast('templateCtrl');
-                  }
-                );
+                        $scope._postJSONSave.withPopUp("/base/output/posTemplate/template/applyToPrint.sb", nParams,
+                            function (response) {
+                              // 저장 후 재조회
+                              $scope._broadcast('templateCtrl');
+                            }
+                        );
+                      }
+                  );
+                } else {
+                  // 실제출력물인경우 저장완료 팝업표시
+                  $scope._popMsg(messages['cmm.saveSucc']);
+                }
+                $scope.flex.collectionView.clearChanges();
+                $scope._broadcast('templateCtrl');
               }
-            );
-          } else {
-            // 실제출력물인경우 저장완료 팝업표시
-            $scope._popMsg(messages['cmm.saveSucc']);
-          }
-          $scope.flex.collectionView.clearChanges();
-          $scope._broadcast('templateCtrl');
-        }
-      );
+          );
+      });
     } else {
       // 자신이 등록하지 않은 템플릿은 수정할 수 없으므로 실제출력물에만 적용한다.
       $scope._popConfirm("해당 템플릿을 실제출력물에 업데이트 하시겠습니까?",

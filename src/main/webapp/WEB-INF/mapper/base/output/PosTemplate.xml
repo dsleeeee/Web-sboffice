@@ -118,7 +118,7 @@
                         AND tmpt.PRT_CLASS_CD = #{prtClassCd}
                     ) sub
                 ORDER BY
-                    sub.TEMPLT_REG_FG, sub.TEMPLT_CD
+                    (CASE WHEN sub.TEMPLT_REG_FG = 'S' AND sub.TEMPLT_CD = '000' THEN 1 END), sub.TEMPLT_REG_FG, sub.TEMPLT_CD  <!-- 실제출력물 템플릿이 맨위에 위치 -->
             </when>
         </choose>
     </select>

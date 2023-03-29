@@ -871,4 +871,45 @@ public class KioskKeyMapController {
 
         return ReturnUtil.returnListJson(Status.OK, result, kioskKeyMapVO);
     }
+
+    /**
+     * 키오스크키맵 매장복사 - 매장 키오스크 포스 리스트 조회
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @author 이다솜
+     * @since 2023.03.24
+     * @return
+     */
+    @RequestMapping(value = "/kioskKeyMap/getStoreCopyKioskPosList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreCopyKioskPosList(KioskKeyMapVO kioskKeyMapVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = kioskKeyMapService.getStoreCopyKioskPosList(kioskKeyMapVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, kioskKeyMapVO);
+    }
+
+    /**
+     * 키오스크키맵 매장복사 - 기준매장 키맵그룹 및 키맵정보를 적용매장에 복사
+     * @param kioskKeyMapVOs
+     * @param request
+     * @param response
+     * @param model
+     * @author 이다솜
+     * @since 2023.03.24
+     */
+    @RequestMapping(value = "/kioskKeyMap/saveKioskKeyMapStoreCopy.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveKioskKeyMapStoreCopy(@RequestBody KioskKeyMapVO[] kioskKeyMapVOs, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = kioskKeyMapService.saveKioskKeyMapStoreCopy(kioskKeyMapVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

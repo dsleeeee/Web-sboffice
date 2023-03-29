@@ -202,4 +202,23 @@ public interface KioskKeyMapMapper {
 
     /** 키오스크 키맵매장적용 - 매장에서 사용중인 기존 키맵그룹 삭제(중분류) */
     int deleteStoreTuClsTypeM(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크키맵 매장복사 - 매장 키오스크 포스 리스트 조회 */
+    List<DefaultMap<String>> getStoreCopyKioskPosList(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크키맵 매장복사 - 매장 키맵그룹 복사 */
+    int copyStoreTuClsType(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크키맵 매장복사 - 매장 카테고리(분류) 복사 */
+    int copyStoreTuCls(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크키맵 매장복사 - 매장 키맵상품 복사 */
+    int copyStoreTuKey(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크키맵 매장복사 - 매장 카테고리 하위 중분류 갯수 파악 */
+    int getStoreTuClsCount(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크키맵 매장복사 - 매장 카테고리 하위 중분류 복사 */
+    int copyStoreTuClsM(KioskKeyMapVO kioskKeyMapVO);
+
 }

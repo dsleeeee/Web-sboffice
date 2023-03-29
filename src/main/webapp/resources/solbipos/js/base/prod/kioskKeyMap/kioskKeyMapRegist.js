@@ -521,6 +521,12 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
         }
     };
 
+    // 키맵매장복사
+    $scope.storeCopy = function(){
+        $scope.kioskKeyMapStoreCopyLayer.show(true);
+        $scope._broadcast('kioskKeyMapStoreCopyCtrl');
+    };
+
     // 추천메뉴
     $scope.tuRecmd = function(){
 

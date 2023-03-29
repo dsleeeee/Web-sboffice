@@ -93,6 +93,9 @@
                             <button class="btn_skyblue" id="btnTuClsTypeStore" ng-click="tuClsTypeStore()">
                                 <s:message code="kioskKeyMap.tuClsTypeStore" />
                             </button>
+                            <button class="btn_skyblue" id="btnStoreCopy" ng-click="storeCopy()">
+                                <s:message code="kioskKeyMap.storeCopy" />
+                            </button>
                         </c:if>
                         <button class="btn_skyblue" id="btnTuClsTypeStore" ng-click="tuRecmd()">
                             <s:message code="kioskKeyMap.tuRecmd" />
@@ -459,7 +462,7 @@
     var kioskKeyEnvstVal = "${kioskKeyEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20220111.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20230329.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
@@ -467,6 +470,10 @@
 
 <%-- 키맵매장적용 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskKeyMapStoreRegist.jsp">
+</c:import>
+
+<%-- 키맵매장복사 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskKeyMapStoreCopy.jsp">
 </c:import>
 
 <%-- 키맵적용(매장/포장) 팝업 --%>

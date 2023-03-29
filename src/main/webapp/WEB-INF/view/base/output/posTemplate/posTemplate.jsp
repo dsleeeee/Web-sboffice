@@ -56,7 +56,7 @@
     <%-- 템플릿 --%>
     <div class="fl mt10 mr10" style="width: 250px;">
       <%--위즈모 테이블--%>
-      <div id="gridTemplate" class="wj-TblWrapBr pd20" style="height:485px;">
+      <div id="gridTemplate" class="wj-TblWrapBr pd10" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='posTemplate.gridNm' /></span>
           <button class="btn_skyblue" id="btnAddTemplate" style="display: none;" ng-click="addRow()">
@@ -84,7 +84,7 @@
             id="wjGridPosTemplate">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="30"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="posTemplate.templtNm"/>" binding="templtNm" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="posTemplate.prtForm"/>" binding="prtForm" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="posTemplate.templtRegFg"/>" binding="templtRegFg" visible="false"></wj-flex-grid-column>
@@ -101,7 +101,7 @@
 
     <%-- 코드리스트 --%>
     <div class="fl mt10 mr10" style="width: 160px;">
-      <div class="wj-TblWrapBr pd20" style="height:485px;">
+      <div class="wj-TblWrapBr pd10" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='posTemplate.listNm' /></span>
         </div>
@@ -120,7 +120,7 @@
 
     <%-- 편집 영역 --%>
     <div class="fl mt10 mr10" style="width: 325px;">
-      <div class="wj-TblWrapBr pd20 templateEdit" style="height:485px;">
+      <div class="wj-TblWrapBr pd10 templateEdit" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='posTemplate.editNm' /></span>
           <span class="fl bk lh30 s12" ng-if="showTempltRegFgNm">&nbsp;- {{templtRegFgNm}}등록 > {{templtEditableTxt}}</span>
@@ -136,7 +136,7 @@
 
     <%-- 미리보기 영역 --%>
     <div class="fl mt10" style="width: 330px;">
-      <div class="wj-TblWrapBr pd20 templateEdit" style="height:485px;">
+      <div class="wj-TblWrapBr pd10 templateEdit" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='posTemplate.viewNm' /></span>
           <c:if test="${orgnFg == 'HQ'}">
@@ -172,7 +172,7 @@
       $(".menuControl").trigger("click");
   }
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/output/posTemplate/posTemplate.js?ver=20230315.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/output/posTemplate/posTemplate.js?ver=20230329.01" charset="utf-8"></script>
 <%-- 레이어 팝업 : 적용매장 선택 팝업 --%>
 <c:import url="/WEB-INF/view/base/output/posTemplate/storePosTemplate.jsp">
   <c:param name="menuCd" value="${menuCd}"/>

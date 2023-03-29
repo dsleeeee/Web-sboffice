@@ -154,6 +154,9 @@ public class KioskKeyMapVO extends PageVO {
     /** 지사코드 */
     private String branchCd;
 
+    /** 기준매장코드 */
+    private String originalStoreCd;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -630,5 +633,13 @@ public class KioskKeyMapVO extends PageVO {
 
     public void setBranchCd(String branchCd) {
         this.branchCd = branchCd;
+    }
+
+    public String getOriginalStoreCd() {
+        return originalStoreCd;
+    }
+
+    public void setOriginalStoreCd(String originalStoreCd) {
+        this.originalStoreCd = originalStoreCd;
     }
 }

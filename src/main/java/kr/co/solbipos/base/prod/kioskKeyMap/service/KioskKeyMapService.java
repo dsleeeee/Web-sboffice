@@ -109,4 +109,10 @@ public interface KioskKeyMapService {
 
     /** 키맵그룹에 KIOSK중분류사용 조회 */
     List<DefaultMap<Object>> getKioskKeyMapGroupTuMClsFg(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크키맵 매장복사 - 매장 키오스크 포스 리스트 조회 */
+    List<DefaultMap<String>> getStoreCopyKioskPosList(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크키맵 매장복사 - 기준매장 키맵그룹 매장적용 */
+    int saveKioskKeyMapStoreCopy(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
 }

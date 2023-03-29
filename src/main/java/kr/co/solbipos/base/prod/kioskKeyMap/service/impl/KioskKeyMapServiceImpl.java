@@ -930,4 +930,95 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         return kioskKeyMapMapper.getKioskKeyMapGroupTuMClsFg(kioskKeyMapVO);
     }
 
+    /** 키오스크키맵 매장복사 - 매장 키오스크 포스 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getStoreCopyKioskPosList(@RequestBody KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
+
+        kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 매장브랜드가 없을 때 (매장브랜드가 '전체' 일때)
+            if (kioskKeyMapVO.getStoreHqBrandCd() == "" || kioskKeyMapVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (kioskKeyMapVO.getUserBrands() != null && !"".equals(kioskKeyMapVO.getUserBrands())) {
+                    String[] userBrandList = kioskKeyMapVO.getUserBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        kioskKeyMapVO.setUserBrandList(userBrandList);
+                    }
+                }
+            }
+        }
+
+        return kioskKeyMapMapper.getStoreCopyKioskPosList(kioskKeyMapVO);
+    }
+
+    /** 키오스크키맵 매장복사 - 기준매장 키맵그룹 및 키맵정보를 적용매장에 복사 */
+    @Override
+    public int saveKioskKeyMapStoreCopy(@RequestBody KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO){
+
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        // 매장 키오스크 포스 환경설정값 일괄 저장
+        for (KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
+
+            kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            kioskKeyMapVO.setDirctInYn("Y");
+            kioskKeyMapVO.setPosFg("W"); // WEB
+            kioskKeyMapVO.setUseYn("Y");
+            kioskKeyMapVO.setRegDt(currentDt);
+            kioskKeyMapVO.setRegId(sessionInfoVO.getUserId());
+            kioskKeyMapVO.setModDt(currentDt);
+            kioskKeyMapVO.setModId(sessionInfoVO.getUserId());
+
+            // 매장, 포장 환경설정값
+            String [] arrEnvCd = kioskKeyMapVO.getEnvstCd().split(",");
+            String [] arrEnvVal = kioskKeyMapVO.getEnvstVal().split(",");
+
+            for(int i=0; i<arrEnvCd.length; i++){
+                if (!"".equals(arrEnvVal[i])) {
+
+                    kioskKeyMapVO.setEnvstCd(arrEnvCd[i]);
+                    kioskKeyMapVO.setEnvstVal(arrEnvVal[i]);
+                    kioskKeyMapVO.setTuClsType(arrEnvVal[i]);
+
+                    // 매장 키오스크 포스 환경설정값 저장
+                    result = kioskKeyMapMapper.insertStoreKioskPosEnv(kioskKeyMapVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                    // 기존 키맵그룹명 삭제
+                    kioskKeyMapMapper.deleteStoreTuClsTypeNm(kioskKeyMapVO);
+
+                    // 기존 카테고리(분류) 삭제
+                    kioskKeyMapMapper.deleteStoreTuClsType(kioskKeyMapVO);
+
+                    // 기존 키맵상품삭제
+                    kioskKeyMapMapper.deleteKioskKeyMapByTuClsCd(kioskKeyMapVO);
+
+                    // 기존 카테고리(중분류) 삭제
+                    kioskKeyMapMapper.deleteStoreTuClsTypeM(kioskKeyMapVO);
+
+                    // 키오스크키맵 매장복사 - 매장 키맵그룹 복사
+                    result = kioskKeyMapMapper.copyStoreTuClsType(kioskKeyMapVO);
+                    if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                    // 키오스크키맵 매장복사 - 매장 카테고리(분류) 복사
+                    result = kioskKeyMapMapper.copyStoreTuCls(kioskKeyMapVO);
+                    if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                    // 키오스크키맵 매장복사 - 매장 키맵상품 복사
+                    result = kioskKeyMapMapper.copyStoreTuKey(kioskKeyMapVO);
+                    if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                    // 매장 카테고리 하위 중분류 갯수 파악
+                    if(kioskKeyMapMapper.getStoreTuClsCount(kioskKeyMapVO) > 0){
+                        // 매장 카테고리 하위 중분류 복사
+                        result = kioskKeyMapMapper.copyStoreTuClsM(kioskKeyMapVO);
+                        if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                    }
+                }
+            }
+        }
+        return result;
+    }
 }
