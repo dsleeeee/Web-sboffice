@@ -346,7 +346,7 @@
   var arrDlvrInFgCol = dlvrInFgCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/month/monthMoms/monthMoms.js?ver=20221129.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/month/monthMoms/monthMoms.js?ver=20230329.01" charset="utf-8"></script>
 
 <%-- 팝업 레이어 시작 --%>
 <%-- 매장별 매출현황 팝업 레이어 --%>

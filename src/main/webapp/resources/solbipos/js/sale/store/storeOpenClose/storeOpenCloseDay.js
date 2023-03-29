@@ -254,7 +254,7 @@ app.controller('storeOpenCloseDayCtrl', ['$scope', '$http', '$timeout', function
         $timeout(function () {
             wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
                 includeColumnHeaders: true,
-                includeCellStyles   : true,
+                includeCellStyles   : false,
                 includeColumns      : function (column) {
                     return column.visible;
                 }
@@ -456,7 +456,7 @@ app.controller('storeOpenCloseDayDtlCtrl', ['$scope', '$http', '$timeout', funct
         $timeout(function () {
             wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
                 includeColumnHeaders: true,
-                includeCellStyles   : true,
+                includeCellStyles   : false,
                 includeColumns      : function (column) {
                     return column.visible;
                 }

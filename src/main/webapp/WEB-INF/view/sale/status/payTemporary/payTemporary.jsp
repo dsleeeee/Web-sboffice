@@ -295,7 +295,7 @@
   <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/payTemporary/payTemporary.js?ver=20230320.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/payTemporary/payTemporary.js?ver=20230329.01" charset="utf-8"></script>
 
 <script type="text/javascript">
   var orgnFg = "${orgnFg}";

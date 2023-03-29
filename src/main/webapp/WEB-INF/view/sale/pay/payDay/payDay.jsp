@@ -296,4 +296,4 @@
   var orgnFg = "${orgnFg}";
   var storeCd = "${storeCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/pay/payDay/payDay.js?ver=20221013.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/pay/payDay/payDay.js?ver=20230329.01" charset="utf-8"></script>

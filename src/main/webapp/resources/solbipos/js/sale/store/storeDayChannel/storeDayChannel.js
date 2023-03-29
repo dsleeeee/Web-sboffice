@@ -580,7 +580,7 @@ app.controller('storeDayChannelExcelCtrl', ['$scope', '$http', '$timeout', funct
           $timeout(function () {
             wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
               includeColumnHeaders: true,
-              includeCellStyles: true,
+              includeCellStyles: false,
               includeColumns: function (column) {
                 return column.visible;
               }

@@ -316,7 +316,7 @@ app.controller('dayPosCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles: true,
+        includeCellStyles: false,
         includeColumns: function (column) {
           return column.visible;
         }

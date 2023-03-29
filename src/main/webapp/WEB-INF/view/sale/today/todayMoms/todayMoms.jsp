@@ -384,5 +384,5 @@
   var arrDcCol    = dcCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayMoms/todayMoms.js?ver=20230217.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayMoms/todayMoms.js?ver=20230329.01" charset="utf-8"></script>
 

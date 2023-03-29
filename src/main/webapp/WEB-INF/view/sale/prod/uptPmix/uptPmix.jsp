@@ -427,4 +427,4 @@
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/uptPmix/uptPmix.js?ver=20230217.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/uptPmix/uptPmix.js?ver=20230329.01" charset="utf-8"></script>
