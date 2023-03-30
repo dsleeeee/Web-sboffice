@@ -554,7 +554,7 @@
                 SALE_CNT,
                 RTN_SALE_CNT,
                 REAL_SALE_CNT AS BILL_CNT,
-                ROUND(REAL_SALE_AMT / REAL_SALE_CNT) AS BILL_UPRC
+                DECODE(NVL(REAL_SALE_CNT, 0), 0, 0, (ROUND(REAL_SALE_AMT / REAL_SALE_CNT))) AS BILL_UPRC
         FROM 	TB_SL_DAILY_TOTAL
         WHERE   1=1
         AND     HQ_OFFICE_CD = #{hqOfficeCd}
