@@ -1300,16 +1300,17 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 MERGE INTO TB_HQ_PRODUCT_SDSEL_PROD thpsp
                 USING DUAL
-                   ON (
-                thpsp.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND thpsp.SDSEL_CLASS_CD = #{sdselClassCd}
-                AND thpsp.PROD_CD = #{prodCd}
-                      )
+                    ON (
+                            thpsp.HQ_OFFICE_CD = #{hqOfficeCd}
+                            AND thpsp.SDSEL_CLASS_CD = #{sdselClassCd}
+                            AND thpsp.PROD_CD = #{prodCd}
+                        )
                 WHEN MATCHED THEN
-                     UPDATE
-                        SET thpsp.USE_YN = 'Y',
-                            thpsp.MOD_DT = #{modDt},
-                            thpsp.MOD_ID = #{modId}
+                    UPDATE
+                    SET thpsp.USE_YN = 'Y',
+                        thpsp.DISP_SEQ = #{dispSeq},
+                        thpsp.MOD_DT = #{modDt},
+                        thpsp.MOD_ID = #{modId}
                 WHEN NOT MATCHED THEN
                      INSERT
                      (
@@ -1331,7 +1332,7 @@
                          #{prodCd},
                          #{addProdUprc},
                          #{addProdQty},
-                         (SELECT NVL(MAX(DISP_SEQ), 0) +1 FROM TB_HQ_PRODUCT_SDSEL_PROD WHERE HQ_OFFICE_CD =  #{hqOfficeCd} AND SDSEL_CLASS_CD = #{sdselClassCd} AND USE_YN='Y'), -- 임시수정
+                         #{dispSeq},
                          'Y',
                          #{regDt},
                          #{regId},
@@ -1344,16 +1345,17 @@
             <when test='orgnFg != null and orgnFg == "S"'>
                 MERGE INTO TB_MS_PRODUCT_SDSEL_PROD tmpsp
                 USING DUAL
-                  ON (
-                      tmpsp.STORE_CD = #{storeCd}
-                      AND tmpsp.SDSEL_CLASS_CD = #{sdselClassCd}
-                      AND tmpsp.PROD_CD = #{prodCd}
-                  )
+                    ON (
+                            tmpsp.STORE_CD = #{storeCd}
+                            AND tmpsp.SDSEL_CLASS_CD = #{sdselClassCd}
+                            AND tmpsp.PROD_CD = #{prodCd}
+                        )
                 WHEN MATCHED THEN
-                     UPDATE
-                     SET tmpsp.USE_YN = 'Y',
-                         tmpsp.MOD_DT = #{modDt},
-                         tmpsp.MOD_ID = #{modId}
+                    UPDATE
+                    SET tmpsp.USE_YN = 'Y',
+                        tmpsp.DISP_SEQ = #{dispSeq},
+                        tmpsp.MOD_DT = #{modDt},
+                        tmpsp.MOD_ID = #{modId}
                 WHEN NOT MATCHED THEN
                      INSERT
                      (
@@ -1375,7 +1377,7 @@
                          #{prodCd},
                          #{addProdUprc},
                          #{addProdQty},
-                         (SELECT NVL(MAX(DISP_SEQ), 0) +1 FROM TB_MS_PRODUCT_SDSEL_PROD WHERE STORE_CD =  #{storeCd} AND SDSEL_CLASS_CD = #{sdselClassCd} AND USE_YN='Y'), -- 임시수정
+                         #{dispSeq},
                          'Y',
                          #{regDt},
                          #{regId},

@@ -143,6 +143,20 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
 
     // 저장
     $scope.save = function() {
+        // 검증성공 이 아닌 데이터가 1개라도 있으면 저장 안함
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            if($scope.flex.collectionView.items[i].result !== "검증성공") {
+                $scope._popMsg(messages["storeBatchChange.noSaveConfirm"] + (i+1) + messages["storeBatchChange.noSaveConfirm2"]); // 검증성공이 아닌 데이터가 있습니다. <br/> 검증실패 항목은 수정 또는 삭제 후 진행해주세요. <br/> 3번째 줄
+                return false;
+            }
+        }
+
+        // 그리드가 수정되면 저장 안함
+        if($scope.flex.collectionView.itemsEdited.length > 0) {
+            $scope._popMsg(messages["storeBatchChange.noSaveConfirm3"]); // 수정된 내역이 있습니다. <br/> 엑셀다운로드 후, 다시 엑셀업로드 해주세요.
+            return false;
+        }
+
         // 검증을 통과한 매장정보를 저장하시겠습니까?
         $scope._popConfirm(messages["storeBatchChange.saveConfirm"], function() {
             // 매장등록 저장
@@ -152,14 +166,6 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
 
     // 매장등록 저장
     $scope.storeExcelUploadSave = function() {
-        // 검증성공 이 아닌 데이터가 1개라도 있으면 저장 안함
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            if($scope.flex.collectionView.items[i].result !== "검증성공") {
-                $scope._popMsg(messages["storeBatchChange.noSaveConfirm"] + (i+1) + messages["storeBatchChange.noSaveConfirm2"]); // 검증성공이 아닌 데이터가 있습니다. <br/> 검증실패 항목은 수정 또는 삭제 후 진행해주세요. <br/> 3번째 줄
-                return false;
-            }
-        }
-
         $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
 
         // 파라미터 설정
@@ -193,7 +199,7 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
                         return column.binding != 'gChk';
                     }
                 },
-                '매장정보일괄변경_엑셀업로드_'+getCurDateTime()+'.xlsx',
+                '매장정보일괄변경_엑셀다운로드_'+getCurDateTime()+'.xlsx',
                 function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기

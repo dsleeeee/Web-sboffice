@@ -10,7 +10,7 @@
 
 <div class="subCon">
 
-  <div class="searchBar">
+  <div class="searchBar flddUnfld">
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -43,10 +43,10 @@
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="prodOption.optionGrpCd"/>" binding="optionGrpCd" width="80" is-read-only="true"  align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="prodOption.optionGrpNm"/>" binding="optionGrpNm" width="100"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="prodOption.useYn"/>" binding="useYn" width="80" align="center" data-map="useYnDataMap" ></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="prodOption.cnt"/>" binding="cnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="prodOption.optionGrpCd"/>" binding="optionGrpCd" width="65" is-read-only="true"  align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="prodOption.optionGrpNm"/>" binding="optionGrpNm" width="120"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="prodOption.useYn"/>" binding="useYn" data-map="useYnDataMap" width="65" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="prodOption.cnt"/>" binding="cnt" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>
@@ -78,11 +78,11 @@
 
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodOption.optionGrpCd"/>" binding="optionGrpCd" width="100" is-read-only="true" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodOption.optionValCd"/>" binding="optionValCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodOption.optionValNm"/>" binding="optionValNm" width="150" align="left"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodOption.prodCd"/>" binding="optProdCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodOption.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodOption.optionGrpCd"/>" binding="optionGrpCd" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodOption.optionValCd"/>" binding="optionValCd" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodOption.optionValNm"/>" binding="optionValNm" width="120" align="left"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodOption.prodCd"/>" binding="optProdCd" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodOption.prodNm"/>" binding="prodNm" width="120" is-read-only="true" align="left"></wj-flex-grid-column>
 
         </wj-flex-grid>
         </div>
@@ -114,5 +114,3 @@
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
 </c:import>
-
-

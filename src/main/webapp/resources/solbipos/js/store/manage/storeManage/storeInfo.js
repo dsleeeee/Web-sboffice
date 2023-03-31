@@ -558,6 +558,36 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     }
 
+    // 맘스터치 (운영 DS034,DS038,DS040,H0393) (개발 DS021)
+    if($scope.store.hqOfficeCd === "DS034" || $scope.store.hqOfficeCd === "DS038" || $scope.store.hqOfficeCd === "DS040" || $scope.store.hqOfficeCd === "H0393" || $scope.store.hqOfficeCd === "DS021") {
+        // 매장코드 시작규칙
+        if($scope.store.storeCd.substring(0, 1) == "C" || $scope.store.storeCd.substring(0, 1) == "D" || $scope.store.storeCd.substring(0, 1) == "E" || $scope.store.storeCd.substring(0, 1) == "0") {
+        } else {
+            $scope._popMsg(messages["storeManage.moms.storeCdChk"]); // 맘스터치 매장코드 시작규칙은 C, D, E, 0(숫자) 입니다.
+            return false;
+        }
+        // 매장코드 자리수
+        if($scope.store.storeCd.length == 6) {
+        } else {
+            $scope._popMsg(messages["storeManage.moms.storeCdLengthChk"]); // 맘스터치 매장코드는 6자리만 가능합니다.
+            return false;
+        }
+    // BBQ (운영 DS024,H0360) (개발 DS011)
+    } else if($scope.store.hqOfficeCd === "DS024" || $scope.store.hqOfficeCd === "H0360" || $scope.store.hqOfficeCd === "DS011") {
+        // 매장코드 시작규칙
+        if($scope.store.storeCd.substring(0, 1) == "B" || $scope.store.storeCd.substring(0, 1) == "0" || $scope.store.storeCd.substring(0, 1) == "1" || $scope.store.storeCd.substring(0, 1) == "2" || $scope.store.storeCd.substring(0, 1) == "9") {
+        } else {
+            $scope._popMsg(messages["storeManage.bbq.storeCdChk"]); // BBQ 매장코드 시작규칙은 B(영어), 0, 1, 2, 9 입니다.
+            return false;
+        }
+        // 매장코드 자리수
+        if($scope.store.storeCd.length == 9) {
+        } else {
+            $scope._popMsg(messages["storeManage.bbq.storeCdLengthChk"]); // BBQ 매장코드는 9자리만 가능합니다.
+            return false;
+        }
+    }
+
     // 매장명을 입력해주세요.
     var msg = messages["storeManage.storeNm"]+messages["cmm.require.text"];
     if( isNull( $scope.store.storeNm )) {
@@ -1553,6 +1583,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 매장코드를 웹 사용자 아이디로 자동 바인딩
   $scope.setUserId = function () {
+    // 맘스터치 (운영 DS034,DS038,DS040,H0393) (개발 DS021)
     if($scope.store.hqOfficeCd === "DS034" || $scope.store.hqOfficeCd === "DS038" || $scope.store.hqOfficeCd === "DS040" || $scope.store.hqOfficeCd === "H0393" || $scope.store.hqOfficeCd === "DS021"){
       $("#userId").val('moms' + $("#storeCd").val().toString().toLowerCase());
       $scope.store.userId = 'moms' + $("#storeCd").val().toString().toLowerCase();
@@ -1665,7 +1696,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $("#storeNm").val(erpStoreScope.getErpStore().storeNm);
           $("#bizStoreNm").val(erpStoreScope.getErpStore().bizStoreNm);
           $("#ownerNm").val(erpStoreScope.getErpStore().ownerNm);
-          // 아트박스(운영H0345,H0094)(개발DS012)
+          // 아트박스 (운영 H0345,H0094) (개발 DS012)
           if($scope.store.hqOfficeCd === "H0345" || $scope.store.hqOfficeCd === "H0094" || $scope.store.hqOfficeCd === "DS012") {
             $("#userId").val("p" + erpStoreScope.getErpStore().bbqStoreCd.toLowerCase());
             $("#userPwd").val("p" + erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234");
@@ -1674,7 +1705,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.store.userPwd = "p" + erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234";
             $scope.store.userPwdConf = "p" + erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234";
           } else if ($scope.store.hqOfficeCd === "DS034" || $scope.store.hqOfficeCd === "DS038" || $scope.store.hqOfficeCd === "DS040" || $scope.store.hqOfficeCd === "H0393" || $scope.store.hqOfficeCd === "DS021") {
-            // 맘스터치(운영DS034,DS038,DS040,H0393)(개발DS021)
+            // 맘스터치 (운영 DS034,DS038,DS040,H0393) (개발 DS021)
             $("#userId").val("moms" + erpStoreScope.getErpStore().bbqStoreCd.toLowerCase());
             $("#userPwd").val(erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234");
             $("#userPwdConf").val(erpStoreScope.getErpStore().bbqStoreCd.toLowerCase()  + "1234");
