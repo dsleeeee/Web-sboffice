@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StorePosVersion.xml
+    매장포스버전현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2023.03.30      최초작성
+-->
+<mapper namespace="kr.co.solbipos.store.storeMoms.storePosVersion.service.impl.StorePosVersionMapper">
+
+    <!-- 매장포스버전 조회 -->
+    <!--
+        TABLE    : TB_HQ_BRANCH_MOMS, TB_MS_STORE
+        PARAM    : storePosVersionVO
+        COMMENTS : 매장포스버전을 조회한다.
+    -->
+    <select id="getStorePosVersionList" parameterType="storePosVersionVO" resultType="DefaultMap">
+        /* USE : StorePosVersionMapper.getStorePosVersionList */
+        SELECT  A.STORE_CD
+        ,		C.STORE_NM
+        ,		A.POS_NO
+        ,		A.POS_NM
+        ,		A.POS_VER_NO
+        ,		B.PROG_FG
+        ,		B.MAX_VER_SER_NO
+        FROM    TB_MS_POS A
+        ,       (
+        SELECT  PROG_FG
+        ,       NVL(MAX(VER_SER_NO), '-')   AS MAX_VER_SER_NO
+        FROM    TB_CM_POS_VERSN
+        WHERE   ORGN_CDS    LIKE '%'|| #{hqOfficeCd} || '%'
+        GROUP
+        BY      PROG_FG
+        ) B
+        ,		TB_MS_STORE C
+        ,		TB_MS_STORE_INFO D
+        WHERE   B.PROG_FG   (+) =   A.VER_TYPE_FG
+        AND   	C.STORE_CD      =   A.STORE_CD
+        AND   	D.STORE_CD  (+) =   A.STORE_CD
+        AND 	C.HQ_OFFICE_CD  = #{hqOfficeCd}
+        <if test="storeCd != null and storeCd != ''">
+            AND C.STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND C.STORE_NM LIKE '%'||#{storeNm}||'%' --매장명
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND C.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND C.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND D.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND D.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND D.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND D.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND D.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND D.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND C.BRANCH_CD = #{branchCd}
+        </if>
+        ORDER
+        BY A.STORE_CD, A.POS_NO
+    </select>
+</mapper>
