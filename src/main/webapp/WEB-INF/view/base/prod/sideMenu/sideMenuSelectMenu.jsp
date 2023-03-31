@@ -6,13 +6,29 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 
-  <div id="selectMenuArea" class="wj-TblWrap mt20 ng-cloak" ng-hide="isSelectMenuTab">
+  <div id="selectMenuArea" class="wj-TblWrap mt5 ng-cloak" ng-hide="isSelectMenuTab">
     <div class="w40 fl">
     <div>
       <%--위즈모 테이블--%>
-      <div id="gridPrint" class="wj-TblWrapBr pd5" style="height: 240px;" ng-controller="sideMenuSelectGroupCtrl">
-        <div class="updownSet oh mb5">
+      <div id="gridPrint" class="wj-TblWrapBr pd5" style="height: 260px;" ng-controller="sideMenuSelectGroupCtrl">
+        <div class="updownSet oh mb10" style="height:60px;">
           <span class="fl bk lh30"><s:message code='sideMenu.selectMenu.sdselGrp' /></span>
+              <br>
+              <br>
+              <div class="sb-select w20 mr5" style="float: left;">
+                <wj-combo-box
+                  id="srchTypeSelGroup"
+                  items-source="_getComboData('srchTypeSelGroup')"
+                  display-member-path="name"
+                  selected-value-path="value"
+                  is-editable="false"
+                  control="srchTypeSelGroupCombo">
+                </wj-combo-box>
+              </div>
+              <input type="text" id="txtSelGroup" class="fl sb-input w25 mr5" style="font-size: 12px;" onkeyup="fnNxBtnSearch(1);"/>
+              <button class="fl btn_skyblue" id="nxBtnSearch1" ng-click="srchRow()" >
+                <s:message code="cmm.search" />
+              </button>
               <button class="btn_skyblue" id="btnAddSelGroup" ng-click="addRow()" >
                 <s:message code="cmm.add" />
               </button>
@@ -55,7 +71,7 @@
 
     <div>
       <%--위즈모 테이블--%>
-      <div id="gridMapng" class="wj-TblWrapBr pd5" style="height: 240px;" ng-controller="sideMenuSelectClassCtrl">
+      <div id="gridMapng" class="wj-TblWrapBr pd5" style="height: 260px;" ng-controller="sideMenuSelectClassCtrl">
         <div class="updownSet oh mb10" style="height:60px;">
           <span class="fl bk lh30" style="white-space: nowrap;"><s:message code='sideMenu.selectMenu.sdselClass' /><span id="sideSelectGroupTitle"></span> </span>
           <br>
@@ -108,11 +124,25 @@
     <div class="w60 fl">
     <div>
       <%--위즈모 테이블--%>
-      <div id="gridMapng" class="wj-TblWrapBr ml10 pd5" style="height: 480px;" ng-controller="sideMenuSelectProdCtrl">
+      <div id="gridMapng" class="wj-TblWrapBr ml10 pd5" style="height: 520px;" ng-controller="sideMenuSelectProdCtrl">
         <div class="updownSet oh mb10" style="height:60px;">
           <span class="fl bk lh30" style="white-space: nowrap;"><s:message code='sideMenu.selectMenu.sdselProd' /><span id="sideClassTitle"></span> </span>
           <br>
           <br>
+            <div class="sb-select w20 mr5" style="float: left;">
+                <wj-combo-box
+                  id="srchTypeSelProd"
+                  items-source="_getComboData('srchTypeSelProd')"
+                  display-member-path="name"
+                  selected-value-path="value"
+                  is-editable="false"
+                  control="srchTypeSelProdCombo">
+                </wj-combo-box>
+            </div>
+            <input type="text" id="txtSelProd" class="fl sb-input w25 mr5" style="font-size: 12px;" onkeyup="fnNxBtnSearch(2);"/>
+            <button class="fl btn_skyblue" id="nxBtnSearch2" ng-click="srchRow()" >
+                <s:message code="cmm.search" />
+            </button>
             <button class="btn_up" id="btnUpSelProd" ng-click="rowMoveUp()">
               <s:message code="cmm.up" />
             </button>
@@ -166,7 +196,7 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenu.js?ver=20230217.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenu.js?ver=20230331.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품선택 --%>
 <c:import url="/WEB-INF/view/base/prod/sideMenu/sideMenuProdView.jsp">
