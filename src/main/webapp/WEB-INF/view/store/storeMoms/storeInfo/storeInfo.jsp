@@ -11,7 +11,7 @@
     <a href="#" class="open fl">${menuNm}</a>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
       <%-- 조회 --%>
-      <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('storeInfoCtrl')">
+      <button class="btn_blue fr" id="nxBtnSearch" ng-click="_broadcast('storeInfoCtrl')">
         <s:message code="cmm.search"/>
       </button>
       <%-- 확장조회 --%>
