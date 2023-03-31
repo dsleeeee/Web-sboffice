@@ -16,6 +16,7 @@ public class IostockCmmVO extends PageVO {
     private String orgnFg;
     /** 본사코드 */
     private String hqOfficeCd;
+    private String hqOfficeNm;
     /** 브랜드코드 */
     private String hqBrandCd;
     /** 매장코드 */
@@ -124,6 +125,14 @@ public class IostockCmmVO extends PageVO {
      */
     public void setHqOfficeCd(String hqOfficeCd) {
         this.hqOfficeCd = hqOfficeCd;
+    }
+
+    public String getHqOfficeNm() {
+        return hqOfficeNm;
+    }
+
+    public void setHqOfficeNm(String hqOfficeNm) {
+        this.hqOfficeNm = hqOfficeNm;
     }
 
     public String getHqBrandCd() {

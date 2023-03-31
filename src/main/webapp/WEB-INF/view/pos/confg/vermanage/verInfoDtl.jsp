@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 
-<wj-popup control="versionInfoDetailLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:370px;">
+<wj-popup control="versionInfoDetailLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:430px;">
   <div class="wj-dialog wj-dialog-columns title">
 
     <%-- header --%>
@@ -26,7 +26,7 @@
       </ul>
 
       <div>
-        <div style="height:170px; overflow-y: auto;">
+        <div style="height:230px; overflow-y: auto;">
           <f:form id="viewForm" name="viewForm" >
             <h3 class="h3_tbl"><s:message code="storeManage.basicInfo" /></h3>
             <table class="searchTbl">
@@ -87,6 +87,11 @@
                   <%-- 비고 --%>
                 <th style="height:65px;"><s:message code="verManage.fileDesc" /></th>
                 <td colspan="3">{{version.fileDesc}}</td>
+              </tr>
+              <tr>
+                  <%-- 버전체크정보(참고용) --%>
+                <th><s:message code="verManage.orgnCds" /></th>
+                <td>{{version.orgnCds}}</td>
               </tr>
               </tbody>
             </table>

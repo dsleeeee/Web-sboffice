@@ -105,6 +105,8 @@ public class VerManageServiceImpl implements VerManageService {
             verInfo.setPgmYn((String)multi.getParameter("pgmYn"));
             verInfo.setImgYn((String)multi.getParameter("imgYn"));
             verInfo.setDbYn((String)multi.getParameter("dbYn"));
+            verInfo.setDbYn((String)multi.getParameter("dbYn"));
+            verInfo.setOrgnCds((String)multi.getParameter("orgnCds"));
             verInfo.setDelYn("N");
 
             if(String.valueOf(UseYn.Y).equals(multi.getParameter("useYn"))){
@@ -164,6 +166,7 @@ public class VerManageServiceImpl implements VerManageService {
             verInfo.setPgmYn((String)multi.getParameter("pgmYn"));
             verInfo.setImgYn((String)multi.getParameter("imgYn"));
             verInfo.setDbYn((String)multi.getParameter("dbYn"));
+            verInfo.setOrgnCds((String)multi.getParameter("orgnCds"));
             verInfo.setDelYn("N");
 
             if(String.valueOf(UseYn.Y).equals(multi.getParameter("useYn"))){

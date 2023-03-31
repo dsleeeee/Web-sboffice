@@ -56,6 +56,8 @@ public class VerInfoVO extends PageVO {
     private UseYn useYn;
     /**  상태 */
     private String sysStatFg;
+    /**  버전체크정보(참고용) */
+    private String orgnCds;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -284,5 +286,13 @@ public class VerInfoVO extends PageVO {
 
     public void setSysStatFg(String sysStatFg) {
         this.sysStatFg = sysStatFg;
+    }
+
+    public String getOrgnCds() {
+        return orgnCds;
+    }
+
+    public void setOrgnCds(String orgnCds) {
+        this.orgnCds = orgnCds;
     }
 }
