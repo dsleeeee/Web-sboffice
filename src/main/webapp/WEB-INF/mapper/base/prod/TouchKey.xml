@@ -2765,7 +2765,8 @@
         ,       tms.STORE_CD
         ,       tmp.POS_NO
         ,       tms.SYS_STAT_FG
-        ,       (SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = tms.STORE_CD AND POS_NO = tmp.POS_NO AND ENVST_CD = '4038') AS ENV_4038
+        ,		tmpe.ENVST_VAL AS ENV_4038
+        ,       TO_CHAR(TO_DATE(tmpe.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
         FROM    TB_MS_STORE tms
         ,       TB_MS_STORE_INFO tmsi
         ,       (
@@ -2778,12 +2779,20 @@
                     AND     tmpe.ENVST_CD = '4019'
                     AND     tmpe.ENVST_VAL IN ('1', '2', '3')
                 ) tmp
+        ,		TB_MS_POS_ENVST tmpe
         WHERE   tms.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='orgnFg != null and orgnFg == "S"'>
             AND tms.STORE_CD = #{storeCd}
         </if>
         AND     tmp.STORE_CD = tms.STORE_CD
         AND     tms.STORE_CD = tmsi.STORE_CD(+)
+        AND     tms.STORE_CD = tmsi.STORE_CD(+)
+        AND 	tms.STORE_CD = tmpe.STORE_CD(+)
+        AND 	tmp.POS_NO = tmpe.POS_NO(+)
+        AND 	'4038' = tmpe.ENVST_CD(+)
+        <if test='tukeyGrpCd != null and tukeyGrpCd != ""'>
+            AND tmpe.ENVST_VAL = #{tukeyGrpCd}
+        </if>
         <if test="storeCd != null and storeCd != ''">
             AND tms.STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
         </if>

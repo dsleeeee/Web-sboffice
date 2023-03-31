@@ -17,6 +17,7 @@ app.controller('popUpTouchKeyEnvCtrl', ['$scope', '$http', function ($scope, $ht
 
     $scope._setComboData("srchEnvSysStatFg", sysStatFg);
     $scope._setComboData("touchKeyEnvCombo", touchKeyGrpData);
+    $scope._setComboData("tukeyGrpCombo2", tukeyGrpData);
 
     // 브랜드 콤보박스 셋팅
     $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
@@ -30,6 +31,7 @@ app.controller('popUpTouchKeyEnvCtrl', ['$scope', '$http', function ($scope, $ht
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
+        $scope.grpDataMap = new wijmo.grid.DataMap(touchKeyGrpData, 'value', 'name');
         $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
 
         // 그리드 header 클릭시 정렬 이벤트 막기
@@ -41,6 +43,8 @@ app.controller('popUpTouchKeyEnvCtrl', ['$scope', '$http', function ($scope, $ht
 
     // 팝업 오픈 시, 매장리스트 조회
     $scope.$on("popUpTouchKeyEnvCtrl", function(event, key) {
+
+        $scope._setComboData("touchKeyEnvCombo", touchKeyGrpData);
 
         // 매장 포스 터치키 그룹 코드 조회
         $scope.searchPos();
@@ -55,6 +59,7 @@ app.controller('popUpTouchKeyEnvCtrl', ['$scope', '$http', function ($scope, $ht
         params.storeCd = $("#srchEnvStoreCd").val();
         params.storeNm = $("#srchEnvStoreNm").val();
         params.momsEnvstVal = momsEnvstVal;
+        params.tukeyGrpCd = $scope.tukeyGrp;
         if(momsEnvstVal === "1" && orgnFg === "HQ") {
             params.momsTeam = $scope.momsTeam;
             params.momsAcShop = $scope.momsAcShop;
@@ -111,6 +116,14 @@ app.controller('popUpTouchKeyEnvCtrl', ['$scope', '$http', function ($scope, $ht
             if (item.gChk === true) {
                 if(item.posNo !== null && item.posNo !== "") {
                     item.envstVal = $scope.touchKeyEnvCombo.selectedValue;
+
+                    // 키맵매장적용 여부
+                    if($("#chkApplyStore").is(":checked")){
+                        item.chkApplyStore = "Y";
+                        item.tukeyGrpCd = $scope.touchKeyEnvCombo.selectedValue;
+                    }else{
+                        item.chkApplyStore = "N";
+                    }
                     params.push(item);
                 }
             }
