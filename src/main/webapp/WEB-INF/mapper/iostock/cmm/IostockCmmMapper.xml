@@ -87,6 +87,28 @@
         BY      DECODE(ORGN_FG, 'H', 1, 'F', 2, 'S', 3), ORGN_CD
     </select>
 
+    <!-- 본사선택 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : iostockCmmVO
+        COMMENTS : 본사선택 리스트를 조회한다.
+    -->
+    <select id="selectHqList" parameterType="iostockCmmVO" resultType="DefaultMap">
+    /* USE : IostockCmmMapper.selectHqList */
+        SELECT	HQ_OFFICE_CD
+        ,		HQ_OFFICE_NM
+        FROM	TB_HQ_OFFICE tho
+        WHERE   1=1
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+            AND HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+            AND HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
+        </if>
+        ORDER
+        BY      HQ_OFFICE_CD
+    </select>
+
     <!-- 매장선택 조회 -->
     <!--
         TABLE    : TB_MS_STORE

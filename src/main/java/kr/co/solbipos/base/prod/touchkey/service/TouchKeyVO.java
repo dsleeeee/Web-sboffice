@@ -141,6 +141,9 @@ public class TouchKeyVO extends CmmVO {
     /** 환경설정값 */
     private String envstVal;
 
+    /** 터치키매장적용여부 */
+    private String chkApplyStore;
+
     /**
      * @return the orgnFg
      */
@@ -598,5 +601,13 @@ public class TouchKeyVO extends CmmVO {
 
     public void setEnvstVal(String envstVal) {
         this.envstVal = envstVal;
+    }
+
+    public String getChkApplyStore() {
+        return chkApplyStore;
+    }
+
+    public void setChkApplyStore(String chkApplyStore) {
+        this.chkApplyStore = chkApplyStore;
     }
 }

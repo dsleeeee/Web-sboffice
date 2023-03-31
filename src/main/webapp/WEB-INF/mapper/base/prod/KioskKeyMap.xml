@@ -1784,7 +1784,9 @@
             tms.SYS_STAT_FG,
             (SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = tms.STORE_CD AND POS_NO = tmp.POS_NO AND ENVST_CD = '4068') AS ENV_4068,
             (SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = tms.STORE_CD AND POS_NO = tmp.POS_NO AND ENVST_CD = '4069') AS ENV_4069,
-            NVL((SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = tms.STORE_CD AND POS_NO = tmp.POS_NO AND ENVST_CD = '4101'), 0) AS TU_M_CLS_FG
+            NVL((SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = tms.STORE_CD AND POS_NO = tmp.POS_NO AND ENVST_CD = '4101'), 0) AS TU_M_CLS_FG,
+            (SELECT TO_CHAR(TO_DATE(MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') FROM TB_MS_POS_ENVST WHERE STORE_CD = tms.STORE_CD AND POS_NO = tmp.POS_NO AND ENVST_CD = '4068') AS MOD_DT_4068,
+            (SELECT TO_CHAR(TO_DATE(MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') FROM TB_MS_POS_ENVST WHERE STORE_CD = tms.STORE_CD AND POS_NO = tmp.POS_NO AND ENVST_CD = '4069') AS MOD_DT_4069
             FROM TB_MS_STORE tms,
                  TB_MS_STORE_INFO tmsi,
             (
@@ -1847,6 +1849,12 @@
         WHERE 1=1
         <if test="tuMClsFg != null and tuMClsFg != ''">
             AND TU_M_CLS_FG = #{tuMClsFg}
+        </if>
+        <if test="tuClsType != null and tuClsType != '' and envstCd == '4068'">
+            AND ENV_4068 = #{tuClsType}
+        </if>
+        <if test="tuClsType != null and tuClsType != '' and envstCd == '4069'">
+            AND ENV_4069 = #{tuClsType}
         </if>
     </select>
 

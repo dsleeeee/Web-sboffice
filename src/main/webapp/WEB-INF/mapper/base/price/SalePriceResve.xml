@@ -635,6 +635,23 @@
            AND START_DATE = #{orgStartDate}
     </delete>
 
+    <!-- 가격예약(매장판매가) 기존 예약 판매가 삭제 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SALE_PRICE
+        PARAM    : salePriceResveVO
+        COMMENTS : 가격예약(매장판매가) 기존 예약 판매가 삭제
+    -->
+    <delete id="deleteStoreSalePriceResve2" parameterType="salePriceResveVO">
+      /* SalePriceResveMapper.deleteStoreSalePriceResve2 */
+        DELETE
+          FROM TB_MS_PRODUCT_SALE_PRICE
+         WHERE STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+           AND PROD_CD = #{prodCd}
+           AND SALE_PRC_FG = '1'
+           AND SALE_RESVE_FG = '1'
+           AND START_DATE = #{orgStartDate}
+    </delete>
+
     <!-- 가격예약(매장판매가) 해당 시작날짜에 등록된 가격이 있는지 조회(판매가 히스토리 등록을 위해) -->
     <!--
         TABLE    : TB_MS_PRODUCT_SALE_PRICE

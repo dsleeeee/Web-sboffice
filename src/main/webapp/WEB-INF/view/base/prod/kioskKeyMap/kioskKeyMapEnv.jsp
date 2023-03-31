@@ -64,10 +64,25 @@
                         </div>
                     </td>
                 </tr>
-                <c:if test="${brandUseFg == '1'}">
-                    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-                        <tr>
-                                <%-- 매장브랜드 --%>
+                <tr>
+                    <th><s:message code="kioskKeyMap.tuClsType" /></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="tuClsTypeCombo2"
+                                    ng-model="tuClsType"
+                                    control="tuClsTypeCombo2"
+                                    items-source="_getComboData('tuClsTypeCombo2')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <c:if test="${brandUseFg == '1'}">
+                        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                            <%-- 매장브랜드 --%>
                             <th><s:message code="kioskKeyMap.storeHqBrand" /></th>
                             <td>
                                 <div class="sb-select">
@@ -82,11 +97,9 @@
                                     </wj-combo-box>
                                 </div>
                             </td>
-                            <th></th>
-                            <td></td>
-                        </tr>
+                        </c:if>
                     </c:if>
-                </c:if>
+                </tr>
                 </tbody>
             </table>
             <c:if test="${momsEnvstVal == '1'}">
@@ -217,8 +230,6 @@
                                     </wj-combo-box>
                                 </div>
                             </td>
-                            <td></td>
-                            <td></td>
                         </tr>
                         </tbody>
                     </table>
@@ -254,8 +265,10 @@
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.sysStatFg"/>" binding="sysStatFg" width="85"  data-map="sysStatFgDataMap" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.kioskPosNo"/>" binding="posNo" width="110" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.kioskTuMClsFg"/>" binding="tuMClsFg" data-map="tuMClsFgDataMap" width="110" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.envstVal"/>" binding="env4068" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.envstVal"/>" binding="env4069" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.envstVal"/>" binding="env4068" width="85" align="center" is-read-only="true" data-map="kioskTuClsTypeDataMap"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.envstVal"/>" binding="env4069" width="85" align="center" is-read-only="true" data-map="kioskTuClsTypeDataMap"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.modDt"/>" binding="modDt4068" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.modDt"/>" binding="modDt4069" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
                 <%--//위즈모 테이블--%>
@@ -312,4 +325,4 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapEnv.js?ver=20220823.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapEnv.js?ver=20220823.04" charset="utf-8"></script>

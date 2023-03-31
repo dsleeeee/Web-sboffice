@@ -145,7 +145,7 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     formData.append("dbYn",  $("#db").is(":checked") === true ? 'Y' : 'N');
     formData.append("imgYn", $("#img").is(":checked") === true ? 'Y' : 'N');
     formData.append("useYn", $scope.versionUseYnCombo.selectedValue);
-
+    formData.append("orgnCds", $("#orgnCdsCd").val());
     var url = '';
 
     if( isEmptyObject($scope.getSelectVersion()) ) {
@@ -174,7 +174,7 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
           }
 
           $scope.$broadcast('loadingPopupInactive');
-          $scope.close();
+          $scope.closePop();
         }
         else if (result.status === "FAIL") {
           $scope._popMsg('Ajax Fail By HTTP Request');
@@ -229,7 +229,13 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.version.img = true;
         $("#img").prop("checked", true);
       }
-
+      if(data.orgnCds == null || data.orgnCds == undefined){
+        $("#orgnCdsCd").val("");
+        $("#orgnCdsNm").val("선택");
+      } else if(data.orgnCds.length > 0){
+        $("#orgnCdsCd").val(data.orgnCds);
+        $("#orgnCdsNm").val(data.orgnCds);
+      }
     });
   };
 
@@ -242,5 +248,11 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     console.log("closePop");
   };
 
+  // 매장선택 모듈 팝업 사용시 정의
+  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.orgnCdsShow = function () {
+    $scope._broadcast('orgnCdsCtrl');
+  };
 }]);
 

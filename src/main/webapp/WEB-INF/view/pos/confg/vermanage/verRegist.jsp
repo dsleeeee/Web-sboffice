@@ -2,7 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-<wj-popup control="versionRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:350px;">
+<wj-popup control="versionRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:400px;">
     <div class="wj-dialog wj-dialog-columns title" ng-controller="verRegistCtrl">
 
     <%-- header --%>
@@ -15,13 +15,12 @@
     <%-- body --%>
     <div class="wj-dialog-body">
       <div>
-        <div style="height:200px; overflow-y: auto;">
+        <div style="height:250px; overflow-y: auto;">
           <f:form id="regForm" name="regForm" >
             <h3 class="h3_tbl"><s:message code="verManage.verInfo" /></h3>
             <table class="searchTbl">
               <colgroup>
                 <col class="w15" />
-
                 <col class="w35" />
                 <col class="w15" />
                 <col class="w35" />
@@ -97,6 +96,15 @@
                   <input type="text" class="sb-input w100" id="fileDesc" ng-model="version.fileDesc" maxlength="500"/>
                 </td>
               </tr>
+              <tr>
+                  <%-- 버전체크정보(참고용) --%>
+                <th><s:message code="verManage.orgnCds" /></th>
+                <td colspan="3">
+                  <jsp:include page="/WEB-INF/view/iostock/cmm/selectHqM.jsp" flush="true">
+                    <jsp:param name="targetId" value="orgnCds"/>
+                  </jsp:include>
+                </td>
+              </tr>
               </tbody>
             </table>
           </f:form>
@@ -113,6 +121,6 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verRegist.js?ver=20220822.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verRegist.js?ver=20220822.02" charset="utf-8"></script>
 
 

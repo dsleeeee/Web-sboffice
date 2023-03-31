@@ -217,6 +217,10 @@
         <p class="mb5" style="font-size: small">- <s:message code="empBatchChange.target.emp" /> -</p>
         <p id="orgEmp" class="mb5" style="font-size: small"></p>
         <input type="text" class="sb-input w100" style="display:none;" id="orgEmpNo"/>
+
+        <div class="mt10 oh sb-select dkbr">
+            <button class="btn_skyblue ml5 fr" ng-click="searchTargetEmpList()"><s:message code="cmm.search"/></button>
+        </div>
         <%-- 적용대상사원 조회 조건 --%>
         <table class="searchTbl">
             <colgroup>

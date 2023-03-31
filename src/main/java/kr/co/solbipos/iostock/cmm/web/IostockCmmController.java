@@ -78,7 +78,7 @@ public class IostockCmmController {
     }
 
     /**
-     * 수불&재고관련 공통 - 매장선택 리스트 조회
+     * 수불&재고관련 공통 - 본사+매장선택 리스트 조회
      * @param   request
      * @param   response
      * @param   model
@@ -95,6 +95,28 @@ public class IostockCmmController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<String>> list = iostockCmmService.selectHqStoreList(iostockCmmVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
+    }
+
+    /**
+     * 수불&재고관련 공통 - 본사+매장선택 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   iostockCmmVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 09. 03.
+     */
+    @RequestMapping(value = "/selectHqList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectHqList(HttpServletRequest request, HttpServletResponse response,
+        Model model, IostockCmmVO iostockCmmVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = iostockCmmService.selectHqList(iostockCmmVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
     }

@@ -1053,6 +1053,49 @@ public class TouchKeyServiceImpl implements TouchKeyService {
 
             // 터치키 매장적용
             result  = keyMapper.saveTouchKeyEnv(touchKeyVO);
+
+            System.out.println("매장적용 : " + touchKeyVO.getChkApplyStore());
+            // 터치키 매장적용
+            if("Y".equals(touchKeyVO.getChkApplyStore())){
+
+                // 소속구분 설정
+                touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                // 기본입력정보 설정
+                touchKeyVO.setRegDt(currentDt);
+                touchKeyVO.setRegId(sessionInfoVO.getUserId());
+                touchKeyVO.setModDt(currentDt);
+                touchKeyVO.setModId(sessionInfoVO.getUserId());
+
+                sessionInfoVO.setStoreCd(touchKeyVO.getStoreCd());
+
+                String envstVal1248 = CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1248"), "0");
+
+                // 매장에 터치키 XML 정보 업데이트
+                keyMapper.saveStoreConfgXml(touchKeyVO);
+                touchKeyVO.setOrgnFg("S");
+                // 기적용된 터치키 그룹 정보 삭제
+                keyMapper.deleteTouchkeyGrp(touchKeyVO);
+                // 기적용된 터치키 정보 삭제
+                keyMapper.deleteTouchKeyClassToStore(touchKeyVO);
+                // 1248이 0/1이면 전체 삭제
+                // 1248이 2이면 228 Y 제외 삭제
+                if(envstVal1248.equals("0") || envstVal1248.equals("1")) {
+                    keyMapper.deleteTouchKeyToStore(touchKeyVO);
+                } else if(envstVal1248.equals("2")){
+                    keyMapper.deleteTouchKeyToStore2(touchKeyVO);
+                }
+                // 터치키 매장적용
+                result  = keyMapper.mergeStoreEnvst(touchKeyVO);
+                result  = keyMapper.insertTouchKeyGroupToStore(touchKeyVO);
+                result += keyMapper.insertTouchKeyClassToStore(touchKeyVO);
+                // 1248이 0/1이면 전체 삽입
+                // 1248이 2이면 228 Y 제외 삽입
+                if(envstVal1248.equals("0") || envstVal1248.equals("1")) {
+                    result += keyMapper.insertTouchKeyToStore(touchKeyVO);
+                } else if(envstVal1248.equals("2")){
+                    result += keyMapper.insertTouchKeyToStore2(touchKeyVO);
+                }
+            }
         }
 
         if ( result >= 0 ) {

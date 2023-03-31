@@ -111,7 +111,8 @@ public class SalePriceResveServiceImpl implements SalePriceResveService {
             salePriceResveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             // 기존 예약 판매가 삭제
             salePriceResveMapper.deleteHqSalePriceResve(salePriceResveVO);
-
+            // 매장 예약 판매가 삭제
+            salePriceResveMapper.deleteStoreSalePriceResve2(salePriceResveVO);
         }
         return result;
     }

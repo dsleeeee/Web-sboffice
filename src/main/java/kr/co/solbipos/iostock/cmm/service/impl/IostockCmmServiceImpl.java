@@ -53,6 +53,11 @@ public class IostockCmmServiceImpl implements IostockCmmService {
         return iostockCmmMapper.selectHqStoreList(iostockCmmVO);
     }
 
+    @Override
+    public List<DefaultMap<String>> selectHqList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
+        return iostockCmmMapper.selectHqList(iostockCmmVO);
+    }
+
     /** 수불&재고관련 공통 - 매장선택 리스트 조회 */
     @Override
     public List<DefaultMap<String>> selectStoreMomsList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {

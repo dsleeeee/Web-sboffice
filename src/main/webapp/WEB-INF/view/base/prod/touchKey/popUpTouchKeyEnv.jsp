@@ -48,26 +48,44 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                    <c:if test="${brandUseFg == '1'}">
-                        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-                        <%-- 매장브랜드 --%>
-                        <th><s:message code="kioskKeyMap.storeHqBrand" /></th>
-                        <td>
-                            <div class="sb-select">
-                                <wj-combo-box
-                                        id="srchStoreHqBrandCdCombo"
-                                        ng-model="storeHqBrandCd"
-                                        items-source="_getComboData('storeHqBrandCdCombo')"
-                                        display-member-path="name"
-                                        selected-value-path="value"
-                                        is-editable="false"
-                                        control="srchStoreHqBrandCdCombo">
-                                </wj-combo-box>
-                            </div>
-                        </td>
-                        </c:if>
-                    </c:if>
+                    <%-- 터치키 --%>
+                    <th><s:message code="touchKey.grp"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="tukeyGrpCombo2"
+                                    ng-model="tukeyGrp"
+                                    control="tukeyGrpCombo2"
+                                    items-source="_getComboData('tukeyGrpCombo2')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)">
+                            </wj-combo-box>
+                        </div>
+                    </td>
                 </tr>
+                <c:if test="${brandUseFg == '1'}">
+                    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                        <tr>
+                            <%-- 매장브랜드 --%>
+                            <th><s:message code="kioskKeyMap.storeHqBrand" /></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="srchStoreHqBrandCdCombo"
+                                            ng-model="storeHqBrandCd"
+                                            items-source="_getComboData('storeHqBrandCdCombo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            control="srchStoreHqBrandCdCombo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                        </tr>
+                    </c:if>
+                </c:if>
                 </tbody>
             </table>
             <c:if test="${momsEnvstVal == '1'}">
@@ -198,8 +216,6 @@
                                     </wj-combo-box>
                                 </div>
                             </td>
-                            <td></td>
-                            <td></td>
                         </tr>
                         </tbody>
                     </table>
@@ -234,7 +250,8 @@
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.storeNm"/>" binding="storeNm" width="160" align="left" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.sysStatFg"/>" binding="sysStatFg" width="85"  data-map="sysStatFgDataMap" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="touchKey.posNo"/>" binding="posNo" width="110" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.envstVal"/>" binding="env4038" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="touchKey.grp"/>" binding="env4038" width="85" align="center" is-read-only="true" data-map="grpDataMap"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="touchKey.modDt"/>" binding="modDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
                 <%--//위즈모 테이블--%>
@@ -247,7 +264,7 @@
                         </colgroup>
                         <tbody>
                         <tr>
-                            <th><s:message code="kioskKeyMap.tuClsType" /></th>
+                            <th><s:message code="touchKey.grp" /></th>
                             <td>
                                 <div class="sb-select" style="width:150px; float:left;">
                                     <wj-combo-box
@@ -260,6 +277,10 @@
                                             control="touchKeyEnvCombo"
                                             initialized="_initComboBox(s)">
                                     </wj-combo-box>
+                                </div>
+                                <div class="fl pd5" style="padding-right: 15px;">
+                                    <div style="float: left;"><input type="checkbox" id="chkApplyStore" checked="checked"/></div>
+                                    <div style="padding-top: 3px; padding-left: 20px;"><s:message code="touchKey.applyStore" /></div>
                                 </div>
                                 <button class="btn_blue ml5 fl" id="btnInsertEnv" ng-click="btnInsertEnv()"><s:message code="cmm.apply"/></button>
                             </td>
@@ -276,4 +297,4 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpTouchKeyEnv.js?ver=20230308.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpTouchKeyEnv.js?ver=20230308.02" charset="utf-8"></script>
