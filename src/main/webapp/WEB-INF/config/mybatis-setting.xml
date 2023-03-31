@@ -330,6 +330,10 @@
     <typeAlias alias="prodInfoSearchVO" type="kr.co.solbipos.base.prod.prodInfoSearch.service.ProdInfoSearchVO"/>
     <!-- 기초관리 > 상품관리 > 비노출관리 -->
     <typeAlias alias="kioskDisplayVO" type="kr.co.solbipos.base.prod.kioskDisplay.service.KioskDisplayVO"/>
+    <!-- 기초관리 > 상품관리2 > 판매터치키설정(예약) -->
+    <typeAlias alias="touchKeyResveVO" type="kr.co.solbipos.base.prod.touchKeyResve.service.TouchKeyResveVO"/>
+    <!-- 기초관리 > 상품관리2 > 키오스크키맵설정(예약) -->
+    <typeAlias alias="kioskKeyMapResveVO" type="kr.co.solbipos.base.prod.kioskKeyMapResve.service.KioskKeyMapResveVO"/>
     <!--
     <typeAlias alias="prodBarcdVO" type="kr.co.solbipos.base.prod.prodbarcd.service.ProdBarcdVO"/>
     <typeAlias alias="supplyVO" type="kr.co.solbipos.base.prod.supply.service.SupplyVO"/>
@@ -852,6 +856,8 @@
     <typeAlias alias="storeSaleAreaVO" type="kr.co.solbipos.store.storeMoms.storeSaleArea.service.StoreSaleAreaVO"/>
     <!-- 맘스터치 > 매장관리 > 매장정보일괄변경 -->
     <typeAlias alias="storeBatchChangeVO" type="kr.co.solbipos.store.storeMoms.storeBatchChange.service.StoreBatchChangeVO"/>
+    <!-- 맘스터치 > 매장관리 > 매장포스버전현황 -->
+    <typeAlias alias="storePosVersionVO" type="kr.co.solbipos.store.storeMoms.storePosVersion.service.StorePosVersionVO"/>
 
     <!-- 맘스터치 > 승인관리2 > 현금영수증 승인 조회 -->
     <typeAlias alias="cashBillVO" type="kr.co.solbipos.sale.appr.cashBill.service.CashBillVO"/>
