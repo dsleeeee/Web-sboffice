@@ -6,13 +6,30 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 
-<div id="selectMenuSingleArea" class="wj-TblWrap mt20 ng-cloak" ng-hide="isSelectMenuSingleTab">
+<div id="selectMenuSingleArea" class="wj-TblWrap mt5 ng-cloak" ng-hide="isSelectMenuSingleTab">
     <div class="w40 fl">
         <div>
             <%--위즈모 테이블--%>
-             <div class="wj-TblWrapBr pd5" style="height: 240px;" ng-controller="sideMenuSelectGroupSingleCtrl">
-               <div class="updownSet oh mb5">
+             <div class="wj-TblWrapBr pd5" style="height: 260px;" ng-controller="sideMenuSelectGroupSingleCtrl">
+               <div class="updownSet oh mb10" style="height:60px;">
                  <span class="fl bk lh30"><s:message code='sideMenu.selectMenu.sdselGrp' /></span>
+                    <br>
+                    <br>
+                    <div class="sb-select w20 mr5" style="float: left;">
+                        <wj-combo-box
+                             id="srchTypeSelGroupSingle"
+                             items-source="_getComboData('srchTypeSelGroupSingle')"
+                             display-member-path="name"
+                             selected-value-path="value"
+                             is-editable="false"
+                             control="srchTypeSelGroupSingleCombo">
+                        </wj-combo-box>
+                    </div>
+                    <input type="text" id="txtSelGroupSingle" class="fl sb-input w25 mr5" style="font-size: 12px;" onkeyup="fnNxBtnSearch(3);"/>
+                    <button class="fl btn_skyblue" id="nxBtnSearch3" ng-click="srchRow()" >
+                        <s:message code="cmm.search" />
+                    </button>
+
                      <button class="btn_skyblue" id="btnAddSelGroupSingle" ng-click="addRow()" >
                        <s:message code="cmm.add" />
                      </button>
@@ -55,7 +72,7 @@
 
         <div>
             <%--위즈모 테이블--%>
-            <div class="wj-TblWrapBr pd5" style="height: 240px;" ng-controller="sideMenuSelectClassSingleCtrl">
+            <div class="wj-TblWrapBr pd5" style="height: 260px;" ng-controller="sideMenuSelectClassSingleCtrl">
                 <div class="updownSet oh mb10" style="height:60px;">
                   <span class="fl bk lh30" style="white-space: nowrap;"><s:message code='sideMenu.selectMenu.sdselClass' /><span id="sideSelectGroupSingleTitle"></span> </span>
                   <br>
@@ -109,11 +126,25 @@
     <div class="w60 fl">
         <div>
           <%--위즈모 테이블--%>
-          <div class="wj-TblWrapBr ml10 pd5" style="height: 480px;" ng-controller="sideMenuSelectProdSingleCtrl">
+          <div class="wj-TblWrapBr ml10 pd5" style="height: 520px;" ng-controller="sideMenuSelectProdSingleCtrl">
             <div class="updownSet oh mb10" style="height:60px;">
               <span class="fl bk lh30" style="white-space: nowrap;"><s:message code='sideMenu.selectMenu.sdselProd' /><span id="sideClassSingleTitle"></span> </span>
               <br>
               <br>
+                <div class="sb-select w20 mr5" style="float: left;">
+                    <wj-combo-box
+                      id="srchTypeSelProdSingle"
+                      items-source="_getComboData('srchTypeSelProdSingle')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      control="srchTypeSelProdSingleCombo">
+                    </wj-combo-box>
+                </div>
+                <input type="text" id="txtSelProdSingle" class="fl sb-input w25 mr5" style="font-size: 12px;" onkeyup="fnNxBtnSearch(4);"/>
+                <button class="fl btn_skyblue" id="nxBtnSearch4" ng-click="srchRow()" >
+                    <s:message code="cmm.search" />
+                </button>
                 <button class="btn_up" id="btnUpSelProdSingle" ng-click="rowMoveUp()">
                   <s:message code="cmm.up" />
                 </button>
@@ -168,4 +199,4 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenuSingle.js?ver=20230217.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenuSingle.js?ver=20230331.01" charset="utf-8"></script>

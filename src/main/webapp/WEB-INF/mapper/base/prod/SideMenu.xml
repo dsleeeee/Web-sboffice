@@ -552,6 +552,39 @@
                     thpsg.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND thpsg.USE_YN = 'Y'
                     AND thpsg.SDSEL_TYPE_FG = #{sdselTypeFg}
+                <if test='srchType != null and srchType != ""'>
+                    <if test='srchType != null and srchType == "grp"'>
+                        <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+                            AND thpsg.SDSEL_GRP_CD LIKE '%'||#{sdselGrpCd}||'%'
+                        </if>
+                        <if test='sdselGrpNm != null and sdselGrpNm != ""'>
+                            AND thpsg.SDSEL_GRP_NM LIKE '%'||#{sdselGrpNm}||'%'
+                        </if>
+                    </if>
+                    <if test='srchType != null and srchType == "prod"'>
+                        AND thpsg.SDSEL_GRP_CD IN (
+                                                        SELECT DISTINCT(thpsc.SDSEL_GRP_CD)
+                                                        FROM TB_HQ_PRODUCT_SDSEL_PROD thpsp
+                                                        LEFT OUTER JOIN TB_HQ_PRODUCT thp ON thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                                                        AND thpsp.PROD_CD = thp.PROD_CD
+                                                        AND (
+                                                                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                                                                OR
+                                                                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                                                            )
+                                                        INNER JOIN TB_HQ_PRODUCT_SDSEL_CLASS thpsc ON thpsc.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                                                        AND thpsc.SDSEL_CLASS_CD = thpsp.SDSEL_CLASS_CD
+                                                        WHERE thpsp.HQ_OFFICE_CD = #{hqOfficeCd}
+                                                        <if test='sdselProdCd != null and sdselProdCd != ""'>
+                                                            AND thp.PROD_CD LIKE '%'||#{sdselProdCd}||'%'
+                                                        </if>
+                                                        <if test='sdselProdNm != null and sdselProdNm != ""'>
+                                                            AND thp.PROD_NM LIKE '%'||#{sdselProdNm}||'%'
+                                                        </if>
+                                                        AND thpsp.USE_YN = 'Y'
+                                                 )
+                    </if>
+                </if>
                 ORDER BY
                     thpsg.SDSEL_GRP_CD
             </when>
@@ -570,6 +603,39 @@
                     tmpsg.STORE_CD = #{storeCd}
                     AND tmpsg.USE_YN = 'Y'
                     AND tmpsg.SDSEL_TYPE_FG = #{sdselTypeFg}
+                <if test='srchType != null and srchType != ""'>
+                    <if test='srchType != null and srchType == "grp"'>
+                        <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+                            AND tmpsg.SDSEL_GRP_CD LIKE '%'||#{sdselGrpCd}||'%'
+                        </if>
+                        <if test='sdselGrpNm != null and sdselGrpNm != ""'>
+                            AND tmpsg.SDSEL_GRP_NM LIKE '%'||#{sdselGrpNm}||'%'
+                        </if>
+                    </if>
+                    <if test='srchType != null and srchType == "prod"'>
+                        AND tmpsg.SDSEL_GRP_CD IN (
+                                                        SELECT DISTINCT(tmpsc.SDSEL_GRP_CD)
+                                                        FROM TB_MS_PRODUCT_SDSEL_PROD tmpsp
+                                                        LEFT OUTER JOIN TB_MS_PRODUCT tmp ON tmpsp.STORE_CD = tmp.STORE_CD
+                                                        AND tmpsp.PROD_CD = tmp.PROD_CD
+                                                        AND (
+                                                                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                                                                OR
+                                                                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                                                             )
+                                                        INNER JOIN TB_MS_PRODUCT_SDSEL_CLASS tmpsc ON tmpsc.STORE_CD = tmpsp.STORE_CD
+                                                        AND tmpsc.SDSEL_CLASS_CD = tmpsp.SDSEL_CLASS_CD
+                                                        WHERE tmpsp.STORE_CD = #{storeCd}
+                                                        <if test='sdselProdCd != null and sdselProdCd != ""'>
+                                                            AND tmp.PROD_CD LIKE '%'||#{sdselProdCd}||'%'
+                                                        </if>
+                                                        <if test='sdselProdNm != null and sdselProdNm != ""'>
+                                                            AND tmp.PROD_NM LIKE '%'||#{sdselProdNm}||'%'
+                                                        </if>
+                                                        AND tmpsp.USE_YN = 'Y'
+                                                  )
+                    </if>
+                </if>
                 ORDER BY
                     tmpsg.SDSEL_GRP_CD
             </when>

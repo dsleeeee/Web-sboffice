@@ -55,6 +55,18 @@ public class SideMenuSelGroupVO extends CmmVO {
     /** 선택그룹사용정보 */
     private String sdselTypeFg;
 
+    /** 사이드선택상품코드*/
+    private String sdselProdCd;
+
+    /** 사이드선택상품명*/
+    private String sdselProdNm;
+
+    /** 사용자 아이디 */
+    private String userId;
+
+    /** 선택그룹 검색조건의 조회타입(그룹, 상품) */
+    private String srchType;
+
     /**
      * @return the hqOfficeCd
      */
@@ -189,4 +201,36 @@ public class SideMenuSelGroupVO extends CmmVO {
     public String getSdselTypeFg() { return sdselTypeFg; }
 
     public void setSdselTypeFg(String sdselTypeFg) { this.sdselTypeFg = sdselTypeFg; }
+
+    public String getSdselProdCd() {
+        return sdselProdCd;
+    }
+
+    public void setSdselProdCd(String sdselProdCd) {
+        this.sdselProdCd = sdselProdCd;
+    }
+
+    public String getSdselProdNm() {
+        return sdselProdNm;
+    }
+
+    public void setSdselProdNm(String sdselProdNm) {
+        this.sdselProdNm = sdselProdNm;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getSrchType() {
+        return srchType;
+    }
+
+    public void setSrchType(String srchType) {
+        this.srchType = srchType;
+    }
 }

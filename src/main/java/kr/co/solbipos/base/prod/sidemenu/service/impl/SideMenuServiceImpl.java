@@ -195,6 +195,7 @@ public class SideMenuServiceImpl implements SideMenuService {
         sideMenuSelGroupVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         sideMenuSelGroupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         sideMenuSelGroupVO.setStoreCd(sessionInfoVO.getStoreCd());
+        sideMenuSelGroupVO.setUserId(sessionInfoVO.getUserId());
 
         return sideMenuMapper.getMenuGrpList(sideMenuSelGroupVO);
     }

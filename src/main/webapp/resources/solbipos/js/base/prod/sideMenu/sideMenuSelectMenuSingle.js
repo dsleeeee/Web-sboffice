@@ -30,6 +30,9 @@ app.controller('sideMenuSelectGroupSingleCtrl', ['$scope', '$http', function ($s
         return $scope.selectedSelGroup;
     };
 
+    // 콤보박스 데이터 Set
+    $scope._setComboData("srchTypeSelGroupSingle", vSrchTypeSelGroup);
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // 그리드 내 콤보박스 설정
@@ -121,9 +124,44 @@ app.controller('sideMenuSelectGroupSingleCtrl', ['$scope', '$http', function ($s
         $("#btnDelSelProdSingle").hide();
         $("#btnSaveSelProdSingle").hide();
 
+        // 선택그룹 검색조건 입력값
+        $scope.srchTypeSelGroupSingleCombo.selectedIndex = 0;
+        $('#txtSelGroupSingle').val("");
+
+        // 선택상품 검색조건 초기화
+        var vScope = agrid.getScope('sideMenuSelectProdSingleCtrl');
+        vScope.srchTypeSelProdSingleCombo.selectedIndex = 0;
+        $('#txtSelProdSingle').val("");
+
+        // 선택그룹 그리드 조회
+        $scope.srchSelGroup();
+
+        // 기능수행 종료 : 반드시 추가
+        event.preventDefault();
+    });
+
+    // 선택그룹 그리드 조회
+    $scope.srchSelGroup = function(){
+
         // 파라미터
         var params = {};
         params.sdselTypeFg = 'S';
+        params.srchType = "";
+        params.sdselGrpCd = "";
+        params.sdselGrpNm = "";
+
+        if($("#txtSelGroupSingle").val() !== ""){
+          params.srchType = "grp";
+          if($scope.srchTypeSelGroupSingleCombo.selectedValue === "grpCd"){
+            params.sdselGrpCd = $("#txtSelGroupSingle").val();
+            params.sdselGrpNm = "";
+          }
+          else if($scope.srchTypeSelGroupSingleCombo.selectedValue === "grpNm"){
+            params.sdselGrpCd = "";
+            params.sdselGrpNm = $("#txtSelGroupSingle").val();
+          }
+        }
+
         // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
         $scope._inquiryMain('/base/prod/sideMenu/menuGrp/list.sb', params,function() {
           // <-- 그리드 visible -->
@@ -153,10 +191,40 @@ app.controller('sideMenuSelectGroupSingleCtrl', ['$scope', '$http', function ($s
           }
           // <-- //그리드 visible -->
         }, false);
+    };
 
-        // 기능수행 종료 : 반드시 추가
-        event.preventDefault();
-    });
+    // 선택그룹 그리드 행 조회(검색조건 포함)
+    $scope.srchRow = function() {
+        // 초기 버튼 셋팅
+        // 선택분류 버튼
+        $("#btnUpSelClassSingle").hide();
+        $("#btnDownSelClassSingle").hide();
+        $("#btnAddSelClassSingle").hide();
+        $("#btnDelSelClassSingle").hide();
+        $("#btnSaveSelClassSingle").hide();
+
+        // 선택상품버튼
+        $("#btnUpSelProdSingle").hide();
+        $("#btnDownSelProdSingle").hide();
+        $("#btnAddSelProdSingle").hide();
+        $("#btnDelSelProdSingle").hide();
+        $("#btnSaveSelProdSingle").hide();
+
+        $("#sideSelectGroupSingleTitle").html("");
+        var attrScope = agrid.getScope('sideMenuSelectClassSingleCtrl');
+        attrScope._gridDataInit();   // 선택분류(싱글) 그리드 초기화
+
+        $("#sideClassSingleTitle").html("");
+        var prodScope = agrid.getScope('sideMenuSelectProdSingleCtrl');
+        prodScope._gridDataInit();   // 선택상품(싱글) 그리드 초기화
+
+        // 선택상품 검색조건 초기화
+        prodScope.srchTypeSelProdSingleCombo.selectedIndex = 0;
+        $('#txtSelProdSingle').val("");
+
+        // 선택그룹 그리드 조회
+        $scope.srchSelGroup();
+    };
 
     // 선택그룹 그리드 행 추가
     $scope.addRow = function() {
@@ -324,6 +392,63 @@ app.controller('sideMenuSelectGroupSingleCtrl', ['$scope', '$http', function ($s
       }
     }
     return true;
+    };
+
+    // 선택상품 검색시, 조회된 선택상품이 포함된 선택그룹 그리드 조회
+    $scope.srchSelGroupByProd = function (srchType) {
+
+    // 파라미터
+    var params = {};
+    params.sdselTypeFg = 'S';
+    params.srchType = "";
+    params.sdselProdCd = "";
+    params.sdselProdNm = "";
+
+    if($("#txtSelProdSingle").val() !== ""){
+      params.srchType = "prod";
+      if(srchType === "prodCd"){
+        params.sdselProdCd = $("#txtSelProdSingle").val();
+        params.sdselProdNm = "";
+      }
+      else if(srchType === "prodNm"){
+        params.sdselProdCd = "";
+        params.sdselProdNm = $("#txtSelProdSingle").val();
+      }
+    }
+
+    // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
+    $scope._inquiryMain('/base/prod/sideMenu/menuGrp/list.sb', params,function() {
+      // <-- 그리드 visible -->
+      // 선택한 테이블에 따른 리스트 항목 visible
+      var grid = wijmo.Control.getControl("#wjGridSelGroupSingleList");
+      var columns = grid.columns;
+
+      // 컬럼 총갯수
+      var columnsCnt = 6;
+      if(hqOfficeCd == 'A0001' && orgnFg == 'HQ') {
+        // 컬럼 총갯수
+        columnsCnt = 7;
+      }
+
+      // 합계가 0이면 해당 컬럼 숨기기
+      for (var j = 0; j < columnsCnt; j++) {
+        // [1014 포스프로그램구분]
+        if(posVerEnvstVal === "1") {
+          if(columns[j].binding == "fixProdFg") {
+            columns[j].visible = false;
+          }
+        } else if(posVerEnvstVal === "2") {
+          if(columns[j].binding == "fixProdFg") {
+            columns[j].visible = true;
+          }
+        }
+      }
+      // <-- //그리드 visible -->
+    }, false);
+
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+
     };
 
 }]);
@@ -751,6 +876,9 @@ app.controller('sideMenuSelectProdSingleCtrl', ['$scope', '$http', 'sdselClassCd
     return sdselClassCd.get();
   };
 
+    // 콤보박스 데이터 Set
+  $scope._setComboData("srchTypeSelProdSingle", vSrchTypeSelProd);
+
   // 선택분류의 수량 set
   $scope.sdselQty = 0;
 
@@ -832,6 +960,41 @@ app.controller('sideMenuSelectProdSingleCtrl', ['$scope', '$http', 'sdselClassCd
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
+
+  // 선택상품 검색시, 조회된 선택상품이 포함된 선택그룹 그리드 조회
+  $scope.srchRow = function(){
+      // 초기 버튼 셋팅
+      // 선택분류 버튼
+      $("#btnUpSelClassSingle").hide();
+      $("#btnDownSelClassSingle").hide();
+      $("#btnAddSelClassSingle").hide();
+      $("#btnDelSelClassSingle").hide();
+      $("#btnSaveSelClassSingle").hide();
+
+      // 선택상품버튼
+      $("#btnUpSelProdSingle").hide();
+      $("#btnDownSelProdSingle").hide();
+      $("#btnAddSelProdSingle").hide();
+      $("#btnDelSelProdSingle").hide();
+      $("#btnSaveSelProdSingle").hide();
+
+      $("#sideSelectGroupSingleTitle").html("");
+      var attrScope = agrid.getScope('sideMenuSelectClassSingleCtrl');
+      attrScope._gridDataInit();   // 선택분류(싱글) 그리드 초기화
+
+      $("#sideClassSingleTitle").html("");
+      var prodScope = agrid.getScope('sideMenuSelectProdSingleCtrl');
+      prodScope._gridDataInit();   // 선택상품(싱글) 그리드 초기화
+
+      // 선택그룹 검색조건 초기화
+      var vScope = agrid.getScope('sideMenuSelectGroupSingleCtrl');
+      vScope.srchTypeSelGroupSingleCombo.selectedIndex = 0;
+      $('#txtSelGroupSingle').val("");
+
+      // 선택그룹 그리드 조회
+      vScope.srchSelGroupByProd($scope.srchTypeSelProdSingleCombo.selectedValue);
+  };
+
   // 선택상품 그리드 행 추가
   $scope.addRow = function() {
     if($("#sideClassSingleTitle").html() == ""){
