@@ -37,9 +37,9 @@ app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', function ($scope, $http
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-
         $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
         $scope.tuMClsFgDataMap = new wijmo.grid.DataMap(tuMClsFgMapEnvComboData, 'value', 'name'); // KIOSK중분류사용
+        $scope.kioskTuClsTypeDataMap = new wijmo.grid.DataMap(kioskTuClsTypeList, 'value', 'name'); // KIOSK중분류사용
 
         // 그리드 header 클릭시 정렬 이벤트 막기
         s.addEventListener(s.hostElement, 'mousedown', function (e) {
@@ -50,6 +50,7 @@ app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', function ($scope, $http
 
     // 팝업 오픈 시, 매장리스트 조회
     $scope.$on("kioskKeyMapEnvCtrl", function(event, key) {
+        $scope._setComboData("tuClsTypeCombo2", kioskTuClsTypeListAll);
 
         // 매장적용(매장/포장) 키값 hidden에 갖고 있기
         $("#hdEnvstCd").val(key);
@@ -89,6 +90,8 @@ app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', function ($scope, $http
         params.momsShopType = $scope.momsShopType;
         params.momsStoreManageType = $scope.momsStoreManageType;
         params.branchCd = $scope.branchCd;
+        params.envstCd = $("#hdEnvstCd").val();
+        params.tuClsType = $scope.tuClsType;
         if(brandUseFg === "1" && orgnFg === "HQ"){
 
             // 선택한 매장브랜드가 있을 때
@@ -117,9 +120,13 @@ app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', function ($scope, $http
             if($("#hdEnvstCd").val() === "4068") {
                 columns[6].visible = true;
                 columns[7].visible = false;
+                columns[8].visible = true;
+                columns[9].visible = false;
             }else{
                 columns[6].visible = false;
                 columns[7].visible = true;
+                columns[8].visible = false;
+                columns[9].visible = true;
             }
 
             // 키오스크포스가 없는 매장은 선택 불가
