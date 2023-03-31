@@ -55,6 +55,7 @@ public interface SalePriceResveMapper {
 
     /** 가격예약(매장판매가) 기존 예약 판매가 삭제 */
     int deleteStoreSalePriceResve(SalePriceResveVO salePriceResveVO);
+    int deleteStoreSalePriceResve2(SalePriceResveVO salePriceResveVO);
 
     /** 가격예약(매장판매가) 해당 시작날짜에 등록된 가격이 있는지 조회(판매가 히스토리 등록을 위해) */
     int getStoreSalePriceCnt(SalePriceResveVO salePriceResveVO);
