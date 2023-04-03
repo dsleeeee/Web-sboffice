@@ -93,9 +93,9 @@
                             <button class="btn_skyblue" id="btnTuClsTypeStore" ng-click="tuClsTypeStore()">
                                 <s:message code="kioskKeyMap.tuClsTypeStore" />
                             </button>
-                            <button class="btn_skyblue" id="btnStoreCopy" ng-click="storeCopy()">
+                            <%--<button class="btn_skyblue" id="btnStoreCopy" ng-click="storeCopy()">
                                 <s:message code="kioskKeyMap.storeCopy" />
-                            </button>
+                            </button>--%>
                         </c:if>
                         <button class="btn_skyblue" id="btnTuClsTypeStore" ng-click="tuRecmd()">
                             <s:message code="kioskKeyMap.tuRecmd" />
