@@ -366,6 +366,7 @@
         AND A.SESSION_ID = #{sessionId}
         AND A.HQ_OFFICE_CD = #{hqOfficeCd}
         AND B.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+        AND B.EMP_NO (+)= A.EMP_NO
         ORDER BY A.SEQ
     </select>
 
