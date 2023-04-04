@@ -5,8 +5,8 @@
 <input type="hidden" id="<c:out value="${param.targetId}Cd"/>" />
 <input type="text"
        id="<c:out value="${param.targetId}Nm"/>"
-       class="sb-input fl mr5 w100"
-       style="cursor:pointer; width:180px;"
+       class="sb-input fl mr5"
+       style="cursor:pointer; width:200px;"
        <c:if test="${empty param.modiFg}">
          ng-click="<c:out value="${param.targetId}"/>Show()"
        </c:if>
@@ -16,7 +16,7 @@
   <s:message code="cmm.selectCancel"/></button>
 </c:if>
 
-<wj-popup id="wj<c:out value="${param.targetId}"/>LayerS" control="wj<c:out value="${param.targetId}"/>LayerS" show-trigger="Click" hide-trigger="Click" style="display:none;width:500px;">
+<wj-popup id="wj<c:out value="${param.targetId}"/>LayerS" control="wj<c:out value="${param.targetId}"/>LayerS" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;">
   <div class="wj-dialog wj-dialog-columns" ng-controller="<c:out value="${param.targetId}"/>Ctrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="cmm.prod.select"/>
@@ -29,9 +29,9 @@
         <table class="tblType01">
           <colgroup>
             <col class="w15" />
-            <col class="w35" />
+            <col class="w30" />
             <col class="w15" />
-            <col class="w35" />
+            <col class="w40" />
           </colgroup>
           <tbody>
           <tr>
@@ -45,20 +45,35 @@
             </td>
           </tr>
           <tr>
-            <th><s:message code="outstockReqDate.hqBrand" /></th>
+            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+               <%-- 상품브랜드 --%>
+              <th><s:message code="outstockReqDate.prodHqBrand" /></th>
+              <td>
+                <div class="sb-select">
+                  <wj-combo-box
+                          id="srchPopProdHqBrandCombo"
+                          ng-model="popProdHqBrandCd"
+                          items-source="_getComboData('popProdHqBrandCdCombo')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          control="srchPopProdHqBrandCombo">
+                  </wj-combo-box>
+                </div>
+              </td>
+            </c:if>
+            <%-- 분류조회 --%>
+            <th><s:message code="outstockReqDate.prodClass" /></th>
             <td>
-              <div class="sb-select">
-                <wj-combo-box
-                        id="hqBrand"
-                        ng-model="hqBrand"
-                        items-source="_getComboData('hqBrand')"
-                        display-member-path="name"
-                        selected-value-path="value"
-                        is-editable="false"
-                        control="hqBrandCombo">
-                </wj-combo-box>
-              </div>
+              <input type="text" class="sb-input" id="srchPopProdClassCd" ng-model="popProdClassNm" ng-click="popUpProdClass()" style="float: left; width: 170px;"
+                     placeholder="<s:message code="outstockReqDate.prodClass" /> 선택" readonly/>
+              <input type="hidden" id="_popProdClassCd" name="popProdClassCd" ng-model="popProdClassCd" disabled />
+              <button type="button" class="btn_skyblue fl mr5" id="btnCancelPopProdClassCd" style="margin-left: 5px;" ng-click="delPopProdClass()"><s:message code="cmm.selectCancel"/></button>
             </td>
+            <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+              <td></td>
+              <td></td>
+            </c:if>
           </tr>
           </tbody>
         </table>
@@ -81,7 +96,7 @@
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="outstockReqDate.prodCd"/>" binding="prodCd" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="outstockReqDate.prodNm"/>" binding="prodNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="outstockReqDate.prodNm"/>" binding="prodNm" width="400" align="left" is-read-only="true"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>
@@ -92,12 +107,18 @@
   </div>
 </wj-popup>
 
+<%-- 상품분류 팝업 --%>
+<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>
 
 <script type="text/javascript">
   /**
    * get application
    */
   var app = agrid.getApp();
+
+  // 상품브랜드 콤보박스 항목 저장시 쓰려고
+  var momsHqBrandCdComboList;
 
   /** 매장선택 controller */
   app.controller('${param.targetId}Ctrl', ['$scope', '$http', function ($scope, $http) {
@@ -140,11 +161,14 @@
         }
       });
 
+      // 상품브랜드
       var params = {};
       $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectBrandMomsList.sb', params, function (response) {
         if (response.data.data.list.length > 0) {
           var list = response.data.data.list;
-          $scope._setComboData("hqBrand", list);
+          $scope._setComboData("popProdHqBrandCdCombo", list);
+          // 상품브랜드 콤보박스 항목 저장시 쓰려고
+          momsHqBrandCdComboList = list;
         }
       });
     };
@@ -159,7 +183,7 @@
         if ('${param.closeFunc}' !== '') {
           eval('$scope.${param.closeFunc}()');
         }
-        $scope.hqBrandCombo.selectedIndex = 0;
+        $scope.srchPopProdHqBrandCombo.selectedIndex = 0;
       });
 
       if ($scope.searchFg == "N") {
@@ -174,12 +198,51 @@
       var params = {};
       params.prodCd = $scope.srchProdCd;
       params.prodNm = $scope.srchProdNm;
-      params.hqBrandCd = $scope.hqBrand;
+      params.prodHqBrandCd = $scope.popProdHqBrandCd;
+      params.prodClassCd = $scope.popProdClassCd;
+      // '전체' 일때
+      if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+        var momsHqBrandCd = "";
+        for(var i=0; i < momsHqBrandCdComboList.length; i++){
+          if(momsHqBrandCdComboList[i].value !== null) {
+            momsHqBrandCd += momsHqBrandCdComboList[i].value + ","
+          }
+        }
+        params.userBrands = momsHqBrandCd;
+      }
 
       $scope._inquirySub("/iostock/cmm/iostockCmm/selectProdMomsList.sb", params, function () {
         $scope.searchFg = "Y";
       });
     };
+
+    // 분류 조회 팝업
+    $scope.popUpProdClass = function() {
+      var popUp = $scope.prodClassPopUpLayer;
+      popUp.show(true, function (s) {
+        // 선택 버튼 눌렀을때만
+        if (s.dialogResult === "wj-hide-apply") {
+          var scope = agrid.getScope('prodClassPopUpCtrl');
+          var prodClassCd = scope.getSelectedClass();
+          var params = {};
+          params.prodClassCd = prodClassCd;
+          // 조회 수행 : 조회URL, 파라미터, 콜백함수
+          $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+            function(response){
+              $scope.popProdClassCd = prodClassCd;
+              $scope.popProdClassNm = response.data.data;
+            }
+          );
+        }
+      });
+    };
+
+    // 상품분류정보 선택취소
+    $scope.delPopProdClass = function(){
+      $scope.popProdClassCd = "";
+      $scope.popProdClassNm = "";
+    };
+
   }]);
 
   $(document).ready(function () {
@@ -189,5 +252,6 @@
       $("#${param.targetId}Nm").val(("${param.displayNm}" === "" ? messages["cmm.select"] : "${param.displayNm}"));
     });
   });
+
 
 </script>

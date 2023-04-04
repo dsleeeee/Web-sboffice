@@ -50,7 +50,31 @@ public class KioskDisplayServiceImpl implements KioskDisplayService {
         if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
             kioskDisplayVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
+        kioskDisplayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         kioskDisplayVO.setUserId(sessionInfoVO.getUserId());
+
+        // 매장 array 값 세팅
+        String[] storeCds = kioskDisplayVO.getStoreCds().split(",");
+        kioskDisplayVO.setStoreCdList(storeCds);
+
+        // 상품 array 값 세팅
+        if (kioskDisplayVO.getProdCds() != null && !"".equals(kioskDisplayVO.getProdCds())) {
+            String[] prodCdList = kioskDisplayVO.getProdCds().split(",");
+            kioskDisplayVO.setProdCdList(prodCdList);
+        }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 매장브랜드, 상품브랜드가 '전체' 일때
+            if (kioskDisplayVO.getStoreHqBrandCd() == "" || kioskDisplayVO.getStoreHqBrandCd() == null || kioskDisplayVO.getProdHqBrandCd() == "" || kioskDisplayVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (kioskDisplayVO.getUserBrands() != null && !"".equals(kioskDisplayVO.getUserBrands())) {
+                    String[] userBrandList = kioskDisplayVO.getUserBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        kioskDisplayVO.setUserBrandList(userBrandList);
+                    }
+                }
+            }
+        }
 
         return kioskDisplayMapper.getProdList(kioskDisplayVO);
     }
