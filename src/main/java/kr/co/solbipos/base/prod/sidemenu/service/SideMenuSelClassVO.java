@@ -54,6 +54,21 @@ public class SideMenuSelClassVO extends CmmVO {
     /** 필수선택여부 */
     private String requireYn;
 
+    /** 복사할 사이드선택그룹코드 */
+    private String copySdselGrpCd;
+
+    /** 복사할 사이드 선택분류코드 */
+    private String copySdselClassCd;
+
+    /** 적용할 사이드 선택그룹코드 */
+    private String applySdselGrpCd;
+
+    /** 적용할 사이드 선택분류코드 */
+    private String applySdselClassCd;
+
+    /** 적용할 사이드 표시순서 */
+    private String applyDispSeq;
+
     /**
      * @return the hqOfficeCd
      */
@@ -198,4 +213,26 @@ public class SideMenuSelClassVO extends CmmVO {
     public String getRequireYn() { return requireYn; }
 
     public void setRequireYn(String requireYn) { this.requireYn = requireYn; }
+
+
+    public String getCopySdselGrpCd() { return copySdselGrpCd; }
+
+    public void setCopySdselGrpCd(String copySdselGrpCd) { this.copySdselGrpCd = copySdselGrpCd; }
+
+    public String getCopySdselClassCd() { return copySdselClassCd; }
+
+    public void setCopySdselClassCd(String copySdselClassCd) { this.copySdselClassCd = copySdselClassCd; }
+
+    public String getApplySdselGrpCd() { return applySdselGrpCd; }
+
+    public void setApplySdselGrpCd(String applySdselGrpCd) { this.applySdselGrpCd = applySdselGrpCd; }
+
+    public String getApplySdselClassCd() { return applySdselClassCd; }
+
+    public void setApplySdselClassCd(String applySdselClassCd) { this.applySdselClassCd = applySdselClassCd; }
+
+    public String getApplyDispSeq() { return applyDispSeq; }
+
+    public void setApplyDispSeq(String applyDispSeq) { this.applyDispSeq = applyDispSeq; }
+
 }

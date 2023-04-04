@@ -529,6 +529,7 @@ public class SideMenuServiceImpl implements SideMenuService {
         return sideMenuMapper.getSideMenuAttrClassCombo(sideMenuManageVO);
     }
 
+
     /** 사이드메뉴-사이드메뉴관리탭 선택메뉴 콤보박스 */
     @Override
     public List<DefaultMap<String>> getSideMenuSdselGrpCdCombo(SideMenuManageVO sideMenuManageVO, SessionInfoVO sessionInfoVO) {
@@ -541,4 +542,56 @@ public class SideMenuServiceImpl implements SideMenuService {
 
         return sideMenuMapper.getSideMenuSdselGrpCdCombo(sideMenuManageVO);
     }
+
+    /** 사이드메뉴-선택메뉴 탭-선택분류복사 팝업 - 저장 */
+    @Override
+    public int getSdselClassCopySave(SideMenuSelClassVO[] sideMenuSelClassVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String procResult;
+        String currentDt = currentDateTimeString();
+
+        for(SideMenuSelClassVO sideMenuSelClassVO : sideMenuSelClassVOs) {
+            sideMenuSelClassVO.setModDt(currentDt);
+            sideMenuSelClassVO.setModId(sessionInfoVO.getUserId());
+            sideMenuSelClassVO.setRegDt(currentDt);
+            sideMenuSelClassVO.setRegId(sessionInfoVO.getUserId());
+
+            sideMenuSelClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            sideMenuSelClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+                sideMenuSelClassVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+
+            // 분류코드 생성
+            sideMenuSelClassVO.setApplySdselClassCd(sideMenuMapper.getMenuClassCode(sideMenuSelClassVO));
+
+            // 선택분류 생성시 표기순번 자동채번
+            sideMenuSelClassVO.setApplyDispSeq(sideMenuMapper.getDispSeqCode(sideMenuSelClassVO));
+
+            System.out.println("사이드 선택메뉴 복사 > 복사할 그룹코드 : " + sideMenuSelClassVO.getCopySdselGrpCd() + " ,  분류코드 : " + sideMenuSelClassVO.getCopySdselClassCd());
+            System.out.println("사이드 선택메뉴 복사 > 적용할 그룹코드 : " + sideMenuSelClassVO.getApplySdselGrpCd() + " ,  분류코드 : " + sideMenuSelClassVO.getApplySdselClassCd() + " ,  표기순번 : " + sideMenuSelClassVO.getApplyDispSeq());
+
+            // 선택분류 복사
+            procCnt = sideMenuMapper.getSdselClassCopySaveInsertClass(sideMenuSelClassVO);
+
+            // 본사에서 접속시
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                sideMenuSelClassVO.setSdselGrpCd(sideMenuSelClassVO.getApplySdselGrpCd());
+                sideMenuSelClassVO.setSdselClassCd(sideMenuSelClassVO.getApplySdselClassCd());
+
+                procResult = sideMenuMapper.insertHqMenuClassListToStore(sideMenuSelClassVO);
+            }
+
+            // 선택상품 복사
+            procCnt = sideMenuMapper.getSdselClassCopySaveMergeProd(sideMenuSelClassVO);
+            // 본사에서 접속시
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                procCnt = sideMenuMapper.getSdselClassCopySaveMergeProdStore(sideMenuSelClassVO);
+            }
+        }
+
+        return procCnt;
+    }
+
 }

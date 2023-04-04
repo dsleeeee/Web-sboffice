@@ -282,7 +282,7 @@
         ORDER BY A.SEQ
     </select>
 
-    <!-- 매장정보 저장 -->
+    <!-- 업로드 매장정보 저장 -->
     <!--
         TABLE    : TB_MS_STORE
         COMMENTS :
@@ -308,7 +308,7 @@
             MOD_ID = #{modId}
     </update>
 
-    <!-- 매장정보 저장 -->
+    <!-- 업로드 매장정보 저장 -->
     <!--
         TABLE    : TB_MS_STORE_INFO
         COMMENTS :
@@ -316,21 +316,27 @@
     <update id="getSimpleStoreInfoSave" parameterType="storeBatchChangeVO">
         /* StoreBatchChangeMapper.getSimpleStoreInfoSave */
         MERGE INTO TB_MS_STORE_INFO A
-        USING
-        (
-            SELECT
-            STORE_CD,
-            (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '151' AND NMCODE_NM = MOMS_TEAM) AS MOMS_TEAM,
-            (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '152' AND NMCODE_NM = MOMS_AC_SHOP) AS MOMS_AC_SHOP,
-            (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '153' AND NMCODE_NM = MOMS_AREA_FG) AS MOMS_AREA_FG,
-            (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '154' AND NMCODE_NM = MOMS_COMMERCIAL) AS MOMS_COMMERCIAL,
-            (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '155' AND NMCODE_NM = MOMS_SHOP_TYPE) AS MOMS_SHOP_TYPE,
-            (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '156' AND NMCODE_NM = MOMS_STORE_MANAGE_TYPE) AS MOMS_STORE_MANAGE_TYPE
-            FROM TB_TMP_EXCEL_STORE_INFO
-            WHERE SESSION_ID = #{sessionId}
-            AND HQ_OFFICE_CD = #{hqOfficeCd}
-        ) B
-        ON (A.STORE_CD = B.STORE_CD)
+        USING (
+                SELECT
+                C.STORE_CD,
+                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '151' AND NMCODE_NM = C.MOMS_TEAM) AS MOMS_TEAM,
+                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '152' AND NMCODE_NM = C.MOMS_AC_SHOP) AS MOMS_AC_SHOP,
+                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '153' AND NMCODE_NM = C.MOMS_AREA_FG) AS MOMS_AREA_FG,
+                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '154' AND NMCODE_NM = C.MOMS_COMMERCIAL) AS MOMS_COMMERCIAL,
+                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '155' AND NMCODE_NM = C.MOMS_SHOP_TYPE) AS MOMS_SHOP_TYPE,
+                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '156' AND NMCODE_NM = C.MOMS_STORE_MANAGE_TYPE) AS MOMS_STORE_MANAGE_TYPE,
+                #{regDt} AS REG_DT,
+                #{regId} AS REG_ID,
+                #{modDt} AS MOD_DT,
+                #{modId} AS MOD_ID
+                FROM TB_TMP_EXCEL_STORE_INFO C
+                WHERE 1=1
+                AND C.SESSION_ID = #{sessionId}
+                AND C.HQ_OFFICE_CD = #{hqOfficeCd}
+            ) B
+        ON (
+                A.STORE_CD = B.STORE_CD
+            )
         WHEN MATCHED THEN
             UPDATE
             SET
@@ -340,9 +346,9 @@
             A.MOMS_COMMERCIAL = B.MOMS_COMMERCIAL,
             A.MOMS_SHOP_TYPE = B.MOMS_SHOP_TYPE,
             A.MOMS_STORE_MANAGE_TYPE = B.MOMS_STORE_MANAGE_TYPE,
-            MOD_DT = #{modDt},
-            MOD_ID = #{modId}
-        WHEN NOT MATCHED THEN
+            A.MOD_DT = B.MOD_DT,
+            A.MOD_ID = B.MOD_ID
+         WHEN NOT MATCHED THEN
             INSERT
             (
                 A.STORE_CD,
@@ -364,10 +370,10 @@
                 B.MOMS_COMMERCIAL,
                 B.MOMS_SHOP_TYPE,
                 B.MOMS_STORE_MANAGE_TYPE,
-                #{regDt},
-                #{regId},
-                #{modDt},
-                #{modId}
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
             )
     </update>
 

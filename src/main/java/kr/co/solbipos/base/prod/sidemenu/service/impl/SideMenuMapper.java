@@ -170,4 +170,16 @@ public interface SideMenuMapper {
     /** 사이드메뉴-사이드메뉴관리탭 선택메뉴 콤보박스 */
     List<DefaultMap<String>> getSideMenuSdselGrpCdCombo(SideMenuManageVO sideMenuManageVO);
 
+
+    /** 선택분류 생성시 표기순번 자동채번 */
+    String getDispSeqCode(SideMenuSelClassVO SideMenuSelClassVO);
+
+    /** 사이드메뉴-선택메뉴 탭-선택분류복사 팝업 - 선택분류 복사 insert */
+    int getSdselClassCopySaveInsertClass(SideMenuSelClassVO SideMenuSelClassVO);
+
+    /** 사이드메뉴-선택메뉴 탭-선택분류복사 팝업 - 선택상품 복사 merge */
+    int getSdselClassCopySaveMergeProd(SideMenuSelClassVO sideMenuSelClassVO);
+
+    /** 사이드메뉴-선택메뉴 탭-선택분류복사 팝업 - 선택상품 매장에 내려줌 */
+    int getSdselClassCopySaveMergeProdStore(SideMenuSelClassVO sideMenuSelClassVO);
 }
