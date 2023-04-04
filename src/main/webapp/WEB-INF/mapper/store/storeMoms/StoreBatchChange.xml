@@ -282,7 +282,7 @@
         ORDER BY A.SEQ
     </select>
 
-    <!-- 매장정보 저장 -->
+    <!-- 업로드 매장정보 저장 -->
     <!--
         TABLE    : TB_MS_STORE
         COMMENTS :
@@ -325,6 +325,8 @@
                 (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '154' AND NMCODE_NM = C.MOMS_COMMERCIAL) AS MOMS_COMMERCIAL,
                 (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '155' AND NMCODE_NM = C.MOMS_SHOP_TYPE) AS MOMS_SHOP_TYPE,
                 (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '156' AND NMCODE_NM = C.MOMS_STORE_MANAGE_TYPE) AS MOMS_STORE_MANAGE_TYPE,
+                #{regDt} AS REG_DT,
+                #{regId} AS REG_ID,
                 #{modDt} AS MOD_DT,
                 #{modId} AS MOD_ID
                 FROM TB_TMP_EXCEL_STORE_INFO C
@@ -346,6 +348,33 @@
             A.MOMS_STORE_MANAGE_TYPE = B.MOMS_STORE_MANAGE_TYPE,
             A.MOD_DT = B.MOD_DT,
             A.MOD_ID = B.MOD_ID
+         WHEN NOT MATCHED THEN
+            INSERT
+            (
+                A.STORE_CD,
+                A.MOMS_TEAM,
+                A.MOMS_AC_SHOP,
+                A.MOMS_AREA_FG,
+                A.MOMS_COMMERCIAL,
+                A.MOMS_SHOP_TYPE,
+                A.MOMS_STORE_MANAGE_TYPE,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+            ) VALUES (
+                B.STORE_CD,
+                B.MOMS_TEAM,
+                B.MOMS_AC_SHOP,
+                B.MOMS_AREA_FG,
+                B.MOMS_COMMERCIAL,
+                B.MOMS_SHOP_TYPE,
+                B.MOMS_STORE_MANAGE_TYPE,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
+            )
     </update>
 
     <!-- 검증결과 삭제 -->
