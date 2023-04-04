@@ -1950,6 +1950,321 @@
             </when>
         </choose>
     </select>
+
+
+    <!-- 선택분류 생성시 표기순번 자동채번 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getDispSeqCode" parameterType="sideMenuSelClassVO" resultType="String">
+        /* SideMenuMapper.getDispSeqCode */
+        <choose>
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT NVL(MAX(DISP_SEQ), '0') + 1
+                FROM TB_HQ_PRODUCT_SDSEL_CLASS
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{hqOfficeCd}
+                AND SDSEL_GRP_CD = #{applySdselGrpCd}
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT NVL(MAX(DISP_SEQ), '0') + 1
+                FROM TB_MS_PRODUCT_SDSEL_CLASS
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND SDSEL_GRP_CD = #{applySdselGrpCd}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 사이드메뉴-선택메뉴 탭-선택분류복사 팝업 - 선택분류 복사 insert -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getSdselClassCopySaveInsertClass" parameterType="sideMenuSelClassVO">
+        /* SideMenuMapper.getSdselClassCopySaveInsertClass */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_PRODUCT_SDSEL_CLASS
+                (
+                    HQ_OFFICE_CD,
+                    SDSEL_CLASS_CD,
+                    SDSEL_CLASS_NM,
+                    SDSEL_GRP_CD,
+                    SDSEL_QTY,
+                    DISP_SEQ,
+                    USE_YN,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID,
+                    MAP_CLASS_CD,
+                    RCVKIND,
+                    REQUIRE_YN
+                )
+                SELECT
+                A.HQ_OFFICE_CD,
+                #{applySdselClassCd} AS SDSEL_CLASS_CD,
+                A.SDSEL_CLASS_NM,
+                #{applySdselGrpCd} AS SDSEL_GRP_CD,
+                A.SDSEL_QTY,
+                #{applyDispSeq} AS DISP_SEQ,
+                A.USE_YN,
+                #{regDt} AS REG_DT,
+                #{regId} AS REG_ID,
+                #{modDt} AS MOD_DT,
+                #{modId} AS MOD_ID,
+                A.MAP_CLASS_CD,
+                A.RCVKIND,
+                A.REQUIRE_YN
+                FROM TB_HQ_PRODUCT_SDSEL_CLASS A
+                WHERE 1=1
+                AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND A.SDSEL_GRP_CD = #{copySdselGrpCd}
+                AND A.SDSEL_CLASS_CD = #{copySdselClassCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_PRODUCT_SDSEL_CLASS
+                (
+                    STORE_CD,
+                    SDSEL_CLASS_CD,
+                    SDSEL_CLASS_NM,
+                    SDSEL_GRP_CD,
+                    SDSEL_QTY,
+                    DISP_SEQ,
+                    USE_YN,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID,
+                    MAP_CLASS_CD,
+                    RCVKIND,
+                    REQUIRE_YN
+                )
+                SELECT
+                A.STORE_CD,
+                #{applySdselClassCd} AS SDSEL_CLASS_CD,
+                A.SDSEL_CLASS_NM,
+                #{applySdselGrpCd} AS SDSEL_GRP_CD,
+                A.SDSEL_QTY,
+                #{applyDispSeq} AS DISP_SEQ,
+                A.USE_YN,
+                #{regDt} AS REG_DT,
+                #{regId} AS REG_ID,
+                #{modDt} AS MOD_DT,
+                #{modId} AS MOD_ID,
+                A.MAP_CLASS_CD,
+                A.RCVKIND,
+                A.REQUIRE_YN
+                FROM TB_MS_PRODUCT_SDSEL_CLASS A
+                WHERE 1=1
+                AND A.STORE_CD = #{storeCd}
+                AND A.SDSEL_GRP_CD = #{copySdselGrpCd}
+                AND A.SDSEL_CLASS_CD = #{copySdselClassCd}
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 사이드메뉴-선택메뉴 탭-선택분류복사 팝업 - 선택상품 복사 merge -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getSdselClassCopySaveMergeProd" parameterType="sideMenuSelClassVO">
+        /* SideMenuMapper.getSdselClassCopySaveMergeProd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                MERGE INTO TB_HQ_PRODUCT_SDSEL_PROD A
+                USING (
+                        SELECT
+                        C.HQ_OFFICE_CD,
+                        #{applySdselClassCd} AS SDSEL_CLASS_CD,
+                        C.PROD_CD,
+                        C.ADD_PROD_UPRC,
+                        C.ADD_PROD_QTY,
+                        C.DISP_SEQ,
+                        C.USE_YN,
+                        #{regDt} AS REG_DT,
+                        #{regId} AS REG_ID,
+                        #{modDt} AS MOD_DT,
+                        #{modId} AS MOD_ID,
+                        C.RCVKIND,
+                        C.FIX_PROD_FG
+                        FROM TB_HQ_PRODUCT_SDSEL_PROD C
+                        WHERE 1=1
+                        AND C.HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND C.SDSEL_CLASS_CD = #{copySdselClassCd}
+                    ) B
+                ON  (
+                        A.HQ_OFFICE_CD = B.HQ_OFFICE_CD AND A.SDSEL_CLASS_CD = B.SDSEL_CLASS_CD AND A.PROD_CD = B.PROD_CD
+                    )
+                WHEN NOT MATCHED THEN
+                    INSERT (
+                        A.HQ_OFFICE_CD,
+                        A.SDSEL_CLASS_CD,
+                        A.PROD_CD,
+                        A.ADD_PROD_UPRC,
+                        A.ADD_PROD_QTY,
+                        A.DISP_SEQ,
+                        A.USE_YN,
+                        A.REG_DT,
+                        A.REG_ID,
+                        A.MOD_DT,
+                        A.MOD_ID,
+                        A.RCVKIND,
+                        A.FIX_PROD_FG
+                    ) VALUES (
+                        B.HQ_OFFICE_CD,
+                        B.SDSEL_CLASS_CD,
+                        B.PROD_CD,
+                        B.ADD_PROD_UPRC,
+                        B.ADD_PROD_QTY,
+                        B.DISP_SEQ,
+                        B.USE_YN,
+                        B.REG_DT,
+                        B.REG_ID,
+                        B.MOD_DT,
+                        B.MOD_ID,
+                        B.RCVKIND,
+                        B.FIX_PROD_FG
+                    )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                MERGE INTO TB_MS_PRODUCT_SDSEL_PROD A
+                USING (
+                        SELECT
+                        C.STORE_CD,
+                        #{applySdselClassCd} AS SDSEL_CLASS_CD,
+                        C.PROD_CD,
+                        C.ADD_PROD_UPRC,
+                        C.ADD_PROD_QTY,
+                        C.DISP_SEQ,
+                        C.USE_YN,
+                        #{regDt} AS REG_DT,
+                        #{regId} AS REG_ID,
+                        #{modDt} AS MOD_DT,
+                        #{modId} AS MOD_ID,
+                        C.RCVKIND,
+                        C.FIX_PROD_FG,
+                        C.SOLD_OUT_YN
+                        FROM TB_MS_PRODUCT_SDSEL_PROD C
+                        WHERE 1=1
+                        AND C.STORE_CD = #{storeCd}
+                        AND C.SDSEL_CLASS_CD = #{copySdselClassCd}
+                    ) B
+                ON  (
+                        A.STORE_CD = B.STORE_CD AND A.SDSEL_CLASS_CD = B.SDSEL_CLASS_CD AND A.PROD_CD = B.PROD_CD
+                    )
+                WHEN NOT MATCHED THEN
+                    INSERT (
+                        A.STORE_CD,
+                        A.SDSEL_CLASS_CD,
+                        A.PROD_CD,
+                        A.ADD_PROD_UPRC,
+                        A.ADD_PROD_QTY,
+                        A.DISP_SEQ,
+                        A.USE_YN,
+                        A.REG_DT,
+                        A.REG_ID,
+                        A.MOD_DT,
+                        A.MOD_ID,
+                        A.RCVKIND,
+                        A.FIX_PROD_FG,
+                        A.SOLD_OUT_YN
+                    ) VALUES (
+                        B.STORE_CD,
+                        B.SDSEL_CLASS_CD,
+                        B.PROD_CD,
+                        B.ADD_PROD_UPRC,
+                        B.ADD_PROD_QTY,
+                        B.DISP_SEQ,
+                        B.USE_YN,
+                        B.REG_DT,
+                        B.REG_ID,
+                        B.MOD_DT,
+                        B.MOD_ID,
+                        B.RCVKIND,
+                        B.FIX_PROD_FG,
+                        B.SOLD_OUT_YN
+                    )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 사이드메뉴-선택메뉴 탭-선택분류복사 팝업 - 선택상품 매장에 내려줌 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getSdselClassCopySaveMergeProdStore" parameterType="sideMenuSelClassVO">
+        /* SideMenuMapper.getSdselClassCopySaveMergeProdStore */
+        MERGE INTO TB_MS_PRODUCT_SDSEL_PROD A
+        USING (
+                SELECT
+                D.STORE_CD,
+                #{applySdselClassCd} AS SDSEL_CLASS_CD,
+                C.PROD_CD,
+                C.ADD_PROD_UPRC,
+                C.ADD_PROD_QTY,
+                C.DISP_SEQ,
+                C.USE_YN,
+                #{regDt} AS REG_DT,
+                #{regId} AS REG_ID,
+                #{modDt} AS MOD_DT,
+                #{modId} AS MOD_ID,
+                C.RCVKIND,
+                C.FIX_PROD_FG,
+                '' AS SOLD_OUT_YN
+                FROM TB_HQ_PRODUCT_SDSEL_PROD C,
+                TB_MS_STORE D
+                WHERE 1=1
+                AND C.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND C.SDSEL_CLASS_CD = #{copySdselClassCd}
+                AND D.HQ_OFFICE_CD = C.HQ_OFFICE_CD
+            ) B
+        ON  (
+                A.STORE_CD = B.STORE_CD AND A.SDSEL_CLASS_CD = B.SDSEL_CLASS_CD AND A.PROD_CD = B.PROD_CD
+            )
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.STORE_CD,
+                A.SDSEL_CLASS_CD,
+                A.PROD_CD,
+                A.ADD_PROD_UPRC,
+                A.ADD_PROD_QTY,
+                A.DISP_SEQ,
+                A.USE_YN,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID,
+                A.RCVKIND,
+                A.FIX_PROD_FG,
+                A.SOLD_OUT_YN
+            ) VALUES (
+                B.STORE_CD,
+                B.SDSEL_CLASS_CD,
+                B.PROD_CD,
+                B.ADD_PROD_UPRC,
+                B.ADD_PROD_QTY,
+                B.DISP_SEQ,
+                B.USE_YN,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID,
+                B.RCVKIND,
+                B.FIX_PROD_FG,
+                B.SOLD_OUT_YN
+            )
+    </insert>
+
 </mapper>
 
 

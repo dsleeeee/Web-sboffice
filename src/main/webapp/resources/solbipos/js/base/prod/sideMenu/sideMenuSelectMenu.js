@@ -94,6 +94,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
         }
       }
     });
+
     // 선택그룹 그리드 에디팅 방지
     s.beginningEdit.addHandler(function (s, e) {
       var col = s.columns[e.col];
@@ -104,6 +105,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
         }
       }
     });
+
     // 선택그룹 그리드 선택 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function(e) {
       var ht = s.hitTest(e);
@@ -120,6 +122,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
               $("#btnAddSelClass").hide();
               $("#btnDelSelClass").hide();
               $("#btnSaveSelClass").hide();
+              $("#btnSdselClassCopy").hide();
 
               $("#btnUpSelProd").hide();
               $("#btnDownSelProd").hide();
@@ -132,6 +135,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
               $("#btnAddSelClass").show();
               $("#btnDelSelClass").show();
               $("#btnSaveSelClass").show();
+              $("#btnSdselClassCopy").show();
 
               $("#btnUpSelProd").hide();
               $("#btnDownSelProd").hide();
@@ -150,6 +154,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
     });
   };
 
+  // <-- 검색 호출 -->
   $scope.$on('sideMenuSelectGroupCtrl', function(event, data) {
     // 초기 버튼 셋팅
     // 선택분류 버튼
@@ -158,6 +163,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
     $("#btnAddSelClass").hide();
     $("#btnDelSelClass").hide();
     $("#btnSaveSelClass").hide();
+    $("#btnSdselClassCopy").hide();
 
     // 선택상품버튼
     $("#btnUpSelProd").hide();
@@ -234,6 +240,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
       // <-- //그리드 visible -->
     }, false);
   };
+  // <-- //검색 호출 -->
 
   // 선택그룹 그리드 행 조회(검색조건 포함)
   $scope.srchRow = function() {
@@ -244,6 +251,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
     $("#btnAddSelClass").hide();
     $("#btnDelSelClass").hide();
     $("#btnSaveSelClass").hide();
+    $("#btnSdselClassCopy").hide();
 
     // 선택상품버튼
     $("#btnUpSelProd").hide();
@@ -490,10 +498,10 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
 
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
-
   };
 
 }]);
+
 
 /**
  * 사이드메뉴 선택분류 그리드 생성
@@ -862,6 +870,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     }
     $scope.flex.select(movedRows, 1);
   };
+
   // 아래로 옮기기 버튼
   $scope.rowMoveDown = function() {
     var movedRows = 0;
@@ -880,6 +889,38 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     }
     $scope.flex.select(movedRows, 1);
   };
+
+  // 선택 매장
+  $scope.selectedSdselClassCopy;
+  $scope.setSelectedSdselClassCopy = function(store) {
+    $scope.selectedSdselClassCopy = store;
+  };
+  $scope.getSelectedSdselClassCopy = function(){
+    return $scope.selectedSdselClassCopy;
+  };
+
+  // 수신자추가
+  $scope.sdselClassCopy = function() {
+    var params = {};
+    params.sdselGrpCd = $scope.getSdselGrpCd();
+    params.sdselGrpCdNm = $("#sideSelectGroupTitle").html();
+    $scope.setSelectedSdselClassCopy(params);
+
+    $scope.wjSdselClassCopyLayer.show(true);
+    event.preventDefault();
+  };
+
+  // 화면 ready 된 후 설정
+  angular.element(document).ready(function () {
+
+    // 선택분류복사 팝업 핸들러 추가
+    $scope.wjSdselClassCopyLayer.shown.addHandler(function (s) {
+      setTimeout(function() {
+        $scope._broadcast('sdselClassCopyCtrl', $scope.getSelectedSdselClassCopy());
+      }, 50)
+    });
+  });
+
 }]).factory('sdselGrpCd', function () {
   // 사이드메뉴 선택분류 그리드 의 변수 값 영역
   var sdselGrpCd = {};
@@ -891,6 +932,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
   };
   return sdselGrpCd;
 });
+
 
 /**
  * 사이드메뉴 선택상품 그리드 생성
@@ -968,7 +1010,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
     //     }
     //   }
     // });
-  };
+};
   // 선택상품 그리드 조회
   $scope.$on('sideMenuSelectProdCtrl', function(event, data) {
     // scope 영역에 변수 Set
@@ -979,6 +1021,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
     // 파라미터
     var params = {};
     params.sdselClassCd = data.sdselClassCd;
+
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquiryMain('/base/prod/sideMenu/menuProd/list.sb', params,function() {
       // <-- 그리드 visible -->
@@ -1018,6 +1061,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
     $("#btnAddSelClass").hide();
     $("#btnDelSelClass").hide();
     $("#btnSaveSelClass").hide();
+    $("#btnSdselClassCopy").hide();
 
     // 선택상품버튼
     $("#btnUpSelProd").hide();
@@ -1144,7 +1188,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
       }
 
       // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-      $scope._save('/base/prod/sideMenu/menuProd/save.sb', params, function() {
+      $scope._save('/base/prod/sideMenu/menuClass/save.sb', params, function() {
 
           // 선택상품 리스트 재조회
           var params = {};
