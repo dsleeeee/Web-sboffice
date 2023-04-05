@@ -4,6 +4,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.prodKitchenprintLink.service.ProdKitchenprintLinkService;
 import kr.co.solbipos.base.prod.prodKitchenprintLink.service.ProdKitchenprintLinkVO;
 import kr.co.solbipos.pos.loginstatus.enums.SysStatFg;
@@ -224,6 +225,16 @@ public class ProdKitchenprintLinkServiceImpl implements ProdKitchenprintLinkServ
     @Override
     public List<DefaultMap<String>> getPrinterList(ProdKitchenprintLinkVO prodKitchenprintLinkVO, SessionInfoVO sessionInfoVO) {
         prodKitchenprintLinkVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        // 매장브랜드 '전체' 일때
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            if (prodKitchenprintLinkVO.getStoreHqBrandCd() == "" || prodKitchenprintLinkVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = prodKitchenprintLinkVO.getUserBrands().split(",");
+                prodKitchenprintLinkVO.setUserBrandList(userBrandList);
+            }
+        }
+
         return prodKitchenprintLinkMapper.getPrinterList(prodKitchenprintLinkVO);
     }
 
