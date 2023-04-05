@@ -72,6 +72,12 @@
                         <s:message code="touchKey.storeModGrp" />
                     </button>
                 </c:if>
+                <c:if test="${orgnFg == 'STORE'}">
+                    <%-- 매장사용터치키설정 --%>
+                    <button class="btn_blk ml5 fr" id="btnTouchKeyEnv" ng-click="$broadcast('showPopUpTouchKeyEnv')">
+                        <s:message code="touchKey.storeUseTouchKey"/>
+                    </button>
+                </c:if>
                 <%-- 신규생성 취소 --%>
                 <%--<button class="btn_skyblue fl ml20" id="btnCancleNewGrp" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.cancle"/></button>--%>
                 <%-- 터치키 신규 등록인지 수정인지 여부 파악을 위해--%>

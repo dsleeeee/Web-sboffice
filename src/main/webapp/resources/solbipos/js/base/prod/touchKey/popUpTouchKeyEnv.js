@@ -118,7 +118,7 @@ app.controller('popUpTouchKeyEnvCtrl', ['$scope', '$http', function ($scope, $ht
                     item.envstVal = $scope.touchKeyEnvCombo.selectedValue;
 
                     // 키맵매장적용 여부
-                    if($("#chkApplyStore").is(":checked")){
+                    if($("#chkApplyStore").is(":checked") && orgnFg === "HQ"){
                         item.chkApplyStore = "Y";
                         item.tukeyGrpCd = $scope.touchKeyEnvCombo.selectedValue;
                     }else{
@@ -128,6 +128,7 @@ app.controller('popUpTouchKeyEnvCtrl', ['$scope', '$http', function ($scope, $ht
                 }
             }
         }
+        console.log(params);
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/base/prod/touchKey/touchKey/saveTouchKeyEnv.sb", params, function () {
@@ -138,9 +139,11 @@ app.controller('popUpTouchKeyEnvCtrl', ['$scope', '$http', function ($scope, $ht
 
     // 닫기
     $scope.close = function () {
-        $("#srchEnvStoreCd").val("");
-        $("#srchEnvStoreNm").val("");
-        $scope.srchEnvSysStatFgCombo.selectedIndex = 0;
+        if(orgnFg === "HQ"){
+            $("#srchEnvStoreCd").val("");
+            $("#srchEnvStoreNm").val("");
+            $scope.srchEnvSysStatFgCombo.selectedIndex = 0;
+        }
         $scope.touchKeyEnvCombo.selectedIndex = 0;
     };
 
