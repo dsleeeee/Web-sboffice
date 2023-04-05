@@ -25,7 +25,7 @@ app.controller('storePosVersionCtrl', ['$scope', '$http', '$timeout', function (
     $scope._makePickColumns("storePosVersionCtrl");
 
     // 그리드 DataMap 설정
-    $scope.progFgDataMap = new wijmo.grid.DataMap(progFg, 'value', 'name');
+    $scope.verTypeFgDataMap = new wijmo.grid.DataMap(verTypeFg, 'value', 'name');
     $scope.areaCdDataMap = new wijmo.grid.DataMap(areaCd, 'value', 'name'); // 지역
     $scope.clsFgDataMap = new wijmo.grid.DataMap(clsFg, 'value', 'name'); // 용도
     $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name'); // 상태
