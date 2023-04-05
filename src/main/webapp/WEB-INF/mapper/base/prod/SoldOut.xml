@@ -21,9 +21,9 @@
     -->
     <select id="getProdList" parameterType="soldOutVO" resultType="DefaultMap">
         /* USE : SoldOutMapper.getProdList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
         tmp.STORE_CD,
+        tms.STORE_NM,
         tmp.PROD_CD,
         tmp.PROD_NM,
         NVL(tmp.SOLD_OUT_YN, 'N') AS SOLD_OUT_YN,
@@ -44,7 +44,6 @@
         tmp.USE_YN,
         tmp.REG_FG,
         tmpb.BARCD_CD AS BAR_CD
-        <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
         TB_MS_PRODUCT tmp
         LEFT OUTER JOIN (
@@ -72,8 +71,10 @@
         LEFT OUTER JOIN TB_MS_PRODUCT_BARCD tmpb ON
         tmpb.STORE_CD = tmp.STORE_CD
         AND tmpb.PROD_CD = tmp.PROD_CD
+        LEFT OUTER JOIN TB_MS_STORE_INFO tmsi ON
+        tmsi.STORE_CD = tmp.STORE_CD
         WHERE 1=1
-        AND tmp.STORE_CD = #{storeCd}
+        AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test="chkDt == false">
             <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                 <![CDATA[
@@ -95,16 +96,13 @@
                                         SELECT
                                         PROD_CLASS_CD
                                         FROM TB_MS_PRODUCT_CLASS
-                                        WHERE STORE_CD = #{storeCd}
-                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
-                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                                        WHERE STORE_CD = tmp.STORE_CD
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = tmp.STORE_CD
+                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = tmp.STORE_CD
                                     )
         </if>
         <if test="useYn != null and useYn != ''">
             AND tmp.USE_YN = #{useYn} --사용여부
-        </if>
-        <if test="hqBrandNm != null and hqBrandNm != ''">
-            AND tmb.MS_BRAND_NM LIKE '%'||#{hqBrandNm}||'%' -- 브랜드명
         </if>
         <if test='soldOutYn != null and soldOutYn == "Y"'> -- 품절여부
             AND tmp.SOLD_OUT_YN = #{soldOutYn}
@@ -113,13 +111,70 @@
             AND (tmp.SOLD_OUT_YN = #{soldOutYn}
             OR  tmp.SOLD_OUT_YN IS NULL)
         </if>
+        <if test='storeCds != null and storeCds != ""'>
+            AND tmp.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+
+        <if test='prodCds != null and prodCds != ""'>
+            AND tmp.PROD_CD IN
+            <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+            AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+        </if>
+        <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 상품브랜드 전체일때
+                AND tmp.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
         AND (
                 ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
                 OR
                 ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
             )
-        ORDER BY tmp.PROD_CD ASC
-        <include refid="CmmSQL.PagingTemplateBottom"/>
+        ORDER BY tms.STORE_CD, tmp.PROD_CD ASC
     </select>
 
     <!-- 상품 상세 조회 -->

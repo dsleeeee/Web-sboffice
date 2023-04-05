@@ -175,7 +175,7 @@
                 OR
                 ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
             )
-        ORDER BY tmp.PROD_CD ASC
+        ORDER BY tms.STORE_CD, tmp.PROD_CD ASC
     </select>
 
     <!-- 상품 상세 조회 -->

@@ -50,7 +50,31 @@ public class SoldOutServiceImpl implements SoldOutService {
         if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
             soldOutVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
+        soldOutVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         soldOutVO.setUserId(sessionInfoVO.getUserId());
+
+        // 매장 array 값 세팅
+        String[] storeCds = soldOutVO.getStoreCds().split(",");
+        soldOutVO.setStoreCdList(storeCds);
+
+        // 상품 array 값 세팅
+        if (soldOutVO.getProdCds() != null && !"".equals(soldOutVO.getProdCds())) {
+            String[] prodCdList = soldOutVO.getProdCds().split(",");
+            soldOutVO.setProdCdList(prodCdList);
+        }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 매장브랜드, 상품브랜드가 '전체' 일때
+            if (soldOutVO.getStoreHqBrandCd() == "" || soldOutVO.getStoreHqBrandCd() == null || soldOutVO.getProdHqBrandCd() == "" || soldOutVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (soldOutVO.getUserBrands() != null && !"".equals(soldOutVO.getUserBrands())) {
+                    String[] userBrandList = soldOutVO.getUserBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        soldOutVO.setUserBrandList(userBrandList);
+                    }
+                }
+            }
+        }
 
         return soldOutMapper.getProdList(soldOutVO);
     }

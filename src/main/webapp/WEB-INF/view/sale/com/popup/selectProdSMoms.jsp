@@ -62,6 +62,10 @@
                 </div>
               </td>
             </c:if>
+            <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+              <th></th>
+              <td></td>
+            </c:if>
             <%-- 분류조회 --%>
             <th><s:message code="outstockReqDate.prodClass" /></th>
             <td>
