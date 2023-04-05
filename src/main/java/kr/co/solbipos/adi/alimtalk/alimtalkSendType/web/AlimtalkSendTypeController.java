@@ -400,6 +400,8 @@ public class AlimtalkSendTypeController {
         // NHN API 응답(발신프로필 등록)
         ApiSenderReceiveVO apiSenderReceiveVO = new ApiSenderReceiveVO();
 
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+
         try {
             // 객체를 JSON 타입의 String으로 변환
             String jsonString = mapper.writeValueAsString(apiSenderVO);
@@ -433,6 +435,9 @@ public class AlimtalkSendTypeController {
             //json 데이터를 클래스에 넣음.
             apiSenderReceiveVO = mapper.readValue(sb.toString(), ApiSenderReceiveVO.class);
 
+            resultMap.put("resultCode", apiSenderReceiveVO.getHeader().getResultCode());
+            resultMap.put("resultMessage", apiSenderReceiveVO.getHeader().getResultMessage());
+
             if(apiSenderReceiveVO.getHeader().getResultCode() == 0){
 
                 // 알림톡 계정정보 저장 insert
@@ -444,10 +449,6 @@ public class AlimtalkSendTypeController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        DefaultMap<Object> resultMap = new DefaultMap<Object>();
-        resultMap.put("resultCode", apiSenderReceiveVO.getHeader().getResultCode());
-        resultMap.put("resultMessage", apiSenderReceiveVO.getHeader().getResultMessage());
 
         System.out.println("WEB_ALIMTALK >>> 알림톡 계정등록 >>> API sb 끝");
 
@@ -492,6 +493,8 @@ public class AlimtalkSendTypeController {
         // NHN API 응답(발신프로필 토큰 인증)
         ApiTokenReceiveVO apiTokenReceiveVO = new ApiTokenReceiveVO();
 
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+
         try {
             // 객체를 JSON 타입의 String으로 변환
             String jsonString = mapper.writeValueAsString(apiTokenVO);
@@ -525,6 +528,10 @@ public class AlimtalkSendTypeController {
             //json 데이터를 클래스에 넣음.
             apiTokenReceiveVO = mapper.readValue(sb.toString(), ApiTokenReceiveVO.class);
 
+            resultMap.put("resultCode", apiTokenReceiveVO.getHeader().getResultCode());
+            resultMap.put("resultMessage", apiTokenReceiveVO.getHeader().getResultMessage());
+            resultMap.put("senderKey", apiTokenReceiveVO.getSender().getSenderKey());
+
             if(apiTokenReceiveVO.getHeader().getResultCode() == 0){
                 alimtalkSendTypeVO.setSenderKey(apiTokenReceiveVO.getSender().getSenderKey());
                 alimtalkSendTypeVO.setApprFg(apiTokenReceiveVO.getSender().getStatus());
@@ -538,11 +545,6 @@ public class AlimtalkSendTypeController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        DefaultMap<Object> resultMap = new DefaultMap<Object>();
-        resultMap.put("resultCode", apiTokenReceiveVO.getHeader().getResultCode());
-        resultMap.put("resultMessage", apiTokenReceiveVO.getHeader().getResultMessage());
-        resultMap.put("senderKey", apiTokenReceiveVO.getSender().getSenderKey());
 
         System.out.println("WEB_ALIMTALK >>> 알림톡 토큰등록 >>> API sb 끝");
 
@@ -590,6 +592,8 @@ public class AlimtalkSendTypeController {
         // NHN API 응답(그룹에 발신프로필 추가)
         ApiGroupReceiveVO apiGroupReceiveVO = new ApiGroupReceiveVO();
 
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+
         try {
             // 객체를 JSON 타입의 String으로 변환
             String jsonString = mapper.writeValueAsString(apiGroupVO);
@@ -623,6 +627,9 @@ public class AlimtalkSendTypeController {
             //json 데이터를 클래스에 넣음.
             apiGroupReceiveVO = mapper.readValue(sb.toString(), ApiGroupReceiveVO.class);
 
+            resultMap.put("resultCode", apiGroupReceiveVO.getHeader().getResultCode());
+            resultMap.put("resultMessage", apiGroupReceiveVO.getHeader().getResultMessage());
+
             // 해당 그룹-계정정보가 이미 NHN 사이트에 등록되있을때(-1018 This is a plusFriend that has already been added)
             if(apiGroupReceiveVO.getHeader().getResultCode() == 0 || apiGroupReceiveVO.getHeader().getResultCode() == -1018){
 
@@ -635,10 +642,6 @@ public class AlimtalkSendTypeController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        DefaultMap<Object> resultMap = new DefaultMap<Object>();
-        resultMap.put("resultCode", apiGroupReceiveVO.getHeader().getResultCode());
-        resultMap.put("resultMessage", apiGroupReceiveVO.getHeader().getResultMessage());
 
         System.out.println("WEB_ALIMTALK >>> 알림톡 그룹-계정등록 >>> API sb 끝");
 

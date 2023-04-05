@@ -1188,7 +1188,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
       }
 
       // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-      $scope._save('/base/prod/sideMenu/menuClass/save.sb', params, function() {
+      $scope._save('/base/prod/sideMenu/menuProd/save.sb', params, function() {
 
           // 선택상품 리스트 재조회
           var params = {};
