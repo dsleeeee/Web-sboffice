@@ -70,7 +70,7 @@
             </tr>
         </c:if>
         <tr>
-            <th><s:message code="kioskKeyMapResve.tuClsType" /></th>
+            <th><s:message code="kioskKeyMapResve.resveTuClsType" /></th>
             <td>
                 <div class="sb-select w100 fl">
                     <wj-combo-box
@@ -85,7 +85,24 @@
                     </wj-combo-box>
                 </div>
             </td>
-            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+            <th><s:message code="kioskKeyMapResve.envstCd" /></th>
+            <td>
+                <div class="sb-select w100 fl">
+                    <wj-combo-box
+                            id="envstCdCombo"
+                            ng-model="envstCd"
+                            control="envstCdCombo"
+                            items-source="_getComboData('envstCdCombo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                    </wj-combo-box>
+                </div>
+            </td>
+        </tr>
+        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+            <tr>
                 <%-- 매장브랜드 --%>
                 <th><s:message code="dayProd.storeHqBrand"/></th>
                 <td>
@@ -101,8 +118,8 @@
                         </wj-combo-box>
                     </div>
                 </td>
-            </c:if>
-        </tr>
+            </tr>
+        </c:if>
         </tbody>
     </table>
 
@@ -250,7 +267,7 @@
         <%--판매가--%>
         <tr class="brt">
             <th>
-                <s:message code="kioskKeyMapResve.tuClsType" />
+                <s:message code="kioskKeyMapResve.resveTuClsType" />
             </th>
             <th class="oh gr">
                 <div class="sb-select" style="width:120px; float:left;">
@@ -279,21 +296,8 @@
     </table>
 
     <div class="mt10 oh sb-select dkbr">
-        <%-- 페이지 스케일  --%>
-        <wj-combo-box
-                class="w100px fl"
-                id="listScaleBox"
-                ng-model="listScale"
-                control="listScaleCombo"
-                items-source="_getComboData('listScaleBox')"
-                display-member-path="name"
-                selected-value-path="value"
-                is-editable="false"
-                initialized="_initComboBox(s)">
-        </wj-combo-box>
-
-        <%-- 저장 --%>
-        <button class="btn_skyblue fr" ng-click="add()"><s:message code="cmm.add" /></button>
+        <button class="btn_skyblue fr" ng-click="add('4069')"><s:message code="kioskKeyMapResve.storeEnv4069" /></button>
+        <button class="btn_skyblue fr mr5" ng-click="add('4068')"><s:message code="kioskKeyMapResve.storeEnv4068" /></button>
         <button class="btn_skyblue fr mr5" ng-click="save()"><s:message code="cmm.edit" /></button>
         <button class="btn_skyblue fr mr5" ng-click="del()"><s:message code="cmm.del" /></button>
     </div>
@@ -324,7 +328,8 @@
                 <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.momsTeam"/>" binding="momsTeam" is-read-only="true" width="80" align="center" data-map="momsTeamDataMap" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.momsAcShop"/>" binding="momsAcShop" width="80" align="center" data-map="momsAcShopDataMap" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="" binding="orgStartDate" width="100" align="center" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.modDt"/>" binding="modDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.nowTuClsType"/>" binding="nowTuClsType" width="130" align="center" is-read-only="true" data-map="tuClsTypeDataMap"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.orgModDt"/>" binding="modDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.startDate"/>" binding="startDate" width="150" align="center">
                     <wj-flex-grid-cell-template cell-type="CellEdit">
                         <div class="sb-select">
@@ -338,7 +343,7 @@
                         </div>
                     </wj-flex-grid-cell-template>
                 </wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.org"/>" binding="orgTouchKeyGrp" is-read-only="true" width="100" align="center" data-map="tuClsTypeDataMap" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="" binding="orgTouchKeyGrp" is-read-only="true" width="100" align="center" data-map="tuClsTypeDataMap" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.tuClsType"/>" binding="tuClsType" width="100" align="center" data-map="tuClsTypeDataMap"></wj-flex-grid-column>
 
 
@@ -379,7 +384,7 @@
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMapResve/kioskKeyMapResve.js?ver=20230327.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMapResve/kioskKeyMapResve.js ver=20230327.02" charset="utf-8"></script>
 
 <%-- 예약 추가 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/kioskKeyMapResve/kioskKeyMapResveAdd.jsp">

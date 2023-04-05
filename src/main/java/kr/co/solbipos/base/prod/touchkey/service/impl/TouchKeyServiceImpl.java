@@ -594,7 +594,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
             String envstVal1248 = CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1248"), "0");
 
             // 매장에 터치키 XML 정보 업데이트
-            keyMapper.saveStoreConfgXml(touchKeyVO);
+//            keyMapper.saveStoreConfgXml(touchKeyVO);//판매터치키 XML 데이터 미사용 처리 20230331
             touchKeyVO.setOrgnFg("S");
             // 기적용된 터치키 그룹 정보 삭제
             keyMapper.deleteTouchkeyGrp(touchKeyVO);
@@ -970,7 +970,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         touchKeyVO.setTukeyGrpCd(tukeyGrpCd);
 
         // 1. XML 복사
-        result += keyMapper.copyTouchKeyGrpXml(touchKeyVO);
+//        result += keyMapper.copyTouchKeyGrpXml(touchKeyVO);//판매터치키 XML 데이터 미사용 처리 20230331
 
         // 2. 터치키 Class 복사
         result += keyMapper.copyTouchKeyGrpClass(touchKeyVO);
@@ -1013,7 +1013,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         param.put("hqOfficeCd", sessionInfoVO.getHqOfficeCd());
         param.put("storeCd", sessionInfoVO.getStoreCd());
         param.put("confgFg", ConfgFg.TOUCH_KEY.getCode());
-        keyMapper.deleteTouchKeyConfgXml(param);
+//        keyMapper.deleteTouchKeyConfgXml(param);  //판매터치키 XML 데이터 미사용 처리 20230331
         return result;
     }
 
@@ -1071,7 +1071,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                 String envstVal1248 = CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1248"), "0");
 
                 // 매장에 터치키 XML 정보 업데이트
-                keyMapper.saveStoreConfgXml(touchKeyVO);
+//                keyMapper.saveStoreConfgXml(touchKeyVO);//판매터치키 XML 데이터 미사용 처리 20230331
                 touchKeyVO.setOrgnFg("S");
                 // 기적용된 터치키 그룹 정보 삭제
                 keyMapper.deleteTouchkeyGrp(touchKeyVO);

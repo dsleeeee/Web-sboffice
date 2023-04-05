@@ -612,7 +612,7 @@ public class StoreManageServiceImpl implements StoreManageService{
                         confgXmlVO.setModId(sessionInfoVO.getUserId());
 
                         confgXmlVO.setConfgFg(ConfgFg.TOUCH_KEY); // 터치키
-                        procCnt += mapper.copyStoreConfXml(confgXmlVO);
+//                        procCnt += mapper.copyStoreConfXml(confgXmlVO); //판매터치키 XML 데이터 미사용 처리 20230331
 
                         // 포스기능 XML 복사 (TB_WB_POS_CONFG_XML) - 포스 수 만큼
 //                    int installPosCnt =  Integer.parseInt(storeManageVO.getInstallPosCnt());

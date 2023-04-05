@@ -70,7 +70,7 @@
             </tr>
         </c:if>
         <tr>
-            <th><s:message code="touchKeyResve.touchKeyGrp" /></th>
+            <th><s:message code="touchKeyResve.resveTouchKeyGrp" /></th>
             <td>
                 <div class="sb-select w100 fl">
                     <wj-combo-box
@@ -243,13 +243,13 @@
 
     <table class="searchTbl mt10" id="tblHqChange" style="display: none;">
         <colgroup>
-            <col class="w13" />
-            <col class="w87" />
+            <col class="w15" />
+            <col class="w85" />
         </colgroup>
         <tbody>
         <tr class="brt">
             <th>
-                <s:message code="touchKeyResve.touchKeyGrp" />
+                <s:message code="touchKeyResve.resveTouchKeyGrp" />
             </th>
             <th class="oh gr">
                 <div class="sb-select" style="width:120px; float:left;">
@@ -278,21 +278,7 @@
     </table>
 
     <div class="mt10 oh sb-select dkbr">
-        <%-- 페이지 스케일  --%>
-        <wj-combo-box
-                class="w100px fl"
-                id="listScaleBox"
-                ng-model="listScale"
-                control="listScaleCombo"
-                items-source="_getComboData('listScaleBox')"
-                display-member-path="name"
-                selected-value-path="value"
-                is-editable="false"
-                initialized="_initComboBox(s)">
-        </wj-combo-box>
-
-        <%-- 저장 --%>
-        <button class="btn_skyblue fr" ng-click="add()"><s:message code="cmm.add" /></button>
+        <button class="btn_skyblue fr" ng-click="add()"><s:message code="touchKeyResve.storeEnv" /></button>
         <button class="btn_skyblue fr mr5" ng-click="save()"><s:message code="cmm.edit" /></button>
         <button class="btn_skyblue fr mr5" ng-click="del()"><s:message code="cmm.del" /></button>
     </div>
@@ -321,7 +307,8 @@
                 <wj-flex-grid-column header="<s:message code="touchKeyResve.brand"/>" binding="brand" is-read-only="true" width="80" align="center" data-map="brandDataMap" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="touchKeyResve.momsTeam"/>" binding="momsTeam" is-read-only="true" width="80" align="center" data-map="momsTeamDataMap" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="touchKeyResve.momsAcShop"/>" binding="momsAcShop" width="80" align="center" data-map="momsAcShopDataMap" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="touchKeyResve.modDt"/>" binding="modDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="touchKeyResve.env4038"/>" binding="env4038" width="100" align="center" is-read-only="true" data-map="touchKeyGrpDataMap"S></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="touchKeyResve.orgModDt"/>" binding="modDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="" binding="orgStartDate" width="100" align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="touchKeyResve.startDate"/>" binding="startDate" width="150" align="center">
                     <wj-flex-grid-cell-template cell-type="CellEdit">
@@ -336,8 +323,8 @@
                         </div>
                     </wj-flex-grid-cell-template>
                 </wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="touchKeyResve.org"/>" binding="orgTouchKeyGrp" is-read-only="true" width="100" align="center" data-map="touchKeyGrpDataMap" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="touchKeyResve.touchKeyGrp"/>" binding="touchKeyGrp" width="100" align="center" data-map="touchKeyGrpDataMap"></wj-flex-grid-column>
+                <wj-flex-grid-column header="" binding="orgTouchKeyGrp" is-read-only="true" width="100" align="center" data-map="touchKeyGrpDataMap" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="touchKeyResve.resveTouchKeyGrp"/>" binding="touchKeyGrp" width="100" align="center" data-map="touchKeyGrpDataMap"></wj-flex-grid-column>
 
             </wj-flex-grid>
         </div>
@@ -376,7 +363,7 @@
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKeyResve/touchKeyResve.js?ver=20230327.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKeyResve/touchKeyResve.js?ver=20230327.02" charset="utf-8"></script>
 
 <%-- 예약 추가 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/touchKeyResve/touchKeyResveAdd.jsp">

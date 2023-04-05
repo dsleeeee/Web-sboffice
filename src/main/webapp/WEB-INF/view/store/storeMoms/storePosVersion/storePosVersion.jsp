@@ -219,7 +219,7 @@
         <wj-flex-grid-column header="<s:message code="storePosVersion.posNo"/>" binding="posNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storePosVersion.posNm"/>" binding="posNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storePosVersion.posVerNo"/>" binding="posVerNo" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storePosVersion.progFg"/>" binding="progFg" data-map="progFgDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storePosVersion.verTypeFg"/>" binding="verTypeFg" data-map="verTypeFgDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storePosVersion.maxVerSerNo"/>" binding="maxVerSerNo" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
@@ -227,7 +227,7 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storePosVersion/storePosVersion.js?ver=20230330.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storePosVersion/storePosVersion.js?ver=20230330.02" charset="utf-8"></script>
 
 <script type="text/javascript">
   var orgnFg = "${orgnFg}";
@@ -236,7 +236,7 @@
   var clsFg = ${ccu.getCommCodeSelect("001")};
   var sysStatFg = ${ccu.getCommCodeSelect("005")};
   var areaCd = ${ccu.getCommCodeSelect("061")};
-  var progFg      = ${ccu.getCommCodeExcpAll("059")};
+  var verTypeFg = ${ccu.getCommCodeExcpAll("059")};
 
   // List 형식("" 안붙임)
   var momsHqBrandCdComboList = ${momsHqBrandCdComboList};

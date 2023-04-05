@@ -3,6 +3,7 @@ package kr.co.solbipos.application.session.auth.service.impl;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.security.EncUtil;
 import kr.co.solbipos.application.session.auth.enums.LoginOrigin;
 import kr.co.solbipos.application.session.auth.enums.LoginResult;
@@ -242,7 +243,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         // 기본사용자로 세팅하기위해 userId를 storeCd 의 소문자로 변경한다.
-        sessionInfoVO.setUserId(sessionInfoVO.getStoreCd().toLowerCase());
+        sessionInfoVO.setUserId(CmmUtil.nvl(sessionInfoVO.getUserId(), sessionInfoVO.getStoreCd().toLowerCase()));
         // userId 로 사용자 조회
         SessionInfoVO posSi = selectWebUser(sessionInfoVO);
 

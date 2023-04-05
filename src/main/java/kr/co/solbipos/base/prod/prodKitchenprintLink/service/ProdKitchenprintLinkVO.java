@@ -62,7 +62,7 @@ public class ProdKitchenprintLinkVO extends PageVO {
     private String prterNo;
 
     /** 프린터명 */
-    private String pprterNm;
+    private String prterNm;
 
     /** 매장상태구분 */
     private SysStatFg sysStatFg;
@@ -87,6 +87,39 @@ public class ProdKitchenprintLinkVO extends PageVO {
 
     /** 메뉴그룹 */
     private String storeGroup;
+
+    /** 환경설정 [1250 맘스터치] */
+    private String momsEnvstVal;
+
+    /** 사용자별 브랜드코드(매장) */
+    private String[] userBrandList;
+
+    /** 사용자별 브랜드코드 */
+    private String userBrands;
+
+    /** 매장브랜드코드 */
+    private String storeHqBrandCd;
+
+    /** 팀별 */
+    private String momsTeam;
+
+    /** AC점포별 */
+    private String momsAcShop;
+
+    /** 지역구분 */
+    private String momsAreaFg;
+
+    /** 상권 */
+    private String momsCommercial;
+
+    /** 점포유형 */
+    private String momsShopType;
+
+    /** 매장관리타입 */
+    private String momsStoreManageType;
+
+    /** 지사코드 */
+    private String branchCd;
 
     public String getSysClosureDate() {
         return sysClosureDate;
@@ -216,12 +249,12 @@ public class ProdKitchenprintLinkVO extends PageVO {
         this.prterNo = prterNo;
     }
 
-    public String getPprterNm() {
-        return pprterNm;
+    public String getPrterNm() {
+        return prterNm;
     }
 
-    public void setPprterNm(String pprterNm) {
-        this.pprterNm = pprterNm;
+    public void setPrterNm(String prterNm) {
+        this.prterNm = prterNm;
     }
 
     public String getUserId() {
@@ -270,5 +303,93 @@ public class ProdKitchenprintLinkVO extends PageVO {
 
     public void setStoreGroup(String storeGroup) {
         this.storeGroup = storeGroup;
+    }
+
+    public String getMomsEnvstVal() {
+        return momsEnvstVal;
+    }
+
+    public void setMomsEnvstVal(String momsEnvstVal) {
+        this.momsEnvstVal = momsEnvstVal;
+    }
+
+    public String[] getUserBrandList() {
+        return userBrandList;
+    }
+
+    public void setUserBrandList(String[] userBrandList) {
+        this.userBrandList = userBrandList;
+    }
+
+    public String getUserBrands() {
+        return userBrands;
+    }
+
+    public void setUserBrands(String userBrands) {
+        this.userBrands = userBrands;
+    }
+
+    public String getStoreHqBrandCd() {
+        return storeHqBrandCd;
+    }
+
+    public void setStoreHqBrandCd(String storeHqBrandCd) {
+        this.storeHqBrandCd = storeHqBrandCd;
+    }
+
+    public String getMomsTeam() {
+        return momsTeam;
+    }
+
+    public void setMomsTeam(String momsTeam) {
+        this.momsTeam = momsTeam;
+    }
+
+    public String getMomsAcShop() {
+        return momsAcShop;
+    }
+
+    public void setMomsAcShop(String momsAcShop) {
+        this.momsAcShop = momsAcShop;
+    }
+
+    public String getMomsAreaFg() {
+        return momsAreaFg;
+    }
+
+    public void setMomsAreaFg(String momsAreaFg) {
+        this.momsAreaFg = momsAreaFg;
+    }
+
+    public String getMomsCommercial() {
+        return momsCommercial;
+    }
+
+    public void setMomsCommercial(String momsCommercial) {
+        this.momsCommercial = momsCommercial;
+    }
+
+    public String getMomsShopType() {
+        return momsShopType;
+    }
+
+    public void setMomsShopType(String momsShopType) {
+        this.momsShopType = momsShopType;
+    }
+
+    public String getMomsStoreManageType() {
+        return momsStoreManageType;
+    }
+
+    public void setMomsStoreManageType(String momsStoreManageType) {
+        this.momsStoreManageType = momsStoreManageType;
+    }
+
+    public String getBranchCd() {
+        return branchCd;
+    }
+
+    public void setBranchCd(String branchCd) {
+        this.branchCd = branchCd;
     }
 }

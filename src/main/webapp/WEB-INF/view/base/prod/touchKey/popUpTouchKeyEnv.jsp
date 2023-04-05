@@ -8,7 +8,7 @@
 
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font">
-            <s:message code="touchKey.grp" />
+            <s:message code="touchKey.storeUseTouchKey" />
             <a href="" class="wj-hide btn_close" ng-click="close()"></a>
         </div>
 
@@ -23,6 +23,7 @@
                     <col class="w30" />
                 </colgroup>
                 <tbody>
+                <c:if test="${orgnFg == 'HQ'}">
                 <tr>
                     <th><s:message code="kioskKeyMap.storeCd" /></th>
                     <td>
@@ -33,21 +34,24 @@
                         <input type="text" id="srchEnvStoreNm"/>
                     </td>
                 </tr>
+                </c:if>
                 <tr>
-                    <%-- 매장상태구분 --%>
-                    <th><s:message code="kioskKeyMap.sysStatFg" /></th>
-                    <td>
-                        <div class="sb-select w100">
-                            <wj-combo-box
-                                    id="srchEnvSysStatFg"
-                                    items-source="_getComboData('srchEnvSysStatFg')"
-                                    display-member-path="name"
-                                    selected-value-path="value"
-                                    is-editable="false"
-                                    control="srchEnvSysStatFgCombo">
-                            </wj-combo-box>
-                        </div>
-                    </td>
+                    <c:if test="${orgnFg == 'HQ'}">
+                        <%-- 매장상태구분 --%>
+                        <th><s:message code="kioskKeyMap.sysStatFg" /></th>
+                        <td>
+                            <div class="sb-select w100">
+                                <wj-combo-box
+                                        id="srchEnvSysStatFg"
+                                        items-source="_getComboData('srchEnvSysStatFg')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        control="srchEnvSysStatFgCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                    </c:if>
                     <%-- 터치키 --%>
                     <th><s:message code="touchKey.grp"/></th>
                     <td>
@@ -278,10 +282,12 @@
                                             initialized="_initComboBox(s)">
                                     </wj-combo-box>
                                 </div>
-                                <div class="fl pd5" style="padding-right: 15px;">
-                                    <div style="float: left;"><input type="checkbox" id="chkApplyStore" checked="checked"/></div>
-                                    <div style="padding-top: 3px; padding-left: 20px;"><s:message code="touchKey.applyStore" /></div>
-                                </div>
+                                <c:if test="${orgnFg == 'HQ'}">
+                                    <div class="fl pd5" style="padding-right: 15px;">
+                                        <div style="float: left;"><input type="checkbox" id="chkApplyStore" checked="checked"/></div>
+                                        <div style="padding-top: 3px; padding-left: 20px;"><s:message code="touchKey.applyStore" /></div>
+                                    </div>
+                                </c:if>
                                 <button class="btn_blue ml5 fl" id="btnInsertEnv" ng-click="btnInsertEnv()"><s:message code="cmm.apply"/></button>
                             </td>
                         </tr>
@@ -297,4 +303,4 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpTouchKeyEnv.js?ver=20230308.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpTouchKeyEnv.js?ver=20230308.03" charset="utf-8"></script>

@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup id="kioskKeyMapResveAddLayer" control="kioskKeyMapResveAddLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;">
+<wj-popup id="kioskKeyMapResveAddLayer" control="kioskKeyMapResveAddLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:90%;">
 
     <div ng-controller="kioskKeyMapResveAddCtrl">
 
@@ -37,7 +37,7 @@
                     </tr>
                 </c:if>
                 <tr>
-                    <th><s:message code="kioskKeyMapResve.tuClsType" /></th>
+                    <th><s:message code="kioskKeyMapResve.orgTuClsType" /></th>
                     <td>
                         <div class="sb-select w100 fl">
                             <wj-combo-box
@@ -216,7 +216,7 @@
                 <tbody>
                 <tr class="brt">
                     <th>
-                        <s:message code="kioskKeyMapResve.tuClsType" />
+                        <s:message code="kioskKeyMapResve.resveTuClsType" />
                     </th>
                     <th class="oh gr">
                         <div class="sb-select" style="width:120px; float:left;">
@@ -282,9 +282,9 @@
                         <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.brand"/>" binding="brand" is-read-only="true" width="80" align="center" data-map="brandDataMap" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.momsTeam"/>" binding="momsTeam" is-read-only="true" width="80" align="center" data-map="momsTeamDataMap" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.momsAcShop"/>" binding="momsAcShop" width="80" align="center" data-map="momsAcShopDataMap" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.org"/>" binding="orgTouchKeyGrp" is-read-only="true" width="90" align="center" data-map="tuClsTypeDataMap"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.modDt"/>" binding="modDt" is-read-only="true" width="130" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.update"/>" binding="tuClsType" width="90" align="center" data-map="tuClsTypeDataMap"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.orgTuClsType"/>" binding="orgTuClsType" is-read-only="true" width="90" align="center" data-map="tuClsTypeDataMap"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.orgModDt"/>" binding="modDt" is-read-only="true" width="130" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.resveTuClsType"/>" binding="tuClsType" width="90" align="center" data-map="tuClsTypeDataMap"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
                 <%--//위즈모 테이블--%>

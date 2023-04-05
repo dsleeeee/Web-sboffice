@@ -271,8 +271,8 @@
     <div id="addPrinter" class="wj-TblWrap fl" style="width:calc(100% - 275px); display: none;">
 
         <%-- 프린터연결 grid --%>
-        <div class="wj-TblWrap mt20 w100 fl" ng-controller="printerMappingCtrl">
-            <div class="wj-TblWrapBr mr10 pd10" style="height:265px;">
+        <div class="wj-TblWrap mt20 w50 fl" ng-controller="printerMappingCtrl">
+            <div class="wj-TblWrapBr mr10 pd10" style="height:535px;">
                 <div class="ml5">
                     <span class="bk"><s:message code='printerGroup.addPrinter' /></span>
                 </div>
@@ -282,7 +282,7 @@
                         <s:message code="cmm.del" />
                     </button>
                 </div>
-                <div class="wj-gridWrap" style="height:190px; overflow-x: hidden; overflow-y: hidden;">
+                <div class="wj-gridWrap" style="height:450px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"
@@ -305,17 +305,198 @@
         </div>
 
         <%-- 프린터선택 grid --%>
-        <div class="wj-TblWrap mt10 mb5 w100 fr" ng-controller="printerSelectCtrl">
-            <div class="wj-TblWrapBr mr10 pd10" style="height:255px;">
-                <div class="ml5">
-                </div>
-                <div class="updownSet oh mb10 pd5">
-                    <span class="fl bk lh30" id="lblPrinterGroup2"></span>
+        <div class="wj-TblWrap mt10 mb5 w50 fr" ng-controller="printerSelectCtrl">
+            <div class="wj-TblWrapBr mr10 pd10" style="height:535px;">
+                <table class="tblType01">
+                    <colgroup>
+                        <col class="w13" />
+                        <col class="w35" />
+                        <col class="w13" />
+                        <col class="w35" />
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <th><s:message code="printerGroup.storeCd" /></th><%--매장코드--%>
+                        <td>
+                            <input type="text" class="sb-input w100" id="srchStoreCd" ng-model="srchStoreCd"/>
+                        </td>
+                        <th><s:message code="printerGroup.storeNm" /></th><%--매장명--%>
+                        <td>
+                            <input type="text" class="sb-input w100" id="srchStoreNm" ng-model="srchStoreNm"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><s:message code="printerGroup.brand" /></th><%--브랜드--%>
+                        <td>
+                            <div class="sb-select w100">
+                                <wj-combo-box
+                                        id="srchStoreHqBrandCdCombo"
+                                        ng-model="storeHqBrandCd"
+                                        items-source="_getComboData('storeHqBrandCdCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        control="srchStoreHqBrandCdCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                        <th><s:message code="printerGroup.prterNm" /></th><%--프린터명--%>
+                        <td>
+                            <input type="text" class="sb-input w100" id="srchPrterNm" ng-model="srchPrterNm"/>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <c:if test="${sessionInfo.orgnFg == 'HQ' and momsEnvstVal == '1'}">
+                    <table class="tblType01" id="tblSearchAddShowPrter" style="display: none;">
+                        <colgroup>
+                            <col class="w15"/>
+                            <col class="w35"/>
+                            <col class="w15"/>
+                            <col class="w35"/>
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                                <%-- 팀별 --%>
+                            <th><s:message code="dayProd.momsTeam"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="srchMomsTeamCombo"
+                                            ng-model="momsTeam"
+                                            items-source="_getComboData('momsTeamCombo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            control="srchMomsTeamCombo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                                <%-- AC점포별 --%>
+                            <th><s:message code="dayProd.momsAcShop"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="srchMomsAcShopCombo"
+                                            ng-model="momsAcShop"
+                                            items-source="_getComboData('momsAcShopCombo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            control="srchMomsAcShopCombo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                                <%-- 지역구분 --%>
+                            <th><s:message code="dayProd.momsAreaFg"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="srchMomsAreaFgCombo"
+                                            ng-model="momsAreaFg"
+                                            items-source="_getComboData('momsAreaFgCombo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            control="srchMomsAreaFgCombo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                                <%-- 상권 --%>
+                            <th><s:message code="dayProd.momsCommercial"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="srchMomsCommercialCombo"
+                                            ng-model="momsCommercial"
+                                            items-source="_getComboData('momsCommercialCombo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            control="srchMomsCommercialCombo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                                <%-- 점포유형 --%>
+                            <th><s:message code="dayProd.momsShopType"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="srchMomsShopTypeCombo"
+                                            ng-model="momsShopType"
+                                            items-source="_getComboData('momsShopTypeCombo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            control="srchMomsShopTypeCombo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                                <%-- 매장관리타입 --%>
+                            <th><s:message code="dayProd.momsStoreManageType"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="srchMomsStoreManageTypeCombo"
+                                            ng-model="momsStoreManageType"
+                                            items-source="_getComboData('momsStoreManageTypeCombo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            control="srchMomsStoreManageTypeCombo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                                <%-- 지사 --%>
+                            <th><s:message code="dayProd.branchCd"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="srchBranchCdComboo"
+                                            ng-model="branchCd"
+                                            items-source="_getComboData('branchCdCombo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            control="srchBranchCdComboo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </c:if>
+
+                <div class="updownSet oh mb5 mt5">
+                    <c:if test="${momsEnvstVal == '1' and sessionInfo.orgnFg == 'HQ'}">
+                        <button class="btn_skyblue" id="btnSrchAdd" ng-click="searchAddShowChange()">
+                            <s:message code="cmm.search.addShow" />
+                        </button>
+                    </c:if>
+                    <button class="btn_skyblue" id="btnSrchPrter" ng-click="searchPrinter()">
+                        <s:message code="cmm.search" />
+                    </button>
                     <button class="btn_skyblue" id="btnAddPrinterMapping" ng-click="addPrinterMapping()">
                         <s:message code="cmm.add" />
                     </button>
                 </div>
-                <div class="wj-gridWrap" style="height:190px; overflow-x: hidden; overflow-y: hidden;">
+                <div class="wj-gridWrap" style="height:380px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"
@@ -347,7 +528,7 @@
     var prodTypeFg = ${ccu.getCommCode("008")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodKitchenprintLink/printerGroup.js?ver=20220511.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodKitchenprintLink/printerGroup.js?ver=20220511.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

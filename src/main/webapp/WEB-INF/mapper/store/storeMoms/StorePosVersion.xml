@@ -24,7 +24,7 @@
         ,		A.POS_NO
         ,		A.POS_NM
         ,		A.POS_VER_NO
-        ,		B.PROG_FG
+        ,		A.VER_TYPE_FG
         ,		B.MAX_VER_SER_NO
         FROM    TB_MS_POS A
         ,       (

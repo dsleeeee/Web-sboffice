@@ -210,7 +210,7 @@ public class ViewServiceImpl implements ViewService {
 
                 // 터치키 XML 복사
                 copyStoreEnvVO.setConfgFg(ConfgFg.TOUCH_KEY.getCode());
-                procResult = viewMapper.copyTouchKeyXML(copyStoreEnvVO);
+//                procResult = viewMapper.copyTouchKeyXML(copyStoreEnvVO); //판매터치키 XML 데이터 미사용 처리 20230331
             }
             if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.COUPON_CLASS) { // 쿠폰분류
                 procResult = viewMapper.copyCouponClass(copyStoreEnvVO);
@@ -291,7 +291,7 @@ public class ViewServiceImpl implements ViewService {
 
                 // 터치키 XML 전체복사
                 copyStoreEnvVO.setConfgFg(ConfgFg.TOUCH_KEY.getCode());
-                procResult = viewMapper.copyTouchKeyXML(copyStoreEnvVO);
+//                procResult = viewMapper.copyTouchKeyXML(copyStoreEnvVO); //판매터치키 XML 데이터 미사용 처리 20230331
 
                 viewMapper.deleteTouchKeyGrpNm(copyStoreEnvVO);
                 viewMapper.copyTouchKeyGrpNm(copyStoreEnvVO);
@@ -303,7 +303,7 @@ public class ViewServiceImpl implements ViewService {
 
                 // 터치키 선택그룹 XML 복사
                 copyStoreEnvVO.setConfgFg(ConfgFg.TOUCH_KEY.getCode());
-                procResult = viewMapper.copyTouchKeyGrpXML(copyStoreEnvVO);
+//                procResult = viewMapper.copyTouchKeyGrpXML(copyStoreEnvVO);//판매터치키 XML 데이터 미사용 처리 20230331
 
                 viewMapper.deleteTouchKeyGrpNm(copyStoreEnvVO);
                 viewMapper.copyTouchKeyGrpNm(copyStoreEnvVO);
