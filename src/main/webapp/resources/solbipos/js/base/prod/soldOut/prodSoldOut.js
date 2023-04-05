@@ -75,7 +75,7 @@ app.controller('prodSoldOutCtrl', ['$scope', '$http', '$timeout', function ($sco
   // 사용여부를 쓰는 콤보박스의 데이터
   $scope._setComboData('useYnComboData', useYnComboData);
   // 브랜드명 콤보박스
-  $scope._setComboData('hqBrandCd', brandList);
+  //$scope._setComboData('hqBrandCd', brandList);
   // 상품유형 콤보박스
   $scope._getComboDataQuery('008', 'prodTypeFgComboData');
   // 판매상품여부 콤보박스
@@ -97,6 +97,18 @@ app.controller('prodSoldOutCtrl', ['$scope', '$http', '$timeout', function ($sco
   // 품절여부 콤보박스
   $scope._setComboData("soldOutYnCombo", soldOutYnAllData); // 판매상품여부
   $scope._setComboData("soldOutYnComboChg", soldOutYnData); // 판매상품여부
+  // 매장브랜드 콤보박스
+  $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList);
+  // 상품브랜드 콤보박스
+  $scope._setComboData("srchProdHqBrandCd", userHqBrandCdComboList);
+
+  $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
+  $scope._setComboData("momsAcShopCombo", momsAcShopComboList); // AC점포별
+  $scope._setComboData("momsAreaFgCombo", momsAreaFgComboList); // 지역구분
+  $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
+  $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
+  $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
+  $scope._setComboData("branchCdCombo", branchCdComboList); // 지사
 
   // 등록일자 셋팅
   $scope.srchStartDate = wcombo.genDateVal("#srchTimeStartDate", gvStartDate);
@@ -173,8 +185,23 @@ app.controller('prodSoldOutCtrl', ['$scope', '$http', '$timeout', function ($sco
     $scope._broadcast('prodSoldOutStoreCtrl');
   };
 
+  // 상품선택 모듈 팝업 사용시 정의
+  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.prodSoldOutProdShow = function () {
+    $scope._broadcast('prodSoldOutProdCtrl');
+  };
+
   // 상품 목록 조회
   $scope.searchProdList = function(){
+
+    if(orgnFg == "HQ"){
+      if(($("#prodSoldOutStoreCd").val() === "" || $("#prodSoldOutStoreCd").val() === undefined) && ($("#prodSoldOutProdCd").val() === "" || $("#prodSoldOutProdCd").val() === undefined)){
+        $scope._popMsg(messages["kioskDisplay.require.select.msg"]);
+        return false;
+      }
+    }
+
     // 파라미터
     var params = {};
     // 등록일자 '전체기간' 선택에 따른 params
@@ -182,13 +209,38 @@ app.controller('prodSoldOutCtrl', ['$scope', '$http', '$timeout', function ($sco
       params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
       params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
     }
+    params.storeCds = $("#prodSoldOutStoreCd").val();
+    params.prodCds = $("#prodSoldOutProdCd").val();
+    params.soldOutYn = $scope.soldOutYn;
+    params.useYn = $scope.useYn;
+    params.prodClassCd = $scope.prodClassCd;
+    params.prodCd = $scope.prodCd;
+    params.prodNm = $scope.prodNm;
 
-    if(orgnFg == "HQ"){
-      if($("#prodSoldOutStoreCd").val() == "" || $("#prodSoldOutStoreCd").val() == undefined){
-        $scope._popMsg(messages["cmm.require.selectStore"]);
-        return false;
-      } else {
-        params.storeCd = $("#prodSoldOutStoreCd").val();
+    if(momsEnvstVal === "1" && orgnFg === "HQ"){ // 확장조회는 본사권한이면서 맘스터치만 사용
+      params.momsTeam = $scope.momsTeam;
+      params.momsAcShop = $scope.momsAcShop;
+      params.momsAreaFg = $scope.momsAreaFg;
+      params.momsCommercial = $scope.momsCommercial;
+      params.momsShopType = $scope.momsShopType;
+      params.momsStoreManageType = $scope.momsStoreManageType;
+      params.branchCd = $scope.branchCd;
+    }
+
+    if(brandUseFg === "1" && orgnFg === "HQ"){ // 본사이면서 브랜드사용시만 검색가능
+
+      params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
+      params.prodHqBrandCd = $scope.srchProdHqBrandCdCombo.selectedValue;
+
+      // '전체' 일때
+      if (params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+        var momsHqBrandCd = "";
+        for (var i = 0; i < momsHqBrandCdComboList.length; i++) {
+          if (momsHqBrandCdComboList[i].value !== null) {
+            momsHqBrandCd += momsHqBrandCdComboList[i].value + ","
+          }
+        }
+        params.userBrands = momsHqBrandCd;
       }
     }
 
@@ -205,16 +257,6 @@ app.controller('prodSoldOutCtrl', ['$scope', '$http', '$timeout', function ($sco
         var scope = agrid.getScope('prodClassPopUpCtrl');
         var prodClassCd = scope.getSelectedClass();
         var params = {};
-
-        if(orgnFg == "HQ"){
-          if($("#prodSoldOutStoreCd").val() == "" || $("#prodSoldOutStoreCd").val() == undefined){
-            $scope._popMsg(messages["cmm.require.selectStore"]);
-            return false;
-          } else {
-            params.storeCd = $("#prodSoldOutStoreCd").val();
-          }
-        }
-
         params.prodClassCd = prodClassCd;
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
@@ -225,12 +267,6 @@ app.controller('prodSoldOutCtrl', ['$scope', '$http', '$timeout', function ($sco
         );
       }
     });
-  };
-
-  // 상품분류정보 선택취소
-  $scope.delProdClass = function(){
-    $scope.prodClassCd = "";
-    $scope.prodClassCdNm = "";
   };
 
   // 일괄적용
@@ -259,15 +295,8 @@ app.controller('prodSoldOutCtrl', ['$scope', '$http', '$timeout', function ($sco
     $scope.flex.refresh();
   };
 
-
   // <-- 그리드 저장 -->
   $scope.save = function() {
-    if(orgnFg == "HQ"){
-      if($("#prodSoldOutStoreCd").val() == "" || $("#prodSoldOutStoreCd").val() == undefined){
-        $scope._popMsg(messages["cmm.require.selectStore"]);
-        return false;
-      }
-    }
 
     if($scope.flex.rows.length <= 0) {
       $scope._popMsg(messages["cmm.empty.data"]);
@@ -304,5 +333,20 @@ app.controller('prodSoldOutCtrl', ['$scope', '$http', '$timeout', function ($sco
     });
 
   });
+
+  // 상품분류정보 선택취소
+  $scope.delProdClass = function(){
+    $scope.prodClassCd = "";
+    $scope.prodClassCdNm = "";
+  };
+
+  // 확장조회 숨김/보임
+  $scope.searchAddShowChange = function(){
+      if( $("#tblSearchAddShow").css("display") === 'none') {
+          $("#tblSearchAddShow").show();
+      } else {
+          $("#tblSearchAddShow").hide();
+      }
+  };
 
 }]);

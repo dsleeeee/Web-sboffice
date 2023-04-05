@@ -362,7 +362,7 @@
     <div class="wj-TblWrapBr mt10">
         <%-- 개발시 높이 조절해서 사용--%>
         <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-        <div id="theGrid" style="height: 370px;">
+        <div id="theGrid" style="height: 350px;">
             <wj-flex-grid
                     autoGenerateColumns="false"
                     control="flex"
@@ -377,10 +377,10 @@
                 <wj-flex-grid-column header="<s:message code="prod.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.storeNm"/>" binding="storeNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.prodCd"/>" binding="prodCd" width="100" is-read-only="true" format="d"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.prodNm"/>" binding="prodNm" width="150" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.prodNm"/>" binding="prodNm" width="170" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kioskDisplay.kioskDisplayYn"/>" binding="kioskDisplayYn" width="80" data-map="kioskDisplayYnDataMap" align="center"></wj-flex-grid-column>
                 <c:if test="${brandUseFg == '1'}">
-                    <wj-flex-grid-column header="<s:message code="prod.brandNm"/>" binding="hqBrandNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.brandNm"/>" binding="hqBrandNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                 </c:if>
                 <wj-flex-grid-column header="<s:message code="prod.prodClassCd"/>" binding="prodClassCd" width="90" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.prodClassNm"/>" binding="prodClassNm" width="250" is-read-only="true"></wj-flex-grid-column>
@@ -402,10 +402,6 @@
                 <wj-flex-grid-column header="<s:message code="prod.sdselGrpCd"/>" binding="sdselGrpCd" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.regFg"/>" binding="regFg" visible="false"></wj-flex-grid-column>
             </wj-flex-grid>
-            <%-- ColumnPicker 사용시 include --%>
-            <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-                <jsp:param name="pickerTarget" value="kioskDisplayCtrl"/>
-            </jsp:include>
         </div>
     </div>
     <%--//위즈모 테이블--%>

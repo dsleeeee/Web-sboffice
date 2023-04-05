@@ -244,6 +244,51 @@ public class SoldOutVO extends PageVO {
     /** 사이드선택그룹코드 */
     private String sdselClassCd;
 
+    /** 사용자별 브랜드코드 */
+    private String[] userBrandList;
+
+    /** 사용자별 브랜드코드 */
+    private String userBrands;
+
+    /** 매장브랜드코드 */
+    private String storeHqBrandCd;
+
+    /** 상품브랜드코드 */
+    private String prodHqBrandCd;
+
+    /** 상품코드 */
+    private String[] prodCdList;
+
+    /** 상품코드 */
+    private String prodCds;
+
+    /** 매장코드 */
+    private String[] storeCdList;
+
+    /** 조회매장 */
+    private String storeCds;
+
+    /** 팀별 */
+    private String momsTeam;
+
+    /** AC점포별 */
+    private String momsAcShop;
+
+    /** 지역구분 */
+    private String momsAreaFg;
+
+    /** 상권 */
+    private String momsCommercial;
+
+    /** 점포유형 */
+    private String momsShopType;
+
+    /** 매장관리타입 */
+    private String momsStoreManageType;
+
+    /** 지사코드 */
+    private String branchCd;
+
     /**
      * @return the hqOfficeCd
      */
@@ -1148,5 +1193,125 @@ public class SoldOutVO extends PageVO {
 
     public void setSdselClassCd(String sdselClassCd) {
         this.sdselClassCd = sdselClassCd;
+    }
+
+    public String[] getUserBrandList() {
+        return userBrandList;
+    }
+
+    public void setUserBrandList(String[] userBrandList) {
+        this.userBrandList = userBrandList;
+    }
+
+    public String getUserBrands() {
+        return userBrands;
+    }
+
+    public void setUserBrands(String userBrands) {
+        this.userBrands = userBrands;
+    }
+
+    public String getStoreHqBrandCd() {
+        return storeHqBrandCd;
+    }
+
+    public void setStoreHqBrandCd(String storeHqBrandCd) {
+        this.storeHqBrandCd = storeHqBrandCd;
+    }
+
+    public String getProdHqBrandCd() {
+        return prodHqBrandCd;
+    }
+
+    public void setProdHqBrandCd(String prodHqBrandCd) {
+        this.prodHqBrandCd = prodHqBrandCd;
+    }
+
+    public String[] getProdCdList() {
+        return prodCdList;
+    }
+
+    public void setProdCdList(String[] prodCdList) {
+        this.prodCdList = prodCdList;
+    }
+
+    public String getProdCds() {
+        return prodCds;
+    }
+
+    public void setProdCds(String prodCds) {
+        this.prodCds = prodCds;
+    }
+
+    public String[] getStoreCdList() {
+        return storeCdList;
+    }
+
+    public void setStoreCdList(String[] storeCdList) {
+        this.storeCdList = storeCdList;
+    }
+
+    public String getStoreCds() {
+        return storeCds;
+    }
+
+    public void setStoreCds(String storeCds) {
+        this.storeCds = storeCds;
+    }
+
+    public String getMomsTeam() {
+        return momsTeam;
+    }
+
+    public void setMomsTeam(String momsTeam) {
+        this.momsTeam = momsTeam;
+    }
+
+    public String getMomsAcShop() {
+        return momsAcShop;
+    }
+
+    public void setMomsAcShop(String momsAcShop) {
+        this.momsAcShop = momsAcShop;
+    }
+
+    public String getMomsAreaFg() {
+        return momsAreaFg;
+    }
+
+    public void setMomsAreaFg(String momsAreaFg) {
+        this.momsAreaFg = momsAreaFg;
+    }
+
+    public String getMomsCommercial() {
+        return momsCommercial;
+    }
+
+    public void setMomsCommercial(String momsCommercial) {
+        this.momsCommercial = momsCommercial;
+    }
+
+    public String getMomsShopType() {
+        return momsShopType;
+    }
+
+    public void setMomsShopType(String momsShopType) {
+        this.momsShopType = momsShopType;
+    }
+
+    public String getMomsStoreManageType() {
+        return momsStoreManageType;
+    }
+
+    public void setMomsStoreManageType(String momsStoreManageType) {
+        this.momsStoreManageType = momsStoreManageType;
+    }
+
+    public String getBranchCd() {
+        return branchCd;
+    }
+
+    public void setBranchCd(String branchCd) {
+        this.branchCd = branchCd;
     }
 }

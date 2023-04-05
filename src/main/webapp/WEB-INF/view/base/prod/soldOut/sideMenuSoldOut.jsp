@@ -7,7 +7,7 @@
 
 <div class="subCon" id="sideMenuSoldOutView" ng-controller="soldOutChgCtrl" style="display: none;">
   <%--searchTbl--%>
-  <div class="searchBar flddUnfld">
+  <div class="searchBar">
     <a href="#" class="open fl"><s:message code="soldOut.sideMenu" /></a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -29,9 +29,19 @@
         <th><s:message code="soldOut.store" /></th>
         <td>
             <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-          <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
+          <%--<jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
             <jsp:param name="targetId" value="sideMenuSoldOutStore"/>
-          </jsp:include>
+          </jsp:include>--%>
+            <c:if test="${momsEnvstVal == '0'}">
+                <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
+                    <jsp:param name="targetId" value="sideMenuSoldOutStore"/>
+                </jsp:include>
+            </c:if>
+            <c:if test="${momsEnvstVal == '1'}">
+                <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreSMoms.jsp" flush="true">
+                    <jsp:param name="targetId" value="sideMenuSoldOutStore"/>
+                </jsp:include>
+            </c:if>
         </td>
       </tr>
       </tbody>
