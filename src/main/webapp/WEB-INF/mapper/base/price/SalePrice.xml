@@ -746,7 +746,8 @@
                 tmp.PROD_NM,
                 thpsp.SALE_UPRC AS HQ_SALE_UPRC, -- 본사판매가
                 tmpsp.SALE_UPRC AS STORE_SALE_UPRC, -- 매장판매가
-                tmpsp.SALE_UPRC AS SALE_UPRC -- 매장변경판매가
+                tmpsp.SALE_UPRC AS SALE_UPRC, -- 매장변경판매가
+                thn.STORE_CHG_NOT
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_MS_PRODUCT tmp,
                 TB_HQ_PRODUCT thp,
@@ -779,7 +780,17 @@
                     ]]>
                     AND SALE_PRC_FG = '1'
                     GROUP BY STORE_CD, PROD_CD
-                ) tmpsp
+                ) tmpsp,
+                (
+                    SELECT
+                    NMCODE_NM AS STORE_CD,
+                    '불가' AS STORE_CHG_NOT
+                    FROM TB_HQ_NMCODE
+                    WHERE 1=1
+                    AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND NMCODE_GRP_CD = '164'
+                    AND USE_YN = 'Y'
+                ) thn
                 WHERE 1=1
                 <![CDATA[
                     AND tmp.STORE_CD IN (SELECT STORE_CD FROM (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} ORDER BY STORE_CD) WHERE ROWNUM < 2)
@@ -795,6 +806,7 @@
                 AND thpsp.PROD_CD = thp.PROD_CD
                 AND tmpsp.STORE_CD = tmp.STORE_CD
                 AND tmpsp.PROD_CD = tmp.PROD_CD
+                AND thn.STORE_CD (+)= tmp.STORE_CD
                 ORDER BY tmp.STORE_CD, tmp.PROD_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>

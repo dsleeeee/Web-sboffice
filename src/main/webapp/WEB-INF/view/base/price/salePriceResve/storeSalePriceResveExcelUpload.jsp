@@ -51,6 +51,10 @@
                 <wj-flex-grid-column header="<s:message code="storeSalePriceResveExcelUpload.hqSaleUprc"/>" binding="hqSaleUprc" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeSalePriceResveExcelUpload.storeSaleUprc"/>" binding="storeSaleUprc" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeSalePriceResveExcelUpload.saleUprc"/>" binding="saleUprc" width="100" align="right"></wj-flex-grid-column>
+                <%-- [1250 맘스터치] --%>
+                <c:if test="${momsEnvstVal == '1'}">
+                    <wj-flex-grid-column header="<s:message code="storeSalePriceResveExcelUpload.storeChgNot"/>" binding="storeChgNot" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                </c:if>
             </wj-flex-grid>
         </div>
     </div>
