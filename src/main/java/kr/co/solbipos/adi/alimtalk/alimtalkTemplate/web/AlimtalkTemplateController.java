@@ -328,6 +328,8 @@ public class AlimtalkTemplateController {
         // NHN API 응답(템플릿 이미지 등록)
         ApiTemplateImageReceiveVO apiTemplateImageReceiveVO = new ApiTemplateImageReceiveVO();
 
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+
         try {
             // 객체를 JSON 타입의 String으로 변환
             String jsonString = mapper.writeValueAsString(apiTemplateImageVO);
@@ -361,6 +363,13 @@ public class AlimtalkTemplateController {
             //json 데이터를 클래스에 넣음.
             apiTemplateImageReceiveVO = mapper.readValue(sb.toString(), ApiTemplateImageReceiveVO.class);
 
+            resultMap.put("resultCode", apiTemplateImageReceiveVO.getHeader().getResultCode());
+            resultMap.put("resultMessage", apiTemplateImageReceiveVO.getHeader().getResultMessage());
+            resultMap.put("templateImageName", templateImageName);
+            resultMap.put("templateImageUrl", templateImageUrl);
+            resultMap.put("fileNm", fileNm);
+            resultMap.put("filePath", filePath);
+
             if(apiTemplateImageReceiveVO.getHeader().getResultCode() == 0){
                 // 저장 로직은 따로
                 templateImageName = apiTemplateImageReceiveVO.getTemplateImage().getTemplateImageName();
@@ -372,14 +381,6 @@ public class AlimtalkTemplateController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        DefaultMap<Object> resultMap = new DefaultMap<Object>();
-        resultMap.put("resultCode", apiTemplateImageReceiveVO.getHeader().getResultCode());
-        resultMap.put("resultMessage", apiTemplateImageReceiveVO.getHeader().getResultMessage());
-        resultMap.put("templateImageName", templateImageName);
-        resultMap.put("templateImageUrl", templateImageUrl);
-        resultMap.put("fileNm", fileNm);
-        resultMap.put("filePath", filePath);
 
         System.out.println("WEB_ALIMTALK >>> 알림톡 템플릿 이미지 등록 >>> API sb 끝");
 

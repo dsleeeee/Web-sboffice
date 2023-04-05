@@ -175,6 +175,9 @@ public class AlimtalkSendStatusController {
                 //json 데이터를 클래스에 넣음.
                 apiSendCancelReceiveVO = mapper.readValue(sb.toString(), ApiSendCancelReceiveVO.class);
 
+                resultCode = apiSendCancelReceiveVO.getHeader().getResultCode();
+                resultMessage = apiSendCancelReceiveVO.getHeader().getResultMessage();
+
                 if(apiSendCancelReceiveVO.getHeader().getResultCode() == 0){
 
                     // 알림톡 전송결과 - 예약취소
@@ -186,9 +189,6 @@ public class AlimtalkSendStatusController {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            resultCode = apiSendCancelReceiveVO.getHeader().getResultCode();
-            resultMessage = apiSendCancelReceiveVO.getHeader().getResultMessage();
         }
 
         DefaultMap<Object> resultMap = new DefaultMap<Object>();
