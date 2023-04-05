@@ -245,7 +245,7 @@
             </table>
 
             <div class="mt10 oh sb-select dkbr">
-                <button class="btn_blue fr" id="nxBtnSearch1" ng-click="_pageView('kioskKeyMapResveAddCtrl',1)"><s:message code="cmm.search" /></button>
+                <button class="btn_blue fr" id="nxBtnSearch1" ng-click="searchKioskKeyMapResveAddList()"><s:message code="cmm.search" /></button>
                 <c:if test="${momsEnvstVal == '1' and sessionInfo.orgnFg == 'HQ'}">
                     <%-- 확장조회 --%>
                     <button class="btn_blue fr mr5" id="btnSearchAddShow" ng-click="searchAddShowChangeEnv()">
