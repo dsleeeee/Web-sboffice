@@ -122,7 +122,7 @@
         WHERE 	tms.HQ_OFFICE_CD = #{hqOfficeCd}
         AND 	tms.STORE_CD = tmsi.STORE_CD(+)
         AND 	tms.STORE_CD = tmpe.STORE_CD(+)
-        AND 	'4068' = tmpe.ENVST_CD(+)
+        AND 	#{envstCd} = tmpe.ENVST_CD(+)
         AND 	tms.STORE_CD = tmpe2.STORE_CD(+)
         AND 	tmpe.POS_NO = tmpe2.POS_NO
         AND 	tmpe2.ENVST_CD = '4019'

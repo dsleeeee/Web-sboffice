@@ -384,7 +384,7 @@
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMapResve/kioskKeyMapResve.js ver=20230327.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMapResve/kioskKeyMapResve.js?ver=20230327.02" charset="utf-8"></script>
 
 <%-- 예약 추가 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/kioskKeyMapResve/kioskKeyMapResveAdd.jsp">
