@@ -17,7 +17,7 @@ var app = agrid.getApp();
  *  상품삭제 팝업생성
  */
 app.controller('kioskKeyMapResveAddCtrl', ['$scope', '$http', function ($scope, $http) {
-
+    var envstCd;
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('kioskKeyMapResveAddCtrl', $scope, $http, true));
 
@@ -71,7 +71,7 @@ app.controller('kioskKeyMapResveAddCtrl', ['$scope', '$http', function ($scope, 
         dataItem.momsTeam       = messages["kioskKeyMapResve.momsTeam"];
         dataItem.momsAcShop     = messages["kioskKeyMapResve.momsAcShop"];
         dataItem.startDate      = messages["kioskKeyMapResve.startDate"];
-        dataItem.orgTouchKeyGrp = messages["kioskKeyMapResve.tuClsType"];
+        dataItem.orgTuClsType   = messages["kioskKeyMapResve.tuClsType"];
         dataItem.tuClsType      = messages["kioskKeyMapResve.tuClsType"];
         dataItem.modDt          = messages["kioskKeyMapResve.tuClsType"];
 
@@ -156,7 +156,8 @@ app.controller('kioskKeyMapResveAddCtrl', ['$scope', '$http', function ($scope, 
 
     // 조회
     $scope.$on("kioskKeyMapResveAddCtrl", function(event, data) {
-
+        console.log(data);
+        envstCd = data;
         // 리스트 조회
         $scope.searchKioskKeyMapResveAddList();
         event.preventDefault();
@@ -166,7 +167,7 @@ app.controller('kioskKeyMapResveAddCtrl', ['$scope', '$http', function ($scope, 
     $scope.searchKioskKeyMapResveAddList = function () {
 
         var params = {};
-
+        params.envstCd = envstCd;
         params.storeCd   = $scope.storeCd;
         params.storeNm   = $scope.storeNm;
         params.tuClsType = $scope.tuClsType;

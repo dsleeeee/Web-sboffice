@@ -14,6 +14,7 @@
 var app = agrid.getApp();
 
 var envstData = [
+    {"name":"전체","value":""},
     {"name":"매장","value":"4068"},
     {"name":"포장","value":"4069"}
 ];
@@ -33,6 +34,7 @@ app.controller('kioskKeyMapResveCtrl', ['$scope', '$http', function ($scope, $ht
     $scope.isChecked = true;
 
     // 콤보박스 셋팅
+    $scope._setComboData("envstCdCombo", envstData);
     $scope._setComboData("tuClsTypeCombo", tuClsTypeDataAll);
     $scope._setComboData("tuClsTypeCombo2", tuClsTypeData);
     $scope._setComboData("listScaleBox", gvListScaleBoxData);
@@ -115,6 +117,7 @@ app.controller('kioskKeyMapResveCtrl', ['$scope', '$http', function ($scope, $ht
             params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
             params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
         }
+        params.envstCd   = $scope.envstCd;
         params.storeCd   = $scope.storeCd;
         params.storeNm   = $scope.storeNm;
         params.tuClsType = $scope.tuClsType;
@@ -136,7 +139,7 @@ app.controller('kioskKeyMapResveCtrl', ['$scope', '$http', function ($scope, $ht
             }
             params.userBrands = momsHqBrandCd;
         }
-        params.listScale = $scope.listScaleCombo.text;
+        params.listScale = 500;
         console.log(params);
 
         $scope._inquirySub('/base/prod/kioskKeyMapResve/kioskKeyMapResve/getKioskKeyMapResveList.sb', params, function() {
@@ -234,9 +237,9 @@ app.controller('kioskKeyMapResveCtrl', ['$scope', '$http', function ($scope, $ht
     };
 
     // 추가 팝업
-    $scope.add = function () {
+    $scope.add = function (envstCd) {
         $scope.kioskKeyMapResveAddLayer.show(true);
-        $scope._pageView('kioskKeyMapResveAddCtrl',1);
+        $scope._broadcast('kioskKeyMapResveAddCtrl',envstCd);
     };
 
     // 그리드 선택불가 항목처리

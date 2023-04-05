@@ -131,7 +131,7 @@ app.controller('touchKeyResveCtrl', ['$scope', '$http', function ($scope, $http)
             }
             params.userBrands = momsHqBrandCd;
         }
-        params.listScale = $scope.listScaleCombo.text;
+        params.listScale = 500;
         console.log(params);
 
         $scope._inquirySub('/base/prod/touchKeyResve/touchKeyResve/getTouchKeyResveList.sb', params, function() {

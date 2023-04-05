@@ -25,14 +25,19 @@
         ,		TO_CHAR(TO_DATE(tmtkgr.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS START_DATE
         ,		tmtkgr.TUKEY_GRP_CD AS ORG_TOUCH_KEY_GRP
         ,		tmtkgr.TUKEY_GRP_CD AS TOUCH_KEY_GRP
-        ,       TO_CHAR(TO_DATE(tmtkgr.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
+        ,       TO_CHAR(TO_DATE(tmpe.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
+        ,       tmpe.ENVST_VAL AS ENV_4038
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM 	TB_MS_TOUCH_KEY_GROUP_RESVE tmtkgr
         ,		TB_MS_STORE tms
         ,		TB_MS_STORE_INFO tmsi
+        ,       TB_MS_POS_ENVST tmpe
         WHERE 	tms.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     tmtkgr.STORE_CD = tms.STORE_CD
         AND     tmtkgr.STORE_CD = tmsi.STORE_CD(+)
+        AND     tmtkgr.STORE_CD = tmpe.STORE_CD(+)
+        AND     tmtkgr.POS_NO = tmpe.POS_NO(+)
+        AND     '4038' = tmpe.ENVST_CD(+)
         <if test='storeCd != null and storeCd != ""'>
             AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
         </if>

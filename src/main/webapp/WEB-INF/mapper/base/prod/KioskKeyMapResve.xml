@@ -26,7 +26,16 @@
         ,		TO_CHAR(TO_DATE(tmtkgr.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS START_DATE
         ,		tmtkgr.TU_CLS_TYPE AS ORG_TU_CLS_TYPE
         ,		tmtkgr.TU_CLS_TYPE AS TU_CLS_TYPE
-        ,       TO_CHAR(TO_DATE(tmtkgr.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
+        ,       (   SELECT  TO_CHAR(TO_DATE(MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS')
+                    FROM    TB_MS_POS_ENVST
+                    WHERE   STORE_CD = tmtkgr.STORE_CD
+                    AND     POS_NO = tmtkgr.POS_NO
+                    AND     ENVST_CD = tmtkgr.ENVST_CD) AS MOD_DT
+        ,       (   SELECT  ENVST_VAL
+                    FROM    TB_MS_POS_ENVST
+                    WHERE   STORE_CD = tmtkgr.STORE_CD
+                    AND     POS_NO = tmtkgr.POS_NO
+                    AND     ENVST_CD = tmtkgr.ENVST_CD) AS NOW_TU_CLS_TYPE
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM 	TB_MS_KIOSK_GROUP_RESVE tmtkgr
         ,		TB_MS_STORE tms
@@ -34,6 +43,9 @@
         WHERE 	tms.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     tmtkgr.STORE_CD = tms.STORE_CD
         AND     tmtkgr.STORE_CD = tmsi.STORE_CD(+)
+        <if test='envstCd != null and envstCd != ""'>
+            AND tmtkgr.ENVST_CD LIKE '%'||#{envstCd}||'%'
+        </if>
         <if test='storeCd != null and storeCd != ""'>
             AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
         </if>
@@ -92,152 +104,73 @@
     -->
     <select id="getKioskKeyMapResveAddList" parameterType="kioskKeyMapResveVO" resultType="DefaultMap">
         /* USE : KioskKeyMapResveMapper.getKioskKeyMapResveAddList */
-        SELECT	BRANCH_CD
-        ,		BRANCH_NM
-        ,		STORE_CD
-        ,		STORE_NM
-        ,		POS_NO
-        ,       ENVST_CD
-        ,		HQ_BRAND_CD
-        ,		MOMS_TEAM
-        ,		MOMS_AC_SHOP
-        ,		ORG_TU_CLS_TYPE
-        ,       MOD_DT
-        FROM 	(
-                SELECT	tms.BRANCH_CD
+        SELECT	tms.BRANCH_CD
         ,		(SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
-                ,		tms.STORE_CD
-                ,		tms.STORE_NM
-                ,		tmpe.POS_NO
-                ,		tms.HQ_BRAND_CD
-                ,		tmsi.MOMS_TEAM
-                ,		tmsi.MOMS_AC_SHOP
-                ,		tmpe.ENVST_VAL AS ORG_TU_CLS_TYPE
-                ,		'4068' AS ENVST_CD
-                ,       TO_CHAR(TO_DATE(tmpe.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
-                FROM 	TB_MS_STORE tms
-                ,		TB_MS_STORE_INFO tmsi
-                ,		TB_MS_POS_ENVST tmpe
-                ,		TB_MS_POS_ENVST tmpe2
-                WHERE 	tms.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND 	tms.STORE_CD = tmsi.STORE_CD(+)
-                AND 	tms.STORE_CD = tmpe.STORE_CD(+)
-                AND 	'4038' = tmpe.ENVST_CD(+)
-                AND 	tms.STORE_CD = tmpe2.STORE_CD(+)
-                AND 	tmpe.POS_NO = tmpe2.POS_NO
-                AND 	tmpe2.ENVST_CD = '4019'
-                AND 	tmpe2.ENVST_VAL = '6'
-                <if test='storeCd != null and storeCd != ""'>
-                    AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
-                </if>
-                <if test='storeNm != null and storeNm != ""'>
-                    AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
-                </if>
-                <if test='tuClsType != null and tuClsType != ""'>
-                    AND tmpe.ENVST_VAL = #{tuClsType}
-                </if>
-                <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
-                    AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
-                </if>
-                <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
-                    <if test='userBrands != null and userBrands != ""'>
-                        -- 매장브랜드 전체일때
-                        AND tms.HQ_BRAND_CD IN
-                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
-                            #{item}
-                        </foreach>
-                    </if>
-                </if>
-                <if test='momsTeam != null and momsTeam != ""'>
-                    AND tmsi.MOMS_TEAM = #{momsTeam}
-                </if>
-                <if test='momsAcShop != null and momsAcShop != ""'>
-                    AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
-                </if>
-                <if test='momsAreaFg != null and momsAreaFg != ""'>
-                    AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
-                </if>
-                <if test='momsCommercial != null and momsCommercial != ""'>
-                    AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
-                </if>
-                <if test='momsShopType != null and momsShopType != ""'>
-                    AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
-                </if>
-                <if test='momsStoreManageType != null and momsStoreManageType != ""'>
-                    AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
-                </if>
-                <if test='branchCd != null and branchCd != ""'>
-                    AND tms.BRANCH_CD = #{branchCd}
-                </if>
-                UNION ALL
-                SELECT	tms.BRANCH_CD
-        ,		(SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
-                ,		tms.STORE_CD
-                ,		tms.STORE_NM
-                ,		tmpe.POS_NO
-                ,		tms.HQ_BRAND_CD
-                ,		tmsi.MOMS_TEAM
-                ,		tmsi.MOMS_AC_SHOP
-                ,		tmpe.ENVST_VAL AS ORG_TU_CLS_TYPE
-                ,		'4069' AS ENVST_CD
-                ,       TO_CHAR(TO_DATE(tmpe.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
-                FROM 	TB_MS_STORE tms
-                ,		TB_MS_STORE_INFO tmsi
-                ,		TB_MS_POS_ENVST tmpe
-                ,		TB_MS_POS_ENVST tmpe2
-                WHERE 	tms.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND 	tms.STORE_CD = tmsi.STORE_CD(+)
-                AND 	tms.STORE_CD = tmpe.STORE_CD(+)
-                AND 	'4038' = tmpe.ENVST_CD(+)
-                AND 	tms.STORE_CD = tmpe2.STORE_CD(+)
-                AND 	tmpe.POS_NO = tmpe2.POS_NO
-                AND 	tmpe2.ENVST_CD = '4019'
-                AND 	tmpe2.ENVST_VAL = '6'
-                <if test='storeCd != null and storeCd != ""'>
-                    AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
-                </if>
-                <if test='storeNm != null and storeNm != ""'>
-                    AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
-                </if>
-                <if test='tuClsType != null and tuClsType != ""'>
-                    AND tmpe.ENVST_VAL = #{tuClsType}
-                </if>
-                <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
-                    AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
-                </if>
-                <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
-                    <if test='userBrands != null and userBrands != ""'>
-                        -- 매장브랜드 전체일때
-                        AND tms.HQ_BRAND_CD IN
-                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
-                            #{item}
-                        </foreach>
-                    </if>
-                </if>
-                <if test='momsTeam != null and momsTeam != ""'>
-                    AND tmsi.MOMS_TEAM = #{momsTeam}
-                </if>
-                <if test='momsAcShop != null and momsAcShop != ""'>
-                    AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
-                </if>
-                <if test='momsAreaFg != null and momsAreaFg != ""'>
-                    AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
-                </if>
-                <if test='momsCommercial != null and momsCommercial != ""'>
-                    AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
-                </if>
-                <if test='momsShopType != null and momsShopType != ""'>
-                    AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
-                </if>
-                <if test='momsStoreManageType != null and momsStoreManageType != ""'>
-                    AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
-                </if>
-                <if test='branchCd != null and branchCd != ""'>
-                    AND tms.BRANCH_CD = #{branchCd}
-                </if>
-                )
+        ,		tms.STORE_CD
+        ,		tms.STORE_NM
+        ,		tmpe.POS_NO
+        ,		tms.HQ_BRAND_CD
+        ,		tmsi.MOMS_TEAM
+        ,		tmsi.MOMS_AC_SHOP
+        ,		tmpe.ENVST_VAL AS ORG_TU_CLS_TYPE
+        ,		tmpe.ENVST_CD AS ENVST_CD
+        ,       TO_CHAR(TO_DATE(tmpe.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
+        FROM 	TB_MS_STORE tms
+        ,		TB_MS_STORE_INFO tmsi
+        ,		TB_MS_POS_ENVST tmpe
+        ,		TB_MS_POS_ENVST tmpe2
+        WHERE 	tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND 	tms.STORE_CD = tmsi.STORE_CD(+)
+        AND 	tms.STORE_CD = tmpe.STORE_CD(+)
+        AND 	'4068' = tmpe.ENVST_CD(+)
+        AND 	tms.STORE_CD = tmpe2.STORE_CD(+)
+        AND 	tmpe.POS_NO = tmpe2.POS_NO
+        AND 	tmpe2.ENVST_CD = '4019'
+        AND 	tmpe2.ENVST_VAL = '6'
+        <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test='tuClsType != null and tuClsType != ""'>
+            AND tmpe.ENVST_VAL = #{tuClsType}
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
         ORDER
-        BY      STORE_CD, POS_NO, ENVST_CD
+        BY      tms.STORE_CD, tmpe.POS_NO
     </select>
 
     <!-- 판매터치키설정(예약) 등록 -->
