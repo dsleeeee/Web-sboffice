@@ -318,11 +318,11 @@
                     <tr>
                         <th><s:message code="printerGroup.storeCd" /></th><%--매장코드--%>
                         <td>
-                            <input type="text" class="sb-input w100" id="srchStoreCd" ng-model="srchStoreCd"/>
+                            <input type="text" class="sb-input w100" id="srchPrterStoreCd" ng-model="srchStoreCd"/>
                         </td>
                         <th><s:message code="printerGroup.storeNm" /></th><%--매장명--%>
                         <td>
-                            <input type="text" class="sb-input w100" id="srchStoreNm" ng-model="srchStoreNm"/>
+                            <input type="text" class="sb-input w100" id="srchPrterStoreNm" ng-model="srchStoreNm"/>
                         </td>
                     </tr>
                     <tr>
@@ -528,7 +528,7 @@
     var prodTypeFg = ${ccu.getCommCode("008")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodKitchenprintLink/printerGroup.js?ver=20220511.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodKitchenprintLink/printerGroup.js?ver=20220511.03" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

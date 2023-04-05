@@ -539,8 +539,8 @@ app.controller('printerSelectCtrl', ['$scope', '$http', '$timeout', function ($s
 
         var params = [];
         params.printerGroupCd = $("#groupCd").val();
-        params.storeCd = $("#srchStoreCd").val();
-        params.storeNm = $("#srchStoreNm").val();
+        params.storeCd = $("#srchPrterStoreCd").val();
+        params.storeNm = $("#srchPrterStoreNm").val();
         params.prterNm = $("#srchPrterNm").val();
         params.momsEnvstVal = momsEnvstVal;
         params.momsTeam = $scope.momsTeam;
