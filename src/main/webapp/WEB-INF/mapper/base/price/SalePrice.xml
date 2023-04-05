@@ -792,9 +792,7 @@
                     AND USE_YN = 'Y'
                 ) thn
                 WHERE 1=1
-                <![CDATA[
-                    AND tmp.STORE_CD IN (SELECT STORE_CD FROM (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} ORDER BY STORE_CD) WHERE ROWNUM < 2)
-                ]]>
+                AND tmp.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
                 AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND (
                         ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
