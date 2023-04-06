@@ -1062,7 +1062,8 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
 
         // 매장 키오스크 포스 환경설정값 일괄 저장
         for (KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
-
+            // 매장에서 매장으로 복사하는 쿼리라 "S"값으로 고정(getKioskMClsCount, getKioskMClsCount2에서 사용)
+            kioskKeyMapVO.setOrgnFg("S");
             kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             kioskKeyMapVO.setDirctInYn("Y");
             kioskKeyMapVO.setPosFg("W"); // WEB
