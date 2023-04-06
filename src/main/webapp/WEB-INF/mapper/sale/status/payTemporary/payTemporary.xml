@@ -176,18 +176,26 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT	TO_CHAR(TO_DATE(tsspt.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+                SELECT	tsspt.STORE_CD
+                ,       tms.STORE_NM
+                ,       TO_CHAR(TO_DATE(tsspt.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
                 ,		COUNT(*) AS SALE_CNT
                 ,		SUM(tsspt.SALE_AMT) AS SALE_AMT
                 FROM 	TB_SL_SALE_PAY_TEMPORARY tsspt
+                ,       TB_MS_STORE tms
                 WHERE 	tsspt.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND 	tsspt.STORE_CD = #{storeCd}
                 AND 	tsspt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 AND     tsspt.TEMPORARY_PAY_CD    =   '98'
+                AND     tsspt.STORE_CD = tms.STORE_CD
                 GROUP
-                BY 		tsspt.SALE_DATE
+                BY 		tsspt.STORE_CD
+                ,       tms.STORE_NM
+                ,       tsspt.SALE_DATE
                 ORDER
-                BY 		tsspt.SALE_DATE
+                BY 		tsspt.STORE_CD
+                ,       tms.STORE_NM
+                ,       tsspt.SALE_DATE
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
