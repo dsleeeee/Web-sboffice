@@ -93,9 +93,6 @@
                             <button class="btn_skyblue" id="btnTuClsTypeStore" ng-click="tuClsTypeStore()">
                                 <s:message code="kioskKeyMap.tuClsTypeStore" />
                             </button>
-                            <%--<button class="btn_skyblue" id="btnStoreCopy" ng-click="storeCopy()">
-                                <s:message code="kioskKeyMap.storeCopy" />
-                            </button>--%>
                         </c:if>
                         <button class="btn_skyblue" id="btnTuClsTypeStore" ng-click="tuRecmd()">
                             <s:message code="kioskKeyMap.tuRecmd" />
@@ -470,10 +467,6 @@
 
 <%-- 키맵매장적용 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskKeyMapStoreRegist.jsp">
-</c:import>
-
-<%-- 키맵매장복사 팝업 --%>
-<c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskKeyMapStoreCopy.jsp">
 </c:import>
 
 <%-- 키맵적용(매장/포장) 팝업 --%>

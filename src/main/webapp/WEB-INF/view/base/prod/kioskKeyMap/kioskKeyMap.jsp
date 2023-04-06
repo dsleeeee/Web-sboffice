@@ -10,9 +10,11 @@
                 <a id="kioskKeyMapRegistTab" href="#" class="on" ng-click="kioskKeyMapRegistShow()"><s:message code="kioskKeyMap.kioskKeyMapRegist"/></a>
             </li>
             <%-- 키오스크키맵복사 탭 --%>
-            <%--<li>
-                <a id="kioskKeyMapCopyTab" href="#" ng-click="kioskKeyMapCopyShow()"><s:message code="kioskKeyMap.kioskKeyMapCopy"/></a>
-            </li>--%>
+            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                <li>
+                    <a id="kioskKeyMapCopyTab" href="#" ng-click="kioskKeyMapCopyShow()"><s:message code="kioskKeyMap.kioskKeyMapCopy"/></a>
+                </li>
+            </c:if>
         </ul>
     </div>
 </div>
@@ -55,7 +57,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMap.js?ver=20220111.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMap.js?ver=20230406.01" charset="utf-8"></script>
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 키오스크키맵등록 레이어 --%>
 <c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskKeyMapRegist.jsp">

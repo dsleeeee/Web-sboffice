@@ -32,7 +32,10 @@ app.controller('kioskKeyMapManageCtrl', ['$scope', function ($scope) {
         $("#kioskKeyMapCopyView").show();
 
         // angular 그리드 hide 시 깨지므로 refresh()
-        var scope = agrid.getScope("kiosKeyMapCopyCtrl");
+        var scope = agrid.getScope("kioskKeyMapCopyCtrl");
         scope.flex.refresh();
+
+        var scope2 = agrid.getScope("kioskKeyMapCopy2Ctrl");
+        scope2.flex.refresh();
     };
 }]);

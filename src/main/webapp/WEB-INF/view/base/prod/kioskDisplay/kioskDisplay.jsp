@@ -183,7 +183,7 @@
         </tr>
         </tbody>
     </table>
-    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+    <c:if test="${momsEnvstVal == '1' and sessionInfo.orgnFg == 'HQ'}">
         <table class="searchTbl" id="tblSearchAddShow" style="display: none;">
             <colgroup>
                 <col class="w15"/>

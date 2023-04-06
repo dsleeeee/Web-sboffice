@@ -29,9 +29,6 @@
         <th><s:message code="soldOut.store" /></th>
         <td>
             <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-          <%--<jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
-            <jsp:param name="targetId" value="sideMenuSoldOutStore"/>
-          </jsp:include>--%>
             <c:if test="${momsEnvstVal == '0'}">
                 <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
                     <jsp:param name="targetId" value="sideMenuSoldOutStore"/>
