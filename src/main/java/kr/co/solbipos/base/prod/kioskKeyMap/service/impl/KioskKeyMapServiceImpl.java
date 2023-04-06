@@ -612,8 +612,9 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             hqKioskKeyMapVO.setModDt(currentDt);
             hqKioskKeyMapVO.setModId(sessionInfoVO.getUserId());
 
-            result = kioskKeyMapMapper.insertHqKioskEnv(hqKioskKeyMapVO);
-            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            // 20230406 키맵적용 기능 중 TB_HQ_ENVST 4068,4069 저장하는 로직 제거
+//            result = kioskKeyMapMapper.insertHqKioskEnv(hqKioskKeyMapVO);
+//            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
         // 매장 키오스크 포스 환경설정값 일괄 저장
