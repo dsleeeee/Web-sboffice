@@ -35,6 +35,10 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
+            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+              <wj-flex-grid-column header="<s:message code="payTemporary.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="payTemporary.storeNm"/>" binding="storeNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+            </c:if>
             <wj-flex-grid-column header="<s:message code="payTemporary.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
             <c:if test="${sessionInfo.orgnFg == 'HQ'}">
               <wj-flex-grid-column header="<s:message code="payTemporary.saleCnt"/>" binding="saleCnt" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
