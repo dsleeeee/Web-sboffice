@@ -42,6 +42,7 @@
         AND     tsspt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
         AND     tsspt.STORE_CD = tms.STORE_CD
         AND     tsspt.STORE_CD = tmsi.STORE_CD(+)
+        AND     tsspt.TEMPORARY_PAY_CD    =   '98'
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
         </if>
@@ -117,6 +118,7 @@
         AND     tsspt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
         AND     tsspt.STORE_CD = tms.STORE_CD
         AND     tsspt.STORE_CD = tmsi.STORE_CD(+)
+        AND     tsspt.TEMPORARY_PAY_CD    =   '98'
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
         </if>
@@ -181,6 +183,7 @@
                 WHERE 	tsspt.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND 	tsspt.STORE_CD = #{storeCd}
                 AND 	tsspt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                AND     tsspt.TEMPORARY_PAY_CD    =   '98'
                 GROUP
                 BY 		tsspt.SALE_DATE
                 ORDER
@@ -199,6 +202,7 @@
                 WHERE 	tsspt.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND 	tsspt.STORE_CD = #{storeCd}
                 AND 	tsspt.SALE_DATE = #{saleDate}
+                AND     tsspt.TEMPORARY_PAY_CD    =   '98'
                 ORDER
                 BY 		tsspt.SALE_DATE
             </when>
