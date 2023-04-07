@@ -3,6 +3,7 @@ package kr.co.solbipos.store.manage.closeStore.service.impl;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.auth.service.impl.AuthMapper;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.anals.store.rank.service.StoreRankVO;
 import kr.co.solbipos.store.manage.closeStore.service.CloseStoreService;
 import kr.co.solbipos.store.manage.closeStore.service.CloseStoreVO;
@@ -45,6 +46,9 @@ public class CloseStoreServiceImpl implements CloseStoreService {
     /** 폐점예정매장 목록 조회 */
     @Override
     public List<DefaultMap<String>> getCloseStoreList(CloseStoreVO closeStoreVO, SessionInfoVO sessionInfoVO) {
+        if(sessionInfoVO.getOrgnFg().equals(OrgnFg.AGENCY)){
+            closeStoreVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
         return closeStoreMapper.getCloseStoreList(closeStoreVO);
     }
 

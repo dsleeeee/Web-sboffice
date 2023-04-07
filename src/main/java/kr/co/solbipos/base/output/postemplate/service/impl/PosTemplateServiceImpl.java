@@ -6,6 +6,7 @@ import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.output.postemplate.service.PosTemplateService;
 import kr.co.solbipos.base.output.postemplate.service.PosTemplateVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -203,6 +204,18 @@ public class PosTemplateServiceImpl implements PosTemplateService {
     /** 매장 조회 */
     @Override
     public List<DefaultMap<String>> getRegStoreList(PosTemplateVO posTemplateVO) {
+
+        // 선택한 매장브랜드가 없을 때 (매장브랜드가 '전체' 일때)
+        if (posTemplateVO.getStoreHqBrandCd() == "" || posTemplateVO.getStoreHqBrandCd() == null) {
+            // 사용자별 브랜드 array 값 세팅
+            if (posTemplateVO.getUserBrands() != null && !"".equals(posTemplateVO.getUserBrands())) {
+                String[] userBrandList = posTemplateVO.getUserBrands().split(",");
+                if (userBrandList.length > 0) {
+                    posTemplateVO.setUserBrandList(userBrandList);
+                }
+            }
+        }
+
         return posTemplateMapper.getRegStoreList(posTemplateVO);
     }
 

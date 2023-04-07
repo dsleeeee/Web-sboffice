@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StoreCloseExcept.xml
+    폐점제외매장 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2023.04.07      최초작성
+-->
+<mapper namespace="kr.co.solbipos.store.manage.storeCloseExcept.service.impl.StoreCloseExceptMapper">
+
+    <!-- 사용자별 브랜드 조회(콤보박스용) -->
+    <!--
+        TABLE    : TB_CM_VAN_CMPNY
+        PARAM    : storeTypeVO
+        COMMENTS : 콤보박스에서 사용할 밴정보를 조회한다.
+    -->
+    <select id="getVanComboList" parameterType="dayProdVO" resultType="DefaultMap">
+        /* StoreCloseExceptMapper.getVanComboList */
+                SELECT  '' AS VALUE
+                ,       '전체' AS NAME
+                FROM    DUAL
+                UNION
+                SELECT	VAN_CD AS VALUE
+                ,		VAN_NM AS NAME
+                FROM    TB_CM_VAN_CMPNY
+                WHERE	VAN_FG = '01'
+                ORDER
+                BY VALUE NULLS FIRST
+    </select>
+
+    <!-- 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE, TB_HQ_OFFICE, TB_CM_AGENCY
+        PARAM    : storeCloseExceptVO
+        COMMENTS : 매장 목록을 조회한다.
+    -->
+    <select id="getStoreList" parameterType="storeCloseExceptVO" resultType="DefaultMap">
+        /* USE : StoreCloseExceptMapper.getStoreList */
+        SELECT	tms.HQ_OFFICE_CD
+        ,		tho.HQ_OFFICE_NM
+        ,		tms.STORE_CD
+        ,		tms.STORE_NM
+        ,		tca.AGENCY_NM
+        FROM 	TB_MS_STORE tms
+        ,		TB_HQ_OFFICE tho
+        ,		TB_CM_AGENCY tca
+        WHERE 	tms.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
+        AND		tms.AGENCY_CD = tca.AGENCY_CD
+        AND 	tms.STORE_CD NOT IN (SELECT STORE_CD FROM TB_MS_STORE_CLOSE_EXCEPT)
+        <if test="vanCd != null and vanCd != ''">
+            AND tms.VAN_CD = #{vanCd}
+        </if>
+        ORDER
+        BY 		tms.HQ_OFFICE_CD
+        ,		tms.STORE_CD
+    </select>
+
+    <!-- 폐점제외매장 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE_CLOSE_EXCEPT, TB_MS_STORE, TB_HQ_OFFICE, TB_CM_AGENCY
+        PARAM    : storeCloseExceptVO
+        COMMENTS : 폐점제외매장 목록을 조회한다.
+    -->
+    <select id="getStoreCloseExceptList" parameterType="storeCloseExceptVO" resultType="DefaultMap">
+        /* USE : StoreCloseExceptMapper.getStoreCloseExceptList */
+        SELECT 	tmsce.HQ_OFFICE_CD
+        ,		tho.HQ_OFFICE_NM
+        ,		tmsce.STORE_CD
+        ,		tms.STORE_NM
+        ,		tca.AGENCY_NM
+        ,		tmsce.REMARK
+        FROM 	TB_MS_STORE_CLOSE_EXCEPT tmsce
+        ,		TB_MS_STORE tms
+        ,		TB_HQ_OFFICE tho
+        ,		TB_CM_AGENCY tca
+        WHERE 	tmsce.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND		tmsce.STORE_CD = tms.STORE_CD
+        AND		tmsce.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
+        AND		tms.AGENCY_CD = tca.AGENCY_CD
+        ORDER
+        BY 		tmsce.HQ_OFFICE_CD
+        ,		tmsce.STORE_CD
+    </select>
+
+    <!-- 폐점제외매장 - 등록 -->
+    <!--
+        TABLE    : TB_MS_STORE_CLOSE_EXCEPT
+        PARAM    : storeCloseExceptVO
+        COMMENTS : 매장을 폐점제외처리한다.
+    -->
+    <insert id="saveStoreCloseExcept" parameterType="DefaultMap">
+        /* USE : StoreCloseExceptMapper.saveStoreCloseExcept */
+        INSERT INTO TB_MS_STORE_CLOSE_EXCEPT
+        (
+            HQ_OFFICE_CD
+        ,   STORE_CD
+        ,   REMARK
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        ) VALUES (
+            #{hqOfficeCd}
+        ,   #{storeCd}
+        ,   #{remark}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+         )
+    </insert>
+
+    <!-- 폐점제외매장 - 삭제 -->
+    <!--
+        TABLE    : TB_MS_STORE_CLOSE_EXCEPT
+        PARAM    : storeCloseExceptVO
+        COMMENTS : 폐점제외매장에서 제거한다.
+    -->
+    <delete id="deleteStoreCloseExcept" parameterType="DefaultMap">
+        /* USE : StoreCloseExceptMapper.deleteStoreCloseExcept */
+        DELETE  TB_MS_STORE_CLOSE_EXCEPT
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     STORE_CD = #{storeCd}
+    </delete>
+</mapper>

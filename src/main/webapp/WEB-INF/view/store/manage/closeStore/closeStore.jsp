@@ -28,7 +28,7 @@
     </colgroup>
     <tbody>
     <tr>
-      <%-- --%>
+      <%-- 조회년월  --%>
       <th><s:message code="closeStore.startMonth" /></th>
       <td>
         <div class="sb-select">
@@ -52,6 +52,7 @@
         </div>
       </td>
     </tr>
+<c:if test="${orgnFg == 'MASTER'}">
     <tr>
       <%-- 관리업체코드 --%>
       <th><s:message code="closeStore.agencyCd" /></th>
@@ -64,6 +65,7 @@
         <input type="text" class="sb-input w100" id="srchAgencyNm" ng-model="agencyNm" onkeyup="fnNxBtnSearch();"/>
       </td>
     </tr>
+</c:if>
     <tr>
       <tr>
         <%-- 본사코드 --%>
@@ -89,8 +91,9 @@
           <input type="text" class="sb-input w100" id="srchStoreNm" ng-model="storeNm" onkeyup="fnNxBtnSearch();"/>
         </td>
       </tr>
+<c:if test="${orgnFg == 'MASTER'}">
     <tr>
-      <%-- 매장코드 --%>
+      <%-- 비고 --%>
       <th><s:message code="closeStore.remark" /></th>
       <td colspan="3">
         <input type="text" class="sb-input w90" id="remark" ng-model="remark"/>
@@ -99,6 +102,7 @@
         </button>
       </td>
     </tr>
+</c:if>
     </tbody>
   </table>
 

@@ -43,6 +43,10 @@
                                     FROM    TB_SL_MONTHLY_TOTAL TSMT
                                     WHERE   SALE_YM >= TO_CHAR(ADD_MONTHS(TO_DATE(#{startMonth},'YYYYMM') , -1),'YYYYMM')
                                     )
+        AND     A.STORE_CD NOT IN (
+                                    SELECT  STORE_CD
+                                    FROM    TB_MS_STORE_CLOSE_EXCEPT
+                                    )
         ]]>
         --AND     A.STORE_CD NOT LIKE 'D%'   -- 제외(요청 시 진행(김중선))
         <if test='agencyCd != null and agencyCd !=""'>
@@ -94,6 +98,10 @@
                                                 SELECT  DISTINCT STORE_CD
                                                 FROM    TB_SL_MONTHLY_TOTAL TSMT
                                                 WHERE   SALE_YM >= TO_CHAR(ADD_MONTHS(SYSDATE, -1),'YYYYMM')
+                                                )
+                    AND     A.STORE_CD NOT IN (
+                                                SELECT  STORE_CD
+                                                FROM    TB_MS_STORE_CLOSE_EXCEPT
                                                 )
                     ]]>
                     --AND     A.STORE_CD NOT LIKE 'D%'   -- 제외(요청 시 진행(김중선))
