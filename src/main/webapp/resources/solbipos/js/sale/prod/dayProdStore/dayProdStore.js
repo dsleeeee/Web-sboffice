@@ -112,7 +112,7 @@ app.controller('dayProdStoreCtrl', ['$scope', '$http', '$timeout', function ($sc
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         params.storeHqBrandCd = $scope.storeHqBrandCd;
-        params.storeCds = $("#dayProdStoreCd").val();
+        params.storeCds = $("#dayProdStoreStoreCd").val();
         params.prodCds = $("#dayProdSelectCd").val();
         params.prodHqBrandCd = $scope.prodHqBrandCd;
         params.momsTeam = $scope.momsTeam;
@@ -187,8 +187,8 @@ app.controller('dayProdStoreCtrl', ['$scope', '$http', '$timeout', function ($sc
     // 매장선택 모듈 팝업 사용시 정의
     // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
     // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.dayProdStoreShow = function () {
-        $scope._broadcast('dayProdStoreCtrl');
+    $scope.dayProdStoreStoreShow = function () {
+        $scope._broadcast('dayProdStoreStoreCtrl');
     };
 
     // 매장선택 모듈 팝업 사용시 정의
@@ -249,7 +249,7 @@ app.controller('dayProdStoreCtrl', ['$scope', '$http', '$timeout', function ($sc
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         params.storeHqBrandCd = $scope.storeHqBrandCd;
-        params.storeCds = $("#dayProdStoreCd").val();
+        params.storeCds = $("#dayProdStoreStoreCd").val();
         params.prodCds = $("#dayProdSelectCd").val();
         params.prodHqBrandCd = $scope.prodHqBrandCd;
         params.momsTeam = $scope.momsTeam;

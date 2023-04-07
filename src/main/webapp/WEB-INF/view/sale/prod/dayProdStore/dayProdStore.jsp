@@ -122,7 +122,7 @@
                                           modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
                                           closeFunc - 팝업 닫기시 호출할 함수--%>
                             <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreMMoms.jsp" flush="true">
-                                <jsp:param name="targetId" value="dayProdStore"/>
+                                <jsp:param name="targetId" value="dayProdStoreStore"/>
                             </jsp:include>
                             <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
                         </td>
@@ -423,4 +423,4 @@
   var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/dayProdStore/dayProdStore.js?ver=20230329.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/dayProdStore/dayProdStore.js?ver=20230407.01" charset="utf-8"></script>

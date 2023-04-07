@@ -160,7 +160,7 @@ app.controller('monthProdStoreCtrl', ['$scope', '$http', '$timeout', function ($
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         params.storeHqBrandCd = $scope.storeHqBrandCd;
-        params.storeCds = $("#monthProdStoreCd").val();
+        params.storeCds = $("#monthProdStoreStoreCd").val();
         params.prodCds = $("#monthProdSelectCd").val();
         params.prodHqBrandCd = $scope.prodHqBrandCd;
         params.momsTeam = $scope.momsTeam;
@@ -235,8 +235,8 @@ app.controller('monthProdStoreCtrl', ['$scope', '$http', '$timeout', function ($
     // 매장선택 모듈 팝업 사용시 정의
     // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
     // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.monthProdStoreShow = function () {
-        $scope._broadcast('monthProdStoreCtrl');
+    $scope.monthProdStoreStoreShow = function () {
+        $scope._broadcast('monthProdStoreStoreCtrl');
     };
 
     // 매장선택 모듈 팝업 사용시 정의
@@ -298,7 +298,7 @@ app.controller('monthProdStoreCtrl', ['$scope', '$http', '$timeout', function ($
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         params.storeHqBrandCd = $scope.storeHqBrandCd;
-        params.storeCds = $("#monthProdStoreCd").val();
+        params.storeCds = $("#monthProdStoreStoreCd").val();
         params.prodCds = $("#monthProdSelectCd").val();
         params.prodHqBrandCd = $scope.prodHqBrandCd;
         params.momsTeam = $scope.momsTeam;
