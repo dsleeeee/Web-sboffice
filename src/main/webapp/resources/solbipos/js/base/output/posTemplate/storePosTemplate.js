@@ -15,6 +15,15 @@
 app.controller('storePosTemplateCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('storePosTemplateCtrl', $scope, $http, true));
+  // 브랜드 콤보박스 셋팅
+  $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
+  $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
+  $scope._setComboData("momsAcShopCombo", momsAcShopComboList); // AC점포별
+  $scope._setComboData("momsAreaFgCombo", momsAreaFgComboList); // 지역구분
+  $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
+  $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
+  $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
+  $scope._setComboData("branchCdCombo", branchCdComboList); // 지사
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
@@ -73,8 +82,35 @@ app.controller('storePosTemplateCtrl', ['$scope', '$http', function ($scope, $ht
     params.storeCd    = $scope.storeCd;
     params.storeNm    = $scope.storeNm;
     params.sysStatFg  = $scope.sysStatFg;
-
+    if(momsEnvstVal === "1") {
+      params.momsTeam = $scope.momsTeam;
+      params.momsAcShop = $scope.momsAcShop;
+      params.momsAreaFg = $scope.momsAreaFg;
+      params.momsCommercial = $scope.momsCommercial;
+      params.momsShopType = $scope.momsShopType;
+      params.momsStoreManageType = $scope.momsStoreManageType;
+      params.branchCd = $scope.branchCd;
+      params.storeHqBrandCd = $scope.storeHqBrandCd;
+      // '전체' 일때
+      if (params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+        var momsHqBrandCd = "";
+        for (var i = 0; i < userHqBrandCdComboList.length; i++) {
+          if (userHqBrandCdComboList[i].value !== null) {
+            momsHqBrandCd += userHqBrandCdComboList[i].value + ","
+          }
+        }
+        params.userBrands = momsHqBrandCd;
+      }
+    }
     $scope._inquirySub("/base/output/posTemplate/template/getRegStoreList.sb", params, function() {}, false);
   };
 
+  // 확장조회 숨김/보임
+  $scope.searchAddShowChange = function(){
+    if( $("#tblSearchAddShow").css("display") === 'none') {
+      $("#tblSearchAddShow").show();
+    } else {
+      $("#tblSearchAddShow").hide();
+    }
+  };
 }]);
