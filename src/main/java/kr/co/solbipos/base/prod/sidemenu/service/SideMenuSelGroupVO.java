@@ -64,9 +64,6 @@ public class SideMenuSelGroupVO extends CmmVO {
     /** 사용자 아이디 */
     private String userId;
 
-    /** 선택그룹 검색조건의 조회타입(그룹, 상품) */
-    private String srchType;
-
     /**
      * @return the hqOfficeCd
      */
@@ -226,11 +223,4 @@ public class SideMenuSelGroupVO extends CmmVO {
         this.userId = userId;
     }
 
-    public String getSrchType() {
-        return srchType;
-    }
-
-    public void setSrchType(String srchType) {
-        this.srchType = srchType;
-    }
 }

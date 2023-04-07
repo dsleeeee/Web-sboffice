@@ -38,9 +38,6 @@ app.controller('sideMenuManageCtrl', ['$scope', '$http', function ($scope, $http
     // 사이드메뉴여부 콤보박스 셋팅
     $scope._setComboData("sideProdYnComboData", sideProdYnData);
     $scope._setComboData("chgSideProdYn", useYnData);
-    //사이드메뉴-속성 콤보박스 셋팅
-    $scope._setComboData("sdattrClassCdComboData", sdattrClassList);
-    $scope._setComboData("chgSdattrClassCd", sdattrClassList.slice(1, sdattrClassList.length));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -50,8 +47,6 @@ app.controller('sideMenuManageCtrl', ['$scope', '$http', function ($scope, $http
         $scope.stockProdYnDataMap = new wijmo.grid.DataMap(useYnData, 'value', 'name');        // 재고상품여부
         $scope.vatFgDataMap = new wijmo.grid.DataMap(vatFgData, 'value', 'name');               // 부과세구분
         $scope.sideProdYnDataMap = new wijmo.grid.DataMap(useYnData, 'value', 'name');         // 사이드메뉴여부
-        $scope.sdattrClassDataMap = new wijmo.grid.DataMap(sdattrClassList.slice(1, sdattrClassList.length), 'value', 'name'); // 속성
-        $scope.sdselGrpDataMap = new wijmo.grid.DataMap(sdselGrpList.slice(1, sdselGrpList.length), 'value', 'name');        // 선택메뉴
         $scope.useYnDataMap = new wijmo.grid.DataMap(useYnData, 'value', 'name');               // 사용여부
         $scope.poProdFgDataMap = new wijmo.grid.DataMap(poProdFgData, 'value', 'name');        // 발주상품구분
         $scope.prodTipYnDataMap = new wijmo.grid.DataMap(useYnData, 'value', 'name');          // 상품봉사료여부
@@ -65,7 +60,10 @@ app.controller('sideMenuManageCtrl', ['$scope', '$http', function ($scope, $http
 
     // 사이드메뉴관리 그리드 조회
     $scope.$on('sideMenuManageCtrl', function(event, data) {
-        
+
+        // 속성, 선택메뉴 콤보박스 셋팅
+        $scope.setCombo();
+
         // 조회
         $scope.searchSideMenuManage();
 
@@ -244,5 +242,32 @@ app.controller('sideMenuManageCtrl', ['$scope', '$http', function ($scope, $http
         });
     };
 
+    // 속성, 선택메뉴 콤보박스 셋팅
+    $scope.setCombo = function () {
+
+        // 속성
+        var params = {};
+        $scope._postJSONQuery.withOutPopUp('/base/prod/sideMenu/getSideMenuAttrClassCombo.sb', params, function (response) {
+           if (response.data.data.list.length > 0) {
+               var list = response.data.data.list;
+               // 그리드 속성 콤보 셋팅
+               $scope.sdattrClassDataMap = new wijmo.grid.DataMap(list.slice(1, list.length), 'value', 'name');
+
+               // 사이드메뉴-속성 콤보박스 셋팅
+               $scope._setComboData("sdattrClassCdComboData", list);
+               $scope._setComboData("chgSdattrClassCd", list.slice(1, list.length));
+           }
+        });
+
+        // 선택메뉴
+        var params = {};
+        $scope._postJSONQuery.withOutPopUp('/base/prod/sideMenu/getSideMenuSdselGrpCdCombo.sb', params, function (response) {
+           if (response.data.data.list.length > 0) {
+               var list = response.data.data.list;
+               // 그리드 선택메뉴 콤보 셋팅
+               $scope.sdselGrpDataMap = new wijmo.grid.DataMap(list.slice(1, list.length), 'value', 'name');
+           }
+        });
+    };
 
 }]);
