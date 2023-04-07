@@ -152,9 +152,9 @@ app.controller('payTemporaryCtrl', ['$scope', '$http', '$timeout', function ($sc
       return false;
     }
 
-    // 조회일자 최대 7일 제한
-    if (diffDay > 6) {
-      $scope._popMsg(messages['cmm.dateOver.7day.error']);
+    // 조회일자 최대 1달(31일) 제한
+    if (diffDay > 31) {
+      $scope._popMsg(messages['cmm.dateOver.1month.error']);
       return false;
     }
 
