@@ -242,7 +242,7 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.storeCd"/>" binding="storeCd" width="70" is-read-only="true"  align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.storeNm"/>" binding="storeNm" width="230" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.storeNm"/>" binding="storeNm" width="*" is-read-only="true" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
 
               </wj-flex-grid>
