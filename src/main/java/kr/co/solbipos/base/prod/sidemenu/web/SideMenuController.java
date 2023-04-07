@@ -443,4 +443,44 @@ public class SideMenuController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 속성 조회(콤보박스용)
+     * @param sideMenuManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/getSideMenuAttrClassCombo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSideMenuAttrClassCombo(SideMenuManageVO sideMenuManageVO, HttpServletRequest request,
+                                             HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = sideMenuService.getSideMenuAttrClassCombo(sideMenuManageVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, sideMenuManageVO);
+    }
+
+    /**
+     * 선택메뉴 조회(콤보박스용)
+     * @param sideMenuManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/getSideMenuSdselGrpCdCombo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSideMenuSdselGrpCdCombo(SideMenuManageVO sideMenuManageVO, HttpServletRequest request,
+                                             HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = sideMenuService.getSideMenuSdselGrpCdCombo(sideMenuManageVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, sideMenuManageVO);
+    }
 }
