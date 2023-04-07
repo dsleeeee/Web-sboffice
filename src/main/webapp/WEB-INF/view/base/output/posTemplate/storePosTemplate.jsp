@@ -6,7 +6,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
-<wj-popup control="storePosTemplateLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:700px;" >
+<wj-popup control="storePosTemplateLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:600px;" >
   <div class="wj-dialog wj-dialog-columns title" ng-controller="storePosTemplateCtrl">
 
     <%-- header --%>
@@ -229,7 +229,7 @@
             <div class="oh">
               <span class="fl bk lh20 s14"><s:message code="prod.regStore"/></span>
             </div>
-            <div id="regStoreGrid" class="mt10" style="height: 370px; overflow-y: hidden;">
+            <div id="regStoreGrid" class="mt10" style="height: 370px; overflow-y: hidden; overflow-x: hidden;">
               <wj-flex-grid
                       autoGenerateColumns="false"
                       control="flex"
@@ -242,7 +242,7 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.storeCd"/>" binding="storeCd" width="70" is-read-only="true"  align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.storeNm"/>" binding="storeNm" width="*" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.storeNm"/>" binding="storeNm" width="300" is-read-only="true" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
 
               </wj-flex-grid>
