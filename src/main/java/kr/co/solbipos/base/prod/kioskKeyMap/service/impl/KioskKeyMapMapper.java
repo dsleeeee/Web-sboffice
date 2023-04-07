@@ -125,7 +125,7 @@ public interface KioskKeyMapMapper {
     List<DefaultMap<String>> getStoreKioskPosList(KioskKeyMapVO kioskKeyMapVO);
 
     /** 키오스크 매장적용(매장/포장) - 본사 환경설정값 저장 */
-    int insertHqKioskEnv(KioskKeyMapVO kioskKeyMapVO);
+//    int insertHqKioskEnv(KioskKeyMapVO kioskKeyMapVO);
 
     /** 키오스크 매장적용(매장/포장) - 매장 키오스크 포스 환경설정값 일괄 저장 */
     int insertStoreKioskPosEnv(KioskKeyMapVO kioskKeyMapVO);
