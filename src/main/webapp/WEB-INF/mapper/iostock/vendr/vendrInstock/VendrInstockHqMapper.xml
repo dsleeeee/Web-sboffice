@@ -213,7 +213,6 @@
 				,		A.IN_AMT
 				,		A.IN_VAT
 				,		A.IN_TOT
-				,       A.TOT_CNT
 				/*
 				,		NVL(B.PROD_CD, A.PROD_CD)       AS  A_PROD_CD
 				,       NVL(B.STORAGE_CD, '001')        AS  A_STORAGE_CD
@@ -225,6 +224,9 @@
 				,       NVL(B.IN_VAT,0)        AS  A_IN_VAT
 				,       NVL(B.IN_TOT,0)        AS  A_IN_TOT
 				*/
+				]]>
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                <![CDATA[
 				FROM	(
 				        SELECT  thvp.HQ_OFFICE_CD
 						,		NVL(tphvid.SLIP_NO,#{slipNo})	AS SLIP_NO
@@ -246,15 +248,13 @@
 				        ,       TO_NUMBER(DECODE(tphvid.IN_AMT    ,  0, NULL, tphvid.IN_AMT*tphvid.SLIP_FG     )) AS IN_AMT
 				        ,       TO_NUMBER(DECODE(tphvid.IN_VAT    ,  0, NULL, tphvid.IN_VAT*tphvid.SLIP_FG     )) AS IN_VAT
 				        ,       TO_NUMBER(DECODE(tphvid.IN_TOT    ,  0, NULL, tphvid.IN_TOT*tphvid.SLIP_FG     )) AS IN_TOT
-				        ]]>
-				        <include refid="CmmSQL.PagingTemplateCount"/>
-				        <![CDATA[
 				        FROM    TB_HQ_VENDOR_PROD thvp
 				        ,       TB_HQ_PRODUCT thp
 				        ,       TB_PO_HQ_VENDR_INSTOCK_DTL tphvid
 				        ,       TB_HQ_VENDOR thv
 				        WHERE   thvp.HQ_OFFICE_CD     =   #{hqOfficeCd}
 				        AND     thvp.VENDR_CD         =   #{vendrCd}
+				        AND     thvp.USE_YN           = 'Y'
 				        AND     thp.HQ_OFFICE_CD      =   thvp.HQ_OFFICE_CD
 				        AND     thp.PROD_CD           =   thvp.PROD_CD
 				        AND     thp.USE_YN            =   'Y'
@@ -264,8 +264,6 @@
 				        AND     tphvid.PROD_CD    (+) =   thp.PROD_CD
 				        AND     thv.HQ_OFFICE_CD      =   thvp.HQ_OFFICE_CD
 				        AND     thv.VENDR_CD          =   #{vendrCd}
-				        AND     thp.PO_PROD_FG IN ('1', '2')
-				        AND     thvp.USE_YN           = 'Y'
 				        ]]>
 				        <if test='prodCd != null and prodCd != ""'>
 				            AND thp.PROD_CD = #{prodCd}
