@@ -46,7 +46,9 @@ app.controller('vendrTrtmntCtrl', ['$scope', '$http', function ($scope, $http) {
     angular.extend(this, new RootController('vendrTrtmntCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
-    $scope.initGrid = function (s, e) {};
+    $scope.initGrid = function (s, e) {
+        $scope.useYnFgDataMap = new wijmo.grid.DataMap(useYnFgData, 'value', 'name'); //사용여부
+    };
 
     // 해당 scope 호출
     $scope.$on("vendrTrtmntCtrl", function(event, vendrCd) {

@@ -412,7 +412,8 @@
         ROWNUM AS RNUM,
         thvp.PROD_CD,
         thp.PROD_NM,
-        thp.SPLY_UPRC
+        thp.SPLY_UPRC,
+        thp.USE_YN
         FROM TB_HQ_VENDOR_PROD thvp,
         TB_HQ_PRODUCT thp
         WHERE 1=1
@@ -450,7 +451,8 @@
         ROWNUM AS RNUM,
         tmvp.PROD_CD,
         tmp.PROD_NM,
-        tmp.SPLY_UPRC
+        tmp.SPLY_UPRC,
+        tmp.USE_YN
         FROM TB_MS_VENDOR_PROD tmvp,
         TB_MS_PRODUCT tmp
         WHERE 1=1

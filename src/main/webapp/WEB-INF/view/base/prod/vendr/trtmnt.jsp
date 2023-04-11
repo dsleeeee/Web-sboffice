@@ -90,8 +90,9 @@
 
                   <!-- define columns -->
                   <wj-flex-grid-column header="<s:message code="func.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                  <wj-flex-grid-column header="<s:message code="vendr.prodCd"/>" binding="prodCd" width="*" is-read-only="true"></wj-flex-grid-column>
-                  <wj-flex-grid-column header="<s:message code="vendr.prodNm"/>" binding="prodNm" width="*" is-read-only="true" ></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="vendr.prodCd"/>" binding="prodCd" width="130" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="vendr.prodNm"/>" binding="prodNm" width="130" is-read-only="true" ></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="vendr.useYn"/>" binding="useYn" data-map="useYnFgDataMap" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
 <%--                  <wj-flex-grid-column header="<s:message code="vendr.splyUprc"/>" binding="splyUprc" width="*" align="right" ></wj-flex-grid-column>--%>
                 </wj-flex-grid>
               </div>
@@ -120,7 +121,7 @@
 
                   <!-- define columns -->
                   <wj-flex-grid-column header="<s:message code="func.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                  <wj-flex-grid-column header="<s:message code="vendr.prodCd"/>" binding="prodCd" width="*" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="vendr.prodCd"/>" binding="prodCd" width="130" is-read-only="true"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="vendr.prodNm"/>" binding="prodNm" width="*" is-read-only="true" ></wj-flex-grid-column>
 <%--                  <wj-flex-grid-column header="<s:message code="vendr.splyUprc"/>" binding="splyUprc" width="*" align="right" ></wj-flex-grid-column>--%>
                 </wj-flex-grid>
@@ -136,6 +137,8 @@
 </wj-popup>
 
 <script>
+  <%-- 사용여부 --%>
+  var useYnFgData = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/trtmnt.js?ver=20200423.41" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/trtmnt.js?ver=20230411.01" charset="utf-8"></script>
