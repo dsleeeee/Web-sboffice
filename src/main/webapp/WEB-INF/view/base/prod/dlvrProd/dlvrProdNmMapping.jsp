@@ -156,6 +156,27 @@
         </tbody>
     </table>
 
+    <table class="searchTbl mt10">
+        <colgroup>
+            <col class="w100" />
+        </colgroup>
+        <tbody>
+        <tr class="brt">
+            <th class="oh gr fl w50" style="height: 40px;">
+                <p class="s12 bk lh20">
+                    * 상품 체크 후, '상품명칭 매장적용'을 클릭해주세요.<br />
+                </p>
+            </th>
+            <th class="oh gr fr w50" style="height: 40px; font-size:15px">
+                <%-- 상품명칭 매장적용 --%>
+                <button class="btn_skyblue ml5 fr" id="btnStoreApply" ng-click="storeApply()">
+                    <s:message code="dlvrProd.dlvrProdNmStoreRegist" />
+                </button>
+            </th>
+        </tr>
+        </tbody>
+    </table>
+
     <div id="grid" class="w100">
         <div class="mt20 oh sb-select dkbr">
             <%-- 페이지 스케일  --%>
@@ -175,12 +196,10 @@
             <button class="btn_skyblue ml5 fr"  id="copyBtn" ng-click="copyDlvrProdNm()" <c:if test="${orgnFg eq 'STORE' and hqOfficeCd eq '00000'}">style="display: none;"</c:if>>
                 <s:message code="dlvrProd.nmCopy" />
             </button>
-
             <%-- 저장 --%>
             <button class="btn_skyblue ml5 fr" id="btnSave" ng-click="save()">
                 <s:message code="cmm.save" />
             </button>
-
         </div>
         <div class="wj-gridWrap mt10" style="height:370px; overflow-y: hidden;">
             <div class="row">
@@ -195,6 +214,7 @@
                         ime-enabled="true">
 
                     <!-- define columns -->
+                    <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="30"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dlvrProd.prodCd"/>" binding="prodCd" width="100" is-read-only="true" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dlvrProd.prodNm"/>" binding="prodNm" width="200" is-read-only="true"></wj-flex-grid-column>
                     <%-- 배달앱 구분코드 컬럼 생성--%>
@@ -221,7 +241,7 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProd/dlvrProdNmMapping.js?ver=20230209.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProd/dlvrProdNmMapping.js?ver=20230411.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
@@ -233,4 +253,10 @@
 
 <%-- 상품명칭 엑셀업로드 --%>
 <c:import url="/WEB-INF/view/base/prod/dlvrProd/excelUploadDlvrProdNm.jsp">
+</c:import>
+
+<%-- 상품명칭 매장적용 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/dlvrProd/dlvrProdNmStoreRegist.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

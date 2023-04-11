@@ -169,4 +169,49 @@ public class DlvrProdController {
         return returnJson(Status.OK, getCnt);
     }
 
+    /**
+     * 상품명칭 매장적용 팝업 - 조회
+     *
+     * @param dlvrProdVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 04. 10.
+     */
+    @RequestMapping(value = "/dlvrProd/getDlvrProdNmStoreRegistList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDlvrProdNmStoreRegistList(DlvrProdVO dlvrProdVO, HttpServletRequest request,
+                                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = dlvrProdService.getDlvrProdNmStoreRegistList(dlvrProdVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, result, dlvrProdVO);
+    }
+
+    /**
+     * 상품명칭 매장적용 팝업 - 저장
+     *
+     * @param dlvrProdVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 04. 10.
+     */
+    @RequestMapping(value = "/dlvrProd/getDlvrProdNmStoreRegistSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDlvrProdNmStoreRegistSave(@RequestBody DlvrProdVO[] dlvrProdVOs, HttpServletRequest request,
+                                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = dlvrProdService.getDlvrProdNmStoreRegistSave(dlvrProdVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

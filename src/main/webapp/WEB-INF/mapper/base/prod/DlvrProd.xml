@@ -388,4 +388,80 @@
             </when>
         </choose>
     </select>
+
+    <!-- 상품명칭 매장적용 팝업 - 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        COMMENTS : [매장]매장 정보
+    -->
+    <select id="getDlvrProdNmStoreRegistList" parameterType="dlvrProdVO" resultType="DefaultMap">
+        /* DlvrProdMapper.getDlvrProdNmStoreRegistList */
+        SELECT
+        tms.HQ_OFFICE_CD,
+        tms.STORE_CD,
+        tms.STORE_NM,
+        tms.SYS_STAT_FG
+        FROM TB_MS_STORE tms
+        WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="storeCd != null and storeCd != ''">
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test="sysStatFg != null and sysStatFg != ''">
+            AND tms.SYS_STAT_FG = #{sysStatFg}
+        </if>
+        ORDER BY tms.STORE_CD ASC
+    </select>
+
+    <!-- 상품명칭 매장적용 팝업 - 저장 delete -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getDlvrProdNmStoreRegistSaveDelete" parameterType="dlvrProdVO" >
+        /* DlvrProdMapper.getDlvrProdNmStoreRegistSaveDelete */
+        DELETE
+        FROM TB_MS_PRODUCT_DLVR_PROD_NM
+        WHERE 1=1
+        AND STORE_CD = #{storeCd}
+        AND PROD_CD IN (${selectProdCd})
+    </delete>
+
+    <!-- 상품명칭 매장적용 팝업 - 저장 insert -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getDlvrProdNmStoreRegistSaveInsert" parameterType="dlvrProdVO" >
+        /* DlvrProdMapper.getDlvrProdNmStoreRegistSaveInsert */
+        INSERT INTO TB_MS_PRODUCT_DLVR_PROD_NM
+        (
+            STORE_CD,
+            PROD_CD,
+            DLVR_NAME_CD,
+            DLVR_PROD_NM,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID,
+            DLVR_MAPPING_FG
+        )
+        SELECT
+        #{storeCd} AS STORE_CD,
+        PROD_CD,
+        DLVR_NAME_CD,
+        DLVR_PROD_NM,
+        #{regDt} AS REG_DT,
+        #{regId} AS REG_ID,
+        #{modDt} AS MOD_DT,
+        #{modId} AS MOD_ID,
+        DLVR_MAPPING_FG
+        FROM TB_HQ_PRODUCT_DLVR_PROD_NM
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND PROD_CD IN (${selectProdCd})
+    </insert>
+
 </mapper>

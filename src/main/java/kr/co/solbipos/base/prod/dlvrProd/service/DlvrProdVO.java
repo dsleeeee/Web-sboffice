@@ -81,6 +81,14 @@ public class DlvrProdVO extends PageVO {
     *//** 위메프앱 *//*
     private String dlvrProdNm6;*/
 
+    /** 매장명 */
+    private String storeNm;
+
+    /** 매장상태 */
+    private String sysStatFg;
+
+    /** 상품코드 */
+    private String selectProdCd;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -249,4 +257,16 @@ public class DlvrProdVO extends PageVO {
     public void setRegDtType(String regDtType) {
         this.regDtType = regDtType;
     }
+
+    public String getStoreNm() { return storeNm; }
+
+    public void setStoreNm(String storeNm) { this.storeNm = storeNm; }
+
+    public String getSysStatFg() { return sysStatFg; }
+
+    public void setSysStatFg(String sysStatFg) { this.sysStatFg = sysStatFg; }
+
+    public String getSelectProdCd() { return selectProdCd; }
+
+    public void setSelectProdCd(String selectProdCd) { this.selectProdCd = selectProdCd; }
 }
