@@ -165,4 +165,38 @@ public class DlvrProdServiceImpl implements DlvrProdService {
         return dlvrProdMapper.chkDlvrProd(dlvrProdVO);
     }
 
+    /** 상품명칭 매장적용 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getDlvrProdNmStoreRegistList(DlvrProdVO dlvrProdVO, SessionInfoVO sessionInfoVO) {
+
+        dlvrProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return dlvrProdMapper.getDlvrProdNmStoreRegistList(dlvrProdVO);
+    }
+
+    /** 상품명칭 매장적용 팝업 - 저장 */
+    @Override
+    public int getDlvrProdNmStoreRegistSave(DlvrProdVO[] dlvrProdVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(DlvrProdVO dlvrProdVO : dlvrProdVOs) {
+
+            dlvrProdVO.setRegDt(currentDt);
+            dlvrProdVO.setRegId(sessionInfoVO.getUserId());
+            dlvrProdVO.setModDt(currentDt);
+            dlvrProdVO.setModId(sessionInfoVO.getUserId());
+
+            dlvrProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+            // 삭제
+            procCnt = dlvrProdMapper.getDlvrProdNmStoreRegistSaveDelete(dlvrProdVO);
+
+            // 등록
+            procCnt = dlvrProdMapper.getDlvrProdNmStoreRegistSaveInsert(dlvrProdVO);
+        }
+
+        return procCnt;
+    }
 }

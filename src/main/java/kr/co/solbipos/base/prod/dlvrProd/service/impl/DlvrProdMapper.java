@@ -46,4 +46,13 @@ public interface DlvrProdMapper {
 
     /** 배달시스템 상품 명칭 매핑 - 상품명칭 엑셀 업로드 전 상품코드 유효여부 체크 */
     int chkDlvrProd(DlvrProdVO dlvrProdVO);
+
+    /** 상품명칭 매장적용 팝업 - 조회 */
+    List<DefaultMap<Object>> getDlvrProdNmStoreRegistList(DlvrProdVO dlvrProdVO);
+
+    /** 상품명칭 매장적용 팝업 - 저장 delete */
+    int getDlvrProdNmStoreRegistSaveDelete(DlvrProdVO dlvrProdVO);
+
+    /** 상품명칭 매장적용 팝업 - 저장 insert */
+    int getDlvrProdNmStoreRegistSaveInsert(DlvrProdVO dlvrProdVO);
 }

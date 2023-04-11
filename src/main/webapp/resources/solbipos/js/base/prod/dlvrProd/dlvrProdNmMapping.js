@@ -177,4 +177,49 @@ app.controller('dlvrProdNmMappingCtrl', ['$scope', '$http', function ($scope, $h
         vScope.excelFormDownload();
     };
 
+    // 상품명칭 매장적용
+    $scope.storeApply = function () {
+        if($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["cmm.empty.data"]);
+            return false;
+        }
+
+        // 파라미터 설정
+        var params = new Array();
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            if($scope.flex.collectionView.items[i].gChk) {
+                params.push($scope.flex.collectionView.items[i]);
+            }
+        }
+
+        if(params.length <= 0) {
+            s_alert.pop(messages["cmm.not.select"]);
+            return;
+        }
+
+        $scope.setSelectedProd(params);
+        $scope.wjDlvrProdNmStoreRegistLayer.show(true);
+        event.preventDefault();
+    };
+
+    // 선택
+    $scope.selectedProd;
+    $scope.setSelectedProd = function(store) {
+        $scope.selectedProd = store;
+    };
+    $scope.getSelectedProd = function() {
+        return $scope.selectedProd;
+    };
+
+    // 화면 ready 된 후 설정
+    angular.element(document).ready(function () {
+
+        // 상품명칭 매장적용 팝업 핸들러 추가
+        $scope.wjDlvrProdNmStoreRegistLayer.shown.addHandler(function (s) {
+            setTimeout(function() {
+                $scope._broadcast('dlvrProdNmStoreRegistCtrl', $scope.getSelectedProd());
+            }, 50)
+        });
+    });
+
 }]);
