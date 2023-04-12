@@ -158,7 +158,7 @@
         /* EmpStoreMapper.getStoreManageEmpList */
         SELECT
         thes.HQ_OFFICE_CD,
-        thes.STORE_CD,
+        #{storeCd} AS STORE_CD,
         thes.EMP_NO,
         the.EMP_NM,
         the.SERVICE_FG,
@@ -169,7 +169,11 @@
         AND the.HQ_OFFICE_CD (+)= thes.HQ_OFFICE_CD
         AND the.EMP_NO (+)= thes.EMP_NO
         AND thes.HQ_OFFICE_CD = #{membrOrgnCd}
-        AND thes.STORE_CD = #{storeCd}
+        AND (thes.STORE_CD = #{storeCd} OR thes.STORE_CD = 'ALL')
+        GROUP BY thes.HQ_OFFICE_CD,
+        thes.EMP_NO,
+        the.EMP_NM,
+        the.SERVICE_FG
         ORDER BY thes.EMP_NO
     </select>
 
@@ -199,7 +203,7 @@
             WHERE 1=1
             AND thes.EMP_NO = the.EMP_NO
             AND thes.HQ_OFFICE_CD = #{membrOrgnCd}
-            AND thes.STORE_CD = #{storeCd}
+            AND (thes.STORE_CD = #{storeCd} OR thes.STORE_CD = 'ALL')
         )
         ORDER BY the.EMP_NO
     </select>
