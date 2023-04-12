@@ -109,6 +109,8 @@ public class EmpStoreServiceImpl implements EmpStoreService {
             resultMap.put("empNo", empStoreVO.getEmpNo());
 
             empNoManageStoreList.add(0, resultMap);
+        }else{
+            empNoManageStoreList.clear();
         }
 
         return empNoManageStoreList;
