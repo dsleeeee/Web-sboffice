@@ -45,10 +45,10 @@ public interface IostockCmmMapper {
     /** 사용자별 코드별 공통코드 콤보박스 조회 */
     List<DefaultMap<String>> selectHqNmcodeMomsList(IostockCmmVO iostockCmmVO);
 
-    /** 사용자별 지사 조회 */
+    /** 사용자별 그룹 조회 */
     String getUserBranchCdList(IostockCmmVO iostockCmmVO);
 
-    /** 사용자별 지사 콤보박스 조회 */
+    /** 사용자별 그룹 콤보박스 조회 */
     List<DefaultMap<String>> selectBranchMomsList(IostockCmmVO iostockCmmVO);
 
     /** 프로모션 조회 */

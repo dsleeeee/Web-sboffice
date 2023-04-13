@@ -102,7 +102,7 @@ public interface HqEmpMapper {
     /** 본사 거래처 조회(콤보박스용) */
     List<DefaultMap<String>> getHqVendrCombo(HqEmpVO hqEmpVO);
 
-    /** 지사 조회(콤보박스용) */
+    /** 그룹 조회(콤보박스용) */
     List<DefaultMap<String>> getHqBranchCombo(HqEmpVO hqEmpVO);
 
     /** 코드별 본사 공통코드 콤보박스 조회 */

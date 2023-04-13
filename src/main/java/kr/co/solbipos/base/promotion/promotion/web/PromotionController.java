@@ -115,7 +115,7 @@ public class PromotionController {
         // 맘스터치 적용매장추가 조회조건 콤보박스 데이터
         IostockCmmVO iostockCmmVO = new IostockCmmVO();
         model.addAttribute("momsStoreHqBrand", convertToJson(iostockCmmService.selectBrandMomsList(iostockCmmVO, sessionInfoVO)));         // 매장브랜드
-        model.addAttribute("momsBranch", convertToJson(iostockCmmService.selectBranchMomsList(iostockCmmVO, sessionInfoVO)));               // 지사
+        model.addAttribute("momsBranch", convertToJson(iostockCmmService.selectBranchMomsList(iostockCmmVO, sessionInfoVO)));               // 그룹
 
         iostockCmmVO.setNmcodeGrpCd("151");
         model.addAttribute("momsTeam", convertToJson(iostockCmmService.selectHqNmcodeMomsList(iostockCmmVO, sessionInfoVO)));               // 팀별

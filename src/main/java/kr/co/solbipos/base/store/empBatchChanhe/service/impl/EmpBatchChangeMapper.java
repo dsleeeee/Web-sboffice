@@ -44,7 +44,7 @@ public interface EmpBatchChangeMapper {
 
     /** 사원번호 */
     int getEmpNoChk(EmpBatchChangeVO empBatchChangeVO);
-    /** 지사코드 */
+    /** 그룹코드 */
     String getBranchCdChk(EmpBatchChangeVO empBatchChangeVO);
     /** 본사공통코드 */
     String getHqNmcodeChk(EmpBatchChangeVO empBatchChangeVO);

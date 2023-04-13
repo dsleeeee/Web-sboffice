@@ -171,7 +171,7 @@ public class StoreManageVO extends PageVO {
     /** 경도 */
     private String longitude;
 
-    /** 지사코드 */
+    /** 그룹코드 */
     private String branchCd;
 
     /** 명칭코드그룹코드 */

@@ -48,7 +48,7 @@
                         </wj-combo-box>
                     </div>
                 </td>
-                <%-- 지사 --%>
+                <%-- 그룹 --%>
                 <th><s:message code="promotion.branch"/></th>
                 <td>
                     <div class="sb-select w100">

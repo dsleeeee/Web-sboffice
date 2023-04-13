@@ -60,7 +60,7 @@
                 </wj-combo-box>
               </div>
             </td>
-            <%-- 지사 --%>
+            <%-- 그룹 --%>
             <th><s:message code="outstockReqDate.branchCd"/></th>
             <td>
               <div class="sb-select">
@@ -381,13 +381,13 @@
         }
       });
 
-      // 지사
+      // 그룹
       var params = {};
       $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectBranchMomsList.sb', params, function (response) {
         if (response.data.data.list.length > 0) {
           var list = response.data.data.list;
           $scope._setComboData("popBranchCdCombo", list);
-          // 지사
+          // 그룹
           if(list.length <= 1) {
             $("#srchPopBranchCdComboo").css('background-color', '#F0F0F0');
             $("#srchPopBranchCdComboo").attr("disabled", true);

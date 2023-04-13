@@ -34,7 +34,7 @@
             <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
           </div>
         </td>
-        <%-- 지사 --%>
+        <%-- 그룹 --%>
         <th><s:message code="dayStore.branch"/></th>
         <td>
           <div class="sb-select">

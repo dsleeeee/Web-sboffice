@@ -161,7 +161,7 @@ public interface StoreManageService {
     /** 매장의 환경설정값 조회 */
     String getStoreEnvVal(StoreManageVO storeManageVO);
 
-    /** 본사-지사 조회(콤보박스용) */
+    /** 본사-그룹 조회(콤보박스용) */
     List<DefaultMap<String>> getBranchCombo(StoreManageVO storeManageVO);
 
     /** 코드별 본사 공통코드 콤보박스 조회 */

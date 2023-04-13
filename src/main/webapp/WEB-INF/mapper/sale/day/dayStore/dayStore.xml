@@ -92,7 +92,7 @@
         GROUP BY tsdt.SALE_DATE, tsdt.HQ_OFFICE_CD, tms.BRANCH_CD
     </select>
 
-    <!-- 지사코드 콤보박스 조회 -->
+    <!-- 그룹코드 콤보박스 조회 -->
     <!--
         TABLE    :
         COMMENTS :

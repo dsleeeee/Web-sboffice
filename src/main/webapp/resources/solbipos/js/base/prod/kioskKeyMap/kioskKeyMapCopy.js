@@ -33,7 +33,7 @@ app.controller('kioskKeyMapCopyCtrl', ['$scope', '$http', function ($scope, $htt
     $scope._setComboData("srchMomsCommercial1", momsCommercialComboList); // 상권
     $scope._setComboData("srchMomsShopType1", momsShopTypeComboList); // 점포유형
     $scope._setComboData("srchMomsStoreManageType1", momsStoreManageTypeComboList); // 매장관리타입
-    $scope._setComboData("srchBranchCd1", branchCdComboList); // 지사
+    $scope._setComboData("srchBranchCd1", branchCdComboList); // 그룹
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -153,7 +153,7 @@ app.controller('kioskKeyMapCopy2Ctrl', ['$scope', '$http', function ($scope, $ht
     $scope._setComboData("srchMomsCommercial2", momsCommercialComboList); // 상권
     $scope._setComboData("srchMomsShopType2", momsShopTypeComboList); // 점포유형
     $scope._setComboData("srchMomsStoreManageType2", momsStoreManageTypeComboList); // 매장관리타입
-    $scope._setComboData("srchBranchCd2", branchCdComboList); // 지사
+    $scope._setComboData("srchBranchCd2", branchCdComboList); // 그룹
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {

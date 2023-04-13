@@ -272,7 +272,7 @@
               <td></td>
           </tr>
           <tr>
-            <%-- 지사명 --%>
+            <%-- 그룹명 --%>
             <th>
               <s:message code="hqEmp.branchNm"/>
             </th>

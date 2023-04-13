@@ -34,14 +34,14 @@
     </colgroup>
     <tbody>
       <tr>
-        <%-- 지사코드 --%>
+        <%-- 그룹코드 --%>
         <th><s:message code="branchMoms.branchCd" /></th>
         <td>
           <div class="sb-select">
             <input type="text" class="sb-input w100" id="srchBranchCd" ng-model="branchCd" onkeyup="fnNxBtnSearch();"/>
           </div>
         </td>
-        <%-- 지사명 --%>
+        <%-- 그룹명 --%>
         <th><s:message code="branchMoms.branchNm" /></th>
         <td>
           <div class="sb-select">

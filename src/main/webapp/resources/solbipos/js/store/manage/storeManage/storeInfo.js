@@ -345,7 +345,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
       var installPosCnt   = response.data.data.instPosCnt;
       var storeDetailInfo = response.data.data.storeDtlInfo;
-      var vBranchCd = storeDetailInfo.branchCd; // 지사 (콤보 먼저 셋팅 후 바인딩시 사용)
+      var vBranchCd = storeDetailInfo.branchCd; // 그룹 (콤보 먼저 셋팅 후 바인딩시 사용)
       // [1250 맘스터치]
       // 콤보 먼저 셋팅 후 바인딩시 사용
       var vMomsTeam = nvl(storeDetailInfo.momsTeam, "");
@@ -430,7 +430,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.store.latitude = storeDetailInfo.latitude;
       $scope.store.longitude = storeDetailInfo.longitude;
 
-      // 본사-지사 콤보박스 set 후 -> 지사정보 set
+      // 본사-그룹 콤보박스 set 후 -> 그룹정보 set
       $scope.setBranchDropdownList();
 
       // [1250 맘스터치]
@@ -468,7 +468,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
       // 콤보박스 먼저 set할 시간을 벌기 위해
       setTimeout(function() {
-        $scope.branchCdCombo.selectedValue = vBranchCd;  // 지사
+        $scope.branchCdCombo.selectedValue = vBranchCd;  // 그룹
 
         // [1250 맘스터치]
         if($("#hdMomsEnvstVal").val() === "1") {
@@ -1019,7 +1019,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           // 매장환경복사 체크 disabled
           $scope.copyStoreSettingChk();
 
-          // 본사-지사 콤보박스 set
+          // 본사-그룹 콤보박스 set
           $scope.setBranchDropdownList();
 
           // [1250 맘스터치]
@@ -1472,7 +1472,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     // 매장환경복사 체크 disabled
     $scope.copyStoreSettingChk();
 
-    // 본사-지사 콤보박스 set
+    // 본사-그룹 콤보박스 set
     $scope.setBranchDropdownList();
 
     // ERP 연동 매장 셋팅 팝업 관련 visible 처리
@@ -1806,7 +1806,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
   };
   
-  // 본사-지사 콤보박스 set
+  // 본사-그룹 콤보박스 set
   $scope.setBranchDropdownList = function(){
 
     var params = {};

@@ -29,19 +29,19 @@
                 </colgroup>
                 <tbody>
                 <tr style="border-top: 1px solid #ccc;">
-                    <%-- 지사코드 --%>
+                    <%-- 그룹코드 --%>
                     <th><s:message code="branchMoms.branchCd"/></th>
                     <td>
                         <input type="text" id="branchCd" name="branchCd" ng-model="branchCd" class="sb-input w100"readonly="readonly">
                     </td>
-                    <%-- 지사명 --%>
+                    <%-- 그룹명 --%>
                     <th><s:message code="branchMoms.branchNm"/><em class="imp">*</em></th>
                     <td>
                         <input type="text" id="branchNm" name="branchNm" ng-model="branchNm" class="sb-input w100" maxlength="30" required/>
                     </td>
                 </tr>
                 <tr>
-                    <%-- 지사장명 --%>
+                    <%-- 그룹장명 --%>
                     <th><s:message code="branchMoms.branchOwnerNm"/><em class="imp">*</em></th>
                     <td>
                         <input type="text" id="branchOwnerNm" name="branchOwnerNm" ng-model="branchOwnerNm" class="sb-input w100" maxlength="100" required/>

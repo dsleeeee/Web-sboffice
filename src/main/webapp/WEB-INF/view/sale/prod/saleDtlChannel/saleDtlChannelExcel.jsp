@@ -259,7 +259,7 @@
                     </td>
                 </tr>
                 <tr>
-                        <%-- 지사 --%>
+                        <%-- 그룹 --%>
                     <th><s:message code="prodSaleRate.branchCd"/></th>
                     <td>
                         <div class="sb-select">

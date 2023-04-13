@@ -95,7 +95,7 @@ public class HqEmpVO extends PageVO {
     /** 거래처 코드 */
     private String vendrCd;
 
-    /** 지사 코드 */
+    /** 그룹 코드 */
     private String branchCd;
 
     /** 명칭코드그룹코드 */

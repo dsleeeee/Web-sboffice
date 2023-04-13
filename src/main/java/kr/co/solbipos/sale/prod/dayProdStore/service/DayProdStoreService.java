@@ -32,6 +32,6 @@ public interface DayProdStoreService {
     /** 사용자별 코드별 공통코드 콤보박스 조회 */
     List<DefaultMap<Object>> getUserHqNmcodeComboList(SessionInfoVO sessionInfoVO, String nmcodeGrpCd);
 
-    /** 사용자별 지사 콤보박스 조회 */
+    /** 사용자별 그룹 콤보박스 조회 */
     List<DefaultMap<Object>> getUserBranchComboList(SessionInfoVO sessionInfoVO);
 }

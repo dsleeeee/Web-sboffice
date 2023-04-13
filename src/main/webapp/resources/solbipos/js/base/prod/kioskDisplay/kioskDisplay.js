@@ -123,7 +123,7 @@ app.controller('kioskDisplayCtrl', ['$scope', '$http', '$timeout', function ($sc
   $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
   $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
   $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
-  $scope._setComboData("branchCdCombo", branchCdComboList); // 지사
+  $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
 
   // 등록일자 셋팅
   $scope.srchStartDate = wcombo.genDateVal("#srchTimeStartDate", gvStartDate);

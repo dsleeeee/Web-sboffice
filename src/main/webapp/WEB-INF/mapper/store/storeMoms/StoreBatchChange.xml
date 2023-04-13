@@ -169,10 +169,10 @@
         AND     STORE_CD = #{storeCd}
     </select>
 
-    <!-- 지사코드 -->
+    <!-- 그룹코드 -->
     <!--
         TABLE    : TB_HQ_BRANCH_MOMS
-        COMMENTS : 유효한 지사코드인지 체크
+        COMMENTS : 유효한 그룹코드인지 체크
     -->
     <select id="getBranchCdChk"  parameterType="ProdExcelUploadVO" resultType="String">
         /* StoreBatchChangeMapper.getBranchCdChk */

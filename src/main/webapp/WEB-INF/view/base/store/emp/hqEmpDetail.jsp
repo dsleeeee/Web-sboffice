@@ -109,7 +109,7 @@
             <td></td>
           </tr>
           <tr>
-            <%-- 지사정보 --%>
+            <%-- 그룹정보 --%>
             <th>
               <s:message code="hqEmp.branchNm"/>
             </th>

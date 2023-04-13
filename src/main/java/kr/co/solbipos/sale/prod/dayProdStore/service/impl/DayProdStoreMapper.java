@@ -42,9 +42,9 @@ public interface DayProdStoreMapper {
     /** 사용자별 코드별 공통코드 콤보박스 조회 */
     List<DefaultMap<Object>> getUserHqNmcodeComboList(DayProdStoreVO dayProdStoreVO);
 
-    /** 사용자별 지사 조회 */
+    /** 사용자별 그룹 조회 */
     String getUserBranchCdList(DayProdStoreVO dayProdStoreVO);
 
-    /** 사용자별 지사 콤보박스 조회 */
+    /** 사용자별 그룹 콤보박스 조회 */
     List<DefaultMap<Object>> getUserBranchComboList(DayProdStoreVO dayProdStoreVO);
 }

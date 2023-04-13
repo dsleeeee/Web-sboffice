@@ -8046,11 +8046,11 @@
         }
     </select>
 
-    <!-- 본사-지사 조회(콤보박스용) -->
+    <!-- 본사-그룹 조회(콤보박스용) -->
     <!--
         TABLE    : TB_HQ_BRANCH_MOMS
         PARAM    : storeManageVO
-        COMMENTS : 본사-지사(콤보박스용) 데이터를 조회한다.
+        COMMENTS : 본사-그룹(콤보박스용) 데이터를 조회한다.
     -->
     <select id="getBranchCombo" parameterType="storeManageVO" resultType="DefaultMap">
         /* StoreManageMapper.getBranchCombo */
@@ -8132,6 +8132,60 @@
                 #{regId},
                 #{modDt},
                 #{modId}
+            )
+    </insert>
+
+
+    <!-- 매장정보 저장 (맘스터치 추가정보) -->
+    <!--
+        TABLE    : TB_MS_STORE_INFO
+        COMMENTS : 매장정보 저장 (맘스터치 추가정보)
+    -->
+    <insert id="mergeStoreEnv1264" parameterType="storeManageVO">
+        /* StoreManageMapper.mergeStoreEnv1264 */
+        MERGE INTO TB_MS_STORE_ENVST A
+        USING (
+            SELECT  STORE_CD
+            ,       NVL(MAP_STORE_CD, STORE_CD) AS ENVST_VAL
+            ,       #{regDt} AS REG_DT
+            ,       #{regId} AS REG_ID
+            ,       #{modDt} AS MOD_DT
+            ,       #{modId} AS MOD_ID
+            FROM    TB_MS_STORE
+            WHERE   STORE_CD = #{storeCd}
+            ) B
+        ON
+            (
+                A.STORE_CD = B.STORE_CD
+            AND A.ENVST_CD = '1264'
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+                A.ENVST_VAL = B.ENVST_VAL
+            ,   MOD_ID      = B.MOD_ID
+            ,   MOD_DT      = B.MOD_DT
+        WHEN NOT MATCHED THEN
+            INSERT (
+                STORE_CD
+            ,   ENVST_CD
+            ,   ENVST_VAL
+            ,   DIRCT_IN_YN
+            ,   USE_YN
+            ,   REG_DT
+            ,   REG_ID
+            ,   MOD_DT
+            ,   MOD_ID
+            ) VALUES (
+                B.STORE_CD
+            ,   '1264'
+            ,   B.ENVST_VAL
+            ,   'N'
+            ,   'Y'
+            ,   B.REG_DT
+            ,   B.REG_ID
+            ,   B.MOD_DT
+            ,   B.MOD_ID
             )
     </insert>
 

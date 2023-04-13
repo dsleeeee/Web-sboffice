@@ -21,7 +21,7 @@ app.controller('copyAuthorExceptCtrl', ['$scope', '$http', function ($scope, $ht
     $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
     $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 사원관리타입
-    $scope._setComboData("branchCdCombo", branchCdComboList); // 지사
+    $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -129,7 +129,7 @@ app.controller('copyAuthorExcept2Ctrl', ['$scope', '$http', function ($scope, $h
     $scope._setComboData("momsCommercialCombo2", momsCommercialComboList); // 상권
     $scope._setComboData("momsShopTypeCombo2", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo2", momsStoreManageTypeComboList); // 사원관리타입
-    $scope._setComboData("branchCdCombo2", branchCdComboList); // 지사
+    $scope._setComboData("branchCdCombo2", branchCdComboList); // 그룹
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {

@@ -42,7 +42,7 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._getComboDataQuery('007', 'hqEmpServiceFgComboData');
   // 본사 거래처 콤보박스
   $scope._setComboData('hqEmpVendrCdComboData', vendrList);
-  // 지사 콤보박스
+  // 그룹 콤보박스
   $scope._setComboData('hqEmpBranchCdComboData', branchList);
 
   // [1250 맘스터치]

@@ -149,7 +149,7 @@ public class DayProdServiceImpl implements DayProdService {
         return resultList;
     }
 
-    /** 사용자별 지사 콤보박스 조회 */
+    /** 사용자별 그룹 콤보박스 조회 */
     @Override
     public List<DefaultMap<Object>> getUserBranchComboList(SessionInfoVO sessionInfoVO) {
 
@@ -164,7 +164,7 @@ public class DayProdServiceImpl implements DayProdService {
         List<DefaultMap<Object>> resultList = new ArrayList<DefaultMap<Object>>();
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
-            // 사사용자별 지사 조회
+            // 사사용자별 그룹 조회
             String userHqNmcodeCd = dayProdMapper.getUserBranchCdList(dayProdVO);
             dayProdVO.setUserHqNmcodeCd(userHqNmcodeCd);
 

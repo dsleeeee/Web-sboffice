@@ -450,7 +450,7 @@
         </choose>
     </select>
 
-    <!-- 사용자별 지사 조회 -->
+    <!-- 사용자별 그룹 조회 -->
     <!--
         TABLE    : TB_HQ_BRAND
         PARAM    : storeTypeVO
@@ -465,7 +465,7 @@
         AND the.USER_ID = #{userId}
     </select>
 
-    <!-- 사용자별 지사 콤보박스 조회 -->
+    <!-- 사용자별 그룹 콤보박스 조회 -->
     <!--
         TABLE    : TB_HQ_NMCODE
         COMMENTS :
