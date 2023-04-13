@@ -31,13 +31,13 @@ app.controller('storeBatchChangeCtrl', ['$scope', '$http', function ($scope, $ht
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
 
-    $scope._setComboData("momsTeamChgCombo", momsTeamComboList2); // 팀별
-    $scope._setComboData("momsAcShopChgCombo", momsAcShopComboList2); // AC점포별
-    $scope._setComboData("momsAreaFgChgCombo", momsAreaFgComboList2); // 지역구분
-    $scope._setComboData("momsCommercialChgCombo", momsCommercialComboList2); // 상권
-    $scope._setComboData("momsShopTypeChgCombo", momsShopTypeComboList2); // 점포유형
-    $scope._setComboData("momsStoreManageTypeChgCombo", momsStoreManageTypeComboList2); // 매장관리타입
-    $scope._setComboData("branchCdChgCombo", branchCdComboList2); // 그룹
+    $scope._setComboData("momsTeamChgCombo", momsTeamComboList3); // 팀별
+    $scope._setComboData("momsAcShopChgCombo", momsAcShopComboList3); // AC점포별
+    $scope._setComboData("momsAreaFgChgCombo", momsAreaFgComboList3); // 지역구분
+    $scope._setComboData("momsCommercialChgCombo", momsCommercialComboList3); // 상권
+    $scope._setComboData("momsShopTypeChgCombo", momsShopTypeComboList3); // 점포유형
+    $scope._setComboData("momsStoreManageTypeChgCombo", momsStoreManageTypeComboList3); // 매장관리타입
+    $scope._setComboData("branchCdChgCombo", branchCdComboList3); // 그룹
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {

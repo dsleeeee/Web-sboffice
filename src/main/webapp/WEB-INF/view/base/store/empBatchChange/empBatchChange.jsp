@@ -413,4 +413,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/empBatchChange/empBatchChange.js?ver=20230216.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/empBatchChange/empBatchChange.js?ver=20230413.01" charset="utf-8"></script>
