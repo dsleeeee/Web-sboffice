@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SaleMcoupon.xml
+    모바일쿠폰 현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2023.04.11     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.status.saleMcoupon.service.impl.SaleMcouponMapper">
+
+    <!-- 모바일쿠폰 현황 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSaleMcouponList" parameterType="SaleMcouponVO" resultType="DefaultMap">
+        /* SaleMcouponMapper.getSaleMcouponList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        tms.BRANCH_CD,
+        (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM,
+        tsspm.STORE_CD,
+        tms.STORE_NM,
+        tms.HQ_BRAND_CD AS BRAND_CD,
+        tmsi.MOMS_TEAM,
+        tmsi.MOMS_AC_SHOP,
+        <if test='orgnFg != null and orgnFg == "S"'>
+          TO_CHAR(TO_DATE(tsspm.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        </if>
+        COUNT(tsspm.SALE_FG) AS SALE_CNT,
+        SUM(tsspm.SALE_AMT) AS SALE_AMT,
+        SUM(CASE WHEN tsspm.SALE_FG = 1 THEN 1 ELSE 0 END) AS APPR_CNT,
+        SUM(CASE WHEN tsspm.SALE_FG = 1 THEN tsspm.SALE_AMT ELSE 0 END) AS APPR_AMT,
+        SUM(CASE WHEN tsspm.SALE_FG = -1 THEN 1 ELSE 0 END) AS CANCEL_CNT,
+        SUM(CASE WHEN tsspm.SALE_FG = -1 THEN tsspm.SALE_AMT ELSE 0 END) AS CANCEL_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_SL_SALE_PAY_MCOUPN tsspm,
+        TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi
+        WHERE 1=1
+        AND tsspm.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsspm.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        AND tsspm.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tms.HQ_OFFICE_CD = tsspm.HQ_OFFICE_CD
+        AND tms.STORE_CD = tsspm.STORE_CD
+        AND tmsi.STORE_CD (+)= tsspm.STORE_CD
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        GROUP BY tms.BRANCH_CD, tsspm.STORE_CD, tms.STORE_NM, tms.HQ_BRAND_CD, tmsi.MOMS_TEAM, tmsi.MOMS_AC_SHOP
+        <if test='orgnFg != null and orgnFg == "S"'>
+            , tsspm.SALE_DATE
+            ORDER BY tsspm.SALE_DATE
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            ORDER BY tms.BRANCH_CD, tsspm.STORE_CD
+        </if>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 모바일쿠폰 현황 - 엑셀다운로드 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSaleMcouponExcelList" parameterType="SaleMcouponVO" resultType="DefaultMap">
+        /* SaleMcouponMapper.getSaleMcouponExcelList */
+        SELECT
+        tms.BRANCH_CD,
+        (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM,
+        tsspm.STORE_CD,
+        tms.STORE_NM,
+        tms.HQ_BRAND_CD AS BRAND_CD,
+        tmsi.MOMS_TEAM,
+        tmsi.MOMS_AC_SHOP,
+        <if test='orgnFg != null and orgnFg == "S"'>
+            TO_CHAR(TO_DATE(tsspm.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        </if>
+        COUNT(tsspm.SALE_FG) AS SALE_CNT,
+        SUM(tsspm.SALE_AMT) AS SALE_AMT,
+        SUM(CASE WHEN tsspm.SALE_FG = 1 THEN 1 ELSE 0 END) AS APPR_CNT,
+        SUM(CASE WHEN tsspm.SALE_FG = 1 THEN tsspm.SALE_AMT ELSE 0 END) AS APPR_AMT,
+        SUM(CASE WHEN tsspm.SALE_FG = -1 THEN 1 ELSE 0 END) AS CANCEL_CNT,
+        SUM(CASE WHEN tsspm.SALE_FG = -1 THEN tsspm.SALE_AMT ELSE 0 END) AS CANCEL_AMT
+        FROM TB_SL_SALE_PAY_MCOUPN tsspm,
+        TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi
+        WHERE 1=1
+        AND tsspm.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsspm.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        AND tsspm.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tms.HQ_OFFICE_CD = tsspm.HQ_OFFICE_CD
+        AND tms.STORE_CD = tsspm.STORE_CD
+        AND tmsi.STORE_CD (+)= tsspm.STORE_CD
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        GROUP BY tms.BRANCH_CD, tsspm.STORE_CD, tms.STORE_NM, tms.HQ_BRAND_CD, tmsi.MOMS_TEAM, tmsi.MOMS_AC_SHOP
+        <if test='orgnFg != null and orgnFg == "S"'>
+            , tsspm.SALE_DATE
+            ORDER BY tsspm.SALE_DATE
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            ORDER BY tms.BRANCH_CD, tsspm.STORE_CD
+        </if>
+    </select>
+
+    <!-- 모바일쿠폰 현황 상세 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSaleMcouponDtlList" parameterType="SaleMcouponVO" resultType="DefaultMap">
+        /* SaleMcouponMapper.getSaleMcouponDtlList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                tsspm.STORE_CD,
+                tms.STORE_NM,
+                TO_CHAR(TO_DATE(tsspm.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+                COUNT(tsspm.SALE_FG) AS SALE_CNT,
+                SUM(tsspm.SALE_AMT) AS SALE_AMT
+                FROM TB_SL_SALE_PAY_MCOUPN tsspm,
+                TB_MS_STORE tms
+                WHERE 1=1
+                AND tsspm.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsspm.STORE_CD = #{storeCd}
+                AND tsspm.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                AND tms.STORE_CD = tsspm.STORE_CD
+                GROUP BY tsspm.STORE_CD, tms.STORE_NM, tsspm.SALE_DATE
+                ORDER BY tsspm.STORE_CD, tsspm.SALE_DATE
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                TO_CHAR(TO_DATE(tsspm.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+                tsspm.POS_NO,
+                tsspm.BILL_NO,
+                tsspm.LINE_NO,
+                tsspm.LINE_SEQ_NO,
+                tsspm.SALE_YN,
+                tsspm.SALE_AMT
+                FROM TB_SL_SALE_PAY_MCOUPN tsspm
+                WHERE 1=1
+                AND tsspm.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsspm.STORE_CD = #{storeCd}
+                AND tsspm.SALE_DATE = #{saleDate}
+                ORDER BY tsspm.SALE_DATE, tsspm.POS_NO, tsspm.BILL_NO, tsspm.LINE_NO, tsspm.LINE_SEQ_NO
+            </when>
+        </choose>
+    </select>
+
+</mapper>
