@@ -40,7 +40,7 @@ public interface StoreBatchChangeMapper {
 
     /** 매장코드 */
     int getStoreCdChk(StoreBatchChangeVO storeBatchChangeVO);
-    /** 지사코드 */
+    /** 그룹코드 */
     String getBranchCdChk(StoreBatchChangeVO storeBatchChangeVO);
     /** 본사공통코드 */
     String getHqNmcodeChk(StoreBatchChangeVO storeBatchChangeVO);

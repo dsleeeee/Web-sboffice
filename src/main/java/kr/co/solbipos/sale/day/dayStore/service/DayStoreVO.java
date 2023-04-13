@@ -33,7 +33,7 @@ public class DayStoreVO extends PageVO {
     /** 조회매장 */
     private String storeCds;
 
-    /** 지사코드 */
+    /** 그룹코드 */
     private String branchCd;
 
     public String getHqOfficeCd() { return hqOfficeCd; }

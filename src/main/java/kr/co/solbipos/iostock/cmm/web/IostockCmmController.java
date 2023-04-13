@@ -369,7 +369,7 @@ public class IostockCmmController {
     }
 
     /**
-     * 사용자별 지사 콤보박스 조회
+     * 사용자별 그룹 콤보박스 조회
      * @param   request
      * @param   response
      * @param   model

@@ -65,7 +65,7 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
     $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
     $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
-    $scope._setComboData("branchCdCombo", branchCdComboList); // 지사
+    $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
 
   $scope.prodSaleUprcApply = true;
 

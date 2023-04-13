@@ -66,7 +66,7 @@ public class DayStoreController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         DayStoreVO dayStoreVO = new DayStoreVO();
 
-        // 지사 콤보박스
+        // 그룹 콤보박스
         model.addAttribute("branchMomsComboList", convertToJson(dayStoreService.getBranchMomsComboList(dayStoreVO, sessionInfoVO)));
 
         return "sale/day/dayStore/dayStore";

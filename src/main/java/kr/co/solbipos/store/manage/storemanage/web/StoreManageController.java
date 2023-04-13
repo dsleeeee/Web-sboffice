@@ -1000,7 +1000,7 @@ public class StoreManageController {
     }
 
     /**
-     * 본사-지사 조회(콤보박스용)
+     * 본사-그룹 조회(콤보박스용)
      * @param storeManageVO
      * @param request
      * @param response

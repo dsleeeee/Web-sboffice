@@ -144,7 +144,7 @@ public class SoldOutController {
         List momsStoreManageTypeComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "156");
         model.addAttribute("momsStoreManageTypeComboList", momsStoreManageTypeComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsStoreManageTypeComboList, "name", "value", UseYn.N));
 
-        // - 사용자별 지사 콤보박스 조회
+        // - 사용자별 그룹 콤보박스 조회
         List branchCdComboList = dayProdService.getUserBranchComboList(sessionInfoVO);
         model.addAttribute("branchCdComboList", branchCdComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(branchCdComboList, "name", "value", UseYn.N));
 

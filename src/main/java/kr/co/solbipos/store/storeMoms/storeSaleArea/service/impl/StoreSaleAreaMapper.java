@@ -30,7 +30,7 @@ public interface StoreSaleAreaMapper {
     /** 매장목록 조회 */
     List<DefaultMap<String>> getStoreList(StoreSaleAreaVO storeSaleAreaVO);
 
-    /** 지사 조회(콤보박스용) */
+    /** 그룹 조회(콤보박스용) */
     List<DefaultMap<String>> getBranchCombo(StoreSaleAreaVO storeSaleAreaVO);
 
     /** 매장 조회(콤보박스용) */

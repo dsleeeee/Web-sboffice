@@ -173,8 +173,8 @@ public class EmpBatchChangeController {
         }
         model.addAttribute("momsStoreManageTypeComboList", momsStoreManageTypeComboListAll);
 
-        // 사용자별 지사 콤보박스 조회
-        // 지사
+        // 사용자별 그룹 콤보박스 조회
+        // 그룹
         List branchCdComboList = dayProdService.getUserBranchComboList(sessionInfoVO);
         String branchCdComboListAll = "";
         if (branchCdComboList.isEmpty()) {
@@ -246,8 +246,8 @@ public class EmpBatchChangeController {
             model.addAttribute("momsStoreManageTypeComboList2", momsStoreManageTypeComboListAll);
         }
 
-        // 사용자별 지사 콤보박스 조회
-        // 지사
+        // 사용자별 그룹 콤보박스 조회
+        // 그룹
         if(branchCdComboList.size() > 1) {
             branchCdComboList.remove(0);
             String branchCdComboListAll2 = "";

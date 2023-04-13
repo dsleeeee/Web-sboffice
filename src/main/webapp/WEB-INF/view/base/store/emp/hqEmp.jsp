@@ -227,7 +227,7 @@
 
   <%-- 본사 거래처 콤보박스 --%>
   var vendrList = ${vendrList};
-  <%-- 지사 콤보박스 --%>
+  <%-- 그룹 콤보박스 --%>
   var branchList = ${branchList};
 
   // [1250 맘스터치] 환경설정값

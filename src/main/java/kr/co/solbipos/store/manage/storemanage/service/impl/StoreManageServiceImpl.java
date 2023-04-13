@@ -756,6 +756,8 @@ public class StoreManageServiceImpl implements StoreManageService{
         System.out.println("momsEnvstVal : " + storeManageVO.getMomsEnvstVal());
         if(("1").equals(storeManageVO.getMomsEnvstVal())) {
             procCnt += mapper.mergeStoreInfoAddMoms(storeManageVO);
+            // [1264] 맘스전용_기프티쇼매장코드 MERGE 처리
+            procCnt += mapper.mergeStoreEnv1264(storeManageVO);
         }
 
         return procCnt;
@@ -1595,7 +1597,7 @@ public class StoreManageServiceImpl implements StoreManageService{
         }
     }
 
-    /** 본사-지사 조회(콤보박스용) */
+    /** 본사-그룹 조회(콤보박스용) */
     @Override
     public List<DefaultMap<String>> getBranchCombo(StoreManageVO storeManageVO){
         return mapper.getBranchCombo(storeManageVO);

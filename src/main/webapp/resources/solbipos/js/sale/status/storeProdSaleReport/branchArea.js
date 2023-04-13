@@ -1,7 +1,7 @@
 /****************************************************************
  *
  * 파일명 : storeProdSaleReport.js
- * 설  명 : 지사-지역관리 탭 JavaScript
+ * 설  명 : 그룹-지역관리 탭 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
@@ -13,11 +13,11 @@
  */
 var app = agrid.getApp();
 
-// 지역관리 등록에 추가버튼, '지사코드' 미선택시 막을려고 ("V":선택, "N":미선택)
+// 지역관리 등록에 추가버튼, '그룹코드' 미선택시 막을려고 ("V":선택, "N":미선택)
 var addSelected = "N";
 
 /**
- *  지사관리 그리드 생성
+ *  그룹관리 그리드 생성
  */
 app.controller('branchAreaCtrl', ['$scope', '$http', function ($scope, $http) {
 
@@ -31,7 +31,7 @@ app.controller('branchAreaCtrl', ['$scope', '$http', function ($scope, $http) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
 
-                // 지사코드
+                // 그룹코드
                 if (col.binding === "branchCd") {
                     // var item = s.rows[e.row].dataItem;
                     wijmo.addClass(e.cell, 'wijLink');
@@ -45,7 +45,7 @@ app.controller('branchAreaCtrl', ['$scope', '$http', function ($scope, $http) {
             if( ht.cellType === wijmo.grid.CellType.Cell) {
                 var col = ht.panel.columns[ht.col];
 
-                // 지사코드 클릭시 상세정보 조회
+                // 그룹코드 클릭시 상세정보 조회
                 if ( col.binding === "branchCd") {
                     var selectedRow = s.rows[ht.row].dataItem;
                     var params = {};
@@ -115,7 +115,7 @@ app.controller('branchAreaCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.save = function() {
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].branchNm === "") {
-                $scope._popMsg(messages["branchArea.branchNmBlank"]); // 지사명을 입력해주세요.
+                $scope._popMsg(messages["branchArea.branchNmBlank"]); // 그룹명을 입력해주세요.
                 return false;
             }
         }
@@ -145,7 +145,7 @@ app.controller('branchAreaCtrl', ['$scope', '$http', function ($scope, $http) {
 
 
 /**
- *  지사-지역관리 그리드 생성
+ *  그룹-지역관리 그리드 생성
  */
 app.controller('branchAreaDetailCtrl', ['$scope', '$http', function ($scope, $http) {
 
@@ -195,7 +195,7 @@ app.controller('branchAreaDetailCtrl', ['$scope', '$http', function ($scope, $ht
     // <-- 그리드 행 추가 -->
     $scope.addRow = function() {
         if(addSelected === "N") {
-            $scope._popMsg(messages["branchArea.branchCdAlert"]); // 지사코드을 선택해주세요.
+            $scope._popMsg(messages["branchArea.branchCdAlert"]); // 그룹코드을 선택해주세요.
             return false;
         }
 
@@ -214,7 +214,7 @@ app.controller('branchAreaDetailCtrl', ['$scope', '$http', function ($scope, $ht
     // <-- 그리드 행 삭제 -->
     $scope.del = function(){
         if(addSelected === "N") {
-            $scope._popMsg(messages["branchArea.branchCdAlert"]); // 지사코드을 선택해주세요.
+            $scope._popMsg(messages["branchArea.branchCdAlert"]); // 그룹코드을 선택해주세요.
             return false;
         }
 
@@ -236,7 +236,7 @@ app.controller('branchAreaDetailCtrl', ['$scope', '$http', function ($scope, $ht
     // <-- 그리드 저장 -->
     $scope.save = function() {
         if(addSelected == "N") {
-            $scope._popMsg(messages["branchArea.branchCdAlert"]); // 지사코드을 선택해주세요.
+            $scope._popMsg(messages["branchArea.branchCdAlert"]); // 그룹코드을 선택해주세요.
             return;
         }
 

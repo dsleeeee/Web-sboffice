@@ -29,7 +29,7 @@ app.controller('storeBatchChangeCtrl', ['$scope', '$http', function ($scope, $ht
     $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
     $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
-    $scope._setComboData("branchCdCombo", branchCdComboList); // 지사
+    $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
 
     $scope._setComboData("momsTeamChgCombo", momsTeamComboList2); // 팀별
     $scope._setComboData("momsAcShopChgCombo", momsAcShopComboList2); // AC점포별
@@ -37,13 +37,13 @@ app.controller('storeBatchChangeCtrl', ['$scope', '$http', function ($scope, $ht
     $scope._setComboData("momsCommercialChgCombo", momsCommercialComboList2); // 상권
     $scope._setComboData("momsShopTypeChgCombo", momsShopTypeComboList2); // 점포유형
     $scope._setComboData("momsStoreManageTypeChgCombo", momsStoreManageTypeComboList2); // 매장관리타입
-    $scope._setComboData("branchCdChgCombo", branchCdComboList2); // 지사
+    $scope._setComboData("branchCdChgCombo", branchCdComboList2); // 그룹
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
         // 그리드 DataMap 설정
-        $scope.branchCdDataMap = new wijmo.grid.DataMap(branchCdComboList2, 'value', 'name'); // 지사
+        $scope.branchCdDataMap = new wijmo.grid.DataMap(branchCdComboList2, 'value', 'name'); // 그룹
         $scope.momsTeamDataMap = new wijmo.grid.DataMap(momsTeamComboList2, 'value', 'name'); // 팀별
         $scope.momsAcShopDataMap = new wijmo.grid.DataMap(momsAcShopComboList2, 'value', 'name'); // AC점포별
         $scope.momsAreaFgDataMap = new wijmo.grid.DataMap(momsAreaFgComboList2, 'value', 'name'); // 지역구분
@@ -140,7 +140,7 @@ app.controller('storeBatchChangeCtrl', ['$scope', '$http', function ($scope, $ht
 
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
-                // 지사코드
+                // 그룹코드
                 if(chgGubun == "branchCdChg") {
                     $scope.flex.collectionView.items[i].branchCd = $scope.branchCdChg;
                 }

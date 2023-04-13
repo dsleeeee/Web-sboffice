@@ -76,7 +76,7 @@ public class PayFgVO extends PageVO {
     /** 매장관리타입 */
     private String momsStoreManageType;
 
-    /** 지사코드 */
+    /** 그룹코드 */
     private String branchCd;
 
     public String getHqOfficeCd() { return hqOfficeCd; }

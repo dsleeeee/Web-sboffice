@@ -4,7 +4,7 @@
 var app = agrid.getApp();
 
 var optionData = [
-  {"name":"지사별","value":"branch"},
+  {"name":"그룹별","value":"branch"},
   {"name":"매장별","value":"store"}
 ];
 
@@ -25,7 +25,7 @@ app.controller('storeDayChannelCtrl', ['$scope', '$http', '$timeout', function (
   $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
   $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
   $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
-  $scope._setComboData("branchCdCombo", branchCdComboList); // 지사
+  $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -340,7 +340,7 @@ app.controller('storeDayChannelCtrl', ['$scope', '$http', '$timeout', function (
     }
   };
 
-  // 옵션(지사별/매장별)에 따라 매장선택 숨김/보임
+  // 옵션(그룹별/매장별)에 따라 매장선택 숨김/보임
   $scope.changeOption = function (s){
     if(s.selectedValue === "branch"){
       $(".dayStore").hide();

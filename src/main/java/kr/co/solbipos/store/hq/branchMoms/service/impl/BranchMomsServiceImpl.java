@@ -16,7 +16,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : BranchMomsServiceImpl.java
- * @Description : 가맹점관리 > 본사정보 > 본사-지사 관리
+ * @Description : 가맹점관리 > 본사정보 > 본사-그룹 관리
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용

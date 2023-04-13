@@ -267,7 +267,7 @@
           </td>
         </tr>
         <tr>
-          <%-- 지사 --%>
+          <%-- 그룹 --%>
           <th><s:message code="prodRankMoms.branchCd"/></th>
           <td>
             <div class="sb-select">

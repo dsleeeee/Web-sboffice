@@ -193,7 +193,7 @@ public class PromotionVO extends PageVO {
     private String[] userBrandList;
     /** 매장브랜드코드 */
     private String storeHqBrandCd;
-    /** 지사코드 */
+    /** 그룹코드 */
     private String branchCd;
     /** 팀별 */
     private String momsTeam;

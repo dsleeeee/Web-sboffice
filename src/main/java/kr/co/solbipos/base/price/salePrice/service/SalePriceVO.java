@@ -145,7 +145,7 @@ public class SalePriceVO extends PageVO {
     /** 매장관리타입 */
     private String momsStoreManageType;
 
-    /** 지사코드 */
+    /** 그룹코드 */
     private String branchCd;
 
     /** 엑셀업로드 구분 (H:본사판매가, S:매장판매가) */

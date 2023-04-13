@@ -25,7 +25,7 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 
 /**
  * @Class Name : BranchMomsController.java
- * @Description : 가맹점관리 > 본사정보 > 본사-지사 관리
+ * @Description : 가맹점관리 > 본사정보 > 본사-그룹 관리
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -54,7 +54,7 @@ public class BranchMomsController {
     }
 
     /**
-     * 본사-지사 관리 화면 이동
+     * 본사-그룹 관리 화면 이동
      * @param   request
      * @param   response
      * @param   model

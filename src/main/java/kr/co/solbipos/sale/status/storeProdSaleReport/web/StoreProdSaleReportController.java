@@ -213,7 +213,7 @@ public class StoreProdSaleReportController {
     }
 
     /**
-     * 지사-지역관리 탭 - 지사 조회
+     * 그룹-지역관리 탭 - 그룹 조회
      *
      * @param storeProdSaleReportVO
      * @param request
@@ -236,7 +236,7 @@ public class StoreProdSaleReportController {
     }
 
     /**
-     * 지사-지역관리 탭 - 지사 저장
+     * 그룹-지역관리 탭 - 그룹 저장
      *
      * @param storeProdSaleReportVOs
      * @param request
@@ -259,7 +259,7 @@ public class StoreProdSaleReportController {
     }
 
     /**
-     * 지사-지역관리 탭 - 지역 조회
+     * 그룹-지역관리 탭 - 지역 조회
      *
      * @param storeProdSaleReportVO
      * @param request
@@ -282,7 +282,7 @@ public class StoreProdSaleReportController {
     }
 
     /**
-     * 지사-지역관리 탭 - 지역 저장
+     * 그룹-지역관리 탭 - 지역 저장
      *
      * @param storeProdSaleReportVOs
      * @param request
@@ -374,7 +374,7 @@ public class StoreProdSaleReportController {
     }
 
     /**
-     * 지사-지역관리 탭 - 지역-매장 저장 delete
+     * 그룹-지역관리 탭 - 지역-매장 저장 delete
      *
      * @param storeProdSaleReportVOs
      * @param request
@@ -397,7 +397,7 @@ public class StoreProdSaleReportController {
     }
 
     /**
-     * 지사-지역관리 탭 - 지역-매장 저장
+     * 그룹-지역관리 탭 - 지역-매장 저장
      *
      * @param storeProdSaleReportVOs
      * @param request

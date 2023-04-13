@@ -109,7 +109,7 @@ public class StoreProdSaleReportServiceImpl implements StoreProdSaleReportServic
         return storeProdSaleReportMapper.getStoreProdSaleReportChk(storeProdSaleReportVO);
     }
 
-    /** 지사-지역관리 탭 - 지사 조회 */
+    /** 그룹-지역관리 탭 - 그룹 조회 */
     @Override
     public List<DefaultMap<Object>> getBranchAreaList(StoreProdSaleReportVO storeProdSaleReportVO, SessionInfoVO sessionInfoVO) {
 
@@ -118,7 +118,7 @@ public class StoreProdSaleReportServiceImpl implements StoreProdSaleReportServic
         return storeProdSaleReportMapper.getBranchAreaList(storeProdSaleReportVO);
     }
 
-    /** 지사-지역관리 탭 - 지사 저장 */
+    /** 그룹-지역관리 탭 - 그룹 저장 */
     @Override
     public int getBranchAreaSave(StoreProdSaleReportVO[] storeProdSaleReportVOs, SessionInfoVO sessionInfoVO) {
 
@@ -135,7 +135,7 @@ public class StoreProdSaleReportServiceImpl implements StoreProdSaleReportServic
                 storeProdSaleReportVO.setRegDt(currentDt);
                 storeProdSaleReportVO.setRegId(sessionInfoVO.getUserId());
 
-                // 지사코드(자동 채번)
+                // 그룹코드(자동 채번)
                 String branchCd = storeProdSaleReportMapper.getBranchAreaBranchCd(storeProdSaleReportVO);
                 storeProdSaleReportVO.setBranchCd(branchCd);
 
@@ -147,7 +147,7 @@ public class StoreProdSaleReportServiceImpl implements StoreProdSaleReportServic
             } else if (storeProdSaleReportVO.getStatus() == GridDataFg.DELETE) {
                 procCnt = storeProdSaleReportMapper.getBranchAreaSaveDelete(storeProdSaleReportVO);
 
-                // 지사 delete 시, 지역 delete
+                // 그룹 delete 시, 지역 delete
                 procCnt = storeProdSaleReportMapper.getBranchAreaDetailSaveDeleteAll(storeProdSaleReportVO);
             }
         }
@@ -155,7 +155,7 @@ public class StoreProdSaleReportServiceImpl implements StoreProdSaleReportServic
         return procCnt;
     }
 
-    /** 지사-지역관리 탭 - 지역 조회 */
+    /** 그룹-지역관리 탭 - 지역 조회 */
     @Override
     public List<DefaultMap<Object>> getBranchAreaDetailList(StoreProdSaleReportVO storeProdSaleReportVO, SessionInfoVO sessionInfoVO) {
 
@@ -164,7 +164,7 @@ public class StoreProdSaleReportServiceImpl implements StoreProdSaleReportServic
         return storeProdSaleReportMapper.getBranchAreaDetailList(storeProdSaleReportVO);
     }
 
-    /** 지사-지역관리 탭 - 지역 저장 */
+    /** 그룹-지역관리 탭 - 지역 저장 */
     @Override
     public int getBranchAreaDetailSave(StoreProdSaleReportVO[] storeProdSaleReportVOs, SessionInfoVO sessionInfoVO) {
 
@@ -225,7 +225,7 @@ public class StoreProdSaleReportServiceImpl implements StoreProdSaleReportServic
         return storeProdSaleReportMapper.getAreaStoreMappingStoreList(storeProdSaleReportVO);
     }
 
-    /** 지사-지역관리 탭 - 지역-매장 저장 delete */
+    /** 그룹-지역관리 탭 - 지역-매장 저장 delete */
     @Override
     public int getAreaStoreMappingDetailSave(StoreProdSaleReportVO[] storeProdSaleReportVOs, SessionInfoVO sessionInfoVO) {
 
@@ -246,7 +246,7 @@ public class StoreProdSaleReportServiceImpl implements StoreProdSaleReportServic
         return procCnt;
     }
 
-    /** 지사-지역관리 탭 - 지역-매장 저장 */
+    /** 그룹-지역관리 탭 - 지역-매장 저장 */
     @Override
     public int getAreaStoreMappingStoreSave(StoreProdSaleReportVO[] storeProdSaleReportVOs, SessionInfoVO sessionInfoVO) {
 

@@ -29,9 +29,11 @@ app.controller('closeStoreCtrl',  ['$scope', '$http', function ($scope, $http) {
   // 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
   $scope._setComboData("srchStatFg", sysStatFg);
+  $scope._setComboData("srchVanCd", vanComboList);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+    $scope.vanCdDataMap = new wijmo.grid.DataMap(vanComboList, 'value', 'name');
     $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("closeStoreCtrl");

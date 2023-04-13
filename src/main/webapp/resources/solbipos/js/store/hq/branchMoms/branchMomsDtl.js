@@ -1,7 +1,7 @@
 /****************************************************************
  *
  * 파일명 : branchMoms.js
- * 설  명 : 본사-지사 관리 JavaScript
+ * 설  명 : 본사-그룹 관리 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
@@ -92,28 +92,28 @@ app.controller('branchMomsDtlCtrl', ['$scope', '$http', function ($scope, $http)
 
   $scope.valueCheck = function () {
 
-    // 지사명 입력 체크
+    // 그룹명 입력 체크
     if(nvl($("#branchNm").val(), '') === ''){
       msg = messages["branchMoms.branchNm"] + messages["branchMoms.noneChk"];
       $scope._popMsg(msg);
       return false;
     }
 
-    // 지사장명 입력 체크
+    // 그룹장명 입력 체크
     if(nvl($("#branchOwnerNm").val(), '') === ''){
       msg = messages["branchMoms.branchOwnerNm"] + messages["branchMoms.noneChk"];
       $scope._popMsg(msg);
       return false;
     }
 
-    // 지사명 최대길이 체크
+    // 그룹명 최대길이 체크
     if (nvl($("#branchNm").val(), '') !== '' && nvl($("#branchNm").val() + '', -'').getByteLengthForOracle() > 50) {
       msg = messages["branchMoms.branchNm"] + messages["excelUpload.overLength"] + " 100 " + messages["excelUpload.bateLengthInfo"];
       $scope._popMsg(msg);
       return false;
     }
 
-    // 지사장명 최대길이 체크
+    // 그룹장명 최대길이 체크
     if (nvl($("#branchOwnerNm").val(), '') !== '' && nvl($("#branchOwnerNm").val() + '', '').getByteLengthForOracle() > 50) {
       msg = messages["branchMoms.branchOwnerNm"] + messages["excelUpload.overLength"] + " 50 " + messages["excelUpload.bateLengthInfo"];
       $scope._popMsg(msg);

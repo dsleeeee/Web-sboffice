@@ -63,7 +63,7 @@ public class StoreSaleAreaServiceImpl implements StoreSaleAreaService {
         return storeSaleAreaMapper.getStoreList(storeSaleAreaVO);
     }
 
-    /** 지사 조회(콤보박스용) */
+    /** 그룹 조회(콤보박스용) */
     @Override
     public List<DefaultMap<String>> getBranchCombo(StoreSaleAreaVO storeSaleAreaVO, SessionInfoVO sessionInfoVO) {
 

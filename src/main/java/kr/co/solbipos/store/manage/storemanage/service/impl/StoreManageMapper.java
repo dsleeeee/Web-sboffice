@@ -494,7 +494,7 @@ public interface StoreManageMapper {
     /** 특이매장 데이터 처리 */
     String unusualStoreRegInfo(StoreManageVO storeManageVO);
 
-    /** 본사-지사 조회(콤보박스용) */
+    /** 본사-그룹 조회(콤보박스용) */
     List<DefaultMap<String>> getBranchCombo(StoreManageVO storeManageVO);
 
     /** 코드별 본사 공통코드 콤보박스 조회 */
@@ -502,6 +502,9 @@ public interface StoreManageMapper {
 
     /** 매장정보 저장 (맘스터치 추가정보) */
     int mergeStoreInfoAddMoms(StoreManageVO storeManageVO);
+
+    /** 매장정보 저장 ([1264] 맘스전용_기프티쇼매장코드 MERGE 처리) */
+    int mergeStoreEnv1264(StoreManageVO storeManageVO);
 
     /** 브랜드 콤보박스 조회 */
     List<DefaultMap<Object>> getHqBrandCdComboList(StoreManageVO storeManageVO);

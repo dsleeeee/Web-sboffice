@@ -43,7 +43,7 @@ app.controller('storeSaleAreaDtlCtrl', ['$scope', '$http', function ($scope, $ht
         }
     });
 
-    // 지사선택에 따른 매장 리스트 set
+    // 그룹선택에 따른 매장 리스트 set
     $scope.setDtlStore = function (s) {
         if(s.selectedValue !== null && s.selectedValue !== undefined && s.selectedValue !== "") {
             var params = {};

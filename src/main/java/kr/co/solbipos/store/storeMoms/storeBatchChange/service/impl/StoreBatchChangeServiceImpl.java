@@ -154,12 +154,12 @@ public class StoreBatchChangeServiceImpl implements StoreBatchChangeService {
 
             // 매장코드
             if(storeBatchChangeMapper.getStoreCdChk(storeBatchChangeVO) > 0){
-                // 지사코드
+                // 그룹코드
                 if(storeBatchChangeVO.getBranchCd() != null && !"".equals(storeBatchChangeVO.getBranchCd())){
                     String branchCd = storeBatchChangeMapper.getBranchCdChk(storeBatchChangeVO);
                     // 잘못된 정보 입력시
                     if(branchCd == null || branchCd == "") {
-                        result += "지사, ";
+                        result += "그룹, ";
                     }
                 }
                 // 팀별

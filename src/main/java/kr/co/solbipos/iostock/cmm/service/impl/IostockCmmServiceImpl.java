@@ -217,7 +217,7 @@ public class IostockCmmServiceImpl implements IostockCmmService {
         return resultList;
     }
 
-    /** 사용자별 지사 콤보박스 조회 */
+    /** 사용자별 그룹 콤보박스 조회 */
     @Override
     public List<DefaultMap<String>> selectBranchMomsList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
 
@@ -231,7 +231,7 @@ public class IostockCmmServiceImpl implements IostockCmmService {
         List<DefaultMap<String>> resultList = new ArrayList<DefaultMap<String>>();
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
-            // 사사용자별 지사 조회
+            // 사사용자별 그룹 조회
             String userHqNmcodeCd = iostockCmmMapper.getUserBranchCdList(iostockCmmVO);
             iostockCmmVO.setUserHqNmcodeCd(userHqNmcodeCd);
 

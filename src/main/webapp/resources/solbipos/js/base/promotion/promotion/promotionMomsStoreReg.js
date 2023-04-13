@@ -16,7 +16,7 @@ app.controller('promotionMomsStoreRegCtrl', ['$scope', '$http', function ($scope
     angular.extend(this, new RootController('promotionMomsStoreRegCtrl', $scope, $http, false));
 
     $scope._setComboData("srchMomsStoreHqBrand", momsStoreHqBrand);       // 매장브랜드
-    $scope._setComboData("srchMomsBranch", momsBranch);                   // 지사
+    $scope._setComboData("srchMomsBranch", momsBranch);                   // 그룹
     $scope._setComboData("srchMomsTeam", momsTeam);                       // 팀별
     $scope._setComboData("srchMomsAcShop", momsAcShop);                   // AC점포별
     $scope._setComboData("srchMomsAreaFg", momsAreaFg);                   // 지역구분

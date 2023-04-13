@@ -156,12 +156,12 @@ public class EmpBatchChangeServiceImpl implements EmpBatchChangeService {
 
             // 사원코드
             if(empBatchChangeMapper.getEmpNoChk(empBatchChangeVO) > 0){
-                // 지사코드
+                // 그룹코드
                 if(empBatchChangeVO.getBranchCd() != null && !"".equals(empBatchChangeVO.getBranchCd())){
                     String branchCd = empBatchChangeMapper.getBranchCdChk(empBatchChangeVO);
                     // 잘못된 정보 입력시
                     if(branchCd == null || branchCd == "") {
-                        result += "지사, ";
+                        result += "그룹, ";
                     }
                 }
                 // 팀별

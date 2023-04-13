@@ -34,16 +34,16 @@ public interface StoreProdSaleReportService {
     /** 기간별 매장-상품 매출 다운로드 탭 - 자료생성 요청건 존재여부 확인 */
     DefaultMap<String> getStoreProdSaleReportChk(StoreProdSaleReportVO storeProdSaleReportVO, SessionInfoVO sessionInfoVO);
 
-    /** 지사-지역관리 탭 - 지사 조회 */
+    /** 그룹-지역관리 탭 - 그룹 조회 */
     List<DefaultMap<Object>> getBranchAreaList(StoreProdSaleReportVO storeProdSaleReportVO, SessionInfoVO sessionInfoVO);
 
-    /** 지사-지역관리 탭 - 지사 저장 */
+    /** 그룹-지역관리 탭 - 그룹 저장 */
     int getBranchAreaSave(StoreProdSaleReportVO[] storeProdSaleReportVOs, SessionInfoVO sessionInfoVO);
 
-    /** 지사-지역관리 탭 - 지역 조회 */
+    /** 그룹-지역관리 탭 - 지역 조회 */
     List<DefaultMap<Object>> getBranchAreaDetailList(StoreProdSaleReportVO storeProdSaleReportVO, SessionInfoVO sessionInfoVO);
 
-    /** 지사-지역관리 탭 - 지역 저장 */
+    /** 그룹-지역관리 탭 - 지역 저장 */
     int getBranchAreaDetailSave(StoreProdSaleReportVO[] storeProdSaleReportVOs, SessionInfoVO sessionInfoVO);
 
     /** 지역-매장관리 탭 - 지역 조회 */
@@ -55,9 +55,9 @@ public interface StoreProdSaleReportService {
     /** 지역-매장관리 탭 - 매장 조회 */
     List<DefaultMap<Object>> getAreaStoreMappingStoreList(StoreProdSaleReportVO storeProdSaleReportVO, SessionInfoVO sessionInfoVO);
 
-    /** 지사-지역관리 탭 - 지역-매장 저장 delete */
+    /** 그룹-지역관리 탭 - 지역-매장 저장 delete */
     int getAreaStoreMappingDetailSave(StoreProdSaleReportVO[] storeProdSaleReportVOs, SessionInfoVO sessionInfoVO);
 
-    /** 지사-지역관리 탭 - 지역-매장 저장 */
+    /** 그룹-지역관리 탭 - 지역-매장 저장 */
     int getAreaStoreMappingStoreSave(StoreProdSaleReportVO[] storeProdSaleReportVOs, SessionInfoVO sessionInfoVO);
 }

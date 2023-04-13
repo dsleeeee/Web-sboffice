@@ -176,8 +176,8 @@ public class StoreSaleAreaController {
         }
         model.addAttribute("momsStoreManageTypeComboList", momsStoreManageTypeComboListAll);
 
-        // 사용자별 지사 콤보박스 조회
-        // 지사
+        // 사용자별 그룹 콤보박스 조회
+        // 그룹
         List branchCdComboList = dayProdService.getUserBranchComboList(sessionInfoVO);
         String branchCdComboListAll = "";
         if (branchCdComboList.isEmpty()) {
@@ -192,7 +192,7 @@ public class StoreSaleAreaController {
         }
         model.addAttribute("branchCdComboList", branchCdComboListAll);
 
-        // 지사 조회(콤보박스용)
+        // 그룹 조회(콤보박스용)
         model.addAttribute("branchCombo", convertToJson(storeSaleAreaService.getBranchCombo(storeSaleAreaVO, sessionInfoVO)));
 
         return "store/storeMoms/storeSaleArea/storeSaleArea";

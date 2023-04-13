@@ -36,7 +36,7 @@ app.controller('storeProdSaleReportTabCtrl', ['$scope', function ($scope) {
         scope.flex.refresh();
     };
 
-    // 지사-지역관리 탭 보이기
+    // 그룹-지역관리 탭 보이기
     $scope.branchAreaShow = function () {
         $("#storeProdSaleReportTab").removeClass("on");
         $("#branchAreaTab").addClass("on");

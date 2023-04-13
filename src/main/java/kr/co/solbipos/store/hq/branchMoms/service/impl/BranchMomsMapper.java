@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * @Class Name : BranchMomsMapper.java
- * @Description : 가맹점관리 > 본사정보 > 본사-지사 관리
+ * @Description : 가맹점관리 > 본사정보 > 본사-그룹 관리
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -30,7 +30,7 @@ public interface BranchMomsMapper {
     /** 본사 목록 조회 */
     List<DefaultMap<String>> getBranchMomsList(BranchMomsVO branchMomsVO);
 
-    /** 지사코드 채번 */
+    /** 그룹코드 채번 */
     String setBranchCd(BranchMomsVO branchMomsVO);
 
     /** 사업자번호 중복체크 */

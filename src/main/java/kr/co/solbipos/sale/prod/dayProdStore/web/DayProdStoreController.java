@@ -162,8 +162,8 @@ public class DayProdStoreController {
         }
         model.addAttribute("momsStoreManageTypeComboList", momsStoreManageTypeComboListAll);
 
-        // 사용자별 지사 콤보박스 조회
-        // 지사
+        // 사용자별 그룹 콤보박스 조회
+        // 그룹
         List branchCdComboList = dayProdStoreService.getUserBranchComboList(sessionInfoVO);
         String branchCdComboListAll = "";
         if (branchCdComboList.isEmpty()) {

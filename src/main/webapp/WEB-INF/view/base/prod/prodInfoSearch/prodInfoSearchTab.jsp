@@ -10,6 +10,10 @@
 <div class="con">
     <div class="tabType1" ng-controller="prodInfoSearchCtrl" ng-init="init()">
         <ul>
+            <%-- 상품정보 탭 --%>
+            <li>
+                <a id="prodInfo2Tab" href="#" ng-click="prodInfo2Show()" <c:if test="${momsEnvstVal != '1'}">style="display: none" </c:if>><s:message code="prodInfoSearch.prodInfo2"/></a>
+            </li>
             <%-- 상품분류 탭 --%>
             <li>
                 <a id="prodClassTab" href="#" class="on" ng-click="prodClassShow()"><s:message code="prodInfoSearch.prodClass"/></a>
@@ -49,7 +53,34 @@
         </ul>
     </div>
 </div>
+<script>
+    onload = function()
+    {
+
+        // 분류조회팝업 한번씩 열었다 닫아야 정상동작함 딱 한번만 반복하도록
+        var prodInfoScope = agrid.getScope("prodInfoCtrl");
+        prodInfoScope.prodClassPopUpLayer.show();
+        prodInfoScope.prodClassPopUpLayer.hide();
+
+        var orgplceScope = agrid.getScope("orgplceCtrl");
+        orgplceScope.prodClassPopUpLayer.show();
+        orgplceScope.prodClassPopUpLayer.hide();
+
+        var allergyScope = agrid.getScope("allergyCtrl");
+        allergyScope.prodClassPopUpLayer.show();
+        allergyScope.prodClassPopUpLayer.hide();
+
+        if(momsEnvstVal === "1") {
+            var prodInfo2Scope = agrid.getScope("prodInfo2Ctrl");
+            prodInfo2Scope.prodClassPopUpLayer.show();
+            prodInfo2Scope.prodClassPopUpLayer.hide();
+        }
+    }
+</script>
 <script type="text/javascript">
+    // [1250 맘스터치] 환경설정값
+    var momsEnvstVal = "${momsEnvstVal}";
+
     // List 형식("" 안붙임)
     var momsHqBrandCdComboList = ${momsHqBrandCdComboList};
 
@@ -64,9 +95,15 @@
     var kioskTuClsTypeList = ${kioskTuClsTypeList};
     kioskTuClsTypeList.unshift({name: "전체", value: ""});
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodInfoSearch/prodInfoSearchTab.js?ver=20221223.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodInfoSearch/prodInfoSearchTab.js?ver=20221223.03" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
+<%-- 상품정보 레이어 --%>
+<c:import url="/WEB-INF/view/base/prod/prodInfoSearch/prodInfo2.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
 <%-- 상품분류 레이어 --%>
 <c:import url="/WEB-INF/view/base/prod/prodInfoSearch/prodClass.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
@@ -120,5 +157,4 @@
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
-
 <%-- //탭페이지 레이어 --%>

@@ -37,7 +37,7 @@ app.controller('storeOpenCloseMonthTimeCtrl', ['$scope', '$http', '$timeout', fu
     $scope._setComboData("momsCommercialCombo2", momsCommercialComboList); // 상권
     $scope._setComboData("momsShopTypeCombo2", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo2", momsStoreManageTypeComboList); // 매장관리타입
-    $scope._setComboData("branchCdCombo2", branchCdComboList); // 지사
+    $scope._setComboData("branchCdCombo2", branchCdComboList); // 그룹
 
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("storeOpenCloseMonthTimeCtrl", function (event, data) {

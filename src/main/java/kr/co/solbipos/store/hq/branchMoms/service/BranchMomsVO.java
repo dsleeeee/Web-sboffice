@@ -6,7 +6,7 @@ import kr.co.solbipos.sys.auth.authgroup.enums.IncldExcldFg;
 
 /**
  * @Class Name : BranchMomsVO.java
- * @Description : 가맹점관리 > 본사정보 > 본사-지사 관리
+ * @Description : 가맹점관리 > 본사정보 > 본사-그룹 관리
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -26,11 +26,11 @@ public class BranchMomsVO extends PageVO {
 
     /** 본사코드 */
     private String hqOfficeCd;
-    /** 지사코드 */
+    /** 그룹코드 */
     private String branchCd;
-    /** 지사명 */
+    /** 그룹명 */
     private String branchNm;
-    /** 지사장명 */
+    /** 그룹장명 */
     private String branchOwnerNm;
     /** 전화번호 */
     private String telNo;

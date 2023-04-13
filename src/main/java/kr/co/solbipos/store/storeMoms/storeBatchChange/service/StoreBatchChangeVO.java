@@ -24,9 +24,9 @@ public class StoreBatchChangeVO extends PageVO {
 
     /** 본사코드 */
     private String hqOfficeCd;
-    /** 지사코드 */
+    /** 그룹코드 */
     private String branchCd;
-    /** 지사명 */
+    /** 그룹명 */
     private String branchNm;
     /** 매장코드 */
     private String storeCd;

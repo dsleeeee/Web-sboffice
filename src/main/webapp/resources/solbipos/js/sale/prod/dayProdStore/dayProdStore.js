@@ -47,7 +47,7 @@ app.controller('dayProdStoreCtrl', ['$scope', '$http', '$timeout', function ($sc
     $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
     $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
-    $scope._setComboData("branchCdCombo", branchCdComboList); // 지사
+    $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
     $scope._setComboData("prodOptionCombo", prodOptionComboData); // 상품표시옵션
     $scope._setComboData("dayOptionCombo", dayOptionComboData); // 일자표시옵션
 

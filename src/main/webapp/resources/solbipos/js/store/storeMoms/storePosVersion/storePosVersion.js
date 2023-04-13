@@ -16,7 +16,7 @@ app.controller('storePosVersionCtrl', ['$scope', '$http', '$timeout', function (
   $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
   $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
   $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
-  $scope._setComboData("branchCdCombo", branchCdComboList); // 지사
+  $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -29,7 +29,7 @@ app.controller('storePosVersionCtrl', ['$scope', '$http', '$timeout', function (
     $scope.areaCdDataMap = new wijmo.grid.DataMap(areaCd, 'value', 'name'); // 지역
     $scope.clsFgDataMap = new wijmo.grid.DataMap(clsFg, 'value', 'name'); // 용도
     $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name'); // 상태
-    $scope.branchCdDataMap = new wijmo.grid.DataMap(branchCdComboList, 'value', 'name'); // 지사
+    $scope.branchCdDataMap = new wijmo.grid.DataMap(branchCdComboList, 'value', 'name'); // 그룹
 
     $scope.momsTeamDataMap = new wijmo.grid.DataMap(momsTeamComboList, 'value', 'name'); // 팀별
     $scope.momsAcShopDataMap = new wijmo.grid.DataMap(momsAcShopComboList, 'value', 'name'); // AC점포별

@@ -30,7 +30,7 @@ app.controller('storeSaleAreaRegCtrl', ['$scope', '$http', function ($scope, $ht
             setTimeout(function() {
                 $scope.srchRegStoreCdCombo.selectedValue = data.storeCd;
 
-                // 처음 선택한 지사와 매장 갖고있기(초기화 클릭시 사용)
+                // 처음 선택한 그룹와 매장 갖고있기(초기화 클릭시 사용)
                 $("#hdRegBranchCd").val(data.branchCd);
                 $("#hdRegStoreCd").val(data.storeCd);
             }, 300);
@@ -41,7 +41,7 @@ app.controller('storeSaleAreaRegCtrl', ['$scope', '$http', function ($scope, $ht
         }
     });
 
-    // 지사선택에 따른 매장 리스트 set
+    // 그룹선택에 따른 매장 리스트 set
     $scope.setRegStore = function (s) {
         if(s.selectedValue !== null && s.selectedValue !== undefined && s.selectedValue !== "") {
             var params = {};
@@ -147,7 +147,7 @@ app.controller('storeSaleAreaRegCtrl', ['$scope', '$http', function ($scope, $ht
         });
     };
 
-    // 타매장 지역 매칭 - 지사선택에 따른 매장리스트 set
+    // 타매장 지역 매칭 - 그룹선택에 따른 매장리스트 set
     $scope.setMapStore = function(s) {
         if(s.selectedValue !== null && s.selectedValue !== undefined && s.selectedValue !== "") {
             var params = {};
