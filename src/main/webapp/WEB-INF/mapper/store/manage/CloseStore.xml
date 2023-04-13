@@ -28,7 +28,8 @@
                 C.AGENCY_NM,
                 TO_CHAR(TO_DATE((SELECT MAX(SALE_DATE) FROM TB_SL_DAILY_TOTAL WHERE HQ_OFFICE_CD = A.HQ_OFFICE_CD AND STORE_CD = A.STORE_CD), 'yyyymmdd'), 'yyyy-mm-dd') AS MAX_SALE_DATE,
                 TO_CHAR(TO_DATE(A.REG_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD') AS REG_DT,
-                A.SYS_STAT_FG
+                A.SYS_STAT_FG,
+                A.VAN_CD
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM    TB_MS_STORE A,
                 TB_HQ_OFFICE B,
@@ -69,6 +70,9 @@
         </if>
         <if test='sysStatFg != null and sysStatFg != ""'>
             AND A.SYS_STAT_FG = #{sysStatFg}
+        </if>
+        <if test="vanCd != null and vanCd != ''">
+            AND A.VAN_CD = #{vanCd}
         </if>
         ORDER BY A.HQ_OFFICE_CD ASC, A.STORE_CD ASC, A.AGENCY_CD ASC
         <include refid="CmmSQL.PagingTemplateBottom"/>

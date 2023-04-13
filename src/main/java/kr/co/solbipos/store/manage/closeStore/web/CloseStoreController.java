@@ -6,9 +6,9 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.sale.anals.store.rank.service.StoreRankVO;
 import kr.co.solbipos.store.manage.closeStore.service.CloseStoreService;
 import kr.co.solbipos.store.manage.closeStore.service.CloseStoreVO;
+import kr.co.solbipos.store.manage.storeCloseExcept.service.StoreCloseExceptService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : CloseStoreController.java
@@ -50,12 +51,14 @@ public class CloseStoreController {
     /** service */
     private final CloseStoreService closeStoreService;
     private final SessionService sessionService;
+    private final StoreCloseExceptService storeCloseExceptService;
 
     /** Constructor Injection */
     @Autowired
-    public CloseStoreController(CloseStoreService closeStoreService, SessionService sessionService) {
+    public CloseStoreController(CloseStoreService closeStoreService, SessionService sessionService, StoreCloseExceptService storeCloseExceptService) {
         this.closeStoreService = closeStoreService;
         this.sessionService = sessionService;
+        this.storeCloseExceptService = storeCloseExceptService;
     }
 
     /**
@@ -70,6 +73,8 @@ public class CloseStoreController {
     @RequestMapping(value = "/closeStore/view.sb", method = RequestMethod.GET)
     public String virtualLoginView(HttpServletRequest request, HttpServletResponse response,
             Model model) {
+        model.addAttribute("vanComboList", convertToJson(storeCloseExceptService.getVanComboList()));
+
         return "store/manage/closeStore/closeStore";
     }
 

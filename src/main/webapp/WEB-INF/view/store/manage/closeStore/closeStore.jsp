@@ -67,30 +67,46 @@
     </tr>
 </c:if>
     <tr>
-      <tr>
-        <%-- 본사코드 --%>
-        <th><s:message code="closeStore.hqOfficeCd" /></th>
-        <td>
-          <input type="text" class="sb-input w100" id="srchHqOfficeCd" ng-model="hqOfficeCd" onkeyup="fnNxBtnSearch();"/>
-        </td>
-        <%-- 본사명 --%>
-        <th><s:message code="closeStore.hqOfficeNm" /></th>
-        <td>
-          <input type="text" class="sb-input w100" id="srchHqOfficeNm" ng-model="hqOfficeNm" onkeyup="fnNxBtnSearch();"/>
-        </td>
-      </tr>
-      <tr>
-        <%-- 매장코드 --%>
-        <th><s:message code="closeStore.storeCd" /></th>
-        <td>
-          <input type="text" class="sb-input w100" id="srchStoreCd" ng-model="storeCd" onkeyup="fnNxBtnSearch();"/>
-        </td>
-        <%-- 매장명 --%>
-        <th><s:message code="closeStore.storeNm" /></th>
-        <td>
-          <input type="text" class="sb-input w100" id="srchStoreNm" ng-model="storeNm" onkeyup="fnNxBtnSearch();"/>
-        </td>
-      </tr>
+      <%-- 본사코드 --%>
+      <th><s:message code="closeStore.hqOfficeCd" /></th>
+      <td>
+        <input type="text" class="sb-input w100" id="srchHqOfficeCd" ng-model="hqOfficeCd" onkeyup="fnNxBtnSearch();"/>
+      </td>
+      <%-- 본사명 --%>
+      <th><s:message code="closeStore.hqOfficeNm" /></th>
+      <td>
+        <input type="text" class="sb-input w100" id="srchHqOfficeNm" ng-model="hqOfficeNm" onkeyup="fnNxBtnSearch();"/>
+      </td>
+    </tr>
+    <tr>
+      <%-- 매장코드 --%>
+      <th><s:message code="closeStore.storeCd" /></th>
+      <td>
+        <input type="text" class="sb-input w100" id="srchStoreCd" ng-model="storeCd" onkeyup="fnNxBtnSearch();"/>
+      </td>
+      <%-- 매장명 --%>
+      <th><s:message code="closeStore.storeNm" /></th>
+      <td>
+        <input type="text" class="sb-input w100" id="srchStoreNm" ng-model="storeNm" onkeyup="fnNxBtnSearch();"/>
+      </td>
+    </tr>
+      <%-- 밴사코드 --%>
+      <th><s:message code="closeStore.vanCd" /></th>
+      <td>
+        <div class="sb-select">
+          <wj-combo-box
+                  id="srchVanCd"
+                  ng-model="vanCd"
+                  control="vanCdCombo"
+                  items-source="_getComboData('srchVanCd')"
+                  display-member-path="name"
+                  selected-value-path="value"
+                  is-editable="false"
+                  initialized="_initComboBox(s)">
+          </wj-combo-box>
+        </div>
+      </td>
+    </tr>
 <c:if test="${orgnFg == 'MASTER'}">
     <tr>
       <%-- 비고 --%>
@@ -144,6 +160,7 @@
           <wj-flex-grid-column header="<s:message code="closeStore.storeCd"/>" binding="storeCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="closeStore.storeNm"/>" binding="storeNm" width="200" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="closeStore.agencyNm"/>" binding="agencyNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="closeStore.vanCd"/>" binding="vanCd" width="100" align="center" is-read-only="true" data-map="vanCdDataMap"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="closeStore.maxSaleDate"/>" binding="maxSaleDate" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="closeStore.regDate"/>" binding="regDt" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="closeStore.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -170,5 +187,6 @@
 
 <script type="text/javascript">
   var sysStatFg = ${ccu.getCommCode("005")};
+  var vanComboList = ${vanComboList};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/closeStore/closeStore.js?ver=20220422.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/closeStore/closeStore.js?ver=20220422.02" charset="utf-8"></script>
