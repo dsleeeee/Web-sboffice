@@ -52,7 +52,8 @@
                   selected-value-path="value"
                   is-editable="false"
                   control="optionCombo"
-                  selected-index-changed="changeOption(s)">
+                  selected-index-changed="changeOption(s)"
+                  selected-index="1">
           </wj-combo-box>
         </div>
       </td>
