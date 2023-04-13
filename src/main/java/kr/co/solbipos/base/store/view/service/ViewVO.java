@@ -84,7 +84,7 @@ public class ViewVO extends PageVO {
     /** 매장관리타입 */
     private String momsStoreManageType;
 
-    /** 지사코드 */
+    /** 그룹코드 */
     private String branchCd;
 
     /** 환경설정 [1250 맘스터치] */

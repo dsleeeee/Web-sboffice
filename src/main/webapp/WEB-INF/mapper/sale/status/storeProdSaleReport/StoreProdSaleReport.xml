@@ -115,7 +115,7 @@
         AND thsr.REPORT_TYPE = '01'
     </select>
 
-    <!-- 지사-지역관리 탭 - 지사 조회 -->
+    <!-- 그룹-지역관리 탭 - 그룹 조회 -->
     <!--
         TABLE    :
         COMMENTS :
@@ -132,7 +132,7 @@
         AND thn.PARENT_CD = 'N001'
     </select>
 
-    <!-- 지사코드(자동채번) -->
+    <!-- 그룹코드(자동채번) -->
     <!--
         TABLE    :
         COMMENTS :
@@ -148,7 +148,7 @@
         AND thn.PARENT_CD = 'N001'
     </select>
 
-    <!-- 지사-지역관리 탭 - 지사 저장 Insert -->
+    <!-- 그룹-지역관리 탭 - 그룹 저장 Insert -->
     <!--
         TABLE    :
         COMMENTS :
@@ -185,7 +185,7 @@
         )
     </insert>
 
-    <!-- 지사-지역관리 탭 - 지사 저장 update -->
+    <!-- 그룹-지역관리 탭 - 그룹 저장 update -->
     <!--
         TABLE    :
         COMMENTS :
@@ -204,7 +204,7 @@
         AND NMCODE_CD = #{branchCd}
     </insert>
 
-    <!-- 지사-지역관리 탭 - 지사 저장 delete -->
+    <!-- 그룹-지역관리 탭 - 그룹 저장 delete -->
     <!--
         TABLE    :
         COMMENTS :
@@ -219,7 +219,7 @@
         AND NMCODE_CD = #{branchCd}
     </delete>
 
-    <!-- 지사-지역관리 탭 - 지사 delete 시, 지역 delete -->
+    <!-- 그룹-지역관리 탭 - 그룹 delete 시, 지역 delete -->
     <!--
         TABLE    :
         COMMENTS :
@@ -233,7 +233,7 @@
         AND PARENT_CD = #{branchCd}
     </delete>
 
-    <!-- 지사-지역관리 탭 - 지역 조회 -->
+    <!-- 그룹-지역관리 탭 - 지역 조회 -->
     <!--
         TABLE    :
         COMMENTS :
@@ -266,7 +266,7 @@
         AND thn.PARENT_CD = #{branchCd}
     </select>
 
-    <!-- 지사-지역관리 탭 - 지역 저장 Insert -->
+    <!-- 그룹-지역관리 탭 - 지역 저장 Insert -->
     <!--
         TABLE    :
         COMMENTS :
@@ -303,7 +303,7 @@
         )
     </insert>
 
-    <!-- 지사-지역관리 탭 - 지역 저장 update -->
+    <!-- 그룹-지역관리 탭 - 지역 저장 update -->
     <!--
         TABLE    :
         COMMENTS :
@@ -322,7 +322,7 @@
         AND NMCODE_CD = #{areaCd}
     </insert>
 
-    <!-- 지사-지역관리 탭 - 지역 저장 delete -->
+    <!-- 그룹-지역관리 탭 - 지역 저장 delete -->
     <!--
         TABLE    :
         COMMENTS :
@@ -425,7 +425,7 @@
         ORDER BY tms.STORE_CD
     </select>
 
-    <!-- 지사-지역관리 탭 - 지역-매장 저장 delete -->
+    <!-- 그룹-지역관리 탭 - 지역-매장 저장 delete -->
     <!--
         TABLE    :
         COMMENTS :
@@ -440,7 +440,7 @@
         AND AREA_CD = #{areaCd}
     </delete>
 
-    <!-- 지사-지역관리 탭 - 지역-매장 insert -->
+    <!-- 그룹-지역관리 탭 - 지역-매장 insert -->
     <!--
         TABLE    :
         COMMENTS :

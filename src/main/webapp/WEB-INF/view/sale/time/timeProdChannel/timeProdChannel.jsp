@@ -321,7 +321,7 @@
             </td>
           </tr>
           <tr>
-            <%-- 지사 --%>
+            <%-- 그룹 --%>
             <th><s:message code="timeProdChannel.branchCd"/></th>
             <td>
               <div class="sb-select">

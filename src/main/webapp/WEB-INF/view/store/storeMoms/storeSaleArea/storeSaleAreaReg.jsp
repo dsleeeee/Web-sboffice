@@ -27,7 +27,7 @@
                          selected-index-changed="setRegStoreSaleArea(s)">
                   </wj-combo-box>
                 </div>
-                <%-- 지사 --%>
+                <%-- 그룹 --%>
                 <div class="sb-select w200px fr mr5">
                   <wj-combo-box
                          id="srchRegBranchCd"
@@ -57,7 +57,7 @@
                          selected-index-changed="setMapStoreSaleArea(s)">
                   </wj-combo-box>
                 </div>
-                <%-- 지사 --%>
+                <%-- 그룹 --%>
                 <div class="sb-select w200px fr mr5">
                   <wj-combo-box
                          id="srchMapBranchCd"
@@ -70,7 +70,7 @@
                   </wj-combo-box>
                 </div>
             </div>
-            <%-- 처음 선택한 지사와 매장(초기화 클릭시 사용) --%>
+            <%-- 처음 선택한 그룹와 매장(초기화 클릭시 사용) --%>
             <input type="hidden" id="hdRegBranchCd"/>
             <input type="hidden" id="hdRegStoreCd"/>
         </div>

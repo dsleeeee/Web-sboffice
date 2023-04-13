@@ -173,7 +173,7 @@
             </td>
         </tr>
         <tr>
-                <%-- 지사 --%>
+                <%-- 그룹 --%>
             <th><s:message code="dayProd.branchCd"/></th>
             <td>
                 <div class="sb-select">
@@ -240,7 +240,7 @@
   var orgnFg = "${orgnFg}";
   var storeCd = "${storeCd}";
 
-    // 지사
+    // 그룹
     var branchCombo = ${branchCombo};
 
   // List 형식("" 안붙임)

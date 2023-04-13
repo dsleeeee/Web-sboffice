@@ -190,7 +190,7 @@
             </td>
           </tr>
           <tr>
-              <%-- 지사 --%>
+              <%-- 그룹 --%>
             <th><s:message code="dayProd.branchCd"/></th>
             <td>
               <div class="sb-select">

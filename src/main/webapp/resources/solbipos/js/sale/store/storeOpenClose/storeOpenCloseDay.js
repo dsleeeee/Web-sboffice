@@ -30,7 +30,7 @@ app.controller('storeOpenCloseDayTimeCtrl', ['$scope', '$http', '$timeout', func
     $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
     $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
-    $scope._setComboData("branchCdCombo", branchCdComboList); // 지사
+    $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
 
     // 확장조회 숨김/보임
     $scope.searchAddShowChange = function(){

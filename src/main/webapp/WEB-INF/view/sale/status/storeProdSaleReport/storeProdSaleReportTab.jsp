@@ -13,7 +13,7 @@
             <li>
                 <a id="storeProdSaleReportTab" href="#" class="on" ng-click="storeProdSaleReportShow()"><s:message code="storeProdSaleReportTab.storeProdSaleReport"/></a>
             </li>
-            <%-- 지사-지역관리 --%>
+            <%-- 그룹-지역관리 --%>
             <li>
                 <a id="branchAreaTab" href="#" ng-click="branchAreaShow()"><s:message code="storeProdSaleReportTab.branchArea"/></a>
             </li>
@@ -34,7 +34,7 @@
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<%-- 지사-지역관리 레이어 --%>
+<%-- 그룹-지역관리 레이어 --%>
 <c:import url="/WEB-INF/view/sale/status/storeProdSaleReport/branchArea.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>

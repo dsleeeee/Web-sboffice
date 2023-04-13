@@ -27,7 +27,7 @@
                          selected-index-changed="setDtlStoreSaleArea(s)">
                   </wj-combo-box>
                 </div>
-                <%-- 지사 --%>
+                <%-- 그룹 --%>
                 <div class="sb-select w200px fr mr5">
                   <wj-combo-box
                          id="srchDtlBranchCd"

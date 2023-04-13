@@ -89,7 +89,7 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
     $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
     $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
-    $scope._setComboData("branchCdCombo", branchCdComboList); // 지사
+    $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
     $scope._setComboData("prodOptionCombo", prodOptionComboData); // 상품표시옵션
     $scope._setComboData("dayOptionCombo", dayOptionComboData); // 일자표시옵션
     $scope._setComboData("dayGubunCombo", dayGubunComboData); // 일/월 구분
@@ -142,7 +142,7 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
     //     $("#srchMomsStoreManageTypeCombo").css('background-color', '#FFFFFF');
     //     $("#srchMomsStoreManageTypeCombo").attr("disabled", false);
     // }
-    // // 지사
+    // // 그룹
     // if(branchCdComboList.length <= 1) {
     //     $("#srchBranchCdComboo").css('background-color', '#F0F0F0');
     //     $("#srchBranchCdComboo").attr("disabled", true);

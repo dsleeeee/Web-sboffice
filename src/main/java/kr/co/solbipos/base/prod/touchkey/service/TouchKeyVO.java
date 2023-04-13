@@ -132,7 +132,7 @@ public class TouchKeyVO extends CmmVO {
     /** 매장관리타입 */
     private String momsStoreManageType;
 
-    /** 지사코드 */
+    /** 그룹코드 */
     private String branchCd;
 
     /** 포스번호 */

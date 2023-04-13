@@ -27,7 +27,7 @@ app.controller('storeSaleAreaCtrl', ['$scope', '$http', function ($scope, $http)
     $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
     $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
-    $scope._setComboData("branchCdCombo", branchCdComboList); // 지사
+    $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -51,9 +51,9 @@ app.controller('storeSaleAreaCtrl', ['$scope', '$http', function ($scope, $http)
                 var selectedRow = s.rows[ht.row].dataItem;
                 if (col.binding === "storeCd") {
 
-                    // 지사가 있는 매장인지 확인
+                    // 그룹가 있는 매장인지 확인
                     if(selectedRow.branchCd === null || selectedRow.branchCd === undefined || selectedRow.branchCd === "") {
-                        $scope._popMsg(messages["storeSaleArea.require.branch"]); // 지사가 없는 매장입니다. 지사를 먼저 등록하세요.
+                        $scope._popMsg(messages["storeSaleArea.require.branch"]); // 그룹가 없는 매장입니다. 그룹를 먼저 등록하세요.
                         return;
                     }
 

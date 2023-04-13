@@ -47,7 +47,7 @@ app.controller('uptPmixCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     $scope._setComboData("srchMomsCommercial", momsCommercialComboList);           // 상권
     $scope._setComboData("srchMomsShopType", momsShopTypeComboList);               // 점포유형
     $scope._setComboData("srchMomsStoreManageType", momsStoreManageTypeComboList); // 매장관리타입
-    $scope._setComboData("srchBranchCd", branchCdComboList);                       // 지사
+    $scope._setComboData("srchBranchCd", branchCdComboList);                       // 그룹
 
     // // 팀별
     // if(momsTeamComboList.length <= 1) {
@@ -97,7 +97,7 @@ app.controller('uptPmixCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     //     $("#srchMomsStoreManageType").css('background-color', '#FFFFFF');
     //     $("#srchMomsStoreManageType").attr("disabled", false);
     // }
-    // // 지사
+    // // 그룹
     // if(branchCdComboList.length <= 1) {
     //     $("#srchBranchCd").css('background-color', '#F0F0F0');
     //     $("#srchBranchCd").attr("disabled", true);
