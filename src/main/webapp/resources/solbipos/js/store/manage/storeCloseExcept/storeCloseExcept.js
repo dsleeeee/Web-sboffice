@@ -22,8 +22,9 @@ app.controller('storeCloseExceptCtrl', ['$scope', '$http', '$timeout', function 
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-
+    $scope.vanCdDataMap = new wijmo.grid.DataMap(vanComboList, 'value', 'name');
   };
+
   // 대표명칭 그리드 조회
   $scope.$on('storeCloseExceptCtrl', function(event, data) {
 
@@ -85,15 +86,24 @@ app.controller('storeCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
   angular.extend(this, new RootController('storeCtrl', $scope, $http, false));
 
   $scope._setComboData("srchVanCd", vanComboList);
+  $scope._setComboData("srchStatFg", sysStatFg);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+    $scope.vanCdDataMap = new wijmo.grid.DataMap(vanComboList, 'value', 'name');
   };
 
   // 매장 그리드 조회
   $scope.$on("storeCtrl", function(event, data) {
     var params = {};
     params.vanCd = $scope.vanCdCombo.selectedValue;
+    params.sysStatFg = $scope.sysStatFg.selectedValue;
+    params.agencyCd = $scope.agencyCd;
+    params.agencyNm = $scope.agencyNm;
+    params.hqOfficeCd = $scope.hqOfficeCd;
+    params.hqOfficeNm = $scope.hqOfficeNm;
+    params.storeCd = $scope.storeCd;
+    params.storeNm = $scope.storeNm;
     // 조회URL, 파라미터, 콜백함수 형태로 조회함수 호출
     $scope._inquirySub("/store/manage/storeCloseExcept/storeCloseExcept/getStoreList.sb", params, function() {
     });

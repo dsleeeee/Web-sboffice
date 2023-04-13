@@ -27,7 +27,7 @@
     </colgroup>
     <tbody>
     <tr>
-      <%-- 매장상태 --%>
+      <%-- 밴사코드 --%>
       <th><s:message code="storeCloseExcept.vanCd" /></th>
       <td>
         <div class="sb-select">
@@ -42,6 +42,58 @@
                   initialized="_initComboBox(s)">
           </wj-combo-box>
         </div>
+      </td>
+      <%-- 매장상태 --%>
+      <th><s:message code="storeCloseExcept.sysStatFg" /></th>
+      <td>
+        <div class="sb-select">
+          <wj-combo-box
+                  id="srchStatFg"
+                  ng-model="sysStatFg"
+                  control="statFgCombo"
+                  items-source="_getComboData('srchStatFg')"
+                  display-member-path="name"
+                  selected-value-path="value"
+                  is-editable="false"
+                  initialized="_initComboBox(s)">
+          </wj-combo-box>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <%-- 관리업체코드 --%>
+      <th><s:message code="storeCloseExcept.agencyCd" /></th>
+      <td>
+        <input type="text" class="sb-input w100" id="srchAgencyCd" ng-model="agencyCd" onkeyup="fnNxBtnSearch();"/>
+      </td>
+      <%-- 관리업체명 --%>
+      <th><s:message code="storeCloseExcept.agencyNm" /></th>
+      <td>
+        <input type="text" class="sb-input w100" id="srchAgencyNm" ng-model="agencyNm" onkeyup="fnNxBtnSearch();"/>
+      </td>
+    </tr>
+    <tr>
+      <%-- 본사코드 --%>
+      <th><s:message code="storeCloseExcept.hqOfficeCd" /></th>
+      <td>
+        <input type="text" class="sb-input w100" id="srchHqOfficeCd" ng-model="hqOfficeCd" onkeyup="fnNxBtnSearch();"/>
+      </td>
+      <%-- 본사명 --%>
+      <th><s:message code="storeCloseExcept.hqOfficeNm" /></th>
+      <td>
+        <input type="text" class="sb-input w100" id="srchHqOfficeNm" ng-model="hqOfficeNm" onkeyup="fnNxBtnSearch();"/>
+      </td>
+    </tr>
+    <tr>
+      <%-- 매장코드 --%>
+      <th><s:message code="storeCloseExcept.storeCd" /></th>
+      <td>
+        <input type="text" class="sb-input w100" id="srchStoreCd" ng-model="storeCd" onkeyup="fnNxBtnSearch();"/>
+      </td>
+      <%-- 매장명 --%>
+      <th><s:message code="storeCloseExcept.storeNm" /></th>
+      <td>
+        <input type="text" class="sb-input w100" id="srchStoreNm" ng-model="storeNm" onkeyup="fnNxBtnSearch();"/>
       </td>
     </tr>
     </tbody>
@@ -83,6 +135,7 @@
             <wj-flex-grid-column header="<s:message code="storeCloseExcept.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeCloseExcept.storeNm"/>" binding="storeNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeCloseExcept.agencyNm"/>" binding="agencyNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeCloseExcept.vanCd"/>" binding="vanCd" width="100" align="center" is-read-only="true" data-map="vanCdDataMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeCloseExcept.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           </wj-flex-grid>
         </div>
@@ -124,6 +177,7 @@
           <wj-flex-grid-column header="<s:message code="storeCloseExcept.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storeCloseExcept.storeNm"/>" binding="storeNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storeCloseExcept.agencyNm"/>" binding="agencyNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storeCloseExcept.vanCd"/>" binding="vanCd" width="100" align="center" is-read-only="true" data-map="vanCdDataMap"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storeCloseExcept.remark"/>" binding="remark" width="100" align="left"></wj-flex-grid-column>
 
         </wj-flex-grid>
@@ -135,6 +189,7 @@
 </div>
 
 <script type="text/javascript">
+  var sysStatFg = ${ccu.getCommCode("005")};
   var vanComboList = ${vanComboList};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeCloseExcept/storeCloseExcept.js?ver=20230407.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeCloseExcept/storeCloseExcept.js?ver=20230407.02" charset="utf-8"></script>
