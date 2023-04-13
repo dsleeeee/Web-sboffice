@@ -20,6 +20,7 @@
         </ul>
     </div>
 </div>
+
 <script type="text/javascript">
     // 콤보박스 데이터(전체)
     var momsHqBrandCdComboList = ${momsHqBrandCdComboList};
@@ -39,7 +40,17 @@
     var momsCommercialComboList2 = ${momsCommercialComboList2};
     var momsShopTypeComboList2 = ${momsShopTypeComboList2};
     var momsStoreManageTypeComboList2 = ${momsStoreManageTypeComboList2};
+
+    // 콤보박스 데이터(선택)
+    var branchCdComboList3 = ${branchCdComboList3};
+    var momsTeamComboList3 = ${momsTeamComboList3};
+    var momsAcShopComboList3 = ${momsAcShopComboList3};
+    var momsAreaFgComboList3 = ${momsAreaFgComboList3};
+    var momsCommercialComboList3 = ${momsCommercialComboList3};
+    var momsShopTypeComboList3 = ${momsShopTypeComboList3};
+    var momsStoreManageTypeComboList3 = ${momsStoreManageTypeComboList3};
 </script>
+
 <script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storeBatchChange/storeBatchChangeTab.js?ver=20230117.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>

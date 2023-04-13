@@ -190,72 +190,85 @@ public class StoreBatchChangeController {
         }
         model.addAttribute("branchCdComboList", branchCdComboListAll);
 
+
         // 전체 없는 콤보박스 데이터
-        // 사용자별 코드별 공통코드 콤보박스 조회
         // 팀별
          if (momsTeamComboList.size() > 1) {
             momsTeamComboList.remove(0);
-            String momsTeamComboListAll2 = "";
-            momsTeamComboListAll2 = cmmCodeUtil.assmblObj(momsTeamComboList, "name", "value", UseYn.N);
+            String momsTeamComboListAll2 = cmmCodeUtil.assmblObj(momsTeamComboList, "name", "value", UseYn.N);
             model.addAttribute("momsTeamComboList2", momsTeamComboListAll2);
+             String momsTeamComboListAll3 = cmmCodeUtil.assmblObj(momsTeamComboList, "name", "value", UseYn.SELECT);
+             model.addAttribute("momsTeamComboList3", momsTeamComboListAll3);
         } else {
             model.addAttribute("momsTeamComboList2", momsTeamComboListAll);
+            model.addAttribute("momsTeamComboList3", momsTeamComboListAll);
         }
         // AC점포별
         if (momsAcShopComboList.size() > 1) {
             momsAcShopComboList.remove(0);
-            String momsAcShopComboListAll2 = "";
-            momsAcShopComboListAll2 = cmmCodeUtil.assmblObj(momsAcShopComboList, "name", "value", UseYn.N);
+            String momsAcShopComboListAll2 = cmmCodeUtil.assmblObj(momsAcShopComboList, "name", "value", UseYn.N);
             model.addAttribute("momsAcShopComboList2", momsAcShopComboListAll2);
+            String momsAcShopComboListAll3 = cmmCodeUtil.assmblObj(momsAcShopComboList, "name", "value", UseYn.SELECT);
+            model.addAttribute("momsAcShopComboList3", momsAcShopComboListAll3);
         } else {
             model.addAttribute("momsAcShopComboList2", momsAcShopComboListAll);
+            model.addAttribute("momsAcShopComboList3", momsAcShopComboListAll);
         }
         // 지역구분
         if (momsAreaFgComboList.size() > 1) {
             momsAreaFgComboList.remove(0);
-            String momsAreaFgComboListAll2 = "";
-            momsAreaFgComboListAll2 = cmmCodeUtil.assmblObj(momsAreaFgComboList, "name", "value", UseYn.N);
+            String momsAreaFgComboListAll2 = cmmCodeUtil.assmblObj(momsAreaFgComboList, "name", "value", UseYn.N);
             model.addAttribute("momsAreaFgComboList2", momsAreaFgComboListAll2);
+            String momsAreaFgComboListAll3 = cmmCodeUtil.assmblObj(momsAreaFgComboList, "name", "value", UseYn.SELECT);
+            model.addAttribute("momsAreaFgComboList3", momsAreaFgComboListAll3);
         } else {
-        model.addAttribute("momsAreaFgComboList2", momsAreaFgComboListAll);
+            model.addAttribute("momsAreaFgComboList2", momsAreaFgComboListAll);
+            model.addAttribute("momsAreaFgComboList3", momsAreaFgComboListAll);
         }
         // 상권
         if(momsCommercialComboList.size() > 1) {
             momsCommercialComboList.remove(0);
-            String momsCommercialComboListAll2 = "";
-            momsCommercialComboListAll2 = cmmCodeUtil.assmblObj(momsCommercialComboList, "name", "value", UseYn.N);
+            String momsCommercialComboListAll2 = cmmCodeUtil.assmblObj(momsCommercialComboList, "name", "value", UseYn.N);
             model.addAttribute("momsCommercialComboList2", momsCommercialComboListAll2);
+            String momsCommercialComboListAll3 = cmmCodeUtil.assmblObj(momsCommercialComboList, "name", "value", UseYn.SELECT);
+            model.addAttribute("momsCommercialComboList3", momsCommercialComboListAll3);
         } else {
             model.addAttribute("momsCommercialComboList2", momsCommercialComboListAll);
+            model.addAttribute("momsCommercialComboList3", momsCommercialComboListAll);
         }
         // 점포유형
         if(momsShopTypeComboList.size() > 1) {
             momsShopTypeComboList.remove(0);
-            String momsShopTypeComboListAll2 = "";
-            momsShopTypeComboListAll2 = cmmCodeUtil.assmblObj(momsShopTypeComboList, "name", "value", UseYn.N);
+            String momsShopTypeComboListAll2 = cmmCodeUtil.assmblObj(momsShopTypeComboList, "name", "value", UseYn.N);
             model.addAttribute("momsShopTypeComboList2", momsShopTypeComboListAll2);
+            String momsShopTypeComboListAll3 = cmmCodeUtil.assmblObj(momsShopTypeComboList, "name", "value", UseYn.SELECT);
+            model.addAttribute("momsShopTypeComboList3", momsShopTypeComboListAll3);
         } else {
             model.addAttribute("momsShopTypeComboList2", momsShopTypeComboListAll);
+            model.addAttribute("momsShopTypeComboList3", momsShopTypeComboListAll);
         }
         // 매장관리타입
         if(momsStoreManageTypeComboList.size() > 1) {
             momsStoreManageTypeComboList.remove(0);
-            String momsStoreManageTypeComboListAll2 = "";
-            momsStoreManageTypeComboListAll2 = cmmCodeUtil.assmblObj(momsStoreManageTypeComboList, "name", "value", UseYn.N);
+
+            String momsStoreManageTypeComboListAll2 = cmmCodeUtil.assmblObj(momsStoreManageTypeComboList, "name", "value", UseYn.N);
             model.addAttribute("momsStoreManageTypeComboList2", momsStoreManageTypeComboListAll2);
+            String momsStoreManageTypeComboListAll3 = cmmCodeUtil.assmblObj(momsStoreManageTypeComboList, "name", "value", UseYn.SELECT);
+            model.addAttribute("momsStoreManageTypeComboList3", momsStoreManageTypeComboListAll3);
         } else {
             model.addAttribute("momsStoreManageTypeComboList2", momsStoreManageTypeComboListAll);
+            model.addAttribute("momsStoreManageTypeComboList3", momsStoreManageTypeComboListAll);
         }
-
-        // 사용자별 지사 콤보박스 조회
         // 지사
         if(branchCdComboList.size() > 1) {
             branchCdComboList.remove(0);
-            String branchCdComboListAll2 = "";
-            branchCdComboListAll2 = cmmCodeUtil.assmblObj(branchCdComboList, "name", "value", UseYn.N);
+            String branchCdComboListAll2 = cmmCodeUtil.assmblObj(branchCdComboList, "name", "value", UseYn.N);
             model.addAttribute("branchCdComboList2", branchCdComboListAll2);
+            String branchCdComboListAll3 = cmmCodeUtil.assmblObj(branchCdComboList, "name", "value", UseYn.SELECT);
+            model.addAttribute("branchCdComboList3", branchCdComboListAll3);
         } else {
             model.addAttribute("branchCdComboList2", branchCdComboListAll);
+            model.addAttribute("branchCdComboList3", branchCdComboListAll);
         }
 
         return "store/storeMoms/storeBatchChange/storeBatchChangeTab";
