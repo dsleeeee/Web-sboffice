@@ -4,7 +4,10 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapService;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapVO;
 import kr.co.solbipos.base.prod.prodInfoSearch.service.ProdInfoSearchService;
@@ -51,15 +54,17 @@ public class ProdInfoSearchController {
     private final DayProdService dayProdService;
     private final TouchKeyService touchkeyService;
     private final KioskKeyMapService kioskKeyMapService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public ProdInfoSearchController(SessionService sessionService, ProdInfoSearchService prodInfoSearchService, DayProdService dayProdService, TouchKeyService touchkeyService, KioskKeyMapService kioskKeyMapService) {
+    public ProdInfoSearchController(SessionService sessionService, ProdInfoSearchService prodInfoSearchService, DayProdService dayProdService, TouchKeyService touchkeyService, KioskKeyMapService kioskKeyMapService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.prodInfoSearchService = prodInfoSearchService;
         this.dayProdService = dayProdService;
         this.touchkeyService = touchkeyService;
         this.kioskKeyMapService = kioskKeyMapService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -75,6 +80,14 @@ public class ProdInfoSearchController {
     public String view(HttpServletRequest request, HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        /** 맘스터치 */
+        // [1250 맘스터치] 환경설정값 조회
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0"));
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
+        }
 
         // 사용자별 브랜드 조회(콤보박스용)
         DayProdVO dayProdVO = new DayProdVO();
@@ -98,6 +111,43 @@ public class ProdInfoSearchController {
         model.addAttribute("kioskTuClsTypeList", convertToJson(kioskTuClsTypeList)  );
 
         return "base/prod/prodInfoSearch/prodInfoSearchTab";
+    }
+
+
+    /**
+     * 상품정보 조회
+     *
+     * @param prodInfoSearchVO HttpServletRequest
+     * @param request HttpServletRequest
+     * @return
+     */
+    @RequestMapping(value = "/prodInfo/getProdInfo2List.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdInfo2List(ProdInfoSearchVO prodInfoSearchVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = prodInfoSearchService.getProdInfo2List(prodInfoSearchVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, prodInfoSearchVO);
+    }
+
+    /**
+     * 상품정보 엑셀 조회
+     *
+     * @param prodInfoSearchVO HttpServletRequest
+     * @param request HttpServletRequest
+     * @return
+     */
+    @RequestMapping(value = "/prodInfo/getProdInfo2ExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdInfo2ExcelList(ProdInfoSearchVO prodInfoSearchVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = prodInfoSearchService.getProdInfo2ExcelList(prodInfoSearchVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, prodInfoSearchVO);
     }
 
     /**

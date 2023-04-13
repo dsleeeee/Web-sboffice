@@ -11,6 +11,531 @@
 -->
 <mapper namespace="kr.co.solbipos.base.prod.prodInfoSearch.service.impl.ProdInfoSearchMapper">
 
+    <!-- 상품정보 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SDATTR_CLASS, TB_HQ_PRODUCT_SDSEL_GROUP, TB_HQ_PRODUCT_OPTION_GROUP, TB_MS_PRODUCT, TB_MS_PRODUCT_SDATTR_CLASS, TB_MS_PRODUCT_SDSEL_GROUP, TB_MS_PRODUCT_OPTION_GROUP
+        PARAM    : prodInfoSearchVO
+        COMMENTS : 상품정보 목록을 조회한다.
+    -->
+    <select id="getProdInfo2List" parameterType="prodInfoSearchVO" resultType="DefaultMap">
+        /* USE : ProdInfoSearchMapper.getProdInfo2List */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT  thp.HQ_BRAND_CD
+                ,		(SELECT HQ_BRAND_NM FROM TB_HQ_BRAND thb WHERE thb.HQ_OFFICE_CD = #{hqOfficeCd} AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD) AS HQ_BRAND_NM
+                ,		thp.PROD_TYPE_FG 	-- 008
+                ,       thpcv.L_CLASS_CD
+                ,	    thpcv.L_CLASS_NM
+                ,	    thpcv.M_CLASS_CD
+                ,	    thpcv.M_CLASS_NM
+                ,	    thpcv.S_CLASS_CD
+                ,	    thpcv.S_CLASS_NM
+                ,       thp.PROD_CD
+                ,		thp.PROD_NM
+                ,		thpsp2.SALE_UPRC
+                ,		thp.PRC_CTRL_FG		-- 045
+                ,		thp.USE_YN
+                ,		thp.SIDE_PROD_YN
+                ,		thp.SDSEL_GRP_CD
+                ,		thpsg.SDSEL_GRP_NM
+                ,		thp.OPTION_GRP_CD
+                ,		thpog.OPTION_GRP_NM
+                ,		thp.GROUP_PROD_CD
+                ,		thp2.PROD_NM AS GROUP_PROD_NM
+                ,		thp.DEPOSIT_PROD_CD
+                ,		thp3.PROD_NM AS DEPOSIT_PROD_NM
+                ,		thpi.NU_TOT_WT
+                ,		thpi.NU_KCAL
+                ,		thpi.NU_PROTEIN
+                ,		thpi.NU_SODIUM
+                ,		thpi.NU_SUGARS
+                ,		thpi.NU_SAT_FAT
+                ,		thpi.NU_CAFFEINE
+                ,		thpi.MOMS_KIOSK_EDGE
+                ,		thp.RELEASE_DATE
+                ,		thp.DISCON_YN
+                ,		thp.DISCON_DATE
+                ,		thpi.SALE_TYPE_YN_SIN
+                ,		thpi.SALE_TYPE_YN_DLV
+                ,		thpi.SALE_TYPE_YN_PKG
+                ,		thpi.SALE_CHN_YN_POS
+                ,		thpi.SALE_CHN_YN_KSK
+                ,		thpi.SALE_CHN_YN_CMP
+                ,		thpi.SALE_CHN_YN_BAE
+                ,		thpi.SALE_CHN_YN_BAO
+                ,		thpi.SALE_CHN_YN_YGY
+                ,		thpi.SALE_CHN_YN_YGE
+                ,		thpi.SALE_CHN_YN_CPN
+                ,		thpi.SALE_CHN_YN_TNG
+                ,		thpi.SALE_CHN_YN_DDN
+                ,		thp.REMARK
+                ,		thpi.PROD_INFO
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM 	TB_HQ_PRODUCT thp
+                ,       TB_HQ_PRODUCT_CLASS_V02 thpcv	-- 분류정보
+                -- 가격
+                ,		(
+                        SELECT  HQ_OFFICE_CD,
+                                PROD_CD,
+                                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                        FROM TB_HQ_PRODUCT_SALE_PRICE
+                        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                        <![CDATA[
+                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        ]]>
+                        AND SALE_PRC_FG = '1'
+                        GROUP BY
+                        HQ_OFFICE_CD, PROD_CD
+                        ) thpsp2
+                -- 가격
+                ,		TB_HQ_PRODUCT_INFO thpi				-- 상품정보
+                ,		TB_HQ_PRODUCT_SDSEL_GROUP thpsg		-- 선택메뉴
+                ,		TB_HQ_PRODUCT_OPTION_GROUP thpog	-- 옵션
+                ,		TB_HQ_PRODUCT thp2	-- 단품/세트
+                ,		TB_HQ_PRODUCT thp3					-- 보증금상품
+                WHERE 	thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND 	thp.HQ_OFFICE_CD = thpcv.HQ_OFFICE_CD
+                AND 	thp.PROD_CD = thpcv.PROD_CD
+                AND 	thp.HQ_OFFICE_CD = thpsp2.HQ_OFFICE_CD
+                AND 	thp.PROD_CD = thpsp2.PROD_CD
+                AND 	thp.HQ_OFFICE_CD = thpi.HQ_OFFICE_CD (+)
+                AND 	thp.PROD_CD = thpi.PROD_CD (+)
+                -- 선택메뉴
+                AND 	thp.HQ_OFFICE_CD = thpsg.HQ_OFFICE_CD (+)
+                AND 	thp.SDSEL_GRP_CD = thpsg.SDSEL_GRP_CD (+)
+                -- 옵션
+                AND 	thp.HQ_OFFICE_CD = thpog.HQ_OFFICE_CD (+)
+                AND 	thp.OPTION_GRP_CD = thpog.OPTION_GRP_CD (+)
+                -- 단품/세트
+                AND 	thp.HQ_OFFICE_CD = thp2.HQ_OFFICE_CD (+)
+                AND 	thp.GROUP_PROD_CD = thp2.PROD_CD (+)
+                -- 보증금상품
+                AND 	thp.HQ_OFFICE_CD = thp3.HQ_OFFICE_CD (+)
+                AND 	thp.DEPOSIT_PROD_CD = thp3.PROD_CD (+)
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND thp.PROD_CLASS_CD IN (
+                    SELECT
+                    PROD_CLASS_CD
+                    FROM TB_HQ_PRODUCT_CLASS
+                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                    START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    )
+                </if>
+                <if test='prodCd != null and prodCd != ""'>
+                    AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                </if>
+                <if test='prodCds != null and prodCds != ""'>
+                    AND thp.PROD_CD IN
+                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                    AND thp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+                </if>
+                <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                    <if test='userBrands != null and userBrands != ""'>
+                        -- 상품브랜드 전체일때
+                        AND thp.HQ_BRAND_CD IN
+                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                </if>
+                ORDER BY thp.PROD_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT  thp.HQ_BRAND_CD
+                ,		(SELECT HQ_BRAND_NM FROM TB_HQ_BRAND thb WHERE thb.HQ_OFFICE_CD = #{hqOfficeCd} AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD) AS HQ_BRAND_NM
+                ,		thp.PROD_TYPE_FG 	-- 008
+                ,       thpcv.L_CLASS_CD
+                ,	    thpcv.L_CLASS_NM
+                ,	    thpcv.M_CLASS_CD
+                ,	    thpcv.M_CLASS_NM
+                ,	    thpcv.S_CLASS_CD
+                ,	    thpcv.S_CLASS_NM
+                ,       thp.PROD_CD
+                ,		thp.PROD_NM
+                ,		thpsp2.SALE_UPRC
+                ,		thp.PRC_CTRL_FG		-- 045
+                ,		thp.USE_YN
+                ,		thp.SIDE_PROD_YN
+                ,		thp.SDSEL_GRP_CD
+                ,		thpsg.SDSEL_GRP_NM
+                ,		thp.OPTION_GRP_CD
+                ,		thpog.OPTION_GRP_NM
+                ,		thp.GROUP_PROD_CD
+                ,		thp2.PROD_NM AS GROUP_PROD_NM
+                ,		thp.DEPOSIT_PROD_CD
+                ,		thp3.PROD_NM AS DEPOSIT_PROD_NM
+                ,		thpi.NU_TOT_WT
+                ,		thpi.NU_KCAL
+                ,		thpi.NU_PROTEIN
+                ,		thpi.NU_SODIUM
+                ,		thpi.NU_SUGARS
+                ,		thpi.NU_SAT_FAT
+                ,		thpi.NU_CAFFEINE
+                ,		thpi.MOMS_KIOSK_EDGE
+                ,		thp.RELEASE_DATE
+                ,		thp.DISCON_YN
+                ,		thp.DISCON_DATE
+                ,		thpi.SALE_TYPE_YN_SIN
+                ,		thpi.SALE_TYPE_YN_DLV
+                ,		thpi.SALE_TYPE_YN_PKG
+                ,		thpi.SALE_CHN_YN_POS
+                ,		thpi.SALE_CHN_YN_KSK
+                ,		thpi.SALE_CHN_YN_CMP
+                ,		thpi.SALE_CHN_YN_BAE
+                ,		thpi.SALE_CHN_YN_BAO
+                ,		thpi.SALE_CHN_YN_YGY
+                ,		thpi.SALE_CHN_YN_YGE
+                ,		thpi.SALE_CHN_YN_CPN
+                ,		thpi.SALE_CHN_YN_TNG
+                ,		thpi.SALE_CHN_YN_DDN
+                ,		thp.REMARK
+                ,		thpi.PROD_INFO
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM 	TB_MS_PRODUCT thp
+                ,       TB_MS_PRODUCT_CLASS_V02 thpcv	-- 분류정보
+                -- 가격
+                ,		(
+                SELECT
+                STORE_CD,
+                PROD_CD,
+                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                FROM TB_MS_PRODUCT_SALE_PRICE
+                WHERE STORE_CD = #{storeCd}
+                <![CDATA[
+                AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                  ]]>
+                AND SALE_PRC_FG = '1'
+                GROUP BY
+                STORE_CD, PROD_CD
+                ) thpsp2
+                -- 가격
+                ,		TB_MS_PRODUCT_INFO thpi				-- 상품정보
+                ,		TB_MS_PRODUCT_SDSEL_GROUP thpsg		-- 선택메뉴
+                ,		TB_MS_PRODUCT_OPTION_GROUP thpog	-- 옵션
+                ,		TB_MS_PRODUCT thp2	-- 단품/세트
+                ,		TB_MS_PRODUCT thp3					-- 보증금상품
+                WHERE 	thp.STORE_CD = #{storeCd}
+                AND 	thp.STORE_CD = thpcv.STORE_CD
+                AND 	thp.PROD_CD = thpcv.PROD_CD
+                AND 	thp.STORE_CD = thpsp2.STORE_CD
+                AND 	thp.PROD_CD = thpsp2.PROD_CD
+                AND 	thp.STORE_CD = thpi.STORE_CD (+)
+                AND 	thp.PROD_CD = thpi.PROD_CD (+)
+                -- 선택메뉴
+                AND 	thp.STORE_CD = thpsg.STORE_CD (+)
+                AND 	thp.SDSEL_GRP_CD = thpsg.SDSEL_GRP_CD (+)
+                -- 옵션
+                AND 	thp.STORE_CD = thpog.STORE_CD (+)
+                AND 	thp.OPTION_GRP_CD = thpog.OPTION_GRP_CD (+)
+                -- 단품/세트
+                AND 	thp.STORE_CD = thp2.STORE_CD (+)
+                AND 	thp.GROUP_PROD_CD = thp2.PROD_CD (+)
+                -- 보증금상품
+                AND 	thp.STORE_CD = thp3.STORE_CD (+)
+                AND 	thp.DEPOSIT_PROD_CD = thp3.PROD_CD (+)
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND thp.PROD_CLASS_CD IN (
+                    SELECT
+                    PROD_CLASS_CD
+                    FROM TB_MS_PRODUCT_CLASS
+                    WHERE STORE_CD = #{storeCd}
+                    START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                    )
+                </if>
+                <if test='prodCd != null and prodCd != ""'>
+                    AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                </if>
+                <if test='prodCds != null and prodCds != ""'>
+                    AND thp.PROD_CD IN
+                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                ORDER BY thp.PROD_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 상품정보 엑셀 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SDATTR_CLASS, TB_HQ_PRODUCT_SDSEL_GROUP, TB_HQ_PRODUCT_OPTION_GROUP, TB_MS_PRODUCT, TB_MS_PRODUCT_SDATTR_CLASS, TB_MS_PRODUCT_SDSEL_GROUP, TB_MS_PRODUCT_OPTION_GROUP
+        PARAM    : prodInfoSearchVO
+        COMMENTS : 상품정보목록을 조회한다.
+    -->
+    <select id="getProdInfo2ExcelList" parameterType="prodInfoSearchVO" resultType="DefaultMap">
+        /* USE : ProdInfoSearchMapper.getProdInfo2ExcelList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  thp.HQ_BRAND_CD
+                ,		(SELECT HQ_BRAND_NM FROM TB_HQ_BRAND thb WHERE thb.HQ_OFFICE_CD = #{hqOfficeCd} AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD) AS HQ_BRAND_NM
+                ,		thp.PROD_TYPE_FG 	-- 008
+                ,       thpcv.L_CLASS_CD
+                ,	    thpcv.L_CLASS_NM
+                ,	    thpcv.M_CLASS_CD
+                ,	    thpcv.M_CLASS_NM
+                ,	    thpcv.S_CLASS_CD
+                ,	    thpcv.S_CLASS_NM
+                ,       thp.PROD_CD
+                ,		thp.PROD_NM
+                ,		thpsp2.SALE_UPRC
+                ,		thp.PRC_CTRL_FG		-- 045
+                ,		thp.USE_YN
+                ,		thp.SIDE_PROD_YN
+                ,		thp.SDSEL_GRP_CD
+                ,		thpsg.SDSEL_GRP_NM
+                ,		thp.OPTION_GRP_CD
+                ,		thpog.OPTION_GRP_NM
+                ,		thp.GROUP_PROD_CD
+                ,		thp2.PROD_NM AS GROUP_PROD_NM
+                ,		thp.DEPOSIT_PROD_CD
+                ,		thp3.PROD_NM AS DEPOSIT_PROD_NM
+                ,		thpi.NU_TOT_WT
+                ,		thpi.NU_KCAL
+                ,		thpi.NU_PROTEIN
+                ,		thpi.NU_SODIUM
+                ,		thpi.NU_SUGARS
+                ,		thpi.NU_SAT_FAT
+                ,		thpi.NU_CAFFEINE
+                ,		thpi.MOMS_KIOSK_EDGE
+                ,		thp.RELEASE_DATE
+                ,		thp.DISCON_YN
+                ,		thp.DISCON_DATE
+                ,		thpi.SALE_TYPE_YN_SIN
+                ,		thpi.SALE_TYPE_YN_DLV
+                ,		thpi.SALE_TYPE_YN_PKG
+                ,		thpi.SALE_CHN_YN_POS
+                ,		thpi.SALE_CHN_YN_KSK
+                ,		thpi.SALE_CHN_YN_CMP
+                ,		thpi.SALE_CHN_YN_BAE
+                ,		thpi.SALE_CHN_YN_BAO
+                ,		thpi.SALE_CHN_YN_YGY
+                ,		thpi.SALE_CHN_YN_YGE
+                ,		thpi.SALE_CHN_YN_CPN
+                ,		thpi.SALE_CHN_YN_TNG
+                ,		thpi.SALE_CHN_YN_DDN
+                ,		thp.REMARK
+                ,		thpi.PROD_INFO
+                FROM 	TB_HQ_PRODUCT thp
+                ,       TB_HQ_PRODUCT_CLASS_V02 thpcv	-- 분류정보
+                -- 가격
+                ,		(
+                SELECT
+                HQ_OFFICE_CD,
+                PROD_CD,
+                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                FROM TB_HQ_PRODUCT_SALE_PRICE
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                <![CDATA[
+                AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                  ]]>
+                AND SALE_PRC_FG = '1'
+                GROUP BY
+                HQ_OFFICE_CD, PROD_CD
+                ) thpsp2
+                -- 가격
+                ,		TB_HQ_PRODUCT_INFO thpi				-- 상품정보
+                ,		TB_HQ_PRODUCT_SDSEL_GROUP thpsg		-- 선택메뉴
+                ,		TB_HQ_PRODUCT_OPTION_GROUP thpog	-- 옵션
+                ,		TB_HQ_PRODUCT thp2	                -- 단품/세트
+                ,		TB_HQ_PRODUCT thp3					-- 보증금상품
+                WHERE 	thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND 	thp.HQ_OFFICE_CD = thpcv.HQ_OFFICE_CD
+                AND 	thp.PROD_CD = thpcv.PROD_CD
+                AND 	thp.HQ_OFFICE_CD = thpsp2.HQ_OFFICE_CD
+                AND 	thp.PROD_CD = thpsp2.PROD_CD
+                AND 	thp.HQ_OFFICE_CD = thpi.HQ_OFFICE_CD (+)
+                AND 	thp.PROD_CD = thpi.PROD_CD (+)
+                -- 선택메뉴
+                AND 	thp.HQ_OFFICE_CD = thpsg.HQ_OFFICE_CD (+)
+                AND 	thp.SDSEL_GRP_CD = thpsg.SDSEL_GRP_CD (+)
+                -- 옵션
+                AND 	thp.HQ_OFFICE_CD = thpog.HQ_OFFICE_CD (+)
+                AND 	thp.OPTION_GRP_CD = thpog.OPTION_GRP_CD (+)
+                -- 단품/세트
+                AND 	thp.HQ_OFFICE_CD = thp2.HQ_OFFICE_CD (+)
+                AND 	thp.GROUP_PROD_CD = thp2.PROD_CD (+)
+                -- 보증금상품
+                AND 	thp.HQ_OFFICE_CD = thp3.HQ_OFFICE_CD (+)
+                AND 	thp.DEPOSIT_PROD_CD = thp3.PROD_CD (+)
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND thp.PROD_CLASS_CD IN (
+                    SELECT
+                    PROD_CLASS_CD
+                    FROM TB_HQ_PRODUCT_CLASS
+                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                    START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    )
+                </if>
+                <if test='prodCd != null and prodCd != ""'>
+                    AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                </if>
+                <if test='prodCds != null and prodCds != ""'>
+                    AND thp.PROD_CD IN
+                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                    AND thp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+                </if>
+                <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                    <if test='userBrands != null and userBrands != ""'>
+                        -- 상품브랜드 전체일때
+                        AND thp.HQ_BRAND_CD IN
+                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                </if>
+                ORDER BY thp.PROD_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  thp.HQ_BRAND_CD
+                ,		(SELECT HQ_BRAND_NM FROM TB_HQ_BRAND thb WHERE thb.HQ_OFFICE_CD = #{hqOfficeCd} AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD) AS HQ_BRAND_NM
+                ,		thp.PROD_TYPE_FG 	-- 008
+                ,       thpcv.L_CLASS_CD
+                ,	    thpcv.L_CLASS_NM
+                ,	    thpcv.M_CLASS_CD
+                ,	    thpcv.M_CLASS_NM
+                ,	    thpcv.S_CLASS_CD
+                ,	    thpcv.S_CLASS_NM
+                ,       thp.PROD_CD
+                ,		thp.PROD_NM
+                ,		thpsp2.SALE_UPRC
+                ,		thp.PRC_CTRL_FG		-- 045
+                ,		thp.USE_YN
+                ,		thp.SIDE_PROD_YN
+                ,		thp.SDSEL_GRP_CD
+                ,		thpsg.SDSEL_GRP_NM
+                ,		thp.OPTION_GRP_CD
+                ,		thpog.OPTION_GRP_NM
+                ,		thp.GROUP_PROD_CD
+                ,		thp2.PROD_NM AS GROUP_PROD_NM
+                ,		thp.DEPOSIT_PROD_CD
+                ,		thp3.PROD_NM AS DEPOSIT_PROD_NM
+                ,		thpi.NU_TOT_WT
+                ,		thpi.NU_KCAL
+                ,		thpi.NU_PROTEIN
+                ,		thpi.NU_SODIUM
+                ,		thpi.NU_SUGARS
+                ,		thpi.NU_SAT_FAT
+                ,		thpi.NU_CAFFEINE
+                ,		thpi.MOMS_KIOSK_EDGE
+                ,		thp.RELEASE_DATE
+                ,		thp.DISCON_YN
+                ,		thp.DISCON_DATE
+                ,		thpi.SALE_TYPE_YN_SIN
+                ,		thpi.SALE_TYPE_YN_DLV
+                ,		thpi.SALE_TYPE_YN_PKG
+                ,		thpi.SALE_CHN_YN_POS
+                ,		thpi.SALE_CHN_YN_KSK
+                ,		thpi.SALE_CHN_YN_CMP
+                ,		thpi.SALE_CHN_YN_BAE
+                ,		thpi.SALE_CHN_YN_BAO
+                ,		thpi.SALE_CHN_YN_YGY
+                ,		thpi.SALE_CHN_YN_YGE
+                ,		thpi.SALE_CHN_YN_CPN
+                ,		thpi.SALE_CHN_YN_TNG
+                ,		thpi.SALE_CHN_YN_DDN
+                ,		thp.REMARK
+                ,		thpi.PROD_INFO
+                FROM 	TB_MS_PRODUCT thp
+                ,       TB_MS_PRODUCT_CLASS_V02 thpcv	-- 분류정보
+                -- 가격
+                ,		(
+                SELECT
+                STORE_CD,
+                PROD_CD,
+                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                FROM TB_MS_PRODUCT_SALE_PRICE
+                WHERE STORE_CD = #{storeCd}
+                <![CDATA[
+                AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                  ]]>
+                AND SALE_PRC_FG = '1'
+                GROUP BY
+                STORE_CD, PROD_CD
+                ) thpsp2
+                -- 가격
+                ,		TB_MS_PRODUCT_INFO thpi				-- 상품정보
+                ,		TB_MS_PRODUCT_SDSEL_GROUP thpsg		-- 선택메뉴
+                ,		TB_MS_PRODUCT_OPTION_GROUP thpog	-- 옵션
+                ,		TB_MS_PRODUCT thp2	-- 단품/세트
+                ,		TB_MS_PRODUCT thp3					-- 보증금상품
+                WHERE 	thp.STORE_CD = #{storeCd}
+                AND 	thp.STORE_CD = thpcv.STORE_CD
+                AND 	thp.PROD_CD = thpcv.PROD_CD
+                AND 	thp.STORE_CD = thpsp2.STORE_CD
+                AND 	thp.PROD_CD = thpsp2.PROD_CD
+                AND 	thp.STORE_CD = thpi.STORE_CD (+)
+                AND 	thp.PROD_CD = thpi.PROD_CD (+)
+                -- 선택메뉴
+                AND 	thp.STORE_CD = thpsg.STORE_CD (+)
+                AND 	thp.SDSEL_GRP_CD = thpsg.SDSEL_GRP_CD (+)
+                -- 옵션
+                AND 	thp.STORE_CD = thpog.STORE_CD (+)
+                AND 	thp.OPTION_GRP_CD = thpog.OPTION_GRP_CD (+)
+                -- 단품/세트
+                AND 	thp.STORE_CD = thp2.STORE_CD (+)
+                AND 	thp.GROUP_PROD_CD = thp2.PROD_CD (+)
+                -- 보증금상품
+                AND 	thp.STORE_CD = thp3.STORE_CD (+)
+                AND 	thp.DEPOSIT_PROD_CD = thp3.PROD_CD (+)
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND tmp.PROD_CLASS_CD IN (
+                    SELECT
+                    PROD_CLASS_CD
+                    FROM TB_MS_PRODUCT_CLASS
+                    WHERE STORE_CD = #{storeCd}
+                    START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                    )
+                </if>
+                <if test='prodCd != null and prodCd != ""'>
+                    AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                </if>
+                <if test='prodCds != null and prodCds != ""'>
+                    AND tmp.PROD_CD IN
+                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                ORDER BY thp.PROD_CD
+            </when>
+        </choose>
+    </select>
+
     <!-- 상품분류조회 -->
     <!--
         TABLE    : TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS
@@ -203,7 +728,7 @@
                 WHERE 	thpsc.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND 	thpsc.HQ_OFFICE_CD = thps.HQ_OFFICE_CD (+)
                 AND		thpsc.SDATTR_CLASS_CD = thps.SDATTR_CLASS_CD (+)
-                ORDER BY thpsc.SDATTR_CLASS_CD, thps.SDATTR_CD
+                ORDER BY thpsc.SDATTR_CLASS_CD, thps.DISP_SEQ
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
             <!-- 매장 -->
@@ -219,7 +744,7 @@
                 WHERE 	tmpsc.STORE_CD = #{storeCd}
                 AND 	tmpsc.STORE_CD = tmps.STORE_CD (+)
                 AND		tmpsc.SDATTR_CLASS_CD = tmps.SDATTR_CLASS_CD (+)
-                ORDER BY tmpsc.SDATTR_CLASS_CD, tmps.SDATTR_CD
+                ORDER BY tmpsc.SDATTR_CLASS_CD, tmps.DISP_SEQ
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
         </choose>
@@ -245,7 +770,7 @@
                 WHERE 	thpsc.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND 	thpsc.HQ_OFFICE_CD = thps.HQ_OFFICE_CD (+)
                 AND		thpsc.SDATTR_CLASS_CD = thps.SDATTR_CLASS_CD (+)
-                ORDER BY thpsc.SDATTR_CLASS_CD, thps.SDATTR_CD
+                ORDER BY thpsc.SDATTR_CLASS_CD, thps.DISP_SEQ
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -258,7 +783,7 @@
                 WHERE 	tmpsc.STORE_CD = #{storeCd}
                 AND 	tmpsc.STORE_CD = tmps.STORE_CD (+)
                 AND		tmpsc.SDATTR_CLASS_CD = tmps.SDATTR_CLASS_CD (+)
-                ORDER BY tmpsc.SDATTR_CLASS_CD, tmps.SDATTR_CD
+                ORDER BY tmpsc.SDATTR_CLASS_CD, tmps.DISP_SEQ
             </when>
         </choose>
     </select>
@@ -541,16 +1066,19 @@
                         ,		thpsc.SDATTR_CLASS_NM
                         ,		thps.SDATTR_CD
                         ,		thps.SDATTR_NM
+                        ,		thps.DISP_SEQ AS SDATTR_DISP_SEQ
                         ,		'' AS SDSEL_GRP_CD
                         ,		'' AS SDSEL_GRP_NM
                         ,		'' AS GRP_FIX_PROD_FG
                         ,		'' AS SDSEL_TYPE_FG
                         ,		'' AS SDSEL_CLASS_CD
                         ,		'' AS SDSEL_CLASS_NM
+                        ,		0 AS SDSEL_CLASS_DISP_SEQ
                         ,		0 AS SDSEL_QTY
                         ,		'' AS REQUIRE_YN
                         ,		'' AS SDSEL_PROD_CD
                         ,		'' AS SDSEL_PROD_NM
+                        ,		0 AS SDSEL_PROD_DISP_SEQ
                         ,		0 AS ADD_PROD_UPRC
                         ,		0 AS ADD_PROD_QTY
                         ,		'' AS FIX_PROD_FG
@@ -587,16 +1115,19 @@
                         ,		'' AS SDATTR_CLASS_NM
                         ,		'' AS SDATTR_CD
                         ,		'' AS SDATTR_NM
+                        ,		0 AS SDATTR_DISP_SEQ
                         ,		thp.SDSEL_GRP_CD
                         ,		thpsg.SDSEL_GRP_NM
                         ,		DECODE(thpsg.FIX_PROD_FG, '0', '선택', '1', '고정') AS GRP_FIX_PROD_FG
                         ,		DECODE(thpsg.SDSEL_TYPE_FG, 'C', '세트', 'S', '싱글세트') AS SDSEL_TYPE_FG
                         ,		thpsc.SDSEL_CLASS_CD
                         ,		thpsc.SDSEL_CLASS_NM
+                        ,		thpsc.DISP_SEQ AS SDSEL_CLASS_DISP_SEQ
                         ,		thpsc.SDSEL_QTY
                         ,		DECODE(thpsc.REQUIRE_YN, 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
                         ,		thpsp.PROD_CD AS SDSEL_PROD_CD
                         ,		thp2.PROD_NM AS SDSEL_PROD_NM
+                        ,		thpsp.DISP_SEQ AS SDSEL_PROD_DISP_SEQ
                         ,       thpsp.ADD_PROD_UPRC
                         ,       thpsp.ADD_PROD_QTY
                         ,       DECODE(thpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
@@ -640,16 +1171,19 @@
                         ,		'' AS SDATTR_CLASS_NM
                         ,		'' AS SDATTR_CD
                         ,		'' AS SDATTR_NM
+                        ,		0 AS SDATTR_DISP_SEQ
                         ,		'' AS SDSEL_GRP_CD
                         ,		'' AS SDSEL_GRP_NM
                         ,		'' AS GRP_FIX_PROD_FG
                         ,		'' AS SDSEL_TYPE_FG
                         ,		'' AS SDSEL_CLASS_CD
                         ,		'' AS SDSEL_CLASS_NM
+                        ,		0 AS SDSEL_CLASS_DISP_SEQ
                         ,		0 AS SDSEL_QTY
                         ,		'' AS REQUIRE_YN
                         ,		'' AS SDSEL_PROD_CD
                         ,		'' AS SDSEL_PROD_NM
+                        ,		0 AS SDSEL_PROD_DISP_SEQ
                         ,		0 AS ADD_PROD_UPRC
                         ,		0 AS ADD_PROD_QTY
                         ,		'' AS FIX_PROD_FG
@@ -711,7 +1245,7 @@
                         </foreach>
                     </if>
                 </if>
-                ORDER BY A.PROD_CD, A.SDATTR_CLASS_CD, A.SDATTR_CD, A.SDSEL_GRP_CD, A.SDSEL_CLASS_CD, A.SDSEL_PROD_CD, A.OPTION_GRP_CD, A.OPTION_VAL_CD
+                ORDER BY A.PROD_CD, A.SDATTR_CLASS_CD, A.SDATTR_DISP_SEQ, A.SDSEL_GRP_CD, A.SDSEL_CLASS_DISP_SEQ, A.SDSEL_PROD_DISP_SEQ, A.OPTION_GRP_CD, A.OPTION_VAL_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
             <!-- 매장 -->
@@ -735,16 +1269,19 @@
                         ,		tmpsc.SDATTR_CLASS_NM
                         ,		tmps.SDATTR_CD
                         ,		tmps.SDATTR_NM
+                        ,		tmps.DISP_SEQ AS SDATTR_DISP_SEQ
                         ,		'' AS SDSEL_GRP_CD
                         ,		'' AS SDSEL_GRP_NM
                         ,		'' AS GRP_FIX_PROD_FG
                         ,		'' AS SDSEL_TYPE_FG
                         ,		'' AS SDSEL_CLASS_CD
                         ,		'' AS SDSEL_CLASS_NM
+                        ,		0 AS SDSEL_CLASS_DISP_SEQ
                         ,		0 AS SDSEL_QTY
                         ,		'' AS REQUIRE_YN
                         ,		'' AS SDSEL_PROD_CD
                         ,		'' AS SDSEL_PROD_NM
+                        ,		0 AS SDSEL_PROD_DISP_SEQ
                         ,		0 AS ADD_PROD_UPRC
                         ,		0 AS ADD_PROD_QTY
                         ,		'' AS FIX_PROD_FG
@@ -781,16 +1318,19 @@
                         ,		'' AS SDATTR_CLASS_NM
                         ,		'' AS SDATTR_CD
                         ,		'' AS SDATTR_NM
+                        ,		0 AS SDATTR_DISP_SEQ
                         ,		tmp.SDSEL_GRP_CD
                         ,		tmpsg.SDSEL_GRP_NM
                         ,		DECODE(tmpsg.FIX_PROD_FG, '0', '선택', '1', '고정') AS GRP_FIX_PROD_FG
                         ,		DECODE(tmpsg.SDSEL_TYPE_FG, 'C', '세트', 'S', '싱글세트') AS SDSEL_TYPE_FG
                         ,		tmpsc.SDSEL_CLASS_CD
                         ,		tmpsc.SDSEL_CLASS_NM
+                        ,		tmpsc.DISP_SEQ AS SDSEL_CLASS_DISP_SEQ
                         ,		tmpsc.SDSEL_QTY
                         ,		DECODE(tmpsc.REQUIRE_YN, 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
                         ,		tmpsp.PROD_CD AS SDSEL_PROD_CD
                         ,		tmp2.PROD_NM AS SDSEL_PROD_NM
+                        ,		tmpsp.DISP_SEQ AS SDSEL_PROD_DISP_SEQ
                         ,       tmpsp.ADD_PROD_UPRC
                         ,       tmpsp.ADD_PROD_QTY
                         ,       DECODE(tmpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
@@ -834,16 +1374,19 @@
                         ,		'' AS SDATTR_CLASS_NM
                         ,		'' AS SDATTR_CD
                         ,		'' AS SDATTR_NM
+                        ,		0 AS SDATTR_DISP_SEQ
                         ,		'' AS SDSEL_GRP_CD
                         ,		'' AS SDSEL_GRP_NM
                         ,		'' AS GRP_FIX_PROD_FG
                         ,		'' AS SDSEL_TYPE_FG
                         ,		'' AS SDSEL_CLASS_CD
                         ,		'' AS SDSEL_CLASS_NM
+                        ,		0 AS SDSEL_CLASS_DISP_SEQ
                         ,		0 AS SDSEL_QTY
                         ,		'' AS REQUIRE_YN
                         ,		'' AS SDSEL_PROD_CD
                         ,		'' AS SDSEL_PROD_NM
+                        ,		0 AS SDSEL_PROD_DISP_SEQ
                         ,		0 AS ADD_PROD_UPRC
                         ,		0 AS ADD_PROD_QTY
                         ,		'' AS FIX_PROD_FG
@@ -893,7 +1436,7 @@
                         #{item}
                     </foreach>
                 </if>
-                ORDER BY A.PROD_CD, A.SDATTR_CLASS_CD, A.SDATTR_CD, A.SDSEL_GRP_CD, A.SDSEL_CLASS_CD, A.SDSEL_PROD_CD, A.OPTION_GRP_CD, A.OPTION_VAL_CD
+                ORDER BY A.PROD_CD, A.SDATTR_CLASS_CD, A.SDATTR_DISP_SEQ, A.SDSEL_GRP_CD, A.SDSEL_CLASS_DISP_SEQ, A.SDSEL_PROD_DISP_SEQ, A.OPTION_GRP_CD, A.OPTION_VAL_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
         </choose>
@@ -927,16 +1470,19 @@
                 ,		thpsc.SDATTR_CLASS_NM
                 ,		thps.SDATTR_CD
                 ,		thps.SDATTR_NM
+                ,		thps.DISP_SEQ AS SDATTR_DISP_SEQ
                 ,		'' AS SDSEL_GRP_CD
                 ,		'' AS SDSEL_GRP_NM
                 ,		'' AS GRP_FIX_PROD_FG
                 ,		'' AS SDSEL_TYPE_FG
                 ,		'' AS SDSEL_CLASS_CD
                 ,		'' AS SDSEL_CLASS_NM
+                ,		0 AS SDSEL_CLASS_DISP_SEQ
                 ,		0 AS SDSEL_QTY
                 ,		'' AS REQUIRE_YN
                 ,		'' AS SDSEL_PROD_CD
                 ,		'' AS SDSEL_PROD_NM
+                ,		0 AS SDSEL_PROD_DISP_SEQ
                 ,		0 AS ADD_PROD_UPRC
                 ,		0 AS ADD_PROD_QTY
                 ,		'' AS FIX_PROD_FG
@@ -973,16 +1519,19 @@
                 ,		'' AS SDATTR_CLASS_NM
                 ,		'' AS SDATTR_CD
                 ,		'' AS SDATTR_NM
+                ,		0 AS SDATTR_DISP_SEQ
                 ,		thp.SDSEL_GRP_CD
                 ,		thpsg.SDSEL_GRP_NM
                 ,		DECODE(thpsg.FIX_PROD_FG, '0', '선택', '1', '고정') AS GRP_FIX_PROD_FG
                 ,		DECODE(thpsg.SDSEL_TYPE_FG, 'C', '세트', 'S', '싱글세트') AS SDSEL_TYPE_FG
                 ,		thpsc.SDSEL_CLASS_CD
                 ,		thpsc.SDSEL_CLASS_NM
+                ,		thpsc.DISP_SEQ AS SDSEL_CLASS_DISP_SEQ
                 ,		thpsc.SDSEL_QTY
                 ,		DECODE(thpsc.REQUIRE_YN, 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
                 ,		thpsp.PROD_CD AS SDSEL_PROD_CD
                 ,		thp2.PROD_NM AS SDSEL_PROD_NM
+                ,		thpsp.DISP_SEQ AS SDSEL_PROD_DISP_SEQ
                 ,       thpsp.ADD_PROD_UPRC
                 ,       thpsp.ADD_PROD_QTY
                 ,       DECODE(thpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
@@ -1026,16 +1575,19 @@
                 ,		'' AS SDATTR_CLASS_NM
                 ,		'' AS SDATTR_CD
                 ,		'' AS SDATTR_NM
+                ,		0 AS SDATTR_DISP_SEQ
                 ,		'' AS SDSEL_GRP_CD
                 ,		'' AS SDSEL_GRP_NM
                 ,		'' AS GRP_FIX_PROD_FG
                 ,		'' AS SDSEL_TYPE_FG
                 ,		'' AS SDSEL_CLASS_CD
                 ,		'' AS SDSEL_CLASS_NM
+                ,		0 AS SDSEL_CLASS_DISP_SEQ
                 ,		0 AS SDSEL_QTY
                 ,		'' AS REQUIRE_YN
                 ,		'' AS SDSEL_PROD_CD
                 ,		'' AS SDSEL_PROD_NM
+                ,		0 AS SDSEL_PROD_DISP_SEQ
                 ,		0 AS ADD_PROD_UPRC
                 ,		0 AS ADD_PROD_QTY
                 ,		'' AS FIX_PROD_FG
@@ -1097,7 +1649,7 @@
                         </foreach>
                     </if>
                 </if>
-                ORDER BY A.PROD_CD, A.SDATTR_CLASS_CD, A.SDATTR_CD, A.SDSEL_GRP_CD, A.SDSEL_CLASS_CD, A.SDSEL_PROD_CD, A.OPTION_GRP_CD, A.OPTION_VAL_CD
+                ORDER BY A.PROD_CD, A.SDATTR_CLASS_CD, A.SDATTR_DISP_SEQ, A.SDSEL_GRP_CD, A.SDSEL_CLASS_DISP_SEQ, A.SDSEL_PROD_DISP_SEQ, A.OPTION_GRP_CD, A.OPTION_VAL_CD
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -1118,16 +1670,19 @@
                 ,		tmpsc.SDATTR_CLASS_NM
                 ,		tmps.SDATTR_CD
                 ,		tmps.SDATTR_NM
+                ,		tmps.DISP_SEQ AS SDATTR_DISP_SEQ
                 ,		'' AS SDSEL_GRP_CD
                 ,		'' AS SDSEL_GRP_NM
                 ,		'' AS GRP_FIX_PROD_FG
                 ,		'' AS SDSEL_TYPE_FG
                 ,		'' AS SDSEL_CLASS_CD
                 ,		'' AS SDSEL_CLASS_NM
+                ,		0 AS SDSEL_CLASS_DISP_SEQ
                 ,		0 AS SDSEL_QTY
                 ,		'' AS REQUIRE_YN
                 ,		'' AS SDSEL_PROD_CD
                 ,		'' AS SDSEL_PROD_NM
+                ,		0 AS SDSEL_PROD_DISP_SEQ
                 ,		0 AS ADD_PROD_UPRC
                 ,		0 AS ADD_PROD_QTY
                 ,		'' AS FIX_PROD_FG
@@ -1164,16 +1719,19 @@
                 ,		'' AS SDATTR_CLASS_NM
                 ,		'' AS SDATTR_CD
                 ,		'' AS SDATTR_NM
+                ,		0 AS SDATTR_DISP_SEQ
                 ,		tmp.SDSEL_GRP_CD
                 ,		tmpsg.SDSEL_GRP_NM
                 ,		DECODE(tmpsg.FIX_PROD_FG, '0', '선택', '1', '고정') AS GRP_FIX_PROD_FG
                 ,		DECODE(tmpsg.SDSEL_TYPE_FG, 'C', '세트', 'S', '싱글세트') AS SDSEL_TYPE_FG
                 ,		tmpsc.SDSEL_CLASS_CD
                 ,		tmpsc.SDSEL_CLASS_NM
+                ,		tmpsc.DISP_SEQ AS SDSEL_CLASS_DISP_SEQ
                 ,		tmpsc.SDSEL_QTY
                 ,		DECODE(tmpsc.REQUIRE_YN, 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
                 ,		tmpsp.PROD_CD AS SDSEL_PROD_CD
                 ,		tmp2.PROD_NM AS SDSEL_PROD_NM
+                ,		tmpsp.DISP_SEQ AS SDSEL_PROD_DISP_SEQ
                 ,       tmpsp.ADD_PROD_UPRC
                 ,       tmpsp.ADD_PROD_QTY
                 ,       DECODE(tmpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
@@ -1217,16 +1775,19 @@
                 ,		'' AS SDATTR_CLASS_NM
                 ,		'' AS SDATTR_CD
                 ,		'' AS SDATTR_NM
+                ,		0 AS SDATTR_DISP_SEQ
                 ,		'' AS SDSEL_GRP_CD
                 ,		'' AS SDSEL_GRP_NM
                 ,		'' AS GRP_FIX_PROD_FG
                 ,		'' AS SDSEL_TYPE_FG
                 ,		'' AS SDSEL_CLASS_CD
                 ,		'' AS SDSEL_CLASS_NM
+                ,		0 AS SDSEL_CLASS_DISP_SEQ
                 ,		0 AS SDSEL_QTY
                 ,		'' AS REQUIRE_YN
                 ,		'' AS SDSEL_PROD_CD
                 ,		'' AS SDSEL_PROD_NM
+                ,		0 AS SDSEL_PROD_DISP_SEQ
                 ,		0 AS ADD_PROD_UPRC
                 ,		0 AS ADD_PROD_QTY
                 ,		'' AS FIX_PROD_FG
@@ -1276,7 +1837,7 @@
                         #{item}
                     </foreach>
                 </if>
-                ORDER BY A.PROD_CD, A.SDATTR_CLASS_CD, A.SDATTR_CD, A.SDSEL_GRP_CD, A.SDSEL_CLASS_CD, A.SDSEL_PROD_CD, A.OPTION_GRP_CD, A.OPTION_VAL_CD
+                ORDER BY A.PROD_CD, A.SDATTR_CLASS_CD, A.SDATTR_DISP_SEQ, A.SDSEL_GRP_CD, A.SDSEL_CLASS_DISP_SEQ, A.SDSEL_PROD_DISP_SEQ, A.OPTION_GRP_CD, A.OPTION_VAL_CD
             </when>
         </choose>
     </select>

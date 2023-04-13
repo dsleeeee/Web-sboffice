@@ -22,6 +22,12 @@ import java.util.List;
  */
 public interface ProdInfoSearchService {
 
+    /** 상품정보 조회 */
+    List<DefaultMap<String>> getProdInfo2List(ProdInfoSearchVO prodInfoSearchVO, SessionInfoVO sessionInfoVO);
+
+    /** 상품정보 엑셀 조회 */
+    List<DefaultMap<String>> getProdInfo2ExcelList(ProdInfoSearchVO prodInfoSearchVO, SessionInfoVO sessionInfoVO);
+
     /** 상품분류 조회 */
     List<DefaultMap<String>> getProdClassList(ProdInfoSearchVO prodInfoSearchVO, SessionInfoVO sessionInfoVO);
 

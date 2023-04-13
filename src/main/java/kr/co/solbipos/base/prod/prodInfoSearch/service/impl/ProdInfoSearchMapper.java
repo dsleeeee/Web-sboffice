@@ -27,6 +27,12 @@ import java.util.List;
 @Repository
 public interface ProdInfoSearchMapper {
 
+    /* 상품정보 조회 */
+    List<DefaultMap<String>> getProdInfo2List(ProdInfoSearchVO prodInfoSearchVO);
+
+    /* 상품정보 엑셀 조회 */
+    List<DefaultMap<String>> getProdInfo2ExcelList(ProdInfoSearchVO prodInfoSearchVO);
+
     /* 상품분류 조회 */
     List<DefaultMap<String>> getProdClassList(ProdInfoSearchVO prodInfoSearchVO);
 

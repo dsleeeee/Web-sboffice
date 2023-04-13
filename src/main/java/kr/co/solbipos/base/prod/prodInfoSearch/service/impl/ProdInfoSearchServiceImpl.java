@@ -35,6 +35,58 @@ public class ProdInfoSearchServiceImpl implements ProdInfoSearchService {
         this.prodInfoSearchMapper = prodInfoSearchMapper;
     }
 
+    /** 상품정보 조회 */
+    @Override
+    public List<DefaultMap<String>> getProdInfo2List(ProdInfoSearchVO prodInfoSearchVO, SessionInfoVO sessionInfoVO) {
+
+        prodInfoSearchVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodInfoSearchVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodInfoSearchVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        // 상품 array 값 세팅
+        if (prodInfoSearchVO.getProdCds() != null && !"".equals(prodInfoSearchVO.getProdCds())) {
+            String[] prodCdList = prodInfoSearchVO.getProdCds().split(",");
+            prodInfoSearchVO.setProdCdList(prodCdList);
+        }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 매장브랜드, 상품브랜드가 '전체' 일때
+            if (prodInfoSearchVO.getProdHqBrandCd() == "" || prodInfoSearchVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = prodInfoSearchVO.getUserBrands().split(",");
+                prodInfoSearchVO.setUserBrandList(userBrandList);
+            }
+        }
+
+        return prodInfoSearchMapper.getProdInfo2List(prodInfoSearchVO);
+    }
+
+    /** 상품정보 엑셀 조회 */
+    @Override
+    public List<DefaultMap<String>> getProdInfo2ExcelList(ProdInfoSearchVO prodInfoSearchVO, SessionInfoVO sessionInfoVO) {
+
+        prodInfoSearchVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodInfoSearchVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodInfoSearchVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        // 상품 array 값 세팅
+        if (prodInfoSearchVO.getProdCds() != null && !"".equals(prodInfoSearchVO.getProdCds())) {
+            String[] prodCdList = prodInfoSearchVO.getProdCds().split(",");
+            prodInfoSearchVO.setProdCdList(prodCdList);
+        }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 매장브랜드, 상품브랜드가 '전체' 일때
+            if (prodInfoSearchVO.getProdHqBrandCd() == "" || prodInfoSearchVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = prodInfoSearchVO.getUserBrands().split(",");
+                prodInfoSearchVO.setUserBrandList(userBrandList);
+            }
+        }
+
+        return prodInfoSearchMapper.getProdInfo2ExcelList(prodInfoSearchVO);
+    }
+
     /** 상품분류 조회 */
     @Override
     public List<DefaultMap<String>> getProdClassList(ProdInfoSearchVO prodInfoSearchVO, SessionInfoVO sessionInfoVO) {
