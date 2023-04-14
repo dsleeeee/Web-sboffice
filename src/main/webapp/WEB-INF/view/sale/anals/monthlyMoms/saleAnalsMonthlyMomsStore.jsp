@@ -33,8 +33,8 @@
 	          <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.storeCd"/>" 		binding="storeCd" 		width="100" align="center"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.storeNm"/>" 		binding="storeNm" 		width="160" align="left"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.saleDate"/>" 		binding="saleDate" 		width="100" align="center"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.billCnt"/>" 		binding="billCnt" 		width="100" align="center"></wj-flex-grid-column>
-          	  <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.realSaleAmt"/>"	binding="realSaleAmt" 	width="130" align="right"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.billCnt"/>" 		binding="billCnt" 		width="100" align="center" aggregate="Sum"></wj-flex-grid-column>
+          	  <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.realSaleAmt"/>"	binding="realSaleAmt" 	width="130" align="right" aggregate="Sum"></wj-flex-grid-column>
 	      </div>
 	      <%-- ColumnPicker 사용시 include --%>
           <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">

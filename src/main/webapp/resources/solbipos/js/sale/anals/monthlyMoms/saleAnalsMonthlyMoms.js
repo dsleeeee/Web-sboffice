@@ -170,7 +170,7 @@ app.controller('saleAnalsMonthlyMomsCtrl', ['$scope', '$http', '$sce', function 
 
 					if (sunData != null && sunData != "") {
 						var sunSplit = sunData.split('||');
-						htmlTxt += '	<td class="red">' + $scope.changeDate(sunSplit[0].substr(6,2)) + '</td>';
+						htmlTxt += '	<td style="background-color: #d5d5d5; color:red;">' + $scope.changeDate(sunSplit[0].substr(6,2)) + '</td>';
 						sunSum += parseInt(sunSplit[1]);
 						weekSum += parseInt(sunSplit[1]);
 					} else {
@@ -180,9 +180,9 @@ app.controller('saleAnalsMonthlyMomsCtrl', ['$scope', '$http', '$sce', function 
 					if (monData != null && monData != "") {
 						var monSplit = monData.split('||');
 						if (monSplit[2] == "Y") {
-							htmlTxt += '	<td class="red">' + $scope.changeDate(monSplit[0].substr(6,2)) + '</td>';
+							htmlTxt += '	<td style="background-color: #d5d5d5; color:red;">' + $scope.changeDate(monSplit[0].substr(6,2)) + '</td>';
 						} else {
-							htmlTxt += '	<td>' + $scope.changeDate(monSplit[0].substr(6,2)) + '</td>';
+							htmlTxt += '	<td style="background-color: #d5d5d5;">' + $scope.changeDate(monSplit[0].substr(6,2)) + '</td>';
 						}
 						monSum += parseInt(monSplit[1]);
 						weekSum += parseInt(monSplit[1]);
@@ -193,9 +193,9 @@ app.controller('saleAnalsMonthlyMomsCtrl', ['$scope', '$http', '$sce', function 
 					if (tueData != null && tueData != "") {
 						var tueSplit = tueData.split('||');
 						if (tueSplit[2] == "Y") {
-							htmlTxt += '	<td class="red">' + $scope.changeDate(tueSplit[0].substr(6,2)) + '</td>';
+							htmlTxt += '	<td style="background-color: #d5d5d5; color:red;">' + $scope.changeDate(tueSplit[0].substr(6,2)) + '</td>';
 						} else {
-							htmlTxt += '	<td>' + $scope.changeDate(tueSplit[0].substr(6,2)) + '</td>';
+							htmlTxt += '	<td style="background-color: #d5d5d5;">' + $scope.changeDate(tueSplit[0].substr(6,2)) + '</td>';
 						}
 						tueSum += parseInt(tueSplit[1]);
 						weekSum += parseInt(tueSplit[1]);
@@ -206,9 +206,9 @@ app.controller('saleAnalsMonthlyMomsCtrl', ['$scope', '$http', '$sce', function 
 					if (wedData != null && wedData != "") {
 						var wedSplit = wedData.split('||');
 						if (wedSplit[2] == "Y") {
-							htmlTxt += '	<td class="red">' + $scope.changeDate(wedSplit[0].substr(6,2)) + '</td>';
+							htmlTxt += '	<td style="background-color: #d5d5d5; color:red;">' + $scope.changeDate(wedSplit[0].substr(6,2)) + '</td>';
 						} else {
-							htmlTxt += '	<td>' + $scope.changeDate(wedSplit[0].substr(6,2)) + '</td>';
+							htmlTxt += '	<td style="background-color: #d5d5d5;">' + $scope.changeDate(wedSplit[0].substr(6,2)) + '</td>';
 						}
 						wedSum += parseInt(wedSplit[1]);
 						weekSum += parseInt(wedSplit[1]);
@@ -219,9 +219,9 @@ app.controller('saleAnalsMonthlyMomsCtrl', ['$scope', '$http', '$sce', function 
 					if (thuData != null && thuData != "") {
 						var thuSplit = thuData.split('||');
 						if (thuSplit[2] == "Y") {
-							htmlTxt += '	<td class="red">' + $scope.changeDate(thuSplit[0].substr(6,2)) + '</td>';
+							htmlTxt += '	<td style="background-color: #d5d5d5; color:red;">' + $scope.changeDate(thuSplit[0].substr(6,2)) + '</td>';
 						} else {
-							htmlTxt += '	<td>' + $scope.changeDate(thuSplit[0].substr(6,2)) + '</td>';
+							htmlTxt += '	<td style="background-color: #d5d5d5;">' + $scope.changeDate(thuSplit[0].substr(6,2)) + '</td>';
 						}
 						thuSum += parseInt(thuSplit[1]);
 						weekSum += parseInt(thuSplit[1]);
@@ -232,9 +232,9 @@ app.controller('saleAnalsMonthlyMomsCtrl', ['$scope', '$http', '$sce', function 
 					if (friData != null && friData != "") {
 						var friSplit = friData.split('||');
 						if (friSplit[2] == "Y") {
-							htmlTxt += '	<td class="red">' + $scope.changeDate(friSplit[0].substr(6,2)) + '</td>';
+							htmlTxt += '	<td style="background-color: #d5d5d5; color:red;">' + $scope.changeDate(friSplit[0].substr(6,2)) + '</td>';
 						} else {
-							htmlTxt += '	<td>' + $scope.changeDate(friSplit[0].substr(6,2)) + '</td>';
+							htmlTxt += '	<td style="background-color: #d5d5d5;">' + $scope.changeDate(friSplit[0].substr(6,2)) + '</td>';
 						}
 						friSum += parseInt(friSplit[1]);
 						weekSum += parseInt(friSplit[1]);
@@ -245,9 +245,9 @@ app.controller('saleAnalsMonthlyMomsCtrl', ['$scope', '$http', '$sce', function 
 					if (satData != null && satData != "") {
 						var satSplit = satData.split('||');
 						if (satSplit[2] == "Y") {
-							htmlTxt += '	<td class="blue">' + $scope.changeDate(satSplit[0].substr(6,2)) + '</td>';
+							htmlTxt += '	<td style="background-color: #d5d5d5; color:blue;">' + $scope.changeDate(satSplit[0].substr(6,2)) + '</td>';
 						} else {
-							htmlTxt += '	<td class="blue">' + $scope.changeDate(satSplit[0].substr(6,2)) + '</td>';
+							htmlTxt += '	<td style="background-color: #d5d5d5; color:blue;">' + $scope.changeDate(satSplit[0].substr(6,2)) + '</td>';
 						}
 						satSum += parseInt(satSplit[1]);
 						weekSum += parseInt(satSplit[1]);
@@ -255,15 +255,15 @@ app.controller('saleAnalsMonthlyMomsCtrl', ['$scope', '$http', '$sce', function 
 						htmlTxt += '	<td></td>';
 					}
 
-					htmlTxt += '	<td class="bg-total">주간합계</td>'
-							+ '	<td class="bg-total">비율</td>'
+					htmlTxt += '	<td style="background-color: #FDD69D;" class="bg-total">주간합계</td>'
+							+ '	<td  style="background-color: #FDD69D;" class="bg-total">비율</td>'
 							+ '</tr>'
 							+ '<tr class="cal-txt">';
 
 					if (sunData != null && sunData != "") {
 						var sunSplit = sunData.split('||');
 						if(sunSplit[1] > 0 || sunSplit[1] < 0){
-							htmlTxt += '	<td class="cal-txt"><p class="tl">' + tueSplit[3].format() + '</p><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyMomsPop(' + sunSplit[0] + ')\"> ' + sunSplit[1].format() + '</a></td>';
+							htmlTxt += '	<td class="cal-txt"><p class="tl">' + sunSplit[3].format() + '</p><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyMomsPop(' + sunSplit[0] + ')\"> ' + sunSplit[1].format() + '</a></td>';
 						}else{
 							htmlTxt += '	<td class="cal-txt">' + sunSplit[1].format() + '</td>';
 						}
@@ -274,7 +274,7 @@ app.controller('saleAnalsMonthlyMomsCtrl', ['$scope', '$http', '$sce', function 
 					if (monData != null && monData != "") {
 						var monSplit = monData.split('||');
 						if(monSplit[1] > 0 || monSplit[1] < 0){
-							htmlTxt += '	<td class="cal-txt"><p class="tl">' + tueSplit[3].format() + '</p><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyMomsPop(' + monSplit[0] + ')\"> ' + monSplit[1].format() + '</a></td>';
+							htmlTxt += '	<td class="cal-txt"><p class="tl">' + monSplit[3].format() + '</p><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyMomsPop(' + monSplit[0] + ')\"> ' + monSplit[1].format() + '</a></td>';
 						}else{
 							htmlTxt += '	<td class="cal-txt">' + monSplit[1].format() + '</td>';
 						}
@@ -296,7 +296,7 @@ app.controller('saleAnalsMonthlyMomsCtrl', ['$scope', '$http', '$sce', function 
 					if (wedData != null && wedData != "") {
 						var wedSplit = wedData.split('||');
 						if(wedSplit[1] > 0 || wedSplit[1] < 0){
-							htmlTxt += '	<td class="cal-txt"><p class="tl">' + tueSplit[3].format() + '</p><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyMomsPop(' + wedSplit[0] + ')\"> ' + wedSplit[1].format() + '</a></td>';
+							htmlTxt += '	<td class="cal-txt"><p class="tl">' + wedSplit[3].format() + '</p><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyMomsPop(' + wedSplit[0] + ')\"> ' + wedSplit[1].format() + '</a></td>';
 						}else{
 							htmlTxt += '	<td class="cal-txt">' + wedSplit[1].format() + '</td>';
 						}
@@ -307,7 +307,7 @@ app.controller('saleAnalsMonthlyMomsCtrl', ['$scope', '$http', '$sce', function 
 					if (thuData != null && thuData != "") {
 						var thuSplit = thuData.split('||');
 						if(thuSplit[1] > 0 || thuSplit[1] < 0){
-							htmlTxt += '	<td class="cal-txt"><p class="tl">' + tueSplit[3].format() + '</p><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyMomsPop(' + thuSplit[0] + ')\"> ' + thuSplit[1].format() + '</a></td>';
+							htmlTxt += '	<td class="cal-txt"><p class="tl">' + thuSplit[3].format() + '</p><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyMomsPop(' + thuSplit[0] + ')\"> ' + thuSplit[1].format() + '</a></td>';
 						}else{
 							htmlTxt += '	<td class="cal-txt">' + thuSplit[1].format() + '</td>';
 						}
@@ -318,7 +318,7 @@ app.controller('saleAnalsMonthlyMomsCtrl', ['$scope', '$http', '$sce', function 
 					if (friData != null && friData != "") {
 						var friSplit = friData.split('||');
 						if(friSplit[1] > 0 || friSplit[1] < 0){
-							htmlTxt += '	<td class="cal-txt"><p class="tl">' + tueSplit[3].format() + '</p><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyMomsPop(' + friSplit[0] + ')\"> ' + friSplit[1].format() + '</a></td>';
+							htmlTxt += '	<td class="cal-txt"><p class="tl">' + friSplit[3].format() + '</p><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyMomsPop(' + friSplit[0] + ')\"> ' + friSplit[1].format() + '</a></td>';
 						}else{
 							htmlTxt += '	<td class="cal-txt">' + friSplit[1].format() + '</td>';
 						}
@@ -329,7 +329,7 @@ app.controller('saleAnalsMonthlyMomsCtrl', ['$scope', '$http', '$sce', function 
 					if (satData != null && satData != "") {
 						var satSplit = satData.split('||');
 						if(satSplit[1] > 0 || satSplit[1] < 0){
-							htmlTxt += '	<td class="cal-txt"><p class="tl">' + tueSplit[3].format() + '</p><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyMomsPop(' + satSplit[0] + ')\"> ' + satSplit[1].format() + '</a></td>';
+							htmlTxt += '	<td class="cal-txt"><p class="tl">' + satSplit[3].format() + '</p><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyMomsPop(' + satSplit[0] + ')\"> ' + satSplit[1].format() + '</a></td>';
 						}else{
 							htmlTxt += '	<td class="cal-txt">' + satSplit[1].format() + '</td>';
 						}
@@ -387,14 +387,14 @@ app.controller('saleAnalsMonthlyMomsCtrl', ['$scope', '$http', '$sce', function 
 
 
 				htmlTxt += '<tr class="bg-total">'
-						+ '  <td class="red">일요일합계</td>'
-						+ '  <td>월요일합계</td>'
-						+ '  <td>화요일합계</td>'
-						+ '  <td>수요일합계</td>'
-						+ '  <td>목요일합계</td>'
-						+ '  <td>금요일합계</td>'
-						+ '  <td class="blue">토요일합계</th>'
-						+ '  <td colspan="2">총매출합계</td>'
+						+ '  <td style="background-color: #FDD69D; color:red;">일요일합계</td>'
+						+ '  <td style="background-color: #FDD69D;">월요일합계</td>'
+						+ '  <td style="background-color: #FDD69D;">화요일합계</td>'
+						+ '  <td style="background-color: #FDD69D;">수요일합계</td>'
+						+ '  <td style="background-color: #FDD69D;">목요일합계</td>'
+						+ '  <td style="background-color: #FDD69D;">금요일합계</td>'
+						+ '  <td style="background-color: #FDD69D; color:blue;">토요일합계</th>'
+						+ '  <td style="background-color: #FDD69D;" colspan="2">총매출합계</td>'
 						+ '</tr>'
 						+ '<tr class="cal-txt">'
 						+ '  <td>' + sunSum.format() + '</td>'
@@ -404,16 +404,16 @@ app.controller('saleAnalsMonthlyMomsCtrl', ['$scope', '$http', '$sce', function 
 						+ '  <td>' + thuSum.format() + '</td>'
 						+ '  <td>' + friSum.format() + '</td>'
 						+ '  <td>' + satSum.format() + '</td>'
-						+ '  <td rowspan="3" colspan="2" class="tr red s20">' + totalSaleSum.format() + '</td>'
+						+ '  <td rowspan="3" colspan="2" style="color:red;" class="tr s20">' + totalSaleSum.format() + '</td>'
 						+ '</tr>'
 						+ '<tr class="bg-total">'
-						+ '  <td>비율</td>'
-						+ '  <td>비율</td>'
-						+ '  <td>비율</td>'
-						+ '  <td>비율</td>'
-						+ '  <td>비율</td>'
-						+ '  <td>비율</td>'
-						+ '  <td>비율</td>'
+						+ '  <td style="background-color: #FDD69D;">비율</td>'
+						+ '  <td style="background-color: #FDD69D;">비율</td>'
+						+ '  <td style="background-color: #FDD69D;">비율</td>'
+						+ '  <td style="background-color: #FDD69D;">비율</td>'
+						+ '  <td style="background-color: #FDD69D;">비율</td>'
+						+ '  <td style="background-color: #FDD69D;">비율</td>'
+						+ '  <td style="background-color: #FDD69D;">비율</td>'
 						+ '</tr>'
 						+ '<tr class="cal-txt">'
 						+ '  <td>' + String(sunRatio.toFixed(2)) + '%' + '</td>'

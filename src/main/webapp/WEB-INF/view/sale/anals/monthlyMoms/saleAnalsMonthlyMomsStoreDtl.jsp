@@ -34,9 +34,9 @@
 	          <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.billNo"/>" 		binding="billNo" 		width="80" align="center"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.billDt"/>" 		binding="billDt" 		width="130" align="center"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.saleFg"/>" 		binding="saleFg" 		width="80" align="center"></wj-flex-grid-column>
-          	  <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.totSaleAmt"/>"		binding="totSaleAmt" 	width="100" align="right"></wj-flex-grid-column>
-          	  <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.totDcAmt"/>"		binding="totDcAmt" 		width="100" align="right"></wj-flex-grid-column>
-          	  <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.realSaleAmt"/>"	binding="realSaleAmt" 	width="100" align="right"></wj-flex-grid-column>
+          	  <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.totSaleAmt"/>"		binding="totSaleAmt" 	width="100" align="right" aggregate="Sum"></wj-flex-grid-column>
+          	  <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.totDcAmt"/>"		binding="totDcAmt" 		width="100" align="right" aggregate="Sum"></wj-flex-grid-column>
+          	  <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.realSaleAmt"/>"	binding="realSaleAmt" 	width="100" align="right" aggregate="Sum"></wj-flex-grid-column>
 	      </div>
 	      <%-- ColumnPicker 사용시 include --%>
           <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">

@@ -2,7 +2,6 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
@@ -80,14 +79,14 @@
 	    </colgroup>
 	    <thead>
 	    <tr>
-	      <th class="red"><s:message code="saleAnalsMonthly.sun"/></th>
-	      <th><s:message code="saleAnalsMonthly.mon"/></th>
-	      <th><s:message code="saleAnalsMonthly.tue"/></th>
-	      <th><s:message code="saleAnalsMonthly.wed"/></th>
-	      <th><s:message code="saleAnalsMonthly.thu"/></th>
-	      <th><s:message code="saleAnalsMonthly.fri"/></th>
-	      <th class="blue"><s:message code="saleAnalsMonthly.sat"/></th>
-	      <th colspan="2"><s:message code="saleAnalsMonthly.saleAnal"/></th>
+	      <th style="background-color: #d9e5ff;" class="red"><s:message code="saleAnalsMonthly.sun"/></th>
+	      <th style="background-color: #d9e5ff;"><s:message code="saleAnalsMonthly.mon"/></th>
+	      <th style="background-color: #d9e5ff;"><s:message code="saleAnalsMonthly.tue"/></th>
+	      <th style="background-color: #d9e5ff;"><s:message code="saleAnalsMonthly.wed"/></th>
+	      <th style="background-color: #d9e5ff;"><s:message code="saleAnalsMonthly.thu"/></th>
+	      <th style="background-color: #d9e5ff;"><s:message code="saleAnalsMonthly.fri"/></th>
+	      <th style="background-color: #d9e5ff;" class="blue"><s:message code="saleAnalsMonthly.sat"/></th>
+	      <th style="background-color: #d9e5ff;" colspan="2"><s:message code="saleAnalsMonthly.saleAnal"/></th>
 	    </tr>
 	    </thead>
 	    <tbody ng-bind-html="saleAnalsMonthlyMomsBody">
@@ -103,15 +102,25 @@
   var statusDataFg  = ${ccu.getCommCode("100")};
   var empNo = "${empNo}"
 
-  <%-- 엑셀 다운로드 버튼 클릭 --%>
   $("#btnExcel").click(function(){
-	  var name = "${menuNm}";
-	  var xecel = XLSX.utils.table_to_book(document.getElementById("monthly"));
-	  XLSX.writeFile(xecel, name + '_' + getCurDateTime() + ".xlsx");
+	  tabletoExcel(document.getElementById("monthly"), '${menuNm}');
   });
+
+	function tabletoExcel(table, name) {
+	  var uri = 'data:application/vnd.ms-excel;base64,'
+			  , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+			  , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))); }
+			  , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }); };
+	  if (!table.nodeType) table = document.getElementById(table);
+	  var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML };
+		let a = document.createElement('a');
+		a.href = uri + base64(format(template, ctx));
+		a.download = name + '_' + getCurDateTime() + ".xls";
+		a.click();
+  	}
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/monthlyMoms/saleAnalsMonthlyMoms.js?ver=20230413.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/monthlyMoms/saleAnalsMonthlyMoms.js?ver=20230413.01" charset="utf-8"></script>
 
 <%-- 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/anals/monthlyMoms/saleAnalsMonthlyMomsStore.jsp">
