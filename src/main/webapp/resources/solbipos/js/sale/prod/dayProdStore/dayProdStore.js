@@ -98,9 +98,9 @@ app.controller('dayProdStoreCtrl', ['$scope', '$http', '$timeout', function ($sc
             $scope._popMsg(messages['cmm.dateChk.error']);
             return false;
         }
-        // 조회일자 최대 7일 제한
-        if (diffDay > 7) {
-            $scope._popMsg(messages['cmm.dateOver.7day.error']);
+        // 조회일자 최대 3일 제한
+        if (diffDay > 2) {
+            $scope._popMsg(messages['cmm.dateOver.3day.error']);
             return false;
         }
 
@@ -236,9 +236,9 @@ app.controller('dayProdStoreCtrl', ['$scope', '$http', '$timeout', function ($sc
             $scope._popMsg(messages['cmm.dateChk.error']);
             return false;
         }
-        // 조회일자 최대 7일 제한
-        if (diffDay > 7) {
-            $scope._popMsg(messages['cmm.dateOver.7day.error']);
+        // 조회일자 최대 3일 제한
+        if (diffDay > 2) {
+            $scope._popMsg(messages['cmm.dateOver.3day.error']);
             return false;
         }
 

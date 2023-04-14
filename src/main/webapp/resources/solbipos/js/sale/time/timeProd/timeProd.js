@@ -295,9 +295,9 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
                 $scope._popMsg(messages['cmm.dateChk.error']);
                 return false;
             }
-            // 조회일자 최대 7일 제한
-            if (diffDay > 7) {
-                $scope._popMsg(messages['cmm.dateOver.7day.error']);
+            // 조회일자 최대 3일 제한
+            if (diffDay > 2) {
+                $scope._popMsg(messages['cmm.dateOver.3day.error']);
                 return false;
             }
 
@@ -311,9 +311,9 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
                 $scope._popMsg(messages['cmm.dateChk.error']);
                 return false;
             }
-            // 조회일자 최대 7달 제한
-            if (diffMonth > 7) {
-                $scope._popMsg(messages['cmm.dateOver.7month.error']);
+            // 조회일자 최대 3달 제한
+            if (diffMonth > 2) {
+                $scope._popMsg(messages['cmm.dateOver.3month.error']);
                 return false;
             }
         }
@@ -573,9 +573,9 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
                 $scope._popMsg(messages['cmm.dateChk.error']);
                 return false;
             }
-            // 조회일자 최대 7일 제한
-            if (diffDay > 7) {
-                $scope._popMsg(messages['cmm.dateOver.7day.error']);
+            // 조회일자 최대 3일 제한
+            if (diffDay > 2) {
+                $scope._popMsg(messages['cmm.dateOver.3day.error']);
                 return false;
             }
 
@@ -589,9 +589,9 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
                 $scope._popMsg(messages['cmm.dateChk.error']);
                 return false;
             }
-            // 조회일자 최대 7달 제한
-            if (diffMonth > 7) {
-                $scope._popMsg(messages['cmm.dateOver.7month.error']);
+            // 조회일자 최대 3달 제한
+            if (diffMonth > 2) {
+                $scope._popMsg(messages['cmm.dateOver.3month.error']);
                 return false;
             }
         }
