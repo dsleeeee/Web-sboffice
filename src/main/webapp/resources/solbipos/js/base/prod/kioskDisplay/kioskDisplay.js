@@ -83,6 +83,7 @@ app.controller('kioskDisplayCtrl', ['$scope', '$http', '$timeout', function ($sc
   $scope._setComboData('listScaleBox', gvListScaleBoxData);
   // 사용여부를 쓰는 콤보박스의 데이터 (조회용)
   $scope._setComboData('useYnAllComboData', useYnAllComboData);
+  $scope._setComboData('kioskUseYnAllComboData', useYnAllComboData);
   // 상품등록주체 (본사/매장구분)
   $scope._setComboData('regOrgnFgComboData', regOrgnFgComboData);
   // 사용여부를 쓰는 콤보박스의 데이터
@@ -229,6 +230,7 @@ app.controller('kioskDisplayCtrl', ['$scope', '$http', '$timeout', function ($sc
     params.prodCds = $("#kioskDisplayProdCd").val();
     params.kioskDisplayYn = $scope.kioskDisplayYn;
     params.useYn = $scope.useYn;
+    params.kioskUseYn = $scope.kioskUseYn;
     params.prodClassCd = $scope.prodClassCd;
     params.prodCd = $scope.prodCd;
     params.prodNm = $scope.prodNm;
