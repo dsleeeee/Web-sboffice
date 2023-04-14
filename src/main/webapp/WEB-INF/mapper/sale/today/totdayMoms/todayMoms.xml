@@ -137,7 +137,7 @@
                     AND     tsspc.SALE_DATE =       #{startDate}
                     GROUP BY tsspc.STORE_CD, tsspc.SALE_DATE, tsspc.POS_NO, tsspc.BILL_NO
                 ) tsspc
-        ,       TB_MS_TABLE_V01 tmt
+        <!-- ,       TB_MS_TABLE_V01 tmt -->
         ,       TB_MS_STORE tms
         ,       TB_MS_STORE_INFO tmsi
         WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -196,8 +196,8 @@
         AND     tsshd.SALE_DATE   (+) = tssh.SALE_DATE
         AND     tsshd.POS_NO      (+) = tssh.POS_NO
         AND     tsshd.BILL_NO     (+) = tssh.BILL_NO
-        AND     tmt.STORE_CD      (+) = tssh.STORE_CD
-        AND     tmt.TBL_CD        (+) = tssh.TBL_CD
+        <!-- AND     tmt.STORE_CD      (+) = tssh.STORE_CD -->
+        <!-- AND     tmt.TBL_CD        (+) = tssh.TBL_CD -->
         AND     tsspc.STORE_CD    (+) = tssh.STORE_CD
         AND     tsspc.SALE_DATE   (+) = tssh.SALE_DATE
         AND     tsspc.POS_NO      (+) = tssh.POS_NO
@@ -331,7 +331,7 @@
                 AND     tsspc.SALE_DATE =       #{startDate}
                 GROUP BY tsspc.STORE_CD, tsspc.SALE_DATE, tsspc.POS_NO, tsspc.BILL_NO
                 ) tsspc
-        ,       TB_MS_TABLE_V01 tmt
+        <!-- ,       TB_MS_TABLE_V01 tmt -->
         ,       TB_MS_STORE tms
         ,       TB_MS_STORE_INFO tmsi
         WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -390,8 +390,8 @@
         AND     tsshd.SALE_DATE   (+) = tssh.SALE_DATE
         AND     tsshd.POS_NO      (+) = tssh.POS_NO
         AND     tsshd.BILL_NO     (+) = tssh.BILL_NO
-        AND     tmt.STORE_CD      (+) = tssh.STORE_CD
-        AND     tmt.TBL_CD        (+) = tssh.TBL_CD
+        <!-- AND     tmt.STORE_CD      (+) = tssh.STORE_CD -->
+        <!-- AND     tmt.TBL_CD        (+) = tssh.TBL_CD -->
         AND     tsspc.STORE_CD    (+) = tssh.STORE_CD
         AND     tsspc.SALE_DATE   (+) = tssh.SALE_DATE
         AND     tsspc.POS_NO      (+) = tssh.POS_NO

@@ -369,9 +369,9 @@ app.controller('saleDtlChannelCtrl', ['$scope', '$http', '$timeout', function ($
            return false;
        }
 
-       // 조회일자 최대 한달(31일) 제한
-       if (diffDay > 2) {
-           s_alert.pop(messages['cmm.dateOver.2day.error']);
+       // 조회일자 최대 1일 제한
+       if (diffDay > 0) {
+           s_alert.pop(messages['cmm.dateOver.1day.error']);
            return false;
        }
 
@@ -465,9 +465,9 @@ app.controller('saleDtlChannelCtrl', ['$scope', '$http', '$timeout', function ($
            return false;
        }
 
-       // 조회일자 최대 한달(31일) 제한
-       if (diffDay > 2) {
-           s_alert.pop(messages['cmm.dateOver.2day.error']);
+       // 조회일자 최대 1일 제한
+       if (diffDay > 0) {
+           s_alert.pop(messages['cmm.dateOver.1day.error']);
            return false;
        }
 

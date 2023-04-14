@@ -155,9 +155,9 @@ app.controller('saleProdRankMomsCtrl', ['$scope', '$http', '$timeout', function 
            return false;
        }
 
-       // 조회일자 최대 한달(31일) 제한
-       if (diffDay > 7) {
-           s_alert.pop(messages['cmm.dateOver.7day.error']);
+       // 조회일자 최대 3일 제한
+       if (diffDay > 2) {
+           s_alert.pop(messages['cmm.dateOver.3day.error']);
            return false;
        }
 
@@ -257,9 +257,9 @@ app.controller('saleProdRankMomsCtrl', ['$scope', '$http', '$timeout', function 
            return false;
         }
 
-        // 조회일자 최대 한달(31일) 제한
-        if (diffDay > 7) {
-           s_alert.pop(messages['cmm.dateOver.7day.error']);
+        // 조회일자 최대 3일 제한
+        if (diffDay > 2) {
+           s_alert.pop(messages['cmm.dateOver.3day.error']);
            return false;
         }
 

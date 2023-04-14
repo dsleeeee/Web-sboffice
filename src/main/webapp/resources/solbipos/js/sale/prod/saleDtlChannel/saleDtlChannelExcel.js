@@ -185,6 +185,23 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', function ($scope, 
     });
 
     $scope.searchsaleDtlChannelExcel = function(){
+        
+        // 조회기간
+        var startDt = new Date(wijmo.Globalize.format(startMonth.value, 'yyyy-MM'));
+        var endDt = new Date(wijmo.Globalize.format(endMonth.value, 'yyyy-MM'));
+        var diffMonth = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000 * 30); // 시 * 분 * 초 * 밀리세컨 * 월
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+        // 조회일자 최대 3개월 제한
+        if (diffMonth > 2) {
+            $scope._popMsg(messages['cmm.dateOver.3month.error']);
+            return false;
+        }
+        
         var params = {};
         params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
