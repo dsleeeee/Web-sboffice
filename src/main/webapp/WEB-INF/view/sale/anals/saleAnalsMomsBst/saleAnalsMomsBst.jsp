@@ -148,7 +148,8 @@
                               display-member-path="name"
                               selected-value-path="value"
                               is-editable="false"
-                              control="srchProdOptionCombo">
+                              control="srchProdOptionCombo"
+                              selected-index="2">
                       </wj-combo-box>
                   </div>
               </td>
