@@ -46,14 +46,15 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="storeSalePriceExcelUpload.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeSalePriceExcelUpload.storeNm"/>" binding="storeNm" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeSalePriceExcelUpload.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeSalePriceExcelUpload.prodNm"/>" binding="prodNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeSalePriceExcelUpload.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeSalePriceExcelUpload.hqSaleUprc"/>" binding="hqSaleUprc" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeSalePriceExcelUpload.storeSaleUprc"/>" binding="storeSaleUprc" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeSalePriceExcelUpload.saleUprc"/>" binding="saleUprc" width="100" align="right"></wj-flex-grid-column>
                 <%-- [1250 맘스터치] --%>
                 <c:if test="${momsEnvstVal == '1'}">
-                    <wj-flex-grid-column header="<s:message code="storeSalePriceExcelUpload.storeChgNot"/>" binding="storeChgNot" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeSalePriceExcelUpload.storeChgNot"/>" binding="storeChgNot" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
                 </c:if>
             </wj-flex-grid>
         </div>
@@ -115,7 +116,7 @@
     var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/storeSalePriceExcelUpload.js?ver=20230303.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/storeSalePriceExcelUpload.js?ver=20230414.01" charset="utf-8"></script>
 
 <%-- 매장판매가관리 엑셀업로드 팝업 --%>
 <c:import url="/WEB-INF/view/base/price/salePrice/storeSalePriceExcelUploadAdd.jsp">
