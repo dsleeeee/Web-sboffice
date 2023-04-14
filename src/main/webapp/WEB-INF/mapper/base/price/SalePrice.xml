@@ -742,6 +742,7 @@
                 <include refid="CmmSQL.PagingTemplateHeader"/>
                 SELECT
                 tmp.STORE_CD,
+                tms.STORE_NM,
                 tmp.PROD_CD,
                 tmp.PROD_NM,
                 thpsp.SALE_UPRC AS HQ_SALE_UPRC, -- 본사판매가
@@ -750,6 +751,7 @@
                 thn.STORE_CHG_NOT
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_MS_PRODUCT tmp,
+                TB_MS_STORE tms,
                 TB_HQ_PRODUCT thp,
                 (
                     SELECT HQ_OFFICE_CD, PROD_CD,
@@ -784,7 +786,7 @@
                 (
                     SELECT
                     NMCODE_NM AS STORE_CD,
-                    '불가' AS STORE_CHG_NOT
+                    '변경제한매장' AS STORE_CHG_NOT
                     FROM TB_HQ_NMCODE
                     WHERE 1=1
                     AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -793,6 +795,8 @@
                 ) thn
                 WHERE 1=1
                 AND tmp.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tms.STORE_CD = tmp.STORE_CD
                 AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND (
                         ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
@@ -907,6 +911,7 @@
                 AND A.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND tmp.STORE_CD (+)= A.STORE_CD
                 AND tmp.PROD_CD (+)= A.PROD_CD
+                AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND tms.STORE_CD (+)= A.STORE_CD
                 AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND thp.PROD_CD = tmp.PROD_CD
