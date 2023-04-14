@@ -105,6 +105,9 @@
         <if test="useYn != null and useYn != ''">
             AND tmp.USE_YN = #{useYn} --사용여부
         </if>
+        <if test='kioskUseYn != null and kioskUseYn != ""'>
+            AND (SELECT nvl2(min(tmkk.prod_cd), 'Y', 'N') FROM TB_MS_KIOSK_KEY tmkk WHERE tmkk.STORE_CD = tmp.STORE_CD AND tmkk.PROD_CD = tmp.PROD_CD) = #{kioskUseYn}
+        </if>
         <if test='kioskDisplayYn != null and kioskDisplayYn == "Y"'> -- 비노출여부
             AND (tmp.KIOSK_DISPLAY_YN = #{kioskDisplayYn}
             OR  tmp.KIOSK_DISPLAY_YN IS NULL)

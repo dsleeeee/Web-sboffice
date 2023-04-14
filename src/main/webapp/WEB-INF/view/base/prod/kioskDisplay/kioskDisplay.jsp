@@ -166,8 +166,23 @@
                 <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
                 <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
             </td>
-            <th></th>
-            <td></td>
+                <%-- 키오스크사용여부 --%>
+            <th><s:message code="kioskDisplay.kioskUseYn" /></th>
+            <td>
+                <div class="sb-select">
+                    <wj-combo-box
+                            id="srchKioskUseYn"
+                            ng-model="kioskUseYn"
+                            control="kioskUseYnAllCombo"
+                            items-source="_getComboData('kioskUseYnAllComboData')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)"
+                            selected-index="1">
+                    </wj-combo-box>
+                </div>
+            </td>
         </tr>
         <tr>
             <%-- 상품코드 --%>
@@ -429,7 +444,7 @@
     var branchCdComboList = ${branchCdComboList};
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskDisplay/kioskDisplay.js?ver=20230404.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskDisplay/kioskDisplay.js?ver=20230404.02" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">

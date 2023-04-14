@@ -99,6 +99,7 @@ public class KioskDisplayVO extends PageVO {
     private String stockUnitFg;
     /** 사용여부 */
     private String useYn;
+    private String kioskUseYn;
     /** 비고 */
     private String remark;
 
@@ -1324,5 +1325,13 @@ public class KioskDisplayVO extends PageVO {
 
     public void setBranchCd(String branchCd) {
         this.branchCd = branchCd;
+    }
+
+    public String getKioskUseYn() {
+        return kioskUseYn;
+    }
+
+    public void setKioskUseYn(String kioskUseYn) {
+        this.kioskUseYn = kioskUseYn;
     }
 }
