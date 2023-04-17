@@ -156,26 +156,28 @@
         </tbody>
     </table>
 
-    <table class="searchTbl mt10">
-        <colgroup>
-            <col class="w100" />
-        </colgroup>
-        <tbody>
-        <tr class="brt">
-            <th class="oh gr fl w50" style="height: 40px;">
-                <p class="s12 bk lh20">
-                    * 상품 체크 후, '상품명칭 매장적용'을 클릭해주세요.<br />
-                </p>
-            </th>
-            <th class="oh gr fr w50" style="height: 40px; font-size:15px">
-                <%-- 상품명칭 매장적용 --%>
-                <button class="btn_skyblue ml5 fr" id="btnStoreApply" ng-click="storeApply()">
-                    <s:message code="dlvrProd.dlvrProdNmStoreRegist" />
-                </button>
-            </th>
-        </tr>
-        </tbody>
-    </table>
+    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+        <table class="searchTbl mt10">
+            <colgroup>
+                <col class="w100" />
+            </colgroup>
+            <tbody>
+            <tr class="brt">
+                <th class="oh gr fl w50" style="height: 40px;">
+                    <p class="s12 bk lh20">
+                        * 상품 체크 후, '상품명칭 매장적용'을 클릭해주세요.<br />
+                    </p>
+                </th>
+                <th class="oh gr fr w50" style="height: 40px; font-size:15px">
+                    <%-- 상품명칭 매장적용 --%>
+                    <button class="btn_skyblue ml5 fr" id="btnStoreApply" ng-click="storeApply()">
+                        <s:message code="dlvrProd.dlvrProdNmStoreRegist" />
+                    </button>
+                </th>
+            </tr>
+            </tbody>
+        </table>
+    </c:if>
 
     <div id="grid" class="w100">
         <div class="mt20 oh sb-select dkbr">
@@ -214,7 +216,9 @@
                         ime-enabled="true">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="30"></wj-flex-grid-column>
+                    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="30"></wj-flex-grid-column>
+                    </c:if>
                     <wj-flex-grid-column header="<s:message code="dlvrProd.prodCd"/>" binding="prodCd" width="100" is-read-only="true" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dlvrProd.prodNm"/>" binding="prodNm" width="200" is-read-only="true"></wj-flex-grid-column>
                     <%-- 배달앱 구분코드 컬럼 생성--%>
