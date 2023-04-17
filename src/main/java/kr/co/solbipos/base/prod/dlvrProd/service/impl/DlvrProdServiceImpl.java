@@ -190,6 +190,13 @@ public class DlvrProdServiceImpl implements DlvrProdService {
 
             dlvrProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
+            String selectProdCd = "";
+            String arrSelectProdCd[] = dlvrProdVO.getSelectProdCd().split(",");
+            for(int i=0; i < arrSelectProdCd.length; i++) {
+                selectProdCd += (selectProdCd.equals("") ? "" : ",") + "'"+arrSelectProdCd[i]+"'";
+            }
+            dlvrProdVO.setSelectProdCd(selectProdCd);
+
             // 삭제
             procCnt = dlvrProdMapper.getDlvrProdNmStoreRegistSaveDelete(dlvrProdVO);
 
