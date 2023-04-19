@@ -156,6 +156,7 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
     params.prterSpeedFg = "0";
     params.prterOutputQty = "1";
     params.prterCheckYn = "N";
+    params.bellUseYn    = "N";
     params.useYn        = "Y";
 
 

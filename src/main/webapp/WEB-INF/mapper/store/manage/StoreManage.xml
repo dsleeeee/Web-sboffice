@@ -1658,6 +1658,7 @@
             USE_YN,
             PRTER_FG,
             PRTER_LABEL_KIND_FG,
+            BELL_USE_YN,
             REG_DT,
             REG_ID,
             MOD_DT,
@@ -1676,6 +1677,7 @@
                USE_YN,
                PRTER_FG,
                PRTER_LABEL_KIND_FG,
+               BELL_USE_YN,
                #{regDt},
                #{regId},
                #{modDt},
@@ -5962,7 +5964,8 @@
                tmp.USE_YN,
                tmp.PRTER_FG,
                tmp.PRTER_LABEL_KIND_FG,
-               NVL(tmpr.CNT, 0) AS CNT
+               NVL(tmpr.CNT, 0) AS CNT,
+               tmp.BELL_USE_YN
           FROM TB_MS_PRINTER tmp,
                (SELECT STORE_CD, PRTER_NO, COUNT(PROD_CD) AS CNT
                   FROM TB_MS_PRINTER_PROD
@@ -5999,6 +6002,7 @@
             USE_YN,
             PRTER_FG,
             PRTER_LABEL_KIND_FG,
+            BELL_USE_YN,
             REG_DT,
             REG_ID,
             MOD_DT,
@@ -6020,6 +6024,7 @@
             #{useYn},
             #{prterFg},
             #{prterLabelKindFg},
+            #{bellUseYn},
             #{regDt},
             #{regId},
             #{modDt},
@@ -6048,6 +6053,7 @@
                USE_YN = #{useYn},
                PRTER_FG = #{prterFg},
                PRTER_LABEL_KIND_FG = #{prterLabelKindFg},
+               BELL_USE_YN = #{bellUseYn},
                MOD_DT = #{modDt},
                MOD_ID = #{modId}
          WHERE STORE_CD = #{storeCd}
