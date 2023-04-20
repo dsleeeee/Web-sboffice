@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
-<wj-popup id="wjPayTemporaryDtlLayer" control="wjPayTemporaryDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px; height:480px;">
+<wj-popup id="wjPayTemporaryDtlLayer" control="wjPayTemporaryDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:720px; height:500px;">
   <div id="PayTemporaryDtlLayer" class="wj-dialog wj-dialog-columns" ng-controller="payTemporaryDtlCtrl">
 
     <div class="wj-dialog-header wj-dialog-header-font">
@@ -24,7 +24,7 @@
       </div>
       <div class="w100 mt10">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="wj-gridWrap" style="height: 370px; overflow-y: hidden; overflow-x: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
@@ -36,22 +36,19 @@
 
             <!-- define columns -->
             <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-              <wj-flex-grid-column header="<s:message code="payTemporary.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="payTemporary.storeNm"/>" binding="storeNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="payTemporary.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="payTemporary.storeNm"/>" binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             </c:if>
             <wj-flex-grid-column header="<s:message code="payTemporary.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-              <wj-flex-grid-column header="<s:message code="payTemporary.saleCnt"/>" binding="saleCnt" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
-            </c:if>
             <c:if test="${sessionInfo.orgnFg == 'STORE'}">
               <wj-flex-grid-column header="<s:message code="payTemporary.posNo"/>" binding="posNo" width="70" align="center" is-read-only="true" ></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="payTemporary.billNo"/>" binding="billNo" width="80" align="center" is-read-only="true" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="payTemporary.billNo"/>" binding="billNo" width="70" align="center" is-read-only="true" ></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="payTemporary.lineNo"/>" binding="lineNo" width="70" align="center" is-read-only="true" ></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="payTemporary.lineSeqNo"/>" binding="lineSeqNo" width="90" align="center" is-read-only="true" ></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="payTemporary.saleYn"/>" binding="saleYn" width="80" align="center" is-read-only="true" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="payTemporary.saleYn"/>" binding="saleYn" width="70" align="center" is-read-only="true" ></wj-flex-grid-column>
             </c:if>
-            <wj-flex-grid-column header="<s:message code="payTemporary.saleAmt"/>" binding="saleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-
+            <wj-flex-grid-column header="<s:message code="payTemporary.saleCnt"/>" binding="saleCnt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="payTemporary.saleAmt"/>" binding="saleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           </wj-flex-grid>
         </div>
         <%--//위즈모 테이블--%>

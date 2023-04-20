@@ -25,8 +25,8 @@
         <if test='orgnFg != null and orgnFg == "S"'>
         ,       TO_CHAR(TO_DATE(tsspt.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
         </if>
-        ,		COUNT(*) AS SALE_CNT
-        ,		SUM(SALE_AMT) AS SALE_AMT
+        ,		SUM(CASE WHEN tsspt.SALE_YN = 'Y' THEN 1 WHEN tsspt.SALE_YN = 'N' THEN -1 ELSE 0 END) AS SALE_CNT
+        ,		SUM(tsspt.SALE_AMT) AS SALE_AMT
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM    TB_SL_SALE_PAY_TEMPORARY tsspt
         ,       TB_MS_STORE tms
@@ -102,8 +102,8 @@
         <if test='orgnFg != null and orgnFg == "S"'>
             ,       TO_CHAR(TO_DATE(tsspt.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
         </if>
-        ,		COUNT(*) AS SALE_CNT
-        ,		SUM(SALE_AMT) AS SALE_AMT
+        ,		SUM(CASE WHEN tsspt.SALE_YN = 'Y' THEN 1 WHEN tsspt.SALE_YN = 'N' THEN -1 ELSE 0 END) AS SALE_CNT
+        ,		SUM(tsspt.SALE_AMT) AS SALE_AMT
         FROM    TB_SL_SALE_PAY_TEMPORARY tsspt
         ,       TB_MS_STORE tms
         ,       TB_MS_STORE_INFO tmsi
@@ -179,8 +179,8 @@
                 SELECT	tsspt.STORE_CD
                 ,       tms.STORE_NM
                 ,       TO_CHAR(TO_DATE(tsspt.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
-                ,		COUNT(*) AS SALE_CNT
-                ,		SUM(tsspt.SALE_AMT) AS SALE_AMT
+                ,		(CASE WHEN tsspt.SALE_YN = 'Y' THEN 1 WHEN tsspt.SALE_YN = 'N' THEN -1 ELSE 0 END) AS SALE_CNT
+                ,		tsspt.SALE_AMT
                 FROM 	TB_SL_SALE_PAY_TEMPORARY tsspt
                 ,       TB_MS_STORE tms
                 WHERE 	tsspt.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -188,13 +188,8 @@
                 AND 	tsspt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 AND     tsspt.TEMPORARY_PAY_CD    =   '98'
                 AND     tsspt.STORE_CD = tms.STORE_CD
-                GROUP
-                BY 		tsspt.STORE_CD
-                ,       tms.STORE_NM
-                ,       tsspt.SALE_DATE
                 ORDER
                 BY 		tsspt.STORE_CD
-                ,       tms.STORE_NM
                 ,       tsspt.SALE_DATE
             </when>
             <!-- 매장 -->
@@ -205,6 +200,7 @@
                 ,		tsspt.LINE_NO
                 ,		tsspt.LINE_SEQ_NO
                 ,		DECODE(tsspt.SALE_YN,'Y','매출','반품') AS SALE_YN
+                ,		(CASE WHEN tsspt.SALE_YN = 'Y' THEN 1 WHEN tsspt.SALE_YN = 'N' THEN -1 ELSE 0 END) AS SALE_CNT
                 ,		tsspt.SALE_AMT
                 FROM 	TB_SL_SALE_PAY_TEMPORARY tsspt
                 WHERE 	tsspt.HQ_OFFICE_CD = #{hqOfficeCd}
