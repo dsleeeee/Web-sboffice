@@ -18,6 +18,11 @@ var saleYnDataMapData = [
     {"name":"매출","value":"Y"},
     {"name":"반품","value":"N"}
 ];
+// 모바일쿠폰구분
+var mcoupnTypeFgData = [
+    {"name":"교환권","value":"1"},
+    {"name":"금액권","value":"2"}
+];
 
 /**
  *  모바일쿠폰 현황 상세 팝업 조회 그리드 생성
@@ -31,6 +36,7 @@ app.controller('saleMcouponDtlCtrl', ['$scope', '$http', '$timeout', function ($
     $scope.initGrid = function (s, e) {
         // 그리드 DataMap 설정
         $scope.saleYnDataMap = new wijmo.grid.DataMap(saleYnDataMapData, 'value', 'name'); // 매출구분
+        $scope.mcoupnTypeFgDataMap = new wijmo.grid.DataMap(mcoupnTypeFgData, 'value', 'name'); // 모바일쿠폰구분
 
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
