@@ -58,12 +58,12 @@
 
         <div class="subCon">
             <div class="w100 pd10">
-                <div class="oh sb-select dkbr">
+                <div class="oh">
                     <p class="tl s14 mt5 lh15 red mb10">1. 휴대폰번호 등록시</p>
                     <p class="tl s14 mt5 lh15">- "휴대폰번호 인증요청" 버튼을 클릭하면 본인인증을 위한 화면이 뜹니다. 본인인증 성공시 인증한 번호를 발신번호로 저장합니다.</p>
                     <p class="tl s14 mt5 lh15">- 사전등록 인증 처리 진행 중 창을 강제로 닫을 경우 정상적으로 인증처리 되지 않을 수 있습니다.</p>
                 </div>
-                <div class="oh sb-select dkbr mt10">
+                <div class="mt10 oh">
                     <%-- 사전등록 발신번호 --%>
                     <%--                <s:message code="smsTelNoRegister.registerTelNo" />--%>
                     <%--                    <input type="hidden" class="sb-input w70" id="ordr_idxx" ng-model="ordr_idxx" />--%>
@@ -93,7 +93,7 @@
                 </div>
             </div>
             <div class="w100 pd10 bt">
-                <div class="oh sb-select dkbr">
+                <div class="oh">
                     <p class="tl s14 mt5 lh15 red mb10">2. 일반번호 등록시</p>
                     <p class="tl s14 mt5 lh15">- "일반번호 인증요청" 버튼을 클릭하면 증빙서류를 제출하기 위한 화면이 뜹니다.</p>
                     <p class="tl s14 mt5 lh15">- 증빙서류는 통신사에서 발급한 "통신서비스 이용 증명원"을 제출해주세요.</p>
@@ -103,13 +103,13 @@
                     <p class="tl s14 mt5 lh15">- 발신번호 증빙서류는 사용하고 있는 각 서비스 이통사에 문의하거나, 해당 이통사 홈페이지를 통하여 발급받을 수 있습니다.</p>
                     <p class="tl s14 mt5 lh15">※ 인증 요청하신 내역은 "부가서비스 > SMS관리 > SMS전송 > 발신번호관리 탭"에서 확인 가능합니다.</p>
                 </div>
-                <div class="oh sb-select dkbr mt10">
+                <div class="mt10 oh">
                     <%-- 일반번호 인증요청 --%>
                     <button id="request" class="btn_skyblue ml5 fr" ng-click="smsGeneralNoRequest()">
                         <s:message code="smsTelNoRegister.smsGeneralNoRequest" />
                     </button>
                 </div>
-                <div class="oh sb-select dkbr">
+                <div class="oh">
                     <p class="tl s14 mt5 lh15 red">* 증빙서류 발급방법 *</p>
                     <p class="tl s14 mt5 lh15 blue">[KT 올레 가입증명원]</p>
                     <p class="tl s14 mt5 lh15">기업고객은 080-530-7979 KT기업고객센터로 전화하여 "통신가입증명원" 발급 요청

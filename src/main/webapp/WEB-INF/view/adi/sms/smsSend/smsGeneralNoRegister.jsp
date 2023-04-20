@@ -13,7 +13,7 @@
         </div>
 
         <div class="wj-dialog-body">
-            <div class="oh sb-select dkbr mb10">
+            <div class="mb10 oh">
                 <p class="tl s14 mt5 lh15">통신사에서 발급한 "통신서비스 이용 증명원"을 제출해주세요.</p>
                 <p class="tl s14 mt5 lh15">- 요청하신 서류는 근무일 1~5일 이내로 심사가 완료됩니다.</p>
                 <p class="tl s14 mt5 lh15">※ 인증 요청하신 내역은 "부가서비스 > SMS관리 > SMS전송 > 발신번호관리 탭"에서 확인 가능합니다.</p>

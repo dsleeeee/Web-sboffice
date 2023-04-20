@@ -83,7 +83,7 @@
             </tbody>
         </table>
 
-        <div class="mt10 oh sb-select dkbr">
+        <div class="mt10 oh">
             <div class="w100">
                 <div class="w40 fl">
                     <p class="tl s14 mt5 lh15">※ 입력 항목</p>
@@ -103,7 +103,7 @@
                 </div>
             </div>
         </div>
-        <div class="mt10 oh sb-select dkbr">
+        <div class="mt10 oh">
             <%-- 엑셀다운로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelDownload()">
                 <s:message code="cmm.excel.down" />

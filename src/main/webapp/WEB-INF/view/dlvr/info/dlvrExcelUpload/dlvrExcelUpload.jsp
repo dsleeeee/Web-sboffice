@@ -22,7 +22,7 @@
             </div>
         </div>
 
-        <div class="mt10 oh sb-select dkbr">
+        <div class="mt10 oh">
             <p class="tl s14 mt5 lh15">1. '양식다운로드' 버튼을 클릭하여 양식을 다운받아주세요.</p>
             <p class="tl s14 mt5 lh15">2. 다운받은 양식을 입력해주세요.</p>
             <p class="tl s14 mt5 lh15">- '양식 샘플 미리보기'를 꼭 참고해주세요.</p>

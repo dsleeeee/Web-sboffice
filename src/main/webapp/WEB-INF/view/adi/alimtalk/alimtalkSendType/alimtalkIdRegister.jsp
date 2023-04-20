@@ -119,7 +119,7 @@
                 </tbody>
             </table>
             <div class="w100 mt20">
-                <div class="oh sb-select dkbr">
+                <div class="oh">
                     <p class="tl s14 mt5 lh15 blue">* 카카오계정ID 등록하는 방법</p>
                     <p class="tl s14 mt5 lh15">1. 카카오를 접속하여 카카오톡 계정 로그인을 합니다.</p>
                     <p class="tl s14 mt5 lh15">2. 새 채널 만들기를 합니다.</p>
