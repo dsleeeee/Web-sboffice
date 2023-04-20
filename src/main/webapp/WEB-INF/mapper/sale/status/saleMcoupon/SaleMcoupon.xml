@@ -30,7 +30,7 @@
         <if test='orgnFg != null and orgnFg == "S"'>
           TO_CHAR(TO_DATE(tsspm.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
         </if>
-        COUNT(tsspm.SALE_FG) AS SALE_CNT,
+        SUM(tsspm.SALE_FG) AS SALE_CNT,
         SUM(tsspm.SALE_AMT) AS SALE_AMT,
         SUM(CASE WHEN tsspm.SALE_FG = 1 THEN 1 ELSE 0 END) AS APPR_CNT,
         SUM(CASE WHEN tsspm.SALE_FG = 1 THEN tsspm.SALE_AMT ELSE 0 END) AS APPR_AMT,
@@ -114,7 +114,7 @@
         <if test='orgnFg != null and orgnFg == "S"'>
             TO_CHAR(TO_DATE(tsspm.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
         </if>
-        COUNT(tsspm.SALE_FG) AS SALE_CNT,
+        SUM(tsspm.SALE_FG) AS SALE_CNT,
         SUM(tsspm.SALE_AMT) AS SALE_AMT,
         SUM(CASE WHEN tsspm.SALE_FG = 1 THEN 1 ELSE 0 END) AS APPR_CNT,
         SUM(CASE WHEN tsspm.SALE_FG = 1 THEN tsspm.SALE_AMT ELSE 0 END) AS APPR_AMT,
@@ -192,8 +192,12 @@
                 tsspm.STORE_CD,
                 tms.STORE_NM,
                 TO_CHAR(TO_DATE(tsspm.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
-                COUNT(tsspm.SALE_FG) AS SALE_CNT,
-                SUM(tsspm.SALE_AMT) AS SALE_AMT
+                (CASE WHEN tsspm.SALE_YN = 'Y' THEN 1 WHEN tsspm.SALE_YN = 'N' THEN -1 ELSE 0 END) AS SALE_CNT,
+                tsspm.SALE_AMT,
+                (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '110' AND  NMCODE_CD = tsspm.MCOUPN_CD) AS MCOUPN_CD,
+                tsspm.MCOUPN_TERMNL_NO,
+                tsspm.MCOUPN_TYPE_FG,
+                tsspm.MCOUPN_BARCD_NO
                 FROM TB_SL_SALE_PAY_MCOUPN tsspm,
                 TB_MS_STORE tms
                 WHERE 1=1
@@ -201,7 +205,6 @@
                 AND tsspm.STORE_CD = #{storeCd}
                 AND tsspm.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 AND tms.STORE_CD = tsspm.STORE_CD
-                GROUP BY tsspm.STORE_CD, tms.STORE_NM, tsspm.SALE_DATE
                 ORDER BY tsspm.STORE_CD, tsspm.SALE_DATE
             </when>
             <!-- 매장 -->
@@ -213,7 +216,12 @@
                 tsspm.LINE_NO,
                 tsspm.LINE_SEQ_NO,
                 tsspm.SALE_YN,
-                tsspm.SALE_AMT
+                (CASE WHEN tsspm.SALE_YN = 'Y' THEN 1 WHEN tsspm.SALE_YN = 'N' THEN -1 ELSE 0 END) AS SALE_CNT,
+                tsspm.SALE_AMT,
+                (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '110' AND  NMCODE_CD = tsspm.MCOUPN_CD) AS MCOUPN_CD,
+                tsspm.MCOUPN_TERMNL_NO,
+                tsspm.MCOUPN_TYPE_FG,
+                tsspm.MCOUPN_BARCD_NO
                 FROM TB_SL_SALE_PAY_MCOUPN tsspm
                 WHERE 1=1
                 AND tsspm.HQ_OFFICE_CD = #{hqOfficeCd}

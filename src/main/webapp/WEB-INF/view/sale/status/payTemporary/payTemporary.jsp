@@ -236,21 +236,21 @@
 
         <!-- define columns -->
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-        <wj-flex-grid-column header="<s:message code="payTemporary.branchCd"/>" binding="branchCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="payTemporary.branchNm"/>" binding="branchNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="payTemporary.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="payTemporary.branchCd"/>" binding="branchCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="payTemporary.branchNm"/>" binding="branchNm" width="80" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="payTemporary.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="payTemporary.storeNm"/>" binding="storeNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="payTemporary.brand"/>" binding="brand" width="100" align="left" is-read-only="true" data-map="brandDataMap"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="payTemporary.momsTeam"/>" binding="momsTeam" width="100" align="left" is-read-only="true" data-map="momsTeamDataMap"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="payTemporary.momsAcShop"/>" binding="momsAcShop" width="100" align="left" is-read-only="true" data-map="momsAcShopDataMap"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="payTemporary.brand"/>" binding="brand" width="80" align="left" is-read-only="true" data-map="brandDataMap"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="payTemporary.momsTeam"/>" binding="momsTeam" width="80" align="left" is-read-only="true" data-map="momsTeamDataMap"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="payTemporary.momsAcShop"/>" binding="momsAcShop" width="80" align="left" is-read-only="true" data-map="momsAcShopDataMap"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="payTemporary.startDate"/>" binding="startDate" width="100" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="payTemporary.endDate"/>" binding="endDate" width="100" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
         </c:if>
         <c:if test="${sessionInfo.orgnFg == 'STORE'}">
           <wj-flex-grid-column header="<s:message code="payTemporary.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
         </c:if>
-        <wj-flex-grid-column header="<s:message code="payTemporary.saleCnt"/>" binding="saleCnt" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="payTemporary.saleAmt"/>" binding="saleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="payTemporary.saleCnt"/>" binding="saleCnt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="payTemporary.saleAmt"/>" binding="saleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         </wj-flex-grid>
     </div>
     <%--//위즈모 테이블--%>

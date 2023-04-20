@@ -40,6 +40,13 @@ app.controller('storeEmpWebMenuCtrl', ['$scope', '$http', function ($scope, $htt
             $("#btnAddMenu").css("display", "");
         }
 
+        // 사원ID가 없는 경우 수정불가
+        if(selData.userId == "" || selData.userId == null) {
+            $("#btnCopyAuth").css("display", "none");
+            $("#btnRemoveMenu").css("display", "none");
+            $("#btnAddMenu").css("display", "none");
+        }
+
         // 메뉴권한복사 콤보박스 데이터 조회 및 셋팅
         var params= {};
         params.empNo = selData.empNo;

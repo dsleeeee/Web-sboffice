@@ -250,11 +250,11 @@
                     <c:if test="${sessionInfo.orgnFg == 'STORE'}">
                         <wj-flex-grid-column header="<s:message code="saleMcoupon.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                     </c:if>
-                    <wj-flex-grid-column header="<s:message code="saleMcoupon.saleCnt"/>" binding="saleCnt" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleMcoupon.saleCnt"/>" binding="saleCnt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="saleMcoupon.saleAmt"/>" binding="saleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="saleMcoupon.apprCnt"/>" binding="apprCnt" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleMcoupon.apprCnt"/>" binding="apprCnt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="saleMcoupon.apprAmt"/>" binding="apprAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="saleMcoupon.cancelCnt"/>" binding="cancelCnt" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleMcoupon.cancelCnt"/>" binding="cancelCnt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="saleMcoupon.cancelAmt"/>" binding="cancelAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
