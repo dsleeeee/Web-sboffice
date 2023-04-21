@@ -282,7 +282,7 @@
                                             initialized="_initComboBox(s)">
                                     </wj-combo-box>
                                 </div>
-                                <c:if test="${orgnFg == 'HQ'}">
+                                <c:if test="${sessionInfo.orgnFg == 'HQ'}">
                                     <div class="fl pd5" style="padding-right: 15px;">
                                         <div style="float: left;"><input type="checkbox" id="chkApplyStore" checked="checked"/></div>
                                         <div style="padding-top: 3px; padding-left: 20px;"><s:message code="touchKey.applyStore" /></div>

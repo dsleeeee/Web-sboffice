@@ -44,7 +44,32 @@
         tmp.REG_DT,
         tmp.USE_YN,
         tmp.REG_FG,
-        tmpb.BARCD_CD AS BAR_CD
+        NVL2((SELECT DISTINCT PROD_CD
+        FROM	TB_MS_KIOSK_KEY tmkk2
+        WHERE 	tmkk2.STORE_CD = tmp.STORE_CD
+        AND		tmkk2.PROD_CD = tmp.PROD_CD
+        AND 	TU_CLS_TYPE IN (SELECT ENVST_VAL
+                                FROM    TB_MS_POS_ENVST tmpe
+                                WHERE   tmpe.STORE_CD = tmp.STORE_CD
+                                AND     tmpe.ENVST_CD IN ('4068')
+                                AND 	STORE_CD || POS_NO IN (SELECT STORE_CD || POS_NO
+                                                                FROM TB_MS_POS_ENVST
+                                                                WHERE ENVST_CD = '4019'
+                                                                AND ENVST_VAL = '6'
+                                                                AND STORE_CD = tmp.STORE_CD))), 'Y', 'N') AS USE_YN_4068,
+        NVL2((SELECT DISTINCT PROD_CD
+        FROM	TB_MS_KIOSK_KEY tmkk2
+        WHERE 	tmkk2.STORE_CD = tmp.STORE_CD
+        AND		tmkk2.PROD_CD = tmp.PROD_CD
+        AND 	TU_CLS_TYPE IN (SELECT ENVST_VAL
+                                FROM    TB_MS_POS_ENVST tmpe
+                                WHERE   tmpe.STORE_CD = tmp.STORE_CD
+                                AND     tmpe.ENVST_CD IN ('4069')
+                                AND 	STORE_CD || POS_NO IN (SELECT STORE_CD || POS_NO
+                                                                FROM TB_MS_POS_ENVST
+                                                                WHERE ENVST_CD = '4019'
+                                                                AND ENVST_VAL = '6'
+                                                                AND STORE_CD = tmp.STORE_CD))), 'Y', 'N') AS USE_YN_4069
         FROM
         TB_MS_PRODUCT tmp
         LEFT OUTER JOIN (
@@ -69,9 +94,6 @@
         LEFT OUTER JOIN TB_MS_BRAND tmb ON
         tmb.STORE_CD = tmp.STORE_CD
         AND tmb.MS_BRAND_CD = tmp.HQ_BRAND_CD
-        LEFT OUTER JOIN TB_MS_PRODUCT_BARCD tmpb ON
-        tmpb.STORE_CD = tmp.STORE_CD
-        AND tmpb.PROD_CD = tmp.PROD_CD
         LEFT OUTER JOIN TB_MS_STORE_INFO tmsi ON
         tmsi.STORE_CD = tmp.STORE_CD
         WHERE 1=1
@@ -105,8 +127,61 @@
         <if test="useYn != null and useYn != ''">
             AND tmp.USE_YN = #{useYn} --사용여부
         </if>
-        <if test='kioskUseYn != null and kioskUseYn != ""'>
-            AND (SELECT nvl2(min(tmkk.prod_cd), 'Y', 'N') FROM TB_MS_KIOSK_KEY tmkk WHERE tmkk.STORE_CD = tmp.STORE_CD AND tmkk.PROD_CD = tmp.PROD_CD) = #{kioskUseYn}
+        <if test='kioskUseYn != null and kioskUseYn == "Y"'>
+            AND  (NVL2((SELECT DISTINCT PROD_CD
+            FROM	TB_MS_KIOSK_KEY tmkk2
+            WHERE 	tmkk2.STORE_CD = tmp.STORE_CD
+            AND		tmkk2.PROD_CD = tmp.PROD_CD
+            AND 	TU_CLS_TYPE IN (SELECT ENVST_VAL
+                                    FROM    TB_MS_POS_ENVST tmpe
+                                    WHERE   tmpe.STORE_CD = tmp.STORE_CD
+                                    AND     tmpe.ENVST_CD IN ('4068')
+                                    AND 	STORE_CD || POS_NO IN (SELECT STORE_CD || POS_NO
+                                                                    FROM TB_MS_POS_ENVST
+                                                                    WHERE ENVST_CD = '4019'
+                                                                    AND ENVST_VAL = '6'
+                                                                    AND STORE_CD = tmp.STORE_CD))), 'Y', 'N') = 'Y'
+            OR      NVL2((SELECT DISTINCT PROD_CD
+            FROM	TB_MS_KIOSK_KEY tmkk2
+            WHERE 	tmkk2.STORE_CD = tmp.STORE_CD
+            AND		tmkk2.PROD_CD = tmp.PROD_CD
+            AND 	TU_CLS_TYPE IN (SELECT ENVST_VAL
+                                    FROM    TB_MS_POS_ENVST tmpe
+                                    WHERE   tmpe.STORE_CD = tmp.STORE_CD
+                                    AND     tmpe.ENVST_CD IN ('4069')
+                                    AND 	STORE_CD || POS_NO IN (SELECT STORE_CD || POS_NO
+                                                                    FROM TB_MS_POS_ENVST
+                                                                    WHERE ENVST_CD = '4019'
+                                                                    AND ENVST_VAL = '6'
+                                                                    AND STORE_CD = tmp.STORE_CD))), 'Y', 'N') = 'Y')
+        </if>
+        <if test='kioskUseYn != null and kioskUseYn == "N"'>
+            AND  NVL2((SELECT DISTINCT PROD_CD
+            FROM	TB_MS_KIOSK_KEY tmkk2
+            WHERE 	tmkk2.STORE_CD = tmp.STORE_CD
+            AND		tmkk2.PROD_CD = tmp.PROD_CD
+            AND 	TU_CLS_TYPE IN (SELECT ENVST_VAL
+                                    FROM    TB_MS_POS_ENVST tmpe
+                                    WHERE   tmpe.STORE_CD = tmp.STORE_CD
+                                    AND     tmpe.ENVST_CD IN ('4068')
+                                    AND 	STORE_CD || POS_NO IN (SELECT STORE_CD || POS_NO
+                                                                    FROM TB_MS_POS_ENVST
+                                                                    WHERE ENVST_CD = '4019'
+                                                                    AND ENVST_VAL = '6'
+                                                                    AND STORE_CD = tmp.STORE_CD))), 'Y', 'N') = 'N'
+            AND     NVL2((SELECT DISTINCT PROD_CD
+            FROM	TB_MS_KIOSK_KEY tmkk2
+            WHERE 	tmkk2.STORE_CD = tmp.STORE_CD
+            AND		tmkk2.PROD_CD = tmp.PROD_CD
+            AND 	TU_CLS_TYPE IN (SELECT ENVST_VAL
+                                    FROM    TB_MS_POS_ENVST tmpe
+                                    WHERE   tmpe.STORE_CD = tmp.STORE_CD
+                                    AND     tmpe.ENVST_CD IN ('4069')
+                                    AND 	STORE_CD || POS_NO IN (SELECT STORE_CD || POS_NO
+                                                                    FROM TB_MS_POS_ENVST
+                                                                    WHERE ENVST_CD = '4019'
+                                                                    AND ENVST_VAL = '6'
+                                                                    AND STORE_CD = tmp.STORE_CD))), 'Y', 'N') = 'N'
         </if>
         <if test='kioskDisplayYn != null and kioskDisplayYn == "Y"'> -- 비노출여부
             AND (tmp.KIOSK_DISPLAY_YN = #{kioskDisplayYn}
