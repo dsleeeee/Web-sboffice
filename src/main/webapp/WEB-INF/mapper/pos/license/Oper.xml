@@ -178,11 +178,15 @@
                 ) N
         ,       (
                     SELECT  A.STORE_CD
-                    ,       COUNT(DISTINCT POS_NO)          POS_CNT
+                    ,       COUNT(DISTINCT A.POS_NO)          POS_CNT
                     FROM    TB_CM_INSTLL A
+                    ,       TB_MS_POS B
                     <![CDATA[
                     WHERE   A.INST_FG <>  '0'
                     ]]>
+                    AND     B.STORE_CD  =  A.STORE_CD
+                    AND     B.POS_NO    =  A.POS_NO
+                    AND     B.USE_YN    =   'Y'
                     GROUP
                     BY      A.STORE_CD
                 ) O
