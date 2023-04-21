@@ -416,6 +416,8 @@
                 <wj-flex-grid-column header="<s:message code="prod.sdattrClassCd"/>" binding="sdattrClassCd" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.sdselGrpCd"/>" binding="sdselGrpCd" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.regFg"/>" binding="regFg" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.useYn4068"/>" binding="useYn4068" width="100" data-map="useYnComboDataMap" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.useYn4069"/>" binding="useYn4069" width="100" data-map="useYnComboDataMap" is-read-only="true" align="center"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
