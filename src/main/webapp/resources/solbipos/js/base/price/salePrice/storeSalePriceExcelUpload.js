@@ -33,9 +33,20 @@ app.controller('storeSalePriceExcelUploadSampleCtrl', ['$scope', '$http', '$time
 
     // <-- 양식다운로드 -->
     $scope.sampleDownload = function(){
+        var storeCd = $("#storeSalePriceExcelUploadStoreCd").val();
+        var storeCdArr = storeCd.split(',');
+        if(storeCd == "") {
+            $scope._popMsg(messages["cmm.require.selectStore"]); // 매장을 선택해 주세요.
+            return false;
+        }
+        if(storeCdArr.length > 10) {
+            $scope._popMsg(messages["storeSalePriceExcelUpload.storeCdCntAlert"]); // 선택가능한 매장수는 10개 입니다.
+            return false;
+        }
+
         var params = {};
         params.salePriceOrgnFg = "S";
-        params.listScale = 5000;
+        params.storeCds = storeCd;
 
         $scope._inquiryMain("/base/price/salePrice/salePriceExcelUpload/getSalePriceExcelUploadSampleList.sb", params, function (){
             $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
@@ -67,6 +78,13 @@ app.controller('storeSalePriceExcelUploadSampleCtrl', ['$scope', '$http', '$time
         $("#storeSalePriceExcelUpFile").trigger('click');
     };
     // <-- //엑셀업로드 -->
+
+    // 매장선택 모듈 팝업 사용시 정의
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+    $scope.storeSalePriceExcelUploadStoreShow = function () {
+        $scope._broadcast('storeSalePriceExcelUploadStoreCtrl');
+    };
 
 }]);
 

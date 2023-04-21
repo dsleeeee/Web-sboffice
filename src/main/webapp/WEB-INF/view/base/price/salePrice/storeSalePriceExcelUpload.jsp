@@ -16,8 +16,9 @@
             <a href="#" class="open fl"><s:message code="storeSalePriceExcelUpload.excelUpload" /></a>
         </div>
 
-        <div class="mt10 oh sb-select dkbr">
+        <div class="mt10 oh">
             <p class="tl s14 mt5 lh15">1. '양식다운로드' 버튼을 클릭하여 양식을 다운받아주세요.</p>
+            <p class="tl s14 mt5 lh15">- 매장 선택 후 진행해주세요. (매장은 최대 10개까지 선택가능합니다.)</p>
             <p class="tl s14 mt5 lh15">2. 다운받은 양식을 입력해주세요.</p>
             <p class="tl s14 mt5 lh15">3. '엑셀업로드' 버튼을 클릭하여 업로드 해주세요.</p>
             <p class="tl s14 mt5 lh15">4. '판매가'가 업로드되면 '저장'을 클릭하여 검증 및 저장을 해주세요.</p>
@@ -31,6 +32,35 @@
             <button class="btn_skyblue ml5 fr" ng-click="sampleDownload()">
                 <s:message code="cmm.excel.sampleDown" />
             </button>
+            <%-- 매장 --%>
+            <div class="ml5 fr">
+                <%-- [1250 맘스터치] --%>
+                <c:if test="${momsEnvstVal == '1'}">
+                    <%-- 매장선택 모듈 싱글 선택 사용시 include param 정의 :
+                                  targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+                                  displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+                                  modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+                                  closeFunc - 팝업 닫기시 호출할 함수--%>
+                    <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreMMoms.jsp" flush="true">
+                        <jsp:param name="targetId" value="storeSalePriceExcelUploadStore"/>
+                    </jsp:include>
+                    <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+                </c:if>
+                <c:if test="${momsEnvstVal == '0'}">
+                    <%-- 매장선택 모듈 싱글 선택 사용시 include param 정의 :
+                                  targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+                                  displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+                                  modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+                                  closeFunc - 팝업 닫기시 호출할 함수--%>
+                    <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
+                        <jsp:param name="targetId" value="storeSalePriceExcelUploadStore"/>
+                    </jsp:include>
+                    <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+                </c:if>
+            </div>
+            <div class="sb-select dkbr ml5 fr">
+                <p class="tl s14 mt5 lh15"><s:message code="cmm.store"/></p>
+            </div>
         </div>
 
         <div class="wj-gridWrap" style="display: none">
@@ -116,7 +146,7 @@
     var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/storeSalePriceExcelUpload.js?ver=20230414.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/storeSalePriceExcelUpload.js?ver=20230421.01" charset="utf-8"></script>
 
 <%-- 매장판매가관리 엑셀업로드 팝업 --%>
 <c:import url="/WEB-INF/view/base/price/salePrice/storeSalePriceExcelUploadAdd.jsp">
