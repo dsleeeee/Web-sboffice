@@ -739,7 +739,6 @@
             </when>
             <!-- 매장판매가 -->
             <when test='salePriceOrgnFg != null and salePriceOrgnFg != "" and salePriceOrgnFg == "S"'>
-                <include refid="CmmSQL.PagingTemplateHeader"/>
                 SELECT
                 tmp.STORE_CD,
                 tms.STORE_NM,
@@ -749,7 +748,6 @@
                 tmpsp.SALE_UPRC AS STORE_SALE_UPRC, -- 매장판매가
                 tmpsp.SALE_UPRC AS SALE_UPRC, -- 매장변경판매가
                 thn.STORE_CHG_NOT
-                <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_MS_PRODUCT tmp,
                 TB_MS_STORE tms,
                 TB_HQ_PRODUCT thp,
@@ -794,7 +792,12 @@
                     AND USE_YN = 'Y'
                 ) thn
                 WHERE 1=1
-                AND tmp.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                <if test='storeCds != null and storeCds != ""'>
+                    AND tmp.STORE_CD IN
+                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
                 AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND tms.STORE_CD = tmp.STORE_CD
                 AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -810,7 +813,6 @@
                 AND tmpsp.PROD_CD = tmp.PROD_CD
                 AND thn.STORE_CD (+)= tmp.STORE_CD
                 ORDER BY tmp.STORE_CD, tmp.PROD_CD
-                <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
         </choose>
     </select>

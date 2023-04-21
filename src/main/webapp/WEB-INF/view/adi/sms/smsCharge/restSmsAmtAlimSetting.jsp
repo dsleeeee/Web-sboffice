@@ -15,7 +15,7 @@
         <%-- body --%>
         <div class="wj-dialog-body">
             <div class="w100 mb20">
-                <div class="oh sb-select dkbr">
+                <div class="oh">
                     <p class="tl s14 mt5 lh15">※ 잔여금액 알림 설정이란?</p>
                     <p class="tl s14 mt5 lh15">- 충전하신 잔여금액이 '잔여금액 설정값' 이하시 입력하신 번호로 문자서비스를 받으실 수</p>
                     <p class="tl s14 mt5 lh15">&nbsp;&nbsp;있습니다.</p>
