@@ -99,6 +99,9 @@ public class IostockCmmVO extends PageVO {
     /** 프로모션명 */
     private String promotionNm;
 
+    /** 판매가변경제한매장 */
+    private String storeChgNot;
+
     /**
      * @return the orgnFg
      */
@@ -417,5 +420,13 @@ public class IostockCmmVO extends PageVO {
 
     public void setPromotionNm(String promotionNm) {
         this.promotionNm = promotionNm;
+    }
+
+    public String getStoreChgNot() {
+        return storeChgNot;
+    }
+
+    public void setStoreChgNot(String storeChgNot) {
+        this.storeChgNot = storeChgNot;
     }
 }
