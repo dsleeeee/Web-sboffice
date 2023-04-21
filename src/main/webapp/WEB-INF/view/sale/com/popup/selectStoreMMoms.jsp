@@ -176,6 +176,26 @@
                   </td>
               </tr>
           </c:if>
+          <tr>
+              <%-- 구분(판매가변경제한매장) --%>
+              <th><s:message code="outstockReqDate.gubun"/></th>
+              <td>
+                  <div class="sb-select">
+                      <wj-combo-box
+                              id="srchPopStoreChgNotCombo"
+                              ng-model="popStoreChgNot"
+                              items-source="_getComboData('popStoreChgNotCombo')"
+                              display-member-path="name"
+                              selected-value-path="value"
+                              is-editable="false"
+                              initialized="_initComboBox(s)"
+                              control="srchPopStoreChgNotCombo">
+                      </wj-combo-box>
+                  </div>
+              </td>
+              <td></td>
+              <td></td>
+          </tr>
           </tbody>
         </table>
 
@@ -200,7 +220,7 @@
             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center" is-read-only="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="outstockReqDate.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="outstockReqDate.storeNm"/>" binding="storeNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
-
+            <wj-flex-grid-column header="<s:message code="outstockReqDate.storeChgNot"/>" binding="storeChgNot" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
           </wj-flex-grid>
         </div>
         <%--//위즈모 테이블--%>
@@ -218,6 +238,13 @@
 
   // 매장브랜드 콤보박스 항목 저장시 쓰려고
   var momsHqBrandCdComboList;
+
+  // 구분(판매가변경제한매장)
+  var popStoreChgNotComboData = [
+      {"name": "전체", "value": ""},
+      {"name": "판매가변경제한매장", "value": "1"},
+      {"name": "판매가변경제한매장외", "value": "2"}
+  ];
 
   /** 매장선택 controller */
   app.controller('${param.targetId}Ctrl', ['$scope', '$http', function ($scope, $http) {
@@ -365,6 +392,9 @@
                 }
             }
         });
+
+        // 구분(판매가변경제한매장)
+        $scope._setComboData("popStoreChgNotCombo", popStoreChgNotComboData);
     };
 
     $scope.searchFg = "N";
@@ -394,6 +424,7 @@
         $scope.srchPopMomsShopTypeCombo.selectedIndex = 0;
         $scope.srchPopMomsStoreManageTypeCombo.selectedIndex = 0;
         $scope.srchPopBranchCdComboo.selectedIndex = 0;
+        $scope.srchPopStoreChgNotCombo.selectedIndex = 0;
       });
 
       if ($scope.searchFg == "N") {
@@ -426,6 +457,7 @@
             }
             params.userBrands = momsHqBrandCd;
         }
+        params.storeChgNot = $scope.popStoreChgNot;
 
         $scope._inquirySub("/iostock/cmm/iostockCmm/selectStoreMomsList.sb", params, function () {
             $scope.searchFg = "Y";
