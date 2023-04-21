@@ -17,6 +17,12 @@
 
         <%-- body --%>
         <div class="wj-dialog-body">
+            <div class="mt20 oh sb-select dkbr">
+                <%-- 엑셀 다운로드 --%>
+                <button class="btn_skyblue ml5 fr" id="btnExcel" ng-click="excelDownload()">
+                    <s:message code="cmm.excel.down" />
+                </button>
+            </div>
             <%-- 그리드 --%>
             <div class="w100 mt10 mb20">
                 <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
@@ -52,4 +58,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/prodInfo/prodSaleDtl.js?ver=20210201.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/prodInfo/prodSaleDtl.js?ver=20210201.05" charset="utf-8"></script>
