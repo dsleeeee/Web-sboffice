@@ -279,6 +279,7 @@
                             item-formatter="_itemFormatter">
 
                         <!-- define columns -->
+                        <wj-flex-grid-column header="" binding="saleDate" width="80" align="center" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeOpenClose.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeOpenClose.storeNm"/>" binding="storeNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dayProd.brand"/>" binding="brand" width="100" align="left" is-read-only="true" data-map="brandDataMap"></wj-flex-grid-column>
@@ -323,4 +324,4 @@
    #red:hover {background-color:#ed5565; color:#FFFFFF;}
 </style>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeOpenClose/storeOpenCloseDay.js?ver=20230329.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeOpenClose/storeOpenCloseDay.js?ver=20230329.02" charset="utf-8"></script>

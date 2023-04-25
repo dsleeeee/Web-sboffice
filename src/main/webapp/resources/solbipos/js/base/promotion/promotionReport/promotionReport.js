@@ -408,7 +408,12 @@ app.controller('promotionReportExcelCtrl', ['$scope', '$http', '$timeout', funct
         $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
         return false;
       }
-
+      var excelName;
+      if(params.gubun === "D"){
+        excelName = messages["promotionReport.promotionReport"] + '_' + params.startDate + '_' + params.endDate + '_';
+      } else {
+        excelName = messages["promotionReport.promotionReport"] + '_' ;
+      }
       $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
       $timeout(function () {
         wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
@@ -418,7 +423,7 @@ app.controller('promotionReportExcelCtrl', ['$scope', '$http', '$timeout', funct
             return column.visible;
           }
         },
-            messages["promotionReport.promotionReport"] + '_' + getCurDateTime() +'.xlsx', function () {
+            excelName + getCurDateTime() +'.xlsx', function () {
               $timeout(function () {
                 $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
               }, 10);

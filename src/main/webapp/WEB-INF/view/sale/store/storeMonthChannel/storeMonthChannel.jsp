@@ -380,7 +380,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeMonthChannel/storeMonthChannel.js?ver=20230329.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeMonthChannel/storeMonthChannel.js?ver=20230329.02" charset="utf-8"></script>
 
 <script type="text/javascript">
     var orgnFg = "${orgnFg}";

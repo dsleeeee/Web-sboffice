@@ -235,6 +235,8 @@
                             item-formatter="_itemFormatter">
 
                         <!-- define columns -->
+                        <wj-flex-grid-column header="" binding="startMonth" width="80" align="center" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="" binding="endMonth" width="80" align="center" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeOpenClose.date"/>" binding="yyyymmdd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeOpenClose.openCnt"/>" binding="openCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeOpenClose.closeCnt"/>" binding="closeCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -272,6 +274,8 @@
                             item-formatter="_itemFormatter">
 
                         <!-- define columns -->
+                        <wj-flex-grid-column header="" binding="startMonth" width="80" align="center" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="" binding="endMonth" width="80" align="center" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeOpenClose.date"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeOpenClose.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeOpenClose.storeNm"/>" binding="storeNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
@@ -312,4 +316,4 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeOpenClose/storeOpenCloseMonth.js?ver=20230329.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeOpenClose/storeOpenCloseMonth.js?ver=20230329.02" charset="utf-8"></script>

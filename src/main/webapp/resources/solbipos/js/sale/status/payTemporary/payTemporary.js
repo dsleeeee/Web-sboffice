@@ -238,7 +238,7 @@ app.controller('payTemporaryExcelCtrl', ['$scope', '$http', '$timeout', function
                 return column.visible;
               }
             },
-                messages["payTemporary.payTemporary"] + '_' + getCurDateTime() +'.xlsx', function () {
+                messages["payTemporary.payTemporary"] + '_' + params.startDate + '_' + params.endDate + '_' + getCurDateTime() +'.xlsx', function () {
                   $timeout(function () {
                     $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                   }, 10);

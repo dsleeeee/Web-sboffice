@@ -299,8 +299,8 @@ app.controller('dayMomsCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         includeColumns: function (column) {
           return column.visible;
         }
-      }, 
-          messages["dayMomsMoms.dayMomsMoms"] + getCurDateTime() + '.xlsx', function () {
+      },
+          messages["dayMomsMoms.dayMomsMoms"] + '_' +  wijmo.Globalize.format(startDate.value, 'yyyyMMdd') + '_' + wijmo.Globalize.format(endDate.value, 'yyyyMMdd') + '_' + getCurDateTime() + '.xlsx', function () {
             $timeout(function () {
               $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
             }, 10);

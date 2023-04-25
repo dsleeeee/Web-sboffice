@@ -211,7 +211,7 @@ app.controller('todayMomsCtrl', ['$scope', '$http', '$timeout', function ($scope
       params.userBrands = momsHqBrandCd;
     }
     params.listScale = 500;
-    
+
     console.log(params);
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -387,7 +387,7 @@ app.controller('todayMomsExcelCtrl', ['$scope', '$http', '$timeout', function ($
           includeColumns      : function (column) {
             return column.visible;
           }
-        }, messages["todayMomsMoms.todayMomsMoms"]+getCurDateTime()+'.xlsx', function () {
+        }, messages["todayMomsMoms.todayMomsMoms"] + '_' + params.startDate + '_' + getCurDateTime()+'.xlsx', function () {
           $timeout(function () {
             $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
           }, 10);

@@ -125,6 +125,8 @@ app.controller('storeOpenCloseMonthCtrl', ['$scope', '$http', '$timeout', functi
                 if (col.binding === "yyyymmdd") {
                     var scope = agrid.getScope("storeOpenCloseMonthTimeCtrl");
                     var params = {};
+                    params.startDate = selectedRow.startMonth;
+                    params.endDate = selectedRow.endMonth;
                     params.saleDate = selectedRow.yyyymmdd;
                     params.storeCds = $("#storeOpenCloseMonthStoreCd").val();
                     params.momsTeam = scope.momsTeam;
@@ -206,7 +208,7 @@ app.controller('storeOpenCloseMonthCtrl', ['$scope', '$http', '$timeout', functi
                 includeColumns      : function (column) {
                     return column.visible;
                 }
-            }, messages["storeOpenCloseMoms.storeOpenCloseMoms"] + messages["storeOpenClose.month"] + '_' + getCurDateTime() + '.xlsx', function () {
+            }, messages["storeOpenCloseMoms.storeOpenCloseMoms"] + messages["storeOpenClose.month"] + '_' + $scope.flex.rows[0].dataItem.startMonth + '_' +  $scope.flex.rows[0].dataItem.endMonth + '_' + getCurDateTime() + '.xlsx', function () {
                 $timeout(function () {
                     $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 }, 10);
@@ -357,6 +359,8 @@ app.controller('storeOpenCloseMonthDtlCtrl', ['$scope', '$http', '$timeout', fun
 
         // 파라미터
         var params = {};
+        params.startDate = data.startDate;
+        params.endDate = data.endDate;
         params.saleDate = data.saleDate.replaceAll("-", "");
         params.storeCds = data.storeCds;
         params.momsTeam = data.momsTeam;
@@ -411,7 +415,7 @@ app.controller('storeOpenCloseMonthDtlCtrl', ['$scope', '$http', '$timeout', fun
                 includeColumns      : function (column) {
                     return column.visible;
                 }
-            }, messages["storeOpenCloseMoms.storeOpenCloseMoms"] + messages["storeOpenClose.month"] + '_(상세)' + getCurDateTime() + '.xlsx', function () {
+            }, messages["storeOpenCloseMoms.storeOpenCloseMoms"] + messages["storeOpenClose.month"] + '_' + $scope.flex.rows[0].dataItem.startMonth + '_' +  $scope.flex.rows[0].dataItem.endMonth  + '_(상세)' + getCurDateTime() + '.xlsx', function () {
                 $timeout(function () {
                     $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 }, 10);

@@ -279,4 +279,4 @@
   var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/period/comparePeriodMoms/comparePeriodMoms.js?ver=20230329.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/period/comparePeriodMoms/comparePeriodMoms.js?ver=20230329.02" charset="utf-8"></script>

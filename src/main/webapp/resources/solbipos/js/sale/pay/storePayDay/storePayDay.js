@@ -373,7 +373,7 @@ app.controller('storePayDayExcelCtrl', ['$scope', '$http', '$timeout', function 
           includeColumns      : function (column) {
             return column.visible;
           }
-        }, messages["storePayDayMoms.storePayDayMoms"]+getCurDateTime()+'.xlsx', function () {
+        }, messages["storePayDayMoms.storePayDayMoms"] + '_' + params.startDate + '_' + params.endDate + '_' + getCurDateTime()+'.xlsx', function () {
           $timeout(function () {
             $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
           }, 10);

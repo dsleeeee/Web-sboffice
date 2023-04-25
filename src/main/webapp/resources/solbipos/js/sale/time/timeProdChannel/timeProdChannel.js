@@ -964,7 +964,7 @@ app.controller('timeProdChannelExcelCtrl', ['$scope', '$http', '$timeout', funct
                     includeColumns      : function (column) {
                         return column.visible;
                     }
-                }, messages["timeProdChannel.timeProdChannel"] + "_" + getCurDateTime() +'.xlsx', function () {
+                }, messages["timeProdChannel.timeProdChannel"] + '_' + params.startDate + '_' + params.endDate + '_' + getCurDateTime() +'.xlsx', function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);

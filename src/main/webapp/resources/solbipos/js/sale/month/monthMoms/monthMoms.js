@@ -309,7 +309,7 @@ app.controller('monthMomsCtrl', ['$scope', '$http', '$timeout', function ($scope
           return column.visible;
         }
       },
-          messages["monthMomsMoms.monthMomsMoms"] + getCurDateTime() + '.xlsx', function () {
+          messages["monthMomsMoms.monthMomsMoms"] +'_'+ wijmo.Globalize.format(startMonth.value, 'yyyyMM') +'_'+ wijmo.Globalize.format(endMonth.value, 'yyyyMM')  +'_'+ getCurDateTime() + '.xlsx', function () {
             $timeout(function () {
               $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
             }, 10);
