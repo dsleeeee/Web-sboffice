@@ -227,9 +227,11 @@ public class SalePriceServiceImpl implements SalePriceService {
         salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         salePriceVO.setUserId(sessionInfoVO.getUserId());
 
-        // 매장 array 값 세팅
-        String[] storeCds = salePriceVO.getStoreCds().split(",");
-        salePriceVO.setStoreCdList(storeCds);
+        if(salePriceVO.getSalePriceOrgnFg() == "S") {
+            // 매장 array 값 세팅
+            String[] storeCds = salePriceVO.getStoreCds().split(",");
+            salePriceVO.setStoreCdList(storeCds);
+        }
 
         return salePriceMapper.getSalePriceExcelUploadSampleList(salePriceVO);
     }
