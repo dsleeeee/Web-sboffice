@@ -167,4 +167,7 @@ public interface TouchKeyMapper {
 
     /** 판매 터치키 포스에 적용 ENVST4038 */
     int saveTouchKeyEnv(TouchKeyVO touchKeyVO);
+
+    /** 매장 판매터치키 그룹 ENVST4038 조회 */
+    String getStoreTouchKeyGrp4038(TouchKeyVO touchKeyVO);
 }

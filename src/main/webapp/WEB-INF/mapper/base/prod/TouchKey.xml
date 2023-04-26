@@ -1982,7 +1982,7 @@
                 WHERE   tmtkc.STORE_CD = #{storeCd}
                 AND     tmtkc.STORE_CD = tmtkg.STORE_CD(+)
                 AND     tmtkc.TUKEY_GRP_CD = tmtkg.TUKEY_GRP_CD(+)
-                ORDER BY tmtkc.TUKEY_GRP_CD
+                ORDER BY DECODE(tmtkc.TUKEY_GRP_CD, #{envstVal}, 1), tmtkc.TUKEY_GRP_CD
             </when>
         </choose>
     </select>
@@ -2888,4 +2888,44 @@
             ,   #{modId}
             )
     </update>
+
+    <!-- 매장 판매터치키 그룹 ENVST4038 조회 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getStoreTouchKeyGrp4038" parameterType="touchKeyVO" resultType="String">
+        /* USE : TouchkeyMapper.getStoreTouchKeyGrp4038 */
+        SELECT ENV_4038
+        FROM
+        (
+            SELECT
+            tmp.STORE_CD,
+            tmp.POS_NO,
+            tmpe.ENVST_VAL AS ENV_4038
+            FROM TB_MS_POS_ENVST tmpe,
+            (
+                SELECT tmp.STORE_CD
+                ,       tmp.POS_NO
+                FROM   TB_MS_POS_ENVST tmpe
+                ,       TB_MS_POS tmp
+                WHERE  tmpe.STORE_CD = tmp.STORE_CD
+                AND    tmpe.POS_NO = tmp.POS_NO
+                AND    tmpe.ENVST_CD = '4019'
+                AND    tmpe.ENVST_VAL IN ('1', '2', '3')
+            ) tmp
+            WHERE 1=1
+            AND tmpe.STORE_CD = #{storeCd}
+            AND tmpe.ENVST_CD = '4038'
+            AND tmpe.STORE_CD (+)= tmp.STORE_CD
+            AND tmpe.POS_NO (+)= tmp.POS_NO
+            ORDER BY tmpe.STORE_CD, tmpe.POS_NO
+        )
+        WHERE 1=1
+        <![CDATA[
+            AND ROWNUM <= 1
+        ]]>
+    </select>
+
 </mapper>

@@ -940,6 +940,12 @@ public class TouchKeyServiceImpl implements TouchKeyService {
     @Override
     public List<DefaultMap<String>> getTouchKeyGrp(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO) {
 
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            // 매장 판매터치키 그룹 ENVST4038 조회
+            String touchKeyGrp4038 = keyMapper.getStoreTouchKeyGrp4038(touchKeyVO);
+            touchKeyVO.setEnvstVal(touchKeyGrp4038);
+        }
+
         return keyMapper.getTouchKeyGrp(touchKeyVO);
     }
 
