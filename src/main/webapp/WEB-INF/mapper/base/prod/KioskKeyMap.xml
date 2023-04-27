@@ -967,7 +967,8 @@
                         tmp.PROD_NM,
                         NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
                         (CASE WHEN tmkk.PROD_CD IS NULL THEN 'N' ELSE 'Y' END) AS REG_YN,
-                        (SELECT PROD_NM FROM TB_MS_PRODUCT tmp2 WHERE STORE_CD = #{storeCd} AND PROD_CD = tmp.GROUP_PROD_CD) AS GROUP_PROD_NM
+                        (SELECT PROD_NM FROM TB_MS_PRODUCT tmp2 WHERE STORE_CD = #{storeCd} AND PROD_CD = tmp.GROUP_PROD_CD) AS GROUP_PROD_NM,
+                        DECODE(NVL(tmp.KIOSK_DISPLAY_YN, 'Y'), 'Y', '노출', 'N', '비노출') AS KIOSK_DISPLAY_YN
                 <include refid="CmmSQL.PagingTemplateCount"/>
                   FROM TB_MS_PRODUCT tmp
                   LEFT OUTER JOIN (
