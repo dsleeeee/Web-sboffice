@@ -321,7 +321,7 @@ app.controller('dayPosCtrl', ['$scope', '$http', '$timeout', function ($scope, $
           return column.visible;
         }
       }, 
-          messages["dayPos.dayPos"] + getCurDateTime() + '.xlsx', function () {
+          messages["dayPos.dayPos"] + '_' + wijmo.Globalize.format(startDate.value, 'yyyyMMdd') + '_' + wijmo.Globalize.format(endDate.value, 'yyyyMMdd') + '_' + getCurDateTime() + '.xlsx', function () {
             $timeout(function () {
               $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
             }, 10);

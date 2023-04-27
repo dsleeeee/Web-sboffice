@@ -464,7 +464,7 @@ app.controller('uptPmixExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
                     includeColumns      : function (column) {
                         return column.visible;
                     }
-                }, "UPT&Pmix_"+getCurDateTime()+'.xlsx', function () {
+                }, "UPT&Pmix" + '_' + params.startDate + '_' + params.endDate + '_' + getCurDateTime()+'.xlsx', function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);

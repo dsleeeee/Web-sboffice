@@ -56,8 +56,8 @@
 	<div class="tbl-d type2">
 	  <div class="tbl-tit-btn">
 		  <div class="txtIn bk lh30">
-		  	<span class="bk">{{_selectedYear}}</span><s:message code="saleAnalsMonthly.year"/>
-		  	<span class="bk">{{_selectedMonth}}</span><s:message code="saleAnalsMonthly.month"/>
+		  	<span class="bk" id="year">{{_selectedYear}}</span><s:message code="saleAnalsMonthly.year"/>
+		  	<span class="bk" id="month">{{_selectedMonth}}</span><s:message code="saleAnalsMonthly.month"/>
 		  </div>
 		  <%-- 엑셀다운로드 //TODO--%>
 		  <span class="fr">
@@ -115,7 +115,7 @@
 	  var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML };
 		let a = document.createElement('a');
 		a.href = uri + base64(format(template, ctx));
-		a.download = name + '_' + getCurDateTime() + ".xls";
+		a.download = name + '_' + $("#year").text()+$("#month").text() + '_' + getCurDateTime() + ".xls";
 		a.click();
   	}
 </script>

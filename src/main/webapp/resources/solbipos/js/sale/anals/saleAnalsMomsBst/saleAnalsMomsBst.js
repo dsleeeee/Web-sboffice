@@ -777,6 +777,20 @@ app.controller('saleAnalsMomsBstCtrl', ['$scope', '$http', '$timeout', function 
           return false;
         }
 
+        var startDate;
+        var endDate;
+
+        if ($scope.srchDayGubunCombo.selectedValue === "day") {
+            startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+            endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+        } else if ($scope.srchDayGubunCombo.selectedValue === "month") {
+            startDate = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
+            endDate = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
+        } else if ($scope.srchDayGubunCombo.selectedValue === "year") {
+            startDate = startYear.selectedValue;
+            endDate = endYear.selectedValue;
+        }
+
         $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
         $timeout(function () {
             wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
@@ -785,7 +799,7 @@ app.controller('saleAnalsMomsBstCtrl', ['$scope', '$http', '$timeout', function 
                 includeColumns      : function (column) {
                     return column.visible;
                 }
-            },  messages["saleAnalsMomsBst.saleAnalsMomsBst"] + '_'+ getToday() + '.xlsx', function () {
+            },  messages["saleAnalsMomsBst.saleAnalsMomsBst"] + '_'+ startDate + '_'+ endDate + '_'+ getCurDateTime() + '.xlsx', function () {
                 $timeout(function () {
                     $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 }, 10);

@@ -145,7 +145,8 @@
     -->
     <select id="getStoreOpenCloseDayDtlList" parameterType="storeOpenCloseVO" resultType="DefaultMap">
         /* USE : StoreOpenCloseMapper.getStoreOpenCloseDayDtlList */
-        SELECT 	TPE.HQ_OFFICE_CD
+        SELECT  #{saleDate} AS SALE_DATE
+        ,     	TPE.HQ_OFFICE_CD
         ,		TPE.STORE_CD
         ,       (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = TPE.STORE_CD) AS STORE_NM
         ,		TPE.HQ_BRAND_CD AS BRAND
@@ -457,7 +458,8 @@
     -->
     <select id="getStoreOpenCloseDayDtlNoneList" parameterType="storeOpenCloseVO" resultType="DefaultMap">
     /** storeOpenCloseMapper.getStoreOpenCloseDayDtlNoneList */
-        SELECT 	tms.STORE_CD
+        SELECT 	#{saleDate} AS SALE_DATE
+        ,     	tms.STORE_CD
         ,       tms.STORE_NM
         ,       tms.HQ_BRAND_CD AS BRAND
         ,       tmsi.MOMS_TEAM
@@ -513,7 +515,9 @@
     -->
     <select id="getStoreOpenCloseMonthList" parameterType="storeOpenCloseVO" resultType="DefaultMap">
         /* USE : StoreOpenCloseMapper.getStoreOpenCloseMonthList */
-        SELECT 	TO_CHAR(TO_DATE(tcd.YYYYMMDD, 'YYYYMMDD'), 'YYYY-MM-DD') AS YYYYMMDD
+        SELECT 	#{startDate} AS START_MONTH
+        ,       #{endDate} AS END_MONTH
+        ,       TO_CHAR(TO_DATE(tcd.YYYYMMDD, 'YYYYMMDD'), 'YYYY-MM-DD') AS YYYYMMDD
         ,		(	SELECT	COUNT(DISTINCT tpe.STORE_CD)
                     FROM	TB_PS_EXACTCALC tpe
                     ,       TB_MS_STORE tms
@@ -810,7 +814,9 @@
     -->
     <select id="getStoreOpenCloseMonthDtlList" parameterType="storeOpenCloseVO" resultType="DefaultMap">
         /* USE : StoreOpenCloseMapper.getStoreOpenCloseMonthDtlList */
-        SELECT 	TO_CHAR(TO_DATE(#{saleDate}, 'YYYYMMDD'), 'YYYY-MM-DD') AS SALE_DATE
+        SELECT 	#{startDate} AS START_MONTH
+        ,       #{endDate} AS END_MONTH
+        ,       TO_CHAR(TO_DATE(#{saleDate}, 'YYYYMMDD'), 'YYYY-MM-DD') AS SALE_DATE
         ,		tms.STORE_CD
         ,		tms.STORE_NM
         ,       tms.HQ_BRAND_CD AS BRAND

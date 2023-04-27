@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    LsmStore.xml
+    LSM사용매장조회
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2023.04.26      최초작성
+-->
+<mapper namespace="kr.co.solbipos.store.storeMoms.lsmStore.service.impl.LsmStoreMapper">
+
+    <!-- LSM사용매장 조회 -->
+    <!--
+        TABLE    : TB_HQ_BRANCH_MOMS, TB_MS_STORE
+        PARAM    : lsmStoreVO
+        COMMENTS : LSM사용매장을 조회한다.
+    -->
+    <select id="getLsmStoreList" parameterType="lsmStoreVO" resultType="DefaultMap">
+        /* USE : LsmStoreMapper.getLsmStoreList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  A.STORE_CD
+        ,		E.STORE_NM
+        ,		F.POS_NO
+        ,		A.TUKEY_GRP_CD
+        ,		B.TUKEY_GRP_NM
+        ,		A.TUKEY_CLASS_CD
+        ,		A.TUKEY_CLASS_NM
+        ,		C.PROD_CD
+        ,		D.PROD_NM
+        ,		J.SALE_UPRC
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    TB_MS_TOUCH_KEY_CLASS A
+        ,       TB_MS_TOUCH_KEY_GROUP B
+        ,       TB_MS_TOUCH_KEY C
+        ,		TB_MS_PRODUCT D
+        ,		TB_MS_STORE E
+        ,		TB_MS_POS_ENVST F
+        ,		TB_MS_STORE_ENVST G
+        ,		TB_HQ_TOUCH_KEY_CLASS H
+        ,		TB_HQ_NMCODE I
+        ,		(
+                SELECT	STORE_CD
+                ,		PROD_CD
+                ,		MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                FROM 	TB_MS_PRODUCT_SALE_PRICE
+                WHERE 	STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                <![CDATA[
+                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                ]]>
+                AND 	SALE_PRC_FG = '1'
+                GROUP
+                BY 		STORE_CD
+                , 		PROD_CD
+                ) J
+        WHERE 	A.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+          AND 	B.STORE_CD (+) = A.STORE_CD
+          AND 	B.TUKEY_GRP_CD (+) = A.TUKEY_GRP_CD
+          AND 	C.STORE_CD (+) = A.STORE_CD
+          AND 	C.TUKEY_GRP_CD (+) = A.TUKEY_GRP_CD
+          AND 	C.TUKEY_CLASS_CD (+) = A.TUKEY_CLASS_CD
+          AND 	C.TUKEY_FG (+) = '01'
+          AND 	D.STORE_CD (+) = A.STORE_CD
+          AND 	D.PROD_CD (+) = C.PROD_CD
+          AND 	E.STORE_CD = A.STORE_CD
+          AND 	F.STORE_CD = A.STORE_CD
+          AND 	F.ENVST_CD = '4038'
+          AND 	F.ENVST_VAL != '*'
+        AND 	F.ENVST_VAL = A.TUKEY_GRP_CD
+        AND 	G.STORE_CD = A.STORE_CD
+        AND 	G.ENVST_CD = '1248'
+        AND 	G.ENVST_VAL = '2'
+        AND 	H.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND 	H.HQ_OFFICE_CD = I.HQ_OFFICE_CD(+)
+        AND 	H.TUKEY_GRP_CD = I.NMCODE_NM(+)
+        AND 	H.TUKEY_CLASS_CD = I.NMCODE_ITEM_1(+)
+        AND 	'228' = I.NMCODE_GRP_CD(+)
+        AND 	I.NMCODE_ITEM_2 = 'Y'
+        AND 	H.TUKEY_GRP_CD = A.TUKEY_GRP_CD
+        AND 	H.TUKEY_CLASS_CD = A.TUKEY_CLASS_CD
+        AND 	J.STORE_CD = A.STORE_CD
+        AND 	J.PROD_CD = C.PROD_CD
+        ORDER BY A.STORE_CD, F.POS_NO, A.TUKEY_GRP_CD, A.PAGE_NO, A.Y, A.X, C.PAGE_NO, C.Y, C.X
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- LSM사용매장 조회 -->
+    <!--
+        TABLE    : TB_HQ_BRANCH_MOMS, TB_MS_STORE
+        PARAM    : lsmStoreVO
+        COMMENTS : LSM사용매장을 조회한다.
+    -->
+    <select id="getLsmStoreExcelList" parameterType="lsmStoreVO" resultType="DefaultMap">
+        /* USE : LsmStoreMapper.getLsmStoreExcelList */
+        SELECT  A.STORE_CD
+        ,		E.STORE_NM
+        ,		F.POS_NO
+        ,		A.TUKEY_GRP_CD
+        ,		B.TUKEY_GRP_NM
+        ,		A.TUKEY_CLASS_CD
+        ,		A.TUKEY_CLASS_NM
+        ,		C.PROD_CD
+        ,		D.PROD_NM
+        ,		J.SALE_UPRC
+        FROM    TB_MS_TOUCH_KEY_CLASS A
+        ,       TB_MS_TOUCH_KEY_GROUP B
+        ,       TB_MS_TOUCH_KEY C
+        ,		TB_MS_PRODUCT D
+        ,		TB_MS_STORE E
+        ,		TB_MS_POS_ENVST F
+        ,		TB_MS_STORE_ENVST G
+        ,		TB_HQ_TOUCH_KEY_CLASS H
+        ,		TB_HQ_NMCODE I
+        ,		(
+                    SELECT	STORE_CD
+                    ,		PROD_CD
+                    ,		MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                    FROM 	TB_MS_PRODUCT_SALE_PRICE
+                    WHERE 	STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                    <![CDATA[
+                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    ]]>
+                    AND 	SALE_PRC_FG = '1'
+                    GROUP
+                    BY 		STORE_CD
+                    , 		PROD_CD
+                ) J
+        WHERE 	A.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+        AND 	B.STORE_CD (+) = A.STORE_CD
+        AND 	B.TUKEY_GRP_CD (+) = A.TUKEY_GRP_CD
+        AND 	C.STORE_CD (+) = A.STORE_CD
+        AND 	C.TUKEY_GRP_CD (+) = A.TUKEY_GRP_CD
+        AND 	C.TUKEY_CLASS_CD (+) = A.TUKEY_CLASS_CD
+        AND 	C.TUKEY_FG (+) = '01'
+        AND 	D.STORE_CD (+) = A.STORE_CD
+        AND 	D.PROD_CD (+) = C.PROD_CD
+        AND 	E.STORE_CD = A.STORE_CD
+        AND 	F.STORE_CD = A.STORE_CD
+        AND 	F.ENVST_CD = '4038'
+        AND 	F.ENVST_VAL != '*'
+        AND 	F.ENVST_VAL = A.TUKEY_GRP_CD
+        AND 	G.STORE_CD = A.STORE_CD
+        AND 	G.ENVST_CD = '1248'
+        AND 	G.ENVST_VAL = '2'
+        AND 	H.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND 	H.HQ_OFFICE_CD = I.HQ_OFFICE_CD(+)
+        AND 	H.TUKEY_GRP_CD = I.NMCODE_NM(+)
+        AND 	H.TUKEY_CLASS_CD = I.NMCODE_ITEM_1(+)
+        AND 	'228' = I.NMCODE_GRP_CD(+)
+        AND 	I.NMCODE_ITEM_2 = 'Y'
+        AND 	H.TUKEY_GRP_CD = A.TUKEY_GRP_CD
+          AND 	H.TUKEY_CLASS_CD = A.TUKEY_CLASS_CD
+        AND 	J.STORE_CD = A.STORE_CD
+        AND 	J.PROD_CD = C.PROD_CD
+        ORDER BY A.STORE_CD, F.POS_NO, A.TUKEY_GRP_CD, A.PAGE_NO, A.Y, A.X, C.PAGE_NO, C.Y, C.X
+    </select>
+</mapper>

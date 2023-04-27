@@ -971,6 +971,17 @@ app.controller('timeProdExcelCtrl', ['$scope', '$http', '$timeout', function ($s
             }
             // <-- //그리드 visible -->
 
+            var startDate;
+            var endDate;
+
+            if (params.dayGubun === "day") {
+                startDate = params.startDate;
+                endDate = params.endDate;
+            } else if (params.dayGubun === "month") {
+                startDate = params.startMonth;
+                endDate = params.endMonth;
+            }
+
             $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
             $timeout(function () {
                 wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
@@ -979,7 +990,7 @@ app.controller('timeProdExcelCtrl', ['$scope', '$http', '$timeout', function ($s
                     includeColumns      : function (column) {
                         return column.visible;
                     }
-                }, "상품별시간대매출_"+getCurDateTime()+'.xlsx', function () {
+                }, "상품별시간대매출" + '_'+ startDate + '_'+ endDate + '_'+ getCurDateTime()+'.xlsx', function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);

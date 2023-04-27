@@ -364,7 +364,8 @@ app.controller('storeDayTimeCtrl', ['$scope', '$http', '$timeout', function ($sc
                     return column.visible;
                 }
             },
-                messages["storeDayTimeMoms.storeDayTimeMoms"] + '_'  + getCurDateTime() +'.xlsx', function () {
+                messages["storeDayTimeMoms.storeDayTimeMoms"] + '_' + wijmo.Globalize.format(startDate.value, 'yyyyMMdd') + '_' +
+                wijmo.Globalize.format(endDate.value, 'yyyyMMdd') + '_' + getCurDateTime() +'.xlsx', function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);

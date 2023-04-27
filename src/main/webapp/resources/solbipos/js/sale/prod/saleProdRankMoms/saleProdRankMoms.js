@@ -456,7 +456,7 @@ app.controller('saleProdRankMomsExcelCtrl', ['$scope', '$http', '$timeout', func
                     includeColumns      : function (column) {
                         return column.visible;
                     }
-                }, messages["prodRankMoms.prodRankMoms"] + "_" + getCurDateTime() +'.xlsx', function () {
+                }, messages["prodRankMoms.prodRankMoms"] + '_' + params.startDate + '_' + params.endDate + '_' + getCurDateTime() +'.xlsx', function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);

@@ -392,4 +392,4 @@
     var arrTimeSlotCol = timeSlotCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeDayTime/storeDayTime.js?ver=20230329.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeDayTime/storeDayTime.js?ver=20230329.02" charset="utf-8"></script>

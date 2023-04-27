@@ -421,6 +421,9 @@
                         </c:if>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.saleUprc"/>" binding="saleUprc" width="60" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.regYn"/>" binding="regYn" align="center"data-map="regYnDataMap" width="60" is-read-only="true"></wj-flex-grid-column>
+                         <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+                            <wj-flex-grid-column header="<s:message code="kioskKeyMap.kioskDisplayYn"/>" binding="kioskDisplayYn" align="center"data-map="regYnDataMap" width="60" is-read-only="true"></wj-flex-grid-column>
+                        </c:if>
                     </wj-flex-grid>
                 </div>
             </div>

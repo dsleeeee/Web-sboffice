@@ -5970,7 +5970,7 @@
                tmp.PRTER_PORT_FG,
                tmp.PRTER_SPEED_FG,
                tmp.PRTER_NET_IP,
-               tmp.PRTER_NET_PORT,
+               TO_CHAR(tmp.PRTER_NET_PORT) AS PRTER_NET_PORT,
                tmp.PRTER_OUTPUT_QTY,
                tmp.PRTER_CHECK_YN,
                tmp.USE_YN,
