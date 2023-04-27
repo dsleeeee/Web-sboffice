@@ -33,7 +33,7 @@
         <tbody>
         <%-- 조회일자 --%>
         <tr>
-            <th><s:message code="cmm.search.date" /></th>
+            <th><s:message code="salePriceResve.select.startDate" /></th>
             <td colspan="3">
                 <div class="sb-select">
                     <span class="txtIn"><input id="srchTimeStartDate" ng-model="startDate" class="w120px"></span>
