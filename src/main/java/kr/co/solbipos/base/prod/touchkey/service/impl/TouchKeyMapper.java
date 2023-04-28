@@ -170,4 +170,10 @@ public interface TouchKeyMapper {
 
     /** 매장 판매터치키 그룹 ENVST4038 조회 */
     String getStoreTouchKeyGrp4038(TouchKeyVO touchKeyVO);
+
+    /** 본사 판매터치키 매장적용(PKG 처리) */
+    String saveTouchKeyToStore(TouchKeyVO touchKeyVO);
+
+    /** 매장사용터치키설정(PKG 처리) */
+    String saveTouchKeyEnv2(TouchKeyVO touchKeyVO);
 }
