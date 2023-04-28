@@ -28,7 +28,7 @@ app.controller('kioskKeyMapViewCtrl', ['$scope', '$http', function ($scope, $htt
   $scope.resetTh = function (){
     for(var th=0; th < 8; th++){
       $("#tuCls" + th).html('');
-      $("#th" + th).css('background-color', '#ddd');
+      $("#th" + th).css('background-color', '#d5d5d5');
     }
   }
 
@@ -157,7 +157,7 @@ app.controller('kioskKeyMapViewCtrl', ['$scope', '$http', function ($scope, $htt
     $scope.resetTd();
 
     for (var i = 0; i < 8; i++) {
-      $("#th"+i).css('background-color', '#ddd');
+      $("#th"+i).css('background-color', '#d5d5d5');
     }
     $("#th"+index).css('background-color', '#FDD69D');
     $scope.getTuKeyList($("#tuClsCd" + index).text());

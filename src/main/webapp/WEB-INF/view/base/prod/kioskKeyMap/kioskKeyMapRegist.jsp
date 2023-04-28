@@ -107,11 +107,11 @@
                                 <s:message code="kioskKeyMap.tuClsTypeNm" />
                             </button>
                         </c:if>
-<%--                        <c:if test="${momsEnvstVal == '1'}">--%>
-<%--                            <button class="btn_skyblue" id="btnKioskKeyMapView" ng-click="kioskKeyMapView()">--%>
-<%--                                <s:message code="kioskKeyMap.kioskKeyMapView" />--%>
-<%--                            </button>--%>
-<%--                        </c:if>--%>
+                        <c:if test="${momsEnvstVal == '1'}">
+                            <button class="btn_skyblue" id="btnKioskKeyMapView" ng-click="kioskKeyMapView()">
+                                <s:message code="kioskKeyMap.kioskKeyMapView" />
+                            </button>
+                        </c:if>
                        </div>
                 </td>
             </tr>

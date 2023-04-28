@@ -6,10 +6,16 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 
 <style>
-    table thead tr th, table tbody tr td { border:1px solid #ddd; }
+#kioskKeyMapViewLayer table thead tr th div { height:10px;width:102px;text-align:center; }
+#thPre, #thNext { background-color: #d5d5d5 }
+#kioskKeyMapViewLayer table tbody tr td div { height:120px;width:164px;text-align:center; }
+#kioskKeyMapViewLayer table thead tr th, table tbody tr td { border:1px solid #ddd; }
+
+
 </style>
+
 <%-- 팝업 부분 설정 - width 는 강제 해주어야함.. 해결방법? 확인 필요 : 20180829 노현수 --%>
-<wj-popup control="kioskKeyMapViewLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:630px;">
+<wj-popup id="kioskKeyMapViewLayer" control="kioskKeyMapViewLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:630px;">
     <div class="wj-dialog wj-dialog-columns" ng-controller="kioskKeyMapViewCtrl">
         <div class="wj-dialog-header wj-dialog-header-font">
             <h3 class="fl" style="line-height:50px;"><s:message code="kioskKeyMap.kioskKeyMapView"/></h3>
@@ -42,17 +48,17 @@
                 <thead>
                 <tr>
                     <th id="thPre" rowspan="2" ng-click="thPre()">◀</th>
-                    <th id="th0"><div style="height:10px;width:102px;text-align:center;" id="tuCls0" ng-click="thClick('0')"></div></th>
-                    <th id="th1"><div style="height:10px;width:102px;text-align:center;" id="tuCls1" ng-click="thClick('1')"></div></th>
-                    <th id="th2"><div style="height:10px;width:102px;text-align:center;" id="tuCls2" ng-click="thClick('2')"></div></th>
-                    <th id="th3"><div style="height:10px;width:102px;text-align:center;" id="tuCls3" ng-click="thClick('3')"></div></th>
+                    <th id="th0"><div id="tuCls0" ng-click="thClick('0')"></div></th>
+                    <th id="th1"><div id="tuCls1" ng-click="thClick('1')"></div></th>
+                    <th id="th2"><div id="tuCls2" ng-click="thClick('2')"></div></th>
+                    <th id="th3"><div id="tuCls3" ng-click="thClick('3')"></div></th>
                     <th id="thNext" rowspan="2" ng-click="thNext()">▶</th>
                 </tr>
                 <tr>
-                    <th id="th4"><div style="height:10px;width:102px;text-align:center;" id="tuCls4" ng-click="thClick('4')"></div></th>
-                    <th id="th5"><div style="height:10px;width:102px;text-align:center;" id="tuCls5" ng-click="thClick('5')"></div></th>
-                    <th id="th6"><div style="height:10px;width:102px;text-align:center;" id="tuCls6" ng-click="thClick('6')"></div></th>
-                    <th id="th7"><div style="height:10px;width:102px;text-align:center;" id="tuCls7" ng-click="thClick('7')"></div></th>
+                    <th id="th4"><div id="tuCls4" ng-click="thClick('4')"></div></th>
+                    <th id="th5"><div id="tuCls5" ng-click="thClick('5')"></div></th>
+                    <th id="th6"><div id="tuCls6" ng-click="thClick('6')"></div></th>
+                    <th id="th7"><div id="tuCls7" ng-click="thClick('7')"></div></th>
                 </tr>
                 </thead>
             </table>
@@ -67,25 +73,25 @@
                 <tbody>
                 <tr>
                     <td id="tdPre" rowspan="4" ng-click="tdPre()">◀</td>
-                    <td><div style="height:120px;width:164px;text-align:center;" id="tuKey0"></div></td>
-                    <td><div style="height:120px;width:164px;text-align:center;" id="tuKey1"></div></td>
-                    <td><div style="height:120px;width:164px;text-align:center;" id="tuKey2"></div></td>
+                    <td><div id="tuKey0"></div></td>
+                    <td><div id="tuKey1"></div></td>
+                    <td><div id="tuKey2"></div></td>
                     <td id="tdNext" rowspan="4" ng-click="tdNext()">▶</td>
                 </tr>
                 <tr>
-                    <td><div style="height:120px;width:164px;text-align:center;" id="tuKey3"></div></td>
-                    <td><div style="height:120px;width:164px;text-align:center;" id="tuKey4"></div></td>
-                    <td><div style="height:120px;width:164px;text-align:center;" id="tuKey5"></div></td>
+                    <td><div id="tuKey3"></div></td>
+                    <td><div id="tuKey4"></div></td>
+                    <td><div id="tuKey5"></div></td>
                 </tr>
                 <tr>
-                    <td><div style="height:120px;width:164px;text-align:center;" id="tuKey6"></div></td>
-                    <td><div style="height:120px;width:164px;text-align:center;" id="tuKey7"></div></td>
-                    <td><div style="height:120px;width:164px;text-align:center;" id="tuKey8"></div></td>
+                    <td><div id="tuKey6"></div></td>
+                    <td><div id="tuKey7"></div></td>
+                    <td><div id="tuKey8"></div></td>
                 </tr>
                 <tr>
-                    <td><div style="height:120px;width:164px;text-align:center;" id="tuKey9"></div></td>
-                    <td><div style="height:120px;width:164px;text-align:center;" id="tuKey10"></div></td>
-                    <td><div style="height:120px;width:164px;text-align:center;" id="tuKey11"></div></td>
+                    <td><div id="tuKey9"></div></td>
+                    <td><div id="tuKey10"></div></td>
+                    <td><div id="tuKey11"></div></td>
                 </tr>
                 </tbody>
             </table>
