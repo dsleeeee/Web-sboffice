@@ -912,4 +912,26 @@ public class KioskKeyMapController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 키오스크 키맵 조회
+     *
+     * @param kioskKeyMapVO
+     * @param request
+     * @param response
+     * @param model
+     * @author  권지현
+     * @since   2023.04.27
+     */
+    @RequestMapping(value = "/kioskKeyMap/getTuKeyList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getTuKeyList(KioskKeyMapVO kioskKeyMapVO, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = kioskKeyMapService.getTuKeyList(kioskKeyMapVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, result);
+    }
 }
