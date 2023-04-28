@@ -551,6 +551,12 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
         }
     };
 
+    // 키맵미리보기
+    $scope.kioskKeyMapView = function(){
+        $scope.kioskKeyMapViewLayer.show(true);
+        $scope._broadcast('kioskKeyMapViewCtrl');
+    };
+
     // 매장권한) POS번호 선택 시, 키맵그룹 dropdown 조회
     $scope.setTuClsType = function (s) {
 

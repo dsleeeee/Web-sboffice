@@ -1170,4 +1170,17 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         }
         return result;
     }
+
+    /** 키맵 미리보기 키맵조회 */
+    @Override
+    public List<DefaultMap<Object>> getTuKeyList(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
+
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+            kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return kioskKeyMapMapper.getTuKeyList(kioskKeyMapVO);
+    }
 }

@@ -226,4 +226,6 @@ public interface KioskKeyMapMapper {
     /** 키오스크키맵 매장복사 - 매장 카테고리 하위 중분류 복사 */
     int copyStoreTuClsM(KioskKeyMapVO kioskKeyMapVO);
 
+    /** 키오스크 키맵 미리보기 키맵조회 */
+    List<DefaultMap<Object>> getTuKeyList(KioskKeyMapVO kioskKeyMapVO);
 }
