@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="copyStoreTouchKeyLayer" show-trigger="Click" hide-trigger="Click" style="display:none; width:600px;overflow-y:auto;">
+<wj-popup control="copyStoreTouchKeyLayer" show-trigger="Click" hide-trigger="Click" style="display:none; width:650px;overflow-y:auto;">
     <div class="wj-dialog wj-dialog-columns title">
 
         <%-- header --%>
@@ -507,4 +507,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/view/copyStoreTouchKey.js?ver=20220504.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/view/copyStoreTouchKey.js?ver=20230428.01" charset="utf-8"></script>

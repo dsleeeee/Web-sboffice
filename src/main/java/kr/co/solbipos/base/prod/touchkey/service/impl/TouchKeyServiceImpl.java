@@ -576,7 +576,35 @@ public class TouchKeyServiceImpl implements TouchKeyService {
     /** 터치키 매장적용 */
     @Override
     public int saveTouchKeyToStore(TouchKeyVO[] TouchKeyVOs, SessionInfoVO sessionInfoVO) {
+
         int result = 0;
+
+        // 터치키 매장적용 - PKG 호출 방식(일단 주석처리 20230426) ========================================================
+        /*String sStoreCds = "";
+
+        // 선택한 매장코드 셋팅
+        for (TouchKeyVO touchKeyVO : TouchKeyVOs) {
+            sStoreCds += touchKeyVO.getStoreCd() + ",";
+        }
+
+        TouchKeyVO tkVO = new TouchKeyVO();
+
+        tkVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        tkVO.setStoreCds(sStoreCds.substring(0, sStoreCds.length()-1));
+        tkVO.setTukeyGrpCd(TouchKeyVOs[0].getTukeyGrpCd());
+        tkVO.setRegId(sessionInfoVO.getUserId());
+
+        // 본사 판매터치키 매장적용(PKG 처리)
+        keyMapper.saveTouchKeyToStore(tkVO);
+        LOGGER.info("SP_HQ_TOUCH_KEY_TO_STORE_I 실행결과 : " + tkVO.getResult());
+
+        if (tkVO.getResult().equals("0000")) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }*/
+        // ============================================================================================================
+
         String currentDt = currentDateTimeString();
 
         for ( TouchKeyVO touchKeyVO : TouchKeyVOs ) {
@@ -594,7 +622,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
             String envstVal1248 = CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1248"), "0");
 
             // 매장에 터치키 XML 정보 업데이트
-//            keyMapper.saveStoreConfgXml(touchKeyVO);//판매터치키 XML 데이터 미사용 처리 20230331
+            //keyMapper.saveStoreConfgXml(touchKeyVO);//판매터치키 XML 데이터 미사용 처리 20230331
             touchKeyVO.setOrgnFg("S");
             // 기적용된 터치키 그룹 정보 삭제
             keyMapper.deleteTouchkeyGrp(touchKeyVO);
@@ -1047,6 +1075,37 @@ public class TouchKeyServiceImpl implements TouchKeyService {
     public int saveTouchKeyEnv(TouchKeyVO[] TouchKeyVOs, SessionInfoVO sessionInfoVO) {
 
         int result = 0;
+
+        // 터치키 매장적용 - PKG 호출 방식(일단 주석처리 20230426) ========================================================
+        /*String sStoreCds = "";
+        String sPosNos = "";
+
+        // 선택한 매장코드, POS번호 셋팅
+        for (TouchKeyVO touchKeyVO : TouchKeyVOs) {
+            sStoreCds += touchKeyVO.getStoreCd() + ",";
+            sPosNos += touchKeyVO.getPosNo() + ",";
+        }
+
+        TouchKeyVO tkVO = new TouchKeyVO();
+
+        tkVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        tkVO.setStoreCds(sStoreCds.substring(0, sStoreCds.length()-1));
+        tkVO.setPosNos(sPosNos.substring(0, sPosNos.length()-1));
+        tkVO.setChkApplyStore(TouchKeyVOs[0].getChkApplyStore());
+        tkVO.setTukeyGrpCd(TouchKeyVOs[0].getEnvstVal());
+        tkVO.setRegId(sessionInfoVO.getUserId());
+
+        // 매장사용터치키설정(PKG 처리)
+        keyMapper.saveTouchKeyEnv2(tkVO);
+        LOGGER.info("SP_MS_TOUCH_KEY_ENV_IU 실행결과 : " + tkVO.getResult());
+
+        if (tkVO.getResult().equals("0000")) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }*/
+        // ============================================================================================================
+
         String currentDt = currentDateTimeString();
 
         for ( TouchKeyVO touchKeyVO : TouchKeyVOs ) {
@@ -1077,7 +1136,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                 String envstVal1248 = CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1248"), "0");
 
                 // 매장에 터치키 XML 정보 업데이트
-//                keyMapper.saveStoreConfgXml(touchKeyVO);//판매터치키 XML 데이터 미사용 처리 20230331
+                //keyMapper.saveStoreConfgXml(touchKeyVO);//판매터치키 XML 데이터 미사용 처리 20230331
                 touchKeyVO.setOrgnFg("S");
                 // 기적용된 터치키 그룹 정보 삭제
                 keyMapper.deleteTouchkeyGrp(touchKeyVO);

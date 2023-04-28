@@ -144,6 +144,15 @@ public class TouchKeyVO extends CmmVO {
     /** 터치키매장적용여부 */
     private String chkApplyStore;
 
+    /** 매장코드(멀티선택) */
+    private String storeCds;
+
+    /** 포스번호(멀티선택) */
+    private String posNos;
+
+    /** 프로시져 실행 결과 */
+    private String result;
+
     /**
      * @return the orgnFg
      */
@@ -609,5 +618,29 @@ public class TouchKeyVO extends CmmVO {
 
     public void setChkApplyStore(String chkApplyStore) {
         this.chkApplyStore = chkApplyStore;
+    }
+
+    public String getStoreCds() {
+        return storeCds;
+    }
+
+    public void setStoreCds(String storeCds) {
+        this.storeCds = storeCds;
+    }
+
+    public String getPosNos() {
+        return posNos;
+    }
+
+    public void setPosNos(String posNos) {
+        this.posNos = posNos;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 }

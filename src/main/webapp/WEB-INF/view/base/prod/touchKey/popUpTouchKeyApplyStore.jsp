@@ -274,9 +274,9 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-        <div class="wj-dialog-footer">
-            <button class="btn wj-hide-apply btn_blue"><s:message code="cmm.apply" /></button>
+            <div class="wj-dialog-footer">
+                <button class="btn_blue"  ng-click="btnTouchKeyApplyStore()"><s:message code="cmm.apply" /></button>
+            </div>
         </div>
     </div>
 </wj-popup>
@@ -284,4 +284,4 @@
   var sysStatFgComboData = ${ccu.getCommCode("005")};
   var clsFgComboData = ${ccu.getCommCode("001")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpTouchKeyApplyStore.js?ver=20230306.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpTouchKeyApplyStore.js?ver=20230428.01" charset="utf-8"></script>

@@ -11,7 +11,7 @@
 
 var app = agrid.getApp();
 
-app.controller('popUpTouchKeyEnvCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('popUpTouchKeyEnvCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     angular.extend(this, new RootController('popUpTouchKeyEnvCtrl', $scope, $http, false));
 
@@ -90,6 +90,9 @@ app.controller('popUpTouchKeyEnvCtrl', ['$scope', '$http', function ($scope, $ht
     // 적용
     $scope.btnInsertEnv = function () {
 
+        $scope.stepCnt = 10;    // 한번에 DB에 저장할 숫자 세팅
+        $scope.progressCnt = 0; // 처리된 숫자
+
         // 파라미터 설정
         var params = new Array();
 
@@ -130,11 +133,101 @@ app.controller('popUpTouchKeyEnvCtrl', ['$scope', '$http', function ($scope, $ht
         }
         console.log(params);
 
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/base/prod/touchKey/touchKey/saveTouchKeyEnv.sb", params, function () {
-            $scope.popUpTouchKeyEnvLayer.hide(true);
+        // 사용터치키 설정을 하시겠습니까?(선택매장이 많은경우, 오래걸릴수 있습니다.)
+        $scope._popConfirm(messages["touchKey.touchKeyEnvToStore.msg"], function() {
+            $timeout(function () {
+                setTimeout(function () {
+                    // 매장사용터치키 설정 저장
+                    $scope.save(params);
+                }, 500);
+            }, 10);
         });
+    };
 
+    // 매장사용터치키 설정 저장
+    $scope.save = function(orgParams){
+
+        $scope.totalRows = orgParams.length;    // 체크 매장수
+        var params = [];
+
+        // 저장 시작이면 작업내역 로딩 팝업 오픈
+        if ($scope.progressCnt === 0) {
+            $timeout(function () {
+                $scope.excelUploadingPopup(true);
+                $("#progressCnt").html($scope.progressCnt);
+                $("#totalRows").html($scope.totalRows);
+            }, 10);
+        }
+
+        // stepCnt 만큼 데이터 DB에 저장
+        var loopCnt = (parseInt($scope.progressCnt) + parseInt($scope.stepCnt) > parseInt($scope.totalRows) ? parseInt($scope.totalRows) : parseInt($scope.progressCnt) + parseInt($scope.stepCnt));
+        for (var i = $scope.progressCnt; i < loopCnt; i++) {
+            params.push(orgParams[i]);
+        }
+
+        console.log("총 갯수 :" + $scope.totalRows);
+        console.log("진행 갯수 :" + $scope.progressCnt + "~" + (loopCnt - 1));
+        console.log("---------------------------------------------------------------------");
+
+        //가상로그인 session 설정
+        var sParam = {};
+        if(document.getElementsByName('sessionId')[0]){
+            sParam['sid'] = document.getElementsByName('sessionId')[0].value;
+        }
+
+        // ajax 통신 설정
+        $http({
+            method : 'POST', //방식
+            url    : '/base/prod/touchKey/touchKey/saveTouchKeyEnv.sb', /* 통신할 URL */
+            data   : params, /* 파라메터로 보낼 데이터 : @requestBody */
+            params : sParam,
+            headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+        }).then(function successCallback(response) {
+            if ($scope._httpStatusCheck(response, true)) {
+                if (parseInt($scope.progressCnt) >= parseInt($scope.totalRows)) {
+                    // 작업내역 로딩 팝업 닫기
+                    $scope.excelUploadingPopup(false);
+                    // 매장사용터치키설정 팝업 닫기
+                    $scope.popUpTouchKeyEnvLayer.hide(true);
+                    // 저장되었습니다.
+                    $scope._popMsg(messages["cmm.saveSucc"]);
+                }
+            }
+        }, function errorCallback(response) {
+            $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
+            if (response.data.message) {
+                $scope._popMsg(response.data.message);
+            } else {
+                $scope._popMsg(messages['cmm.saveFail']);
+            }
+            return false;
+        }).then(function () {
+            // 'complete' code here
+            // 처리 된 숫자가 총 업로드할 수보다 작은 경우 다시 save 함수 호출
+            if (parseInt($scope.progressCnt) < parseInt($scope.totalRows)) {
+                // 처리된 숫자 변경
+                $scope.progressCnt = loopCnt;
+                // 팝업의 progressCnt 값 변경
+                $("#progressCnt").html($scope.progressCnt);
+                $scope.save(orgParams);
+            }
+        });
+    };
+
+    // 작업내역 로딩 팝업
+    $scope.excelUploadingPopup = function (showFg) {
+        if (showFg) {
+            // 팝업내용 동적 생성
+            var innerHtml = '<div class=\"wj-popup-loading\"><p class=\"bk\">' + messages['touchKey.loading.msg'] + '</p>';
+            innerHtml += '<div class="mt5 txtIn"><span class="bk" id="progressCnt">0</span>/<span class="bk" id="totalRows">0</span> 개 진행 중...</div>';
+            innerHtml += '<p><img src=\"/resource/solbipos/css/img/loading.gif\" alt=\"\" /></p></div>';
+            // html 적용
+            $scope._loadingPopup.content.innerHTML = innerHtml;
+            // 팝업 show
+            $scope._loadingPopup.show(true);
+        } else {
+            $scope._loadingPopup.hide(true);
+        }
     };
 
     // 닫기

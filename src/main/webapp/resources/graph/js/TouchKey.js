@@ -200,38 +200,10 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
   };
 
   // 터치키 적용매장 목록 팝업
-  $scope.$on("showPopUp", function(event, data) {
-    var popup = $scope.popUpApplyStoreLayer;
-    popup.shown.addHandler(function (s) {
-      // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
-      setTimeout(function() {
-        $scope._broadcast('popUpApplyStoreCtrl');
-      }, 50)
-    });
-    // 팝업 닫을때
-    popup.show(true, function (s) {
-      // 적용 버튼 눌렀을때만
-      if (popup.dialogResult === "wj-hide-apply") {
-        // 팝업 컨트롤러 Get
-        var scopeLayer = agrid.getScope("popUpApplyStoreCtrl");
-        // 저장 파라미터 설정
-        var paramArr = [];
+  $scope.$on("showPopUp", function(event, data){
 
-        for (var i = 0; i < scopeLayer.flexLayer.itemsSource.items.length; i++) {
-          if ( scopeLayer.flexLayer.itemsSource.items[i].gChk === true ) {
-            scopeLayer.flexLayer.itemsSource.items[i].tukeyGrpCd = scopeLayer.applyTouchKeyGrp;
-            paramArr.push(scopeLayer.flexLayer.itemsSource.items[i]);
-          }
-        }
-        if (paramArr.length <= 0) {
-          s_alert.pop(messages["touchKey.msg.select"]);
-        }
-        // 저장수행
-        $scope._postJSONSave.withPopUp("/base/prod/touchKey/touchKey/applyStore.sb", paramArr, function () {
-          $scope._popMsg(messages["cmm.saveSucc"]);
-        });
-      }
-    });
+    $scope.popUpApplyStoreLayer.show(true);
+    $scope._broadcast('popUpApplyStoreCtrl');
   });
 
   // 매장 판매터치키복사 팝업
