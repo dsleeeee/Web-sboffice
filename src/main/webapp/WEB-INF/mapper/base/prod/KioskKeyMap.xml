@@ -763,7 +763,8 @@
                             tmkk.REG_ID,
                             tmkk.MOD_DT,
                             tmkk.MOD_ID,
-                (SELECT PROD_NM FROM TB_MS_PRODUCT tmp2 WHERE STORE_CD = #{storeCd} AND PROD_CD = tmp.GROUP_PROD_CD) AS GROUP_PROD_NM
+                (SELECT PROD_NM FROM TB_MS_PRODUCT tmp2 WHERE STORE_CD = #{storeCd} AND PROD_CD = tmp.GROUP_PROD_CD) AS GROUP_PROD_NM,
+                DECODE(NVL(tmp.KIOSK_DISPLAY_YN, 'Y'), 'Y', '노출', 'N', '비노출') AS KIOSK_DISPLAY_YN
                       FROM TB_MS_KIOSK_KEY tmkk,
                             TB_MS_PRODUCT tmp
                      WHERE tmp.STORE_CD (+)= tmkk.STORE_CD
@@ -3588,4 +3589,85 @@
     </insert>
 
 
+    <!-- 키오스크 키맵 조회 -->
+    <!--
+        TABLE    : TB_HQ_KIOSK_CLS, TB_MS_KIOSK_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키오스크 키맵을 가져온다.
+    -->
+    <select id="getTuKeyList" parameterType="kioskKeyMapVO" resultType="DefaultMap">
+        /* USE : KioskKeyMapMapper.getTuKeyList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT 	thkk.PROD_CD
+                ,		thp.PROD_NM
+                ,		thpi.IMG_URL
+                ,		thpi.IMG_FILE_NM
+                ,		TO_CHAR(thpsp.SALE_UPRC,'999,999,999,999') AS SALE_UPRC
+                FROM 	TB_HQ_KIOSK_KEY thkk
+                ,		TB_HQ_PRODUCT thp
+                ,		TB_HQ_PRODUCT_IMAGE thpi
+                ,		(
+                            SELECT	PROD_CD
+                            ,		MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                            FROM 	TB_HQ_PRODUCT_SALE_PRICE
+                            WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                            <![CDATA[
+                                AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                            ]]>
+                            AND 	SALE_PRC_FG = '1'
+                            GROUP
+                            BY 		PROD_CD
+                        ) thpsp
+                WHERE 	thkk.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND 	thkk.TU_CLS_TYPE = #{tuClsType}
+                AND 	thkk.TU_CLS_CD = #{tuClsCd}
+                AND 	thkk.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND 	thkk.PROD_CD = thp.PROD_CD
+                AND 	thkk.HQ_OFFICE_CD = thpi.HQ_OFFICE_CD(+)
+                AND 	thkk.PROD_CD = thpi.PROD_CD(+)
+                AND 	'002' = thpi.IMG_FG(+)
+                AND 	thkk.PROD_CD = thpsp.PROD_CD
+                ORDER
+                BY 		thkk.INDEX_NO
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT 	thkk.PROD_CD
+                ,		thp.PROD_NM
+                ,		thpi.IMG_URL
+                ,		thpi.IMG_FILE_NM
+                ,		TO_CHAR(thpsp.SALE_UPRC,'999,999,999,999') AS SALE_UPRC
+                FROM 	TB_MS_KIOSK_KEY thkk
+                ,		TB_MS_PRODUCT thp
+                ,		TB_MS_PRODUCT_IMAGE thpi
+                ,		(
+                SELECT	PROD_CD
+                ,		MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                FROM 	TB_MS_PRODUCT_SALE_PRICE
+                WHERE 	STORE_CD = #{storeCd}
+                <![CDATA[
+                                AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                            ]]>
+                AND 	SALE_PRC_FG = '1'
+                GROUP
+                BY 		PROD_CD
+                ) thpsp
+                WHERE 	thkk.STORE_CD = #{storeCd}
+                AND 	thkk.TU_CLS_TYPE = #{tuClsType}
+                AND 	thkk.TU_CLS_CD = #{tuClsCd}
+                AND 	thkk.STORE_CD = thp.STORE_CD
+                AND 	thkk.PROD_CD = thp.PROD_CD
+                AND 	thkk.STORE_CD = thpi.STORE_CD(+)
+                AND 	thkk.PROD_CD = thpi.PROD_CD(+)
+                AND 	'002' = thpi.IMG_FG(+)
+                AND 	thkk.PROD_CD = thpsp.PROD_CD
+                ORDER
+                BY 		thkk.INDEX_NO
+            </when>
+        </choose>
+    </select>
 </mapper>

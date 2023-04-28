@@ -115,4 +115,7 @@ public interface KioskKeyMapService {
 
     /** 키오스크키맵 매장복사 - 기준매장 키맵그룹 매장적용 */
     int saveKioskKeyMapStoreCopy(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
+    
+    /** 키맵미리보기 판매터치키 */
+    List<DefaultMap<Object>> getTuKeyList(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
 }

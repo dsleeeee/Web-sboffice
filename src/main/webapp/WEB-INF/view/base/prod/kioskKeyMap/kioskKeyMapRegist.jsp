@@ -107,6 +107,11 @@
                                 <s:message code="kioskKeyMap.tuClsTypeNm" />
                             </button>
                         </c:if>
+<%--                        <c:if test="${momsEnvstVal == '1'}">--%>
+<%--                            <button class="btn_skyblue" id="btnKioskKeyMapView" ng-click="kioskKeyMapView()">--%>
+<%--                                <s:message code="kioskKeyMap.kioskKeyMapView" />--%>
+<%--                            </button>--%>
+<%--                        </c:if>--%>
                        </div>
                 </td>
             </tr>
@@ -257,6 +262,9 @@
                         <%-- [1250 맘스터치] --%>
                         <c:if test="${momsEnvstVal == '1'}">
                             <wj-flex-grid-column header="<s:message code="kioskKeyMap.groupProdNm"/>" binding="groupProdNm" width="100" is-read-only="true"></wj-flex-grid-column>
+                        </c:if>
+                        <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+                            <wj-flex-grid-column header="<s:message code="kioskKeyMap.kioskDisplayYn"/>" binding="kioskDisplayYn" align="center"data-map="regYnDataMap" width="60" is-read-only="true"></wj-flex-grid-column>
                         </c:if>
                     </wj-flex-grid>
                 </div>
@@ -498,4 +506,8 @@
 
 <%-- 매장수정허용카테고리 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskKeyMapClsTypeNm.jsp">
+</c:import>
+
+<%-- 키맵미리보기 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskKeyMapView.jsp">
 </c:import>
