@@ -179,6 +179,11 @@
                 SELECT	tsspt.STORE_CD
                 ,       tms.STORE_NM
                 ,       TO_CHAR(TO_DATE(tsspt.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+                ,		tsspt.POS_NO
+                ,		tsspt.BILL_NO
+                ,		tsspt.LINE_NO
+                ,		tsspt.LINE_SEQ_NO
+                ,		DECODE(tsspt.SALE_YN,'Y','매출','반품') AS SALE_YN
                 ,		(CASE WHEN tsspt.SALE_YN = 'Y' THEN 1 WHEN tsspt.SALE_YN = 'N' THEN -1 ELSE 0 END) AS SALE_CNT
                 ,		tsspt.SALE_AMT
                 FROM 	TB_SL_SALE_PAY_TEMPORARY tsspt
@@ -189,8 +194,7 @@
                 AND     tsspt.TEMPORARY_PAY_CD    =   '98'
                 AND     tsspt.STORE_CD = tms.STORE_CD
                 ORDER
-                BY 		tsspt.STORE_CD
-                ,       tsspt.SALE_DATE
+                BY 		tsspt.STORE_CD, tsspt.SALE_DATE, tsspt.POS_NO, tsspt.BILL_NO, tsspt.LINE_NO, tsspt.LINE_SEQ_NO
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -208,7 +212,7 @@
                 AND 	tsspt.SALE_DATE = #{saleDate}
                 AND     tsspt.TEMPORARY_PAY_CD    =   '98'
                 ORDER
-                BY 		tsspt.SALE_DATE
+                BY 		tsspt.SALE_DATE, tsspt.POS_NO, tsspt.BILL_NO, tsspt.LINE_NO, tsspt.LINE_SEQ_NO
             </when>
         </choose>
     </select>

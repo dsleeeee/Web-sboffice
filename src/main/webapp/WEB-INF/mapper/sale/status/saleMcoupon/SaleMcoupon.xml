@@ -192,6 +192,11 @@
                 tsspm.STORE_CD,
                 tms.STORE_NM,
                 TO_CHAR(TO_DATE(tsspm.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+                tsspm.POS_NO,
+                tsspm.BILL_NO,
+                tsspm.LINE_NO,
+                tsspm.LINE_SEQ_NO,
+                tsspm.SALE_YN,
                 (CASE WHEN tsspm.SALE_YN = 'Y' THEN 1 WHEN tsspm.SALE_YN = 'N' THEN -1 ELSE 0 END) AS SALE_CNT,
                 tsspm.SALE_AMT,
                 (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '110' AND  NMCODE_CD = tsspm.MCOUPN_CD) AS MCOUPN_CD,
@@ -205,7 +210,7 @@
                 AND tsspm.STORE_CD = #{storeCd}
                 AND tsspm.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 AND tms.STORE_CD = tsspm.STORE_CD
-                ORDER BY tsspm.STORE_CD, tsspm.SALE_DATE
+                ORDER BY tsspm.STORE_CD, tsspm.SALE_DATE, tsspm.POS_NO, tsspm.BILL_NO, tsspm.LINE_NO, tsspm.LINE_SEQ_NO
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>

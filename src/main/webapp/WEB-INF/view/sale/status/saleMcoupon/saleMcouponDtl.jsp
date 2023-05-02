@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="wjSaleMcouponDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:860px;height:500px;" fade-in="false" fade-out="false">
+<wj-popup control="wjSaleMcouponDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:870px;height:500px;" fade-in="false" fade-out="false">
     <div ng-controller="saleMcouponDtlCtrl">
 
         <%-- header --%>
@@ -36,14 +36,12 @@
                             <wj-flex-grid-column header="<s:message code="saleMcouponDtl.storeNm"/>" binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                         </c:if>
                         <wj-flex-grid-column header="<s:message code="saleMcouponDtl.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <c:if test="${sessionInfo.orgnFg == 'STORE'}">
-                            <wj-flex-grid-column header="<s:message code="saleMcouponDtl.posNo"/>" binding="posNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="saleMcouponDtl.billNo"/>" binding="billNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="saleMcouponDtl.lineNo"/>" binding="lineNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="saleMcouponDtl.lineSeqNo"/>" binding="lineSeqNo" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="saleMcouponDtl.saleYn"/>" binding="saleYn" data-map="saleYnDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                        </c:if>
-                        <wj-flex-grid-column header="<s:message code="saleMcouponDtl.saleCnt"/>" binding="saleCnt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="saleMcouponDtl.posNo"/>" binding="posNo" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="saleMcouponDtl.billNo"/>" binding="billNo" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="saleMcouponDtl.lineNo"/>" binding="lineNo" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="saleMcouponDtl.lineSeqNo"/>" binding="lineSeqNo" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="saleMcouponDtl.saleYn"/>" binding="saleYn" data-map="saleYnDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="saleMcouponDtl.saleCnt"/>" binding="saleCnt" width="65" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="saleMcouponDtl.saleAmt"/>" binding="saleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="saleMcouponDtl.mcoupnCd"/>" binding="mcoupnCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="saleMcouponDtl.mcoupnTermnlNo"/>" binding="mcoupnTermnlNo" width="135" align="center" is-read-only="true"></wj-flex-grid-column>

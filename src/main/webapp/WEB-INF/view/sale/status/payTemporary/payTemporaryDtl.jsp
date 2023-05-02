@@ -6,12 +6,11 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
-<wj-popup id="wjPayTemporaryDtlLayer" control="wjPayTemporaryDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:720px; height:500px;">
+<wj-popup id="wjPayTemporaryDtlLayer" control="wjPayTemporaryDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:870px; height:500px;">
   <div id="PayTemporaryDtlLayer" class="wj-dialog wj-dialog-columns" ng-controller="payTemporaryDtlCtrl">
 
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="PayTemporary.PayTemporaryDtl"/>
-      <span id="spanDtlTitle"></span>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
 
@@ -40,14 +39,12 @@
               <wj-flex-grid-column header="<s:message code="payTemporary.storeNm"/>" binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             </c:if>
             <wj-flex-grid-column header="<s:message code="payTemporary.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-            <c:if test="${sessionInfo.orgnFg == 'STORE'}">
-              <wj-flex-grid-column header="<s:message code="payTemporary.posNo"/>" binding="posNo" width="70" align="center" is-read-only="true" ></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="payTemporary.billNo"/>" binding="billNo" width="70" align="center" is-read-only="true" ></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="payTemporary.lineNo"/>" binding="lineNo" width="70" align="center" is-read-only="true" ></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="payTemporary.lineSeqNo"/>" binding="lineSeqNo" width="90" align="center" is-read-only="true" ></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="payTemporary.saleYn"/>" binding="saleYn" width="70" align="center" is-read-only="true" ></wj-flex-grid-column>
-            </c:if>
-            <wj-flex-grid-column header="<s:message code="payTemporary.saleCnt"/>" binding="saleCnt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="payTemporary.posNo"/>" binding="posNo" width="65" align="center" is-read-only="true" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="payTemporary.billNo"/>" binding="billNo" width="65" align="center" is-read-only="true" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="payTemporary.lineNo"/>" binding="lineNo" width="65" align="center" is-read-only="true" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="payTemporary.lineSeqNo"/>" binding="lineSeqNo" width="85" align="center" is-read-only="true" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="payTemporary.saleYn"/>" binding="saleYn" width="70" align="center" is-read-only="true" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="payTemporary.saleCnt"/>" binding="saleCnt" width="65" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="payTemporary.saleAmt"/>" binding="saleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           </wj-flex-grid>
         </div>
@@ -61,4 +58,5 @@
 <script type="text/javascript">
   var orgnFg = '${orgnFg}';
 </script>
+
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/payTemporary/payTemporaryDtl.js?ver=20230321.01" charset="utf-8"></script>
