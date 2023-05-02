@@ -1997,14 +1997,32 @@
         /* USE : TouchkeyMapper.getTouchKeyGrpCd */
         <choose>
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT LPAD( NVL(MAX(TUKEY_GRP_CD), 0) + 1, 2, '0') AS TUKEY_GRP_CD
-                FROM TB_HQ_TOUCH_KEY_CLASS
-                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                SELECT GRP_CD
+                FROM TB_CM_GROUP_CODE_TOUCHKEY_KIOSKKEYMAP
+                WHERE 1=1
+                AND SEQ = (
+                                SELECT
+                                MAX(B.SEQ)+1
+                                FROM TB_HQ_TOUCH_KEY_CLASS A,
+                                TB_CM_GROUP_CODE_TOUCHKEY_KIOSKKEYMAP B
+                                WHERE 1=1
+                                AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+                                AND B.GRP_CD (+)= A.TUKEY_GRP_CD
+                            )
             </when>
             <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT LPAD( NVL(MAX(TUKEY_GRP_CD), 0) + 1, 2, '0') AS TUKEY_GRP_CD
-                FROM TB_MS_TOUCH_KEY_CLASS
-                WHERE STORE_CD  = #{storeCd}
+                SELECT GRP_CD
+                FROM TB_CM_GROUP_CODE_TOUCHKEY_KIOSKKEYMAP
+                WHERE 1=1
+                AND SEQ = (
+                                SELECT
+                                MAX(B.SEQ)+1
+                                FROM TB_MS_TOUCH_KEY_CLASS A,
+                                TB_CM_GROUP_CODE_TOUCHKEY_KIOSKKEYMAP B
+                                WHERE 1=1
+                                AND A.STORE_CD = #{storeCd}
+                                AND B.GRP_CD (+)= A.TUKEY_GRP_CD
+                            )
             </when>
         </choose>
     </select>
