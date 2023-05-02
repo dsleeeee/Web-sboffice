@@ -141,7 +141,7 @@ app.controller('kioskKeyMapCopyCtrl', ['$scope', '$http', function ($scope, $htt
 }]);
 
 // 적용대상매장포스
-app.controller('kioskKeyMapCopy2Ctrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('kioskKeyMapCopy2Ctrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     angular.extend(this, new RootController('kioskKeyMapCopy2Ctrl', $scope, $http, false));
 
@@ -240,6 +240,9 @@ app.controller('kioskKeyMapCopy2Ctrl', ['$scope', '$http', function ($scope, $ht
             return false;
         }
 
+        $scope.stepCnt = 10;    // 한번에 DB에 저장할 숫자 세팅
+        $scope.progressCnt = 0; // 처리된 숫자
+
         var chkCount = 0;
         var chkTuMClsFg = 0;
         for (var i=0; i< $scope.flex.collectionView.itemCount; i++) {
@@ -279,13 +282,106 @@ app.controller('kioskKeyMapCopy2Ctrl', ['$scope', '$http', function ($scope, $ht
             }
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._save('/base/prod/kioskKeyMap/kioskKeyMap/saveKioskKeyMapStoreCopy.sb', params, function() {
+            /*$scope._save('/base/prod/kioskKeyMap/kioskKeyMap/saveKioskKeyMapStoreCopy.sb', params, function() {
                 // 적용대상매장 키오스크 포스 재조회
                 $scope.searchTargetStoreList();
-            });
+            });*/
+
+            $timeout(function () {
+                setTimeout(function () {
+                    // 키오스크키맵복사
+                    $scope.save(params);
+                }, 500);
+            }, 10);
 
         });
 
+    };
+
+    // 키오스크키맵복사
+    $scope.save = function(orgParams){
+
+        $scope.totalRows = orgParams.length;    // 체크 매장수
+        var params = [];
+
+        // 저장 시작이면 작업내역 로딩 팝업 오픈
+        if ($scope.progressCnt === 0) {
+            $timeout(function () {
+                $scope.excelUploadingPopup(true);
+                $("#progressCnt").html($scope.progressCnt);
+                $("#totalRows").html($scope.totalRows);
+            }, 10);
+        }
+
+        // stepCnt 만큼 데이터 DB에 저장
+        var loopCnt = (parseInt($scope.progressCnt) + parseInt($scope.stepCnt) > parseInt($scope.totalRows) ? parseInt($scope.totalRows) : parseInt($scope.progressCnt) + parseInt($scope.stepCnt));
+        for (var i = $scope.progressCnt; i < loopCnt; i++) {
+            params.push(orgParams[i]);
+        }
+
+        console.log("총 갯수 :" + $scope.totalRows);
+        console.log("진행 갯수 :" + $scope.progressCnt + "~" + (loopCnt - 1));
+        console.log("---------------------------------------------------------------------");
+
+        //가상로그인 session 설정
+        var sParam = {};
+        if(document.getElementsByName('sessionId')[0]){
+            sParam['sid'] = document.getElementsByName('sessionId')[0].value;
+        }
+
+        // ajax 통신 설정
+        $http({
+            method : 'POST', //방식
+            url    : '/base/prod/kioskKeyMap/kioskKeyMap/saveKioskKeyMapStoreCopy.sb', /* 통신할 URL */
+            data   : params, /* 파라메터로 보낼 데이터 : @requestBody */
+            params : sParam,
+            headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+        }).then(function successCallback(response) {
+            if ($scope._httpStatusCheck(response, true)) {
+                if (parseInt($scope.progressCnt) >= parseInt($scope.totalRows)) {
+                    // 작업내역 로딩 팝업 닫기
+                    $scope.excelUploadingPopup(false);
+                    // 적용대상매장 키오스크 포스 재조회
+                    $scope.searchTargetStoreList();
+                    // 저장되었습니다.
+                    $scope._popMsg(messages["cmm.saveSucc"]);
+                }
+            }
+        }, function errorCallback(response) {
+            $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
+            if (response.data.message) {
+                $scope._popMsg(response.data.message);
+            } else {
+                $scope._popMsg(messages['cmm.saveFail']);
+            }
+            return false;
+        }).then(function () {
+            // 'complete' code here
+            // 처리 된 숫자가 총 업로드할 수보다 작은 경우 다시 save 함수 호출
+            if (parseInt($scope.progressCnt) < parseInt($scope.totalRows)) {
+                // 처리된 숫자 변경
+                $scope.progressCnt = loopCnt;
+                // 팝업의 progressCnt 값 변경
+                $("#progressCnt").html($scope.progressCnt);
+                $scope.save(orgParams);
+            }
+        });
+    };
+
+    // 작업내역 로딩 팝업
+    $scope.excelUploadingPopup = function (showFg) {
+        if (showFg) {
+            // 팝업내용 동적 생성
+            var innerHtml = '<div class=\"wj-popup-loading\"><p class=\"bk\">' + messages['touchKey.loading.msg'] + '</p>';
+            innerHtml += '<div class="mt5 txtIn"><span class="bk" id="progressCnt">0</span>/<span class="bk" id="totalRows">0</span> 개 진행 중...</div>';
+            innerHtml += '<p><img src=\"/resource/solbipos/css/img/loading.gif\" alt=\"\" /></p></div>';
+            // html 적용
+            $scope._loadingPopup.content.innerHTML = innerHtml;
+            // 팝업 show
+            $scope._loadingPopup.show(true);
+        } else {
+            $scope._loadingPopup.hide(true);
+        }
     };
 
     // 확장조회 숨김/보임
