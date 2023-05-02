@@ -599,7 +599,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         String currentDt = currentDateTimeString();
 
         // 본사 환경설정값 저장 (매장 일괄 적용 시, 항상 본사 환경설정도 update 해준다)
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
+        /*if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
 
             KioskKeyMapVO hqKioskKeyMapVO = new KioskKeyMapVO();
             hqKioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -613,9 +613,9 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             hqKioskKeyMapVO.setModId(sessionInfoVO.getUserId());
 
             // 20230406 키맵적용 기능 중 TB_HQ_ENVST 4068,4069 저장하는 로직 제거
-//            result = kioskKeyMapMapper.insertHqKioskEnv(hqKioskKeyMapVO);
-//            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
+            //result = kioskKeyMapMapper.insertHqKioskEnv(hqKioskKeyMapVO);
+            //if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }*/
 
         // 매장 키오스크 포스 환경설정값 일괄 저장
         for ( KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
