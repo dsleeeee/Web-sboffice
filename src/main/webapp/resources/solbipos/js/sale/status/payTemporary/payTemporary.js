@@ -1,12 +1,21 @@
+/****************************************************************
+ *
+ * 파일명 : payTemporary.js
+ * 설  명 : 가승인-상품권결제차액 JavaScript
+ *
+ *    수정일      수정자      Version        Function 명
+ * ------------  ---------   -------------  --------------------
+ * 2023.03.20     권지현      1.0
+ *
+ * **************************************************************/
 /**
  * get application
  */
 var app = agrid.getApp();
 
-
 app.controller('payTemporaryCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('payTemporaryCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('payTemporaryCtrl', $scope, $http, false));
 
    var startDate = wcombo.genDateVal("#srchDayStartDate", gvStartDate);
    var endDate   = wcombo.genDateVal("#srchDayEndDate", gvEndDate);
@@ -24,13 +33,9 @@ app.controller('payTemporaryCtrl', ['$scope', '$http', '$timeout', function ($sc
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-
     $scope.brandDataMap = new wijmo.grid.DataMap(momsHqBrandCdComboList, 'value', 'name');
     $scope.momsTeamDataMap = new wijmo.grid.DataMap(momsTeamComboList, 'value', 'name');
     $scope.momsAcShopDataMap = new wijmo.grid.DataMap(momsAcShopComboList, 'value', 'name');
-
-    // picker 사용시 호출 : 미사용시 호출안함
-    $scope._makePickColumns("payTemporaryCtrl");
 
     // add the new GroupRow to the grid's 'columnFooters' panel
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
@@ -63,7 +68,6 @@ app.controller('payTemporaryCtrl', ['$scope', '$http', '$timeout', function ($sc
     });
   };
 
-
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("payTemporaryCtrl", function (event, data) {
     $scope.searchDayList();
@@ -71,10 +75,8 @@ app.controller('payTemporaryCtrl', ['$scope', '$http', '$timeout', function ($sc
     event.preventDefault();
   });
 
-
   // 리스트 조회
   $scope.searchDayList = function () {
-
     var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
     var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
     var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
@@ -119,8 +121,7 @@ app.controller('payTemporaryCtrl', ['$scope', '$http', '$timeout', function ($sc
     console.log(params);
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/sale/status/payTemporary/payTemporary/getPayTemporaryList.sb", params, function (){
-    });
+    $scope._inquiryMain("/sale/status/payTemporary/payTemporary/getPayTemporaryList.sb", params, function (){});
   };
 
   // 확장조회 숨김/보임
@@ -141,7 +142,6 @@ app.controller('payTemporaryCtrl', ['$scope', '$http', '$timeout', function ($sc
 
   // 엑셀 다운로드
   $scope.excelDownloadInfo = function () {
-
     var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
     var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
     var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
@@ -184,10 +184,10 @@ app.controller('payTemporaryCtrl', ['$scope', '$http', '$timeout', function ($sc
     }
 
     $scope._broadcast('payTemporaryExcelCtrl', params);
-
   };
 
 }]);
+
 
 /**
  *  엑셀다운로드 그리드 생성
@@ -199,7 +199,6 @@ app.controller('payTemporaryExcelCtrl', ['$scope', '$http', '$timeout', function
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-
       $scope.brandDataMap = new wijmo.grid.DataMap(momsHqBrandCdComboList, 'value', 'name');
       $scope.momsTeamDataMap = new wijmo.grid.DataMap(momsTeamComboList, 'value', 'name');
       $scope.momsAcShopDataMap = new wijmo.grid.DataMap(momsAcShopComboList, 'value', 'name');
@@ -208,7 +207,6 @@ app.controller('payTemporaryExcelCtrl', ['$scope', '$http', '$timeout', function
       s.columnFooters.rows.push(new wijmo.grid.GroupRow());
       // add a sigma to the header to show that this is a summary row
       s.bottomLeftCells.setCellData(0, 0, '합계');
-
     };
 
     // 다른 컨트롤러의 broadcast 받기

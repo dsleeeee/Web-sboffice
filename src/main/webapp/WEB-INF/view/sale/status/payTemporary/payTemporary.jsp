@@ -295,8 +295,6 @@
   <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/payTemporary/payTemporary.js?ver=20230329.04" charset="utf-8"></script>
-
 <script type="text/javascript">
   var orgnFg = "${orgnFg}";
   var storeCd = "${storeCd}";
@@ -312,7 +310,9 @@
   var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
-<%-- 상세 레이어 --%>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/payTemporary/payTemporary.js?ver=20230329.04" charset="utf-8"></script>
+
+<%-- 가승인-상품권결제차액 상세 팝업 --%>
 <c:import url="/WEB-INF/view/sale/status/payTemporary/payTemporaryDtl.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>

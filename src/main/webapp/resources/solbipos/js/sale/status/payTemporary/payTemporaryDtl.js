@@ -1,3 +1,13 @@
+/****************************************************************
+ *
+ * 파일명 : payTemporaryDtl.js
+ * 설  명 : 가승인-상품권결제차액 상세 팝업 JavaScript
+ *
+ *    수정일      수정자      Version        Function 명
+ * ------------  ---------   -------------  --------------------
+ * 2023.03.20     권지현      1.0
+ *
+ * **************************************************************/
 /**
  * get application
  */
@@ -5,18 +15,17 @@ var app = agrid.getApp();
 
 /** 모바일페이 상세 내역 controller */
 app.controller('payTemporaryDtlCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('payTemporaryDtlCtrl', $scope, $http, true));
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-
     // add the new GroupRow to the grid's 'columnFooters' panel
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
     s.bottomLeftCells.setCellData(0, 0, '합계');
   };
-
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("payTemporaryDtlCtrl", function (event, data) {
@@ -25,7 +34,6 @@ app.controller('payTemporaryDtlCtrl', ['$scope', '$http', '$timeout', function (
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
-
 
   // 리스트 조회
   $scope.searchPayTemporaryDtlList = function (data) {
@@ -58,7 +66,7 @@ app.controller('payTemporaryDtlCtrl', ['$scope', '$http', '$timeout', function (
         includeColumns: function (column) {
           return column.visible;
         }
-      }, messages["PayTemporary.PayTemporaryDtl"] + '_' + getCurDateTime() + '.xlsx', function () {
+      }, messages["payTemporary.payTemporaryDtl"] + '_' + getCurDateTime() + '.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

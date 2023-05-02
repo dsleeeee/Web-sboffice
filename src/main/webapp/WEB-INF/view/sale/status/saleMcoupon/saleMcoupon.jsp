@@ -7,8 +7,6 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
-<c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
-<c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 
 <div class="subCon">
 

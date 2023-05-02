@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--
+    PayTemporary.xml
+    가승인-상품권결제차액
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2023.03.20     최초작성
+-->
 <mapper namespace="kr.co.solbipos.sale.status.payTemporary.service.impl.PayTemporaryMapper">
 
-    <!-- 가승인-상품권결제차액 리스트 조회 -->
+    <!-- 가승인-상품권결제차액 조회 -->
     <!--
         TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY, TB_SL_SALE_HDR_DC
         PARAM    : payTemporaryVO
@@ -89,7 +96,11 @@
     <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
-
+    <!-- 가승인-상품권결제차액 - 엑셀다운로드 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
     <select id="getPayTemporaryExcelList" parameterType="payTemporaryVO" resultType="DefaultMap">
         /* USE : PayTemporaryMapper.getPayTemporaryExcelList */
         SELECT  tms.BRANCH_CD
@@ -164,7 +175,6 @@
         </if>
     </select>
 
-
     <!-- 가승인-상품권결제차액 상세 리스트 조회 -->
     <!--
         TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY, TB_SL_SALE_HDR_DC
@@ -216,4 +226,5 @@
             </when>
         </choose>
     </select>
+
 </mapper>

@@ -10,16 +10,14 @@
   <div id="PayTemporaryDtlLayer" class="wj-dialog wj-dialog-columns" ng-controller="payTemporaryDtlCtrl">
 
     <div class="wj-dialog-header wj-dialog-header-font">
-      <s:message code="PayTemporary.PayTemporaryDtl"/>
+      <s:message code="payTemporary.payTemporaryDtl"/>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
 
     <div class="wj-dialog-body sc2">
       <div class="oh sb-select dkbr">
         <%-- 엑셀다운로드 --%>
-        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()">
-          <s:message code="cmm.excel.down" />
-        </button>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
       </div>
       <div class="w100 mt10">
         <%--위즈모 테이블--%>
@@ -59,4 +57,4 @@
   var orgnFg = '${orgnFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/payTemporary/payTemporaryDtl.js?ver=20230321.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/payTemporary/payTemporaryDtl.js?ver=20230321.02" charset="utf-8"></script>
