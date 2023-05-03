@@ -17,7 +17,7 @@ var app = agrid.getApp();
 app.controller('payTemporaryDtlCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('payTemporaryDtlCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('payTemporaryDtlCtrl', $scope, $http, false));
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
