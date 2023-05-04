@@ -384,7 +384,7 @@ app.controller('dayProdStoreExcelCtrl', ['$scope', '$http', '$timeout', function
                     includeColumns      : function (column) {
                         return column.visible;
                     }
-                }, "일별상품매출현황(매장별)_"+getCurDateTime()+'.xlsx', function () {
+                }, "일별상품매출현황(매장별)_" + params.startDate + "_" + params.endDate + getCurDateTime()+'.xlsx', function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);

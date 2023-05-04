@@ -41,8 +41,12 @@
                         </c:if>
                     </c:if>
                     <tr>
+                        <th><s:message code="touchKey.layer.srchStoreCd" /></th>
+                        <td>
+                            <input type="text" class="sb-input w100" id="srchStoreCd" ng-model="storeCd" />
+                        </td>
                         <th><s:message code="touchKey.layer.srchStoreNm" /></th>
-                        <td colspan="3">
+                        <td>
                             <input type="text" class="sb-input w100" id="srchStoreNm" ng-model="storeNm" />
                         </td>
                     </tr>

@@ -6,12 +6,10 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 
 <style>
-#kioskKeyMapViewLayer table thead tr th div { height:10px;width:102px;text-align:center; }
-#thPre, #thNext { background-color: #d5d5d5 }
-#kioskKeyMapViewLayer table tbody tr td div { height:120px;width:164px;text-align:center; }
+#thPre, #thNext { background-color: #d5d5d5; width: 28px; }
+#kioskKeyMapViewLayer table thead tr th div { height: 10px; width: 102px; text-align: center; }
+#kioskKeyMapViewLayer table tbody tr td div { height: 120px; width: 160px; text-align: center; }
 #kioskKeyMapViewLayer table thead tr th, table tbody tr td { border:1px solid #ddd; }
-
-
 </style>
 
 <%-- 팝업 부분 설정 - width 는 강제 해주어야함.. 해결방법? 확인 필요 : 20180829 노현수 --%>
@@ -98,4 +96,4 @@
         </div>
     </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapView.js?ver=20250427.01" charset="utf-8">1</script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapView.js?ver=20250427.02" charset="utf-8">1</script>

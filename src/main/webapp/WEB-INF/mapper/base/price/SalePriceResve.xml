@@ -1043,12 +1043,15 @@
                       ) tmpsp
                 WHERE 1=1
                   AND tmp.STORE_CD = #{storeCd}
-                <if test='startDate != null and startDate != ""'>
-                    AND tmpsp.START_DATE <![CDATA[>=]]> #{startDate}
+                <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
+                    AND tmpsp.START_DATE BETWEEN #{startDate} AND #{endDate}
                 </if>
-                <if test='endDate != null and endDate != ""'>
-                    AND tmpsp.END_DATE <![CDATA[<= ]]> #{endDate}
-                </if>
+<!--                <if test='startDate != null and startDate != ""'>-->
+<!--                    AND tmpsp.START_DATE <![CDATA[>=]]> #{startDate}-->
+<!--                </if>-->
+<!--                <if test='endDate != null and endDate != ""'>-->
+<!--                    AND tmpsp.END_DATE <![CDATA[<= ]]> #{endDate}-->
+<!--                </if>-->
                 <if test='prodClassCd != null and prodClassCd != ""'>
                   AND tmp.PROD_CLASS_CD IN (
                                                     SELECT PROD_CLASS_CD

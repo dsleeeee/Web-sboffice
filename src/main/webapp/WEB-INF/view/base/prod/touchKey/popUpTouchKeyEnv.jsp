@@ -23,20 +23,20 @@
                     <col class="w30" />
                 </colgroup>
                 <tbody>
-                <c:if test="${orgnFg == 'HQ'}">
+                <c:if test="${sessionInfo.orgnFg == 'HQ'}">
                 <tr>
                     <th><s:message code="kioskKeyMap.storeCd" /></th>
                     <td>
-                        <input type="text" id="srchEnvStoreCd"/>
+                        <input type="text" id="srchEnvStoreCd" ng-model="storeCd"/>
                     </td>
                     <th><s:message code="kioskKeyMap.storeNm" /></th>
                     <td>
-                        <input type="text" id="srchEnvStoreNm"/>
+                        <input type="text" id="srchEnvStoreNm" ng-model="storeNm"/>
                     </td>
                 </tr>
                 </c:if>
                 <tr>
-                    <c:if test="${orgnFg == 'HQ'}">
+                    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
                         <%-- 매장상태구분 --%>
                         <th><s:message code="kioskKeyMap.sysStatFg" /></th>
                         <td>
@@ -303,4 +303,4 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpTouchKeyEnv.js?ver=20230428.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpTouchKeyEnv.js?ver=20230428.04" charset="utf-8"></script>

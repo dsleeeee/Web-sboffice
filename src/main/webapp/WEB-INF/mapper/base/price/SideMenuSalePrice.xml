@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SideMenuSalePrice.xml
+    가격예약
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2022.04.05     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.price.sideMenuSalePrice.service.impl.SideMenuSalePriceMapper">
+
+    <!-- 가격예약(본사판매가) 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE
+        PARAM    : sideMenuSalePriceVO
+        COMMENTS : 가격예약(본사판매가) 리스트 조회
+    -->
+    <select id="getSideMenuSalePriceList" parameterType="sideMenuSalePriceVO" resultType="DefaultMap">
+        /* SideMenuSalePriceMapper.getSideMenuSalePriceList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT 	#{storeCd} AS STORE_CD
+        ,       tmpsg.SDSEL_GRP_CD
+        ,		tmpsg.SDSEL_GRP_NM
+        ,		DECODE(NVL(tmpsg.FIX_PROD_FG, '0'), '0', '선택', '1', '고정') AS GRP_FIX_PROD_FG
+        ,		DECODE(NVL(tmpsg.SDSEL_TYPE_FG, 'C'), 'C', '세트', 'S', '싱글세트') AS SDSEL_TYPE_FG
+        ,		tmpsc.SDSEL_CLASS_CD
+        ,		tmpsc.SDSEL_CLASS_NM
+        ,		tmpsc.SDSEL_QTY
+        ,		DECODE(NVL(tmpsc.REQUIRE_YN, 'N'), 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
+        ,       FN_GET_PROD_CLASS_CD_NM_STR(#{storeCd}, tmp.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+        ,		tmpsp.PROD_CD
+        ,		tmp.PROD_NM
+        ,       tmpsp.ADD_PROD_UPRC
+        ,       tmpsp.ADD_PROD_UPRC AS SALE_UPRC
+        ,       tmpsp.ADD_PROD_QTY
+        ,       DECODE(NVL(tmpsp.FIX_PROD_FG, '0'), '0', '선택', '1', '고정') AS FIX_PROD_FG
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	TB_MS_PRODUCT_SDSEL_GROUP tmpsg
+        ,		TB_MS_PRODUCT_SDSEL_CLASS tmpsc
+        ,		TB_MS_PRODUCT_SDSEL_PROD tmpsp
+        ,		TB_MS_PRODUCT tmp
+        WHERE 	tmpsg.STORE_CD = #{storeCd}
+        AND 	tmpsg.STORE_CD = tmpsc.STORE_CD (+)
+        AND 	tmpsg.SDSEL_GRP_CD = tmpsc.SDSEL_GRP_CD (+)
+        AND 	tmpsc.STORE_CD = tmpsp.STORE_CD (+)
+        AND 	tmpsc.SDSEL_CLASS_CD = tmpsp.SDSEL_CLASS_CD (+)
+        AND 	tmpsp.STORE_CD = tmp.STORE_CD (+)
+        AND 	tmpsp.PROD_CD = tmp.PROD_CD (+)
+        <if test="sdselGrpCd != null and sdselGrpCd != ''">
+            AND tmpsg.SDSEL_GRP_CD LIKE '%'||#{sdselGrpCd}||'%'
+        </if>
+        <if test="sdselGrpNm != null and sdselGrpNm != ''">
+            AND tmpsg.SDSEL_GRP_NM LIKE '%'||#{sdselGrpNm}||'%'
+        </if>
+        <if test="sdselClassCd != null and sdselClassCd != ''">
+            AND tmpsc.SDSEL_CLASS_CD LIKE '%'||#{sdselClassCd}||'%'
+        </if>
+        <if test="sdselClassNm != null and sdselClassNm != ''">
+            AND tmpsc.SDSEL_CLASS_NM LIKE '%'||#{sdselClassNm}||'%'
+        </if>
+        <if test="prodCd != null and prodCd != ''">
+            AND tmpsp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test="prodNm != null and prodNm != ''">
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND tmp.PROD_CLASS_CD IN (
+                                        SELECT  PROD_CLASS_CD
+                                        FROM    TB_MS_PRODUCT_CLASS
+                                        WHERE   STORE_CD = #{storeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                                    )
+        </if>
+        <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+            AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 선택한 상품브랜드가 있을 때
+        </if>
+        <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+            <if test='userProdBrands != null and userProdBrands != ""'>
+                -- 선택한 상품브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                AND tmp.HQ_BRAND_CD IN
+                <foreach collection="userProdBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        AND     tmpsp.USE_YN = 'Y'
+        ORDER BY tmpsg.SDSEL_GRP_CD, tmpsc.DISP_SEQ, tmpsp.DISP_SEQ
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 게시판 공개대상 update -->
+    <!--
+        TABLE    : TB_WB_BOARD_PART_STORE
+        COMMENTS : 게시판 일부 매장
+    -->
+    <update id="saveSideMenuSalePrice" parameterType="SideMenuSalePriceVO">
+        /* SideMenuSalePriceMapper.saveSideMenuSalePrice */
+        UPDATE  TB_MS_PRODUCT_SDSEL_PROD
+        SET     ADD_PROD_UPRC = #{saleUprc}
+        ,       MOD_DT = #{modDt}
+        ,       MOD_ID = #{modId}
+        WHERE   STORE_CD = #{storeCd}
+        AND     SDSEL_CLASS_CD = #{sdselClassCd}
+        AND     PROD_CD = #{prodCd}
+    </update>
+
+</mapper>

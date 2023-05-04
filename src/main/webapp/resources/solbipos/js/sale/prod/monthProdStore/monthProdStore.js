@@ -418,7 +418,7 @@ app.controller('monthProdStoreExcelCtrl', ['$scope', '$http', '$timeout', functi
                     includeColumns      : function (column) {
                         return column.visible;
                     }
-                }, "월별상품매출현황(매장별)_"+getCurDateTime()+'.xlsx', function () {
+                }, "월별상품매출현황(매장별)_" + params.startMonth + "_" + params.endMonth + getCurDateTime()+'.xlsx', function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);

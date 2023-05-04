@@ -1057,7 +1057,9 @@ public class TouchKeyServiceImpl implements TouchKeyService {
 
         touchKeyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        touchKeyVO.setStoreCd(sessionInfoVO.getStoreCd());
+        if(sessionInfoVO.getOrgnFg().equals(OrgnFg.STORE)){
+            touchKeyVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
 
         if(touchKeyVO.getMomsEnvstVal().equals("1") && sessionInfoVO.getOrgnFg().equals(OrgnFg.HQ)) {
             // 매장브랜드 '전체' 일때
