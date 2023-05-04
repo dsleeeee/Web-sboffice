@@ -1519,6 +1519,9 @@
         AND     tcm_sys_stat_fg.NMCODE_GRP_CD = '005'
         AND     tms.CLS_FG = tcm_cls_stat_fg.NMCODE_CD (+)
         AND     tcm_cls_stat_fg.NMCODE_GRP_CD = '001'
+        <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
+        </if>
         <if test='storeNm != null and storeNm != ""'>
             AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
         </if>
