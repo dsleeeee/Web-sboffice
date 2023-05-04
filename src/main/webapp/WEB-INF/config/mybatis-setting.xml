@@ -849,6 +849,9 @@
     <typeAlias alias="apprCoprtnVO" type="kr.co.solbipos.sale.status.appr.coprtn.service.ApprCoprtnVO"/>
     <typeAlias alias="apprAcquireVO" type="kr.co.solbipos.sale.status.appr.acquire.service.ApprAcquireVO"/>
 
+    <!-- 매출관리 > 승인현황 > 비매출카드상세 -->
+    <typeAlias alias="nonSaleCardVO" type="kr.co.solbipos.sale.status.nonSaleCard.service.NonSaleCardVO"/>
+
 
     <!-- 광운대 > 신용카드입금관리 > 신용카드입금관리 -->
     <typeAlias alias="cardCreditVO" type="kr.co.solbipos.sale.card.cardCredit.service.CardCreditVO"/>

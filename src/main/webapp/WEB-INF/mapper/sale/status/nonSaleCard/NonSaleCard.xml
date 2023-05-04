@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    NonSaleCard.xml
+    비매출카드상세
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2023.05.03     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.status.nonSaleCard.service.impl.NonSaleCardMapper">
+
+    <!-- 비매출카드상세 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getNonSaleCardList" parameterType="NonSaleCardVO" resultType="DefaultMap">
+        /* NonSaleCardMapper.getNonSaleCardList */
+        SELECT
+        tnnpc.STORE_CD,
+        tms.STORE_NM,
+        TO_CHAR(TO_DATE(tnnpc.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        tnnpc.POS_NO,
+        tnnpc.BILL_NO,
+        DECODE(tnnpc.SALE_YN, 'Y', '승인', 'N', '취소') AS APPR_PROC,
+        DECODE(tnnpc.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG,
+        tnnpc.ACQUIRE_NM,
+        DECODE(tnnpc.CARD_TYPE_FG, 1, '일반', 2, 'PAYON', 3, 'APP', 4, 'UNION', 5, 'PAYCO') AS CARD_TYPE_FG,
+        tnnpc.CARD_NO,
+        tnnpc.SALE_AMT,
+        tnnpc.TIP_AMT,
+        tnnpc.VAT_AMT,
+        DECODE(tnnpc.INST_CNT, 0, '일시불', '할부') AS INST_CNT_NM,
+        tnnpc.INST_CNT,
+        TO_CHAR(TO_DATE(tnnpc.APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS APPR_DT,
+        tnnpc.APPR_NO,
+        (DECODE(tnnpc.SALE_YN, 'Y', 1, 'N', -1) * tnnpc.APPR_AMT) AS APPR_AMT
+        FROM TB_NS_NONSALE_PAY_CARD tnnpc,
+        TB_MS_STORE tms
+        WHERE 1=1
+        AND tnnpc.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tnnpc.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tnnpc.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND tnnpc.STORE_CD||'||'||tnnpc.POS_NO IN
+            <foreach collection="arrPosNo" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='saleYn != null and saleYn != ""'>
+            AND tnnpc.SALE_YN = #{saleYn}
+        </if>
+        <if test='apprProcFg != null and apprProcFg != ""'>
+            AND tnnpc.APPR_PROC_FG = #{apprProcFg}
+        </if>
+        AND tms.STORE_CD = tnnpc.STORE_CD
+        ORDER BY tnnpc.STORE_CD, tnnpc.SALE_DATE, tnnpc.POS_NO, tnnpc.BILL_NO
+    </select>
+
+</mapper>
