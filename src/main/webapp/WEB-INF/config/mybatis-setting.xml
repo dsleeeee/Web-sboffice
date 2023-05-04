@@ -355,6 +355,8 @@
     <typeAlias alias="salePriceHistoryVO" type="kr.co.solbipos.base.price.salePriceHistory.service.SalePriceHistoryVO"/>
     <!-- 기초관리 > 가격관리 > 가격에약 -->
     <typeAlias alias="salePriceResveVO" type="kr.co.solbipos.base.price.salePriceResve.service.SalePriceResveVO"/>
+    <!-- 기초관리 > 가격관리 > 매장별구성상품가격변경 -->
+    <typeAlias alias="sideMenuSalePriceVO" type="kr.co.solbipos.base.price.sideMenuSalePrice.service.SideMenuSalePriceVO"/>
     <!--
         <typeAlias alias="chgBatchVO" type="kr.co.solbipos.base.prod.chgbatch.service.ChgBatchVO"/>
         <typeAlias alias="cornerVO" type="kr.co.solbipos.base.prod.corner.service.CornerVO"/>
