@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 
-<div class="subCon" ng-controller="payTemporaryCtrl">
+<div class="subCon" ng-controller="payTemporaryCtrl" id="payTemporaryView" style="display: none;">
   <div class="searchBar">
     <a href="#" class="open fl">${menuNm}</a>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -294,21 +294,6 @@
   </div>
   <%--//페이지 리스트--%>
 </div>
-
-<script type="text/javascript">
-  var orgnFg = "${orgnFg}";
-  var storeCd = "${storeCd}";
-
-  // List 형식("" 안붙임)
-  var momsHqBrandCdComboList = ${momsHqBrandCdComboList};
-  var branchCdComboList = ${branchCdComboList};
-  var momsTeamComboList = ${momsTeamComboList};
-  var momsAcShopComboList = ${momsAcShopComboList};
-  var momsAreaFgComboList = ${momsAreaFgComboList};
-  var momsCommercialComboList = ${momsCommercialComboList};
-  var momsShopTypeComboList = ${momsShopTypeComboList};
-  var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
-</script>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/payTemporary/payTemporary.js?ver=20230329.04" charset="utf-8"></script>
 

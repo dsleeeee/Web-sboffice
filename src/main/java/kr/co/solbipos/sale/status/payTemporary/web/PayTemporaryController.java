@@ -27,7 +27,6 @@ import java.util.List;
 
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
-
 /**
  * @Class Name : PayTemporaryController.java
  * @Description : 맘스터치 > 매출분석2 > 가승인-상품권결제차액
@@ -183,11 +182,11 @@ public class PayTemporaryController {
         }
         model.addAttribute("branchCdComboList", branchCdComboListAll);
 
-        return "sale/status/payTemporary/payTemporary";
+        return "sale/status/payTemporary/payTemporaryTab";
     }
 
     /**
-     * 조회
+     * 가승인-상품권결제차액 탭 - 조회
      * @param   request
      * @param   response
      * @param   model
@@ -208,7 +207,7 @@ public class PayTemporaryController {
     }
 
     /**
-     * 엑셀 다운로드 조회
+     * 가승인-상품권결제차액 탭 - 엑셀 다운로드 조회
      * @param   request
      * @param   response
      * @param   model
@@ -229,7 +228,7 @@ public class PayTemporaryController {
     }
 
     /**
-     * 상세 조회
+     * 가승인-상품권결제차액 탭 - 팝업 상세 조회
      * @param   request
      * @param   response
      * @param   model
@@ -247,5 +246,51 @@ public class PayTemporaryController {
         List<DefaultMap<String>> list = payTemporaryService.getPayTemporaryDtlList(payTemporaryVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, payTemporaryVO);
+    }
+
+    /**
+     * 가승인-상품권결제차액 상세내역 탭 - 조회
+     *
+     * @param payTemporaryVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 05. 03.
+     */
+    @RequestMapping(value = "/payTemporaryGift/getPayTemporaryGiftList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPayTemporaryGiftList(PayTemporaryVO payTemporaryVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = payTemporaryService.getPayTemporaryGiftList(payTemporaryVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, payTemporaryVO);
+    }
+
+    /**
+     * 가승인-상품권결제차액 상세내역 탭 - 엑셀다운로드 조회
+     *
+     * @param payTemporaryVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 05. 03.
+     */
+    @RequestMapping(value = "/payTemporaryGift/getPayTemporaryGiftExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPayTemporaryGiftExcelList(PayTemporaryVO payTemporaryVO, HttpServletRequest request,
+                                          HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = payTemporaryService.getPayTemporaryGiftExcelList(payTemporaryVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, payTemporaryVO);
     }
 }

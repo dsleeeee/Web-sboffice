@@ -228,7 +228,7 @@
             <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
                 <wj-flex-grid
                         autoGenerateColumns="false"
-                        control="excelFlex"
+                        control="flex"
                         initialized="initGrid(s,e)"
                         sticky-headers="true"
                         selection-mode="Row"
