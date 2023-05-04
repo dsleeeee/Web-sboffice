@@ -11,7 +11,7 @@
 -->
 <mapper namespace="kr.co.solbipos.sale.status.payTemporary.service.impl.PayTemporaryMapper">
 
-    <!-- 가승인-상품권결제차액 조회 -->
+    <!-- 가승인-상품권결제차액 탭 - 조회 -->
     <!--
         TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY, TB_SL_SALE_HDR_DC
         PARAM    : payTemporaryVO
@@ -96,7 +96,7 @@
     <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
-    <!-- 가승인-상품권결제차액 - 엑셀다운로드 조회 -->
+    <!-- 가승인-상품권결제차액 탭 - 엑셀다운로드 조회 -->
     <!--
         TABLE    :
         COMMENTS :
@@ -175,7 +175,7 @@
         </if>
     </select>
 
-    <!-- 가승인-상품권결제차액 상세 리스트 조회 -->
+    <!-- 가승인-상품권결제차액 탭 - 팝업 상세 리스트 조회 -->
     <!--
         TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY, TB_SL_SALE_HDR_DC
         PARAM    : payTemporaryVO
@@ -225,6 +225,149 @@
                 BY 		tsspt.SALE_DATE, tsspt.POS_NO, tsspt.BILL_NO, tsspt.LINE_NO, tsspt.LINE_SEQ_NO
             </when>
         </choose>
+    </select>
+
+    <!-- 가승인-상품권결제차액 상세내역 탭 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getPayTemporaryGiftList" parameterType="payTemporaryVO" resultType="DefaultMap">
+        /* PayTemporaryMapper.getPayTemporaryGiftList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        tsspt.STORE_CD,
+        tms.STORE_NM,
+        TO_CHAR(TO_DATE(tsspt.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        tsspt.POS_NO,
+        tsspt.BILL_NO,
+        tsspt.LINE_NO,
+        tsspt.LINE_SEQ_NO,
+        tsspt.SALE_YN,
+        (CASE WHEN tsspt.SALE_YN = 'Y' THEN 1 WHEN tsspt.SALE_YN = 'N' THEN -1 ELSE 0 END) AS SALE_CNT,
+        tsspt.SALE_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_SL_SALE_PAY_TEMPORARY tsspt,
+        TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi
+        WHERE 1=1
+        AND tsspt.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsspt.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        AND tsspt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tsspt.TEMPORARY_PAY_CD = '98'
+        AND tms.HQ_OFFICE_CD = tsspt.HQ_OFFICE_CD
+        AND tms.STORE_CD = tsspt.STORE_CD
+        AND tmsi.STORE_CD (+)= tsspt.STORE_CD
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        ORDER BY tsspt.STORE_CD, tsspt.SALE_DATE, tsspt.POS_NO, tsspt.BILL_NO, tsspt.LINE_NO, tsspt.LINE_SEQ_NO
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 가승인-상품권결제차액 상세내역 탭 - 엑셀다운로드 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getPayTemporaryGiftExcelList" parameterType="payTemporaryVO" resultType="DefaultMap">
+        /* PayTemporaryMapper.getPayTemporaryGiftExcelList */
+        SELECT
+        tsspt.STORE_CD,
+        tms.STORE_NM,
+        TO_CHAR(TO_DATE(tsspt.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        tsspt.POS_NO,
+        tsspt.BILL_NO,
+        tsspt.LINE_NO,
+        tsspt.LINE_SEQ_NO,
+        tsspt.SALE_YN,
+        (CASE WHEN tsspt.SALE_YN = 'Y' THEN 1 WHEN tsspt.SALE_YN = 'N' THEN -1 ELSE 0 END) AS SALE_CNT,
+        tsspt.SALE_AMT
+        FROM TB_SL_SALE_PAY_TEMPORARY tsspt,
+        TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi
+        WHERE 1=1
+        AND tsspt.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsspt.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        AND tsspt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tsspt.TEMPORARY_PAY_CD = '98'
+        AND tms.HQ_OFFICE_CD = tsspt.HQ_OFFICE_CD
+        AND tms.STORE_CD = tsspt.STORE_CD
+        AND tmsi.STORE_CD (+)= tsspt.STORE_CD
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        ORDER BY tsspt.STORE_CD, tsspt.SALE_DATE, tsspt.POS_NO, tsspt.BILL_NO, tsspt.LINE_NO, tsspt.LINE_SEQ_NO
     </select>
 
 </mapper>
