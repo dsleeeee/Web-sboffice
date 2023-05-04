@@ -156,4 +156,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/nonSaleCard/nonSaleCard.js?ver=20230412.09" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/nonSaleCard/nonSaleCard.js?ver=20230504.01" charset="utf-8"></script>
