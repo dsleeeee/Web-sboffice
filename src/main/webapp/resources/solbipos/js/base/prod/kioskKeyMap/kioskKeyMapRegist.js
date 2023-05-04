@@ -607,6 +607,7 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
                     }
 
                     $scope._setComboData("tuClsType", comboArray);
+                    $scope._setComboData("tuClsTypeView", comboArray);
                     if(orgnFg === "HQ") {
                         $scope._setComboData("applyTuClsType", comboArray);
                         $scope._setComboData("envTuClsType", comboArray);

@@ -25,22 +25,22 @@
             <c:if test="${orgnFg == 'STORE'}">
                 <tr>
                     <%-- 포스번호 --%>
-                    <th><s:message code="kioskKeyMap.posNo" /></th>
-                    <td colspan="3">
-                        <div class="sb-select" style="width:200px; float:left;">
-                            <wj-combo-box
-                                    id="posNo"
-                                    ng-model="posNo"
-                                    items-source="_getComboData('posNo')"
-                                    display-member-path="name"
-                                    selected-value-path="value"
-                                    is-editable="false"
-                                    control="posNoCombo"
-                                    selected-index-changed="setTuClsType(s)">
-                            </wj-combo-box>
-                        </div>
-                    </td>
-                </tr>
+                <th><s:message code="kioskKeyMap.posNo" /></th>
+                <td colspan="3">
+                    <div class="sb-select" style="width:200px; float:left;">
+                        <wj-combo-box
+                                id="posNo"
+                                ng-model="posNo"
+                                items-source="_getComboData('posNo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                control="posNoCombo"
+                                selected-index-changed="setTuClsType(s)">
+                        </wj-combo-box>
+                    </div>
+                </td>
+            </tr>
             </c:if>
             <tr>
                 <%-- 키맵그룹 --%>
@@ -263,8 +263,9 @@
                         <c:if test="${momsEnvstVal == '1'}">
                             <wj-flex-grid-column header="<s:message code="kioskKeyMap.groupProdNm"/>" binding="groupProdNm" width="100" is-read-only="true"></wj-flex-grid-column>
                         </c:if>
-                        <c:if test="${sessionInfo.orgnFg == 'STORE'}">
-                            <wj-flex-grid-column header="<s:message code="kioskKeyMap.kioskDisplayYn"/>" binding="kioskDisplayYn" align="center"data-map="regYnDataMap" width="60" is-read-only="true"></wj-flex-grid-column>
+                        <c:if test="${sessionInfo.orgnFg == 'STORE' and momsEnvstVal == '1'}">
+                            <wj-flex-grid-column header="<s:message code="kioskKeyMap.kioskDisplayYn"/>" binding="kioskDisplayYn" align="center" width="60" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="kioskKeyMap.soldOutYn"/>" binding="soldOutYn" align="center" width="60" is-read-only="true"></wj-flex-grid-column>
                         </c:if>
                     </wj-flex-grid>
                 </div>
@@ -429,8 +430,9 @@
                         </c:if>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.saleUprc"/>" binding="saleUprc" width="60" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.regYn"/>" binding="regYn" align="center"data-map="regYnDataMap" width="60" is-read-only="true"></wj-flex-grid-column>
-                         <c:if test="${sessionInfo.orgnFg == 'STORE'}">
-                            <wj-flex-grid-column header="<s:message code="kioskKeyMap.kioskDisplayYn"/>" binding="kioskDisplayYn" align="center"data-map="regYnDataMap" width="60" is-read-only="true"></wj-flex-grid-column>
+                         <c:if test="${sessionInfo.orgnFg == 'STORE' and momsEnvstVal == '1'}">
+                            <wj-flex-grid-column header="<s:message code="kioskKeyMap.kioskDisplayYn"/>" binding="kioskDisplayYn" align="center" width="60" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="kioskKeyMap.soldOutYn"/>" binding="soldOutYn" align="center" width="60" is-read-only="true"></wj-flex-grid-column>
                         </c:if>
                     </wj-flex-grid>
                 </div>
@@ -470,7 +472,7 @@
     var kioskKeyEnvstVal = "${kioskKeyEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20230329.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20230329.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

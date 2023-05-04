@@ -17,6 +17,7 @@ app.controller('kioskKeyMapViewCtrl', ['$scope', '$http', function ($scope, $htt
   var tuKey;
   var tuClsPage = 1;
   var tuKeyPage = 1;
+  var soldOut = "<div style='position: absolute;'><img src='/resource/solbipos/css/img/soldOut.png' style='width: auto; height: 80%; opacity: 0.5;'/></div>";
 
   $scope._setComboData("tuClsTypeView", kioskTuClsTypeList);
 
@@ -57,6 +58,10 @@ app.controller('kioskKeyMapViewCtrl', ['$scope', '$http', function ($scope, $htt
     // 파라미터
     var params = {};
     params.tuClsType = $scope.tuClsTypeViewCombo.selectedValue;
+    if(orgnFg==='STORE'){
+      var scope = agrid.getScope('kioskKeyMapRegistCtrl');
+      params.posNo = scope.posNoCombo.selectedValue;
+    }
     var url = "/base/prod/kioskKeyMap/kioskKeyMap/getKioskCategory.sb" + "?sid=" + document.getElementsByName('sessionId')[0].value;
     $http({
       method: 'POST', //방식
@@ -127,7 +132,11 @@ app.controller('kioskKeyMapViewCtrl', ['$scope', '$http', function ($scope, $htt
         } else {
           tuKey = list;
           for (var i = 0; i < (12 > list.length ? list.length : 12); i++) {
-            $("#tuKey" + i).html("<img src='" + list[i].imgUrl + "/" + list[i].imgFileNm + "' style='max-height:90px; width: 100%'><br/>"+list[i].prodNm+"<br/>"+list[i].saleUprc);
+            if(list[i].soldOutYn === 'Y' && orgnFg === "STORE"){
+              $("#tuKey" + i).html(soldOut + "<img src='" + list[i].imgUrl + "/" + list[i].imgFileNm + "' onerror='this.src=\"/resource/solbipos/css/img/NoImage.png\"' style='width: auto; height: 80%;'><br/>"+list[i].prodNm+"<br/>"+list[i].saleUprc);
+            } else {
+              $("#tuKey" + i).html("<img src='" + list[i].imgUrl + "/" + list[i].imgFileNm + "' onerror='this.src=\"/resource/solbipos/css/img/NoImage.png\"' style='width: auto; height: 80%;'><br/>"+list[i].prodNm+"<br/>"+list[i].saleUprc);
+            }
           }
         }
       }
@@ -212,7 +221,11 @@ app.controller('kioskKeyMapViewCtrl', ['$scope', '$http', function ($scope, $htt
       }
 
       for (var i = 0; i < 12; i++) {
-        $("#tuKey" + i).html("<img src='" + tuKey[index].imgUrl + "/" + tuKey[index].imgFileNm + "' style='max-height:90px; width: 100%'><br/>"+tuKey[index].prodNm+"<br/>"+tuKey[index].saleUprc);
+        if(tuKey[index].soldOutYn === 'Y' && orgnFg === "STORE"){
+          $("#tuKey" + i).html(soldOut + "<img src='" + tuKey[index].imgUrl + "/" + tuKey[index].imgFileNm + "' onerror='this.src=\"/resource/solbipos/css/img/NoImage.png\"' style='width: auto; height: 80%;'><br/>"+tuKey[index].prodNm+"<br/>"+tuKey[index].saleUprc);
+        } else {
+          $("#tuKey" + i).html("<img src='" + tuKey[index].imgUrl + "/" + tuKey[index].imgFileNm + "' onerror='this.src=\"/resource/solbipos/css/img/NoImage.png\"' style='width: auto; height: 80%;'><br/>"+tuKey[index].prodNm+"<br/>"+tuKey[index].saleUprc);
+        }
         index ++;
       }
     }
@@ -227,7 +240,11 @@ app.controller('kioskKeyMapViewCtrl', ['$scope', '$http', function ($scope, $htt
       tuKeyPage++;
 
       for (var i = 0; index < (12*tuKeyPage > tuKey.length ? tuKey.length : 12*tuKeyPage); i++) {
-        $("#tuKey" + i).html("<img src='" + tuKey[index].imgUrl + "/" + tuKey[index].imgFileNm + "' style='max-height:90px; width: 100%'><br/>"+tuKey[index].prodNm+"<br/>"+tuKey[index].saleUprc);
+        if(tuKey[index].soldOutYn === 'Y' && orgnFg === "STORE"){
+          $("#tuKey" + i).html(soldOut + "<img src='" + tuKey[index].imgUrl + "/" + tuKey[index].imgFileNm + "' onerror='this.src=\"/resource/solbipos/css/img/NoImage.png\"' style='width: auto; height: 80%;'><br/>"+tuKey[index].prodNm+"<br/>"+tuKey[index].saleUprc);
+        } else {
+          $("#tuKey" + i).html("<img src='" + tuKey[index].imgUrl + "/" + tuKey[index].imgFileNm + "' onerror='this.src=\"/resource/solbipos/css/img/NoImage.png\"' style='width: auto; height: 80%;'><br/>"+tuKey[index].prodNm+"<br/>"+tuKey[index].saleUprc);
+        }
         index ++;
       }
     }
