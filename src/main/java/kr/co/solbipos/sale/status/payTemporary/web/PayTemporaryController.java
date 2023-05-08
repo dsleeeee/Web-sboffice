@@ -182,6 +182,69 @@ public class PayTemporaryController {
         }
         model.addAttribute("branchCdComboList", branchCdComboListAll);
 
+
+        // 전체 없는 콤보박스 데이터
+        // 사용자별 코드별 공통코드 콤보박스 조회
+        // 팀별
+        if (momsTeamComboList.size() > 1) {
+            momsTeamComboList.remove(0);
+            String momsTeamComboListAll2 = cmmCodeUtil.assmblObj(momsTeamComboList, "name", "value", UseYn.N);
+            model.addAttribute("momsTeamComboList2", momsTeamComboListAll2);
+        } else {
+            model.addAttribute("momsTeamComboList2", momsTeamComboListAll);
+        }
+        // AC점포별
+        if (momsAcShopComboList.size() > 1) {
+            momsAcShopComboList.remove(0);
+            String momsAcShopComboListAll2 = cmmCodeUtil.assmblObj(momsAcShopComboList, "name", "value", UseYn.N);
+            model.addAttribute("momsAcShopComboList2", momsAcShopComboListAll2);
+        } else {
+            model.addAttribute("momsAcShopComboList2", momsAcShopComboListAll);
+        }
+        // 지역구분
+        if (momsAreaFgComboList.size() > 1) {
+            momsAreaFgComboList.remove(0);
+            String momsAreaFgComboListAll2 = cmmCodeUtil.assmblObj(momsAreaFgComboList, "name", "value", UseYn.N);
+            model.addAttribute("momsAreaFgComboList2", momsAreaFgComboListAll2);
+        } else {
+            model.addAttribute("momsAreaFgComboList2", momsAreaFgComboListAll);
+        }
+        // 상권
+        if(momsCommercialComboList.size() > 1) {
+            momsCommercialComboList.remove(0);
+            String momsCommercialComboListAll2 = cmmCodeUtil.assmblObj(momsCommercialComboList, "name", "value", UseYn.N);
+            model.addAttribute("momsCommercialComboList2", momsCommercialComboListAll2);
+            String momsCommercialComboListAll3 = cmmCodeUtil.assmblObj(momsCommercialComboList, "name", "value", UseYn.SELECT);
+        } else {
+            model.addAttribute("momsCommercialComboList2", momsCommercialComboListAll);
+        }
+        // 점포유형
+        if(momsShopTypeComboList.size() > 1) {
+            momsShopTypeComboList.remove(0);
+            String momsShopTypeComboListAll2 = cmmCodeUtil.assmblObj(momsShopTypeComboList, "name", "value", UseYn.N);
+            model.addAttribute("momsShopTypeComboList2", momsShopTypeComboListAll2);
+        } else {
+            model.addAttribute("momsShopTypeComboList2", momsShopTypeComboListAll);
+        }
+        // 매장관리타입
+        if(momsStoreManageTypeComboList.size() > 1) {
+            momsStoreManageTypeComboList.remove(0);
+
+            String momsStoreManageTypeComboListAll2 = cmmCodeUtil.assmblObj(momsStoreManageTypeComboList, "name", "value", UseYn.N);
+            model.addAttribute("momsStoreManageTypeComboList2", momsStoreManageTypeComboListAll2);
+        } else {
+            model.addAttribute("momsStoreManageTypeComboList2", momsStoreManageTypeComboListAll);
+        }
+        // 그룹
+        if(branchCdComboList.size() > 1) {
+            branchCdComboList.remove(0);
+            String branchCdComboListAll2 = cmmCodeUtil.assmblObj(branchCdComboList, "name", "value", UseYn.N);
+            model.addAttribute("branchCdComboList2", branchCdComboListAll2);
+        } else {
+            model.addAttribute("branchCdComboList2", branchCdComboListAll);
+        }
+
+
         return "sale/status/payTemporary/payTemporaryTab";
     }
 

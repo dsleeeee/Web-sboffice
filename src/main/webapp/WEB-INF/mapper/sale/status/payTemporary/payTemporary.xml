@@ -245,7 +245,14 @@
         tsspt.LINE_SEQ_NO,
         tsspt.SALE_YN,
         (CASE WHEN tsspt.SALE_YN = 'Y' THEN 1 WHEN tsspt.SALE_YN = 'N' THEN -1 ELSE 0 END) AS SALE_CNT,
-        tsspt.SALE_AMT
+        tsspt.SALE_AMT,
+        tmsi.MOMS_TEAM,
+        tmsi.MOMS_AC_SHOP,
+        tmsi.MOMS_AREA_FG,
+        tmsi.MOMS_COMMERCIAL,
+        tmsi.MOMS_SHOP_TYPE,
+        tmsi.MOMS_STORE_MANAGE_TYPE,
+        tms.BRANCH_CD
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_SL_SALE_PAY_TEMPORARY tsspt,
         TB_MS_STORE tms,
