@@ -2005,7 +2005,7 @@
                 WHERE 1=1
                 AND SEQ = (
                                 SELECT
-                                MAX(B.SEQ)+1
+                                NVL(MAX(B.SEQ), 0) +1
                                 FROM TB_HQ_TOUCH_KEY_CLASS A,
                                 TB_CM_GROUP_CODE_TOUCHKEY_KIOSKKEYMAP B
                                 WHERE 1=1
@@ -2019,7 +2019,7 @@
                 WHERE 1=1
                 AND SEQ = (
                                 SELECT
-                                MAX(B.SEQ)+1
+                                NVL(MAX(B.SEQ), 0) +1
                                 FROM TB_MS_TOUCH_KEY_CLASS A,
                                 TB_CM_GROUP_CODE_TOUCHKEY_KIOSKKEYMAP B
                                 WHERE 1=1
