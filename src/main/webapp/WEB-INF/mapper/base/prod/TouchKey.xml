@@ -2363,7 +2363,7 @@
                 ,   MOD_ID
                 )
                 SELECT  STORE_CD
-                ,       TUKEY_GRP_CD
+                ,       #{tukeyGrpCd}
                 ,		TUKEY_GRP_NM
                 ,       #{regDt}
                 ,       #{regId}
