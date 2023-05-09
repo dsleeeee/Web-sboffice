@@ -10,6 +10,8 @@ import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.status.nonSaleCard.service.NonSaleCardService;
 import kr.co.solbipos.sale.status.nonSaleCard.service.NonSaleCardVO;
+import kr.co.solbipos.sale.today.todayDtl.service.TodayDtlService;
+import kr.co.solbipos.sale.today.todayDtl.service.TodayDtlVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,14 +50,16 @@ public class NonSaleCardController {
 
     private final SessionService sessionService;
     private final NonSaleCardService nonSaleCardService;
+    private final TodayDtlService todayDtlService;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public NonSaleCardController(SessionService sessionService, NonSaleCardService nonSaleCardService) {
+    public NonSaleCardController(SessionService sessionService, NonSaleCardService nonSaleCardService, TodayDtlService todayDtlService) {
         this.sessionService = sessionService;
         this.nonSaleCardService = nonSaleCardService;
+        this.todayDtlService = todayDtlService;
     }
 
     /**
@@ -67,6 +71,45 @@ public class NonSaleCardController {
      */
     @RequestMapping(value = "/nonSaleCard/list.sb", method = RequestMethod.GET)
     public String nonSaleCardView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+
+        TodayDtlVO todayDtlVO = new TodayDtlVO();
+
+        // 결제수단 조회
+        List<DefaultMap<String>> payColList = todayDtlService.getPayColList(todayDtlVO, sessionInfoVO);
+
+        // 결제수단 코드를 , 로 연결하는 문자열 생성
+        String payCol = "";
+        for(int i=0; i < payColList.size(); i++) {
+            payCol += (payCol.equals("") ? "" : ",") + payColList.get(i).getStr("payCd");
+        }
+        model.addAttribute("payColList", payColList);
+        model.addAttribute("payCol", payCol);
+
+        // 할인구분 조회
+        List<DefaultMap<String>> dcColList = todayDtlService.getDcColList(todayDtlVO, sessionInfoVO);
+
+        // 할인구분 코드를 , 로 연결하는 문자열 생성
+        String dcCol = "";
+        for(int i=0; i < dcColList.size(); i++) {
+            dcCol += (dcCol.equals("") ? "" : ",") + dcColList.get(i).getStr("dcCd");
+        }
+        model.addAttribute("dcColList", dcColList);
+        model.addAttribute("dcCol", dcCol);
+
+        // 객수 조회
+        List<DefaultMap<String>> guestColList = todayDtlService.getGuestColList(todayDtlVO, sessionInfoVO);
+
+        // 객수 코드를 , 로 연결하는 문자열 생성
+        String guestCol = "";
+        for(int i=0; i < guestColList.size(); i++) {
+            guestCol += (guestCol.equals("") ? "" : ",") + guestColList.get(i).getStr("guestCd");
+        }
+        model.addAttribute("guestColList", guestColList);
+        model.addAttribute("guestCol", guestCol);
+
 
         return "sale/status/nonSaleCard/nonSaleCard";
     }

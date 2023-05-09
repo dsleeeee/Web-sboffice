@@ -113,6 +113,37 @@ app.controller('nonSaleCardCtrl', ['$scope', '$http', '$timeout', function ($sco
             }
         }
         // <-- //그리드 헤더2줄 -->
+
+        // 그리드 링크 효과
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel == s.cells) {
+                var col = s.columns[e.col];
+                var item = s.rows[e.row].dataItem;
+                if (col.binding === "billNo") {
+                    wijmo.addClass(e.cell, 'wijLink');
+                    wijmo.addClass(e.cell, 'wj-custom-readonly');
+                }
+            }
+        });
+
+        // 그리드 클릭 이벤트
+        s.addEventListener(s.hostElement, 'mousedown', function (e) {
+            var ht = s.hitTest(e);
+            if (ht.cellType === wijmo.grid.CellType.Cell) {
+                var col = ht.panel.columns[ht.col];
+                var selectedRow = s.rows[ht.row].dataItem;
+                if (col.binding === "billNo") {
+                    var params = {};
+                    params.storeCd = selectedRow.storeCd;
+                    params.saleDate = selectedRow.saleDate.replaceAll("-", "");
+                    params.posNo = selectedRow.posNo;
+                    params.billNo = selectedRow.billNo;
+                    params.saleYn = selectedRow.saleYn;
+
+                    $scope._broadcast('billInfoCtrl', params);
+                }
+            }
+        });
     };
 
     // <-- 검색 호출 -->

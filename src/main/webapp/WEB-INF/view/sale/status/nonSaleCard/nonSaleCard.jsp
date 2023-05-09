@@ -156,4 +156,39 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/nonSaleCard/nonSaleCard.js?ver=20230504.01" charset="utf-8"></script>
+<script type="text/javascript">
+    var payColList = [];
+    <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
+    <c:forEach var="payCol" items="${payColList}">
+        var payParam = {};
+        payParam.payCd = "${payCol.payCd}";
+        payParam.payMethod = "${payCol.payMethod}";
+        payColList.push(payParam);
+    </c:forEach>
+
+    var dcColList = [];
+    <%--javascript에서 사용할 할인 json 데이터 생성--%>
+    <c:forEach var="dcCol" items="${dcColList}">
+        var dcParam = {};
+        dcParam.dcCd = "${dcCol.dcCd}";
+        dcParam.dcMethod = "${dcCol.dcMethod}";
+        dcColList.push(dcParam);
+    </c:forEach>
+
+    var payCol = '${payCol}';
+    var dcCol = '${dcCol}';
+    var guestCol = '${guestCol}';
+    var arrPayCol = payCol.split(',');
+    var arrDcCol = dcCol.split(',');
+    var arrGuestCol = guestCol.split(',');
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/nonSaleCard/nonSaleCard.js?ver=20230509.01" charset="utf-8"></script>
+
+<%-- 영수증 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/billInfo/billInfo.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+    <c:param name="payColList" value="${payColList}"/>
+    <c:param name="guestColList" value="${guestColList}"/>
+</c:import>
