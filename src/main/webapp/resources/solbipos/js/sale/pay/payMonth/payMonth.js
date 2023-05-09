@@ -1,11 +1,11 @@
 /****************************************************************
  *
  * 파일명 : payMonth.js
- * 설  명 : 기간별매출 > 월별탭 > 월별종합 JavaScript
+ * 설  명 : 맘스터치 > 결제수단매출 > 월별결제수단매출 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2019.12.09     김설아      1.0
+ * 2022.10.03     권지현      1.0
  *
  * **************************************************************/
 /**
@@ -137,12 +137,12 @@ app.controller('payMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
         // 시작일자가 종료일자보다 빠른지 확인
         if(startDt.getTime() > endDt.getTime()){
-            $scope._popMsg(messages['mobile.cmm.dateChk.error']);
+            $scope._popMsg(messages['cmm.dateChk.error']);
             return false;
         }
         // 조회일자 최대 1년(12개월) 제한
         if (diffMonth > 12) {
-            $scope._popMsg(messages['mobile.cmm.dateOver.1year.error']);
+            $scope._popMsg(messages['cmm.dateOver.1year.error']);
             return false;
         }
 
