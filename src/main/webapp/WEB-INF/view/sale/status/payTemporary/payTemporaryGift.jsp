@@ -49,7 +49,7 @@
             </tr>
             <c:if test="${sessionInfo.orgnFg == 'HQ'}">
                 <tr>
-                    <%-- 매장브랜드 --%>
+                        <%-- 매장브랜드 --%>
                     <th><s:message code="saleMcoupon.storeHqBrand"/></th>
                     <td>
                         <div class="sb-select">
@@ -64,19 +64,19 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                    <%-- 매장코드 --%>
+                        <%-- 매장코드 --%>
                     <th><s:message code="cmm.store"/></th>
                     <td>
-                        <%-- 매장선택 모듈 싱글 선택 사용시 include
-                             param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-                                          displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
-                                          modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
-                                          closeFunc - 팝업 닫기시 호출할 함수
-                        --%>
+                            <%-- 매장선택 모듈 싱글 선택 사용시 include
+                                 param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+                                              displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+                                              modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+                                              closeFunc - 팝업 닫기시 호출할 함수
+                            --%>
                         <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreMMoms.jsp" flush="true">
                             <jsp:param name="targetId" value="payTemporaryGiftStore"/>
                         </jsp:include>
-                        <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+                            <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
                     </td>
                 </tr>
             </c:if>
@@ -304,4 +304,39 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/payTemporary/payTemporaryGift.js?ver=20230508.01" charset="utf-8"></script>
+<script type="text/javascript">
+    var payColList = [];
+    <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
+    <c:forEach var="payCol" items="${payColList}">
+        var payParam = {};
+        payParam.payCd = "${payCol.payCd}";
+        payParam.payMethod = "${payCol.payMethod}";
+        payColList.push(payParam);
+    </c:forEach>
+
+    var dcColList = [];
+    <%--javascript에서 사용할 할인 json 데이터 생성--%>
+    <c:forEach var="dcCol" items="${dcColList}">
+        var dcParam = {};
+        dcParam.dcCd = "${dcCol.dcCd}";
+        dcParam.dcMethod = "${dcCol.dcMethod}";
+        dcColList.push(dcParam);
+    </c:forEach>
+
+    var payCol = '${payCol}';
+    var dcCol = '${dcCol}';
+    var guestCol = '${guestCol}';
+    var arrPayCol = payCol.split(',');
+    var arrDcCol = dcCol.split(',');
+    var arrGuestCol = guestCol.split(',');
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/payTemporary/payTemporaryGift.js?ver=20230509.01" charset="utf-8"></script>
+
+<%-- 영수증 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/billInfo/billInfo.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+    <c:param name="payColList" value="${payColList}"/>
+    <c:param name="guestColList" value="${guestColList}"/>
+</c:import>
