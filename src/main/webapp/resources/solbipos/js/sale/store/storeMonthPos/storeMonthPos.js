@@ -14,7 +14,7 @@
 var app = agrid.getApp();
 
 var optionData = [
-    {"name":"지사별","value":"branch"},
+    {"name":"그룹별","value":"branch"},
     {"name":"매장별","value":"store"}
 ];
 

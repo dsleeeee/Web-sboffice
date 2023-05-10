@@ -19,7 +19,7 @@ var optionData = [
 ];
 
 var optionData2 = [
-    {"name":"지사별","value":"branch"},
+    {"name":"그룹별","value":"branch"},
     {"name":"매장별","value":"store"}
 ];
 
@@ -280,7 +280,7 @@ app.controller('storeDayTimeCtrl', ['$scope', '$http', '$timeout', function ($sc
             }
 
             columnsCnt = 9;
-            // 옵션(지사별/매장별)에 따라 매장정보 visible
+            // 옵션(그룹별/매장별)에 따라 매장정보 visible
             for (var j = 3; j < columnsCnt; j++) {
                 if($scope.option2 === "branch"){
                     if(columns[j].binding == "storeCd" || columns[j].binding == "storeNm" || columns[j].binding == "brand" || columns[j].binding == "momsTeam" || columns[j].binding == "momsAcShop") {

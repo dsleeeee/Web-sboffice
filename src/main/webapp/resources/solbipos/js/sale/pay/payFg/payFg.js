@@ -15,7 +15,7 @@ var app = agrid.getApp();
 
 var optionData = [
   {"name":"전체","value":"all"},
-  {"name":"지사별","value":"branch"},
+  {"name":"그룹별","value":"branch"},
   {"name":"매장별","value":"store"}
 ];
 
@@ -159,7 +159,7 @@ app.controller('payFgCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
     }
   };
 
-  // 옵션(지사별/매장별)에 따라 매장선택 숨김/보임
+  // 옵션(그룹별/매장별)에 따라 매장선택 숨김/보임
   $scope.changeOption = function (s){
     if(s.selectedValue === "all" || s.selectedValue === "branch"){
       $(".payFgStore").hide();

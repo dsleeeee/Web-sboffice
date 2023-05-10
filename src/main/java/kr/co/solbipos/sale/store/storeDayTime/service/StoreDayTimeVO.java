@@ -35,7 +35,7 @@ public class StoreDayTimeVO extends PageVO {
 
     /** 옵션 */
     private String option;  //기간별/일자별
-    private String option2; //지사별/매장별
+    private String option2; //그룹별/매장별
     private String optionFg;//시간별/시간대별
 
     private String startTime;

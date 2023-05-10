@@ -14,7 +14,7 @@
 var app = agrid.getApp();
 
 var optionData = [
-  {"name":"지사별","value":"branch"},
+  {"name":"그룹별","value":"branch"},
   {"name":"매장별","value":"store"}
 ];
 
@@ -371,7 +371,7 @@ app.controller('storeDayPosCtrl', ['$scope', '$http', '$timeout', function ($sco
     }
   };
 
-  // 옵션(지사별/매장별)에 따라 매장선택 숨김/보임
+  // 옵션(그룹별/매장별)에 따라 매장선택 숨김/보임
   $scope.changeOption = function (s){
     if(s.selectedValue === "branch"){
       $(".dayStore").hide();

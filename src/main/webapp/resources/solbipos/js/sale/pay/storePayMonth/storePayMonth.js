@@ -14,7 +14,7 @@
 var app = agrid.getApp();
 
 var optionData = [
-    {"name":"지사별","value":"branch"},
+    {"name":"그룹별","value":"branch"},
     {"name":"매장별","value":"store"}
 ];
 
@@ -216,7 +216,7 @@ app.controller('storePayMonthCtrl', ['$scope', '$http', '$timeout', function ($s
     };
     // <-- //검색 호출 -->
 
-    // 옵션(지사별/매장별)에 따라 매장선택 숨김/보임
+    // 옵션(그룹별/매장별)에 따라 매장선택 숨김/보임
     $scope.changeOption = function (s){
         if(s.selectedValue === "branch"){
             $(".storePayMonth").hide();
