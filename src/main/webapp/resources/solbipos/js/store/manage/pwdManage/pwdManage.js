@@ -72,11 +72,11 @@ app.controller('pwdManageCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 관리자만 로그인 잠금해제 가능
         // 관리자, 총판/대리점 권한은 웹 비밀번호 잠김해제 가능하도록 변경_2022.03.23
-        if($scope.userOrgnFg === "M" || $scope.userOrgnFg === "A"){
+        // if($scope.userOrgnFg === "M" || $scope.userOrgnFg === "A"){
           if(col.binding === "userNm"){
             wijmo.addClass(e.cell, 'wijLink');
           }
-        }
+        // }
       }
     });
 
@@ -100,14 +100,14 @@ app.controller('pwdManageCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 관리자만 선택 사원 웹 비밀번호잠김해제 팝업
         // 관리자, 총판/대리점 권한은 웹 비밀번호 잠김해제 가능하도록 변경_2022.03.23
-        if($scope.userOrgnFg === "M" || $scope.userOrgnFg === "A"){
+        // if($scope.userOrgnFg === "M" || $scope.userOrgnFg === "A"){
           if ( col.binding === "userNm" ) {
             var selectedData = s.rows[ht.row].dataItem;
             $scope.pwdUnlockPopupLayer.show(true);
             $scope._broadcast('pwdUnlockCtrl', selectedData);
             event.preventDefault();
           }
-        }
+        // }
 
       }
     });

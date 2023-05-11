@@ -98,8 +98,12 @@
     </tbody>
   </table>
 
+  <div class="mt10 oh">
+    <p class="tl s14 mt5 lh15">- '사용자ID' 클릭시 '비밀번호 변경' 가능합니다.</p>
+    <p class="tl s14 mt5 lh15">- '사용자명' 클릭시 '로그인 잠금해제' 가능합니다.</p>
+  </div>
 
-  <div class="mt20 oh sb-select dkbr">
+  <div class="mt10 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <wj-combo-box
             class="w100px fl"
@@ -161,7 +165,7 @@
   var serviceFg    = ${ccu.getCommCode("007")};
   var webUseYn     = ${ccu.getCommCode("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/pwdManage/pwdManage.js?ver=20220323.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/pwdManage/pwdManage.js?ver=20230511.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 비밀번호 변경 --%>
 <c:import url="/WEB-INF/view/store/manage/pwdManage/pwdChange.jsp">
