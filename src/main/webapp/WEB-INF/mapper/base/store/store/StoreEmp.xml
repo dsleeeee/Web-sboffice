@@ -333,6 +333,8 @@
            SET USER_PWD = #{userPwd},
                LAST_PWD_CHG_DT = #{modDt},
                MOB_LOGIN_AUTO_SERIAL = #{modDt},
+               USER_STAT_FG = '00',
+               LOGIN_FAIL_CNT = '0',
                MOD_DT = #{modDt},
                MOD_ID = #{modId}
          WHERE USER_ID = #{userId}

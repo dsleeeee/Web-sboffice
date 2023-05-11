@@ -326,7 +326,9 @@
                 SET
                     USER_PWD = #{newPassword},
                     MOB_LOGIN_AUTO_SERIAL = #{lastPwdChgDt},
-                    LAST_PWD_CHG_DT = #{lastPwdChgDt}
+                    LAST_PWD_CHG_DT = #{lastPwdChgDt},
+                    USER_STAT_FG = '00',
+                    LOGIN_FAIL_CNT = '0'
                 WHERE
                     USER_ID = #{userId}
             </when>
@@ -343,7 +345,6 @@
                     USER_ID = #{userId}
             </otherwise>
         </choose>
-
     </update>
 
     <!-- 비밀번호 변경이력 저장 -->
