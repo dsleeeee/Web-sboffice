@@ -66,6 +66,9 @@
           </tr>
           </tbody>
         </table>
+        <p class="mt20 s12">
+            <s:message code="login.layer.pwchg.policy" arguments="6,20" />
+        </p>
       </div>
     </div>
 
