@@ -3,10 +3,12 @@ package kr.co.solbipos.base.store.emp.hq.service.impl;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.exception.AuthenticationException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.security.EncUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.PwChgResult;
 import kr.co.solbipos.base.store.emp.enums.EmpResult;
 import kr.co.common.exception.JsonException;
 import kr.co.solbipos.base.store.emp.hq.service.HqEmpMenuVO;
@@ -211,13 +213,26 @@ public class HqEmpServiceImpl implements HqEmpService {
             }
         }
 
+        // 기존 비밀번호와 동일
         if( newUserPassword.equals(hqEmpVO.getPriorPwd()) ) {
             return EmpResult.PASSWORD_NOT_CHANGED;
         }
 
-        if ( !CmmUtil.passwordPolicyCheck(hqEmpVO.getUserPwd()) ) {
-            return EmpResult.PASSWORD_REGEXP;
+        /** 패스워드 정책 체크 */
+        PwChgResult pwdChk ;
+        try {
+            pwdChk = CmmUtil.checkPasswd(hqEmpVO.getUserPwd());
+            if(pwdChk != PwChgResult.CHECK_OK) {
+                return EmpResult.PASSWORD_REGEXP;
+            }
+        } catch (Exception e) {
+            throw new AuthenticationException(messageService.get("login.pwchg.error"), "");
         }
+
+        // 비밀번호 정책과 맞지 않음
+//        if ( !CmmUtil.passwordPolicyCheck(hqEmpVO.getUserPwd()) ) {
+//            return EmpResult.PASSWORD_REGEXP;
+//        }
 
         hqEmpVO.setUserPwd(newUserPassword);
 
@@ -235,18 +250,22 @@ public class HqEmpServiceImpl implements HqEmpService {
         hqEmpVO.setRegDt(dt);
         hqEmpVO.setModId(sessionInfoVO.getUserId());
         hqEmpVO.setModDt(dt);
-        hqEmpVO.setPriorPwd(hqEmpMapper.getHqEmpPassword(hqEmpVO));
+
+        hqEmpVO.setPriorPwd(hqEmpMapper.getHqEmpPassword(hqEmpVO)); // 변경전 사용자 비밀번호
         hqEmpVO.setRegIp(sessionInfoVO.getLoginIp());
 
+        // 변경 비밀번호 정책 체크
         EmpResult pwdChgResult = passwordPolicy(hqEmpVO);
         if(EmpResult.SUCCESS != pwdChgResult) {
             return pwdChgResult;
         }
 
+        // 비밀번호 변경
         if( hqEmpMapper.updateUserPassword(hqEmpVO) != 1 ) {
             return EmpResult.FAIL;
         }
         else {
+            // 변경 히스토리 등록
             if (hqEmpMapper.insertPasswordHistory(hqEmpVO) != 1) {
                 return EmpResult.FAIL;
             }

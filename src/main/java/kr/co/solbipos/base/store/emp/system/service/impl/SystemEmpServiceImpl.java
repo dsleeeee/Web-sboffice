@@ -2,11 +2,13 @@ package kr.co.solbipos.base.store.emp.system.service.impl;
 
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.exception.AuthenticationException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.security.EncUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.application.session.user.enums.PwChgResult;
 import kr.co.solbipos.base.store.emp.enums.EmpResult;
 import kr.co.solbipos.base.store.emp.system.service.SystemEmpService;
 import kr.co.solbipos.base.store.emp.system.service.SystemEmpVO;
@@ -216,10 +218,21 @@ public class SystemEmpServiceImpl implements SystemEmpService {
             return EmpResult.PASSWORD_NOT_CHANGED;
         }
 
-        // 비밀번호 정책과 맞지 않음
-        if ( !CmmUtil.passwordPolicyCheck(systemEmpVO.getUserPwd()) ) {
-            return EmpResult.PASSWORD_REGEXP;
+        /** 패스워드 정책 체크 */
+        PwChgResult pwdChk ;
+        try {
+            pwdChk = CmmUtil.checkPasswd(systemEmpVO.getUserPwd());
+            if(pwdChk != PwChgResult.CHECK_OK) {
+                return EmpResult.PASSWORD_REGEXP;
+            }
+        } catch (Exception e) {
+            throw new AuthenticationException(messageService.get("login.pwchg.error"), "");
         }
+
+        // 비밀번호 정책과 맞지 않음
+//        if ( !CmmUtil.passwordPolicyCheck(systemEmpVO.getUserPwd()) ) {
+//            return EmpResult.PASSWORD_REGEXP;
+//        }
 
         systemEmpVO.setUserPwd(newUserPassword);
 
@@ -236,7 +249,8 @@ public class SystemEmpServiceImpl implements SystemEmpService {
         systemEmpVO.setRegDt(dt);
         systemEmpVO.setModId(sessionInfoVO.getUserId());
         systemEmpVO.setModDt(dt);
-        systemEmpVO.setPriorPwd(systemEmpMapper.getSystemEmpPassword(systemEmpVO));
+
+        systemEmpVO.setPriorPwd(systemEmpMapper.getSystemEmpPassword(systemEmpVO)); // 변경전 사용자 비밀번호
         systemEmpVO.setRegIp(sessionInfoVO.getLoginIp());
 
         // 변경 비밀번호 정책 체크
