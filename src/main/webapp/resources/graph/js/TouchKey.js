@@ -376,6 +376,9 @@ $(document).ready(function() {
     var scope = agrid.getScope("touchKeyCtrl");
     params['tukeyGrpCd'] = scope.touchKeyGrp;
 
+    // 조회한 터치키그룹 코드 hidden에 갖고있기(조회후 터치키그룹 콤보 변경 상태에서 저장 시, 조회된 그룹이 아닌 콤보박스에 있는 그룹으로 저장되는 오류 방지)
+    $("#hdSrchTouchKeyGrp").val(scope.touchKeyGrpCombo.selectedValue);
+
     if(scope.touchKeyGrp !== null && scope.touchKeyGrp !== "") { // 기존에 사용중인 터치키그룹이 있는 경우에만 조회(없으면 기본 스타일 '01'로 셋팅)
       // 스타일 코드 조회
       $.ajax({
@@ -1457,7 +1460,7 @@ function deleteClassChk(format) {
 
     var params = {};
     var scope = agrid.getScope("touchKeyCtrl");
-    params.tukeyGrpCd = scope.touchKeyGrp;
+    params.tukeyGrpCd = $("#hdSrchTouchKeyGrp").val();
     params.tukeyClassCd = classCd;
 
     // 가상로그인 대응
@@ -1824,6 +1827,9 @@ Format.prototype.initElements = function () {
 
     // 터치키 저장 기본 수정 Flag로 셋팅
     $("#hdNewGrp").val("N");
+
+    // 조회한 터치키그룹 코드 hidden에 갖고있기(조회후 터치키그룹 콤보 변경 상태에서 저장 시, 조회된 그룹이 아닌 콤보박스에 있는 그룹으로 저장되는 오류 방지)
+    $("#hdSrchTouchKeyGrp").val(scope.touchKeyGrpCombo.selectedValue);
 
   });
 
@@ -2552,7 +2558,7 @@ Format.prototype.save = function () {
           params += '&tukeyGrpNm=' + grpNm;
         }
       }else{
-        params += '&tukeyGrpCd=' + scope.touchKeyGrp;
+        params += '&tukeyGrpCd=' + $("#hdSrchTouchKeyGrp").val();
       }
 
       // 가상로그인 대응

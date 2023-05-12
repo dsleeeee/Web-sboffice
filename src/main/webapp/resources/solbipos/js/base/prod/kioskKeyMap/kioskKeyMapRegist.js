@@ -76,7 +76,7 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
                             event.preventDefault();
                         // 중분류사용
                         } else if(selectedRow.tuMClsFg === "2") {
-                            selectedRow.tuClsType = $scope.tuClsTypeCombo.selectedValue;
+                            //selectedRow.tuClsType = $("#hdTuClsType").val();
 
                             $("#divGridCategoryClsM").css("display", "");
 
@@ -370,7 +370,7 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
 
         for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
             if(orgnFg === "STORE") {$scope.flex.collectionView.itemsRemoved[d].posNo = $scope.posNoCombo.selectedValue;}
-            $scope.flex.collectionView.itemsRemoved[d].tuClsType = $scope.tuClsTypeCombo.selectedValue;
+            $scope.flex.collectionView.itemsRemoved[d].tuClsType = $("#hdTuClsType").val();
             $scope.flex.collectionView.itemsRemoved[d].status = 'D';
             params.push($scope.flex.collectionView.itemsRemoved[d]);
         }
@@ -392,14 +392,14 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
 
         for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
             if(orgnFg === "STORE") {$scope.flex.collectionView.itemsEdited[u].posNo = $scope.posNoCombo.selectedValue;}
-            $scope.flex.collectionView.itemsEdited[u].tuClsType = $scope.tuClsTypeCombo.selectedValue;
+            $scope.flex.collectionView.itemsEdited[u].tuClsType = $("#hdTuClsType").val();
             $scope.flex.collectionView.itemsEdited[u].status = 'U';
             params.push($scope.flex.collectionView.itemsEdited[u]);
         }
 
         for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
             if(orgnFg === "STORE") {$scope.flex.collectionView.itemsAdded[i].posNo = $scope.posNoCombo.selectedValue;}
-            $scope.flex.collectionView.itemsAdded[i].tuClsType = $scope.tuClsTypeCombo.selectedValue;
+            $scope.flex.collectionView.itemsAdded[i].tuClsType = $("#hdTuClsType").val();
             $scope.flex.collectionView.itemsAdded[i].status = 'I';
             params.push($scope.flex.collectionView.itemsAdded[i]);
         }
@@ -731,7 +731,7 @@ app.controller('categoryClsMCtrl', ['$scope', '$http', '$timeout', function ($sc
         params.tuClsType = $("#hdTuClsType").val();
         params.tuClsCd = $("#hdTuClsCd").val();
 
-        $scope._inquiryMain("/base/prod/kioskKeyMap/kioskKeyMap/getKioskCategoryM.sb", params, function() {
+        $scope._inquirySub("/base/prod/kioskKeyMap/kioskKeyMap/getKioskCategoryM.sb", params, function() {
             // 본사 : storeMod = N
             // 프차매장 : 1249가 1 or 2인데 storeMod = Y
             // 단독매장
