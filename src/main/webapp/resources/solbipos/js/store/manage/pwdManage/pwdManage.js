@@ -22,15 +22,13 @@ var empOrgnFgData = [
   {"name":"매장","value":"S"}
 ];
 
-
-
-
 /**********************************************************************
  *  사원목록 그리드
  **********************************************************************/
 app.controller('pwdManageCtrl', ['$scope', '$http', function ($scope, $http) {
+
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('pwdManageCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('pwdManageCtrl', $scope, $http, false));
 
   // 사용자의 권한구분
   $scope.userOrgnFg = gvOrgnFg;
@@ -122,6 +120,8 @@ app.controller('pwdManageCtrl', ['$scope', '$http', function ($scope, $http) {
   // 회원 목록 조회
   $scope.getEmpList = function(){
     var params = {};
+    params.listScale = $scope.listScale;
+
     $scope._inquiryMain("/store/manage/pwdManage/pwdManage/list.sb", params, function() {
     });
   };
@@ -135,4 +135,5 @@ app.controller('pwdManageCtrl', ['$scope', '$http', function ($scope, $http) {
       }, 50)
     });
   });
+
 }]);

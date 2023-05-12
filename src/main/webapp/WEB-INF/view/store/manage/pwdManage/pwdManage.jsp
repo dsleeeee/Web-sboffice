@@ -129,14 +129,12 @@
               item-formatter="_itemFormatter">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="pwdManage.empOrgnFg"/>" binding="empOrgnFg" data-map="empOrgnFgDataMap" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
 
       <c:if test="${orgnFg != 'HQ' and orgnFg != 'STORE'}">
         <wj-flex-grid-column header="<s:message code="pwdManage.agencyCd"/>" binding="agencyCd" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="pwdManage.agencyNm"/>" binding="agencyNm" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
       </c:if>
-
       <c:if test="${orgnFg != 'STORE'}">
         <wj-flex-grid-column header="<s:message code="pwdManage.hqOfficeCd"/>" binding="hqOfficeCd" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="pwdManage.hqOfficeNm"/>" binding="hqOfficeNm" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -160,12 +158,15 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
+
 </div>
+
 <script>
   var serviceFg    = ${ccu.getCommCode("007")};
   var webUseYn     = ${ccu.getCommCode("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/pwdManage/pwdManage.js?ver=20230511.01" charset="utf-8"></script>
+
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/pwdManage/pwdManage.js?ver=20230512.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 비밀번호 변경 --%>
 <c:import url="/WEB-INF/view/store/manage/pwdManage/pwdChange.jsp">

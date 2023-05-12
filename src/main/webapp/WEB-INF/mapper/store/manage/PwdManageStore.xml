@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    PwdManageStore.xml
+    비밀번호 임의변경(매장)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2023.05.11     최초작성
+-->
+<mapper namespace="kr.co.solbipos.store.manage.pwdManageStore.service.impl.PwdManageStoreMapper">
+
+    <!-- 비밀번호 임의변경(매장) - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getPwdManageStoreList" parameterType="PwdManageStoreVO" resultType="DefaultMap">
+        /* PwdManageStoreMapper.getPwdManageStoreList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT emp.*
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM
+        (
+            SELECT
+            'H' AS EMP_ORGN_FG,
+            tho.HQ_OFFICE_CD,
+            tho.HQ_OFFICE_NM,
+            '' AS STORE_CD,
+            '' AS STORE_NM,
+            the.EMP_NO,
+            the.EMP_NM AS USER_NM,
+            the.USER_ID,
+            the.SERVICE_FG,
+            the.WEB_USE_YN,
+            the.MP_NO,
+            '' AS EMAIL_ADDR,
+            '' AS ADDR,
+            tho.AGENCY_CD,
+            tca.AGENCY_NM
+            FROM
+            TB_HQ_EMPLOYEE the
+            INNER JOIN TB_HQ_OFFICE tho ON
+            the.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
+            LEFT OUTER JOIN TB_CM_NMCODE tcn ON
+            the.SERVICE_FG = tcn.NMCODE_CD
+            AND tcn.NMCODE_GRP_CD = '007'
+            LEFT OUTER JOIN TB_CM_AGENCY tca ON
+            tho.AGENCY_CD = tca.AGENCY_CD
+            WHERE 1=1
+            AND the.USER_ID = #{userId}
+        UNION ALL
+            SELECT
+            'S' AS EMP_ORGN_FG,
+            tho.HQ_OFFICE_CD,
+            tho.HQ_OFFICE_NM,
+            tms.STORE_CD,
+            tms.STORE_NM,
+            tme.EMP_NO,
+            tme.EMP_NM AS USER_NM,
+            tme.USER_ID,
+            tme.SERVICE_FG,
+            tme.WEB_USE_YN,
+            tme.MP_NO,
+            tme.EMAIL_ADDR,
+            tme.ADDR || tme.ADDR_DTL AS ADDR,
+            tms.AGENCY_CD,
+            tca.AGENCY_NM
+            FROM
+            TB_MS_EMPLOYEE tme
+            INNER JOIN TB_MS_STORE tms ON
+            tme.STORE_CD = tms.STORE_CD
+            LEFT OUTER JOIN TB_HQ_OFFICE tho ON
+            tms.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
+            LEFT OUTER JOIN TB_CM_NMCODE tcn ON
+            tme.SERVICE_FG = tcn.NMCODE_CD
+            AND tcn.NMCODE_GRP_CD = '007'
+            LEFT OUTER JOIN TB_CM_AGENCY tca ON
+            tms.AGENCY_CD = tca.AGENCY_CD
+            WHERE 1=1
+        ) emp
+        WHERE 1=1
+        AND emp.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='empOrgnFg != null and empOrgnFg.toString() != ""'>
+            AND emp.EMP_ORGN_FG = #{empOrgnFg}
+        </if>
+        <if test='srchStoreCd != null and srchStoreCd != ""'>
+            AND emp.STORE_CD LIKE '%'|| #{srchStoreCd}||'%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND emp.STORE_NM LIKE '%'||#{storeNm} || '%'
+        </if>
+        <if test='srchUserId != null and srchUserId != ""'>
+            AND emp.USER_ID LIKE '%'||#{srchUserId}||'%'
+        </if>
+        <if test='userNm != null and userNm != ""'>
+            AND emp.USER_NM LIKE '%'||#{userNm}||'%'
+        </if>
+        ORDER BY emp.EMP_ORGN_FG ASC, emp.HQ_OFFICE_CD ASC, emp.STORE_CD ASC, emp.USER_NM
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+</mapper>
