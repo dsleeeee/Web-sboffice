@@ -96,8 +96,8 @@
         <div class="sb-select">
           <wj-combo-box
                   id="srchVanCd"
-                  ng-model="vanCd"
-                  control="vanCdCombo"
+                  ng-model="srchVanCd"
+                  control="srchVanCdCombo"
                   items-source="_getComboData('srchVanCd')"
                   display-member-path="name"
                   selected-value-path="value"
@@ -110,9 +110,23 @@
 <c:if test="${orgnFg == 'MASTER'}">
     <tr>
       <%-- 비고 --%>
-      <th><s:message code="closeStore.remark" /></th>
+      <th><s:message code="closeStore.closeVanCd" />/<s:message code="closeStore.remark" /></th>
       <td colspan="3">
-        <input type="text" class="sb-input w90" id="remark" ng-model="remark"/>
+        <div class="sb-select w100px" style="display: inline-block;">
+          <wj-combo-box
+                  id="vanCd"
+                  ng-model="vanCd"
+                  control="vanCdCombo"
+                  items-source="_getComboData('vanCd')"
+                  display-member-path="name"
+                  selected-value-path="value"
+                  is-editable="false"0
+                  is-read-only="true"
+                  selected-index="1"
+                  initialized="_initComboBox(s)">
+          </wj-combo-box>
+        </div>
+        <input type="text" class="sb-input w70" id="remark" ng-model="remark"/>
         <button class="btn_skyblue" id="btnCloseStore" ng-click="closeStore()">
           <s:message code="closeStore.closeStore" />
         </button>

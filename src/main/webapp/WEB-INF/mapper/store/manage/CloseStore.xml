@@ -71,8 +71,8 @@
         <if test='sysStatFg != null and sysStatFg != ""'>
             AND A.SYS_STAT_FG = #{sysStatFg}
         </if>
-        <if test="vanCd != null and vanCd != ''">
-            AND A.VAN_CD = #{vanCd}
+        <if test="srchVanCd != null and srchVanCd != ''">
+            AND A.VAN_CD = #{srchVanCd}
         </if>
         ORDER BY A.HQ_OFFICE_CD ASC, A.STORE_CD ASC, A.AGENCY_CD ASC
         <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -109,26 +109,29 @@
                                                 )
                     ]]>
                     --AND     A.STORE_CD NOT LIKE 'D%'   -- 제외(요청 시 진행(김중선))
-                    <if test='agencyCd != null and agencyCd !=""'>
-                        AND A.AGENCY_CD LIKE '%' || #{agencyCd} || '%'
-                    </if>
-                    <if test='agencyNm != null and agencyNm !=""'>
-                        AND C.AGENCY_NM LIKE '%' || #{agencyNm} || '%'
-                    </if>
-                    <if test='hqOfficeCd != null and hqOfficeCd !=""'>
-                        AND A.HQ_OFFICE_CD LIKE '%' || #{hqOfficeCd} || '%'
-                    </if>
-                    <if test='hqOfficeNm != null and hqOfficeNm !=""'>
-                        AND B.HQ_OFFICE_NM LIKE '%' || #{hqOfficeNm} || '%'
-                    </if>
-                    <if test='storeCd != null and storeCd !=""'>
-                        AND A.STORE_CD LIKE '%' || #{storeCd} || '%'
-                    </if>
-                    <if test='storeNm != null and storeNm !=""'>
-                        AND A.STORE_NM LIKE '%' || #{storeNm} || '%'
-                    </if>
-                    <if test='sysStatFg != null and sysStatFg != ""'>
-                        AND A.SYS_STAT_FG = #{sysStatFg}
+<!--                    <if test='agencyCd != null and agencyCd !=""'>-->
+<!--                        AND A.AGENCY_CD LIKE '%' || #{agencyCd} || '%'-->
+<!--                    </if>-->
+<!--                    <if test='agencyNm != null and agencyNm !=""'>-->
+<!--                        AND C.AGENCY_NM LIKE '%' || #{agencyNm} || '%'-->
+<!--                    </if>-->
+<!--                    <if test='hqOfficeCd != null and hqOfficeCd !=""'>-->
+<!--                        AND A.HQ_OFFICE_CD LIKE '%' || #{hqOfficeCd} || '%'-->
+<!--                    </if>-->
+<!--                    <if test='hqOfficeNm != null and hqOfficeNm !=""'>-->
+<!--                        AND B.HQ_OFFICE_NM LIKE '%' || #{hqOfficeNm} || '%'-->
+<!--                    </if>-->
+<!--                    <if test='storeCd != null and storeCd !=""'>-->
+<!--                        AND A.STORE_CD LIKE '%' || #{storeCd} || '%'-->
+<!--                    </if>-->
+<!--                    <if test='storeNm != null and storeNm !=""'>-->
+<!--                        AND A.STORE_NM LIKE '%' || #{storeNm} || '%'-->
+<!--                    </if>-->
+<!--                    <if test='sysStatFg != null and sysStatFg != ""'>-->
+<!--                        AND A.SYS_STAT_FG = #{sysStatFg}-->
+<!--                    </if>-->
+                    <if test="vanCd != null and vanCd != ''">
+                        AND A.VAN_CD = #{vanCd}
                     </if>
                 ) B
             ON      (
