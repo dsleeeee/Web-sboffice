@@ -15,7 +15,7 @@
 
 <%--서브컨텐츠--%>
 <div class="subCon" ng-controller="touchKeyCtrl" id="touchKeyView">
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl"><s:message code="storeSideMenu.touchKey" /></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -47,6 +47,7 @@
                             is-editable="false"
                             initialized="_initComboBox(s)">
                     </wj-combo-box>
+                    <input type="hidden" id="hdSrchTouchKeyGrp" />
                 </div>
                 <%-- 추가터치키생성 --%>
                 <button class="btn_skyblue fl ml20" id="btnNewGrp" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && (touchKeyEnvstVal2 == '0' || touchKeyEnvstVal2 == '2')}">style="margin-left : 4px;visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.newGrp"/></button>
@@ -492,7 +493,7 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20230428.01"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20230512.01"
         charset="utf-8"></script>
 
 <%-- 스타일미리보기 팝업 --%>
