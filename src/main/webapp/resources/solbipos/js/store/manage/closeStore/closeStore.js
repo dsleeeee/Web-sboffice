@@ -30,6 +30,7 @@ app.controller('closeStoreCtrl',  ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
   $scope._setComboData("srchStatFg", sysStatFg);
   $scope._setComboData("srchVanCd", vanComboList);
+  $scope._setComboData("vanCd", vanComboList);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -51,6 +52,7 @@ app.controller('closeStoreCtrl',  ['$scope', '$http', function ($scope, $http) {
     var params = {};
     params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
     params.orgnFg = orgnFg;
+    params.vanCd = $scope.srchVanCd;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/store/manage/closeStore/closeStore/list.sb", params, function() {});
   };
@@ -61,6 +63,7 @@ app.controller('closeStoreCtrl',  ['$scope', '$http', function ($scope, $http) {
     var params = new Array();
     var param = {};
     param.remark = $scope.remark;
+    param.vanCd = $scope.vanCd;
     params.push(param);
 
     $scope._save("/store/manage/closeStore/closeStore/saveCloseStore.sb", params, function (){

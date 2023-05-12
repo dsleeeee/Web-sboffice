@@ -79,7 +79,8 @@
                                     display-member-path="name"
                                     selected-value-path="value"
                                     is-editable="false"
-                                    control="srchProdOptionCombo">
+                                    control="srchProdOptionCombo"
+                                    selected-index="3">
                             </wj-combo-box>
                         </div>
                     </td>
@@ -423,4 +424,4 @@
   var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/dayProdStore/dayProdStore.js?ver=20230413.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/dayProdStore/dayProdStore.js?ver=20230413.03" charset="utf-8"></script>

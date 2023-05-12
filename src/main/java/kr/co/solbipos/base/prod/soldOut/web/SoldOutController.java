@@ -278,4 +278,26 @@ public class SoldOutController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 사이드메뉴(상품) 목록 조회
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param soldOutVO SoldOutVO
+     * @param model
+     * @return Result
+     */
+    @RequestMapping(value = "/soldOut/getSideMenuProdSoldOutList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSideMenuProdSoldOutList(HttpServletRequest request, HttpServletResponse response,
+                                  SoldOutVO soldOutVO, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        // 목록 조회
+        List<DefaultMap<String>> list = soldOutService.getSideMenuProdSoldOutList(soldOutVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, soldOutVO);
+    }
+
 }

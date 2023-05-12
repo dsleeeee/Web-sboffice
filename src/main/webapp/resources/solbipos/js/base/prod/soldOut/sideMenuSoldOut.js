@@ -285,12 +285,6 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
   });
 
   $scope.saveProd = function() {
-    if(orgnFg == "HQ"){
-      if($("#prodSoldOutStoreCd").val() == "" || $("#prodSoldOutStoreCd").val() == undefined){
-        $scope._popMsg(messages["cmm.require.selectStore"]);
-        return false;
-      }
-    }
 
     if($scope.flex.rows.length <= 0) {
       $scope._popMsg(messages["cmm.empty.data"]);

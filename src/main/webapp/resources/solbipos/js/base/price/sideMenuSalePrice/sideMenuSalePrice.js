@@ -149,4 +149,43 @@ app.controller('sideMenuSalePriceCtrl', ['$scope', '$http', function ($scope, $h
             $scope.searchSideMenuList();
         });
     };
+
+    // 판매가 일괄적용 버튼 클릭
+    // 매장판매가 일괄적용시, 입력한 매장판매가를 적용시킴.
+    // 본사판매가 일괄적용시, 조회된 본사판매가를 적용시킴.
+    $scope.changeAmt = function() {
+
+        if( $scope.flex.collectionView === undefined){
+            $scope._popMsg("판매가를 일괄적용할 상품을 조회해주세요.");
+            return false;
+        }
+
+        var selectCnt = 0;
+        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+            var item = $scope.flex.collectionView.items[i];
+            if(item.gChk){ selectCnt ++; }
+        }
+
+        if(selectCnt < 1) {
+            $scope._popMsg("상품을 선택해주세요.");
+            return false;
+        }
+
+        if($("#inputSaleAmt").val() === ""){
+            $scope._popMsg("판매가를 입력해 주세요.");
+            return false;
+        }
+
+        // 변경 판매가 적용
+        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+            if($scope.flex.collectionView.items[i].gChk) {
+
+                $scope.flex.collectionView.items[i].saleUprc = $scope.inputSaleAmt;
+            }
+        }
+
+        $scope.flex.collectionView.commitEdit();
+        $scope.flex.collectionView.refresh();
+    };
+
 }]);

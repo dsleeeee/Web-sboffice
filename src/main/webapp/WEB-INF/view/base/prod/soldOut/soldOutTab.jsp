@@ -15,10 +15,28 @@
             <li>
                 <a id="sideSoldOut" href="#" ng-click="sideSoldOutShow()"><s:message code="soldOut.sideMenu"/></a>
             </li>
+            <%-- 사이드메뉴(상품) 품절관리 탭 --%>
+            <li>
+                <a id="sideProdSoldOut" href="#" ng-click="sideProdSoldOutShow()"><s:message code="soldOut.sideMenuProd"/></a>
+            </li>
         </ul>
     </div>
 </div>
+<script>
+    onload = function()
+    {
 
+        // 분류조회팝업 한번씩 열었다 닫아야 정상동작함 딱 한번만 반복하도록
+        var prodScope = agrid.getScope("prodSoldOutCtrl");
+        prodScope.prodClassPopUpLayer.show();
+        prodScope.prodClassPopUpLayer.hide();
+
+        var sideMenuProdScope = agrid.getScope("sideMenuProdSoldOutCtrl");
+        sideMenuProdScope.prodClassPopUpLayer.show();
+        sideMenuProdScope.prodClassPopUpLayer.hide();
+
+    }
+</script>
 <script>
     // (상품관리)브랜드사용여부
     var brandUseFg = "${brandUseFg}";
@@ -26,6 +44,8 @@
     var brandList = ${brandList};
     var orgnFg = "${orgnFg}";
     var momsEnvstVal = "${momsEnvstVal}";
+    // 브랜드
+    var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOut/soldOutTab.js?ver=20220225.01" charset="utf-8"></script>
 
@@ -41,4 +61,17 @@
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
+
+<%-- 사이드메뉴(상품) 품절관리 레이어 --%>
+<c:import url="/WEB-INF/view/base/prod/soldOut/sideMenuProdSoldOut.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
 <%-- 탭페이지 레이어 끝--%>
+
+<%-- 레이어 팝업 : 상품상세정보 --%>
+<c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+    <c:param name="prodNoEnvFg" value="${prodNoEnvFg}"/>
+</c:import>

@@ -17,28 +17,31 @@ app.controller('soldOutTabCtrl', ['$scope', function ($scope) {
     $scope.init = function () {
         $("#prodSoldOut").addClass("on");
         $("#sideSoldOut").removeClass("on");
+        $("#sideProdSoldOut").removeClass("on");
     };
 
-    // 판매상품여부, 포인트적립여부, 매핑상품코드, 가격관리구분 변경 탭 보이기
     $scope.prodSoldOutShow = function () {
         $("#prodSoldOut").addClass("on");
         $("#sideSoldOut").removeClass("on");
+        $("#sideProdSoldOut").removeClass("on");
 
         $("#prodSoldOutView").show();
         $("#sideMenuSoldOutView").hide();
+        $("#sideMenuProdSoldOutView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("prodSoldOutCtrl");
         scope.flex.refresh();
     };
 
-    // 브랜드, 상품분류 변경 레이어 탭 보이기
     $scope.sideSoldOutShow = function () {
         $("#prodSoldOut").removeClass("on");
         $("#sideSoldOut").addClass("on");
+        $("#sideProdSoldOut").removeClass("on");
 
         $("#prodSoldOutView").hide();
         $("#sideMenuSoldOutView").show();
+        $("#sideMenuProdSoldOutView").hide();
 
         if(orgnFg != 'HQ'){
             // 선택그룹 조회
@@ -52,6 +55,20 @@ app.controller('soldOutTabCtrl', ['$scope', function ($scope) {
         classGrid.flex.refresh();
         var prodGrid = agrid.getScope('sideMenuSelectProdCtrl');
         prodGrid.flex.refresh();
+
+    };
+
+    $scope.sideProdSoldOutShow = function () {
+        $("#prodSoldOut").removeClass("on");
+        $("#sideSoldOut").removeClass("on");
+        $("#sideProdSoldOut").addClass("on");
+
+        $("#prodSoldOutView").hide();
+        $("#sideMenuSoldOutView").hide();
+        $("#sideMenuProdSoldOutView").show();
+
+        var scope = agrid.getScope('sideMenuProdSoldOutCtrl');
+        scope.flex.refresh();
 
     };
 

@@ -41,6 +41,7 @@ public class CloseStoreVO extends PageVO {
     private String agencyNm;
     /** 밴코드 */
     private String vanCd;
+    private String srchVanCd;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -120,5 +121,13 @@ public class CloseStoreVO extends PageVO {
 
     public void setVanCd(String vanCd) {
         this.vanCd = vanCd;
+    }
+
+    public String getSrchVanCd() {
+        return srchVanCd;
+    }
+
+    public void setSrchVanCd(String srchVanCd) {
+        this.srchVanCd = srchVanCd;
     }
 }

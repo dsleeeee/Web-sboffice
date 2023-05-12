@@ -256,6 +256,8 @@ app.controller('prodSoldOutCtrl', ['$scope', '$http', '$timeout', function ($sco
       if (s.dialogResult === "wj-hide-apply") {
         var scope = agrid.getScope('prodClassPopUpCtrl');
         var prodClassCd = scope.getSelectedClass();
+        console.log('상품');
+        console.log(prodClassCd);
         var params = {};
         params.prodClassCd = prodClassCd;
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -267,6 +269,12 @@ app.controller('prodSoldOutCtrl', ['$scope', '$http', '$timeout', function ($sco
         );
       }
     });
+  };
+
+  // 상품분류정보 선택취소
+  $scope.delProdClass = function(){
+    $scope.prodClassCd = "";
+    $scope.prodClassCdNm = "";
   };
 
   // 일괄적용
@@ -333,12 +341,6 @@ app.controller('prodSoldOutCtrl', ['$scope', '$http', '$timeout', function ($sco
     });
 
   });
-
-  // 상품분류정보 선택취소
-  $scope.delProdClass = function(){
-    $scope.prodClassCd = "";
-    $scope.prodClassCdNm = "";
-  };
 
   // 확장조회 숨김/보임
   $scope.searchAddShowChange = function(){
