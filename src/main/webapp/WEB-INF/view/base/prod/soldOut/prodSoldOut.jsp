@@ -352,7 +352,7 @@
             </td>
             <%-- 저장 --%>
             <td>
-                <button class="btn_blue ml5 fr" id="btnSoldOutYnSave" ng-click="save()"><s:message code="cmm.save" /></button>
+                <button class="btn_skyblue ml5 fr" id="btnSoldOutYnSave" ng-click="save()"><s:message code="cmm.save" /></button>
             </td>
         </tr>
         </tbody>
@@ -431,10 +431,3 @@
 
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOut/prodSoldOut.js?ver=20230405.01" charset="utf-8"></script>
-
-<%-- 레이어 팝업 : 상품상세정보 --%>
-<c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-    <c:param name="prodNoEnvFg" value="${prodNoEnvFg}"/>
-</c:import>

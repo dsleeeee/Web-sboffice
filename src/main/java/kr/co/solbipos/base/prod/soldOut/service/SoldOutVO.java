@@ -289,6 +289,15 @@ public class SoldOutVO extends PageVO {
     /** 그룹코드 */
     private String branchCd;
 
+    /** 선택분류명 */
+    private String sdselClassNm;
+
+    /** 사용자별 브랜드코드(상품) */
+    private String[] userProdBrandList;
+
+    /** 사용자별 브랜드코드(상품) */
+    private String userProdBrands;
+
     /**
      * @return the hqOfficeCd
      */
@@ -1313,5 +1322,29 @@ public class SoldOutVO extends PageVO {
 
     public void setBranchCd(String branchCd) {
         this.branchCd = branchCd;
+    }
+
+    public String getSdselClassNm() {
+        return sdselClassNm;
+    }
+
+    public void setSdselClassNm(String sdselClassNm) {
+        this.sdselClassNm = sdselClassNm;
+    }
+
+    public String[] getUserProdBrandList() {
+        return userProdBrandList;
+    }
+
+    public void setUserProdBrandList(String[] userProdBrandList) {
+        this.userProdBrandList = userProdBrandList;
+    }
+
+    public String getUserProdBrands() {
+        return userProdBrands;
+    }
+
+    public void setUserProdBrands(String userProdBrands) {
+        this.userProdBrands = userProdBrands;
     }
 }

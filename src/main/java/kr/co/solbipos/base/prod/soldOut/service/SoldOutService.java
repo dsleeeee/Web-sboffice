@@ -51,4 +51,7 @@ public interface SoldOutService {
     // 사이드메뉴 품절여부 저장
     int getSideMenuSoldOutSave(SoldOutVO[] soldOutVOs, SessionInfoVO sessionInfoVO);
 
+    /** 사이드메뉴(상품) 목록 조회 */
+    List<DefaultMap<String>> getSideMenuProdSoldOutList(SoldOutVO soldOutVO, SessionInfoVO sessionInfoVO);
+
 }

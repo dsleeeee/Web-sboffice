@@ -174,4 +174,29 @@ public class SoldOutServiceImpl implements SoldOutService {
 
         return procCnt;
     }
+
+    /** 사이드메뉴(상품) 목록 조회 */
+    @Override
+    public List<DefaultMap<String>> getSideMenuProdSoldOutList(SoldOutVO soldOutVO, SessionInfoVO sessionInfoVO) {
+
+        // 소속구분 설정
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
+            soldOutVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        soldOutVO.setUserId(sessionInfoVO.getUserId());
+
+        // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
+        if (soldOutVO.getProdHqBrandCd() == "" || soldOutVO.getProdHqBrandCd() == null) {
+            // 사용자별 브랜드 array 값 세팅
+            if (soldOutVO.getUserProdBrands() != null && !"".equals(soldOutVO.getUserProdBrands())) {
+                String[] userBrandList = soldOutVO.getUserProdBrands().split(",");
+                if (userBrandList.length > 0) {
+                    soldOutVO.setUserProdBrandList(userBrandList);
+                }
+            }
+        }
+
+        return soldOutMapper.getSideMenuProdSoldOutList(soldOutVO);
+    }
+
 }

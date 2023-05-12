@@ -44,19 +44,14 @@
       </tbody>
     </table>
     </c:if>
-    <div class="oh sb-select dkbr mt20">
-      <button class="btn_blue ml5 fr" id="btnSoldOutYnSave" ng-click="save()"><s:message code="cmm.save" /></button>
-    </div>
 
     <%-- 일괄적용 --%>
     <table class="searchTbl mt10">
       <colgroup>
         <col class="w15" />
         <col class="w15" />
-        <col class="w20" />
         <col class="w15" />
-        <col class="w15" />
-        <col class="w20" />
+        <col class="*" />
       </colgroup>
       <tbody>
       <tr class="brt">
@@ -81,6 +76,10 @@
         <td>
           <a href="#" class="btn_grayS ml10" ng-click="batchChange()"><s:message code="prodBatchChange.batchChange" /></a>
         </td>
+          <%-- 저장 --%>
+          <td>
+            <button class="btn_skyblue ml5 fr" id="btnSoldOutYnSave" ng-click="save()"><s:message code="cmm.save" /></button>
+          </td>
       </tr>
       </tbody>
     </table>
@@ -106,6 +105,7 @@
             ime-enabled="true">
 
             <!-- define columns -->
+            <wj-flex-grid-column header="<s:message code="soldOut.store"/>" binding="storeCd" width="70" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselGrpCd"/>" binding="sdselGrpCd" width="70" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselGrpNm"/>" binding="sdselGrpNm" width="*" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselQty"/>" binding="cnt" width="*" visible="false"></wj-flex-grid-column>
@@ -136,6 +136,7 @@
             ime-enabled="true">
 
             <!-- define columns -->
+            <wj-flex-grid-column header="<s:message code="soldOut.store"/>" binding="storeCd" width="70" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselClassCd"/>" binding="sdselClassCd" width="70" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselClassNm"/>" binding="sdselClassNm" width="*" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselQty"/>" binding="sdselQty" width="50" is-read-only="true"></wj-flex-grid-column>
@@ -170,6 +171,8 @@
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="30"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="soldOut.store"/>" binding="storeCd" width="70" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselClassCd"/>" binding="sdselClassCd" width="70" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.prodCd"/>" binding="prodCd" width="100" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.prodNm"/>" binding="prodNm" width="100" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="soldOut.soldOutYn"/>" binding="soldOutYn" width="80" data-map="soldOutYnDataMap" ></wj-flex-grid-column>
