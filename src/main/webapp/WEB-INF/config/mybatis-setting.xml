@@ -145,6 +145,10 @@
     <typeAlias alias="hqEmpVO" type="kr.co.solbipos.base.store.emp.hq.service.HqEmpVO"/>
     <typeAlias alias="systemEmpVO" type="kr.co.solbipos.base.store.emp.system.service.SystemEmpVO"/>
     <typeAlias alias="systemEmpPwdManageVO" type="kr.co.solbipos.base.store.emp.system.service.SystemEmpPwdManageVO"/>
+
+    <!-- 기초관리 > 비밀번호 임의변경 > 비밀번호 임의변경(매장) -->
+    <typeAlias alias="pwdManageStoreVO" type="kr.co.solbipos.store.manage.pwdManageStore.service.PwdManageStoreVO"/>
+
     <typeAlias alias="viewVO" type="kr.co.solbipos.base.store.view.service.ViewVO"/>
     <typeAlias alias="vanConfigVO" type="kr.co.solbipos.base.store.view.service.VanConfigVO"/>
     <typeAlias alias="copyStoreEnvVO" type="kr.co.solbipos.base.store.view.service.CopyStoreEnvVO"/>
