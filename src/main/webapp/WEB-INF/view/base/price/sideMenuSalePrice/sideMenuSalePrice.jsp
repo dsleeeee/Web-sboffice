@@ -120,6 +120,39 @@
       </tr>
       </tbody>
     </table>
+      <table class="searchTbl mt10" id="tblChange">
+          <colgroup>
+              <col class="w13" />
+              <col class="w87" />
+          </colgroup>
+          <tbody>
+          <%--판매가--%>
+          <tr class="brt">
+              <th>
+                  <s:message code="salePriceManage.salePrice" />
+              </th>
+              <th class="oh gr">
+                  <div class="sb-select fl">
+                        <span>
+                            <input type="text" maxlength="10" numberOnly class="inSty2 w80px" id="inputSaleAmt"ng-model="inputSaleAmt" />
+                        </span>
+                  </div>
+                  <div class="sb-select fl w5px mr5 mt10">
+                      <span>원</span>
+                  </div>
+                  <a href="#" class="btn_grayS ml10" ng-click="changeAmt()">일괄적용</a>
+              </th>
+          </tr>
+          <tr>
+              <th colspan="2">
+                  <p class="s12 bk lh20">
+                      체크박스에서 선택된 항목만 일괄적용 됩니다.
+                  </p>
+              </th>
+          </tr>
+          </tbody>
+      </table>
+
 
     <div class="mt10 oh sb-select dkbr">
       <button class="btn_skyblue fr" ng-click="saveAddProdUprc()">
@@ -171,7 +204,7 @@
     </div>
     <%-- //페이지 리스트 --%>
 </div>
-<script type="text/javascript" src=/resource/solbipos/js/base/price/sideMenuSalePrice/sideMenuSalePrice.js?ver=20230502.01" charset="utf-8"></script>
+<script type="text/javascript" src=/resource/solbipos/js/base/price/sideMenuSalePrice/sideMenuSalePrice.js?ver=20230502.03" charset="utf-8"></script>
 
 <script>
     // (상품관리)브랜드사용여부
@@ -179,6 +212,11 @@
     // 브랜드
     var userHqBrandCdComboList = ${userHqBrandCdComboList};
     var momsEnvstVal = "${momsEnvstVal}";
+    $(function(){
+        $("input:text[numberOnly]").on("keyup", function() {
+            $(this).val($(this).val().replace(/[^-|^0-9]/g,""));
+        });
+    });
 </script>
 
 <%-- 상품분류 팝업 --%>
