@@ -550,12 +550,304 @@ function makePreview() {
       if (lineArray[m].getByteLength() <= 42 || !isEmpty(lineArray[m].match(/<img src.*?>/g)) || !isEmpty(lineArray[m].match(/<font.*?>/g))) {
         newValues[newLine++] = lineArray[m];
       } else {
-        splitStr = lineArray[m].splitByteLen(42);
+        /*splitStr = lineArray[m].splitByteLen(42);
         for (var n = 0; n < splitStr.length; n++) {
           newValues[newLine++] = splitStr[n];
-        }
+        }*/
+        newValues[newLine++] = lineArray[m];    // 42byte 초과 문자열 쪼개서 배열넣던 방식 -> 쪼개지 않고 통으로 사용(20230509)
       }
     }
   }
-  thePreview.innerHTML = "<PRE><P>" + newValues.join("</P><P>") + "</P></PRE>";
+
+  //thePreview.innerHTML = "<PRE><P>" + newValues.join("</P><P>") + "</P></PRE>";
+
+
+  var innerVal = "<PRE>";
+
+  var pTag = "<p";       // 전체(정렬 + 폰트) tag
+  var pAlignTag = "";    // 정렬 tag
+  var pFontTag = "";     // 폰트 style tag
+  var endStyle = false;  // 전체 style tag 종료 구분
+  var fontSizeType = ""; // 폰트 사이즈 구분(사이즈별 문단 height 값 지정시 사용)
+
+  for(var i=0; i<newValues.length; i++){
+
+    // 정렬 ------------------------------------------------------------------------------------------------------------  
+    // 중앙 정렬
+    if(newValues[i].includes("{CENTER}")){
+        // 정렬 tag 구성
+        pAlignTag = " align=\"center\"";
+        pTag += pAlignTag;
+        // 기존 구분자값 제거
+        newValues[i] = newValues[i].replace("{CENTER}", "");
+    }
+
+    // 왼쪽 정렬
+    if(newValues[i].includes("{LEFT}")){
+        // 정렬 tag 구성
+        pAlignTag = " align=\"left\"";
+        pTag += pAlignTag;
+        // 기존 구분자값 제거
+        newValues[i] = newValues[i].replace("{LEFT}", "");
+    }
+
+    // 오른쪽 정렬
+    if(newValues[i].includes("{RIGHT}")){
+        // 정렬 tag 구성
+        pAlignTag = " align=\"right\"";
+        pTag += pAlignTag;
+        // 기존 구분자값 제거
+        newValues[i] = newValues[i].replace("{RIGHT}", "");
+    }
+
+    // 정렬 종료 시
+    if(newValues[i].includes("{/CENTER}") || newValues[i].includes("{/LEFT}") || newValues[i].includes("{/RIGHT}")){
+        // 정렬 tag 초기화 
+        pAlignTag = "";
+        // 기존 구분자값 제거
+        newValues[i] = newValues[i].replace("{/CENTER}", "");
+        newValues[i] = newValues[i].replace("{/LEFT}", "");
+        newValues[i] = newValues[i].replace("{/RIGHT}", "");
+    }
+
+    // 폰트 사이즈 또는 강조 ---------------------------------------------------------------------------------------------
+    if(newValues[i].includes("FONT_H2X") || newValues[i].includes("FONT_HV2X") || newValues[i].includes("FONT_V2X") ||
+        newValues[i].includes("FONT_1") || newValues[i].includes("FONT_2") || newValues[i].includes("FONT_3") ||
+        newValues[i].includes("FONT_4") || newValues[i].includes("FONT_5") || newValues[i].includes("FONT_6") ||
+        newValues[i].includes("FONT_7") || newValues[i].includes("EMPHASIS")){
+
+        // 'style' tag 추가
+        if(!pTag.includes(" style=\"")){
+            pTag += " style=\"";
+            endStyle = true;
+        }
+
+        // 폰트 사이즈 - 가로 두배 늘리기
+        if(newValues[i].includes("{FONT_H2X}")){
+          // 폰트 사이즈 구분 추가      
+          fontSizeType = "FONT_H2X";
+          // 폰트 사이즈 tag 구성
+          pFontTag = "font-size:24px; transform:scaleY(0.5); transform-origin:0 0; height:12px;";
+          pTag += pFontTag;
+          // 기존 구분자값 제거
+          newValues[i] = newValues[i].replace("{FONT_H2X}", "");
+        }
+        
+        // 폰트 사이즈 - 가로 두배 늘리기 종료 시
+        if(newValues[i].includes("{/FONT_H2X}")){
+          // 폰트 style tag 초기화
+          pFontTag = "";
+          // 기존 구분자값 제거
+          newValues[i] = newValues[i].replace("{/FONT_H2X}", "");
+        }
+        
+        // 폰트 사이즈 - 가로,세로 두배 늘리기
+        if(newValues[i].includes("{FONT_HV2X}")){
+          fontSizeType = "FONT_HV2X";
+          pFontTag = "font-size:24px; transform:scaleY(1); transform-origin:0 0; height:24px;";
+          pTag += pFontTag;
+          newValues[i] = newValues[i].replace("{FONT_HV2X}", "");
+        }
+        
+        // 폰트 사이즈 - 가로,세로 두배 늘리기 종료 시
+        if(newValues[i].includes("{/FONT_HV2X}")){
+          pFontTag = "";
+          newValues[i] = newValues[i].replace("{/FONT_HV2X}", "");
+        }
+
+        // 폰트 사이즈 - 세로 두배 늘리기
+        if(newValues[i].includes("{FONT_V2X}")){
+          fontSizeType = "FONT_V2X";
+          pFontTag = "font-size:24px; transform:scaleX(0.5); transform-origin:0 0; width:200%; height:24px;";
+          pTag += pFontTag;
+          newValues[i] = newValues[i].replace("{FONT_V2X}", "");
+        }
+        
+        // 폰트 사이즈 - 세로 두배 늘리기 종료 시
+        if(newValues[i].includes("{/FONT_V2X}")){
+          pFontTag = "";
+          newValues[i] = newValues[i].replace("{/FONT_V2X}", "");
+        }
+
+        // 폰트 사이즈 - FONT_1
+        if(newValues[i].includes("{FONT_1}")){
+          fontSizeType = "FONT_1";
+          pFontTag = "font-size:50px; transform:scaleY(0.6); transform-origin:0 0; height:30px;";
+          pTag += pFontTag;
+          newValues[i] = newValues[i].replace("{FONT_1}", "");
+        }
+
+        // 폰트 사이즈 - FONT_1 종료 시 
+        if(newValues[i].includes("{/FONT_1}")){
+          pFontTag = "";
+          newValues[i] = newValues[i].replace("{/FONT_1}", "");
+        }
+        
+        // 폰트 사이즈 - FONT_2
+        if(newValues[i].includes("{FONT_2}")){
+          fontSizeType = "FONT_2";
+          pFontTag = "font-size:50px; transform:scaleY(0.8); transform-origin:0 0; height:40px;";
+          pTag += pFontTag;
+          newValues[i] = newValues[i].replace("{FONT_2}", "");
+        }
+
+        // 폰트 사이즈 - FONT_2 종료 시 
+        if(newValues[i].includes("{/FONT_2}")){
+          pFontTag = "";
+          newValues[i] = newValues[i].replace("{/FONT_2}", "");
+        }
+
+        // 폰트 사이즈 - FONT_3
+        if(newValues[i].includes("{FONT_3}")){
+          fontSizeType = "FONT_3";
+          pFontTag = "font-size:50px; transform:scaleY(1); transform-origin:0 0; height:50px;";
+          pTag += pFontTag;
+          newValues[i] = newValues[i].replace("{FONT_3}", "");
+        }
+
+        // 폰트 사이즈 - FONT_3 종료 시
+        if(newValues[i].includes("{/FONT_3}")){
+          pFontTag = "";
+          newValues[i] = newValues[i].replace("{/FONT_3}", "");
+        }
+
+        // 폰트 사이즈 - FONT_4
+        if(newValues[i].includes("{FONT_4}")){
+          fontSizeType = "FONT_4";
+          pFontTag = "font-size:50px; transform:scaleY(1.2); transform-origin:0 0; height:60px;";
+          pTag += pFontTag;
+          newValues[i] = newValues[i].replace("{FONT_4}", "");
+        }
+
+        // 폰트 사이즈 - FONT_4 종료 시
+        if(newValues[i].includes("{/FONT_4}")){
+          pFontTag = "";
+          newValues[i] = newValues[i].replace("{/FONT_4}", "");
+        }
+
+        // 폰트 사이즈 - FONT_5
+        if(newValues[i].includes("{FONT_5}")){
+          fontSizeType = "FONT_5";
+          pFontTag = "font-size:50px; transform:scaleY(1.4); transform-origin:0 0; height:70px;";
+          pTag += pFontTag;
+          newValues[i] = newValues[i].replace("{FONT_5}", "");
+        }
+
+        // 폰트 사이즈 - FONT_5 종료 시
+        if(newValues[i].includes("{/FONT_5}")){
+          pFontTag = "";
+          newValues[i] = newValues[i].replace("{/FONT_5}", "");
+        }
+
+        // 폰트 사이즈 - FONT_6
+        if(newValues[i].includes("{FONT_6}")){
+          fontSizeType = "FONT_6";
+          pFontTag = "font-size:50px; transform:scaleY(1.6); transform-origin:0 0; height:80px;";
+          pTag += pFontTag;
+          newValues[i] = newValues[i].replace("{FONT_6}", "");
+        }
+
+        // 폰트 사이즈 - FONT_6 종료 시
+        if(newValues[i].includes("{/FONT_6}")){
+          pFontTag = "";
+          newValues[i] = newValues[i].replace("{/FONT_6}", "");
+        }
+
+        // 폰트 사이즈 - FONT_7
+        if(newValues[i].includes("{FONT_7}")){
+          fontSizeType = "FONT_7";
+          pFontTag = "font-size:50px; transform:scaleY(1.8); transform-origin:0 0; height:90px;";
+          pTag += pFontTag;
+          newValues[i] = newValues[i].replace("{FONT_7}", "");
+        }
+
+        // 폰트 사이즈 - FONT_7 종료 시
+        if(newValues[i].includes("{/FONT_7}")){
+          pFontTag = "";
+          newValues[i] = newValues[i].replace("{/FONT_7}", "");
+        }
+
+        // 폰트 강조
+        if(newValues[i].includes("{EMPHASIS}")){
+          // 폰트 강조 tag 구성
+          pFontTag = " font-weight:bold;";
+          pTag += pFontTag;
+          // 기존 구분자값 제거
+          newValues[i] = newValues[i].replace("{EMPHASIS}", "");
+        }
+
+        // 폰트 강조 종료 시
+        if(newValues[i].includes("{/EMPHASIS}")){
+          // 폰트 style tag 초기화
+          pFontTag = "";
+          // 기존 구분자값 제거
+          newValues[i] = newValues[i].replace("{/EMPHASIS}", "");
+        }
+
+        // 'style' tag 종료
+        if(endStyle){
+            pTag += "\"";
+            endStyle = false;
+        }
+    }
+
+    var vLine = 1;      // 문단 Line 수
+    var pTag2 = pTag;   // 기존 tag 값 유지를 위해
+
+    // 글자 갯수로 문단 Line 수 판단
+    if(fontSizeType === "FONT_H2X" || fontSizeType === "FONT_HV2X"){
+        vLine = parseInt(newValues[i].getByteLength()/(2*11)) + 1; // 2byte * 한줄에 11자
+        if(newValues[i].getByteLength()%(2*11) === 0){
+            vLine = vLine - 1;
+        }
+    }else if(fontSizeType === "FONT_V2X"){
+        vLine = parseInt(newValues[i].getByteLength()/(2*22)) + 1; // 2byte * 한줄에 22자
+        if(newValues[i].getByteLength()%(2*22) === 0){
+            vLine = vLine - 1;
+        }
+    }else{
+        vLine = parseInt(newValues[i].getByteLength()/(2*5)) + 1;  // 2byte * 한줄에 5자씩
+        if(newValues[i].getByteLength()%(2*5) === 0){
+            vLine = vLine - 1;
+        }
+    }
+
+    // (문단 Line 수 * 글자크기)로 문단 height값 계산하여 기존값에 치환
+    if(fontSizeType === "FONT_H2X"){
+      pTag2 = pTag2.replace(" height:12px;", " height:" + (vLine * 12).toString() + "px;");
+    }else if(fontSizeType === "FONT_HV2X"){
+      pTag2 = pTag2.replace(" height:24px;", " height:" + (vLine * 24).toString() + "px;");
+    }else if(fontSizeType === "FONT_V2X"){
+      pTag2 = pTag2.replace(" height:24px;", " height:" + (vLine * 24).toString() + "px;");
+    }else if(fontSizeType === "FONT_1"){
+      pTag2 = pTag2.replace(" height:30px;", " height:" + (vLine * 30).toString() + "px;");
+    }else if(fontSizeType === "FONT_2"){
+      pTag2 = pTag2.replace(" height:40px;", " height:" + (vLine * 40).toString() + "px;");
+    }else if(fontSizeType === "FONT_3"){
+      pTag2 = pTag2.replace(" height:50px;", " height:" + (vLine * 50).toString() + "px;");
+    }else if(fontSizeType === "FONT_4"){
+      pTag2 = pTag2.replace(" height:60px;", " height:" + (vLine * 60).toString() + "px;");
+    }else if(fontSizeType === "FONT_5"){
+      pTag2 = pTag2.replace(" height:70px;", " height:" + (vLine * 70).toString() + "px;");
+    }else if(fontSizeType === "FONT_6"){
+      pTag2 = pTag2.replace(" height:80px;", " height:" + (vLine * 80).toString() + "px;");
+    }else if(fontSizeType === "FONT_7"){
+      pTag2 = pTag2.replace(" height:90px;", " height:" + (vLine * 90).toString() + "px;");
+    }
+
+    // style 적용된 문단 완성
+    innerVal += pTag2 + ">" + newValues[i] + "</p>";
+
+    // 전체 tag 초기화(폰트 style tag 제거)
+    pTag  = "<p" + pAlignTag;
+
+    // 전체 tag 초기화(정렬 tag 제거)
+    pTag  = "<p" + pFontTag;
+  }
+
+  innerVal += "</PRE>";
+
+  // 미리보기 화면에 set
+  thePreview.innerHTML = innerVal;
+
 }

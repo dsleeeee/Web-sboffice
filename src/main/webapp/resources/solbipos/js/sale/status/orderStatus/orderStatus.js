@@ -42,6 +42,20 @@ var orderFgData = [
     {"name": "취소", "value": "2"},
     {"name": "결제", "value": "3"}
 ];
+// 주문구분(조회조건용)
+var orderFgData2 = [
+    {"name": "전체", "value": ""},
+    {"name": "주문", "value": "1"},
+    {"name": "취소", "value": "2"},
+    {"name": "결제", "value": "3"}
+];
+// 주문상세구분(조회조건용)
+var orderDtlFgData2 = [
+    {"name": "전체", "value": ""},
+    {"name": "주문", "value": "1"},
+    {"name": "취소", "value": "2"},
+    {"name": "변경", "value": "3"}
+];
 // 배달주문구분
 var dlvrOrderFgData = [
     {"name": "일반", "value": "1"},
@@ -60,6 +74,12 @@ app.controller('orderStatusCtrl', ['$scope', '$http', function ($scope, $http) {
 
   //페이지 스케일 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
+
+  // 주문구분 콤보박스 데이터 set
+  $scope._setComboData("orderFgCombo", orderFgData2);
+
+  // 주문상세구분 콤보박스 데이터 set
+  $scope._setComboData("orderDtlFgCombo", orderDtlFgData2);
 
   // 등록일자 셋팅
   $scope.startDate = wcombo.genDateVal("#startDate", gvStartDate);
@@ -106,6 +126,7 @@ app.controller('orderStatusCtrl', ['$scope', '$http', function ($scope, $http) {
                 $("#orderStatusDtlLayer").show();
                 var params = {};
                 params.saleDate = selectedRow.saleDate.replaceAll("-","");
+                params.storeCd = selectedRow.storeCd;
                 params.orderNo = selectedRow.orderNo;
                 $scope._broadcast('orderStatusDtlCtrl', params);
             }
@@ -123,9 +144,11 @@ app.controller('orderStatusCtrl', ['$scope', '$http', function ($scope, $http) {
   // 그리드 조회
   $scope.searchOrderStatusList = function(){
     var params = {};
-    params.startDate = wijmo.Globalize.format($scope.startDate.value, 'yyyyMMdd');
-    params.endDate   = wijmo.Globalize.format($scope.endDate.value, 'yyyyMMdd');
-    params.listScale = $scope.listScale;;
+    params.startDate  = wijmo.Globalize.format($scope.startDate.value, 'yyyyMMdd');
+    params.endDate    = wijmo.Globalize.format($scope.endDate.value, 'yyyyMMdd');
+    params.orderFg    = $scope.orderFgCombo.selectedValue;
+    params.orderDtlFg = $scope.orderDtlFgCombo.selectedValue;
+    params.listScale  = $scope.listScale;
 
     $scope._inquiryMain('/sale/orderStatus/orderStatus/orderStatus/getOrderStatusList.sb', params);
   };

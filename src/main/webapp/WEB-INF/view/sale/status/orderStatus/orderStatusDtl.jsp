@@ -53,5 +53,5 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderStatus/orderStatusDtl.js?ver=20211001.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderStatus/orderStatusDtl.js?ver=20230511.01" charset="utf-8"></script>
 

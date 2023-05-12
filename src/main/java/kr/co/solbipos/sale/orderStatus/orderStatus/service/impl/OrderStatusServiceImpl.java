@@ -3,6 +3,7 @@ package kr.co.solbipos.sale.orderStatus.orderStatus.service.impl;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.orderStatus.orderStatus.service.OrderStatusService;
 import kr.co.solbipos.sale.orderStatus.orderStatus.service.OrderStatusVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,9 @@ public class OrderStatusServiceImpl implements OrderStatusService {
     @Override
     public List<DefaultMap<String>> getOrderStatusList(OrderStatusVO orderStatusVO, SessionInfoVO sessionInfoVO) {
         orderStatusVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        orderStatusVO.setStoreCd(sessionInfoVO.getStoreCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            orderStatusVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
         return orderStatusMapper.getOrderStatusList(orderStatusVO);
     }
 
@@ -49,7 +52,6 @@ public class OrderStatusServiceImpl implements OrderStatusService {
     @Override
     public List<DefaultMap<String>> getOrderStatusDtlList(OrderStatusVO orderStatusVO, SessionInfoVO sessionInfoVO) {
         orderStatusVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        orderStatusVO.setStoreCd(sessionInfoVO.getStoreCd());
         return orderStatusMapper.getOrderStatusDtlList(orderStatusVO);
     }
 }

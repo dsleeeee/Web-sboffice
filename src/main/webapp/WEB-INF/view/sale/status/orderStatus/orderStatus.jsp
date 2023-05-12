@@ -9,7 +9,7 @@
 <div class="subCon" ng-controller="orderStatusCtrl">
 
   <%-- 조회조건 --%>
-  <div class="searchBar flddUnfld">
+  <div class="searchBar">
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -30,12 +30,42 @@
     <%-- 변경 일자 --%>
     <tr>
       <th><s:message code="orderStatus.srchDate" /></th>
-      <td>
+      <td colspan="3">
         <div class="sb-select">
           <span class="txtIn"><input id="startDate" ng-model="startDate" class="w110px"></span>
           <span class="rg">~</span>
           <span class="txtIn"><input id="endDate" ng-model="endDate" class="w110px"></span>
         </div>
+      </td>
+    </tr>
+    <tr>
+      <th><s:message code="orderStatus.orderFg" /></th>
+      <td>
+        <div class="sb-select w50">
+          <wj-combo-box
+              id="orderFg"
+              items-source="_getComboData('orderFgCombo')"
+              display-member-path="name"
+              selected-value-path="value"
+              is-editable="false"
+              initialized="_initComboBox(s)"
+              control="orderFgCombo">
+          </wj-combo-box>
+        </div>
+      </td>
+      <th><s:message code="orderStatus.orderDtlFg" /></th>
+      <td>
+          <div class="sb-select w50">
+            <wj-combo-box
+                id="orderDtlFg"
+                items-source="_getComboData('orderDtlFgCombo')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)"
+                control="orderDtlFgCombo">
+            </wj-combo-box>
+          </div>
       </td>
     </tr>
    </tbody>
@@ -71,6 +101,7 @@
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="orderStatus.saleDate"/>"      binding="saleDate"      width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="orderStatus.storeCd"/>"       binding="storeCd"       width="70" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="orderStatus.posNo"/>"         binding="posNo"         width="70" is-read-only="true" align="center"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="orderStatus.orderNo"/>"       binding="orderNo"       width="80" is-read-only="true" align="center"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="orderStatus.orderFg"/>"       binding="orderFg"       width="80" is-read-only="true" align="center" data-map="orderFgDataMap"></wj-flex-grid-column>
@@ -95,6 +126,8 @@
         <wj-flex-grid-column header="<s:message code="orderStatus.tblCd"/>"         binding="tblCd"         width="80" is-read-only="true" align="center"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="orderStatus.moveOrderNo"/>"   binding="moveOrderNo"   width="80" is-read-only="true" align="center"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="orderStatus.empNo"/>"         binding="empNo"         width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="orderStatus.empNm"/>"         binding="empNm"         width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="orderStatus.billNo"/>"         binding="billNo"         width="80" is-read-only="true" align="center"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="orderStatus.pagerNo"/>"       binding="pagerNo"       width="80" is-read-only="true" align="center"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="orderStatus.dlvrYn"/>"        binding="dlvrYn"        width="80" is-read-only="true" align="center" data-map="dlvrYnDataMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="orderStatus.membrYn"/>"       binding="membrYn"      width="80" is-read-only="true" align="center" data-map="membrYnDataMap"></wj-flex-grid-column>
@@ -117,7 +150,7 @@
   <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderStatus/orderStatus.js?ver=20211001.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderStatus/orderStatus.js?ver=20230511.01" charset="utf-8"></script>
 
 <%-- 상세 팝업 --%>
 <c:import url="/WEB-INF/view/sale/status/orderStatus/orderStatusDtl.jsp">

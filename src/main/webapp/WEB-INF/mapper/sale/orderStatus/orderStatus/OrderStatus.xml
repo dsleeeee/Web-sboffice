@@ -19,42 +19,66 @@
     <select id="getOrderStatusList"  parameterType="orderStatusVO" resultType="DefaultMap">
         /* OrderStatus.getOrderStatusList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT	TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,		-- 영업일자
-                POS_NO,			-- 포스번호
-                ORDER_NO,		-- 주문번호
-                ORDER_FG,		-- 주문구분 1:주문 2:취소 3:결제
-                DLVR_ORDER_FG,	-- 배달주문구분 1:일반 2:배달 3:포장
-                TO_CHAR(TO_DATE(ORDER_START_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS ORDER_START_DT,  -- 최초주문일시
-                TO_CHAR(TO_DATE(ORDER_END_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS ORDER_END_DT,      -- 최종주문일시
-                TOT_SALE_AMT,	-- 총판매금액
-                TOT_DC_AMT,		-- 총할인금액
-                TOT_TIP_AMT,	-- 총봉사료금액
-                TOT_ETC_AMT,	-- 총에누리금액
-                REAL_SALE_AMT,	-- 실판매금액
-                TAX_SALE_AMT,	-- 과세금액
-                VAT_AMT,		-- 부가세금액
-                NO_TAX_SALE_AMT,-- 면세금액
-                NET_SALE_AMT AS PURE_SALE_AMT,	-- 순판매금액
-                EXPECT_PAY_AMT,	-- 받을금액
-                RECV_PAY_AMT,	-- 받은금액
-                RTN_PAY_AMT,	-- 거스름액
-                DUTCH_PAY_CNT,	-- 더치페이인원수
-                TOT_GUEST_CNT,	-- 총인원
-                KITCHEN_MEMO,	-- 주방메모
-                TBL_CD,			-- 테이블코드
-                MOVE_ORDER_NO,	-- 이동주문번호
-                EMP_NO,			-- 사원번호
-                PAGER_NO,		-- 진동벨번호
-                DLVR_YN,		-- 배달여부
-                MEMBR_YN,		-- 회원여부
-                RESVE_YN,		-- 예약여부
-                REFUND_YN,		-- 환급여부
-                SEND_YN,		-- 전송여부
-                TO_CHAR(TO_DATE(SEND_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS SEND_DT -- 전송일시
+        SELECT	TO_CHAR(TO_DATE(tooh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,		-- 영업일자
+                tooh.STORE_CD,      -- 매장코드
+                tooh.POS_NO,		-- 포스번호
+                tooh.ORDER_NO,		-- 주문번호
+                tooh.ORDER_FG,		-- 주문구분 1:주문 2:취소 3:결제
+                tooh.DLVR_ORDER_FG,	-- 배달주문구분 1:일반 2:배달 3:포장
+                TO_CHAR(TO_DATE(tooh.ORDER_START_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS ORDER_START_DT,  -- 최초주문일시
+                TO_CHAR(TO_DATE(tooh.ORDER_END_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS ORDER_END_DT,      -- 최종주문일시
+                tooh.TOT_SALE_AMT,	-- 총판매금액
+                tooh.TOT_DC_AMT,	-- 총할인금액
+                tooh.TOT_TIP_AMT,	-- 총봉사료금액
+                tooh.TOT_ETC_AMT,	-- 총에누리금액
+                tooh.REAL_SALE_AMT,	-- 실판매금액
+                tooh.TAX_SALE_AMT,	-- 과세금액
+                tooh.VAT_AMT,		-- 부가세금액
+                tooh.NO_TAX_SALE_AMT,-- 면세금액
+                tooh.NET_SALE_AMT AS PURE_SALE_AMT,	-- 순판매금액
+                tooh.EXPECT_PAY_AMT,-- 받을금액
+                tooh.RECV_PAY_AMT,	-- 받은금액
+                tooh.RTN_PAY_AMT,	-- 거스름액
+                tooh.DUTCH_PAY_CNT,	-- 더치페이인원수
+                tooh.TOT_GUEST_CNT,	-- 총인원
+                tooh.KITCHEN_MEMO,	-- 주방메모
+                tooh.TBL_CD,		-- 테이블코드
+                tooh. MOVE_ORDER_NO,-- 이동주문번호
+                tooh.EMP_NO,		-- 사원번호
+                tme.EMP_NM,			-- 사원명
+                tooh.PAGER_NO,		-- 진동벨번호
+                tooh.DLVR_YN,		-- 배달여부
+                tooh.MEMBR_YN,		-- 회원여부
+                tooh.RESVE_YN,		-- 예약여부
+                tooh.REFUND_YN,		-- 환급여부
+                tooh.SEND_YN,		-- 전송여부
+                tooh.BILL_NO,       -- 영수증번호
+                TO_CHAR(TO_DATE(tooh.SEND_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS SEND_DT -- 전송일시
         <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM 	TB_OD_ORDER_HDR
-        WHERE 	STORE_CD = #{storeCd}
-        AND 	SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        FROM 	TB_OD_ORDER_HDR tooh
+        ,       TB_MS_EMPLOYEE tme
+        WHERE 	1=1
+        AND     tme.STORE_CD (+)= tooh.STORE_CD
+        AND     tme.EMP_NO (+)= tooh.EMP_NO
+        AND 	tooh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCd != null and storeCd != ""'>
+          AND     tooh.STORE_CD = #{storeCd}
+        </if>
+        <if test='orderFg != null and orderFg != ""'>
+          AND     tooh.ORDER_FG = #{orderFg}
+        </if>
+        <if test='orderDtlFg != null and orderDtlFg != ""'>
+          AND     (tooh.STORE_CD, tooh.SALE_DATE, tooh.ORDER_NO) IN  (
+                                                                        SELECT  tood.STORE_CD, tood.SALE_DATE, tood.ORDER_NO
+                                                                        FROM    TB_OD_ORDER_DTL tood
+                                                                        WHERE   tood.SALE_DATE = tooh.SALE_DATE
+                                                                        AND     tood.STORE_CD = tooh.STORE_CD
+                                                                        AND     tood.ORDER_NO = tooh.ORDER_NO
+                                                                        AND     tood.ORDER_DTL_FG = #{orderDtlFg}
+                                                                     )
+        </if>
+        ORDER
+        BY tooh.SALE_DATE DESC, tooh.STORE_CD, tooh.POS_NO, tooh.ORDER_NO ASC
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -89,6 +113,7 @@
         AND     tood.ORDER_NO = #{orderNo}
         AND     tmp.STORE_CD (+) = tood.STORE_CD
         AND     tmp.PROD_CD (+) = tood.PROD_CD
-
+        ORDER
+        BY ORDER_SEQ, ORDER_DTL_NO ASC
     </select>
 </mapper>

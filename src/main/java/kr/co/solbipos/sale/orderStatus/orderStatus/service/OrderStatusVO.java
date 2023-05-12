@@ -18,6 +18,10 @@ public class OrderStatusVO extends PageVO {
     private String saleDate;
     /** 주문번호 */
     private String orderNo;
+    /** 주문구분 */
+    private String orderFg;
+    /** 주문상세구분 */
+    private String orderDtlFg;
 
     /**
      * @return the hqOfficeCd
@@ -81,5 +85,21 @@ public class OrderStatusVO extends PageVO {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
+    }
+
+    public String getOrderFg() {
+        return orderFg;
+    }
+
+    public void setOrderFg(String orderFg) {
+        this.orderFg = orderFg;
+    }
+
+    public String getOrderDtlFg() {
+        return orderDtlFg;
+    }
+
+    public void setOrderDtlFg(String orderDtlFg) {
+        this.orderDtlFg = orderDtlFg;
     }
 }

@@ -46,6 +46,7 @@ app.controller('orderStatusDtlCtrl', ['$scope', '$http', function ($scope, $http
     $scope.searchOrderStatusDtl = function (data) {
         var params = {};
         params.saleDate = data.saleDate;
+        params.storeCd = data.storeCd;
         params.orderNo = data.orderNo;
         $scope._inquirySub("/sale/orderStatus/orderStatus/orderStatus/getOrderStatusDtlList.sb", params, function () {});
     };
