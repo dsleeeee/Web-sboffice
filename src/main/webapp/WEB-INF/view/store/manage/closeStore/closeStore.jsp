@@ -120,7 +120,7 @@
                   items-source="_getComboData('vanCd')"
                   display-member-path="name"
                   selected-value-path="value"
-                  is-editable="false"0
+                  is-editable="false"
                   is-read-only="true"
                   selected-index="1"
                   initialized="_initComboBox(s)">
