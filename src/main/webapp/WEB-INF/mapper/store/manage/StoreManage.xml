@@ -7435,6 +7435,7 @@
                     ,       #{modId} AS MOD_ID
                     FROM    TB_HQ_POS_ADVER_FILE
                     WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND      PROMOTION_CD IS NULL
                 ) B
             ON  (
                     A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
