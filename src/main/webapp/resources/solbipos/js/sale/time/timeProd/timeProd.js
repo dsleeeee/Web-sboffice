@@ -21,11 +21,18 @@ var prodOptionComboData = [
     {"name":"단품/세트/구성","value":"3"},
     {"name":"모두표시","value":"4"}
 ];
-// 일자표시옵션
+// 일자표시옵션(일자별표시)
 var dayOptionComboData = [
     {"name":"일자별","value":"1"},
     {"name":"기간합","value":"2"}
 ];
+
+// 일자표시옵션(월별표시)
+var dayOptionComboData2 = [
+    {"name":"월별","value":"1"},
+    {"name":"기간합","value":"2"}
+];
+
 //  일/월 구분
 var dayGubunComboData = [
     {"name":"일","value":"day"},
@@ -658,9 +665,11 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
         if(s.selectedValue === "day") {
             $("#spanDay").css("display" , "");
             $("#spanMonth").css("display" , "none");
+            $scope._setComboData("dayOptionCombo", dayOptionComboData); // 일자표시옵션(일자별표시)
         } else if(s.selectedValue === "month") {
             $("#spanDay").css("display" , "none");
             $("#spanMonth").css("display" , "");
+            $scope._setComboData("dayOptionCombo", dayOptionComboData2); // 일자표시옵션(월별표시)
         }
     };
 

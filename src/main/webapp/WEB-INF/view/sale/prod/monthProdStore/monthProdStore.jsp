@@ -422,4 +422,4 @@
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/monthProdStore/monthProdStore.js?ver=20230413.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/monthProdStore/monthProdStore.js?ver=20230517.01" charset="utf-8"></script>

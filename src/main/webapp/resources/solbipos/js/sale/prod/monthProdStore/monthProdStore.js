@@ -22,7 +22,7 @@ var prodOptionComboData = [
 ];
 // 일자표시옵션
 var dayOptionComboData = [
-    {"name":"일자별","value":"1"},
+    {"name":"월별","value":"1"},
     {"name":"기간합","value":"2"}
 ];
 

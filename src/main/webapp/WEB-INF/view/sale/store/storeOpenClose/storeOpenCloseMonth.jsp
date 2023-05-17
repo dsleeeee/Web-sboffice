@@ -29,8 +29,8 @@
         </colgroup>
         <tbody>
         <tr>
-            <%-- 조회일자 --%>
-            <th><s:message code="cmm.search.date"/></th>
+            <%-- 조회월 --%>
+            <th><s:message code="cmm.search.month"/></th>
             <td>
                 <div class="sb-select">
                     <span class="txtIn"><input id="monthStartDate" name="monthStartDate" class="w110px" /></span>
