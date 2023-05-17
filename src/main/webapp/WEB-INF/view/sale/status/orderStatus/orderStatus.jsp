@@ -6,11 +6,11 @@
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 
-<div class="subCon" ng-controller="orderStatusCtrl">
+<div id="orderStatusView" class="subCon" ng-controller="orderStatusCtrl">
 
   <%-- 조회조건 --%>
   <div class="searchBar">
-    <a href="#" class="open fl">${menuNm}</a>
+    <a href="#" class="open fl"><s:message code="orderStatus.orderStatus"/></a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
       <button class="btn_blue fr" ng-click="_pageView('orderStatusCtrl',1)">
@@ -48,7 +48,6 @@
               display-member-path="name"
               selected-value-path="value"
               is-editable="false"
-              initialized="_initComboBox(s)"
               control="orderFgCombo">
           </wj-combo-box>
         </div>
@@ -62,7 +61,6 @@
                 display-member-path="name"
                 selected-value-path="value"
                 is-editable="false"
-                initialized="_initComboBox(s)"
                 control="orderDtlFgCombo">
             </wj-combo-box>
           </div>
@@ -81,8 +79,7 @@
             items-source="_getComboData('listScaleBox')"
             display-member-path="name"
             selected-value-path="value"
-            is-editable="false"
-            initialized="initComboBox(s)">
+            is-editable="false">
     </wj-combo-box>
     <%--// 페이지 스케일  --%>
   </div>
@@ -150,7 +147,7 @@
   <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderStatus/orderStatus.js?ver=20230511.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderStatus/orderStatus.js?ver=20230517.01" charset="utf-8"></script>
 
 <%-- 상세 팝업 --%>
 <c:import url="/WEB-INF/view/sale/status/orderStatus/orderStatusDtl.jsp">

@@ -116,4 +116,182 @@
         ORDER
         BY ORDER_SEQ, ORDER_DTL_NO ASC
     </select>
+
+    <!-- 주문취소 - 기간내 전체취소건수 조회 -->
+    <!--
+        TABLE    : TB_OD_ORDER_HDR, TB_OD_ORDER_DTL
+        COMMENTS : 주문취소 기간내 전체취소건수를 조회한다.
+    -->
+    <select id="getOrderCancelPeriod"  parameterType="orderStatusVO" resultType="DefaultMap">
+        /* OrderStatus.getOrderCancelPeriod */
+        SELECT  #{startDate} ||'' - ''|| #{endDate} AS SALE_DATE
+        ,       A.STORE_CD
+        ,       COUNT(*) CANCEL_CNT
+        FROM    TB_OD_ORDER_HDR A
+        WHERE   A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCd != null and storeCd != ""'>
+        AND     A.STORE_CD = #{storeCd}
+        </if>
+        AND     A.ORDER_FG = '3'
+        AND     (A.STORE_CD, A.SALE_DATE, A.ORDER_NO) IN (
+                                                            SELECT  B.STORE_CD, B.SALE_DATE, B.ORDER_NO
+                                                            FROM    TB_OD_ORDER_DTL B
+                                                            WHERE   B.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                                                            <if test='storeCd != null and storeCd != ""'>
+                                                            AND     B.STORE_CD = #{storeCd}
+                                                            </if>
+                                                            AND     B.ORDER_DTL_FG = '2'
+                                                         )
+        GROUP
+        BY      A.STORE_CD
+        ORDER
+        BY      A.STORE_CD
+    </select>
+
+    <!-- 주문취소 - 일자별 취소건수 조회 -->
+    <!--
+        TABLE    : TB_OD_ORDER_HDR, TB_OD_ORDER_DTL
+        COMMENTS : 주문취소 일자별 취소건수를 조회한다.
+    -->
+    <select id="getOrderCancelByDate"  parameterType="orderStatusVO" resultType="DefaultMap">
+        /* OrderStatus.getOrderCancelByDate */
+        SELECT  TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,       A.STORE_CD
+        ,       COUNT(*) CANCEL_CNT
+        FROM    TB_OD_ORDER_HDR A
+        WHERE   A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCd != null and storeCd != ""'>
+        AND     A.STORE_CD = #{storeCd}
+        </if>
+        AND     A.ORDER_FG = '3'
+        AND     (A.STORE_CD, A.SALE_DATE, A.ORDER_NO) IN (
+                                                            SELECT  B.STORE_CD, B.SALE_DATE, B.ORDER_NO
+                                                            FROM    TB_OD_ORDER_DTL B
+                                                            WHERE   B.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                                                            <if test='storeCd != null and storeCd != ""'>
+                                                            AND     B.STORE_CD = #{storeCd}
+                                                            </if>
+                                                            AND     B.ORDER_DTL_FG = '2'
+                                                         )
+        GROUP
+        BY      A.SALE_DATE
+        ,       A.STORE_CD
+        ORDER
+        BY      A.SALE_DATE
+        ,       A.STORE_CD
+    </select>
+
+    <!-- 주문취소 - 캐셔별 취소건수 조회 -->
+    <!--
+        TABLE    : TB_OD_ORDER_HDR, TB_OD_ORDER_DTL
+        COMMENTS : 주문취소 캐셔별 취소건수를 조회한다.
+    -->
+    <select id="getOrderCancelByCashier"  parameterType="orderStatusVO" resultType="DefaultMap">
+        /* OrderStatus.getOrderCancelByCashier */
+        SELECT  A.EMP_NO
+        ,       (SELECT EMP_NM FROM TB_MS_EMPLOYEE WHERE STORE_CD = A.STORE_CD AND EMP_NO = A.EMP_NO) AS EMP_NM
+        ,       A.STORE_CD
+        ,       COUNT(*) CANCEL_CNT
+        FROM    TB_OD_ORDER_HDR A
+        WHERE   A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCd != null and storeCd != ""'>
+        AND     A.STORE_CD = #{storeCd}
+        </if>
+        AND     A.ORDER_FG = '3'
+        AND     (A.STORE_CD, A.SALE_DATE, A.ORDER_NO) IN (
+                                                            SELECT  B.STORE_CD, B.SALE_DATE, B.ORDER_NO
+                                                            FROM    TB_OD_ORDER_DTL B
+                                                            WHERE   B.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                                                            <if test='storeCd != null and storeCd != ""'>
+                                                            AND     B.STORE_CD = #{storeCd}
+                                                            </if>
+                                                            AND     B.ORDER_DTL_FG = '2'
+                                                         )
+        GROUP
+        BY      A.STORE_CD
+        ,       A.EMP_NO
+        ORDER
+        BY      A.STORE_CD
+        ,       A.EMP_NO
+    </select>
+
+    <!-- 주문취소 - 주문취소내역 조회 -->
+    <!--
+        TABLE    : TB_OD_ORDER_HDR, TB_OD_ORDER_DTL
+        COMMENTS : 주문취소내역을 조회한다.
+    -->
+    <select id="getOrderCancelList"  parameterType="orderStatusVO" resultType="DefaultMap">
+        /* OrderStatus.getOrderCancelList */
+        SELECT  A.STORE_CD
+        ,       TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,       A.ORDER_NO
+        ,		A.POS_NO
+        ,		C.TBL_GRP_NM
+        ,		C.TBL_NM
+        ,       A.ORDER_FG
+        ,       A.BILL_NO
+        ,	    TO_CHAR(TO_DATE(B.ORDER_REG_DT,  'YYYYMMDDHH24MISS'), 'HH24:MI:SS') AS ORDER_REG_DT
+        ,		B.ORDER_SEQ
+        ,		B.PROD_CD
+        ,       (SELECT PROD_NM FROM TB_MS_PRODUCT WHERE STORE_CD = B.STORE_CD AND PROD_CD = B.PROD_CD) AS PROD_NM
+        ,  		B.ORDER_DTL_FG
+        ,		B.SALE_QTY
+        ,		B.DC_AMT
+        ,		B.REAL_SALE_AMT
+        ,		A.EMP_NO
+        ,       (SELECT EMP_NM FROM TB_MS_EMPLOYEE WHERE STORE_CD = A.STORE_CD AND EMP_NO = A.EMP_NO) AS EMP_NM
+        ,		B.MOVE_TBL_NO
+        ,		B.MOVE_TBL_CD
+        ,       D.SALE_YN
+        ,       CASE WHEN D.REG_ID LIKE 'WEB_REG_%' THEN 'Y' ELSE 'N' END AS WEB_REG
+        FROM    TB_OD_ORDER_HDR A
+        ,       TB_OD_ORDER_DTL B
+        ,       (   SELECT A.TBL_CD
+                    , 	   A.TBL_NM
+                    , 	   A.TBL_GRP_CD
+                    ,	   B.TBL_GRP_NM
+                    FROM TB_MS_TABLE A
+                    ,	 TB_MS_TABLE_GROUP B
+                    WHERE A.STORE_CD = #{storeCd}
+                    AND A.STORE_CD = B.STORE_CD
+                    AND A.TBL_GRP_CD = B.TBL_GRP_CD
+                 ) C
+        ,        TB_SL_SALE_HDR D
+        WHERE   A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCd != null and storeCd != ""'>
+        AND     A.STORE_CD = #{storeCd}
+        </if>
+        AND     A.ORDER_FG = '3'
+        AND     B.STORE_CD = A.STORE_CD
+        AND     B.SALE_DATE = A.SALE_DATE
+        AND     B.ORDER_NO = A.ORDER_NO
+        AND     (A.STORE_CD, A.SALE_DATE, A.ORDER_NO) IN (
+                                                            SELECT  B.STORE_CD, B.SALE_DATE, B.ORDER_NO
+                                                            FROM    TB_OD_ORDER_DTL B
+                                                            WHERE   B.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                                                            <if test='storeCd != null and storeCd != ""'>
+                                                            AND     B.STORE_CD = #{storeCd}
+                                                            </if>
+                                                            AND     B.ORDER_DTL_FG = '2'
+                                                         )
+        <if test='saleDate != null and saleDate != ""'>
+        AND     A.SALE_DATE = #{saleDate}
+        </if>
+        <if test='empNo != null and empNo != ""'>
+        AND     A.EMP_NO = #{empNo}
+        </if>
+        AND     C.TBL_CD (+)= A.TBL_CD
+        AND     D.STORE_CD (+)= A.STORE_CD
+        AND     D.SALE_DATE (+)= A.SALE_DATE
+        AND     D.POS_NO (+)= A.POS_NO
+        AND     D.BILL_NO (+)= A.BILL_NO
+        ORDER
+        BY      A.SALE_DATE
+        ,       A.ORDER_NO
+        ,       A.POS_NO
+        ,       A.BILL_NO
+        ,       B.ORDER_REG_DT
+        ,       B.ORDER_SEQ
+        ,       B.ORDER_DTL_FG
+    </select>
 </mapper>

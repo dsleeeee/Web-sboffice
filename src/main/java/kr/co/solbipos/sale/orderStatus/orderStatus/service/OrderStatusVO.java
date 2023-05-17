@@ -22,6 +22,8 @@ public class OrderStatusVO extends PageVO {
     private String orderFg;
     /** 주문상세구분 */
     private String orderDtlFg;
+    /** 사원번호 */
+    private String empNo;
 
     /**
      * @return the hqOfficeCd
@@ -101,5 +103,13 @@ public class OrderStatusVO extends PageVO {
 
     public void setOrderDtlFg(String orderDtlFg) {
         this.orderDtlFg = orderDtlFg;
+    }
+
+    public String getEmpNo() {
+        return empNo;
+    }
+
+    public void setEmpNo(String empNo) {
+        this.empNo = empNo;
     }
 }

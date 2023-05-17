@@ -27,4 +27,16 @@ public interface OrderStatusService {
 
     /** 주문현황 상세 팝업 - 조회 */
     List<DefaultMap<String>> getOrderStatusDtlList(OrderStatusVO orderStatusVO, SessionInfoVO sessionInfoVO);
+
+    /** 주문취소 - 기간내 전체취소건수 조회 */
+    List<DefaultMap<String>> getOrderCancelPeriod(OrderStatusVO orderStatusVO, SessionInfoVO sessionInfoVO);
+
+    /** 주문취소 - 일자별 취소건수 조회  */
+    List<DefaultMap<String>> getOrderCancelByDate(OrderStatusVO orderStatusVO, SessionInfoVO sessionInfoVO);
+
+    /** 주문취소 - 캐셔별 취소건수 조회 */
+    List<DefaultMap<String>> getOrderCancelByCashier(OrderStatusVO orderStatusVO, SessionInfoVO sessionInfoVO);
+
+    /** 주문취소 - 주문취소내역 조회 */
+    List<DefaultMap<String>> getOrderCancelList(OrderStatusVO orderStatusVO, SessionInfoVO sessionInfoVO);
 }

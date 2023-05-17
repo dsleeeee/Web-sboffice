@@ -54,4 +54,45 @@ public class OrderStatusServiceImpl implements OrderStatusService {
         orderStatusVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return orderStatusMapper.getOrderStatusDtlList(orderStatusVO);
     }
+
+    /** 주문취소 - 기간내 전체취소건수 조회 */
+    @Override
+    public List<DefaultMap<String>> getOrderCancelPeriod(OrderStatusVO orderStatusVO, SessionInfoVO sessionInfoVO) {
+        orderStatusVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            orderStatusVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        return orderStatusMapper.getOrderCancelPeriod(orderStatusVO);
+    }
+
+    /** 주문취소 - 일자별 취소건수 조회 */
+    @Override
+    public List<DefaultMap<String>> getOrderCancelByDate(OrderStatusVO orderStatusVO, SessionInfoVO sessionInfoVO) {
+        orderStatusVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            orderStatusVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        return orderStatusMapper.getOrderCancelByDate(orderStatusVO);
+    }
+
+    /** 주문취소 - 캐셔별 취소건수 조회 */
+    @Override
+    public List<DefaultMap<String>> getOrderCancelByCashier(OrderStatusVO orderStatusVO, SessionInfoVO sessionInfoVO) {
+        orderStatusVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            orderStatusVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        return orderStatusMapper.getOrderCancelByCashier(orderStatusVO);
+    }
+
+    /** 주문취소 - 주문취소내역 조회 */
+    @Override
+    public List<DefaultMap<String>> getOrderCancelList(OrderStatusVO orderStatusVO, SessionInfoVO sessionInfoVO) {
+        orderStatusVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            orderStatusVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        return orderStatusMapper.getOrderCancelList(orderStatusVO);
+    }
+
 }
