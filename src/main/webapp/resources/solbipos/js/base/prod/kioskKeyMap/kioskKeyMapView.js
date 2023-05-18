@@ -62,7 +62,13 @@ app.controller('kioskKeyMapViewCtrl', ['$scope', '$http', function ($scope, $htt
       var scope = agrid.getScope('kioskKeyMapRegistCtrl');
       params.posNo = scope.posNoCombo.selectedValue;
     }
-    var url = "/base/prod/kioskKeyMap/kioskKeyMap/getKioskCategory.sb" + "?sid=" + document.getElementsByName('sessionId')[0].value;
+
+    if(document.getElementsByName('sessionId')[0]){
+      params.sid = document.getElementsByName('sessionId')[0].value;
+    }
+
+    var url = "/base/prod/kioskKeyMap/kioskKeyMap/getKioskCategory.sb";
+
     $http({
       method: 'POST', //방식
       url: url, /* 통신할 URL */
@@ -114,7 +120,12 @@ app.controller('kioskKeyMapViewCtrl', ['$scope', '$http', function ($scope, $htt
     var params = {};
     params.tuClsType = $scope.tuClsTypeViewCombo.selectedValue;
     params.tuClsCd = tuClsCd;
-    var url = "/base/prod/kioskKeyMap/kioskKeyMap/getTuKeyList.sb" + "?sid=" + document.getElementsByName('sessionId')[0].value;
+
+    if(document.getElementsByName('sessionId')[0]){
+      params.sid = document.getElementsByName('sessionId')[0].value;
+    }
+
+    var url = "/base/prod/kioskKeyMap/kioskKeyMap/getTuKeyList.sb";
     $http({
       method: 'POST', //방식
       url: url, /* 통신할 URL */
