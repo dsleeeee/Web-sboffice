@@ -199,15 +199,36 @@
           </tbody>
         </table>
 
-        <%-- 버튼영역 --%>
-        <div class="mt10 tr">
-          <button class="btn_skyblue" ng-click="searchStore()"><s:message code="cmm.search" /></button>
-          <button class="btn_skyblue" ng-click="storeSelected()"><s:message code="cmm.chk"/></button>
-        </div>
+        <%-- 조회조건 --%>
+        <table class="tblType01">
+            <colgroup>
+                <col class="w15" />
+                <col class="w35" />
+                <col class="w15" />
+                <col class="w35" />
+            </colgroup>
+            <tbody>
+            <tr>
+                <th><s:message code="outstockReqDate.storeNm" /></th>
+                <td>
+                    <input type="text" id="filterStoreNm" ng-model="filterStoreNm"/>
+                </td>
+                <td colspan="2">
+                    <%-- 버튼영역 --%>
+                    <div class="tr">
+                        <button class="btn_skyblue fl" ng-click="searchFilter()"><s:message code="outstockReqDate.filter" /></button>
+                        <button class="btn_skyblue" ng-click="searchStore()"><s:message code="cmm.search" /></button>
+                        <button class="btn_skyblue" ng-click="storeSelected()"><s:message code="cmm.chk"/></button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
 
         <%--위즈모 테이블--%>
         <div class="theGrid mt10" style="height: 400px;">
           <wj-flex-grid
+            id="wjGridStoreM"
             autoGenerateColumns="false"
             selection-mode="Row"
             items-source="data"
@@ -433,6 +454,25 @@
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
     });
+
+    $scope.searchFilter = function (){
+        var grid = wijmo.Control.getControl("#wjGridStoreM");
+
+        if(grid.rows.length > 0){
+
+            for (var i = 0; i < grid.rows.length; i++) {
+                grid.rows[i].visible = true;
+            }
+            if($("#filterStoreNm").val() !==undefined && $("#filterStoreNm").val() !== null && $("#filterStoreNm").val() !== ""){
+                for (var i = 0; i < grid.rows.length; i++) {
+                    if (grid.rows[i].dataItem.storeNm.indexOf($("#filterStoreNm").val()) === -1) {
+                        grid.rows[i].visible = false;
+                    }
+                }
+            }
+            grid.refresh();
+        }
+    };
 
     $scope.searchStore = function () {
         // 파라미터
