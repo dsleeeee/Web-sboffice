@@ -116,6 +116,28 @@ public class SoldOutServiceImpl implements SoldOutService {
         return procCnt;
     }
 
+    /** 품절관리 상품탭 - 품절여부전체저장 */
+    @Override
+    public int getProdSoldOutAllSave(SoldOutVO[] soldOutVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(SoldOutVO soldOutVO : soldOutVOs) {
+
+            soldOutVO.setModDt(currentDt);
+            soldOutVO.setModId(sessionInfoVO.getUserId());
+
+            // 상품 update
+            procCnt = soldOutMapper.getProdSoldOutSave(soldOutVO);
+
+            // 사이드상품 update
+            procCnt = soldOutMapper.getSdselProdSoldOutSaveUpdate(soldOutVO);
+        }
+
+        return procCnt;
+    }
+
     // 선택그룹
     @Override
     public List<DefaultMap<String>> getMenuGrpList(SoldOutVO soldOutVO, SessionInfoVO sessionInfoVO) {

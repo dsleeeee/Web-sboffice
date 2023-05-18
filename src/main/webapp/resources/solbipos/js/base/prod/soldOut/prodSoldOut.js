@@ -326,6 +326,7 @@ app.controller('prodSoldOutCtrl', ['$scope', '$http', '$timeout', function ($sco
       });
     });
   };
+  // <-- //그리드 저장 -->
 
   // 화면 ready 된 후 설정
   angular.element(document).ready(function () {
@@ -349,6 +350,28 @@ app.controller('prodSoldOutCtrl', ['$scope', '$http', '$timeout', function ($sco
       } else {
           $("#tblSearchAddShow").hide();
       }
+  };
+
+  // 품절여부전체저장
+  $scope.soldOutAllSave = function() {
+    if($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["cmm.empty.data"]);
+      return false;
+    }
+
+    $scope._popConfirm(messages["cmm.choo.save"], function() {
+      // 파라미터 설정
+      var params = new Array();
+      for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+        $scope.flex.collectionView.items[i].soldOutYn = "Y"; // 품절
+        params.push($scope.flex.collectionView.items[i]);
+      }
+
+      // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+      $scope._save("/base/prod/soldOut/soldOut/getProdSoldOutAllSave.sb", params, function(){
+        $scope.searchProdList();
+      });
+    });
   };
 
 }]);
