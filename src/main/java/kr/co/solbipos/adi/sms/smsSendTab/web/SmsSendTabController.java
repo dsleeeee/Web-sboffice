@@ -3,7 +3,9 @@ package kr.co.solbipos.adi.sms.smsSendTab.web;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.adi.sms.marketingSmsSend.service.MarketingSmsSendService;
 import kr.co.solbipos.adi.sms.marketingSmsSend.service.MarketingSmsSendVO;
@@ -44,16 +46,18 @@ public class SmsSendTabController {
     private final MarketingSmsSendService marketingSmsSendService; // 마케팅용 SMS전송
     private final CmmCodeUtil cmmCodeUtil;
     private final SendStatusService sendStatusService; // 문자전송현황
+    private final CmmEnvUtil cmmEnvUtil;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public SmsSendTabController(SessionService sessionService, MarketingSmsSendService marketingSmsSendService, CmmCodeUtil cmmCodeUtil, SendStatusService sendStatusService) {
+    public SmsSendTabController(SessionService sessionService, MarketingSmsSendService marketingSmsSendService, CmmCodeUtil cmmCodeUtil, SendStatusService sendStatusService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.marketingSmsSendService = marketingSmsSendService; // 마케팅용 SMS전송
         this.cmmCodeUtil = cmmCodeUtil;
         this.sendStatusService = sendStatusService; // 문자전송현황
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -83,6 +87,13 @@ public class SmsSendTabController {
         // SMS전송 - 메세지그룹 조회
         List<DefaultMap<String>> msgGrpColList = sendStatusService.getMsgGrpColList(sendStatusVO, sessionInfoVO);
         model.addAttribute("msgGrpColList", msgGrpColList);
+
+        // 비매출회원SMS전송여부
+        if ( "H".equals(sessionInfoVO.getOrgnFg().getCode()) ) {
+            model.addAttribute("envst1273", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1273"), "0"));
+        } else if ( "S".equals(sessionInfoVO.getOrgnFg().getCode()) ) {
+            model.addAttribute("envst1273", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1273"), "0"));
+        }
 
         return "adi/sms/smsSendTab/smsSendTab";
     }

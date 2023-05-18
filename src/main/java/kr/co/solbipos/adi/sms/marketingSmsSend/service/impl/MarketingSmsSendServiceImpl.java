@@ -1,6 +1,8 @@
 package kr.co.solbipos.adi.sms.marketingSmsSend.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.adi.sms.marketingSmsSend.service.MarketingSmsSendService;
@@ -35,14 +37,16 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 public class MarketingSmsSendServiceImpl implements MarketingSmsSendService {
     private final MarketingSmsSendMapper marketingSmsSendMapper;
     private final SmsSendMapper smsSendMapper; // SMS전송 팝업
+    private final CmmEnvUtil cmmEnvUtil;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public MarketingSmsSendServiceImpl(MarketingSmsSendMapper marketingSmsSendMapper, SmsSendMapper smsSendMapper) {
+    public MarketingSmsSendServiceImpl(MarketingSmsSendMapper marketingSmsSendMapper, SmsSendMapper smsSendMapper, CmmEnvUtil cmmEnvUtil) {
         this.marketingSmsSendMapper = marketingSmsSendMapper;
         this.smsSendMapper = smsSendMapper; // SMS전송 팝업
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /** 메세지그룹 컬럼 리스트 조회 */
@@ -122,6 +126,13 @@ public class MarketingSmsSendServiceImpl implements MarketingSmsSendService {
 
             // 자기매장 회원만 보이게
             marketingSmsSendVO.setStoreMembr("true");
+        }
+
+        // 비매출회원SMS전송여부
+        if ( "H".equals(sessionInfoVO.getOrgnFg().getCode()) ) {
+            marketingSmsSendVO.setEnvst1273(CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1273"), "0"));
+        } else if ( "S".equals(sessionInfoVO.getOrgnFg().getCode()) ) {
+            marketingSmsSendVO.setEnvst1273(CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1273"), "0"));
         }
 
         procCnt = marketingSmsSendMapper.getMarketingSmsSendListSaveInsert(marketingSmsSendVO);
