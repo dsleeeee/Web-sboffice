@@ -3412,7 +3412,8 @@
             #{regId} AS REG_ID,
             #{modDt} AS MOD_DT,
             #{modId} AS MOD_ID,
-            RCVKIND
+            RCVKIND,
+            FIX_PROD_FG
             FROM TB_HQ_PRODUCT_SDSEL_PROD
             WHERE 1=1
             AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -3431,7 +3432,8 @@
             USE_YN = B.USE_YN,
             MOD_DT = B.MOD_DT,
             MOD_ID = B.MOD_ID,
-            RCVKIND = B.RCVKIND
+            RCVKIND = B.RCVKIND,
+            FIX_PROD_FG = B.FIX_PROD_FG
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -3445,7 +3447,8 @@
                 A.REG_ID,
                 A.MOD_DT,
                 A.MOD_ID,
-                A.RCVKIND
+                A.RCVKIND,
+                A.FIX_PROD_FG
             ) VALUES (
                 B.STORE_CD,
                 B.SDSEL_CLASS_CD,
@@ -3458,7 +3461,8 @@
                 B.REG_ID,
                 B.MOD_DT,
                 B.MOD_ID,
-                B.RCVKIND
+                B.RCVKIND,
+                B.FIX_PROD_FG
             )
     </insert>
 
