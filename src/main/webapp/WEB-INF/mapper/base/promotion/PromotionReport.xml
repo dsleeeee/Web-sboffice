@@ -173,12 +173,20 @@
                 ,       FN_PROMO_CHARGE_UPRC2(tsdp.STORE_CD, tsdp.PROMOTION_CD, SUM(tsdp.REAL_SALE_QTY), SUM(tsdp.PROMOTION_DC_AMT), 'PN')   AS PARTNER_CHARGE_UPRC_PROMO_CD
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM 	TB_SL_DAILY_PROMO tsdp
-                ,		TB_MS_PROMO_H thph
+                ,		TB_HQ_PROMO_H thph
                 ,		TB_MS_PROMO_CONDI thpc
                 ,		TB_MS_STORE tms
                 WHERE 	tsdp.STORE_CD = #{storeCds}
-                AND     thpc.DEPOSIT_YMD BETWEEN #{startDate} AND #{endDate}
-                AND 	tsdp.STORE_CD = thph.STORE_CD
+                <if test='gubun != null and gubun == "D"'>
+                    AND thpc.DEPOSIT_YMD BETWEEN #{startDate} AND #{endDate}
+                </if>
+                <if test='promotionCds != null and promotionCds != "" and gubun != null and gubun == "P"'>
+                    AND tsdp.PROMOTION_CD IN
+                    <foreach collection="promotionCdList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                AND 	tsdp.HQ_OFFICE_CD  = thph.HQ_OFFICE_CD
                 AND 	tsdp.PROMOTION_CD = thph.PROMOTION_CD
                 AND 	tsdp.STORE_CD = thpc.STORE_CD
                 AND 	tsdp.PROMOTION_CD = thpc.PROMOTION_CD
@@ -377,12 +385,20 @@
                 ,       FN_PROMO_CHARGE_UPRC2(tsdp.STORE_CD, tsdp.PROMOTION_CD, SUM(tsdp.REAL_SALE_QTY), SUM(tsdp.PROMOTION_DC_AMT), 'MS')   AS MS_CHARGE_UPRC_PROMO_CD
                 ,       FN_PROMO_CHARGE_UPRC2(tsdp.STORE_CD, tsdp.PROMOTION_CD, SUM(tsdp.REAL_SALE_QTY), SUM(tsdp.PROMOTION_DC_AMT), 'PN')   AS PARTNER_CHARGE_UPRC_PROMO_CD
                 FROM 	TB_SL_DAILY_PROMO tsdp
-                ,		TB_MS_PROMO_H thph
+                ,		TB_HQ_PROMO_H thph
                 ,		TB_MS_PROMO_CONDI thpc
                 ,		TB_MS_STORE tms
                 WHERE 	tsdp.STORE_CD = #{storeCds}
-                AND     thpc.DEPOSIT_YMD BETWEEN #{startDate} AND #{endDate}
-                AND 	tsdp.STORE_CD = thph.STORE_CD
+                <if test='gubun != null and gubun == "D"'>
+                    AND thpc.DEPOSIT_YMD BETWEEN #{startDate} AND #{endDate}
+                </if>
+                <if test='promotionCds != null and promotionCds != "" and gubun != null and gubun == "P"'>
+                    AND tsdp.PROMOTION_CD IN
+                    <foreach collection="promotionCdList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
+                AND 	tsdp.HQ_OFFICE_CD  = thph.HQ_OFFICE_CD
                 AND 	tsdp.PROMOTION_CD = thph.PROMOTION_CD
                 AND 	tsdp.STORE_CD = thpc.STORE_CD
                 AND 	tsdp.PROMOTION_CD = thpc.PROMOTION_CD
