@@ -374,6 +374,24 @@
         AND     PROD_CD     = #{prodCd}
     </update>
 
+    <!-- 품절관리 상품탭 - 품절여부전체저장 사이드상품 update -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getSdselProdSoldOutSaveUpdate" parameterType="soldOutVO">
+        /* SoldOutMapper.getSdselProdSoldOutSaveUpdate */
+        UPDATE
+        TB_MS_PRODUCT_SDSEL_PROD
+        SET
+        SOLD_OUT_YN = #{soldOutYn},
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND STORE_CD = #{storeCd}
+        AND PROD_CD = #{prodCd}
+    </update>
+
     <!-- 선택그룹 조회 -->
     <!--
         TABLE    : TB_MS_PRODUCT_SDSEL_GROUP

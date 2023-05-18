@@ -200,6 +200,29 @@ public class SoldOutController {
     }
 
     /**
+     * 품절관리 상품탭 - 품절여부전체저장
+     *
+     * @param soldOutVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 05. 17.
+     */
+    @RequestMapping(value = "/soldOut/getProdSoldOutAllSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdSoldOutAllSave(@RequestBody SoldOutVO[] soldOutVOs, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = soldOutService.getProdSoldOutAllSave(soldOutVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
      * 사이드메뉴-선택그룹 - 선택그룹 목록 조회
      *
      * @param request HttpServletRequest
