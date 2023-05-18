@@ -227,7 +227,7 @@ public class SalePriceServiceImpl implements SalePriceService {
         salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         salePriceVO.setUserId(sessionInfoVO.getUserId());
 
-        if(salePriceVO.getSalePriceOrgnFg() == "S") {
+        if(salePriceVO.getSalePriceOrgnFg().equals("S")) {
             // 매장 array 값 세팅
             String[] storeCds = salePriceVO.getStoreCds().split(",");
             salePriceVO.setStoreCdList(storeCds);
