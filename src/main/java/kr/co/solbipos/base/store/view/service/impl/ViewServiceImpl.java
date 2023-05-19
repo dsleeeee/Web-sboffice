@@ -173,6 +173,8 @@ public class ViewServiceImpl implements ViewService {
             }
             if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.POS_ENV) { // 포스환경
                 procResult = viewMapper.copyPosEnv(copyStoreEnvVO);
+                // 메인포스가 아닌경우 4048 스마트오더 미사용 강제수정
+                viewMapper.setEnv4048(copyStoreEnvVO);
             }
             if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.PROD) { // 상품(현재 사용안함)
                 // 상품분류, 상품, 판매가격 함께 복사

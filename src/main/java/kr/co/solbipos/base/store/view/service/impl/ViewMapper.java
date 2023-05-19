@@ -60,6 +60,9 @@ public interface ViewMapper {
     /** 포스 환경 복사 */
     String copyPosEnv(CopyStoreEnvVO copyStoreEnvVO);
 
+    /** 메인포스가 아닌경우 4048 스마트오더 미사용 강제수정 */
+    int setEnv4048(CopyStoreEnvVO copyStoreEnvVO);
+
     /** 상품 복사 */
     String copyProduct(CopyStoreEnvVO copyStoreEnvVO);
 

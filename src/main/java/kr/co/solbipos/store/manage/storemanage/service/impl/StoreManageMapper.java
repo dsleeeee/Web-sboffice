@@ -287,6 +287,9 @@ public interface StoreManageMapper {
     /** 매장 포스 환경 복사 */
     int copyPosEnvInfo(StorePosEnvVO storePosEnvVO);
 
+    /** 메인포스가 아닌경우 4048 스마트오더 미사용 강제수정 */
+    int setEnv4048(StorePosEnvVO storePosEnvVO);
+
     /** 메인포스 변경 */
     int updatePosEnv(StorePosEnvVO storePosEnvVO);
 
