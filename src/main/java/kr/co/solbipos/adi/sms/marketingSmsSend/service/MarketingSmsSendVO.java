@@ -152,6 +152,9 @@ public class MarketingSmsSendVO extends PageVO {
     /** 결과코드 */
     private String resCd;
 
+    /** envst1273 */
+    private String envst1273;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -460,6 +463,14 @@ public class MarketingSmsSendVO extends PageVO {
 
     public void setResCd(String resCd) {
         this.resCd = resCd;
+    }
+
+    public String getEnvst1273() {
+        return envst1273;
+    }
+
+    public void setEnvst1273(String envst1273) {
+        this.envst1273 = envst1273;
     }
 
     @Override

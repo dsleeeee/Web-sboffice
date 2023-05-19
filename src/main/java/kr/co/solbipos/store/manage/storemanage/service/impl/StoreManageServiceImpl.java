@@ -939,6 +939,9 @@ public class StoreManageServiceImpl implements StoreManageService{
         // 1-2) TB_MS_POS_ENVST 데이터 select insert
         procCnt += mapper.copyPosEnvInfo(storePosEnvVO);
 
+        // 메인포스가 아닌경우 4048 스마트오더 미사용 강제수정
+        mapper.setEnv4048(storePosEnvVO);
+
         // 1-3) 메인포스는 하나여야 하므로 복사하는 대상포스는 서브포스가 되어야 함
         storePosEnvVO.setEnvstCd(MAIN_POS_YN);
         storePosEnvVO.setEnvstVal(MAIN_POS_YN_DEFAULT);

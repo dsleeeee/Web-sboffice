@@ -3412,7 +3412,8 @@
             #{regId} AS REG_ID,
             #{modDt} AS MOD_DT,
             #{modId} AS MOD_ID,
-            RCVKIND
+            RCVKIND,
+            FIX_PROD_FG
             FROM TB_HQ_PRODUCT_SDSEL_PROD
             WHERE 1=1
             AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -3431,7 +3432,8 @@
             USE_YN = B.USE_YN,
             MOD_DT = B.MOD_DT,
             MOD_ID = B.MOD_ID,
-            RCVKIND = B.RCVKIND
+            RCVKIND = B.RCVKIND,
+            FIX_PROD_FG = B.FIX_PROD_FG
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -3445,7 +3447,8 @@
                 A.REG_ID,
                 A.MOD_DT,
                 A.MOD_ID,
-                A.RCVKIND
+                A.RCVKIND,
+                A.FIX_PROD_FG
             ) VALUES (
                 B.STORE_CD,
                 B.SDSEL_CLASS_CD,
@@ -3458,7 +3461,8 @@
                 B.REG_ID,
                 B.MOD_DT,
                 B.MOD_ID,
-                B.RCVKIND
+                B.RCVKIND,
+                B.FIX_PROD_FG
             )
     </insert>
 
@@ -5697,6 +5701,22 @@
          WHERE STORE_CD = #{storeCd}
            AND POS_NO = #{posNo}
     </insert>
+
+
+    <!-- 메인포스가 아닌경우 4048 스마트오더 미사용 강제수정 -->
+    <!--
+        TABLE    : TB_MS_POS_ENVST
+        PARAM    : storePosEnvVO
+        COMMENTS : 메인포스가 아닌경우 4048 스마트오더 미사용 강제수정
+    -->
+    <update id="setEnv4048" parameterType="storePosEnvVO">
+        /* USE : StoreManageMapper.setEnv4048 */
+        UPDATE  TB_MS_POS_ENVST
+        SET     ENVST_VAL = '0'
+        WHERE   STORE_CD = #{storeCd}
+        AND     POS_NO = #{targetPosNo}
+        AND     ENVST_CD = '4048'
+    </update>
 
     <!-- 포스 셋팅 복사, 메인포스 지정 -->
     <!--

@@ -707,6 +707,16 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
           $scope._popMsg(messages["sideMenu.selectMenu.sdselClassNm"] + messages["sideMenu.selectMenu.inputEnv"]);
           return false;
         }
+
+        // 필수선택여부가 'Y'이면 수량은 1 이상
+        if($scope.flex.collectionView.itemsAdded[i].requireYn === "Y") {
+          if(parseInt(nvl($scope.flex.collectionView.itemsAdded[i].sdselQty, 0)) >= 1) {
+          } else {
+            $scope._popMsg(messages["sideMenu.selectMenu.requireYnQtyChk.msg"]); // 필수선택시 수량은 1 이상 입력해주세요.
+            return false;
+          }
+        }
+
         if($scope.maxChk($scope.flex.collectionView.itemsAdded[i].sdselClassNm)) {
           
           // addRow가 제대로 안된 데이터 다시 파악하여 필수값 채워주기

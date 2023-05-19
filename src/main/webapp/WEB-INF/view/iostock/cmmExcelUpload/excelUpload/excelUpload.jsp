@@ -1270,7 +1270,7 @@
                 //     // return false;
                 // }
 
-                var numChkregexp = /[^0-9]/g;
+                var numChkregexp = /[^-|^0-9]/g;
                 if (numChkregexp.test(item.totAdjPoint)) {
                     // return false;
                     item.totAdjPoint = 0;

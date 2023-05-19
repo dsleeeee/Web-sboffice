@@ -232,6 +232,11 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     }
 
+    // 메인포스가 아닌경우 4048 스마트오더 미사용 강제수정
+    if(env4021 !== "1") {
+      $("#env4048").val('0');
+    }
+
     var chngCnt  = 0; // 변경된 건수
     var arrChg = []; //  변경된 환경변수 배열 Key 값
     var params = new Array();
