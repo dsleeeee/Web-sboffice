@@ -24,13 +24,20 @@
     </ul>
   </div>
 </div>
+
 <script>
   var touchKeyEnvstVal = ${touchKeyEnvstVal};
   var touchKeyGrpData  = ${touchKeyGrp};
   var maxClassRow      = ${maxClassRow};
   var prodNoEnvFg      = "${prodNoEnvFg}";
   var prodAuthEnvstVal = "${prodAuthEnvstVal}";
+
+  // [1014 포스프로그램구분] 환경설정값
+  var posVerEnvstVal = "${posVerEnvstVal}";
+  // [1261 필수선택사용여부] 환경설정값
+  var requireYnEnvstVal = "${requireYnEnvstVal}";
 </script>
+
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/storeSideMenu/storeSideMenu.js?ver=20200805.09" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
