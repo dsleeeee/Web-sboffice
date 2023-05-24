@@ -27,24 +27,29 @@
         <col class="w35" />
       </colgroup>
       <tbody>
-      <%-- 매장선택 --%>
-      <tr>
-        <th><s:message code="sideMenuSalePrice.store" /></th>
-        <td colspan="3">
-          <%-- 매장선택 모듈 사용시 include --%>
-          <c:if test="${momsEnvstVal == '0'}">
-            <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
-              <jsp:param name="targetId" value="sideMenuSalePriceStore"/>
-            </jsp:include>
-          </c:if>
-          <c:if test="${momsEnvstVal == '1'}">
-            <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreSMoms.jsp" flush="true">
-              <jsp:param name="targetId" value="sideMenuSalePriceStore"/>
-            </jsp:include>
-          </c:if>
-          <%--// 매장선택 모듈 사용시 include --%>
-        </td>
-      </tr>
+      <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+          <%-- 매장선택 --%>
+          <tr>
+            <th><s:message code="sideMenuSalePrice.store" /></th>
+            <td colspan="3">
+              <%-- 매장선택 모듈 사용시 include --%>
+              <c:if test="${momsEnvstVal == '0'}">
+                <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
+                  <jsp:param name="targetId" value="sideMenuSalePriceStore"/>
+                </jsp:include>
+              </c:if>
+              <c:if test="${momsEnvstVal == '1'}">
+                <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreSMoms.jsp" flush="true">
+                  <jsp:param name="targetId" value="sideMenuSalePriceStore"/>
+                </jsp:include>
+              </c:if>
+              <%--// 매장선택 모듈 사용시 include --%>
+            </td>
+          </tr>
+      </c:if>
+      <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+          <input type="hidden" id="sideMenuSalePriceStoreCd" value="${sessionInfo.storeCd}"/>
+      </c:if>
       <tr>
       <c:if test="${brandUseFg == '1'}">
           <%-- 상품브랜드 --%>
