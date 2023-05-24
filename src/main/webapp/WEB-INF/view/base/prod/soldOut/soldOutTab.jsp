@@ -11,13 +11,13 @@
             <li>
                 <a id="prodSoldOut" href="#" class="on" ng-click="prodSoldOutShow()"><s:message code="soldOut.prod"/></a>
             </li>
-            <%-- 사이드메뉴 품절관리 탭 --%>
-            <li>
-                <a id="sideSoldOut" href="#" ng-click="sideSoldOutShow()"><s:message code="soldOut.sideMenu"/></a>
-            </li>
             <%-- 사이드메뉴(상품) 품절관리 탭 --%>
             <li>
                 <a id="sideProdSoldOut" href="#" ng-click="sideProdSoldOutShow()"><s:message code="soldOut.sideMenuProd"/></a>
+            </li>
+            <%-- 사이드메뉴 품절관리 탭 --%>
+            <li>
+                <a id="sideSoldOut" href="#" ng-click="sideSoldOutShow()"><s:message code="soldOut.sideMenu"/></a>
             </li>
         </ul>
     </div>
