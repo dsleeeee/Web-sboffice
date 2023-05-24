@@ -366,7 +366,7 @@
         <tbody>
         <tr class="brt">
             <th>
-                - '품절여부전체저장' 클릭시 조회된 전체 상품과 사이드상품까지 '품절' 처리됩니다.
+                - '품절여부전체저장' 클릭시 체크된 상품과 사이드상품까지 '품절' 처리됩니다.
             </th>
             <th>
                 <%-- 품절여부전체저장 --%>
@@ -448,4 +448,4 @@
     var branchCdComboList = ${branchCdComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOut/prodSoldOut.js?ver=20230517.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOut/prodSoldOut.js?ver=20230524.01" charset="utf-8"></script>

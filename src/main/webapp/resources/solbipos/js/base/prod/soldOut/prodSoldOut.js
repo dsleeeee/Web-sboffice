@@ -363,8 +363,9 @@ app.controller('prodSoldOutCtrl', ['$scope', '$http', '$timeout', function ($sco
       // 파라미터 설정
       var params = new Array();
       for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-        $scope.flex.collectionView.items[i].soldOutYn = "Y"; // 품절
-        params.push($scope.flex.collectionView.items[i]);
+        if($scope.flex.collectionView.items[i].gChk) {
+          params.push($scope.flex.collectionView.items[i]);
+        }
       }
 
       // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
