@@ -574,6 +574,9 @@
             </if>
         </if>
         AND     tmpsp.USE_YN = 'Y'
+        <if test="soldOutYn != null and soldOutYn != ''">
+            AND tmpsp.SOLD_OUT_YN = #{soldOutYn}
+        </if>
         ORDER BY tmpsg.SDSEL_GRP_CD, tmpsc.DISP_SEQ, tmpsp.DISP_SEQ
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>

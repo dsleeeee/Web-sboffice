@@ -131,6 +131,25 @@
           <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" onkeyup="fnNxBtnSearch();"/>
         </td>
       </tr>
+      <tr>
+          <%-- 품절여부 --%>
+          <th><s:message code="sideMenuProdSoldOut.soldOutYn" /></th>
+          <td>
+              <div class="sb-select">
+                  <wj-combo-box
+                          id="srchSideProdSoldOutYn"
+                          ng-model="soldOutYn"
+                          items-source="_getComboData('sideProdSoldOutYnCombo')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          initialized="_initComboBox(s)">
+                  </wj-combo-box>
+              </div>
+          </td>
+          <th></th>
+          <td></td>
+      </tr>
       </tbody>
     </table>
 
@@ -189,21 +208,21 @@
 
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="soldOut.store"/>" binding="storeCd" width="100" align="center" is-read-only="true" visible="false" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.sdselGrpCd"/>" binding="sdselGrpCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.sdselGrpNm"/>" binding="sdselGrpNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="soldOut.store"/>" binding="storeCd" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.sdselGrpCd"/>" binding="sdselGrpCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.sdselGrpNm"/>" binding="sdselGrpNm" width="80" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.fixProdFg"/>" binding="grpFixProdFg" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.sdselTypeFg"/>" binding="sdselTypeFg" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.sdselClassCd"/>" binding="sdselClassCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.sdselTypeFg"/>" binding="sdselTypeFg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.sdselClassCd"/>" binding="sdselClassCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.sdselClassNm"/>" binding="sdselClassNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.sdselQty"/>" binding="sdselQty" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.requireYn"/>" binding="requireYn" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.sdselQty"/>" binding="sdselQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.requireYn"/>" binding="requireYn" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.prodClass"/>" binding="prodClassNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.prodNm"/>" binding="prodNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.addProdQty"/>" binding="addProdQty" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.addProdQty"/>" binding="addProdQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.fixProdFg"/>" binding="fixProdFg" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="soldOut.soldOutYn"/>" binding="soldOutYn" width="100" align="center" data-map="soldOutYnDataMap" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.soldOutYn"/>" binding="soldOutYn" data-map="soldOutYnDataMap" width="70" align="center"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
       <%--//위즈모 테이블--%>
@@ -216,4 +235,5 @@
     </div>
     <%-- //페이지 리스트 --%>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOut/sideMenuProdSoldOut.js?ver=20230509.01" charset="utf-8"></script>
+
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOut/sideMenuProdSoldOut.js?ver=20230524.01" charset="utf-8"></script>

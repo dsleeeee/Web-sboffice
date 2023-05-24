@@ -26,6 +26,7 @@ app.controller('sideMenuProdSoldOutCtrl', ['$scope', '$http', function ($scope, 
     angular.extend(this, new RootController('sideMenuProdSoldOutCtrl', $scope, $http, false));
 
     $scope._setComboData("srchProdHqBrandCd", userHqBrandCdComboList); // 상품브랜드
+    $scope._setComboData("sideProdSoldOutYnCombo", soldOutYnAllData); // 품절여부
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -80,6 +81,7 @@ app.controller('sideMenuProdSoldOutCtrl', ['$scope', '$http', function ($scope, 
                 params.userProdBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
             }
         }
+        params.soldOutYn = $scope.soldOutYn;
         params.listScale = 500;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
