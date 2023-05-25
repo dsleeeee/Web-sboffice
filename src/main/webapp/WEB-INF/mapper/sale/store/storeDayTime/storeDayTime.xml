@@ -48,9 +48,9 @@
             AND     tssh.STORE_CD = tms.STORE_CD
             AND     tssh.STORE_CD = tmsi.STORE_CD(+)
             <if test='storeCds != null and storeCds != ""'>
-                AND tssh.STORE_CD IN
-                <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
-                    #{item}
+                AND
+                <foreach collection="storeCdList" item="item" open="(" close=")" separator="OR">
+                    tssh.STORE_CD = #{item}
                 </foreach>
             </if>
             <if test='startTime != "0" or endTime != "23"'>
@@ -194,9 +194,9 @@
                             AND     tsdt.STORE_CD = tms.STORE_CD
                             AND     tsdt.STORE_CD = tmsi.STORE_CD(+)
                             <if test='storeCds != null and storeCds != ""'>
-                                AND tsdt.STORE_CD IN
-                                <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
-                                    #{item}
+                                AND
+                                <foreach collection="storeCdList" item="item" open="(" close=")" separator="OR">
+                                    tsdt.STORE_CD = #{item}
                                 </foreach>
                             </if>
                             <if test='timeSlot != null and timeSlot != ""'>

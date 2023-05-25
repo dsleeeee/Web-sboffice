@@ -123,9 +123,9 @@
                 WHERE   tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND     tsdt.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth}||'31'
                 <if test='storeCds != null and storeCds != ""'>
-                    AND tsdt.STORE_CD IN
-                    <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
+                        tsdt.STORE_CD = #{item}
                     </foreach>
                 </if>
                 AND     tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
@@ -186,9 +186,9 @@
                     ,       TB_MS_STORE_INFO tmsi
                     WHERE   tsdto.HQ_OFFICE_CD  = #{hqOfficeCd}
                     <if test='storeCds != null and storeCds != ""'>
-                        AND tsdto.STORE_CD IN
-                        <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                            #{item}
+                        AND
+                        <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                            tsdto.STORE_CD = #{item}
                         </foreach>
                     </if>
                     AND     tsdto.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
@@ -265,9 +265,9 @@
         AND 	tsmpd.POS_NO = tmpe.POS_NO
         AND 	tmpe.ENVST_CD = '4019'
         <if test='storeCds != null and storeCds != ""'>
-            AND tsmpd.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                tsmpd.STORE_CD = #{item}
             </foreach>
         </if>
         AND     tsmpd.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
@@ -442,9 +442,9 @@
         WHERE   tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     tsdt.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth}||'31'
         <if test='storeCds != null and storeCds != ""'>
-            AND tsdt.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
+                tsdt.STORE_CD = #{item}
             </foreach>
         </if>
         AND     tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
@@ -505,9 +505,9 @@
         ,       TB_MS_STORE_INFO tmsi
         WHERE   tsdto.HQ_OFFICE_CD  = #{hqOfficeCd}
         <if test='storeCds != null and storeCds != ""'>
-            AND tsdto.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                tsdto.STORE_CD = #{item}
             </foreach>
         </if>
         AND     tsdto.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
@@ -585,9 +585,9 @@
         AND 	tsmpd.POS_NO = tmpe.POS_NO
         AND 	tmpe.ENVST_CD = '4019'
         <if test='storeCds != null and storeCds != ""'>
-            AND tsmpd.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                tsmpd.STORE_CD = #{item}
             </foreach>
         </if>
         AND     tsmpd.SALE_YM BETWEEN #{startMonth} AND #{endMonth}

@@ -71,9 +71,9 @@
                                 </if>
                             </if>
                             <if test='storeCds != null and storeCds != ""'>
-                                AND tsdpsd.STORE_CD IN
-                                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                                    #{item}
+                                AND
+                                <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                                    tsdpsd.STORE_CD = #{item}
                                 </foreach>
                             </if>
                             <if test='momsTeam != null and momsTeam != ""'>
@@ -165,9 +165,9 @@
                                 </if>
                             </if>
                             <if test='storeCds != null and storeCds != ""'>
-                                AND tsdpsd.STORE_CD IN
-                                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                                    #{item}
+                                AND
+                                <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                                    tsdpsd.STORE_CD = #{item}
                                 </foreach>
                             </if>
                             <if test='momsTeam != null and momsTeam != ""'>
@@ -289,9 +289,9 @@
                                     </if>
                                 </if>
                                 <if test='storeCds != null and storeCds != ""'>
-                                    AND tsdpsd.STORE_CD IN
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                                        #{item}
+                                    AND
+                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                                        tsdpsd.STORE_CD = #{item}
                                     </foreach>
                                 </if>
                                 <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
@@ -307,9 +307,9 @@
                                     </if>
                                 </if>
                                 <if test='prodCds != null and prodCds != ""'>
-                                    AND tmp.PROD_CD IN
-                                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                                        #{item}
+                                    AND
+                                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                                        tmp.PROD_CD = #{item}
                                     </foreach>
                                 </if>
                                 <if test='momsTeam != null and momsTeam != ""'>
@@ -438,9 +438,9 @@
                                     </if>
                                 </if>
                                 <if test='storeCds != null and storeCds != ""'>
-                                    AND tsdpsd.STORE_CD IN
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                                        #{item}
+                                    AND
+                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                                        tsdpsd.STORE_CD = #{item}
                                     </foreach>
                                 </if>
                                 <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
@@ -456,9 +456,9 @@
                                     </if>
                                 </if>
                                 <if test='prodCds != null and prodCds != ""'>
-                                    AND tmp.PROD_CD IN
-                                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                                        #{item}
+                                    AND
+                                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                                        tmp.PROD_CD = #{item}
                                     </foreach>
                                 </if>
                                 <if test='momsTeam != null and momsTeam != ""'>
@@ -586,9 +586,9 @@
                                     </if>
                                 </if>
                                 <if test='storeCds != null and storeCds != ""'>
-                                    AND tsdpsd.STORE_CD IN
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                                        #{item}
+                                    AND
+                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                                        tsdpsd.STORE_CD = #{item}
                                     </foreach>
                                 </if>
                                 <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
@@ -604,9 +604,9 @@
                                     </if>
                                 </if>
                                 <if test='prodCds != null and prodCds != ""'>
-                                    AND tmp.PROD_CD IN
-                                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                                        #{item}
+                                    AND
+                                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                                        tmp.PROD_CD = #{item}
                                     </foreach>
                                 </if>
                                 <if test='momsTeam != null and momsTeam != ""'>
@@ -727,9 +727,9 @@
                                 </if>
                             </if>
                             <if test='storeCds != null and storeCds != ""'>
-                                AND tsdpsd.STORE_CD IN
-                                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                                    #{item}
+                                AND
+                                <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                                    tsdpsd.STORE_CD = #{item}
                                 </foreach>
                             </if>
                             <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
@@ -745,9 +745,9 @@
                                 </if>
                             </if>
                             <if test='prodCds != null and prodCds != ""'>
-                                AND tmp.PROD_CD IN
-                                <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                                    #{item}
+                                AND
+                                <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                                    tmp.PROD_CD = #{item}
                                 </foreach>
                             </if>
                             <if test='momsTeam != null and momsTeam != ""'>
@@ -868,9 +868,9 @@
                                 </if>
                             </if>
                             <if test='prodCds != null and prodCds != ""'>
-                                AND tmp.PROD_CD IN
-                                <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                                    #{item}
+                                AND
+                                <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                                    tmp.PROD_CD = #{item}
                                 </foreach>
                             </if>
                             <if test='momsTeam != null and momsTeam != ""'>
@@ -995,9 +995,9 @@
                                 </if>
                             </if>
                             <if test='prodCds != null and prodCds != ""'>
-                                AND tmp.PROD_CD IN
-                                <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                                    #{item}
+                                AND
+                                <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                                    tmp.PROD_CD = #{item}
                                 </foreach>
                             </if>
                             <if test='momsTeam != null and momsTeam != ""'>
@@ -1121,9 +1121,9 @@
                                     </if>
                                 </if>
                                 <if test='storeCds != null and storeCds != ""'>
-                                    AND tsdpsd.STORE_CD IN
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                                        #{item}
+                                    AND
+                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                                        tsdpsd.STORE_CD = #{item}
                                     </foreach>
                                 </if>
                                 <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
@@ -1139,9 +1139,9 @@
                                     </if>
                                 </if>
                                 <if test='prodCds != null and prodCds != ""'>
-                                    AND tmp.PROD_CD IN
-                                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                                        #{item}
+                                    AND
+                                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                                        tmp.PROD_CD = #{item}
                                     </foreach>
                                 </if>
                                 <if test='momsTeam != null and momsTeam != ""'>
@@ -1270,9 +1270,9 @@
                                     </if>
                                 </if>
                                 <if test='storeCds != null and storeCds != ""'>
-                                    AND tsdpsd.STORE_CD IN
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                                        #{item}
+                                    AND
+                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                                        tsdpsd.STORE_CD = #{item}
                                     </foreach>
                                 </if>
                                 <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
@@ -1288,9 +1288,9 @@
                                     </if>
                                 </if>
                                 <if test='prodCds != null and prodCds != ""'>
-                                    AND tmp.PROD_CD IN
-                                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                                        #{item}
+                                    AND
+                                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                                        tmp.PROD_CD = #{item}
                                     </foreach>
                                 </if>
                                 <if test='momsTeam != null and momsTeam != ""'>
@@ -1418,9 +1418,9 @@
                                     </if>
                                 </if>
                                 <if test='storeCds != null and storeCds != ""'>
-                                    AND tsdpsd.STORE_CD IN
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                                        #{item}
+                                    AND
+                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                                        tsdpsd.STORE_CD = #{item}
                                     </foreach>
                                 </if>
                                 <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
@@ -1436,9 +1436,9 @@
                                     </if>
                                 </if>
                                 <if test='prodCds != null and prodCds != ""'>
-                                    AND tmp.PROD_CD IN
-                                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                                        #{item}
+                                    AND
+                                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                                        tmp.PROD_CD = #{item}
                                     </foreach>
                                 </if>
                                 <if test='momsTeam != null and momsTeam != ""'>
@@ -1564,9 +1564,9 @@
                                 </if>
                             </if>
                             <if test='storeCds != null and storeCds != ""'>
-                                AND tsdpsd.STORE_CD IN
-                                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                                    #{item}
+                                AND
+                                <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                                    tsdpsd.STORE_CD = #{item}
                                 </foreach>
                             </if>
                             <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
@@ -1582,9 +1582,9 @@
                                 </if>
                             </if>
                             <if test='prodCds != null and prodCds != ""'>
-                                AND tmp.PROD_CD IN
-                                <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                                    #{item}
+                                AND
+                                <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                                    tmp.PROD_CD = #{item}
                                 </foreach>
                             </if>
                             <if test='momsTeam != null and momsTeam != ""'>
@@ -1647,9 +1647,9 @@
       WHERE  tsdpsd.HQ_OFFICE_CD = #{hqOfficeCd}
       AND    tsdpsd.SALE_DATE BETWEEN #{saleStartDate} and #{saleEndDate}
     <if test='storeCds != null and storeCds != ""'>
-        AND tsdpsd.STORE_CD IN
-        <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-            #{item}
+        AND
+        <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+            tsdpsd.STORE_CD = #{item}
         </foreach>
     </if>
       AND    tsdpsd.STORE_CD = tms.STORE_CD

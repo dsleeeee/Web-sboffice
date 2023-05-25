@@ -88,9 +88,9 @@
                                     </if>
                                 </if>
                                 <if test='storeCds != null and storeCds != ""'>
-                                    AND tsdt.STORE_CD IN
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                                        #{item}
+                                    AND
+                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                                        tsdt.STORE_CD = #{item}
                                     </foreach>
                                 </if>
                                 <if test='momsTeam != null and momsTeam != ""'>
@@ -148,9 +148,9 @@
                                     </if>
                                 </if>
                                 <if test='storeCds != null and storeCds != ""'>
-                                    AND tsdt.STORE_CD IN
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                                        #{item}
+                                    AND
+                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                                        tsdt.STORE_CD = #{item}
                                     </foreach>
                                 </if>
                                 <if test='momsTeam != null and momsTeam != ""'>
@@ -224,9 +224,9 @@
                                     </if>
                                 </if>
                                 <if test='storeCds != null and storeCds != ""'>
-                                    AND tsdt.STORE_CD IN
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                                        #{item}
+                                    AND
+                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                                        tsdt.STORE_CD = #{item}
                                     </foreach>
                                 </if>
                                 <if test='momsTeam != null and momsTeam != ""'>
@@ -284,9 +284,9 @@
                                     </if>
                                 </if>
                                 <if test='storeCds != null and storeCds != ""'>
-                                    AND tsdt.STORE_CD IN
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                                        #{item}
+                                    AND
+                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                                        tsdt.STORE_CD = #{item}
                                     </foreach>
                                 </if>
                                 <if test='momsTeam != null and momsTeam != ""'>

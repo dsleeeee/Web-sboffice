@@ -84,9 +84,9 @@
                     AND     tsdt.STORE_CD = tmsi.STORE_CD (+)
                     AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
                     <if test='storeCds != null and storeCds != ""'>
-                        AND tsdt.STORE_CD IN
-                        <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                            #{item}
+                        AND
+                        <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                            tsdt.STORE_CD = #{item}
                         </foreach>
                     </if>
                     AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -138,9 +138,9 @@
                     AND     tsdto.STORE_CD = tmsi.STORE_CD (+)
                     AND     tsdto.HQ_OFFICE_CD  = #{hqOfficeCd}
                     <if test='storeCds != null and storeCds != ""'>
-                        AND tsdto.STORE_CD IN
-                        <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                            #{item}
+                        AND
+                        <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                            tsdto.STORE_CD = #{item}
                         </foreach>
                     </if>
                     AND     tsdto.SALE_DATE BETWEEN #{startDate} AND #{endDate}

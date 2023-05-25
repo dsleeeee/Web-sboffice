@@ -40,9 +40,9 @@
         ,       TB_MS_STORE_INFO tmsi
         WHERE   tsspt.HQ_OFFICE_CD  = #{hqOfficeCd}
         <if test='storeCds != null and storeCds != ""'>
-            AND tsspt.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                tsspt.STORE_CD = #{item}
             </foreach>
         </if>
         AND     tsspt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -120,9 +120,9 @@
         ,       TB_MS_STORE_INFO tmsi
         WHERE   tsspt.HQ_OFFICE_CD  = #{hqOfficeCd}
         <if test='storeCds != null and storeCds != ""'>
-            AND tsspt.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                tsspt.STORE_CD = #{item}
             </foreach>
         </if>
         AND     tsspt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -260,9 +260,9 @@
         WHERE 1=1
         AND tsspt.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='storeCds != null and storeCds != ""'>
-            AND tsspt.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                tsspt.STORE_CD = #{item}
             </foreach>
         </if>
         AND tsspt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -331,9 +331,9 @@
         WHERE 1=1
         AND tsspt.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='storeCds != null and storeCds != ""'>
-            AND tsspt.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                tsspt.STORE_CD = #{item}
             </foreach>
         </if>
         AND tsspt.SALE_DATE BETWEEN #{startDate} AND #{endDate}

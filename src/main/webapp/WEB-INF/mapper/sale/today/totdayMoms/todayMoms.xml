@@ -63,9 +63,9 @@
                                 FROM    TB_SL_SALE_HDR_PAY tsshp
                                 WHERE   tsshp.HQ_OFFICE_CD  = #{hqOfficeCd}
                                 <if test='storeCds != null and storeCds != ""'>
-                                    AND tsshp.STORE_CD IN
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                                        #{item}
+                                    AND
+                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                                        tsshp.STORE_CD = #{item}
                                     </foreach>
                                 </if>
                                 AND     tsshp.SALE_DATE     = #{startDate}
@@ -86,9 +86,9 @@
                             FROM    TB_SL_SALE_PAY_MPAY tsspm
                             WHERE   tsspm.HQ_OFFICE_CD  = #{hqOfficeCd}
                             <if test='storeCds != null and storeCds != ""'>
-                                AND tsspm.STORE_CD IN
-                                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                                    #{item}
+                                AND
+                                <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                                    tsspm.STORE_CD = #{item}
                                 </foreach>
                             </if>
                             AND     tsspm.SALE_DATE     = #{startDate}
@@ -108,9 +108,9 @@
                                 FROM    TB_SL_SALE_HDR_DC tsshd
                                 WHERE   tsshd.HQ_OFFICE_CD  = #{hqOfficeCd}
                                 <if test='storeCds != null and storeCds != ""'>
-                                    AND tsshd.STORE_CD IN
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                                        #{item}
+                                    AND
+                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                                        tsshd.STORE_CD = #{item}
                                     </foreach>
                                 </if>
                                 AND     tsshd.SALE_DATE     = #{startDate}
@@ -129,9 +129,9 @@
                     FROM    TB_SL_SALE_PAY_CASH tsspc
                     WHERE   tsspc.HQ_OFFICE_CD =    #{hqOfficeCd}
                     <if test='storeCds != null and storeCds != ""'>
-                        AND tsspc.STORE_CD IN
-                        <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                            #{item}
+                        AND
+                        <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                            tsspc.STORE_CD = #{item}
                         </foreach>
                     </if>
                     AND     tsspc.SALE_DATE =       #{startDate}
@@ -142,9 +142,9 @@
         ,       TB_MS_STORE_INFO tmsi
         WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='storeCds != null and storeCds != ""'>
-            AND tssh.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                tssh.STORE_CD = #{item}
             </foreach>
         </if>
         AND     tssh.SALE_DATE    = #{startDate}
@@ -257,9 +257,9 @@
                             FROM    TB_SL_SALE_HDR_PAY tsshp
                             WHERE   tsshp.HQ_OFFICE_CD  = #{hqOfficeCd}
                             <if test='storeCds != null and storeCds != ""'>
-                                AND tsshp.STORE_CD IN
-                                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                                    #{item}
+                                AND
+                                <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                                    tsshp.STORE_CD = #{item}
                                 </foreach>
                             </if>
                             AND     tsshp.SALE_DATE     = #{startDate}
@@ -280,9 +280,9 @@
                             FROM    TB_SL_SALE_PAY_MPAY tsspm
                             WHERE   tsspm.HQ_OFFICE_CD  = #{hqOfficeCd}
                             <if test='storeCds != null and storeCds != ""'>
-                                AND tsspm.STORE_CD IN
-                                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                                    #{item}
+                                AND
+                                <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                                    tsspm.STORE_CD = #{item}
                                 </foreach>
                             </if>
                             AND     tsspm.SALE_DATE     = #{startDate}
@@ -302,9 +302,9 @@
                             FROM    TB_SL_SALE_HDR_DC tsshd
                             WHERE   tsshd.HQ_OFFICE_CD  = #{hqOfficeCd}
                             <if test='storeCds != null and storeCds != ""'>
-                                AND tsshd.STORE_CD IN
-                                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                                    #{item}
+                                AND
+                                <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                                    tsshd.STORE_CD = #{item}
                                 </foreach>
                             </if>
                             AND     tsshd.SALE_DATE     = #{startDate}
@@ -323,9 +323,9 @@
                 FROM    TB_SL_SALE_PAY_CASH tsspc
                 WHERE   tsspc.HQ_OFFICE_CD =    #{hqOfficeCd}
                 <if test='storeCds != null and storeCds != ""'>
-                    AND tsspc.STORE_CD IN
-                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                        tsspc.STORE_CD = #{item}
                     </foreach>
                 </if>
                 AND     tsspc.SALE_DATE =       #{startDate}
@@ -336,9 +336,9 @@
         ,       TB_MS_STORE_INFO tmsi
         WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='storeCds != null and storeCds != ""'>
-            AND tssh.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                tssh.STORE_CD = #{item}
             </foreach>
         </if>
         AND     tssh.SALE_DATE    = #{startDate}

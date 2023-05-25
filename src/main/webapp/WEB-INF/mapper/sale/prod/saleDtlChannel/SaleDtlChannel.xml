@@ -165,9 +165,9 @@
         AND   	tmsi.STORE_CD     (+) = tms.STORE_CD
         AND     tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='storeCds != null and storeCds != ""'>
-          AND tssh.STORE_CD IN
-          <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-            #{item}
+          AND
+          <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+              tssh.STORE_CD = #{item}
           </foreach>
         </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
@@ -236,9 +236,9 @@
             </if>
         </if>
         <if test='prodCds != null and prodCds != ""'>
-            AND tmps2.PROD_CD IN
-            <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                tmps2.PROD_CD = #{item}
             </foreach>
         </if>
         <if test='prodOption != null and prodOption != "" and prodOption == "1"'>

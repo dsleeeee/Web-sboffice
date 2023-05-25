@@ -112,9 +112,9 @@
             AND tsdps.HQ_OFFICE_CD = #{hqOfficeCd}
             AND tsdps.SALE_DATE BETWEEN #{startDate} AND #{endDate}
             <if test='storeCds != null and storeCds != ""'>
-                AND tsdps.STORE_CD IN
-                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                    #{item}
+                AND
+                <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                    tsdps.STORE_CD = #{item}
                 </foreach>
             </if>
             <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
@@ -146,9 +146,9 @@
                 AND tmps2.PROD_NM LIKE '%'||#{prodNm}||'%'
             </if>
             <if test='prodCds != null and prodCds != ""'>
-                AND tmps2.PROD_CD IN
-                <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                    #{item}
+                AND
+                <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                    tmps2.PROD_CD = #{item}
                 </foreach>
             </if>
             <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
@@ -229,9 +229,9 @@
             AND tsdps.HQ_OFFICE_CD = #{hqOfficeCd}
             AND tsdps.SALE_DATE BETWEEN #{startDate} AND #{endDate}
             <if test='storeCds != null and storeCds != ""'>
-                AND tsdps.STORE_CD IN
-                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                    #{item}
+                AND
+                <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                    tsdps.STORE_CD = #{item}
                 </foreach>
             </if>
             <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
@@ -263,9 +263,9 @@
                 AND tmps2.PROD_NM LIKE '%'||#{prodNm}||'%'
             </if>
             <if test='prodCds != null and prodCds != ""'>
-                AND tmps2.PROD_CD IN
-                <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                    #{item}
+                AND
+                <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                    tmps2.PROD_CD = #{item}
                 </foreach>
             </if>
             <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
@@ -429,9 +429,9 @@
             AND tsdps.HQ_OFFICE_CD = #{hqOfficeCd}
             AND tsdps.SALE_DATE BETWEEN #{startDate} AND #{endDate}
             <if test='storeCds != null and storeCds != ""'>
-                AND tsdps.STORE_CD IN
-                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                    #{item}
+                AND
+                <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                    tsdps.STORE_CD = #{item}
                 </foreach>
             </if>
             <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
@@ -463,9 +463,9 @@
                 AND tmps2.PROD_NM LIKE '%'||#{prodNm}||'%'
             </if>
             <if test='prodCds != null and prodCds != ""'>
-                AND tmps2.PROD_CD IN
-                <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                    #{item}
+                AND
+                <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                    tmps2.PROD_CD = #{item}
                 </foreach>
             </if>
             <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
@@ -546,9 +546,9 @@
             AND tsdps.HQ_OFFICE_CD = #{hqOfficeCd}
             AND tsdps.SALE_DATE BETWEEN #{startDate} AND #{endDate}
             <if test='storeCds != null and storeCds != ""'>
-                AND tsdps.STORE_CD IN
-                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                    #{item}
+                AND
+                <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                    tsdps.STORE_CD = #{item}
                 </foreach>
             </if>
             <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
@@ -580,9 +580,9 @@
                 AND tmps2.PROD_NM LIKE '%'||#{prodNm}||'%'
             </if>
             <if test='prodCds != null and prodCds != ""'>
-                AND tmps2.PROD_CD IN
-                <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                    #{item}
+                AND
+                <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                    tmps2.PROD_CD = #{item}
                 </foreach>
             </if>
             <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>

@@ -26,9 +26,9 @@
                         AND		tpe.SALE_DATE = #{saleDate}
                         AND     TPE.REG_SEQ = '00'
                         <if test='storeCds != null and storeCds != ""'>
-                            AND tpe.STORE_CD IN
-                            <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
-                                #{item}
+                            AND
+                            <foreach collection="storeCdList" item="item" open="(" close=")" separator="OR">
+                                tpe.STORE_CD = #{item}
                             </foreach>
                         </if>
                         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
@@ -76,9 +76,9 @@
                         AND		tpe.SALE_DATE = #{saleDate}
                         AND     TPE.REG_SEQ = '00'
                         <if test='storeCds != null and storeCds != ""'>
-                            AND tpe.STORE_CD IN
-                            <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
-                                #{item}
+                            AND
+                            <foreach collection="storeCdList" item="item" open="(" close=")" separator="OR">
+                                tpe.STORE_CD = #{item}
                             </foreach>
                         </if>
                         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
@@ -317,9 +317,9 @@
                         AND     TPE.HQ_OFFICE_CD = #{hqOfficeCd}
                         AND     TPE.SALE_DATE = #{saleDate}
                         <if test='storeCds != null and storeCds != ""'>
-                            AND TPE.STORE_CD IN
-                            <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
-                                #{item}
+                            AND
+                            <foreach collection="storeCdList" item="item" open="(" close=")" separator="OR">
+                                TPE.STORE_CD = #{item}
                             </foreach>
                         </if>
                         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
@@ -385,9 +385,9 @@
                         AND     TPE.HQ_OFFICE_CD = #{hqOfficeCd}
                         AND     TPE.SALE_DATE = #{saleDate}
                         <if test='storeCds != null and storeCds != ""'>
-                            AND TPE.STORE_CD IN
-                            <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
-                                #{item}
+                            AND
+                            <foreach collection="storeCdList" item="item" open="(" close=")" separator="OR">
+                                TPE.STORE_CD = #{item}
                             </foreach>
                         </if>
                         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
@@ -529,9 +529,9 @@
                     AND		tpe.SALE_DATE = tcd.YYYYMMDD
                     AND     TPE.REG_SEQ = '00'
                     <if test='storeCds != null and storeCds != ""'>
-                        AND tms.STORE_CD IN
-                        <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
-                            #{item}
+                        AND
+                        <foreach collection="storeCdList" item="item" open="(" close=")" separator="OR">
+                            tms.STORE_CD = #{item}
                         </foreach>
                     </if>
                     <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
@@ -579,9 +579,9 @@
                     AND		tpe.SALE_DATE = tcd.YYYYMMDD
                     AND     TPE.REG_SEQ = '00'
                     <if test='storeCds != null and storeCds != ""'>
-                        AND tms.STORE_CD IN
-                        <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
-                            #{item}
+                        AND
+                        <foreach collection="storeCdList" item="item" open="(" close=")" separator="OR">
+                            tms.STORE_CD = #{item}
                         </foreach>
                     </if>
                     <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
@@ -633,9 +633,9 @@
                                                 AND	    tpe.STORE_CD = tmsi.STORE_CD(+)
                                                 AND		SALE_DATE = tcd.YYYYMMDD
                                                 <if test='storeCds != null and storeCds != ""'>
-                                                    AND tms.STORE_CD IN
-                                                    <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
-                                                        #{item}
+                                                    AND
+                                                    <foreach collection="storeCdList" item="item" open="(" close=")" separator="OR">
+                                                        tms.STORE_CD = #{item}
                                                     </foreach>
                                                 </if>
                                                 <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
@@ -673,9 +673,9 @@
                                                 </if>
                                                 )
                     <if test='storeCds != null and storeCds != ""'>
-                        AND tms.STORE_CD IN
-                        <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
-                            #{item}
+                        AND
+                        <foreach collection="storeCdList" item="item" open="(" close=")" separator="OR">
+                            tms.STORE_CD = #{item}
                         </foreach>
                     </if>
                     <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
@@ -955,9 +955,9 @@
         AND 	#{saleDate} = tpe.SALE_DATE(+)
         AND     '00' = TPE.REG_SEQ(+)
         <if test='storeCds != null and storeCds != ""'>
-            AND tms.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open="(" close=")" separator=",">
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open="(" close=")" separator="OR">
+                tms.STORE_CD = #{item}
             </foreach>
         </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>

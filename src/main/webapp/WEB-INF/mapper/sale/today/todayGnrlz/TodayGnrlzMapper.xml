@@ -21,9 +21,9 @@
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
            AND SALE_DATE = #{startDate}
         <if test='arrStoreCd != null and arrStoreCd != ""'>
-           AND STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                #{item}
+           AND
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                STORE_CD = #{item}
             </foreach>
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
@@ -57,9 +57,9 @@
                      WHERE HQ_OFFICE_CD = #{hqOfficeCd}
                        AND SALE_DATE = #{startDate}
                     <if test='arrStoreCd != null and arrStoreCd != ""'>
-                       AND STORE_CD IN
-                        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                            #{item}
+                       AND
+                        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                            STORE_CD = #{item}
                         </foreach>
                     </if>
                     <if test='orgnFg != null and orgnFg == "H"'>
@@ -71,9 +71,9 @@
               WHERE tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND tsdp.SALE_DATE = #{startDate}
             <if test='arrStoreCd != null and arrStoreCd != ""'>
-                AND tsdp.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                    #{item}
+                AND
+                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                    tsdp.STORE_CD = #{item}
                 </foreach>
             </if>
             <if test='orgnFg != null and orgnFg == "H"'>
@@ -111,9 +111,9 @@
         AND     tsshm.SALE_DATE     =   #{startDate}
         AND     tsshm.SALE_SAVE_POINT > 0
         <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND tsshm.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                #{item}
+            AND
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                tsshm.STORE_CD = #{item}
             </foreach>
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
@@ -136,9 +136,9 @@
         AND     tmm.MEMBR_NO        =   tsspp.MEMBR_NO
         AND     tsspp.SALE_AMT      > 0
         <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND tsspp.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                #{item}
+            AND
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                tsspp.STORE_CD = #{item}
             </foreach>
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
@@ -174,9 +174,9 @@
          WHERE tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
            AND tsdp.SALE_DATE = #{startDate}
         <if test='arrStoreCd != null and arrStoreCd != ""'>
-           AND tsdp.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                #{item}
+           AND
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                tsdp.STORE_CD = #{item}
             </foreach>
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
