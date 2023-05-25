@@ -18,6 +18,12 @@ var envstData = [
     {"name":"매장","value":"4068"},
     {"name":"포장","value":"4069"}
 ];
+
+// 예약키맵그룹
+var selectComboLData = [
+    {"name":"전체","value":""}
+];
+
 /**
  * 키오스크키맵설정(예약) 그리드 생성
  */
@@ -35,9 +41,14 @@ app.controller('kioskKeyMapResveCtrl', ['$scope', '$http', function ($scope, $ht
 
     // 콤보박스 셋팅
     $scope._setComboData("envstCdCombo", envstData);
-    $scope._setComboData("tuClsTypeCombo", tuClsTypeDataAll);
-    $scope._setComboData("tuClsTypeCombo2", tuClsTypeData);
-    $scope._setComboData("listScaleBox", gvListScaleBoxData);
+    if(orgnFg == "HQ") {
+        $scope._setComboData("tuClsTypeCombo", tuClsTypeDataAll); // 예약키맵그룹
+    } else {
+        $scope._setComboData("posNoCombo", kioskPosList); // POS번호
+        kioskPosList.unshift({name: "전체", value: ""});
+        $scope._setComboData("tuClsTypeCombo", selectComboLData); // 예약키맵그룹
+    }
+    $scope._setComboData("tuClsTypeCombo2", tuClsTypeData); // 일괄변경 - 예약키맵그룹
     $scope._setComboData("storeHqBrandCdCombo", momsHqBrandCdComboList); // 매장브랜드
     $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
     $scope._setComboData("momsAcShopCombo", momsAcShopComboList); // AC점포별
@@ -139,7 +150,9 @@ app.controller('kioskKeyMapResveCtrl', ['$scope', '$http', function ($scope, $ht
             }
             params.userBrands = momsHqBrandCd;
         }
+        if(orgnFg === "STORE") {params.posNo = $scope.posNoCombo.selectedValue;}
         params.listScale = 500;
+
         console.log(params);
 
         $scope._inquirySub('/base/prod/kioskKeyMapResve/kioskKeyMapResve/getKioskKeyMapResveList.sb', params, function() {
@@ -268,6 +281,59 @@ app.controller('kioskKeyMapResveCtrl', ['$scope', '$http', function ($scope, $ht
         } else {
             $("#tblSearchAddShow").hide();
         }
+    };
+
+    // 매장권한) POS번호 선택 시, 키맵그룹 dropdown 조회
+    $scope.setTuClsType = function (s) {
+        // 키맵그룹 dropdown 재조회
+        $scope.setTuClsDropdownList();
+    };
+
+    // 키맵그룹 dropdownLIst 재조회
+    $scope.setTuClsDropdownList = function (){
+        // 키맵그룹 dropdown 재조회
+        var url = '/base/prod/kioskKeyMap/kioskKeyMap/getKioskTuClsTypeList.sb';
+        var params = {};
+        if(orgnFg === "STORE") {params.posNo = $scope.posNoCombo.selectedValue;}
+
+        //가상로그인 session 설정
+        if(document.getElementsByName('sessionId')[0]){
+            params['sid'] = document.getElementsByName('sessionId')[0].value;
+        }
+
+        // ajax 통신 설정
+        $http({
+            method : 'POST', //방식
+            url    : url, /* 통신할 URL */
+            params : params, /* 파라메터로 보낼 데이터 */
+            headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+        }).then(function successCallback(response) {
+            if ($scope._httpStatusCheck(response, true)) {
+                if (!$.isEmptyObject(response.data.data.list)) {
+                    var list = response.data.data.list;
+                    var comboArray = [];
+                    var comboData  = {};
+
+                    for (var i = 0; i < list.length; i++) {
+                        comboData = {};
+                        comboData.name  = list[i].name;
+                        comboData.value = list[i].value;
+                        comboArray.push(comboData);
+                    }
+
+                    comboArray.unshift({name: "전체", value: ""});
+                    $scope._setComboData("tuClsTypeCombo", comboArray);
+                } else {
+                    var comboArrayAll = [];
+                    comboArrayAll.unshift({name: "전체", value: ""});
+
+                    $scope._setComboData("tuClsTypeCombo", comboArrayAll);
+                }
+            }
+        }, function errorCallback(response) {
+            $scope._popMsg(messages["cmm.error"]);
+            return false;
+        });
     };
 
 }]);

@@ -110,6 +110,11 @@ public class KioskKeyMapResveController {
         String dateStr = formatter.format(cal.getTime());
         model.addAttribute("tomorrowDate", dateStr);
 
+        // 키오스크용 포스 조회
+        List<DefaultMap<String>> kioskPosList = kioskKeyMapService.getKioskPosList(kioskKeyMapVO, sessionInfoVO);
+        model.addAttribute("kioskPosList", convertToJson(kioskPosList));
+
+
         /** 맘스터치 */
         // [1250 맘스터치] 환경설정값 조회
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {

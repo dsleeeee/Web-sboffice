@@ -39,8 +39,8 @@
             <col class="w35" />
         </colgroup>
         <tbody>
-        <%-- 조회일자 --%>
         <tr>
+            <%-- 조회일자 --%>
             <th><s:message code="cmm.search.date" /></th>
             <td colspan="3">
                 <div class="sb-select">
@@ -59,17 +59,43 @@
         </tr>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
             <tr>
+                <%-- 매장코드 --%>
                 <th><s:message code="kioskKeyMapResve.storeCd" /></th>
                 <td>
                     <input type="text" class="sb-input w100" id="srchStoreCd" ng-model="storeCd" />
                 </td>
+                <%-- 매장명 --%>
                 <th><s:message code="kioskKeyMapResve.storeNm" /></th>
                 <td>
                     <input type="text" class="sb-input w100" id="srchStoreNm" ng-model="storeNm" />
                 </td>
             </tr>
         </c:if>
+        <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+            <tr>
+                <%-- POS번호 --%>
+                <th><s:message code="kioskKeyMapResve.posNo" /></th>
+                    <td>
+                        <div class="sb-select w100 fl">
+                            <wj-combo-box
+                                    id="posNoCombo"
+                                    ng-model="posNo"
+                                    control="posNoCombo"
+                                    items-source="_getComboData('posNoCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    selected-index-changed="setTuClsType(s)">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                <th></th>
+                <td></td>
+            </tr>
+        </c:if>
         <tr>
+            <%-- 예약키맵그룹 --%>
             <th><s:message code="kioskKeyMapResve.resveTuClsType" /></th>
             <td>
                 <div class="sb-select w100 fl">
@@ -85,6 +111,7 @@
                     </wj-combo-box>
                 </div>
             </td>
+            <%-- 키맵구분 --%>
             <th><s:message code="kioskKeyMapResve.envstCd" /></th>
             <td>
                 <div class="sb-select w100 fl">
@@ -122,7 +149,6 @@
         </c:if>
         </tbody>
     </table>
-
     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <table class="searchTbl" id="tblSearchAddShow" style="display: none;">
             <colgroup>
@@ -320,20 +346,20 @@
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.branchCd"/>" binding="branchCd" is-read-only="true" width="80" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.branchNm"/>" binding="branchNm" is-read-only="true" width="80" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.storeCd"/>" binding="storeCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.storeNm"/>" binding="storeNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.posNo"/>" binding="posNo" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.envstCd"/>" binding="envstCd" width="80" is-read-only="true" align="center" data-map="envstDataMap"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.storeNm"/>" binding="storeNm" width="120" is-read-only="true" align="left"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.posNo"/>" binding="posNo" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.envstCd"/>" binding="envstCd" width="70" is-read-only="true" align="center" data-map="envstDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.brand"/>" binding="brand" is-read-only="true" width="80" align="center" data-map="brandDataMap" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.momsTeam"/>" binding="momsTeam" is-read-only="true" width="80" align="center" data-map="momsTeamDataMap" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.momsAcShop"/>" binding="momsAcShop" width="80" align="center" data-map="momsAcShopDataMap" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="" binding="orgStartDate" width="100" align="center" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.nowTuClsType"/>" binding="nowTuClsType" width="130" align="center" is-read-only="true" data-map="tuClsTypeDataMap"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.nowTuClsType"/>" binding="nowTuClsType" width="90" align="center" is-read-only="true" data-map="tuClsTypeDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.orgModDt"/>" binding="modDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.startDate"/>" binding="startDate" width="150" align="center">
+                <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.startDate"/>" binding="startDate" width="120" align="center">
                     <wj-flex-grid-cell-template cell-type="CellEdit">
                         <div class="sb-select">
-                          <span class="txtIn w100px">
+                          <span class="txtIn w110px">
                             <wj-input-date
                                     value="$value"
                                     min="${tomorrowDate}"
@@ -344,9 +370,7 @@
                     </wj-flex-grid-cell-template>
                 </wj-flex-grid-column>
                 <wj-flex-grid-column header="" binding="orgTouchKeyGrp" is-read-only="true" width="100" align="center" data-map="tuClsTypeDataMap" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.tuClsType"/>" binding="tuClsType" width="100" align="center" data-map="tuClsTypeDataMap"></wj-flex-grid-column>
-
-
+                <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.tuClsType"/>" binding="tuClsType" width="90" align="center" data-map="tuClsTypeDataMap"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
@@ -367,8 +391,12 @@
     var hqOfficeCd = "${hqOfficeCd}";
     var storeCd = "${storeCd}";
 
+    // 키오스크 키맵그룹 조회
     var tuClsTypeData = ${kioskTuClsTypeList};
     var tuClsTypeDataAll = ${kioskTuClsTypeListAll};
+
+    // 키오스크용 포스 목록
+    var kioskPosList = ${kioskPosList};
 
     // [1250 맘스터치] 환경설정값
     var momsEnvstVal = "${momsEnvstVal}";
@@ -384,7 +412,7 @@
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMapResve/kioskKeyMapResve.js?ver=20230327.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMapResve/kioskKeyMapResve.js?ver=20230525.01" charset="utf-8"></script>
 
 <%-- 예약 추가 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/kioskKeyMapResve/kioskKeyMapResveAdd.jsp">
