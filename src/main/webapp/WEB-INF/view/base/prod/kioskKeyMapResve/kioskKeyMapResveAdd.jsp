@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup id="kioskKeyMapResveAddLayer" control="kioskKeyMapResveAddLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:90%;">
+<wj-popup id="kioskKeyMapResveAddLayer" control="kioskKeyMapResveAddLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:850px;">
 
     <div ng-controller="kioskKeyMapResveAddCtrl">
 
@@ -26,10 +26,12 @@
                 <tbody>
                 <c:if test="${sessionInfo.orgnFg == 'HQ'}">
                     <tr>
+                        <%-- 매장코드 --%>
                         <th><s:message code="kioskKeyMapResve.storeCd" /></th>
                         <td>
                             <input type="text" class="sb-input w100" id="srchAddStoreCd" ng-model="storeCd" />
                         </td>
+                        <%-- 매장명 --%>
                         <th><s:message code="kioskKeyMapResve.storeNm" /></th>
                         <td>
                             <input type="text" class="sb-input w100" id="srchAddStoreNm" ng-model="storeNm" />
@@ -37,14 +39,34 @@
                     </tr>
                 </c:if>
                 <tr>
+                    <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+                        <%-- POS번호 --%>
+                        <th><s:message code="kioskKeyMapResve.posNo" /></th>
+                        <td>
+                            <div class="sb-select w100 fl">
+                                <wj-combo-box
+                                        id="posNoAddCombo"
+                                        ng-model="posNo"
+                                        control="posNoAddCombo"
+                                        items-source="_getComboData('posNoAddCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        selected-index-changed="setAddTuClsType(s)">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                    </c:if>
+                    <%-- 예약키맵그룹 --%>
                     <th><s:message code="kioskKeyMapResve.orgTuClsType" /></th>
                     <td>
                         <div class="sb-select w100 fl">
                             <wj-combo-box
                                     id="tuClsTypeAddCombo"
-                                    ng-model="tuClsType"
-                                    control="tuClsTypeCombo"
-                                    items-source="_getComboData('tuClsTypeCombo')"
+                                    ng-model="tuClsTypeAdd"
+                                    control="tuClsTypeAddCombo"
+                                    items-source="_getComboData('tuClsTypeAddCombo')"
                                     display-member-path="name"
                                     selected-value-path="value"
                                     is-editable="false"
@@ -53,7 +75,7 @@
                         </div>
                     </td>
                     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-                            <%-- 매장브랜드 --%>
+                        <%-- 매장브랜드 --%>
                         <th><s:message code="dayProd.storeHqBrand"/></th>
                         <td>
                             <div class="sb-select">
@@ -276,13 +298,13 @@
                         <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.branchCd"/>" binding="branchCd" is-read-only="true" width="80" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.branchNm"/>" binding="branchNm" is-read-only="true" width="80" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.storeNm"/>" binding="storeNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.storeNm"/>" binding="storeNm" width="120" is-read-only="true" align="left"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.posNo"/>" binding="posNo" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.envstCd"/>" binding="envstCd" width="70" is-read-only="true" align="center" data-map="envstDataMap"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.brand"/>" binding="brand" is-read-only="true" width="80" align="center" data-map="brandDataMap" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.momsTeam"/>" binding="momsTeam" is-read-only="true" width="80" align="center" data-map="momsTeamDataMap" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.momsAcShop"/>" binding="momsAcShop" width="80" align="center" data-map="momsAcShopDataMap" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.orgTuClsType"/>" binding="orgTuClsType" is-read-only="true" width="90" align="center" data-map="tuClsTypeDataMap"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.orgTuClsType"/>" binding="orgTuClsType" is-read-only="true" width="80" align="center" data-map="tuClsTypeDataMap"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.orgModDt"/>" binding="modDt" is-read-only="true" width="130" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.resveTuClsType"/>" binding="tuClsType" width="90" align="center" data-map="tuClsTypeDataMap"></wj-flex-grid-column>
                     </wj-flex-grid>
@@ -330,4 +352,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMapResve/kioskKeyMapResveAdd.js?ver=20230327.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMapResve/kioskKeyMapResveAdd.js?ver=20230525.01" charset="utf-8"></script>

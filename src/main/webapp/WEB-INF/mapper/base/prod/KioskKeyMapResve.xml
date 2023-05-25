@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--
+    KioskKeyMapResve.xml
+    키오스크키맵설정(예약)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2023.03.27     최초작성
+-->
 <mapper namespace="kr.co.solbipos.base.prod.kioskKeyMapResve.service.impl.KioskKeyMapResveMapper">
 
     <!-- 리스트 조회 -->
@@ -171,6 +178,9 @@
         </if>
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND tmpe.POS_NO = #{posNo}
         </if>
         ORDER
         BY      tms.STORE_CD, tmpe.POS_NO
