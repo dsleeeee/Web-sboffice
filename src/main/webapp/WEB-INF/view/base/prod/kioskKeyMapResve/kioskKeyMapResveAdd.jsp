@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup id="kioskKeyMapResveAddLayer" control="kioskKeyMapResveAddLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:850px;">
+<wj-popup id="kioskKeyMapResveAddLayer" control="kioskKeyMapResveAddLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:800px;">
 
     <div ng-controller="kioskKeyMapResveAddCtrl">
 
@@ -273,10 +273,11 @@
                     <button class="btn_blue fr mr5" id="btnSearchAddShow" ng-click="searchAddShowChangeEnv()">
                         <s:message code="cmm.search.addShow" />
                     </button>
+                    <%-- 일괄변경 --%>
+                    <button class="btn_blue mr5 fr" id="btnShow" ng-click="changeAddShow()">
+                        <s:message code="kioskKeyMapResve.select.changeAll" />
+                    </button>
                 </c:if>
-                <button class="btn_blue mr5 fr" id="btnShow" ng-click="changeAddShow()">
-                    <s:message code="kioskKeyMapResve.select.changeAll" />
-                </button>
              </div>
 
             <%-- 그리드 영역 --%>
@@ -352,4 +353,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMapResve/kioskKeyMapResveAdd.js?ver=20230525.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMapResve/kioskKeyMapResveAdd.js?ver=20230526.02" charset="utf-8"></script>

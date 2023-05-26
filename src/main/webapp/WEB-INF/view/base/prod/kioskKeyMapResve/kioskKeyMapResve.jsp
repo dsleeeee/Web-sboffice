@@ -24,10 +24,11 @@
                 <button class="btn_blue mr5 fl" id="btnSearchAddShow" ng-click="searchAddShowChange()">
                     <s:message code="cmm.search.addShow" />
                 </button>
+                <%-- 일괄변경 --%>
+                <button class="btn_blue mr5 fl" id="btnShow" ng-click="changeShow()">
+                    <s:message code="kioskKeyMapResve.select.changeAll" />
+                </button>
             </c:if>
-            <button class="btn_blue mr5 fl" id="btnShow" ng-click="changeShow()">
-                <s:message code="kioskKeyMapResve.select.changeAll" />
-            </button>
         </div>
     </div>
 
@@ -412,7 +413,7 @@
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMapResve/kioskKeyMapResve.js?ver=20230525.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMapResve/kioskKeyMapResve.js?ver=20230526.02" charset="utf-8"></script>
 
 <%-- 예약 추가 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/kioskKeyMapResve/kioskKeyMapResveAdd.jsp">
