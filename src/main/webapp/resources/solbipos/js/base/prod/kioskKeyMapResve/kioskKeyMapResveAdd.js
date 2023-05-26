@@ -27,7 +27,11 @@ app.controller('kioskKeyMapResveAddCtrl', ['$scope', '$http', function ($scope, 
     if(orgnFg == "HQ") {
         $scope._setComboData("tuClsTypeAddCombo", tuClsTypeDataAll); // 예약키맵그룹
     } else {
-        $scope._setComboData("posNoAddCombo", kioskPosList); // POS번호
+        if(kioskPosList.length < 1) {
+            $scope._setComboData("posNoAddCombo", selectComboLData); // POS번호
+        } else {
+            $scope._setComboData("posNoAddCombo", kioskPosList); // POS번호
+        }
         $scope._setComboData("tuClsTypeAddCombo", selectComboLData); // 예약키맵그룹
     }
     $scope._setComboData("tuClsTypeAddCombo2", tuClsTypeData); // 일괄변경 - 예약키맵그룹
@@ -172,6 +176,12 @@ app.controller('kioskKeyMapResveAddCtrl', ['$scope', '$http', function ($scope, 
 
     // 리스트 조회
     $scope.searchKioskKeyMapResveAddList = function () {
+        if(orgnFg === "STORE") {
+            if(kioskPosList.length < 1) {
+                $scope._popMsg(messages["kioskKeyMapResve.kioskPosCntAlert"]); // 키오스크용으로 등록된 POS가 없습니다.
+                return;
+            }
+        }
 
         var params = {};
         params.envstCd = envstCd;
@@ -300,6 +310,9 @@ app.controller('kioskKeyMapResveAddCtrl', ['$scope', '$http', function ($scope, 
     $scope.setAddTuClsType = function (s) {
         // 키맵그룹 dropdown 재조회
         $scope.setTuClsDropdownList();
+
+        // 그리드에 콤보박스 데이터를 변경함으로 재조회
+        $scope.searchKioskKeyMapResveAddList();
     };
 
     // 키맵그룹 dropdownLIst 재조회
@@ -334,13 +347,15 @@ app.controller('kioskKeyMapResveAddCtrl', ['$scope', '$http', function ($scope, 
                         comboArray.push(comboData);
                     }
 
-                    comboArray.unshift({name: "전체", value: ""});
-                    $scope._setComboData("tuClsTypeAddCombo", comboArray);
+                    $scope._setComboData("tuClsTypeAddCombo", [{name: "선택", value: ""}].concat(comboArray));
+                    $scope.tuClsTypeDataMap = new wijmo.grid.DataMap(comboArray, 'value', 'name');
+
                 } else {
                     var comboArrayAll = [];
-
-                    comboArrayAll.unshift({name: "전체", value: ""});
+                    comboArrayAll.unshift({name: "선택", value: ""});
                     $scope._setComboData("tuClsTypeAddCombo", comboArrayAll);
+
+                    $scope.tuClsTypeDataMap = new wijmo.grid.DataMap(comboArrayAll, 'value', 'name');
                 }
             }
         }, function errorCallback(response) {

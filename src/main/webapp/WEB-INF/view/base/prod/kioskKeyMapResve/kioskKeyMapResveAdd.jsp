@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup id="kioskKeyMapResveAddLayer" control="kioskKeyMapResveAddLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:850px;">
+<wj-popup id="kioskKeyMapResveAddLayer" control="kioskKeyMapResveAddLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:800px;">
 
     <div ng-controller="kioskKeyMapResveAddCtrl">
 
@@ -353,4 +353,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMapResve/kioskKeyMapResveAdd.js?ver=20230525.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMapResve/kioskKeyMapResveAdd.js?ver=20230526.02" charset="utf-8"></script>
