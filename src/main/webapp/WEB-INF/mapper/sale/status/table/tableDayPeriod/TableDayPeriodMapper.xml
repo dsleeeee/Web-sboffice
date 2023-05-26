@@ -30,9 +30,9 @@
           	  AND TMTG.STORE_CD = TSDT.STORE_CD
           	  AND TMT.STORE_CD = TMS.STORE_CD
    			  <if test='arrStoreCd != null and arrStoreCd != ""'>
-			  	AND TMTG.STORE_CD IN
-			  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-			  		#{item}
+			  	AND
+			  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                    TMTG.STORE_CD = #{item}
 			  	</foreach>
 			  </if>
               <if test='orgnFg != null and orgnFg == "H"'>
@@ -77,9 +77,9 @@
               AND TMTG.STORE_CD = TSDT.STORE_CD
               AND TMT.STORE_CD = TMS.STORE_CD
               <if test='arrStoreCd != null and arrStoreCd != ""'>
-                AND TMTG.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                    #{item}
+                AND
+                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                    TMTG.STORE_CD = #{item}
                 </foreach>
               </if>
               <if test='orgnFg != null and orgnFg == "H"'>

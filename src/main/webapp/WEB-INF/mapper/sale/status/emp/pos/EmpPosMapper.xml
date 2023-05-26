@@ -29,9 +29,9 @@
 							FROM TB_MS_STORE TMS
 							WHERE TMS.HQ_OFFICE_CD = #{hqOfficeCd}
 							<if test='storeCd != null and storeCd != ""'>
-							   AND TMS.STORE_CD	IN
-						        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-			                        #{item}
+							   AND
+						        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+									TMS.STORE_CD = #{item}
 			                    </foreach>
 							</if>
 					     ) AS STORE_CNT
@@ -43,9 +43,9 @@
 				WHERE 	TSDE.HQ_OFFICE_CD = #{hqOfficeCd}
 				AND		TSDE.STORE_CD = TMS.STORE_CD    	         	
 				<if test='storeCd != null and storeCd != ""'>
-				   AND TSDE.STORE_CD	IN
-			        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                        #{item}
+				   AND
+			        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+						TSDE.STORE_CD = #{item}
                     </foreach>
 				</if>
 				<if test='startDate != null and startDate != ""'>
@@ -86,9 +86,9 @@
 							FROM TB_MS_STORE TMS
 							WHERE TMS.HQ_OFFICE_CD = #{hqOfficeCd}
 							<if test='storeCd != null and storeCd != ""'>
-							   AND TMS.STORE_CD	IN
-						        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-			                        #{item}
+							   AND
+						        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+									TMS.STORE_CD = #{item}
 			                    </foreach>
 							</if>
 					     ) AS STORE_CNT
@@ -100,9 +100,9 @@
 				WHERE 	TSDE.HQ_OFFICE_CD = #{hqOfficeCd}
 				AND		TSDE.STORE_CD = TMS.STORE_CD    	         	
 				<if test='storeCd != null and storeCd != ""'>
-				   AND TSDE.STORE_CD	IN
-			        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                        #{item}
+				   AND
+			        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+						TSDE.STORE_CD = #{item}
                     </foreach>
 				</if>
 				<if test='startDate != null and startDate != ""'>
@@ -135,9 +135,9 @@
 		   WHERE TME.STORE_CD = TMS.STORE_CD
 		   AND TMS.HQ_OFFICE_CD = #{hqOfficeCd}
 		  <if test='storeCd != null and storeCd != ""'>
-		  AND TME.STORE_CD IN
-  				<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                      	#{item}
+		  AND
+  				<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+					TME.STORE_CD = #{item}
                 </foreach>
           </if>
 		  <if test='empChk != "Y"'>
@@ -146,9 +146,9 @@
 	                  AND	Z.store_cd = TME.STORE_CD 
 	                  AND Z.EMP_NO = TME.EMP_NO
 	                  <if test='storeCd != null and storeCd != ""'>
-	                  AND Z.STORE_CD IN
-	                  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                        	#{item}
+	                  AND
+	                  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+							Z.STORE_CD = #{item}
                     	</foreach> 
                       </if>
 	                    <if test='startDate != null and startDate != ""'>

@@ -82,9 +82,9 @@
 		FROM    TB_MS_TABLE_V01 TMP
 		WHERE	1=1
 			<if test='arrStoreCd != null and arrStoreCd.length >= 0'>
-               	AND TMP.STORE_CD IN
-               	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                   	#{item}
+               	AND
+               	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+					TMP.STORE_CD = #{item}
                	</foreach>
            	</if>
            	<if test='arrTableCd != null and arrTableCd.length >= 0'>

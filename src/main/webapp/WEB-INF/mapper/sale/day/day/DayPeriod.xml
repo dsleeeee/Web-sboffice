@@ -26,9 +26,9 @@
         FROM    TB_SL_DAILY_TIME
         WHERE   HQ_OFFICE_CD = #{membrOrgnCd}
         <if test='storeCds != null and storeCds != ""'>
-            AND STORE_CD IN
-            <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
+                STORE_CD = #{item}
             </foreach>
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
@@ -68,9 +68,9 @@
                 ) thn
         WHERE   HQ_OFFICE_CD = #{membrOrgnCd}
         <if test='storeCds != null and storeCds != ""'>
-            AND STORE_CD IN
-            <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
+                STORE_CD = #{item}
             </foreach>
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
@@ -104,9 +104,9 @@
                 TB_MS_PRODUCT tmp
         WHERE   tsdpt.HQ_OFFICE_CD = #{membrOrgnCd}
         <if test='storeCds != null and storeCds != ""'>
-            AND tsdpt.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
+                tsdpt.STORE_CD = #{item}
             </foreach>
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
@@ -162,9 +162,9 @@
                 WHERE 1=1
                 AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
                 <if test='storeCds != null and storeCds != ""'>
-                    AND tssd.STORE_CD IN
-                    <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
+                        tssd.STORE_CD = #{item}
                     </foreach>
                 </if>
                 <if test='orgnFg != null and orgnFg == "H"'>
@@ -189,9 +189,9 @@
             WHERE 1=1
             AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
             <if test='storeCds != null and storeCds != ""'>
-                AND tssd.STORE_CD IN
-                <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                    #{item}
+                AND
+                <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
+                    tssd.STORE_CD = #{item}
                 </foreach>
             </if>
             <if test='orgnFg != null and orgnFg == "H"'>
@@ -225,9 +225,9 @@
         WHERE 1=1
         AND tsdp.HQ_OFFICE_CD = #{membrOrgnCd}
         <if test='storeCds != null and storeCds != ""'>
-            AND tsdp.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
+                tsdp.STORE_CD = #{item}
             </foreach>
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
@@ -319,9 +319,9 @@
         WHERE 1=1
         AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
         <if test='storeCds != null and storeCds != ""'>
-            AND tssd.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
+                tssd.STORE_CD = #{item}
             </foreach>
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
@@ -385,9 +385,9 @@
         WHERE 1=1
         AND tsspgd.HQ_OFFICE_CD = #{membrOrgnCd}
         <if test='storeCds != null and storeCds != ""'>
-            AND tsspgd.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
+                tsspgd.STORE_CD = #{item}
             </foreach>
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
