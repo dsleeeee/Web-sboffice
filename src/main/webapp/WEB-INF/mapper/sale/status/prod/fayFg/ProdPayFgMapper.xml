@@ -90,9 +90,9 @@
                                 TB_MS_PRODUCT_BARCD tmpb
                         WHERE   tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
                         <if test='storeCd != null and storeCd != ""'>
-                            AND tsdp.STORE_CD IN
-                            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                                #{item}
+                            AND
+                            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                                tsdp.STORE_CD = #{item}
                             </foreach>
                         </if>
                         <if test='orgnFg != null and orgnFg == "H"'>
@@ -129,9 +129,9 @@
                     FROM    TB_SL_DAILY_PROD_PAY
                     WHERE   STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
                     <if test='storeCd != null and storeCd != ""'>
-                        AND STORE_CD IN
-                        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                            #{item}
+                        AND
+                        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                            STORE_CD = #{item}
                         </foreach>
                     </if>
                     <if test='orgnFg != null and orgnFg == "H"'>
@@ -216,9 +216,9 @@
                                 TB_MS_PRODUCT_BARCD tmpb
                         WHERE   tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
                         <if test='storeCd != null and storeCd != ""'>
-                            AND tsdp.STORE_CD IN
-                            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                                #{item}
+                            AND
+                            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                                tsdp.STORE_CD = #{item}
                             </foreach>
                         </if>
                         <if test='orgnFg != null and orgnFg == "H"'>
@@ -255,9 +255,9 @@
                 FROM    TB_SL_DAILY_PROD_PAY
                 WHERE   STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
                 <if test='storeCd != null and storeCd != ""'>
-                    AND STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                        #{item}
+                    AND
+                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                        STORE_CD = #{item}
                     </foreach>
                 </if>
                 <if test='orgnFg != null and orgnFg == "H"'>

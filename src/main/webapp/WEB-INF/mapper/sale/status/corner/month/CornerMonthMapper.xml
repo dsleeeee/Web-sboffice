@@ -21,9 +21,9 @@
         FROM TB_SL_MONTHLY_CORNR_PROD TSDCP
         WHERE TSDCP.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='arrStoreCd != null and arrStoreCd != ""'>
-           AND TSDCP.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
+           AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                TSDCP.STORE_CD = #{item}
             </foreach>
         </if>
         <if test='arrCornrCd != null and arrCornrCd != ""'>
@@ -58,9 +58,9 @@
         FROM TB_SL_MONTHLY_CORNR_PROD TSDCP
         WHERE TSDCP.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='arrStoreCd != null and arrStoreCd != ""'>
-           AND TSDCP.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
+           AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                TSDCP.STORE_CD = #{item}
             </foreach>
         </if>
         <if test='arrCornrCd != null and arrCornrCd != ""'>

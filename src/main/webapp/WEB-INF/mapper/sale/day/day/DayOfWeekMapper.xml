@@ -60,9 +60,9 @@
             WHERE   HQ_OFFICE_CD = #{membrOrgnCd}
             AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
             <if test='storeCds != null and storeCds != ""'>
-                AND STORE_CD IN
-                <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                    #{item}
+                AND
+                <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
+                    STORE_CD = #{item}
                 </foreach>
             </if>
             <if test='orgnFg != null and orgnFg == "H"'>
@@ -81,9 +81,9 @@
             WHERE   HQ_OFFICE_CD = #{membrOrgnCd}
             AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
             <if test='storeCds != null and storeCds != ""'>
-                AND STORE_CD IN
-                <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                    #{item}
+                AND
+                <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
+                    STORE_CD = #{item}
                 </foreach>
             </if>
             <if test='orgnFg != null and orgnFg == "H"'>
@@ -106,9 +106,9 @@
                 WHERE   HQ_OFFICE_CD = #{membrOrgnCd}
                 AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 <if test='storeCds != null and storeCds != ""'>
-                    AND STORE_CD IN
-                    <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
+                        STORE_CD = #{item}
                     </foreach>
                 </if>
                 <if test='orgnFg != null and orgnFg == "H"'>
@@ -167,9 +167,9 @@
                 AND tsshd.HQ_OFFICE_CD = #{membrOrgnCd}
                 AND tsshd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 <if test='storeCds != null and storeCds != ""'>
-                    AND tsshd.STORE_CD IN
-                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                        tsshd.STORE_CD = #{item}
                     </foreach>
                 </if>
                 <if test='orgnFg != null and orgnFg == "H"'>
@@ -234,9 +234,9 @@
             AND tssh.HQ_OFFICE_CD = #{membrOrgnCd}
             AND tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
             <if test='storeCds != null and storeCds != ""'>
-                AND tssh.STORE_CD IN
-                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                    #{item}
+                AND
+                <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                    tssh.STORE_CD = #{item}
                 </foreach>
             </if>
             <if test='orgnFg != null and orgnFg == "H"'>
@@ -274,9 +274,9 @@
                WHERE HQ_OFFICE_CD = #{membrOrgnCd}
                  AND SALE_DATE  BETWEEN #{startDate} AND #{endDate}
                 <if test='storeCds != null and storeCds != ""'>
-                    AND STORE_CD IN
-                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                        STORE_CD = #{item}
                     </foreach>
                 </if>
                 <if test='orgnFg != null and orgnFg == "H"'>
@@ -335,9 +335,9 @@
                     AND     SALE_DATE  BETWEEN #{startDate} AND #{endDate}
                     AND     tsdt.SALE_HOUR BETWEEN thn.START_TIME AND thn.END_TIME
                     <if test='storeCds != null and storeCds != ""'>
-                        AND STORE_CD IN
-                        <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                            #{item}
+                        AND
+                        <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                            STORE_CD = #{item}
                         </foreach>
                     </if>
                     <if test='orgnFg != null and orgnFg == "H"'>
@@ -390,9 +390,9 @@
                     WHERE 1=1
                     AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
                     <if test='storeCds != null and storeCds != ""'>
-                        AND tssd.STORE_CD IN
-                        <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                            #{item}
+                        AND
+                        <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                            tssd.STORE_CD = #{item}
                         </foreach>
                     </if>
                     <if test='orgnFg != null and orgnFg == "H"'>
@@ -477,9 +477,9 @@
                                 WHERE 1=1
                                 AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
                                 <if test='storeCds != null and storeCds != ""'>
-                                    AND tssd.STORE_CD IN
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                                        #{item}
+                                    AND
+                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                                        tssd.STORE_CD = #{item}
                                     </foreach>
                                 </if>
                                 <if test='orgnFg != null and orgnFg == "H"'>
@@ -909,9 +909,9 @@
                 WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
                 AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 <if test='storeCds != null and storeCds != ""'>
-                    AND STORE_CD IN
-                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                        STORE_CD = #{item}
                     </foreach>
                 </if>
                 GROUP BY STORE_CD || POS_NO, SALE_DATE

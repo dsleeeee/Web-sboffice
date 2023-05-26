@@ -52,9 +52,9 @@
             WHERE 1=1
             AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
             <if test='storeCd != null and storeCd != ""'>
-                AND tsdp.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                    #{item}
+                AND
+                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                    tsdp.STORE_CD = #{item}
                 </foreach>
             </if>
             <if test='orgnFg != null and orgnFg == "H"'>
@@ -142,9 +142,9 @@
             WHERE 1=1
             AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
             <if test='storeCd != null and storeCd != ""'>
-                AND tsdp.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                    #{item}
+                AND
+                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                    tsdp.STORE_CD = #{item}
                 </foreach>
             </if>
             <if test='orgnFg != null and orgnFg == "H"'>

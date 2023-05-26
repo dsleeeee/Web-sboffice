@@ -26,9 +26,9 @@
         WHERE TSDCP.HQ_OFFICE_CD = #{hqOfficeCd}
         ]]>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
-           AND TSDCP.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
+           AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                TSDCP.STORE_CD = #{item}
             </foreach>
         </if>
         <if test='arrCornrCd != null and arrCornrCd != ""'>
@@ -61,9 +61,9 @@
           AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.STORE_CD = TMC.STORE_CD AND Z.HQ_OFFICE_CD = #{hqOfficeCd})
     ]]>
         <if test='arrStoreCd != null and arrStoreCd.length >= 0'>
-            AND TMC.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                #{item}
+            AND
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                TMC.STORE_CD = #{item}
             </foreach>
         </if>
          <if test='arrCornrCd != null and arrCornrCd.length >= 0'>
@@ -98,9 +98,9 @@
         WHERE TSDCP.HQ_OFFICE_CD = #{hqOfficeCd}
         ]]>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
-           AND TSDCP.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
+           AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                TSDCP.STORE_CD = #{item}
             </foreach>
         </if>
         <if test='arrCornrCd != null and arrCornrCd != ""'>

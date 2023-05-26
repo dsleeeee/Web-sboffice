@@ -46,9 +46,9 @@
                 AND TSSH.STORE_CD = TMS.STORE_CD
         ]]>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
-           AND TSSH.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
+           AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                TSSH.STORE_CD = #{item}
             </foreach>
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
@@ -195,9 +195,9 @@
                 WHERE 1=1
                 AND HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test='arrStoreCd != null and arrStoreCd != ""'>
-                    AND STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                        #{item}
+                    AND
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                        STORE_CD = #{item}
                     </foreach>
                 </if>
                 <if test='orgnFg != null and orgnFg == "H"'>
@@ -259,9 +259,9 @@
                 WHERE 1=1
                 AND HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test='arrStoreCd != null and arrStoreCd != ""'>
-                    AND STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                        #{item}
+                    AND
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                        STORE_CD = #{item}
                     </foreach>
                 </if>
                 <if test='orgnFg != null and orgnFg == "H"'>
@@ -318,9 +318,9 @@
                 AND TSSH.STORE_CD = TMS.STORE_CD
         ]]>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
-           AND TSSH.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
+           AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                TSSH.STORE_CD = #{item}
             </foreach>
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
@@ -587,9 +587,9 @@
                                 AND     tssh.SALE_YN = 'N'
         ]]>
                                 <if test='arrStoreCd != null and arrStoreCd != ""'>
-                                    AND tssh.STORE_CD IN
-                                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                                        #{item}
+                                    AND
+                                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                                        tssh.STORE_CD = #{item}
                                     </foreach>
                                 </if>
                                 <if test='orgnFg != null and orgnFg == "H"'>
@@ -621,9 +621,9 @@
                                 AND     tsshp.SALE_YN = 'N'
         ]]>
                                 <if test='arrStoreCd != null and arrStoreCd != ""'>
-                                    AND tsshp.STORE_CD IN
-                                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                                        #{item}
+                                    AND
+                                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                                        tsshp.STORE_CD = #{item}
                                     </foreach>
                                 </if>
                                 <if test='orgnFg != null and orgnFg == "H"'>
@@ -656,9 +656,9 @@
                     AND     tsspc.SALE_YN = 'N'
                                 ]]>
                     <if test='arrStoreCd != null and arrStoreCd != ""'>
-                        AND tsspc.STORE_CD IN
-                        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                            #{item}
+                        AND
+                        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                            tsspc.STORE_CD = #{item}
                         </foreach>
                     </if>
                     <if test='orgnFg != null and orgnFg == "H"'>

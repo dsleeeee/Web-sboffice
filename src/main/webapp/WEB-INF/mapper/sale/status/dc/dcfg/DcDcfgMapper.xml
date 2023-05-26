@@ -49,9 +49,9 @@
                                 AND SALE_DATE BETWEEN #{startDate} AND #{endDate}
                             </if>
                             <if test='arrStoreCd != null and arrStoreCd.length >= 0'>
-                                AND STORE_CD IN
-                                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                                    #{item}
+                                AND
+                                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+									STORE_CD = #{item}
                                 </foreach>
                             </if>
 							<if test='orgnFg != null and orgnFg == "H"'>
@@ -133,9 +133,9 @@
             AND TSDT.SALE_DATE BETWEEN #{startDate} AND #{endDate}
           </if>
           <if test='arrStoreCd != null and arrStoreCd.length >= 0'>
-            AND TSDT.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                #{item}
+            AND
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+				TSDT.STORE_CD = #{item}
             </foreach>
           </if>
 		<if test='orgnFg != null and orgnFg == "H"'>
@@ -332,9 +332,9 @@
 			     AND DC.HQ_OFFICE_CD = #{hqOfficeCd}
 			  </if>
 			  <if test='arrStoreCd != null and arrStoreCd != ""'>
-			  	AND DC.STORE_CD IN
-			  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-			  		#{item}
+			  	AND
+			  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+					DC.STORE_CD IN = #{item}
 			  	</foreach>
 			  </if>
 		ORDER BY NMCODE.NMCODE_NM
