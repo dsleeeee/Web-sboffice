@@ -273,10 +273,11 @@
                     <button class="btn_blue fr mr5" id="btnSearchAddShow" ng-click="searchAddShowChangeEnv()">
                         <s:message code="cmm.search.addShow" />
                     </button>
+                    <%-- 일괄변경 --%>
+                    <button class="btn_blue mr5 fr" id="btnShow" ng-click="changeAddShow()">
+                        <s:message code="kioskKeyMapResve.select.changeAll" />
+                    </button>
                 </c:if>
-                <button class="btn_blue mr5 fr" id="btnShow" ng-click="changeAddShow()">
-                    <s:message code="kioskKeyMapResve.select.changeAll" />
-                </button>
              </div>
 
             <%-- 그리드 영역 --%>

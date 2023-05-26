@@ -24,10 +24,11 @@
                 <button class="btn_blue mr5 fl" id="btnSearchAddShow" ng-click="searchAddShowChange()">
                     <s:message code="cmm.search.addShow" />
                 </button>
+                <%-- 일괄변경 --%>
+                <button class="btn_blue mr5 fl" id="btnShow" ng-click="changeShow()">
+                    <s:message code="kioskKeyMapResve.select.changeAll" />
+                </button>
             </c:if>
-            <button class="btn_blue mr5 fl" id="btnShow" ng-click="changeShow()">
-                <s:message code="kioskKeyMapResve.select.changeAll" />
-            </button>
         </div>
     </div>
 
