@@ -281,7 +281,7 @@
             </table>
         </c:if>
 
-        <div class="mt10 oh sb-select dkbr">
+        <div class="mt10 oh sb-select dkbr" style="display:none;">
             <p class="tl s14 mt5 lh15 red">전체매장 자료생성 요청시 생성까지 최대 90분정도 소요됩니다.</p>
             <%-- 삭제 --%>
             <button class="btn_skyblue ml5 fr" id="btnDel" ng-click="del()">
@@ -293,7 +293,7 @@
             </button>
             <%-- 자료생성 날짜 --%>
             <div class="sb-select dkbr ml5 fr">
-                <span class="txtIn"><input id="dataCreateMonth" name="dataCreateMonth" class="w100px" /></span>
+                <span class="txtIn"><input id="dataCreateMonth" name="dataCreateMonth" class="w110px" /></span>
             </div>
         </div>
 
@@ -311,7 +311,8 @@
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.saleMonth"/>" binding="saleMonth" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.saleMonth"/>" binding="saleMonth" width="80" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.saleDate"/>" binding="saleDate" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.procGubun"/>" binding="procGubun" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.procDt"/>" binding="procDt" width="80" is-read-only="true" align="center" format="date"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.userNm"/>" binding="userNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -338,6 +339,8 @@
                     <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.fromSaleDate"/>" binding="fromSaleDate" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.toSaleDate"/>" binding="toSaleDate" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.fileName"/>" binding="fileName" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="" binding="reqDate" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="" binding="reqTime" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -359,4 +362,4 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/saleDtlChannel/saleDtlChannelExcel.js?ver=20230413.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/saleDtlChannel/saleDtlChannelExcel.js?ver=20230413.03" charset="utf-8"></script>

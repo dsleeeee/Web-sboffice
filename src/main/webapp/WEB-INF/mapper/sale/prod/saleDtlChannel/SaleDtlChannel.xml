@@ -250,7 +250,7 @@
         AND   tmp.STORE_CD = tsdpsd.STORE_CD
         AND   tmp.PROD_CD = tsdpsd.PROD_CD
         AND   tmps2.STORE_CD = tsdpsd.STORE_CD
-        AND   tmps2.PROD_CD = tsdpsd.PROD_CD
+        AND   tmps2.PROD_CD = tsdpsd.SIDE_PROD_CD
         AND   tmps2.STORE_CD = tmpcv.STORE_CD
         AND   tmps2.PROD_CD = tmpcv.PROD_CD
         ) A
@@ -511,6 +511,7 @@
   <select id="getSaleDtlChannelExcelList"  parameterType="SaleDtlChannelVO" resultType="DefaultMap">
     /* SaleDtlChannelMapper.getSaleDtlChannelExcelList */
     SELECT  SUBSTR(thsrm.FROM_SALE_DATE, 0, 6) AS SALE_MONTH
+    ,       TO_CHAR(TO_DATE(thsrm.FROM_SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
     ,       '전체매장통합파일' AS PROC_GUBUN
     ,       thsrm.PROC_DT
     ,       (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = thsrm.REG_ID) AS USER_NM
@@ -535,6 +536,8 @@
     ,       MOMS_SHOP_TYPE
     ,       MOMS_STORE_MANAGE_TYPE
     ,       BRANCH_CD
+    ,       REQ_DATE
+    ,       REQ_TIME
     FROM    TB_HQ_SALE_REPORT_MOMS thsrm
     WHERE   thsrm.HQ_OFFICE_CD = #{hqOfficeCd}
     <![CDATA[
@@ -584,7 +587,7 @@
       <if test='prodCds != null and prodCds != ""'>
           AND TO_CHAR(thsrm.PROD_CD_LIST) = #{prodCds}
       </if>
-    ORDER BY thsrm.FROM_SALE_DATE DESC
+      ORDER BY thsrm.FROM_SALE_DATE DESC, thsrm.REQ_DATE, thsrm.REQ_TIME
   </select>
 
   <!-- 기간별 매장-상품 매출 다운로드 탭 - 자료생성 저장 insert -->
@@ -633,8 +636,8 @@
        #{reqDate},
        #{reqTime},
        '01',
-       #{dataCreateMonth}||'01',
-       #{dataCreateMonth}||#{dataCreateMonthLastDate},
+       #{dataCreateMonth},
+       #{dataCreateMonth},
        '0',
        '',
        '',
@@ -679,13 +682,15 @@
     WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
     AND     FROM_SALE_DATE = #{fromSaleDate}
     AND     TO_SALE_DATE = #{toSaleDate}
+    AND     REQ_DATE = #{reqDate}
+    AND     REQ_TIME = #{reqTime}
     AND     REPORT_TYPE = '01'
   </delete>
 
   <!-- 기간별 매장-상품 매출 다운로드 탭 - 자료생성 요청건 존재여부 확인 -->
   <!--
       TABLE    :
-      COMMENTS :
+      COMMENTS : 체크로직 사용 안 함 사용할거면 FROM_SALE_DATE, TO_SALE_DATE yyyy-MM-dd로 변경해야함
   -->
   <select id="getSaleDtlChannelChk" parameterType="SaleDtlChannelVO" resultType="DefaultMap">
     /* SaleDtlChannelMapper.getSaleDtlChannelChk */
