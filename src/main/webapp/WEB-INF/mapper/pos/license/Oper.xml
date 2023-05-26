@@ -27,6 +27,7 @@
         ,       D.AGENCY_NM
         ,       B.VAN_CD
         ,       E.VAN_NM
+        ,		Q.ENVST_VAL_NM AS PROG_FG
         ,       O.POS_CNT
         ,       G.BILL_CNT
         ,       G.SALE_CNT
@@ -190,6 +191,18 @@
                     GROUP
                     BY      A.STORE_CD
                 ) O
+        ,		(
+                    SELECT 	A.STORE_CD
+                    ,		A.ENVST_VAL
+                    FROM	TB_MS_STORE_ENVST A
+                    WHERE 	ENVST_CD = '1014'
+                )P
+        ,		(
+                    SELECT 	A.ENVST_VAL_CD
+                    ,		A.ENVST_VAL_NM
+                    FROM 	TB_CM_ENVST_DTL A
+                    WHERE 	A.ENVST_CD = '1014'
+                )Q
         WHERE   1 = 1
         AND     B.HQ_OFFICE_CD      =   A.HQ_OFFICE_CD
         <if test='hqOfficeCd != null and hqOfficeCd != ""'>
@@ -258,6 +271,8 @@
         AND     M.STORE_CD          (+) =   B.STORE_CD
         AND     N.STORE_CD          (+) =   B.STORE_CD
         AND     O.STORE_CD          (+) =   B.STORE_CD
+        AND     P.STORE_CD              =   B.STORE_CD
+        AND     Q.ENVST_VAL_CD          =   P.ENVST_VAL
         ORDER
         BY      A.HQ_OFFICE_CD, A.HQ_OFFICE_NM
         ,       B.STORE_CD, B.STORE_NM, B.SYS_STAT_FG
@@ -279,6 +294,7 @@
         ,       D.AGENCY_NM
         ,       B.VAN_CD
         ,       E.VAN_NM
+        ,		Q.ENVST_VAL_NM AS PROG_FG
         ,       F.POS_CNT
         ,       F.POS_ENVST_4019_1
         ,       F.POS_ENVST_4019_2
@@ -431,6 +447,19 @@
                     BY      A.STORE_CD
                 ) K
         ,       TB_MIG_DATA_MAPPING L
+        ,		(
+                    SELECT 	A.STORE_CD
+                    ,		A.ENVST_VAL
+                    FROM	TB_MS_STORE_ENVST A
+                    WHERE 	ENVST_CD = '1014'
+
+                )P
+        ,		(
+                    SELECT 	A.ENVST_VAL_CD
+                    ,		A.ENVST_VAL_NM
+                    FROM 	TB_CM_ENVST_DTL A
+                    WHERE 	A.ENVST_CD = '1014'
+                )Q
         WHERE   1 = 1
         AND     B.HQ_OFFICE_CD      =   A.HQ_OFFICE_CD
         <if test='hqOfficeCd != null and hqOfficeCd != ""'>
@@ -496,6 +525,8 @@
         AND     J.STORE_CD      (+) =   B.STORE_CD
         AND     K.STORE_CD      (+) =   B.STORE_CD
         AND     L.SOLBI_STORE_CD    (+) =   B.STORE_CD
+        AND     P.STORE_CD              =   B.STORE_CD
+        AND     Q.ENVST_VAL_CD          =   P.ENVST_VAL
         ORDER
         BY      A.HQ_OFFICE_CD, A.HQ_OFFICE_NM
         ,       B.STORE_CD, B.STORE_NM, B.SYS_STAT_FG

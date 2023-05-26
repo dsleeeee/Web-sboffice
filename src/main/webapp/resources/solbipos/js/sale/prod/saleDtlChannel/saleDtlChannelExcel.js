@@ -49,8 +49,8 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', function ($scope, 
 
     // 자료생성
     var dataCreateMonth = new wijmo.input.InputDate('#dataCreateMonth', {
-        format       : "yyyy-MM",
-        selectionMode: "2" // 달력 선택 모드(1:day 2:month)
+        format       : "yyyy-MM-dd",
+        selectionMode: "1" // 달력 선택 모드(1:day 2:month)
     });
 
     // 브랜드 콤보박스 셋팅
@@ -197,7 +197,7 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', function ($scope, 
             return false;
         }
         // 조회일자 최대 3개월 제한
-        if (diffMonth > 2) {
+        if (diffMonth > 3) {
             $scope._popMsg(messages['cmm.dateOver.3month.error']);
             return false;
         }
@@ -244,7 +244,7 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', function ($scope, 
 
     // <-- 자료생성 -->
     $scope.dataCreate = function(){
-        var createMonth = wijmo.Globalize.format(dataCreateMonth.value, 'yyyyMM');
+        var createMonth = wijmo.Globalize.format(dataCreateMonth.value, 'yyyyMMdd');
         var createMonthLastDate = new Date(createMonth.substring(0, 4), createMonth.substring(4, 6), 0).getDate();
 
         // 자료생성 요청건 존재여부 확인
@@ -272,7 +272,7 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', function ($scope, 
             params.branchCd = $scope.srchBranchCdCombo.selectedValue;
 
             // '전체' 일때
-            if (params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+            // if (params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
                 var momsHqBrandCd = "";
                 for (var i = 0; i < momsHqBrandCdComboList.length; i++) {
                     if (momsHqBrandCdComboList[i].value !== null) {
@@ -280,23 +280,23 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', function ($scope, 
                     }
                 }
                 params.userBrands = momsHqBrandCd;
-            }
+            // }
         }
 
         console.log(params);
 
-        $scope._postJSONQuery.withOutPopUp( "/sale/prod/saleDtlChannel/saleDtlChannelExcel/getSaleDtlChannelChk.sb", params, function(response){
-            var saleDtlChannelExcel = response.data.data.result;
-            $scope.saleDtlChannelExcel = saleDtlChannelExcel;
+        // $scope._postJSONQuery.withOutPopUp( "/sale/prod/saleDtlChannel/saleDtlChannelExcel/getSaleDtlChannelChk.sb", params, function(response){
+        //     var saleDtlChannelExcel = response.data.data.result;
+        //     $scope.saleDtlChannelExcel = saleDtlChannelExcel;
 
-            if($scope.saleDtlChannelExcel.cnt > 0) {
-                var msg = createMonth + " " + messages["saleDtlChannelExcel.saleMonthAlert"]; // 자료가 존재합니다. 삭제 후 진행해주세요.
-                $scope._popMsg(msg);
-                return;
-            } else {
+            // if($scope.saleDtlChannelExcel.cnt > 0) {
+            //     var msg = createMonth + " " + messages["saleDtlChannelExcel.saleMonthAlert"]; // 자료가 존재합니다. 삭제 후 진행해주세요.
+            //     $scope._popMsg(msg);
+            //     return;
+            // } else {
                 $scope.save(params);
-            }
-        });
+            // }
+        // });
     };
 
     $scope.save = function(params){

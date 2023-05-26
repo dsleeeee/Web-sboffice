@@ -302,6 +302,7 @@ public class SaleDtlChannelServiceImpl implements SaleDtlChannelService {
     }
 
     /** 매출상세현황(채널별) 매출 다운로드 탭 - 자료생성 요청건 존재여부 확인 */
+    // 20230522 사용 안 함
     @Override
     public DefaultMap<String> getSaleDtlChannelChk(SaleDtlChannelVO saleDtlChannelVO, SessionInfoVO sessionInfoVO) {
 
@@ -319,13 +320,11 @@ public class SaleDtlChannelServiceImpl implements SaleDtlChannelService {
 
         // 매장브랜드 '전체' 일때
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            if (saleDtlChannelVO.getStoreHqBrandCd() == "" || saleDtlChannelVO.getStoreHqBrandCd() == null || saleDtlChannelVO.getProdHqBrandCd() == "" || saleDtlChannelVO.getProdHqBrandCd() == null) {
                 // 사용자별 브랜드 array 값 세팅
                 String[] userBrandList = saleDtlChannelVO.getUserBrands().split(",");
                 saleDtlChannelVO.setUserBrandList(userBrandList);
                 // 매장브랜드 뒤에 , 제거용
                 saleDtlChannelVO.setUserBrands(saleDtlChannelVO.getUserBrands().substring(0, saleDtlChannelVO.getUserBrands().length()-1));
-            }
         }
 
         return saleDtlChannelMapper.getSaleDtlChannelChk(saleDtlChannelVO);
