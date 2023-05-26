@@ -136,8 +136,9 @@
                 USE_YN,
                 REG_DT,
                 DISP_TIME,
-                PROMOTION_CD
-          FROM TB_HQ_POS_ADVER_FILE
+                PROMOTION_CD,
+                NVL2(PROMOTION_CD,(SELECT PROMOTION_NM FROM TB_HQ_PROMO_H thph WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND thph.PROMOTION_CD = thpaf.PROMOTION_CD), '') AS PROMOTION_NM
+          FROM TB_HQ_POS_ADVER_FILE thpaf
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
            AND ADVER_FILE_NO = #{verSerNo}
         </when>
@@ -159,8 +160,9 @@
                     USE_YN,
                     REG_DT,
                     DISP_TIME,
-                    PROMOTION_CD
-              FROM TB_MS_POS_ADVER_FILE
+                    PROMOTION_CD,
+                    NVL2(PROMOTION_CD,(SELECT PROMOTION_NM FROM TB_MS_PROMO_H thph WHERE STORE_CD = #{storeCd} AND thph.PROMOTION_CD = tmpaf.PROMOTION_CD), '') AS PROMOTION_NM
+              FROM TB_MS_POS_ADVER_FILE tmpaf
              WHERE STORE_CD = #{storeCd}
                AND ADVER_FILE_NO = #{verSerNo}
         </when>

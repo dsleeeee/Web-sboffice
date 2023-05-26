@@ -87,8 +87,8 @@
                 <%-- 이미지출력시간 --%>
                 <th><s:message code="media.dispTime" /></th>
                 <td>{{version.dispTime}}</td>
-                <th></th>
-                <td></td>
+                <th><s:message code="media.promotionNm" /></th>
+                <td>{{version.promotionNm}}</td>
               </tr>
               </tbody>
             </table>
