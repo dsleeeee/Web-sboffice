@@ -183,6 +183,7 @@
                     <wj-flex-grid-column header="<s:message code="oper.runDist"/>           " binding="dist"            width="150" is-read-only="true" align="left"  > </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.runAgency"/>         " binding="agencyNm"        width="120" is-read-only="true" align="left"  > </wj-flex-grid-column>
 
+                    <wj-flex-grid-column header="<s:message code="oper.progFg"/>            " binding="progFg"          width=" 90" is-read-only="true" align="center"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.posCnt"/>            " binding="posCnt"          width=" 60" is-read-only="true" align="center" aggregate="Sum"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.pSaleCnt"/>          " binding="pSaleCnt"        width="120" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.pRtnSaleCnt"/>       " binding="pRtnSaleCnt"     width="120" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>

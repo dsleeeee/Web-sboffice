@@ -189,6 +189,7 @@
                     <wj-flex-grid-column header="<s:message code="oper.sysOpenDate"/>   " binding="sysOpenDate"     width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.agencyCd"/>      " binding="agencyCd"        width=" 80" is-read-only="true" align="center"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.agency"/>        " binding="agencyNm"        width="120" is-read-only="true" align="left"  > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.progFg"/>        " binding="progFg"          width=" 90" is-read-only="true" align="center"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.posCnt"/>        " binding="posCnt"          width=" 60" is-read-only="true" align="center"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.posEnvst40191"/> " binding="posEnvst40191"   width=" 70" is-read-only="true" align="center"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.posEnvst40192"/> " binding="posEnvst40192"   width=" 70" is-read-only="true" align="center"> </wj-flex-grid-column>
@@ -232,7 +233,7 @@
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/oper/saleStoreList.js?ver=20201210.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/oper/saleStoreList.js?ver=20201210.02" charset="utf-8"></script>
 
 <%-- 대리점 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/searchAgency.jsp">
