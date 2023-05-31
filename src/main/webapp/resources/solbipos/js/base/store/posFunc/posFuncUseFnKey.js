@@ -58,6 +58,7 @@ app.controller('posFuncUseFnKeyCtrl', ['$scope', '$http', function ($scope, $htt
         $("#fnKeyTitle").text(data.fnkeyNm);
         $("#hdStoreCd").val(data.storeCd);
         $("#hdPosNo").val(data.posNo);
+        $("#hdFnkeyFg").val(data.fnkeyFg);
 
         // 포스기능키목록 그리드 조회
         $scope.getPosFuncDetail(data);
@@ -138,15 +139,13 @@ app.controller('posFuncUseFnKeyCtrl', ['$scope', '$http', function ($scope, $htt
             $scope.flex.collectionView.commitEdit();
         }
 
-
         for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
             $scope.flex.collectionView.itemsEdited[u].status = 'U';
             $scope.flex.collectionView.itemsEdited[u].storeCd = $("#hdStoreCd").val();
             $scope.flex.collectionView.itemsEdited[u].posNo = $("#hdPosNo").val();
-
+            $scope.flex.collectionView.itemsEdited[u].fnkeyFg = $("#hdFnkeyFg").val();
             params.push($scope.flex.collectionView.itemsEdited[u]);
         }
-
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save('/base/store/posfunc/use/savePosConf.sb', params, function() {

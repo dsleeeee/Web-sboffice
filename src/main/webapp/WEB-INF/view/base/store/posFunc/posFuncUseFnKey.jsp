@@ -27,6 +27,7 @@
                 </div>
                 <input type="hidden" id="hdStoreCd" />
                 <input type="hidden" id="hdPosNo" />
+                <input type="hidden" id="hdFnkeyFg" />
 
                 <%-- 그리드 --%>
                 <%-- 개발시 높이 조절해서 사용--%>
@@ -60,4 +61,4 @@
         </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/posFunc/posFuncUseFnKey.js?ver=20201013.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/posFunc/posFuncUseFnKey.js?ver=20230531.01" charset="utf-8"></script>
