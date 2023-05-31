@@ -104,9 +104,9 @@
         AND tsssd.STORAGE_CD (+)= tsssc.STORAGE_CD
         AND tsssd.PROD_CD (+)= tsssc.PROD_CD
         <if test="storeCd != null and storeCd != ''">
-            AND tmp.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")" >
+                tmp.STORE_CD = #{item}
             </foreach>
         </if>
         <if test='prodCd != null and prodCd != ""'>

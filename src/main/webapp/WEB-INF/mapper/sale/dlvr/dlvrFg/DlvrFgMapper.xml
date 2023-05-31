@@ -89,9 +89,9 @@
                    AND tsdpd.PROD_CD      = tmp.PROD_CD
                    AND tsdpd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 <if test='storeCd != null and storeCd != ""'>
-                   AND tsdpd.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
-                        #{item}
+                   AND
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")" >
+                        tsdpd.STORE_CD = #{item}
                     </foreach>
                 </if>
                 <if test='orgnFg != null and orgnFg == "H"'>
@@ -217,9 +217,9 @@
                    AND tsdpd.PROD_CD      = tmpb.PROD_CD(+)
                    AND tsdpd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 <if test='storeCd != null and storeCd != ""'>
-                   AND tsdpd.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
-                        #{item}
+                   AND
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")" >
+                        tsdpd.STORE_CD = #{item}
                     </foreach>
                 </if>
                 <if test='orgnFg != null and orgnFg == "H"'>
@@ -354,9 +354,9 @@
                    AND tsdpd.PROD_CD      = tmpb.PROD_CD(+)
                    AND tsdpd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 <if test='storeCd != null and storeCd != ""'>
-                   AND tsdpd.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
-                        #{item}
+                   AND
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")" >
+                        tsdpd.STORE_CD = #{item}
                     </foreach>
                 </if>
                 <if test='orgnFg != null and orgnFg == "H"'>
@@ -511,9 +511,9 @@
                              WHERE tssdp.HQ_OFFICE_CD = #{hqOfficeCd}
                             <if test='orgnFg != null and orgnFg == "H"'>
                                 <if test='storeCd != null and storeCd != ""'>
-                                    AND tssdp.STORE_CD IN
-                                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
-                                        #{item}
+                                    AND
+                                    <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")" >
+                                        tssdp.STORE_CD = #{item}
                                     </foreach>
                                 </if>
                             </if>
@@ -545,9 +545,9 @@
        WHERE tssd.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='orgnFg != null and orgnFg == "H"'>
             <if test='storeCd != null and storeCd != ""'>
-                AND tssd.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
-                    #{item}
+                AND
+                <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")" >
+                    tssd.STORE_CD = #{item}
                 </foreach>
             </if>
         </if>

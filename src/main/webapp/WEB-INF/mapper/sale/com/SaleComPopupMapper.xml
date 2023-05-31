@@ -525,9 +525,9 @@
              WHERE   C.PROD_CD       = A.PROD_CD(+)
              AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
             <if test='storeCd != null and storeCd != ""'>
-				AND C.STORE_CD	IN
-                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                   					#{item}
+				AND
+                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+						C.STORE_CD = #{item}
                		</foreach>
 			</if>
 			<if test='startDate != null and startDate != ""'>
@@ -602,9 +602,9 @@
              WHERE   C.PROD_CD       = A.PROD_CD(+)
              AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
             <if test='storeCd != null and storeCd != ""'>
-				AND C.STORE_CD	IN
-                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                   					#{item}
+				AND
+                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+						C.STORE_CD	= #{item}
                		</foreach>
 			</if>
 			<if test='startDate != null and startDate != ""'>
@@ -709,9 +709,9 @@
              WHERE   C.PROD_CD       = A.PROD_CD(+)
              AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
             <if test='storeCd != null and storeCd != ""'>
-				AND C.STORE_CD	IN
-                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                   					#{item}
+				AND
+                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+						C.STORE_CD = #{item}
                		</foreach>
 			</if>
 			<if test='saleMonth != null and saleMonth != ""'>
@@ -771,9 +771,9 @@
              WHERE   C.PROD_CD       = A.PROD_CD(+)
              AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
             <if test='storeCd != null and storeCd != ""'>
-				AND C.STORE_CD	IN
-                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                   					#{item}
+				AND
+                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+						C.STORE_CD = #{item}
                		</foreach>
 			</if>
 			<if test='saleMonth != null and saleMonth != ""'>
@@ -815,9 +815,9 @@
          WHERE A.STORE_CD = B.STORE_CD
          AND   A.HQ_OFFICE_CD  = #{hqOfficeCd}
 		<if test='storeCd != null and storeCd != ""'>
-			AND A.STORE_CD	IN
-                   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                  					#{item}
+			AND
+                   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+					   A.STORE_CD =	#{item}
               		</foreach>
 	 	</if>
 		<if test='startDate != null and startDate != ""'>
@@ -887,10 +887,12 @@
 				           , SUM(TSSD.REAL_SALE_AMT) AS REAL_SALE_AMT
 				        FROM TB_SL_SALE_DTL TSSD
 				        WHERE TSSD.HQ_OFFICE_CD = #{hqOfficeCd}
-				        AND TSSD.STORE_CD IN
-		        	    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                        	#{item}
-                    	</foreach>
+						<if test='arrStoreCd != null and arrStoreCd != ""'>
+							AND
+							<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+								TSSD.STORE_CD = #{item}
+							</foreach>
+			 			</if>
 						<if test='startDate != null and startDate != ""'>
 							AND TSSD.SALE_DATE	>=   REPLACE(#{startDate}, '-', '')
 						</if>
@@ -918,10 +920,10 @@
 				                       	AND Z.SALE_DATE = TSSD.SALE_DATE
 				                       	AND Z.POS_NO = TSSD.POS_NO
 				                       	AND Z.BILL_NO = TSSD.BILL_NO
-				                       	AND Z.STORE_CD IN
 				                       	<if test='arrStoreCd != null and arrStoreCd != ""'>
-					                       	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-			                        				#{item}
+											AND
+					                       	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+												Z.STORE_CD = #{item}
 			                    			</foreach>
 		                    			</if>
 								        <if test='startDate != null and startDate != ""'>
@@ -989,10 +991,10 @@
 				           , SUM(TSSD.REAL_SALE_AMT) AS REAL_SALE_AMT
 				        FROM TB_SL_SALE_DTL TSSD
 				        WHERE	TSSD.HQ_OFFICE_CD = #{hqOfficeCd}
-				        AND	TSSD.STORE_CD IN
 				        <if test='arrStoreCd != null and arrStoreCd != ""'>
-			        	    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-	                        	#{item}
+							AND
+			        	    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+								TSSD.STORE_CD = #{item}
 	                    	</foreach>
                     	</if>
 						<if test='startDate != null and startDate != ""'>
@@ -1022,10 +1024,10 @@
 				                       	AND Z.SALE_DATE = TSSD.SALE_DATE
 				                       	AND Z.POS_NO = TSSD.POS_NO
 				                       	AND Z.BILL_NO = TSSD.BILL_NO
-				                       	AND Z.STORE_CD IN
 				                        <if test='arrStoreCd != null and arrStoreCd != ""'>
-					                       	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-			                        				#{item}
+				                        	AND
+					                       	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+												Z.STORE_CD = #{item}
 		                    			   </foreach>
 								        </if>
 								        <if test='startDate != null and startDate != ""'>
@@ -1864,9 +1866,9 @@
 		<choose>
             <when test='orgnFg != null and orgnFg == "H"'>
             	<if test='storeCd != null and storeCd != ""'>
-                 	AND TSSDP.STORE_CD IN
-                 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                   		#{item}
+                 	AND
+                 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+						TSSDP.STORE_CD = #{item}
                		</foreach>
                	</if>
 				AND (

@@ -47,9 +47,9 @@
         </if>
         AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='storeCds != null and storeCds != ""'>
-            AND tssd.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
+                tssd.STORE_CD = #{item}
             </foreach>
         </if>
         <if test='membrNo != null and membrNo != ""'>

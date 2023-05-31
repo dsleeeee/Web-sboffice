@@ -116,9 +116,9 @@
           AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
           AND PROD_CD = #{prodCd}
       <if test='arrStoreCd != null and arrStoreCd.toString() != ""'>
-          AND tms.STORE_CD IN
-          <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-              #{item}
+          AND
+          <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+              tms.STORE_CD = #{item}
           </foreach>
       </if>
       <if test='sysStatFg != null and sysStatFg.toString() != ""'>
@@ -169,9 +169,9 @@
                                                         AND     tmpp.PROD_CD = #{prodCd}
                                                     )
         <if test='arrStoreCd != null and arrStoreCd.toString() != ""'>
-            AND tms.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                tms.STORE_CD = #{item}
             </foreach>
         </if>
         <if test='sysStatFg != null and sysStatFg.toString() != ""'>

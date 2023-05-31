@@ -66,9 +66,9 @@
                     OR	tsmt.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                     )
                 <if test='arrStoreCd != null and arrStoreCd != ""'>
-                    AND tsmt.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                        #{item}
+                    AND
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                        tsmt.STORE_CD = #{item}
                     </foreach>
                 </if>
                 AND     tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
@@ -90,9 +90,9 @@
                     OR	tsmdd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                     )
                 <if test='arrStoreCd != null and arrStoreCd != ""'>
-                    AND tsmdd.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                        #{item}
+                    AND
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                        tsmdd.STORE_CD = #{item}
                     </foreach>
                 </if>
                 AND     tsmdd.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
@@ -113,9 +113,9 @@
                             OR	tssh.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                             )
                         <if test='arrStoreCd != null and arrStoreCd != ""'>
-                            AND tssh.STORE_CD IN
-                            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                                #{item}
+                            AND
+                            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                                tssh.STORE_CD = #{item}
                             </foreach>
                         </if>
                         AND     tssh.SALE_DATE BETWEEN #{startMonth} || '01' AND #{endMonth} || '31'
@@ -132,9 +132,9 @@
                     OR	STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                     )
                 <if test='arrStoreCd != null and arrStoreCd != ""'>
-                    AND STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                        #{item}
+                    AND
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                        STORE_CD = #{item}
                     </foreach>
                 </if>
                 ) E

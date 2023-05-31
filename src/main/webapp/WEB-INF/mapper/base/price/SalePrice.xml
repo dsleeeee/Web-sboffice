@@ -117,9 +117,9 @@
         AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND thpsp.PROD_CD = thp.PROD_CD
         <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND tms.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                #{item}
+            AND
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                tms.STORE_CD = #{item}
             </foreach>
         </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
@@ -793,9 +793,9 @@
                 ) thn
                 WHERE 1=1
                 <if test='storeCds != null and storeCds != ""'>
-                    AND tmp.STORE_CD IN
-                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                        tmp.STORE_CD = #{item}
                     </foreach>
                 </if>
                 AND tms.HQ_OFFICE_CD = #{hqOfficeCd}

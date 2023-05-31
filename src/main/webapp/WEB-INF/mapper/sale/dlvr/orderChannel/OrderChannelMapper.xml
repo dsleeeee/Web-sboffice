@@ -246,9 +246,9 @@
                 ) tcn
          WHERE tsdto.HQ_OFFICE_CD = #{hqOfficeCd}
             <if test='arrStoreCd != null and arrStoreCd != ""'>
-                AND tsdto.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                  #{item}
+                AND
+                <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                    tsdto.STORE_CD = #{item}
                 </foreach>
             </if>
            AND tsdto.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -280,9 +280,9 @@
         WHERE 1=1
         AND tsdto.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND tsdto.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                tsdto.STORE_CD = #{item}
             </foreach>
         </if>
         AND tsdto.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -312,9 +312,9 @@
         WHERE 1=1
         AND tssh.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND tssh.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                tssh.STORE_CD = #{item}
             </foreach>
         </if>
         AND     tssh.SALE_DATE = #{saleDate}
@@ -348,9 +348,9 @@
         WHERE 1=1
           AND tsdto.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND tsdto.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                tsdto.STORE_CD = #{item}
             </foreach>
         </if>
           AND tsdto.SALE_DATE BETWEEN #{startDate} AND #{endDate}

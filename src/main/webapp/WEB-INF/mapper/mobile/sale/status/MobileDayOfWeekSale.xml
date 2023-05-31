@@ -35,10 +35,12 @@
                 WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
                 <!-- 매장 -->
                 <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                    AND STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                        #{item}
+                  <if test='arrStoreCd != null and arrStoreCd != ""'>
+                    AND
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                        STORE_CD = #{item}
                     </foreach>
+                   </if>
                 </if>
                 AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
             )
@@ -65,10 +67,12 @@
             WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
+              <if test='arrStoreCd != null and arrStoreCd != ""'>
+                AND
+                <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                    STORE_CD = #{item}
                 </foreach>
+              </if>
             </if>
             AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
             )

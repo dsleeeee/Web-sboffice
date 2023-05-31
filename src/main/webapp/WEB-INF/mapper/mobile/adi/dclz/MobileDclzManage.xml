@@ -55,10 +55,12 @@
       </if>
       <!-- 매장 -->
       <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-          AND tpec.STORE_CD IN
-          <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-              #{item}
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+          AND
+          <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+              tpec.STORE_CD = #{item}
           </foreach>
+        </if>
       </if>
        ORDER
           BY tpec.SALE_DATE DESC, tpec.COMMUTE_IN_DT ASC

@@ -41,9 +41,9 @@
         AND 	SALE_DATE BETWEEN #{startMonth} || '01' AND #{startMonth} || '31'
         AND 	SALE_HOUR BETWEEN #{startTime} AND #{endTime}
         <if test='storeCds != null and storeCds != ""'>
-            AND tsdpt.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                tsdpt.STORE_CD = #{item}
             </foreach>
         </if>
         <if test='prodCd != null and prodCd != ""'>
@@ -98,9 +98,9 @@
         AND 	SALE_DATE BETWEEN #{startMonth} || '01' AND #{startMonth} || '31'
         AND 	SALE_HOUR BETWEEN #{startTime} AND #{endTime}
         <if test='storeCds != null and storeCds != ""'>
-            AND tsdpt.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                tsdpt.STORE_CD = #{item}
             </foreach>
         </if>
         <if test='prodCd != null and prodCd != ""'>

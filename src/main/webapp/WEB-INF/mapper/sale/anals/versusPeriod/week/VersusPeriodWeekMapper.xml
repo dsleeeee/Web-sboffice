@@ -75,9 +75,9 @@
 										 	AND TSDT.SALE_DATE BETWEEN REPLACE(#{startDate}, '-', '') AND REPLACE(#{endDate}, '-', '')
 										 </if>
 										 <if test='arrStoreCd != null and arrStoreCd != ""'>
-										 	AND TSDT.STORE_CD IN
-										 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-										 		#{item}
+										 	AND
+										 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+												TSDT.STORE_CD = #{item}
 										 	</foreach>
 										 </if>
 										<if test='orgnFg != null and orgnFg == "H"'>
@@ -125,9 +125,9 @@
 										 	AND TSDT.SALE_DATE BETWEEN REPLACE(#{compStartDate}, '-', '') AND REPLACE(#{compEndDate}, '-', '')
 										 </if>
 										 <if test='arrStoreCd != null and arrStoreCd != ""'>
-										 	AND TSDT.STORE_CD IN
-										 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-										 		#{item}
+										 	AND
+										 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+												TSDT.STORE_CD = #{item}
 										 	</foreach>
 										 </if>
 										<if test='orgnFg != null and orgnFg == "H"'>
@@ -226,9 +226,9 @@ ORDER BY LV.LV
 										 					AND TSDT.SALE_DATE BETWEEN REPLACE(#{startDate}, '-', '') AND REPLACE(#{endDate}, '-', '')
 										 				</if>
 										 				<if test='arrStoreCd != null and arrStoreCd != ""'>
-										 					AND TSDT.STORE_CD IN
-										 					<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-										 						#{item}
+										 					AND
+										 					<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+																TSDT.STORE_CD = #{item}
 										 					</foreach>
 														</if>
 														<if test='orgnFg != null and orgnFg == "H"'>
@@ -276,9 +276,9 @@ ORDER BY LV.LV
 										 					AND TSDT.SALE_DATE BETWEEN REPLACE(#{compStartDate}, '-', '') AND REPLACE(#{compEndDate}, '-', '')
 										 				</if>
 										 				<if test='arrStoreCd != null and arrStoreCd != ""'>
-										 					AND TSDT.STORE_CD IN
-										 					<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-										 						#{item}
+										 					AND
+										 					<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+																TSDT.STORE_CD = #{item}
 										 					</foreach>
 														</if>
 														<if test='orgnFg != null and orgnFg == "H"'>

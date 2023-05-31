@@ -1223,9 +1223,9 @@
                     WHERE 1=1
                     AND HQ_OFFICE_CD = #{hqOfficeCd}
                     <if test='storeCds != null and storeCds != ""'>
-                        AND STORE_CD IN
-                        <foreach collection="storeCdList" item="item" open="(" separator="," close=")" >
-                            #{item}
+                        AND
+                        <foreach collection="storeCdList" item="item" open="(" separator="OR" close=")" >
+                            STORE_CD = #{item}
                         </foreach>
                     </if>
                     AND PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
@@ -1249,9 +1249,9 @@
         WHERE 1=1
         AND A.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='storeCds != null and storeCds != ""'>
-            AND A.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open="(" separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open="(" separator="OR" close=")" >
+                A.STORE_CD = #{item}
             </foreach>
         </if>
         AND A.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'

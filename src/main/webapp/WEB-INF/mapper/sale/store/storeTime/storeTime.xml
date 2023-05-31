@@ -39,9 +39,9 @@
                 AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 <if test='storeCds != null and storeCds != ""'>
-                    AND tsdt.STORE_CD IN
-                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                        tsdt.STORE_CD = #{item}
                     </foreach>
                 </if>
                 GROUP BY tsdt.STORE_CD, tms.STORE_NM, tms.HQ_OFFICE_CD, tms.BRANCH_CD
@@ -82,9 +82,9 @@
                 AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 <if test='storeCds != null and storeCds != ""'>
-                    AND tsdt.STORE_CD IN
-                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                        tsdt.STORE_CD = #{item}
                     </foreach>
                 </if>
                 <if test='prodCd != null and prodCd != ""'>

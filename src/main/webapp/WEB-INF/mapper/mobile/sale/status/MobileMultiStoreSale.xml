@@ -41,9 +41,9 @@
             AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tsdt.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
+                AND
+                <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                    tsdt.STORE_CD = #{item}
                 </foreach>
             </if>
             AND tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -60,9 +60,9 @@
             AND tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tsdtd.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
+                AND
+                <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                    tsdtd.STORE_CD = #{item}
                 </foreach>
             </if>
             AND tsdtd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -77,9 +77,9 @@
             AND tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tsdtd.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
+                AND
+                <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                    tsdtd.STORE_CD = #{item}
                 </foreach>
             </if>
             AND tsdtd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -93,9 +93,9 @@
             AND tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tsdtd.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
+                AND
+                <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                    tsdtd.STORE_CD = #{item}
                 </foreach>
             </if>
             AND tsdtd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -157,9 +157,9 @@
             AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tsdt.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
+                AND
+                <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                    tsdt.STORE_CD = #{item}
                 </foreach>
             </if>
             AND tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -182,9 +182,9 @@
             AND tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tsdtd.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
+                AND
+                <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                    tsdtd.STORE_CD = #{item}
                 </foreach>
             </if>
             AND tsdtd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -201,9 +201,9 @@
             AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tsdp.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
+                AND
+                <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                    tsdp.STORE_CD = #{item}
                 </foreach>
             </if>
             AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -220,9 +220,9 @@
             AND tsdd.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tsdd.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
+                AND
+                <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                    tsdd.STORE_CD = #{item}
                 </foreach>
             </if>
             AND tsdd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -237,9 +237,9 @@
             AND tssh.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tssh.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
+                AND
+                <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                    tssh.STORE_CD = #{item}
                 </foreach>
             </if>
             AND tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -269,9 +269,9 @@
         AND tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
         <!-- 매장 -->
         <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-            AND tsdtd.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                tsdtd.STORE_CD = #{item}
             </foreach>
         </if>
         AND tsdtd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -325,9 +325,9 @@
             AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tsdt.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
+                AND
+                <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                    tsdt.STORE_CD = #{item}
                 </foreach>
             </if>
             AND tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -351,9 +351,9 @@
             AND tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tsdtd.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
+                AND
+                <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                    tsdtd.STORE_CD = #{item}
                 </foreach>
             </if>
             AND tsdtd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -371,9 +371,9 @@
             AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tsdp.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
+                AND
+                <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                    tsdp.STORE_CD = #{item}
                 </foreach>
             </if>
             AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -391,9 +391,9 @@
             AND tsdd.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tsdd.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
+                AND
+                <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                    tsdd.STORE_CD = #{item}
                 </foreach>
             </if>
             AND tsdd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -409,9 +409,9 @@
             AND tssh.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tssh.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
+                AND
+                <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                    tssh.STORE_CD = #{item}
                 </foreach>
             </if>
             AND tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}

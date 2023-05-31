@@ -54,9 +54,9 @@
                 WHERE   A.YYYYMMDD  BETWEEN #{closeDate}||'01' AND #{closeDate}||'31'
                 AND     B.HQ_OFFICE_CD  = #{hqOfficeCd}
                 <if test='arrStoreCd != null and arrStoreCd != ""'>
-                    AND B.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                        #{item}
+                    AND
+                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                        B.STORE_CD = #{item}
                     </foreach>
                 </if>
                 ) A

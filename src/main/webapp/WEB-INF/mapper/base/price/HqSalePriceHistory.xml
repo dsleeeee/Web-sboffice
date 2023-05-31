@@ -43,9 +43,9 @@
         WHERE 	tms.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     tlmpspl.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
         <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND tlmpspl.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                #{item}
+            AND
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                tlmpspl.STORE_CD = #{item}
             </foreach>
         </if>
         <if test='prodCd != null and prodCd != ""'>
@@ -117,9 +117,9 @@
         WHERE 	tms.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     tlmpspl.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
         <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND tlmpspl.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                #{item}
+            AND
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                tlmpspl.STORE_CD = #{item}
             </foreach>
         </if>
         <if test='prodCd != null and prodCd != ""'>

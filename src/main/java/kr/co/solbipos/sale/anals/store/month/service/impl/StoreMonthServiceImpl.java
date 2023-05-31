@@ -34,9 +34,9 @@ public class StoreMonthServiceImpl implements StoreMonthService {
         String[] array = storeMonthVO.getStoreCd().split(",");
         for(int i=0; i<array.length;i++) {
         	if(i > 0) {
-        		arrayStoreCd += ",'"+array[i]+"'";
+        		arrayStoreCd += " OR TSDT.STORE_CD ='"+array[i]+"'";
         	}else {
-        		arrayStoreCd += "'"+array[i]+"'";
+        		arrayStoreCd += " TSDT.STORE_CD ='"+array[i]+"'";
         	}
         }
         
@@ -81,7 +81,7 @@ public class StoreMonthServiceImpl implements StoreMonthService {
 		    	sQuery3 +=" AND TSDT.HQ_OFFICE_CD = " + "'"+ m +"'" + "\n";
 		    	sQuery3 +=" AND TSDT.SALE_YM     = " + j + "\n";
 		    	if(!storeCd.equals("")) {
-		    		sQuery3 +=" AND TSDT.STORE_CD IN  (" + arrayStoreCd + ")" + "\n";
+		    		sQuery3 +=" AND (" + arrayStoreCd + ")" + "\n";
 		    	}
 		    	if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
 					sQuery3 +="AND (" +
@@ -120,7 +120,7 @@ public class StoreMonthServiceImpl implements StoreMonthService {
 	    	sQuery3 +=" AND TSDT.HQ_OFFICE_CD = " + "'"+ m +"'" + "\n";
 	    	sQuery3 +=" AND TSDT.SALE_YM     = " + j + "\n";
 	    	if(!storeCd.equals("")) {
-	    		sQuery3 +=" AND TSDT.STORE_CD IN  (" + arrayStoreCd + ")" + "\n";
+	    		sQuery3 +=" AND (" + arrayStoreCd + ")" + "\n";
 	    	}
 			if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
 				sQuery3 +="AND (" +

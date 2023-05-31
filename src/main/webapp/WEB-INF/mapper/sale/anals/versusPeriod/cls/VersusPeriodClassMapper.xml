@@ -137,9 +137,9 @@
 									WHERE 1=1
 									AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = B.STORE_CD)
 									<if test='arrStoreCd != null and arrStoreCd != ""'>
-										AND B.STORE_CD IN
-										<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-											#{item}
+										AND
+										<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+											B.STORE_CD = #{item}
 										</foreach>
 									</if>
 									<if test='orgnFg != null and orgnFg == "H"'>
@@ -163,9 +163,9 @@
 									   	 	AND C.SALE_DATE BETWEEN REPLACE(#{startDate}, '-', '') AND REPLACE(#{endDate}, '-', '')
 										 </if>
 										 <if test='arrStoreCd != null and arrStoreCd != ""'>
-											AND C.STORE_CD IN
-											<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-												#{item}
+											AND
+											<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+												C.STORE_CD = #{item}
 											</foreach>
 										 </if>
 										<if test='orgnFg != null and orgnFg == "H"'>
@@ -292,9 +292,9 @@
 									   WHERE 1=1
 									   AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = B.STORE_CD)
 									   <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   AND B.STORE_CD IN
-										   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-												#{item}
+									   	   AND
+										   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+											   B.STORE_CD = #{item}
 										   </foreach>
 									   </if>
 										<if test='orgnFg != null and orgnFg == "H"'>
@@ -318,9 +318,9 @@
 									   	 	AND C.SALE_DATE BETWEEN REPLACE(#{compStartDate}, '-', '') AND REPLACE(#{compEndDate}, '-', '')
 										 </if>
 										  <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  AND C.STORE_CD IN
-										      <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-												#{item}
+									   	   	  AND
+										      <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+												  C.STORE_CD = #{item}
 										      </foreach>
 									   	  </if>
 										  <if test='orgnFg != null and orgnFg == "H"'>
@@ -393,9 +393,9 @@
 											 WHERE 1=1
 											 AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = B.STORE_CD)
 											 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  	   AND B.STORE_CD IN
-										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-														#{item}
+									   	   	  	   AND
+										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+													   B.STORE_CD = #{item}
 										      	   </foreach>
 									   	  	</if>
 											<if test='orgnFg != null and orgnFg == "H"'>
@@ -420,9 +420,9 @@
 											 WHERE 1=1
 											 AND	C.HQ_OFFICE_CD = #{hqOfficeCd}
 											 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  	   AND C.STORE_CD IN
-										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-														#{item}
+									   	   	  	   AND
+										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+													   C.STORE_CD = #{item}
 										      	   </foreach>
 									   	  	</if>
 											<if test='orgnFg != null and orgnFg == "H"'>
@@ -444,10 +444,11 @@
 									 AND	B.PROD_CD = C.PROD_CD(+)
 									 <if test='storeCd != null and storeCd != "" and prodClassCd != null and prodClassCd != ""'>
 									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z
+										 WHERE 1=1
 									   	 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									  	  WHERE Z.STORE_CD IN
-									  	 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-									  	  		#{item}
+									  	  AND
+									  	 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+												Z.STORE_CD = #{item}
 									  	  	</foreach>
 	                                     </if>
 										 <if test='orgnFg != null and orgnFg == "H"'>
@@ -476,9 +477,9 @@
 											 WHERE 1=1
 											 AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = B.STORE_CD)
 											 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  	   AND B.STORE_CD IN
-										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-														#{item}
+									   	   	  	   AND
+										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+													   B.STORE_CD = #{item}
 										      	   </foreach>
 									   	  	</if>
 											<if test='orgnFg != null and orgnFg == "H"'>
@@ -502,9 +503,9 @@
 											  FROM TB_SL_DAILY_PROD    C
 											 WHERE  C.HQ_OFFICE_CD = #{hqOfficeCd}
 											 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  	   AND C.STORE_CD IN
-										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-														#{item}
+									   	   	  	   AND
+										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+													   C.STORE_CD = #{item}
 										      	   </foreach>
 									   	  	 </if>
 											<if test='orgnFg != null and orgnFg == "H"'>
@@ -525,10 +526,11 @@
 									 AND	B.PROD_CD = C.PROD_CD(+)
 									 <if test='storeCd != null and storeCd != "" and prodClassCd != null and prodClassCd != ""'>
 									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z
+										 WHERE 1=1
 							             <if test='arrStoreCd != null and arrStoreCd != ""'>
-									  	  WHERE Z.STORE_CD IN
-									  	 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-									  	  		#{item}
+									  	   AND
+									  	 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+												Z.STORE_CD = #{item}
 									  	  	</foreach>
 	                                     </if>
 										 <if test='orgnFg != null and orgnFg == "H"'>
@@ -582,9 +584,9 @@
 											 WHERE 1=1
 											 AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = B.STORE_CD)
 											 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  	   AND B.STORE_CD IN
-										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-														#{item}
+									   	   	  	   AND
+										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+													   B.STORE_CD = #{item}
 										      	   </foreach>
 									   	  	</if>
 											<if test='orgnFg != null and orgnFg == "H"'>
@@ -608,9 +610,9 @@
 											  FROM TB_SL_DAILY_PROD    C
 											 WHERE  C.HQ_OFFICE_CD = #{hqOfficeCd}
 											 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  	   AND C.STORE_CD IN
-										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-														#{item}
+									   	   	  	   AND
+										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+													   C.STORE_CD = #{item}
 										      	   </foreach>
 									   	  	</if>
 											<if test='orgnFg != null and orgnFg == "H"'>
@@ -631,10 +633,11 @@
 									 AND	B.PROD_CD = C.PROD_CD(+)
 									 <if test='storeCd != null and storeCd != "" and prodClassCd != null and prodClassCd != ""'>
 									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z
+										 WHERE 1=1
 									   	 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									  	  WHERE Z.STORE_CD IN
-									  	 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-									  	  		#{item}
+									  	   AND
+									  	 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+												Z.STORE_CD = #{item}
 									  	  	</foreach>
 	                                     </if>
 										 <if test='orgnFg != null and orgnFg == "H"'>
@@ -663,9 +666,9 @@
 											 WHERE 1=1
 											 AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = B.STORE_CD)
 											 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  	   AND B.STORE_CD IN
-										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-														#{item}
+									   	   	  	   AND
+										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+													   B.STORE_CD = #{item}
 										      	   </foreach>
 									   	  	</if>
 											<if test='orgnFg != null and orgnFg == "H"'>
@@ -689,9 +692,9 @@
 											  FROM TB_SL_DAILY_PROD    C
 											 WHERE C.HQ_OFFICE_CD = #{hqOfficeCd}
 											 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  	   AND C.STORE_CD IN
-										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-														#{item}
+									   	   	  	   AND
+										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+													   C.STORE_CD = #{item}
 										      	   </foreach>
 									   	  	 </if>
 											<if test='orgnFg != null and orgnFg == "H"'>
@@ -712,10 +715,11 @@
 									 AND	B.PROD_CD = C.PROD_CD(+)
 									 <if test='storeCd != null and storeCd != "" and prodClassCd != null and prodClassCd != ""'>
 									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z
+									   	 WHERE 1=1
 							             <if test='arrStoreCd != null and arrStoreCd != ""'>
-									  	  WHERE Z.STORE_CD IN
-									  	 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-									  	  		#{item}
+									  	  AND
+									  	 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+												Z.STORE_CD = #{item}
 									  	  	</foreach>
 	                                     </if>
 										 <if test='orgnFg != null and orgnFg == "H"'>
@@ -768,9 +772,9 @@
 											 WHERE 1=1
 											 AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = B.STORE_CD)
 											 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  	   AND B.STORE_CD IN
-										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-														#{item}
+									   	   	  	   AND
+										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+													   B.STORE_CD = #{item}
 										      	   </foreach>
 									   	  	</if>
 											<if test='orgnFg != null and orgnFg == "H"'>
@@ -794,9 +798,9 @@
 											  FROM TB_SL_DAILY_PROD    C
 											 WHERE C.HQ_OFFICE_CD = #{hqOfficeCd}
 											 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  	   AND C.STORE_CD IN
-										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-														#{item}
+									   	   	  	   AND
+										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+													   C.STORE_CD = #{item}
 										      	   </foreach>
 									   	  	</if>
 											<if test='orgnFg != null and orgnFg == "H"'>
@@ -817,10 +821,11 @@
 									 AND	B.PROD_CD = C.PROD_CD(+)
 									 <if test='storeCd != null and storeCd != "" and prodClassCd != null and prodClassCd != ""'>
 									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z
+									   	 WHERE 1=1
 									   	 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									  	  WHERE Z.STORE_CD IN
-									  	 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-									  	  		#{item}
+									  	  AND
+									  	 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+												Z.STORE_CD = #{item}
 									  	  	</foreach>
 	                                     </if>
 										 <if test='orgnFg != null and orgnFg == "H"'>
@@ -849,9 +854,9 @@
 											 WHERE 1=1
 											 AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = B.STORE_CD)
 											 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  	   AND B.STORE_CD IN
-										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-														#{item}
+									   	   	  	   AND
+										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+													   B.STORE_CD = #{item}
 										      	   </foreach>
 									   	  	</if>
 											<if test='orgnFg != null and orgnFg == "H"'>
@@ -875,9 +880,9 @@
 											  FROM TB_SL_DAILY_PROD    C
 											 WHERE C.HQ_OFFICE_CD = #{hqOfficeCd}
 											 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  	   AND C.STORE_CD IN
-										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-														#{item}
+									   	   	  	   AND
+										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+													   C.STORE_CD = #{item}
 										      	   </foreach>
 									   	  	 </if>
 											<if test='orgnFg != null and orgnFg == "H"'>
@@ -898,10 +903,11 @@
 									 AND	B.PROD_CD = C.PROD_CD(+)
 									 <if test='storeCd != null and storeCd != "" and prodClassCd != null and prodClassCd != ""'>
 									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z
+							             WHERE 1=1
 							             <if test='arrStoreCd != null and arrStoreCd != ""'>
-									  	  WHERE Z.STORE_CD IN
-									  	 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-									  	  		#{item}
+									  	  AND
+									  	 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+												Z.STORE_CD = #{item}
 									  	  	</foreach>
 	                                     </if>
 										 <if test='orgnFg != null and orgnFg == "H"'>

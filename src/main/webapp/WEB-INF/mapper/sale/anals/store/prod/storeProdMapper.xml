@@ -155,9 +155,9 @@
 			  		   		AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
 			  		   	</if>
 			  		   	<if test='storeCd != null and storeCd != ""'>
-						    AND TSDP.STORE_CD IN
-						     	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-										#{item}
+						    AND
+						     	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+									TSDP.STORE_CD = #{item}
 								</foreach>
 						</if>
 						<if test='orgnFg != null and orgnFg == "H"'>
@@ -332,9 +332,9 @@
 			  		   		AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
 			  		   	</if>
 			  		   	<if test='storeCd != null and storeCd != ""'>
-						    AND TSDP.STORE_CD IN
-						     	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-										#{item}
+						    AND
+						     	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+									TSDP.STORE_CD = #{item}
 								</foreach>
 						</if>
 						<if test='orgnFg != null and orgnFg == "H"'>

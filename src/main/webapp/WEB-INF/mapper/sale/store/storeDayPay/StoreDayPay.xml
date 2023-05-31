@@ -67,9 +67,9 @@
                 FROM    TB_SL_DAILY_TOTAL tsdt
                 WHERE   tsdt.HQ_OFFICE_CD  = #{hqOfficeCd}
                 <if test='arrStoreCd != null and arrStoreCd != ""'>
-                    AND tsdt.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                        #{item}
+                    AND
+                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                        tsdt.STORE_CD = #{item}
                     </foreach>
                 </if>
                 <if test='orgnFg != null and orgnFg == "H"'>
@@ -89,9 +89,9 @@
                 FROM	TB_SL_DAILY_DTL_DLVR tssd
                 WHERE	tssd.HQ_OFFICE_CD	=	#{hqOfficeCd}
                 <if test='arrStoreCd != null and arrStoreCd != ""'>
-                    AND tssd.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                        #{item}
+                    AND
+                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                        tssd.STORE_CD = #{item}
                     </foreach>
                 </if>
                 <if test='orgnFg != null and orgnFg == "H"'>

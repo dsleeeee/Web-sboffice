@@ -24,9 +24,9 @@
         FROM 	TB_SL_DAILY_TOTAL
         WHERE	HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                STORE_CD = #{item}
             </foreach>
         </if>
         AND		SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -53,9 +53,9 @@
                 TB_MS_STORE tms
         WHERE 	tssh.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND tssh.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                tssh.STORE_CD = #{item}
             </foreach>
         </if>
         AND		tssh.SALE_DATE = #{startDate}

@@ -68,9 +68,9 @@
                    AND SBPENC.D(tmm.TEL_NO) LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
                 </if>
                 <if test='arrStoreCd != null and arrStoreCd != ""'>
-                   AND tms.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                        #{item}
+                   AND
+                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                        tms.STORE_CD = #{item}
                     </foreach>
                 </if>
                 <if test='defaultStoreCd != null and defaultStoreCd.toString() != ""'>
@@ -161,9 +161,9 @@
                    AND SBPENC.D(tmm.TEL_NO) LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
                 </if>
                 <if test='arrStoreCd != null and arrStoreCd != ""'>
-                   AND tms.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                        #{item}
+                   AND
+                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                        tms.STORE_CD = #{item}
                     </foreach>
                 </if>
                 <if test='defaultStoreCd != null and defaultStoreCd.toString() != ""'>
@@ -263,9 +263,9 @@
                AND SBPENC.D(tmm.TEL_NO) LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
             </if>
             <if test='arrStoreCd != null and arrStoreCd != ""'>
-               AND tms.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                    #{item}
+               AND
+                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                    tms.STORE_CD = #{item}
                 </foreach>
             </if>
             <if test='defaultStoreCd != null and defaultStoreCd.toString() != ""'>
@@ -357,9 +357,9 @@
                    AND SBPENC.D(tmm.TEL_NO) LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
                 </if>
                 <if test='arrStoreCd != null and arrStoreCd != ""'>
-                   AND tms.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                        #{item}
+                   AND
+                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                        tms.STORE_CD = #{item}
                     </foreach>
                 </if>
                 <if test='defaultStoreCd != null and defaultStoreCd.toString() != ""'>

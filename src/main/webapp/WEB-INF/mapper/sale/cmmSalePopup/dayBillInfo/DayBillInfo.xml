@@ -58,9 +58,9 @@
                 </when>
             </choose>
             <if test='storeCds != null and storeCds != ""'>
-                AND tssh.STORE_CD IN
-                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                    #{item}
+                AND
+                <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                    tssh.STORE_CD = #{item}
                 </foreach>
             </if>
             AND (
@@ -108,9 +108,9 @@
             </when>
         </choose>
         <if test='storeCds != null and storeCds != ""'>
-            AND tssh.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                tssh.STORE_CD = #{item}
             </foreach>
         </if>
         ORDER BY tssh.HQ_OFFICE_CD, tssh.STORE_CD, tssh.BILL_DT, tssh.POS_NO

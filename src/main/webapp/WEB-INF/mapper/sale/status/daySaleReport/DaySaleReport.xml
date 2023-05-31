@@ -117,9 +117,9 @@
         WHERE 1=1
         AND tmsr.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='storeCds != null and storeCds != ""'>
-            AND tmsr.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
+                tmsr.STORE_CD = #{item}
             </foreach>
         </if>
         AND tmsr.FROM_SALE_DATE = #{dataCreateMonth}||'01'

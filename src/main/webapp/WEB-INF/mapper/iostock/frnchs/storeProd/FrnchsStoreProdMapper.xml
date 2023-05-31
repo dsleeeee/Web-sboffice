@@ -57,9 +57,9 @@
               AND Z.PROD_NM LIKE '%' || #{prodNm} || '%'
            </if>
            <if test='storeCd != null and storeCd !=""'>
-              AND A.STORE_CD IN
-              <foreach collection="arrStoreCd" item="item" open="(" separator="," close=")">
-                #{item}
+              AND
+              <foreach collection="arrStoreCd" item="item" open="(" separator="OR" close=")">
+                  A.STORE_CD = #{item}
               </foreach>
            </if>
             <choose>
@@ -135,9 +135,9 @@
               AND Z.PROD_NM LIKE '%' || #{prodNm} || '%'
            </if>
            <if test='storeCd != null and storeCd !=""'>
-              AND A.STORE_CD IN
-              <foreach collection="arrStoreCd" item="item" open="(" separator="," close=")">
-                #{item}
+              AND
+              <foreach collection="arrStoreCd" item="item" open="(" separator="OR" close=")">
+                  A.STORE_CD = #{item}
               </foreach>
            </if>
             <choose>

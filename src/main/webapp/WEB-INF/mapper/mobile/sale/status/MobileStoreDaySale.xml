@@ -55,9 +55,9 @@
                 OR	tsdt.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                 )
             <if test='arrStoreCd != null and arrStoreCd != ""'>
-                AND tsdt.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
+                AND
+                <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                    tsdt.STORE_CD = #{item}
                 </foreach>
             </if>
             AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -78,9 +78,9 @@
                 OR	tsddd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                 )
             <if test='arrStoreCd != null and arrStoreCd != ""'>
-                AND tsddd.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                        #{item}
+                AND
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                        tsddd.STORE_CD = #{item}
                     </foreach>
             </if>
             AND     tsddd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -98,9 +98,9 @@
                 OR	tsdp.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                 )
             <if test='arrStoreCd != null and arrStoreCd != ""'>
-                AND tsdp.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
+                AND
+                <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                    tsdp.STORE_CD = #{item}
                 </foreach>
             </if>
             AND     tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -118,9 +118,9 @@
                 OR	tsdd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                 )
             <if test='arrStoreCd != null and arrStoreCd != ""'>
-                AND tsdd.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                        #{item}
+                AND
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                        tsdd.STORE_CD = #{item}
                     </foreach>
             </if>
             AND     tsdd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -136,9 +136,9 @@
                 OR	tssh.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                 )
             <if test='arrStoreCd != null and arrStoreCd != ""'>
-                AND tssh.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                        #{item}
+                AND
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                        tssh.STORE_CD = #{item}
                     </foreach>
             </if>
             AND     tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -153,9 +153,9 @@
                 OR	STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                 )
             <if test='arrStoreCd != null and arrStoreCd != ""'>
-                AND STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
+                AND
+                <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                    STORE_CD = #{item}
                 </foreach>
             </if>
             ) F

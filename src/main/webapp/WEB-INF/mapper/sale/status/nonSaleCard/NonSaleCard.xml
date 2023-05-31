@@ -43,9 +43,9 @@
         AND tnnpc.HQ_OFFICE_CD = #{hqOfficeCd}
         AND tnnpc.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND tnnpc.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                tnnpc.STORE_CD = #{item}
             </foreach>
         </if>
         <if test='posNo != null and posNo != ""'>

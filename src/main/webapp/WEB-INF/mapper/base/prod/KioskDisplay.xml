@@ -137,9 +137,9 @@
                     AND tmp.KIOSK_DISPLAY_YN = #{kioskDisplayYn}
                 </if>
                 <if test='storeCds != null and storeCds != ""'>
-                    AND tmp.STORE_CD IN
-                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                        tmp.STORE_CD = #{item}
                     </foreach>
                 </if>
                 <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>

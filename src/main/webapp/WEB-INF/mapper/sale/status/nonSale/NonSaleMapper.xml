@@ -47,9 +47,9 @@
 						TB_MS_PRODUCT tmp
 				WHERE 	tssd.HQ_OFFICE_CD = #{hqOfficeCd}
 				<if test='storeCd != null and storeCd != ""'>
-					AND tssd.STORE_CD IN
-					<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-						#{item}
+					AND
+					<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+						tssd.STORE_CD = #{item}
 					</foreach>
 				</if>
 				<if test='orgnFg != null and orgnFg == "H"'>
@@ -65,9 +65,9 @@
 																			AND 	tssd2.SALE_DATE BETWEEN #{startDate} AND #{endDate}
 				    														AND 	tssd2.PROD_CD IN (SELECT PROD_CD FROM TB_MS_PRODUCT tmp2 WHERE tmp2.STORE_CD = tssd2.STORE_CD AND  tmp2.PROD_CD = tssd2.PROD_CD)
 																			<if test='storeCd != null and storeCd != ""'>
-																				AND tssd2.STORE_CD IN
-																				<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-																					#{item}
+																				AND
+																				<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+																					tssd2.STORE_CD = #{item}
 																				</foreach>
 																			</if>
 																			<if test='orgnFg != null and orgnFg == "H"'>
@@ -124,9 +124,9 @@
 		TB_MS_PRODUCT tmp
 		WHERE 	tssd.HQ_OFFICE_CD = #{hqOfficeCd}
 		<if test='storeCd != null and storeCd != ""'>
-			AND tssd.STORE_CD IN
-			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-				#{item}
+			AND
+			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+				tssd.STORE_CD = #{item}
 			</foreach>
 		</if>
 		<if test='orgnFg != null and orgnFg == "H"'>
@@ -171,9 +171,9 @@
 		WHERE 	tms.STORE_CD = tcrd.STORE_CD
 		AND 	tms.HQ_OFFICE_CD = #{hqOfficeCd}
 		<if test='storeCd != null and storeCd != ""'>
-			AND tcrd.STORE_CD IN
-			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-				#{item}
+			AND
+			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+				tcrd.STORE_CD = #{item}
 			</foreach>
 		</if>
 		AND 	SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -204,9 +204,9 @@
 		WHERE 	tms.STORE_CD = tcrd.STORE_CD
 		AND 	tms.HQ_OFFICE_CD = #{hqOfficeCd}
 		<if test='storeCd != null and storeCd != ""'>
-			AND tcrd.STORE_CD IN
-			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-				#{item}
+			AND
+			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+				tcrd.STORE_CD = #{item}
 			</foreach>
 		</if>
 		AND 	SALE_DATE BETWEEN #{startDate} AND #{endDate}

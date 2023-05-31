@@ -19,9 +19,9 @@
            AND A.SALE_GOAL_YM = #{startDate}
          </if>
 	     <if test='arrStoreCd != null and arrStoreCd != ""'>
-           AND B.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
+           AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                B.STORE_CD = #{item}
             </foreach>
          </if>
         <if test='orgnFg != null and orgnFg == "H"'>
@@ -59,9 +59,9 @@
 			           AND TSSGD.SALE_GOAL_YM = #{startDate}
 			         </if>
 			         <if test='arrStoreCd != null and arrStoreCd != ""'>
-					   AND TSSGD.STORE_CD IN
-					    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-					        #{item}
+					   AND
+					    <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                            TSSGD.STORE_CD = #{item}
 					    </foreach>
 					 </if>
                     <if test='orgnFg != null and orgnFg == "H"'>
@@ -104,9 +104,9 @@
                        AND TSSGD.SALE_GOAL_YM = #{startDate}
                      </if>
                      <if test='arrStoreCd != null and arrStoreCd != ""'>
-                       AND TSSGD.STORE_CD IN
-                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                            #{item}
+                       AND
+                        <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                            TSSGD.STORE_CD = #{item}
                         </foreach>
                      </if>
                     <if test='orgnFg != null and orgnFg == "H"'>
@@ -166,9 +166,9 @@
                      AND TSSGD.SALE_GOAL_YM <![CDATA[<=]]> #{endDate}
                    </if>
                    <if test='arrStoreCd != null and arrStoreCd != ""'>
-                     AND TSSGD.STORE_CD IN
-                      <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                          #{item}
+                     AND
+                      <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                          TSSGD.STORE_CD = #{item}
                       </foreach>
                    </if>
                     <if test='orgnFg != null and orgnFg == "H"'>
@@ -225,9 +225,9 @@
                      AND TSSGD.SALE_GOAL_YM <![CDATA[<=]]> #{endDate}
                    </if>
                    <if test='arrStoreCd != null and arrStoreCd != ""'>
-                     AND TSSGD.STORE_CD IN
-                      <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                          #{item}
+                     AND
+                      <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                          TSSGD.STORE_CD = #{item}
                       </foreach>
                    </if>
                     <if test='orgnFg != null and orgnFg == "H"'>

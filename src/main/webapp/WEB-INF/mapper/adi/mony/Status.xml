@@ -38,9 +38,9 @@
                 WHERE tpei.HQ_OFFICE_CD = #{hqOfficeCd}
                   AND tpei.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                   <if test='storeCd != null and storeCd != ""'>
-                      AND tpei.STORE_CD IN
-                      <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
-                          #{item}
+                      AND
+                      <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")" >
+                          tpei.STORE_CD = #{item}
                       </foreach>
                   </if>
                   <if test="accntFg != null and accntFg != ''">

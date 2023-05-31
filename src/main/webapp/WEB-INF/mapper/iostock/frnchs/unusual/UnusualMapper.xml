@@ -62,9 +62,9 @@
 	   <choose>
             <when test='orgnFg != null and orgnFg == "H"'>
             	<if test='storeCd != null and storeCd != ""'>
-                 	AND TPHSO.STORE_CD IN
-                 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                   		#{item}
+                 	AND
+                 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+						TPHSO.STORE_CD = #{item}
                		</foreach>
                	</if>
             </when>

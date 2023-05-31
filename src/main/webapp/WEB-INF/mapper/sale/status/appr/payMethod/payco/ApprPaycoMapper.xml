@@ -39,9 +39,9 @@
                  WHERE SALE_AMT>0
         ]]>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                STORE_CD = #{item}
             </foreach>
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
@@ -81,9 +81,9 @@
                  WHERE SALE_AMT<0
         ]]>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                STORE_CD = #{item}
             </foreach>
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
@@ -163,9 +163,9 @@
                  WHERE SALE_AMT>0
         ]]>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                STORE_CD = #{item}
             </foreach>
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
@@ -205,9 +205,9 @@
                  WHERE SALE_AMT<0
         ]]>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                STORE_CD = #{item}
             </foreach>
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>

@@ -92,9 +92,9 @@
                         <!-- 전체 -->
                         <if test='gubunCombo == ""'>
                             <if test='storeCds != null and storeCds != ""'>
-                                AND twuidv01.STORE_CD IN
-                                <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                                    #{item}
+                                AND
+                                <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
+                                    twuidv01.STORE_CD = #{item}
                                 </foreach>
                             </if>
                         </if>
@@ -110,9 +110,9 @@
                                 AND twuidv01.ORGN_FG IN ('S')
                             ]]>
                             <if test='storeCds != null and storeCds != ""'>
-                                AND twuidv01.STORE_CD IN
-                                <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                                    #{item}
+                                AND
+                                <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
+                                    twuidv01.STORE_CD = #{item}
                                 </foreach>
                             </if>
                         </if>
@@ -210,9 +210,9 @@
                         <!-- 전체 -->
                         <if test='gubunCombo == ""'>
                             <if test='storeCds != null and storeCds != ""'>
-                                AND twuidv01.STORE_CD IN
-                                <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                                    #{item}
+                                AND
+                                <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
+                                    twuidv01.STORE_CD = #{item}
                                 </foreach>
                             </if>
                         </if>
@@ -228,9 +228,9 @@
                                 AND twuidv01.ORGN_FG IN ('S')
                             ]]>
                             <if test='storeCds != null and storeCds != ""'>
-                                AND twuidv01.STORE_CD IN
-                                <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                                    #{item}
+                                AND
+                                <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
+                                    twuidv01.STORE_CD = #{item}
                                 </foreach>
                             </if>
                         </if>

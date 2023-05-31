@@ -72,9 +72,9 @@
                       AND TMP.PROD_CD  = #{prodCd}
                    </if>
                    <if test='arrStoreCd != null and arrStoreCd != ""'>
-                      AND TSSSD.STORE_CD IN
-                       <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                           #{item}
+                      AND
+                       <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                           TSSSD.STORE_CD = #{item}
                        </foreach>
                    </if>
                    <if test='arrVendrCd != null and arrVendrCd != ""'>
@@ -179,9 +179,9 @@
                       AND TMP.PROD_CD  = #{prodCd}
                    </if>
                    <if test='arrStoreCd != null and arrStoreCd != ""'>
-                      AND TSSSD.STORE_CD IN
-                       <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                           #{item}
+                      AND
+                       <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                           TSSSD.STORE_CD = #{item}
                        </foreach>
                    </if>
                    <if test='arrVendrCd != null and arrVendrCd != ""'>

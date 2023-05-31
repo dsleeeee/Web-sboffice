@@ -334,7 +334,7 @@
 			  <if test='arrStoreCd != null and arrStoreCd != ""'>
 			  	AND
 			  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-					DC.STORE_CD IN = #{item}
+					DC.STORE_CD = #{item}
 			  	</foreach>
 			  </if>
 		ORDER BY NMCODE.NMCODE_NM

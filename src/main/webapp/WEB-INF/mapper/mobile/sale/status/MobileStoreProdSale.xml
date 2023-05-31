@@ -40,9 +40,9 @@
                     OR	tsdp.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                     )
                 <if test='arrStoreCd != null and arrStoreCd != ""'>
-                    AND tsdp.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                        #{item}
+                    AND
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                        tsdp.STORE_CD = #{item}
                     </foreach>
                 </if>
                 AND     tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -59,9 +59,9 @@
                     OR	STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                     )
                 <if test='arrStoreCd != null and arrStoreCd != ""'>
-                    AND STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                        #{item}
+                    AND
+                    <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                        STORE_CD = #{item}
                     </foreach>
                 </if>
                 ) B

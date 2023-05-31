@@ -41,9 +41,9 @@
                    AND APPR_PROC_FG IN ('1','2')
         ]]>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                STORE_CD = #{item}
             </foreach>
         </if>
         <if test='startDate != null and startDate != ""'>
@@ -63,9 +63,9 @@
                    AND APPR_PROC_FG IN ('1','2')
         ]]>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                STORE_CD = #{item}
             </foreach>
         </if>
         <if test='startDate != null and startDate != ""'>

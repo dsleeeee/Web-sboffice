@@ -38,9 +38,9 @@
         WHERE 1=1
         AND tmmp.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='storeCds != null and storeCds != ""'>
-            AND tmmp.STORE_CD IN
-            <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
+                tmmp.STORE_CD = #{item}
             </foreach>
         </if>
         <if test='storeCd != null and storeCd != ""'>
