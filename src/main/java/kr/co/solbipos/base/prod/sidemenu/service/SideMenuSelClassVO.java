@@ -69,6 +69,9 @@ public class SideMenuSelClassVO extends CmmVO {
     /** 적용할 사이드 표시순서 */
     private String applyDispSeq;
 
+    /** 적용매장구분 */
+    private String regStoreFg;
+
     /**
      * @return the hqOfficeCd
      */
@@ -235,4 +238,7 @@ public class SideMenuSelClassVO extends CmmVO {
 
     public void setApplyDispSeq(String applyDispSeq) { this.applyDispSeq = applyDispSeq; }
 
+    public String getRegStoreFg() { return regStoreFg; }
+
+    public void setRegStoreFg(String regStoreFg) { this.regStoreFg = regStoreFg; }
 }
