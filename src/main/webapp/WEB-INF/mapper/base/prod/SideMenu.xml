@@ -878,7 +878,8 @@
                     thpsc.SDSEL_QTY,
                     (SELECT COUNT(*) FROM TB_HQ_PRODUCT_SDSEL_PROD WHERE HQ_OFFICE_CD = thpsc.HQ_OFFICE_CD AND SDSEL_CLASS_CD = thpsc.SDSEL_CLASS_CD AND USE_YN = 'Y') AS CNT,
                     (SELECT SUM(ADD_PROD_QTY) FROM TB_HQ_PRODUCT_SDSEL_PROD WHERE HQ_OFFICE_CD = thpsc.HQ_OFFICE_CD AND SDSEL_CLASS_CD = thpsc.SDSEL_CLASS_CD AND USE_YN = 'Y' AND FIX_PROD_FG = '1') AS FIX_PROD_CNT,
-                    NVL(thpsc.REQUIRE_YN, 'N') AS REQUIRE_YN
+                    NVL(thpsc.REQUIRE_YN, 'N') AS REQUIRE_YN,
+                    NVL(thpsc.REG_STORE_FG, '0') AS REG_STORE_FG
                 FROM
                     TB_HQ_PRODUCT_SDSEL_CLASS thpsc
                 WHERE
@@ -957,7 +958,8 @@
                     REG_ID,
                     MOD_DT,
                     MOD_ID,
-                    REQUIRE_YN
+                    REQUIRE_YN,
+                    REG_STORE_FG
                 ) VALUES (
                     #{hqOfficeCd},
                     #{sdselClassCd},
@@ -970,7 +972,8 @@
                     #{regId},
                     #{modDt},
                     #{modId},
-                    #{requireYn}
+                    #{requireYn},
+                    #{regStoreFg}
                 )
             </when>
             <!-- 매장 -->
@@ -1025,7 +1028,8 @@
                     SDSEL_QTY = #{sdselQty},
                     MOD_DT = #{modDt},
                     MOD_ID = #{modId},
-                    REQUIRE_YN = #{requireYn}
+                    REQUIRE_YN = #{requireYn},
+                    REG_STORE_FG = #{regStoreFg}
                 WHERE
                     HQ_OFFICE_CD = #{hqOfficeCd}
                     AND SDSEL_CLASS_CD = #{sdselClassCd}
@@ -1292,7 +1296,8 @@
                     thpsp.ADD_PROD_UPRC,
                     thpsp.ADD_PROD_QTY,
                     thpsp.DISP_SEQ,
-                    NVL(thpsp.FIX_PROD_FG, '0') AS FIX_PROD_FG
+                    NVL(thpsp.FIX_PROD_FG, '0') AS FIX_PROD_FG,
+                    NVL(thpsp.REG_STORE_FG, '0') AS REG_STORE_FG
                 FROM
                     TB_HQ_PRODUCT_SDSEL_PROD thpsp
                 LEFT OUTER JOIN TB_HQ_PRODUCT thp ON
@@ -1368,7 +1373,7 @@
                 WHEN MATCHED THEN
                     UPDATE
                     SET thpsp.USE_YN = 'Y',
-                        thpsp.DISP_SEQ = #{dispSeq},
+                        thpsp.DISP_SEQ = #{dispSeq}
                         thpsp.MOD_DT = #{modDt},
                         thpsp.MOD_ID = #{modId}
                 WHEN NOT MATCHED THEN
@@ -1385,7 +1390,8 @@
                          REG_ID,
                          MOD_DT,
                          MOD_ID,
-                         FIX_PROD_FG
+                         FIX_PROD_FG,
+                        REG_STORE_FG
                      ) VALUES (
                          #{hqOfficeCd},
                          #{sdselClassCd},
@@ -1398,7 +1404,8 @@
                          #{regId},
                          #{modDt},
                          #{modId},
-                         #{fixProdFg}
+                         #{fixProdFg},
+                        #{regStoreFg}
                      )
             </when>
             <!-- 매장 -->
@@ -1467,7 +1474,8 @@
                     DISP_SEQ = #{dispSeq},
                     MOD_DT = #{modDt},
                     MOD_ID = #{modId},
-                    FIX_PROD_FG = #{fixProdFg}
+                    FIX_PROD_FG = #{fixProdFg},
+                    REG_STORE_FG = #{regStoreFg}
                 WHERE
                     HQ_OFFICE_CD = #{hqOfficeCd}
                     AND SDSEL_CLASS_CD = #{sdselClassCd}
@@ -2260,6 +2268,3 @@
     </insert>
 
 </mapper>
-
-
-
