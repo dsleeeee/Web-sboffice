@@ -51,9 +51,9 @@
             AND A.STORE_CD = #{storeCd}
         </if>
         <if test='storeCd != null and storeCd != ""'>
-            AND A.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                #{item}
+            AND
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                A.STORE_CD = #{item}
             </foreach>
         </if>
 <!-- 		<if test='prodClassCd != null and prodClassCd != ""'> -->
@@ -154,9 +154,9 @@
    			  AND TPHSOD.HQ_OFFICE_CD = #{hqOfficeCd}
    		    </if>
         	<if test='storeCd != null and storeCd != ""'>
-			  AND TPHSOD.STORE_CD IN
-               	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                   	#{item}
+			  AND
+               	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                    TPHSOD.STORE_CD = #{item}
                	</foreach>
 			</if>
    			  AND TPHSO.HQ_OFFICE_CD  = TPHSOD.HQ_OFFICE_CD
@@ -228,9 +228,9 @@
             AND A.STORE_CD = #{storeCd}
         </if>
         <if test='storeCd != null and storeCd != ""'>
-            AND A.STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                #{item}
+            AND
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                A.STORE_CD = #{item}
             </foreach>
         </if>
 <!--        <if test='prodClassCd != null and prodClassCd != ""'> -->

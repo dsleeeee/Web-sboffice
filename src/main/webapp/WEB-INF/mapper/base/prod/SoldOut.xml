@@ -131,9 +131,9 @@
         </if>
 
         <if test='prodCds != null and prodCds != ""'>
-            AND tmp.PROD_CD IN
-            <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                tmp.PROD_CD = #{item}
             </foreach>
         </if>
         <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>

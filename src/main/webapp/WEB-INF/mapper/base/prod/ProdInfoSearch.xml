@@ -132,9 +132,9 @@
                     AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
                 </if>
                 <if test='prodCds != null and prodCds != ""'>
-                    AND thp.PROD_CD IN
-                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                        thp.PROD_CD = #{item}
                     </foreach>
                 </if>
                 <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
@@ -265,9 +265,9 @@
                     AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
                 </if>
                 <if test='prodCds != null and prodCds != ""'>
-                    AND thp.PROD_CD IN
-                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                        thp.PROD_CD = #{item}
                     </foreach>
                 </if>
                 ORDER BY thp.PROD_CD
@@ -396,9 +396,9 @@
                     AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
                 </if>
                 <if test='prodCds != null and prodCds != ""'>
-                    AND thp.PROD_CD IN
-                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                        thp.PROD_CD = #{item}
                     </foreach>
                 </if>
                 <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
@@ -526,9 +526,9 @@
                     AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
                 </if>
                 <if test='prodCds != null and prodCds != ""'>
-                    AND tmp.PROD_CD IN
-                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                        tmp.PROD_CD = #{item}
                     </foreach>
                 </if>
                 ORDER BY thp.PROD_CD
@@ -1228,9 +1228,9 @@
                     AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
                 </if>
                 <if test='prodCds != null and prodCds != ""'>
-                    AND thp.PROD_CD IN
-                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                        thp.PROD_CD = #{item}
                     </foreach>
                 </if>
                 <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
@@ -1431,9 +1431,9 @@
                     AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
                 </if>
                 <if test='prodCds != null and prodCds != ""'>
-                    AND tmp.PROD_CD IN
-                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                        tmp.PROD_CD = #{item}
                     </foreach>
                 </if>
                 ORDER BY A.PROD_CD, A.SDATTR_CLASS_CD, A.SDATTR_DISP_SEQ, A.SDSEL_GRP_CD, A.SDSEL_CLASS_DISP_SEQ, A.SDSEL_PROD_DISP_SEQ, A.OPTION_GRP_CD, A.OPTION_VAL_CD
@@ -1632,9 +1632,9 @@
                     AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
                 </if>
                 <if test='prodCds != null and prodCds != ""'>
-                    AND thp.PROD_CD IN
-                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                        thp.PROD_CD = #{item}
                     </foreach>
                 </if>
                 <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
@@ -1832,9 +1832,9 @@
                     AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
                 </if>
                 <if test='prodCds != null and prodCds != ""'>
-                    AND tmp.PROD_CD IN
-                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                        tmp.PROD_CD = #{item}
                     </foreach>
                 </if>
                 ORDER BY A.PROD_CD, A.SDATTR_CLASS_CD, A.SDATTR_DISP_SEQ, A.SDSEL_GRP_CD, A.SDSEL_CLASS_DISP_SEQ, A.SDSEL_PROD_DISP_SEQ, A.OPTION_GRP_CD, A.OPTION_VAL_CD
@@ -1885,9 +1885,9 @@
                     AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
                 </if>
                 <if test='prodCds != null and prodCds != ""'>
-                    AND thp.PROD_CD IN
-                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                        thp.PROD_CD = #{item}
                     </foreach>
                 </if>
                 <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
@@ -1939,9 +1939,9 @@
                     AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
                 </if>
                 <if test='prodCds != null and prodCds != ""'>
-                    AND tmp.PROD_CD IN
-                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                        tmp.PROD_CD = #{item}
                     </foreach>
                 </if>
                 ORDER BY tmprp.PROD_CD, tmpro.RECIPES_CD
@@ -1991,9 +1991,9 @@
                     AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
                 </if>
                 <if test='prodCds != null and prodCds != ""'>
-                    AND thp.PROD_CD IN
-                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                        thp.PROD_CD = #{item}
                     </foreach>
                 </if>
                 <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
@@ -2042,9 +2042,9 @@
                     AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
                 </if>
                 <if test='prodCds != null and prodCds != ""'>
-                    AND tmp.PROD_CD IN
-                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                        tmp.PROD_CD = #{item}
                     </foreach>
                 </if>
                 ORDER BY tmprp.PROD_CD, tmpro.RECIPES_CD
@@ -2095,9 +2095,9 @@
                     AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
                 </if>
                 <if test='prodCds != null and prodCds != ""'>
-                    AND thp.PROD_CD IN
-                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                        thp.PROD_CD = #{item}
                     </foreach>
                 </if>
                 <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
@@ -2149,9 +2149,9 @@
                     AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
                 </if>
                 <if test='prodCds != null and prodCds != ""'>
-                    AND tmp.PROD_CD IN
-                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                        tmp.PROD_CD = #{item}
                     </foreach>
                 </if>
                 ORDER BY tmpap.PROD_CD, tmpai.RECIPES_CD
@@ -2201,9 +2201,9 @@
                     AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
                 </if>
                 <if test='prodCds != null and prodCds != ""'>
-                    AND thp.PROD_CD IN
-                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                        thp.PROD_CD = #{item}
                     </foreach>
                 </if>
                 <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
@@ -2252,9 +2252,9 @@
                     AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
                 </if>
                 <if test='prodCds != null and prodCds != ""'>
-                    AND tmp.PROD_CD IN
-                    <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                        tmp.PROD_CD = #{item}
                     </foreach>
                 </if>
                 ORDER BY tmpap.PROD_CD, tmpai.RECIPES_CD

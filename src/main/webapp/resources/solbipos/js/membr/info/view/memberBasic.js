@@ -156,7 +156,7 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             $("#trWeddingDay").css("display", "none");
             $scope.weddingDayCombo.selectedValue = new Date();
             $scope.weddingDayCombo.refresh();
-            $scope.member.weddingDayCombo = new Date();
+            $scope.member.weddingDay = new Date();
 
             // 생일구분 기본셋팅
             $("input:checkbox[id='birthChk']").prop("checked", false);
@@ -250,7 +250,11 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             // 결혼기념일을 입력한 경우
             if(memberDetailInfo.weddingYn === 'Y') {
                 $("#trWeddingDay").css("display", "");
-                memberDetailInfo.weddingday = stringToDate(memberDetailInfo.weddingday);
+                if(memberDetailInfo.weddingday === null || memberDetailInfo.weddingday === "" || memberDetailInfo.weddingday === undefined){
+                    memberDetailInfo.weddingday = new Date();
+                }else{
+                    memberDetailInfo.weddingday = stringToDate(memberDetailInfo.weddingday);
+                }
             }else{
                 memberDetailInfo.weddingday = new Date();
             }

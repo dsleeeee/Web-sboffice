@@ -65,9 +65,9 @@
 		         WHERE A.PROC_FG = '00'
 		         AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = A.STORE_CD)
 		           <if test='storeCd != null and storeCd != ""'>
-                       AND A.STORE_CD IN
-                       <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                           #{item}
+                       AND
+                       <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                           A.STORE_CD = #{item}
                        </foreach>
                    </if>
 		        UNION ALL
@@ -104,9 +104,9 @@
 		                  FROM TB_PO_HQ_STORE_DISTRIBUTE TPHSD
 		                 WHERE TPHSD.HQ_OFFICE_CD = #{hqOfficeCd}
 		                   <if test='storeCd != null and storeCd != ""'>
-					            AND TPHSD.STORE_CD IN
-					            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-					                #{item}
+					            AND
+					            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                                    TPHSD.STORE_CD = #{item}
 					            </foreach>
 					        </if>
 		                 GROUP BY TPHSD.HQ_OFFICE_CD
@@ -286,9 +286,9 @@
                  WHERE A.PROC_FG = '00'
                  AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = A.STORE_CD)
                    <if test='storeCd != null and storeCd != ""'>
-                       AND A.STORE_CD IN
-                       <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                           #{item}
+                       AND
+                       <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                           A.STORE_CD = #{item}
                        </foreach>
                    </if>
                 UNION ALL
@@ -324,9 +324,9 @@
                           FROM TB_PO_HQ_STORE_DISTRIBUTE TPHSD
                          WHERE TPHSD.HQ_OFFICE_CD = #{hqOfficeCd}
                            <if test='storeCd != null and storeCd != ""'>
-                                AND TPHSD.STORE_CD IN
-                                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                                    #{item}
+                                AND
+                                <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                                    TPHSD.STORE_CD = #{item}
                                 </foreach>
                             </if>
                          GROUP BY TPHSD.HQ_OFFICE_CD

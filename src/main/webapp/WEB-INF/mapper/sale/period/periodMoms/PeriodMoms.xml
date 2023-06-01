@@ -41,9 +41,9 @@
                 WHERE   tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND 	SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 <if test='storeCds != null and storeCds != ""'>
-                    AND STORE_CD IN
-                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                        STORE_CD = #{item}
                     </foreach>
                 </if>
                 ) A
@@ -56,9 +56,9 @@
                 WHERE   tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND 	SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate}
                 <if test='storeCds != null and storeCds != ""'>
-                    AND STORE_CD IN
-                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
+                    AND
+                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                        STORE_CD = #{item}
                     </foreach>
                 </if>
                 ) B
@@ -94,9 +94,9 @@
         WHERE   tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
         AND 	SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='storeCds != null and storeCds != ""'>
-            AND STORE_CD IN
-            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                STORE_CD = #{item}
             </foreach>
         </if>
         ) A
@@ -109,9 +109,9 @@
         WHERE   tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
         AND 	SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate}
         <if test='storeCds != null and storeCds != ""'>
-            AND STORE_CD IN
-            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                #{item}
+            AND
+            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                STORE_CD = #{item}
             </foreach>
         </if>
         ) B
