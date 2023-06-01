@@ -104,14 +104,14 @@
             <%--위즈모 테이블--%>
             <div class="wj-TblWrapBr pd5" style="height: 260px;" ng-controller="sideMenuSelectClassCtrl">
                 <div class="updownSet oh mb10" style="height:60px;">
-                    <span class="fl bk lh30" style="white-space: nowrap;"><s:message code='sideMenu.selectMenu.sdselClass' /><span id="sideSelectGroupTitle"></span> </span>
+                    <span class="fl bk lh30" style="white-space: nowrap;"><s:message code='sideMenu.selectMenu.sdselClass' /><span id="sideSelectGroupTitle"></span></span>
                     <br>
                     <br>
                     <%-- 선택분류복사 --%>
                     <button class="btn_skyblue" id="btnSdselClassCopy" ng-click="sdselClassCopy()" >
                         <s:message code="sideMenu.selectMenu.sdselClassCopy" />
                     </button>
-                      <button class="btn_up" id="btnUpSelClass" ng-click="rowMoveUp()" >
+                    <button class="btn_up" id="btnUpSelClass" ng-click="rowMoveUp()" >
                         <s:message code="cmm.up" />
                     </button>
                     <button class="btn_down" id="btnDownSelClass" ng-click="rowMoveDown()" >
@@ -149,6 +149,9 @@
                         <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselQty"/>" binding="sdselQty" width="50" max-length="3"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselQty"/>" binding="cnt" width="*" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselQty"/>" binding="fixProdCnt" width="*" visible="false"></wj-flex-grid-column>
+                        <c:if test="${orgnFg == 'HQ'}">
+                            <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.regStoreFg"/>" binding="regStoreFg" data-map="regStoreFgDataMap" width="70"></wj-flex-grid-column>
+                        </c:if>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -201,6 +204,9 @@
                         <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.addProdUprc"/>" binding="addProdUprc" width="50"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.addProdQty"/>" binding="addProdQty" width="50" max-length="3"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.fixProdFg"/>" binding="fixProdFg" width="50" data-map="fixProdFgDataMap"></wj-flex-grid-column>
+                        <c:if test="${orgnFg == 'HQ'}">
+                            <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.regStoreFg"/>" binding="regStoreFg" data-map="regStoreFgDataMap" width="70"></wj-flex-grid-column>
+                        </c:if>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -215,7 +221,7 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenu.js?ver=20230407.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenu.js?ver=20230530.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품선택 --%>
 <c:import url="/WEB-INF/view/base/prod/sideMenu/sideMenuProdView.jsp">

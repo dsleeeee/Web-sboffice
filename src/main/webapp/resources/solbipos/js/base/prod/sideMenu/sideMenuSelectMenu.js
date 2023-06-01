@@ -39,6 +39,13 @@ var vSrchTypeSelProd = [
     {"name":"상품코드","value":"prodCd"}
 ];
 
+// 적용매장구분
+var regStoreFgData = [
+  {"name":"미사용","value":"0"},
+  {"name":"제외매장","value":"1"},
+  {"name":"허용매장","value":"2"}
+];
+
 /**
  * 사이드메뉴 선택그룹 그리드 생성
  */
@@ -472,6 +479,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
   $scope.initGrid = function (s, e) {
     // 그리드 내 콤보박스 설정
     $scope.requireYnDataMap = requireYnDataMap;
+    $scope.regStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
@@ -832,7 +840,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     return $scope.selectedSdselClassCopy;
   };
 
-  // 수신자추가
+  // 선택분류복사
   $scope.sdselClassCopy = function() {
     var params = {};
     params.sdselGrpCd = $scope.getSdselGrpCd();
@@ -852,6 +860,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
         $scope._broadcast('sdselClassCopyCtrl', $scope.getSelectedSdselClassCopy());
       }, 50)
     });
+
   });
 
 }]).factory('sdselGrpCd', function () {
@@ -920,6 +929,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
 
     // 그리드 내 콤보박스 설정
     $scope.fixProdFgDataMap = fixProdFgDataMap;
+    $scope.regStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
 
     // 선택상품 그리드 에디팅 방지
     s.beginningEdit.addHandler(function (s, e) {
