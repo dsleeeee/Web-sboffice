@@ -83,7 +83,9 @@ public class TouchKeyResveServiceImpl implements TouchKeyResveService {
             touchKeyResveVO.setModDt(currentDt);
             touchKeyResveVO.setModId(sessionInfoVO.getUserId());
 
-            result += touchKeyResveMapper.saveTouchKeyResve(touchKeyResveVO);
+            if(touchKeyResveMapper.getTouchKeyResveCnt(touchKeyResveVO) == 0) {
+                result += touchKeyResveMapper.saveTouchKeyResve(touchKeyResveVO);
+            }
         }
 
         return result;
@@ -117,9 +119,10 @@ public class TouchKeyResveServiceImpl implements TouchKeyResveService {
             touchKeyResveVO.setModDt(currentDt);
             touchKeyResveVO.setModId(sessionInfoVO.getUserId());
             // 기존 예약 삭제
-            touchKeyResveMapper.deleteTouchKeyResve(touchKeyResveVO);
-            // 예약 저장
-            result += touchKeyResveMapper.saveTouchKeyResve(touchKeyResveVO);
+            if (touchKeyResveMapper.deleteTouchKeyResve(touchKeyResveVO) > 0) {
+                // 예약 저장
+                result += touchKeyResveMapper.saveTouchKeyResve(touchKeyResveVO);
+            }
         }
 
         return result;
