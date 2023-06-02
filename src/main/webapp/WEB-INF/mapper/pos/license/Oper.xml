@@ -271,8 +271,8 @@
         AND     M.STORE_CD          (+) =   B.STORE_CD
         AND     N.STORE_CD          (+) =   B.STORE_CD
         AND     O.STORE_CD          (+) =   B.STORE_CD
-        AND     P.STORE_CD              =   B.STORE_CD
-        AND     Q.ENVST_VAL_CD          =   P.ENVST_VAL
+        AND     P.STORE_CD          (+) =   B.STORE_CD
+        AND     Q.ENVST_VAL_CD      (+) =   P.ENVST_VAL
         ORDER
         BY      A.HQ_OFFICE_CD, A.HQ_OFFICE_NM
         ,       B.STORE_CD, B.STORE_NM, B.SYS_STAT_FG
@@ -525,8 +525,8 @@
         AND     J.STORE_CD      (+) =   B.STORE_CD
         AND     K.STORE_CD      (+) =   B.STORE_CD
         AND     L.SOLBI_STORE_CD    (+) =   B.STORE_CD
-        AND     P.STORE_CD              =   B.STORE_CD
-        AND     Q.ENVST_VAL_CD          =   P.ENVST_VAL
+        AND     P.STORE_CD          (+) =   B.STORE_CD
+        AND     Q.ENVST_VAL_CD      (+) =   P.ENVST_VAL
         ORDER
         BY      A.HQ_OFFICE_CD, A.HQ_OFFICE_NM
         ,       B.STORE_CD, B.STORE_NM, B.SYS_STAT_FG

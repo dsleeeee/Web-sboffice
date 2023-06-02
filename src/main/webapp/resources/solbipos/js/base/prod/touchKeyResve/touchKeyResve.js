@@ -243,7 +243,7 @@ app.controller('touchKeyResveCtrl', ['$scope', '$http', function ($scope, $http)
             var item = $scope.flex.collectionView.items[i];
 
             // 시작일자가 오늘날짜보다 작거나 같으면 수정불가
-            if(Number(now) >= Number(item.orgStartDate.replaceAll('-', ''))) {
+            if(Number(now) >= Number(item.orgStartDate.replaceAll('-', '')) || item.resveFg !== '0') {
                 item.gChk = false;
                 rows[i].isReadOnly = true;
             }

@@ -1,0 +1,633 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.base.prod.soldOutResve.service.impl.SoldOutResveMapper">
+
+    <!-- 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY, TB_SL_SALE_HDR_DC
+        PARAM    : soldOutResveVO
+        COMMENTS : 리스트를 조회한다.
+    -->
+    <select id="getSoldOutResve" parameterType="soldOutResveVO" resultType="DefaultMap">
+        /* USE : SoldOutResveMapper.getSoldOutResve */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT 	tmkdr.STORE_CD
+        ,		tms.STORE_NM
+        ,		tmkdr.PROD_CD
+        ,		tmp.PROD_NM
+        ,		TO_CHAR(TO_DATE(tmkdr.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS START_DATE
+        ,		TO_CHAR(TO_DATE(tmkdr.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS ORG_START_DATE
+        ,		tmkdr.START_TIME
+        ,		tmkdr.START_TIME AS ORG_START_TIME
+        ,		NVL(tmp.SOLD_OUT_YN, 'N') AS NOW_SOLD_OUT_YN
+        ,		tmkdr.SOLD_OUT_YN AS ORG_SOLD_OUT_YN
+        ,		tmkdr.SOLD_OUT_YN
+        ,		tmkdr.ALL_SOLD_OUT_YN
+        ,		tmkdr.RESVE_FG
+        ,		tms.HQ_OFFICE_CD
+        ,		tmp.HQ_BRAND_CD
+        ,		tmb.MS_BRAND_NM AS HQ_BRAND_NM
+        ,		tmp.PROD_CLASS_CD
+        ,		( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM
+        ,		NVL(tmp.COST_UPRC, 0) COST_UPRC
+        ,		NVL(tmp.SPLY_UPRC, 0) SPLY_UPRC
+        ,		NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC
+        ,		tmp.ORGPLCE_CD
+        ,		tmp.SIDE_PROD_YN
+        ,		tmp.SDATTR_CLASS_CD
+        ,		tmp.SDSEL_GRP_CD
+        ,		tmp.PO_UNIT_FG
+        ,		tmp.REG_DT
+        ,		tmp.USE_YN
+        ,		tmp.REG_FG
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    TB_MS_STORE tms
+        ,		TB_MS_STORE_INFO tmsi
+        ,       TB_MS_SOLD_OUT_RESVE tmkdr
+        ,		TB_MS_PRODUCT tmp
+        LEFT OUTER JOIN (
+        SELECT
+        STORE_CD,
+        PROD_CD,
+        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+        FROM TB_MS_PRODUCT_SALE_PRICE
+        WHERE STORE_CD = #{storeCd}
+        <![CDATA[
+            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+        ]]>
+        AND SALE_PRC_FG = '1'
+        GROUP BY
+        STORE_CD, PROD_CD
+        ) thpsp ON
+        tmp.STORE_CD = thpsp.STORE_CD
+        AND tmp.PROD_CD = thpsp.PROD_CD
+        LEFT OUTER JOIN TB_MS_BRAND tmb ON
+        tmb.STORE_CD = tmp.STORE_CD
+        AND tmb.MS_BRAND_CD = tmp.HQ_BRAND_CD
+        WHERE	tmkdr.STORE_CD = tmp.STORE_CD
+        AND 	tmkdr.PROD_CD  = tmp.PROD_CD
+        AND 	tmkdr.STORE_CD = tms.STORE_CD
+        AND 	tmkdr.STORE_CD = tmsi.STORE_CD
+        AND     tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tmkdr.STORE_CD = #{storeCds}
+        </if>
+        <if test='prodCds != null and prodCds != ""'>
+            AND tmkdr.PROD_CD = #{prodCds}
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
+        AND     tmtkgr.START_DATE BETWEEN #{startDate} AND #{endDate}
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+            AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tmp.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='soldOutYn != null and soldOutYn != ""'>
+            AND tmkdr.SOLD_OUT_YN = #{soldOutYn}
+        </if>
+        <if test='useYn != null and useYn != ""'>
+            AND tmp.USE_YN = #{useYn}
+        </if>
+        ORDER
+        BY      tmkdr.STORE_CD, tmkdr.PROD_CD, tmkdr.START_DATE, tmkdr.START_TIME
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 상품 내역  조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY, TB_SL_SALE_HDR_DC
+        PARAM    : soldOutResveVO
+        COMMENTS : 상품 내역을 조회한다.
+    -->
+    <select id="getProdList" parameterType="soldOutResveVO" resultType="DefaultMap">
+        /* USE : SoldOutResveMapper.getProdList */
+        SELECT  tms.BRANCH_CD
+        ,		(SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+        ,		tmp.STORE_CD
+        ,		tms.STORE_NM
+        ,		tmp.PROD_CD
+        ,		tmp.PROD_NM
+        ,		NVL(tmp.SOLD_OUT_YN, 'N') AS ORG_SOLD_OUT_YN
+        FROM 	TB_MS_PRODUCT tmp
+        ,		TB_MS_STORE tms
+        ,		TB_MS_STORE_INFO tmsi
+        WHERE 	tmp.STORE_CD = tms.STORE_CD
+        AND 	tms.STORE_CD = tmsi.STORE_CD (+)
+        AND     tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tms.STORE_CD = #{storeCds}
+        </if>
+        <if test='prodCds != null and prodCds != ""'>
+            AND tmp.PROD_CD = #{prodCds}
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        ORDER
+        BY      STORE_CD, PROD_CD
+    </select>
+
+    <!-- 비노출관리(예약) 등록 전 체크 -->
+    <!--
+        TABLE    : TB_MS_SOLD_OUT_RESVE
+        PARAM    : soldOutResveVO
+        COMMENTS : 비노출관리(예약)을 등록한다.
+    -->
+    <select id="getSoldOutResveCnt" parameterType="soldOutResveVO" resultType="Integer">
+        /* USE : SoldOutResveMapper.getSoldOutResveCnt */
+            SELECT  COUNT(*)
+            FROM    TB_MS_SOLD_OUT_RESVE
+            WHERE   STORE_CD    = #{storeCd}
+            AND     PROD_CD     = #{prodCd}
+            AND     START_DATE  = #{startDate}
+            AND     START_TIME  = #{startTime}
+            AND     RESVE_FG   != '0'
+    </select>
+
+    <!-- 비노출관리(예약) 등록 -->
+    <!--
+        TABLE    : TB_MS_SOLD_OUT_RESVE
+        PARAM    : soldOutResveVO
+        COMMENTS : 비노출관리(예약)을 등록한다.
+    -->
+    <insert id="saveSoldOutResve" parameterType="soldOutResveVO" >
+        /* USE : SoldOutResveMapper.saveSoldOutResve */
+        MERGE INTO TB_MS_SOLD_OUT_RESVE A
+        USING DUAL
+        ON
+        (
+            A.STORE_CD      = #{storeCd}
+        AND A.PROD_CD       = #{prodCd}
+        AND A.START_DATE    = #{startDate}
+        AND A.START_TIME    = #{startTime}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            A.SOLD_OUT_YN       = #{soldOutYn}
+        ,   A.ALL_SOLD_OUT_YN   = #{allSoldOutYn}
+        ,   A.MOD_DT            = #{modDt}
+        ,   A.MOD_ID            = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT  (
+                STORE_CD
+            ,   PROD_CD
+            ,   START_DATE
+            ,   START_TIME
+            ,   SOLD_OUT_YN
+            ,   ALL_SOLD_OUT_YN
+            ,   RESVE_FG
+            ,   REG_DT
+            ,   REG_ID
+            ,   MOD_DT
+            ,   MOD_ID
+        ) VALUES (
+                #{storeCd}
+            ,   #{prodCd}
+            ,   #{startDate}
+            ,   #{startTime}
+            ,   #{soldOutYn}
+            ,   #{allSoldOutYn}
+            ,   '0'
+            ,   #{regDt}
+            ,   #{regId}
+            ,   #{modDt}
+            ,   #{modId}
+        )
+    </insert>
+
+    <!-- 판매터치키설정(예약) 삭제 -->
+    <!--
+        TABLE    : TB_MS_SOLD_OUT_RESVE
+        PARAM    : soldOutResveVO
+        COMMENTS : 판매터치키설정(예약)을 삭제한다.
+    -->
+    <delete id="deleteSoldOutResve" parameterType="soldOutResveVO" >
+        /* USE : SoldOutResveMapper.deleteSoldOutResve */
+        DELETE
+        FROM    TB_MS_SOLD_OUT_RESVE
+        WHERE   STORE_CD = #{storeCd}
+        AND     PROD_CD = #{prodCd}
+        AND     START_DATE = #{orgStartDate}
+        AND     START_TIME = #{orgStartTime}
+        AND     SOLD_OUT_YN = #{orgSoldOutYn}
+        AND     RESVE_FG = '0'
+    </delete>
+
+    <!-- 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY, TB_SL_SALE_HDR_DC
+        PARAM    : soldOutResveVO
+        COMMENTS : 리스트를 조회한다.
+    -->
+    <select id="getSdselSoldOutResve" parameterType="soldOutResveVO" resultType="DefaultMap">
+        /* USE : SoldOutResveMapper.getSdselSoldOutResve */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT 	tmkdr.STORE_CD
+        ,		tms.STORE_NM
+        ,		tmpsg.SDSEL_GRP_CD
+        ,		tmpsg.SDSEL_GRP_NM
+        ,		DECODE(NVL(tmpsg.FIX_PROD_FG, '0'), '0', '선택', '1', '고정') AS GRP_FIX_PROD_FG
+        ,		DECODE(NVL(tmpsg.SDSEL_TYPE_FG, 'C'), 'C', '세트', 'S', '싱글세트') AS SDSEL_TYPE
+        ,		tmkdr.SDSEL_CLASS_CD
+        ,		tmpsc.SDSEL_CLASS_NM
+        ,		tmpsc.SDSEL_QTY
+        ,		DECODE(NVL(tmpsc.REQUIRE_YN, 'N'), 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
+        ,       FN_GET_PROD_CLASS_CD_NM_STR(tmkdr.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+        ,		tmkdr.PROD_CD
+        ,		tmp.PROD_NM
+        ,       tmpsp.ADD_PROD_QTY
+        ,       DECODE(NVL(tmpsp.FIX_PROD_FG, '0'), '0', '선택', '1', '고정') AS FIX_PROD_FG
+        ,		TO_CHAR(TO_DATE(tmkdr.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS START_DATE
+        ,		TO_CHAR(TO_DATE(tmkdr.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS ORG_START_DATE
+        ,		tmkdr.START_TIME
+        ,		tmkdr.START_TIME AS ORG_START_TIME
+        ,		NVL(tmp.SOLD_OUT_YN, 'N') AS NOW_SOLD_OUT_YN
+        ,		tmkdr.SOLD_OUT_YN AS ORG_SOLD_OUT_YN
+        ,		tmkdr.SOLD_OUT_YN
+        ,		tmkdr.RESVE_FG
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	TB_MS_SOLD_OUT_SDSEL_RESVE tmkdr
+        ,		TB_MS_PRODUCT tmp
+        ,		TB_MS_STORE tms
+        ,		TB_MS_STORE_INFO tmsi
+        ,		TB_MS_PRODUCT_SDSEL_CLASS tmpsc
+        ,		TB_MS_PRODUCT_SDSEL_GROUP tmpsg
+        ,		TB_MS_PRODUCT_SDSEL_PROD tmpsp
+        WHERE	tmkdr.STORE_CD = tmp.STORE_CD
+        AND 	tmkdr.PROD_CD  = tmp.PROD_CD
+        AND 	tmkdr.STORE_CD = tms.STORE_CD
+        AND 	tmkdr.STORE_CD = tmsi.STORE_CD
+        AND 	tmpsc.STORE_CD = tmkdr.STORE_CD
+        AND 	tmpsc.SDSEL_CLASS_CD = tmkdr.SDSEL_CLASS_CD
+        AND 	tmpsc.STORE_CD = tmpsg.STORE_CD
+        AND 	tmpsc.SDSEL_GRP_CD = tmpsg.SDSEL_GRP_CD
+        AND 	tmkdr.STORE_CD = tmpsp.STORE_CD
+        AND 	tmkdr.SDSEL_CLASS_CD = tmpsp.SDSEL_CLASS_CD
+        AND 	tmkdr.PROD_CD = tmpsp.PROD_CD
+        AND     tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tmkdr.STORE_CD = #{storeCds}
+        </if>
+        <if test='prodCds != null and prodCds != ""'>
+            AND tmkdr.PROD_CD = #{prodCds}
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
+            AND     tmtkgr.START_DATE BETWEEN #{startDate} AND #{endDate}
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+            AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tmp.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='soldOutYn != null and soldOutYn != ""'>
+            AND tmkdr.SOLD_OUT_YN = #{soldOutYn}
+        </if>
+        <if test='useYn != null and useYn != ""'>
+            AND tmp.USE_YN = #{useYn}
+        </if>
+        ORDER
+        BY      tmkdr.STORE_CD, tmkdr.PROD_CD, tmkdr.START_DATE, tmkdr.START_TIME
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 사이드 상품 내역  조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY, TB_SL_SALE_HDR_DC
+        PARAM    : soldOutResveVO
+        COMMENTS : 사이드 상품 내역을 조회한다.
+    -->
+    <select id="getSdselProdList" parameterType="soldOutResveVO" resultType="DefaultMap">
+        /* USE : SoldOutResveMapper.getSdselProdList */
+        SELECT 	tms.BRANCH_CD
+        ,		(SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+        ,		tmp.STORE_CD
+        ,		tms.STORE_NM
+        ,		tmpsg.SDSEL_GRP_CD
+        ,		tmpsg.SDSEL_GRP_NM
+        ,		tmpsc.SDSEL_CLASS_CD
+        ,		tmpsc.SDSEL_CLASS_NM
+        ,		tmpsc.SDSEL_QTY
+        ,		tmpsp.PROD_CD
+        ,		tmp.PROD_NM
+        ,       NVL(tmpsp.SOLD_OUT_YN, 'N') AS ORG_SOLD_OUT_YN
+        FROM 	TB_MS_PRODUCT_SDSEL_GROUP tmpsg
+        ,		TB_MS_PRODUCT_SDSEL_CLASS tmpsc
+        ,		TB_MS_PRODUCT_SDSEL_PROD tmpsp
+        ,		TB_MS_PRODUCT tmp
+        ,		TB_MS_STORE tms
+        ,		TB_MS_STORE_INFO tmsi
+        WHERE 	tmpsg.STORE_CD = tmpsc.STORE_CD (+)
+        AND 	tmpsg.SDSEL_GRP_CD = tmpsc.SDSEL_GRP_CD (+)
+        AND 	tmpsc.STORE_CD = tmpsp.STORE_CD (+)
+        AND 	tmpsc.SDSEL_CLASS_CD = tmpsp.SDSEL_CLASS_CD (+)
+        AND 	tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tmpsg.STORE_CD = tms.STORE_CD
+        AND 	tmpsp.STORE_CD = tmp.STORE_CD (+)
+        AND 	tmpsp.PROD_CD = tmp.PROD_CD (+)
+        AND 	tms.STORE_CD = tmsi.STORE_CD (+)
+        <if test='storeCds != null and storeCds != ""'>
+            AND tms.STORE_CD = #{storeCds}
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test="sdselGrpCd != null and sdselGrpCd != ''">
+            AND tmpsg.SDSEL_GRP_CD LIKE '%'||#{sdselGrpCd}||'%'
+        </if>
+        <if test="sdselGrpNm != null and sdselGrpNm != ''">
+            AND tmpsg.SDSEL_GRP_NM LIKE '%'||#{sdselGrpNm}||'%'
+        </if>
+        <if test="sdselClassCd != null and sdselClassCd != ''">
+            AND tmpsc.SDSEL_CLASS_CD LIKE '%'||#{sdselClassCd}||'%'
+        </if>
+        <if test="sdselClassNm != null and sdselClassNm != ''">
+            AND tmpsc.SDSEL_CLASS_NM LIKE '%'||#{sdselClassNm}||'%'
+        </if>
+        <if test="prodCd != null and prodCd != ''">
+            AND tmpsp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test="prodNm != null and prodNm != ''">
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND tmp.PROD_CLASS_CD IN (
+            SELECT  PROD_CLASS_CD
+            FROM    TB_MS_PRODUCT_CLASS
+            WHERE   STORE_CD = #{storeCd}
+            START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+            CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
+            )
+        </if>
+        <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+            AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tmp.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        AND     tmpsp.USE_YN = 'Y'
+        <if test="soldOutYn != null and soldOutYn != ''">
+            AND tmpsp.SOLD_OUT_YN = #{soldOutYn}
+        </if>
+        ORDER BY tmpsg.SDSEL_GRP_CD, tmpsc.DISP_SEQ, tmpsp.DISP_SEQ
+    </select>
+
+
+    <!-- 비노출관리(예약) 등록 전 체크 -->
+    <!--
+        TABLE    : TB_MS_SOLD_OUT_RESVE
+        PARAM    : soldOutResveVO
+        COMMENTS : 비노출관리(예약)을 등록한다.
+    -->
+    <select id="getSdselSoldOutResveCnt" parameterType="soldOutResveVO" resultType="Integer">
+        /* USE : SoldOutResveMapper.getSdselSoldOutResveCnt */
+        SELECT  COUNT(*)
+        FROM    TB_MS_SOLD_OUT_SDSEL_RESVE
+        WHERE   STORE_CD    = #{storeCd}
+        AND     SDSEL_CLASS_CD = #{sdselClassCd}
+        AND     PROD_CD     = #{prodCd}
+        AND     START_DATE  = #{startDate}
+        AND     START_TIME  = #{startTime}
+        AND     RESVE_FG   != '0'
+    </select>
+
+    <!-- 비노출관리(예약) 등록 -->
+    <!--
+        TABLE    : TB_MS_SOLD_OUT_RESVE
+        PARAM    : soldOutResveVO
+        COMMENTS : 비노출관리(예약)을 등록한다.
+    -->
+    <insert id="saveSdselSoldOutResve" parameterType="soldOutResveVO" >
+        /* USE : SoldOutResveMapper.saveSdselSoldOutResve */
+        MERGE INTO TB_MS_SOLD_OUT_SDSEL_RESVE A
+            USING DUAL
+            ON
+                (
+                        A.STORE_CD      = #{storeCd}
+                        AND A.SDSEL_CLASS_CD = #{sdselClassCd}
+                        AND A.PROD_CD       = #{prodCd}
+                        AND A.START_DATE    = #{startDate}
+                        AND A.START_TIME    = #{startTime}
+                    )
+            WHEN MATCHED THEN
+                UPDATE
+                    SET
+                        A.SOLD_OUT_YN       = #{soldOutYn}
+                        ,   A.MOD_DT            = #{modDt}
+                        ,   A.MOD_ID            = #{modId}
+            WHEN NOT MATCHED THEN
+                INSERT  (
+                         STORE_CD
+                    ,   SDSEL_CLASS_CD
+                    ,   PROD_CD
+                    ,   START_DATE
+                    ,   START_TIME
+                    ,   SOLD_OUT_YN
+                    ,   RESVE_FG
+                    ,   REG_DT
+                    ,   REG_ID
+                    ,   MOD_DT
+                    ,   MOD_ID
+                    ) VALUES (
+                                 #{storeCd}
+                             ,   #{sdselClassCd}
+                             ,   #{prodCd}
+                             ,   #{startDate}
+                             ,   #{startTime}
+                             ,   #{soldOutYn}
+                             ,   '0'
+                             ,   #{regDt}
+                             ,   #{regId}
+                             ,   #{modDt}
+                             ,   #{modId}
+                             )
+    </insert>
+
+    <!-- 판매터치키설정(예약) 삭제 -->
+    <!--
+        TABLE    : TB_MS_SOLD_OUT_RESVE
+        PARAM    : soldOutResveVO
+        COMMENTS : 판매터치키설정(예약)을 삭제한다.
+    -->
+    <delete id="deleteSdselSoldOutResve" parameterType="soldOutResveVO" >
+        /* USE : SoldOutResveMapper.deleteSdselSoldOutResve */
+        DELETE
+        FROM    TB_MS_SOLD_OUT_SDSEL_RESVE
+        WHERE   STORE_CD = #{storeCd}
+        AND     SDSEL_CLASS_CD = #{sdselClassCd}
+        AND     PROD_CD = #{prodCd}
+        AND     START_DATE = #{orgStartDate}
+        AND     START_TIME = #{orgStartTime}
+        AND     SOLD_OUT_YN = #{orgSoldOutYn}
+        AND     RESVE_FG = '0'
+    </delete>
+
+</mapper>

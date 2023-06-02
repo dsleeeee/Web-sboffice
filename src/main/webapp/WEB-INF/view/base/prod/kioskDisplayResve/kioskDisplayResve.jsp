@@ -8,22 +8,23 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 <c:set var="brandUseFg" value="${brandUseFg}" />
+<c:set var="toDate" value="${toDate}" />
 
-<div class="subCon" ng-controller="prodSoldOutCtrl" id="prodSoldOutView">
+<div class="subCon" ng-controller="kioskDisplayResveCtrl" >
     <%--searchTbl--%>
     <div class="searchBar">
-        <a href="#" class="open fl"><s:message code="soldOut.prod" /></a>
+        <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" id="nxBtnSearch2" ng-click="_pageView('prodSoldOutCtrl',1)">
+            <button class="btn_blue fr" id="nxBtnSearch2" ng-click="_pageView('kioskDisplayResveCtrl',1)">
                 <s:message code="cmm.search" />
             </button>
             <c:if test="${momsEnvstVal == '1' and sessionInfo.orgnFg == 'HQ'}">
-              <%-- 확장조회 --%>
-              <button class="btn_blue mr5 fl" id="btnSearchAddShow" ng-click="searchAddShowChange()">
-                  <s:message code="cmm.search.addShow" />
-              </button>
-           </c:if>
+               <%-- 확장조회 --%>
+               <button class="btn_blue mr5 fl" id="btnSearchAddShow" ng-click="searchAddShowChange()">
+                   <s:message code="cmm.search.addShow" />
+               </button>
+            </c:if>
         </div>
     </div>
     <table class="searchTbl">
@@ -76,19 +77,19 @@
                 <td>
                 <c:if test="${momsEnvstVal == '0'}">
                     <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
-                        <jsp:param name="targetId" value="prodSoldOutStore"/>
+                        <jsp:param name="targetId" value="kioskDisplayResveStore"/>
                     </jsp:include>
                 </c:if>
                 <c:if test="${momsEnvstVal == '1'}">
                     <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreSMoms.jsp" flush="true">
-                        <jsp:param name="targetId" value="prodSoldOutStore"/>
+                        <jsp:param name="targetId" value="kioskDisplayResveStore"/>
                     </jsp:include>
                 </c:if>
                 </td>
             </tr>
         </c:if>
         <c:if test="${sessionInfo.orgnFg == 'STORE'}">
-          <input type="hidden" id="prodSoldOutStoreCd" value="${sessionInfo.storeCd}"/>
+          <input type="hidden" id="kioskDisplayResveStoreCd" value="${sessionInfo.storeCd}"/>
         </c:if>
         <tr>
             <c:if test="${sessionInfo.orgnFg == 'HQ'}">
@@ -118,20 +119,20 @@
                      modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
                      closeFunc - 팝업 닫기시 호출할 함수--%>
                 <jsp:include page="/WEB-INF/view/sale/com/popup/selectProdSMoms.jsp" flush="true">
-                    <jsp:param name="targetId" value="prodSoldOutProd"/>
+                    <jsp:param name="targetId" value="kioskDisplayResveProd"/>
                 </jsp:include>
                 <%--// 상품선택 모듈 멀티 선택 사용시 include --%>
             </td>
         </tr>
         <tr>
-            <%-- 품절여부 --%>
-            <th><s:message code="soldOut.soldOutYn" /></th>
+            <%-- 비노출여부 --%>
+            <th><s:message code="kioskDisplayResve.kioskDisplayYn" /></th>
             <td>
                 <div class="sb-select">
                     <wj-combo-box
-                            id="srchSoldOutYn"
-                            ng-model="soldOutYn"
-                            items-source="_getComboData('soldOutYnCombo')"
+                            id="srchKioskDisplayResveYn"
+                            ng-model="kioskDisplayResveYn"
+                            items-source="_getComboData('kioskDisplayResveYnCombo')"
                             display-member-path="name"
                             selected-value-path="value"
                             is-editable="false"
@@ -166,8 +167,22 @@
                 <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
                 <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
             </td>
-            <th></th>
-            <td></td>
+                <%-- 키오스크사용여부 --%>
+            <th><s:message code="kioskDisplayResve.kioskUseYn" /></th>
+            <td>
+                <div class="sb-select">
+                    <wj-combo-box
+                            id="srchKioskUseYn"
+                            ng-model="kioskUseYn"
+                            control="kioskUseYnAllCombo"
+                            items-source="_getComboData('kioskUseYnAllComboData')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                    </wj-combo-box>
+                </div>
+            </td>
         </tr>
         <tr>
             <%-- 상품코드 --%>
@@ -318,63 +333,40 @@
         </table>
     </c:if>
     <%--//searchTbl--%>
-
-    <%-- 일괄적용 --%>
     <table class="searchTbl mt10">
         <colgroup>
             <col class="w15" />
-            <col class="w15" />
-            <col class="w15" />
-            <col class="*" />
+            <col class="w85" />
         </colgroup>
         <tbody>
         <tr class="brt">
-            <%-- 판매상품여부 --%>
             <th>
-                <s:message code="soldOut.soldOutYn" />
+                <s:message code="kioskDisplayResve.resveKioskDisplayYn" />
             </th>
             <td>
-                <div class="sb-select">
+                <div class="sb-select" style="width:120px; float:left;">
                     <wj-combo-box
-                        id="srchSoldOutYnChg"
-                        ng-model="soldOutYnChg"
-                        items-source="_getComboData('soldOutYnComboChg')"
-                        display-member-path="name"
-                        selected-value-path="value"
-                        is-editable="false"
-                        initialized="_initComboBox(s)">
+                            id="kioskDisplayYnCombo2"
+                            ng-model="kioskDisplayYnChange"
+                            control="kioskDisplayYnCombo2"
+                            items-source="_getComboData('kioskDisplayYnCombo2')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
                     </wj-combo-box>
                 </div>
-            </td>
-            <%-- 일괄적용 --%>
-            <td>
-                <a href="#" class="btn_grayS ml10" ng-click="batchChange()"><s:message code="cmm.batchChange" /></a>
-            </td>
-            <%-- 저장 --%>
-            <td>
-                <button class="btn_skyblue ml5 fr" id="btnSoldOutYnSave" ng-click="save()"><s:message code="cmm.save" /></button>
+                <a href="#" class="btn_grayS ml10" ng-click="change()">일괄적용</a>
             </td>
         </tr>
         </tbody>
     </table>
 
-    <table class="searchTbl mt10">
-        <colgroup>
-            <col class="w80" />
-            <col class="w20" />
-        </colgroup>
-        <tbody>
-        <tr class="brt">
-            <th>
-                - '품절여부전체저장' 클릭시 체크된 상품과 사이드상품까지 '품절' 처리됩니다.
-            </th>
-            <th>
-                <%-- 품절여부전체저장 --%>
-                <button class="btn_skyblue ml5 fr" ng-click="soldOutAllSave()"><s:message code="soldOut.soldOutAllSave" /></button>
-            </th>
-        </tr>
-        </tbody>
-    </table>
+    <div class="mt10 oh sb-select dkbr">
+        <button class="btn_skyblue fr" ng-click="add()"><s:message code="kioskDisplayResve.add" /></button>
+        <button class="btn_skyblue fr mr5" ng-click="save()"><s:message code="cmm.edit" /></button>
+        <button class="btn_skyblue fr mr5" ng-click="del()"><s:message code="cmm.del" /></button>
+    </div>
 
     <%--위즈모 테이블--%>
     <div class="wj-TblWrapBr mt10">
@@ -388,44 +380,49 @@
                     sticky-headers="true"
                     selection-mode="Row"
                     items-source="data"
-                    item-formatter="_itemFormatter">
+                    item-formatter="_itemFormatter"
+                    id="wjGridKioskDisplayResve"
+                    frozen-columns="1">
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.storeNm"/>" binding="storeNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.prodCd"/>" binding="prodCd" width="100" is-read-only="true" format="d"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.prodNm"/>" binding="prodNm" width="170" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="soldOut.soldOutYn"/>" binding="soldOutYn" width="80" data-map="soldOutYnDataMap" align="center"></wj-flex-grid-column>
-                <c:if test="${brandUseFg == '1'}">
-                    <wj-flex-grid-column header="<s:message code="prod.brandNm"/>" binding="hqBrandNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
-                </c:if>
-                <wj-flex-grid-column header="<s:message code="prod.prodClassCd"/>" binding="prodClassCd" width="90" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.prodClassNm"/>" binding="prodClassNm" width="250" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.barCd"/>" binding="barCd" width="100" is-read-only="true" visible="false"></wj-flex-grid-column>
-                <c:if test="${orgnFg == 'HQ'}">
-                    <wj-flex-grid-column header="<s:message code="prod.storeCnt"/>" binding="storeCnt" width="80" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-                </c:if>
-                <wj-flex-grid-column header="<s:message code="prod.costUprc"/>" binding="costUprc" width="100" is-read-only="true" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.splyUprc"/>" binding="splyUprc" width="100" is-read-only="true" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.saleUprc"/>" binding="saleUprc" width="100" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.orgplceCd"/>" binding="orgplceCd" width="80" is-read-only="true" align="center" visible="false"></wj-flex-grid-column><!--// todo 원산지명 조회 필요-->
-                <wj-flex-grid-column header="<s:message code="prod.poUnitFg"/>" binding="poUnitFg" width="80" data-map="poUnitFgComboDataMap" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.useYn"/>" binding="useYn" width="70" data-map="useYnComboDataMap" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.brandCd"/>" binding="hqBrandCd" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.brandNm"/>" binding="hqBrandN" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.sideProdYn"/>" binding="sideProdYn" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.sdattrClassCd"/>" binding="sdattrClassCd" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.sdselGrpCd"/>" binding="sdselGrpCd" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.regFg"/>" binding="regFg" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kioskDisplayResve.storeCd"/>" binding="storeCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kioskDisplayResve.storeNm"/>" binding="storeNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kioskDisplayResve.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kioskDisplayResve.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
+                <wj-flex-grid-column header="" binding="orgStartDate" width="100" align="center" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="" binding="orgStartTime" width="100" align="center" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kioskDisplayResve.nowKioskDisplayYn"/>" binding="nowKioskDisplayYn" width="130" align="center" is-read-only="true" data-map="kioskDisplayResveYnDataMap"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kioskDisplayResve.startDate"/>" binding="startDate" width="150" align="center">
+                    <wj-flex-grid-cell-template cell-type="CellEdit">
+                        <div class="sb-select">
+                          <span class="txtIn w100px">
+                            <wj-input-date
+                                    value="$value"
+                                    min="${toDate}"
+                                    max="9999-12-31">
+                            </wj-input-date>
+                          </span>
+                        </div>
+                    </wj-flex-grid-cell-template>
+                </wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kioskDisplayResve.startTime"/>" binding="startTime" width="100" align="center" data-map="startTimeDataMap"></wj-flex-grid-column>
+                <wj-flex-grid-column header="" binding="orgKioskDisplayYn" is-read-only="true" width="100" align="center" data-map="kioskDisplayResveYnDataMap" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="" binding="resveFg" is-read-only="true" width="100" align="center" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kioskDisplayResve.kioskDisplayYn"/>" binding="kioskDisplayYn" width="100" align="center" data-map="kioskDisplayResveYnDataMap"></wj-flex-grid-column>
+
             </wj-flex-grid>
-            <%-- ColumnPicker 사용시 include --%>
-            <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-                <jsp:param name="pickerTarget" value="prodSoldOutCtrl"/>
-            </jsp:include>
         </div>
     </div>
     <%--//위즈모 테이블--%>
+
+    <%-- 페이지 리스트 --%>
+    <div class="pageNum mt20">
+        <%-- id --%>
+        <ul id="kioskDisplayResveCtrlPager" data-size="10">
+        </ul>
+    </div>
+    <%--//페이지 리스트--%>
 </div>
 
 <script>
@@ -436,6 +433,8 @@
     var brandUseFg = "${brandUseFg}";
     // 브랜드
     var brandList = ${brandList};
+    // [1250 맘스터치] 환경설정값
+    var momsEnvstVal = "${momsEnvstVal}";
 
     // List 형식("" 안붙임)
     var userHqBrandCdComboList = ${userHqBrandCdComboList};
@@ -446,6 +445,31 @@
     var momsShopTypeComboList = ${momsShopTypeComboList};
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
     var branchCdComboList = ${branchCdComboList};
-</script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOut/prodSoldOut.js?ver=20230524.02" charset="utf-8"></script>
+</script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskDisplayResve/kioskDisplayResve.js?ver=20230525.01" charset="utf-8"></script>
+
+<script>
+    onload = function()
+    {
+
+        // 분류조회팝업 한번씩 열었다 닫아야 정상동작함 딱 한번만 반복하도록
+        var scope = agrid.getScope("kioskDisplayResveCtrl");
+        scope.prodClassPopUpLayer.show();
+        scope.prodClassPopUpLayer.hide();
+        var addScope = agrid.getScope("kioskDisplayResveAddCtrl");
+        addScope.prodClassPopUpLayer.show();
+        addScope.prodClassPopUpLayer.hide();
+
+    }
+</script>
+<%-- 예약 추가 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/kioskDisplayResve/kioskDisplayResveAdd.jsp">
+</c:import>
+
+<%-- 레이어 팝업 : 상품상세정보 --%>
+<c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+    <c:param name="prodNoEnvFg" value="${prodNoEnvFg}"/>
+</c:import>

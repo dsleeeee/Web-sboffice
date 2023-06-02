@@ -18,6 +18,8 @@ public interface TouchKeyResveMapper {
     /** 판매터치키(예약) 추가 */
     int saveTouchKeyResve(TouchKeyResveVO touchKeyResveVO);
 
+    int getTouchKeyResveCnt(TouchKeyResveVO touchKeyResveVO);
+
     /** 판매터치키(예약) 삭제 */
     int deleteTouchKeyResve(TouchKeyResveVO touchKeyResveVO);
 }

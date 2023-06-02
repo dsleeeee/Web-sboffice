@@ -18,6 +18,8 @@ public interface KioskKeyMapResveMapper {
     /** 키오스크키맵설정(예약) 추가 */
     int saveKioskKeyMapResve(KioskKeyMapResveVO kioskKeyMapResveVO);
 
+    int getKioskKeyMapResveCnt(KioskKeyMapResveVO kioskKeyMapResveVO);
+
     /** 키오스크키맵설정(예약) 삭제 */
     int deleteKioskKeyMapResve(KioskKeyMapResveVO kioskKeyMapResveVO);
 }
