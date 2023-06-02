@@ -44,8 +44,8 @@ app.controller('sdselClassRegStoreCtrl', ['$scope', '$http', function ($scope, $
     // <-- 검색 호출 -->
     $scope.$on('sdselClassRegStoreCtrl', function(event, data) {
         // 선택그룹
-        $("#srchClassRegStoreGroup").val(data.sdselGrpCdNm);
         $("#srchClassRegStoreGroupCd").val(data.sdselGrpCd);
+        $("#srchClassRegStoreGroup").val(data.sdselGrpCdNm);
 
         // 선택분류 조회
         $scope.categoryCode();
@@ -58,6 +58,9 @@ app.controller('sdselClassRegStoreCtrl', ['$scope', '$http', function ($scope, $
             $scope._popMsg(messages["sideMenu.sdselClassRegStore.sdselClassNullAlert"]); // 선택분류를 선택해주세요. </br> (선택분류는 적용매장구분이 '제외매장', '허용매장'만 가능합니다.)
             return false;
         }
+
+        // 선택분류
+        $("#lblClassRegStoreClass").text("선택분류 : [" + $scope.regStoreSdselClassCombo + "] " + $scope.srchRegStoreSdselClassCombo.text);
 
         var params = {};
         params.sdselGrpCd = $("#srchClassRegStoreGroupCd").val();
@@ -118,6 +121,9 @@ app.controller('sdselClassRegStoreCtrl', ['$scope', '$http', function ($scope, $
         $scope.srchMomsStoreManageTypeCombo.selectedIndex = 0;
         $scope.srchBranchCdCombo.selectedIndex = 0;
 
+        // 선택분류
+        $("#lblClassRegStoreClass").text("");
+
         // 그리드 초기화
         var storeScope = agrid.getScope('sdselClassYesRegStoreCtrl');
         storeScope._gridDataInit();
@@ -143,11 +149,11 @@ app.controller('sdselClassYesRegStoreCtrl', ['$scope', '$http', function ($scope
 
     // <-- 검색 호출 -->
     $scope.$on('sdselClassYesRegStoreCtrl', function(event, data) {
-        $scope.searchSdselClassRegStore(data);
+        $scope.searchSdselClassYesRegStore(data);
         event.preventDefault();
     });
 
-    $scope.searchSdselClassRegStore = function(params){
+    $scope.searchSdselClassYesRegStore = function(params){
 
         $scope._inquiryMain("/base/prod/sideMenu/sdselClassRegStore/getSdselClassRegStoreList.sb", params, function() {}, false);
     };
@@ -155,19 +161,21 @@ app.controller('sdselClassYesRegStoreCtrl', ['$scope', '$http', function ($scope
 
     // 적용매장 저장
     $scope.regSave = function(){
-        // 파라미터 설정
-        var params = new Array();
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            if($scope.flex.collectionView.items[i].gChk) {
-                $scope.flex.collectionView.items[i].status = "D";
-                params.push($scope.flex.collectionView.items[i]);
+        $scope._popConfirm(messages["cmm.choo.save"], function() {
+            // 파라미터 설정
+            var params = new Array();
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                if($scope.flex.collectionView.items[i].gChk) {
+                    $scope.flex.collectionView.items[i].status = "D";
+                    params.push($scope.flex.collectionView.items[i]);
+                }
             }
-        }
 
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/base/prod/sideMenu/sdselClassRegStore/getSdselClassRegStoreSave.sb", params, function(){
-            var storeScope = agrid.getScope('sdselClassRegStoreCtrl');
-            storeScope.searchSdselClassRegStore();
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._save("/base/prod/sideMenu/sdselClassRegStore/getSdselClassRegStoreSave.sb", params, function(){
+                var storeScope = agrid.getScope('sdselClassRegStoreCtrl');
+                storeScope.searchSdselClassRegStore();
+            });
         });
     };
 }]);
@@ -199,19 +207,21 @@ app.controller('sdselClassNoRegStoreCtrl', ['$scope', '$http', function ($scope,
 
     // 미적용매장 저장
     $scope.noRegSave = function(){
-        // 파라미터 설정
-        var params = new Array();
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            if($scope.flex.collectionView.items[i].gChk) {
-                $scope.flex.collectionView.items[i].status = "I";
-                params.push($scope.flex.collectionView.items[i]);
+        $scope._popConfirm(messages["cmm.choo.save"], function() {
+            // 파라미터 설정
+            var params = new Array();
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                if($scope.flex.collectionView.items[i].gChk) {
+                    $scope.flex.collectionView.items[i].status = "I";
+                    params.push($scope.flex.collectionView.items[i]);
+                }
             }
-        }
 
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/base/prod/sideMenu/sdselClassRegStore/getSdselClassRegStoreSave.sb", params, function(){
-            var storeScope = agrid.getScope('sdselClassRegStoreCtrl');
-            storeScope.searchSdselClassRegStore();
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._save("/base/prod/sideMenu/sdselClassRegStore/getSdselClassRegStoreSave.sb", params, function(){
+                var storeScope = agrid.getScope('sdselClassRegStoreCtrl');
+                storeScope.searchSdselClassRegStore();
+            });
         });
     };
 }]);

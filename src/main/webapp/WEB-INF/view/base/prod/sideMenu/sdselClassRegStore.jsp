@@ -28,8 +28,8 @@
                         <s:message code="sideMenu.sdselClassRegStore.sdselGrp"/>
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchClassRegStoreGroup" ng-model="group" readonly />
                         <input type="text" class="sb-input w100" id="srchClassRegStoreGroupCd" ng-model="groupCd" readonly style="display: none" />
+                        <input type="text" class="sb-input w100" id="srchClassRegStoreGroup" ng-model="group" readonly />
                     </td>
                     <%-- 선택분류 (적용매장구분) --%>
                     <th>
@@ -45,7 +45,8 @@
                                     display-member-path="name"
                                     selected-value-path="value"
                                     is-editable="false"
-                                    initialized="_initComboBox(s)">
+                                    initialized="_initComboBox(s)"
+                                    control="srchRegStoreSdselClassCombo">
                             </wj-combo-box>
                         </div>
                     </td>
@@ -202,6 +203,8 @@
             </table>
             <div class="mt10 tr">
                 <div class="oh sb-select dkbr">
+                    <%-- 선택분류 --%>
+                    <span class="fl bk lh30"><label id="lblClassRegStoreClass"/></span>
                     <%-- 조회 --%>
                     <button class="btn_blue fr" id="nxBtnSearch3" ng-click="searchSdselClassRegStore()"><s:message code="cmm.search" /></button>
                     <c:if test="${momsEnvstVal == '1'}">
@@ -243,7 +246,7 @@
                                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassRegStore.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassRegStore.storeNm"/>" binding="storeNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                                <%--저장시 필요--%>
+                                <%-- 저장시 필요 --%>
                                 <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassRegStore.sdselClassCd"/>" binding="sdselClassCd" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                             </wj-flex-grid>
                         </div>
@@ -279,7 +282,7 @@
                                 <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassRegStore.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassRegStore.storeNm"/>" binding="storeNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
 
-                                <%--저장시 필요--%>
+                                <%-- 저장시 필요 --%>
                                 <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassRegStore.sdselClassCd"/>" binding="sdselClassCd" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                             </wj-flex-grid>
                         </div>
@@ -293,4 +296,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sdselClassRegStore.js?ver=20230601.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sdselClassRegStore.js?ver=20230602.012" charset="utf-8"></script>
