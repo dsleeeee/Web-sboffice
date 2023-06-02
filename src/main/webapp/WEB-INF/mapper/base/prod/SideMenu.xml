@@ -2275,15 +2275,15 @@
     <select id="getSdselClassCodeComboList" parameterType="SideMenuSelClassVO" resultType="DefaultMap">
         /* SideMenuMapper.getSdselClassCodeComboList */
         SELECT
-        SDSEL_CLASS_CD AS VALUE,
-        (SDSEL_CLASS_NM || DECODE(REG_STORE_FG, '1', ' (제외매장)', '2', ' (허용매장)', null)) AS NAME
-        FROM TB_HQ_PRODUCT_SDSEL_CLASS
+        thpsc.SDSEL_CLASS_CD AS VALUE,
+        (thpsc.SDSEL_CLASS_NM || DECODE(thpsc.REG_STORE_FG, '1', ' (제외매장)', '2', ' (허용매장)', null)) AS NAME
+        FROM TB_HQ_PRODUCT_SDSEL_CLASS thpsc
         WHERE 1=1
-        AND HQ_OFFICE_CD = #{hqOfficeCd}
-        AND SDSEL_GRP_CD = #{sdselGrpCd}
-        AND USE_YN = 'Y'
-        AND REG_STORE_FG IN ('1', '2')
-        ORDER BY SDSEL_CLASS_CD
+        AND thpsc.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thpsc.SDSEL_GRP_CD = #{sdselGrpCd}
+        AND thpsc.USE_YN = 'Y'
+        AND thpsc.REG_STORE_FG IN ('1', '2')
+        ORDER BY thpsc.SDSEL_CLASS_CD
     </select>
 
     <!-- 선택분류 적용매장등록 팝업 - 적용매장 조회 -->
@@ -2422,6 +2422,173 @@
         WHERE 1=1
         AND HQ_OFFICE_CD = #{hqOfficeCd}
         AND SDSEL_CLASS_CD = #{sdselClassCd}
+        AND STORE_CD = #{storeCd}
+    </insert>
+
+    <!-- 선택상품 적용매장등록 팝업 - 선택상품 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSdselProdCodeComboList" parameterType="sideMenuSelProdVO" resultType="DefaultMap">
+        /* SideMenuMapper.getSdselProdCodeComboList */
+        SELECT
+        thpsp.PROD_CD AS VALUE,
+        (thp.PROD_NM || DECODE(thpsp.REG_STORE_FG, '1', ' (제외매장)', '2', ' (허용매장)', null)) AS NAME
+        FROM TB_HQ_PRODUCT_SDSEL_PROD thpsp,
+        TB_HQ_PRODUCT thp
+        WHERE 1=1
+        AND thpsp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thpsp.SDSEL_CLASS_CD = #{sdselClassCd}
+        AND thpsp.USE_YN = 'Y'
+        AND thpsp.REG_STORE_FG IN ('1', '2')
+        AND thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+        AND thp.PROD_CD = thpsp.PROD_CD
+        ORDER BY thpsp.PROD_CD
+    </select>
+
+    <!-- 선택상품 적용매장등록 팝업 - 적용매장 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSdselProdRegStoreList" parameterType="sideMenuSelProdVO" resultType="DefaultMap">
+        /* SideMenuMapper.getSdselProdRegStoreList */
+        SELECT
+        thpsprs.STORE_CD,
+        tms.STORE_NM,
+        thpsprs.SDSEL_CLASS_CD,
+        thpsprs.PROD_CD
+        FROM TB_HQ_PRODUCT_SDSEL_PROD_REG_STORE thpsprs,
+        TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi
+        WHERE 1=1
+        AND thpsprs.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thpsprs.SDSEL_CLASS_CD = #{sdselClassCd}
+        AND thpsprs.PROD_CD = #{prodCd}
+        <if test="storeCd != null and storeCd != ''">
+            AND thpsprs.STORE_CD LIKE '%' || #{storeCd} || '%'
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND tms.STORE_NM LIKE '%' || #{storeNm} || '%'
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        AND tms.HQ_OFFICE_CD (+)= thpsprs.HQ_OFFICE_CD
+        AND tms.STORE_CD (+)= thpsprs.STORE_CD
+        AND tmsi.STORE_CD (+)= tms.STORE_CD
+        ORDER BY thpsprs.STORE_CD
+    </select>
+
+    <!-- 선택상품 적용매장등록 팝업 - 미적용매장 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSdselProdNoRegStoreList" parameterType="sideMenuSelProdVO" resultType="DefaultMap">
+        /* SideMenuMapper.getSdselProdNoRegStoreList */
+        SELECT
+        tms.STORE_CD,
+        tms.STORE_NM,
+        #{sdselClassCd} AS SDSEL_CLASS_CD,
+        #{prodCd} AS PROD_CD
+        FROM TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi
+        WHERE 1=1
+        AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tms.STORE_CD NOT IN (SELECT STORE_CD FROM TB_HQ_PRODUCT_SDSEL_PROD_REG_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND SDSEL_CLASS_CD = #{sdselClassCd} AND PROD_CD = #{prodCd})
+        <if test="storeCd != null and storeCd != ''">
+            AND tms.STORE_CD LIKE '%' || #{storeCd} || '%'
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND tms.STORE_NM LIKE '%' || #{storeNm} || '%'
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        AND tmsi.STORE_CD (+)= tms.STORE_CD
+        ORDER BY tms.STORE_CD
+    </select>
+
+    <!-- 선택상품 적용매장등록 팝업 - 저장 insert -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getSdselProdRegStoreSaveInsert" parameterType="sideMenuSelProdVO">
+        /* SideMenuMapper.getSdselProdRegStoreSaveInsert */
+        INSERT INTO TB_HQ_PRODUCT_SDSEL_PROD_REG_STORE
+        (
+            HQ_OFFICE_CD,
+            SDSEL_CLASS_CD,
+            PROD_CD,
+            STORE_CD,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{hqOfficeCd},
+            #{sdselClassCd},
+            #{prodCd},
+            #{storeCd},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 선택상품 적용매장등록 팝업 - 저장 delete -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getSdselProdRegStoreSaveDelete" parameterType="sideMenuSelProdVO">
+        /* SideMenuMapper.getSdselProdRegStoreSaveDelete */
+        DELETE
+        TB_HQ_PRODUCT_SDSEL_PROD_REG_STORE
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND SDSEL_CLASS_CD = #{sdselClassCd}
+        AND PROD_CD = #{prodCd}
         AND STORE_CD = #{storeCd}
     </insert>
 

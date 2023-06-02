@@ -82,4 +82,16 @@ public interface SideMenuService {
 
     /** 선택분류 적용매장등록 팝업 - 저장 */
     int getSdselClassRegStoreSave(SideMenuSelClassVO[] sideMenuSelClassVOs, SessionInfoVO sessionInfoVO);
+
+    /** 선택상품 적용매장등록 팝업 - 선택상품 조회 */
+    List<DefaultMap<Object>> getSdselProdCodeComboList(SideMenuSelProdVO sideMenuSelProdVO, SessionInfoVO sessionInfoVO);
+
+    /** 선택상품 적용매장등록 팝업 - 적용매장 조회 */
+    List<DefaultMap<Object>> getSdselProdRegStoreList(SideMenuSelProdVO sideMenuSelProdVO, SessionInfoVO sessionInfoVO);
+
+    /** 선택상품 적용매장등록 팝업 - 미적용매장 조회 */
+    List<DefaultMap<Object>> getSdselProdNoRegStoreList(SideMenuSelProdVO sideMenuSelProdVO, SessionInfoVO sessionInfoVO);
+
+    /** 선택상품 적용매장등록 팝업 - 저장 */
+    int getSdselProdRegStoreSave(SideMenuSelProdVO[] sideMenuSelProdVOs, SessionInfoVO sessionInfoVO);
 }

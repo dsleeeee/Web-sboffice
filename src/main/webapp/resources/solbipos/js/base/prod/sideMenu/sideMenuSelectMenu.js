@@ -138,6 +138,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
               $("#btnAddSelProd").hide();
               $("#btnDelSelProd").hide();
               $("#btnSaveSelProd").hide();
+              $("#btnSdselProdRegStore").hide();
             } else {
               $("#btnUpSelClass").show();
               $("#btnDownSelClass").show();
@@ -152,6 +153,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
               $("#btnAddSelProd").hide();
               $("#btnDelSelProd").hide();
               $("#btnSaveSelProd").hide();
+              $("#btnSdselProdRegStore").hide();
             }
 
             $scope.setSelectedSelGroup(selectedRow);
@@ -182,6 +184,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
     $("#btnAddSelProd").hide();
     $("#btnDelSelProd").hide();
     $("#btnSaveSelProd").hide();
+    $("#btnSdselProdRegStore").hide();
 
     $("#sideSelectGroupTitle").html("");
     var attrScope = agrid.getScope('sideMenuSelectClassCtrl');
@@ -522,12 +525,14 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
               $("#btnAddSelProd").hide();
               $("#btnDelSelProd").hide();
               $("#btnSaveSelProd").show();
+              $("#btnSdselProdRegStore").hide();
             } else {
               $("#btnUpSelProd").show();
               $("#btnDownSelProd").show();
               $("#btnAddSelProd").show();
               $("#btnDelSelProd").show();
               $("#btnSaveSelProd").show();
+              $("#btnSdselProdRegStore").show();
             }
 
             var params = {};
@@ -835,12 +840,12 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
   };
 
   // 선택 매장
-  $scope.selectedSdselClassCopy;
-  $scope.setSelectedSdselClassCopy = function(store) {
-    $scope.selectedSdselClassCopy = store;
+  $scope.selectedSdselClass;
+  $scope.setSelectedSdselClass = function(store) {
+    $scope.selectedSdselClass = store;
   };
-  $scope.getSelectedSdselClassCopy = function(){
-    return $scope.selectedSdselClassCopy;
+  $scope.getSelectedSdselClass = function(){
+    return $scope.selectedSdselClass;
   };
 
   // 선택분류복사
@@ -848,7 +853,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     var params = {};
     params.sdselGrpCd = $scope.getSdselGrpCd();
     params.sdselGrpCdNm = $("#sideSelectGroupTitle").html();
-    $scope.setSelectedSdselClassCopy(params);
+    $scope.setSelectedSdselClass(params);
 
     $scope.wjSdselClassCopyLayer.show(true);
     event.preventDefault();
@@ -859,7 +864,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     var params = {};
     params.sdselGrpCd = $scope.getSdselGrpCd();
     params.sdselGrpCdNm = $("#sideSelectGroupTitle").html();
-    $scope.setSelectedSdselClassCopy(params);
+    $scope.setSelectedSdselClass(params);
 
     $scope.wjSdselClassRegStoreLayer.show(true);
     event.preventDefault();
@@ -871,14 +876,14 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     // 선택분류복사 팝업 핸들러 추가
     $scope.wjSdselClassCopyLayer.shown.addHandler(function (s) {
       setTimeout(function() {
-        $scope._broadcast('sdselClassCopyCtrl', $scope.getSelectedSdselClassCopy());
+        $scope._broadcast('sdselClassCopyCtrl', $scope.getSelectedSdselClass());
       }, 50)
     });
 
     // 선택분류 적용매장등록 팝업 핸들러 추가
     $scope.wjSdselClassRegStoreLayer.shown.addHandler(function (s) {
       setTimeout(function() {
-          $scope._broadcast('sdselClassRegStoreCtrl', $scope.getSelectedSdselClassCopy());
+          $scope._broadcast('sdselClassRegStoreCtrl', $scope.getSelectedSdselClass());
       }, 50)
     });
   });
@@ -1202,6 +1207,27 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
       });
     }, 50);
   };
+
+  // 선택 매장
+  $scope.selectedSdselProd;
+  $scope.setSelectedSdselProd = function(store) {
+    $scope.selectedSdselProd = store;
+  };
+  $scope.getSelectedSdselProd = function(){
+    return $scope.selectedSdselProd;
+  };
+
+  // 선택상품 적용매장등록
+  $scope.sdselProdRegStore = function() {
+    var params = {};
+    params.sdselClassCd = $scope.getSdselClassCd();
+    params.sdselClassCdNm = $("#sideClassTitle").html();
+    $scope.setSelectedSdselProd(params);
+
+    $scope.wjSdselProdRegStoreLayer.show(true);
+    event.preventDefault();
+  };
+
   // 화면 ready 된 후 설정
   angular.element(document).ready(function () {
     // 상품상세정보 팝업 핸들러 추가
@@ -1209,6 +1235,13 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
       setTimeout(function () {
         $scope._broadcast('sideMenuProdCtrl', $scope.getSdselClassCd());
       }, 50);
+    });
+
+    // 선택상품 적용매장등록 팝업 핸들러 추가
+    $scope.wjSdselProdRegStoreLayer.shown.addHandler(function (s) {
+      setTimeout(function() {
+        $scope._broadcast('sdselProdRegStoreCtrl', $scope.getSelectedSdselProd());
+      }, 50)
     });
   });
 

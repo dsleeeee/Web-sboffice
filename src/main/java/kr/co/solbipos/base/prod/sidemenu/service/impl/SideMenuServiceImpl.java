@@ -648,4 +648,59 @@ public class SideMenuServiceImpl implements SideMenuService {
 
         return procCnt;
     }
+
+    /** 선택상품 적용매장등록 팝업 - 선택상품 조회 */
+    @Override
+    public List<DefaultMap<Object>> getSdselProdCodeComboList(SideMenuSelProdVO sideMenuSelProdVO, SessionInfoVO sessionInfoVO) {
+
+        sideMenuSelProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return sideMenuMapper.getSdselProdCodeComboList(sideMenuSelProdVO);
+    }
+
+    /** 선택상품 적용매장등록 팝업 - 적용매장 조회 */
+    @Override
+    public List<DefaultMap<Object>> getSdselProdRegStoreList(SideMenuSelProdVO sideMenuSelProdVO, SessionInfoVO sessionInfoVO) {
+
+        sideMenuSelProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return sideMenuMapper.getSdselProdRegStoreList(sideMenuSelProdVO);
+    }
+
+    /** 선택상품 적용매장등록 팝업 - 미적용매장 조회 */
+    @Override
+    public List<DefaultMap<Object>> getSdselProdNoRegStoreList(SideMenuSelProdVO sideMenuSelProdVO, SessionInfoVO sessionInfoVO) {
+
+        sideMenuSelProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return sideMenuMapper.getSdselProdNoRegStoreList(sideMenuSelProdVO);
+    }
+
+    /** 선택상품 적용매장등록 팝업 - 저장 */
+    @Override
+    public int getSdselProdRegStoreSave(SideMenuSelProdVO[] sideMenuSelProdVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(SideMenuSelProdVO sideMenuSelProdVO : sideMenuSelProdVOs) {
+
+            sideMenuSelProdVO.setModDt(currentDt);
+            sideMenuSelProdVO.setModId(sessionInfoVO.getUserId());
+
+            sideMenuSelProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+            if (sideMenuSelProdVO.getStatus() == GridDataFg.INSERT) {
+                sideMenuSelProdVO.setRegDt(currentDt);
+                sideMenuSelProdVO.setRegId(sessionInfoVO.getUserId());
+
+                procCnt = sideMenuMapper.getSdselProdRegStoreSaveInsert(sideMenuSelProdVO);
+
+            } else if (sideMenuSelProdVO.getStatus() == GridDataFg.DELETE) {
+                procCnt = sideMenuMapper.getSdselProdRegStoreSaveDelete(sideMenuSelProdVO);
+            }
+        }
+
+        return procCnt;
+    }
 }

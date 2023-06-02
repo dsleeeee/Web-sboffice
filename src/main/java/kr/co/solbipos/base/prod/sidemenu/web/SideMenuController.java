@@ -694,4 +694,96 @@ public class SideMenuController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 선택상품 적용매장등록 팝업 - 선택상품 조회
+     *
+     * @param sideMenuSelProdVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 05. 31.
+     */
+    @RequestMapping(value = "/sdselProdRegStore/getSdselProdCodeComboList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSdselProdCodeComboList(SideMenuSelProdVO sideMenuSelProdVO, HttpServletRequest request,
+                                             HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = sideMenuService.getSdselProdCodeComboList(sideMenuSelProdVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, sideMenuSelProdVO);
+    }
+
+    /**
+     * 선택상품 적용매장등록 팝업 - 적용매장 조회
+     *
+     * @param sideMenuSelProdVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 05. 31.
+     */
+    @RequestMapping(value = "/sdselProdRegStore/getSdselProdRegStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSdselProdRegStoreList(SideMenuSelProdVO sideMenuSelProdVO, HttpServletRequest request,
+                                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = sideMenuService.getSdselProdRegStoreList(sideMenuSelProdVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, sideMenuSelProdVO);
+    }
+
+    /**
+     * 선택상품 적용매장등록 팝업 - 미적용매장 조회
+     *
+     * @param sideMenuSelProdVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 05. 31.
+     */
+    @RequestMapping(value = "/sdselProdRegStore/getSdselProdNoRegStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSdselProdNoRegStoreList(SideMenuSelProdVO sideMenuSelProdVO, HttpServletRequest request,
+                                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = sideMenuService.getSdselProdNoRegStoreList(sideMenuSelProdVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, sideMenuSelProdVO);
+    }
+
+    /**
+     * 선택상품 적용매장등록 팝업 - 저장
+     *
+     * @param sideMenuSelProdVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 05. 31.
+     */
+    @RequestMapping(value = "/sdselProdRegStore/getSdselProdRegStoreSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSdselProdRegStoreSave(@RequestBody SideMenuSelProdVO[] sideMenuSelProdVOs, HttpServletRequest request,
+                                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = sideMenuService.getSdselProdRegStoreSave(sideMenuSelProdVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }
