@@ -55,6 +55,15 @@
   var posVerEnvstVal = "${posVerEnvstVal}";
   // [1261 필수선택사용여부] 환경설정값
   var requireYnEnvstVal = "${requireYnEnvstVal}";
+
+  var momsEnvstVal = "${momsEnvstVal}"; // [1250 맘스터치] 환경설정값
+  var branchCdComboList = ${branchCdComboList};
+  var momsTeamComboList = ${momsTeamComboList};
+  var momsAcShopComboList = ${momsAcShopComboList};
+  var momsAreaFgComboList = ${momsAreaFgComboList};
+  var momsCommercialComboList = ${momsCommercialComboList};
+  var momsShopTypeComboList = ${momsShopTypeComboList};
+  var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenu.js?ver=20230217.01" charset="utf-8"></script>

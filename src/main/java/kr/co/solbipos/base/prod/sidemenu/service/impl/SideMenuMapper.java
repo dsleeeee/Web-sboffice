@@ -182,4 +182,19 @@ public interface SideMenuMapper {
 
     /** 사이드메뉴-선택메뉴 탭-선택분류복사 팝업 - 선택상품 매장에 내려줌 */
     int getSdselClassCopySaveMergeProdStore(SideMenuSelClassVO sideMenuSelClassVO);
+
+    /** 선택분류 적용매장등록 팝업 - 선택분류 조회 */
+    List<DefaultMap<Object>> getSdselClassCodeComboList(SideMenuSelClassVO sideMenuSelClassVO);
+
+    /** 선택분류 적용매장등록 팝업 - 적용매장 조회 */
+    List<DefaultMap<Object>> getSdselClassRegStoreList(SideMenuSelClassVO sideMenuSelClassVO);
+
+    /** 선택분류 적용매장등록 팝업 - 미적용매장 조회 */
+    List<DefaultMap<Object>> getSdselClassNoRegStoreList(SideMenuSelClassVO sideMenuSelClassVO);
+
+    /** 선택분류 적용매장등록 팝업 - 저장 insert */
+    int getSdselClassRegStoreSaveInsert(SideMenuSelClassVO sideMenuSelClassVO);
+
+    /** 선택분류 적용매장등록 팝업 - 저장 delete */
+    int getSdselClassRegStoreSaveDelete(SideMenuSelClassVO sideMenuSelClassVO);
 }

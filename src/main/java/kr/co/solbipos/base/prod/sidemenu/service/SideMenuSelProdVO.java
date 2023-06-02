@@ -75,6 +75,9 @@ public class SideMenuSelProdVO extends PageVO {
     /** 상품브랜드코드 */
     private String prodHqBrandCd;
 
+    /** 적용매장구분 */
+    private String regStoreFg;
+
     /**
      * @return the hqOfficeCd
      */
@@ -299,4 +302,8 @@ public class SideMenuSelProdVO extends PageVO {
     public void setProdHqBrandCd(String prodHqBrandCd) {
         this.prodHqBrandCd = prodHqBrandCd;
     }
+
+    public String getRegStoreFg() { return regStoreFg; }
+
+    public void setRegStoreFg(String regStoreFg) { this.regStoreFg = regStoreFg; }
 }

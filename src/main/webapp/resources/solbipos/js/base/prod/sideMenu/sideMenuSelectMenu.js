@@ -39,6 +39,13 @@ var vSrchTypeSelProd = [
     {"name":"상품코드","value":"prodCd"}
 ];
 
+// 적용매장구분
+var regStoreFgData = [
+  {"name":"미사용","value":"0"},
+  {"name":"제외매장","value":"1"},
+  {"name":"허용매장","value":"2"}
+];
+
 /**
  * 사이드메뉴 선택그룹 그리드 생성
  */
@@ -124,6 +131,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
               $("#btnDelSelClass").hide();
               $("#btnSaveSelClass").hide();
               $("#btnSdselClassCopy").hide();
+              $("#btnSdselClassRegStore").hide();
 
               $("#btnUpSelProd").hide();
               $("#btnDownSelProd").hide();
@@ -137,6 +145,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
               $("#btnDelSelClass").show();
               $("#btnSaveSelClass").show();
               $("#btnSdselClassCopy").show();
+              $("#btnSdselClassRegStore").show();
 
               $("#btnUpSelProd").hide();
               $("#btnDownSelProd").hide();
@@ -165,6 +174,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
     $("#btnDelSelClass").hide();
     $("#btnSaveSelClass").hide();
     $("#btnSdselClassCopy").hide();
+    $("#btnSdselClassRegStore").hide();
 
     // 선택상품버튼
     $("#btnUpSelProd").hide();
@@ -472,6 +482,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
   $scope.initGrid = function (s, e) {
     // 그리드 내 콤보박스 설정
     $scope.requireYnDataMap = requireYnDataMap;
+    $scope.regStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
@@ -832,7 +843,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     return $scope.selectedSdselClassCopy;
   };
 
-  // 수신자추가
+  // 선택분류복사
   $scope.sdselClassCopy = function() {
     var params = {};
     params.sdselGrpCd = $scope.getSdselGrpCd();
@@ -843,6 +854,17 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     event.preventDefault();
   };
 
+  // 선택분류 적용매장등록
+  $scope.sdselClassRegStore = function() {
+    var params = {};
+    params.sdselGrpCd = $scope.getSdselGrpCd();
+    params.sdselGrpCdNm = $("#sideSelectGroupTitle").html();
+    $scope.setSelectedSdselClassCopy(params);
+
+    $scope.wjSdselClassRegStoreLayer.show(true);
+    event.preventDefault();
+  };
+
   // 화면 ready 된 후 설정
   angular.element(document).ready(function () {
 
@@ -850,6 +872,13 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     $scope.wjSdselClassCopyLayer.shown.addHandler(function (s) {
       setTimeout(function() {
         $scope._broadcast('sdselClassCopyCtrl', $scope.getSelectedSdselClassCopy());
+      }, 50)
+    });
+
+    // 선택분류 적용매장등록 팝업 핸들러 추가
+    $scope.wjSdselClassRegStoreLayer.shown.addHandler(function (s) {
+      setTimeout(function() {
+          $scope._broadcast('sdselClassRegStoreCtrl', $scope.getSelectedSdselClassCopy());
       }, 50)
     });
   });
@@ -920,6 +949,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
 
     // 그리드 내 콤보박스 설정
     $scope.fixProdFgDataMap = fixProdFgDataMap;
+    $scope.regStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
 
     // 선택상품 그리드 에디팅 방지
     s.beginningEdit.addHandler(function (s, e) {

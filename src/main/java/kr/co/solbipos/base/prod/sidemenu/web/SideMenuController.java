@@ -1,11 +1,13 @@
 package kr.co.solbipos.base.prod.sidemenu.web;
 
 import kr.co.common.data.enums.Status;
+import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
@@ -24,6 +26,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
@@ -55,15 +59,17 @@ public class SideMenuController {
     private final DayProdService dayProdService;
     private final SessionService sessionService;
     private final CmmEnvUtil cmmEnvUtil;
+    private final CmmCodeUtil cmmCodeUtil;
 
     /** Constructor Injection */
     @Autowired
-    public SideMenuController(SideMenuService sideMenuService, StoreTypeService storeTypeService, DayProdService dayProdService, SessionService sessionService, CmmEnvUtil cmmEnvUtil) {
+    public SideMenuController(SideMenuService sideMenuService, StoreTypeService storeTypeService, DayProdService dayProdService, SessionService sessionService, CmmEnvUtil cmmEnvUtil, CmmCodeUtil cmmCodeUtil) {
         this.sideMenuService = sideMenuService;
         this.storeTypeService = storeTypeService;
         this.dayProdService = dayProdService;
         this.sessionService = sessionService;
         this.cmmEnvUtil = cmmEnvUtil;
+        this.cmmCodeUtil = cmmCodeUtil;
     }
 
     /**
@@ -123,6 +129,119 @@ public class SideMenuController {
             model.addAttribute("requireYnEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1261"), "0"));
             System.out.println("requireYnEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1261"), "0"));
         }
+
+
+        /** 맘스터치 */
+        // [1250 맘스터치] 환경설정값 조회
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0"));
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
+        }
+
+        // 사용자별 코드별 공통코드 콤보박스 조회
+        // 팀별
+        List momsTeamComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "151");
+        String momsTeamComboListAll = "";
+        if (momsTeamComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            momsTeamComboListAll = convertToJson(list);
+        } else {
+            momsTeamComboListAll = cmmCodeUtil.assmblObj(momsTeamComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("momsTeamComboList", momsTeamComboListAll);
+        // AC점포별
+        List momsAcShopComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "152");
+        String momsAcShopComboListAll = "";
+        if (momsAcShopComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            momsAcShopComboListAll = convertToJson(list);
+        } else {
+            momsAcShopComboListAll = cmmCodeUtil.assmblObj(momsAcShopComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("momsAcShopComboList", momsAcShopComboListAll);
+        // 지역구분
+        List momsAreaFgComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "153");
+        String momsAreaFgComboListAll = "";
+        if (momsAreaFgComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            momsAreaFgComboListAll = convertToJson(list);
+        } else {
+            momsAreaFgComboListAll = cmmCodeUtil.assmblObj(momsAreaFgComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("momsAreaFgComboList", momsAreaFgComboListAll);
+        // 상권
+        List momsCommercialComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "154");
+        String momsCommercialComboListAll = "";
+        if (momsCommercialComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            momsCommercialComboListAll = convertToJson(list);
+        } else {
+            momsCommercialComboListAll = cmmCodeUtil.assmblObj(momsCommercialComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("momsCommercialComboList", momsCommercialComboListAll);
+        // 점포유형
+        List momsShopTypeComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "155");
+        String momsShopTypeComboListAll = "";
+        if (momsShopTypeComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            momsShopTypeComboListAll = convertToJson(list);
+        } else {
+            momsShopTypeComboListAll = cmmCodeUtil.assmblObj(momsShopTypeComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("momsShopTypeComboList", momsShopTypeComboListAll);
+        // 매장관리타입
+        List momsStoreManageTypeComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "156");
+        String momsStoreManageTypeComboListAll = "";
+        if (momsStoreManageTypeComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            momsStoreManageTypeComboListAll = convertToJson(list);
+        } else {
+            momsStoreManageTypeComboListAll = cmmCodeUtil.assmblObj(momsStoreManageTypeComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("momsStoreManageTypeComboList", momsStoreManageTypeComboListAll);
+
+        // 사용자별 그룹 콤보박스 조회
+        // 그룹
+        List branchCdComboList = dayProdService.getUserBranchComboList(sessionInfoVO);
+        String branchCdComboListAll = "";
+        if (branchCdComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            branchCdComboListAll = convertToJson(list);
+        } else {
+            branchCdComboListAll = cmmCodeUtil.assmblObj(branchCdComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("branchCdComboList", branchCdComboListAll);
+        /** //맘스터치 */
+
 
         return "base/prod/sideMenu/sideMenu";
     }
@@ -482,5 +601,97 @@ public class SideMenuController {
         List<DefaultMap<String>> list = sideMenuService.getSideMenuSdselGrpCdCombo(sideMenuManageVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, sideMenuManageVO);
+    }
+
+    /**
+     * 선택분류 적용매장등록 팝업 - 선택분류 조회
+     *
+     * @param sideMenuSelClassVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 05. 31.
+     */
+    @RequestMapping(value = "/sdselClassRegStore/getSdselClassCodeComboList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSdselClassCodeComboList(SideMenuSelClassVO sideMenuSelClassVO, HttpServletRequest request,
+                                             HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = sideMenuService.getSdselClassCodeComboList(sideMenuSelClassVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, sideMenuSelClassVO);
+    }
+
+    /**
+     * 선택분류 적용매장등록 팝업 - 적용매장 조회
+     *
+     * @param sideMenuSelClassVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 05. 31.
+     */
+    @RequestMapping(value = "/sdselClassRegStore/getSdselClassRegStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSdselClassRegStoreList(SideMenuSelClassVO sideMenuSelClassVO, HttpServletRequest request,
+                                             HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = sideMenuService.getSdselClassRegStoreList(sideMenuSelClassVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, sideMenuSelClassVO);
+    }
+
+    /**
+     * 선택분류 적용매장등록 팝업 - 미적용매장 조회
+     *
+     * @param sideMenuSelClassVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 05. 31.
+     */
+    @RequestMapping(value = "/sdselClassRegStore/getSdselClassNoRegStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSdselClassNoRegStoreList(SideMenuSelClassVO sideMenuSelClassVO, HttpServletRequest request,
+                                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = sideMenuService.getSdselClassNoRegStoreList(sideMenuSelClassVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, sideMenuSelClassVO);
+    }
+
+    /**
+     * 선택분류 적용매장등록 팝업 - 저장
+     *
+     * @param sideMenuSelClassVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 05. 31.
+     */
+    @RequestMapping(value = "/sdselClassRegStore/getSdselClassRegStoreSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSdselClassRegStoreSave(@RequestBody SideMenuSelClassVO[] sideMenuSelClassVOs, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = sideMenuService.getSdselClassRegStoreSave(sideMenuSelClassVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 }

@@ -70,4 +70,16 @@ public interface SideMenuService {
 
     /** 사이드메뉴-선택메뉴 탭-선택분류복사 팝업 - 저장 */
     int getSdselClassCopySave(SideMenuSelClassVO[] sideMenuSelClassVOs, SessionInfoVO sessionInfoVO);
+
+    /** 선택분류 적용매장등록 팝업 - 선택분류 조회 */
+    List<DefaultMap<Object>> getSdselClassCodeComboList(SideMenuSelClassVO sideMenuSelClassVO, SessionInfoVO sessionInfoVO);
+
+    /** 선택분류 적용매장등록 팝업 - 적용매장 조회 */
+    List<DefaultMap<Object>> getSdselClassRegStoreList(SideMenuSelClassVO sideMenuSelClassVO, SessionInfoVO sessionInfoVO);
+
+    /** 선택분류 적용매장등록 팝업 - 미적용매장 조회 */
+    List<DefaultMap<Object>> getSdselClassNoRegStoreList(SideMenuSelClassVO sideMenuSelClassVO, SessionInfoVO sessionInfoVO);
+
+    /** 선택분류 적용매장등록 팝업 - 저장 */
+    int getSdselClassRegStoreSave(SideMenuSelClassVO[] sideMenuSelClassVOs, SessionInfoVO sessionInfoVO);
 }
