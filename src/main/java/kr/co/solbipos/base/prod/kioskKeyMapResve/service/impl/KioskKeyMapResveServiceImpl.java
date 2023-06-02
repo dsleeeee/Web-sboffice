@@ -83,7 +83,9 @@ public class KioskKeyMapResveServiceImpl implements KioskKeyMapResveService {
             kioskKeyMapResveVO.setModDt(currentDt);
             kioskKeyMapResveVO.setModId(sessionInfoVO.getUserId());
 
-            result += kioskKeyMapResveMapper.saveKioskKeyMapResve(kioskKeyMapResveVO);
+            if(kioskKeyMapResveMapper.getKioskKeyMapResveCnt(kioskKeyMapResveVO) == 0) {
+                result += kioskKeyMapResveMapper.saveKioskKeyMapResve(kioskKeyMapResveVO);
+            }
         }
 
         return result;
@@ -117,9 +119,10 @@ public class KioskKeyMapResveServiceImpl implements KioskKeyMapResveService {
             kioskKeyMapResveVO.setModDt(currentDt);
             kioskKeyMapResveVO.setModId(sessionInfoVO.getUserId());
             // 기존 예약 삭제
-            kioskKeyMapResveMapper.deleteKioskKeyMapResve(kioskKeyMapResveVO);
-            // 예약 저장
-            result += kioskKeyMapResveMapper.saveKioskKeyMapResve(kioskKeyMapResveVO);
+            if(kioskKeyMapResveMapper.deleteKioskKeyMapResve(kioskKeyMapResveVO) > 0){
+                // 예약 저장
+                result += kioskKeyMapResveMapper.saveKioskKeyMapResve(kioskKeyMapResveVO);
+            }
         }
 
         return result;

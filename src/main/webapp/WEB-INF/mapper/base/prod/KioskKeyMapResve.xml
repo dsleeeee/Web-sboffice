@@ -43,6 +43,7 @@
                     WHERE   STORE_CD = tmtkgr.STORE_CD
                     AND     POS_NO = tmtkgr.POS_NO
                     AND     ENVST_CD = tmtkgr.ENVST_CD) AS NOW_TU_CLS_TYPE
+        ,       tmtkgr.RESVE_FG
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM 	TB_MS_KIOSK_GROUP_RESVE tmtkgr
         ,		TB_MS_STORE tms
@@ -192,6 +193,23 @@
         PARAM    : kioskKeyMapResveVO
         COMMENTS : 판매터치키설정(예약)을 등록한다.
     -->
+    <select id="getKioskKeyMapResveCnt" parameterType="kioskKeyMapResveVO" resultType="Integer">
+        /* USE : KioskKeyMapResveMapper.getKioskDisplayResveCnt */
+        SELECT  COUNT(*)
+        FROM    TB_MS_KIOSK_GROUP_RESVE
+        WHERE   STORE_CD    = #{storeCd}
+        AND     POS_NO = #{posNo}
+        AND     START_DATE  = #{startDate}
+        AND     ENVST_CD = #{envstCd}
+        AND     RESVE_FG   != '0'
+    </select>
+
+    <!-- 판매터치키설정(예약) 등록 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_GROUP_RESVE
+        PARAM    : kioskKeyMapResveVO
+        COMMENTS : 판매터치키설정(예약)을 등록한다.
+    -->
     <insert id="saveKioskKeyMapResve" parameterType="kioskKeyMapResveVO" >
         /* USE : KioskKeyMapResveMapper.saveKioskKeyMapResve */
         MERGE INTO TB_MS_KIOSK_GROUP_RESVE A
@@ -250,5 +268,6 @@
         AND     START_DATE = #{orgStartDate}
         AND     ENVST_CD = #{envstCd}
         AND     TU_CLS_TYPE = #{orgTuClsType}
+        AND     RESVE_FG = '0'
     </delete>
 </mapper>
