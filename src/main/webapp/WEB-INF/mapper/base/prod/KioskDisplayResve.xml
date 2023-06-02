@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.base.prod.kioskDisplayResve.service.impl.KioskDisplayResveMapper">
+
+    <!-- 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY, TB_SL_SALE_HDR_DC
+        PARAM    : kioskDisplayResveVO
+        COMMENTS : 리스트를 조회한다.
+    -->
+    <select id="getKioskDisplayResve" parameterType="kioskDisplayResveVO" resultType="DefaultMap">
+        /* USE : KioskDisplayResveMapper.getKioskDisplayResve */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  a.*
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    (
+                    SELECT 	tmkdr.STORE_CD
+                    ,		tms.STORE_NM
+                    ,		tmkdr.PROD_CD
+                    ,		tmp.PROD_NM
+                    ,		TO_CHAR(TO_DATE(tmkdr.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS START_DATE
+                    ,		TO_CHAR(TO_DATE(tmkdr.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS ORG_START_DATE
+                    ,		tmkdr.START_TIME
+                    ,		tmkdr.START_TIME AS ORG_START_TIME
+                    ,		NVL(tmp.KIOSK_DISPLAY_YN, 'Y') AS NOW_KIOSK_DISPLAY_YN
+                    ,		tmkdr.KIOSK_DISPLAY_YN AS ORG_KIOSK_DISPLAY_YN
+                    ,		tmkdr.KIOSK_DISPLAY_YN
+                    ,		tmkdr.RESVE_FG
+                    ,       NVL2((  SELECT  DISTINCT PROD_CD
+                                    FROM	TB_MS_KIOSK_KEY tmkk2
+                                    WHERE 	tmkk2.STORE_CD = tmp.STORE_CD
+                                    AND		tmkk2.PROD_CD = tmp.PROD_CD
+                                    AND 	TU_CLS_TYPE IN (SELECT ENVST_VAL
+                                    FROM    TB_MS_POS_ENVST tmpe
+                                    WHERE   tmpe.STORE_CD = tmp.STORE_CD
+                                    AND     tmpe.ENVST_CD IN ('4068')
+                                    AND 	STORE_CD || POS_NO IN (SELECT STORE_CD || POS_NO
+                                    FROM TB_MS_POS_ENVST
+                                    WHERE ENVST_CD = '4019'
+                                    AND ENVST_VAL = '6'
+                                    AND STORE_CD = tmp.STORE_CD))), 'Y', 'N') AS USE_YN_4068
+                    ,       NVL2((  SELECT  DISTINCT PROD_CD
+                                    FROM	TB_MS_KIOSK_KEY tmkk2
+                                    WHERE 	tmkk2.STORE_CD = tmp.STORE_CD
+                                    AND		tmkk2.PROD_CD = tmp.PROD_CD
+                                    AND 	TU_CLS_TYPE IN (SELECT ENVST_VAL
+                                    FROM    TB_MS_POS_ENVST tmpe
+                                    WHERE   tmpe.STORE_CD = tmp.STORE_CD
+                                    AND     tmpe.ENVST_CD IN ('4069')
+                                    AND 	STORE_CD || POS_NO IN (SELECT STORE_CD || POS_NO
+                                    FROM TB_MS_POS_ENVST
+                                    WHERE ENVST_CD = '4019'
+                                    AND ENVST_VAL = '6'
+                                    AND STORE_CD = tmp.STORE_CD))), 'Y', 'N') AS USE_YN_4069
+                    FROM 	TB_MS_KIOSK_DISPLAY_RESVE tmkdr
+                    ,		TB_MS_PRODUCT tmp
+                    ,		TB_MS_STORE tms
+                    ,		TB_MS_STORE_INFO tmsi
+                    WHERE	tmkdr.STORE_CD = tmp.STORE_CD
+                    AND 	tmkdr.PROD_CD  = tmp.PROD_CD
+                    AND 	tmkdr.STORE_CD = tms.STORE_CD
+                    AND 	tmkdr.STORE_CD = tmsi.STORE_CD
+                    AND     tms.HQ_OFFICE_CD = #{hqOfficeCd}
+                    <if test='storeCds != null and storeCds != ""'>
+                        AND tmkdr.STORE_CD = #{storeCds}
+                    </if>
+                    <if test='prodCds != null and prodCds != ""'>
+                        AND tmkdr.PROD_CD = #{prodCds}
+                    </if>
+                    <if test='prodCd != null and prodCd != ""'>
+                        AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+                    </if>
+                    <if test='prodNm != null and prodNm != ""'>
+                        AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                    </if>
+                    <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
+                    AND     tmtkgr.START_DATE BETWEEN #{startDate} AND #{endDate}
+                    </if>
+                    <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                        AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                    </if>
+                    <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                        <if test='userBrands != null and userBrands != ""'>
+                            -- 매장브랜드 전체일때
+                            AND tms.HQ_BRAND_CD IN
+                            <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                #{item}
+                            </foreach>
+                        </if>
+                    </if>
+                    <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                        AND tmp.HQ_BRAND_CD = #{prodHqBrandCd} -- 매장브랜드 선택일때
+                    </if>
+                    <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                        <if test='userBrands != null and userBrands != ""'>
+                            -- 매장브랜드 전체일때
+                            AND tmp.HQ_BRAND_CD IN
+                            <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                                #{item}
+                            </foreach>
+                        </if>
+                    </if>
+                    <if test='momsTeam != null and momsTeam != ""'>
+                        AND tmsi.MOMS_TEAM = #{momsTeam}
+                    </if>
+                    <if test='momsAcShop != null and momsAcShop != ""'>
+                        AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                    </if>
+                    <if test='momsAreaFg != null and momsAreaFg != ""'>
+                        AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                    </if>
+                    <if test='momsCommercial != null and momsCommercial != ""'>
+                        AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                    </if>
+                    <if test='momsShopType != null and momsShopType != ""'>
+                        AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                    </if>
+                    <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                        AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                    </if>
+                    <if test='branchCd != null and branchCd != ""'>
+                        AND tms.BRANCH_CD = #{branchCd}
+                    </if>
+                    <if test='kioskDisplayYn != null and kioskDisplayYn != ""'>
+                        AND tmkdr.KIOSK_DISPLAY_YN = #{kioskDisplayYn}
+                    </if>
+                    <if test='useYn != null and useYn != ""'>
+                        AND tmp.USE_YN = #{useYn}
+                    </if>
+                ) a
+        WHERE   1=1
+        <if test='kioskUseYn != null and kioskUseYn == "Y"'>
+            AND (USE_YN_4068 = 'Y'
+            OR  USE_YN_4069 = 'Y')
+        </if>
+        <if test='kioskUseYn != null and kioskUseYn == "N"'>
+            AND USE_YN_4068 = 'N'
+            AND USE_YN_4069 = 'N'
+        </if>
+        ORDER
+        BY      STORE_CD, PROD_CD, START_DATE, START_TIME
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 상품 내역  조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY, TB_SL_SALE_HDR_DC
+        PARAM    : kioskDisplayResveVO
+        COMMENTS : 상품 내역을 조회한다.
+    -->
+    <select id="getProdList" parameterType="kioskDisplayResveVO" resultType="DefaultMap">
+        /* USE : KioskDisplayResveMapper.getProdList */
+        SELECT  *
+        FROM    (
+                SELECT  tms.BRANCH_CD
+                ,		(SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+                ,		tmp.STORE_CD
+                ,		tms.STORE_NM
+                ,		tmp.PROD_CD
+                ,		tmp.PROD_NM
+                ,		NVL(tmp.KIOSK_DISPLAY_YN, 'Y') AS ORG_KIOSK_DISPLAY_YN
+                ,       NVL2((  SELECT  DISTINCT PROD_CD
+                FROM	TB_MS_KIOSK_KEY tmkk2
+                WHERE 	tmkk2.STORE_CD = tmp.STORE_CD
+                AND		tmkk2.PROD_CD = tmp.PROD_CD
+                AND 	TU_CLS_TYPE IN (SELECT ENVST_VAL
+                FROM    TB_MS_POS_ENVST tmpe
+                WHERE   tmpe.STORE_CD = tmp.STORE_CD
+                AND     tmpe.ENVST_CD IN ('4068')
+                AND 	STORE_CD || POS_NO IN (SELECT STORE_CD || POS_NO
+                FROM TB_MS_POS_ENVST
+                WHERE ENVST_CD = '4019'
+                AND ENVST_VAL = '6'
+                AND STORE_CD = tmp.STORE_CD))), 'Y', 'N') AS USE_YN_4068
+                ,       NVL2((  SELECT  DISTINCT PROD_CD
+                FROM	TB_MS_KIOSK_KEY tmkk2
+                WHERE 	tmkk2.STORE_CD = tmp.STORE_CD
+                AND		tmkk2.PROD_CD = tmp.PROD_CD
+                AND 	TU_CLS_TYPE IN (SELECT ENVST_VAL
+                FROM    TB_MS_POS_ENVST tmpe
+                WHERE   tmpe.STORE_CD = tmp.STORE_CD
+                AND     tmpe.ENVST_CD IN ('4069')
+                AND 	STORE_CD || POS_NO IN (SELECT STORE_CD || POS_NO
+                FROM TB_MS_POS_ENVST
+                WHERE ENVST_CD = '4019'
+                AND ENVST_VAL = '6'
+                AND STORE_CD = tmp.STORE_CD))), 'Y', 'N') AS USE_YN_4069
+                FROM 	TB_MS_PRODUCT tmp
+                ,		TB_MS_STORE tms
+                ,		TB_MS_STORE_INFO tmsi
+                WHERE 	tmp.STORE_CD = tms.STORE_CD
+                AND 	tms.STORE_CD = tmsi.STORE_CD (+)
+                AND     tms.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='storeCds != null and storeCds != ""'>
+                    AND tms.STORE_CD = #{storeCds}
+                </if>
+                <if test='prodCds != null and prodCds != ""'>
+                    AND tmp.PROD_CD = #{prodCds}
+                </if>
+                <if test='prodCd != null and prodCd != ""'>
+                    AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                </if>
+                <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                    AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                </if>
+                <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                    <if test='userBrands != null and userBrands != ""'>
+                        -- 매장브랜드 전체일때
+                        AND tms.HQ_BRAND_CD IN
+                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                </if>
+                <if test='momsTeam != null and momsTeam != ""'>
+                    AND tmsi.MOMS_TEAM = #{momsTeam}
+                </if>
+                <if test='momsAcShop != null and momsAcShop != ""'>
+                    AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                </if>
+                <if test='momsAreaFg != null and momsAreaFg != ""'>
+                    AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                </if>
+                <if test='momsCommercial != null and momsCommercial != ""'>
+                    AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                </if>
+                <if test='momsShopType != null and momsShopType != ""'>
+                    AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                </if>
+                <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                    AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                </if>
+                <if test='branchCd != null and branchCd != ""'>
+                    AND tms.BRANCH_CD = #{branchCd}
+                </if>
+                )
+        WHERE   1=1
+        <if test='kioskUseYn != null and kioskUseYn == "Y"'>
+            AND (USE_YN_4068 = 'Y'
+            OR  USE_YN_4069 = 'Y')
+        </if>
+        <if test='kioskUseYn != null and kioskUseYn == "N"'>
+            AND USE_YN_4068 = 'N'
+            AND USE_YN_4069 = 'N'
+        </if>
+        ORDER
+        BY      STORE_CD, PROD_CD
+    </select>
+
+    <!-- 비노출관리(예약) 등록 전 체크 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_DISPLAY_RESVE
+        PARAM    : kioskDisplayResveVO
+        COMMENTS : 비노출관리(예약)을 등록한다.
+    -->
+    <select id="getKioskDisplayResveCnt" parameterType="kioskDisplayResveVO" resultType="Integer">
+        /* USE : KioskDisplayResveMapper.getKioskDisplayResveCnt */
+            SELECT  COUNT(*)
+            FROM    TB_MS_KIOSK_DISPLAY_RESVE
+            WHERE   STORE_CD    = #{storeCd}
+            AND     PROD_CD     = #{prodCd}
+            AND     START_DATE  = #{startDate}
+            AND     START_TIME  = #{startTime}
+            AND     RESVE_FG   != '0'
+    </select>
+
+    <!-- 비노출관리(예약) 등록 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_DISPLAY_RESVE
+        PARAM    : kioskDisplayResveVO
+        COMMENTS : 비노출관리(예약)을 등록한다.
+    -->
+    <insert id="saveKioskDisplayResve" parameterType="kioskDisplayResveVO" >
+        /* USE : KioskDisplayResveMapper.saveKioskDisplayResve */
+        MERGE INTO TB_MS_KIOSK_DISPLAY_RESVE A
+        USING DUAL
+        ON
+        (
+            A.STORE_CD      = #{storeCd}
+        AND A.PROD_CD       = #{prodCd}
+        AND A.START_DATE    = #{startDate}
+        AND A.START_TIME    = #{startTime}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            A.KIOSK_DISPLAY_YN  = #{kioskDisplayYn}
+        ,   A.MOD_DT            = #{modDt}
+        ,   A.MOD_ID            = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT  (
+                STORE_CD
+            ,   PROD_CD
+            ,   START_DATE
+            ,   START_TIME
+            ,   KIOSK_DISPLAY_YN
+            ,   RESVE_FG
+            ,   REG_DT
+            ,   REG_ID
+            ,   MOD_DT
+            ,   MOD_ID
+        ) VALUES (
+                #{storeCd}
+            ,   #{prodCd}
+            ,   #{startDate}
+            ,   #{startTime}
+            ,   #{kioskDisplayYn}
+            ,   '0'
+            ,   #{regDt}
+            ,   #{regId}
+            ,   #{modDt}
+            ,   #{modId}
+        )
+    </insert>
+
+    <!-- 판매터치키설정(예약) 삭제 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_DISPLAY_RESVE
+        PARAM    : kioskDisplayResveVO
+        COMMENTS : 판매터치키설정(예약)을 삭제한다.
+    -->
+    <delete id="deleteKioskDisplayResve" parameterType="kioskDisplayResveVO" >
+        /* USE : KioskDisplayResveMapper.deleteKioskDisplayResve */
+        DELETE
+        FROM    TB_MS_KIOSK_DISPLAY_RESVE
+        WHERE   STORE_CD = #{storeCd}
+        AND     PROD_CD = #{prodCd}
+        AND     START_DATE = #{orgStartDate}
+        AND     START_TIME = #{orgStartTime}
+        AND     KIOSK_DISPLAY_YN = #{orgKioskDisplayYn}
+        AND     RESVE_FG = '0'
+    </delete>
+</mapper>

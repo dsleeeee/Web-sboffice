@@ -1,0 +1,337 @@
+package kr.co.solbipos.base.prod.soldOutResve.web;
+
+import kr.co.common.data.enums.Status;
+import kr.co.common.data.enums.UseYn;
+import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.data.structure.Result;
+import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.jsp.CmmCodeUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.soldOutResve.service.SoldOutResveService;
+import kr.co.solbipos.base.prod.soldOutResve.service.SoldOutResveVO;
+import kr.co.solbipos.base.prod.prod.service.ProdService;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
+
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
+
+/**
+ * @Class Name : SoldOutResveController.java
+ * @Description : 기초관리 - 상품관리2 - 품절관리(예약)
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2023.05.30  권지현       최초생성
+ *
+ * @author 솔비포스 WEB개발팀 권지현
+ * @since 2023.05.30
+ * @version 1.0
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
+@Controller
+@RequestMapping(value = "/base/prod/soldOutResve")
+public class SoldOutResveController {
+
+    private final SessionService sessionService;
+    private final SoldOutResveService soldOutResveService;
+    private final ProdService prodService;
+    private final CmmEnvUtil cmmEnvUtil;
+    private final DayProdService dayProdService;
+    private final CmmCodeUtil cmmCodeUtil;
+
+
+    /** Constructor Injection */
+    @Autowired
+    public SoldOutResveController(SessionService sessionService, SoldOutResveService soldOutResveService, ProdService prodService, CmmEnvUtil cmmEnvUtil, DayProdService dayProdService, CmmCodeUtil cmmCodeUtil) {
+        this.sessionService = sessionService;
+        this.soldOutResveService = soldOutResveService;
+        this.prodService = prodService;
+        this.cmmEnvUtil = cmmEnvUtil;
+        this.dayProdService = dayProdService;
+        this.cmmCodeUtil = cmmCodeUtil;
+    }
+
+    /**
+     * 상품조회
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+
+    @RequestMapping(value = "soldOutResve/view.sb", method = RequestMethod.GET)
+    public String view(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 내일날짜
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String dateStr = formatter.format(cal.getTime());
+        model.addAttribute("toDate", dateStr);
+
+        // (상품관리)브랜드사용여부
+        model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
+
+        // 매장상품제한구분 사용여부(매장 세트구성상품 등록시 사용, 매장에서 사용하지만 본사환경설정값으로 여부파악)
+        if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
+            model.addAttribute("storeProdUseFg", "0");
+        } else {
+            model.addAttribute("storeProdUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1100"), "0"));
+        }
+
+        // 브랜드 리스트 조회(선택 콤보박스용)
+        ProdVO prodVO = new ProdVO();
+        model.addAttribute("brandList", convertToJson(prodService.getBrandList(prodVO, sessionInfoVO)));
+
+        // 사용자별 브랜드 콤보박스 조회
+        DayProdVO dayProdVO = new DayProdVO();
+        model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
+
+        /** 맘스터치 */
+        // [1250 맘스터치] 환경설정값 조회
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0"));
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
+        }
+        /** //맘스터치 */
+
+        // 사용자별 코드별 공통코드 콤보박스 조회
+        // - 팀별
+        List momsTeamComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "151");
+        model.addAttribute("momsTeamComboList", momsTeamComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsTeamComboList, "name", "value", UseYn.N));
+
+        // - AC점포별
+        List momsAcShopComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "152");
+        model.addAttribute("momsAcShopComboList", momsAcShopComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsAcShopComboList, "name", "value", UseYn.N));
+
+        // - 지역구분
+        List momsAreaFgComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "153");
+        model.addAttribute("momsAreaFgComboList", momsAreaFgComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsAreaFgComboList, "name", "value", UseYn.N));
+
+        // - 상권
+        List momsCommercialComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "154");
+        model.addAttribute("momsCommercialComboList", momsCommercialComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsCommercialComboList, "name", "value", UseYn.N));
+
+        // - 점포유형
+        List momsShopTypeComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "155");
+        model.addAttribute("momsShopTypeComboList", momsShopTypeComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsShopTypeComboList, "name", "value", UseYn.N));
+
+        // - 매장관리타입
+        List momsStoreManageTypeComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "156");
+        model.addAttribute("momsStoreManageTypeComboList", momsStoreManageTypeComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsStoreManageTypeComboList, "name", "value", UseYn.N));
+
+        // - 사용자별 그룹 콤보박스 조회
+        List branchCdComboList = dayProdService.getUserBranchComboList(sessionInfoVO);
+        model.addAttribute("branchCdComboList", branchCdComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(branchCdComboList, "name", "value", UseYn.N));
+
+        return "base/prod/soldOutResve/soldOutResveTab";
+    }
+
+    /**
+     * 예약 내역 조회
+     *
+     * @param soldOutResveVO HttpServletRequest
+     * @param request HttpServletRequest
+     * @return
+     */
+    @RequestMapping(value = "soldOutResve/getSoldOutResve.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSoldOutResve(SoldOutResveVO soldOutResveVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = soldOutResveService.getSoldOutResve(soldOutResveVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, soldOutResveVO);
+    }
+
+    /**
+     * 상품 내역 조회
+     *
+     * @param soldOutResveVO HttpServletRequest
+     * @param request HttpServletRequest
+     * @return
+     */
+    @RequestMapping(value = "soldOutResve/getProdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdList(SoldOutResveVO soldOutResveVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = soldOutResveService.getProdList(soldOutResveVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, soldOutResveVO);
+    }
+
+    /**
+     * 품절관리 예약
+     * @param soldOutResveVOs SoldOutResveVO[]
+     * @param request HttpServletRequest
+     * @return
+     */
+    @RequestMapping(value = "soldOutResve/saveSoldOutResve.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveSoldOutResve(@RequestBody SoldOutResveVO[] soldOutResveVOs, HttpServletRequest request) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = soldOutResveService.saveSoldOutResve(soldOutResveVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 품절관리(예약) 삭제
+     * @param soldOutResveVOs
+     * @param request
+     * @return
+     * @author  권지현
+     * @since   2023.05.30
+     */
+    @RequestMapping(value = "/soldOutResve/deleteSoldOutResve.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result deleteSoldOutResve(@RequestBody SoldOutResveVO[] soldOutResveVOs, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = soldOutResveService.deleteSoldOutResve(soldOutResveVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 품절관리(예약) 수정
+     * @param soldOutResveVOs
+     * @param request
+     * @return
+     * @author  권지현
+     * @since   2023.05.30
+     */
+    @RequestMapping(value = "/soldOutResve/modSoldOutResve.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result modSoldOutResve(@RequestBody SoldOutResveVO[] soldOutResveVOs, HttpServletRequest request,
+                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = soldOutResveService.modSoldOutResve(soldOutResveVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 사이드 예약 내역 조회
+     *
+     * @param soldOutResveVO HttpServletRequest
+     * @param request HttpServletRequest
+     * @return
+     */
+    @RequestMapping(value = "soldOutResve/getSdselSoldOutResve.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSdselSoldOutResve(SoldOutResveVO soldOutResveVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = soldOutResveService.getSdselSoldOutResve(soldOutResveVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, soldOutResveVO);
+    }
+
+    /**
+     * 사이드 상품 내역 조회
+     *
+     * @param soldOutResveVO HttpServletRequest
+     * @param request HttpServletRequest
+     * @return
+     */
+    @RequestMapping(value = "soldOutResve/getSdselProdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSdselProdList(SoldOutResveVO soldOutResveVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = soldOutResveService.getSdselProdList(soldOutResveVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, soldOutResveVO);
+    }
+
+    /**
+     * 사이드 품절관리 예약
+     * @param soldOutResveVOs SoldOutResveVO[]
+     * @param request HttpServletRequest
+     * @return
+     */
+    @RequestMapping(value = "soldOutResve/saveSdselSoldOutResve.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveSdselSoldOutResve(@RequestBody SoldOutResveVO[] soldOutResveVOs, HttpServletRequest request) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = soldOutResveService.saveSdselSoldOutResve(soldOutResveVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 사이드 품절관리(예약) 삭제
+     * @param soldOutResveVOs
+     * @param request
+     * @return
+     * @author  권지현
+     * @since   2023.05.30
+     */
+    @RequestMapping(value = "/soldOutResve/deleteSdselSoldOutResve.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result deleteSdselSoldOutResve(@RequestBody SoldOutResveVO[] soldOutResveVOs, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = soldOutResveService.deleteSdselSoldOutResve(soldOutResveVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 사이드 품절관리(예약) 수정
+     * @param soldOutResveVOs
+     * @param request
+     * @return
+     * @author  권지현
+     * @since   2023.05.30
+     */
+    @RequestMapping(value = "/soldOutResve/modSdselSoldOutResve.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result modSdselSoldOutResve(@RequestBody SoldOutResveVO[] soldOutResveVOs, HttpServletRequest request,
+                                  HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = soldOutResveService.modSdselSoldOutResve(soldOutResveVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+}
