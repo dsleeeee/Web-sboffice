@@ -50,6 +50,17 @@ public class VirtualLoginServiceImpl implements VirtualLoginService {
 
         if("H".equals(virtualLoginVO.getOrgnFg())) { // 본사권한으로 해당 본사코드로만 조회
             virtualLoginVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+            // 선택한 매장브랜드가 없을 때 (매장브랜드가 '전체' 일때)
+            if (virtualLoginVO.getStoreHqBrandCd() == "" || virtualLoginVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (virtualLoginVO.getUserBrands() != null && !"".equals(virtualLoginVO.getUserBrands())) {
+                    String[] userBrandList = virtualLoginVO.getUserBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        virtualLoginVO.setUserBrandList(userBrandList);
+                    }
+                }
+            }
         }
 
         if("A".equals(virtualLoginVO.getOrgnFg())) { //총판권한으로 해당 총판코드로만 조회

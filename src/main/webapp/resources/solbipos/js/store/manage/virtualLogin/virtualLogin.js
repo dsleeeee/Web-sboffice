@@ -29,6 +29,18 @@ app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
   $scope._setComboData("srchClsFg", clsFg);
   $scope._setComboData("srchStatFg", sysStatFg);
+
+  if($scope.userOrgnFg == "H"){
+    $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList);             // 매장브랜드
+    $scope._setComboData("momsTeamCombo", momsTeamComboList);                       // 팀별
+    $scope._setComboData("momsAcShopCombo", momsAcShopComboList);                   // AC점포별
+    $scope._setComboData("momsAreaFgCombo", momsAreaFgComboList);                   // 지역구분
+    $scope._setComboData("momsCommercialCombo", momsCommercialComboList);           // 상권
+    $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList);               // 점포유형
+    $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
+    $scope._setComboData("branchCdCombo", branchCdComboList);                       // 그룹
+  }
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // picker 사용시 호출 : 미사용시 호출안함
@@ -93,6 +105,33 @@ app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http) {
     // 파라미터
     var params = {};
     params.orgnFg = orgnFg;
+
+    if(momsEnvstVal === "1" && orgnFg === "HQ") { // 확장조회는 본사권한이면서 맘스터치만 사용
+      params.momsTeam = $scope.srchMomsTeamCombo.selectedValue;
+      params.momsAcShop = $scope.srchMomsAcShopCombo.selectedValue;
+      params.momsAreaFg = $scope.srchMomsAreaFgCombo.selectedValue;
+      params.momsCommercial = $scope.srchMomsCommercialCombo.selectedValue;
+      params.momsShopType = $scope.srchMomsShopTypeCombo.selectedValue;
+      params.momsStoreManageType = $scope.srchMomsStoreManageTypeCombo.selectedValue;
+      params.branchCd = $scope.srchBranchCdCombo.selectedValue;
+    }
+
+    if(brandUseFg === "1" && orgnFg === "HQ"){
+        // 선택한 매장브랜드가 있을 때
+        params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
+
+        // 선택한 매장브랜드가 없을 때('전체' 일때)
+        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+            var userHqBrandCd = "";
+            for(var i=0; i < userHqBrandCdComboList.length; i++){
+                if(userHqBrandCdComboList[i].value !== null) {
+                    userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                }
+            }
+            params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+        }
+    }
+
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/store/manage/virtualLogin/virtualLogin/list.sb", params, function() {
 
@@ -154,4 +193,14 @@ app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http) {
       document.body.removeChild(form);
     }
   };
+
+  // 확장조회 숨김/보임
+  $scope.searchAddShowChange = function(){
+    if( $("#tblSearchAddShow").css("display") === 'none') {
+      $("#tblSearchAddShow").show();
+    } else {
+      $("#tblSearchAddShow").hide();
+    }
+  };
+
 }]);

@@ -67,7 +67,26 @@ public class VirtualLoginVO extends PageVO {
     private String userIdCkeck;
     /** 권한확인 유저 아이디 버추얼로그인 실행자*/
     private String vUserIdCkeck;
-
+    /** 사용자별 브랜드코드 */
+        private String[] userBrandList;
+    /** 사용자별 브랜드코드 */
+    private String userBrands;
+    /** 매장브랜드코드 */
+    private String storeHqBrandCd;
+    /** 팀별 */
+    private String momsTeam;
+    /** AC점포별 */
+    private String momsAcShop;
+    /** 지역구분 */
+    private String momsAreaFg;
+    /** 상권 */
+    private String momsCommercial;
+    /** 점포유형 */
+    private String momsShopType;
+    /** 매장관리타입 */
+    private String momsStoreManageType;
+    /** 그룹코드 */
+    private String branchCd;
 
     /**
      * @return the hqOfficeCd
@@ -325,4 +344,84 @@ public class VirtualLoginVO extends PageVO {
     public String getvUserIdCkeck() { return vUserIdCkeck; }
 
     public void setvUserIdCkeck(String vUserIdCkeck) { this.vUserIdCkeck = vUserIdCkeck; }
+
+    public String[] getUserBrandList() {
+        return userBrandList;
+    }
+
+    public void setUserBrandList(String[] userBrandList) {
+        this.userBrandList = userBrandList;
+    }
+
+    public String getUserBrands() {
+        return userBrands;
+    }
+
+    public void setUserBrands(String userBrands) {
+        this.userBrands = userBrands;
+    }
+
+    public String getStoreHqBrandCd() {
+        return storeHqBrandCd;
+    }
+
+    public void setStoreHqBrandCd(String storeHqBrandCd) {
+        this.storeHqBrandCd = storeHqBrandCd;
+    }
+
+    public String getMomsTeam() {
+        return momsTeam;
+    }
+
+    public void setMomsTeam(String momsTeam) {
+        this.momsTeam = momsTeam;
+    }
+
+    public String getMomsAcShop() {
+        return momsAcShop;
+    }
+
+    public void setMomsAcShop(String momsAcShop) {
+        this.momsAcShop = momsAcShop;
+    }
+
+    public String getMomsAreaFg() {
+        return momsAreaFg;
+    }
+
+    public void setMomsAreaFg(String momsAreaFg) {
+        this.momsAreaFg = momsAreaFg;
+    }
+
+    public String getMomsCommercial() {
+        return momsCommercial;
+    }
+
+    public void setMomsCommercial(String momsCommercial) {
+        this.momsCommercial = momsCommercial;
+    }
+
+    public String getMomsShopType() {
+        return momsShopType;
+    }
+
+    public void setMomsShopType(String momsShopType) {
+        this.momsShopType = momsShopType;
+    }
+
+    public String getMomsStoreManageType() {
+        return momsStoreManageType;
+    }
+
+    public void setMomsStoreManageType(String momsStoreManageType) {
+        this.momsStoreManageType = momsStoreManageType;
+    }
+
+    public String getBranchCd() {
+        return branchCd;
+    }
+
+    public void setBranchCd(String branchCd) {
+        this.branchCd = branchCd;
+    }
 }
