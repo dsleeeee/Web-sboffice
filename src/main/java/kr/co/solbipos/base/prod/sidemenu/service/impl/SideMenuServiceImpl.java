@@ -594,4 +594,58 @@ public class SideMenuServiceImpl implements SideMenuService {
         return procCnt;
     }
 
+    /** 선택분류 적용매장등록 팝업 - 선택분류 조회 */
+    @Override
+    public List<DefaultMap<Object>> getSdselClassCodeComboList(SideMenuSelClassVO sideMenuSelClassVO, SessionInfoVO sessionInfoVO) {
+
+        sideMenuSelClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return sideMenuMapper.getSdselClassCodeComboList(sideMenuSelClassVO);
+    }
+
+    /** 선택분류 적용매장등록 팝업 - 적용매장 조회 */
+    @Override
+    public List<DefaultMap<Object>> getSdselClassRegStoreList(SideMenuSelClassVO sideMenuSelClassVO, SessionInfoVO sessionInfoVO) {
+
+        sideMenuSelClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return sideMenuMapper.getSdselClassRegStoreList(sideMenuSelClassVO);
+    }
+
+    /** 선택분류 적용매장등록 팝업 - 미적용매장 조회 */
+    @Override
+    public List<DefaultMap<Object>> getSdselClassNoRegStoreList(SideMenuSelClassVO sideMenuSelClassVO, SessionInfoVO sessionInfoVO) {
+
+        sideMenuSelClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return sideMenuMapper.getSdselClassNoRegStoreList(sideMenuSelClassVO);
+    }
+
+    /** 선택분류 적용매장등록 팝업 - 저장 */
+    @Override
+    public int getSdselClassRegStoreSave(SideMenuSelClassVO[] sideMenuSelClassVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(SideMenuSelClassVO sideMenuSelClassVO : sideMenuSelClassVOs) {
+
+            sideMenuSelClassVO.setModDt(currentDt);
+            sideMenuSelClassVO.setModId(sessionInfoVO.getUserId());
+
+            sideMenuSelClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+            if (sideMenuSelClassVO.getStatus() == GridDataFg.INSERT) {
+                sideMenuSelClassVO.setRegDt(currentDt);
+                sideMenuSelClassVO.setRegId(sessionInfoVO.getUserId());
+
+                procCnt = sideMenuMapper.getSdselClassRegStoreSaveInsert(sideMenuSelClassVO);
+
+            } else if (sideMenuSelClassVO.getStatus() == GridDataFg.DELETE) {
+                procCnt = sideMenuMapper.getSdselClassRegStoreSaveDelete(sideMenuSelClassVO);
+            }
+        }
+
+        return procCnt;
+    }
 }

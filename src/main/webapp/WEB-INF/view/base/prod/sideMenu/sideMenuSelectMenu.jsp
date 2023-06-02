@@ -127,6 +127,14 @@
                         <s:message code="cmm.save" />
                     </button>
                 </div>
+                <c:if test="${orgnFg == 'HQ'}">
+                    <div class="updownSet oh mb10">
+                        <%-- 적용매장등록 --%>
+                        <button class="btn_skyblue" id="btnSdselClassRegStore" ng-click="sdselClassRegStore()">
+                            <s:message code="sideMenu.selectMenu.sdselClassRegStore" />
+                        </button>
+                    </div>
+                </c:if>
                 <%-- 개발시 높이 조절해서 사용--%>
                 <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
                 <div style="height:130px;">
@@ -150,7 +158,7 @@
                         <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselQty"/>" binding="cnt" width="*" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselQty"/>" binding="fixProdCnt" width="*" visible="false"></wj-flex-grid-column>
                         <c:if test="${orgnFg == 'HQ'}">
-                            <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.regStoreFg"/>" binding="regStoreFg" data-map="regStoreFgDataMap" width="70"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.regStoreFg"/>" binding="regStoreFg" data-map="regStoreFgDataMap" width="85"></wj-flex-grid-column>
                         </c:if>
                     </wj-flex-grid>
                 </div>
@@ -205,7 +213,7 @@
                         <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.addProdQty"/>" binding="addProdQty" width="50" max-length="3"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.fixProdFg"/>" binding="fixProdFg" width="50" data-map="fixProdFgDataMap"></wj-flex-grid-column>
                         <c:if test="${orgnFg == 'HQ'}">
-                            <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.regStoreFg"/>" binding="regStoreFg" data-map="regStoreFgDataMap" width="70"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.regStoreFg"/>" binding="regStoreFg" data-map="regStoreFgDataMap" width="85"></wj-flex-grid-column>
                         </c:if>
                     </wj-flex-grid>
                 </div>
@@ -221,7 +229,7 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenu.js?ver=20230530.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenu.js?ver=20230601.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품선택 --%>
 <c:import url="/WEB-INF/view/base/prod/sideMenu/sideMenuProdView.jsp">
@@ -231,6 +239,12 @@
 
 <%-- 선택분류복사 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/sideMenu/sdselClassCopy.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 선택분류 적용매장등록 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/sideMenu/sdselClassRegStore.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
