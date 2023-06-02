@@ -17,7 +17,14 @@
            tmpll.POS_VER_NO,
            tms.SYS_STAT_FG,
            (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '005' AND NMCODE_CD = tms.SYS_STAT_FG) AS SYS_STAT_FG_NM,
-           tmpll.LOGIN_SEQ
+           tmpll.LOGIN_SEQ,
+           TO_CHAR(TO_DATE(tmpll.SYS_DATE ,'YYYYMMDD'), 'YYYY/MM/DD') AS SYS_DATE,
+           TO_CHAR(TO_DATE(tmpll.REG_DT ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS REG_DT,
+           tmpll.POS_TELEX_ID,
+           tmpll.RESULT_CD,
+           tmpll.RESULT_MSG,
+           tmpll.NXPOS_VER_NO,
+           tmpll.VER_TYPE_FG
            <include refid="CmmSQL.PagingTemplateCount"/>
       FROM TB_MS_POS_LOGIN_LOG tmpll,
            TB_MS_STORE tms,
@@ -26,6 +33,7 @@
      WHERE tms.STORE_CD (+)= tmpll.STORE_CD
        AND tms.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
        AND tca.AGENCY_CD = tms.AGENCY_CD
+       AND tmpll.POS_TELEX_ID = 'au001'
       <choose>
           <!-- 총판 -->
           <when test='orgnFg != null and orgnFg == "AGENCY"'>
@@ -40,16 +48,16 @@
        </if>
      </if>
      <if test='hqOfficeCd != null and hqOfficeCd != ""'>
-       AND tho.HQ_OFFICE_CD = #{hqOfficeCd} --본사코드
+       AND tho.HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%' --본사코드
      </if>
      <if test='hqOfficeNm != null and hqOfficeNm != ""'>
-       AND tho.HQ_OFFICE_NM = #{hqOfficeNm} --본사명
+       AND tho.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%' --본사명
      </if>
      <if test='storeCd != null and storeCd != ""'>
-       AND tms.STORE_CD = #{storeCd} --매장코드
+       AND tms.STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
      </if>
      <if test='storeNm != null and storeNm != ""'>
-       AND tms.STORE_NM = #{storeNm}
+       AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
      </if>
      <if test='sysStatFg != null and sysStatFg.name() != "ALL"'>
        AND tms.SYS_STAT_FG = #{sysStatFg} --매장상태

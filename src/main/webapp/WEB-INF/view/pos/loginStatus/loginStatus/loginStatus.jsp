@@ -12,7 +12,7 @@
 
 <div class="subCon" ng-controller="loginStatusCtrl">
   <%-- 조회조건 --%>
-  <div class="searchBar flddUnfld">
+  <div class="searchBar">
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -56,7 +56,7 @@
                       initialized="_initDateBox(s)">
               </wj-input-date>
             </span>
-            <span class="chk ml10">
+            <span class="chk ml10" style="display: none;">
               <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />
               <label for="chkDt">
                 <s:message code="cmm.all.day" />
@@ -100,7 +100,8 @@
                     display-member-path="name"
                     selected-value-path="value"
                     is-editable="false"
-                    initialized="_initComboBox(s)">
+                    initialized="_initComboBox(s)"
+                    control="srchSysStatFgCombo">
             </wj-combo-box>
           </div>
         </td>
@@ -148,7 +149,13 @@
         <wj-flex-grid-column header="<s:message code="loginStatus.loginIp"/>" binding="loginIp" align="center" width="130" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="loginStatus.posVerNo"/>" binding="posVerNo" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="loginStatus.sysStatFgNm"/>" binding="sysStatFgNm" align="center" width="90" is-read-only="true"></wj-flex-grid-column>
-
+        <wj-flex-grid-column header="<s:message code="loginStatus.sysDate"/>" binding="sysDate" align="center" width="90" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loginStatus.regDt"/>" binding="regDt" align="center" width="150" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loginStatus.posTelexId"/>" binding="posTelexId" align="center" width="90" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loginStatus.resultCd"/>" binding="resultCd" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loginStatus.resultMsg"/>" binding="resultMsg" align="center" width="110" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loginStatus.nxposVerNo"/>" binding="nxposVerNo" data-map="nxposVerNoDataMap" align="center" width="110" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loginStatus.verTypeFg"/>" binding="verTypeFg" data-map="verTypeFgDataMap" align="center" width="90" is-read-only="true"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
   </div>
@@ -170,4 +177,4 @@
   var orgnCd = "${orgnCd}";
   var pAgencyCd = "${pAgencyCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/loginStatus/loginStatus.js?ver=2019010501.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/loginStatus/loginStatus.js?ver=20230602.01" charset="utf-8"></script>

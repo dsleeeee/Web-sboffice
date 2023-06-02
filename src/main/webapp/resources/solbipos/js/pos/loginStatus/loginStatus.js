@@ -13,6 +13,18 @@
  */
 var app = agrid.getApp();
 
+// NXPOS버전구분
+var nxposVerNo = [
+  {"name":"기존버전","value":"1"},
+  {"name":"NXPOS2","value":"2"}
+];
+
+// 포스버전구분
+var verTypeFg = [
+    {"name":"NXPOS VER1","value":"1"},
+    {"name":"NXPOS VER2","value":"2"}
+];
+
 /**********************************************************************
  *  포스로그인현황 화면
  **********************************************************************/
@@ -21,7 +33,7 @@ app.controller('loginStatusCtrl', ['$scope', '$http', function ($scope, $http) {
   angular.extend(this, new RootController('loginStatusCtrl', $scope, $http, true));
 
   // 전체기간 체크박스
-  $scope.isChecked = true;
+  $scope.isChecked = false;
 
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData2);
@@ -32,6 +44,11 @@ app.controller('loginStatusCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.isChkDt = function() {
     $scope.startDateCombo.isReadOnly = $scope.isChecked;
     $scope.endDateCombo.isReadOnly = $scope.isChecked;
+  };
+
+  $scope.initGrid = function (s, e) {
+    $scope.verTypeFgDataMap = new wijmo.grid.DataMap(verTypeFg, 'value', 'name');      // NXPOS버전구분
+    $scope.nxposVerNoDataMap = new wijmo.grid.DataMap(nxposVerNo, 'value', 'name');    // 포스버전구분
   };
 
   // 조회 버튼 클릭 (_broadcast)
@@ -54,6 +71,16 @@ app.controller('loginStatusCtrl', ['$scope', '$http', function ($scope, $http) {
     //   return false;
     // }
 
+    var startDt = new Date(wijmo.Globalize.format($scope.startDate, 'yyyy-MM-dd'));
+    var endDt = new Date(wijmo.Globalize.format($scope.endDate, 'yyyy-MM-dd'));
+    var diffDay = (endDt.getTime() - startDt.getTime()) / (1000 * 60 * 60 * 24); // 시 * 분 * 초 * 밀리세컨
+
+    // 조회일자 최대 한달(31일) 제한
+    if (diffDay > 31) {
+        $scope._popMsg(messages['cmm.dateOver.1month.error']);
+        return false;
+    }
+
     console.log('$scope.listScale : '+ $scope.listScale);
 
     var params = {};
@@ -66,6 +93,11 @@ app.controller('loginStatusCtrl', ['$scope', '$http', function ($scope, $http) {
       params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMMdd');
       params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMMdd');
     }
+    params.hqOfficeCd = $("#srchHqOfficeCd").val();
+    params.hqOfficeNm = $("#srchHqOfficeNm").val();
+    params.storeCd = $("#srchStoreCd").val();
+    params.storeNm = $("#srchStoreNm").val();
+    params.sysStatFg = $scope.srchSysStatFgCombo.selectedValue;
 
     $scope._inquiryMain("/pos/confg/loginStatus/loginStatus/list.sb", params, function() {
     });
