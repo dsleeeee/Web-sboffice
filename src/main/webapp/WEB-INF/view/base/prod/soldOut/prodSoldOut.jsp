@@ -448,4 +448,4 @@
     var branchCdComboList = ${branchCdComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOut/prodSoldOut.js?ver=20230524.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOut/prodSoldOut.js?ver=20230524.02" charset="utf-8"></script>

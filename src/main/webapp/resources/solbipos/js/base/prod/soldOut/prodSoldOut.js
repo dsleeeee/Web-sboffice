@@ -197,7 +197,7 @@ app.controller('prodSoldOutCtrl', ['$scope', '$http', '$timeout', function ($sco
 
     if(orgnFg == "HQ"){
       if(($("#prodSoldOutStoreCd").val() === "" || $("#prodSoldOutStoreCd").val() === undefined) && ($("#prodSoldOutProdCd").val() === "" || $("#prodSoldOutProdCd").val() === undefined)){
-        $scope._popMsg(messages["kioskDisplay.require.select.msg"]);
+        $scope._popMsg(messages["soldOut.require.select.msg"]);
         return false;
       }
     }
