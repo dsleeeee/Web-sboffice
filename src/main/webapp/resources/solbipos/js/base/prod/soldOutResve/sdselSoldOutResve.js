@@ -183,13 +183,6 @@ app.controller('sdselSoldOutResveCtrl', ['$scope', '$http', '$timeout', function
   // 예약 내역 조회
   $scope.searchsdselSoldOutResveList = function(){
 
-    if(orgnFg == "HQ"){
-      if(($("#sdselSoldOutResveStoreCd").val() === "" || $("#sdselSoldOutResveStoreCd").val() === undefined) && ($("#sdselSoldOutResveProdCd").val() === "" || $("#sdselSoldOutResveProdCd").val() === undefined)){
-        $scope._popMsg(messages["soldOutResve.require.select.msg"]);
-        return false;
-      }
-    }
-
     // 파라미터
     var params = {};
     // 등록일자 '전체기간' 선택에 따른 params
@@ -204,6 +197,7 @@ app.controller('sdselSoldOutResveCtrl', ['$scope', '$http', '$timeout', function
     params.prodClassCd = $scope.prodClassCd;
     params.prodCd = $scope.prodCd;
     params.prodNm = $scope.prodNm;
+    params.listScale=500;
 
     if(momsEnvstVal === "1" && orgnFg === "HQ"){ // 확장조회는 본사권한이면서 맘스터치만 사용
       params.momsTeam = $scope.momsTeam;

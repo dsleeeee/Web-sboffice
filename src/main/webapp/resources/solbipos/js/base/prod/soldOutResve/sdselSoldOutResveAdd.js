@@ -210,6 +210,10 @@ app.controller('sdselSoldOutResveAddCtrl', ['$scope', '$http', function ($scope,
         params.soldOutResveYn = $scope.soldOutResveYn;
         params.useYn = $scope.useYn;
         params.prodClassCd = $scope.prodClassCd;
+        params.sdselGrpCd = $scope.sdselGrpCd;
+        params.sdselGrpNm = $scope.sdselGrpNm;
+        params.sdselClassCd = $scope.sdselClassCd;
+        params.sdselClassNm = $scope.sdselClassNm;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
 

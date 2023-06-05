@@ -138,6 +138,38 @@
                     </td>
                 </tr>
                 <tr>
+                    <%-- 선택그룹코드 --%>
+                    <th>
+                        <s:message code="sideMenuProdSoldOut.sdselGrpCd" />
+                    </th>
+                    <td>
+                        <input type="text" class="sb-input w100" id="srchSdselGrpCd" ng-model="sdselGrpCd"/>
+                    </td>
+                    <%-- 선택그룹명 --%>
+                    <th>
+                        <s:message code="sideMenuProdSoldOut.sdselGrpNm" />
+                    </th>
+                    <td>
+                        <input type="text" class="sb-input w100" id="srchSdselGrpNm" ng-model="sdselGrpNm"/>
+                    </td>
+                </tr>
+                <tr>
+                    <%-- 선택분류코드 --%>
+                    <th>
+                        <s:message code="sideMenuProdSoldOut.sdselClassCd" />
+                    </th>
+                    <td>
+                        <input type="text" class="sb-input w100" id="srchSdselClassCd" ng-model="sdselClassCd"/>
+                    </td>
+                    <%-- 선택분류명 --%>
+                    <th>
+                        <s:message code="sideMenuProdSoldOut.sdselClassNm" />
+                    </th>
+                    <td>
+                        <input type="text" class="sb-input w100" id="srchSdselClassNm" ng-model="sdselClassNm"/>
+                    </td>
+                </tr>
+                <tr>
                     <%-- 상품코드 --%>
                     <th><s:message code="prod.prodCd" /></th>
                     <td>
