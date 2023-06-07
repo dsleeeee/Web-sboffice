@@ -1373,7 +1373,7 @@
                 WHEN MATCHED THEN
                     UPDATE
                     SET thpsp.USE_YN = 'Y',
-                        thpsp.DISP_SEQ = #{dispSeq}
+                        thpsp.DISP_SEQ = #{dispSeq},
                         thpsp.MOD_DT = #{modDt},
                         thpsp.MOD_ID = #{modId}
                 WHEN NOT MATCHED THEN

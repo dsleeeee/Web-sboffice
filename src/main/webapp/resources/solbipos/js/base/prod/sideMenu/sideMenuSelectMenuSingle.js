@@ -376,6 +376,7 @@ app.controller('sideMenuSelectGroupSingleCtrl', ['$scope', '$http', function ($s
 
 }]);
 
+
 /**
  * 사이드메뉴 선택분류 그리드 생성
  */
@@ -408,9 +409,9 @@ app.controller('sideMenuSelectClassSingleCtrl', ['$scope', '$http', 'sdselGrpCd'
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-
         // 그리드 내 콤보박스 설정
         $scope.requireYnDataMap = requireYnDataMap;
+        $scope.regStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
 
         // ReadOnly 효과설정
         s.formatItem.addHandler(function (s, e) {
@@ -753,6 +754,20 @@ app.controller('sideMenuSelectClassSingleCtrl', ['$scope', '$http', 'sdselGrpCd'
         $scope.flex.select(movedRows, 1);
     };
 
+    // 선택분류 적용매장등록
+    $scope.sdselClassRegStore = function() {
+        // 선택메뉴 탭
+        var storeScope = agrid.getScope('sideMenuSelectClassCtrl');
+
+        var params = {};
+        params.sdselGrpCd = $scope.getSdselGrpCd();
+        params.sdselGrpCdNm = $("#sideSelectGroupSingleTitle").html();
+        storeScope.setSelectedSdselClass(params);
+
+        storeScope.wjSdselClassRegStoreLayer.show(true);
+        event.preventDefault();
+    };
+
 }]).factory('sdselGrpCd', function () {
   // 사이드메뉴 선택분류 그리드 의 변수 값 영역
   var sdselGrpCd = {};
@@ -764,6 +779,7 @@ app.controller('sideMenuSelectClassSingleCtrl', ['$scope', '$http', 'sdselGrpCd'
   };
   return sdselGrpCd;
 });;
+
 
 /**
  * 사이드메뉴 선택상품 그리드 생성
@@ -819,6 +835,7 @@ app.controller('sideMenuSelectProdSingleCtrl', ['$scope', '$http', 'sdselClassCd
 
     // 그리드 내 콤보박스 설정
     $scope.fixProdFgDataMap = fixProdFgDataMap;
+    $scope.regStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
 
     // 선택상품 그리드 에디팅 방지
     s.beginningEdit.addHandler(function (s, e) {
@@ -1080,6 +1097,29 @@ app.controller('sideMenuSelectProdSingleCtrl', ['$scope', '$http', 'sdselClassCd
       }, 50);
     });
   });
+
+    // 선택 매장
+    $scope.selectedSdselProd;
+    $scope.setSelectedSdselProd = function(store) {
+        $scope.selectedSdselProd = store;
+    };
+    $scope.getSelectedSdselProd = function(){
+        return $scope.selectedSdselProd;
+    };
+
+    // 선택상품 적용매장등록
+    $scope.sdselProdRegStore = function() {
+        // 선택메뉴 탭
+        var storeScope = agrid.getScope('sideMenuSelectProdCtrl');
+
+        var params = {};
+        params.sdselClassCd = $scope.getSdselClassCd();
+        params.sdselClassCdNm = $("#sideClassSingleTitle").html();
+        storeScope.setSelectedSdselProd(params);
+
+        storeScope.wjSdselProdRegStoreLayer.show(true);
+        event.preventDefault();
+    };
 
 }]).factory('sdselClassCd', function () {
   // 사이드메뉴 선택상품 그리드 의 변수 값 영역

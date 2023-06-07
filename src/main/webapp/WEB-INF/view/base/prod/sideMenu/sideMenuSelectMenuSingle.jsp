@@ -120,6 +120,14 @@
                       <s:message code="cmm.save" />
                     </button>
                 </div>
+                <c:if test="${orgnFg == 'HQ' and hqOfficeCd == 'DS021'}">
+                    <div class="updownSet oh mb10">
+                        <%-- 적용매장등록 --%>
+                        <button class="btn_skyblue" id="btnSdselClassRegStore" ng-click="sdselClassRegStore()">
+                            <s:message code="sideMenu.selectMenu.sdselClassRegStore" />
+                        </button>
+                    </div>
+                </c:if>
                 <%-- 개발시 높이 조절해서 사용--%>
                 <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
                 <div style="height:130px;">
@@ -143,6 +151,9 @@
                     <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselQty"/>" binding="cnt" width="*" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselQty"/>" binding="fixProdCnt" width="*" visible="false"></wj-flex-grid-column>
                     <%--<wj-flex-grid-column header="순서" binding="dispSeq" width="50"></wj-flex-grid-column>--%>
+                    <c:if test="${orgnFg == 'HQ' and hqOfficeCd == 'DS021'}">
+                      <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.regStoreFg"/>" binding="regStoreFg" data-map="regStoreFgDataMap" width="85"></wj-flex-grid-column>
+                    </c:if>
                   </wj-flex-grid>
                 </div>
             </div>
@@ -172,6 +183,14 @@
                   <s:message code="cmm.save" />
                 </button>
             </div>
+            <c:if test="${orgnFg == 'HQ' and hqOfficeCd == 'DS021'}">
+              <div class="updownSet oh mb10">
+                  <%-- 적용매장등록 --%>
+                  <button class="btn_skyblue" id="btnSdselProdRegStore" ng-click="sdselProdRegStore()">
+                      <s:message code="sideMenu.selectMenu.sdselClassRegStore" />
+                  </button>
+              </div>
+            </c:if>
             <%-- 개발시 높이 조절해서 사용--%>
             <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
             <div style="height:370px;">
@@ -194,7 +213,9 @@
                 <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.addProdQty"/>" binding="addProdQty" width="50" max-length="3"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.fixProdFg"/>" binding="fixProdFg" width="50" data-map="fixProdFgDataMap"></wj-flex-grid-column>
                 <%--<wj-flex-grid-column header="순서" binding="dispSeq" width="50"></wj-flex-grid-column>--%>
-
+                <c:if test="${orgnFg == 'HQ' and hqOfficeCd == 'DS021'}">
+                  <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.regStoreFg"/>" binding="regStoreFg" data-map="regStoreFgDataMap" width="85"></wj-flex-grid-column>
+                </c:if>
               </wj-flex-grid>
 
             </div>
@@ -210,4 +231,4 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenuSingle.js?ver=20230407.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenuSingle.js?ver=20230607.01" charset="utf-8"></script>
