@@ -1098,15 +1098,6 @@ app.controller('sideMenuSelectProdSingleCtrl', ['$scope', '$http', 'sdselClassCd
     });
   });
 
-    // 선택 매장
-    $scope.selectedSdselProd;
-    $scope.setSelectedSdselProd = function(store) {
-        $scope.selectedSdselProd = store;
-    };
-    $scope.getSelectedSdselProd = function(){
-        return $scope.selectedSdselProd;
-    };
-
     // 선택상품 적용매장등록
     $scope.sdselProdRegStore = function() {
         // 선택메뉴 탭
