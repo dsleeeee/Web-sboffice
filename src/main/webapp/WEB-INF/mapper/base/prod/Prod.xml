@@ -1496,6 +1496,7 @@
     <!--
         TABLE    : TB_HQ_PRODUCT_SALE_PRICE_HISTORY
         COMMENTS : 상품 판매가 변경 히스토리 저장한다.
+                   (상품_판매금액_변경이력 테이블(SALE_PRICE_HISTORY) 사용안함, 20230605)
     -->
     <insert id="saveSalePriceHistory" parameterType="prodVO">
         /* ProdMapper.saveSalePriceHistory */
@@ -7173,6 +7174,57 @@
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT FN_GET_SDSEL_GRP_CD_YN(#{storeCd}, #{sdselGrpCd}, #{prodCd})
                   FROM DUAL
+            </when>
+        </choose>
+    </select>
+
+    <!-- 기존 상품가격 조회 -->
+    <!--
+       TABLE    : TB_HQ_PRODUCT_SALE_PRICE, TB_MS_PRODUCT_SALE_PRICE
+       COMMENTS : 기존 상품가격 조회
+    -->
+    <select id="getProdSalePrice" parameterType="prodVO" resultType="DefaultMap">
+        /* ProdMapper.getProdSalePrice */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT HQ_OFFICE_CD,
+                       PROD_CD,
+                       MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+                       MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+                       MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
+                       MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
+                  FROM TB_HQ_PRODUCT_SALE_PRICE
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND PROD_CD = #{prodCd}
+                   <![CDATA[
+                       AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                       AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                   ]]>
+                   AND SALE_PRC_FG = '1'
+                 GROUP
+                    BY HQ_OFFICE_CD,
+                       PROD_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT STORE_CD,
+                       PROD_CD,
+                       MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+                       MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+                       MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
+                       MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
+                  FROM TB_MS_PRODUCT_SALE_PRICE
+                 WHERE STORE_CD = #{storeCd}
+                   AND PROD_CD = #{prodCd}
+                   <![CDATA[
+                       AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                       AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                   ]]>
+                   AND SALE_PRC_FG = '1'
+                 GROUP
+                    BY STORE_CD,
+                       PROD_CD
             </when>
         </choose>
     </select>
