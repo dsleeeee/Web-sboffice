@@ -85,7 +85,7 @@
             AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
         <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
-        AND     tmtkgr.START_DATE BETWEEN #{startDate} AND #{endDate}
+        AND     tmkdr.START_DATE BETWEEN #{startDate} AND #{endDate}
         </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -365,7 +365,7 @@
             AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
         <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
-            AND     tmtkgr.START_DATE BETWEEN #{startDate} AND #{endDate}
+            AND     tmkdr.START_DATE BETWEEN #{startDate} AND #{endDate}
         </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
