@@ -48,6 +48,7 @@ app.controller('orderCancelSrch1Ctrl', ['$scope', '$http', function ($scope, $ht
                     var params = {};
                     params.startDate  = wijmo.Globalize.format($scope.ocStartDate.value, 'yyyyMMdd');
                     params.endDate    = wijmo.Globalize.format($scope.ocEndDate.value, 'yyyyMMdd');
+                    params.storeCds   = $("#orderCancelSelectStoreCd").val();
                     $scope._broadcast('orderCancelCtrl', params);
                 }
             }
@@ -63,9 +64,16 @@ app.controller('orderCancelSrch1Ctrl', ['$scope', '$http', function ($scope, $ht
     
     // 기간내 전체취소건수 조회
     $scope.orderCancelPeriod = function () {
+
+        if($("#orderCancelSelectStoreCd").val() === ""){
+          $scope._popMsg(messages["orderStatus.storeCd"] + messages["cmm.require.select"]); // 매장코드(을)를 선택해주세요.
+          return false;
+        }
+
         var params = {};
         params.startDate  = wijmo.Globalize.format($scope.ocStartDate.value, 'yyyyMMdd');
         params.endDate    = wijmo.Globalize.format($scope.ocEndDate.value, 'yyyyMMdd');
+        params.storeCds = $("#orderCancelSelectStoreCd").val();
 
         // 주문취소 grid 초기화
         var wjGridOrderCancel = wijmo.Control.getControl("#wjGridOrderCancel");
@@ -82,6 +90,13 @@ app.controller('orderCancelSrch1Ctrl', ['$scope', '$http', function ($scope, $ht
             var scope3 = agrid.getScope('orderCancelSrch3Ctrl');
             scope3.orderCancelByCashier(params);
         });
+    };
+
+    // 매장선택 모듈 팝업 사용시 정의 (매장찾기)
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+    $scope.orderCancelSelectStoreShow = function () {
+        $scope._broadcast('orderCancelSelectStoreCtrl');
     };
 
 }]);
@@ -118,6 +133,7 @@ app.controller('orderCancelSrch2Ctrl', ['$scope', '$http', function ($scope, $ht
                     params.startDate  = wijmo.Globalize.format($scope.ocStartDate.value, 'yyyyMMdd');
                     params.endDate    = wijmo.Globalize.format($scope.ocEndDate.value, 'yyyyMMdd');
                     params.saleDate   = selectedRow.saleDate.replaceAll("-","");
+                    params.storeCds   = $("#orderCancelSelectStoreCd").val();
                     $scope._broadcast('orderCancelCtrl', params);
                 }
             }
@@ -167,6 +183,7 @@ app.controller('orderCancelSrch3Ctrl', ['$scope', '$http', function ($scope, $ht
                     params.startDate  = wijmo.Globalize.format($scope.ocStartDate.value, 'yyyyMMdd');
                     params.endDate    = wijmo.Globalize.format($scope.ocEndDate.value, 'yyyyMMdd');
                     params.empNo      = selectedRow.empNo;
+                    params.storeCds   = $("#orderCancelSelectStoreCd").val();
                     $scope._broadcast('orderCancelCtrl', params);
                 }
             }

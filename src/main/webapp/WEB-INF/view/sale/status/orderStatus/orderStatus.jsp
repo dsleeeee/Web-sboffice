@@ -66,6 +66,22 @@
           </div>
       </td>
     </tr>
+    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+        <tr>
+            <%-- 매장코드 --%>
+            <th><s:message code="orderStatus.storeCd"/></th>
+            <td>
+                <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                    <jsp:param name="targetId" value="orderStatusSelectStore"/>
+                </jsp:include>
+            </td>
+            <th></th>
+            <td></td>
+        </tr>
+    </c:if>
+    <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+        <input type="hidden" id="orderStatusSelectStoreCd" value="${sessionInfo.storeCd}"/>
+    </c:if>
    </tbody>
   </table>
   <%--//searchTbl--%>
@@ -147,7 +163,7 @@
   <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderStatus/orderStatus.js?ver=20230517.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderStatus/orderStatus.js?ver=20230608.01" charset="utf-8"></script>
 
 <%-- 상세 팝업 --%>
 <c:import url="/WEB-INF/view/sale/status/orderStatus/orderStatusDtl.jsp">

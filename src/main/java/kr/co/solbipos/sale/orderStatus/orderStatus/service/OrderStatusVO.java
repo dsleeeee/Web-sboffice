@@ -24,6 +24,10 @@ public class OrderStatusVO extends PageVO {
     private String orderDtlFg;
     /** 사원번호 */
     private String empNo;
+    /** 매장코드 */
+    private String[] storeCdList;
+    /** 조회매장 */
+    private String storeCds;
 
     /**
      * @return the hqOfficeCd
@@ -111,5 +115,21 @@ public class OrderStatusVO extends PageVO {
 
     public void setEmpNo(String empNo) {
         this.empNo = empNo;
+    }
+
+    public String[] getStoreCdList() {
+        return storeCdList;
+    }
+
+    public void setStoreCdList(String[] storeCdList) {
+        this.storeCdList = storeCdList;
+    }
+
+    public String getStoreCds() {
+        return storeCds;
+    }
+
+    public void setStoreCds(String storeCds) {
+        this.storeCds = storeCds;
     }
 }

@@ -39,6 +39,22 @@
                 </div>
               </td>
             </tr>
+            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                <tr>
+                    <%-- 매장코드 --%>
+                    <th><s:message code="orderStatus.storeCd"/></th>
+                    <td>
+                        <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                            <jsp:param name="targetId" value="orderCancelSelectStore"/>
+                        </jsp:include>
+                    </td>
+                    <th></th>
+                    <td></td>
+                </tr>
+            </c:if>
+            <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+                <input type="hidden" id="orderCancelSelectStoreCd" value="${sessionInfo.storeCd}"/>
+            </c:if>
            </tbody>
           </table>
         <%--//searchTbl--%>
@@ -181,7 +197,7 @@
   var arrGuestCol = guestCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderStatus/orderCancel.js?ver=20230517.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderStatus/orderCancel.js?ver=20230608.01" charset="utf-8"></script>
 
 <%-- 영수증 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/cmmSalePopup/billInfo/billInfo.jsp">
