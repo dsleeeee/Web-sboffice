@@ -64,18 +64,33 @@ app.controller('prodDeleteCtrl', ['$scope', '$http', function ($scope, $http) {
     // 전체상품삭제
     $scope.allProdDelete = function () {
 
-        // 모든 상품을 삭제하시겠습니까?
+        // 모든 상품을 삭제하시겠습니까? 전체상품이 삭제됩니다. 주의하여 주십시오.
         $scope._popConfirm(messages["prod.allDelete.msg"], function() {
 
-            var params = {};
+            // 비밀번호 체크
+            if($("#delPwd").val() === ""){
+                $scope._popMsg(messages["prod.delPwd.msg"]); // 비밀번호를 입력하세요.
+                return false;
+            }
 
-            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._postJSONSave.withPopUp("/base/prod/prod/prod/allProdDelete.sb", params, function () {
+            if($("#delPwd").val() !== userId){
+                $scope._popMsg(messages["prod.delPwdChk.msg"]); // 비밀번호가 일치하지 않습니다. 다시 입력하세요.
+                return false;
+            }
 
-                // 부모창 재조회 및 팝업닫기
-                var scope = agrid.getScope('prodCtrl');
-                scope.searchProdList();
-                $scope.prodDeleteLayer.hide(true);
+            // 삭제하시겠습니까?
+            $scope._popConfirm(messages["cmm.choo.delete"], function() {
+
+                var params = {};
+
+                // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+                $scope._postJSONSave.withPopUp("/base/prod/prod/prod/allProdDelete.sb", params, function () {
+
+                    // 부모창 재조회 및 팝업닫기
+                    var scope = agrid.getScope('prodCtrl');
+                    scope.searchProdList();
+                    $scope.prodDeleteLayer.hide(true);
+                });
             });
         });
     };
