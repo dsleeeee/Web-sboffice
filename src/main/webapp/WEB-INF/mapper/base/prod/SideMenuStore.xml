@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SideMenuStore.xml
+    매장별사이드관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2023.06.07     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.prod.sideMenuStore.service.impl.SideMenuStoreMapper">
+
+    <!-- 선택분류(매장별) 탭 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSideMenuClassStoreList"  parameterType="SideMenuStoreVO" resultType="DefaultMap">
+        /* SideMenuStoreMapper.getSideMenuClassStoreList */
+        SELECT *
+        FROM
+        (
+            SELECT
+            #{storeCd} AS STORE_CD,
+            (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = #{storeCd}) AS STORE_NM,
+            A.SDSEL_GRP_CD,
+            A.SDSEL_GRP_NM,
+            B.SDSEL_CLASS_CD,
+            B.SDSEL_CLASS_NM,
+            NVL(B.REG_STORE_FG, '0') AS REG_STORE_FG,
+            (CASE WHEN C.STORE_CD IS NOT NULL THEN 'Y' ELSE 'N' END) AS REG_YN
+            FROM TB_HQ_PRODUCT_SDSEL_GROUP A,
+            TB_HQ_PRODUCT_SDSEL_CLASS B,
+            TB_HQ_PRODUCT_SDSEL_CLASS_REG_STORE C
+            WHERE 1=1
+            AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+                AND A.SDSEL_GRP_CD = #{sdselGrpCd}
+            </if>
+            AND NVL(B.REG_STORE_FG, '0') IN ('1', '2')
+            AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+            AND B.SDSEL_GRP_CD = A.SDSEL_GRP_CD
+            AND C.STORE_CD (+)= #{storeCd}
+            AND C.HQ_OFFICE_CD (+)= B.HQ_OFFICE_CD
+            AND C.SDSEL_CLASS_CD (+)= B.SDSEL_CLASS_CD
+        )
+        WHERE 1=1
+        <if test='regYn != null and regYn != ""'>
+            AND REG_YN = #{regYn}
+        </if>
+        ORDER BY SDSEL_GRP_CD, SDSEL_CLASS_CD
+    </select>
+
+    <!-- 선택분류(매장별) 탭 - 저장 insert -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getSideMenuClassStoreSaveInsert" parameterType="SideMenuStoreVO">
+        /* SideMenuStoreMapper.getSideMenuClassStoreSaveInsert */
+        INSERT INTO TB_HQ_PRODUCT_SDSEL_CLASS_REG_STORE
+        (
+            HQ_OFFICE_CD,
+            SDSEL_CLASS_CD,
+            STORE_CD,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{hqOfficeCd},
+            #{sdselClassCd},
+            #{storeCd},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 선택분류(매장별) 탭 - 저장 delete -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getSideMenuClassStoreSaveDelete" parameterType="SideMenuStoreVO">
+        /* SideMenuStoreMapper.getSideMenuClassStoreSaveDelete */
+        DELETE
+        TB_HQ_PRODUCT_SDSEL_CLASS_REG_STORE
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND SDSEL_CLASS_CD = #{sdselClassCd}
+        AND STORE_CD = #{storeCd}
+    </insert>
+
+</mapper>
