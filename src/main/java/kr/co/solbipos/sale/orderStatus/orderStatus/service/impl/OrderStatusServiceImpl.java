@@ -43,8 +43,13 @@ public class OrderStatusServiceImpl implements OrderStatusService {
     public List<DefaultMap<String>> getOrderStatusList(OrderStatusVO orderStatusVO, SessionInfoVO sessionInfoVO) {
         orderStatusVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-            orderStatusVO.setStoreCd(sessionInfoVO.getStoreCd());
+            orderStatusVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
+
+        // 매장 array 값 세팅
+        String[] storeCds = orderStatusVO.getStoreCds().split(",");
+        orderStatusVO.setStoreCdList(storeCds);
+
         return orderStatusMapper.getOrderStatusList(orderStatusVO);
     }
 
@@ -60,8 +65,12 @@ public class OrderStatusServiceImpl implements OrderStatusService {
     public List<DefaultMap<String>> getOrderCancelPeriod(OrderStatusVO orderStatusVO, SessionInfoVO sessionInfoVO) {
         orderStatusVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-            orderStatusVO.setStoreCd(sessionInfoVO.getStoreCd());
+            orderStatusVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
+        // 매장 array 값 세팅
+        String[] storeCds = orderStatusVO.getStoreCds().split(",");
+        orderStatusVO.setStoreCdList(storeCds);
+
         return orderStatusMapper.getOrderCancelPeriod(orderStatusVO);
     }
 
@@ -70,8 +79,12 @@ public class OrderStatusServiceImpl implements OrderStatusService {
     public List<DefaultMap<String>> getOrderCancelByDate(OrderStatusVO orderStatusVO, SessionInfoVO sessionInfoVO) {
         orderStatusVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-            orderStatusVO.setStoreCd(sessionInfoVO.getStoreCd());
+            orderStatusVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
+        // 매장 array 값 세팅
+        String[] storeCds = orderStatusVO.getStoreCds().split(",");
+        orderStatusVO.setStoreCdList(storeCds);
+
         return orderStatusMapper.getOrderCancelByDate(orderStatusVO);
     }
 
@@ -80,8 +93,12 @@ public class OrderStatusServiceImpl implements OrderStatusService {
     public List<DefaultMap<String>> getOrderCancelByCashier(OrderStatusVO orderStatusVO, SessionInfoVO sessionInfoVO) {
         orderStatusVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-            orderStatusVO.setStoreCd(sessionInfoVO.getStoreCd());
+            orderStatusVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
+        // 매장 array 값 세팅
+        String[] storeCds = orderStatusVO.getStoreCds().split(",");
+        orderStatusVO.setStoreCdList(storeCds);
+
         return orderStatusMapper.getOrderCancelByCashier(orderStatusVO);
     }
 
@@ -90,8 +107,12 @@ public class OrderStatusServiceImpl implements OrderStatusService {
     public List<DefaultMap<String>> getOrderCancelList(OrderStatusVO orderStatusVO, SessionInfoVO sessionInfoVO) {
         orderStatusVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-            orderStatusVO.setStoreCd(sessionInfoVO.getStoreCd());
+            orderStatusVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
+        // 매장 array 값 세팅
+        String[] storeCds = orderStatusVO.getStoreCds().split(",");
+        orderStatusVO.setStoreCdList(storeCds);
+
         return orderStatusMapper.getOrderCancelList(orderStatusVO);
     }
 

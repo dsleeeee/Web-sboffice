@@ -143,15 +143,29 @@ app.controller('orderStatusCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 그리드 조회
   $scope.searchOrderStatusList = function(){
+
+    if($("#orderStatusSelectStoreCd").val() === ""){
+      $scope._popMsg(messages["orderStatus.storeCd"] + messages["cmm.require.select"]); // 매장코드(을)를 선택해주세요.
+      return false;
+    }
+
     var params = {};
     params.startDate  = wijmo.Globalize.format($scope.startDate.value, 'yyyyMMdd');
     params.endDate    = wijmo.Globalize.format($scope.endDate.value, 'yyyyMMdd');
     params.orderFg    = $scope.orderFgCombo.selectedValue;
     params.orderDtlFg = $scope.orderDtlFgCombo.selectedValue;
     params.listScale  = $scope.listScale;
+    params.storeCds = $("#orderStatusSelectStoreCd").val();
 
     $scope._inquiryMain('/sale/orderStatus/orderStatus/orderStatus/getOrderStatusList.sb', params);
   };
   // <-- //검색 호출 -->
+
+    // 매장선택 모듈 팝업 사용시 정의 (매장찾기)
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+    $scope.orderStatusSelectStoreShow = function () {
+        $scope._broadcast('orderStatusSelectStoreCtrl');
+    };
 
 }]);
