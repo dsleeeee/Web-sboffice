@@ -433,4 +433,26 @@ public class IostockCmmController {
 
         return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
     }
+
+    /**
+     * 선택그룹 공통 - 선택그룹 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   iostockCmmVO
+     * @return  String
+     * @author  김설아
+     * @since   2023. 06. 08.
+     */
+    @RequestMapping(value = "/selectSdselGrpList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectSdselGrpList(HttpServletRequest request, HttpServletResponse response,
+                                      Model model, IostockCmmVO iostockCmmVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = iostockCmmService.selectSdselGrpList(iostockCmmVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
+    }
 }
