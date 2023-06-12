@@ -27,4 +27,7 @@ public interface SideMenuStoreService {
 
     /** 선택분류(매장별) 탭 - 저장 */
     int getSideMenuClassStoreSave(SideMenuStoreVO[] sideMenuStoreVOs, SessionInfoVO sessionInfoVO);
+
+    /** 선택분류(선택분류별) 탭 - 조회 */
+    List<DefaultMap<Object>> getSideMenuClassList(SideMenuStoreVO sideMenuStoreVO, SessionInfoVO sessionInfoVO);
 }
