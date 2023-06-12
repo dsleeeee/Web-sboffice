@@ -14,7 +14,7 @@
 
         <%-- 조회조건 --%>
         <div class="searchBar flddUnfld">
-            <a href="#" class="open fl"><s:message code="sideMenuStore.info"/></a>
+            <a href="#" class="open fl"><s:message code="sideMenuStoreTab.sideMenuClassStore"/></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
                 <button class="btn_blue fr" ng-click="_broadcast('sideMenuClassStoreCtrl',1)">
@@ -137,7 +137,7 @@
                     <wj-flex-grid-column header="<s:message code="sideMenuStore.sdselGrpNm"/>" binding="sdselGrpNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="sideMenuStore.sdselClassCd"/>" binding="sdselClassCd" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="sideMenuStore.sdselClassNm"/>" binding="sdselClassNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="sideMenuStore.regStoreFg"/>" binding="regStoreFg" data-map="regStoreFgDataMap" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="sideMenuStore.regStoreFg"/>" binding="regStoreFg" data-map="regStoreFgDataMap" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="sideMenuStore.regYn"/>" binding="regYn" data-map="regYnDataMap" width="80" align="center"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
@@ -146,4 +146,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenuStore/sideMenuClassStore.js?ver=20230608.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenuStore/sideMenuClassStore.js?ver=20230612.01" charset="utf-8"></script>

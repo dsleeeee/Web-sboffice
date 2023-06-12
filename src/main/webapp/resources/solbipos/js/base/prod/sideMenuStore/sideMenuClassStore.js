@@ -32,7 +32,7 @@ var regStoreFgData = [
 ];
 
 /**
- *  선택분류(매장별 조회 그리드 생성
+ *  선택분류(매장별) 조회 그리드 생성
  */
 app.controller('sideMenuClassStoreCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
@@ -41,13 +41,13 @@ app.controller('sideMenuClassStoreCtrl', ['$scope', '$http', '$timeout', functio
 
     // 콤보박스 셋팅
     $scope._setComboData("regYnCombo", regYnAllData); // 등록구분
-    $scope._setComboData("regYnChgCombo", regYnData); // 등록구분
+    $scope._setComboData("regYnChgCombo", regYnData); // 일괄변경 - 등록구분
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // 그리드 DataMap 설정
         $scope.regStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
-        $scope.regYnDataMap = new wijmo.grid.DataMap(regYnData, 'value', 'name'); // 일괄변경 - 등록구분
+        $scope.regYnDataMap = new wijmo.grid.DataMap(regYnData, 'value', 'name'); // 등록구분
 
         // 그리드 값 변경 시 체크박스 체크
         s.cellEditEnded.addHandler(function (s, e) {
@@ -90,7 +90,7 @@ app.controller('sideMenuClassStoreCtrl', ['$scope', '$http', '$timeout', functio
         $scope._broadcast('sideMenuClassStoreStoreCtrl');
     };
 
-    // 매장선택 모듈 팝업 사용시 정의
+    // 선택그룹 선택 모듈 팝업 사용시 정의
     // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
     // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
     $scope.sideMenuClassStoreSdselGrpShow = function () {
@@ -141,6 +141,7 @@ app.controller('sideMenuClassStoreCtrl', ['$scope', '$http', '$timeout', functio
                     params.push($scope.flex.collectionView.items[i]);
                 }
             }
+
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._save("/base/prod/sideMenuStore/sideMenuClassStore/getSideMenuClassStoreSave.sb", params, function(){
                 $scope.searchSideMenuClassStore();
