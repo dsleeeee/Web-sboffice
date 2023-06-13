@@ -707,7 +707,13 @@
                 thp.PROD_CD,
                 thp.PROD_NM,
                 thpsp.SALE_UPRC AS HQ_SALE_UPRC, -- 본사판매가
-                thpsp.SALE_UPRC AS SALE_UPRC -- 변경판매가
+                thpsp.SALE_UPRC AS SALE_UPRC,    -- 변경판매가
+                thpsp.STIN_SALE_UPRC AS HQ_STIN_SALE_UPRC, -- 본사내점판매가
+                thpsp.STIN_SALE_UPRC AS STIN_SALE_UPRC,    -- 변경내점판매가
+                thpsp.DLVR_SALE_UPRC AS HQ_DLVR_SALE_UPRC, -- 본사배달판매가
+                thpsp.DLVR_SALE_UPRC AS DLVR_SALE_UPRC,    -- 변경배달판매가
+                thpsp.PACK_SALE_UPRC AS HQ_PACK_SALE_UPRC, -- 본사포장판매가
+                thpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC     -- 변경포장판매가
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_HQ_PRODUCT thp,
                 (
@@ -744,9 +750,15 @@
                 tms.STORE_NM,
                 tmp.PROD_CD,
                 tmp.PROD_NM,
-                thpsp.SALE_UPRC AS HQ_SALE_UPRC, -- 본사판매가
+                thpsp.SALE_UPRC AS HQ_SALE_UPRC,    -- 본사판매가
                 tmpsp.SALE_UPRC AS STORE_SALE_UPRC, -- 매장판매가
-                tmpsp.SALE_UPRC AS SALE_UPRC, -- 매장변경판매가
+                tmpsp.SALE_UPRC AS SALE_UPRC,       -- 변경판매가
+                tmpsp.STIN_SALE_UPRC AS STORE_STIN_SALE_UPRC, -- 매장내점판매가
+                tmpsp.STIN_SALE_UPRC AS STIN_SALE_UPRC,       -- 변경내점판매가
+                tmpsp.DLVR_SALE_UPRC AS STORE_DLVR_SALE_UPRC, -- 매장배달판매가
+                tmpsp.DLVR_SALE_UPRC AS DLVR_SALE_UPRC,       -- 변경배달판매가
+                tmpsp.PACK_SALE_UPRC AS STORE_PACK_SALE_UPRC, -- 매장포장판매가
+                tmpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC,       -- 변경포장판매가
                 thn.STORE_CHG_NOT
                 FROM TB_MS_PRODUCT tmp,
                 TB_MS_STORE tms,
@@ -832,7 +844,13 @@
                 A.PROD_CD,
                 thp.PROD_NM,
                 thpsp.SALE_UPRC AS HQ_SALE_UPRC, -- 본사판매가
-                A.SALE_UPRC, -- 변경판매가
+                A.SALE_UPRC,                     -- 변경판매가
+                thpsp.STIN_SALE_UPRC AS HQ_STIN_SALE_UPRC, -- 본사내점판매가
+                A.STIN_SALE_UPRC,                          -- 변경내점판매가
+                thpsp.DLVR_SALE_UPRC AS HQ_DLVR_SALE_UPRC, -- 본사배달판매가
+                A.DLVR_SALE_UPRC,                          -- 변경배달판매가
+                thpsp.PACK_SALE_UPRC AS HQ_PACK_SALE_UPRC, -- 본사포장판매가
+                A.PACK_SALE_UPRC,                          -- 변경포장판매가
                 thp.PRC_CTRL_FG,
                 A.SEQ
                 FROM TB_TMP_EXCEL_SALE_PRICE A,
@@ -869,9 +887,15 @@
                 tms.STORE_NM,
                 A.PROD_CD,
                 tmp.PROD_NM,
-                thpsp.SALE_UPRC AS HQ_SALE_UPRC, -- 본사판매가
+                thpsp.SALE_UPRC AS HQ_SALE_UPRC,    -- 본사판매가
                 tmpsp.SALE_UPRC AS STORE_SALE_UPRC, -- 매장판매가
-                A.SALE_UPRC,
+                A.SALE_UPRC,                        -- 변경판매가
+                tmpsp.STIN_SALE_UPRC AS STORE_STIN_SALE_UPRC, -- 매장내점판매가
+                A.STIN_SALE_UPRC,                             -- 변경내점판매가
+                tmpsp.DLVR_SALE_UPRC AS STORE_DLVR_SALE_UPRC, -- 매장배달판매가
+                A.DLVR_SALE_UPRC,                             -- 변경배달판매가
+                tmpsp.PACK_SALE_UPRC AS STORE_PACK_SALE_UPRC, -- 매장포장판매가
+                A.PACK_SALE_UPRC,
                 tmp.PRC_CTRL_FG,
                 A.SEQ
                 FROM TB_TMP_EXCEL_SALE_PRICE A,
@@ -991,7 +1015,10 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            STIN_SALE_UPRC,
+            DLVR_SALE_UPRC,
+            PACK_SALE_UPRC
         ) VALUES (
             #{sessionId},
             #{seq},
@@ -1003,7 +1030,10 @@
             #{regDt},
             #{regId},
             #{modDt},
-            #{modId}
+            #{modId},
+            NVL(#{stinSaleUprc}, #{saleUprc}),
+            NVL(#{dlvrSaleUprc}, #{saleUprc}),
+            NVL(#{packSaleUprc}, #{saleUprc})
          )
     </insert>
 

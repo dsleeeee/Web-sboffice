@@ -333,6 +333,33 @@ public class SalePriceServiceImpl implements SalePriceService {
                 salePriceVO.setResult("판매가를 입력해주세요.");
             }
 
+            // 내점판매가
+            if(salePriceVO.getStinSaleUprc() != null && !"".equals(salePriceVO.getStinSaleUprc())) {
+                if(Pattern.matches(pattern, salePriceVO.getStinSaleUprc())) {
+                    salePriceVO.setStinSaleUprc(salePriceVO.getStinSaleUprc());
+                } else {
+                    salePriceVO.setResult("내점판매가는 숫자만 입력가능합니다.");
+                }
+            }
+
+            // 배달판매가
+            if(salePriceVO.getDlvrSaleUprc() != null && !"".equals(salePriceVO.getDlvrSaleUprc())) {
+                if(Pattern.matches(pattern, salePriceVO.getDlvrSaleUprc())) {
+                    salePriceVO.setDlvrSaleUprc(salePriceVO.getDlvrSaleUprc());
+                } else {
+                    salePriceVO.setResult("배달판매가는 숫자만 입력가능합니다.");
+                }
+            }
+
+            // 포장판매가
+            if(salePriceVO.getPackSaleUprc() != null && !"".equals(salePriceVO.getPackSaleUprc())) {
+                if(Pattern.matches(pattern, salePriceVO.getPackSaleUprc())) {
+                    salePriceVO.setPackSaleUprc(salePriceVO.getPackSaleUprc());
+                } else {
+                    salePriceVO.setResult("포장판매가는 숫자만 입력가능합니다.");
+                }
+            }
+
             // 본사판매가
             if(("H").equals(salePriceVO.getSalePriceOrgnFg())) {
                 // 상품코드 존재여부 체크

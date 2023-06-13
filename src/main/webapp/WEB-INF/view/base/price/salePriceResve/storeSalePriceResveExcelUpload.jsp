@@ -82,6 +82,16 @@
                 <wj-flex-grid-column header="<s:message code="storeSalePriceResveExcelUpload.hqSaleUprc"/>" binding="hqSaleUprc" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeSalePriceResveExcelUpload.storeSaleUprc"/>" binding="storeSaleUprc" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeSalePriceResveExcelUpload.saleUprc"/>" binding="saleUprc" width="100" align="right"></wj-flex-grid-column>
+
+                <c:if test="${subPriceFg == '1'}">
+                    <wj-flex-grid-column header="<s:message code="storeSalePriceResveExcelUpload.storeStinSaleUprc"/>" binding="storeStinSaleUprc" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeSalePriceResveExcelUpload.stinSaleUprc"/>" binding="stinSaleUprc" width="100" align="right"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeSalePriceResveExcelUpload.storeDlvrSaleUprc"/>" binding="storeDlvrSaleUprc" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeSalePriceResveExcelUpload.dlvrSaleUprc"/>" binding="dlvrSaleUprc" width="100" align="right"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeSalePriceResveExcelUpload.storePackSaleUprc"/>" binding="storePackSaleUprc" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeSalePriceResveExcelUpload.packSaleUprc"/>" binding="packSaleUprc" width="100" align="right"></wj-flex-grid-column>
+                </c:if>
+
                 <%-- [1250 맘스터치] --%>
                 <c:if test="${momsEnvstVal == '1'}">
                     <wj-flex-grid-column header="<s:message code="storeSalePriceResveExcelUpload.storeChgNot"/>" binding="storeChgNot" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -159,6 +169,16 @@
                     <wj-flex-grid-column header="<s:message code="storeSalePriceResveExcelUpload.hqSaleUprc"/>" binding="hqSaleUprc" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeSalePriceResveExcelUpload.storeSaleUprc"/>" binding="storeSaleUprc" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeSalePriceResveExcelUpload.saleUprc"/>" binding="saleUprc" width="100" align="right"></wj-flex-grid-column>
+
+                    <c:if test="${subPriceFg == '1'}">
+                        <wj-flex-grid-column header="<s:message code="storeSalePriceResveExcelUpload.storeStinSaleUprc"/>" binding="storeStinSaleUprc" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeSalePriceResveExcelUpload.stinSaleUprc"/>" binding="stinSaleUprc" width="100" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeSalePriceResveExcelUpload.storeDlvrSaleUprc"/>" binding="storeDlvrSaleUprc" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeSalePriceResveExcelUpload.dlvrSaleUprc"/>" binding="dlvrSaleUprc" width="100" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeSalePriceResveExcelUpload.storePackSaleUprc"/>" binding="storePackSaleUprc" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeSalePriceResveExcelUpload.packSaleUprc"/>" binding="packSaleUprc" width="100" align="right"></wj-flex-grid-column>
+                    </c:if>
+
                     <wj-flex-grid-column header="<s:message code="storeSalePriceResveExcelUpload.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
 
                     <%-- 삭제시 필요 --%>
@@ -175,7 +195,7 @@
     var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeSalePriceResveExcelUpload.js?ver=20230421.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeSalePriceResveExcelUpload.js?ver=20230613.01" charset="utf-8"></script>
 
 <%-- 가격예약(매장판매가) 엑셀업로드 팝업 --%>
 <c:import url="/WEB-INF/view/base/price/salePriceResve/storeSalePriceResveExcelUploadAdd.jsp">

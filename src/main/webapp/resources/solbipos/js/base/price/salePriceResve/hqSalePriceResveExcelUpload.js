@@ -155,6 +155,13 @@ app.controller('hqSalePriceResveExcelUploadCtrl', ['$scope', '$http', '$timeout'
             $scope.flex.collectionView.items[i].result = result;
             $scope.flex.collectionView.items[i].salePriceOrgnFg = "H";
 
+            // 잘못된 판매단가값이 복사되어 내점/포장/배달 판매가에 들어가있으면(hidden 상태) 검증과정에서 걸린다.
+            if(subPriceFg === "0"){
+                $scope.flex.collectionView.items[i].stinSaleUprc = "";
+                $scope.flex.collectionView.items[i].dlvrSaleUprc = "";
+                $scope.flex.collectionView.items[i].packSaleUprc = "";
+            }
+
             params.push($scope.flex.collectionView.items[i]);
         }
 
@@ -225,6 +232,14 @@ app.controller('hqSalePriceResveExcelUploadCtrl', ['$scope', '$http', '$timeout'
             $scope.flex.collectionView.items[i].startDate = wijmo.Globalize.format($scope.excelUploadStartDateCombo.value, 'yyyyMMdd');
             $scope.flex.collectionView.items[i].endDate = wijmo.Globalize.format($scope.excelUploadEndDateCombo.value, 'yyyyMMdd');
             $scope.flex.collectionView.items[i].salePriceOrgnFg = "H";
+
+            // 내점/배달/포장 가격관리 미사용일 때, 내점/포장/배달 판매가는 쿼리에서 판매단가로 대체하여 넣는다.
+            if(subPriceFg === "0"){
+                $scope.flex.collectionView.items[i].stinSaleUprc = "";
+                $scope.flex.collectionView.items[i].dlvrSaleUprc = "";
+                $scope.flex.collectionView.items[i].packSaleUprc = "";
+            }
+
             params.push($scope.flex.collectionView.items[i]);
         }
 
