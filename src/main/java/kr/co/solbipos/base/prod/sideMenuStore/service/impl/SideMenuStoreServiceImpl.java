@@ -85,4 +85,41 @@ public class SideMenuStoreServiceImpl implements SideMenuStoreService {
 
         return sideMenuStoreMapper.getSideMenuClassList(sideMenuStoreVO);
     }
+
+    /** 선택상품(매장별) 탭 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getSideMenuProdStoreList(SideMenuStoreVO sideMenuStoreVO, SessionInfoVO sessionInfoVO) {
+
+        sideMenuStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return sideMenuStoreMapper.getSideMenuProdStoreList(sideMenuStoreVO);
+    }
+
+    /** 선택상품(매장별) 탭 - 저장 */
+    @Override
+    public int getSideMenuProdStoreSave(SideMenuStoreVO[] sideMenuStoreVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(SideMenuStoreVO sideMenuStoreVO : sideMenuStoreVOs) {
+
+            sideMenuStoreVO.setModDt(currentDt);
+            sideMenuStoreVO.setModId(sessionInfoVO.getUserId());
+
+            sideMenuStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+            if (sideMenuStoreVO.getRegYn().equals("Y")) {
+                sideMenuStoreVO.setRegDt(currentDt);
+                sideMenuStoreVO.setRegId(sessionInfoVO.getUserId());
+
+                procCnt = sideMenuStoreMapper.getSideMenuProdStoreSaveInsert(sideMenuStoreVO);
+
+            } else if (sideMenuStoreVO.getRegYn().equals("N")) {
+                procCnt = sideMenuStoreMapper.getSideMenuProdStoreSaveDelete(sideMenuStoreVO);
+            }
+        }
+
+        return procCnt;
+    }
 }

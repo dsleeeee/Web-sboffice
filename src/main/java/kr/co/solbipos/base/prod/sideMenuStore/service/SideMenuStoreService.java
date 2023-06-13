@@ -30,4 +30,10 @@ public interface SideMenuStoreService {
 
     /** 선택분류(선택분류별) 탭 - 조회 */
     List<DefaultMap<Object>> getSideMenuClassList(SideMenuStoreVO sideMenuStoreVO, SessionInfoVO sessionInfoVO);
+
+    /** 선택상품(매장별) 탭 - 조회 */
+    List<DefaultMap<Object>> getSideMenuProdStoreList(SideMenuStoreVO sideMenuStoreVO, SessionInfoVO sessionInfoVO);
+
+    /** 선택상품(매장별) 탭 - 저장 */
+    int getSideMenuProdStoreSave(SideMenuStoreVO[] sideMenuStoreVOs, SessionInfoVO sessionInfoVO);
 }

@@ -37,4 +37,13 @@ public interface SideMenuStoreMapper {
 
     /** 선택분류(선택분류별) 탭 - 조회 */
     List<DefaultMap<Object>> getSideMenuClassList(SideMenuStoreVO sideMenuStoreVO);
+
+    /** 선택상품(매장별) 탭 - 조회 */
+    List<DefaultMap<Object>> getSideMenuProdStoreList(SideMenuStoreVO sideMenuStoreVO);
+
+    /** 선택상품(매장별) 탭 - 저장 insert */
+    int getSideMenuProdStoreSaveInsert(SideMenuStoreVO sideMenuStoreVO);
+
+    /** 선택상품(매장별) 탭 - 저장 delete */
+    int getSideMenuProdStoreSaveDelete(SideMenuStoreVO sideMenuStoreVO);
 }

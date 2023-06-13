@@ -45,6 +45,9 @@ public class SideMenuStoreVO extends PageVO {
     /** 등록구분 */
     private String regYn;
 
+    /** 상품코드 */
+    private String prodCd;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -91,5 +94,13 @@ public class SideMenuStoreVO extends PageVO {
 
     public void setRegYn(String regYn) {
         this.regYn = regYn;
+    }
+
+    public String getProdCd() {
+        return prodCd;
+    }
+
+    public void setProdCd(String prodCd) {
+        this.prodCd = prodCd;
     }
 }
