@@ -50,7 +50,7 @@
         <if test='regYn != null and regYn != ""'>
             AND REG_YN = #{regYn}
         </if>
-        ORDER BY SDSEL_CLASS_CD
+        ORDER BY SDSEL_GRP_CD, SDSEL_CLASS_CD
     </select>
 
     <!-- 선택분류(매장별) 탭 - 저장 insert -->
@@ -134,7 +134,7 @@
         <if test='regYn != null and regYn != ""'>
             AND REG_YN = #{regYn}
         </if>
-        ORDER BY STORE_CD
+        ORDER BY SDSEL_GRP_CD, SDSEL_CLASS_CD, STORE_CD
     </select>
 
     <!-- 선택상품(매장별) 탭 - 조회 -->
@@ -154,8 +154,8 @@
             A.SDSEL_GRP_NM,
             B.SDSEL_CLASS_CD,
             B.SDSEL_CLASS_NM,
-            C.PROD_CD,
-            D.PROD_NM,
+            C.PROD_CD AS SDSEL_PROD_CD,
+            D.PROD_NM AS SDSEL_PROD_NM,
             NVL(C.REG_STORE_FG, '0') AS REG_STORE_FG,
             (CASE WHEN E.STORE_CD IS NOT NULL THEN 'Y' ELSE 'N' END) AS REG_YN
             FROM TB_HQ_PRODUCT_SDSEL_GROUP A,
@@ -170,10 +170,10 @@
             </if>
             AND NVL(B.REG_STORE_FG, '0') IN ('1', '2')
             AND B.USE_YN = 'Y'
-            AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
-            AND B.SDSEL_GRP_CD = A.SDSEL_GRP_CD
             AND NVL(C.REG_STORE_FG, '0') IN ('1', '2')
             AND C.USE_YN = 'Y'
+            AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+            AND B.SDSEL_GRP_CD = A.SDSEL_GRP_CD
             AND C.HQ_OFFICE_CD = B.HQ_OFFICE_CD
             AND C.SDSEL_CLASS_CD = B.SDSEL_CLASS_CD
             AND D.HQ_OFFICE_CD (+)= C.HQ_OFFICE_CD
@@ -186,7 +186,7 @@
         <if test='regYn != null and regYn != ""'>
             AND REG_YN = #{regYn}
         </if>
-        ORDER BY SDSEL_CLASS_CD, PROD_CD
+        ORDER BY SDSEL_GRP_CD, SDSEL_CLASS_CD, SDSEL_PROD_CD
     </select>
 
     <!-- 선택상품(매장별) 탭 - 저장 insert -->
@@ -209,7 +209,7 @@
         ) VALUES (
             #{hqOfficeCd},
             #{sdselClassCd},
-            #{prodCd},
+            #{sdselProdCd},
             #{storeCd},
             #{regDt},
             #{regId},
@@ -230,8 +230,57 @@
         WHERE 1=1
         AND HQ_OFFICE_CD = #{hqOfficeCd}
         AND SDSEL_CLASS_CD = #{sdselClassCd}
-        AND PROD_CD = #{prodCd}
+        AND PROD_CD = #{sdselProdCd}
         AND STORE_CD = #{storeCd}
     </insert>
+
+    <!-- 선택상품(선택상품별) 탭 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSideMenuProdList"  parameterType="SideMenuStoreVO" resultType="DefaultMap">
+        /* SideMenuStoreMapper.getSideMenuProdList */
+        SELECT *
+        FROM
+        (
+            SELECT
+            A.SDSEL_GRP_CD,
+            A.SDSEL_GRP_NM,
+            B.SDSEL_CLASS_CD,
+            B.SDSEL_CLASS_NM,
+            C.PROD_CD AS SDSEL_PROD_CD,
+            (SELECT PROD_NM FROM TB_HQ_PRODUCT WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = C.PROD_CD) AS SDSEL_PROD_NM,
+            NVL(C.REG_STORE_FG, '0') AS REG_STORE_FG,
+            D.STORE_CD,
+            D.STORE_NM,
+            (CASE WHEN E.STORE_CD IS NOT NULL THEN 'Y' ELSE 'N' END) AS REG_YN
+            FROM TB_HQ_PRODUCT_SDSEL_GROUP A,
+            TB_HQ_PRODUCT_SDSEL_CLASS B,
+            TB_HQ_PRODUCT_SDSEL_PROD C,
+            TB_MS_STORE D,
+            TB_HQ_PRODUCT_SDSEL_PROD_REG_STORE E
+            WHERE 1=1
+            AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND NVL(B.REG_STORE_FG, '0') IN ('1', '2')
+            AND B.USE_YN = 'Y'
+            AND C.PROD_CD = #{sdselProdCd}
+            AND NVL(C.REG_STORE_FG, '0') IN ('1', '2')
+            AND C.USE_YN = 'Y'
+            AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+            AND B.SDSEL_GRP_CD = A.SDSEL_GRP_CD
+            AND C.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+            AND C.SDSEL_CLASS_CD = B.SDSEL_CLASS_CD
+            AND D.HQ_OFFICE_CD = C.HQ_OFFICE_CD
+            AND E.HQ_OFFICE_CD (+)= C.HQ_OFFICE_CD
+            AND E.SDSEL_CLASS_CD (+)= C.SDSEL_CLASS_CD
+            AND E.STORE_CD (+)= D.STORE_CD
+        )
+        WHERE 1=1
+        <if test='regYn != null and regYn != ""'>
+            AND REG_YN = #{regYn}
+        </if>
+        ORDER BY SDSEL_GRP_CD, SDSEL_CLASS_CD, SDSEL_PROD_CD, STORE_CD
+    </select>
 
 </mapper>

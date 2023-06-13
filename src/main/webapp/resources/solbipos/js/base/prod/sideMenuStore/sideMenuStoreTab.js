@@ -19,6 +19,7 @@ app.controller('sideMenuStoreTabCtrl', ['$scope', function ($scope) {
         $("#sideMenuClassStoreView").show();
         $("#sideMenuClassView").hide();
         $("#sideMenuProdStoreView").hide();
+        $("#sideMenuProdView").hide();
     };
 
     // 선택분류(매장별) 탭 보이기
@@ -26,10 +27,12 @@ app.controller('sideMenuStoreTabCtrl', ['$scope', function ($scope) {
         $("#sideMenuClassStoreTab").addClass("on");
         $("#sideMenuClassTab").removeClass("on");
         $("#sideMenuProdStoreTab").removeClass("on");
+        $("#sideMenuProdTab").removeClass("on");
 
         $("#sideMenuClassStoreView").show();
         $("#sideMenuClassView").hide();
         $("#sideMenuProdStoreView").hide();
+        $("#sideMenuProdView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("sideMenuClassStoreCtrl");
@@ -41,10 +44,12 @@ app.controller('sideMenuStoreTabCtrl', ['$scope', function ($scope) {
         $("#sideMenuClassStoreTab").removeClass("on");
         $("#sideMenuClassTab").addClass("on");
         $("#sideMenuProdStoreTab").removeClass("on");
+        $("#sideMenuProdTab").removeClass("on");
 
         $("#sideMenuClassStoreView").hide();
         $("#sideMenuClassView").show();
         $("#sideMenuProdStoreView").hide();
+        $("#sideMenuProdView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("sideMenuClassCtrl");
@@ -56,13 +61,32 @@ app.controller('sideMenuStoreTabCtrl', ['$scope', function ($scope) {
         $("#sideMenuClassStoreTab").removeClass("on");
         $("#sideMenuClassTab").removeClass("on");
         $("#sideMenuProdStoreTab").addClass("on");
+        $("#sideMenuProdTab").removeClass("on");
 
         $("#sideMenuClassStoreView").hide();
         $("#sideMenuClassView").hide();
         $("#sideMenuProdStoreView").show();
+        $("#sideMenuProdView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("sideMenuProdStoreCtrl");
+        scope.flex.refresh();
+    };
+
+    // 선택상품(선택상품별) 탭 보이기
+    $scope.sideMenuProdShow = function () {
+        $("#sideMenuClassStoreTab").removeClass("on");
+        $("#sideMenuClassTab").removeClass("on");
+        $("#sideMenuProdStoreTab").removeClass("on");
+        $("#sideMenuProdTab").addClass("on");
+
+        $("#sideMenuClassStoreView").hide();
+        $("#sideMenuClassView").hide();
+        $("#sideMenuProdStoreView").hide();
+        $("#sideMenuProdView").show();
+
+        // angular 그리드 hide 시 깨지므로 refresh()
+        var scope = agrid.getScope("sideMenuProdCtrl");
         scope.flex.refresh();
     };
 

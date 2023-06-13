@@ -122,4 +122,13 @@ public class SideMenuStoreServiceImpl implements SideMenuStoreService {
 
         return procCnt;
     }
+
+    /** 선택상품(선택상품별) 탭 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getSideMenuProdList(SideMenuStoreVO sideMenuStoreVO, SessionInfoVO sessionInfoVO) {
+
+        sideMenuStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return sideMenuStoreMapper.getSideMenuProdList(sideMenuStoreVO);
+    }
 }

@@ -197,4 +197,27 @@ public class SideMenuStoreController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 선택상품(선택상품별) 탭 - 조회
+     *
+     * @param sideMenuStoreVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 06. 07.
+     */
+    @RequestMapping(value = "/sideMenuProd/getSideMenuProdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSideMenuProdList(SideMenuStoreVO sideMenuStoreVO, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = sideMenuStoreService.getSideMenuProdList(sideMenuStoreVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, sideMenuStoreVO);
+    }
 }
