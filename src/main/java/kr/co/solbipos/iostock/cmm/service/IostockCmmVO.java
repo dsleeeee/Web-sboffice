@@ -114,6 +114,12 @@ public class IostockCmmVO extends PageVO {
     /** 사이드선택분류명 */
     private String sdselClassNm;
 
+    /** 사이드선택상품코드 */
+    private String sdselProdCd;
+
+    /** 사이드선택상품명 */
+    private String sdselProdNm;
+
     /**
      * @return the orgnFg
      */
@@ -472,5 +478,21 @@ public class IostockCmmVO extends PageVO {
 
     public void setSdselClassNm(String sdselClassNm) {
         this.sdselClassNm = sdselClassNm;
+    }
+
+    public String getSdselProdCd() {
+        return sdselProdCd;
+    }
+
+    public void setSdselProdCd(String sdselProdCd) {
+        this.sdselProdCd = sdselProdCd;
+    }
+
+    public String getSdselProdNm() {
+        return sdselProdNm;
+    }
+
+    public void setSdselProdNm(String sdselProdNm) {
+        this.sdselProdNm = sdselProdNm;
     }
 }
