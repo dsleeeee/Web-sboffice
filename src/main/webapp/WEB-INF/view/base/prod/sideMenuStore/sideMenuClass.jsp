@@ -69,15 +69,16 @@
         <table class="searchTbl mt10">
             <colgroup>
                 <col class="w15" />
-                <col class="w35" />
                 <col class="w15" />
-                <col class="w35" />
+                <col class="w20" />
+                <col class="w15" />
+                <col class="w15" />
+                <col class="w20" />
             </colgroup>
             <tbody>
             <tr class="brt">
                 <%-- 등록구분 --%>
                 <th><s:message code="sideMenuStore.regYn"/></th>
-                </th>
                 <td>
                     <div class="sb-select">
                         <wj-combo-box
@@ -95,6 +96,7 @@
                 <td>
                     <a href="#" class="btn_grayS ml10" ng-click="batchChange('regYnChg')"><s:message code="cmm.batchChange" /></a>
                 </td>
+                <td colspan="3"></td>
             </tr>
             </tbody>
         </table>

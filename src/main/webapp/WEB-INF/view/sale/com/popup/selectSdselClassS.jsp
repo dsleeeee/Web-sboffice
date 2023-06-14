@@ -74,10 +74,10 @@
                             item-formatter="_itemFormatter">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="outstockReqDate.sdselGrpCd"/>" binding="sdselGrpCd" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="outstockReqDate.sdselGrpNm"/>" binding="sdselGrpNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="outstockReqDate.sdselClassCd"/>" binding="sdselClassCd" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="outstockReqDate.sdselClassNm"/>" binding="sdselClassNm" width="110" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="outstockReqDate.sdselGrpCd"/>" binding="sdselGrpCd" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="outstockReqDate.sdselGrpNm"/>" binding="sdselGrpNm" width="105" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="outstockReqDate.sdselClassCd"/>" binding="sdselClassCd" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="outstockReqDate.sdselClassNm"/>" binding="sdselClassNm" width="115" align="left" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
                 <%--//위즈모 테이블--%>
