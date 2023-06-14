@@ -16,10 +16,10 @@
             <%-- 매장별 판매가관리 --%>
             <li><a id="storeSalePriceResve" href="#" ng-click="changeTab('S');"><s:message code="salePriceResve.storeSalePrice" /></a></li>
             <%-- [1250 맘스터치] --%>
-            <c:if test="${momsEnvstVal == '1'}">
+            <%--<c:if test="${momsEnvstVal == '1'}">--%>
                 <%-- 가격예약(매장판매가) 엑셀업로드 탭 --%>
                 <li><a id="storeSalePriceResveExcelUpload" href="#" ng-click="changeTab('U');"><s:message code="salePriceResve.storeSalePriceResveExcelUpload" /></a></li>
-            </c:if>
+            <%--</c:if>--%>
         </ul>
     </div>
 </div>

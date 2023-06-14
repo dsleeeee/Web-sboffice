@@ -382,10 +382,10 @@ public class SalePriceServiceImpl implements SalePriceService {
                 if(salePriceMapper.getProdCdChk(salePriceVO) > 0) {
                     // 가격관리구분
                     if(salePriceVO.getPrcCtrlFg() != null && !"".equals(salePriceVO.getPrcCtrlFg())) {
-                        // 가격관리구분이 매장인 경우만 수정
-                        if (("S").equals(salePriceVO.getPrcCtrlFg())) {
+                        // 가격관리구분이 본사인 경우만 수정(20230613)
+                        if(("H").equals(salePriceVO.getPrcCtrlFg())) {
                         } else {
-                            salePriceVO.setResult("가격관리구분이 매장인 상품만 수정 가능합니다.");
+                            salePriceVO.setResult("가격관리구분이 본사인 상품만 수정 가능합니다.");
                         }
                     }
                 } else {

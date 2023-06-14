@@ -21,6 +21,9 @@ app.controller('storeSalePriceResveExcelUploadSampleCtrl', ['$scope', '$http', '
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('storeSalePriceResveExcelUploadSampleCtrl', $scope, $http, false));
 
+    // 일괄변경 체크
+    $scope.saleUprcApply = true;
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
     };
@@ -122,6 +125,25 @@ app.controller('storeSalePriceResveExcelUploadCtrl', ['$scope', '$http', '$timeo
                     }
                 }
             }
+        });
+
+        s.cellEditEnded.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                var item = s.rows[e.row].dataItem;
+                // 가격 변경시 체크박스 체크
+                if (col.binding === "saleUprc" || col.binding === "stinSaleUprc" || col.binding === "dlvrSaleUprc" || col.binding === "packSaleUprc") {
+                    $scope.checked(item);
+                }
+                // 판매가 변경시 다른 컬럼값도 변경
+                if (col.binding === "saleUprc") {
+                    var vScope = agrid.getScope("storeSalePriceResveExcelUploadSampleCtrl");
+                    if(vScope.saleUprcApply){
+                        $scope.saleUprc(item);
+                    }
+                }
+            }
+            s.collectionView.commitEdit();
         });
     };
 
@@ -321,5 +343,17 @@ app.controller('storeSalePriceResveExcelUploadCtrl', ['$scope', '$http', '$timeo
         });
     };
     // <-- //그리드 행 삭제 -->
+
+    // 판매가 수정시 체크박스 체크
+    $scope.checked = function (item){
+        item.gChk = true;
+    };
+
+    // 일괄변경
+    $scope.saleUprc = function (item){
+        item.stinSaleUprc = item.saleUprc;
+        item.dlvrSaleUprc = item.saleUprc;
+        item.packSaleUprc = item.saleUprc;
+    };
 
 }]);
