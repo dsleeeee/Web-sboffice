@@ -128,4 +128,96 @@ public class SideMenuStoreController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 선택분류(선택분류별) 탭 - 조회
+     *
+     * @param sideMenuStoreVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 06. 07.
+     */
+    @RequestMapping(value = "/sideMenuClass/getSideMenuClassList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSideMenuClassList(SideMenuStoreVO sideMenuStoreVO, HttpServletRequest request,
+                                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = sideMenuStoreService.getSideMenuClassList(sideMenuStoreVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, sideMenuStoreVO);
+    }
+
+    /**
+     * 선택상품(매장별) 탭 - 조회
+     *
+     * @param sideMenuStoreVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 06. 07.
+     */
+    @RequestMapping(value = "/sideMenuProdStore/getSideMenuProdStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSideMenuProdStoreList(SideMenuStoreVO sideMenuStoreVO, HttpServletRequest request,
+                                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = sideMenuStoreService.getSideMenuProdStoreList(sideMenuStoreVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, sideMenuStoreVO);
+    }
+
+    /**
+     * 선택상품(매장별) 탭 - 저장
+     *
+     * @param sideMenuStoreVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 06. 07.
+     */
+    @RequestMapping(value = "/sideMenuProdStore/getSideMenuProdStoreSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSideMenuProdStoreSave(@RequestBody SideMenuStoreVO[] sideMenuStoreVOs, HttpServletRequest request,
+                                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = sideMenuStoreService.getSideMenuProdStoreSave(sideMenuStoreVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 선택상품(선택상품별) 탭 - 조회
+     *
+     * @param sideMenuStoreVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 06. 07.
+     */
+    @RequestMapping(value = "/sideMenuProd/getSideMenuProdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSideMenuProdList(SideMenuStoreVO sideMenuStoreVO, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = sideMenuStoreService.getSideMenuProdList(sideMenuStoreVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, sideMenuStoreVO);
+    }
 }

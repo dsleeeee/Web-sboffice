@@ -679,19 +679,109 @@
     <select id="selectSdselGrpList" parameterType="iostockCmmVO" resultType="DefaultMap">
         /* USE : IostockCmmMapper.selectSdselGrpList */
         SELECT
-        thpsg.SDSEL_GRP_CD,
-        thpsg.SDSEL_GRP_NM
-        FROM TB_HQ_PRODUCT_SDSEL_GROUP thpsg
+        A.SDSEL_GRP_CD,
+        A.SDSEL_GRP_NM
+        FROM TB_HQ_PRODUCT_SDSEL_GROUP A
         WHERE 1=1
-        AND thpsg.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND A.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='sdselGrpCd != null and sdselGrpCd != ""'>
-            AND thpsg.SDSEL_GRP_CD LIKE '%'||#{sdselGrpCd}||'%'
+            AND A.SDSEL_GRP_CD LIKE '%'||#{sdselGrpCd}||'%'
         </if>
         <if test='sdselGrpNm != null and sdselGrpNm != ""'>
-            AND thpsg.SDSEL_GRP_NM LIKE '%'||#{sdselGrpNm}||'%'
+            AND A.SDSEL_GRP_NM LIKE '%'||#{sdselGrpNm}||'%'
         </if>
-        AND thpsg.USE_YN = 'Y'
-        ORDER BY thpsg.SDSEL_GRP_CD
+        AND A.USE_YN = 'Y'
+        ORDER BY A.SDSEL_GRP_CD
+    </select>
+
+    <!-- 선택분류 공통 - 선택분류 리스트 조회 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="selectSdselClassList" parameterType="iostockCmmVO" resultType="DefaultMap">
+        /* USE : IostockCmmMapper.selectSdselClassList */
+        SELECT
+        A.SDSEL_GRP_CD,
+        A.SDSEL_GRP_NM,
+        B.SDSEL_CLASS_CD,
+        B.SDSEL_CLASS_NM
+        FROM TB_HQ_PRODUCT_SDSEL_GROUP A,
+        TB_HQ_PRODUCT_SDSEL_CLASS B
+        WHERE 1=1
+        AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+            AND A.SDSEL_GRP_CD LIKE '%'||#{sdselGrpCd}||'%'
+        </if>
+        <if test='sdselGrpNm != null and sdselGrpNm != ""'>
+            AND A.SDSEL_GRP_NM LIKE '%'||#{sdselGrpNm}||'%'
+        </if>
+        AND A.USE_YN = 'Y'
+        <if test='sdselClassCd != null and sdselClassCd != ""'>
+            AND B.SDSEL_CLASS_CD LIKE '%'||#{sdselClassCd}||'%'
+        </if>
+        <if test='sdselClassNm != null and sdselClassNm != ""'>
+            AND B.SDSEL_CLASS_NM LIKE '%'||#{sdselClassNm}||'%'
+        </if>
+        AND NVL(B.REG_STORE_FG, '0') IN ('1', '2')
+        AND B.USE_YN = 'Y'
+        AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+        AND B.SDSEL_GRP_CD = A.SDSEL_GRP_CD
+        ORDER BY A.SDSEL_GRP_CD, B.SDSEL_CLASS_CD
+    </select>
+
+    <!-- 선택상품 공통 - 선택상품 리스트 조회 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="selectSdselProdList" parameterType="iostockCmmVO" resultType="DefaultMap">
+        /* USE : IostockCmmMapper.selectSdselProdList */
+        SELECT
+        A.SDSEL_GRP_CD,
+        A.SDSEL_GRP_NM,
+        B.SDSEL_CLASS_CD,
+        B.SDSEL_CLASS_NM,
+        C.PROD_CD AS SDSEL_PROD_CD,
+        D.PROD_NM AS SDSEL_PROD_NM
+        FROM TB_HQ_PRODUCT_SDSEL_GROUP A,
+        TB_HQ_PRODUCT_SDSEL_CLASS B,
+        TB_HQ_PRODUCT_SDSEL_PROD C,
+        TB_HQ_PRODUCT D
+        WHERE 1=1
+        AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+            AND A.SDSEL_GRP_CD LIKE '%'||#{sdselGrpCd}||'%'
+        </if>
+        <if test='sdselGrpNm != null and sdselGrpNm != ""'>
+            AND A.SDSEL_GRP_NM LIKE '%'||#{sdselGrpNm}||'%'
+        </if>
+        AND A.USE_YN = 'Y'
+        <if test='sdselClassCd != null and sdselClassCd != ""'>
+            AND B.SDSEL_CLASS_CD LIKE '%'||#{sdselClassCd}||'%'
+        </if>
+        <if test='sdselClassNm != null and sdselClassNm != ""'>
+            AND B.SDSEL_CLASS_NM LIKE '%'||#{sdselClassNm}||'%'
+        </if>
+        AND NVL(B.REG_STORE_FG, '0') IN ('1', '2')
+        AND B.USE_YN = 'Y'
+        <if test='sdselProdCd != null and sdselProdCd != ""'>
+            AND C.PROD_CD LIKE '%'||#{sdselProdCd}||'%'
+        </if>
+        <if test='sdselProdNm != null and sdselProdNm != ""'>
+            AND D.PROD_NM LIKE '%'||#{sdselProdNm}||'%'
+        </if>
+        AND NVL(C.REG_STORE_FG, '0') IN ('1', '2')
+        AND C.USE_YN = 'Y'
+        AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+        AND B.SDSEL_GRP_CD = A.SDSEL_GRP_CD
+        AND C.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+        AND C.SDSEL_CLASS_CD = B.SDSEL_CLASS_CD
+        AND D.HQ_OFFICE_CD (+)= C.HQ_OFFICE_CD
+        AND D.PROD_CD (+)= C.PROD_CD
+        ORDER BY A.SDSEL_GRP_CD, B.SDSEL_CLASS_CD, C.PROD_CD
     </select>
 
 </mapper>

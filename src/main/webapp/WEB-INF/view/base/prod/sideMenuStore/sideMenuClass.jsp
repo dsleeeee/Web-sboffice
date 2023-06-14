@@ -9,15 +9,15 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
-<div id="sideMenuClassStoreView" class="subCon" style="display: none;">
-    <div ng-controller="sideMenuClassStoreCtrl">
+<div id="sideMenuClassView" class="subCon" style="display: none;">
+    <div ng-controller="sideMenuClassCtrl">
 
         <%-- 조회조건 --%>
         <div class="searchBar flddUnfld">
-            <a href="#" class="open fl"><s:message code="sideMenuStoreTab.sideMenuClassStore"/></a>
+            <a href="#" class="open fl"><s:message code="sideMenuStoreTab.sideMenuClass"/></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" ng-click="_broadcast('sideMenuClassStoreCtrl',1)">
+                <button class="btn_blue fr" ng-click="_broadcast('sideMenuClassCtrl',1)">
                     <s:message code="cmm.search" />
                 </button>
             </div>
@@ -31,32 +31,14 @@
             </colgroup>
             <tbody>
             <tr>
-                <%-- 매장코드 --%>
-                <th><s:message code="cmm.store"/></th>
-                <td colspan="3">
-                    <%-- 매장선택 모듈 사용시 include --%>
-                    <c:if test="${momsEnvstVal == '0'}">
-                        <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
-                            <jsp:param name="targetId" value="sideMenuClassStoreStore"/>
-                        </jsp:include>
-                    </c:if>
-                    <c:if test="${momsEnvstVal == '1'}">
-                        <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreSMoms.jsp" flush="true">
-                            <jsp:param name="targetId" value="sideMenuClassStoreStore"/>
-                        </jsp:include>
-                    </c:if>
-                    <%--// 매장선택 모듈 사용시 include --%>
-                </td>
-            </tr>
-            <tr>
-                <%-- 선택그룹 --%>
-                <th><s:message code="sideMenuStore.sdselGrp"/></th>
+                <%-- 선택분류 --%>
+                <th><s:message code="sideMenuStore.sdselClass"/></th>
                 <td>
-                    <%-- 선택그룹 선택 모듈 사용시 include --%>
-                    <jsp:include page="/WEB-INF/view/sale/com/popup/selectSdselGrpS.jsp" flush="true">
-                        <jsp:param name="targetId" value="sideMenuClassStoreSdselGrp"/>
+                    <%-- 선택분류 선택 모듈 사용시 include --%>
+                    <jsp:include page="/WEB-INF/view/sale/com/popup/selectSdselClassS.jsp" flush="true">
+                        <jsp:param name="targetId" value="sideMenuClassSdselClass"/>
                     </jsp:include>
-                    <%--// 선택그룹 선택 모듈 사용시 include --%>
+                    <%--// 선택분류 선택 모듈 사용시 include --%>
                 </td>
                 <%-- 등록구분 --%>
                 <th><s:message code="sideMenuStore.regYn"/></th>
@@ -133,13 +115,13 @@
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="sideMenuStore.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="sideMenuStore.storeNm"/>" binding="storeNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="sideMenuStore.sdselGrpCd"/>" binding="sdselGrpCd" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="sideMenuStore.sdselGrpNm"/>" binding="sdselGrpNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="sideMenuStore.sdselClassCd"/>" binding="sdselClassCd" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="sideMenuStore.sdselClassNm"/>" binding="sdselClassNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="sideMenuStore.regStoreFg"/>" binding="regStoreFg" data-map="regStoreFgDataMap" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="sideMenuStore.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="sideMenuStore.storeNm"/>" binding="storeNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="sideMenuStore.regYn"/>" binding="regYn" data-map="regYnDataMap" width="80" align="center"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
@@ -148,4 +130,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenuStore/sideMenuClassStore.js?ver=20230612.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenuStore/sideMenuClass.js?ver=20230612.01" charset="utf-8"></script>
