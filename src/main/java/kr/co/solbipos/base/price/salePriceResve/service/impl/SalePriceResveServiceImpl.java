@@ -459,8 +459,8 @@ public class SalePriceResveServiceImpl implements SalePriceResveService {
             salePriceResveVO.setSaleResveFg("1"); // 가격예약구분 0:일반, 1:예약
 
             if(("검증성공").equals(salePriceResveVO.getResult())) {
-                // 가격관리구분이 매장인 경우만 수정
-                if(("S").equals(salePriceResveVO.getPrcCtrlFg())) {
+                // 가격관리구분이 본사인 경우만 수정(20230613)
+                if(("H").equals(salePriceResveVO.getPrcCtrlFg())) {
 
                     // 해당 시작날짜에 등록된 가격이 있는지 조회(판매가 히스토리 등록을 위해)
                     int prodCnt = salePriceResveMapper.getStoreSalePriceCnt(salePriceResveVO);

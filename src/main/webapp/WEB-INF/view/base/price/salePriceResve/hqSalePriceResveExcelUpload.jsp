@@ -12,9 +12,26 @@
 
     <div ng-controller="hqSalePriceResveExcelUploadSampleCtrl">
         <%-- 조회조건 --%>
-        <div class="searchBar flddUnfld">
+        <div class="searchBar">
             <a href="#" class="open fl"><s:message code="hqSalePriceResveExcelUpload.excelUpload" /></a>
         </div>
+
+        <table class="searchTbl">
+           <colgroup>
+               <col class="w15" />
+               <col class="w35" />
+               <col class="w15" />
+               <col class="w35" />
+           </colgroup>
+           <tbody>
+               <c:if test="${subPriceFg == '1'}">
+                   <tr>
+                       <th><input type="checkbox" ng-model="saleUprcApply"/> <s:message code="salePriceResve.batchChange"/></th>
+                       <td><s:message code="salePriceResve.saleUprcApply"/></td>
+                   </tr>
+               </c:if>
+           </tbody>
+       </table>
 
         <div class="mt10 oh">
             <p class="tl s14 mt5 lh15">1. '양식다운로드' 버튼을 클릭하여 양식을 다운받아주세요.</p>
@@ -159,7 +176,7 @@
     var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/hqSalePriceResveExcelUpload.js?ver=20230613.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/hqSalePriceResveExcelUpload.js?ver=20230614.01" charset="utf-8"></script>
 
 <%-- 가격예약(본사판매가) 엑셀업로드 팝업 --%>
 <c:import url="/WEB-INF/view/base/price/salePriceResve/hqSalePriceResveExcelUploadAdd.jsp">
