@@ -21,6 +21,9 @@ app.controller('storeSalePriceExcelUploadSampleCtrl', ['$scope', '$http', '$time
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('storeSalePriceExcelUploadSampleCtrl', $scope, $http, false));
 
+    // 일괄변경 체크
+    $scope.saleUprcApply = true;
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
     };
@@ -119,6 +122,25 @@ app.controller('storeSalePriceExcelUploadCtrl', ['$scope', '$http', '$timeout', 
                 }
             }
         });
+
+        s.cellEditEnded.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                var item = s.rows[e.row].dataItem;
+                // 가격 변경시 체크박스 체크
+                if (col.binding === "saleUprc" || col.binding === "stinSaleUprc" || col.binding === "dlvrSaleUprc" || col.binding === "packSaleUprc") {
+                    $scope.checked(item);
+                }
+                // 판매가 변경시 다른 컬럼값도 변경
+                if (col.binding === "saleUprc") {
+                    var vScope = agrid.getScope("storeSalePriceExcelUploadSampleCtrl");
+                    if(vScope.saleUprcApply){
+                        $scope.saleUprc(item);
+                    }
+                }
+            }
+            s.collectionView.commitEdit();
+        });
     };
 
     // <-- 검색 호출 -->
@@ -166,6 +188,13 @@ app.controller('storeSalePriceExcelUploadCtrl', ['$scope', '$http', '$timeout', 
             $scope.flex.collectionView.items[i].result = result;
             $scope.flex.collectionView.items[i].salePriceOrgnFg = "S";
 
+            // 잘못된 판매단가값이 복사되어 내점/포장/배달 판매가에 들어가있으면(hidden 상태) 검증과정에서 걸린다.
+            if(subPriceFg === "0"){
+                $scope.flex.collectionView.items[i].stinSaleUprc = "";
+                $scope.flex.collectionView.items[i].dlvrSaleUprc = "";
+                $scope.flex.collectionView.items[i].packSaleUprc = "";
+            }
+
             params.push($scope.flex.collectionView.items[i]);
         }
 
@@ -194,6 +223,14 @@ app.controller('storeSalePriceExcelUploadCtrl', ['$scope', '$http', '$timeout', 
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             $scope.flex.collectionView.items[i].salePriceOrgnFg = "S";
+
+            // 내점/배달/포장 가격관리 미사용일 때, 내점/포장/배달 판매가는 쿼리에서 판매단가로 대체하여 넣는다.
+            if(subPriceFg === "0"){
+                $scope.flex.collectionView.items[i].stinSaleUprc = "";
+                $scope.flex.collectionView.items[i].dlvrSaleUprc = "";
+                $scope.flex.collectionView.items[i].packSaleUprc = "";
+            }
+
             params.push($scope.flex.collectionView.items[i]);
         }
 
@@ -266,5 +303,17 @@ app.controller('storeSalePriceExcelUploadCtrl', ['$scope', '$http', '$timeout', 
         });
     };
     // <-- //그리드 행 삭제 -->
+
+    // 판매가 수정시 체크박스 체크
+    $scope.checked = function (item){
+        item.gChk = true;
+    };
+
+    // 일괄변경
+    $scope.saleUprc = function (item){
+        item.stinSaleUprc = item.saleUprc;
+        item.dlvrSaleUprc = item.saleUprc;
+        item.packSaleUprc = item.saleUprc;
+    };
 
 }]);

@@ -15,12 +15,12 @@
                 <a id="hqSalePriceTab" href="#" class="on" ng-click="hqSalePriceShow()"><s:message code="hqSalePriceTab.hqSalePrice"/></a>
             </li>
             <%-- [1250 맘스터치] --%>
-            <c:if test="${momsEnvstVal == '1'}">
+            <%--<c:if test="${momsEnvstVal == '1'}">--%>
                 <%-- 본사판매가관리 엑셀업로드 탭 --%>
                 <li>
                     <a id="hqSalePriceExcelUploadTab" href="#" ng-click="hqSalePriceExcelUploadShow()"><s:message code="hqSalePriceTab.hqSalePriceExcelUpload"/></a>
                 </li>
-            </c:if>
+            <%--</c:if>--%>
         </ul>
     </div>
 </div>

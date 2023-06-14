@@ -20,10 +20,10 @@
           <%-- 매장판매가 복사 --%>
           <li><a id="storeSaleCopy" href="#" ng-click="changeTab('C');"><s:message code="salePrice.storeSaleCopy" /></a></li>
           <%-- [1250 맘스터치] --%>
-          <c:if test="${momsEnvstVal == '1'}">
+          <%--<c:if test="${momsEnvstVal == '1'}">--%>
               <%-- 매장판매가관리 엑셀업로드 탭 --%>
               <li><a id="storeSalePriceExcelUpload" href="#" ng-click="changeTab('U');"><s:message code="salePrice.storeSalePriceExcelUpload" /></a></li>
-          </c:if>
+          <%--</c:if>--%>
         </ul>
     </div>
 </div>

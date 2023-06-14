@@ -486,8 +486,8 @@ public class SalePriceServiceImpl implements SalePriceService {
             salePriceVO.setEndDate("99991231");
 
             if(("검증성공").equals(salePriceVO.getResult())) {
-                // 가격관리구분이 매장인 경우만 수정
-                if(("S").equals(salePriceVO.getPrcCtrlFg())) {
+                // 가격관리구분이 본사인 경우만 수정
+                if(("H").equals(salePriceVO.getPrcCtrlFg())) {
 
                     // 판매가 변경 히스토리 등록
                     int prodCnt = salePriceMapper.getRegistProdCount(salePriceVO);
