@@ -164,6 +164,11 @@
                     FROM   (
                             SELECT  tms.BRANCH_CD
                             ,       tsdt.STORE_CD
+                            <if test='option2 != null and option2 != "" and option2 == "store"'>
+                            ,       tms.HQ_BRAND_CD
+                            ,       tmsi.MOMS_TEAM
+                            ,       tmsi.MOMS_AC_SHOP
+                            </if>
                             <if test='option != null and option != "" and option == "day"'>
                             ,       SALE_DATE
                             </if>
@@ -236,6 +241,11 @@
                                 AND tms.BRANCH_CD = #{branchCd}
                             </if>
                             GROUP BY tms.BRANCH_CD, tsdt.STORE_CD, TIME_SLOT
+                            <if test='option2 != null and option2 != "" and option2 == "store"'>
+                                ,  tms.HQ_BRAND_CD
+                                ,  tmsi.MOMS_TEAM
+                                ,  tmsi.MOMS_AC_SHOP
+                            </if>
                             <if test='option != null and option != "" and option == "day"'>
                             , SALE_DATE
                             </if>
