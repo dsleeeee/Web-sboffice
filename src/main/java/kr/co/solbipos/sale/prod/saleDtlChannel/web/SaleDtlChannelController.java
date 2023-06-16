@@ -8,6 +8,7 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
+import kr.co.common.utils.spring.WebUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -306,6 +308,7 @@ public class SaleDtlChannelController {
     @ResponseBody
     public void getSaleDtlChannelDownload(SaleDtlChannelVO saleDtlChannelVO, HttpServletRequest request,
                                           HttpServletResponse response, Model model) throws Exception {
+        WebUtil.setCookie("fileDownloadToken", "true", 60 * 60 * 24);
 
 //        File file = new File("D:\\Workspace\\javaWeb\\testSaleReport\\", saleDtlChannelVO.getFileName());
         File file = new File(BaseEnv.FILE_UPLOAD_DIR + "/MediaBase/SaleReport/", saleDtlChannelVO.getFileName());
@@ -333,4 +336,12 @@ public class SaleDtlChannelController {
         response.getOutputStream().flush();
         response.getOutputStream().close();
     }
+
+    @RequestMapping(value="/saleDtlChannelExcel/getDeleteCookie.sb")
+    @ResponseBody
+    public void getDeleteCookie(SaleDtlChannelVO saleDtlChannelVO, HttpServletRequest request,
+                                          HttpServletResponse response, Model model) throws Exception {
+        WebUtil.removeCookie(WebUtils.getCookie( request, "fileDownloadToken"));
+    }
+
 }

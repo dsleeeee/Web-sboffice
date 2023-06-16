@@ -30,6 +30,8 @@ public class KitchenPrintVO extends CmmVO {
     private String prterNm;
     /** 포스번호 */
     private String posNo;
+    /** 대체포스번호 */
+    private String tPosNo;
     /** 프린터종류구분 */
     private String prterKindFg;
     /** 프린터포트구분 */
@@ -102,6 +104,15 @@ public class KitchenPrintVO extends CmmVO {
     public void setPosNo(String posNo) {
         this.posNo = posNo;
     }
+
+    public String gettPosNo() {
+        return tPosNo;
+    }
+
+    public void settPosNo(String tPosNo) {
+        this.tPosNo = tPosNo;
+    }
+
     /**
      * @return the prterKindFg
      */

@@ -36,6 +36,7 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   // 조회조건
   $scope._setComboData("hqOffice", hqList);
   $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
+  $scope._setComboData("tuClsType", tuClsTypeDataAll); // 예약키맵그룹
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -104,11 +105,12 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
             params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
         }
     }
+    params.tuClsType = $scope.tuClsType;
 
     $scope._inquiryMain("/base/store/media/applcStore/srchStoreList.sb", params, function() {
       // 적용매장 조회 후, 미적용 매장 조회
       var allStoreScope = agrid.getScope("allStoreCtrl");
-      allStoreScope._broadcast('allStoreCtrl', brandUseFg === "1" && orgnFg === "HQ" ? $scope.srchStoreHqBrandCdCombo.selectedValue : ""); // 미적용매장 조회시, 본사권한은 검색조건 매장브랜드 값 넘기기
+      allStoreScope.allStoreSearch($scope.tuClsType, brandUseFg === "1" && orgnFg === "HQ" ? $scope.srchStoreHqBrandCdCombo.selectedValue : ""); // 미적용매장 조회시, 본사권한은 검색조건 매장브랜드 값 넘기기
       //allStoreScope._pageView('allStoreCtrl', 1);
 
     }, false);
@@ -181,7 +183,7 @@ app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   });
 
   // 미적용매장 목록 조회
-  $scope.allStoreSearch = function(vStoreHqBrandCd){
+  $scope.allStoreSearch = function(tuClsType, vStoreHqBrandCd){
 
     var params = {};
     var scope  = agrid.getScope('mediaCtrl');
@@ -218,6 +220,7 @@ app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
             params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
         }
     }
+    params.tuClsType = tuClsType;
 
     $scope._inquiryMain("/base/store/media/applcStore/srchStoreList.sb", params, function() {
     }, false);

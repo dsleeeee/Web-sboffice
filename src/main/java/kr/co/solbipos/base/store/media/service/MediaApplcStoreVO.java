@@ -63,6 +63,8 @@ public class MediaApplcStoreVO extends PageVO {
     private String userBrands;
     /** 매장브랜드코드 */
     private String storeHqBrandCd;
+    /** 키오스크키맵 */
+    private String tuClsType;
 
 
     /**
@@ -303,5 +305,13 @@ public class MediaApplcStoreVO extends PageVO {
 
     public void setStoreHqBrandCd(String storeHqBrandCd) {
         this.storeHqBrandCd = storeHqBrandCd;
+    }
+
+    public String getTuClsType() {
+        return tuClsType;
+    }
+
+    public void setTuClsType(String tuClsType) {
+        this.tuClsType = tuClsType;
     }
 }

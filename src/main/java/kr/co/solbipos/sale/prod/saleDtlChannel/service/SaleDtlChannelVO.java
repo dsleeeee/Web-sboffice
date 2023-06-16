@@ -131,6 +131,8 @@ public class SaleDtlChannelVO extends PageVO {
     /** 영업최종일 */
     private String toSaleDate;
 
+    private int noSeq;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -417,5 +419,13 @@ public class SaleDtlChannelVO extends PageVO {
 
     public void setToSaleDate(String toSaleDate) {
         this.toSaleDate = toSaleDate;
+    }
+
+    public int getNoSeq() {
+        return noSeq;
+    }
+
+    public void setNoSeq(int noSeq) {
+        this.noSeq = noSeq;
     }
 }

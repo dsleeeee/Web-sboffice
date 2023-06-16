@@ -591,6 +591,8 @@
     <typeAlias alias="cdKwuVO" type="kr.co.solbipos.adi.etc.cdKwu.service.CdKwuVO"/>
     <!-- 맘스터치 > 기타관리 > 명칭관리 -->
     <typeAlias alias="cdMomsVO" type="kr.co.solbipos.adi.etc.cdMoms.service.CdMomsVO"/>
+    <!-- 맘스터치 > 기타관리 > 매출트레킹수신자목록 -->
+    <typeAlias alias="alimtalkVO" type="kr.co.solbipos.adi.etc.alimtalk.service.AlimtalkVO"/>
 
 <!--
     <typeAlias alias="resveVO" type="kr.co.solbipos.adi.etc.resve.service.ResveVO"/>

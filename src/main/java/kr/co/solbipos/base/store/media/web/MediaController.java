@@ -1,14 +1,18 @@
 package kr.co.solbipos.base.store.media.web;
 
 import kr.co.common.data.enums.Status;
+import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapService;
+import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapVO;
 import kr.co.solbipos.base.store.media.service.MediaApplcStoreVO;
 import kr.co.solbipos.base.store.media.service.MediaService;
 import kr.co.solbipos.base.store.media.service.MediaVO;
@@ -25,6 +29,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
@@ -57,13 +63,17 @@ public class MediaController {
     private final DayProdService dayProdService;
     private final MessageService messageService;
     private final CmmEnvUtil cmmEnvUtil;
+    private final KioskKeyMapService kioskKeyMapService;
+    private final CmmCodeUtil cmmCodeUtil;
 
-    public MediaController(SessionService sessionService, MediaService mediaService, DayProdService dayProdService, MessageService messageService, CmmEnvUtil cmmEnvUtil) {
+    public MediaController(SessionService sessionService, MediaService mediaService, DayProdService dayProdService, MessageService messageService, CmmEnvUtil cmmEnvUtil, KioskKeyMapService kioskKeyMapService, CmmCodeUtil cmmCodeUtil) {
         this.sessionService = sessionService;
         this.mediaService = mediaService;
         this.dayProdService = dayProdService;
         this.messageService = messageService;
         this.cmmEnvUtil = cmmEnvUtil;
+        this.kioskKeyMapService = kioskKeyMapService;
+        this.cmmCodeUtil = cmmCodeUtil;
     }
 
     /**
@@ -90,6 +100,22 @@ public class MediaController {
         if(request.getParameter("posLoginReconnect") != null && request.getParameter("posLoginReconnect").length() > 0){
             model.addAttribute("posLoginReconnect", request.getParameter("posLoginReconnect"));
         }
+
+        KioskKeyMapVO kioskKeyMapVO = new KioskKeyMapVO();
+        // 키오스크 키맵그룹 조회
+        List<DefaultMap<String>> kioskTuClsTypeList = kioskKeyMapService.getKioskTuClsTypeList(kioskKeyMapVO, sessionInfoVO);
+        String kioskTuClsTypeListAll = "";
+        if (kioskTuClsTypeList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "선택");
+            m.put("value", "");
+            list.add(m);
+            kioskTuClsTypeListAll = convertToJson(list);
+        } else {
+            kioskTuClsTypeListAll = cmmCodeUtil.assmblObj(kioskTuClsTypeList, "name", "value", UseYn.SELECT);
+        }
+        model.addAttribute("kioskTuClsTypeListAll", kioskTuClsTypeListAll);
 
         return "base/store/media/mediaTab";
     }

@@ -69,29 +69,43 @@
                 </div>
               </td>
             </tr>
-            <c:if test="${brandUseFg == '1'}">
-              <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-                <tr>
-                  <%-- 매장브랜드 --%>
-                  <th><s:message code="media.storeHqBrand" /></th>
-                  <td>
-                    <div class="sb-select">
-                      <wj-combo-box
-                        id="srchStoreHqBrandCd"
-                        ng-model="storeHqBrandCd"
-                        items-source="_getComboData('srchStoreHqBrandCd')"
-                        display-member-path="name"
-                        selected-value-path="value"
-                        is-editable="false"
-                        control="srchStoreHqBrandCdCombo">
-                      </wj-combo-box>
-                    </div>
-                  </td>
-                  <th></th>
-                  <td></td>
-                </tr>
-              </c:if>
-            </c:if>
+              <tr>
+                <c:if test="${brandUseFg == '1'}">
+                  <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                    <%-- 매장브랜드 --%>
+                    <th><s:message code="media.storeHqBrand" /></th>
+                    <td>
+                      <div class="sb-select">
+                        <wj-combo-box
+                          id="srchStoreHqBrandCd"
+                          ng-model="storeHqBrandCd"
+                          items-source="_getComboData('srchStoreHqBrandCd')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          control="srchStoreHqBrandCdCombo">
+                        </wj-combo-box>
+                      </div>
+                    </td>
+                  </c:if>
+                </c:if>
+              <%-- 키맵 --%>
+              <th><s:message code="media.tuClsType" /></th>
+              <td>
+                <div class="sb-select mr5" style="width:110px; float:left;">
+                  <wj-combo-box
+                          id="tuClsType"
+                          ng-model="tuClsType"
+                          items-source="_getComboData('tuClsType')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          control="tuClsTypeCombo">
+                  </wj-combo-box>
+                </div>
+              <tr>
+              </td>
+              </tr>
             </tbody>
           </table>
           <div class="mt10 tr">
@@ -163,7 +177,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/storeAdd.js?ver=20230109.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/storeAdd.js?ver=20230109.03" charset="utf-8"></script>
 
 <script>
   $(document).ready(function(){
@@ -181,5 +195,7 @@
   var brandUseFg = "${brandUseFg}";
   // 사용자 브랜드
   var userHqBrandCdComboList = ${userHqBrandCdComboList};
+  // 키오스크키맵
+  var tuClsTypeDataAll = ${kioskTuClsTypeListAll};
 
 </script>
