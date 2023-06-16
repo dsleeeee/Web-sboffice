@@ -9,6 +9,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
+<c:set var="userId" value="${sessionScope.sessionInfo.userId}" />
 
 <div id="saleDtlChannelExcelView" class="subCon">
     <div ng-controller="saleDtlChannelExcelCtrl">
@@ -280,8 +281,19 @@
                 </tbody>
             </table>
         </c:if>
-
-        <div class="mt10 oh sb-select dkbr" style="display:none;">
+        <div class="mt10 oh sb-select dkbr">
+            <%-- 일괄다운로드 --%>
+            <button class="btn_skyblue ml5 fr" id="btnDel" ng-click="allDownload()">
+                <s:message code="saleDtlChannelExcel.allDownload" />
+            </button>
+            <c:if test="${userId == 'ds021' or userId == 'h0393'}">
+                <%-- 관리자등록 --%>
+                <button class="btn_skyblue ml5 fr" id="btnDel" ng-click="regist()">
+                    <s:message code="saleDtlChannelExcel.regist" />
+                </button>
+            </c:if>
+        </div>
+        <div class="mt10 oh sb-select dkbr" style="display:none;" id="regist">
             <p class="tl s14 mt5 lh15 red">전체매장 자료생성 요청시 생성까지 최대 90분정도 소요됩니다.</p>
             <%-- 삭제 --%>
             <button class="btn_skyblue ml5 fr" id="btnDel" ng-click="del()">
@@ -341,6 +353,7 @@
                     <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.fileName"/>" binding="fileName" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="" binding="reqDate" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="" binding="reqTime" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="" binding="noSeq" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -354,6 +367,10 @@
     <input type="hidden" name="fileName" value="" /> <%--파일명--%>
 </form>
 
+<form id="deleteCookie_info" name="deleteCookie_info" method="post" action="/sale/prod/saleDtlChannel/saleDtlChannelExcel/getDeleteCookie.sb" target="deleteCookieFrm">
+    <iframe name="deleteCookieFrm" style="display:none;"></iframe>
+</form>
+<input type="hidden" id="hd_token" value="" />
 <script type="text/javascript">
     function saleReport_download(fileName)
     {
@@ -362,4 +379,4 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/saleDtlChannel/saleDtlChannelExcel.js?ver=20230413.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/saleDtlChannel/saleDtlChannelExcel.js?ver=20230413.04" charset="utf-8"></script>

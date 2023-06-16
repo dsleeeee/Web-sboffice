@@ -269,10 +269,15 @@ public class SaleDtlChannelServiceImpl implements SaleDtlChannelService {
                 saleDtlChannelVO.setUserBrandList(userBrandList);
                 // 매장브랜드 뒤에 , 제거용
                 saleDtlChannelVO.setUserBrands(saleDtlChannelVO.getUserBrands().substring(0, saleDtlChannelVO.getUserBrands().length()-1));
-            }
-        }
 
-        procCnt = saleDtlChannelMapper.getSaleDtlChannelSaveInsert(saleDtlChannelVO);
+                for(int i=0; i < userBrandList.length; i++){
+                    saleDtlChannelVO.setStoreHqBrandCd(userBrandList[i]);
+                    procCnt = saleDtlChannelMapper.getSaleDtlChannelSaveInsert(saleDtlChannelVO);
+                }
+            }
+        } else {
+            procCnt = saleDtlChannelMapper.getSaleDtlChannelSaveInsert(saleDtlChannelVO);
+        }
 
         return procCnt;
     }

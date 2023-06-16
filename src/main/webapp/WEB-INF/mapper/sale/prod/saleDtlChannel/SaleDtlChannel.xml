@@ -538,6 +538,7 @@
     ,       BRANCH_CD
     ,       REQ_DATE
     ,       REQ_TIME
+    ,       NO_SEQ
     FROM    TB_HQ_SALE_REPORT_MOMS thsrm
     WHERE   thsrm.HQ_OFFICE_CD = #{hqOfficeCd}
     <![CDATA[
@@ -597,6 +598,11 @@
   -->
   <insert id="getSaleDtlChannelSaveInsert" parameterType="SaleDtlChannelVO">
     /* SaleDtlChannelMapper.getSaleDtlChannelSaveInsert */
+    <selectKey resultType="int" keyProperty="noSeq" order="BEFORE">
+      SELECT  NVL(MAX(NO_SEQ), 0)
+      FROM    TB_HQ_SALE_REPORT_MOMS
+      WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+    </selectKey>
     INSERT INTO TB_HQ_SALE_REPORT_MOMS
     (
       HQ_OFFICE_CD,
@@ -629,46 +635,49 @@
       REG_DT,
       REG_ID,
       MOD_DT,
-      MOD_ID
-    ) VALUES (
-       #{hqOfficeCd},
-       '0000000',
-       #{reqDate},
-       #{reqTime},
-       '01',
-       #{dataCreateMonth},
-       #{dataCreateMonth},
-       '0',
-       '',
-       '',
-       '',
-       '',
-       #{prodClassCd},
-       #{prodOption},
-       #{prodCd},
-       #{prodNm},
+      MOD_ID,
+      NO_SEQ
+    )
+      SELECT 	#{hqOfficeCd},
+      '0000000',
+      #{reqDate},
+      #{reqTime},
+      '01',
+      YYYYMMDD,
+      YYYYMMDD,
+      '0',
+      '',
+      '',
+      '',
+      '',
+      #{prodClassCd},
+      #{prodOption},
+      #{prodCd},
+      #{prodNm},
       <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
-        #{storeHqBrandCd:CLOB}, -- 매장브랜드 선택일때
+          #{storeHqBrandCd:CLOB}, -- 매장브랜드 선택일때
       </if>
       <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
-        -- 매장브랜드 전체일때
-        #{userBrands:CLOB},
+          -- 매장브랜드 전체일때
+          #{userBrands:CLOB},
       </if>
-       #{storeCds:CLOB},
-       #{prodHqBrandCd}, -- 상품브랜드 선택일때
-       #{prodCds:CLOB},
-       #{momsTeam},
-       #{momsAcShop},
-       #{momsAreaFg},
-       #{momsCommercial},
-       #{momsShopType},
-       #{momsStoreManageType},
-       #{branchCd},
-       #{regDt},
-       #{regId},
-       #{modDt},
-       #{modId}
-     )
+      #{storeCds:CLOB},
+      #{prodHqBrandCd}, -- 상품브랜드 선택일때
+      #{prodCds:CLOB},
+      #{momsTeam},
+      #{momsAcShop},
+      #{momsAreaFg},
+      #{momsCommercial},
+      #{momsShopType},
+      #{momsStoreManageType},
+      #{branchCd},
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId},
+      #{noSeq} + ROWNUM
+      FROM 	TB_CM_DATEM
+      WHERE 	YYYYMMDD LIKE #{dataCreateMonth}||'%'
   </insert>
 
   <!-- 기간별 매장-상품 매출 다운로드 탭 - 삭제 -->
@@ -684,6 +693,7 @@
     AND     TO_SALE_DATE = #{toSaleDate}
     AND     REQ_DATE = #{reqDate}
     AND     REQ_TIME = #{reqTime}
+    AND     NO_SEQ = #{noSeq}
     AND     REPORT_TYPE = '01'
   </delete>
 
@@ -697,6 +707,7 @@
     SELECT  COUNT(thsrm.REPORT_TYPE) AS CNT
     FROM    TB_HQ_SALE_REPORT_MOMS thsrm
     WHERE   thsrm.HQ_OFFICE_CD = #{hqOfficeCd}
+    AND     thsrm.NO_SEQ = #{noSeq}
     AND     thsrm.FROM_SALE_DATE = #{dataCreateMonth}||'01'
     AND     thsrm.TO_SALE_DATE = #{dataCreateMonth}||#{dataCreateMonthLastDate}
     AND     thsrm.REPORT_TYPE = '01'

@@ -32,7 +32,7 @@ var prodOptionComboData = [
 /**
  *  매출상세현황(채널별) 매출 다운로드 그리드 생성
  */
-app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('saleDtlChannelExcelCtrl', $scope, $http, false));
@@ -49,8 +49,8 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', function ($scope, 
 
     // 자료생성
     var dataCreateMonth = new wijmo.input.InputDate('#dataCreateMonth', {
-        format       : "yyyy-MM-dd",
-        selectionMode: "1" // 달력 선택 모드(1:day 2:month)
+        format       : "yyyy-MM",
+        selectionMode: "2" // 달력 선택 모드(1:day 2:month)
     });
 
     // 브랜드 콤보박스 셋팅
@@ -63,7 +63,7 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', function ($scope, 
     $scope._setComboData("srchMomsCommercial", momsCommercialComboList);           // 상권
     $scope._setComboData("srchMomsShopType", momsShopTypeComboList);               // 점포유형
     $scope._setComboData("srchMomsStoreManageType", momsStoreManageTypeComboList); // 매장관리타입
-    $scope._setComboData("srchBranchCd", branchCdComboList);                       // 그룹
+    $scope._setComboData("srchBranchCd", branchCdComboList);   
 
     // // 팀별
     // if(momsTeamComboList.length <= 1) {
@@ -172,6 +172,9 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', function ($scope, 
                     if (nvl(selectedRow[("procFg")], '') == '2') {
                         // 다운로드
                         saleReport_download(selectedRow.fileName);
+                        setTimeout(function() {
+                            $("#deleteCookie_info").submit();
+                        }, 500);
                     }
                 }
             }
@@ -185,7 +188,7 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', function ($scope, 
     });
 
     $scope.searchsaleDtlChannelExcel = function(){
-        
+
         // 조회기간
         var startDt = new Date(wijmo.Globalize.format(startMonth.value, 'yyyy-MM'));
         var endDt = new Date(wijmo.Globalize.format(endMonth.value, 'yyyy-MM'));
@@ -244,7 +247,7 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', function ($scope, 
 
     // <-- 자료생성 -->
     $scope.dataCreate = function(){
-        var createMonth = wijmo.Globalize.format(dataCreateMonth.value, 'yyyyMMdd');
+        var createMonth = wijmo.Globalize.format(dataCreateMonth.value, 'yyyyMM');
         var createMonthLastDate = new Date(createMonth.substring(0, 4), createMonth.substring(4, 6), 0).getDate();
 
         // 자료생성 요청건 존재여부 확인
@@ -389,4 +392,83 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', function ($scope, 
         $scope.prodClassNm = "";
     };
 
+    // 관리자생성 보여줌
+    $scope.regist = function (){
+        if( $("#regist").css("display") === 'none') {
+            $("#regist").show();
+        } else {
+            $("#regist").hide();
+        }
+    }
+
+    // 일괄다운로드
+    $scope.allDownload = function (){
+
+        var fileNames = new Array();
+
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            if($scope.flex.collectionView.items[i].gChk) {
+                // 값이 있으면 링크
+                if (nvl($scope.flex.collectionView.items[i].procFg, '') == '2') {
+                    // 다운로드
+                    fileNames.push($scope.flex.collectionView.items[i].fileName);
+                }
+            }
+        }
+        download(fileNames);
+    }
+
+    async function download(fileNames) {
+        const downloadChk = () =>
+            new Promise((resolve) => {
+                var chk = setInterval(function() {
+                    var token = getCookie("fileDownloadToken");
+                    // console.log(token);
+                    if(token === "true") {
+                        $("#deleteCookie_info").submit();
+                        setTimeout(function() {
+                            clearInterval(chk);
+                            $scope.excelUploadingPopup(false);
+                            resolve();
+                        }, 50);
+                    }
+                }, 1000 );
+            });
+
+        for (let i = 0; i < fileNames.length; i++) {
+
+            var frm = $('<form id="saleReport_info_all'+ i +'" method="post" action="/sale/prod/saleDtlChannel/saleDtlChannelExcel/getSaleDtlChannelDownload.sb" target="saleReportFrm' + i + '" async><iframe id="saleReportFrm' + i + '" name="saleReportFrm' + i + '" style="display: none;"></iframe><input type="hidden" name="fileName" value="'+fileNames[i] +'" /></form>');
+            frm.appendTo("body");
+
+            $scope.excelUploadingPopup(true);
+            $("#totalRows").html(fileNames.length);
+            var j = i;
+            $("#progressCnt").html(j+1);
+
+            $("#saleReport_info_all" + i).submit();
+
+            const result = await downloadChk();
+        }
+    }
+
+    function getCookie(name) {
+        var parts = document.cookie.split(name + "=");
+        if (parts.length == 2) return parts.pop().split(";").shift();
+    }
+
+    // 작업내역 로딩 팝업
+    $scope.excelUploadingPopup = function (showFg) {
+        if (showFg) {
+            // 팝업내용 동적 생성
+            var innerHtml = '<div class=\"wj-popup-loading\"><p class=\"bk\">' + messages['touchKey.loading.msg'] + '</p>';
+            innerHtml += '<div class="mt5 txtIn"><span class="bk" id="progressCnt">0</span>/<span class="bk" id="totalRows">0</span> 개 진행 중...</div>';
+            innerHtml += '<p><img src=\"/resource/solbipos/css/img/loading.gif\" alt=\"\" /></p></div>';
+            // html 적용
+            $scope._loadingPopup.content.innerHTML = innerHtml;
+            // 팝업 show
+            $scope._loadingPopup.show(true);
+        } else {
+            $scope._loadingPopup.hide(true);
+        }
+    };
 }]);
