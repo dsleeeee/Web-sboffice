@@ -2,6 +2,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<input type="hidden" id="<c:out value="org_${param.targetId}Cd"/>"/><%-- 직전에 선택했던 매장코드 값 갖고있기 --%>
 <input type="hidden" id="<c:out value="${param.targetId}Cd"/>"/>
 <input type="text"
        id="<c:out value="${param.targetId}Nm"/>"
@@ -95,12 +96,11 @@
     $scope.$on(targetId + 'Ctrl', function (event, paramObj) {
       // 매장선택 팝업 오픈
       eval('$scope.wj' + targetId + 'LayerM.show(true)');
-      
+
       // 팝업 닫힐시 이벤트
       eval('$scope.wj' + targetId + 'LayerM').hidden.addHandler(function () {
         if ('${param.closeFunc}' !== '') {
-			$scope.storeSelected();
-//           eval('$scope.${param.closeFunc}()');
+            eval('$scope.${param.closeFunc}()');
         }
       });
 
@@ -141,6 +141,9 @@
           cnt++;
         }
       }
+
+      // 직전에 선택했던 매장코드 값 갖고있기
+      $("#org_" + targetId + "Cd").val($("#" + targetId + "Cd").val());
 
       $("#" + targetId + "Cd").val(arrStoreCd.join());
       if (cnt == 0) {

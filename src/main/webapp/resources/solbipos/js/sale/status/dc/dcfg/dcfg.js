@@ -35,12 +35,6 @@ app.controller('dcDcfgCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     $scope._broadcast('dcDcfgSelectDcfgCtrl');
   };
 
-  $scope.getDcNmList = function() {
-	  $scope._broadcast('dcDcfgSelectedTableCtrl');
-	  $("#dcDcfgSelectDcfgNm").val(messages["cmm.all"]);
-	  $("#dcDcfgSelectDcfgCd").val("");
-  }
-
   //전체기간 체크박스 클릭이벤트
   $scope.isChkDt = function() {
     $scope.srchDcDcfgStartDate.isReadOnly = $scope.isChecked;
@@ -50,7 +44,15 @@ app.controller('dcDcfgCtrl', ['$scope', '$http', '$timeout', function ($scope, $
   // 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
   $scope.isChkProdClassDisplay = function(){
 	  $scope._broadcast("chkProdClassDisplay");
-  }
+  };
+
+  // 조회조건으로 선택한 매장이 이전에 선택한 매장과 다르면, 할인유형 선택정보 초기화
+  $scope.resetDcfg = function () {
+    if($("#dcDcfgSelectStoreCd").val() !== $("#org_dcDcfgSelectStoreCd").val()) {
+        $("#dcDcfgSelectDcfgNm").val(messages["cmm.all"]);
+        $("#dcDcfgSelectDcfgCd").val("");
+    }
+  };
 
 }]);
 

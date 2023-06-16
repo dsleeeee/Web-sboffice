@@ -603,13 +603,25 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
         return false;
       }
 
+      if(params[i].vendorNm == "" || params[i].vendorNm == undefined){
+        $scope._popMsg(messages["terminalManage.vendorCd"] + messages["terminalManage.require.select"]);
+        return false;
+      }
+
       if(params[i].vendorTermnlNo == "" || params[i].vendorTermnlNo == undefined) {
         $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.input"]);
         return false;
       } else {
-        if(params[i].vendorTermnlNo.length > 50) {
-          $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.exact.data"]);
-          return false;
+        if(params[i].vendorFg === "01" && params[i].vendorNm === "KCP"){
+          if(params[i].vendorTermnlNo.length != 10) {
+            $scope._popMsg(messages["terminalManage.vendorTermnlNo"] +"는 10자리로 입력하세요.");
+            return false;
+          }
+        }else {
+          if (params[i].vendorTermnlNo.length > 50) {
+            $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.exact.data"]);
+            return false;
+          }
         }
       }
 

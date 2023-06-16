@@ -199,5 +199,13 @@ app.controller('dcfgPeriodSaleCtrl', ['$scope', '$http', '$timeout', function ($
             });
         }, 10);
     }
+
+    // 조회조건으로 선택한 매장이 이전에 선택한 매장과 다르면, 할인유형 선택정보 초기화
+    $scope.resetDcfg = function () {
+        if($("#dcfgPeriodSaleStoreCd").val() !== $("#org_dcfgPeriodSaleStoreCd").val()) {
+            $("#dcfgPeriodSaleDcfgNm").val(messages["cmm.all"]);
+            $("#dcfgPeriodSaleDcfgCd").val("");
+        }
+    };
     
 }]);
