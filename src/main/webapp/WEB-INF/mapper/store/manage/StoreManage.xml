@@ -1662,7 +1662,8 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            T_POS_NO
         )
         SELECT #{storeCd},
                PRTER_NO,
@@ -1681,7 +1682,8 @@
                #{regDt},
                #{regId},
                #{modDt},
-               #{modId}
+               #{modId},
+               #{tPosNo}
           FROM TB_MS_PRINTER
          WHERE STORE_CD = #{copyStoreCd}
            AND POS_NO IN (SELECT POS_NO FROM TB_MS_POS WHERE STORE_CD = #{storeCd})
@@ -5997,7 +5999,8 @@
                tmp.PRTER_FG,
                tmp.PRTER_LABEL_KIND_FG,
                NVL(tmpr.CNT, 0) AS CNT,
-               tmp.BELL_USE_YN
+               tmp.BELL_USE_YN,
+               tmp.T_POS_NO
           FROM TB_MS_PRINTER tmp,
                (SELECT STORE_CD, PRTER_NO, COUNT(PROD_CD) AS CNT
                   FROM TB_MS_PRINTER_PROD
@@ -6038,7 +6041,8 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            T_POS_NO
         )
         VALUES
         (
@@ -6060,7 +6064,8 @@
             #{regDt},
             #{regId},
             #{modDt},
-            #{modId}
+            #{modId},
+            #{tPosNo}
         )
     </insert>
 
@@ -6087,7 +6092,8 @@
                PRTER_LABEL_KIND_FG = #{prterLabelKindFg},
                BELL_USE_YN = #{bellUseYn},
                MOD_DT = #{modDt},
-               MOD_ID = #{modId}
+               MOD_ID = #{modId},
+               T_POS_NO = #{tPosNo}
          WHERE STORE_CD = #{storeCd}
            AND PRTER_NO = #{prterNo}
     </update>
