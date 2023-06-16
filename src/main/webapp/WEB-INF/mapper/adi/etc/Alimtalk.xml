@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    Alimtalk.xml
+    매출트레킹수신자목록
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2023.06.16      최초작성
+-->
+<mapper namespace="kr.co.solbipos.adi.etc.alimtalk.service.impl.AlimtalkMapper">
+
+    <!-- 맘스터치 알림톡 수신자정보 조회 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
+        PARAM    : alimtalkVO
+        COMMENTS : 맘스터치 알림톡 수신자정보를 조회한다.
+    -->
+    <select id="getAlimtalkList" parameterType="alimtalkVO" resultType="DefaultMap">
+        /* USE : AlimtalkMapper.getAlimtalkList */
+        SELECT  HQ_OFFICE_CD
+        ,       STORE_CD
+        ,       ALIMTALK_FG
+        ,       MP_NO
+        ,       MP_INFO
+        ,       REMARK
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        FROM    TB_AL_ALIMTALK_MP_LIST_MOMS
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        ORDER
+        BY      REG_DT
+    </select>
+
+    <!-- 맘스터치 알림톡 수신자정보 저장 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : alimtalkVO
+        COMMENTS : 맘스터치 알림톡 수신자정보를 저장한다.
+    -->
+    <insert id="getAlimtalkSave" parameterType="alimtalkVO">
+        /* USE : AlimtalkMapper.getAlimtalkSave */
+        MERGE INTO TB_AL_ALIMTALK_MP_LIST_MOMS
+        USING DUAL
+        ON
+        (
+            HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND ALIMTALK_FG     = #{alimtalkFg}
+        AND MP_NO           = #{mpNo}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            MP_INFO = #{mpInfo}
+        ,   REMARK = #{remark}
+        ,   MOD_DT = #{modDt}
+        ,   MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT (
+            HQ_OFFICE_CD
+        ,   STORE_CD
+        ,   ALIMTALK_FG
+        ,   MP_NO
+        ,   MP_INFO
+        ,   REMARK
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        ) VALUES (
+            #{hqOfficeCd}
+        ,   #{storeCd}
+        ,   #{alimtalkFg}
+        ,   #{mpNo}
+        ,   #{mpInfo}
+        ,   #{remark}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+    </insert>
+
+    <!-- 맘스터치 알림톡 수신자정보 삭제 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
+        PARAM    : alimtalkVO
+        COMMENTS : 맘스터치 알림톡 수신자정보를 삭제한다.
+    -->
+    <delete id="getAlimtalkDelete" parameterType="alimtalkVO">
+        /* USE : AlimtalkMapper.getAlimtalkDelete */
+        DELETE  TB_AL_ALIMTALK_MP_LIST_MOMS
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     ALIMTALK_FG = #{alimtalkFg}
+        AND     MP_NO = #{mpNo}
+    </delete>
+
+</mapper>
