@@ -50,6 +50,7 @@
             <td colspan="3">
                 <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
                     <jsp:param name="targetId" value="dcfgPeriodSaleStore" />
+                    <jsp:param name="closeFunc" value="resetDcfg"/>
                 </jsp:include>
             </td>
         </tr>
@@ -116,7 +117,7 @@
 </div>
 
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/dcfgPeriodSale/dcfgPeriodSale.js?ver=20220617.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/dcfgPeriodSale/dcfgPeriodSale.js?ver=20230616.01" charset="utf-8"></script>
 
 <%-- 소계, 합계 Title 정렬 CSS --%>
 <style>

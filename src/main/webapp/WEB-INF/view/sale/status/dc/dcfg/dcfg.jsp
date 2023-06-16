@@ -62,8 +62,7 @@
                             closeFunc - 팝업 닫기시 호출할 함수--%>
                         <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
 							<jsp:param name="targetId" value="dcDcfgSelectStore" />
-							<jsp:param name="targetDcfgId" value="dcDcfgSelectDcfg" />
-							<jsp:param name="closeFunc" value="getDcNmList"/>
+							<jsp:param name="closeFunc" value="resetDcfg"/>
 						</jsp:include>
 						<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
 					</td>
@@ -73,9 +72,6 @@
 						value="${sessionInfo.storeCd}" />
 				</c:if>
 			</tr>
-
-			<input type="hidden" id="dcDcfgSelectDcfgCd" value=""/>
-			<input type="hidden" id="dcDcfgSelectDcfgName" value=""/>
 			<tr>
 				<%-- 할인유형표시 --%>
 				<th><s:message code="dcDcfg.dcDisplay" /></th>
@@ -215,7 +211,7 @@
 </div>
 
 <script type="text/javascript"
-	src="/resource/solbipos/js/sale/status/dc/dcfg/dcfg.js?ver=20190125.03"
+	src="/resource/solbipos/js/sale/status/dc/dcfg/dcfg.js?ver=20230616.03"
 	charset="utf-8"></script>
 
 <%-- 상품매출내역 팝업 상세 레이어 --%>
