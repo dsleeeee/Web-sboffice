@@ -198,13 +198,6 @@ public interface SideMenuMapper {
     /** 선택분류 적용매장등록 팝업 - 저장 delete */
     int getSdselClassRegStoreSaveDelete(SideMenuSelClassVO sideMenuSelClassVO);
 
-
-
-
-
-
-
-
     /** 선택상품 적용매장등록 팝업 - 선택상품 조회 */
     List<DefaultMap<Object>> getSdselProdCodeComboList(SideMenuSelProdVO sideMenuSelProdVO);
 
@@ -219,4 +212,10 @@ public interface SideMenuMapper {
 
     /** 선택상품 적용매장등록 팝업 - 저장 delete */
     int getSdselProdRegStoreSaveDelete(SideMenuSelProdVO sideMenuSelProdVO);
+
+    /** 선택분류 적용매장 전체 삭제 */
+    int getSdselClassRegStoreDeleteAll(SideMenuSelClassVO sideMenuSelClassVO);
+
+    /** 선택상품 적용매장 전체 삭제 */
+    int getSdselProdRegStoreDeleteAll(SideMenuSelProdVO sideMenuSelProdVO);
 }

@@ -13,13 +13,13 @@
             <li>
                 <a id="sideMenuClassStoreTab" href="#" class="on" ng-click="sideMenuClassStoreShow()"><s:message code="sideMenuStoreTab.sideMenuClassStore"/></a>
             </li>
-            <%-- 선택분류(선택분류별) 탭 --%>
-            <li>
-                <a id="sideMenuClassTab" href="#" ng-click="sideMenuClassShow()"><s:message code="sideMenuStoreTab.sideMenuClass"/></a>
-            </li>
             <%-- 선택상품(매장별) 탭 --%>
             <li>
                 <a id="sideMenuProdStoreTab" href="#" ng-click="sideMenuProdStoreShow()"><s:message code="sideMenuStoreTab.sideMenuProdStore"/></a>
+            </li>
+            <%-- 선택분류(선택분류별) 탭 --%>
+            <li>
+                <a id="sideMenuClassTab" href="#" ng-click="sideMenuClassShow()"><s:message code="sideMenuStoreTab.sideMenuClass"/></a>
             </li>
             <%-- 선택상품(선택상품별) 탭 --%>
             <li>
@@ -32,6 +32,16 @@
 <script type="text/javascript">
     // [1250 맘스터치] 환경설정값
     var momsEnvstVal = "${momsEnvstVal}";
+
+    // List 형식("" 안붙임)
+    var momsHqBrandCdComboList = ${momsHqBrandCdComboList};
+    var branchCdComboList = ${branchCdComboList};
+    var momsTeamComboList = ${momsTeamComboList};
+    var momsAcShopComboList = ${momsAcShopComboList};
+    var momsAreaFgComboList = ${momsAreaFgComboList};
+    var momsCommercialComboList = ${momsCommercialComboList};
+    var momsShopTypeComboList = ${momsShopTypeComboList};
+    var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenuStore/sideMenuStoreTab.js?ver=20230613.01" charset="utf-8"></script>

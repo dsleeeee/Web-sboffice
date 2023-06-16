@@ -2592,4 +2592,33 @@
         AND STORE_CD = #{storeCd}
     </insert>
 
+    <!-- 선택분류 적용매장 전체 삭제 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getSdselClassRegStoreDeleteAll" parameterType="SideMenuSelClassVO">
+        /* SideMenuMapper.getSdselClassRegStoreDeleteAll */
+        DELETE
+        TB_HQ_PRODUCT_SDSEL_CLASS_REG_STORE
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND SDSEL_CLASS_CD = #{sdselClassCd}
+    </insert>
+
+    <!-- 선택상품 적용매장 전체 삭제 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getSdselProdRegStoreDeleteAll" parameterType="sideMenuSelProdVO">
+        /* SideMenuMapper.getSdselProdRegStoreDeleteAll */
+        DELETE
+        TB_HQ_PRODUCT_SDSEL_PROD_REG_STORE
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND SDSEL_CLASS_CD = #{sdselClassCd}
+        AND PROD_CD = #{prodCd}
+    </insert>
+
 </mapper>

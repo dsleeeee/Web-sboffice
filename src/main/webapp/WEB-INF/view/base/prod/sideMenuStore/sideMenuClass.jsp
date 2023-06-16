@@ -13,12 +13,17 @@
     <div ng-controller="sideMenuClassCtrl">
 
         <%-- 조회조건 --%>
-        <div class="searchBar flddUnfld">
+        <%--<div class="searchBar flddUnfld">--%>
+        <div class="searchBar">
             <a href="#" class="open fl"><s:message code="sideMenuStoreTab.sideMenuClass"/></a>
-            <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" ng-click="_broadcast('sideMenuClassCtrl',1)">
+                <%-- 조회 --%>
+                <button class="btn_blue fr" ng-click="_broadcast('sideMenuClassCtrl',1)" id="nxBtnSearch3">
                     <s:message code="cmm.search" />
+                </button>
+                <%-- 확장조회 --%>
+                <button class="btn_blue mr5 fl" id="btnSearchAddShow" ng-click="searchAddShowChange()">
+                    <s:message code="cmm.search.addShow" />
                 </button>
             </div>
         </div>
@@ -56,6 +61,158 @@
                         </wj-combo-box>
                     </div>
                 </td>
+            </tr>
+            <tr>
+                <%-- 매장코드 --%>
+                <th><s:message code="cmm.store"/></th>
+                <td>
+                    <%-- 매장선택 모듈 사용시 include --%>
+                    <c:if test="${momsEnvstVal == '0'}">
+                        <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
+                            <jsp:param name="targetId" value="sideMenuClassClassStore"/>
+                        </jsp:include>
+                    </c:if>
+                    <c:if test="${momsEnvstVal == '1'}">
+                        <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreMMoms.jsp" flush="true">
+                            <jsp:param name="targetId" value="sideMenuClassClassStore"/>
+                        </jsp:include>
+                    </c:if>
+                    <%--// 매장선택 모듈 사용시 include --%>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+        <table class="searchTbl" id="tblSearchAddShow" style="display: none;">
+            <colgroup>
+                <col class="w15"/>
+                <col class="w35"/>
+                <col class="w15"/>
+                <col class="w35"/>
+            </colgroup>
+            <tbody>
+            <tr>
+                <%-- 팀별 --%>
+                <th><s:message code="dayProd.momsTeam"/></th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                id="srchMomsTeamCombo"
+                                ng-model="momsTeam"
+                                items-source="_getComboData('momsTeamCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                control="srchMomsTeamCombo">
+                        </wj-combo-box>
+                    </div>
+                </td>
+                <%-- AC점포별 --%>
+                <th><s:message code="dayProd.momsAcShop"/></th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                id="srchMomsAcShopCombo"
+                                ng-model="momsAcShop"
+                                items-source="_getComboData('momsAcShopCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                control="srchMomsAcShopCombo">
+                        </wj-combo-box>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <%-- 지역구분 --%>
+                <th><s:message code="dayProd.momsAreaFg"/></th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                id="srchMomsAreaFgCombo"
+                                ng-model="momsAreaFg"
+                                items-source="_getComboData('momsAreaFgCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                control="srchMomsAreaFgCombo">
+                        </wj-combo-box>
+                    </div>
+                </td>
+                <%-- 상권 --%>
+                <th><s:message code="dayProd.momsCommercial"/></th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                id="srchMomsCommercialCombo"
+                                ng-model="momsCommercial"
+                                items-source="_getComboData('momsCommercialCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                control="srchMomsCommercialCombo">
+                        </wj-combo-box>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <%-- 점포유형 --%>
+                <th><s:message code="dayProd.momsShopType"/></th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                id="srchMomsShopTypeCombo"
+                                ng-model="momsShopType"
+                                items-source="_getComboData('momsShopTypeCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                control="srchMomsShopTypeCombo">
+                        </wj-combo-box>
+                    </div>
+                </td>
+                <%-- 매장관리타입 --%>
+                <th><s:message code="dayProd.momsStoreManageType"/></th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                id="srchMomsStoreManageTypeCombo"
+                                ng-model="momsStoreManageType"
+                                items-source="_getComboData('momsStoreManageTypeCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                control="srchMomsStoreManageTypeCombo">
+                        </wj-combo-box>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <%-- 그룹 --%>
+                <th><s:message code="dayProd.branchCd"/></th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                id="srchBranchCdComboo"
+                                ng-model="branchCd"
+                                items-source="_getComboData('branchCdCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                control="srchBranchCdComboo">
+                        </wj-combo-box>
+                    </div>
+                </td>
+                <td></td>
+                <td></td>
             </tr>
             </tbody>
         </table>
@@ -130,4 +287,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenuStore/sideMenuClass.js?ver=20230612.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenuStore/sideMenuClass.js?ver=20230615.01" charset="utf-8"></script>

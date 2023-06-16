@@ -94,4 +94,10 @@ public interface SideMenuService {
 
     /** 선택상품 적용매장등록 팝업 - 저장 */
     int getSdselProdRegStoreSave(SideMenuSelProdVO[] sideMenuSelProdVOs, SessionInfoVO sessionInfoVO);
+
+    /** 선택분류 적용매장 전체 삭제 */
+    int getSdselClassRegStoreDeleteAll(SideMenuSelClassVO[] sideMenuSelClassVOs, SessionInfoVO sessionInfoVO);
+
+    /** 선택상품 적용매장 전체 삭제 */
+    int getSdselProdRegStoreDeleteAll(SideMenuSelProdVO[] sideMenuSelProdVOs, SessionInfoVO sessionInfoVO);
 }

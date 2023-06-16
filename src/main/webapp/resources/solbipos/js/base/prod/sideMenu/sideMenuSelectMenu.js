@@ -615,6 +615,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     params.gChk = true;
     params.sdselClassCd = '자동채번';
     params.requireYn = "N";
+    params.regStoreFg = "0";
 
     // 추가기능 수행 : 파라미터
     $scope._addRow(params, 2);
@@ -663,9 +664,15 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     });
   };
 
-  // 저장
-  $scope.save = function() {
-    $scope._popConfirm(messages["cmm.choo.save"], function() {
+  // 선택분류 그리드 저장
+  $scope.saveClass = function() {
+    var msg = messages["cmm.choo.save"];
+
+    if(orgnFg == 'HQ' && hqOfficeCd == 'DS021'){
+      msg = messages["sideMenu.selectMenu.sdselClassRegStoreAlert"] + " " +  messages["cmm.choo.save"]; // 적용매장구분 변경된 경우 등록된 적용매장은 모두 삭제됩니다.
+    }
+
+    $scope._popConfirm(msg, function() {
       $scope.flex.collectionView.commitEdit();
 
       // 파라미터 설정
@@ -694,8 +701,8 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
 
         if(nvl($scope.flex.collectionView.itemsEdited[u].fixProdCnt, 0) > nvl($scope.flex.collectionView.itemsEdited[u].sdselQty, 0)){
           $scope._popMsg( "'" + $scope.flex.collectionView.itemsEdited[u].sdselClassNm + "[" + $scope.flex.collectionView.itemsEdited[u].sdselClassCd + "]'"
-                                 + messages["sideMenu.selectMenu.sdselQtyChk.msg"]
-                                 + "<br/> (선택분류수량 : " + $scope.flex.collectionView.itemsEdited[u].sdselQty + " / 고정상품수량합계 : "  + $scope.flex.collectionView.itemsEdited[u].fixProdCnt+ ")");
+              + messages["sideMenu.selectMenu.sdselQtyChk.msg"]
+              + "<br/> (선택분류수량 : " + $scope.flex.collectionView.itemsEdited[u].sdselQty + " / 고정상품수량합계 : "  + $scope.flex.collectionView.itemsEdited[u].fixProdCnt+ ")");
           return false;
         }
 
@@ -734,7 +741,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
         }
 
         if($scope.maxChk($scope.flex.collectionView.itemsAdded[i].sdselClassNm)) {
-          
+
           // addRow가 제대로 안된 데이터 다시 파악하여 필수값 채워주기
           if($scope.flex.collectionView.itemsAdded[i].gChk === undefined){
             $scope.flex.collectionView.itemsAdded[i].sdselGrpCd =  $scope.getSdselGrpCd();
@@ -757,25 +764,35 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
 
       // console.log('2 params',params);
 
-      // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-      $scope._save('/base/prod/sideMenu/menuClass/save.sb', params, function() {
-
-        // 선택그룹 리스트 재조회
-        //$scope._broadcast("sideMenuSelectGroupCtrl");
-
-        // 선택분류 리스트 재조회
-        var grpGrid = agrid.getScope('sideMenuSelectGroupCtrl');
-        var selectedSelGroup = grpGrid.getSelectedSelGroup();
-        $scope._broadcast('sideMenuSelectClassCtrl', selectedSelGroup);
-
-        // 선택상품 리스트 재조회
-        $("#sideClassTitle").html("");
-        var prodScope = agrid.getScope('sideMenuSelectProdCtrl');
-        prodScope._gridDataInit();   // 그리드 초기화
-
+      // 적용매장 전체 삭제
+      $scope._postJSONSave.withOutPopUp("/base/prod/sideMenu/menuClass/getSdselClassRegStoreDeleteAll.sb", params, function(){
+        // 저장
+        $scope.save(params);
       });
     });
   };
+
+  // 저장
+  $scope.save = function(params) {
+    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+    $scope._save('/base/prod/sideMenu/menuClass/save.sb', params, function() {
+
+      // 선택그룹 리스트 재조회
+      //$scope._broadcast("sideMenuSelectGroupCtrl");
+
+      // 선택분류 리스트 재조회
+      var grpGrid = agrid.getScope('sideMenuSelectGroupCtrl');
+      var selectedSelGroup = grpGrid.getSelectedSelGroup();
+      $scope._broadcast('sideMenuSelectClassCtrl', selectedSelGroup);
+
+      // 선택상품 리스트 재조회
+      $("#sideClassTitle").html("");
+      var prodScope = agrid.getScope('sideMenuSelectProdCtrl');
+      prodScope._gridDataInit();   // 그리드 초기화
+
+    });
+  };
+
   $scope.maxChk = function (val){
     var str = val;
     var strLength = 0;
@@ -1060,9 +1077,15 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
     });
   };
 
-  // 저장
-  $scope.save = function() {
-    $scope._popConfirm(messages["cmm.choo.save"], function() {
+  // 선택상품 그리드 저장
+  $scope.saveProd = function() {
+    var msg = messages["cmm.choo.save"];
+
+    if(orgnFg == 'HQ' && hqOfficeCd == 'DS021'){
+      msg = messages["sideMenu.selectMenu.sdselClassRegStoreAlert"] + " " +  messages["cmm.choo.save"]; // 적용매장구분 변경된 경우 등록된 적용매장은 모두 삭제됩니다.
+    }
+
+    $scope._popConfirm(msg, function() {
       $scope.flex.collectionView.commitEdit();
 
       // 파라미터 설정
@@ -1117,21 +1140,30 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
         return false;
       }
 
-      // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-      $scope._save('/base/prod/sideMenu/menuProd/save.sb', params, function() {
-
-          // 선택상품 리스트 재조회
-          var params = {};
-          params.sdselClassCd = $scope.getSdselClassCd();
-          params.sdselQty = $scope.sdselQty;
-          $scope._broadcast('sideMenuSelectProdCtrl', params);
-
-          // 선택분류 리스트 재조회
-          var grpGrid = agrid.getScope('sideMenuSelectGroupCtrl');
-          var selectedSelGroup = grpGrid.getSelectedSelGroup();
-          $scope._broadcast('sideMenuSelectClassCtrl', selectedSelGroup);
-          // $scope._broadcast("sideMenuSelectGroupCtrl");
+      // 적용매장 전체 삭제
+      $scope._postJSONSave.withOutPopUp("/base/prod/sideMenu/menuProd/getSdselProdRegStoreDeleteAll.sb", params, function(){
+        // 저장
+        $scope.save(params);
       });
+    });
+  };
+
+  // 저장
+  $scope.save = function(params) {
+    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+    $scope._save('/base/prod/sideMenu/menuProd/save.sb', params, function() {
+
+      // 선택상품 리스트 재조회
+      var params = {};
+      params.sdselClassCd = $scope.getSdselClassCd();
+      params.sdselQty = $scope.sdselQty;
+      $scope._broadcast('sideMenuSelectProdCtrl', params);
+
+      // 선택분류 리스트 재조회
+      var grpGrid = agrid.getScope('sideMenuSelectGroupCtrl');
+      var selectedSelGroup = grpGrid.getSelectedSelGroup();
+      $scope._broadcast('sideMenuSelectClassCtrl', selectedSelGroup);
+      // $scope._broadcast("sideMenuSelectGroupCtrl");
     });
   };
 
@@ -1194,6 +1226,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
                 params.addProdQty = 1; // 기본으로 하나씩 들어가도록 // todo 추후 수정
                 params.gChk = true;
                 params.fixProdFg = 0;
+                params.regStoreFg = "0";
                 // 추가기능 수행 : 파라미터
                 $scope._addRow(params);
               } else {
