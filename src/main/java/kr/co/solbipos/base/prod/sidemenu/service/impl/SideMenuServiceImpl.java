@@ -703,4 +703,36 @@ public class SideMenuServiceImpl implements SideMenuService {
 
         return procCnt;
     }
+
+    /** 선택분류 적용매장 전체 삭제 */
+    @Override
+    public int getSdselClassRegStoreDeleteAll(SideMenuSelClassVO[] sideMenuSelClassVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+
+        for(SideMenuSelClassVO sideMenuSelClassVO : sideMenuSelClassVOs) {
+
+            sideMenuSelClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+            procCnt = sideMenuMapper.getSdselClassRegStoreDeleteAll(sideMenuSelClassVO);
+        }
+
+        return procCnt;
+    }
+
+    /** 선택상품 적용매장 전체 삭제 */
+    @Override
+    public int getSdselProdRegStoreDeleteAll(SideMenuSelProdVO[] sideMenuSelProdVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+
+        for(SideMenuSelProdVO sideMenuSelProdVO : sideMenuSelProdVOs) {
+
+            sideMenuSelProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+            procCnt = sideMenuMapper.getSdselProdRegStoreDeleteAll(sideMenuSelProdVO);
+        }
+
+        return procCnt;
+    }
 }

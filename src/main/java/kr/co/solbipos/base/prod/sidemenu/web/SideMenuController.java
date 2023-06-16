@@ -786,4 +786,50 @@ public class SideMenuController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 선택분류 적용매장 전체 삭제
+     *
+     * @param sideMenuSelClassVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 06. 16.
+     */
+    @RequestMapping(value = "/menuClass/getSdselClassRegStoreDeleteAll.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSdselClassRegStoreDeleteAll(@RequestBody SideMenuSelClassVO[] sideMenuSelClassVOs, HttpServletRequest request,
+                                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = sideMenuService.getSdselClassRegStoreDeleteAll(sideMenuSelClassVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 선택상품 적용매장 전체 삭제
+     *
+     * @param sideMenuSelProdVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 06. 16.
+     */
+    @RequestMapping(value = "/menuProd/getSdselProdRegStoreDeleteAll.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSdselProdRegStoreDeleteAll(@RequestBody SideMenuSelProdVO[] sideMenuSelProdVOs, HttpServletRequest request,
+                                                 HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = sideMenuService.getSdselProdRegStoreDeleteAll(sideMenuSelProdVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

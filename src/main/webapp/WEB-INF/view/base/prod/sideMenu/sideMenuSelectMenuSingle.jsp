@@ -116,7 +116,7 @@
                     <button class="btn_skyblue" id="btnDelSelClassSingle" ng-click="deleteRow()" >
                       <s:message code="cmm.delete" />
                     </button>
-                    <button class="btn_skyblue" id="btnSaveSelClassSingle" ng-click="save()" >
+                    <button class="btn_skyblue" id="btnSaveSelClassSingle" ng-click="saveClass()" >
                       <s:message code="cmm.save" />
                     </button>
                 </div>
@@ -179,7 +179,7 @@
                 <button class="btn_skyblue" id="btnDelSelProdSingle" ng-click="deleteRow()">
                   <s:message code="cmm.delete" />
                 </button>
-                <button class="btn_skyblue" id="btnSaveSelProdSingle" ng-click="save()">
+                <button class="btn_skyblue" id="btnSaveSelProdSingle" ng-click="saveProd()">
                   <s:message code="cmm.save" />
                 </button>
             </div>
@@ -231,4 +231,4 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenuSingle.js?ver=20230607.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenuSingle.js?ver=20230616.03" charset="utf-8"></script>

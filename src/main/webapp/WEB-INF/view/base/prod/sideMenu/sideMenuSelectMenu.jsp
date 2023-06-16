@@ -123,7 +123,7 @@
                     <button class="btn_skyblue" id="btnDelSelClass" ng-click="deleteRow()" >
                         <s:message code="cmm.delete" />
                     </button>
-                    <button class="btn_skyblue" id="btnSaveSelClass" ng-click="save()" >
+                    <button class="btn_skyblue" id="btnSaveSelClass" ng-click="saveClass()" >
                         <s:message code="cmm.save" />
                     </button>
                 </div>
@@ -187,7 +187,7 @@
                     <button class="btn_skyblue" id="btnDelSelProd" ng-click="deleteRow()">
                         <s:message code="cmm.delete" />
                     </button>
-                    <button class="btn_skyblue" id="btnSaveSelProd" ng-click="save()">
+                    <button class="btn_skyblue" id="btnSaveSelProd" ng-click="saveProd()">
                         <s:message code="cmm.save" />
                     </button>
                 </div>
@@ -237,7 +237,7 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenu.js?ver=20230602.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenu.js?ver=20230616.02" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품선택 --%>
 <c:import url="/WEB-INF/view/base/prod/sideMenu/sideMenuProdView.jsp">
