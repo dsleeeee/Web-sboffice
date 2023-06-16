@@ -24,6 +24,13 @@ app.controller('sideMenuClassCtrl', ['$scope', '$http', '$timeout', function ($s
     // 콤보박스 셋팅
     $scope._setComboData("regYnCombo", regYnAllData); // 등록구분
     $scope._setComboData("regYnChgCombo", regYnData); // 일괄변경 - 등록구분
+    $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
+    $scope._setComboData("momsAcShopCombo", momsAcShopComboList); // AC점포별
+    $scope._setComboData("momsAreaFgCombo", momsAreaFgComboList); // 지역구분
+    $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
+    $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
+    $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
+    $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -59,6 +66,7 @@ app.controller('sideMenuClassCtrl', ['$scope', '$http', '$timeout', function ($s
         var params = {};
         params.sdselClassCd = $("#sideMenuClassSdselClassCd").val();
         params.regYn = $scope.regYn;
+        params.storeCds = $("#sideMenuClassClassStoreCd").val();
 
         $scope._inquiryMain("/base/prod/sideMenuStore/sideMenuClass/getSideMenuClassList.sb", params, function() {}, false);
     };
@@ -69,6 +77,22 @@ app.controller('sideMenuClassCtrl', ['$scope', '$http', '$timeout', function ($s
     // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
     $scope.sideMenuClassSdselClassShow = function () {
         $scope._broadcast('sideMenuClassSdselClassCtrl');
+    };
+
+    // 매장선택 모듈 팝업 사용시 정의
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+    $scope.sideMenuClassClassStoreShow = function () {
+        $scope._broadcast('sideMenuClassClassStoreCtrl');
+    };
+
+    // 확장조회 숨김/보임
+    $scope.searchAddShowChange = function(){
+        if( $("#tblSearchAddShow").css("display") === 'none') {
+            $("#tblSearchAddShow").show();
+        } else {
+            $("#tblSearchAddShow").hide();
+        }
     };
 
     // 일괄적용

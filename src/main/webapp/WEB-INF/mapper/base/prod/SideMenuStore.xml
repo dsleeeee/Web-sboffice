@@ -36,10 +36,20 @@
             WHERE 1=1
             AND A.HQ_OFFICE_CD = #{hqOfficeCd}
             <if test='sdselGrpCd != null and sdselGrpCd != ""'>
-                AND A.SDSEL_GRP_CD = #{sdselGrpCd}
+                AND A.SDSEL_GRP_CD LIKE '%'||#{sdselGrpCd}||'%'
             </if>
-            AND NVL(B.REG_STORE_FG, '0') IN ('1', '2')
+            <if test='sdselGrpNm != null and sdselGrpNm != ""'>
+                AND A.SDSEL_GRP_NM LIKE '%'||#{sdselGrpNm}||'%'
+            </if>
+            <if test='sdselClassCd != null and sdselClassCd != ""'>
+                AND B.SDSEL_CLASS_CD LIKE '%'||#{sdselClassCd}||'%'
+            </if>
+            <if test='sdselClassNm != null and sdselClassNm != ""'>
+                AND B.SDSEL_CLASS_NM LIKE '%'||#{sdselClassNm}||'%'
+            </if>
+            AND A.USE_YN = 'Y'
             AND B.USE_YN = 'Y'
+            AND NVL(B.REG_STORE_FG, '0') IN ('1', '2')
             AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
             AND B.SDSEL_GRP_CD = A.SDSEL_GRP_CD
             AND C.STORE_CD (+)= #{storeCd}
@@ -117,18 +127,48 @@
             FROM TB_HQ_PRODUCT_SDSEL_GROUP A,
             TB_HQ_PRODUCT_SDSEL_CLASS B,
             TB_MS_STORE C,
-            TB_HQ_PRODUCT_SDSEL_CLASS_REG_STORE D
+            TB_HQ_PRODUCT_SDSEL_CLASS_REG_STORE D,
+            TB_MS_STORE_INFO E
             WHERE 1=1
             AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND A.USE_YN = 'Y'
             AND B.SDSEL_CLASS_CD = #{sdselClassCd}
-            AND NVL(B.REG_STORE_FG, '0') IN ('1', '2')
             AND B.USE_YN = 'Y'
+            AND NVL(B.REG_STORE_FG, '0') IN ('1', '2')
             AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
             AND B.SDSEL_GRP_CD = A.SDSEL_GRP_CD
+            <if test='storeCds != null and storeCds != ""'>
+                AND
+                <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                    C.STORE_CD = #{item}
+                </foreach>
+            </if>
+            <if test='momsTeam != null and momsTeam != ""'>
+                AND E.MOMS_TEAM = #{momsTeam}
+            </if>
+            <if test='momsAcShop != null and momsAcShop != ""'>
+                AND E.MOMS_AC_SHOP = #{momsAcShop}
+            </if>
+            <if test='momsAreaFg != null and momsAreaFg != ""'>
+                AND E.MOMS_AREA_FG = #{momsAreaFg}
+            </if>
+            <if test='momsCommercial != null and momsCommercial != ""'>
+                AND E.MOMS_COMMERCIAL = #{momsCommercial}
+            </if>
+            <if test='momsShopType != null and momsShopType != ""'>
+                AND E.MOMS_SHOP_TYPE = #{momsShopType}
+            </if>
+            <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                AND E.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+            </if>
+            <if test='branchCd != null and branchCd != ""'>
+                AND C.BRANCH_CD = #{branchCd}
+            </if>
             AND B.HQ_OFFICE_CD (+)= C.HQ_OFFICE_CD
             AND D.HQ_OFFICE_CD (+)= B.HQ_OFFICE_CD
             AND D.SDSEL_CLASS_CD (+)= B.SDSEL_CLASS_CD
             AND D.STORE_CD (+)= C.STORE_CD
+            AND E.STORE_CD (+)= C.STORE_CD
         )
         WHERE 1=1
         <if test='regYn != null and regYn != ""'>
@@ -166,12 +206,27 @@
             WHERE 1=1
             AND A.HQ_OFFICE_CD = #{hqOfficeCd}
             <if test='sdselGrpCd != null and sdselGrpCd != ""'>
-                AND A.SDSEL_GRP_CD = #{sdselGrpCd}
+                AND A.SDSEL_GRP_CD LIKE '%'||#{sdselGrpCd}||'%'
             </if>
-            AND NVL(B.REG_STORE_FG, '0') IN ('1', '2')
+            <if test='sdselGrpNm != null and sdselGrpNm != ""'>
+                AND A.SDSEL_GRP_NM LIKE '%'||#{sdselGrpNm}||'%'
+            </if>
+            <if test='sdselClassCd != null and sdselClassCd != ""'>
+                AND B.SDSEL_CLASS_CD LIKE '%'||#{sdselClassCd}||'%'
+            </if>
+            <if test='sdselClassNm != null and sdselClassNm != ""'>
+                AND B.SDSEL_CLASS_NM LIKE '%'||#{sdselClassNm}||'%'
+            </if>
+            <if test='sdselProdCd != null and sdselProdCd != ""'>
+                AND C.PROD_CD LIKE '%'||#{sdselProdCd}||'%'
+            </if>
+            <if test='sdselProdNm != null and sdselProdNm != ""'>
+                AND D.PROD_NM LIKE '%'||#{sdselProdNm}||'%'
+            </if>
+            AND A.USE_YN = 'Y'
             AND B.USE_YN = 'Y'
-            AND NVL(C.REG_STORE_FG, '0') IN ('1', '2')
             AND C.USE_YN = 'Y'
+            AND NVL(C.REG_STORE_FG, '0') IN ('1', '2')
             AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
             AND B.SDSEL_GRP_CD = A.SDSEL_GRP_CD
             AND C.HQ_OFFICE_CD = B.HQ_OFFICE_CD
@@ -259,14 +314,45 @@
             TB_HQ_PRODUCT_SDSEL_CLASS B,
             TB_HQ_PRODUCT_SDSEL_PROD C,
             TB_MS_STORE D,
-            TB_HQ_PRODUCT_SDSEL_PROD_REG_STORE E
+            TB_HQ_PRODUCT_SDSEL_PROD_REG_STORE E,
+            TB_MS_STORE_INFO F
             WHERE 1=1
             AND A.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND NVL(B.REG_STORE_FG, '0') IN ('1', '2')
+            AND A.USE_YN = 'Y'
             AND B.USE_YN = 'Y'
+            <if test='sdselClassCd != null and sdselClassCd != ""'>
+                AND B.SDSEL_CLASS_CD = #{sdselClassCd}
+            </if>
             AND C.PROD_CD = #{sdselProdCd}
-            AND NVL(C.REG_STORE_FG, '0') IN ('1', '2')
             AND C.USE_YN = 'Y'
+            AND NVL(C.REG_STORE_FG, '0') IN ('1', '2')
+            <if test='storeCds != null and storeCds != ""'>
+                AND
+                <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                    D.STORE_CD = #{item}
+                </foreach>
+            </if>
+            <if test='momsTeam != null and momsTeam != ""'>
+                AND F.MOMS_TEAM = #{momsTeam}
+            </if>
+            <if test='momsAcShop != null and momsAcShop != ""'>
+                AND F.MOMS_AC_SHOP = #{momsAcShop}
+            </if>
+            <if test='momsAreaFg != null and momsAreaFg != ""'>
+                AND F.MOMS_AREA_FG = #{momsAreaFg}
+            </if>
+            <if test='momsCommercial != null and momsCommercial != ""'>
+                AND F.MOMS_COMMERCIAL = #{momsCommercial}
+            </if>
+            <if test='momsShopType != null and momsShopType != ""'>
+                AND F.MOMS_SHOP_TYPE = #{momsShopType}
+            </if>
+            <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                AND F.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+            </if>
+            <if test='branchCd != null and branchCd != ""'>
+                AND D.BRANCH_CD = #{branchCd}
+            </if>
             AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
             AND B.SDSEL_GRP_CD = A.SDSEL_GRP_CD
             AND C.HQ_OFFICE_CD = B.HQ_OFFICE_CD
@@ -275,6 +361,7 @@
             AND E.HQ_OFFICE_CD (+)= C.HQ_OFFICE_CD
             AND E.SDSEL_CLASS_CD (+)= C.SDSEL_CLASS_CD
             AND E.STORE_CD (+)= D.STORE_CD
+            AND F.STORE_CD (+)= D.STORE_CD
         )
         WHERE 1=1
         <if test='regYn != null and regYn != ""'>

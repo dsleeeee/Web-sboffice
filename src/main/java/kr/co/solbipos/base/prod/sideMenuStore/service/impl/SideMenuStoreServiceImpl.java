@@ -83,6 +83,10 @@ public class SideMenuStoreServiceImpl implements SideMenuStoreService {
 
         sideMenuStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
+        // 매장 array 값 세팅
+        String[] storeCds = sideMenuStoreVO.getStoreCds().split(",");
+        sideMenuStoreVO.setStoreCdList(storeCds);
+
         return sideMenuStoreMapper.getSideMenuClassList(sideMenuStoreVO);
     }
 
@@ -128,6 +132,10 @@ public class SideMenuStoreServiceImpl implements SideMenuStoreService {
     public List<DefaultMap<Object>> getSideMenuProdList(SideMenuStoreVO sideMenuStoreVO, SessionInfoVO sessionInfoVO) {
 
         sideMenuStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        // 매장 array 값 세팅
+        String[] storeCds = sideMenuStoreVO.getStoreCds().split(",");
+        sideMenuStoreVO.setStoreCdList(storeCds);
 
         return sideMenuStoreMapper.getSideMenuProdList(sideMenuStoreVO);
     }

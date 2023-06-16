@@ -17,7 +17,7 @@
             <a href="#" class="open fl"><s:message code="sideMenuStoreTab.sideMenuProdStore"/></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" ng-click="_broadcast('sideMenuProdStoreCtrl',1)">
+                <button class="btn_blue fr" ng-click="_broadcast('sideMenuProdStoreCtrl',1)" id="nxBtnSearch2">
                     <s:message code="cmm.search" />
                 </button>
             </div>
@@ -33,7 +33,7 @@
             <tr>
                 <%-- 매장코드 --%>
                 <th><s:message code="cmm.store"/></th>
-                <td colspan="3">
+                <td>
                     <%-- 매장선택 모듈 사용시 include --%>
                     <c:if test="${momsEnvstVal == '0'}">
                         <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
@@ -46,17 +46,6 @@
                         </jsp:include>
                     </c:if>
                     <%--// 매장선택 모듈 사용시 include --%>
-                </td>
-            </tr>
-            <tr>
-                <%-- 선택그룹 --%>
-                <th><s:message code="sideMenuStore.sdselGrp"/></th>
-                <td>
-                    <%-- 선택그룹 선택 모듈 사용시 include --%>
-                    <jsp:include page="/WEB-INF/view/sale/com/popup/selectSdselGrpS.jsp" flush="true">
-                        <jsp:param name="targetId" value="sideMenuProdStoreSdselGrp"/>
-                    </jsp:include>
-                    <%--// 선택그룹 선택 모듈 사용시 include --%>
                 </td>
                 <%-- 등록구분 --%>
                 <th><s:message code="sideMenuStore.regYn"/></th>
@@ -73,6 +62,51 @@
                                 control="srchRegYnCombo">
                         </wj-combo-box>
                     </div>
+                </td>
+                <%-- 선택그룹 --%>
+                <%--<th><s:message code="sideMenuStore.sdselGrp"/></th>--%>
+                <%--<td>--%>
+                    <%--&lt;%&ndash; 선택그룹 선택 모듈 사용시 include &ndash;%&gt;--%>
+                    <%--<jsp:include page="/WEB-INF/view/sale/com/popup/selectSdselGrpS.jsp" flush="true">--%>
+                        <%--<jsp:param name="targetId" value="sideMenuProdStoreSdselGrp"/>--%>
+                    <%--</jsp:include>--%>
+                    <%--&lt;%&ndash;// 선택그룹 선택 모듈 사용시 include &ndash;%&gt;--%>
+                <%--</td>--%>
+            </tr>
+            <tr>
+                <%-- 선택그룹코드 --%>
+                <th><s:message code="sideMenuStore.sdselGrpCd"/></th>
+                <td>
+                    <input type="text" class="sb-input w100" id="srchSdselGrpCd" ng-model="sdselGrpCd" onkeyup="fnNxBtnSearch(2);"/>
+                </td>
+                <%-- 선택그룹코명 --%>
+                <th><s:message code="sideMenuStore.sdselGrpNm"/></th>
+                <td>
+                    <input type="text" class="sb-input w100" id="srchSdselGrpNm" ng-model="sdselGrpNm" onkeyup="fnNxBtnSearch(2);"/>
+                </td>
+            </tr>
+            <tr>
+                <%-- 선택분류코드 --%>
+                <th><s:message code="sideMenuStore.sdselClassCd"/></th>
+                <td>
+                    <input type="text" class="sb-input w100" id="srchSdselClassCd" ng-model="sdselClassCd" onkeyup="fnNxBtnSearch(2);"/>
+                </td>
+                <%-- 선택분류명 --%>
+                <th><s:message code="sideMenuStore.sdselClassNm"/></th>
+                <td>
+                    <input type="text" class="sb-input w100" id="srchSdselClassNm" ng-model="sdselClassNm" onkeyup="fnNxBtnSearch(2);"/>
+                </td>
+            </tr>
+            <tr>
+                <%-- 선택상품코드 --%>
+                <th><s:message code="sideMenuStore.sdselProdCd"/></th>
+                <td>
+                    <input type="text" class="sb-input w100" id="srchSdselProdCd" ng-model="sdselProdCd" onkeyup="fnNxBtnSearch(2);"/>
+                </td>
+                <%-- 선택상품명 --%>
+                <th><s:message code="sideMenuStore.sdselProdNm"/></th>
+                <td>
+                    <input type="text" class="sb-input w100" id="srchSdselProdNm" ng-model="sdselProdNm" onkeyup="fnNxBtnSearch(2);"/>
                 </td>
             </tr>
             </tbody>
@@ -150,4 +184,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenuStore/sideMenuProdStore.js?ver=20230613.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenuStore/sideMenuProdStore.js?ver=20230615.01" charset="utf-8"></script>

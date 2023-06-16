@@ -13,6 +13,12 @@
  */
 var app = agrid.getApp();
 
+// 구분
+var gubunComboData = [
+    {"name":"선택상품기준","value":"1"},
+    {"name":"상품코드기준","value":"2"}
+];
+
 /**
  *  선택상품(선택상품별) 조회 그리드 생성
  */
@@ -24,6 +30,14 @@ app.controller('sideMenuProdCtrl', ['$scope', '$http', '$timeout', function ($sc
     // 콤보박스 셋팅
     $scope._setComboData("regYnCombo", regYnAllData); // 등록구분
     $scope._setComboData("regYnChgCombo", regYnData); // 일괄변경 - 등록구분
+    $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
+    $scope._setComboData("momsAcShopCombo", momsAcShopComboList); // AC점포별
+    $scope._setComboData("momsAreaFgCombo", momsAreaFgComboList); // 지역구분
+    $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
+    $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
+    $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
+    $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+    $scope._setComboData("gubunCombo", gubunComboData); // 구분
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -58,7 +72,13 @@ app.controller('sideMenuProdCtrl', ['$scope', '$http', '$timeout', function ($sc
 
         var params = {};
         params.sdselProdCd = $("#sideMenuProdSdselProdCd").val();
+        if($scope.gubun == "1") {
+            params.sdselClassCd = $("#sideMenuProdSdselProdClassCd").val()
+        } else {
+            params.sdselClassCd = "";
+        }
         params.regYn = $scope.regYn;
+        params.storeCds = $("#sideMenuProdProdStoreCd").val();
 
         $scope._inquiryMain("/base/prod/sideMenuStore/sideMenuProd/getSideMenuProdList.sb", params, function() {}, false);
     };
@@ -69,6 +89,22 @@ app.controller('sideMenuProdCtrl', ['$scope', '$http', '$timeout', function ($sc
     // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
     $scope.sideMenuProdSdselProdShow = function () {
         $scope._broadcast('sideMenuProdSdselProdCtrl');
+    };
+
+    // 매장선택 모듈 팝업 사용시 정의
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+    $scope.sideMenuProdProdStoreShow = function () {
+        $scope._broadcast('sideMenuProdProdStoreCtrl');
+    };
+
+    // 확장조회 숨김/보임
+    $scope.searchAddShowChange = function(){
+        if( $("#tblSearchAddShow2").css("display") === 'none') {
+            $("#tblSearchAddShow2").show();
+        } else {
+            $("#tblSearchAddShow2").hide();
+        }
     };
 
     // 일괄적용

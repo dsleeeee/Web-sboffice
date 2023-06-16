@@ -76,7 +76,7 @@ app.controller('sideMenuClassStoreCtrl', ['$scope', '$http', '$timeout', functio
 
         var params = {};
         params.storeCd = $("#sideMenuClassStoreStoreCd").val();
-        params.sdselGrpCd = $("#sideMenuClassStoreSdselGrpCd").val();
+        // params.sdselGrpCd = $("#sideMenuClassStoreSdselGrpCd").val();
         params.regYn = $scope.regYn;
 
         $scope._inquiryMain("/base/prod/sideMenuStore/sideMenuClassStore/getSideMenuClassStoreList.sb", params, function() {}, false);
@@ -93,9 +93,9 @@ app.controller('sideMenuClassStoreCtrl', ['$scope', '$http', '$timeout', functio
     // 선택그룹 선택 모듈 팝업 사용시 정의
     // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
     // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.sideMenuClassStoreSdselGrpShow = function () {
-        $scope._broadcast('sideMenuClassStoreSdselGrpCtrl');
-    };
+    // $scope.sideMenuClassStoreSdselGrpShow = function () {
+    //     $scope._broadcast('sideMenuClassStoreSdselGrpCtrl');
+    // };
 
     // 일괄적용
     $scope.batchChange = function(chgGubun) {

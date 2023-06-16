@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <input type="hidden" id="<c:out value="${param.targetId}Cd"/>" />
+<input type="hidden" id="<c:out value="${param.targetId}ClassCd"/>" />
 <input type="text"
        id="<c:out value="${param.targetId}Nm"/>"
        class="sb-input fl mr5 w100"
@@ -139,9 +140,11 @@
                     if (col.binding === "sdselProdCd") {
                         $("#" + $scope.targetId + "Cd").val(selectedRow.sdselProdCd);
                         $("#" + $scope.targetId + "Nm").val("[" + selectedRow.sdselProdCd + "] " + selectedRow.sdselProdNm);
+                        $("#" + $scope.targetId + "ClassCd").val(selectedRow.sdselClassCd);
 
                         $("#" + $scope.subTargetId + "Nm").val(messages["cmm.all"]);
                         $("#" + $scope.subTargetId + "Cd").val("");
+                        $("#" + $scope.subTargetId + "ClassCd").val("");
                         eval('$scope.wj' + $scope.targetId + 'LayerS.hide(true)');
                     }
                 }
@@ -188,6 +191,7 @@
         $("#${param.targetId}SelectCancelBtn").click(function () {
             $("#${param.targetId}Cd").val("");
             $("#${param.targetId}Nm").val(("${param.displayNm}" === "" ? messages["cmm.select"] : "${param.displayNm}"));
+            $("#${param.targetId}ClassCd").val("");
         });
     });
 
