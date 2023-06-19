@@ -1683,7 +1683,7 @@
                #{regId},
                #{modDt},
                #{modId},
-               #{tPosNo}
+               T_POS_NO
           FROM TB_MS_PRINTER
          WHERE STORE_CD = #{copyStoreCd}
            AND POS_NO IN (SELECT POS_NO FROM TB_MS_POS WHERE STORE_CD = #{storeCd})
