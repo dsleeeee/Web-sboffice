@@ -51,7 +51,7 @@ app.controller('alimtalkCtrl', ['$scope', '$http', '$timeout', function ($scope,
   };
 
   // 그리드 행 삭제
-  $scope.delete = function(){
+  $scope.deleteRow = function(){
     for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
       var item = $scope.flex.collectionView.items[i];
       if(item.gChk){
@@ -117,7 +117,7 @@ app.controller('alimtalkCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // console.log(params);
 
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save("/adi/etc/alimtalk/alimtalk/getAlimtalkSave.sb", params, function(){ $scope.getKitchenMemoList() });
+    $scope._save("/adi/etc/alimtalk/alimtalk/getAlimtalkSave.sb", params, function(){ $scope.searchAlimtalkList() });
   }
 
 }]);
