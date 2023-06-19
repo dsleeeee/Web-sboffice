@@ -411,4 +411,25 @@ public class PosTemplateController {
         return returnJson(Status.OK, result);
     }
 
+    /**
+     *  출력코드명 조회
+     *
+     * @param request
+     * @param response
+     * @param posTemplateVO
+     * @param model
+     * @return String
+     * @author 이다솜
+     * @since 2023. 06. 19.
+     */
+    @RequestMapping(value = "/template/getPrintCodeNm.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPrintCodeNm(HttpServletRequest request, HttpServletResponse response,
+                                           PosTemplateVO posTemplateVO, Model model) {
+
+        String result = posTemplateService.getPrintCodeNm(posTemplateVO);
+
+        return returnJson(Status.OK, result);
+    }
+
 }
