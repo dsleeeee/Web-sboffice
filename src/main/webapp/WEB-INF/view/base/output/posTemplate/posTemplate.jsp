@@ -52,12 +52,12 @@
     </tbody>
   </table>
 
-  <div class="wj-TblWrap mt20" style="display: flex; width: 1050px;">
+  <div class="wj-TblWrap" style="display: flex; width: 1050px;">
     <%-- 템플릿 --%>
     <div class="fl mt10 mr10" style="width: 250px;">
       <%--위즈모 테이블--%>
-      <div id="gridTemplate" class="wj-TblWrapBr pd10" style="height:485px;">
-        <div class="updownSet oh mb10">
+      <div id="gridTemplate" class="wj-TblWrapBr pd5" style="height:485px;">
+        <div class="updownSet oh mb5">
           <span class="fl bk lh30"><s:message code='posTemplate.gridNm' /></span>
           <button class="btn_skyblue" id="btnAddTemplate" style="display: none;" ng-click="addRow()">
             <s:message code="cmm.add" />
@@ -101,18 +101,23 @@
 
     <%-- 코드리스트 --%>
     <div class="fl mt10 mr10" style="width: 160px;">
-      <div class="wj-TblWrapBr pd10" style="height:485px;">
-        <div class="updownSet oh mb10">
+      <div class="wj-TblWrapBr pd5" style="height:485px;">
+        <div class="updownSet oh mb5">
           <span class="fl bk lh30"><s:message code='posTemplate.listNm' /></span>
+        </div>
+        <%-- 코드리스트 정보표시 영역 --%>
+        <div id="divCodeDesc" class="pd5 mb5">
+          <label id="lblCodeDesc"></label>
         </div>
         <div class="app-input-group">
           <wj-list-box
-            style="width: 100%;height: 410px;"
+            style="width: 100%;height: 370px;"
             control="listBoxCodeList"
             initialized="initListBox(s,e)"
             display-member-path="prtCd"
             selected-value-path="prtCd"
-            is-editable="false">
+            is-editable="false"
+            selected-index-changed="setCodeDesc(s)">
           </wj-list-box>
         </div>
       </div>
@@ -120,8 +125,8 @@
 
     <%-- 편집 영역 --%>
     <div class="fl mt10 mr10" style="width: 325px;">
-      <div class="wj-TblWrapBr pd10 templateEdit" style="height:485px;">
-        <div class="updownSet oh mb10">
+      <div class="wj-TblWrapBr pd5 templateEdit" style="height:485px;">
+        <div class="updownSet oh mb5">
           <span class="fl bk lh30"><s:message code='posTemplate.editNm' /></span>
           <span class="fl bk lh30 s12" ng-if="showTempltRegFgNm">&nbsp;- {{templtRegFgNm}}등록 > {{templtEditableTxt}}</span>
           <button class="btn_skyblue" id="btnSaveEditTemplate" ng-if="showBtnSaveEdit" ng-click="saveEditTemplate()">
@@ -136,8 +141,8 @@
 
     <%-- 미리보기 영역 --%>
     <div class="fl mt10" style="width: 330px;">
-      <div class="wj-TblWrapBr pd10 templateEdit" style="height:485px;">
-        <div class="updownSet oh mb10">
+      <div class="wj-TblWrapBr pd5 templateEdit" style="height:485px;">
+        <div class="updownSet oh mb5">
           <span class="fl bk lh30"><s:message code='posTemplate.viewNm' /></span>
           <c:if test="${orgnFg == 'HQ'}">
             <button class="btn_skyblue" id="btnApplyStoreTemplate" ng-if="showBtnApplyStore" ng-click="applyToStoreReal()" style="font-size:0.7em; padding:0 5px;">
@@ -188,7 +193,20 @@
       $(".menuControl").trigger("click");
   }
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/output/posTemplate/posTemplate.js?ver=20230511.01" charset="utf-8"></script>
+
+<style>
+  /* 코드리스트 정보표시 영역 */
+  #divCodeDesc{
+    height: 35px;
+    background-color: #e8e8e8;
+    color: #ff0000;
+    font-size: 12px;
+    text-align: left;
+    border-radius: 6px;
+  }
+</style>
+
+<script type="text/javascript" src="/resource/solbipos/js/base/output/posTemplate/posTemplate.js?ver=20230619.01" charset="utf-8"></script>
 <%-- 레이어 팝업 : 적용매장 선택 팝업 --%>
 <c:import url="/WEB-INF/view/base/output/posTemplate/storePosTemplate.jsp">
   <c:param name="menuCd" value="${menuCd}"/>

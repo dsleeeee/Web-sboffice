@@ -254,4 +254,10 @@ public class PosTemplateServiceImpl implements PosTemplateService {
 
     }
 
+    /** 출력코드명 조회 */
+    @Override
+    public String getPrintCodeNm(PosTemplateVO posTemplateVO) {
+        return posTemplateMapper.getPrintCodeNm(posTemplateVO);
+    }
+
 }

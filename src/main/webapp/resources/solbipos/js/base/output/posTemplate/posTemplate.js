@@ -438,6 +438,22 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
       e.dataTransfer.setData("text", dragRow);
     }, true);
   };
+
+  // 출력코드명 조회
+  $scope.setCodeDesc = function(s){
+
+    // 파라미터
+    var params= {};
+    params.prtCd = s.selectedValue;
+
+    $.postJSON("/base/output/posTemplate/template/getPrintCodeNm.sb", params, function(result) {
+        $("#lblCodeDesc").text(result.data);
+    },
+    function(result){
+        s_alert.pop(result.message);
+    });
+  };
+
 }]);
 
 // 편집/미리보기 폼 element 할당

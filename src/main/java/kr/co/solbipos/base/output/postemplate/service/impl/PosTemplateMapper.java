@@ -63,4 +63,7 @@ public interface PosTemplateMapper {
     /** 실제출력물 매장적용 */
     int applyToStoreReal(PosTemplateVO posTemplateVO);
 
+    /** 출력코드명 조회 */
+    String getPrintCodeNm(PosTemplateVO posTemplateVO);
+
 }
