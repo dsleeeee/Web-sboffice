@@ -78,24 +78,28 @@ app.controller('sideMenuSelectGroupSingleCtrl', ['$scope', '$http', function ($s
                   $("#btnAddSelClassSingle").hide();
                   $("#btnDelSelClassSingle").hide();
                   $("#btnSaveSelClassSingle").hide();
+                  $("#btnSdselClassRegStoreSingle").hide();
 
                   $("#btnUpSelProdSingle").hide();
                   $("#btnDownSelProdSingle").hide();
                   $("#btnAddSelProdSingle").hide();
                   $("#btnDelSelProdSingle").hide();
                   $("#btnSaveSelProdSingle").hide();
+                  $("#btnSdselProdRegStoreSingle").hide();
                 } else {
                   $("#btnUpSelClassSingle").show();
                   $("#btnDownSelClassSingle").show();
                   $("#btnAddSelClassSingle").show();
                   $("#btnDelSelClassSingle").show();
                   $("#btnSaveSelClassSingle").show();
+                  $("#btnSdselClassRegStoreSingle").show();
 
                   $("#btnUpSelProdSingle").hide();
                   $("#btnDownSelProdSingle").hide();
                   $("#btnAddSelProdSingle").hide();
                   $("#btnDelSelProdSingle").hide();
                   $("#btnSaveSelProdSingle").hide();
+                  $("#btnSdselProdRegStoreSingle").hide();
                 }
 
                 $scope.setSelectedSelGroup(selectedRow);
@@ -117,6 +121,7 @@ app.controller('sideMenuSelectGroupSingleCtrl', ['$scope', '$http', function ($s
         $("#btnAddSelClassSingle").hide();
         $("#btnDelSelClassSingle").hide();
         $("#btnSaveSelClassSingle").hide();
+        $("#btnSdselClassRegStoreSingle").hide();
 
         // 선택상품버튼
         $("#btnUpSelProdSingle").hide();
@@ -124,6 +129,7 @@ app.controller('sideMenuSelectGroupSingleCtrl', ['$scope', '$http', function ($s
         $("#btnAddSelProdSingle").hide();
         $("#btnDelSelProdSingle").hide();
         $("#btnSaveSelProdSingle").hide();
+        $("#btnSdselProdRegStoreSingle").hide();
 
         $("#sideSelectGroupSingleTitle").html("");
         var attrScope = agrid.getScope('sideMenuSelectClassSingleCtrl');
@@ -451,12 +457,14 @@ app.controller('sideMenuSelectClassSingleCtrl', ['$scope', '$http', 'sdselGrpCd'
                   $("#btnAddSelProdSingle").hide();
                   $("#btnDelSelProdSingle").hide();
                   $("#btnSaveSelProdSingle").show();
+                  $("#btnSdselProdRegStoreSingle").show();
                 } else {
                   $("#btnUpSelProdSingle").show();
                   $("#btnDownSelProdSingle").show();
                   $("#btnAddSelProdSingle").show();
                   $("#btnDelSelProdSingle").show();
                   $("#btnSaveSelProdSingle").show();
+                  $("#btnSdselProdRegStoreSingle").show();
                 }
 
                 var params = {};

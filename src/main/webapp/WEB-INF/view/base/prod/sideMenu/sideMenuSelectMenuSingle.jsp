@@ -123,7 +123,7 @@
                 <c:if test="${orgnFg == 'HQ' and hqOfficeCd == 'DS021'}">
                     <div class="updownSet oh mb10">
                         <%-- 적용매장등록 --%>
-                        <button class="btn_skyblue" id="btnSdselClassRegStore" ng-click="sdselClassRegStore()">
+                        <button class="btn_skyblue" id="btnSdselClassRegStoreSingle" ng-click="sdselClassRegStore()">
                             <s:message code="sideMenu.selectMenu.sdselClassRegStore" />
                         </button>
                     </div>
@@ -186,7 +186,7 @@
             <c:if test="${orgnFg == 'HQ' and hqOfficeCd == 'DS021'}">
               <div class="updownSet oh mb10">
                   <%-- 적용매장등록 --%>
-                  <button class="btn_skyblue" id="btnSdselProdRegStore" ng-click="sdselProdRegStore()">
+                  <button class="btn_skyblue" id="btnSdselProdRegStoreSingle" ng-click="sdselProdRegStore()">
                       <s:message code="sideMenu.selectMenu.sdselClassRegStore" />
                   </button>
               </div>
@@ -231,4 +231,4 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenuSingle.js?ver=20230616.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenuSingle.js?ver=20230620.01" charset="utf-8"></script>
