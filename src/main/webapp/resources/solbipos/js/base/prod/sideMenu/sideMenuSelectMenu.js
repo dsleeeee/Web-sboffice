@@ -669,7 +669,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     var msg = messages["cmm.choo.save"];
 
     if(orgnFg == 'HQ' && hqOfficeCd == 'DS021'){
-      msg = messages["sideMenu.selectMenu.sdselClassRegStoreAlert"] + " " +  messages["cmm.choo.save"]; // 적용매장구분 변경된 경우 등록된 적용매장은 모두 삭제됩니다.
+      msg = messages["sideMenu.selectMenu.sdselClassRegStoreAlert"] + " " +  messages["cmm.choo.save"]; // 적용매장구분 변경된 경우 등록된 적용매장은 모두 삭제됩니다. 저장하시겠습니까?
     }
 
     $scope._popConfirm(msg, function() {
@@ -1082,7 +1082,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
     var msg = messages["cmm.choo.save"];
 
     if(orgnFg == 'HQ' && hqOfficeCd == 'DS021'){
-      msg = messages["sideMenu.selectMenu.sdselClassRegStoreAlert"] + " " +  messages["cmm.choo.save"]; // 적용매장구분 변경된 경우 등록된 적용매장은 모두 삭제됩니다.
+      msg = messages["sideMenu.selectMenu.sdselClassRegStoreAlert"] + " " +  messages["cmm.choo.save"]; // 적용매장구분 변경된 경우 등록된 적용매장은 모두 삭제됩니다. 저장하시겠습니까?
     }
 
     $scope._popConfirm(msg, function() {
