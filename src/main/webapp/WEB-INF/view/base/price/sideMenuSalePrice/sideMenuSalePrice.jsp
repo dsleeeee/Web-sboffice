@@ -51,31 +51,6 @@
           <input type="hidden" id="sideMenuSalePriceStoreCd" value="${sessionInfo.storeCd}"/>
       </c:if>
       <tr>
-      <c:if test="${brandUseFg == '1'}">
-          <%-- 상품브랜드 --%>
-          <th><s:message code="salePriceResve.prodHqBrand"/></th>
-          <td>
-              <div class="sb-select">
-                  <wj-combo-box
-                          id="srchProdHqBrandCd"
-                          items-source="_getComboData('srchProdHqBrandCd')"
-                          display-member-path="name"
-                          selected-value-path="value"
-                          is-editable="false"
-                          control="srchProdHqBrandCdCombo">
-                  </wj-combo-box>
-              </div>
-          </td>
-      </c:if>
-        <th><s:message code="sideMenuSalePrice.prodClass" /></th>
-        <td>
-          <input type="text" id="searchProdClassNm" ng-model="prodClassNm" class="sb-input w70" ng-click="popUpProdClass()" style="float: left;"
-                 placeholder="선택" readonly />
-          <input type="hidden" id="searchProdClassCd" ng-model="prodClassCd" disabled/>
-          <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
-        </td>
-      </tr>
-      <tr>
         <%-- 선택그룹코드 --%>
         <th>
           <s:message code="sideMenuSalePrice.sdselGrpCd" />
@@ -106,6 +81,31 @@
         <td>
           <input type="text" class="sb-input w100" id="srchSdselClassNm" ng-model="sdselClassNm" onkeyup="fnNxBtnSearch();"/>
         </td>
+      </tr>
+      <tr>
+          <c:if test="${brandUseFg == '1'}">
+              <%-- 상품브랜드 --%>
+              <th><s:message code="salePriceResve.prodHqBrand"/></th>
+              <td>
+                  <div class="sb-select">
+                      <wj-combo-box
+                              id="srchProdHqBrandCd"
+                              items-source="_getComboData('srchProdHqBrandCd')"
+                              display-member-path="name"
+                              selected-value-path="value"
+                              is-editable="false"
+                              control="srchProdHqBrandCdCombo">
+                      </wj-combo-box>
+                  </div>
+              </td>
+          </c:if>
+          <th><s:message code="sideMenuSalePrice.prodClass" /></th>
+          <td>
+              <input type="text" id="searchProdClassNm" ng-model="prodClassNm" class="sb-input w70" ng-click="popUpProdClass()" style="float: left;"
+                     placeholder="선택" readonly />
+              <input type="hidden" id="searchProdClassCd" ng-model="prodClassCd" disabled/>
+              <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
+          </td>
       </tr>
       <tr>
         <%-- 상품코드 --%>
