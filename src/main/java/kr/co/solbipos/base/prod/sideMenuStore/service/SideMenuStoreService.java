@@ -39,4 +39,13 @@ public interface SideMenuStoreService {
 
     /** 선택상품(선택상품별) 탭 - 조회 */
     List<DefaultMap<Object>> getSideMenuProdList(SideMenuStoreVO sideMenuStoreVO, SessionInfoVO sessionInfoVO);
+
+    /** 선택분류(적용매장) 탭 - 조회 */
+    List<DefaultMap<Object>> getSideMenuClassRegStoreList(SideMenuStoreVO sideMenuStoreVO, SessionInfoVO sessionInfoVO);
+
+    /** 선택분류(적용매장) 탭 - 저장 */
+    int getSideMenuClassRegStoreSave(SideMenuStoreVO[] sideMenuStoreVOs, SessionInfoVO sessionInfoVO);
+
+    /** 선택분류(적용매장) 탭 - 선택분류 적용매장 전체 삭제 */
+    int getSideMenuClassRegStoreDeleteAll(SideMenuStoreVO[] sideMenuStoreVOs, SessionInfoVO sessionInfoVO);
 }

@@ -2415,7 +2415,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <insert id="getSdselClassRegStoreSaveDelete" parameterType="SideMenuSelClassVO">
+    <delete id="getSdselClassRegStoreSaveDelete" parameterType="SideMenuSelClassVO">
         /* SideMenuMapper.getSdselClassRegStoreSaveDelete */
         DELETE
         TB_HQ_PRODUCT_SDSEL_CLASS_REG_STORE
@@ -2423,7 +2423,7 @@
         AND HQ_OFFICE_CD = #{hqOfficeCd}
         AND SDSEL_CLASS_CD = #{sdselClassCd}
         AND STORE_CD = #{storeCd}
-    </insert>
+    </delete>
 
     <!-- 선택상품 적용매장등록 팝업 - 선택상품 조회 -->
     <!--
@@ -2581,7 +2581,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <insert id="getSdselProdRegStoreSaveDelete" parameterType="sideMenuSelProdVO">
+    <delete id="getSdselProdRegStoreSaveDelete" parameterType="sideMenuSelProdVO">
         /* SideMenuMapper.getSdselProdRegStoreSaveDelete */
         DELETE
         TB_HQ_PRODUCT_SDSEL_PROD_REG_STORE
@@ -2590,28 +2590,28 @@
         AND SDSEL_CLASS_CD = #{sdselClassCd}
         AND PROD_CD = #{prodCd}
         AND STORE_CD = #{storeCd}
-    </insert>
+    </delete>
 
     <!-- 선택분류 적용매장 전체 삭제 -->
     <!--
         TABLE    :
         COMMENTS :
     -->
-    <insert id="getSdselClassRegStoreDeleteAll" parameterType="SideMenuSelClassVO">
+    <delete id="getSdselClassRegStoreDeleteAll" parameterType="SideMenuSelClassVO">
         /* SideMenuMapper.getSdselClassRegStoreDeleteAll */
         DELETE
         TB_HQ_PRODUCT_SDSEL_CLASS_REG_STORE
         WHERE 1=1
         AND HQ_OFFICE_CD = #{hqOfficeCd}
         AND SDSEL_CLASS_CD = #{sdselClassCd}
-    </insert>
+    </delete>
 
     <!-- 선택상품 적용매장 전체 삭제 -->
     <!--
         TABLE    :
         COMMENTS :
     -->
-    <insert id="getSdselProdRegStoreDeleteAll" parameterType="sideMenuSelProdVO">
+    <delete id="getSdselProdRegStoreDeleteAll" parameterType="sideMenuSelProdVO">
         /* SideMenuMapper.getSdselProdRegStoreDeleteAll */
         DELETE
         TB_HQ_PRODUCT_SDSEL_PROD_REG_STORE
@@ -2619,6 +2619,6 @@
         AND HQ_OFFICE_CD = #{hqOfficeCd}
         AND SDSEL_CLASS_CD = #{sdselClassCd}
         AND PROD_CD = #{prodCd}
-    </insert>
+    </delete>
 
 </mapper>

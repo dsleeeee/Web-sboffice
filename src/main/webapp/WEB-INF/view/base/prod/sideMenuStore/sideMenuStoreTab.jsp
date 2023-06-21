@@ -25,6 +25,10 @@
             <li>
                 <a id="sideMenuProdTab" href="#" ng-click="sideMenuProdShow()"><s:message code="sideMenuStoreTab.sideMenuProd"/></a>
             </li>
+            <%-- 선택분류(적용매장) 탭 --%>
+            <li>
+                <a id="sideMenuClassRegStoreTab" href="#" ng-click="sideMenuClassRegStoreShow()"><s:message code="sideMenuStoreTab.sideMenuClassRegStore"/></a>
+            </li>
         </ul>
     </div>
 </div>
@@ -44,7 +48,7 @@
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenuStore/sideMenuStoreTab.js?ver=20230613.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenuStore/sideMenuStoreTab.js?ver=20230620.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 선택분류(매장별) 레이어 --%>
@@ -67,6 +71,12 @@
 
 <%-- 선택상품(선택상품별) 레이어 --%>
 <c:import url="/WEB-INF/view/base/prod/sideMenuStore/sideMenuProd.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 선택분류(적용매장) 레이어 --%>
+<c:import url="/WEB-INF/view/base/prod/sideMenuStore/sideMenuClassRegStore.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
