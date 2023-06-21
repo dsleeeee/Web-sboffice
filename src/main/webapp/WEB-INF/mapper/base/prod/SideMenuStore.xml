@@ -16,7 +16,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getSideMenuClassStoreList"  parameterType="SideMenuStoreVO" resultType="DefaultMap">
+    <select id="getSideMenuClassStoreList" parameterType="SideMenuStoreVO" resultType="DefaultMap">
         /* SideMenuStoreMapper.getSideMenuClassStoreList */
         SELECT *
         FROM
@@ -63,31 +63,41 @@
         ORDER BY SDSEL_GRP_CD, SDSEL_CLASS_CD
     </select>
 
-    <!-- 선택분류(매장별) 탭 - 저장 insert -->
+    <!-- 선택분류(매장별) 탭 - 저장 merge -->
     <!--
         TABLE    :
         COMMENTS :
     -->
-    <insert id="getSideMenuClassStoreSaveInsert" parameterType="SideMenuStoreVO">
-        /* SideMenuStoreMapper.getSideMenuClassStoreSaveInsert */
-        INSERT INTO TB_HQ_PRODUCT_SDSEL_CLASS_REG_STORE
-        (
-            HQ_OFFICE_CD,
-            SDSEL_CLASS_CD,
-            STORE_CD,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
-        ) VALUES (
-            #{hqOfficeCd},
-            #{sdselClassCd},
-            #{storeCd},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId}
-        )
+    <insert id="getSideMenuClassStoreSaveMerge" parameterType="SideMenuStoreVO">
+        /* SideMenuStoreMapper.getSideMenuClassStoreSaveMerge */
+        MERGE INTO TB_HQ_PRODUCT_SDSEL_CLASS_REG_STORE
+        USING DUAL
+        ON  (
+                HQ_OFFICE_CD = #{hqOfficeCd} AND SDSEL_CLASS_CD = #{sdselClassCd} AND STORE_CD = #{storeCd}
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+            INSERT (
+                HQ_OFFICE_CD,
+                SDSEL_CLASS_CD,
+                STORE_CD,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            ) VALUES (
+                #{hqOfficeCd},
+                #{sdselClassCd},
+                #{storeCd},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
     </insert>
 
     <!-- 선택분류(매장별) 탭 - 저장 delete -->
@@ -95,7 +105,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <insert id="getSideMenuClassStoreSaveDelete" parameterType="SideMenuStoreVO">
+    <delete id="getSideMenuClassStoreSaveDelete" parameterType="SideMenuStoreVO">
         /* SideMenuStoreMapper.getSideMenuClassStoreSaveDelete */
         DELETE
         TB_HQ_PRODUCT_SDSEL_CLASS_REG_STORE
@@ -103,14 +113,14 @@
         AND HQ_OFFICE_CD = #{hqOfficeCd}
         AND SDSEL_CLASS_CD = #{sdselClassCd}
         AND STORE_CD = #{storeCd}
-    </insert>
+    </delete>
 
     <!-- 선택분류(선택분류별) 탭 - 조회 -->
     <!--
         TABLE    :
         COMMENTS :
     -->
-    <select id="getSideMenuClassList"  parameterType="SideMenuStoreVO" resultType="DefaultMap">
+    <select id="getSideMenuClassList" parameterType="SideMenuStoreVO" resultType="DefaultMap">
         /* SideMenuStoreMapper.getSideMenuClassList */
         SELECT *
         FROM
@@ -131,12 +141,7 @@
             TB_MS_STORE_INFO E
             WHERE 1=1
             AND A.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND A.USE_YN = 'Y'
             AND B.SDSEL_CLASS_CD = #{sdselClassCd}
-            AND B.USE_YN = 'Y'
-            AND NVL(B.REG_STORE_FG, '0') IN ('1', '2')
-            AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
-            AND B.SDSEL_GRP_CD = A.SDSEL_GRP_CD
             <if test='storeCds != null and storeCds != ""'>
                 AND
                 <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
@@ -164,6 +169,11 @@
             <if test='branchCd != null and branchCd != ""'>
                 AND C.BRANCH_CD = #{branchCd}
             </if>
+            AND A.USE_YN = 'Y'
+            AND B.USE_YN = 'Y'
+            AND NVL(B.REG_STORE_FG, '0') IN ('1', '2')
+            AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+            AND B.SDSEL_GRP_CD = A.SDSEL_GRP_CD
             AND B.HQ_OFFICE_CD (+)= C.HQ_OFFICE_CD
             AND D.HQ_OFFICE_CD (+)= B.HQ_OFFICE_CD
             AND D.SDSEL_CLASS_CD (+)= B.SDSEL_CLASS_CD
@@ -182,7 +192,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getSideMenuProdStoreList"  parameterType="SideMenuStoreVO" resultType="DefaultMap">
+    <select id="getSideMenuProdStoreList" parameterType="SideMenuStoreVO" resultType="DefaultMap">
         /* SideMenuStoreMapper.getSideMenuProdStoreList */
         SELECT *
         FROM
@@ -236,6 +246,7 @@
             AND E.STORE_CD (+)= #{storeCd}
             AND E.HQ_OFFICE_CD (+)= C.HQ_OFFICE_CD
             AND E.SDSEL_CLASS_CD (+)= C.SDSEL_CLASS_CD
+            AND E.PROD_CD (+)= C.PROD_CD
         )
         WHERE 1=1
         <if test='regYn != null and regYn != ""'>
@@ -244,33 +255,43 @@
         ORDER BY SDSEL_GRP_CD, SDSEL_CLASS_CD, SDSEL_PROD_CD
     </select>
 
-    <!-- 선택상품(매장별) 탭 - 저장 insert -->
+    <!-- 선택상품(매장별) 탭 - 저장 merge -->
     <!--
         TABLE    :
         COMMENTS :
     -->
-    <insert id="getSideMenuProdStoreSaveInsert" parameterType="SideMenuStoreVO">
-        /* SideMenuStoreMapper.getSideMenuProdStoreSaveInsert */
-        INSERT INTO TB_HQ_PRODUCT_SDSEL_PROD_REG_STORE
-        (
-            HQ_OFFICE_CD,
-            SDSEL_CLASS_CD,
-            PROD_CD,
-            STORE_CD,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
-        ) VALUES (
-            #{hqOfficeCd},
-            #{sdselClassCd},
-            #{sdselProdCd},
-            #{storeCd},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId}
-        )
+    <insert id="getSideMenuProdStoreSaveMerge" parameterType="SideMenuStoreVO">
+        /* SideMenuStoreMapper.getSideMenuProdStoreSaveMerge */
+        MERGE INTO TB_HQ_PRODUCT_SDSEL_PROD_REG_STORE
+        USING DUAL
+        ON  (
+                HQ_OFFICE_CD = #{hqOfficeCd} AND SDSEL_CLASS_CD = #{sdselClassCd} AND PROD_CD = #{sdselProdCd} AND STORE_CD = #{storeCd}
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+            INSERT (
+                HQ_OFFICE_CD,
+                SDSEL_CLASS_CD,
+                PROD_CD,
+                STORE_CD,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            ) VALUES (
+                #{hqOfficeCd},
+                #{sdselClassCd},
+                #{sdselProdCd},
+                #{storeCd},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
     </insert>
 
     <!-- 선택상품(매장별) 탭 - 저장 delete -->
@@ -278,7 +299,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <insert id="getSideMenuProdStoreSaveDelete" parameterType="SideMenuStoreVO">
+    <delete id="getSideMenuProdStoreSaveDelete" parameterType="SideMenuStoreVO">
         /* SideMenuStoreMapper.getSideMenuProdStoreSaveDelete */
         DELETE
         TB_HQ_PRODUCT_SDSEL_PROD_REG_STORE
@@ -287,14 +308,14 @@
         AND SDSEL_CLASS_CD = #{sdselClassCd}
         AND PROD_CD = #{sdselProdCd}
         AND STORE_CD = #{storeCd}
-    </insert>
+    </delete>
 
     <!-- 선택상품(선택상품별) 탭 - 조회 -->
     <!--
         TABLE    :
         COMMENTS :
     -->
-    <select id="getSideMenuProdList"  parameterType="SideMenuStoreVO" resultType="DefaultMap">
+    <select id="getSideMenuProdList" parameterType="SideMenuStoreVO" resultType="DefaultMap">
         /* SideMenuStoreMapper.getSideMenuProdList */
         SELECT *
         FROM
@@ -318,14 +339,10 @@
             TB_MS_STORE_INFO F
             WHERE 1=1
             AND A.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND A.USE_YN = 'Y'
-            AND B.USE_YN = 'Y'
             <if test='sdselClassCd != null and sdselClassCd != ""'>
                 AND B.SDSEL_CLASS_CD = #{sdselClassCd}
             </if>
             AND C.PROD_CD = #{sdselProdCd}
-            AND C.USE_YN = 'Y'
-            AND NVL(C.REG_STORE_FG, '0') IN ('1', '2')
             <if test='storeCds != null and storeCds != ""'>
                 AND
                 <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
@@ -353,6 +370,10 @@
             <if test='branchCd != null and branchCd != ""'>
                 AND D.BRANCH_CD = #{branchCd}
             </if>
+            AND A.USE_YN = 'Y'
+            AND B.USE_YN = 'Y'
+            AND C.USE_YN = 'Y'
+            AND NVL(C.REG_STORE_FG, '0') IN ('1', '2')
             AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
             AND B.SDSEL_GRP_CD = A.SDSEL_GRP_CD
             AND C.HQ_OFFICE_CD = B.HQ_OFFICE_CD
@@ -360,6 +381,7 @@
             AND D.HQ_OFFICE_CD = C.HQ_OFFICE_CD
             AND E.HQ_OFFICE_CD (+)= C.HQ_OFFICE_CD
             AND E.SDSEL_CLASS_CD (+)= C.SDSEL_CLASS_CD
+            AND E.PROD_CD (+)= C.PROD_CD
             AND E.STORE_CD (+)= D.STORE_CD
             AND F.STORE_CD (+)= D.STORE_CD
         )
@@ -369,5 +391,80 @@
         </if>
         ORDER BY SDSEL_GRP_CD, SDSEL_CLASS_CD, SDSEL_PROD_CD, STORE_CD
     </select>
+
+    <!-- 선택분류(적용매장) 탭 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSideMenuClassRegStoreList" parameterType="SideMenuStoreVO" resultType="DefaultMap">
+        /* SideMenuStoreMapper.getSideMenuClassRegStoreList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        A.SDSEL_GRP_CD,
+        A.SDSEL_GRP_NM,
+        B.SDSEL_CLASS_CD,
+        B.SDSEL_CLASS_NM,
+        NVL(B.REQUIRE_YN, 'N') AS REQUIRE_YN,
+        NVL(B.REG_STORE_FG, '0') AS REG_STORE_FG
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_HQ_PRODUCT_SDSEL_GROUP A,
+        TB_HQ_PRODUCT_SDSEL_CLASS B
+        WHERE 1=1
+        AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+            AND A.SDSEL_GRP_CD LIKE '%'||#{sdselGrpCd}||'%'
+        </if>
+        <if test='sdselGrpNm != null and sdselGrpNm != ""'>
+            AND A.SDSEL_GRP_NM LIKE '%'||#{sdselGrpNm}||'%'
+        </if>
+        <if test='sdselClassCd != null and sdselClassCd != ""'>
+            AND B.SDSEL_CLASS_CD LIKE '%'||#{sdselClassCd}||'%'
+        </if>
+        <if test='sdselClassNm != null and sdselClassNm != ""'>
+            AND B.SDSEL_CLASS_NM LIKE '%'||#{sdselClassNm}||'%'
+        </if>
+        <if test='regStoreFg != null and regStoreFg != ""'>
+            AND NVL(B.REG_STORE_FG, '0') = #{regStoreFg}
+        </if>
+        AND A.USE_YN = 'Y'
+        AND B.USE_YN = 'Y'
+        AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+        AND B.SDSEL_GRP_CD = A.SDSEL_GRP_CD
+        ORDER BY A.SDSEL_GRP_CD, B.SDSEL_CLASS_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 선택분류(적용매장) 탭 - 저장 update -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getSideMenuClassRegStoreSaveUpdate" parameterType="SideMenuStoreVO">
+        /* SideMenuStoreMapper.getSideMenuClassRegStoreSaveUpdate */
+        UPDATE
+        TB_HQ_PRODUCT_SDSEL_CLASS
+        SET
+        REG_STORE_FG = #{regStoreFg},
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND SDSEL_CLASS_CD = #{sdselClassCd}
+    </update>
+
+    <!-- 선택분류(적용매장) 탭 - 선택분류 적용매장 전체 삭제 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getSideMenuClassRegStoreDeleteAll" parameterType="SideMenuStoreVO">
+        /* SideMenuStoreMapper.getSideMenuClassRegStoreDeleteAll */
+        DELETE
+        TB_HQ_PRODUCT_SDSEL_CLASS_REG_STORE
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND SDSEL_CLASS_CD = #{sdselClassCd}
+    </delete>
 
 </mapper>

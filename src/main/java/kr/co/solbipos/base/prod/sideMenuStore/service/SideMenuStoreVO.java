@@ -87,6 +87,9 @@ public class SideMenuStoreVO extends PageVO {
     /** 구분 */
     private String gubun;
 
+    /** 적용매장구분 */
+    private String regStoreFg;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -242,4 +245,8 @@ public class SideMenuStoreVO extends PageVO {
     public String getGubun() { return gubun; }
 
     public void setGubun(String gubun) { this.gubun = gubun; }
+
+    public String getRegStoreFg() { return regStoreFg; }
+
+    public void setRegStoreFg(String regStoreFg) { this.regStoreFg = regStoreFg; }
 }

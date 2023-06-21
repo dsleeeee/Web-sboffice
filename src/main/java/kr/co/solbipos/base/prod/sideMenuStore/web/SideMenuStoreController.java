@@ -338,4 +338,73 @@ public class SideMenuStoreController {
 
         return ReturnUtil.returnListJson(Status.OK, result, sideMenuStoreVO);
     }
+
+    /**
+     * 선택분류(적용매장) 탭 - 조회
+     *
+     * @param sideMenuStoreVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 06. 20.
+     */
+    @RequestMapping(value = "/sideMenuClassRegStore/getSideMenuClassRegStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSideMenuClassRegStoreList(SideMenuStoreVO sideMenuStoreVO, HttpServletRequest request,
+                                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = sideMenuStoreService.getSideMenuClassRegStoreList(sideMenuStoreVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, sideMenuStoreVO);
+    }
+
+    /**
+     * 선택분류(적용매장) 탭 - 저장
+     *
+     * @param sideMenuStoreVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 06. 20.
+     */
+    @RequestMapping(value = "/sideMenuClassRegStore/getSideMenuClassRegStoreSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSideMenuClassRegStoreSave(@RequestBody SideMenuStoreVO[] sideMenuStoreVOs, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = sideMenuStoreService.getSideMenuClassRegStoreSave(sideMenuStoreVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 선택분류(적용매장) 탭 - 선택분류 적용매장 전체 삭제
+     *
+     * @param sideMenuStoreVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 06. 20.
+     */
+    @RequestMapping(value = "/sideMenuClassRegStore/getSideMenuClassRegStoreDeleteAll.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSideMenuClassRegStoreDeleteAll(@RequestBody SideMenuStoreVO[] sideMenuStoreVOs, HttpServletRequest request,
+                                               HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = sideMenuStoreService.getSideMenuClassRegStoreDeleteAll(sideMenuStoreVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

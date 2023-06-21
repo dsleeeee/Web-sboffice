@@ -29,8 +29,8 @@ public interface SideMenuStoreMapper {
     /** 선택분류(매장별) 탭 - 조회 */
     List<DefaultMap<Object>> getSideMenuClassStoreList(SideMenuStoreVO sideMenuStoreVO);
 
-    /** 선택분류(매장별) 탭 - 저장 insert */
-    int getSideMenuClassStoreSaveInsert(SideMenuStoreVO sideMenuStoreVO);
+    /** 선택분류(매장별) 탭 - 저장 merge */
+    int getSideMenuClassStoreSaveMerge(SideMenuStoreVO sideMenuStoreVO);
 
     /** 선택분류(매장별) 탭 - 저장 delete */
     int getSideMenuClassStoreSaveDelete(SideMenuStoreVO sideMenuStoreVO);
@@ -41,12 +41,21 @@ public interface SideMenuStoreMapper {
     /** 선택상품(매장별) 탭 - 조회 */
     List<DefaultMap<Object>> getSideMenuProdStoreList(SideMenuStoreVO sideMenuStoreVO);
 
-    /** 선택상품(매장별) 탭 - 저장 insert */
-    int getSideMenuProdStoreSaveInsert(SideMenuStoreVO sideMenuStoreVO);
+    /** 선택상품(매장별) 탭 - 저장 merge */
+    int getSideMenuProdStoreSaveMerge(SideMenuStoreVO sideMenuStoreVO);
 
     /** 선택상품(매장별) 탭 - 저장 delete */
     int getSideMenuProdStoreSaveDelete(SideMenuStoreVO sideMenuStoreVO);
 
     /** 선택상품(선택상품별) 탭 - 조회 */
     List<DefaultMap<Object>> getSideMenuProdList(SideMenuStoreVO sideMenuStoreVO);
+
+    /** 선택분류(적용매장) 탭 - 조회 */
+    List<DefaultMap<Object>> getSideMenuClassRegStoreList(SideMenuStoreVO sideMenuStoreVO);
+
+    /** 선택분류(적용매장) 탭 - 저장 update */
+    int getSideMenuClassRegStoreSaveUpdate(SideMenuStoreVO sideMenuStoreVO);
+
+    /** 선택분류(적용매장) 탭 - 선택분류 적용매장 전체 삭제 */
+    int getSideMenuClassRegStoreDeleteAll(SideMenuStoreVO sideMenuStoreVO);
 }

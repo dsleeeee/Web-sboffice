@@ -60,14 +60,13 @@ public class SideMenuStoreServiceImpl implements SideMenuStoreService {
 
             sideMenuStoreVO.setModDt(currentDt);
             sideMenuStoreVO.setModId(sessionInfoVO.getUserId());
+            sideMenuStoreVO.setRegDt(currentDt);
+            sideMenuStoreVO.setRegId(sessionInfoVO.getUserId());
 
             sideMenuStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
             if (sideMenuStoreVO.getRegYn().equals("Y")) {
-                sideMenuStoreVO.setRegDt(currentDt);
-                sideMenuStoreVO.setRegId(sessionInfoVO.getUserId());
-
-                procCnt = sideMenuStoreMapper.getSideMenuClassStoreSaveInsert(sideMenuStoreVO);
+                procCnt = sideMenuStoreMapper.getSideMenuClassStoreSaveMerge(sideMenuStoreVO);
 
             } else if (sideMenuStoreVO.getRegYn().equals("N")) {
                 procCnt = sideMenuStoreMapper.getSideMenuClassStoreSaveDelete(sideMenuStoreVO);
@@ -110,14 +109,13 @@ public class SideMenuStoreServiceImpl implements SideMenuStoreService {
 
             sideMenuStoreVO.setModDt(currentDt);
             sideMenuStoreVO.setModId(sessionInfoVO.getUserId());
+            sideMenuStoreVO.setRegDt(currentDt);
+            sideMenuStoreVO.setRegId(sessionInfoVO.getUserId());
 
             sideMenuStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
             if (sideMenuStoreVO.getRegYn().equals("Y")) {
-                sideMenuStoreVO.setRegDt(currentDt);
-                sideMenuStoreVO.setRegId(sessionInfoVO.getUserId());
-
-                procCnt = sideMenuStoreMapper.getSideMenuProdStoreSaveInsert(sideMenuStoreVO);
+                procCnt = sideMenuStoreMapper.getSideMenuProdStoreSaveMerge(sideMenuStoreVO);
 
             } else if (sideMenuStoreVO.getRegYn().equals("N")) {
                 procCnt = sideMenuStoreMapper.getSideMenuProdStoreSaveDelete(sideMenuStoreVO);
@@ -138,5 +136,50 @@ public class SideMenuStoreServiceImpl implements SideMenuStoreService {
         sideMenuStoreVO.setStoreCdList(storeCds);
 
         return sideMenuStoreMapper.getSideMenuProdList(sideMenuStoreVO);
+    }
+
+    /** 선택분류(적용매장) 탭 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getSideMenuClassRegStoreList(SideMenuStoreVO sideMenuStoreVO, SessionInfoVO sessionInfoVO) {
+
+        sideMenuStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return sideMenuStoreMapper.getSideMenuClassRegStoreList(sideMenuStoreVO);
+    }
+
+    /** 선택분류(적용매장) 탭 - 저장 */
+    @Override
+    public int getSideMenuClassRegStoreSave(SideMenuStoreVO[] sideMenuStoreVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(SideMenuStoreVO sideMenuStoreVO : sideMenuStoreVOs) {
+
+            sideMenuStoreVO.setModDt(currentDt);
+            sideMenuStoreVO.setModId(sessionInfoVO.getUserId());
+
+            sideMenuStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+            procCnt = sideMenuStoreMapper.getSideMenuClassRegStoreSaveUpdate(sideMenuStoreVO);
+        }
+
+        return procCnt;
+    }
+
+    /** 선택분류(적용매장) 탭 - 선택분류 적용매장 전체 삭제 */
+    @Override
+    public int getSideMenuClassRegStoreDeleteAll(SideMenuStoreVO[] sideMenuStoreVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+
+        for(SideMenuStoreVO sideMenuStoreVO : sideMenuStoreVOs) {
+
+            sideMenuStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+            procCnt = sideMenuStoreMapper.getSideMenuClassRegStoreDeleteAll(sideMenuStoreVO);
+        }
+
+        return procCnt;
     }
 }
