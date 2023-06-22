@@ -73,6 +73,7 @@ app.controller('sideMenuSelectGroupSingleCtrl', ['$scope', '$http', function ($s
                 $("#sideSelectGroupSingleTitle").html(" [" + selectedRow.sdselGrpCd + "]" + selectedRow.sdselGrpNm);
                 $("#sideClassSingleTitle").html("");
                 if (hqOfficeCd != '00000' && orgnFg == 'STORE' && selectedRow.sdselGrpCd <= 799999) {
+                  $("#btnSdselClassCopySingle").hide();
                   $("#btnUpSelClassSingle").hide();
                   $("#btnDownSelClassSingle").hide();
                   $("#btnAddSelClassSingle").hide();
@@ -85,6 +86,7 @@ app.controller('sideMenuSelectGroupSingleCtrl', ['$scope', '$http', function ($s
                   $("#btnDelSelProdSingle").hide();
                   $("#btnSaveSelProdSingle").hide();
                 } else {
+                  $("#btnSdselClassCopySingle").show();
                   $("#btnUpSelClassSingle").show();
                   $("#btnDownSelClassSingle").show();
                   $("#btnAddSelClassSingle").show();
@@ -112,6 +114,7 @@ app.controller('sideMenuSelectGroupSingleCtrl', ['$scope', '$http', function ($s
     $scope.$on('sideMenuSelectGroupSingleCtrl', function(event, data) {
         // 초기 버튼 셋팅
         // 선택분류 버튼
+        $("#btnSdselClassCopySingle").hide();
         $("#btnUpSelClassSingle").hide();
         $("#btnDownSelClassSingle").hide();
         $("#btnAddSelClassSingle").hide();
@@ -771,6 +774,26 @@ app.controller('sideMenuSelectClassSingleCtrl', ['$scope', '$http', 'sdselGrpCd'
         $scope.flex.select(movedRows, 1);
     };
 
+    // 선택그룹
+    $scope.selectedSdselClassSingle;
+    $scope.setSelectedSdselClassSingle = function(store) {
+        $scope.selectedSdselClassSingle = store;
+    };
+    $scope.getSelectedSdselClassSingle = function(){
+        return $scope.selectedSdselClassSingle;
+    };
+
+    // 선택분류복사
+    $scope.sdselClassCopySingle = function() {
+        var params = {};
+        params.sdselGrpCd = $scope.getSdselGrpCd();
+        params.sdselGrpCdNm = $("#sideSelectGroupSingleTitle").html();
+        $scope.setSelectedSdselClassSingle(params);
+
+        $scope.wjSdselClassCopySingleLayer.show(true);
+        event.preventDefault();
+    };
+
     // 선택분류 적용매장등록
     $scope.sdselClassRegStore = function() {
         // 선택메뉴 탭
@@ -785,6 +808,16 @@ app.controller('sideMenuSelectClassSingleCtrl', ['$scope', '$http', 'sdselGrpCd'
         event.preventDefault();
     };
 
+
+    // 화면 ready 된 후 설정
+    angular.element(document).ready(function () {
+        // 선택분류복사 팝업 핸들러 추가
+        $scope.wjSdselClassCopySingleLayer.shown.addHandler(function (s) {
+            setTimeout(function() {
+                $scope._broadcast('sdselClassCopySingleCtrl', $scope.getSelectedSdselClassSingle());
+            }, 50)
+        });
+    });
 }]).factory('sdselGrpCd', function () {
   // 사이드메뉴 선택분류 그리드 의 변수 값 영역
   var sdselGrpCd = {};

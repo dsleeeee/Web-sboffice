@@ -104,6 +104,10 @@
                   <span class="fl bk lh30" style="white-space: nowrap;"><s:message code='sideMenu.selectMenu.sdselClass' /><span id="sideSelectGroupSingleTitle"></span> </span>
                   <br>
                   <br>
+                    <%-- 선택분류복사 --%>
+                    <button class="btn_skyblue" id="btnSdselClassCopySingle" ng-click="sdselClassCopySingle()" >
+                        <s:message code="sideMenu.selectMenu.sdselClassCopy" />
+                    </button>
                     <button class="btn_up" id="btnUpSelClassSingle" ng-click="rowMoveUp()" >
                       <s:message code="cmm.up" />
                     </button>
@@ -232,3 +236,9 @@
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenuSingle.js?ver=20230616.03" charset="utf-8"></script>
+
+<%-- 선택분류복사 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/sideMenu/sdselClassCopySingle.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
