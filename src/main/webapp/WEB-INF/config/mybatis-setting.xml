@@ -224,6 +224,8 @@
     <typeAlias alias="saleChkVO" type="kr.co.solbipos.sys.admin.saleChk.service.SaleChkVO"/>
     <!-- 시스템관리 > 관리자기능 > 맘스터치일괄처리 -->
     <typeAlias alias="momsBatchVO" type="kr.co.solbipos.sys.admin.momsBatch.service.MomsBatchVO"/>
+    <!-- 시스템관리 > 관리자기능 > 스마트오더연결상태 -->
+    <typeAlias alias="posSmartOrderConVO" type="kr.co.solbipos.sys.admin.posSmartOrderCon.service.PosSmartOrderConVO"/>
     <!-- 시스템관리 > 기타관리 > 샘플용 화면_임시-->
     <!--<typeAlias alias="sampleViewVO" type="kr.co.solbipos.sys.admin.sampleView.service.SampleViewVO"/>-->
 <!--
