@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    PosSmartOrderCon.xml
+    스마트오더연결상태 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2023.06.20      최초작성
+-->
+<mapper namespace="kr.co.solbipos.sys.admin.posSmartOrderCon.service.impl.PosSmartOrderConMapper">
+
+    <!-- 매장코드 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE, TB_HQ_OFFICE
+        PARAM    : posSmartOrderConVO
+        COMMENTS : 매장코드 리스트를 조회한다.
+    -->
+    <select id="getPosSmartOrderConList" parameterType="posSmartOrderConVO" resultType="DefaultMap">
+    /* USE : PosSmartOrderConMapper.getPosSmartOrderConList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT 	tlpsoc.HQ_OFFICE_CD
+        ,		tho.HQ_OFFICE_NM
+        ,		tlpsoc.STORE_CD
+        ,		tms.STORE_NM
+        ,		tlpsoc.POS_NO
+        ,		TO_CHAR(TO_DATE(tlpsoc.SYS_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SYS_DATE
+        ,		tlpsoc.CONNECT_TYPE
+        ,		TO_CHAR(TO_DATE(tlpsoc.CONNECT_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS CONNECT_DT
+        ,		TO_CHAR(TO_DATE(tlpsoc.RESPONSE_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS RESPONSE_DT
+        ,		tlpsoc.RESULT_CODE
+        ,		tlpsoc.RESULT_MSG
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	TB_LOG_POS_SMART_ORDER_CON tlpsoc
+        ,		TB_HQ_OFFICE tho
+        ,		TB_MS_STORE tms
+        WHERE 	tlpsoc.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
+        AND 	tlpsoc.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND 	tlpsoc.STORE_CD = tms.STORE_CD
+        AND     tlpsoc.SYS_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+            AND tms.HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+            AND tho.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test='connectType != null and connectType != ""'>
+            AND tlpsoc.CONNECT_TYPE = #{connectType}
+        </if>
+        <if test='resultCode != null and resultCode == "1"'>
+            AND tlpsoc.RESULT_CODE != '0000'
+        </if>
+        <if test='resultCode != null and resultCode == "0"'>
+            AND tlpsoc.RESULT_CODE = '0000'
+        </if>
+        ORDER
+        BY tlpsoc.SYS_DATE, tlpsoc.CONNECT_DT
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+</mapper>

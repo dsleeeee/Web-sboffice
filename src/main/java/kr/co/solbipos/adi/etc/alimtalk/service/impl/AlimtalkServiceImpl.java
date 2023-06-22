@@ -46,6 +46,11 @@ public class AlimtalkServiceImpl implements AlimtalkService {
         this.alimtalkMapper = alimtalkMapper;
     }
 
+    @Override
+    public List<DefaultMap<String>> getAlimtalkFgList(SessionInfoVO sessionInfoVO) {
+        return alimtalkMapper.getAlimtalkFgList(sessionInfoVO);
+    }
+
     /** 세부명칭 코드목록 조회 */
     @Override
     public List<DefaultMap<String>> getAlimtalkList(AlimtalkVO alimtalkVO, SessionInfoVO sessionInfoVO) {
