@@ -221,6 +221,7 @@
         <wj-flex-grid-column header="<s:message code="storePosVersion.posVerNo"/>" binding="posVerNo" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storePosVersion.verTypeFg"/>" binding="verTypeFg" data-map="verTypeFgDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storePosVersion.maxVerSerNo"/>" binding="maxVerSerNo" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storePosVersion.maxSaleDate"/>" binding="maxSaleDate" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
     <%--//위즈모 테이블--%>

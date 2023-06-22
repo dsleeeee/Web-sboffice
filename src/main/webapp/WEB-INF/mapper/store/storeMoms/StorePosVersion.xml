@@ -26,6 +26,7 @@
         ,		A.POS_VER_NO
         ,		A.VER_TYPE_FG
         ,		B.MAX_VER_SER_NO
+        ,       E.MAX_SALE_DATE
         FROM    TB_MS_POS A
         ,       (
         SELECT  PROG_FG
@@ -37,9 +38,22 @@
         ) B
         ,		TB_MS_STORE C
         ,		TB_MS_STORE_INFO D
+        ,       (
+                SELECT  STORE_CD
+                ,       POS_NO
+                ,       TO_CHAR(TO_DATE(MAX(SALE_DATE), 'yyyymmdd'), 'yyyy-mm-dd') AS MAX_SALE_DATE
+                FROM    TB_SL_DAILY_POS
+                WHERE   SALE_DATE BETWEEN TO_CHAR(SYSDATE - 31, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+                AND     HQ_OFFICE_CD = #{hqOfficeCd}
+                GROUP
+                BY      STORE_CD
+                ,       POS_NO
+                ) E
         WHERE   B.PROG_FG   (+) =   A.VER_TYPE_FG
         AND   	C.STORE_CD      =   A.STORE_CD
         AND   	D.STORE_CD  (+) =   A.STORE_CD
+        AND     E.STORE_CD  (+) =   A.STORE_CD
+        AND     E.POS_NO    (+) =   A.POS_NO
         AND 	C.HQ_OFFICE_CD  = #{hqOfficeCd}
         <if test="storeCd != null and storeCd != ''">
             AND C.STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
