@@ -11,6 +11,20 @@
 -->
 <mapper namespace="kr.co.solbipos.adi.etc.alimtalk.service.impl.AlimtalkMapper">
 
+    <select id="getAlimtalkFgList" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* USE : AlimtalkMapper.getAlimtalkFgList */
+        SELECT  '' AS VALUE
+        ,       '전체' AS NAME
+        FROM DUAL
+        UNION
+        SELECT 	thn.NMCODE_CD AS VALUE
+        ,		thn.NMCODE_NM AS NAME
+        FROM 	TB_HQ_NMCODE thn
+        WHERE 	NMCODE_GRP_CD = '165'
+        ORDER
+        BY      VALUE NULLS FIRST, VALUE ASC
+    </select>
+
     <!-- 맘스터치 알림톡 수신자정보 조회 -->
     <!--
         TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
@@ -31,6 +45,9 @@
         ,       MOD_ID
         FROM    TB_AL_ALIMTALK_MP_LIST_MOMS
         WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="alimtalkFg != null and alimtalkFg != ''">
+            AND ALIMTALK_FG = #{alimtalkFg}
+        </if>
         ORDER
         BY      REG_DT
     </select>

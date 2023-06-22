@@ -1,5 +1,6 @@
 <%@ page pageEncoding="UTF-8" %>
-<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
@@ -24,10 +25,28 @@
       <col class="w35"/>
     </colgroup>
     <tbody>
+        <tr>
+            <th><s:message code="alimtalk.alimtalkFg"/></th>
+            <td>
+                <div class="sb-select">
+                    <wj-combo-box
+                            id="alimtalkFg"
+                            ng-model="alimtalkFg"
+                            control="alimtalkFgCombo"
+                            items-source="_getComboData('alimtalkFgCombo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            selected-index="1">
+                    </wj-combo-box>
+                </div>
+            </td>
+        </tr>
     </tbody>
   </table>
 
     <div class="updownSet oh mb10 mt10">
+        <span class="s14 fl">중복되는 수신자번호는 하나만 저장됩니다.</span>
         <button class="btn_skyblue" id="btnAddRepresent" ng-click="addRow()">
             <s:message code="cmm.add" />
         </button>
@@ -54,7 +73,7 @@
 
             <!-- define columns -->
               <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="alimtalk.alimtalkFg"/>" binding="alimtalkFg" width="80" align="left" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="alimtalk.alimtalkFg"/>" binding="alimtalkFg" width="150" align="center" data-map="alimtalkDataMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="alimtalk.mpNo"/>" binding="mpNo" width="100" align="left"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="alimtalk.mpInfo"/>" binding="mpInfo" width="200" align="left"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="alimtalk.remark"/>" binding="remark" width="*" align="left"></wj-flex-grid-column>
@@ -63,5 +82,9 @@
         <%--//위즈모 테이블--%>
     </div>
 </div>
+<script type="text/javascript">
+    var alimtalkFgListAll  = ${alimtalkFgListAll};
+    var alimtalkFgList  = ${alimtalkFgList};
+</script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/etc/alimtalk/alimtalk.js?ver=20260615.02" charset="utf-8"></script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/etc/alimtalk/alimtalk.js?ver=20260615.01" charset="utf-8"></script>
