@@ -127,7 +127,7 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', '$timeout', functi
         // 그리드 DataMap 설정
         $scope.procFgDataMap = new wijmo.grid.DataMap(procFgData, 'value', 'name'); // 생성구분
         $scope.prodOptionComboDataMap = new wijmo.grid.DataMap(prodOptionComboData, 'value', 'name'); // 그룹
-        $scope.branchCdDataMap = new wijmo.grid.DataMap(branchCdComboList, 'value', 'name'); // 그룹
+        $scope.branchCdDataMap = new wijmo.grid.DataMap(momsHqBrandCdComboList, 'value', 'name'); // 그룹
         $scope.momsTeamDataMap = new wijmo.grid.DataMap(momsTeamComboList, 'value', 'name'); // 팀별
         $scope.momsAcShopDataMap = new wijmo.grid.DataMap(momsAcShopComboList, 'value', 'name'); // AC점포별
         $scope.momsAreaFgDataMap = new wijmo.grid.DataMap(momsAreaFgComboList, 'value', 'name'); // 지역구분

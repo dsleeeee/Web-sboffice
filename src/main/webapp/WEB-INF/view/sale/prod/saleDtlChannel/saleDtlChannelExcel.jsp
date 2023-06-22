@@ -286,7 +286,7 @@
             <button class="btn_skyblue ml5 fr" id="btnDel" ng-click="allDownload()">
                 <s:message code="saleDtlChannelExcel.allDownload" />
             </button>
-            <c:if test="${userId == 'ds021' or userId == 'h0393'}">
+            <c:if test="${userId == 'ds021' or userId == 'ds034' or userId == 'h0393'}">
                 <%-- 관리자등록 --%>
                 <button class="btn_skyblue ml5 fr" id="btnDel" ng-click="regist()">
                     <s:message code="saleDtlChannelExcel.regist" />
@@ -335,9 +335,9 @@
                     <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.prodOption"/>" binding="prodOption" width="80" is-read-only="true" align="center" data-map="prodOptionComboDataMap"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.prodCd"/>" binding="prodCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.prodNm"/>" binding="prodNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.storeHqBrandCdList"/>" binding="storeHqBrandCdList" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.storeHqBrandCdList"/>" binding="storeHqBrandCdList" width="80" is-read-only="true" align="center" data-map="branchCdDataMap"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.storeCdList"/>" binding="storeCdList" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.prodHqBrandCd"/>" binding="prodHqBrandCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.prodHqBrandCd"/>" binding="prodHqBrandCd" width="80" is-read-only="true" align="center" data-map="branchCdDataMap"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.prodCdList"/>" binding="prodCdList" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.momsTeam"/>" binding="momsTeam" width="80" is-read-only="true" align="center" data-map="momsTeamDataMap" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.momsAcShop"/>" binding="momsAcShop" width="80" is-read-only="true" align="center" data-map="momsAcShopDataMap"></wj-flex-grid-column>
@@ -379,4 +379,4 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/saleDtlChannel/saleDtlChannelExcel.js?ver=20230413.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/saleDtlChannel/saleDtlChannelExcel.js?ver=20230413.05" charset="utf-8"></script>
