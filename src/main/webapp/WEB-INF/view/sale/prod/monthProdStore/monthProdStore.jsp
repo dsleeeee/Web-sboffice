@@ -308,10 +308,10 @@
         </c:if>
 
         <div class="mt10 oh sb-select dkbr">
-            <%-- 엑셀다운로드 --%>
-            <%--<button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCondition"/></button>--%>
-            <%-- 엑셀 다운로드(그리드 바인딩된 데이터만) --%>
-            <button class="btn_skyblue ml5 fr" ng-click="excelDownload2()"><s:message code="cmm.excel.downCondition"/></button>
+            <%-- 현재화면 엑셀다운로드 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownload2()"><s:message code="cmm.excel.downCurrent"/></button>
+            <%-- 조회조건 엑셀다운로드 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCondition"/></button>
         </div>
 
         <div class="w100 mt10">
@@ -424,4 +424,4 @@
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/monthProdStore/monthProdStore.js?ver=20230622.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/monthProdStore/monthProdStore.js?ver=20230623.04" charset="utf-8"></script>

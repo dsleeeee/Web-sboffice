@@ -653,6 +653,47 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
     // 엑셀 다운로드(그리드 바인딩된 데이터만)
     $scope.excelDownload2 = function () {
+
+        var excelDate = "";
+        if($scope.dayGubun === "day") {
+            var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
+            var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
+            var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+            excelDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd') + '_'+ wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+
+            // 시작일자가 종료일자보다 빠른지 확인
+            if(startDt.getTime() > endDt.getTime()){
+                $scope._popMsg(messages['cmm.dateChk.error']);
+                return false;
+            }
+            // 조회일자 최대 1일 제한
+            if (diffDay > 0) {
+                $scope._popMsg(messages['cmm.dateOver.1day.error']);
+                return false;
+            }
+
+        } else if($scope.dayGubun === "month") {
+            var startDt = new Date(wijmo.Globalize.format(startMonth.value, 'yyyy-MM'));
+            var endDt = new Date(wijmo.Globalize.format(endMonth.value, 'yyyy-MM'));
+            var diffMonth = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000 * 30); // 시 * 분 * 초 * 밀리세컨 * 월
+            excelDate = wijmo.Globalize.format(startMonth.value, 'yyyyMM') + '_'+ wijmo.Globalize.format(endMonth.value, 'yyyyMM');
+
+            // 시작일자가 종료일자보다 빠른지 확인
+            if(startDt.getTime() > endDt.getTime()){
+                $scope._popMsg(messages['cmm.dateChk.error']);
+                return false;
+            }
+            // 조회일자 최대 1달 제한
+            if (diffMonth > 0) {
+                $scope._popMsg(messages['cmm.dateOver.1month.error']);
+                return false;
+            }
+        }
+
+        if($scope.startTime*1 > $scope.endTime*1){ // *1하는이유 : Time들이 String이라 int로 바꿀라고
+            $scope._popMsg(messages["timeProd.startEnd"]); // 검색 시작 시간대가 검색 종료 시간대보다 큽니다.
+            return false;
+        }
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
             return false;
@@ -667,7 +708,7 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
              return column.visible;
            }
          },
-             "상품별시간대매출" + '_' +  wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd') + '_' + wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd') + '_' + getCurDateTime()+'.xlsx', function () {
+             "상품별시간대매출" + '_' +  excelDate + '_' + getCurDateTime()+'.xlsx', function () {
            $timeout(function () {
              $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
            }, 10);

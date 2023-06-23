@@ -225,8 +225,9 @@ app.controller('dayProdStoreCtrl', ['$scope', '$http', '$timeout', function ($sc
         $scope.prodClassNm = "";
     };
   
-    // 엑셀 다운로드
+    // 조회조건 엑셀다운로드
     $scope.excelDownload = function () {
+
         var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
         var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
         var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
@@ -236,9 +237,13 @@ app.controller('dayProdStoreCtrl', ['$scope', '$http', '$timeout', function ($sc
             $scope._popMsg(messages['cmm.dateChk.error']);
             return false;
         }
-        // 조회일자 최대 3일 제한
-        if (diffDay > 2) {
-            $scope._popMsg(messages['cmm.dateOver.3day.error']);
+        // 조회일자 최대 1일 제한
+        if (diffDay > 0) {
+            $scope._popMsg(messages['cmm.dateOver.1day.error']);
+            return false;
+        }
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
             return false;
         }
 
@@ -275,11 +280,26 @@ app.controller('dayProdStoreCtrl', ['$scope', '$http', '$timeout', function ($sc
         $scope._broadcast('dayProdStoreExcelCtrl', params);
     };
 
-    // 엑셀 다운로드(그리드 바인딩된 데이터만)
+    // 현재화면 엑셀다운로드
     $scope.excelDownload2 = function () {
+
+        var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+           $scope._popMsg(messages['cmm.dateChk.error']);
+           return false;
+        }
+        // 조회일자 최대 1일 제한
+        if (diffDay > 0) {
+           $scope._popMsg(messages['cmm.dateOver.1day.error']);
+           return false;
+        }
         if ($scope.flex.rows.length <= 0) {
-            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-            return false;
+           $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+           return false;
         }
 
         $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
