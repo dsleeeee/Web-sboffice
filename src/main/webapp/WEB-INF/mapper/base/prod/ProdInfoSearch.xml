@@ -819,13 +819,15 @@
                 ,		TB_HQ_PRODUCT_SDSEL_PROD thpsp
                 ,		TB_HQ_PRODUCT thp
                 WHERE 	thpsg.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     thpsg.USE_YN = 'Y'
+                AND     thpsc.USE_YN = 'Y'
+                AND     thpsp.USE_YN = 'Y'
                 AND 	thpsg.HQ_OFFICE_CD = thpsc.HQ_OFFICE_CD (+)
                 AND 	thpsg.SDSEL_GRP_CD = thpsc.SDSEL_GRP_CD (+)
                 AND 	thpsc.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD (+)
                 AND 	thpsc.SDSEL_CLASS_CD = thpsp.SDSEL_CLASS_CD (+)
                 AND 	thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD (+)
                 AND 	thpsp.PROD_CD = thp.PROD_CD (+)
-                AND     thpsp.USE_YN = 'Y'
                 ORDER BY thpsg.SDSEL_GRP_CD, thpsc.DISP_SEQ, thpsp.DISP_SEQ
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -851,13 +853,15 @@
                 ,		TB_MS_PRODUCT_SDSEL_PROD tmpsp
                 ,		TB_MS_PRODUCT tmp
                 WHERE 	tmpsg.STORE_CD = #{storeCd}
+                AND     tmpsg.USE_YN = 'Y'
+                AND     tmpsc.USE_YN = 'Y'
+                AND     tmpsp.USE_YN = 'Y'
                 AND 	tmpsg.STORE_CD = tmpsc.STORE_CD (+)
                 AND 	tmpsg.SDSEL_GRP_CD = tmpsc.SDSEL_GRP_CD (+)
                 AND 	tmpsc.STORE_CD = tmpsp.STORE_CD (+)
                 AND 	tmpsc.SDSEL_CLASS_CD = tmpsp.SDSEL_CLASS_CD (+)
                 AND 	tmpsp.STORE_CD = tmp.STORE_CD (+)
                 AND 	tmpsp.PROD_CD = tmp.PROD_CD (+)
-                AND     tmpsp.USE_YN = 'Y'
                 ORDER BY tmpsg.SDSEL_GRP_CD, tmpsc.DISP_SEQ, tmpsp.DISP_SEQ
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -893,13 +897,15 @@
                 ,		TB_HQ_PRODUCT_SDSEL_PROD thpsp
                 ,		TB_HQ_PRODUCT thp
                 WHERE 	thpsg.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     thpsg.USE_YN = 'Y'
+                AND     thpsc.USE_YN = 'Y'
+                AND     thpsp.USE_YN = 'Y'
                 AND 	thpsg.HQ_OFFICE_CD = thpsc.HQ_OFFICE_CD (+)
                 AND 	thpsg.SDSEL_GRP_CD = thpsc.SDSEL_GRP_CD (+)
                 AND 	thpsc.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD (+)
                 AND 	thpsc.SDSEL_CLASS_CD = thpsp.SDSEL_CLASS_CD (+)
                 AND 	thpsp.HQ_OFFICE_CD (+) = thp.HQ_OFFICE_CD
                 AND 	thpsp.PROD_CD (+) = thp.PROD_CD
-                AND     thpsp.USE_YN = 'Y'
                 ORDER BY thpsg.SDSEL_GRP_CD, thpsc.DISP_SEQ, thpsp.DISP_SEQ
             </when>
             <!-- 매장 -->
@@ -922,13 +928,15 @@
                 ,		TB_MS_PRODUCT_SDSEL_PROD tmpsp
                 ,		TB_MS_PRODUCT tmp
                 WHERE 	tmpsg.STORE_CD = #{storeCd}
+                AND     tmpsg.USE_YN = 'Y'
+                AND     tmpsc.USE_YN = 'Y'
+                AND     tmpsp.USE_YN = 'Y'
                 AND 	tmpsg.STORE_CD = tmpsc.STORE_CD (+)
                 AND 	tmpsg.SDSEL_GRP_CD = tmpsc.SDSEL_GRP_CD (+)
                 AND 	tmpsc.STORE_CD = tmpsp.STORE_CD (+)
                 AND 	tmpsc.SDSEL_CLASS_CD = tmpsp.SDSEL_CLASS_CD (+)
                 AND 	tmpsp.STORE_CD = tmp.STORE_CD (+)
                 AND 	tmpsp.PROD_CD = tmp.PROD_CD (+)
-                AND     tmpsp.USE_YN = 'Y'
                 ORDER BY tmpsg.SDSEL_GRP_CD, tmpsc.DISP_SEQ, tmpsp.DISP_SEQ
             </when>
         </choose>
@@ -1144,6 +1152,9 @@
                         ,		TB_HQ_PRODUCT thp2
                         ,       TB_HQ_PRODUCT_CLASS_V02 thpcv
                         WHERE 	thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND     thpsg.USE_YN = 'Y'
+                        AND     thpsc.USE_YN = 'Y'
+                        AND     thpsp.USE_YN = 'Y'
                         AND 	thp.HQ_OFFICE_CD = thpsg.HQ_OFFICE_CD
                         AND 	thp.SDSEL_GRP_CD = thpsg.SDSEL_GRP_CD
                         AND 	thpsg.HQ_OFFICE_CD = thpsc.HQ_OFFICE_CD (+)
@@ -1152,7 +1163,6 @@
                         AND 	thpsc.SDSEL_CLASS_CD = thpsp.SDSEL_CLASS_CD (+)
                         AND 	thpsp.HQ_OFFICE_CD = thp2.HQ_OFFICE_CD (+)
                         AND 	thpsp.PROD_CD = thp2.PROD_CD (+)
-                        AND 	thpsp.USE_YN = 'Y'
                         AND 	thpcv.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
                         AND 	thpcv.PROD_CD = thp.PROD_CD
                         UNION ALL
@@ -1347,6 +1357,9 @@
                         ,		TB_MS_PRODUCT tmp2
                         ,       TB_MS_PRODUCT_CLASS_V02 tmpcv
                         WHERE 	tmp.STORE_CD = #{storeCd}
+                        AND     tmpsg.USE_YN = 'Y'
+                        AND     tmpsc.USE_YN = 'Y'
+                        AND     tmpsp.USE_YN = 'Y'
                         AND 	tmp.STORE_CD = tmpsg.STORE_CD
                         AND 	tmp.SDSEL_GRP_CD = tmpsg.SDSEL_GRP_CD
                         AND 	tmpsg.STORE_CD = tmpsc.STORE_CD (+)
@@ -1355,7 +1368,6 @@
                         AND 	tmpsc.SDSEL_CLASS_CD = tmpsp.SDSEL_CLASS_CD (+)
                         AND 	tmpsp.STORE_CD = tmp2.STORE_CD (+)
                         AND 	tmpsp.PROD_CD = tmp2.PROD_CD (+)
-                        AND 	tmpsp.USE_YN = 'Y'
                         AND 	tmpcv.STORE_CD = tmp.STORE_CD
                         AND 	tmpcv.PROD_CD = tmp.PROD_CD
                         UNION ALL
@@ -1548,6 +1560,9 @@
                 ,		TB_HQ_PRODUCT thp2
                 ,       TB_HQ_PRODUCT_CLASS_V02 thpcv
                 WHERE 	thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     thpsg.USE_YN = 'Y'
+                AND     thpsc.USE_YN = 'Y'
+                AND     thpsp.USE_YN = 'Y'
                 AND 	thp.HQ_OFFICE_CD = thpsg.HQ_OFFICE_CD
                 AND 	thp.SDSEL_GRP_CD = thpsg.SDSEL_GRP_CD
                 AND 	thpsg.HQ_OFFICE_CD = thpsc.HQ_OFFICE_CD (+)
@@ -1556,7 +1571,6 @@
                 AND 	thpsc.SDSEL_CLASS_CD = thpsp.SDSEL_CLASS_CD (+)
                 AND 	thpsp.HQ_OFFICE_CD = thp2.HQ_OFFICE_CD (+)
                 AND 	thpsp.PROD_CD = thp2.PROD_CD (+)
-                AND 	thpsp.USE_YN = 'Y'
                 AND 	thpcv.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
                 AND 	thpcv.PROD_CD = thp.PROD_CD
                 UNION ALL
@@ -1748,6 +1762,9 @@
                 ,		TB_MS_PRODUCT tmp2
                 ,       TB_MS_PRODUCT_CLASS_V02 tmpcv
                 WHERE 	tmp.STORE_CD = #{storeCd}
+                AND     tmpsg.USE_YN = 'Y'
+                AND     tmpsc.USE_YN = 'Y'
+                AND     tmpsp.USE_YN = 'Y'
                 AND 	tmp.STORE_CD = tmpsg.STORE_CD
                 AND 	tmp.SDSEL_GRP_CD = tmpsg.SDSEL_GRP_CD
                 AND 	tmpsg.STORE_CD = tmpsc.STORE_CD (+)
@@ -1756,7 +1773,6 @@
                 AND 	tmpsc.SDSEL_CLASS_CD = tmpsp.SDSEL_CLASS_CD (+)
                 AND 	tmpsp.STORE_CD = tmp2.STORE_CD (+)
                 AND 	tmpsp.PROD_CD = tmp2.PROD_CD (+)
-                AND 	tmpsp.USE_YN = 'Y'
                 AND 	tmpcv.STORE_CD = tmp.STORE_CD
                 AND 	tmpcv.PROD_CD = tmp.PROD_CD
                 UNION ALL
