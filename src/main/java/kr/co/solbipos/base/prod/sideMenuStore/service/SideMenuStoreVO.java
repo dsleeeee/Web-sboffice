@@ -90,6 +90,18 @@ public class SideMenuStoreVO extends PageVO {
     /** 적용매장구분 */
     private String regStoreFg;
 
+    /** 상품분류코드 */
+    private String prodClassCd;
+
+    /** 사용자별 브랜드코드(상품) */
+    private String[] userProdBrandList;
+
+    /** 사용자별 브랜드코드(상품) */
+    private String userProdBrands;
+
+    /** 상품브랜드코드 */
+    private String prodHqBrandCd;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -249,4 +261,36 @@ public class SideMenuStoreVO extends PageVO {
     public String getRegStoreFg() { return regStoreFg; }
 
     public void setRegStoreFg(String regStoreFg) { this.regStoreFg = regStoreFg; }
+
+    public String getProdClassCd() {
+        return prodClassCd;
+    }
+
+    public void setProdClassCd(String prodClassCd) {
+        this.prodClassCd = prodClassCd;
+    }
+
+    public String[] getUserProdBrandList() {
+        return userProdBrandList;
+    }
+
+    public void setUserProdBrandList(String[] userProdBrandList) {
+        this.userProdBrandList = userProdBrandList;
+    }
+
+    public String getUserProdBrands() {
+        return userProdBrands;
+    }
+
+    public void setUserProdBrands(String userProdBrands) {
+        this.userProdBrands = userProdBrands;
+    }
+
+    public String getProdHqBrandCd() {
+        return prodHqBrandCd;
+    }
+
+    public void setProdHqBrandCd(String prodHqBrandCd) {
+        this.prodHqBrandCd = prodHqBrandCd;
+    }
 }

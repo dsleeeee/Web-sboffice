@@ -467,4 +467,116 @@
         AND SDSEL_CLASS_CD = #{sdselClassCd}
     </delete>
 
+    <!-- 선택상품(적용매장) 탭 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSideMenuProdRegStoreList" parameterType="SideMenuStoreVO" resultType="DefaultMap">
+        /* SideMenuStoreMapper.getSideMenuProdRegStoreList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        A.SDSEL_GRP_CD,
+        A.SDSEL_GRP_NM,
+        B.SDSEL_CLASS_CD,
+        B.SDSEL_CLASS_NM,
+        C.PROD_CD AS SDSEL_PROD_CD,
+        D.PROD_NM AS SDSEL_PROD_NM,
+        NVL(C.REG_STORE_FG, '0') AS REG_STORE_FG
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_HQ_PRODUCT_SDSEL_GROUP A,
+        TB_HQ_PRODUCT_SDSEL_CLASS B,
+        TB_HQ_PRODUCT_SDSEL_PROD C,
+        TB_HQ_PRODUCT D
+        WHERE 1=1
+        AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+            AND A.SDSEL_GRP_CD LIKE '%'||#{sdselGrpCd}||'%'
+        </if>
+        <if test='sdselGrpNm != null and sdselGrpNm != ""'>
+            AND A.SDSEL_GRP_NM LIKE '%'||#{sdselGrpNm}||'%'
+        </if>
+        <if test='sdselClassCd != null and sdselClassCd != ""'>
+            AND B.SDSEL_CLASS_CD LIKE '%'||#{sdselClassCd}||'%'
+        </if>
+        <if test='sdselClassNm != null and sdselClassNm != ""'>
+            AND B.SDSEL_CLASS_NM LIKE '%'||#{sdselClassNm}||'%'
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND D.PROD_CLASS_CD IN (
+                                        SELECT  PROD_CLASS_CD
+                                        FROM    TB_HQ_PRODUCT_CLASS
+                                        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    )
+        </if>
+        <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+            AND D.HQ_BRAND_CD = #{prodHqBrandCd} -- 선택한 상품브랜드가 있을 때
+        </if>
+        <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+            <if test='userProdBrands != null and userProdBrands != ""'>
+                -- 선택한 상품브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                AND D.HQ_BRAND_CD IN
+                <foreach collection="userProdBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='sdselProdCd != null and sdselProdCd != ""'>
+            AND C.PROD_CD LIKE '%'||#{sdselProdCd}||'%'
+        </if>
+        <if test='sdselProdNm != null and sdselProdNm != ""'>
+            AND D.PROD_NM LIKE '%'||#{sdselProdNm}||'%'
+        </if>
+        <if test='regStoreFg != null and regStoreFg != ""'>
+            AND NVL(C.REG_STORE_FG, '0') = #{regStoreFg}
+        </if>
+        AND A.USE_YN = 'Y'
+        AND B.USE_YN = 'Y'
+        AND C.USE_YN = 'Y'
+        AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+        AND B.SDSEL_GRP_CD = A.SDSEL_GRP_CD
+        AND C.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+        AND C.SDSEL_CLASS_CD = B.SDSEL_CLASS_CD
+        AND D.HQ_OFFICE_CD (+)= C.HQ_OFFICE_CD
+        AND D.PROD_CD (+)= C.PROD_CD
+        ORDER BY A.SDSEL_GRP_CD, B.SDSEL_CLASS_CD, C.PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 선택상품(적용매장) 탭 - 저장 update -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getSideMenuProdRegStoreSaveUpdate" parameterType="SideMenuStoreVO">
+        /* SideMenuStoreMapper.getSideMenuProdRegStoreSaveUpdate */
+        UPDATE
+        TB_HQ_PRODUCT_SDSEL_PROD
+        SET
+        REG_STORE_FG = #{regStoreFg},
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND SDSEL_CLASS_CD = #{sdselClassCd}
+        AND PROD_CD = #{sdselProdCd}
+    </update>
+
+    <!-- 선택상품(적용매장) 탭 - 선택상품 적용매장 전체 삭제 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getSideMenuProdRegStoreDeleteAll" parameterType="SideMenuStoreVO">
+        /* SideMenuStoreMapper.getSideMenuProdRegStoreDeleteAll */
+        DELETE
+        TB_HQ_PRODUCT_SDSEL_PROD_REG_STORE
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND SDSEL_CLASS_CD = #{sdselClassCd}
+        AND PROD_CD = #{sdselProdCd}
+    </delete>
+
 </mapper>

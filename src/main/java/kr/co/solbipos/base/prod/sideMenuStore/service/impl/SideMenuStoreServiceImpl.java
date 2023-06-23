@@ -182,4 +182,60 @@ public class SideMenuStoreServiceImpl implements SideMenuStoreService {
 
         return procCnt;
     }
+
+    /** 선택상품(적용매장) 탭 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getSideMenuProdRegStoreList(SideMenuStoreVO sideMenuStoreVO, SessionInfoVO sessionInfoVO) {
+
+        sideMenuStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
+        if (sideMenuStoreVO.getProdHqBrandCd() == "" || sideMenuStoreVO.getProdHqBrandCd() == null) {
+            // 사용자별 브랜드 array 값 세팅
+            if (sideMenuStoreVO.getUserProdBrands() != null && !"".equals(sideMenuStoreVO.getUserProdBrands())) {
+                String[] userBrandList = sideMenuStoreVO.getUserProdBrands().split(",");
+                if (userBrandList.length > 0) {
+                    sideMenuStoreVO.setUserProdBrandList(userBrandList);
+                }
+            }
+        }
+
+        return sideMenuStoreMapper.getSideMenuProdRegStoreList(sideMenuStoreVO);
+    }
+
+    /** 선택상품(적용매장) 탭 - 저장 */
+    @Override
+    public int getSideMenuProdRegStoreSave(SideMenuStoreVO[] sideMenuStoreVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(SideMenuStoreVO sideMenuStoreVO : sideMenuStoreVOs) {
+
+            sideMenuStoreVO.setModDt(currentDt);
+            sideMenuStoreVO.setModId(sessionInfoVO.getUserId());
+
+            sideMenuStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+            procCnt = sideMenuStoreMapper.getSideMenuProdRegStoreSaveUpdate(sideMenuStoreVO);
+        }
+
+        return procCnt;
+    }
+
+    /** 선택상품(적용매장) 탭 - 선택상품 적용매장 전체 삭제 */
+    @Override
+    public int getSideMenuProdRegStoreDeleteAll(SideMenuStoreVO[] sideMenuStoreVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+
+        for(SideMenuStoreVO sideMenuStoreVO : sideMenuStoreVOs) {
+
+            sideMenuStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+            procCnt = sideMenuStoreMapper.getSideMenuProdRegStoreDeleteAll(sideMenuStoreVO);
+        }
+
+        return procCnt;
+    }
 }

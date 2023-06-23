@@ -29,6 +29,10 @@
             <li>
                 <a id="sideMenuClassRegStoreTab" href="#" ng-click="sideMenuClassRegStoreShow()"><s:message code="sideMenuStoreTab.sideMenuClassRegStore"/></a>
             </li>
+            <%-- 선택상품(적용매장) 탭 --%>
+            <li>
+                <a id="sideMenuProdRegStoreTab" href="#" ng-click="sideMenuProdRegStoreShow()"><s:message code="sideMenuStoreTab.sideMenuProdRegStore"/></a>
+            </li>
         </ul>
     </div>
 </div>
@@ -38,7 +42,6 @@
     var momsEnvstVal = "${momsEnvstVal}";
 
     // List 형식("" 안붙임)
-    var momsHqBrandCdComboList = ${momsHqBrandCdComboList};
     var branchCdComboList = ${branchCdComboList};
     var momsTeamComboList = ${momsTeamComboList};
     var momsAcShopComboList = ${momsAcShopComboList};
@@ -46,9 +49,14 @@
     var momsCommercialComboList = ${momsCommercialComboList};
     var momsShopTypeComboList = ${momsShopTypeComboList};
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
+
+    // 브랜드사용여부
+    var brandUseFg = "${brandUseFg}";
+    // 브랜드
+    var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenuStore/sideMenuStoreTab.js?ver=20230620.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenuStore/sideMenuStoreTab.js?ver=20230622.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 선택분류(매장별) 레이어 --%>
@@ -77,6 +85,12 @@
 
 <%-- 선택분류(적용매장) 레이어 --%>
 <c:import url="/WEB-INF/view/base/prod/sideMenuStore/sideMenuClassRegStore.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 선택상품(적용매장) 레이어 --%>
+<c:import url="/WEB-INF/view/base/prod/sideMenuStore/sideMenuProdRegStore.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

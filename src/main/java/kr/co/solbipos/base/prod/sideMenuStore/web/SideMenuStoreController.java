@@ -81,6 +81,14 @@ public class SideMenuStoreController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
+
+        // 브랜드사용여부
+        model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
+        // 사용자별 브랜드 콤보박스 조회
+        DayProdVO dayProdVO = new DayProdVO();
+        model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
+
+
         /** 맘스터치 */
         // [1250 맘스터치] 환경설정값 조회
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
@@ -88,12 +96,6 @@ public class SideMenuStoreController {
         } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
         }
-
-        // 사용자별 브랜드 조회(콤보박스용)
-        DayProdVO dayProdVO = new DayProdVO();
-        String momsHqBrandCdComboList = convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO));
-        model.addAttribute("momsHqBrandCdComboList", momsHqBrandCdComboList);
-        System.out.println("momsHqBrandCdComboList : " + momsHqBrandCdComboList);
 
         // 사용자별 코드별 공통코드 콤보박스 조회
         // 팀별
@@ -404,6 +406,75 @@ public class SideMenuStoreController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = sideMenuStoreService.getSideMenuClassRegStoreDeleteAll(sideMenuStoreVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 선택상품(적용매장) 탭 - 조회
+     *
+     * @param sideMenuStoreVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 06. 20.
+     */
+    @RequestMapping(value = "/sideMenuProdRegStore/getSideMenuProdRegStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSideMenuProdRegStoreList(SideMenuStoreVO sideMenuStoreVO, HttpServletRequest request,
+                                               HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = sideMenuStoreService.getSideMenuProdRegStoreList(sideMenuStoreVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, sideMenuStoreVO);
+    }
+
+    /**
+     * 선택상품(적용매장) 탭 - 저장
+     *
+     * @param sideMenuStoreVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 06. 20.
+     */
+    @RequestMapping(value = "/sideMenuProdRegStore/getSideMenuProdRegStoreSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSideMenuProdRegStoreSave(@RequestBody SideMenuStoreVO[] sideMenuStoreVOs, HttpServletRequest request,
+                                               HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = sideMenuStoreService.getSideMenuProdRegStoreSave(sideMenuStoreVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 선택상품(적용매장) 탭 - 선택상품 적용매장 전체 삭제
+     *
+     * @param sideMenuStoreVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 06. 20.
+     */
+    @RequestMapping(value = "/sideMenuProdRegStore/getSideMenuProdRegStoreDeleteAll.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSideMenuProdRegStoreDeleteAll(@RequestBody SideMenuStoreVO[] sideMenuStoreVOs, HttpServletRequest request,
+                                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = sideMenuStoreService.getSideMenuProdRegStoreDeleteAll(sideMenuStoreVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

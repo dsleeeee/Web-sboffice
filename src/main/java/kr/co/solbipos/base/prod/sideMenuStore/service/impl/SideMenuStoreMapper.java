@@ -58,4 +58,13 @@ public interface SideMenuStoreMapper {
 
     /** 선택분류(적용매장) 탭 - 선택분류 적용매장 전체 삭제 */
     int getSideMenuClassRegStoreDeleteAll(SideMenuStoreVO sideMenuStoreVO);
+
+    /** 선택상품(적용매장) 탭 - 조회 */
+    List<DefaultMap<Object>> getSideMenuProdRegStoreList(SideMenuStoreVO sideMenuStoreVO);
+
+    /** 선택상품(적용매장) 탭 - 저장 update */
+    int getSideMenuProdRegStoreSaveUpdate(SideMenuStoreVO sideMenuStoreVO);
+
+    /** 선택상품(적용매장) 탭 - 선택상품 적용매장 전체 삭제 */
+    int getSideMenuProdRegStoreDeleteAll(SideMenuStoreVO sideMenuStoreVO);
 }
