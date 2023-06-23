@@ -23,6 +23,8 @@ import java.util.List;
  */
 public interface AlimtalkService {
 
+    List<DefaultMap<String>> getAlimtalkFgList(SessionInfoVO sessionInfoVO);
+
     /** 조회 */
     List<DefaultMap<String>> getAlimtalkList(AlimtalkVO alimtalkVO, SessionInfoVO sessionInfoVO);
 

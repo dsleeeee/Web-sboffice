@@ -8,8 +8,10 @@ app.controller('alimtalkCtrl', ['$scope', '$http', '$timeout', function ($scope,
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('alimtalkCtrl', $scope, $http, true));
 
+  $scope._setComboData('alimtalkFgCombo', alimtalkFgListAll);
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+    $scope.alimtalkDataMap = new wijmo.grid.DataMap(alimtalkFgList, 'value', 'name');
 
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("alimtalkCtrl");
@@ -34,6 +36,8 @@ app.controller('alimtalkCtrl', ['$scope', '$http', '$timeout', function ($scope,
   $scope.searchAlimtalkList = function () {
     // 파라미터
     var params       = {};
+    params.alimtalkFg = $scope.alimtalkFg;
+
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/adi/etc/alimtalk/alimtalk/getAlimtalkList.sb", params, function (){});
   };
@@ -52,72 +56,97 @@ app.controller('alimtalkCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
   // 그리드 행 삭제
   $scope.deleteRow = function(){
-    for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
-      var item = $scope.flex.collectionView.items[i];
-      if(item.gChk){
-          $scope.flex.collectionView.removeAt(i);
-      }
+
+    if($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["cmm.empty.data"]);
+      return false;
     }
+
+    $scope._popConfirm(messages["cdKwu.detail.require.delConfirm"], function() {
+      for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
+        var item = $scope.flex.collectionView.items[i];
+        if (item.gChk) {
+          $scope.flex.collectionView.removeAt(i);
+        }
+      }
+
+      var params = new Array();
+
+      for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
+        $scope.flex.collectionView.itemsRemoved[i].status = "D";
+        params.push($scope.flex.collectionView.itemsRemoved[i]);
+      }
+
+      // console.log(params);
+
+      // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+      $scope._save("/adi/etc/alimtalk/alimtalk/getAlimtalkSave.sb", params, function () {
+        $scope.searchAlimtalkList()
+      });
+    });
   };
 
   // 그리드 저장
   $scope.save = function() {
-    // 파라미터 설정
-    var params = new Array();
-    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      if($scope.flex.collectionView.itemsEdited[i].mpInfo.getByteLengthForOracle() > 200){
-        $scope._popMsg(messages["alimtalk.mpInfo"] + messages["alimtalk.max200Chk"]);
-        return false;
-      }
-      if($scope.flex.collectionView.itemsEdited[i].remark.getByteLengthForOracle() > 200){
-        $scope._popMsg(messages["alimtalk.remark"] + messages["alimtalk.max200Chk"]);
-        return false;
-      }
-      if($scope.flex.collectionView.itemsEdited[i].mpNo !== ""){
-        if($scope.flex.collectionView.itemsEdited[i].remark.getByteLengthForOracle() > 15){
-          $scope._popMsg(messages["alimtalk.mpNo"] + messages["alimtalk.max15Chk"]);
+
+    if($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["cmm.empty.data"]);
+      return false;
+    }
+
+    $scope._popConfirm(messages["cmm.choo.save"], function() {
+      // 파라미터 설정
+      var params = new Array();
+      for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+        if (nvl($scope.flex.collectionView.itemsEdited[i].mpInfo, '').getByteLengthForOracle() > 200) {
+          $scope._popMsg(messages["alimtalk.mpInfo"] + messages["alimtalk.max200Chk"]);
           return false;
-        } else {
-          $scope.flex.collectionView.itemsEdited[i].status = "U";
-          params.push($scope.flex.collectionView.itemsEdited[i]);
         }
-      } else {
-        $scope._popMsg(messages["alimtalk.mpNo"] + messages["alimtalk.mpNoChkMsg"]);
-        return false;
-      }
-    }
-    for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-      if($scope.flex.collectionView.itemsAdded[i].mpInfo.getByteLengthForOracle() > 200){
-        $scope._popMsg(messages["alimtalk.mpInfo"] + messages["alimtalk.max200Chk"]);
-        return false;
-      }
-      if($scope.flex.collectionView.itemsAdded[i].remark.getByteLengthForOracle() > 200){
-        $scope._popMsg(messages["alimtalk.remark"] + messages["alimtalk.max200Chk"]);
-        return false;
-      }
-      if($scope.flex.collectionView.itemsAdded[i].mpNo !== ""){
-        if($scope.flex.collectionView.itemsAdded[i].mpNo.getByteLengthForOracle() > 15) {
-          $scope._popMsg(messages["alimtalk.mpNo"] + messages["alimtalk.max15Chk"]);
+        if (nvl($scope.flex.collectionView.itemsEdited[i].remark, '').getByteLengthForOracle() > 200) {
+          $scope._popMsg(messages["alimtalk.remark"] + messages["alimtalk.max200Chk"]);
           return false;
-        } else {
-          $scope.flex.collectionView.itemsAdded[i].status = "U";
-          params.push($scope.flex.collectionView.itemsAdded[i]);
         }
-      } else {
-        $scope._popMsg(messages["alimtalk.mpNo"] + messages["alimtalk.mpNoChkMsg"]);
-        return false;
+        if ($scope.flex.collectionView.itemsEdited[i].mpNo !== "") {
+          if ($scope.flex.collectionView.itemsEdited[i].mpNo.getByteLengthForOracle() > 15) {
+            $scope._popMsg(messages["alimtalk.mpNo"] + messages["alimtalk.max15Chk"]);
+            return false;
+          } else {
+            $scope.flex.collectionView.itemsEdited[i].status = "U";
+            params.push($scope.flex.collectionView.itemsEdited[i]);
+          }
+        } else {
+          $scope._popMsg(messages["alimtalk.mpNo"] + messages["alimtalk.mpNoChkMsg"]);
+          return false;
+        }
       }
-    }
+      for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+        if (nvl($scope.flex.collectionView.itemsAdded[i].mpInfo, '').getByteLengthForOracle() > 200) {
+          $scope._popMsg(messages["alimtalk.mpInfo"] + messages["alimtalk.max200Chk"]);
+          return false;
+        }
+        if (nvl($scope.flex.collectionView.itemsAdded[i].remark, '').getByteLengthForOracle() > 200) {
+          $scope._popMsg(messages["alimtalk.remark"] + messages["alimtalk.max200Chk"]);
+          return false;
+        }
+        if ($scope.flex.collectionView.itemsAdded[i].mpNo !== "") {
+          if ($scope.flex.collectionView.itemsAdded[i].mpNo.getByteLengthForOracle() > 15) {
+            $scope._popMsg(messages["alimtalk.mpNo"] + messages["alimtalk.max15Chk"]);
+            return false;
+          } else {
+            $scope.flex.collectionView.itemsAdded[i].status = "U";
+            params.push($scope.flex.collectionView.itemsAdded[i]);
+          }
+        } else {
+          $scope._popMsg(messages["alimtalk.mpNo"] + messages["alimtalk.mpNoChkMsg"]);
+          return false;
+        }
+      }
 
-    for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
-      $scope.flex.collectionView.itemsRemoved[i].status = "D";
-      params.push($scope.flex.collectionView.itemsRemoved[i]);
-    }
-
-    // console.log(params);
-
-    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save("/adi/etc/alimtalk/alimtalk/getAlimtalkSave.sb", params, function(){ $scope.searchAlimtalkList() });
+      // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+      $scope._save("/adi/etc/alimtalk/alimtalk/getAlimtalkSave.sb", params, function () {
+        $scope.searchAlimtalkList()
+      });
+    });
   }
 
 }]);

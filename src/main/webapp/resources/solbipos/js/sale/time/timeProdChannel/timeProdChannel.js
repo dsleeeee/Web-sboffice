@@ -574,6 +574,30 @@ app.controller('timeProdChannelCtrl', ['$scope', '$http', '$timeout', function (
         $scope._broadcast('timeProdChannelExcelCtrl', params);
     };
 
+    // 엑셀 다운로드(그리드 바인딩된 데이터만)
+    $scope.excelDownload2 = function () {
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+         wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+           includeColumnHeaders: true,
+           includeCellStyles: false,
+           includeColumns: function (column) {
+             return column.visible;
+           }
+         },
+             messages["timeProdChannel.timeProdChannel"] + '_' +  wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd') + '_' + wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd') + '_' + getCurDateTime()+'.xlsx', function () {
+           $timeout(function () {
+             $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+           }, 10);
+         });
+        }, 10);
+    };
+
     // 확장조회 숨김/보임
     $scope.searchAddShowChange = function(){
         if( $("#tblSearchAddShow").css("display") === 'none') {

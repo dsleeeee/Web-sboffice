@@ -2,6 +2,7 @@ package kr.co.solbipos.adi.etc.alimtalk.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.adi.etc.alimtalk.service.AlimtalkVO;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -25,6 +26,8 @@ import java.util.List;
 @Mapper
 @Repository
 public interface AlimtalkMapper {
+
+    List<DefaultMap<String>> getAlimtalkFgList(SessionInfoVO sessionInfoVO);
 
     /** 조회 */
     List<DefaultMap<String>> getAlimtalkList(AlimtalkVO alimtalkVO);
