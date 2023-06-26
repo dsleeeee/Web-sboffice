@@ -217,7 +217,8 @@
             </tbody>
         </table>
 
-        <div class="mt10 oh sb-select dkbr">
+        <div class="mt10 oh">
+            <p class="tl s14 mt5 lh15">- '적용매장구분'이 '제외매장', '허용매장'인 경우에만 조회됩니다.</p>
             <%-- 저장 --%>
             <button class="btn_skyblue ml5 fr" id="btnSave" ng-click="save()"><s:message code="cmm.save" /></button>
         </div>

@@ -59,6 +59,7 @@
 
                 <%-- 버튼영역 --%>
                 <div class="mt10 tr">
+                    <p class="tl s14 mt5 lh15">- '적용매장구분'이 '제외매장', '허용매장'인 경우에만 조회됩니다.</p>
                     <button class="btn_skyblue" ng-click="searchSdselClass()"><s:message code="cmm.search" /></button>
                 </div>
 
