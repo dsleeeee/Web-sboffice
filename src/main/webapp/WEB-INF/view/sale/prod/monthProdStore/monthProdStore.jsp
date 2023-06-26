@@ -311,7 +311,7 @@
             <%-- 현재화면 엑셀다운로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelDownload2()"><s:message code="cmm.excel.downCurrent"/></button>
             <%-- 조회조건 엑셀다운로드 --%>
-            <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCondition"/></button>
+            <%--<button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCondition"/></button>--%>
         </div>
 
         <div class="w100 mt10">
