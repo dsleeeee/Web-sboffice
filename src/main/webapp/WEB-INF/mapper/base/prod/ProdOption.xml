@@ -192,6 +192,7 @@
                 ,       thpov.OPTION_VAL_NM
                 ,       thpov.OPT_PROD_CD
                 ,       thp.PROD_NM
+                ,       NVL(thpov.PRINT_YN, 'Y') AS PRINT_YN
                 FROM    TB_HQ_PRODUCT_OPTION_VAL thpov
                 ,       TB_HQ_PRODUCT thp
                 WHERE   thpov.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -207,6 +208,7 @@
                 ,       tmpov.OPTION_VAL_NM
                 ,       tmpov.OPT_PROD_CD
                 ,       tmp.PROD_NM
+                ,       NVL(tmpov.PRINT_YN, 'Y') AS PRINT_YN
                 FROM    TB_MS_PRODUCT_OPTION_VAL tmpov
                 ,       TB_MS_PRODUCT tmp
                 WHERE   tmpov.STORE_CD = #{storeCd}
@@ -258,74 +260,78 @@
                 MERGE INTO  TB_HQ_PRODUCT_OPTION_VAL A
                 USING   DUAL
                 ON (    A.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND A.OPTION_GRP_CD = #{optionGrpCd}
-                AND A.OPTION_VAL_CD = #{optionValCd})
+                    AND A.OPTION_GRP_CD = #{optionGrpCd}
+                    AND A.OPTION_VAL_CD = #{optionValCd})
                 WHEN MATCHED THEN
-                UPDATE
-                SET A.OPTION_VAL_NM = #{optionValNm},
-                A.MOD_DT = #{modDt},
-                A.MOD_ID = #{modId}
+                    UPDATE
+                    SET A.OPTION_VAL_NM = #{optionValNm},
+                    A.MOD_DT = #{modDt},
+                    A.MOD_ID = #{modId},
+                    A.PRINT_YN = #{printYn}
                 WHEN NOT MATCHED THEN
-                INSERT (
-                A.HQ_OFFICE_CD,
-                A.OPTION_GRP_CD,
-                A.OPTION_VAL_CD,
-                A.OPTION_VAL_NM,
-                A.REG_DT,
-                A.REG_ID,
-                A.MOD_DT,
-                A.MOD_ID,
-                A.OPT_PROD_CD
-                )
-                VALUES (
-                #{hqOfficeCd},
-                #{optionGrpCd},
-                #{optionValCd},
-                #{optionValNm},
-                #{regDt},
-                #{regId},
-                #{modDt},
-                #{modId},
-                #{optProdCd}
-                )
+                    INSERT (
+                        A.HQ_OFFICE_CD,
+                        A.OPTION_GRP_CD,
+                        A.OPTION_VAL_CD,
+                        A.OPTION_VAL_NM,
+                        A.REG_DT,
+                        A.REG_ID,
+                        A.MOD_DT,
+                        A.MOD_ID,
+                        A.OPT_PROD_CD,
+                        A.PRINT_YN
+                    ) VALUES (
+                        #{hqOfficeCd},
+                        #{optionGrpCd},
+                        #{optionValCd},
+                        #{optionValNm},
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId},
+                        #{optProdCd},
+                        #{printYn}
+                    )
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 MERGE INTO  TB_MS_PRODUCT_OPTION_VAL A
                 USING   DUAL
                 ON (    A.STORE_CD = #{storeCd}
-                AND A.OPTION_GRP_CD = #{optionGrpCd}
-                AND A.OPTION_VAL_CD = #{optionValCd})
+                    AND A.OPTION_GRP_CD = #{optionGrpCd}
+                    AND A.OPTION_VAL_CD = #{optionValCd})
                 WHEN MATCHED THEN
-                UPDATE
-                SET A.OPTION_VAL_NM = #{optionValNm},
-                A.MOD_DT = #{modDt},
-                A.MOD_ID = #{modId}
+                    UPDATE
+                    SET A.OPTION_VAL_NM = #{optionValNm},
+                    A.MOD_DT = #{modDt},
+                    A.MOD_ID = #{modId},
+                    A.PRINT_YN = #{printYn}
                 WHEN NOT MATCHED THEN
-                INSERT (
-                A.STORE_CD,
-                A.OPTION_GRP_CD,
-                A.OPTION_VAL_CD,
-                A.OPTION_VAL_NM,
-                A.REG_FG,
-                A.REG_DT,
-                A.REG_ID,
-                A.MOD_DT,
-                A.MOD_ID,
-                A.OPT_PROD_CD
-                )
-                VALUES (
-                #{storeCd},
-                #{optionGrpCd},
-                #{optionValCd},
-                #{optionValNm},
-                #{regFg},
-                #{regDt},
-                #{regId},
-                #{modDt},
-                #{modId},
-                #{optProdCd}
-                )
+                    INSERT (
+                        A.STORE_CD,
+                        A.OPTION_GRP_CD,
+                        A.OPTION_VAL_CD,
+                        A.OPTION_VAL_NM,
+                        A.REG_FG,
+                        A.REG_DT,
+                        A.REG_ID,
+                        A.MOD_DT,
+                        A.MOD_ID,
+                        A.OPT_PROD_CD,
+                        A.PRINT_YN
+                    ) VALUES (
+                        #{storeCd},
+                        #{optionGrpCd},
+                        #{optionValCd},
+                        #{optionValNm},
+                        #{regFg},
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId},
+                        #{optProdCd},
+                        #{printYn}
+                    )
             </when>
         </choose>
     </insert>

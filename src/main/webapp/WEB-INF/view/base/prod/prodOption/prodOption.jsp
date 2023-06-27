@@ -83,7 +83,7 @@
           <wj-flex-grid-column header="<s:message code="prodOption.optionValNm"/>" binding="optionValNm" width="120" align="left"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodOption.prodCd"/>" binding="optProdCd" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodOption.prodNm"/>" binding="prodNm" width="120" is-read-only="true" align="left"></wj-flex-grid-column>
-
+          <wj-flex-grid-column header="<s:message code="prodOption.printYn"/>" binding="printYn" data-map="printYnDataMap" width="70" align="center"></wj-flex-grid-column>
         </wj-flex-grid>
         </div>
       </div>
@@ -105,7 +105,7 @@
   var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodOption/prodOption.js?ver=20230215.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodOption/prodOption.js?ver=20230627.01" charset="utf-8"></script>
 
 <%-- 추가(상품포함) 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/prodOption/prodOptionAddWithProd.jsp">

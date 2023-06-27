@@ -80,6 +80,8 @@ public class ProdOptionVO extends PageVO {
     /** 매장상품제한구분 여부 */
     private String storeProdUseFg;
 
+    /**  출력여부 */
+    private String printYn;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -223,5 +225,13 @@ public class ProdOptionVO extends PageVO {
 
     public void setStoreProdUseFg(String storeProdUseFg) {
         this.storeProdUseFg = storeProdUseFg;
+    }
+
+    public String getPrintYn() {
+        return printYn;
+    }
+
+    public void setPrintYn(String printYn) {
+        this.printYn = printYn;
     }
 }

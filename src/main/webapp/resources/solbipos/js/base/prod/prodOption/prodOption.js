@@ -8,6 +8,16 @@
  * 2022.12.19     권지현      1.0
  *
  * **************************************************************/
+/**
+ * get application
+ */
+var app = agrid.getApp();
+
+// 출력여부
+var printYnData = [
+  {"name":"사용","value":"Y"},
+  {"name":"미사용","value":"N"}
+];
 
 /**
  * 사이드메뉴 속성분류 그리드 생성
@@ -237,6 +247,9 @@ app.controller('prodOptionValCtrl', ['$scope', '$http', function ($scope, $http)
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+    // 그리드 DataMap 설정
+    $scope.printYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // 출력여부
+
     // 속성 그리드 에디팅 방지
     s.beginningEdit.addHandler(function (s, e) {
       var col = s.columns[e.col];
@@ -274,6 +287,7 @@ app.controller('prodOptionValCtrl', ['$scope', '$http', function ($scope, $http)
     params.status = 'I';
     params.gChk = true;
     params.optionValCd = '자동채번';
+    params.printYn = 'Y';
     // 추가기능 수행 : 파라미터
     $scope._addRow(params, 2);
   };
