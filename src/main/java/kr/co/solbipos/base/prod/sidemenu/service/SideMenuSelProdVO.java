@@ -102,6 +102,9 @@ public class SideMenuSelProdVO extends PageVO {
     /** 그룹코드 */
     private String branchCd;
 
+    /**  출력여부 */
+    private String printYn;
+
     /**
      * @return the hqOfficeCd
      */
@@ -393,5 +396,13 @@ public class SideMenuSelProdVO extends PageVO {
 
     public void setBranchCd(String branchCd) {
         this.branchCd = branchCd;
+    }
+
+    public String getPrintYn() {
+        return printYn;
+    }
+
+    public void setPrintYn(String printYn) {
+        this.printYn = printYn;
     }
 }

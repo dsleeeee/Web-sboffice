@@ -46,6 +46,13 @@ var regStoreFgData = [
   {"name":"허용매장","value":"2"}
 ];
 
+// 출력여부
+var printYnData = [
+  {"name":"사용","value":"Y"},
+  {"name":"미사용","value":"N"}
+];
+
+
 /**
  * 사이드메뉴 선택그룹 그리드 생성
  */
@@ -972,6 +979,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
     // 그리드 내 콤보박스 설정
     $scope.fixProdFgDataMap = fixProdFgDataMap;
     $scope.regStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
+    $scope.printYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // 출력여부
 
     // 선택상품 그리드 에디팅 방지
     s.beginningEdit.addHandler(function (s, e) {
@@ -1227,6 +1235,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
                 params.gChk = true;
                 params.fixProdFg = 0;
                 params.regStoreFg = "0";
+                params.printYn = 'Y';
                 // 추가기능 수행 : 파라미터
                 $scope._addRow(params);
               } else {

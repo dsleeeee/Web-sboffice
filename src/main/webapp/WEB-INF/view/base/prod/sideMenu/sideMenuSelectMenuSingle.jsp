@@ -220,6 +220,7 @@
                 <c:if test="${orgnFg == 'HQ' and hqOfficeCd == 'DS021'}">
                   <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.regStoreFg"/>" binding="regStoreFg" data-map="regStoreFgDataMap" width="85"></wj-flex-grid-column>
                 </c:if>
+                <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.printYn"/>" binding="printYn" data-map="printYnDataMap" width="70" align="center"></wj-flex-grid-column>
               </wj-flex-grid>
 
             </div>
@@ -235,7 +236,7 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenuSingle.js?ver=20230616.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenuSingle.js?ver=20230627.01" charset="utf-8"></script>
 
 <%-- 선택분류복사 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/sideMenu/sdselClassCopySingle.jsp">

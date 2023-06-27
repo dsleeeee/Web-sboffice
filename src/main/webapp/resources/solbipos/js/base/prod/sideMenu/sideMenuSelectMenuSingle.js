@@ -894,6 +894,7 @@ app.controller('sideMenuSelectProdSingleCtrl', ['$scope', '$http', 'sdselClassCd
     // 그리드 내 콤보박스 설정
     $scope.fixProdFgDataMap = fixProdFgDataMap;
     $scope.regStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
+    $scope.printYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // 출력여부
 
     // 선택상품 그리드 에디팅 방지
     s.beginningEdit.addHandler(function (s, e) {
@@ -1148,7 +1149,8 @@ app.controller('sideMenuSelectProdSingleCtrl', ['$scope', '$http', 'sdselClassCd
                 params.addProdQty = 1; // 기본으로 하나씩 들어가도록 // todo 추후 수정
                 params.gChk = true;
                 params.fixProdFg = 0;
-                  params.regStoreFg = "0";
+                params.regStoreFg = "0";
+                params.printYn = 'Y';
                 // 추가기능 수행 : 파라미터
                 $scope._addRow(params);
               } else {

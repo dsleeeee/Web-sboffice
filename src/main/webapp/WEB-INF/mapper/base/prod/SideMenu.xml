@@ -1297,7 +1297,8 @@
                     thpsp.ADD_PROD_QTY,
                     thpsp.DISP_SEQ,
                     NVL(thpsp.FIX_PROD_FG, '0') AS FIX_PROD_FG,
-                    NVL(thpsp.REG_STORE_FG, '0') AS REG_STORE_FG
+                    NVL(thpsp.REG_STORE_FG, '0') AS REG_STORE_FG,
+                    NVL(thpsp.PRINT_YN, 'Y') AS PRINT_YN
                 FROM
                     TB_HQ_PRODUCT_SDSEL_PROD thpsp
                 LEFT OUTER JOIN TB_HQ_PRODUCT thp ON
@@ -1328,7 +1329,8 @@
                     tmpsp.ADD_PROD_UPRC,
                     tmpsp.ADD_PROD_QTY,
                     tmpsp.DISP_SEQ,
-                    NVL(tmpsp.FIX_PROD_FG, '0') AS FIX_PROD_FG
+                    NVL(tmpsp.FIX_PROD_FG, '0') AS FIX_PROD_FG,
+                    NVL(tmpsp.PRINT_YN, 'Y') AS PRINT_YN
                 FROM
                     TB_MS_PRODUCT_SDSEL_PROD tmpsp
                 LEFT OUTER JOIN TB_MS_PRODUCT tmp ON
@@ -1375,38 +1377,42 @@
                     SET thpsp.USE_YN = 'Y',
                         thpsp.DISP_SEQ = #{dispSeq},
                         thpsp.MOD_DT = #{modDt},
-                        thpsp.MOD_ID = #{modId}
+                        thpsp.MOD_ID = #{modId},
+                        thpsp.REG_STORE_FG = #{regStoreFg},
+                        thpsp.PRINT_YN = #{printYn}
                 WHEN NOT MATCHED THEN
-                     INSERT
-                     (
-                         HQ_OFFICE_CD,
-                         SDSEL_CLASS_CD,
-                         PROD_CD,
-                         ADD_PROD_UPRC,
-                         ADD_PROD_QTY,
-                         DISP_SEQ,
-                         USE_YN,
-                         REG_DT,
-                         REG_ID,
-                         MOD_DT,
-                         MOD_ID,
-                         FIX_PROD_FG,
-                        REG_STORE_FG
-                     ) VALUES (
-                         #{hqOfficeCd},
-                         #{sdselClassCd},
-                         #{prodCd},
-                         #{addProdUprc},
-                         #{addProdQty},
-                         #{dispSeq},
-                         'Y',
-                         #{regDt},
-                         #{regId},
-                         #{modDt},
-                         #{modId},
-                         #{fixProdFg},
-                        #{regStoreFg}
-                     )
+                    INSERT
+                    (
+                        HQ_OFFICE_CD,
+                        SDSEL_CLASS_CD,
+                        PROD_CD,
+                        ADD_PROD_UPRC,
+                        ADD_PROD_QTY,
+                        DISP_SEQ,
+                        USE_YN,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID,
+                        FIX_PROD_FG,
+                        REG_STORE_FG,
+                        PRINT_YN
+                    ) VALUES (
+                        #{hqOfficeCd},
+                        #{sdselClassCd},
+                        #{prodCd},
+                        #{addProdUprc},
+                        #{addProdQty},
+                        #{dispSeq},
+                        'Y',
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId},
+                        #{fixProdFg},
+                        #{regStoreFg},
+                        #{printYn}
+                    )
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -1422,36 +1428,39 @@
                     SET tmpsp.USE_YN = 'Y',
                         tmpsp.DISP_SEQ = #{dispSeq},
                         tmpsp.MOD_DT = #{modDt},
-                        tmpsp.MOD_ID = #{modId}
+                        tmpsp.MOD_ID = #{modId},
+                        tmpsp.PRINT_YN = #{printYn}
                 WHEN NOT MATCHED THEN
-                     INSERT
-                     (
-                         STORE_CD,
-                         SDSEL_CLASS_CD,
-                         PROD_CD,
-                         ADD_PROD_UPRC,
-                         ADD_PROD_QTY,
-                         DISP_SEQ,
-                         USE_YN,
-                         REG_DT,
-                         REG_ID,
-                         MOD_DT,
-                         MOD_ID,
-                         FIX_PROD_FG
-                     ) VALUES (
-                         #{storeCd},
-                         #{sdselClassCd},
-                         #{prodCd},
-                         #{addProdUprc},
-                         #{addProdQty},
-                         #{dispSeq},
-                         'Y',
-                         #{regDt},
-                         #{regId},
-                         #{modDt},
-                         #{modId},
-                         #{fixProdFg}
-                     )
+                    INSERT
+                    (
+                        STORE_CD,
+                        SDSEL_CLASS_CD,
+                        PROD_CD,
+                        ADD_PROD_UPRC,
+                        ADD_PROD_QTY,
+                        DISP_SEQ,
+                        USE_YN,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID,
+                        FIX_PROD_FG,
+                        PRINT_YN
+                    ) VALUES (
+                        #{storeCd},
+                        #{sdselClassCd},
+                        #{prodCd},
+                        #{addProdUprc},
+                        #{addProdQty},
+                        #{dispSeq},
+                        'Y',
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId},
+                        #{fixProdFg},
+                        #{printYn}
+                    )
             </when>
         </choose>
     </insert>
@@ -1475,7 +1484,8 @@
                     MOD_DT = #{modDt},
                     MOD_ID = #{modId},
                     FIX_PROD_FG = #{fixProdFg},
-                    REG_STORE_FG = #{regStoreFg}
+                    REG_STORE_FG = #{regStoreFg},
+                    PRINT_YN = #{printYn}
                 WHERE
                     HQ_OFFICE_CD = #{hqOfficeCd}
                     AND SDSEL_CLASS_CD = #{sdselClassCd}
@@ -1490,7 +1500,8 @@
                     DISP_SEQ = #{dispSeq},
                     MOD_DT = #{modDt},
                     MOD_ID = #{modId},
-                    FIX_PROD_FG = #{fixProdFg}
+                    FIX_PROD_FG = #{fixProdFg},
+                    PRINT_YN = #{printYn}
                 WHERE
                     STORE_CD = #{storeCd}
                     AND SDSEL_CLASS_CD = #{sdselClassCd}
