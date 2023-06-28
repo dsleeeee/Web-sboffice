@@ -117,7 +117,7 @@ app.controller('sideMenuClassStoreCtrl', ['$scope', '$http', '$timeout', functio
 
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
-                // 등록구분
+                // 적용매장구분
                 if(chgGubun == "regYnChg") {
                     $scope.flex.collectionView.items[i].regYn = $scope.regYnChg;
                 }

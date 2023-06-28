@@ -121,7 +121,7 @@ app.controller('sideMenuProdRegStoreCtrl', ['$scope', '$http', '$timeout', funct
 
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
-                // 등록구분
+                // 적용매장구분
                 if(chgGubun == "regStoreFgChg") {
                     $scope.flex.collectionView.items[i].regStoreFg = $scope.regStoreFgChg;
                 }
