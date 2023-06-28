@@ -213,7 +213,7 @@
                 '0',
                 '01',
                 '',
-                #{useYn},
+                NVL(#{useYn}, 'N'),
                 #{regDt},
                 #{regId},
                 #{modDt},
