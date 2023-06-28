@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ProdPrintYn.xml
+    출력여부관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2023.06.28     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.prod.prodPrintYn.service.impl.ProdPrintYnMapper">
+
+    <!-- 옵션관리 탭 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getProdOptionPrintYnList" parameterType="ProdPrintYnVO" resultType="DefaultMap">
+        /* ProdPrintYnMapper.getProdOptionPrintYnList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                A.OPTION_GRP_CD,
+                A.OPTION_GRP_NM,
+                A.USE_YN,
+                B.OPTION_VAL_CD,
+                B.OPTION_VAL_NM,
+                B.OPT_PROD_CD,
+                C.PROD_NM AS OPT_PROD_NM,
+                NVL(B.PRINT_YN, 'Y') AS PRINT_YN
+                FROM TB_HQ_PRODUCT_OPTION_GROUP A,
+                TB_HQ_PRODUCT_OPTION_VAL B,
+                TB_HQ_PRODUCT C
+                WHERE 1=1
+                AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='optionGrpCd != null and optionGrpCd != ""'>
+                    AND A.OPTION_GRP_CD LIKE '%'||#{optionGrpCd}||'%'
+                </if>
+                <if test='optionGrpNm != null and optionGrpNm != ""'>
+                    AND A.OPTION_GRP_NM LIKE '%'||#{optionGrpNm}||'%'
+                </if>
+                <if test='optionValCd != null and optionValCd != ""'>
+                    AND B.OPTION_VAL_CD LIKE '%'||#{optionValCd}||'%'
+                </if>
+                <if test='optionValNm != null and optionValNm != ""'>
+                    AND B.OPTION_VAL_NM LIKE '%'||#{optionValNm}||'%'
+                </if>
+                <if test='printYn != null and printYn != ""'>
+                    AND NVL(B.PRINT_YN, 'Y') = #{printYn}
+                </if>
+                AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+                AND B.OPTION_GRP_CD = A.OPTION_GRP_CD
+                AND C.HQ_OFFICE_CD (+)= B.HQ_OFFICE_CD
+                AND C.PROD_CD (+)= B.OPT_PROD_CD
+                ORDER BY A.OPTION_GRP_CD, B.OPTION_VAL_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                A.OPTION_GRP_CD,
+                A.OPTION_GRP_NM,
+                A.USE_YN,
+                B.OPTION_VAL_CD,
+                B.OPTION_VAL_NM,
+                B.OPT_PROD_CD,
+                C.PROD_NM AS OPT_PROD_NM,
+                NVL(B.PRINT_YN, 'Y') AS PRINT_YN
+                FROM TB_MS_PRODUCT_OPTION_GROUP A,
+                TB_MS_PRODUCT_OPTION_VAL B,
+                TB_MS_PRODUCT C
+                WHERE 1=1
+                AND A.STORE_CD = #{storeCd}
+                <if test='optionGrpCd != null and optionGrpCd != ""'>
+                    AND A.OPTION_GRP_CD LIKE '%'||#{optionGrpCd}||'%'
+                </if>
+                <if test='optionGrpNm != null and optionGrpNm != ""'>
+                    AND A.OPTION_GRP_NM LIKE '%'||#{optionGrpNm}||'%'
+                </if>
+                <if test='optionValCd != null and optionValCd != ""'>
+                    AND B.OPTION_VAL_CD LIKE '%'||#{optionValCd}||'%'
+                </if>
+                <if test='optionValNm != null and optionValNm != ""'>
+                    AND B.OPTION_VAL_NM LIKE '%'||#{optionValNm}||'%'
+                </if>
+                <if test='printYn != null and printYn != ""'>
+                    AND NVL(B.PRINT_YN, 'Y') = #{printYn}
+                </if>
+                AND B.STORE_CD = A.STORE_CD
+                AND B.OPTION_GRP_CD = A.OPTION_GRP_CD
+                AND C.STORE_CD (+)= B.STORE_CD
+                AND C.PROD_CD (+)= B.OPT_PROD_CD
+                ORDER BY A.OPTION_GRP_CD, B.OPTION_VAL_CD
+            </when>
+        </choose>
+    </select>
+
+    <!-- 옵션관리 탭 - 저장 update -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getProdOptionPrintYnSaveUpdate" parameterType="ProdPrintYnVO">
+        /* ProdPrintYnMapper.getProdOptionPrintYnSaveUpdate */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE
+                TB_HQ_PRODUCT_OPTION_VAL
+                SET
+                PRINT_YN = #{printYn},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{hqOfficeCd}
+                AND OPTION_GRP_CD = #{optionGrpCd}
+                AND OPTION_VAL_CD = #{optionValCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE
+                TB_MS_PRODUCT_OPTION_VAL
+                SET
+                PRINT_YN = #{printYn},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND OPTION_GRP_CD = #{optionGrpCd}
+                AND OPTION_VAL_CD = #{optionValCd}
+            </when>
+        </choose>
+    </update>
+
+</mapper>
