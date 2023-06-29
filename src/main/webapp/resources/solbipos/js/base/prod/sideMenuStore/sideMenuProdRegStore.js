@@ -13,6 +13,12 @@
  */
 var app = agrid.getApp();
 
+// 고정상품구분
+var fixProdFgData = [
+    {"name":"선택","value":"0"},
+    {"name":"고정","value":"1"}
+];
+
 /**
  *  선택상품(적용매장) 조회 그리드 생성
  */
@@ -30,6 +36,7 @@ app.controller('sideMenuProdRegStoreCtrl', ['$scope', '$http', '$timeout', funct
     $scope.initGrid = function (s, e) {
         // 그리드 DataMap 설정
         $scope.requireYnDataMap = new wijmo.grid.DataMap(requireYnData, 'value', 'name'); // 필수선택여부
+        $scope.fixProdFgDataMap = new wijmo.grid.DataMap(fixProdFgData, 'value', 'name'); // 구분
         $scope.regStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
 
         // 그리드 값 변경 시 체크박스 체크
