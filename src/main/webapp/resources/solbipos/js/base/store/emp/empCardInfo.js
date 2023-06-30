@@ -75,6 +75,7 @@ app.controller('empCardInfoCtrl', ['$scope', '$http', '$timeout', function ($sco
         params.divNm = '';
         params.deptNm = '';
         params.positionNm = '';
+        params.useFg = '1';
         // 추가기능 수행 : 파라미터
         $scope._addRow(params, 1);
     };
