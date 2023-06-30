@@ -148,6 +148,12 @@
             <wj-flex-grid-column header="<s:message code="member.excel.prepaidUseAmt"/>" binding="prepaidUseAmt"
                                  data-type="String" visible="{{prepaidUseAmtVisibleFg}}"
                                  width="100" align="left"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="member.excel.postpaidAmt"/>" binding="postpaidAmt"
+                                 data-type="String" visible="{{postpaidAmtVisibleFg}}"
+                                 width="100" align="left"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="member.excel.depositAmt"/>" binding="depositAmt"
+                                 data-type="String" visible="{{depositAmtVisibleFg}}"
+                                 width="100" align="left"></wj-flex-grid-column>
 
         </wj-flex-grid>
     </div>
@@ -285,6 +291,8 @@
                 $scope.remarkVisibleFg = false; // 비고
                 $scope.prepaidAmtVisibleFg = false; // 선불충전금액
                 $scope.prepaidUseAmtVisibleFg = false; // 선불사용금액
+                $scope.postpaidAmtVisibleFg = false; // 후불충전금액
+                $scope.depositAmtVisibleFg = false; // 후불사용금액
 
                 params.prodBarcdCd = '상품코드입력';
                 params.unitQty = 0;
@@ -302,6 +310,8 @@
                 $scope.remarkVisibleFg = false; // 비고
                 $scope.prepaidAmtVisibleFg = false; // 선불충전금액
                 $scope.prepaidUseAmtVisibleFg = false; // 선불사용금액
+                $scope.postpaidAmtVisibleFg = false; // 후불충전금액
+                $scope.depositAmtVisibleFg = false; // 후불사용금액
 
                 params.prodBarcdCd = '상품코드입력';
                 params.unitQty = 0;
@@ -320,6 +330,8 @@
                 $scope.remarkVisibleFg = true;  // 비고
                 $scope.prepaidAmtVisibleFg = false; // 선불충전금액
                 $scope.prepaidUseAmtVisibleFg = false; // 선불사용금액
+                $scope.postpaidAmtVisibleFg = false; // 후불충전금액
+                $scope.depositAmtVisibleFg = false; // 후불사용금액
 
                 params.prodBarcdCd = '상품코드입력';
                 params.qty = 0;
@@ -376,6 +388,8 @@
                 $scope.totSavePoint = true; // 누적포인트
                 $scope.prepaidAmtVisibleFg = true; // 선불충전금액
                 $scope.prepaidUseAmtVisibleFg = true; // 선불사용금액
+                $scope.postpaidAmtVisibleFg = true; // 후불충전금액
+                $scope.depositAmtVisibleFg = true; // 후불사용금액
 
                 //양식 샘플 초기값
                 // params.membrClassCd = '기본';
@@ -392,6 +406,8 @@
                 params.totSavePoint = 0;
                 params.prepaidAmt = 0; // 선불충전금액
                 params.prepaidUseAmt = 0; // 선불사용금액
+                params.postpaidAmt = 0; // 후불충전금액
+                params.depositAmt = 0; // 후불사용금액
             }
             // 회원포인트조정
             else if ($scope.uploadFg === 'memberPoint') {
@@ -415,6 +431,8 @@
                 $scope.tmpTotAdjPoint = false;
                 $scope.prepaidAmtVisibleFg = false; // 선불충전금액
                 $scope.prepaidUseAmtVisibleFg = false; // 선불사용금액
+                $scope.postpaidAmtVisibleFg = false; // 후불충전금액
+                $scope.depositAmtVisibleFg = false; // 후불사용금액
 
                 params.membrNo = "0000000001";
                 params.totAdjPoint = 0
@@ -1073,6 +1091,34 @@
                     }
                 } else {
                     item.prepaidUseAmt = 0;
+                }
+
+                // 후불발생금액
+                if (nvl(item.postpaidAmt, '') !== '') {
+                    // 후불발생금액 숫자가 아닌 값
+                    var numChkexp = /[^0-9]/g;
+                    if (numChkexp.test(nvl(item.postpaidAmt, 0))) {
+                        msg = messages["member.excel.postpaidAmt"] + messages["excelUpload.not.numberData"]; // 후불발생금액의 값에 숫자가 아닌 값이 존재합니다. 데이터 및 양식을 확인해주세요.
+                        item.result = msg;
+                        failCnt++;
+                        continue;
+                    }
+                } else {
+                    item.postpaidAmt = 0;
+                }
+
+                // 후불입금금액
+                if (nvl(item.depositAmt, '') !== '') {
+                    // 후불입금금액 숫자가 아닌 값
+                    var numChkexp = /[^0-9]/g;
+                    if (numChkexp.test(nvl(item.depositAmt, 0))) {
+                        msg = messages["member.excel.depositAmt"] + messages["excelUpload.not.numberData"]; // 후불입금금액의 값에 숫자가 아닌 값이 존재합니다. 데이터 및 양식을 확인해주세요.
+                        item.result = msg;
+                        failCnt++;
+                        continue;
+                    }
+                } else {
+                    item.depositAmt = 0;
                 }
 
                 // 선불사용금액는 선불충전금액보다 클 수 없습니다.

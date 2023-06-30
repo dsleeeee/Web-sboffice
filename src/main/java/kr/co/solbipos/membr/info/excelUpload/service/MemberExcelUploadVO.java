@@ -3,6 +3,8 @@ package kr.co.solbipos.membr.info.excelUpload.service;
 import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.PageVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.membr.anals.postpaid.enums.PostpaidFg;
+import kr.co.solbipos.membr.anals.postpaid.enums.PostpaidPayFg;
 import kr.co.solbipos.membr.anals.prepaid.enums.PrepaidFg;
 import kr.co.solbipos.membr.anals.prepaid.enums.PrepaidPayFg;
 import kr.co.solbipos.membr.info.regist.enums.WeddingYn;
@@ -54,6 +56,10 @@ public class MemberExcelUploadVO extends PageVO {
   private String prepaidAmt;
   /** 선불사용금액 */
   private String prepaidUseAmt;
+  /** 후불발생금액 */
+  private String postpaidAmt;
+  /** 후불입금금액 */
+  private String depositAmt;
   /** 외상 입금 날짜 */
   private String saleDate;
   /** 외상 입금 일시 */
@@ -62,6 +68,12 @@ public class MemberExcelUploadVO extends PageVO {
   private PrepaidFg prepaidFg;
   /** 외상 입금 구분 */
   private PrepaidPayFg prepaidPayFg;
+  /** 후불 입금 일시 */
+  private String postpaidDt;
+  /** 후불 입금 구분 */
+  private PostpaidFg postpaidFg;
+  /** 후불 입금 구분 */
+  private PostpaidPayFg postpaidPayFg;
   /** 비매출 승인번호 */
   private String nonsaleTypeApprNo;
   /** 원거래비매출승인번호 */
@@ -374,6 +386,22 @@ public String getMembrOrgnCd() {
 
   public void setPrepaidUseAmt(String prepaidUseAmt) { this.prepaidUseAmt = prepaidUseAmt; }
 
+  public String getPostpaidAmt() {
+    return postpaidAmt;
+  }
+
+  public void setPostpaidAmt(String postpaidAmt) {
+    this.postpaidAmt = postpaidAmt;
+  }
+
+  public String getDepositAmt() {
+    return depositAmt;
+  }
+
+  public void setDepositAmt(String depositAmt) {
+    this.depositAmt = depositAmt;
+  }
+
   public String getSaleDate() {
     return saleDate;
   }
@@ -404,6 +432,30 @@ public String getMembrOrgnCd() {
 
   public void setPrepaidPayFg(PrepaidPayFg prepaidPayFg) {
     this.prepaidPayFg = prepaidPayFg;
+  }
+
+  public String getPostpaidDt() {
+    return postpaidDt;
+  }
+
+  public void setPostpaidDt(String postpaidDt) {
+    this.postpaidDt = postpaidDt;
+  }
+
+  public PostpaidFg getPostpaidFg() {
+    return postpaidFg;
+  }
+
+  public void setPostpaidFg(PostpaidFg postpaidFg) {
+    this.postpaidFg = postpaidFg;
+  }
+
+  public PostpaidPayFg getPostpaidPayFg() {
+    return postpaidPayFg;
+  }
+
+  public void setPostpaidPayFg(PostpaidPayFg postpaidPayFg) {
+    this.postpaidPayFg = postpaidPayFg;
   }
 
   public String getNonsaleTypeApprNo() {

@@ -283,4 +283,106 @@
             )
     </insert>
 
+    <!-- 후불 발생,입금  -->
+    <!--
+        TABLE    : TB_MB_MEMBER_POSTPAID
+        COMMENTS : 후불  발생,입금을 저장한다.
+    -->
+    <insert id="savePostPaid" parameterType="memberExcelUploadVO">
+    /* MemberExcelMapper.savePostPaid */
+    INSERT INTO TB_MB_MEMBER_POSTPAID
+    (
+      HQ_OFFICE_CD,
+      STORE_CD,
+      SALE_DATE,
+      POSTPAID_NO,
+      MEMBR_NO,
+      POSTPAID_DT,
+      POSTPAID_FG,
+      POSTPAID_PAY_FG,
+      POSTPAID_AMT,
+      DEPOSIT_AMT,
+      NONSALE_TYPE_APPR_NO,
+      ORG_NONSALE_TYPE_APPR_NO,
+      NONSALE_BILL_NO,
+      REG_DT,
+      REG_ID,
+      MOD_DT,
+      MOD_ID
+    )
+    VALUES
+    (
+      #{hqOfficeCd},
+      #{regStoreCd},
+      #{saleDate},
+      (SELECT LPAD(NVL(MAX(POSTPAID_NO), '0')+1, 4, '0')
+         FROM TB_MB_MEMBER_POSTPAID
+        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+          AND STORE_CD = #{regStoreCd}
+          AND SALE_DATE = #{saleDate} ),
+      #{membrNo},
+      #{prepaidDt},
+      #{prepaidFg, jdbcType=VARCHAR},
+      #{prepaidPayFg, jdbcType=VARCHAR},
+      #{amt},
+      0,
+      #{nonsaleTypeApprNo},
+      #{orgNonsaleTypeApprNo},
+      #{nonsaleBillNo},
+      #{regDt},
+      #{regId},
+      #{modDt},
+      #{modId}
+    )
+  </insert>
+
+    <!-- 후불 발생,입금 집계 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_PAID_BALANCE
+        COMMENTS : 후불금을 회원별로 집계 반영한다.
+    -->
+    <insert id="savePostPaidBalance" parameterType="DefaultMap">
+      /* MemberExcelMapper.savePostPaidBalance */
+        MERGE INTO TB_MB_MEMBER_PAID_BALANCE tmmpb
+        USING DUAL ON
+            (
+                tmmpb.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tmmpb.STORE_CD = #{regStoreCd}
+                AND tmmpb.MEMBR_NO = #{membrNo}
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+                tmmpb.POSTPAID_AMT = #{postpaidAmt},
+                tmmpb.POSTPAID_IN_AMT = #{depositAmt},
+                tmmpb.POSTPAID_BAL_AMT = ( #{postpaidAmt} - #{depositAmt} ),
+                tmmpb.MOD_DT = #{modDt},
+                tmmpb.MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+            INSERT
+            (
+                tmmpb.HQ_OFFICE_CD,
+                tmmpb.STORE_CD,
+                tmmpb.MEMBR_NO,
+                tmmpb.POSTPAID_AMT,
+                tmmpb.POSTPAID_IN_AMT,
+                tmmpb.POSTPAID_BAL_AMT,
+                tmmpb.REG_DT,
+                tmmpb.REG_ID,
+                tmmpb.MOD_DT,
+                tmmpb.MOD_ID
+            ) VALUES (
+                #{hqOfficeCd},
+                #{regStoreCd},
+                #{membrNo},
+                #{postpaidAmt},
+                #{depositAmt},
+                ( #{postpaidAmt} - #{depositAmt} ),
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
+    </insert>
+
 </mapper>
