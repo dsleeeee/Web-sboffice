@@ -76,4 +76,41 @@ public class ProdPrintYnServiceImpl implements ProdPrintYnService {
 
         return procCnt;
     }
+
+    /** 사이드메뉴관리 탭 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getSideMenuProdPrintYnList(ProdPrintYnVO prodPrintYnVO, SessionInfoVO sessionInfoVO) {
+
+        prodPrintYnVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodPrintYnVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            prodPrintYnVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return prodPrintYnMapper.getSideMenuProdPrintYnList(prodPrintYnVO);
+    }
+
+    /** 사이드메뉴관리 탭 - 저장 */
+    @Override
+    public int getSideMenuProdPrintYnSave(ProdPrintYnVO[] prodPrintYnVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(ProdPrintYnVO prodPrintYnVO : prodPrintYnVOs) {
+
+            prodPrintYnVO.setModDt(currentDt);
+            prodPrintYnVO.setModId(sessionInfoVO.getUserId());
+
+            prodPrintYnVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            prodPrintYnVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                prodPrintYnVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+
+            procCnt = prodPrintYnMapper.getSideMenuProdPrintYnSaveUpdate(prodPrintYnVO);
+        }
+
+        return procCnt;
+    }
 }

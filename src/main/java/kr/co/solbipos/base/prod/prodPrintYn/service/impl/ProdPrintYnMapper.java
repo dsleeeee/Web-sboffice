@@ -31,4 +31,10 @@ public interface ProdPrintYnMapper {
 
     /** 옵션관리 탭 - 저장 update */
     int getProdOptionPrintYnSaveUpdate(ProdPrintYnVO prodPrintYnVO);
+
+    /** 사이드메뉴관리 탭 - 조회 */
+    List<DefaultMap<Object>> getSideMenuProdPrintYnList(ProdPrintYnVO prodPrintYnVO);
+
+    /** 사이드메뉴관리 탭 - 저장 update */
+    int getSideMenuProdPrintYnSaveUpdate(ProdPrintYnVO prodPrintYnVO);
 }

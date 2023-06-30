@@ -13,6 +13,10 @@
             <li>
                 <a id="prodOptionPrintYnTab" href="#" class="on" ng-click="prodOptionPrintYnShow()"><s:message code="prodPrintYnTab.prodOptionPrintYn"/></a>
             </li>
+            <%-- 사이드메뉴관리 탭 --%>
+            <li>
+                <a id="sideMenuProdPrintYnTab" href="#" ng-click="sideMenuProdPrintYnShow()"><s:message code="prodPrintYnTab.sideMenuProdPrintYn"/></a>
+            </li>
         </ul>
     </div>
 </div>
@@ -20,11 +24,17 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodPrintYn/prodPrintYnTab.js?ver=20230628.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodPrintYn/prodPrintYnTab.js?ver=20230630.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 출력여부관리 - 옵션관리 레이어 --%>
 <c:import url="/WEB-INF/view/base/prod/prodPrintYn/prodOptionPrintYn.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 출력여부관리 - 사이드메뉴관리 레이어 --%>
+<c:import url="/WEB-INF/view/base/prod/prodPrintYn/sideMenuProdPrintYn.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

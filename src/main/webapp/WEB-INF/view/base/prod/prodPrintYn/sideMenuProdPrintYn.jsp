@@ -8,15 +8,15 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<div id="prodOptionPrintYnView" class="subCon" style="display: none;">
-    <div ng-controller="prodOptionPrintYnCtrl">
+<div id="sideMenuProdPrintYnView" class="subCon" style="display: none;">
+    <div ng-controller="sideMenuProdPrintYnCtrl">
 
         <%-- 조회조건 --%>
         <div class="searchBar flddUnfld">
-            <a href="#" class="open fl"><s:message code="prodPrintYnTab.prodOptionPrintYn"/></a>
+            <a href="#" class="open fl"><s:message code="prodPrintYnTab.sideMenuProdPrintYn"/></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" ng-click="_broadcast('prodOptionPrintYnCtrl',1)" id="nxBtnSearch">
+                <button class="btn_blue fr" ng-click="_broadcast('sideMenuProdPrintYnCtrl',1)" id="nxBtnSearch2">
                     <s:message code="cmm.search" />
                 </button>
             </div>
@@ -30,27 +30,39 @@
             </colgroup>
             <tbody>
             <tr>
-                <%-- 그룹코드 --%>
-                <th><s:message code="prodPrintYn.optionGrpCd"/></th>
+                <%-- 선택그룹코드 --%>
+                <th><s:message code="prodPrintYn.sdselGrpCd"/></th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchOptionGrpCd" ng-model="optionGrpCd" onkeyup="fnNxBtnSearch();"/>
+                    <input type="text" class="sb-input w100" id="srchSdselGrpCd" ng-model="sdselGrpCd" onkeyup="fnNxBtnSearch(2);"/>
                 </td>
-                <%-- 그룹명 --%>
-                <th><s:message code="prodPrintYn.optionGrpNm"/></th>
+                <%-- 선택그룹코명 --%>
+                <th><s:message code="prodPrintYn.sdselGrpNm"/></th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchOptionGrpNm" ng-model="optionGrpNm" onkeyup="fnNxBtnSearch();"/>
+                    <input type="text" class="sb-input w100" id="srchSdselGrpNm" ng-model="sdselGrpNm" onkeyup="fnNxBtnSearch(2);"/>
                 </td>
             </tr>
             <tr>
-                <%-- 옵션코드 --%>
-                <th><s:message code="prodPrintYn.optionValCd"/></th>
+                <%-- 선택분류코드 --%>
+                <th><s:message code="prodPrintYn.sdselClassCd"/></th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchOptionValCd" ng-model="optionValCd" onkeyup="fnNxBtnSearch();"/>
+                    <input type="text" class="sb-input w100" id="srchSdselClassCd" ng-model="sdselClassCd" onkeyup="fnNxBtnSearch(2);"/>
                 </td>
-                <%-- 옵션명 --%>
-                <th><s:message code="prodPrintYn.optionValNm"/></th>
+                <%-- 선택분류명 --%>
+                <th><s:message code="prodPrintYn.sdselClassNm"/></th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchOptionValNm" ng-model="optionValNm" onkeyup="fnNxBtnSearch();"/>
+                    <input type="text" class="sb-input w100" id="srchSdselClassNm" ng-model="sdselClassNm" onkeyup="fnNxBtnSearch(2);"/>
+                </td>
+            </tr>
+            <tr>
+                <%-- 선택상품코드 --%>
+                <th><s:message code="prodPrintYn.sdselProdCd"/></th>
+                <td>
+                    <input type="text" class="sb-input w100" id="srchSdselProdCd" ng-model="sdselProdCd" onkeyup="fnNxBtnSearch(2);"/>
+                </td>
+                <%-- 선택상품명 --%>
+                <th><s:message code="prodPrintYn.sdselProdNm"/></th>
+                <td>
+                    <input type="text" class="sb-input w100" id="srchSdselProdNm" ng-model="sdselProdNm" onkeyup="fnNxBtnSearch(2);"/>
                 </td>
             </tr>
             <tr>
@@ -131,24 +143,31 @@
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodPrintYn.optionGrpCd"/>" binding="optionGrpCd" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodPrintYn.optionGrpNm"/>" binding="optionGrpNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodPrintYn.useYn"/>" binding="useYn" data-map="useYnDataMap" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodPrintYn.optionValCd"/>" binding="optionValCd" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodPrintYn.optionValNm"/>" binding="optionValNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodPrintYn.optProdCd"/>" binding="optProdCd" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodPrintYn.optProdNm"/>" binding="optProdNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodPrintYn.sdselGrpCd"/>" binding="sdselGrpCd" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodPrintYn.sdselGrpNm"/>" binding="sdselGrpNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodPrintYn.fixProdFg"/>" binding="sdselGrpFixProdFg" data-map="sdselGrpFixProdFgDataMap" width="50" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodPrintYn.sdselTypeFg"/>" binding="sdselTypeFg" data-map="sdselTypeFgDataMap" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodPrintYn.sdselClassCd"/>" binding="sdselClassCd" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodPrintYn.sdselClassNm"/>" binding="sdselClassNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodPrintYn.sdselQty"/>" binding="sdselQty" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodPrintYn.requireYn"/>" binding="requireYn" data-map="requireYnDataMap" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodPrintYn.prodClassNm"/>" binding="prodClassNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodPrintYn.sdselProdCd"/>" binding="sdselProdCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodPrintYn.sdselProdNm"/>" binding="sdselProdNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodPrintYn.fixProdFg"/>" binding="fixProdFg" data-map="fixProdFgDataMap" width="50" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodPrintYn.printYn"/>" binding="printYn" data-map="printYnDataMap" width="70" align="center"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
+        <%-- 페이지 리스트 --%>
+        <div class="pageNum mt20">
+            <%-- id --%>
+            <ul id="sideMenuProdPrintYnCtrlPager" data-size="10">
+            </ul>
+        </div>
+        <%--//페이지 리스트--%>
 
     </div>
 </div>
 
-<script type="text/javascript">
-    <%-- 사용여부 --%>
-    var useYnData = ${ccu.getCommCodeExcpAll("067")};
-</script>
-
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodPrintYn/prodOptionPrintYn.js?ver=20230629.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodPrintYn/sideMenuProdPrintYn.js?ver=20230630.01" charset="utf-8"></script>

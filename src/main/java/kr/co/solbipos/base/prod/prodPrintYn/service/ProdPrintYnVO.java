@@ -51,6 +51,24 @@ public class ProdPrintYnVO extends PageVO {
     /**  출력여부 */
     private String printYn;
 
+    /** 사이드선택그룹코드 */
+    private String sdselGrpCd;
+
+    /** 사이드선택그룹명 */
+    private String sdselGrpNm;
+
+    /** 사이드선택분류코드 */
+    private String sdselClassCd;
+
+    /** 사이드선택분류명 */
+    private String sdselClassNm;
+
+    /** 사이드선택상품코드 */
+    private String sdselProdCd;
+
+    /** 사이드선택상품명 */
+    private String sdselProdNm;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -102,4 +120,52 @@ public class ProdPrintYnVO extends PageVO {
     public String getPrintYn() { return printYn; }
 
     public void setPrintYn(String printYn) { this.printYn = printYn; }
+
+    public String getSdselGrpCd() {
+        return sdselGrpCd;
+    }
+
+    public void setSdselGrpCd(String sdselGrpCd) {
+        this.sdselGrpCd = sdselGrpCd;
+    }
+
+    public String getSdselGrpNm() {
+        return sdselGrpNm;
+    }
+
+    public void setSdselGrpNm(String sdselGrpNm) {
+        this.sdselGrpNm = sdselGrpNm;
+    }
+
+    public String getSdselClassCd() {
+        return sdselClassCd;
+    }
+
+    public void setSdselClassCd(String sdselClassCd) {
+        this.sdselClassCd = sdselClassCd;
+    }
+
+    public String getSdselClassNm() {
+        return sdselClassNm;
+    }
+
+    public void setSdselClassNm(String sdselClassNm) {
+        this.sdselClassNm = sdselClassNm;
+    }
+
+    public String getSdselProdCd() {
+        return sdselProdCd;
+    }
+
+    public void setSdselProdCd(String sdselProdCd) {
+        this.sdselProdCd = sdselProdCd;
+    }
+
+    public String getSdselProdNm() {
+        return sdselProdNm;
+    }
+
+    public void setSdselProdNm(String sdselProdNm) {
+        this.sdselProdNm = sdselProdNm;
+    }
 }
