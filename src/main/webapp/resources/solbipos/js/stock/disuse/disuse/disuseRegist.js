@@ -670,4 +670,16 @@ app.controller('disuseRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
     $scope._broadcast('disuseRegistSelectVendrCtrl');
   };
 
+  // 화면 ready 된 후 설정
+  angular.element(document).ready(function () {
+
+    // 팝업 핸들러 추가
+    $scope.wjDisuseRegistLayer.shown.addHandler(function () {
+      setTimeout(function() {
+        var params = {};
+        $scope._save("/iostock/cmmExcelUpload/excelUploadStore/excelUploadStore/delete.sb", params, false);
+      }, 50);
+    });
+
+  });
 }]);
