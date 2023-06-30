@@ -17,16 +17,32 @@ app.controller('prodPrintYnTabCtrl', ['$scope', function ($scope) {
 
     $scope.init = function () {
         $("#prodOptionPrintYnView").show();
+        $("#sideMenuProdPrintYnView").hide();
     };
 
     // 옵션관리 탭 보이기
     $scope.prodOptionPrintYnShow = function () {
         $("#prodOptionPrintYnTab").addClass("on");
+        $("#sideMenuProdPrintYnTab").removeClass("on");
 
         $("#prodOptionPrintYnView").show();
+        $("#sideMenuProdPrintYnView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("prodOptionPrintYnCtrl");
+        scope.flex.refresh();
+    };
+
+    // 사이드메뉴관리 탭 보이기
+    $scope.sideMenuProdPrintYnShow = function () {
+        $("#prodOptionPrintYnTab").removeClass("on");
+        $("#sideMenuProdPrintYnTab").addClass("on");
+
+        $("#prodOptionPrintYnView").hide();
+        $("#sideMenuProdPrintYnView").show();
+
+        // angular 그리드 hide 시 깨지므로 refresh()
+        var scope = agrid.getScope("sideMenuProdPrintYnCtrl");
         scope.flex.refresh();
     };
 

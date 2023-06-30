@@ -119,4 +119,50 @@ public class ProdPrintYnController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 사이드메뉴관리 탭 - 조회
+     *
+     * @param prodPrintYnVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 06. 28.
+     */
+    @RequestMapping(value = "/sideMenuProdPrintYn/getSideMenuProdPrintYnList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSideMenuProdPrintYnList(ProdPrintYnVO prodPrintYnVO, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = prodPrintYnService.getSideMenuProdPrintYnList(prodPrintYnVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodPrintYnVO);
+    }
+
+    /**
+     * 사이드메뉴관리 탭 - 저장
+     *
+     * @param prodPrintYnVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 06. 28.
+     */
+    @RequestMapping(value = "/sideMenuProdPrintYn/getSideMenuProdPrintYnSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSideMenuProdPrintYnSave(@RequestBody ProdPrintYnVO[] prodPrintYnVOs, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = prodPrintYnService.getSideMenuProdPrintYnSave(prodPrintYnVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }
