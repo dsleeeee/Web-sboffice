@@ -6,6 +6,8 @@ import static kr.co.common.utils.DateUtil.currentDateString;
 import java.util.Date;
 import java.util.List;
 
+import kr.co.solbipos.application.pos.service.MemberVO;
+import kr.co.solbipos.application.pos.service.impl.SimpleMemberJoinMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
@@ -37,13 +39,15 @@ public class MemberExcelUploadServiceImpl implements MemberExcelUploadService {
 
     private final MemberExcelUploadMapper mapper;
     private final RegistMapper registMapper;
+    private final SimpleMemberJoinMapper simpleMemberJoinMapper;
     private final MessageService messageService;
     private final CmmEnvUtil cmmEnvUtil;
 
     @Autowired
-    public MemberExcelUploadServiceImpl(MemberExcelUploadMapper memberExcelUploadMapper, RegistMapper registMapper, CmmEnvUtil cmmEnvUtil, MessageService messageService) {
+    public MemberExcelUploadServiceImpl(MemberExcelUploadMapper memberExcelUploadMapper, RegistMapper registMapper, SimpleMemberJoinMapper simpleMemberJoinMapper, CmmEnvUtil cmmEnvUtil, MessageService messageService) {
         this.mapper = memberExcelUploadMapper;
         this.registMapper = registMapper;
+        this.simpleMemberJoinMapper = simpleMemberJoinMapper;
         this.messageService = messageService;
         this.cmmEnvUtil = cmmEnvUtil;
     }
@@ -191,7 +195,37 @@ public class MemberExcelUploadServiceImpl implements MemberExcelUploadService {
                         // 선불회원 등록 (자점회원)
                         result = registMapper.registMemberPrepaid(registVO);
                     }
-
+                    // 후불발생금액
+                    int postpaidAmt = StringUtils.isEmpty(memberExcelUploadVO.getPostpaidAmt()) ? 0 : Integer.parseInt( memberExcelUploadVO.getPostpaidAmt() );
+                    // 후불입금금액
+                    int depositAmt = StringUtils.isEmpty(memberExcelUploadVO.getDepositAmt()) ? 0 : Integer.parseInt( memberExcelUploadVO.getDepositAmt() );
+                    if ( postpaidAmt != 0 ){
+                        memberExcelUploadVO.setPrepaidFg(PrepaidFg.USE); // 발생
+                        memberExcelUploadVO.setAmt(Integer.toString(postpaidAmt)); // 후불발생금액
+                        // 선불 충전,사용
+                        result = mapper.savePostPaid(memberExcelUploadVO);
+                    }
+                    if ( depositAmt != 0 ){
+                        memberExcelUploadVO.setPrepaidFg(PrepaidFg.CHARGE); // 입금
+                        memberExcelUploadVO.setAmt(Integer.toString(depositAmt)); // 후불입금금액
+                        // 후불 발생,입금
+                        result = mapper.savePostPaid(memberExcelUploadVO);
+                    }
+                    if ( postpaidAmt != 0 || depositAmt != 0 ){
+                        // 후불 발생,입금 집계
+                        result = mapper.savePostPaidBalance(memberExcelUploadVO);
+                        MemberVO memberVO = new MemberVO();
+                        memberVO.setMembrOrgnCd(registVO.getMembrOrgnCd());
+                        memberVO.setMembrNo(registVO.getMembrNo());
+                        memberVO.setRegStoreCd(registVO.getRegStoreCd());
+                        memberVO.setUseYn(registVO.getUseYn());
+                        memberVO.setRegDt(registVO.getRegDt());
+                        memberVO.setRegId(registVO.getRegId());
+                        memberVO.setModDt(registVO.getModDt());
+                        memberVO.setModId(registVO.getModId());
+                        // 선불회원 등록 (자점회원)
+                        result = simpleMemberJoinMapper.registMemberPostpaid(memberVO);
+                    }
                 }
 
                 if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));

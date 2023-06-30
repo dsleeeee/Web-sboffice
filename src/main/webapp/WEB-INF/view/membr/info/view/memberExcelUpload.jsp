@@ -185,6 +185,10 @@
                                      width="90" is-read-only="false" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="member.excel.prepaidUseAmt"/>" binding="prepaidUseAmt"
                                      width="90" is-read-only="false" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="member.excel.postpaidAmt"/>" binding="postpaidAmt"
+                                     width="90" is-read-only="false" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="member.excel.depositAmt"/>" binding="depositAmt"
+                                     width="90" is-read-only="false" align="right"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
@@ -208,8 +212,8 @@
     var membrClassManageFg = ${membrClassManageFg};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberExcelUpload.js?ver=2019052801.13" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberPoint.js?ver=2019052801.12" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberExcelUpload.js?ver=2019052801.14" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberPoint.js?ver=2019052801.13" charset="utf-8"></script>
 
 <%-- 수불 엑셀업로드 공통 팝업 --%>
 <c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUpload/excelUpload.jsp">

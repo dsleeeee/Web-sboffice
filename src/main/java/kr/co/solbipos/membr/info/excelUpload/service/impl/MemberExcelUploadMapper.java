@@ -26,4 +26,10 @@ public interface MemberExcelUploadMapper {
 
   /** 선불 충전,사용 집계 */
   int savePrePaidBalance(MemberExcelUploadVO memberExcelUploadVO);
+
+  /** 후불 발생,입금 */
+  int savePostPaid(MemberExcelUploadVO memberExcelUploadVO);
+
+  /** 후불 발생,입금 집계 */
+  int savePostPaidBalance(MemberExcelUploadVO memberExcelUploadVO);
 }

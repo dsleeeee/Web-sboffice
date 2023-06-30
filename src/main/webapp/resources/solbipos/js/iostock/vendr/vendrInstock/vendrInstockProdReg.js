@@ -500,4 +500,16 @@ app.controller('vendrInstockProdRegCtrl', ['$scope', '$http', '$timeout', functi
     });
   };
 
+  // 화면 ready 된 후 설정
+  angular.element(document).ready(function () {
+
+    // 팝업 핸들러 추가
+    $scope.wjVendrInstockProdRegLayer.shown.addHandler(function () {
+      setTimeout(function() {
+        var params = {};
+        $scope._save("/iostock/cmmExcelUpload/excelUploadMPS/excelUploadMPS/delete.sb", params, false);
+      }, 50);
+    });
+
+  });
 }]);

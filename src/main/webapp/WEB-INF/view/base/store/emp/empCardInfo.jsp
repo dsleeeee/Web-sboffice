@@ -164,7 +164,7 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/empCardInfo.js?ver=20220727.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/empCardInfo.js?ver=20220727.02" charset="utf-8"></script>
 
 <%-- 사원카드정보관리 엑셀업로드 --%>
 <c:import url="/WEB-INF/view/base/store/emp/excelUploadEmpCardInfo.jsp">
