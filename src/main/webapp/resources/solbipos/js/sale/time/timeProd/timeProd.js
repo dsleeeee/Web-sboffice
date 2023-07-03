@@ -568,8 +568,8 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
         $scope.prodClassNm = "";
     };
 
-    // 엑셀 다운로드
-    $scope.excelDownload = function () {
+    // 조회조건/분할 엑셀다운로드
+    $scope.excelDownload = function (excelType) {
         if($scope.dayGubun === "day") {
             var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
             var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
@@ -580,9 +580,9 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
                 $scope._popMsg(messages['cmm.dateChk.error']);
                 return false;
             }
-            // 조회일자 최대 3일 제한
-            if (diffDay > 2) {
-                $scope._popMsg(messages['cmm.dateOver.3day.error']);
+            // 조회일자 최대 1일 제한
+            if (diffDay > 0) {
+                $scope._popMsg(messages['cmm.dateOver.1day.error']);
                 return false;
             }
 
@@ -596,15 +596,19 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
                 $scope._popMsg(messages['cmm.dateChk.error']);
                 return false;
             }
-            // 조회일자 최대 3달 제한
-            if (diffMonth > 2) {
-                $scope._popMsg(messages['cmm.dateOver.3month.error']);
+            // 조회일자 최대 1달 제한
+            if (diffMonth > 0) {
+                $scope._popMsg(messages['cmm.dateOver.1month.error']);
                 return false;
             }
         }
 
         if($scope.startTime*1 > $scope.endTime*1){ // *1하는이유 : Time들이 String이라 int로 바꿀라고
             $scope._popMsg(messages["timeProd.startEnd"]); // 검색 시작 시간대가 검색 종료 시간대보다 큽니다.
+            return false;
+        }
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
             return false;
         }
 
@@ -647,11 +651,12 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
         params.prodOption = $scope.prodOption;
         params.dayOption = $scope.dayOption;
         params.dayGubun = $scope.dayGubun;
+        params.excelType = excelType;
 
         $scope._broadcast('timeProdExcelCtrl', params);
     };
 
-    // 엑셀 다운로드(그리드 바인딩된 데이터만)
+    // 현재화면 엑셀다운로드
     $scope.excelDownload2 = function () {
 
         var excelDate = "";
@@ -880,7 +885,12 @@ app.controller('timeProdExcelCtrl', ['$scope', '$http', '$timeout', function ($s
 
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("timeProdExcelCtrl", function (event, data) {
-        $scope.searchExcelList(data);
+
+        if(data.excelType === '1') {
+            $scope.searchExcelList(data);
+        }else{
+            $scope.searchExcelDivisionList(data);
+        }
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
     });
@@ -1071,6 +1081,290 @@ app.controller('timeProdExcelCtrl', ['$scope', '$http', '$timeout', function ($s
                 });
             }, 10);
         });
+    };
+
+    // 분할 엑셀 리스트 조회
+    $scope.searchExcelDivisionList = function (params) {
+
+        // 전체 데이터 수
+        var listSize = 0;
+        // 다운로드 되는 총 엑셀파일 수
+        var totFileCnt = 0;
+
+        // 전체 데이터 수 조회
+        params.limit = 1;
+        params.offset = 1;
+        $scope._postJSONQuery.withOutPopUp( "/sale/time/timeProd/timeProd/getTimeProdList.sb", params, function(response){
+
+            listSize = response.data.data.list[0].totCnt;
+            totFileCnt = Math.ceil(listSize/5000); // 하나의 엑셀파일에 5000개씩 다운로드
+
+            if(listSize === 0 || totFileCnt === 0){
+                $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+                $scope.excelUploadingPopup(false);
+                return false;
+            };
+
+            // 다운로드 시작이면 작업내역 로딩 팝업 오픈
+            $scope.excelUploadingPopup(true);
+            $("#totalRows").html(totFileCnt);
+
+            // 총 파일 수 만큼 반복
+            for(var k=0; k<totFileCnt; k++){
+                (function(x){
+                    setTimeout(function(){
+                        console.log("setTimeout  > i="+k+" x="+x);
+
+                        // 페이징 5000개씩 지정해 분할 다운로드 진행
+                        params.limit = 5000 * (x+1);
+                        params.offset = (5000 * (x+1)) - 4999;
+
+                        // 가상로그인 대응한 session id 설정
+                        if (document.getElementsByName('sessionId')[0]) {
+                            params['sid'] = document.getElementsByName('sessionId')[0].value;
+                        }
+
+                        // ajax 통신 설정
+                        $http({
+                            method: 'POST', //방식
+                            url: '/sale/time/timeProd/timeProd/getTimeProdList.sb', /* 통신할 URL */
+                            params: params, /* 파라메터로 보낼 데이터 */
+                            headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+                        }).then(function successCallback(response) {
+                            if ($scope._httpStatusCheck(response, true)) {
+                                // this callback will be called asynchronously
+                                // when the response is available
+                                var list = response.data.data.list;
+                                if (list.length === undefined || list.length === 0) {
+                                    $scope.data = new wijmo.collections.CollectionView([]);
+                                    $scope.excelUploadingPopup(false);
+                                    return false;
+                                }
+
+                                var data = new wijmo.collections.CollectionView(list);
+                                data.trackChanges = true;
+                                $scope.data = data;
+                            }
+                        }, function errorCallback(response) {
+                            // 로딩팝업 hide
+                            $scope.excelUploadingPopup(false);
+                            // called asynchronously if an error occurs
+                            // or server returns response with an error status.
+                            if (response.data.message) {
+                                $scope._popMsg(response.data.message);
+                            } else {
+                                $scope._popMsg(messages['cmm.error']);
+                            }
+                            return false;
+                        }).then(function () {
+                            // 'complete' code here
+                            setTimeout(function () {
+                                if ($scope.flex.rows.length <= 0) {
+                                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+                                 $scope.excelUploadingPopup(false);
+                                 return false;
+                                }
+
+                                // <-- 그리드 visible -->
+                                // 선택한 테이블에 따른 리스트 항목 visible
+                                var grid = wijmo.Control.getControl("#wjGridExcelList");
+                                var columns = grid.columns;
+
+                                // 시간대
+                                var start = params.startTime*1;
+                                var end = params.endTime*1;
+
+                                // 컬럼 총갯수
+                                var columnsCnt = columns.length;
+
+                                for (var i = 0; i < columnsCnt; i++) {
+                                    columns[i].visible = true;
+                                }
+
+                                // 조회일자 일/월 & 일자표시옵션 구분에 따른 날짜 컬럼 제어
+                                if(params.dayGubun === "day") {                     // 일
+                                    if(params.dayOption === "1"){                   // 일자별
+                                        columns[2].visible = false;                 // saleYm
+                                        columns[3].visible = false;                 // dayFrom
+                                        columns[4].visible = false;                 // dayTo
+                                    } else if(params.dayOption === "2"){            // 기간합
+                                        columns[0].visible = false;                 // saleDate
+                                        columns[1].visible = false;                 // yoil
+                                        columns[2].visible = false;                 // saleYm
+                                    }
+                                } else if(params.dayGubun === "month") {            // 월
+                                    if(params.dayOption === "1"){                   // 일자별
+                                        columns[0].visible = false;                 // saleDate
+                                        columns[1].visible = false;                 // yoil
+                                        columns[3].visible = false;                 // dayFrom
+                                        columns[4].visible = false;                 // dayTo
+                                    } else if(params.dayOption === "2"){            // 기간합
+                                        columns[0].visible = false;                 // saleDate
+                                        columns[1].visible = false;                 // yoil
+                                        columns[2].visible = false;                 // saleYm
+                                    }
+                                }
+
+                                // 시간대옵션에 따른 시간 컬럼제어
+                                if($("input[name=optionFg]:checked").val() == "time") { // 시간대
+
+                                    // 시간대 컬럼 show
+                                    for (var i = 20; i < 236; i++) {
+
+                                        // 시간대에 해당되는 컬럼 파악
+                                        var startCol = (start * 9) + 20;
+                                        var endCol = (end * 9) + 28;
+
+                                        if(i >= startCol && endCol >= i){
+                                            if(params.prodOption === "1") {  // 단품+세트
+                                                if(i%3 === 2){
+                                                    columns[i].visible = true;
+                                                }else{
+                                                    columns[i].visible = false;
+                                                }
+                                            } else if(params.prodOption === "2") {  // 단품+구성
+                                                if(i%3 === 0){
+                                                    columns[i].visible = true;
+                                                }else{
+                                                    columns[i].visible = false;
+                                                }
+                                            } else if(params.prodOption === "3") {  // 단품+세트+구성
+                                                if(i%3 === 1){
+                                                    columns[i].visible = true;
+                                                }else{
+                                                    columns[i].visible = false;
+                                                }
+                                            } else if(params.prodOption === "4") {  // 모두표시
+                                                columns[i].visible = true;
+                                            }
+                                        }else{
+                                            columns[i].visible = false;
+                                        }
+                                    }
+
+                                    // 시간대분류 컬럼 hidden
+                                    for (var i = 236; i < 272; i++) {
+                                        columns[i].visible = false;
+                                    }
+
+                                } else if($("input[name=optionFg]:checked").val() == "timeSlot") {   // 시간대분류
+
+                                    // 시간대 컬럼 hidden
+                                    for (var i = 20; i < 236; i++) {
+                                        columns[i].visible = false;
+                                    }
+
+                                    // 시간대분류 컬럼 show
+                                    for (var i = 236; i < 272; i++) {
+
+                                        if(params.timeSlot === ""){ // 전체
+
+                                            if(params.prodOption === "1") {  // 단품+세트
+                                                if(i%3 === 2){
+                                                    columns[i].visible = true;
+                                                }else{
+                                                    columns[i].visible = false;
+                                                }
+                                            } else if(params.prodOption === "2") {  // 단품+구성
+                                                if(i%3 === 0){
+                                                    columns[i].visible = true;
+                                                }else{
+                                                    columns[i].visible = false;
+                                                }
+                                            } else if(params.prodOption === "3") {  // 단품+세트+구성
+                                                if(i%3 === 1){
+                                                    columns[i].visible = true;
+                                                }else{
+                                                    columns[i].visible = false;
+                                                }
+                                            } else if(params.prodOption === "4") {  // 모두표시
+                                                columns[i].visible = true;
+                                            }
+
+                                        }else{
+                                            // 시간대에 해당되는 컬럼 파악
+                                            var startCol = ((23 + params.timeSlotIdx) * 9) + 20;
+                                            var endCol = ((23 + params.timeSlotIdx) * 9) + 28;
+
+                                            if(i >= startCol && endCol >= i){
+                                                if(params.prodOption === "1") {  // 단품+세트
+                                                    if(i%3 === 2){
+                                                        columns[i].visible = true;
+                                                    }else{
+                                                        columns[i].visible = false;
+                                                    }
+                                                } else if(params.prodOption === "2") {  // 단품+구성
+                                                    if(i%3 === 0){
+                                                        columns[i].visible = true;
+                                                    }else{
+                                                        columns[i].visible = false;
+                                                    }
+                                                } else if(params.prodOption === "3") {  // 단품+세트+구성
+                                                    if(i%3 === 1){
+                                                        columns[i].visible = true;
+                                                    }else{
+                                                        columns[i].visible = false;
+                                                    }
+                                                } else if(params.prodOption === "4") {  // 모두표시
+                                                    columns[i].visible = true;
+                                                }
+                                            }else{
+                                                columns[i].visible = false;
+                                            }
+                                        }
+                                    }
+                                }
+                                // <-- //그리드 visible -->
+
+                                var startDate;
+                                var endDate;
+
+                                if (params.dayGubun === "day") {
+                                    startDate = params.startDate;
+                                    endDate = params.endDate;
+                                } else if (params.dayGubun === "month") {
+                                    startDate = params.startMonth;
+                                    endDate = params.endMonth;
+                                }
+
+                                // 다운로드 진행중인 파일 숫자 변경
+                                $("#progressCnt").html(x+1);
+
+                                wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+                                    includeColumnHeaders: true,
+                                    includeCellStyles   : false,
+                                    includeColumns      : function (column) {
+                                        return column.visible;
+                                    }
+                                }, "상품별시간대매출" + '_'+ startDate + '_'+ endDate + '_'+ getCurDateTime() + '_' + (x+1) +'.xlsx', function () {
+                                    $timeout(function () {
+                                        if(x+1 === totFileCnt){ // 마지막 파일의 다운로드가 완료되면 로딩팝업 hide
+                                            $scope.excelUploadingPopup(false);
+                                        }
+                                    }, 1000);
+                                });
+                            }, 3000);
+                        });
+                    }, 3000*x);
+                })(k);
+            }
+        });
+    };
+
+    // 작업내역 로딩 팝업
+    $scope.excelUploadingPopup = function (showFg) {
+      if (showFg) {
+          // 팝업내용 동적 생성
+          var innerHtml = '<div class=\"wj-popup-loading\"><p class=\"bk\">' + messages['cmm.progress'] + '</p>';
+          innerHtml += '<div class="mt5 txtIn"><span class="bk" id="progressCnt">0</span>/<span class="bk" id="totalRows">0</span> 개 다운로드 진행 중...</div>';
+          innerHtml += '<p><img src=\"/resource/solbipos/css/img/loading.gif\" alt=\"\" /></p></div>';
+          // html 적용
+          $scope._loadingPopup.content.innerHTML = innerHtml;
+          // 팝업 show
+          $scope._loadingPopup.show(true);
+      } else {
+          $scope._loadingPopup.hide(true);
+      }
     };
 
 }]);
