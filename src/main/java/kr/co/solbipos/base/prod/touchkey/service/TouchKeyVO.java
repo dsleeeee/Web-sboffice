@@ -153,6 +153,9 @@ public class TouchKeyVO extends CmmVO {
     /** 프로시져 실행 결과 */
     private String result;
 
+    /** 조회구분 */
+    private String gubunCombo;
+
     /**
      * @return the orgnFg
      */
@@ -642,5 +645,13 @@ public class TouchKeyVO extends CmmVO {
 
     public void setResult(String result) {
         this.result = result;
+    }
+
+    public String getGubunCombo() {
+        return gubunCombo;
+    }
+
+    public void setGubunCombo(String gubunCombo) {
+        this.gubunCombo = gubunCombo;
     }
 }

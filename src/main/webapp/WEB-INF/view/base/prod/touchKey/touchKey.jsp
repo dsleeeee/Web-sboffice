@@ -26,8 +26,8 @@
     </div>
     <table class="searchTbl">
         <colgroup>
-            <col class="w15" />
-            <col class="w35" />
+            <col class="w12" />
+            <col class="w38" />
             <col class="w15" />
             <col class="w35" />
         </colgroup>
@@ -36,6 +36,7 @@
             <%-- 분류조회 --%>
             <th><s:message code="touchKey.grp" /></th>
             <td colspan="3">
+                <%-- 터치키그룹 --%>
                 <div class="sb-select" style="width:120px; float:left;">
                     <wj-combo-box
                             id="touchKeyGrpCombo"
@@ -49,6 +50,19 @@
                     </wj-combo-box>
                     <input type="hidden" id="hdSrchTouchKeyGrp" />
                 </div>
+                <%-- 조회구분 --%>
+                <div class="sb-select" style="width:90px; float:left;">
+                    <wj-combo-box
+                            id="gubunCombo"
+                            ng-model="gubunCombo"
+                            control="gubunCombo"
+                            items-source="_getComboData('gubunCombo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                    </wj-combo-box>
+                </div>
                 <%-- 추가터치키생성 --%>
                 <button class="btn_skyblue fl ml20" id="btnNewGrp" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && (touchKeyEnvstVal2 == '0' || touchKeyEnvstVal2 == '2')}">style="margin-left : 4px;visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.newGrp"/></button>
                 <%-- 터치키복사 --%>
@@ -59,10 +73,12 @@
                 <button class="btn_skyblue fl ml20" id="btnNoTouchKey" style="margin-left : 4px;" ng-click="$broadcast('showPopUpNoTouchKey')">
                     <s:message code="touchKey.noTouchKey" />
                 </button>
-                <%-- 초기화 --%>
-                <button class="btn_skyblue fl ml5" id="btnInti"<c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>>
-                    <s:message code="cmm.init"/>
-                </button>
+                <c:if test="${hqOfficeCd != 'H0393'}">
+                    <%-- 초기화 --%>
+                    <button class="btn_skyblue fl ml5" id="btnInti"<c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>>
+                        <s:message code="cmm.init"/>
+                    </button>
+                </c:if>
                 <%-- 터치키 그룹명 --%>
                 <button class="btn_skyblue fl ml5" id="btnGrpNm"<c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && (touchKeyEnvstVal2 == '0' || touchKeyEnvstVal2 == '2')}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose> ng-click="$broadcast('showGrpNm')">
                     <s:message code="touchKey.grpNm"/>
@@ -214,8 +230,11 @@
                     <div class="sb-select dkbr fl w120px" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise></c:otherwise></c:choose>>
                         <div id="selectStyle" ng-model="selectStyle"></div>
                     </div>
+                    <%-- 스타일적용 --%>
                     <button class="btn_skyblue fl ml5" id="btnApplyStyle" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.applyStyle"/></button>
+                    <%-- 스타일미리보기 --%>
                     <button class="btn_skyblue fl ml5" id="btnViewStyle" ng-click="viewStyle()" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.viewStyle"/></button>
+                    <%-- 저장 --%>
                     <button class="btn_skyblue fl ml20" id="btnSave" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="cmm.save"/></button>
                     <%--포스에서 1024*768 사이즈에 보이지 않아 위치변경함(초기화, 삭제)--%>
                     <div id="keyStyleAd" class="fl hideNav" style="margin-left : 4px;">
@@ -239,7 +258,7 @@
                 <div class="touchProdsWrap" id="prodWrap">
                     <%--1줄 "hProdLine1", 2줄 "hProdLine2", 3줄 "hProdLine3" 사용 --%>
                     <%--터치키가 들어가는 위치 --%>
-                    <div class="" id="prodArea" tabindex="-1">
+                    <div class="" id="prodArea" tabindex="-1" style="word-break: break-all;">
                     </div>
                 </div>
                 <%--//상품버튼 영역 끝 --%>
@@ -362,7 +381,6 @@
 <%--//서브컨텐츠--%>
 
 <script>
-
     // 본사권한 [기초관리] - [매장관리] - [매장정보조회]의 판매터치키변경을 클릭하여 접속한 경우, 왼쪽 메뉴영역은 접어두기.
     var referrer = document.referrer;
     if(orgnFg === "STORE" && referrer.indexOf("/base/store/view/view/list.sb") > 0){
@@ -472,7 +490,6 @@
     window.mxLanguages = window.mxLanguages || ['ko'];
 
     window.MAX_CLASS_ROW = '${maxClassRow}' || '2';
-
 </script>
 
 <script type="text/javascript">
@@ -486,6 +503,7 @@
     var momsShopTypeComboList = ${momsShopTypeComboList};
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
+
 <script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js"
         charset="utf-8"></script>
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js"
@@ -493,7 +511,7 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20230512.01"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20230704.01"
         charset="utf-8"></script>
 
 <%-- 스타일미리보기 팝업 --%>

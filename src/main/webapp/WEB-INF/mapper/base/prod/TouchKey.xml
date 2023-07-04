@@ -319,10 +319,16 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT
                     thtk.PROD_CD,
-                    thp.PROD_NM,
+                    <if test='gubunCombo != null and gubunCombo != "" and gubunCombo == "0"'>
+                        thp.PROD_NM,
+                    </if>
+                    <if test='gubunCombo != null and gubunCombo != "" and gubunCombo == "1"'>
+                        ('[' || thtk.PROD_CD || ']' || thp.PROD_NM) AS PROD_NM,
+                    </if>
                     TO_CHAR(NVL(thpsp.SALE_UPRC, 0), 'FM9,999,999') AS SALE_UPRC
                 FROM
                     TB_HQ_TOUCH_KEY thtk
+
                 LEFT OUTER JOIN TB_HQ_PRODUCT thp ON
                     thtk.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
                     AND thtk.PROD_CD = thp.PROD_CD
@@ -357,7 +363,12 @@
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT
                     tmtk.PROD_CD,
-                    tmp.PROD_NM,
+                    <if test='gubunCombo != null and gubunCombo != "" and gubunCombo == "0"'>
+                        tmp.PROD_NM,
+                    </if>
+                    <if test='gubunCombo != null and gubunCombo != "" and gubunCombo == "1"'>
+                        ('[' || tmtk.PROD_CD || ']' || tmp.PROD_NM) AS PROD_NM,
+                    </if>
                     NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC
                 FROM
                     TB_MS_TOUCH_KEY tmtk
