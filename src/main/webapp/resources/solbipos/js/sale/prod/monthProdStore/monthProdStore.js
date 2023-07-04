@@ -413,7 +413,7 @@ app.controller('monthProdStoreExcelCtrl', ['$scope', '$http', '$timeout', functi
     $scope.searchExcelList = function (params) {
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/prod/monthProdStore/monthProdStore/getMonthProdStoreExcelList.sb", params, function() {
-            if ($scope.flex.rows.length <= 0) {
+            if ($scope.excelFlex.rows.length <= 0) {
                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
                 return false;
             }
@@ -462,7 +462,7 @@ app.controller('monthProdStoreExcelCtrl', ['$scope', '$http', '$timeout', functi
 
             $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
             $timeout(function () {
-                wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+                wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
                     includeColumnHeaders: true,
                     includeCellStyles   : false,
                     includeColumns      : function (column) {
@@ -480,6 +480,10 @@ app.controller('monthProdStoreExcelCtrl', ['$scope', '$http', '$timeout', functi
     // 분할 엑셀 리스트 조회
     $scope.searchExcelDivisionList = function (params) {
 
+        // 다운로드 시작이면 작업내역 로딩 팝업 오픈
+        $scope.excelUploadingPopup(true);
+        $("#totalRows").html(0);
+
         // 전체 데이터 수
         var listSize = 0;
         // 다운로드 되는 총 엑셀파일 수
@@ -491,7 +495,7 @@ app.controller('monthProdStoreExcelCtrl', ['$scope', '$http', '$timeout', functi
         $scope._postJSONQuery.withOutPopUp( "/sale/prod/monthProdStore/monthProdStore/getMonthProdStoreList.sb", params, function(response){
 
             listSize = response.data.data.list[0].totCnt;
-            totFileCnt = Math.ceil(listSize/5000); // 하나의 엑셀파일에 5000개씩 다운로드
+            totFileCnt = Math.ceil(listSize/35000); // 하나의 엑셀파일에 35000개씩 다운로드
 
             if(listSize === 0 || totFileCnt === 0){
                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
@@ -499,19 +503,21 @@ app.controller('monthProdStoreExcelCtrl', ['$scope', '$http', '$timeout', functi
                 return false;
             };
 
-            // 다운로드 시작이면 작업내역 로딩 팝업 오픈
-            $scope.excelUploadingPopup(true);
+            // 다운로드 될 전체 파일 갯수 셋팅
             $("#totalRows").html(totFileCnt);
 
-            // 총 파일 수 만큼 반복
-            for(var k=0; k<totFileCnt; k++){
-                (function(x){
-                    setTimeout(function(){
-                        console.log("setTimeout  > i="+k+" x="+x);
+            // 엑셀 다운로드
+            function delay(x){
+                return new Promise(function(resolve, reject){
+                    setTimeout(function() {
+                        console.log("setTimeout  > i=" + x + " x=" + x);
 
-                        // 페이징 5000개씩 지정해 분할 다운로드 진행
-                        params.limit = 5000 * (x+1);
-                        params.offset = (5000 * (x+1)) - 4999;
+                        // 다운로드 진행중인 파일 숫자 변경
+                        $("#progressCnt").html(x + 1);
+
+                        // 페이징 35000개씩 지정해 분할 다운로드 진행
+                        params.limit = 35000 * (x + 1);
+                        params.offset = (35000 * (x + 1)) - 34999;
 
                         // 가상로그인 대응한 session id 설정
                         if (document.getElementsByName('sessionId')[0]) {
@@ -552,11 +558,11 @@ app.controller('monthProdStoreExcelCtrl', ['$scope', '$http', '$timeout', functi
                             return false;
                         }).then(function () {
                             // 'complete' code here
-                            setTimeout(function () {
-                                if ($scope.flex.rows.length <= 0) {
-                                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-                                 $scope.excelUploadingPopup(false);
-                                 return false;
+                            setTimeout(function() {
+                                if ($scope.excelFlex.rows.length <= 0) {
+                                    $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+                                    $scope.excelUploadingPopup(false);
+                                    return false;
                                 }
 
                                 // <-- 그리드 visible -->
@@ -601,27 +607,40 @@ app.controller('monthProdStoreExcelCtrl', ['$scope', '$http', '$timeout', functi
                                 }
                                 // <-- //그리드 visible -->
 
-                                // 다운로드 진행중인 파일 숫자 변경
-                                $("#progressCnt").html(x+1);
-
-                                wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+                                wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
                                     includeColumnHeaders: true,
-                                    includeCellStyles   : false,
-                                    includeColumns      : function (column) {
+                                    includeCellStyles: false,
+                                    includeColumns: function (column) {
                                         return column.visible;
                                     }
-                                }, "월별상품매출현황(매장별)_" + params.startMonth + "_" + params.endMonth + "_" + getCurDateTime() + '_' + (x+1) +'.xlsx', function () {
+                                }, "월별상품매출현황(매장별)_" + params.startMonth + "_" + params.endMonth + "_" + getCurDateTime() + '_' + (x + 1) +'.xlsx', function () {
                                     $timeout(function () {
-                                        if(x+1 === totFileCnt){ // 마지막 파일의 다운로드가 완료되면 로딩팝업 hide
-                                            $scope.excelUploadingPopup(false);
-                                        }
-                                    }, 1000);
+                                        console.log("Export complete start. _" + (x + 1));
+                                        getExcelFile(x + 1);
+                                    }, 500);
+                                }, function (reason) { // onError
+                                    // User can catch the failure reason in this callback.
+                                    console.log('The reason of save failure is ' + reason + "_" + (x + 1));
+                                    $scope.excelUploadingPopup(false);
                                 });
                             }, 3000);
                         });
+                        resolve();
                     }, 3000*x);
-                })(k);
-            }
+                });
+            };
+
+            async function getExcelFile(x) {
+                if(totFileCnt > x){
+                    await delay(x);
+                }else{
+                    $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
+                }
+            };
+
+            // 엑셀 분할 다운로드 시작
+            getExcelFile(0);
+
         });
     };
 

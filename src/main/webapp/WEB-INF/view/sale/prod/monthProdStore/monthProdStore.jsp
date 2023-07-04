@@ -378,7 +378,7 @@
                     autoGenerateColumns="false"
                     selection-mode="Row"
                     items-source="data"
-                    control="flex"
+                    control="excelFlex"
                     initialized="initGrid(s,e)"
                     is-read-only="true"
                     item-formatter="_itemFormatter">
@@ -430,4 +430,4 @@
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/monthProdStore/monthProdStore.js?ver=20230703.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/monthProdStore/monthProdStore.js?ver=20230704.01" charset="utf-8"></script>
