@@ -38,7 +38,7 @@ public interface TouchKeyService {
     String getTouchKeyPageStyleCd(SessionInfoVO sessionInfoVO, String tukeyGrpCd);
 
     /** 판매터치키 XML 정보 조회 */
-    String getTouchKeyXml(SessionInfoVO sessionInfoVO, String tukeyGrpCd);
+    String getTouchKeyXml(SessionInfoVO sessionInfoVO, String tukeyGrpCd, String gubunCombo);
 
     /** 판매터치키 저장 상품정보 조회 */
     List<DefaultMap<String>> getTouchKeyProdInfoList(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO);

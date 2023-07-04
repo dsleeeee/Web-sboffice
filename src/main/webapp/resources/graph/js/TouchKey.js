@@ -21,6 +21,12 @@ var touchKeyFilterData = [
   {"name":"미사용","value":"F"}
 ];
 
+// 조회구분
+var gubunComboData = [
+  {"name":"표시","value":"0"},
+  {"name":"상품코드","value":"1"}
+];
+
 var touchKeyStyleCd, touchKeyStyleCdList, touchKeyStyles;
 var viewStyleCd;
 
@@ -118,12 +124,16 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData("touchKeyFilterCombo", touchKeyFilterData);
   // 브랜드 콤보박스 셋팅
   $scope._setComboData("srchBrandCombo", brandList);
+  // 조회구분 콤보
+  $scope._setComboData("gubunCombo", gubunComboData);
+
   $scope.setTouchKeyFilter = function(s) {
     $scope.updateFilter('touchKeyUsed', s.selectedValue);
   };
   $scope.selectedBrand = function(s) {
     $scope._broadcast('touchKeyCtrl');
   };
+
   // 상품목록 그리드 조회
   $scope.$on("touchKeyCtrl", function(event, data) {
     // 파라미터
@@ -1687,34 +1697,38 @@ Format.prototype.initElements = function () {
     scope.$apply(function(){
       scope._popConfirm("터치키를 초기화 하시겠습니까?", function() {
 
-        // 터치키 저장 시 새 그룹으로 생성해 저장하겠다는 Flag
-        $("#hdNewGrp").val("N");
+        scope._popConfirm("초기화시 터치키정보 전체가 삭제되며 복구할 수 없습니다. 진행하시겠습니까?", function() {
+          
+          // 터치키 저장 시 새 그룹으로 생성해 저장하겠다는 Flag
+          $("#hdNewGrp").val("N");
 
-        format.selectStyle.selectedValue = '01';
-        format.setBtnStyle();
+          format.selectStyle.selectedValue = '01';
+          format.setBtnStyle();
 
-        // 아무것도 없는 빈 XML 터치키 셋팅
-        // format.setGraphXml(classArea, null);
-        // format.setGraphXml(prodArea, null);
-        // scope._broadcast('touchKeyCtrl');
+          // 아무것도 없는 빈 XML 터치키 셋팅
+          // format.setGraphXml(classArea, null);
+          // format.setGraphXml(prodArea, null);
+          // scope._broadcast('touchKeyCtrl');
 
-        $.ajax({
-          type: "POST",
-          url: "/base/prod/touchKey/touchKey/deleteTouchKey.sb?sid=" + sid,
-          data: params,
-          dataType: "json",
-          processData: false,
-          contentType: false,
-          cache: false,
-          success: function(result){
-            if (result.status === "OK") {
-              alert("초기화 되었습니다.");
+          $.ajax({
+            type: "POST",
+            url: "/base/prod/touchKey/touchKey/deleteTouchKey.sb?sid=" + sid,
+            data: params,
+            dataType: "json",
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function(result){
+              if (result.status === "OK") {
+                alert("초기화 되었습니다.");
 
-              location.reload(true);
-            } else {
-              alert("초기화하는데 실패하였습니다.");
+                location.reload(true);
+              } else {
+                alert("초기화하는데 실패하였습니다.");
+              }
             }
-          }
+          });
+
         });
 
       });
@@ -1735,6 +1749,8 @@ Format.prototype.initElements = function () {
 
     // 터치키그룹 추가
     params['tukeyGrpCd'] = scope.touchKeyGrp;
+    // 조회구분
+    params['gubunCombo'] = scope.gubunCombo;
 
     // 스타일 코드 조회
     $.ajax({
