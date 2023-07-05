@@ -183,6 +183,9 @@
                 <if test='sdselProdNm != null and sdselProdNm != ""'>
                     AND D.PROD_NM LIKE '%'||#{sdselProdNm}||'%'
                 </if>
+                <if test='fixProdFg != null and fixProdFg != ""'>
+                    AND NVL(C.FIX_PROD_FG, '0') = #{fixProdFg}
+                </if>
                 <if test='printYn != null and printYn != ""'>
                     AND NVL(C.PRINT_YN, 'Y') = #{printYn}
                 </if>
@@ -239,6 +242,9 @@
                 </if>
                 <if test='sdselProdNm != null and sdselProdNm != ""'>
                     AND D.PROD_NM LIKE '%'||#{sdselProdNm}||'%'
+                </if>
+                <if test='fixProdFg != null and fixProdFg != ""'>
+                    AND NVL(C.FIX_PROD_FG, '0') = #{fixProdFg}
                 </if>
                 <if test='printYn != null and printYn != ""'>
                     AND NVL(C.PRINT_YN, 'Y') = #{printYn}

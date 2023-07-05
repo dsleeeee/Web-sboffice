@@ -66,6 +66,22 @@
                 </td>
             </tr>
             <tr>
+                <%-- 구분 --%>
+                <th><s:message code="prodPrintYn.printYn"/></th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                id="srchFixProdFgCombo"
+                                ng-model="fixProdFg"
+                                items-source="_getComboData('fixProdFgCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                control="srchFixProdFgCombo">
+                        </wj-combo-box>
+                    </div>
+                </td>
                 <%-- 출력여부 --%>
                 <th><s:message code="prodPrintYn.printYn"/></th>
                 <td>
@@ -82,8 +98,6 @@
                         </wj-combo-box>
                     </div>
                 </td>
-                <td></td>
-                <td></td>
             </tr>
             </tbody>
         </table>
@@ -170,4 +184,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodPrintYn/sideMenuProdPrintYn.js?ver=20230630.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodPrintYn/sideMenuProdPrintYn.js?ver=20230705.01" charset="utf-8"></script>

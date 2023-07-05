@@ -69,6 +69,9 @@ public class ProdPrintYnVO extends PageVO {
     /** 사이드선택상품명 */
     private String sdselProdNm;
 
+    /** 고정상품구분 */
+    private String fixProdFg;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -167,5 +170,13 @@ public class ProdPrintYnVO extends PageVO {
 
     public void setSdselProdNm(String sdselProdNm) {
         this.sdselProdNm = sdselProdNm;
+    }
+
+    public String getFixProdFg() {
+        return fixProdFg;
+    }
+
+    public void setFixProdFg(String fixProdFg) {
+        this.fixProdFg = fixProdFg;
     }
 }

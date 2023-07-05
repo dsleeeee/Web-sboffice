@@ -18,6 +18,11 @@ var fixProdFgData = [
     {"name":"선택","value":"0"},
     {"name":"고정","value":"1"}
 ];
+var fixProdFgAllData = [
+    {"name":"전체","value":""},
+    {"name":"선택","value":"0"},
+    {"name":"고정","value":"1"}
+];
 
 // 세트구분
 var sdselTypeFgData = [
@@ -40,6 +45,7 @@ app.controller('sideMenuProdPrintYnCtrl', ['$scope', '$http', '$timeout', functi
     angular.extend(this, new RootController('sideMenuProdPrintYnCtrl', $scope, $http, false));
 
     // 콤보박스 셋팅
+    $scope._setComboData("fixProdFgCombo", fixProdFgAllData); // 구분
     $scope._setComboData("printYnCombo", printYnAllData); // 출력여부
     $scope._setComboData("printYnChgCombo", printYnData); // 일괄변경 - 출력여부
 
