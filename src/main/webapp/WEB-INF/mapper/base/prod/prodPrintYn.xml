@@ -198,7 +198,7 @@
                 AND C.SDSEL_CLASS_CD = B.SDSEL_CLASS_CD
                 AND D.HQ_OFFICE_CD (+)= C.HQ_OFFICE_CD
                 AND D.PROD_CD (+)= C.PROD_CD
-                ORDER BY A.SDSEL_GRP_CD, B.SDSEL_CLASS_CD, C.PROD_CD
+                ORDER BY A.SDSEL_GRP_CD, B.DISP_SEQ, C.DISP_SEQ
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
             <!-- 매장 -->
@@ -258,7 +258,7 @@
                 AND C.SDSEL_CLASS_CD = B.SDSEL_CLASS_CD
                 AND D.STORE_CD (+)= C.STORE_CD
                 AND D.PROD_CD (+)= C.PROD_CD
-                ORDER BY A.SDSEL_GRP_CD, B.SDSEL_CLASS_CD, C.PROD_CD
+                ORDER BY A.SDSEL_GRP_CD, B.DISP_SEQ, C.DISP_SEQ
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
         </choose>
@@ -299,6 +299,25 @@
                 AND PROD_CD = #{sdselProdCd}
             </when>
         </choose>
+    </update>
+
+    <!-- 사이드메뉴관리 탭 - 매장 저장 update -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getStoreSideMenuProdPrintYnSaveUpdate" parameterType="ProdPrintYnVO">
+        /* ProdPrintYnMapper.getStoreSideMenuProdPrintYnSaveUpdate */
+        UPDATE
+        TB_MS_PRODUCT_SDSEL_PROD
+        SET
+        PRINT_YN = #{printYn},
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+        AND SDSEL_CLASS_CD = #{sdselClassCd}
+        AND PROD_CD = #{sdselProdCd}
     </update>
 
 </mapper>

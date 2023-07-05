@@ -67,7 +67,7 @@
             </tr>
             <tr>
                 <%-- 구분 --%>
-                <th><s:message code="prodPrintYn.printYn"/></th>
+                <th><s:message code="prodPrintYn.fixProdFg"/></th>
                 <td>
                     <div class="sb-select">
                         <wj-combo-box
@@ -159,7 +159,7 @@
                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodPrintYn.sdselGrpCd"/>" binding="sdselGrpCd" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodPrintYn.sdselGrpNm"/>" binding="sdselGrpNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodPrintYn.fixProdFg"/>" binding="sdselGrpFixProdFg" data-map="sdselGrpFixProdFgDataMap" width="50" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodPrintYn.sdselGrpFixProdFg"/>" binding="sdselGrpFixProdFg" data-map="sdselGrpFixProdFgDataMap" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodPrintYn.sdselTypeFg"/>" binding="sdselTypeFg" data-map="sdselTypeFgDataMap" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodPrintYn.sdselClassCd"/>" binding="sdselClassCd" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodPrintYn.sdselClassNm"/>" binding="sdselClassNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
