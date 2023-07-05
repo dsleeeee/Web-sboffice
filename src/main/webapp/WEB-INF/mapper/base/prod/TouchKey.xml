@@ -319,10 +319,10 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT
                     thtk.PROD_CD,
-                    <if test='gubunCombo != null and gubunCombo != "" and gubunCombo == "0"'>
+                    <if test='gubun != null and gubun != "" and gubun == "0"'>
                         thp.PROD_NM,
                     </if>
-                    <if test='gubunCombo != null and gubunCombo != "" and gubunCombo == "1"'>
+                    <if test='gubun != null and gubun != "" and gubun == "1"'>
                         ('[' || thtk.PROD_CD || ']' || thp.PROD_NM) AS PROD_NM,
                     </if>
                     TO_CHAR(NVL(thpsp.SALE_UPRC, 0), 'FM9,999,999') AS SALE_UPRC
@@ -363,10 +363,10 @@
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT
                     tmtk.PROD_CD,
-                    <if test='gubunCombo != null and gubunCombo != "" and gubunCombo == "0"'>
+                    <if test='gubun != null and gubun != "" and gubun == "0"'>
                         tmp.PROD_NM,
                     </if>
-                    <if test='gubunCombo != null and gubunCombo != "" and gubunCombo == "1"'>
+                    <if test='gubun != null and gubun != "" and gubun == "1"'>
                         ('[' || tmtk.PROD_CD || ']' || tmp.PROD_NM) AS PROD_NM,
                     </if>
                     NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC

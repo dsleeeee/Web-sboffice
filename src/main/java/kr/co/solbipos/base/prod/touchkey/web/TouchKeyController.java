@@ -366,7 +366,7 @@ public class TouchKeyController {
     @ResponseBody
     public Result getTouchKeyXml(HttpServletRequest request, HttpSession session, Model model) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        String xml = touchkeyService.getTouchKeyXml(sessionInfoVO, request.getParameter("tukeyGrpCd"), request.getParameter("gubunCombo"));
+        String xml = touchkeyService.getTouchKeyXml(sessionInfoVO, request.getParameter("tukeyGrpCd"), request.getParameter("gubun"));
         return new Result(Status.OK, xml);
     }
 

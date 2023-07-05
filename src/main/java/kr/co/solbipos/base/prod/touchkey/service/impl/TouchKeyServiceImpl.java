@@ -147,7 +147,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
      * 상품명/상품금액 변경분 반영을 위해 xml 조회 후 해당 값 수정하여 반환한다.
      */
     @Override
-    public String getTouchKeyXml(SessionInfoVO sessionInfoVO, String tukeyGrpCd, String gubunCombo) {
+    public String getTouchKeyXml(SessionInfoVO sessionInfoVO, String tukeyGrpCd, String gubun) {
 
         String result = "";
         // 상품정보 조회 : 판매터치키 갱신용
@@ -156,7 +156,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         touchKeyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         touchKeyVO.setStoreCd(sessionInfoVO.getStoreCd());
-        touchKeyVO.setGubunCombo(CmmUtil.nvl(gubunCombo, "0")); // 조회구분
+        touchKeyVO.setGubun(CmmUtil.nvl(gubun, "0")); // 조회구분
         // 터치키에 등록되어있는 상품정보
         List<DefaultMap<String>> prodList = keyMapper.getTouchKeyProdInfoList(touchKeyVO);
 

@@ -1749,8 +1749,6 @@ Format.prototype.initElements = function () {
 
     // 터치키그룹 추가
     params['tukeyGrpCd'] = scope.touchKeyGrp;
-    // 조회구분
-    params['gubunCombo'] = scope.gubunCombo;
 
     // 스타일 코드 조회
     $.ajax({
@@ -1767,6 +1765,10 @@ Format.prototype.initElements = function () {
       }
     });
 
+    var params2 = params;
+    // 조회구분
+    params2['gubun'] = scope.gubun;
+
     // 터치키 XML과 사용중인 상품 조회
     $.ajax({
       type: 'POST',
@@ -1774,7 +1776,7 @@ Format.prototype.initElements = function () {
       cache: false,
       dataType: 'json',
       url:  TOUCHKEY_OPEN_URL,
-      data: params,
+      data: params2,
       success: function(data){
 
         if (data.status === 'OK') {

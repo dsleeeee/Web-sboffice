@@ -53,9 +53,9 @@
                 <%-- 조회구분 --%>
                 <div class="sb-select" style="width:90px; float:left;">
                     <wj-combo-box
-                            id="gubunCombo"
-                            ng-model="gubunCombo"
-                            control="gubunCombo"
+                            id="srchGubunCombo"
+                            ng-model="gubun"
+                            control="srchGubunCombo"
                             items-source="_getComboData('gubunCombo')"
                             display-member-path="name"
                             selected-value-path="value"
@@ -73,12 +73,12 @@
                 <button class="btn_skyblue fl ml20" id="btnNoTouchKey" style="margin-left : 4px;" ng-click="$broadcast('showPopUpNoTouchKey')">
                     <s:message code="touchKey.noTouchKey" />
                 </button>
-                <c:if test="${hqOfficeCd != 'H0393'}">
+                <div <c:if test="${hqOfficeCd == 'H0393'}">style="display: none;"</c:if> >
                     <%-- 초기화 --%>
                     <button class="btn_skyblue fl ml5" id="btnInti"<c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>>
                         <s:message code="cmm.init"/>
                     </button>
-                </c:if>
+                </div>
                 <%-- 터치키 그룹명 --%>
                 <button class="btn_skyblue fl ml5" id="btnGrpNm"<c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && (touchKeyEnvstVal2 == '0' || touchKeyEnvstVal2 == '2')}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose> ng-click="$broadcast('showGrpNm')">
                     <s:message code="touchKey.grpNm"/>
@@ -511,7 +511,7 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20230704.01"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20230705.01"
         charset="utf-8"></script>
 
 <%-- 스타일미리보기 팝업 --%>
