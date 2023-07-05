@@ -37,4 +37,7 @@ public interface ProdPrintYnMapper {
 
     /** 사이드메뉴관리 탭 - 저장 update */
     int getSideMenuProdPrintYnSaveUpdate(ProdPrintYnVO prodPrintYnVO);
+
+    /** 사이드메뉴관리 탭 - 매장 저장 update */
+    int getStoreSideMenuProdPrintYnSaveUpdate(ProdPrintYnVO prodPrintYnVO);
 }
