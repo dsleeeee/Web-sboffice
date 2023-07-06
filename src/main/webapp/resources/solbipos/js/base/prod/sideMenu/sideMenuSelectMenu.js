@@ -532,7 +532,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
               $("#btnDownSelProd").hide();
               $("#btnAddSelProd").hide();
               $("#btnDelSelProd").hide();
-              $("#btnSaveSelProd").show();
+              $("#btnSaveSelProd").hide();
               $("#btnSdselProdRegStore").hide();
             } else {
               $("#btnUpSelProd").show();
