@@ -406,7 +406,8 @@
         B.SDSEL_CLASS_CD,
         B.SDSEL_CLASS_NM,
         NVL(B.REQUIRE_YN, 'N') AS REQUIRE_YN,
-        NVL(B.REG_STORE_FG, '0') AS REG_STORE_FG
+        NVL(B.REG_STORE_FG, '0') AS REG_STORE_FG,
+        NVL(B.REG_STORE_FG, '0') AS OLD_REG_STORE_FG
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_HQ_PRODUCT_SDSEL_GROUP A,
         TB_HQ_PRODUCT_SDSEL_CLASS B
@@ -484,7 +485,8 @@
         C.PROD_CD AS SDSEL_PROD_CD,
         D.PROD_NM AS SDSEL_PROD_NM,
         NVL(C.FIX_PROD_FG, '0') AS FIX_PROD_FG,
-        NVL(C.REG_STORE_FG, '0') AS REG_STORE_FG
+        NVL(C.REG_STORE_FG, '0') AS REG_STORE_FG,
+        NVL(C.REG_STORE_FG, '0') AS OLD_REG_STORE_FG
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_HQ_PRODUCT_SDSEL_GROUP A,
         TB_HQ_PRODUCT_SDSEL_CLASS B,

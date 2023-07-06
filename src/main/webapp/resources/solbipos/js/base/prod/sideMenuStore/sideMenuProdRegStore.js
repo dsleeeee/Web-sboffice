@@ -38,6 +38,7 @@ app.controller('sideMenuProdRegStoreCtrl', ['$scope', '$http', '$timeout', funct
         $scope.requireYnDataMap = new wijmo.grid.DataMap(requireYnData, 'value', 'name'); // 필수선택여부
         $scope.fixProdFgDataMap = new wijmo.grid.DataMap(fixProdFgData, 'value', 'name'); // 구분
         $scope.regStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
+        $scope.oldRegStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
 
         // 그리드 값 변경 시 체크박스 체크
         s.cellEditEnded.addHandler(function (s, e) {

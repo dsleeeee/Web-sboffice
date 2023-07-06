@@ -44,6 +44,7 @@ app.controller('sideMenuClassRegStoreCtrl', ['$scope', '$http', '$timeout', func
         // 그리드 DataMap 설정
         $scope.requireYnDataMap = new wijmo.grid.DataMap(requireYnData, 'value', 'name'); // 필수선택여부
         $scope.regStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
+        $scope.oldRegStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
 
         // 그리드 값 변경 시 체크박스 체크
         s.cellEditEnded.addHandler(function (s, e) {

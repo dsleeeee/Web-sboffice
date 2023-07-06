@@ -1,6 +1,7 @@
 package kr.co.solbipos.base.prod.sideMenuStore.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.utils.CmmUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.sideMenuStore.service.SideMenuStoreService;
@@ -177,7 +178,10 @@ public class SideMenuStoreServiceImpl implements SideMenuStoreService {
 
             sideMenuStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-            procCnt = sideMenuStoreMapper.getSideMenuClassRegStoreDeleteAll(sideMenuStoreVO);
+            // 적용매장구분이 변경된 경우만
+            if(!sideMenuStoreVO.getRegStoreFg().equals(CmmUtil.nvl(sideMenuStoreVO.getOldRegStoreFg(), "0"))) {
+                procCnt = sideMenuStoreMapper.getSideMenuClassRegStoreDeleteAll(sideMenuStoreVO);
+            }
         }
 
         return procCnt;
@@ -233,7 +237,10 @@ public class SideMenuStoreServiceImpl implements SideMenuStoreService {
 
             sideMenuStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-            procCnt = sideMenuStoreMapper.getSideMenuProdRegStoreDeleteAll(sideMenuStoreVO);
+            // 적용매장구분이 변경된 경우만
+            if(!sideMenuStoreVO.getRegStoreFg().equals(CmmUtil.nvl(sideMenuStoreVO.getOldRegStoreFg(), "0"))) {
+                procCnt = sideMenuStoreMapper.getSideMenuProdRegStoreDeleteAll(sideMenuStoreVO);
+            }
         }
 
         return procCnt;
