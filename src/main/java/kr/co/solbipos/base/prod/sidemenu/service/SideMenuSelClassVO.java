@@ -72,6 +72,9 @@ public class SideMenuSelClassVO extends CmmVO {
     /** 적용매장구분 */
     private String regStoreFg;
 
+    /** 변경전 적용매장구분 */
+    private String oldRegStoreFg;
+
     /** 매장명 */
     private String storeNm;
 
@@ -265,6 +268,10 @@ public class SideMenuSelClassVO extends CmmVO {
     public String getRegStoreFg() { return regStoreFg; }
 
     public void setRegStoreFg(String regStoreFg) { this.regStoreFg = regStoreFg; }
+
+    public String getOldRegStoreFg() { return oldRegStoreFg; }
+
+    public void setOldRegStoreFg(String oldRegStoreFg) { this.oldRegStoreFg = oldRegStoreFg; }
 
     public String getStoreNm() {
         return storeNm;

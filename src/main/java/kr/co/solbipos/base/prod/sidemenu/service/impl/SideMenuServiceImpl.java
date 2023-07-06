@@ -4,6 +4,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
@@ -714,7 +715,10 @@ public class SideMenuServiceImpl implements SideMenuService {
 
             sideMenuSelClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-            procCnt = sideMenuMapper.getSdselClassRegStoreDeleteAll(sideMenuSelClassVO);
+            // 적용매장구분이 변경된 경우만 삭제
+            if(!sideMenuSelClassVO.getRegStoreFg().equals(CmmUtil.nvl(sideMenuSelClassVO.getOldRegStoreFg(), "0"))) {
+                procCnt = sideMenuMapper.getSdselClassRegStoreDeleteAll(sideMenuSelClassVO);
+            }
         }
 
         return procCnt;
@@ -730,7 +734,10 @@ public class SideMenuServiceImpl implements SideMenuService {
 
             sideMenuSelProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-            procCnt = sideMenuMapper.getSdselProdRegStoreDeleteAll(sideMenuSelProdVO);
+            // 적용매장구분이 변경된 경우만 삭제
+            if(!sideMenuSelProdVO.getRegStoreFg().equals(CmmUtil.nvl(sideMenuSelProdVO.getOldRegStoreFg(), "0"))) {
+                procCnt = sideMenuMapper.getSdselProdRegStoreDeleteAll(sideMenuSelProdVO);
+            }
         }
 
         return procCnt;

@@ -879,7 +879,8 @@
                     (SELECT COUNT(*) FROM TB_HQ_PRODUCT_SDSEL_PROD WHERE HQ_OFFICE_CD = thpsc.HQ_OFFICE_CD AND SDSEL_CLASS_CD = thpsc.SDSEL_CLASS_CD AND USE_YN = 'Y') AS CNT,
                     (SELECT SUM(ADD_PROD_QTY) FROM TB_HQ_PRODUCT_SDSEL_PROD WHERE HQ_OFFICE_CD = thpsc.HQ_OFFICE_CD AND SDSEL_CLASS_CD = thpsc.SDSEL_CLASS_CD AND USE_YN = 'Y' AND FIX_PROD_FG = '1') AS FIX_PROD_CNT,
                     NVL(thpsc.REQUIRE_YN, 'N') AS REQUIRE_YN,
-                    NVL(thpsc.REG_STORE_FG, '0') AS REG_STORE_FG
+                    NVL(thpsc.REG_STORE_FG, '0') AS REG_STORE_FG,
+                    NVL(thpsc.REG_STORE_FG, '0') AS OLD_REG_STORE_FG
                 FROM
                     TB_HQ_PRODUCT_SDSEL_CLASS thpsc
                 WHERE
@@ -1298,6 +1299,7 @@
                     thpsp.DISP_SEQ,
                     NVL(thpsp.FIX_PROD_FG, '0') AS FIX_PROD_FG,
                     NVL(thpsp.REG_STORE_FG, '0') AS REG_STORE_FG,
+                    NVL(thpsp.REG_STORE_FG, '0') AS OLD_REG_STORE_FG,
                     NVL(thpsp.PRINT_YN, 'Y') AS PRINT_YN
                 FROM
                     TB_HQ_PRODUCT_SDSEL_PROD thpsp

@@ -421,6 +421,7 @@ app.controller('sideMenuSelectClassSingleCtrl', ['$scope', '$http', 'sdselGrpCd'
         // 그리드 내 콤보박스 설정
         $scope.requireYnDataMap = requireYnDataMap;
         $scope.regStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
+        $scope.oldRegStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
 
         // ReadOnly 효과설정
         s.formatItem.addHandler(function (s, e) {
@@ -606,7 +607,7 @@ app.controller('sideMenuSelectClassSingleCtrl', ['$scope', '$http', 'sdselGrpCd'
     $scope.saveClass = function() {
         var msg = messages["cmm.choo.save"];
 
-        if(orgnFg == 'HQ' && hqOfficeCd == 'DS021'){
+        if(orgnFg == 'HQ' && hqOfficeCd == 'DS021') {
             msg = messages["sideMenu.selectMenu.sdselClassRegStoreAlert"] + " " +  messages["cmm.choo.save"]; // 적용매장구분 변경된 경우 등록된 적용매장은 모두 삭제됩니다. 저장하시겠습니까?
         }
 
@@ -691,11 +692,17 @@ app.controller('sideMenuSelectClassSingleCtrl', ['$scope', '$http', 'sdselGrpCd'
 
             // console.log('2 params',params);
 
-            // 적용매장 전체 삭제
-            $scope._postJSONSave.withOutPopUp("/base/prod/sideMenu/menuClass/getSdselClassRegStoreDeleteAll.sb", params, function(){
+            if(orgnFg == 'HQ') {
+                // 적용매장 전체 삭제
+                $scope._postJSONSave.withOutPopUp("/base/prod/sideMenu/menuClass/getSdselClassRegStoreDeleteAll.sb", params, function(){
+                    // 저장
+                    $scope.save(params);
+                });
+            } else {
                 // 저장
                 $scope.save(params);
-            });
+            }
+
         });
     };
 
@@ -894,6 +901,7 @@ app.controller('sideMenuSelectProdSingleCtrl', ['$scope', '$http', 'sdselClassCd
     // 그리드 내 콤보박스 설정
     $scope.fixProdFgDataMap = fixProdFgDataMap;
     $scope.regStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
+    $scope.oldRegStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
     $scope.printYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // 출력여부
 
     // 선택상품 그리드 에디팅 방지
@@ -1004,7 +1012,7 @@ app.controller('sideMenuSelectProdSingleCtrl', ['$scope', '$http', 'sdselClassCd
     $scope.saveProd = function() {
         var msg = messages["cmm.choo.save"];
 
-        if(orgnFg == 'HQ' && hqOfficeCd == 'DS021'){
+        if(orgnFg == 'HQ' && hqOfficeCd == 'DS021') {
             msg = messages["sideMenu.selectMenu.sdselClassRegStoreAlert"] + " " +  messages["cmm.choo.save"]; // 적용매장구분 변경된 경우 등록된 적용매장은 모두 삭제됩니다. 저장하시겠습니까?
         }
 
@@ -1063,11 +1071,17 @@ app.controller('sideMenuSelectProdSingleCtrl', ['$scope', '$http', 'sdselClassCd
                 return false;
             }
 
-            // 적용매장 전체 삭제
-            $scope._postJSONSave.withOutPopUp("/base/prod/sideMenu/menuProd/getSdselProdRegStoreDeleteAll.sb", params, function(){
+            if(orgnFg == 'HQ') {
+                // 적용매장 전체 삭제
+                $scope._postJSONSave.withOutPopUp("/base/prod/sideMenu/menuProd/getSdselProdRegStoreDeleteAll.sb", params, function(){
+                    // 저장
+                    $scope.save(params);
+                });
+            } else {
                 // 저장
                 $scope.save(params);
-            });
+            }
+
         });
     };
 
