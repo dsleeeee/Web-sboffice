@@ -98,6 +98,7 @@
               <!-- define columns -->
               <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="90" visible="false"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="verRecv.verSerNo"/>" binding="verSerNo" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.verSerNoStore"/>" binding="verSerNoStore" align="center" width="130" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="verRecv.verSerNm"/>" binding="fileDesc" align="left" width="120" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="verRecv.regCnt"/>" binding="regCnt" width="75" align="center" is-read-only="true" ></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="verRecv.recvCntM"/>" binding="recvCnt" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -130,6 +131,7 @@
       <div class="w100 mt10 mb20">
         <div class="wj-gridWrap" style="height:350px; overflow-x: hidden; overflow-y: hidden;">
           <wj-flex-grid
+                  id="wjVerRecvStoreGridList"
                   control="flex"
                   autoGenerateColumns="false"
                   selection-mode="Row"
@@ -165,6 +167,7 @@
   <div class="w100 mt10 mb20" style="display:none;" ng-controller="verRecvStoreExcelCtrl">
     <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
       <wj-flex-grid
+              id="wjVerRecvStoreExcelGridList"
               control="excelFlex"
               autoGenerateColumns="false"
               selection-mode="Row"
@@ -189,4 +192,4 @@
   var hqOfficeCd = "${hqOfficeCd}";
   var progFg      = ${ccu.getCommCode("059")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/verRecv.js?ver=20220822.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/verRecv.js?ver=20220822.02" charset="utf-8"></script>

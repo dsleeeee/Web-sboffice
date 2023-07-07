@@ -179,8 +179,9 @@ public class TerminalManageController {
     @ResponseBody
     public Result getPosTerminalList(StoreTerminalVO storeTerminalVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> posList = service.getPosTerminalList(storeTerminalVO);
+        List<DefaultMap<String>> posList = service.getPosTerminalList(storeTerminalVO, sessionInfoVO);
 
         return returnListJson(Status.OK, posList, storeTerminalVO);
     }
