@@ -66,7 +66,7 @@ app.controller('verRecvCtrl', ['$scope', '$http', function ($scope, $http) {
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
-        if (col.binding === "verSerNo") {
+        if (col.binding === "verSerNo" || col.binding === "verSerNoStore") {
           wijmo.addClass(e.cell, 'wijLink');
         }
       }
@@ -77,8 +77,9 @@ app.controller('verRecvCtrl', ['$scope', '$http', function ($scope, $http) {
       var ht = s.hitTest(e);
       if( ht.cellType === wijmo.grid.CellType.Cell) {
         var col = ht.panel.columns[ht.col];
-        if ( col.binding === "verSerNo") {
+        if ( col.binding === "verSerNo" || col.binding === "verSerNoStore") {
           var selectedData = s.rows[ht.row].dataItem;
+          selectedData.gubun = col.binding;
           $scope.setSelectVersion(selectedData);
           // $scope.versionInfoDetailLayer.show(true);
 
@@ -166,10 +167,23 @@ app.controller('verRecvStoreCtrl', ['$scope', '$http', function ($scope, $http) 
     params.hqOfficeCd = hqOfficeCd;
     params.progFg =  $scope.getSelectVersion().progFg;
 
+    var url;
+    if ($scope.getSelectVersion().gubun === 'verSerNo') {
+      url = "/pos/confg/verRecv/verRecv/storeList.sb";
+    } else {
+      url = "/pos/confg/verRecv/verRecv/storeList2.sb";
+    }
     // console.log('dtl params', params);
-
-    $scope._inquiryMain("/pos/confg/verRecv/verRecv/storeList.sb", params, function() {
-    });
+      $scope._inquiryMain(url, params, function() {
+        // 선택한 테이블에 따른 리스트 항목 visible
+        var grid = wijmo.Control.getControl("#wjVerRecvStoreGridList");
+        var columns = grid.columns;
+        if ($scope.getSelectVersion().gubun === 'verSerNo') {
+          columns[3].visible = true;
+        } else {
+          columns[3].visible = false;
+        }
+      });
   };
 
   // <-- 엑셀다운로드 호출 -->
@@ -180,6 +194,7 @@ app.controller('verRecvStoreCtrl', ['$scope', '$http', function ($scope, $http) 
     params.curr = $scope._getPagingInfo('curr');
     params.verSerNo = $scope.getSelectVersion().verSerNo;
     params.verRecvYn = scope.verRecvYn;
+    params.gubun =$scope.getSelectVersion().gubun;
 
     if ($scope.flex.rows.length <= 0) {
       $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
@@ -217,11 +232,27 @@ app.controller('verRecvStoreExcelCtrl', ['$scope', '$http', '$timeout', function
     params.verRecvYn = data.verRecvYn;
     params.hqOfficeCd = hqOfficeCd;
 
-    $scope._inquiryMain("/pos/confg/verRecv/verRecv/storeExcelList.sb", params, function() {
+    var url;
+    if(data.gubun === 'verSerNo'){
+      url = "/pos/confg/verRecv/verRecv/storeExcelList.sb";
+    } else {
+      url = "/pos/confg/verRecv/verRecv/storeExcelList2.sb";
+    }
+
+    $scope._inquiryMain(url, params, function() {
 
       if ($scope.excelFlex.rows.length <= 0) {
         $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
         return false;
+      }
+
+      // 선택한 테이블에 따른 리스트 항목 visible
+      var grid = wijmo.Control.getControl("#wjVerRecvStoreExcelGridList");
+      var columns = grid.columns;
+      if (data.gubun === 'verSerNo') {
+        columns[3].visible = true;
+      } else {
+        columns[3].visible = false;
       }
 
       $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기

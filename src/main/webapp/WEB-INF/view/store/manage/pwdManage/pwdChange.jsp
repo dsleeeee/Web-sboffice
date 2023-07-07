@@ -70,7 +70,7 @@
           </tbody>
         </table>
         <p class="mt20 s12">
-          <s:message code="login.layer.pwchg.policy" arguments="6,20" />
+          <s:message code="login.pw.cannot"/>
           <br>
           <br>
           <s:message code="pwdManage.layer.msg" />
@@ -84,4 +84,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/pwdManage/pwdChange.js?ver=20181211.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/pwdManage/pwdChange.js?ver=20181211.04" charset="utf-8"></script>

@@ -44,7 +44,7 @@ public interface TerminalManageService {
     int updateTerminalEnvst(StoreEnvVO storeEnvVO, SessionInfoVO sessionInfoVO);
 
     /** 포스 터미널 목록 조회 */
-    List<DefaultMap<String>> getPosTerminalList(StoreTerminalVO storeTerminalVO);
+    List<DefaultMap<String>> getPosTerminalList(StoreTerminalVO storeTerminalVO, SessionInfoVO sessionInfoVO);
 
     /** 포스 터미널 정보 저장 */
     int savePosTerminalInfo(StoreTerminalVO[] storeTerminalVOs, SessionInfoVO sessionInfoVO);

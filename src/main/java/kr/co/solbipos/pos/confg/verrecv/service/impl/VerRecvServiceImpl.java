@@ -47,9 +47,21 @@ public class VerRecvServiceImpl implements VerRecvService {
         return verRecvMapper.selectStoreList(verRecv);
     }
 
+    /** 매장 목록 조회(매장별) */
+    @Override
+    public List<DefaultMap<String>> selectStoreList2(VerRecvVO verRecv) {
+        return verRecvMapper.selectStoreList2(verRecv);
+    }
+
     /** 매장 목록 엑셀조회 */
     @Override
     public List<DefaultMap<String>> selectStoreExcelList(VerRecvVO verRecv) {
+        return verRecvMapper.selectStoreExcelList(verRecv);
+    }
+
+    /** 매장 목록 엑셀조회(매장별) */
+    @Override
+    public List<DefaultMap<String>> selectStoreExcelList2(VerRecvVO verRecv) {
         return verRecvMapper.selectStoreExcelList(verRecv);
     }
 

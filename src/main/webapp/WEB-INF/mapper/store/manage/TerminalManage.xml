@@ -142,6 +142,9 @@
           FROM TB_MS_POS_TERMNL tmpt
          WHERE tmpt.STORE_CD = #{storeCd}
            AND tmpt.POS_NO = #{posNo}
+        <if test='orgnFg != null and orgnFg == "H" and (hqOfficeCd == "H0360" or hqOfficeCd == "DS024")'>
+        AND (VENDOR_FG != '04' OR VENDOR_CD != '009')
+        </if>
     </select>
 
     <!-- 코너 터미널 목록 조회 -->

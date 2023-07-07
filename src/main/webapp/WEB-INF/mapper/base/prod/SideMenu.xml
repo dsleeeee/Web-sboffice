@@ -542,7 +542,7 @@
                     thpsg.HQ_BRAND_CD,
                     thpsg.SDSEL_GRP_CD,
                     thpsg.SDSEL_GRP_NM,
-                    thpsg.PROD_CD,
+                    (SELECT LISTAGG(PROD_CD, ',') WITHIN GROUP (ORDER BY PROD_CD) AS PROD_CD FROM TB_HQ_PRODUCT thp WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd} AND thp.SIDE_PROD_YN = 'Y' AND thp.SDSEL_GRP_CD = thpsg.SDSEL_GRP_CD ) AS PROD_CD,
                     (SELECT COUNT(*) FROM TB_HQ_PRODUCT_SDSEL_CLASS WHERE HQ_OFFICE_CD = thpsg.HQ_OFFICE_CD  AND SDSEL_GRP_CD = thpsg.SDSEL_GRP_CD AND USE_YN  = 'Y') AS CNT,
                     NVL(thpsg.FIX_PROD_FG, '0') AS FIX_PROD_FG,
                     NVL(thpsg.SDSEL_TYPE_FG, 'C') AS SDSEL_TYPE_FG

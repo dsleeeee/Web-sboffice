@@ -113,6 +113,24 @@ public class VerRecvController {
     }
 
     /**
+     * 버전별수신현황 - 매장 리스트 조회(매장별)
+     * @param verRecv
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "verRecv/storeList2.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result verrecvStoreList2(VerRecvVO verRecv, HttpServletRequest request,
+            HttpServletResponse response, Model model) {
+
+        List<DefaultMap<String>> list = verRecvService.selectStoreList2(verRecv);
+
+        return returnListJson(Status.OK, list, verRecv);
+    }
+
+    /**
      * 버전별수신현황 - 매장 리스트 엑셀조회
      * @param verRecv
      * @param request
@@ -127,6 +145,25 @@ public class VerRecvController {
 
 //        System.out.println("test11111");
         List<DefaultMap<String>> list = verRecvService.selectStoreExcelList(verRecv);
+
+        return returnListJson(Status.OK, list, verRecv);
+    }
+
+    /**
+     * 버전별수신현황 - 매장 리스트 엑셀조회(매장별)
+     * @param verRecv
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "verRecv/storeExcelList2.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result verrecvStoreExcelList2(VerRecvVO verRecv, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
+
+//        System.out.println("test11111");
+        List<DefaultMap<String>> list = verRecvService.selectStoreExcelList2(verRecv);
 
         return returnListJson(Status.OK, list, verRecv);
     }

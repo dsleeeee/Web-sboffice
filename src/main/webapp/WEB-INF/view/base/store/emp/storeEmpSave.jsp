@@ -256,5 +256,5 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/storeEmpSave.js?ver=20181121.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/storeEmpSave.js?ver=20181121.04" charset="utf-8"></script>
 

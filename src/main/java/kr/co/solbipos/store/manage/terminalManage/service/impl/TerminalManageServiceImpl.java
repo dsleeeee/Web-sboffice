@@ -97,7 +97,9 @@ public class TerminalManageServiceImpl implements TerminalManageService{
 
     /** 포스 터미널 목록 조회 */
     @Override
-    public List<DefaultMap<String>> getPosTerminalList(StoreTerminalVO storeTerminalVO) {
+    public List<DefaultMap<String>> getPosTerminalList(StoreTerminalVO storeTerminalVO, SessionInfoVO sessionInfoVO) {
+        storeTerminalVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        storeTerminalVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return mapper.getPosTerminalList(storeTerminalVO);
     }
 

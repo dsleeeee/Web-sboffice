@@ -13,7 +13,7 @@
 
     <div class="wj-dialog-body sc2" style="overflow-y: hidden;">
       <%-- 상세 --%>
-      <div style="height: 175px; overflow-y: auto;">
+      <div style="height: 200px; overflow-y: auto;">
         <table class="tblType01">
           <colgroup>
             <col class="w30" />
@@ -66,8 +66,8 @@
           </tr>
           </tbody>
         </table>
-        <p class="mt20 s12">
-            <s:message code="login.layer.pwchg.policy" arguments="6,20" />
+        <p class="mt10 s12">
+            <s:message code="login.pw.cannot"/>
         </p>
       </div>
     </div>
@@ -84,4 +84,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/changePassword.js?ver=20230511.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/changePassword.js?ver=20230511.02" charset="utf-8"></script>
