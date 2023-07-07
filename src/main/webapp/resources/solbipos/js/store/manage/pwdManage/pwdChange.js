@@ -131,7 +131,7 @@ app.controller('pwdChangeCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope._popMsg(messages["login.pw.cannot.be.used.id.null"]);
         return false;
       } else { // 저장실패
-        $scope._popMsg(messages["cmm.registFail"]);
+        $scope._popMsg(messages["cmm.registFail"] + "<br/>" + messages["login.pw.cannot"]);
         return false;
       }
     });

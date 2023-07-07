@@ -165,7 +165,7 @@ app.controller('storeEmpRegistCtrl', ['$scope', '$http', function ($scope, $http
         $scope._popMsg(messages["storeEmp.userIdRegexp.msg"]);
         return false;
       } else if(response.data.data === 'PASSWORD_REGEXP') {
-        $scope._popMsg(messages["login.pw.not.match.char"]);
+        $scope._popMsg(messages["login.pw.cannot"]);
         return false;
       } else {
         $scope._popMsg(messages["cmm.registFail"]);
@@ -194,7 +194,7 @@ app.controller('storeEmpRegistCtrl', ['$scope', '$http', function ($scope, $http
         $scope._popMsg(messages["cmm.saveSucc"]);
         $scope.storeEmpRegistLayer.hide();
       } else if(response.data.data === 'PASSWORD_REGEXP') {
-        $scope._popMsg(messages["login.pw.not.match.char"]);
+        $scope._popMsg(messages["login.pw.cannot"]);
         return false;
       } else if(response.data.data === 'PASSWORD_NOT_CHANGED') {
         $scope._popMsg(messages["storeEmp.passwordNotChanged.msg"]);
