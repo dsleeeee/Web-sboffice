@@ -391,12 +391,8 @@
         </c:if>
 
         <div class="mt10 oh sb-select dkbr">
-            <c:if test="${sessionScope.sessionInfo.userId == 'h0393'}">
-                <c:if test="${sessionScope.sessionInfo.vUserId != null}">
-                    <%-- 분할 엑셀다운로드 --%>
-                    <button class="btn_skyblue ml5 fr" ng-click="excelDownload('2')"><s:message code="cmm.excel.downDivision"/></button>
-                </c:if>
-            </c:if>
+            <%-- 분할 엑셀다운로드 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownload('2')"><s:message code="cmm.excel.downDivision"/></button>
             <%-- 현재화면 엑셀다운로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelDownload2()"><s:message code="cmm.excel.downCurrent"/></button>
             <%-- 조회조건 엑셀다운로드 --%>
@@ -482,7 +478,7 @@
                     autoGenerateColumns="false"
                     selection-mode="Row"
                     items-source="data"
-                    control="flex"
+                    control="excelFlex"
                     initialized="initGrid(s,e)"
                     is-read-only="true"
                     item-formatter="_itemFormatter">
@@ -568,7 +564,7 @@
   var arrTimeSlotCol = timeSlotCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/time/timeProd/timeProd.js?ver=20230703.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/time/timeProd/timeProd.js?ver=20230707.02" charset="utf-8"></script>
 
 <%-- 20221117 상품분류 팝업 주석처리함 -> 상품 멀티 팝업에 상품분류가 들어감으로 오류 --%>
 <%-- 상품분류 팝업 --%>

@@ -6,22 +6,22 @@
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
 
-<div class="subCon" ng-controller="timeProdChannelCtrl">
-    <div class="searchBar">
-      <a href="#" class="open fl"><s:message code="timeProdChannel.timeProdChannel"/></a>
-      <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('timeProdChannelCtrl')">
-        <s:message code="cmm.search"/>
-      </button>
-      <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-        <%-- 확장조회 --%>
-        <button class="btn_blue fr mt5 mr5" id="btnSearchAddShow" ng-click="searchAddShowChange()">
-          <s:message code="cmm.search.addShow" />
-        </button>
-      </c:if>
-    </div>
-
-    <table class="searchTbl">
+<div class="subCon">
+    <div ng-controller="timeProdChannelCtrl">
+        <div class="searchBar">
+            <a href="#" class="open fl"><s:message code="timeProdChannel.timeProdChannel"/></a>
+            <%-- 조회 --%>
+            <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('timeProdChannelCtrl')">
+                <s:message code="cmm.search"/>
+            </button>
+            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                <%-- 확장조회 --%>
+                <button class="btn_blue fr mt5 mr5" id="btnSearchAddShow" ng-click="searchAddShowChange()">
+                    <s:message code="cmm.search.addShow" />
+                </button>
+            </c:if>
+        </div>
+        <table class="searchTbl">
           <colgroup>
           <col class="w15"/>
           <col class="w35"/>
@@ -222,141 +222,137 @@
               </tr>
           </tbody>
       </table>
-      <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-        <table class="searchTbl" id="tblSearchAddShow" style="display: none;">
-          <colgroup>
-            <col class="w15"/>
-            <col class="w35"/>
-            <col class="w15"/>
-            <col class="w35"/>
-          </colgroup>
-          <tbody>
-          <tr>
-              <%-- 팀별 --%>
-            <th><s:message code="timeProdChannel.momsTeam"/></th>
-            <td>
-              <div class="sb-select">
-                <wj-combo-box
-                  id="srchMomsTeam"
-                  items-source="_getComboData('srchMomsTeam')"
-                  display-member-path="name"
-                  selected-value-path="value"
-                  is-editable="false"
-                  control="srchMomsTeamCombo">
-                </wj-combo-box>
-              </div>
-            </td>
-              <%-- AC점포별 --%>
-            <th><s:message code="timeProdChannel.momsAcShop"/></th>
-            <td>
-              <div class="sb-select">
-                <wj-combo-box
-                  id="srchMomsAcShop"
-                  items-source="_getComboData('srchMomsAcShop')"
-                  display-member-path="name"
-                  selected-value-path="value"
-                  is-editable="false"
-                  control="srchMomsAcShopCombo">
-                </wj-combo-box>
-              </div>
-            </td>
-          </tr>
-          <tr>
-              <%-- 지역구분 --%>
-            <th><s:message code="timeProdChannel.momsAreaFg"/></th>
-            <td>
-              <div class="sb-select">
-                <wj-combo-box
-                  id="srchMomsAreaFg"
-                  items-source="_getComboData('srchMomsAreaFg')"
-                  display-member-path="name"
-                  selected-value-path="value"
-                  is-editable="false"
-                  control="srchMomsAreaFgCombo">
-                </wj-combo-box>
-              </div>
-            </td>
-              <%-- 상권 --%>
-            <th><s:message code="timeProdChannel.momsCommercial"/></th>
-            <td>
-              <div class="sb-select">
-                <wj-combo-box
-                  id="srchMomsCommercial"
-                  items-source="_getComboData('srchMomsCommercial')"
-                  display-member-path="name"
-                  selected-value-path="value"
-                  is-editable="false"
-                  control="srchMomsCommercialCombo">
-                </wj-combo-box>
-              </div>
-            </td>
-          </tr>
-          <tr>
-              <%-- 점포유형 --%>
-            <th><s:message code="timeProdChannel.momsShopType"/></th>
-            <td>
-              <div class="sb-select">
-                <wj-combo-box
-                  id="srchMomsShopType"
-                  items-source="_getComboData('srchMomsShopType')"
-                  display-member-path="name"
-                  selected-value-path="value"
-                  is-editable="false"
-                  control="srchMomsShopTypeCombo">
-                </wj-combo-box>
-              </div>
-            </td>
-              <%-- 매장관리타입 --%>
-            <th><s:message code="timeProdChannel.momsStoreManageType"/></th>
-            <td>
-              <div class="sb-select">
-                <wj-combo-box
-                  id="srchMomsStoreManageType"
-                  items-source="_getComboData('srchMomsStoreManageType')"
-                  display-member-path="name"
-                  selected-value-path="value"
-                  is-editable="false"
-                  control="srchMomsStoreManageTypeCombo">
-                </wj-combo-box>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <%-- 그룹 --%>
-            <th><s:message code="timeProdChannel.branchCd"/></th>
-            <td>
-              <div class="sb-select">
-                <wj-combo-box
-                  id="srchBranchCd"
-                  items-source="_getComboData('srchBranchCd')"
-                  display-member-path="name"
-                  selected-value-path="value"
-                  is-editable="false"
-                  control="srchBranchCdCombo">
-                </wj-combo-box>
-              </div>
-            </td>
-            <td></td>
-            <td></td>
-          </tr>
-          </tbody>
-        </table>
-      </c:if>
+        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+            <table class="searchTbl" id="tblSearchAddShow" style="display: none;">
+              <colgroup>
+                <col class="w15"/>
+                <col class="w35"/>
+                <col class="w15"/>
+                <col class="w35"/>
+              </colgroup>
+              <tbody>
+              <tr>
+                  <%-- 팀별 --%>
+                <th><s:message code="timeProdChannel.momsTeam"/></th>
+                <td>
+                  <div class="sb-select">
+                    <wj-combo-box
+                      id="srchMomsTeam"
+                      items-source="_getComboData('srchMomsTeam')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      control="srchMomsTeamCombo">
+                    </wj-combo-box>
+                  </div>
+                </td>
+                  <%-- AC점포별 --%>
+                <th><s:message code="timeProdChannel.momsAcShop"/></th>
+                <td>
+                  <div class="sb-select">
+                    <wj-combo-box
+                      id="srchMomsAcShop"
+                      items-source="_getComboData('srchMomsAcShop')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      control="srchMomsAcShopCombo">
+                    </wj-combo-box>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                  <%-- 지역구분 --%>
+                <th><s:message code="timeProdChannel.momsAreaFg"/></th>
+                <td>
+                  <div class="sb-select">
+                    <wj-combo-box
+                      id="srchMomsAreaFg"
+                      items-source="_getComboData('srchMomsAreaFg')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      control="srchMomsAreaFgCombo">
+                    </wj-combo-box>
+                  </div>
+                </td>
+                  <%-- 상권 --%>
+                <th><s:message code="timeProdChannel.momsCommercial"/></th>
+                <td>
+                  <div class="sb-select">
+                    <wj-combo-box
+                      id="srchMomsCommercial"
+                      items-source="_getComboData('srchMomsCommercial')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      control="srchMomsCommercialCombo">
+                    </wj-combo-box>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                  <%-- 점포유형 --%>
+                <th><s:message code="timeProdChannel.momsShopType"/></th>
+                <td>
+                  <div class="sb-select">
+                    <wj-combo-box
+                      id="srchMomsShopType"
+                      items-source="_getComboData('srchMomsShopType')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      control="srchMomsShopTypeCombo">
+                    </wj-combo-box>
+                  </div>
+                </td>
+                  <%-- 매장관리타입 --%>
+                <th><s:message code="timeProdChannel.momsStoreManageType"/></th>
+                <td>
+                  <div class="sb-select">
+                    <wj-combo-box
+                      id="srchMomsStoreManageType"
+                      items-source="_getComboData('srchMomsStoreManageType')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      control="srchMomsStoreManageTypeCombo">
+                    </wj-combo-box>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <%-- 그룹 --%>
+                <th><s:message code="timeProdChannel.branchCd"/></th>
+                <td>
+                  <div class="sb-select">
+                    <wj-combo-box
+                      id="srchBranchCd"
+                      items-source="_getComboData('srchBranchCd')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      control="srchBranchCdCombo">
+                    </wj-combo-box>
+                  </div>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              </tbody>
+            </table>
+        </c:if>
 
-      <div class="mt10 oh sb-select dkbr">
-          <c:if test="${sessionScope.sessionInfo.userId == 'h0393'}">
-              <c:if test="${sessionScope.sessionInfo.vUserId != null}">
-                    <%-- 분할 엑셀다운로드 --%>
-                    <button class="btn_skyblue ml5 fr" ng-click="excelDownload('2')"><s:message code="cmm.excel.downDivision"/></button>
-              </c:if>
-          </c:if>
-          <%-- 현재화면 엑셀다운로드 --%>
-          <button class="btn_skyblue ml5 fr" ng-click="excelDownload2()"><s:message code="cmm.excel.downCurrent"/></button>
-          <%-- 조회조건 엑셀다운로드 --%>
-          <%--<button class="btn_skyblue ml5 fr" ng-click="excelDownload('1')"><s:message code="cmm.excel.downCondition"/></button>--%>
-      </div>
+        <div class="mt10 oh sb-select dkbr">
+            <%-- 분할 엑셀다운로드 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownload('2')"><s:message code="cmm.excel.downDivision"/></button>
+            <%-- 현재화면 엑셀다운로드 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownload2()"><s:message code="cmm.excel.downCurrent"/></button>
+            <%-- 조회조건 엑셀다운로드 --%>
+            <%--<button class="btn_skyblue ml5 fr" ng-click="excelDownload('1')"><s:message code="cmm.excel.downCondition"/></button>--%>
+        </div>
 
-      <div class="w100 mt10">
+        <div class="w100 mt10">
           <%--위즈모 테이블--%>
           <div class="wj-gridWrap" style="height: 380px; overflow-x: hidden; overflow-y: hidden;">
             <wj-flex-grid
@@ -449,6 +445,7 @@
           </div>
           <%--//위즈모 테이블--%>
       </div>
+    </div>
 
       <%-- 페이지 리스트 --%>
       <div class="pageNum mt20">
@@ -459,91 +456,93 @@
 
       <%--엑셀 리스트--%>
       <div class="wj-gridWrap" style="display: none;"  ng-controller="timeProdChannelExcelCtrl">
-        <wj-flex-grid
-          id="wjGridExcelList"
-          autoGenerateColumns="false"
-          selection-mode="Row"
-          items-source="data"
-          control="excelFlex"
-          initialized="initGrid(s,e)"
-          is-read-only="true"
-          item-formatter="_itemFormatter">
+          <div class="wj-gridWrap" style="height: 380px; overflow-x: hidden; overflow-y: hidden;">
+              <wj-flex-grid
+                  id="wjGridExcelList"
+                  autoGenerateColumns="false"
+                  selection-mode="Row"
+                  items-source="data"
+                  control="excelFlex"
+                  initialized="initGrid(s,e)"
+                  is-read-only="true"
+                  item-formatter="_itemFormatter">
 
-          <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.yoil"/>" binding="yoil" width="50" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.dayFrom"/>" binding="dayFrom" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.dayTo"/>" binding="dayTo" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.branchNm"/>" binding="branchNm" width="80" align="left" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.storeNm"/>" binding="storeNm" width="120" align="left" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.lClassCd"/>" binding="lClassCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.lClassNm"/>" binding="lClassNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.mClassCd"/>" binding="mClassCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.mClassNm"/>" binding="mClassNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.sClassCd"/>" binding="sClassCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.sClassNm"/>" binding="sClassNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.sideProdCd"/>" binding="sideProdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.selTypeFg"/>" binding="selTypeFg" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.prodNm"/>" binding="prodNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.time"/>" binding="saleHour" data-map="timeSlotDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                  <!-- define columns -->
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.yoil"/>" binding="yoil" width="50" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.dayFrom"/>" binding="dayFrom" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.dayTo"/>" binding="dayTo" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.branchNm"/>" binding="branchNm" width="80" align="left" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.storeNm"/>" binding="storeNm" width="120" align="left" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.lClassCd"/>" binding="lClassCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.lClassNm"/>" binding="lClassNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.mClassCd"/>" binding="mClassCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.mClassNm"/>" binding="mClassNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.sClassCd"/>" binding="sClassCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.sClassNm"/>" binding="sClassNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.sideProdCd"/>" binding="sideProdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.selTypeFg"/>" binding="selTypeFg" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.prodNm"/>" binding="prodNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.time"/>" binding="saleHour" data-map="timeSlotDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
 
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty1"/>" binding="saleQty1" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty2"/>" binding="saleQty2" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty3"/>" binding="saleQty3" width="110" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.totSaleAmt"/>" binding="totSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.dcAmt"/>" binding="dcAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt1"/>" binding="realSaleAmt1" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt2"/>" binding="realSaleAmt2" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt3"/>" binding="realSaleAmt3" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty1"/>" binding="saleQty1" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty2"/>" binding="saleQty2" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty3"/>" binding="saleQty3" width="110" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.totSaleAmt"/>" binding="totSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.dcAmt"/>" binding="dcAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt1"/>" binding="realSaleAmt1" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt2"/>" binding="realSaleAmt2" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt3"/>" binding="realSaleAmt3" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty1"/>" binding="stinSaleQty1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty2"/>" binding="stinSaleQty2" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty3"/>" binding="stinSaleQty3" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt1"/>" binding="stinRealSaleAmt1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt2"/>" binding="stinRealSaleAmt2" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt3"/>" binding="stinRealSaleAmt3" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty1"/>" binding="dlvrSaleQty1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty2"/>" binding="dlvrSaleQty2" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty3"/>" binding="dlvrSaleQty3" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt1"/>" binding="dlvrRealSaleAmt1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt2"/>" binding="dlvrRealSaleAmt2" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt3"/>" binding="dlvrRealSaleAmt3" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty1"/>" binding="packSaleQty1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty2"/>" binding="packSaleQty2" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty3"/>" binding="packSaleQty3" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt1"/>" binding="packRealSaleAmt1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt2"/>" binding="packRealSaleAmt2" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt3"/>" binding="packRealSaleAmt3" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty1"/>" binding="stinSaleQty1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty2"/>" binding="stinSaleQty2" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty3"/>" binding="stinSaleQty3" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt1"/>" binding="stinRealSaleAmt1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt2"/>" binding="stinRealSaleAmt2" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt3"/>" binding="stinRealSaleAmt3" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty1"/>" binding="dlvrSaleQty1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty2"/>" binding="dlvrSaleQty2" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty3"/>" binding="dlvrSaleQty3" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt1"/>" binding="dlvrRealSaleAmt1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt2"/>" binding="dlvrRealSaleAmt2" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt3"/>" binding="dlvrRealSaleAmt3" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty1"/>" binding="packSaleQty1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty2"/>" binding="packSaleQty2" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty3"/>" binding="packSaleQty3" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt1"/>" binding="packRealSaleAmt1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt2"/>" binding="packRealSaleAmt2" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt3"/>" binding="packRealSaleAmt3" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 
-            <c:forEach var="dlvrInFgCol" items="${dlvrInFgColList}">
-                <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty1"/>" binding="stinDifg${dlvrInFgCol.dlvrInFg}SaleQty1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty2"/>" binding="stinDifg${dlvrInFgCol.dlvrInFg}SaleQty2" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty3"/>" binding="stinDifg${dlvrInFgCol.dlvrInFg}SaleQty3" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt1"/>" binding="stinDifg${dlvrInFgCol.dlvrInFg}RealSaleAmt1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt2"/>" binding="stinDifg${dlvrInFgCol.dlvrInFg}RealSaleAmt2" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt3"/>" binding="stinDifg${dlvrInFgCol.dlvrInFg}RealSaleAmt3" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            </c:forEach>
+                    <c:forEach var="dlvrInFgCol" items="${dlvrInFgColList}">
+                        <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty1"/>" binding="stinDifg${dlvrInFgCol.dlvrInFg}SaleQty1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty2"/>" binding="stinDifg${dlvrInFgCol.dlvrInFg}SaleQty2" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty3"/>" binding="stinDifg${dlvrInFgCol.dlvrInFg}SaleQty3" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt1"/>" binding="stinDifg${dlvrInFgCol.dlvrInFg}RealSaleAmt1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt2"/>" binding="stinDifg${dlvrInFgCol.dlvrInFg}RealSaleAmt2" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt3"/>" binding="stinDifg${dlvrInFgCol.dlvrInFg}RealSaleAmt3" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    </c:forEach>
 
-            <c:forEach var="dlvrInFgCol" items="${dlvrInFgColList}">
-                <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty1"/>" binding="dlvrDifg${dlvrInFgCol.dlvrInFg}SaleQty1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty2"/>" binding="dlvrDifg${dlvrInFgCol.dlvrInFg}SaleQty2" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty3"/>" binding="dlvrDifg${dlvrInFgCol.dlvrInFg}SaleQty3" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt1"/>" binding="dlvrDifg${dlvrInFgCol.dlvrInFg}RealSaleAmt1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt2"/>" binding="dlvrDifg${dlvrInFgCol.dlvrInFg}RealSaleAmt2" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt3"/>" binding="dlvrDifg${dlvrInFgCol.dlvrInFg}RealSaleAmt3" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            </c:forEach>
+                    <c:forEach var="dlvrInFgCol" items="${dlvrInFgColList}">
+                        <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty1"/>" binding="dlvrDifg${dlvrInFgCol.dlvrInFg}SaleQty1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty2"/>" binding="dlvrDifg${dlvrInFgCol.dlvrInFg}SaleQty2" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty3"/>" binding="dlvrDifg${dlvrInFgCol.dlvrInFg}SaleQty3" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt1"/>" binding="dlvrDifg${dlvrInFgCol.dlvrInFg}RealSaleAmt1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt2"/>" binding="dlvrDifg${dlvrInFgCol.dlvrInFg}RealSaleAmt2" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt3"/>" binding="dlvrDifg${dlvrInFgCol.dlvrInFg}RealSaleAmt3" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    </c:forEach>
 
-            <c:forEach var="dlvrInFgCol" items="${dlvrInFgColList}">
-                <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty1"/>" binding="packDifg${dlvrInFgCol.dlvrInFg}SaleQty1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty2"/>" binding="packDifg${dlvrInFgCol.dlvrInFg}SaleQty2" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty3"/>" binding="packDifg${dlvrInFgCol.dlvrInFg}SaleQty3" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt1"/>" binding="packDifg${dlvrInFgCol.dlvrInFg}RealSaleAmt1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt2"/>" binding="packDifg${dlvrInFgCol.dlvrInFg}RealSaleAmt2" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt3"/>" binding="packDifg${dlvrInFgCol.dlvrInFg}RealSaleAmt3" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            </c:forEach>
-        </wj-flex-grid>
+                    <c:forEach var="dlvrInFgCol" items="${dlvrInFgColList}">
+                        <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty1"/>" binding="packDifg${dlvrInFgCol.dlvrInFg}SaleQty1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty2"/>" binding="packDifg${dlvrInFgCol.dlvrInFg}SaleQty2" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="timeProdChannel.saleQty3"/>" binding="packDifg${dlvrInFgCol.dlvrInFg}SaleQty3" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt1"/>" binding="packDifg${dlvrInFgCol.dlvrInFg}RealSaleAmt1" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt2"/>" binding="packDifg${dlvrInFgCol.dlvrInFg}RealSaleAmt2" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="timeProdChannel.realSaleAmt3"/>" binding="packDifg${dlvrInFgCol.dlvrInFg}RealSaleAmt3" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    </c:forEach>
+              </wj-flex-grid>
+          </div>
       </div>
       <%--//엑셀 리스트--%>
 </div>
@@ -606,4 +605,4 @@
     var arrTimeSlotCol = timeSlotCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/time/timeProdChannel/timeProdChannel.js?ver=20230703.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/time/timeProdChannel/timeProdChannel.js?ver=20230707.02" charset="utf-8"></script>

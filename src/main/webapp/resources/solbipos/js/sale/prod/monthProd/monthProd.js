@@ -327,7 +327,10 @@ app.controller('monthProdCtrl', ['$scope', '$http', '$timeout', function ($scope
         params.prodOption = $scope.prodOption;
         params.dayOption = $scope.dayOption;
 
-        $scope._broadcast('monthProdExcelCtrl', params);
+        // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
+        $scope._popConfirm(messages["cmm.excel.totalExceDownload"], function() {
+            $scope._broadcast('monthProdExcelCtrl', params);
+        });
     };
 
     // 현재화면 엑셀다운로드

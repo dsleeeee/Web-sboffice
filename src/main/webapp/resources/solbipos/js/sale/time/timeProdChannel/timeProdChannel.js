@@ -574,7 +574,10 @@ app.controller('timeProdChannelCtrl', ['$scope', '$http', '$timeout', function (
 
         params.excelType = excelType;
 
-        $scope._broadcast('timeProdChannelExcelCtrl', params);
+        // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
+        $scope._popConfirm(messages["cmm.excel.totalExceDownload"], function() {
+            $scope._broadcast('timeProdChannelExcelCtrl', params);
+        });
     };
 
     // 현재화면 엑셀다운로드
@@ -1027,6 +1030,10 @@ app.controller('timeProdChannelExcelCtrl', ['$scope', '$http', '$timeout', funct
     // 분할 엑셀 리스트 조회
     $scope.searchExcelDivisionList = function (params) {
 
+        // 다운로드 시작이면 작업내역 로딩 팝업 오픈
+        $scope.excelUploadingPopup(true);
+        $("#totalRows").html(0);
+
         // 전체 데이터 수
         var listSize = 0;
         // 다운로드 되는 총 엑셀파일 수
@@ -1046,19 +1053,21 @@ app.controller('timeProdChannelExcelCtrl', ['$scope', '$http', '$timeout', funct
                 return false;
             };
 
-            // 다운로드 시작이면 작업내역 로딩 팝업 오픈
-            $scope.excelUploadingPopup(true);
+            // 다운로드 될 전체 파일 갯수 셋팅
             $("#totalRows").html(totFileCnt);
 
-            // 총 파일 수 만큼 반복
-            for(var k=0; k<totFileCnt; k++){
-                (function(x){
-                    setTimeout(function(){
-                        console.log("setTimeout  > i="+k+" x="+x);
+            // 엑셀 다운로드
+            function delay(x){
+                return new Promise(function(resolve, reject){
+                    //setTimeout(function() {
+                        console.log("setTimeout  > i=" + x + " x=" + x);
+
+                        // 다운로드 진행중인 파일 숫자 변경
+                        $("#progressCnt").html(x + 1);
 
                         // 페이징 5000개씩 지정해 분할 다운로드 진행
-                        params.limit = 5000 * (x+1);
-                        params.offset = (5000 * (x+1)) - 4999;
+                        params.limit = 5000 * (x + 1);
+                        params.offset = (5000 * (x + 1)) - 4999;
 
                         // 가상로그인 대응한 session id 설정
                         if (document.getElementsByName('sessionId')[0]) {
@@ -1099,11 +1108,11 @@ app.controller('timeProdChannelExcelCtrl', ['$scope', '$http', '$timeout', funct
                             return false;
                         }).then(function () {
                             // 'complete' code here
-                            setTimeout(function () {
+                            setTimeout(function() {
                                 if ($scope.excelFlex.rows.length <= 0) {
-                                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-                                 $scope.excelUploadingPopup(false);
-                                 return false;
+                                    $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+                                    $scope.excelUploadingPopup(false);
+                                    return false;
                                 }
 
                                 // <-- 그리드 visible -->
@@ -1179,27 +1188,40 @@ app.controller('timeProdChannelExcelCtrl', ['$scope', '$http', '$timeout', funct
                                 }
                                 // <-- //그리드 visible -->
 
-                                // 다운로드 진행중인 파일 숫자 변경
-                                $("#progressCnt").html(x+1);
-
                                 wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
                                     includeColumnHeaders: true,
-                                    includeCellStyles   : false,
-                                    includeColumns      : function (column) {
+                                    includeCellStyles: false,
+                                    includeColumns: function (column) {
                                         return column.visible;
                                     }
-                                },  messages["timeProdChannel.timeProdChannel"] + '_' + params.startDate + '_' + params.endDate + '_' + getCurDateTime() + '_' + (x+1) +'.xlsx', function () {
+                                }, messages["timeProdChannel.timeProdChannel"] + '_' + params.startDate + '_' + params.endDate + '_' + getCurDateTime() + '_' + (x + 1) +'.xlsx', function () {
                                     $timeout(function () {
-                                        if(x+1 === totFileCnt){ // 마지막 파일의 다운로드가 완료되면 로딩팝업 hide
-                                            $scope.excelUploadingPopup(false);
-                                        }
-                                    }, 1000);
+                                        console.log("Export complete start. _" + (x + 1));
+                                        getExcelFile(x + 1);
+                                    }, 500);
+                                }, function (reason) { // onError
+                                    // User can catch the failure reason in this callback.
+                                    console.log('The reason of save failure is ' + reason + "_" + (x + 1));
+                                    $scope.excelUploadingPopup(false);
                                 });
-                            }, 3000);
+                            }, 1000);
                         });
-                    }, 3000*x);
-                })(k);
-            }
+                        resolve();
+                    //}, 3000*x);
+                });
+            };
+
+            async function getExcelFile(x) {
+                if(totFileCnt > x){
+                    await delay(x);
+                }else{
+                    $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
+                }
+            };
+
+            // 엑셀 분할 다운로드 시작
+            getExcelFile(0);
+
         });
     };
 

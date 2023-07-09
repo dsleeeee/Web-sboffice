@@ -308,12 +308,8 @@
         </c:if>
 
         <div class="mt10 oh sb-select dkbr">
-            <c:if test="${sessionScope.sessionInfo.userId == 'h0393'}">
-                <c:if test="${sessionScope.sessionInfo.vUserId != null}">
-                    <%-- 분할 엑셀다운로드 --%>
-                    <button class="btn_skyblue ml5 fr" ng-click="excelDownload('2')"><s:message code="cmm.excel.downDivision"/></button>
-                </c:if>
-            </c:if>
+            <%-- 분할 엑셀다운로드 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownload('2')"><s:message code="cmm.excel.downDivision"/></button>
             <%-- 현재화면 엑셀다운로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelDownload2()"><s:message code="cmm.excel.downCurrent"/></button>
             <%-- 조회조건 엑셀다운로드 --%>
@@ -430,4 +426,4 @@
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/monthProdStore/monthProdStore.js?ver=20230704.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/monthProdStore/monthProdStore.js?ver=20230707.02" charset="utf-8"></script>

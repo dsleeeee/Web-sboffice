@@ -278,7 +278,10 @@ app.controller('dayProdStoreCtrl', ['$scope', '$http', '$timeout', function ($sc
         params.dayOption = $scope.dayOption;
         params.excelType = excelType;
 
-        $scope._broadcast('dayProdStoreExcelCtrl', params);
+        // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
+        $scope._popConfirm(messages["cmm.excel.totalExceDownload"], function() {
+            $scope._broadcast('dayProdStoreExcelCtrl', params);
+        });
     };
 
     // 현재화면 엑셀다운로드
@@ -475,7 +478,7 @@ app.controller('dayProdStoreExcelCtrl', ['$scope', '$http', '$timeout', function
             // 엑셀 분할 다운로드
             function delay(x){
                 return new Promise(function(resolve, reject){
-                    setTimeout(function() {
+                    //setTimeout(function() {
                         console.log("setTimeout  > i=" + x + " x=" + x);
 
                         // 다운로드 진행중인 파일 숫자 변경
@@ -589,10 +592,10 @@ app.controller('dayProdStoreExcelCtrl', ['$scope', '$http', '$timeout', function
                                     console.log('The reason of save failure is ' + reason + "_" + (x + 1));
                                     $scope.excelUploadingPopup(false);
                                 });
-                            }, 3000);
+                            }, 1000);
                         });
                         resolve(x);
-                    }, 3000*x);
+                    //}, 3000*x);
                 });
             };
 
