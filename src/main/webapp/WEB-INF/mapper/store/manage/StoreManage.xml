@@ -3415,7 +3415,8 @@
             #{modDt} AS MOD_DT,
             #{modId} AS MOD_ID,
             RCVKIND,
-            FIX_PROD_FG
+            FIX_PROD_FG,
+            PRINT_YN
             FROM TB_HQ_PRODUCT_SDSEL_PROD
             WHERE 1=1
             AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -3435,7 +3436,8 @@
             MOD_DT = B.MOD_DT,
             MOD_ID = B.MOD_ID,
             RCVKIND = B.RCVKIND,
-            FIX_PROD_FG = B.FIX_PROD_FG
+            FIX_PROD_FG = B.FIX_PROD_FG,
+            PRINT_YN = B.PRINT_YN
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -3450,7 +3452,8 @@
                 A.MOD_DT,
                 A.MOD_ID,
                 A.RCVKIND,
-                A.FIX_PROD_FG
+                A.FIX_PROD_FG,
+                A.PRINT_YN
             ) VALUES (
                 B.STORE_CD,
                 B.SDSEL_CLASS_CD,
@@ -3464,7 +3467,8 @@
                 B.MOD_DT,
                 B.MOD_ID,
                 B.RCVKIND,
-                B.FIX_PROD_FG
+                B.FIX_PROD_FG,
+                B.PRINT_YN
             )
     </insert>
 
@@ -3647,7 +3651,8 @@
             #{modId} AS MOD_ID,
             RCVKIND,
             FIX_PROD_FG,
-            SOLD_OUT_YN
+            SOLD_OUT_YN,
+            PRINT_YN
             FROM TB_MS_PRODUCT_SDSEL_PROD
             WHERE 1=1
             AND STORE_CD = #{copyStoreCd}
@@ -3668,7 +3673,8 @@
             MOD_ID = B.MOD_ID,
             RCVKIND = B.RCVKIND,
             FIX_PROD_FG = B.FIX_PROD_FG,
-            SOLD_OUT_YN = B.SOLD_OUT_YN
+            SOLD_OUT_YN = B.SOLD_OUT_YN,
+            PRINT_YN = B.PRINT_YN
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -3684,7 +3690,8 @@
                 A.MOD_ID,
                 A.RCVKIND,
                 A.FIX_PROD_FG,
-                A.SOLD_OUT_YN
+                A.SOLD_OUT_YN,
+                A.PRINT_YN
             ) VALUES (
                 B.STORE_CD,
                 B.SDSEL_CLASS_CD,
@@ -3699,7 +3706,8 @@
                 B.MOD_ID,
                 B.RCVKIND,
                 B.FIX_PROD_FG,
-                B.SOLD_OUT_YN
+                B.SOLD_OUT_YN,
+                B.PRINT_YN
             )
     </insert>
 
@@ -3780,7 +3788,8 @@
                             #{regId} AS REG_ID,
                             #{modDt} AS MOD_DT,
                             #{modId} AS MOD_ID,
-                            OPT_PROD_CD
+                            OPT_PROD_CD,
+                            PRINT_YN
                     FROM    TB_HQ_PRODUCT_OPTION_VAL
                     WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
                 ) B
@@ -3794,7 +3803,8 @@
                     SET
                         MOD_DT = B.MOD_DT,
                         MOD_ID = B.MOD_ID,
-                        OPT_PROD_CD = B.OPT_PROD_CD
+                        OPT_PROD_CD = B.OPT_PROD_CD,
+                        PRINT_YN = B.PRINT_YN
             WHEN NOT MATCHED THEN
                 INSERT (
                         A.STORE_CD,
@@ -3806,7 +3816,8 @@
                         A.REG_ID,
                         A.MOD_DT,
                         A.MOD_ID,
-                        A.OPT_PROD_CD
+                        A.OPT_PROD_CD,
+                        A.PRINT_YN
                     ) VALUES (
                         B.STORE_CD,
                         B.OPTION_GRP_CD,
@@ -3817,7 +3828,8 @@
                         B.REG_ID,
                         B.MOD_DT,
                         B.MOD_ID,
-                        B.OPT_PROD_CD
+                        B.OPT_PROD_CD,
+                        B.PRINT_YN
                      )
     </insert>
 
