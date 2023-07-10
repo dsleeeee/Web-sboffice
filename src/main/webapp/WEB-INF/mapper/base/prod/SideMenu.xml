@@ -2109,7 +2109,8 @@
                         #{modDt} AS MOD_DT,
                         #{modId} AS MOD_ID,
                         C.RCVKIND,
-                        C.FIX_PROD_FG
+                        C.FIX_PROD_FG,
+                        C.PRINT_YN
                         FROM TB_HQ_PRODUCT_SDSEL_PROD C
                         WHERE 1=1
                         AND C.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -2132,7 +2133,8 @@
                         A.MOD_DT,
                         A.MOD_ID,
                         A.RCVKIND,
-                        A.FIX_PROD_FG
+                        A.FIX_PROD_FG,
+                        A.PRINT_YN
                     ) VALUES (
                         B.HQ_OFFICE_CD,
                         B.SDSEL_CLASS_CD,
@@ -2146,7 +2148,8 @@
                         B.MOD_DT,
                         B.MOD_ID,
                         B.RCVKIND,
-                        B.FIX_PROD_FG
+                        B.FIX_PROD_FG,
+                        B.PRINT_YN
                     )
             </when>
             <!-- 매장 -->
@@ -2167,7 +2170,8 @@
                         #{modId} AS MOD_ID,
                         C.RCVKIND,
                         C.FIX_PROD_FG,
-                        C.SOLD_OUT_YN
+                        C.SOLD_OUT_YN,
+                        C.PRINT_YN
                         FROM TB_MS_PRODUCT_SDSEL_PROD C
                         WHERE 1=1
                         AND C.STORE_CD = #{storeCd}
@@ -2191,7 +2195,8 @@
                         A.MOD_ID,
                         A.RCVKIND,
                         A.FIX_PROD_FG,
-                        A.SOLD_OUT_YN
+                        A.SOLD_OUT_YN,
+                        A.PRINT_YN
                     ) VALUES (
                         B.STORE_CD,
                         B.SDSEL_CLASS_CD,
@@ -2206,7 +2211,8 @@
                         B.MOD_ID,
                         B.RCVKIND,
                         B.FIX_PROD_FG,
-                        B.SOLD_OUT_YN
+                        B.SOLD_OUT_YN,
+                        B.PRINT_YN
                     )
             </when>
         </choose>
@@ -2235,7 +2241,8 @@
                 #{modId} AS MOD_ID,
                 C.RCVKIND,
                 C.FIX_PROD_FG,
-                '' AS SOLD_OUT_YN
+                '' AS SOLD_OUT_YN,
+                C.PRINT_YN
                 FROM TB_HQ_PRODUCT_SDSEL_PROD C,
                 TB_MS_STORE D
                 WHERE 1=1
@@ -2261,7 +2268,8 @@
                 A.MOD_ID,
                 A.RCVKIND,
                 A.FIX_PROD_FG,
-                A.SOLD_OUT_YN
+                A.SOLD_OUT_YN,
+                A.PRINT_YN
             ) VALUES (
                 B.STORE_CD,
                 B.SDSEL_CLASS_CD,
@@ -2276,7 +2284,8 @@
                 B.MOD_ID,
                 B.RCVKIND,
                 B.FIX_PROD_FG,
-                B.SOLD_OUT_YN
+                B.SOLD_OUT_YN,
+                B.PRINT_YN
             )
     </insert>
 
