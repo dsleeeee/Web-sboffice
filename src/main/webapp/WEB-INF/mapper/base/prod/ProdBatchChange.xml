@@ -34,7 +34,8 @@
                 thp.POINT_SAVE_YN,
                 thp.PRC_CTRL_FG,
                 thp.MAP_PROD_CD,
-                thp.HQ_BRAND_CD
+                thp.HQ_BRAND_CD,
+                thp.VAT_FG
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_HQ_PRODUCT thp,
                 TB_HQ_PRODUCT_CLASS thpc,
@@ -76,6 +77,9 @@
                 <if test="hqBrandCd != null and hqBrandCd != ''">
                     AND thp.HQ_BRAND_CD = #{hqBrandCd}
                 </if>
+                <if test="vatFg != null and vatFg != ''">
+                   AND thp.VAT_FG = #{vatFg}
+                </if>
                 AND thpc.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
                 AND thpc.PROD_CLASS_CD = thp.PROD_CLASS_CD
                 AND thpb.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
@@ -97,7 +101,8 @@
                 tmp.PRC_CTRL_FG,
                 tmp.REG_FG,
                 tmp.MAP_PROD_CD,
-                tmp.HQ_BRAND_CD
+                tmp.HQ_BRAND_CD,
+                tmp.VAT_FG
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_MS_PRODUCT tmp,
                 TB_MS_PRODUCT_CLASS tmpc,
@@ -142,6 +147,9 @@
                 <if test="hqBrandCd != null and hqBrandCd != ''">
                     AND tmp.HQ_BRAND_CD = #{hqBrandCd}
                 </if>
+                <if test="vatFg != null and vatFg != ''">
+                   AND tmp.VAT_FG = #{vatFg}
+                </if>
                 AND tmpc.STORE_CD = tmp.STORE_CD
                 AND tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD
                 AND tmpb.STORE_CD (+)= tmp.STORE_CD
@@ -169,6 +177,7 @@
                 POINT_SAVE_YN = #{pointSaveYn},
                 PRC_CTRL_FG = #{prcCtrlFg},
                 MAP_PROD_CD = TRIM(REPLACE(REPLACE(#{mapProdCd}, CHR(10), NULL), CHR(13), NULL)),
+                VAT_FG = #{vatFg},
                 MOD_DT = #{modDt},
                 MOD_ID = #{modId}
                 WHERE 1=1
@@ -184,6 +193,7 @@
                 POINT_SAVE_YN = #{pointSaveYn},
                 PRC_CTRL_FG = #{prcCtrlFg},
                 MAP_PROD_CD = TRIM(REPLACE(REPLACE(#{mapProdCd}, CHR(10), NULL), CHR(13), NULL)),
+                VAT_FG = #{vatFg},
                 MOD_DT = #{modDt},
                 MOD_ID = #{modId}
                 WHERE 1=1
@@ -207,6 +217,7 @@
             POINT_SAVE_YN = #{pointSaveYn},
             PRC_CTRL_FG = #{prcCtrlFg},
             MAP_PROD_CD = TRIM(REPLACE(REPLACE(#{mapProdCd}, CHR(10), NULL), CHR(13), NULL)),
+            VAT_FG = #{vatFg},
             MOD_DT = #{modDt},
             MOD_ID = #{modId}
             WHERE 1=1
@@ -277,5 +288,148 @@
                             )
             AND PROD_CD = #{prodCd}
     </update>
+
+    <!-- 상품정보일괄변경 조회조건 엑셀다운로드 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_CLASS, TB_HQ_PRODUCT_BARCD,
+                   TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS, TB_MS_PRODUCT_BARCD
+        COMMENTS : [본사]상품, [본사]상품_분류, [본사]상품_바코드,
+                   [매장]상품, [매장]상품_분류, [매장]상품_바코드
+    -->
+    <select id="getProdBatchChangeExcelList"  parameterType="ProdBatchChangeVO" resultType="DefaultMap">
+        /* ProdBatchChangeMapper.getProdBatchChangeExcelList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                thp.PROD_CD,
+                thp.PROD_NM,
+                FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+                thp.PROD_CLASS_CD,
+                thpb.BARCD_CD AS BAR_CD,
+                thp.SALE_PROD_YN,
+                thp.POINT_SAVE_YN,
+                thp.PRC_CTRL_FG,
+                thp.MAP_PROD_CD,
+                thp.HQ_BRAND_CD,
+                thp.VAT_FG
+                FROM TB_HQ_PRODUCT thp,
+                TB_HQ_PRODUCT_CLASS thpc,
+                TB_HQ_PRODUCT_BARCD thpb
+                WHERE 1=1
+                AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test="prodCd != null and prodCd != ''">
+                    AND thp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND thp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND thp.PROD_CLASS_CD IN (
+                                                SELECT
+                                                PROD_CLASS_CD
+                                                FROM TB_HQ_PRODUCT_CLASS
+                                                WHERE 1=1
+                                                AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                            )
+                </if>
+                <if test="barCd != null and barCd != ''">
+                    AND thpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'
+                </if>
+                <if test="saleProdYn != null and saleProdYn != ''">
+                    AND thp.SALE_PROD_YN = #{saleProdYn}
+                </if>
+                <if test="pointSaveYn != null and pointSaveYn != ''">
+                    AND thp.POINT_SAVE_YN = #{pointSaveYn}
+                </if>
+                <if test="prcCtrlFg != null and prcCtrlFg != ''">
+                    AND thp.PRC_CTRL_FG = #{prcCtrlFg}
+                </if>
+                <if test="mapProdCd != null and mapProdCd != ''">
+                    AND thp.MAP_PROD_CD LIKE '%'|| #{mapProdCd} ||'%'
+                </if>
+                <if test="hqBrandCd != null and hqBrandCd != ''">
+                    AND thp.HQ_BRAND_CD = #{hqBrandCd}
+                </if>
+                <if test="vatFg != null and vatFg != ''">
+                   AND thp.VAT_FG = #{vatFg}
+                </if>
+                AND thpc.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND thpc.PROD_CLASS_CD = thp.PROD_CLASS_CD
+                AND thpb.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+                AND thpb.PROD_CD (+)= thp.PROD_CD
+                ORDER BY thp.PROD_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                tmp.PROD_CD,
+                tmp.PROD_NM,
+                FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+                tmp.PROD_CLASS_CD,
+                tmpb.BARCD_CD AS BAR_CD,
+                tmp.SALE_PROD_YN,
+                tmp.POINT_SAVE_YN,
+                tmp.PRC_CTRL_FG,
+                tmp.REG_FG,
+                tmp.MAP_PROD_CD,
+                tmp.HQ_BRAND_CD,
+                tmp.VAT_FG
+                FROM TB_MS_PRODUCT tmp,
+                TB_MS_PRODUCT_CLASS tmpc,
+                TB_MS_PRODUCT_BARCD tmpb
+                WHERE 1=1
+                AND tmp.STORE_CD = #{storeCd}
+                <if test="prodCd != null and prodCd != ''">
+                    AND tmp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND tmp.PROD_CLASS_CD IN (
+                                                SELECT
+                                                PROD_CLASS_CD
+                                                FROM TB_MS_PRODUCT_CLASS
+                                                WHERE 1=1
+                                                AND STORE_CD = #{storeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                                            )
+                </if>
+                <if test="barCd != null and barCd != ''">
+                    AND tmpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'
+                </if>
+                <if test="saleProdYn != null and saleProdYn != ''">
+                    AND tmp.SALE_PROD_YN = #{saleProdYn}
+                </if>
+                <if test="pointSaveYn != null and pointSaveYn != ''">
+                    AND tmp.POINT_SAVE_YN = #{pointSaveYn}
+                </if>
+                <if test="prcCtrlFg != null and prcCtrlFg != ''">
+                    AND tmp.PRC_CTRL_FG = #{prcCtrlFg}
+                </if>
+                <if test="regFg != null and regFg != ''">
+                    AND tmp.REG_FG = #{regFg}
+                </if>
+                <if test="mapProdCd != null and mapProdCd != ''">
+                    AND tmp.MAP_PROD_CD LIKE '%'|| #{mapProdCd} ||'%'
+                </if>
+                <if test="hqBrandCd != null and hqBrandCd != ''">
+                    AND tmp.HQ_BRAND_CD = #{hqBrandCd}
+                </if>
+                <if test="vatFg != null and vatFg != ''">
+                   AND tmp.VAT_FG = #{vatFg}
+                </if>
+                AND tmpc.STORE_CD = tmp.STORE_CD
+                AND tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD
+                AND tmpb.STORE_CD (+)= tmp.STORE_CD
+                AND tmpb.PROD_CD (+)= tmp.PROD_CD
+                ORDER BY tmp.PROD_CD
+            </when>
+        </choose>
+    </select>
 
 </mapper>

@@ -23,6 +23,10 @@
 
     // 브랜드
     var brandList = ${brandList};
+
+    <%-- 과세여부 구분 --%>
+    var vatFgData = ${ccu.getCommCode("039")};
+    var vatFgData2 = ${ccu.getCommCodeExcpAll("039")};
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/prodBatchChange/prodBatchChangeTab.js?ver=20211216.01" charset="utf-8"></script>

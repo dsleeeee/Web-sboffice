@@ -59,11 +59,13 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
     $scope._setComboData("pointSaveYnCombo", pointSaveYnTotData); // 포인트적립여부
     $scope._setComboData("prcCtrlFgCombo", prcCtrlFgTotData); // 가격관리구분
     $scope._setComboData("regFgCombo", regFgTotData); // 상품등록구분
+    $scope._setComboData("vatFgCombo", vatFgData); // 과세여부
 
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("saleProdYnChgCombo", saleProdYnData); // 판매상품여부
     $scope._setComboData("pointSaveYnChgCombo", pointSaveYnData); // 포인트적립여부
     $scope._setComboData("prcCtrlFgChgCombo", prcCtrlFgData); // 가격관리구분
+    $scope._setComboData("vatFgChgCombo", vatFgData2); // 과세여부
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -72,6 +74,7 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
         $scope.pointSaveYnDataMap = new wijmo.grid.DataMap(pointSaveYnData, 'value', 'name'); // 포인트적립여부
         $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
         $scope.regFgDataMap = new wijmo.grid.DataMap(regFgData, 'value', 'name'); // 상품등록구분
+        $scope.vatFgDataMap = new wijmo.grid.DataMap(vatFgData2, 'value', 'name'); // 과제여부구분
 
         // 그리드 header 클릭시 정렬 이벤트 막기
         s.addEventListener(s.hostElement, 'mousedown', function (e) {
@@ -174,6 +177,10 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
                 else if(chgGubun == "mapProdCdChg") {
                     $scope.flex.collectionView.items[i].mapProdCd = $scope.mapProdCdChg;
                 }
+                // 과세여부
+                else if(chgGubun == "vatFgChg") {
+                    $scope.flex.collectionView.items[i].vatFg = $scope.vatFgChg;
+                }
             }
         }
         $scope.flex.refresh();
@@ -225,5 +232,91 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
         $scope.searchProdBatchChange();
     };
     // <-- //그리드 저장 -->
+
+    // 엑셀 다운로드
+    $scope.excelDownload = function () {
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        var params = {};
+        params.prodCd = $("#srchProdCd").val();
+        params.prodNm = $("#srchProdNm").val();
+        params.prodClassCd = $scope.prodClassCd;
+        params.barCd = $("#srchBarCd").val();
+        params.saleProdYn = $scope.saleProdYn;
+        params.pointSaveYn = $scope.pointSaveYn;
+        params.mapProdCd = $("#srchMapProdCd").val();
+
+        if(orgnFg === "HQ"){
+            params.prcCtrlFg = $scope.prcCtrlFg;
+        }else if (orgnFg === "STORE" && hqOfficeCd !== "00000"){
+            params.regFg = $scope.regFg;
+        }
+        params.vatFg = $scope.vatFg;
+
+        $scope._broadcast('prodBatchChangeExcelCtrl', params);
+    };
+
+}]);
+
+/**
+ *  엑셀다운로드 그리드 생성
+ */
+app.controller('prodBatchChangeExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('prodBatchChangeExcelCtrl', $scope, $http, false));
+
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+
+        $scope.saleProdYnDataMap = new wijmo.grid.DataMap(saleProdYnData, 'value', 'name'); // 판매상품여부
+        $scope.pointSaveYnDataMap = new wijmo.grid.DataMap(pointSaveYnData, 'value', 'name'); // 포인트적립여부
+        $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
+        $scope.regFgDataMap = new wijmo.grid.DataMap(regFgData, 'value', 'name'); // 상품등록구분
+        $scope.vatFgDataMap = new wijmo.grid.DataMap(vatFgData2, 'value', 'name'); // 과제여부구분
+
+        // 그리드 header 클릭시 정렬 이벤트 막기
+        s.addEventListener(s.hostElement, 'mousedown', function (e) {
+            var ht = s.hitTest(e);
+            s.allowSorting = false;
+        });
+    };
+
+    // 다른 컨트롤러의 broadcast 받기
+    $scope.$on("prodBatchChangeExcelCtrl", function (event, data) {
+        $scope.searchExcelList(data);
+        // 기능수행 종료 : 반드시 추가
+        event.preventDefault();
+    });
+
+    // 엑셀 리스트 조회
+    $scope.searchExcelList = function (params) {
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $scope._inquiryMain("/base/prod/prodBatchChange/prodBatchChange/getProdBatchChangeExcelList.sb", params, function() {
+
+            if ($scope.excelFlex.rows.length <= 0) {
+                $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+                return false;
+            }
+
+            $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+            $timeout(function () {
+                wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
+                    includeColumnHeaders: true,
+                    includeCellStyles   : false,
+                    includeColumns      : function (column) {
+                        return column.visible;
+                    }
+                }, messages["prodBatchChange.prodBatchChange"] + "_(" + messages["prodBatchChange.tab1"] + ")_" + getCurDateTime()+'.xlsx', function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                });
+            }, 10);
+        });
+    };
 
 }]);

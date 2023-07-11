@@ -133,4 +133,17 @@ public class ProdBatchChangeServiceImpl implements ProdBatchChangeService {
         return procCnt;
     }
 
+    /** 상품정보일괄변경 조회조건 엑셀다운로드 */
+    @Override
+    public List<DefaultMap<Object>> getProdBatchChangeExcelList(ProdBatchChangeVO prodBatchChangeVO, SessionInfoVO sessionInfoVO) {
+
+        prodBatchChangeVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodBatchChangeVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return prodBatchChangeMapper.getProdBatchChangeExcelList(prodBatchChangeVO);
+    }
+
 }

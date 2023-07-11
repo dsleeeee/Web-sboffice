@@ -40,4 +40,7 @@ public interface ProdBatchChangeMapper {
 
     /** 상품정보일괄변경 저장 매장에 update(브랜드, 상품분류) */
     int getProdBatchChange2SaveStoreUpdate(ProdBatchChangeVO prodBatchChangeVO);
+
+    /** 상품정보일괄변경 조회조건 엑셀다운로드 */
+    List<DefaultMap<Object>> getProdBatchChangeExcelList(ProdBatchChangeVO prodBatchChangeVO);
 }

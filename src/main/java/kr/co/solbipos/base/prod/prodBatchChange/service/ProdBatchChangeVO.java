@@ -78,6 +78,9 @@ public class ProdBatchChangeVO extends PageVO {
     /** 브랜드코드 */
     private String hqBrandCd;
 
+    /** 부가세구분 */
+    private String vatFg;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -160,5 +163,13 @@ public class ProdBatchChangeVO extends PageVO {
 
     public void setHqBrandCd(String hqBrandCd) {
         this.hqBrandCd = hqBrandCd;
+    }
+
+    public String getVatFg() {
+        return vatFg;
+    }
+
+    public void setVatFg(String vatFg) {
+        this.vatFg = vatFg;
     }
 }
