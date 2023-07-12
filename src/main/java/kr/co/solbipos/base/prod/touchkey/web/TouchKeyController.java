@@ -685,4 +685,50 @@ public class TouchKeyController {
         return returnJson(Status.OK, result);
 
     }
+
+    /**
+     * 터치키삭제 팝업 - 조회
+     *
+     * @param touchKeyVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 07. 11.
+     */
+    @RequestMapping(value = "/getPopUpTouchKeyDelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPopUpTouchKeyDelList(TouchKeyVO touchKeyVO, HttpServletRequest request,
+                                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = touchkeyService.getPopUpTouchKeyDelList(touchKeyVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, touchKeyVO);
+    }
+
+    /**
+     * 터치키삭제 팝업 - 저장
+     *
+     * @param touchKeyVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 07. 11.
+     */
+    @RequestMapping(value = "/getPopUpTouchKeyDelSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPopUpTouchKeyDelSave(@RequestBody TouchKeyVO[] touchKeyVOs, HttpServletRequest request,
+                                             HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = touchkeyService.getPopUpTouchKeyDelSave(touchKeyVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

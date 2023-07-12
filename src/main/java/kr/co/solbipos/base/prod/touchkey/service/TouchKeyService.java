@@ -85,4 +85,9 @@ public interface TouchKeyService {
     /** 판매 터치키 포스에 적용 ENVST4038 */
     int saveTouchKeyEnv(TouchKeyVO[] TouchKeyVOs, SessionInfoVO sessionInfoVO);
 
+    /** 터치키삭제 팝업 - 조회 */
+    List<DefaultMap<Object>> getPopUpTouchKeyDelList(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO);
+
+    /** 터치키삭제 팝업 - 저장 */
+    int getPopUpTouchKeyDelSave(TouchKeyVO[] touchKeyVOs, SessionInfoVO sessionInfoVO);
 }

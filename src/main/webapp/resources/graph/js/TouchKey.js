@@ -365,7 +365,13 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.popUpTouchKeyEnvLayer.show();
     $scope._broadcast('popUpTouchKeyEnvCtrl');
     event.preventDefault();
+  });
 
+  // 터치키삭제 팝업
+  $scope.$on("showPopUpDel", function(event, data) {
+    $scope.popUpTouchKeyDelLayer.show();
+    $scope._broadcast('popUpTouchKeyDelCtrl');
+    event.preventDefault();
   });
 
 }]);

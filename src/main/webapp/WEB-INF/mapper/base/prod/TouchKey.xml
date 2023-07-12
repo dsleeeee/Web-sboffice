@@ -3006,4 +3006,53 @@
         }
     </select>
 
+    <!-- 터치키삭제 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getPopUpTouchKeyDelList" parameterType="touchKeyVO" resultType="DefaultMap">
+        /* TouchkeyMapper.getPopUpTouchKeyDelList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                DISTINCT A.TUKEY_GRP_CD,
+                B.TUKEY_GRP_NM
+                FROM TB_HQ_TOUCH_KEY_CLASS A,
+                TB_HQ_TOUCH_KEY_GROUP B
+                WHERE 1=1
+                AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='tukeyGrpCd != null and tukeyGrpCd != ""'>
+                    AND A.TUKEY_GRP_CD LIKE '%'||#{tukeyGrpCd}||'%'
+                </if>
+                <if test='tukeyGrpNm != null and tukeyGrpNm != ""'>
+                    AND B.TUKEY_GRP_NM LIKE '%'||#{tukeyGrpNm}||'%'
+                </if>
+                AND B.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+                AND B.TUKEY_GRP_CD (+)= A.TUKEY_GRP_CD
+                ORDER BY A.TUKEY_GRP_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                DISTINCT A.TUKEY_GRP_CD,
+                B.TUKEY_GRP_NM
+                FROM TB_MS_TOUCH_KEY_CLASS A,
+                TB_MS_TOUCH_KEY_GROUP B
+                WHERE 1=1
+                AND A.STORE_CD = #{storeCd}
+                <if test='tukeyGrpCd != null and tukeyGrpCd != ""'>
+                    AND A.TUKEY_GRP_CD LIKE '%'||#{tukeyGrpCd}||'%'
+                </if>
+                <if test='tukeyGrpNm != null and tukeyGrpNm != ""'>
+                    AND B.TUKEY_GRP_NM LIKE '%'||#{tukeyGrpNm}||'%'
+                </if>
+                AND B.STORE_CD (+)= A.STORE_CD
+                AND B.TUKEY_GRP_CD (+)= A.TUKEY_GRP_CD
+                ORDER BY A.TUKEY_GRP_CD
+            </when>
+        </choose>
+    </select>
+
 </mapper>

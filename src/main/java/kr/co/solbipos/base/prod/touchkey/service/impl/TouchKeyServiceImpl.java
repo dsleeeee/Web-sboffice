@@ -1173,4 +1173,46 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         }
     }
 
+    /** 터치키삭제 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getPopUpTouchKeyDelList(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO) {
+
+        touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        touchKeyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            touchKeyVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        return keyMapper.getPopUpTouchKeyDelList(touchKeyVO);
+    }
+
+    /** 터치키삭제 팝업 - 저장 */
+    @Override
+    public int getPopUpTouchKeyDelSave(TouchKeyVO[] touchKeyVOs, SessionInfoVO sessionInfoVO) {
+        System.out.println("터치키삭제 팝업 삭제 버튼 클릭");
+
+        int procCnt = 0;
+
+        for(TouchKeyVO touchKeyVO : touchKeyVOs) {
+
+            TouchKeyClassVO touchKeyClassVO = new TouchKeyClassVO();
+            touchKeyClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            touchKeyClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                touchKeyClassVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+            touchKeyClassVO.setTukeyGrpCd(touchKeyVO.getTukeyGrpCd());
+            keyMapper.deleteTouchKeyClass(touchKeyClassVO);
+
+            touchKeyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                touchKeyVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+            touchKeyVO.setTukeyGrpCd(touchKeyVO.getTukeyGrpCd());
+            keyMapper.deleteTouchkeyGrp(touchKeyVO);
+            keyMapper.deleteTouchKey(touchKeyVO);
+        }
+
+        return procCnt;
+    }
 }

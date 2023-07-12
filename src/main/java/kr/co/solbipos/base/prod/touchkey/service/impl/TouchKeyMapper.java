@@ -176,4 +176,7 @@ public interface TouchKeyMapper {
 
     /** 매장사용터치키설정(PKG 처리) */
     String saveTouchKeyEnv2(TouchKeyVO touchKeyVO);
+
+    /** 터치키삭제 팝업 - 조회 */
+    List<DefaultMap<Object>> getPopUpTouchKeyDelList(TouchKeyVO touchKeyVO);
 }

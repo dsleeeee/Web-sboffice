@@ -69,11 +69,15 @@
                 <button class="btn_skyblue fl ml20" id="btnCopyTouchKey" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && (touchKeyEnvstVal2 == '0' || touchKeyEnvstVal2 == '2')}">style="margin-left : 4px;visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose> ng-click="$broadcast('showPopUpCopy')">
                     <s:message code="touchKey.copy" />
                 </button>
+                <%-- 터치키삭제 --%>
+                <button class="btn_skyblue fl ml20" id="btnDelTouchKey" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && (touchKeyEnvstVal2 == '0' || touchKeyEnvstVal2 == '2')}">style="margin-left : 4px;visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose> ng-click="$broadcast('showPopUpDel')">
+                    <s:message code="touchKey.touchKeyDel" />
+                </button>
                 <%-- 터치키미적용상품 --%>
                 <button class="btn_skyblue fl ml20" id="btnNoTouchKey" style="margin-left : 4px;" ng-click="$broadcast('showPopUpNoTouchKey')">
                     <s:message code="touchKey.noTouchKey" />
                 </button>
-                <div <c:if test="${hqOfficeCd == 'H0393'}">style="display: none;"</c:if> >
+                <div style="display: none;">
                     <%-- 초기화 --%>
                     <button class="btn_skyblue fl ml5" id="btnInti"<c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>>
                         <s:message code="cmm.init"/>
@@ -373,6 +377,12 @@
         <c:param name="menuNm" value="${menuNm}"/>
     </c:import>
 
+    <%-- 터치키삭제 팝업 --%>
+    <c:import url="/WEB-INF/view/base/prod/touchKey/popUpTouchKeyDel.jsp">
+        <c:param name="menuCd" value="${menuCd}"/>
+        <c:param name="menuNm" value="${menuNm}"/>
+    </c:import>
+
     <%-- 매장 판매터치키복사 --%>
     <c:import url="/WEB-INF/view/base/store/view/copyStoreTouchKey.jsp">
     </c:import>
@@ -511,7 +521,7 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20230705.01"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20230711.01"
         charset="utf-8"></script>
 
 <%-- 스타일미리보기 팝업 --%>
