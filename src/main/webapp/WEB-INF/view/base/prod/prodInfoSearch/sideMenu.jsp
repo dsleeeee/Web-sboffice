@@ -48,6 +48,7 @@
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.sdselQty"/>" binding="sdselQty" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.requireYn"/>" binding="requireYn" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.prodNm"/>" binding="prodNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.addProdUprc"/>" binding="addProdUprc" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.addProdQty"/>" binding="addProdQty" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
@@ -87,6 +88,7 @@
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.sdselQty"/>" binding="sdselQty" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.requireYn"/>" binding="requireYn" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.prodNm"/>" binding="prodNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.addProdUprc"/>" binding="addProdUprc" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.addProdQty"/>" binding="addProdQty" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
@@ -96,4 +98,4 @@
     </div>
     <%--//엑셀 리스트--%>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodInfoSearch/sideMenu.js?ver=20221223.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodInfoSearch/sideMenu.js?ver=20230711.01" charset="utf-8"></script>

@@ -156,4 +156,27 @@ public class ProdBatchChangeController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 상품정보일괄변경 조회조건 엑셀다운로드
+     *
+     * @param prodBatchChangeVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  이다솜
+     * @since   2023. 07. 11.
+     */
+    @RequestMapping(value = "/prodBatchChange/getProdBatchChangeExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdBatchChangeExcelList(ProdBatchChangeVO prodBatchChangeVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = prodBatchChangeService.getProdBatchChangeExcelList(prodBatchChangeVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodBatchChangeVO);
+    }
 }

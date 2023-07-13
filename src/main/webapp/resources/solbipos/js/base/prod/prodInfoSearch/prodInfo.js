@@ -53,6 +53,7 @@ app.controller('prodInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     dataItem.sClassCd       = messages["prodInfoSearch.prodInfo.sClassCd"];
     dataItem.sClassNm       = messages["prodInfoSearch.prodInfo.sClassNm"];
     dataItem.prodCd         = messages["prodInfoSearch.prodInfo.prodCd"];
+    dataItem.remark         = messages["prodInfoSearch.prodInfo.remark"];
     dataItem.prodNm         = messages["prodInfoSearch.prodInfo.prodNm"];
     dataItem.gubun 	        = messages["prodInfoSearch.prodInfo.gubun"];
     dataItem.sdattrClassCd  = messages["prodInfoSearch.prodInfo.sdattr"];
@@ -68,6 +69,7 @@ app.controller('prodInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     dataItem.sdselQty       = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.requireYn      = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselProdCd    = messages["prodInfoSearch.prodInfo.sdsel"];
+    dataItem.sdselRemark    = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselProdNm 	= messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.addProdUprc	= messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.addProdQty	    = messages["prodInfoSearch.prodInfo.sdsel"];
@@ -251,6 +253,7 @@ app.controller('prodInfoExcelCtrl', ['$scope', '$http', '$timeout', function ($s
     dataItem.sClassCd       = messages["prodInfoSearch.prodInfo.sClassCd"];
     dataItem.sClassNm       = messages["prodInfoSearch.prodInfo.sClassNm"];
     dataItem.prodCd         = messages["prodInfoSearch.prodInfo.prodCd"];
+    dataItem.remark         = messages["prodInfoSearch.prodInfo.remark"];
     dataItem.prodNm         = messages["prodInfoSearch.prodInfo.prodNm"];
     dataItem.gubun 	        = messages["prodInfoSearch.prodInfo.gubun"];
     dataItem.sdattrClassCd  = messages["prodInfoSearch.prodInfo.sdattr"];
@@ -266,6 +269,7 @@ app.controller('prodInfoExcelCtrl', ['$scope', '$http', '$timeout', function ($s
     dataItem.sdselQty       = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.requireYn      = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselProdCd    = messages["prodInfoSearch.prodInfo.sdsel"];
+    dataItem.sdselRemark    = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselProdNm 	= messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.addProdUprc	= messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.addProdQty	    = messages["prodInfoSearch.prodInfo.sdsel"];

@@ -30,4 +30,7 @@ public interface ProdBatchChangeService {
 
     /** 상품정보일괄변경 저장(브랜드, 상품분류) */
     int getProdBatchChange2Save(ProdBatchChangeVO[] prodBatchChangeVOs, SessionInfoVO sessionInfoVO);
+
+    /** 상품정보일괄변경 조회조건 엑셀다운로드 */
+    List<DefaultMap<Object>> getProdBatchChangeExcelList(ProdBatchChangeVO prodBatchChangeVO, SessionInfoVO sessionInfoVO);
 }

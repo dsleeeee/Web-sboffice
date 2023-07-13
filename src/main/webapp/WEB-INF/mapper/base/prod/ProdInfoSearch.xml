@@ -813,6 +813,7 @@
                 ,       thpsp.ADD_PROD_UPRC
                 ,       thpsp.ADD_PROD_QTY
                 ,       DECODE(thpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
+                ,       thp.REMARK
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM 	TB_HQ_PRODUCT_SDSEL_GROUP thpsg
                 ,		TB_HQ_PRODUCT_SDSEL_CLASS thpsc
@@ -847,6 +848,7 @@
                 ,       tmpsp.ADD_PROD_UPRC
                 ,       tmpsp.ADD_PROD_QTY
                 ,       DECODE(tmpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
+                ,       tmp.REMARK
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM 	TB_MS_PRODUCT_SDSEL_GROUP tmpsg
                 ,		TB_MS_PRODUCT_SDSEL_CLASS tmpsc
@@ -892,6 +894,7 @@
                 ,       thpsp.ADD_PROD_UPRC
                 ,       thpsp.ADD_PROD_QTY
                 ,       DECODE(thpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
+                ,       thp.REMARK
                 FROM 	TB_HQ_PRODUCT_SDSEL_GROUP thpsg
                 ,		TB_HQ_PRODUCT_SDSEL_CLASS thpsc
                 ,		TB_HQ_PRODUCT_SDSEL_PROD thpsp
@@ -923,6 +926,7 @@
                 ,       tmpsp.ADD_PROD_UPRC
                 ,       tmpsp.ADD_PROD_QTY
                 ,       DECODE(tmpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
+                ,       tmp.REMARK
                 FROM 	TB_MS_PRODUCT_SDSEL_GROUP tmpsg
                 ,		TB_MS_PRODUCT_SDSEL_CLASS tmpsc
                 ,		TB_MS_PRODUCT_SDSEL_PROD tmpsp
@@ -1068,6 +1072,7 @@
                         ,	    thpcv.S_CLASS_CD
                         ,	    thpcv.S_CLASS_NM
                         ,       thp.PROD_CD
+                        ,       thp.REMARK
                         ,		thp.PROD_NM
                         ,       '속성' AS GUBUN
                         ,		thp.SDATTR_CLASS_CD
@@ -1085,6 +1090,7 @@
                         ,		0 AS SDSEL_QTY
                         ,		'' AS REQUIRE_YN
                         ,		'' AS SDSEL_PROD_CD
+                        ,       '' AS SDSEL_REMARK
                         ,		'' AS SDSEL_PROD_NM
                         ,		0 AS SDSEL_PROD_DISP_SEQ
                         ,		0 AS ADD_PROD_UPRC
@@ -1117,6 +1123,7 @@
                         ,	    thpcv.S_CLASS_CD
                         ,	    thpcv.S_CLASS_NM
                         ,       thp.PROD_CD
+                        ,       thp.REMARK
                         ,		thp.PROD_NM
                         ,       '선택메뉴' AS GUBUN
                         ,		'' AS SDATTR_CLASS_CD
@@ -1134,6 +1141,7 @@
                         ,		thpsc.SDSEL_QTY
                         ,		DECODE(thpsc.REQUIRE_YN, 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
                         ,		thpsp.PROD_CD AS SDSEL_PROD_CD
+                        ,       thp2.REMARK AS SDSEL_REMARK
                         ,		thp2.PROD_NM AS SDSEL_PROD_NM
                         ,		thpsp.DISP_SEQ AS SDSEL_PROD_DISP_SEQ
                         ,       thpsp.ADD_PROD_UPRC
@@ -1175,6 +1183,7 @@
                         ,	    thpcv.S_CLASS_CD
                         ,	    thpcv.S_CLASS_NM
                         ,       thp.PROD_CD
+                        ,       thp.REMARK
                         ,		thp.PROD_NM
                         ,       '옵션' AS GUBUN
                         ,		'' AS SDATTR_CLASS_CD
@@ -1192,6 +1201,7 @@
                         ,		0 AS SDSEL_QTY
                         ,		'' AS REQUIRE_YN
                         ,		'' AS SDSEL_PROD_CD
+                        ,       '' AS SDSEL_REMARK
                         ,		'' AS SDSEL_PROD_NM
                         ,		0 AS SDSEL_PROD_DISP_SEQ
                         ,		0 AS ADD_PROD_UPRC
@@ -1273,6 +1283,7 @@
                         ,	    tmpcv.S_CLASS_CD
                         ,	    tmpcv.S_CLASS_NM
                         ,       tmp.PROD_CD
+                        ,       tmp.REMARK
                         ,		tmp.PROD_NM
                         ,       '속성' AS GUBUN
                         ,		tmp.SDATTR_CLASS_CD
@@ -1290,6 +1301,7 @@
                         ,		0 AS SDSEL_QTY
                         ,		'' AS REQUIRE_YN
                         ,		'' AS SDSEL_PROD_CD
+                        ,       '' AS SDSEL_REMARK
                         ,		'' AS SDSEL_PROD_NM
                         ,		0 AS SDSEL_PROD_DISP_SEQ
                         ,		0 AS ADD_PROD_UPRC
@@ -1322,6 +1334,7 @@
                         ,	    tmpcv.S_CLASS_CD
                         ,	    tmpcv.S_CLASS_NM
                         ,       tmp.PROD_CD
+                        ,       tmp.REMARK
                         ,		tmp.PROD_NM
                         ,       '선택메뉴' AS GUBUN
                         ,		'' AS SDATTR_CLASS_CD
@@ -1339,6 +1352,7 @@
                         ,		tmpsc.SDSEL_QTY
                         ,		DECODE(tmpsc.REQUIRE_YN, 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
                         ,		tmpsp.PROD_CD AS SDSEL_PROD_CD
+                        ,       tmp2.REMARK AS SDSEL_REMARK
                         ,		tmp2.PROD_NM AS SDSEL_PROD_NM
                         ,		tmpsp.DISP_SEQ AS SDSEL_PROD_DISP_SEQ
                         ,       tmpsp.ADD_PROD_UPRC
@@ -1380,6 +1394,7 @@
                         ,	    tmpcv.S_CLASS_CD
                         ,	    tmpcv.S_CLASS_NM
                         ,       tmp.PROD_CD
+                        ,       tmp.REMARK
                         ,		tmp.PROD_NM
                         ,       '옵션' AS GUBUN
                         ,		'' AS SDATTR_CLASS_CD
@@ -1397,6 +1412,7 @@
                         ,		0 AS SDSEL_QTY
                         ,		'' AS REQUIRE_YN
                         ,		'' AS SDSEL_PROD_CD
+                        ,       '' AS SDSEL_REMARK
                         ,		'' AS SDSEL_PROD_NM
                         ,		0 AS SDSEL_PROD_DISP_SEQ
                         ,		0 AS ADD_PROD_UPRC
@@ -1476,6 +1492,7 @@
                 ,	    thpcv.S_CLASS_CD
                 ,	    thpcv.S_CLASS_NM
                 ,       thp.PROD_CD
+                ,       thp.REMARK
                 ,		thp.PROD_NM
                 ,       '속성' AS GUBUN
                 ,		thp.SDATTR_CLASS_CD
@@ -1493,6 +1510,7 @@
                 ,		0 AS SDSEL_QTY
                 ,		'' AS REQUIRE_YN
                 ,		'' AS SDSEL_PROD_CD
+                ,       '' AS SDSEL_REMARK
                 ,		'' AS SDSEL_PROD_NM
                 ,		0 AS SDSEL_PROD_DISP_SEQ
                 ,		0 AS ADD_PROD_UPRC
@@ -1525,6 +1543,7 @@
                 ,	    thpcv.S_CLASS_CD
                 ,	    thpcv.S_CLASS_NM
                 ,       thp.PROD_CD
+                ,       thp.REMARK
                 ,		thp.PROD_NM
                 ,       '선택메뉴' AS GUBUN
                 ,		'' AS SDATTR_CLASS_CD
@@ -1542,6 +1561,7 @@
                 ,		thpsc.SDSEL_QTY
                 ,		DECODE(thpsc.REQUIRE_YN, 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
                 ,		thpsp.PROD_CD AS SDSEL_PROD_CD
+                ,       thp2.REMARK AS SDSEL_REMARK
                 ,		thp2.PROD_NM AS SDSEL_PROD_NM
                 ,		thpsp.DISP_SEQ AS SDSEL_PROD_DISP_SEQ
                 ,       thpsp.ADD_PROD_UPRC
@@ -1583,6 +1603,7 @@
                 ,	    thpcv.S_CLASS_CD
                 ,	    thpcv.S_CLASS_NM
                 ,       thp.PROD_CD
+                ,       thp.REMARK
                 ,		thp.PROD_NM
                 ,       '옵션' AS GUBUN
                 ,		'' AS SDATTR_CLASS_CD
@@ -1600,6 +1621,7 @@
                 ,		0 AS SDSEL_QTY
                 ,		'' AS REQUIRE_YN
                 ,		'' AS SDSEL_PROD_CD
+                ,       '' AS SDSEL_REMARK
                 ,		'' AS SDSEL_PROD_NM
                 ,		0 AS SDSEL_PROD_DISP_SEQ
                 ,		0 AS ADD_PROD_UPRC
@@ -1678,6 +1700,7 @@
                 ,	    tmpcv.S_CLASS_CD
                 ,	    tmpcv.S_CLASS_NM
                 ,       tmp.PROD_CD
+                ,       tmp.REMARK
                 ,		tmp.PROD_NM
                 ,       '속성' AS GUBUN
                 ,		tmp.SDATTR_CLASS_CD
@@ -1695,6 +1718,7 @@
                 ,		0 AS SDSEL_QTY
                 ,		'' AS REQUIRE_YN
                 ,		'' AS SDSEL_PROD_CD
+                ,       '' AS SDSEL_REMARK
                 ,		'' AS SDSEL_PROD_NM
                 ,		0 AS SDSEL_PROD_DISP_SEQ
                 ,		0 AS ADD_PROD_UPRC
@@ -1727,6 +1751,7 @@
                 ,	    tmpcv.S_CLASS_CD
                 ,	    tmpcv.S_CLASS_NM
                 ,       tmp.PROD_CD
+                ,       tmp.REMARK
                 ,		tmp.PROD_NM
                 ,       '선택메뉴' AS GUBUN
                 ,		'' AS SDATTR_CLASS_CD
@@ -1744,6 +1769,7 @@
                 ,		tmpsc.SDSEL_QTY
                 ,		DECODE(tmpsc.REQUIRE_YN, 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
                 ,		tmpsp.PROD_CD AS SDSEL_PROD_CD
+                ,       tmp2.REMARK AS SDSEL_REMARK
                 ,		tmp2.PROD_NM AS SDSEL_PROD_NM
                 ,		tmpsp.DISP_SEQ AS SDSEL_PROD_DISP_SEQ
                 ,       tmpsp.ADD_PROD_UPRC
@@ -1785,6 +1811,7 @@
                 ,	    tmpcv.S_CLASS_CD
                 ,	    tmpcv.S_CLASS_NM
                 ,       tmp.PROD_CD
+                ,       tmp.REMARK
                 ,		tmp.PROD_NM
                 ,       '옵션' AS GUBUN
                 ,		'' AS SDATTR_CLASS_CD
@@ -1802,6 +1829,7 @@
                 ,		0 AS SDSEL_QTY
                 ,		'' AS REQUIRE_YN
                 ,		'' AS SDSEL_PROD_CD
+                ,       '' AS SDSEL_REMARK
                 ,		'' AS SDSEL_PROD_NM
                 ,		0 AS SDSEL_PROD_DISP_SEQ
                 ,		0 AS ADD_PROD_UPRC
