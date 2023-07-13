@@ -69,11 +69,12 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="mobile.storeProdSale.prodCd"/>"       binding="prodCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.storeProdSale.prodNm"/>"       binding="prodNm" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.storeProdSale.prod"/>"         binding="prod" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.storeProdSale.store"/>"        binding="store" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.storeProdSale.totSaleAmt"/>"   binding="totSaleQty" width="70" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.storeProdSale.realSaleAmt"/>"  binding="realSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.storeProdSale.realSalePer"/>"  binding="realSalePer" width="70" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-  <!-- 조회 결과가 없을 때, msg 띄우기 -->
+                <!-- 조회 결과가 없을 때, msg 띄우기 -->
                 <div class="gridMsg" id="mobileStoreProdSaleDtlMsg" style="line-height: 150px; display: none;"><s:message code="mobile.cmm.search.result.empty"/></div>
             </wj-flex-grid>
         </div>
@@ -82,4 +83,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/storeProdSale/mobileStoreProdSale.js?ver=20210907.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/storeProdSale/mobileStoreProdSale.js?ver=20230713.01" charset="utf-8"></script>

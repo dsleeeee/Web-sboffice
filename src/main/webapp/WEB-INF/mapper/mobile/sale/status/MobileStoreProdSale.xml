@@ -19,6 +19,7 @@
     <select id="getMobileStoreProdSaleDtlList" parameterType="MobileStoreProdSaleVO" resultType="DefaultMap">
         /* MobileStoreProdSaleMapper.getMobileStoreProdSaleDtlList */
         SELECT  '[' || A.STORE_CD || ']' || B.STORE_NM AS STORE,
+                A.PROD_NM || '[' || A.PROD_CD || ']' AS PROD,
                 A.PROD_CD,
                 A.PROD_NM,
                 A.TOT_SALE_QTY,

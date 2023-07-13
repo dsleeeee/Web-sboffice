@@ -139,7 +139,7 @@ app.controller('mobileStoreProdSaleDtlCtrl', ['$scope', '$http', function ($scop
 
         //create a group to show the grand totals
         // var grpLv1 = new wijmo.collections.PropertyGroupDescription('전체');
-        var grpLv2 = new wijmo.collections.PropertyGroupDescription('prodCd');
+        var grpLv2 = new wijmo.collections.PropertyGroupDescription('prod');
 
         var theGrid = new wijmo.Control.getControl('#mobileStoreProdSaleDtlGrid');
 
