@@ -29,33 +29,33 @@
                     <th>
                         <div class="sb-select">
                             <wj-combo-box
-                                    id="srchCopyTypeSelGroup"
-                                    items-source="_getComboData('srchCopyTypeSelGroup')"
+                                    id="srchCopyTypeSelGroupSingle"
+                                    items-source="_getComboData('srchCopyTypeSelGroupSingle')"
                                     display-member-path="name"
                                     selected-value-path="value"
                                     is-editable="false"
-                                    control="srchCopyTypeSelGroupCombo">
+                                    control="srchCopyTypeSelGroupSingleCombo">
                             </wj-combo-box>
                         </div>
                     </th>
                     <td>
-                        <input type="text" id="txtCopySelGroup" class="fl sb-input w25 mr5" style="font-size: 12px;" onkeyup="fnNxBtnSearch(2);"/>
+                        <input type="text" id="txtCopySelGroupSingle" class="fl sb-input w25 mr5" style="font-size: 12px;" onkeyup="fnNxBtnSearch(2);"/>
                     </td>
                     <%-- 상품명,상품코드 --%>
                     <th>
                         <div class="sb-select">
                             <wj-combo-box
-                                    id="srchCopyTypeSelProd"
-                                    items-source="_getComboData('srchCopyTypeSelProd')"
+                                    id="srchCopyTypeSelProdSingle"
+                                    items-source="_getComboData('srchCopyTypeSelProdSingle')"
                                     display-member-path="name"
                                     selected-value-path="value"
                                     is-editable="false"
-                                    control="srchCopyTypeSelProdCombo">
+                                    control="srchCopyTypeSelProdSingleCombo">
                             </wj-combo-box>
                         </div>
                     </th>
                     <td>
-                        <input type="text" id="txtCopySelProd" class="fl sb-input w25 mr5" style="font-size: 12px;" onkeyup="fnNxBtnSearch(2);"/>
+                        <input type="text" id="txtCopySelProdSingle" class="fl sb-input w25 mr5" style="font-size: 12px;" onkeyup="fnNxBtnSearch(2);"/>
                     </td>
                     <td>
                         <%-- 조회 --%>
@@ -82,8 +82,8 @@
                         <s:message code="sideMenu.sdselClassCopy.copyGroup"/>
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchApplySingleGroup" ng-model="applyGroup" readonly />
-                        <input type="text" class="sb-input w100" id="srchApplySingleGroupCd" ng-model="applyGroupCd" readonly style="display: none" />
+                        <input type="text" class="sb-input w100" id="srchApplySingleGroupSingle" ng-model="applyGroup" readonly />
+                        <input type="text" class="sb-input w100" id="srchApplySingleGroupCdSingle" ng-model="applyGroupCd" readonly style="display: none" />
                     </td>
                     <td>
                         <%-- 선택분류복사 --%>
@@ -138,7 +138,7 @@
                     <%--위즈모 테이블--%>
                     <div id="gridMapng" class="wj-TblWrapBr pd5" style="height: 220px;" ng-controller="sdselClassCopySingleClassCtrl">
                         <div class="updownSet oh mb10" style="height:30px;">
-                            <span class="fl bk lh30" style="white-space: nowrap;"><s:message code='sideMenu.sdselClassCopy.sdselClass' /><span id="sideSelectGroupCopyTitle"></span> </span>
+                            <span class="fl bk lh30" style="white-space: nowrap;"><s:message code='sideMenu.sdselClassCopy.sdselClass' /><span id="sideSelectGroupCopySingleTitle"></span> </span>
                         </div>
                         <%-- 개발시 높이 조절해서 사용--%>
                         <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
@@ -176,7 +176,7 @@
                     <%--위즈모 테이블--%>
                     <div id="gridMapng" class="wj-TblWrapBr ml10 pd5" style="height: 440px;" ng-controller="sdselClassCopySingleProdCtrl">
                         <div class="updownSet oh mb10" style="height:30px;">
-                            <span class="fl bk lh30" style="white-space: nowrap;"><s:message code='sideMenu.sdselClassCopy.sdselProd' /><span id="sideClassCopySingleTitle"></span> </span>
+                            <span class="fl bk lh30" style="white-space: nowrap;"><s:message code='sideMenu.sdselClassCopy.sdselProd' /><span id="sideClassCopySingleSingleTitle"></span> </span>
                         </div>
                         <%-- 개발시 높이 조절해서 사용--%>
                         <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
@@ -212,4 +212,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sdselClassCopySingle.js?ver=20230407.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sdselClassCopySingle.js?ver=20230713.02" charset="utf-8"></script>
