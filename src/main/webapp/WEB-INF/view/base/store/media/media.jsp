@@ -158,6 +158,11 @@
 </div>
 
 <script>
+  // List 형식("" 안붙임)
+  // 파일타입 콤보박스
+  var fileTypeComboList = ${fileTypeComboList};
+  var fileTypeComboListAll = ${fileTypeComboListAll};
+
   <%--var fileType    = ${ccu.getCommCode("303")};--%>
   var useYn       = ${ccu.getCommCode("067")};
   var clsFg       = ${ccu.getCommCodeExcpAll("059")};
@@ -166,7 +171,7 @@
   var hqOfficeCd  = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/media.js?ver=20221023.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/media.js?ver=20230713.01" charset="utf-8"></script>
 
 <%-- 버전 상세정보 레이어 --%>
 <c:import url="/WEB-INF/view/base/store/media/verInfoDtl.jsp">

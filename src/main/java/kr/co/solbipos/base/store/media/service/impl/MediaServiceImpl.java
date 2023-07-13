@@ -502,4 +502,11 @@ public class MediaServiceImpl implements MediaService {
 
         return procCnt;
     }
+
+    /** 파일타입 콤보박스 조회 */
+    @Override
+    public List<DefaultMap<String>> getFileTypeComboList(MediaVO mediaVO, SessionInfoVO sessionInfoVO) {
+
+        return mediaMapper.getFileTypeComboList(mediaVO);
+    }
 }

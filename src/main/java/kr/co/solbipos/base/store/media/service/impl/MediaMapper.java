@@ -87,4 +87,7 @@ public interface MediaMapper {
 
     /** 재생순서관리 탭 - 저장 */
     int getMediaPlaySeqSaveUpdate(MediaVO mediaVO);
+
+    /** 파일타입 콤보박스 조회 */
+    List<DefaultMap<String>> getFileTypeComboList(MediaVO mediaVO);
 }

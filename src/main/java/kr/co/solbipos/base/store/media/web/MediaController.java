@@ -117,6 +117,18 @@ public class MediaController {
         }
         model.addAttribute("kioskTuClsTypeListAll", kioskTuClsTypeListAll);
 
+
+        /** 파일타입 콤보박스 조회 */
+        MediaVO mediaVO = new MediaVO();
+        List<DefaultMap<String>> fileTypeComboList = mediaService.getFileTypeComboList(mediaVO, sessionInfoVO);
+        String fileTypeComboList2 = cmmCodeUtil.assmblObj(fileTypeComboList, "name", "value", UseYn.N);
+        model.addAttribute("fileTypeComboList", fileTypeComboList2);
+        System.out.println("fileTypeComboList : " + fileTypeComboList2);
+        String fileTypeComboListAll = cmmCodeUtil.assmblObj(fileTypeComboList, "name", "value", UseYn.ALL);
+        model.addAttribute("fileTypeComboListAll", fileTypeComboListAll);
+        System.out.println("fileTypeComboListAll : " + fileTypeComboListAll);
+
+
         return "base/store/media/mediaTab";
     }
 

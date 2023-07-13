@@ -739,4 +739,21 @@
         </choose>
     </update>
 
+    <!-- 파일타입 콤보박스 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getFileTypeComboList" parameterType="MediaVO" resultType="DefaultMap">
+        /* MediaMapper.getFileTypeComboList */
+        SELECT
+        NMCODE_CD AS VALUE,
+        NMCODE_NM AS NAME
+        FROM TB_CM_NMCODE
+        WHERE 1=1
+        AND NMCODE_GRP_CD = '303'
+        AND NMCODE_CD NOT IN ('008', '009')
+        ORDER BY NMCODE_CD
+    </select>
+
 </mapper>

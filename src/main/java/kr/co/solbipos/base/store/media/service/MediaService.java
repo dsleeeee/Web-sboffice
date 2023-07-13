@@ -67,4 +67,7 @@ public interface MediaService {
 
     /** 재생순서관리 탭 - 저장 */
     int getMediaPlaySeqSaveUpdate(MediaVO[] mediaVOs, SessionInfoVO sessionInfoVO);
+
+    /** 파일타입 콤보박스 조회 */
+    List<DefaultMap<String>> getFileTypeComboList(MediaVO mediaVO, SessionInfoVO sessionInfoVO);
 }
