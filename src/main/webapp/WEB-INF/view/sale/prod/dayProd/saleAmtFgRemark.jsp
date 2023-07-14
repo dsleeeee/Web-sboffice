@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
-<wj-popup id="saleAmtFgRemarkPopupLayer" control="saleAmtFgRemarkPopupLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:650px;">
+ <wj-popup id="saleAmtFgRemarkPopupLayer" control="saleAmtFgRemarkPopupLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:800px;">
 
     <div ng-controller="saleAmtFgRemarkPopupCtrl">
         <div class="wj-dialog-header wj-dialog-header-font">
@@ -30,8 +30,10 @@
 
                         <wj-flex-grid-column header="<s:message code="dayProd.sideProdCd"/>" binding="sideProdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dayProd.sideProdNm"/>" binding="sideProdNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dayProd.remark"/>" binding="sideRemark" width="80" align="left" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dayProd.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dayProd.prodNm"/>" binding="prodNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dayProd.remark"/>" binding="remark" width="80" align="left" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
