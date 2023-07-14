@@ -85,8 +85,13 @@
                    <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                    <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselGrpCd"/>" binding="sdselGrpCd" width="70" is-read-only="true"></wj-flex-grid-column>
                    <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselGrpNm"/>" binding="sdselGrpNm" width="100"></wj-flex-grid-column>
+                   <c:if test="${brandUseFg == '1'}">
+                       <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                            <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.brand"/>" binding="hqBrandCd" data-map="brandDataMap" width="80"></wj-flex-grid-column>
+                       </c:if>
+                   </c:if>
                    <c:if test="${orgnFg == 'HQ'}">
-                       <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.prodCd"/>" binding="prodCd" width="100"></wj-flex-grid-column>
+                     <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.prodCd"/>" binding="prodCd" width="100"></wj-flex-grid-column>
                    </c:if>
                    <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.fixProdFg"/>" binding="fixProdFg" data-map="fixProdFgDataMap" width="50" is-read-only="true"></wj-flex-grid-column>
                    <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselQty"/>" binding="cnt" width="*" visible="false"></wj-flex-grid-column>
@@ -170,6 +175,8 @@
         <div>
           <%--위즈모 테이블--%>
           <div class="wj-TblWrapBr ml10 pd5" style="height: 500px;" ng-controller="sideMenuSelectProdSingleCtrl">
+          <%-- 선택한 선택그룹의 브랜드 코드 --%>
+          <input type="hidden" id="hdSdselGrpBrandCdSingle" />
             <div class="updownSet oh  mb5">
               <span class="fl bk lh30" style="white-space: nowrap;"><s:message code='sideMenu.selectMenu.sdselProd' /><span id="sideClassSingleTitle"></span> </span>
                 <button class="btn_up" id="btnUpSelProdSingle" ng-click="rowMoveUp()">
@@ -212,6 +219,11 @@
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="30"></wj-flex-grid-column>
+                    <c:if test="${brandUseFg == '1'}">
+                        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                            <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.brand"/>" binding="hqBrandCd" data-map="brandDataMap" width="80" is-read-only="true"></wj-flex-grid-column>
+                        </c:if>
+                    </c:if>
                     <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.prodCd"/>" binding="prodCd" width="100"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.prodNm"/>" binding="prodNm" width="100"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.addProdUprc"/>" binding="addProdUprc" width="50"></wj-flex-grid-column>
@@ -238,7 +250,7 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenuSingle.js?ver=20230706.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenuSingle.js?ver=20230714.02" charset="utf-8"></script>
 
 <%-- 선택분류복사 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/sideMenu/sdselClassCopySingle.jsp">

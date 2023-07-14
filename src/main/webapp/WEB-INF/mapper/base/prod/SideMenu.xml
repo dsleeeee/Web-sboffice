@@ -1169,7 +1169,8 @@
                     thp.PROD_CLASS_CD,
                     ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
                     thp.ORGPLCE_CD, -- TODO 원산지명 조회 필요
-                    thp.PO_UNIT_FG
+                    thp.PO_UNIT_FG,
+                    thp.HQ_BRAND_CD
                     <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM
                     TB_HQ_PRODUCT thp
@@ -1232,7 +1233,8 @@
                     ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
                     tmp.ORGPLCE_CD, -- TODO 원산지명 조회 필요
                     tmp.PO_UNIT_FG,
-                    tmp.REG_DT
+                    tmp.REG_DT,
+                    tmp.HQ_BRAND_CD
                     <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM
                     TB_MS_PRODUCT tmp
@@ -1300,7 +1302,8 @@
                     NVL(thpsp.FIX_PROD_FG, '0') AS FIX_PROD_FG,
                     NVL(thpsp.REG_STORE_FG, '0') AS REG_STORE_FG,
                     NVL(thpsp.REG_STORE_FG, '0') AS OLD_REG_STORE_FG,
-                    NVL(thpsp.PRINT_YN, 'Y') AS PRINT_YN
+                    NVL(thpsp.PRINT_YN, 'Y') AS PRINT_YN,
+                    thp.HQ_BRAND_CD
                 FROM
                     TB_HQ_PRODUCT_SDSEL_PROD thpsp
                 LEFT OUTER JOIN TB_HQ_PRODUCT thp ON
@@ -1332,7 +1335,8 @@
                     tmpsp.ADD_PROD_QTY,
                     tmpsp.DISP_SEQ,
                     NVL(tmpsp.FIX_PROD_FG, '0') AS FIX_PROD_FG,
-                    NVL(tmpsp.PRINT_YN, 'Y') AS PRINT_YN
+                    NVL(tmpsp.PRINT_YN, 'Y') AS PRINT_YN,
+                    tmp.HQ_BRAND_CD
                 FROM
                     TB_MS_PRODUCT_SDSEL_PROD tmpsp
                 LEFT OUTER JOIN TB_MS_PRODUCT tmp ON

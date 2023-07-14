@@ -1,12 +1,12 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <wj-popup id="sideMenuProdLayer" control="sideMenuProdLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:800px;">
   <div class="wj-dialog wj-dialog-columns" ng-controller="sideMenuProdCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="sideMenu.selectMenu.selProd" />
-      <label id="lblsdselClassCd" style="display:none"/>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
 
@@ -96,6 +96,11 @@
 
               <!-- define columns -->
               <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+               <c:if test="${brandUseFg == '1'}">
+                  <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                      <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.brand"/>" binding="hqBrandCd" data-map="brandDataMap" width="80" is-read-only="true"></wj-flex-grid-column>
+                  </c:if>
+               </c:if>
               <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.prodClassNm"/>" binding="prodClassNm" width="200" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.prodCd"/>" binding="prodCd" width="*" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.prodNm"/>" binding="prodNm" width="300" is-read-only="true"></wj-flex-grid-column>
@@ -128,4 +133,4 @@
   // 사용자 브랜드
   var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuProdView.js?ver=20230112.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuProdView.js?ver=20230714.01" charset="utf-8"></script>

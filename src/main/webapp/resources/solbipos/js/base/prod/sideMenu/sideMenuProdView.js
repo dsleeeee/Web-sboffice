@@ -13,7 +13,7 @@
 /**
  *  사이드메뉴 상품선택 그리드 생성
  */
-app.controller('sideMenuProdCtrl', ['$scope', '$http', 'sdselClassCd', function ($scope, $http, sdselClassCd) {
+app.controller('sideMenuProdCtrl', ['$scope', '$http', 'sdselClassCd', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('sideMenuProdCtrl', $scope, $http, false));
   // 콤보박스 데이터 Set
@@ -23,6 +23,9 @@ app.controller('sideMenuProdCtrl', ['$scope', '$http', 'sdselClassCd', function 
   $scope.itemChecked = false;
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+
+    $scope.brandDataMap = new wijmo.grid.DataMap(brandList, 'value', 'name'); // 브랜드
+
     // 그리드 선택 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function(e) {
       var ht = s.hitTest(e);
@@ -38,20 +41,54 @@ app.controller('sideMenuProdCtrl', ['$scope', '$http', 'sdselClassCd', function 
     });
   };
 
+  var selSdselClassCd = "";
+  var selSdselGrpBrandCd = "";
+
   // 사이드메뉴 상품선택 그리드 조회
   $scope.$on("sideMenuProdCtrl", function(event, data) {
 
-    $("#lblsdselClassCd").text(data);
+      if(data !== undefined && !isEmptyObject(data)) {
 
-    // 상품브랜드 검색조건 show/hidden
-    if(brandUseFg === "1" && orgnFg === "HQ"){
-      $("#trProdHqBrand").css("display", "");
-    }else{
-      $("#trProdHqBrand").css("display", "none");
-    }
+          // 상품브랜드 콤보박스 disabled 초기화
+          $scope.srchProdHqBrandCdCombo.isDisabled = false;
 
+          // 선택그룹 브랜드 코드, 선택분류 코드 셋팅(hidden)
+          selSdselClassCd = data.sdselClassCd;
+          selSdselGrpBrandCd = data.sdselGrpBrandCd;
+
+          // 선택그룹의 브랜드 유무에 따른 상품브랜드 콤보박스 셋팅
+          if (selSdselGrpBrandCd !== "" && selSdselGrpBrandCd !== null && selSdselGrpBrandCd !== undefined) {
+              // 선택그룹의 브랜드가 있는 경우, 해당 브랜드로 기본 셋팅
+              $scope.srchProdHqBrandCdCombo.selectedValue = selSdselGrpBrandCd;
+
+              // 맘스터치는 선택그룹의 브랜드에 속한 상품만 조회 가능(상품브랜드 변경 불가)
+              if (momsEnvstVal === "1") {
+                  $scope.srchProdHqBrandCdCombo.isDisabled = true;
+              }
+
+          } else {
+              // 선택그룹의 브랜드가 없는 경우, '전체'(null)로 기본셋팅
+              $scope.srchProdHqBrandCdCombo.selectedValue = null;
+          }
+
+          // 상품브랜드 검색조건 show/hidden
+          if (brandUseFg === "1" && orgnFg === "HQ") {
+              $("#trProdHqBrand").css("display", "");
+          } else {
+              $("#trProdHqBrand").css("display", "none");
+          }
+
+          $scope._setPagingInfo('curr', 1); // 페이지번호 1로 세팅
+      }
+
+      // 상품목록 조회
+      $scope.srchProdList();
+  });
+
+  // 상품목록 조회
+  $scope.srchProdList = function(){
     var params = {};
-    params.sdselClassCd = $("#lblsdselClassCd").text();
+    params.sdselClassCd = selSdselClassCd;
     params.prodClassCd = $scope.prodClassCd;
     if(typeof gubun !== "undefined"){
       params.sideEnvstVal = gubun;
@@ -60,7 +97,7 @@ app.controller('sideMenuProdCtrl', ['$scope', '$http', 'sdselClassCd', function 
       // 선택한 상품브랜드가 있을 때
       params.prodHqBrandCd = $scope.srchProdHqBrandCdCombo.selectedValue;
 
-      // 선택한 상품브랜드가 없을 때('전체' 일때)
+     // 선택한 상품브랜드가 없을 때('전체' 일때)
       if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
           var userHqBrandCd = "";
           for(var i=0; i < userHqBrandCdComboList.length; i++){
@@ -75,7 +112,7 @@ app.controller('sideMenuProdCtrl', ['$scope', '$http', 'sdselClassCd', function 
     $scope._inquiryMain('/base/prod/sideMenu/menuProd/getProdList.sb', params);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
-  });
+  };
 
   // 상품선택버튼 클릭
   $scope.selProdConfirm = function() {

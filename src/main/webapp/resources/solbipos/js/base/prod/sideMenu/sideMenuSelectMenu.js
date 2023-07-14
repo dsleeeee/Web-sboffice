@@ -94,6 +94,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // 그리드 내 콤보박스 설정
+    $scope.brandDataMap = new wijmo.grid.DataMap(brandList, 'value', 'name'); // 브랜드
     $scope.fixProdFgDataMap = fixProdFgDataMap;
     $scope.sdselTypeFgDataMap = sdselTypeFgDataMap;
 
@@ -131,6 +132,16 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
           if (selectedRow.sdselGrpCd !== '' && selectedRow.sdselGrpCd !== undefined && selectedRow.sdselGrpCd !== '자동채번') {
             $("#sideSelectGroupTitle").html(" [" + selectedRow.sdselGrpCd + "]" + selectedRow.sdselGrpNm);
             $("#sideClassTitle").html("");
+
+            // 선택한 선택그룹의 브랜드코드 갖고있기(선택상품 추가 팝업에서 사용)
+            if(brandUseFg === "1"){
+              if(orgnFg === "HQ"){
+                $("#hdSdselGrpBrandCd").val(selectedRow.hqBrandCd);
+              }
+            }else{
+              $("#hdSdselGrpBrandCd").val("");
+            }
+
             if (hqOfficeCd != '00000' && orgnFg == 'STORE' && selectedRow.sdselGrpCd <= 799999) {
               $("#btnUpSelClass").hide();
               $("#btnDownSelClass").hide();
@@ -282,6 +293,13 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
     params.status = 'I';
     params.gChk = true;
     params.sdselGrpCd = '자동채번';
+
+    if(brandUseFg === "1") {
+      if (orgnFg === "HQ") {
+        params.hqBrandCd = null;
+      }
+    }
+
     params.fixProdFg = 0;
     params.sdselTypeFg = "C";
 
@@ -984,6 +1002,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
     // });
 
     // 그리드 내 콤보박스 설정
+    $scope.brandDataMap = new wijmo.grid.DataMap(brandList, 'value', 'name'); // 브랜드
     $scope.fixProdFgDataMap = fixProdFgDataMap;
     $scope.regStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
     $scope.oldRegStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
@@ -1056,6 +1075,13 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
       $scope._popMsg(messages["sideMenu.selectMenu.sdselClass.null"]);
       return false;
     }
+
+    var params = {};
+    params.sdselClassCd = $scope.getSdselClassCd();
+    params.sdselGrpBrandCd = $("#hdSdselGrpBrandCd").val();
+
+    $scope._broadcast('sideMenuProdCtrl', params);
+
     $scope.selectProdView(true);
   };
 
@@ -1235,6 +1261,12 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
           var scope = agrid.getScope('sideMenuProdCtrl', $scope.getSdselClassCd());
           for (var i = 0; i < scope.flex.collectionView.items.length; i++) {
             if (scope.flex.collectionView.items[i].gChk) {
+
+              if(brandUseFg === "1"){
+                if(orgnFg === "HQ") {
+                  var hqBrandCd = scope.flex.collectionView.items[i].hqBrandCd;
+                }
+              }
               var prodCd = scope.flex.collectionView.items[i].prodCd;
               var prodNm = scope.flex.collectionView.items[i].prodNm;
               if ( type ) {
@@ -1242,6 +1274,11 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
                 var params = {};
                 params.sdselClassCd = $scope.getSdselClassCd();
                 params.status = 'I';
+                if(brandUseFg === "1") {
+                  if (orgnFg === "HQ") {
+                    params.hqBrandCd = hqBrandCd;
+                  }
+                }
                 params.prodCd = prodCd;
                 params.prodNm = prodNm;
                 params.addProdUprc = 0;
@@ -1286,13 +1323,6 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
 
   // 화면 ready 된 후 설정
   angular.element(document).ready(function () {
-    // 상품상세정보 팝업 핸들러 추가
-    $scope.sideMenuProdLayer.shown.addHandler(function (s) {
-      setTimeout(function () {
-        $scope._broadcast('sideMenuProdCtrl', $scope.getSdselClassCd());
-      }, 50);
-    });
-
     // 선택상품 적용매장등록 팝업 핸들러 추가
     $scope.wjSdselProdRegStoreLayer.shown.addHandler(function (s) {
       setTimeout(function() {
