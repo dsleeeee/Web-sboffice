@@ -21,8 +21,10 @@
         /* DayProdMapper.getSaleAmtFgRemarkList */
         SELECT 	thpsmm.SIDE_PROD_CD
         ,		thp.PROD_NM AS SIDE_PROD_NM
+        ,		thp.REMARK AS SIDE_REMARK
         ,		thpsmm.PROD_CD
         ,		thp2.PROD_NM
+        ,		thp2.REMARK
         FROM 	TB_HQ_PRODUCT_SDSEL_MOMS_MOD thpsmm
         ,		TB_HQ_PRODUCT thp
         ,		TB_HQ_PRODUCT thp2
