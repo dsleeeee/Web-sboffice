@@ -48,5 +48,9 @@ public interface BrandTerminalMapper {
     /** 터미널 정보 삭제 */
     int deleteTerminalInfo(BrandTerminalVO brandTerminalVO);
 
+    /** 브랜드 터미널 정보 매장에 저장 */
+    int insertStoreTerminalInfo(BrandTerminalVO brandTerminalVO);
+    /** 브랜드 터미널 정보 매장에 삭제 */
+    int deleteStoreTerminalInfo(BrandTerminalVO brandTerminalVO);
 }
 

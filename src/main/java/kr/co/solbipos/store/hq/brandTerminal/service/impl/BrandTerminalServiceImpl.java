@@ -80,16 +80,14 @@ public class BrandTerminalServiceImpl implements BrandTerminalService{
             brandTerminalVO.setModId(sessionInfoVO.getUserId());
 
             if(brandTerminalVO.getStatus() == GridDataFg.INSERT) {
-
                 result += mapper.insertTerminalInfo(brandTerminalVO);
-
+                result += mapper.insertStoreTerminalInfo(brandTerminalVO);
             } else if(brandTerminalVO.getStatus() == GridDataFg.UPDATE) {
-
                 result += mapper.updateTerminalInfo(brandTerminalVO);
-
+                result += mapper.insertStoreTerminalInfo(brandTerminalVO);
             } else if(brandTerminalVO.getStatus() == GridDataFg.DELETE) {
-
                 result += mapper.deleteTerminalInfo(brandTerminalVO);
+                result += mapper.deleteStoreTerminalInfo(brandTerminalVO);
             }
         }
         return result;

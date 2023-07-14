@@ -13,6 +13,14 @@
  */
 var app = agrid.getApp();
 
+// 저장 시 매장 적용 구분
+var excelStoreSaveFg = [
+    {"name":"전매장적용","value":"all"},
+    {"name":"미적용","value":"none"},
+    {"name":"전매장적용(제한매장포함)","value":"tot"},
+    {"name":"매장선택","value":"choice"}
+];
+
 /**
  *  가격예약(본사판매가) 엑셀업로드 샘플양식 조회 그리드 생성
  */
@@ -23,6 +31,7 @@ app.controller('hqSalePriceResveExcelUploadSampleCtrl', ['$scope', '$http', '$ti
 
     // 일괄변경 체크
     $scope.saleUprcApply = true;
+    $scope._setComboData("excelStoreSaveFg", excelStoreSaveFg);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -81,9 +90,6 @@ app.controller('hqSalePriceResveExcelUploadCtrl', ['$scope', '$http', '$timeout'
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('hqSalePriceResveExcelUploadCtrl', $scope, $http, false));
-
-    // 전매장적용
-    $scope.applyFg = true;
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -166,6 +172,13 @@ app.controller('hqSalePriceResveExcelUploadCtrl', ['$scope', '$http', '$timeout'
             return false;
         }
 
+        if($scope.excelStoreSaveFg.selectedValue === "choice") {
+            if ($("#excelChoiceSaveStoreCd").val() === "") {
+                $scope._popMsg("매장을 선택해주세요");
+                return false;
+            }
+        }
+
         $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
 
         // 파라미터 설정
@@ -198,7 +211,7 @@ app.controller('hqSalePriceResveExcelUploadCtrl', ['$scope', '$http', '$timeout'
             // 검증을 통과한 판매가를 저장하시겠습니까?
             var msg = messages["hqSalePriceResveExcelUpload.saveConfirm"];
             // 전매장적용
-            if ($scope.applyFg) {
+            if ($scope.excelStoreSaveFg.selectedValue !== "none") {
                 // 전체 매장에, 검증을 통과한 판매가를 저장하시겠습니까?
                 msg = messages["hqSalePriceResveExcelUpload.saveConfirm2"];
             }
@@ -250,7 +263,10 @@ app.controller('hqSalePriceResveExcelUploadCtrl', ['$scope', '$http', '$timeout'
         // 파라미터 설정
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            $scope.flex.collectionView.items[i].applyFg = $scope.applyFg;
+            $scope.flex.collectionView.items[i].applyFg = $scope.excelStoreSaveFg.selectedValue;
+            if($scope.excelStoreSaveFg.selectedValue === "choice") {
+                $scope.flex.collectionView.items[i].saveStoreCds = $("#excelChoiceSaveStoreCd").val();
+            }
             $scope.flex.collectionView.items[i].startDate = wijmo.Globalize.format($scope.excelUploadStartDateCombo.value, 'yyyyMMdd');
             $scope.flex.collectionView.items[i].endDate = wijmo.Globalize.format($scope.excelUploadEndDateCombo.value, 'yyyyMMdd');
             $scope.flex.collectionView.items[i].salePriceOrgnFg = "H";
@@ -347,4 +363,19 @@ app.controller('hqSalePriceResveExcelUploadCtrl', ['$scope', '$http', '$timeout'
         item.packSaleUprc = item.saleUprc;
     };
 
+    // 매장선택 모듈 팝업 사용시 정의
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+    $scope.excelChoiceSaveStoreShow = function () {
+        $scope._broadcast('excelChoiceSaveStoreCtrl');
+    };
+
+    $scope.selectedIndexChanged = function (s) {
+        if (s.selectedValue === "choice") {
+            $("#excelStoreSaveStore").show();
+        }
+        else {
+            $("#excelStoreSaveStore").hide();
+        }
+    };
 }]);

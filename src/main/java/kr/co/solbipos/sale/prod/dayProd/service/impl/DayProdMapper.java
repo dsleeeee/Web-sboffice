@@ -26,6 +26,7 @@ import java.util.List;
 @Repository
 public interface DayProdMapper {
 
+    List<DefaultMap<Object>> getSaleAmtFgRemarkList(DayProdVO dayProdVO);
     /** 조회 */
     List<DefaultMap<Object>> getDayProdList(DayProdVO dayProdVO);
     List<DefaultMap<Object>> getDayProdExcelList(DayProdVO dayProdVO);

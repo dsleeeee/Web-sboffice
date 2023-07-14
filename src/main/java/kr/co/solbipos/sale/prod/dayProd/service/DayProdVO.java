@@ -108,6 +108,9 @@ public class DayProdVO extends PageVO {
     /** 일자표시옵션 */
     private String dayOption;
 
+    /** 금액보정 */
+    private String saleAmtFg;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -291,4 +294,12 @@ public class DayProdVO extends PageVO {
     }
 
     public void setDayOption(String dayOption) { this.dayOption = dayOption; }
+
+    public String getSaleAmtFg() {
+        return saleAmtFg;
+    }
+
+    public void setSaleAmtFg(String saleAmtFg) {
+        this.saleAmtFg = saleAmtFg;
+    }
 }

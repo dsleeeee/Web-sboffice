@@ -32,6 +32,12 @@ public class SalePriceVO extends PageVO {
     /** 조회매장 */
     private String storeCds;
 
+    /** 매장코드 */
+    private String[] saveStoreCdList;
+
+    /** 조회매장 */
+    private String saveStoreCds;
+
     /** 상품코드 */
     private String prodCd;
 
@@ -201,6 +207,22 @@ public class SalePriceVO extends PageVO {
 
     public void setStoreCds(String storeCds) {
         this.storeCds = storeCds;
+    }
+
+    public String[] getSaveStoreCdList() {
+        return saveStoreCdList;
+    }
+
+    public void setSaveStoreCdList(String[] saveStoreCdList) {
+        this.saveStoreCdList = saveStoreCdList;
+    }
+
+    public String getSaveStoreCds() {
+        return saveStoreCds;
+    }
+
+    public void setSaveStoreCds(String saveStoreCds) {
+        this.saveStoreCds = saveStoreCds;
     }
 
     /**

@@ -28,6 +28,12 @@
         <if test='storeNm != null and storeNm != ""'>
             AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
         </if>
+        <if test='storeChgNot != null and storeChgNot != "" and storeChgNot == "0"'>
+            AND tms.STORE_CD NOT IN (   SELECT 	NMCODE_NM
+                                        FROM 	TB_HQ_NMCODE thn
+                                        WHERE 	NMCODE_GRP_CD = '164'
+                                        AND 	HQ_OFFICE_CD = #{hqOfficeCd})
+        </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 선택한 매장브랜드가 있을 때
         </if>
