@@ -10,9 +10,12 @@
           <a href="#" class="wj-hide btn_close"></a>
         </div>
 
-        <div class="wj-dialog-body sc2" style="height: 460px;">
-          <div class="w100 mt10">
-            <%--위즈모 테이블--%>
+         <div class="mt10 oh sb-select mr20">
+           <%-- 엑셀 다운로드 --%>
+           <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
+         </div>
+
+        <div class="w100 mb20 pd20">
             <div class="wj-gridWrap" style="height: 400px; overflow-y: hidden; overflow-x: hidden;">
               <wj-flex-grid
                 autoGenerateColumns="false"
@@ -41,8 +44,6 @@
                 <wj-flex-grid-column header="<s:message code="promotionReport.realSaleAmt"/>" binding="realSaleAmt" width="85" align="right" is-read-only="true"></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
-            <%--//위즈모 테이블--%>
-          </div>
         </div>
     </div>
 </wj-popup>
@@ -52,4 +53,4 @@
   var saleFgData = ${ccu.getCommCodeExcpAll("047")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotionReport/promotionReportDtl.js?ver=20230314.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotionReport/promotionReportDtl.js?ver=20230714.01" charset="utf-8"></script>
