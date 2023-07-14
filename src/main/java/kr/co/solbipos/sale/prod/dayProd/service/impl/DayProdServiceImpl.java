@@ -37,6 +37,13 @@ public class DayProdServiceImpl implements DayProdService {
 
     /** 조회 */
     @Override
+    public List<DefaultMap<Object>> getSaleAmtFgRemarkList(DayProdVO dayProdVO, SessionInfoVO sessionInfoVO) {
+        dayProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return dayProdMapper.getSaleAmtFgRemarkList(dayProdVO);
+    }
+
+    /** 조회 */
+    @Override
     public List<DefaultMap<Object>> getDayProdList(DayProdVO dayProdVO, SessionInfoVO sessionInfoVO) {
 
         dayProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());

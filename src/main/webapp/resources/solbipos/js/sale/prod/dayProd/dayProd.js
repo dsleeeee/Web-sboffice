@@ -26,6 +26,11 @@ var dayOptionComboData = [
     {"name":"일자별","value":"1"},
     {"name":"기간합","value":"2"}
 ];
+// 금액보정
+var saleAmtFgComboData = [
+    {"name":"정상","value":"1"},
+    {"name":"보정1","value":"2"}
+];
 
 /**
  *  일별 상품 매출 현황 그리드 생성
@@ -51,6 +56,7 @@ app.controller('dayProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
     $scope._setComboData("prodOptionCombo", prodOptionComboData); // 상품표시옵션
     $scope._setComboData("dayOptionCombo", dayOptionComboData); // 일자표시옵션
+    $scope._setComboData("saleAmtFgCombo", saleAmtFgComboData); // 금액보정
 
     // // 팀별
     // if(momsTeamComboList.length <= 1) {
@@ -192,6 +198,7 @@ app.controller('dayProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         }
         params.prodOption = $scope.prodOption;
         params.dayOption = $scope.dayOption;
+        params.saleAmtFg = $scope.saleAmtFg;
         params.listScale = 500;
 
         console.log(params);
@@ -334,6 +341,7 @@ app.controller('dayProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         }
         params.prodOption = $scope.prodOption;
         params.dayOption = $scope.dayOption;
+        params.saleAmtFg = $scope.saleAmtFg;
 
         $scope._broadcast('dayProdExcelCtrl', params);
     };
@@ -386,6 +394,10 @@ app.controller('dayProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         }
     };
 
+    $scope.remark = function (){
+        $scope.saleAmtFgRemarkPopupLayer.show();
+        $scope._broadcast('saleAmtFgRemarkPopupCtrl');
+    };
 }]);
 
 

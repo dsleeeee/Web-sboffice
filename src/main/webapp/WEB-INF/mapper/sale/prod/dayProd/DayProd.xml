@@ -17,6 +17,29 @@
         TABLE    :
         COMMENTS :
     -->
+    <select id="getSaleAmtFgRemarkList" parameterType="dayProdVO" resultType="DefaultMap">
+        /* DayProdMapper.getSaleAmtFgRemarkList */
+        SELECT 	thpsmm.SIDE_PROD_CD
+        ,		thp.PROD_NM AS SIDE_PROD_NM
+        ,		thpsmm.PROD_CD
+        ,		thp2.PROD_NM
+        FROM 	TB_HQ_PRODUCT_SDSEL_MOMS_MOD thpsmm
+        ,		TB_HQ_PRODUCT thp
+        ,		TB_HQ_PRODUCT thp2
+        WHERE 	thpsmm.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND 	thpsmm.SIDE_PROD_CD = thp.PROD_CD
+        AND 	thpsmm.HQ_OFFICE_CD = thp2.HQ_OFFICE_CD
+        AND 	thpsmm.PROD_CD = thp2.PROD_CD
+        AND 	thpsmm.HQ_OFFICE_CD = #{hqOfficeCd}
+        ORDER
+        BY 		thpsmm.SIDE_PROD_CD
+        ,		thpsmm.PROD_CD
+    </select>
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
     <select id="getDayProdList" parameterType="dayProdVO" resultType="DefaultMap">
         /* DayProdMapper.getDayProdList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
@@ -49,7 +72,13 @@
         SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'S' THEN tsdps.REAL_SALE_AMT END) AS REAL_SALE_AMT2,
         SUM(tsdps.REAL_SALE_AMT) AS REAL_SALE_AMT3
         <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM TB_SL_DAILY_PROD_SDSEL tsdps,
+        FROM
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "1"'>
+            TB_SL_DAILY_PROD_SDSEL tsdps,
+        </if>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "2"'>
+            TB_SL_DAILY_PROD_SDSEL_MOMS_V01 tsdps,
+        </if>
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,
         TB_MS_PRODUCT tmp,
@@ -191,7 +220,13 @@
         SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.REAL_SALE_AMT END) AS REAL_SALE_AMT1,
         SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'S' THEN tsdps.REAL_SALE_AMT END) AS REAL_SALE_AMT2,
         SUM(tsdps.REAL_SALE_AMT) AS REAL_SALE_AMT3
-        FROM TB_SL_DAILY_PROD_SDSEL tsdps,
+        FROM
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "1"'>
+            TB_SL_DAILY_PROD_SDSEL tsdps,
+        </if>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "2"'>
+            TB_SL_DAILY_PROD_SDSEL_MOMS_V01 tsdps,
+        </if>
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,
         TB_MS_PRODUCT tmp,

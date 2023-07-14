@@ -189,6 +189,27 @@ public class DayProdController {
      * @param   dayProdVO
      * @return  String
      * @author  권지현
+     * @since   2023.07.13
+     */
+    @RequestMapping(value = "/dayProd/getSaleAmtFgRemarkList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSaleAmtFgRemarkList(HttpServletRequest request, HttpServletResponse response, Model model, DayProdVO dayProdVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> list = dayProdService.getSaleAmtFgRemarkList(dayProdVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dayProdVO);
+    }
+
+    /**
+     * 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dayProdVO
+     * @return  String
+     * @author  권지현
      * @since   2022.10.04
      */
     @RequestMapping(value = "/dayProd/getDayProdList.sb", method = RequestMethod.POST)
