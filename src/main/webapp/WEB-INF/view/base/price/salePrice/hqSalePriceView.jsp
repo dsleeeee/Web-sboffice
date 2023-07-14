@@ -333,10 +333,34 @@
             is-editable="false"
             initialized="_initComboBox(s)">
     </wj-combo-box>
-
+  </div>
+    <div class="mt10 oh sb-select dkbr">
+      <div class="sb-select w200px fl mr10">
+        <wj-combo-box
+                id="storeSaveFg"
+                ng-model="storeSaveFg"
+                items-source="_getComboData('storeSaveFg')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                control="storeSaveFg"
+                selected-index-changed="selectedIndexChanged(s)">
+        </wj-combo-box>
+      </div>
+    <div id="storeSaveStore" class="fl oh bk" style="width: 200px; height:25px;display: none;">
+      <c:if test="${momsEnvstVal == '0'}">
+        <jsp:include page="/WEB-INF/view/application/layer/searchPriceStoreM.jsp" flush="true">
+          <jsp:param name="targetId" value="choiceSaveStore"/>
+        </jsp:include>
+      </c:if>
+      <c:if test="${momsEnvstVal == '1'}">
+        <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreMMoms.jsp" flush="true">
+          <jsp:param name="targetId" value="choiceSaveStore"/>
+        </jsp:include>
+      </c:if>
+    </div>
     <%-- 저장 --%>
     <button class="btn_skyblue fr" ng-click="saveProdPrice()"><s:message code="cmm.save" /></button>
-    <span class="fr mr10"><input type="checkbox" id="applyFg" ng-model="applyFg" /> 전매장적용</span>
   </div>
 
   <%--위즈모 테이블--%>
@@ -397,9 +421,11 @@
   var coercionFg = "${coercionFg}";
   <%-- 가격관리구분 --%>
   var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
+  // [1250 맘스터치] 환경설정값
+  var momsEnvstVal = "${momsEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/hqSalePrice.js?ver=20220124.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/hqSalePrice.js?ver=20220124.03" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

@@ -130,6 +130,12 @@ public class SalePriceResveVO extends PageVO {
     /** 엑셀업로드 구분 (H:본사판매가, S:매장판매가) */
     private String salePriceOrgnFg;
 
+    /** 매장코드 */
+    private String[] saveStoreCdList;
+
+    /** 조회매장 */
+    private String saveStoreCds;
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -380,5 +386,21 @@ public class SalePriceResveVO extends PageVO {
 
     public void setSalePriceOrgnFg(String salePriceOrgnFg) {
         this.salePriceOrgnFg = salePriceOrgnFg;
+    }
+
+    public String[] getSaveStoreCdList() {
+        return saveStoreCdList;
+    }
+
+    public void setSaveStoreCdList(String[] saveStoreCdList) {
+        this.saveStoreCdList = saveStoreCdList;
+    }
+
+    public String getSaveStoreCds() {
+        return saveStoreCds;
+    }
+
+    public void setSaveStoreCds(String saveStoreCds) {
+        this.saveStoreCds = saveStoreCds;
     }
 }

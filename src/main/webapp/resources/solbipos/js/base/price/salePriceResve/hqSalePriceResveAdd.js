@@ -13,6 +13,13 @@
  */
 var app = agrid.getApp();
 
+// 저장 시 매장 적용 구분
+var addStoreSaveFg = [
+    {"name":"전매장적용","value":"all"},
+    {"name":"미적용","value":"none"},
+    {"name":"전매장적용(제한매장포함)","value":"tot"},
+    {"name":"매장선택","value":"choice"}
+];
 /**
  *  상품삭제 팝업생성
  */
@@ -24,8 +31,8 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
     // 콤보박스 데이터 Set
     $scope._setComboData("listScaleBox2", gvListScaleBoxData);
     $scope._setComboData("srchProdHqBrandCd", userHqBrandCdComboList); // 상품브랜드
+    $scope._setComboData("addStoreSaveFg", addStoreSaveFg);
 
-    $scope.popApplyFg = true;
     $scope.popSaleUprcApply = true;
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -245,7 +252,12 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
                 }
             }
         }
-        
+
+        if($scope.addStoreSaveFg.selectedValue === "choice" && $("#addChoiceSaveStoreCd").val() === "") {
+            $scope._popMsg("매장을 선택해주세요");
+            return false;
+        }
+
         // 예약날짜 체크
         var date = new Date();
         var year = new String(date.getFullYear());
@@ -394,7 +406,10 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
                         }
                     }
                 }
-                $scope.flex.collectionView.items[i].applyFg = $scope.popApplyFg;
+                $scope.flex.collectionView.items[i].applyFg = $scope.addStoreSaveFg.selectedValue;
+                if($scope.addStoreSaveFg.selectedValue === "choice") {
+                    $scope.flex.collectionView.items[i].saveStoreCds = $("#addChoiceSaveStoreCd").val();
+                }
                 $scope.flex.collectionView.items[i].startDate = wijmo.Globalize.format($scope.startDateCombo.value, 'yyyyMMdd');
                 $scope.flex.collectionView.items[i].endDate = wijmo.Globalize.format($scope.endDateCombo.value, 'yyyyMMdd');
                 params.push($scope.flex.collectionView.items[i]);
@@ -402,7 +417,7 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
             }
         }
 
-        if ($scope.popApplyFg) {
+        if ($scope.addStoreSaveFg.selectedValue !== "none") {
             $scope._popConfirm( "하위매장에 가격이 적용됩니다. 그래도 저장하시겠습니까?", function(){
                 // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
                 $scope._save('/base/price/salePriceResve/hqSalePriceResve/saveHqSalePriceResve.sb', params, function(){
@@ -444,10 +459,23 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
         $scope.startDateCombo.value = getTomorrow('-');
         $scope.endDateCombo.value = "9999-12-31";
         $("input:checkbox[id='popSaleUprcApply']").prop("checked", true);
-        $("input:checkbox[id='popApplyFg']").prop("checked", true);
-        $scope.popApplyFg = true;
         $scope.popSaleUprcApply = true;
 
     };
 
+    // 매장선택 모듈 팝업 사용시 정의
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+    $scope.addChoiceSaveStoreShow = function () {
+        $scope._broadcast('addChoiceSaveStoreCtrl');
+    };
+
+    $scope.selectedIndexChanged = function (s) {
+        if (s.selectedValue === "choice") {
+            $("#addStoreSaveStore").show();
+        }
+        else {
+            $("#addStoreSaveStore").hide();
+        }
+    };
 }]);
