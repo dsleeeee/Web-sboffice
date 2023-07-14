@@ -50,7 +50,13 @@
         SUM(CASE WHEN tsmps.SEL_TYPE_FG = 'N' OR tsmps.SEL_TYPE_FG = 'S' THEN tsmps.REAL_SALE_AMT END) AS REAL_SALE_AMT2,
         SUM(tsmps.REAL_SALE_AMT) AS REAL_SALE_AMT3
         <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM TB_SL_MONTHLY_PROD_SDSEL tsmps,
+        FROM
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "1"'>
+            TB_SL_MONTHLY_PROD_SDSEL tsmps,
+        </if>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "2"'>
+            TB_SL_MONTHLY_PROD_SDSEL_MOMS_V01 tsmps,
+        </if>
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,
         TB_MS_PRODUCT tmp,
@@ -195,7 +201,13 @@
         SUM(CASE WHEN tsmps.SEL_TYPE_FG = 'N' OR tsmps.SEL_TYPE_FG = 'S' THEN tsmps.REAL_SALE_AMT END) AS REAL_SALE_AMT2,
         SUM(tsmps.REAL_SALE_AMT) AS REAL_SALE_AMT3
         <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM TB_SL_MONTHLY_PROD_SDSEL tsmps,
+        FROM
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "1"'>
+            TB_SL_MONTHLY_PROD_SDSEL tsmps,
+        </if>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "2"'>
+            TB_SL_MONTHLY_PROD_SDSEL_MOMS_V01 tsmps,
+        </if>
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,
         TB_MS_PRODUCT tmp,

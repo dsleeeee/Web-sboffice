@@ -25,6 +25,11 @@ var dayOptionComboData = [
     {"name":"일자별","value":"1"},
     {"name":"기간합","value":"2"}
 ];
+// 금액보정
+var saleAmtFgComboData = [
+    {"name":"정상","value":"1"},
+    {"name":"보정1","value":"2"}
+];
 
 /**
  *  일별 상품 매출 현황 그리드 생성
@@ -50,6 +55,7 @@ app.controller('dayProdStoreCtrl', ['$scope', '$http', '$timeout', function ($sc
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
     $scope._setComboData("prodOptionCombo", prodOptionComboData); // 상품표시옵션
     $scope._setComboData("dayOptionCombo", dayOptionComboData); // 일자표시옵션
+    $scope._setComboData("saleAmtFgCombo", saleAmtFgComboData); // 금액보정
 
     // 그리드 매출구분
     $scope.saleFgMap = new wijmo.grid.DataMap([
@@ -134,6 +140,7 @@ app.controller('dayProdStoreCtrl', ['$scope', '$http', '$timeout', function ($sc
         }
         params.prodOption = $scope.prodOption;
         params.dayOption = $scope.dayOption;
+        params.saleAmtFg = $scope.saleAmtFg;
         params.listScale = 500;
 
         console.log(params);
@@ -276,6 +283,7 @@ app.controller('dayProdStoreCtrl', ['$scope', '$http', '$timeout', function ($sc
         }
         params.prodOption = $scope.prodOption;
         params.dayOption = $scope.dayOption;
+        params.saleAmtFg = $scope.saleAmtFg;
         params.excelType = excelType;
 
         // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
@@ -332,6 +340,10 @@ app.controller('dayProdStoreCtrl', ['$scope', '$http', '$timeout', function ($sc
         }
     };
 
+    $scope.remark = function (){
+        $scope.saleAmtFgRemarkPopupLayer.show();
+        $scope._broadcast('saleAmtFgRemarkPopupCtrl');
+    };
 }]);
 
 

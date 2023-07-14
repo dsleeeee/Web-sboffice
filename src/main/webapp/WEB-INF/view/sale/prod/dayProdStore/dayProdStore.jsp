@@ -168,6 +168,24 @@
                         <td></td>
                     </c:if>
                 </tr>
+                <tr>
+                    <th><s:message code="dayProd.saleAmtFg"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchSaleAmtFgCombo"
+                                    ng-model="saleAmtFg"
+                                    items-source="_getComboData('saleAmtFgCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="srchSaleAmtFgCombo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <td><button class="btn_skyblue" ng-click="remark()"><s:message code="dayProd.remark"/></button></td>
+                    <td></td>
+                </tr>
             </tbody>
         </table>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
@@ -428,4 +446,9 @@
   var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/dayProdStore/dayProdStore.js?ver=20230707.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/dayProdStore/dayProdStore.js?ver=20230707.03 charset="utf-8"></script>
+
+<c:import url="/WEB-INF/view/sale/prod/dayProd/saleAmtFgRemark.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
