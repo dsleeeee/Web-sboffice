@@ -82,34 +82,6 @@
 
     <%-- 그리드 --%>
     <div ng-controller="hqSalePriceResveExcelUploadCtrl">
-
-        <div class="mt10 oh sb-select dkbr">
-            <div class="sb-select w200px fl mr10">
-                <wj-combo-box
-                        id="excelStoreSaveFg"
-                        ng-model="excelStoreSaveFg"
-                        items-source="_getComboData('excelStoreSaveFg')"
-                        display-member-path="name"
-                        selected-value-path="value"
-                        is-editable="false"
-                        control="excelStoreSaveFg"
-                        selected-index-changed="selectedIndexChanged(s)">
-                </wj-combo-box>
-            </div>
-            <div id="excelStoreSaveStore" class="fl oh bk" style="width: 200px; height:25px; display: none;">
-                <c:if test="${momsEnvstVal == '0'}">
-                    <jsp:include page="/WEB-INF/view/application/layer/searchPriceStoreM.jsp" flush="true">
-                        <jsp:param name="targetId" value="excelChoiceSaveStore"/>
-                    </jsp:include>
-                </c:if>
-                <c:if test="${momsEnvstVal == '1'}">
-                    <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreMMoms.jsp" flush="true">
-                        <jsp:param name="targetId" value="excelChoiceSaveStore"/>
-                    </jsp:include>
-                </c:if>
-            </div>
-        </div>
-
         <div class="mt10 oh sb-select dkbr">
             <%-- 엑셀다운로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelDownload()">
@@ -123,7 +95,10 @@
             <button class="btn_skyblue ml5 fr" id="btnSave" ng-click="save()">
                 <s:message code="cmm.save" />
             </button>
-
+            <%-- 전매장적용 --%>
+            <span class="fr mr10">
+                <input type="checkbox" id="applyFg" ng-model="applyFg" /><s:message code="hqSalePriceResveExcelUpload.allStoreApply" />
+            </span>
             <%-- 예약일시 --%>
             <span class="fr mr10">
                 <div class="sb-select">
@@ -201,7 +176,7 @@
     var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/hqSalePriceResveExcelUpload.js?ver=20230614.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/hqSalePriceResveExcelUpload.js?ver=20230614.01" charset="utf-8"></script>
 
 <%-- 가격예약(본사판매가) 엑셀업로드 팝업 --%>
 <c:import url="/WEB-INF/view/base/price/salePriceResve/hqSalePriceResveExcelUploadAdd.jsp">
