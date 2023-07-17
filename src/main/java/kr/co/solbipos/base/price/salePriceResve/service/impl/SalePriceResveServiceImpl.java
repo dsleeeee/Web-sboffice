@@ -94,15 +94,7 @@ public class SalePriceResveServiceImpl implements SalePriceResveService {
             result = salePriceResveMapper.insertHqSalePrice(salePriceResveVO);
 
             // 전매장적용 체크시, 본사 예약 판매가 매장적용
-            // all - 전매장적용(판매가변경제한매장 미포함)
-            // none - 미적용
-            // tot - 전매장적용(판매가변경제한매장 포함)
-            // choice - 선택한 매장만 적용
-            if(salePriceResveVO.getApplyFg().equals("all") || salePriceResveVO.getApplyFg().equals("tot") || salePriceResveVO.getApplyFg().equals("choice")){
-                if (salePriceResveVO.getApplyFg().equals("choice")){
-                    String[] saveStoreCds = salePriceResveVO.getSaveStoreCds().split(",");
-                    salePriceResveVO.setSaveStoreCdList(saveStoreCds);
-                }
+            if(salePriceResveVO.getApplyFg().equals("true")){
                 salePriceResveMapper.insertHqSalePriceToStore(salePriceResveVO);
             }
         }
@@ -157,16 +149,7 @@ public class SalePriceResveServiceImpl implements SalePriceResveService {
             result = salePriceResveMapper.insertHqSalePrice(salePriceResveVO);
 
             // 전매장적용 체크시, 본사 예약 판매가 매장적용
-            // all - 전매장적용(판매가변경제한매장 미포함)
-            // none - 미적용
-            // tot - 전매장적용(판매가변경제한매장 포함)
-            // choice - 선택한 매장만 적용
-            if(salePriceResveVO.getApplyFg().equals("all") || salePriceResveVO.getApplyFg().equals("tot") || salePriceResveVO.getApplyFg().equals("choice")){
-
-                if (salePriceResveVO.getApplyFg().equals("choice")){
-                    String[] saveStoreCds = salePriceResveVO.getSaveStoreCds().split(",");
-                    salePriceResveVO.setSaveStoreCdList(saveStoreCds);
-                }
+            if(salePriceResveVO.getApplyFg().equals("true")){
                 salePriceResveMapper.insertHqSalePriceToStore(salePriceResveVO);
             }
         }
@@ -436,16 +419,7 @@ public class SalePriceResveServiceImpl implements SalePriceResveService {
                     result = salePriceResveMapper.insertHqSalePrice(salePriceResveVO);
 
                     // 전매장적용 체크시, 본사 예약 판매가 매장적용
-                    // all - 전매장적용(판매가변경제한매장 미포함)
-                    // none - 미적용
-                    // tot - 전매장적용(판매가변경제한매장 포함)
-                    // choice - 선택한 매장만 적용
-                    if(salePriceResveVO.getApplyFg().equals("all") || salePriceResveVO.getApplyFg().equals("tot") || salePriceResveVO.getApplyFg().equals("choice")){
-
-                        if (salePriceResveVO.getApplyFg().equals("choice")){
-                            String[] saveStoreCds = salePriceResveVO.getSaveStoreCds().split(",");
-                            salePriceResveVO.setSaveStoreCdList(saveStoreCds);
-                        }
+                    if(salePriceResveVO.getApplyFg().equals("true")){
                         salePriceResveMapper.insertHqSalePriceToStore(salePriceResveVO);
                     }
 

@@ -50,13 +50,6 @@ var modeFg = [
   {"name":"절하","value":"2"}
 ];
 
-// 저장 시 매장 적용 구분
-var storeSaveFg = [
-    {"name":"전매장적용","value":"all"},
-    {"name":"미적용","value":"none"},
-    {"name":"전매장적용(제한매장포함)","value":"tot"},
-    {"name":"매장선택","value":"choice"}
-];
 /**
  * 상품별 판매가관리 그리드 생성
  */
@@ -175,16 +168,8 @@ app.controller('hqSalePriceCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData("packSaleUprcChangeUnit", unitFg);
   $scope._setComboData("packSaleUprcChangeMode", modeFg);
 
-  $scope._setComboData("storeSaveFg", storeSaveFg);
-    
+  $scope.applyFg = true;
   $scope.saleUprcApply = true;
-
-    // 매장선택 모듈 팝업 사용시 정의
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.choiceSaveStoreShow = function () {
-        $scope._broadcast('choiceSaveStoreCtrl');
-    };
 
   // <-- 검색 호출 -->
   // 상품정보관리 그리드 조회
@@ -270,6 +255,13 @@ app.controller('hqSalePriceCtrl', ['$scope', '$http', function ($scope, $http) {
   };
   $scope.getProdInfo = function(){
     return $scope.prodInfo;
+  };
+
+  // 매장선택 모듈 팝업 사용시 정의 (매장찾기)
+  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.searchStoreShow = function () {
+    $scope._broadcast('searchStoreCtrl');
   };
 
   // 화면 ready 된 후 설정
@@ -574,13 +566,6 @@ app.controller('hqSalePriceCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     }
 
-    if($scope.storeSaveFg.selectedValue === "choice") {
-      if ($("#choiceSaveStoreCd").val() === "") {
-          $scope._popMsg("매장을 선택해주세요");
-          return false;
-      }
-    }
-
     var numchkexp = /[^0-9]/g; // 숫자가 아닌 값 체크
     var numchkexp2 = /^-[0-9]/g;
 
@@ -703,22 +688,14 @@ app.controller('hqSalePriceCtrl', ['$scope', '$http', function ($scope, $http) {
                   }
               }
               $scope.flex.collectionView.items[i].storeCd = $("#searchStoreCd").val();
-              $scope.flex.collectionView.items[i].applyFg = $scope.storeSaveFg.selectedValue;
-              if($scope.storeSaveFg.selectedValue === "choice") {
-                  if($("#choiceSaveStoreCd").val() === ""){
-                      $scope._popMsg("매장을 선택해주세요");
-                      return false;
-                  }
-                  $scope.flex.collectionView.items[i].saveStoreCds = $("#choiceSaveStoreCd").val();
-              }
+              $scope.flex.collectionView.items[i].applyFg = $scope.applyFg;
               params.push($scope.flex.collectionView.items[i]);
           }
         }
       }
 
-      if ($scope.storeSaveFg.selectedValue !== "none") {
+      if ($scope.applyFg) {
           $scope._popConfirm( "하위매장에 가격이 적용됩니다. 그래도 저장하시겠습니까?", function(){
-              console.log(params);
               // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
               $scope._save('/base/price/salePrice/prodSalePrice/saveHqProdSalePrice.sb', params, function(){
                   $scope.searchSalePriceList();
@@ -732,13 +709,4 @@ app.controller('hqSalePriceCtrl', ['$scope', '$http', function ($scope, $http) {
       }
 
   };
-
-    $scope.selectedIndexChanged = function (s) {
-        if (s.selectedValue === "choice") {
-            $("#storeSaveStore").show();
-        }
-        else {
-            $("#storeSaveStore").hide();
-        }
-    };
 }]);

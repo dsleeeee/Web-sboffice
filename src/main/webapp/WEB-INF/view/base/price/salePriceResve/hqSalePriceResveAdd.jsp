@@ -176,38 +176,16 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="4">
-                            <div class="sb-select w200px fl mr10">
-                                <wj-combo-box
-                                        id="addStoreSaveFg"
-                                        ng-model="addStoreSaveFg"
-                                        items-source="_getComboData('addStoreSaveFg')"
-                                        display-member-path="name"
-                                        selected-value-path="value"
-                                        is-editable="false"
-                                        control="addStoreSaveFg"
-                                        selected-index-changed="selectedIndexChanged(s)">
-                                </wj-combo-box>
-                            </div>
-                            <div id="addStoreSaveStore" class="fl oh bk" style="width: 200px; height:25px; display: none">
-                                <c:if test="${momsEnvstVal == '0'}">
-                                    <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
-                                        <jsp:param name="targetId" value="addChoiceSaveStore"/>
-                                    </jsp:include>
-                                </c:if>
-                                <c:if test="${momsEnvstVal == '1'}">
-                                    <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreMMoms.jsp" flush="true">
-                                        <jsp:param name="targetId" value="addChoiceSaveStore"/>
-                                    </jsp:include>
-                                </c:if>
-                            </div>
-                        </td>
+                        <th>전매장적용</th>
+                        <td colspan="3">
+                            <div style="float: left;"><span class="mr10"><input type="checkbox" id="popApplyFg" ng-model="popApplyFg" /> 전매장적용</span></div>
+                        </th>
                     </tr>
                     </tbody>
                 </table>
             </div>
             <div class="wj-dialog-footer">
-                <div class="mt10 btnSet2">
+                <div class="btnSet2">
                     <button class="btn_blue" ng-click="saveProdPrice2()"><s:message code="cmm.save" /></button>
                 </div>
             </div>
@@ -216,4 +194,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/hqSalePriceResveAdd.js?ver=20230111.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/hqSalePriceResveAdd.js?ver=20230111.01" charset="utf-8"></script>

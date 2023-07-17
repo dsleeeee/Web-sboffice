@@ -209,20 +209,11 @@ public class SalePriceServiceImpl implements SalePriceService {
 
             // 본사 판매가 변경
             result = salePriceMapper.modifyHqProdSalePrice(salePriceVO);
-            // all - 전매장적용(판매가변경제한매장 미포함)
-            // none - 미적용
-            // tot - 전매장적용(판매가변경제한매장 포함)
-            // choice - 선택한 매장만 적용
-            if(salePriceVO.getApplyFg().equals("all") || salePriceVO.getApplyFg().equals("tot") || salePriceVO.getApplyFg().equals("choice")){
+
+            if(salePriceVO.getApplyFg().equals("true")){
                 salePriceVO.setWorkMode(WorkModeFg.MOD_PROD);
                 //전매장 적용, 상품이 있으면 머지 업데이트 처리
                 //String storeSalePriceReulst = salePriceMapper.saveStoreSalePrice(salePriceVO);
-
-                if (salePriceVO.getApplyFg().equals("choice")){
-                String[] saveStoreCds = salePriceVO.getSaveStoreCds().split(",");
-                salePriceVO.setSaveStoreCdList(saveStoreCds);
-                }
-
                 result2 = salePriceMapper.modifyMsProdSalePrice(salePriceVO);
             }
         }
@@ -459,25 +450,10 @@ public class SalePriceServiceImpl implements SalePriceService {
                     // 본사 판매가 변경
                     result = salePriceMapper.modifyHqProdSalePrice(salePriceVO);
 
-                    System.out.println("엑셀저장");
-                    System.out.println(salePriceVO.getApplyFg());
-
-                    // all - 전매장적용(판매가변경제한매장 미포함)
-                    // none - 미적용
-                    // tot - 전매장적용(판매가변경제한매장 포함)
-                    // choice - 선택한 매장만 적용
-                    if(salePriceVO.getApplyFg().equals("all") || salePriceVO.getApplyFg().equals("tot") || salePriceVO.getApplyFg().equals("choice")){
-
+                    // 전매장적용
+                    if(salePriceVO.getApplyFg().equals("true")){
                         salePriceVO.setWorkMode(WorkModeFg.MOD_PROD);
                         //전매장 적용, 상품이 있으면 머지 업데이트 처리
-                        //기존 전매장적용(판매가변경제한매장)은 제외하고 처리
-
-                        if (salePriceVO.getApplyFg().equals("choice")){
-                            String[] saveStoreCds = salePriceVO.getSaveStoreCds().split(",");
-                            salePriceVO.setSaveStoreCdList(saveStoreCds);
-                        }
-                        System.out.println(salePriceVO.getSaveStoreCdList());
-
                         result2 = salePriceMapper.modifyMsProdSalePrice(salePriceVO);
                     }
 
