@@ -41,8 +41,10 @@ public class StoreProdServiceImpl implements StoreProdService {
     /** 매장상품순위 - 매장상품순위 리스트(엑셀) 조회   */
     @Override
     public List<DefaultMap<String>> getStoreProdExcelList(StoreProdVO storeProdVO, SessionInfoVO sessionInfoVO) {
-  
+
+        storeProdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	storeProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        storeProdVO.setEmpNo(sessionInfoVO.getEmpNo());
     	
         if(!StringUtil.getOrBlank(storeProdVO.getStoreCd()).equals("")) {
         	storeProdVO.setArrStoreCd(storeProdVO.getStoreCd().split(","));
