@@ -108,6 +108,7 @@
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.orgplce.recipesCd"/>" binding="recipesCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.orgplce.recipesNm"/>" binding="recipesNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.orgplce.orgplceNm"/>" binding="orgplceNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.orgplce.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
       <%--//위즈모 테이블--%>
@@ -139,6 +140,7 @@
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.orgplce.recipesCd"/>" binding="recipesCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.orgplce.recipesNm"/>" binding="recipesNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.orgplce.orgplceNm"/>" binding="orgplceNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.orgplce.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
     </div>

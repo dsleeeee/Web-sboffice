@@ -56,10 +56,12 @@ app.controller('prodInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     dataItem.remark         = messages["prodInfoSearch.prodInfo.remark"];
     dataItem.prodNm         = messages["prodInfoSearch.prodInfo.prodNm"];
     dataItem.gubun 	        = messages["prodInfoSearch.prodInfo.gubun"];
+
     dataItem.sdattrClassCd  = messages["prodInfoSearch.prodInfo.sdattr"];
     dataItem.sdattrClassNm  = messages["prodInfoSearch.prodInfo.sdattr"];
     dataItem.sdattrCd       = messages["prodInfoSearch.prodInfo.sdattr"];
     dataItem.sdattrNm       = messages["prodInfoSearch.prodInfo.sdattr"];
+
     dataItem.sdselGrpCd 	= messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselGrpNm 	= messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.grpFixProdFg 	= messages["prodInfoSearch.prodInfo.sdsel"];
@@ -74,12 +76,17 @@ app.controller('prodInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     dataItem.addProdUprc	= messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.addProdQty	    = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.fixProdFg	    = messages["prodInfoSearch.prodInfo.sdsel"];
+    dataItem.regStoreFg	    = messages["prodInfoSearch.prodInfo.sdsel"];
+    dataItem.printYn	    = messages["prodInfoSearch.prodInfo.sdsel"];
+
     dataItem.optionGrpCd 	= messages["prodInfoSearch.prodInfo.option"];
     dataItem.optionGrpNm    = messages["prodInfoSearch.prodInfo.option"];
     dataItem.optionValCd    = messages["prodInfoSearch.prodInfo.option"];
     dataItem.optionValNm    = messages["prodInfoSearch.prodInfo.option"];
     dataItem.optionProdCd   = messages["prodInfoSearch.prodInfo.option"];
     dataItem.optionProdNm   = messages["prodInfoSearch.prodInfo.option"];
+    dataItem.optionPrintYn   = messages["prodInfoSearch.prodInfo.option"];
+
     s.columnHeaders.rows[0].dataItem = dataItem;
     //Grid Header 2줄 - END		----------------------------------------------------------------
 

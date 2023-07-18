@@ -39,12 +39,13 @@
                 item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionGrpCd"/>" binding="optionGrpCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionGrpCd"/>" binding="optionGrpCd" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionGrpNm"/>" binding="optionGrpNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionValCd"/>" binding="optionValCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionValCd"/>" binding="optionValCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionValNm"/>" binding="optionValNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionProdCd"/>" binding="optionProdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionProdNm"/>" binding="optionProdNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.printYn"/>" binding="printYn" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
       <%--//위즈모 테이블--%>
@@ -71,15 +72,17 @@
                 item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionGrpCd"/>" binding="optionGrpCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionGrpCd"/>" binding="optionGrpCd" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionGrpNm"/>" binding="optionGrpNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionValCd"/>" binding="optionValCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionValCd"/>" binding="optionValCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionValNm"/>" binding="optionValNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionProdCd"/>" binding="optionProdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.optionProdNm"/>" binding="optionProdNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.option.printYn"/>" binding="printYn" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
     </div>
     <%--//엑셀 리스트--%>
 </div>
+
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/prodInfoSearch/option.js?ver=20221223.01" charset="utf-8"></script>

@@ -73,6 +73,7 @@
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.touchKey.tukeyClassNm"/>" binding="tukeyClassNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.touchKey.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.touchKey.prodNm"/>" binding="prodNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.touchKey.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
       <%--//위즈모 테이블--%>
@@ -105,6 +106,7 @@
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.touchKey.tukeyClassNm"/>" binding="tukeyClassNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.touchKey.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.touchKey.prodNm"/>" binding="prodNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.touchKey.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
     </div>
