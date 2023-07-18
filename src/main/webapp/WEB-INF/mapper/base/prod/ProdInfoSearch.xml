@@ -44,6 +44,7 @@
                 ,		thpog.OPTION_GRP_NM
                 ,		thp.GROUP_PROD_CD
                 ,		thp2.PROD_NM AS GROUP_PROD_NM
+                ,		thp2.REMARK AS GROUP_PROD_REMARK
                 ,		thp.DEPOSIT_PROD_CD
                 ,		thp3.PROD_NM AS DEPOSIT_PROD_NM
                 ,		thpi.NU_TOT_WT
@@ -176,6 +177,7 @@
                 ,		thpog.OPTION_GRP_NM
                 ,		thp.GROUP_PROD_CD
                 ,		thp2.PROD_NM AS GROUP_PROD_NM
+                ,		thp2.REMARK AS GROUP_PROD_REMARK
                 ,		thp.DEPOSIT_PROD_CD
                 ,		thp3.PROD_NM AS DEPOSIT_PROD_NM
                 ,		thpi.NU_TOT_WT
@@ -308,6 +310,7 @@
                 ,		thpog.OPTION_GRP_NM
                 ,		thp.GROUP_PROD_CD
                 ,		thp2.PROD_NM AS GROUP_PROD_NM
+                ,		thp2.REMARK AS GROUP_PROD_REMARK
                 ,		thp.DEPOSIT_PROD_CD
                 ,		thp3.PROD_NM AS DEPOSIT_PROD_NM
                 ,		thpi.NU_TOT_WT
@@ -438,6 +441,7 @@
                 ,		thpog.OPTION_GRP_NM
                 ,		thp.GROUP_PROD_CD
                 ,		thp2.PROD_NM AS GROUP_PROD_NM
+                ,		thp2.REMARK AS GROUP_PROD_REMARK
                 ,		thp.DEPOSIT_PROD_CD
                 ,		thp3.PROD_NM AS DEPOSIT_PROD_NM
                 ,		thpi.NU_TOT_WT
@@ -1943,6 +1947,7 @@
                 ,		thpro.RECIPES_CD
                 ,		thpro.RECIPES_NM
                 ,		thpro.ORGPLCE_NM
+                ,       thp.REMARK
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM 	TB_HQ_PRODUCT_RECP_PROD thprp
                 ,		TB_HQ_PRODUCT_RECP_ORIGIN thpro
@@ -1997,6 +2002,7 @@
                 ,		tmpro.RECIPES_CD
                 ,		tmpro.RECIPES_NM
                 ,		tmpro.ORGPLCE_NM
+                ,       tmp.REMARK
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM 	TB_MS_PRODUCT_RECP_PROD tmprp
                 ,		TB_MS_PRODUCT_RECP_ORIGIN tmpro
@@ -2050,6 +2056,7 @@
                 ,		thpro.RECIPES_CD
                 ,		thpro.RECIPES_NM
                 ,		thpro.ORGPLCE_NM
+                ,       thp.REMARK
                 FROM 	TB_HQ_PRODUCT_RECP_PROD thprp
                 ,		TB_HQ_PRODUCT_RECP_ORIGIN thpro
                 ,		TB_HQ_PRODUCT thp
@@ -2101,6 +2108,7 @@
                 ,		tmpro.RECIPES_CD
                 ,		tmpro.RECIPES_NM
                 ,		tmpro.ORGPLCE_NM
+                ,       tmp.REMARK
                 FROM 	TB_MS_PRODUCT_RECP_PROD tmprp
                 ,		TB_MS_PRODUCT_RECP_ORIGIN tmpro
                 ,		TB_MS_PRODUCT tmp
@@ -2153,6 +2161,7 @@
                 ,		thpai.RECIPES_CD
                 ,		thpai.RECIPES_NM
                 ,		thpai.ALLERGIE_NM
+                ,       thp.REMARK
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM 	TB_HQ_PRODUCT_ALGI_PROD thpap
                 ,		TB_HQ_PRODUCT_ALGI_INFO thpai
@@ -2207,6 +2216,7 @@
                 ,		tmpai.RECIPES_CD
                 ,		tmpai.RECIPES_NM
                 ,		tmpai.ALLERGIE_NM
+                ,       tmp.REMARK
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM 	TB_MS_PRODUCT_ALGI_PROD tmpap
                 ,		TB_MS_PRODUCT_ALGI_INFO tmpai
@@ -2260,6 +2270,7 @@
                 ,		thpai.RECIPES_CD
                 ,		thpai.RECIPES_NM
                 ,		thpai.ALLERGIE_NM
+                ,       thp.REMARK
                 FROM 	TB_HQ_PRODUCT_ALGI_PROD thpap
                 ,		TB_HQ_PRODUCT_ALGI_INFO thpai
                 ,		TB_HQ_PRODUCT thp
@@ -2311,6 +2322,7 @@
                 ,		tmpai.RECIPES_CD
                 ,		tmpai.RECIPES_NM
                 ,		tmpai.ALLERGIE_NM
+                ,       tmp.REMARK
                 FROM 	TB_MS_PRODUCT_ALGI_PROD tmpap
                 ,		TB_MS_PRODUCT_ALGI_INFO tmpai
                 ,		TB_MS_PRODUCT tmp
@@ -2364,6 +2376,7 @@
                 ,		A.TUKEY_CLASS_NM
                 ,		C.PROD_CD
                 ,		D.PROD_NM
+                ,       D.REMARK
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM    TB_HQ_TOUCH_KEY_CLASS A
                 ,       TB_HQ_TOUCH_KEY_GROUP B
@@ -2393,6 +2406,7 @@
                 ,		A.TUKEY_CLASS_NM
                 ,		C.PROD_CD
                 ,		D.PROD_NM
+                ,       D.REMARK
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM    TB_MS_TOUCH_KEY_CLASS A
                 ,       TB_MS_TOUCH_KEY_GROUP B
@@ -2433,6 +2447,7 @@
                 ,		A.TUKEY_CLASS_NM
                 ,		C.PROD_CD
                 ,		D.PROD_NM
+                ,       D.REMARK
                 FROM    TB_HQ_TOUCH_KEY_CLASS A
                 ,       TB_HQ_TOUCH_KEY_GROUP B
                 ,       TB_HQ_TOUCH_KEY C
@@ -2459,6 +2474,7 @@
                 ,		A.TUKEY_CLASS_NM
                 ,		C.PROD_CD
                 ,		D.PROD_NM
+                ,       D.REMARK
                 FROM    TB_MS_TOUCH_KEY_CLASS A
                 ,       TB_MS_TOUCH_KEY_GROUP B
                 ,       TB_MS_TOUCH_KEY C
@@ -2501,6 +2517,7 @@
                 ,       DECODE(A.TU_M_CLS_FG, '2', C.TU_M_CLS_NM, NULL) AS TU_M_CLS_NM
                 ,       D.PROD_CD
                 ,		E.PROD_NM
+                ,       E.REMARK
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM    TB_HQ_KIOSK_CLS A
                 ,       TB_HQ_KIOSK_GROUP B
@@ -2536,6 +2553,7 @@
                 ,       DECODE(A.TU_M_CLS_FG, '2', C.TU_M_CLS_NM, NULL) AS TU_M_CLS_NM
                 ,       D.PROD_CD
                 ,		E.PROD_NM
+                ,       E.REMARK
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM    TB_MS_KIOSK_CLS A
                 ,       TB_MS_KIOSK_GROUP B
@@ -2586,6 +2604,7 @@
                 ,       DECODE(A.TU_M_CLS_FG, '2', C.TU_M_CLS_NM, NULL) AS TU_M_CLS_NM
                 ,       D.PROD_CD
                 ,		E.PROD_NM
+                ,       E.REMARK
                 FROM    TB_HQ_KIOSK_CLS A
                 ,       TB_HQ_KIOSK_GROUP B
                 ,       TB_HQ_KIOSK_M_CLS C
@@ -2618,6 +2637,7 @@
                 ,       DECODE(A.TU_M_CLS_FG, '2', C.TU_M_CLS_NM, NULL) AS TU_M_CLS_NM
                 ,       D.PROD_CD
                 ,		E.PROD_NM
+                ,       E.REMARK
                 FROM    TB_MS_KIOSK_CLS A
                 ,       TB_MS_KIOSK_GROUP B
                 ,       TB_MS_KIOSK_M_CLS C
