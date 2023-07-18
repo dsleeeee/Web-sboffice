@@ -1,12 +1,11 @@
 /****************************************************************
  *
- * 파일명 : timeProd.js
- * 설  명 : 맘스터치 > 상품매출분석 > 상품별 시간대 매출 JavaScript
+ * 파일명 : timeProdMonth.js
+ * 설  명 : 맘스터치 > 상품매출분석 > 상품별 시간대 매출(월별) JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2022.10.12     권지현      1.0
- * 2022.12.15     김설아      1.0            전체수정
+ * 2023.07.17     이다솜      1.0
  *
  * **************************************************************/
 /**
@@ -35,8 +34,8 @@ var dayOptionComboData2 = [
 
 //  일/월 구분
 var dayGubunComboData = [
-    {"name":"일","value":"day"}
-    /*{"name":"월","value":"month"}*/
+    /*{"name":"일","value":"day"},*/
+    {"name":"월","value":"month"}
 ];
 
 // 시 VALUE
@@ -52,10 +51,10 @@ for(i =0 ; i < 24; i++){
 /**
  *  상품별 시간대 매출 그리드 생성
  */
-app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('timeProdMonthCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('timeProdCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('timeProdMonthCtrl', $scope, $http, false));
 
     // 조회일자
     $scope.srchStartDate = wcombo.genDateVal("#srchStartDate", gvStartDate);
@@ -69,7 +68,7 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
         format       : "yyyy-MM",
         selectionMode: "2" // 달력 선택 모드(1:day 2:month)
     });
-    
+
     // 시간대
     $scope.timeSlotData = [];
     var comboArray  = [{name:"전체", value:""}];
@@ -86,7 +85,7 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
     $scope._setComboData("endTimeCombo", Hh);
     $scope.startTime     = "0";
     $scope.endTime       = "23";
-    
+
     // 콤보박스 셋팅
     $scope._setComboData("storeHqBrandCdCombo", momsHqBrandCdComboList); // 매장브랜드
     $scope._setComboData("prodHqBrandCdCombo", momsHqBrandCdComboList); // 상품브랜드
@@ -283,7 +282,7 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
     };
 
     // 다른 컨트롤러의 broadcast 받기
-    $scope.$on("timeProdCtrl", function (event, data) {
+    $scope.$on("timeProdMonthCtrl", function (event, data) {
         $scope.searchTimeProdList();
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
@@ -345,8 +344,8 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         params.storeHqBrandCd = $scope.storeHqBrandCd;
-        params.storeCds = $("#timeProdStoreCd").val();
-        params.prodCds = $("#timeProdSelectCd").val();
+        params.storeCds = $("#timeProdMonthStoreCd").val();
+        params.prodCds = $("#timeProdMonthSelectCd").val();
         params.prodHqBrandCd = $scope.prodHqBrandCd;
         params.momsTeam = $scope.momsTeam;
         params.momsAcShop = $scope.momsAcShop;
@@ -378,7 +377,7 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
             // 선택한 테이블에 따른 리스트 항목 visible
             var grid = wijmo.Control.getControl("#wjGridList");
             var columns = grid.columns;
-            
+
             // 시간대
             var start = params.startTime*1;
             var end = params.endTime*1;
@@ -530,15 +529,15 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // 매장선택 모듈 팝업 사용시 정의
     // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
     // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.timeProdStoreShow = function () {
-        $scope._broadcast('timeProdStoreCtrl');
+    $scope.timeProdMonthStoreShow = function () {
+        $scope._broadcast('timeProdMonthStoreCtrl');
     };
 
     // 상품선택 모듈 팝업 사용시 정의
     // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
     // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.timeProdSelectShow = function () {
-        $scope._broadcast('timeProdSelectCtrl');
+    $scope.timeProdMonthSelectShow = function () {
+        $scope._broadcast('timeProdMonthSelectCtrl');
     };
 
     // 상품분류정보 팝업
@@ -628,8 +627,8 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         params.storeHqBrandCd = $scope.storeHqBrandCd;
-        params.storeCds = $("#timeProdStoreCd").val();
-        params.prodCds = $("#timeProdSelectCd").val();
+        params.storeCds = $("#timeProdMonthStoreCd").val();
+        params.prodCds = $("#timeProdMonthSelectCd").val();
         params.prodHqBrandCd = $scope.prodHqBrandCd;
         params.momsTeam = $scope.momsTeam;
         params.momsAcShop = $scope.momsAcShop;
@@ -655,7 +654,7 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
         // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
         $scope._popConfirm(messages["cmm.excel.totalExceDownload"], function() {
-            $scope._broadcast('timeProdExcelCtrl', params);
+            $scope._broadcast('timeProdMonthExcelCtrl', params);
         });
     };
 
@@ -716,7 +715,7 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
              return column.visible;
            }
          },
-             "상품별시간대매출" + '_' +  excelDate + '_' + getCurDateTime()+'.xlsx', function () {
+             "상품별시간대매출(월별)" + '_' +  excelDate + '_' + getCurDateTime()+'.xlsx', function () {
            $timeout(function () {
              $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
            }, 10);
@@ -763,10 +762,10 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
 /**
  *  엑셀다운로드 그리드 생성
  */
-app.controller('timeProdExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('timeProdMonthExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('timeProdExcelCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('timeProdMonthExcelCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -887,7 +886,7 @@ app.controller('timeProdExcelCtrl', ['$scope', '$http', '$timeout', function ($s
     };
 
     // 다른 컨트롤러의 broadcast 받기
-    $scope.$on("timeProdExcelCtrl", function (event, data) {
+    $scope.$on("timeProdMonthExcelCtrl", function (event, data) {
 
         if(data.excelType === '1') {
             $scope.searchExcelList(data);
@@ -1077,7 +1076,7 @@ app.controller('timeProdExcelCtrl', ['$scope', '$http', '$timeout', function ($s
                     includeColumns      : function (column) {
                         return column.visible;
                     }
-                }, "상품별시간대매출" + '_'+ startDate + '_'+ endDate + '_'+ getCurDateTime()+'.xlsx', function () {
+                }, "상품별시간대매출(월별)" + '_'+ startDate + '_'+ endDate + '_'+ getCurDateTime()+'.xlsx', function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);
@@ -1342,7 +1341,7 @@ app.controller('timeProdExcelCtrl', ['$scope', '$http', '$timeout', function ($s
                                     includeColumns: function (column) {
                                         return column.visible;
                                     }
-                                }, "상품별시간대매출" + '_'+ startDate + '_'+ endDate + '_'+ getCurDateTime() + '_' + (x + 1) +'.xlsx', function () {
+                                }, "상품별시간대매출(월별)" + '_'+ startDate + '_'+ endDate + '_'+ getCurDateTime() + '_' + (x + 1) +'.xlsx', function () {
                                     $timeout(function () {
                                         console.log("Export complete start. _" + (x + 1));
                                         getExcelFile(x + 1);

@@ -8,13 +8,12 @@
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
 
 <div class="subCon">
-    <div ng-controller="timeProdCtrl">
-        <%--<div class="searchBar flddUnfld">--%>
+    <div ng-controller="timeProdMonthCtrl">
         <div class="searchBar">
             <a href="#" class="open fl">${menuNm}</a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('timeProdCtrl', 1)">
+                <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('timeProdMonthCtrl', 1)">
                     <s:message code="cmm.search"/>
                 </button>
                 <c:if test="${sessionInfo.orgnFg == 'HQ'}">
@@ -206,14 +205,14 @@
                                           modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
                                           closeFunc - 팝업 닫기시 호출할 함수--%>
                             <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreMMoms.jsp" flush="true">
-                                <jsp:param name="targetId" value="timeProdStore"/>
+                                <jsp:param name="targetId" value="timeProdMonthStore"/>
                             </jsp:include>
                             <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
                         </td>
                     </tr>
                 </c:if>
                 <c:if test="${sessionInfo.orgnFg == 'STORE'}">
-                    <input type="hidden" id="timeProdStoreCd" value="${sessionInfo.storeCd}"/>
+                    <input type="hidden" id="timeProdMonthStoreCd" value="${sessionInfo.storeCd}"/>
                 </c:if>
                 <tr>
                     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
@@ -242,7 +241,7 @@
                                        modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
                                        closeFunc - 팝업 닫기시 호출할 함수--%>
                         <jsp:include page="/WEB-INF/view/sale/com/popup/selectProdMMoms.jsp" flush="true">
-                        <jsp:param name="targetId" value="timeProdSelect"/>
+                        <jsp:param name="targetId" value="timeProdMonthSelect"/>
                         </jsp:include>
                         <%--// 상품선택 모듈 멀티 선택 사용시 include --%>
                     </td>
@@ -465,13 +464,13 @@
     <%-- 페이지 리스트 --%>
     <div class="pageNum mt20">
         <%-- id --%>
-        <ul id="timeProdCtrlPager" data-size="10">
+        <ul id="timeProdMonthCtrlPager" data-size="10">
         </ul>
     </div>
     <%-- //페이지 리스트 --%>
 
     <%--엑셀 리스트--%>
-    <div class="w100 mt10" style="display:none;" ng-controller="timeProdExcelCtrl">
+    <div class="w100 mt10" style="display:none;" ng-controller="timeProdMonthExcelCtrl">
         <div class="wj-gridWrap" style="height: 380px; overflow-x: hidden; overflow-y: hidden;">
             <wj-flex-grid
                     id="wjGridExcelList"
@@ -564,7 +563,7 @@
   var arrTimeSlotCol = timeSlotCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/time/timeProd/timeProd.js?ver=20230717.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/time/timeProdMonth/timeProdMonth.js?ver=20230718.01" charset="utf-8"></script>
 
 <%-- 20221117 상품분류 팝업 주석처리함 -> 상품 멀티 팝업에 상품분류가 들어감으로 오류 --%>
 <%-- 상품분류 팝업 --%>
