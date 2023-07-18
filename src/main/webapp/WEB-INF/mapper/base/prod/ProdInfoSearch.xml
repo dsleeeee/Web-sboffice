@@ -813,6 +813,8 @@
                 ,       thpsp.ADD_PROD_UPRC
                 ,       thpsp.ADD_PROD_QTY
                 ,       DECODE(thpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
+                ,       DECODE(NVL(thpsp.REG_STORE_FG, '0'), '0', '미사용', '1', '제외매장', '2', '허용매장') AS REG_STORE_FG
+                ,       DECODE(NVL(thpsp.PRINT_YN, 'Y'), 'Y', '사용', 'N', '미사용') AS PRINT_YN
                 ,       thp.REMARK
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM 	TB_HQ_PRODUCT_SDSEL_GROUP thpsg
@@ -848,6 +850,7 @@
                 ,       tmpsp.ADD_PROD_UPRC
                 ,       tmpsp.ADD_PROD_QTY
                 ,       DECODE(tmpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
+                ,       DECODE(NVL(tmpsp.PRINT_YN, 'Y'), 'Y', '사용', 'N', '미사용') AS PRINT_YN
                 ,       tmp.REMARK
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM 	TB_MS_PRODUCT_SDSEL_GROUP tmpsg
@@ -894,6 +897,8 @@
                 ,       thpsp.ADD_PROD_UPRC
                 ,       thpsp.ADD_PROD_QTY
                 ,       DECODE(thpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
+                ,       DECODE(NVL(thpsp.REG_STORE_FG, '0'), '0', '미사용', '1', '제외매장', '2', '허용매장') AS REG_STORE_FG
+                ,       DECODE(NVL(thpsp.PRINT_YN, 'Y'), 'Y', '사용', 'N', '미사용') AS PRINT_YN
                 ,       thp.REMARK
                 FROM 	TB_HQ_PRODUCT_SDSEL_GROUP thpsg
                 ,		TB_HQ_PRODUCT_SDSEL_CLASS thpsc
@@ -926,6 +931,7 @@
                 ,       tmpsp.ADD_PROD_UPRC
                 ,       tmpsp.ADD_PROD_QTY
                 ,       DECODE(tmpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
+                ,       DECODE(NVL(tmpsp.PRINT_YN, 'Y'), 'Y', '사용', 'N', '미사용') AS PRINT_YN
                 ,       tmp.REMARK
                 FROM 	TB_MS_PRODUCT_SDSEL_GROUP tmpsg
                 ,		TB_MS_PRODUCT_SDSEL_CLASS tmpsc
@@ -964,6 +970,7 @@
                 ,		thpov.OPTION_VAL_NM
                 ,		thpov.OPT_PROD_CD AS OPTION_PROD_CD
                 ,		thp.PROD_NM AS OPTION_PROD_NM
+                ,       DECODE(NVL(thpov.PRINT_YN, 'Y'), 'Y', '사용', 'N', '미사용') AS PRINT_YN
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM 	TB_HQ_PRODUCT_OPTION_GROUP thpog
                 ,		TB_HQ_PRODUCT_OPTION_VAL thpov
@@ -985,6 +992,7 @@
                 ,		tmpov.OPTION_VAL_NM
                 ,		tmpov.OPT_PROD_CD AS OPTION_PROD_CD
                 ,		tmp.PROD_NM AS OPTION_PROD_NM
+                ,       DECODE(NVL(tmpov.PRINT_YN, 'Y'), 'Y', '사용', 'N', '미사용') AS PRINT_YN
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM 	TB_MS_PRODUCT_OPTION_GROUP tmpog
                 ,		TB_MS_PRODUCT_OPTION_VAL tmpov
@@ -1017,6 +1025,7 @@
                 ,		thpov.OPTION_VAL_NM
                 ,		thpov.OPT_PROD_CD AS OPTION_PROD_CD
                 ,		thp.PROD_NM AS OPTION_PROD_NM
+                ,       DECODE(NVL(thpov.PRINT_YN, 'Y'), 'Y', '사용', 'N', '미사용') AS PRINT_YN
                 FROM 	TB_HQ_PRODUCT_OPTION_GROUP thpog
                 ,		TB_HQ_PRODUCT_OPTION_VAL thpov
                 ,       TB_HQ_PRODUCT thp
@@ -1035,6 +1044,7 @@
                 ,		tmpov.OPTION_VAL_NM
                 ,		tmpov.OPT_PROD_CD AS OPTION_PROD_CD
                 ,		tmp.PROD_NM AS OPTION_PROD_NM
+                ,       DECODE(NVL(tmpov.PRINT_YN, 'Y'), 'Y', '사용', 'N', '미사용') AS PRINT_YN
                 FROM 	TB_MS_PRODUCT_OPTION_GROUP tmpog
                 ,		TB_MS_PRODUCT_OPTION_VAL tmpov
                 ,		TB_MS_PRODUCT tmp
@@ -1096,12 +1106,15 @@
                         ,		0 AS ADD_PROD_UPRC
                         ,		0 AS ADD_PROD_QTY
                         ,		'' AS FIX_PROD_FG
+                        ,		'' AS REG_STORE_FG
+                        ,		'' AS PRINT_YN
                         ,		'' AS OPTION_GRP_CD
                         ,		'' AS OPTION_GRP_NM
                         ,		'' AS OPTION_VAL_CD
                         ,		'' AS OPTION_VAL_NM
                         ,		'' AS OPTION_PROD_CD
                         ,		'' AS OPTION_PROD_NM
+                        ,		'' AS OPTION_PRINT_YN
                         FROM 	TB_HQ_PRODUCT thp
                         ,		TB_HQ_PRODUCT_SDATTR_CLASS thpsc
                         ,		TB_HQ_PRODUCT_SDATTR thps
@@ -1147,12 +1160,15 @@
                         ,       thpsp.ADD_PROD_UPRC
                         ,       thpsp.ADD_PROD_QTY
                         ,       DECODE(thpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
+                        ,       DECODE(NVL(thpsp.REG_STORE_FG, '0'), '0', '미사용', '1', '제외매장', '2', '허용매장') AS REG_STORE_FG
+                        ,       DECODE(NVL(thpsp.PRINT_YN, 'Y'), 'Y', '사용', 'N', '미사용') AS PRINT_YN
                         ,		'' AS OPTION_GRP_CD
                         ,		'' AS OPTION_GRP_NM
                         ,		'' AS OPTION_VAL_CD
                         ,		'' AS OPTION_VAL_NM
                         ,		'' AS OPTION_PROD_CD
                         ,		'' AS OPTION_PROD_NM
+                        ,		'' AS OPTION_PRINT_YN
                         FROM 	TB_HQ_PRODUCT thp
                         ,		TB_HQ_PRODUCT_SDSEL_GROUP thpsg
                         ,		TB_HQ_PRODUCT_SDSEL_CLASS thpsc
@@ -1207,12 +1223,15 @@
                         ,		0 AS ADD_PROD_UPRC
                         ,		0 AS ADD_PROD_QTY
                         ,		'' AS FIX_PROD_FG
+                        ,		'' AS REG_STORE_FG
+                        ,		'' AS PRINT_YN
                         ,		thpog.OPTION_GRP_CD
                         ,		thpog.OPTION_GRP_NM
                         ,		thpov.OPTION_VAL_CD
                         ,		thpov.OPTION_VAL_NM
                         ,		thpov.OPT_PROD_CD AS OPTION_PROD_CD
                         ,		thp2.PROD_NM AS OPTION_PROD_NM
+                        ,       DECODE(NVL(thpov.PRINT_YN, 'Y'), 'Y', '사용', 'N', '미사용') AS OPTION_PRINT_YN
                         FROM 	TB_HQ_PRODUCT thp
                         ,		TB_HQ_PRODUCT_OPTION_GROUP thpog
                         ,		TB_HQ_PRODUCT_OPTION_VAL thpov
@@ -1307,12 +1326,14 @@
                         ,		0 AS ADD_PROD_UPRC
                         ,		0 AS ADD_PROD_QTY
                         ,		'' AS FIX_PROD_FG
+                        ,		'' AS PRINT_YN
                         ,		'' AS OPTION_GRP_CD
                         ,		'' AS OPTION_GRP_NM
                         ,		'' AS OPTION_VAL_CD
                         ,		'' AS OPTION_VAL_NM
                         ,		'' AS OPTION_PROD_CD
                         ,		'' AS OPTION_PROD_NM
+                        ,		'' AS OPTION_PRINT_YN
                         FROM 	TB_MS_PRODUCT tmp
                         ,		TB_MS_PRODUCT_SDATTR_CLASS tmpsc
                         ,		TB_MS_PRODUCT_SDATTR tmps
@@ -1358,12 +1379,14 @@
                         ,       tmpsp.ADD_PROD_UPRC
                         ,       tmpsp.ADD_PROD_QTY
                         ,       DECODE(tmpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
+                        ,       DECODE(NVL(tmpsp.PRINT_YN, 'Y'), 'Y', '사용', 'N', '미사용') AS PRINT_YN
                         ,		'' AS OPTION_GRP_CD
                         ,		'' AS OPTION_GRP_NM
                         ,		'' AS OPTION_VAL_CD
                         ,		'' AS OPTION_VAL_NM
                         ,		'' AS OPTION_PROD_CD
                         ,		'' AS OPTION_PROD_NM
+                        ,		'' AS OPTION_PRINT_YN
                         FROM 	TB_MS_PRODUCT tmp
                         ,		TB_MS_PRODUCT_SDSEL_GROUP tmpsg
                         ,		TB_MS_PRODUCT_SDSEL_CLASS tmpsc
@@ -1418,12 +1441,14 @@
                         ,		0 AS ADD_PROD_UPRC
                         ,		0 AS ADD_PROD_QTY
                         ,		'' AS FIX_PROD_FG
+                        ,		'' AS PRINT_YN
                         ,		tmpog.OPTION_GRP_CD
                         ,		tmpog.OPTION_GRP_NM
                         ,		tmpov.OPTION_VAL_CD
                         ,		tmpov.OPTION_VAL_NM
                         ,		tmpov.OPT_PROD_CD AS OPTION_PROD_CD
                         ,		tmp2.PROD_NM AS OPTION_PROD_NM
+                        ,       DECODE(NVL(tmpov.PRINT_YN, 'Y'), 'Y', '사용', 'N', '미사용') AS OPTION_PRINT_YN
                         FROM 	TB_MS_PRODUCT tmp
                         ,		TB_MS_PRODUCT_OPTION_GROUP tmpog
                         ,		TB_MS_PRODUCT_OPTION_VAL tmpov
@@ -1516,12 +1541,15 @@
                 ,		0 AS ADD_PROD_UPRC
                 ,		0 AS ADD_PROD_QTY
                 ,		'' AS FIX_PROD_FG
+                ,		'' AS REG_STORE_FG
+                ,		'' AS PRINT_YN
                 ,		'' AS OPTION_GRP_CD
                 ,		'' AS OPTION_GRP_NM
                 ,		'' AS OPTION_VAL_CD
                 ,		'' AS OPTION_VAL_NM
                 ,		'' AS OPTION_PROD_CD
                 ,		'' AS OPTION_PROD_NM
+                ,		'' AS OPTION_PRINT_YN
                 FROM 	TB_HQ_PRODUCT thp
                 ,		TB_HQ_PRODUCT_SDATTR_CLASS thpsc
                 ,		TB_HQ_PRODUCT_SDATTR thps
@@ -1567,12 +1595,15 @@
                 ,       thpsp.ADD_PROD_UPRC
                 ,       thpsp.ADD_PROD_QTY
                 ,       DECODE(thpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
+                ,       DECODE(NVL(thpsp.REG_STORE_FG, '0'), '0', '미사용', '1', '제외매장', '2', '허용매장') AS REG_STORE_FG
+                ,       DECODE(NVL(thpsp.PRINT_YN, 'Y'), 'Y', '사용', 'N', '미사용') AS PRINT_YN
                 ,		'' AS OPTION_GRP_CD
                 ,		'' AS OPTION_GRP_NM
                 ,		'' AS OPTION_VAL_CD
                 ,		'' AS OPTION_VAL_NM
                 ,		'' AS OPTION_PROD_CD
                 ,		'' AS OPTION_PROD_NM
+                ,		'' AS OPTION_PRINT_YN
                 FROM 	TB_HQ_PRODUCT thp
                 ,		TB_HQ_PRODUCT_SDSEL_GROUP thpsg
                 ,		TB_HQ_PRODUCT_SDSEL_CLASS thpsc
@@ -1627,12 +1658,15 @@
                 ,		0 AS ADD_PROD_UPRC
                 ,		0 AS ADD_PROD_QTY
                 ,		'' AS FIX_PROD_FG
+                ,		'' AS REG_STORE_FG
+                ,		'' AS PRINT_YN
                 ,		thpog.OPTION_GRP_CD
                 ,		thpog.OPTION_GRP_NM
                 ,		thpov.OPTION_VAL_CD
                 ,		thpov.OPTION_VAL_NM
                 ,		thpov.OPT_PROD_CD AS OPTION_PROD_CD
                 ,		thp2.PROD_NM AS OPTION_PROD_NM
+                ,       DECODE(NVL(thpov.PRINT_YN, 'Y'), 'Y', '사용', 'N', '미사용') AS OPTION_PRINT_YN
                 FROM 	TB_HQ_PRODUCT thp
                 ,		TB_HQ_PRODUCT_OPTION_GROUP thpog
                 ,		TB_HQ_PRODUCT_OPTION_VAL thpov
@@ -1724,12 +1758,14 @@
                 ,		0 AS ADD_PROD_UPRC
                 ,		0 AS ADD_PROD_QTY
                 ,		'' AS FIX_PROD_FG
+                ,		'' AS PRINT_YN
                 ,		'' AS OPTION_GRP_CD
                 ,		'' AS OPTION_GRP_NM
                 ,		'' AS OPTION_VAL_CD
                 ,		'' AS OPTION_VAL_NM
                 ,		'' AS OPTION_PROD_CD
                 ,		'' AS OPTION_PROD_NM
+                ,		'' AS OPTION_PRINT_YN
                 FROM 	TB_MS_PRODUCT tmp
                 ,		TB_MS_PRODUCT_SDATTR_CLASS tmpsc
                 ,		TB_MS_PRODUCT_SDATTR tmps
@@ -1775,12 +1811,14 @@
                 ,       tmpsp.ADD_PROD_UPRC
                 ,       tmpsp.ADD_PROD_QTY
                 ,       DECODE(tmpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
+                ,       DECODE(NVL(tmpsp.PRINT_YN, 'Y'), 'Y', '사용', 'N', '미사용') AS PRINT_YN
                 ,		'' AS OPTION_GRP_CD
                 ,		'' AS OPTION_GRP_NM
                 ,		'' AS OPTION_VAL_CD
                 ,		'' AS OPTION_VAL_NM
                 ,		'' AS OPTION_PROD_CD
                 ,		'' AS OPTION_PROD_NM
+                ,		'' AS OPTION_PRINT_YN
                 FROM 	TB_MS_PRODUCT tmp
                 ,		TB_MS_PRODUCT_SDSEL_GROUP tmpsg
                 ,		TB_MS_PRODUCT_SDSEL_CLASS tmpsc
@@ -1835,12 +1873,14 @@
                 ,		0 AS ADD_PROD_UPRC
                 ,		0 AS ADD_PROD_QTY
                 ,		'' AS FIX_PROD_FG
+                ,		'' AS PRINT_YN
                 ,		tmpog.OPTION_GRP_CD
                 ,		tmpog.OPTION_GRP_NM
                 ,		tmpov.OPTION_VAL_CD
                 ,		tmpov.OPTION_VAL_NM
                 ,		tmpov.OPT_PROD_CD AS OPTION_PROD_CD
                 ,		tmp2.PROD_NM AS OPTION_PROD_NM
+                ,       DECODE(NVL(tmpov.PRINT_YN, 'Y'), 'Y', '사용', 'N', '미사용') AS OPTION_PRINT_YN
                 FROM 	TB_MS_PRODUCT tmp
                 ,		TB_MS_PRODUCT_OPTION_GROUP tmpog
                 ,		TB_MS_PRODUCT_OPTION_VAL tmpov
