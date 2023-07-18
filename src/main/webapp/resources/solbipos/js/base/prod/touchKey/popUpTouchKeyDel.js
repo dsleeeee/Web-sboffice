@@ -111,8 +111,10 @@ app.controller('popUpTouchKeyDelCtrl', ['$scope', '$http', '$timeout', function 
                     $scope._gridDataInit();
                     // 저장되었습니다.
                     $scope._popMsg(messages["cmm.saveSucc"]);
-                    // 조회
-                    $scope.searchPopUpTouchKeyDel();
+                    // 화면 리플레시
+                    setTimeout(function() {
+                        location.reload();
+                    }, 100);
                 }
             }
         }, function errorCallback(response) {
