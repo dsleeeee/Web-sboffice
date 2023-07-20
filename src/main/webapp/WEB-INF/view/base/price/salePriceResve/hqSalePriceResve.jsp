@@ -346,27 +346,51 @@
                 is-editable="false"
                 initialized="_initComboBox(s)">
         </wj-combo-box>
-
+    </div>
+    <div class="mt10 oh sb-select dkbr">
+        <div class="sb-select w200px fl mr10">
+            <wj-combo-box
+                    id="storeSaveFg"
+                    ng-model="storeSaveFg"
+                    items-source="_getComboData('storeSaveFg')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    control="storeSaveFgCombo"
+                    selected-index-changed="selectedIndexChanged(s)">
+            </wj-combo-box>
+        </div>
+        <div id="storeSaveStore" class="fl oh bk" style="width: 200px; height:25px; display: none;">
+            <c:if test="${momsEnvstVal == '0'}">
+                <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
+                    <jsp:param name="targetId" value="choiceSaveStore"/>
+                </jsp:include>
+            </c:if>
+            <c:if test="${momsEnvstVal == '1'}">
+                <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreMMoms.jsp" flush="true">
+                    <jsp:param name="targetId" value="choiceSaveStore"/>
+                </jsp:include>
+            </c:if>
+        </div>
         <%-- 저장 --%>
         <button class="btn_skyblue fr" ng-click="addProdPrice()"><s:message code="salePriceResve.priceResve" /></button>
         <button class="btn_skyblue fr mr5" ng-click="saveProdPrice()"><s:message code="cmm.edit" /></button>
         <button class="btn_skyblue fr mr5" ng-click="delProdPrice()"><s:message code="cmm.del" /></button>
-        <span class="fr mr10"><input type="checkbox" id="applyFg" ng-model="applyFg" /> 전매장적용</span>
     </div>
 
     <%--위즈모 테이블--%>
     <div class="wj-TblWrapBr mt10">
         <div style="height: 300px; overflow-y: hidden; overflow-x: hidden;">
             <wj-flex-grid
-                autoGenerateColumns="false"
-                control="flex"
-                initialized="initGrid(s,e)"
-                sticky-headers="true"
-                selection-mode="Row"
-                items-source="data"
-                item-formatter="_itemFormatter"
-                ime-enabled="true"
-                id="wjGridHqSalePriceResve">
+                    autoGenerateColumns="false"
+                    control="flex"
+                    initialized="initGrid(s,e)"
+                    sticky-headers="true"
+                    selection-mode="Row"
+                    items-source="data"
+                    item-formatter="_itemFormatter"
+                    ime-enabled="true"
+                    id="wjGridHqSalePriceResve">
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
@@ -446,7 +470,7 @@
     var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/hqSalePriceResve.js?ver=20220509.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/hqSalePriceResve.js?ver=20220509.04" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
@@ -459,3 +483,4 @@
 <%-- 가격예약(본사판매가) 추가 팝업 --%>
 <c:import url="/WEB-INF/view/base/price/salePriceResve/hqSalePriceResveAdd.jsp">
 </c:import>
+Combo
