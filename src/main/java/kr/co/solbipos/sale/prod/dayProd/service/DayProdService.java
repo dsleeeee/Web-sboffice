@@ -23,6 +23,9 @@ import java.util.List;
 public interface DayProdService {
 
     List<DefaultMap<Object>> getSaleAmtFgRemarkList(DayProdVO dayProdVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<Object>> getSaleAmtFgRemarkList3(DayProdVO dayProdVO, SessionInfoVO sessionInfoVO);
+    int getSdselMomsModSave (DayProdVO[] dayProdVOs, SessionInfoVO sessionInfoVO);
+    int getSdselMomsModDelete (DayProdVO[] dayProdVOs, SessionInfoVO sessionInfoVO);
     /** 일별 상품 매출 현황 조회 */
     List<DefaultMap<Object>> getDayProdList(DayProdVO dayProdVO, SessionInfoVO sessionInfoVO);
     List<DefaultMap<Object>> getDayProdExcelList(DayProdVO dayProdVO, SessionInfoVO sessionInfoVO);

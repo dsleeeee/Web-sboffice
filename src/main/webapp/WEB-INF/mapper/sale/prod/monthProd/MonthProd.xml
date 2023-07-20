@@ -49,11 +49,17 @@
         SUM(tsmps.REAL_SALE_AMT) AS REAL_SALE_AMT3
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
-        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "1"'>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "0"'>
             TB_SL_MONTHLY_PROD_SDSEL tsmps,
         </if>
-        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "2"'>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "1"'>
             TB_SL_MONTHLY_PROD_SDSEL_MOMS_V01 tsmps,
+        </if>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "2"'>
+            TB_SL_MONTHLY_PROD_SDSEL_MOMS_V02 tsmps,
+        </if>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "3"'>
+            TB_SL_MONTHLY_PROD_SDSEL_MOMS_V03 tsmps,
         </if>
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,
@@ -197,11 +203,17 @@
         SUM(tsmps.REAL_SALE_AMT) AS REAL_SALE_AMT3
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
-        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "1"'>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "0"'>
             TB_SL_MONTHLY_PROD_SDSEL tsmps,
         </if>
-        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "2"'>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "1"'>
             TB_SL_MONTHLY_PROD_SDSEL_MOMS_V01 tsmps,
+        </if>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "2"'>
+            TB_SL_MONTHLY_PROD_SDSEL_MOMS_V02 tsmps,
+        </if>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "3"'>
+            TB_SL_MONTHLY_PROD_SDSEL_MOMS_V03 tsmps,
         </if>
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,

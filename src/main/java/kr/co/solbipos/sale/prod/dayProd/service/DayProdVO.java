@@ -111,6 +111,14 @@ public class DayProdVO extends PageVO {
     /** 금액보정 */
     private String saleAmtFg;
 
+    /** 사이드상품코드 */
+    private String sdselProdCd;
+
+    /** 사이드상품명 */
+    private String sdselProdNm;
+
+    private String gubun;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -301,5 +309,29 @@ public class DayProdVO extends PageVO {
 
     public void setSaleAmtFg(String saleAmtFg) {
         this.saleAmtFg = saleAmtFg;
+    }
+
+    public String getSdselProdCd() {
+        return sdselProdCd;
+    }
+
+    public void setSdselProdCd(String sdselProdCd) {
+        this.sdselProdCd = sdselProdCd;
+    }
+
+    public String getSdselProdNm() {
+        return sdselProdNm;
+    }
+
+    public void setSdselProdNm(String sdselProdNm) {
+        this.sdselProdNm = sdselProdNm;
+    }
+
+    public String getGubun() {
+        return gubun;
+    }
+
+    public void setGubun(String gubun) {
+        this.gubun = gubun;
     }
 }

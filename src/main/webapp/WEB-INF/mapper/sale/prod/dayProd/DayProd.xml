@@ -37,6 +37,137 @@
         BY 		thpsmm.SIDE_PROD_CD
         ,		thpsmm.PROD_CD
     </select>
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSaleAmtFgRemarkList3" parameterType="dayProdVO" resultType="DefaultMap">
+        /* DayProdMapper.getSaleAmtFgRemarkList3 */
+        SELECT  thp.HQ_BRAND_CD
+        ,		(SELECT HQ_BRAND_NM FROM TB_HQ_BRAND thb WHERE thb.HQ_OFFICE_CD = #{hqOfficeCd} AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD) AS HQ_BRAND_NM
+        ,       thpcv.L_CLASS_CD
+        ,	    thpcv.L_CLASS_NM
+        ,	    thpcv.M_CLASS_CD
+        ,	    thpcv.M_CLASS_NM
+        ,	    thpcv.S_CLASS_CD
+        ,	    thpcv.S_CLASS_NM
+        ,       thp.PROD_CD
+        ,       thp.REMARK
+        ,		thp.PROD_NM
+        ,		0 AS SDATTR_DISP_SEQ
+        ,		thp.SDSEL_GRP_CD
+        ,		thpsg.SDSEL_GRP_NM
+        ,		DECODE(thpsg.FIX_PROD_FG, '0', '선택', '1', '고정') AS GRP_FIX_PROD_FG
+        ,		DECODE(thpsg.SDSEL_TYPE_FG, 'C', '세트', 'S', '싱글세트') AS SDSEL_TYPE_FG
+        ,		thpsc.SDSEL_CLASS_CD
+        ,		thpsc.SDSEL_CLASS_NM
+        ,		thpsc.DISP_SEQ AS SDSEL_CLASS_DISP_SEQ
+        ,		thpsc.SDSEL_QTY
+        ,		DECODE(thpsc.REQUIRE_YN, 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
+        ,		thpsp.PROD_CD AS SDSEL_PROD_CD
+        ,       thp2.REMARK AS SDSEL_REMARK
+        ,		thp2.PROD_NM AS SDSEL_PROD_NM
+        ,		thpsp.DISP_SEQ AS SDSEL_PROD_DISP_SEQ
+        ,       thpsp.ADD_PROD_UPRC
+        ,       thpsp.ADD_PROD_QTY
+        ,       DECODE(thpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
+        FROM 	TB_HQ_PRODUCT thp
+        ,		TB_HQ_PRODUCT_SDSEL_GROUP thpsg
+        ,		TB_HQ_PRODUCT_SDSEL_CLASS thpsc
+        ,		TB_HQ_PRODUCT_SDSEL_PROD thpsp
+        ,		TB_HQ_PRODUCT thp2
+        ,       TB_HQ_PRODUCT_CLASS_V02 thpcv
+        WHERE 	thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     thpsg.USE_YN = 'Y'
+        AND     thpsc.USE_YN = 'Y'
+        AND     thpsp.USE_YN = 'Y'
+        AND 	thp.HQ_OFFICE_CD = thpsg.HQ_OFFICE_CD
+        AND 	thp.SDSEL_GRP_CD = thpsg.SDSEL_GRP_CD
+        AND 	thpsg.HQ_OFFICE_CD = thpsc.HQ_OFFICE_CD (+)
+        AND 	thpsg.SDSEL_GRP_CD = thpsc.SDSEL_GRP_CD (+)
+        AND 	thpsc.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD (+)
+        AND 	thpsc.SDSEL_CLASS_CD = thpsp.SDSEL_CLASS_CD (+)
+        AND 	thpsp.HQ_OFFICE_CD = thp2.HQ_OFFICE_CD (+)
+        AND 	thpsp.PROD_CD = thp2.PROD_CD (+)
+        AND 	thpcv.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND 	thpcv.PROD_CD = thp.PROD_CD
+        <if test='gubun != null and gubun != "" and gubun == "N"'>
+            AND thp.PROD_CD || thpsp.PROD_CD NOT IN (SELECT thpsmm.SIDE_PROD_CD || thpsmm.PROD_CD FROM TB_HQ_PRODUCT_SDSEL_MOMS_MOD2 thpsmm WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+        </if>
+        <if test='gubun != null and gubun != "" and gubun == "Y"'>
+            AND thp.PROD_CD || thpsp.PROD_CD IN (SELECT thpsmm.SIDE_PROD_CD || thpsmm.PROD_CD FROM TB_HQ_PRODUCT_SDSEL_MOMS_MOD2 thpsmm WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='sdselProdCd != null and sdselProdCd != ""'>
+            AND thpsp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='sdselProdNm != null and sdselProdNm != ""'>
+            AND thp2.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+            AND thp.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+        </if>
+        <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 상품브랜드 전체일때
+                AND thp.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND thp.PROD_CLASS_CD IN (
+            SELECT
+            PROD_CLASS_CD
+            FROM TB_HQ_PRODUCT_CLASS
+            WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+            CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+            )
+        </if>
+        ORDER BY 	thp.PROD_CD, thpsc.DISP_SEQ, thpsp.DISP_SEQ
+    </select>
+
+    <!-- 등록 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getSdselMomsModSave" parameterType="dayProdVO">
+        /* DayProdMapper.getSdselMomsModSave */
+        INSERT INTO TB_HQ_PRODUCT_SDSEL_MOMS_MOD2
+        (
+            HQ_OFFICE_CD
+        ,   PROD_CD
+        ,   SIDE_PROD_CD
+        ) VALUES (
+            #{hqOfficeCd}
+        ,   #{sdselProdCd}
+        ,   #{prodCd}
+        )
+    </insert>
+
+    <!-- 삭제 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getSdselMomsModDelete" parameterType="dayProdVO">
+        /* DayProdMapper.getSdselMomsModDelete */
+        DELETE  TB_HQ_PRODUCT_SDSEL_MOMS_MOD2
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     PROD_CD = #{sdselProdCd}
+        AND     SIDE_PROD_CD = #{prodCd}
+    </delete>
+
     <!-- 조회 -->
     <!--
         TABLE    :
@@ -75,11 +206,17 @@
         SUM(tsdps.REAL_SALE_AMT) AS REAL_SALE_AMT3
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
-        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "1"'>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "0"'>
             TB_SL_DAILY_PROD_SDSEL tsdps,
         </if>
-        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "2"'>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "1"'>
             TB_SL_DAILY_PROD_SDSEL_MOMS_V01 tsdps,
+        </if>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "2"'>
+            TB_SL_DAILY_PROD_SDSEL_MOMS_V02 tsdps,
+        </if>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "3"'>
+            TB_SL_DAILY_PROD_SDSEL_MOMS_V03 tsdps,
         </if>
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,
@@ -223,11 +360,17 @@
         SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'S' THEN tsdps.REAL_SALE_AMT END) AS REAL_SALE_AMT2,
         SUM(tsdps.REAL_SALE_AMT) AS REAL_SALE_AMT3
         FROM
-        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "1"'>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "0"'>
             TB_SL_DAILY_PROD_SDSEL tsdps,
         </if>
-        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "2"'>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "1"'>
             TB_SL_DAILY_PROD_SDSEL_MOMS_V01 tsdps,
+        </if>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "2"'>
+            TB_SL_DAILY_PROD_SDSEL_MOMS_V02 tsdps,
+        </if>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "3"'>
+            TB_SL_DAILY_PROD_SDSEL_MOMS_V03 tsdps,
         </if>
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,

@@ -8,11 +8,13 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.store.dlvrAddr.service.DlvrAddrVO;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -200,6 +202,65 @@ public class DayProdController {
         List<DefaultMap<Object>> list = dayProdService.getSaleAmtFgRemarkList(dayProdVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, dayProdVO);
+    }
+
+    /**
+     * 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dayProdVO
+     * @return  String
+     * @author  권지현
+     * @since   2023.07.19
+     */
+    @RequestMapping(value = "/dayProd/getSaleAmtFgRemarkList3.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSaleAmtFgRemarkList3(HttpServletRequest request, HttpServletResponse response, Model model, DayProdVO dayProdVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> list = dayProdService.getSaleAmtFgRemarkList3(dayProdVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dayProdVO);
+    }
+
+    /**
+     * 등록
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/dayProd/getSdselMomsModSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSdselMomsModSave(@RequestBody DayProdVO[] dayProdVOs, HttpServletRequest request, HttpServletResponse response,
+                              Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = dayProdService.getSdselMomsModSave(dayProdVOs, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result);
+    }
+
+    /**
+     * 삭제
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/dayProd/getSdselMomsModDelete.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSdselMomsModDelete(@RequestBody DayProdVO[] dayProdVOs, HttpServletRequest request, HttpServletResponse response,
+                              Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = dayProdService.getSdselMomsModDelete(dayProdVOs, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result);
     }
 
     /**

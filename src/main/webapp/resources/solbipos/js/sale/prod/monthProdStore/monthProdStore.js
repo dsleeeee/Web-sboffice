@@ -27,8 +27,10 @@ var dayOptionComboData = [
 ];
 // 금액보정
 var saleAmtFgComboData = [
-    {"name":"정상","value":"1"},
-    {"name":"보정1","value":"2"}
+    {"name":"정상","value":"0"}
+    ,   {"name":"보정1","value":"1"}
+// ,   {"name":"보정2","value":"2"}
+// ,   {"name":"보정3","value":"3"}
 ];
 
 /**
@@ -389,9 +391,18 @@ app.controller('monthProdStoreCtrl', ['$scope', '$http', '$timeout', function ($
         }
     };
 
-    $scope.remark = function (){
+    $scope.remark1 = function (){
         $scope.saleAmtFgRemarkPopupLayer.show();
         $scope._broadcast('saleAmtFgRemarkPopupCtrl');
+    };
+    $scope.remark2 = function (){
+        $scope._popMsg("구성상품 금액은 세트상품으로 집계");
+    };
+    $scope.remark3 = function (){
+        $scope.saleAmtFgRemark3PopupLayer.show();
+        $scope._broadcast('saleAmtFgRemarkPopupCtrl3');
+        // 기능수행 종료 : 반드시 추가
+        event.preventDefault();
     };
 }]);
 
