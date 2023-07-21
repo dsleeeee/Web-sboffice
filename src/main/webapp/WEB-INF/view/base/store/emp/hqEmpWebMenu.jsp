@@ -18,7 +18,7 @@
     <%-- 웹사이트 메뉴 --%>
     <div id="webArea" ng-controller="hqEmpWebMenuCtrl">
         <%-- 권한복사 영역 --%>
-        <table class="tblType01 moreDark mb10 mt10">
+        <table id="tableCopy" class="tblType01 moreDark mb10 mt10">
             <colgroup>
                 <col class="w20" />
                 <col class="w55" />
@@ -28,19 +28,9 @@
                 <%-- 메뉴권한복사 --%>
                 <th><s:message code="hqEmp.copy.authorExcept" /></th>
                 <td colspan="3">
-                    <div class="sb-select fl w60 mr10">
-                        <wj-combo-box
-                                id="empNoCombo"
-                                ng-model="empNo"
-                                control="empNoCombo"
-                                items-source="_getComboData('empNoCombo')"
-                                display-member-path="name"
-                                selected-value-path="value"
-                                is-editable="false"
-                                initialized="_initComboBox(s)"
-                                selected-index-changed="setStoreCd(s)">
-                        </wj-combo-box>
-                    </div>
+                    <jsp:include page="/WEB-INF/view/sale/com/popup/selectEmpS.jsp" flush="true">
+                        <jsp:param name="targetId" value="copyEmp"/>
+                    </jsp:include>
                     <%-- 메뉴권한복사 버튼  --%>
                     <div class="fl">
                         <a href="#" class="btn_grayS" id="btnCopyAuth" ng-click="copyAuth()"><s:message code="hqEmp.copy.auth" /></a>
@@ -121,4 +111,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpWebMenu.js?ver=20200529.18" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpWebMenu.js?ver=20200529.19" charset="utf-8"></script>

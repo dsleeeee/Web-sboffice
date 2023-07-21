@@ -54,4 +54,7 @@ public interface IostockCmmService {
 
     /** 선택상품 공통 - 선택상품 리스트 조회 */
     List<DefaultMap<String>> selectSdselProdList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO);
+
+    /** 선택상품 공통 - 사원 리스트 조회 */
+    List<DefaultMap<String>> selectEmpList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO);
 }
