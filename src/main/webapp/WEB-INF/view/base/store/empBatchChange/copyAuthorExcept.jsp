@@ -205,8 +205,14 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="empBatchChange.empNo"/>" binding="empNo" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="empBatchChange.empNm"/>" binding="empNm" width="*" is-read-only="true" align="left"></wj-flex-grid-column>
-
+                        <wj-flex-grid-column header="<s:message code="empBatchChange.empNm"/>" binding="empNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="empBatchChange.branchCd"/>" binding="branchCd" width="100" align="left" is-read-only="true" data-map="branchCdDataMap"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="empBatchChange.momsTeam"/>" binding="momsTeam" width="80" is-read-only="true" align="center" data-map="momsTeamDataMap" ></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="empBatchChange.momsAcShop"/>" binding="momsAcShop" width="80" is-read-only="true" align="center" data-map="momsAcShopDataMap"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="empBatchChange.momsAreaFg"/>" binding="momsAreaFg" width="80" is-read-only="true" align="center" data-map="momsAreaFgDataMap"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="empBatchChange.momsCommercial"/>" binding="momsCommercial" width="80" is-read-only="true" align="center" data-map="momsCommercialDataMap"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="empBatchChange.momsShopType"/>" binding="momsShopType" width="80" is-read-only="true" align="center" data-map="momsShopTypeDataMap"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="empBatchChange.momsStoreManageType"/>" binding="momsStoreManageType" width="100" is-read-only="true" align="center" data-map="momsStoreManageTypeDataMap"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -408,7 +414,14 @@
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="empBatchChange.empNo"/>" binding="empNo" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="empBatchChange.empNm"/>" binding="empNm" width="*" is-read-only="true" align="left"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="empBatchChange.empNm"/>" binding="empNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="empBatchChange.branchCd"/>" binding="branchCd" width="100" align="left" is-read-only="true" data-map="branchCdDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="empBatchChange.momsTeam"/>" binding="momsTeam" width="80" is-read-only="true" align="center" data-map="momsTeamDataMap" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="empBatchChange.momsAcShop"/>" binding="momsAcShop" width="80" is-read-only="true" align="center" data-map="momsAcShopDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="empBatchChange.momsAreaFg"/>" binding="momsAreaFg" width="80" is-read-only="true" align="center" data-map="momsAreaFgDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="empBatchChange.momsCommercial"/>" binding="momsCommercial" width="80" is-read-only="true" align="center" data-map="momsCommercialDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="empBatchChange.momsShopType"/>" binding="momsShopType" width="80" is-read-only="true" align="center" data-map="momsShopTypeDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="empBatchChange.momsStoreManageType"/>" binding="momsStoreManageType" width="100" is-read-only="true" align="center" data-map="momsStoreManageTypeDataMap"></wj-flex-grid-column>
 
                 </wj-flex-grid>
             </div>
@@ -424,4 +437,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/empBatchChange/copyAuthorExcept.js?ver=20230221.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/empBatchChange/copyAuthorExcept.js?ver=20230221.02" charset="utf-8"></script>
