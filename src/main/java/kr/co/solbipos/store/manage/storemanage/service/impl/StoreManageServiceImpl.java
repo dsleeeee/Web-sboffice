@@ -320,6 +320,10 @@ public class StoreManageServiceImpl implements StoreManageService{
                 }
             }
 
+            if(storeManageVO.getHqOfficeCd().equals("DS011") || storeManageVO.getHqOfficeCd().equals("DS024") || storeManageVO.getHqOfficeCd().equals("H0360")) {
+                procCnt += mapper.insertBrandTerminalInfo(storeManageVO);
+            }
+
             // 기본 코너 등록 (매장 기본코너)
             StoreCornerVO storeCornerVO = new StoreCornerVO();
             storeCornerVO.setStoreCd(storeCd);
@@ -758,6 +762,10 @@ public class StoreManageServiceImpl implements StoreManageService{
             procCnt += mapper.mergeStoreInfoAddMoms(storeManageVO);
             // [1264] 맘스전용_기프티쇼매장코드 MERGE 처리
             procCnt += mapper.mergeStoreEnv1264(storeManageVO);
+        }
+        // BBQ매장일때 브랜드 터미널 정보 머지 처리
+        if(storeManageVO.getHqOfficeCd().equals("DS011") || storeManageVO.getHqOfficeCd().equals("DS024") || storeManageVO.getHqOfficeCd().equals("H0360")) {
+            procCnt += mapper.insertBrandTerminalInfo(storeManageVO);
         }
 
         return procCnt;

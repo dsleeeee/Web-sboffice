@@ -210,6 +210,19 @@ public class StoreManageVO extends PageVO {
     /** 매장브랜드코드 */
     private String storeHqBrandCd;
 
+    /** [벤더구분] */
+    private String vendorFg;
+    /** [벤더구분명] */
+    private String vendorFgNm;
+    /** [벤더코드] */
+    private String vendorCd;
+    /** [벤더명] */
+    private String vendorNm;
+    /** [벤더 터미널번호] */
+    private String vendorTermnlNo;
+    /** [벤더시리얼번호] */
+    private String vendorSerNo;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -1002,5 +1015,53 @@ public class StoreManageVO extends PageVO {
 
     public void setStoreHqBrandCd(String storeHqBrandCd) {
         this.storeHqBrandCd = storeHqBrandCd;
+    }
+
+    public String getVendorFg() {
+        return vendorFg;
+    }
+
+    public void setVendorFg(String vendorFg) {
+        this.vendorFg = vendorFg;
+    }
+
+    public String getVendorFgNm() {
+        return vendorFgNm;
+    }
+
+    public void setVendorFgNm(String vendorFgNm) {
+        this.vendorFgNm = vendorFgNm;
+    }
+
+    public String getVendorCd() {
+        return vendorCd;
+    }
+
+    public void setVendorCd(String vendorCd) {
+        this.vendorCd = vendorCd;
+    }
+
+    public String getVendorNm() {
+        return vendorNm;
+    }
+
+    public void setVendorNm(String vendorNm) {
+        this.vendorNm = vendorNm;
+    }
+
+    public String getVendorTermnlNo() {
+        return vendorTermnlNo;
+    }
+
+    public void setVendorTermnlNo(String vendorTermnlNo) {
+        this.vendorTermnlNo = vendorTermnlNo;
+    }
+
+    public String getVendorSerNo() {
+        return vendorSerNo;
+    }
+
+    public void setVendorSerNo(String vendorSerNo) {
+        this.vendorSerNo = vendorSerNo;
     }
 }

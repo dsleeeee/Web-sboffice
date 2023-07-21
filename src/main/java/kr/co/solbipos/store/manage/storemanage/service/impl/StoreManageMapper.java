@@ -96,6 +96,9 @@ public interface StoreManageMapper {
     /** 포스 마스터 등록*/
     int insertPosInfo(StoreManageVO storeManageVO);
 
+    /** 매장 브랜드 터미널 등록 */
+    int insertBrandTerminalInfo(StoreManageVO storeManageVO);
+
     /** 매장 기본 코너 등록 */
     int insertStoreCorner(StoreCornerVO storeCornerVO);
 

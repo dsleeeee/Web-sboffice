@@ -214,6 +214,7 @@
                tmsi.MOMS_SHOP_TYPE,
                tmsi.MOMS_STORE_MANAGE_TYPE,
                NVL((SELECT ENVST_VAL FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '1250' AND USE_YN = 'Y'), '0') AS ENVST_1250,
+               NVL((SELECT ENVST_VAL FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '1114' AND USE_YN = 'Y'), '0') AS ENVST_1114,
                tms.SITE_CD
           FROM TB_MS_STORE tms,
                TB_HQ_OFFICE tho,
@@ -851,6 +852,81 @@
             #{modDt},
             #{modId}
         )
+    </insert>
+
+    <!-- 매장 브랜드 터미널 등록 -->
+    <!--
+        TABLE    : TB_MS_CORNER
+        PARAM    : storeManageVO
+        COMMENTS : 매장 브랜드 터미널을 등록한다. BBQ만 사용
+    -->
+    <insert id="insertBrandTerminalInfo" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertBrandTerminalInfo */
+        MERGE INTO TB_MS_POS_TERMNL A
+            USING (
+                SELECT  tms.STORE_CD
+                ,       tmp.POS_NO
+                ,       thbt.VENDOR_FG
+                ,       thbt.VENDOR_CD
+                ,       thbt.VENDOR_NM
+                ,       thbt.VENDOR_TERMNL_NO
+                ,       thbt.VENDOR_SER_NO
+                ,       #{regDt} AS REG_DT
+                ,       #{regId} AS REG_ID
+                ,       #{modDt} AS MOD_DT
+                ,       #{modId} AS MOD_ID
+                FROM    TB_MS_STORE tms
+                ,       TB_MS_POS tmp
+                ,		TB_HQ_BRAND_TERMNL thbt
+                WHERE   tms.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     tms.HQ_BRAND_CD = #{hqBrandCd}
+                AND     tms.STORE_CD = #{storeCd}
+                AND     tms.STORE_CD = tmp.STORE_CD
+                AND 	thbt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                AND 	thbt.HQ_BRAND_CD = tms.HQ_BRAND_CD
+            ) B
+            ON (
+                    A.STORE_CD = B.STORE_CD
+                    AND A.POS_NO = B.POS_NO
+                    AND A.VENDOR_FG = B.VENDOR_FG
+                    AND A.VENDOR_CD = B.VENDOR_CD
+                )
+            WHEN MATCHED THEN
+                UPDATE
+                    SET     A.VENDOR_NM = B.VENDOR_NM
+                    ,       A.VENDOR_TERMNL_NO = B.VENDOR_TERMNL_NO
+                    ,       A.VENDOR_SER_NO = B.VENDOR_SER_NO
+                    ,       A.MOD_DT = B.MOD_DT
+                    ,       A.MOD_ID = B.MOD_ID
+            WHEN NOT MATCHED THEN
+                INSERT
+                    (
+                        A.STORE_CD
+                    ,   A.POS_NO
+                    ,   A.VENDOR_FG
+                    ,   A.VENDOR_CD
+                    ,   A.VENDOR_NM
+                    ,   A.VENDOR_TERMNL_NO
+                    ,   A.VENDOR_SER_NO
+                    ,   A.REG_DT
+                    ,   A.REG_ID
+                    ,   A.MOD_DT
+                    ,   A.MOD_ID
+                    )
+                    VALUES
+                    (
+                        B.STORE_CD
+                    ,   B.POS_NO
+                    ,   B.VENDOR_FG
+                    ,   B.VENDOR_CD
+                    ,   B.VENDOR_NM
+                    ,   B.VENDOR_TERMNL_NO
+                    ,   B.VENDOR_SER_NO
+                    ,   B.REG_DT
+                    ,   B.REG_ID
+                    ,   B.MOD_DT
+                    ,   B.MOD_ID
+                    )
     </insert>
 
     <!-- 기본 코너 등록 -->
