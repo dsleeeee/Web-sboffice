@@ -44,7 +44,7 @@
                     <%-- 매장코드 --%>
                     <th><s:message code="orderStatus.storeCd"/></th>
                     <td>
-                        <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                        <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
                             <jsp:param name="targetId" value="orderCancelSelectStore"/>
                         </jsp:include>
                     </td>

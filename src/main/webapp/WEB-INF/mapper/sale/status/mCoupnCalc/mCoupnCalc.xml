@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    mCoupnCalc.xml
+    모바일쿠폰 정산
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2023.07.18     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.status.mCoupnCalc.service.impl.MCoupnCalcMapper">
+
+    <!-- 모바일쿠폰 정산 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_MCOUPN, TB_MS_STORE, TB_MS_STORE_INFO
+        PARAM    : mCoupnCalcVO
+        COMMENTS : 모바일쿠폰 정산 리스트를 조회한다.
+    -->
+    <select id="getMCoupnCalcList" parameterType="mCoupnCalcVO" resultType="DefaultMap">
+       /* USE : MCoupnCalcMapper.getMCoupnCalcList */
+       <include refid="CmmSQL.PagingTemplateHeader"/>
+       SELECT tms.BRANCH_CD
+       ,      (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+       ,      tsspm2.STORE_CD
+       ,      tms.STORE_NM
+       ,      tms.HQ_BRAND_CD AS BRAND_CD
+       ,      tmsi.MOMS_TEAM
+       ,      tmsi.MOMS_AC_SHOP
+       ,      tsspm2.MCOUPN_CD
+       ,      tcn.NMCODE_NM AS MCOUPN_NM
+       ,      SUM(tsspm2.CNT) AS CNT
+       ,      SUM(tsspm2.APPR_AMT) AS APPR_AMT
+       ,      SUM(tsspm2.CNT_OK) AS CNT_OK
+       ,      SUM(tsspm2.APPR_AMT_OK) AS APPR_AMT_OK
+       ,      SUM(tsspm2.CNT_CANCEL) AS CNT_CANCEL
+       ,      SUM(tsspm2.APPR_AMT_CANCEL) AS APPR_AMT_CANCEL
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_MS_STORE tms
+        ,    TB_MS_STORE_INFO tmsi
+        ,    (
+                SELECT NMCODE_CD
+                ,      NMCODE_NM
+                FROM   TB_CM_NMCODE
+                WHERE  NMCODE_GRP_CD = '110'
+             ) tcn
+        ,    (
+                SELECT tsspm.STORE_CD
+                     , SUM(tsspm.CNT) AS CNT
+                     , SUM(tsspm.SALE_AMT) AS APPR_AMT
+                     , DECODE(tsspm.SALE_FG,1,SUM(tsspm.CNT),0) AS CNT_OK
+                     , DECODE(tsspm.SALE_FG,1,SUM(tsspm.SALE_AMT),0) AS APPR_AMT_OK
+                     , DECODE(tsspm.SALE_FG,-1,ABS(SUM(tsspm.CNT)),0) AS CNT_CANCEL
+                     , DECODE(tsspm.SALE_FG,-1,ABS(SUM(tsspm.SALE_AMT)),0) AS APPR_AMT_CANCEL
+                     , tsspm.MCOUPN_CD
+                FROM (
+                        SELECT STORE_CD
+                        ,      SALE_FG
+                        ,      1 AS CNT
+                        ,      SALE_AMT
+                        ,      MCOUPN_CD
+                        FROM   TB_SL_SALE_PAY_MCOUPN
+                        WHERE  SALE_FG = 1
+                        AND    HQ_OFFICE_CD = #{hqOfficeCd}
+                        <if test='storeCds != null and storeCds != ""'>
+                            AND
+                            <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
+                                STORE_CD = #{item}
+                            </foreach>
+                        </if>
+                        <if test='orgnFg != null and orgnFg == "H"'>
+                            AND (
+                                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                                OR	STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                                )
+                        </if>
+                        <if test='posNo != null and posNo != ""'>
+                            AND STORE_CD||'||'||POS_NO IN
+                            <foreach collection="arrPosNo" item="item" open="("  separator="," close=")">
+                                #{item}
+                            </foreach>
+                        </if>
+                        <if test='mcoupnCd != null and mcoupnCd != ""'>
+                            AND MCOUPN_CD = #{mcoupnCd}
+                        </if>
+                        <!-- <if test='apprProcFg != null and apprProcFg != ""'>
+                            AND APPR_PROC_FG = #{apprProcFg}
+                        </if> -->
+                        <if test='cashBillApprProcFg != null and cashBillApprProcFg != ""'>
+                            AND CASH_BILL_APPR_PROC_FG = #{cashBillApprProcFg}
+                        </if>
+                        <if test='startDate != null and startDate != ""'>
+                           AND SALE_DATE >= #{startDate}
+                        </if>
+                        <if test='endDate != null and endDate != ""'>
+                           AND SALE_DATE <![CDATA[<= ]]> #{endDate}
+                        </if>
+                     UNION ALL
+                        SELECT STORE_CD
+                        ,      SALE_FG
+                        ,      -1 AS CNT
+                        ,       SALE_AMT
+                        ,      MCOUPN_CD
+                        FROM   TB_SL_SALE_PAY_MCOUPN
+                        WHERE  SALE_FG = -1
+                        AND    HQ_OFFICE_CD = #{hqOfficeCd}
+                        <if test='storeCds != null and storeCds != ""'>
+                            AND
+                            <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
+                                STORE_CD = #{item}
+                            </foreach>
+                        </if>
+                        <if test='orgnFg != null and orgnFg == "H"'>
+                            AND (
+                                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                                OR	STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                                )
+                        </if>
+                        <if test='posNo != null and posNo != ""'>
+                            AND STORE_CD||'||'||POS_NO IN
+                            <foreach collection="arrPosNo" item="item" open="("  separator="," close=")">
+                                #{item}
+                            </foreach>
+                        </if>
+                        <if test='mcoupnCd != null and mcoupnCd != ""'>
+                            AND MCOUPN_CD = #{mcoupnCd}
+                        </if>
+                        <!-- <if test='apprProcFg != null and apprProcFg != ""'>
+                            AND APPR_PROC_FG = #{apprProcFg}
+                        </if> -->
+                        <if test='cashBillApprProcFg != null and cashBillApprProcFg != ""'>
+                            AND CASH_BILL_APPR_PROC_FG = #{cashBillApprProcFg}
+                        </if>
+                        <if test='startDate != null and startDate != ""'>
+                           AND SALE_DATE >= #{startDate}
+                        </if>
+                        <if test='endDate != null and endDate != ""'>
+                           AND SALE_DATE <![CDATA[<= ]]> #{endDate}
+                        </if>
+                     ) tsspm
+                GROUP
+                BY    tsspm.STORE_CD
+                ,     tsspm.SALE_FG
+                ,     tsspm.MCOUPN_CD
+                <if test='saleFg != null and saleFg != ""'>
+                    HAVING tsspm.SALE_FG = #{saleFg}
+                </if>
+             ) tsspm2
+       WHERE tms.STORE_CD = tsspm2.STORE_CD
+       AND   tmsi.STORE_CD (+)= tsspm2.STORE_CD
+       AND   tcn.NMCODE_CD = tsspm2.MCOUPN_CD
+       <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+          AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 선택한 매장브랜드가 있을 때
+       </if>
+       <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+          <if test='userBrands != null and userBrands != ""'>
+              -- 선택한 매장브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+              AND tms.HQ_BRAND_CD IN
+              <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                  #{item}
+              </foreach>
+          </if>
+       </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+       GROUP
+       BY    tms.BRANCH_CD
+       ,     tsspm2.STORE_CD
+       ,     tms.STORE_NM
+       ,     tms.HQ_BRAND_CD
+       ,     tmsi.MOMS_TEAM
+       ,     tmsi.MOMS_AC_SHOP
+       ,     tsspm2.MCOUPN_CD
+       ,     tcn.NMCODE_NM
+       ORDER
+       BY    tsspm2.STORE_CD
+       <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 모바일쿠폰 정산 조회조건 엑셀다운로드 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_MCOUPN, TB_MS_STORE, TB_MS_STORE_INFO
+        PARAM    : mCoupnCalcVO
+        COMMENTS : 모바일쿠폰 정산 조회조건 엑셀 다운로드 한다.
+    -->
+    <select id="getMCoupnCalcExcelList" parameterType="mCoupnCalcVO" resultType="DefaultMap">
+       /* USE : MCoupnCalcMapper.getMCoupnCalcExcelList */
+       SELECT tms.BRANCH_CD
+       ,      (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+       ,      tsspm2.STORE_CD
+       ,      tms.STORE_NM
+       ,      tms.HQ_BRAND_CD AS BRAND_CD
+       ,      tmsi.MOMS_TEAM
+       ,      tmsi.MOMS_AC_SHOP
+       ,      tsspm2.MCOUPN_CD
+       ,      tcn.NMCODE_NM AS MCOUPN_NM
+       ,      SUM(tsspm2.CNT) AS CNT
+       ,      SUM(tsspm2.APPR_AMT) AS APPR_AMT
+       ,      SUM(tsspm2.CNT_OK) AS CNT_OK
+       ,      SUM(tsspm2.APPR_AMT_OK) AS APPR_AMT_OK
+       ,      SUM(tsspm2.CNT_CANCEL) AS CNT_CANCEL
+       ,      SUM(tsspm2.APPR_AMT_CANCEL) AS APPR_AMT_CANCEL
+        FROM TB_MS_STORE tms
+        ,    TB_MS_STORE_INFO tmsi
+        ,    (
+                SELECT NMCODE_CD
+                ,      NMCODE_NM
+                FROM   TB_CM_NMCODE
+                WHERE  NMCODE_GRP_CD = '110'
+             ) tcn
+        ,    (
+                SELECT tsspm.STORE_CD
+                     , SUM(tsspm.CNT) AS CNT
+                     , SUM(tsspm.SALE_AMT) AS APPR_AMT
+                     , DECODE(tsspm.SALE_FG,1,SUM(tsspm.CNT),0) AS CNT_OK
+                     , DECODE(tsspm.SALE_FG,1,SUM(tsspm.SALE_AMT),0) AS APPR_AMT_OK
+                     , DECODE(tsspm.SALE_FG,-1,ABS(SUM(tsspm.CNT)),0) AS CNT_CANCEL
+                     , DECODE(tsspm.SALE_FG,-1,ABS(SUM(tsspm.SALE_AMT)),0) AS APPR_AMT_CANCEL
+                     , tsspm.MCOUPN_CD
+                FROM (
+                        SELECT STORE_CD
+                        ,      SALE_FG
+                        ,      1 AS CNT
+                        ,      SALE_AMT
+                        ,      MCOUPN_CD
+                        FROM   TB_SL_SALE_PAY_MCOUPN
+                        WHERE  SALE_FG = 1
+                        AND    HQ_OFFICE_CD = #{hqOfficeCd}
+                        <if test='storeCds != null and storeCds != ""'>
+                            AND
+                            <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
+                                STORE_CD = #{item}
+                            </foreach>
+                        </if>
+                        <if test='orgnFg != null and orgnFg == "H"'>
+                            AND (
+                                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                                OR	STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                                )
+                        </if>
+                        <if test='posNo != null and posNo != ""'>
+                            AND STORE_CD||'||'||POS_NO IN
+                            <foreach collection="arrPosNo" item="item" open="("  separator="," close=")">
+                                #{item}
+                            </foreach>
+                        </if>
+                        <if test='mcoupnCd != null and mcoupnCd != ""'>
+                            AND MCOUPN_CD = #{mcoupnCd}
+                        </if>
+                        <!-- <if test='apprProcFg != null and apprProcFg != ""'>
+                            AND APPR_PROC_FG = #{apprProcFg}
+                        </if> -->
+                        <if test='cashBillApprProcFg != null and cashBillApprProcFg != ""'>
+                            AND CASH_BILL_APPR_PROC_FG = #{cashBillApprProcFg}
+                        </if>
+                        <if test='startDate != null and startDate != ""'>
+                           AND SALE_DATE >= #{startDate}
+                        </if>
+                        <if test='endDate != null and endDate != ""'>
+                           AND SALE_DATE <![CDATA[<= ]]> #{endDate}
+                        </if>
+                     UNION ALL
+                        SELECT STORE_CD
+                        ,      SALE_FG
+                        ,      -1 AS CNT
+                        ,       SALE_AMT
+                        ,      MCOUPN_CD
+                        FROM   TB_SL_SALE_PAY_MCOUPN
+                        WHERE  SALE_FG = -1
+                        AND    HQ_OFFICE_CD = #{hqOfficeCd}
+                        <if test='storeCds != null and storeCds != ""'>
+                            AND
+                            <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
+                                STORE_CD = #{item}
+                            </foreach>
+                        </if>
+                        <if test='orgnFg != null and orgnFg == "H"'>
+                            AND (
+                                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                                OR	STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                                )
+                        </if>
+                        <if test='posNo != null and posNo != ""'>
+                            AND STORE_CD||'||'||POS_NO IN
+                            <foreach collection="arrPosNo" item="item" open="("  separator="," close=")">
+                                #{item}
+                            </foreach>
+                        </if>
+                        <if test='mcoupnCd != null and mcoupnCd != ""'>
+                            AND MCOUPN_CD = #{mcoupnCd}
+                        </if>
+                        <!-- <if test='apprProcFg != null and apprProcFg != ""'>
+                            AND APPR_PROC_FG = #{apprProcFg}
+                        </if> -->
+                        <if test='cashBillApprProcFg != null and cashBillApprProcFg != ""'>
+                            AND CASH_BILL_APPR_PROC_FG = #{cashBillApprProcFg}
+                        </if>
+                        <if test='startDate != null and startDate != ""'>
+                           AND SALE_DATE >= #{startDate}
+                        </if>
+                        <if test='endDate != null and endDate != ""'>
+                           AND SALE_DATE <![CDATA[<= ]]> #{endDate}
+                        </if>
+                     ) tsspm
+                GROUP
+                BY    tsspm.STORE_CD
+                ,     tsspm.SALE_FG
+                ,     tsspm.MCOUPN_CD
+                <if test='saleFg != null and saleFg != ""'>
+                    HAVING tsspm.SALE_FG = #{saleFg}
+                </if>
+             ) tsspm2
+       WHERE tms.STORE_CD = tsspm2.STORE_CD
+       AND   tmsi.STORE_CD (+)= tsspm2.STORE_CD
+       AND   tcn.NMCODE_CD = tsspm2.MCOUPN_CD
+       <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+          AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 선택한 매장브랜드가 있을 때
+       </if>
+       <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+          <if test='userBrands != null and userBrands != ""'>
+              -- 선택한 매장브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+              AND tms.HQ_BRAND_CD IN
+              <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                  #{item}
+              </foreach>
+          </if>
+       </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+       GROUP
+       BY    tms.BRANCH_CD
+       ,     tsspm2.STORE_CD
+       ,     tms.STORE_NM
+       ,     tms.HQ_BRAND_CD
+       ,     tmsi.MOMS_TEAM
+       ,     tmsi.MOMS_AC_SHOP
+       ,     tsspm2.MCOUPN_CD
+       ,     tcn.NMCODE_NM
+       ORDER
+       BY    tsspm2.STORE_CD
+    </select>
+
+    <!-- 모바일쿠폰 정산 상세화면 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_COUPN
+        PARAM    : mCoupnCalcVO
+        COMMENTS : 모바일쿠폰 정산 상세화면을 조회한다.
+    -->
+    <select id="getMCoupnCalcDtlList" parameterType="mCoupnCalcVO" resultType="DefaultMap">
+        /* USE : MCoupnCalcMapper.getMCoupnCalcDtlList */
+        SELECT TO_CHAR(TO_DATE(tsspm.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,      tsspm.POS_NO
+        ,      tsspm.BILL_NO
+        ,      DECODE(tsspm.SALE_FG, 1, '승인', -1, '취소') AS SALE_FG
+        ,      tsspm.SALE_AMT
+        ,      tsspm.TIP_AMT
+        ,      tsspm.VAT_AMT
+        ,      DECODE(tsspm.MCOUPN_TYPE_FG, 1 , '교환권', 2, '금액권') AS MCOUPN_TYPE_FG
+        ,      tsspm.MCOUPN_UPRC
+        ,      tsspm.MCOUPN_REMAIN_AMT
+        ,      DECODE(tsspm.CASH_BILL_APPR_PROC_FG, 1 , '포스승인', 2, '단말기승인', 3, '일반') AS CASH_BILL_APPR_PROC_FG
+        ,      tsspm.CASH_BILL_CARD_NO
+        ,      TO_CHAR(TO_DATE(tsspm.CASH_BILL_APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS CASH_BILL_APPR_DT
+        ,      TO_CHAR(TO_DATE(tsspm.APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS APPR_DT
+        ,      tsspm.APPR_NO
+        ,      tsspm.SALE_AMT AS APPR_AMT
+        FROM   TB_SL_SALE_PAY_MCOUPN tsspm
+        ,      TB_MS_STORE_INFO tmsi
+        ,      TB_MS_STORE tms
+        WHERE 1=1
+        AND   tms.STORE_CD = tsspm.STORE_CD
+        AND   tmsi.STORE_CD (+)= tsspm.STORE_CD
+        AND   tsspm.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCd != null and storeCd != ""'>
+            AND tsspm.STORE_CD = #{storeCd}
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR	tsspm.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND tsspm.STORE_CD||'||'||tsspm.POS_NO IN
+            <foreach collection="arrPosNo" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='mcoupnCd != null and mcoupnCd != ""'>
+            AND tsspm.MCOUPN_CD = #{mcoupnCd}
+        </if>
+        <if test='saleFg != null and saleFg != ""'>
+           AND tsspm.SALE_FG = #{saleFg}
+        </if>
+        <if test='cashBillApprProcFg != null and cashBillApprProcFg != ""'>
+            AND tsspm.CASH_BILL_APPR_PROC_FG = #{cashBillApprProcFg}
+        </if>
+        <if test='startDate != null and startDate != ""'>
+            AND tsspm.SALE_DATE >= #{startDate}
+        </if>
+        <if test='endDate != null and endDate != ""'>
+            AND tsspm.SALE_DATE <![CDATA[ <= ]]> #{endDate}
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                  AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 선택한 매장브랜드가 있을 때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+          <if test='userBrands != null and userBrands != ""'>
+              -- 선택한 매장브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+              AND tms.HQ_BRAND_CD IN
+              <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                  #{item}
+              </foreach>
+          </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+    </select>
+
+
+</mapper>
