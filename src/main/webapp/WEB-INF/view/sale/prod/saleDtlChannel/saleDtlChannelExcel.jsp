@@ -341,7 +341,7 @@
                     <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.prodCdList"/>" binding="prodCdList" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.momsTeam"/>" binding="momsTeam" width="80" is-read-only="true" align="center" data-map="momsTeamDataMap" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.momsAcShop"/>" binding="momsAcShop" width="80" is-read-only="true" align="center" data-map="momsAcShopDataMap"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.momsAearFg"/>" binding="momsAearFg" width="80" is-read-only="true" align="center" data-map="momsAreaFgDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.momsAreaFg"/>" binding="momsAreaFg" width="80" is-read-only="true" align="center" data-map="momsAreaFgDataMap"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.momsCommercial"/>" binding="momsCommercial" width="80" is-read-only="true" align="center" data-map="momsCommercialDataMap"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.momsShopType"/>" binding="momsShopType" width="80" is-read-only="true" align="center" data-map="momsShopTypeDataMap"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.momsStoreManageType"/>" binding="momsStoreManageType" width="80" is-read-only="true" align="center" data-map="momsStoreManageTypeDataMap"></wj-flex-grid-column>
