@@ -3,6 +3,7 @@ package kr.co.solbipos.sale.prod.dayProd.service.impl;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.kioskDisplayResve.service.KioskDisplayResveVO;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : DayProdServiceImpl.java
@@ -40,6 +43,49 @@ public class DayProdServiceImpl implements DayProdService {
     public List<DefaultMap<Object>> getSaleAmtFgRemarkList(DayProdVO dayProdVO, SessionInfoVO sessionInfoVO) {
         dayProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return dayProdMapper.getSaleAmtFgRemarkList(dayProdVO);
+    }
+
+    /** 조회 */
+    @Override
+    public List<DefaultMap<Object>> getSaleAmtFgRemarkList3(DayProdVO dayProdVO, SessionInfoVO sessionInfoVO) {
+        dayProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 매장브랜드, 상품브랜드가 '전체' 일때
+            if (dayProdVO.getProdHqBrandCd() == "" || dayProdVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = dayProdVO.getUserBrands().split(",");
+                dayProdVO.setUserBrandList(userBrandList);
+            }
+        }
+
+        return dayProdMapper.getSaleAmtFgRemarkList3(dayProdVO);
+    }
+
+    @Override
+    public int getSdselMomsModSave(DayProdVO[] dayProdVOs, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String currentDt = currentDateTimeString();
+        for(DayProdVO dayProdVO : dayProdVOs){
+            dayProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            dayProdVO.setRegDt(currentDt);
+            dayProdVO.setRegId(sessionInfoVO.getUserId());
+            dayProdVO.setModDt(currentDt);
+            dayProdVO.setModId(sessionInfoVO.getUserId());
+
+            result = dayProdMapper.getSdselMomsModSave(dayProdVO);
+        }
+        return result;
+    }
+
+    @Override
+    public int getSdselMomsModDelete(DayProdVO[] dayProdVOs, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        for(DayProdVO dayProdVO : dayProdVOs){
+            dayProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            result = dayProdMapper.getSdselMomsModDelete(dayProdVO);
+        }
+        return result;
     }
 
     /** 조회 */

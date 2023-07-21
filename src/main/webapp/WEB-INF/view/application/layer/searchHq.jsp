@@ -77,6 +77,7 @@
                 <wj-flex-grid-column header="<s:message code="application.hq.search.digit8Store"/>" binding="digit8Store" width="70" align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="application.hq.search.1250"/>" binding="envst1250" width="70" align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="application.hq.search.1262"/>" binding="envst1262" width="70" align="center" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="application.hq.search.1114"/>" binding="envst1114" width="70" align="center" visible="false"></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
           </div>

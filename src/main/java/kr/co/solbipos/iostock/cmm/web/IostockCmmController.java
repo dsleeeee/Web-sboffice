@@ -499,4 +499,26 @@ public class IostockCmmController {
 
         return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
     }
+
+    /**
+     * 수불&재고관련 공통 - 사원 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   iostockCmmVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 09. 03.
+     */
+    @RequestMapping(value = "/selectEmpList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectEmpList(HttpServletRequest request, HttpServletResponse response,
+                                  Model model, IostockCmmVO iostockCmmVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = iostockCmmService.selectEmpList(iostockCmmVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
+    }
 }

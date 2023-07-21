@@ -789,4 +789,79 @@
         ORDER BY A.SDSEL_GRP_CD, B.SDSEL_CLASS_CD, C.PROD_CD
     </select>
 
+
+    <!-- 사원 공통 - 사원 리스트 조회 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="selectEmpList" parameterType="iostockCmmVO" resultType="DefaultMap">
+        /* USE : IostockCmmMapper.selectEmpList */
+        SELECT 	the.EMP_NO
+        ,		the.EMP_NM
+        ,		the.USER_ID
+        ,		the.MP_NO
+        ,		twub.HQ_BRAND_NM AS USER_HQ_BRAND
+        ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND BRANCH_CD = the.BRANCH_CD) AS BRANCH_CD
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '151' AND NMCODE_CD = the.MOMS_TEAM) AS MOMS_TEAM
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '152' AND NMCODE_CD = the.MOMS_AC_SHOP) AS MOMS_AC_SHOP
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '153' AND NMCODE_CD = the.MOMS_AREA_FG) AS MOMS_AREA_FG
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '154' AND NMCODE_CD = the.MOMS_COMMERCIAL) AS MOMS_COMMERCIAL
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '155' AND NMCODE_CD = the.MOMS_SHOP_TYPE) AS MOMS_SHOP_TYPE
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '156' AND NMCODE_CD = the.MOMS_STORE_MANAGE_TYPE) AS MOMS_STORE_MANAGE_TYPE
+        FROM 	TB_HQ_EMPLOYEE the
+        ,        (
+                SELECT  twub.USER_ID,
+                        LISTAGG(twub.HQ_BRAND_CD, ',') WITHIN GROUP (ORDER BY twub.HQ_BRAND_CD) AS HQ_BRAND_CD,
+                        LISTAGG(thb.HQ_BRAND_NM, ',') WITHIN GROUP (ORDER BY thb.HQ_BRAND_NM) AS HQ_BRAND_NM
+                FROM    TB_WB_USER_BRAND twub,
+                        TB_HQ_BRAND thb
+                WHERE   1=1
+                AND     thb.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     thb.HQ_BRAND_CD = twub.HQ_BRAND_CD
+                GROUP BY twub.USER_ID
+        ) twub
+        WHERE 	the.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND 	the.USER_ID = twub.USER_ID(+)
+        AND 	the.USER_ID IS NOT NULL
+        <if test='empNo != null and empNo != ""'>
+            AND the.EMP_NO LIKE '%'||#{empNo}||'%'
+        </if>
+        <if test='empNm != null and empNm != ""'>
+            AND the.EMP_NM LIKE '%'||#{empNm}||'%'
+        </if>
+        <if test='userId != null and userId != ""'>
+            AND the.USER_ID LIKE '%'||#{userId}||'%'
+        </if>
+        <if test='mpNo != null and mpNo != ""'>
+            AND the.MP_NO LIKE '%'||#{mpNo}||'%'
+        </if>
+        <if test='userHqBrand != null and userHqBrand != ""'>
+            AND twub.HQ_BRAND_CD LIKE '%'||#{userHqBrand}||'%'
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND the.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND the.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND the.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND the.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND the.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND the.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND the.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        ORDER BY the.EMP_NO
+    </select>
+
 </mapper>

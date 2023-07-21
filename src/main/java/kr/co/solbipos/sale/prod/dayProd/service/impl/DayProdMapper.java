@@ -27,6 +27,9 @@ import java.util.List;
 public interface DayProdMapper {
 
     List<DefaultMap<Object>> getSaleAmtFgRemarkList(DayProdVO dayProdVO);
+    List<DefaultMap<Object>> getSaleAmtFgRemarkList3(DayProdVO dayProdVO);
+    int getSdselMomsModSave(DayProdVO dayProdVO);
+    int getSdselMomsModDelete(DayProdVO dayProdVO);
     /** 조회 */
     List<DefaultMap<Object>> getDayProdList(DayProdVO dayProdVO);
     List<DefaultMap<Object>> getDayProdExcelList(DayProdVO dayProdVO);

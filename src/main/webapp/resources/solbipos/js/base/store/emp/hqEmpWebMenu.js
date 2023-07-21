@@ -25,16 +25,19 @@ app.controller('hqEmpWebMenuCtrl', ['$scope', '$http', function ($scope, $http) 
 
     // 팝업 오픈시 사원메뉴권한 조회
     $scope.$on("hqEmpWebMenuCtrl", function(event, data) {
-
+        $("#copyEmpNo").val("");
+        $("#copyEmpNm").val("선택");
         // 선택한 사원정보 데이터
         selData = data;
 
         // 본사마스터 계정(사원번호 0000)은 수정불가(관리자에서 해야함)
         if(selData.empNo == "0000"){
+            $("#tableCopy").css("display", "none");
             $("#btnCopyAuth").css("display", "none");
             $("#btnRemoveMenu").css("display", "none");
             $("#btnAddMenu").css("display", "none");
         }else{
+            $("#tableCopy").css("display", "");
             $("#btnCopyAuth").css("display", "");
             $("#btnRemoveMenu").css("display", "");
             $("#btnAddMenu").css("display", "");
@@ -77,9 +80,17 @@ app.controller('hqEmpWebMenuCtrl', ['$scope', '$http', function ($scope, $http) 
     // 권한복사 버튼 클릭
     $scope.copyAuth = function(){
 
+        if($("#copyEmpNo").val() === ""){
+            $scope._popMsg(messages["hqEmp.require.empNullChk"]);
+            return false;
+        }
+        if(selData.empNo === $("#copyEmpNo").val()){
+            $scope._popMsg(messages["hqEmp.require.empChk"]);
+            return false;
+        }
         var param = {};
         param.empNo      = selData.empNo;
-        param.copyEmpNo  = $scope.empNo;
+        param.copyEmpNo  = $("#copyEmpNo").val();
 
         console.log(param);
 
@@ -127,6 +138,12 @@ app.controller('hqEmpWebMenuCtrl', ['$scope', '$http', function ($scope, $http) 
         return;
     }
 
+    // 매장선택 모듈 팝업 사용시 정의
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+    $scope.copyEmpShow = function () {
+        $scope._broadcast('copyEmpCtrl');
+    };
 }]);
 
 app.controller('notUseHqEmpWebMenuCtrl', ['$scope', '$http', function ($scope, $http) {

@@ -183,8 +183,11 @@
                         </wj-combo-box>
                     </div>
                 </td>
-                <td><button class="btn_skyblue" ng-click="remark()"><s:message code="dayProd.remark"/></button></td>
-                <td></td>
+                <td colspan="2">
+                    <button class="btn_skyblue" ng-click="remark1()"><s:message code="dayProd.saleAmtFg1"/></button>
+<%--                    <button class="btn_skyblue" ng-click="remark2()"><s:message code="dayProd.saleAmtFg2"/></button>--%>
+<%--                    <button class="btn_skyblue" ng-click="remark3()"><s:message code="dayProd.saleAmtFg3"/></button>--%>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -436,7 +439,7 @@
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/monthProd/monthProd.js?ver=20230707.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/monthProd/monthProd.js?ver=20230718.02" charset="utf-8"></script>
 
 <%-- 20221117 상품분류 팝업 주석처리함 -> 상품 멀티 팝업에 상품분류가 들어감으로 오류 --%>
 <%-- 상품분류 팝업 --%>
@@ -444,6 +447,10 @@
 <%--</c:import>--%>
 
 <c:import url="/WEB-INF/view/sale/prod/dayProd/saleAmtFgRemark.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+<c:import url="/WEB-INF/view/sale/prod/dayProd/saleAmtFgRemark3.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

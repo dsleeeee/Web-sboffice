@@ -435,6 +435,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
       // [1250 맘스터치]
       $("#hdMomsEnvstVal").val(storeDetailInfo.envst1250);
+      $("#envst1114").val(storeDetailInfo.envst1114);
       if($("#hdMomsEnvstVal").val() === "1") {
         // [1250 맘스터치] 코드별 본사 공통코드 콤보박스 조회
         $scope.hqNmcodeComboList("151");
@@ -448,6 +449,10 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
         $("#trMomsEnvst").css("display", "");
         $("#divMomsEnvst").css("display", "");
+      } else if($("#envst1114").val() === "1") {
+        // [1250 맘스터치] 브랜드 콤보박스 조회
+        $scope.hqBrandCdComboList();
+        $("#trMomsEnvst").css("display", "");
       } else {
         // 콤보박스 데이터
         $scope._setComboData("momsTeamCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-팀별
@@ -478,6 +483,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $scope.srchMomsCommercialCombo.selectedValue = vMomsCommercial;
           $scope.srchMomsShopTypeCombo.selectedValue = vMomsShopType;
           $scope.srchMomsStoreManageTypeCombo.selectedValue = vMomsStoreManageType;
+          $scope.srchHqBrandCdCombo.selectedValue = vHqBrandCd;
+        } else if($("#envst1114").val() === "1") {
           $scope.srchHqBrandCdCombo.selectedValue = vHqBrandCd;
         }
       }, 500);
@@ -880,7 +887,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // [1250 맘스터치]
     params.momsEnvstVal = nvl($("#hdMomsEnvstVal").val(), "0");
-    if($("#hdMomsEnvstVal").val() === "0") {
+    if($("#hdMomsEnvstVal").val() === "0" && $("#envst1114").val() === "0") {
       params.hqBrandCd = bHdHqBrandCd;
     }
     if(params.hqBrandCd === "" || params.hqBrandCd === null) {
@@ -1024,6 +1031,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
           // [1250 맘스터치]
           $("#hdMomsEnvstVal").val(hqScope.getHq().envst1250);
+          $("#envst1114").val(hqScope.getHq().envst1114);
+          console.log(hqScope.getHq().envst1114);
           if($("#hdMomsEnvstVal").val() === "1") {
             // [1250 맘스터치] 코드별 본사 공통코드 콤보박스 조회
             $scope.hqNmcodeComboList("151");
@@ -1044,7 +1053,12 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.srchMomsShopTypeCombo.selectedIndex = 0;
             $scope.srchMomsStoreManageTypeCombo.selectedIndex = 0;
             $scope.srchHqBrandCdCombo.selectedIndex = 0;
-          } else {
+          } else if($("#envst1114").val() === "1") {
+            // [1250 맘스터치] 브랜드 콤보박스 조회
+            $scope.hqBrandCdComboList();
+            $("#trMomsEnvst").css("display", "");
+            $scope.srchHqBrandCdCombo.selectedIndex = 0;
+          }  else {
             // 콤보박스 데이터
             $scope._setComboData("momsTeamCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-팀별
             $scope._setComboData("momsAcShopCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-AC점포별
@@ -1486,6 +1500,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // [1250 맘스터치]
     $("#hdMomsEnvstVal").val(momsEnvstVal);
+    $("#envst1114").val(brandUseFg);
     if($("#hdMomsEnvstVal").val() === "1") {
       // [1250 맘스터치] 코드별 본사 공통코드 콤보박스 조회
       $scope.hqNmcodeComboList("151");
@@ -1505,6 +1520,11 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.srchMomsCommercialCombo.selectedIndex = 0;
       $scope.srchMomsShopTypeCombo.selectedIndex = 0;
       $scope.srchMomsStoreManageTypeCombo.selectedIndex = 0;
+      $scope.srchHqBrandCdCombo.selectedIndex = 0;
+    } else if($("#envst1114").val() === "1") {
+      // [1250 맘스터치] 브랜드 콤보박스 조회
+      $scope.hqBrandCdComboList();
+      $("#trMomsEnvst").css("display", "");
       $scope.srchHqBrandCdCombo.selectedIndex = 0;
     } else {
       // 콤보박스 데이터

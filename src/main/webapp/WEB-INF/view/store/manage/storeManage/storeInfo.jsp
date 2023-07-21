@@ -69,6 +69,7 @@
                 <input type="hidden" id="hdDigit8Store"/>
                 <input type="hidden" id="hdBbqStoreCd" />
                 <input type="hidden" id="hdMomsEnvstVal" /> <%-- [1250 맘스터치] --%>
+                <input type="hidden" id="envst1114" /> <%-- [1114 브랜드사용여부] --%>
                 <input type="hidden" id="envst1262" />
                 <a id="btnChkStoreCd" href="#" class="btn_grayS ml5" ng-click="chkStoreCd()" style="display: none;"><s:message code="storeManage.chk.duplicate" /></a><Br />
               </td>
@@ -596,7 +597,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20230328.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20230328.02" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">

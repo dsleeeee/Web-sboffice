@@ -120,6 +120,15 @@ public class IostockCmmVO extends PageVO {
     /** 사이드선택상품명 */
     private String sdselProdNm;
 
+    /** 사원명 */
+    private String empNm;
+
+    /** 휴대폰번호 */
+    private String mpNo;
+
+    /** 관리브랜드 */
+    private String userHqBrand;
+
     /**
      * @return the orgnFg
      */
@@ -494,5 +503,29 @@ public class IostockCmmVO extends PageVO {
 
     public void setSdselProdNm(String sdselProdNm) {
         this.sdselProdNm = sdselProdNm;
+    }
+
+    public String getEmpNm() {
+        return empNm;
+    }
+
+    public void setEmpNm(String empNm) {
+        this.empNm = empNm;
+    }
+
+    public String getMpNo() {
+        return mpNo;
+    }
+
+    public void setMpNo(String mpNo) {
+        this.mpNo = mpNo;
+    }
+
+    public String getUserHqBrand() {
+        return userHqBrand;
+    }
+
+    public void setUserHqBrand(String userHqBrand) {
+        this.userHqBrand = userHqBrand;
     }
 }

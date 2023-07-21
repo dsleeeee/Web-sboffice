@@ -195,6 +195,8 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     // 키오스크(인트로)
     if(s.selectedValue === "003") {
       $("#lblFileSizeMax").text(messages["media.fileSize.max2"]);
+    } else if(s.selectedValue === "010") {
+      $("#lblFileSizeMax").text(messages["media.fileSize.max3"]);
     } else {
       $("#lblFileSizeMax").text("");
     }
