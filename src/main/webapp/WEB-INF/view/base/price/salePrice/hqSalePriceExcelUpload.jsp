@@ -82,30 +82,6 @@
 
     <%-- 그리드 --%>
     <div ng-controller="hqSalePriceExcelUploadCtrl">
-        <div class="sb-select w200px fl mr10">
-            <wj-combo-box
-                    id="excelStoreSaveFg"
-                    ng-model="excelStoreSaveFg"
-                    items-source="_getComboData('excelStoreSaveFg')"
-                    display-member-path="name"
-                    selected-value-path="value"
-                    is-editable="false"
-                    control="excelStoreSaveFgCombo"
-                    selected-index-changed="selectedIndexChanged(s)">
-            </wj-combo-box>
-        </div>
-        <div id="excelStoreSaveStore" class="fl oh bk" style="width: 200px; height:25px; display: none;">
-            <c:if test="${momsEnvstVal == '0'}">
-                <jsp:include page="/WEB-INF/view/application/layer/searchPriceStoreM.jsp" flush="true">
-                    <jsp:param name="targetId" value="excelChoiceSaveStore"/>
-                </jsp:include>
-            </c:if>
-            <c:if test="${momsEnvstVal == '1'}">
-                <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreMMoms.jsp" flush="true">
-                    <jsp:param name="targetId" value="excelChoiceSaveStore"/>
-                </jsp:include>
-            </c:if>
-        </div>
         <div class="mt10 oh sb-select dkbr">
             <%-- 엑셀다운로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelDownload()">
@@ -119,6 +95,30 @@
             <button class="btn_skyblue ml5 fr" id="btnSave" ng-click="save()">
                 <s:message code="cmm.save" />
             </button>
+            <div id="excelStoreSaveStore" class="fr mr10 oh bk" style="width: 200px; height:25px; display: none;">
+                <c:if test="${momsEnvstVal == '0'}">
+                    <jsp:include page="/WEB-INF/view/application/layer/searchPriceStoreM.jsp" flush="true">
+                        <jsp:param name="targetId" value="excelChoiceSaveStore"/>
+                    </jsp:include>
+                </c:if>
+                <c:if test="${momsEnvstVal == '1'}">
+                    <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreMMoms.jsp" flush="true">
+                        <jsp:param name="targetId" value="excelChoiceSaveStore"/>
+                    </jsp:include>
+                </c:if>
+            </div>
+            <div class="sb-select w200px fr mr10">
+                <wj-combo-box
+                        id="excelStoreSaveFg"
+                        ng-model="excelStoreSaveFg"
+                        items-source="_getComboData('excelStoreSaveFg')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        control="excelStoreSaveFgCombo"
+                        selected-index-changed="selectedIndexChanged(s)">
+                </wj-combo-box>
+            </div>
         </div>
         <%-- 저장 --%>
         <div class="w100 mt10 mb20">

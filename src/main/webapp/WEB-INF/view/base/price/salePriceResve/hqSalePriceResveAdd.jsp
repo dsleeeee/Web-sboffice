@@ -176,7 +176,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="4">
+                        <th><s:message code="salePriceResve.storeSaveFg"/></th>
+                        <td colspan="3">
                             <div class="sb-select w200px fl mr10">
                                 <wj-combo-box
                                         id="addStoreSaveFg"

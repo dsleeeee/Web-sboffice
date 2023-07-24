@@ -84,19 +84,7 @@
     <div ng-controller="hqSalePriceResveExcelUploadCtrl">
 
         <div class="mt10 oh sb-select dkbr">
-            <div class="sb-select w200px fl mr10">
-                <wj-combo-box
-                        id="excelStoreSaveFg"
-                        ng-model="excelStoreSaveFg"
-                        items-source="_getComboData('excelStoreSaveFg')"
-                        display-member-path="name"
-                        selected-value-path="value"
-                        is-editable="false"
-                        control="excelStoreSaveFgCombo"
-                        selected-index-changed="selectedIndexChanged(s)">
-                </wj-combo-box>
-            </div>
-            <div id="excelStoreSaveStore" class="fl oh bk" style="width: 200px; height:25px; display: none;">
+            <div id="excelStoreSaveStore" class="fr oh bk mr10" style="width: 200px; height:25px; display: none;">
                 <c:if test="${momsEnvstVal == '0'}">
                     <jsp:include page="/WEB-INF/view/application/layer/searchPriceStoreM.jsp" flush="true">
                         <jsp:param name="targetId" value="excelChoiceSaveStore"/>
@@ -107,6 +95,18 @@
                         <jsp:param name="targetId" value="excelChoiceSaveStore"/>
                     </jsp:include>
                 </c:if>
+            </div>
+            <div class="sb-select w200px fr mr10">
+                <wj-combo-box
+                        id="excelStoreSaveFg"
+                        ng-model="excelStoreSaveFg"
+                        items-source="_getComboData('excelStoreSaveFg')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        control="excelStoreSaveFgCombo"
+                        selected-index-changed="selectedIndexChanged(s)">
+                </wj-combo-box>
             </div>
         </div>
 
