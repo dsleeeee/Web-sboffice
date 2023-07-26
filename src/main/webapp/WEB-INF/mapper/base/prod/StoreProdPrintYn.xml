@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StoreProdPrintYn.xml
+    매장별출력여부관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2023.07.24     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.prod.storeProdPrintYn.service.impl.StoreProdPrintYnMapper">
+
+    <!-- 옵션관리 탭 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getStoreProdOptionPrintYnList" parameterType="StoreProdPrintYnVO" resultType="DefaultMap">
+        /* StoreProdPrintYnMapper.getStoreProdOptionPrintYnList */
+        SELECT
+        A.STORE_CD,
+        D.STORE_NM,
+        A.OPTION_GRP_CD,
+        A.OPTION_GRP_NM,
+        A.USE_YN,
+        B.OPTION_VAL_CD,
+        B.OPTION_VAL_NM,
+        B.OPT_PROD_CD,
+        C.PROD_NM AS OPT_PROD_NM,
+        NVL(B.PRINT_YN, 'Y') AS PRINT_YN,
+        E.PRINT_YN AS HQ_PRINT_YN
+        FROM TB_MS_PRODUCT_OPTION_GROUP A,
+        TB_MS_PRODUCT_OPTION_VAL B,
+        TB_MS_PRODUCT C,
+        TB_MS_STORE D,
+        TB_HQ_PRODUCT_OPTION_VAL E
+        WHERE 1=1
+        AND A.STORE_CD = #{storeCd}
+        <if test='optionGrpCd != null and optionGrpCd != ""'>
+            AND A.OPTION_GRP_CD LIKE '%'||#{optionGrpCd}||'%'
+        </if>
+        <if test='optionGrpNm != null and optionGrpNm != ""'>
+            AND A.OPTION_GRP_NM LIKE '%'||#{optionGrpNm}||'%'
+        </if>
+        <if test='optionValCd != null and optionValCd != ""'>
+            AND B.OPTION_VAL_CD LIKE '%'||#{optionValCd}||'%'
+        </if>
+        <if test='optionValNm != null and optionValNm != ""'>
+            AND B.OPTION_VAL_NM LIKE '%'||#{optionValNm}||'%'
+        </if>
+        <if test='printYn != null and printYn != ""'>
+            AND NVL(B.PRINT_YN, 'Y') = #{printYn}
+        </if>
+        AND B.STORE_CD = A.STORE_CD
+        AND B.OPTION_GRP_CD = A.OPTION_GRP_CD
+        AND C.STORE_CD (+)= B.STORE_CD
+        AND C.PROD_CD (+)= B.OPT_PROD_CD
+        AND D.STORE_CD = A.STORE_CD
+        AND E.HQ_OFFICE_CD (+)= #{hqOfficeCd}
+        AND E.OPTION_GRP_CD (+)= B.OPTION_GRP_CD
+        AND E.OPTION_VAL_CD (+)= B.OPTION_VAL_CD
+        ORDER BY A.OPTION_GRP_CD, B.OPTION_VAL_CD
+    </select>
+
+    <!-- 옵션관리 탭 - 저장 update -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getStoreProdOptionPrintYnSaveUpdate" parameterType="StoreProdPrintYnVO">
+        /* StoreProdPrintYnMapper.getStoreProdOptionPrintYnSaveUpdate */
+        UPDATE
+        TB_MS_PRODUCT_OPTION_VAL
+        SET
+        PRINT_YN = #{printYn},
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND STORE_CD = #{storeCd}
+        AND OPTION_GRP_CD = #{optionGrpCd}
+        AND OPTION_VAL_CD = #{optionValCd}
+    </update>
+
+    <!-- 사이드메뉴관리 탭 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getStoreSideMenuProdPrintYnList" parameterType="StoreProdPrintYnVO" resultType="DefaultMap">
+        /* StoreProdPrintYnMapper.getStoreSideMenuProdPrintYnList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        A.STORE_CD,
+        E.STORE_NM,
+        A.SDSEL_GRP_CD,
+        A.SDSEL_GRP_NM,
+        NVL(A.FIX_PROD_FG, '0') AS SDSEL_GRP_FIX_PROD_FG,
+        NVL(A.SDSEL_TYPE_FG, 'C') AS SDSEL_TYPE_FG,
+        B.SDSEL_CLASS_CD,
+        B.SDSEL_CLASS_NM,
+        B.SDSEL_QTY,
+        NVL(B.REQUIRE_YN, 'N') AS REQUIRE_YN,
+        FN_GET_PROD_CLASS_CD_NM_STR(#{storeCd}, D.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM,
+        C.PROD_CD AS SDSEL_PROD_CD,
+        D.PROD_NM AS SDSEL_PROD_NM,
+        NVL(C.FIX_PROD_FG, '0') AS FIX_PROD_FG,
+        NVL(C.PRINT_YN, 'Y') AS PRINT_YN,
+        F.PRINT_YN AS HQ_PRINT_YN
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_MS_PRODUCT_SDSEL_GROUP A,
+        TB_MS_PRODUCT_SDSEL_CLASS B,
+        TB_MS_PRODUCT_SDSEL_PROD C,
+        TB_MS_PRODUCT D,
+        TB_MS_STORE E,
+        TB_HQ_PRODUCT_SDSEL_PROD F
+        WHERE 1=1
+        AND A.STORE_CD = #{storeCd}
+        <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+            AND A.SDSEL_GRP_CD LIKE '%'||#{sdselGrpCd}||'%'
+        </if>
+        <if test='sdselGrpNm != null and sdselGrpNm != ""'>
+            AND A.SDSEL_GRP_NM LIKE '%'||#{sdselGrpNm}||'%'
+        </if>
+        <if test='sdselClassCd != null and sdselClassCd != ""'>
+            AND B.SDSEL_CLASS_CD LIKE '%'||#{sdselClassCd}||'%'
+        </if>
+        <if test='sdselClassNm != null and sdselClassNm != ""'>
+            AND B.SDSEL_CLASS_NM LIKE '%'||#{sdselClassNm}||'%'
+        </if>
+        <if test='sdselProdCd != null and sdselProdCd != ""'>
+            AND C.PROD_CD LIKE '%'||#{sdselProdCd}||'%'
+        </if>
+        <if test='sdselProdNm != null and sdselProdNm != ""'>
+            AND D.PROD_NM LIKE '%'||#{sdselProdNm}||'%'
+        </if>
+        <if test='fixProdFg != null and fixProdFg != ""'>
+            AND NVL(C.FIX_PROD_FG, '0') = #{fixProdFg}
+        </if>
+        <if test='printYn != null and printYn != ""'>
+            AND NVL(C.PRINT_YN, 'Y') = #{printYn}
+        </if>
+        AND A.USE_YN = 'Y'
+        AND B.USE_YN = 'Y'
+        AND C.USE_YN = 'Y'
+        AND B.STORE_CD = A.STORE_CD
+        AND B.SDSEL_GRP_CD = A.SDSEL_GRP_CD
+        AND C.STORE_CD = B.STORE_CD
+        AND C.SDSEL_CLASS_CD = B.SDSEL_CLASS_CD
+        AND D.STORE_CD (+)= C.STORE_CD
+        AND D.PROD_CD (+)= C.PROD_CD
+        AND E.STORE_CD = A.STORE_CD
+        AND F.HQ_OFFICE_CD (+)= #{hqOfficeCd}
+        AND F.SDSEL_CLASS_CD (+)= C.SDSEL_CLASS_CD
+        AND F.PROD_CD (+)= C.PROD_CD
+        ORDER BY A.SDSEL_GRP_CD, B.DISP_SEQ, C.DISP_SEQ
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 사이드메뉴관리 탭 - 저장 update -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getStoreSideMenuProdPrintYnSaveUpdate" parameterType="StoreProdPrintYnVO">
+        /* StoreProdPrintYnMapper.getStoreSideMenuProdPrintYnSaveUpdate */
+        UPDATE
+        TB_MS_PRODUCT_SDSEL_PROD
+        SET
+        PRINT_YN = #{printYn},
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND STORE_CD = #{storeCd}
+        AND SDSEL_CLASS_CD = #{sdselClassCd}
+        AND PROD_CD = #{sdselProdCd}
+    </update>
+
+</mapper>
