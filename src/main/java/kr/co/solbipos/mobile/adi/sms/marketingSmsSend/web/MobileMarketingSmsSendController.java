@@ -5,8 +5,10 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.mobile.adi.sms.marketingSmsSend.service.MobileMarketingSmsSendService;
 import kr.co.solbipos.mobile.adi.sms.marketingSmsSend.service.MobileMarketingSmsSendVO;
@@ -49,16 +51,18 @@ public class MobileMarketingSmsSendController {
     private final MobileMarketingSmsSendService mobileMarketingSmsSendService;
     private final MarketingSmsSendService marketingSmsSendService; // 마케팅용 SMS전송
     private final CmmCodeUtil cmmCodeUtil;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public MobileMarketingSmsSendController(SessionService sessionService, MobileMarketingSmsSendService mobileMarketingSmsSendService, MarketingSmsSendService marketingSmsSendService, CmmCodeUtil cmmCodeUtil) {
+    public MobileMarketingSmsSendController(SessionService sessionService, MobileMarketingSmsSendService mobileMarketingSmsSendService, MarketingSmsSendService marketingSmsSendService, CmmCodeUtil cmmCodeUtil, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.mobileMarketingSmsSendService = mobileMarketingSmsSendService;
         this.marketingSmsSendService = marketingSmsSendService; // 마케팅용 SMS전송
         this.cmmCodeUtil = cmmCodeUtil;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -82,6 +86,13 @@ public class MobileMarketingSmsSendController {
         List membrClassList = marketingSmsSendService.getMembrClassList(marketingSmsSendVO, sessionInfoVO);
         String membrClassListAll = cmmCodeUtil.assmblObj(membrClassList, "name", "value", UseYn.ALL);
         model.addAttribute("memberClassList", membrClassListAll);
+
+        // [1273 비매출회원SMS전송여부]
+        if ( "H".equals(sessionInfoVO.getOrgnFg().getCode()) ) {
+            model.addAttribute("envst1273", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1273"), "0"));
+        } else if ( "S".equals(sessionInfoVO.getOrgnFg().getCode()) ) {
+            model.addAttribute("envst1273", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1273"), "0"));
+        }
 
         return "mobile/adi/sms/marketingSmsSend/mobileMarketingSmsSend";
     }

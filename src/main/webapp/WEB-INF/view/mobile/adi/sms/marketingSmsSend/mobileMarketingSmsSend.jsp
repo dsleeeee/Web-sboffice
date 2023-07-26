@@ -742,9 +742,12 @@
 
     // 회원등급
     var memberClassList = ${memberClassList};
+
+    // [1273 비매출회원SMS전송여부]
+    var envst1273 = "${envst1273}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/adi/sms/marketingSmsSend/mobileMarketingSmsSend.js?ver=20220426.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/adi/sms/marketingSmsSend/mobileMarketingSmsSend.js?ver=20230726.01" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
 <%--<c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">--%>

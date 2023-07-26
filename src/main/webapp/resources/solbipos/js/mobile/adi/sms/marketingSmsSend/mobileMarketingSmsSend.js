@@ -26,8 +26,18 @@ var periodData = [
 ];
 
 // 광고성 SMS전송 DropBoxDataMap
+var marketingSmsGubunComboDataAll = [
+    {"name": "전체", "value": ""},
+    {"name": "1개월전", "value": "1"},
+    {"name": "2개월전", "value": "2"},
+    {"name": "3개월전", "value": "3"},
+    {"name": "4개월전", "value": "4"},
+    {"name": "5개월전", "value": "5"},
+    {"name": "6개월전", "value": "6"}
+];
+
+// 광고성 SMS전송 DropBoxDataMap
 var marketingSmsGubunComboData = [
-    // {"name": "전체", "value": ""},
     {"name": "1개월전", "value": "1"},
     {"name": "2개월전", "value": "2"},
     {"name": "3개월전", "value": "3"},
@@ -135,7 +145,12 @@ app.controller('mobileMarketingSmsSendCtrl', ['$scope', '$http', '$timeout', fun
 
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("telNoCombo", telNoComboData); // 전송자번호
-    $scope._setComboData("marketingSmsGubunCombo", marketingSmsGubunComboData); // 광고성 SMS전송
+    if(envst1273 === '0'){
+        $scope._setComboData("marketingSmsGubunCombo", marketingSmsGubunComboData); // 광고성 SMS전송
+    } else {
+        $scope._setComboData("marketingSmsGubunCombo", marketingSmsGubunComboDataAll); // 광고성 SMS전송
+        $scope.marketingSmsGubun = '';
+    }
     $scope._setComboData("rMemberClass", memberClassList); // 회원등급
     $scope._setComboData("periodType", periodData); // 검색기간 콤보박스
     $scope._getComboDataQuery('299', 'membrCardFg', 'A');

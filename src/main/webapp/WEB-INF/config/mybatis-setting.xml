@@ -352,6 +352,8 @@
     <typeAlias alias="sideMenuStoreVO" type="kr.co.solbipos.base.prod.sideMenuStore.service.SideMenuStoreVO"/>
     <!-- 기초관리 > 상품관리2 > 출력여부관리 -->
     <typeAlias alias="prodPrintYnVO" type="kr.co.solbipos.base.prod.prodPrintYn.service.ProdPrintYnVO"/>
+    <!-- 기초관리 > 상품관리2 > 매장별출력여부관리 -->
+    <typeAlias alias="storeProdPrintYnVO" type="kr.co.solbipos.base.prod.storeProdPrintYn.service.StoreProdPrintYnVO"/>
     <!--
     <typeAlias alias="prodBarcdVO" type="kr.co.solbipos.base.prod.prodbarcd.service.ProdBarcdVO"/>
     <typeAlias alias="supplyVO" type="kr.co.solbipos.base.prod.supply.service.SupplyVO"/>
