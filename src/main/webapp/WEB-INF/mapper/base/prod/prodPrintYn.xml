@@ -306,8 +306,8 @@
         TABLE    :
         COMMENTS :
     -->
-    <update id="getStoreSideMenuProdPrintYnSaveUpdate" parameterType="ProdPrintYnVO">
-        /* ProdPrintYnMapper.getStoreSideMenuProdPrintYnSaveUpdate */
+    <update id="getSideMenuProdPrintYnStoreSaveUpdate" parameterType="ProdPrintYnVO">
+        /* ProdPrintYnMapper.getSideMenuProdPrintYnStoreSaveUpdate */
         <![CDATA[
             UPDATE
             TB_MS_PRODUCT_SDSEL_PROD A

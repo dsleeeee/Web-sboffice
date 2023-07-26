@@ -112,7 +112,7 @@ public class ProdPrintYnServiceImpl implements ProdPrintYnService {
 
             // 본사에서 접속시
             if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-                procCnt = prodPrintYnMapper.getStoreSideMenuProdPrintYnSaveUpdate(prodPrintYnVO);
+                procCnt = prodPrintYnMapper.getSideMenuProdPrintYnStoreSaveUpdate(prodPrintYnVO);
             }
         }
 
