@@ -79,11 +79,6 @@ app.controller('storeSideMenuProdPrintYnCtrl', ['$scope', '$http', '$timeout', f
     });
 
     $scope.searchStoreSideMenuProdPrintYn = function() {
-        if($("#storeSideMenuProdPrintYnStoreCd").val() == ""){
-            $scope._popMsg(messages["cmm.require.selectStore"]); // 매장을 선택해 주세요.
-            return false;
-        }
-
         var params = {};
         params.storeCd = $("#storeSideMenuProdPrintYnStoreCd").val();
         params.printYn = $scope.printYn;

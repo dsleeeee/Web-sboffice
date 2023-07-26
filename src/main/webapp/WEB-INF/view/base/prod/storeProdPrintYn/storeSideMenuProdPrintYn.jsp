@@ -205,4 +205,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/storeProdPrintYn/storeSideMenuProdPrintYn.js?ver=20230725.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/storeProdPrintYn/storeSideMenuProdPrintYn.js?ver=20230726.01" charset="utf-8"></script>

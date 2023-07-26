@@ -18,6 +18,7 @@
     -->
     <select id="getStoreProdOptionPrintYnList" parameterType="StoreProdPrintYnVO" resultType="DefaultMap">
         /* StoreProdPrintYnMapper.getStoreProdOptionPrintYnList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
         A.STORE_CD,
         D.STORE_NM,
@@ -30,13 +31,16 @@
         C.PROD_NM AS OPT_PROD_NM,
         NVL(B.PRINT_YN, 'Y') AS PRINT_YN,
         E.PRINT_YN AS HQ_PRINT_YN
+        <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_MS_PRODUCT_OPTION_GROUP A,
         TB_MS_PRODUCT_OPTION_VAL B,
         TB_MS_PRODUCT C,
         TB_MS_STORE D,
         TB_HQ_PRODUCT_OPTION_VAL E
         WHERE 1=1
-        AND A.STORE_CD = #{storeCd}
+        <if test='storeCd != null and storeCd != ""'>
+            AND A.STORE_CD = #{storeCd}
+        </if>
         <if test='optionGrpCd != null and optionGrpCd != ""'>
             AND A.OPTION_GRP_CD LIKE '%'||#{optionGrpCd}||'%'
         </if>
@@ -60,7 +64,8 @@
         AND E.HQ_OFFICE_CD (+)= #{hqOfficeCd}
         AND E.OPTION_GRP_CD (+)= B.OPTION_GRP_CD
         AND E.OPTION_VAL_CD (+)= B.OPTION_VAL_CD
-        ORDER BY A.OPTION_GRP_CD, B.OPTION_VAL_CD
+        ORDER BY A.STORE_CD, A.OPTION_GRP_CD, B.OPTION_VAL_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <!-- 옵션관리 탭 - 저장 update -->
@@ -115,7 +120,9 @@
         TB_MS_STORE E,
         TB_HQ_PRODUCT_SDSEL_PROD F
         WHERE 1=1
-        AND A.STORE_CD = #{storeCd}
+        <if test='storeCd != null and storeCd != ""'>
+            AND A.STORE_CD = #{storeCd}
+        </if>
         <if test='sdselGrpCd != null and sdselGrpCd != ""'>
             AND A.SDSEL_GRP_CD LIKE '%'||#{sdselGrpCd}||'%'
         </if>
@@ -153,7 +160,7 @@
         AND F.HQ_OFFICE_CD (+)= #{hqOfficeCd}
         AND F.SDSEL_CLASS_CD (+)= C.SDSEL_CLASS_CD
         AND F.PROD_CD (+)= C.PROD_CD
-        ORDER BY A.SDSEL_GRP_CD, B.DISP_SEQ, C.DISP_SEQ
+        ORDER BY A.STORE_CD, A.SDSEL_GRP_CD, B.DISP_SEQ, C.DISP_SEQ
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 

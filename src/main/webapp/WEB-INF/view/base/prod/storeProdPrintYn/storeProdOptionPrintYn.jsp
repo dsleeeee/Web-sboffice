@@ -163,6 +163,13 @@
                 </wj-flex-grid>
             </div>
         </div>
+        <%-- 페이지 리스트 --%>
+        <div class="pageNum mt20">
+            <%-- id --%>
+            <ul id="storeProdOptionPrintYnCtrlPager" data-size="10">
+            </ul>
+        </div>
+        <%--//페이지 리스트--%>
 
     </div>
 </div>
@@ -172,4 +179,4 @@
     var useYnData = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/storeProdPrintYn/storeProdOptionPrintYn.js?ver=20230725.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/storeProdPrintYn/storeProdOptionPrintYn.js?ver=20230726.01" charset="utf-8"></script>

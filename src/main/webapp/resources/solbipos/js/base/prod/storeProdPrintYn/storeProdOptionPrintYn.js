@@ -63,14 +63,10 @@ app.controller('storeProdOptionPrintYnCtrl', ['$scope', '$http', '$timeout', fun
     });
 
     $scope.searchStoreProdOptionPrintYn = function() {
-        if($("#storeProdOptionPrintYnStoreCd").val() == ""){
-            $scope._popMsg(messages["cmm.require.selectStore"]); // 매장을 선택해 주세요.
-            return false;
-        }
-
         var params = {};
         params.storeCd = $("#storeProdOptionPrintYnStoreCd").val();
         params.printYn = $scope.printYn;
+        params.listScale = 500;
 
         $scope._inquiryMain("/base/prod/storeProdPrintYn/storeProdOptionPrintYn/getStoreProdOptionPrintYnList.sb", params, function() {}, false);
     };
