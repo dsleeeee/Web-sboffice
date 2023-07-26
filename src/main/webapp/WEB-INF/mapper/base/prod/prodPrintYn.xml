@@ -308,31 +308,16 @@
     -->
     <update id="getSideMenuProdPrintYnStoreSaveUpdate" parameterType="ProdPrintYnVO">
         /* ProdPrintYnMapper.getSideMenuProdPrintYnStoreSaveUpdate */
-        <![CDATA[
-            UPDATE
-            TB_MS_PRODUCT_SDSEL_PROD A
-            SET
-            A.PRINT_YN = DECODE(    (   SELECT  COUNT(B.USER_ID)
-                                        FROM    TB_MS_EMPLOYEE B
-                                        WHERE   B.STORE_CD      =   STORE_CD
-                                        AND     B.USER_ID       IN (
-                                                                        SELECT  DISTINCT C.MOD_ID
-                                                                        FROM    TB_LG_MS_PRODUCT_SDSEL_PROD_LOG C
-                                                                        WHERE   C.STORE_CD        =   A.STORE_CD
-                                                                        AND     C.SDSEL_CLASS_CD  =   A.SDSEL_CLASS_CD
-                                                                        AND     C.PROD_CD         =   A.PROD_CD
-                                                                        AND     NVL(C.B_PRINT_YN, 'N') <> NVL(C.PRINT_YN, 'N')
-                                                                    )
-                                    )
-                                , 0, #{printYn}
-                                , A.PRINT_YN),
-            A.MOD_DT = #{modDt},
-            A.MOD_ID = #{modId}
-            WHERE 1=1
-            AND A.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
-            AND A.SDSEL_CLASS_CD = #{sdselClassCd}
-            AND A.PROD_CD = #{sdselProdCd}
-        ]]>
+        UPDATE
+        TB_MS_PRODUCT_SDSEL_PROD A
+        SET
+        A.PRINT_YN = #{printYn},
+        A.MOD_DT = #{modDt},
+        A.MOD_ID = #{modId}
+        WHERE 1=1
+        AND A.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+        AND A.SDSEL_CLASS_CD = #{sdselClassCd}
+        AND A.PROD_CD = #{sdselProdCd}
     </update>
 
 </mapper>
