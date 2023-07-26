@@ -729,6 +729,15 @@ public class StoreManageServiceImpl implements StoreManageService{
             if(("1").equals(storeManageVO.getMomsEnvstVal())) {
                 procCnt += mapper.mergeStoreInfoAddMoms(storeManageVO);
             }
+
+            // 기준테이블바탕화면 이미지 등록
+            if(!storeManageVO.getHqOfficeCd().equals("00000")) {
+                // 기준테이블바탕화면 이미지 등록(프랜차이즈 매장)
+                mapper.insertHqBaseTblBgImgToStore(storeManageVO);
+            }else{
+                // 기준테이블바탕화면 이미지 등록(단독매장)
+                mapper.insertStoreBaseTblBgImg(storeManageVO);
+            }
         }
 
         return storeCd;

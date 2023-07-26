@@ -8339,4 +8339,146 @@
         ORDER BY thb.HQ_BRAND_CD
     </select>
 
+    <!-- 기준테이블바탕화면 이미지 등록(프랜차이즈 매장) -->
+    <!--
+        TABLE    : TB_HQ_POS_ADVER_FILE, TB_MS_POS_ADVER_FILE, TB_HQ_POS_ADVER_STORE
+        PARAM    : storeManageVO
+        COMMENTS : 본사의 기준테이블바탕화면 이미지를 프랜차이즈 매장에 등록한다.
+    -->
+    <insert id="insertHqBaseTblBgImgToStore" parameterType="storeManageVO">
+        /* USE : StoreManageMapper.insertHqBaseTblBgImgToStore */
+        MERGE INTO TB_HQ_POS_ADVER_STORE A
+        USING (
+                SELECT HQ_OFFICE_CD
+                ,      ADVER_FILE_NO
+                ,      #{storeCd} AS STORE_CD
+                ,      #{regDt} AS REG_DT
+                ,      #{regId} AS REG_ID
+                ,      #{modDt} AS MOD_DT
+                ,      #{modId} AS MOD_ID
+                FROM   TB_HQ_POS_ADVER_FILE
+                WHERE  HQ_OFFICE_CD  = #{hqOfficeCd}
+                AND    FILE_USE_TYPE = '005'
+                AND    FILE_ORG_NM   = '수정금지_기준테이블바탕화면'
+        ) B
+        ON
+        (
+                A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
+            AND A.ADVER_FILE_NO = B.ADVER_FILE_NO
+            AND A.STORE_CD      = B.STORE_CD
+        )
+        WHEN MATCHED THEN
+          UPDATE
+          SET
+              A.MOD_ID = B.MOD_ID
+          ,   A.MOD_DT = B.MOD_DT
+        WHEN NOT MATCHED THEN
+          INSERT
+          (
+              A.HQ_OFFICE_CD
+          ,   A.ADVER_FILE_NO
+          ,   A.STORE_CD
+          ,   A.REG_DT
+          ,   A.REG_ID
+          ,   A.MOD_DT
+          ,   A.MOD_ID
+          )
+          VALUES
+          (
+              B.HQ_OFFICE_CD
+          ,   B.ADVER_FILE_NO
+          ,   B.STORE_CD
+          ,   B.REG_DT
+          ,   B.REG_ID
+          ,   B.MOD_DT
+          ,   B.MOD_ID
+          )
+    </insert>
+
+    <!-- 기준테이블바탕화면 이미지 등록(단독매장) -->
+    <!--
+        TABLE    : TB_MS_POS_ADVER_FILE
+        PARAM    : storeManageVO
+        COMMENTS : 기준테이블바탕화면 이미지를 등록한다.
+        -->
+    <insert id="insertStoreBaseTblBgImg" parameterType="storeManageVO">
+        /* USE : StoreManageMapper.insertStoreBaseTblBgImg */
+        INSERT INTO TB_MS_POS_ADVER_FILE
+        (
+               STORE_CD
+        ,      ADVER_FILE_NO
+        ,      FILE_USE_TYPE
+        ,      ADVER_S_DATE
+        ,      ADVER_E_DATE
+        ,      FILE_DIR
+        ,      FILE_NM
+        ,      FILE_EXT
+        ,      FILE_SIZE
+        ,      FILE_MIME_TYPE
+        ,      FILE_ORG_NM
+        ,      FILE_DESC
+        ,      FILE_CHG_DT
+        ,      USE_YN
+        ,      REG_FG
+        ,      REG_DT
+        ,      REG_ID
+        ,      MOD_DT
+        ,      MOD_ID
+        ,      POS_RECV_YN
+        ,      POS_RECV_DT
+        ,      DISP_SEQ
+        ,      DISP_TIME
+        ,      TIME_YN
+        ,      START_TIME
+        ,      END_TIME
+        ,      WEEK_YN
+        ,      MON_YN
+        ,      TUE_YN
+        ,      WED_YN
+        ,      THU_YN
+        ,      FRI_YN
+        ,      SAT_YN
+        ,      SUN_YN
+        ,      PROMOTION_CD
+        )
+        SELECT #{storeCd} AS STORE_CD
+        ,      (SELECT LPAD(NVL(MAX(ADVER_FILE_NO), 7999) +1, 4, '0') FROM TB_MS_POS_ADVER_FILE WHERE STORE_CD = #{storeCd} AND ADVER_FILE_NO > 7999) AS ADVER_FILE_NO
+        ,      FILE_USE_TYPE
+        ,      ADVER_S_DATE
+        ,      ADVER_E_DATE
+        ,      FILE_DIR
+        ,      FILE_NM
+        ,      FILE_EXT
+        ,      FILE_SIZE
+        ,      FILE_MIME_TYPE
+        ,      FILE_ORG_NM
+        ,      FILE_DESC
+        ,      FILE_CHG_DT
+        ,      USE_YN
+        ,      REG_FG
+        ,      #{regDt} AS REG_DT
+        ,      #{regId} AS REG_ID
+        ,      #{modDt} AS MOD_DT
+        ,      #{modId} AS MOD_ID
+        ,      POS_RECV_YN
+        ,      POS_RECV_DT
+        ,      DISP_SEQ
+        ,      DISP_TIME
+        ,      TIME_YN
+        ,      START_TIME
+        ,      END_TIME
+        ,      WEEK_YN
+        ,      MON_YN
+        ,      TUE_YN
+        ,      WED_YN
+        ,      THU_YN
+        ,      FRI_YN
+        ,      SAT_YN
+        ,      SUN_YN
+        ,      PROMOTION_CD
+        FROM   TB_MS_POS_ADVER_FILE
+        WHERE  STORE_CD      = '0000000'
+        AND    ADVER_FILE_NO = '8000'
+    </insert>
+
 </mapper>

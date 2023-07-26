@@ -243,6 +243,10 @@ public class HqManageServiceImpl implements HqManageService{
         result += mapper.hqPrintTempReg(hqManage);
         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
+        // 기준테이블바탕화면 이미지 등록
+        result += mapper.insertHqBaseTblBgImg(hqManage);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
         return result;
     }
 

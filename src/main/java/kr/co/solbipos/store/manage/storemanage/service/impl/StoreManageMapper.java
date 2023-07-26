@@ -514,4 +514,10 @@ public interface StoreManageMapper {
 
     /** 브랜드 콤보박스 조회 */
     List<DefaultMap<Object>> getHqBrandCdComboList(StoreManageVO storeManageVO);
+
+    /** 기준테이블바탕화면 이미지 등록(프랜차이즈 매장) */
+    int insertHqBaseTblBgImgToStore(StoreManageVO storeManageVO);
+
+    /** 기준테이블바탕화면 이미지 등록(단독매장) */
+    int insertStoreBaseTblBgImg(StoreManageVO storeManageVO);
 }

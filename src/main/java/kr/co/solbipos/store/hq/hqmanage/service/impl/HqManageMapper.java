@@ -163,4 +163,7 @@ public interface HqManageMapper {
     /** 매장 판매터치키 재정렬 (03: 가격)*/
     int chgSortHqTouchKey03(HqEnvstVO hqEnvstVO);
 
+    /** 기준테이블바탕화면 이미지 등록*/
+    int insertHqBaseTblBgImg(HqManageVO hqManageVO);
+
 }
