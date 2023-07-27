@@ -40,7 +40,6 @@ public class StoreProdPrintYnServiceImpl implements StoreProdPrintYnService {
     @Autowired
     public StoreProdPrintYnServiceImpl(StoreProdPrintYnMapper storeProdPrintYnMapper) { this.storeProdPrintYnMapper = storeProdPrintYnMapper; }
 
-
     /** 옵션관리 탭 - 조회 */
     @Override
     public List<DefaultMap<Object>> getStoreProdOptionPrintYnList(StoreProdPrintYnVO storeProdPrintYnVO, SessionInfoVO sessionInfoVO) {
