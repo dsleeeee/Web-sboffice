@@ -127,6 +127,7 @@
             <div class="wj-TblWrapBr mr10 pd20" style="height:600px;">
                 <div class="mb5">
                     <label id="lbTuClsType"></label>
+                    <input type="hidden" id="tuClsTypeInfo"/>
                 </div>
                 <div class="updownSet oh mb10 pd5" id="divBtnCls" style="visibility: hidden;">
                     <div <c:choose><c:when test="${orgnFg == 'STORE' && kioskKeyEnvstVal == '0'}">style="visibility: hidden"</c:when><c:otherwise></c:otherwise></c:choose>>
@@ -472,7 +473,7 @@
     var kioskKeyEnvstVal = "${kioskKeyEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20230512.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20230727.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

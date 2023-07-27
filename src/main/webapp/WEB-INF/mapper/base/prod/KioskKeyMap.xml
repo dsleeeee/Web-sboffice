@@ -325,52 +325,95 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                INSERT INTO TB_HQ_KIOSK_GROUP
-                (
-                    HQ_OFFICE_CD
-                ,   TU_CLS_TYPE
-                ,   TU_CLS_TYPE_NM
-                ,   REG_DT
-                ,   REG_ID
-                ,   MOD_DT
-                ,   MOD_ID
-                )
+                MERGE INTO TB_HQ_KIOSK_GROUP A
+                USING   (
                 SELECT  HQ_OFFICE_CD
-                ,       #{tuClsType}
+                ,       #{tuClsType} AS TU_CLS_TYPE
                 ,       TU_CLS_TYPE_NM
-                ,       REG_DT
-                ,       REG_ID
-                ,       MOD_DT
-                ,       MOD_ID
+                ,       #{regDt} AS REG_ID
+                ,       #{regId} AS REG_DT
+                ,       #{modDt} AS MOD_ID
+                ,       #{modId} AS MOD_DT
                 FROM    TB_HQ_KIOSK_GROUP
                 WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
                 AND     TU_CLS_TYPE = #{orgTuClsType}
+                ) B
+                ON (
+                    A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                AND A.TU_CLS_TYPE = B.TU_CLS_TYPE
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                SET A.TU_CLS_TYPE_NM = B.TU_CLS_TYPE_NM
+                ,   A.MOD_ID = B.MOD_ID
+                ,   A.MOD_DT = B.MOD_DT
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                    A.HQ_OFFICE_CD
+                ,   A.TU_CLS_TYPE
+                ,   A.TU_CLS_TYPE_NM
+                ,   A.REG_DT
+                ,   A.REG_ID
+                ,   A.MOD_DT
+                ,   A.MOD_ID
+                )
+                VALUES
+                (
+                    B.HQ_OFFICE_CD
+                ,   B.TU_CLS_TYPE
+                ,   B.TU_CLS_TYPE_NM
+                ,   B.REG_DT
+                ,   B.REG_ID
+                ,   B.MOD_DT
+                ,   B.MOD_ID
+                )
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                INSERT INTO TB_MS_KIOSK_GROUP
-                (
-                    STORE_CD
-                ,   POS_NO
-                ,   TU_CLS_TYPE
-                ,   TU_CLS_TYPE_NM
-                ,   REG_DT
-                ,   REG_ID
-                ,   MOD_DT
-                ,   MOD_ID
-                )
+                MERGE INTO TB_MS_KIOSK_GROUP A
+                USING   (
                 SELECT  STORE_CD
-                ,       #{posNo}
-                ,       TU_CLS_TYPE
+                ,       #{tuClsType} AS TU_CLS_TYPE
                 ,       TU_CLS_TYPE_NM
-                ,       REG_DT
-                ,       REG_ID
-                ,       MOD_DT
-                ,       MOD_ID
+                ,       #{regDt} AS REG_ID
+                ,       #{regId} AS REG_DT
+                ,       #{modDt} AS MOD_ID
+                ,       #{modId} AS MOD_DT
                 FROM    TB_MS_KIOSK_GROUP
                 WHERE   STORE_CD = #{storeCd}
-                AND     POS_NO = #{orgPosNo}
                 AND     TU_CLS_TYPE = #{orgTuClsType}
+                ) B
+                ON (
+                    A.STORE_CD = B.STORE_CD
+                AND A.TU_CLS_TYPE = B.TU_CLS_TYPE
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                SET A.TU_CLS_TYPE_NM = B.TU_CLS_TYPE_NM
+                ,   A.MOD_ID = B.MOD_ID
+                ,   A.MOD_DT = B.MOD_DT
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                    A.STORE_CD
+                ,   A.TU_CLS_TYPE
+                ,   A.TU_CLS_TYPE_NM
+                ,   A.REG_DT
+                ,   A.REG_ID
+                ,   A.MOD_DT
+                ,   A.MOD_ID
+                )
+                VALUES
+                (
+                    B.STORE_CD
+                ,   B.TU_CLS_TYPE
+                ,   B.TU_CLS_TYPE_NM
+                ,   B.REG_DT
+                ,   B.REG_ID
+                ,   B.MOD_DT
+                ,   B.MOD_ID
+                )
             </when>
         </choose>
     </insert>

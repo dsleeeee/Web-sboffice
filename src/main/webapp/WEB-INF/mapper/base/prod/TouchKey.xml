@@ -2340,49 +2340,95 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                INSERT INTO TB_HQ_TOUCH_KEY_GROUP
+                MERGE INTO TB_HQ_TOUCH_KEY_GROUP A
+                    USING   (
+                        SELECT  HQ_OFFICE_CD
+                        ,       #{tukeyGrpCd} AS TUKEY_GRP_CD
+                        ,		TUKEY_GRP_NM
+                        ,       #{regDt} AS REG_ID
+                        ,       #{regId} AS REG_DT
+                        ,       #{modDt} AS MOD_ID
+                        ,       #{modId} AS MOD_DT
+                        FROM    TB_HQ_TOUCH_KEY_GROUP
+                        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND     TUKEY_GRP_CD = #{copyTukeyGrpCd}
+                    ) B
+                    ON (
+                        A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                    AND A.TUKEY_GRP_CD = B.TUKEY_GRP_CD
+                    )
+                WHEN MATCHED THEN
+                UPDATE
+                SET A.TUKEY_GRP_NM = B.TUKEY_GRP_NM
+                ,   A.MOD_ID = B.MOD_ID
+                ,   A.MOD_DT = B.MOD_DT
+                WHEN NOT MATCHED THEN
+                INSERT
                 (
-                    HQ_OFFICE_CD
-                ,   TUKEY_GRP_CD
-                ,   TUKEY_GRP_NM
-                ,   REG_DT
-                ,   REG_ID
-                ,   MOD_DT
-                ,   MOD_ID
+                    A.HQ_OFFICE_CD
+                ,   A.TUKEY_GRP_CD
+                ,   A.TUKEY_GRP_NM
+                ,   A.REG_DT
+                ,   A.REG_ID
+                ,   A.MOD_DT
+                ,   A.MOD_ID
                 )
-                SELECT  HQ_OFFICE_CD
-                ,       #{tukeyGrpCd}
-                ,		TUKEY_GRP_NM
-                ,       #{regDt}
-                ,       #{regId}
-                ,       #{modDt}
-                ,       #{modId}
-                FROM    TB_HQ_TOUCH_KEY_GROUP
-                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
-                AND     TUKEY_GRP_CD = #{copyTukeyGrpCd}
+                VALUES
+                (
+                    B.HQ_OFFICE_CD
+                ,   B.TUKEY_GRP_CD
+                ,   B.TUKEY_GRP_NM
+                ,   B.REG_DT
+                ,   B.REG_ID
+                ,   B.MOD_DT
+                ,   B.MOD_ID
+                )
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                INSERT INTO TB_MS_TOUCH_KEY_GROUP
-                (
-                    STORE_CD
-                ,   TUKEY_GRP_CD
-                ,   TUKEY_GRP_NM
-                ,   REG_DT
-                ,   REG_ID
-                ,   MOD_DT
-                ,   MOD_ID
-                )
+                MERGE INTO TB_MS_TOUCH_KEY_GROUP A
+                USING   (
                 SELECT  STORE_CD
-                ,       #{tukeyGrpCd}
+                ,       #{tukeyGrpCd} AS TUKEY_GRP_CD
                 ,		TUKEY_GRP_NM
-                ,       #{regDt}
-                ,       #{regId}
-                ,       #{modDt}
-                ,       #{modId}
+                ,       #{regDt} AS REG_ID
+                ,       #{regId} AS REG_DT
+                ,       #{modDt} AS MOD_ID
+                ,       #{modId} AS MOD_DT
                 FROM    TB_MS_TOUCH_KEY_GROUP
                 WHERE   STORE_CD = #{storeCd}
                 AND     TUKEY_GRP_CD = #{copyTukeyGrpCd}
+                ) B
+                ON (
+                A.STORE_CD = B.STORE_CD
+                AND A.TUKEY_GRP_CD = B.TUKEY_GRP_CD
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                SET A.TUKEY_GRP_NM = B.TUKEY_GRP_NM
+                ,   A.MOD_ID = B.MOD_ID
+                ,   A.MOD_DT = B.MOD_DT
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                    A.STORE_CD
+                ,   A.TUKEY_GRP_CD
+                ,   A.TUKEY_GRP_NM
+                ,   A.REG_DT
+                ,   A.REG_ID
+                ,   A.MOD_DT
+                ,   A.MOD_ID
+                )
+                VALUES
+                (
+                    B.STORE_CD
+                ,   B.TUKEY_GRP_CD
+                ,   B.TUKEY_GRP_NM
+                ,   B.REG_DT
+                ,   B.REG_ID
+                ,   B.MOD_DT
+                ,   B.MOD_ID
+                )
             </when>
         </choose>
     </insert>

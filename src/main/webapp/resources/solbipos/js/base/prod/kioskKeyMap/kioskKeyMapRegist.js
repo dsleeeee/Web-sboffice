@@ -127,8 +127,10 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
         // 키맵그룹 관련 데이터 셋팅
         if(orgnFg === "STORE") {
             $("#lbTuClsType").text("POS번호 : " + $scope.posNoCombo.selectedValue + " / 키맵그룹 : " + $scope.tuClsTypeCombo.selectedValue);
+            $("#tuClsTypeInfo").val($scope.tuClsTypeCombo._oldText);
         }else{
             $("#lbTuClsType").text("키맵그룹 : " + $scope.tuClsTypeCombo.selectedValue);
+            $("#tuClsTypeInfo").val($scope.tuClsTypeCombo._oldText);
         }
 
         var params = {};
@@ -352,71 +354,78 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
 
     // 카테고리(분류) 저장
     $scope.saveCls = function () {
+        $scope._popConfirm(messages["cmm.choo.save"] + '<br/>('+ $("#tuClsTypeInfo").val() + ")", function () {
+            $scope.flex.collectionView.commitEdit();
 
-        $scope.flex.collectionView.commitEdit();
-
-        // 생성, 수정 Validation Check
-        for (var m = 0; m < $scope.flex.collectionView.itemCount; m++) {
-            //if(params[m].status !== 'D') {
-                if(  $scope.flex.collectionView.items[m].tuClsNm === null  || $scope.flex.collectionView.items[m].tuClsNm === '') {
+            // 생성, 수정 Validation Check
+            for (var m = 0; m < $scope.flex.collectionView.itemCount; m++) {
+                //if(params[m].status !== 'D') {
+                if ($scope.flex.collectionView.items[m].tuClsNm === null || $scope.flex.collectionView.items[m].tuClsNm === '') {
                     $scope._popMsg(messages['kioskKeyMap.require.category.msg']); // 카테고리명을 입력해주세요.
                     return;
                 }
-            //}
-        }
-
-        // 파라미터 설정
-        var params = [];
-
-        for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
-            if(orgnFg === "STORE") {$scope.flex.collectionView.itemsRemoved[d].posNo = $scope.posNoCombo.selectedValue;}
-            $scope.flex.collectionView.itemsRemoved[d].tuClsType = $("#hdTuClsType").val();
-            $scope.flex.collectionView.itemsRemoved[d].status = 'D';
-            params.push($scope.flex.collectionView.itemsRemoved[d]);
-        }
-
-        // indexNo 재설정
-        var editItems = [];
-        for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
-            if( isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
-                editItems.push($scope.flex.collectionView.items[s]);
+                //}
             }
-        }
 
-        for (var s = 0; s < editItems.length; s++) {
-            editItems[s].indexNo = (s + 1);
-            $scope.flex.collectionView.editItem(editItems[s]);
-            editItems[s].status = "U";
-            $scope.flex.collectionView.commitEdit();
-        }
+            // 파라미터 설정
+            var params = [];
 
-        for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
-            if(orgnFg === "STORE") {$scope.flex.collectionView.itemsEdited[u].posNo = $scope.posNoCombo.selectedValue;}
-            $scope.flex.collectionView.itemsEdited[u].tuClsType = $("#hdTuClsType").val();
-            $scope.flex.collectionView.itemsEdited[u].status = 'U';
-            params.push($scope.flex.collectionView.itemsEdited[u]);
-        }
-
-        for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-            if(orgnFg === "STORE") {$scope.flex.collectionView.itemsAdded[i].posNo = $scope.posNoCombo.selectedValue;}
-            $scope.flex.collectionView.itemsAdded[i].tuClsType = $("#hdTuClsType").val();
-            $scope.flex.collectionView.itemsAdded[i].status = 'I';
-            params.push($scope.flex.collectionView.itemsAdded[i]);
-        }
-
-        // 카테고리(분류)를 모두 삭제하는지 파악하기 위해
-        var gridLength = $scope.flex.collectionView.items.length;
-
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save('/base/prod/kioskKeyMap/kioskKeyMap/saveKioskCategory.sb', params, function() {
-
-            if(gridLength > 0 ){
-                // 카테고리분류 재조회
-                $scope.btnSearchCls();
-            }else{
-                // 키맵그룹 dropdown 재조회
-                $scope.setTuClsDropdownList("F");
+            for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
+                if (orgnFg === "STORE") {
+                    $scope.flex.collectionView.itemsRemoved[d].posNo = $scope.posNoCombo.selectedValue;
+                }
+                $scope.flex.collectionView.itemsRemoved[d].tuClsType = $("#hdTuClsType").val();
+                $scope.flex.collectionView.itemsRemoved[d].status = 'D';
+                params.push($scope.flex.collectionView.itemsRemoved[d]);
             }
+
+            // indexNo 재설정
+            var editItems = [];
+            for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
+                if (isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
+                    editItems.push($scope.flex.collectionView.items[s]);
+                }
+            }
+
+            for (var s = 0; s < editItems.length; s++) {
+                editItems[s].indexNo = (s + 1);
+                $scope.flex.collectionView.editItem(editItems[s]);
+                editItems[s].status = "U";
+                $scope.flex.collectionView.commitEdit();
+            }
+
+            for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
+                if (orgnFg === "STORE") {
+                    $scope.flex.collectionView.itemsEdited[u].posNo = $scope.posNoCombo.selectedValue;
+                }
+                $scope.flex.collectionView.itemsEdited[u].tuClsType = $("#hdTuClsType").val();
+                $scope.flex.collectionView.itemsEdited[u].status = 'U';
+                params.push($scope.flex.collectionView.itemsEdited[u]);
+            }
+
+            for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+                if (orgnFg === "STORE") {
+                    $scope.flex.collectionView.itemsAdded[i].posNo = $scope.posNoCombo.selectedValue;
+                }
+                $scope.flex.collectionView.itemsAdded[i].tuClsType = $("#hdTuClsType").val();
+                $scope.flex.collectionView.itemsAdded[i].status = 'I';
+                params.push($scope.flex.collectionView.itemsAdded[i]);
+            }
+
+            // 카테고리(분류)를 모두 삭제하는지 파악하기 위해
+            var gridLength = $scope.flex.collectionView.items.length;
+
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._save('/base/prod/kioskKeyMap/kioskKeyMap/saveKioskCategory.sb', params, function () {
+
+                if (gridLength > 0) {
+                    // 카테고리분류 재조회
+                    $scope.btnSearchCls();
+                } else {
+                    // 키맵그룹 dropdown 재조회
+                    $scope.setTuClsDropdownList("F");
+                }
+            });
         });
     };
 
@@ -1036,48 +1045,55 @@ app.controller('kioskKeyMapCtrl', ['$scope', '$http', '$timeout', function ($sco
 
     // 키맵 저장
     $scope.saveKeyMap = function () {
-        $scope.flex.collectionView.commitEdit();
 
-        // 파라미터 설정
-        var params = [];
-
-        for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
-            if(orgnFg === "STORE") {$scope.flex.collectionView.itemsRemoved[d].posNo = $("#hdPosNo").val();}
-            $scope.flex.collectionView.itemsRemoved[d].tuClsType = $("#hdTuClsType").val();
-            $scope.flex.collectionView.itemsRemoved[d].tuClsCd = $("#hdTuClsCd").val();
-            $scope.flex.collectionView.itemsRemoved[d].status = 'D';
-            params.push($scope.flex.collectionView.itemsRemoved[d]);
-        }
-
-        // indexNo 재설정
-        var editItems = [];
-        for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
-            if( isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
-                editItems.push($scope.flex.collectionView.items[s]);
-            }
-        }
-
-        for (var s = 0; s < editItems.length; s++) {
-            editItems[s].indexNo = (s + 1);
-            $scope.flex.collectionView.editItem(editItems[s]);
-            editItems[s].status = "U";
+        $scope._popConfirm(messages["cmm.choo.save"] + '<br/>(' + $("#spanTuKeyCls").text() + ")", function () {
             $scope.flex.collectionView.commitEdit();
-        }
 
-        for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
-            if(orgnFg === "STORE") {$scope.flex.collectionView.itemsEdited[u].posNo = $("#hdPosNo").val();}
-            $scope.flex.collectionView.itemsEdited[u].tuClsType = $("#hdTuClsType").val();
-            $scope.flex.collectionView.itemsEdited[u].tuClsCd = $("#hdTuClsCd").val();
-            $scope.flex.collectionView.itemsEdited[u].status = 'U';
-            params.push($scope.flex.collectionView.itemsEdited[u]);
-        }
+            // 파라미터 설정
+            var params = [];
 
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save('/base/prod/kioskKeyMap/kioskKeyMap/updateKioskKeyMap.sb', params, function() {
+            for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
+                if (orgnFg === "STORE") {
+                    $scope.flex.collectionView.itemsRemoved[d].posNo = $("#hdPosNo").val();
+                }
+                $scope.flex.collectionView.itemsRemoved[d].tuClsType = $("#hdTuClsType").val();
+                $scope.flex.collectionView.itemsRemoved[d].tuClsCd = $("#hdTuClsCd").val();
+                $scope.flex.collectionView.itemsRemoved[d].status = 'D';
+                params.push($scope.flex.collectionView.itemsRemoved[d]);
+            }
 
-            // 키맵 재조회
-            $scope.searchKeyMap();
+            // indexNo 재설정
+            var editItems = [];
+            for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
+                if (isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
+                    editItems.push($scope.flex.collectionView.items[s]);
+                }
+            }
 
+            for (var s = 0; s < editItems.length; s++) {
+                editItems[s].indexNo = (s + 1);
+                $scope.flex.collectionView.editItem(editItems[s]);
+                editItems[s].status = "U";
+                $scope.flex.collectionView.commitEdit();
+            }
+
+            for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
+                if (orgnFg === "STORE") {
+                    $scope.flex.collectionView.itemsEdited[u].posNo = $("#hdPosNo").val();
+                }
+                $scope.flex.collectionView.itemsEdited[u].tuClsType = $("#hdTuClsType").val();
+                $scope.flex.collectionView.itemsEdited[u].tuClsCd = $("#hdTuClsCd").val();
+                $scope.flex.collectionView.itemsEdited[u].status = 'U';
+                params.push($scope.flex.collectionView.itemsEdited[u]);
+            }
+
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._save('/base/prod/kioskKeyMap/kioskKeyMap/updateKioskKeyMap.sb', params, function () {
+
+                // 키맵 재조회
+                $scope.searchKeyMap();
+
+            });
         });
     }
 

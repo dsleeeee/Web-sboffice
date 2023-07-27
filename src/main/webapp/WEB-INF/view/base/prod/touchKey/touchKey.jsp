@@ -49,6 +49,7 @@
                             initialized="_initComboBox(s)">
                     </wj-combo-box>
                     <input type="hidden" id="hdSrchTouchKeyGrp" />
+                    <input type="hidden" id="touchKeyGrpInfo" />
                 </div>
                 <%-- 조회구분 --%>
                 <div class="sb-select" style="width:90px; float:left;">
@@ -521,7 +522,7 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20230711.01"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20230727.01"
         charset="utf-8"></script>
 
 <%-- 스타일미리보기 팝업 --%>
