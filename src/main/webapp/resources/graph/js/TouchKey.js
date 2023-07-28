@@ -394,6 +394,7 @@ $(document).ready(function() {
 
     // 조회한 터치키그룹 코드 hidden에 갖고있기(조회후 터치키그룹 콤보 변경 상태에서 저장 시, 조회된 그룹이 아닌 콤보박스에 있는 그룹으로 저장되는 오류 방지)
     $("#hdSrchTouchKeyGrp").val(scope.touchKeyGrpCombo.selectedValue);
+    $("#touchKeyGrpInfo").val(scope.touchKeyGrpCombo._oldText);
 
     if(scope.touchKeyGrp !== null && scope.touchKeyGrp !== "") { // 기존에 사용중인 터치키그룹이 있는 경우에만 조회(없으면 기본 스타일 '01'로 셋팅)
       // 스타일 코드 조회
@@ -1854,6 +1855,7 @@ Format.prototype.initElements = function () {
 
     // 조회한 터치키그룹 코드 hidden에 갖고있기(조회후 터치키그룹 콤보 변경 상태에서 저장 시, 조회된 그룹이 아닌 콤보박스에 있는 그룹으로 저장되는 오류 방지)
     $("#hdSrchTouchKeyGrp").val(scope.touchKeyGrpCombo.selectedValue);
+    $("#touchKeyGrpInfo").val(scope.touchKeyGrpCombo._oldText);
 
   });
 
@@ -1890,8 +1892,13 @@ Format.prototype.initElements = function () {
   addClickHandler(document.getElementById('btnSave'), function () {
 
     var scope = agrid.getScope("touchKeyCtrl");
+    var saveMsg
 
-    var saveMsg = "해당 그룹의 터치키를 저장하시겠습니까?";
+    if(scope.touchKeyGrpCombo.isDisabled){
+      saveMsg = "신규터치키그룹의 터치키를 저장하시겠습니까?";
+    } else {
+      saveMsg = $("#touchKeyGrpInfo").val() + "의 터치키를 저장하시겠습니까?";
+    }
 
     if(orgnFg === "HQ"){
       saveMsg += '<br/>매장수정허용분류에 등록된 분류의 터치키는 저장되지 않습니다.';

@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    EmpWebMenu.xml
+    메뉴별권한복사
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2023.07.25     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.store.emp.empWebMenu.service.impl.EmpWebMenuMapper">
+
+    <!-- 웹메뉴조회 조회 -->
+    <!--
+        TABLE    : TB_MS_EMPLOYEE, TB_MS_EMPLOYEE_CORNR
+        COMMENTS :
+    -->
+    <select id="getMenuList"  parameterType="empWebMenuVO" resultType="DefaultMap">
+        /* EmpWebMenuMapper.getMenuList */
+        SELECT twr.*
+        FROM (
+                SELECT  twr.RESRCE_CD AS L_MENU_CD,
+                        twr.RESRCE_NM AS L_MENU_NM,
+                        twri.RESRCE_CD AS M_MENU_CD,
+                        twri.RESRCE_NM AS M_MENU_NM,
+                        twrif.RESRCE_CD AS S_MENU_CD,
+                        twrif.RESRCE_NM AS S_MENU_NM
+                FROM    TB_WB_RESRCE_INFO twr,
+                        TB_WB_RESRCE_INFO twri,
+                        TB_WB_RESRCE_INFO twrif
+                WHERE   1=1
+                AND     twr.USE_YN = 'Y'
+                AND     twri.USE_YN = 'Y'
+                AND     twrif.USE_YN = 'Y'
+                AND     twri.P_RESRCE = twr.RESRCE_CD
+                AND     twrif.P_RESRCE = twri.RESRCE_CD
+                AND     (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
+                AND     twrif.DISP_LEVEL = '3'
+                ORDER BY twr.RESRCE_CD, twri.RESRCE_CD, twrif.RESRCE_CD
+                 ) twr,
+                 (
+                 SELECT twa.RESRCE_CD
+                 FROM   TB_HQ_EMPLOYEE the,
+                        TB_WB_USER_INFO twu,
+                        TB_WB_AUTHOR_GRP_RESRCE twa
+                 WHERE  the.HQ_OFFICE_CD = #{hqOfficeCd}
+                 AND    the.EMP_NO = '0000'
+                 AND    twu.USER_ID = the.USER_ID
+                 AND    twa.AUTH_GRP_CD = twu.AUTH_GRP_CD
+                 AND    twa.USE_YN = 'Y'
+                 MINUS
+                 SELECT twa.RESRCE_CD
+                 FROM   TB_HQ_EMPLOYEE the,
+                        TB_WB_USER_INFO twu,
+                        TB_WB_AUTHOR_EXCEPT_V01 twa
+                 WHERE  the.HQ_OFFICE_CD = #{hqOfficeCd}
+                 AND    the.EMP_NO = '0000'
+                 AND    twu.USER_ID = the.USER_ID
+                 AND    twa.USER_ID = twu.USER_ID
+                 AND    twa.INCLD_EXCLD_FG = 'E'
+                 AND    twa.USE_YN = 'Y'
+                 MINUS
+                 SELECT twa.RESRCE_CD
+                 FROM   TB_HQ_EMPLOYEE the,
+                        TB_WB_USER_INFO twu,
+                        TB_WB_AUTHOR_EXCEPT_V01 twa
+                 WHERE  the.HQ_OFFICE_CD = #{hqOfficeCd}
+                 AND    the.EMP_NO = '0000'
+                 AND    twu.USER_ID = the.USER_ID
+                 AND    twa.USER_ID = twu.USER_ID
+                 AND    twa.INCLD_EXCLD_FG = 'E'
+                 AND    twa.USE_YN = 'Y'
+                 ) the
+        WHERE the.RESRCE_CD = twr.S_MENU_CD
+        <if test='sMenuNm != null and sMenuNm != ""'>
+            AND twr.S_MENU_NM LIKE '%' || #{sMenuNm} || '%'
+        </if>
+    </select>
+
+    <!-- 메뉴 사용 사원조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getUseEmp"  parameterType="empWebMenuVO" resultType="DefaultMap">
+        /* EmpWebMenuMapper.getUseEmp */
+        SELECT 	the.EMP_NO
+        ,		the.EMP_NM
+        ,		the.USER_ID
+        ,		the.MP_NO
+        ,		twub.HQ_BRAND_NM AS USER_HQ_BRAND
+        ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND BRANCH_CD = the.BRANCH_CD) AS BRANCH_CD
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '151' AND NMCODE_CD = the.MOMS_TEAM) AS MOMS_TEAM
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '152' AND NMCODE_CD = the.MOMS_AC_SHOP) AS MOMS_AC_SHOP
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '153' AND NMCODE_CD = the.MOMS_AREA_FG) AS MOMS_AREA_FG
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '154' AND NMCODE_CD = the.MOMS_COMMERCIAL) AS MOMS_COMMERCIAL
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '155' AND NMCODE_CD = the.MOMS_SHOP_TYPE) AS MOMS_SHOP_TYPE
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '156' AND NMCODE_CD = the.MOMS_STORE_MANAGE_TYPE) AS MOMS_STORE_MANAGE_TYPE
+        FROM 	TB_HQ_EMPLOYEE the
+        ,        (
+                SELECT  twub.USER_ID
+                ,       LISTAGG(twub.HQ_BRAND_CD, ',') WITHIN GROUP (ORDER BY twub.HQ_BRAND_CD) AS HQ_BRAND_CD
+                ,       LISTAGG(thb.HQ_BRAND_NM, ',') WITHIN GROUP (ORDER BY thb.HQ_BRAND_NM) AS HQ_BRAND_NM
+                FROM    TB_WB_USER_BRAND twub
+                ,       TB_HQ_BRAND thb
+                WHERE   1=1
+                AND     thb.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     thb.HQ_BRAND_CD = twub.HQ_BRAND_CD
+                GROUP BY twub.USER_ID
+                ) twub
+        WHERE 	the.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND 	the.USER_ID = twub.USER_ID(+)
+        AND 	the.EMP_NO != '0000'
+        AND 	the.USER_ID IS NOT NULL
+        AND     the.EMP_NO NOT IN (
+                                    SELECT  DISTINCT THE.EMP_NO
+                                    FROM    TB_HQ_EMPLOYEE the
+                                    ,       TB_WB_USER_INFO twu
+                                    ,       TB_WB_AUTHOR_EXCEPT_V01 twa
+                                    WHERE   the.HQ_OFFICE_CD = #{hqOfficeCd}
+                                    AND     twu.USER_ID = the.USER_ID
+                                    AND     twa.USER_ID = twu.USER_ID
+                                    AND     twa.INCLD_EXCLD_FG = 'E'
+                                    AND     twa.USE_YN = 'Y'
+                                    AND     twa.RESRCE_CD = #{sMenuCd}
+                                    )
+
+        <if test='empNo != null and empNo != ""'>
+            AND the.EMP_NO LIKE '%'||#{empNo}||'%'
+        </if>
+        <if test='empNm != null and empNm != ""'>
+            AND the.EMP_NM LIKE '%'||#{empNm}||'%'
+        </if>
+        <if test='userId != null and userId != ""'>
+            AND the.USER_ID LIKE '%'||#{userId}||'%'
+        </if>
+        <if test='mpNo != null and mpNo != ""'>
+            AND the.MP_NO LIKE '%'||#{mpNo}||'%'
+        </if>
+        <if test='userHqBrand != null and userHqBrand != ""'>
+            AND twub.HQ_BRAND_CD LIKE '%'||#{userHqBrand}||'%'
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND the.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND the.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND the.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND the.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND the.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND the.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND the.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        ORDER BY the.EMP_NO
+    </select>
+
+    <!-- 메뉴 미사용 사원조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getUnuesdEmp"  parameterType="empWebMenuVO" resultType="DefaultMap">
+        /* EmpWebMenuMapper.getUnuesdEmp */
+        SELECT  the.EMP_NO
+        ,		the.EMP_NM
+        ,		the.USER_ID
+        ,		the.MP_NO
+        ,		twub.HQ_BRAND_NM AS USER_HQ_BRAND
+        ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND BRANCH_CD = the.BRANCH_CD) AS BRANCH_CD
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '151' AND NMCODE_CD = the.MOMS_TEAM) AS MOMS_TEAM
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '152' AND NMCODE_CD = the.MOMS_AC_SHOP) AS MOMS_AC_SHOP
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '153' AND NMCODE_CD = the.MOMS_AREA_FG) AS MOMS_AREA_FG
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '154' AND NMCODE_CD = the.MOMS_COMMERCIAL) AS MOMS_COMMERCIAL
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '155' AND NMCODE_CD = the.MOMS_SHOP_TYPE) AS MOMS_SHOP_TYPE
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '156' AND NMCODE_CD = the.MOMS_STORE_MANAGE_TYPE) AS MOMS_STORE_MANAGE_TYPE
+        FROM    (
+                SELECT  DISTINCT the.EMP_NO
+                ,		the.EMP_NM
+                ,		the.USER_ID
+                ,		the.MP_NO
+                ,       the.BRANCH_CD
+                ,       the.MOMS_TEAM
+                ,       the.MOMS_AC_SHOP
+                ,       the.MOMS_AREA_FG
+                ,       the.MOMS_COMMERCIAL
+                ,       the.MOMS_SHOP_TYPE
+                ,       the.MOMS_STORE_MANAGE_TYPE
+                FROM    TB_HQ_EMPLOYEE the
+                ,       TB_WB_USER_INFO twu
+                ,       TB_WB_AUTHOR_EXCEPT_V01 twa
+                WHERE   the.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     twu.USER_ID = the.USER_ID
+                AND     twa.USER_ID = twu.USER_ID
+                AND     twa.INCLD_EXCLD_FG = 'E'
+                AND     twa.USE_YN = 'Y'
+                AND     twa.RESRCE_CD = #{sMenuCd}
+                ) the
+           ,    (
+                SELECT  twub.USER_ID
+                ,       LISTAGG(twub.HQ_BRAND_CD, ',') WITHIN GROUP (ORDER BY twub.HQ_BRAND_CD) AS HQ_BRAND_CD
+                ,       LISTAGG(thb.HQ_BRAND_NM, ',') WITHIN GROUP (ORDER BY thb.HQ_BRAND_NM) AS HQ_BRAND_NM
+                FROM    TB_WB_USER_BRAND twub
+                ,       TB_HQ_BRAND thb
+                WHERE   1=1
+                AND     thb.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     thb.HQ_BRAND_CD = twub.HQ_BRAND_CD
+                GROUP BY twub.USER_ID
+                ) twub
+        WHERE   the.USER_ID = twub.USER_ID(+)
+        AND 	the.EMP_NO != '0000'
+        <if test='empNo != null and empNo != ""'>
+            AND the.EMP_NO LIKE '%'||#{empNo}||'%'
+        </if>
+        <if test='empNm != null and empNm != ""'>
+            AND the.EMP_NM LIKE '%'||#{empNm}||'%'
+        </if>
+        <if test='userId != null and userId != ""'>
+            AND the.USER_ID LIKE '%'||#{userId}||'%'
+        </if>
+        <if test='mpNo != null and mpNo != ""'>
+            AND the.MP_NO LIKE '%'||#{mpNo}||'%'
+        </if>
+        <if test='userHqBrand != null and userHqBrand != ""'>
+            AND twub.HQ_BRAND_CD LIKE '%'||#{userHqBrand}||'%'
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND the.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND the.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND the.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND the.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND the.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND the.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND the.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        ORDER BY the.EMP_NO
+    </select>
+
+    <!-- 사원별탭 - 관리코너 추가 -->
+    <!--
+        TABLE    : TB_MS_EMPLOYEE_CORNR
+        COMMENTS : [매장]사원_관리코너
+    -->
+    <insert id="getEmpWebMenuSaveInsert" parameterType="empWebMenuVO">
+        /* EmpWebMenuMapper.getEmpWebMenuSaveInsert */
+        INSERT INTO TB_WB_AUTHOR_EXCEPT
+        (
+            USER_ID,
+            RESRCE_CD,
+            INCLD_EXCLD_FG,
+            USE_YN,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{userId},
+            #{sMenuCd},
+            'E',
+            'Y',
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 사원별탭 - 관리코너 삭제 -->
+    <!--
+        TABLE    : TB_MS_EMPLOYEE_CORNR
+        COMMENTS : [매장]사원_관리코너
+    -->
+    <delete id="getEmpWebMenuSaveDelete" parameterType="empWebMenuVO">
+        /* EmpWebMenuMapper.getEmpWebMenuSaveDelete */
+        DELETE  TB_WB_AUTHOR_EXCEPT
+        WHERE   USER_ID = #{userId}
+        AND     RESRCE_CD = #{sMenuCd}
+    </delete>
+
+</mapper>
