@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    BbqMemberExcelUpload.xml
+    회원엑셀업로드(BBQ)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2023.07.26     최초작성
+-->
+<mapper namespace="kr.co.solbipos.membr.info.bbqMemberExcelUpload.service.impl.BbqMemberExcelUploadMapper">
+
+    <!--
+        TABLE    : TB_MB_MEMBER
+        PARAM    : bbqMemberExcelUploadVO
+        COMMENTS : 회원엑셀업로드(BBQ) 저장
+    -->
+    <insert id="insertMember" parameterType="bbqMemberExcelUploadVO">
+        <selectKey keyProperty="membrNo" resultType="String" order="AFTER">
+          select MEMBR_NO FROM TB_MB_MEMBER WHERE MEMBR_ORGN_CD = #{membrOrgnCd} AND MEMBR_NO = #{membrNo}
+        </selectKey>
+        /* BbqMemberExcelUploadMapper.insertMember */
+        INSERT INTO TB_MB_MEMBER tmm (
+                    tmm.MEMBR_ORGN_CD,
+                    tmm.MEMBR_NO,
+                    tmm.MEMBR_NM,
+                    tmm.MEMBR_NICKNM,
+                    tmm.MEMBR_CLASS_CD,
+                    tmm.MEMBR_CARD_NO,
+                    tmm.REG_STORE_CD,
+                    tmm.POST_NO,
+                    tmm.ADDR,
+                    tmm.ADDR_DTL,
+                    tmm.BIRTHDAY,
+                    tmm.LUNAR_YN,
+                    tmm.GENDR_FG,
+                    tmm.EMAIL_ADDR,
+                    tmm.SHORT_NO,
+                    tmm.TEL_NO,
+                    tmm.WEDDING_YN,
+                    tmm.WEDDINGDAY,
+                    tmm.EMAIL_RECV_YN,
+                    tmm.SMS_RECV_YN,
+                    tmm.USE_YN,
+                    tmm.REMARK,
+                    tmm.REG_DT,
+                    tmm.REG_ID,
+                    tmm.MOD_DT,
+                    tmm.MOD_ID,
+                    tmm.MEMBER_ENG_NM
+        ) VALUES (
+                    #{membrOrgnCd},
+                    #{membrNo},
+                    SBPENC.E(#{membrNm}),
+                    #{membrNicknm},
+                    #{membrClassCd},
+                    #{membrCardNo},
+                    #{regStoreCd},
+                    #{postNo},
+                    SBPENC.E(#{addr}),
+                    SBPENC.E(#{addrDtl}),
+                    #{birthday},
+                    #{lunarYn},
+                    #{gendrFg},
+                    #{emailAddr},
+                    #{shortNo},
+                    SBPENC.E(#{telNo}),
+                    #{weddingYn},
+                    #{weddingday},
+                    #{emailRecvYn},
+                    #{smsRecvYn},
+                    'Y',
+                    #{remark},
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId},
+                    #{memberEngNm}
+        )
+    </insert>
+
+    <!--
+        TABLE    : TB_MB_MEMBER_POINT
+        PARAM    : bbqMemberExcelUploadVO
+        COMMENTS : 회원엑셀업로드(BBQ) 회원포인트 저장
+    -->
+    <insert id="insertMemberPoint" parameterType="bbqMemberExcelUploadVO">
+        /* BbqMemberExcelUploadMapper.insertMemberPoint */
+        INSERT INTO TB_MB_MEMBER_POINT tmmp (
+                      tmmp.MEMBR_ORGN_CD
+                    , tmmp.MEMBR_NO
+                    , tmmp.TOT_SALE_CNT
+                    , tmmp.TOT_SALE_AMT
+                    , tmmp.TOT_DC_AMT
+                    , tmmp.TOT_SAVE_POINT
+                    , tmmp.TOT_USE_POINT
+                    , tmmp.AVABL_POINT
+                    , tmmp.TOT_ADJ_POINT
+                    , tmmp.FIRST_SALE_DATE
+                    , tmmp.LAST_SALE_DATE
+                    , tmmp.POINT_ACC_CNT
+                    , tmmp.POINT_USE_CNT
+                    , tmmp.REG_STORE_CD
+                    , tmmp.REG_TOT_SALE_CNT
+                    , tmmp.REG_TOT_SALE_AMT
+                    , tmmp.REG_TOT_DC_AMT
+                    , tmmp.REG_F_SALE_DATE
+                    , tmmp.REG_L_SALE_DATE
+                    , tmmp.REG_DT
+                    , tmmp.REG_ID
+                    , tmmp.MOD_DT
+                    , tmmp.MOD_ID
+        ) VALUES (
+                      #{membrOrgnCd}
+                    , #{membrNo}
+                    , 0
+                    , 0
+                    , 0
+                    , 0
+                    , 0
+                    , 0
+                    , 0
+                    , ''
+                    , #{lastSaleDate}
+                    , 0
+                    , 0
+                    , #{regStoreCd}
+                    , 0
+                    , 0
+                    , 0
+                    , ''
+                    , #{lastSaleDate}
+                    , #{regDt}
+                    , #{regId}
+                    , #{modDt}
+                    , #{modId}
+        )
+    </insert>
+
+</mapper>
