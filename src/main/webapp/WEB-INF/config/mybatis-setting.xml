@@ -354,6 +354,8 @@
     <typeAlias alias="prodPrintYnVO" type="kr.co.solbipos.base.prod.prodPrintYn.service.ProdPrintYnVO"/>
     <!-- 기초관리 > 상품관리2 > 매장별출력여부관리 -->
     <typeAlias alias="storeProdPrintYnVO" type="kr.co.solbipos.base.prod.storeProdPrintYn.service.StoreProdPrintYnVO"/>
+    <!-- 기초관리 > 상품관리2 > 테이블오더키맵관리 -->
+    <typeAlias alias="tableOrderKeyMapVO" type="kr.co.solbipos.base.prod.tableOrderKeyMap.service.TableOrderKeyMapVO"/>
     <!--
     <typeAlias alias="prodBarcdVO" type="kr.co.solbipos.base.prod.prodbarcd.service.ProdBarcdVO"/>
     <typeAlias alias="supplyVO" type="kr.co.solbipos.base.prod.supply.service.SupplyVO"/>
