@@ -254,6 +254,9 @@ public interface StoreManageMapper {
     /** 터치키 재설정 */
     String updateTouchKeyMng(StoreEnvVO storeEnvVO);
 
+    /** [1014 포스 프로그램 구분] 변경시 매장 포스 정보 저장 */
+    int updateMsPos(StoreEnvVO storeEnvVO);
+
     /** 매장 포스 환경 정보 조회 */
     List<DefaultMap<String>> getPosEnvGroupList(StorePosEnvVO storePosEnvVOs);
 

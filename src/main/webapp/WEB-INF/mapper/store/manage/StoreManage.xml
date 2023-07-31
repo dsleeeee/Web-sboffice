@@ -5465,6 +5465,22 @@
         }
     </select>
 
+    <!-- [1014 포스 프로그램 구분] 변경시 매장 포스 정보 저장 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="updateMsPos" parameterType="storeEnvVO">
+        /* USE : StoreManageMapper.updateMsPos */
+        UPDATE TB_MS_POS
+        SET POS_VER_NO = '',
+        VER_TYPE_FG = #{envstVal},
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND STORE_CD = #{storeCd}
+    </update>
+
     <!-- 매장 포스환경 정보 조회 -->
     <!--
         TABLE    : TB_CM_ENVST, TB_CM_ENVST_DTL, TB_MS_STORE_ENVST, TB_CM_NMCODE

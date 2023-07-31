@@ -837,6 +837,11 @@ public class StoreManageServiceImpl implements StoreManageService{
                     // 매장의 터치키분류 메뉴 라인수 변경에 따른 터치키 재정렬(바둑판형식)
                     chgStoreTouchKeySort(storeEnvVO, sessionInfoVO);
                 }
+                // [1014 포스 프로그램 구분] 변경시
+                if(chkEnvstCd.equals("1014"))
+                {
+                    mapper.updateMsPos(storeEnvVO);
+                }
             }
         }
         return procCnt;
