@@ -48,6 +48,7 @@
                 WHERE   thkc.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND     thkc.HQ_OFFICE_CD = thkg.HQ_OFFICE_CD(+)
                 AND     thkc.TU_CLS_TYPE = thkg.TU_CLS_TYPE(+)
+                AND     thkc.TU_CLS_TYPE NOT IN ('00')
                 ORDER BY thkc.TU_CLS_TYPE
             </when>
             <!-- 매장 -->
@@ -61,6 +62,7 @@
                 AND     thkc.STORE_CD = thkg.STORE_CD(+)
                 AND     thkc.POS_NO = thkg.POS_NO(+)
                 AND     thkc.TU_CLS_TYPE = thkg.TU_CLS_TYPE(+)
+                AND     thkc.TU_CLS_TYPE NOT IN ('00')
                 ORDER BY thkc.TU_CLS_TYPE
             </when>
         </choose>
@@ -101,6 +103,7 @@
                 <if test='storeModYn != null and storeModYn == "N"'>
                     AND (thn.NMCODE_ITEM_2 = 'N' OR thn.NMCODE_ITEM_2 IS NULL)
                 </if>
+                AND     thkc.TU_CLS_TYPE NOT IN ('00')
                 ORDER BY thkc.TU_CLS_TYPE, thkc.TU_CLS_CD
             </when>
             <!-- 매장 -->
@@ -124,6 +127,7 @@
                     AND thtkc.TU_CLS_TYPE = #{tuClsType}
                 </if>
                 AND thn.NMCODE_ITEM_2 = 'Y'
+                AND     thkc.TU_CLS_TYPE NOT IN ('00')
                 ORDER BY thkc.TU_CLS_TYPE, thkc.TU_CLS_CD
             </when>
         </choose>
@@ -208,6 +212,7 @@
                 WHERE	thkc.HQ_OFFICE_CD = thkg.HQ_OFFICE_CD (+)
                 AND 	thkc.TU_CLS_TYPE = thkg.TU_CLS_TYPE (+)
                 AND     thkc.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     thkc.TU_CLS_TYPE NOT IN ('00')
                 ORDER BY thkc.TU_CLS_TYPE
             </when>
             <!-- 매장 -->
@@ -222,6 +227,7 @@
                 AND 	tmkc.TU_CLS_TYPE = tmkg.TU_CLS_TYPE (+)
                 AND     tmkc.STORE_CD = #{storeCd}
                 AND     tmkc.POS_NO = #{posNo}
+                AND     tmkc.TU_CLS_TYPE NOT IN ('00')
                 ORDER BY tmkc.TU_CLS_TYPE
             </when>
         </choose>

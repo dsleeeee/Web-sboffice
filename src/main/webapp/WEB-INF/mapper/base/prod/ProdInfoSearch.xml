@@ -2538,6 +2538,7 @@
                 <if test='tuClsType != null and tuClsType != ""'>
                     AND A.TU_CLS_TYPE = #{tuClsType}
                 </if>
+                AND     A.TU_CLS_TYPE NOT IN ('00')
                 ORDER BY A.TU_CLS_TYPE, A.INDEX_NO, C.INDEX_NO, D.INDEX_NO
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -2578,6 +2579,7 @@
                 <if test='tuClsType != null and tuClsType != ""'>
                     AND A.TU_CLS_TYPE = #{tuClsType}
                 </if>
+                AND     A.TU_CLS_TYPE NOT IN ('00')
                 ORDER BY A.TU_CLS_TYPE, A.INDEX_NO, C.INDEX_NO, D.INDEX_NO
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -2624,6 +2626,7 @@
                 <if test='tuClsType != null and tuClsType != ""'>
                     AND A.TU_CLS_TYPE = #{tuClsType}
                 </if>
+                AND     A.TU_CLS_TYPE NOT IN ('00')
                 ORDER BY A.TU_CLS_TYPE, A.INDEX_NO, C.INDEX_NO, D.INDEX_NO
             </when>
             <!-- 매장 -->
@@ -2661,6 +2664,7 @@
                 <if test='tuClsType != null and tuClsType != ""'>
                     AND A.TU_CLS_TYPE = #{tuClsType}
                 </if>
+                AND     A.TU_CLS_TYPE NOT IN ('00')
                 ORDER BY A.TU_CLS_TYPE, A.INDEX_NO, C.INDEX_NO, D.INDEX_NO
             </when>
         </choose>
