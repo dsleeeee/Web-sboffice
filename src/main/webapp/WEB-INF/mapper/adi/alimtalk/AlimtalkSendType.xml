@@ -324,7 +324,7 @@
             UPDATE
             SET
             SEND_PERIOD_FG = #{sendPeriodFg},
-            SEND_PERIOD = #{sendPeriod},
+            SEND_PERIOD = NVL(#{sendPeriod}, 0),
             TEMPLATE_GRP_FG = #{templateGrpFg},
             TEMPLATE_CD = #{templateCd},
             MOD_DT = #{modDt},
@@ -350,7 +350,7 @@
                 #{sendTypeCd},
                 #{sendTypeDtlCd},
                 #{sendPeriodFg},
-                #{sendPeriod},
+                NVL(#{sendPeriod}, 0),
                 #{templateGrpFg},
                 #{templateCd},
                 'N',
