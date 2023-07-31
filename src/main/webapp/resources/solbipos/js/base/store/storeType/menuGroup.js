@@ -413,7 +413,13 @@ app.controller('prodSelectCtrl', ['$scope', '$http', '$timeout', function ($scop
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
                 var item = s.rows[e.row].dataItem;
+            }
+        });
 
+        s.cellEditEnded.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                var item = s.rows[e.row].dataItem;
                 // 판매가 변경시 다른 컬럼값도 변경
                 if (col.binding === "saleUprc") {
                     var scope = agrid.getScope('menuGroupCtrl');
@@ -424,6 +430,7 @@ app.controller('prodSelectCtrl', ['$scope', '$http', '$timeout', function ($scop
                     }
                 }
             }
+            s.collectionView.commitEdit();
         });
     };
 
