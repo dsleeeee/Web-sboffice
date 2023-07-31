@@ -16,34 +16,21 @@
             <button class="btn_blue fr mt5 mr10" id="btnSearchCls" ng-click="_pageView('tableOrderKeyMapRegistCtrl', 1)"><s:message code="cmm.search"/></button>
         </div>
 
-        <table class="searchTbl">
-            <colgroup>
-                <col class="w10" />
-                <col class="w90" />
-            </colgroup>
-            <tbody>
-            <tr>
-                <%-- 키맵그룹 --%>
-                <th><s:message code="tableOrderKeyMap.tuClsType" /></th>
-                <td colspan="3">
-                    <div <c:choose><c:when test="${orgnFg == 'STORE' && kioskKeyEnvstVal == '0'}">style="visibility: hidden"</c:when><c:otherwise></c:otherwise></c:choose> >
-                        <c:if test="${orgnFg == 'HQ'}">
-                            <button class="btn_skyblue" id="btnTuClsTypeStore" ng-click="tuClsTypeStore()">
-                                <s:message code="tableOrderKeyMap.tuClsTypeStore" />
-                            </button>
-                        </c:if>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="mt10 oh">
+            <div class="fr">
+                <div <c:choose><c:when test="${orgnFg == 'STORE' && kioskKeyEnvstVal == '0'}">style="visibility: hidden"</c:when><c:otherwise></c:otherwise></c:choose> >
+                    <c:if test="${orgnFg == 'HQ'}">
+                        <button class="btn_skyblue" id="btnTuClsTypeStore" ng-click="tuClsTypeStore()">
+                            <s:message code="tableOrderKeyMap.tuClsTypeStore" />
+                        </button>
+                    </c:if>
+                </div>
+            </div>
+        </div>
 
         <div class="wj-TblWrap mt10 mb20 w25 fl">
             <div class="wj-TblWrapBr mr10 pd20" style="height:600px;">
-                <div class="mb5">
-                    <label id="lbTuClsType"></label>
-                </div>
-                <div class="updownSet oh mb10 pd5" id="divBtnCls" style="visibility: hidden;">
+                <div class="updownSet oh mb10 pd5" id="divBtnCls" style="visibility: hidden; height:60px;">
                     <div <c:choose><c:when test="${orgnFg == 'STORE' && kioskKeyEnvstVal == '0'}">style="visibility: hidden"</c:when><c:otherwise></c:otherwise></c:choose>>
                         <button class="btn_up" id="btnUpCls" ng-click="rowMoveUpCls()" >
                             <s:message code="cmm.up" />
@@ -51,6 +38,7 @@
                         <button class="btn_down" id="btnDownCls" ng-click="rowMoveDownCls()">
                             <s:message code="cmm.down" />
                         </button>
+                        <br/>
                         <button class="btn_skyblue" id="btnAddCls" ng-click="addRowCls()">
                             <s:message code="cmm.add" />
                         </button>
@@ -63,7 +51,7 @@
                     </div>
                 </div>
                 <div class="w100 mt10 mb20">
-                    <div class="wj-gridWrap" style="height:200px; overflow-x: hidden; overflow-y: hidden;">
+                    <div class="wj-gridWrap" style="height:400px; overflow-x: hidden; overflow-y: hidden;">
                         <wj-flex-grid
                                 autoGenerateColumns="false"
                                 control="flex"
@@ -80,57 +68,11 @@
                             <wj-flex-grid-column header="<s:message code="tableOrderKeyMap.tuClsCd"/>" binding="tuClsCd" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="tableOrderKeyMap.tuClsNm"/>" binding="tuClsNm" width="140"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="tableOrderKeyMap.clsMemo"/>" binding="clsMemo" width="90"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="tableOrderKeyMap.tuMClsFg"/>" binding="tuMClsFg" data-map="tuMClsFgDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="tableOrderKeyMap.storeModYn"/>" binding="storeModYn" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         </wj-flex-grid>
                     </div>
                 </div>
-                <input type="hidden" id="hdTuMClsFg" />
                 <input type="hidden" id="storeMod" />
-                <%-- 중분류그리드 --%>
-                <div id="divGridCategoryClsM" style="display: none;" ng-controller="categoryClsMCtrl">
-                    <div class="w100 mt10 mb20 bt">
-                        <div class="mb5 mt10">
-                            <label id="lbTuClsCdM"></label>
-                        </div>
-                        <div class="updownSet oh mb10 pd5" id="divBtnClsM" style="visibility: hidden;">
-                            <button class="btn_up" id="btnUpClsM" ng-click="rowMoveUpClsM()" >
-                                <s:message code="cmm.up" />
-                            </button>
-                            <button class="btn_down" id="btnDownClsM" ng-click="rowMoveDownClsM()">
-                                <s:message code="cmm.down" />
-                            </button>
-                            <button class="btn_skyblue" id="btnAddClsM" ng-click="addRowClsM()">
-                                <s:message code="cmm.add" />
-                            </button>
-                            <button class="btn_skyblue" id="btnDelClsM" ng-click="delRowClsM()">
-                                <s:message code="cmm.delete" />
-                            </button>
-                            <button class="btn_skyblue" id="btnSaveClsM" ng-click="saveClsM()">
-                                <s:message code="cmm.save" />
-                            </button>
-                        </div>
-                        <div class="wj-gridWrap" style="height:200px; overflow-x: hidden; overflow-y: hidden;">
-                            <wj-flex-grid
-                                    autoGenerateColumns="false"
-                                    control="flexM"
-                                    initialized="initGrid(s,e)"
-                                    sticky-headers="true"
-                                    selection-mode="Row"
-                                    items-source="data"
-                                    item-formatter="_itemFormatter"
-                                    ime-enabled="true"
-                                    id="wjGridCategoryClsM">
-
-                                <!-- define columns -->
-                                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="tableOrderKeyMap.tuMClsCd"/>" binding="tuMClsCd" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="tableOrderKeyMap.tuMClsNm"/>" binding="tuMClsNm" width="140"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="tableOrderKeyMap.mmClsMemo"/>" binding="mmClsMemo" width="90"></wj-flex-grid-column>
-                            </wj-flex-grid>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -364,7 +306,7 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/tableOrderKeyMap/tableOrderKeyMapRegist.js?ver=20230726.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/tableOrderKeyMap/tableOrderKeyMapRegist.js?ver=20230731.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

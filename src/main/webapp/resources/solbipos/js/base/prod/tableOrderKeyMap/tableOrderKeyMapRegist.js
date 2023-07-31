@@ -25,12 +25,6 @@ var useYnAllComboData = [
     {"name": "미사용", "value": "N"}
 ];
 
-// KIOSK중분류사용
-var tuMClsFgComboData = [
-    {"name":"미사용","value":"0"},
-    {"name":"중분류사용","value":"2"}
-];
-
 // 키오스크 카테고리(분류)
 app.controller('tableOrderKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
@@ -38,9 +32,6 @@ app.controller('tableOrderKeyMapRegistCtrl', ['$scope', '$http', '$timeout', fun
     angular.extend(this, new RootController('tableOrderKeyMapRegistCtrl', $scope, $http, false));
 
     $scope.initGrid = function (s, e) {
-        // 그리드 DataMap 설정
-        $scope.tuMClsFgDataMap = new wijmo.grid.DataMap(tuMClsFgComboData, 'value', 'name'); // KIOSK중분류사용
-
         // ReadOnly 효과설정
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
@@ -62,25 +53,9 @@ app.controller('tableOrderKeyMapRegistCtrl', ['$scope', '$http', '$timeout', fun
                 var selectedRow = s.rows[ht.row].dataItem;
                 if (col.binding === "tuClsCd") {
                     if(selectedRow.tuClsCd !== '자동채번') {
-
                         $("#storeMod").val(selectedRow.storeModYn);
-                        // KIOSK중분류사용
-                        // 미사용
-                        if(selectedRow.tuMClsFg === "0") {
-                            $("#divGridCategoryClsM").css("display", "none");
-
-                            $scope._broadcast('tableOrderKeyMapCtrl', selectedRow);
-                            event.preventDefault();
-                        // 중분류사용
-                        } else if(selectedRow.tuMClsFg === "2") {
-                            $("#divGridCategoryClsM").css("display", "");
-
-                            $scope._broadcast('categoryClsMCtrl', selectedRow);
-                            event.preventDefault();
-
-                            // 초기화
-                            $scope.resetM();
-                        }
+                        $scope._broadcast('tableOrderKeyMapCtrl', selectedRow);
+                        event.preventDefault();
                     }
                 }
             }
@@ -96,9 +71,6 @@ app.controller('tableOrderKeyMapRegistCtrl', ['$scope', '$http', '$timeout', fun
     $scope.btnSearchCls = function(){
         // 초기화
         $scope.reset();
-
-        // 키맵그룹에 KIOSK중분류사용 조회
-        $("#hdTuMClsFg").val("0");
 
         var params = {};
         if(orgnFg === "STORE") {params.posNo = '00'}
@@ -142,11 +114,9 @@ app.controller('tableOrderKeyMapRegistCtrl', ['$scope', '$http', '$timeout', fun
 
         // 카테고리(분류), 키맵, 상품 관련 버튼 hidden 처리
         var divBtnCls = document.getElementById('divBtnCls');
-        var divBtnClsM = document.getElementById('divBtnClsM');
         var divBtnKeyMap = document.getElementById('divBtnKeyMap');
         var divBtnProd = document.getElementById('divBtnProd');
         divBtnCls.style.visibility='hidden';
-        divBtnClsM.style.visibility='hidden';
         divBtnKeyMap.style.visibility='hidden';
         divBtnProd.style.visibility='hidden';
 
@@ -275,7 +245,7 @@ app.controller('tableOrderKeyMapRegistCtrl', ['$scope', '$http', '$timeout', fun
         params.tuClsCd = '자동채번';
         params.tuClsNm = '';
         params.clsMemo = '';
-        params.tuMClsFg = $("#hdTuMClsFg").val();
+        params.tuMClsFg = "0";
 
         // 행추가
         $scope._addRow(params, 2);
@@ -358,230 +328,6 @@ app.controller('tableOrderKeyMapRegistCtrl', ['$scope', '$http', '$timeout', fun
     $scope.tuClsTypeStore = function(){
         $scope.tableOrderKeyMapStoreRegLayer.show(true);
         $scope._broadcast('tableOrderKeyMapStoreRegCtrl');
-    };
-
-}]);
-
-
-// 키오스크 카테고리(중분류)
-app.controller('categoryClsMCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
-
-    // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('categoryClsMCtrl', $scope, $http, false));
-
-    $scope.initGrid = function (s, e) {
-        // ReadOnly 효과설정
-        s.formatItem.addHandler(function (s, e) {
-            if (e.panel === s.cells) {
-                var col = s.columns[e.col];
-                var item = s.rows[e.row].dataItem;
-                if (col.binding === 'tuMClsCd') {
-                    if(item.tuClsCd !== '자동채번') {
-                        wijmo.addClass(e.cell, 'wijLink');
-                    }
-                }
-            }
-        });
-
-        // 카테고리 코드 클릭 시, 키맵과 상품 조회
-        s.addEventListener(s.hostElement, 'mousedown', function (e) {
-            var ht = s.hitTest(e);
-            if (ht.cellType === wijmo.grid.CellType.Cell) {
-                var col = ht.panel.columns[ht.col];
-                var selectedRow = s.rows[ht.row].dataItem;
-                if (col.binding === "tuMClsCd") {
-                    if(selectedRow.tuMClsCd !== '자동채번') {
-                        selectedRow.tuClsCd = selectedRow.tuMClsCd;
-                        selectedRow.tuClsNm = selectedRow.tuMClsNm;
-                        $scope._broadcast('tableOrderKeyMapCtrl', selectedRow);
-                        event.preventDefault();
-                    }
-                }
-            }
-        });
-    };
-
-    $scope.$on("categoryClsMCtrl", function(event, data) {
-        if(data !== undefined && !isEmptyObject(data)) {
-            $("#lbTuClsCdM").text("중분류 : [" + data.tuClsCd + "] " + data.tuClsNm);
-
-            // 카테고리 관련 데이터 셋팅
-            $("#hdTuClsCd").val(data.tuClsCd);
-        }
-
-        // 중분류그리드 조회
-        $scope.searchCategoryClsM();
-    });
-
-    // 중분류그리드 조회
-    $scope.searchCategoryClsM = function () {
-        var params = {};
-        if(orgnFg === "STORE") {params.posNo = '00'}
-        params.tuClsType = '00';
-        params.tuClsCd = $("#hdTuClsCd").val();
-
-        $scope._inquirySub("/base/prod/kioskKeyMap/kioskKeyMap/getKioskCategoryM.sb", params, function() {
-            // 본사 : storeMod = N
-            // 프차매장 : 1249가 1 or 2인데 storeMod = Y
-            // 단독매장
-            if((orgnFg === "HQ" && $("#storeMod").val() === "N")
-                || (orgnFg === "STORE" && hqOfficeCd != "00000" && kioskKeyEnvstVal ==="1")
-                || (orgnFg === "STORE" && hqOfficeCd != "00000" && kioskKeyEnvstVal ==="2" && $("#storeMod").val() === "Y")
-                || (orgnFg === "STORE" && hqOfficeCd == "00000")){
-                // 카테고리(중분류)가 정상조회 되면 관련 버튼 보이도록
-                var divBtnClsM = document.getElementById('divBtnClsM');
-                divBtnClsM.style.visibility='visible'
-            } else {
-                // 카테고리(중분류)가 정상조회 되면 관련 버튼 보이도록
-                var divBtnClsM = document.getElementById('divBtnClsM');
-                divBtnClsM.style.visibility='hidden'
-            }
-        }, false);
-    };
-
-    // 카테고리(중분류) 상위 순서 이동
-    $scope.rowMoveUpClsM = function () {
-        var movedRows = 0;
-        for (var i = 0; i < $scope.flexM.collectionView.itemCount; i++) {
-            var item = $scope.flexM.collectionView.items[i];
-            if (i > 0 && item.gChk) {
-                if (!$scope.flexM.collectionView.items[i - 1].gChk) {
-                    movedRows = i - 1;
-                    var tmpItem = $scope.flexM.collectionView.items[movedRows];
-                    $scope.flexM.collectionView.items[movedRows] = $scope.flexM.collectionView.items[i];
-                    $scope.flexM.collectionView.items[i] = tmpItem;
-                    $scope.flexM.collectionView.commitEdit();
-                    $scope.flexM.collectionView.refresh();
-                }
-            }
-        }
-        $scope.flexM.select(movedRows, 1);
-    };
-
-    // 카테고리(중분류) 하위 순서 이동
-    $scope.rowMoveDownClsM = function () {
-        var movedRows = $scope.flexM.itemsSource.itemCount - 1;
-        for (var i = $scope.flexM.itemsSource.itemCount - 1; i >= 0; i--) {
-            var item = $scope.flexM.collectionView.items[i];
-            if (i < ($scope.flexM.itemsSource.itemCount - 1) && item.gChk) {
-                if (!$scope.flexM.collectionView.items[i + 1].gChk) {
-                    movedRows = i + 1;
-                    var tmpItem = $scope.flexM.collectionView.items[movedRows];
-                    $scope.flexM.collectionView.items[movedRows] = $scope.flexM.collectionView.items[i];
-                    $scope.flexM.collectionView.items[i] = tmpItem;
-                    $scope.flexM.collectionView.commitEdit();
-                    $scope.flexM.collectionView.refresh();
-                }
-            }
-        }
-        $scope.flexM.select(movedRows, 1);
-    };
-
-    // 카테고리(중분류) 추가
-    $scope.addRowClsM = function () {
-        var params = {};
-        params.gChk = false;
-        params.tuMClsCd = '자동채번';
-        params.tuMClsNm = '';
-        params.mmClsMemo = '';
-
-        // 행추가
-        var flex = $scope.flexM;
-        if (!flex.collectionView) {
-            flex.itemsSource = new wijmo.collections.CollectionView();
-        }
-        var newRow = flex.collectionView.addNew();
-        newRow.status = 'I';
-        newRow.gChk = true;
-        for (var prop in params) {
-            newRow[prop] = params[prop];
-        }
-        flex.collectionView.trackChanges = true;
-        flex.collectionView.commitNew();
-        // 추가된 Row 선택
-        setTimeout(function () {
-            flex.scrollIntoView(flex.rows.length - 1, 0);
-            flex.select(flex.rows.length - 1, 1);
-            flex.focus();
-            flex.startEditing(true, flex.rows.length - 1, (pos === null ? 0 : pos), true);
-        }, 50);
-    };
-
-    // 카테고리(중분류) 삭제
-    $scope.delRowClsM = function () {
-        for(var i = $scope.flexM.collectionView.items.length-1; i >= 0; i-- ){
-            var item = $scope.flexM.collectionView.items[i];
-            if(item.gChk){
-                $scope.flexM.collectionView.removeAt(i);
-            }
-        }
-    };
-
-    // 카테고리(중분류) 저장
-    $scope.saveClsM = function () {
-        $scope.flexM.collectionView.commitEdit();
-
-        // 생성, 수정 Validation Check
-        for (var m = 0; m < $scope.flexM.collectionView.itemCount; m++) {
-            if(  $scope.flexM.collectionView.items[m].tuMClsNm === null  || $scope.flexM.collectionView.items[m].tuMClsNm === '') {
-                $scope._popMsg(messages['tableOrderKeyMap.require.category.msg']); // 카테고리명을 입력해주세요.
-                return;
-            }
-        }
-
-        // 파라미터 설정
-        var params = [];
-
-        for (var d = 0; d < $scope.flexM.collectionView.itemsRemoved.length; d++) {
-            if(orgnFg === "STORE") {$scope.flexM.collectionView.itemsRemoved[d].posNo = '00';}
-            $scope.flexM.collectionView.itemsRemoved[d].tuClsType =  '00';
-            $scope.flexM.collectionView.itemsRemoved[d].tuClsCd = $("#hdTuClsCd").val();
-            $scope.flexM.collectionView.itemsRemoved[d].status = 'D';
-            params.push($scope.flexM.collectionView.itemsRemoved[d]);
-        }
-
-        // indexNo 재설정
-        var editItems = [];
-        for (var s = 0; s < $scope.flexM.collectionView.itemCount; s++) {
-            if( isEmptyObject($scope.flexM.collectionView.items[s].status) || $scope.flexM.collectionView.items[s].status === 'I') {
-                editItems.push($scope.flexM.collectionView.items[s]);
-            }
-        }
-
-        for (var s = 0; s < editItems.length; s++) {
-            editItems[s].indexNo = (s + 1);
-            $scope.flexM.collectionView.editItem(editItems[s]);
-            editItems[s].status = "U";
-            $scope.flexM.collectionView.commitEdit();
-        }
-
-        for (var u = 0; u < $scope.flexM.collectionView.itemsEdited.length; u++) {
-            if(orgnFg === "STORE") {$scope.flexM.collectionView.itemsEdited[u].posNo = '00';}
-            $scope.flexM.collectionView.itemsEdited[u].tuClsType = '00';
-            $scope.flexM.collectionView.itemsEdited[u].tuClsCd = $("#hdTuClsCd").val();
-            $scope.flexM.collectionView.itemsEdited[u].status = 'U';
-            params.push($scope.flexM.collectionView.itemsEdited[u]);
-        }
-
-        for (var i = 0; i < $scope.flexM.collectionView.itemsAdded.length; i++) {
-            if(orgnFg === "STORE") {$scope.flexM.collectionView.itemsAdded[i].posNo = '00';}
-            $scope.flexM.collectionView.itemsAdded[i].tuClsType = '00';
-            $scope.flexM.collectionView.itemsAdded[i].tuClsCd = $("#hdTuClsCd").val();
-            $scope.flexM.collectionView.itemsAdded[i].status = 'I';
-            params.push($scope.flexM.collectionView.itemsAdded[i]);
-        }
-
-        // 카테고리(분류)를 모두 삭제하는지 파악하기 위해
-        var gridLength = $scope.flexM.collectionView.items.length;
-
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save('/base/prod/kioskKeyMap/kioskKeyMap/saveKioskCategoryM.sb', params, function() {
-
-            if(gridLength > 0 ){
-                // 카테고리분류 재조회
-                $scope.searchCategoryClsM();
-            }
-        });
     };
 
 }]);
