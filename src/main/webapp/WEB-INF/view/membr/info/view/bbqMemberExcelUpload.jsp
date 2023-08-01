@@ -146,8 +146,8 @@
         </tbody>
     </table>
 
-    <div class="mt10 oh sb-select dkbr">
-        <%-- 페이지 스케일  --%>
+    <%--<div class="mt10 oh sb-select dkbr">
+        &lt;%&ndash; 페이지 스케일  &ndash;%&gt;
         <wj-combo-box
                 class="w100px fl"
                 id="listScaleBox"
@@ -158,7 +158,7 @@
                 is-editable="false"
                 initialized="initComboBox(s)">
         </wj-combo-box>
-    </div>
+    </div>--%>
 
     <%-- 회원목록 그리드 --%>
     <div class="w100 mt10 mb20">
@@ -205,7 +205,7 @@
     var membrClassManageFg = "${membrClassManageFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/bbqMemberExcelUpload.js?ver=20230728.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/bbqMemberExcelUpload.js?ver=20230731.01" charset="utf-8"></script>
 
 
 <%-- 회원엑셀업로드(BBQ) 엑셀파일업로드--%>

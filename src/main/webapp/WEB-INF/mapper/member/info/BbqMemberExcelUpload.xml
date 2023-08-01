@@ -17,9 +17,6 @@
         COMMENTS : 회원엑셀업로드(BBQ) 저장
     -->
     <insert id="insertMember" parameterType="bbqMemberExcelUploadVO">
-        <selectKey keyProperty="membrNo" resultType="String" order="AFTER">
-          select MEMBR_NO FROM TB_MB_MEMBER WHERE MEMBR_ORGN_CD = #{membrOrgnCd} AND MEMBR_NO = #{membrNo}
-        </selectKey>
         /* BbqMemberExcelUploadMapper.insertMember */
         INSERT INTO TB_MB_MEMBER tmm (
                     tmm.MEMBR_ORGN_CD,
@@ -87,54 +84,86 @@
     -->
     <insert id="insertMemberPoint" parameterType="bbqMemberExcelUploadVO">
         /* BbqMemberExcelUploadMapper.insertMemberPoint */
-        INSERT INTO TB_MB_MEMBER_POINT tmmp (
-                      tmmp.MEMBR_ORGN_CD
-                    , tmmp.MEMBR_NO
-                    , tmmp.TOT_SALE_CNT
-                    , tmmp.TOT_SALE_AMT
-                    , tmmp.TOT_DC_AMT
-                    , tmmp.TOT_SAVE_POINT
-                    , tmmp.TOT_USE_POINT
-                    , tmmp.AVABL_POINT
-                    , tmmp.TOT_ADJ_POINT
-                    , tmmp.FIRST_SALE_DATE
-                    , tmmp.LAST_SALE_DATE
-                    , tmmp.POINT_ACC_CNT
-                    , tmmp.POINT_USE_CNT
-                    , tmmp.REG_STORE_CD
-                    , tmmp.REG_TOT_SALE_CNT
-                    , tmmp.REG_TOT_SALE_AMT
-                    , tmmp.REG_TOT_DC_AMT
-                    , tmmp.REG_F_SALE_DATE
-                    , tmmp.REG_L_SALE_DATE
-                    , tmmp.REG_DT
-                    , tmmp.REG_ID
-                    , tmmp.MOD_DT
-                    , tmmp.MOD_ID
-        ) VALUES (
-                      #{membrOrgnCd}
-                    , #{membrNo}
-                    , 0
-                    , 0
-                    , 0
-                    , 0
-                    , 0
-                    , 0
-                    , 0
-                    , ''
-                    , #{lastSaleDate}
-                    , 0
-                    , 0
-                    , #{regStoreCd}
-                    , 0
-                    , 0
-                    , 0
-                    , ''
-                    , #{lastSaleDate}
-                    , #{regDt}
-                    , #{regId}
-                    , #{modDt}
-                    , #{modId}
+        MERGE INTO TB_MB_MEMBER_POINT tmmp
+        USING DUAL
+        ON (
+            tmmp.MEMBR_ORGN_CD = #{membrOrgnCd}
+        AND tmmp.MEMBR_NO = #{membrNo}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            tmmp.TOT_SALE_CNT      =  0
+        ,   tmmp.TOT_SALE_AMT      =  0
+        ,   tmmp.TOT_DC_AMT        =  0
+        ,   tmmp.TOT_SAVE_POINT    =  0
+        ,   tmmp.TOT_USE_POINT     =  0
+        ,   tmmp.AVABL_POINT       =  0
+        ,   tmmp.TOT_ADJ_POINT     =  0
+        ,   tmmp.FIRST_SALE_DATE   =  ''
+        ,   tmmp.LAST_SALE_DATE    =  #{lastSaleDate}
+        ,   tmmp.POINT_ACC_CNT     =  0
+        ,   tmmp.POINT_USE_CNT     =  0
+        ,   tmmp.REG_STORE_CD      =  #{regStoreCd}
+        ,   tmmp.REG_TOT_SALE_CNT  =  0
+        ,   tmmp.REG_TOT_SALE_AMT  =  0
+        ,   tmmp.REG_TOT_DC_AMT    =  0
+        ,   tmmp.REG_F_SALE_DATE   =  ''
+        ,   tmmp.REG_L_SALE_DATE   =  #{lastSaleDate}
+        ,   tmmp.MOD_DT            =  #{modDt}
+        ,   tmmp.MOD_ID            =  #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+              tmmp.MEMBR_ORGN_CD
+            , tmmp.MEMBR_NO
+            , tmmp.TOT_SALE_CNT
+            , tmmp.TOT_SALE_AMT
+            , tmmp.TOT_DC_AMT
+            , tmmp.TOT_SAVE_POINT
+            , tmmp.TOT_USE_POINT
+            , tmmp.AVABL_POINT
+            , tmmp.TOT_ADJ_POINT
+            , tmmp.FIRST_SALE_DATE
+            , tmmp.LAST_SALE_DATE
+            , tmmp.POINT_ACC_CNT
+            , tmmp.POINT_USE_CNT
+            , tmmp.REG_STORE_CD
+            , tmmp.REG_TOT_SALE_CNT
+            , tmmp.REG_TOT_SALE_AMT
+            , tmmp.REG_TOT_DC_AMT
+            , tmmp.REG_F_SALE_DATE
+            , tmmp.REG_L_SALE_DATE
+            , tmmp.REG_DT
+            , tmmp.REG_ID
+            , tmmp.MOD_DT
+            , tmmp.MOD_ID
+        )
+        VALUES
+        (
+              #{membrOrgnCd}
+            , #{membrNo}
+            , 0
+            , 0
+            , 0
+            , 0
+            , 0
+            , 0
+            , 0
+            , ''
+            , #{lastSaleDate}
+            , 0
+            , 0
+            , #{regStoreCd}
+            , 0
+            , 0
+            , 0
+            , ''
+            , #{lastSaleDate}
+            , #{regDt}
+            , #{regId}
+            , #{modDt}
+            , #{modId}
         )
     </insert>
 

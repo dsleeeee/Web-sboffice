@@ -54,7 +54,7 @@ app.controller('bbqMemberExcelUploadCtrl', ['$scope', '$http', '$timeout', funct
         params.membrNo = $("#memberNo").val();
         params.membrNm = $("#memberNm").val();
         params.membrClassManageFg = membrClassManageFg;
-        params.listScale = $scope.listScale;
+        params.listScale = 500;
 
         $scope._inquiryMain("/membr/info/view/view/getMemberlist.sb", params, function () {});
     };
