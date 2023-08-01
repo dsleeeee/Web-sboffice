@@ -204,24 +204,17 @@
                         is-read-only="true">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="touchKey.grid.touchKeyUsed"/>"
-                                         binding="touchKeyUsed" width="38"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="touchKey.grid.touchKeyUsed"/>" binding="touchKeyUsed" width="38"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="touchKey.grid.prodNm"/>" binding="prodNm" width="200"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="touchKey.grid.prodCd"/>" binding="prodCd"
-                                         width="100" visible="true" align="center"></wj-flex-grid-column>
-
-                    <wj-flex-grid-column header="<s:message code="touchKey.grid.prodClass"/>"
-                                         binding="prodClassCd"
-                                         visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="touchKey.grid.prodClassNm"/>"
-                                         binding="prodClassNm" width="100"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="touchKey.grid.saleUprc"/>"
-                                         binding="saleUprc" width="*" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="touchKey.grid.prodCd"/>" binding="prodCd" width="100" visible="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="touchKey.grid.prodClass"/>" binding="prodClassCd" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="touchKey.grid.prodClassNm"/>" binding="prodClassNm" width="100"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="touchKey.grid.saleUprc"/>" binding="saleUprc" width="*" visible="false"></wj-flex-grid-column>
                     <%-- [1250 맘스터치] --%>
                     <c:if test="${momsEnvstVal == '1'}">
-                        <wj-flex-grid-column header="<s:message code="touchKey.grid.groupProdNm"/>"
-                                             binding="groupProdNm" width="100"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="touchKey.grid.groupProdNm"/>" binding="groupProdNm" width="100"></wj-flex-grid-column>
                     </c:if>
+                    <wj-flex-grid-column header="<s:message code="touchKey.grid.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>

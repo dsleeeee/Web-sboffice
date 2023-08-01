@@ -170,6 +170,7 @@
                     <wj-flex-grid-column header="<s:message code="prodPrintYn.sdselProdNm"/>" binding="sdselProdNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodPrintYn.fixProdFg"/>" binding="fixProdFg" data-map="fixProdFgDataMap" width="50" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodPrintYn.printYn"/>" binding="printYn" data-map="printYnDataMap" width="70" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeProdPrintYn.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>

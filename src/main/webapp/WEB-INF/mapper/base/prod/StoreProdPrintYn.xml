@@ -30,7 +30,8 @@
         B.OPT_PROD_CD,
         C.PROD_NM AS OPT_PROD_NM,
         NVL(B.PRINT_YN, 'Y') AS PRINT_YN,
-        E.PRINT_YN AS HQ_PRINT_YN
+        E.PRINT_YN AS HQ_PRINT_YN,
+        C.REMARK
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_MS_PRODUCT_OPTION_GROUP A,
         TB_MS_PRODUCT_OPTION_VAL B,
@@ -111,7 +112,8 @@
         D.PROD_NM AS SDSEL_PROD_NM,
         NVL(C.FIX_PROD_FG, '0') AS FIX_PROD_FG,
         NVL(C.PRINT_YN, 'Y') AS PRINT_YN,
-        F.PRINT_YN AS HQ_PRINT_YN
+        F.PRINT_YN AS HQ_PRINT_YN,
+        D.REMARK
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_MS_PRODUCT_SDSEL_GROUP A,
         TB_MS_PRODUCT_SDSEL_CLASS B,

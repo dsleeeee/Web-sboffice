@@ -29,7 +29,8 @@
                 B.OPTION_VAL_NM,
                 B.OPT_PROD_CD,
                 C.PROD_NM AS OPT_PROD_NM,
-                NVL(B.PRINT_YN, 'Y') AS PRINT_YN
+                NVL(B.PRINT_YN, 'Y') AS PRINT_YN,
+                C.REMARK
                 FROM TB_HQ_PRODUCT_OPTION_GROUP A,
                 TB_HQ_PRODUCT_OPTION_VAL B,
                 TB_HQ_PRODUCT C
@@ -66,7 +67,8 @@
                 B.OPTION_VAL_NM,
                 B.OPT_PROD_CD,
                 C.PROD_NM AS OPT_PROD_NM,
-                NVL(B.PRINT_YN, 'Y') AS PRINT_YN
+                NVL(B.PRINT_YN, 'Y') AS PRINT_YN,
+                C.REMARK
                 FROM TB_MS_PRODUCT_OPTION_GROUP A,
                 TB_MS_PRODUCT_OPTION_VAL B,
                 TB_MS_PRODUCT C
@@ -157,7 +159,8 @@
                 C.PROD_CD AS SDSEL_PROD_CD,
                 D.PROD_NM AS SDSEL_PROD_NM,
                 NVL(C.FIX_PROD_FG, '0') AS FIX_PROD_FG,
-                NVL(C.PRINT_YN, 'Y') AS PRINT_YN
+                NVL(C.PRINT_YN, 'Y') AS PRINT_YN,
+                D.REMARK
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_HQ_PRODUCT_SDSEL_GROUP A,
                 TB_HQ_PRODUCT_SDSEL_CLASS B,
@@ -217,7 +220,8 @@
                 C.PROD_CD AS SDSEL_PROD_CD,
                 D.PROD_NM AS SDSEL_PROD_NM,
                 NVL(C.FIX_PROD_FG, '0') AS FIX_PROD_FG,
-                NVL(C.PRINT_YN, 'Y') AS PRINT_YN
+                NVL(C.PRINT_YN, 'Y') AS PRINT_YN,
+                D.REMARK
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_MS_PRODUCT_SDSEL_GROUP A,
                 TB_MS_PRODUCT_SDSEL_CLASS B,
