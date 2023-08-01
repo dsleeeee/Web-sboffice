@@ -119,6 +119,7 @@
                             <wj-flex-grid-column header="<s:message code="tableOrderKeyMap.kioskDisplayYn"/>" binding="kioskDisplayYn" align="center" width="60" is-read-only="true"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="tableOrderKeyMap.soldOutYn"/>" binding="soldOutYn" align="center" width="60" is-read-only="true"></wj-flex-grid-column>
                         </c:if>
+                        <wj-flex-grid-column header="<s:message code="tableOrderKeyMap.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -286,6 +287,7 @@
                             <wj-flex-grid-column header="<s:message code="tableOrderKeyMap.kioskDisplayYn"/>" binding="kioskDisplayYn" align="center" width="60" is-read-only="true"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="tableOrderKeyMap.soldOutYn"/>" binding="soldOutYn" align="center" width="60" is-read-only="true"></wj-flex-grid-column>
                         </c:if>
+                        <wj-flex-grid-column header="<s:message code="tableOrderKeyMap.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>

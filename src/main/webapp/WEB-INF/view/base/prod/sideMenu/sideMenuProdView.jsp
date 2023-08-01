@@ -101,9 +101,10 @@
                       <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.brand"/>" binding="hqBrandCd" data-map="brandDataMap" width="80" is-read-only="true"></wj-flex-grid-column>
                   </c:if>
                </c:if>
-              <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.prodClassNm"/>" binding="prodClassNm" width="200" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.prodClassNm"/>" binding="prodClassNm" width="150" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.prodCd"/>" binding="prodCd" width="*" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.prodNm"/>" binding="prodNm" width="300" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.prodNm"/>" binding="prodNm" width="200" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
           </div>
         </div>

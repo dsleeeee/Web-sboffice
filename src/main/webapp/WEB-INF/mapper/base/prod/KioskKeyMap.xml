@@ -801,7 +801,8 @@
                             thkk.REG_ID,
                             thkk.MOD_DT,
                             thkk.MOD_ID,
-                (SELECT PROD_NM FROM TB_HQ_PRODUCT tmp2 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = thp.GROUP_PROD_CD) AS GROUP_PROD_NM
+                            (SELECT PROD_NM FROM TB_HQ_PRODUCT tmp2 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = thp.GROUP_PROD_CD) AS GROUP_PROD_NM,
+                            thp.REMARK
                       FROM TB_HQ_KIOSK_KEY thkk,
                             TB_HQ_PRODUCT thp
                      WHERE thp.HQ_OFFICE_CD (+)= thkk.HQ_OFFICE_CD
@@ -830,9 +831,10 @@
                             tmkk.REG_ID,
                             tmkk.MOD_DT,
                             tmkk.MOD_ID,
-                (SELECT PROD_NM FROM TB_MS_PRODUCT tmp2 WHERE STORE_CD = #{storeCd} AND PROD_CD = tmp.GROUP_PROD_CD) AS GROUP_PROD_NM,
-                DECODE(NVL(tmp.KIOSK_DISPLAY_YN, 'Y'), 'Y', '노출', 'N', '비노출') AS KIOSK_DISPLAY_YN,
-                DECODE(NVL(tmp.SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS SOLD_OUT_YN
+                            (SELECT PROD_NM FROM TB_MS_PRODUCT tmp2 WHERE STORE_CD = #{storeCd} AND PROD_CD = tmp.GROUP_PROD_CD) AS GROUP_PROD_NM,
+                            DECODE(NVL(tmp.KIOSK_DISPLAY_YN, 'Y'), 'Y', '노출', 'N', '비노출') AS KIOSK_DISPLAY_YN,
+                            DECODE(NVL(tmp.SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS SOLD_OUT_YN,
+                            tmp.REMARK
                       FROM TB_MS_KIOSK_KEY tmkk,
                             TB_MS_PRODUCT tmp
                      WHERE tmp.STORE_CD (+)= tmkk.STORE_CD
@@ -939,7 +941,8 @@
                         thp.PROD_NM,
                         NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
                         (CASE WHEN thkk.PROD_CD IS NULL THEN 'N' ELSE 'Y' END) AS REG_YN,
-                        (SELECT PROD_NM FROM TB_HQ_PRODUCT thp2 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = thp.GROUP_PROD_CD) AS GROUP_PROD_NM
+                        (SELECT PROD_NM FROM TB_HQ_PRODUCT thp2 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = thp.GROUP_PROD_CD) AS GROUP_PROD_NM,
+                        thp.REMARK
                 <include refid="CmmSQL.PagingTemplateCount"/>
                   FROM TB_HQ_PRODUCT thp
                   LEFT OUTER JOIN (
@@ -1038,7 +1041,8 @@
                         (CASE WHEN tmkk.PROD_CD IS NULL THEN 'N' ELSE 'Y' END) AS REG_YN,
                         (SELECT PROD_NM FROM TB_MS_PRODUCT tmp2 WHERE STORE_CD = #{storeCd} AND PROD_CD = tmp.GROUP_PROD_CD) AS GROUP_PROD_NM,
                         DECODE(NVL(tmp.KIOSK_DISPLAY_YN, 'Y'), 'Y', '노출', 'N', '비노출') AS KIOSK_DISPLAY_YN,
-                        DECODE(NVL(tmp.SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS SOLD_OUT_YN
+                        DECODE(NVL(tmp.SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS SOLD_OUT_YN,
+                        tmp.REMARK
                 <include refid="CmmSQL.PagingTemplateCount"/>
                   FROM TB_MS_PRODUCT tmp
                   LEFT OUTER JOIN (
