@@ -182,6 +182,7 @@
                     <wj-flex-grid-column header="<s:message code="sideMenuStore.sdselProdNm"/>" binding="sdselProdNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="sideMenuStore.fixProdFg"/>" binding="fixProdFg" data-map="fixProdFgDataMap" width="50" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="sideMenuStore.regStoreFg"/>" binding="regStoreFg" data-map="regStoreFgDataMap" width="85" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="sideMenuStore.remark"/>" binding="remark" width="100" is-read-only="true" align="left"></wj-flex-grid-column>
 
                     <%--저장시 필요--%>
                     <wj-flex-grid-column header="<s:message code="sideMenuStore.oldRegStoreFg"/>" binding="oldRegStoreFg" data-map="oldRegStoreFgDataMap" width="85" align="center" visible="false"></wj-flex-grid-column>

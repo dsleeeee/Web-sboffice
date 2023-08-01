@@ -207,7 +207,8 @@
             C.PROD_CD AS SDSEL_PROD_CD,
             D.PROD_NM AS SDSEL_PROD_NM,
             NVL(C.REG_STORE_FG, '0') AS REG_STORE_FG,
-            (CASE WHEN E.STORE_CD IS NOT NULL THEN 'Y' ELSE 'N' END) AS REG_YN
+            (CASE WHEN E.STORE_CD IS NOT NULL THEN 'Y' ELSE 'N' END) AS REG_YN,
+            D.REMARK
             FROM TB_HQ_PRODUCT_SDSEL_GROUP A,
             TB_HQ_PRODUCT_SDSEL_CLASS B,
             TB_HQ_PRODUCT_SDSEL_PROD C,
@@ -326,17 +327,19 @@
             B.SDSEL_CLASS_CD,
             B.SDSEL_CLASS_NM,
             C.PROD_CD AS SDSEL_PROD_CD,
-            (SELECT PROD_NM FROM TB_HQ_PRODUCT WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = C.PROD_CD) AS SDSEL_PROD_NM,
+            D.PROD_NM AS SDSEL_PROD_NM,
             NVL(C.REG_STORE_FG, '0') AS REG_STORE_FG,
-            D.STORE_CD,
-            D.STORE_NM,
-            (CASE WHEN E.STORE_CD IS NOT NULL THEN 'Y' ELSE 'N' END) AS REG_YN
+            E.STORE_CD,
+            E.STORE_NM,
+            (CASE WHEN F.STORE_CD IS NOT NULL THEN 'Y' ELSE 'N' END) AS REG_YN,
+            D.REMARK
             FROM TB_HQ_PRODUCT_SDSEL_GROUP A,
             TB_HQ_PRODUCT_SDSEL_CLASS B,
             TB_HQ_PRODUCT_SDSEL_PROD C,
-            TB_MS_STORE D,
-            TB_HQ_PRODUCT_SDSEL_PROD_REG_STORE E,
-            TB_MS_STORE_INFO F
+            TB_HQ_PRODUCT D,
+            TB_MS_STORE E,
+            TB_HQ_PRODUCT_SDSEL_PROD_REG_STORE F,
+            TB_MS_STORE_INFO G
             WHERE 1=1
             AND A.HQ_OFFICE_CD = #{hqOfficeCd}
             <if test='sdselClassCd != null and sdselClassCd != ""'>
@@ -346,29 +349,29 @@
             <if test='storeCds != null and storeCds != ""'>
                 AND
                 <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                    D.STORE_CD = #{item}
+                    E.STORE_CD = #{item}
                 </foreach>
             </if>
             <if test='momsTeam != null and momsTeam != ""'>
-                AND F.MOMS_TEAM = #{momsTeam}
+                AND G.MOMS_TEAM = #{momsTeam}
             </if>
             <if test='momsAcShop != null and momsAcShop != ""'>
-                AND F.MOMS_AC_SHOP = #{momsAcShop}
+                AND G.MOMS_AC_SHOP = #{momsAcShop}
             </if>
             <if test='momsAreaFg != null and momsAreaFg != ""'>
-                AND F.MOMS_AREA_FG = #{momsAreaFg}
+                AND G.MOMS_AREA_FG = #{momsAreaFg}
             </if>
             <if test='momsCommercial != null and momsCommercial != ""'>
-                AND F.MOMS_COMMERCIAL = #{momsCommercial}
+                AND G.MOMS_COMMERCIAL = #{momsCommercial}
             </if>
             <if test='momsShopType != null and momsShopType != ""'>
-                AND F.MOMS_SHOP_TYPE = #{momsShopType}
+                AND G.MOMS_SHOP_TYPE = #{momsShopType}
             </if>
             <if test='momsStoreManageType != null and momsStoreManageType != ""'>
-                AND F.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                AND G.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
             </if>
             <if test='branchCd != null and branchCd != ""'>
-                AND D.BRANCH_CD = #{branchCd}
+                AND E.BRANCH_CD = #{branchCd}
             </if>
             AND A.USE_YN = 'Y'
             AND B.USE_YN = 'Y'
@@ -378,12 +381,14 @@
             AND B.SDSEL_GRP_CD = A.SDSEL_GRP_CD
             AND C.HQ_OFFICE_CD = B.HQ_OFFICE_CD
             AND C.SDSEL_CLASS_CD = B.SDSEL_CLASS_CD
-            AND D.HQ_OFFICE_CD = C.HQ_OFFICE_CD
-            AND E.HQ_OFFICE_CD (+)= C.HQ_OFFICE_CD
-            AND E.SDSEL_CLASS_CD (+)= C.SDSEL_CLASS_CD
-            AND E.PROD_CD (+)= C.PROD_CD
-            AND E.STORE_CD (+)= D.STORE_CD
-            AND F.STORE_CD (+)= D.STORE_CD
+            AND D.HQ_OFFICE_CD (+)= C.HQ_OFFICE_CD
+            AND D.PROD_CD (+)= C.PROD_CD
+            AND E.HQ_OFFICE_CD = C.HQ_OFFICE_CD
+            AND F.HQ_OFFICE_CD (+)= C.HQ_OFFICE_CD
+            AND F.SDSEL_CLASS_CD (+)= C.SDSEL_CLASS_CD
+            AND F.PROD_CD (+)= C.PROD_CD
+            AND F.STORE_CD (+)= E.STORE_CD
+            AND G.STORE_CD (+)= E.STORE_CD
         )
         WHERE 1=1
         <if test='regYn != null and regYn != ""'>
@@ -486,7 +491,8 @@
         D.PROD_NM AS SDSEL_PROD_NM,
         NVL(C.FIX_PROD_FG, '0') AS FIX_PROD_FG,
         NVL(C.REG_STORE_FG, '0') AS REG_STORE_FG,
-        NVL(C.REG_STORE_FG, '0') AS OLD_REG_STORE_FG
+        NVL(C.REG_STORE_FG, '0') AS OLD_REG_STORE_FG,
+        D.REMARK
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_HQ_PRODUCT_SDSEL_GROUP A,
         TB_HQ_PRODUCT_SDSEL_CLASS B,

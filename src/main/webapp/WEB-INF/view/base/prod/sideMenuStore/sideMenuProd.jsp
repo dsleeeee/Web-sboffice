@@ -296,6 +296,7 @@
                     <wj-flex-grid-column header="<s:message code="sideMenuStore.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="sideMenuStore.storeNm"/>" binding="storeNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="sideMenuStore.regYn"/>" binding="regYn" data-map="regYnDataMap" width="80" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="sideMenuStore.remark"/>" binding="remark" width="100" is-read-only="true" align="left"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>

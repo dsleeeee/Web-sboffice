@@ -139,7 +139,7 @@
                     <wj-flex-grid-column header="<s:message code="prodPrintYn.optProdCd"/>" binding="optProdCd" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodPrintYn.optProdNm"/>" binding="optProdNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodPrintYn.printYn"/>" binding="printYn" data-map="printYnDataMap" width="70" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodPrintYn.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodPrintYn.remark"/>" binding="remark" width="100" is-read-only="true" align="left"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
