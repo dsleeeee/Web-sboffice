@@ -157,16 +157,80 @@ app.controller('storeTypeApplyStoreCtrl', ['$scope', '$http', '$timeout', functi
             }
         }
 
+        // 매장에 적용하시겠습니까? 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
         $scope._popConfirm(messages["storeType.storeApply.msg"], function() {
 
-            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._save("/base/store/storeType/storeType/saveStoreTypeApplyStore.sb", params, function () {
+            // 작업내역 로딩 팝업 오픈
+            $scope.loadingPopup(true);
 
-                $scope.storeTypeApplyStoreLayer.hide(true);
-                $scope.close();
+            // 매장적용할 전체 매장수 셋팅
+            var totCnt =  params.length;
+            $("#totalRows").html(totCnt);
 
-            });
+            // 10개씩 나눠 진행시, 총 차수 파악
+            var turnCnt= Math.ceil(params.length/10);
 
+            function delay(x, y){
+                return new Promise(function(resolve, reject){
+
+                    // 10개씩 나눠 매장적용, 마지막 차수는 남은거 전부 처리
+                    var params2 = (y === turnCnt) ? params.slice(x, totCnt) : params.slice(x, y * 10);
+                    console.log(JSON.stringify(params2));
+
+                    //가상로그인 session 설정
+                    var sParam = {};
+                    if(document.getElementsByName('sessionId')[0]){
+                        sParam['sid'] = document.getElementsByName('sessionId')[0].value;
+                    }
+
+                    // ajax 통신 설정
+                    $http({
+                        method : 'POST', //방식
+                        url    : '/base/store/storeType/storeType/saveStoreTypeApplyStore.sb', /* 통신할 URL */
+                        data   : params2, /* 파라메터로 보낼 데이터 : @requestBody */
+                        params : sParam,  /* 파라메터로 보낼 데이터 : request.getParameter */
+                        headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+                    }).then(function successCallback(response) {
+                        if ($scope._httpStatusCheck(response, true)) {
+                            // this callback will be called asynchronously
+                            // when the response is available
+
+                            // 진행 완료된 매장 숫자 변경
+                            $("#progressCnt").html(x + 10);
+
+                            // 매장타입 매장적용 다음 차수 진행
+                            startStoreTypeApply(x + 10, y + 1);
+                        }
+                    }, function errorCallback(response) {
+                        // 로딩팝업 hide
+                        $scope.loadingPopup(false);
+                        // called asynchronously if an error occurs
+                        // or server returns response with an error status.
+                        if (response.data.message) {
+                            $scope._popMsg(response.data.message);
+                        } else {
+                            $scope._popMsg(messages['cmm.error']);
+                        }
+                        return false;
+                    }).then(function () {
+
+                    });
+                    resolve();
+                });
+            };
+
+            async function startStoreTypeApply(x, y) {
+                if(totCnt > x){
+                    await delay(x, y);
+                }else{
+                    $scope.loadingPopup(false); // 작업내역 로딩 팝업 닫기
+                    $scope.storeTypeApplyStoreLayer.hide(true); // 팝업 닫기
+                    $scope.close();
+                }
+            };
+
+            // 매장타입 매장적용 시작
+            startStoreTypeApply(0, 1); // 매장적용 시작배열 수, 차수
         });
 
     };
@@ -206,6 +270,22 @@ app.controller('storeTypeApplyStoreCtrl', ['$scope', '$http', '$timeout', functi
             $("#applyDayHh").attr("disabled", true);
             $("#applyDayHh").css('background-color', '#F0F0F0');
         }
+    };
+
+    // 작업내역 로딩 팝업
+    $scope.loadingPopup = function (showFg) {
+      if (showFg) {
+          // 팝업내용 동적 생성
+          var innerHtml = '<div class=\"wj-popup-loading\"><p class=\"bk\">' + messages['cmm.progress'] + '</p>';
+          innerHtml += '<div class="mt5 txtIn"><span class="bk" id="progressCnt">0</span>/<span class="bk" id="totalRows">0</span> 개 매장 완료...</div>';
+          innerHtml += '<p><img src=\"/resource/solbipos/css/img/loading.gif\" alt=\"\" /></p></div>';
+          // html 적용
+          $scope._loadingPopup.content.innerHTML = innerHtml;
+          // 팝업 show
+          $scope._loadingPopup.show(true);
+      } else {
+          $scope._loadingPopup.hide(true);
+      }
     };
 
 }]);
