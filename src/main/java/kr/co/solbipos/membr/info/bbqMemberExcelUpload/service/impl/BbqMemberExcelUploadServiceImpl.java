@@ -101,8 +101,10 @@ public class BbqMemberExcelUploadServiceImpl implements BbqMemberExcelUploadServ
                 result = bbqMemberExcelUploadMapper.insertMember(bbqMemberExcelUploadVO);
 
                 if(result == 1){
-                    // 회원포인트 저장
-                    result = bbqMemberExcelUploadMapper.insertMemberPoint(bbqMemberExcelUploadVO);
+                    if(bbqMemberExcelUploadVO.getLastSaleDate().length() == 8){
+                        // 회원포인트 저장
+                        result = bbqMemberExcelUploadMapper.insertMemberPoint(bbqMemberExcelUploadVO);
+                    }
                 }
 
                 if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));

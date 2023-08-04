@@ -139,8 +139,10 @@
                     <label>[${storeCd}]&nbsp;${storeNm}</label>
                     <input type="hidden" id="bbqMemberExcelUploadStoreCd" value="${storeCd}" />
                 </c:if>
-                <%-- 회원엑셀업로드 --%>
+                <%-- 회원업로드(excel) --%>
                 <button class="btn_skyblue ml2 " ng-click="excelUpload()"><s:message code="cmm.excel.excelUpload" />(BBQ)</button>
+                <%-- 회원업로드(txt) --%>
+                <button class="btn_skyblue ml2 " ng-click="txtUpload()"><s:message code="cmm.txt.txtUpload" />(BBQ)</button>
             </td>
         </tr>
         </tbody>
@@ -205,7 +207,7 @@
     var membrClassManageFg = "${membrClassManageFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/bbqMemberExcelUpload.js?ver=20230731.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/bbqMemberExcelUpload.js?ver=20230804.01" charset="utf-8"></script>
 
 
 <%-- 회원엑셀업로드(BBQ) 엑셀파일업로드--%>

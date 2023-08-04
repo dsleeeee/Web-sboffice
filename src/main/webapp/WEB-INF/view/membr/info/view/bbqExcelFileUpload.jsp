@@ -9,6 +9,11 @@
            onchange="angular.element(this).scope().excelFileChanged()"
            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel.sheet.macroEnabled.12"/>
 
+    <input type="file" class="form-control" id="textUpFile"
+           ng-model="textUpFile"
+           onchange="angular.element(this).scope().textFileChanged()"
+           accept=".txt"/>
+
     <%--위즈모 테이블--%>
     <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
         <wj-flex-grid
@@ -32,4 +37,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/bbqExcelFileUpload.js?ver=20230728.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/bbqExcelFileUpload.js?ver=20230804.01" charset="utf-8"></script>

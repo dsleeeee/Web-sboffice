@@ -81,6 +81,28 @@ app.controller('bbqMemberExcelUploadCtrl', ['$scope', '$http', '$timeout', funct
         });
     };
 
+    // 텍스트업로드(BBQ)
+    $scope.txtUpload = function(){
+
+        // 등록매장을 선택하세요.
+        if($("#bbqMemberExcelUploadStoreCd").val() === ""){
+            $scope._popMsg(messages["bbq.member.excel.regStore.chkMsg"] );
+            return false;
+        }
+
+        var vScope = agrid.getScope('bbqExcelFileUploadCtrl');
+
+        // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
+        $scope._popConfirm(messages["bbq.member.excel.confmMsg"], function() {
+
+            /* 부모컨트롤러 값을 넣으면 업로드가 완료된 후 uploadCallBack 이라는 함수를 호출해준다. */
+            vScope.parentCtrl = 'bbqMemberExcelUploadCtrl';
+
+            $("#textUpFile").val('');
+            $("#textUpFile").trigger('click');
+        });
+    };
+
     /** 업로드 완료 후 callback 함수. 업로드 이후 로직 작성. */
     $scope.uploadCallBack = function () {
         $scope._pageView('bbqMemberExcelUploadCtrl', 1);
