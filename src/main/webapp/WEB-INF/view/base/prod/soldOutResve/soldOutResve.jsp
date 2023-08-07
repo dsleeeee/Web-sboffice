@@ -425,7 +425,7 @@
         <%--//페이지 리스트--%>
     </div>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOutResve/soldOutResve.js?ver=20230530.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOutResve/soldOutResve.js?ver=20230807.01" charset="utf-8"></script>
 
 <%-- 예약 추가 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/soldOutResve/soldOutResveAdd.jsp">

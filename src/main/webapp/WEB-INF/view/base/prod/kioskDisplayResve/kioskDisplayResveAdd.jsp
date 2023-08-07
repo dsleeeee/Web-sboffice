@@ -434,4 +434,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskDisplayResve/kioskDisplayResveAdd.js?ver=20230327.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskDisplayResve/kioskDisplayResveAdd.js?ver=20230807.01" charset="utf-8"></script>
