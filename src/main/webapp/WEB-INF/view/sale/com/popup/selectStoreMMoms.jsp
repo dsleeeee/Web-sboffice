@@ -228,7 +228,7 @@
         <%--위즈모 테이블--%>
         <div class="theGrid mt10" style="height: 400px;">
           <wj-flex-grid
-            id="wjGridStoreM"
+            id="wjGridStore${param.targetId}"
             autoGenerateColumns="false"
             selection-mode="Row"
             items-source="data"
@@ -456,16 +456,18 @@
     });
 
     $scope.searchFilter = function (){
-        var grid = wijmo.Control.getControl("#wjGridStoreM");
+
+        var nm = "#wjGridStore" + targetId;
+        var grid = wijmo.Control.getControl(nm);
 
         if(grid.rows.length > 0){
 
             for (var i = 0; i < grid.rows.length; i++) {
                 grid.rows[i].visible = true;
             }
-            if($("#filterStoreNm").val() !==undefined && $("#filterStoreNm").val() !== null && $("#filterStoreNm").val() !== ""){
+            if($scope.filterStoreNm !== undefined && $scope.filterStoreNm !== null && $scope.filterStoreNm !== ""){
                 for (var i = 0; i < grid.rows.length; i++) {
-                    if (grid.rows[i].dataItem.storeNm.indexOf($("#filterStoreNm").val()) === -1) {
+                    if (grid.rows[i].dataItem.storeNm.indexOf($scope.filterStoreNm) === -1) {
                         grid.rows[i].visible = false;
                     }
                 }
