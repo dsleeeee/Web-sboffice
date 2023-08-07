@@ -48,8 +48,18 @@ app.controller('mediaCtrl', ['$scope', '$http', function ($scope, $http) {
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
+        var item = s.rows[e.row].dataItem;
         if (col.binding === "verSerNo") {
           wijmo.addClass(e.cell, 'wijLink');
+        }
+
+        //
+        if(col.binding === "view"){
+        }
+
+        //
+        if(col.binding === "downLoad"){
+          e.cell.innerHTML = "<td><a href=\"/base/store/media/media/download.sb?fileNm=" + item.fileNmExt + "&orginlFileNm=" + item.fileOrgNm + "&fileExt=" + item.fileExt + "\">다운로드</a></td>";
         }
       }
     });

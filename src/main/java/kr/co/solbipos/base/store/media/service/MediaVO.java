@@ -102,6 +102,8 @@ public class MediaVO extends PageVO {
     private String promotionCd;
     /** 소속코드 */
     private String orgnCd;
+    /** 원본 파일 명 */
+    private String orginlFileNm;
 
 
     public String getOrgnFg() {
@@ -507,5 +509,13 @@ public class MediaVO extends PageVO {
 
     public void setOrgnCd(String orgnCd) {
         this.orgnCd = orgnCd;
+    }
+
+    public String getOrginlFileNm() {
+        return orginlFileNm;
+    }
+
+    public void setOrginlFileNm(String orginlFileNm) {
+        this.orginlFileNm = orginlFileNm;
     }
 }

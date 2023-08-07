@@ -6,6 +6,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
@@ -21,6 +22,7 @@ import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +31,10 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -387,5 +393,59 @@ public class MediaController {
         int result = mediaService.getMediaPlaySeqSaveUpdate(mediaVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 첨부파일 다운로드
+     *
+     * @param mediaVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  이다솜
+     * @since   2023. 08. 07.
+     */
+    @RequestMapping(value="/media/download.sb")
+    @ResponseBody
+    public void download(MediaVO mediaVO, HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
+
+//System.out.println("kjs: request.getParameter(fileNm): "  + request.getParameter("fileNm"));
+System.out.println("kjs: boardVO.getFileNm() : "  + mediaVO.getFileNm());
+//        File file = new File("D:\\Workspace\\javaWeb\\testBoardAtch\\", boardVO.getFileNm());
+        String reFileNM = mediaVO.getFileNm().replaceAll("../", "").replaceAll("/", "");
+System.out.println("kjs: reFileNM : " + reFileNM);
+
+        File file = new File(BaseEnv.FILE_UPLOAD_DIR + "Media/", reFileNM);
+
+        BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
+
+        //User-Agent : 어떤 운영체제로  어떤 브라우저를 서버( 홈페이지 )에 접근하는지 확인함
+        String header = request.getHeader("User-Agent");
+        String fileName;
+        String orginlFileNm;
+        String fileExt;
+        if ((header.contains("MSIE")) || (header.contains("Trident")) || (header.contains("Edge"))) {
+            //인터넷 익스플로러 10이하 버전, 11버전, 엣지에서 인코딩
+            fileName = URLEncoder.encode(reFileNM, "UTF-8");
+            orginlFileNm = URLEncoder.encode(mediaVO.getOrginlFileNm(), "UTF-8");
+            fileExt = URLEncoder.encode(mediaVO.getFileExt(), "UTF-8");
+        } else {
+            //나머지 브라우저에서 인코딩
+            fileName = new String(reFileNM.getBytes("UTF-8"), "iso-8859-1");
+            orginlFileNm = new String(mediaVO.getOrginlFileNm().getBytes("UTF-8"), "iso-8859-1");
+            fileExt = new String(mediaVO.getFileExt().getBytes("UTF-8"), "iso-8859-1");
+        }
+
+        //형식을 모르는 파일첨부용 contentType
+        response.setContentType("application/octet-stream");
+        //다운로드와 다운로드될 파일이름
+//        response.setHeader("Content-Disposition", "attachment; filename=\""+ fileName + "\"");
+        response.setHeader("Content-Disposition", "attachment; filename=\""+ orginlFileNm + "." + fileExt + "\"");
+        //파일복사
+        FileCopyUtils.copy(in, response.getOutputStream());
+        in.close();
+        response.getOutputStream().flush();
+        response.getOutputStream().close();
     }
 }
