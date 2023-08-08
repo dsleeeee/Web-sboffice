@@ -75,20 +75,8 @@
         </table>
 
         <div class="mt10 oh sb-select dkbr">
-            <%-- 페이지 스케일  --%>
-            <wj-combo-box
-                    class="w100px fl"
-                    id="listScaleBox"
-                    ng-model="listScale"
-                    items-source="_getComboData('listScaleBox')"
-                    display-member-path="name"
-                    selected-value-path="value"
-                    is-editable="false"
-                    initialized="initComboBox(s)">
-            </wj-combo-box>
-            <%--// 페이지 스케일  --%>
             <%-- 엑셀다운로드 --%>
-            <%--<button class="btn_skyblue fr" ng-click="excelDownload()"><s:message code="empCardInfo.excelDownload" /></button>--%>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></button>
         </div>
 
         <%--위즈모 테이블--%>
@@ -120,14 +108,6 @@
             </div>
         </div>
         <%--//위즈모 테이블--%>
-
-        <%-- 페이지 리스트 --%>
-        <div class="pageNum mt20">
-            <%-- id --%>
-            <ul id="storeTypeChgHistCtrlPager" data-size="10">
-            </ul>
-        </div>
-        <%--//페이지 리스트--%>
     </div>
 
 </div>
@@ -136,4 +116,4 @@
     var useYnData = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeTypeChgHist.js?ver=20211118.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeTypeChgHist.js?ver=20230807.02" charset="utf-8"></script>

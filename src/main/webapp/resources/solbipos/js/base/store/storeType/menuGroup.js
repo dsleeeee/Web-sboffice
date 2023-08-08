@@ -37,13 +37,15 @@ app.controller('menuGroupCtrl', ['$scope', '$http', '$timeout', function ($scope
 
     $("#btnAddMenuGroup").css("display", "none");
     $("#btnSaveMenuGroup").css("display", "none");
+    $("#btnExcelDownloadMenuGroup").css("display", "none");
     $("#btnDelProdMapping").css("display", "none");
     $("#btnSaveProdMapping").css("display", "none");
+    $("#btnExcelDownloadProdMapping").css("display", "none");
     $("#btnSrchProd").css("display", "none");
     $("#btnRegProd").css("display", "none");
+    $("#btnExcelDownloadProd").css("display", "none");
 
     $scope.initGrid = function (s, e) {
-
         // 그리드 DataMap 설정
         $scope.useYnDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');
 
@@ -87,8 +89,10 @@ app.controller('menuGroupCtrl', ['$scope', '$http', '$timeout', function ($scope
                             $("#btnSaveProdMapping").css("display", "none");
                         }
 
+                        $("#btnExcelDownloadProdMapping").css("display", "");
                         $("#btnSrchProd").css("display", "");
                         $("#btnRegProd").css("display", "");
+                        $("#btnExcelDownloadProd").css("display", "");
 
                         event.preventDefault();
                     }
@@ -98,11 +102,9 @@ app.controller('menuGroupCtrl', ['$scope', '$http', '$timeout', function ($scope
 
         // 메뉴그룹조회
         $scope.searchMenuGroup();
-
     };
 
     $scope.$on("menuGroupCtrl", function(event, data) {
-
         // 메뉴그룹조회
         $scope.searchMenuGroup();
         event.preventDefault();
@@ -110,7 +112,6 @@ app.controller('menuGroupCtrl', ['$scope', '$http', '$timeout', function ($scope
 
     // 메뉴그룹조회
     $scope.searchMenuGroup = function () {
-
         var params = [];
         params.storeGroupNm = $scope.storeGroupNm;
         params.useYn = $scope.useYn;
@@ -124,10 +125,13 @@ app.controller('menuGroupCtrl', ['$scope', '$http', '$timeout', function ($scope
             // 버튼 visible 셋팅 - 매장타입관리 grid 버튼은 보이고 나머지 grid 버튼은 숨길것.
             $("#btnAddMenuGroup").css("display", "");
             $("#btnSaveMenuGroup").css("display", "");
+            $("#btnExcelDownloadMenuGroup").css("display", "");
             $("#btnDelProdMapping").css("display", "none");
             $("#btnSaveProdMapping").css("display", "none");
+            $("#btnExcelDownloadProdMapping").css("display", "none");
             $("#btnSrchProd").css("display", "none");
             $("#btnRegProd").css("display", "none");
+            $("#btnExcelDownloadProd").css("display", "none");
 
             // 상품연결 그리드 초기화
             var prodMappingScope = agrid.getScope('prodMappingCtrl');
@@ -153,11 +157,10 @@ app.controller('menuGroupCtrl', ['$scope', '$http', '$timeout', function ($scope
             prodSelectScope.srchRegYnCombo.selectedIndex = 0;
 
         }, false);
-    }
+    };
 
     // 메뉴그룹추가
     $scope.addMenuGroup = function () {
-
         var params = [];
         params.storeGroupCd = '자동채번';
         params.storeGroupNm = '';
@@ -166,7 +169,7 @@ app.controller('menuGroupCtrl', ['$scope', '$http', '$timeout', function ($scope
 
         // 행추가
         $scope._addRow(params, 1);
-    }
+    };
     
     // 메뉴그룹저장
     $scope.saveMenuGroup = function () {
@@ -204,12 +207,10 @@ app.controller('menuGroupCtrl', ['$scope', '$http', '$timeout', function ($scope
             $scope.setStoreGroupDropdownList();
 
         });
-
     };
     
     // 메뉴그룹 dropdown 재조회
     $scope.setStoreGroupDropdownList = function(){
-
         var url = '/base/store/storeType/storeType/getStoreGroupCombo.sb';
         var params = {};
 
@@ -249,6 +250,29 @@ app.controller('menuGroupCtrl', ['$scope', '$http', '$timeout', function ($scope
             $timeout(function () {
             }, 10);
         });
+    };
+
+    // 엑셀다운로드
+    $scope.excelDownloadMenuGroup = function () {
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+                includeColumnHeaders: true,
+                includeCellStyles: true,
+                includeColumns: function (column) {
+                    return column.visible;
+                }
+            }, '메뉴그룹_메뉴그룹관리_' + getToday() + '.xlsx', function () {
+                $timeout(function () {
+                    $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                }, 10);
+            });
+        }, 10);
     };
 
 }]);
@@ -376,6 +400,29 @@ app.controller('prodMappingCtrl', ['$scope', '$http', '$timeout', function ($sco
             cv.trackChanges = true;
             $scope.data = cv;
             $scope.flex.refresh();
+        }, 10);
+    };
+
+    // 엑셀다운로드
+    $scope.excelDownloadProdMapping = function () {
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+                includeColumnHeaders: true,
+                includeCellStyles: true,
+                includeColumns: function (column) {
+                    return column.visible;
+                }
+            }, '메뉴그룹_메뉴그룹-상품연결_' + getToday() + '.xlsx', function () {
+                $timeout(function () {
+                    $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                }, 10);
+            });
         }, 10);
     };
 
@@ -533,6 +580,29 @@ app.controller('prodSelectCtrl', ['$scope', '$http', '$timeout', function ($scop
             cv.trackChanges = true;
             $scope.data = cv;
             $scope.flex.refresh();
+        }, 10);
+    };
+
+    // 엑셀다운로드
+    $scope.excelDownloadProd = function () {
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+                includeColumnHeaders: true,
+                includeCellStyles: true,
+                includeColumns: function (column) {
+                    return column.visible;
+                }
+            }, '메뉴그룹_상품_' + getToday() + '.xlsx', function () {
+                $timeout(function () {
+                    $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                }, 10);
+            });
         }, 10);
     };
 

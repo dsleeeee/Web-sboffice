@@ -1,7 +1,7 @@
 /****************************************************************
  *
  * 파일명 : soldOutResveAdd.js
- * 설  명 : 비노출관리(예약) 추가 팝업 JavaScript
+ * 설  명 : 품절관리(예약) 추가 팝업 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
@@ -13,48 +13,6 @@
  */
 var app = agrid.getApp();
 
-// 사용여부 콤보는 별도 조회하지 않고 고정적으로 사용
-var soldOutYnAllComboData = [
-    {"name": "전체", "value": ""},
-    {"name": "품절", "value": "Y"},
-    {"name": "정상", "value": "N"}
-];
-var soldOutYnComboData = [
-    {"name": "품절", "value": "Y"},
-    {"name": "정상", "value": "N"}
-];
-var allSoldOutYnComboData = [
-    {"name": "단품", "value": "N"},
-    {"name": "전체", "value": "Y"}
-];
-
-var startTimeData = [
-    {"name":"00", "value":"0"},
-    {"name":"01", "value":"1"},
-    {"name":"02", "value":"2"},
-    {"name":"03", "value":"3"},
-    {"name":"04", "value":"4"},
-    {"name":"05", "value":"5"},
-    {"name":"06", "value":"6"},
-    {"name":"07", "value":"7"},
-    {"name":"08", "value":"8"},
-    {"name":"09", "value":"9"},
-    {"name":"10", "value":"10"},
-    {"name":"11", "value":"11"},
-    {"name":"12", "value":"12"},
-    {"name":"13", "value":"13"},
-    {"name":"14", "value":"14"},
-    {"name":"15", "value":"15"},
-    {"name":"16", "value":"16"},
-    {"name":"17", "value":"17"},
-    {"name":"18", "value":"18"},
-    {"name":"19", "value":"19"},
-    {"name":"20", "value":"20"},
-    {"name":"21", "value":"21"},
-    {"name":"22", "value":"22"},
-    {"name":"23", "value":"23"}
-];
-
 /**
  *  예약추가 팝업
  */
@@ -64,13 +22,13 @@ app.controller('soldOutResveAddCtrl', ['$scope', '$http', function ($scope, $htt
     angular.extend(this, new RootController('soldOutResveAddCtrl', $scope, $http, true));
 
     // 콤보박스 데이터 Set
-    $scope._setComboData("soldOutYnAddCombo", soldOutYnAllComboData);
-    $scope._setComboData("soldOutYnAddCombo2", soldOutYnComboData);
+    $scope._setComboData("soldOutYnAddCombo", soldOutYnAllData);
+    $scope._setComboData("soldOutYnAddCombo2", soldOutYnData);
     $scope._setComboData("startTimeCombo", startTimeData);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-        $scope.soldOutYnDataMap = new wijmo.grid.DataMap(soldOutYnComboData, 'value', 'name');
+        $scope.soldOutYnDataMap = new wijmo.grid.DataMap(soldOutYnData, 'value', 'name');
         $scope.allSoldOutYnDataMap = new wijmo.grid.DataMap(allSoldOutYnComboData, 'value', 'name');
 
         // 예약일시 날짜셋팅
@@ -293,7 +251,7 @@ app.controller('soldOutResveAddCtrl', ['$scope', '$http', function ($scope, $htt
                 if($scope.flex.collectionView.items[i].soldOutYn != undefined && $scope.flex.collectionView.items[i].soldOutYn != null && $scope.flex.collectionView.items[i].soldOutYn != ""){
 
                     $scope.flex.collectionView.items[i].startDate = wijmo.Globalize.format($scope.startDateCombo.value, 'yyyyMMdd');
-                    $scope.flex.collectionView.items[i].startTime = $scope.startTime;
+                    $scope.flex.collectionView.items[i].startTime = $scope.startTimeCombo.text;
                     $scope.flex.collectionView.items[i].allSoldOutYn = gubun;
                     params.push($scope.flex.collectionView.items[i]);
                 }

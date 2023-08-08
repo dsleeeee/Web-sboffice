@@ -13,45 +13,6 @@
  */
 var app = agrid.getApp();
 
-// 사용여부 콤보는 별도 조회하지 않고 고정적으로 사용
-var kioskDisplayYnAllComboData = [
-    {"name": "전체", "value": ""},
-    {"name": "노출", "value": "Y"},
-    {"name": "비노출", "value": "N"}
-];
-var kioskDisplayYnComboData = [
-    {"name": "노출", "value": "Y"},
-    {"name": "비노출", "value": "N"}
-];
-
-
-var startTimeData = [
-    {"name":"00", "value":"0"},
-    {"name":"01", "value":"1"},
-    {"name":"02", "value":"2"},
-    {"name":"03", "value":"3"},
-    {"name":"04", "value":"4"},
-    {"name":"05", "value":"5"},
-    {"name":"06", "value":"6"},
-    {"name":"07", "value":"7"},
-    {"name":"08", "value":"8"},
-    {"name":"09", "value":"9"},
-    {"name":"10", "value":"10"},
-    {"name":"11", "value":"11"},
-    {"name":"12", "value":"12"},
-    {"name":"13", "value":"13"},
-    {"name":"14", "value":"14"},
-    {"name":"15", "value":"15"},
-    {"name":"16", "value":"16"},
-    {"name":"17", "value":"17"},
-    {"name":"18", "value":"18"},
-    {"name":"19", "value":"19"},
-    {"name":"20", "value":"20"},
-    {"name":"21", "value":"21"},
-    {"name":"22", "value":"22"},
-    {"name":"23", "value":"23"}
-];
-
 /**
  *  예약추가 팝업
  */
@@ -61,13 +22,13 @@ app.controller('kioskDisplayResveAddCtrl', ['$scope', '$http', function ($scope,
     angular.extend(this, new RootController('kioskDisplayResveAddCtrl', $scope, $http, true));
 
     // 콤보박스 데이터 Set
-    $scope._setComboData("kioskDisplayYnAddCombo", kioskDisplayYnAllComboData);
-    $scope._setComboData("kioskDisplayYnAddCombo2", kioskDisplayYnComboData);
+    $scope._setComboData("kioskDisplayYnAddCombo", kioskDisplayResveYnAllData);
+    $scope._setComboData("kioskDisplayYnAddCombo2", kioskDisplayResveYnData);
     $scope._setComboData("startTimeCombo", startTimeData);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-        $scope.kioskDisplayYnComboDataMap = new wijmo.grid.DataMap(kioskDisplayYnComboData, 'value', 'name');
+        $scope.kioskDisplayYnComboDataMap = new wijmo.grid.DataMap(kioskDisplayResveYnData, 'value', 'name');
 
         // 예약일시 날짜셋팅
         // $scope.startDateCombo.value = getTomorrow('-');
@@ -289,7 +250,7 @@ app.controller('kioskDisplayResveAddCtrl', ['$scope', '$http', function ($scope,
                 if($scope.flex.collectionView.items[i].kioskDisplayYn != undefined && $scope.flex.collectionView.items[i].kioskDisplayYn != null && $scope.flex.collectionView.items[i].kioskDisplayYn != ""){
 
                     $scope.flex.collectionView.items[i].startDate = wijmo.Globalize.format($scope.startDateCombo.value, 'yyyyMMdd');
-                    $scope.flex.collectionView.items[i].startTime = $scope.startTime;
+                    $scope.flex.collectionView.items[i].startTime = $scope.startTimeCombo.text;
                     params.push($scope.flex.collectionView.items[i]);
                 }
             }

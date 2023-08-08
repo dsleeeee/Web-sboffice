@@ -63,6 +63,10 @@
                     <button class="btn_skyblue" id="btnSaveMenuGroup" ng-click="saveMenuGroup()">
                         <s:message code="cmm.save" />
                     </button>
+                    <%-- 엑셀 --%>
+                    <button class="btn_skyblue" id="btnExcelDownloadMenuGroup" ng-click="excelDownloadMenuGroup()">
+                        <s:message code="cmm.excel"/>
+                    </button>
                 </div>
                 <div class="w100 mt10 mb20">
                     <div class="wj-gridWrap" style="height:635px; overflow-x: hidden; overflow-y: hidden;">
@@ -106,6 +110,10 @@
                     </button>
                     <button class="btn_skyblue" id="btnSaveProdMapping" ng-click="saveProdMapping()">
                         <s:message code="cmm.save" />
+                    </button>
+                    <%-- 엑셀 --%>
+                    <button class="btn_skyblue" id="btnExcelDownloadProdMapping" ng-click="excelDownloadProdMapping()">
+                        <s:message code="cmm.excel"/>
                     </button>
                 </div>
                 <div class="wj-gridWrap" style="height:620px; overflow-x: hidden; overflow-y: hidden;">
@@ -261,19 +269,24 @@
                                 </wj-combo-box>
                             </div>
                         </td>
-                        <td></td>
-                        <td class="fr">
-                            <button class="btn_skyblue" id="btnSrchProd" ng-click="searchProd()">
-                                <s:message code="cmm.search" />
-                            </button>
-                            <button class="btn_skyblue" id="btnRegProd" ng-click="regProd()">
-                                <s:message code="storeType.reg" />
-                            </button>
+                        <td colspan="2">
+                            <div class="fr">
+                                <button class="btn_skyblue" id="btnSrchProd" ng-click="searchProd()">
+                                    <s:message code="cmm.search" />
+                                </button>
+                                <button class="btn_skyblue" id="btnRegProd" ng-click="regProd()">
+                                    <s:message code="storeType.reg" />
+                                </button>
+                                <%-- 엑셀 --%>
+                                <button class="btn_skyblue" id="btnExcelDownloadProd" ng-click="excelDownloadProd()">
+                                    <s:message code="cmm.excel"/>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                     </tbody>
                 </table>
-                <div class="wj-gridWrap" style="height:430px; overflow-x: hidden; overflow-y: hidden;">
+                <div class="wj-gridWrap" style="height:480px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"
@@ -309,7 +322,7 @@
     var prodTypeFg = ${ccu.getCommCode("008")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/menuGroup.js?ver=20230731.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/menuGroup.js?ver=20230808.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

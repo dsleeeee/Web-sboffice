@@ -400,4 +400,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOutResve/soldOutResveAdd.js?ver=20230531.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOutResve/soldOutResveAdd.js?ver=20230807.01" charset="utf-8"></script>

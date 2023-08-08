@@ -75,58 +75,36 @@
         </table>
 
         <div class="mt10 oh sb-select dkbr">
-            <%-- 페이지 스케일  --%>
-            <wj-combo-box
-                    class="w100px fl"
-                    id="listScaleBox2"
-                    ng-model="listScale2"
-                    items-source="_getComboData('listScaleBox2')"
-                    display-member-path="name"
-                    selected-value-path="value"
-                    is-editable="false"
-                    initialized="initComboBox(s)">
-            </wj-combo-box>
-            <%--// 페이지 스케일  --%>
             <%-- 엑셀다운로드 --%>
-            <%--<button class="btn_skyblue fr" ng-click="excelDownload()"><s:message code="empCardInfo.excelDownload" /></button>--%>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></button>
         </div>
 
         <%--위즈모 테이블--%>
         <div class="wj-TblWrapBr mt10">
             <div id="theGridMenuGroup" style="height: 300px; overflow-y: hidden; overflow-x: hidden;">
                 <wj-flex-grid
-                autoGenerateColumns="false"
-                control="flex"
-                initialized="initGrid(s,e)"
-                sticky-headers="true"
-                selection-mode="Row"
-                items-source="data"
-                item-formatter="_itemFormatter">
+                        autoGenerateColumns="false"
+                        control="flex"
+                        initialized="initGrid(s,e)"
+                        sticky-headers="true"
+                        selection-mode="Row"
+                        items-source="data"
+                        item-formatter="_itemFormatter">
 
-            <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="storeType.code"/>" binding="storeGroupCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeType.menuGroupNm"/>" binding="storeGroupNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeType.useYn"/>" binding="useYn" width="80" is-read-only="true" align="center" data-map="useYnDataMap"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeType.remark"/>" binding="remark" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeType.useYn"/>" binding="bUseYn" width="80" is-read-only="true" align="center" data-map="useYnDataMap"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeType.remark"/>" binding="bRemark" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeType.procFg"/>" binding="procFg" is-read-only="true" width="100" align="center" data-map="procFgDataMap"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeType.procDt"/>" binding="procDt" is-read-only="true" width="150" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeType.modId"/>" binding="modId" is-read-only="true" width="100" align="center"></wj-flex-grid-column>
-
-
-        </wj-flex-grid>
+                    <!-- define columns -->
+                    <wj-flex-grid-column header="<s:message code="storeType.storeGroupCd"/>" binding="storeGroupCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeType.menuGroupNm"/>" binding="storeGroupNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeType.useYn"/>" binding="useYn" width="80" is-read-only="true" align="center" data-map="useYnDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeType.remark"/>" binding="remark" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeType.useYn"/>" binding="bUseYn" width="80" is-read-only="true" align="center" data-map="useYnDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeType.remark"/>" binding="bRemark" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeType.procFg"/>" binding="procFg" is-read-only="true" width="100" align="center" data-map="procFgDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeType.procDt"/>" binding="procDt" is-read-only="true" width="150" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeType.modId"/>" binding="modId" is-read-only="true" width="100" align="center"></wj-flex-grid-column>
+                </wj-flex-grid>
             </div>
         </div>
         <%--//위즈모 테이블--%>
-
-        <%-- 페이지 리스트 --%>
-        <div class="pageNum mt20">
-            <%-- id --%>
-            <ul id="menuGroupChgHistCtrlPager" data-size="10">
-            </ul>
-        </div>
-        <%--//페이지 리스트--%>
 
     </div>
 
@@ -135,4 +113,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/menuGroupChgHist.js?ver=20211118.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/menuGroupChgHist.js?ver=20230807.01" charset="utf-8"></script>

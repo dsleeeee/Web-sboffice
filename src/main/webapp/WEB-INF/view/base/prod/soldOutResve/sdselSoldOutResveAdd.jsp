@@ -455,4 +455,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOutResve/sdselSoldOutResveAdd.js?ver=20230531.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOutResve/sdselSoldOutResveAdd.js?ver=20230807.02" charset="utf-8"></script>

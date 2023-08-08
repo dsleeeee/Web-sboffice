@@ -109,18 +109,8 @@
         </table>
 
         <div class="mt10 oh sb-select dkbr">
-            <%-- 페이지 스케일 --%>
-            <wj-combo-box
-                    class="w100px fl"
-                    id="listScaleBox"
-                    ng-model="listScale"
-                    control="listScaleCombo5"
-                    items-source="_getComboData('listScaleBox')"
-                    display-member-path="name"
-                    selected-value-path="value"
-                    is-editable="false"
-                    initialized="_initComboBox(s)">
-            </wj-combo-box>
+            <%-- 엑셀다운로드 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></button>
             <%-- 취소 --%>
             <button class="btn_skyblue ml5 fr" id="btnCancel" ng-click="cancel()"><s:message code="cmm.cancel" /></button>
         </div>
@@ -157,18 +147,11 @@
                 </wj-flex-grid>
             </div>
         </div>
-        <%-- 페이지 리스트 --%>
-        <div class="pageNum mt20">
-            <%-- id --%>
-            <ul id="storeApplyChgHistCtrlPager" data-size="10">
-            </ul>
-        </div>
-        <%--//페이지 리스트--%>
     </div>
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeApplyChgHist.js?ver=20230109.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeApplyChgHist.js?ver=20230808.01" charset="utf-8"></script>
 
 <%-- 매장적용이력 상세 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/storeType/storeApplyChgHistDtl.jsp">
