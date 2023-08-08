@@ -55,7 +55,7 @@
             AND C.STORE_CD (+)= #{storeCd}
             AND C.HQ_OFFICE_CD (+)= B.HQ_OFFICE_CD
             AND C.SDSEL_CLASS_CD (+)= B.SDSEL_CLASS_CD
-            ORDER BY B.DISP_SEQ
+            ORDER BY A.SDSEL_GRP_CD, B.DISP_SEQ
         )
         WHERE 1=1
         <if test='regYn != null and regYn != ""'>
@@ -179,7 +179,7 @@
             AND D.SDSEL_CLASS_CD (+)= B.SDSEL_CLASS_CD
             AND D.STORE_CD (+)= C.STORE_CD
             AND E.STORE_CD (+)= C.STORE_CD
-            ORDER BY B.DISP_SEQ
+            ORDER BY A.SDSEL_GRP_CD, B.DISP_SEQ
         )
         WHERE 1=1
         <if test='regYn != null and regYn != ""'>
@@ -248,7 +248,7 @@
             AND E.HQ_OFFICE_CD (+)= C.HQ_OFFICE_CD
             AND E.SDSEL_CLASS_CD (+)= C.SDSEL_CLASS_CD
             AND E.PROD_CD (+)= C.PROD_CD
-            ORDER BY B.DISP_SEQ, C.DISP_SEQ
+            ORDER BY A.SDSEL_GRP_CD, B.DISP_SEQ, C.DISP_SEQ
         )
         WHERE 1=1
         <if test='regYn != null and regYn != ""'>
@@ -389,7 +389,7 @@
             AND F.PROD_CD (+)= C.PROD_CD
             AND F.STORE_CD (+)= E.STORE_CD
             AND G.STORE_CD (+)= E.STORE_CD
-            ORDER BY B.DISP_SEQ, C.DISP_SEQ
+            ORDER BY A.SDSEL_GRP_CD, B.DISP_SEQ, C.DISP_SEQ
         )
         WHERE 1=1
         <if test='regYn != null and regYn != ""'>
@@ -437,7 +437,7 @@
         AND B.USE_YN = 'Y'
         AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
         AND B.SDSEL_GRP_CD = A.SDSEL_GRP_CD
-        ORDER BY B.DISP_SEQ
+        ORDER BY A.SDSEL_GRP_CD, B.DISP_SEQ
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -551,7 +551,7 @@
         AND C.SDSEL_CLASS_CD = B.SDSEL_CLASS_CD
         AND D.HQ_OFFICE_CD (+)= C.HQ_OFFICE_CD
         AND D.PROD_CD (+)= C.PROD_CD
-        ORDER BY B.DISP_SEQ, C.DISP_SEQ
+        ORDER BY A.SDSEL_GRP_CD, B.DISP_SEQ, C.DISP_SEQ
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
