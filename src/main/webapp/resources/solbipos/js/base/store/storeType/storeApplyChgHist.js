@@ -26,7 +26,7 @@ var applyProcFgComboData = [
 /**
  *  매장적용이력 그리드 생성
  */
-app.controller('storeApplyChgHistCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('storeApplyChgHistCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('storeApplyChgHistCtrl', $scope, $http, false));
@@ -34,9 +34,6 @@ app.controller('storeApplyChgHistCtrl', ['$scope', '$http', function ($scope, $h
     // 변경일자 셋팅
     var startDate = wcombo.genDateVal("#srchSachStartDate", gvStartDate);
     var endDate = wcombo.genDateVal("#srchSachEndDate", gvEndDate);
-
-    // 콤보박스 데이터 Set
-    $scope._setComboData('listScaleBox', gvListScaleBoxData);
 
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("srchSachStoreType", storeTypeList);
@@ -127,7 +124,6 @@ app.controller('storeApplyChgHistCtrl', ['$scope', '$http', function ($scope, $h
         params.storeCds = $("#storeApplyChgHistStoreCd").val();
         params.storeTypeCd = $scope.srchSachStoreTypeCombo.selectedValue;
         params.storeGroupCd = $scope.srchSachStoreGroupCombo.selectedValue;
-        params.listScale = $scope.listScaleCombo5.text;
 
         if(brandUseFg === "1" && orgnFg === "HQ"){
 
@@ -175,14 +171,9 @@ app.controller('storeApplyChgHistCtrl', ['$scope', '$http', function ($scope, $h
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._save("/base/store/storeType/storeApplyChgHist/getStoreApplyChgHistSaveUpdate.sb", params, function(){
-                $scope.allSearch();
+                $scope.searchStoreApplyChgHist();
             });
         });
-    };
-
-    // 재조회
-    $scope.allSearch = function () {
-        $scope.searchStoreApplyChgHist();
     };
 
     // 선택
@@ -204,5 +195,28 @@ app.controller('storeApplyChgHistCtrl', ['$scope', '$http', function ($scope, $h
             }, 50)
         });
     });
+
+    // 엑셀다운로드
+    $scope.excelDownload = function () {
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+                includeColumnHeaders: true,
+                includeCellStyles: true,
+                includeColumns: function (column) {
+                    return column.visible;
+                }
+            }, '매장적용이력_' + getToday() + '.xlsx', function () {
+                $timeout(function () {
+                    $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                }, 10);
+            });
+        }, 10);
+    };
 
 }]);

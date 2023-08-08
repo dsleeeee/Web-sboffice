@@ -1175,7 +1175,6 @@
     -->
     <select id="getStoreApplyChgHistList" parameterType="storeTypeVO" resultType="DefaultMap">
         /* StoreTypeMapper.getStoreApplyChgHistList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
         A.STORE_TYPE_CD,
         (SELECT STORE_TYPE_NM FROM TB_HQ_STORE_TYPE WHERE HQ_OFFICE_CD = A.HQ_OFFICE_CD AND STORE_TYPE_CD = A.STORE_TYPE_CD) AS STORE_TYPE_NM,
@@ -1193,7 +1192,6 @@
                 ELSE '' END
         ) AS APPLY_INFO,
         (SELECT NVL2(MAX(STORE_CD), 'Y', 'N') FROM TB_HQ_STORE_TYPE_APP WHERE HQ_OFFICE_CD = A.HQ_OFFICE_CD AND STORE_CD = A.STORE_CD AND MOD_DT = A.MOD_DT AND APPLY_PROC_FG = '0') AS APPLY_PROC_FG_YN
-        <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_LG_HQ_STORE_TYPE_APP_LOG A,
         TB_MS_STORE tms,
         (
@@ -1280,7 +1278,6 @@
         AND tms.HQ_OFFICE_CD = A.HQ_OFFICE_CD
         AND tms.STORE_CD = A.STORE_CD
         ORDER BY A.PROC_DT DESC
-        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <!-- 매장적용이력 탭 - 취소 update -->
