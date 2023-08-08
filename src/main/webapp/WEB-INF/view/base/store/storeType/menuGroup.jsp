@@ -286,7 +286,7 @@
                     </tr>
                     </tbody>
                 </table>
-                <div class="wj-gridWrap" style="height:430px; overflow-x: hidden; overflow-y: hidden;">
+                <div class="wj-gridWrap" style="height:480px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"
