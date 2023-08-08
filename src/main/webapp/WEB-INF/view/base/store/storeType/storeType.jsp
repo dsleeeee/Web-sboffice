@@ -60,6 +60,10 @@
                     <button class="btn_skyblue" id="btnSaveStoreType" ng-click="saveStoreType()">
                         <s:message code="cmm.save" />
                     </button>
+                    <%-- 엑셀 --%>
+                    <button class="btn_skyblue" id="btnExcelDownloadStoreType" ng-click="excelDownloadStoreType()">
+                        <s:message code="cmm.excel"/>
+                    </button>
                 </div>
                 <div class="w100 mt10 mb20">
                     <div class="wj-gridWrap" style="height:635px; overflow-x: hidden; overflow-y: hidden;">
@@ -99,6 +103,10 @@
                     <span class="fl bk lh30" id="lblStoreType1"></span>
                     <button class="btn_skyblue" id="btnDelStoreMapping" ng-click="delStoreMapping()">
                         <s:message code="cmm.del" />
+                    </button>
+                    <%-- 엑셀 --%>
+                    <button class="btn_skyblue" id="btnExcelDownloadStoreMapping" ng-click="excelDownloadStoreMapping()">
+                        <s:message code="cmm.excel"/>
                     </button>
                 </div>
                 <div class="wj-gridWrap" style="height:268px; overflow-x: hidden; overflow-y: hidden;">
@@ -184,14 +192,19 @@
                         <tr>
                             <td></td>
                             <td></td>
-                            <td></td>
-                            <td class="fr">
-                                <button class="btn_skyblue" id="btnSearchStore" ng-click="searchStore()">
-                                    <s:message code="cmm.search" />
-                                </button>
-                                <button class="btn_skyblue" id="btnRegStore" ng-click="regStore()">
-                                    <s:message code="storeType.reg" />
-                                </button>
+                            <td colspan="2">
+                                <div class="fr">
+                                    <button class="btn_skyblue" id="btnSearchStore" ng-click="searchStore()">
+                                        <s:message code="cmm.search" />
+                                    </button>
+                                    <button class="btn_skyblue" id="btnRegStore" ng-click="regStore()">
+                                        <s:message code="storeType.reg" />
+                                    </button>
+                                    <%-- 엑셀 --%>
+                                    <button class="btn_skyblue" id="btnExcelDownloadRegStore" ng-click="excelDownloadRegStore()">
+                                        <s:message code="cmm.excel"/>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                         </tbody>
@@ -226,6 +239,10 @@
                     <span class="fl bk lh30" id="lblStoreType2"></span>
                     <button class="btn_skyblue" id="btnDelMenuGroupMapping" ng-click="delMenuGroupMapping()">
                         <s:message code="cmm.del" />
+                    </button>
+                    <%-- 엑셀 --%>
+                    <button class="btn_skyblue" id="btnExcelDownloadGroupMapping" ng-click="excelDownloadGroupMapping()">
+                        <s:message code="cmm.excel"/>
                     </button>
                 </div>
                 <div class="wj-gridWrap" style="height:268px; overflow-x: hidden; overflow-y: hidden;">
@@ -284,14 +301,19 @@
                                 </wj-combo-box>
                             </div>
                         </td>
-                        <td></td>
-                        <td class="fr">
-                            <button class="btn_skyblue" id="btnSearchMenuGroup" ng-click="searchMenuGroup()">
-                                <s:message code="cmm.search" />
-                            </button>
-                            <button class="btn_skyblue" id="btnRegMenuGroup" ng-click="regMenuGroup()">
-                                <s:message code="storeType.reg" />
-                            </button>
+                        <td colspan="2">
+                            <div class="fr">
+                                <button class="btn_skyblue" id="btnSearchMenuGroup" ng-click="searchMenuGroup()">
+                                    <s:message code="cmm.search" />
+                                </button>
+                                <button class="btn_skyblue" id="btnRegMenuGroup" ng-click="regMenuGroup()">
+                                    <s:message code="storeType.reg" />
+                                </button>
+                                <%-- 엑셀 --%>
+                                <button class="btn_skyblue" id="btnExcelDownloadGroup" ng-click="excelDownloadGroup()">
+                                    <s:message code="cmm.excel"/>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                     </tbody>
@@ -324,7 +346,7 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeType.js?ver=20230109.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/storeType/storeType.js?ver=20230808.01" charset="utf-8"></script>
 
 <%-- 매장타입 매장적용 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/storeType/storeTypeApplyStore.jsp">
