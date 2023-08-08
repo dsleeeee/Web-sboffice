@@ -92,7 +92,7 @@
                         item-formatter="_itemFormatter">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="storeType.code"/>" binding="storeGroupCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeType.storeGroupCd"/>" binding="storeGroupCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeType.menuGroupNm"/>" binding="storeGroupNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeType.useYn"/>" binding="useYn" width="80" is-read-only="true" align="center" data-map="useYnDataMap"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeType.remark"/>" binding="remark" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
