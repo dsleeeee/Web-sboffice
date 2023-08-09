@@ -2338,7 +2338,7 @@
         COMMENTS : 터치키 그룹명 복사
     -->
     <insert id="copyTouchKeyGrpNm" parameterType="touchKeyVO">
-        /* USE : TouchkeyMapper.TB_MS_TOUCH_KEY_GROUP */
+        /* USE : TouchkeyMapper.copyTouchKeyGrpNm */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
@@ -2347,10 +2347,10 @@
                         SELECT  HQ_OFFICE_CD
                         ,       #{tukeyGrpCd} AS TUKEY_GRP_CD
                         ,		TUKEY_GRP_NM
-                        ,       #{regDt} AS REG_ID
-                        ,       #{regId} AS REG_DT
-                        ,       #{modDt} AS MOD_ID
-                        ,       #{modId} AS MOD_DT
+                        ,       #{regDt} AS REG_DT
+                        ,       #{regId} AS REG_ID
+                        ,       #{modDt} AS MOD_DT
+                        ,       #{modId} AS MOD_ID
                         FROM    TB_HQ_TOUCH_KEY_GROUP
                         WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
                         AND     TUKEY_GRP_CD = #{copyTukeyGrpCd}
@@ -2362,8 +2362,8 @@
                 WHEN MATCHED THEN
                 UPDATE
                 SET A.TUKEY_GRP_NM = B.TUKEY_GRP_NM
-                ,   A.MOD_ID = B.MOD_ID
                 ,   A.MOD_DT = B.MOD_DT
+                ,   A.MOD_ID = B.MOD_ID
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -2393,10 +2393,10 @@
                 SELECT  STORE_CD
                 ,       #{tukeyGrpCd} AS TUKEY_GRP_CD
                 ,		TUKEY_GRP_NM
-                ,       #{regDt} AS REG_ID
-                ,       #{regId} AS REG_DT
-                ,       #{modDt} AS MOD_ID
-                ,       #{modId} AS MOD_DT
+                ,       #{regDt} AS REG_DT
+                ,       #{regId} AS REG_ID
+                ,       #{modDt} AS MOD_DT
+                ,       #{modId} AS MOD_ID
                 FROM    TB_MS_TOUCH_KEY_GROUP
                 WHERE   STORE_CD = #{storeCd}
                 AND     TUKEY_GRP_CD = #{copyTukeyGrpCd}
@@ -2408,8 +2408,8 @@
                 WHEN MATCHED THEN
                 UPDATE
                 SET A.TUKEY_GRP_NM = B.TUKEY_GRP_NM
-                ,   A.MOD_ID = B.MOD_ID
                 ,   A.MOD_DT = B.MOD_DT
+                ,   A.MOD_ID = B.MOD_ID
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
