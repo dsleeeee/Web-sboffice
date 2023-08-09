@@ -233,6 +233,8 @@
         ,       tsspm.SALE_AMT AS APPR_AMT
         ,       SUBSTR(tsspm.APPR_DT, 0, 8) AS APPR_DATE
         ,       SUBSTR(tsspm.APPR_DT, 9, 14) AS APPR_TIME
+        ,       tsspm.ACQUIRE_NM
+        ,       tsspm.ISSUE_NM
         FROM    TB_SL_SALE_PAY_MPAY tsspm
         ,       TB_MS_CORNER tmc
         ,       TB_CM_NMCODE tcn

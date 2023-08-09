@@ -37,7 +37,8 @@
             <wj-flex-grid-column header="<s:message code="mpay.apprDate"/>" binding="apprDate" width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="mpay.apprTime"/>" binding="apprTime" width="80" align="center" is-read-only="true" format="time"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="mpay.apprNo"/>" binding="apprNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-
+            <wj-flex-grid-column header="<s:message code="mpay.acquireNm"/>" binding="acquireNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="mpay.issueNm"/>" binding="issueNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
           </wj-flex-grid>
         </div>
         <%--//위즈모 테이블--%>
