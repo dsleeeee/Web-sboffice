@@ -129,6 +129,9 @@ public class IostockCmmVO extends PageVO {
     /** 관리브랜드 */
     private String userHqBrand;
 
+    /** 적용매장구분 */
+    private String regStoreFg;
+
     /**
      * @return the orgnFg
      */
@@ -528,4 +531,8 @@ public class IostockCmmVO extends PageVO {
     public void setUserHqBrand(String userHqBrand) {
         this.userHqBrand = userHqBrand;
     }
+
+    public String getRegStoreFg() { return regStoreFg; }
+
+    public void setRegStoreFg(String regStoreFg) { this.regStoreFg = regStoreFg; }
 }

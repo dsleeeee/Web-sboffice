@@ -16,7 +16,7 @@
         <s:message code="cmm.selectCancel"/></button>
 </c:if>
 
-<wj-popup id="wj<c:out value="${param.targetId}"/>LayerS" control="wj<c:out value="${param.targetId}"/>LayerS" show-trigger="Click" hide-trigger="Click" style="display:none;width:500px;">
+<wj-popup id="wj<c:out value="${param.targetId}"/>LayerS" control="wj<c:out value="${param.targetId}"/>LayerS" show-trigger="Click" hide-trigger="Click" style="display:none;width:590px;">
     <div class="wj-dialog wj-dialog-columns" ng-controller="<c:out value="${param.targetId}"/>Ctrl">
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="cmm.sdselClass.select"/>
@@ -54,6 +54,26 @@
                             <input type="text" id="srchSdselClassNm" ng-model="srchSdselClassNm"/>
                         </td>
                     </tr>
+                    <tr>
+                        <%-- 적용매장구분 --%>
+                        <th><s:message code="outstockReqDate.regStoreFg"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchRegStoreFgCombo"
+                                        ng-model="regStoreFg"
+                                        items-source="_getComboData('regStoreFgCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchRegStoreFgCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                     </tbody>
                 </table>
 
@@ -79,6 +99,7 @@
                         <wj-flex-grid-column header="<s:message code="outstockReqDate.sdselGrpNm"/>" binding="sdselGrpNm" width="105" align="left" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="outstockReqDate.sdselClassCd"/>" binding="sdselClassCd" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="outstockReqDate.sdselClassNm"/>" binding="sdselClassNm" width="115" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="outstockReqDate.regStoreFg"/>" binding="regStoreFg" data-map="regStoreFgDataMap" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
                 <%--//위즈모 테이블--%>
@@ -95,6 +116,18 @@
      */
     var app = agrid.getApp();
 
+    // 적용매장구분
+    var regStoreFgData = [
+        {"name":"미사용","value":"0"},
+        {"name":"제외매장","value":"1"},
+        {"name":"허용매장","value":"2"}
+    ];
+    var regStoreFgAllData = [
+        {"name":"전체","value":""},
+        {"name":"제외매장","value":"1"},
+        {"name":"허용매장","value":"2"}
+    ];
+
     /** 선택분류 선택 controller */
     app.controller('${param.targetId}Ctrl', ['$scope', '$http', function ($scope, $http) {
 
@@ -105,8 +138,14 @@
         // 상위 객체 상속 : T/F 는 picker
         angular.extend(this, new RootController($scope.targetId + 'Ctrl', $scope, $http, true));
 
+        // 콤보박스 셋팅
+        $scope._setComboData("regStoreFgCombo", regStoreFgAllData); // 적용매장구분
+
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
         $scope.initGrid = function (s, e) {
+            // 그리드 내 콤보박스 설정
+            $scope.regStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
+
             // 그리드 링크 효과
             s.formatItem.addHandler(function (s, e) {
                 if (e.panel == s.cells) {
@@ -163,6 +202,7 @@
             params.sdselGrpNm = $scope.srchSdselGrpNm;
             params.sdselClassCd = $scope.srchSdselClassCd;
             params.sdselClassNm = $scope.srchSdselClassNm;
+            params.regStoreFg = $scope.regStoreFg;
 
             $scope._inquirySub("/iostock/cmm/iostockCmm/selectSdselClassList.sb", params, function () {
                 $scope.searchFg = "Y";
