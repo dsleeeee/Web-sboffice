@@ -63,6 +63,9 @@ public class MsgManageVO extends PageVO {
     /** 그룹코드 */
     private String selectMsgGrpCd;
 
+    /** 프로시져 실행 결과 */
+    private String result;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -114,4 +117,12 @@ public class MsgManageVO extends PageVO {
     public String getSelectMsgGrpCd() { return selectMsgGrpCd; }
 
     public void setSelectMsgGrpCd(String selectMsgGrpCd) { this.selectMsgGrpCd = selectMsgGrpCd; }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
 }
