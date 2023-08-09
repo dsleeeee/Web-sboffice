@@ -67,4 +67,10 @@ public interface MsgManageMapper {
 
     /** 메세지관리 매장적용 팝업 - 저장(메세지서식) insert */
     int getMsgManageStoreRegistDtlSaveInsert(MsgManageVO msgManageVO);
+
+    /** 메시지관리 - 본사 메시지그룹 매장적용 */
+    String insertMsgGrpToStore(MsgManageVO msgManageVO);
+
+    /** 메시지관리 - 본사 메시지 매장적용 */
+    String insertMsgSmsToStore(MsgManageVO msgManageVO);
 }

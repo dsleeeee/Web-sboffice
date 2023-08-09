@@ -137,8 +137,8 @@
 <%--        <wj-flex-grid-column header="<s:message code="media.regCnt"/>" binding="regCnt" align="center" width="80"  is-read-only="true"></wj-flex-grid-column>--%>
 <%--        <wj-flex-grid-column header="<s:message code="media.recvCnt"/>" binding="recvCnt" align="center" width="80"  is-read-only="true"></wj-flex-grid-column>--%>
         <wj-flex-grid-column header="<s:message code="media.useYn"/>" binding="useYn" data-map="useYnDataMap" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="media.view"/>" binding="view" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="media.download"/>" binding="downLoad" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="media.view"/>" binding="view" align="center" width="70" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="media.download"/>" binding="downLoad" align="center" width="70" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="media.dispTime"/>" binding="dispTime" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
             <wj-flex-grid-column header="<s:message code="media.storeCnt"/>" binding="storeCnt" align="center" width="75" is-read-only="true"></wj-flex-grid-column>
@@ -146,6 +146,7 @@
 
         <%-- 저장시 필요 --%>
         <wj-flex-grid-column header="<s:message code="media.fileNmExt"/>" binding="fileNmExt" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="media.fileNm"/>" binding="realFileOrgNm" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="media.fileExt"/>" binding="fileExt" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
@@ -174,7 +175,7 @@
   var hqOfficeCd  = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/media.js?ver=20230807.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/media.js?ver=20230807.02" charset="utf-8"></script>
 
 <%-- 버전 상세정보 레이어 --%>
 <c:import url="/WEB-INF/view/base/store/media/verInfoDtl.jsp">

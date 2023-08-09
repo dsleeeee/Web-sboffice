@@ -392,4 +392,41 @@
             )
     </insert>
 
+    <!-- 본사 메시지그룹 매장적용  -->
+    <!--
+        TABLE    : HCS_MSGGR_T
+        PARAM    : MsgManageVO
+        COMMENTS : 본사 메시지그룹을 매장에 적용한다.
+    -->
+    <select id="insertMsgGrpToStore" statementType="CALLABLE"  parameterType="MsgManageVO" resultType="String">
+        /* USE : MsgManageMapper.insertMsgGrpToStore   */
+        {
+            CALL PKG_HCS_MSGGR_T_01.SP_PKG_HCS_MSGGR_T_001
+          (
+            #{orgnCd},
+            #{msgGrpCd},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
+    <!-- 본사 메시지 매장적용  -->
+    <!--
+        TABLE    : HCS_SMSMS_T
+        PARAM    : MsgManageVO
+        COMMENTS : 본사 메시지를 매장에 적용한다.
+    -->
+    <select id="insertMsgSmsToStore" statementType="CALLABLE"  parameterType="MsgManageVO" resultType="String">
+        /* USE : MsgManageMapper.insertMsgSmsToStore   */
+        {
+            CALL PKG_HCS_SMSMS_T_01.SP_PKG_HCS_SMSMS_T_001
+          (
+            #{orgnCd},
+            #{msgGrpCd},
+            #{seqNo},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
 </mapper>

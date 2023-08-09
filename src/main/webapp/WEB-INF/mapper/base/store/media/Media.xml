@@ -34,6 +34,7 @@
                 A.DISP_TIME,
                 A.FILE_NM AS FILE_NM_EXT,
                 A.FILE_EXT,
+                A.FILE_ORG_NM AS REAL_FILE_ORG_NM,
                 NVL(B.STORE_CNT, 0) AS STORE_CNT
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_HQ_POS_ADVER_FILE A,
