@@ -7,6 +7,8 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.adi.sms.msgManage.service.MsgManageService;
 import kr.co.solbipos.adi.sms.msgManage.service.MsgManageVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +37,8 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class MsgManageServiceImpl implements MsgManageService {
     private final MsgManageMapper msgManageMapper;
+
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     /**
      * Constructor Injection
@@ -86,6 +90,14 @@ public class MsgManageServiceImpl implements MsgManageService {
                 // 메세지서식 전체 삭제
                 procCnt = msgManageMapper.getMsgManageDtlSaveDeleteAll(msgManageVO);
             }
+
+            // 본사 저장시, 매장적용
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+
+                // 메시지관리 - 본사 메시지그룹 매장적용
+                msgManageMapper.insertMsgGrpToStore(msgManageVO);
+                LOGGER.info("CALL PKG_HCS_MSGGR_T_01.SP_PKG_HCS_MSGGR_T_001 결과 : " + msgManageVO.getResult());
+            }
         }
 
         return procCnt;
@@ -126,6 +138,14 @@ public class MsgManageServiceImpl implements MsgManageService {
 
         } else if (msgManageVO.getStatus() == GridDataFg.DELETE) {
             procCnt = msgManageMapper.getMsgManageDtlSaveDelete(msgManageVO);
+        }
+
+        // 본사 저장시, 매장적용
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+
+            // 메시지관리 - 본사 메시지 매장적용
+            msgManageMapper.insertMsgSmsToStore(msgManageVO);
+            LOGGER.info("CALL PKG_HCS_SMSMS_T_01.SP_PKG_HCS_SMSMS_T_001 결과 : " + msgManageVO.getResult());
         }
 
         return procCnt;
