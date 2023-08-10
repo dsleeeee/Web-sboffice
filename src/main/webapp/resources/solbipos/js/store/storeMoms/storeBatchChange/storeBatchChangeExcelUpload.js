@@ -166,22 +166,17 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
 
     // 매장등록 저장
     $scope.storeExcelUploadSave = function() {
-        if($scope.flex.rows.length <= 0) {
-            $scope._popMsg(messages["cmm.empty.data"]);
-            return false;
-        }
-
         $scope.stepCnt = 10;    // 한번에 DB에 저장할 숫자 세팅
         $scope.progressCnt = 0; // 처리된 숫자
 
+        // 파라미터 설정
+        var params = new Array();
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            params.push($scope.flex.collectionView.items[i]);
+        }
+
         $timeout(function () {
             setTimeout(function () {
-                // 파라미터 설정
-                var params = new Array();
-                for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-                    params.push($scope.flex.collectionView.items[i]);
-                }
-
                 // 저장
                 $scope.save2(params);
             }, 500);
@@ -273,7 +268,6 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
             $scope._loadingPopup.hide(true);
         }
     };
-
 
     // <-- 엑셀다운로드 -->
     $scope.storeExcelDownload = function(){
