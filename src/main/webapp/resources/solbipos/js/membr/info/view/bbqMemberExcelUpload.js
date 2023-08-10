@@ -33,7 +33,8 @@ app.controller('bbqMemberExcelUploadCtrl', ['$scope', '$http', '$timeout', funct
     $scope._setComboData("membrClassCd", memberClassList); // 회원등급
 
     $scope.initGrid = function (s, e) {
-
+        // 그리드 DataMap 설정
+        $scope.useYnDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');
     };
 
     // 조회 버튼 클릭

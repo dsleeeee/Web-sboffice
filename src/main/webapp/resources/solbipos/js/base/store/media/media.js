@@ -49,13 +49,19 @@ app.controller('mediaCtrl', ['$scope', '$http', function ($scope, $http) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
         var item = s.rows[e.row].dataItem;
-        if (col.binding === "verSerNo") {
+        if (col.binding === "verSerNo" || col.binding === "preview" || col.binding === "downLoad") {
           wijmo.addClass(e.cell, 'wijLink');
         }
 
-        // 뷰
-        if(col.binding === "view"){
+        // 미리보기
+        if(col.binding === "preview"){
+            if(item.fileExt === "png" || item.fileExt === "PNG" ||
+                item.fileExt === "jpg" || item.fileExt === "JPG" ||
+                item.fileExt === "jpeg" || item.fileExt === "JPEG" ||
+                item.fileExt === "gif" || item.fileExt === "GIF") {
 
+                e.cell.innerHTML = "미리보기";
+            }
         }
 
         // 다운로드
@@ -70,11 +76,24 @@ app.controller('mediaCtrl', ['$scope', '$http', function ($scope, $http) {
       var ht = s.hitTest(e);
       if( ht.cellType === wijmo.grid.CellType.Cell) {
         var col = ht.panel.columns[ht.col];
+        var selectedData = s.rows[ht.row].dataItem;
+
         if ( col.binding === "verSerNo") {
-          var selectedData = s.rows[ht.row].dataItem;
-          $scope.setSelectVersion(selectedData);
-          $scope.versionInfoDetailLayer.show(true);
-          event.preventDefault();
+            $scope.setSelectVersion(selectedData);
+            $scope.versionInfoDetailLayer.show(true);
+            event.preventDefault();
+        }
+
+        if ( col.binding === "preview") {
+            if(selectedData.fileExt === "png" || selectedData.fileExt === "PNG" ||
+                selectedData.fileExt === "jpg" || selectedData.fileExt === "JPG" ||
+                selectedData.fileExt === "jpeg" || selectedData.fileExt === "JPEG" ||
+                selectedData.fileExt === "gif" || selectedData.fileExt === "GIF") {
+
+                $scope._broadcast('mediaPreviewCtrl', selectedData.verSerNo);
+                $scope.mediaPreviewLayer.show(true);
+                event.preventDefault();
+            }
         }
       }
     });
