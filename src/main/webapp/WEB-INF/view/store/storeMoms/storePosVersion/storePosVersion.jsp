@@ -15,9 +15,11 @@
         <s:message code="cmm.search"/>
       </button>
       <%-- 확장조회 --%>
-      <button class="btn_blue mr5 fl" id="btnSearchAddShow" ng-click="searchAddShowChange()">
-        <s:message code="cmm.search.addShow" />
-      </button>
+      <c:if test="${momsEnvstVal == '1'}">
+        <button class="btn_blue mr5 fl" id="btnSearchAddShow" ng-click="searchAddShowChange()">
+          <s:message code="cmm.search.addShow" />
+        </button>
+      </c:if>
     </div>
   </div>
   <table class="searchTbl">
@@ -239,6 +241,9 @@
   var areaCd = ${ccu.getCommCodeSelect("061")};
   var verTypeFg = ${ccu.getCommCodeExcpAll("059")};
 
+  // [1250 맘스터치] 환경설정값
+  var momsEnvstVal = "${momsEnvstVal}";
+
   // List 형식("" 안붙임)
   var momsHqBrandCdComboList = ${momsHqBrandCdComboList};
   var branchCdComboList = ${branchCdComboList};
@@ -248,5 +253,4 @@
   var momsCommercialComboList = ${momsCommercialComboList};
   var momsShopTypeComboList = ${momsShopTypeComboList};
   var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
-
 </script>

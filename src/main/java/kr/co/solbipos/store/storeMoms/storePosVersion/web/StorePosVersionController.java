@@ -5,9 +5,12 @@ import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.store.storeMoms.storePosVersion.service.StorePosVersionService;
 import kr.co.solbipos.store.storeMoms.storePosVersion.service.StorePosVersionVO;
 import kr.co.solbipos.sale.day.day.service.DayVO;
@@ -53,15 +56,16 @@ public class StorePosVersionController {
     private final StorePosVersionService storePosVersionService;
     private final DayProdService dayProdService;
     private final CmmCodeUtil cmmCodeUtil;
+    private final CmmEnvUtil cmmEnvUtil;
 
     @Autowired
-    public StorePosVersionController(SessionService sessionService, StorePosVersionService storePosVersionService, DayProdService dayProdService, CmmCodeUtil cmmCodeUtil) {
+    public StorePosVersionController(SessionService sessionService, StorePosVersionService storePosVersionService, DayProdService dayProdService, CmmCodeUtil cmmCodeUtil, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.storePosVersionService = storePosVersionService;
         this.dayProdService = dayProdService;
         this.cmmCodeUtil = cmmCodeUtil;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
-
 
     /**
      * 페이지 이동
@@ -75,9 +79,18 @@ public class StorePosVersionController {
     @RequestMapping(value = "/storePosVersion/view.sb", method = RequestMethod.GET)
     public String empMonthView(HttpServletRequest request, HttpServletResponse response, Model model) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
         DayVO dayVO = new DayVO();
         StoreChannelVO storeChannelVO = new StoreChannelVO();
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        /** 맘스터치 */
+        // [1250 맘스터치] 환경설정값 조회
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0"));
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
+        }
 
         // 사용자별 브랜드 조회(콤보박스용)
         DayProdVO dayProdVO = new DayProdVO();
