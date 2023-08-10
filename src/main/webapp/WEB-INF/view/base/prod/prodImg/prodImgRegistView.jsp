@@ -121,7 +121,7 @@
     </table>
     <%--//searchTbl--%>
     <div class="mt10 oh sb-select dkbr">
-        <button class="btn_skyblue fr mr5" ng-click="deleteAll()" ><s:message code="prodImg.deleteAll"/></button>
+        <button class="btn_skyblue fr mr5" ng-click="deleteAll()" style="display: none;"><s:message code="prodImg.deleteAll"/></button>
         <button class="btn_skyblue fr mr5" ng-click="copy('A')" ><s:message code="prodImg.copyAll"/></button>
         <p class="s12 fr pd5">등록된 이미지만 복사됩니다.</p>
     </div>
