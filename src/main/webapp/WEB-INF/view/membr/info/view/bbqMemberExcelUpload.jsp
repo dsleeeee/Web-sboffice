@@ -177,10 +177,11 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="bbq.member.excel.memberNo"/>" binding="membrNo" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="bbq.member.excel.memberNm"/>" binding="membrNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="bbq.member.excel.regStore"/>" binding="regStoreNm" align="left" width="200" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="bbq.member.excel.regStore"/>" binding="regStoreNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="bbq.member.excel.memberClass"/>" binding="membrClassCd" align="center"  width="80" is-read-only="true" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="bbq.member.excel.memberClass"/>" binding="membrClassNm" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="bbq.member.excel.telNo"/>" binding="telNo" align="center" width="120" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="bbq.member.excel.addr"/>" binding="addr" align="left" width="200" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="bbq.member.excel.useYn"/>" binding="useYn" data-map="useYnDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="bbq.member.excel.remark"/>" binding="remark" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
@@ -205,9 +206,12 @@
 
     // 회원등급 관리구분[1237]
     var membrClassManageFg = "${membrClassManageFg}";
+
+    // 사용여부
+    var useYn = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/bbqMemberExcelUpload.js?ver=20230804.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/bbqMemberExcelUpload.js?ver=20230809.01" charset="utf-8"></script>
 
 
 <%-- 회원엑셀업로드(BBQ) 엑셀파일업로드--%>
