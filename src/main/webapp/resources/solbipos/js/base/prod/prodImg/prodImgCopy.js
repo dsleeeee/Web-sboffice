@@ -15,8 +15,10 @@ var imgFg = [
     {"name":"상품이미지","value":"001"},
     {"name":"KIOSK이미지","value":"002"},
     {"name":"DID이미지","value":"003"},
-    {"name":"#2이미지","value":"004"}
+    {"name":"#2이미지","value":"004"},
+    {"name":"테이블오더이미지","value":"005"}
 ];
+
 app.controller('prodImgCopyCtrl', ['$scope', '$http', function ($scope, $http) {
 
     angular.extend(this, new RootController('prodImgCopyCtrl', $scope, $http, false));

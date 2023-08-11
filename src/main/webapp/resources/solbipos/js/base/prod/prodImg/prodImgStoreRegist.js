@@ -30,6 +30,7 @@ app.controller('prodImgStoreRegCtrl', ['$scope', '$http', function ($scope, $htt
         $("input:checkbox[id='chkKiosk']").prop("checked", true);
         $("input:checkbox[id='chkDid']").prop("checked", true);
         $("input:checkbox[id='chkHash']").prop("checked", true);
+        $("input:checkbox[id='chkTableOrder']").prop("checked", true);
 
         // 매장조회
         $scope.searchStore();
@@ -92,6 +93,10 @@ app.controller('prodImgStoreRegCtrl', ['$scope', '$http', function ($scope, $htt
         if($("#chkHash").is(":checked")){
             chkImgFgCount++;
             chkImgFgCd += $("#chkHash").val() + ",";
+        }
+        if($("#chkTableOrder").is(":checked")){
+            chkImgFgCount++;
+            chkImgFgCd += $("#chkTableOrder").val() + ",";
         }
 
         if(chkImgFgCount === 0){

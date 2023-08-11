@@ -182,12 +182,14 @@
                         <th><s:message code="prodImg.kioskImg" /></th>
                         <th><s:message code="prodImg.didImg" /></th>
                         <th><s:message code="prodImg.didHash" /></th>
+                        <th><s:message code="prodImg.tableOrder" /></th>
                     </tr>
                     <tr>
                         <td><div class="imgCell" id="imgProd"></div></td>
                         <td><div class="imgCell" id="imgKiosk"></div></td>
                         <td><div class="imgCell" id="imgDid"></div></td>
                         <td><div class="imgCell" id="imgHash"></div></td>
+                        <td><div class="imgCell" id="imgTableOrder"></div></td>
                     </tr>
                     <f:form id="regForm" name="regForm" method="post" enctype="multipart/form-data">
                         <tr>
@@ -206,6 +208,10 @@
                             <td>
                                 <input type="file" id="fileHash" name="fileHash" class="form-control" accept="image/x-png, .jpg" onchange="imagePreview(this, '004')"/>
                                 <input type="hidden" id="hdHashFileNm" />
+                            </td>
+                            <td>
+                                <input type="file" id="fileTableOrder" name="fileTableOrder" class="form-control" accept="image/x-png, .jpg" onchange="imagePreview(this, '005')"/>
+                                <input type="hidden" id="hdTableOrderFileNm" />
                             </td>
                         </tr>
                     </f:form>
@@ -238,6 +244,11 @@
                             <button type="button" class="btn_skyblue" ng-click="imgCancel('004', 'F')"><s:message code="cmm.selectCancel" /></button>
                             <button type="button" class="btn_skyblue" ng-click="regImg('004')"><s:message code="prodImg.regImg" /></button>
                             <button type="button" class="btn_skyblue" ng-click="delImg('004')"><s:message code="cmm.del" /></button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn_skyblue" ng-click="imgCancel('005', 'F')"><s:message code="cmm.selectCancel" /></button>
+                            <button type="button" class="btn_skyblue" ng-click="regImg('005')"><s:message code="prodImg.regImg" /></button>
+                            <button type="button" class="btn_skyblue" ng-click="delImg('005')"><s:message code="cmm.del" /></button>
                         </td>
                     </tr>
                 </tbody>
@@ -299,7 +310,7 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodImg/prodImgRegistView.js?ver=20210414.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodImg/prodImgRegistView.js?ver=20230810.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

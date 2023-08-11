@@ -105,6 +105,7 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.imgCancel("002", 'A');
         $scope.imgCancel("003", 'A');
         $scope.imgCancel("004", 'A');
+        $scope.imgCancel("005", 'A');
 
         // 파라미터
         var params = {};
@@ -174,6 +175,7 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.imgCancel("002", 'A');
         $scope.imgCancel("003", 'A');
         $scope.imgCancel("004", 'A');
+        $scope.imgCancel("005", 'A');
 
         var params = {};
         params.prodCd = prodCd;
@@ -204,6 +206,11 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
                         $("#imgHash").html("<img src='" + list[i].imgUrl + "/" + list[i].imgFileNm + "' class='imgPic'>");
                         $("#hdHashFileNm").val(list[i].imgFileNm);
                     }
+
+                    if(list[i].imgFg === "005"){
+                        $("#imgTableOrder").html("<img src='" + list[i].imgUrl + "/" + list[i].imgFileNm + "' class='imgPic'>");
+                        $("#hdTableOrderFileNm").val(list[i].imgFileNm);
+                    }
                 }
             }
         });
@@ -218,6 +225,7 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
                 if(imgFg === '002') $("#imgKiosk").html("<img src='" +  e.target.result + "' class='imgPic'>");
                 if(imgFg === '003') $("#imgDid").html("<img src='" +  e.target.result + "' class='imgPic'>");
                 if(imgFg === '004') $("#imgHash").html("<img src='" +  e.target.result + "' class='imgPic'>");
+                if(imgFg === '005') $("#imgTableOrder").html("<img src='" +  e.target.result + "' class='imgPic'>");
             };
             reader.readAsDataURL(imgVal.files[0]);
         }
@@ -277,6 +285,18 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
                     }
                 }
             }
+
+            if(imgFg === "005"){
+                if($("#hdTableOrderFileNm").val() !== ""){
+                    if($("#fileTableOrder").val() !== ""){
+                        // 재조회
+                        $scope.getProdImg($("#hdProdCd").val(), $("#hdProdNm").val());
+                        return;
+                    }else{
+                        return;
+                    }
+                }
+            }
         }
 
         var element = "";
@@ -298,6 +318,10 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
             $("#imgHash").html("No Image");
             $("#hdHashFileNm").val("");
             element = "fileHash";
+        } else if (imgFg === "005") {
+            $("#imgTableOrder").html("No Image");
+            $("#hdTableOrderFileNm").val("");
+            element = "fileTableOrder";
         }
 
         $scope.resetFile(element);
@@ -341,6 +365,10 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
         }else if(imgFg === "004"){
             fileSize = 300;
             element = "fileHash";
+            errMsg = messages["prodImg.fileSizeChk.300.msg"];
+        }else if(imgFg === "005"){
+            fileSize = 300;
+            element = "fileTableOrder";
             errMsg = messages["prodImg.fileSizeChk.300.msg"];
         }
 
@@ -455,6 +483,10 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
             }
         }else if(imgFg === "004"){
             if($("#hdHashFileNm").val() === ""){
+                return;
+            }
+        }else if(imgFg === "005"){
+            if($("#hdTableOrderFileNm").val() === ""){
                 return;
             }
         }

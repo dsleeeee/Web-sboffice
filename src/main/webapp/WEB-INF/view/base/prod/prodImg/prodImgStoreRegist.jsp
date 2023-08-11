@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="prodImgStoreRegLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:650px;">
+<wj-popup control="prodImgStoreRegLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:750px;">
     <div class="wj-dialog wj-dialog-columns title" ng-controller="prodImgStoreRegCtrl">
 
         <%-- header --%>
@@ -72,9 +72,9 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="prodImg.storeCd"/>" binding="storeCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="prodImg.storeNm"/>" binding="storeNm" width="300" align="left" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="prodImg.sysStatFg"/>" binding="sysStatFg" width="100"  data-map="sysStatFgDataMap" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodImg.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodImg.storeNm"/>" binding="storeNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodImg.sysStatFg"/>" binding="sysStatFg" width="90" data-map="sysStatFgDataMap" align="center" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
                 <%--//위즈모 테이블--%>
@@ -82,8 +82,8 @@
                 <div style="padding-top:20px;">
                     <table class="tblType01">
                         <colgroup>
-                            <col width="20%" />
-                            <col width="80%" />
+                            <col width="15%" />
+                            <col width="85%" />
                         </colgroup>
                         <tbody>
                         <tr>
@@ -97,6 +97,9 @@
                                 <div style="float: left; padding: 3px 10px 0 5px;"><label><s:message code="prodImg.didImg" /></label></div>
                                 <div style="float: left;"><input type="checkbox" id="chkHash" value="004"/></div>
                                 <div style="float: left; padding: 3px 10px 0 5px;"><label><s:message code="prodImg.didHash" /></label></div>
+                                <div style="float: left;"><input type="checkbox" id="chkTableOrder" value="005"/></div>
+                                <div style="float: left; padding: 3px 10px 0 5px;"><label><s:message code="prodImg.tableOrder" /></label></div>
+                                <%-- 적용 --%>
                                 <button class="btn_blue ml10 fl" id="btnRegImgStore" ng-click="btnRegImgStore()"><s:message code="cmm.apply"/></button>
                             </td>
                         </tr>
@@ -112,4 +115,4 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodImg/prodImgStoreRegist.js?ver=20210617.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodImg/prodImgStoreRegist.js?ver=20230810.01" charset="utf-8"></script>
