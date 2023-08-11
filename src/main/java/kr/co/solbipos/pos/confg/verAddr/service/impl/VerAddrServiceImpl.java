@@ -306,4 +306,39 @@ public class VerAddrServiceImpl implements VerAddrService {
 //        }
         return procCnt;
     }
+
+    /** 미적용매장 엑셀업로드 */
+    @Override
+    public int storeExcelUpload(AddrApplcStoreVO[] applcStores, SessionInfoVO sessionInfo) {
+
+        int procCnt = 0;
+
+        String dt = currentDateTimeString();
+
+        for(AddrApplcStoreVO applcStore : applcStores) {
+            applcStore.setHqOfficeCd(sessionInfo.getHqOfficeCd());
+            applcStore.setRegDt(dt);
+            applcStore.setModDt(dt);
+            applcStore.setRegId(sessionInfo.getUserId());
+            applcStore.setModId(sessionInfo.getUserId());
+            applcStore.setVerRecvFg(VerRecvFg.REG);
+            applcStore.setVerRecvDt(dt);
+
+            // 사용자별 브랜드 array 값 세팅
+            if (applcStore.getUserBrands() != null && !"".equals(applcStore.getUserBrands())) {
+                String[] userBrandList = applcStore.getUserBrands().split(",");
+                if (userBrandList.length > 0) {
+                    applcStore.setUserBrandList(userBrandList);
+                }
+            }
+
+            if(verAddrMapper.getStoreChk(applcStore) > 0){ // 유효 매장 체크
+
+                int result = verAddrMapper.storeExcelUpload(applcStore);
+                if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
+        }
+
+        return procCnt;
+    }
 }

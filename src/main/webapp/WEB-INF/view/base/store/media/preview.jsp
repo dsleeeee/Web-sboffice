@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="mediaPreviewLayer" show-trigger="Click" hide-trigger="Click" style="display:none;">
+<wj-popup control="mediaPreviewLayer" show-trigger="Click" hide-trigger="Click" style="display:none; width:600px;">
 
     <div class="wj-dialog wj-dialog-columns" ng-controller="mediaPreviewCtrl">
         <%-- header --%>
@@ -15,7 +15,7 @@
         <%-- body --%>
         <div class="wj-dialog-body">
             <%-- 이미지 --%>
-            <img id="imgPreview" />
+            <img id="imgPreview" style="width:100%;"/>
         </div>
         <%-- //body --%>
     </div>

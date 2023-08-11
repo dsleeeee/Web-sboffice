@@ -57,6 +57,10 @@ public class AddrApplcStoreVO extends PageVO {
     private String result;
     /** 복수검색여부 */
     private String chkMulti;
+    /** 사용자별 브랜드코드(매장) */
+    private String[] userBrandList;
+    /** 사용자별 브랜드코드 */
+    private String userBrands;
 
 
     /**
@@ -273,5 +277,21 @@ public class AddrApplcStoreVO extends PageVO {
 
     public void setChkMulti(String chkMulti) {
         this.chkMulti = chkMulti;
+    }
+
+    public String[] getUserBrandList() {
+        return userBrandList;
+    }
+
+    public void setUserBrandList(String[] userBrandList) {
+        this.userBrandList = userBrandList;
+    }
+
+    public String getUserBrands() {
+        return userBrands;
+    }
+
+    public void setUserBrands(String userBrands) {
+        this.userBrands = userBrands;
     }
 }

@@ -56,4 +56,11 @@ public interface VerAddrMapper {
 
     /** 버전 적용 매장 삭제 */
     int removeStore(AddrApplcStoreVO applcStore);
+
+    /** 유효 매장 체크 */
+    int getStoreChk(AddrApplcStoreVO applcStore);
+
+    /** 미적용매장 엑셀업로드 */
+    int storeExcelUpload(AddrApplcStoreVO applcStore);
+
 }

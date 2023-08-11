@@ -262,4 +262,25 @@ public class VerAddrController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 미적용매장 엑셀업로드
+     *
+     * @param applcStore
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/applcStore/storeExcelUpload.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result storeExcelUpload(@RequestBody AddrApplcStoreVO[] applcStore, HttpServletRequest request,
+                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
+
+        int result = verAddrService.storeExcelUpload(applcStore, sessionInfo);
+
+        return returnJson(Status.OK, result);
+    }
 }
