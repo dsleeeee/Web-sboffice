@@ -8156,7 +8156,19 @@
            REG_STORE_CD
         )
         SELECT #{membrOrgnCd},
-               (SELECT LPAD( NVL(MAX(MEMBR_CLASS_CD), 0) + 1, 3, '0') FROM TB_MB_MEMBER_CLASS WHERE MEMBR_ORGN_CD = #{membrOrgnCd}),
+               (    SELECT CODE3
+                    FROM TB_CM_GROUP_CODE_TOUCHKEY_KIOSKKEYMAP
+                    WHERE 1=1
+                    AND SEQ = (
+                                    SELECT
+                                    NVL(MAX(B.SEQ), 0) +1
+                                    FROM TB_MB_MEMBER_CLASS A,
+                                    TB_CM_GROUP_CODE_TOUCHKEY_KIOSKKEYMAP B
+                                    WHERE 1=1
+                                    AND A.MEMBR_ORGN_CD = #{membrOrgnCd}
+                                    AND B.CODE3 (+)= A.MEMBR_CLASS_CD
+                                )
+               ) AS MEMBR_CLASS_CD,
                MEMBR_CLASS_NM,
                DC_RATE,
                POINT_SAVE_FG,

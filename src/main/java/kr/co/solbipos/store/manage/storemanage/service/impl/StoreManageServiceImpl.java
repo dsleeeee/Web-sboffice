@@ -352,7 +352,7 @@ public class StoreManageServiceImpl implements StoreManageService{
             }
 
             // 프랜차이즈매장 회원등급 생성
-            /*if(!storeManageVO.getHqOfficeCd().equals("00000")){
+            if(!storeManageVO.getHqOfficeCd().equals("00000")){
                 memberClassVO.setMembrOrgnCd(storeManageVO.getHqOfficeCd());
                 memberClassVO.setHqOfficeCd(storeManageVO.getHqOfficeCd());
                 memberClassVO.setStoreCd(storeCd);
@@ -365,7 +365,7 @@ public class StoreManageServiceImpl implements StoreManageService{
                 if("0".equals(envst1237)){
                     procCnt += mapper.insertStoreMemberClass(memberClassVO);
                 }
-            }*/
+            }
 
             // 프랜차이즈매장: 본사에 등록된 결제수단분류/쿠폰/상품권 생성
             if(!storeManageVO.getHqOfficeCd().equals("00000")) {
