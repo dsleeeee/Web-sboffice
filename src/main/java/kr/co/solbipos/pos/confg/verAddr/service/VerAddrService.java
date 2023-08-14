@@ -52,4 +52,7 @@ public interface VerAddrService {
 
     /** 버전 적용 매장 삭제 */
     int removeStore(AddrApplcStoreVO[] applcStores, SessionInfoVO sessionInfo);
+
+    /** 미적용매장 엑셀업로드 */
+    int storeExcelUpload(AddrApplcStoreVO[] applcStores, SessionInfoVO sessionInfo);
 }

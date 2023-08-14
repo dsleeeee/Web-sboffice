@@ -13,7 +13,7 @@
 
     <div ng-controller="dlvrAddrCtrl">
         <%-- 조회조건 --%>
-        <div class="searchBar flddUnfld">
+        <div class="searchBar">
             <a href="#" class="open fl">${menuNm}</a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -69,6 +69,7 @@
                                 <wj-flex-grid-column header="<s:message code="dlvrAddr.dongNm"/>" binding="lawDongNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="dlvrAddr.lawDongCd"/>" binding="lawDongCd" width="*" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="dlvrAddr.myAreaCd"/>" binding="myAreaCd" width="*" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="dlvrAddr.eupmyeonNm"/>" binding="eupmyeonNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
                             </wj-flex-grid>
                         </div>
                     </div>
@@ -102,6 +103,7 @@
                         <wj-flex-grid-column header="<s:message code="dlvrAddr.sigunguNm"/>" binding="sigunguNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrAddr.dongNm"/>" binding="lawDongNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrAddr.lawDongCd"/>" binding="lawDongCd" width="*" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dlvrAddr.eupmyeonNm"/>" binding="eupmyeonNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>

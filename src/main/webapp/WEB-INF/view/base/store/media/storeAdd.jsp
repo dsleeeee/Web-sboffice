@@ -103,9 +103,18 @@
                           control="tuClsTypeCombo">
                   </wj-combo-box>
                 </div>
-              <tr>
               </td>
               </tr>
+            <tr>
+                <th><s:message code="media.store.noRegisted"/><br/><s:message code="cmm.excel.excelUpload" /></th>
+                <td colspan="3">
+                    <%-- 양식다운로드 --%>
+                    <button class="btn_skyblue ml2 " ng-click="sampleDownload()"><s:message code="cmm.excel.sampleDown" /></button>
+
+                    <%-- 엑셀업로드 --%>
+                    <button class="btn_skyblue ml2 " ng-click="excelUpload()"><s:message code="cmm.excel.excelUpload" /></button>
+                </td>
+            </tr>
             </tbody>
           </table>
           <div class="mt10 tr">
@@ -115,7 +124,7 @@
         </div>
 
         <%-- 등록매장 그리드 --%>
-        <div class="oh mt40 w50 fl">
+        <div class="oh mt10 w50 fl">
           <div class="wj-TblWrap mr10" style="height:405px; overflow-y: hidden;">
             <div class="oh mb10">
               <span class="fl bk lh20 s14"><s:message code="media.store.registed"/></span>
@@ -145,7 +154,7 @@
       </div>
 
       <%--- 미등록매장 그리드 --%>
-      <div class="oh mt40 w50 ">
+      <div class="oh mt10 w50 ">
         <div class=" ">
           <div class="wj-TblWrap ml10" style="height:405px; overflow-y: hidden;" ng-controller="allStoreCtrl">
             <div class="oh mb10">
@@ -173,11 +182,36 @@
           </div>
         </div>
       </div>
+
+      <%-- 양식다운로드, 엑셀 업로드 관련 --%>
+      <div style="display: none;" ng-controller="addStoreExcelFileUploadCtrl">
+        <input type="file" class="form-control" id="excelUpFile"
+                ng-model="excelUpFile"
+                onchange="angular.element(this).scope().excelFileChanged()"
+                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel.sheet.macroEnabled.12"/>
+
+        <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
+            <wj-flex-grid
+                autoGenerateColumns="false"
+                selection-mode="Row"
+                items-source="data"
+                control="flex"
+                initialized="initGrid(s,e)"
+                is-read-only="true">
+
+                <!-- define columns -->
+                <wj-flex-grid-column header="<s:message code="media.store.storeCd"/>" binding="storeCd" width="130" align="center" data-type="String"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="media.store.storeNm"/>" binding="storeNm" width="130" align="center" data-type="String"></wj-flex-grid-column>
+
+            </wj-flex-grid>
+        </div>
+       </div>
+
     </div>
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/storeAdd.js?ver=20230109.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/storeAdd.js?ver=20230811.02" charset="utf-8"></script>
 
 <script>
   $(document).ready(function(){
