@@ -65,4 +65,7 @@ public interface IostockCmmMapper {
 
     /** 선택상품 공통 - 사원 리스트 조회 */
     List<DefaultMap<String>> selectEmpList(IostockCmmVO iostockCmmVO);
+
+    /** 업로드매장 공통 - 업로드매장 리스트 조회 */
+    List<DefaultMap<String>> selectUploadStoreList(IostockCmmVO iostockCmmVO);
 }

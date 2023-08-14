@@ -313,4 +313,19 @@ public class IostockCmmServiceImpl implements IostockCmmService {
         }
         return resultList;
     }
+
+    /** 업로드매장 공통 - 업로드매장 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> selectUploadStoreList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
+
+        iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        List<DefaultMap<String>> resultList = new ArrayList<DefaultMap<String>>();
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
+
+            resultList = iostockCmmMapper.selectUploadStoreList(iostockCmmVO);
+        }
+        return resultList;
+    }
 }

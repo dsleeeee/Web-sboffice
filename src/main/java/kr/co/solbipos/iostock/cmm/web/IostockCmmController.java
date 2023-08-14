@@ -521,4 +521,26 @@ public class IostockCmmController {
 
         return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
     }
+
+    /**
+     * 업로드매장 공통 - 업로드매장 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   iostockCmmVO
+     * @return  String
+     * @author  김설아
+     * @since   2023. 08. 11.
+     */
+    @RequestMapping(value = "/selectUploadStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectUploadStoreList(HttpServletRequest request, HttpServletResponse response,
+                                      Model model, IostockCmmVO iostockCmmVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = iostockCmmService.selectUploadStoreList(iostockCmmVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
+    }
 }

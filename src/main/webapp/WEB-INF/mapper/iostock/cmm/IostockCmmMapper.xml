@@ -872,4 +872,23 @@
         ORDER BY the.EMP_NO
     </select>
 
+    <!-- 업로드매장 공통 - 업로드매장 리스트 조회 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="selectUploadStoreList" parameterType="iostockCmmVO" resultType="DefaultMap">
+        /* USE : IostockCmmMapper.selectUploadStoreList */
+        SELECT
+        '1111' AS STORE_CD,
+        '매장1' AS STORE_NM
+        FROM dual
+        UNION ALL
+        SELECT
+        '2222' AS STORE_CD,
+        '매장2' AS STORE_NM
+        FROM dual
+    </select>
+
 </mapper>
