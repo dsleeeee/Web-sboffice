@@ -111,6 +111,14 @@
                 <if test="useYn != null and useYn != ''">
                     AND thp.USE_YN = #{useYn} --사용여부
                 </if>
+                <if test="channelProdNm != null and channelProdNm != ''">
+                    AND
+                    (
+                    <foreach collection="arrDlvrCol" item="item" separator="OR">
+                        thpdpn.DLVR_PROD_NM_${item} LIKE '%' || #{channelProdNm} || '%' --채널사상품명
+                    </foreach>
+                    )
+                </if>
                 AND (
                 ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
                 OR
@@ -180,6 +188,14 @@
                 </if>
                 <if test="useYn != null and useYn != ''">
                     AND tmp.USE_YN = #{useYn} --사용여부
+                </if>
+                <if test="channelProdNm != null and channelProdNm != ''">
+                    AND
+                    (
+                    <foreach collection="arrDlvrCol" item="item" separator="OR">
+                        tmpdpn.DLVR_PROD_NM_${item} LIKE '%' || #{channelProdNm} || '%' --채널사상품명
+                    </foreach>
+                    )
                 </if>
                 AND (
                 ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )

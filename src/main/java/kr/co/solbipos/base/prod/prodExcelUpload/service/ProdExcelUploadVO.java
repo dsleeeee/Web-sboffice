@@ -173,6 +173,9 @@ public class ProdExcelUploadVO extends PageVO {
     /** 할인여부 */
     private String dcYn;
 
+    /** 처리갯수 (seq 생성시 사용)*/
+    private int progressCnt;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -523,5 +526,13 @@ public class ProdExcelUploadVO extends PageVO {
 
     public void setDcYn(String dcYn) {
         this.dcYn = dcYn;
+    }
+
+    public int getProgressCnt() {
+        return progressCnt;
+    }
+
+    public void setProgressCnt(int progressCnt) {
+        this.progressCnt = progressCnt;
     }
 }

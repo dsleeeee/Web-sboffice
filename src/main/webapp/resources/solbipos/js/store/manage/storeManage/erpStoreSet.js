@@ -39,6 +39,7 @@ app.controller('erpStoreSetCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.initGrid = function (s, e) {
 
         $scope.regYnDataMap = new wijmo.grid.DataMap(regYnAllFgData, 'value', 'name'); // 등록여부
+        $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');  // 매장상태구분
 
         // ReadOnly 효과설정
         s.formatItem.addHandler(function (s, e) {
@@ -94,6 +95,7 @@ app.controller('erpStoreSetCtrl', ['$scope', '$http', function ($scope, $http) {
         params.srchStoreNm = $("#erpStoreNm").val();
         params.bizNo = $("#erpBizNo").val();
         params.regYn = $scope.erpRegYnCombo.selectedValue;
+        params.sysStatFg = $scope.sysStatFgCombo.selectedValue;
         params.listScale = $scope.listScaleErp;
 
         $scope._inquirySub("/store/manage/storeManage/storeManage/getErpStore.sb", params, function () {});

@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="erpStoreSetLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:600px;">
+<wj-popup control="erpStoreSetLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:800px;">
     <div class="wj-dialog wj-dialog-columns title" ng-controller="erpStoreSetCtrl">
 
         <%-- header --%>
@@ -55,6 +55,25 @@
                         </div>
                     </td>
                 </tr>
+                <tr>
+                    <%-- 매장상태 --%>
+                    <th><s:message code="storeManage.sysStatFg" /></th>
+                    <td>
+                      <div class="sb-select">
+                        <wj-combo-box
+                                id="sysStatFg"
+                                items-source="_getComboData('sysStatFg')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                control="sysStatFgCombo"
+                                selected-index="1">
+                        </wj-combo-box>
+                      </div>
+                    </td>
+                    <th></th>
+                    <td></td>
+                </tr>
                 </tbody>
             </table>
             <%-- 버튼영역 --%>
@@ -88,11 +107,11 @@
                         <wj-flex-grid-column header="<s:message code="storeManage.storeCd"/>" binding="bbqStoreCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeManage.storeNm"/>" binding="storeNm" width="100" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeManage.bizStoreNm"/>" binding="bizStoreNm" width="100" is-read-only="true" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storeManage.onwerNm"/>" binding="ownerNm" width="100"  align="center"  is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeManage.onwerNm"/>" binding="ownerNm" width="80"  align="center"  is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeManage.weatherArea"/>" binding="areaCd" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeManage.directManage"/>" binding="directManageYn" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeManage.installPosCnt"/>" binding="posCnt" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storeManage.bizNo"/>" binding="bizNo" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeManage.bizNo"/>" binding="bizNo" width="100"  align="center"  is-read-only="true" visible="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeManage.telNo"/>" binding="telNo" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeManage.mpNo"/>" binding="mpNo" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeManage.postNo"/>" binding="postNo" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -102,7 +121,8 @@
                         <wj-flex-grid-column header="<s:message code="storeManage.vanCd"/>" binding="vanCd" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeManage.agency"/>" binding="agencyNm" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeManage.agency"/>" binding="agencyCd" width="100"  align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storeManage.regYn"/>" binding="regYn" width="100" align="center" data-map="regYnDataMap"is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeManage.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="100"  align="center"  is-read-only="true" visible="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeManage.regYn"/>" binding="regYn" width="80" align="center" data-map="regYnDataMap"is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeManage.mapStoreCd"/>" binding="mapStoreCd" width="100" align="center" data-map="regYnDataMap"is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
@@ -121,4 +141,8 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/erpStoreSet.js?ver=20211015.02" charset="utf-8"></script>
+<script type="text/javascript">
+    var sysStatFg = ${ccu.getCommCodeSelect("005")};
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/erpStoreSet.js?ver=20230817.01" charset="utf-8"></script>

@@ -90,6 +90,9 @@ public class DlvrProdVO extends PageVO {
     /** 상품코드 */
     private String selectProdCd;
 
+    /** 배달앱(배달채널) - 상품명(검색용) */
+    private String channelProdNm;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -269,4 +272,12 @@ public class DlvrProdVO extends PageVO {
     public String getSelectProdCd() { return selectProdCd; }
 
     public void setSelectProdCd(String selectProdCd) { this.selectProdCd = selectProdCd; }
+
+    public String getChannelProdNm() {
+        return channelProdNm;
+    }
+
+    public void setChannelProdNm(String channelProdNm) {
+        this.channelProdNm = channelProdNm;
+    }
 }

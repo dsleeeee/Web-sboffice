@@ -24,8 +24,7 @@
                 initialized="initGrid(s,e)"
                 sticky-headers="true"
                 selection-mode="Row"
-                items-source="data"
-                item-formatter="_itemFormatter">
+                items-source="data">
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="prodExcelUpload.brandNm"/>" binding="hqBrandCd" width="85" align="center" <c:if test="${brandUseFg == '0'}">visible="false"</c:if> ></wj-flex-grid-column>
@@ -77,4 +76,4 @@
     var brandUseFg = "${brandUseFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUploadAdd.js?ver=20210421.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUploadAdd.js?ver=20230817.01" charset="utf-8"></script>

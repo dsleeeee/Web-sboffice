@@ -573,7 +573,7 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
 
     // 상품등록 저장
     $scope.prodExcelUploadSave = function() {
-        $scope.stepCnt = 10;    // 한번에 DB에 저장할 숫자 세팅
+        $scope.stepCnt = 100;    // 한번에 DB에 저장할 숫자 세팅
         $scope.progressCnt = 0; // 처리된 숫자
 
         // 파라미터 설정

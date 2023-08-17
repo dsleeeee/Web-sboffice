@@ -7046,7 +7046,8 @@
                 C.AGENCY_NM,
                 A.AGENCY_CD,
                 CASE WHEN A.STORE_FG = '1' AND A.NXPOS_STORE_CD IS NOT NULL THEN 'Y' ELSE 'N' END AS REG_YN,
-                NVL(A.MAP_STORE_CD, A.BBQ_STORE_CD) AS MAP_STORE_CD
+                NVL(A.MAP_STORE_CD, A.BBQ_STORE_CD) AS MAP_STORE_CD,
+                A.SYS_STAT_FG
         <include refid="CmmSQL.PagingTemplateCount"/>
           FROM IFB_MS_BBQ_STORE A,
                 TB_CM_VAN_CMPNY B,
@@ -7076,6 +7077,9 @@
         <if test='regYn != null and regYn == "Y"'>
             AND A.STORE_FG = '1'
             AND A.NXPOS_STORE_CD IS NOT NULL
+        </if>
+        <if test='sysStatFg != null and sysStatFg.toString() != ""'>
+            AND A.SYS_STAT_FG = #{sysStatFg, jdbcType=VARCHAR}
         </if>
         ORDER
            BY BBQ_STORE_CD ASC

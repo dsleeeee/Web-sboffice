@@ -120,8 +120,11 @@
                     </wj-combo-box>
                 </div>
             </td>
-            <th></th>
-            <td></td>
+            <%-- 채널사상품명 --%>
+            <th><s:message code="dlvrProd.channel.prodNm" /></th>
+            <td>
+                <input type="text" class="sb-input w100" id="srchChannelProdNm" ng-model="channelProdNm" onkeyup="fnNxBtnSearch();"/>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -245,7 +248,7 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProd/dlvrProdNmMapping.js?ver=20230411.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProd/dlvrProdNmMapping.js?ver=20230817.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
