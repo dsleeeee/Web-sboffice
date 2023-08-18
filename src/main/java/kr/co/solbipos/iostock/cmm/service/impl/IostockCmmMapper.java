@@ -67,5 +67,11 @@ public interface IostockCmmMapper {
     List<DefaultMap<String>> selectEmpList(IostockCmmVO iostockCmmVO);
 
     /** 업로드매장 공통 - 업로드매장 리스트 조회 */
-    List<DefaultMap<String>> selectUploadStoreList(IostockCmmVO iostockCmmVO);
+    List<DefaultMap<String>> getSelectUploadStoreList(IostockCmmVO iostockCmmVO);
+
+    /** 업로드매장 공통 - 검증결과 저장 */
+    int getSelectUploadStoreExcelUploadSave(IostockCmmVO iostockCmmVO);
+
+    /** 업로드매장 공통 - 검증결과 전체 삭제 */
+    int getSelectUploadStoreExcelUploadDeleteAll(IostockCmmVO iostockCmmVO);
 }

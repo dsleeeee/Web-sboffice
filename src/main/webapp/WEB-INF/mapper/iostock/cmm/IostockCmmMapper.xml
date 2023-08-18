@@ -875,20 +875,61 @@
     <!-- 업로드매장 공통 - 업로드매장 리스트 조회 -->
     <!--
         TABLE    :
-        PARAM    :
         COMMENTS :
     -->
-    <select id="selectUploadStoreList" parameterType="iostockCmmVO" resultType="DefaultMap">
-        /* USE : IostockCmmMapper.selectUploadStoreList */
+    <select id="getSelectUploadStoreList" parameterType="iostockCmmVO" resultType="DefaultMap">
+        /* USE : IostockCmmMapper.getSelectUploadStoreList */
         SELECT
-        '1111' AS STORE_CD,
-        '매장1' AS STORE_NM
-        FROM dual
-        UNION ALL
-        SELECT
-        '2222' AS STORE_CD,
-        '매장2' AS STORE_NM
-        FROM dual
+        A.STORE_CD,
+        B.STORE_NM
+        FROM TB_HQ_SEARCH_UPLOAD_STORE A,
+        TB_MS_STORE B
+        WHERE 1=1
+        AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND A.USER_ID = #{userId}
+        AND B.STORE_CD (+)= A.STORE_CD
+        ORDER BY A.STORE_CD
     </select>
+
+    <!-- 업로드매장 공통 - 업로드시 임시테이블 저장 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getSelectUploadStoreExcelUploadSave" parameterType="iostockCmmVO">
+        /* IostockCmmMapper.getSelectUploadStoreExcelUploadSave */
+        INSERT INTO TB_HQ_SEARCH_UPLOAD_STORE
+        (
+            HQ_OFFICE_CD,
+            USER_ID,
+            STORE_CD,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{hqOfficeCd},
+            #{userId},
+            #{storeCd},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 업로드매장 공통 - 검증결과 전체 삭제 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getSelectUploadStoreExcelUploadDeleteAll" parameterType="iostockCmmVO">
+        /* IostockCmmMapper.getSelectUploadStoreExcelUploadDeleteAll */
+        DELETE
+        TB_HQ_SEARCH_UPLOAD_STORE
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND USER_ID = #{userId}
+    </delete>
 
 </mapper>

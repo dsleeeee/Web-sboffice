@@ -132,6 +132,12 @@ public class IostockCmmVO extends PageVO {
     /** 적용매장구분 */
     private String regStoreFg;
 
+    /** 업로드매장 */
+    private String uploadStoreCds;
+    /** 업로드매장 */
+    private String[] uploadStoreCdList;
+
+
     /**
      * @return the orgnFg
      */
@@ -535,4 +541,20 @@ public class IostockCmmVO extends PageVO {
     public String getRegStoreFg() { return regStoreFg; }
 
     public void setRegStoreFg(String regStoreFg) { this.regStoreFg = regStoreFg; }
+
+    public String getUploadStoreCds() {
+        return uploadStoreCds;
+    }
+
+    public void setUploadStoreCds(String uploadStoreCds) {
+        this.uploadStoreCds = uploadStoreCds;
+    }
+
+    public String[] getUploadStoreCdList() {
+        return uploadStoreCdList;
+    }
+
+    public void setUploadStoreCdList(String[] uploadStoreCdList) {
+        this.uploadStoreCdList = uploadStoreCdList;
+    }
 }

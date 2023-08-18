@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
+
 @Service("iostockCmmService")
 public class IostockCmmServiceImpl implements IostockCmmService {
     private final IostockCmmMapper iostockCmmMapper;
@@ -316,16 +318,54 @@ public class IostockCmmServiceImpl implements IostockCmmService {
 
     /** 업로드매장 공통 - 업로드매장 리스트 조회 */
     @Override
-    public List<DefaultMap<String>> selectUploadStoreList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<String>> getSelectUploadStoreList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
 
         iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        iostockCmmVO.setUserId(sessionInfoVO.getUserId());
 
         List<DefaultMap<String>> resultList = new ArrayList<DefaultMap<String>>();
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
 
-            resultList = iostockCmmMapper.selectUploadStoreList(iostockCmmVO);
+            resultList = iostockCmmMapper.getSelectUploadStoreList(iostockCmmVO);
         }
+
         return resultList;
+    }
+
+    /** 업로드매장 공통 - 검증결과 저장 */
+    @Override
+    public int getSelectUploadStoreExcelUploadSave(IostockCmmVO[] iostockCmmVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(IostockCmmVO iostockCmmVO : iostockCmmVOs) {
+            iostockCmmVO.setRegDt(currentDt);
+            iostockCmmVO.setRegId(sessionInfoVO.getUserId());
+            iostockCmmVO.setModDt(currentDt);
+            iostockCmmVO.setModId(sessionInfoVO.getUserId());
+
+            iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            iostockCmmVO.setUserId(sessionInfoVO.getUserId());
+
+            procCnt += iostockCmmMapper.getSelectUploadStoreExcelUploadSave(iostockCmmVO);
+        }
+
+        return procCnt;
+    }
+
+    /** 업로드매장 공통 - 검증결과 전체 삭제 */
+    @Override
+    public int getSelectUploadStoreExcelUploadDeleteAll(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+
+        iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        iostockCmmVO.setUserId(sessionInfoVO.getUserId());
+
+        procCnt += iostockCmmMapper.getSelectUploadStoreExcelUploadDeleteAll(iostockCmmVO);
+
+        return procCnt;
     }
 }
