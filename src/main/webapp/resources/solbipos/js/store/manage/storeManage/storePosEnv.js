@@ -483,23 +483,28 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope._popMsg(messages["storeManage.unable.delete.defaultPos"]);
       return false;
     }
+    // 패스워드 확인(패스워드 : 포스번호(삭제하려는포스번호와 같음 확인)+아이디(접속한 아이디))
+    if($("#deletePosPw").val() === $scope.getSelectedPosNo() + userId){
+      $scope._popConfirm(messages["cmm.choo.delete"], function() {
+        var storeScope = agrid.getScope('storeManageCtrl');
+        var params = {};
+        params.hqOfficeCd = storeScope.getSelectedStore().hqOfficeCd;
+        params.storeCd = storeScope.getSelectedStore().storeCd;
+        params.posNo = $scope.getSelectedPosNo();
 
-    var storeScope    = agrid.getScope('storeManageCtrl');
-    var param         = {};
-    params.hqOfficeCd = storeScope.getSelectedStore().hqOfficeCd;
-    params.storeCd    = storeScope.getSelectedStore().storeCd;
-    params.posNo      = $scope.getSelectedPosNo();
-
-    $scope.$broadcast('loadingPopupActive');
-    $scope._postJSONSave.withOutPopUp( "/store/manage/storeManage/storeManage/deletePos.sb", params, function () {
-      $scope.$broadcast('loadingPopupInactive');
-      $scope._popMsg(messages["cmm.delSucc"]);
-
-      // 재조회
-      var envScope = agrid.getScope('storeEnvCtrl');
-      $scope.searchCmmEnv(envScope.getEnvGroupCd());
-    });
-
+        $scope.$broadcast('loadingPopupActive');
+        $scope._postJSONSave.withOutPopUp("/store/manage/storeManage/storeManage/deletePos.sb", params, function () {
+          $scope.$broadcast('loadingPopupInactive');
+          $scope._popMsg(messages["cmm.delSucc"]);
+          $("#deletePosPw").val('');
+          // 재조회
+          $scope.changeEnvGroup("03");
+        });
+      });
+    } else {
+      $scope._popMsg("올바른 패스워드를 입력해주세요");
+      return false;
+    };
   };
 
 }]);
