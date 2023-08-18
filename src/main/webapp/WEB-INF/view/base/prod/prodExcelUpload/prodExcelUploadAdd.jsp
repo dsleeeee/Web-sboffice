@@ -76,4 +76,4 @@
     var brandUseFg = "${brandUseFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUploadAdd.js?ver=20230817.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUploadAdd.js?ver=20230818.01" charset="utf-8"></script>

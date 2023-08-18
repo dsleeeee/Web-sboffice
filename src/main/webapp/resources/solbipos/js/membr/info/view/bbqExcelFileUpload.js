@@ -211,11 +211,11 @@ app.controller('bbqExcelFileUploadCtrl', ['$scope', '$http', '$timeout', functio
                     item = {};
 
                     // 1줄의 데이터를 , 로 split 한 자료의 길이가 columnNum 보다 작은 경우 수량 없음 오류 메시지
-                    if (dataArrLength < columnNum) {
+                    /*if (dataArrLength < columnNum) {
                         $scope._popMsg(messages["product.not.qty"]); // 업로드 데이터 중 없는 데이터가 존재합니다.
                         jsonData = [];
                         break;
-                    }
+                    }*/
 
                     for (var j = 0; j < dataArrLength; j++) {
                         var value = nvl(dataArr[j], '').trim();
