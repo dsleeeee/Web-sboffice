@@ -1889,7 +1889,7 @@ Format.prototype.initElements = function () {
   });
 
   // 저장 버튼
-  addClickHandler(document.getElementById('btnSave'), function () {
+  addClickHandler(document.getElementById('btnSaveTouchKey'), function () {
 
     var scope = agrid.getScope("touchKeyCtrl");
     var saveMsg

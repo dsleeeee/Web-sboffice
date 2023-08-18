@@ -13,6 +13,7 @@ import kr.co.solbipos.iostock.cmm.service.IostockCmmVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -532,15 +533,61 @@ public class IostockCmmController {
      * @author  김설아
      * @since   2023. 08. 11.
      */
-    @RequestMapping(value = "/selectUploadStoreList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/getSelectUploadStoreList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result selectUploadStoreList(HttpServletRequest request, HttpServletResponse response,
                                       Model model, IostockCmmVO iostockCmmVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> list = iostockCmmService.selectUploadStoreList(iostockCmmVO, sessionInfoVO);
+        List<DefaultMap<String>> list = iostockCmmService.getSelectUploadStoreList(iostockCmmVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
+    }
+
+    /**
+     * 업로드매장 공통 - 검증결과 저장
+     *
+     * @param iostockCmmVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 08. 11.
+     */
+    @RequestMapping(value = "/getSelectUploadStoreExcelUploadSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSelectUploadStoreExcelUploadSave(@RequestBody IostockCmmVO[] iostockCmmVOs, HttpServletRequest request,
+                                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = iostockCmmService.getSelectUploadStoreExcelUploadSave(iostockCmmVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 업로드매장 공통 - 검증결과 전체 삭제
+     *
+     * @param iostockCmmVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 08. 11.
+     */
+    @RequestMapping(value = "/getSelectUploadStoreExcelUploadDeleteAll.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSelectUploadStoreExcelUploadDeleteAll(@RequestBody IostockCmmVO iostockCmmVO, HttpServletRequest request,
+                                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = iostockCmmService.getSelectUploadStoreExcelUploadDeleteAll(iostockCmmVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 }
