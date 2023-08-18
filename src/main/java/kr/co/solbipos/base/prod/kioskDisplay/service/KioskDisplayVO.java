@@ -293,6 +293,11 @@ public class KioskDisplayVO extends PageVO {
     /** 그룹코드 */
     private String branchCd;
 
+    /** 업로드 상품코드 컬럼  */
+    private String prodCdCol;
+    /** 업로드 상품코드 array */
+    private String arrProdCdCol[];
+
     /**
      * @return the hqOfficeCd
      */
@@ -1333,5 +1338,21 @@ public class KioskDisplayVO extends PageVO {
 
     public void setKioskUseYn(String kioskUseYn) {
         this.kioskUseYn = kioskUseYn;
+    }
+
+    public String getProdCdCol() {
+        return prodCdCol;
+    }
+
+    public void setProdCdCol(String prodCdCol) {
+        this.prodCdCol = prodCdCol;
+    }
+
+    public String[] getArrProdCdCol() {
+        return arrProdCdCol;
+    }
+
+    public void setArrProdCdCol(String[] arrProdCdCol) {
+        this.arrProdCdCol = arrProdCdCol;
     }
 }

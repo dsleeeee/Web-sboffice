@@ -396,4 +396,34 @@ app.controller('kioskDisplayCtrl', ['$scope', '$http', '$timeout', function ($sc
     }, 10);
   };
   // <-- //양식다운로드 -->
+
+  // 비노출관리 excelUpload
+  $scope.excelUpload = function () {
+    var vScope = agrid.getScope('excelUploadKioskDisplayCtrl');
+    var msg = messages["dlvrProd.confmMsg"];  // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
+
+    s_alert.popConf(msg, function () {
+
+      /* 부모컨트롤러 값을 넣으면 업로드가 완료된 후 uploadCallBack 이라는 함수를 호출해준다. */
+      vScope.parentCtrl = 'kioskDisplayCtrl';
+
+      $("#excelUpFile").val('');
+      $("#excelUpFile").trigger('click');
+
+    });
+  };
+
+  // 비노출관리 양식 다운로드
+  $scope.sampleDownload = function () {
+    var vScope = agrid.getScope('excelUploadKioskDisplayCtrl');
+    vScope.excelFormDownload();
+  };
+
+  /** 업로드 완료 후 callback 함수. 업로드 이후 로직 작성. */
+  $scope.uploadCallBack = function () {
+    var vScope = agrid.getScope('excelUploadKioskDisplayCtrl');
+    vScope.excelUploadingPopup(false); // 업로딩 팝업 닫기
+    $scope._popMsg(messages['cmm.saveSucc']);
+  };
+
 }]);
