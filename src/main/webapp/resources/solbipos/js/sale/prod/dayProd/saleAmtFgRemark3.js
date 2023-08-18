@@ -49,10 +49,13 @@ app.controller('saleAmtFgRemarkPopupCtrl3', ['$scope', '$http','$timeout', funct
             }
             params.userBrands = momsHqBrandCd;
         }
-        params.gubun = 'N';
+        params.gubun = '1';
         $scope._inquirySub("/sale/prod/dayProd/dayProd/getSaleAmtFgRemarkList3.sb", params, function (){
             var scope = agrid.getScope('sdselMomsModPopupCtrl');
             scope.getSdselMomsMod();
+            var exScope = agrid.getScope('sdselMomsModExPopupCtrl');
+            exScope.getSdselMomsModEx();
+
         });
     };
 
@@ -83,7 +86,8 @@ app.controller('saleAmtFgRemarkPopupCtrl3', ['$scope', '$http','$timeout', funct
         $scope.prodClassNm = "";
     };
 
-    $scope.add = function (){
+    // 보정삭제
+    $scope.modDel = function (){
         for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ) {
             var item = $scope.flex.collectionView.items[i];
             if (item.gChk) {
@@ -94,11 +98,12 @@ app.controller('saleAmtFgRemarkPopupCtrl3', ['$scope', '$http','$timeout', funct
         // 파라미터 설정
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
+            $scope.flex.collectionView.itemsRemoved[i].gubun = 'mod';
             params.push($scope.flex.collectionView.itemsRemoved[i]);
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/sale/prod/dayProd/dayProd/getSdselMomsModSave.sb", params, function(){
+        $scope._save("/sale/prod/dayProd/dayProd/getSdselMomsModDelete.sb", params, function(){
             $scope.getSaleAmtFgRemarkList3();
         });
     }
@@ -133,11 +138,11 @@ app.controller('sdselMomsModPopupCtrl', ['$scope', '$http','$timeout', function 
             }
         }
         params.userBrands = momsHqBrandCd;
-        params.gubun = 'Y';
+        params.gubun = '2';
         $scope._inquirySub("/sale/prod/dayProd/dayProd/getSaleAmtFgRemarkList3.sb", params);
     };
 
-    $scope.delete = function (){
+    $scope.modAdd = function (){
         for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ) {
             var item = $scope.flex.collectionView.items[i];
             if (item.gChk) {
@@ -148,6 +153,85 @@ app.controller('sdselMomsModPopupCtrl', ['$scope', '$http','$timeout', function 
         // 파라미터 설정
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
+            $scope.flex.collectionView.itemsRemoved[i].gubun = 'mod';
+            params.push($scope.flex.collectionView.itemsRemoved[i]);
+        }
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._save("/sale/prod/dayProd/dayProd/getSdselMomsModSave.sb", params, function(){
+            var scope = agrid.getScope('saleAmtFgRemarkPopupCtrl3');
+            scope.getSaleAmtFgRemarkList3();
+        });
+    }
+
+    $scope.modExAdd = function (){
+        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ) {
+            var item = $scope.flex.collectionView.items[i];
+            if (item.gChk) {
+                $scope.flex.collectionView.removeAt(i);
+            }
+        }
+
+        // 파라미터 설정
+        var params = new Array();
+        for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
+            $scope.flex.collectionView.itemsRemoved[i].gubun = 'modEx';
+            params.push($scope.flex.collectionView.itemsRemoved[i]);
+        }
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._save("/sale/prod/dayProd/dayProd/getSdselMomsModSave.sb", params, function(){
+            var scope = agrid.getScope('saleAmtFgRemarkPopupCtrl3');
+            scope.getSaleAmtFgRemarkList3();
+        });
+    }
+}]);
+
+app.controller('sdselMomsModExPopupCtrl', ['$scope', '$http','$timeout', function ($scope, $http, $timeout) {
+
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('sdselMomsModExPopupCtrl', $scope, $http, true));
+
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+    };
+
+    $scope.$on("sdselMomsModExPopupCtrl", function(event, data) {
+    });
+
+    // 프린터그룹 조회
+    $scope.getSdselMomsModEx = function(){
+        // 파라미터
+        var params = {};
+        params.prodCd = '';
+        params.prodNm = '';
+        params.sdselProdCd = '';
+        params.sdselProdNm = '';
+        params.prodClassCd = '';
+        params.prodHqBrandCd = '';
+        var momsHqBrandCd = "";
+        for(var i=0; i < momsHqBrandCdComboList.length; i++){
+            if(momsHqBrandCdComboList[i].value !== null) {
+                momsHqBrandCd += momsHqBrandCdComboList[i].value + ","
+            }
+        }
+        params.userBrands = momsHqBrandCd;
+        params.gubun = '3';
+        $scope._inquirySub("/sale/prod/dayProd/dayProd/getSaleAmtFgRemarkList3.sb", params);
+    };
+
+    $scope.modExDel = function (){
+        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ) {
+            var item = $scope.flex.collectionView.items[i];
+            if (item.gChk) {
+                $scope.flex.collectionView.removeAt(i);
+            }
+        }
+
+        // 파라미터 설정
+        var params = new Array();
+        for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
+            $scope.flex.collectionView.itemsRemoved[i].gubun = 'modEx';
             params.push($scope.flex.collectionView.itemsRemoved[i]);
         }
 

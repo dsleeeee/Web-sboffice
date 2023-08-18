@@ -93,11 +93,21 @@
         AND 	thpsp.PROD_CD = thp2.PROD_CD (+)
         AND 	thpcv.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND 	thpcv.PROD_CD = thp.PROD_CD
-        <if test='gubun != null and gubun != "" and gubun == "N"'>
-            AND thp.PROD_CD || thpsp.PROD_CD NOT IN (SELECT thpsmm.SIDE_PROD_CD || thpsmm.PROD_CD FROM TB_HQ_PRODUCT_SDSEL_MOMS_MOD2 thpsmm WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+        <if test='gubun != null and gubun != "" and gubun == "1"'>
+            AND thp.PROD_CD || thpsp.PROD_CD IN (SELECT SIDE_PROD_CD || PROD_CD FROM TB_HQ_PRODUCT_SDSEL_MOMS_MOD WHERE HQ_OFFICE_CD = #{hqOfficeCd})
         </if>
-        <if test='gubun != null and gubun != "" and gubun == "Y"'>
-            AND thp.PROD_CD || thpsp.PROD_CD IN (SELECT thpsmm.SIDE_PROD_CD || thpsmm.PROD_CD FROM TB_HQ_PRODUCT_SDSEL_MOMS_MOD2 thpsmm WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+        <if test='gubun != null and gubun != "" and gubun == "2"'>
+            AND thp.PROD_CD || thpsp.PROD_CD IN
+            (
+            SELECT SIDE_PROD_CD || PROD_CD FROM TB_HQ_PRODUCT_SDSEL_MOMS_MOD_V01    WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}	-- 보정규칙
+            MINUS
+            SELECT SIDE_PROD_CD || PROD_CD FROM TB_HQ_PRODUCT_SDSEL_MOMS_MOD        WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}	-- 보정확정상품
+            MINUS
+            SELECT SIDE_PROD_CD || PROD_CD FROM TB_HQ_PRODUCT_SDSEL_MOMS_MOD_EX     WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}	-- 보정예외상품
+            )
+        </if>
+        <if test='gubun != null and gubun != "" and gubun == "3"'>
+            AND thp.PROD_CD || thpsp.PROD_CD IN (SELECT SIDE_PROD_CD || PROD_CD FROM TB_HQ_PRODUCT_SDSEL_MOMS_MOD_EX WHERE HQ_OFFICE_CD = #{hqOfficeCd})
         </if>
         <if test='prodCd != null and prodCd != ""'>
             AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
@@ -143,7 +153,12 @@
     -->
     <insert id="getSdselMomsModSave" parameterType="dayProdVO">
         /* DayProdMapper.getSdselMomsModSave */
-        INSERT INTO TB_HQ_PRODUCT_SDSEL_MOMS_MOD2
+        <if test='gubun != null and gubun != "" and gubun == "mod"'>
+            INSERT INTO TB_HQ_PRODUCT_SDSEL_MOMS_MOD
+        </if>
+        <if test='gubun != null and gubun != "" and gubun == "modEx"'>
+            INSERT INTO TB_HQ_PRODUCT_SDSEL_MOMS_MOD_EX
+        </if>
         (
             HQ_OFFICE_CD
         ,   PROD_CD
@@ -162,7 +177,12 @@
     -->
     <delete id="getSdselMomsModDelete" parameterType="dayProdVO">
         /* DayProdMapper.getSdselMomsModDelete */
-        DELETE  TB_HQ_PRODUCT_SDSEL_MOMS_MOD2
+        <if test='gubun != null and gubun != "" and gubun == "mod"'>
+            DELETE  TB_HQ_PRODUCT_SDSEL_MOMS_MOD
+        </if>
+        <if test='gubun != null and gubun != "" and gubun == "modEx"'>
+            DELETE  TB_HQ_PRODUCT_SDSEL_MOMS_MOD_EX
+        </if>
         WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
         AND     PROD_CD = #{sdselProdCd}
         AND     SIDE_PROD_CD = #{prodCd}
