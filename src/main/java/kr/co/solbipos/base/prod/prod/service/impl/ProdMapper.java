@@ -2,6 +2,7 @@ package kr.co.solbipos.base.prod.prod.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
+import kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelProdVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -535,4 +536,9 @@ public interface ProdMapper {
 
     /** 기존 상품가격 조회 */
     DefaultMap<String> getProdSalePrice(ProdVO prodVO);
+
+    /** 선택메뉴 조회 팝업 - 신규선택메뉴생성 팝업 오른쪽 상품리스트 그리드 조회 */
+    List<DefaultMap<String>> getNewSdselProdList(ProdVO prodVO);
+
+    int insertSdselProdList(SideMenuSelProdVO sideMenuSelProdVO);
 }

@@ -552,6 +552,9 @@
                     thpsg.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND thpsg.USE_YN = 'Y'
                     AND thpsg.SDSEL_TYPE_FG = #{sdselTypeFg}
+                    <if test='fixProdFg != null and fixProdFg != ""'>
+                        AND thpsg.FIX_PROD_FG LIKE '%'||#{fixProdFg}||'%'
+                    </if>
                     <if test='sdselGrpCd != null and sdselGrpCd != ""'>
                         AND thpsg.SDSEL_GRP_CD LIKE '%'||#{sdselGrpCd}||'%'
                     </if>
@@ -1294,6 +1297,7 @@
                 SELECT
                     thpsc.SDSEL_GRP_CD,
                     thpsp.SDSEL_CLASS_CD,
+                ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
                     thpsp.PROD_CD,
                     thp.PROD_NM,
                     thpsp.ADD_PROD_UPRC,

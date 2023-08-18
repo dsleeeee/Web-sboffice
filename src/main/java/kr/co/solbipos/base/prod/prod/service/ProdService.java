@@ -2,6 +2,7 @@ package kr.co.solbipos.base.prod.prod.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelProdVO;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.List;
@@ -138,8 +139,12 @@ public interface ProdService {
     List<DefaultMap<String>> getSearchDepositProdList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 
     /** 매장상품일괄등록 - 매장목록 조회 */
-    List<DefaultMap<String>> selectStoreList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 
     /** 상품정보 저장 전 체크 - 선택한 선택메뉴코드가 세트('C')이면서, 나(현재 선택한 상품)를 가진 세트가 있는지 확인 */
     String getSideMenuChk(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<String>> selectStoreList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
+    /** 선택메뉴 조회 팝업 - 신규선택메뉴생성 팝업 오른쪽 상품리스트 그리드 조회 */
+    List<DefaultMap<String>> getNewSdselProdList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+    int insertSdselProdList(SideMenuSelProdVO[] sideMenuSelProdVOs, SessionInfoVO sessionInfoVO);
 }

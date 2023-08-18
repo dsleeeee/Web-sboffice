@@ -54,6 +54,15 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         return $scope.prodModifyInfo;
     };
 
+    // 신규 선택 그룹 코드
+    $scope.newSdselGrpCd = "";
+    $scope.setNewSdselGrpCd = function(data){
+        $scope.newSdselGrpCd = data;
+    };
+    $scope.getNewSdselGrpCd = function(){
+        return $scope.newSdselGrpCd;
+    };
+
     $scope.prodNmList;
 
     // 판매가 내점/배달/포장에 적용
@@ -1718,6 +1727,12 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
 
     // 화면 ready 된 후 설정
     angular.element(document).ready(function () {
+        // 팝업 핸들러 추가
+        $scope.prodModifyLayer.hidden.addHandler(function (s) {
+            setTimeout(function () {
+                $scope.setNewSdselGrpCd("");
+            }, 50)
+        });
 
         // 상품 거래처 조회 팝업 핸들러 추가
         $scope.wjSearchProdVendrLayer.shown.addHandler(function (s) {

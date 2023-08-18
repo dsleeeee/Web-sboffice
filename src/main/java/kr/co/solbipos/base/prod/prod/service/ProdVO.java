@@ -402,6 +402,9 @@ public class ProdVO extends PageVO {
     /** 그룹코드 */
     private String branchCd;
 
+    /** 상품분류코드 */
+    private String sdselClassCd;
+
     /**
      * @return the hqOfficeCd
      */
@@ -1739,5 +1742,13 @@ public class ProdVO extends PageVO {
 
     public void setBranchCd(String branchCd) {
         this.branchCd = branchCd;
+    }
+
+    public String getSdselClassCd() {
+        return sdselClassCd;
+    }
+
+    public void setSdselClassCd(String sdselClassCd) {
+        this.sdselClassCd = sdselClassCd;
     }
 }
