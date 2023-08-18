@@ -4527,9 +4527,13 @@
                   FROM TB_HQ_PRODUCT_SDSEL_GROUP thpsg
                  WHERE thpsg.HQ_OFFICE_CD = #{hqOfficeCd}
                    AND thpsg.USE_YN = 'Y'
+                <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+                   AND thpsg.SDSEL_GRP_CD LIKE '%' || #{sdselGrpCd} || '%'
+                </if>
                 <if test='sdselGrpNm != null and sdselGrpNm != ""'>
                    AND thpsg.SDSEL_GRP_NM LIKE '%' || #{sdselGrpNm} || '%'
                 </if>
+                ORDER BY SDSEL_GRP_CD
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -4542,6 +4546,7 @@
                 <if test='sdselGrpNm != null and sdselGrpNm != ""'>
                     AND tmpsg.SDSEL_GRP_NM LIKE '%' || #{sdselGrpNm} || '%'
                 </if>
+                ORDER BY SDSEL_GRP_CD
             </when>
         </choose>
     </select>
@@ -7229,4 +7234,125 @@
         </choose>
     </select>
 
+    <!-- 선택메뉴 조회 팝업 - 신규선택메뉴생성 팝업 오른쪽 상품리스트 그리드 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRINTER_GROUP_PROD
+        PARAM    : prodKitchenprintLinkVO
+        COMMENTS : 선택메뉴 조회 팝업 - 신규선택메뉴생성 팝업 오른쪽 상품리스트 그리드 조회한다.
+    -->
+    <select id="getNewSdselProdList" parameterType="prodVO" resultType="DefaultMap">
+        /* USE : ProdMapper.getNewSdselProdList */
+        SELECT  (SELECT HQ_BRAND_NM FROM TB_HQ_BRAND thb WHERE thb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD) AS HQ_BRAND_CD
+        ,       thp.PROD_CD
+        ,       thp.PROD_NM
+        ,       ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM
+        FROM    TB_HQ_PRODUCT thp
+        WHERE   thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     thp.PROD_CD NOT IN (SELECT PROD_CD FROM TB_HQ_PRODUCT_SDSEL_PROD thpsp WHERE thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD AND thpsp.SDSEL_CLASS_CD = #{sdselClassCd} AND thpsp.USE_YN = 'Y')
+        <if test="chkDt == false">
+            <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                <![CDATA[
+                        AND thp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                        ]]>
+            </if>
+        </if>
+        <if test="prodCd != null and prodCd != ''">
+            AND thp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+        </if>
+        <if test="prodNm != null and prodNm != ''">
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND thp.PROD_CLASS_CD IN (
+            SELECT PROD_CLASS_CD
+            FROM TB_HQ_PRODUCT_CLASS
+            WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+            CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+            ) --상품분류
+        </if>
+        <if test="barCd != null and barCd != ''">
+            AND EXISTS (
+            SELECT 1
+            FROM TB_HQ_PRODUCT_BARCD
+            WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+            AND PROD_CD = thp.PROD_CD
+            AND BARCD_CD = #{barCd}
+            ) --바코드
+        </if>
+        <if test="hqBrandCd != null and hqBrandCd != ''">
+            AND thp.HQ_BRAND_CD = #{hqBrandCd} --브랜드코드
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND thp.USE_YN = #{useYn} --사용여부
+        </if>
+        <if test="prodTypeFg != null and prodTypeFg != ''">
+            AND thp.PROD_TYPE_FG = #{prodTypeFg} --상품유형
+        </if>
+        AND (
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+        OR
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+        )
+        ORDER
+        BY thp.PROD_CD ASC
+    </select>
+
+    <insert id="insertSdselProdList" parameterType="sideMenuSelProdVO">
+        /* USE : ProdMapper.insertSdselProdList */
+        <selectKey keyProperty="dispSeq" resultType="int" order="BEFORE">
+            SELECT 	NVL(MAX(DISP_SEQ+1), 1)
+            FROM 	TB_HQ_PRODUCT_SDSEL_PROD thpsp
+            WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+            AND 	SDSEL_CLASS_CD = #{sdselClassCd}
+        </selectKey>
+        MERGE INTO TB_HQ_PRODUCT_SDSEL_PROD thpsp
+            USING DUAL
+            ON (
+                    thpsp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thpsp.SDSEL_CLASS_CD = #{sdselClassCd}
+                    AND thpsp.PROD_CD = #{prodCd}
+                )
+            WHEN MATCHED THEN
+                UPDATE
+                    SET thpsp.USE_YN = 'Y'
+                    ,   thpsp.DISP_SEQ = #{dispSeq}
+                    ,   thpsp.MOD_DT = #{modDt}
+                    ,   thpsp.MOD_ID = #{modId}
+                    ,   thpsp.REG_STORE_FG = #{regStoreFg}
+                    ,   thpsp.PRINT_YN = #{printYn}
+            WHEN NOT MATCHED THEN
+                INSERT
+                    (
+                     HQ_OFFICE_CD,
+                     SDSEL_CLASS_CD,
+                     PROD_CD,
+                     ADD_PROD_UPRC,
+                     ADD_PROD_QTY,
+                     DISP_SEQ,
+                     USE_YN,
+                     REG_DT,
+                     REG_ID,
+                     MOD_DT,
+                     MOD_ID,
+                     FIX_PROD_FG,
+                     REG_STORE_FG,
+                     PRINT_YN
+                    ) VALUES (
+                                 #{hqOfficeCd},
+                                 #{sdselClassCd},
+                                 #{prodCd},
+                                 #{addProdUprc},
+                                 #{addProdQty},
+                                 #{dispSeq},
+                                 'Y',
+                                 #{regDt},
+                                 #{regId},
+                                 #{modDt},
+                                 #{modId},
+                                 #{fixProdFg},
+                                 #{regStoreFg},
+                                 #{printYn}
+                             )
+    </insert>
 </mapper>

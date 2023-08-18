@@ -55,7 +55,7 @@ app.controller('searchSdselGrpCtrl', ['$scope', '$http', function ($scope, $http
                     scope.prodModifyInfo.sdselGrpNm = selectedRow.sdselGrpNm;
                     scope.prodModifyInfo.sdselGrpCd = selectedRow.sdselGrpCd;
 
-                    $scope.wjSearchSdselGrpLayer.hide();
+                    $scope.close();
 
                 }
             }
@@ -74,9 +74,76 @@ app.controller('searchSdselGrpCtrl', ['$scope', '$http', function ($scope, $http
     $scope.searchSdselGrp = function () {
 
         var params = {};
+        params.sdselGrpCd = $("#searchSdselGrpCd").val();
         params.sdselGrpNm = $("#searchSdselGrpNm").val();
 
         $scope._inquirySub("/base/prod/prod/prod/getSearchSdselGrpList.sb", params, function() {}, false);
     }
 
+    // 신규선택메뉴생성
+    $scope.newSdsel = function (){
+        var scope = agrid.getScope('prodModifyCtrl');
+
+        //선택한 그룹이 없으면 신규생성
+        if(scope.prodModifyInfo.sdselGrpCd === "" && (scope.getNewSdselGrpCd() === "" || scope.getNewSdselGrpCd() === undefined)){
+            // 선택그룹을 생성
+            // 파라미터 설정
+            var params = [];
+            var param = {};
+            param.status = "I";
+            var prodInfoScope = agrid.getScope('prodModifyCtrl');
+            if(prodInfoScope.prodModifyInfo.prodNm === ""){
+                param.sdselGrpNm = "신상품";
+            } else {
+                param.sdselGrpNm = prodInfoScope.prodModifyInfo.prodNm;
+            }
+            param.fixProdFg = "1";
+            param.sdselTypeFg = "C";
+            params.push(param);
+
+            $scope._save('/base/prod/sideMenu/menuGrp/save.sb', params, function() {
+                $scope.wjNewSdselLayer.show();
+                var grpScope = agrid.getScope('newSdselGrpCtrl');
+                grpScope.searchSdselGrp();
+                setTimeout(function() {
+                    grpScope.selectNewGrp();
+                }, 300);
+            }, false);
+        } else {
+            $scope.wjNewSdselLayer.show();
+            var scope = agrid.getScope('newSdselGrpCtrl');
+            scope.searchSdselGrp();
+            scope.flex.fixed();
+        }
+
+    };
+
+    $scope.close = function (){
+        $("#searchSdselGrpCd").val("");
+        $scope.wjSearchSdselGrpLayer.hide();
+    }
+
+    // 화면 ready 된 후 설정
+    angular.element(document).ready(function () {
+        // 신규선택메뉴생성 팝업 핸들러 추가
+        $scope.wjNewSdselLayer.shown.addHandler(function (s) {
+            $("#sdselGrpTitle").html("");
+            var classScope = agrid.getScope('newSdselClassCtrl');
+            classScope._gridDataInit();   // 그리드 초기화
+
+            $("#sdselClassTitle").html("");
+            var prodScope = agrid.getScope('newSdselProdCtrl');
+            prodScope._gridDataInit();   // 그리드 초기화
+            var prodScope2 = agrid.getScope('prodSelectCtrl');
+            prodScope2._gridDataInit();   // 그리드 초기화
+        });
+        // 신규선택메뉴생성 팝업 핸들러 추가
+        $scope.wjNewSdselLayer.hidden.addHandler(function (s) {
+            setTimeout(function() {
+                $scope.searchSdselGrp();
+                var scope = agrid.getScope('prodModifyCtrl');
+                $("#searchSdselGrpCd").val(scope.getNewSdselGrpCd());
+            }, 50);
+        });
+    });
 }]);

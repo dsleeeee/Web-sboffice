@@ -361,19 +361,19 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
       var params = [];
       var orgChk = 0;
 
-      // dispSeq 재설정
-      var editItems = [];
-      for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
-        if( isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
-          editItems.push($scope.flex.collectionView.items[s]);
-        }
-      }
-
-      for (var s = 0; s < editItems.length; s++) {
-        editItems[s].dispSeq = (s + 1);
-        $scope.flex.collectionView.editItem(editItems[s]);
-        $scope.flex.collectionView.commitEdit();
-      }
+      // // dispSeq 재설정   < 선택그룹은 dispSeq가 없다
+      // var editItems = [];
+      // for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
+      //   if( isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
+      //     editItems.push($scope.flex.collectionView.items[s]);
+      //   }
+      // }
+      //
+      // for (var s = 0; s < editItems.length; s++) {
+      //   editItems[s].dispSeq = (s + 1);
+      //   $scope.flex.collectionView.editItem(editItems[s]);
+      //   $scope.flex.collectionView.commitEdit();
+      // }
 
       for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
         if ((orgnFg == "HQ") || (orgnFg == "STORE" && hqOfficeCd =="00000") || (orgnFg == "STORE" && hqOfficeCd !="00000" && $scope.flex.collectionView.itemsEdited[u].sdselGrpCd > 799999)) {
@@ -707,8 +707,10 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
       // dispSeq 재설정
       var editItems = [];
       for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
-        if( isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
-          editItems.push($scope.flex.collectionView.items[s]);
+        if($scope.flex.collectionView.items[s].dispSeq !== (s+1)){
+          if( isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
+            editItems.push($scope.flex.collectionView.items[s]);
+          }
         }
       }
 
@@ -718,7 +720,6 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
         editItems[s].status = "U";
         $scope.flex.collectionView.commitEdit();
       }
-
       for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
         if($scope.flex.collectionView.itemsEdited[u].sdselClassNm == ""){
           $scope._popMsg(messages["sideMenu.selectMenu.sdselClassNm"] + messages["sideMenu.selectMenu.inputEnv"]);
@@ -749,7 +750,6 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
           return false;
         }
       }
-
 
       for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
         if($scope.flex.collectionView.itemsAdded[i].sdselClassNm == ""){
@@ -1136,8 +1136,10 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
       // dispSeq 재설정
       var editItems = [];
       for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
-        if( isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
-          editItems.push($scope.flex.collectionView.items[s]);
+        if($scope.flex.collectionView.items[s].dispSeq !== (s+1)) {
+          if (isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
+            editItems.push($scope.flex.collectionView.items[s]);
+          }
         }
       }
 

@@ -490,7 +490,7 @@ public class StoreManageController {
     */
    @RequestMapping(value = "storeManage/deletePos.sb", method = RequestMethod.POST)
    @ResponseBody
-   public Result deletePos(StorePosEnvVO storePosEnvVO, HttpServletRequest request,
+   public Result deletePos(@RequestBody StorePosEnvVO storePosEnvVO, HttpServletRequest request,
            HttpServletResponse response, Model model) {
 
        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
@@ -732,7 +732,7 @@ public class StoreManageController {
         return returnListJson(Status.OK, avlblMenu);
     }
 
-    /**
+    /**D
      * 미사용메뉴 조회
      * @param storeManageVO
      * @param request

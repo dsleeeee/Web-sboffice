@@ -3,6 +3,8 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<c:set var="userId" value="${sessionScope.sessionInfo.userId}" />
+
 <%-- 포스 환경 설정 --%>
 <div id="posEnvArea" style="display:none;" ng-controller="posEnvCtrl">
 
@@ -36,6 +38,8 @@
     <button id="btnSetPosNm" type="button" class="btn_skyblue" ng-click="settingPosNm()"><s:message code="storeManage.setting.posName" /></button>
     <%-- 포스 설정복사 --%>
     <button id="btnCopyPosSetting" type="button" class="btn_skyblue" ng-click="copyPosSetting()" ><s:message code="storeManage.copy.posSetting" /></button>
+    <%-- 삭제 비밀번호 --%>
+    <input id="deletePosPw" style="border:1px solid #ccc;" class="w110px">
     <%-- 삭제 --%>
     <button id="btnDeletePos" type="button" class="btn_skyblue" ng-click="deletePos()"><s:message code="cmm.delete" /></button>
   </div>
@@ -51,8 +55,11 @@
   </div>
 
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storePosEnv.js?ver=20230315.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storePosEnv.js?ver=20230315.02" charset="utf-8"></script>
 
+<script type="text/javascript">
+  var userId = "${userId}";
+</script>
 <%-- 테이블 그룹설정 --%>
 <c:import url="/WEB-INF/view/store/manage/storeManage/setTableGroup.jsp">
 </c:import>

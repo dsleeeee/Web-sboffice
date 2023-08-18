@@ -171,6 +171,7 @@
                             <wj-flex-grid-column header="<s:message code="kioskKeyMap.clsMemo"/>" binding="clsMemo" width="90"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="kioskKeyMap.tuMClsFg"/>" binding="tuMClsFg" data-map="tuMClsFgDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="kioskKeyMap.storeModYn"/>" binding="storeModYn" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="" binding="indexNo" width="*" visible="false"></wj-flex-grid-column>
                         </wj-flex-grid>
                     </div>
                 </div>
@@ -218,6 +219,7 @@
                                 <wj-flex-grid-column header="<s:message code="kioskKeyMap.tuMClsCd"/>" binding="tuMClsCd" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="kioskKeyMap.tuMClsNm"/>" binding="tuMClsNm" width="140"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="kioskKeyMap.mmClsMemo"/>" binding="mmClsMemo" width="90"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="" binding="indexNo" width="*" visible="false"></wj-flex-grid-column>
                             </wj-flex-grid>
                         </div>
                     </div>
@@ -267,6 +269,7 @@
                         <c:if test="${sessionInfo.orgnFg == 'STORE' and momsEnvstVal == '1'}">
                             <wj-flex-grid-column header="<s:message code="kioskKeyMap.kioskDisplayYn"/>" binding="kioskDisplayYn" align="center" width="60" is-read-only="true"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="kioskKeyMap.soldOutYn"/>" binding="soldOutYn" align="center" width="60" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="" binding="indexNo" width="*" visible="false"></wj-flex-grid-column>
                         </c:if>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
@@ -475,7 +478,7 @@
     var kioskKeyEnvstVal = "${kioskKeyEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20230727.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20230727.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

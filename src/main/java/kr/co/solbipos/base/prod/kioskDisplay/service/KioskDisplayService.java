@@ -39,5 +39,9 @@ public interface KioskDisplayService {
     // 상품 품절여부 저장
     int getProdKioskDisplaySave(KioskDisplayVO[] kioskDisplayVOs, SessionInfoVO sessionInfoVO);
 
+    // 엑셀 업로드 전 매장코드, 상품코드 유효여부 체크
+    int chkCd(KioskDisplayVO kioskDisplayVO, SessionInfoVO sessionInfoVO);
 
+    // 엑셀 업로드
+    int getExcelUploadSave(KioskDisplayVO[] kioskDisplayVOs, SessionInfoVO sessionInfoVO);
 }

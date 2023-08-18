@@ -382,8 +382,10 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
             // indexNo 재설정
             var editItems = [];
             for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
-                if (isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
-                    editItems.push($scope.flex.collectionView.items[s]);
+                 if($scope.flex.collectionView.items[s].indexNo !== (s+1)) {
+                    if (isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
+                        editItems.push($scope.flex.collectionView.items[s]);
+                    }
                 }
             }
 
@@ -868,8 +870,10 @@ app.controller('categoryClsMCtrl', ['$scope', '$http', '$timeout', function ($sc
         // indexNo 재설정
         var editItems = [];
         for (var s = 0; s < $scope.flexM.collectionView.itemCount; s++) {
-            if( isEmptyObject($scope.flexM.collectionView.items[s].status) || $scope.flexM.collectionView.items[s].status === 'I') {
-                editItems.push($scope.flexM.collectionView.items[s]);
+            if($scope.flex.collectionView.items[s].indexNo !== (s+1)) {
+                if (isEmptyObject($scope.flexM.collectionView.items[s].status) || $scope.flexM.collectionView.items[s].status === 'I') {
+                    editItems.push($scope.flexM.collectionView.items[s]);
+                }
             }
         }
 
@@ -1065,8 +1069,10 @@ app.controller('kioskKeyMapCtrl', ['$scope', '$http', '$timeout', function ($sco
             // indexNo 재설정
             var editItems = [];
             for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
-                if (isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
-                    editItems.push($scope.flex.collectionView.items[s]);
+                if($scope.flex.collectionView.items[s].indexNo !== (s+1)) {
+                    if (isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
+                        editItems.push($scope.flex.collectionView.items[s]);
+                    }
                 }
             }
 

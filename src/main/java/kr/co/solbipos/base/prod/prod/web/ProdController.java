@@ -16,6 +16,7 @@ import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdAuthEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
+import kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelProdVO;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -918,6 +919,7 @@ public class ProdController {
     public Result getSearchDepositProdList(ProdVO prodVO, HttpServletRequest request,
                                            HttpServletResponse response, Model model) {
 
+
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<String>> result = prodService.getSearchDepositProdList(prodVO, sessionInfoVO);
@@ -961,6 +963,51 @@ public class ProdController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         String result = prodService.getSideMenuChk(prodVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 선택메뉴 조회 팝업 - 신규선택메뉴생성 팝업 오른쪽 상품리스트 그리드 조회
+     * @param prodVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  권지현
+     * @since   2023.07.28
+     */
+    @RequestMapping(value = "/getNewSdselProdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getNewSdselProdList(ProdVO prodVO, HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = prodService.getNewSdselProdList(prodVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodVO);
+    }
+
+
+    /**
+     * 선택메뉴 조회 팝업 - 신규선택메뉴생성 팝업 오른쪽 상품 추가
+     * @param sideMenuSelProdVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  권지현
+     * @since   2023.07.28
+     */
+    @RequestMapping(value = "/insertSdselProdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result insertSdselProdList(@RequestBody SideMenuSelProdVO[] sideMenuSelProdVOs, HttpServletRequest request,
+                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = prodService.insertSdselProdList(sideMenuSelProdVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

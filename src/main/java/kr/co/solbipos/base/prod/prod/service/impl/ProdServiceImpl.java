@@ -16,6 +16,7 @@ import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.WorkModeFg;
+import kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelProdVO;
 import kr.co.solbipos.stock.adj.adj.service.AdjVO;
 import kr.co.solbipos.stock.adj.adj.service.impl.AdjMapper;
 import org.apache.commons.io.FilenameUtils;
@@ -2237,4 +2238,35 @@ public class ProdServiceImpl implements ProdService {
         return prodMapper.getSideMenuChk(prodVO);
     }
 
+    /** 선택메뉴 조회 팝업 - 신규선택메뉴생성 팝업 오른쪽 상품리스트 그리드 조회 */
+    @Override
+    public List<DefaultMap<String>> getNewSdselProdList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodVO.setUserId(sessionInfoVO.getUserId());
+        return prodMapper.getNewSdselProdList(prodVO);
+    }
+
+    @Override
+    public int insertSdselProdList(SideMenuSelProdVO[] sideMenuSelProdVOs, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        for(SideMenuSelProdVO sideMenuSelProdVO : sideMenuSelProdVOs ){
+
+            // 소속구분 설정
+            String orgnFg = sessionInfoVO.getOrgnFg().getCode();
+            sideMenuSelProdVO.setOrgnFg(orgnFg);
+            sideMenuSelProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+            sideMenuSelProdVO.setRegDt(currentDt);
+            sideMenuSelProdVO.setModDt(currentDt);
+            sideMenuSelProdVO.setRegId(sessionInfoVO.getUserId());
+            sideMenuSelProdVO.setModId(sessionInfoVO.getUserId());
+
+            result = prodMapper.insertSdselProdList(sideMenuSelProdVO);
+        }
+        return result;
+    }
 }

@@ -4,22 +4,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
- <wj-popup id="saleAmtFgRemark3PopupLayer" control="saleAmtFgRemark3PopupLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:800px;">
-    <div>
-        <div class="wj-dialog-header wj-dialog-header-font">
-            <s:message code="dayProd.saleAmtFg"/>3
-            <a href="#" class="wj-hide btn_close"></a>
-        </div>
-
-        <div class="wj-dialog-body">
+ <wj-popup id="saleAmtFgRemark3PopupLayer" control="saleAmtFgRemark3PopupLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:100%;height:100%;" fade-in="false" fade-out="false">
+    <div class="wj-dialog-header wj-dialog-header-font">
+        <s:message code="dayProd.saleAmtFg"/>3 : 선택된 구성상품은 세트상품으로 집계
+        <a href="#" class="wj-hide btn_close"></a>
+    </div>
+    <div class="wj-dialog-body">
             <div ng-controller="saleAmtFgRemarkPopupCtrl3">
-                선택된 구성상품은 세트상품으로 집계
-                <button class="btn_skyblue fr mb5" ng-click="getSaleAmtFgRemarkList3()">
-                    <s:message code="cmm.search" />
-                </button>
-                <button class="btn_skyblue fr mr5 mb5" ng-click="add()">
-                    <s:message code="cmm.add" />
-                </button>
                 <table class="tblType01" >
                     <colgroup>
                         <col class="w15" />
@@ -65,9 +56,16 @@
                     </tr>
                     </tbody>
                 </table>
-
+                <div class="updownSet oh mb10 pd5">
+                    <button class="btn_skyblue fr mb5" ng-click="getSaleAmtFgRemarkList3()">
+                        <s:message code="cmm.search" />
+                    </button>
+                    <button class="btn_skyblue fr mr5 mb5" ng-click="modDel()">
+                        <s:message code="dayProd.modDel" />
+                    </button>
+                </div>
                 <%-- 그리드 --%>
-                <div class="wj-gridWrap" style="height:200px; overflow-y: hidden; overflow-x: hidden;">
+                <div class="wj-gridWrap" style="height:140px; overflow-y: hidden; overflow-x: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             selection-mode="Row"
@@ -100,12 +98,53 @@
 
             <div ng-controller="sdselMomsModPopupCtrl">
                 <div class="updownSet oh mb10 pd5">
-                    <button class="btn_skyblue fr" ng-click="delete()">
-                        <s:message code="cmm.del" />
+                    <button class="btn_skyblue fr" ng-click="modAdd()">
+                        <s:message code="dayProd.modAdd" />
+                    </button>
+                    <button class="btn_skyblue mr5 fr" ng-click="modExAdd()">
+                        <s:message code="dayProd.modExAdd" />
                     </button>
                 </div>
                 <%-- 그리드 --%>
-                <div class="wj-gridWrap" style="height:200px; overflow-y: hidden; overflow-x: hidden;">
+                <div class="wj-gridWrap" style="height:140px; overflow-y: hidden; overflow-x: hidden;">
+                    <wj-flex-grid
+                            autoGenerateColumns="false"
+                            selection-mode="Row"
+                            items-source="data"
+                            control="flex"
+                            initialized="initGrid(s,e)"
+                            sticky-headers="true"
+                            item-formatter="_itemFormatter"
+                            is-read-only="false"
+                            frozen-columns="1">
+                        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo.hqBrandNm"/>" binding="hqBrandNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo.lClassNm"/>" binding="lClassNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo.mClassNm"/>" binding="mClassNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo.sClassNm"/>" binding="sClassNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo.prodNm"/>" binding="prodNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo.sdselGrpNm"/>" binding="sdselGrpNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo.sdselClassNm"/>" binding="sdselClassNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.requireYn"/>" binding="requireYn" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo.sdselProdCd"/>" binding="sdselProdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo.sdselRemark"/>" binding="sdselRemark" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo.sdselProdNm"/>" binding="sdselProdNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo.addProdUprc"/>" binding="addProdUprc" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo.fixProdFg"/>" binding="fixProdFg" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                    </wj-flex-grid>
+                </div>
+            </div>
+
+            <div ng-controller="sdselMomsModExPopupCtrl">
+                <div class="updownSet oh mb10 pd5">
+                    <button class="btn_skyblue fr" ng-click="modExDel()">
+                        <s:message code="dayProd.modExDel" />
+                    </button>
+                </div>
+                <%-- 그리드 --%>
+                <div class="wj-gridWrap" style="height:140px; overflow-y: hidden; overflow-x: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             selection-mode="Row"
@@ -136,7 +175,6 @@
                 </div>
             </div>
         </div>
-    </div>
 </wj-popup>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/prod/dayProd/saleAmtFgRemark3.js?ver=20230718.01" charset="utf-8"></script>

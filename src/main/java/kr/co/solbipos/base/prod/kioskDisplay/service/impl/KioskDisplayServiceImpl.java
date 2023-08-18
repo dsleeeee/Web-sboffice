@@ -5,6 +5,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.kioskDisplay.service.KioskDisplayService;
 import kr.co.solbipos.base.prod.kioskDisplay.service.KioskDisplayVO;
+import kr.co.solbipos.base.prod.prodBarcd.service.ProdBarcdVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,5 +115,33 @@ public class KioskDisplayServiceImpl implements KioskDisplayService {
         }
 
         return procCnt;
+    }
+
+    // 엑셀 업로드 전 매장코드, 상품코드 유효여부 체크
+    @Override
+    public int chkCd(KioskDisplayVO kioskDisplayVO, SessionInfoVO sessionInfoVO) {
+
+        // 상품코드 array 값 세팅
+        kioskDisplayVO.setArrProdCdCol(kioskDisplayVO.getProdCdCol().split(","));
+
+        return kioskDisplayMapper.chkCd(kioskDisplayVO);
+    }
+
+    // 엑셀 업로드
+    @Override
+    public int getExcelUploadSave(KioskDisplayVO[] kioskDisplayVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        for (KioskDisplayVO kioskDisplayVO : kioskDisplayVOs) {
+            kioskDisplayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            kioskDisplayVO.setModDt(currentDt);
+            kioskDisplayVO.setModId(sessionInfoVO.getUserId());
+
+            result += kioskDisplayMapper.getExcelUploadSave(kioskDisplayVO);
+        }
+
+        return result;
     }
 }

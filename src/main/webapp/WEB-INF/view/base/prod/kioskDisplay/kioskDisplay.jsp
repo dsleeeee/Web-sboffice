@@ -375,6 +375,14 @@
     <div class="mt10 oh sb-select dkbr">
         <%-- 엑셀다운로드 --%>
         <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCondition"/></button>
+        <%-- excel 업로드 --%>
+        <button class="btn_skyblue ml5 fr" id="btnExcelUpload" ng-click="excelUpload()">
+            <s:message code="dlvrProd.excelUpload" />
+        </button>
+        <%-- excel 양식 다운로드 --%>
+        <button class="btn_skyblue ml5 fr" id="btnExcelDownload" ng-click="sampleDownload()">
+            <s:message code="dlvrProd.sampleDownload" />
+        </button>
     </div>
 
     <%--위즈모 테이블--%>
@@ -450,11 +458,15 @@
     var branchCdComboList = ${branchCdComboList};
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskDisplay/kioskDisplay.js?ver=20230404.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskDisplay/kioskDisplay.js?ver=20230404.04" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
     <c:param name="prodNoEnvFg" value="${prodNoEnvFg}"/>
+</c:import>
+
+<%-- 엑셀업로드 --%>
+<c:import url="/WEB-INF/view/base/prod/kioskDisplay/excelUploadKioskDisplay.jsp">
 </c:import>

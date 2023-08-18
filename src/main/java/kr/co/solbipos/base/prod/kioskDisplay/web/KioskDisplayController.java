@@ -198,4 +198,43 @@ public class KioskDisplayController {
         return returnJson(Status.OK, result);
     }
 
+    /**
+     * 엑셀 업로드 전 매장코드, 상품코드 유효여부 체크
+     *
+     * @param kioskDisplayVO
+     * @param request
+     * @author 권지현
+     * @since 2023.08.17
+     * @return
+     */
+    @RequestMapping(value = "/kioskDisplay/chkCd.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result chkCd(KioskDisplayVO kioskDisplayVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int getCnt = kioskDisplayService.chkCd(kioskDisplayVO, sessionInfoVO);
+
+        return returnJson(Status.OK, getCnt);
+    }
+
+    /**
+     * 엑셀 업로드
+     *
+     * @param kioskDisplayVOs
+     * @param request
+     * @author 권지현
+     * @since 2023.08.17
+     * @return
+     */
+    @RequestMapping(value = "/kioskDisplay/getExcelUploadSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getExcelUploadSave(@RequestBody KioskDisplayVO[] kioskDisplayVOs, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = kioskDisplayService.getExcelUploadSave(kioskDisplayVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }
