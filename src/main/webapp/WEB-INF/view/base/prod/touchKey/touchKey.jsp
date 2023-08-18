@@ -233,7 +233,7 @@
                     <%-- 스타일미리보기 --%>
                     <button class="btn_skyblue fl ml5" id="btnViewStyle" ng-click="viewStyle()" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.viewStyle"/></button>
                     <%-- 저장 --%>
-                    <button class="btn_skyblue fl ml20" id="btnSave" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="cmm.save"/></button>
+                    <button class="btn_skyblue fl ml20" id="btnSaveTouchKey" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="cmm.save"/></button>
                     <%--포스에서 1024*768 사이즈에 보이지 않아 위치변경함(초기화, 삭제)--%>
                     <div id="keyStyleAd" class="fl hideNav" style="margin-left : 4px;">
                         <button class="btn_skyblue mb5" id="btnReset" ng-click="$broadcast('btnReset')">
@@ -515,7 +515,7 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20230727.01"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20230818.01"
         charset="utf-8"></script>
 
 <%-- 스타일미리보기 팝업 --%>
