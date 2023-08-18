@@ -351,8 +351,10 @@ app.controller('sideMenuAttrAttrCtrl', ['$scope', '$http', 'sdattrClassCd', func
       // dispSeq 재설정
       var editItems = [];
       for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
-        if (isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
-          editItems.push($scope.flex.collectionView.items[s]);
+        if($scope.flex.collectionView.items[s].dispSeq !== (s+1)) {
+          if (isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
+            editItems.push($scope.flex.collectionView.items[s]);
+          }
         }
       }
 

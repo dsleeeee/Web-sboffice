@@ -89,7 +89,7 @@
           <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="sideMenu.attr.sdattrCd"/>" binding="sdattrCd" width="100"is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="sideMenu.attr.sdattrNm"/>" binding="sdattrNm" width="*"></wj-flex-grid-column>
-
+          <wj-flex-grid-column header="" binding="dispSeq" width="*" visible="false"></wj-flex-grid-column>
         </wj-flex-grid>
 
       </div>
@@ -101,6 +101,6 @@
   var orgnFg = "${orgnFg}";
   var hqOfficeCd = "${hqOfficeCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuAttr.js?ver=20181223.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuAttr.js?ver=20181223.07" charset="utf-8"></script>
 
 
