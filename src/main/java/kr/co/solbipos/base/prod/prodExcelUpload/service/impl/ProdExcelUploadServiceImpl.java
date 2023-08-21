@@ -342,7 +342,8 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
             prodExcelUploadVO.setModId(sessionInfoVO.getUserId());
 
             prodExcelUploadVO.setSessionId(sessionInfoVO.getUserId());
-            prodExcelUploadVO.setSeq(i);
+            prodExcelUploadVO.setSeq(prodExcelUploadVO.getProgressCnt() + i); // seq 중복방지를 위해 (진행 갯수 + i)로 계산
+
 
             // 할인여부
             if (prodExcelUploadVO.getDcYn() != null && !"".equals(prodExcelUploadVO.getDcYn())) {

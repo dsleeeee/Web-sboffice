@@ -273,301 +273,360 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._postJSONSave.withOutPopUp("/base/prod/prodExcelUpload/prodExcelUpload/getProdExcelUploadCheckDeleteAll.sb", params, function(){
+
+            $scope.stepCnt = 100;   // 한번에 DB에 저장할 숫자 세팅
+            $scope.progressCnt = 0; // 처리된 숫자
+
+            if ($scope.flex.rows.length <= 0) {
+               $scope._popMsg(messages["prodExcelUpload.saveBlank"]);
+               return false;
+            }
+
+            // 상품명 앞뒤 공백 및 엔터값 제거
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                if(prodNoEnvFg === "MANUAL") {
+                    if ($scope.flex.collectionView.items[i].prodCd !== "" && $scope.flex.collectionView.items[i].prodCd !== null) {
+                        $scope.flex.collectionView.items[i].prodCd = $scope.flex.collectionView.items[i].prodCd.trim().removeEnter();
+                    }
+                }
+
+                if($scope.flex.collectionView.items[i].prodNm !== "" && $scope.flex.collectionView.items[i].prodNm !== null) {
+                    $scope.flex.collectionView.items[i].prodNm = $scope.flex.collectionView.items[i].prodNm.trim().removeEnter();
+                }
+            }
+
+            // 파라미터 설정
+            var params = new Array();
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+
+                // 상품코드 채번방식
+                var prodNoEnv = "";
+                if(prodNoEnvFg === "MANUAL") { prodNoEnv = "1"; } else { prodNoEnv = "0"; } // 0 : 자동채번, 1 : 수동채번
+                $scope.flex.collectionView.items[i].prodNoEnv = prodNoEnv;
+
+                // 상품명 중복체크
+                $scope.flex.collectionView.items[i].chkProdNm = $scope.isChecked;
+
+                // isInteger는 es6 임. ie 11 에서는 안되므로 함수 만듬.
+                Number.isInteger = Number.isInteger || function(value) {
+                    return typeof value === "number" &&
+                        isFinite(value) &&
+                        Math.floor(value) === value;
+                };
+
+                // 브랜드사용여부
+                $scope.flex.collectionView.items[i].brandUseFg = $scope.brandUseFg;
+
+                // <-- 검증 -->
+                var result = "";
+
+                // 비고
+                if($scope.flex.collectionView.items[i].remark === "" || $scope.flex.collectionView.items[i].remark === null) {
+                } else {
+                    // 최대길이 체크
+                    if(nvl($scope.flex.collectionView.items[i].remark, '').getByteLengthForOracle() > 500) { result = messages["prodExcelUpload.remarkLengthChk"]; } // 비고 길이가 너무 깁니다.
+                }
+
+                // 상품유형 보증금일때
+                if($scope.flex.collectionView.items[i].prodTypeFg === "4"){
+                    $scope.flex.collectionView.items[i].vatFg = "2";
+                    $scope.flex.collectionView.items[i].pointUseYn = "N";
+                    $scope.flex.collectionView.items[i].dcYn = "N";
+                    if($scope.flex.collectionView.items[i].depositCupFg === "" || $scope.flex.collectionView.items[i].depositCupFg === null || $scope.flex.collectionView.items[i].depositCupFg === "선택"){
+                        result = messages["prodExcelUpload.depositCupFg.None"];
+                    }
+                } else {
+                    console.log($scope.flex.collectionView.items[i].depositCupFg);
+                    if($scope.flex.collectionView.items[i].depositCupFg !== "" && $scope.flex.collectionView.items[i].depositCupFg !== null && $scope.flex.collectionView.items[i].depositCupFg !== undefined && $scope.flex.collectionView.items[i].depositCupFg !== "선택"){
+                        result = messages["prodExcelUpload.depositCupFg.Chk"];
+                    }
+                }
+
+                // 바코드
+                if($scope.flex.collectionView.items[i].barCd === "" || $scope.flex.collectionView.items[i].barCd === null) {
+                } else {
+                    // 숫자/영문만 입력
+                    var numChkexp = /[^A-Za-z0-9]/g;
+                    if (numChkexp.test($scope.flex.collectionView.items[i].barCd)) { result = messages["prodExcelUpload.barCdInChk"]; } // 상품코드 숫자/영문만 입력해주세요.
+
+                    // 최대길이 체크
+                    if(nvl($scope.flex.collectionView.items[i].barCd, '').getByteLengthForOracle() > 40) { result = messages["prodExcelUpload.barCdLengthChk"]; } // 바코드 길이가 너무 깁니다.
+
+                    //  바코드 중복체크
+                    for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
+                        if(i !== j) {
+                            if($scope.flex.collectionView.items[j].barCd === $scope.flex.collectionView.items[i].barCd) { result = messages["prodExcelUpload.barCdChk"]; } // 바코드가 중복됩니다.
+                        }
+                    }
+                }
+
+                // 원가단가
+                if($scope.flex.collectionView.items[i].costUprc === "" || $scope.flex.collectionView.items[i].costUprc === null) {
+                    result = messages["prodExcelUpload.costUprcBlank"]; // 원가단가를 입력하세요.
+                } else {
+                    // 숫자만 입력
+                    var numChkexp = /[^0-9]/g;
+                    if (numChkexp.test($scope.flex.collectionView.items[i].costUprc)) {
+                        $scope.flex.collectionView.items[i].costUprc = "";
+                        result = messages["prodExcelUpload.costUprcInChk"]; // 원가단가 숫자만 입력해주세요.
+                    }
+                }
+
+                // 최소발주수량
+                if($scope.flex.collectionView.items[i].poMinQty === "" || $scope.flex.collectionView.items[i].poMinQty === null) {
+                    result = messages["prodExcelUpload.poMinQtyBlank"]; // 최소발주수량를 입력하세요.
+                } else {
+                    // 숫자만 입력
+                    var numChkexp = /[^0-9]/g;
+                    if (numChkexp.test($scope.flex.collectionView.items[i].poMinQty)) {
+                        $scope.flex.collectionView.items[i].poMinQty = "";
+                        result = messages["prodExcelUpload.poMinQtyInChk"]; // 최소발주수량은 숫자만 입력해주세요.
+                    }
+                }
+
+                // 발주단위수량
+                if($scope.flex.collectionView.items[i].poUnitQty === "" || $scope.flex.collectionView.items[i].poUnitQty === null) {
+                    result = messages["prodExcelUpload.poUnitQtyBlank"]; // 발주단위수량을 입력하세요.
+                } else {
+                    // 숫자만 입력
+                    var numChkexp = /[^0-9]/g;
+                    if (numChkexp.test($scope.flex.collectionView.items[i].poUnitQty)) {
+                        $scope.flex.collectionView.items[i].poUnitQty = "";
+                        result = messages["prodExcelUpload.poUnitQtyInChk"]; // 발주단위수량은 숫자만 입력해주세요.
+                    }
+                }
+
+                // 공급단가
+                if($scope.flex.collectionView.items[i].splyUprc === "" || $scope.flex.collectionView.items[i].splyUprc === null) {
+                    result = messages["prodExcelUpload.splyUprcBlank"]; // 공급단가를 입력하세요.
+                } else {
+                    // 숫자만 입력
+                    var numChkexp = /[^0-9]/g;
+                    if (numChkexp.test($scope.flex.collectionView.items[i].splyUprc)) {
+                        $scope.flex.collectionView.items[i].splyUprc = "";
+                        result = messages["prodExcelUpload.splyUprcInChk"]; // 공급단가 숫자만 입력해주세요.
+                    }
+                }
+
+                // 판매단가
+                if($scope.flex.collectionView.items[i].saleUprc === "" || $scope.flex.collectionView.items[i].saleUprc === null) {
+                    result = messages["prodExcelUpload.saleUprcBlank"]; // 판매단가를 입력하세요.
+                } else {
+                    if(Number.isInteger(parseFloat($scope.flex.collectionView.items[i].saleUprc)) == false){ // 소수점있으면 거름
+                        $scope.flex.collectionView.items[i].saleUprc = "";
+                        result = messages["prodExcelUpload.saleUprcInChk"];
+                    } else {
+                        // 숫자만 입력
+                        var numchkexp = /[^0-9]/g;
+                        if (numchkexp.test($scope.flex.collectionView.items[i].saleUprc)) { // 음수
+                            var numchkexp2 = /^-[0-9]/g;
+                            if (numchkexp2.test($scope.flex.collectionView.items[i].saleUprc)) {
+                            } else if((numchkexp2.test($scope.flex.collectionView.items[i].saleUprc) == false)){
+                                $scope.flex.collectionView.items[i].saleUprc = "";
+                                result = messages["prodExcelUpload.saleUprcInChk"];
+                            }
+                        } else if($scope.flex.collectionView.items[i].saleUprc >= 1000000000){ // 양수 max값
+                            $scope.flex.collectionView.items[i].saleUprc = "";
+                            result = messages["prodExcelUpload.saleUprcInChk"];
+                        }
+                    }
+                }
+
+                // 내점가
+                if($scope.flex.collectionView.items[i].stinSaleUprc !== "" && $scope.flex.collectionView.items[i].stinSaleUprc !== null) {
+                    if(Number.isInteger(parseFloat($scope.flex.collectionView.items[i].stinSaleUprc)) == false){ // 소수점있으면 거름
+                        //$scope.flex.collectionView.items[i].stinSaleUprc = "";
+                        result = messages["prodExcelUpload.stinSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
+                    } else {
+                        // 숫자만 입력
+                        var numchkexp = /[^0-9]/g;
+                        if (numchkexp.test($scope.flex.collectionView.items[i].stinSaleUprc)) { // 음수
+                            var numchkexp2 = /^-[0-9]/g;
+                            if (numchkexp2.test($scope.flex.collectionView.items[i].stinSaleUprc)) {
+                            } else if((numchkexp2.test($scope.flex.collectionView.items[i].stinSaleUprc) == false)){
+                                //$scope.flex.collectionView.items[i].stinSaleUprc = "";
+                                result = messages["prodExcelUpload.stinSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
+                            }
+                        } else if($scope.flex.collectionView.items[i].stinSaleUprc >= 1000000000){ // 양수 max값
+                            //$scope.flex.collectionView.items[i].stinSaleUprc = "";
+                            result = messages["prodExcelUpload.stinSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
+                        }
+                    }
+                }
+
+                // 배달가
+                if($scope.flex.collectionView.items[i].dlvrSaleUprc !== "" && $scope.flex.collectionView.items[i].dlvrSaleUprc !== null) {
+                    if(Number.isInteger(parseFloat($scope.flex.collectionView.items[i].dlvrSaleUprc)) == false){ // 소수점있으면 거름
+                        //$scope.flex.collectionView.items[i].dlvrSaleUprc = "";
+                        result = messages["prodExcelUpload.dlvrSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
+                    } else {
+                        // 숫자만 입력
+                        var numchkexp = /[^0-9]/g;
+                        if (numchkexp.test($scope.flex.collectionView.items[i].dlvrSaleUprc)) { // 음수
+                            var numchkexp2 = /^-[0-9]/g;
+                            if (numchkexp2.test($scope.flex.collectionView.items[i].dlvrSaleUprc)) {
+                            } else if((numchkexp2.test($scope.flex.collectionView.items[i].dlvrSaleUprc) == false)){
+                                //$scope.flex.collectionView.items[i].dlvrSaleUprc = "";
+                                result = messages["prodExcelUpload.dlvrSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
+                            }
+                        } else if($scope.flex.collectionView.items[i].dlvrSaleUprc >= 1000000000){ // 양수 max값
+                            //$scope.flex.collectionView.items[i].dlvrSaleUprc = "";
+                            result = messages["prodExcelUpload.dlvrSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
+                        }
+                    }
+                }
+
+                // 포장가
+                if($scope.flex.collectionView.items[i].packSaleUprc !== "" && $scope.flex.collectionView.items[i].packSaleUprc !== null) {
+                    if(Number.isInteger(parseFloat($scope.flex.collectionView.items[i].packSaleUprc)) == false){ // 소수점있으면 거름
+                        //$scope.flex.collectionView.items[i].packSaleUprc = "";
+                        result = messages["prodExcelUpload.packSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
+                    } else {
+                        // 숫자만 입력
+                        var numchkexp = /[^0-9]/g;
+                        if (numchkexp.test($scope.flex.collectionView.items[i].packSaleUprc)) { // 음수
+                            var numchkexp2 = /^-[0-9]/g;
+                            if (numchkexp2.test($scope.flex.collectionView.items[i].packSaleUprc)) {
+                            } else if((numchkexp2.test($scope.flex.collectionView.items[i].packSaleUprc) == false)){
+                                //$scope.flex.collectionView.items[i].packSaleUprc = "";
+                                result = messages["prodExcelUpload.packSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
+                            }
+                        } else if($scope.flex.collectionView.items[i].packSaleUprc >= 1000000000){ // 양수 max값
+                            //$scope.flex.collectionView.items[i].packSaleUprc = "";
+                            result = messages["prodExcelUpload.packSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
+                        }
+                    }
+                }
+
+                // 상품명
+                if($scope.flex.collectionView.items[i].prodNm === "" || $scope.flex.collectionView.items[i].prodNm === null) {
+                    result = messages["prodExcelUpload.prodNmBlank"]; // 상품명을 입력하세요.
+                } else {
+                    // 최대길이 체크
+                    if(nvl($scope.flex.collectionView.items[i].prodNm, '').getByteLengthForOracle() > 100) { result = messages["prodExcelUpload.prodNmLengthChk"]; } // 상품명 길이가 너무 깁니다.
+
+                    // 상품명 중복체크
+                    if($scope.isChecked === true) {
+                        for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
+                            if(i !== j) {
+                                if($scope.flex.collectionView.items[j].prodNm !== "" && $scope.flex.collectionView.items[j].prodNm !== null){
+                                    if($scope.flex.collectionView.items[j].prodNm === $scope.flex.collectionView.items[i].prodNm) { result = messages["prodExcelUpload.prodNmChk"]; } // 상품명이 중복됩니다.
+                                }
+                            }
+                        }
+                    }
+
+                    // 큰따옴표(") 입력 불가
+                    if ($scope.flex.collectionView.items[i].prodNm.indexOf("\"") >= 0) { result = messages["prodExcelUpload.prodNmTextChk"]; } // 상품명에 큰따옴표(")를 입력할 수 없습니다.
+                }
+
+                // 상품코드
+                // 수동채번일때만 체크
+                if(prodNoEnv === "1") {
+                    if ($scope.flex.collectionView.items[i].prodCd === "" || $scope.flex.collectionView.items[i].prodCd === null) {
+                        result = messages["prodExcelUpload.prodCdBlank"]; // 상품코드를 입력하세요.
+                    } else {
+                        // 숫자/영문만 입력
+                        var numChkexp = /[^A-Za-z0-9]/g;
+                        if (numChkexp.test($scope.flex.collectionView.items[i].prodCd)) { result = messages["prodExcelUpload.prodCdInChk"]; } // 상품코드 숫자/영문만 입력해주세요.
+
+                        // 최대길이 체크
+                        if (nvl($scope.flex.collectionView.items[i].prodCd, '').getByteLengthForOracle() > 13) { result = messages["prodExcelUpload.prodCdLengthChk"]; } // 상품코드 길이가 너무 깁니다.
+
+                        // 상품코드 중복체크
+                        for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
+                            if (i !== j) {
+                                if($scope.flex.collectionView.items[j].prodCd !== "" && $scope.flex.collectionView.items[j].prodCd !== null) {
+                                    if ($scope.flex.collectionView.items[j].prodCd === $scope.flex.collectionView.items[i].prodCd) { result = messages["prodExcelUpload.prodCdChk"]; } // 상품코드가 중복됩니다.
+                                }
+                            }
+                        }
+                    }
+                }
+
+                $scope.flex.collectionView.items[i].result = result;
+                // <-- //검증 -->
+
+
+                params.push($scope.flex.collectionView.items[i]);
+            }
+
+
             // 저장
-            $scope.saveSave();
+            $scope.saveSave(params);
         });
     };
 
     // 저장
-    $scope.saveSave = function() {
-        if ($scope.flex.rows.length <= 0) {
-            $scope._popMsg(messages["prodExcelUpload.saveBlank"]);
+    $scope.saveSave = function(jsonData) {
+
+        $scope.totalRows = jsonData.length;
+        var params = [];
+        var msg = '';
+
+        // 저장 시작이면 업로드 중 팝업 오픈
+        if ($scope.progressCnt === 0) {
+            $timeout(function () {
+                $scope.excelUploadingPopup(true);
+                $("#progressCnt").html($scope.progressCnt);
+                $("#totalRows").html($scope.totalRows);
+            }, 10);
+        }
+
+        // stepCnt 만큼 데이터 DB에 저장
+        var loopCnt = (parseInt($scope.progressCnt) + parseInt($scope.stepCnt) > parseInt($scope.totalRows) ? parseInt($scope.totalRows) : parseInt($scope.progressCnt) + parseInt($scope.stepCnt));
+        for (var i = $scope.progressCnt; i < loopCnt; i++) {
+            var item = jsonData[i];
+
+            item.progressCnt = $scope.progressCnt;
+
+            params.push(item);
+        }
+
+        //가상로그인 session 설정
+        var sParam = {};
+        if(document.getElementsByName('sessionId')[0]){
+            sParam['sid'] = document.getElementsByName('sessionId')[0].value;
+        }
+
+        // ajax 통신 설정
+        $http({
+            method : 'POST', //방식
+            url    : '/base/prod/prodExcelUpload/prodExcelUpload/getProdExcelUploadCheckSaveAdd.sb', /* 통신할 URL */
+            data   : params, /* 파라메터로 보낼 데이터 : @requestBody */
+            params : sParam,
+            headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+        }).then(function successCallback(response) {
+            if ($scope._httpStatusCheck(response, true)) {
+                if (parseInt($scope.progressCnt) >= parseInt($scope.totalRows)) {
+                    $scope.excelUploadingPopup(false); // 업로딩 팝업 닫기
+                    // 검증결과 조회
+                    $scope.searchProdExcelUploadProd();
+
+                    $scope._popConfirm(messages["prodExcelUpload.saveConfirm"], function() {
+                        // 상품등록 저장
+                        $scope.prodExcelUploadSave();
+                    });
+                }
+            }
+        }, function errorCallback(response) {
+            $scope.excelUploadingPopup(false); // 업로딩 팝업 닫기
+            if (response.data.message) {
+                $scope._popMsg(response.data.message);
+            } else {
+                $scope._popMsg(messages['cmm.saveFail']);
+            }
             return false;
-        }
-
-        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-
-        // 상품명 앞뒤 공백 및 엔터값 제거
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            if(prodNoEnvFg === "MANUAL") {
-                if ($scope.flex.collectionView.items[i].prodCd !== "" && $scope.flex.collectionView.items[i].prodCd !== null) {
-                    $scope.flex.collectionView.items[i].prodCd = $scope.flex.collectionView.items[i].prodCd.trim().removeEnter();
-                }
+        }).then(function () {
+            // 'complete' code here
+            // 처리 된 숫자가 총 업로드할 수보다 작은 경우 다시 save 함수 호출
+            if (parseInt($scope.progressCnt) < parseInt($scope.totalRows)) {
+                // 처리된 숫자 변경
+                $scope.progressCnt = loopCnt;
+                // 팝업의 progressCnt 값 변경
+                $("#progressCnt").html($scope.progressCnt);
+                $scope.saveSave(jsonData);
             }
-
-            if($scope.flex.collectionView.items[i].prodNm !== "" && $scope.flex.collectionView.items[i].prodNm !== null) {
-                $scope.flex.collectionView.items[i].prodNm = $scope.flex.collectionView.items[i].prodNm.trim().removeEnter();
-            }
-        }
-
-        // 파라미터 설정
-        var params = new Array();
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-
-            // 상품코드 채번방식
-            var prodNoEnv = "";
-            if(prodNoEnvFg === "MANUAL") { prodNoEnv = "1"; } else { prodNoEnv = "0"; } // 0 : 자동채번, 1 : 수동채번
-            $scope.flex.collectionView.items[i].prodNoEnv = prodNoEnv;
-
-            // 상품명 중복체크
-            $scope.flex.collectionView.items[i].chkProdNm = $scope.isChecked;
-
-            // isInteger는 es6 임. ie 11 에서는 안되므로 함수 만듬.
-            Number.isInteger = Number.isInteger || function(value) {
-                return typeof value === "number" &&
-                    isFinite(value) &&
-                    Math.floor(value) === value;
-            };
-
-            // 브랜드사용여부
-            $scope.flex.collectionView.items[i].brandUseFg = $scope.brandUseFg;
-
-            // <-- 검증 -->
-            var result = "";
-
-            // 비고
-            if($scope.flex.collectionView.items[i].remark === "" || $scope.flex.collectionView.items[i].remark === null) {
-            } else {
-                // 최대길이 체크
-                if(nvl($scope.flex.collectionView.items[i].remark, '').getByteLengthForOracle() > 500) { result = messages["prodExcelUpload.remarkLengthChk"]; } // 비고 길이가 너무 깁니다.
-            }
-            
-            // 상품유형 보증금일때
-            if($scope.flex.collectionView.items[i].prodTypeFg === "4"){
-                $scope.flex.collectionView.items[i].vatFg = "2";
-                $scope.flex.collectionView.items[i].pointUseYn = "N";
-                $scope.flex.collectionView.items[i].dcYn = "N";
-                if($scope.flex.collectionView.items[i].depositCupFg === "" || $scope.flex.collectionView.items[i].depositCupFg === null || $scope.flex.collectionView.items[i].depositCupFg === "선택"){
-                    result = messages["prodExcelUpload.depositCupFg.None"];
-                }
-            } else {
-                console.log($scope.flex.collectionView.items[i].depositCupFg);
-                if($scope.flex.collectionView.items[i].depositCupFg !== "" && $scope.flex.collectionView.items[i].depositCupFg !== null && $scope.flex.collectionView.items[i].depositCupFg !== undefined && $scope.flex.collectionView.items[i].depositCupFg !== "선택"){
-                    result = messages["prodExcelUpload.depositCupFg.Chk"];
-                }
-            }
-
-            // 바코드
-            if($scope.flex.collectionView.items[i].barCd === "" || $scope.flex.collectionView.items[i].barCd === null) {
-            } else {
-                // 숫자/영문만 입력
-                var numChkexp = /[^A-Za-z0-9]/g;
-                if (numChkexp.test($scope.flex.collectionView.items[i].barCd)) { result = messages["prodExcelUpload.barCdInChk"]; } // 상품코드 숫자/영문만 입력해주세요.
-
-                // 최대길이 체크
-                if(nvl($scope.flex.collectionView.items[i].barCd, '').getByteLengthForOracle() > 40) { result = messages["prodExcelUpload.barCdLengthChk"]; } // 바코드 길이가 너무 깁니다.
-
-                //  바코드 중복체크
-                for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
-                    if(i !== j) {
-                        if($scope.flex.collectionView.items[j].barCd === $scope.flex.collectionView.items[i].barCd) { result = messages["prodExcelUpload.barCdChk"]; } // 바코드가 중복됩니다.
-                    }
-                }
-            }
-
-            // 원가단가
-            if($scope.flex.collectionView.items[i].costUprc === "" || $scope.flex.collectionView.items[i].costUprc === null) {
-                result = messages["prodExcelUpload.costUprcBlank"]; // 원가단가를 입력하세요.
-            } else {
-                // 숫자만 입력
-                var numChkexp = /[^0-9]/g;
-                if (numChkexp.test($scope.flex.collectionView.items[i].costUprc)) {
-                    $scope.flex.collectionView.items[i].costUprc = "";
-                    result = messages["prodExcelUpload.costUprcInChk"]; // 원가단가 숫자만 입력해주세요.
-                }
-            }
-
-            // 최소발주수량
-            if($scope.flex.collectionView.items[i].poMinQty === "" || $scope.flex.collectionView.items[i].poMinQty === null) {
-                result = messages["prodExcelUpload.poMinQtyBlank"]; // 최소발주수량를 입력하세요.
-            } else {
-                // 숫자만 입력
-                var numChkexp = /[^0-9]/g;
-                if (numChkexp.test($scope.flex.collectionView.items[i].poMinQty)) {
-                    $scope.flex.collectionView.items[i].poMinQty = "";
-                    result = messages["prodExcelUpload.poMinQtyInChk"]; // 최소발주수량은 숫자만 입력해주세요.
-                }
-            }
-
-            // 발주단위수량
-            if($scope.flex.collectionView.items[i].poUnitQty === "" || $scope.flex.collectionView.items[i].poUnitQty === null) {
-                result = messages["prodExcelUpload.poUnitQtyBlank"]; // 발주단위수량을 입력하세요.
-            } else {
-                // 숫자만 입력
-                var numChkexp = /[^0-9]/g;
-                if (numChkexp.test($scope.flex.collectionView.items[i].poUnitQty)) {
-                    $scope.flex.collectionView.items[i].poUnitQty = "";
-                    result = messages["prodExcelUpload.poUnitQtyInChk"]; // 발주단위수량은 숫자만 입력해주세요.
-                }
-            }
-
-            // 공급단가
-            if($scope.flex.collectionView.items[i].splyUprc === "" || $scope.flex.collectionView.items[i].splyUprc === null) {
-                result = messages["prodExcelUpload.splyUprcBlank"]; // 공급단가를 입력하세요.
-            } else {
-                // 숫자만 입력
-                var numChkexp = /[^0-9]/g;
-                if (numChkexp.test($scope.flex.collectionView.items[i].splyUprc)) {
-                    $scope.flex.collectionView.items[i].splyUprc = "";
-                    result = messages["prodExcelUpload.splyUprcInChk"]; // 공급단가 숫자만 입력해주세요.
-                }
-            }
-
-            // 판매단가
-            if($scope.flex.collectionView.items[i].saleUprc === "" || $scope.flex.collectionView.items[i].saleUprc === null) {
-                result = messages["prodExcelUpload.saleUprcBlank"]; // 판매단가를 입력하세요.
-            } else {
-                if(Number.isInteger(parseFloat($scope.flex.collectionView.items[i].saleUprc)) == false){ // 소수점있으면 거름
-                    $scope.flex.collectionView.items[i].saleUprc = "";
-                    result = messages["prodExcelUpload.saleUprcInChk"];
-                } else {
-                    // 숫자만 입력
-                    var numchkexp = /[^0-9]/g;
-                    if (numchkexp.test($scope.flex.collectionView.items[i].saleUprc)) { // 음수
-                        var numchkexp2 = /^-[0-9]/g;
-                        if (numchkexp2.test($scope.flex.collectionView.items[i].saleUprc)) {
-                        } else if((numchkexp2.test($scope.flex.collectionView.items[i].saleUprc) == false)){
-                            $scope.flex.collectionView.items[i].saleUprc = "";
-                            result = messages["prodExcelUpload.saleUprcInChk"];
-                        }
-                    } else if($scope.flex.collectionView.items[i].saleUprc >= 1000000000){ // 양수 max값
-                        $scope.flex.collectionView.items[i].saleUprc = "";
-                        result = messages["prodExcelUpload.saleUprcInChk"];
-                    }
-                }
-            }
-
-            // 내점가
-            if($scope.flex.collectionView.items[i].stinSaleUprc !== "" && $scope.flex.collectionView.items[i].stinSaleUprc !== null) {
-                if(Number.isInteger(parseFloat($scope.flex.collectionView.items[i].stinSaleUprc)) == false){ // 소수점있으면 거름
-                    //$scope.flex.collectionView.items[i].stinSaleUprc = "";
-                    result = messages["prodExcelUpload.stinSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
-                } else {
-                    // 숫자만 입력
-                    var numchkexp = /[^0-9]/g;
-                    if (numchkexp.test($scope.flex.collectionView.items[i].stinSaleUprc)) { // 음수
-                        var numchkexp2 = /^-[0-9]/g;
-                        if (numchkexp2.test($scope.flex.collectionView.items[i].stinSaleUprc)) {
-                        } else if((numchkexp2.test($scope.flex.collectionView.items[i].stinSaleUprc) == false)){
-                            //$scope.flex.collectionView.items[i].stinSaleUprc = "";
-                            result = messages["prodExcelUpload.stinSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
-                        }
-                    } else if($scope.flex.collectionView.items[i].stinSaleUprc >= 1000000000){ // 양수 max값
-                        //$scope.flex.collectionView.items[i].stinSaleUprc = "";
-                        result = messages["prodExcelUpload.stinSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
-                    }
-                }
-            }
-
-            // 배달가
-            if($scope.flex.collectionView.items[i].dlvrSaleUprc !== "" && $scope.flex.collectionView.items[i].dlvrSaleUprc !== null) {
-                if(Number.isInteger(parseFloat($scope.flex.collectionView.items[i].dlvrSaleUprc)) == false){ // 소수점있으면 거름
-                    //$scope.flex.collectionView.items[i].dlvrSaleUprc = "";
-                    result = messages["prodExcelUpload.dlvrSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
-                } else {
-                    // 숫자만 입력
-                    var numchkexp = /[^0-9]/g;
-                    if (numchkexp.test($scope.flex.collectionView.items[i].dlvrSaleUprc)) { // 음수
-                        var numchkexp2 = /^-[0-9]/g;
-                        if (numchkexp2.test($scope.flex.collectionView.items[i].dlvrSaleUprc)) {
-                        } else if((numchkexp2.test($scope.flex.collectionView.items[i].dlvrSaleUprc) == false)){
-                            //$scope.flex.collectionView.items[i].dlvrSaleUprc = "";
-                            result = messages["prodExcelUpload.dlvrSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
-                        }
-                    } else if($scope.flex.collectionView.items[i].dlvrSaleUprc >= 1000000000){ // 양수 max값
-                        //$scope.flex.collectionView.items[i].dlvrSaleUprc = "";
-                        result = messages["prodExcelUpload.dlvrSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
-                    }
-                }
-            }
-
-            // 포장가
-            if($scope.flex.collectionView.items[i].packSaleUprc !== "" && $scope.flex.collectionView.items[i].packSaleUprc !== null) {
-                if(Number.isInteger(parseFloat($scope.flex.collectionView.items[i].packSaleUprc)) == false){ // 소수점있으면 거름
-                    //$scope.flex.collectionView.items[i].packSaleUprc = "";
-                    result = messages["prodExcelUpload.packSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
-                } else {
-                    // 숫자만 입력
-                    var numchkexp = /[^0-9]/g;
-                    if (numchkexp.test($scope.flex.collectionView.items[i].packSaleUprc)) { // 음수
-                        var numchkexp2 = /^-[0-9]/g;
-                        if (numchkexp2.test($scope.flex.collectionView.items[i].packSaleUprc)) {
-                        } else if((numchkexp2.test($scope.flex.collectionView.items[i].packSaleUprc) == false)){
-                            //$scope.flex.collectionView.items[i].packSaleUprc = "";
-                            result = messages["prodExcelUpload.packSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
-                        }
-                    } else if($scope.flex.collectionView.items[i].packSaleUprc >= 1000000000){ // 양수 max값
-                        //$scope.flex.collectionView.items[i].packSaleUprc = "";
-                        result = messages["prodExcelUpload.packSaleUprc"] + messages["prodExcelUpload.uprcChk.msg"];
-                    }
-                }
-            }
-
-            // 상품명
-            if($scope.flex.collectionView.items[i].prodNm === "" || $scope.flex.collectionView.items[i].prodNm === null) {
-                result = messages["prodExcelUpload.prodNmBlank"]; // 상품명을 입력하세요.
-            } else {
-                // 최대길이 체크
-                if(nvl($scope.flex.collectionView.items[i].prodNm, '').getByteLengthForOracle() > 100) { result = messages["prodExcelUpload.prodNmLengthChk"]; } // 상품명 길이가 너무 깁니다.
-
-                // 상품명 중복체크
-                if($scope.isChecked === true) {
-                    for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
-                        if(i !== j) {
-                            if($scope.flex.collectionView.items[j].prodNm !== "" && $scope.flex.collectionView.items[j].prodNm !== null){
-                                if($scope.flex.collectionView.items[j].prodNm === $scope.flex.collectionView.items[i].prodNm) { result = messages["prodExcelUpload.prodNmChk"]; } // 상품명이 중복됩니다.
-                            }
-                        }
-                    }
-                }
-
-                // 큰따옴표(") 입력 불가
-                if ($scope.flex.collectionView.items[i].prodNm.indexOf("\"") >= 0) { result = messages["prodExcelUpload.prodNmTextChk"]; } // 상품명에 큰따옴표(")를 입력할 수 없습니다.
-            }
-
-            // 상품코드
-            // 수동채번일때만 체크
-            if(prodNoEnv === "1") {
-                if ($scope.flex.collectionView.items[i].prodCd === "" || $scope.flex.collectionView.items[i].prodCd === null) {
-                    result = messages["prodExcelUpload.prodCdBlank"]; // 상품코드를 입력하세요.
-                } else {
-                    // 숫자/영문만 입력
-                    var numChkexp = /[^A-Za-z0-9]/g;
-                    if (numChkexp.test($scope.flex.collectionView.items[i].prodCd)) { result = messages["prodExcelUpload.prodCdInChk"]; } // 상품코드 숫자/영문만 입력해주세요.
-
-                    // 최대길이 체크
-                    if (nvl($scope.flex.collectionView.items[i].prodCd, '').getByteLengthForOracle() > 13) { result = messages["prodExcelUpload.prodCdLengthChk"]; } // 상품코드 길이가 너무 깁니다.
-
-                    // 상품코드 중복체크
-                    for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
-                        if (i !== j) {
-                            if($scope.flex.collectionView.items[j].prodCd !== "" && $scope.flex.collectionView.items[j].prodCd !== null) {
-                                if ($scope.flex.collectionView.items[j].prodCd === $scope.flex.collectionView.items[i].prodCd) { result = messages["prodExcelUpload.prodCdChk"]; } // 상품코드가 중복됩니다.
-                            }
-                        }
-                    }
-                }
-            }
-
-            $scope.flex.collectionView.items[i].result = result;
-            // <-- //검증 -->
-
-
-            params.push($scope.flex.collectionView.items[i]);
-        }
-
-        // 검증결과 저장
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._postJSONSave.withOutPopUp("/base/prod/prodExcelUpload/prodExcelUpload/getProdExcelUploadCheckSaveAdd.sb", params, function(){
-            $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-
-            // 검증결과 조회
-            $scope.searchProdExcelUploadProd();
-
-            $scope._popConfirm(messages["prodExcelUpload.saveConfirm"], function() {
-                // 상품등록 저장
-                $scope.prodExcelUploadSave();
-            });
         });
     };
 
@@ -669,7 +728,7 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
     $scope.excelUploadingPopup = function (showFg) {
         if (showFg) {
             // 팝업내용 동적 생성
-            var innerHtml = '<div class=\"wj-popup-loading\"><p class=\"bk\">' + messages['touchKey.loading.msg'] + '</p>';
+            var innerHtml = '<div class=\"wj-popup-loading\"><p class=\"bk\">' + messages['cmm.progress'] + '</p>';
             innerHtml += '<div class="mt5 txtIn"><span class="bk" id="progressCnt">0</span>/<span class="bk" id="totalRows">0</span> 개 진행 중...</div>';
             innerHtml += '<p><img src=\"/resource/solbipos/css/img/loading.gif\" alt=\"\" /></p></div>';
             // html 적용
