@@ -2,6 +2,7 @@ package kr.co.solbipos.membr.info.memberFg.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -62,10 +63,18 @@ public class MemberFgServiceImpl implements MemberFgService {
     @Override
     public List<DefaultMap<String>> getMembrClassList(SessionInfoVO sessionInfoVO) {
 
-        MembrClassVO membrClassVO = new MembrClassVO();
+       // 회원등급 관리구분
+       String membrClassManageFg = CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1237"), "1");
 
-        membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
-        membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+       MembrClassVO membrClassVO = new MembrClassVO();
+
+       membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+       membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+       membrClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+       if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+           membrClassVO.setStoreCd(sessionInfoVO.getStoreCd());
+       }
+       membrClassVO.setMembrClassManageFg(membrClassManageFg);
 
         List<DefaultMap<String>> resultList = memberFgMapper.getMemberClassList(membrClassVO);
 

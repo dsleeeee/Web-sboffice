@@ -62,6 +62,15 @@ public class MarketingSmsSendServiceImpl implements MarketingSmsSendService {
     @Override
     public List<DefaultMap<String>> getMembrClassList(MarketingSmsSendVO marketingSmsSendVO, SessionInfoVO sessionInfoVO) {
 
+        // 회원등급 관리구분
+        String membrClassManageFg = CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1237"), "1");
+
+        marketingSmsSendVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+        marketingSmsSendVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            marketingSmsSendVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        marketingSmsSendVO.setMembrClassManageFg(membrClassManageFg);
         marketingSmsSendVO.setOrgnGrpCd(sessionInfoVO.getOrgnGrpCd());
 
         List<DefaultMap<String>> resultList = marketingSmsSendMapper.getMembrClassList(marketingSmsSendVO);

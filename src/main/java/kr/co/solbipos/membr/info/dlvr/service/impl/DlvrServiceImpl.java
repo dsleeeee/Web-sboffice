@@ -4,15 +4,13 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
-import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.info.dlvr.service.DlvrService;
 import kr.co.solbipos.membr.info.dlvr.service.DlvrVO;
-import kr.co.solbipos.membr.info.grade.service.MembrClassPointVO;
 import kr.co.solbipos.membr.info.grade.service.MembrClassVO;
-import kr.co.solbipos.membr.info.regist.service.RegistVO;
 import kr.co.solbipos.membr.info.regist.service.impl.RegistMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,15 +73,22 @@ public class DlvrServiceImpl implements DlvrService {
     /** 회원등급 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getMembrClassList(SessionInfoVO sessionInfoVO) {
-        MembrClassVO membrClassVO = new MembrClassVO();
-        membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
 
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            membrClassVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
-        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-            membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        // 회원등급 관리구분
+        String membrClassManageFg = CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1237"), "1");
+
+        MembrClassVO membrClassVO = new MembrClassVO();
+
+        membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+        membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        membrClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+           membrClassVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
+        membrClassVO.setMembrClassManageFg(membrClassManageFg);
+
         List<DefaultMap<String>> resultList = dlvrMapper.getMemberClassList(membrClassVO);
+
         // 등록된 회원등급이 없을때는 기본등급을 리스트에 넣어줌.
         if (resultList.size() == 0) {
             DefaultMap<String> tmpList = new DefaultMap<String>();

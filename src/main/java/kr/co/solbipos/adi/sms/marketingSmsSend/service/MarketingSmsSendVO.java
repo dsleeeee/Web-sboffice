@@ -2,6 +2,7 @@ package kr.co.solbipos.adi.sms.marketingSmsSend.service;
 
 import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.PageVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.info.regist.enums.WeddingYn;
 import kr.co.solbipos.membr.info.regist.service.enums.AnvType;
 import kr.co.solbipos.membr.info.regist.service.enums.PeriodType;
@@ -154,6 +155,22 @@ public class MarketingSmsSendVO extends PageVO {
 
     /** envst1273 */
     private String envst1273;
+
+    /**
+     * [본사코드]
+     */
+    private String hqOfficeCd;
+
+    /**
+     * [회원소속구분]
+     */
+    private OrgnFg membrOrgnFg;
+
+    /**
+     * [회원분류 관리구분]
+     */
+    private String membrClassManageFg;
+
 
     public String getOrgnFg() { return orgnFg; }
 
@@ -509,5 +526,29 @@ public class MarketingSmsSendVO extends PageVO {
                 + ", memberSaleFg=" + memberSaleFg
                 + ", memberPointFg=" + memberPointFg
                 + "]";
+    }
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
+
+    public OrgnFg getMembrOrgnFg() {
+        return membrOrgnFg;
+    }
+
+    public void setMembrOrgnFg(OrgnFg membrOrgnFg) {
+        this.membrOrgnFg = membrOrgnFg;
+    }
+
+    public String getMembrClassManageFg() {
+        return membrClassManageFg;
+    }
+
+    public void setMembrClassManageFg(String membrClassManageFg) {
+        this.membrClassManageFg = membrClassManageFg;
     }
 }

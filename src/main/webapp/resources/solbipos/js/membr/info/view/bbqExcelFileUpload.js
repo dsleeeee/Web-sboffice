@@ -226,7 +226,7 @@ app.controller('bbqExcelFileUploadCtrl', ['$scope', '$http', '$timeout', functio
                             if (j % columnNum === 0) item.remark = value;
                             else if (j % columnNum === 1) item.membrNm = value;
                             else if (j % columnNum === 2) item.memberTelNo = value;
-                            else if (j % columnNum === 3) item.memberAddr = value;
+                            else if (j % columnNum === 3) item.memberAddrDtl = value;
                             else if (j % columnNum === 14) item.lastSaleDate = value;
                         }
                     }

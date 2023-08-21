@@ -5,6 +5,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
@@ -58,14 +59,19 @@ public class ChgBatchServiceImpl implements ChgBatchService {
     /** 회원등급 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getMembrClassList(SessionInfoVO sessionInfoVO) {
-        MembrClassVO membrClassVO = new MembrClassVO();
-        membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
 
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            membrClassVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
-        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-            membrClassVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+        // 회원등급 관리구분
+        String membrClassManageFg = CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1237"), "1");
+
+        MembrClassVO membrClassVO = new MembrClassVO();
+
+        membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+        membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        membrClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            membrClassVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
+        membrClassVO.setMembrClassManageFg(membrClassManageFg);
 
         List<DefaultMap<String>> resultList = mapper.getMemberClassList(membrClassVO);
 
