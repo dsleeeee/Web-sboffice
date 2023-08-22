@@ -2489,6 +2489,8 @@
                                    FROM TB_HQ_TOUCH_KEY_CLASS
                                   WHERE HQ_OFFICE_CD = #{hqOfficeCd}
                                     AND TUKEY_GRP_CD = #{tukeyGrpCd}
+                                  ORDER
+                                     BY Y, X
                              )
                   )
                   ,
