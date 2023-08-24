@@ -375,6 +375,7 @@
         ,       tsspm.STORE_CD, tms.STORE_NM
         ,       tsspm.POS_NO, tsspm.BILL_NO
         ,       tsspm.SALE_YN
+        ,       tsspm.MCOUPN_CD
         ,       tsspm.MCOUPN_TYPE_FG
         ,       tsspm.MCOUPN_BARCD_NO
         ,       tsspm.APPR_NO
