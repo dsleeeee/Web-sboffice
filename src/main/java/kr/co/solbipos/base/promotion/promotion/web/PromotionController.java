@@ -1,13 +1,17 @@
 package kr.co.solbipos.base.promotion.promotion.web;
 
 import kr.co.common.data.enums.Status;
+import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.adi.sms.marketingSmsSend.service.MarketingSmsSendService;
+import kr.co.solbipos.adi.sms.marketingSmsSend.service.MarketingSmsSendVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.promotion.promotion.service.PromotionService;
@@ -61,18 +65,22 @@ public class PromotionController {
     private final PromotionService promotionService;
     private final StoreTypeService storeTypeService;
     private final IostockCmmService iostockCmmService;
+    private final MarketingSmsSendService marketingSmsSendService;
     private final MessageService messageService;
     private final CmmEnvUtil cmmEnvUtil;
+    private final CmmCodeUtil cmmCodeUtil;
 
     /** Constructor Injection */
     @Autowired
-    public PromotionController(SessionService sessionService, PromotionService promotionService, StoreTypeService storeTypeService, IostockCmmService iostockCmmService, MessageService messageService, CmmEnvUtil cmmEnvUtil) {
+    public PromotionController(SessionService sessionService, PromotionService promotionService, StoreTypeService storeTypeService, IostockCmmService iostockCmmService, MarketingSmsSendService marketingSmsSendService, MessageService messageService, CmmEnvUtil cmmEnvUtil, CmmCodeUtil cmmCodeUtil) {
         this.sessionService = sessionService;
         this.promotionService = promotionService;
         this.storeTypeService = storeTypeService;
         this.iostockCmmService = iostockCmmService;
+        this.marketingSmsSendService = marketingSmsSendService;
         this.messageService = messageService;
         this.cmmEnvUtil = cmmEnvUtil;
+        this.cmmCodeUtil = cmmCodeUtil;
     }
 
     /**
@@ -149,6 +157,12 @@ public class PromotionController {
 
         // 프로모션 종류 조회(콤보박스용)
         model.addAttribute("promotionTypeList", convertToJson(promotionService.getPromotionTypeList()));
+
+        // 회원등급 리스트 조회
+        MarketingSmsSendVO marketingSmsSendVO = new MarketingSmsSendVO();
+        List membrClassList = marketingSmsSendService.getMembrClassList(marketingSmsSendVO, sessionInfoVO);
+        String membrClassListAll = cmmCodeUtil.assmblObj(membrClassList, "name", "value", UseYn.N);
+        model.addAttribute("memberClassList", membrClassListAll);
 
         // POS에서 해당 WEB 화면 재접속한 경우(이전 접속 session 그대로 존재), 'posLoginReconnect'값울 판단하여 view화면 처리
         if(request.getParameter("posLoginReconnect") != null && request.getParameter("posLoginReconnect").length() > 0){
