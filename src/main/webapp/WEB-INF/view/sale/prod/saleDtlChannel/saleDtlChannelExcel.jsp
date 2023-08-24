@@ -294,7 +294,7 @@
             </c:if>
         </div>
         <div class="mt10 oh sb-select dkbr" style="display:none;" id="regist">
-            <p class="tl s14 mt5 lh15 red">전체매장 자료생성 요청시 생성까지 최대 90분정도 소요됩니다.</p>
+            <p class="tl s14 mt5 lh15 red">23시 이후 자료생성 등록(소요시간 3시간 이상)</p>
             <%-- 삭제 --%>
             <button class="btn_skyblue ml5 fr" id="btnDel" ng-click="del()">
                 <s:message code="cmm.del" />
