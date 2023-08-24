@@ -171,7 +171,7 @@
                             <wj-flex-grid-column header="<s:message code="kioskKeyMap.clsMemo"/>" binding="clsMemo" width="90"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="kioskKeyMap.tuMClsFg"/>" binding="tuMClsFg" data-map="tuMClsFgDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="kioskKeyMap.storeModYn"/>" binding="storeModYn" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="" binding="indexNo" width="*" visible="false"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="" binding="indexNo" width="*"></wj-flex-grid-column>
                         </wj-flex-grid>
                     </div>
                 </div>
@@ -478,7 +478,7 @@
     var kioskKeyEnvstVal = "${kioskKeyEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20230727.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20230727.03" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
