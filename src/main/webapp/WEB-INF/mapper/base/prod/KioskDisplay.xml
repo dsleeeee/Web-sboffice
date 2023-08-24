@@ -418,7 +418,8 @@
         /* USE : KioskDisplayMapper.chkCd */
         SELECT  COUNT(*)
         FROM    TB_MS_PRODUCT
-        WHERE   STORE_CD || PROD_CD IN
+        WHERE   STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+        AND     STORE_CD || PROD_CD IN
         <foreach collection="arrProdCdCol" item="item" open="(" close=")" separator=",">
             #{item}
         </foreach>

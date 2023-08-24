@@ -434,6 +434,30 @@
         </div>
     </div>
     <%--//위즈모 테이블--%>
+
+
+    <%--위즈모 테이블--%>
+    <div class="wj-TblWrapBr mt10" style="display: none;" ng-controller="kioskDisplayExcelCtrl">
+        <%-- 개발시 높이 조절해서 사용--%>
+        <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
+        <div id="theGrid" style="height: 350px;">
+            <wj-flex-grid
+                    autoGenerateColumns="false"
+                    control="excelFlex"
+                    initialized="initGrid(s,e)"
+                    sticky-headers="true"
+                    selection-mode="Row"
+                    items-source="data"
+                    item-formatter="_itemFormatter">
+
+                <!-- define columns -->
+                <wj-flex-grid-column header="<s:message code="prod.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.prodCd"/>" binding="prodCd" width="100" is-read-only="true" format="d"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kioskDisplay.kioskDisplayYn"/>" binding="kioskDisplayYn" width="80" data-map="kioskDisplayYnDataMap" align="center"></wj-flex-grid-column>
+            </wj-flex-grid>
+        </div>
+    </div>
+    <%--//위즈모 테이블--%>
 </div>
 
 <script>
@@ -458,7 +482,7 @@
     var branchCdComboList = ${branchCdComboList};
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskDisplay/kioskDisplay.js?ver=20230404.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskDisplay/kioskDisplay.js?ver=20230404.05" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">
