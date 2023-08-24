@@ -6035,7 +6035,7 @@
     <select id="chkSaleYn" parameterType="storePosEnvVO" resultType="Integer">
         /* USE : StoreManageMapper.chkSaleYn */
         SELECT COUNT(1) CNT
-          FROM TB_SL_SALE_HDR
+          FROM TB_SL_MONTHLY_POS
          WHERE STORE_CD = #{storeCd}
            AND POS_NO = #{posNo}
     </select>
