@@ -54,11 +54,11 @@ var memberTargetDsFgData = [
 ];
 
 // 적용조건 - 적용등급
-var memberClassCdFgData = [
+/*var memberClassCdFgData = [
     {"name":"골드","value":"001"},
     {"name":"플래티넘","value":"002"},
     {"name":"VIP","value":"003"}
-];
+];*/
 
 // 적용조건 - 분담금구분
 var chargeDsData = [
