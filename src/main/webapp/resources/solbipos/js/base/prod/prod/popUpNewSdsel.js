@@ -452,20 +452,28 @@ app.controller('newSdselClassCtrl', ['$scope', '$http', 'sdselGrpCd', function (
             var params = [];
 
             // dispSeq 재설정
-            var editItems = [];
-            for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
-                if($scope.flex.collectionView.items[s].dispSeq !== (s+1)) {
-                    if (isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
-                        editItems.push($scope.flex.collectionView.items[s]);
-                    }
+            // var editItems = [];
+            // for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
+            //     if($scope.flex.collectionView.items[s].dispSeq !== (s+1)) {
+            //         if (isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
+            //             editItems.push($scope.flex.collectionView.items[s]);
+            //         }
+            //     }
+            // }
+            //
+            // for (var s = 0; s < editItems.length; s++) {
+            //     editItems[s].dispSeq = (s + 1);
+            //     $scope.flex.collectionView.editItem(editItems[s]);
+            //     editItems[s].status = "U";
+            //     $scope.flex.collectionView.commitEdit();
+            // }
+            for(var s = 0, num = 1; s < $scope.flex.rows.length; s++, num++) {
+                if ($scope.flex.collectionView.items[s].dispSeq !== num) {
+                    $scope.flex.collectionView.items[s].dispSeq = num;
+                    $scope.flex.collectionView.editItem($scope.flex.collectionView.items[s]);
+                    $scope.flex.collectionView.items[s].status = "U";
+                    $scope.flex.collectionView.commitEdit();
                 }
-            }
-
-            for (var s = 0; s < editItems.length; s++) {
-                editItems[s].dispSeq = (s + 1);
-                $scope.flex.collectionView.editItem(editItems[s]);
-                editItems[s].status = "U";
-                $scope.flex.collectionView.commitEdit();
             }
 
             for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
@@ -728,20 +736,28 @@ app.controller('newSdselProdCtrl', ['$scope', '$http', 'sdselClassCd', function 
             var params = [];
 
             // dispSeq 재설정
-            var editItems = [];
-            for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
-                if($scope.flex.collectionView.items[s].dispSeq !== (s+1)) {
-                    if (isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
-                        editItems.push($scope.flex.collectionView.items[s]);
-                    }
+            // var editItems = [];
+            // for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
+            //     if($scope.flex.collectionView.items[s].dispSeq !== (s+1)) {
+            //         if (isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
+            //             editItems.push($scope.flex.collectionView.items[s]);
+            //         }
+            //     }
+            // }
+            //
+            // for (var s = 0; s < editItems.length; s++) {
+            //     editItems[s].dispSeq = (s + 1);
+            //     $scope.flex.collectionView.editItem(editItems[s]);
+            //     editItems[s].status = "U";
+            //     $scope.flex.collectionView.commitEdit();
+            // }
+            for(var s = 0, num = 1; s < $scope.flex.rows.length; s++, num++) {
+                if ($scope.flex.collectionView.items[s].dispSeq !== num) {
+                    $scope.flex.collectionView.items[s].dispSeq = num;
+                    $scope.flex.collectionView.editItem($scope.flex.collectionView.items[s]);
+                    $scope.flex.collectionView.items[s].status = "U";
+                    $scope.flex.collectionView.commitEdit();
                 }
-            }
-
-            for (var s = 0; s < editItems.length; s++) {
-                editItems[s].dispSeq = (s + 1);
-                $scope.flex.collectionView.editItem(editItems[s]);
-                editItems[s].status = "U";
-                $scope.flex.collectionView.commitEdit();
             }
 
             for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {

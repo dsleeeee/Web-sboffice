@@ -294,4 +294,4 @@
     // 사용여부
     var useYn = ${ccu.getCommCode("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/popUpNewSdsel.js?ver=20230727.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/popUpNewSdsel.js?ver=20230727.02" charset="utf-8"></script>
