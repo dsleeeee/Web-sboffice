@@ -380,20 +380,26 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
             }
 
             // indexNo 재설정
-            var editItems = [];
-            for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
-                 if($scope.flex.collectionView.items[s].indexNo !== (s+1)) {
-                    if (isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
-                        editItems.push($scope.flex.collectionView.items[s]);
-                    }
+            // var editItems = [];
+            // for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
+            //     if (isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
+            //         editItems.push($scope.flex.collectionView.items[s]);
+            //     }
+            // }
+            //
+            // for (var s = 0; s < editItems.length; s++) {
+            //     editItems[s].indexNo = (s + 1);
+            //     $scope.flex.collectionView.editItem(editItems[s]);
+            //     editItems[s].status = "U";
+            //     $scope.flex.collectionView.commitEdit();
+            // }
+            for(var s = 0, num = 1; s < $scope.flex.rows.length; s++, num++) {
+                if ($scope.flex.collectionView.items[s].indexNo !== num) {
+                    $scope.flex.collectionView.items[s].indexNo = num;
+                    $scope.flex.collectionView.editItem($scope.flex.collectionView.items[s]);
+                    $scope.flex.collectionView.items[s].status = "U";
+                    $scope.flex.collectionView.commitEdit();
                 }
-            }
-
-            for (var s = 0; s < editItems.length; s++) {
-                editItems[s].indexNo = (s + 1);
-                $scope.flex.collectionView.editItem(editItems[s]);
-                editItems[s].status = "U";
-                $scope.flex.collectionView.commitEdit();
             }
 
             for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
@@ -416,7 +422,7 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
 
             // 카테고리(분류)를 모두 삭제하는지 파악하기 위해
             var gridLength = $scope.flex.collectionView.items.length;
-
+console.log(params);
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._save('/base/prod/kioskKeyMap/kioskKeyMap/saveKioskCategory.sb', params, function () {
 
@@ -868,20 +874,25 @@ app.controller('categoryClsMCtrl', ['$scope', '$http', '$timeout', function ($sc
         }
 
         // indexNo 재설정
-        var editItems = [];
-        for (var s = 0; s < $scope.flexM.collectionView.itemCount; s++) {
-            if($scope.flex.collectionView.items[s].indexNo !== (s+1)) {
-                if (isEmptyObject($scope.flexM.collectionView.items[s].status) || $scope.flexM.collectionView.items[s].status === 'I') {
-                    editItems.push($scope.flexM.collectionView.items[s]);
-                }
+        // var editItems = [];
+        // for (var s = 0; s < $scope.flexM.collectionView.itemCount; s++) {
+        //     if($scope.flex.collectionView.items[s].indexNo !== (s+1)) {
+        //         if (isEmptyObject($scope.flexM.collectionView.items[s].status) || $scope.flexM.collectionView.items[s].status === 'I') {
+        //             editItems.push($scope.flexM.collectionView.items[s]);
+        //         }
+        //     }
+        // }
+        //
+        // for (var s = 0; s < editItems.length; s++) {
+        //     editItems[s].indexNo = (s + 1);
+        //     $scope.flexM.collectionView.editItem(editItems[s]);
+        //     editItems[s].status = "U";
+        //     $scope.flexM.collectionView.commitEdit();
+        // }
+        for(var s = 0; s < $scope.flexM.rows.length; s++) {
+            if ($scope.flexM.collectionView.items[s].indexNo !== $scope.flexM.rowNum) {
+                $scope.flexM.collectionView.items[s].indexNo = $scope.flexM.rowNum;
             }
-        }
-
-        for (var s = 0; s < editItems.length; s++) {
-            editItems[s].indexNo = (s + 1);
-            $scope.flexM.collectionView.editItem(editItems[s]);
-            editItems[s].status = "U";
-            $scope.flexM.collectionView.commitEdit();
         }
 
         for (var u = 0; u < $scope.flexM.collectionView.itemsEdited.length; u++) {
@@ -1067,20 +1078,28 @@ app.controller('kioskKeyMapCtrl', ['$scope', '$http', '$timeout', function ($sco
             }
 
             // indexNo 재설정
-            var editItems = [];
-            for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
-                if($scope.flex.collectionView.items[s].indexNo !== (s+1)) {
-                    if (isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
-                        editItems.push($scope.flex.collectionView.items[s]);
-                    }
+            // var editItems = [];
+            // for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
+            //     if($scope.flex.collectionView.items[s].indexNo !== (s+1)) {
+            //         if (isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
+            //             editItems.push($scope.flex.collectionView.items[s]);
+            //         }
+            //     }
+            // }
+            //
+            // for (var s = 0; s < editItems.length; s++) {
+            //     editItems[s].indexNo = (s + 1);
+            //     $scope.flex.collectionView.editItem(editItems[s]);
+            //     editItems[s].status = "U";
+            //     $scope.flex.collectionView.commitEdit();
+            // }
+            for(var s = 0, num = 1; s < $scope.flex.rows.length; s++, num++) {
+                if ($scope.flex.collectionView.items[s].indexNo !== num) {
+                    $scope.flex.collectionView.items[s].indexNo = num;
+                    $scope.flex.collectionView.editItem($scope.flex.collectionView.items[s]);
+                    $scope.flex.collectionView.items[s].status = "U";
+                    $scope.flex.collectionView.commitEdit();
                 }
-            }
-
-            for (var s = 0; s < editItems.length; s++) {
-                editItems[s].indexNo = (s + 1);
-                $scope.flex.collectionView.editItem(editItems[s]);
-                editItems[s].status = "U";
-                $scope.flex.collectionView.commitEdit();
             }
 
             for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {

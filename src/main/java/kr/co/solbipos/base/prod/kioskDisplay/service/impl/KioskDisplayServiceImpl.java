@@ -120,7 +120,7 @@ public class KioskDisplayServiceImpl implements KioskDisplayService {
     // 엑셀 업로드 전 매장코드, 상품코드 유효여부 체크
     @Override
     public int chkCd(KioskDisplayVO kioskDisplayVO, SessionInfoVO sessionInfoVO) {
-
+        kioskDisplayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         // 상품코드 array 값 세팅
         kioskDisplayVO.setArrProdCdCol(kioskDisplayVO.getProdCdCol().split(","));
 

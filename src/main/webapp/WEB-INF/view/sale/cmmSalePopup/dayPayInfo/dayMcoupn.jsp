@@ -40,6 +40,7 @@
             <wj-flex-grid-column header="<s:message code="dayMcoupn.posNo"/>" binding="posNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dayMcoupn.billNo"/>" binding="billNo" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dayMcoupn.saleYn"/>" binding="saleYn" width="70" align="center" is-read-only="true" data-map="saleYnMap"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dayMcoupn.mcoupnCd"/>" binding="mcoupnCd" width="70" align="center" is-read-only="true" data-map="mcoupnCdMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dayMcoupn.mcoupnTypeFg"/>" binding="mcoupnTypeFg" width="70" align="center" is-read-only="true" data-map="mcoupnTypeFgMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dayMcoupn.mcoupnBarcdNo"/>" binding="mcoupnBarcdNo" width="110" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dayMcoupn.saleAmt"/>" binding="saleAmt" width="90" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
@@ -57,4 +58,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dayPayInfo/dayMcoupn.js?ver=20210719.01" charset="utf-8"></script>
+<script type="text/javascript">
+  var mcouponCd = ${ccu.getCommCodeExcpAll("110")};
+</script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dayPayInfo/dayMcoupn.js?ver=20210719.02" charset="utf-8"></script>

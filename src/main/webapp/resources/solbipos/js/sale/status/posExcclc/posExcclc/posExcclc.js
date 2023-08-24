@@ -29,11 +29,14 @@ app.controller('posExcclcCtrl', ['$scope', '$http', '$timeout', function ($scope
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
+        var item = s.rows[e.row].dataItem;
 
         if (col.binding === "closeFgNm") { // 수량합계
-        	var item = s.rows[e.row].dataItem;
           	wijmo.addClass(e.cell, 'wijLink');
           	wijmo.addClass(e.cell, 'wj-custom-readonly');
+        }
+        if(item.closeFg !== "2" && item.regSeq === "00") {
+            wijmo.addClass(e.cell, 'red');
         }
       }
     });
@@ -63,6 +66,7 @@ app.controller('posExcclcCtrl', ['$scope', '$http', '$timeout', function ($scope
         if (col.binding === "closeFgNm") {//마감구분
         	var selectedRow = s.rows[ht.row].dataItem;
             $scope.openDtlLayer(selectedRow);
+            console.log(selectedRow);
         }
       }
     }, true);
@@ -84,7 +88,8 @@ app.controller('posExcclcCtrl', ['$scope', '$http', '$timeout', function ($scope
     dataItem.saleDate		= messages["posExcclc.saleDate"];
     dataItem.posNo			= messages["posExcclc.posNo"];
     dataItem.closeFgNm		= messages["posExcclc.closeFg"];
-    dataItem.regDt			= messages["posExcclc.regDate"];
+    dataItem.openDate	    = messages["posExcclc.openDate"];
+    dataItem.closeDate	    = messages["posExcclc.closeDate"];
     dataItem.totSaleAmt		= messages["posExcclc.sale"];
     dataItem.totDcAmt		= messages["posExcclc.sale"];
     dataItem.realSaleAmt	= messages["posExcclc.sale"];
@@ -344,7 +349,8 @@ app.controller('posExcclcExcelCtrl', ['$scope', '$http', '$timeout', function ($
 	    dataItem.saleDate		= messages["posExcclc.saleDate"];
 	    dataItem.posNo			= messages["posExcclc.posNo"];
 	    dataItem.closeFgNm		= messages["posExcclc.closeFg"];
-	    dataItem.regDt			= messages["posExcclc.regDate"];
+        dataItem.openDate	    = messages["posExcclc.openDate"];
+        dataItem.closeDate	    = messages["posExcclc.closeDate"];
 	    dataItem.totSaleAmt		= messages["posExcclc.sale"];
 	    dataItem.totDcAmt		= messages["posExcclc.sale"];
 	    dataItem.realSaleAmt	= messages["posExcclc.sale"];

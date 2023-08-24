@@ -20,7 +20,9 @@
 			     , TPE.REG_SEQ
 			     , TPE.CLOSE_FG_SEQ
 			     , TPE.CLOSE_FG_NM
-			     , TO_CHAR(TO_DATE(TPE.REG_DT,'YYYYMMDDHH24MISS'),'YYYY.MM.DD HH24:MI:SS') AS REG_DT
+	 	,		TPE.CLOSE_FG
+		,       TO_CHAR(TO_DATE(TPE.OPEN_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS OPEN_DATE
+		,       TO_CHAR(TO_DATE(TPE.CLOSE_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS CLOSE_DATE
 			----------------------------
 			     , NVL((SELECT SUM(NVL(TPES.TOT_SALE_AMT,0))
 			          FROM TB_PS_EXACTCALC_SALE TPES
@@ -159,7 +161,9 @@
 			           , TPE.SALE_DATE
 			           , TPE.POS_NO
 			           , TPE.REG_SEQ
-			           , TPE.REG_DT
+			           , TPE.CLOSE_FG
+					   , TPE.OPEN_DT
+					   , TPE.CLOSE_DT
 			        FROM (
 			            SELECT '1'  AS CLOSE_FG_SEQ
 			                , '1'  AS CLOSE_POS_SEQ
@@ -169,7 +173,9 @@
 			                 , TPE.SALE_DATE
 			                 , TPE.POS_NO
 			                 , TPE.REG_SEQ
-			                 , TPE.OPEN_DT   AS REG_DT
+							 , TPE.CLOSE_FG
+			                 , TPE.OPEN_DT
+							 , TPE.CLOSE_DT
 			              FROM TB_PS_EXACTCALC TPE
 			             WHERE TPE.HQ_OFFICE_CD = #{hqOfficeCd}
                            <if test='arrStoreCd != null and arrStoreCd != ""'>
@@ -206,7 +212,9 @@
 			                 , TPE.SALE_DATE
 			                 , TPE.POS_NO
 			                 , TPE.REG_SEQ
-			                 , TPE.CLOSE_DT AS REG_DT
+							 , TPE.CLOSE_FG
+							 , TPE.OPEN_DT
+							 , TPE.CLOSE_DT
 			              FROM TB_PS_EXACTCALC TPE
 			             WHERE TPE.HQ_OFFICE_CD = #{hqOfficeCd}
                             <if test='arrStoreCd != null and arrStoreCd != ""'>
@@ -242,7 +250,9 @@
 			                 , TPE.SALE_DATE
 			                 , TPE.POS_NO
 			                 , TPE.REG_SEQ
-			                 , TPE.CLOSE_DT AS REG_DT
+							 , TPE.CLOSE_FG
+							 , TPE.OPEN_DT
+							 , TPE.CLOSE_DT
 			              FROM TB_PS_EXACTCALC TPE
 			             WHERE TPE.HQ_OFFICE_CD = #{hqOfficeCd}
 		                <if test='arrStoreCd != null and arrStoreCd != ""'>
@@ -277,9 +287,11 @@
 			     , TPE.SALE_DATE
 			     , TPE.POS_NO
 			     , TPE.REG_SEQ
-			    , TPE.CLOSE_FG_SEQ
+			     , TPE.CLOSE_FG_SEQ
 			     , TPE.CLOSE_FG_NM
-			     , TPE.REG_DT
+				 , TPE.CLOSE_FG
+				 , TPE.OPEN_DT
+				 , TPE.CLOSE_DT
 			 ORDER BY TPE.STORE_CD, TPE.SALE_DATE, TPE.CLOSE_FG_SEQ
 	   <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -578,7 +590,9 @@
 			     , TPE.REG_SEQ
 			     , TPE.CLOSE_FG_SEQ
 			     , TPE.CLOSE_FG_NM
-			     , TO_CHAR(TO_DATE(TPE.REG_DT,'YYYYMMDDHH24MISS'),'YYYY.MM.DD HH24:MI:SS') AS REG_DT
+		, 		TPE.CLOSE_FG
+		,       TO_CHAR(TO_DATE(TPE.OPEN_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS OPEN_DATE
+		,       TO_CHAR(TO_DATE(TPE.CLOSE_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS CLOSE_DATE
 			----------------------------
 			     , NVL((SELECT SUM(NVL(TPES.TOT_SALE_AMT,0))
 			          FROM TB_PS_EXACTCALC_SALE TPES
@@ -718,7 +732,9 @@
 			           , TPE.SALE_DATE
 			           , TPE.POS_NO
 			           , TPE.REG_SEQ
-			           , TPE.REG_DT
+						, TPE.CLOSE_FG
+						, TPE.OPEN_DT
+						, TPE.CLOSE_DT
 			        FROM (
 			            SELECT '1'  AS CLOSE_FG_SEQ
 			                , '1'  AS CLOSE_POS_SEQ
@@ -728,7 +744,9 @@
 			                 , TPE.SALE_DATE
 			                 , TPE.POS_NO
 			                 , TPE.REG_SEQ
-			                 , TPE.OPEN_DT   AS REG_DT
+							, TPE.CLOSE_FG
+							, TPE.OPEN_DT
+							, TPE.CLOSE_DT
 			              FROM TB_PS_EXACTCALC TPE
 			             WHERE TPE.HQ_OFFICE_CD = #{hqOfficeCd}
                            <if test='arrStoreCd != null and arrStoreCd != ""'>
@@ -765,7 +783,9 @@
 			                 , TPE.SALE_DATE
 			                 , TPE.POS_NO
 			                 , TPE.REG_SEQ
-			                 , TPE.CLOSE_DT AS REG_DT
+							, TPE.CLOSE_FG
+							, TPE.OPEN_DT
+							, TPE.CLOSE_DT
 			              FROM TB_PS_EXACTCALC TPE
 			             WHERE TPE.HQ_OFFICE_CD = #{hqOfficeCd}
                             <if test='arrStoreCd != null and arrStoreCd != ""'>
@@ -801,7 +821,9 @@
 			                 , TPE.SALE_DATE
 			                 , TPE.POS_NO
 			                 , TPE.REG_SEQ
-			                 , TPE.CLOSE_DT AS REG_DT
+							, TPE.CLOSE_FG
+							, TPE.OPEN_DT
+							, TPE.CLOSE_DT
 			              FROM TB_PS_EXACTCALC TPE
 			             WHERE TPE.HQ_OFFICE_CD = #{hqOfficeCd}
 		                <if test='arrStoreCd != null and arrStoreCd != ""'>
@@ -838,7 +860,9 @@
 			     , TPE.REG_SEQ
 			    , TPE.CLOSE_FG_SEQ
 			     , TPE.CLOSE_FG_NM
-			     , TPE.REG_DT
+				, TPE.CLOSE_FG
+				, TPE.OPEN_DT
+				, TPE.CLOSE_DT
 			 ORDER BY TPE.STORE_CD, TPE.SALE_DATE, TPE.CLOSE_FG_SEQ
     </select>
 </mapper>

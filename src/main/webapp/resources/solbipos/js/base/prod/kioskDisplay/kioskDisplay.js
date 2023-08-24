@@ -415,8 +415,58 @@ app.controller('kioskDisplayCtrl', ['$scope', '$http', '$timeout', function ($sc
 
   // 비노출관리 양식 다운로드
   $scope.sampleDownload = function () {
-    var vScope = agrid.getScope('excelUploadKioskDisplayCtrl');
-    vScope.excelFormDownload();
+
+    if(orgnFg == "HQ"){
+      if(($("#kioskDisplayStoreCd").val() === "" || $("#kioskDisplayStoreCd").val() === undefined) && ($("#kioskDisplayProdCd").val() === "" || $("#kioskDisplayProdCd").val() === undefined)){
+        $scope._popMsg(messages["kioskDisplay.require.select.msg"]);
+        return false;
+      }
+    }
+
+    // 파라미터
+    var params = {};
+    // 등록일자 '전체기간' 선택에 따른 params
+    if(!$scope.isChecked){
+      params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+      params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+    }
+    params.storeCds = $("#kioskDisplayStoreCd").val();
+    params.prodCds = $("#kioskDisplayProdCd").val();
+    params.kioskDisplayYn = $scope.kioskDisplayYn;
+    params.useYn = $scope.useYn;
+    params.kioskUseYn = $scope.kioskUseYn;
+    params.prodClassCd = $scope.prodClassCd;
+    params.prodCd = $scope.prodCd;
+    params.prodNm = $scope.prodNm;
+
+    if(momsEnvstVal === "1" && orgnFg === "HQ"){ // 확장조회는 본사권한이면서 맘스터치만 사용
+      params.momsTeam = $scope.momsTeam;
+      params.momsAcShop = $scope.momsAcShop;
+      params.momsAreaFg = $scope.momsAreaFg;
+      params.momsCommercial = $scope.momsCommercial;
+      params.momsShopType = $scope.momsShopType;
+      params.momsStoreManageType = $scope.momsStoreManageType;
+      params.branchCd = $scope.branchCd;
+    }
+
+    if(brandUseFg === "1" && orgnFg === "HQ"){ // 본사이면서 브랜드사용시만 검색가능
+
+      params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
+      params.prodHqBrandCd = $scope.srchProdHqBrandCdCombo.selectedValue;
+
+      // '전체' 일때
+      if (params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+        var momsHqBrandCd = "";
+        for (var i = 0; i < momsHqBrandCdComboList.length; i++) {
+          if (momsHqBrandCdComboList[i].value !== null) {
+            momsHqBrandCd += momsHqBrandCdComboList[i].value + ","
+          }
+        }
+        params.userBrands = momsHqBrandCd;
+      }
+    }
+
+    $scope._broadcast('kioskDisplayExcelCtrl', params);
   };
 
   /** 업로드 완료 후 callback 함수. 업로드 이후 로직 작성. */
@@ -425,5 +475,59 @@ app.controller('kioskDisplayCtrl', ['$scope', '$http', '$timeout', function ($sc
     vScope.excelUploadingPopup(false); // 업로딩 팝업 닫기
     $scope._popMsg(messages['cmm.saveSucc']);
   };
+}]);
+
+/**
+ *  엑셀다운로드 그리드 생성
+ */
+app.controller('kioskDisplayExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('kioskDisplayExcelCtrl', $scope, $http, false));
+
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+  }
+
+  // 다른 컨트롤러의 broadcast 받기
+  $scope.$on("kioskDisplayExcelCtrl", function (event, data) {
+
+    $scope.searchExcelList(data);
+
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+
+  // 엑셀 리스트 조회
+  $scope.searchExcelList = function (params) {
+
+    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+    $scope._inquiryMain("/base/prod/kioskDisplay/kioskDisplay/list.sb", params, function () {
+    $timeout(function() {
+      if ($scope.excelFlex.rows.length <= 0) {
+        $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+        return false;
+      }
+      $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+
+      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex,
+          {
+            includeColumnHeaders: true,
+            includeCellStyles: false,
+            includeColumns: function (column) {
+              return column.visible;
+            }
+          },
+          messages["kioskDisplay.kioskDisplay"] + '양식' + '.xlsx',
+          function () {
+            $timeout(function () {
+              $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+            }, 10);
+          }
+      );
+    }, 10);
+    });
+  };
+
 
 }]);
