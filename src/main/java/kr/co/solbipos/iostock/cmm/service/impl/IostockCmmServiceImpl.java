@@ -67,6 +67,7 @@ public class IostockCmmServiceImpl implements IostockCmmService {
         iostockCmmVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         iostockCmmVO.setEmpNo(sessionInfoVO.getEmpNo());
         iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        iostockCmmVO.setUserId(sessionInfoVO.getUserId());
 
         // 매장브랜드가 '전체' 일때
         if (iostockCmmVO.getStoreHqBrandCd() == "" || iostockCmmVO.getStoreHqBrandCd() == null) {
@@ -367,5 +368,15 @@ public class IostockCmmServiceImpl implements IostockCmmService {
         procCnt += iostockCmmMapper.getSelectUploadStoreExcelUploadDeleteAll(iostockCmmVO);
 
         return procCnt;
+    }
+
+    /** 업로드매장 공통 - 업로드매장 텍스트박스 조회 */
+    @Override
+    public DefaultMap<Object> getSelectUploadStoreText(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
+
+        iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        iostockCmmVO.setUserId(sessionInfoVO.getUserId());
+
+        return iostockCmmMapper.getSelectUploadStoreText(iostockCmmVO);
     }
 }

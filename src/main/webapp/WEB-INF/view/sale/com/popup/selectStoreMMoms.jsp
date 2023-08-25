@@ -222,6 +222,20 @@
                     </div>
                 </td>
             </tr>
+            <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                <tr>
+                    <%-- 업로드매장 --%>
+                    <th><s:message code="outstockReqDate.uploadStore" /></th>
+                    <td>
+                        <input type="text" id="popUploadStore" ng-model="popUploadStore" readonly/>
+                    </td>
+                    <td colspan="2">
+                        <jsp:include page="/WEB-INF/view/sale/com/popup/selectUploadStore.jsp" flush="true">
+                            <jsp:param name="targetId" value="${param.targetId}Upload"/>
+                        </jsp:include>
+                    </td>
+                </tr>
+            </c:if>
             </tbody>
         </table>
 
@@ -450,6 +464,9 @@
                 $scope.srchPopStoreChgNotCombo.selectedIndex = 0;
             });
 
+            // 업로드매장 텍스트박스 조회
+            $scope.selectUploadStoreText();
+
             if ($scope.searchFg == "N") {
                 $scope.searchStore();
             }
@@ -502,6 +519,7 @@
                 params.userBrands = momsHqBrandCd;
             }
             params.storeChgNot = $scope.popStoreChgNot;
+            params.selectStoreFg = "M"; // 팝업 구분(S:싱글, M:멀티)
 
             $scope._inquirySub("/iostock/cmm/iostockCmm/selectStoreMomsList.sb", params, function () {
                 $scope.searchFg = "Y";
@@ -560,6 +578,27 @@
                 $("#" + targetId +"StoreNum").val(" 영업매장 : "+cnt+" 개");
             }
             eval('$scope.wj' + targetId + 'LayerM.hide(true)');
+        };
+
+        // 업로드매장 팝업
+        $scope.selectUploadStoreShow = function () {
+            $scope._broadcast(targetId + 'UploadCtrl');
+        };
+
+        // 업로드매장 텍스트박스 조회
+        $scope.selectUploadStoreText = function () {
+            var params = {};
+
+            $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/getSelectUploadStoreText.sb', params, function (response) {
+                var textList = response.data.data.result;
+                $scope.textList = textList;
+
+                if(textList.storeCnt < 1) {
+                    $scope.popUploadStore = "업로드된 매장 없음";
+                } else {
+                    $scope.popUploadStore = "매장 " + textList.storeCnt + "건";
+                }
+            });
         };
 
     }]);

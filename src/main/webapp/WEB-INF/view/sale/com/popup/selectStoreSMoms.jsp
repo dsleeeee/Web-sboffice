@@ -451,6 +451,7 @@
         }
         params.userBrands = momsHqBrandCd;
       }
+      params.selectStoreFg = "S"; // 팝업 구분(S:싱글, M:멀티)
 
       $scope._inquirySub("/iostock/cmm/iostockCmm/selectStoreMomsList.sb", params, function () {
         $scope.searchFg = "Y";

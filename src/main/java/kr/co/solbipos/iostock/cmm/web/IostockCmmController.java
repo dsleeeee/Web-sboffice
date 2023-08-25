@@ -590,4 +590,29 @@ public class IostockCmmController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 업로드매장 공통 - 업로드매장 텍스트박스 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   iostockCmmVO
+     * @return  String
+     * @author  김설아
+     * @since   2023. 08. 11.
+     */
+    @RequestMapping(value = "/getSelectUploadStoreText.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSelectUploadStoreText(IostockCmmVO iostockCmmVO, HttpServletRequest request,
+                                 HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<Object> result = iostockCmmService.getSelectUploadStoreText(iostockCmmVO, sessionInfoVO);
+
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+        resultMap.put("result", result);
+
+        return returnJson(Status.OK, resultMap);
+    }
 }
