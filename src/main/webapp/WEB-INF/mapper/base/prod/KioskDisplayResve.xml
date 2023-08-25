@@ -61,7 +61,7 @@
                     WHERE	tmkdr.STORE_CD = tmp.STORE_CD
                     AND 	tmkdr.PROD_CD  = tmp.PROD_CD
                     AND 	tmkdr.STORE_CD = tms.STORE_CD
-                    AND 	tmkdr.STORE_CD = tmsi.STORE_CD
+                    AND 	tmkdr.STORE_CD = tmsi.STORE_CD (+)
                     AND     tms.HQ_OFFICE_CD = #{hqOfficeCd}
                     <if test='storeCds != null and storeCds != ""'>
                         AND tmkdr.STORE_CD = #{storeCds}

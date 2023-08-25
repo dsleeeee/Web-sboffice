@@ -66,4 +66,7 @@ public interface IostockCmmService {
 
     /** 업로드매장 공통 - 검증결과 전체 삭제 */
     int getSelectUploadStoreExcelUploadDeleteAll(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO);
+
+    /** 업로드매장 공통 - 업로드매장 텍스트박스 조회 */
+    DefaultMap<Object> getSelectUploadStoreText(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO);
 }

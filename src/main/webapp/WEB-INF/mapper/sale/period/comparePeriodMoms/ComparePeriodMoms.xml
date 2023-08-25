@@ -72,7 +72,7 @@
                                 WHERE   1=1
                                 AND     tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
                                 AND     tsdt.STORE_CD = tms.STORE_CD
-                                AND     tms.STORE_CD = tmsi.STORE_CD
+                                AND     tms.STORE_CD = tmsi.STORE_CD (+)
                                 AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
                                 AND 	tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                                <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
@@ -132,7 +132,7 @@
                                 WHERE   1=1
                                 AND     tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
                                 AND     tsdt.STORE_CD = tms.STORE_CD
-                                AND     tms.STORE_CD = tmsi.STORE_CD
+                                AND     tms.STORE_CD = tmsi.STORE_CD (+)
                                 AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
                                 AND 	tsdt.SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate}
                                 <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
@@ -208,7 +208,7 @@
                                 WHERE   1=1
                                 AND     tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
                                 AND     tsdt.STORE_CD = tms.STORE_CD
-                                AND     tms.STORE_CD = tmsi.STORE_CD
+                                AND     tms.STORE_CD = tmsi.STORE_CD (+)
                                 AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
                                 AND 	tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                                 <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
@@ -268,7 +268,7 @@
                                 WHERE   1=1
                                 AND     tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
                                 AND     tsdt.STORE_CD = tms.STORE_CD
-                                AND     tms.STORE_CD = tmsi.STORE_CD
+                                AND     tms.STORE_CD = tmsi.STORE_CD (+)
                                 AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
                                 AND 	tsdt.SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate}
                                 <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
