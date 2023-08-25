@@ -90,11 +90,11 @@ public class MonthProdSaleRateMomsServiceImpl implements MonthProdSaleRateMomsSe
             sQuery1 += ", " + orderFg[j-1] + "_REAL_SALE_AMT2" + "\n";
             sQuery1 += ", " + orderFg[j-1] + "_REAL_SALE_AMT3" + "\n";
 
-            sQuery2 += ", SUM(CASE WHEN DLVR_ORDER_FG = '" + j + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'P') THEN TOT_SALE_QTY ELSE 0 END) AS " + orderFg[j-1] + "_SALE_QTY1" + "\n";
-            sQuery2 += ", SUM(CASE WHEN DLVR_ORDER_FG = '" + j + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'S') THEN TOT_SALE_QTY ELSE 0 END) AS " + orderFg[j-1] + "_SALE_QTY2" + "\n";
+            sQuery2 += ", SUM(CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'P') THEN TOT_SALE_QTY ELSE 0 END) AS " + orderFg[j-1] + "_SALE_QTY1" + "\n";
+            sQuery2 += ", SUM(CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'S') THEN TOT_SALE_QTY ELSE 0 END) AS " + orderFg[j-1] + "_SALE_QTY2" + "\n";
             sQuery2 += ", SUM(CASE WHEN DLVR_ORDER_FG = '" + j + "' THEN TOT_SALE_QTY ELSE 0 END) AS " + orderFg[j-1] + "_SALE_QTY3" + "\n";
-            sQuery2 += ", SUM(CASE WHEN DLVR_ORDER_FG = '" + j + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'P') THEN REAL_SALE_AMT ELSE 0 END) AS " + orderFg[j-1] + "_REAL_SALE_AMT1" + "\n";
-            sQuery2 += ", SUM(CASE WHEN DLVR_ORDER_FG = '" + j + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'S') THEN REAL_SALE_AMT ELSE 0 END) AS " + orderFg[j-1] + "_REAL_SALE_AMT2" + "\n";
+            sQuery2 += ", SUM(CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'P') THEN REAL_SALE_AMT ELSE 0 END) AS " + orderFg[j-1] + "_REAL_SALE_AMT1" + "\n";
+            sQuery2 += ", SUM(CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'S') THEN REAL_SALE_AMT ELSE 0 END) AS " + orderFg[j-1] + "_REAL_SALE_AMT2" + "\n";
             sQuery2 += ", SUM(CASE WHEN DLVR_ORDER_FG = '" + j + "' THEN REAL_SALE_AMT ELSE 0 END) AS " + orderFg[j-1] + "_REAL_SALE_AMT3" + "\n";
         }
 
@@ -108,12 +108,12 @@ public class MonthProdSaleRateMomsServiceImpl implements MonthProdSaleRateMomsSe
                 sQuery1 += ", " + orderFg[j-1] + "_DIFG" + list[i] + "_REAL_SALE_AMT2" + "\n";
                 sQuery1 += ", " + orderFg[j-1] + "_DIFG" + list[i] + "_REAL_SALE_AMT3" + "\n";
 
-                sQuery2 += ", SUM(CASE WHEN DLVR_ORDER_FG = '" + j + "' AND DLVR_IN_FG = '" + list[i] + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'P') THEN TOT_SALE_QTY ELSE 0 END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_SALE_QTY1" + "\n";
-                sQuery2 += ", SUM(CASE WHEN DLVR_ORDER_FG = '" + j + "' AND DLVR_IN_FG = '" + list[i] + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'S') THEN TOT_SALE_QTY ELSE 0 END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_SALE_QTY2" + "\n";
-                sQuery2 += ", SUM(CASE WHEN DLVR_ORDER_FG = '" + j + "' AND DLVR_IN_FG = '" + list[i] + "' THEN TOT_SALE_QTY ELSE 0 END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_SALE_QTY3" + "\n";
-                sQuery2 += ", SUM(CASE WHEN DLVR_ORDER_FG = '" + j + "' AND DLVR_IN_FG = '" + list[i] + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'P') THEN REAL_SALE_AMT ELSE 0 END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_REAL_SALE_AMT1" + "\n";
-                sQuery2 += ", SUM(CASE WHEN DLVR_ORDER_FG = '" + j + "' AND DLVR_IN_FG = '" + list[i] + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'S') THEN REAL_SALE_AMT ELSE 0 END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_REAL_SALE_AMT2" + "\n";
-                sQuery2 += ", SUM(CASE WHEN DLVR_ORDER_FG = '" + j + "' AND DLVR_IN_FG = '" + list[i] + "' THEN REAL_SALE_AMT ELSE 0 END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_REAL_SALE_AMT3" + "\n";
+                sQuery2 += ", SUM(CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND DLVR_IN_FG = '" + list[i] + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'P') THEN TOT_SALE_QTY ELSE 0 END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_SALE_QTY1" + "\n";
+                sQuery2 += ", SUM(CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND DLVR_IN_FG = '" + list[i] + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'S') THEN TOT_SALE_QTY ELSE 0 END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_SALE_QTY2" + "\n";
+                sQuery2 += ", SUM(CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND DLVR_IN_FG = '" + list[i] + "' THEN TOT_SALE_QTY ELSE 0 END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_SALE_QTY3" + "\n";
+                sQuery2 += ", SUM(CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND DLVR_IN_FG = '" + list[i] + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'P') THEN REAL_SALE_AMT ELSE 0 END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_REAL_SALE_AMT1" + "\n";
+                sQuery2 += ", SUM(CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND DLVR_IN_FG = '" + list[i] + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'S') THEN REAL_SALE_AMT ELSE 0 END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_REAL_SALE_AMT2" + "\n";
+                sQuery2 += ", SUM(CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND DLVR_IN_FG = '" + list[i] + "' THEN REAL_SALE_AMT ELSE 0 END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_REAL_SALE_AMT3" + "\n";
             }
         }
 
@@ -177,11 +177,11 @@ public class MonthProdSaleRateMomsServiceImpl implements MonthProdSaleRateMomsSe
             sQuery1 += ", " + orderFg[j-1] + "_REAL_SALE_AMT2" + "\n";
             sQuery1 += ", " + orderFg[j-1] + "_REAL_SALE_AMT3" + "\n";
 
-            sQuery2 += ", SUM(CASE WHEN DLVR_ORDER_FG = '" + j + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'P') THEN TOT_SALE_QTY ELSE 0 END) AS " + orderFg[j-1] + "_SALE_QTY1" + "\n";
-            sQuery2 += ", SUM(CASE WHEN DLVR_ORDER_FG = '" + j + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'S') THEN TOT_SALE_QTY ELSE 0 END) AS " + orderFg[j-1] + "_SALE_QTY2" + "\n";
+            sQuery2 += ", SUM(CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'P') THEN TOT_SALE_QTY ELSE 0 END) AS " + orderFg[j-1] + "_SALE_QTY1" + "\n";
+            sQuery2 += ", SUM(CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'S') THEN TOT_SALE_QTY ELSE 0 END) AS " + orderFg[j-1] + "_SALE_QTY2" + "\n";
             sQuery2 += ", SUM(CASE WHEN DLVR_ORDER_FG = '" + j + "' THEN TOT_SALE_QTY ELSE 0 END) AS " + orderFg[j-1] + "_SALE_QTY3" + "\n";
-            sQuery2 += ", SUM(CASE WHEN DLVR_ORDER_FG = '" + j + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'P') THEN REAL_SALE_AMT ELSE 0 END) AS " + orderFg[j-1] + "_REAL_SALE_AMT1" + "\n";
-            sQuery2 += ", SUM(CASE WHEN DLVR_ORDER_FG = '" + j + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'S') THEN REAL_SALE_AMT ELSE 0 END) AS " + orderFg[j-1] + "_REAL_SALE_AMT2" + "\n";
+            sQuery2 += ", SUM(CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'P') THEN REAL_SALE_AMT ELSE 0 END) AS " + orderFg[j-1] + "_REAL_SALE_AMT1" + "\n";
+            sQuery2 += ", SUM(CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'S') THEN REAL_SALE_AMT ELSE 0 END) AS " + orderFg[j-1] + "_REAL_SALE_AMT2" + "\n";
             sQuery2 += ", SUM(CASE WHEN DLVR_ORDER_FG = '" + j + "' THEN REAL_SALE_AMT ELSE 0 END) AS " + orderFg[j-1] + "_REAL_SALE_AMT3" + "\n";
         }
 
@@ -195,12 +195,12 @@ public class MonthProdSaleRateMomsServiceImpl implements MonthProdSaleRateMomsSe
                 sQuery1 += ", " + orderFg[j-1] + "_DIFG" + list[i] + "_REAL_SALE_AMT2" + "\n";
                 sQuery1 += ", " + orderFg[j-1] + "_DIFG" + list[i] + "_REAL_SALE_AMT3" + "\n";
 
-                sQuery2 += ", SUM(CASE WHEN DLVR_ORDER_FG = '" + j + "' AND DLVR_IN_FG = '" + list[i] + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'P') THEN TOT_SALE_QTY ELSE 0 END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_SALE_QTY1" + "\n";
-                sQuery2 += ", SUM(CASE WHEN DLVR_ORDER_FG = '" + j + "' AND DLVR_IN_FG = '" + list[i] + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'S') THEN TOT_SALE_QTY ELSE 0 END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_SALE_QTY2" + "\n";
-                sQuery2 += ", SUM(CASE WHEN DLVR_ORDER_FG = '" + j + "' AND DLVR_IN_FG = '" + list[i] + "' THEN TOT_SALE_QTY ELSE 0 END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_SALE_QTY3" + "\n";
-                sQuery2 += ", SUM(CASE WHEN DLVR_ORDER_FG = '" + j + "' AND DLVR_IN_FG = '" + list[i] + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'P') THEN REAL_SALE_AMT ELSE 0 END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_REAL_SALE_AMT1" + "\n";
-                sQuery2 += ", SUM(CASE WHEN DLVR_ORDER_FG = '" + j + "' AND DLVR_IN_FG = '" + list[i] + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'S') THEN REAL_SALE_AMT ELSE 0 END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_REAL_SALE_AMT2" + "\n";
-                sQuery2 += ", SUM(CASE WHEN DLVR_ORDER_FG = '" + j + "' AND DLVR_IN_FG = '" + list[i] + "' THEN REAL_SALE_AMT ELSE 0 END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_REAL_SALE_AMT3" + "\n";
+                sQuery2 += ", SUM(CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND DLVR_IN_FG = '" + list[i] + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'P') THEN TOT_SALE_QTY ELSE 0 END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_SALE_QTY1" + "\n";
+                sQuery2 += ", SUM(CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND DLVR_IN_FG = '" + list[i] + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'S') THEN TOT_SALE_QTY ELSE 0 END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_SALE_QTY2" + "\n";
+                sQuery2 += ", SUM(CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND DLVR_IN_FG = '" + list[i] + "' THEN TOT_SALE_QTY ELSE 0 END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_SALE_QTY3" + "\n";
+                sQuery2 += ", SUM(CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND DLVR_IN_FG = '" + list[i] + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'P') THEN REAL_SALE_AMT ELSE 0 END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_REAL_SALE_AMT1" + "\n";
+                sQuery2 += ", SUM(CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND DLVR_IN_FG = '" + list[i] + "' AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'S') THEN REAL_SALE_AMT ELSE 0 END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_REAL_SALE_AMT2" + "\n";
+                sQuery2 += ", SUM(CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND DLVR_IN_FG = '" + list[i] + "' THEN REAL_SALE_AMT ELSE 0 END) AS " + orderFg[j-1] + "_DIFG" + list[i] + "_REAL_SALE_AMT3" + "\n";
             }
         }
 
