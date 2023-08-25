@@ -44,33 +44,33 @@
         ,		tmp.REG_FG
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM    TB_MS_STORE tms
-        ,		TB_MS_STORE_INFO tmsi
         ,       TB_MS_SOLD_OUT_RESVE tmkdr
         ,		TB_MS_PRODUCT tmp
         LEFT OUTER JOIN (
-        SELECT
-        STORE_CD,
-        PROD_CD,
-        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-        FROM TB_MS_PRODUCT_SALE_PRICE
-        WHERE STORE_CD = #{storeCd}
-        <![CDATA[
-            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-        ]]>
-        AND SALE_PRC_FG = '1'
-        GROUP BY
-        STORE_CD, PROD_CD
-        ) thpsp ON
-        tmp.STORE_CD = thpsp.STORE_CD
-        AND tmp.PROD_CD = thpsp.PROD_CD
+                SELECT
+                STORE_CD,
+                PROD_CD,
+                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                FROM TB_MS_PRODUCT_SALE_PRICE
+                WHERE STORE_CD = #{storeCd}
+                <![CDATA[
+                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                ]]>
+                AND SALE_PRC_FG = '1'
+                GROUP BY
+                STORE_CD, PROD_CD
+            ) thpsp ON
+            tmp.STORE_CD = thpsp.STORE_CD
+            AND tmp.PROD_CD = thpsp.PROD_CD
         LEFT OUTER JOIN TB_MS_BRAND tmb ON
-        tmb.STORE_CD = tmp.STORE_CD
-        AND tmb.MS_BRAND_CD = tmp.HQ_BRAND_CD
+            tmb.STORE_CD = tmp.STORE_CD
+            AND tmb.MS_BRAND_CD = tmp.HQ_BRAND_CD
+        LEFT OUTER JOIN TB_MS_STORE_INFO tmsi ON
+            tmsi.STORE_CD = tmp.STORE_CD
         WHERE	tmkdr.STORE_CD = tmp.STORE_CD
         AND 	tmkdr.PROD_CD  = tmp.PROD_CD
         AND 	tmkdr.STORE_CD = tms.STORE_CD
-        AND 	tmkdr.STORE_CD = tmsi.STORE_CD
         AND     tms.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='storeCds != null and storeCds != ""'>
             AND tmkdr.STORE_CD = #{storeCds}
@@ -343,7 +343,7 @@
         WHERE	tmkdr.STORE_CD = tmp.STORE_CD
         AND 	tmkdr.PROD_CD  = tmp.PROD_CD
         AND 	tmkdr.STORE_CD = tms.STORE_CD
-        AND 	tmkdr.STORE_CD = tmsi.STORE_CD
+        AND 	tmkdr.STORE_CD = tmsi.STORE_CD (+)
         AND 	tmpsc.STORE_CD = tmkdr.STORE_CD
         AND 	tmpsc.SDSEL_CLASS_CD = tmkdr.SDSEL_CLASS_CD
         AND 	tmpsc.STORE_CD = tmpsg.STORE_CD
