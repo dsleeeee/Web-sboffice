@@ -8513,4 +8513,19 @@
         AND    ADVER_FILE_NO = '8000'
     </insert>
 
+    <!-- 매장포스 환경정값 조회 -->
+    <!--
+        TABLE    : TB_MS_POS_ENVST
+        COMMENTS : 매장포스의 환경설정값을 조회한다.
+    -->
+    <select id="getPosEnvVal" parameterType="storeManageVO" resultType="String">
+        /* StoreManageMapper.getPosEnvVal */
+        SELECT ENVST_VAL
+          FROM TB_MS_POS_ENVST
+         WHERE STORE_CD = #{storeCd}
+           AND ENVST_CD = #{envstCd}
+           AND POS_NO = #{posNo}
+           AND USE_YN = 'Y'
+    </select>
+
 </mapper>

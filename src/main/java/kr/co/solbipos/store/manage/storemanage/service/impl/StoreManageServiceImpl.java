@@ -1642,4 +1642,10 @@ public class StoreManageServiceImpl implements StoreManageService{
         return mapper.getHqBrandCdComboList(storeManageVO);
     }
 
+    /** 매장포스 환경설정값 조회 */
+    @Override
+    public String getPosEnvVal(StoreManageVO storeManageVO){
+        return mapper.getPosEnvVal(storeManageVO);
+    }
+
 }

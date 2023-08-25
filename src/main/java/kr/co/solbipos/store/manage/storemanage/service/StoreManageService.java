@@ -169,4 +169,7 @@ public interface StoreManageService {
 
     /** 브랜드 콤보박스 조회 */
     List<DefaultMap<Object>> getHqBrandCdComboList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장포스 환경설정값 조회 */
+    String getPosEnvVal(StoreManageVO storeManageVO);
 }

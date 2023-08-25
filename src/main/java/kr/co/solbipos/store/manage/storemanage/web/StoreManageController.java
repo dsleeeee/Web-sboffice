@@ -1064,4 +1064,25 @@ public class StoreManageController {
 
         return ReturnUtil.returnListJson(Status.OK, result, storeManageVO);
     }
+
+    /**
+     * 매장포스 환경설정값 조회
+     *
+     * @param storeManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  이다솜
+     * @since   2023.08.25
+     */
+    @RequestMapping(value = "storeManage/getPosEnvVal.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPosEnvVal(StoreManageVO storeManageVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        String result = service.getPosEnvVal(storeManageVO);
+
+        return returnJson(Status.OK, result);
+    }
 }
