@@ -258,22 +258,25 @@ app.controller('bbqExcelFileUploadCtrl', ['$scope', '$http', '$timeout', functio
         for (var i = $scope.progressCnt; i < loopCnt; i++) {
             var item = jsonData[i];
 
-            // 전화번호 필수값 체크
-            //if(item.telNo !== null && item.telNo != ''){
+            item.regStoreCd = $("#bbqMemberExcelUploadStoreCd").val();
+            item.membrClassCd = "001"; // 회원등급 [001] : 이전회원용_수정금지
+            item.gendrFg = 'N';
+            item.weddingYn = 'N';
+            item.emailRecvYn = 'N';
+            item.smsRecvYn = 'N';
+            item.totAdjPoint = 0;
+            item.useYn = 'Y';
+            item.status = 'I';
+            item.lastSaleDate = nvl(item.lastSaleDate, "").replaceAll('-','');
 
-                item.regStoreCd = $("#bbqMemberExcelUploadStoreCd").val();
-                item.membrClassCd = "001"; // 회원등급 [001] : 이전회원용_수정금지
-                item.gendrFg = 'N';
-                item.weddingYn = 'N';
-                item.emailRecvYn = 'N';
-                item.smsRecvYn = 'N';
-                item.totAdjPoint = 0;
-                item.useYn = 'Y';
-                item.status = 'I';
-                item.lastSaleDate = nvl(item.lastSaleDate, "").replaceAll('-','');
+            // 휴대폰 번호가 있으면 문자수신여부 'Y' 셋팅
+            if(item.memberTelNo !== null && item.memberTelNo !== '' && item.memberTelNo !== undefined) {
+                if (item.memberTelNo.substr(0,3) === "010") {
+                    item.smsRecvYn = 'Y';
+                }
+            }
 
-                params.push(item);
-            //}
+            params.push(item);
         }
 
         //가상로그인 session 설정

@@ -523,4 +523,7 @@ public interface StoreManageMapper {
 
     /** 기준테이블바탕화면 이미지 등록(단독매장) */
     int insertStoreBaseTblBgImg(StoreManageVO storeManageVO);
+
+    /** 매장포스 환경설정값 조회 */
+    String getPosEnvVal(StoreManageVO storeManageVO);
 }
