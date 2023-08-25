@@ -304,7 +304,7 @@
 </div>
 
 <script>
-    var subPriceFg = "${subPriceFg}";ㅇ
+    var subPriceFg = "${subPriceFg}";
     var coercionFg = "${coercionFg}";
 
     <%-- 가격관리구분 --%>

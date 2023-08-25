@@ -239,7 +239,7 @@ app.controller('saleAnalsMomsBstCtrl', ['$scope', '$http', '$timeout', function 
 
         var opt2 = ""; // 조회옵션2
         if($("#chkOpt2StoreIn").is(":checked")){opt2 += "1,"}
-        if($("#chkOpt2Pack").is(":checked")){opt2 += "3,"}
+        if($("#chkOpt2Pack").is(":checked")){opt2 += "3,4,"}
         if($("#chkOpt2Dlvr").is(":checked")){opt2 += "2,"}
         params.dlvrOrderFg = opt2;
 
