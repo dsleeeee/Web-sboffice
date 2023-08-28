@@ -3759,6 +3759,7 @@
                 BY 		PROD_CD
                 ) thpsp
                 WHERE 	thkk.STORE_CD = #{storeCd}
+                AND 	thkk.POS_NO = #{posNo}
                 AND 	thkk.TU_CLS_TYPE = #{tuClsType}
                 AND 	thkk.TU_CLS_CD = #{tuClsCd}
                 AND 	thkk.STORE_CD = thp.STORE_CD

@@ -120,6 +120,10 @@ app.controller('kioskKeyMapViewCtrl', ['$scope', '$http', function ($scope, $htt
     var params = {};
     params.tuClsType = $scope.tuClsTypeViewCombo.selectedValue;
     params.tuClsCd = tuClsCd;
+    if(orgnFg==='STORE'){
+      var scope = agrid.getScope('kioskKeyMapRegistCtrl');
+      params.posNo = scope.posNoCombo.selectedValue;
+    }
 
     if(document.getElementsByName('sessionId')[0]){
       params.sid = document.getElementsByName('sessionId')[0].value;
