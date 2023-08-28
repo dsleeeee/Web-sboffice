@@ -8,7 +8,7 @@
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
 
 <div class="subCon">
-  <div ng-controller="todayMomsCtrl">ㅣ
+  <div ng-controller="todayMomsCtrl">
     <div class="searchBar">
       <a href="#" class="open fl">${menuNm}</a>
       <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
