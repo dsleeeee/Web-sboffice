@@ -95,10 +95,10 @@ public class SaleDtlChannelServiceImpl implements SaleDtlChannelService {
 
             sQuery2 += ", (CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'P') THEN SALE_QTY END) AS " + orderFg[j-1] + "_SALE_QTY1" + "\n";
             sQuery2 += ", (CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'S') THEN SALE_QTY END) AS " + orderFg[j-1] + "_SALE_QTY2" + "\n";
-            sQuery2 += ", (CASE WHEN DLVR_ORDER_FG = '" + j + "' THEN SALE_QTY END) AS " + orderFg[j-1] + "_SALE_QTY3" + "\n";
+            sQuery2 += ", (CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') THEN SALE_QTY END) AS " + orderFg[j-1] + "_SALE_QTY3" + "\n";
             sQuery2 += ", (CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'P') THEN REAL_SALE_AMT END) AS " + orderFg[j-1] + "_REAL_SALE_AMT1" + "\n";
             sQuery2 += ", (CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') AND (SEL_TYPE_FG = 'N' OR SEL_TYPE_FG = 'S') THEN REAL_SALE_AMT END) AS " + orderFg[j-1] + "_REAL_SALE_AMT2" + "\n";
-            sQuery2 += ", (CASE WHEN DLVR_ORDER_FG = '" + j + "' THEN REAL_SALE_AMT END) AS " + orderFg[j-1] + "_REAL_SALE_AMT3" + "\n";
+            sQuery2 += ", (CASE WHEN (DLVR_ORDER_FG = '" + (j == 3 ? (j + "' OR DLVR_ORDER_FG = '4") : j) + "') THEN REAL_SALE_AMT END) AS " + orderFg[j-1] + "_REAL_SALE_AMT3" + "\n";
         }
 
         // 내점, 배달, 포장의 주문채널별 수량과 실매출액
