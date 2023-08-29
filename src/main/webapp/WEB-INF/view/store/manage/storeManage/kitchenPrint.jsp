@@ -69,4 +69,4 @@
   var prterSpeed  = ${cnv.getEnvCodeExcpAll("4032")};
   var useYn       = ${ccu.getCommCodeExcpAll("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrint.js?ver=20230417.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrint.js?ver=20230829.01" charset="utf-8"></script>
