@@ -231,7 +231,7 @@
                     </td>
                     <td colspan="2">
                         <jsp:include page="/WEB-INF/view/sale/com/popup/selectUploadStore.jsp" flush="true">
-                            <jsp:param name="targetId" value="${param.targetId}Upload"/>
+                            <jsp:param name="targetId" value="${param.targetId}SelectUpload"/>
                         </jsp:include>
                     </td>
                 </tr>
@@ -582,7 +582,7 @@
 
         // 업로드매장 팝업
         $scope.selectUploadStoreShow = function () {
-            $scope._broadcast(targetId + 'UploadCtrl');
+            $scope._broadcast(targetId + 'SelectUploadCtrl');
         };
 
         // 업로드매장 텍스트박스 조회

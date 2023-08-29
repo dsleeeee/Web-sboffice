@@ -114,10 +114,10 @@
             var params = {};
 
             $scope._inquirySub("/iostock/cmm/iostockCmm/getSelectUploadStoreList.sb", params, function () {
-                $scope.searchFg = "Y";
+                // $scope.searchFg = "Y";
 
                 // 저장기능 수행후 재조회
-                var preTargetId = targetId.substring(0, targetId.indexOf('Upload'));
+                var preTargetId = targetId.substring(0, targetId.indexOf('SelectUpload'));
                 var scope = agrid.getScope(preTargetId + 'Ctrl');
                 scope.selectUploadStoreText();
 
