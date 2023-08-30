@@ -21,10 +21,12 @@
                     <s:message code="cmm.search" />
                 </button>
                 <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-                    <%-- 확장조회 --%>
-                    <button class="btn_blue mr5 fl" id="btnSearchAddShow" ng-click="searchAddShowChange()">
-                        <s:message code="cmm.search.addShow" />
-                    </button>
+                    <c:if test="${momsEnvstVal == '1'}">
+                        <%-- 확장조회 --%>
+                        <button class="btn_blue mr5 fl" id="btnSearchAddShow" ng-click="searchAddShowChange()">
+                            <s:message code="cmm.search.addShow" />
+                        </button>
+                    </c:if>
                 </c:if>
             </div>
         </div>
@@ -303,6 +305,9 @@
 </div>
 
 <script type="text/javascript">
+    // [1250 맘스터치] 환경설정값
+    var momsEnvstVal = "${momsEnvstVal}";
+
     // List 형식("" 안붙임)
     var momsHqBrandCdComboList = ${momsHqBrandCdComboList};
     var branchCdComboList = ${branchCdComboList};

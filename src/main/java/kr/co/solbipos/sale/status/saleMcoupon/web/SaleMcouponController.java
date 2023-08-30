@@ -5,9 +5,12 @@ import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.status.saleMcoupon.service.SaleMcouponService;
 import kr.co.solbipos.sale.status.saleMcoupon.service.SaleMcouponVO;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
@@ -52,16 +55,18 @@ public class SaleMcouponController {
     private final SaleMcouponService saleMcouponService;
     private final CmmCodeUtil cmmCodeUtil;
     private final DayProdService dayProdService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public SaleMcouponController(SessionService sessionService, SaleMcouponService saleMcouponService, CmmCodeUtil cmmCodeUtil, DayProdService dayProdService) {
+    public SaleMcouponController(SessionService sessionService, SaleMcouponService saleMcouponService, CmmCodeUtil cmmCodeUtil, DayProdService dayProdService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
         this.saleMcouponService = saleMcouponService;
         this.cmmCodeUtil = cmmCodeUtil;
         this.dayProdService = dayProdService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -76,6 +81,14 @@ public class SaleMcouponController {
 
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        /** 맘스터치 */
+        // [1250 맘스터치] 환경설정값 조회
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0"));
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
+        }
 
         // 사용자별 브랜드 조회(콤보박스용)
         DayProdVO dayProdVO = new DayProdVO();
