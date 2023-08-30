@@ -279,6 +279,38 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
             $("#env"+list[s].envstCd).attr("defaultVal", "*");
         }
       }
+
+      // 매장환경 저장전 체크에 필요한 환경설정값 갖고있기
+      if(list[s].envstCd  === "1102"){
+          console.log("1102: " + list[s].selEnvstVal);
+          orgEnv1102 = list[s].selEnvstVal;
+      }
+      if(list[s].envstCd  === "1221"){
+          console.log("1221: " + list[s].selEnvstVal);
+          orgEnv1221 = list[s].selEnvstVal;
+      }
+      if(list[s].envstCd  === "2001"){
+          console.log("2001: " + list[s].selEnvstVal);
+          orgEnv2001 = list[s].selEnvstVal;
+      }
+      if(list[s].envstCd  === "2002"){
+          console.log("2002: " + list[s].selEnvstVal);
+          orgEnv2002 = list[s].selEnvstVal;
+      }
+
+      // 포스환경 저장전 체크에 필요한 환경설정값 갖고있기
+      if(list[s].envstCd  === "1015"){
+          console.log("1015: " + list[s].selEnvstVal);
+          orgEnv1015 = list[s].selEnvstVal;
+      }
+      if(list[s].envstCd  === "4020"){
+          console.log("4020: " + list[s].selEnvstVal);
+          orgEnv4020 = list[s].selEnvstVal;
+      }
+      if(list[s].envstCd  === "4021"){
+          console.log("4021: " + list[s].selEnvstVal);
+          orgEnv4021 = list[s].selEnvstVal;
+      }
     }
 
     // 등록되지 않은 환경값이 있을 경우

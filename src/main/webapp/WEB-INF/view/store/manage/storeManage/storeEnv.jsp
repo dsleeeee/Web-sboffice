@@ -58,5 +58,18 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeEnv.js?ver=20181107.08" charset="utf-8"></script>
+<script type="text/javascript">
+    // 매장환경 저장전 체크에 필요한 환경설정값 갖고있기
+    var orgEnv1102 = "";
+    var orgEnv1221 = "";
+    var orgEnv2001 = "";
+    var orgEnv2002 = "";
+
+    // 포스환경 저장전 체크에 필요한 환경설정값 갖고있기
+    var orgEnv1015 = "";
+    var orgEnv4020 = "";
+    var orgEnv4021 = "";
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeEnv.js?ver=20230830.01" charset="utf-8"></script>
 
