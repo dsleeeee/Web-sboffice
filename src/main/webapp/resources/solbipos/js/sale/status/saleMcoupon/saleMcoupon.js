@@ -104,7 +104,6 @@ app.controller('saleMcouponCtrl', ['$scope', '$http', '$timeout', function ($sco
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
         params.storeCds = $("#saleMcouponStoreCd").val();
-        params.prodHqBrandCd = $scope.prodHqBrandCd;
         params.momsTeam = $scope.momsTeam;
         params.momsAcShop = $scope.momsAcShop;
         params.momsAreaFg = $scope.momsAreaFg;
@@ -188,7 +187,6 @@ app.controller('saleMcouponCtrl', ['$scope', '$http', '$timeout', function ($sco
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
         params.storeCds = $("#saleMcouponStoreCd").val();
-        params.prodHqBrandCd = $scope.prodHqBrandCd;
         params.momsTeam = $scope.momsTeam;
         params.momsAcShop = $scope.momsAcShop;
         params.momsAreaFg = $scope.momsAreaFg;

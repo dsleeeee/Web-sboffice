@@ -17,7 +17,7 @@
             <a href="#" class="open fl">${menuNm}</a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" ng-click="_broadcast('saleMcouponCtrl',1)">
+                <button class="btn_blue fr" ng-click="_pageView('saleMcouponCtrl',1)">
                     <s:message code="cmm.search" />
                 </button>
                 <c:if test="${sessionInfo.orgnFg == 'HQ'}">
@@ -319,7 +319,7 @@
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/saleMcoupon/saleMcoupon.js?ver=20230412.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/saleMcoupon/saleMcoupon.js?ver=20230412.03" charset="utf-8"></script>
 
 <%-- 모바일쿠폰 현황 상세 팝업 --%>
 <c:import url="/WEB-INF/view/sale/status/saleMcoupon/saleMcouponDtl.jsp">
