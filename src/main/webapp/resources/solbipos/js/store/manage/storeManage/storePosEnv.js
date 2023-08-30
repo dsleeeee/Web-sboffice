@@ -194,8 +194,8 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     var objTargtFg      = document.getElementsByName("pos_targtFg");
 
     // 포스형태[204]가 외식업-후불제인 경우에만 후불제를 선택할 수 있습니다.
-    var env1015 = $("#env1015").val();
-    var env4020 = $("#env4020").val();
+    var env1015 = $("#env1015").val() === undefined ? orgEnv1015 : $("#env1015").val();
+    var env4020 = $("#env4020").val() === undefined ? orgEnv4020 : $("#env4020").val();
     if(env1015 == "03") {
       if(env4020 != "0") {
         $scope._popMsg(messages["storeManage.only.select.postPay"]);
@@ -203,161 +203,150 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     }
 
-    //var env4021 = $("#env4021").val(); // 포스-메인여부
-    var env4021 = "";
-    var params2 = {};
-    params2.storeCd = storeScope.getSelectedStore().storeCd;
-    params2.envstCd = '4021';
-    params2.posNo = $scope.getSelectedPosNo();
+    var env4021 = $("#env4021").val() === undefined ? orgEnv4021 : $("#env4021").val(); // 포스-메인여부
 
-    $scope._postJSONQuery.withOutPopUp( "/store/manage/storeManage/storeManage/getPosEnvVal.sb", params2, function(result) {
-        if (result.data.status === "OK") {
-            env4021 = result.data.data; // 포스-메인여부 조회
-
-            if(vEnv1221 !=="" && vEnv1221 !== null && vEnv1221 !== undefined) {
-              // DB구성방법 [1221:통합DB]환경 사용시 메인포스가 반드시 존재해야 합니다.
-              if (vEnv1221 === "0") {
-                if (env4021 === "2") {
-                  if (mainPosList.length === 0) { // 메인포스가 없을 때
-                    $scope._popMsg(messages["storeManage.require.mainPos.msg"]);
-                    return false;
-                  } else {
-                    if (mainPosList.length === 1) { // 메인포스가 1개 일때
-                      if (mainPosNo === $scope.getSelectedPosNo()) {
-                        $scope._popMsg(messages["storeManage.require.mainPos.msg"]);
-                        return false;
-                      }
-                    }
-                  }
-                }
-              }
-
-              // DB구성방법 [1221:개별DB]환경은 서브포스를 사용할 수 없습니다.
-              if (vEnv1221 === "1") {
-                if (env4021 === "2") {
-                  $scope._popMsg(messages["storeManage.notUse.subPos.msg"]);
+    if (vEnv1221 !== "" && vEnv1221 !== null && vEnv1221 !== undefined) {
+      // DB구성방법 [1221:통합DB]환경 사용시 메인포스가 반드시 존재해야 합니다.
+      if (vEnv1221 === "0") {
+          if (env4021 === "2") {
+              if (mainPosList.length === 0) { // 메인포스가 없을 때
+                  $scope._popMsg(messages["storeManage.require.mainPos.msg"]);
                   return false;
-                }
-              }
-            }
-
-            // 메인포스가 아닌경우 4048 스마트오더 미사용 강제수정
-            if(env4021 !== "1") {
-              $("#env4048").val('0');
-            }
-
-            var chngCnt  = 0; // 변경된 건수
-            var arrChg = []; //  변경된 환경변수 배열 Key 값
-            var params = new Array();
-
-            for(var i=0; i<objEnvstCd.length; i++){
-
-              if(objDirctInYn[i].value == "Y" && objEnvstValCd[i].value == ""){
-                var msgStr = messages["hqManage.envSetting"] + " [" + objEnvstCd[i].value + "] "+ objEnvstNm[i].value
-                    + messages["storeManage.require.regist.inputEnv"]
-                ;
-
-                $scope._popMsg(msgStr);
-                return false;
-              }
-
-              if(objhqOfficeCd !== "00000" && objTargtFg[i].value === "X" && objHqEnvstValCd[i].value !== objEnvstValCd[i].value){
-                var msgStr = "["
-                    + objEnvstCd[i].value + "] "
-                    + objEnvstNm[i].value
-                    + messages["storeManage.require.regist.hqEnvstVal"]
-                    + messages["storeManage.require.regist.hqEnvstVal2"]
-                    + "( '"+objHqEnvstValNm[i].value+"' )"
-                    + messages["storeManage.require.regist.hqEnvstVal3"];
-                if(objHqEnvstValNm[i].value.toString() === 'null') {  // 본사 설정값이 없으면 '본사환경값을 먼저 세팅하여 주십시오' 출력
-                  msgStr = msgStr + messages["storeManage.require.regist.hqEnvstVal4"];
-                }
-                $scope._popMsg(msgStr);
-                return false;
-              }
-
-              if(objOldEnvstVal[i].value != $("#env"+objEnvstCd[i].value).val()) {
-                arrChg.push(i);
-                chngCnt ++;
-              }
-            }
-
-            if(chngCnt == 0 ){
-              $scope._popMsg(messages["cmm.not.modify"]);
-              return false;
-            }
-
-            $scope._popConfirm( messages["cmm.choo.save"], function(){
-
-              var storeScope = agrid.getScope('storeManageCtrl');
-
-              /*for(var i=0; i<objEnvstCd.length; i++){
-
-                var obj = {};
-                obj.hqOfficeCd  = storeScope.getSelectedStore().hqOfficeCd;
-                obj.storeCd     = storeScope.getSelectedStore().storeCd;
-                obj.status      = objStatus[i].value;
-                obj.envstCd     = objEnvstCd[i].value;
-                obj.envstNm     = objEnvstNm[i].value;
-                obj.envstGrpCd  = objEnvstGrpCd[i].value;
-                obj.envstVal    = objEnvstValCd[i].value;
-                obj.dirctInYn   = objDirctInYn[i].value;
-                obj.posNo       = $scope.getSelectedPosNo();
-                obj.useYn       = "Y";
-
-                params.push(obj);
-              }*/
-
-              // 기존에 전체 환경변수값 저장에서 변경된 환경변수값만 저장되도록 수정
-              for(var i=0; i<arrChg.length; i++){
-
-                var obj = {};
-                obj.hqOfficeCd  = storeScope.getSelectedStore().hqOfficeCd;
-                obj.storeCd     = storeScope.getSelectedStore().storeCd;
-                obj.status      = objStatus[arrChg[i]].value;
-                obj.envstCd     = objEnvstCd[arrChg[i]].value;
-                obj.envstNm     = objEnvstNm[arrChg[i]].value;
-                obj.envstGrpCd  = objEnvstGrpCd[arrChg[i]].value;
-                obj.envstVal    = objEnvstValCd[arrChg[i]].value;
-                obj.dirctInYn   = objDirctInYn[arrChg[i]].value;
-                obj.posNo       = $scope.getSelectedPosNo();
-                obj.useYn       = "Y";
-
-                params.push(obj);
-              }
-
-              $scope.$broadcast('loadingPopupActive', messages["cmm.saving"]);
-
-              $scope._postJSONSave.withOutPopUp( "/store/manage/storeManage/storeManage/savePosConfig.sb", params, function () {
-
-                // 나머지는 모두 서브포스로 강제 업데이트
-                if(vEnv1221 !=="" && vEnv1221 !== null && vEnv1221 !== undefined) {
-                  if (vEnv1221 === "0") {
-                    if (env4021 === "1") {
-                      $scope.updateToSubPos();
-                    }
+              } else {
+                  if (mainPosList.length === 1) { // 메인포스가 1개 일때
+                      if (mainPosNo === $scope.getSelectedPosNo()) {
+                          $scope._popMsg(messages["storeManage.require.mainPos.msg"]);
+                          return false;
+                      }
                   }
-                }
+              }
+          }
+      }
 
-                if(vEnv1221 ==="" || vEnv1221 === null || vEnv1221 === undefined || !(vEnv1221 === "0" && env4021 === "1")){
-                  console.log("(재조회) DB구성요소:" + vEnv1221 + " 포스-메인여부:" + env4021);
-                  // DB구성요소[1221] 값 재조회
-                  $scope.getEnv1221();
-                  // 메인포스 재조회
-                  $scope.getMainPosList();
-                }
+      // DB구성방법 [1221:개별DB]환경은 서브포스를 사용할 수 없습니다.
+      if (vEnv1221 === "1") {
+          if (env4021 === "2") {
+              $scope._popMsg(messages["storeManage.notUse.subPos.msg"]);
+              return false;
+          }
+      }
+    }
 
-                $scope.$broadcast('loadingPopupInactive');
-                $scope._popMsg(messages["cmm.saveSucc"]);
-                // 재조회 - 포스명칭 selectBox까지 초기화되어, 그부분 없이 바로 포스 환경설정 값 조회 (2020.04.03_이다솜)
-                //var envScope = agrid.getScope('storeEnvCtrl');
-                //$scope.changeEnvGroup(envScope.getEnvGroupCd());
-                $scope.searchPosEnv();
-              });
-            });
-            event.preventDefault();
-        }
+    // 메인포스가 아닌경우 4048 스마트오더 미사용 강제수정
+    if (env4021 !== "1") {
+      $("#env4048").val('0');
+    }
+
+    var chngCnt = 0; // 변경된 건수
+    var arrChg = []; //  변경된 환경변수 배열 Key 값
+    var params = new Array();
+
+    for (var i = 0; i < objEnvstCd.length; i++) {
+
+      if (objDirctInYn[i].value == "Y" && objEnvstValCd[i].value == "") {
+          var msgStr = messages["hqManage.envSetting"] + " [" + objEnvstCd[i].value + "] " + objEnvstNm[i].value
+              + messages["storeManage.require.regist.inputEnv"]
+          ;
+
+          $scope._popMsg(msgStr);
+          return false;
+      }
+
+      if (objhqOfficeCd !== "00000" && objTargtFg[i].value === "X" && objHqEnvstValCd[i].value !== objEnvstValCd[i].value) {
+          var msgStr = "["
+              + objEnvstCd[i].value + "] "
+              + objEnvstNm[i].value
+              + messages["storeManage.require.regist.hqEnvstVal"]
+              + messages["storeManage.require.regist.hqEnvstVal2"]
+              + "( '" + objHqEnvstValNm[i].value + "' )"
+              + messages["storeManage.require.regist.hqEnvstVal3"];
+          if (objHqEnvstValNm[i].value.toString() === 'null') {  // 본사 설정값이 없으면 '본사환경값을 먼저 세팅하여 주십시오' 출력
+              msgStr = msgStr + messages["storeManage.require.regist.hqEnvstVal4"];
+          }
+          $scope._popMsg(msgStr);
+          return false;
+      }
+
+      if (objOldEnvstVal[i].value != $("#env" + objEnvstCd[i].value).val()) {
+          arrChg.push(i);
+          chngCnt++;
+      }
+    }
+
+    if (chngCnt == 0) {
+      $scope._popMsg(messages["cmm.not.modify"]);
+      return false;
+    }
+
+    $scope._popConfirm(messages["cmm.choo.save"], function () {
+
+      var storeScope = agrid.getScope('storeManageCtrl');
+
+      /*for(var i=0; i<objEnvstCd.length; i++){
+
+        var obj = {};
+        obj.hqOfficeCd  = storeScope.getSelectedStore().hqOfficeCd;
+        obj.storeCd     = storeScope.getSelectedStore().storeCd;
+        obj.status      = objStatus[i].value;
+        obj.envstCd     = objEnvstCd[i].value;
+        obj.envstNm     = objEnvstNm[i].value;
+        obj.envstGrpCd  = objEnvstGrpCd[i].value;
+        obj.envstVal    = objEnvstValCd[i].value;
+        obj.dirctInYn   = objDirctInYn[i].value;
+        obj.posNo       = $scope.getSelectedPosNo();
+        obj.useYn       = "Y";
+
+        params.push(obj);
+      }*/
+
+      // 기존에 전체 환경변수값 저장에서 변경된 환경변수값만 저장되도록 수정
+      for (var i = 0; i < arrChg.length; i++) {
+
+          var obj = {};
+          obj.hqOfficeCd = storeScope.getSelectedStore().hqOfficeCd;
+          obj.storeCd = storeScope.getSelectedStore().storeCd;
+          obj.status = objStatus[arrChg[i]].value;
+          obj.envstCd = objEnvstCd[arrChg[i]].value;
+          obj.envstNm = objEnvstNm[arrChg[i]].value;
+          obj.envstGrpCd = objEnvstGrpCd[arrChg[i]].value;
+          obj.envstVal = objEnvstValCd[arrChg[i]].value;
+          obj.dirctInYn = objDirctInYn[arrChg[i]].value;
+          obj.posNo = $scope.getSelectedPosNo();
+          obj.useYn = "Y";
+
+          params.push(obj);
+      }
+
+      $scope.$broadcast('loadingPopupActive', messages["cmm.saving"]);
+
+      $scope._postJSONSave.withOutPopUp("/store/manage/storeManage/storeManage/savePosConfig.sb", params, function () {
+
+          // 나머지는 모두 서브포스로 강제 업데이트
+          if (vEnv1221 !== "" && vEnv1221 !== null && vEnv1221 !== undefined) {
+              if (vEnv1221 === "0") {
+                  if (env4021 === "1") {
+                      $scope.updateToSubPos();
+                  }
+              }
+          }
+
+          if (vEnv1221 === "" || vEnv1221 === null || vEnv1221 === undefined || !(vEnv1221 === "0" && env4021 === "1")) {
+              console.log("(재조회) DB구성요소:" + vEnv1221 + " 포스-메인여부:" + env4021);
+              // DB구성요소[1221] 값 재조회
+              $scope.getEnv1221();
+              // 메인포스 재조회
+              $scope.getMainPosList();
+          }
+
+          $scope.$broadcast('loadingPopupInactive');
+          $scope._popMsg(messages["cmm.saveSucc"]);
+          // 재조회 - 포스명칭 selectBox까지 초기화되어, 그부분 없이 바로 포스 환경설정 값 조회 (2020.04.03_이다솜)
+          //var envScope = agrid.getScope('storeEnvCtrl');
+          //$scope.changeEnvGroup(envScope.getEnvGroupCd());
+          $scope.searchPosEnv();
+      });
     });
+    event.preventDefault();
   };
 
   // 서브포스로 변경

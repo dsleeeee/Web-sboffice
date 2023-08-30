@@ -1294,6 +1294,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
     envPopup.shown.addHandler(function (s) {
       setTimeout(function() {
+        // 환경 검색값 초기화
+        $("#srchConfig").val('');
         $scope._broadcast('storeEnvCtrl');
       }, 50)
     });
