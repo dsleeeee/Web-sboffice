@@ -199,7 +199,8 @@
                 tsspm.SALE_YN,
                 (CASE WHEN tsspm.SALE_YN = 'Y' THEN 1 WHEN tsspm.SALE_YN = 'N' THEN -1 ELSE 0 END) AS SALE_CNT,
                 tsspm.SALE_AMT,
-                (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '110' AND  NMCODE_CD = tsspm.MCOUPN_CD) AS MCOUPN_CD,
+                tsspm.MCOUPN_CD,
+                (SELECT VAN_NM FROM TB_CM_VAN_CMPNY WHERE VAN_FG = '04' AND VAN_CD = tsspm.MCOUPN_CD) AS MCOUPN_NM,
                 tsspm.MCOUPN_TERMNL_NO,
                 tsspm.MCOUPN_TYPE_FG,
                 tsspm.MCOUPN_BARCD_NO
@@ -223,7 +224,8 @@
                 tsspm.SALE_YN,
                 (CASE WHEN tsspm.SALE_YN = 'Y' THEN 1 WHEN tsspm.SALE_YN = 'N' THEN -1 ELSE 0 END) AS SALE_CNT,
                 tsspm.SALE_AMT,
-                (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '110' AND  NMCODE_CD = tsspm.MCOUPN_CD) AS MCOUPN_CD,
+                tsspm.MCOUPN_CD,
+                (SELECT VAN_NM FROM TB_CM_VAN_CMPNY WHERE VAN_FG = '04' AND VAN_CD = tsspm.MCOUPN_CD) AS MCOUPN_NM,
                 tsspm.MCOUPN_TERMNL_NO,
                 tsspm.MCOUPN_TYPE_FG,
                 tsspm.MCOUPN_BARCD_NO

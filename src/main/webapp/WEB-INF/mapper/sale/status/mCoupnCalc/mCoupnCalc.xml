@@ -28,7 +28,7 @@
        ,      tmsi.MOMS_TEAM
        ,      tmsi.MOMS_AC_SHOP
        ,      tsspm2.MCOUPN_CD
-       ,      tcn.NMCODE_NM AS MCOUPN_NM
+       ,      tcvc.MCOUPN_NM
        ,      SUM(tsspm2.CNT) AS CNT
        ,      SUM(tsspm2.APPR_AMT) AS APPR_AMT
        ,      SUM(tsspm2.CNT_OK) AS CNT_OK
@@ -39,11 +39,12 @@
         FROM TB_MS_STORE tms
         ,    TB_MS_STORE_INFO tmsi
         ,    (
-                SELECT NMCODE_CD
-                ,      NMCODE_NM
-                FROM   TB_CM_NMCODE
-                WHERE  NMCODE_GRP_CD = '110'
-             ) tcn
+                SELECT
+                VAN_CD AS MCOUPN_CD,
+                VAN_NM AS MCOUPN_NM
+                FROM TB_CM_VAN_CMPNY
+                WHERE VAN_FG = '04'
+             ) tcvc
         ,    (
                 SELECT tsspm.STORE_CD
                      , SUM(tsspm.CNT) AS CNT
@@ -148,7 +149,7 @@
              ) tsspm2
        WHERE tms.STORE_CD = tsspm2.STORE_CD
        AND   tmsi.STORE_CD (+)= tsspm2.STORE_CD
-       AND   tcn.NMCODE_CD = tsspm2.MCOUPN_CD
+       AND   tcvc.MCOUPN_CD = tsspm2.MCOUPN_CD
        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
           AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 선택한 매장브랜드가 있을 때
        </if>
@@ -190,7 +191,7 @@
        ,     tmsi.MOMS_TEAM
        ,     tmsi.MOMS_AC_SHOP
        ,     tsspm2.MCOUPN_CD
-       ,     tcn.NMCODE_NM
+       ,     tcvc.MCOUPN_NM
        ORDER
        BY    tsspm2.STORE_CD
        <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -212,7 +213,7 @@
        ,      tmsi.MOMS_TEAM
        ,      tmsi.MOMS_AC_SHOP
        ,      tsspm2.MCOUPN_CD
-       ,      tcn.NMCODE_NM AS MCOUPN_NM
+       ,      tcvc.MCOUPN_NM
        ,      SUM(tsspm2.CNT) AS CNT
        ,      SUM(tsspm2.APPR_AMT) AS APPR_AMT
        ,      SUM(tsspm2.CNT_OK) AS CNT_OK
@@ -222,11 +223,12 @@
         FROM TB_MS_STORE tms
         ,    TB_MS_STORE_INFO tmsi
         ,    (
-                SELECT NMCODE_CD
-                ,      NMCODE_NM
-                FROM   TB_CM_NMCODE
-                WHERE  NMCODE_GRP_CD = '110'
-             ) tcn
+                SELECT
+                VAN_CD AS MCOUPN_CD,
+                VAN_NM AS MCOUPN_NM
+                FROM TB_CM_VAN_CMPNY
+                WHERE VAN_FG = '04'
+             ) tcvc
         ,    (
                 SELECT tsspm.STORE_CD
                      , SUM(tsspm.CNT) AS CNT
@@ -331,7 +333,7 @@
              ) tsspm2
        WHERE tms.STORE_CD = tsspm2.STORE_CD
        AND   tmsi.STORE_CD (+)= tsspm2.STORE_CD
-       AND   tcn.NMCODE_CD = tsspm2.MCOUPN_CD
+       AND   tcvc.MCOUPN_CD = tsspm2.MCOUPN_CD
        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
           AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 선택한 매장브랜드가 있을 때
        </if>
@@ -373,7 +375,7 @@
        ,     tmsi.MOMS_TEAM
        ,     tmsi.MOMS_AC_SHOP
        ,     tsspm2.MCOUPN_CD
-       ,     tcn.NMCODE_NM
+       ,     tcvc.MCOUPN_NM
        ORDER
        BY    tsspm2.STORE_CD
     </select>

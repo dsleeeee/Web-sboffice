@@ -44,6 +44,7 @@
                         <wj-flex-grid-column header="<s:message code="saleMcouponDtl.saleCnt"/>" binding="saleCnt" width="65" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="saleMcouponDtl.saleAmt"/>" binding="saleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="saleMcouponDtl.mcoupnCd"/>" binding="mcoupnCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="saleMcouponDtl.mcoupnNm"/>" binding="mcoupnNm" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="saleMcouponDtl.mcoupnTermnlNo"/>" binding="mcoupnTermnlNo" width="135" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="saleMcouponDtl.mcoupnTypeFg"/>" binding="mcoupnTypeFg" data-map="mcoupnTypeFgDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="saleMcouponDtl.mcoupnBarcdNo"/>" binding="mcoupnBarcdNo" width="135" align="center" is-read-only="true"></wj-flex-grid-column>
