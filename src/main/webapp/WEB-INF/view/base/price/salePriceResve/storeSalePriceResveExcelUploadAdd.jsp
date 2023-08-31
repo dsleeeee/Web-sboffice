@@ -36,4 +36,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeSalePriceResveExcelUploadAdd.js?ver=20230306.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/storeSalePriceResveExcelUploadAdd.js?ver=20230830.01" charset="utf-8"></script>
