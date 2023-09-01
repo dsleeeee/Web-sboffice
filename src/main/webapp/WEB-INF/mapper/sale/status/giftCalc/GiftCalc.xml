@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    GiftCalc.xml
+    지류상품권 정산
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2023.08.30     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.status.giftCalc.service.impl.GiftCalcMapper">
+
+    <!-- 지류상품권 정산 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getGiftCalcList" parameterType="GiftCalcVO" resultType="DefaultMap">
+        /* GiftCalcMapper.getGiftCalcList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        tms.BRANCH_CD,
+        (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM,
+        tsspgd.STORE_CD,
+        tms.STORE_NM,
+        tms.HQ_BRAND_CD AS BRAND_CD,
+        tmsi.MOMS_TEAM,
+        tmsi.MOMS_AC_SHOP,
+        tsspgd.GIFT_CD,
+        tsspgd.GIFT_NM,
+        SUM(tsspgd.SALE_FG) AS SALE_CNT,
+        SUM(tsspgd.SALE_AMT) AS SALE_AMT,
+        SUM(CASE WHEN tsspgd.SALE_FG = 1 THEN 1 ELSE 0 END) AS APPR_CNT,
+        SUM(CASE WHEN tsspgd.SALE_FG = 1 THEN tsspgd.SALE_AMT ELSE 0 END) AS APPR_AMT,
+        SUM(CASE WHEN tsspgd.SALE_FG = -1 THEN 1 ELSE 0 END) AS CANCEL_CNT,
+        SUM(CASE WHEN tsspgd.SALE_FG = -1 THEN tsspgd.SALE_AMT ELSE 0 END) AS CANCEL_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM
+        (
+            SELECT
+            A.HQ_OFFICE_CD,
+            A.STORE_CD,
+            A.POS_NO,
+            B.GIFT_CD,
+            C.GIFT_NM,
+            A.SALE_FG,
+            B.GIFT_UPRC AS SALE_AMT
+            FROM TB_SL_SALE_PAY_GIFT A,
+            TB_SL_SALE_PAY_GIFT_DTL B,
+            TB_HQ_GIFT C
+            WHERE 1=1
+            AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test='storeCds != null and storeCds != ""'>
+                AND
+                <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                    A.STORE_CD = #{item}
+                </foreach>
+            </if>
+            AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+            AND B.STORE_CD = A.STORE_CD
+            AND B.SALE_DATE = A.SALE_DATE
+            AND B.POS_NO = A.POS_NO
+            AND B.BILL_NO = A.BILL_NO
+            AND B.LINE_NO = A.LINE_NO
+            AND C.HQ_OFFICE_CD (+)= B.HQ_OFFICE_CD
+            AND C.GIFT_CD (+)= B.GIFT_CD
+        UNION ALL
+            SELECT
+            A.HQ_OFFICE_CD,
+            A.STORE_CD,
+            A.POS_NO,
+            A.BARCD_NO AS GIFT_CD,
+            B.NMCODE_NM AS GIFT_NM,
+            (CASE WHEN A.SALE_YN = 'Y' THEN 1 WHEN A.SALE_YN = 'N' THEN -1 ELSE 0 END) AS SALE_FG,
+            A.SALE_AMT
+            FROM TB_SL_SALE_PAY_TEMPORARY A,
+            TB_CM_NMCODE B
+            WHERE 1=1
+            AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test='storeCds != null and storeCds != ""'>
+                AND
+                <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                    A.STORE_CD = #{item}
+                </foreach>
+            </if>
+            AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            AND A.TEMPORARY_PAY_DTL_CD = 'VGC'
+            AND B.NMCODE_GRP_CD (+)= '230'
+            AND B.NMCODE_ITEM_1 (+)= A.TEMPORARY_PAY_DTL_CD
+        ) tsspgd,
+        TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi
+        WHERE 1=1
+        <if test='posNo != null and posNo != ""'>
+            AND tsspgd.STORE_CD||'||'||tsspgd.POS_NO IN
+            <foreach collection="arrPosNo" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='saleFg != null and saleFg != ""'>
+            AND tsspgd.SALE_FG = #{saleFg}
+        </if>
+        AND tms.HQ_OFFICE_CD = tsspgd.HQ_OFFICE_CD
+        AND tms.STORE_CD = tsspgd.STORE_CD
+        AND tmsi.STORE_CD (+)= tsspgd.STORE_CD
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        GROUP BY tms.BRANCH_CD, tsspgd.STORE_CD, tms.STORE_NM, tms.HQ_BRAND_CD, tmsi.MOMS_TEAM, tmsi.MOMS_AC_SHOP, tsspgd.GIFT_CD, tsspgd.GIFT_NM
+        ORDER BY tms.BRANCH_CD, tsspgd.STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 지류상품권 정산 - 엑셀다운로드 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getGiftCalcExcelList" parameterType="GiftCalcVO" resultType="DefaultMap">
+        /* GiftCalcMapper.getGiftCalcExcelList */
+        SELECT
+        tms.BRANCH_CD,
+        (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM,
+        tsspgd.STORE_CD,
+        tms.STORE_NM,
+        tms.HQ_BRAND_CD AS BRAND_CD,
+        tmsi.MOMS_TEAM,
+        tmsi.MOMS_AC_SHOP,
+        tsspgd.GIFT_CD,
+        tsspgd.GIFT_NM,
+        SUM(tsspgd.SALE_FG) AS SALE_CNT,
+        SUM(tsspgd.SALE_AMT) AS SALE_AMT,
+        SUM(CASE WHEN tsspgd.SALE_FG = 1 THEN 1 ELSE 0 END) AS APPR_CNT,
+        SUM(CASE WHEN tsspgd.SALE_FG = 1 THEN tsspgd.SALE_AMT ELSE 0 END) AS APPR_AMT,
+        SUM(CASE WHEN tsspgd.SALE_FG = -1 THEN 1 ELSE 0 END) AS CANCEL_CNT,
+        SUM(CASE WHEN tsspgd.SALE_FG = -1 THEN tsspgd.SALE_AMT ELSE 0 END) AS CANCEL_AMT
+        FROM
+        (
+            SELECT
+            A.HQ_OFFICE_CD,
+            A.STORE_CD,
+            A.POS_NO,
+            B.GIFT_CD,
+            C.GIFT_NM,
+            A.SALE_FG,
+            B.GIFT_UPRC AS SALE_AMT
+            FROM TB_SL_SALE_PAY_GIFT A,
+            TB_SL_SALE_PAY_GIFT_DTL B,
+            TB_HQ_GIFT C
+            WHERE 1=1
+            AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test='storeCds != null and storeCds != ""'>
+                AND
+                <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                    A.STORE_CD = #{item}
+                </foreach>
+            </if>
+            AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+            AND B.STORE_CD = A.STORE_CD
+            AND B.SALE_DATE = A.SALE_DATE
+            AND B.POS_NO = A.POS_NO
+            AND B.BILL_NO = A.BILL_NO
+            AND B.LINE_NO = A.LINE_NO
+            AND C.HQ_OFFICE_CD (+)= B.HQ_OFFICE_CD
+            AND C.GIFT_CD (+)= B.GIFT_CD
+        UNION ALL
+            SELECT
+            A.HQ_OFFICE_CD,
+            A.STORE_CD,
+            A.POS_NO,
+            A.BARCD_NO AS GIFT_CD,
+            B.NMCODE_NM AS GIFT_NM,
+            (CASE WHEN A.SALE_YN = 'Y' THEN 1 WHEN A.SALE_YN = 'N' THEN -1 ELSE 0 END) AS SALE_FG,
+            A.SALE_AMT
+            FROM TB_SL_SALE_PAY_TEMPORARY A,
+            TB_CM_NMCODE B
+            WHERE 1=1
+            AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test='storeCds != null and storeCds != ""'>
+                AND
+                <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
+                    A.STORE_CD = #{item}
+                </foreach>
+            </if>
+            AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            AND A.TEMPORARY_PAY_DTL_CD = 'VGC'
+            AND B.NMCODE_GRP_CD (+)= '230'
+            AND B.NMCODE_ITEM_1 (+)= A.TEMPORARY_PAY_DTL_CD
+        ) tsspgd,
+        TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi
+        WHERE 1=1
+        <if test='posNo != null and posNo != ""'>
+            AND tsspgd.STORE_CD||'||'||tsspgd.POS_NO IN
+            <foreach collection="arrPosNo" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='saleFg != null and saleFg != ""'>
+            AND tsspgd.SALE_FG = #{saleFg}
+        </if>
+        AND tms.HQ_OFFICE_CD = tsspgd.HQ_OFFICE_CD
+        AND tms.STORE_CD = tsspgd.STORE_CD
+        AND tmsi.STORE_CD (+)= tsspgd.STORE_CD
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        GROUP BY tms.BRANCH_CD, tsspgd.STORE_CD, tms.STORE_NM, tms.HQ_BRAND_CD, tmsi.MOMS_TEAM, tmsi.MOMS_AC_SHOP, tsspgd.GIFT_CD, tsspgd.GIFT_NM
+        ORDER BY tms.BRANCH_CD, tsspgd.STORE_CD
+    </select>
+
+    <!-- 지류상품권 정산 상세 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getGiftCalcDtlList" parameterType="GiftCalcVO" resultType="DefaultMap">
+        /* GiftCalcMapper.getGiftCalcDtlList */
+        SELECT
+        tsspgd.STORE_CD,
+        tms.STORE_NM,
+        TO_CHAR(TO_DATE(tsspgd.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        tsspgd.POS_NO,
+        tsspgd.BILL_NO,
+        tsspgd.LINE_NO,
+        tsspgd.REG_SEQ,
+        tsspgd.SALE_FG,
+        SUM(tsspgd.SALE_AMT) AS SALE_AMT,
+        SUM(tsspgd.TIP_AMT) AS TIP_AMT,
+        SUM(tsspgd.VAT_AMT) AS VAT_AMT,
+        tsspgd.GIFT_CD,
+        tsspgd.GIFT_NM,
+        SUM(tsspgd.GIFT_UPRC) AS GIFT_UPRC,
+        tsspgd.APPR_DT,
+        tsspgd.APPR_NO
+        FROM
+        (
+            SELECT
+            A.HQ_OFFICE_CD,
+            A.STORE_CD,
+            A.SALE_DATE,
+            A.POS_NO,
+            A.BILL_NO,
+            A.LINE_NO,
+            A.REG_SEQ,
+            A.SALE_FG,
+            A.SALE_AMT,
+            A.TIP_AMT,
+            A.VAT_AMT,
+            B.GIFT_CD,
+            C.GIFT_NM,
+            B.GIFT_UPRC,
+            B.APPR_DT,
+            B.APPR_NO
+            FROM TB_SL_SALE_PAY_GIFT A,
+            TB_SL_SALE_PAY_GIFT_DTL B,
+            TB_HQ_GIFT C
+            WHERE 1=1
+            AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test='storeCd != null and storeCd != ""'>
+                AND A.STORE_CD = #{storeCd}
+            </if>
+            AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+            AND B.STORE_CD = A.STORE_CD
+            AND B.SALE_DATE = A.SALE_DATE
+            AND B.POS_NO = A.POS_NO
+            AND B.BILL_NO = A.BILL_NO
+            AND B.LINE_NO = A.LINE_NO
+            AND C.HQ_OFFICE_CD (+)= B.HQ_OFFICE_CD
+            AND C.GIFT_CD (+)= B.GIFT_CD
+        UNION ALL
+            SELECT
+            A.HQ_OFFICE_CD,
+            A.STORE_CD,
+            A.SALE_DATE,
+            A.POS_NO,
+            A.BILL_NO,
+            A.LINE_NO,
+            A.LINE_SEQ_NO AS REG_SEQ,
+            (CASE WHEN A.SALE_YN = 'Y' THEN 1 WHEN A.SALE_YN = 'N' THEN -1 ELSE 0 END) AS SALE_FG,
+            A.SALE_AMT,
+            A.TIP_AMT,
+            A.VAT_AMT,
+            A.BARCD_NO AS GIFT_CD,
+            B.NMCODE_NM AS GIFT_NM,
+            9900 AS GIFT_UPRC,
+            '' AS APPR_DT,
+            A.APPR_NO
+            FROM TB_SL_SALE_PAY_TEMPORARY A,
+            TB_CM_NMCODE B
+            WHERE 1=1
+            AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test='storeCd != null and storeCd != ""'>
+                AND A.STORE_CD = #{storeCd}
+            </if>
+            AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            AND A.TEMPORARY_PAY_DTL_CD = 'VGC'
+            AND B.NMCODE_GRP_CD (+)= '230'
+            AND B.NMCODE_ITEM_1 (+)= A.TEMPORARY_PAY_DTL_CD
+        ) tsspgd,
+        TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi
+        WHERE 1=1
+        <if test='posNo != null and posNo != ""'>
+            AND tsspgd.STORE_CD||'||'||tsspgd.POS_NO IN
+            <foreach collection="arrPosNo" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='saleFg != null and saleFg != ""'>
+            AND tsspgd.SALE_FG = #{saleFg}
+        </if>
+        AND tms.HQ_OFFICE_CD = tsspgd.HQ_OFFICE_CD
+        AND tms.STORE_CD = tsspgd.STORE_CD
+        AND tmsi.STORE_CD (+)= tsspgd.STORE_CD
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        GROUP BY tsspgd.STORE_CD, tms.STORE_NM, tsspgd.SALE_DATE, tsspgd.POS_NO, tsspgd.BILL_NO, tsspgd.LINE_NO, tsspgd.REG_SEQ, tsspgd.SALE_FG, tsspgd.GIFT_CD, tsspgd.GIFT_NM, tsspgd.APPR_DT, tsspgd.APPR_NO
+        ORDER BY tsspgd.STORE_CD, tsspgd.SALE_DATE, tsspgd.POS_NO, tsspgd.BILL_NO, tsspgd.LINE_NO, tsspgd.REG_SEQ
+    </select>
+
+</mapper>
