@@ -102,8 +102,8 @@
         AND     tssd.POS_NO           (+) =   tssdd.POS_NO
         AND     tssd.BILL_NO          (+) =   tssdd.BILL_NO
         AND     tssd.BILL_DTL_NO      (+) =   tssdd.BILL_DTL_NO
-        AND     tmc.STORE_CD              =   tssdd.STORE_CD
-        AND     tmc.COUPN_CD              =   tssdd.DC_REASON_CD
+        AND     tmc.STORE_CD          (+) =   tssdd.STORE_CD
+        AND     tmc.COUPN_CD          (+) =   tssdd.DC_REASON_CD
         AND     tmp.STORE_CD              =   tssd.STORE_CD
         AND     tmp.PROD_CD               =   tssd.PROD_CD
         ORDER
