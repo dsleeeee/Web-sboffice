@@ -157,6 +157,8 @@ public class KioskKeyMapVO extends PageVO {
     /** 기준매장코드 */
     private String originalStoreCd;
 
+    private String userId;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -641,5 +643,13 @@ public class KioskKeyMapVO extends PageVO {
 
     public void setOriginalStoreCd(String originalStoreCd) {
         this.originalStoreCd = originalStoreCd;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

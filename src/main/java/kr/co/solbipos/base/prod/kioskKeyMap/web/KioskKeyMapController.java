@@ -230,6 +230,21 @@ public class KioskKeyMapController {
 
         /** //맘스터치 */
 
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 내점/배달/포장 가격관리 사용여부
+            model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0044"), "0"));
+
+            // 매장판매가관리본사강제수정
+            model.addAttribute("coercionFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1113"), "0"));
+        }else{
+            // 내점/배달/포장 가격관리 사용여부
+            model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0044") , "0"));
+
+            // 본사통제구분-판매가
+            model.addAttribute("salePriceFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0045") , "1"));
+            model.addAttribute("coercionFg", "0");
+        }
+
         return "base/prod/kioskKeyMap/kioskKeyMap";
     }
 
@@ -933,5 +948,71 @@ public class KioskKeyMapController {
         List<DefaultMap<Object>> result = kioskKeyMapService.getTuKeyList(kioskKeyMapVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, result);
+    }
+
+    /**
+     * 본사판매가관리 조회
+     *
+     * @param kioskKeyMapVO
+     * @param request
+     * @param response
+     * @param model
+     * @author  권지현
+     * @since   2023.08.30
+     */
+    @RequestMapping(value = "/kioskKeyMap/getHqSalePrice.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getHqSalePrice(KioskKeyMapVO kioskKeyMapVO, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = kioskKeyMapService.getHqSalePrice(kioskKeyMapVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, kioskKeyMapVO);
+    }
+
+    /**
+     * 매장판매가관리 조회
+     *
+     * @param kioskKeyMapVO
+     * @param request
+     * @param response
+     * @param model
+     * @author  권지현
+     * @since   2023.08.30
+     */
+    @RequestMapping(value = "/kioskKeyMap/getStoreSalePrice.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreSalePrice(KioskKeyMapVO kioskKeyMapVO, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = kioskKeyMapService.getStoreSalePrice(kioskKeyMapVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, kioskKeyMapVO);
+    }
+
+    /**
+     * 판매가관리 조회
+     *
+     * @param kioskKeyMapVO
+     * @param request
+     * @param response
+     * @param model
+     * @author  권지현
+     * @since   2023.08.30
+     */
+    @RequestMapping(value = "/kioskKeyMap/getSalePrice.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSalePrice(KioskKeyMapVO kioskKeyMapVO, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = kioskKeyMapService.getSalePrice(kioskKeyMapVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, kioskKeyMapVO);
     }
 }

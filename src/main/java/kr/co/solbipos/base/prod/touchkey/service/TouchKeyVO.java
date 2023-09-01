@@ -1,6 +1,7 @@
 package kr.co.solbipos.base.prod.touchkey.service;
 
 import kr.co.solbipos.application.common.service.CmmVO;
+import kr.co.solbipos.application.common.service.PageVO;
 import kr.co.solbipos.base.common.enums.InFg;
 import kr.co.solbipos.pos.loginstatus.enums.SysStatFg;
 
@@ -20,7 +21,7 @@ import kr.co.solbipos.pos.loginstatus.enums.SysStatFg;
  *
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public class TouchKeyVO extends CmmVO {
+public class TouchKeyVO extends PageVO {
 
     private static final long serialVersionUID = 5453851450384224044L;
 
@@ -34,6 +35,8 @@ public class TouchKeyVO extends CmmVO {
     private String hqOfficeCd;
     /** 매장코드 */
     private String storeCd;
+    /** 매장코드 array */
+    private String arrStoreCd[];
     /** 터치키분류코드 */
     private String tukeyClassCd;
     /** 터치키코드 */
@@ -156,6 +159,17 @@ public class TouchKeyVO extends CmmVO {
     /** 조회구분 */
     private String gubun;
 
+    private String userId;
+
+    /** 사용자별 브랜드코드(상품) */
+    private String[] userProdBrandList;
+
+    /** 사용자별 브랜드코드(상품) */
+    private String userProdBrands;
+
+    /** 상품브랜드코드 */
+    private String prodHqBrandCd;
+
     /**
      * @return the orgnFg
      */
@@ -192,6 +206,15 @@ public class TouchKeyVO extends CmmVO {
     public void setStoreCd(String storeCd) {
         this.storeCd = storeCd;
     }
+
+    public String[] getArrStoreCd() {
+        return arrStoreCd;
+    }
+
+    public void setArrStoreCd(String[] arrStoreCd) {
+        this.arrStoreCd = arrStoreCd;
+    }
+
     /**
      * @return the tukeyClassCd
      */
@@ -653,5 +676,38 @@ public class TouchKeyVO extends CmmVO {
 
     public void setGubun(String gubun) {
         this.gubun = gubun;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String[] getUserProdBrandList() {
+        return userProdBrandList;
+    }
+
+    public void setUserProdBrandList(String[] userProdBrandList) {
+        this.userProdBrandList = userProdBrandList;
+    }
+
+    public String getUserProdBrands() {
+        return userProdBrands;
+    }
+
+    public void setUserProdBrands(String userProdBrands) {
+        this.userProdBrands = userProdBrands;
+    }
+
+    public String getProdHqBrandCd() {
+
+        return prodHqBrandCd;
+    }
+
+    public void setProdHqBrandCd(String prodHqBrandCd) {
+        this.prodHqBrandCd = prodHqBrandCd;
     }
 }

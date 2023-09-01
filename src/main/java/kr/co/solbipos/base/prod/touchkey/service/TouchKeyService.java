@@ -90,4 +90,13 @@ public interface TouchKeyService {
 
     /** 터치키삭제 팝업 - 저장 */
     int getPopUpTouchKeyDelSave(TouchKeyVO[] touchKeyVOs, SessionInfoVO sessionInfoVO);
+
+    /** 본사판매가관리 팝업 - 조회 */
+    List<DefaultMap<Object>> getHqSalePrice(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장판매가관리 팝업 - 조회 */
+    List<DefaultMap<Object>> getStoreSalePrice(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO);
+
+    /** 판매가관리 팝업 - 조회 */
+    List<DefaultMap<Object>> getSalePrice(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO);
 }

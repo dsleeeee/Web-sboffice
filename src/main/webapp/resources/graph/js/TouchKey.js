@@ -351,7 +351,28 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
 
   });
 
-  // 매장수정허용분류 팝업
+  // 본사판매가관리 팝업
+  $scope.$on("showHqSalePrice", function(event, data) {
+    $scope.popUpHqSalePriceLayer.show(true);
+    $scope._broadcast('popUpHqSalePriceCtrl');
+    // event.preventDefault();
+  });
+
+  // 매장판매가관리 팝업
+  $scope.$on("showStoreSalePrice", function(event, data) {
+    $scope.popUpStoreSalePriceLayer.show(true);
+    $scope._broadcast('popUpStoreSalePriceCtrl');
+    // event.preventDefault();
+  });
+
+  // 판매가관리 팝업
+  $scope.$on("showSalePrice", function(event, data) {
+    $scope.popUpSalePriceLayer.show(true);
+    $scope._broadcast('popUpSalePriceCtrl');
+    // event.preventDefault();
+  });
+
+  // 터치키 그룹명 팝업
   $scope.$on("showGrpNm", function(event, data) {
 
     $scope.popUpGrpNmLayer.show();
@@ -360,7 +381,7 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
 
   });
 
-  // 매장수정허용분류 팝업
+  // 매장사용터치키설정 팝업
   $scope.$on("showPopUpTouchKeyEnv", function(event, data) {
     $scope.popUpTouchKeyEnvLayer.show();
     $scope._broadcast('popUpTouchKeyEnvCtrl');

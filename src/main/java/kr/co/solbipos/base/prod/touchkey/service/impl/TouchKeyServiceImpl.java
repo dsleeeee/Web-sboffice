@@ -1215,4 +1215,49 @@ public class TouchKeyServiceImpl implements TouchKeyService {
 
         return procCnt;
     }
+
+    /** 본사판매가관리 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getHqSalePrice(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO) {
+
+        touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        touchKeyVO.setUserId(sessionInfoVO.getUserId());
+        return keyMapper.getHqSalePrice(touchKeyVO);
+    }
+
+    /** 매장판매가관리 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getStoreSalePrice(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO) {
+
+        touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        touchKeyVO.setUserId(sessionInfoVO.getUserId());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
+            if (touchKeyVO.getProdHqBrandCd() == "" || touchKeyVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (touchKeyVO.getUserBrands() != null && !"".equals(touchKeyVO.getUserBrands())) {
+                    // 사용자별 브랜드 array 값 세팅
+                    String[] userBrandList = touchKeyVO.getUserBrands().split(",");
+
+                    if (userBrandList.length > 0) {
+                        touchKeyVO.setUserBrandList(userBrandList);
+                    }
+                }
+            }
+        }
+
+        return keyMapper.getStoreSalePrice(touchKeyVO);
+    }
+
+    /** 판매가관리 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getSalePrice(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO) {
+        touchKeyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        touchKeyVO.setStoreCd(sessionInfoVO.getStoreCd());
+        touchKeyVO.setUserId(sessionInfoVO.getUserId());
+
+        return keyMapper.getSalePrice(touchKeyVO);
+    }
 }

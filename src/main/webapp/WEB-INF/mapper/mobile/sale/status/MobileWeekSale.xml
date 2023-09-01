@@ -607,7 +607,12 @@
                             )
                     </if>
                     AND tsdtd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-                    AND tsdtd.DLVR_ORDER_FG = #{gubun}
+                    <if test='gubun != null and gubun != "3"'>
+                        AND tsdtd.DLVR_ORDER_FG = #{gubun}
+                    </if>
+                    <if test='gubun != null and gubun == "3"'>
+                        AND tsdtd.DLVR_ORDER_FG IN ('3', '4')
+                    </if>
                     GROUP BY tsdtd.SALE_DATE
                 )
                 GROUP BY SALE_DATE
