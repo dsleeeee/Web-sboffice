@@ -28,6 +28,8 @@
 
     // [1250 맘스터치] 환경설정값
     var momsEnvstVal = "${momsEnvstVal}";
+    var subPriceFg = "${subPriceFg}";
+    var coercionFg = "${coercionFg}";
 
     var branchCdComboList = ${branchCdComboList};
     var momsTeamComboList = ${momsTeamComboList};

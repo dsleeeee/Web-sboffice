@@ -1183,4 +1183,51 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
 
         return kioskKeyMapMapper.getTuKeyList(kioskKeyMapVO);
     }
+
+    /** 본사판매가관리 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getHqSalePrice(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
+
+        kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        kioskKeyMapVO.setUserId(sessionInfoVO.getUserId());
+
+        return kioskKeyMapMapper.getHqSalePrice(kioskKeyMapVO);
+    }
+
+    /** 매장판매가관리 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getStoreSalePrice(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
+
+        kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        kioskKeyMapVO.setUserId(sessionInfoVO.getUserId());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
+            if (kioskKeyMapVO.getProdHqBrandCd() == "" || kioskKeyMapVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (kioskKeyMapVO.getUserBrands() != null && !"".equals(kioskKeyMapVO.getUserBrands())) {
+                    // 사용자별 브랜드 array 값 세팅
+                    String[] userBrandList = kioskKeyMapVO.getUserBrands().split(",");
+
+                    if (userBrandList.length > 0) {
+                        kioskKeyMapVO.setUserBrandList(userBrandList);
+                    }
+                }
+            }
+        }
+
+        return kioskKeyMapMapper.getStoreSalePrice(kioskKeyMapVO);
+    }
+
+    /** 판매가관리 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getSalePrice(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
+
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+        kioskKeyMapVO.setUserId(sessionInfoVO.getUserId());
+
+        return kioskKeyMapMapper.getSalePrice(kioskKeyMapVO);
+    }
 }

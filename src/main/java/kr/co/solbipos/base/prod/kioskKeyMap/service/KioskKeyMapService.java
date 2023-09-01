@@ -118,4 +118,13 @@ public interface KioskKeyMapService {
     
     /** 키맵미리보기 판매터치키 */
     List<DefaultMap<Object>> getTuKeyList(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
+
+    /** 본사판매가관리 조회 */
+    List<DefaultMap<Object>> getHqSalePrice(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장판매가관리 조회 */
+    List<DefaultMap<Object>> getStoreSalePrice(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
+
+    /** 판매가관리 조회 */
+    List<DefaultMap<Object>> getSalePrice(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
 }

@@ -12,6 +12,7 @@
 <c:set var="touchKeyGrp" value="${touchKeyGrp}" />
 <c:set var="brandUseFg" value="${brandUseFg}" />
 <c:set var="fontSizeEnvstVal" value="${fontSizeEnvstVal}" />
+<c:set var="userId" value="${sessionScope.sessionInfo.userId}" />
 
 <%--서브컨텐츠--%>
 <div class="subCon" ng-controller="touchKeyCtrl" id="touchKeyView">
@@ -65,13 +66,13 @@
                     </wj-combo-box>
                 </div>
                 <%-- 추가터치키생성 --%>
-                <button class="btn_skyblue fl ml20" id="btnNewGrp" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && (touchKeyEnvstVal2 == '0' || touchKeyEnvstVal2 == '2')}">style="margin-left : 4px;visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.newGrp"/></button>
+                <button class="btn_skyblue fl ml20" id="btnNewGrp" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && (touchKeyEnvstVal2 == '0' || touchKeyEnvstVal2 == '2')}">style="margin-left : 4px;display:none"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.newGrp"/></button>
                 <%-- 터치키복사 --%>
-                <button class="btn_skyblue fl ml20" id="btnCopyTouchKey" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && (touchKeyEnvstVal2 == '0' || touchKeyEnvstVal2 == '2')}">style="margin-left : 4px;visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose> ng-click="$broadcast('showPopUpCopy')">
+                <button class="btn_skyblue fl ml20" id="btnCopyTouchKey" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && (touchKeyEnvstVal2 == '0' || touchKeyEnvstVal2 == '2')}">style="margin-left : 4px;display:none"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose> ng-click="$broadcast('showPopUpCopy')">
                     <s:message code="touchKey.copy" />
                 </button>
                 <%-- 터치키삭제 --%>
-                <button class="btn_skyblue fl ml20" id="btnDelTouchKey" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && (touchKeyEnvstVal2 == '0' || touchKeyEnvstVal2 == '2')}">style="margin-left : 4px;visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose> ng-click="$broadcast('showPopUpDel')">
+                <button class="btn_skyblue fl ml20" id="btnDelTouchKey" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && (touchKeyEnvstVal2 == '0' || touchKeyEnvstVal2 == '2')}">style="margin-left : 4px;display:none"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose> ng-click="$broadcast('showPopUpDel')">
                     <s:message code="touchKey.touchKeyDel" />
                 </button>
                 <%-- 터치키미적용상품 --%>
@@ -80,46 +81,52 @@
                 </button>
                 <div style="display: none;">
                     <%-- 초기화 --%>
-                    <button class="btn_skyblue fl ml5" id="btnInti"<c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>>
+                    <button class="btn_skyblue fl ml5" id="btnInti"<c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="display:none"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>>
                         <s:message code="cmm.init"/>
                     </button>
                 </div>
                 <%-- 터치키 그룹명 --%>
-                <button class="btn_skyblue fl ml5" id="btnGrpNm"<c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && (touchKeyEnvstVal2 == '0' || touchKeyEnvstVal2 == '2')}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose> ng-click="$broadcast('showGrpNm')">
+                <button class="btn_skyblue fl ml5" id="btnGrpNm"<c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && (touchKeyEnvstVal2 == '0' || touchKeyEnvstVal2 == '2')}">style="display:none"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose> ng-click="$broadcast('showGrpNm')">
                     <s:message code="touchKey.grpNm"/>
                 </button>
-                <c:if test="${orgnFg == 'STORE' && hqOfficeCd != '00000' && touchKeyEnvstVal2 == '2'}">
-                    <%-- 매장수정허용분류 --%>
-                    <button class="btn_blk ml5 fr"  id="storeModGrpMs" ng-click="$broadcast('showPopUpStoreModGrp')">
-                        <s:message code="touchKey.storeModGrp" />
+                <c:if test="${userId == 'ds021' or userId == 'ds024' or userId == 'h0360'}">
+                    <%-- 본사판매가관리 --%>
+                    <button class="btn_skyblue fl ml5" id="btnGrpNm"<c:choose><c:when test="${orgnFg == 'STORE'}">style="display:none"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose> ng-click="$broadcast('showHqSalePrice')">
+                        <s:message code="touchKey.hqSalePrice"/>
                     </button>
-                </c:if>
-                <c:if test="${orgnFg == 'STORE'}">
-                    <%-- 매장사용터치키설정 --%>
-                    <button class="btn_blk ml5 fr" id="btnTouchKeyEnv" ng-click="$broadcast('showPopUpTouchKeyEnv')">
-                        <s:message code="touchKey.storeUseTouchKey"/>
+                    <%-- 매장판매가관리 --%>
+                    <button class="btn_skyblue fl ml5" id="btnGrpNm"<c:choose><c:when test="${orgnFg == 'STORE'}">style="display:none"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose> ng-click="$broadcast('showStoreSalePrice')">
+                        <s:message code="touchKey.storeSalePrice"/>
+                    </button>
+                    <%-- 판매가관리 --%>
+                    <button class="btn_skyblue fl ml5" id="btnGrpNm"<c:choose><c:when test="${orgnFg == 'HQ'}">style="display:none"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose> ng-click="$broadcast('showSalePrice')">
+                        <s:message code="touchKey.salePrice"/>
                     </button>
                 </c:if>
                 <%-- 신규생성 취소 --%>
-                <%--<button class="btn_skyblue fl ml20" id="btnCancleNewGrp" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.cancle"/></button>--%>
+                <%--<button class="btn_skyblue fl ml20" id="btnCancleNewGrp" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="display:none"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.cancle"/></button>--%>
                 <%-- 터치키 신규 등록인지 수정인지 여부 파악을 위해--%>
                 <input type="hidden" id="hdNewGrp"/>
             </td>
         </tr>
-        <tr id="trApplyStore" style="display: none;">
+        <tr>
             <th><s:message code="touchKey.applyStore" /></th>
             <td colspan="3" class="oh">
-                <button class="btn_blk fl" id="btnApplyStore" ng-click="$broadcast('showPopUp')">
-                    <s:message code="touchKey.applyStore" />
-                </button>
-                <%-- 터치키 매장복사 --%>
-                <button class="btn_blk ml5 fl"  id="copyTouchKey" ng-click="copyStoreTouchKey()">
-                    <s:message code="touchKey.storeCopy" />
-                </button>
-                <%-- 매장수정허용분류 --%>
-                <button class="btn_blk ml5 fl"  id="storeModGrpHq" ng-click="$broadcast('showPopUpStoreModGrp')">
-                    <s:message code="touchKey.storeModGrp" />
-                </button>
+                <c:if test="${orgnFg == 'HQ'}">
+                    <button class="btn_blk fl" id="btnApplyStore" ng-click="$broadcast('showPopUp')">
+                        <s:message code="touchKey.applyStore" />
+                    </button>
+                    <%-- 터치키 매장복사 --%>
+                    <button class="btn_blk ml5 fl"  id="copyTouchKey" ng-click="copyStoreTouchKey()">
+                        <s:message code="touchKey.storeCopy" />
+                    </button>
+                </c:if>
+                <c:if test="${touchKeyEnvstVal2 == '2'}">
+                    <%-- 매장수정허용분류 --%>
+                    <button class="btn_blk ml5 fl"  id="storeModGrpHq" ng-click="$broadcast('showPopUpStoreModGrp')">
+                        <s:message code="touchKey.storeModGrp" />
+                    </button>
+                </c:if>
                 <%-- 매장사용터치키설정 --%>
                 <button class="btn_blk ml5 fl" id="btnTouchKeyEnv" ng-click="$broadcast('showPopUpTouchKeyEnv')">
                     <s:message code="touchKey.storeUseTouchKey"/>
@@ -225,13 +232,13 @@
             <%--포스에서 1024*768 사이즈에 보이지 않아 위치변경함(스타일적용, 저장)--%>
             <div class="updownSet oh mb10">
                 <div class="fl txtIn">
-                    <div class="sb-select dkbr fl w120px" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise></c:otherwise></c:choose>>
+                    <div class="sb-select dkbr fl w120px" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="display:none"</c:when><c:otherwise></c:otherwise></c:choose>>
                         <div id="selectStyle" ng-model="selectStyle"></div>
                     </div>
                     <%-- 스타일적용 --%>
-                    <button class="btn_skyblue fl ml5" id="btnApplyStyle" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.applyStyle"/></button>
+                    <button class="btn_skyblue fl ml5" id="btnApplyStyle" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="display:none"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.applyStyle"/></button>
                     <%-- 스타일미리보기 --%>
-                    <button class="btn_skyblue fl ml5" id="btnViewStyle" ng-click="viewStyle()" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.viewStyle"/></button>
+                    <button class="btn_skyblue fl ml5" id="btnViewStyle" ng-click="viewStyle()" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="display:none"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.viewStyle"/></button>
                     <%-- 저장 --%>
                     <button class="btn_skyblue fl ml20" id="btnSave" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && touchKeyEnvstVal2 == '0'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="cmm.save"/></button>
                     <%--포스에서 1024*768 사이즈에 보이지 않아 위치변경함(초기화, 삭제)--%>
@@ -381,6 +388,23 @@
     <c:import url="/WEB-INF/view/base/store/view/copyStoreTouchKey.jsp">
     </c:import>
 
+    <%-- 본사판매가관리 팝업 --%>
+    <c:import url="/WEB-INF/view/base/prod/touchKey/popUpHqSalePrice.jsp">
+        <c:param name="menuCd" value="${menuCd}"/>
+        <c:param name="menuNm" value="${menuNm}"/>
+    </c:import>
+
+    <%-- 매장판매가관리 팝업 --%>
+    <c:import url="/WEB-INF/view/base/prod/touchKey/popUpStoreSalePrice.jsp">
+        <c:param name="menuCd" value="${menuCd}"/>
+        <c:param name="menuNm" value="${menuNm}"/>
+    </c:import>
+
+    <%-- 판매가관리 팝업 --%>
+    <c:import url="/WEB-INF/view/base/prod/touchKey/popUpSalePrice.jsp">
+        <c:param name="menuCd" value="${menuCd}"/>
+        <c:param name="menuNm" value="${menuNm}"/>
+    </c:import>
 </div>
 <%--//서브컨텐츠--%>
 
@@ -409,6 +433,8 @@
     var tukeyGrpData = ${touchKeyGrp};
     tukeyGrpData.unshift({name: "전체", value: ""});
 
+    var momsHqBrandCdComboList = ${momsHqBrandCdComboList};
+
     // 매장 [1248]
     var touchKeyEnvstVal2 = "${touchKeyEnvstVal2}";
 
@@ -417,6 +443,9 @@
 
     // [1250 맘스터치] 환경설정값
     var momsEnvstVal = "${momsEnvstVal}";
+
+    var subPriceFg = "${subPriceFg}";
+    var coercionFg = "${coercionFg}";
 
     // 기존 터치키 그룹이 있을 떄/ 없을 때 버튼, selectBox 설정
     if(touchKeyGrpData.length === 0){
@@ -515,7 +544,7 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20230727.01"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20230727.02"
         charset="utf-8"></script>
 
 <%-- 스타일미리보기 팝업 --%>

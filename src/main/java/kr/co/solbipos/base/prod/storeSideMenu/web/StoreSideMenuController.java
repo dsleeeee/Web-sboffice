@@ -317,6 +317,25 @@ public class StoreSideMenuController {
             model.addAttribute("fontSizeEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1236"), "15"));
         }
 
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 내점/배달/포장 가격관리 사용여부
+            model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0044"), "0"));
+
+            // 매장판매가관리본사강제수정
+            model.addAttribute("coercionFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1113"), "0"));
+        }else{
+            // 내점/배달/포장 가격관리 사용여부
+            model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0044") , "0"));
+
+            // 본사통제구분-판매가
+            model.addAttribute("salePriceFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0045") , "1"));
+            model.addAttribute("coercionFg", "0");
+        }
+
+        // 사용자별 브랜드 조회(콤보박스용)
+        String momsHqBrandCdComboList = convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO));
+        model.addAttribute("momsHqBrandCdComboList", momsHqBrandCdComboList);
+
         return "base/prod/storeSideMenu/storeSideMenu";
     }
 
