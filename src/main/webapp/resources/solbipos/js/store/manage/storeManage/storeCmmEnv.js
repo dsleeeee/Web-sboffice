@@ -114,6 +114,7 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
    * *******************************************************/
   $scope.save = function(){
 
+    var envScope = agrid.getScope('storeEnvCtrl');
     var storeScope  = agrid.getScope('storeManageCtrl');
     var objhqOfficeCd  = storeScope.getSelectedStore().hqOfficeCd;
 
@@ -130,22 +131,27 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     var objTargtFg      = document.getElementsByName("targtFg");
 
     // 봉사료 사용구분이 'Y'일 경우, 봉사료율이 설정되어야 함.
-    var env2001 = $("#env2001").val();
-    var env2002 = $("#env2002").val();
+    // 외식환경 탭이 활성화 되어있을때만 체크
+    if(envScope.getEnvGroupCd() === '01') {
+        var env2001 = $("#env2001").val() === undefined ? orgEnv2001 : $("#env2001").val();
+        var env2002 = $("#env2002").val() === undefined ? orgEnv2002 : $("#env2002").val();
 
-    if(env2001 === '1' && (env2002 == null || env2002 === '')) {
-      $scope._popMsg(messages["storeManage.require.serviceRate"]);
-      return false;
+        if (env2001 === '1' && (env2002 == null || env2002 === '')) {
+            $scope._popMsg(messages["storeManage.require.serviceRate"]);
+            return false;
+        }
     }
 
     // 1221이 개별DB(1)일때 1102이 사용(1)이면 저장 막기
-    var env1221 = $("#env1221").val();
-    var env1102 = $("#env1102").val();
-    console.log(env1221);
-    console.log(env1102);
-    if(env1221 === '1' && env1102 === '1'){
-      $scope._popMsg(messages["storeManage.require.serviceDb"]);
-      return false;
+    // 매장환경 탭이 활성화 되어있을때만 체크
+    if(envScope.getEnvGroupCd() === '00') {
+      var env1221 = $("#env1221").val() === undefined ? orgEnv1221 : $("#env1221").val();
+      var env1102 = $("#env1102").val() === undefined ? orgEnv1102 : $("#env1102").val();
+
+      if (env1221 === '1' && env1102 === '1') {
+          $scope._popMsg(messages["storeManage.require.serviceDb"]);
+          return false;
+      }
     }
 
     var chngCnt  = 0; // 변경된 건수
@@ -231,13 +237,15 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope._postJSONSave.withOutPopUp( "/store/manage/storeManage/storeManage/saveStoreConfig.sb", params, function () {
 
         // DB구성방법[1221]에 따라 매장포스들 포스-메인여부[4021] 환경설정값 수정
-        $scope.updateToPos($("#env1221").val());
+        // 매장환경 탭이 활성화 되어있을때만 실행  
+        if(envScope.getEnvGroupCd() === '00') {
+          $scope.updateToPos($("#env1221").val() === undefined ? orgEnv1221 : $("#env1221").val());
+        }
 
         $scope.$broadcast('loadingPopupInactive');
         $scope._popMsg(messages["cmm.saveSucc"]);
 
         // 재조회
-        var envScope = agrid.getScope('storeEnvCtrl');
         $scope.searchCmmEnv(envScope.getEnvGroupCd());
       });
     });

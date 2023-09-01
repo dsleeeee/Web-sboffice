@@ -228,4 +228,13 @@ public interface KioskKeyMapMapper {
 
     /** 키오스크 키맵 미리보기 키맵조회 */
     List<DefaultMap<Object>> getTuKeyList(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 본사판매가관리 팝업 - 조회 */
+    List<DefaultMap<Object>> getHqSalePrice(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 매장판매가관리 팝업 - 조회 */
+    List<DefaultMap<Object>> getStoreSalePrice(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 판매가관리 팝업 - 조회 */
+    List<DefaultMap<Object>> getSalePrice(KioskKeyMapVO kioskKeyMapVO);
 }

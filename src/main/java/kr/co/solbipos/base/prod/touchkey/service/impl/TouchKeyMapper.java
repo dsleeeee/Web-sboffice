@@ -179,4 +179,13 @@ public interface TouchKeyMapper {
 
     /** 터치키삭제 팝업 - 조회 */
     List<DefaultMap<Object>> getPopUpTouchKeyDelList(TouchKeyVO touchKeyVO);
+
+    /** 본사판매가관리 팝업 - 조회 */
+    List<DefaultMap<Object>> getHqSalePrice(TouchKeyVO touchKeyVO);
+
+    /** 매장판매가관리 팝업 - 조회 */
+    List<DefaultMap<Object>> getStoreSalePrice(TouchKeyVO touchKeyVO);
+
+    /** 판매가관리 팝업 - 조회 */
+    List<DefaultMap<Object>> getSalePrice(TouchKeyVO touchKeyVO);
 }

@@ -6,6 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
+<c:set var="userId" value="${sessionScope.sessionInfo.userId}" />
 
 <div id="kioskKeyMapRegistView" name="kioskKeyMapRegistView" class="subCon" style="display: none;">
 
@@ -111,6 +112,21 @@
                             <button class="btn_skyblue" id="btnKioskKeyMapView" ng-click="kioskKeyMapView()">
                                 <s:message code="kioskKeyMap.kioskKeyMapView" />
                             </button>
+                        </c:if>
+                        <c:if test="${userId == 'ds021' or userId == 'ds024' or userId == 'h0360'}">
+                            <c:if test="${orgnFg == 'HQ'}">
+                                <button class="btn_skyblue" id="btnHqSalePrice" ng-click="hqSalePriceView()">
+                                    <s:message code="kioskKeyMap.hqSalePrice" />
+                                </button>
+                                <button class="btn_skyblue" id="btnStoreSalePrice" ng-click="storeSalePriceView()">
+                                    <s:message code="kioskKeyMap.storeSalePrice" />
+                                </button>
+                            </c:if>
+                            <c:if test="${orgnFg == 'STORE'}">
+                                <button class="btn_skyblue" id="btnSalePrice" ng-click="salePriceView()">
+                                    <s:message code="kioskKeyMap.salePrice" />
+                                </button>
+                            </c:if>
                         </c:if>
                        </div>
                 </td>
@@ -478,7 +494,7 @@
     var kioskKeyEnvstVal = "${kioskKeyEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20230727.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20230727.04" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
@@ -518,4 +534,16 @@
 
 <%-- 키맵미리보기 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskKeyMapView.jsp">
+</c:import>
+
+<%-- 본사판매가관리 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/kioskKeyMap/popUpHqSalePrice.jsp">
+</c:import>
+
+<%-- 매장판매가관리 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/kioskKeyMap/popUpStoreSalePrice.jsp">
+</c:import>
+
+<%-- 판매가관리 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/kioskKeyMap/popUpSalePrice.jsp">
 </c:import>

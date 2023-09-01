@@ -574,6 +574,28 @@ console.log(params);
         $scope._broadcast('kioskKeyMapViewCtrl');
     };
 
+
+    // 본사판매가관리 팝업
+    $scope.hqSalePriceView = function(){
+        $scope.popUpHqSalePriceLayer.show(true);
+        $scope._broadcast('popUpHqSalePriceCtrl');
+        event.preventDefault();
+    };
+
+    // 매장판매가관리 팝업
+    $scope.storeSalePriceView = function(){
+        $scope.popUpStoreSalePriceLayer.show(true);
+        $scope._broadcast('popUpStoreSalePriceCtrl');
+        event.preventDefault();
+    };
+
+    // 판매가관리 팝업
+    $scope.salePriceView = function(){
+        $scope.popUpSalePriceLayer.show(true);
+        $scope._broadcast('popUpSalePriceCtrl');
+        event.preventDefault();
+    };
+
     // 매장권한) POS번호 선택 시, 키맵그룹 dropdown 조회
     $scope.setTuClsType = function (s) {
 

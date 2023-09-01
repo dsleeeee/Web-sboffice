@@ -47,10 +47,6 @@ app.controller('excelUploadKioskDisplayCtrl', ['$scope', '$http', '$timeout', fu
     // 엑셀 업로드
     $scope.excelUpload = function () {
 
-        $scope.excelTextFg = 'excel'; // 업로드 progress 관련 기본값 세팅
-        $scope.stepCnt = 100; // 한번에 DB에 저장할 숫자 세팅
-        $scope.progressCnt = 0; // 처리된 숫자
-
         // 선택한 파일이 있으면
         if ($('#excelUpFile')[0].files[0]) {
             var file          = $('#excelUpFile')[0].files[0];
@@ -121,6 +117,9 @@ app.controller('excelUploadKioskDisplayCtrl', ['$scope', '$http', '$timeout', fu
             strCd += (strCd === '' ? '' : ',') + jsonData[i].storeCd + jsonData[i].prodCd;
         }
 
+        $scope.stepCnt = 100; // 한번에 DB에 저장할 숫자 세팅
+        $scope.progressCnt = 0; // 처리된 숫자
+
         // 파라미터
         var params = {};
         params.prodCdCol = strCd;
@@ -140,12 +139,12 @@ app.controller('excelUploadKioskDisplayCtrl', ['$scope', '$http', '$timeout', fu
         });
     };
 
-    // 엑셀업로딩 팝업 열기
+    // 작업내역 로딩 팝업
     $scope.excelUploadingPopup = function (showFg) {
         if (showFg) {
             // 팝업내용 동적 생성
-            var innerHtml = '<div class=\"wj-popup-loading\"><p class=\"bk\">' + messages['dlvrProd.excelUploading'] + '</p>';
-            innerHtml += '<div class="mt5 txtIn"><!--<span class="bk" id="progressCnt">0</span> / --><span class="bk" id="totalRows">0</span> 개 업로드 중...</div>';
+            var innerHtml = '<div class=\"wj-popup-loading\"><p class=\"bk\">' + messages['cmm.progress'] + '</p>';
+            innerHtml += '<div class="mt5 txtIn"><span class="bk" id="progressCnt">0</span>/<span class="bk" id="totalRows">0</span> 개 진행 중...</div>';
             innerHtml += '<p><img src=\"/resource/solbipos/css/img/loading.gif\" alt=\"\" /></p></div>';
             // html 적용
             $scope._loadingPopup.content.innerHTML = innerHtml;
@@ -166,11 +165,10 @@ app.controller('excelUploadKioskDisplayCtrl', ['$scope', '$http', '$timeout', fu
     // DB에 저장
     $scope.save = function (jsonData) {
 
-        $scope.totalRows = jsonData.length;
+        $scope.totalRows = jsonData.length;    // 체크수
         var params = [];
-        var msg = '';
 
-        // 저장 시작이면 업로드 중 팝업 오픈
+        // 저장 시작이면 작업내역 로딩 팝업 오픈
         if ($scope.progressCnt === 0) {
             $timeout(function () {
                 $scope.excelUploadingPopup(true);
@@ -211,14 +209,16 @@ app.controller('excelUploadKioskDisplayCtrl', ['$scope', '$http', '$timeout', fu
         $http({
             method : 'POST', //방식
             url    : '/base/prod/kioskDisplay/kioskDisplay/getExcelUploadSave.sb', /* 통신할 URL */
-            data   : jsonData, /* 파라메터로 보낼 데이터 : @requestBody */
+            data   : params, /* 파라메터로 보낼 데이터 : @requestBody */
             params : sParam,
             headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
         }).then(function successCallback(response) {
             if ($scope._httpStatusCheck(response, true)) {
-                if (nvl($scope.parentCtrl, '') !== '') {
-                    var parentScope = agrid.getScope($scope.parentCtrl);
-                    parentScope.uploadCallBack();
+                if (parseInt($scope.progressCnt) >= parseInt($scope.totalRows)) {
+                    if (nvl($scope.parentCtrl, '') !== '') {
+                        var parentScope = agrid.getScope($scope.parentCtrl);
+                        parentScope.uploadCallBack();
+                    }
                 }
             }
         }, function errorCallback(response) {

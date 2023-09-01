@@ -20,6 +20,7 @@ import kr.co.solbipos.base.prod.touchkey.service.TouchKeyVO;
 import kr.co.solbipos.base.store.storeType.service.StoreTypeService;
 import kr.co.solbipos.base.store.storeType.service.StoreTypeVO;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,6 +116,21 @@ public class TouchKeyController {
             model.addAttribute("maxClassRow", cmmEnvUtil.getHqEnvst(sessionInfoVO, "0041"));
         } else {
             model.addAttribute("maxClassRow", cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1041"));
+        }
+
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 내점/배달/포장 가격관리 사용여부
+            model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0044"), "0"));
+
+            // 매장판매가관리본사강제수정
+            model.addAttribute("coercionFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1113"), "0"));
+        }else{
+            // 내점/배달/포장 가격관리 사용여부
+            model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0044") , "0"));
+
+            // 본사통제구분-판매가
+            model.addAttribute("salePriceFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0045") , "1"));
+            model.addAttribute("coercionFg", "0");
         }
 
         // 터치키 관련 권한정보 가져오기 : 2019-08-08 이다솜
@@ -266,6 +282,10 @@ public class TouchKeyController {
         }
         model.addAttribute("branchCdComboList", branchCdComboListAll);
 
+        // 사용자별 브랜드 조회(콤보박스용)
+        DayProdVO dayProdVO = new DayProdVO();
+        String momsHqBrandCdComboList = convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO));
+        model.addAttribute("momsHqBrandCdComboList", momsHqBrandCdComboList);
         /** //맘스터치 */
 
         return "base/prod/touchKey/touchKey";
@@ -730,5 +750,77 @@ public class TouchKeyController {
         int result = touchkeyService.getPopUpTouchKeyDelSave(touchKeyVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 판매 터치키 본사판매가관리
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param touchKeyVO TouchKeyVO
+     * @param model Model
+     * @return Result
+     * @author 권지현
+     * @since 2023.08.24
+     */
+    @RequestMapping(value = "/getHqSalePrice.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getHqSalePrice(HttpServletRequest request, HttpServletResponse response,
+                                 TouchKeyVO touchKeyVO, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> list =  touchkeyService.getHqSalePrice(touchKeyVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, touchKeyVO);
+
+    }
+
+    /**
+     * 판매 터치키 매장판매가관리
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param touchKeyVO TouchKeyVO
+     * @param model Model
+     * @return Result
+     * @author 권지현
+     * @since 2023.08.25
+     */
+    @RequestMapping(value = "/getStoreSalePrice.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreSalePrice(HttpServletRequest request, HttpServletResponse response,
+                                 TouchKeyVO touchKeyVO, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> list =  touchkeyService.getStoreSalePrice(touchKeyVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, touchKeyVO);
+
+    }
+
+    /**
+     * 판매 터치키 판매가관리
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param touchKeyVO TouchKeyVO
+     * @param model Model
+     * @return Result
+     * @author 권지현
+     * @since 2023.08.29
+     */
+    @RequestMapping(value = "/getSalePrice.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSalePrice(HttpServletRequest request, HttpServletResponse response,
+                                 TouchKeyVO touchKeyVO, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> list =  touchkeyService.getSalePrice(touchKeyVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, touchKeyVO);
+
     }
 }

@@ -635,7 +635,12 @@
                             )
                     </if>
                     AND tsmtd.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
-                    AND tsmtd.DLVR_ORDER_FG = #{gubun}
+                    <if test='gubun != null and gubun != "3"'>
+                        AND tsmtd.DLVR_ORDER_FG = #{gubun}
+                    </if>
+                    <if test='gubun != null and gubun == "3"'>
+                        AND tsmtd.DLVR_ORDER_FG IN ('3', '4')
+                    </if>
                     GROUP BY tsmtd.SALE_YM
                 )
                 GROUP BY SALE_YM
