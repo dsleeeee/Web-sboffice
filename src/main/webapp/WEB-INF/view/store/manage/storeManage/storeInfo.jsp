@@ -533,6 +533,12 @@
                       <input type="text" class="sb-input w100" ng-model="store.copyStoreInfo" readonly="readonly" ng-click="searchStore()"/>
                       <input type="text" id="envStoreCd" class="sb-input w100" ng-model="store.copyStoreCd" readonly="readonly" style="display: none"/>
                   </div>
+
+                  <%-- 전체선택 버튼 --%>
+                  <span><a href="#" class="btn_grayS pd5 mt5" id="btnAllChk" ng-click="allChkYn('Y')"><s:message code="storeManage.allChk" /></a></span>
+                  <%-- 전체해제 버튼 --%>
+                  <span><a href="#" class="btn_grayS pd5 mt5" id="btnAllClear" ng-click="allChkYn('N')"><s:message code="storeManage.allClear" /></a></span>
+
                   <%-- 매장환경조회 버튼 --%>
                   <%--<a id="btnStoreSetting" href="#" class="btn_grayS mt35 mb15"><s:message code="storeManage.srchStoreSetting" /></a><br />--%>
                   <%-- 매장환경 체크박스  --%>
@@ -597,7 +603,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20230830.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20230901.01" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">

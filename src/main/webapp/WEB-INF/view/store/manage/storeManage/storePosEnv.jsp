@@ -55,7 +55,7 @@
   </div>
 
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storePosEnv.js?ver=20230830.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storePosEnv.js?ver=20230831.01" charset="utf-8"></script>
 
 <script type="text/javascript">
   var userId = "${userId}";

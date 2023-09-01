@@ -1908,6 +1908,15 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope._setComboData("hqBrandCdCombo", [{"name": "기본브랜드", "value": "0000000"}]); // 브랜드
       }
     });
-  }
+  };
+
+  // 매장환경복사 항목 전체선택/해제
+  $scope.allChkYn = function (val) {
+      if (val === 'Y') {
+          $("input:checkbox[name='copyChk']").prop("checked", true);
+      } else {
+          $("input:checkbox[name='copyChk']").prop("checked", false);
+      }
+  };
 
 }]);
