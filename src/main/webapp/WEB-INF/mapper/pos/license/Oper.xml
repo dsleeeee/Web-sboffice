@@ -45,6 +45,7 @@
         ,       H.P_SALE_CNT
         ,       H.P_RTN_SALE_CNT
         ,       H.P_REAL_SALE_CNT
+        ,       CASE WHEN H.P_MAX_SALE_DATE IS NOT NULL THEN TO_CHAR(TO_DATE(H.P_MAX_SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') ELSE '' END AS P_MAX_SALE_DATE
         ,       I.P_CARD_CNT
         ,       J.P_CASH_CNT
         ,       J.P_CASH_APPR_CNT
@@ -123,6 +124,7 @@
                     ,       SUM(NVL(A.SALE_CNT      , 0))   P_SALE_CNT
                     ,       SUM(NVL(A.RTN_SALE_CNT  , 0))   P_RTN_SALE_CNT
                     ,       SUM(NVL(A.REAL_SALE_CNT , 0))   P_REAL_SALE_CNT
+                    ,       MAX(A.SALE_DATE)                P_MAX_SALE_DATE
                     FROM    TB_SL_DAILY_TOTAL A
                     WHERE   A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                     GROUP
