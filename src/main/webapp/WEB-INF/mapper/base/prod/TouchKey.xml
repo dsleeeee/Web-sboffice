@@ -3151,7 +3151,7 @@
                 AND 	tht.HQ_OFFICE_CD = thtkc.HQ_OFFICE_CD
                 AND 	tht.TUKEY_CLASS_CD = thtkc.TUKEY_CLASS_CD
                 <if test='tukeyGrpCd != null and tukeyGrpCd != ""'>
-                    AND thtkg.TUKEY_GRP_CD = #{tukeyGrpCd}
+                    AND tht.TUKEY_GRP_CD = #{tukeyGrpCd}
                 </if>
                 GROUP
                 BY      tht.HQ_OFFICE_CD
@@ -3260,7 +3260,7 @@
                 AND 	tht.HQ_OFFICE_CD = thtkc.HQ_OFFICE_CD
                 AND 	tht.TUKEY_CLASS_CD = thtkc.TUKEY_CLASS_CD
                 <if test='tukeyGrpCd != null and tukeyGrpCd != ""'>
-                    AND thtkg.TUKEY_GRP_CD = #{tukeyGrpCd}
+                    AND tht.TUKEY_GRP_CD = #{tukeyGrpCd}
                 </if>
                 GROUP
                 BY      tht.HQ_OFFICE_CD
@@ -3427,7 +3427,7 @@
                             AND 	tmt.STORE_CD = tmtkc.STORE_CD
                             AND 	tmt.TUKEY_CLASS_CD = tmtkc.TUKEY_CLASS_CD
                             <if test='tukeyGrpCd != null and tukeyGrpCd != ""'>
-                                AND tmtkg.TUKEY_GRP_CD = #{tukeyGrpCd}
+                                AND tmt.TUKEY_GRP_CD = #{tukeyGrpCd}
                             </if>
                             GROUP
                             BY      tmt.STORE_CD
@@ -3548,7 +3548,7 @@
                 AND 	tmt.STORE_CD = tmtkc.STORE_CD
                 AND 	tmt.TUKEY_CLASS_CD = tmtkc.TUKEY_CLASS_CD
                 <if test='tukeyGrpCd != null and tukeyGrpCd != ""'>
-                    AND tmtkg.TUKEY_GRP_CD = #{tukeyGrpCd}
+                    AND tmt.TUKEY_GRP_CD = #{tukeyGrpCd}
                 </if>
                 GROUP
                 BY      tmt.STORE_CD

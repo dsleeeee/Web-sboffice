@@ -3819,7 +3819,7 @@
         AND 	thkk.HQ_OFFICE_CD = thkc.HQ_OFFICE_CD
         AND 	thkk.TU_CLS_CD = thkc.TU_CLS_CD
         <if test='tuClsType != null and tuClsType != ""'>
-            AND thkg.TU_CLS_TYPE = #{tuClsType}
+            AND thkk.TU_CLS_TYPE = #{tuClsType}
         </if>
         GROUP
         BY      thkk.HQ_OFFICE_CD
@@ -3924,7 +3924,7 @@
         AND 	thkk.HQ_OFFICE_CD = thkc.HQ_OFFICE_CD
         AND 	thkk.TU_CLS_CD = thkc.TU_CLS_CD
         <if test='tuClsType != null and tuClsType != ""'>
-            AND thkg.TU_CLS_TYPE = #{tuClsType}
+            AND thkk.TU_CLS_TYPE = #{tuClsType}
         </if>
         GROUP
         BY      thkk.HQ_OFFICE_CD
@@ -4084,7 +4084,7 @@
                 AND 	tmkk.TU_CLS_CD = tmkc.TU_CLS_CD
                 AND     tmkk.POS_NO = #{posNo}
                 <if test='tuClsType != null and tuClsType != ""'>
-                    AND tmkg.TU_CLS_TYPE = #{tuClsType}
+                    AND tmkk.TU_CLS_TYPE = #{tuClsType}
                 </if>
                 GROUP
                 BY      tmkk.STORE_CD
@@ -4204,7 +4204,7 @@
                 AND 	tmkk.TU_CLS_CD = tmkc.TU_CLS_CD
                 AND     tmkk.POS_NO = #{posNo}
                 <if test='tuClsType != null and tuClsType != ""'>
-                    AND tmkg.TU_CLS_TYPE = #{tuClsType}
+                    AND tmkk.TU_CLS_TYPE = #{tuClsType}
                 </if>
                 GROUP
                 BY      tmkk.STORE_CD
