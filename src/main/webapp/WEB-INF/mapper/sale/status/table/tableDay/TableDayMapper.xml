@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.solbipos.sale.status.table.day.service.impl.TableDayMapper">
+
 	<select id="getTableDayList" parameterType="tableDayVO" resultType="DefaultMap">
+		/* TableDayMapper.getTableDayList */
 		<include refid="CmmSQL.PagingTemplateHeader"/>
 		SELECT STORE_CD
 			, TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
@@ -47,7 +48,7 @@
 	</select>
 
 	<select id="getTableDayExcelList" parameterType="tableDayVO" resultType="DefaultMap">
-
+		/* TableDayMapper.getTableDayExcelList */
         SELECT TSDT.STORE_CD
         	, TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
             , TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') SALE_DAY
@@ -76,9 +77,8 @@
         BY    SALE_DATE DESC
     </select>
 
-
  	<select id="getStoreTableList" parameterType="tableDayVO" resultType="DefaultMap">
-
+		/* TableDayMapper.getStoreTableList */
 		SELECT	TMP.STORE_CD||'||'||TMP.TBL_CD AS TABLE_CD
 				, TMP.TBL_NM AS TABLE_NM
 				, (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = TMP.STORE_CD) AS STORE_NM
@@ -100,7 +100,6 @@
                	</foreach>
            	</if>
         ORDER BY TMP.STORE_CD||'||'||TMP.TBL_CD
-
         <!-- SELECT  tmp.TBL_CD AS NMCODE_CD
         		, tmp.TBL_NM AS NMCODE_NM
         		${sQuery1}
@@ -117,7 +116,6 @@
         		</if>
         ORDER
         BY      tmp.TBL_NM -->
-
     </select>
 
 </mapper>

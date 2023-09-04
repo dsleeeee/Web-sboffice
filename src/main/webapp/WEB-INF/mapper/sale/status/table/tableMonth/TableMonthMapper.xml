@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.solbipos.sale.status.table.month.service.impl.TableMonthMapper">
+
 	<select id="getTableMonthList" parameterType="tableMonthVO" resultType="DefaultMap">
+		/* TableMonthMapper.getTableMonthList */
 		<include refid="CmmSQL.PagingTemplateHeader"/>
 		SELECT STORE_CD
 			, TO_CHAR(TO_DATE(SALE_YM, 'YYYYMM'), 'YYYY-MM') AS SALE_YM
@@ -27,7 +28,6 @@
 			  <if test='endDate != null and endDate != ""'>
 			  	AND TSDT.SALE_YM <![CDATA[<= ]]> #{endDate}
 			  </if>
-
 			<!--   AND TBL_CD in (${sQuery2})
 			  <![CDATA[
    			  AND TSDT.SALE_YM >= TO_CHAR(TO_DATE(#{startDate}, 'YYYYMMDD'),'YYYYMM')
@@ -41,6 +41,7 @@
 	</select>
 
     <select id="getTableMonthExcelList" parameterType="tableMonthVO" resultType="DefaultMap">
+		/* TableMonthMapper.getTableMonthExcelList */
         SELECT STORE_CD
         	, TO_CHAR(TO_DATE(SALE_YM, 'YYYYMM'), 'YYYY-MM') AS SALE_YM
             , NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
@@ -62,7 +63,6 @@
               <if test='endDate != null and endDate != ""'>
                 AND TSDT.SALE_YM <![CDATA[<= ]]> #{endDate}
               </if>
-
             <!--   AND TBL_CD in (${sQuery2})
               <![CDATA[
               AND TSDT.SALE_YM >= TO_CHAR(TO_DATE(#{startDate}, 'YYYYMMDD'),'YYYYMM')
@@ -75,7 +75,7 @@
     </select>
 
 	<select id="getStoreTableList" parameterType="tableMonthVO" resultType="DefaultMap">
-
+		/* TableMonthMapper.getStoreTableList */
         SELECT	TMP.STORE_CD||'||'||TMP.TBL_CD AS TABLE_CD
 				, TMP.TBL_NM AS TABLE_NM
 				, (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = TMP.STORE_CD) AS STORE_NM
@@ -94,7 +94,6 @@
                	</foreach>
            	</if>
         ORDER BY TMP.STORE_CD||'||'||TMP.TBL_CD
-
     </select>
 
 </mapper>

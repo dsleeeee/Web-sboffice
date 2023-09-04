@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.solbipos.sale.status.table.dayOfWeek.service.impl.TableDayOfWeekMapper">
 
 	<select id="getTableDayOfWeekList" parameterType="tableDayOfWeekVO" resultType="DefaultMap">
+		/* TableDayOfWeekMapper.getTableDayOfWeekList */
 		SELECT 	TSDT.STORE_CD
 				, TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean') AS SALE_DAY
 				, CASE TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
@@ -45,7 +45,7 @@
 	</select>
 
 	<select id="getStoreTableList" parameterType="tableDayOfWeekVO" resultType="DefaultMap">
-
+		/* TableDayOfWeekMapper.getStoreTableList */
 			SELECT	TMP.STORE_CD||'||'||TMP.TBL_CD AS TABLE_CD
 				, TMP.TBL_NM AS TABLE_NM
 				, (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = TMP.STORE_CD) AS STORE_NM
