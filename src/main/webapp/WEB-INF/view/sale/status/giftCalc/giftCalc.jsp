@@ -304,7 +304,7 @@
             <wj-flex-grid
                     id="wjGridGiftCalcExcel"
                     autoGenerateColumns="false"
-                    control="flex"
+                    control="excelFlex"
                     initialized="initGrid(s,e)"
                     sticky-headers="true"
                     selection-mode="Row"
