@@ -182,9 +182,9 @@ app.controller('popUpStoreSalePriceCtrl', ['$scope', '$http', '$timeout', functi
         // '전체' 일때
         if (params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
             var momsHqBrandCd = "";
-            for (var i = 0; i < momsHqBrandCdComboList.length; i++) {
-                if (momsHqBrandCdComboList[i].value !== null) {
-                    momsHqBrandCd += momsHqBrandCdComboList[i].value + ","
+            for (var i = 0; i < userHqBrandCdComboList.length; i++) {
+                if (userHqBrandCdComboList[i].value !== null) {
+                    momsHqBrandCd += userHqBrandCdComboList[i].value + ","
                 }
             }
             params.userBrands = momsHqBrandCd;
