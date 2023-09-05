@@ -304,11 +304,21 @@ app.controller('dayProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             $scope._popMsg(messages['cmm.dateChk.error']);
             return false;
         }
-        // 조회일자 최대 1일 제한
-        if (diffDay > 0) {
-            $scope._popMsg(messages['cmm.dateOver.1day.error']);
-            return false;
+
+        if(userId == "momsaseralee" || userId == "h0393") {
+            // 조회일자 최대 한달(31일) 제한
+            if (diffDay > 31) {
+                $scope._popMsg(messages['cmm.dateOver.1month.error']);
+                return false;
+            }
+        } else {
+            // 조회일자 최대 1일 제한
+            if (diffDay > 0) {
+                $scope._popMsg(messages['cmm.dateOver.1day.error']);
+                return false;
+            }
         }
+
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
             return false;

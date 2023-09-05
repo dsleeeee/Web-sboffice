@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.solbipos.sale.status.table.dayPeriod.service.impl.TableDayPeriodMapper">
 
 	<select id="getTableDayPeriodList" parameterType="tableDayPeriodVO" resultType="DefaultMap">
+        /* TableDayPeriodMapper.getTableDayPeriodList */
 		<include refid="CmmSQL.PagingTemplateHeader"/>
 		SELECT TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
 		       TMTG.STORE_CD,
@@ -50,10 +50,10 @@
         GROUP BY TMTG.STORE_CD, TMS.STORE_NM, TSDT.SALE_DATE, TMT.TBL_CD, TMT.TBL_NM
         ORDER BY TSDT.SALE_DATE DESC, TMT.TBL_CD, TMT.TBL_NM
         <include refid="CmmSQL.PagingTemplateBottom"/>
-
 	</select>
 
     <select id="getTableDayPeriodExcelList" parameterType="tableDayPeriodVO" resultType="DefaultMap">
+        /* TableDayPeriodMapper.getTableDayPeriodExcelList */
         SELECT TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
                TMTG.STORE_CD,
                TMS.STORE_NM,
@@ -96,7 +96,6 @@
               </if>
         GROUP BY TMTG.STORE_CD, TMS.STORE_NM, TSDT.SALE_DATE, TMT.TBL_CD, TMT.TBL_NM
         ORDER BY TSDT.SALE_DATE DESC, TMT.TBL_CD, TMT.TBL_NM
-
     </select>
 
 </mapper>

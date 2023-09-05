@@ -6,6 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
+<c:set var="userId" value="${sessionScope.sessionInfo.userId}" />
 
 <div class="subCon">
     <div ng-controller="dayProdCtrl">
@@ -429,6 +430,7 @@
 <script type="text/javascript">
   var orgnFg = "${orgnFg}";
   var storeCd = "${storeCd}";
+  var userId = "${userId}";
 
   // List 형식("" 안붙임)
   var momsHqBrandCdComboList = ${momsHqBrandCdComboList};
@@ -441,7 +443,7 @@
   var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/dayProd/dayProd.js?ver=20230718.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/dayProd/dayProd.js?ver=20230905.01" charset="utf-8"></script>
 
 <%-- 20221117 상품분류 팝업 주석처리함 -> 상품 멀티 팝업에 상품분류가 들어감으로 오류 --%>
 <%-- 상품분류 팝업 --%>
