@@ -205,12 +205,12 @@
             TO_CHAR(TO_DATE(#{startDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_FROM,
             TO_CHAR(TO_DATE(#{endDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_TO,
         </if>
-        L_CLASS_CD,
-        L_CLASS_NM,
-        M_CLASS_CD,
-        M_CLASS_NM,
-        S_CLASS_CD,
-        S_CLASS_NM,
+        tmpcv.L_CLASS_CD,
+        tmpcv.L_CLASS_NM,
+        tmpcv.M_CLASS_CD,
+        tmpcv.M_CLASS_NM,
+        tmpcv.S_CLASS_CD,
+        tmpcv.S_CLASS_NM,
         tsdps.SIDE_PROD_CD AS PROD_CD,
         tmp.PROD_NM,
         (CASE tsdps.SEL_TYPE_FG WHEN 'P' THEN '사이드모상품' WHEN 'S' THEN '사이드상품' WHEN 'N' THEN '일반판매상품' END) AS SEL_TYPE_FG,
@@ -242,7 +242,7 @@
         TB_MS_STORE_INFO tmsi,
         TB_MS_PRODUCT tmp,
         TB_MS_PRODUCT tmps2, -- 사이드
-        TB_MS_PRODUCT_CLASS_V02 tmpcv
+        TB_MS_PRODUCT_CLASS_V03 tmpcv
         WHERE 1=1
         AND tsdps.HQ_OFFICE_CD = #{hqOfficeCd}
         AND tsdps.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -332,7 +332,7 @@
         AND tmps2.STORE_CD = tsdps.STORE_CD
         AND tmps2.PROD_CD = tsdps.PROD_CD
         AND tmpcv.STORE_CD = tmps2.STORE_CD
-        AND tmpcv.PROD_CD = tmps2.PROD_CD
+        AND tmpcv.PROD_CLASS_CD = tmps2.PROD_CLASS_CD
         <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
             GROUP BY tsdps.SALE_DATE, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, tsdps.PROD_CD, tmp.PROD_NM, tsdps.SEL_TYPE_FG, tsdps.SIDE_PROD_CD, tmps2.PROD_NM
             ORDER BY tsdps.SALE_DATE, tsdps.SIDE_PROD_CD, (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.PROD_CD END) DESC
@@ -360,12 +360,12 @@
             TO_CHAR(TO_DATE(#{startDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_FROM,
             TO_CHAR(TO_DATE(#{endDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_TO,
         </if>
-        L_CLASS_CD,
-        L_CLASS_NM,
-        M_CLASS_CD,
-        M_CLASS_NM,
-        S_CLASS_CD,
-        S_CLASS_NM,
+        tmpcv.L_CLASS_CD,
+        tmpcv.L_CLASS_NM,
+        tmpcv.M_CLASS_CD,
+        tmpcv.M_CLASS_NM,
+        tmpcv.S_CLASS_CD,
+        tmpcv.S_CLASS_NM,
         tsdps.SIDE_PROD_CD AS PROD_CD,
         tmp.PROD_NM,
         (CASE tsdps.SEL_TYPE_FG WHEN 'P' THEN '사이드모상품' WHEN 'S' THEN '사이드상품' WHEN 'N' THEN '일반판매상품' END) AS SEL_TYPE_FG,
@@ -396,7 +396,7 @@
         TB_MS_STORE_INFO tmsi,
         TB_MS_PRODUCT tmp,
         TB_MS_PRODUCT tmps2, -- 사이드
-        TB_MS_PRODUCT_CLASS_V02 tmpcv
+        TB_MS_PRODUCT_CLASS_V03 tmpcv
         WHERE 1=1
         AND tsdps.HQ_OFFICE_CD = #{hqOfficeCd}
         AND tsdps.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -486,7 +486,7 @@
         AND tmps2.STORE_CD = tsdps.STORE_CD
         AND tmps2.PROD_CD = tsdps.PROD_CD
         AND tmpcv.STORE_CD = tmps2.STORE_CD
-        AND tmpcv.PROD_CD = tmps2.PROD_CD
+        AND tmpcv.PROD_CLASS_CD = tmps2.PROD_CLASS_CD
         <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
             GROUP BY tsdps.SALE_DATE, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, tsdps.PROD_CD, tmp.PROD_NM, tsdps.SEL_TYPE_FG, tsdps.SIDE_PROD_CD, tmps2.PROD_NM
             ORDER BY tsdps.SALE_DATE, tsdps.SIDE_PROD_CD, (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.PROD_CD END) DESC
