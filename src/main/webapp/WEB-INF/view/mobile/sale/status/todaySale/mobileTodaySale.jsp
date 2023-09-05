@@ -199,6 +199,8 @@
     <%-- 결제수단 --%>
     <div class="gridBar mt10" id="mobileTodaySalePay" onclick="girdFldUnfld('mobileTodaySalePay')">
         <a href="#" class="open"><s:message code="mobile.todaySale.todaySalePay"/></a>
+        <%-- 결제수단 엑셀다운로드 --%>
+        <button id="btnExcelMobileTodaySalePay"><s:message code="cmm.excel.down"/></button>
     </div>
     <div class="w100" id="mobileTodaySalePayGrid">
         <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden; min-height:80px;">
@@ -226,6 +228,8 @@
     <%-- 할인내역 --%>
     <div class="gridBar mt10" id="mobileTodaySaleDc" onclick="girdFldUnfld('mobileTodaySaleDc')">
         <a href="#" class="open"><s:message code="mobile.todaySale.todaySaleDc"/></a>
+        <%-- 할인내역 엑셀다운로드 --%>
+        <button id="btnExcelMobileTodaySaleDc"><s:message code="cmm.excel.down"/></button>
     </div>
     <div class="w100" id="mobileTodaySaleDcGrid" ng-controller="mobileTodaySaleDcCtrl">
         <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden; min-height:80px;">
@@ -253,12 +257,14 @@
     <%-- 내점/배달/포장 --%>
     <div class="gridBar mt10" id="mobileTodaySaleDlvr" onclick="girdFldUnfld('mobileTodaySaleDlvr')">
         <a href="#" class="open"><s:message code="mobile.todaySale.todaySaleDlvr"/></a>
+        <%-- 내점/배달/포장 엑셀다운로드 --%>
+        <button id="btnExcelMobileTodaySaleDlvr"><s:message code="cmm.excel.down"/></button>
     </div>
     <div class="w100" id="mobileTodaySaleDlvrGrid" ng-controller="mobileTodaySaleDlvrCtrl">
         <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;">
             <wj-flex-grid
                     autoGenerateColumns="false"
-                    control="flex"
+                    control="flexMobileTodaySaleDlvr"
                     initialized="initGrid(s,e)"
                     selection-mode="Row"
                     items-source="data"
@@ -278,6 +284,8 @@
     <%-- 시간대별 --%>
     <div class="gridBar mt10" id="mobileTodaySaleTime" onclick="girdFldUnfld('mobileTodaySaleTime')">
         <a href="#" class="open"><s:message code="mobile.todaySale.todaySaleTime"/></a>
+        <%-- 시간대별 엑셀다운로드 --%>
+        <button id="btnExcelMobileTodaySaleTime"><s:message code="cmm.excel.down"/></button>
     </div>
     <div class="w100" id="mobileTodaySaleTimeGrid" ng-controller="mobileTodaySaleTimeCtrl">
         <table class="searchTbl">
@@ -350,7 +358,7 @@
         <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;">
             <wj-flex-grid
                     autoGenerateColumns="false"
-                    control="flex"
+                    control="flexMobileTodaySaleTime"
                     initialized="initGrid(s,e)"
                     selection-mode="Row"
                     items-source="data"
@@ -387,4 +395,4 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/todaySale/mobileTodaySale.js?ver=20210524.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/todaySale/mobileTodaySale.js?ver=20230905.01" charset="utf-8"></script>

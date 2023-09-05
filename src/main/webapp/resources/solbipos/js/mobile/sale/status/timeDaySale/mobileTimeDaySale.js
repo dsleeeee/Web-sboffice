@@ -26,7 +26,7 @@ for(i =0 ; i < 24; i++){
 /**
  *  일자-시간대별 그리드 생성
  */
-app.controller('mobileTimeDaySaleDateTimeCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('mobileTimeDaySaleDateTimeCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('mobileTimeDaySaleDateTimeCtrl', $scope, $http, false));
@@ -94,13 +94,39 @@ app.controller('mobileTimeDaySaleDateTimeCtrl', ['$scope', '$http', function ($s
         }, false);
     };
     // <-- //검색 호출 -->
+
+    // 일자-시간대별 엑셀다운로드
+    $("#btnExcelMobileTimeDaySaleDateTime").on("click", function(event) {
+
+        if ($scope.flexMobileTimeDaySaleDateTime.rows.length <= 0) {
+          $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+          return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+          wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flexMobileTimeDaySaleDateTime, {
+            includeColumnHeaders: true,
+            includeCellStyles: true,
+            includeColumns: function (column) {
+              return column.visible;
+            }
+          },  messages["mobile.timeDaySale"] + '_' + messages["mobile.timeDaySale.dateTime"] + '_' + getToday() + '.xlsx', function () {
+            $timeout(function () {
+              $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+            }, 10);
+          });
+        }, 10);
+        event.stopPropagation();
+    });
+
 }]);
 
 
 /**
  *  시간대별 그리드 생성
  */
-app.controller('mobileTimeDaySaleCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('mobileTimeDaySaleCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('mobileTimeDaySaleCtrl', $scope, $http, false));
@@ -222,6 +248,31 @@ app.controller('mobileTimeDaySaleCtrl', ['$scope', '$http', function ($scope, $h
             $("#timeOption").hide();
             $("#timeSlotOption").show();
         }
+    });
+
+    // 시간대별 엑셀다운로드
+    $("#btnExcelMobileTimeDaySaleTime").on("click", function(event) {
+
+        if ($scope.flexMobileTimeDaySaleTime.rows.length <= 0) {
+          $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+          return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+          wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flexMobileTimeDaySaleTime, {
+            includeColumnHeaders: true,
+            includeCellStyles: true,
+            includeColumns: function (column) {
+              return column.visible;
+            }
+          },  messages["mobile.timeDaySale"] + '_' + messages["mobile.timeDaySale.time"] + '_' + getToday() + '.xlsx', function () {
+            $timeout(function () {
+              $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+            }, 10);
+          });
+        }, 10);
+        event.stopPropagation();
     });
 
 }]);

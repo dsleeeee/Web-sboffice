@@ -51,6 +51,31 @@ app.controller('todayBest3Ctrl', ['$scope', '$http', '$timeout', function ($scop
         }, false);
     }
 
+    // 당일매출 (Best3) 엑셀다운로드
+    $("#btnExcelTodayBest3").on("click", function(event) {
+
+        if ($scope.flexTodayBest3.rows.length <= 0) {
+          $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+          return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+          wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flexTodayBest3, {
+            includeColumnHeaders: true,
+            includeCellStyles: true,
+            includeColumns: function (column) {
+              return column.visible;
+            }
+          },  messages["mobile.prodSale.prodSale"] + '_' + messages["mobile.prodSale.todaySaleBest3"] + '_' + getToday() + '.xlsx', function () {
+            $timeout(function () {
+              $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+            }, 10);
+          });
+        }, 10);
+        event.stopPropagation();
+    });
+
 }]);
 
 app.controller('mobileProdSaleCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
@@ -126,5 +151,30 @@ app.controller('mobileProdSaleCtrl', ['$scope', '$http', '$timeout', function ($
     $scope.mobileProdSaleStoreShow = function () {
         $scope._broadcast('mobileProdSaleStoreCtrl');
     };
+
+    // 상품별 매출현황 엑셀다운로드
+    $("#btnExcelProdSale").on("click", function(event) {
+
+        if ($scope.flexProdSale.rows.length <= 0) {
+          $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+          return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+          wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flexProdSale, {
+            includeColumnHeaders: true,
+            includeCellStyles: true,
+            includeColumns: function (column) {
+              return column.visible;
+            }
+          },  messages["mobile.prodSale.prodSale"] + '_' + messages["mobile.prodSale.prodSale"] + '_' + getToday() + '.xlsx', function () {
+            $timeout(function () {
+              $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+            }, 10);
+          });
+        }, 10);
+        event.stopPropagation();
+    });
 
 }]);
