@@ -171,6 +171,8 @@
     <%-- 결제수단 --%>
     <div class="gridBar mt10" id="mobileMonthSalePay" onclick="girdFldUnfld('mobileMonthSalePay')">
         <a href="#" class="open"><s:message code="mobile.monthSale.salePay"/></a>
+        <!-- 결제수단 엑셀다운로드 -->
+        <button id="btnExcelMobileMonthSalePay"><s:message code="cmm.excel.down"/></button>
     </div>
     <div class="w100" id="mobileMonthSalePayGrid">
         <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden; min-height:80px;">
@@ -197,6 +199,8 @@
     <%-- 할인내역 --%>
     <div class="gridBar mt10" id="mobileMonthSaleDc" onclick="girdFldUnfld('mobileMonthSaleDc')">
         <a href="#" class="open"><s:message code="mobile.monthSale.saleDc"/></a>
+        <!-- 할인내역 엑셀다운로드 -->
+        <button id="btnExcelMobileMonthSaleDc"><s:message code="cmm.excel.down"/></button>
     </div>
     <div class="w100" id="mobileMonthSaleDcGrid" ng-controller="mobileMonthSaleDcCtrl">
         <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden; min-height:80px;">
@@ -273,13 +277,15 @@
     <%-- 내점/배달/포장 --%>
     <div class="gridBar mt10" id="mobileMonthSaleDlvr" onclick="girdFldUnfld('mobileMonthSaleDlvr')">
         <a href="#" class="open"><s:message code="mobile.monthSale.saleDlvr"/></a>
+        <!-- 내점/배달/포장 엑셀다운로드 -->
+        <button id="btnExcelMobileMonthSaleDlvr"><s:message code="cmm.excel.down"/></button>
     </div>
     <div class="w100" id="mobileMonthSaleDlvrGrid">
         <div ng-controller="mobileMonthSaleDlvrCtrl">
             <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;">
                 <wj-flex-grid
                         autoGenerateColumns="false"
-                        control="flex"
+                        control="flexMobileMonthSaleDlvr"
                         initialized="initGrid(s,e)"
                         selection-mode="Row"
                         items-source="data"
@@ -437,6 +443,8 @@
     <%-- 월자별 매출현황 --%>
     <div class="gridBar mt10" id="mobileMonthSaleDtl" onclick="girdFldUnfld('mobileMonthSaleDtl')">
         <a href="#" class="open"><s:message code="mobile.monthSale.saleDtl"/></a>
+        <!-- 월자별 매출현황 엑셀다운로드 -->
+        <button id="btnExcelMobileMonthSaleDtl"><s:message code="cmm.excel.down"/></button>
     </div>
     <div class="w100" id="mobileMonthSaleDtlGrid" ng-controller="mobileMonthSaleDtlCtrl">
         <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden; min-height:100px;">
@@ -451,7 +459,7 @@
                     frozen-columns="1">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="mobile.monthSale.saleYm"/>" binding="saleYm" width="55" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.monthSale.saleYm"/>" binding="saleYm" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.monthSale.totSaleAmt"/>" binding="totSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.monthSale.totDcAmt"/>" binding="totDcAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.monthSale.totRealSaleAmt"/>" binding="totRealSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -491,4 +499,4 @@
     var multiStoreFg = '${multiStoreFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/monthSale/mobileMonthSale.js?ver=20210524.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/monthSale/mobileMonthSale.js?ver=20230905.01" charset="utf-8"></script>

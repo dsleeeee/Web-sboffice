@@ -15,7 +15,7 @@ var app = agrid.getApp();
 /**
  *  다중매장매출현황 그리드 생성
  */
-app.controller('mobileMultiStoreSaleCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('mobileMultiStoreSaleCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('mobileMultiStoreSaleCtrl', $scope, $http, false));
@@ -160,8 +160,39 @@ app.controller('mobileMultiStoreSaleCtrl', ['$scope', '$http', function ($scope,
     $scope.mobileMultiStoreSaleStoreShow = function () {
         $scope._broadcast('mobileMultiStoreSaleStoreCtrl');
     };
+
+    // 다중매장매출현황 엑셀다운로드
+    $("#btnExcelMobileMultiStoreSale").on("click", function(event) {
+
+        if ($scope.flexMobileMultiStoreSale.rows.length <= 0) {
+          $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+          return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+          wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flexMobileMultiStoreSale, {
+            includeColumnHeaders: true,
+            includeCellStyles: true,
+            includeColumns: function (column) {
+              return column.visible;
+            }
+          },  messages["mobile.multiStoreSale"] + '_1_' + getToday() + '.xlsx', function () {
+            $timeout(function () {
+              $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+
+              // 다중매장매출현황2 엑셀다운로드
+              var scope = agrid.getScope('mobileMultiStoreSale2Ctrl');
+              scope.excelMobileMultiStoreSale2();
+
+            }, 10);
+          });
+        }, 10);
+        event.stopPropagation();
+    });
+
 }]);
-app.controller('mobileMultiStoreSale2Ctrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('mobileMultiStoreSale2Ctrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('mobileMultiStoreSale2Ctrl', $scope, $http, false));
@@ -271,6 +302,26 @@ app.controller('mobileMultiStoreSale2Ctrl', ['$scope', '$http', function ($scope
         }, false);
     };
     // <-- //검색 호출 -->
+
+    // 다중매장매출현황2 엑셀다운로드
+    $scope.excelMobileMultiStoreSale2 = function () {
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+          wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flexMobileMultiStoreSale2, {
+            includeColumnHeaders: true,
+            includeCellStyles: true,
+            includeColumns: function (column) {
+              return column.visible;
+            }
+          },  messages["mobile.multiStoreSale"] + '_2_' + getToday() + '.xlsx', function () {
+            $timeout(function () {
+              $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+            }, 10);
+          });
+        }, 10);
+    };
+
 }]);
 /**
  *  다중매장매출현황 차트 생성
@@ -372,7 +423,7 @@ app.controller('mobileMultiStoreSaleChartCtrl', ['$scope', '$http', function ($s
 /**
  *  일자-매장별 매출현황 그리드 생성
  */
-app.controller('mobileMultiStoreSaleDayStoreCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('mobileMultiStoreSaleDayStoreCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('mobileMultiStoreSaleDayStoreCtrl', $scope, $http, false));
@@ -492,4 +543,30 @@ app.controller('mobileMultiStoreSaleDayStoreCtrl', ['$scope', '$http', function 
         }, false);
     };
     // <-- //검색 호출 -->
+
+    // 일자-매장별 매출현황 엑셀다운로드
+    $("#btnExcelMobileMultiStoreSaleDayStore").on("click", function(event) {
+
+        if ($scope.flexMobileMultiStoreSaleDayStore.rows.length <= 0) {
+          $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+          return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+          wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flexMobileMultiStoreSaleDayStore, {
+            includeColumnHeaders: true,
+            includeCellStyles: true,
+            includeColumns: function (column) {
+              return column.visible;
+            }
+          },  messages["mobile.multiStoreSale"] + '_' + messages["mobile.multiStoreSale.dayStore"] + '_' + getToday() + '.xlsx', function () {
+            $timeout(function () {
+              $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+            }, 10);
+          });
+        }, 10);
+        event.stopPropagation();
+    });
+
 }]);

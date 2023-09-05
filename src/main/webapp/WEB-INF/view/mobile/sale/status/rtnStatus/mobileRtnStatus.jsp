@@ -57,6 +57,8 @@
     <%-- 반품현황 --%>
     <div class="gridBar mt10" id="mobileRtnStatus" onclick="girdFldUnfld('mobileRtnStatus')">
         <a href="#" class="open"><s:message code="mobile.rtnStatus"/></a>
+        <!-- 반품현황 엑셀다운로드 -->
+        <button id="btnExcelMobileRtnStatus"><s:message code="cmm.excel.down"/></button>
     </div>
     <div class="w100" id="mobileRtnStatusGrid">
         <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden; min-height:80px;">
@@ -70,7 +72,7 @@
                     is-read-only="true">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="mobile.rtnStatus.saleDate"/>"     binding="saleDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.rtnStatus.saleDate"/>"     binding="saleDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.rtnStatus.rtnSaleCnt"/>"   binding="rtnSaleCnt" width="70" align="center" is-read-only="true" aggregate="Sum" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.rtnStatus.orderAmt"/>"     binding="rtnRealSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum" ></wj-flex-grid-column>
 
@@ -87,7 +89,7 @@
     var multiStoreFg = '${multiStoreFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/rtnStatus/mobileRtnStatus.js?ver=20210928.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/rtnStatus/mobileRtnStatus.js?ver=20230905.01" charset="utf-8"></script>
 
 <%-- 반품현황 상세 팝업 --%>
 <c:import url="/WEB-INF/view/mobile/sale/status/rtnStatus/mobileRtnStatusDtl.jsp">

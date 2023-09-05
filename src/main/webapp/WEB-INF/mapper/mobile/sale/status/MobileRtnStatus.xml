@@ -18,7 +18,7 @@
     -->
     <select id="getMobileRtnStatusList" parameterType="MobileRtnStatusVO" resultType="DefaultMap">
         /* MobileRtnStatusMapper.getMobileRtnStatusList */
-        SELECT  SALE_DATE,
+        SELECT  TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
                 SUM(RTN_SALE_CNT) AS RTN_SALE_CNT,
                 SUM(RTN_REAL_SALE_AMT) AS RTN_REAL_SALE_AMT
         FROM 	TB_SL_DAILY_TOTAL

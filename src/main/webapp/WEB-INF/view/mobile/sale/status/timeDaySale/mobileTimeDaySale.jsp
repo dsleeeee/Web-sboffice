@@ -117,6 +117,8 @@
     <%-- 일자-시간대별 --%>
     <div class="gridBar mt10" id="mobileTimeDaySaleDateTime" onclick="girdFldUnfld('mobileTimeDaySaleDateTime')">
         <a href="#" class="open"><s:message code="mobile.timeDaySale.dateTime"/></a>
+        <!-- 일자-시간대별 엑셀다운로드 -->
+        <button id="btnExcelMobileTimeDaySaleDateTime"><s:message code="cmm.excel.down"/></button>
     </div>
     <div class="w100" id="mobileTimeDaySaleDateTimeGrid" ng-controller="mobileTimeDaySaleDateTimeCtrl">
         <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden; min-height:80px;">
@@ -153,6 +155,8 @@
     <%-- 시간대별 --%>
     <div class="gridBar mt10" id="mobileTimeDaySaleTime" onclick="girdFldUnfld('mobileTimeDaySaleTime')">
         <a href="#" class="open"><s:message code="mobile.timeDaySale.time"/></a>
+        <!-- 시간대별 엑셀다운로드 -->
+        <button id="btnExcelMobileTimeDaySaleTime"><s:message code="cmm.excel.down"/></button>
     </div>
     <div class="w100" id="mobileTimeDaySaleTimeGrid">
         <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden; min-height:80px;">
@@ -231,4 +235,4 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/timeDaySale/mobileTimeDaySale.js?ver=20210609.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/timeDaySale/mobileTimeDaySale.js?ver=20230905.01" charset="utf-8"></script>

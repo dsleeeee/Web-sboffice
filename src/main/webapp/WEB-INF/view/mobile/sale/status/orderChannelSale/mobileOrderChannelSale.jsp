@@ -57,6 +57,8 @@
     <%-- 주문채널별 --%>
     <div class="gridBar mt10" id="mobileOrderChannelPay" onclick="girdFldUnfld('mobileOrderChannelPay')">
         <a href="#" class="open"><s:message code="mobile.orderChannelSale.orderChannel"/></a>
+        <!-- 주문채널별 엑셀다운로드 -->
+       <button id="btnExcelMobileOrderChannelPay"><s:message code="cmm.excel.down"/></button>
     </div>
     <div class="w100" id="mobileOrderChannelPayGrid">
         <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden; min-height:80px;">
@@ -116,6 +118,8 @@
     <%-- 일자별 매출현황 --%>
     <div class="gridBar mt10" id="mobileOrderChannelSaleDtl" onclick="girdFldUnfld('mobileOrderChannelSaleDtl')">
         <a href="#" class="open"><s:message code="mobile.orderChannelSale.saleDtl"/></a>
+        <!-- 일자별 엑셀다운로드 -->
+        <button id="btnExcelMobileOrderChannelSaleDtl"><s:message code="cmm.excel.down"/></button>
     </div>
     <div class="w100" id="mobileOrderChannelSaleDtlGrid" ng-controller="mobileOrderChannelSaleDtlCtrl">
         <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;min-height:100px;">
@@ -130,7 +134,7 @@
                     frozen-columns="1">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="mobile.orderChannelSale.saleDate"/>" binding="saleDate" width="70" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.orderChannelSale.saleDate"/>" binding="saleDate" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.orderChannelSale.totBillCnt"/>" binding="totBillCnt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.orderChannelSale.totRealSaleAmt"/>" binding="totRealSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 
@@ -166,4 +170,4 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/orderChannelSale/mobileOrderChannelSale.js?ver=20210903.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/orderChannelSale/mobileOrderChannelSale.js?ver=20230905.01" charset="utf-8"></script>

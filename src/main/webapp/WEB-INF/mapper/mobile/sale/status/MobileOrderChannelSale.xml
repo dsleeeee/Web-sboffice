@@ -197,7 +197,7 @@
     -->
     <select id="getOrderChannelSaleDtlList" parameterType="mobileOrderChannelSaleVO" resultType="DefaultMap">
       /* USE : MobileOrderChannelSaleMapper.getOrderChannelSaleDtlList */
-           SELECT tsdto.SALE_DATE,
+           SELECT  TO_CHAR(TO_DATE(tsdto.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
                    SUM(tsdto.REAL_SALE_CNT) AS TOT_BILL_CNT,
                    SUM(tsdto.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT,
                     <foreach collection="arrDlvrInFgCol" item="item" separator=",">

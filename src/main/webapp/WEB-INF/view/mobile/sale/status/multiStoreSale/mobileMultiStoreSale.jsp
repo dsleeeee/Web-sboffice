@@ -57,6 +57,8 @@
     <%-- 다중매장매출현황 --%>
     <div class="gridBar mt10" id="mobileMultiStoreSale" onclick="girdFldUnfld('mobileMultiStoreSale')">
         <a href="#" class="open"><s:message code="mobile.multiStoreSale"/></a>
+        <!-- 다중매장매출현황 엑셀다운로드 -->
+        <button id="btnExcelMobileMultiStoreSale"><s:message code="cmm.excel.down"/></button>
     </div>
     <div class="w100" id="mobileMultiStoreSaleGrid">
         <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden; min-height:100px;">
@@ -176,6 +178,8 @@
     <%-- 일자-매장별 매출현황 --%>
     <div class="gridBar mt10" id="mobileMultiStoreSaleDayStore" onclick="girdFldUnfld('mobileMultiStoreSaleDayStore')">
         <a href="#" class="open"><s:message code="mobile.multiStoreSale.dayStore"/></a>
+        <!-- 일자-매장별 매출현황 엑셀다운로드 -->
+        <button id="btnExcelMobileMultiStoreSaleDayStore"><s:message code="cmm.excel.down"/></button>
     </div>
     <div class="w100" id="mobileMultiStoreSaleDayStoreGrid" ng-controller="mobileMultiStoreSaleDayStoreCtrl">
         <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden; min-height:100px;">
@@ -190,7 +194,7 @@
                     frozen-columns="1">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.saleDate"/>" binding="saleDate" width="70" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.saleDate"/>" binding="saleDate" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.storeNm"/>" binding="storeNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.totSaleAmt"/>" binding="totSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.multiStoreSale.totDcAmt"/>" binding="totDcAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -233,4 +237,4 @@
     var multiStoreFg = '${multiStoreFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/multiStoreSale/mobileMultiStoreSale.js?ver=20210524.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/multiStoreSale/mobileMultiStoreSale.js?ver=20230905.01" charset="utf-8"></script>
