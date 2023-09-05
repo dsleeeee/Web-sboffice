@@ -213,6 +213,29 @@ public class StoreProdSaleReportController {
     }
 
     /**
+     * 일자별 매장-상품 매출 다운로드 탭 - 조회
+     *
+     * @param storeProdSaleReportVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 09. 05.
+     */
+    @RequestMapping(value = "/dayStoreProdSaleReport/getDayStoreProdSaleReportList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDayStoreProdSaleReportList(StoreProdSaleReportVO storeProdSaleReportVO, HttpServletRequest request,
+                                             HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = storeProdSaleReportService.getDayStoreProdSaleReportList(storeProdSaleReportVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, storeProdSaleReportVO);
+    }
+
+    /**
      * 그룹-지역관리 탭 - 그룹 조회
      *
      * @param storeProdSaleReportVO

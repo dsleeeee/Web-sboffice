@@ -1,11 +1,11 @@
 /****************************************************************
  *
- * 파일명 : storeProdSaleReport.js
- * 설  명 : 기간별 매장-상품 매출 다운로드 탭 JavaScript
+ * 파일명 : dayStoreProdSaleReport.js
+ * 설  명 : 일자별 매장-상품 매출 다운로드 탭 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2021.12.01     김설아      1.0
+ * 2023.09.05     김설아      1.0
  *
  * **************************************************************/
 /**
@@ -13,37 +13,20 @@
  */
 var app = agrid.getApp();
 
-// 생성구분
-var procFgData = [
-    {"name":"생성요청","value":"0"},
-    {"name":"생성중","value":"1"},
-    {"name":"생성완료","value":"2"},
-    {"name":"오류발생","value":"9"}
-];
-
 /**
- *  기간별 매장-상품 매출 다운로드 그리드 생성
+ *  일자별 매장-상품 매출 다운로드 그리드 생성
  */
-app.controller('storeProdSaleReportCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('dayStoreProdSaleReportCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('storeProdSaleReportCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('dayStoreProdSaleReportCtrl', $scope, $http, false));
 
     // 검색조건에 조회기간
-    var startMonth = new wijmo.input.InputDate('#startMonth', {
-        format       : "yyyy-MM",
-        selectionMode: "2" // 달력 선택 모드(1:day 2:month)
-    });
-    var endMonth = new wijmo.input.InputDate('#endMonth', {
-        format       : "yyyy-MM",
-        selectionMode: "2" // 달력 선택 모드(1:day 2:month)
-    });
+    var startDate = wcombo.genDateVal("#srchStartDate", gvStartDate);
+    var endDate = wcombo.genDateVal("#srchEndDate", gvEndDate);
 
     // 자료생성
-    var dataCreateMonth = new wijmo.input.InputDate('#dataCreateMonth', {
-        format       : "yyyy-MM",
-        selectionMode: "2" // 달력 선택 모드(1:day 2:month)
-    });
+    var dataCreateDate = wcombo.genDateVal("#dataCreateDate", gvStartDate);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -86,7 +69,7 @@ app.controller('storeProdSaleReportCtrl', ['$scope', '$http', function ($scope, 
                     // 값이 있으면 링크
                     if (nvl(selectedRow[("procFg")], '') == '2') {
                         // 다운로드
-                        saleReport_download(selectedRow.fileName);
+                        daySaleReport_download(selectedRow.fileName);
                     }
                 }
             }
@@ -94,36 +77,35 @@ app.controller('storeProdSaleReportCtrl', ['$scope', '$http', function ($scope, 
     };
 
     // <-- 검색 호출 -->
-    $scope.$on("storeProdSaleReportCtrl", function(event, data) {
-        $scope.searchStoreProdSaleReport();
+    $scope.$on("dayStoreProdSaleReportCtrl", function(event, data) {
+        $scope.searchDayStoreProdSaleReport();
         event.preventDefault();
     });
 
-    $scope.searchStoreProdSaleReport = function(){
+    $scope.searchDayStoreProdSaleReport = function(){
         var params = {};
-        params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
-        params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
+        params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
+        params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
 
-        $scope._inquiryMain("/sale/status/storeProdSaleReport/storeProdSaleReport/getStoreProdSaleReportList.sb", params, function() {}, false);
+        $scope._inquiryMain("/sale/status/storeProdSaleReport/dayStoreProdSaleReport/getDayStoreProdSaleReportList.sb", params, function() {}, false);
     };
     // <-- //검색 호출 -->
 
     // <-- 자료생성 -->
     $scope.dataCreate = function(){
-        var createMonth = wijmo.Globalize.format(dataCreateMonth.value, 'yyyyMM');
-        var createMonthLastDate = new Date(createMonth.substring(0, 4), createMonth.substring(4, 6), 0).getDate();
+        var createDate = wijmo.Globalize.format(dataCreateDate.value, 'yyyyMMdd');
 
         // 자료생성 요청건 존재여부 확인
         var params = {};
-        params.fromSaleDate = createMonth + "01";
-        params.toSaleDate = createMonth + createMonthLastDate;
+        params.fromSaleDate = createDate;
+        params.toSaleDate = createDate;
 
         $scope._postJSONQuery.withOutPopUp( "/sale/status/storeProdSaleReport/storeProdSaleReport/getStoreProdSaleReportChk.sb", params, function(response){
-            var storeProdSaleReport = response.data.data.result;
-            $scope.storeProdSaleReport = storeProdSaleReport;
+            var dayStoreProdSaleReport = response.data.data.result;
+            $scope.dayStoreProdSaleReport = dayStoreProdSaleReport;
 
-            if($scope.storeProdSaleReport.cnt > 0) {
-                var msg = createMonth + " " + messages["storeProdSaleReport.saleMonthAlert"]; // 자료가 존재합니다. 삭제 후 진행해주세요.
+            if($scope.dayStoreProdSaleReport.cnt > 0) {
+                var msg = createDate + " " + messages["storeProdSaleReport.saleMonthAlert"]; // 자료가 존재합니다. 삭제 후 진행해주세요.
                 $scope._popMsg(msg);
                 return;
             } else {
@@ -169,7 +151,7 @@ app.controller('storeProdSaleReportCtrl', ['$scope', '$http', function ($scope, 
 
     // 재조회
     $scope.allSearch = function () {
-        $scope.searchStoreProdSaleReport();
+        $scope.searchDayStoreProdSaleReport();
     };
 
 }]);

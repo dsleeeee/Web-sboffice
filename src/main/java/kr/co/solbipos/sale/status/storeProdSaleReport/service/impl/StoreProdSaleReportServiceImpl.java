@@ -109,6 +109,15 @@ public class StoreProdSaleReportServiceImpl implements StoreProdSaleReportServic
         return storeProdSaleReportMapper.getStoreProdSaleReportChk(storeProdSaleReportVO);
     }
 
+    /** 일자별 매장-상품 매출 다운로드 탭 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getDayStoreProdSaleReportList(StoreProdSaleReportVO storeProdSaleReportVO, SessionInfoVO sessionInfoVO) {
+
+        storeProdSaleReportVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return storeProdSaleReportMapper.getDayStoreProdSaleReportList(storeProdSaleReportVO);
+    }
+
     /** 그룹-지역관리 탭 - 그룹 조회 */
     @Override
     public List<DefaultMap<Object>> getBranchAreaList(StoreProdSaleReportVO storeProdSaleReportVO, SessionInfoVO sessionInfoVO) {

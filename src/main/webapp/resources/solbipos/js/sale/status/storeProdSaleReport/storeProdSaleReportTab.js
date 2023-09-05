@@ -17,6 +17,7 @@ app.controller('storeProdSaleReportTabCtrl', ['$scope', function ($scope) {
 
     $scope.init = function () {
         $("#storeProdSaleReportView").show();
+        // $("#dayStoreProdSaleReportView").hide();
         $("#branchAreaView").hide();
         $("#areaStoreMappingView").hide();
     };
@@ -24,10 +25,12 @@ app.controller('storeProdSaleReportTabCtrl', ['$scope', function ($scope) {
     // 기간별 매장-상품 매출 다운로드 탭 보이기
     $scope.storeProdSaleReportShow = function () {
         $("#storeProdSaleReportTab").addClass("on");
+        $("#dayStoreProdSaleReportTab").removeClass("on");
         $("#branchAreaTab").removeClass("on");
         $("#areaStoreMappingTab").removeClass("on");
 
         $("#storeProdSaleReportView").show();
+        $("#dayStoreProdSaleReportView").hide();
         $("#branchAreaView").hide();
         $("#areaStoreMappingView").hide();
 
@@ -36,13 +39,32 @@ app.controller('storeProdSaleReportTabCtrl', ['$scope', function ($scope) {
         scope.flex.refresh();
     };
 
+    // 일자별 매장-상품 매출 다운로드 탭 보이기
+    $scope.dayStoreProdSaleReportShow = function () {
+        $("#storeProdSaleReportTab").removeClass("on");
+        $("#dayStoreProdSaleReportTab").addClass("on");
+        $("#branchAreaTab").removeClass("on");
+        $("#areaStoreMappingTab").removeClass("on");
+
+        $("#storeProdSaleReportView").hide();
+        $("#dayStoreProdSaleReportView").show();
+        $("#branchAreaView").hide();
+        $("#areaStoreMappingView").hide();
+
+        // angular 그리드 hide 시 깨지므로 refresh()
+        var scope = agrid.getScope("dayStoreProdSaleReportCtrl");
+        scope.flex.refresh();
+    };
+
     // 그룹-지역관리 탭 보이기
     $scope.branchAreaShow = function () {
         $("#storeProdSaleReportTab").removeClass("on");
+        $("#dayStoreProdSaleReportTab").removeClass("on");
         $("#branchAreaTab").addClass("on");
         $("#areaStoreMappingTab").removeClass("on");
 
         $("#storeProdSaleReportView").hide();
+        $("#dayStoreProdSaleReportView").hide();
         $("#branchAreaView").show();
         $("#areaStoreMappingView").hide();
 
@@ -56,10 +78,12 @@ app.controller('storeProdSaleReportTabCtrl', ['$scope', function ($scope) {
     // 지역-매장관리 탭 보이기
     $scope.areaStoreMappingShow = function () {
         $("#storeProdSaleReportTab").removeClass("on");
+        $("#dayStoreProdSaleReportTab").removeClass("on");
         $("#branchAreaTab").removeClass("on");
         $("#areaStoreMappingTab").addClass("on");
 
         $("#storeProdSaleReportView").hide();
+        $("#dayStoreProdSaleReportView").hide();
         $("#branchAreaView").hide();
         $("#areaStoreMappingView").show();
 

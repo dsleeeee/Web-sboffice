@@ -8,15 +8,15 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<div id="storeProdSaleReportView" class="subCon" style="display: none;">
-    <div ng-controller="storeProdSaleReportCtrl">
+<div id="dayStoreProdSaleReportView" class="subCon" style="display: none;">
+    <div ng-controller="dayStoreProdSaleReportCtrl">
 
         <%-- 조회조건 --%>
         <div class="searchBar flddUnfld">
-            <a href="#" class="open fl"><s:message code="storeProdSaleReportTab.storeProdSaleReport"/></a>
+            <a href="#" class="open fl"><s:message code="storeProdSaleReportTab.dayStoreProdSaleReport"/></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" ng-click="_broadcast('storeProdSaleReportCtrl',1)">
+                <button class="btn_blue fr" ng-click="_broadcast('dayStoreProdSaleReportCtrl',1)">
                     <s:message code="cmm.search" />
                 </button>
             </div>
@@ -30,15 +30,15 @@
             </colgroup>
             <tbody>
             <tr>
-                <%-- 조회월 --%>
+                <%-- 조회일자 --%>
                 <th>
-                    <s:message code="cmm.search.month" />
+                    <s:message code="cmm.search.date"/>
                 </th>
                 <td colspan="3">
                     <div class="sb-select">
-                        <span class="txtIn"> <input id="startMonth" name="startMonth" class="w100px" /></span>
+                        <span class="txtIn"><input id="srchStartDate" class="w110px"></span>
                         <span class="rg">~</span>
-                        <span class="txtIn"> <input id="endMonth" name="endMonth" class="w100px" /></span>
+                        <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
                     </div>
                 </td>
             </tr>
@@ -57,7 +57,7 @@
             </button>
             <%-- 자료생성 날짜 --%>
             <div class="sb-select dkbr ml5 fr">
-                <span class="txtIn"><input id="dataCreateMonth" name="dataCreateMonth" class="w100px" /></span>
+                <span class="txtIn"><input id="dataCreateDate" name="dataCreateDate" class="w110px" /></span>
             </div>
         </div>
 
@@ -75,7 +75,7 @@
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storeProdSaleReport.saleMonth"/>" binding="saleMonth" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeProdSaleReport.saleDate"/>" binding="saleDate" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeProdSaleReport.procGubun"/>" binding="procGubun" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeProdSaleReport.procDt"/>" binding="procDt" width="80" is-read-only="true" align="center" format="date"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeProdSaleReport.userNm"/>" binding="userNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -94,18 +94,18 @@
     </div>
 </div>
 
-<form id="saleReport_info" name="saleReport_info" method="post" action="/sale/status/storeProdSaleReport/storeProdSaleReport/getStoreProdSaleReportDownload.sb" target="saleReportFrm">
-    <iframe name="saleReportFrm" style="display:none;"></iframe>
+<form id="daySaleReport_info" name="daySaleReport_info" method="post" action="/sale/status/storeProdSaleReport/storeProdSaleReport/getStoreProdSaleReportDownload.sb" target="daySaleReportFrm">
+    <iframe name="daySaleReportFrm" style="display:none;"></iframe>
 
     <input type="hidden" name="fileName" value="" /> <%--파일명--%>
 </form>
 
 <script type="text/javascript">
-    function saleReport_download(fileName)
+    function daySaleReport_download(fileName)
     {
-        document.saleReport_info.fileName.value = fileName;
-        document.saleReport_info.submit();
+        document.daySaleReport_info.fileName.value = fileName;
+        document.daySaleReport_info.submit();
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/storeProdSaleReport/storeProdSaleReport.js?ver=20230905.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/storeProdSaleReport/dayStoreProdSaleReport.js?ver=20230905.01" charset="utf-8"></script>

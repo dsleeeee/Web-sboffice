@@ -36,12 +36,6 @@ public class StoreProdSaleReportVO extends PageVO {
     /** 조회월 */
     private String endMonth;
 
-    /** 자료생성 월 */
-    private String dataCreateMonth;
-
-    /** 자료생성 월의 마지막날 */
-    private String dataCreateMonthLastDate;
-
     /** 요청일자 */
     private String reqDate;
 
@@ -96,14 +90,6 @@ public class StoreProdSaleReportVO extends PageVO {
     public String getEndMonth() { return endMonth; }
 
     public void setEndMonth(String endMonth) { this.endMonth = endMonth; }
-
-    public String getDataCreateMonth() { return dataCreateMonth; }
-
-    public void setDataCreateMonth(String dataCreateMonth) { this.dataCreateMonth = dataCreateMonth; }
-
-    public String getDataCreateMonthLastDate() { return dataCreateMonthLastDate; }
-
-    public void setDataCreateMonthLastDate(String dataCreateMonthLastDate) { this.dataCreateMonthLastDate = dataCreateMonthLastDate; }
 
     public String getReqDate() { return reqDate; }
 

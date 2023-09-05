@@ -35,6 +35,7 @@
         <![CDATA[
             AND thsr.FROM_SALE_DATE >= #{startMonth}||'01'
             AND thsr.TO_SALE_DATE <= #{endMonth}||'31'
+            AND thsr.FROM_SALE_DATE <> TO_SALE_DATE
         ]]>
         AND thsr.REPORT_TYPE = '01'
         ORDER BY thsr.FROM_SALE_DATE DESC
@@ -70,8 +71,8 @@
             #{reqDate},
             #{reqTime},
             '01',
-            #{dataCreateMonth}||'01',
-            #{dataCreateMonth}||#{dataCreateMonthLastDate},
+            #{fromSaleDate},
+            #{toSaleDate},
             '0',
             '',
             '',
@@ -110,9 +111,39 @@
         FROM TB_HQ_SALE_REPORT thsr
         WHERE 1=1
         AND thsr.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND thsr.FROM_SALE_DATE = #{dataCreateMonth}||'01'
-        AND thsr.TO_SALE_DATE = #{dataCreateMonth}||#{dataCreateMonthLastDate}
+        AND thsr.FROM_SALE_DATE = #{fromSaleDate}
+        AND thsr.TO_SALE_DATE = #{toSaleDate}
         AND thsr.REPORT_TYPE = '01'
+    </select>
+
+    <!-- 일자별 매장-상품 매출 다운로드 탭 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getDayStoreProdSaleReportList"  parameterType="StoreProdSaleReportVO" resultType="DefaultMap">
+        /* StoreProdSaleReportMapper.getDayStoreProdSaleReportList */
+        SELECT
+        thsr.FROM_SALE_DATE AS SALE_DATE,
+        '전체매장통합파일' AS PROC_GUBUN,
+        thsr.PROC_DT,
+        (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = thsr.REG_ID) AS USER_NM,
+        thsr.PROC_FG,
+        thsr.PROC_MSG,
+        '다운로드' AS DOWNLOAD,
+        thsr.FROM_SALE_DATE,
+        thsr.TO_SALE_DATE,
+        thsr.FILE_NAME
+        FROM TB_HQ_SALE_REPORT thsr
+        WHERE 1=1
+        AND thsr.HQ_OFFICE_CD = #{hqOfficeCd}
+        <![CDATA[
+            AND thsr.FROM_SALE_DATE >= #{startDate}
+            AND thsr.TO_SALE_DATE <= #{endDate}
+            AND thsr.FROM_SALE_DATE = TO_SALE_DATE
+        ]]>
+        AND thsr.REPORT_TYPE = '01'
+        ORDER BY thsr.FROM_SALE_DATE DESC
     </select>
 
     <!-- 그룹-지역관리 탭 - 그룹 조회 -->

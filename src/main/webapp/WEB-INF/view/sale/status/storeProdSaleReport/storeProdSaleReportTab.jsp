@@ -13,6 +13,10 @@
             <li>
                 <a id="storeProdSaleReportTab" href="#" class="on" ng-click="storeProdSaleReportShow()"><s:message code="storeProdSaleReportTab.storeProdSaleReport"/></a>
             </li>
+            <%-- 일자별 매장-상품 매출 다운로드 탭 --%>
+            <li>
+                <a id="dayStoreProdSaleReportTab" href="#" ng-click="dayStoreProdSaleReportShow()"><s:message code="storeProdSaleReportTab.dayStoreProdSaleReport"/></a>
+            </li>
             <%-- 그룹-지역관리 --%>
             <li>
                 <a id="branchAreaTab" href="#" ng-click="branchAreaShow()"><s:message code="storeProdSaleReportTab.branchArea"/></a>
@@ -25,11 +29,17 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/storeProdSaleReport/storeProdSaleReportTab.js?ver=20211207.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/storeProdSaleReport/storeProdSaleReportTab.js?ver=20230905.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 기간별 매장-상품 매출 다운로드 레이어 --%>
 <c:import url="/WEB-INF/view/sale/status/storeProdSaleReport/storeProdSaleReport.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 일자별 매장-상품 매출 다운로드 레이어 --%>
+<c:import url="/WEB-INF/view/sale/status/storeProdSaleReport/dayStoreProdSaleReport.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

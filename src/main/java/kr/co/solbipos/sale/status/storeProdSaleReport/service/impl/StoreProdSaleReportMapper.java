@@ -38,6 +38,9 @@ public interface StoreProdSaleReportMapper {
     /** 기간별 매장-상품 매출 다운로드 탭 - 자료생성 요청건 존재여부 확인 */
     DefaultMap<String> getStoreProdSaleReportChk(StoreProdSaleReportVO storeProdSaleReportVO);
 
+    /** 일자별 매장-상품 매출 다운로드 탭 - 조회 */
+    List<DefaultMap<Object>> getDayStoreProdSaleReportList(StoreProdSaleReportVO storeProdSaleReportVO);
+
     /** 그룹-지역관리 탭 - 그룹 조회 */
     List<DefaultMap<Object>> getBranchAreaList(StoreProdSaleReportVO storeProdSaleReportVO);
 
