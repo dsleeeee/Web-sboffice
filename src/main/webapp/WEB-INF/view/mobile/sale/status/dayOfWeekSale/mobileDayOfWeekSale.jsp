@@ -11,7 +11,7 @@
 <div class="subCon" ng-controller="mobileDayOfWeekSaleCtrl">
 
     <div class="searchBar">
-        <%-- 일별매출현황 --%>
+        <%-- 요일별 --%>
         <a href="#" class="fl"><s:message code="mobile.dayOfWeek"/></a>
         <%-- 조회 --%>
         <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('mobileDayOfWeekSaleCtrl', 1)">
@@ -57,6 +57,8 @@
     <%-- 요일별 --%>
     <div class="gridBar mt10" id="mobileDayOfWeekSale" onclick="girdFldUnfld('mobileDayOfWeekSale')">
         <a href="#" class="open"><s:message code="mobile.dayOfWeek.saleDtl"/></a>
+        <!-- 요일별 엑셀다운로드 -->
+        <button id="btnExcelMobileDayOfWeekSale"><s:message code="cmm.excel.down"/></button>
     </div>
     <div class="w100" id="mobileDayOfWeekSaleGrid">
         <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden; min-height:80px;">
@@ -72,7 +74,7 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="mobile.dayOfWeek.yoil"/>" binding="yoil" width="1.*" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.dayOfWeek.saleDate"/>" binding="saleDate" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mobile.dayOfWeek.saleCnt"/>" binding="saleCnt" width="1.*" align="right" is-read-only="true" aggregate="Sum"ㅍ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.dayOfWeek.saleCnt"/>" binding="saleCnt" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.dayOfWeek.realSaleAmt"/>" binding="realSaleAmt" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.dayOfWeek.dayAvrSale"/>" binding="dayAvrSale" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <!-- 조회 결과가 없을 때, msg 띄우기 -->
@@ -121,4 +123,4 @@
     var multiStoreFg 	= '${multiStoreFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/dayOfWeekSale/mobileDayOfWeekSale.js?ver=20220427.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/dayOfWeekSale/mobileDayOfWeekSale.js?ver=20230905.01" charset="utf-8"></script>

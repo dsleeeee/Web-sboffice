@@ -117,6 +117,8 @@
     <%-- 월-시간대별 --%>
     <div class="gridBar mt10" id="mobileTimeMonthSaleDateTime" onclick="girdFldUnfld('mobileTimeMonthSaleDateTime')">
         <a href="#" class="open"><s:message code="mobile.timeMonthSale.dateTime"/></a>
+        <!-- 월-시간대별 엑셀다운로드 -->
+        <button id="btnExcelMobileTimeMonthSaleDateTime"><s:message code="cmm.excel.down"/></button>
     </div>
     <div class="w100" id="mobileTimeMonthSaleDateTimeGrid" ng-controller="mobileTimeMonthSaleDateTimeCtrl">
         <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden; min-height:80px;">
@@ -153,6 +155,8 @@
     <%-- 시간대별 --%>
     <div class="gridBar mt10" id="mobileTimeMonthSaleTime" onclick="girdFldUnfld('mobileTimeMonthSaleTime')">
         <a href="#" class="open"><s:message code="mobile.timeMonthSale.time"/></a>
+        <!-- 시간대별 엑셀다운로드 -->
+        <button id="btnExcelMobileTimeMonthSaleTime"><s:message code="cmm.excel.down"/></button>
     </div>
     <div class="w100" id="mobileTimeMonthSaleTimeGrid">
         <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden; min-height:80px;">
@@ -231,4 +235,4 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/timeMonthSale/mobileTimeMonthSale.js?ver=20210609.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/timeMonthSale/mobileTimeMonthSale.js?ver=20230905.01" charset="utf-8"></script>

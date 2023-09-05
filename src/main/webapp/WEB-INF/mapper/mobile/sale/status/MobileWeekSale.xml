@@ -640,7 +640,7 @@
     <select id="getMobileWeekSaleDtlList" parameterType="MobileWeekSaleVO" resultType="DefaultMap">
         /* MobileWeekSaleMapper.getMobileWeekSaleDtlList */
         SELECT
-        A.SALE_DATE,
+        TO_CHAR(TO_DATE(A.SALE_DATE), 'YYYY-MM-DD') AS SALE_DATE,
         NVL(A.TOT_SALE_AMT, 0) AS TOT_SALE_AMT,
         NVL(A.TOT_DC_AMT, 0) AS TOT_DC_AMT,
         NVL(A.TOT_REAL_SALE_AMT, 0) AS TOT_REAL_SALE_AMT,

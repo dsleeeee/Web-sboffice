@@ -91,6 +91,31 @@ app.controller('mobileDayOfWeekSaleCtrl', ['$scope', '$http', '$timeout', functi
         $scope._broadcast('mobileDayOfWeekSaleStoreCtrl');
     };
 
+    // 요일별 엑셀다운로드
+    $("#btnExcelMobileDayOfWeekSale").on("click", function(event) {
+
+        if ($scope.flexMobileDayOfWeekSale.rows.length <= 0) {
+          $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+          return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+          wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flexMobileDayOfWeekSale, {
+            includeColumnHeaders: true,
+            includeCellStyles: true,
+            includeColumns: function (column) {
+              return column.visible;
+            }
+          },  messages["mobile.dayOfWeek"] + '_' + getToday() + '.xlsx', function () {
+            $timeout(function () {
+              $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+            }, 10);
+          });
+        }, 10);
+        event.stopPropagation();
+    });
+
 }]);
 
 /**

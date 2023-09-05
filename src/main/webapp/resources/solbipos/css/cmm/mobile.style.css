@@ -2398,6 +2398,10 @@ label.rdo-po {font-size:14px; position:relative; top:-2px}
 .gridBar a.open:before {transform:rotate(-90deg);}
 .gridBar a.close:before {transform:rotate(90deg);}
 
+/* 모바일 Grid 상단 Title Bar 안에 Button - 20230904 추가 */
+.gridBar button {position:absolute; right:33px; top:2px; bottom:2px; height:19px; background:#1e88e5; border:1px solid #1e88e5; color:#fff; border-radius:4px; line-height:10px; padding:0 10px; font-size:0.8em; transition:all 0.2s;}
+.gridBar button:hover {background:#174291; transition:all 0.2s;}
+
 /* 모바일 Popup Grid CSS - 20210407 추가 */
 .popGrid .wj-cell{padding:9px 5px; font-size:13px;}
 .popGrid .wj-cell .wj-cell-check {width:22px; height:22px;}

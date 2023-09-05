@@ -286,7 +286,7 @@
     <select id="getMobileMultiStoreSaleDayStoreList" parameterType="MobileMultiStoreSaleVO" resultType="DefaultMap">
         /* MobileMultiStoreSaleMapper.getMobileMultiStoreSaleDayStoreList */
         SELECT
-        A.SALE_DATE,
+        TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
         A.STORE_CD,
         (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = A.STORE_CD) AS STORE_NM,
         NVL(A.TOT_SALE_AMT, 0) AS TOT_SALE_AMT,

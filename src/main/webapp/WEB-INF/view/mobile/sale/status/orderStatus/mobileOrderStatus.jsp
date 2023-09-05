@@ -57,6 +57,8 @@
     <%-- 주문현황 --%>
     <div class="gridBar mt10" id="mobileOrderStatus" onclick="girdFldUnfld('mobileOrderStatus')">
         <a href="#" class="open"><s:message code="mobile.orderStatus"/></a>
+        <!-- 주문현황 엑셀다운로드 -->
+        <button id="btnExcelMobileOrderStatus"><s:message code="cmm.excel.down"/></button>
     </div>
     <div class="w100" id="mobileOrderStatusGrid">
         <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden; min-height:80px;">
@@ -116,7 +118,7 @@
     var multiStoreFg = '${multiStoreFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/orderStatus/mobileOrderStatus.js?ver=20211005.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/orderStatus/mobileOrderStatus.js?ver=20230905.01" charset="utf-8"></script>
 
 <%-- 주문현황 상세 팝업 --%>
 <c:import url="/WEB-INF/view/mobile/sale/status/orderStatus/mobileOrderStatusDtl.jsp">

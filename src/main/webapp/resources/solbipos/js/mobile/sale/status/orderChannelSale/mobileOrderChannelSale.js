@@ -14,7 +14,7 @@
 var app = agrid.getApp();
 
 /**
- *  결제수단 그리드 생성
+ *  주문채널별 그리드 생성
  */
 app.controller('mobileOrderChannelSaleCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
@@ -94,10 +94,35 @@ app.controller('mobileOrderChannelSaleCtrl', ['$scope', '$http', '$timeout', fun
         $scope._broadcast('mobileOrderChannelSaleStoreCtrl');
     };
 
+    // 주문채널별 엑셀다운로드
+    $("#btnExcelMobileOrderChannelPay").on("click", function(event) {
+
+        if ($scope.flexMobileOrderChannelPay.rows.length <= 0) {
+          $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+          return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+          wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flexMobileOrderChannelPay, {
+            includeColumnHeaders: true,
+            includeCellStyles: true,
+            includeColumns: function (column) {
+              return column.visible;
+            }
+          },  messages["mobile.orderChannelSale"] + '_' + messages["mobile.orderChannelSale.orderChannel"] + '_' + getToday() + '.xlsx', function () {
+            $timeout(function () {
+              $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+            }, 10);
+          });
+        }, 10);
+        event.stopPropagation();
+    });
+
 }]);
 
 /**
- * 결제수단 차트
+ * 주문채널별 차트
  */
 app.controller('mobileOrderChannelPayChartCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
@@ -316,5 +341,30 @@ app.controller('mobileOrderChannelSaleDtlCtrl', ['$scope', '$http', '$timeout', 
         }, false);
     };
     // <-- //검색 호출 -->
+
+    // 일자별 엑셀다운로드
+    $("#btnExcelMobileOrderChannelSaleDtl").on("click", function(event) {
+
+        if ($scope.flexMobileOrderChannelSaleDtl.rows.length <= 0) {
+          $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+          return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+          wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flexMobileOrderChannelSaleDtl, {
+            includeColumnHeaders: true,
+            includeCellStyles: true,
+            includeColumns: function (column) {
+              return column.visible;
+            }
+          },  messages["mobile.orderChannelSale"] + '_' + messages["mobile.orderChannelSale.saleDtl"] + '_' + getToday() + '.xlsx', function () {
+            $timeout(function () {
+              $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+            }, 10);
+          });
+        }, 10);
+        event.stopPropagation();
+    });
 
 }]);

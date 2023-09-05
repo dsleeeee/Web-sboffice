@@ -171,6 +171,8 @@
     <%-- 결제수단 --%>
     <div class="gridBar mt10" id="mobileDaySalePay" onclick="girdFldUnfld('mobileDaySalePay')">
         <a href="#" class="open"><s:message code="mobile.daySale.salePay"/></a>
+        <!-- 결제수단 엑셀다운로드 -->
+        <button id="btnExcelMobileDaySalePay"><s:message code="cmm.excel.down"/></button>
     </div>
     <div class="w100" id="mobileDaySalePayGrid">
         <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden; min-height:80px;">
@@ -197,6 +199,8 @@
     <%-- 할인내역 --%>
     <div class="gridBar mt10" id="mobileDaySaleDc" onclick="girdFldUnfld('mobileDaySaleDc')">
         <a href="#" class="open"><s:message code="mobile.daySale.saleDc"/></a>
+        <!-- 할인내역 엑셀다운로드 -->
+        <button id="btnExcelMobileDaySaleDc"><s:message code="cmm.excel.down"/></button>
     </div>
     <div class="w100" id="mobileDaySaleDcGrid" ng-controller="mobileDaySaleDcCtrl">
         <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden; min-height:80px;">
@@ -273,13 +277,15 @@
     <%-- 내점/배달/포장 --%>
     <div class="gridBar mt10" id="mobileDaySaleDlvr" onclick="girdFldUnfld('mobileDaySaleDlvr')">
         <a href="#" class="open"><s:message code="mobile.daySale.saleDlvr"/></a>
+        <!-- 내점/배달/포장 엑셀다운로드 -->
+        <button id="btnExcelMobileDaySaleDlvr"><s:message code="cmm.excel.down"/></button>
     </div>
     <div class="w100" id="mobileDaySaleDlvrGrid">
         <div ng-controller="mobileDaySaleDlvrCtrl">
             <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;">
                 <wj-flex-grid
                         autoGenerateColumns="false"
-                        control="flex"
+                        control="flexMobileDaySaleDlvr"
                         initialized="initGrid(s,e)"
                         selection-mode="Row"
                         items-source="data"
@@ -437,6 +443,8 @@
     <%-- 일자별 매출현황 --%>
     <div class="gridBar mt10" id="mobileDaySaleDtl" onclick="girdFldUnfld('mobileDaySaleDtl')">
         <a href="#" class="open"><s:message code="mobile.daySale.saleDtl"/></a>
+        <!-- 일자별 매출현황 엑셀다운로드 -->
+        <button id="btnExcelMobileDaySaleDtl"><s:message code="cmm.excel.down"/></button>
     </div>
     <div class="w100" id="mobileDaySaleDtlGrid" ng-controller="mobileDaySaleDtlCtrl">
         <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;min-height:100px;">
@@ -451,7 +459,7 @@
                     frozen-columns="1">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="mobile.daySale.saleDate"/>" binding="saleDate" width="70" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.daySale.saleDate"/>" binding="saleDate" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.daySale.totSaleAmt"/>" binding="totSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.daySale.totDcAmt"/>" binding="totDcAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.daySale.totRealSaleAmt"/>" binding="totRealSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -491,4 +499,4 @@
     var multiStoreFg = '${multiStoreFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/daySale/mobileDaySale.js?ver=20210524.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/daySale/mobileDaySale.js?ver=20230905.01" charset="utf-8"></script>

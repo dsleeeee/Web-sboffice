@@ -50,6 +50,8 @@
         <!-- 당일매출 Best3 -->
         <div class="gridBar mt10" id="todayBest3" onclick="girdFldUnfld('todayBest3')">
             <a href="#" class="open"><s:message code="mobile.prodSale.todaySaleBest3"/></a>
+            <!-- 당일매출 Best3 엑셀다운로드 -->
+            <button id="btnExcelTodayBest3"><s:message code="cmm.excel.down"/></button>
         </div>
         <div class="w100" id="todayBest3Grid" ng-controller="todayBest3Ctrl">
             <div class="wj-gridWrap" style="height:130px; overflow-x: hidden; overflow-y: hidden;">
@@ -75,6 +77,8 @@
         <!-- 상품별매출현황 -->
         <div class="gridBar mt10" id="prodSale" onclick="girdFldUnfld('prodSale')">
             <a href="#" class="open"><s:message code="mobile.prodSale.prodSale"/></a>
+            <!-- 상품별매출현황 엑셀다운로드 -->
+            <button id="btnExcelProdSale"><s:message code="cmm.excel.down"/></button>
         </div>
         <div class="w100" id="prodSaleGrid">
             <div class="wj-gridWrap" style="height:300px; overflow-x: hidden; overflow-y: hidden;">
@@ -104,4 +108,4 @@
     var multiStoreFg 	= '${multiStoreFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/prod/mobileProdSale.js?ver=20210524.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/prod/mobileProdSale.js?ver=20230905.01" charset="utf-8"></script>
