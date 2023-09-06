@@ -30,6 +30,15 @@ app.controller('memberPostpaidCtrl', ['$scope', '$http', function ($scope, $http
 
   // 그리드 조회
   $scope.$on("memberPostpaidCtrl", function(event, data) {
+    if(orgnFg == 'HQ') {
+      if(orgnCd == 'H0360' || orgnCd == 'H0343') {
+        if($("#postpaidStoreCd").val() == "") {
+          $scope._popMsg(messages["cmm.require.selectStore"]); // 매장을 선택해 주세요.
+          return false;
+        }
+      }
+    }
+
     var postpaidScope = agrid.getScope('memberPostpaidRegistCtrl'); // 후불회원 등록(후불)
     postpaidScope._broadcast('memberPostpaidRegistCtrl');
     var noPostpaidScope = agrid.getScope('memberPostpaidNoRegistCtrl'); // 후불회원 미등록(선불)

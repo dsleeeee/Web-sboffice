@@ -6,6 +6,8 @@
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+
 <!--   후불 화면    -->
 <div class="subCon" id="memberPostpaidArea" ng-controller="memberPostpaidCtrl" style="display:none;">
 
@@ -66,9 +68,16 @@
           <%-- 매장선택 --%>
           <th><s:message code="cmm.store.select" /></th>
           <td>
-            <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
-              <jsp:param name="targetId" value="postpaidStore"/>
-            </jsp:include>
+              <c:if test="${orgnCd != 'H0360' and orgnCd != 'H0343'}">
+                <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                  <jsp:param name="targetId" value="postpaidStore"/>
+                </jsp:include>
+              </c:if>
+              <c:if test="${orgnCd == 'H0360' or orgnCd == 'H0343'}">
+                <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
+                  <jsp:param name="targetId" value="postpaidStore"/>
+                </jsp:include>
+              </c:if>
           </td>
           <th></th>
           <td></td>
@@ -155,4 +164,10 @@
       </div>
     </div>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/memberFg/memberPostpaid.js?ver=20210429.01" charset="utf-8"></script>
+
+<script type="text/javascript">
+  var orgnFg = "${orgnFg}";
+  var orgnCd = "${orgnCd}";
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/memberFg/memberPostpaid.js?ver=20230906.01" charset="utf-8"></script>
