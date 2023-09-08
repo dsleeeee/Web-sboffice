@@ -227,7 +227,7 @@ public class CmmMenuServiceImpl implements CmmMenuService {
                 // [231 웹세션 타임아웃 12시간아이디] 특정아이디 체크
                 Integer userIdCnt = cmmMenuMapper.getWebSessionTimeOutLoginIdChk(sessionInfoVO);
                 if(userIdCnt > 0) { sessionTimeOutMin = 720; }
-                System.out.println("setSessionInfo 아이디 / 타임아웃시간 : " + sessionInfoVO.getUserId() + " / " + sessionTimeOutMin);
+                System.out.println("setSessionInfo 아이디 / 타임아웃(분) : " + sessionInfoVO.getUserId() + " / " + sessionTimeOutMin);
 
                 redisCustomTemplate.set( redisCustomTemplate.makeKey(sessionInfoVO.getSessionId()), sessionInfoVO,
                         sessionTimeOutMin, TimeUnit.MINUTES );
