@@ -641,11 +641,11 @@
         </choose>
     </delete>
 
-    <!-- 판매터치키 그룹 생성 -->
+    <!-- 판매터치키 분류 생성 -->
     <!--
         TABLE    : TB_HQ_TOUCH_CLASS, TB_MS_TOUCH_CLASS
         PARAM    : touchKeyClassVO
-        COMMENTS : 판매터치키 그룹 정보를 생성한다.
+        COMMENTS : 판매터치키 분류 정보를 생성한다.
     -->
     <insert id="insertTouchKeyClass" parameterType="touchKeyClassVO">
         /* USE : TouchkeyMapper.insertTouchKeyClass */
@@ -743,11 +743,11 @@
         </choose>
     </insert>
 
-    <!-- 판매터치키 그룹 삭제 -->
+    <!-- 판매터치키 분류 삭제 -->
     <!--
         TABLE    : TB_HQ_TOUCH_KEY_CLASS, TB_MS_TOUCH_KEY_CLASS
         PARAM    : touchKeyClassVO
-        COMMENTS : 판매터치키 그룹 정보를 삭제한다.
+        COMMENTS : 판매터치키 분류 정보를 삭제한다.
     -->
     <delete id="deleteTouchKeyClass" parameterType="touchKeyClassVO">
         /* USE : TouchkeyMapper.deleteTouchKeyClass */
@@ -762,6 +762,11 @@
                 <if test="tukeyGrpCd != null and tukeyGrpCd != ''">
                     AND TUKEY_GRP_CD = #{tukeyGrpCd}
                 </if>
+                AND 	TUKEY_GRP_CD || TUKEY_CLASS_CD NOT IN ( SELECT 	NMCODE_NM || NMCODE_ITEM_1
+                                                                                FROM 	TB_HQ_NMCODE thn
+                                                                                WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                                                                                AND     NMCODE_GRP_CD = '228'
+                                                                                AND 	NMCODE_ITEM_2 = 'Y')
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -776,6 +781,92 @@
             </when>
         </choose>
     </delete>
+
+    <!-- 판매터치키 분류 수정 -->
+    <!--
+        TABLE    : TB_HQ_TOUCH_KEY_CLASS, TB_MS_TOUCH_KEY_CLASS
+        PARAM    : touchKeyClassVO
+        COMMENTS : 판매터치키 분류 정보를 수정한다.
+    -->
+    <insert id="updateTouchKeyClass" parameterType="touchKeyClassVO">
+        /* USE : TouchKeyMapper.updateTouchKeyClass */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                MERGE INTO TB_HQ_TOUCH_KEY_CLASS A
+                USING DUAL
+                    ON (
+                        A.HQ_OFFICE_CD   = #{hqOfficeCd}
+                    AND A.TUKEY_GRP_CD   = #{tukeyGrpCd}
+                    AND A.TUKEY_CLASS_CD = #{tukeyClassCd}
+                    )
+                WHEN MATCHED THEN
+                UPDATE
+                SET A.TUKEY_CLASS_NM = NVL(SUBSTRB(#{tukeyClassNm}, 1, 50), ' ')
+                ,   A.PAGE_NO = #{pageNo}
+                ,   A.PAGE_ROWS = #{pageRows}
+                ,   A.X = #{x}
+                ,   A.Y = #{y}
+                ,   A.WIDTH = #{width}
+                ,   A.HEIGHT = #{height}
+                ,   A.STYLE_CD = #{styleCd}
+                ,   A.FONT_SIZE = #{fontSize, jdbcType=NUMERIC}
+                ,   A.FONT_COLOR = #{fontColor, jdbcType=VARCHAR}
+                ,   A.FILL_COLOR = #{fillColor, jdbcType=VARCHAR}
+                ,   A.IMG_NM = #{imgNm, jdbcType=VARCHAR}
+                ,   A.MOD_DT = #{regDt}
+                ,   A.MOD_ID = #{regId}
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                    A.HQ_OFFICE_CD
+                ,   A.TUKEY_GRP_CD
+                ,   A.TUKEY_CLASS_CD
+                ,   A.TUKEY_CLASS_NM
+                ,   A.PAGE_NO
+                ,   A.PAGE_ROWS
+                ,   A.X
+                ,   A.Y
+                ,   A.WIDTH
+                ,   A.HEIGHT
+                ,   A.STYLE_CD
+                ,   A.FONT_SIZE
+                ,   A.FONT_COLOR
+                ,   A.FILL_COLOR
+                ,   A.IMG_NM
+                ,   A.REG_DT
+                ,   A.REG_ID
+                ,   A.MOD_DT
+                ,   A.MOD_ID
+                )
+                VALUES
+                (
+                    #{hqOfficeCd}
+                ,   #{tukeyGrpCd}
+                ,   #{tukeyClassCd}
+                ,   NVL(SUBSTRB(#{tukeyClassNm}, 1, 50), ' ')
+                ,   #{pageNo}
+                ,   #{pageRows}
+                ,   #{x}
+                ,   #{y}
+                ,   #{width}
+                ,   #{height}
+                ,   #{styleCd}
+                ,   #{fontSize, jdbcType=NUMERIC}
+                ,   #{fontColor, jdbcType=VARCHAR}
+                ,   #{fillColor, jdbcType=VARCHAR}
+                ,   #{imgNm, jdbcType=VARCHAR}
+                ,   #{regDt}
+                ,   #{regId}
+                ,   #{regDt}
+                ,   #{regId}
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+            </when>
+        </choose>
+    </insert>
 
     <!-- 판매터치키 그룹 삭제 -->
     <!--
@@ -1120,6 +1211,95 @@
         </choose>
 
     </delete>
+
+    <!-- 판매터치키 수정 -->
+    <!--
+        TABLE    : TB_HQ_TOUCH_KEY, TB_MS_TOUCH_KEY
+        PARAM    : touchKeyVO
+        COMMENTS : 판매터치키 정보를 수정한다.
+    -->
+    <insert id="updateTouchKey" parameterType="touchKeyVO">
+        /* USE : TouchkeyMapper.updateTouchKey */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                MERGE INTO TB_HQ_TOUCH_KEY A
+                USING DUAL
+                ON (
+                        A.HQ_OFFICE_CD   = #{hqOfficeCd}
+                    AND A.TUKEY_GRP_CD   = #{tukeyGrpCd}
+                    AND A.TUKEY_CLASS_CD = #{tukeyClassCd}
+                    AND A.TUKEY_CD       = #{tukeyCd}
+                    AND A.TUKEY_FG       = #{tukeyFg}
+                  )
+            WHEN MATCHED THEN
+            UPDATE
+            SET A.PROD_CD = #{prodCd}
+            ,   A.PAGE_NO = #{pageNo}
+            ,   A.X = #{x}
+            ,   A.Y = #{y}
+            ,   A.WIDTH = #{width}
+            ,   A.HEIGHT = #{height}
+            ,   A.STYLE_CD = #{styleCd}
+            ,   A.FONT_SIZE = #{fontSize, jdbcType=NUMERIC}
+            ,   A.FONT_COLOR = #{fontColor, jdbcType=VARCHAR}
+            ,   A.FILL_COLOR = #{fillColor, jdbcType=VARCHAR}
+            ,   A.IMG_NM = #{imgNm, jdbcType=VARCHAR}
+            ,   A.MOD_DT = #{regDt}
+            ,   A.MOD_ID = #{regId}
+            WHEN NOT MATCHED THEN
+            INSERT
+            (
+                A.HQ_OFFICE_CD
+            ,   A.TUKEY_CLASS_CD
+            ,   A.TUKEY_CD
+            ,   A.TUKEY_FG
+            ,   A.PROD_CD
+            ,   A.PAGE_NO
+            ,   A.X
+            ,   A.Y
+            ,   A.WIDTH
+            ,   A.HEIGHT
+            ,   A.STYLE_CD
+            ,   A.FONT_SIZE
+            ,   A.FONT_COLOR
+            ,   A.FILL_COLOR
+            ,   A.IMG_NM
+            ,   A.REG_DT
+            ,   A.REG_ID
+            ,   A.MOD_DT
+            ,   A.MOD_ID
+            ,   A.TUKEY_GRP_CD
+            )
+            VALUES
+            (
+                #{hqOfficeCd}
+            ,   #{tukeyClassCd}
+            ,   #{tukeyCd}
+            ,   #{tukeyFg}
+            ,   #{prodCd}
+            ,   #{pageNo}
+            ,   #{x}
+            ,   #{y}
+            ,   #{width}
+            ,   #{height}
+            ,   #{styleCd}
+            ,   #{fontSize, jdbcType=NUMERIC}
+            ,   #{fontColor, jdbcType=VARCHAR}
+            ,   #{fillColor, jdbcType=VARCHAR}
+            ,   #{imgNm, jdbcType=VARCHAR}
+            ,   #{regDt}
+            ,   #{regId}
+            ,   #{regDt}
+            ,   #{regId}
+            ,   #{tukeyGrpCd}
+            )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+            </when>
+        </choose>
+    </insert>
 
     <!-- 터치키미적용상품 조회 -->
     <!--
@@ -2663,6 +2843,8 @@
                                    FROM TB_MS_TOUCH_KEY_CLASS
                                   WHERE STORE_CD = #{storeCd}
                                     AND TUKEY_GRP_CD = #{tukeyGrpCd}
+                                  ORDER
+                                     BY Y, X
                               )
                     )
                     ,
