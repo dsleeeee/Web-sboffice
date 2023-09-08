@@ -300,9 +300,19 @@
           AND URL = #{url}
     </select>
 
+    <!--  [231 웹세션 타임아웃 12시간아이디] 특정아이디 체크 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getWebSessionTimeOutLoginIdChk" parameterType="sessionInfoVO" resultType="Integer">
+       /* CmmMenuMapper.getWebSessionTimeOutLoginIdChk */
+        SELECT NVL(COUNT(NMCODE_NM), 0) AS USER_ID_CNT
+        FROM TB_CM_NMCODE
+        WHERE 1=1
+        AND NMCODE_GRP_CD = '231'
+        AND NMCODE_NM = #{userId}
+    </select>
+
 </mapper>
-
-
-
-
-

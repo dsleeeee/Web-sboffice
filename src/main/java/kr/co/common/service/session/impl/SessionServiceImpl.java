@@ -154,8 +154,15 @@ public class SessionServiceImpl implements SessionService {
     private void setSessionInfo( String sessionId, SessionInfoVO sessionInfoVO ) {
         if ( redisConnService.isAvailable() ) {
             try {
+                int sessionTimeOutMin = BaseEnv.SESSION_TIMEOUT_MIN;
+
+                // [231 웹세션 타임아웃 12시간아이디] 특정아이디 체크
+                Integer userIdCnt = cmmMenuService.getWebSessionTimeOutLoginIdChk(sessionInfoVO);
+                if(userIdCnt > 0) { sessionTimeOutMin = 720; }
+                System.out.println("setSessionInfo 아이디 / 타임아웃시간 : " + sessionInfoVO.getUserId() + " / " + sessionTimeOutMin);
+
                 redisCustomTemplate.set( redisCustomTemplate.makeKey( sessionId ), sessionInfoVO,
-                        BaseEnv.SESSION_TIMEOUT_MIN, TimeUnit.MINUTES );
+                        sessionTimeOutMin, TimeUnit.MINUTES );
             } catch ( Exception e ) {
                 LOGGER.error( "Redis server not available!! setSessionInfo {}", e );
                 redisConnService.disable();
@@ -175,9 +182,16 @@ public class SessionServiceImpl implements SessionService {
             try {
                 sessionInfoVO = redisCustomTemplate.get( redisCustomTemplate.makeKey( sessionId ) );
                 if ( !ObjectUtils.isEmpty( sessionInfoVO ) ) {
+                    int sessionTimeOutMin = BaseEnv.SESSION_TIMEOUT_MIN;
+
+                    // [231 웹세션 타임아웃 12시간아이디] 특정아이디 체크
+                    Integer userIdCnt = cmmMenuService.getWebSessionTimeOutLoginIdChk(sessionInfoVO);
+                    if(userIdCnt > 0) { sessionTimeOutMin = 720; }
+                    System.out.println("getSessionInfo 아이디 / 타임아웃시간 : " + sessionInfoVO.getUserId() + " / " + sessionTimeOutMin);
+
                     // 세션 타임 연장
                     redisCustomTemplate.expire( redisCustomTemplate.makeKey( sessionId ),
-                            BaseEnv.SESSION_TIMEOUT_MIN, TimeUnit.MINUTES );
+                            sessionTimeOutMin, TimeUnit.MINUTES );
                 }
             } catch ( Exception e ) {
                 LOGGER.error( "Redis server not available!! getSessionInfo {}", e );
