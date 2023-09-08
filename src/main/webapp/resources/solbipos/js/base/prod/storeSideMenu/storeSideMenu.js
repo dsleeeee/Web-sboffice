@@ -15,9 +15,10 @@ var app = agrid.getApp();
 
 app.controller('storeSideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.init = function () {
-    $("#sideMenuView").show();
-    $("#prodView").hide();
+    // $("#sideMenuView").();
+    $("#prodView").show();
     $("#touchKeyView").hide();
+    $("#setProdView").hide();
   };
 
   // 사이드메뉴관리 탭 보이기
@@ -25,10 +26,12 @@ app.controller('storeSideMenuCtrl', ['$scope', '$http', function ($scope, $http)
     $("#sideMenuTab").addClass("on");
     $("#prodTab").removeClass("on");
     $("#touchKeyTab").removeClass("on");
+    $("#setProdTab").removeClass("on");
 
     $("#sideMenuView").show();
     $("#prodView").hide();
     $("#touchKeyView").hide();
+    $("#setProdView").hide();
 
     // angular 그리드 hide 시 깨지므로 refresh()
     var scope = agrid.getScope("sideMenuCtrl");
@@ -36,12 +39,14 @@ app.controller('storeSideMenuCtrl', ['$scope', '$http', function ($scope, $http)
 
   // 상품정보관리 탭 보이기
   $scope.prodShow = function () {
-    $("#sideMenuTab").removeClass("on");
+    // $("#sideMenuTab").removeClass("on");
     $("#prodTab").addClass("on");
+    $("#setProdTab").removeClass("on");
     $("#touchKeyTab").removeClass("on");
 
-    $("#sideMenuView").hide();
+    // $("#sideMenuView").hide();
     $("#prodView").show();
+    $("#setProdView").hide();
     $("#touchKeyView").hide();
 
     // angular 그리드 hide 시 깨지므로 refresh()
@@ -49,14 +54,33 @@ app.controller('storeSideMenuCtrl', ['$scope', '$http', function ($scope, $http)
     scope.flex.refresh();
   };
 
+  // 세트메뉴구성(BBQ전용) 탭 보이기
+  $scope.setProdShow = function () {
+    // $("#sideMenuTab").removeClass("on");
+    $("#prodTab").removeClass("on");
+    $("#setProdTab").addClass("on");
+    $("#touchKeyTab").removeClass("on");
+
+    // $("#sideMenuView").hide();
+    $("#prodView").hide();
+    $("#setProdView").show();
+    $("#touchKeyView").hide();
+
+    // angular 그리드 hide 시 깨지므로 refresh()
+    var scope = agrid.getScope("setProdCtrl");
+    scope._broadcast('setProdCtrl');
+  };
+
   // 판매터치키등록 탭 보이기
   $scope.touchKeyShow = function () {
-    $("#sideMenuTab").removeClass("on");
+    // $("#sideMenuTab").removeClass("on");
     $("#prodTab").removeClass("on");
+    $("#setProdTab").removeClass("on");
     $("#touchKeyTab").addClass("on");
 
-    $("#sideMenuView").hide();
+    // $("#sideMenuView").hide();
     $("#prodView").hide();
+    $("#setProdView").hide();
     $("#touchKeyView").show();
 
     // angular 그리드 hide 시 깨지므로 refresh()

@@ -41,12 +41,12 @@
                 <div class="oh sb-select dkbr">
                     <%--조회--%>
                     <button class="btn_skyblue fr" id="btnSearch" ng-click="_broadcast('searchSdselGrpCtrl', 1)" ><s:message code="cmm.search" /></button>
-                    <c:if test="${sessionInfo.orgnFg eq 'HQ'}">
-                        <c:if test="${hqOfficeCd eq 'DS021' or hqOfficeCd eq 'DS034' or hqOfficeCd eq 'H0360'}">
-                            <%--신규선택메뉴생성--%>
-                            <button class="btn_skyblue fr mr5" id="btnNewSdsel" ng-click="newSdsel()" ><s:message code="prod.newSdsel"/></button>
-                        </c:if>
-                    </c:if>
+<%--                    <c:if test="${sessionInfo.orgnFg eq 'HQ'}">--%>
+<%--                        <c:if test="${hqOfficeCd eq 'DS021' or hqOfficeCd eq 'DS034' or hqOfficeCd eq 'H0360'}">--%>
+<%--                            &lt;%&ndash;신규선택메뉴생성&ndash;%&gt;--%>
+<%--                            <button class="btn_skyblue fr mr5" id="btnNewSdsel" ng-click="newSdsel()" ><s:message code="prod.newSdsel"/></button>--%>
+<%--                        </c:if>--%>
+<%--                    </c:if>--%>
                 </div>
             </div>
 
