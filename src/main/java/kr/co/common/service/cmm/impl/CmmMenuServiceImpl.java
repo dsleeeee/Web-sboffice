@@ -222,8 +222,15 @@ public class CmmMenuServiceImpl implements CmmMenuService {
         // 레디스에 수정한 세션정보를 저장
         if ( redisConnService.isAvailable() ) {
             try {
+                int sessionTimeOutMin = BaseEnv.SESSION_TIMEOUT_MIN;
+
+                // [231 웹세션 타임아웃 12시간아이디] 특정아이디 체크
+                Integer userIdCnt = cmmMenuMapper.getWebSessionTimeOutLoginIdChk(sessionInfoVO);
+                if(userIdCnt > 0) { sessionTimeOutMin = 720; }
+                System.out.println("setSessionInfo 아이디 / 타임아웃시간 : " + sessionInfoVO.getUserId() + " / " + sessionTimeOutMin);
+
                 redisCustomTemplate.set( redisCustomTemplate.makeKey(sessionInfoVO.getSessionId()), sessionInfoVO,
-                    BaseEnv.SESSION_TIMEOUT_MIN, TimeUnit.MINUTES );
+                        sessionTimeOutMin, TimeUnit.MINUTES );
             } catch ( Exception e ) {
                 LOGGER.error( "Redis server not available!! setSessionInfo {}", e );
                 redisConnService.disable();
@@ -276,6 +283,11 @@ public class CmmMenuServiceImpl implements CmmMenuService {
         return cmmMenuMapper.menuResrceChk(resrceInfoVO);
     }
 
+    /** [231 웹세션 타임아웃 12시간아이디] 특정아이디 체크 */
+    @Override
+    public int getWebSessionTimeOutLoginIdChk(SessionInfoVO sessionInfoVO) {
+        return cmmMenuMapper.getWebSessionTimeOutLoginIdChk(sessionInfoVO);
+    }
 }
 
 

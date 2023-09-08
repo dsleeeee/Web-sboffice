@@ -67,4 +67,6 @@ public interface CmmMenuMapper {
     /** 유효 메뉴 여부 확인 */
     int menuResrceChk(ResrceInfoVO resrceInfoVO);
 
+    /** [231 웹세션 타임아웃 12시간아이디] 특정아이디 체크 */
+    int getWebSessionTimeOutLoginIdChk(SessionInfoVO sessionInfoVO);
 }
