@@ -1922,7 +1922,7 @@ Format.prototype.initElements = function () {
     }
 
     if(orgnFg === "HQ"){
-      saveMsg += '<br/>매장수정허용분류에 등록된 분류의 터치키는 저장되지 않습니다.';
+      saveMsg += '<br/>매장수정허용분류에 등록된 분류의 터치키는 매장에 적용되지 않습니다. ';
     } else if(orgnFg === "STORE" && touchKeyEnvstVal2 === "2"){
       saveMsg += '<br/>매장수정허용분류에 등록된 분류의 터치키만 저장됩니다.';
     }

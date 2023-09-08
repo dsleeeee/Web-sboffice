@@ -72,6 +72,9 @@ public interface TouchKeyMapper {
     /** 판매터치키 분류 삭제 */
     int deleteTouchKeyClass(TouchKeyClassVO touchKeyClassVO);
 
+    /** 판매터치키 분류 수정 */
+    int updateTouchKeyClass(TouchKeyClassVO touchKeyClassVO);
+
     /** 판매터치키 분류 기본값 세팅 */
     int defaultTouchKeyClass(TouchKeyClassVO touchKeyClassVO);
 
@@ -87,6 +90,9 @@ public interface TouchKeyMapper {
     /** 판매터치키 삭제 */
     int deleteTouchKey(TouchKeyVO touchKeyVO);
     int deleteTouchKey2(TouchKeyVO touchKeyVO);
+
+    /** 판매터치키 수정 */
+    int updateTouchKey(TouchKeyVO touchKeyVO);
 
     /** 터치키미적용상품 조회 */
     List<DefaultMap<String>> getNoTouchKey(TouchKeyVO touchKeyVO);

@@ -406,17 +406,40 @@ public class TouchKeyServiceImpl implements TouchKeyService {
             String nTukeyClassCd="";
             int insertChk = keyMapper.insertTouchKeyChk(touchKeyClassVO);
 
-            // 본사, envstVal1248 상관없음, [매장수정허용분류] 상관없이 수정
-            // 매장, envstVal1248 0/1 이면 [매장수정허용분류] 상관없이 수정
-            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ
-                || sessionInfoVO.getOrgnFg() == OrgnFg.STORE && (envstVal1248.equals("0") || envstVal1248.equals("1"))) {
+            // 본사, envstVal1248 상관없음, [매장수정허용분류]인 분류는 삭제 불가
+            // 매장, envstVal1248 0/1 이면 [매장수정허용분류] 상관없이 분류 수정 가능
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
+
+                if(insertChk == 0){
+                    nTukeyClassCd = keyMapper.getTouchKeyClassCd(nParams);
+                    touchKeyClassVO.setTukeyClassCd(nTukeyClassCd);
+
+                    // 터치 분류(그룹) 저장
+                    if (keyMapper.insertTouchKeyClass(touchKeyClassVO) != 1) {
+                        System.out.println("터치키 분류 저장 에러 : insertTouchKeyClass");
+                        result = false;
+                        throw new BizException(messageService.get("label.modifyFail"));
+                    }
+                }else{
+                    nTukeyClassCd = touchKeyClassVO.getTukeyClassCd();
+                    touchKeyClassVO.setTukeyClassCd(nTukeyClassCd);
+
+                    // 터치 분류 수정
+                    if (keyMapper.updateTouchKeyClass(touchKeyClassVO) != 1) {
+                        System.out.println("터치키 분류 수정 에러 : updateTouchKeyClass");
+                        result = false;
+                        throw new BizException(messageService.get("label.modifyFail"));
+                    }
+                }
+
+            }else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE && (envstVal1248.equals("0") || envstVal1248.equals("1"))) {
 
                 nTukeyClassCd = keyMapper.getTouchKeyClassCd(nParams);
                 touchKeyClassVO.setTukeyClassCd(nTukeyClassCd);
 
                 // 터치 분류(그룹) 저장
                 if (keyMapper.insertTouchKeyClass(touchKeyClassVO) != 1) {
-                    System.out.println("터치키 저장 에러 : insertTouchKeyClass");
+                    System.out.println("터치키 분류 저장 에러 : insertTouchKeyClass");
                     result = false;
                     throw new BizException(messageService.get("label.modifyFail"));
                 }
@@ -436,13 +459,23 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                 touchKeyVO.setTukeyGrpCd(tukeyGrpCd);
                 touchKeyVO.setTukeyClassCd(nTukeyClassCd);
 
-                // 본사 저장 시 228이 N인 분류의 터치키만 저장
+                // 본사 저장 시 228이 N인 분류([매장수정허용분류]가 아닌것)의 터치키만 저장
                 // 매장 저장 시 1248이 0/1 이거나 1248이 2일땐 228이 Y인 분류의 터치키만 저장
                 if ((sessionInfoVO.getOrgnFg() == OrgnFg.HQ && insertChk == 0)
                     || (sessionInfoVO.getOrgnFg() == OrgnFg.STORE && (envstVal1248.equals("0") || envstVal1248.equals("1") || (envstVal1248.equals("2") && insertChk > 0)))){
                     // 터치키 저장
                     if (keyMapper.insertTouchKey(touchKeyVO) != 1) {
                         System.out.println("터치키 저장 에러 : insertTouchKey");
+                        result = false;
+                        throw new BizException(messageService.get("label.modifyFail"));
+                    }
+                }
+
+                // 본사 저장 시 [매장수정허용분류]인 분류에 속한 터치키는 정보 업데이트
+                if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ && insertChk == 1){
+                    // 터치키 수정
+                    if (keyMapper.updateTouchKey(touchKeyVO) != 1) {
+                        System.out.println("터치키 수정 에러 : updateTouchKey");
                         result = false;
                         throw new BizException(messageService.get("label.modifyFail"));
                     }
