@@ -313,6 +313,11 @@ public class RegistVO extends PageVO {
     /** 경도 */
     private String longitude;
 
+    /** 엑셀다운로드 마스킹 패스워드 */
+    private String excelPw;
+
+    /** 사용자 ID */
+    private String userId;
 
 
     /**
@@ -1526,6 +1531,22 @@ public class RegistVO extends PageVO {
 
     public void setLongitude(String longitude) {
         this.longitude = longitude;
+    }
+
+    public String getExcelPw() {
+        return excelPw;
+    }
+
+    public void setExcelPw(String excelPw) {
+        this.excelPw = excelPw;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     @Override

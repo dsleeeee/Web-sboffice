@@ -211,6 +211,14 @@ public class RegistServiceImpl implements RegistService {
             if(CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1237"), "1").equals("1")){
                 registVO.setMembrClassManageFg(null);
             }
+
+            if(registVO.getExcelPw() != null && registVO.getExcelPw().equals("c08001")){
+                registVO.setUserId(sessionInfoVO.getUserId());
+                /** 마스킹 없는 엑셀다운로드 로그 저장 */
+                mapper.saveMemberExcelLog(registVO);
+            }
+        } else {
+            registVO.setExcelPw(null);
         }
 
         return mapper.getMemberListExcel(registVO);

@@ -318,6 +318,29 @@
         ]]>
     </select>
 
+    <!-- 마스킹 없는 엑셀다운로드 로그 저장 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
+        PARAM    : sideMenuAttrClassVO
+        COMMENTS : 마스킹 없는 엑셀다운로드 로그 저장한다. ( 본사/매장 )
+    -->
+    <insert id="saveMemberExcelLog" parameterType="registVO">
+        /* RegistMapper.saveMemberExcelLog */
+        INSERT INTO TB_LG_MB_MEMBER_DOWNLOAD_LOG
+        (
+            PROC_DT,
+            USER_ID,
+            HQ_OFFICE_CD,
+            STORE_CD
+        )
+        VALUES
+        (
+            TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS'),
+            #{userId},
+            #{hqOfficeCd},
+            #{storeCd}
+        )
+    </insert>
     <!-- 회원정보 조회(Excel 용) -->
     <!--
         TABLE    : TB_MB_MEMBER
@@ -327,7 +350,15 @@
         /* RegistMapper.getMemberListExcel */
         SELECT
         tmm.MEMBR_NO,
-        RPAD(SUBSTR(SBPENC.D(tmm.MEMBR_NM),0,1), LENGTHB(CONVERT(SBPENC.D(tmm.MEMBR_NM), 'KO16MSWIN949')), '*') AS MEMBR_NM,
+        <choose>
+            <when test='excelPw != null and excelPw != "" and excelPw == "c08001"'>
+                SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
+            </when>
+            <otherwise>
+                RPAD(SUBSTR(SBPENC.D(tmm.MEMBR_NM),0,1), LENGTHB(CONVERT(SBPENC.D(tmm.MEMBR_NM), 'KO16MSWIN949')), '*') AS MEMBR_NM,
+            </otherwise>
+        </choose>
+        tmm.MEMBR_NM,
         tmmp2.CD_PARTNER AS MAPPING_CD,
         tnsp.LN_PARTNER AS MAPPING_NM,
         tmm.MEMBR_CLASS_CD,
@@ -340,7 +371,14 @@
         tmm.POST_NO,
         SBPENC.D(tmm.ADDR) AS ADDR,
         SBPENC.D(tmm.ADDR_DTL) AS ADDR_DTL,
-        RPAD(SUBSTR(SBPENC.D(tmm.TEL_NO),0,7),11,'*') AS TEL_NO,
+        <choose>
+            <when test='excelPw != null and excelPw != "" and excelPw == "c08001"'>
+                SBPENC.D(tmm.TEL_NO) AS TEL_NO,
+            </when>
+            <otherwise>
+                RPAD(SUBSTR(SBPENC.D(tmm.TEL_NO),0,7),11,'*') AS TEL_NO,
+            </otherwise>
+        </choose>
         tmm.EMAIL_ADDR,
         (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '072' AND NMCODE_CD = tmm.EMAIL_RECV_YN) AS EMAIL_RECV_YN,
         tmm.BIRTHDAY,

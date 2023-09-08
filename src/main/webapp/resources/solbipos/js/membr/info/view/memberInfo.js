@@ -550,6 +550,7 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     $scope.excelDownloadTotal = function(){
         var params       = {};
         params.excelGubun = 'T';
+        params.excelPw = $("#excelPw").val();
 
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
