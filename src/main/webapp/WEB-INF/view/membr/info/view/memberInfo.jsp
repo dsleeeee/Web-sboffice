@@ -441,6 +441,7 @@
         </button>--%>
         <%-- 전체 엑셀다운로드 --%>
         <button class="btn_skyblue ml5 fr" ng-click="excelDownloadTotal()"><s:message code="cmm.excel.downTotal" /></button>
+        <input type="text" class="sb-input fr" style="width: 38px;" id="excelPw" ng-model="excelPw"/>
         <%-- 엑셀다운로드 --%>
         <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
 
@@ -690,7 +691,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20220722.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20220722.05" charset="utf-8"></script>
 
 <%-- 후불적용매장등록 --%>
 <c:import url="/WEB-INF/view/membr/info/view/postpaidStoreRegist.jsp">

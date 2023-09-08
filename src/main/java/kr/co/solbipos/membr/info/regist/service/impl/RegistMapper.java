@@ -321,4 +321,7 @@ public interface RegistMapper {
 
     /** 회원정보 조회 (광운대아이스링크 추가정보) */
     DefaultMap<String> getMemberInfoAddKwu(RegistVO registVO);
+
+    /** 마스킹 없는 엑셀다운로드 로그 저장 */
+    int saveMemberExcelLog(RegistVO registVO);
 }

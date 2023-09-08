@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SideMenu.xml
+    사이드메뉴 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       노현수     2018.11.14     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.prod.setProd.service.impl.SetProdMapper">
+
+    <!-- 상품 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
+        PARAM    : setProdVO
+        COMMENTS : 상품을 조회한다. ( 본사/매장 )
+    -->
+    <select id="getProdList" parameterType="setProdVO" resultType="DefaultMap">
+        /* USE : SetProdMapper.getProdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  thp.PROD_CD
+                ,		thp.PROD_NM
+                ,       thp.USE_YN
+                ,       thp.SIDE_PROD_YN
+                ,       thp.SDSEL_GRP_CD
+                ,       thpsg.SDSEL_GRP_NM
+                ,		thpsg.SDSEL_TYPE_FG
+                ,       '세트' AS REG_SDSEL_GRP
+                ,       '해제' AS N_SIDE_PROD_YN
+                ,       '싱글' AS REG_SDSEL_GRP_SINGLE
+                FROM    TB_HQ_PRODUCT thp
+                ,		TB_HQ_PRODUCT_SDSEL_GROUP thpsg
+                WHERE   thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND 	thpsg.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+                AND 	thpsg.SDSEL_GRP_CD (+)= thp.SDSEL_GRP_CD
+                <if test='prodCd != null and prodCd != ""'>
+                    AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                </if>
+                <if test='useYn != null and useYn != ""'>
+                    AND thp.USE_YN = #{useYn}
+                </if>
+                ORDER
+                BY      thp.PROD_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  tmp.PROD_CD
+                ,		tmp.PROD_NM
+                ,       tmp.USE_YN
+                ,       tmp.SIDE_PROD_YN
+                ,       tmp.SDSEL_GRP_CD
+                ,       tmpsg.SDSEL_GRP_NM
+                ,		tmpsg.SDSEL_TYPE_FG
+                ,       '세트' AS REG_SDSEL_GRP
+                ,       '해제' AS N_SIDE_PROD_YN
+                ,       '싱글' AS REG_SDSEL_GRP_SINGLE
+                FROM    TB_MS_PRODUCT tmp
+                ,		TB_MS_PRODUCT_SDSEL_GROUP tmpsg
+                WHERE   tmp.STORE_CD = #{storeCd}
+                AND 	tmpsg.STORE_CD (+)= tmp.STORE_CD
+                AND 	tmpsg.SDSEL_GRP_CD (+)= tmp.SDSEL_GRP_CD
+                <if test='prodCd != null and prodCd != ""'>
+                    AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                </if>
+                <if test='useYn != null and useYn != ""'>
+                    AND tmp.USE_YN = #{useYn}
+                </if>
+                ORDER
+                BY      tmp.PROD_CD
+            </when>
+        </choose>
+    </select>
+
+    <!-- 상품 사이드상품여부 저장 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
+        PARAM    : sideMenuAttrClassVO
+        COMMENTS : 상품 사이드상품여부 저장한다. ( 본사/매장 )
+    -->
+    <update id="saveSideProdYn" parameterType="setProdVO">
+        /* USE : SetProdMapper.saveSideProdYn */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE  TB_HQ_PRODUCT
+                SET     SIDE_PROD_YN = #{sideProdYn}
+                <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+                ,       SDSEL_GRP_CD = #{sdselGrpCd}
+                </if>
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     PROD_CD = #{prodCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE  TB_MS_PRODUCT
+                SET     SIDE_PROD_YN = #{sideProdYn}
+                <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+                ,       SDSEL_GRP_CD = #{sdselGrpCd}
+                </if>
+                WHERE   STORE_CD = #{storeCd}
+                AND     PROD_CD = #{prodCd}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 상품 선택그룹 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
+        PARAM    : setProdVO
+        COMMENTS : 상품 선택그룹을 조회한다. ( 본사/매장 )
+    -->
+    <select id="getSdselGrpList" parameterType="setProdVO" resultType="DefaultMap">
+        /* USE : SetProdMapper.getSdselGrpList */
+        <if test='prodCd != null and prodCd != ""'>
+            SELECT  *
+            FROM    (
+        </if>
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                    SELECT  thpsg.HQ_BRAND_CD
+                    ,       thpsg.SDSEL_GRP_CD
+                    ,       thpsg.SDSEL_GRP_NM
+                    ,       (SELECT LISTAGG(PROD_CD, ',') WITHIN GROUP (ORDER BY PROD_CD) AS PROD_CD FROM TB_HQ_PRODUCT thp WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd} AND thp.SIDE_PROD_YN = 'Y' AND thp.SDSEL_GRP_CD = thpsg.SDSEL_GRP_CD ) AS PROD_CD
+                    ,       (SELECT COUNT(*) FROM TB_HQ_PRODUCT_SDSEL_CLASS WHERE HQ_OFFICE_CD = thpsg.HQ_OFFICE_CD  AND SDSEL_GRP_CD = thpsg.SDSEL_GRP_CD AND USE_YN  = 'Y') AS CNT
+                    ,       NVL(thpsg.FIX_PROD_FG, '0') AS FIX_PROD_FG
+                    ,       NVL(thpsg.SDSEL_TYPE_FG, 'C') AS SDSEL_TYPE_FG
+                    FROM    TB_HQ_PRODUCT_SDSEL_GROUP thpsg
+                    WHERE   thpsg.HQ_OFFICE_CD = #{hqOfficeCd}
+                    <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+                        AND thpsg.SDSEL_GRP_CD LIKE '%'||#{sdselGrpCd}||'%'
+                    </if>
+                    AND     thpsg.USE_YN = 'Y'
+                    ORDER
+                    BY      thpsg.SDSEL_GRP_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                    SELECT  tmpsg.MS_BRAND_CD
+                    ,       tmpsg.SDSEL_GRP_CD
+                    ,       tmpsg.SDSEL_GRP_NM
+                    ,       (SELECT LISTAGG(PROD_CD, ',') WITHIN GROUP (ORDER BY PROD_CD) AS PROD_CD FROM TB_MS_PRODUCT tmp WHERE tmp.STORE_CD = #{storeCd} AND tmp.SIDE_PROD_YN = 'Y' AND tmp.SDSEL_GRP_CD = tmpsg.SDSEL_GRP_CD ) AS PROD_CD
+                    ,       (SELECT COUNT(*) FROM TB_MS_PRODUCT_SDSEL_CLASS WHERE STORE_CD = tmpsg.STORE_CD  AND SDSEL_GRP_CD = tmpsg.SDSEL_GRP_CD AND USE_YN  = 'Y') AS CNT
+                    ,       NVL(tmpsg.FIX_PROD_FG, '0') AS FIX_PROD_FG
+                    ,       NVL(tmpsg.SDSEL_TYPE_FG, 'C') AS SDSEL_TYPE_FG
+                    FROM    TB_MS_PRODUCT_SDSEL_GROUP tmpsg
+                    WHERE   tmpsg.STORE_CD = #{storeCd}
+                    <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+                        AND tmpsg.SDSEL_GRP_CD LIKE '%'||#{sdselGrpCd}||'%'
+                    </if>
+                    AND     tmpsg.USE_YN = 'Y'
+                    ORDER
+                    BY      tmpsg.SDSEL_GRP_CD
+            </when>
+        </choose>
+        <if test='prodCd != null and prodCd != ""'>
+            )
+            WHERE   PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+    </select>
+</mapper>
