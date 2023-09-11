@@ -40,7 +40,7 @@
                 <th><s:message code="sideMenuStore.sdselProd"/></th>
                 <td>
                     <%-- 선택상품 선택 모듈 사용시 include --%>
-                    <jsp:include page="/WEB-INF/view/sale/com/popup/selectSdselProdS.jsp" flush="true">
+                    <jsp:include page="/WEB-INF/view/common/popup/selectSdselProd.jsp" flush="true">
                         <jsp:param name="targetId" value="sideMenuProdSdselProd"/>
                     </jsp:include>
                     <%--// 선택상품 선택 모듈 사용시 include --%>

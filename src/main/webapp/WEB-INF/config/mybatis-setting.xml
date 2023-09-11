@@ -480,10 +480,9 @@
     <typeAlias alias="inclnVO" type="kr.co.solbipos.membr.anals.incln.service.InclnVO"/>
     <typeAlias alias="bbqMemberExcelUploadVO" type="kr.co.solbipos.membr.info.bbqMemberExcelUpload.service.BbqMemberExcelUploadVO"/>
 
-    <!-- 광운대 > 리포트 > 강사별회원관리내역 -->
-    <typeAlias alias="InstructorMembrVO" type="kr.co.solbipos.membr.reportKwu.instructorMembr.service.InstructorMembrVO"/>
-    <!-- 광운대 > 리포트 > 월별회원등록현황 -->
-    <typeAlias alias="MonthlyMembrVO" type="kr.co.solbipos.membr.reportKwu.monthlyMembr.service.MonthlyMembrVO"/>
+    <!-- (공통) 선택상품 팝업 -->
+    <typeAlias alias="selectSdselProdVO" type="kr.co.solbipos.common.popup.selectSdselProd.service.SelectSdselProdVO"/>
+
 
     <!--
         <typeAlias alias="gradeVO" type="kr.co.solbipos.membr.info.grade.service.GradeVO"/>
@@ -1087,24 +1086,24 @@
     <typeAlias type="kr.co.common.data.handler.CustomBooleanTypeHandler" alias="CustomBooleanTypeHandler" />
     <typeAlias type="kr.co.common.data.handler.CustomDateTypeHandler" alias="CustomDateTypeHandler" />
 
+
     <!-- 배달관리 > 배달정보 > 배달지등록 -->
     <typeAlias alias="dlvrRegistVO" type="kr.co.solbipos.dlvr.info.regist.service.DlvrRegistVO"/>
     <typeAlias alias="dlvrInfoVO" type="kr.co.solbipos.dlvr.anals.dlvrInfo.service.DlvrInfoVO"/>
     <typeAlias alias="dayDlvrVO" type="kr.co.solbipos.dlvr.anals.dayDlvr.service.DayDlvrVO"/>
-
     <!-- 배달관리 > 배달정보 > 배달사원정보관리 -->
     <typeAlias alias="dlvrEmpVO" type="kr.co.solbipos.dlvr.info.dlvrEmp.service.DlvrEmpVO"/>
-
     <!-- 배달관리 > 배달현황 > 배달지별 내역 -->
     <typeAlias alias="dlvrReceiptVO" type="kr.co.solbipos.dlvr.anals.dlvrReceipt.service.DlvrReceiptVO"/>
-
     <!-- 배달관리 > CID 배달정보 > 배달지엑셀업로드 -->
     <typeAlias alias="dlvrExcelUploadVO" type="kr.co.solbipos.dlvr.info.dlvrExcelUpload.service.DlvrExcelUploadVO"/>
     <!-- 배달관리 > CID 배달정보 > 배달지정보관리 -->
     <typeAlias alias="deliveryTelNoVO" type="kr.co.solbipos.dlvr.info.deliveryTelNo.service.DeliveryTelNoVO"/>
 
+
     <!-- KDS -->
     <typeAlias alias="kdsVO" type="kr.co.solbipos.kds.anals.chart.service.KdsVO"/>
+
 
     <!-- 광운대 > 광운대일마감 > 광운대일마감 -->
     <typeAlias alias="dayCloseVO" type="kr.co.solbipos.excclc.excclc.dayClose.service.DayCloseVO"/>
@@ -1112,6 +1111,7 @@
     <typeAlias alias="dailyTableVO" type="kr.co.solbipos.excclc.excclc.dailyTable.service.DailyTableVO"/>
     <!-- 광운대 > 광운대일마감 > 일일일계표2 -->
     <typeAlias alias="dailyTableKwuVO" type="kr.co.solbipos.excclc.excclc.dailyTableKwu.service.DailyTableKwuVO"/>
+
     <!-- 광운대 > 후방매출등록 > 후방매출등록 -->
     <typeAlias alias="saleRegistKwuVO" type="kr.co.solbipos.excclc.excclc.saleRegistKwu.service.SaleRegistKwuVO"/>
 
@@ -1120,7 +1120,10 @@
     <!-- 광운대 > 리포트 > 신용카드 매출내역 -->
     <!-- 광운대 > 리포트 > 현금영수증 발행내역 -->
     <typeAlias alias="reportKwuVO" type="kr.co.solbipos.sale.status.reportKwu.service.ReportKwuVO"/>
-
+    <!-- 광운대 > 리포트 > 강사별회원관리내역 -->
+    <typeAlias alias="InstructorMembrVO" type="kr.co.solbipos.membr.reportKwu.instructorMembr.service.InstructorMembrVO"/>
+    <!-- 광운대 > 리포트 > 월별회원등록현황 -->
+    <typeAlias alias="MonthlyMembrVO" type="kr.co.solbipos.membr.reportKwu.monthlyMembr.service.MonthlyMembrVO"/>
     <!-- 광운대 > 리포트 > 매출현황2 -->
     <typeAlias alias="saleStatusKwuVO" type="kr.co.solbipos.sale.status.saleStatusKwu.service.SaleStatusKwuVO"/>
 
