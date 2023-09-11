@@ -102,24 +102,6 @@ public class IostockCmmVO extends PageVO {
     /** 판매가변경제한매장 */
     private String storeChgNot;
 
-    /** 사이드선택그룹코드 */
-    private String sdselGrpCd;
-
-    /** 사이드선택그룹명 */
-    private String sdselGrpNm;
-
-    /** 사이드선택분류코드 */
-    private String sdselClassCd;
-
-    /** 사이드선택분류명 */
-    private String sdselClassNm;
-
-    /** 사이드선택상품코드 */
-    private String sdselProdCd;
-
-    /** 사이드선택상품명 */
-    private String sdselProdNm;
-
     /** 사원명 */
     private String empNm;
 
@@ -128,9 +110,6 @@ public class IostockCmmVO extends PageVO {
 
     /** 관리브랜드 */
     private String userHqBrand;
-
-    /** 적용매장구분 */
-    private String regStoreFg;
 
     /** 조회매장 팝업 구분 */
     private String selectStoreFg;
@@ -463,54 +442,6 @@ public class IostockCmmVO extends PageVO {
         this.storeChgNot = storeChgNot;
     }
 
-    public String getSdselGrpCd() {
-        return sdselGrpCd;
-    }
-
-    public void setSdselGrpCd(String sdselGrpCd) {
-        this.sdselGrpCd = sdselGrpCd;
-    }
-
-    public String getSdselGrpNm() {
-        return sdselGrpNm;
-    }
-
-    public void setSdselGrpNm(String sdselGrpNm) {
-        this.sdselGrpNm = sdselGrpNm;
-    }
-
-    public String getSdselClassCd() {
-        return sdselClassCd;
-    }
-
-    public void setSdselClassCd(String sdselClassCd) {
-        this.sdselClassCd = sdselClassCd;
-    }
-
-    public String getSdselClassNm() {
-        return sdselClassNm;
-    }
-
-    public void setSdselClassNm(String sdselClassNm) {
-        this.sdselClassNm = sdselClassNm;
-    }
-
-    public String getSdselProdCd() {
-        return sdselProdCd;
-    }
-
-    public void setSdselProdCd(String sdselProdCd) {
-        this.sdselProdCd = sdselProdCd;
-    }
-
-    public String getSdselProdNm() {
-        return sdselProdNm;
-    }
-
-    public void setSdselProdNm(String sdselProdNm) {
-        this.sdselProdNm = sdselProdNm;
-    }
-
     public String getEmpNm() {
         return empNm;
     }
@@ -534,10 +465,6 @@ public class IostockCmmVO extends PageVO {
     public void setUserHqBrand(String userHqBrand) {
         this.userHqBrand = userHqBrand;
     }
-
-    public String getRegStoreFg() { return regStoreFg; }
-
-    public void setRegStoreFg(String regStoreFg) { this.regStoreFg = regStoreFg; }
 
     public String getSelectStoreFg() { return selectStoreFg; }
 

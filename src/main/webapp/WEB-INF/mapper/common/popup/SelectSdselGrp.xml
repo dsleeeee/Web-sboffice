@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SelectSdselGrp.xml
+    (공통) 선택그룹 팝업
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2023.09.11     최초작성
+-->
+<mapper namespace="kr.co.solbipos.common.popup.selectSdselGrp.service.impl.SelectSdselGrpMapper">
+
+    <!-- 선택그룹 공통 - 선택그룹 리스트 조회 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="selectSdselGrpList" parameterType="selectSdselGrpVO" resultType="DefaultMap">
+        /* USE : SelectSdselGrpMapper.selectSdselGrpList */
+        SELECT
+        A.SDSEL_GRP_CD,
+        A.SDSEL_GRP_NM
+        FROM TB_HQ_PRODUCT_SDSEL_GROUP A
+        WHERE 1=1
+        AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+            AND A.SDSEL_GRP_CD LIKE '%'||#{sdselGrpCd}||'%'
+        </if>
+        <if test='sdselGrpNm != null and sdselGrpNm != ""'>
+            AND A.SDSEL_GRP_NM LIKE '%'||#{sdselGrpNm}||'%'
+        </if>
+        AND A.USE_YN = 'Y'
+        ORDER BY A.SDSEL_GRP_CD
+    </select>
+
+</mapper>

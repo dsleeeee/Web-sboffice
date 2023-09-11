@@ -16,7 +16,7 @@
         <s:message code="cmm.selectCancel"/></button>
 </c:if>
 
-<wj-popup id="wj<c:out value="${param.targetId}"/>LayerS" control="wj<c:out value="${param.targetId}"/>LayerS" show-trigger="Click" hide-trigger="Click" style="display:none;width:500px;">
+<wj-popup id="wj<c:out value="${param.targetId}"/>Layer" control="wj<c:out value="${param.targetId}"/>Layer" show-trigger="Click" hide-trigger="Click" style="display:none;width:500px;">
     <div class="wj-dialog wj-dialog-columns" ng-controller="<c:out value="${param.targetId}"/>Ctrl">
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="cmm.sdselGrp.select"/>
@@ -35,11 +35,11 @@
                     </colgroup>
                     <tbody>
                     <tr>
-                        <th><s:message code="outstockReqDate.sdselGrpCd" /></th>
+                        <th><s:message code="selectSdselGrp.sdselGrpCd" /></th>
                         <td>
                             <input type="text" id="srchSdselGrpCd" ng-model="srchSdselGrpCd"/>
                         </td>
-                        <th><s:message code="outstockReqDate.sdselGrpNm" /></th>
+                        <th><s:message code="selectSdselGrp.sdselGrpNm" /></th>
                         <td>
                             <input type="text" id="srchSdselGrpNm" ng-model="srchSdselGrpNm"/>
                         </td>
@@ -49,7 +49,6 @@
 
                 <%-- 버튼영역 --%>
                 <div class="mt10 tr">
-                    <p class="tl s14 mt5 lh15">- '적용매장구분'이 '제외매장', '허용매장'인 경우에만 조회됩니다.</p>
                     <button class="btn_skyblue" ng-click="searchSdselGrp()"><s:message code="cmm.search" /></button>
                 </div>
 
@@ -65,8 +64,8 @@
                             item-formatter="_itemFormatter">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="outstockReqDate.sdselGrpCd"/>" binding="sdselGrpCd" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="outstockReqDate.sdselGrpNm"/>" binding="sdselGrpNm" width="300" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="selectSdselGrp.sdselGrpCd"/>" binding="sdselGrpCd" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="selectSdselGrp.sdselGrpNm"/>" binding="sdselGrpNm" width="300" align="left" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
                 <%--//위즈모 테이블--%>
@@ -119,7 +118,7 @@
 
                         $("#" + $scope.subTargetId + "Nm").val(messages["cmm.all"]);
                         $("#" + $scope.subTargetId + "Cd").val("");
-                        eval('$scope.wj' + $scope.targetId + 'LayerS.hide(true)');
+                        eval('$scope.wj' + $scope.targetId + 'Layer.hide(true)');
                     }
                 }
             });
@@ -129,9 +128,9 @@
         // 다른 컨트롤러의 broadcast 받기
         $scope.$on($scope.targetId + 'Ctrl', function (event, paramObj) {
             // 선택그룹 선택 팝업 오픈
-            eval('$scope.wj' + $scope.targetId + 'LayerS.show(true)');
+            eval('$scope.wj' + $scope.targetId + 'Layer.show(true)');
             // 팝업 닫힐시 이벤트
-            eval('$scope.wj' + $scope.targetId + 'LayerS').hidden.addHandler(function () {
+            eval('$scope.wj' + $scope.targetId + 'Layer').hidden.addHandler(function () {
                 if ('${param.closeFunc}' !== '') {
                     eval('$scope.${param.closeFunc}()');
                 }
@@ -150,7 +149,7 @@
             params.sdselGrpCd = $scope.srchSdselGrpCd;
             params.sdselGrpNm = $scope.srchSdselGrpNm;
 
-            $scope._inquirySub("/iostock/cmm/iostockCmm/selectSdselGrpList.sb", params, function () {
+            $scope._inquirySub("/common/popup/selectSdselGrp/selectSdselGrpList.sb", params, function () {
                 $scope.searchFg = "Y";
             });
         };
