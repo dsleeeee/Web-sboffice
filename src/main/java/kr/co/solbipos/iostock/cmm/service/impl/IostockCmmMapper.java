@@ -57,9 +57,6 @@ public interface IostockCmmMapper {
     /** 선택그룹 공통 - 선택그룹 리스트 조회 */
     List<DefaultMap<String>> selectSdselGrpList(IostockCmmVO iostockCmmVO);
 
-    /** 선택분류 공통 - 선택분류 리스트 조회 */
-    List<DefaultMap<String>> selectSdselClassList(IostockCmmVO iostockCmmVO);
-
     /** 선택상품 공통 - 사원 리스트 조회 */
     List<DefaultMap<String>> selectEmpList(IostockCmmVO iostockCmmVO);
 

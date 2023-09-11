@@ -480,6 +480,9 @@
     <typeAlias alias="inclnVO" type="kr.co.solbipos.membr.anals.incln.service.InclnVO"/>
     <typeAlias alias="bbqMemberExcelUploadVO" type="kr.co.solbipos.membr.info.bbqMemberExcelUpload.service.BbqMemberExcelUploadVO"/>
 
+
+    <!-- (공통) 선택분류 팝업 -->
+    <typeAlias alias="selectSdselClassVO" type="kr.co.solbipos.common.popup.selectSdselClass.service.SelectSdselClassVO"/>
     <!-- (공통) 선택상품 팝업 -->
     <typeAlias alias="selectSdselProdVO" type="kr.co.solbipos.common.popup.selectSdselProd.service.SelectSdselProdVO"/>
 

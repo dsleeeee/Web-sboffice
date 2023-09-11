@@ -271,22 +271,6 @@ public class IostockCmmServiceImpl implements IostockCmmService {
         return resultList;
     }
 
-    /** 선택분류 공통 - 선택분류 리스트 조회 */
-    @Override
-    public List<DefaultMap<String>> selectSdselClassList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
-
-        iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-
-        List<DefaultMap<String>> resultList = new ArrayList<DefaultMap<String>>();
-
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
-
-            resultList = iostockCmmMapper.selectSdselClassList(iostockCmmVO);
-        }
-
-        return resultList;
-    }
-
 
     /** 선택상품 공통 - 사원 리스트 조회 */
     @Override

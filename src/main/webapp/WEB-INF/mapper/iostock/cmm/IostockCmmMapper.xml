@@ -707,48 +707,6 @@
         ORDER BY A.SDSEL_GRP_CD
     </select>
 
-    <!-- 선택분류 공통 - 선택분류 리스트 조회 -->
-    <!--
-        TABLE    :
-        PARAM    :
-        COMMENTS :
-    -->
-    <select id="selectSdselClassList" parameterType="iostockCmmVO" resultType="DefaultMap">
-        /* USE : IostockCmmMapper.selectSdselClassList */
-        SELECT
-        A.SDSEL_GRP_CD,
-        A.SDSEL_GRP_NM,
-        B.SDSEL_CLASS_CD,
-        B.SDSEL_CLASS_NM,
-        NVL(B.REG_STORE_FG, '0') AS REG_STORE_FG
-        FROM TB_HQ_PRODUCT_SDSEL_GROUP A,
-        TB_HQ_PRODUCT_SDSEL_CLASS B
-        WHERE 1=1
-        AND A.HQ_OFFICE_CD = #{hqOfficeCd}
-        <if test='sdselGrpCd != null and sdselGrpCd != ""'>
-            AND A.SDSEL_GRP_CD LIKE '%'||#{sdselGrpCd}||'%'
-        </if>
-        <if test='sdselGrpNm != null and sdselGrpNm != ""'>
-            AND A.SDSEL_GRP_NM LIKE '%'||#{sdselGrpNm}||'%'
-        </if>
-        <if test='sdselClassCd != null and sdselClassCd != ""'>
-            AND B.SDSEL_CLASS_CD LIKE '%'||#{sdselClassCd}||'%'
-        </if>
-        <if test='sdselClassNm != null and sdselClassNm != ""'>
-            AND B.SDSEL_CLASS_NM LIKE '%'||#{sdselClassNm}||'%'
-        </if>
-        <if test='regStoreFg != null and regStoreFg != ""'>
-            AND NVL(B.REG_STORE_FG, '0') = #{regStoreFg}
-        </if>
-        AND A.USE_YN = 'Y'
-        AND B.USE_YN = 'Y'
-        AND NVL(B.REG_STORE_FG, '0') IN ('1', '2')
-        AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
-        AND B.SDSEL_GRP_CD = A.SDSEL_GRP_CD
-        ORDER BY A.SDSEL_GRP_CD, B.DISP_SEQ
-    </select>
-
-
     <!-- 사원 공통 - 사원 리스트 조회 -->
     <!--
         TABLE    :

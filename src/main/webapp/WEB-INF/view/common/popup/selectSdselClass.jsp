@@ -16,7 +16,7 @@
         <s:message code="cmm.selectCancel"/></button>
 </c:if>
 
-<wj-popup id="wj<c:out value="${param.targetId}"/>LayerS" control="wj<c:out value="${param.targetId}"/>LayerS" show-trigger="Click" hide-trigger="Click" style="display:none;width:590px;">
+<wj-popup id="wj<c:out value="${param.targetId}"/>Layer" control="wj<c:out value="${param.targetId}"/>Layer" show-trigger="Click" hide-trigger="Click" style="display:none;width:590px;">
     <div class="wj-dialog wj-dialog-columns" ng-controller="<c:out value="${param.targetId}"/>Ctrl">
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="cmm.sdselClass.select"/>
@@ -35,28 +35,28 @@
                     </colgroup>
                     <tbody>
                     <tr>
-                        <th><s:message code="outstockReqDate.sdselGrpCd" /></th>
+                        <th><s:message code="selectSdselClass.sdselGrpCd" /></th>
                         <td>
                             <input type="text" id="srchSdselGrpCd" ng-model="srchSdselGrpCd"/>
                         </td>
-                        <th><s:message code="outstockReqDate.sdselGrpNm" /></th>
+                        <th><s:message code="selectSdselClass.sdselGrpNm" /></th>
                         <td>
                             <input type="text" id="srchSdselGrpNm" ng-model="srchSdselGrpNm"/>
                         </td>
                     </tr>
                     <tr>
-                        <th><s:message code="outstockReqDate.sdselClassCd" /></th>
+                        <th><s:message code="selectSdselClass.sdselClassCd" /></th>
                         <td>
                             <input type="text" id="srchSdselClassCd" ng-model="srchSdselClassCd"/>
                         </td>
-                        <th><s:message code="outstockReqDate.sdselClassNm" /></th>
+                        <th><s:message code="selectSdselClass.sdselClassNm" /></th>
                         <td>
                             <input type="text" id="srchSdselClassNm" ng-model="srchSdselClassNm"/>
                         </td>
                     </tr>
                     <tr>
                         <%-- 적용매장구분 --%>
-                        <th><s:message code="outstockReqDate.regStoreFg"/></th>
+                        <th><s:message code="selectSdselClass.regStoreFg"/></th>
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
@@ -95,11 +95,11 @@
                             item-formatter="_itemFormatter">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="outstockReqDate.sdselGrpCd"/>" binding="sdselGrpCd" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="outstockReqDate.sdselGrpNm"/>" binding="sdselGrpNm" width="105" align="left" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="outstockReqDate.sdselClassCd"/>" binding="sdselClassCd" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="outstockReqDate.sdselClassNm"/>" binding="sdselClassNm" width="115" align="left" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="outstockReqDate.regStoreFg"/>" binding="regStoreFg" data-map="regStoreFgDataMap" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="selectSdselClass.sdselGrpCd"/>" binding="sdselGrpCd" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="selectSdselClass.sdselGrpNm"/>" binding="sdselGrpNm" width="105" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="selectSdselClass.sdselClassCd"/>" binding="sdselClassCd" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="selectSdselClass.sdselClassNm"/>" binding="sdselClassNm" width="115" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="selectSdselClass.regStoreFg"/>" binding="regStoreFg" data-map="regStoreFgDataMap" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
                 <%--//위즈모 테이블--%>
@@ -170,7 +170,7 @@
 
                         $("#" + $scope.subTargetId + "Nm").val(messages["cmm.all"]);
                         $("#" + $scope.subTargetId + "Cd").val("");
-                        eval('$scope.wj' + $scope.targetId + 'LayerS.hide(true)');
+                        eval('$scope.wj' + $scope.targetId + 'Layer.hide(true)');
                     }
                 }
             });
@@ -180,9 +180,9 @@
         // 다른 컨트롤러의 broadcast 받기
         $scope.$on($scope.targetId + 'Ctrl', function (event, paramObj) {
             // 선택분류 선택 팝업 오픈
-            eval('$scope.wj' + $scope.targetId + 'LayerS.show(true)');
+            eval('$scope.wj' + $scope.targetId + 'Layer.show(true)');
             // 팝업 닫힐시 이벤트
-            eval('$scope.wj' + $scope.targetId + 'LayerS').hidden.addHandler(function () {
+            eval('$scope.wj' + $scope.targetId + 'Layer').hidden.addHandler(function () {
                 if ('${param.closeFunc}' !== '') {
                     eval('$scope.${param.closeFunc}()');
                 }
@@ -204,7 +204,7 @@
             params.sdselClassNm = $scope.srchSdselClassNm;
             params.regStoreFg = $scope.regStoreFg;
 
-            $scope._inquirySub("/iostock/cmm/iostockCmm/selectSdselClassList.sb", params, function () {
+            $scope._inquirySub("/common/popup/selectSdselClass/selectSdselClassList.sb", params, function () {
                 $scope.searchFg = "Y";
             });
         };

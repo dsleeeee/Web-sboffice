@@ -457,27 +457,7 @@ public class IostockCmmController {
         return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
     }
 
-    /**
-     * 선택분류 공통 - 선택분류 리스트 조회
-     * @param   request
-     * @param   response
-     * @param   model
-     * @param   iostockCmmVO
-     * @return  String
-     * @author  김설아
-     * @since   2023. 06. 08.
-     */
-    @RequestMapping(value = "/selectSdselClassList.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result selectSdselClassList(HttpServletRequest request, HttpServletResponse response,
-                                     Model model, IostockCmmVO iostockCmmVO) {
 
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        List<DefaultMap<String>> list = iostockCmmService.selectSdselClassList(iostockCmmVO, sessionInfoVO);
-
-        return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
-    }
 
     /**
      * 수불&재고관련 공통 - 사원 리스트 조회
