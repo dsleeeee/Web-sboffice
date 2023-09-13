@@ -4,6 +4,7 @@ import kr.co.common.data.domain.AgencyVO;
 import kr.co.common.data.domain.HqOfficeVO;
 import kr.co.common.data.domain.VanVO;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.base.prod.info.service.ProductClassVO;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
@@ -57,5 +58,8 @@ public interface PopupMapper {
 
     /** 본사 + 매장목록 조회 */
     List<DefaultMap<String>> getHqStoreList(StoreManageVO storeManageVO);
+
+    /** 매장(멀티) 조회조건 사용시, 리스트 검색에 사용할 매장값 리턴 함수 호출 */
+    String getSearchMultiStoreRtn(StoreVO storeVO);
 }
 
