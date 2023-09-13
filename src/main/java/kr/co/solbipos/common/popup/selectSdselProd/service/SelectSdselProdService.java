@@ -23,5 +23,5 @@ import java.util.List;
 public interface SelectSdselProdService {
 
     /** 선택상품 공통 - 선택상품 리스트 조회 */
-    List<DefaultMap<String>> selectSdselProdList(SelectSdselProdVO selectSdselProdVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<String>> getSelectSdselProdList(SelectSdselProdVO selectSdselProdVO, SessionInfoVO sessionInfoVO);
 }

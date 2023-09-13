@@ -23,5 +23,5 @@ import java.util.List;
 public interface SelectSdselGrpService {
 
     /** 선택그룹 공통 - 선택그룹 리스트 조회 */
-    List<DefaultMap<String>> selectSdselGrpList(SelectSdselGrpVO selectSdselGrpVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<String>> getSelectSdselGrpList(SelectSdselGrpVO selectSdselGrpVO, SessionInfoVO sessionInfoVO);
 }

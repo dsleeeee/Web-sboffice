@@ -42,14 +42,14 @@ public class SelectSdselGrpServiceImpl implements SelectSdselGrpService {
 
     /** 선택그룹 공통 - 선택그룹 리스트 조회 */
     @Override
-    public List<DefaultMap<String>> selectSdselGrpList(SelectSdselGrpVO selectSdselGrpVO, SessionInfoVO sessionInfoVO) {
-
-        List<DefaultMap<String>> resultList = new ArrayList<DefaultMap<String>>();
+    public List<DefaultMap<String>> getSelectSdselGrpList(SelectSdselGrpVO selectSdselGrpVO, SessionInfoVO sessionInfoVO) {
 
         selectSdselGrpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
+        List<DefaultMap<String>> resultList = new ArrayList<DefaultMap<String>>();
+
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
-            resultList = selectSdselGrpMapper.selectSdselGrpList(selectSdselGrpVO);
+            resultList = selectSdselGrpMapper.getSelectSdselGrpList(selectSdselGrpVO);
         }
 
         return resultList;

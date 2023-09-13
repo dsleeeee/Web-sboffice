@@ -40,16 +40,16 @@ public class SelectSdselProdServiceImpl implements SelectSdselProdService {
     @Autowired
     public SelectSdselProdServiceImpl(SelectSdselProdMapper selectSdselProdMapper) { this.selectSdselProdMapper = selectSdselProdMapper; }
 
-    /** 공통 선택상품 - 선택상품 리스트 조회 */
+    /** 선택상품 공통 - 선택상품 리스트 조회 */
     @Override
-    public List<DefaultMap<String>> selectSdselProdList(SelectSdselProdVO selectSdselProdVO, SessionInfoVO sessionInfoVO) {
-
-        List<DefaultMap<String>> resultList = new ArrayList<DefaultMap<String>>();
+    public List<DefaultMap<String>> getSelectSdselProdList(SelectSdselProdVO selectSdselProdVO, SessionInfoVO sessionInfoVO) {
 
         selectSdselProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
+        List<DefaultMap<String>> resultList = new ArrayList<DefaultMap<String>>();
+
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
-            resultList = selectSdselProdMapper.selectSdselProdList(selectSdselProdVO);
+            resultList = selectSdselProdMapper.getSelectSdselProdList(selectSdselProdVO);
         }
 
         return resultList;

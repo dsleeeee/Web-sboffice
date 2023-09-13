@@ -149,7 +149,7 @@
             params.sdselGrpCd = $scope.srchSdselGrpCd;
             params.sdselGrpNm = $scope.srchSdselGrpNm;
 
-            $scope._inquirySub("/common/popup/selectSdselGrp/selectSdselGrpList.sb", params, function () {
+            $scope._inquirySub("/common/popup/selectSdselGrp/getSelectSdselGrpList.sb", params, function () {
                 $scope.searchFg = "Y";
             });
         };

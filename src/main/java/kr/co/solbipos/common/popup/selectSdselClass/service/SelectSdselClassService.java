@@ -23,5 +23,5 @@ import java.util.List;
 public interface SelectSdselClassService {
 
     /** 선택분류 공통 - 선택분류 리스트 조회 */
-    List<DefaultMap<String>> selectSdselClassList(SelectSdselClassVO selectSdselClassVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<String>> getSelectSdselClassList(SelectSdselClassVO selectSdselClassVO, SessionInfoVO sessionInfoVO);
 }
