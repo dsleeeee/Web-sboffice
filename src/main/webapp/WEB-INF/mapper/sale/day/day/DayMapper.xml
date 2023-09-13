@@ -251,11 +251,8 @@
                             SUM(APPR_CASH_AMT) AS PAY021
                     FROM    TB_SL_DAILY_TOTAL tsdt
                     WHERE   tsdt.HQ_OFFICE_CD  = #{hqOfficeCd}
-                    <if test='arrStoreCd != null and arrStoreCd != ""'>
-                        AND
-                        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                            tsdt.STORE_CD = #{item}
-                        </foreach>
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND tsdt.STORE_CD IN (${storeCdQuery})
                     </if>
                     <if test='orgnFg != null and orgnFg == "H"'>
                         AND (
@@ -272,11 +269,8 @@
                     , SUM(CASE WHEN tssd.DLVR_PACK_FG = '3' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
                     FROM	TB_SL_DAILY_DTL_DLVR tssd
                     WHERE	tssd.HQ_OFFICE_CD	=	#{hqOfficeCd}
-                    <if test='arrStoreCd != null and arrStoreCd != ""'>
-                        AND
-                        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                            tssd.STORE_CD = #{item}
-                        </foreach>
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND tssd.STORE_CD IN (${storeCdQuery})
                     </if>
                     <if test='orgnFg != null and orgnFg == "H"'>
                         AND (

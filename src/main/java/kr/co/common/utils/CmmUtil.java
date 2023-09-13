@@ -489,4 +489,27 @@ public class CmmUtil {
 
         return convertToJson(list);
     }
+
+    /**
+     * 문자열 특정길이만큼 잘라 배열로 return
+     */
+    public static String[] splitText(String text, int maxLength){
+
+        int textLen = text.length();
+        int loopCnt = textLen / maxLength + 1;
+        String str = "";
+
+        for (int i = 0; i < loopCnt; i++) {
+
+            int lastIndex = (i + 1) * maxLength;
+
+            // 글자길이보다 긴 lastIndex를 설정하면 StringIndexOutOfBoundsException 오류가 발생하므로 if문으로 분기
+             if(textLen > lastIndex){
+               str += text.substring(i * maxLength, lastIndex) + "【】》》";
+             }else{
+               str += text.substring(i * maxLength);
+             }
+        }
+        return str.split("【】》》");
+    }
 }

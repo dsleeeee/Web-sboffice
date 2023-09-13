@@ -29,6 +29,8 @@ public class StoreVO extends CmmVO {
     private String hqOfficeCd;
     /** 디폴트 매장 */
     private String defaultStoreCd;
+    /** 매장(멀티) 조회조건 사용시, 리스트 검색에 사용할 매장코드 array */
+    private String arrSplitStoreCd[];
 
     /**
      * @return the storeCd
@@ -103,5 +105,13 @@ public class StoreVO extends CmmVO {
      */
     public void setDefaultStoreCd(String defaultStoreCd) {
         this.defaultStoreCd = defaultStoreCd;
+    }
+
+    public String[] getArrSplitStoreCd() {
+        return arrSplitStoreCd;
+    }
+
+    public void setArrSplitStoreCd(String[] arrSplitStoreCd) {
+        this.arrSplitStoreCd = arrSplitStoreCd;
     }
 }

@@ -2,7 +2,10 @@ package kr.co.solbipos.sale.day.day.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.day.day.service.DayService;
@@ -16,11 +19,13 @@ import java.util.List;
 @Service("dayService")
 public class DayServiceImpl implements DayService {
     private final DayMapper dayMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public DayServiceImpl(DayMapper dayMapper, MessageService messageService) {
+    public DayServiceImpl(DayMapper dayMapper, PopupMapper popupMapper, MessageService messageService) {
         this.dayMapper = dayMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -102,7 +107,9 @@ public class DayServiceImpl implements DayService {
         dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
-            dayVO.setArrStoreCd(dayVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayVO.getStoreCd(), 3900));
+            dayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
 //        // 결제수단 array 값 세팅

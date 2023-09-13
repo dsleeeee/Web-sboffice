@@ -416,4 +416,22 @@
       ORDER BY A.ORGN_FG, A.STORE_CD
       <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
+
+    <!-- 매장(멀티) 조회조건 사용시, 리스트 검색에 사용할 매장값 리턴 함수 호출 -->
+    <!--
+        TABLE    : COM_SQLTM_T
+        PARAM    : storeVO
+        COMMENTS : 매장(멀티) 조회조건 사용시, 리스트 검색에 사용할 매장값을 리턴하는 함수를 호출한다.
+    -->
+    <select id="getSearchMultiStoreRtn" parameterType="storeVO" resultType="String">
+        /* USE : PopupMapper.getSearchMultiStoreRtn */
+        SELECT FN_GET_REPLACE_SQL
+        <if test='arrSplitStoreCd != null and arrSplitStoreCd != ""'>
+            <foreach collection="arrSplitStoreCd" item="item" open="(" close=")" separator="||">
+              TO_CLOB (#{item})
+            </foreach>
+        </if>
+        FROM DUAL
+    </select>
+
 </mapper>
