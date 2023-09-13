@@ -225,7 +225,7 @@ app.controller('excelUploadDlvrProdNmCtrl', ['$scope', '$http','$timeout', funct
             }
 
             // 배달앱별 상품명칭 길이 체크하여 30자 이상이면 문자 자르기
-            if(nvl(item.dlvrProdNm, '') !== '' && nvl(item.dlvrProdNm, '').getByteLengthForOracle() > 100) {
+            if(nvl(item.dlvrProdNm, '') !== '' && nvl(item.dlvrProdNm.toString(), '').getByteLengthForOracle() > 100) {
                 item.dlvrProdNm = item.dlvrProdNm.substr(0, 30);
             }
 
