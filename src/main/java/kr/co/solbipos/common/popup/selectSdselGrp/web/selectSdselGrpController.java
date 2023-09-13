@@ -71,14 +71,14 @@ public class selectSdselGrpController {
      * @author  김설아
      * @since   2023. 09. 11.
      */
-    @RequestMapping(value = "/selectSdselGrpList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/getSelectSdselGrpList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result selectSdselGrpList(HttpServletRequest request, HttpServletResponse response,
+    public Result getSelectSdselGrpList(HttpServletRequest request, HttpServletResponse response,
                                      Model model, SelectSdselGrpVO selectSdselGrpVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> list = selectSdselGrpService.selectSdselGrpList(selectSdselGrpVO, sessionInfoVO);
+        List<DefaultMap<String>> list = selectSdselGrpService.getSelectSdselGrpList(selectSdselGrpVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, selectSdselGrpVO);
     }
