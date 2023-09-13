@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.today.todayMoms.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.today.todayMoms.service.TodayMomsService;
@@ -30,9 +34,11 @@ import java.util.List;
 @Transactional
 public class TodayMomsServiceImpl implements TodayMomsService {
     private final TodayMomsMapper todayMomsMapper;
+    private final PopupMapper popupMapper;
 
-    public TodayMomsServiceImpl(TodayMomsMapper todayMomsMapper) {
+    public TodayMomsServiceImpl(TodayMomsMapper todayMomsMapper, PopupMapper popupMapper) {
         this.todayMomsMapper = todayMomsMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 조회 */
@@ -46,8 +52,11 @@ public class TodayMomsServiceImpl implements TodayMomsService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = todayMomsVO.getStoreCds().split(",");
-        todayMomsVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(todayMomsVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(todayMomsVO.getStoreCds(), 3900));
+            todayMomsVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
 
         /** PAY_CD = 02 현금,현금영수증 분리 */
@@ -113,8 +122,11 @@ public class TodayMomsServiceImpl implements TodayMomsService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = todayMomsVO.getStoreCds().split(",");
-        todayMomsVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(todayMomsVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(todayMomsVO.getStoreCds(), 3900));
+            todayMomsVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
 
         /** PAY_CD = 02 현금,현금영수증 분리 */

@@ -20,12 +20,9 @@
           FROM TB_SL_DAILY_TOTAL
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
            AND SALE_DATE = #{startDate}
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-           AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                STORE_CD = #{item}
-            </foreach>
-        </if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+       		AND STORE_CD IN (${storeCdQuery})
+       	</if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
                     'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -56,11 +53,8 @@
                       FROM TB_SL_DAILY_PAY
                      WHERE HQ_OFFICE_CD = #{hqOfficeCd}
                        AND SALE_DATE = #{startDate}
-                    <if test='arrStoreCd != null and arrStoreCd != ""'>
-                       AND
-                        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                            STORE_CD = #{item}
-                        </foreach>
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND STORE_CD IN (${storeCdQuery})
                     </if>
                     <if test='orgnFg != null and orgnFg == "H"'>
                         AND (
@@ -70,11 +64,8 @@
                     </if>) tsdptot
               WHERE tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND tsdp.SALE_DATE = #{startDate}
-            <if test='arrStoreCd != null and arrStoreCd != ""'>
-                AND
-                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                    tsdp.STORE_CD = #{item}
-                </foreach>
+            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                AND tsdp.STORE_CD IN (${storeCdQuery})
             </if>
             <if test='orgnFg != null and orgnFg == "H"'>
                 AND (
@@ -110,12 +101,9 @@
         WHERE   tsshm.HQ_OFFICE_CD  =   #{hqOfficeCd}
         AND     tsshm.SALE_DATE     =   #{startDate}
         AND     tsshm.SALE_SAVE_POINT > 0
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                tsshm.STORE_CD = #{item}
-            </foreach>
-        </if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+       		AND tsshm.STORE_CD IN (${storeCdQuery})
+       	</if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
                     'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -135,12 +123,9 @@
         AND     tmm.MEMBR_ORGN_CD   =   #{orgnCd}
         AND     tmm.MEMBR_NO        =   tsspp.MEMBR_NO
         AND     tsspp.SALE_AMT      > 0
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                tsspp.STORE_CD = #{item}
-            </foreach>
-        </if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+       		AND tsspp.STORE_CD IN (${storeCdQuery})
+       	</if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
                     'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -173,12 +158,9 @@
                TB_MS_PRODUCT tmp
          WHERE tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
            AND tsdp.SALE_DATE = #{startDate}
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-           AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                tsdp.STORE_CD = #{item}
-            </foreach>
-        </if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+       		AND tsdp.STORE_CD IN (${storeCdQuery})
+       	</if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
                     'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')

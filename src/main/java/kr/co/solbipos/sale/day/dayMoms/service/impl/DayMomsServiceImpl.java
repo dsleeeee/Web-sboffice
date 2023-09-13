@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.day.dayMoms.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.day.dayMoms.service.DayMomsService;
@@ -30,9 +34,11 @@ import java.util.List;
 @Transactional
 public class DayMomsServiceImpl implements DayMomsService {
     private final DayMomsMapper dayMomsMapper;
+    private final PopupMapper popupMapper;
 
-    public DayMomsServiceImpl(DayMomsMapper dayMomsMapper) {
+    public DayMomsServiceImpl(DayMomsMapper dayMomsMapper, PopupMapper popupMapper) {
         this.dayMomsMapper = dayMomsMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 조회 */
@@ -46,8 +52,11 @@ public class DayMomsServiceImpl implements DayMomsService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayMomsVO.getStoreCds().split(",");
-        dayMomsVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayMomsVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayMomsVO.getStoreCds(), 3900));
+            dayMomsVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 결제수단 array 값 세팅
         String payCol= "";
@@ -107,8 +116,11 @@ public class DayMomsServiceImpl implements DayMomsService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayMomsVO.getStoreCds().split(",");
-        dayMomsVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayMomsVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayMomsVO.getStoreCds(), 3900));
+            dayMomsVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return dayMomsMapper.getDayMomsExcelList(dayMomsVO);
     }

@@ -62,11 +62,8 @@
                     FROM    (   SELECT  tsshp.STORE_CD, tsshp.SALE_DATE, tsshp.POS_NO, tsshp.BILL_NO, tsshp.PAY_CD, tsshp.PAY_AMT
                                 FROM    TB_SL_SALE_HDR_PAY tsshp
                                 WHERE   tsshp.HQ_OFFICE_CD  = #{hqOfficeCd}
-                                <if test='storeCds != null and storeCds != ""'>
-                                    AND
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                                        tsshp.STORE_CD = #{item}
-                                    </foreach>
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND tsshp.STORE_CD IN (${storeCdQuery})
                                 </if>
                                 AND     tsshp.SALE_DATE     = #{startDate}
                                 AND     tsshp.PAY_CD != '02' -- 현금,현금영수증 분리
@@ -85,11 +82,8 @@
                             FROM    (   SELECT  tsspm.STORE_CD, tsspm.SALE_DATE, tsspm.POS_NO, tsspm.BILL_NO, tsspm.MPAY_CD, tsspm.SALE_AMT
                             FROM    TB_SL_SALE_PAY_MPAY tsspm
                             WHERE   tsspm.HQ_OFFICE_CD  = #{hqOfficeCd}
-                            <if test='storeCds != null and storeCds != ""'>
-                                AND
-                                <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                                    tsspm.STORE_CD = #{item}
-                                </foreach>
+                            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                AND tsspm.STORE_CD IN (${storeCdQuery})
                             </if>
                             AND     tsspm.SALE_DATE     = #{startDate}
                             )
@@ -107,11 +101,8 @@
                     FROM    (   SELECT  tsshd.STORE_CD, tsshd.SALE_DATE, tsshd.POS_NO, tsshd.BILL_NO, tsshd.DC_CD, tsshd.DC_AMT
                                 FROM    TB_SL_SALE_HDR_DC tsshd
                                 WHERE   tsshd.HQ_OFFICE_CD  = #{hqOfficeCd}
-                                <if test='storeCds != null and storeCds != ""'>
-                                    AND
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                                        tsshd.STORE_CD = #{item}
-                                    </foreach>
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND tsshd.STORE_CD IN (${storeCdQuery})
                                 </if>
                                 AND     tsshd.SALE_DATE     = #{startDate}
                             )
@@ -128,11 +119,8 @@
                     SUM(CASE WHEN tsspc.APPR_PROC_FG IN ('1','2','4') THEN tsspc.SALE_AMT ELSE 0 END) AS PAY021 -- 현금영수증
                     FROM    TB_SL_SALE_PAY_CASH tsspc
                     WHERE   tsspc.HQ_OFFICE_CD =    #{hqOfficeCd}
-                    <if test='storeCds != null and storeCds != ""'>
-                        AND
-                        <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                            tsspc.STORE_CD = #{item}
-                        </foreach>
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND tsspc.STORE_CD IN (${storeCdQuery})
                     </if>
                     AND     tsspc.SALE_DATE =       #{startDate}
                     GROUP BY tsspc.STORE_CD, tsspc.SALE_DATE, tsspc.POS_NO, tsspc.BILL_NO
@@ -141,11 +129,8 @@
         ,       TB_MS_STORE tms
         ,       TB_MS_STORE_INFO tmsi
         WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
-        <if test='storeCds != null and storeCds != ""'>
-            AND
-            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                tssh.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tssh.STORE_CD IN (${storeCdQuery})
         </if>
         AND     tssh.SALE_DATE    = #{startDate}
         AND     tms.HQ_OFFICE_CD  = tssh.HQ_OFFICE_CD
@@ -256,11 +241,8 @@
                 FROM    (   SELECT  tsshp.STORE_CD, tsshp.SALE_DATE, tsshp.POS_NO, tsshp.BILL_NO, tsshp.PAY_CD, tsshp.PAY_AMT
                             FROM    TB_SL_SALE_HDR_PAY tsshp
                             WHERE   tsshp.HQ_OFFICE_CD  = #{hqOfficeCd}
-                            <if test='storeCds != null and storeCds != ""'>
-                                AND
-                                <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                                    tsshp.STORE_CD = #{item}
-                                </foreach>
+                            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                AND tsshp.STORE_CD IN (${storeCdQuery})
                             </if>
                             AND     tsshp.SALE_DATE     = #{startDate}
                             AND     tsshp.PAY_CD != '02' -- 현금,현금영수증 분리
@@ -279,11 +261,8 @@
                 FROM    (   SELECT  tsspm.STORE_CD, tsspm.SALE_DATE, tsspm.POS_NO, tsspm.BILL_NO, tsspm.MPAY_CD, tsspm.SALE_AMT
                             FROM    TB_SL_SALE_PAY_MPAY tsspm
                             WHERE   tsspm.HQ_OFFICE_CD  = #{hqOfficeCd}
-                            <if test='storeCds != null and storeCds != ""'>
-                                AND
-                                <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                                    tsspm.STORE_CD = #{item}
-                                </foreach>
+                            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                AND tsspm.STORE_CD IN (${storeCdQuery})
                             </if>
                             AND     tsspm.SALE_DATE     = #{startDate}
                             )
@@ -301,11 +280,8 @@
                 FROM    (   SELECT  tsshd.STORE_CD, tsshd.SALE_DATE, tsshd.POS_NO, tsshd.BILL_NO, tsshd.DC_CD, tsshd.DC_AMT
                             FROM    TB_SL_SALE_HDR_DC tsshd
                             WHERE   tsshd.HQ_OFFICE_CD  = #{hqOfficeCd}
-                            <if test='storeCds != null and storeCds != ""'>
-                                AND
-                                <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                                    tsshd.STORE_CD = #{item}
-                                </foreach>
+                            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                AND tsshd.STORE_CD IN (${storeCdQuery})
                             </if>
                             AND     tsshd.SALE_DATE     = #{startDate}
                             )
@@ -322,11 +298,8 @@
                 SUM(CASE WHEN tsspc.APPR_PROC_FG IN ('1','2','4') THEN tsspc.SALE_AMT ELSE 0 END) AS PAY021 -- 현금영수증
                 FROM    TB_SL_SALE_PAY_CASH tsspc
                 WHERE   tsspc.HQ_OFFICE_CD =    #{hqOfficeCd}
-                <if test='storeCds != null and storeCds != ""'>
-                    AND
-                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                        tsspc.STORE_CD = #{item}
-                    </foreach>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND tsspc.STORE_CD IN (${storeCdQuery})
                 </if>
                 AND     tsspc.SALE_DATE =       #{startDate}
                 GROUP BY tsspc.STORE_CD, tsspc.SALE_DATE, tsspc.POS_NO, tsspc.BILL_NO
@@ -335,11 +308,8 @@
         ,       TB_MS_STORE tms
         ,       TB_MS_STORE_INFO tmsi
         WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
-        <if test='storeCds != null and storeCds != ""'>
-            AND
-            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                tssh.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tssh.STORE_CD IN (${storeCdQuery})
         </if>
         AND     tssh.SALE_DATE    = #{startDate}
         AND     tms.HQ_OFFICE_CD  = tssh.HQ_OFFICE_CD
