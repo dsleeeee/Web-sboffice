@@ -34,7 +34,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  */
 @Service("mobileMultiStoreSaleService")
 @Transactional
-public class MobileMultiStoreSaleServiceImpl implements  MobileMultiStoreSaleService {
+public class MobileMultiStoreSaleServiceImpl implements MobileMultiStoreSaleService {
     private final MobileMultiStoreSaleMapper mobileMultiStoreSaleMapper;
 
     /**

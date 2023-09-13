@@ -34,8 +34,8 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  */
 @Service("mobileDaySaleService")
 @Transactional
-public class MobileDaySaleServiceImpl implements  MobileDaySaleService {
-    private final  MobileDaySaleMapper  mobileDaySaleMapper;
+public class MobileDaySaleServiceImpl implements MobileDaySaleService {
+    private final MobileDaySaleMapper mobileDaySaleMapper;
 
     /**
      * Constructor Injection
