@@ -3,16 +3,16 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%--<input type="hidden" id="<c:out value="${param.targetId}Cd"/>"/>--%>
-<%--<input type="text"--%>
-       <%--id="<c:out value="${param.targetId}Nm"/>"--%>
-       <%--class="sb-input fl mr5"--%>
-       <%--style="cursor:pointer; width:150px;"--%>
-       <%--value="미선택"--%>
-       <%--&lt;%&ndash;ng-click="<c:out value="${param.targetId}"/>Show()"&ndash;%&gt;--%>
-       <%--readonly/>--%>
-<button class="btn_skyblue" ng-click="selectUploadStoreShow()"><s:message code="outstockReqDate.upload" /></button>
+        <%--<input type="text"--%>
+        <%--id="<c:out value="${param.targetId}Nm"/>"--%>
+        <%--class="sb-input fl mr5"--%>
+        <%--style="cursor:pointer; width:150px;"--%>
+        <%--value="미선택"--%>
+        <%--&lt;%&ndash;ng-click="<c:out value="${param.targetId}"/>Show()"&ndash;%&gt;--%>
+        <%--readonly/>--%>
+<button class="btn_skyblue" ng-click="selectUploadStoreShow()"><s:message code="selectStore.upload" /></button>
 
-<wj-popup id="wj<c:out value="${param.targetId}"/>LayerM" control="wj<c:out value="${param.targetId}"/>LayerM" show-trigger="Click" hide-trigger="Click" style="display:none;width:450px;">
+<wj-popup id="wj<c:out value="${param.targetId}"/>Layer" control="wj<c:out value="${param.targetId}"/>Layer" show-trigger="Click" hide-trigger="Click" style="display:none;width:450px;">
     <div class="wj-dialog wj-dialog-columns">
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="cmm.uploadStore.select"/>
@@ -45,8 +45,8 @@
                             item-formatter="_itemFormatter">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="outstockReqDate.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="outstockReqDate.storeNm"/>" binding="storeNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="selectStore.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="selectStore.storeNm"/>" binding="storeNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
                 <%--//위즈모 테이블--%>
@@ -55,11 +55,13 @@
     </div>
 </wj-popup>
 
+
 <%-- 공용 업로드매장 팝업 - 엑셀업로드 팝업 --%>
-<c:import url="/WEB-INF/view/sale/com/popup/selectUploadStoreExcelUpload.jsp">
+<c:import url="/WEB-INF/view/common/popup/selectUploadStoreExcelUpload.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
+
 
 <script type="text/javascript">
     /**
@@ -84,10 +86,10 @@
         // 다른 컨트롤러의 broadcast 받기
         $scope.$on(targetId + 'Ctrl', function (event) {
             // 매장선택 팝업 오픈
-            eval('$scope.wj' + targetId + 'LayerM.show(true)');
+            eval('$scope.wj' + targetId + 'Layer.show(true)');
 
             // 팝업 닫힐시 이벤트
-            eval('$scope.wj' + targetId + 'LayerM').hidden.addHandler(function () {
+            eval('$scope.wj' + targetId + 'Layer').hidden.addHandler(function () {
                 if ('${param.closeFunc}' !== '') {
                     if('${param.closeFunc}'.indexOf(',')>-1){
                         var closeFunc = ('${param.closeFunc}').split(",");
@@ -152,10 +154,10 @@
         //         $("#" + targetId + "Nm").val("[" + strStoreCd + "] " + strStoreNm);
         //     }
         //     else if (cnt > 1) {
-        //         $("#" + targetId + "Nm").val(strStoreCd + " "+messages["outstockReqDate.except"]+" " + (cnt - 1) + messages["outstockReqDate.cntStore"]);
+        //         $("#" + targetId + "Nm").val(strStoreCd + " "+messages["selectStore.except"]+" " + (cnt - 1) + messages["selectStore.cntStore"]);
         //     }
         //
-        //     // eval('$scope.wj' + targetId + 'LayerM.hide(true)');
+        //     // eval('$scope.wj' + targetId + 'Layer.hide(true)');
         // };
 
         // 양식다운로드

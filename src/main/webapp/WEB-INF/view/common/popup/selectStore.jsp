@@ -11,264 +11,266 @@
        ng-click="<c:out value="${param.targetId}"/>Show()"
        readonly/>
 
-<wj-popup id="wj<c:out value="${param.targetId}"/>LayerM" control="wj<c:out value="${param.targetId}"/>LayerM" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;">
-  <div class="wj-dialog wj-dialog-columns">
-    <div class="wj-dialog-header wj-dialog-header-font">
-      <s:message code="cmm.store.select"/>
-      <a href="#" class="wj-hide btn_close"></a>
-    </div>
-    <div class="wj-dialog-body" ng-controller="<c:out value="${param.targetId}"/>Ctrl">
-      <div class="w100">
-
-        <%-- 조회조건 --%>
-        <table class="tblType01">
-          <colgroup>
-            <col class="w15" />
-            <col class="w35" />
-            <col class="w15" />
-            <col class="w35" />
-          </colgroup>
-          <tbody>
-          <tr>
-            <th><s:message code="outstockReqDate.storeCd" /></th>
-            <td>
-              <input type="text" id="srchStoreCd" ng-model="srchStoreCd"/>
-            </td>
-            <th><s:message code="outstockReqDate.storeNm" /></th>
-            <td>
-              <input type="text" id="srchStoreNm" ng-model="srchStoreNm"/>
-            </td>
-          </tr>
-          <tr>
-            <%-- 매장브랜드 --%>
-            <th><s:message code="outstockReqDate.storeHqBrand" /></th>
-            <td>
-              <div class="sb-select">
-                <wj-combo-box
-                        id="srchPopStoreHqBrandCdCombo"
-                        ng-model="popStoreHqBrandCd"
-                        items-source="_getComboData('popStoreHqBrandCdCombo')"
-                        display-member-path="name"
-                        selected-value-path="value"
-                        is-editable="false"
-                        control="srchPopStoreHqBrandCdCombo">
-                </wj-combo-box>
-              </div>
-            </td>
-            <%-- 그룹 --%>
-            <th><s:message code="outstockReqDate.branchCd"/></th>
-            <td>
-                <div class="sb-select">
-                    <wj-combo-box
-                            id="srchPopBranchCdComboo"
-                            ng-model="popBranchCd"
-                            items-source="_getComboData('popBranchCdCombo')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)"
-                            control="srchPopBranchCdComboo">
-                    </wj-combo-box>
-                </div>
-            </td>
-          </tr>
-          <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-              <tr>
-                  <%-- 팀별 --%>
-                  <th><s:message code="outstockReqDate.momsTeam"/></th>
-                  <td>
-                      <div class="sb-select">
-                          <wj-combo-box
-                                  id="srchPopMomsTeamCombo"
-                                  ng-model="popMomsTeam"
-                                  items-source="_getComboData('popMomsTeamCombo')"
-                                  display-member-path="name"
-                                  selected-value-path="value"
-                                  is-editable="false"
-                                  initialized="_initComboBox(s)"
-                                  control="srchPopMomsTeamCombo">
-                          </wj-combo-box>
-                      </div>
-                  </td>
-                  <%-- AC점포별 --%>
-                  <th><s:message code="outstockReqDate.momsAcShop"/></th>
-                  <td>
-                      <div class="sb-select">
-                          <wj-combo-box
-                                  id="srchPopMomsAcShopCombo"
-                                  ng-model="popMomsAcShop"
-                                  items-source="_getComboData('popMomsAcShopCombo')"
-                                  display-member-path="name"
-                                  selected-value-path="value"
-                                  is-editable="false"
-                                  initialized="_initComboBox(s)"
-                                  control="srchPopMomsAcShopCombo">
-                          </wj-combo-box>
-                      </div>
-                  </td>
-              </tr>
-              <tr>
-                  <%-- 지역구분 --%>
-                  <th><s:message code="outstockReqDate.momsAreaFg"/></th>
-                  <td>
-                      <div class="sb-select">
-                          <wj-combo-box
-                                  id="srchPopMomsAreaFgCombo"
-                                  ng-model="popMomsAreaFg"
-                                  items-source="_getComboData('popMomsAreaFgCombo')"
-                                  display-member-path="name"
-                                  selected-value-path="value"
-                                  is-editable="false"
-                                  initialized="_initComboBox(s)"
-                                  control="srchPopMomsAreaFgCombo">
-                          </wj-combo-box>
-                      </div>
-                  </td>
-                  <%-- 상권 --%>
-                  <th><s:message code="outstockReqDate.momsCommercial"/></th>
-                  <td>
-                      <div class="sb-select">
-                          <wj-combo-box
-                                  id="srchPopMomsCommercialCombo"
-                                  ng-model="popMomsCommercial"
-                                  items-source="_getComboData('popMomsCommercialCombo')"
-                                  display-member-path="name"
-                                  selected-value-path="value"
-                                  is-editable="false"
-                                  initialized="_initComboBox(s)"
-                                  control="srchPopMomsCommercialCombo">
-                          </wj-combo-box>
-                      </div>
-                  </td>
-              </tr>
-              <tr>
-                  <%-- 점포유형 --%>
-                  <th><s:message code="outstockReqDate.momsShopType"/></th>
-                  <td>
-                      <div class="sb-select">
-                          <wj-combo-box
-                                  id="srchPopMomsShopTypeCombo"
-                                  ng-model="popMomsShopType"
-                                  items-source="_getComboData('popMomsShopTypeCombo')"
-                                  display-member-path="name"
-                                  selected-value-path="value"
-                                  is-editable="false"
-                                  initialized="_initComboBox(s)"
-                                  control="srchPopMomsShopTypeCombo">
-                          </wj-combo-box>
-                      </div>
-                  </td>
-                  <%-- 매장관리타입 --%>
-                  <th><s:message code="outstockReqDate.momsStoreManageType"/></th>
-                  <td>
-                      <div class="sb-select">
-                          <wj-combo-box
-                                  id="srchPopMomsStoreManageTypeCombo"
-                                  ng-model="popMomsStoreManageType"
-                                  items-source="_getComboData('popMomsStoreManageTypeCombo')"
-                                  display-member-path="name"
-                                  selected-value-path="value"
-                                  is-editable="false"
-                                  initialized="_initComboBox(s)"
-                                  control="srchPopMomsStoreManageTypeCombo">
-                          </wj-combo-box>
-                      </div>
-                  </td>
-              </tr>
-          </c:if>
-          <tr>
-              <%-- 구분(판매가변경제한매장) --%>
-              <th><s:message code="outstockReqDate.gubun"/></th>
-              <td>
-                  <div class="sb-select">
-                      <wj-combo-box
-                              id="srchPopStoreChgNotCombo"
-                              ng-model="popStoreChgNot"
-                              items-source="_getComboData('popStoreChgNotCombo')"
-                              display-member-path="name"
-                              selected-value-path="value"
-                              is-editable="false"
-                              initialized="_initComboBox(s)"
-                              control="srchPopStoreChgNotCombo">
-                      </wj-combo-box>
-                  </div>
-              </td>
-              <td></td>
-              <td></td>
-          </tr>
-          </tbody>
-        </table>
-
-        <%-- 조회조건 --%>
-        <table class="tblType01">
-            <colgroup>
-                <col class="w15" />
-                <col class="w35" />
-                <col class="w15" />
-                <col class="w35" />
-            </colgroup>
-            <tbody>
-            <tr>
-                <th><s:message code="outstockReqDate.storeNm" /></th>
-                <td>
-                    <input type="text" id="filterStoreNm" ng-model="filterStoreNm"/>
-                </td>
-                <td colspan="2">
-                    <%-- 버튼영역 --%>
-                    <div class="tr">
-                        <button class="btn_skyblue fl" ng-click="searchFilter()"><s:message code="outstockReqDate.filter" /></button>
-                        <button class="btn_skyblue" ng-click="searchStore()"><s:message code="cmm.search" /></button>
-                        <button class="btn_skyblue" ng-click="storeSelected()"><s:message code="cmm.chk"/></button>
-                    </div>
-                </td>
-            </tr>
-            <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
-                <tr>
-                    <%-- 업로드매장 --%>
-                    <th><s:message code="outstockReqDate.uploadStore" /></th>
-                    <td>
-                        <input type="text" id="popUploadStore" ng-model="popUploadStore" readonly/>
-                    </td>
-                    <td colspan="2">
-                        <jsp:include page="/WEB-INF/view/common/popup/selectUploadStore.jsp" flush="true">
-                            <jsp:param name="targetId" value="${param.targetId}SelectUpload"/>
-                        </jsp:include>
-                    </td>
-                </tr>
-            </c:if>
-            </tbody>
-        </table>
-
-        <%--위즈모 테이블--%>
-        <div class="theGrid mt10" style="height: 400px;">
-          <wj-flex-grid
-            id="wjGridStore${param.targetId}"
-            autoGenerateColumns="false"
-            selection-mode="Row"
-            items-source="data"
-            control="flex"
-            initialized="initGrid(s,e)"
-            is-read-only="false"
-            item-formatter="_itemFormatter">
-
-            <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center" is-read-only="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="outstockReqDate.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="outstockReqDate.storeNm"/>" binding="storeNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="outstockReqDate.storeChgNot"/>" binding="storeChgNot" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
-          </wj-flex-grid>
+<wj-popup id="wj<c:out value="${param.targetId}"/>Layer" control="wj<c:out value="${param.targetId}"/>Layer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;">
+    <div class="wj-dialog wj-dialog-columns">
+        <div class="wj-dialog-header wj-dialog-header-font">
+            <s:message code="cmm.store.select"/>
+            <a href="#" class="wj-hide btn_close"></a>
         </div>
-        <%--//위즈모 테이블--%>
-      </div>
+        <div class="wj-dialog-body" ng-controller="<c:out value="${param.targetId}"/>Ctrl">
+            <div class="w100">
+
+                <%-- 조회조건 --%>
+                <table class="tblType01">
+                    <colgroup>
+                        <col class="w15" />
+                        <col class="w35" />
+                        <col class="w15" />
+                        <col class="w35" />
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <%-- 매장코드 --%>
+                        <th><s:message code="selectStore.storeCd" /></th>
+                        <td>
+                            <input type="text" id="srchStoreCd" ng-model="srchStoreCd"/>
+                        </td>
+                        <%-- 매장명 --%>
+                        <th><s:message code="selectStore.storeNm" /></th>
+                        <td>
+                            <input type="text" id="srchStoreNm" ng-model="srchStoreNm"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <%-- 매장브랜드 --%>
+                        <th><s:message code="selectStore.storeHqBrand" /></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchPopStoreHqBrandCdCombo"
+                                        ng-model="popStoreHqBrandCd"
+                                        items-source="_getComboData('popStoreHqBrandCdCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        control="srchPopStoreHqBrandCdCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                        <%-- 그룹 --%>
+                        <th><s:message code="selectStore.branchCd"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchPopBranchCdComboo"
+                                        ng-model="popBranchCd"
+                                        items-source="_getComboData('popBranchCdCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchPopBranchCdComboo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                    </tr>
+                    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                        <tr>
+                            <%-- 팀별 --%>
+                            <th><s:message code="selectStore.momsTeam"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="srchPopMomsTeamCombo"
+                                            ng-model="popMomsTeam"
+                                            items-source="_getComboData('popMomsTeamCombo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            control="srchPopMomsTeamCombo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                            <%-- AC점포별 --%>
+                            <th><s:message code="selectStore.momsAcShop"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="srchPopMomsAcShopCombo"
+                                            ng-model="popMomsAcShop"
+                                            items-source="_getComboData('popMomsAcShopCombo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            control="srchPopMomsAcShopCombo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <%-- 지역구분 --%>
+                            <th><s:message code="selectStore.momsAreaFg"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="srchPopMomsAreaFgCombo"
+                                            ng-model="popMomsAreaFg"
+                                            items-source="_getComboData('popMomsAreaFgCombo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            control="srchPopMomsAreaFgCombo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                            <%-- 상권 --%>
+                            <th><s:message code="selectStore.momsCommercial"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="srchPopMomsCommercialCombo"
+                                            ng-model="popMomsCommercial"
+                                            items-source="_getComboData('popMomsCommercialCombo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            control="srchPopMomsCommercialCombo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <%-- 점포유형 --%>
+                            <th><s:message code="selectStore.momsShopType"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="srchPopMomsShopTypeCombo"
+                                            ng-model="popMomsShopType"
+                                            items-source="_getComboData('popMomsShopTypeCombo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            control="srchPopMomsShopTypeCombo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                            <%-- 매장관리타입 --%>
+                            <th><s:message code="selectStore.momsStoreManageType"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="srchPopMomsStoreManageTypeCombo"
+                                            ng-model="popMomsStoreManageType"
+                                            items-source="_getComboData('popMomsStoreManageTypeCombo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            control="srchPopMomsStoreManageTypeCombo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                        </tr>
+                    </c:if>
+                    <tr>
+                        <%-- 구분(판매가변경제한매장) --%>
+                        <th><s:message code="selectStore.gubun"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchPopStoreChgNotCombo"
+                                        ng-model="popStoreChgNot"
+                                        items-source="_getComboData('popStoreChgNotCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchPopStoreChgNotCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <%-- 조회조건 --%>
+                <table class="tblType01">
+                    <colgroup>
+                        <col class="w15" />
+                        <col class="w35" />
+                        <col class="w15" />
+                        <col class="w35" />
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <th><s:message code="selectStore.storeNm" /></th>
+                        <td>
+                            <input type="text" id="filterStoreNm" ng-model="filterStoreNm"/>
+                        </td>
+                        <td colspan="2">
+                            <%-- 버튼영역 --%>
+                            <div class="tr">
+                                <button class="btn_skyblue fl" ng-click="searchFilter()"><s:message code="selectStore.filter" /></button>
+                                <button class="btn_skyblue" ng-click="searchStore()"><s:message code="cmm.search" /></button>
+                                <button class="btn_skyblue" ng-click="storeSelected()"><s:message code="cmm.chk"/></button>
+                            </div>
+                        </td>
+                    </tr>
+                    <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                        <tr>
+                            <%-- 업로드매장 --%>
+                            <th><s:message code="selectStore.uploadStore" /></th>
+                            <td>
+                                <input type="text" id="popUploadStore" ng-model="popUploadStore" readonly/>
+                            </td>
+                            <td colspan="2">
+                                <jsp:include page="/WEB-INF/view/common/popup/selectUploadStore.jsp" flush="true">
+                                    <jsp:param name="targetId" value="${param.targetId}SelectUpload"/>
+                                </jsp:include>
+                            </td>
+                        </tr>
+                    </c:if>
+                    </tbody>
+                </table>
+
+                <%--위즈모 테이블--%>
+                <div class="theGrid mt10" style="height: 400px;">
+                    <wj-flex-grid
+                            id="wjGridStore${param.targetId}"
+                            autoGenerateColumns="false"
+                            selection-mode="Row"
+                            items-source="data"
+                            control="flex"
+                            initialized="initGrid(s,e)"
+                            is-read-only="false"
+                            item-formatter="_itemFormatter">
+
+                        <!-- define columns -->
+                        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center" is-read-only="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="selectStore.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="selectStore.storeNm"/>" binding="storeNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="selectStore.storeChgNot"/>" binding="storeChgNot" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
+                    </wj-flex-grid>
+                </div>
+                <%--//위즈모 테이블--%>
+            </div>
+        </div>
     </div>
-  </div>
 </wj-popup>
 
 
 <script type="text/javascript">
     /**
-    * get application
-    */
+     * get application
+     */
     var app = agrid.getApp();
 
     // 매장브랜드 콤보박스 항목 저장시 쓰려고
@@ -439,10 +441,10 @@
         // 다른 컨트롤러의 broadcast 받기
         $scope.$on(targetId + 'Ctrl', function (event, paramObj) {
             // 매장선택 팝업 오픈
-            eval('$scope.wj' + targetId + 'LayerM.show(true)');
+            eval('$scope.wj' + targetId + 'Layer.show(true)');
 
             // 팝업 닫힐시 이벤트
-            eval('$scope.wj' + targetId + 'LayerM').hidden.addHandler(function () {
+            eval('$scope.wj' + targetId + 'Layer').hidden.addHandler(function () {
                 if ('${param.closeFunc}' !== '') {
                     if('${param.closeFunc}'.indexOf(',')>-1){
                         var closeFunc = ('${param.closeFunc}').split(",");
@@ -521,7 +523,7 @@
             params.storeChgNot = $scope.popStoreChgNot;
             params.selectStoreFg = "M"; // 팝업 구분(S:싱글, M:멀티)
 
-            $scope._inquirySub("/iostock/cmm/iostockCmm/selectStoreMomsList.sb", params, function () {
+            $scope._inquirySub("/common/popup/selectStore/getSelectStoreList.sb", params, function () {
                 $scope.searchFg = "Y";
             });
         };
@@ -571,13 +573,13 @@
                 $("#" + targetId +"StoreNum").val(" 영업매장 : "+cnt+" 개");
             }
             else if (cnt > 1) {
-                $("#" + targetId + "Nm").val(strStoreNm + " "+messages["outstockReqDate.except"]+" " + (cnt - 1) + messages["outstockReqDate.cntStore"]);
+                $("#" + targetId + "Nm").val(strStoreNm + " "+messages["selectStore.except"]+" " + (cnt - 1) + messages["selectStore.cntStore"]);
                 $("#" + targetCornerId + "Nm").val(messages["cmm.all"]);
                 $("#" + targetTableId + "Nm").val(messages["cmm.all"]);
                 $("#" + targetPosId + "Nm").val(messages["cmm.all"]);
                 $("#" + targetId +"StoreNum").val(" 영업매장 : "+cnt+" 개");
             }
-            eval('$scope.wj' + targetId + 'LayerM.hide(true)');
+            eval('$scope.wj' + targetId + 'Layer.hide(true)');
         };
 
         // 업로드매장 팝업

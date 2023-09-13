@@ -30,12 +30,12 @@
                     items-source="data">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="outstockReqDate.storeNm"/>" binding="storeNm" width="*" is-read-only="true" align="left"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="selectStore.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="selectStore.storeNm"/>" binding="storeNm" width="*" is-read-only="true" align="left"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/com/selectUploadStoreExcelUpload.js?ver=20230822.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/popup/selectUploadStoreExcelUpload.js?ver=20230822.01" charset="utf-8"></script>
