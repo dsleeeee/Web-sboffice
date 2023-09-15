@@ -703,7 +703,7 @@
                                 <label id="lblReleaseDate" />
                             </td>
                             <%-- 단종일 --%>
-                            <th><s:message code="rpdo.disconDate"/></th>
+                            <th><s:message code="prod.disconDate"/></th>
                             <td>
                                 <label id="lblDisconDate" />
                             </td>
