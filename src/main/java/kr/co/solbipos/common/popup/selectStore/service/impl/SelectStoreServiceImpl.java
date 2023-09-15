@@ -14,6 +14,8 @@ import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import java.util.ArrayList;
 import java.util.List;
 
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
+
 /**
  * @Class Name : SelectStoreServiceImpl.java
  * @Description : (공통) 매장 팝업
@@ -62,5 +64,68 @@ public class SelectStoreServiceImpl implements SelectStoreService {
         }
 
         return resultList;
+    }
+
+    /** 업로드매장 공통 - 업로드매장 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getSelectUploadStoreList(SelectStoreVO selectStoreVO, SessionInfoVO sessionInfoVO) {
+
+        selectStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        selectStoreVO.setUserId(sessionInfoVO.getUserId());
+
+        List<DefaultMap<String>> resultList = new ArrayList<DefaultMap<String>>();
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
+
+            resultList = selectStoreMapper.getSelectUploadStoreList(selectStoreVO);
+        }
+
+        return resultList;
+    }
+
+    /** 업로드매장 공통 - 검증결과 저장 */
+    @Override
+    public int getSelectUploadStoreExcelUploadSave(SelectStoreVO[] selectStoreVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(SelectStoreVO selectStoreVO : selectStoreVOs) {
+            selectStoreVO.setRegDt(currentDt);
+            selectStoreVO.setRegId(sessionInfoVO.getUserId());
+            selectStoreVO.setModDt(currentDt);
+            selectStoreVO.setModId(sessionInfoVO.getUserId());
+
+            selectStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            selectStoreVO.setUserId(sessionInfoVO.getUserId());
+
+            procCnt += selectStoreMapper.getSelectUploadStoreExcelUploadSave(selectStoreVO);
+        }
+
+        return procCnt;
+    }
+
+    /** 업로드매장 공통 - 검증결과 전체 삭제 */
+    @Override
+    public int getSelectUploadStoreExcelUploadDeleteAll(SelectStoreVO selectStoreVO, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+
+        selectStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        selectStoreVO.setUserId(sessionInfoVO.getUserId());
+
+        procCnt += selectStoreMapper.getSelectUploadStoreExcelUploadDeleteAll(selectStoreVO);
+
+        return procCnt;
+    }
+
+    /** 업로드매장 공통 - 업로드매장 텍스트박스 조회 */
+    @Override
+    public DefaultMap<Object> getSelectUploadStoreText(SelectStoreVO selectStoreVO, SessionInfoVO sessionInfoVO) {
+
+        selectStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        selectStoreVO.setUserId(sessionInfoVO.getUserId());
+
+        return selectStoreMapper.getSelectUploadStoreText(selectStoreVO);
     }
 }

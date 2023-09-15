@@ -38,4 +38,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/common/popup/selectUploadStoreExcelUpload.js?ver=20230822.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/popup/selectUploadStoreExcelUpload.js?ver=20230822.02" charset="utf-8"></script>

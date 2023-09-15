@@ -82,4 +82,97 @@ public class SelectStoreController {
 
         return ReturnUtil.returnListJson(Status.OK, list, selectStoreVO);
     }
+
+    /**
+     * 업로드매장 공통 - 업로드매장 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   selectStoreVO
+     * @return  String
+     * @author  김설아
+     * @since   2023. 08. 11.
+     */
+    @RequestMapping(value = "/getSelectUploadStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectUploadStoreList(HttpServletRequest request, HttpServletResponse response,
+                                        Model model, SelectStoreVO selectStoreVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = selectStoreService.getSelectUploadStoreList(selectStoreVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, selectStoreVO);
+    }
+
+    /**
+     * 업로드매장 공통 - 검증결과 저장
+     *
+     * @param selectStoreVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 08. 11.
+     */
+    @RequestMapping(value = "/getSelectUploadStoreExcelUploadSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSelectUploadStoreExcelUploadSave(@RequestBody SelectStoreVO[] selectStoreVOs, HttpServletRequest request,
+                                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = selectStoreService.getSelectUploadStoreExcelUploadSave(selectStoreVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 업로드매장 공통 - 검증결과 전체 삭제
+     *
+     * @param selectStoreVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 08. 11.
+     */
+    @RequestMapping(value = "/getSelectUploadStoreExcelUploadDeleteAll.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSelectUploadStoreExcelUploadDeleteAll(@RequestBody SelectStoreVO selectStoreVO, HttpServletRequest request,
+                                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = selectStoreService.getSelectUploadStoreExcelUploadDeleteAll(selectStoreVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 업로드매장 공통 - 업로드매장 텍스트박스 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   selectStoreVO
+     * @return  String
+     * @author  김설아
+     * @since   2023. 08. 11.
+     */
+    @RequestMapping(value = "/getSelectUploadStoreText.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSelectUploadStoreText(SelectStoreVO selectStoreVO, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<Object> result = selectStoreService.getSelectUploadStoreText(selectStoreVO, sessionInfoVO);
+
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+        resultMap.put("result", result);
+
+        return returnJson(Status.OK, resultMap);
+    }
 }

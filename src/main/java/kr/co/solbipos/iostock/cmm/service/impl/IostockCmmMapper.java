@@ -56,16 +56,4 @@ public interface IostockCmmMapper {
 
     /** 선택상품 공통 - 사원 리스트 조회 */
     List<DefaultMap<String>> selectEmpList(IostockCmmVO iostockCmmVO);
-
-    /** 업로드매장 공통 - 업로드매장 리스트 조회 */
-    List<DefaultMap<String>> getSelectUploadStoreList(IostockCmmVO iostockCmmVO);
-
-    /** 업로드매장 공통 - 검증결과 저장 */
-    int getSelectUploadStoreExcelUploadSave(IostockCmmVO iostockCmmVO);
-
-    /** 업로드매장 공통 - 검증결과 전체 삭제 */
-    int getSelectUploadStoreExcelUploadDeleteAll(IostockCmmVO iostockCmmVO);
-
-    /** 업로드매장 공통 - 업로드매장 텍스트박스 조회 */
-    DefaultMap<Object> getSelectUploadStoreText(IostockCmmVO iostockCmmVO);
 }

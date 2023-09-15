@@ -115,7 +115,7 @@
             // 파라미터
             var params = {};
 
-            $scope._inquirySub("/iostock/cmm/iostockCmm/getSelectUploadStoreList.sb", params, function () {
+            $scope._inquirySub("/common/popup/selectStore/getSelectUploadStoreList.sb", params, function () {
                 // $scope.searchFg = "Y";
 
                 // 저장기능 수행후 재조회
@@ -192,7 +192,7 @@
             var params = {};
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._postJSONSave.withPopUp("/iostock/cmm/iostockCmm/getSelectUploadStoreExcelUploadDeleteAll.sb", params, function(){
+            $scope._postJSONSave.withPopUp("/common/popup/selectStore/getSelectUploadStoreExcelUploadDeleteAll.sb", params, function(){
                 // 조회
                 $scope.searchStoreUpload();
             });

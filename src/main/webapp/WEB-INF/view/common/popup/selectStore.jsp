@@ -591,7 +591,7 @@
         $scope.selectUploadStoreText = function () {
             var params = {};
 
-            $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/getSelectUploadStoreText.sb', params, function (response) {
+            $scope._postJSONQuery.withOutPopUp('/common/popup/selectStore/getSelectUploadStoreText.sb', params, function (response) {
                 var textList = response.data.data.result;
                 $scope.textList = textList;
 

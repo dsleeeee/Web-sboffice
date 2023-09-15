@@ -28,4 +28,16 @@ public interface SelectStoreMapper {
 
     /** 매장 공통 - 매장 리스트 조회 */
     List<DefaultMap<String>> getSelectStoreList(SelectStoreVO selectStoreVO);
+
+    /** 업로드매장 공통 - 업로드매장 리스트 조회 */
+    List<DefaultMap<String>> getSelectUploadStoreList(SelectStoreVO selectStoreVO);
+
+    /** 업로드매장 공통 - 검증결과 저장 */
+    int getSelectUploadStoreExcelUploadSave(SelectStoreVO selectStoreVO);
+
+    /** 업로드매장 공통 - 검증결과 전체 삭제 */
+    int getSelectUploadStoreExcelUploadDeleteAll(SelectStoreVO selectStoreVO);
+
+    /** 업로드매장 공통 - 업로드매장 텍스트박스 조회 */
+    DefaultMap<Object> getSelectUploadStoreText(SelectStoreVO selectStoreVO);
 }

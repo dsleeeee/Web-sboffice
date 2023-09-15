@@ -48,7 +48,7 @@ app.controller('selectUploadStoreExcelUploadCtrl', ['$scope', '$http', '$timeout
         var params = {};
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._postJSONSave.withOutPopUp("/iostock/cmm/iostockCmm/getSelectUploadStoreExcelUploadDeleteAll.sb", params, function(){
+        $scope._postJSONSave.withOutPopUp("/common/popup/selectStore/getSelectUploadStoreExcelUploadDeleteAll.sb", params, function(){
             // 엑셀 업로드
             $scope.excelUpload();
         });
@@ -136,7 +136,7 @@ app.controller('selectUploadStoreExcelUploadCtrl', ['$scope', '$http', '$timeout
     // DB에 저장
     $scope.save = function (jsonData) {
         // 업로드시 임시테이블 저장
-        $scope._postJSONSave.withOutPopUp("/iostock/cmm/iostockCmm/getSelectUploadStoreExcelUploadSave.sb", jsonData, function () {
+        $scope._postJSONSave.withOutPopUp("/common/popup/selectStore/getSelectUploadStoreExcelUploadSave.sb", jsonData, function () {
             $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
             // 저장기능 수행후 재조회
             var scope = agrid.getScope($("#selectUploadStoreExcelUploadTargetId").text() + 'Ctrl');
