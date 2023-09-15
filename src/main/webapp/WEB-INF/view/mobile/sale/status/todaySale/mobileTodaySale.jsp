@@ -219,6 +219,7 @@
                 <wj-flex-grid-column header="<s:message code="mobile.todaySale.realSaleAmt"/>" binding="realSaleAmt" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.todaySale.amtRate"/>" binding="amtRate" width="1.*" align="right" is-read-only="true"></wj-flex-grid-column>
                 <%-- 저장시 필요 --%>
+                <wj-flex-grid-column header="<s:message code="mobile.todaySale.payCd"/>" binding="payCd" width="1.*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.todaySale.payMethod"/>" binding="payMethod" width="1.*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                 <!-- 조회 결과가 없을 때, msg 띄우기 -->
                 <div class="gridMsg" id="mobileTodaySalePayMsg" style="line-height: 100px; display: none;"><s:message code="mobile.cmm.search.result.empty"/></div>
@@ -396,7 +397,7 @@
     var arrTimeSlotCol = timeSlotCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/todaySale/mobileTodaySale.js?ver=20230915.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/todaySale/mobileTodaySale.js?ver=20230915.02" charset="utf-8"></script>
 
 <%-- 결제수단 팝업 레이어 시작 --%>
 <%-- (모바일) 공통 결제수단 신용카드 팝업 --%>
