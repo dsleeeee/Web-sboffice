@@ -399,7 +399,13 @@
 <script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/todaySale/mobileTodaySale.js?ver=20230915.01" charset="utf-8"></script>
 
 <%-- 결제수단 팝업 레이어 시작 --%>
-<%-- (모바일) 공통 가승인 팝업 --%>
+<%-- (모바일) 공통 결제수단 신용카드 팝업 --%>
+<c:import url="/WEB-INF/view/mobile/sale/cmmSalePopup/payInfo/mobileCard.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- (모바일) 공통 결제수단 가승인 팝업 --%>
 <c:import url="/WEB-INF/view/mobile/sale/cmmSalePopup/payInfo/mobileTemporary.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>

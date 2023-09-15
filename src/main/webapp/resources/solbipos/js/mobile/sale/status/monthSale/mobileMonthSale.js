@@ -160,7 +160,7 @@ app.controller('mobileMonthSaleCtrl', ['$scope', '$http', '$timeout', function (
 
                         // alert(callCtrl);
                         // mobile/sale/cmmSalePopup/payInfo/
-                        // mobileCard.jsp (신용카드) -> 안만들어짐
+                        // mobileCard.jsp (신용카드)
                         // mobileCash.jsp (현금) -> 안만들어짐
                         // mobilePayco.jsp (페이코) -> 안만들어짐
                         // mobileVpoint.jsp (VMEM 포인트) -> 안만들어짐

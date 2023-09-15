@@ -45,7 +45,22 @@ public class MobilePayInfoServiceImpl implements MobilePayInfoService {
         this.mobilePayInfoMapper = mobilePayInfoMapper;
     }
 
-    /** 가승인 팝업 - 조회 */
+    /** 결제수단 신용카드 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getMobileCardList(MobilePayInfoVO mobilePayInfoVO, SessionInfoVO sessionInfoVO) {
+
+        mobilePayInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        mobilePayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        mobilePayInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if(!StringUtil.getOrBlank(mobilePayInfoVO.getStoreCd()).equals("")) {
+            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getStoreCd().split(","));
+        }
+
+        return mobilePayInfoMapper.getMobileCardList(mobilePayInfoVO);
+    }
+
+    /** 결제수단 가승인 팝업 - 조회 */
     @Override
     public List<DefaultMap<Object>> getMobileTemporaryList(MobilePayInfoVO mobilePayInfoVO, SessionInfoVO sessionInfoVO) {
 

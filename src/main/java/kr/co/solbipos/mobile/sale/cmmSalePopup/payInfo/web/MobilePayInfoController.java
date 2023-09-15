@@ -54,7 +54,30 @@ public class MobilePayInfoController {
     }
 
     /**
-     * 가승인 팝업 - 조회
+     * 결제수단 신용카드 팝업 - 조회
+     *
+     * @param mobilePayInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 09. 13.
+     */
+    @RequestMapping(value = "/mobileCard/getMobileCardList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMobileCardList(MobilePayInfoVO mobilePayInfoVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = mobilePayInfoService.getMobileCardList(mobilePayInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, mobilePayInfoVO);
+    }
+
+    /**
+     * 결제수단 가승인 팝업 - 조회
      *
      * @param mobilePayInfoVO
      * @param request

@@ -1,7 +1,7 @@
 /****************************************************************
  *
- * 파일명 : mobileTemporary.js
- * 설  명 : (모바일) 공통 결제수단 가승인 팝업 JavaScript
+ * 파일명 : mobileCard.js
+ * 설  명 : (모바일) 공통 결제수단 신용카드 팝업 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
@@ -14,12 +14,12 @@
 var app = agrid.getApp();
 
 /**
- *  가승인 팝업 조회 그리드 생성
+ *  신용카드 팝업 조회 그리드 생성
  */
-app.controller('mobileTemporaryCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('mobileCardCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('mobileTemporaryCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('mobileCardCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -31,16 +31,16 @@ app.controller('mobileTemporaryCtrl', ['$scope', '$http', '$timeout', function (
     };
 
     // <-- 검색 호출 -->
-    $scope.$on("mobileTemporaryCtrl", function(event, data) {
-        $scope.wjMobileTemporaryLayer.show(true);
+    $scope.$on("mobileCardCtrl", function(event, data) {
+        $scope.wjMobileCardLayer.show(true);
 
-        $scope.searchMobileTemporary(data);
+        $scope.searchMobileCard(data);
         event.preventDefault();
     });
 
-    $scope.searchMobileTemporary = function(params){
+    $scope.searchMobileCard = function(params){
 
-        $scope._inquiryMain("/mobile/sale/cmmSalePopup/payInfo/mobileTemporary/getMobileTemporaryList.sb", params, function() {}, false);
+        $scope._inquiryMain("/mobile/sale/cmmSalePopup/payInfo/mobileCard/getMobileCardList.sb", params, function() {}, false);
     };
     // <-- //검색 호출 -->
 
@@ -59,7 +59,7 @@ app.controller('mobileTemporaryCtrl', ['$scope', '$http', '$timeout', function (
                 includeColumns: function (column) {
                     return column.visible;
                 }
-            }, '가승인_결제내역_' + getToday() + '.xlsx', function () {
+            }, '신용카드_결제내역_' + getToday() + '.xlsx', function () {
                 $timeout(function () {
                     $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 }, 10);

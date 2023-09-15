@@ -22,6 +22,9 @@ import java.util.List;
  */
 public interface MobilePayInfoService {
 
-    /** 가승인 팝업 - 조회 */
+    /** 결제수단 신용카드 팝업 - 조회 */
+    List<DefaultMap<Object>> getMobileCardList(MobilePayInfoVO mobilePayInfoVO, SessionInfoVO sessionInfoVO);
+
+    /** 결제수단 가승인 팝업 - 조회 */
     List<DefaultMap<Object>> getMobileTemporaryList(MobilePayInfoVO mobilePayInfoVO, SessionInfoVO sessionInfoVO);
 }
