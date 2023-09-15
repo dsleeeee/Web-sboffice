@@ -66,7 +66,7 @@ public interface StoreManageService {
     List<DefaultMap<String>> getPosList(StorePosEnvVO storePosEnvVO);
 
     /** 테이블 그룹설정 (selectBox 용) */
-    List<DefaultMap<String>> getGroupList(StorePosEnvVO storePosEnvVO);
+    List<DefaultMap<String>> getGroupList(StorePosEnvVO storePosEnvVO, SessionInfoVO sessionInfoVO);
 
     /** 테이블 그룹설정정보 저장 */
     int savePosTabGrp(StorePosEnvVO[] storePosEnvVOs, SessionInfoVO sessionInfoVO);

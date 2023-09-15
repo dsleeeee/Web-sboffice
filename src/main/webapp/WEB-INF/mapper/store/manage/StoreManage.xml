@@ -5695,6 +5695,22 @@
          ]]>
     </select>
 
+    <!-- 테이블 그룹 조회 -->
+    <!--
+        TABLE    : TB_MS_TABLE_GROUP
+        PARAM    : storePosEnvVO
+        COMMENTS : 테이블 그룹 (selectBox 용)
+    -->
+    <select id="getNewGroupList" parameterType="storePosEnvVO" resultType="DefaultMap">
+        /* USE : StoreManageMapper.getNewGroupList */
+        <![CDATA[
+        SELECT	TG_CD AS TBL_GRP_CD,
+                TG_NM AS TBL_GRP_NM
+        FROM 	TB_MS_TBGRP_T
+        WHERE STORE_CD = #{storeCd}
+        ]]>
+    </select>
+
 
     <!-- 테이블 그룹설정 정보 저장 -->
     <!--

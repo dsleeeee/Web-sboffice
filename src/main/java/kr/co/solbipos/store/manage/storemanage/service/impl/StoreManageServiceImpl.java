@@ -901,8 +901,12 @@ public class StoreManageServiceImpl implements StoreManageService{
 
     /** 테이블그룹 (selectBox 용) */
     @Override
-    public List<DefaultMap<String>> getGroupList(StorePosEnvVO storePosEnvVO) {
-        return mapper.getGroupList(storePosEnvVO);
+    public List<DefaultMap<String>> getGroupList(StorePosEnvVO storePosEnvVO, SessionInfoVO sessionInfoVO) {
+        if(CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1117"), "0").equals("0")){
+            return mapper.getGroupList(storePosEnvVO);
+        } else {
+            return mapper.getNewGroupList(storePosEnvVO);
+        }
     }
 
     /** 테이블 그룹설정 정보 저장 */
