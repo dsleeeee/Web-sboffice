@@ -219,7 +219,7 @@
             AND tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
             AND tsdt.SALE_HOUR BETWEEN thn.START_TIME AND thn.END_TIME
             <if test='timeSlot != null and timeSlot != ""'>
-                AND TIME_SLOT = #{timeSlot}
+                AND TIME_SLOT = replace(#{timeSlot},'~','')
             </if>
             GROUP BY TIME_SLOT
         ) A,
@@ -320,7 +320,7 @@
         AND tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         AND tsdt.SALE_HOUR BETWEEN thn.START_TIME AND thn.END_TIME
         <if test='timeSlot != null and timeSlot != ""'>
-            AND SALE_TIME = #{timeSlot}
+            AND TIME_SLOT = replace(#{timeSlot},'~','')
         </if>
         GROUP BY TIME_SLOT
         ORDER BY TIME_SLOT
