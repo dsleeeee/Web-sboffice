@@ -29,22 +29,22 @@
       ,      tpot.CHANNEL_ORDER_NO
       ,      tpot.CHANNEL_TYPE
       ,      tpot.CHANNEL_SERVICE
-      ,      TO_CHAR(TO_DATE(tpot.CHANNEL_REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS CHANNEL_REG_DT
+      ,      TO_CHAR(TO_DATE(tpot.CHANNEL_REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS CHANNEL_REG_DT
       ,      tpot.VORDER_NO
-      ,      TO_CHAR(TO_DATE(tpot.VORDER_REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS VORDER_REG_DT
+      ,      TO_CHAR(TO_DATE(tpot.VORDER_REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS VORDER_REG_DT
       ,      tpot.ORDER_NO
-      ,      TO_CHAR(TO_DATE(tpot.POS_REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS POS_REG_DT
+      ,      TO_CHAR(TO_DATE(tpot.POS_REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS POS_REG_DT
       ,      tpot.ACCEPTED_FG
-      ,      TO_CHAR(TO_DATE(tpot.ACCEPTED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS ACCEPTED_DT
-      ,      TO_CHAR(TO_DATE(tpot.COOKED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS COOKED_DT
-      ,      TO_CHAR(TO_DATE(tpot.FINISHED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS FINISHED_DT
-      ,      TO_CHAR(TO_DATE(tpot.CALLED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS CALLED_DT
-      ,      TO_CHAR(TO_DATE(tpot.ASSIGNED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS ASSIGNED_DT
-      ,      TO_CHAR(TO_DATE(tpot.PICKED_UP_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS PICKED_UP_DT
+      ,      TO_CHAR(TO_DATE(tpot.ACCEPTED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS ACCEPTED_DT
+      ,      TO_CHAR(TO_DATE(tpot.COOKED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS COOKED_DT
+      ,      TO_CHAR(TO_DATE(tpot.FINISHED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS FINISHED_DT
+      ,      TO_CHAR(TO_DATE(tpot.CALLED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS CALLED_DT
+      ,      TO_CHAR(TO_DATE(tpot.ASSIGNED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS ASSIGNED_DT
+      ,      TO_CHAR(TO_DATE(tpot.PICKED_UP_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS PICKED_UP_DT
       ,      tpot.COMPLETED_FG
-      ,      TO_CHAR(TO_DATE(tpot.COMPLETED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS COMPLETED_DT
+      ,      TO_CHAR(TO_DATE(tpot.COMPLETED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS COMPLETED_DT
       ,      tpot.CANCELED_FG
-      ,      TO_CHAR(TO_DATE(tpot.CANCELED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS CANCELED_DT
+      ,      TO_CHAR(TO_DATE(tpot.CANCELED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS CANCELED_DT
       ,      tpot.CANCELED_MEMO
       <include refid="CmmSQL.PagingTemplateCount"/>
       FROM   TB_PS_ORDER_TRACKING tpot
@@ -94,6 +94,7 @@
        <if test='branchCd != null and branchCd != ""'>
            AND tms.BRANCH_CD = #{branchCd}
        </if>
+         ORDER BY tpot.CHANNEL_REG_DT DESC, tpot.POS_REG_DT DESC
        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -113,22 +114,22 @@
       ,      tpot.CHANNEL_ORDER_NO
       ,      tpot.CHANNEL_TYPE
       ,      tpot.CHANNEL_SERVICE
-      ,      TO_CHAR(TO_DATE(tpot.CHANNEL_REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS CHANNEL_REG_DT
+      ,      TO_CHAR(TO_DATE(tpot.CHANNEL_REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS CHANNEL_REG_DT
       ,      tpot.VORDER_NO
-      ,      TO_CHAR(TO_DATE(tpot.VORDER_REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS VORDER_REG_DT
+      ,      TO_CHAR(TO_DATE(tpot.VORDER_REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS VORDER_REG_DT
       ,      tpot.ORDER_NO
-      ,      TO_CHAR(TO_DATE(tpot.POS_REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS POS_REG_DT
+      ,      TO_CHAR(TO_DATE(tpot.POS_REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS POS_REG_DT
       ,      tpot.ACCEPTED_FG
-      ,      TO_CHAR(TO_DATE(tpot.ACCEPTED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS ACCEPTED_DT
-      ,      TO_CHAR(TO_DATE(tpot.COOKED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS COOKED_DT
-      ,      TO_CHAR(TO_DATE(tpot.FINISHED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS FINISHED_DT
-      ,      TO_CHAR(TO_DATE(tpot.CALLED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS CALLED_DT
-      ,      TO_CHAR(TO_DATE(tpot.ASSIGNED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS ASSIGNED_DT
-      ,      TO_CHAR(TO_DATE(tpot.PICKED_UP_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS PICKED_UP_DT
+      ,      TO_CHAR(TO_DATE(tpot.ACCEPTED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS ACCEPTED_DT
+      ,      TO_CHAR(TO_DATE(tpot.COOKED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS COOKED_DT
+      ,      TO_CHAR(TO_DATE(tpot.FINISHED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS FINISHED_DT
+      ,      TO_CHAR(TO_DATE(tpot.CALLED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS CALLED_DT
+      ,      TO_CHAR(TO_DATE(tpot.ASSIGNED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS ASSIGNED_DT
+      ,      TO_CHAR(TO_DATE(tpot.PICKED_UP_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS PICKED_UP_DT
       ,      tpot.COMPLETED_FG
-      ,      TO_CHAR(TO_DATE(tpot.COMPLETED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS COMPLETED_DT
+      ,      TO_CHAR(TO_DATE(tpot.COMPLETED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS COMPLETED_DT
       ,      tpot.CANCELED_FG
-      ,      TO_CHAR(TO_DATE(tpot.CANCELED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS CANCELED_DT
+      ,      TO_CHAR(TO_DATE(tpot.CANCELED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS CANCELED_DT
       ,      tpot.CANCELED_MEMO
       FROM   TB_PS_ORDER_TRACKING tpot
       ,      TB_MS_STORE tms
@@ -177,6 +178,7 @@
        <if test='branchCd != null and branchCd != ""'>
            AND tms.BRANCH_CD = #{branchCd}
        </if>
+         ORDER BY tpot.CHANNEL_REG_DT DESC, tpot.POS_REG_DT DESC
     </select>
 
 </mapper>
