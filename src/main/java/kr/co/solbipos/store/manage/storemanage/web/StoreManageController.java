@@ -381,7 +381,7 @@ public class StoreManageController {
        List<DefaultMap<String>> list = service.getPosEnvGroupList(storePosEnvVO, sessionInfoVO);
 
        // 테이블 그룹
-       List<DefaultMap<String>> groupList = service.getGroupList(storePosEnvVO);
+       List<DefaultMap<String>> groupList = service.getGroupList(storePosEnvVO, sessionInfoVO);
 
        resultMap.put("list", list);
        resultMap.put("groupList", groupList);

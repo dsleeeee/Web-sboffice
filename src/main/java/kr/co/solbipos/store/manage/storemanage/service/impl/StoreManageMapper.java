@@ -275,6 +275,9 @@ public interface StoreManageMapper {
     /** 테이블 그룹 (selectBox 용) */
     List<DefaultMap<String>> getGroupList(StorePosEnvVO storePosEnvVO);
 
+    /** 테이블 그룹(신규) (selectBox 용) */
+    List<DefaultMap<String>> getNewGroupList(StorePosEnvVO storePosEnvVO);
+
     /** 테이블 그룹설정 정보 저장 */
     int savePosTabGrp(StorePosEnvVO storePosEnvVO);
 

@@ -54,16 +54,19 @@ var printYnData = [
 
 
 /**
- * 사이드메뉴 선택그룹 그리드 생성
+  * 상품 그리드 생성
  */
 app.controller('setProdCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('setProdCtrl', $scope, $http, false));
 
+  // 사용여부를 쓰는 콤보박스의 데이터 (조회용)
+  $scope._setComboData('useYn', srchUseYn);
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
-    $scope.useYnDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name'); // 사용여부
+    $scope.useYnDataMap = new wijmo.grid.DataMap(srchUseYn, 'value', 'name'); // 사용여부
     $scope.sdselTypeFgDataMap = sdselTypeFgDataMap;
 
     // 사용여부를 쓰는 콤보박스의 데이터 (조회용)
@@ -100,13 +103,17 @@ app.controller('setProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         var selectedRow = s.rows[ht.row].dataItem;
         var msg;
         if ( col.binding === 'regSdselGrp') {
-          if(selectedRow.sdselTypeFg !== "S" || selectedRow.sdselTypeFg === "S"){
-            if(selectedRow.sdselTypeFg === "S"){
-              msg = '현재 싱글세트입니다 세트를 생성하시겠습니까?'
+          if(selectedRow.sdselTypeFg === "S"){
+            msg = '현재 싱글세트입니다 세트를 생성하시겠습니까?'
+          } else {
+            msg = messages["setProd.addSdselGrpMsg"];
+          }
+          $scope._popConfirm(msg, function() {
+            if(selectedRow.sideProdYn === "Y" && selectedRow.sdselTypeFg === "C"){
+              selectedRow.sideProdYn = 'Y';
+              selectedRow.gubun='C'
+              $scope._broadcast('setProeSideMenuSelectGroupCtrl', selectedRow);
             } else {
-              msg = messages["setProd.addSdselGrpMsg"];
-            }
-            $scope._popConfirm(msg, function() {
               selectedRow.sideProdYn = 'Y';
               selectedRow.gubun='C';
               // 파라미터 설정
@@ -115,31 +122,31 @@ app.controller('setProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
               $scope._save('/base/prod/setProd/setProd/saveSideProdYn.sb', params, function() {
                 $scope._broadcast('setProeSideMenuSelectGroupCtrl', selectedRow);
               });
-            });
-          } else {
-            $scope._broadcast('setProeSideMenuSelectGroupCtrl', selectedRow);
-          }
+            }
+          });
         }
         if ( col.binding === 'regSdselGrpSingle') {
-          if(selectedRow.sdselTypeFg !== "C" || selectedRow.sdselTypeFg === "C"){
-            if(selectedRow.sdselTypeFg === "C"){
-              msg = '현재 세트입니다 싱글세트를 생성하시겠습니까?'
-            } else {
-              msg = messages["setProd.addSdselGrpMsg"];
-            }
-            $scope._popConfirm(msg, function() {
+          if(selectedRow.sdselTypeFg === "C"){
+            msg = '현재 세트입니다 싱글세트를 생성하시겠습니까?'
+          } else {
+            msg = messages["setProd.addSdselGrpMsg"];
+          }
+          $scope._popConfirm(msg, function() {
+            if(selectedRow.sideProdYn === "Y" && selectedRow.sdselTypeFg === "S") {
               selectedRow.sideProdYn = 'Y';
-              selectedRow.gubun='S';
+              selectedRow.gubun = 'S';
+              $scope._broadcast('setProeSideMenuSelectGroupCtrl', selectedRow);
+            } else {
+              selectedRow.sideProdYn = 'Y';
+              selectedRow.gubun = 'S';
               // 파라미터 설정
               var params = [];
               params.push(selectedRow);
-              $scope._save('/base/prod/setProd/setProd/saveSideProdYn.sb', params, function() {
+              $scope._save('/base/prod/setProd/setProd/saveSideProdYn.sb', params, function () {
                 $scope._broadcast('setProeSideMenuSelectGroupCtrl', selectedRow);
               });
-            });
-          } else {
-            $scope._broadcast('setProeSideMenuSelectGroupCtrl', selectedRow);
-          }
+            }
+          });
         }
         if ( col.binding === 'nSideProdYn') {
           if(selectedRow.sideProdYn === 'Y'){
@@ -437,8 +444,6 @@ app.controller('setProeSideMenuSelectGroupCtrl', ['$scope', '$http', function ($
     params.sdselGrpNm = "";
     params.sdselProdCd = "";
     params.sdselProdNm = "";
-
-    console.log(params);
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquiryMain('/base/prod/setProd/setProd/getSdselGrpList.sb', params,function() {

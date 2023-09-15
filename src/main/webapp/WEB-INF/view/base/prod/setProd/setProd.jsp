@@ -45,10 +45,10 @@
             <td>
                 <div class="sb-select">
                     <wj-combo-box
-                            id="srchUseYn"
+                            id="useYn"
                             ng-model="useYn"
                             control="useYnAllCombo"
-                            items-source="_getComboData('useYnAllComboData')"
+                            items-source="_getComboData('useYn')"
                             display-member-path="name"
                             selected-value-path="value"
                             is-editable="false"
@@ -302,7 +302,7 @@
 </div>
 
 <script>
-    var useYn = ${ccu.getCommCode("067")};
+    var srchUseYn = ${ccu.getCommCode("067")};
     var orgnFg = "${orgnFg}";
     var hqOfficeCd = "${hqOfficeCd}";
 
@@ -324,7 +324,7 @@
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/setProd/setProd.js?ver=20230904.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/setProd/setProd.js?ver=20230904.02" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품선택 --%>
 <c:import url="/WEB-INF/view/base/prod/sideMenu/sideMenuProdView.jsp">
