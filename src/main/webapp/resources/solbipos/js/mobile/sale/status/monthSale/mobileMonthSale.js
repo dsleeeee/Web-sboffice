@@ -132,7 +132,7 @@ app.controller('mobileMonthSaleCtrl', ['$scope', '$http', '$timeout', function (
                     var params = {};
                     params.startDate = wijmo.Globalize.format(startMonth.value, 'yyyyMM') + '01';
                     params.endDate = wijmo.Globalize.format(endMonth.value, 'yyyyMM') + '31';
-                    params.storeCd = $("#mobileMonthSaleStoreCd").val();
+                    params.srchStoreCd = $("#mobileMonthSaleStoreCd").val();
 
                     var callCtrl = "";
 

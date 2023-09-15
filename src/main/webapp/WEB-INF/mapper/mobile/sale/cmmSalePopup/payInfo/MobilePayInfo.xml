@@ -32,7 +32,7 @@
         AND tsspc.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
                 tsspc.STORE_CD = #{item}
             </foreach>
         </if>
@@ -66,7 +66,7 @@
         AND tsspt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
                 tsspt.STORE_CD = #{item}
             </foreach>
         </if>

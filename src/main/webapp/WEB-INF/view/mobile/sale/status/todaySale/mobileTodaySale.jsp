@@ -397,7 +397,7 @@
     var arrTimeSlotCol = timeSlotCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/todaySale/mobileTodaySale.js?ver=20230915.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/todaySale/mobileTodaySale.js?ver=20230915.03" charset="utf-8"></script>
 
 <%-- 결제수단 팝업 레이어 시작 --%>
 <%-- (모바일) 공통 결제수단 신용카드 팝업 --%>

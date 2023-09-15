@@ -134,7 +134,7 @@ app.controller('mobileTodaySaleCtrl', ['$scope', '$http', '$timeout', function (
                     var params = {};
                     params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
                     params.endDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
-                    params.storeCd = $("#mobileTodaySaleStoreCd").val();
+                    params.srchStoreCd = $("#mobileTodaySaleStoreCd").val();
 
                     var callCtrl = "";
 
