@@ -128,13 +128,13 @@ app.controller('mobileDaySaleCtrl', ['$scope', '$http', '$timeout', function ($s
                     params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
                     params.srchStoreCd = $("#mobileDaySaleStoreCd").val();
 
-                    var callCtrl = "";
+                    var mobileCallCtrl = "";
 
                     // 값이 있으면 링크
                     if (nvl(selectedRow[("payCd")], '') !== '' && nvl(selectedRow[("payCd")], '') != "0") {
-                        callCtrl = 'mobile'+ (selectedRow[("payMethod")].substr(0,1).toUpperCase() + selectedRow[("payMethod")].substr(1).toLowerCase()).replaceAll("_", "") + 'Ctrl';
+                        mobileCallCtrl = 'mobile'+ (selectedRow[("payMethod")].substr(0,1).toUpperCase() + selectedRow[("payMethod")].substr(1).toLowerCase()).replaceAll("_", "") + 'Ctrl';
 
-                        $scope._broadcast(callCtrl, params);
+                        $scope._broadcast(mobileCallCtrl, params);
                         event.preventDefault();
                     }
                 }

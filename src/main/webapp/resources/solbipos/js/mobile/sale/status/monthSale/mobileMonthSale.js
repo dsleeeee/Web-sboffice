@@ -134,11 +134,11 @@ app.controller('mobileMonthSaleCtrl', ['$scope', '$http', '$timeout', function (
                     params.endDate = wijmo.Globalize.format(endMonth.value, 'yyyyMM') + '31';
                     params.srchStoreCd = $("#mobileMonthSaleStoreCd").val();
 
-                    var callCtrl = "";
+                    var mobileCallCtrl = "";
 
                     // 값이 있으면 링크
                     if (nvl(selectedRow[("payCd")], '') !== '' && nvl(selectedRow[("payCd")], '') != "0") {
-                        callCtrl = 'mobile'+ (selectedRow[("payMethod")].substr(0,1).toUpperCase() + selectedRow[("payMethod")].substr(1).toLowerCase()).replaceAll("_", "") + 'Ctrl';
+                        mobileCallCtrl = 'mobile'+ (selectedRow[("payMethod")].substr(0,1).toUpperCase() + selectedRow[("payMethod")].substr(1).toLowerCase()).replaceAll("_", "") + 'Ctrl';
                         // 포인트 이름이 안맞음(mobileMembr->mobilePoint)
                         // if(callCtrl == 'mobileMembrCtrl') {
                         //     callCtrl = 'mobilePointCtrl';
@@ -155,7 +155,7 @@ app.controller('mobileMonthSaleCtrl', ['$scope', '$http', '$timeout', function (
                         //     callCtrl = 'mobileCashCtrl';
                         // }
 
-                        $scope._broadcast(callCtrl, params);
+                        $scope._broadcast(mobileCallCtrl, params);
                         event.preventDefault();
 
                         // alert(callCtrl);
