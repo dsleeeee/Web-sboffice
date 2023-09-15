@@ -103,6 +103,51 @@ app.controller('mobileTodaySaleCtrl', ['$scope', '$http', '$timeout', function (
 
         // 조회
         $scope.searchMobileTodaySalePay();
+
+        // 그리드 링크 효과
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+
+                // 실매출액
+                if (col.binding === "realSaleAmt") {
+                    var item = s.rows[e.row].dataItem;
+
+                    // 값이 있으면 링크 효과
+                    if (nvl(item[("realSaleAmt")], '') !== '' && nvl(item[("realSaleAmt")], '') != "0") {
+                        wijmo.addClass(e.cell, 'wijLink');
+                    }
+                }
+            }
+        });
+
+        // 그리드 선택 이벤트
+        s.addEventListener(s.hostElement, 'mousedown', function(e) {
+            var ht = s.hitTest(e);
+            if( ht.cellType === wijmo.grid.CellType.Cell) {
+                var col = ht.panel.columns[ht.col];
+
+                // 실매출액 클릭시 상세정보 조회
+                if ( col.binding === "realSaleAmt") {
+                    var selectedRow = s.rows[ht.row].dataItem;
+
+                    var params = {};
+                    params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
+                    params.endDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
+                    params.storeCd = $("#mobileTodaySaleStoreCd").val();
+
+                    var callCtrl = "";
+
+                    // 값이 있으면 링크
+                    if (nvl(selectedRow[("realSaleAmt")], '') !== '' && nvl(selectedRow[("realSaleAmt")], '') != "0") {
+                        callCtrl = 'mobile' + (selectedRow[("payMethod")].substr(0, 1).toUpperCase() + selectedRow[("payMethod")].substr(1).toLowerCase()).replaceAll("_", "") + 'Ctrl';
+
+                        $scope._broadcast(callCtrl, params);
+                        event.preventDefault();
+                    }
+                }
+            }
+        });
     };
 
     // <-- 검색 호출 -->

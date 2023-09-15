@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MobilePayInfo.xml
+    (모바일) 공통 결제수단 팝업
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2023.09.14     최초작성
+-->
+<mapper namespace="kr.co.solbipos.mobile.sale.cmmSalePopup.payInfo.service.impl.MobilePayInfoMapper">
+
+    <!-- 가승인 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMobileTemporaryList" parameterType="MobilePayInfoVO" resultType="DefaultMap">
+        /* MobilePayInfoMapper.getMobileTemporaryList */
+        SELECT
+        tsspt.STORE_CD,
+        (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = tsspt.STORE_CD) AS STORE_NM,
+        tsspt.TEMPORARY_PAY_CD,
+        tcn.NMCODE_NM AS TEMPORARY_PAY_NM,
+        SUM(tsspt.SALE_AMT) AS SALE_AMT
+        FROM TB_SL_SALE_PAY_TEMPORARY tsspt,
+        TB_CM_NMCODE tcn
+        WHERE 1=1
+        AND tsspt.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsspt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                tsspt.STORE_CD = #{item}
+            </foreach>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                    OR tsspt.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
+        </if>
+        AND tcn.NMCODE_GRP_CD IN ('111', '802')
+        AND tcn.NMCODE_CD = tsspt.TEMPORARY_PAY_CD
+        GROUP BY tsspt.STORE_CD, tsspt.TEMPORARY_PAY_CD, tcn.NMCODE_NM
+        ORDER BY tsspt.STORE_CD, tsspt.TEMPORARY_PAY_CD
+    </select>
+
+</mapper>

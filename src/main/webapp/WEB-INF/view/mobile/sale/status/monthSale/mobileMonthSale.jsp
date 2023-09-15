@@ -189,6 +189,8 @@
                 <wj-flex-grid-column header="<s:message code="mobile.monthSale.nm"/>" binding="nm" width="1.*" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.monthSale.realSaleAmt"/>" binding="realSaleAmt" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.monthSale.amtRate"/>" binding="amtRate" width="1.*" align="right" is-read-only="true"></wj-flex-grid-column>
+                <%-- 저장시 필요 --%>
+                <wj-flex-grid-column header="<s:message code="mobile.monthSale.payMethod"/>" binding="payMethod" width="1.*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                 <!-- 조회 결과가 없을 때, msg 띄우기 -->
                 <div class="gridMsg" id="mobileMonthSalePayMsg" style="line-height: 100px; display: none;"><s:message code="mobile.cmm.search.result.empty"/></div>
             </wj-flex-grid>
@@ -499,4 +501,12 @@
     var multiStoreFg = '${multiStoreFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/monthSale/mobileMonthSale.js?ver=20230905.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/monthSale/mobileMonthSale.js?ver=20230915.01" charset="utf-8"></script>
+
+<%-- 결제수단 팝업 레이어 시작 --%>
+<%-- (모바일) 공통 가승인 팝업 --%>
+<c:import url="/WEB-INF/view/mobile/sale/cmmSalePopup/payInfo/mobileTemporary.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+<%-- //결제수단 팝업 레이어 시작 --%>

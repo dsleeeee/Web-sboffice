@@ -203,24 +203,6 @@ app.controller('monthCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
                             }
                             console.log(callCtrl);
                             $scope._broadcast(callCtrl, params);
-                            // alert(callCtrl);
-                            // sale/cmmSalePopup/dayPayInfo/
-                            // dayCard.jsp
-                            // dayCash.jsp
-                            // dayPayco.jsp
-                            // dayVpoint.jsp
-                            // dayVcharge.jsp
-                            // dayMpay.jsp
-                            // dayMcoupn.jsp
-                            // dayPoint.jsp
-                            // dayPrepaid.jsp
-                            // dayPostpaid.jsp
-                            // dayGift.jsp
-                            // dayFstmp.jsp
-                            // dayPartner.jsp
-                            // OK캐쉬백 -> 안만들어짐(dayOkcsb)
-                            // dayEmpCard.jsp
-                            // dayTemporary.jsp
                         }
                     }
                 }

@@ -118,9 +118,11 @@
     <select id="getMobileMonthSalePayList" parameterType="MobileMonthSaleVO" resultType="DefaultMap">
         /* MobileMonthSaleMapper.getMobileMonthSalePayList */
         SELECT
-        CASE WHEN PAY_CD = '021' THEN '현금영수증 ' ELSE (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '024' AND NMCODE_CD = PAY_CD) END AS NM,
-        REAL_SALE_AMT,
-        AMT_RATE
+        AA.PAY_CD,
+        BB.PAY_NM AS NM,
+        AA.REAL_SALE_AMT,
+        AA.AMT_RATE,
+        BB.PAY_METHOD
         FROM
         (
             SELECT
@@ -235,10 +237,29 @@
                         OR	tsmt.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                         )
                 </if>
-        AND tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
+                AND tsmt.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
             ) B
-        )
-        ORDER BY PAY_CD
+        ) AA,
+        (
+            SELECT
+            tcn.NMCODE_CD AS PAY_CD,
+            tcn.NMCODE_NM AS PAY_NM,
+            tcn.NMCODE_ITEM_1 AS PAY_METHOD
+            FROM TB_CM_NMCODE tcn
+            WHERE 1=1
+            AND tcn.NMCODE_GRP_CD = '024'
+            UNION ALL
+            (
+                SELECT
+                '021' AS PAY_CD,
+                '현금영수증' AS PAY_NM,
+                'CASH_BILL' AS PAY_METHOD
+                FROM dual
+            )
+        ) BB
+        WHERE 1=1
+        AND BB.PAY_CD (+)= AA.PAY_CD
+        ORDER BY AA.PAY_CD
     </select>
 
     <!-- 할인내역 - 조회 -->
