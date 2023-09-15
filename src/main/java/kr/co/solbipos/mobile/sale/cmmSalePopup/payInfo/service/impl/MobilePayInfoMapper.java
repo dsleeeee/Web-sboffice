@@ -26,6 +26,9 @@ import java.util.List;
 @Repository
 public interface MobilePayInfoMapper {
 
-    /** 가승인 팝업 - 조회 */
+    /** 결제수단 신용카드 팝업 - 조회 */
+    List<DefaultMap<Object>> getMobileCardList(MobilePayInfoVO mobilePayInfoVO);
+
+    /** 결제수단 가승인 팝업 - 조회 */
     List<DefaultMap<Object>> getMobileTemporaryList(MobilePayInfoVO mobilePayInfoVO);
 }

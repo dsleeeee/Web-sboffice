@@ -11,7 +11,42 @@
 -->
 <mapper namespace="kr.co.solbipos.mobile.sale.cmmSalePopup.payInfo.service.impl.MobilePayInfoMapper">
 
-    <!-- 가승인 팝업 - 조회 -->
+    <!-- 결제수단 신용카드 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMobileCardList" parameterType="MobilePayInfoVO" resultType="DefaultMap">
+        /* MobilePayInfoMapper.getMobileCardList */
+        SELECT
+        tsspc.STORE_CD,
+        (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = tsspc.STORE_CD) AS STORE_NM,
+        NVL(tsspc.ACQUIRE_CD, '9999') AS CARD_CD, NVL(tsspc.ACQUIRE_NM, '기타') AS CARD_NM,
+        SUM(DECODE(tsspc.SALE_YN, 'Y', 1, 0)) AS APPR_CNT,
+        SUM(DECODE(tsspc.SALE_YN, 'Y', tsspc.APPR_AMT, 0)) AS APPR_AMT,
+        SUM(DECODE(tsspc.SALE_YN, 'N', 1, 0)) AS CANCEL_CNT,
+        SUM(DECODE(tsspc.SALE_YN, 'N', tsspc.SALE_AMT, 0)) AS CANCEL_AMT
+        FROM TB_SL_SALE_PAY_CARD tsspc
+        WHERE 1=1
+        AND tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsspc.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                tsspc.STORE_CD = #{item}
+            </foreach>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR  tsspc.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+            )
+        </if>
+        GROUP BY tsspc.STORE_CD, NVL(tsspc.ACQUIRE_CD, '9999'), NVL(tsspc.ACQUIRE_NM, '기타')
+        ORDER BY tsspc.STORE_CD, NVL(tsspc.ACQUIRE_CD, '9999')
+    </select>
+
+    <!-- 결제수단 가승인 팝업 - 조회 -->
     <!--
         TABLE    :
         COMMENTS :
@@ -23,7 +58,7 @@
         (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = tsspt.STORE_CD) AS STORE_NM,
         tsspt.TEMPORARY_PAY_CD,
         tcn.NMCODE_NM AS TEMPORARY_PAY_NM,
-        SUM(tsspt.SALE_AMT) AS SALE_AMT
+        NVL(SUM(tsspt.SALE_AMT), 0) AS SALE_AMT
         FROM TB_SL_SALE_PAY_TEMPORARY tsspt,
         TB_CM_NMCODE tcn
         WHERE 1=1

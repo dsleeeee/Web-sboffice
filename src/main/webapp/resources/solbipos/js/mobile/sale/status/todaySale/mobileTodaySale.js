@@ -114,7 +114,7 @@ app.controller('mobileTodaySaleCtrl', ['$scope', '$http', '$timeout', function (
                     var item = s.rows[e.row].dataItem;
 
                     // 값이 있으면 링크 효과
-                    if (nvl(item[("realSaleAmt")], '') !== '' && nvl(item[("realSaleAmt")], '') != "0") {
+                    if (nvl(item[("payCd")], '') !== '' && nvl(item[("payCd")], '') != "0") {
                         wijmo.addClass(e.cell, 'wijLink');
                     }
                 }
@@ -139,7 +139,7 @@ app.controller('mobileTodaySaleCtrl', ['$scope', '$http', '$timeout', function (
                     var callCtrl = "";
 
                     // 값이 있으면 링크
-                    if (nvl(selectedRow[("realSaleAmt")], '') !== '' && nvl(selectedRow[("realSaleAmt")], '') != "0") {
+                    if (nvl(selectedRow[("payCd")], '') !== '' && nvl(selectedRow[("payCd")], '') != "0") {
                         callCtrl = 'mobile' + (selectedRow[("payMethod")].substr(0, 1).toUpperCase() + selectedRow[("payMethod")].substr(1).toLowerCase()).replaceAll("_", "") + 'Ctrl';
 
                         $scope._broadcast(callCtrl, params);
