@@ -204,7 +204,7 @@
             params.sdselClassNm = $scope.srchSdselClassNm;
             params.regStoreFg = $scope.regStoreFg;
 
-            $scope._inquirySub("/common/popup/selectSdselClass/selectSdselClassList.sb", params, function () {
+            $scope._inquirySub("/common/popup/selectSdselClass/getSelectSdselClassList.sb", params, function () {
                 $scope.searchFg = "Y";
             });
         };

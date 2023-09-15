@@ -71,14 +71,14 @@ public class SelectSdselClassController {
      * @author  김설아
      * @since   2023. 09. 11.
      */
-    @RequestMapping(value = "/selectSdselClassList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/getSelectSdselClassList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result selectSdselClassList(HttpServletRequest request, HttpServletResponse response,
+    public Result getSelectSdselClassList(HttpServletRequest request, HttpServletResponse response,
                                        Model model, SelectSdselClassVO selectSdselClassVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> list = selectSdselClassService.selectSdselClassList(selectSdselClassVO, sessionInfoVO);
+        List<DefaultMap<String>> list = selectSdselClassService.getSelectSdselClassList(selectSdselClassVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, selectSdselClassVO);
     }

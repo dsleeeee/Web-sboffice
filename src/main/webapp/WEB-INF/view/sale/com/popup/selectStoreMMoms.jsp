@@ -230,7 +230,7 @@
                         <input type="text" id="popUploadStore" ng-model="popUploadStore" readonly/>
                     </td>
                     <td colspan="2">
-                        <jsp:include page="/WEB-INF/view/sale/com/popup/selectUploadStore.jsp" flush="true">
+                        <jsp:include page="/WEB-INF/view/common/popup/selectUploadStore.jsp" flush="true">
                             <jsp:param name="targetId" value="${param.targetId}SelectUpload"/>
                         </jsp:include>
                     </td>

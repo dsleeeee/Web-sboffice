@@ -71,14 +71,14 @@ public class SelectSdselProdController {
      * @author  김설아
      * @since   2023. 09. 11.
      */
-    @RequestMapping(value = "/selectSdselProdList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/getSelectSdselProdList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result selectSdselProdList(HttpServletRequest request, HttpServletResponse response,
+    public Result getSelectSdselProdList(HttpServletRequest request, HttpServletResponse response,
                                       Model model, SelectSdselProdVO selectSdselProdVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> list = selectSdselProdService.selectSdselProdList(selectSdselProdVO, sessionInfoVO);
+        List<DefaultMap<String>> list = selectSdselProdService.getSelectSdselProdList(selectSdselProdVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, selectSdselProdVO);
     }

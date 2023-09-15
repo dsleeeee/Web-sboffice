@@ -206,22 +206,24 @@ app.controller('monthTotalCtrl', ['$scope', '$http', '$timeout', function ($scop
                             $scope._broadcast(callCtrl, params);
                             // alert(callCtrl);
                             // sale/cmmSalePopup/dayPayInfo/
-                            // dayCard.jsp
-                            // dayCash.jsp
-                            // dayPayco.jsp
-                            // dayVpoint.jsp
-                            // dayVcharge.jsp
-                            // dayMpay.jsp
-                            // dayMcoupn.jsp
-                            // dayPoint.jsp
-                            // dayPrepaid.jsp
-                            // dayPostpaid.jsp
-                            // dayGift.jsp
-                            // dayFstmp.jsp
-                            // dayPartner.jsp
-                            // OK캐쉬백 -> 안만들어짐(dayOkcsb)
-                            // dayEmpCard.jsp
-                            // dayTemporary.jsp
+                            // dayCard.jsp (신용카드)
+                            // dayCash.jsp (현금)
+                            // dayPayco.jsp (페이코)
+                            // dayVpoint.jsp (VMEM 포인트)
+                            // dayVcharge.jsp (VMEM 전자상품권)
+                            // dayMpay.jsp (모바일페이)
+                            // dayMcoupn.jsp (모바일쿠폰)
+                            // dayPoint.jsp (포인트)
+                            // dayPrepaid.jsp (선불)
+                            // dayPostpaid.jsp (후불)
+                            // dayGift.jsp (상품권)
+                            // dayFstmp.jsp (식권)
+                            // dayPartner.jsp (제휴할인)
+                            // dayOkcsb.jsp (OK캐쉬백) -> 안만들어짐
+                            // dayEmpCard.jsp (사원카드)
+                            // dayTemporary.jsp (가승인)
+                            // dayVorder.jsp (스마트오더) -> 안만들어짐
+                            // dayTrs.jsp (즉시환급) -> 안만들어짐
                         }
                     }
                 }

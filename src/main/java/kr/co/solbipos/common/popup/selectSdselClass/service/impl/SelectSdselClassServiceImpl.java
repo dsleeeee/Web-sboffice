@@ -42,14 +42,14 @@ public class SelectSdselClassServiceImpl implements SelectSdselClassService {
 
     /** 선택분류 공통 - 선택분류 리스트 조회 */
     @Override
-    public List<DefaultMap<String>> selectSdselClassList(SelectSdselClassVO selectSdselClassVO, SessionInfoVO sessionInfoVO) {
-
-        List<DefaultMap<String>> resultList = new ArrayList<DefaultMap<String>>();
+    public List<DefaultMap<String>> getSelectSdselClassList(SelectSdselClassVO selectSdselClassVO, SessionInfoVO sessionInfoVO) {
 
         selectSdselClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
+        List<DefaultMap<String>> resultList = new ArrayList<DefaultMap<String>>();
+
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
-            resultList = selectSdselClassMapper.selectSdselClassList(selectSdselClassVO);
+            resultList = selectSdselClassMapper.getSelectSdselClassList(selectSdselClassVO);
         }
 
         return resultList;

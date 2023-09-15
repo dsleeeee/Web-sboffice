@@ -221,7 +221,7 @@
             params.sdselProdNm = $scope.srchSdselProdNm;
             params.regStoreFg = $scope.regStoreFg;
 
-            $scope._inquirySub("/common/popup/selectSdselProd/selectSdselProdList.sb", params, function () {
+            $scope._inquirySub("/common/popup/selectSdselProd/getSelectSdselProdList.sb", params, function () {
                 $scope.searchFg = "Y";
             });
         };

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SelectStore.xml
+    (공통) 매장 팝업
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2023.09.11     최초작성
+-->
+<mapper namespace="kr.co.solbipos.common.popup.selectStore.service.impl.SelectStoreMapper">
+
+    <!-- 매장 공통 - 매장 리스트 조회 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getSelectStoreList" parameterType="selectStoreVO" resultType="DefaultMap">
+        /* USE : SelectStoreMapper.getSelectStoreList */
+        SELECT tms.HQ_OFFICE_CD, tms.STORE_CD, tms.STORE_NM, thn.STORE_CHG_NOT
+        FROM TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi,
+        (
+            SELECT
+            NMCODE_NM AS STORE_CD,
+            '변경제한매장' AS STORE_CHG_NOT
+            FROM TB_HQ_NMCODE
+            WHERE 1=1
+            AND HQ_OFFICE_CD = #{hqOfficeCd}
+            AND NMCODE_GRP_CD = '164'
+            AND USE_YN = 'Y'
+        ) thn
+        WHERE 1=1
+        AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                    OR tms.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='storeChgNot != null and storeChgNot != ""'>
+            <if test='storeChgNot == "1"'>
+                AND thn.STORE_CHG_NOT IS NOT NULL
+            </if>
+            <if test='storeChgNot == "2"'>
+                AND thn.STORE_CHG_NOT IS NULL
+            </if>
+        </if>
+        <if test='selectStoreFg != null and selectStoreFg != "" and selectStoreFg == "M"'>
+            AND (
+                    ( ((SELECT COUNT(STORE_CD) FROM TB_HQ_SEARCH_UPLOAD_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND USER_ID = #{userId}) != 0) AND (tms.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_SEARCH_UPLOAD_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND USER_ID = #{userId})) )
+                    OR
+                    ( ((SELECT COUNT(STORE_CD) FROM TB_HQ_SEARCH_UPLOAD_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND USER_ID = #{userId}) = 0) AND 1=1 )
+                )
+        </if>
+        AND tmsi.STORE_CD (+)= tms.STORE_CD
+        AND thn.STORE_CD (+)= tms.STORE_CD
+        ORDER BY tms.STORE_CD
+    </select>
+
+</mapper>

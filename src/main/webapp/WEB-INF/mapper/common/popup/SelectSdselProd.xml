@@ -17,8 +17,8 @@
         PARAM    :
         COMMENTS :
     -->
-    <select id="selectSdselProdList" parameterType="selectSdselProdVO" resultType="DefaultMap">
-        /* USE : SelectSdselProdMapper.selectSdselProdList */
+    <select id="getSelectSdselProdList" parameterType="selectSdselProdVO" resultType="DefaultMap">
+        /* USE : SelectSdselProdMapper.getSelectSdselProdList */
         SELECT
         A.SDSEL_GRP_CD,
         A.SDSEL_GRP_NM,

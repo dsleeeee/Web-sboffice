@@ -101,6 +101,87 @@ app.controller('mobileMonthSaleCtrl', ['$scope', '$http', '$timeout', function (
 
         // 조회
         // $scope.searchMobileMonthSalePay();
+
+        // 그리드 링크 효과
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+
+                // 실매출액
+                if (col.binding === "realSaleAmt") {
+                    var item = s.rows[e.row].dataItem;
+
+                    // 값이 있으면 링크 효과
+                    if (nvl(item[("realSaleAmt")], '') !== '' && nvl(item[("realSaleAmt")], '') != "0") {
+                        wijmo.addClass(e.cell, 'wijLink');
+                    }
+                }
+            }
+        });
+
+        // 그리드 선택 이벤트
+        s.addEventListener(s.hostElement, 'mousedown', function(e) {
+            var ht = s.hitTest(e);
+            if( ht.cellType === wijmo.grid.CellType.Cell) {
+                var col = ht.panel.columns[ht.col];
+
+                // 실매출액 클릭시 상세정보 조회
+                if ( col.binding === "realSaleAmt") {
+                    var selectedRow = s.rows[ht.row].dataItem;
+
+                    var params = {};
+                    params.startDate = wijmo.Globalize.format(startMonth.value, 'yyyyMM') + '01';
+                    params.endDate = wijmo.Globalize.format(endMonth.value, 'yyyyMM') + '31';
+                    params.storeCd = $("#mobileMonthSaleStoreCd").val();
+
+                    var callCtrl = "";
+
+                    // 값이 있으면 링크
+                    if (nvl(selectedRow[("realSaleAmt")], '') !== '' && nvl(selectedRow[("realSaleAmt")], '') != "0") {
+                        callCtrl = 'mobile'+ (selectedRow[("payMethod")].substr(0,1).toUpperCase() + selectedRow[("payMethod")].substr(1).toLowerCase()).replaceAll("_", "") + 'Ctrl';
+                        // 포인트 이름이 안맞음(mobileMembr->mobilePoint)
+                        // if(callCtrl == 'mobileMembrCtrl') {
+                        //     callCtrl = 'mobilePointCtrl';
+                        // }
+                        // 사원카드 이름이 안맞음(mobileEmp_Card->mobileEmpCard)
+                        // if(callCtrl == 'mobileEmp_cardCtrl') {
+                        //     callCtrl = 'mobileEmpCardCtrl';
+                        // }
+                        // if(callCtrl == "mobileCashCtrl"){
+                        //     params.cashGubun = "02";
+                        // }
+                        // if(callCtrl == "mobileCashbillCtrl"){
+                        //     params.cashGubun = "021";
+                        //     callCtrl = 'mobileCashCtrl';
+                        // }
+
+                        $scope._broadcast(callCtrl, params);
+                        event.preventDefault();
+
+                        // alert(callCtrl);
+                        // mobile/sale/cmmSalePopup/payInfo/
+                        // mobileCard.jsp (신용카드) -> 안만들어짐
+                        // mobileCash.jsp (현금) -> 안만들어짐
+                        // mobilePayco.jsp (페이코) -> 안만들어짐
+                        // mobileVpoint.jsp (VMEM 포인트) -> 안만들어짐
+                        // mobileVcharge.jsp (VMEM 전자상품권) -> 안만들어짐
+                        // mobileMpay.jsp (모바일페이) -> 안만들어짐
+                        // mobileMcoupn.jsp (모바일쿠폰) -> 안만들어짐
+                        // mobilePoint.jsp (포인트) -> 안만들어짐
+                        // mobilePrepaid.jsp (선불) -> 안만들어짐
+                        // mobilePostpaid.jsp (후불) -> 안만들어짐
+                        // mobileGift.jsp (상품권) -> 안만들어짐
+                        // mobileFstmp.jsp (식권) -> 안만들어짐
+                        // mobilePartner.jsp (제휴할인) -> 안만들어짐
+                        // mobileOkcsb.jsp (OK캐쉬백) -> 안만들어짐
+                        // mobileEmpCard.jsp (사원카드) -> 안만들어짐
+                        // mobileTemporary.jsp (가승인)
+                        // mobileVorder.jsp (스마트오더) -> 안만들어짐
+                        // mobileTrs.jsp (즉시환급) -> 안만들어짐
+                    }
+                }
+            }
+        });
     };
 
     // 차트 초기값 셋팅

@@ -140,9 +140,10 @@
         /* MobileDaySaleMapper.getMobileDaySalePayList */
         SELECT
         A.PAY_CD,
-        CASE WHEN A.PAY_CD = '021' THEN '현금영수증 ' ELSE (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '024' AND NMCODE_CD = A.PAY_CD) END AS NM,
+        C.PAY_NM AS NM,
         A.REAL_SALE_AMT,
-        DECODE(B.TOT_REAL_SALE_AMT, 0, 0, NVL(ROUND(A.REAL_SALE_AMT / B.TOT_REAL_SALE_AMT * 100, 2), 0)) AS AMT_RATE
+        DECODE(B.TOT_REAL_SALE_AMT, 0, 0, NVL(ROUND(A.REAL_SALE_AMT / B.TOT_REAL_SALE_AMT * 100, 2), 0)) AS AMT_RATE,
+        C.PAY_METHOD
         FROM
         (
             SELECT
@@ -231,7 +232,26 @@
                     )
             </if>
             AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        ) B
+        ) B,
+        (
+            SELECT
+            tcn.NMCODE_CD AS PAY_CD,
+            tcn.NMCODE_NM AS PAY_NM,
+            tcn.NMCODE_ITEM_1 AS PAY_METHOD
+            FROM TB_CM_NMCODE tcn
+            WHERE 1=1
+            AND tcn.NMCODE_GRP_CD = '024'
+            UNION ALL
+            (
+                SELECT
+                '021' AS PAY_CD,
+                '현금영수증' AS PAY_NM,
+                'CASH_BILL' AS PAY_METHOD
+                FROM dual
+            )
+        ) C
+        WHERE 1=1
+        AND C.PAY_CD (+)= A.PAY_CD
         ORDER BY A.PAY_CD
     </select>
 

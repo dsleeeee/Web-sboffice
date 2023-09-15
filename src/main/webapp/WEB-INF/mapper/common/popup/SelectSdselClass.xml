@@ -17,8 +17,8 @@
         PARAM    :
         COMMENTS :
     -->
-    <select id="selectSdselClassList" parameterType="selectSdselClassVO" resultType="DefaultMap">
-        /* USE : SelectSdselClassMapper.selectSdselClassList */
+    <select id="getSelectSdselClassList" parameterType="selectSdselClassVO" resultType="DefaultMap">
+        /* USE : SelectSdselClassMapper.getSelectSdselClassList */
         SELECT
         A.SDSEL_GRP_CD,
         A.SDSEL_GRP_NM,
