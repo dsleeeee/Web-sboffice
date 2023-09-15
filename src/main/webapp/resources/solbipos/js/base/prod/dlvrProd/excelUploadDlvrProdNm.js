@@ -136,6 +136,33 @@ app.controller('excelUploadDlvrProdNmCtrl', ['$scope', '$http','$timeout', funct
             return false;
         }
 
+        // 배달의민족앱[3] 상품명칭 입력값 전체 체크
+        var str = "";
+        for (var r = 0; r < rowLength; r++) {
+
+            str = "";
+            for (var c = 0; c < $scope.flex.columns.length; c++) {
+                if ($scope.flex.columns[c].header !== null && $scope.flex.getCellData(r, c, false) !== null) {
+                    var colBinding = $scope.colHeaderBind[$scope.flex.columns[c].header];
+                    var cellValue  = $scope.flex.getCellData(r, c, false);
+
+                    if(colBinding !== "prodCd" && cellValue !== null && cellValue !== undefined && cellValue != ""){
+                        str +=  "[채널사: ("+ colBinding + ")/" + cellValue + "]";
+                    }
+                }
+            }
+
+            if(str != null && str != undefined && str != ""){
+                if(str.indexOf("[채널사: (dlvrProdNm3)/") === -1 ){
+                    $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
+
+                    // 배달의민족앱[3] 입력값이 없는 상품이 있습니다. <br>필수입력값이므로, 임의데이터라도 입력하세요.
+                    $scope._popMsg(messages["dlvrProd.baemin.chk.msg"]);
+                    return false;
+                }
+            }
+        }
+
         // 업로드 된 데이터 JSON 형태로 생성
         for (var r = 0; r < rowLength; r++) {
             vProdCd = "";

@@ -89,6 +89,28 @@ app.controller('dlvrProdNmMappingCtrl', ['$scope', '$http', function ($scope, $h
         //
         var arr = dlvrCol.split(",");
 
+        // 배달의민족앱[3] 상품명칭 입력값 전체 체크
+        var str = "";
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+
+            str = "";
+            for(var j = 0; j < arr.length; j++) {
+                if(eval('$scope.flex.collectionView.items[i].dlvrProdNm' + arr[j]) !== null &&
+                   eval('$scope.flex.collectionView.items[i].dlvrProdNm' + arr[j]) !== undefined &&
+                   eval('$scope.flex.collectionView.items[i].dlvrProdNm' + arr[j]) !== ""){
+                    str +=  "[채널사: (dlvrProdNm"+ arr[j] + ")/" + eval('$scope.flex.collectionView.items[i].dlvrProdNm' + arr[j]) + "]";
+                }
+            }
+
+            if(str != null && str != undefined && str != ""){
+                if(str.indexOf("[채널사: (dlvrProdNm3)/") === -1 ){
+                    // 배달의민족앱[3] 입력값이 없는 상품이 있습니다. <br>필수입력값이므로, 임의데이터라도 입력하세요.
+                    $scope._popMsg(messages["dlvrProd.baemin.chk.msg"]);
+                    return false;
+                }
+            }
+        }
+
         // 파라미터 설정
         var params = new Array();
 
