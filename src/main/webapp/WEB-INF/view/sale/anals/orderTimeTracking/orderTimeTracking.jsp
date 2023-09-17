@@ -240,8 +240,8 @@
                     <wj-flex-grid-column header="<s:message code="orderTimeTracking.channelType"/>" binding="channelType" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="orderTimeTracking.channelService"/>" binding="channelService" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="orderTimeTracking.channelRegDt"/>" binding="channelRegDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="orderTimeTracking.vOrderNo"/>" binding="vOrderNo" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="orderTimeTracking.vOrderRegDt"/>" binding="vOrderRegDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="orderTimeTracking.vOrderNo"/>" binding="vorderNo" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="orderTimeTracking.vOrderRegDt"/>" binding="vorderRegDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="orderTimeTracking.orderNo"/>" binding="orderNo" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="orderTimeTracking.posRegDt"/>" binding="posRegDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="orderTimeTracking.acceptedFg"/>" binding="acceptedFg" data-map="acceptedFgDataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
