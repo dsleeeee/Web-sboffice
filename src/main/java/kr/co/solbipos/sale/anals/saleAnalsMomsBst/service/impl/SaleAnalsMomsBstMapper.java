@@ -30,5 +30,5 @@ public interface SaleAnalsMomsBstMapper {
     List<DefaultMap<String>> getSaleAnalsMomsBstList(SaleAnalsMomsBstVO saleAnalsMomsBstVO);
 
     /** 해당 날짜의 총매출액 조회 */
-    int getRealSaleAmt(SaleAnalsMomsBstVO saleAnalsMomsBstVO);
+    long getRealSaleAmt(SaleAnalsMomsBstVO saleAnalsMomsBstVO);
 }

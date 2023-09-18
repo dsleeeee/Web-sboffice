@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.day.dayPos.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.day.dayPos.service.DayPosService;
@@ -29,9 +33,11 @@ import java.util.List;
 @Transactional
 public class DayPosServiceImpl implements DayPosService {
     private final DayPosMapper dayPosMapper;
+    private final PopupMapper popupMapper;
 
-    public DayPosServiceImpl(DayPosMapper dayPosMapper) {
+    public DayPosServiceImpl(DayPosMapper dayPosMapper, PopupMapper popupMapper) {
         this.dayPosMapper = dayPosMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 조회 */
@@ -45,8 +51,11 @@ public class DayPosServiceImpl implements DayPosService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayPosVO.getStoreCds().split(",");
-        dayPosVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayPosVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayPosVO.getStoreCds(), 3900));
+            dayPosVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 결제수단 array 값 세팅
         String payCol= "";
@@ -106,8 +115,11 @@ public class DayPosServiceImpl implements DayPosService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayPosVO.getStoreCds().split(",");
-        dayPosVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayPosVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayPosVO.getStoreCds(), 3900));
+            dayPosVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return dayPosMapper.getDayPosExcelList(dayPosVO);
     }

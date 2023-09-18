@@ -87,11 +87,8 @@
                                         </foreach>
                                     </if>
                                 </if>
-                                <if test='storeCds != null and storeCds != ""'>
-                                    AND
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                                        tsdt.STORE_CD = #{item}
-                                    </foreach>
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND tsdt.STORE_CD IN (${storeCdQuery})
                                 </if>
                                 <if test='momsTeam != null and momsTeam != ""'>
                                     AND tmsi.MOMS_TEAM = #{momsTeam}
@@ -147,11 +144,8 @@
                                         </foreach>
                                     </if>
                                 </if>
-                                <if test='storeCds != null and storeCds != ""'>
-                                    AND
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                                        tsdt.STORE_CD = #{item}
-                                    </foreach>
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND tsdt.STORE_CD IN (${storeCdQuery})
                                 </if>
                                 <if test='momsTeam != null and momsTeam != ""'>
                                     AND tmsi.MOMS_TEAM = #{momsTeam}
@@ -223,11 +217,8 @@
                                         </foreach>
                                     </if>
                                 </if>
-                                <if test='storeCds != null and storeCds != ""'>
-                                    AND
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                                        tsdt.STORE_CD = #{item}
-                                    </foreach>
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND tsdt.STORE_CD IN (${storeCdQuery})
                                 </if>
                                 <if test='momsTeam != null and momsTeam != ""'>
                                     AND tmsi.MOMS_TEAM = #{momsTeam}
@@ -283,11 +274,8 @@
                                         </foreach>
                                     </if>
                                 </if>
-                                <if test='storeCds != null and storeCds != ""'>
-                                    AND
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                                        tsdt.STORE_CD = #{item}
-                                    </foreach>
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND tsdt.STORE_CD IN (${storeCdQuery})
                                 </if>
                                 <if test='momsTeam != null and momsTeam != ""'>
                                     AND tmsi.MOMS_TEAM = #{momsTeam}

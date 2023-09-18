@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.month.monthMoms.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.month.monthMoms.service.MonthMomsService;
@@ -30,9 +34,11 @@ import java.util.List;
 @Transactional
 public class MonthMomsServiceImpl implements MonthMomsService {
     private final MonthMomsMapper monthMomsMapper;
+    private final PopupMapper popupMapper;
 
-    public MonthMomsServiceImpl(MonthMomsMapper monthMomsMapper) {
+    public MonthMomsServiceImpl(MonthMomsMapper monthMomsMapper, PopupMapper popupMapper) {
         this.monthMomsMapper = monthMomsMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 조회 */
@@ -46,8 +52,11 @@ public class MonthMomsServiceImpl implements MonthMomsService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = monthMomsVO.getStoreCds().split(",");
-        monthMomsVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(monthMomsVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(monthMomsVO.getStoreCds(), 3900));
+            monthMomsVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 결제수단 array 값 세팅
         String payCol= "";

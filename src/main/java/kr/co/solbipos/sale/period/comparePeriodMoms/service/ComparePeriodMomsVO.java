@@ -74,6 +74,9 @@ public class ComparePeriodMomsVO extends PageVO {
     /** 그룹코드 */
     private String branchCd;
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -208,5 +211,13 @@ public class ComparePeriodMomsVO extends PageVO {
 
     public void setBranchCd(String branchCd) {
         this.branchCd = branchCd;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }
