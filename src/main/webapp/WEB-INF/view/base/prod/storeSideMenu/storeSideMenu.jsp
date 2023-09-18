@@ -9,13 +9,13 @@
 <div class="con">
   <div class="tabType1" ng-controller="storeSideMenuCtrl" ng-init="init()">
     <ul>
+      <%-- 사이드메뉴관리 --%>
+      <li>
+        <a id="sideMenuTab" href="#" class="on" ng-click="sideMenuShow()"><s:message code="storeSideMenu.sideMenu"/></a>
+      </li>
       <%-- 상품정보관리 --%>
       <li>
-        <a id="prodTab" href="#" class="on" ng-click="prodShow()"><s:message code="storeSideMenu.prod"/></a>
-      </li>
-      <%-- 세트메뉴구성(BBQ전용)--%>
-      <li>
-        <a id="setProdTab" href="#" ng-click="setProdShow()"><s:message code="storeSideMenu.setProd"/></a>
+        <a id="prodTab" href="#" ng-click="prodShow()"><s:message code="storeSideMenu.prod"/></a>
       </li>
       <%-- 판매터치키등록--%>
       <li>
@@ -38,11 +38,11 @@
   var requireYnEnvstVal = "${requireYnEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/storeSideMenu/storeSideMenu.js?ver=20230906.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/storeSideMenu/storeSideMenu.js?ver=20230918.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
-<%-- 세트메뉴구성(BBQ전용) --%>
-<c:import url="/WEB-INF/view/base/prod/setProd/setProd.jsp">
+<%-- 사이드메뉴관리 --%>
+<c:import url="/WEB-INF/view/base/prod/sideMenu/sideMenu.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
   <c:param name="gubun" value="sideMenu"/>
