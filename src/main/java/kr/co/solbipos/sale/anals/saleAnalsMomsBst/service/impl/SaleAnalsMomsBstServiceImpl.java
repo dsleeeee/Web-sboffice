@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.anals.saleAnalsMomsBst.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.anals.saleAnalsMomsBst.service.SaleAnalsMomsBstService;
@@ -8,7 +12,6 @@ import kr.co.solbipos.sale.anals.saleAnalsMomsBst.service.SaleAnalsMomsBstVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -34,9 +37,11 @@ import java.util.*;
 public class SaleAnalsMomsBstServiceImpl implements SaleAnalsMomsBstService {
 
     private final SaleAnalsMomsBstMapper saleAnalsMomsBstMapper;
+    private final PopupMapper popupMapper;
 
-    public SaleAnalsMomsBstServiceImpl(SaleAnalsMomsBstMapper saleAnalsMomsBstMapper) {
+    public SaleAnalsMomsBstServiceImpl(SaleAnalsMomsBstMapper saleAnalsMomsBstMapper, PopupMapper popupMapper) {
         this.saleAnalsMomsBstMapper = saleAnalsMomsBstMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 매출분석(사업전략팀) 조회 */
@@ -50,8 +55,11 @@ public class SaleAnalsMomsBstServiceImpl implements SaleAnalsMomsBstService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = saleAnalsMomsBstVO.getStoreCds().split(",");
-        saleAnalsMomsBstVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(saleAnalsMomsBstVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(saleAnalsMomsBstVO.getStoreCds(), 3900));
+            saleAnalsMomsBstVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 상품 array 값 세팅
         if (saleAnalsMomsBstVO.getProdCds() != null && !"".equals(saleAnalsMomsBstVO.getProdCds())) {
@@ -132,7 +140,7 @@ public class SaleAnalsMomsBstServiceImpl implements SaleAnalsMomsBstService {
         // 화면출력이 상품일떄
         else if("prod".equals(saleAnalsMomsBstVO.getViewType())) {
 
-            int totAmt = 0;
+            long totAmt = 0;
 
             // 집계쿼리 생성
             for (int i = 0; i < dateArr.size(); i++) {

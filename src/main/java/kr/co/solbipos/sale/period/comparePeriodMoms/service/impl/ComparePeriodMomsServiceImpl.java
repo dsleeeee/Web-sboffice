@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.period.comparePeriodMoms.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.period.comparePeriodMoms.service.ComparePeriodMomsService;
@@ -30,9 +34,11 @@ import java.util.List;
 public class ComparePeriodMomsServiceImpl implements ComparePeriodMomsService {
 
     private final ComparePeriodMomsMapper comparePeriodMomsMapper;
+    private final PopupMapper popupMapper;
 
-    public ComparePeriodMomsServiceImpl(ComparePeriodMomsMapper comparePeriodMomsMapper) {
+    public ComparePeriodMomsServiceImpl(ComparePeriodMomsMapper comparePeriodMomsMapper, PopupMapper popupMapper) {
         this.comparePeriodMomsMapper = comparePeriodMomsMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 대비기간별 매출 조회 */
@@ -46,8 +52,11 @@ public class ComparePeriodMomsServiceImpl implements ComparePeriodMomsService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = comparePeriodMomsVO.getStoreCds().split(",");
-        comparePeriodMomsVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(comparePeriodMomsVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(comparePeriodMomsVO.getStoreCds(), 3900));
+            comparePeriodMomsVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 매장브랜드 '전체' 일때
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {

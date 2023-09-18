@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.day.dayTime.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.day.dayTime.service.DayTimeService;
@@ -30,9 +34,11 @@ import java.util.List;
 @Transactional
 public class DayTimeServiceImpl implements DayTimeService {
     private final DayTimeMapper dayTimeMapper;
+    private final PopupMapper popupMapper;
 
-    public DayTimeServiceImpl(DayTimeMapper dayTimeMapper) {
+    public DayTimeServiceImpl(DayTimeMapper dayTimeMapper, PopupMapper popupMapper) {
         this.dayTimeMapper = dayTimeMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 조회 */
@@ -46,8 +52,11 @@ public class DayTimeServiceImpl implements DayTimeService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayTimeVO.getStoreCds().split(",");
-        dayTimeVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayTimeVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayTimeVO.getStoreCds(), 3900));
+            dayTimeVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         if(dayTimeVO.getOptionFg().equals("time")){ // 시간대
             // 매출 시간대 설정

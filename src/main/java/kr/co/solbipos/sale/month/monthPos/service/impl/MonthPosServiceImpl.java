@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.month.monthPos.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.month.monthPos.service.MonthPosService;
@@ -29,9 +33,11 @@ import java.util.List;
 @Transactional
 public class MonthPosServiceImpl implements MonthPosService {
     private final MonthPosMapper monthPosMapper;
+    private final PopupMapper popupMapper;
 
-    public MonthPosServiceImpl(MonthPosMapper monthPosMapper) {
+    public MonthPosServiceImpl(MonthPosMapper monthPosMapper, PopupMapper popupMapper) {
         this.monthPosMapper = monthPosMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 조회 */
@@ -45,8 +51,11 @@ public class MonthPosServiceImpl implements MonthPosService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = monthPosVO.getStoreCds().split(",");
-        monthPosVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(monthPosVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(monthPosVO.getStoreCds(), 3900));
+            monthPosVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 결제수단 array 값 세팅
         String payCol= "";
@@ -106,8 +115,11 @@ public class MonthPosServiceImpl implements MonthPosService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = monthPosVO.getStoreCds().split(",");
-        monthPosVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(monthPosVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(monthPosVO.getStoreCds(), 3900));
+            monthPosVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return monthPosMapper.getMonthPosExcelList(monthPosVO);
     }
