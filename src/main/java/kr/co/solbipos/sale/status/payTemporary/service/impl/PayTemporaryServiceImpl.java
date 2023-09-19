@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.status.payTemporary.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.status.payTemporary.service.PayTemporaryService;
@@ -28,10 +32,12 @@ import java.util.List;
 @Service("payTemporaryService")
 public class PayTemporaryServiceImpl implements PayTemporaryService {
     private final PayTemporaryMapper payTemporaryMapper;
+    private final PopupMapper popupMapper;
 
     @Autowired
-    public PayTemporaryServiceImpl(PayTemporaryMapper payTemporaryMapper) {
+    public PayTemporaryServiceImpl(PayTemporaryMapper payTemporaryMapper, PopupMapper popupMapper) {
         this.payTemporaryMapper = payTemporaryMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 가승인-상품권결제차액 탭 - 조회 */
@@ -42,8 +48,11 @@ public class PayTemporaryServiceImpl implements PayTemporaryService {
         payTemporaryVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         // 매장 array 값 세팅
-        String[] storeCds = payTemporaryVO.getStoreCds().split(",");
-        payTemporaryVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(payTemporaryVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(payTemporaryVO.getStoreCds(), 3900));
+            payTemporaryVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 매장브랜드 '전체' 일때
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
@@ -65,8 +74,11 @@ public class PayTemporaryServiceImpl implements PayTemporaryService {
         payTemporaryVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         // 매장 array 값 세팅
-        String[] storeCds = payTemporaryVO.getStoreCds().split(",");
-        payTemporaryVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(payTemporaryVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(payTemporaryVO.getStoreCds(), 3900));
+            payTemporaryVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 매장브랜드 '전체' 일때
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
@@ -100,8 +112,11 @@ public class PayTemporaryServiceImpl implements PayTemporaryService {
         payTemporaryVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         // 매장 array 값 세팅
-        String[] storeCds = payTemporaryVO.getStoreCds().split(",");
-        payTemporaryVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(payTemporaryVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(payTemporaryVO.getStoreCds(), 3900));
+            payTemporaryVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 매장브랜드 '전체' 일때
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
@@ -123,8 +138,11 @@ public class PayTemporaryServiceImpl implements PayTemporaryService {
         payTemporaryVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         // 매장 array 값 세팅
-        String[] storeCds = payTemporaryVO.getStoreCds().split(",");
-        payTemporaryVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(payTemporaryVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(payTemporaryVO.getStoreCds(), 3900));
+            payTemporaryVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 매장브랜드 '전체' 일때
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {

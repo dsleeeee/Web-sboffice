@@ -42,11 +42,8 @@
         TB_MS_STORE_INFO tmsi
         WHERE 1=1
         AND tsspm.HQ_OFFICE_CD = #{hqOfficeCd}
-        <if test='storeCds != null and storeCds != ""'>
-            AND
-            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                tsspm.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsspm.STORE_CD IN (${storeCdQuery})
         </if>
         AND tsspm.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         AND tms.HQ_OFFICE_CD = tsspm.HQ_OFFICE_CD
@@ -125,11 +122,8 @@
         TB_MS_STORE_INFO tmsi
         WHERE 1=1
         AND tsspm.HQ_OFFICE_CD = #{hqOfficeCd}
-        <if test='storeCds != null and storeCds != ""'>
-            AND
-            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                tsspm.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsspm.STORE_CD IN (${storeCdQuery})
         </if>
         AND tsspm.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         AND tms.HQ_OFFICE_CD = tsspm.HQ_OFFICE_CD

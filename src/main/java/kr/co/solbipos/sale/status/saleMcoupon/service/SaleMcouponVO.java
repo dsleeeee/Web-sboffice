@@ -75,6 +75,9 @@ public class SaleMcouponVO extends PageVO {
     /** 영업일자 */
     private String saleDate;
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -193,5 +196,13 @@ public class SaleMcouponVO extends PageVO {
 
     public void setSaleDate(String saleDate) {
         this.saleDate = saleDate;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

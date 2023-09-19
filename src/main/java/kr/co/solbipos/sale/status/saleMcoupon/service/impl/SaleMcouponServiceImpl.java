@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.status.saleMcoupon.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.status.saleMcoupon.service.SaleMcouponService;
@@ -35,12 +39,16 @@ import static kr.co.common.utils.DateUtil.currentDateString;
 @Transactional
 public class SaleMcouponServiceImpl implements SaleMcouponService {
     private final SaleMcouponMapper saleMcouponMapper;
+    private final PopupMapper popupMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public SaleMcouponServiceImpl(SaleMcouponMapper saleMcouponMapper) { this.saleMcouponMapper = saleMcouponMapper; }
+    public SaleMcouponServiceImpl(SaleMcouponMapper saleMcouponMapper, PopupMapper popupMapper) {
+        this.saleMcouponMapper = saleMcouponMapper;
+        this.popupMapper = popupMapper;
+    }
 
     /** 모바일쿠폰 현황 - 조회 */
     @Override
@@ -50,8 +58,11 @@ public class SaleMcouponServiceImpl implements SaleMcouponService {
         saleMcouponVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         // 매장 array 값 세팅
-        String[] storeCds = saleMcouponVO.getStoreCds().split(",");
-        saleMcouponVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(saleMcouponVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(saleMcouponVO.getStoreCds(), 3900));
+            saleMcouponVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 매장브랜드 '전체' 일때
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
@@ -73,8 +84,11 @@ public class SaleMcouponServiceImpl implements SaleMcouponService {
         saleMcouponVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         // 매장 array 값 세팅
-        String[] storeCds = saleMcouponVO.getStoreCds().split(",");
-        saleMcouponVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(saleMcouponVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(saleMcouponVO.getStoreCds(), 3900));
+            saleMcouponVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 매장브랜드 '전체' 일때
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
