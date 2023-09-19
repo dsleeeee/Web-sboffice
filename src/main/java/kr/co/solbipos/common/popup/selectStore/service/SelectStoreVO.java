@@ -54,6 +54,9 @@ public class SelectStoreVO extends PageVO {
     /** 사용자별 브랜드코드 */
     private String userBrands;
 
+    /** 사용자별 본사 공통코드 */
+    private String userHqNmcodeCd;
+
     /** 팀별 */
     private String momsTeam;
 
@@ -146,6 +149,12 @@ public class SelectStoreVO extends PageVO {
     }
 
     public void setUserBrands(String userBrands) { this.userBrands = userBrands; }
+
+    public String getUserHqNmcodeCd() {
+        return userHqNmcodeCd;
+    }
+
+    public void setUserHqNmcodeCd(String userHqNmcodeCd) { this.userHqNmcodeCd = userHqNmcodeCd; }
 
     public String getMomsTeam() {
         return momsTeam;

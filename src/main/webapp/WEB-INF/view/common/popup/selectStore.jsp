@@ -292,13 +292,13 @@
         var targetPosId = '${param.targetPosId}';
 
         // 상위 객체 상속 : T/F 는 picker
-        angular.extend(this, new RootController(targetId + 'Ctrl', $scope, $http, true));
+        angular.extend(this, new RootController(targetId + 'Ctrl', $scope, $http, false));
 
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
         $scope.initGrid = function (s, e) {
             // 매장브랜드
             var params = {};
-            $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectBrandMomsList.sb', params, function (response) {
+            $scope._postJSONQuery.withOutPopUp('/common/popup/selectStore/getSelectBrandMomsList.sb', params, function (response) {
                 if (response.data.data.list.length > 0) {
                     var list = response.data.data.list;
                     $scope._setComboData("popStoreHqBrandCdCombo", list);
@@ -310,7 +310,7 @@
             // 팀별
             var params = {};
             params.nmcodeGrpCd = "151";
-            $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectHqNmcodeMomsList.sb', params, function (response) {
+            $scope._postJSONQuery.withOutPopUp('/common/popup/selectStore/getSelectHqNmcodeMomsList.sb', params, function (response) {
                 if (response.data.data.list.length > 0) {
                     var list = response.data.data.list;
                     $scope._setComboData("popMomsTeamCombo", list);
@@ -328,7 +328,7 @@
             // AC점포별
             var params = {};
             params.nmcodeGrpCd = "152";
-            $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectHqNmcodeMomsList.sb', params, function (response) {
+            $scope._postJSONQuery.withOutPopUp('/common/popup/selectStore/getSelectHqNmcodeMomsList.sb', params, function (response) {
                 if (response.data.data.list.length > 0) {
                     var list = response.data.data.list;
                     $scope._setComboData("popMomsAcShopCombo", list);
@@ -346,7 +346,7 @@
             // 지역구분
             var params = {};
             params.nmcodeGrpCd = "153";
-            $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectHqNmcodeMomsList.sb', params, function (response) {
+            $scope._postJSONQuery.withOutPopUp('/common/popup/selectStore/getSelectHqNmcodeMomsList.sb', params, function (response) {
                 if (response.data.data.list.length > 0) {
                     var list = response.data.data.list;
                     $scope._setComboData("popMomsAreaFgCombo", list);
@@ -364,7 +364,7 @@
             // 상권
             var params = {};
             params.nmcodeGrpCd = "154";
-            $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectHqNmcodeMomsList.sb', params, function (response) {
+            $scope._postJSONQuery.withOutPopUp('/common/popup/selectStore/getSelectHqNmcodeMomsList.sb', params, function (response) {
                 if (response.data.data.list.length > 0) {
                     var list = response.data.data.list;
                     $scope._setComboData("popMomsCommercialCombo", list);
@@ -382,7 +382,7 @@
             // 점포유형
             var params = {};
             params.nmcodeGrpCd = "155";
-            $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectHqNmcodeMomsList.sb', params, function (response) {
+            $scope._postJSONQuery.withOutPopUp('/common/popup/selectStore/getSelectHqNmcodeMomsList.sb', params, function (response) {
                 if (response.data.data.list.length > 0) {
                     var list = response.data.data.list;
                     $scope._setComboData("popMomsShopTypeCombo", list);
@@ -400,7 +400,7 @@
             // 매장관리타입
             var params = {};
             params.nmcodeGrpCd = "156";
-            $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectHqNmcodeMomsList.sb', params, function (response) {
+            $scope._postJSONQuery.withOutPopUp('/common/popup/selectStore/getSelectHqNmcodeMomsList.sb', params, function (response) {
                 if (response.data.data.list.length > 0) {
                     var list = response.data.data.list;
                     $scope._setComboData("popMomsStoreManageTypeCombo", list);
@@ -417,7 +417,7 @@
 
             // 그룹
             var params = {};
-            $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectBranchMomsList.sb', params, function (response) {
+            $scope._postJSONQuery.withOutPopUp('/common/popup/selectStore/getSelectBranchMomsList.sb', params, function (response) {
                 if (response.data.data.list.length > 0) {
                     var list = response.data.data.list;
                     $scope._setComboData("popBranchCdCombo", list);

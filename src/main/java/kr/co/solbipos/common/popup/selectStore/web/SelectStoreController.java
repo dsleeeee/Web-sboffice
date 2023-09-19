@@ -84,6 +84,72 @@ public class SelectStoreController {
     }
 
     /**
+     * 사용자별 브랜드 콤보박스 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   selectStoreVO
+     * @return  String
+     * @author  김설아
+     * @since   2023. 09. 11.
+     */
+    @RequestMapping(value = "/getSelectBrandMomsList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSelectBrandMomsList(HttpServletRequest request, HttpServletResponse response,
+                                      Model model, SelectStoreVO selectStoreVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = selectStoreService.getSelectBrandMomsList(selectStoreVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, selectStoreVO);
+    }
+
+    /**
+     * 사용자별 코드별 공통코드 콤보박스 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   selectStoreVO
+     * @return  String
+     * @author  김설아
+     * @since   2023. 09. 11.
+     */
+    @RequestMapping(value = "/getSelectHqNmcodeMomsList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSelectHqNmcodeMomsList(HttpServletRequest request, HttpServletResponse response,
+                                         Model model, SelectStoreVO selectStoreVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = selectStoreService.getSelectHqNmcodeMomsList(selectStoreVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, selectStoreVO);
+    }
+
+    /**
+     * 사용자별 그룹 콤보박스 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   selectStoreVO
+     * @return  String
+     * @author  김설아
+     * @since   2023. 09. 11.
+     */
+    @RequestMapping(value = "/getSelectBranchMomsList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSelectBranchMomsList(HttpServletRequest request, HttpServletResponse response,
+                                       Model model, SelectStoreVO selectStoreVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = selectStoreService.getSelectBranchMomsList(selectStoreVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, selectStoreVO);
+    }
+
+    /**
      * 업로드매장 공통 - 업로드매장 리스트 조회
      * @param   request
      * @param   response

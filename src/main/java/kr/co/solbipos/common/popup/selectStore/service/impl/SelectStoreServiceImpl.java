@@ -66,6 +66,80 @@ public class SelectStoreServiceImpl implements SelectStoreService {
         return resultList;
     }
 
+    /** 사용자별 브랜드 콤보박스 조회 */
+    @Override
+    public List<DefaultMap<String>> getSelectBrandMomsList(SelectStoreVO selectStoreVO, SessionInfoVO sessionInfoVO) {
+
+        selectStoreVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        selectStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            selectStoreVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        selectStoreVO.setUserId(sessionInfoVO.getUserId());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 사용자별 브랜드 사용 조회
+            String userBrands = selectStoreMapper.getUserBrandCdList(selectStoreVO);
+            selectStoreVO.setUserBrands(userBrands);
+
+            if (selectStoreVO.getUserBrands() != null && !"".equals(selectStoreVO.getUserBrands())) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = selectStoreVO.getUserBrands().split(",");
+                selectStoreVO.setUserBrandList(userBrandList);
+            }
+        }
+
+        return selectStoreMapper.getSelectBrandMomsList(selectStoreVO);
+    }
+
+    /** 사용자별 코드별 공통코드 콤보박스 조회 */
+    @Override
+    public List<DefaultMap<String>> getSelectHqNmcodeMomsList(SelectStoreVO selectStoreVO, SessionInfoVO sessionInfoVO) {
+
+        selectStoreVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        selectStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            selectStoreVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        selectStoreVO.setUserId(sessionInfoVO.getUserId());
+
+        List<DefaultMap<String>> resultList = new ArrayList<DefaultMap<String>>();
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 사용자별 코드별 공통코드 조회
+            String userHqNmcodeCd = selectStoreMapper.getUserHqNmcodeCdList(selectStoreVO);
+            selectStoreVO.setUserHqNmcodeCd(userHqNmcodeCd);
+
+            resultList = selectStoreMapper.getSelectHqNmcodeMomsList(selectStoreVO);
+        }
+
+        return resultList;
+    }
+
+    /** 사용자별 그룹 콤보박스 조회 */
+    @Override
+    public List<DefaultMap<String>> getSelectBranchMomsList(SelectStoreVO selectStoreVO, SessionInfoVO sessionInfoVO) {
+
+        selectStoreVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        selectStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
+            selectStoreVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        selectStoreVO.setUserId(sessionInfoVO.getUserId());
+
+        List<DefaultMap<String>> resultList = new ArrayList<DefaultMap<String>>();
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
+            // 사사용자별 그룹 조회
+            String userHqNmcodeCd = selectStoreMapper.getUserBranchCdList(selectStoreVO);
+            selectStoreVO.setUserHqNmcodeCd(userHqNmcodeCd);
+
+            resultList = selectStoreMapper.getSelectBranchMomsList(selectStoreVO);
+        }
+
+        return resultList;
+    }
+
     /** 업로드매장 공통 - 업로드매장 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getSelectUploadStoreList(SelectStoreVO selectStoreVO, SessionInfoVO sessionInfoVO) {
