@@ -268,8 +268,8 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="selectBranchMomsList" parameterType="selectStoreVO" resultType="DefaultMap">
-        /* SelectStoreMapper.selectBranchMomsList */
+    <select id="getSelectBranchMomsList" parameterType="selectStoreVO" resultType="DefaultMap">
+        /* SelectStoreMapper.getSelectBranchMomsList */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
