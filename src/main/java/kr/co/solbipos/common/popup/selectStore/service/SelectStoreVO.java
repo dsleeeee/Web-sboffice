@@ -78,6 +78,9 @@ public class SelectStoreVO extends PageVO {
     /** 그룹코드 */
     private String branchCd;
 
+    /** 공통코드 */
+    private String nmcodeGrpCd;
+
     /** 판매가변경제한매장 */
     private String storeChgNot;
 
@@ -208,6 +211,14 @@ public class SelectStoreVO extends PageVO {
 
     public void setBranchCd(String branchCd) {
         this.branchCd = branchCd;
+    }
+
+    public String getNmcodeGrpCd() {
+        return nmcodeGrpCd;
+    }
+
+    public void setNmcodeGrpCd(String nmcodeGrpCd) {
+        this.nmcodeGrpCd = nmcodeGrpCd;
     }
 
     public String getStoreChgNot() {

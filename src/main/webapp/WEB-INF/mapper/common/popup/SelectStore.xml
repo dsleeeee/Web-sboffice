@@ -99,6 +99,19 @@
         ORDER BY tms.STORE_CD
     </select>
 
+    <!-- 매장 공통 - 회사 구분 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSelectStoreCompanyFg" parameterType="selectStoreVO" resultType="DefaultMap">
+        /* SelectStoreMapper.getSelectStoreCompanyFg */
+        SELECT
+        (CASE WHEN (SELECT ENVST_VAL FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '1250' AND USE_YN = 'Y') = '1' THEN 'MOMS'
+                ELSE 'COMMON' END) AS COMPANY_FG
+        FROM dual
+    </select>
+
     <!-- 사용자별 브랜드 사용 조회 -->
     <!--
         TABLE    :

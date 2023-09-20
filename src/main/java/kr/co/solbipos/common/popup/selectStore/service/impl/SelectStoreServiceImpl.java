@@ -66,6 +66,15 @@ public class SelectStoreServiceImpl implements SelectStoreService {
         return resultList;
     }
 
+    /** 매장 공통 - 회사 구분 조회 */
+    @Override
+    public DefaultMap<Object> getSelectStoreCompanyFg(SelectStoreVO selectStoreVO, SessionInfoVO sessionInfoVO) {
+
+        selectStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return selectStoreMapper.getSelectStoreCompanyFg(selectStoreVO);
+    }
+
     /** 사용자별 브랜드 콤보박스 조회 */
     @Override
     public List<DefaultMap<String>> getSelectBrandMomsList(SelectStoreVO selectStoreVO, SessionInfoVO sessionInfoVO) {

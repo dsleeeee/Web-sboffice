@@ -84,6 +84,31 @@ public class SelectStoreController {
     }
 
     /**
+     * 매장 공통 - 회사 구분 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   selectStoreVO
+     * @return  String
+     * @author  김설아
+     * @since   2023. 08. 11.
+     */
+    @RequestMapping(value = "/getSelectStoreCompanyFg.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSelectStoreCompanyFg(SelectStoreVO selectStoreVO, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<Object> result = selectStoreService.getSelectStoreCompanyFg(selectStoreVO, sessionInfoVO);
+
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+        resultMap.put("result", result);
+
+        return returnJson(Status.OK, resultMap);
+    }
+
+    /**
      * 사용자별 브랜드 콤보박스 조회
      * @param   request
      * @param   response

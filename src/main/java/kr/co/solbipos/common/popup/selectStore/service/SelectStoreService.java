@@ -25,6 +25,9 @@ public interface SelectStoreService {
     /** 매장 공통 - 매장 리스트 조회 */
     List<DefaultMap<String>> getSelectStoreList(SelectStoreVO selectStoreVO, SessionInfoVO sessionInfoVO);
 
+    /** 매장 공통 - 회사 구분 조회 */
+    DefaultMap<Object> getSelectStoreCompanyFg(SelectStoreVO selectStoreVO, SessionInfoVO sessionInfoVO);
+
     /** 사용자별 브랜드 콤보박스 조회 */
     List<DefaultMap<String>> getSelectBrandMomsList(SelectStoreVO selectStoreVO, SessionInfoVO sessionInfoVO);
 
