@@ -7,11 +7,11 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 
 <div class="con">
-    <div class="tabType1" ng-controller="kitchenprintCtrl" ng-init="init()">
+    <div class="tabType1" ng-controller="printerGroupTabCtrl" ng-init="init()">
         <ul>
-            <%-- 상품-매장주방프린터 연결 탭 --%>
+            <%-- 주방프린터그룹관리 탭 --%>
             <li>
-                <a id="prodKitchenprintLinkTab" href="#" class="on" ng-click="prodKitchenprintLinkShow()"><s:message code="prodKitchenprintLink.prodKitchenprintLink"/></a>
+                <a id="printerGroupTab" href="#" class="on" ng-click="printerGroupShow()"><s:message code="printerGroup.printerGroup"/></a>
             </li>
         </ul>
     </div>
@@ -37,11 +37,11 @@
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodKitchenprintLink/kitchenprintTab.js?ver=20230921.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodKitchenprintLink/printerGroupTab.js?ver=20230921.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
-<%-- 상품-매장주방프린터 연결 레이어 --%>
-<c:import url="/WEB-INF/view/base/prod/prodKitchenprintLink/prodKitchenprintLink.jsp">
+<%-- 주방프린터그룹관리 레이어 --%>
+<c:import url="/WEB-INF/view/base/prod/prodKitchenprintLink/printerGroup.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

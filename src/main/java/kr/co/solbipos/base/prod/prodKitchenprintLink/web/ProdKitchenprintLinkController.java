@@ -204,6 +204,148 @@ public class ProdKitchenprintLinkController {
     }
 
     /**
+     * 페이지 이동
+     *
+     * @param request
+     * @param response
+     * @param model
+     */
+    @RequestMapping(value = "/printerGroup/list.sb", method = RequestMethod.GET)
+    public String printerGroupView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 브랜드조회(콤보박스용)
+        StoreTypeVO storeTypeVO = new StoreTypeVO();
+        model.addAttribute("brandList", convertToJson(storeTypeService.getBrandList(storeTypeVO, sessionInfoVO)));
+
+        // 메뉴그룹조회(콤보박스용)
+        model.addAttribute("storeGroupList", convertToJson(storeTypeService.getStoreGroupCombo(storeTypeVO, sessionInfoVO)));
+
+        // 사용자별 브랜드 조회(콤보박스용)
+        DayProdVO dayProdVO = new DayProdVO();
+        String momsHqBrandCdComboList = convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO));
+        model.addAttribute("momsHqBrandCdComboList", momsHqBrandCdComboList);
+
+        // 사용자별 브랜드 콤보박스 조회
+        model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
+
+        /** 맘스터치 */
+        // [1250 맘스터치] 환경설정값 조회
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0"));
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
+        }
+
+        // 사용자별 코드별 공통코드 콤보박스 조회
+        // 팀별
+        List momsTeamComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "151");
+        String momsTeamComboListAll = "";
+        if (momsTeamComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            momsTeamComboListAll = convertToJson(list);
+        } else {
+            momsTeamComboListAll = cmmCodeUtil.assmblObj(momsTeamComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("momsTeamComboList", momsTeamComboListAll);
+        // AC점포별
+        List momsAcShopComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "152");
+        String momsAcShopComboListAll = "";
+        if (momsAcShopComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            momsAcShopComboListAll = convertToJson(list);
+        } else {
+            momsAcShopComboListAll = cmmCodeUtil.assmblObj(momsAcShopComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("momsAcShopComboList", momsAcShopComboListAll);
+        // 지역구분
+        List momsAreaFgComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "153");
+        String momsAreaFgComboListAll = "";
+        if (momsAreaFgComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            momsAreaFgComboListAll = convertToJson(list);
+        } else {
+            momsAreaFgComboListAll = cmmCodeUtil.assmblObj(momsAreaFgComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("momsAreaFgComboList", momsAreaFgComboListAll);
+        // 상권
+        List momsCommercialComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "154");
+        String momsCommercialComboListAll = "";
+        if (momsCommercialComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            momsCommercialComboListAll = convertToJson(list);
+        } else {
+            momsCommercialComboListAll = cmmCodeUtil.assmblObj(momsCommercialComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("momsCommercialComboList", momsCommercialComboListAll);
+        // 점포유형
+        List momsShopTypeComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "155");
+        String momsShopTypeComboListAll = "";
+        if (momsShopTypeComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            momsShopTypeComboListAll = convertToJson(list);
+        } else {
+            momsShopTypeComboListAll = cmmCodeUtil.assmblObj(momsShopTypeComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("momsShopTypeComboList", momsShopTypeComboListAll);
+        // 매장관리타입
+        List momsStoreManageTypeComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "156");
+        String momsStoreManageTypeComboListAll = "";
+        if (momsStoreManageTypeComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            momsStoreManageTypeComboListAll = convertToJson(list);
+        } else {
+            momsStoreManageTypeComboListAll = cmmCodeUtil.assmblObj(momsStoreManageTypeComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("momsStoreManageTypeComboList", momsStoreManageTypeComboListAll);
+
+        // 사용자별 그룹 콤보박스 조회
+        // 그룹
+        List branchCdComboList = dayProdService.getUserBranchComboList(sessionInfoVO);
+        String branchCdComboListAll = "";
+        if (branchCdComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            branchCdComboListAll = convertToJson(list);
+        } else {
+            branchCdComboListAll = cmmCodeUtil.assmblObj(branchCdComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("branchCdComboList", branchCdComboListAll);
+
+        /** //맘스터치 */
+
+        return "base/prod/prodKitchenprintLink/printerGroupTab";
+    }
+
+    /**
      * 상품조회
      *
      * @param prodKitchenprintLinkVO HttpServletRequest
