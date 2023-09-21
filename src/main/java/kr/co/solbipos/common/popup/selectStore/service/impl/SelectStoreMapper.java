@@ -29,6 +29,27 @@ public interface SelectStoreMapper {
     /** 매장 공통 - 매장 리스트 조회 */
     List<DefaultMap<String>> getSelectStoreList(SelectStoreVO selectStoreVO);
 
+    /** 매장 공통 - 회사 구분 조회 */
+    DefaultMap<Object> getSelectStoreCompanyFg(SelectStoreVO selectStoreVO);
+
+    /** 사용자별 브랜드 사용 조회 */
+    String getUserBrandCdList(SelectStoreVO selectStoreVO);
+
+    /** 사용자별 브랜드 콤보박스 조회 */
+    List<DefaultMap<String>> getSelectBrandMomsList(SelectStoreVO selectStoreVO);
+
+    /** 사용자별 코드별 공통코드 조회 */
+    String getUserHqNmcodeCdList(SelectStoreVO selectStoreVO);
+
+    /** 사용자별 코드별 공통코드 콤보박스 조회 */
+    List<DefaultMap<String>> getSelectHqNmcodeMomsList(SelectStoreVO selectStoreVO);
+
+    /** 사용자별 그룹 조회 */
+    String getUserBranchCdList(SelectStoreVO selectStoreVO);
+
+    /** 사용자별 그룹 콤보박스 조회 */
+    List<DefaultMap<String>> getSelectBranchMomsList(SelectStoreVO selectStoreVO);
+
     /** 업로드매장 공통 - 업로드매장 리스트 조회 */
     List<DefaultMap<String>> getSelectUploadStoreList(SelectStoreVO selectStoreVO);
 

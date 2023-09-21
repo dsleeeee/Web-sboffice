@@ -54,6 +54,9 @@ public class SelectStoreVO extends PageVO {
     /** 사용자별 브랜드코드 */
     private String userBrands;
 
+    /** 사용자별 본사 공통코드 */
+    private String userHqNmcodeCd;
+
     /** 팀별 */
     private String momsTeam;
 
@@ -74,6 +77,9 @@ public class SelectStoreVO extends PageVO {
 
     /** 그룹코드 */
     private String branchCd;
+
+    /** 공통코드 */
+    private String nmcodeGrpCd;
 
     /** 판매가변경제한매장 */
     private String storeChgNot;
@@ -147,6 +153,12 @@ public class SelectStoreVO extends PageVO {
 
     public void setUserBrands(String userBrands) { this.userBrands = userBrands; }
 
+    public String getUserHqNmcodeCd() {
+        return userHqNmcodeCd;
+    }
+
+    public void setUserHqNmcodeCd(String userHqNmcodeCd) { this.userHqNmcodeCd = userHqNmcodeCd; }
+
     public String getMomsTeam() {
         return momsTeam;
     }
@@ -199,6 +211,14 @@ public class SelectStoreVO extends PageVO {
 
     public void setBranchCd(String branchCd) {
         this.branchCd = branchCd;
+    }
+
+    public String getNmcodeGrpCd() {
+        return nmcodeGrpCd;
+    }
+
+    public void setNmcodeGrpCd(String nmcodeGrpCd) {
+        this.nmcodeGrpCd = nmcodeGrpCd;
     }
 
     public String getStoreChgNot() {

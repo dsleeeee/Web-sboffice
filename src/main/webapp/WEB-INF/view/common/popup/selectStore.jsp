@@ -11,7 +11,7 @@
        ng-click="<c:out value="${param.targetId}"/>Show()"
        readonly/>
 
-<wj-popup id="wj<c:out value="${param.targetId}"/>Layer" control="wj<c:out value="${param.targetId}"/>Layer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;">
+<wj-popup id="wj<c:out value="${param.targetId}"/>Layer" control="wj<c:out value="${param.targetId}"/>Layer" show-trigger="Click" hide-trigger="Click" style="display:none;width:630px;">
     <div class="wj-dialog wj-dialog-columns">
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="cmm.store.select"/>
@@ -41,6 +41,17 @@
                             <input type="text" id="srchStoreNm" ng-model="srchStoreNm"/>
                         </td>
                     </tr>
+                    </tbody>
+                </table>
+                <%-- 조회조건 --%>
+                <table class="tblType01" id="tblSearch2${param.targetId}" style="display: none;">
+                    <colgroup>
+                        <col class="w15" />
+                        <col class="w35" />
+                        <col class="w15" />
+                        <col class="w35" />
+                    </colgroup>
+                    <tbody>
                     <tr>
                         <%-- 매장브랜드 --%>
                         <th><s:message code="selectStore.storeHqBrand" /></th>
@@ -200,9 +211,8 @@
                     </tr>
                     </tbody>
                 </table>
-
                 <%-- 조회조건 --%>
-                <table class="tblType01">
+                <table class="tblType01" id="tblSearch1${param.targetId}" style="display: none;">
                     <colgroup>
                         <col class="w15" />
                         <col class="w35" />
@@ -211,16 +221,15 @@
                     </colgroup>
                     <tbody>
                     <tr>
+                        <%-- 매장명 --%>
                         <th><s:message code="selectStore.storeNm" /></th>
                         <td>
                             <input type="text" id="filterStoreNm" ng-model="filterStoreNm"/>
                         </td>
                         <td colspan="2">
-                            <%-- 버튼영역 --%>
                             <div class="tr">
+                                <%-- 필터 --%>
                                 <button class="btn_skyblue fl" ng-click="searchFilter()"><s:message code="selectStore.filter" /></button>
-                                <button class="btn_skyblue" ng-click="searchStore()"><s:message code="cmm.search" /></button>
-                                <button class="btn_skyblue" ng-click="storeSelected()"><s:message code="cmm.chk"/></button>
                             </div>
                         </td>
                     </tr>
@@ -241,6 +250,33 @@
                     </tbody>
                 </table>
 
+                <%-- 조회조건 --%>
+                <table class="tblType01">
+                    <colgroup>
+                        <col class="w15" />
+                        <col class="w35" />
+                        <col class="w15" />
+                        <col class="w35" />
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <td colspan="4">
+                            <%-- 버튼영역 --%>
+                            <div class="tr">
+                                <div>
+                                    <%-- 조회 --%>
+                                    <button class="btn_skyblue ml5 fr" ng-click="searchStore()"><s:message code="cmm.search" /></button>
+                                </div>
+                                <div id="divStoreSelected${param.targetId}" style="display: none;">
+                                    <%-- 선택 --%>
+                                    <button class="btn_skyblue ml5 fr" ng-click="storeSelected()"><s:message code="cmm.chk"/></button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
                 <%--위즈모 테이블--%>
                 <div class="theGrid mt10" style="height: 400px;">
                     <wj-flex-grid
@@ -255,7 +291,7 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center" is-read-only="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="selectStore.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="selectStore.storeCd"/>" binding="storeCd" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="selectStore.storeNm"/>" binding="storeNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="selectStore.storeChgNot"/>" binding="storeChgNot" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
                     </wj-flex-grid>
@@ -290,15 +326,94 @@
         var targetCornerId = '${param.targetCornerId}';
         var targetTableId = '${param.targetTableId}';
         var targetPosId = '${param.targetPosId}';
+        var targetTypeFg = '${param.targetTypeFg}'; // 매장선택 (S:싱글, M:멀티)
+
+        // 회사 구분 (COMMON:공통, MOMS:맘스터치)
+        var companyFg = "COMMON";
 
         // 상위 객체 상속 : T/F 는 picker
-        angular.extend(this, new RootController(targetId + 'Ctrl', $scope, $http, true));
+        angular.extend(this, new RootController(targetId + 'Ctrl', $scope, $http, false));
 
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
         $scope.initGrid = function (s, e) {
+            // 선택한 테이블에 따른 리스트 항목 visible
+            var grid = wijmo.Control.getControl("#wjGridStore${param.targetId}");
+            var columns = grid.columns;
+
+            // 매장선택 (S:싱글, M:멀티)
+            if(targetTypeFg == "M") {
+                // 검색조건
+                $("#tblSearch1${param.targetId}").css("display", "");
+
+                // 선택 버튼
+                $("#divStoreSelected${param.targetId}").css("display", "");
+
+                // 그리드 체크박스
+                columns[0].visible = true;
+
+            } else if(targetTypeFg == "S") {
+                // 검색조건
+                $("#tblSearch1${param.targetId}").css("display", "none");
+
+                // 선택 버튼
+                $("#divStoreSelected${param.targetId}").css("display", "none");
+
+                // 그리드 체크박스
+                columns[0].visible = false;
+
+                // 그리드 링크 효과
+                s.formatItem.addHandler(function (s, e) {
+                    if (e.panel == s.cells) {
+                        var col = s.columns[e.col];
+                        if (col.binding === "storeCd") {
+                            var item = s.rows[e.row].dataItem;
+                            wijmo.addClass(e.cell, 'wijLink');
+                            wijmo.addClass(e.cell, 'wj-custom-readonly');
+                        }
+                    }
+                });
+
+                // 그리드 클릭 이벤트
+                s.addEventListener(s.hostElement, 'mousedown', function (e) {
+                    var ht = s.hitTest(e);
+                    if (ht.cellType === wijmo.grid.CellType.Cell) {
+                        var col         = ht.panel.columns[ht.col];
+                        var selectedRow = s.rows[ht.row].dataItem;
+                        if (col.binding === "storeCd") {
+                            $("#" + targetId + "Cd").val(selectedRow.storeCd);
+                            $("#" + targetId + "Nm").val("[" + selectedRow.storeCd + "] " + selectedRow.storeNm);
+                            eval('$scope.wj' + targetId + 'Layer.hide(true)');
+                        }
+                    }
+                });
+            }
+
+            // 회사 구분 (COMMON:공통, MOMS:맘스터치)
+            var params = {};
+            $scope._postJSONQuery.withOutPopUp('/common/popup/selectStore/getSelectStoreCompanyFg.sb', params, function (response) {
+                var companyList = response.data.data.result;
+                $scope.companyList = companyList;
+
+                if(companyList.companyFg < 1) {
+                    companyFg = "COMMON";
+                } else {
+                    companyFg = companyList.companyFg;
+                }
+
+                // 회사 구분 (COMMON:공통, MOMS:맘스터치)
+                if(companyFg == "MOMS") {
+                    // 검색조건
+                    $("#tblSearch2${param.targetId}").css("display", "");
+
+                } else if(targetTypeFg == "COMMON") {
+                    // 검색조건
+                    $("#tblSearch2${param.targetId}").css("display", "none");
+                }
+            });
+
             // 매장브랜드
             var params = {};
-            $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectBrandMomsList.sb', params, function (response) {
+            $scope._postJSONQuery.withOutPopUp('/common/popup/selectStore/getSelectBrandMomsList.sb', params, function (response) {
                 if (response.data.data.list.length > 0) {
                     var list = response.data.data.list;
                     $scope._setComboData("popStoreHqBrandCdCombo", list);
@@ -310,7 +425,7 @@
             // 팀별
             var params = {};
             params.nmcodeGrpCd = "151";
-            $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectHqNmcodeMomsList.sb', params, function (response) {
+            $scope._postJSONQuery.withOutPopUp('/common/popup/selectStore/getSelectHqNmcodeMomsList.sb', params, function (response) {
                 if (response.data.data.list.length > 0) {
                     var list = response.data.data.list;
                     $scope._setComboData("popMomsTeamCombo", list);
@@ -328,7 +443,7 @@
             // AC점포별
             var params = {};
             params.nmcodeGrpCd = "152";
-            $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectHqNmcodeMomsList.sb', params, function (response) {
+            $scope._postJSONQuery.withOutPopUp('/common/popup/selectStore/getSelectHqNmcodeMomsList.sb', params, function (response) {
                 if (response.data.data.list.length > 0) {
                     var list = response.data.data.list;
                     $scope._setComboData("popMomsAcShopCombo", list);
@@ -346,7 +461,7 @@
             // 지역구분
             var params = {};
             params.nmcodeGrpCd = "153";
-            $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectHqNmcodeMomsList.sb', params, function (response) {
+            $scope._postJSONQuery.withOutPopUp('/common/popup/selectStore/getSelectHqNmcodeMomsList.sb', params, function (response) {
                 if (response.data.data.list.length > 0) {
                     var list = response.data.data.list;
                     $scope._setComboData("popMomsAreaFgCombo", list);
@@ -364,7 +479,7 @@
             // 상권
             var params = {};
             params.nmcodeGrpCd = "154";
-            $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectHqNmcodeMomsList.sb', params, function (response) {
+            $scope._postJSONQuery.withOutPopUp('/common/popup/selectStore/getSelectHqNmcodeMomsList.sb', params, function (response) {
                 if (response.data.data.list.length > 0) {
                     var list = response.data.data.list;
                     $scope._setComboData("popMomsCommercialCombo", list);
@@ -382,7 +497,7 @@
             // 점포유형
             var params = {};
             params.nmcodeGrpCd = "155";
-            $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectHqNmcodeMomsList.sb', params, function (response) {
+            $scope._postJSONQuery.withOutPopUp('/common/popup/selectStore/getSelectHqNmcodeMomsList.sb', params, function (response) {
                 if (response.data.data.list.length > 0) {
                     var list = response.data.data.list;
                     $scope._setComboData("popMomsShopTypeCombo", list);
@@ -400,7 +515,7 @@
             // 매장관리타입
             var params = {};
             params.nmcodeGrpCd = "156";
-            $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectHqNmcodeMomsList.sb', params, function (response) {
+            $scope._postJSONQuery.withOutPopUp('/common/popup/selectStore/getSelectHqNmcodeMomsList.sb', params, function (response) {
                 if (response.data.data.list.length > 0) {
                     var list = response.data.data.list;
                     $scope._setComboData("popMomsStoreManageTypeCombo", list);
@@ -417,7 +532,7 @@
 
             // 그룹
             var params = {};
-            $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectBranchMomsList.sb', params, function (response) {
+            $scope._postJSONQuery.withOutPopUp('/common/popup/selectStore/getSelectBranchMomsList.sb', params, function (response) {
                 if (response.data.data.list.length > 0) {
                     var list = response.data.data.list;
                     $scope._setComboData("popBranchCdCombo", list);
@@ -477,9 +592,7 @@
         });
 
         $scope.searchFilter = function (){
-
-            var nm = "#wjGridStore" + targetId;
-            var grid = wijmo.Control.getControl(nm);
+            var grid = wijmo.Control.getControl("#wjGridStore" + targetId);
 
             if(grid.rows.length > 0){
 
@@ -521,7 +634,7 @@
                 params.userBrands = momsHqBrandCd;
             }
             params.storeChgNot = $scope.popStoreChgNot;
-            params.selectStoreFg = "M"; // 팝업 구분(S:싱글, M:멀티)
+            params.selectStoreFg = targetTypeFg; // 매장선택 (S:싱글, M:멀티)
 
             $scope._inquirySub("/common/popup/selectStore/getSelectStoreList.sb", params, function () {
                 $scope.searchFg = "Y";

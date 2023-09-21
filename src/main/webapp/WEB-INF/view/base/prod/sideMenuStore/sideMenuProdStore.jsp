@@ -35,16 +35,10 @@
                 <th><s:message code="cmm.store"/></th>
                 <td>
                     <%-- 매장선택 모듈 사용시 include --%>
-                    <c:if test="${momsEnvstVal == '0'}">
-                        <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
-                            <jsp:param name="targetId" value="sideMenuProdStoreStore"/>
-                        </jsp:include>
-                    </c:if>
-                    <c:if test="${momsEnvstVal == '1'}">
-                        <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreSMoms.jsp" flush="true">
-                            <jsp:param name="targetId" value="sideMenuProdStoreStore"/>
-                        </jsp:include>
-                    </c:if>
+                    <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                        <jsp:param name="targetTypeFg" value="S"/>
+                        <jsp:param name="targetId" value="sideMenuProdStoreStore"/>
+                    </jsp:include>
                     <%--// 매장선택 모듈 사용시 include --%>
                 </td>
                 <%-- 등록구분 --%>
