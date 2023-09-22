@@ -36,4 +36,4 @@
     </div>
 
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodBarcd/excelUploadAdd.js?ver=20210421.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodBarcd/excelUploadAdd.js?ver=20230922.01" charset="utf-8"></script>

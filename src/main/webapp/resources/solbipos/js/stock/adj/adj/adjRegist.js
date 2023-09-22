@@ -669,7 +669,8 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
     $scope.wjAdjRegistLayer.shown.addHandler(function () {
       setTimeout(function() {
         var params = {};
-        $scope._save("/iostock/cmmExcelUpload/excelUploadStore/excelUploadStore/delete.sb", params, false);
+        $scope._inquirySub("/iostock/cmmExcelUpload/excelUploadStore/excelUploadStore/delete.sb", params, function() {}, false);
+
       }, 50);
     });
 

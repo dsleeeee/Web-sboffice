@@ -720,7 +720,7 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
     $scope.wjAcinsRegistLayer.shown.addHandler(function () {
       setTimeout(function() {
         var params = {};
-        $scope._save("/iostock/cmmExcelUpload/excelUploadStore/excelUploadStore/delete.sb", params, false);
+        $scope._inquirySub("/iostock/cmmExcelUpload/excelUploadStore/excelUploadStore/delete.sb", params, function() {}, false);
       }, 50);
     });
 
