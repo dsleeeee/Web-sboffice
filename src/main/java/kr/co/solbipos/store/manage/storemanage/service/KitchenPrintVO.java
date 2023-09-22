@@ -54,6 +54,8 @@ public class KitchenPrintVO extends CmmVO {
     private String prterLabelKindFg;
     /** 주방벨사용여부*/
     private String bellUseYn;
+    /** 온라인주문시출력여부*/
+    private String onlinePrintYn;
 
 
     /**
@@ -236,5 +238,13 @@ public class KitchenPrintVO extends CmmVO {
 
     public void setBellUseYn(String bellUseYn) {
         this.bellUseYn = bellUseYn;
+    }
+
+    public String getOnlinePrintYn() {
+        return onlinePrintYn;
+    }
+
+    public void setOnlinePrintYn(String onlinePrintYn) {
+        this.onlinePrintYn = onlinePrintYn;
     }
 }

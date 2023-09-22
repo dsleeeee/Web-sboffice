@@ -1629,7 +1629,7 @@
             UPDATE
             SET     A.ENVST_VAL     =   B.ENVST_VAL
             ,       A.DIRCT_IN_YN   =   B.DIRCT_IN_YN
-            ,       A.POS_FG        =   B.POS_FG
+            ,       A.POS_FG        =   'W'
             ,       A.USE_YN        =   B.USE_YN
             ,       A.MOD_DT        =   #{modDt}
             ,       A.MOD_ID        =   #{modId}
@@ -1655,7 +1655,7 @@
             ,   B.ENVST_CD
             ,   B.ENVST_VAL
             ,   B.DIRCT_IN_YN
-            ,   B.POS_FG
+            ,   'W'
             ,   B.USE_YN
             ,   #{regDt}
             ,   #{regId}
@@ -1739,7 +1739,8 @@
             REG_ID,
             MOD_DT,
             MOD_ID,
-            T_POS_NO
+            T_POS_NO,
+            ONLINE_PRINT_YN
         )
         SELECT #{storeCd},
                PRTER_NO,
@@ -1759,7 +1760,8 @@
                #{regId},
                #{modDt},
                #{modId},
-               T_POS_NO
+               T_POS_NO,
+               ONLINE_PRINT_YN
           FROM TB_MS_PRINTER
          WHERE STORE_CD = #{copyStoreCd}
            AND POS_NO IN (SELECT POS_NO FROM TB_MS_POS WHERE STORE_CD = #{storeCd})
@@ -5597,7 +5599,8 @@
                     SET
                         tmpe.ENVST_VAL = #{envstVal},
                         tmpe.MOD_DT = #{modDt},
-                        tmpe.MOD_ID = #{modId}
+                        tmpe.MOD_ID = #{modId},
+                        tmpe.POS_FG  = 'W'
                 WHEN NOT MATCHED THEN
                     INSERT
                     (
@@ -5618,7 +5621,7 @@
                         #{envstCd},
                         #{envstVal},
                         #{dirctInYn},
-                        #{posFg},
+                        'W',
                         #{useYn},
                         #{regDt},
                         #{regId},
@@ -5638,7 +5641,8 @@
         UPDATE TB_MS_POS_ENVST
            SET ENVST_VAL = #{envstVal},
                MOD_DT = #{modDt},
-               MOD_ID = #{modId}
+               MOD_ID = #{modId},
+               POS_FG  = 'W'
          WHERE STORE_CD = #{storeCd}
            AND ENVST_CD = #{envstCd}
            AND POS_NO   = #{posNo}
@@ -5655,7 +5659,8 @@
         UPDATE TB_MS_POS_ENVST
            SET ENVST_VAL = '2',
                MOD_DT = #{modDt},
-               MOD_ID = #{modId}
+               MOD_ID = #{modId},
+               POS_FG  = 'W'
          WHERE STORE_CD = #{storeCd}
            AND ENVST_CD = #{envstCd}
            AND POS_NO != #{posNo}
@@ -5731,7 +5736,8 @@
          WHEN MATCHED THEN
               UPDATE SET tme.ENVST_VAL = #{envstVal},
                          tme.MOD_DT = #{modDt},
-                         tme.MOD_ID = #{modId}
+                         tme.MOD_ID = #{modId},
+                         tme.POS_FG  = 'W'
          WHEN NOT MATCHED THEN
               INSERT ( STORE_CD,
                        POS_NO,
@@ -5749,7 +5755,7 @@
                        #{envstCd},
                        #{envstVal},
                        'N',
-                       '3',
+                       'W',
                        'Y',
                        #{regDt},
                        #{regId},
@@ -5814,7 +5820,7 @@
                ENVST_CD,
                ENVST_VAL,
                DIRCT_IN_YN,
-               POS_FG,
+               'W',
                USE_YN,
                #{regDt},
                #{regId},
@@ -5836,6 +5842,7 @@
         /* USE : StoreManageMapper.setEnv4048 */
         UPDATE  TB_MS_POS_ENVST
         SET     ENVST_VAL = '0'
+        ,       POS_FG  = 'W'
         WHERE   STORE_CD = #{storeCd}
         AND     POS_NO = #{targetPosNo}
         AND     ENVST_CD = '4048'
@@ -5851,6 +5858,7 @@
         /* USE : StoreManageMapper.updatePosEnv */
         UPDATE TB_MS_POS_ENVST
            SET ENVST_VAL = #{envstVal}
+        ,       POS_FG  = 'W'
          WHERE STORE_CD = #{storeCd}
            AND POS_NO = LPAD(#{targetPosNo}, 2, '0')
            AND ENVST_CD = #{envstCd}
@@ -6121,7 +6129,8 @@
                tmp.PRTER_LABEL_KIND_FG,
                NVL(tmpr.CNT, 0) AS CNT,
                tmp.BELL_USE_YN,
-               tmp.T_POS_NO
+               tmp.T_POS_NO,
+               tmp.ONLINE_PRINT_YN
           FROM TB_MS_PRINTER tmp,
                (SELECT STORE_CD, PRTER_NO, COUNT(PROD_CD) AS CNT
                   FROM TB_MS_PRINTER_PROD
@@ -6163,7 +6172,8 @@
             REG_ID,
             MOD_DT,
             MOD_ID,
-            T_POS_NO
+            T_POS_NO,
+            ONLINE_PRINT_YN
         )
         VALUES
         (
@@ -6186,7 +6196,8 @@
             #{regId},
             #{modDt},
             #{modId},
-            #{tPosNo}
+            #{tPosNo},
+            #{onlinePrintYn}
         )
     </insert>
 
@@ -6214,7 +6225,8 @@
                BELL_USE_YN = #{bellUseYn},
                MOD_DT = #{modDt},
                MOD_ID = #{modId},
-               T_POS_NO = #{tPosNo}
+               T_POS_NO = #{tPosNo},
+               ONLINE_PRINT_YN = #{onlinePrintYn}
          WHERE STORE_CD = #{storeCd}
            AND PRTER_NO = #{prterNo}
     </update>
@@ -8125,7 +8137,7 @@
                          ) tttk, TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp
                    WHERE tttk.STORE_CD = tmpsp.STORE_CD
                      AND tttk.PROD_CD  = tmpsp.PROD_CD
-                     AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
+                     AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'YYYYMMDD')
                   ) tmtk
             WHERE 6 > tmtk.PAGE_NO
     </update>
