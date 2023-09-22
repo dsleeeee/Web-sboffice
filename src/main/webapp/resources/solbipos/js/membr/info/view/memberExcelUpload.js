@@ -80,11 +80,11 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function
                         wijmo.addClass(e.cell, 'wij_gridText-red');
                         wijmo.addClass(e.cell, 'wj-custom-readonly');
                     }
-                } else if (col.binding === "memberTelNo") {
+                } /*else if (col.binding === "memberTelNo") {
                     if(item.memberTelNo === undefined || item.memberTelNo === ""){
                         item.memberTelNo = '01000000000';
                     }
-                }
+                }*/
             }
         });
     };

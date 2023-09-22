@@ -933,6 +933,7 @@
                 } else { // 필수값
                     msg = messages["member.excel.telNo"] + messages["excelUpload.require.data"]; // 전화번호(이)가 없는 데이터가 존재합니다. 데이터 및 양식을 확인해주세요.
                     item.result = msg;
+                    item.memberTelNo = '01000000000'; // 전화번호가 없을시, 임의 전화번호를 넣어준다.
                     failCnt++;
                     continue;
                 }
