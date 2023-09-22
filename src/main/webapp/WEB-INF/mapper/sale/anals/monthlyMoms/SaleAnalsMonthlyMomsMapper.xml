@@ -119,7 +119,7 @@
 		/* USE : SaleAnalsMonthlyMomsMapper.getSaleAnalsMonthlyMomsStoreDtlList */
 		SELECT 	POS_NO
 		,		BILL_NO
-		,		TO_CHAR(TO_DATE(BILL_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS BILL_DT
+		,		TO_CHAR(TO_DATE(BILL_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS BILL_DT
 		,		DECODE(SALE_FG, 1, '승인', -1, '취소') AS SALE_FG
 		,		TOT_SALE_AMT
 		,		TOT_DC_AMT

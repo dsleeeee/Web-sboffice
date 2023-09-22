@@ -39,8 +39,8 @@
               WHEN tce.ORGN_FG = 'A' THEN '총판'
               ELSE null END
         ) AS ORGN_FG,
-        TO_CHAR(TO_DATE(MIN(twlh.LOGIN_DT), 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS MIN_LOGIN_DT,
-        TO_CHAR(TO_DATE(MAX(twlh.LOGIN_DT), 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS MAX_LOGIN_DT
+        TO_CHAR(TO_DATE(MIN(twlh.LOGIN_DT), 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd hh24:mi:ss') AS MIN_LOGIN_DT,
+        TO_CHAR(TO_DATE(MAX(twlh.LOGIN_DT), 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd hh24:mi:ss') AS MAX_LOGIN_DT
         FROM TB_WB_LOGIN_HIST twlh,
         (
             (

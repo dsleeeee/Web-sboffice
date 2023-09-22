@@ -1670,7 +1670,7 @@
                 TO_CHAR(TO_DATE(tssh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
                 tssh.POS_NO,
                 tssh.BILL_NO,
-                TO_CHAR(TO_DATE(tssh.REG_DT, 'YYYYMMDDHH24MISS'), 'HH:mm:ss') AS REG_DT,
+                TO_CHAR(TO_DATE(tssh.REG_DT, 'YYYYMMDDHH24MISS'), 'HH24:MI:SS') AS REG_DT,
                 tssh.SALE_FG,
                 tssh.TOT_SALE_AMT,
                 tssh.REAL_SALE_AMT,

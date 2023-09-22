@@ -30,7 +30,7 @@
         ,       A.SALE_YN
         ,       A.REMARK
         ,       TO_CHAR(TO_DATE(A.PROC_DATE, 'YYYYMMDD'), 'yyyy-mm-dd') AS PROC_DATE
-        ,       TO_CHAR(TO_DATE(A.PROC_TIME, 'HH24MISS'), 'HH:mm:ss') AS PROC_TIME
+        ,       TO_CHAR(TO_DATE(A.PROC_TIME, 'HH24MISS'), 'HH24:mi:ss') AS PROC_TIME
         ,       A.RESULT_MSG
         ,       A.PROC_DT AS PROC_DT2
         ,       A.PROC_YN AS PROC_YN2

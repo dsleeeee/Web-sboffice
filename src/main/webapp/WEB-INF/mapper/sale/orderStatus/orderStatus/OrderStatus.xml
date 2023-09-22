@@ -25,8 +25,8 @@
                 tooh.ORDER_NO,		-- 주문번호
                 tooh.ORDER_FG,		-- 주문구분 1:주문 2:취소 3:결제
                 tooh.DLVR_ORDER_FG,	-- 배달주문구분 1:일반 2:배달 3:포장
-                TO_CHAR(TO_DATE(tooh.ORDER_START_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS ORDER_START_DT,  -- 최초주문일시
-                TO_CHAR(TO_DATE(tooh.ORDER_END_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS ORDER_END_DT,      -- 최종주문일시
+                TO_CHAR(TO_DATE(tooh.ORDER_START_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS ORDER_START_DT,  -- 최초주문일시
+                TO_CHAR(TO_DATE(tooh.ORDER_END_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS ORDER_END_DT,      -- 최종주문일시
                 tooh.TOT_SALE_AMT,	-- 총판매금액
                 tooh.TOT_DC_AMT,	-- 총할인금액
                 tooh.TOT_TIP_AMT,	-- 총봉사료금액
@@ -53,7 +53,7 @@
                 tooh.REFUND_YN,		-- 환급여부
                 tooh.SEND_YN,		-- 전송여부
                 tooh.BILL_NO,       -- 영수증번호
-                TO_CHAR(TO_DATE(tooh.SEND_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS SEND_DT -- 전송일시
+                TO_CHAR(TO_DATE(tooh.SEND_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS SEND_DT -- 전송일시
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM 	TB_OD_ORDER_HDR tooh
         ,       TB_MS_EMPLOYEE tme
