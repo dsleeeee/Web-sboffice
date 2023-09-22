@@ -100,6 +100,11 @@ public class SetProdServiceImpl implements SetProdService {
             }
             // prod테이블 side_prod_yn 을 변경
             result += setProdMapper.saveSideProdYn(setProdVO);
+
+            if(sessionInfoVO.getOrgnFg().equals(OrgnFg.HQ)){
+                // 본사일때 매장 prod테이블 정보도 update
+                result += setProdMapper.saveSideProdYnStore(setProdVO);
+            }
         }
 
         return result;

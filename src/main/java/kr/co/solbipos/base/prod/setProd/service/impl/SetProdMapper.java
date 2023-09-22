@@ -32,6 +32,9 @@ public interface SetProdMapper {
     // 상품 사이드상품여부 저장
     int saveSideProdYn(SetProdVO setProdVO);
 
+    // 상품 사이드상품여부 저장(매장)
+    int saveSideProdYnStore(SetProdVO setProdVO);
+
     // 상품 선택그룹 조회
     List<DefaultMap<String>> getSdselGrpList(SetProdVO setProdVO);
 }

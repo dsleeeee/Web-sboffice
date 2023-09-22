@@ -57,7 +57,10 @@
             </button>
             <%-- 자료생성 날짜 --%>
             <div class="sb-select dkbr ml5 fr">
-                <span class="txtIn"><input id="dataCreateDate" name="dataCreateDate" class="w110px" /></span>
+                <span class="txtIn"><input id="dataCreateEndDate" name="dataCreateEndDate" class="w110px" /></span>
+            </div>
+            <div class="sb-select dkbr ml5 fr">
+                <span class="txtIn"><input id="dataCreateStartDate" name="dataCreateStartDate" class="w110px" /></span>
             </div>
         </div>
 
@@ -75,7 +78,8 @@
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storeProdSaleReport.saleDate"/>" binding="saleDate" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeProdSaleReport.fromSaleDate"/>" binding="fromSaleDate" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeProdSaleReport.toSaleDate"/>" binding="toSaleDate" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeProdSaleReport.procGubun"/>" binding="procGubun" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeProdSaleReport.procDt"/>" binding="procDt" width="80" is-read-only="true" align="center" format="date"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeProdSaleReport.userNm"/>" binding="userNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -108,4 +112,4 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/storeProdSaleReport/dayStoreProdSaleReport.js?ver=20230905.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/storeProdSaleReport/dayStoreProdSaleReport.js?ver=20230905.02" charset="utf-8"></script>

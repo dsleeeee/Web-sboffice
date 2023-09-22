@@ -168,6 +168,77 @@ public class StoreProdSaleReportController {
     }
 
     /**
+     * 일자별 매장-상품 매출 다운로드 탭 - 자료생성 저장
+     *
+     * @param storeProdSaleReportVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2023.09.19
+     */
+    @RequestMapping(value = "/storeProdSaleReport/getDayStoreProdSaleReportSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDayStoreProdSaleReportSave(@RequestBody StoreProdSaleReportVO storeProdSaleReportVO, HttpServletRequest request,
+                                             HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = storeProdSaleReportService.getDayStoreProdSaleReportSaveInsert(storeProdSaleReportVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 일자별 매장-상품 매출 다운로드 탭 - 삭제
+     *
+     * @param storeProdSaleReportVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author 권지현
+     * @since   2023.09.19
+     */
+    @RequestMapping(value = "/storeProdSaleReport/getDayStoreProdSaleReportDel.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDayStoreProdSaleReportDel(@RequestBody StoreProdSaleReportVO[] storeProdSaleReportVOs, HttpServletRequest request,
+                                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = storeProdSaleReportService.getDayStoreProdSaleReportDel(storeProdSaleReportVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+    /**
+     * 기간별 매장-상품 매출 다운로드 탭 - 자료생성 요청건 존재여부 확인
+     *
+     * @param storeProdSaleReportVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author 권지현
+     * @since   2023.09.19
+     */
+    @RequestMapping(value = "/storeProdSaleReport/getDayStoreProdSaleReportChk.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDayStoreProdSaleReportChk(StoreProdSaleReportVO storeProdSaleReportVO, HttpServletRequest request,
+                                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<String> result = storeProdSaleReportService.getDayStoreProdSaleReportChk(storeProdSaleReportVO, sessionInfoVO);
+
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+        resultMap.put("result", result);
+
+        return returnJson(Status.OK, resultMap);
+    }
+
+    /**
      * 기간별 매장-상품 매출 다운로드 탭 - 첨부파일 다운로드
      *
      * @param storeProdSaleReportVO

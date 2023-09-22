@@ -136,10 +136,11 @@
                 COL_VAL
                 FROM
                 (
+                    /* 쿠폰은 결제수단이 아닌 할인내역으로 들어가므로 하드코딩으로 결제수단에 나오지 않도록 함. (05, 12) */
                     SELECT
-                    SUM(tsmt.PAY_AMT_01) AS PAY_AMT_01, /*SUM(tsmt.PAY_AMT_02) AS PAY_AMT_02, */SUM(tsmt.PAY_AMT_03) AS PAY_AMT_03, SUM(tsmt.PAY_AMT_04) AS PAY_AMT_04, SUM(tsmt.PAY_AMT_05) AS PAY_AMT_05,
+                    SUM(tsmt.PAY_AMT_01) AS PAY_AMT_01, /*SUM(tsmt.PAY_AMT_02) AS PAY_AMT_02, */SUM(tsmt.PAY_AMT_03) AS PAY_AMT_03, SUM(tsmt.PAY_AMT_04) AS PAY_AMT_04, /*SUM(tsmt.PAY_AMT_05) AS PAY_AMT_05,*/
                     SUM(tsmt.PAY_AMT_06) AS PAY_AMT_06, SUM(tsmt.PAY_AMT_07) AS PAY_AMT_07, SUM(tsmt.PAY_AMT_08) AS PAY_AMT_08, SUM(tsmt.PAY_AMT_09) AS PAY_AMT_09, SUM(tsmt.PAY_AMT_10) AS PAY_AMT_10,
-                    SUM(tsmt.PAY_AMT_11) AS PAY_AMT_11, SUM(tsmt.PAY_AMT_12) AS PAY_AMT_12, SUM(tsmt.PAY_AMT_13) AS PAY_AMT_13, SUM(tsmt.PAY_AMT_14) AS PAY_AMT_14, SUM(tsmt.PAY_AMT_15) AS PAY_AMT_15,
+                    SUM(tsmt.PAY_AMT_11) AS PAY_AMT_11, /*SUM(tsmt.PAY_AMT_12) AS PAY_AMT_12,*/ SUM(tsmt.PAY_AMT_13) AS PAY_AMT_13, SUM(tsmt.PAY_AMT_14) AS PAY_AMT_14, SUM(tsmt.PAY_AMT_15) AS PAY_AMT_15,
                     SUM(tsmt.PAY_AMT_16) AS PAY_AMT_16, SUM(tsmt.PAY_AMT_17) AS PAY_AMT_17, SUM(tsmt.PAY_AMT_18) AS PAY_AMT_18, SUM(tsmt.PAY_AMT_19) AS PAY_AMT_19
                     FROM TB_SL_MONTHLY_TOTAL tsmt
                     WHERE 1=1
@@ -165,9 +166,9 @@
                     FOR COL_NM
                     IN
                     (
-                        PAY_AMT_01, /*PAY_AMT_02, */PAY_AMT_03, PAY_AMT_04, PAY_AMT_05,
+                        PAY_AMT_01, /*PAY_AMT_02, */PAY_AMT_03, PAY_AMT_04,/* PAY_AMT_05,*/
                         PAY_AMT_06, PAY_AMT_07, PAY_AMT_08, PAY_AMT_09, PAY_AMT_10,
-                        PAY_AMT_11, PAY_AMT_12, PAY_AMT_13, PAY_AMT_14, PAY_AMT_15,
+                        PAY_AMT_11, /*PAY_AMT_12, */PAY_AMT_13, PAY_AMT_14, PAY_AMT_15,
                         PAY_AMT_16, PAY_AMT_17, PAY_AMT_18, PAY_AMT_19
                     )
                 )
@@ -217,9 +218,9 @@
             ) A,
             (
                 SELECT
-                SUM(tsmt.PAY_AMT_01) + SUM(tsmt.PAY_AMT_02) + SUM(tsmt.PAY_AMT_03) + SUM(tsmt.PAY_AMT_04) + SUM(tsmt.PAY_AMT_05)
+                SUM(tsmt.PAY_AMT_01) + SUM(tsmt.PAY_AMT_02) + SUM(tsmt.PAY_AMT_03) + SUM(tsmt.PAY_AMT_04) /*+ SUM(tsmt.PAY_AMT_05)*/
                 + SUM(tsmt.PAY_AMT_06) + SUM(tsmt.PAY_AMT_07) + SUM(tsmt.PAY_AMT_08) + SUM(tsmt.PAY_AMT_09) + SUM(tsmt.PAY_AMT_10)
-                + SUM(tsmt.PAY_AMT_11) + SUM(tsmt.PAY_AMT_12) + SUM(tsmt.PAY_AMT_13) + SUM(tsmt.PAY_AMT_14) + SUM(tsmt.PAY_AMT_15)
+                + SUM(tsmt.PAY_AMT_11) + /*SUM(tsmt.PAY_AMT_12) + */SUM(tsmt.PAY_AMT_13) + SUM(tsmt.PAY_AMT_14) + SUM(tsmt.PAY_AMT_15)
                 + SUM(tsmt.PAY_AMT_16) + SUM(tsmt.PAY_AMT_17) + SUM(tsmt.PAY_AMT_18) + SUM(tsmt.PAY_AMT_19) AS TOT_REAL_SALE_AMT
                 FROM TB_SL_MONTHLY_TOTAL tsmt
                 WHERE 1=1
@@ -248,6 +249,7 @@
             FROM TB_CM_NMCODE tcn
             WHERE 1=1
             AND tcn.NMCODE_GRP_CD = '024'
+            AND tcn.NMCODE_CD NOT IN ('05', '12')
             UNION ALL
             (
                 SELECT

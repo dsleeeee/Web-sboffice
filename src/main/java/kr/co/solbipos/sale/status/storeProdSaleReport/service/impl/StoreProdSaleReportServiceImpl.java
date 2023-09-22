@@ -100,6 +100,53 @@ public class StoreProdSaleReportServiceImpl implements StoreProdSaleReportServic
         return procCnt;
     }
 
+    /** 일자별 매장-상품 매출 다운로드 탭 - 자료생성 저장 */
+    @Override
+    public int getDayStoreProdSaleReportSaveInsert(StoreProdSaleReportVO storeProdSaleReportVO, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+        String currentDate = currentDateString();
+        String currentTime = currentTimeString();
+
+        storeProdSaleReportVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        storeProdSaleReportVO.setReqDate(currentDate);
+        storeProdSaleReportVO.setReqTime(currentTime);
+
+        storeProdSaleReportVO.setRegDt(currentDt);
+        storeProdSaleReportVO.setRegId(sessionInfoVO.getUserId());
+        storeProdSaleReportVO.setModDt(currentDt);
+        storeProdSaleReportVO.setModId(sessionInfoVO.getUserId());
+
+        procCnt = storeProdSaleReportMapper.getDayStoreProdSaleReportSaveInsert(storeProdSaleReportVO);
+
+        return procCnt;
+    }
+
+    /** 일자별 매장-상품 매출 다운로드 탭 - 삭제 */
+    @Override
+    public int getDayStoreProdSaleReportDel(StoreProdSaleReportVO[] storeProdSaleReportVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+
+        for(StoreProdSaleReportVO storeProdSaleReportVO : storeProdSaleReportVOs) {
+
+            storeProdSaleReportVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+            procCnt = storeProdSaleReportMapper.getDayStoreProdSaleReportDel(storeProdSaleReportVO);
+
+            String pathFull = BaseEnv.FILE_UPLOAD_DIR + "/MediaBase/SaleReport/" + storeProdSaleReportVO.getFileName();
+
+            // 파일 삭제
+            File delFile = new File(pathFull);
+            if(delFile.exists()) {
+                delFile.delete();
+            }
+        }
+
+        return procCnt;
+    }
+
     /** 기간별 매장-상품 매출 다운로드 탭 - 자료생성 요청건 존재여부 확인 */
     @Override
     public DefaultMap<String> getStoreProdSaleReportChk(StoreProdSaleReportVO storeProdSaleReportVO, SessionInfoVO sessionInfoVO) {
@@ -107,6 +154,15 @@ public class StoreProdSaleReportServiceImpl implements StoreProdSaleReportServic
         storeProdSaleReportVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         return storeProdSaleReportMapper.getStoreProdSaleReportChk(storeProdSaleReportVO);
+    }
+
+    /** 일자별 매장-상품 매출 다운로드 탭 - 자료생성 요청건 존재여부 확인 */
+    @Override
+    public DefaultMap<String> getDayStoreProdSaleReportChk(StoreProdSaleReportVO storeProdSaleReportVO, SessionInfoVO sessionInfoVO) {
+
+        storeProdSaleReportVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return storeProdSaleReportMapper.getDayStoreProdSaleReportChk(storeProdSaleReportVO);
     }
 
     /** 일자별 매장-상품 매출 다운로드 탭 - 조회 */

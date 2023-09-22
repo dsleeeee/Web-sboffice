@@ -45,6 +45,9 @@ public class MobilePayInfoVO extends PageVO {
     /** 사원번호 */
     private String empNo;
 
+    /** 현금/현금영수증 구분 */
+    private String cashGubun;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -83,5 +86,13 @@ public class MobilePayInfoVO extends PageVO {
 
     public void setEmpNo(String empNo) {
         this.empNo = empNo;
+    }
+
+    public String getCashGubun() {
+        return cashGubun;
+    }
+
+    public void setCashGubun(String cashGubun) {
+        this.cashGubun = cashGubun;
     }
 }

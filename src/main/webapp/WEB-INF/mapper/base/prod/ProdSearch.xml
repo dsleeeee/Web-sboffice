@@ -1,0 +1,723 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    Prod.xml
+    상품관리 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       노현수     2018.10.19     쿼리수정
+-->
+<mapper namespace="kr.co.solbipos.base.prod.prodSearch.service.impl.ProdSearchMapper">
+
+    <!-- 상품 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE,
+                   TB_MS_PRODUCT, TB_MS_PRODUCT_SALE_PRICE
+        PARAM    : prodSearchVO
+        COMMENTS : 상품의 목록을 조회한다. ( 본사/매장 )
+    -->
+    <select id="getProdList" parameterType="prodSearchVO" resultType="DefaultMap">
+        /* USE : ProdMapper.getProdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT  thb.HQ_BRAND_NM AS HQ_BRAND_NM
+                ,		thp.PROD_TYPE_FG
+                ,		thp.PROD_CLASS_CD
+                , 		( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM
+                ,		thp.PROD_CD
+                ,		thp.PROD_NM
+                ,		(SELECT LISTAGG(VENDR_NM , ',') WITHIN GROUP (ORDER BY thv.VENDR_NM ) AS VENDR_NM FROM TB_HQ_VENDOR_PROD thvp, TB_HQ_VENDOR thv WHERE thvp.HQ_OFFICE_CD = #{hqOfficeCd} AND thvp.HQ_OFFICE_CD = thv.HQ_OFFICE_CD AND thvp.VENDR_CD = thv.VENDR_CD AND thvp.PROD_CD = thp.PROD_CD) AS VENDR
+                ,		thp.SALE_PROD_YN -- 판매상품여부
+                ,		NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC -- 판매단가
+                ,		thp.PROD_TIP_YN -- 봉사료포함여부
+                ,		thp.VAT_FG  -- 과세여부
+                ,		thpb.BARCD_CD AS BAR_CD -- 바코드
+                ,		thp.PRC_CTRL_FG -- 가격관리구분
+                ,		NVL(thpsp.STIN_SALE_UPRC, 0) AS STIN_SALE_UPRC -- 내점가
+                ,		NVL(thpsp.PACK_SALE_UPRC, 0) AS PACK_SALE_UPRC -- 포장가
+                ,		NVL(thpsp.DLVR_SALE_UPRC, 0) AS DLVR_SALE_UPRC -- 배달가
+                ,		thp.STOCK_PROD_YN -- 재고관리여부
+                ,		thp.SET_PROD_FG -- 세트상품구분
+                ,		thp.POINT_SAVE_YN -- 포인트적립여부
+                ,		thp.SIDE_PROD_YN -- 사이드상품여부
+                ,		thp.SDATTR_CLASS_CD -- 속성
+                ,		thpsc.SDATTR_CLASS_NM -- 속성명
+                ,		thp.SDSEL_GRP_CD -- 선택메뉴
+                ,		thpsg.SDSEL_GRP_NM -- 선택메뉴명
+                ,		thp.GROUP_PROD_CD -- 단품/세트선택설정
+                ,		(SELECT PROD_NM FROM TB_HQ_PRODUCT thp2 WHERE thp2.HQ_OFFICE_CD = thp.HQ_OFFICE_CD AND thp2.PROD_CD = thp.GROUP_PROD_CD) AS GROUP_PROD_NM
+                ,		thp.DEPOSIT_PROD_CD -- 보증금상품코드
+                ,		(SELECT PROD_NM FROM TB_HQ_PRODUCT thp2 WHERE thp2.HQ_OFFICE_CD = thp.HQ_OFFICE_CD AND thp2.PROD_CD = thp.DEPOSIT_PROD_CD) AS DEPOSIT_PROD_NM
+                ,		thp.DEPOSIT_CUP_FG  -- 보증금상품유형
+                ,		thp.POINT_USE_YN -- 포인트사용여부
+                ,		thp.DC_YN -- 할인여부
+                ,		NVL(thp.SPLY_UPRC, 0) AS SPLY_UPRC -- 공급단가
+                ,		NVL(thp.COST_UPRC, 0) AS COST_UPRC -- 원가단가
+                ,		thp.PO_PROD_FG  -- 발주상품구분
+                ,		thp.PO_UNIT_FG  -- 발주단위
+                ,		thp.PO_UNIT_QTY -- 발주단위수량
+                ,		thp.PO_MIN_QTY  -- 최소발주수량
+                ,		thp.SAFE_STOCK_QTY -- 안전재
+                ,		thpi.NU_TOT_WT -- 총중량
+                ,		thpi.NU_KCAL -- 총열량
+                ,		thpi.NU_PROTEIN -- 단백질
+                ,		thpi.NU_SODIUM -- 나트륨
+                ,		thpi.NU_SUGARS -- 당류
+                ,		thpi.NU_SAT_FAT -- 포화지방
+                ,		thpi.NU_CAFFEINE -- 카페인
+                ,		thp.MAP_PROD_CD -- 매핑상품코드
+                ,		thp.SALE_TIME_FG -- KIOSK 판매시간
+                ,		(SELECT LISTAGG(S_SALE_TIME || '~' || E_SALE_TIME, ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME FROM TB_HQ_PRODUCT_SALE_TIME thpst WHERE thpst.HQ_OFFICE_CD = #{hqOfficeCd} AND thpst.PROD_CD = thp.PROD_CD ) AS SALE_TIME -- KIOSK 시간설정
+                ,		thpi.MOMS_KIOSK_EDGE -- KIOSK 뱃지
+                ,		thp.OPTION_GRP_CD -- 상품옵션그룹
+                ,		thpog.OPTION_GRP_NM
+                ,		thp.RELEASE_DATE -- 출시일
+                ,		DECODE(thp.DISCON_YN, 'Y', '단종', NULL) AS DISCON_YN -- 단종
+                ,		thp.DISCON_DATE -- 단종일
+                ,		DECODE(thpi.SALE_TYPE_YN_SIN, 'N', NULL, thpi.SALE_TYPE_YN_SIN) AS IN_STORE -- 판매방식:내점
+                ,		DECODE(thpi.SALE_TYPE_YN_DLV, 'N', NULL, thpi.SALE_TYPE_YN_DLV) AS DELIVERY -- 판매방식:배달
+                ,		DECODE(thpi.SALE_TYPE_YN_PKG, 'N', NULL, thpi.SALE_TYPE_YN_PKG) AS PACKING -- 판매방식:포장
+                ,		DECODE(thpi.SALE_CHN_YN_POS , 'N', NULL, thpi.SALE_CHN_YN_POS ) AS POS -- 판매채널:포스
+                ,		DECODE(thpi.SALE_CHN_YN_KSK , 'N', NULL, thpi.SALE_CHN_YN_KSK ) AS KIOSK -- 판매채널:키오스크
+                ,		DECODE(thpi.SALE_CHN_YN_CMP , 'N', NULL, thpi.SALE_CHN_YN_CMP ) AS APP -- 판매채널:자사앱
+                ,		DECODE(thpi.SALE_CHN_YN_BAE , 'N', NULL, thpi.SALE_CHN_YN_BAE ) AS BAEMIN -- 판매채널:배민
+                ,		DECODE(thpi.SALE_CHN_YN_BAO , 'N', NULL, thpi.SALE_CHN_YN_BAO ) AS BAEMIN1 -- 판매채널:비맨1
+                ,		DECODE(thpi.SALE_CHN_YN_YGY , 'N', NULL, thpi.SALE_CHN_YN_YGY ) AS YOGIYO -- 판매채널:요기요
+                ,		DECODE(thpi.SALE_CHN_YN_YGE , 'N', NULL, thpi.SALE_CHN_YN_YGE ) AS YOGIYO_EXP -- 판매채널:요기요익스프레스
+                ,		DECODE(thpi.SALE_CHN_YN_CPN , 'N', NULL, thpi.SALE_CHN_YN_CPN ) AS COUPANG -- 판매채널:쿠팡
+                ,		DECODE(thpi.SALE_CHN_YN_TNG , 'N', NULL, thpi.SALE_CHN_YN_TNG ) AS BAEDALTONG -- 판매채널:배달통
+                ,		DECODE(thpi.SALE_CHN_YN_DDN , 'N', NULL, thpi.SALE_CHN_YN_DDN ) AS DDANGYO -- 판매채널:떙겨요
+                ,		thp.REMARK -- 비고
+                ,		thpi.PROD_INFO -- 상품상세설명
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM    TB_HQ_PRODUCT thp
+                        LEFT OUTER JOIN (
+                        SELECT
+                        HQ_OFFICE_CD,
+                        PROD_CD,
+                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+                        MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+                        MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC,
+                        MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC
+                        FROM TB_HQ_PRODUCT_SALE_PRICE
+                        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                        <![CDATA[
+                            AND START_DATE <= TO_CHAR(SYSDATE, 'YYYYMMDD')
+                            AND END_DATE >= TO_CHAR(SYSDATE, 'YYYYMMDD')
+                        ]]>
+                        AND SALE_PRC_FG = '1'
+                        GROUP BY
+                        HQ_OFFICE_CD, PROD_CD
+                        ) thpsp ON
+                        thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                        AND thp.PROD_CD = thpsp.PROD_CD
+                        LEFT OUTER JOIN TB_HQ_BRAND thb ON
+                        thb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                        AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD
+                        LEFT OUTER JOIN TB_HQ_PRODUCT_BARCD thpb ON
+                        thpb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                        AND thpb.PROD_CD = thp.PROD_CD
+                        LEFT OUTER JOIN TB_HQ_PRODUCT_INFO thpi ON
+                        thpi.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                        AND thpi.PROD_CD = thp.PROD_CD
+                        LEFT OUTER JOIN TB_HQ_PRODUCT_SDSEL_GROUP thpsg ON
+                        thpsg.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                        AND thpsg.SDSEL_GRP_CD = thp.SDSEL_GRP_CD
+                        LEFT OUTER JOIN TB_HQ_PRODUCT_OPTION_GROUP thpog ON
+                        thpog.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                        AND thpog.OPTION_GRP_CD = thp.OPTION_GRP_CD
+                        LEFT OUTER JOIN TB_HQ_PRODUCT_SDATTR_CLASS thpsc ON
+                        thpsc.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                        AND thpsc.SDATTR_CLASS_CD = thp.SDATTR_CLASS_CD
+                WHERE 1=1
+                AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test="chkDt == false">
+                    <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                        <![CDATA[
+                            AND thp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                        ]]>
+                    </if>
+                </if>
+                <if test="prodCd != null and prodCd != ''">
+                    AND thp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                </if>
+                <if test="barCd != null and barCd != ''">
+                    AND thpb.BARCD_CD LIKE '%'||#{barCd}||'%' --바코드
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND thp.PROD_CLASS_CD IN (
+                                                SELECT
+                                                PROD_CLASS_CD
+                                                FROM TB_HQ_PRODUCT_CLASS
+                                                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                            )
+                </if>
+                <if test="useYn != null and useYn != ''">
+                    AND thp.USE_YN = #{useYn} --사용여부
+                </if>
+                <if test="vatFg != null and vatFg != ''">
+                    AND thp.VAT_FG = #{vatFg} --과세여부
+                </if>
+                <if test="prodTypeFg != null and prodTypeFg != ''">
+                    AND thp.PROD_TYPE_FG = #{prodTypeFg} --상품유형
+                </if>
+                <if test="prcCtrlFg != null and prcCtrlFg != ''">
+                    AND thp.PRC_CTRL_FG = #{prcCtrlFg} --가격관리구분
+                </if>
+                <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                    AND thp.HQ_BRAND_CD = #{prodHqBrandCd} -- 선택한 상품브랜드가 있을 때
+                </if>
+                <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                    <if test='userProdBrands != null and userProdBrands != ""'>
+                        -- 선택한 상품브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                        AND thp.HQ_BRAND_CD IN
+                        <foreach collection="userProdBrandList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                </if>
+                AND (
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                        OR
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                    )
+                ORDER BY thp.PROD_CD ASC
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT  thb.MS_BRAND_NM AS HQ_BRAND_NM
+                ,		thp.PROD_TYPE_FG
+                ,		thp.PROD_CLASS_CD
+                , 		( SELECT SF_GET_PROD_CLASSES('H', thp.STORE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM
+                ,		thp.PROD_CD
+                ,		thp.PROD_NM
+                ,		(SELECT LISTAGG(VENDR_NM , ',') WITHIN GROUP (ORDER BY thv.VENDR_NM ) AS VENDR_NM FROM TB_MS_VENDOR_PROD thvp, TB_MS_VENDOR thv WHERE thvp.STORE_CD = #{storeCd} AND thvp.STORE_CD = thv.STORE_CD AND thvp.VENDR_CD = thv.VENDR_CD AND thvp.PROD_CD = thp.PROD_CD) AS VENDR
+                ,		thp.SALE_PROD_YN -- 판매상품여부
+                ,		NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC -- 판매단가
+                ,		thp.PROD_TIP_YN -- 봉사료포함여부
+                ,		thp.VAT_FG  -- 과세여부
+                ,		thpb.BARCD_CD AS BAR_CD -- 바코드
+                ,		thp.PRC_CTRL_FG -- 가격관리구분
+                ,		NVL(thpsp.STIN_SALE_UPRC, 0) AS STIN_SALE_UPRC -- 내점가
+                ,		NVL(thpsp.PACK_SALE_UPRC, 0) AS PACK_SALE_UPRC -- 포장가
+                ,		NVL(thpsp.DLVR_SALE_UPRC, 0) AS DLVR_SALE_UPRC -- 배달가
+                ,		thp.STOCK_PROD_YN -- 재고관리여부
+                ,		thp.SET_PROD_FG -- 세트상품구분
+                ,		thp.POINT_SAVE_YN -- 포인트적립여부
+                ,		thp.SIDE_PROD_YN -- 사이드상품여부
+                ,		thp.SDATTR_CLASS_CD -- 속성
+                ,		thpsc.SDATTR_CLASS_NM -- 속성명
+                ,		thp.SDSEL_GRP_CD -- 선택메뉴
+                ,		thpsg.SDSEL_GRP_NM -- 선택메뉴명
+                ,		thp.GROUP_PROD_CD -- 단품/세트선택설정
+                ,		(SELECT PROD_NM FROM TB_MS_PRODUCT thp2 WHERE thp2.STORE_CD = thp.STORE_CD AND thp2.PROD_CD = thp.GROUP_PROD_CD) AS GROUP_PROD_NM
+                ,		thp.DEPOSIT_PROD_CD -- 보증금상품코드
+                ,		(SELECT PROD_NM FROM TB_MS_PRODUCT thp2 WHERE thp2.STORE_CD = thp.STORE_CD AND thp2.PROD_CD = thp.DEPOSIT_PROD_CD) AS DEPOSIT_PROD_NM
+                ,		thp.DEPOSIT_CUP_FG  -- 보증금상품유형
+                ,		thp.POINT_USE_YN -- 포인트사용여부
+                ,		thp.DC_YN -- 할인여부
+                ,		NVL(thp.SPLY_UPRC, 0) AS SPLY_UPRC -- 공급단가
+                ,		NVL(thp.COST_UPRC, 0) AS COST_UPRC -- 원가단가
+                ,		thp.PO_PROD_FG  -- 발주상품구분
+                ,		thp.PO_UNIT_FG  -- 발주단위
+                ,		thp.PO_UNIT_QTY -- 발주단위수량
+                ,		thp.PO_MIN_QTY  -- 최소발주수량
+                ,		thp.SAFE_STOCK_QTY -- 안전재
+                ,		thpi.NU_TOT_WT -- 총중량
+                ,		thpi.NU_KCAL -- 총열량
+                ,		thpi.NU_PROTEIN -- 단백질
+                ,		thpi.NU_SODIUM -- 나트륨
+                ,		thpi.NU_SUGARS -- 당류
+                ,		thpi.NU_SAT_FAT -- 포화지방
+                ,		thpi.NU_CAFFEINE -- 카페인
+                ,		thp.MAP_PROD_CD -- 매핑상품코드
+                ,		thp.SALE_TIME_FG -- KIOSK 판매시간
+                ,		(SELECT LISTAGG(S_SALE_TIME || '~' || E_SALE_TIME, ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME FROM TB_MS_PRODUCT_SALE_TIME thpst WHERE thpst.STORE_CD = #{storeCd} AND thpst.PROD_CD = thp.PROD_CD ) AS SALE_TIME -- KIOSK 시간설정
+                ,		thpi.MOMS_KIOSK_EDGE -- KIOSK 뱃지
+                ,		thp.OPTION_GRP_CD -- 상품옵션그룹
+                ,		thpog.OPTION_GRP_NM
+                ,		thp.RELEASE_DATE -- 출시일
+                ,		DECODE(thp.DISCON_YN, 'Y', '단종', NULL) AS DISCON_YN -- 단종
+                ,		thp.DISCON_DATE -- 단종일
+                ,		DECODE(thpi.SALE_TYPE_YN_SIN, 'N', NULL, thpi.SALE_TYPE_YN_SIN) AS IN_STORE -- 판매방식:내점
+                ,		DECODE(thpi.SALE_TYPE_YN_DLV, 'N', NULL, thpi.SALE_TYPE_YN_DLV) AS DELIVERY -- 판매방식:배달
+                ,		DECODE(thpi.SALE_TYPE_YN_PKG, 'N', NULL, thpi.SALE_TYPE_YN_PKG) AS PACKING -- 판매방식:포장
+                ,		DECODE(thpi.SALE_CHN_YN_POS , 'N', NULL, thpi.SALE_CHN_YN_POS ) AS POS -- 판매채널:포스
+                ,		DECODE(thpi.SALE_CHN_YN_KSK , 'N', NULL, thpi.SALE_CHN_YN_KSK ) AS KIOSK -- 판매채널:키오스크
+                ,		DECODE(thpi.SALE_CHN_YN_CMP , 'N', NULL, thpi.SALE_CHN_YN_CMP ) AS APP -- 판매채널:자사앱
+                ,		DECODE(thpi.SALE_CHN_YN_BAE , 'N', NULL, thpi.SALE_CHN_YN_BAE ) AS BAEMIN -- 판매채널:배민
+                ,		DECODE(thpi.SALE_CHN_YN_BAO , 'N', NULL, thpi.SALE_CHN_YN_BAO ) AS BAEMIN1 -- 판매채널:비맨1
+                ,		DECODE(thpi.SALE_CHN_YN_YGY , 'N', NULL, thpi.SALE_CHN_YN_YGY ) AS YOGIYO -- 판매채널:요기요
+                ,		DECODE(thpi.SALE_CHN_YN_YGE , 'N', NULL, thpi.SALE_CHN_YN_YGE ) AS YOGIYO_EXP -- 판매채널:요기요익스프레스
+                ,		DECODE(thpi.SALE_CHN_YN_CPN , 'N', NULL, thpi.SALE_CHN_YN_CPN ) AS COUPANG -- 판매채널:쿠팡
+                ,		DECODE(thpi.SALE_CHN_YN_TNG , 'N', NULL, thpi.SALE_CHN_YN_TNG ) AS BAEDALTONG -- 판매채널:배달통
+                ,		DECODE(thpi.SALE_CHN_YN_DDN , 'N', NULL, thpi.SALE_CHN_YN_DDN ) AS DDANGYO -- 판매채널:떙겨요
+                ,		thp.REMARK -- 비고
+                ,		thpi.PROD_INFO -- 상품상세설명
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM    TB_MS_PRODUCT thp
+                LEFT OUTER JOIN (
+                SELECT
+                STORE_CD,
+                PROD_CD,
+                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+                MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+                MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC,
+                MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC
+                FROM TB_MS_PRODUCT_SALE_PRICE
+                WHERE STORE_CD = #{storeCd}
+                <![CDATA[
+                            AND START_DATE <= TO_CHAR(SYSDATE, 'YYYYMMDD')
+                            AND END_DATE >= TO_CHAR(SYSDATE, 'YYYYMMDD')
+                        ]]>
+                AND SALE_PRC_FG = '1'
+                GROUP BY
+                STORE_CD, PROD_CD
+                ) thpsp ON
+                thp.STORE_CD = thpsp.STORE_CD
+                AND thp.PROD_CD = thpsp.PROD_CD
+                LEFT OUTER JOIN TB_MS_BRAND thb ON
+                thb.STORE_CD = thp.STORE_CD
+                AND thb.MS_BRAND_CD = thp.HQ_BRAND_CD
+                LEFT OUTER JOIN TB_MS_PRODUCT_BARCD thpb ON
+                thpb.STORE_CD = thp.STORE_CD
+                AND thpb.PROD_CD = thp.PROD_CD
+                LEFT OUTER JOIN TB_MS_PRODUCT_INFO thpi ON
+                thpi.STORE_CD = thp.STORE_CD
+                AND thpi.PROD_CD = thp.PROD_CD
+                LEFT OUTER JOIN TB_MS_PRODUCT_SDSEL_GROUP thpsg ON
+                thpsg.STORE_CD = thp.STORE_CD
+                AND thpsg.SDSEL_GRP_CD = thp.SDSEL_GRP_CD
+                LEFT OUTER JOIN TB_MS_PRODUCT_OPTION_GROUP thpog ON
+                thpog.STORE_CD = thp.STORE_CD
+                AND thpog.OPTION_GRP_CD = thp.OPTION_GRP_CD
+                LEFT OUTER JOIN TB_MS_PRODUCT_SDATTR_CLASS thpsc ON
+                thpsc.STORE_CD = thp.STORE_CD
+                AND thpsc.SDATTR_CLASS_CD = thp.SDATTR_CLASS_CD
+                WHERE 1=1
+                AND thp.STORE_CD = #{storeCd}
+                <if test="chkDt == false">
+                    <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                        <![CDATA[
+                            AND thp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                        ]]>
+                    </if>
+                </if>
+                <if test="prodCd != null and prodCd != ''">
+                    AND thp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                </if>
+                <if test="barCd != null and barCd != ''">
+                    AND thpb.BARCD_CD LIKE '%'||#{barCd}||'%' --바코드
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND thp.PROD_CLASS_CD IN (
+                    SELECT
+                    PROD_CLASS_CD
+                    FROM TB_MS_PRODUCT_CLASS
+                    WHERE STORE_CD = #{storeCd}
+                    START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                    )
+                </if>
+                <if test="useYn != null and useYn != ''">
+                    AND thp.USE_YN = #{useYn} --사용여부
+                </if>
+                <if test="vatFg != null and vatFg != ''">
+                    AND thp.VAT_FG = #{vatFg} --과세여부
+                </if>
+                <if test="prodTypeFg != null and prodTypeFg != ''">
+                    AND thp.PROD_TYPE_FG = #{prodTypeFg} --상품유형
+                </if>
+                <if test="prcCtrlFg != null and prcCtrlFg != ''">
+                    AND thp.PRC_CTRL_FG = #{prcCtrlFg} --가격관리구분
+                </if>
+                <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                    AND thp.HQ_BRAND_CD = #{prodHqBrandCd} -- 선택한 상품브랜드가 있을 때
+                </if>
+                <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                    <if test='userProdBrands != null and userProdBrands != ""'>
+                        -- 선택한 상품브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                        AND thp.HQ_BRAND_CD IN
+                        <foreach collection="userProdBrandList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                </if>
+                AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                )
+                ORDER BY thp.PROD_CD ASC
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 상품 조회(엑셀다운로드용) -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE,
+                   TB_MS_PRODUCT, TB_MS_PRODUCT_SALE_PRICE
+        PARAM    : prodSearchVO
+        COMMENTS : 상품의 목록을 조회한다. ( 본사/매장 )
+    -->
+    <select id="getProdExcelList" parameterType="prodSearchVO" resultType="DefaultMap">
+        /* USE : ProdMapper.getProdExcelList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  thb.HQ_BRAND_NM AS HQ_BRAND_NM
+                ,		thp.PROD_TYPE_FG
+                ,		thp.PROD_CLASS_CD
+                , 		( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM
+                ,		thp.PROD_CD
+                ,		thp.PROD_NM
+                ,		(SELECT LISTAGG(VENDR_NM , ',') WITHIN GROUP (ORDER BY thv.VENDR_NM ) AS VENDR_NM FROM TB_HQ_VENDOR_PROD thvp, TB_HQ_VENDOR thv WHERE thvp.HQ_OFFICE_CD = #{hqOfficeCd} AND thvp.HQ_OFFICE_CD = thv.HQ_OFFICE_CD AND thvp.VENDR_CD = thv.VENDR_CD AND thvp.PROD_CD = thp.PROD_CD) AS VENDR
+                ,		thp.SALE_PROD_YN -- 판매상품여부
+                ,		NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC -- 판매단가
+                ,		thp.PROD_TIP_YN -- 봉사료포함여부
+                ,		thp.VAT_FG  -- 과세여부
+                ,		thpb.BARCD_CD AS BAR_CD -- 바코드
+                ,		thp.PRC_CTRL_FG -- 가격관리구분
+                ,		NVL(thpsp.STIN_SALE_UPRC, 0) AS STIN_SALE_UPRC -- 내점가
+                ,		NVL(thpsp.PACK_SALE_UPRC, 0) AS PACK_SALE_UPRC -- 포장가
+                ,		NVL(thpsp.DLVR_SALE_UPRC, 0) AS DLVR_SALE_UPRC -- 배달가
+                ,		thp.STOCK_PROD_YN -- 재고관리여부
+                ,		thp.SET_PROD_FG -- 세트상품구분
+                ,		thp.POINT_SAVE_YN -- 포인트적립여부
+                ,		thp.SIDE_PROD_YN -- 사이드상품여부
+                ,		thp.SDATTR_CLASS_CD -- 속성
+                ,		thpsc.SDATTR_CLASS_NM -- 속성명
+                ,		thp.SDSEL_GRP_CD -- 선택메뉴
+                ,		thpsg.SDSEL_GRP_NM -- 선택메뉴명
+                ,		thp.GROUP_PROD_CD -- 단품/세트선택설정
+                ,		(SELECT PROD_NM FROM TB_HQ_PRODUCT thp2 WHERE thp2.HQ_OFFICE_CD = thp.HQ_OFFICE_CD AND thp2.PROD_CD = thp.GROUP_PROD_CD) AS GROUP_PROD_NM
+                ,		thp.DEPOSIT_PROD_CD -- 보증금상품코드
+                ,		(SELECT PROD_NM FROM TB_HQ_PRODUCT thp2 WHERE thp2.HQ_OFFICE_CD = thp.HQ_OFFICE_CD AND thp2.PROD_CD = thp.DEPOSIT_PROD_CD) AS DEPOSIT_PROD_NM
+                ,		thp.DEPOSIT_CUP_FG  -- 보증금상품유형
+                ,		thp.POINT_USE_YN -- 포인트사용여부
+                ,		thp.DC_YN -- 할인여부
+                ,		NVL(thp.SPLY_UPRC, 0) AS SPLY_UPRC -- 공급단가
+                ,		NVL(thp.COST_UPRC, 0) AS COST_UPRC -- 원가단가
+                ,		thp.PO_PROD_FG  -- 발주상품구분
+                ,		thp.PO_UNIT_FG  -- 발주단위
+                ,		thp.PO_UNIT_QTY -- 발주단위수량
+                ,		thp.PO_MIN_QTY  -- 최소발주수량
+                ,		thp.SAFE_STOCK_QTY -- 안전재
+                ,		thpi.NU_TOT_WT -- 총중량
+                ,		thpi.NU_KCAL -- 총열량
+                ,		thpi.NU_PROTEIN -- 단백질
+                ,		thpi.NU_SODIUM -- 나트륨
+                ,		thpi.NU_SUGARS -- 당류
+                ,		thpi.NU_SAT_FAT -- 포화지방
+                ,		thpi.NU_CAFFEINE -- 카페인
+                ,		thp.MAP_PROD_CD -- 매핑상품코드
+                ,		thp.SALE_TIME_FG -- KIOSK 판매시간
+                ,		(SELECT LISTAGG(S_SALE_TIME || '~' || E_SALE_TIME, ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME FROM TB_HQ_PRODUCT_SALE_TIME thpst WHERE thpst.HQ_OFFICE_CD = #{hqOfficeCd} AND thpst.PROD_CD = thp.PROD_CD ) AS SALE_TIME -- KIOSK 시간설정
+                ,		thpi.MOMS_KIOSK_EDGE -- KIOSK 뱃지
+                ,		thp.OPTION_GRP_CD -- 상품옵션그룹
+                ,		thpog.OPTION_GRP_NM
+                ,		thp.RELEASE_DATE -- 출시일
+                ,		DECODE(thp.DISCON_YN, 'Y', '단종', NULL) AS DISCON_YN -- 단종
+                ,		thp.DISCON_DATE -- 단종일
+                ,		DECODE(thpi.SALE_TYPE_YN_SIN, 'N', NULL, thpi.SALE_TYPE_YN_SIN) AS IN_STORE -- 판매방식:내점
+                ,		DECODE(thpi.SALE_TYPE_YN_DLV, 'N', NULL, thpi.SALE_TYPE_YN_DLV) AS DELIVERY -- 판매방식:배달
+                ,		DECODE(thpi.SALE_TYPE_YN_PKG, 'N', NULL, thpi.SALE_TYPE_YN_PKG) AS PACKING -- 판매방식:포장
+                ,		DECODE(thpi.SALE_CHN_YN_POS , 'N', NULL, thpi.SALE_CHN_YN_POS ) AS POS -- 판매채널:포스
+                ,		DECODE(thpi.SALE_CHN_YN_KSK , 'N', NULL, thpi.SALE_CHN_YN_KSK ) AS KIOSK -- 판매채널:키오스크
+                ,		DECODE(thpi.SALE_CHN_YN_CMP , 'N', NULL, thpi.SALE_CHN_YN_CMP ) AS APP -- 판매채널:자사앱
+                ,		DECODE(thpi.SALE_CHN_YN_BAE , 'N', NULL, thpi.SALE_CHN_YN_BAE ) AS BAEMIN -- 판매채널:배민
+                ,		DECODE(thpi.SALE_CHN_YN_BAO , 'N', NULL, thpi.SALE_CHN_YN_BAO ) AS BAEMIN1 -- 판매채널:비맨1
+                ,		DECODE(thpi.SALE_CHN_YN_YGY , 'N', NULL, thpi.SALE_CHN_YN_YGY ) AS YOGIYO -- 판매채널:요기요
+                ,		DECODE(thpi.SALE_CHN_YN_YGE , 'N', NULL, thpi.SALE_CHN_YN_YGE ) AS YOGIYO_EXP -- 판매채널:요기요익스프레스
+                ,		DECODE(thpi.SALE_CHN_YN_CPN , 'N', NULL, thpi.SALE_CHN_YN_CPN ) AS COUPANG -- 판매채널:쿠팡
+                ,		DECODE(thpi.SALE_CHN_YN_TNG , 'N', NULL, thpi.SALE_CHN_YN_TNG ) AS BAEDALTONG -- 판매채널:배달통
+                ,		DECODE(thpi.SALE_CHN_YN_DDN , 'N', NULL, thpi.SALE_CHN_YN_DDN ) AS DDANGYO -- 판매채널:떙겨요
+                ,		thp.REMARK -- 비고
+                ,		thpi.PROD_INFO -- 상품상세설명
+                FROM    TB_HQ_PRODUCT thp
+                LEFT OUTER JOIN (
+                SELECT
+                HQ_OFFICE_CD,
+                PROD_CD,
+                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+                MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+                MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC,
+                MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC
+                FROM TB_HQ_PRODUCT_SALE_PRICE
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                <![CDATA[
+                            AND START_DATE <= TO_CHAR(SYSDATE, 'YYYYMMDD')
+                            AND END_DATE >= TO_CHAR(SYSDATE, 'YYYYMMDD')
+                        ]]>
+                AND SALE_PRC_FG = '1'
+                GROUP BY
+                HQ_OFFICE_CD, PROD_CD
+                ) thpsp ON
+                thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                AND thp.PROD_CD = thpsp.PROD_CD
+                LEFT OUTER JOIN TB_HQ_BRAND thb ON
+                thb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD
+                LEFT OUTER JOIN TB_HQ_PRODUCT_BARCD thpb ON
+                thpb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND thpb.PROD_CD = thp.PROD_CD
+                LEFT OUTER JOIN TB_HQ_PRODUCT_INFO thpi ON
+                thpi.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND thpi.PROD_CD = thp.PROD_CD
+                LEFT OUTER JOIN TB_HQ_PRODUCT_SDSEL_GROUP thpsg ON
+                thpsg.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND thpsg.SDSEL_GRP_CD = thp.SDSEL_GRP_CD
+                LEFT OUTER JOIN TB_HQ_PRODUCT_OPTION_GROUP thpog ON
+                thpog.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND thpog.OPTION_GRP_CD = thp.OPTION_GRP_CD
+                LEFT OUTER JOIN TB_HQ_PRODUCT_SDATTR_CLASS thpsc ON
+                thpsc.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND thpsc.SDATTR_CLASS_CD = thp.SDATTR_CLASS_CD
+                WHERE 1=1
+                AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test="chkDt == false">
+                    <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                        <![CDATA[
+                            AND thp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                        ]]>
+                    </if>
+                </if>
+                <if test="prodCd != null and prodCd != ''">
+                    AND thp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                </if>
+                <if test="barCd != null and barCd != ''">
+                    AND thpb.BARCD_CD LIKE '%'||#{barCd}||'%' --바코드
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND thp.PROD_CLASS_CD IN (
+                                                SELECT
+                                                PROD_CLASS_CD
+                                                FROM TB_HQ_PRODUCT_CLASS
+                                                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                            )
+                </if>
+                <if test="useYn != null and useYn != ''">
+                    AND thp.USE_YN = #{useYn} --사용여부
+                </if>
+                <if test="vatFg != null and vatFg != ''">
+                    AND thp.VAT_FG = #{vatFg} --과세여부
+                </if>
+                <if test="prodTypeFg != null and prodTypeFg != ''">
+                    AND thp.PROD_TYPE_FG = #{prodTypeFg} --상품유형
+                </if>
+                <if test="prcCtrlFg != null and prcCtrlFg != ''">
+                    AND thp.PRC_CTRL_FG = #{prcCtrlFg} --가격관리구분
+                </if>
+                <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                    AND thp.HQ_BRAND_CD = #{prodHqBrandCd} -- 선택한 상품브랜드가 있을 때
+                </if>
+                <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                    <if test='userProdBrands != null and userProdBrands != ""'>
+                        -- 선택한 상품브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                        AND thp.HQ_BRAND_CD IN
+                        <foreach collection="userProdBrandList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                </if>
+                AND (
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                        OR
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                    )
+                ORDER BY thp.PROD_CD ASC
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  thb.MS_BRAND_NM AS HQ_BRAND_NM
+                ,		thp.PROD_TYPE_FG
+                ,		thp.PROD_CLASS_CD
+                , 		( SELECT SF_GET_PROD_CLASSES('H', thp.STORE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM
+                ,		thp.PROD_CD
+                ,		thp.PROD_NM
+                ,		(SELECT LISTAGG(VENDR_NM , ',') WITHIN GROUP (ORDER BY thv.VENDR_NM ) AS VENDR_NM FROM TB_MS_VENDOR_PROD thvp, TB_MS_VENDOR thv WHERE thvp.STORE_CD = #{storeCd} AND thvp.STORE_CD = thv.STORE_CD AND thvp.VENDR_CD = thv.VENDR_CD AND thvp.PROD_CD = thp.PROD_CD) AS VENDR
+                ,		thp.SALE_PROD_YN -- 판매상품여부
+                ,		NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC -- 판매단가
+                ,		thp.PROD_TIP_YN -- 봉사료포함여부
+                ,		thp.VAT_FG  -- 과세여부
+                ,		thpb.BARCD_CD AS BAR_CD -- 바코드
+                ,		thp.PRC_CTRL_FG -- 가격관리구분
+                ,		NVL(thpsp.STIN_SALE_UPRC, 0) AS STIN_SALE_UPRC -- 내점가
+                ,		NVL(thpsp.PACK_SALE_UPRC, 0) AS PACK_SALE_UPRC -- 포장가
+                ,		NVL(thpsp.DLVR_SALE_UPRC, 0) AS DLVR_SALE_UPRC -- 배달가
+                ,		thp.STOCK_PROD_YN -- 재고관리여부
+                ,		thp.SET_PROD_FG -- 세트상품구분
+                ,		thp.POINT_SAVE_YN -- 포인트적립여부
+                ,		thp.SIDE_PROD_YN -- 사이드상품여부
+                ,		thp.SDATTR_CLASS_CD -- 속성
+                ,		thpsc.SDATTR_CLASS_NM -- 속성명
+                ,		thp.SDSEL_GRP_CD -- 선택메뉴
+                ,		thpsg.SDSEL_GRP_NM -- 선택메뉴명
+                ,		thp.GROUP_PROD_CD -- 단품/세트선택설정
+                ,		(SELECT PROD_NM FROM TB_MS_PRODUCT thp2 WHERE thp2.STORE_CD = thp.STORE_CD AND thp2.PROD_CD = thp.GROUP_PROD_CD) AS GROUP_PROD_NM
+                ,		thp.DEPOSIT_PROD_CD -- 보증금상품코드
+                ,		(SELECT PROD_NM FROM TB_MS_PRODUCT thp2 WHERE thp2.STORE_CD = thp.STORE_CD AND thp2.PROD_CD = thp.DEPOSIT_PROD_CD) AS DEPOSIT_PROD_NM
+                ,		thp.DEPOSIT_CUP_FG  -- 보증금상품유형
+                ,		thp.POINT_USE_YN -- 포인트사용여부
+                ,		thp.DC_YN -- 할인여부
+                ,		NVL(thp.SPLY_UPRC, 0) AS SPLY_UPRC -- 공급단가
+                ,		NVL(thp.COST_UPRC, 0) AS COST_UPRC -- 원가단가
+                ,		thp.PO_PROD_FG  -- 발주상품구분
+                ,		thp.PO_UNIT_FG  -- 발주단위
+                ,		thp.PO_UNIT_QTY -- 발주단위수량
+                ,		thp.PO_MIN_QTY  -- 최소발주수량
+                ,		thp.SAFE_STOCK_QTY -- 안전재
+                ,		thpi.NU_TOT_WT -- 총중량
+                ,		thpi.NU_KCAL -- 총열량
+                ,		thpi.NU_PROTEIN -- 단백질
+                ,		thpi.NU_SODIUM -- 나트륨
+                ,		thpi.NU_SUGARS -- 당류
+                ,		thpi.NU_SAT_FAT -- 포화지방
+                ,		thpi.NU_CAFFEINE -- 카페인
+                ,		thp.MAP_PROD_CD -- 매핑상품코드
+                ,		thp.SALE_TIME_FG -- KIOSK 판매시간
+                ,		(SELECT LISTAGG(S_SALE_TIME || '~' || E_SALE_TIME, ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME FROM TB_MS_PRODUCT_SALE_TIME thpst WHERE thpst.STORE_CD = #{storeCd} AND thpst.PROD_CD = thp.PROD_CD ) AS SALE_TIME -- KIOSK 시간설정
+                ,		thpi.MOMS_KIOSK_EDGE -- KIOSK 뱃지
+                ,		thp.OPTION_GRP_CD -- 상품옵션그룹
+                ,		thpog.OPTION_GRP_NM
+                ,		thp.RELEASE_DATE -- 출시일
+                ,		DECODE(thp.DISCON_YN, 'Y', '단종', NULL) AS DISCON_YN -- 단종
+                ,		thp.DISCON_DATE -- 단종일
+                ,		DECODE(thpi.SALE_TYPE_YN_SIN, 'N', NULL, thpi.SALE_TYPE_YN_SIN) AS IN_STORE -- 판매방식:내점
+                ,		DECODE(thpi.SALE_TYPE_YN_DLV, 'N', NULL, thpi.SALE_TYPE_YN_DLV) AS DELIVERY -- 판매방식:배달
+                ,		DECODE(thpi.SALE_TYPE_YN_PKG, 'N', NULL, thpi.SALE_TYPE_YN_PKG) AS PACKING -- 판매방식:포장
+                ,		DECODE(thpi.SALE_CHN_YN_POS , 'N', NULL, thpi.SALE_CHN_YN_POS ) AS POS -- 판매채널:포스
+                ,		DECODE(thpi.SALE_CHN_YN_KSK , 'N', NULL, thpi.SALE_CHN_YN_KSK ) AS KIOSK -- 판매채널:키오스크
+                ,		DECODE(thpi.SALE_CHN_YN_CMP , 'N', NULL, thpi.SALE_CHN_YN_CMP ) AS APP -- 판매채널:자사앱
+                ,		DECODE(thpi.SALE_CHN_YN_BAE , 'N', NULL, thpi.SALE_CHN_YN_BAE ) AS BAEMIN -- 판매채널:배민
+                ,		DECODE(thpi.SALE_CHN_YN_BAO , 'N', NULL, thpi.SALE_CHN_YN_BAO ) AS BAEMIN1 -- 판매채널:비맨1
+                ,		DECODE(thpi.SALE_CHN_YN_YGY , 'N', NULL, thpi.SALE_CHN_YN_YGY ) AS YOGIYO -- 판매채널:요기요
+                ,		DECODE(thpi.SALE_CHN_YN_YGE , 'N', NULL, thpi.SALE_CHN_YN_YGE ) AS YOGIYO_EXP -- 판매채널:요기요익스프레스
+                ,		DECODE(thpi.SALE_CHN_YN_CPN , 'N', NULL, thpi.SALE_CHN_YN_CPN ) AS COUPANG -- 판매채널:쿠팡
+                ,		DECODE(thpi.SALE_CHN_YN_TNG , 'N', NULL, thpi.SALE_CHN_YN_TNG ) AS BAEDALTONG -- 판매채널:배달통
+                ,		DECODE(thpi.SALE_CHN_YN_DDN , 'N', NULL, thpi.SALE_CHN_YN_DDN ) AS DDANGYO -- 판매채널:떙겨요
+                ,		thp.REMARK -- 비고
+                ,		thpi.PROD_INFO -- 상품상세설명
+                FROM    TB_MS_PRODUCT thp
+                LEFT OUTER JOIN (
+                SELECT
+                STORE_CD,
+                PROD_CD,
+                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+                MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+                MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC,
+                MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC
+                FROM TB_MS_PRODUCT_SALE_PRICE
+                WHERE STORE_CD = #{storeCd}
+                <![CDATA[
+                            AND START_DATE <= TO_CHAR(SYSDATE, 'YYYYMMDD')
+                            AND END_DATE >= TO_CHAR(SYSDATE, 'YYYYMMDD')
+                        ]]>
+                AND SALE_PRC_FG = '1'
+                GROUP BY
+                STORE_CD, PROD_CD
+                ) thpsp ON
+                thp.STORE_CD = thpsp.STORE_CD
+                AND thp.PROD_CD = thpsp.PROD_CD
+                LEFT OUTER JOIN TB_MS_BRAND thb ON
+                thb.STORE_CD = thp.STORE_CD
+                AND thb.MS_BRAND_CD = thp.HQ_BRAND_CD
+                LEFT OUTER JOIN TB_MS_PRODUCT_BARCD thpb ON
+                thpb.STORE_CD = thp.STORE_CD
+                AND thpb.PROD_CD = thp.PROD_CD
+                LEFT OUTER JOIN TB_MS_PRODUCT_INFO thpi ON
+                thpi.STORE_CD = thp.STORE_CD
+                AND thpi.PROD_CD = thp.PROD_CD
+                LEFT OUTER JOIN TB_MS_PRODUCT_SDSEL_GROUP thpsg ON
+                thpsg.STORE_CD = thp.STORE_CD
+                AND thpsg.SDSEL_GRP_CD = thp.SDSEL_GRP_CD
+                LEFT OUTER JOIN TB_MS_PRODUCT_OPTION_GROUP thpog ON
+                thpog.STORE_CD = thp.STORE_CD
+                AND thpog.OPTION_GRP_CD = thp.OPTION_GRP_CD
+                LEFT OUTER JOIN TB_MS_PRODUCT_SDATTR_CLASS thpsc ON
+                thpsc.STORE_CD = thp.STORE_CD
+                AND thpsc.SDATTR_CLASS_CD = thp.SDATTR_CLASS_CD
+                WHERE 1=1
+                AND thp.STORE_CD = #{storeCd}
+                <if test="chkDt == false">
+                    <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                        <![CDATA[
+                            AND thp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                        ]]>
+                    </if>
+                </if>
+                <if test="prodCd != null and prodCd != ''">
+                    AND thp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                </if>
+                <if test="barCd != null and barCd != ''">
+                    AND thpb.BARCD_CD LIKE '%'||#{barCd}||'%' --바코드
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND thp.PROD_CLASS_CD IN (
+                    SELECT
+                    PROD_CLASS_CD
+                    FROM TB_MS_PRODUCT_CLASS
+                    WHERE STORE_CD = #{storeCd}
+                    START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                    )
+                </if>
+                <if test="useYn != null and useYn != ''">
+                    AND thp.USE_YN = #{useYn} --사용여부
+                </if>
+                <if test="vatFg != null and vatFg != ''">
+                    AND thp.VAT_FG = #{vatFg} --과세여부
+                </if>
+                <if test="prodTypeFg != null and prodTypeFg != ''">
+                    AND thp.PROD_TYPE_FG = #{prodTypeFg} --상품유형
+                </if>
+                <if test="prcCtrlFg != null and prcCtrlFg != ''">
+                    AND thp.PRC_CTRL_FG = #{prcCtrlFg} --가격관리구분
+                </if>
+                <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                    AND thp.HQ_BRAND_CD = #{prodHqBrandCd} -- 선택한 상품브랜드가 있을 때
+                </if>
+                <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                    <if test='userProdBrands != null and userProdBrands != ""'>
+                        -- 선택한 상품브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                        AND thp.HQ_BRAND_CD IN
+                        <foreach collection="userProdBrandList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                </if>
+                AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                )
+                ORDER BY thp.PROD_CD ASC
+            </when>
+        </choose>
+    </select>
+
+</mapper>

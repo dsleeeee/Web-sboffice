@@ -324,6 +324,7 @@
         /* USE : StoreManageMapper.setEnv4048 */
         UPDATE  TB_MS_POS_ENVST
         SET     ENVST_VAL = '0'
+            ,   POS_FG  = 'W'
         WHERE   STORE_CD = #{targetStoreCd}
           AND     POS_NO IN (SELECT POS_NO FROM TB_MS_POS_ENVST WHERE STORE_CD = #{targetStoreCd} AND ENVST_CD = '4021' AND ENVST_VAL = '2')
           AND     ENVST_CD = '4048'

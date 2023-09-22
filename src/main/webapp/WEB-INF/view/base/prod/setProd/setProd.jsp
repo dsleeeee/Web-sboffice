@@ -164,7 +164,7 @@
             <%--위즈모 테이블--%>
             <div class="wj-TblWrapBr pd5" style="height: 260px;" ng-controller="setProeSideMenuSelectClassCtrl">
                 <div class="updownSet oh mb10" style="height:60px;">
-                    <span class="fl bk lh30" style="white-space: nowrap;"><s:message code='sideMenu.selectMenu.sdselClass' /><span id="sideSelectGroupTitle"></span></span>
+                    <span class="fl bk lh30" style="white-space: nowrap;"><s:message code='sideMenu.selectMenu.sdselClass' /><span id="sideSelectGroupTitle"></span><span id="sideSelectGroupType" style="display: none"></span></span>
                     <br>
                     <br>
                     <%-- 선택분류복사 --%>
@@ -326,6 +326,9 @@
 
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/setProd/setProd.js?ver=20230904.02" charset="utf-8"></script>
 
+<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>
+
 <%-- 레이어 팝업 : 상품선택 --%>
 <c:import url="/WEB-INF/view/base/prod/sideMenu/sideMenuProdView.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
@@ -334,6 +337,12 @@
 
 <%-- 선택분류복사 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/sideMenu/sdselClassCopy.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 선택분류복사 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/sideMenu/sdselClassCopySingle.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

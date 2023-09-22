@@ -23,8 +23,8 @@
                 ORDER_NO,		-- 주문번호
                 ORDER_FG,		-- 주문구분 1:주문 2:취소 3:결제
                 DLVR_ORDER_FG,	-- 배달주문구분 1:일반 2:배달 3:포장
-                TO_CHAR(TO_DATE(ORDER_START_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS ORDER_START_DT,  -- 최초주문일시
-                TO_CHAR(TO_DATE(ORDER_END_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS ORDER_END_DT,      -- 최종주문일시
+                TO_CHAR(TO_DATE(ORDER_START_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS ORDER_START_DT,  -- 최초주문일시
+                TO_CHAR(TO_DATE(ORDER_END_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS ORDER_END_DT,      -- 최종주문일시
                 TOT_SALE_AMT,	-- 총판매금액
                 TOT_DC_AMT,		-- 총할인금액
                 TOT_TIP_AMT,	-- 총봉사료금액
@@ -49,7 +49,7 @@
                 RESVE_YN,		-- 예약여부
                 REFUND_YN,		-- 환급여부
                 SEND_YN,		-- 전송여부
-                TO_CHAR(TO_DATE(SEND_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS SEND_DT -- 전송일시
+                TO_CHAR(TO_DATE(SEND_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS SEND_DT -- 전송일시
         FROM 	TB_OD_ORDER_HDR
         WHERE   STORE_CD IN
             <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
