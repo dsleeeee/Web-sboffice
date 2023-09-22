@@ -137,14 +137,86 @@
         FROM TB_HQ_SALE_REPORT thsr
         WHERE 1=1
         AND thsr.HQ_OFFICE_CD = #{hqOfficeCd}
-        <![CDATA[
-            AND thsr.FROM_SALE_DATE >= #{startDate}
-            AND thsr.TO_SALE_DATE <= #{endDate}
-            AND thsr.FROM_SALE_DATE = TO_SALE_DATE
-        ]]>
-        AND thsr.REPORT_TYPE = '01'
+        AND (thsr.FROM_SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            OR thsr.TO_SALE_DATE BETWEEN #{startDate} AND #{endDate})
+        AND thsr.REPORT_TYPE = '04'
         ORDER BY thsr.FROM_SALE_DATE DESC
     </select>
+
+    <!-- 일자별 매장-상품 매출 다운로드 탭 - 자료생성 요청건 존재여부 확인 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getDayStoreProdSaleReportChk" parameterType="StoreProdSaleReportVO" resultType="DefaultMap">
+        /* StoreProdSaleReportMapper.getDayStoreProdSaleReportChk */
+        SELECT
+            COUNT(thsr.REPORT_TYPE) AS CNT
+        FROM TB_HQ_SALE_REPORT thsr
+        WHERE 1=1
+          AND thsr.HQ_OFFICE_CD = #{hqOfficeCd}
+          AND thsr.FROM_SALE_DATE = #{fromSaleDate}
+          AND thsr.TO_SALE_DATE = #{toSaleDate}
+          AND thsr.REPORT_TYPE = '04'
+    </select>
+
+    <!-- 기간별 매장-상품 매출 다운로드 탭 - 자료생성 저장 insert -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getDayStoreProdSaleReportSaveInsert" parameterType="StoreProdSaleReportVO">
+        /* StoreProdSaleReportMapper.getDayStoreProdSaleReportSaveInsert */
+        INSERT INTO TB_HQ_SALE_REPORT
+        (
+            HQ_OFFICE_CD,
+            HQ_BRAND_CD,
+            REQ_DATE,
+            REQ_TIME,
+            REPORT_TYPE,
+            FROM_SALE_DATE,
+            TO_SALE_DATE,
+            PROC_FG,
+            PROC_MSG,
+            PROC_DT,
+            FILE_NAME,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+                     #{hqOfficeCd},
+                     '0000000',
+                     #{reqDate},
+                     #{reqTime},
+                     '04',
+                     #{fromSaleDate},
+                     #{toSaleDate},
+                     '0',
+                     '',
+                     '',
+                     '',
+                     #{regDt},
+                     #{regId},
+                     #{modDt},
+                     #{modId}
+                 )
+    </insert>
+
+    <!-- 기간별 매장-상품 매출 다운로드 탭 - 삭제 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getDayStoreProdSaleReportDel" parameterType="StoreProdSaleReportVO">
+        /* StoreProdSaleReportMapper.getDayStoreProdSaleReportDel */
+        DELETE TB_HQ_SALE_REPORT
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND FROM_SALE_DATE = #{fromSaleDate}
+        AND TO_SALE_DATE = #{toSaleDate}
+        AND REPORT_TYPE = '04'
+    </delete>
 
     <!-- 그룹-지역관리 탭 - 그룹 조회 -->
     <!--

@@ -26,7 +26,8 @@ app.controller('dayStoreProdSaleReportCtrl', ['$scope', '$http', function ($scop
     var endDate = wcombo.genDateVal("#srchEndDate", gvEndDate);
 
     // 자료생성
-    var dataCreateDate = wcombo.genDateVal("#dataCreateDate", gvStartDate);
+    var dataCreateStartDate = wcombo.genDateVal("#dataCreateStartDate", gvStartDate);
+    var dataCreateEndDate = wcombo.genDateVal("#dataCreateEndDate", gvStartDate);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -93,19 +94,20 @@ app.controller('dayStoreProdSaleReportCtrl', ['$scope', '$http', function ($scop
 
     // <-- 자료생성 -->
     $scope.dataCreate = function(){
-        var createDate = wijmo.Globalize.format(dataCreateDate.value, 'yyyyMMdd');
+        var createStartDate = wijmo.Globalize.format(dataCreateStartDate.value, 'yyyyMMdd');
+        var createEndDate = wijmo.Globalize.format(dataCreateEndDate.value, 'yyyyMMdd');
 
         // 자료생성 요청건 존재여부 확인
         var params = {};
-        params.fromSaleDate = createDate;
-        params.toSaleDate = createDate;
+        params.fromSaleDate = createStartDate;
+        params.toSaleDate = createEndDate;
 
-        $scope._postJSONQuery.withOutPopUp( "/sale/status/storeProdSaleReport/storeProdSaleReport/getStoreProdSaleReportChk.sb", params, function(response){
+        $scope._postJSONQuery.withOutPopUp( "/sale/status/storeProdSaleReport/storeProdSaleReport/getDayStoreProdSaleReportChk.sb", params, function(response){
             var dayStoreProdSaleReport = response.data.data.result;
             $scope.dayStoreProdSaleReport = dayStoreProdSaleReport;
 
             if($scope.dayStoreProdSaleReport.cnt > 0) {
-                var msg = createDate + " " + messages["storeProdSaleReport.saleMonthAlert"]; // 자료가 존재합니다. 삭제 후 진행해주세요.
+                var msg = createStartDate + " " + createEndDate + messages["storeProdSaleReport.saleMonthAlert"]; // 자료가 존재합니다. 삭제 후 진행해주세요.
                 $scope._popMsg(msg);
                 return;
             } else {
@@ -118,7 +120,7 @@ app.controller('dayStoreProdSaleReportCtrl', ['$scope', '$http', function ($scop
         // 자료생성을 하시겠습니까?
         $scope._popConfirm(messages["storeProdSaleReport.dataCreateSaveConfirm"], function() {
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._postJSONSave.withPopUp("/sale/status/storeProdSaleReport/storeProdSaleReport/getStoreProdSaleReportSave.sb", params, function(){
+            $scope._postJSONSave.withPopUp("/sale/status/storeProdSaleReport/storeProdSaleReport/getDayStoreProdSaleReportSave.sb", params, function () {
                 $scope.allSearch();
             });
         });
@@ -142,7 +144,7 @@ app.controller('dayStoreProdSaleReportCtrl', ['$scope', '$http', function ($scop
             }
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._save("/sale/status/storeProdSaleReport/storeProdSaleReport/getStoreProdSaleReportDel.sb", params, function(){
+            $scope._save("/sale/status/storeProdSaleReport/storeProdSaleReport/getDayStoreProdSaleReportDel.sb", params, function(){
                 $scope.allSearch();
             });
         });
