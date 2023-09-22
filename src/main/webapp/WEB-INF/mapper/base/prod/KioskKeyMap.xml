@@ -2070,7 +2070,8 @@
         UPDATE
            SET ENVST_VAL = #{envstVal},
                 MOD_DT = #{modDt},
-                MOD_ID = #{modId}
+                MOD_ID = #{modId},
+                POS_FG  = 'W'
         WHEN NOT MATCHED THEN
         INSERT
          (
@@ -2093,7 +2094,7 @@
                 #{envstCd},
                 #{envstVal},
                 #{dirctInYn},
-                #{posFg},
+                'W',
                 #{useYn},
                 #{regDt},
                 #{regId},

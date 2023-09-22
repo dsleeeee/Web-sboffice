@@ -3124,6 +3124,7 @@
             SET     ENVST_VAL = #{envstVal}
             ,       MOD_DT = #{modDt}
             ,       MOD_ID = #{modId}
+            ,       POS_FG  = 'W'
         WHEN NOT MATCHED THEN
             INSERT
             (
@@ -3144,7 +3145,7 @@
             ,   '4038'
             ,   #{envstVal}
             ,   'Y'
-            ,   'M'
+            ,   'W'
             ,   'Y'
             ,   #{regDt}
             ,   #{regId}

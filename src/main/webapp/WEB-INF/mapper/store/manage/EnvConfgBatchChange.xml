@@ -436,7 +436,8 @@
             SET
             ENVST_VAL = #{envstVal},
             MOD_DT = #{modDt},
-            MOD_ID = #{modId}
+            MOD_ID = #{modId},
+            POS_FG  = 'W'
             WHERE STORE_CD = #{storeCd} AND POS_NO = #{posNo} AND ENVST_CD = #{envstCd}
         WHEN NOT MATCHED THEN
             INSERT (
@@ -565,7 +566,8 @@
             UPDATE  TB_MS_POS_ENVST
             SET     USE_YN = #{useYn},
                     MOD_DT = #{modDt},
-                    MOD_ID = #{modId}
+                    MOD_ID = #{modId},
+                    POS_FG  = 'W'
             WHERE   ENVST_CD = #{envstCd}
     </update>
 </mapper>
