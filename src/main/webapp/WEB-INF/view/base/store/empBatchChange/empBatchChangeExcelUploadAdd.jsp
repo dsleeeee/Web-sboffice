@@ -42,4 +42,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/empBatchChange/empBatchChangeExcelUploadAdd.js?ver=20230307.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/empBatchChange/empBatchChangeExcelUploadAdd.js?ver=20230922.01" charset="utf-8"></script>

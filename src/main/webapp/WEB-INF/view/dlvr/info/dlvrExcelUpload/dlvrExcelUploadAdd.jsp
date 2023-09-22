@@ -40,4 +40,4 @@
     </div>
 
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/dlvr/info/dlvrExcelUpload/dlvrExcelUploadAdd.js?ver=20220614.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/dlvr/info/dlvrExcelUpload/dlvrExcelUploadAdd.js?ver=20230922.01" charset="utf-8"></script>

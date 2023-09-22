@@ -108,7 +108,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/empBatchChange/empBatchChangeExcelUpload.js?ver=20230327.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/empBatchChange/empBatchChangeExcelUpload.js?ver=20230922.01" charset="utf-8"></script>
 
 <%-- 상품엑셀업로드 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/empBatchChange/empBatchChangeExcelUploadAdd.jsp">
