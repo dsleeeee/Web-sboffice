@@ -162,6 +162,7 @@ app.controller('setProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                 groupScope._gridDataInit();   // 선택분류 그리드 초기화
 
                 $("#sideSelectGroupTitle").html("");
+                $("#sideSelectGroupType").html("");
                 var attrScope = agrid.getScope('setProeSideMenuSelectClassCtrl');
                 attrScope._gridDataInit();   // 그리드 초기화
 
@@ -201,6 +202,7 @@ app.controller('setProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     groupScope._gridDataInit();   // 선택분류 그리드 초기화
 
     $("#sideSelectGroupTitle").html("");
+    $("#sideSelectGroupType").html("");
     var attrScope = agrid.getScope('setProeSideMenuSelectClassCtrl');
     attrScope._gridDataInit();   // 선택분류 그리드 초기화
 
@@ -253,6 +255,7 @@ app.controller('setProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         groupScope._gridDataInit();   // 선택분류 그리드 초기화
 
         $("#sideSelectGroupTitle").html("");
+        $("#sideSelectGroupType").html("");
         var attrScope = agrid.getScope('setProeSideMenuSelectClassCtrl');
         attrScope._gridDataInit();   // 그리드 초기화
 
@@ -333,6 +336,7 @@ app.controller('setProeSideMenuSelectGroupCtrl', ['$scope', '$http', function ($
         if ( col.binding === 'sdselGrpCd') {
           if (selectedRow.sdselGrpCd !== '' && selectedRow.sdselGrpCd !== undefined && selectedRow.sdselGrpCd !== '자동채번') {
             $("#sideSelectGroupTitle").html(" [" + selectedRow.sdselGrpCd + "]" + selectedRow.sdselGrpNm);
+            $("#sideSelectGroupType").html(selectedRow.sdselTypeFg);
             $("#sideClassTitle").html("");
 
             // 선택한 선택그룹의 브랜드코드 갖고있기(선택상품 추가 팝업에서 사용)
@@ -411,6 +415,7 @@ app.controller('setProeSideMenuSelectGroupCtrl', ['$scope', '$http', function ($
     $("#btnSdselProdRegStore").hide();
 
     $("#sideSelectGroupTitle").html("");
+    $("#sideSelectGroupType").html("");
     var attrScope = agrid.getScope('setProeSideMenuSelectClassCtrl');
     attrScope._gridDataInit();   // 선택분류 그리드 초기화
 
@@ -527,6 +532,7 @@ app.controller('setProeSideMenuSelectGroupCtrl', ['$scope', '$http', function ($
       // 삭제기능 수행 : 저장URL, 파라미터, 콜백함수
       $scope._save('/base/prod/sideMenu/menuGrp/save.sb', params, function() {
         $("#sideSelectGroupTitle").html("");
+        $("#sideSelectGroupType").html("");
         var attrScope = agrid.getScope('setProeSideMenuSelectClassCtrl');
         attrScope._gridDataInit();   // 그리드 초기화
 
@@ -611,6 +617,7 @@ app.controller('setProeSideMenuSelectGroupCtrl', ['$scope', '$http', function ($
       // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
       $scope._save('/base/prod/sideMenu/menuGrp/save.sb', params, function() {
         $("#sideSelectGroupTitle").html("");
+        $("#sideSelectGroupType").html("");
         var attrScope = agrid.getScope('setProeSideMenuSelectClassCtrl');
         attrScope._gridDataInit();   // 그리드 초기화
 
@@ -1087,8 +1094,11 @@ app.controller('setProeSideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd
     params.sdselGrpCd = $scope.getSdselGrpCd();
     params.sdselGrpCdNm = $("#sideSelectGroupTitle").html();
     $scope.setSelectedSdselClass(params);
-
-    $scope.wjSdselClassCopyLayer.show(true);
+    if($("#sideSelectGroupType").html() === "C"){
+      $scope.wjSdselClassCopyLayer.show(true);
+    } else {
+      $scope.wjSdselClassCopySingleLayer.show(true);
+    }
     event.preventDefault();
   };
 
@@ -1110,6 +1120,13 @@ app.controller('setProeSideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd
     $scope.wjSdselClassCopyLayer.shown.addHandler(function (s) {
       setTimeout(function() {
         $scope._broadcast('sdselClassCopyCtrl', $scope.getSelectedSdselClass());
+      }, 50)
+    });
+
+    // 선택분류복사 팝업 핸들러 추가
+    $scope.wjSdselClassCopySingleLayer.shown.addHandler(function (s) {
+      setTimeout(function() {
+        $scope._broadcast('sdselClassCopySingleCtrl', $scope.getSelectedSdselClass());
       }, 50)
     });
 

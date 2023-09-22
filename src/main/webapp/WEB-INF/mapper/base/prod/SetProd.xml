@@ -114,6 +114,24 @@
         </choose>
     </update>
 
+
+    <!-- 상품 사이드상품여부 저장(본사 > 매장) -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
+        PARAM    : sideMenuAttrClassVO
+        COMMENTS : 상품 사이드상품여부 저장한다. ( 본사 > 매장 )
+    -->
+    <update id="saveSideProdYnStore" parameterType="setProdVO">
+        /* USE : SetProdMapper.saveSideProdYnStore */
+        UPDATE  TB_MS_PRODUCT
+        SET     SIDE_PROD_YN = #{sideProdYn}
+        <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+        ,       SDSEL_GRP_CD = #{sdselGrpCd}
+        </if>
+        WHERE   STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+        AND     PROD_CD = #{prodCd}
+    </update>
+
     <!-- 상품 선택그룹 조회 -->
     <!--
         TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
