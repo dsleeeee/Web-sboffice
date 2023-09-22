@@ -133,6 +133,21 @@ app.controller('mobileDaySaleCtrl', ['$scope', '$http', '$timeout', function ($s
                     // 값이 있으면 링크
                     if (nvl(selectedRow[("payCd")], '') !== '' && nvl(selectedRow[("payCd")], '') != "0") {
                         mobileCallCtrl = 'mobile'+ (selectedRow[("payMethod")].substr(0,1).toUpperCase() + selectedRow[("payMethod")].substr(1).toLowerCase()).replaceAll("_", "") + 'Ctrl';
+                        // 포인트 이름이 안맞음(mobileMembr->mobilePoint)
+                        if(mobileCallCtrl == 'mobileMembrCtrl') {
+                            mobileCallCtrl = 'mobilePointCtrl';
+                        }
+                        // 사원카드 이름이 안맞음(mobileEmpcardCtrl->mobileEmpCard)
+                        if(mobileCallCtrl == 'mobileEmpcardCtrl') {
+                            mobileCallCtrl = 'mobileEmpCardCtrl';
+                        }
+                        if(mobileCallCtrl == "mobileCashCtrl"){
+                            params.cashGubun = "02";
+                        }
+                        if(mobileCallCtrl == "mobileCashbillCtrl"){
+                            params.cashGubun = "021";
+                            mobileCallCtrl = 'mobileCashCtrl';
+                        }
 
                         $scope._broadcast(mobileCallCtrl, params);
                         event.preventDefault();
