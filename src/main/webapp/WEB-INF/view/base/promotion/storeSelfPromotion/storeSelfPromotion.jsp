@@ -38,11 +38,12 @@
             <%-- 매장 --%>
             <th><s:message code="storeSelfPromotion.store"/></th>
             <td>
-                <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-                <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                <%-- 매장선택 모듈 사용시 include --%>
+                <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                    <jsp:param name="targetTypeFg" value="M"/>
                     <jsp:param name="targetId" value="storeSelfPromotionStore"/>
                 </jsp:include>
-                <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+                <%--// 매장선택 모듈 사용시 include --%>
             </td>
         </tr>
         </tbody>
