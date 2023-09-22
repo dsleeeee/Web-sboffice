@@ -502,7 +502,7 @@
     var multiStoreFg = '${multiStoreFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/monthSale/mobileMonthSale.js?ver=20230915.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/monthSale/mobileMonthSale.js?ver=20230922.01" charset="utf-8"></script>
 
 <%-- 결제수단 팝업 레이어 시작 --%>
 <%-- (모바일) 공통 결제수단 신용카드 팝업 --%>
@@ -511,8 +511,92 @@
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
+<%-- (모바일) 공통 결제수단 현금 팝업 --%>
+<c:import url="/WEB-INF/view/mobile/sale/cmmSalePopup/payInfo/mobileCash.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- (모바일) 공통 결제수단 페이코 팝업 --%>
+<c:import url="/WEB-INF/view/mobile/sale/cmmSalePopup/payInfo/mobilePayco.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- (모바일) 공통 결제수단 VMEM 포인트 팝업 --%>
+<c:import url="/WEB-INF/view/mobile/sale/cmmSalePopup/payInfo/mobileVpoint.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- (모바일) 공통 결제수단 VMEM 전자상품권 팝업 --%>
+<c:import url="/WEB-INF/view/mobile/sale/cmmSalePopup/payInfo/mobileVcharge.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- (모바일) 공통 결제수단 모바일페이 팝업 --%>
+<c:import url="/WEB-INF/view/mobile/sale/cmmSalePopup/payInfo/mobileMpay.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- (모바일) 공통 결제수단 모바일쿠폰 팝업 --%>
+<c:import url="/WEB-INF/view/mobile/sale/cmmSalePopup/payInfo/mobileMcoupn.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- (모바일) 공통 결제수단 포인트 팝업 --%>
+<c:import url="/WEB-INF/view/mobile/sale/cmmSalePopup/payInfo/mobilePoint.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- (모바일) 공통 결제수단 선불 팝업 --%>
+<c:import url="/WEB-INF/view/mobile/sale/cmmSalePopup/payInfo/mobilePrepaid.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- (모바일) 공통 결제수단 후불 팝업 --%>
+<c:import url="/WEB-INF/view/mobile/sale/cmmSalePopup/payInfo/mobilePostpaid.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- (모바일) 공통 결제수단 상품권 팝업 --%>
+<c:import url="/WEB-INF/view/mobile/sale/cmmSalePopup/payInfo/mobileGift.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- (모바일) 공통 결제수단 식권 팝업 --%>
+<c:import url="/WEB-INF/view/mobile/sale/cmmSalePopup/payInfo/mobileFstmp.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- (모바일) 공통 결제수단 제휴할인 팝업 --%>
+<c:import url="/WEB-INF/view/mobile/sale/cmmSalePopup/payInfo/mobilePartner.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- (모바일) 공통 결제수단 사원카드 팝업 --%>
+<c:import url="/WEB-INF/view/mobile/sale/cmmSalePopup/payInfo/mobileEmpCard.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
 <%-- (모바일) 공통 결제수단 가승인 팝업 --%>
 <c:import url="/WEB-INF/view/mobile/sale/cmmSalePopup/payInfo/mobileTemporary.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- (모바일) 공통 결제수단 스마트오더 팝업 --%>
+<c:import url="/WEB-INF/view/mobile/sale/cmmSalePopup/payInfo/mobileVorder.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

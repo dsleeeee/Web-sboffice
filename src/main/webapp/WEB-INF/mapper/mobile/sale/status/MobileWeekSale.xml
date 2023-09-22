@@ -165,7 +165,7 @@
                     )
             </if>
             AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-            AND tsdp.PAY_CD != '02'
+            AND tsdp.PAY_CD NOT IN ('02', '05', '12')
             GROUP BY tsdp.PAY_CD
             UNION
             SELECT

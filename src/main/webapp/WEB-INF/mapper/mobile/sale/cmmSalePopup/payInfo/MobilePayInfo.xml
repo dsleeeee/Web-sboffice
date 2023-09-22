@@ -46,6 +46,656 @@
         ORDER BY tsspc.STORE_CD, NVL(tsspc.ACQUIRE_CD, '9999')
     </select>
 
+    <!-- 결제수단 현금 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMobileCashList" parameterType="MobilePayInfoVO" resultType="DefaultMap">
+        /* MobilePayInfoMapper.getMobileCashList */
+        SELECT  tsspc.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspc.CORNR_CD
+        ,       tmc.CORNR_NM
+        ,       tsspc.APPR_PROC_FG
+        ,       DECODE(tsspc.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_NM
+        ,       tsspc.VAN_CD
+        ,       tcvc.VAN_NM
+        ,       SUM(tsspc.SALE_AMT) AS APPR_AMT
+        FROM    TB_SL_SALE_PAY_CASH tsspc
+        ,       TB_MS_CORNER tmc
+        ,       TB_CM_VAN_CMPNY tcvc
+        ,       TB_CM_NMCODE tcn
+        ,       TB_MS_STORE tms
+        WHERE   tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsspc.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND     tmc.STORE_CD          (+) =   tsspc.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmc.CORNR_CD          (+) =   tsspc.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcvc.VAN_FG           (+) =   '01' /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcvc.VAN_CD           (+) =   tsspc.VAN_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcn.NMCODE_GRP_CD     (+)    =   '018'
+        AND     tcn.NMCODE_CD         (+)    =   tsspc.APPR_PROC_FG
+        AND     tms.HQ_OFFICE_CD = tsspc.HQ_OFFICE_CD
+        AND     tms.STORE_CD = tsspc.STORE_CD
+        <if test='cashGubun != null and cashGubun == "021"'>
+            <![CDATA[
+            AND tsspc.APPR_PROC_FG <> '3'
+            ]]>
+        </if>
+        <if test='cashGubun != null and cashGubun == "02"'>
+            AND tsspc.APPR_PROC_FG = '3'
+        </if>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                tsspc.STORE_CD = #{item}
+            </foreach>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR  tsspc.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+            )
+        </if>
+        GROUP
+        BY      tsspc.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspc.CORNR_CD
+        ,       tmc.CORNR_NM
+        ,       tsspc.APPR_PROC_FG
+        ,       tsspc.VAN_CD
+        ,       tcvc.VAN_NM
+        ORDER
+        BY      tsspc.STORE_CD
+        ,       tsspc.CORNR_CD
+        ,       tsspc.APPR_PROC_FG
+        ,       tsspc.VAN_CD
+    </select>
+
+    <!-- 결제수단 페이코 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMobilePaycoList" parameterType="MobilePayInfoVO" resultType="DefaultMap">
+        /* MobilePayInfoMapper.getMobilePaycoList */
+        SELECT  tsspp.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspp.APPR_COMPANY_NM AS PAYCO_NM
+        ,       SUM(DECODE(tsspp.SALE_YN, 'Y', 1, 0)) AS APPR_CNT
+        ,       SUM(DECODE(tsspp.SALE_YN, 'Y', tsspp.APPR_AMT+tsspp.POINT_AMT, 0)) AS APPR_AMT
+        ,       SUM(DECODE(tsspp.SALE_YN, 'N', 1, 0)) AS CANCEL_CNT
+        ,       SUM(DECODE(tsspp.SALE_YN, 'N', tsspp.APPR_AMT+tsspp.POINT_AMT, 0)) AS CANCEL_AMT
+        FROM    TB_SL_SALE_PAY_PAYCO tsspp
+        ,       TB_MS_STORE tms
+        WHERE   tsspp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsspp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND     tms.HQ_OFFICE_CD = tsspp.HQ_OFFICE_CD
+        AND     tms.STORE_CD = tsspp.STORE_CD
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                tsspp.STORE_CD = #{item}
+            </foreach>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR  tsspp.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+            )
+        </if>
+        GROUP
+        BY      tsspp.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspp.APPR_COMPANY_NM
+        ORDER
+        BY      tsspp.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspp.APPR_COMPANY_NM
+    </select>
+
+    <!-- 결제수단 VMEM 포인트 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMobileVpointList" parameterType="MobilePayInfoVO" resultType="DefaultMap">
+        /* MobilePayInfoMapper.getMobileVpointList */
+        SELECT  tsspv.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspv.CASH_BILL_APPR_PROC_FG
+        ,       SUM(tsspv.SALE_AMT) AS SALE_AMT
+        FROM    TB_SL_SALE_PAY_VPOINT tsspv
+        ,       TB_MS_STORE tms
+        WHERE   tsspv.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsspv.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND     tms.HQ_OFFICE_CD = tsspv.HQ_OFFICE_CD
+        AND     tms.STORE_CD = tsspv.STORE_CD
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                tsspv.STORE_CD = #{item}
+            </foreach>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR  tsspv.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+            )
+        </if>
+        GROUP
+        BY      tsspv.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspv.CASH_BILL_APPR_PROC_FG
+        ORDER
+        BY      tsspv.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspv.CASH_BILL_APPR_PROC_FG
+    </select>
+
+    <!-- 결제수단 VMEM 전자상품권 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMobileVchargeList" parameterType="MobilePayInfoVO" resultType="DefaultMap">
+        /* MobilePayInfoMapper.getMobileVchargeList */
+        SELECT  tsspv.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspv.CASH_BILL_APPR_PROC_FG
+        ,       SUM(tsspv.SALE_AMT) AS SALE_AMT
+        FROM    TB_SL_SALE_PAY_VCHARGE tsspv
+        ,       TB_MS_STORE tms
+        WHERE   tsspv.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsspv.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND     tms.HQ_OFFICE_CD = tsspv.HQ_OFFICE_CD
+        AND     tms.STORE_CD = tsspv.STORE_CD
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                tsspv.STORE_CD = #{item}
+            </foreach>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR  tsspv.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+            )
+        </if>
+        GROUP
+        BY      tsspv.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspv.CASH_BILL_APPR_PROC_FG
+        ORDER
+        BY      tsspv.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspv.CASH_BILL_APPR_PROC_FG
+    </select>
+
+    <!-- 결제수단 모바일페이 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMobileMpayList" parameterType="MobilePayInfoVO" resultType="DefaultMap">
+        /* MobilePayInfoMapper.getMobileMpayList */
+        SELECT  tsspm.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspm.MPAY_CD
+        ,       tcn.NMCODE_NM AS MPAY_NM
+        ,       SUM(DECODE(tsspm.SALE_YN, 'Y', 1, 0)) AS APPR_CNT
+        ,       SUM(DECODE(tsspm.SALE_YN, 'Y', tsspm.APPR_AMT, 0)) AS APPR_AMT
+        ,       SUM(DECODE(tsspm.SALE_YN, 'N', 1, 0)) AS CANCEL_CNT
+        ,       SUM(DECODE(tsspm.SALE_YN, 'N', tsspm.APPR_AMT, 0)) AS CANCEL_AMT
+        FROM    TB_SL_SALE_PAY_MPAY tsspm
+        ,       TB_CM_NMCODE tcn
+        ,       TB_MS_STORE tms
+        WHERE   tsspm.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsspm.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND     tms.HQ_OFFICE_CD = tsspm.HQ_OFFICE_CD
+        AND     tms.STORE_CD = tsspm.STORE_CD
+        AND     tcn.NMCODE_GRP_CD         (+)=   '109'
+        AND     tcn.NMCODE_CD             (+)=   tsspm.MPAY_CD
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                tsspm.STORE_CD = #{item}
+            </foreach>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR  tsspm.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+            )
+        </if>
+        GROUP
+        BY      tsspm.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspm.MPAY_CD
+        ,       tcn.NMCODE_NM
+        ORDER
+        BY      tsspm.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspm.MPAY_CD
+        ,       tcn.NMCODE_NM
+    </select>
+
+    <!-- 결제수단 모바일쿠폰 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMobileMcoupnList" parameterType="MobilePayInfoVO" resultType="DefaultMap">
+        /* MobilePayInfoMapper.getMobileMcoupnList */
+        SELECT  tsspm.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspm.SALE_YN
+        ,       tsspm.MCOUPN_CD
+        ,       tsspm.MCOUPN_TYPE_FG
+        ,       SUM(tsspm.SALE_AMT) AS SALE_AMT
+        FROM    TB_SL_SALE_PAY_MCOUPN tsspm
+        ,       TB_MS_STORE tms
+        WHERE   tsspm.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsspm.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND     tms.HQ_OFFICE_CD = tsspm.HQ_OFFICE_CD
+        AND     tms.STORE_CD = tsspm.STORE_CD
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                tsspm.STORE_CD = #{item}
+            </foreach>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR  tsspm.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+            )
+        </if>
+        GROUP
+        BY      tsspm.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspm.SALE_YN
+        ,       tsspm.MCOUPN_CD
+        ,       tsspm.MCOUPN_TYPE_FG
+        ORDER
+        BY      tsspm.STORE_CD
+        ,       tsspm.SALE_YN
+        ,       tsspm.MCOUPN_CD
+        ,       tsspm.MCOUPN_TYPE_FG
+    </select>
+
+    <!-- 결제수단 포인트 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMobilePointList" parameterType="MobilePayInfoVO" resultType="DefaultMap">
+        /* MobilePayInfoMapper.getMobilePointList */
+        SELECT  tsspp.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspp.MEMBR_NO
+        ,       SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM
+        ,       tmm.MEMBR_CLASS_CD
+        ,       tmmc.MEMBR_CLASS_NM
+        ,       tmmc.POINT_SAVE_FG
+        ,       tcn.NMCODE_NM AS POINT_SAVE_FG_NM
+        ,       tmmc.DC_RATE
+        ,       SUM(tsspp.SALE_AMT) AS SALE_AMT
+        FROM    TB_SL_SALE_PAY_POINT tsspp
+        ,       TB_MS_CORNER tmc
+        ,       TB_MB_MEMBER tmm
+        ,       TB_MB_MEMBER_CLASS tmmc
+        ,       TB_CM_NMCODE tcn
+        ,       TB_MS_STORE tms
+        WHERE   tsspp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsspp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND     tms.HQ_OFFICE_CD = tsspp.HQ_OFFICE_CD
+        AND     tms.STORE_CD = tsspp.STORE_CD
+        AND     tmc.STORE_CD          (+) =   tsspp.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmc.CORNR_CD          (+) =   tsspp.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmm.MEMBR_ORGN_CD     (+) =   #{hqOfficeCd} /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmm.MEMBR_NO          (+) =   tsspp.MEMBR_NO /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmmc.MEMBR_ORGN_CD    (+) =   #{hqOfficeCd} /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmmc.MEMBR_CLASS_CD   (+) =   tmm.MEMBR_CLASS_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcn.NMCODE_GRP_CD     (+) =   '054' /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcn.NMCODE_CD         (+) =   tmmc.POINT_SAVE_FG /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                tsspp.STORE_CD = #{item}
+            </foreach>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR  tsspp.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+            )
+        </if>
+        GROUP
+        BY      tsspp.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspp.MEMBR_NO
+        ,       tmm.MEMBR_NM
+        ,       tmm.MEMBR_CLASS_CD
+        ,       tmmc.MEMBR_CLASS_NM
+        ,       tmmc.POINT_SAVE_FG
+        ,       tcn.NMCODE_NM
+        ,       tmmc.DC_RATE
+        ORDER
+        BY      tsspp.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspp.MEMBR_NO
+    </select>
+
+    <!-- 결제수단 선불 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMobilePrepaidList" parameterType="MobilePayInfoVO" resultType="DefaultMap">
+        /* MobilePayInfoMapper.getMobilePrepaidList */
+        SELECT  tsspp.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspp.MEMBR_NO
+        ,       SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM
+        ,       tmm.MEMBR_CLASS_CD
+        ,       tmmc.MEMBR_CLASS_NM
+        ,       tmmc.POINT_SAVE_FG
+        ,       tcn.NMCODE_NM AS POINT_SAVE_FG_NM
+        ,       tmmc.DC_RATE
+        ,       SUM(tsspp.SALE_AMT) AS SALE_AMT
+        FROM    TB_SL_SALE_PAY_PREPAID tsspp
+        ,       TB_MS_CORNER tmc
+        ,       TB_MB_MEMBER tmm
+        ,       TB_MB_MEMBER_CLASS tmmc
+        ,       TB_CM_NMCODE tcn
+        ,       TB_MS_STORE tms
+        WHERE   tsspp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsspp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND     tms.HQ_OFFICE_CD = tsspp.HQ_OFFICE_CD
+        AND     tms.STORE_CD = tsspp.STORE_CD
+        AND     tmc.STORE_CD          (+) =   tsspp.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmc.CORNR_CD          (+) =   tsspp.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmm.MEMBR_ORGN_CD     (+) =   #{hqOfficeCd} /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmm.MEMBR_NO          (+) =   tsspp.MEMBR_NO /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmmc.MEMBR_ORGN_CD    (+) =   #{hqOfficeCd} /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmmc.MEMBR_CLASS_CD   (+) =   tmm.MEMBR_CLASS_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcn.NMCODE_GRP_CD     (+) =   '054' /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcn.NMCODE_CD         (+) =   tmmc.POINT_SAVE_FG /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                tsspp.STORE_CD = #{item}
+            </foreach>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR  tsspp.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+            )
+        </if>
+        GROUP
+        BY      tsspp.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspp.MEMBR_NO
+        ,       tmm.MEMBR_NM
+        ,       tmm.MEMBR_CLASS_CD
+        ,       tmmc.MEMBR_CLASS_NM
+        ,       tmmc.POINT_SAVE_FG
+        ,       tcn.NMCODE_NM
+        ,       tmmc.DC_RATE
+        ORDER
+        BY      tsspp.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspp.MEMBR_NO
+    </select>
+
+    <!-- 결제수단 후불 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMobilePostpaidList" parameterType="MobilePayInfoVO" resultType="DefaultMap">
+        /* MobilePayInfoMapper.getMobilePostpaidList */
+        SELECT  tsspp.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspp.MEMBR_NO
+        ,       SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM
+        ,       tmm.MEMBR_CLASS_CD
+        ,       tmmc.MEMBR_CLASS_NM
+        ,       tmmc.POINT_SAVE_FG
+        ,       tcn.NMCODE_NM AS POINT_SAVE_FG_NM
+        ,       tmmc.DC_RATE
+        ,       SUM(tsspp.SALE_AMT) AS SALE_AMT
+        FROM    TB_SL_SALE_PAY_POSTPAID tsspp
+        ,       TB_MS_CORNER tmc
+        ,       TB_MB_MEMBER tmm
+        ,       TB_MB_MEMBER_CLASS tmmc
+        ,       TB_CM_NMCODE tcn
+        ,       TB_MS_STORE tms
+        WHERE   tsspp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsspp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND     tms.HQ_OFFICE_CD = tsspp.HQ_OFFICE_CD
+        AND     tms.STORE_CD = tsspp.STORE_CD
+        AND     tmc.STORE_CD          (+) =   tsspp.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmc.CORNR_CD          (+) =   tsspp.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmm.MEMBR_ORGN_CD     (+) =   #{hqOfficeCd} /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmm.MEMBR_NO          (+) =   tsspp.MEMBR_NO /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmmc.MEMBR_ORGN_CD    (+) =   #{hqOfficeCd} /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmmc.MEMBR_CLASS_CD   (+) =   tmm.MEMBR_CLASS_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcn.NMCODE_GRP_CD     (+) =   '054' /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcn.NMCODE_CD         (+) =   tmmc.POINT_SAVE_FG /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                tsspp.STORE_CD = #{item}
+            </foreach>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR  tsspp.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+            )
+        </if>
+        GROUP
+        BY      tsspp.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspp.MEMBR_NO
+        ,       tmm.MEMBR_NM
+        ,       tmm.MEMBR_CLASS_CD
+        ,       tmmc.MEMBR_CLASS_NM
+        ,       tmmc.POINT_SAVE_FG
+        ,       tcn.NMCODE_NM
+        ,       tmmc.DC_RATE
+        ORDER
+        BY      tsspp.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspp.MEMBR_NO
+    </select>
+
+    <!-- 결제수단 상품권 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMobileGiftList" parameterType="MobilePayInfoVO" resultType="DefaultMap">
+        /* MobilePayInfoMapper.getMobileGiftList */
+        SELECT  tsspgd.STORE_CD
+        ,       tms.STORE_NM
+        ,       tcn.NMCODE_NM AS GIFT_PROC_FG_NM
+        ,       SUM(tsspgd.GIFT_UPRC * tsspgd.GIFT_QTY) AS GIFT_TOT_AMT
+        FROM    TB_SL_SALE_PAY_GIFT_DTL tsspgd
+        ,       TB_CM_NMCODE tcn
+        ,       TB_MS_STORE tms
+        WHERE   tsspgd.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsspgd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND     tms.HQ_OFFICE_CD = tsspgd.HQ_OFFICE_CD
+        AND     tms.STORE_CD = tsspgd.STORE_CD
+        AND     tcn.NMCODE_GRP_CD          =   '048'
+        AND     tcn.NMCODE_CD              =   tsspgd.GIFT_PROC_FG
+        AND     tms.STORE_CD           (+) =   tsspgd.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                tsspgd.STORE_CD = #{item}
+            </foreach>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR  tsspgd.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+            )
+        </if>
+        GROUP
+        BY      tsspgd.STORE_CD
+        ,       tms.STORE_NM
+        ,       tcn.NMCODE_NM
+        ORDER
+        BY      tsspgd.STORE_CD
+        ,       tms.STORE_NM
+        ,       tcn.NMCODE_NM
+    </select>
+
+    <!-- 결제수단 식권 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMobileFstmpList" parameterType="MobilePayInfoVO" resultType="DefaultMap">
+        /* MobilePayInfoMapper.getMobileFstmpList */
+        SELECT  tsspfd.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspfd.SALE_YN
+        ,       SUM(tsspfd.FSTMP_UPRC * tsspfd.FSTMP_QTY) AS FSTMP_TOT_AMT
+        FROM    TB_SL_SALE_PAY_FSTMP_DTL tsspfd
+        ,       TB_MS_STORE tms
+        WHERE   tsspfd.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsspfd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND     tms.HQ_OFFICE_CD = tsspfd.HQ_OFFICE_CD
+        AND     tms.STORE_CD = tsspfd.STORE_CD
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                tsspfd.STORE_CD = #{item}
+            </foreach>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR  tsspfd.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+            )
+        </if>
+        GROUP
+        BY      tsspfd.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspfd.SALE_YN
+        ORDER
+        BY      tsspfd.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspfd.SALE_YN
+    </select>
+
+    <!-- 결제수단 제휴할인 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMobilePartnerList" parameterType="MobilePayInfoVO" resultType="DefaultMap">
+        /* MobilePayInfoMapper.getMobilePartnerList */
+        SELECT  tsspp.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspp.PARTN_CD
+        ,       tmp.PARTN_NM
+        ,       SUM(DECODE(tsspp.SALE_YN, 'Y', 1, 0)) AS SALE_CNT
+        ,       SUM(DECODE(tsspp.SALE_YN, 'Y', tsspp.SALE_AMT, 0)) AS SALE_AMT
+        ,       SUM(DECODE(tsspp.SALE_YN, 'Y', tsspp.DC_AMT, 0)) AS DC_AMT
+        ,       SUM(DECODE(tsspp.SALE_YN, 'N', 1, 0)) AS CANCEL_CNT
+        ,       SUM(DECODE(tsspp.SALE_YN, 'N', tsspp.SALE_AMT, 0)) AS CANCEL_AMT
+        FROM    TB_SL_SALE_PAY_PARTNER tsspp
+        ,       TB_MS_PARTNER tmp
+        ,       TB_MS_STORE tms
+        WHERE   tsspp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsspp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND     tms.HQ_OFFICE_CD = tsspp.HQ_OFFICE_CD
+        AND     tms.STORE_CD = tsspp.STORE_CD
+        AND     tmp.STORE_CD = tsspp.STORE_CD
+        AND     tmp.PARTN_CD = tsspp.PARTN_CD
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                tsspp.STORE_CD = #{item}
+            </foreach>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR  tsspp.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+            )
+        </if>
+        GROUP
+        BY      tsspp.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspp.PARTN_CD
+        ,       tmp.PARTN_NM
+        ORDER
+        BY      tsspp.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspp.PARTN_CD
+        ,       tmp.PARTN_NM
+    </select>
+
+    <!-- 결제수단 사원카드 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMobileEmpCardList" parameterType="MobilePayInfoVO" resultType="DefaultMap">
+        /* MobilePayInfoMapper.getMobileEmpCardList */
+        SELECT  tsspec.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspec.OFFICE_NM
+        ,       tsspec.OFFICE_DEPT_NM
+        ,       tsspec.OFFICE_EMP_NO
+        ,       tsspec.OFFICE_EMP_NM
+        ,       tsspec.ACCOUNT_FG
+        ,       SUM(tsspec.SALE_AMT) AS SALE_AMT
+        ,       SUM(tsspec.REMAIN_AMT) AS REMAIN_AMT
+        FROM    TB_SL_SALE_PAY_EMP_CARD tsspec
+        ,       TB_MS_STORE tms
+        WHERE   tsspec.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsspec.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND     tms.HQ_OFFICE_CD = tsspec.HQ_OFFICE_CD
+        AND     tms.STORE_CD = tsspec.STORE_CD
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                tsspec.STORE_CD = #{item}
+            </foreach>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR  tsspec.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+            )
+        </if>
+        GROUP
+        BY      tsspec.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspec.OFFICE_NM
+        ,       tsspec.OFFICE_DEPT_NM
+        ,       tsspec.OFFICE_EMP_NO
+        ,       tsspec.OFFICE_EMP_NM
+        ,       tsspec.ACCOUNT_FG
+        ORDER
+        BY      tsspec.STORE_CD
+        ,       tms.STORE_NM
+        ,       tsspec.OFFICE_NM
+        ,       tsspec.OFFICE_DEPT_NM
+        ,       tsspec.OFFICE_EMP_NO
+        ,       tsspec.OFFICE_EMP_NM
+        ,       tsspec.ACCOUNT_FG
+    </select>
+
     <!-- 결제수단 가승인 팝업 - 조회 -->
     <!--
         TABLE    :
@@ -80,6 +730,46 @@
         AND tcn.NMCODE_CD = tsspt.TEMPORARY_PAY_CD
         GROUP BY tsspt.STORE_CD, tsspt.TEMPORARY_PAY_CD, tcn.NMCODE_NM
         ORDER BY tsspt.STORE_CD, tsspt.TEMPORARY_PAY_CD
+    </select>
+
+
+    <!-- 결제수단 스마트오더 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMobileVorderList" parameterType="MobilePayInfoVO" resultType="DefaultMap">
+        /* MobilePayInfoMapper.getMobileVorderList */
+        SELECT  tsspv.STORE_CD
+        ,       tms.STORE_NM
+        ,       PICKUP_FG
+        ,       SUM(SALE_AMT) AS SALE_AMT
+        FROM    TB_SL_SALE_PAY_VORDER tsspv
+        ,       TB_MS_STORE tms
+        WHERE   tsspv.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsspv.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND     tms.HQ_OFFICE_CD = tsspv.HQ_OFFICE_CD
+        AND     tms.STORE_CD = tsspv.STORE_CD
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND
+            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
+                tsspv.STORE_CD = #{item}
+            </foreach>
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+            'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+            OR  tsspv.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+            )
+        </if>
+        GROUP
+        BY      tsspv.STORE_CD
+        ,       tms.STORE_NM
+        ,       PICKUP_FG
+        ORDER
+        BY      tsspv.STORE_CD
+        ,       tms.STORE_NM
+        ,       PICKUP_FG
     </select>
 
 </mapper>

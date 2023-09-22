@@ -77,6 +77,305 @@ public class MobilePayInfoController {
     }
 
     /**
+     * 결제수단 현금 팝업 - 조회
+     *
+     * @param mobilePayInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2023.09.20
+     */
+    @RequestMapping(value = "/mobileCash/getMobileCashList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMobileCashList(MobilePayInfoVO mobilePayInfoVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = mobilePayInfoService.getMobileCashList(mobilePayInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, mobilePayInfoVO);
+    }
+
+    /**
+     * 결제수단 페이코 팝업 - 조회
+     *
+     * @param mobilePayInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2023.09.20
+     */
+    @RequestMapping(value = "/mobilePayco/getMobilePaycoList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMobilePaycoList(MobilePayInfoVO mobilePayInfoVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = mobilePayInfoService.getMobilePaycoList(mobilePayInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, mobilePayInfoVO);
+    }
+
+    /**
+     * 결제수단 VMEM 포인트 팝업 - 조회
+     *
+     * @param mobilePayInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2023.09.20
+     */
+    @RequestMapping(value = "/mobileVpoint/getMobileVpointList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMobileVpointList(MobilePayInfoVO mobilePayInfoVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = mobilePayInfoService.getMobileVpointList(mobilePayInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, mobilePayInfoVO);
+    }
+
+    /**
+     * 결제수단 VMEM 전자상품권 팝업 - 조회
+     *
+     * @param mobilePayInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2023.09.20
+     */
+    @RequestMapping(value = "/mobileVcharge/getMobileVchargeList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMobileVchargeList(MobilePayInfoVO mobilePayInfoVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = mobilePayInfoService.getMobileVchargeList(mobilePayInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, mobilePayInfoVO);
+    }
+
+    /**
+     * 결제수단 모바일페이권 팝업 - 조회
+     *
+     * @param mobilePayInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2023.09.20
+     */
+    @RequestMapping(value = "/mobileMpay/getMobileMpayList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMobileMpayList(MobilePayInfoVO mobilePayInfoVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = mobilePayInfoService.getMobileMpayList(mobilePayInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, mobilePayInfoVO);
+    }
+
+    /**
+     * 결제수단 모바일쿠폰 팝업 - 조회
+     *
+     * @param mobilePayInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2023.09.20
+     */
+    @RequestMapping(value = "/mobileMcoupn/getMobileMcoupnList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMobileMcoupnList(MobilePayInfoVO mobilePayInfoVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = mobilePayInfoService.getMobileMcoupnList(mobilePayInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, mobilePayInfoVO);
+    }
+
+    /**
+     * 결제수단 포인트 팝업 - 조회
+     *
+     * @param mobilePayInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2023.09.20
+     */
+    @RequestMapping(value = "/mobilePoint/getMobilePointList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMobilePointList(MobilePayInfoVO mobilePayInfoVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = mobilePayInfoService.getMobilePointList(mobilePayInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, mobilePayInfoVO);
+    }
+
+    /**
+     * 결제수단 선불 팝업 - 조회
+     *
+     * @param mobilePayInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2023.09.20
+     */
+    @RequestMapping(value = "/mobilePrepaid/getMobilePrepaidList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMobilePrepaidList(MobilePayInfoVO mobilePayInfoVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = mobilePayInfoService.getMobilePrepaidList(mobilePayInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, mobilePayInfoVO);
+    }
+
+    /**
+     * 결제수단 후불 팝업 - 조회
+     *
+     * @param mobilePayInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2023.09.20
+     */
+    @RequestMapping(value = "/mobilePostpaid/getMobilePostpaidList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMobilePostpaidList(MobilePayInfoVO mobilePayInfoVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = mobilePayInfoService.getMobilePostpaidList(mobilePayInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, mobilePayInfoVO);
+    }
+
+    /**
+     * 결제수단 상품권 팝업 - 조회
+     *
+     * @param mobilePayInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2023.09.20
+     */
+    @RequestMapping(value = "/mobileGift/getMobileGiftList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMobileGiftList(MobilePayInfoVO mobilePayInfoVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = mobilePayInfoService.getMobileGiftList(mobilePayInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, mobilePayInfoVO);
+    }
+
+    /**
+     * 결제수단 식권 팝업 - 조회
+     *
+     * @param mobilePayInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2023.09.20
+     */
+    @RequestMapping(value = "/mobileFstmp/getMobileFstmpList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMobileFstmpList(MobilePayInfoVO mobilePayInfoVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = mobilePayInfoService.getMobileFstmpList(mobilePayInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, mobilePayInfoVO);
+    }
+
+    /**
+     * 결제수단 제휴할인 팝업 - 조회
+     *
+     * @param mobilePayInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2023.09.20
+     */
+    @RequestMapping(value = "/mobilePartner/getMobilePartnerList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMobilePartnerList(MobilePayInfoVO mobilePayInfoVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = mobilePayInfoService.getMobilePartnerList(mobilePayInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, mobilePayInfoVO);
+    }
+
+    /**
+     * 결제수단 사원카드 팝업 - 조회
+     *
+     * @param mobilePayInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2023.09.20
+     */
+    @RequestMapping(value = "/mobileEmpCard/getMobileEmpCardList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMobileEmpCardList(MobilePayInfoVO mobilePayInfoVO, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = mobilePayInfoService.getMobileEmpCardList(mobilePayInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, mobilePayInfoVO);
+    }
+
+    /**
      * 결제수단 가승인 팝업 - 조회
      *
      * @param mobilePayInfoVO
@@ -95,6 +394,29 @@ public class MobilePayInfoController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<Object>> result = mobilePayInfoService.getMobileTemporaryList(mobilePayInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, mobilePayInfoVO);
+    }
+
+    /**
+     * 결제수단 스마트오더 팝업 - 조회
+     *
+     * @param mobilePayInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  권지현
+     * @since   2023.09.20
+     */
+    @RequestMapping(value = "/mobileVorder/getMobileVorderList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMobileVorderList(MobilePayInfoVO mobilePayInfoVO, HttpServletRequest request,
+                                          HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = mobilePayInfoService.getMobileVorderList(mobilePayInfoVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, mobilePayInfoVO);
     }

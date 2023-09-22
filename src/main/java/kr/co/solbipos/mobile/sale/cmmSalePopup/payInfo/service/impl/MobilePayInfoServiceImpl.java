@@ -62,6 +62,227 @@ public class MobilePayInfoServiceImpl implements MobilePayInfoService {
         return mobilePayInfoMapper.getMobileCardList(mobilePayInfoVO);
     }
 
+    /** 결제수단 현금 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getMobileCashList(MobilePayInfoVO mobilePayInfoVO, SessionInfoVO sessionInfoVO) {
+
+        mobilePayInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        mobilePayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        mobilePayInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
+            // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
+            // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
+            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+        }
+
+        return mobilePayInfoMapper.getMobileCashList(mobilePayInfoVO);
+    }
+
+    /** 결제수단 페이코 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getMobilePaycoList(MobilePayInfoVO mobilePayInfoVO, SessionInfoVO sessionInfoVO) {
+
+        mobilePayInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        mobilePayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        mobilePayInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
+            // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
+            // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
+            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+        }
+
+        return mobilePayInfoMapper.getMobilePaycoList(mobilePayInfoVO);
+    }
+
+    /** 결제수단 VMEM 포인트 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getMobileVpointList(MobilePayInfoVO mobilePayInfoVO, SessionInfoVO sessionInfoVO) {
+
+        mobilePayInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        mobilePayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        mobilePayInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
+            // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
+            // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
+            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+        }
+
+        return mobilePayInfoMapper.getMobileVpointList(mobilePayInfoVO);
+    }
+
+    /** 결제수단 VMEM 전자상품권 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getMobileVchargeList(MobilePayInfoVO mobilePayInfoVO, SessionInfoVO sessionInfoVO) {
+
+        mobilePayInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        mobilePayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        mobilePayInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
+            // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
+            // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
+            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+        }
+
+        return mobilePayInfoMapper.getMobileVchargeList(mobilePayInfoVO);
+    }
+
+    /** 결제수단 모바일페이 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getMobileMpayList(MobilePayInfoVO mobilePayInfoVO, SessionInfoVO sessionInfoVO) {
+
+        mobilePayInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        mobilePayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        mobilePayInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
+            // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
+            // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
+            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+        }
+
+        return mobilePayInfoMapper.getMobileMpayList(mobilePayInfoVO);
+    }
+
+    /** 결제수단 모바일쿠폰 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getMobileMcoupnList(MobilePayInfoVO mobilePayInfoVO, SessionInfoVO sessionInfoVO) {
+
+        mobilePayInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        mobilePayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        mobilePayInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
+            // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
+            // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
+            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+        }
+
+        return mobilePayInfoMapper.getMobileMcoupnList(mobilePayInfoVO);
+    }
+
+    /** 결제수단 포인트 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getMobilePointList(MobilePayInfoVO mobilePayInfoVO, SessionInfoVO sessionInfoVO) {
+
+        mobilePayInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        mobilePayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        mobilePayInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
+            // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
+            // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
+            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+        }
+
+        return mobilePayInfoMapper.getMobilePointList(mobilePayInfoVO);
+    }
+
+    /** 결제수단 선불 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getMobilePrepaidList(MobilePayInfoVO mobilePayInfoVO, SessionInfoVO sessionInfoVO) {
+
+        mobilePayInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        mobilePayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        mobilePayInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
+            // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
+            // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
+            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+        }
+
+        return mobilePayInfoMapper.getMobilePrepaidList(mobilePayInfoVO);
+    }
+
+    /** 결제수단 후불 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getMobilePostpaidList(MobilePayInfoVO mobilePayInfoVO, SessionInfoVO sessionInfoVO) {
+
+        mobilePayInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        mobilePayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        mobilePayInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
+            // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
+            // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
+            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+        }
+
+        return mobilePayInfoMapper.getMobilePostpaidList(mobilePayInfoVO);
+    }
+
+    /** 결제수단 상품권 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getMobileGiftList(MobilePayInfoVO mobilePayInfoVO, SessionInfoVO sessionInfoVO) {
+
+        mobilePayInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        mobilePayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        mobilePayInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
+            // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
+            // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
+            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+        }
+
+        return mobilePayInfoMapper.getMobileGiftList(mobilePayInfoVO);
+    }
+
+    /** 결제수단 식권 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getMobileFstmpList(MobilePayInfoVO mobilePayInfoVO, SessionInfoVO sessionInfoVO) {
+
+        mobilePayInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        mobilePayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        mobilePayInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
+            // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
+            // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
+            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+        }
+
+        return mobilePayInfoMapper.getMobileFstmpList(mobilePayInfoVO);
+    }
+
+    /** 결제수단 제휴할인 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getMobilePartnerList(MobilePayInfoVO mobilePayInfoVO, SessionInfoVO sessionInfoVO) {
+
+        mobilePayInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        mobilePayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        mobilePayInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
+            // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
+            // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
+            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+        }
+
+        return mobilePayInfoMapper.getMobilePartnerList(mobilePayInfoVO);
+    }
+
+    /** 결제수단 사원카드 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getMobileEmpCardList(MobilePayInfoVO mobilePayInfoVO, SessionInfoVO sessionInfoVO) {
+
+        mobilePayInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        mobilePayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        mobilePayInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
+            // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
+            // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
+            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+        }
+
+        return mobilePayInfoMapper.getMobileEmpCardList(mobilePayInfoVO);
+    }
+
     /** 결제수단 가승인 팝업 - 조회 */
     @Override
     public List<DefaultMap<Object>> getMobileTemporaryList(MobilePayInfoVO mobilePayInfoVO, SessionInfoVO sessionInfoVO) {
@@ -77,5 +298,22 @@ public class MobilePayInfoServiceImpl implements MobilePayInfoService {
         }
 
         return mobilePayInfoMapper.getMobileTemporaryList(mobilePayInfoVO);
+    }
+
+    /** 결제수단 스마트오더 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getMobileVorderList(MobilePayInfoVO mobilePayInfoVO, SessionInfoVO sessionInfoVO) {
+
+        mobilePayInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        mobilePayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        mobilePayInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
+            // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
+            // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
+            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+        }
+
+        return mobilePayInfoMapper.getMobileVorderList(mobilePayInfoVO);
     }
 }

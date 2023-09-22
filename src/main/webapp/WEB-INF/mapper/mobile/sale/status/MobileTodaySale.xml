@@ -208,7 +208,7 @@
                     )
             </if>
             AND tsshp.SALE_DATE = #{startDate}
-            AND tsshp.PAY_CD != '02'
+            AND tsshp.PAY_CD NOT IN ('02', '05', '12')
             GROUP BY tsshp.PAY_CD
             UNION
             SELECT
@@ -285,6 +285,8 @@
             FROM TB_CM_NMCODE tcn
             WHERE 1=1
             AND tcn.NMCODE_GRP_CD = '024'
+            AND tcn.NMCODE_CD NOT IN ('05', '12')
+            /* 쿠폰은 결제수단이 아닌 할인내역으로 들어가므로 하드코딩으로 결제수단에 나오지 않도록 함. (05, 12) */
             UNION ALL
             (
                 SELECT
