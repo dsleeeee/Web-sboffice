@@ -21,7 +21,7 @@
             </div>
             <div class="w100">
                 <%--위즈모 테이블--%>
-                <div class="popGrid mt5">
+                <div class="popGrid mt5" style="height:550px; overflow-y: hidden; overflow-x: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             selection-mode="Row"
