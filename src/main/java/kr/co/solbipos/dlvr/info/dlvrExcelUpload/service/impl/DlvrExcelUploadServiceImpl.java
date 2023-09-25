@@ -64,7 +64,7 @@ public class DlvrExcelUploadServiceImpl implements DlvrExcelUploadService {
             dlvrExcelUploadVO.setModId(sessionInfoVO.getUserId());
 
             dlvrExcelUploadVO.setSessionId(sessionInfoVO.getUserId());
-            dlvrExcelUploadVO.setSeq(i);
+            dlvrExcelUploadVO.setSeq(dlvrExcelUploadVO.getProgressCnt() + i); // seq 중복방지를 위해 (진행 갯수 + i)로 계산
 
             dlvrExcelUploadVO.setResult("검증전");
 

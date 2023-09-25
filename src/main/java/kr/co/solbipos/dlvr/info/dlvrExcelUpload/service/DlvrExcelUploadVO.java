@@ -35,6 +35,8 @@ public class DlvrExcelUploadVO extends PageVO {
     private String saleDate;
     /** CID CALL Sequenc */
     private String cidCallSeq;
+    /** 처리갯수 (seq 생성시 사용)*/
+    private int progressCnt;
 
     public int getSeq() {
         return seq;
@@ -162,5 +164,13 @@ public class DlvrExcelUploadVO extends PageVO {
 
     public void setCidCallSeq(String cidCallSeq) {
         this.cidCallSeq = cidCallSeq;
+    }
+
+    public int getProgressCnt() {
+        return progressCnt;
+    }
+
+    public void setProgressCnt(int progressCnt) {
+        this.progressCnt = progressCnt;
     }
 }
