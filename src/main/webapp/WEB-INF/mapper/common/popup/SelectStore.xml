@@ -87,13 +87,11 @@
                 AND thn.STORE_CHG_NOT IS NULL
             </if>
         </if>
-        <if test='selectStoreFg != null and selectStoreFg != "" and selectStoreFg == "M"'>
-            AND (
-                    ( ((SELECT COUNT(STORE_CD) FROM TB_HQ_SEARCH_UPLOAD_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND USER_ID = #{userId}) != 0) AND (tms.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_SEARCH_UPLOAD_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND USER_ID = #{userId})) )
-                    OR
-                    ( ((SELECT COUNT(STORE_CD) FROM TB_HQ_SEARCH_UPLOAD_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND USER_ID = #{userId}) = 0) AND 1=1 )
-                )
-        </if>
+        AND (
+                ( ((SELECT COUNT(STORE_CD) FROM TB_HQ_SEARCH_UPLOAD_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND USER_ID = #{userId}) != 0) AND (tms.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_SEARCH_UPLOAD_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(STORE_CD) FROM TB_HQ_SEARCH_UPLOAD_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         AND tmsi.STORE_CD (+)= tms.STORE_CD
         AND thn.STORE_CD (+)= tms.STORE_CD
         ORDER BY tms.STORE_CD

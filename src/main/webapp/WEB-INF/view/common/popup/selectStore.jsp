@@ -44,7 +44,7 @@
                     </tbody>
                 </table>
                 <%-- 조회조건 --%>
-                <table class="tblType01" id="tblSearch2${param.targetId}" style="display: none;">
+                <table class="tblType01" id="tblSearch1${param.targetId}" style="display: none;">
                     <colgroup>
                         <col class="w15" />
                         <col class="w35" />
@@ -212,7 +212,7 @@
                     </tbody>
                 </table>
                 <%-- 조회조건 --%>
-                <table class="tblType01" id="tblSearch1${param.targetId}" style="display: none;">
+                <table class="tblType01">
                     <colgroup>
                         <col class="w15" />
                         <col class="w35" />
@@ -342,9 +342,6 @@
 
             // 매장선택 (S:싱글, M:멀티)
             if(targetTypeFg == "M") {
-                // 검색조건
-                $("#tblSearch1${param.targetId}").css("display", "");
-
                 // 선택 버튼
                 $("#divStoreSelected${param.targetId}").css("display", "");
 
@@ -352,9 +349,6 @@
                 columns[0].visible = true;
 
             } else if(targetTypeFg == "S") {
-                // 검색조건
-                $("#tblSearch1${param.targetId}").css("display", "none");
-
                 // 선택 버튼
                 $("#divStoreSelected${param.targetId}").css("display", "none");
 
@@ -403,11 +397,11 @@
                 // 회사 구분 (COMMON:공통, MOMS:맘스터치)
                 if(companyFg == "MOMS") {
                     // 검색조건
-                    $("#tblSearch2${param.targetId}").css("display", "");
+                    $("#tblSearch1${param.targetId}").css("display", "");
 
                 } else if(targetTypeFg == "COMMON") {
                     // 검색조건
-                    $("#tblSearch2${param.targetId}").css("display", "none");
+                    $("#tblSearch1${param.targetId}").css("display", "none");
                 }
             });
 
@@ -634,7 +628,7 @@
                 params.userBrands = momsHqBrandCd;
             }
             params.storeChgNot = $scope.popStoreChgNot;
-            params.selectStoreFg = targetTypeFg; // 매장선택 (S:싱글, M:멀티)
+            // params.selectStoreFg = targetTypeFg; // 매장선택 (S:싱글, M:멀티)
 
             $scope._inquirySub("/common/popup/selectStore/getSelectStoreList.sb", params, function () {
                 $scope.searchFg = "Y";
