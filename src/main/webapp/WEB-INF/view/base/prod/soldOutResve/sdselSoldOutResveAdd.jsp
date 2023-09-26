@@ -42,7 +42,7 @@
                             </div>
                         </td>
                     </c:if>
-                    <%-- 매장코드 --%>
+                    <%-- 매장 --%>
                     <th><s:message code="cmm.store"/></th>
                     <td>
                         <%-- 매장선택 모듈 사용시 include --%>

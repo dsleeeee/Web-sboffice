@@ -52,13 +52,15 @@
       </tr>
       <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <tr>
-            <%-- 매장 --%>
-          <th><s:message code="dclzManage.storeNm"/></th>
+          <%-- 매장 --%>
+          <th><s:message code="cmm.store"/></th>
           <td>
-              <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-            <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
-              <jsp:param name="targetId" value="dclzManageStore"/>
-            </jsp:include>
+              <%-- 매장선택 모듈 사용시 include --%>
+              <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                <jsp:param name="targetTypeFg" value="S"/>
+                <jsp:param name="targetId" value="dclzManageStore"/>
+              </jsp:include>
+              <%--// 매장선택 모듈 사용시 include --%>
           </td>
         </tr>
       </c:if>

@@ -55,7 +55,7 @@
                       </wj-combo-box>
                     </div>
                   </td>
-                  <%-- 매장코드 --%>
+                  <%-- 매장 --%>
                   <th><s:message code="cmm.store"/></th>
                   <td colspan="3">
                       <%-- 매장선택 모듈 사용시 include --%>

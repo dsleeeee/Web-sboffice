@@ -135,7 +135,7 @@
                     </wj-combo-box>
                 </div>
             </td>
-            <%-- 매장코드 --%>
+            <%-- 매장 --%>
             <th class="dayTimeStore" style="display: none;"><s:message code="cmm.store"/></th>
             <td class="dayTimeStore" style="display: none;">
                 <%-- 매장선택 모듈 사용시 include --%>

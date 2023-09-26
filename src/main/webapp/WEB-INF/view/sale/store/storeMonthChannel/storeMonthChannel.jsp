@@ -80,7 +80,7 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                    <%-- 매장코드 --%>
+                    <%-- 매장 --%>
                     <th class="monthStore" style="display: none;"><s:message code="cmm.store"/></th>
                     <td class="monthStore" style="display: none;">
                         <%-- 매장선택 모듈 사용시 include --%>
