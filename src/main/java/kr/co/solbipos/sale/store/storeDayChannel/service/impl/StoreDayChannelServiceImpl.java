@@ -1,7 +1,10 @@
 package kr.co.solbipos.sale.store.storeDayChannel.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.store.storeDayChannel.service.StoreDayChannelService;
@@ -14,10 +17,12 @@ import java.util.List;
 @Service("storeDayChannelService")
 public class StoreDayChannelServiceImpl implements StoreDayChannelService {
     private final StoreDayChannelMapper storeDayChannelMapper;
+    private final PopupMapper popupMapper;
 
     @Autowired
-    public StoreDayChannelServiceImpl(StoreDayChannelMapper storeDayChannelMapper) {
+    public StoreDayChannelServiceImpl(StoreDayChannelMapper storeDayChannelMapper, PopupMapper popupMapper) {
         this.storeDayChannelMapper = storeDayChannelMapper;
+        this.popupMapper = popupMapper;
     }
 
 
@@ -29,8 +34,11 @@ public class StoreDayChannelServiceImpl implements StoreDayChannelService {
         storeDayChannelVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         // 매장 array 값 세팅
-        String[] storeCds = storeDayChannelVO.getStoreCds().split(",");
-        storeDayChannelVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(storeDayChannelVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeDayChannelVO.getStoreCds(), 3900));
+            storeDayChannelVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 결제수단 array 값 세팅
         String payCol= "";
@@ -86,8 +94,11 @@ public class StoreDayChannelServiceImpl implements StoreDayChannelService {
         storeDayChannelVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         // 매장 array 값 세팅
-        String[] storeCds = storeDayChannelVO.getStoreCds().split(",");
-        storeDayChannelVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(storeDayChannelVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeDayChannelVO.getStoreCds(), 3900));
+            storeDayChannelVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 결제수단 array 값 세팅
         String payCol= "";

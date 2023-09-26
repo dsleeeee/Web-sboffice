@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.store.storeMonthPos.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.store.storeMonthPos.service.StoreMonthPosService;
@@ -30,10 +34,12 @@ import java.util.List;
 @Service("storeMonthPosService")
 public class StoreMonthPosServiceImpl implements StoreMonthPosService {
     private final StoreMonthPosMapper storeMonthPosMapper;
+    private final PopupMapper popupMapper;
 
     @Autowired
-    public StoreMonthPosServiceImpl(StoreMonthPosMapper storeMonthPosMapper) {
+    public StoreMonthPosServiceImpl(StoreMonthPosMapper storeMonthPosMapper, PopupMapper popupMapper) {
         this.storeMonthPosMapper = storeMonthPosMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 읠별 리스트 조회 */
@@ -45,8 +51,11 @@ public class StoreMonthPosServiceImpl implements StoreMonthPosService {
         storeMonthPosVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         // 매장 array 값 세팅
-        String[] storeCds = storeMonthPosVO.getStoreCds().split(",");
-        storeMonthPosVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(storeMonthPosVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeMonthPosVO.getStoreCds(), 3900));
+            storeMonthPosVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 결제수단 array 값 세팅
         String payCol= "";
@@ -104,8 +113,11 @@ public class StoreMonthPosServiceImpl implements StoreMonthPosService {
         storeMonthPosVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         // 매장 array 값 세팅
-        String[] storeCds = storeMonthPosVO.getStoreCds().split(",");
-        storeMonthPosVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(storeMonthPosVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeMonthPosVO.getStoreCds(), 3900));
+            storeMonthPosVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 결제수단 array 값 세팅
         String payCol= "";

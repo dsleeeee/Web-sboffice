@@ -25,11 +25,8 @@
                         AND     tpe.HQ_OFFICE_CD = #{hqOfficeCd}
                         AND		tpe.SALE_DATE = #{saleDate}
                         AND     TPE.REG_SEQ = '00'
-                        <if test='storeCds != null and storeCds != ""'>
-                            AND
-                            <foreach collection="storeCdList" item="item" open="(" close=")" separator="OR">
-                                tpe.STORE_CD = #{item}
-                            </foreach>
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND tpe.STORE_CD IN (${storeCdQuery})
                         </if>
                         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
                             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -75,11 +72,8 @@
                         AND     tpe.HQ_OFFICE_CD = #{hqOfficeCd}
                         AND		tpe.SALE_DATE = #{saleDate}
                         AND     TPE.REG_SEQ = '00'
-                        <if test='storeCds != null and storeCds != ""'>
-                            AND
-                            <foreach collection="storeCdList" item="item" open="(" close=")" separator="OR">
-                                tpe.STORE_CD = #{item}
-                            </foreach>
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND tpe.STORE_CD IN (${storeCdQuery})
                         </if>
                         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
                             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -316,11 +310,8 @@
                         AND     TPE.STORE_CD = tmsi.STORE_CD (+)
                         AND     TPE.HQ_OFFICE_CD = #{hqOfficeCd}
                         AND     TPE.SALE_DATE = #{saleDate}
-                        <if test='storeCds != null and storeCds != ""'>
-                            AND
-                            <foreach collection="storeCdList" item="item" open="(" close=")" separator="OR">
-                                TPE.STORE_CD = #{item}
-                            </foreach>
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND TPE.STORE_CD IN (${storeCdQuery})
                         </if>
                         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
                             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -384,11 +375,8 @@
                         AND     TPE.STORE_CD = tmsi.STORE_CD (+)
                         AND     TPE.HQ_OFFICE_CD = #{hqOfficeCd}
                         AND     TPE.SALE_DATE = #{saleDate}
-                        <if test='storeCds != null and storeCds != ""'>
-                            AND
-                            <foreach collection="storeCdList" item="item" open="(" close=")" separator="OR">
-                                TPE.STORE_CD = #{item}
-                            </foreach>
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND TPE.STORE_CD IN (${storeCdQuery})
                         </if>
                         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
                             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -732,11 +720,8 @@
         AND 	tms.STORE_CD = tpe.STORE_CD(+)
         AND 	#{saleDate} = tpe.SALE_DATE(+)
         AND     '00' = TPE.REG_SEQ(+)
-        <if test='storeCds != null and storeCds != ""'>
-            AND
-            <foreach collection="storeCdList" item="item" open="(" close=")" separator="OR">
-                tms.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tms.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때

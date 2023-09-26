@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.store.storeDayPos.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.store.storeDayPos.service.StoreDayPosService;
@@ -13,10 +17,12 @@ import java.util.List;
 @Service("storeDayPosService")
 public class StoreDayPosServiceImpl implements StoreDayPosService {
     private final StoreDayPosMapper storeDayPosMapper;
+    private final PopupMapper popupMapper;
 
     @Autowired
-    public StoreDayPosServiceImpl(StoreDayPosMapper storeDayPosMapper) {
+    public StoreDayPosServiceImpl(StoreDayPosMapper storeDayPosMapper, PopupMapper popupMapper) {
         this.storeDayPosMapper = storeDayPosMapper;
+        this.popupMapper = popupMapper;
     }
 
 
@@ -28,8 +34,11 @@ public class StoreDayPosServiceImpl implements StoreDayPosService {
         storeDayPosVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         // 매장 array 값 세팅
-        String[] storeCds = storeDayPosVO.getStoreCds().split(",");
-        storeDayPosVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(storeDayPosVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeDayPosVO.getStoreCds(), 3900));
+            storeDayPosVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 결제수단 array 값 세팅
         String payCol= "";
@@ -85,8 +94,11 @@ public class StoreDayPosServiceImpl implements StoreDayPosService {
         storeDayPosVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         // 매장 array 값 세팅
-        String[] storeCds = storeDayPosVO.getStoreCds().split(",");
-        storeDayPosVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(storeDayPosVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeDayPosVO.getStoreCds(), 3900));
+            storeDayPosVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 결제수단 array 값 세팅
         String payCol= "";

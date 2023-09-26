@@ -1,7 +1,10 @@
 package kr.co.solbipos.sale.store.storeOpenClose.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.store.storeOpenClose.service.StoreOpenCloseService;
@@ -32,9 +35,11 @@ import java.util.List;
 public class StoreOpenCloseServiceImpl implements StoreOpenCloseService {
 
     private final StoreOpenCloseMapper storeOpenCloseMapper;
+    private final PopupMapper popupMapper;
 
-    public StoreOpenCloseServiceImpl(StoreOpenCloseMapper storeOpenCloseMapper) {
+    public StoreOpenCloseServiceImpl(StoreOpenCloseMapper storeOpenCloseMapper, PopupMapper popupMapper) {
         this.storeOpenCloseMapper = storeOpenCloseMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** toreOpenClose - 일별 탭 조회 */
@@ -45,8 +50,11 @@ public class StoreOpenCloseServiceImpl implements StoreOpenCloseService {
         storeOpenCloseVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         // 매장 array 값 세팅
-        String[] storeCds = storeOpenCloseVO.getStoreCds().split(",");
-        storeOpenCloseVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(storeOpenCloseVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeOpenCloseVO.getStoreCds(), 3900));
+            storeOpenCloseVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 매장브랜드 '전체' 일때
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
@@ -68,8 +76,11 @@ public class StoreOpenCloseServiceImpl implements StoreOpenCloseService {
         storeOpenCloseVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         // 매장 array 값 세팅
-        String[] storeCds = storeOpenCloseVO.getStoreCds().split(",");
-        storeOpenCloseVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(storeOpenCloseVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeOpenCloseVO.getStoreCds(), 3900));
+            storeOpenCloseVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 매장브랜드 '전체' 일때
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
@@ -95,8 +106,8 @@ public class StoreOpenCloseServiceImpl implements StoreOpenCloseService {
         storeOpenCloseVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         // 매장 array 값 세팅
-        String[] storeCds = storeOpenCloseVO.getStoreCds().split(",");
-        storeOpenCloseVO.setStoreCdList(storeCds);
+        /*String[] storeCds = storeOpenCloseVO.getStoreCds().split(",");
+        storeOpenCloseVO.setStoreCdList(storeCds);*/
 
         // 매장브랜드 '전체' 일때
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
@@ -118,8 +129,11 @@ public class StoreOpenCloseServiceImpl implements StoreOpenCloseService {
         storeOpenCloseVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         // 매장 array 값 세팅
-        String[] storeCds = storeOpenCloseVO.getStoreCds().split(",");
-        storeOpenCloseVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(storeOpenCloseVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeOpenCloseVO.getStoreCds(), 3900));
+            storeOpenCloseVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 매장브랜드 '전체' 일때
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {

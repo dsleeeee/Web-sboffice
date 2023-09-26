@@ -84,6 +84,9 @@ public class GiftCalcVO extends PageVO {
     /** 승인구분 */
     private String saleFg;
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -226,5 +229,13 @@ public class GiftCalcVO extends PageVO {
 
     public void setSaleFg(String saleFg) {
         this.saleFg = saleFg;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }
