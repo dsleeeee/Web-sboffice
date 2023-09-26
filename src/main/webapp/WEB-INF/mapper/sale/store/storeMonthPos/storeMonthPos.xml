@@ -122,11 +122,8 @@
                 ,       TB_MS_STORE_INFO tmsi
                 WHERE   tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND     tsdt.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth}||'31'
-                <if test='storeCds != null and storeCds != ""'>
-                    AND
-                    <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
-                        tsdt.STORE_CD = #{item}
-                    </foreach>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND tsdt.STORE_CD IN (${storeCdQuery})
                 </if>
                 AND     tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
                 AND     tsdt.STORE_CD = tms.STORE_CD
@@ -185,11 +182,8 @@
                     ,       TB_MS_STORE tms
                     ,       TB_MS_STORE_INFO tmsi
                     WHERE   tsdto.HQ_OFFICE_CD  = #{hqOfficeCd}
-                    <if test='storeCds != null and storeCds != ""'>
-                        AND
-                        <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                            tsdto.STORE_CD = #{item}
-                        </foreach>
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND tsdto.STORE_CD IN (${storeCdQuery})
                     </if>
                     AND     tsdto.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
                     AND     tsdto.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
@@ -264,11 +258,8 @@
         AND 	tsmpd.STORE_CD = tmpe.STORE_CD
         AND 	tsmpd.POS_NO = tmpe.POS_NO
         AND 	tmpe.ENVST_CD = '4019'
-        <if test='storeCds != null and storeCds != ""'>
-            AND
-            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                tsmpd.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsmpd.STORE_CD IN (${storeCdQuery})
         </if>
         AND     tsmpd.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
         AND     tsmpd.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
@@ -441,11 +432,8 @@
         ,       TB_MS_STORE_INFO tmsi
         WHERE   tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     tsdt.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth}||'31'
-        <if test='storeCds != null and storeCds != ""'>
-            AND
-            <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
-                tsdt.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsdt.STORE_CD IN (${storeCdQuery})
         </if>
         AND     tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
         AND     tsdt.STORE_CD = tms.STORE_CD
@@ -504,11 +492,8 @@
         ,       TB_MS_STORE tms
         ,       TB_MS_STORE_INFO tmsi
         WHERE   tsdto.HQ_OFFICE_CD  = #{hqOfficeCd}
-        <if test='storeCds != null and storeCds != ""'>
-            AND
-            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                tsdto.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsdto.STORE_CD IN (${storeCdQuery})
         </if>
         AND     tsdto.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
         AND     tsdto.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
@@ -584,11 +569,8 @@
         AND 	tsmpd.STORE_CD = tmpe.STORE_CD
         AND 	tsmpd.POS_NO = tmpe.POS_NO
         AND 	tmpe.ENVST_CD = '4019'
-        <if test='storeCds != null and storeCds != ""'>
-            AND
-            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                tsmpd.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsmpd.STORE_CD IN (${storeCdQuery})
         </if>
         AND     tsmpd.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
         AND     tsmpd.HQ_OFFICE_CD = tms.HQ_OFFICE_CD

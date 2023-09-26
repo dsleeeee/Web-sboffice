@@ -1,9 +1,12 @@
 package kr.co.solbipos.sale.prod.dayProd.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import kr.co.solbipos.base.prod.kioskDisplayResve.service.KioskDisplayResveVO;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import org.springframework.stereotype.Service;
@@ -33,9 +36,11 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class DayProdServiceImpl implements DayProdService {
     private final DayProdMapper dayProdMapper;
+    private final PopupMapper popupMapper;
 
-    public DayProdServiceImpl(DayProdMapper dayProdMapper) {
+    public DayProdServiceImpl(DayProdMapper dayProdMapper, PopupMapper popupMapper) {
         this.dayProdMapper = dayProdMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 조회 */
@@ -98,8 +103,11 @@ public class DayProdServiceImpl implements DayProdService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayProdVO.getStoreCds().split(",");
-        dayProdVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayProdVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayProdVO.getStoreCds(), 3900));
+            dayProdVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 상품 array 값 세팅
         if (dayProdVO.getProdCds() != null && !"".equals(dayProdVO.getProdCds())) {
@@ -118,7 +126,7 @@ public class DayProdServiceImpl implements DayProdService {
 
         return dayProdMapper.getDayProdList(dayProdVO);
     }
-    
+
     /** 엑셀 조회 */
     @Override
     public List<DefaultMap<Object>> getDayProdExcelList(DayProdVO dayProdVO, SessionInfoVO sessionInfoVO) {
@@ -129,8 +137,11 @@ public class DayProdServiceImpl implements DayProdService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayProdVO.getStoreCds().split(",");
-        dayProdVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayProdVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayProdVO.getStoreCds(), 3900));
+            dayProdVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 상품 array 값 세팅
         if (dayProdVO.getProdCds() != null && !"".equals(dayProdVO.getProdCds())) {

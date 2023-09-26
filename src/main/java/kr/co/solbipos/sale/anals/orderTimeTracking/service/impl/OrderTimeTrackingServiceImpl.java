@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.anals.orderTimeTracking.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.anals.orderTimeTracking.service.OrderTimeTrackingService;
@@ -34,11 +38,13 @@ public class OrderTimeTrackingServiceImpl implements OrderTimeTrackingService {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final OrderTimeTrackingMapper orderTimeTrackingMapper;
+    private final PopupMapper popupMapper;
 
     /** Constructor Injection */
     @Autowired
-    public OrderTimeTrackingServiceImpl(OrderTimeTrackingMapper orderTimeTrackingMapper) {
+    public OrderTimeTrackingServiceImpl(OrderTimeTrackingMapper orderTimeTrackingMapper, PopupMapper popupMapper) {
         this.orderTimeTrackingMapper = orderTimeTrackingMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 주문시간트레킹 리스트 조회 */
@@ -52,8 +58,11 @@ public class OrderTimeTrackingServiceImpl implements OrderTimeTrackingService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = orderTimeTrackingVO.getStoreCds().split(",");
-        orderTimeTrackingVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(orderTimeTrackingVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(orderTimeTrackingVO.getStoreCds(), 3900));
+            orderTimeTrackingVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 매장브랜드 '전체' 일때
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
@@ -78,8 +87,11 @@ public class OrderTimeTrackingServiceImpl implements OrderTimeTrackingService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = orderTimeTrackingVO.getStoreCds().split(",");
-        orderTimeTrackingVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(orderTimeTrackingVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(orderTimeTrackingVO.getStoreCds(), 3900));
+            orderTimeTrackingVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 매장브랜드 '전체' 일때
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {

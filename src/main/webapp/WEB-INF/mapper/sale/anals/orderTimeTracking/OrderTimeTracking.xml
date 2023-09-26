@@ -51,12 +51,9 @@
       ,      TB_MS_STORE tms
       ,      TB_MS_STORE_INFO tmsi
       WHERE  tpot.HQ_OFFICE_CD = #{hqOfficeCd}
-      <if test='storeCds != null and storeCds != ""'>
-        AND
-          <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-              tpot.STORE_CD = #{item}
-          </foreach>
-       </if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tpot.STORE_CD IN (${storeCdQuery})
+        </if>
         AND   tpot.SALE_DATE = #{startDate}
         AND   tms.HQ_OFFICE_CD = tpot.HQ_OFFICE_CD
         AND   tms.STORE_CD = tpot.STORE_CD
@@ -135,12 +132,9 @@
       ,      TB_MS_STORE tms
       ,      TB_MS_STORE_INFO tmsi
       WHERE  tpot.HQ_OFFICE_CD = #{hqOfficeCd}
-      <if test='storeCds != null and storeCds != ""'>
-        AND
-          <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-              tpot.STORE_CD = #{item}
-          </foreach>
-       </if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tpot.STORE_CD IN (${storeCdQuery})
+        </if>
         AND   tpot.SALE_DATE = #{startDate}
         AND   tms.HQ_OFFICE_CD = tpot.HQ_OFFICE_CD
         AND   tms.STORE_CD = tpot.STORE_CD

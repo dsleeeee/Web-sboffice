@@ -99,6 +99,9 @@ public class MCoupnCalcVO extends PageVO {
     /** 여러 포스값 */
     private String[] arrPosNo;
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
 
     public String getOrgnFg() {
         return orgnFg;
@@ -294,5 +297,13 @@ public class MCoupnCalcVO extends PageVO {
 
     public void setArrPosNo(String[] arrPosNo) {
         this.arrPosNo = arrPosNo;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }
