@@ -36,6 +36,7 @@
                 ,		NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC -- 판매단가
                 ,		thp.PROD_TIP_YN -- 봉사료포함여부
                 ,		thp.VAT_FG  -- 과세여부
+                ,		thp.USE_YN  -- 사용여부
                 ,		thpb.BARCD_CD AS BAR_CD -- 바코드
                 ,		thp.PRC_CTRL_FG -- 가격관리구분
                 ,		NVL(thpsp.STIN_SALE_UPRC, 0) AS STIN_SALE_UPRC -- 내점가
@@ -72,7 +73,7 @@
                 ,		thpi.NU_CAFFEINE -- 카페인
                 ,		thp.MAP_PROD_CD -- 매핑상품코드
                 ,		thp.SALE_TIME_FG -- KIOSK 판매시간
-                ,		(SELECT LISTAGG(S_SALE_TIME || '~' || E_SALE_TIME, ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME FROM TB_HQ_PRODUCT_SALE_TIME thpst WHERE thpst.HQ_OFFICE_CD = #{hqOfficeCd} AND thpst.PROD_CD = thp.PROD_CD ) AS SALE_TIME -- KIOSK 시간설정
+                ,		(SELECT LISTAGG(TO_CHAR(TO_DATE(S_SALE_TIME, 'HH24MI'), 'HH24:MI') || '~' || TO_CHAR(TO_DATE(E_SALE_TIME, 'HH24MI'), 'HH24:MI'), ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME FROM TB_HQ_PRODUCT_SALE_TIME thpst WHERE thpst.HQ_OFFICE_CD = #{hqOfficeCd} AND thpst.PROD_CD = thp.PROD_CD ) AS SALE_TIME -- KIOSK 시간설정
                 ,		thpi.MOMS_KIOSK_EDGE -- KIOSK 뱃지
                 ,		thp.OPTION_GRP_CD -- 상품옵션그룹
                 ,		thpog.OPTION_GRP_NM
@@ -200,7 +201,7 @@
                 SELECT  thb.MS_BRAND_NM AS HQ_BRAND_NM
                 ,		thp.PROD_TYPE_FG
                 ,		thp.PROD_CLASS_CD
-                , 		( SELECT SF_GET_PROD_CLASSES('H', thp.STORE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM
+                , 		( SELECT SF_GET_PROD_CLASSES('S', thp.STORE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM
                 ,		thp.PROD_CD
                 ,		thp.PROD_NM
                 ,		(SELECT LISTAGG(VENDR_NM , ',') WITHIN GROUP (ORDER BY thv.VENDR_NM ) AS VENDR_NM FROM TB_MS_VENDOR_PROD thvp, TB_MS_VENDOR thv WHERE thvp.STORE_CD = #{storeCd} AND thvp.STORE_CD = thv.STORE_CD AND thvp.VENDR_CD = thv.VENDR_CD AND thvp.PROD_CD = thp.PROD_CD) AS VENDR
@@ -208,6 +209,7 @@
                 ,		NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC -- 판매단가
                 ,		thp.PROD_TIP_YN -- 봉사료포함여부
                 ,		thp.VAT_FG  -- 과세여부
+                ,		thp.USE_YN  -- 사용여부
                 ,		thpb.BARCD_CD AS BAR_CD -- 바코드
                 ,		thp.PRC_CTRL_FG -- 가격관리구분
                 ,		NVL(thpsp.STIN_SALE_UPRC, 0) AS STIN_SALE_UPRC -- 내점가
@@ -244,7 +246,7 @@
                 ,		thpi.NU_CAFFEINE -- 카페인
                 ,		thp.MAP_PROD_CD -- 매핑상품코드
                 ,		thp.SALE_TIME_FG -- KIOSK 판매시간
-                ,		(SELECT LISTAGG(S_SALE_TIME || '~' || E_SALE_TIME, ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME FROM TB_MS_PRODUCT_SALE_TIME thpst WHERE thpst.STORE_CD = #{storeCd} AND thpst.PROD_CD = thp.PROD_CD ) AS SALE_TIME -- KIOSK 시간설정
+                ,		(SELECT LISTAGG(TO_CHAR(TO_DATE(S_SALE_TIME, 'HH24MI'), 'HH24:MI') || '~' || TO_CHAR(TO_DATE(E_SALE_TIME, 'HH24MI'), 'HH24:MI'), ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME FROM TB_MS_PRODUCT_SALE_TIME thpst WHERE thpst.STORE_CD = #{storeCd} AND thpst.PROD_CD = thp.PROD_CD ) AS SALE_TIME -- KIOSK 시간설정
                 ,		thpi.MOMS_KIOSK_EDGE -- KIOSK 뱃지
                 ,		thp.OPTION_GRP_CD -- 상품옵션그룹
                 ,		thpog.OPTION_GRP_NM
@@ -392,6 +394,7 @@
                 ,		NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC -- 판매단가
                 ,		thp.PROD_TIP_YN -- 봉사료포함여부
                 ,		thp.VAT_FG  -- 과세여부
+                ,		thp.USE_YN  -- 사용여부
                 ,		thpb.BARCD_CD AS BAR_CD -- 바코드
                 ,		thp.PRC_CTRL_FG -- 가격관리구분
                 ,		NVL(thpsp.STIN_SALE_UPRC, 0) AS STIN_SALE_UPRC -- 내점가
@@ -428,7 +431,7 @@
                 ,		thpi.NU_CAFFEINE -- 카페인
                 ,		thp.MAP_PROD_CD -- 매핑상품코드
                 ,		thp.SALE_TIME_FG -- KIOSK 판매시간
-                ,		(SELECT LISTAGG(S_SALE_TIME || '~' || E_SALE_TIME, ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME FROM TB_HQ_PRODUCT_SALE_TIME thpst WHERE thpst.HQ_OFFICE_CD = #{hqOfficeCd} AND thpst.PROD_CD = thp.PROD_CD ) AS SALE_TIME -- KIOSK 시간설정
+                ,		(SELECT LISTAGG(TO_CHAR(TO_DATE(S_SALE_TIME, 'HH24MI'), 'HH24:MI') || '~' || TO_CHAR(TO_DATE(E_SALE_TIME, 'HH24MI'), 'HH24:MI'), ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME FROM TB_HQ_PRODUCT_SALE_TIME thpst WHERE thpst.HQ_OFFICE_CD = #{hqOfficeCd} AND thpst.PROD_CD = thp.PROD_CD ) AS SALE_TIME -- KIOSK 시간설정
                 ,		thpi.MOMS_KIOSK_EDGE -- KIOSK 뱃지
                 ,		thp.OPTION_GRP_CD -- 상품옵션그룹
                 ,		thpog.OPTION_GRP_NM
@@ -553,7 +556,7 @@
                 SELECT  thb.MS_BRAND_NM AS HQ_BRAND_NM
                 ,		thp.PROD_TYPE_FG
                 ,		thp.PROD_CLASS_CD
-                , 		( SELECT SF_GET_PROD_CLASSES('H', thp.STORE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM
+                , 		( SELECT SF_GET_PROD_CLASSES('S', thp.STORE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM
                 ,		thp.PROD_CD
                 ,		thp.PROD_NM
                 ,		(SELECT LISTAGG(VENDR_NM , ',') WITHIN GROUP (ORDER BY thv.VENDR_NM ) AS VENDR_NM FROM TB_MS_VENDOR_PROD thvp, TB_MS_VENDOR thv WHERE thvp.STORE_CD = #{storeCd} AND thvp.STORE_CD = thv.STORE_CD AND thvp.VENDR_CD = thv.VENDR_CD AND thvp.PROD_CD = thp.PROD_CD) AS VENDR
@@ -561,6 +564,7 @@
                 ,		NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC -- 판매단가
                 ,		thp.PROD_TIP_YN -- 봉사료포함여부
                 ,		thp.VAT_FG  -- 과세여부
+                ,		thp.USE_YN  -- 사용여부
                 ,		thpb.BARCD_CD AS BAR_CD -- 바코드
                 ,		thp.PRC_CTRL_FG -- 가격관리구분
                 ,		NVL(thpsp.STIN_SALE_UPRC, 0) AS STIN_SALE_UPRC -- 내점가
@@ -597,7 +601,7 @@
                 ,		thpi.NU_CAFFEINE -- 카페인
                 ,		thp.MAP_PROD_CD -- 매핑상품코드
                 ,		thp.SALE_TIME_FG -- KIOSK 판매시간
-                ,		(SELECT LISTAGG(S_SALE_TIME || '~' || E_SALE_TIME, ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME FROM TB_MS_PRODUCT_SALE_TIME thpst WHERE thpst.STORE_CD = #{storeCd} AND thpst.PROD_CD = thp.PROD_CD ) AS SALE_TIME -- KIOSK 시간설정
+                ,		(SELECT LISTAGG(TO_CHAR(TO_DATE(S_SALE_TIME, 'HH24MI'), 'HH24:MI') || '~' || TO_CHAR(TO_DATE(E_SALE_TIME, 'HH24MI'), 'HH24:MI'), ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME FROM TB_MS_PRODUCT_SALE_TIME thpst WHERE thpst.STORE_CD = #{storeCd} AND thpst.PROD_CD = thp.PROD_CD ) AS SALE_TIME -- KIOSK 시간설정
                 ,		thpi.MOMS_KIOSK_EDGE -- KIOSK 뱃지
                 ,		thp.OPTION_GRP_CD -- 상품옵션그룹
                 ,		thpog.OPTION_GRP_NM

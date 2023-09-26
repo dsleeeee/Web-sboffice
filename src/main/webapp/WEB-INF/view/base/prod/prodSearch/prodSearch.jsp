@@ -222,22 +222,27 @@
                 <wj-flex-grid-column header="<s:message code="prod.saleUprc"/>" binding="saleUprc" width="100" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.prodTipYn"/>" binding="prodTipYn" width="100" is-read-only="true" align="center" data-map="prodTipYnDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.vatFg"/>" binding="vatFg" width="100" is-read-only="true" align="center" data-map="vatFgDataMap"></wj-flex-grid-column>
+                <c:if test="${momsEnvstVal == '0'}">
+                    <wj-flex-grid-column header="<s:message code="prod.useYn"/>" binding="useYn" width="100" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                </c:if>
                 <wj-flex-grid-column header="<s:message code="prod.barCd"/>" binding="barCd" width="100" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.prcCtrlFg"/>" binding="prcCtrlFg" width="100" is-read-only="true" align="center" data-map="regFgDataMap"></wj-flex-grid-column>
 
-<c:if test="${subPriceFg == '1'}">
-                <wj-flex-grid-column header="<s:message code="prod.stinSaleUprc"/>" binding="stinSaleUprc" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.packSaleUprc"/>" binding="packSaleUprc" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.dlvrSaleUprc"/>" binding="dlvrSaleUprc" width="80" is-read-only="true"></wj-flex-grid-column>
-</c:if>
-                
+                <c:if test="${subPriceFg == '1'}">
+                    <wj-flex-grid-column header="<s:message code="prod.stinSaleUprc"/>" binding="stinSaleUprc" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.packSaleUprc"/>" binding="packSaleUprc" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.dlvrSaleUprc"/>" binding="dlvrSaleUprc" width="80" is-read-only="true"></wj-flex-grid-column>
+                </c:if>
+
                 <wj-flex-grid-column header="<s:message code="prod.stockProdYn"/>" binding="stockProdYn" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.setProdFg"/>" binding="setProdFg" width="80" is-read-only="true" align="center" data-map="setProdFgDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.pointSaveYn"/>" binding="pointSaveYn" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.sideProdYn"/>" binding="sideProdYn" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.sdattrClassCd"/>" binding="sdattrClassNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.sdselGrpCd"/>" binding="sdselGrpNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.groupProdCd"/>" binding="groupProdNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <c:if test="${momsEnvstVal == '1'}">
+                    <wj-flex-grid-column header="<s:message code="prod.groupProdCd"/>" binding="groupProdNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                </c:if>
                 <wj-flex-grid-column header="<s:message code="prod.depositProdCd"/>" binding="depositProdNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.depositCupFg"/>" binding="depositCupFg" width="80" is-read-only="true" align="center" data-map="depositCupFgDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.pointUseYn"/>" binding="pointUseYn" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
@@ -251,37 +256,40 @@
                 <wj-flex-grid-column header="<s:message code="prod.poMinQty"/>" binding="poMinQty" width="80" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.safeStockQty"/>" binding="safeStockQty" width="80" is-read-only="true"></wj-flex-grid-column>
 
-                <wj-flex-grid-column header="<s:message code="prod.nuTotWt"/>" binding="nuTotWt" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.nuKcal"/>" binding="nuKcal" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.nuProtein"/>" binding="nuProtein" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.nuSodium"/>" binding="nuSodium" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.nuSugars"/>" binding="nuSugars" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.nuSatFat"/>" binding="nuSatFat" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.nuCaffeine"/>" binding="nuCaffeine" width="80" is-read-only="true"></wj-flex-grid-column>
-
+                <c:if test="${momsEnvstVal == '1'}">
+                    <wj-flex-grid-column header="<s:message code="prod.nuTotWt"/>" binding="nuTotWt" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.nuKcal"/>" binding="nuKcal" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.nuProtein"/>" binding="nuProtein" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.nuSodium"/>" binding="nuSodium" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.nuSugars"/>" binding="nuSugars" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.nuSatFat"/>" binding="nuSatFat" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.nuCaffeine"/>" binding="nuCaffeine" width="80" is-read-only="true"></wj-flex-grid-column>
+                </c:if>
                 <wj-flex-grid-column header="<s:message code="prod.mapProdCd"/>" binding="mapProdCd" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.kioskSaleTime"/>" binding="saleTimeFg" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.kioskSaleTimeSetting"/>" binding="saleTime" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.momsKioskEdge"/>" binding="momsKioskEdge" width="80" is-read-only="true" align="center" data-map="momsKioskEdgeDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.optionGrp"/>" binding="optionGrpNm" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.releaseDate"/>" binding="releaseDate" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.discon"/>" binding="disconYn" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.disconDate"/>" binding="disconDate" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.inStore"/>" binding="inStore" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.delivery"/>" binding="delivery" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.packing"/>" binding="packing" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
 
-                <wj-flex-grid-column header="<s:message code="prod.pos"/>" binding="pos" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.kiosk"/>" binding="kiosk" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"v></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.app"/>" binding="app" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.baemin"/>" binding="baemin" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.baemin1"/>" binding="baemin1" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.yogiyo"/>" binding="yogiyo" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.yogiyoExp"/>" binding="yogiyoExp" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.coupang"/>" binding="coupang" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.baedaltong"/>" binding="baedaltong" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.ddangyo"/>" binding="ddangyo" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                <c:if test="${momsEnvstVal == '1'}">
+                    <wj-flex-grid-column header="<s:message code="prod.kioskSaleTime"/>" binding="saleTimeFg" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.kioskSaleTimeSetting"/>" binding="saleTime" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.momsKioskEdge"/>" binding="momsKioskEdge" width="80" is-read-only="true" align="center" data-map="momsKioskEdgeDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.optionGrp"/>" binding="optionGrpNm" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.releaseDate"/>" binding="releaseDate" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.discon"/>" binding="disconYn" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.disconDate"/>" binding="disconDate" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.inStore"/>" binding="inStore" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.delivery"/>" binding="delivery" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.packing"/>" binding="packing" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
 
+                    <wj-flex-grid-column header="<s:message code="prod.pos"/>" binding="pos" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.kiosk"/>" binding="kiosk" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"v></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.app"/>" binding="app" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.baemin"/>" binding="baemin" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.baemin1"/>" binding="baemin1" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.yogiyo"/>" binding="yogiyo" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.yogiyoExp"/>" binding="yogiyoExp" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.coupang"/>" binding="coupang" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.baedaltong"/>" binding="baedaltong" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.ddangyo"/>" binding="ddangyo" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                </c:if>
                 <wj-flex-grid-column header="<s:message code="prod.title.remark"/>" binding="remark" width="80" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.title.info"/>" binding="prodInfo" width="80"is-read-only="true"></wj-flex-grid-column>
 
@@ -338,21 +346,27 @@
                 <wj-flex-grid-column header="<s:message code="prod.saleUprc"/>" binding="saleUprc" width="100" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.prodTipYn"/>" binding="prodTipYn" width="100" is-read-only="true" align="center" data-map="prodTipYnDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.vatFg"/>" binding="vatFg" width="100" is-read-only="true" align="center" data-map="vatFgDataMap"></wj-flex-grid-column>
+                <c:if test="${momsEnvstVal == '0'}">
+                    <wj-flex-grid-column header="<s:message code="prod.useYn"/>" binding="useYn" width="100" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                </c:if>
                 <wj-flex-grid-column header="<s:message code="prod.barCd"/>" binding="barCd" width="100" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.prcCtrlFg"/>" binding="prcCtrlFg" width="100" is-read-only="true" align="center" data-map="regFgDataMap"></wj-flex-grid-column>
 
-<c:if test="${subPriceFg == '1'}">
-                <wj-flex-grid-column header="<s:message code="prod.stinSaleUprc"/>" binding="stinSaleUprc" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.packSaleUprc"/>" binding="packSaleUprc" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.dlvrSaleUprc"/>" binding="dlvrSaleUprc" width="80" is-read-only="true"></wj-flex-grid-column>
-</c:if>
+                <c:if test="${subPriceFg == '1'}">
+                    <wj-flex-grid-column header="<s:message code="prod.stinSaleUprc"/>" binding="stinSaleUprc" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.packSaleUprc"/>" binding="packSaleUprc" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.dlvrSaleUprc"/>" binding="dlvrSaleUprc" width="80" is-read-only="true"></wj-flex-grid-column>
+                </c:if>
+
                 <wj-flex-grid-column header="<s:message code="prod.stockProdYn"/>" binding="stockProdYn" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.setProdFg"/>" binding="setProdFg" width="80" is-read-only="true" align="center" data-map="setProdFgDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.pointSaveYn"/>" binding="pointSaveYn" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.sideProdYn"/>" binding="sideProdYn" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.sdattrClassCd"/>" binding="sdattrClassNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.sdselGrpCd"/>" binding="sdselGrpNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.groupProdCd"/>" binding="groupProdNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <c:if test="${momsEnvstVal == '1'}">
+                    <wj-flex-grid-column header="<s:message code="prod.groupProdCd"/>" binding="groupProdNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                </c:if>
                 <wj-flex-grid-column header="<s:message code="prod.depositProdCd"/>" binding="depositProdNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.depositCupFg"/>" binding="depositCupFg" width="80" is-read-only="true" align="center" data-map="depositCupFgDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.pointUseYn"/>" binding="pointUseYn" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
@@ -366,37 +380,40 @@
                 <wj-flex-grid-column header="<s:message code="prod.poMinQty"/>" binding="poMinQty" width="80" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.safeStockQty"/>" binding="safeStockQty" width="80" is-read-only="true"></wj-flex-grid-column>
 
-                <wj-flex-grid-column header="<s:message code="prod.nuTotWt"/>" binding="nuTotWt" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.nuKcal"/>" binding="nuKcal" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.nuProtein"/>" binding="nuProtein" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.nuSodium"/>" binding="nuSodium" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.nuSugars"/>" binding="nuSugars" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.nuSatFat"/>" binding="nuSatFat" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.nuCaffeine"/>" binding="nuCaffeine" width="80" is-read-only="true"></wj-flex-grid-column>
-
+                <c:if test="${momsEnvstVal == '1'}">
+                    <wj-flex-grid-column header="<s:message code="prod.nuTotWt"/>" binding="nuTotWt" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.nuKcal"/>" binding="nuKcal" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.nuProtein"/>" binding="nuProtein" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.nuSodium"/>" binding="nuSodium" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.nuSugars"/>" binding="nuSugars" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.nuSatFat"/>" binding="nuSatFat" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.nuCaffeine"/>" binding="nuCaffeine" width="80" is-read-only="true"></wj-flex-grid-column>
+                </c:if>
                 <wj-flex-grid-column header="<s:message code="prod.mapProdCd"/>" binding="mapProdCd" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.kioskSaleTime"/>" binding="saleTimeFg" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.kioskSaleTimeSetting"/>" binding="saleTime" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.momsKioskEdge"/>" binding="momsKioskEdge" width="80" is-read-only="true" align="center" data-map="momsKioskEdgeDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.optionGrp"/>" binding="optionGrpNm" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.releaseDate"/>" binding="releaseDate" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.discon"/>" binding="disconYn" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.disconDate"/>" binding="disconDate" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.inStore"/>" binding="inStore" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.delivery"/>" binding="delivery" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.packing"/>" binding="packing" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
 
-                <wj-flex-grid-column header="<s:message code="prod.pos"/>" binding="pos" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.kiosk"/>" binding="kiosk" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"v></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.app"/>" binding="app" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.baemin"/>" binding="baemin" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.baemin1"/>" binding="baemin1" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.yogiyo"/>" binding="yogiyo" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.yogiyoExp"/>" binding="yogiyoExp" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.coupang"/>" binding="coupang" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.baedaltong"/>" binding="baedaltong" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.ddangyo"/>" binding="ddangyo" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                <c:if test="${momsEnvstVal == '1'}">
+                    <wj-flex-grid-column header="<s:message code="prod.kioskSaleTime"/>" binding="saleTimeFg" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.kioskSaleTimeSetting"/>" binding="saleTime" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.momsKioskEdge"/>" binding="momsKioskEdge" width="80" is-read-only="true" align="center" data-map="momsKioskEdgeDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.optionGrp"/>" binding="optionGrpNm" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.releaseDate"/>" binding="releaseDate" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.discon"/>" binding="disconYn" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.disconDate"/>" binding="disconDate" width="80" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.inStore"/>" binding="inStore" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.delivery"/>" binding="delivery" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.packing"/>" binding="packing" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
 
+                    <wj-flex-grid-column header="<s:message code="prod.pos"/>" binding="pos" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.kiosk"/>" binding="kiosk" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"v></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.app"/>" binding="app" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.baemin"/>" binding="baemin" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.baemin1"/>" binding="baemin1" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.yogiyo"/>" binding="yogiyo" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.yogiyoExp"/>" binding="yogiyoExp" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.coupang"/>" binding="coupang" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.baedaltong"/>" binding="baedaltong" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prod.ddangyo"/>" binding="ddangyo" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
+                </c:if>
                 <wj-flex-grid-column header="<s:message code="prod.title.remark"/>" binding="remark" width="80" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.title.info"/>" binding="prodInfo" width="80"is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
@@ -465,7 +482,7 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodSearch/prodSearch.js?ver=20230912.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodSearch/prodSearch.js?ver=20230912.02" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">

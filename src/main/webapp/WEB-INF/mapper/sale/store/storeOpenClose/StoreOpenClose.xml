@@ -75,6 +75,7 @@
                         AND     tpe.HQ_OFFICE_CD = #{hqOfficeCd}
                         AND		tpe.SALE_DATE = #{saleDate}
                         AND     TPE.REG_SEQ = '00'
+                        AND     tpe.CLOSE_FG    =   '2'
                         <if test='storeCds != null and storeCds != ""'>
                             AND
                             <foreach collection="storeCdList" item="item" open="(" close=")" separator="OR">
@@ -425,6 +426,7 @@
                         </if>
                         <if test='gubun != null and gubun != "" and gubun.toString() == "close"'>
                             AND EXTRACT(HOUR FROM TO_TIMESTAMP(tpe.CLOSE_DT, 'YYYYMMDDHH24MISS')) BETWEEN #{min} AND #{max}
+                            AND tpe.CLOSE_FG    =   '2'
                         </if>
                         <if test='gubun != null and gubun != "" and gubun.toString() != "close"'>
                             AND 1 = 2

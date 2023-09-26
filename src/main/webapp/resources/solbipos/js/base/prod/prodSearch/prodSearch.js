@@ -174,55 +174,6 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
     $scope.poProdFgDataMap = new wijmo.grid.DataMap(poProdFgData, 'value', 'name'); // 발주상품구분
     $scope.poUnitFgDataMap = new wijmo.grid.DataMap(poUnitFgData, 'value', 'name'); // 발주단위
 
-    // 그리드 포맷
-    s.formatItem.addHandler(function (s, e) {
-      if (e.panel === s.cells) {
-        var col = s.columns[e.col];
-        if( col.binding === "prodCd" || col.binding === "storeCnt") {
-          wijmo.addClass(e.cell, 'wijLink');
-        }
-      }
-    });
-
-    // 그리드 선택 이벤트
-    s.addEventListener(s.hostElement, 'mousedown', function(e) {
-      var ht = s.hitTest(e);
-      if( ht.cellType === wijmo.grid.CellType.Cell) {
-        var col = ht.panel.columns[ht.col];
-        var selectedRow = s.rows[ht.row].dataItem;
-        // 상품코드
-        if( col.binding === "prodCd") {
-          // $scope.searchProdDetail(selectedRow.prodCd);
-          $scope.setProdInfo(selectedRow);
-          // 수정권한이 있을때
-          // if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
-          //   || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
-          //     // 상품정보 수정 팝업
-          //     $scope.prodModifyLayer.show();
-          // } else {
-          //     // 상품정보 상세 팝업
-          //     $scope.prodDetailLayer.show();
-          // }
-          // 매장일땐 상품등록구분이 S인 것만 수정가능
-          if(orgnFg == "HQ") {
-            // 상품정보 수정 팝업
-            $scope.prodModifyLayer.show();
-          } else if(orgnFg == "STORE") {
-            if(selectedRow["regFg"] === 'S') {
-              // 상품정보 수정 팝업
-              $scope.prodModifyLayer.show();
-            } else {
-              // 상품정보 상세 팝업
-              $scope.prodDetailLayer.show();
-            }
-          }
-          // 등록매장수
-        } else if(col.binding === "storeCnt"){
-          $scope.registProdStore(selectedRow);
-        }
-      }
-    });
-
     // 전체기간 체크박스 선택에 따른 날짜선택 초기화
     $scope.srchStartDate.isReadOnly = $scope.isChecked;
     $scope.srchEndDate.isReadOnly = $scope.isChecked;

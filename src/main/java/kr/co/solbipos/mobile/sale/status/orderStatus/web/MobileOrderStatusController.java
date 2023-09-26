@@ -8,7 +8,8 @@ import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.mobile.sale.status.orderStatus.service.MobileOrderStatusService;
 import kr.co.solbipos.mobile.sale.status.orderStatus.service.MobileOrderStatusVO;
-import kr.co.solbipos.sale.orderStatus.orderStatus.service.OrderStatusVO;
+import kr.co.solbipos.mobile.sale.status.prod.service.MobileProdSaleService;
+import kr.co.solbipos.mobile.sale.status.prod.service.MobileProdSaleVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,11 +43,13 @@ import java.util.List;
 public class MobileOrderStatusController {
     private final SessionService sessionService;
     private final MobileOrderStatusService mobileOrderStatusService;
+    private final MobileProdSaleService mobileProdSaleService;
 
     @Autowired
-    public MobileOrderStatusController(SessionService sessionService, MobileOrderStatusService mobileOrderStatusService) {
+    public MobileOrderStatusController(SessionService sessionService, MobileOrderStatusService mobileOrderStatusService, MobileProdSaleService mobileProdSaleService) {
         this.sessionService = sessionService;
         this.mobileOrderStatusService = mobileOrderStatusService;
+        this.mobileProdSaleService = mobileProdSaleService;
     }
 
     /**
@@ -60,6 +63,14 @@ public class MobileOrderStatusController {
      */
     @RequestMapping(value = "/mobileOrderStatus/list.sb", method = RequestMethod.GET)
     public String orderView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 다중매장조회
+        MobileProdSaleVO mobileProdSaleVO = new MobileProdSaleVO();
+        List<DefaultMap<String>> list = mobileProdSaleService.getMultiStoreList(mobileProdSaleVO, sessionInfoVO);
+        model.addAttribute("multiStoreFg", list.size());
+
         return "mobile/sale/status/orderStatus/mobileOrderStatus";
     }
 
