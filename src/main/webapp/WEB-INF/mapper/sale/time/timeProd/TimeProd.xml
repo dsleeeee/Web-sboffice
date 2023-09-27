@@ -176,11 +176,8 @@
                                 WHERE 1=1
                                 AND tsdpst.HQ_OFFICE_CD = #{hqOfficeCd}
                                 AND tsdpst.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-                                <if test='storeCds != null and storeCds != ""'>
-                                    AND
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                                        tsdpst.STORE_CD = #{item}
-                                    </foreach>
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND tsdpst.STORE_CD IN (${storeCdQuery})
                                 </if>
                                 <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
                                     AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -435,11 +432,8 @@
                                 WHERE 1=1
                                 AND tsdpst.HQ_OFFICE_CD = #{hqOfficeCd}
                                 AND tsdpst.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
-                                <if test='storeCds != null and storeCds != ""'>
-                                    AND
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                                        tsdpst.STORE_CD = #{item}
-                                    </foreach>
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND tsdpst.STORE_CD IN (${storeCdQuery})
                                 </if>
                                 <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
                                     AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -712,11 +706,8 @@
                                 AND tsdpst.HQ_OFFICE_CD = #{hqOfficeCd}
                                 AND tsdpst.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                                 AND tsdpst.SALE_HOUR BETWEEN thn.START_TIME AND thn.END_TIME
-                                <if test='storeCds != null and storeCds != ""'>
-                                    AND
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                                        tsdpst.STORE_CD = #{item}
-                                    </foreach>
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND tsdpst.STORE_CD IN (${storeCdQuery})
                                 </if>
                                 <if test='timeSlot != null and timeSlot != ""'>
                                     AND thn.TIME_SLOT = replace(#{timeSlot},'~','')
@@ -984,11 +975,8 @@
                                 AND tsdpst.HQ_OFFICE_CD = #{hqOfficeCd}
                                 AND tsdpst.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
                                 AND tsdpst.SALE_HOUR BETWEEN thn.START_TIME AND thn.END_TIME
-                                <if test='storeCds != null and storeCds != ""'>
-                                    AND
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                                        tsdpst.STORE_CD = #{item}
-                                    </foreach>
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND tsdpst.STORE_CD IN (${storeCdQuery})
                                 </if>
                                 <if test='timeSlot != null and timeSlot != ""'>
                                     AND thn.TIME_SLOT = replace(#{timeSlot},'~','')
@@ -1261,11 +1249,8 @@
                                 WHERE 1=1
                                 AND tsdpst.HQ_OFFICE_CD = #{hqOfficeCd}
                                 AND tsdpst.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-                                <if test='storeCds != null and storeCds != ""'>
-                                    AND
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                                        tsdpst.STORE_CD = #{item}
-                                    </foreach>
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND tsdpst.STORE_CD IN (${storeCdQuery})
                                 </if>
                                 <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
                                     AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -1517,11 +1502,8 @@
                                 WHERE 1=1
                                 AND tsdpst.HQ_OFFICE_CD = #{hqOfficeCd}
                                 AND tsdpst.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
-                                <if test='storeCds != null and storeCds != ""'>
-                                    AND
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                                        tsdpst.STORE_CD = #{item}
-                                    </foreach>
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND tsdpst.STORE_CD IN (${storeCdQuery})
                                 </if>
                                 <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
                                     AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -1792,11 +1774,8 @@
                                 AND tsdpst.HQ_OFFICE_CD = #{hqOfficeCd}
                                 AND tsdpst.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                                 AND tsdpst.SALE_HOUR BETWEEN thn.START_TIME AND thn.END_TIME
-                                <if test='storeCds != null and storeCds != ""'>
-                                    AND
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                                        tsdpst.STORE_CD = #{item}
-                                    </foreach>
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND tsdpst.STORE_CD IN (${storeCdQuery})
                                 </if>
                                 <if test='timeSlot != null and timeSlot != ""'>
                                     AND thn.TIME_SLOT = replace(#{timeSlot},'~','')
@@ -2061,11 +2040,8 @@
                                 AND tsdpst.HQ_OFFICE_CD = #{hqOfficeCd}
                                 AND tsdpst.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
                                 AND tsdpst.SALE_HOUR BETWEEN thn.START_TIME AND thn.END_TIME
-                                <if test='storeCds != null and storeCds != ""'>
-                                    AND
-                                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                                        tsdpst.STORE_CD = #{item}
-                                    </foreach>
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND tsdpst.STORE_CD IN (${storeCdQuery})
                                 </if>
                                 <if test='timeSlot != null and timeSlot != ""'>
                                     AND thn.TIME_SLOT = replace(#{timeSlot},'~','')

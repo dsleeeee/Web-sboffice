@@ -137,6 +137,9 @@ public class TimeProdVO extends PageVO {
     /** 시간대 */
     private String timeCol;
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -403,5 +406,13 @@ public class TimeProdVO extends PageVO {
 
     public void setTimeCol(String timeCol) {
         this.timeCol = timeCol;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

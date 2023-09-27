@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.pay.storePayMonth.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.pay.storePayMonth.service.StorePayMonthService;
@@ -29,9 +33,11 @@ import java.util.List;
 @Transactional
 public class StorePayMonthServiceImpl implements StorePayMonthService {
     private final StorePayMonthMapper storePayMonthMapper;
+    private final PopupMapper popupMapper;
 
-    public StorePayMonthServiceImpl(StorePayMonthMapper storePayMonthMapper) {
+    public StorePayMonthServiceImpl(StorePayMonthMapper storePayMonthMapper, PopupMapper popupMapper) {
         this.storePayMonthMapper = storePayMonthMapper;
+        this.popupMapper = popupMapper;
     }
 
 
@@ -47,8 +53,11 @@ public class StorePayMonthServiceImpl implements StorePayMonthService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = storePayMonthVO.getStoreCds().split(",");
-        storePayMonthVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(storePayMonthVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storePayMonthVO.getStoreCds(), 3900));
+            storePayMonthVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 매장브랜드 '전체' 일때
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
@@ -84,8 +93,11 @@ public class StorePayMonthServiceImpl implements StorePayMonthService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = storePayMonthVO.getStoreCds().split(",");
-        storePayMonthVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(storePayMonthVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storePayMonthVO.getStoreCds(), 3900));
+            storePayMonthVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 매장브랜드 '전체' 일때
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {

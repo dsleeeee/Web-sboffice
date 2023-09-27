@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.prod.monthProdStore.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.prod.monthProdStore.service.MonthProdStoreService;
@@ -29,9 +33,11 @@ import java.util.List;
 @Transactional
 public class MonthProdStoreServiceImpl implements MonthProdStoreService {
     private final MonthProdStoreMapper monthProdStoreMapper;
+    private final PopupMapper popupMapper;
 
-    public MonthProdStoreServiceImpl(MonthProdStoreMapper monthProdStoreMapper) {
+    public MonthProdStoreServiceImpl(MonthProdStoreMapper monthProdStoreMapper, PopupMapper popupMapper) {
         this.monthProdStoreMapper = monthProdStoreMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 조회 */
@@ -44,8 +50,11 @@ public class MonthProdStoreServiceImpl implements MonthProdStoreService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = monthProdStoreVO.getStoreCds().split(",");
-        monthProdStoreVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(monthProdStoreVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(monthProdStoreVO.getStoreCds(), 3900));
+            monthProdStoreVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 상품 array 값 세팅
         if (monthProdStoreVO.getProdCds() != null && !"".equals(monthProdStoreVO.getProdCds())) {
@@ -75,8 +84,11 @@ public class MonthProdStoreServiceImpl implements MonthProdStoreService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = monthProdStoreVO.getStoreCds().split(",");
-        monthProdStoreVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(monthProdStoreVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(monthProdStoreVO.getStoreCds(), 3900));
+            monthProdStoreVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 상품 array 값 세팅
         if (monthProdStoreVO.getProdCds() != null && !"".equals(monthProdStoreVO.getProdCds())) {

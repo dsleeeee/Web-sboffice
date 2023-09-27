@@ -164,11 +164,8 @@
         AND   	tssh.STORE_CD         = tms.STORE_CD
         AND   	tmsi.STORE_CD     (+) = tms.STORE_CD
         AND     tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        <if test='storeCds != null and storeCds != ""'>
-          AND
-          <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-              tssh.STORE_CD = #{item}
-          </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tssh.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때

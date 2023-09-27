@@ -104,6 +104,9 @@ public class ProdSaleRateMomsVO extends PageVO {
     /** 주문채널 구분자 array */
     private String arrDlvrInFgCol[];
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
 
     public String getOrgnFg() {
         return orgnFg;
@@ -319,5 +322,13 @@ public class ProdSaleRateMomsVO extends PageVO {
 
     public void setArrDlvrInFgCol(String[] arrDlvrInFgCol) {
         this.arrDlvrInFgCol = arrDlvrInFgCol;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

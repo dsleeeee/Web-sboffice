@@ -79,11 +79,8 @@
                         #{item}
                     </foreach>
                 </if>
-                <if test='storeCds != null and storeCds != ""'>
-                    AND
-                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                        tsdp.STORE_CD = #{item}
-                    </foreach>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND tsdp.STORE_CD IN (${storeCdQuery})
                 </if>
                 <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
                     AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -176,7 +173,8 @@
                 ,		TB_HQ_PROMO_H thph
                 ,		TB_MS_PROMO_CONDI thpc
                 ,		TB_MS_STORE tms
-                WHERE 	tsdp.STORE_CD = #{storeCds}
+                WHERE 	1=1
+                AND tsdp.STORE_CD IN (${storeCdQuery})
                 <if test='gubun != null and gubun == "D"'>
                     AND thpc.DEPOSIT_YMD BETWEEN #{startDate} AND #{endDate}
                 </if>
@@ -294,11 +292,8 @@
                         #{item}
                     </foreach>
                 </if>
-                <if test='storeCds != null and storeCds != ""'>
-                    AND
-                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                        tsdp.STORE_CD = #{item}
-                    </foreach>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND tsdp.STORE_CD IN (${storeCdQuery})
                 </if>
                 <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
                     AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -388,7 +383,8 @@
                 ,		TB_HQ_PROMO_H thph
                 ,		TB_MS_PROMO_CONDI thpc
                 ,		TB_MS_STORE tms
-                WHERE 	tsdp.STORE_CD = #{storeCds}
+                WHERE 	1=1
+                AND tsdp.STORE_CD IN (${storeCdQuery})
                 <if test='gubun != null and gubun == "D"'>
                     AND thpc.DEPOSIT_YMD BETWEEN #{startDate} AND #{endDate}
                 </if>

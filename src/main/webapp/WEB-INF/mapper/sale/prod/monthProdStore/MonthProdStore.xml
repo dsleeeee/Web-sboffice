@@ -71,11 +71,8 @@
         WHERE 1=1
         AND tsmps.HQ_OFFICE_CD = #{hqOfficeCd}
         AND tsmps.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
-        <if test='storeCds != null and storeCds != ""'>
-            AND
-            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-               tsmps.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsmps.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -228,11 +225,8 @@
         WHERE 1=1
         AND tsmps.HQ_OFFICE_CD = #{hqOfficeCd}
         AND tsmps.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
-        <if test='storeCds != null and storeCds != ""'>
-            AND
-            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                tsmps.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsmps.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때

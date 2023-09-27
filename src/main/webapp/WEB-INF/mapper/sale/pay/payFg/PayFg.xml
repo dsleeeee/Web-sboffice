@@ -58,11 +58,8 @@
                         AND     tsdt.STORE_CD = tmsi.STORE_CD(+)
                         AND 	tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
                         AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-                        <if test='storeCds != null and storeCds != ""'>
-                            AND
-                            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                                tsdt.STORE_CD = #{item}
-                            </foreach>
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND tsdt.STORE_CD IN (${storeCdQuery})
                         </if>
                         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
                             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -139,11 +136,8 @@
                         AND     tsdt.STORE_CD = tmsi.STORE_CD(+)
                         AND 	tsdt.HQ_OFFICE_CD =  #{hqOfficeCd}
                         AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-                        <if test='storeCds != null and storeCds != ""'>
-                            AND
-                            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                                tsdt.STORE_CD = #{item}
-                            </foreach>
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND tsdt.STORE_CD IN (${storeCdQuery})
                         </if>
                         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
                             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -255,11 +249,8 @@
         AND     tsdt.STORE_CD = tmsi.STORE_CD(+)
         AND 	tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        <if test='storeCds != null and storeCds != ""'>
-            AND
-            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                tsdt.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsdt.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -336,11 +327,8 @@
         AND     tsdt.STORE_CD = tmsi.STORE_CD(+)
         AND 	tsdt.HQ_OFFICE_CD =  #{hqOfficeCd}
         AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        <if test='storeCds != null and storeCds != ""'>
-            AND
-            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                tsdt.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsdt.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
