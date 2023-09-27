@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.prod.uptPmix.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.prod.uptPmix.service.UptPmixService;
@@ -30,9 +34,11 @@ import java.util.List;
 public class UptPmixServiceImpl implements UptPmixService {
 
     private final UptPmixMapper uptPmixMapper;
+    private final PopupMapper popupMapper;
 
-    public UptPmixServiceImpl(UptPmixMapper uptPmixMapper) {
+    public UptPmixServiceImpl(UptPmixMapper uptPmixMapper, PopupMapper popupMapper) {
         this.uptPmixMapper = uptPmixMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** UPT & P.mix 리스트 조회 */
@@ -45,8 +51,11 @@ public class UptPmixServiceImpl implements UptPmixService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = uptPmixVO.getStoreCds().split(",");
-        uptPmixVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(uptPmixVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(uptPmixVO.getStoreCds(), 3900));
+            uptPmixVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 상품 array 값 세팅
         if (uptPmixVO.getProdCds() != null && !"".equals(uptPmixVO.getProdCds())) {
@@ -85,8 +94,11 @@ public class UptPmixServiceImpl implements UptPmixService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = uptPmixVO.getStoreCds().split(",");
-        uptPmixVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(uptPmixVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(uptPmixVO.getStoreCds(), 3900));
+            uptPmixVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 상품 array 값 세팅
         if (uptPmixVO.getProdCds() != null && !"".equals(uptPmixVO.getProdCds())) {

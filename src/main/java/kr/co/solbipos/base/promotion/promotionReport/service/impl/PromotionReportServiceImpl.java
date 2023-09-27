@@ -1,6 +1,10 @@
 package kr.co.solbipos.base.promotion.promotionReport.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.promotion.promotionReport.service.PromotionReportService;
@@ -29,9 +33,11 @@ import java.util.List;
 @Transactional
 public class PromotionReportServiceImpl implements PromotionReportService {
     private final PromotionReportMapper promotionReportMapper;
+    private final PopupMapper popupMapper;
 
-    public PromotionReportServiceImpl(PromotionReportMapper promotionReportMapper) {
+    public PromotionReportServiceImpl(PromotionReportMapper promotionReportMapper, PopupMapper popupMapper) {
         this.promotionReportMapper = promotionReportMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 조회 */
@@ -45,8 +51,11 @@ public class PromotionReportServiceImpl implements PromotionReportService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = promotionReportVO.getStoreCds().split(",");
-        promotionReportVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(promotionReportVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(promotionReportVO.getStoreCds(), 3900));
+            promotionReportVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 프로모션 array 값 세팅
         String[] promotionCds = promotionReportVO.getPromotionCds().split(",");
@@ -75,8 +84,11 @@ public class PromotionReportServiceImpl implements PromotionReportService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = promotionReportVO.getStoreCds().split(",");
-        promotionReportVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(promotionReportVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(promotionReportVO.getStoreCds(), 3900));
+            promotionReportVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 프로모션 array 값 세팅
         String[] promotionCds = promotionReportVO.getPromotionCds().split(",");

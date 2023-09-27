@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.pay.payFg.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.pay.payFg.service.PayFgService;
@@ -30,9 +34,11 @@ import java.util.List;
 @Transactional
 public class PayFgServiceImpl implements PayFgService {
     private final PayFgMapper payFgMapper;
+    private final PopupMapper popupMapper;
 
-    public PayFgServiceImpl(PayFgMapper payFgMapper) {
+    public PayFgServiceImpl(PayFgMapper payFgMapper, PopupMapper popupMapper) {
         this.payFgMapper = payFgMapper;
+        this.popupMapper = popupMapper;
     }
 
 
@@ -47,8 +53,11 @@ public class PayFgServiceImpl implements PayFgService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = payFgVO.getStoreCds().split(",");
-        payFgVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(payFgVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(payFgVO.getStoreCds(), 3900));
+            payFgVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 매장브랜드 '전체' 일때
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
@@ -85,8 +94,11 @@ public class PayFgServiceImpl implements PayFgService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = payFgVO.getStoreCds().split(",");
-        payFgVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(payFgVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(payFgVO.getStoreCds(), 3900));
+            payFgVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 매장브랜드 '전체' 일때
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {

@@ -1,7 +1,10 @@
 package kr.co.solbipos.sale.pay.payDay.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.pay.payDay.service.PayDayService;
@@ -31,9 +34,11 @@ import java.util.List;
 @Transactional
 public class PayDayServiceImpl implements PayDayService {
     private final PayDayMapper payDayMapper;
+    private final PopupMapper popupMapper;
 
-    public PayDayServiceImpl(PayDayMapper payDayMapper) {
+    public PayDayServiceImpl(PayDayMapper payDayMapper, PopupMapper popupMapper) {
         this.payDayMapper = payDayMapper;
+        this.popupMapper = popupMapper;
     }
 
 
@@ -48,8 +53,11 @@ public class PayDayServiceImpl implements PayDayService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = payDayVO.getStoreCds().split(",");
-        payDayVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(payDayVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(payDayVO.getStoreCds(), 3900));
+            payDayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 매장브랜드 '전체' 일때
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {

@@ -95,8 +95,10 @@ public class UptPmixVO extends PageVO {
     private String prodNm;
 
     /** 동적 컬럼 생성을 위한 쿼리 문자열*/
-   private String sQuery1;
+    private String sQuery1;
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -288,5 +290,13 @@ public class UptPmixVO extends PageVO {
 
     public void setsQuery1(String sQuery1) {
         this.sQuery1 = sQuery1;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

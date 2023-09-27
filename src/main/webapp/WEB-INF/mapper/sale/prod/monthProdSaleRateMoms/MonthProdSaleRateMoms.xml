@@ -120,11 +120,8 @@
                             </foreach>
                         </if>
                     </if>
-                    <if test='storeCds != null and storeCds != ""'>
-                        AND
-                        <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                            tsdpsd.STORE_CD = #{item}
-                        </foreach>
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND tsdpsd.STORE_CD IN (${storeCdQuery})
                     </if>
                     <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
                         AND tmps2.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
@@ -314,11 +311,8 @@
                             </foreach>
                         </if>
                     </if>
-                    <if test='storeCds != null and storeCds != ""'>
-                        AND
-                        <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                            tsdpsd.STORE_CD = #{item}
-                        </foreach>
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND tsdpsd.STORE_CD IN (${storeCdQuery})
                     </if>
                     <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
                         AND tmps2.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때

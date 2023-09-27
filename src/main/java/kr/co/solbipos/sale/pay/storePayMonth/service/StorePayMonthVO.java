@@ -97,6 +97,9 @@ public class StorePayMonthVO extends PageVO {
     /** 그룹코드 */
     private String branchCd;
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
     public String getHqOfficeCd() { return hqOfficeCd; }
 
     public void setHqOfficeCd(String hqOfficeCd) { this.hqOfficeCd = hqOfficeCd; }
@@ -295,5 +298,13 @@ public class StorePayMonthVO extends PageVO {
 
     public void setBranchCd(String branchCd) {
         this.branchCd = branchCd;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

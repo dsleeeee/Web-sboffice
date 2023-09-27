@@ -1,7 +1,11 @@
 package kr.co.solbipos.sale.prod.saleDtlChannel.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
 import kr.co.common.system.BaseEnv;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.prod.saleDtlChannel.service.SaleDtlChannelService;
@@ -34,9 +38,11 @@ import static kr.co.common.utils.DateUtil.*;
 public class SaleDtlChannelServiceImpl implements SaleDtlChannelService {
 
     private final SaleDtlChannelMapper saleDtlChannelMapper;
+    private final PopupMapper popupMapper;
 
-    public SaleDtlChannelServiceImpl(SaleDtlChannelMapper saleDtlChannelMapper) {
+    public SaleDtlChannelServiceImpl(SaleDtlChannelMapper saleDtlChannelMapper, PopupMapper popupMapper) {
         this.saleDtlChannelMapper = saleDtlChannelMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 매출상세현황(채널별) 조회 */
@@ -50,8 +56,11 @@ public class SaleDtlChannelServiceImpl implements SaleDtlChannelService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = saleDtlChannelVO.getStoreCds().split(",");
-        saleDtlChannelVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(saleDtlChannelVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(saleDtlChannelVO.getStoreCds(), 3900));
+            saleDtlChannelVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 상품 array 값 세팅
         if (saleDtlChannelVO.getProdCds() != null && !"".equals(saleDtlChannelVO.getProdCds())) {

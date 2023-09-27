@@ -1,7 +1,10 @@
 package kr.co.solbipos.sale.pay.payMonth.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.pay.payMonth.service.PayMonthService;
@@ -31,9 +34,11 @@ import java.util.List;
 @Transactional
 public class PayMonthServiceImpl implements PayMonthService {
     private final PayMonthMapper payMonthMapper;
+    private final PopupMapper popupMapper;
 
-    public PayMonthServiceImpl(PayMonthMapper payMonthMapper) {
+    public PayMonthServiceImpl(PayMonthMapper payMonthMapper, PopupMapper popupMapper) {
         this.payMonthMapper = payMonthMapper;
+        this.popupMapper = popupMapper;
     }
 
 
@@ -49,8 +54,11 @@ public class PayMonthServiceImpl implements PayMonthService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = payMonthVO.getStoreCds().split(",");
-        payMonthVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(payMonthVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(payMonthVO.getStoreCds(), 3900));
+            payMonthVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 매장브랜드 '전체' 일때
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {

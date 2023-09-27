@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.time.timeProdChannel.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.time.timeProdChannel.service.TimeProdChannelService;
@@ -30,9 +34,11 @@ import java.util.List;
 public class TimeProdChannelServiceImpl implements TimeProdChannelService {
 
     private final TimeProdChannelMapper timeProdChannelMapper;
+    private final PopupMapper popupMapper;
 
-    public TimeProdChannelServiceImpl(TimeProdChannelMapper timeProdChannelMapper) {
+    public TimeProdChannelServiceImpl(TimeProdChannelMapper timeProdChannelMapper, PopupMapper popupMapper) {
         this.timeProdChannelMapper = timeProdChannelMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 상품별시간대매출(채널별) 조회 */
@@ -46,8 +52,11 @@ public class TimeProdChannelServiceImpl implements TimeProdChannelService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = timeProdChannelVO.getStoreCds().split(",");
-        timeProdChannelVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(timeProdChannelVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(timeProdChannelVO.getStoreCds(), 3900));
+            timeProdChannelVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 상품 array 값 세팅
         if (timeProdChannelVO.getProdCds() != null && !"".equals(timeProdChannelVO.getProdCds())) {
@@ -133,8 +142,11 @@ public class TimeProdChannelServiceImpl implements TimeProdChannelService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = timeProdChannelVO.getStoreCds().split(",");
-        timeProdChannelVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(timeProdChannelVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(timeProdChannelVO.getStoreCds(), 3900));
+            timeProdChannelVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 상품 array 값 세팅
         if (timeProdChannelVO.getProdCds() != null && !"".equals(timeProdChannelVO.getProdCds())) {

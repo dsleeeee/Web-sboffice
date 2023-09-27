@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.pay.storePayDay.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.pay.storePayDay.service.StorePayDayService;
@@ -29,9 +33,11 @@ import java.util.List;
 @Transactional
 public class StorePayDayServiceImpl implements StorePayDayService {
     private final StorePayDayMapper storePayDayMapper;
+    private final PopupMapper popupMapper;
 
-    public StorePayDayServiceImpl(StorePayDayMapper storePayDayMapper) {
+    public StorePayDayServiceImpl(StorePayDayMapper storePayDayMapper, PopupMapper popupMapper) {
         this.storePayDayMapper = storePayDayMapper;
+        this.popupMapper = popupMapper;
     }
 
 
@@ -46,8 +52,11 @@ public class StorePayDayServiceImpl implements StorePayDayService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = storePayDayVO.getStoreCds().split(",");
-        storePayDayVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(storePayDayVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storePayDayVO.getStoreCds(), 3900));
+            storePayDayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 매장브랜드 '전체' 일때
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
@@ -84,8 +93,11 @@ public class StorePayDayServiceImpl implements StorePayDayService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = storePayDayVO.getStoreCds().split(",");
-        storePayDayVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(storePayDayVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storePayDayVO.getStoreCds(), 3900));
+            storePayDayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 매장브랜드 '전체' 일때
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
