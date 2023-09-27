@@ -33,13 +33,15 @@
                         </jsp:include>
                         <%--// 상품선택 모듈 멀티 선택 사용시 include --%>
                     </td>
-                    <th><s:message code="salePriceResve.select.store" /></th>
+                    <%-- 매장선택 --%>
+                    <th><s:message code="cmm.store.select"/></th>
                     <td>
-                        <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-                        <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
+                        <%-- 매장선택 모듈 사용시 include --%>
+                        <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                            <jsp:param name="targetTypeFg" value="M"/>
                             <jsp:param name="targetId" value="storeSel"/>
                         </jsp:include>
-                        <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+                        <%--// 매장선택 모듈 사용시 include --%>
                     </td>
                 </tr>
                 <c:if test="${subPriceFg == '1'}">

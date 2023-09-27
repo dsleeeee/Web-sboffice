@@ -39,15 +39,17 @@
     </tr>
     <%-- 매장선택 --%>
     <tr>
-      <%-- 매장 --%>
+      <%-- 매장선택 --%>
       <th><s:message code="cmm.store.select"/></th>
       <td>
-        <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-        <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
+        <%-- 매장선택 모듈 사용시 include --%>
+        <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+          <jsp:param name="targetTypeFg" value="M"/>
           <jsp:param name="targetId" value="storeSalePriceHistoryStore"/>
         </jsp:include>
-        <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+        <%--// 매장선택 모듈 사용시 include --%>
       </td>
+      <%-- 분류선택 --%>
       <th><s:message code="hqSalePriceHistory.prodClass" /></th>
       <td>
         <input type="text" id="searchProdClassNm" ng-model="prodClassNm" class="sb-input w70" ng-click="popUpProdClass()" style="float: left;"

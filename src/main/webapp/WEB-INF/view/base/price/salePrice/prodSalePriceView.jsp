@@ -47,20 +47,15 @@
         </jsp:include>
         <%--// 상품선택 모듈 멀티 선택 사용시 include --%>
       </td>
-      <th><s:message code="salePrice.select.store" /></th>
+      <%-- 매장선택 --%>
+      <th><s:message code="cmm.store.select"/></th>
       <td>
-          <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-          <c:if test="${momsEnvstVal == '0'}">
-            <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
-              <jsp:param name="targetId" value="store"/>
-            </jsp:include>
-          </c:if>
-          <c:if test="${momsEnvstVal == '1'}">
-            <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreMMoms.jsp" flush="true">
-              <jsp:param name="targetId" value="store"/>
-            </jsp:include>
-          </c:if>
-          <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+          <%-- 매장선택 모듈 사용시 include --%>
+          <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+            <jsp:param name="targetTypeFg" value="M"/>
+            <jsp:param name="targetId" value="store"/>
+          </jsp:include>
+          <%--// 매장선택 모듈 사용시 include --%>
       </td>
     </tr>
     <c:if test="${subPriceFg == '1'}">
