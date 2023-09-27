@@ -46,15 +46,16 @@
                 </div>
             </td>
         </tr>
-        <%-- 매장선택 --%>
         <tr>
-            <th><s:message code="salePriceResve.select.store" /></th>
+            <%-- 매장선택 --%>
+            <th><s:message code="cmm.store.select"/></th>
             <td>
-                <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-                <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
+                <%-- 매장선택 모듈 사용시 include --%>
+                <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                    <jsp:param name="targetTypeFg" value="S"/>
                     <jsp:param name="targetId" value="searchStore"/>
                 </jsp:include>
-                <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+                <%--// 매장선택 모듈 사용시 include --%>
             </td>
             <th><s:message code="salePriceResve.select.prodClass" /></th>
             <td>
