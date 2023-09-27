@@ -27,7 +27,6 @@
       <col class="w35" />
     </colgroup>
     <tbody>
-    <%-- 매장선택 --%>
     <tr>
       <%-- 매장선택 --%>
       <th><s:message code="cmm.store.select"/></th>
