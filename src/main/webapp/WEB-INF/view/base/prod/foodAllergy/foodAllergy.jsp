@@ -34,8 +34,8 @@
         </table>
 
         <%-- left --%>
-        <div class="wj-TblWrap mt20 mb20 w40 fl">
-            <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
+        <div class="wj-TblWrap mt10 mb20 w40 fl">
+            <div class="wj-TblWrapBr mr10 pd10" style="height:470px;">
                 <s:message code="foodAllergy.foodAllergy"/>
                 <div class="updownSet oh mb10">
                     <button class="btn_skyblue" id="btnFoodAllergyAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
@@ -73,8 +73,8 @@
     </div>
 
     <%--right--%>
-    <div class="wj-TblWrap mt20 mb20 w60 fr" ng-controller="foodAllergyDetailCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
+    <div class="wj-TblWrap mt10 mb20 w60 fr" ng-controller="foodAllergyDetailCtrl">
+        <div class="wj-TblWrapBr pd10" style="height:470px; overflow-y: hidden;">
             <s:message code="foodAllergy.allergyProd"/>
             <label id="lblRecipesCd"></label>
             <label id="lblRecipesNm"></label>

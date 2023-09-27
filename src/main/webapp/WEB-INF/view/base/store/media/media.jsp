@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
-<div class="subCon" ng-controller="mediaCtrl" id="mediaView" style="display: none;">
+<div class="subCon" ng-controller="mediaCtrl" id="mediaView" style="display: none;padding: 10px 20px 40px">
   <div class="searchBar">
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
@@ -95,7 +95,7 @@
     </tbody>
   </table>
 
-  <div class="mt20 oh sb-select dkbr">
+  <div class="mt10 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <wj-combo-box
             class="w100px fl"

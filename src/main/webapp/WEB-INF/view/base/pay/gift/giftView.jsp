@@ -24,8 +24,8 @@
     </div>
 
     <%-- 상품권분류등록 --%>
-    <div class="mb20 mt20" >
-      <div class="wj-TblWrapBr mr10 pd20" style="height:400px;">
+    <div class="mt10" >
+      <div class="wj-TblWrapBr pd10" style="height:400px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='gift.regist.class' /></span>
           <%-- 페이지 스케일  --%>
@@ -74,7 +74,7 @@
           </wj-flex-grid>
         </div>
         <%-- 페이지 리스트 --%>
-        <div class="pageNum mt20">
+        <div class="pageNum mt10">
           <%-- id --%>
           <ul id="giftClassCtrlPager" data-size="10">
           </ul>
@@ -84,8 +84,8 @@
     </div>
   </div>
   <%-- 상품권등록  --%>
-  <div class="mb40" ng-controller="giftCtrl">
-    <div class="wj-TblWrapBr mr10 pd20" style="height:400px;">
+  <div class="mt10" ng-controller="giftCtrl">
+    <div class="wj-TblWrapBr pd10" style="height:400px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='gift.regist.gift' /> <span id="giftSubTitle"></span> </span>
         <%-- 페이지 스케일  --%>
@@ -131,7 +131,7 @@
       </div>
 
       <%-- 페이지 리스트 --%>
-      <div class="pageNum mt20">
+      <div class="pageNum mt10">
         <%-- id --%>
         <ul id="giftCtrlPager" data-size="10">
         </ul>

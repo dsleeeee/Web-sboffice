@@ -41,8 +41,8 @@
     <%-- 선택한 분류 경로 안내 --%>
 
     <%-- left(대분류) --%>
-    <div class="wj-TblWrap mt20 mb20 w33 fl">
-        <div class="wj-TblWrapBr mr10 pd20" style="height:600px;">
+    <div class="wj-TblWrap mt10 mb20 w33 fl">
+        <div class="wj-TblWrapBr mr10 pd10" style="height:600px;">
             <span class="bk lh30" id="spLevel1"><s:message code='info.prodClassLevel1' /></span>
             <div class="updownSet oh mb10 pd5" id="divBtnLevel1">
                 <span class="fl bk lh30"><s:message code='info.prodClassLevel1' /></span>
@@ -89,8 +89,8 @@
     </div>
 
     <%-- mid(중분류) --%>
-    <div class="wj-TblWrap mt20 mb20 w33 fl" ng-controller="prodClassLevel2Ctrl">
-        <div class="wj-TblWrapBr mr10 pd20" style="height:600px;">
+    <div class="wj-TblWrap mt10 mb20 w33 fl" ng-controller="prodClassLevel2Ctrl">
+        <div class="wj-TblWrapBr mr10 pd10" style="height:600px;">
             <span class="bk lh30" id="spLevel2"><s:message code='info.prodClassLevel2' /></span>
             <div class="updownSet oh mb10 pd5" id="divBtnLevel2">
                 <span class="fl bk lh30"><s:message code='info.prodClassLevel2' /></span>
@@ -136,8 +136,8 @@
     <%-- mid(중분류) --%>
 
     <%-- right(소분류) --%>
-    <div class="wj-TblWrap mt20 mb20 w33 fl" ng-controller="prodClassLevel3Ctrl">
-        <div class="wj-TblWrapBr mr10 pd20" style="height:600px;">
+    <div class="wj-TblWrap mt10 mb20 w33 fl" ng-controller="prodClassLevel3Ctrl">
+        <div class="wj-TblWrapBr pd10" style="height:600px;">
             <span class="bk lh30" id="spLevel3"><s:message code='info.prodClassLevel3' /></span>
             <div class="updownSet oh mb10 pd5" id="divBtnLevel3">
                 <span class="fl bk lh30"><s:message code='info.prodClassLevel3' /></span>

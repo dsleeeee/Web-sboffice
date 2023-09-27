@@ -7,7 +7,7 @@
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
-<div class="subCon" id="prodClassView" ng-controller="prodClassCtrl">
+<div class="subCon" id="prodClassView" ng-controller="prodClassCtrl" style="padding: 10px 20px 40px;">
   <%--searchTbl--%>
   <div class="searchBar">
     <a href="#" class="open fl"><s:message code="prodInfoSearch.prodClass"/></a>

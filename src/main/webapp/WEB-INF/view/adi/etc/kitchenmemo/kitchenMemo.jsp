@@ -14,7 +14,7 @@
     <a href="#" class="open fl">${menuNm}</a>
   </div>
 
-  <div class="mt20 updownSet oh">
+  <div class="mt10 updownSet oh">
     <div class="txtIn">
       <button class="btn_skyblue" id="addBtn" style="display: none;" ng-click="addRow()">
         <s:message code="cmm.add" />
@@ -29,7 +29,7 @@
   </div>
 
   <div id="grid" class="w100">
-    <div class="wj-gridWrap mt10" style="height:370px; overflow-y: hidden;">
+    <div class="wj-gridWrap mt5" style="height:370px; overflow-y: hidden;">
       <div class="row">
         <wj-flex-grid
           autoGenerateColumns="false"

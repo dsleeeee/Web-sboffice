@@ -127,7 +127,7 @@
     </div>
 
     <div class="wj-TblWrap mt10 mb20 w40 fl">
-        <div class="wj-TblWrapBr mr10 pd20" style="height:480px;">
+        <div class="wj-TblWrapBr mr10 pd10" style="height:480px;">
             <div class="sb-select dkbr mb10 oh">
             </div>
             <div class="w100 mt10 mb20">
@@ -162,7 +162,7 @@
     </div>
 
     <div class="wj-TblWrap mt10 mb20 w60 fr">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:480px; overflow-y: hidden;">
+        <div class="wj-TblWrapBr ml10 pd10" style="height:480px; overflow-y: hidden;">
 
             <label id="prodInfo"></label>
             <input type="hidden" id="hdProdCd"/>

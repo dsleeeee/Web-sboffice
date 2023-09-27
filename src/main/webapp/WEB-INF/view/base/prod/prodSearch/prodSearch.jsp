@@ -183,7 +183,7 @@
     </table>
     <%--//searchTbl--%>
 
-    <div class="mt20 oh sb-select dkbr">
+    <div class="mt10 oh sb-select dkbr">
         <%-- 전체상품엑셀다운로드 --%>
         <button class="btn_skyblue ml5 fr" ng-click="excelDownloadTotal()" ><s:message code="cmm.excel.downTotal"/></button>
         <%-- 조회조건내역엑셀다운로드 --%>

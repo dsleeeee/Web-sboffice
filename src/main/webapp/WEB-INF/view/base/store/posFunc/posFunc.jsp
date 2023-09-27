@@ -73,9 +73,9 @@
     </tbody>
   </table>
 
-  <div class="wj-TblWrap mt40">
+  <div class="wj-TblWrap mt10">
     <div class="w40 fl" style="overflow-x: visible">
-      <div class="wj-TblWrapBr mr10 pd20" style="height:700px;">
+      <div class="wj-TblWrapBr mr10 pd10" style="height:700px;">
         <div class="sb-select dkbr mb10 oh">
           <%-- 페이지스케일 --%>
           <%--<div id="listScaleBox" class="w100px fl" style="display: none;"></div>--%>
@@ -105,7 +105,7 @@
     </div>
 
     <div class="w60 fr">
-      <div class="wj-TblWrapBr ml10 pd20" style="height:700px;">
+      <div class="wj-TblWrapBr pd10" style="height:700px;">
         <%-- 포스기능 인증관리--%>
         <c:import url="/WEB-INF/view/base/store/posFunc/posFuncAuth.jsp">
           <c:param name="menuCd" value="${menuCd}"/>

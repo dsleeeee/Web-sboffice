@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
-<div class="subCon" ng-controller="verManageV2Ctrl" id="verManageV2View">
+<div class="subCon" ng-controller="verManageV2Ctrl" id="verManageV2View" style="padding: 10px 20px 40px">
   <div class="searchBar">
     <a href="#" class="open fl">
       <c:if test="${orgnFg != 'HQ'}">${menuNm}</c:if>
@@ -66,7 +66,7 @@
     </tbody>
   </table>
 
-  <div class="mt20 oh sb-select dkbr">
+  <div class="mt10 oh sb-select dkbr">
 
     <%-- 페이지 스케일  --%>
     <wj-combo-box

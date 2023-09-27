@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<div class="subCon" id ="hqSalePriceResveExcelUploadView" style="display: none">
+<div class="subCon" id ="hqSalePriceResveExcelUploadView" style="display: none;padding: 10px 20px 40px;">
 
     <div ng-controller="hqSalePriceResveExcelUploadSampleCtrl">
         <%-- 조회조건 --%>

@@ -9,7 +9,7 @@
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 <c:set var="brandUseFg" value="${brandUseFg}" />
 
-<div class="subCon" ng-controller="prodSoldOutCtrl" id="prodSoldOutView">
+<div class="subCon" ng-controller="prodSoldOutCtrl" id="prodSoldOutView" style="padding: 10px 20px 40px;">
     <%--searchTbl--%>
     <div class="searchBar">
         <a href="#" class="open fl"><s:message code="soldOut.prod" /></a>

@@ -17,7 +17,7 @@
     </ul>
 
     <%-- 왼쪽  --%>
-    <div class="wj-TblWrapBr oh mr10 pd20" style="height:560px;">
+    <div class="wj-TblWrapBr oh mr10 pd10" style="height:560px;">
         <div class="updownSet mb10">
             <div class="sb-select w150px fl">
                 <div id="posListBox"></div>

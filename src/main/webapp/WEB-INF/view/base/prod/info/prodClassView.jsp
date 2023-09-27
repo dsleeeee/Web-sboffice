@@ -18,10 +18,10 @@
     <s:message code="info.setting.productClass"/>
   </h2>
 
-  <div class="wj-TblWrap mt20">
+  <div class="wj-TblWrap mt10">
     <%-- 왼쪽 --%>
     <div class="w50 fl">
-      <div class="wj-TblWrapBr ml10 pd20" style="height:540px;">
+      <div class="wj-TblWrapBr ml10 pd10" style="height:540px;">
         <div class="sb-select dkbr mb10 oh">
           <div class="fl">
             <%-- 전체펼치기 --%>

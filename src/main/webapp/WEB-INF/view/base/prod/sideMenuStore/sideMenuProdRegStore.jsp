@@ -9,7 +9,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
-<div id="sideMenuProdRegStoreView" class="subCon" style="display: none;">
+<div id="sideMenuProdRegStoreView" class="subCon" style="display: none;padding: 10px 20px 40px;">
     <div ng-controller="sideMenuProdRegStoreCtrl">
 
         <%-- 조회조건 --%>

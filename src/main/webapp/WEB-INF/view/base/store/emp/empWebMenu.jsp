@@ -190,7 +190,7 @@
             </tbody>
         </table>
         <%-- left (웹메뉴 보여주는 그리드) --%>
-        <div class="wj-TblWrap mt20 mb20 w45 fl">
+        <div class="wj-TblWrap mt10 mb20 w45 fl">
             <div class="wj-TblWrapBr mr10 pd10" style="height:535px;">
                 <div class="wj-gridWrap" style="height:500px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
@@ -221,8 +221,8 @@
     <%-- right - 사원리스트 --%>
     <div class="wj-TblWrap w55">
         <%-- 사용사원 grid --%>
-        <div class="wj-TblWrap mt20 mb5 w100 fl" ng-controller="useEmpCtrl">
-            <div class="wj-TblWrapBr mr10 pd10 " style="height:260px;">
+        <div class="wj-TblWrap mt10 w100 fl" ng-controller="useEmpCtrl">
+            <div class="wj-TblWrapBr pd10 " style="height:260px;">
                 <div class="ml5">
                     <span class="bk"><s:message code='empWebMenu.useEmp' /></span>
                     <span class="bk lh30" id="lblMenu"></span>
@@ -265,8 +265,8 @@
         </div>
 
         <%-- 미사용 사원 grid --%>
-        <div class="wj-TblWrap mt10 mb5 w100 fr" ng-controller="unusedEmpCtrl">
-            <div class="wj-TblWrapBr mr10 pd10 " style="height:260px;">
+        <div class="wj-TblWrap mt10 w100 fr" ng-controller="unusedEmpCtrl">
+            <div class="wj-TblWrapBr pd10 " style="height:260px;">
                 <div class="ml5">
                     <span class="bk"><s:message code='empWebMenu.unusedEmp' /></span>
                 </div>

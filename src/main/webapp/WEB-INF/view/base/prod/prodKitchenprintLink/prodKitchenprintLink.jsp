@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
 <div id="prodKitchenprintLinkView">
-<div class="subCon" ng-controller="prodKitchenprintLinkCtrl">
+<div class="subCon" ng-controller="prodKitchenprintLinkCtrl" style="padding: 10px 20px 40px;">
   <%--searchTbl--%>
   <div class="searchBar flddUnfld">
     <a href="#" class="open fl">${menuNm}</a>
@@ -143,9 +143,8 @@
     </tbody>
   </table>
   <%--//searchTbl--%>
-    <div class="w28 fl mt40">
-      <div class="wj-TblWrapBr ml10 pd20 ng-scope" >
-
+    <div class="w28 fl mt10">
+      <div class="wj-TblWrapBr pd10 ng-scope" >
       <%--위즈모 테이블--%>
       <div class="wj-gridWrap" style="height: 330px; overflow-x: hidden; overflow-y: hidden;">
         <wj-flex-grid
@@ -169,8 +168,8 @@
   </div>
 </div>
   <%-- 연결된 프린터 --%>
-<div class="w35 fl">
-  <div class="wj-TblWrapBr ml10 pd20 ng-scope"  ng-controller="prodKitchenprintLinkedCtrl">
+<div class="w35 fl" style="margin-top:-30px;">
+  <div class="wj-TblWrapBr ml10 pd10 ng-scope"  ng-controller="prodKitchenprintLinkedCtrl">
 
     <div id="srchSysStatFg2" style="display: none"></div>
 
@@ -205,8 +204,8 @@
   </div>
 </div>
   <%-- 안연결된 프린터 --%>
-<div class="w35 fl">
-  <div class="wj-TblWrapBr ml10 pd20 ng-scope" ng-controller="prodKitchenprintUnlinkCtrl">
+<div class="w35 fl" style="margin-top:-30px;">
+  <div class="wj-TblWrapBr ml10 pd10 ng-scope" ng-controller="prodKitchenprintUnlinkCtrl">
 
     <div class="oh sb-select mb10">
       <span class="fl bk lh30"></span>

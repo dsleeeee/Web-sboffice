@@ -9,7 +9,7 @@
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 <c:set var="baseUrl" value="/pos/confg/verRecv/verStore/"/>
 
-<div class="subCon" id="verStoreView">
+<div class="subCon" id="verStoreView" style="padding: 10px 20px 40px">
   <div class="searchBar">
     <a href="#" class="open fl">
           <c:if test="${orgnFg != 'HQ'}">${menuNm}</c:if>
@@ -80,8 +80,8 @@
     </table>
 
     <%--- left --%>
-    <div class="wj-TblWrap mt20 mb20 w30 fl" style="overflow-y: hidden">
-      <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
+    <div class="wj-TblWrap mt10 mb20 w30 fl" style="overflow-y: hidden">
+      <div class="wj-TblWrapBr mr10 pd10" style="height:470px;">
         <span><s:message code="verRecv.verInfo" /></span>
         <div class="sb-select dkbr mb10 oh">
         </div>
@@ -116,8 +116,8 @@
   </div>
 
   <%-- right --%>
-  <div class="wj-TblWrap mt20 mb20 w70 fr" ng-controller="verInfoDtlCtrl" style="overflow-y: hidden;">
-    <div class="wj-TblWrapBr ml10 pd20" style="height:470px;">
+  <div class="wj-TblWrap mt10 mb20 w70 fr" ng-controller="verInfoDtlCtrl" style="overflow-y: hidden;">
+    <div class="wj-TblWrapBr pd10" style="height:470px;">
       <span><s:message code="verRecv.recvStore"/></span>
       <div class="sb-select dkbr mb10 oh">
       </div>

@@ -7,7 +7,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
-<div id="tableOrderKeyMapRegistView" class="subCon" style="display: none;">
+<div id="tableOrderKeyMapRegistView" class="subCon" style="display: none;padding: 10px 20px 40px">
 
     <div ng-controller="tableOrderKeyMapRegistCtrl">
         <div class="searchBar">
@@ -28,8 +28,8 @@
             </div>
         </div>
 
-        <div class="wj-TblWrap mt10 mb20 w25 fl">
-            <div class="wj-TblWrapBr mr10 pd20" style="height:600px;">
+        <div class="wj-TblWrap w25 fl">
+            <div class="wj-TblWrapBr pd10" style="height:600px;">
                 <div class="updownSet oh mb10 pd5" id="divBtnCls" style="visibility: hidden; height:60px;">
                     <div <c:choose><c:when test="${orgnFg == 'STORE' && kioskKeyEnvstVal == '0'}">style="visibility: hidden"</c:when><c:otherwise></c:otherwise></c:choose>>
                         <button class="btn_up" id="btnUpCls" ng-click="rowMoveUpCls()" >
@@ -77,8 +77,8 @@
         </div>
     </div>
 
-    <div class="wj-TblWrap mt10 mb20 w35 fl" ng-controller="tableOrderKeyMapCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:600px; overflow-y: hidden;">
+    <div class="wj-TblWrap w35 fl" ng-controller="tableOrderKeyMapCtrl">
+        <div class="wj-TblWrapBr ml10 pd10" style="height:600px; overflow-y: hidden;">
             <span class="fl bk lh30" id="spanTuKeyCls"></span>
             <div class="updownSet oh mb10 pd5" id="divBtnKeyMap" style="visibility: hidden;">
                 <button class="btn_up" id="btnUpKeyMap" ng-click="rowMoveUpKeyMap()" >
@@ -127,8 +127,8 @@
         </div>
     </div>
 
-    <div class="wj-TblWrap mt10 mb20 w40 fl" ng-controller="tableOrderProdCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:600px; overflow-y: hidden;">
+    <div class="wj-TblWrap w40 fl" ng-controller="tableOrderProdCtrl">
+        <div class="wj-TblWrapBr ml10 pd10" style="height:600px; overflow-y: hidden;">
             <table class="tblType01">
                 <colgroup>
                     <col class="w13" />

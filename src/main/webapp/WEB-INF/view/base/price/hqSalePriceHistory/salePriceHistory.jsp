@@ -9,7 +9,7 @@
 <div class="con">
     <div class="tabType1" ng-controller="salePriceHistoryCtrl" ng-init="init()">
       <%-- 탭 --%>
-        <ul class="subTab mt20">
+        <ul>
           <%-- 매장판매가변경이력 --%>
           <li><a id="storeSalePriceHistoryTab" href="#" class="on" ng-click="storeSalePriceHistoryShow();"><s:message code="hqSalePriceHistory.storeSalePriceHistory" /></a></li>
           <%-- 본사판매가변경이력 --%>
