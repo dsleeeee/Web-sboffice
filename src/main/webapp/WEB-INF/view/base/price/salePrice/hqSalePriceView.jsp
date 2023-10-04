@@ -30,15 +30,16 @@
       <col class="w35" />
     </colgroup>
     <tbody>
-    <%-- 매장선택 --%>
     <tr>
       <th><s:message code="salePrice.select.prodClass" /></th>
-      <td colspan="3">
+      <td>
         <input type="text" id="searchProdClassNm" ng-model="prodClassNm" class="sb-input w70" ng-click="popUpProdClass()" style="float: left;"
                placeholder="선택" readonly />
         <input type="hidden" id="searchProdClassCd" ng-model="prodClassCd" disabled/>
         <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
       </td>
+      <td></td>
+      <td></td>
     </tr>
     <%-- 판매가 적용 옵션 (//todo 엑셀업로드 기능 추가시, 해당 기능 추가) --%>
     <tr style="display:none;">

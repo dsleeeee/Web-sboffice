@@ -41,7 +41,7 @@
                   <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
               </div>
           </td>
-          <th></th>
+          <td></td>
           <td></td>
       </tr>
       <c:if test="${sessionInfo.orgnFg == 'HQ'}">
