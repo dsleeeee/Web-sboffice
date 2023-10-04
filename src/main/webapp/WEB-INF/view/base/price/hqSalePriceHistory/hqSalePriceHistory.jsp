@@ -6,7 +6,7 @@
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 
-<div id="hqSalePriceHistoryView" class="subCon" style="display: none;" ng-controller="hqSalePriceHistoryCtrl">
+<div id="hqSalePriceHistoryView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="hqSalePriceHistoryCtrl">
   <div class="searchBar">
     <a href="#" class="open fl"><s:message code="hqSalePriceHistory.hqSalePriceHistory" /></a>
     <%-- 조회 --%>

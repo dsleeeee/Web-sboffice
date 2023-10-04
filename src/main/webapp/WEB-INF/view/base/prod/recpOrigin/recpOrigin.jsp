@@ -9,7 +9,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
-<div id="recpOriginView" class="subCon" style="display: none;">
+<div id="recpOriginView" class="subCon" style="display: none;padding: 10px 20px 40px;">
 
     <div ng-controller="recpOriginCtrl">
         <%--searchTbl--%>
@@ -48,8 +48,8 @@
         <%--//searchTbl--%>
 
         <%-- left --%>
-        <div class="wj-TblWrap mt20 mb20 w40 fl">
-            <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
+        <div class="wj-TblWrap mt10 mb20 w40 fl">
+            <div class="wj-TblWrapBr mr10 pd10" style="height:470px;">
                 <s:message code="recpOrigin.recpOrigin"/>
                 <div class="updownSet oh mb10">
                     <button class="btn_skyblue" id="btnRecpOriginAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
@@ -87,8 +87,8 @@
     </div>
 
     <%--right--%>
-    <div class="wj-TblWrap mt20 mb20 w60 fr" ng-controller="recpOriginDetailCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
+    <div class="wj-TblWrap mt10 mb10 w60 fr" ng-controller="recpOriginDetailCtrl">
+        <div class="wj-TblWrapBr pd10" style="height:470px; overflow-y: hidden;">
             <s:message code="recpOrigin.recpProd"/>
             <label id="lblRecipesCd"></label>
             <label id="lblRecipesNm"></label>

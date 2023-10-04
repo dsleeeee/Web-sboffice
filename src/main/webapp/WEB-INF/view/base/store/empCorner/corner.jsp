@@ -7,12 +7,12 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 
-<div id="empCornerCornerView" class="subCon" style="display: none;">
+<div id="empCornerCornerView" class="subCon" style="display: none;padding: 10px 20px 40px;">
 
     <div ng-controller="empCornerCornerCtrl">
         <%--코너정보--%>
-        <div class="wj-TblWrap mt20 mb20 w40 fl">
-            <div class="wj-TblWrapBr mr10 pd20" style="height:470px; overflow-y: hidden;" >
+        <div class="wj-TblWrap mb20 w40 fl">
+            <div class="wj-TblWrapBr mr10 pd10" style="height:470px; overflow-y: hidden;" >
                 <h3 class="lh30" style="font-size:0.75em; border:1px solid #ccc; background:#e8e8e8; padding:5px 15px; color:#222; min-width:150px; position:relative;">
                     <s:message code="empCorner.corner.corner" />
                 </h3>
@@ -39,8 +39,8 @@
     </div>
 
     <%--관리사원--%>
-    <div class="wj-TblWrap mt20 mb20 w30 fl" ng-controller="cornerManageEmpCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
+    <div class="wj-TblWrap mb20 w30 fl" ng-controller="cornerManageEmpCtrl">
+        <div class="wj-TblWrapBr mr10 pd10" style="height:470px; overflow-y: hidden;">
             <h3 class="lh30" style="font-size:0.75em; border:1px solid #ccc; background:#e8e8e8; padding:5px 15px; color:#222; min-width:150px; position:relative;">
                 <s:message code="empCorner.corner.manage" />
                 <span class="fr" style="font-size:1em;" id="btnDelete">
@@ -74,8 +74,8 @@
     <%--관리사원--%>
 
     <%--미관리사원--%>
-    <div class="wj-TblWrap mt20 mb20 w30 fr" ng-controller="cornerNoManageEmpCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
+    <div class="wj-TblWrap mb20 w30 fr" ng-controller="cornerNoManageEmpCtrl">
+        <div class="wj-TblWrapBr pd10" style="height:470px; overflow-y: hidden;">
             <h3 class="lh30" style="font-size:0.75em; border:1px solid #ccc; background:#e8e8e8; padding:5px 15px; color:#222; min-width:150px; position:relative;">
                 <s:message code="empCorner.corner.noManage" />
                 <span class="fr" style="font-size:1em;" id="btnAdd">

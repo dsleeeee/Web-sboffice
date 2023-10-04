@@ -9,7 +9,7 @@
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 <%--<c:set var="baseUrl" value="/pos/confg/verRecv/storeRecv/"/>--%>
 
-<div class="subCon" ng-controller="storeRecvCtrl" id="storeRecvView">
+<div class="subCon" ng-controller="storeRecvCtrl" id="storeRecvView" style="padding: 10px 20px 40px">
   <div class="searchBar">
     <a href="#" class="open fl">
       <c:if test="${orgnFg != 'HQ'}">${menuNm}</c:if>

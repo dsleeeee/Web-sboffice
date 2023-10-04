@@ -8,7 +8,7 @@
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 <c:set var="userId" value="${sessionScope.sessionInfo.userId}" />
 
-<div id="kioskKeyMapRegistView" name="kioskKeyMapRegistView" class="subCon" style="display: none;">
+<div id="kioskKeyMapRegistView" name="kioskKeyMapRegistView" class="subCon" style="display: none;padding: 10px 20px 40px;">
 
     <div ng-controller="kioskKeyMapRegistCtrl">
         <div class="searchBar">
@@ -140,7 +140,7 @@
         </div>
 
         <div class="wj-TblWrap mt10 mb20 w25 fl">
-            <div class="wj-TblWrapBr mr10 pd20" style="height:600px;">
+            <div class="wj-TblWrapBr pd10" style="height:600px;">
                 <div class="mb5">
                     <label id="lbTuClsType"></label>
                     <input type="hidden" id="tuClsTypeInfo"/>
@@ -245,7 +245,7 @@
     </div>
 
     <div class="wj-TblWrap mt10 mb20 w35 fl" ng-controller="kioskKeyMapCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:600px; overflow-y: hidden;">
+        <div class="wj-TblWrapBr ml10 pd10" style="height:600px; overflow-y: hidden;">
             <span class="fl bk lh30" id="spanTuKeyCls"></span>
             <div class="updownSet oh mb10 pd5" id="divBtnKeyMap" style="visibility: hidden;">
                 <button class="btn_up" id="btnUpKeyMap" ng-click="rowMoveUpKeyMap()" >
@@ -296,7 +296,7 @@
     </div>
 
     <div class="wj-TblWrap mt10 mb20 w40 fl" ng-controller="kioskProdCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:600px; overflow-y: hidden;">
+        <div class="wj-TblWrapBr ml10 pd10" style="height:600px; overflow-y: hidden;">
             <table class="tblType01">
                 <colgroup>
                     <col class="w13" />

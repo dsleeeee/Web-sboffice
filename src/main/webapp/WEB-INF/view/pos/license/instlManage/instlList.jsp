@@ -8,7 +8,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 <c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
 
-<div id="instlListView" class="subCon" style="display: none;">
+<div id="instlListView" class="subCon" style="display: none;padding: 10px 20px 40px;">
 
     <div ng-controller="instlListCtrl">
         <%-- 조회조건 --%>
@@ -86,8 +86,8 @@
         </table>
 
         <%--left--%>
-        <div class="wj-TblWrap mt20 mb20 w40 fl">
-            <div class="wj-TblWrapBr mr10 pd20" style="height:420px;">
+        <div class="wj-TblWrap mt10 mb20 w40 fl">
+            <div class="wj-TblWrapBr mr10 pd10" style="height:420px;">
                 <div class="w100 mt10 mb20">
                     <div class="wj-gridWrap" style="height:300px; overflow-x: hidden; overflow-y: hidden;">
                         <wj-flex-grid
@@ -117,8 +117,8 @@
     </div>
 
     <%--right--%>
-    <div class="wj-TblWrap mt20 mb20 w60 fr" ng-controller="instlListDetailCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:420px; overflow-y: hidden;">
+    <div class="wj-TblWrap mt10 mb20 w60 fr" ng-controller="instlListDetailCtrl">
+        <div class="wj-TblWrapBr ml10 pd10" style="height:420px; overflow-y: hidden;">
             <label id="lblAgencyCdInstl"></label> <label id="lblAgencyNmInstl"></label> <label id="lblPosCntInstl"></label> <label id="lblRestCntInstl"></label>
             <div class="w100 mt10 mb20">
                 <div class="wj-gridWrap" style="height:300px; overflow-x: hidden; overflow-y: hidden;">

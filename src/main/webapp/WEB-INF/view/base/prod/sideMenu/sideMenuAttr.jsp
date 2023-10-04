@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 
-<div id="attrArea" class="wj-TblWrap mt20 ng-cloak" ng-hide="isAttrTab">
+<div id="attrArea" class="wj-TblWrap mt5 ng-cloak" ng-hide="isAttrTab">
   <div class="w50 fl">
     <%--위즈모 테이블--%>
     <div id="gridAttrClass" class="wj-TblWrapBr mr10 pd5" style="height: 480px;" ng-controller="sideMenuAttrClassCtrl">
@@ -51,7 +51,7 @@
 
   <div class="w50 fl">
     <%--위즈모 테이블--%>
-    <div id="gridAttrCd" class="wj-TblWrapBr ml10 pd5" style="height: 480px;" ng-controller="sideMenuAttrAttrCtrl">
+    <div id="gridAttrCd" class="wj-TblWrapBr pd5" style="height: 480px;" ng-controller="sideMenuAttrAttrCtrl">
       <div class="updownSet oh mb10" style="height:60px;">
         <span class="fl bk lh30"><s:message code='sideMenu.tab.attr.attr' /><span id="sideMenuAttrTitle"></span> </span>
           <br>

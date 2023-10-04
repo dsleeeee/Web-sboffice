@@ -20,8 +20,8 @@
     </div>
   </div>
 
-  <div class="wj-TblWrap mt20 mb20 w50 fl" ng-controller="prodOptionCtrl">
-    <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
+  <div class="wj-TblWrap mt10 mb20 w50 fl" ng-controller="prodOptionCtrl">
+    <div class="wj-TblWrapBr mr10 pd10" style="height:470px;">
       <s:message code="prodOption.optionGrp"/>
       <div class="updownSet oh mb10">
         <button class="btn_skyblue" id="btnOptionGrpAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
@@ -55,8 +55,8 @@
     <%--//위즈모 테이블--%>
   </div>
 
-  <div class="wj-TblWrap mt20 mb20 w50 fl" ng-controller="prodOptionValCtrl">
-    <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
+  <div class="wj-TblWrap mt10 mb20 w50 fl" ng-controller="prodOptionValCtrl">
+    <div class="wj-TblWrapBr pd10" style="height:470px;">
       <s:message code="prodOption.optionVal"/><span id="optionGrpTitle"></span>
       <div class="updownSet oh mb10">
         <button class="btn_skyblue" id="btnOptionValAddWithProd" ng-click="addRowWithProd()"><s:message code='prodOption.addWithProd' /></button>

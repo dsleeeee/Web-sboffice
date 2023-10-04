@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
-<div id="menuGroupView" name="menuGroupView" class="subCon" style="display: none;">
+<div id="menuGroupView" name="menuGroupView" class="subCon" style="display: none;padding: 10px 20px 40px;">
 
     <div ng-controller="menuGroupCtrl">
         <%-- 제목 및 조회버튼  --%>
@@ -53,7 +53,7 @@
         </table>
 
         <%-- left (메뉴그룹관리-메뉴그룹등록 grid) --%>
-        <div class="wj-TblWrap mt20 mb20 w30 fl" style="width: 275px;">
+        <div class="wj-TblWrap mt10 mb20 w30 fl" style="width: 275px;">
             <div class="wj-TblWrapBr mr10 pd10" style="height:710px;">
                 <div class="updownSet oh mb10 pd5">
                     <span class="fl bk lh30"><s:message code='storeType.menuGroupManage' /></span>
@@ -98,7 +98,7 @@
     <div class="wj-TblWrap fr" style="width:calc(100% - 275px);">
 
         <%-- 메뉴그룹관리-상품연결 grid --%>
-        <div class="wj-TblWrap mt20 mb5 w50 fl" ng-controller="prodMappingCtrl">
+        <div class="wj-TblWrap mt10 mb5 w50 fl" ng-controller="prodMappingCtrl">
             <div class="wj-TblWrapBr mr10 pd10" style="height:710px;">
                 <div class="ml5">
                     <span class="bk"><s:message code='storeType.prodMapping' /></span>
@@ -141,7 +141,7 @@
         </div>
 
         <%-- 메뉴그룹관리-상품선택 grid --%>
-        <div class="wj-TblWrap mt20 mb5 w50 fr" ng-controller="prodSelectCtrl">
+        <div class="wj-TblWrap mt10 mb5 w50 fr" ng-controller="prodSelectCtrl">
             <div class="wj-TblWrapBr mr10 pd10" style="height:710px;">
                 <table class="tblType01">
                     <colgroup>

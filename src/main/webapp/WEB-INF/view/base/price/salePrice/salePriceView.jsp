@@ -10,7 +10,7 @@
 <div class="con">
     <div class="tabType1" ng-controller="sideMenuCtrl">
       <%-- 탭 --%>
-        <ul class="subTab mt20">
+        <ul>
           <%-- 상품별 판매가 관리 --%>
           <li><a id="prodSalePrice" href="#" class="on" ng-click="changeTab('P');"><s:message code="salePrice.prodSalePrice" /></a></li>
           <%-- 매장별 판매가 관리 --%>

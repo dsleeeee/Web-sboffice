@@ -8,7 +8,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 <c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
 
-<div id="agencyListView" class="subCon" style="display: none;" ng-controller="agencyListCtrl">
+<div id="agencyListView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="agencyListCtrl">
 
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">
@@ -102,7 +102,7 @@
         </tbody>
     </table>
 
-    <div class="mt40 oh sb-select dkbr">
+    <div class="mt10 oh sb-select dkbr">
         <%-- 페이지 스케일  --%>
         <wj-combo-box
             class="w100px fl"

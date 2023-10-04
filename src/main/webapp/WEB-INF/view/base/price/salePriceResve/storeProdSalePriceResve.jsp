@@ -6,7 +6,7 @@
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 
-<div class="subCon" id="prodSalePriceResveArea" ng-controller="storeProdSalePriceResveCtrl">
+<div class="subCon" id="prodSalePriceResveArea" ng-controller="storeProdSalePriceResveCtrl" style="padding: 10px 20px 40px;">
     <div class="searchBar">
         <a href="#" class="open fl"><s:message code="salePriceResve.prodSalePrice" /></a>
         <%-- 조회 --%>

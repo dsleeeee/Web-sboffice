@@ -27,8 +27,8 @@
     </div>
 
     <%-- 쿠폰분류등록 --%>
-    <div class="mb20 mt20" >
-      <div class="wj-TblWrapBr mr10 pd20" style="height:400px;">
+    <div class="mt10" >
+      <div class="wj-TblWrapBr pd10" style="height:400px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='coupon.regist.class' /></span>
           <%-- 페이지 스케일  --%>
@@ -94,8 +94,8 @@
   </div>
 
   <%-- 쿠폰등록  --%>
-  <div class="mt20 mb40" ng-controller="couponCtrl">
-    <div class="wj-TblWrapBr mr10 pd20" style="height:400px;">
+  <div class="mt10 mb10" ng-controller="couponCtrl">
+    <div class="wj-TblWrapBr pd10" style="height:400px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='coupon.regist.coupon' /> <span id="couponSubTitle"></span> </span>
         <%-- 페이지 스케일  --%>

@@ -6,9 +6,9 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 
-<div id="selectMenuArea" class="subCon" ng-hide="isManageTab" ng-controller="sideMenuManageCtrl">
+<div id="selectMenuArea" ng-hide="isManageTab" ng-controller="sideMenuManageCtrl">
 
-    <table class="searchTbl" style="border-top:1px solid #ddd">
+    <table class="searchTbl mt5" style="border-top:1px solid #ddd">
         <colgroup>
             <col class="w15"/>
             <col class="w35"/>

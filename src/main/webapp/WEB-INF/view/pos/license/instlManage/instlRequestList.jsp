@@ -9,7 +9,7 @@
 <c:set var="orgnNm" value="${sessionScope.sessionInfo.orgnNm}"/>
 <c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
 
-<div id="instlRequestListView" class="subCon" style="display: none;" ng-controller="instlRequestListCtrl">
+<div id="instlRequestListView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="instlRequestListCtrl">
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl"><s:message code="instl.install.request" /></a>
@@ -82,7 +82,7 @@
         </tbody>
     </table>
 
-    <div class="mt40 oh sb-select dkbr">
+    <div class="mt10 oh sb-select dkbr">
         <%-- 페이지 스케일  --%>
         <wj-combo-box
                 class="w100px fl"

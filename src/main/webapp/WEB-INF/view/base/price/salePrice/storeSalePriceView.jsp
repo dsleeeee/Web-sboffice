@@ -8,7 +8,7 @@
 <%--<c:set var="prodEnvstVal" value="${prodEnvstVal}" />--%>
 <c:set var="priceEnvstVal" value="${priceEnvstVal}" />
 
-<div class="subCon" id="storeSalePriceArea" ng-controller="storeSalePriceCtrl" style="display:none;">
+<div class="subCon" id="storeSalePriceArea" ng-controller="storeSalePriceCtrl" style="display:none;padding: 10px 20px 40px;">
   <%--searchTbl--%>
   <%--<div class="searchBar flddUnfld">--%>
   <div class="searchBar">

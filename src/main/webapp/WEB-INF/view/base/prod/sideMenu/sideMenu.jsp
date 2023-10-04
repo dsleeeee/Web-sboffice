@@ -22,7 +22,7 @@
 
   <%-- 탭 --%>
   <div>
-    <ul class="subTab mt20">
+    <ul class="subTab mt10">
       <%-- 속성 --%>
       <li><a id="sideMenuAttr" href="#" class="on" ng-click="changeTab('A');"><s:message code="sideMenu.tab.attr" /></a></li>
       <%-- 선택메뉴 --%>

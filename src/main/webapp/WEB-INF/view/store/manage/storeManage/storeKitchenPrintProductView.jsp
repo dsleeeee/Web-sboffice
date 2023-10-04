@@ -30,10 +30,10 @@
     </tbody>
   </table>
 
-  <div class="wj-TblWrap mt20 mb40" ng-controller="storeKitchenPrintProductCtrl" ng-init="_broadcast('storeKitchenPrintProductCtrl')">
+  <div class="wj-TblWrap mt10 mb40" ng-controller="storeKitchenPrintProductCtrl" ng-init="_broadcast('storeKitchenPrintProductCtrl')">
     <%-- 주방프린터 --%>
     <div class="w30 fl">
-      <div class="wj-TblWrapBr pd20" style="height:480px;">
+      <div class="wj-TblWrapBr pd10" style="height:480px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code="storeManage.kitchenPrint" /></span>
         </div>
@@ -63,7 +63,7 @@
 
     <%-- 출력상품 --%>
     <div class="w35 fl">
-      <div class="wj-TblWrapBr ml10 pd20" style="height:480px; overflow-y: auto;">
+      <div class="wj-TblWrapBr ml10 pd10" style="height:480px; overflow-y: auto;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code="storeManage.print.product" /><span id="kitchenPrintTitle"></span></span>
           <!-- <button class="btn_skyblue">펼침</button> -->
@@ -86,7 +86,7 @@
 
     <%-- 미출력상품 --%>
     <div class="w35 fl">
-      <div class="wj-TblWrapBr ml10 pd20" style="height:480px; overflow-y: auto;">
+      <div class="wj-TblWrapBr ml10 pd10" style="height:480px; overflow-y: auto;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code="storeManage.no.print.product" /></span>
           <%-- 추가 --%>

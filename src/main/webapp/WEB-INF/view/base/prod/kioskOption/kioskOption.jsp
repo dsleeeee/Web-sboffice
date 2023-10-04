@@ -126,8 +126,8 @@
         </table>
 
         <%-- left --%>
-        <div class="wj-TblWrap mt20 mb20 w40 fl">
-            <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
+        <div class="wj-TblWrap mt10 mb20 w40 fl">
+            <div class="wj-TblWrapBr mr10 pd10" style="height:470px;">
                 <div class="w100 mt10 mb20">
                     <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
                         <div class="row">
@@ -156,8 +156,8 @@
     </div>
 
     <%--right--%>
-    <div class="wj-TblWrap mt20 mb20 w60 fr" ng-controller="kioskOptionDetailCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
+    <div class="wj-TblWrap mt10 mb20 w60 fr" ng-controller="kioskOptionDetailCtrl">
+        <div class="wj-TblWrapBr pd10" style="height:470px; overflow-y: hidden;">
             <label id="lblProdCd"></label>
             <label id="lblProdNm"></label>
             <div class="updownSet oh mb10">

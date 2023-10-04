@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
-<div id="printerGroupView" name="printerGroupView" class="subCon" style="display: none;">
+<div id="printerGroupView" name="printerGroupView" class="subCon" style="display: none;padding: 10px 20px 40px;">
 
     <div ng-controller="printerGroupCtrl">
         <%-- 제목 및 조회버튼  --%>
@@ -34,7 +34,7 @@
         </table>
 
         <%-- left (메뉴그룹관리-메뉴그룹등록 grid) --%>
-        <div class="wj-TblWrap mt20 mb20 w30 fl" style="width: 275px;">
+        <div class="wj-TblWrap mt10 mb20 w30 fl" style="width: 275px;">
             <div class="wj-TblWrapBr mr10 pd10" style="height:535px;">
                 <div class="updownSet oh mb10 pd5">
                     <span class="fl bk lh30"><s:message code='printerGroup.groupManage' /></span>
@@ -74,7 +74,7 @@
     <div id="addProd" class="wj-TblWrap fr" style="width:calc(100% - 275px);">
 
         <%-- 상품연결 grid --%>
-        <div class="wj-TblWrap mt20 mb5 w50 fl" ng-controller="prodMappingCtrl">
+        <div class="wj-TblWrap mt10 mb5 w50 fl" ng-controller="prodMappingCtrl">
             <div class="wj-TblWrapBr mr10 pd10" style="height:535px;">
                 <div class="ml5">
                     <span class="bk"><s:message code='printerGroup.addProd' /></span>
@@ -106,7 +106,7 @@
         </div>
 
         <%-- 상품선택 grid --%>
-        <div class="wj-TblWrap mt20 mb5 w50 fr" ng-controller="prodSelectCtrl">
+        <div class="wj-TblWrap mt10 mb5 w50 fr" ng-controller="prodSelectCtrl">
             <div class="wj-TblWrapBr mr10 pd10" style="height:535px;">
                 <table class="tblType01">
                     <colgroup>
@@ -271,7 +271,7 @@
     <div id="addPrinter" class="wj-TblWrap fl" style="width:calc(100% - 275px); display: none;">
 
         <%-- 프린터연결 grid --%>
-        <div class="wj-TblWrap mt20 w50 fl" ng-controller="printerMappingCtrl">
+        <div class="wj-TblWrap mt10 w50 fl" ng-controller="printerMappingCtrl">
             <div class="wj-TblWrapBr mr10 pd10" style="height:535px;">
                 <div class="ml5">
                     <span class="bk"><s:message code='printerGroup.addPrinter' /></span>

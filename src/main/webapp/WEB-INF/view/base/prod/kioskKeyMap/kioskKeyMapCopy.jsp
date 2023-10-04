@@ -5,7 +5,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="kioskKeyMapCopyView" name="kioskKeyMapCopyView" class="subCon" style="display: none;">
+<div id="kioskKeyMapCopyView" name="kioskKeyMapCopyView" class="subCon" style="display: none;padding: 10px 20px 40px;">
 
     <%-- body --%>
     <div ng-controller="kioskKeyMapCopyCtrl">

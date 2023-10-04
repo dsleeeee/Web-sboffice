@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
-<div id="storeTypeView" name="storeTypeView" class="subCon" style="display: none;">
+<div id="storeTypeView" name="storeTypeView" class="subCon" style="display: none;padding: 10px 20px 40px;">
 
     <div ng-controller="storeTypeCtrl">
         <%-- 제목 및 조회버튼  --%>
@@ -50,7 +50,7 @@
         </table>
 
         <%-- left (매장타입관리-매장타입등록 grid) --%>
-        <div class="wj-TblWrap mt20 mb20 w30 fl">
+        <div class="wj-TblWrap mt10 mb20 w30 fl">
             <div class="wj-TblWrapBr mr10 pd10" style="height:710px;">
                 <div class="updownSet oh mb10 pd5">
                     <span class="fl bk lh30"><s:message code='storeType.storeTypeManage' /></span>
@@ -94,7 +94,7 @@
     <div class="wj-TblWrap w70 fr">
 
         <%-- 매장타입관리-매장연결 grid --%>
-        <div class="wj-TblWrap mt20 mb5 w50 fl" ng-controller="storeMappingCtrl">
+        <div class="wj-TblWrap mt10 mb5 w50 fl" ng-controller="storeMappingCtrl">
             <div class="wj-TblWrapBr mr10 pd10" style="height:350px;">
                 <div class="ml5">
                     <span class="bk"><s:message code='storeType.storeMapping' /></span>
@@ -130,7 +130,7 @@
         </div>
 
         <%-- 매장타입관리-매장선택 grid --%>
-        <div class="wj-TblWrap mt20 mb5 w50 fr" ng-controller="storeSelectCtrl">
+        <div class="wj-TblWrap mt10 mb5 w50 fr" ng-controller="storeSelectCtrl">
             <div class="wj-TblWrapBr mr10 pd10" style="height:350px;">
                 <table class="tblType01 mb10">
                     <colgroup>

@@ -6,7 +6,7 @@
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 
-<div id="storeSalePriceHistoryView" class="subCon" ng-controller="storeSalePriceHistoryCtrl">
+<div id="storeSalePriceHistoryView" class="subCon" ng-controller="storeSalePriceHistoryCtrl" style="padding: 10px 20px 40px;">
   <%--searchTbl--%>
   <%--<div class="searchBar flddUnfld">--%>
   <div class="searchBar">

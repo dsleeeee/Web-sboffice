@@ -7,7 +7,7 @@
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 <c:set var="priceEnvstVal" value="${priceEnvstVal}" />
 
-<div class="subCon" id="hqSalePriceArea" ng-controller="hqSalePriceCtrl">
+<div class="subCon" id="hqSalePriceArea" ng-controller="hqSalePriceCtrl" style="padding: 10px 20px 40px;">
   <%--searchTbl--%>
   <%--<div class="searchBar flddUnfld">--%>
   <div class="searchBar">

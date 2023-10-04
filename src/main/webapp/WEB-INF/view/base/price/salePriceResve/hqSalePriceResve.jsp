@@ -8,7 +8,7 @@
 <c:set var="priceEnvstVal" value="${priceEnvstVal}" />
 <c:set var="tomorrowDate" value="${tomorrowDate}" />
 
-<div class="subCon" id="hqSalePriceResve" ng-controller="hqSalePriceResveCtrl">
+<div class="subCon" id="hqSalePriceResve" ng-controller="hqSalePriceResveCtrl" style="padding: 10px 20px 40px;">
 
     <div class="searchBar">
         <a href="#" class="open fl"><s:message code="salePriceResve.hqSalePriceResve" /></a>

@@ -16,7 +16,7 @@
     <a href="#" class="open">${menuNm}</a>
   </div>
 
-  <div class="wj-TblWrap mt20">
+  <div class="wj-TblWrap" style="margin-top: -10px;">
     <c:import url="/WEB-INF/view/base/store/posFunc/posFuncUseManage.jsp">
       <c:param name="menuCd" value="${menuCd}"/>
       <c:param name="menuNm" value="${menuNm}"/>

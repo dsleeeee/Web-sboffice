@@ -9,7 +9,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
-<div id="prodRecpOriginView" class="subCon" style="display: none;">
+<div id="prodRecpOriginView" class="subCon" style="display: none;padding: 10px 20px 40px;">
 
     <div ng-controller="prodRecpOriginCtrl">
         <%-- 조회조건 --%>
@@ -167,8 +167,8 @@
         </table>
 
         <%-- left --%>
-        <div class="wj-TblWrap mt20 mb20 w30 fl">
-            <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
+        <div class="wj-TblWrap mt10 mb20 w30 fl">
+            <div class="wj-TblWrapBr pd10" style="height:470px;">
                 <c:if test="${hqOfficeCd eq 'A0001' and orgnFg eq 'HQ'}">
                     <div class="updownSet oh mb10">
                             <%-- 저장 --%>
@@ -210,8 +210,8 @@
     </div>
 
     <%-- mid --%>
-    <div class="wj-TblWrap mt20 mb20 w35 fl" ng-controller="prodRecpOriginDetailCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
+    <div class="wj-TblWrap mt10 mb20 w35 fl" ng-controller="prodRecpOriginDetailCtrl">
+        <div class="wj-TblWrapBr ml10 pd10" style="height:470px; overflow-y: hidden;">
             <div class="mb10" style="height: 15px;">
                 <label id="lblProd" style="font-size: 15px;"></label>
             </div>
@@ -253,8 +253,8 @@
     <%-- mid --%>
 
     <%-- right --%>
-    <div class="wj-TblWrap mt20 mb20 w35 fr" ng-controller="prodRecpOriginRegCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
+    <div class="wj-TblWrap mt10 mb20 w35 fr" ng-controller="prodRecpOriginRegCtrl">
+        <div class="wj-TblWrapBr ml10 pd10" style="height:470px; overflow-y: hidden;">
 
             <table class="tblType01">
                 <colgroup>

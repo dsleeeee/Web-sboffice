@@ -100,7 +100,7 @@
     </tbody>
   </table>
 
-  <div class="mt20" >
+  <div class="mt10" >
     <div  ng-controller="terminalCtrl">
       <%-- 그리드 --%>
       <div class="w100">

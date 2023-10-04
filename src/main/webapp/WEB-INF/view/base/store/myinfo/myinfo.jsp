@@ -18,14 +18,14 @@
 
 <div class="subCon">
   <%--<form id="myInfoForm" method="post" action="/base/store/myInfo/myInfo/save.sb">--%>
-    <h2 class="h2_tit oh lh30">
+    <h2 class="h2_tit2 oh lh10">
       <s:message code="myInfo.title1" />
       <div class="txtIn fr">
         <button class="btn_skyblue" onclick="envSetting()"><s:message code="myInfo.myInfo.envSetting" /></button>
         <button class="btn_skyblue" onclick="saveMyInfo()"><s:message code="cmm.save" /></button>
       </div>
     </h2>
-    <table class="searchTbl mt10">
+    <table class="searchTbl">
       <colgroup>
         <col class="w15" />
         <col class="w35" />

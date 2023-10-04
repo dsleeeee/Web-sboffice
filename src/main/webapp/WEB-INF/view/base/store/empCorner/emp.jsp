@@ -7,12 +7,12 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 
-<div id="empCornerEmpView" class="subCon" style="display: none;">
+<div id="empCornerEmpView" class="subCon" style="display: none;padding: 10px 20px 40px;">
 
     <div ng-controller="empCornerEmpCtrl">
         <%--사원정보--%>
-        <div class="wj-TblWrap mt20 mb20 w40 fl">
-            <div class="wj-TblWrapBr mr10 pd20" style="height:470px; overflow-y: hidden;" >
+        <div class="wj-TblWrap mb20 w40 fl">
+            <div class="wj-TblWrapBr mr10 pd10" style="height:470px; overflow-y: hidden;" >
                 <h3 class="lh30" style="font-size:0.75em; border:1px solid #ccc; background:#e8e8e8; padding:5px 15px; color:#222; min-width:150px; position:relative;">
                     <s:message code="empCorner.emp.emp" />
                 </h3>
@@ -39,8 +39,8 @@
     </div>
 
     <%--관리코너--%>
-    <div class="wj-TblWrap mt20 mb20 w30 fl" ng-controller="empManageCornerCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
+    <div class="wj-TblWrap mb20 w30 fl" ng-controller="empManageCornerCtrl">
+        <div class="wj-TblWrapBr mr10 pd10" style="height:470px; overflow-y: hidden;">
             <h3 class="lh30" style="font-size:0.75em; border:1px solid #ccc; background:#e8e8e8; padding:5px 15px; color:#222; min-width:150px; position:relative;">
                 <s:message code="empCorner.emp.manage" />
                 <span class="fr" style="font-size:1em;" id="btnDelete">
@@ -72,8 +72,8 @@
     <%--관리코너--%>
 
     <%--미관리코너--%>
-    <div class="wj-TblWrap mt20 mb20 w30 fr" ng-controller="empNoManageCornerCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
+    <div class="wj-TblWrap mb20 w30 fr" ng-controller="empNoManageCornerCtrl">
+        <div class="wj-TblWrapBr pd10" style="height:470px; overflow-y: hidden;">
             <h3 class="lh30" style="font-size:0.75em; border:1px solid #ccc; background:#e8e8e8; padding:5px 15px; color:#222; min-width:150px; position:relative;">
                 <s:message code="empCorner.emp.noManage" />
                 <span class="fr" style="font-size:1em;" id="btnAdd">

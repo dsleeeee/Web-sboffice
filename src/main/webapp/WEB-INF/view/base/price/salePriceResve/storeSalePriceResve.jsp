@@ -10,7 +10,7 @@
 <div class="con">
     <div class="tabType1" ng-controller="storeSalePriceResveCtrl">
         <%-- 탭 --%>
-        <ul class="subTab mt20">
+        <ul>
             <%-- 상품별 판매가관리 --%>
             <li><a id="prodSalePriceResve" href="#" class="on" ng-click="changeTab('P');"><s:message code="salePriceResve.prodSalePrice" /></a></li>
             <%-- 매장별 판매가관리 --%>

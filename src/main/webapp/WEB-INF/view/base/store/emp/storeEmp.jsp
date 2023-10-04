@@ -153,7 +153,7 @@
   </table>
   <!--//searchTbl-->
 
-  <div class="mt20 mb20 oh sb-select dkbr">
+  <div class="mt10 mb10 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <wj-combo-box
             class="w100px fl"
