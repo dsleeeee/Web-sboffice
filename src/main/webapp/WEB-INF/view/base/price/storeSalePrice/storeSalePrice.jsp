@@ -79,7 +79,7 @@
                     </wj-combo-box>
                 </div>
             </td>
-            <th></th>
+            <td></td>
             <td></td>
           </tr>
         </c:if>
