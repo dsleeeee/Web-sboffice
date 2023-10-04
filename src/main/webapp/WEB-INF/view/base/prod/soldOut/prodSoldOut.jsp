@@ -346,18 +346,14 @@
             <td>
                 <a href="#" class="btn_grayS ml10" ng-click="batchChange()"><s:message code="cmm.batchChange" /></a>
             </td>
-            <%-- 저장 --%>
-            <td>
-                <button class="btn_skyblue ml5 fr" id="btnSoldOutYnSave" ng-click="save()"><s:message code="cmm.save" /></button>
-            </td>
         </tr>
         </tbody>
     </table>
 
     <table class="searchTbl mt10">
         <colgroup>
-            <col class="w80" />
-            <col class="w20" />
+            <col class="w70" />
+            <col class="w30" />
         </colgroup>
         <tbody>
         <tr class="brt">
@@ -367,6 +363,8 @@
             <th>
                 <%-- 품절여부전체저장 --%>
                 <button class="btn_skyblue ml5 fr" ng-click="soldOutAllSave()"><s:message code="soldOut.soldOutAllSave" /></button>
+                <%-- 저장 --%>
+                <button class="btn_skyblue ml5 fr" id="btnSoldOutYnSave" ng-click="save()"><s:message code="cmm.save" /></button>
             </th>
         </tr>
         </tbody>
