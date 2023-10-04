@@ -44,7 +44,7 @@ app.controller('promotionMomsStoreRegCtrl', ['$scope', '$http', function ($scope
         var params = {};
         params.promotionCd = $("#hdPromotionCd").val();
         params.storeCd = $("#srchMomsStoreCd").val();
-        params.storeNm = $("#srchMomsStoreCNm").val();
+        params.storeNm = $("#srchMomsStoreNm").val();
         params.storeHqBrandCd = $scope.srchMomsStoreHqBrandCombo.selectedValue;
         params.branchCd = $scope.srchMomsBranchCombo.selectedValue;
         params.momsTeam = $scope.srchMomsTeamCombo.selectedValue;
