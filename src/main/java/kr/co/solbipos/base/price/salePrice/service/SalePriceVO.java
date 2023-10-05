@@ -163,6 +163,9 @@ public class SalePriceVO extends PageVO {
     /** 엑셀업로드 구분 (H:본사판매가, S:매장판매가) */
     private String salePriceOrgnFg;
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
     /**
      * @return the hqOfficeCd
      */
@@ -642,4 +645,11 @@ public class SalePriceVO extends PageVO {
         this.salePriceOrgnFg = salePriceOrgnFg;
     }
 
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
+    }
 }

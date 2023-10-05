@@ -1,8 +1,11 @@
 package kr.co.solbipos.base.prod.prodKitchenprintLink.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.prodKitchenprintLink.service.ProdKitchenprintLinkService;
@@ -37,11 +40,13 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class ProdKitchenprintLinkServiceImpl implements ProdKitchenprintLinkService {
     private final ProdKitchenprintLinkMapper prodKitchenprintLinkMapper; // 상품엑셀업로드
+    private final PopupMapper popupMapper;
 
     private final String SYS_CLOSURE_DATE = "99991231"; // 시스템 종료일
 
-    public ProdKitchenprintLinkServiceImpl(ProdKitchenprintLinkMapper prodKitchenprintLinkMapper) {
+    public ProdKitchenprintLinkServiceImpl(ProdKitchenprintLinkMapper prodKitchenprintLinkMapper, PopupMapper popupMapper) {
         this.prodKitchenprintLinkMapper = prodKitchenprintLinkMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 상품목록 조회 */
@@ -72,7 +77,9 @@ public class ProdKitchenprintLinkServiceImpl implements ProdKitchenprintLinkServ
 
         // 매장검색
         if(!StringUtil.getOrBlank(prodKitchenprintLinkVO.getStoreCd()).equals("")) {
-            prodKitchenprintLinkVO.setArrStoreCd(prodKitchenprintLinkVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodKitchenprintLinkVO.getStoreCd(), 3900));
+            prodKitchenprintLinkVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return prodKitchenprintLinkMapper.getLinkedList(prodKitchenprintLinkVO);
@@ -105,7 +112,9 @@ public class ProdKitchenprintLinkServiceImpl implements ProdKitchenprintLinkServ
 
         // 매장검색
         if(!StringUtil.getOrBlank(prodKitchenprintLinkVO.getStoreCd()).equals("")) {
-            prodKitchenprintLinkVO.setArrStoreCd(prodKitchenprintLinkVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodKitchenprintLinkVO.getStoreCd(), 3900));
+            prodKitchenprintLinkVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return prodKitchenprintLinkMapper.getUnlinkList(prodKitchenprintLinkVO);

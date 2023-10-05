@@ -136,6 +136,9 @@ public class SalePriceResveVO extends PageVO {
     /** 조회매장 */
     private String saveStoreCds;
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -402,5 +405,13 @@ public class SalePriceResveVO extends PageVO {
 
     public void setSaveStoreCds(String saveStoreCds) {
         this.saveStoreCds = saveStoreCds;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

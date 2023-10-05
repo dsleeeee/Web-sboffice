@@ -241,6 +241,12 @@ app.controller('excelCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
 
     // 상품매출순위 리스트 조회
     $scope.searchExcelList = function (data) {
+
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
         // 파라미터
         var params       = data;
         /*params.storeCd = data.storeCd;

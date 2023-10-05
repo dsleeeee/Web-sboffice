@@ -64,11 +64,8 @@
         AND tmpsp.STORE_CD (+)= tmp.STORE_CD
         AND tmpsp.PROD_CD (+)= tmp.PROD_CD
         AND thpsp.PROD_CD = tmp.PROD_CD
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                tms.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tms.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='prodCd != null and prodCd != ""'>
             AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
@@ -174,11 +171,8 @@
         AND tmpsp.STORE_CD (+)= tmp.STORE_CD
         AND tmpsp.PROD_CD (+)= tmp.PROD_CD
         AND thpsp.PROD_CD = tmp.PROD_CD
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                tms.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tms.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='prodCd != null and prodCd != ""'>
             AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'

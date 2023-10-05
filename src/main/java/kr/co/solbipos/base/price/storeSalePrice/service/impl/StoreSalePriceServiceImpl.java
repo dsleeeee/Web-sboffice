@@ -2,8 +2,11 @@ package kr.co.solbipos.base.price.storeSalePrice.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.price.storeSalePrice.service.StoreSalePriceService;
@@ -36,12 +39,14 @@ public class StoreSalePriceServiceImpl implements StoreSalePriceService {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final StoreSalePriceMapper storeSalePriceMapper;
+    private final PopupMapper popupMapper;
     private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public StoreSalePriceServiceImpl(CmmEnvUtil cmmEnvUtil, MessageService messageService, StoreSalePriceMapper storeSalePriceMapper) {
+    public StoreSalePriceServiceImpl(CmmEnvUtil cmmEnvUtil, MessageService messageService, StoreSalePriceMapper storeSalePriceMapper, PopupMapper popupMapper) {
         this.storeSalePriceMapper = storeSalePriceMapper;
+        this.popupMapper = popupMapper;
         this.cmmEnvUtil = cmmEnvUtil;
     }
 
@@ -50,10 +55,13 @@ public class StoreSalePriceServiceImpl implements StoreSalePriceService {
     public List<DefaultMap<String>> getSalePriceList(StoreSalePriceVO storeSalePriceVO, SessionInfoVO sessionInfoVO) {
 
         storeSalePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        if(!StringUtil.getOrBlank(storeSalePriceVO.getStoreCd()).equals("")) {
-            storeSalePriceVO.setArrStoreCd(storeSalePriceVO.getStoreCd().split(","));
-        }
         storeSalePriceVO.setUserId(sessionInfoVO.getUserId());
+
+        if(!StringUtil.getOrBlank(storeSalePriceVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeSalePriceVO.getStoreCd(), 3900));
+            storeSalePriceVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
@@ -76,10 +84,13 @@ public class StoreSalePriceServiceImpl implements StoreSalePriceService {
     public List<DefaultMap<String>> getSalePriceExcelList(StoreSalePriceVO storeSalePriceVO, SessionInfoVO sessionInfoVO) {
 
         storeSalePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        if(!StringUtil.getOrBlank(storeSalePriceVO.getStoreCd()).equals("")) {
-            storeSalePriceVO.setArrStoreCd(storeSalePriceVO.getStoreCd().split(","));
-        }
         storeSalePriceVO.setUserId(sessionInfoVO.getUserId());
+
+        if(!StringUtil.getOrBlank(storeSalePriceVO.getStoreCd()).equals("")) {
+           StoreVO storeVO = new StoreVO();
+           storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeSalePriceVO.getStoreCd(), 3900));
+           storeSalePriceVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)

@@ -42,11 +42,8 @@
                 TB_MS_STORE tms
         WHERE 	tms.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     tlmpspl.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                tlmpspl.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tlmpspl.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='prodCd != null and prodCd != ""'>
             AND tlmpspl.PROD_CD LIKE '%'||#{prodCd}||'%'
@@ -116,11 +113,8 @@
                 TB_MS_STORE tms
         WHERE 	tms.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     tlmpspl.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                tlmpspl.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tlmpspl.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='prodCd != null and prodCd != ""'>
             AND tlmpspl.PROD_CD LIKE '%'||#{prodCd}||'%'

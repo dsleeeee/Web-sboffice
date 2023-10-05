@@ -4,8 +4,11 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.price.salePrice.service.SalePriceService;
@@ -44,14 +47,16 @@ public class SalePriceServiceImpl implements SalePriceService {
 
     private final MessageService messageService;
     private final SalePriceMapper salePriceMapper;
+    private final PopupMapper popupMapper;
     private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public SalePriceServiceImpl(SalePriceMapper salePriceMapper, CmmEnvUtil cmmEnvUtil, MessageService messageService) {
+    public SalePriceServiceImpl(SalePriceMapper salePriceMapper, CmmEnvUtil cmmEnvUtil, MessageService messageService, PopupMapper popupMapper) {
         this.salePriceMapper = salePriceMapper;
         this.cmmEnvUtil = cmmEnvUtil;
         this.messageService = messageService;
+        this.popupMapper = popupMapper;
     }
 
     /** 상품별 가격정보 조회 */
@@ -70,7 +75,9 @@ public class SalePriceServiceImpl implements SalePriceService {
         salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(salePriceVO.getStoreCd()).equals("")) {
-            salePriceVO.setArrStoreCd(salePriceVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(salePriceVO.getStoreCd(), 3900));
+            salePriceVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {

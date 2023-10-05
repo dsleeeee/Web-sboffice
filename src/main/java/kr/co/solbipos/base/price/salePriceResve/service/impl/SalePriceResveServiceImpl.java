@@ -4,8 +4,11 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.price.salePrice.service.impl.SalePriceMapper;
@@ -46,14 +49,16 @@ public class SalePriceResveServiceImpl implements SalePriceResveService {
     private final SalePriceResveMapper salePriceResveMapper;
     private final CmmEnvUtil cmmEnvUtil;
     private final SalePriceMapper salePriceMapper; // 본사판매가관리
+    private final PopupMapper popupMapper;
 
     /** Constructor Injection */
     @Autowired
-    public SalePriceResveServiceImpl(SalePriceResveMapper salePriceResveMapper, CmmEnvUtil cmmEnvUtil, MessageService messageService, SalePriceMapper salePriceMapper) {
+    public SalePriceResveServiceImpl(SalePriceResveMapper salePriceResveMapper, CmmEnvUtil cmmEnvUtil, MessageService messageService, SalePriceMapper salePriceMapper, PopupMapper popupMapper) {
         this.salePriceResveMapper = salePriceResveMapper;
         this.cmmEnvUtil = cmmEnvUtil;
         this.messageService = messageService;
         this.salePriceMapper = salePriceMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 가격예약(본사판매가) 리스트 조회 */
@@ -187,9 +192,11 @@ public class SalePriceResveServiceImpl implements SalePriceResveService {
     public List<DefaultMap<String>> getStoreProdSalePriceResveList(SalePriceResveVO salePriceResveVO, SessionInfoVO sessionInfoVO) {
 
         salePriceResveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        if(!StringUtil.getOrBlank(salePriceResveVO.getStoreCd()).equals("")) {
-            salePriceResveVO.setArrStoreCd(salePriceResveVO.getStoreCd().split(","));
 
+        if(!StringUtil.getOrBlank(salePriceResveVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(salePriceResveVO.getStoreCd(), 3900));
+            salePriceResveVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return salePriceResveMapper.getStoreProdSalePriceResveList(salePriceResveVO);

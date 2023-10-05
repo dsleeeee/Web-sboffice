@@ -514,11 +514,8 @@
         <!--        <if test='endDate != null and endDate != ""'>-->
         <!--            AND tmpsp.END_DATE <![CDATA[<= ]]> #{endDate}-->
         <!--        </if>-->
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                tms.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tms.STORE_CD IN (${storeCdQuery})
         </if>
         ORDER
         BY tms.STORE_CD ASC, tmpsp.START_DATE DESC

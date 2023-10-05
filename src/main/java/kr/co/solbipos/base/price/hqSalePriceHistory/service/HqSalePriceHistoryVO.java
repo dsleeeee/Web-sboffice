@@ -56,6 +56,9 @@ public class HqSalePriceHistoryVO extends PageVO {
     /** 상품브랜드코드 */
     private String prodHqBrandCd;
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -154,5 +157,13 @@ public class HqSalePriceHistoryVO extends PageVO {
 
     public void setProdHqBrandCd(String prodHqBrandCd) {
         this.prodHqBrandCd = prodHqBrandCd;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

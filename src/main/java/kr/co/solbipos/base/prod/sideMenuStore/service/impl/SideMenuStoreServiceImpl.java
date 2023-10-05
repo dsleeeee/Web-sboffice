@@ -1,15 +1,16 @@
 package kr.co.solbipos.base.prod.sideMenuStore.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
 import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.sideMenuStore.service.SideMenuStoreService;
 import kr.co.solbipos.base.prod.sideMenuStore.service.SideMenuStoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 
 import java.util.List;
 
@@ -34,12 +35,16 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class SideMenuStoreServiceImpl implements SideMenuStoreService {
     private final SideMenuStoreMapper sideMenuStoreMapper;
+    private final PopupMapper popupMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public SideMenuStoreServiceImpl(SideMenuStoreMapper sideMenuStoreMapper) { this.sideMenuStoreMapper = sideMenuStoreMapper; }
+    public SideMenuStoreServiceImpl(SideMenuStoreMapper sideMenuStoreMapper, PopupMapper popupMapper) {
+        this.sideMenuStoreMapper = sideMenuStoreMapper;
+        this.popupMapper = popupMapper;
+    }
 
     /** 선택분류(매장별) 탭 - 조회 */
     @Override
@@ -84,8 +89,11 @@ public class SideMenuStoreServiceImpl implements SideMenuStoreService {
         sideMenuStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         // 매장 array 값 세팅
-        String[] storeCds = sideMenuStoreVO.getStoreCds().split(",");
-        sideMenuStoreVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(sideMenuStoreVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(sideMenuStoreVO.getStoreCds(), 3900));
+            sideMenuStoreVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return sideMenuStoreMapper.getSideMenuClassList(sideMenuStoreVO);
     }
@@ -133,8 +141,11 @@ public class SideMenuStoreServiceImpl implements SideMenuStoreService {
         sideMenuStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         // 매장 array 값 세팅
-        String[] storeCds = sideMenuStoreVO.getStoreCds().split(",");
-        sideMenuStoreVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(sideMenuStoreVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(sideMenuStoreVO.getStoreCds(), 3900));
+            sideMenuStoreVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return sideMenuStoreMapper.getSideMenuProdList(sideMenuStoreVO);
     }
