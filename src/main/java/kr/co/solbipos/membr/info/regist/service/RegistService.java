@@ -32,6 +32,13 @@ public interface RegistService {
     List<DefaultMap<String>> getRegistStore(SessionInfoVO sessionInfoVO);
 
     /**
+     * 등록 매장 리스트 조회 2
+     *
+     * @return
+     */
+    List<DefaultMap<String>> getRegistStore2(SessionInfoVO sessionInfoVO);
+
+    /**
      * 회원 등급 리스트 조회
      * @param sessionInfoVO
      * @return

@@ -80,11 +80,11 @@
                     <%-- 등록매장 --%>
                     <th><s:message code="regist.reg.store.cd"/><em class="imp">*</em></th>
                     <td>
-                        <c:if test="${hqOfficeCd eq '00000'}">
-                            <input type="text" id="basicRegStoreNm" readonly class="sb-input w100" ng-model="member.storeNm" maxlength="15"/>
-                            <input type="hidden" id="basicRegStoreCd"  class="sb-input w100" ng-model="member.regStoreCd" maxlength="15"/>
-                        </c:if>
-                        <c:if test="${hqOfficeCd ne '00000'}">
+                        <%--<c:if test="${hqOfficeCd eq '00000'}">--%>
+                            <%--<input type="text" id="basicRegStoreNm" readonly class="sb-input w100" ng-model="member.storeNm" maxlength="15"/>--%>
+                            <%--<input type="hidden" id="basicRegStoreCd"  class="sb-input w100" ng-model="member.regStoreCd" maxlength="15"/>--%>
+                        <%--</c:if>--%>
+                        <%--<c:if test="${hqOfficeCd ne '00000'}">--%>
                             <div class="sb-select">
                                 <wj-combo-box
                                         id="basicRegStoreCd"
@@ -97,7 +97,7 @@
                                         initialized="_initComboBox(s)">
                                 </wj-combo-box>
                             </div>
-                        </c:if>
+                        <%--</c:if>--%>
 <%--                        <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">--%>
 <%--                            <jsp:param name="targetId" value="regStoreSelect"/>--%>
 <%--                        </jsp:include>--%>
@@ -716,4 +716,4 @@
     var skateFgComboList = ${skateFgComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20230531.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20231004.01" charset="utf-8"></script>
