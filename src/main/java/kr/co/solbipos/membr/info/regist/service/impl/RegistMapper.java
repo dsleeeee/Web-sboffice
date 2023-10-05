@@ -39,6 +39,13 @@ public interface RegistMapper {
     List<DefaultMap<String>> getRegistStore(HqManageVO hqManageVO);
 
     /**
+     * 등록 매장 리스트 조회 2
+     *
+     * @return
+     */
+    List<DefaultMap<String>> getRegistStore2(HqManageVO hqManageVO);
+
+    /**
      * 회원등급 리스트 조회
      * @param membrClassVO
      * @return

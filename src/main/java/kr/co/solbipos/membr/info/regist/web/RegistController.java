@@ -98,15 +98,34 @@ public class RegistController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
+
         // 등록 매장 조회
         List regstrStoreList = registService.getRegistStore(sessionInfoVO);
         // 등록 매장 전체 포함
         String regstrStoreListAll = cmmCodeUtil.assmblObj(regstrStoreList, "name", "value", UseYn.SELECT);
+
+        // 등록 매장 조회 2
+        List regstrStoreList2 = registService.getRegistStore2(sessionInfoVO);
+        // 등록 매장 전체 포함 2
+        String regstrStoreListAll2;
+        if ("H".equals(sessionInfoVO.getOrgnFg().getCode())) {
+            regstrStoreListAll2 = cmmCodeUtil.assmblObj(regstrStoreList2, "name", "value", UseYn.SELECT);
+        } else {
+            regstrStoreListAll2 = cmmCodeUtil.assmblObj(regstrStoreList2, "name", "value", UseYn.N);
+        }
+
+        model.addAttribute("regstrStoreList", regstrStoreListAll);
+        model.addAttribute("regstrStoreList2", regstrStoreListAll2);
+
+
         // 회원등급 리스트 조회
         List membrClassList = registService.getMembrClassList(sessionInfoVO);
-
         String membrClassListAll = cmmCodeUtil.assmblObj(membrClassList, "name", "value", UseYn.ALL);
         String membrClassListSelect = cmmCodeUtil.assmblObj(membrClassList, "name", "value", UseYn.N);
+
+        model.addAttribute("memberClassList", membrClassListAll);
+        model.addAttribute("memberClassSelect", membrClassListSelect);
+
 
         // 본사일 경우 해당 본사의 기본매장(코드)을 조회 해야 함.
         // [보나비]의 경우 기본매장코드를 사용하여
@@ -117,9 +136,6 @@ public class RegistController {
             defaultStoreCd.replace("*", "");
         }
 
-        model.addAttribute("regstrStoreList", regstrStoreListAll);
-        model.addAttribute("memberClassList", membrClassListAll);
-        model.addAttribute("memberClassSelect", membrClassListSelect);
         model.addAttribute("defaultStoreCd", defaultStoreCd);
 
 

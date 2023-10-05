@@ -81,6 +81,26 @@ public class RegistServiceImpl implements RegistService {
     }
 
     /**
+     * 등록매장 리스트 조회 2
+     */
+    @Override
+    public List<DefaultMap<String>> getRegistStore2(SessionInfoVO sessionInfoVO) {
+
+        // 회원정보 등록시 등록매장의 콤보박스 내용 조회
+        // 본사 : 해당 본사에 소속된 매장만 조회한다.
+        // 매장 : 해당 매장만 표시
+        HqManageVO hqVO = new HqManageVO();
+
+        hqVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        hqVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            hqVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return mapper.getRegistStore2(hqVO);
+    }
+
+    /**
      * 회원등급 리스트 조회
      */
     @Override

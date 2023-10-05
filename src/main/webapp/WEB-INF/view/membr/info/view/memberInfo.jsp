@@ -655,6 +655,7 @@
     <%--var rCstCardStatFgList = ${ccu.getCommCodeExcpAll("300")};--%>
 
     var regstrStoreList = ${regstrStoreList};
+    var regstrStoreList2 = ${regstrStoreList2};
     var memberClassList = ${memberClassList};
     var memberClassSelect = ${memberClassSelect};
     var forcedDeleteChkPwd = "${forcedDeleteChkPwd}";
