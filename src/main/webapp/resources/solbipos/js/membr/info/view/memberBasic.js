@@ -143,30 +143,14 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             // }
 
             // 등록매장 기본셋팅
-            // 신규시 프랜본사->전체 / 프랜매장,단독매장->내매장만
-            // 수정시 프랜본사,프랜매장->전체 / 단독매장->내매장만
             if ($scope.saveMode === "REG") {
-                // 등록매장
-                if(orgnFg == "STORE") {
-                    $scope._setComboData("basicRegStoreCd", regstrStoreList2); // 등록매장
-                } else {
-                    $scope._setComboData("basicRegStoreCd", regstrStoreList); // 등록매장
-                }
+                $scope._setComboData("basicRegStoreCd", regstrStoreList2); // 등록매장
                 $scope.basicRegStoreCdCombo.selectedIndex = 0;
                 $scope.basicRegStoreCdCombo.isReadOnly = false;
             }
             // 수정
             else if ($scope.saveMode === "MOD") {
-                // 등록매장
-                if(orgnFg == "STORE") {
-                    if(hqOfficeCd == "00000") {
-                        $scope._setComboData("basicRegStoreCd", regstrStoreList2); // 등록매장
-                    } else {
-                        $scope._setComboData("basicRegStoreCd", regstrStoreList); // 등록매장
-                    }
-                }else{
-                    $scope._setComboData("basicRegStoreCd", regstrStoreList); // 등록매장
-                }
+                $scope._setComboData("basicRegStoreCd", regstrStoreList); // 등록매장
                 $scope.basicRegStoreCdCombo.isReadOnly = true;
             }
 
