@@ -28,21 +28,21 @@
               <col class="w35" />
             </colgroup>
             <tbody>
-            <%-- 조회 일자 --%>
             <tr>
-              <th><s:message code="orderStatus.srchDate" /></th>
-              <td colspan="3">
-                <div class="sb-select">
-                  <span class="txtIn"><input id="ocStartDate" ng-model="ocStartDate" class="w110px"></span>
-                  <span class="rg">~</span>
-                  <span class="txtIn"><input id="ocEndDate" ng-model="ocEndDate" class="w110px"></span>
-                </div>
-              </td>
+                <%-- 조회 일자 --%>
+                <th><s:message code="orderStatus.srchDate" /></th>
+                <td colspan="3">
+                    <div class="sb-select">
+                        <span class="txtIn"><input id="ocStartDate" ng-model="ocStartDate" class="w110px"></span>
+                        <span class="rg">~</span>
+                        <span class="txtIn"><input id="ocEndDate" ng-model="ocEndDate" class="w110px"></span>
+                    </div>
+                </td>
             </tr>
             <c:if test="${sessionInfo.orgnFg == 'HQ'}">
                 <tr>
-                    <%-- 매장 --%>
-                    <th><s:message code="cmm.store"/></th>
+                    <%-- 매장선택 --%>
+                    <th><s:message code="cmm.store.select"/></th>
                     <td>
                         <%-- 매장선택 모듈 사용시 include --%>
                         <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">

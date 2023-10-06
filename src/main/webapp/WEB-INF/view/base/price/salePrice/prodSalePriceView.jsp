@@ -37,8 +37,8 @@
       <col class="w35" />
     </colgroup>
     <tbody>
-    <%-- 상품선택 --%>
     <tr>
+      <%-- 상품선택 --%>
       <th><s:message code="salePrice.select.prod" /></th>
       <td>
         <%-- 상품선택 모듈 멀티 선택 사용시 include --%>
