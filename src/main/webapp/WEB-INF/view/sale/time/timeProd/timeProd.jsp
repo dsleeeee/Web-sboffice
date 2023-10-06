@@ -109,7 +109,6 @@
                         </div>
                     </td>
                 </tr>
-
                 <tr>
                     <%-- 옵션(시간대/시간대분류) --%>
                     <th><s:message code="timeProd.optionFg"/></th>
@@ -167,7 +166,6 @@
                         </div>
                     </td>
                 </tr>
-
                 <tr>
                     <%-- 상품코드 --%>
                     <th><s:message code="timeProd.prodCd" /></th>
@@ -197,8 +195,8 @@
                                 </wj-combo-box>
                             </div>
                         </td>
-                        <%-- 매장 --%>
-                        <th><s:message code="cmm.store"/></th>
+                        <%-- 매장선택 --%>
+                        <th><s:message code="cmm.store.select"/></th>
                         <td>
                             <%-- 매장선택 모듈 사용시 include --%>
                             <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
