@@ -26,8 +26,8 @@
       <col class="w35" />
     </colgroup>
     <tbody>
-    <%-- 변경 일자 --%>
     <tr>
+      <%-- 변경 일자 --%>
       <th><s:message code="hqSalePriceHistory.date" /></th>
       <td colspan="3">
         <div class="sb-select">

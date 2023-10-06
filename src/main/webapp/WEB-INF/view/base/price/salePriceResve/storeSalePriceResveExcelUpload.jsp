@@ -59,7 +59,8 @@
                 <%--// 매장선택 모듈 사용시 include --%>
             </div>
             <div class="sb-select dkbr ml5 fr">
-                <p class="tl s14 mt5 lh15"><s:message code="cmm.store"/></p>
+                <%-- 매장선택 --%>
+                <p class="tl s14 mt5 lh15"><s:message code="cmm.store.select"/></p>
             </div>
         </div>
 
