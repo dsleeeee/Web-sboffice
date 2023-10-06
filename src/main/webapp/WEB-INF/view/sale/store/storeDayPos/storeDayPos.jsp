@@ -75,8 +75,8 @@
             </wj-combo-box>
           </div>
         </td>
-        <%-- 매장 --%>
-        <th class="dayStore" style="display: none;"><s:message code="cmm.store"/></th>
+        <%-- 매장선택 --%>
+        <th class="dayStore" style="display: none;"><s:message code="cmm.store.select"/></th>
         <td class="dayStore" style="display: none;">
           <%-- 매장선택 모듈 사용시 include --%>
           <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">

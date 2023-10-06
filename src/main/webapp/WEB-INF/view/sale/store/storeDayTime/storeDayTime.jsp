@@ -82,22 +82,22 @@
                                     is-editable="false"
                                     control="startTimeCombo"
                                     initialized="_initComboBox(s)">
-                                    </wj-combo-box>
+                            </wj-combo-box>
                         </div>
                         <div class="fl pd5" style="padding-right: 15px;">
                             <label> ~ </label>
                         </div>
                         <div class="sb-select fl" style="width:65px;">
-                                    <wj-combo-box
-                                            id="endTime"
-                                            ng-model="endTime"
-                                            items-source="_getComboData('endTimeCombo')"
-                                            display-member-path="name"
-                                            selected-value-path="value"
-                                            is-editable="false"
-                                            control="endTimeCombo"
-                                            initialized="_initComboBox(s)">
-                                    </wj-combo-box>
+                            <wj-combo-box
+                                    id="endTime"
+                                    ng-model="endTime"
+                                    items-source="_getComboData('endTimeCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="endTimeCombo"
+                                    initialized="_initComboBox(s)">
+                            </wj-combo-box>
                         </div>
                     </div>
                 </div>
@@ -135,8 +135,8 @@
                     </wj-combo-box>
                 </div>
             </td>
-            <%-- 매장 --%>
-            <th class="dayTimeStore" style="display: none;"><s:message code="cmm.store"/></th>
+            <%-- 매장선택 --%>
+            <th class="dayTimeStore" style="display: none;"><s:message code="cmm.store.select"/></th>
             <td class="dayTimeStore" style="display: none;">
                 <%-- 매장선택 모듈 사용시 include --%>
                 <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">

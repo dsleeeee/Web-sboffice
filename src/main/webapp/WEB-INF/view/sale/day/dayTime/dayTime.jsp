@@ -12,17 +12,17 @@
 <div class="subCon" ng-controller="dayTimeCtrl">
     <div class="searchBar">
         <a href="#" class="open fl">${menuNm}</a>
-            <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <%-- 조회 --%>
-                <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('dayTimeCtrl')">
-                    <s:message code="cmm.search"/>
+        <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+            <%-- 조회 --%>
+            <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('dayTimeCtrl')">
+                <s:message code="cmm.search"/>
+            </button>
+            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                <%-- 확장조회 --%>
+                <button class="btn_blue mr5 fl" id="btnSearchAddShow" ng-click="searchAddShowChange()">
+                    <s:message code="cmm.search.addShow" />
                 </button>
-                <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-                    <%-- 확장조회 --%>
-                    <button class="btn_blue mr5 fl" id="btnSearchAddShow" ng-click="searchAddShowChange()">
-                        <s:message code="cmm.search.addShow" />
-                    </button>
-                </c:if>
+            </c:if>
         </div>
     </div>
     <table class="searchTbl">
@@ -82,22 +82,22 @@
                                     is-editable="false"
                                     control="startTimeCombo"
                                     initialized="_initComboBox(s)">
-                                    </wj-combo-box>
+                            </wj-combo-box>
                         </div>
                         <div class="fl pd5" style="padding-right: 15px;">
                             <label> ~ </label>
                         </div>
                         <div class="sb-select fl" style="width:65px;">
-                                    <wj-combo-box
-                                            id="endTime"
-                                            ng-model="endTime"
-                                            items-source="_getComboData('endTimeCombo')"
-                                            display-member-path="name"
-                                            selected-value-path="value"
-                                            is-editable="false"
-                                            control="endTimeCombo"
-                                            initialized="_initComboBox(s)">
-                                    </wj-combo-box>
+                            <wj-combo-box
+                                    id="endTime"
+                                    ng-model="endTime"
+                                    items-source="_getComboData('endTimeCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="endTimeCombo"
+                                    initialized="_initComboBox(s)">
+                            </wj-combo-box>
                         </div>
                     </div>
                 </div>
@@ -134,8 +134,8 @@
                         </wj-combo-box>
                     </div>
                 </td>
-                <%-- 매장 --%>
-                <th><s:message code="cmm.store"/></th>
+                <%-- 매장선택 --%>
+                <th><s:message code="cmm.store.select"/></th>
                 <td>
                     <%-- 매장선택 모듈 사용시 include --%>
                     <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
