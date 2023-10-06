@@ -238,30 +238,28 @@ public class StoreBatchChangeServiceImpl implements StoreBatchChangeService {
 
     /** 매장정보 저장 */
     @Override
-    public int getSimpleSave(StoreBatchChangeVO[] storeBatchChangeVOs, SessionInfoVO sessionInfoVO) {
+    public int getSimpleSave(StoreBatchChangeVO storeBatchChangeVO, SessionInfoVO sessionInfoVO) {
         int storeCnt = 0;
         String currentDt = currentDateTimeString();
 
-        for(StoreBatchChangeVO storeBatchChangeVO : storeBatchChangeVOs) {
-            storeBatchChangeVO.setRegDt(currentDt);
-            storeBatchChangeVO.setRegId(sessionInfoVO.getUserId());
-            storeBatchChangeVO.setModDt(currentDt);
-            storeBatchChangeVO.setModId(sessionInfoVO.getUserId());
+        storeBatchChangeVO.setRegDt(currentDt);
+        storeBatchChangeVO.setRegId(sessionInfoVO.getUserId());
+        storeBatchChangeVO.setModDt(currentDt);
+        storeBatchChangeVO.setModId(sessionInfoVO.getUserId());
 
-            storeBatchChangeVO.setSessionId(sessionInfoVO.getUserId());
-            storeBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        storeBatchChangeVO.setSessionId(sessionInfoVO.getUserId());
+        storeBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-            // TB_MS_STORE 저장
-            // branchCd
-            storeCnt += storeBatchChangeMapper.getStoreBatchChangeUploadSave(storeBatchChangeVO);
+        // TB_MS_STORE 저장
+        // branchCd
+        storeCnt += storeBatchChangeMapper.getStoreBatchChangeUploadSave(storeBatchChangeVO);
 
-            // TB_MS_STORE_INFO 저장
-            // momsTeam, momsAcShop, momsAreaFg, momsCommercial, momsShopType, momsStoreManageType
-            storeCnt += storeBatchChangeMapper.getSimpleStoreInfoSave(storeBatchChangeVO);
+        // TB_MS_STORE_INFO 저장
+        // momsTeam, momsAcShop, momsAreaFg, momsCommercial, momsShopType, momsStoreManageType
+        storeCnt += storeBatchChangeMapper.getSimpleStoreInfoSave(storeBatchChangeVO);
 
-            // 전체 삭제
-            storeBatchChangeMapper.getStoreExcelUploadCheckDeleteAll(storeBatchChangeVO);
-        }
+        // 전체 삭제
+        storeBatchChangeMapper.getStoreExcelUploadCheckDeleteAll(storeBatchChangeVO);
 
         return storeCnt;
     }

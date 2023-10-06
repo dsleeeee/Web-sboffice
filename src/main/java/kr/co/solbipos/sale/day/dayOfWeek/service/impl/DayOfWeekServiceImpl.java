@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.day.dayOfWeek.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.day.day.service.DayVO;
@@ -35,14 +39,16 @@ import java.util.List;
 public class DayOfWeekServiceImpl implements DayOfWeekService {
     private final DayOfWeekMapper dayOfWeekMapper;
     private final DayMapper dayMapper;
+    private final PopupMapper popupMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public DayOfWeekServiceImpl(DayOfWeekMapper dayOfWeekMapper, DayMapper dayMapper) {
+    public DayOfWeekServiceImpl(DayOfWeekMapper dayOfWeekMapper, DayMapper dayMapper, PopupMapper popupMapper) {
         this.dayOfWeekMapper = dayOfWeekMapper;
         this.dayMapper = dayMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 주간종합탭 - 주간종합조회 */
@@ -57,8 +63,11 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayOfWeekVO.getStoreCds().split(",");
-        dayOfWeekVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayOfWeekVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayOfWeekVO.getStoreCds(), 3900));
+            dayOfWeekVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 결제수단 array 값 세팅
         dayOfWeekVO.setArrPayCol(dayOfWeekVO.getPayCol().split(","));
@@ -85,8 +94,11 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayOfWeekVO.getStoreCds().split(",");
-        dayOfWeekVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayOfWeekVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayOfWeekVO.getStoreCds(), 3900));
+            dayOfWeekVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 할인구분 array 값 세팅
         dayOfWeekVO.setArrDcCol(dayOfWeekVO.getDcCol().split(","));
@@ -113,8 +125,11 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayOfWeekVO.getStoreCds().split(",");
-        dayOfWeekVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayOfWeekVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayOfWeekVO.getStoreCds(), 3900));
+            dayOfWeekVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return dayOfWeekMapper.getDayOfWeekTaxList(dayOfWeekVO);
     }
@@ -131,8 +146,11 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayOfWeekVO.getStoreCds().split(",");
-        dayOfWeekVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayOfWeekVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayOfWeekVO.getStoreCds(), 3900));
+            dayOfWeekVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 매출 발생 시간대 기준, 동적 컬럼 생성을 위한 쿼리 변수;
         String sQuery1 = "";
@@ -186,15 +204,14 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
 //        dayOfWeekVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         dayOfWeekVO.setLevel("Level" + dayOfWeekVO.getLevel());
 
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
-            // 매장 array 값 세팅
-            String[] storeCds = dayOfWeekVO.getStoreCds().split(",");
-            dayOfWeekVO.setStoreCdList(storeCds);
-        }
-        else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayOfWeekVO.setStoreCds(sessionInfoVO.getStoreCd());
-            String[] storeCds = dayOfWeekVO.getStoreCds().split(",");
-            dayOfWeekVO.setStoreCdList(storeCds);
+        }
+
+        if(!StringUtil.getOrBlank(dayOfWeekVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayOfWeekVO.getStoreCds(), 3900));
+            dayOfWeekVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         // 레벨에 따른 분류값 가져와서 배열변수에 넣음.
@@ -286,8 +303,11 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayOfWeekVO.getStoreCds().split(",");
-        dayOfWeekVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayOfWeekVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayOfWeekVO.getStoreCds(), 3900));
+            dayOfWeekVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 포스구분 array 값 세팅
 //        dayOfWeekVO.setArrPosCol(dayOfWeekVO.getPosCol().split(","));

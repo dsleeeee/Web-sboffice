@@ -24,7 +24,9 @@ public class ProdDayVO extends PageVO {
     private String empNo;
     /** 상품분류 */
     private String prodClassCd;
-    
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
     /**
      * @return the hqOfficeCd
      */
@@ -131,5 +133,13 @@ public class ProdDayVO extends PageVO {
 
     public void setProdClassCd(String prodClassCd) {
         this.prodClassCd = prodClassCd;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

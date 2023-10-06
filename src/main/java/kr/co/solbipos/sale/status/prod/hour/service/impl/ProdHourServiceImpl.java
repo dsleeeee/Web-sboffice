@@ -2,7 +2,10 @@ package kr.co.solbipos.sale.status.prod.hour.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.day.day.service.DayVO;
 import kr.co.solbipos.sale.day.day.service.impl.DayMapper;
@@ -18,12 +21,14 @@ public class ProdHourServiceImpl implements ProdHourService {
     private final ProdHourMapper prodHourMapper;
     private final MessageService messageService;
     private final DayMapper dayMapper;
+    private final PopupMapper popupMapper;
 
     @Autowired
-    public ProdHourServiceImpl(ProdHourMapper prodHourMapper, MessageService messageService, DayMapper dayMapper) {
+    public ProdHourServiceImpl(ProdHourMapper prodHourMapper, MessageService messageService, DayMapper dayMapper, PopupMapper popupMapper) {
     	this.prodHourMapper = prodHourMapper;
         this.messageService = messageService;
         this.dayMapper = dayMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 시간대별탭 - 조회 */
@@ -32,11 +37,12 @@ public class ProdHourServiceImpl implements ProdHourService {
 
         prodHourVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	prodHourVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-    	prodHourVO.setStoreCd(sessionInfoVO.getStoreCd());
         prodHourVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(prodHourVO.getStoreCd()).equals("")) {
-        	prodHourVO.setArrStoreCd(prodHourVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodHourVO.getStoreCd(), 3900));
+            prodHourVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         // 매출 발생 시간대 기준, 동적 컬럼 생성을 위한 쿼리 변수;
@@ -97,9 +103,12 @@ public class ProdHourServiceImpl implements ProdHourService {
         prodHourVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         prodHourVO.setEmpNo(sessionInfoVO.getEmpNo());
 
-        if (!StringUtil.getOrBlank(prodHourVO.getStoreCd()).equals("")) {
-            prodHourVO.setArrStoreCd(prodHourVO.getStoreCd().split(","));
+        if(!StringUtil.getOrBlank(prodHourVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodHourVO.getStoreCd(), 3900));
+            prodHourVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
+
 
         // 매출 발생 시간대 기준, 동적 컬럼 생성을 위한 쿼리 변수;
         String sQuery1 = "";

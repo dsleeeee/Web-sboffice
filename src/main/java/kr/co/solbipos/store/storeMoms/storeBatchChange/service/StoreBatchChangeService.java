@@ -43,6 +43,6 @@ public interface StoreBatchChangeService {
     List<DefaultMap<String>> getStoreExcelUploadCheckList(StoreBatchChangeVO storeBatchChangeVO, SessionInfoVO sessionInfoVO);
 
     /** 매장정보 저장 */
-    int getSimpleSave(StoreBatchChangeVO[] storeBatchChangeVOs, SessionInfoVO sessionInfoVO);
+    int getSimpleSave(StoreBatchChangeVO storeBatchChangeVO, SessionInfoVO sessionInfoVO);
 
 }

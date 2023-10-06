@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.day.month.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.day.day.service.DayVO;
@@ -36,14 +40,16 @@ import java.util.List;
 public class MonthServiceImpl implements MonthService {
     private final MonthMapper monthMapper;
     private final DayMapper dayMapper;
+    private final PopupMapper popupMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public MonthServiceImpl(MonthMapper monthMapper, DayMapper dayMapper) {
+    public MonthServiceImpl(MonthMapper monthMapper, DayMapper dayMapper, PopupMapper popupMapper) {
         this.monthMapper = monthMapper;
         this.dayMapper = dayMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 월별종합탭 - 월별종합조회 */
@@ -59,8 +65,11 @@ public class MonthServiceImpl implements MonthService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = monthVO.getStoreCds().split(",");
-        monthVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(monthVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(monthVO.getStoreCds(), 3900));
+            monthVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 결제수단 array 값 세팅
         monthVO.setArrPayCol(monthVO.getPayCol().split(","));
@@ -87,8 +96,11 @@ public class MonthServiceImpl implements MonthService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = monthVO.getStoreCds().split(",");
-        monthVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(monthVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(monthVO.getStoreCds(), 3900));
+            monthVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 할인구분 array 값 세팅
         monthVO.setArrDcCol(monthVO.getDcCol().split(","));
@@ -115,8 +127,11 @@ public class MonthServiceImpl implements MonthService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = monthVO.getStoreCds().split(",");
-        monthVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(monthVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(monthVO.getStoreCds(), 3900));
+            monthVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return monthMapper.getMonthTaxList(monthVO);
     }
@@ -133,8 +148,11 @@ public class MonthServiceImpl implements MonthService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = monthVO.getStoreCds().split(",");
-        monthVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(monthVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(monthVO.getStoreCds(), 3900));
+            monthVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 매출 발생 시간대 기준, 동적 컬럼 생성을 위한 쿼리 변수;
         String sQuery1 = "";
@@ -191,7 +209,7 @@ public class MonthServiceImpl implements MonthService {
 //        monthVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         monthVO.setLevel("Level" + monthVO.getLevel());
 
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
+        /*if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
             // 매장 array 값 세팅
             String[] storeCds = monthVO.getStoreCds().split(",");
             monthVO.setStoreCdList(storeCds);
@@ -200,6 +218,16 @@ public class MonthServiceImpl implements MonthService {
             monthVO.setStoreCds(sessionInfoVO.getStoreCd());
             String[] storeCds = monthVO.getStoreCds().split(",");
             monthVO.setStoreCdList(storeCds);
+        }*/
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            monthVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(monthVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(monthVO.getStoreCds(), 3900));
+            monthVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         // 레벨에 따른 분류값 가져와서 배열변수에 넣음.
@@ -291,8 +319,11 @@ public class MonthServiceImpl implements MonthService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = monthVO.getStoreCds().split(",");
-        monthVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(monthVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(monthVO.getStoreCds(), 3900));
+            monthVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 포스구분 array 값 세팅
 //        monthVO.setArrPosCol(monthVO.getPosCol().split(","));
@@ -347,8 +378,11 @@ public class MonthServiceImpl implements MonthService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = monthVO.getStoreCds().split(",");
-        monthVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(monthVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(monthVO.getStoreCds(), 3900));
+            monthVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return monthMapper.getMonthEmpCardList(monthVO);
     }

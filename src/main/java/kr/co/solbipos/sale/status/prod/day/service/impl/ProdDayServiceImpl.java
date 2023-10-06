@@ -2,7 +2,10 @@ package kr.co.solbipos.sale.status.prod.day.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.status.prod.day.service.ProdDayService;
 import kr.co.solbipos.sale.status.prod.day.service.ProdDayVO;
@@ -14,11 +17,13 @@ import java.util.List;
 @Service("ProdDayService")
 public class ProdDayServiceImpl implements ProdDayService {
     private final ProdDayMapper prodDayMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public ProdDayServiceImpl(ProdDayMapper prodDayMapper, MessageService messageService) {
+    public ProdDayServiceImpl(ProdDayMapper prodDayMapper, PopupMapper popupMapper, MessageService messageService) {
     	this.prodDayMapper = prodDayMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -31,7 +36,9 @@ public class ProdDayServiceImpl implements ProdDayService {
         prodDayVO.setEmpNo(sessionInfoVO.getEmpNo());
     	
         if(!StringUtil.getOrBlank(prodDayVO.getStoreCd()).equals("")) {
-        	prodDayVO.setArrStoreCd(prodDayVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodDayVO.getStoreCd(), 3900));
+            prodDayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
         
         return prodDayMapper.getProdDayList(prodDayVO);
@@ -46,7 +53,9 @@ public class ProdDayServiceImpl implements ProdDayService {
         prodDayVO.setEmpNo(sessionInfoVO.getEmpNo());
     	
         if(!StringUtil.getOrBlank(prodDayVO.getStoreCd()).equals("")) {
-        	prodDayVO.setArrStoreCd(prodDayVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodDayVO.getStoreCd(), 3900));
+            prodDayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
         
         return prodDayMapper.getProdDayExcelList(prodDayVO);

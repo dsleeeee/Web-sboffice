@@ -1,7 +1,10 @@
 package kr.co.solbipos.sale.day.dayPeriod.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.day.dayPeriod.service.DayPeriodService;
@@ -33,13 +36,15 @@ import java.util.List;
 @Transactional
 public class DayPeriodServiceImpl implements DayPeriodService {
     private final DayPeriodMapper dayPeriodMapper;
+    private final PopupMapper popupMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public DayPeriodServiceImpl(DayPeriodMapper dayPeriodMapper) {
+    public DayPeriodServiceImpl(DayPeriodMapper dayPeriodMapper, PopupMapper popupMapper) {
         this.dayPeriodMapper = dayPeriodMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 시간대별탭 - 시간대별 매출조회 */
@@ -54,8 +59,11 @@ public class DayPeriodServiceImpl implements DayPeriodService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayPeriodVO.getStoreCds().split(",");
-        dayPeriodVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayPeriodVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayPeriodVO.getStoreCds(), 3900));
+            dayPeriodVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return dayPeriodMapper.getDayPeriodTimeList(dayPeriodVO);
     }
@@ -72,8 +80,11 @@ public class DayPeriodServiceImpl implements DayPeriodService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayPeriodVO.getStoreCds().split(",");
-        dayPeriodVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayPeriodVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayPeriodVO.getStoreCds(), 3900));
+            dayPeriodVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return dayPeriodMapper.getDayPeriodTimeDetailList(dayPeriodVO);
     }
@@ -87,15 +98,14 @@ public class DayPeriodServiceImpl implements DayPeriodService {
         dayPeriodVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         dayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
-            // 매장 array 값 세팅
-            String[] storeCds = dayPeriodVO.getStoreCds().split(",");
-            dayPeriodVO.setStoreCdList(storeCds);
-        }
-        else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayPeriodVO.setStoreCds(sessionInfoVO.getStoreCd());
-            String[] storeCds = dayPeriodVO.getStoreCds().split(",");
-            dayPeriodVO.setStoreCdList(storeCds);
+        }
+
+        if(!StringUtil.getOrBlank(dayPeriodVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayPeriodVO.getStoreCds(), 3900));
+            dayPeriodVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return dayPeriodMapper.getDayPeriodProdClassList(dayPeriodVO);
@@ -110,15 +120,14 @@ public class DayPeriodServiceImpl implements DayPeriodService {
         dayPeriodVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         dayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
-            // 매장 array 값 세팅
-            String[] storeCds = dayPeriodVO.getStoreCds().split(",");
-            dayPeriodVO.setStoreCdList(storeCds);
-        }
-        else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayPeriodVO.setStoreCds(sessionInfoVO.getStoreCd());
-            String[] storeCds = dayPeriodVO.getStoreCds().split(",");
-            dayPeriodVO.setStoreCdList(storeCds);
+        }
+
+        if(!StringUtil.getOrBlank(dayPeriodVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayPeriodVO.getStoreCds(), 3900));
+            dayPeriodVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return dayPeriodMapper.getDayPeriodProdClassDetailList(dayPeriodVO);
@@ -148,8 +157,11 @@ public class DayPeriodServiceImpl implements DayPeriodService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayPeriodVO.getStoreCds().split(",");
-        dayPeriodVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayPeriodVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayPeriodVO.getStoreCds(), 3900));
+            dayPeriodVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return dayPeriodMapper.getDayPeriodCornerList(dayPeriodVO);
     }
@@ -175,8 +187,11 @@ public class DayPeriodServiceImpl implements DayPeriodService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayPeriodVO.getStoreCds().split(",");
-        dayPeriodVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayPeriodVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayPeriodVO.getStoreCds(), 3900));
+            dayPeriodVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return dayPeriodMapper.getDayPeriodGiftList(dayPeriodVO);
     }

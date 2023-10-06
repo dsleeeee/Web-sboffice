@@ -1,13 +1,14 @@
 package kr.co.solbipos.sale.status.prod.payFg.service.impl;
 
-import kr.co.common.data.domain.CustomComboVO;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.status.prod.payFg.service.ProdPayFgService;
 import kr.co.solbipos.sale.status.prod.payFg.service.ProdPayFgVO;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +17,13 @@ import java.util.List;
 @Service("ProdPayFgService")
 public class ProdPayFgServiceImpl implements ProdPayFgService {
     private final ProdPayFgMapper prodPayFgMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public ProdPayFgServiceImpl(ProdPayFgMapper prodPayFgMapper, MessageService messageService) {
+    public ProdPayFgServiceImpl(ProdPayFgMapper prodPayFgMapper, PopupMapper popupMapper, MessageService messageService) {
     	this.prodPayFgMapper = prodPayFgMapper;
+    	this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -47,7 +50,9 @@ public class ProdPayFgServiceImpl implements ProdPayFgService {
         prodPayFgVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(prodPayFgVO.getStoreCd()).equals("")) {
-            prodPayFgVO.setArrStoreCd(prodPayFgVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodPayFgVO.getStoreCd(), 3900));
+            prodPayFgVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         // 결제수단 array 값 세팅
@@ -72,7 +77,9 @@ public class ProdPayFgServiceImpl implements ProdPayFgService {
         prodPayFgVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(prodPayFgVO.getStoreCd()).equals("")) {
-            prodPayFgVO.setArrStoreCd(prodPayFgVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodPayFgVO.getStoreCd(), 3900));
+            prodPayFgVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         // 결제수단 array 값 세팅

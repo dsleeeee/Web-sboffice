@@ -277,7 +277,9 @@ public class DayServiceImpl implements DayService {
         dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
-            dayVO.setArrStoreCd(dayVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayVO.getStoreCd(), 3900));
+            dayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         // 할인구분 array 값 세팅
@@ -301,7 +303,9 @@ public class DayServiceImpl implements DayService {
         dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
-            dayVO.setArrStoreCd(dayVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayVO.getStoreCd(), 3900));
+            dayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return dayMapper.getDayTaxList(dayVO);
@@ -314,7 +318,9 @@ public class DayServiceImpl implements DayService {
         dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
-            dayVO.setArrStoreCd(dayVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayVO.getStoreCd(), 3900));
+            dayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         // 매출 발생 시간대 기준, 동적 컬럼 생성을 위한 쿼리 변수;
@@ -386,12 +392,14 @@ public class DayServiceImpl implements DayService {
         dayVO.setLevel("Level" + dayVO.getLevel());
 
         // storeCd 관련처리
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사면서 매장 검색조건이 있는 경우 배열변수에 넣는다.
-            if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
-                dayVO.setArrStoreCd(dayVO.getStoreCd().split(","));
-            }
-        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            dayVO.setArrStoreCd(sessionInfoVO.getStoreCd().split(","));
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
+            dayVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayVO.getStoreCd(), 3900));
+            dayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         // 레벨에 따른 분류값 가져와서 배열변수에 넣음.
@@ -505,7 +513,9 @@ public class DayServiceImpl implements DayService {
         }
 
         if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
-            dayVO.setArrStoreCd(dayVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayVO.getStoreCd(), 3900));
+            dayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
 //        // 포스구분 array 값 세팅
@@ -561,8 +571,11 @@ public class DayServiceImpl implements DayService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayVO.getStoreCds().split(",");
-        dayVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayVO.getStoreCds(), 3900));
+            dayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return dayMapper.getDayEmpCardList(dayVO);
     }

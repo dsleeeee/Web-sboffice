@@ -389,11 +389,11 @@ public class StoreBatchChangeController {
     /** 엑셀 저장 */
     @RequestMapping(value = "storeBatchChange/getSimpleSave.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getSimpleSave(@RequestBody StoreBatchChangeVO[] storeBatchChangeVOs, HttpServletRequest request) {
+    public Result getSimpleSave(StoreBatchChangeVO storeBatchChangeVO, HttpServletRequest request) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = storeBatchChangeService.getSimpleSave(storeBatchChangeVOs, sessionInfoVO);
+        int result = storeBatchChangeService.getSimpleSave(storeBatchChangeVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

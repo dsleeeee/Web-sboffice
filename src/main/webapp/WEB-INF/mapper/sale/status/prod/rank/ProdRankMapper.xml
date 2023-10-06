@@ -48,11 +48,8 @@
                         TB_MS_PRODUCT_BARCD tmpb
                         WHERE 1=1
                         AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                        <if test='storeCd != null and storeCd != ""'>
-                            AND
-                            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                                tsdp.STORE_CD = #{item}
-                            </foreach>
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND tsdp.STORE_CD IN (${storeCdQuery})
                         </if>
                         AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                         AND tmp.STORE_CD = tsdp.STORE_CD
@@ -94,11 +91,8 @@
                             TB_MS_PRODUCT tmp
                      WHERE 1=1
                        AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                    <if test='storeCd != null and storeCd != ""'>
-                        AND
-                        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                            tsdp.STORE_CD = #{item}
-                        </foreach>
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND tsdp.STORE_CD IN (${storeCdQuery})
                     </if>
                     <if test='orgnFg != null and orgnFg == "H"'>
                         AND (
@@ -156,11 +150,8 @@
                             TB_MS_PRODUCT_BARCD tmpb
                      WHERE 1=1
                        AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-                        <if test='storeCd != null and storeCd != ""'>
-                          AND
-                            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                                tsdp.STORE_CD = #{item}
-                            </foreach>
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND tsdp.STORE_CD IN (${storeCdQuery})
                         </if>
                         <if test='orgnFg != null and orgnFg == "H"'>
                             AND (

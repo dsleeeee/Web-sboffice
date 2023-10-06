@@ -68,9 +68,9 @@
                 <s:message code="cmm.excel.down" />
             </button>
             <%-- 삭제 --%>
-            <button class="btn_skyblue ml5 fr" ng-click="delete()">
+            <%--<button class="btn_skyblue ml5 fr" ng-click="delete()">
                 <s:message code="cmm.del" />
-            </button>
+            </button>--%>
             <%-- 저장 --%>
             <button class="btn_skyblue ml5 fr" id="btnStoreExcelUploadSave" ng-click="save()">
                 <s:message code="cmm.save" />
@@ -108,7 +108,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storeBatchChange/storeBatchChangeExcelUpload.js?ver=20230810.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storeBatchChange/storeBatchChangeExcelUpload.js?ver=20231006.01" charset="utf-8"></script>
 
 <%-- 상품엑셀업로드 팝업 --%>
 <c:import url="/WEB-INF/view/store/storeMoms/storeBatchChange/storeBatchChangeExcelUploadAdd.jsp">
