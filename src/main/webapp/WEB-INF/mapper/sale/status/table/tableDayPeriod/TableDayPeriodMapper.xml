@@ -29,12 +29,9 @@
    			  AND TMT.STORE_CD = TSDT.STORE_CD
           	  AND TMTG.STORE_CD = TSDT.STORE_CD
           	  AND TMT.STORE_CD = TMS.STORE_CD
-   			  <if test='arrStoreCd != null and arrStoreCd != ""'>
-			  	AND
-			  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                    TMTG.STORE_CD = #{item}
-			  	</foreach>
-			  </if>
+              <if test='storeCdQuery != null and storeCdQuery != ""'>
+                  AND TMTG.STORE_CD IN (${storeCdQuery})
+              </if>
               <if test='orgnFg != null and orgnFg == "H"'>
                 AND (
                         'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -76,11 +73,8 @@
               AND TMT.STORE_CD = TSDT.STORE_CD
               AND TMTG.STORE_CD = TSDT.STORE_CD
               AND TMT.STORE_CD = TMS.STORE_CD
-              <if test='arrStoreCd != null and arrStoreCd != ""'>
-                AND
-                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                    TMTG.STORE_CD = #{item}
-                </foreach>
+              <if test='storeCdQuery != null and storeCdQuery != ""'>
+                  AND TMTG.STORE_CD IN (${storeCdQuery})
               </if>
               <if test='orgnFg != null and orgnFg == "H"'>
                 AND (

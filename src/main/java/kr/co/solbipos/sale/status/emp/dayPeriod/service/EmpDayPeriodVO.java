@@ -15,6 +15,9 @@ public class EmpDayPeriodVO extends PageVO {
     /**판매자 번호*/
     private String empNo;
 	private String orgnFg;
+
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
     
 	public String getHqOfficeCd() {
 		return hqOfficeCd;
@@ -51,4 +54,12 @@ public class EmpDayPeriodVO extends PageVO {
 	public void setOrgnFg(String orgnFg) {
 		this.orgnFg = orgnFg;
 	}
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
+    }
 }

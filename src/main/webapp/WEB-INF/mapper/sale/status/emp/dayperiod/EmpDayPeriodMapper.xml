@@ -22,12 +22,9 @@
 		             , SUM(TSDE.REAL_SALE_AMT) AS REAL_SALE_AMT
 				FROM TB_SL_DAILY_EMPLOYEE TSDE
 				WHERE TSDE.HQ_OFFICE_CD = #{hqOfficeCd}
-				<if test='arrStoreCd != null and arrStoreCd != ""'>
-					AND
-		            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-						TSDE.STORE_CD = #{item}
-		            </foreach>
-		        </if>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND TSDE.STORE_CD IN (${storeCdQuery})
+                </if>
 				<if test='orgnFg != null and orgnFg == "H"'>
 					AND (
 							'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -64,12 +61,9 @@
 		             , SUM(TSDE.REAL_SALE_AMT) AS REAL_SALE_AMT
 				FROM TB_SL_DAILY_EMPLOYEE TSDE
 				WHERE TSDE.HQ_OFFICE_CD = #{hqOfficeCd}
-				<if test='arrStoreCd != null and arrStoreCd != ""'>
-					AND
-		            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-						TSDE.STORE_CD = #{item}
-		            </foreach>
-		        </if>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND TSDE.STORE_CD IN (${storeCdQuery})
+                </if>
 				<if test='orgnFg != null and orgnFg == "H"'>
 					AND (
 							'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')

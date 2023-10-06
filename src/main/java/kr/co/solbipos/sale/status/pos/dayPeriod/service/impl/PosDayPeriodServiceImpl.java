@@ -2,7 +2,10 @@ package kr.co.solbipos.sale.status.pos.dayPeriod.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.status.pos.dayPeriod.service.PosDayPeriodService;
 import kr.co.solbipos.sale.status.pos.dayPeriod.service.PosDayPeriodVO;
@@ -15,11 +18,13 @@ import java.util.List;
 @Service("posDayPeriodService")
 public class PosDayPeriodServiceImpl implements PosDayPeriodService {
     private final PosDayPeriodMapper posDayPeriodMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public PosDayPeriodServiceImpl(PosDayPeriodMapper posDayPeriodMapper, MessageService messageService) {
+    public PosDayPeriodServiceImpl(PosDayPeriodMapper posDayPeriodMapper, PopupMapper popupMapper, MessageService messageService) {
         this.posDayPeriodMapper = posDayPeriodMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -31,14 +36,11 @@ public class PosDayPeriodServiceImpl implements PosDayPeriodService {
     	posDayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		posDayPeriodVO.setEmpNo(sessionInfoVO.getEmpNo());
 
-    	if (posDayPeriodVO.getStoreCd() != null && !"".equals(posDayPeriodVO.getStoreCd())) {
-    		String[] arrStoreCd = posDayPeriodVO.getStoreCd().split(",");
-	        if (arrStoreCd.length > 0) {
-	    		if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-	    			posDayPeriodVO.setArrStoreCd(arrStoreCd);
-	    		}
-	    	}
-    	}
+        if(!StringUtil.getOrBlank(posDayPeriodVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(posDayPeriodVO.getStoreCd(), 3900));
+            posDayPeriodVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return posDayPeriodMapper.getPosDayPeriodList(posDayPeriodVO);
     }
@@ -51,14 +53,11 @@ public class PosDayPeriodServiceImpl implements PosDayPeriodService {
 		posDayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		posDayPeriodVO.setEmpNo(sessionInfoVO.getEmpNo());
 
-		if (posDayPeriodVO.getStoreCd() != null && !"".equals(posDayPeriodVO.getStoreCd())) {
-			String[] arrStoreCd = posDayPeriodVO.getStoreCd().split(",");
-			if (arrStoreCd.length > 0) {
-				if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-					posDayPeriodVO.setArrStoreCd(arrStoreCd);
-				}
-			}
-		}
+        if(!StringUtil.getOrBlank(posDayPeriodVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(posDayPeriodVO.getStoreCd(), 3900));
+            posDayPeriodVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
 		return posDayPeriodMapper.getPosDayPeriodExcelList(posDayPeriodVO);
 	}
@@ -70,15 +69,6 @@ public class PosDayPeriodServiceImpl implements PosDayPeriodService {
 		posDayPeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
     	posDayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
-		if (posDayPeriodVO.getStoreCd() != null && !"".equals(posDayPeriodVO.getStoreCd())) {
-    		String[] arrStoreCd = posDayPeriodVO.getStoreCd().split(",");
-	        if (arrStoreCd.length > 0) {
-	    		if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-	    			posDayPeriodVO.setArrStoreCd(arrStoreCd);
-	    		}
-	    	}
-    	}
-
         return posDayPeriodMapper.getPosDayPeriodDtlList(posDayPeriodVO);
 	}
 
@@ -88,15 +78,6 @@ public class PosDayPeriodServiceImpl implements PosDayPeriodService {
 
 		posDayPeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
     	posDayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-
-		if (posDayPeriodVO.getStoreCd() != null && !"".equals(posDayPeriodVO.getStoreCd())) {
-    		String[] arrStoreCd = posDayPeriodVO.getStoreCd().split(",");
-	        if (arrStoreCd.length > 0) {
-	    		if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-	    			posDayPeriodVO.setArrStoreCd(arrStoreCd);
-	    		}
-	    	}
-    	}
 
         return posDayPeriodMapper.getPosDayPeriodDtlExcelList(posDayPeriodVO);
 	}

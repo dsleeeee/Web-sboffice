@@ -2,6 +2,10 @@ package kr.co.solbipos.sale.status.rtnStatus.day.service.impl;
 
 import java.util.List;
 
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.today.todayDtl.service.TodayDtlVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +36,13 @@ import kr.co.solbipos.sale.status.rtnStatus.day.service.RtnStatusDayVO;
 @Service("rtnStatusDayService")
 public class RtnStatusDayServiceImpl implements RtnStatusDayService {
     private final RtnStatusDayMapper rtnStatusDayMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public RtnStatusDayServiceImpl(RtnStatusDayMapper rtnStatusDayMapper, MessageService messageService) {
+    public RtnStatusDayServiceImpl(RtnStatusDayMapper rtnStatusDayMapper, PopupMapper popupMapper, MessageService messageService) {
         this.rtnStatusDayMapper = rtnStatusDayMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -48,15 +54,11 @@ public class RtnStatusDayServiceImpl implements RtnStatusDayService {
 		rtnStatusDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		rtnStatusDayVO.setEmpNo(sessionInfoVO.getEmpNo());
 
-		if (rtnStatusDayVO.getStoreCd() != null && !"".equals(rtnStatusDayVO.getStoreCd())) {
-        	
-        	String[] arrStoreCd = rtnStatusDayVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				rtnStatusDayVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
-    	}
+        if(!StringUtil.getOrBlank(rtnStatusDayVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(rtnStatusDayVO.getStoreCd(), 3900));
+            rtnStatusDayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
     	
         return rtnStatusDayMapper.getRtnStatusDayList(rtnStatusDayVO);
     }
@@ -85,14 +87,11 @@ public class RtnStatusDayServiceImpl implements RtnStatusDayService {
 		rtnStatusDayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		rtnStatusDayVO.setEmpNo(sessionInfoVO.getEmpNo());
 		
-		if (rtnStatusDayVO.getStoreCd() != null && !"".equals(rtnStatusDayVO.getStoreCd())) {
-        	String[] arrStoreCd = rtnStatusDayVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				rtnStatusDayVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
-    	}
+        if(!StringUtil.getOrBlank(rtnStatusDayVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(rtnStatusDayVO.getStoreCd(), 3900));
+            rtnStatusDayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
 		return rtnStatusDayMapper.getRtnStatusProdList(rtnStatusDayVO);
 	}
@@ -104,14 +103,12 @@ public class RtnStatusDayServiceImpl implements RtnStatusDayService {
 		rtnStatusDayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		rtnStatusDayVO.setEmpNo(sessionInfoVO.getEmpNo());
 
-		if (rtnStatusDayVO.getStoreCd() != null && !"".equals(rtnStatusDayVO.getStoreCd())) {
-			String[] arrStoreCd = rtnStatusDayVO.getStoreCd().split(",");
-			if (arrStoreCd.length > 0) {
-				if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-					rtnStatusDayVO.setArrStoreCd(arrStoreCd);
-				}
-			}
-		}
+        if(!StringUtil.getOrBlank(rtnStatusDayVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(rtnStatusDayVO.getStoreCd(), 3900));
+            rtnStatusDayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
 		return rtnStatusDayMapper.getRtnStatusProdExcelList(rtnStatusDayVO);
 	}
 
@@ -121,16 +118,12 @@ public class RtnStatusDayServiceImpl implements RtnStatusDayService {
 		rtnStatusDayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		rtnStatusDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		rtnStatusDayVO.setEmpNo(sessionInfoVO.getEmpNo());
-    	
-    	if (rtnStatusDayVO.getStoreCd() != null && !"".equals(rtnStatusDayVO.getStoreCd())) {
-        	
-        	String[] arrStoreCd = rtnStatusDayVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				rtnStatusDayVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
-    	}
+
+        if(!StringUtil.getOrBlank(rtnStatusDayVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(rtnStatusDayVO.getStoreCd(), 3900));
+            rtnStatusDayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
     	
         return rtnStatusDayMapper.getRtnstatusDayExcelList(rtnStatusDayVO);
 	}
@@ -178,14 +171,12 @@ public class RtnStatusDayServiceImpl implements RtnStatusDayService {
 		rtnStatusDayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		rtnStatusDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		rtnStatusDayVO.setEmpNo(sessionInfoVO.getEmpNo());
-		if (rtnStatusDayVO.getStoreCd() != null && !"".equals(rtnStatusDayVO.getStoreCd())) {
-			String[] arrStoreCd = rtnStatusDayVO.getStoreCd().split(",");
-			if (arrStoreCd.length > 0) {
-				if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-					rtnStatusDayVO.setArrStoreCd(arrStoreCd);
-				}
-			}
-		}
+
+        if(!StringUtil.getOrBlank(rtnStatusDayVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(rtnStatusDayVO.getStoreCd(), 3900));
+            rtnStatusDayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
 		// 결제수단 array 값 세팅
 		rtnStatusDayVO.setArrPayCol(rtnStatusDayVO.getPayCol().split(","));

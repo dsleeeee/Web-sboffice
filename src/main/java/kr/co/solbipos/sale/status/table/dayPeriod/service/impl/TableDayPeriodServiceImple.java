@@ -2,6 +2,9 @@ package kr.co.solbipos.sale.status.table.dayPeriod.service.impl;
 
 import java.util.List;
 
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import org.springframework.stereotype.Service;
 
 import kr.co.common.data.structure.DefaultMap;
@@ -15,11 +18,13 @@ import kr.co.solbipos.sale.status.table.dayPeriod.service.TableDayPeriodVO;
 public class TableDayPeriodServiceImple implements TableDayPeriodService {
 
 	private final TableDayPeriodMapper tableDayPeriodMapper;
+    private final PopupMapper popupMapper;
 	private final MessageService messageService;
 
-	public TableDayPeriodServiceImple(TableDayPeriodMapper tableDayPeriodMapper, MessageService messageService) {
+	public TableDayPeriodServiceImple(TableDayPeriodMapper tableDayPeriodMapper, PopupMapper popupMapper, MessageService messageService) {
 		super();
 		this.tableDayPeriodMapper = tableDayPeriodMapper;
+		this.popupMapper = popupMapper;
 		this.messageService = messageService;
 	}
 
@@ -29,8 +34,11 @@ public class TableDayPeriodServiceImple implements TableDayPeriodService {
 		tableDayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		tableDayPeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		tableDayPeriodVO.setEmpNo(sessionInfoVO.getEmpNo());
-		if(!StringUtil.getOrBlank(tableDayPeriodVO.getStoreCd()).equals("")) {
-        	tableDayPeriodVO.setArrStoreCd(tableDayPeriodVO.getStoreCd().split(","));
+
+        if(!StringUtil.getOrBlank(tableDayPeriodVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(tableDayPeriodVO.getStoreCd(), 3900));
+            tableDayPeriodVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
 		return tableDayPeriodMapper.getTableDayPeriodList(tableDayPeriodVO);
@@ -42,8 +50,11 @@ public class TableDayPeriodServiceImple implements TableDayPeriodService {
 		tableDayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		tableDayPeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		tableDayPeriodVO.setEmpNo(sessionInfoVO.getEmpNo());
-		if(!StringUtil.getOrBlank(tableDayPeriodVO.getStoreCd()).equals("")) {
-        	tableDayPeriodVO.setArrStoreCd(tableDayPeriodVO.getStoreCd().split(","));
+
+        if(!StringUtil.getOrBlank(tableDayPeriodVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(tableDayPeriodVO.getStoreCd(), 3900));
+            tableDayPeriodVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
 		return tableDayPeriodMapper.getTableDayPeriodExcelList(tableDayPeriodVO);

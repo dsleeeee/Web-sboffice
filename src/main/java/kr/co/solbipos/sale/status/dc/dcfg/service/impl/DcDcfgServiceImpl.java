@@ -2,6 +2,9 @@ package kr.co.solbipos.sale.status.dc.dcfg.service.impl;
 
 import java.util.List;
 
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +18,13 @@ import kr.co.solbipos.sale.status.dc.dcfg.service.DcDcfgVO;
 @Service("dcDcfgService")
 public class DcDcfgServiceImpl implements DcDcfgService {
     private final DcDcfgMapper dcDcfgMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public DcDcfgServiceImpl(DcDcfgMapper dcDcfgMapper, MessageService messageService) {
+    public DcDcfgServiceImpl(DcDcfgMapper dcDcfgMapper, PopupMapper popupMapper, MessageService messageService) {
         this.dcDcfgMapper = dcDcfgMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -31,9 +36,12 @@ public class DcDcfgServiceImpl implements DcDcfgService {
 		dcDcfgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		dcDcfgVO.setEmpNo(sessionInfoVO.getEmpNo());
 
-    	if(!StringUtil.getOrBlank(dcDcfgVO.getStoreCd()).equals("")) {
-        	dcDcfgVO.setArrStoreCd(dcDcfgVO.getStoreCd().split(","));
+        if(!StringUtil.getOrBlank(dcDcfgVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dcDcfgVO.getStoreCd(), 3900));
+            dcDcfgVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
+
     	if(!StringUtil.getOrBlank(dcDcfgVO.getDcCd()).equals("")) {
         	dcDcfgVO.setArrDcCd(dcDcfgVO.getDcCd().split(","));
         }
@@ -47,9 +55,12 @@ public class DcDcfgServiceImpl implements DcDcfgService {
 		dcDcfgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		dcDcfgVO.setEmpNo(sessionInfoVO.getEmpNo());
 
-    	if(!StringUtil.getOrBlank(dcDcfgVO.getStoreCd()).equals("")) {
-        	dcDcfgVO.setArrStoreCd(dcDcfgVO.getStoreCd().split(","));
+        if(!StringUtil.getOrBlank(dcDcfgVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dcDcfgVO.getStoreCd(), 3900));
+            dcDcfgVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
+
     	if(!StringUtil.getOrBlank(dcDcfgVO.getDcCd()).equals("")) {
         	dcDcfgVO.setArrDcCd(dcDcfgVO.getDcCd().split(","));
         }
@@ -63,9 +74,6 @@ public class DcDcfgServiceImpl implements DcDcfgService {
 		dcDcfgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		dcDcfgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-		if(!StringUtil.getOrBlank(dcDcfgVO.getStoreCd()).equals("")) {
-        	dcDcfgVO.setArrStoreCd(dcDcfgVO.getStoreCd().split(","));
-        }
 		return dcDcfgMapper.getDcDcfgDtlList(dcDcfgVO);
 	}
 
@@ -74,8 +82,10 @@ public class DcDcfgServiceImpl implements DcDcfgService {
 	public List<DefaultMap<String>> getDcNmlList(DcDcfgVO dcDcfgVO, SessionInfoVO sessionInfoVO) {
 		dcDcfgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-		if(!StringUtil.getOrBlank(dcDcfgVO.getStoreCd()).equals("")) {
-        	dcDcfgVO.setArrStoreCd(dcDcfgVO.getStoreCd().split(","));
+        if(!StringUtil.getOrBlank(dcDcfgVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dcDcfgVO.getStoreCd(), 3900));
+            dcDcfgVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
 		if(!StringUtil.getOrBlank(dcDcfgVO.getDcCd()).equals("")) {

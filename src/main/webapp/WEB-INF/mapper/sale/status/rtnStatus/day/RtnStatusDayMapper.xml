@@ -45,11 +45,8 @@
               WHERE TSSH.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND TSSH.STORE_CD = TMS.STORE_CD
         ]]>
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-           AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                TSSH.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND TSSH.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
@@ -194,11 +191,8 @@
                 FROM TB_SL_SALE_DTL
                 WHERE 1=1
                 AND HQ_OFFICE_CD = #{hqOfficeCd}
-                <if test='arrStoreCd != null and arrStoreCd != ""'>
-                    AND
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                        STORE_CD = #{item}
-                    </foreach>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND STORE_CD IN (${storeCdQuery})
                 </if>
                 <if test='orgnFg != null and orgnFg == "H"'>
                     AND (
@@ -264,6 +258,9 @@
                         STORE_CD = #{item}
                     </foreach>
                 </if>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND STORE_CD IN (${storeCdQuery})
+                </if>
                 <if test='orgnFg != null and orgnFg == "H"'>
                     AND (
                             'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -317,11 +314,8 @@
               WHERE TSSH.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND TSSH.STORE_CD = TMS.STORE_CD
         ]]>
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-           AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                TSSH.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND TSSH.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
@@ -586,11 +580,8 @@
                                 WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
                                 AND     tssh.SALE_YN = 'N'
         ]]>
-                                <if test='arrStoreCd != null and arrStoreCd != ""'>
-                                    AND
-                                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                                        tssh.STORE_CD = #{item}
-                                    </foreach>
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND tssh.STORE_CD IN (${storeCdQuery})
                                 </if>
                                 <if test='orgnFg != null and orgnFg == "H"'>
                                     AND (
@@ -620,11 +611,8 @@
                                 WHERE   tsshp.HQ_OFFICE_CD  = #{hqOfficeCd}
                                 AND     tsshp.SALE_YN = 'N'
         ]]>
-                                <if test='arrStoreCd != null and arrStoreCd != ""'>
-                                    AND
-                                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                                        tsshp.STORE_CD = #{item}
-                                    </foreach>
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND tsshp.STORE_CD IN (${storeCdQuery})
                                 </if>
                                 <if test='orgnFg != null and orgnFg == "H"'>
                                     AND (
@@ -655,11 +643,8 @@
                     WHERE   tsspc.HQ_OFFICE_CD =	#{hqOfficeCd}
                     AND     tsspc.SALE_YN = 'N'
                                 ]]>
-                    <if test='arrStoreCd != null and arrStoreCd != ""'>
-                        AND
-                        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                            tsspc.STORE_CD = #{item}
-                        </foreach>
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND tsspc.STORE_CD IN (${storeCdQuery})
                     </if>
                     <if test='orgnFg != null and orgnFg == "H"'>
                         AND (

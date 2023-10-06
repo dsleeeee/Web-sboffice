@@ -2,6 +2,10 @@ package kr.co.solbipos.sale.status.posExcclc.posExcclc.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.status.posExcclc.posExcclc.service.PosExcclcService;
 import kr.co.solbipos.sale.status.posExcclc.posExcclc.service.PosExcclcVO;
@@ -15,11 +19,13 @@ import java.util.List;
 @Service("posExcclcService")
 public class PosExcclcServiceImpl implements PosExcclcService {
     private final PosExcclcMapper posExcclcMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public PosExcclcServiceImpl(PosExcclcMapper posExcclcMapper, MessageService messageService) {
+    public PosExcclcServiceImpl(PosExcclcMapper posExcclcMapper, PopupMapper popupMapper, MessageService messageService) {
         this.posExcclcMapper = posExcclcMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -29,14 +35,12 @@ public class PosExcclcServiceImpl implements PosExcclcService {
 		posExcclcVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		posExcclcVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		posExcclcVO.setEmpNo(sessionInfoVO.getEmpNo());
-		if (posExcclcVO.getStoreCd() != null && !"".equals(posExcclcVO.getStoreCd())) {
-    		String[] arrStoreCd = posExcclcVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				posExcclcVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
-    	}
+
+        if(!StringUtil.getOrBlank(posExcclcVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(posExcclcVO.getStoreCd(), 3900));
+            posExcclcVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 		return posExcclcMapper.getPosExcclcList(posExcclcVO);
 	}
 
@@ -51,14 +55,12 @@ public class PosExcclcServiceImpl implements PosExcclcService {
 		posExcclcVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		posExcclcVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		posExcclcVO.setEmpNo(sessionInfoVO.getEmpNo());
-		if (posExcclcVO.getStoreCd() != null && !"".equals(posExcclcVO.getStoreCd())) {
-    		String[] arrStoreCd = posExcclcVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				posExcclcVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
-    	}
+
+        if(!StringUtil.getOrBlank(posExcclcVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(posExcclcVO.getStoreCd(), 3900));
+            posExcclcVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 		return posExcclcMapper.getPosExcclcExcelList(posExcclcVO);
 	}
 }
