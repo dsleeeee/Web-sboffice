@@ -28,9 +28,9 @@
       <col class="w35" />
     </colgroup>
     <tbody>
-    <%-- 기준매장 --%>
     <tr>
-      <th><s:message code="saleCopy.original.storeCd" /></th>
+      <%-- 기준매장선택 --%>
+      <th><s:message code="saleCopy.original.store" /></th>
       <td  colspan="3">
         <%-- 매장선택 모듈 사용시 include --%>
         <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
@@ -40,9 +40,9 @@
         <%--// 매장선택 모듈 사용시 include --%>
       </td>
     </tr>
-    <%-- 적용대상매장 --%>
     <tr>
-      <th><s:message code="saleCopy.target.storeCd" /></th>
+      <%-- 적용대상매장선택 --%>
+      <th><s:message code="saleCopy.target.store" /></th>
       <td  colspan="3">
         <%-- 매장선택 모듈 사용시 include --%>
         <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
