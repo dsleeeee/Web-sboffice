@@ -59,8 +59,8 @@
               </wj-combo-box>
             </div>
           </td>
-            <%-- 매장코드 --%>
-          <th><s:message code="todayBillSaleDtl.store"/></th>
+          <%-- 매장선택 --%>
+          <th><s:message code="cmm.store.select"/></th>
           <td colspan="3">
               <%-- 매장선택 모듈 사용시 include --%>
               <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">

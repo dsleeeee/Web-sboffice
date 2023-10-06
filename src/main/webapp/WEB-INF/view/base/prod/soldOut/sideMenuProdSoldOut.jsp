@@ -27,20 +27,20 @@
         <col class="w35" />
       </colgroup>
       <tbody>
-<c:if test="${orgnFg == 'HQ'}">
-      <%-- 매장선택 --%>
-      <tr>
-        <th><s:message code="soldOut.store" /></th>
-        <td colspan="3">
-            <%-- 매장선택 모듈 사용시 include --%>
-            <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
-                <jsp:param name="targetTypeFg" value="S"/>
-                <jsp:param name="targetId" value="sideMenuProdSoldOutStore"/>
-            </jsp:include>
-            <%--// 매장선택 모듈 사용시 include --%>
-        </td>
-      </tr>
-</c:if>
+        <c:if test="${orgnFg == 'HQ'}">
+              <tr>
+                <%-- 매장선택 --%>
+                <th><s:message code="cmm.store.select"/></th>
+                <td colspan="3">
+                    <%-- 매장선택 모듈 사용시 include --%>
+                    <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                        <jsp:param name="targetTypeFg" value="S"/>
+                        <jsp:param name="targetId" value="sideMenuProdSoldOutStore"/>
+                    </jsp:include>
+                    <%--// 매장선택 모듈 사용시 include --%>
+                </td>
+              </tr>
+        </c:if>
       <tr>
       <c:if test="${brandUseFg == '1'}">
           <%-- 상품브랜드 --%>

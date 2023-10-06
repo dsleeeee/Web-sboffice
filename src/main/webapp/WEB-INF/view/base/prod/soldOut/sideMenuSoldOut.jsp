@@ -26,7 +26,8 @@
         <col class="w35" />
       </colgroup>
       <tbody>
-        <th><s:message code="soldOut.store" /></th>
+        <%-- 매장선택 --%>
+        <th><s:message code="cmm.store.select"/></th>
         <td>
             <%-- 매장선택 모듈 사용시 include --%>
             <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">

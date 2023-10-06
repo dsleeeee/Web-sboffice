@@ -79,8 +79,8 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                    <%-- 매장코드 --%>
-                    <th class="storePayMonth" style="display: none;"><s:message code="month.store"/></th>
+                    <%-- 매장선택 --%>
+                    <th class="storePayMonth" style="display: none;"><s:message code="cmm.store.select"/></th>
                     <td class="storePayMonth" style="display: none;">
                         <%-- 매장선택 모듈 사용시 include --%>
                         <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
@@ -101,7 +101,7 @@
                 </colgroup>
                 <tbody>
                 <tr>
-                        <%-- 팀별 --%>
+                    <%-- 팀별 --%>
                     <th><s:message code="dayProd.momsTeam"/></th>
                     <td>
                         <div class="sb-select">
@@ -117,7 +117,7 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                        <%-- AC점포별 --%>
+                    <%-- AC점포별 --%>
                     <th><s:message code="dayProd.momsAcShop"/></th>
                     <td>
                         <div class="sb-select">
@@ -135,7 +135,7 @@
                     </td>
                 </tr>
                 <tr>
-                        <%-- 지역구분 --%>
+                    <%-- 지역구분 --%>
                     <th><s:message code="dayProd.momsAreaFg"/></th>
                     <td>
                         <div class="sb-select">
@@ -151,7 +151,7 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                        <%-- 상권 --%>
+                    <%-- 상권 --%>
                     <th><s:message code="dayProd.momsCommercial"/></th>
                     <td>
                         <div class="sb-select">
@@ -169,7 +169,7 @@
                     </td>
                 </tr>
                 <tr>
-                        <%-- 점포유형 --%>
+                    <%-- 점포유형 --%>
                     <th><s:message code="dayProd.momsShopType"/></th>
                     <td>
                         <div class="sb-select">
@@ -185,7 +185,7 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                        <%-- 매장관리타입 --%>
+                    <%-- 매장관리타입 --%>
                     <th><s:message code="dayProd.momsStoreManageType"/></th>
                     <td>
                         <div class="sb-select">
@@ -204,7 +204,7 @@
                 </tr>
                 <c:if test="${sessionInfo.orgnFg == 'HQ'}">
                     <tr>
-                            <%-- 그룹 --%>
+                        <%-- 그룹 --%>
                         <th><s:message code="dayProd.branchCd"/></th>
                         <td>
                             <div class="sb-select">

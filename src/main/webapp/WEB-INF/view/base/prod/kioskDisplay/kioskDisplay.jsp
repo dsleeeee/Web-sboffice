@@ -34,8 +34,8 @@
             <col class="w35" />
         </colgroup>
         <tbody>
-        <%-- 등록 일자 --%>
         <tr>
+            <%-- 등록 일자 --%>
             <th><s:message code="prod.regDate" /></th>
             <td colspan="3">
                 <div class="sb-select">
@@ -71,8 +71,8 @@
                         </div>
                     </td>
                 </c:if>
-                <%-- 매장 --%>
-                <th><s:message code="cmm.store"/></th>
+                <%-- 매장선택 --%>
+                <th><s:message code="cmm.store.select"/></th>
                 <td>
                     <%-- 매장선택 모듈 사용시 include --%>
                     <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
