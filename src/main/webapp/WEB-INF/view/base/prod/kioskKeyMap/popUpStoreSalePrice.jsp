@@ -65,20 +65,15 @@
                             </div>
                         </td>
                     </c:if>
-                    <th><s:message code="touchKey.store" /></th>
+                    <%-- 매장선택 --%>
+                    <th><s:message code="cmm.store.select"/></th>
                     <td>
-                        <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-                        <c:if test="${momsEnvstVal == '0'}">
-                            <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
-                                <jsp:param name="targetId" value="searchStore"/>
-                            </jsp:include>
-                        </c:if>
-                        <c:if test="${momsEnvstVal == '1'}">
-                            <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreSMoms.jsp" flush="true">
-                                <jsp:param name="targetId" value="searchStore"/>
-                            </jsp:include>
-                        </c:if>
-                        <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+                        <%-- 매장선택 모듈 사용시 include --%>
+                        <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                            <jsp:param name="targetTypeFg" value="S"/>
+                            <jsp:param name="targetId" value="searchStore"/>
+                        </jsp:include>
+                        <%--// 매장선택 모듈 사용시 include --%>
                     </td>
                 </tr>
                 <tr>
@@ -175,16 +170,16 @@
 
                     </wj-flex-grid>
                 </div>
-
-                    <%-- 페이지 리스트 --%>
-                    <div class="pageNum mt20">
-                        <%-- id --%>
-                        <ul id="popUpStoreSalePriceCtrlPager" data-size="10">
-                        </ul>
-                    </div>
-                    <%--//페이지 리스트--%>
+                <%-- 페이지 리스트 --%>
+                <div class="pageNum mt20">
+                    <%-- id --%>
+                    <ul id="popUpStoreSalePriceCtrlPager" data-size="10">
+                    </ul>
+                </div>
+                <%--//페이지 리스트--%>
             </div>
         </div>
+
     </div>
 </wj-popup>
 

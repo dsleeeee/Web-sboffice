@@ -6,7 +6,6 @@
 <wj-popup id="kioskDisplayResveAddLayer" control="kioskDisplayResveAddLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:90%;">
 
     <div ng-controller="kioskDisplayResveAddCtrl">
-
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="kioskDisplayResve.kioskDisplayResve"/>&nbsp;<s:message code="cmm.add"/>
@@ -42,19 +41,15 @@
                             </div>
                         </td>
                     </c:if>
-                    <%-- 매장코드 --%>
-                    <th><s:message code="cmm.store"/></th>
+                    <%-- 매장선택 --%>
+                    <th><s:message code="cmm.store.select"/></th>
                     <td>
-                        <c:if test="${momsEnvstVal == '0'}">
-                            <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
-                                <jsp:param name="targetId" value="kioskDisplayResveAddStore"/>
-                            </jsp:include>
-                        </c:if>
-                        <c:if test="${momsEnvstVal == '1'}">
-                            <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreSMoms.jsp" flush="true">
-                                <jsp:param name="targetId" value="kioskDisplayResveAddStore"/>
-                            </jsp:include>
-                        </c:if>
+                        <%-- 매장선택 모듈 사용시 include --%>
+                        <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                            <jsp:param name="targetTypeFg" value="S"/>
+                            <jsp:param name="targetId" value="kioskDisplayResveAddStore"/>
+                        </jsp:include>
+                        <%--// 매장선택 모듈 사용시 include --%>
                     </td>
                     <c:if test="${sessionInfo.orgnFg == 'STORE'}">
                         <input type="hidden" id="kioskDisplayResveAddStoreCd" value="${sessionInfo.storeCd}"/>

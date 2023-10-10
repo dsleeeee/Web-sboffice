@@ -35,20 +35,18 @@
             </th>
             <td>
                 <div class="sb-select">
-                    <span class="txtIn"> <input id="kdsDayStartDate" name="kdsDayStartDate" class="w150px"/></span>
+                    <span class="txtIn"><input id="kdsDayStartDate" name="kdsDayStartDate" class="w120px"/></span>
                     <span class="rg">~</span>
-                    <span class="txtIn"> <input id="kdsDayEndDate" name="kdsDayEndDate" class="w150px"/></span>
+                    <span class="txtIn"><input id="kdsDayEndDate" name="kdsDayEndDate" class="w120px"/></span>
                 </div>
             </td>
             <%-- 분류조회 --%>
             <th><s:message code="kds.prodClass"/></th>
             <td>
-                <input type="text" class="sb-input w80" id="srchProdClassCd" ng-model="prodClassCdNm"
-                       ng-click="popUpProdClass()" style="float: left;"
+                <input type="text" class="sb-input w80" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float: left;"
                        placeholder="<s:message code="prodCorner.prodClass" /> 선택" readonly/>
                 <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled/>
-                <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;"
-                        ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
+                <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
             </td>
         </tr>
         <tr>
@@ -57,7 +55,7 @@
             </th>
             <td>
                 <div class="sb-select">
-                    <span class="txtIn w150px">
+                    <span class="txtIn w120px">
                         <wj-combo-box
                                 id="makeDate"
                                 ng-model="makeDate"
@@ -70,7 +68,7 @@
                         </wj-combo-box>
                     </span>
                     <span class="rg">~</span>
-                    <span class="txtIn w150px">
+                    <span class="txtIn w120px">
                         <wj-combo-box
                                 id="makeDateSec"
                                 ng-model="makeDateSec"
@@ -89,7 +87,7 @@
             </th>
             <td>
                 <div class="sb-select">
-                    <span class="txtIn w150px">
+                    <span class="txtIn w120px">
                         <wj-combo-box
                                 id="picDate"
                                 ng-model="picDate"
@@ -102,7 +100,7 @@
                         </wj-combo-box>
                     </span>
                     <span class="rg">~</span>
-                    <span class="txtIn w150px">
+                    <span class="txtIn w120px">
                         <wj-combo-box
                                 id="picDateSec"
                                 ng-model="picDateSec"
@@ -120,28 +118,28 @@
         <tr>
             <th><s:message code="kds.prodCd"/></th>
             <td>
-                <input type="text" id="prodCd" class="sb-input w100" ng-model="prodCd"
-                       maxlength="15" onkeyup="fnNxBtnSearch();"/>
+                <input type="text" id="prodCd" class="sb-input w100" ng-model="prodCd" maxlength="15" onkeyup="fnNxBtnSearch();"/>
             </td>
             <th><s:message code="kds.prodNm"/></th>
             <td>
-                <input type="text" id="prodNm" class="sb-input w100" ng-model="prodNm"
-                       maxlength="15" onkeyup="fnNxBtnSearch();"/>
+                <input type="text" id="prodNm" class="sb-input w100" ng-model="prodNm" maxlength="15" onkeyup="fnNxBtnSearch();"/>
             </td>
         </tr>
         <c:if test="${orgnFg == 'HQ'}">
-        <tr>
-            <%-- 매장 --%>
-
-                <th><s:message code="kds.store"/></th>
+            <tr>
+                <%-- 매장선택 --%>
+                <th><s:message code="cmm.store.select"/></th>
                 <td>
-                    <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
+                    <%-- 매장선택 모듈 사용시 include --%>
+                    <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                        <jsp:param name="targetTypeFg" value="S"/>
                         <jsp:param name="targetId" value="regStore"/>
                     </jsp:include>
+                    <%--// 매장선택 모듈 사용시 include --%>
                 </td>
                 <td></td>
                 <td></td>
-        </tr>
+            </tr>
         </c:if>
         </tbody>
     </table>
