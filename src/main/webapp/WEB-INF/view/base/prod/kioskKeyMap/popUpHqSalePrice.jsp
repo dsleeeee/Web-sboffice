@@ -68,10 +68,9 @@
             <%-- 버튼영역 --%>
             <div class="mt10 oh">
                 <button class="btn_blue fr mr10" id="btnSearchSalePriceList" ng-click="searchSalePriceList()"><s:message code="cmm.search" /></button>
-
-            <%-- 저장 --%>
+                <%-- 저장 --%>
                 <button class="btn_blue fr mr10" ng-click="saveProdPrice()"><s:message code="cmm.save" /></button>
-
+                <%-- 매장선택 --%>
                 <div id="storeSaveStore" class="fr mr10 oh bk" style="width: 200px; height:25px;display: none;">
                     <c:if test="${momsEnvstVal == '0'}">
                         <jsp:include page="/WEB-INF/view/application/layer/searchPriceStoreM.jsp" flush="true">
@@ -138,16 +137,16 @@
 
                     </wj-flex-grid>
                 </div>
-
-                    <%-- 페이지 리스트 --%>
-                    <div class="pageNum mt20">
-                        <%-- id --%>
-                        <ul id="popUpHqSalePriceCtrlPager" data-size="10">
-                        </ul>
-                    </div>
-                    <%--//페이지 리스트--%>
+                <%-- 페이지 리스트 --%>
+                <div class="pageNum mt20">
+                    <%-- id --%>
+                    <ul id="popUpHqSalePriceCtrlPager" data-size="10">
+                    </ul>
+                </div>
+                <%--//페이지 리스트--%>
             </div>
         </div>
+
     </div>
 </wj-popup>
 
