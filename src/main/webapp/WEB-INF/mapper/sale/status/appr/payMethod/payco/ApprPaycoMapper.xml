@@ -38,11 +38,8 @@
                   FROM TB_SL_SALE_PAY_PAYCO
                  WHERE SALE_AMT>0
         ]]>
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
@@ -80,11 +77,8 @@
                   FROM TB_SL_SALE_PAY_PAYCO
                  WHERE SALE_AMT<0
         ]]>
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
@@ -162,11 +156,8 @@
                   FROM TB_SL_SALE_PAY_PAYCO
                  WHERE SALE_AMT>0
         ]]>
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
@@ -204,11 +195,8 @@
                   FROM TB_SL_SALE_PAY_PAYCO
                  WHERE SALE_AMT<0
         ]]>
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (

@@ -47,23 +47,15 @@
 		TB_MS_STORE D
 		WHERE 	1=1
 		AND 	D.HQ_OFFICE_CD = #{hqOfficeCd}
-		<choose>
-			<when test='orgnFg != null and orgnFg == "S"'>
-				AND A.STORE_CD = #{storeCd}
-			</when>
-			<when test='orgnFg != null and orgnFg == "H"'>
-				<if test='storeCd != null and storeCd != ""'>
-					AND
-					<foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")" >
-						A.STORE_CD = #{item}
-					</foreach>
-					AND (
-							'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-						OR	A.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
-						)
-				</if>
-			</when>
-		</choose>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                OR	A.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
+        </if>
 		AND 	A.PROD_TYPE_FG = '3'
 		AND		B.STORE_CD = A.STORE_CD
 		AND		B.PROD_CD = A.PROD_CD

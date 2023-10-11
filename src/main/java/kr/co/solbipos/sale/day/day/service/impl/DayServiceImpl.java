@@ -149,7 +149,9 @@ public class DayServiceImpl implements DayService {
         dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
-            dayVO.setArrStoreCd(dayVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayVO.getStoreCd(), 3900));
+            dayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         String payCol= "";

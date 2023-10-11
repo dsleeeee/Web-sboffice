@@ -15,15 +15,12 @@
 	    FROM TB_SL_SALE_GOAL_MONTHLY A, TB_MS_STORE B
 	   WHERE 1=1
 	     AND B.HQ_OFFICE_CD = #{hqOfficeCd}
-	     <if test='startDate != null and startDate != ""'>
-           AND A.SALE_GOAL_YM = #{startDate}
-         </if>
-	     <if test='arrStoreCd != null and arrStoreCd != ""'>
-           AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                B.STORE_CD = #{item}
-            </foreach>
-         </if>
+        <if test='startDate != null and startDate != ""'>
+            AND A.SALE_GOAL_YM = #{startDate}
+        </if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND B.STORE_CD IN (${storeCdQuery})
+        </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
                     'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -55,15 +52,12 @@
 			             , TB_SL_DAILY_TOTAL TSDT
 			       WHERE TSSGD.STORE_CD = TSDT.STORE_CD(+)
 			         AND TSSGD.SALE_GOAL_DATE = TSDT.SALE_DATE(+)
-			         <if test='startDate != null and startDate != ""'>
-			           AND TSSGD.SALE_GOAL_YM = #{startDate}
-			         </if>
-			         <if test='arrStoreCd != null and arrStoreCd != ""'>
-					   AND
-					    <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                            TSSGD.STORE_CD = #{item}
-					    </foreach>
-					 </if>
+                    <if test='startDate != null and startDate != ""'>
+                      AND TSSGD.SALE_GOAL_YM = #{startDate}
+                    </if>
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND TSSGD.STORE_CD IN (${storeCdQuery})
+                    </if>
                     <if test='orgnFg != null and orgnFg == "H"'>
                         AND (
                                 'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -100,15 +94,12 @@
                          , TB_SL_DAILY_TOTAL TSDT
                    WHERE TSSGD.STORE_CD = TSDT.STORE_CD(+)
                      AND TSSGD.SALE_GOAL_DATE = TSDT.SALE_DATE(+)
-                     <if test='startDate != null and startDate != ""'>
-                       AND TSSGD.SALE_GOAL_YM = #{startDate}
-                     </if>
-                     <if test='arrStoreCd != null and arrStoreCd != ""'>
-                       AND
-                        <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                            TSSGD.STORE_CD = #{item}
-                        </foreach>
-                     </if>
+                    <if test='startDate != null and startDate != ""'>
+                      AND TSSGD.SALE_GOAL_YM = #{startDate}
+                    </if>
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND TSSGD.STORE_CD IN (${storeCdQuery})
+                    </if>
                     <if test='orgnFg != null and orgnFg == "H"'>
                         AND (
                                 'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -159,18 +150,15 @@
                      , TB_MS_STORE TMS
                  WHERE TSSGD.STORE_CD = TSDT.STORE_CD(+)
                    AND TSSGD.SALE_GOAL_DATE = TSDT.SALE_DATE(+)
-                   <if test='startDate != null and startDate != ""'>
-                     AND TSSGD.SALE_GOAL_YM >= #{startDate}
-                   </if>
-                   <if test='endDate != null and endDate != ""'>
-                     AND TSSGD.SALE_GOAL_YM <![CDATA[<=]]> #{endDate}
-                   </if>
-                   <if test='arrStoreCd != null and arrStoreCd != ""'>
-                     AND
-                      <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                          TSSGD.STORE_CD = #{item}
-                      </foreach>
-                   </if>
+                    <if test='startDate != null and startDate != ""'>
+                      AND TSSGD.SALE_GOAL_YM >= #{startDate}
+                    </if>
+                    <if test='endDate != null and endDate != ""'>
+                      AND TSSGD.SALE_GOAL_YM <![CDATA[<=]]> #{endDate}
+                    </if>
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND TSSGD.STORE_CD IN (${storeCdQuery})
+                    </if>
                     <if test='orgnFg != null and orgnFg == "H"'>
                         AND (
                                 'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -224,12 +212,9 @@
                    <if test='endDate != null and endDate != ""'>
                      AND TSSGD.SALE_GOAL_YM <![CDATA[<=]]> #{endDate}
                    </if>
-                   <if test='arrStoreCd != null and arrStoreCd != ""'>
-                     AND
-                      <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                          TSSGD.STORE_CD = #{item}
-                      </foreach>
-                   </if>
+                   <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND TSSGD.STORE_CD IN (${storeCdQuery})
+                    </if>
                     <if test='orgnFg != null and orgnFg == "H"'>
                         AND (
                                 'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')

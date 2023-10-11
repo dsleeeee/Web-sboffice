@@ -18,6 +18,8 @@ public class DcfgPeriodSaleVO {
     private String startDate;
     /** 종료일자 */
     private String endDate;
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
 
 
     public String getHqOfficeCd() {
@@ -82,5 +84,13 @@ public class DcfgPeriodSaleVO {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

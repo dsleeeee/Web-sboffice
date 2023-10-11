@@ -2,6 +2,10 @@ package kr.co.solbipos.sale.status.appr.acquire.service.impl;
 
 import java.util.List;
 
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +18,13 @@ import kr.co.solbipos.sale.status.appr.acquire.service.ApprAcquireVO;
 @Service("apprAcquireService")
 public class ApprAcquireServiceImpl implements ApprAcquireService {
     private final ApprAcquireMapper apprAcquireMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public ApprAcquireServiceImpl(ApprAcquireMapper apprAcquireMapper, MessageService messageService) {
+    public ApprAcquireServiceImpl(ApprAcquireMapper apprAcquireMapper, PopupMapper popupMapper, MessageService messageService) {
         this.apprAcquireMapper = apprAcquireMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -51,12 +57,11 @@ public class ApprAcquireServiceImpl implements ApprAcquireService {
         		}
     		}
     	} else {
-    		String[] arrStoreCd = apprAcquireVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				apprAcquireVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
+            if(!StringUtil.getOrBlank(apprAcquireVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(apprAcquireVO.getStoreCd(), 3900));
+                apprAcquireVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
     	}
 
 		return apprAcquireMapper.getApprAcquireList(apprAcquireVO);
@@ -90,12 +95,11 @@ public class ApprAcquireServiceImpl implements ApprAcquireService {
         		}
     		}
     	} else {
-    		String[] arrStoreCd = apprAcquireVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				apprAcquireVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
+            if(!StringUtil.getOrBlank(apprAcquireVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(apprAcquireVO.getStoreCd(), 3900));
+                apprAcquireVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
     	}
 
 		return apprAcquireMapper.getApprAcquireMcouponList(apprAcquireVO);
@@ -129,12 +133,11 @@ public class ApprAcquireServiceImpl implements ApprAcquireService {
         		}
     		}
     	} else {
-    		String[] arrStoreCd = apprAcquireVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				apprAcquireVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
+            if(!StringUtil.getOrBlank(apprAcquireVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(apprAcquireVO.getStoreCd(), 3900));
+                apprAcquireVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
     	}
 
 		return apprAcquireMapper.getApprAcquireMpayList(apprAcquireVO);
@@ -157,12 +160,11 @@ public class ApprAcquireServiceImpl implements ApprAcquireService {
     			}
     		}
     	} else {
-    		String[] arrStoreCd = apprAcquireVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				apprAcquireVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
+            if(!StringUtil.getOrBlank(apprAcquireVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(apprAcquireVO.getStoreCd(), 3900));
+                apprAcquireVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
     	}
 
 		return apprAcquireMapper.getApprAcquireNcardList(apprAcquireVO);
@@ -196,12 +198,11 @@ public class ApprAcquireServiceImpl implements ApprAcquireService {
         		}
     		}
     	} else {
-    		String[] arrStoreCd = apprAcquireVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				apprAcquireVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
+            if(!StringUtil.getOrBlank(apprAcquireVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(apprAcquireVO.getStoreCd(), 3900));
+                apprAcquireVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
     	}
 
 		return apprAcquireMapper.getApprAcquireExcelList(apprAcquireVO);
@@ -235,12 +236,11 @@ public class ApprAcquireServiceImpl implements ApprAcquireService {
         		}
     		}
     	} else {
-    		String[] arrStoreCd = apprAcquireVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				apprAcquireVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
+            if(!StringUtil.getOrBlank(apprAcquireVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(apprAcquireVO.getStoreCd(), 3900));
+                apprAcquireVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
     	}
 
 		return apprAcquireMapper.getApprAcquireMcouponExcelList(apprAcquireVO);
@@ -274,12 +274,11 @@ public class ApprAcquireServiceImpl implements ApprAcquireService {
         		}
     		}
     	} else {
-    		String[] arrStoreCd = apprAcquireVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				apprAcquireVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
+            if(!StringUtil.getOrBlank(apprAcquireVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(apprAcquireVO.getStoreCd(), 3900));
+                apprAcquireVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
     	}
 
 		return apprAcquireMapper.getApprAcquireMpayExcelList(apprAcquireVO);
@@ -302,12 +301,11 @@ public class ApprAcquireServiceImpl implements ApprAcquireService {
     			}
     		}
     	} else {
-    		String[] arrStoreCd = apprAcquireVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				apprAcquireVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
+            if(!StringUtil.getOrBlank(apprAcquireVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(apprAcquireVO.getStoreCd(), 3900));
+                apprAcquireVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
     	}
 
 		return apprAcquireMapper.getApprAcquireNcardExcelList(apprAcquireVO);

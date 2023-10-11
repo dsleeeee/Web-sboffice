@@ -71,23 +71,16 @@
         WHERE 1=1
            AND seq.SALE_DATE BETWEEN #{startDate} AND #{endDate}
            AND seq.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND seq.STORE_CD IN (${storeCdQuery})
+        </if>
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                <if test='storeCd != null and storeCd != ""'>
-                    AND
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")" >
-                        seq.STORE_CD = #{item}
-                    </foreach>
-                </if>
                 AND (
                         'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
                     OR	seq.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                     )
-            </when>
-            <!-- 가맹점 -->
-            <when test='orgnFg != null and orgnFg == "S"'>
-                AND seq.STORE_CD = #{storeCd}
             </when>
         </choose>
            AND EXISTS (
@@ -166,23 +159,16 @@
         WHERE 1=1
           AND seq.SALE_DATE BETWEEN #{startDate} AND #{endDate}
           AND seq.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND seq.STORE_CD IN (${storeCdQuery})
+        </if>
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                <if test='storeCd != null and storeCd != ""'>
-                    AND
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")" >
-                        seq.STORE_CD = #{item}
-                    </foreach>
-                </if>
                 AND (
                         'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
                     OR	seq.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                     )
-            </when>
-            <!-- 가맹점 -->
-            <when test='orgnFg != null and orgnFg == "S"'>
-                AND seq.STORE_CD = #{storeCd}
             </when>
         </choose>
         AND EXISTS (

@@ -1,7 +1,10 @@
 package kr.co.solbipos.sale.status.nonSaleCard.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.status.nonSaleCard.service.NonSaleCardService;
@@ -36,12 +39,13 @@ import static kr.co.common.utils.DateUtil.currentDateString;
 @Transactional
 public class NonSaleCardServiceImpl implements NonSaleCardService {
     private final NonSaleCardMapper nonSaleCardMapper;
+    private final PopupMapper popupMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public NonSaleCardServiceImpl(NonSaleCardMapper nonSaleCardMapper) { this.nonSaleCardMapper = nonSaleCardMapper; }
+    public NonSaleCardServiceImpl(NonSaleCardMapper nonSaleCardMapper, PopupMapper popupMapper) { this.nonSaleCardMapper = nonSaleCardMapper; this.popupMapper = popupMapper;}
 
     /** 비매출카드상세 - 조회 */
     @Override
@@ -57,11 +61,10 @@ public class NonSaleCardServiceImpl implements NonSaleCardService {
                 }
             }
         } else {
-            String[] arrStoreCd = nonSaleCardVO.getStoreCd().split(",");
-            if (arrStoreCd.length > 0) {
-                if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-                    nonSaleCardVO.setArrStoreCd(arrStoreCd);
-                }
+            if(!StringUtil.getOrBlank(nonSaleCardVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(nonSaleCardVO.getStoreCd(), 3900));
+                nonSaleCardVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
             }
         }
 

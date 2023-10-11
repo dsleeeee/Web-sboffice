@@ -1,7 +1,10 @@
 package kr.co.solbipos.sale.dlvr.dlvrFg.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.dlvr.dlvrFg.service.DlvrFgService;
@@ -31,9 +34,11 @@ import java.util.List;
 @Transactional
 public class DlvrFgServiceImpl implements DlvrFgService {
     private final DlvrFgMapper dlvrFgMapper;
+    private final PopupMapper popupMapper;
 
-    public DlvrFgServiceImpl(DlvrFgMapper dlvrFgMapper) {
+    public DlvrFgServiceImpl(DlvrFgMapper dlvrFgMapper, PopupMapper popupMapper) {
         this.dlvrFgMapper = dlvrFgMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 배달구분 */
@@ -78,12 +83,14 @@ public class DlvrFgServiceImpl implements DlvrFgService {
         dlvrFgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         dlvrFgVO.setEmpNo(sessionInfoVO.getEmpNo());
 
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            if(!StringUtil.getOrBlank(dlvrFgVO.getStoreCd()).equals("")) {
-                dlvrFgVO.setArrStoreCd(dlvrFgVO.getStoreCd().split(","));
-            }
-        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             dlvrFgVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(dlvrFgVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dlvrFgVO.getStoreCd(), 3900));
+            dlvrFgVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         // 결제수단 array 값 세팅
@@ -107,12 +114,14 @@ public class DlvrFgServiceImpl implements DlvrFgService {
         dlvrFgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         dlvrFgVO.setEmpNo(sessionInfoVO.getEmpNo());
 
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            if(!StringUtil.getOrBlank(dlvrFgVO.getStoreCd()).equals("")) {
-                dlvrFgVO.setArrStoreCd(dlvrFgVO.getStoreCd().split(","));
-            }
-        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             dlvrFgVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(dlvrFgVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dlvrFgVO.getStoreCd(), 3900));
+            dlvrFgVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         // 결제수단 array 값 세팅
@@ -136,12 +145,14 @@ public class DlvrFgServiceImpl implements DlvrFgService {
         dlvrFgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         dlvrFgVO.setEmpNo(sessionInfoVO.getEmpNo());
 
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            if(!StringUtil.getOrBlank(dlvrFgVO.getStoreCd()).equals("")) {
-                dlvrFgVO.setArrStoreCd(dlvrFgVO.getStoreCd().split(","));
-            }
-        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             dlvrFgVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(dlvrFgVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dlvrFgVO.getStoreCd(), 3900));
+            dlvrFgVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         // 결제수단 array 값 세팅
@@ -165,12 +176,14 @@ public class DlvrFgServiceImpl implements DlvrFgService {
         dlvrFgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         dlvrFgVO.setEmpNo(sessionInfoVO.getEmpNo());
 
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            if(!StringUtil.getOrBlank(dlvrFgVO.getStoreCd()).equals("")) {
-                dlvrFgVO.setArrStoreCd(dlvrFgVO.getStoreCd().split(","));
-            }
-        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             dlvrFgVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(dlvrFgVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dlvrFgVO.getStoreCd(), 3900));
+            dlvrFgVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         // 결제수단 array 값 세팅

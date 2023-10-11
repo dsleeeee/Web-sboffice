@@ -70,16 +70,8 @@
                                     AND TSSD.BILL_DTL_NO = TSSDD.BILL_DTL_NO
                                     AND TSSD.STORE_CD = TMS.STORE_CD
                                     AND TSSD.HQ_OFFICE_CD = #{hqOfficeCd}
-                                <if test='orgnFg != null and orgnFg == "H"'>
-                                  <if test='arrStoreCd != null and arrStoreCd != ""'>
-                                      AND
-                                      <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                                          TSSD.STORE_CD = #{item}
-                                      </foreach>
-                                  </if>
-                                </if>
-                                <if test='orgnFg != null and orgnFg == "S"'>
-                                    AND TSSD.STORE_CD = #{storeCd}
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND TSSD.STORE_CD IN (${storeCdQuery})
                                 </if>
                                 <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                                     AND TSSD.SALE_DATE  BETWEEN #{startDate} AND #{endDate}
@@ -143,19 +135,8 @@
                                              SELECT MAX(COUPN_NM) AS COUPN_NM
                                                FROM TB_MS_COUPON
                                               WHERE 1 = 1
-                                              <if test='orgnFg != null and orgnFg == "H"'>
-                                                  <if test='arrStoreCd != null and arrStoreCd != ""'>
-                                                      AND
-                                                      <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                                                          STORE_CD = #{item}
-                                                      </foreach>
-                                                  </if>
-                                                  <if test='arrStoreCd == null or arrStoreCd == ""'>
-                                                      AND STORE_CD = TMS.STORE_CD
-                                                  </if>
-                                              </if>
-                                              <if test='orgnFg != null and orgnFg == "S"'>
-                                                AND STORE_CD = #{storeCd}
+                                              <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                                  AND STORE_CD IN (${storeCdQuery})
                                               </if>
                                                 AND PAY_CLASS_CD || COUPN_CD = TSSDD.DC_REASON_CD
                                           ) AS MS_COUPN_NM
@@ -176,16 +157,8 @@
                                     AND TSSD.BILL_DTL_NO = TSSDD.BILL_DTL_NO
                                     AND TSSD.STORE_CD = TMS.STORE_CD
                                     AND TSSD.HQ_OFFICE_CD = #{hqOfficeCd}
-                                <if test='orgnFg != null and orgnFg == "H"'>
-                                  <if test='arrStoreCd != null and arrStoreCd != ""'>
-                                      AND
-                                      <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                                          TSSD.STORE_CD = #{item}
-                                      </foreach>
-                                  </if>
-                                </if>
-                                <if test='orgnFg != null and orgnFg == "S"'>
-                                    AND TSSD.STORE_CD = #{storeCd}
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND TSSD.STORE_CD IN (${storeCdQuery})
                                 </if>
                                 <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                                     AND TSSD.SALE_DATE  BETWEEN #{startDate} AND #{endDate}
@@ -250,19 +223,8 @@
                                              SELECT MAX(COUPN_NM) AS COUPN_NM
                                                FROM TB_MS_COUPON
                                               WHERE 1 = 1
-                                              <if test='orgnFg != null and orgnFg == "H"'>
-                                                  <if test='arrStoreCd != null and arrStoreCd != ""'>
-                                                      AND
-                                                      <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                                                          STORE_CD = #{item}
-                                                      </foreach>
-                                                  </if>
-                                                  <if test='arrStoreCd == null or arrStoreCd == ""'>
-                                                      AND STORE_CD = TMS.STORE_CD
-                                                  </if>
-                                              </if>
-                                              <if test='orgnFg != null and orgnFg == "S"'>
-                                                AND STORE_CD = #{storeCd}
+                                              <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                                  AND STORE_CD IN (${storeCdQuery})
                                               </if>
                                                 AND PAY_CLASS_CD || COUPN_CD = TSSDD.DC_REASON_CD
                                           ) AS MS_COUPN_NM
@@ -370,16 +332,8 @@
                                     AND TSSD.PROD_CD = C.PROD_CD
                                     AND TSSD.STORE_CD = TMS.STORE_CD
                                     AND TSSD.HQ_OFFICE_CD = #{hqOfficeCd}
-                                <if test='orgnFg != null and orgnFg == "H"'>
-                                  <if test='arrStoreCd != null and arrStoreCd != ""'>
-                                      AND
-                                      <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                                          TSSD.STORE_CD = #{item}
-                                      </foreach>
-                                  </if>
-                                </if>
-                                <if test='orgnFg != null and orgnFg == "S"'>
-                                    AND TSSD.STORE_CD = #{storeCd}
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND TSSD.STORE_CD IN (${storeCdQuery})
                                 </if>
                                 <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                                     AND TSSD.SALE_DATE  BETWEEN #{startDate} AND #{endDate}

@@ -101,11 +101,8 @@
 	                                      <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
 	                                          AND     TSDP.SALE_DATE BETWEEN #{startDate} AND #{endDate}
 	                                      </if>
-	                                      <if test='arrStoreCd != null and arrStoreCd != ""'>
-	                                                  AND
-	                                                          <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-																  TSDP.STORE_CD = #{item}
-	                                                          </foreach>
+                                          <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                            AND TSDP.STORE_CD IN (${storeCdQuery})
                                           </if>
 										  <if test='orgnFg != null and orgnFg == "H"'>
 											  AND (

@@ -2,6 +2,10 @@ package kr.co.solbipos.sale.status.weight.weight.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.status.weight.weight.service.WeightService;
@@ -29,11 +33,13 @@ import java.util.List;
 @Service("weightService")
 public class WeightServiceImpl implements WeightService {
     private final WeightMapper weightMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public WeightServiceImpl(WeightMapper weightMapper, MessageService messageService) {
+    public WeightServiceImpl(WeightMapper weightMapper, PopupMapper popupMapper, MessageService messageService) {
         this.weightMapper = weightMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -49,9 +55,12 @@ public class WeightServiceImpl implements WeightService {
             weightVO.setStoreCd(sessionInfoVO.getStoreCd());
 		}
 
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            weightVO.setArrStoreCd(weightVO.getStoreCd().split(","));
+        if(!StringUtil.getOrBlank(weightVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(weightVO.getStoreCd(), 3900));
+            weightVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
+
         return weightMapper.getWeightList(weightVO);
     }
 

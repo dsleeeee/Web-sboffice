@@ -2,6 +2,10 @@ package kr.co.solbipos.sale.status.appr.payMethod.ncash.service.impl;
 
 import java.util.List;
 
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +18,13 @@ import kr.co.solbipos.sale.status.appr.payMethod.ncash.service.ApprNcashVO;
 @Service("apprNcashService")
 public class ApprNcashServiceImpl implements ApprNcashService {
     private final ApprNcashMapper apprNcashMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public ApprNcashServiceImpl(ApprNcashMapper apprNcashMapper, MessageService messageService) {
+    public ApprNcashServiceImpl(ApprNcashMapper apprNcashMapper, PopupMapper popupMapper, MessageService messageService) {
         this.apprNcashMapper = apprNcashMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -40,12 +46,11 @@ public class ApprNcashServiceImpl implements ApprNcashService {
     			}
     		}
     	} else {
-    		String[] arrStoreCd = apprNcashVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				apprNcashVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
+            if(!StringUtil.getOrBlank(apprNcashVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(apprNcashVO.getStoreCd(), 3900));
+                apprNcashVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
     	}
 
 		return apprNcashMapper.getApprNcashList(apprNcashVO);
@@ -65,12 +70,11 @@ public class ApprNcashServiceImpl implements ApprNcashService {
     			}
     		}
     	} else {
-    		String[] arrStoreCd = apprNcashVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				apprNcashVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
+            if(!StringUtil.getOrBlank(apprNcashVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(apprNcashVO.getStoreCd(), 3900));
+                apprNcashVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
     	}
 
 		return apprNcashMapper.getApprNcashExcelList(apprNcashVO);

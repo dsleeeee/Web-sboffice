@@ -2,6 +2,10 @@ package kr.co.solbipos.sale.status.appr.payMethod.partner.service.impl;
 
 import java.util.List;
 
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +18,13 @@ import kr.co.solbipos.sale.status.appr.payMethod.partner.service.ApprPartnerVO;
 @Service("apprPartnerService")
 public class ApprPartnerServiceImpl implements ApprPartnerService {
     private final ApprPartnerMapper apprPartnerMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public ApprPartnerServiceImpl(ApprPartnerMapper apprPartnerMapper, MessageService messageService) {
+    public ApprPartnerServiceImpl(ApprPartnerMapper apprPartnerMapper, PopupMapper popupMapper, MessageService messageService) {
         this.apprPartnerMapper = apprPartnerMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -51,12 +57,11 @@ public class ApprPartnerServiceImpl implements ApprPartnerService {
         		}
     		}
     	} else {
-    		String[] arrStoreCd = apprPartnerVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				apprPartnerVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
+            if(!StringUtil.getOrBlank(apprPartnerVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(apprPartnerVO.getStoreCd(), 3900));
+                apprPartnerVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
     	}
 
 		return apprPartnerMapper.getApprPartnerList(apprPartnerVO);
@@ -89,12 +94,11 @@ public class ApprPartnerServiceImpl implements ApprPartnerService {
         		}
     		}
     	} else {
-    		String[] arrStoreCd = apprPartnerVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				apprPartnerVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
+            if(!StringUtil.getOrBlank(apprPartnerVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(apprPartnerVO.getStoreCd(), 3900));
+                apprPartnerVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
     	}
 
 		return apprPartnerMapper.getApprPartnerExcelList(apprPartnerVO);

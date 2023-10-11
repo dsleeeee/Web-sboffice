@@ -2,7 +2,10 @@ package kr.co.solbipos.sale.anals.goal.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.anals.goal.service.GoalService;
 import kr.co.solbipos.sale.anals.goal.service.GoalVO;
@@ -18,11 +21,13 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Service("GoalService")
 public class GoalServiceImpl implements GoalService {
     private final GoalMapper goalMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public GoalServiceImpl(GoalMapper goalMapper, MessageService messageService) {
+    public GoalServiceImpl(GoalMapper goalMapper, PopupMapper popupMapper, MessageService messageService) {
     	this.goalMapper = goalMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -32,15 +37,12 @@ public class GoalServiceImpl implements GoalService {
     	goalVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	goalVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
     	goalVO.setEmpNo(sessionInfoVO.getEmpNo());
-    	
-    	 if(!StringUtil.getOrBlank(goalVO.getStoreCd()).equals("")) {
-     		String[] arrStoreCd = goalVO.getStoreCd().split(",");
-     		if (arrStoreCd.length > 0) {
-     			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-     				goalVO.setArrStoreCd(arrStoreCd);
-     			}
-     		}
-    	 }
+
+        if(!StringUtil.getOrBlank(goalVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(goalVO.getStoreCd(), 3900));
+            goalVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
     	 
     	return goalMapper.getSaleGoalDayColList(goalVO);
 	}
@@ -52,8 +54,13 @@ public class GoalServiceImpl implements GoalService {
 		goalVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		goalVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		goalVO.setEmpNo(sessionInfoVO.getEmpNo());
-    	
+
         if(!StringUtil.getOrBlank(goalVO.getStoreCd()).equals("")) {
+
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(goalVO.getStoreCd(), 3900));
+            goalVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+
     		String[] arrStoreCd = goalVO.getStoreCd().split(",");
     		if (arrStoreCd.length > 0) {
     			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
@@ -90,7 +97,9 @@ public class GoalServiceImpl implements GoalService {
 		goalVO.setEmpNo(sessionInfoVO.getEmpNo());
     	
         if(!StringUtil.getOrBlank(goalVO.getStoreCd()).equals("")) {
-        	goalVO.setArrStoreCd(goalVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(goalVO.getStoreCd(), 3900));
+            goalVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
     	        
         return goalMapper.getSaleGoalMonthList(goalVO);
@@ -348,6 +357,11 @@ public class GoalServiceImpl implements GoalService {
     	goalVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
     	
         if(!StringUtil.getOrBlank(goalVO.getStoreCd()).equals("")) {
+
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(goalVO.getStoreCd(), 3900));
+            goalVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+
     		String[] arrStoreCd = goalVO.getStoreCd().split(",");
     		if (arrStoreCd.length > 0) {
     			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
@@ -382,7 +396,9 @@ public class GoalServiceImpl implements GoalService {
     	goalVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
     	
         if(!StringUtil.getOrBlank(goalVO.getStoreCd()).equals("")) {
-        	goalVO.setArrStoreCd(goalVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(goalVO.getStoreCd(), 3900));
+            goalVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
     	        
         return goalMapper.getSaleGoalMonthExcelList(goalVO);

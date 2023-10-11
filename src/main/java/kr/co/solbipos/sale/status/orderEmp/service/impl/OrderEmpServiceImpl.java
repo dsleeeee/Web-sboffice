@@ -2,7 +2,10 @@ package kr.co.solbipos.sale.status.orderEmp.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.status.orderEmp.service.OrderEmpService;
 import kr.co.solbipos.sale.status.orderEmp.service.OrderEmpVO;
@@ -29,11 +32,13 @@ import java.util.List;
 @Service("orderEmpService")
 public class OrderEmpServiceImpl implements OrderEmpService {
     private final OrderEmpMapper orderEmpMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public OrderEmpServiceImpl(OrderEmpMapper orderEmpMapper, MessageService messageService) {
+    public OrderEmpServiceImpl(OrderEmpMapper orderEmpMapper, PopupMapper popupMapper, MessageService messageService) {
         this.orderEmpMapper = orderEmpMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -46,7 +51,9 @@ public class OrderEmpServiceImpl implements OrderEmpService {
         orderEmpVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(orderEmpVO.getStoreCd()).equals("")) {
-            orderEmpVO.setArrStoreCd(orderEmpVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(orderEmpVO.getStoreCd(), 3900));
+            orderEmpVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
         return orderEmpMapper.getOrderEmpPeriodList(orderEmpVO);
     }
@@ -60,7 +67,9 @@ public class OrderEmpServiceImpl implements OrderEmpService {
         orderEmpVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(orderEmpVO.getStoreCd()).equals("")) {
-            orderEmpVO.setArrStoreCd(orderEmpVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(orderEmpVO.getStoreCd(), 3900));
+            orderEmpVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
         return orderEmpMapper.getOrderEmpPeriodExcelList(orderEmpVO);
     }
@@ -73,9 +82,6 @@ public class OrderEmpServiceImpl implements OrderEmpService {
         orderEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         orderEmpVO.setEmpNo(sessionInfoVO.getEmpNo());
 
-        if(!StringUtil.getOrBlank(orderEmpVO.getStoreCd()).equals("")) {
-            orderEmpVO.setArrStoreCd(orderEmpVO.getStoreCd().split(","));
-        }
         return orderEmpMapper.getOrderEmpPeriodDtlList(orderEmpVO);
     }
 
@@ -87,9 +93,6 @@ public class OrderEmpServiceImpl implements OrderEmpService {
         orderEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         orderEmpVO.setEmpNo(sessionInfoVO.getEmpNo());
 
-        if(!StringUtil.getOrBlank(orderEmpVO.getStoreCd()).equals("")) {
-            orderEmpVO.setArrStoreCd(orderEmpVO.getStoreCd().split(","));
-        }
         return orderEmpMapper.getOrderEmpPeriodDtlExcelList(orderEmpVO);
     }
 

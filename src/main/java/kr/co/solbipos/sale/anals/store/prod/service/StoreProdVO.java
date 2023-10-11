@@ -24,6 +24,8 @@ public class StoreProdVO extends PageVO {
     private String orgnFg;
 	/** 사원번호 */
 	private String empNo;
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
     
     /**
      * @return the hqOfficeCd
@@ -107,4 +109,12 @@ public class StoreProdVO extends PageVO {
 	public void setEmpNo(String empNo) {
 		this.empNo = empNo;
 	}
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
+    }
 }

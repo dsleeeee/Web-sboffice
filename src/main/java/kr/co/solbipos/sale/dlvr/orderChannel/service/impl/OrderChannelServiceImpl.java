@@ -1,7 +1,10 @@
 package kr.co.solbipos.sale.dlvr.orderChannel.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.mobile.sale.status.orderChannelSale.service.MobileOrderChannelSaleVO;
@@ -32,9 +35,11 @@ import java.util.List;
 public class OrderChannelServiceImpl implements OrderChannelService {
 
     private final OrderChannelMapper orderChannelMapper;
+    private final PopupMapper popupMapper;
 
-    public OrderChannelServiceImpl(OrderChannelMapper orderChannelMapper) {
+    public OrderChannelServiceImpl(OrderChannelMapper orderChannelMapper, PopupMapper popupMapper) {
         this.orderChannelMapper = orderChannelMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 주문채널별현황 - 결제수단 컬럼 리스트 조회 */
@@ -83,8 +88,10 @@ public class OrderChannelServiceImpl implements OrderChannelService {
         }
 
         // 매장코드
-        if(!StringUtil.getOrBlank(orderChannelVO.getSrchStoreCd()).equals("")) {
-            orderChannelVO.setArrStoreCd(orderChannelVO.getSrchStoreCd().split(","));
+        if(!StringUtil.getOrBlank(orderChannelVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(orderChannelVO.getStoreCd(), 3900));
+            orderChannelVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         // 결제수단 array 값 세팅
@@ -108,9 +115,12 @@ public class OrderChannelServiceImpl implements OrderChannelService {
         }
 
         // 매장코드
-        if(!StringUtil.getOrBlank(orderChannelVO.getSrchStoreCd()).equals("")) {
-            orderChannelVO.setArrStoreCd(orderChannelVO.getSrchStoreCd().split(","));
+        if(!StringUtil.getOrBlank(orderChannelVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(orderChannelVO.getStoreCd(), 3900));
+            orderChannelVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
+
 
         // 주문채널 구분자 array 값 세팅
         orderChannelVO.setArrDlvrInFgCol(orderChannelVO.getDlvrInFgCol().split(","));
@@ -133,9 +143,12 @@ public class OrderChannelServiceImpl implements OrderChannelService {
         System.out.println("매장arr : " + orderChannelVO.getSrchStoreCd());
 
         // 매장코드
-        if(!StringUtil.getOrBlank(orderChannelVO.getSrchStoreCd()).equals("")) {
-            orderChannelVO.setArrStoreCd(orderChannelVO.getSrchStoreCd().split(","));
+        if(!StringUtil.getOrBlank(orderChannelVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(orderChannelVO.getStoreCd(), 3900));
+            orderChannelVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
+
 
         return orderChannelMapper.getOrderChannelDtlList(orderChannelVO);
     }
@@ -151,8 +164,10 @@ public class OrderChannelServiceImpl implements OrderChannelService {
         }
 
         // 매장코드
-        if(!StringUtil.getOrBlank(orderChannelVO.getSrchStoreCd()).equals("")) {
-            orderChannelVO.setArrStoreCd(orderChannelVO.getSrchStoreCd().split(","));
+        if(!StringUtil.getOrBlank(orderChannelVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(orderChannelVO.getStoreCd(), 3900));
+            orderChannelVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         // 주문채널 구분자 array 값 세팅

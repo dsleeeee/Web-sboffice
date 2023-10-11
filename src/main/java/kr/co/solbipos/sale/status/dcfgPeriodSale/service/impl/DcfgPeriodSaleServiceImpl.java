@@ -1,7 +1,10 @@
 package kr.co.solbipos.sale.status.dcfgPeriodSale.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.status.dcfgPeriodSale.service.DcfgPeriodSaleService;
@@ -32,13 +35,15 @@ import java.util.List;
 public class DcfgPeriodSaleServiceImpl implements DcfgPeriodSaleService {
 
     private final DcfgPeriodSaleMapper dcfgPeriodSaleMapper;
+    private final PopupMapper popupMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public DcfgPeriodSaleServiceImpl(DcfgPeriodSaleMapper dcfgPeriodSaleMapper) {
+    public DcfgPeriodSaleServiceImpl(DcfgPeriodSaleMapper dcfgPeriodSaleMapper, PopupMapper popupMapper) {
         this.dcfgPeriodSaleMapper = dcfgPeriodSaleMapper;
+        this.popupMapper = popupMapper;
     }
 
     /**
@@ -52,10 +57,11 @@ public class DcfgPeriodSaleServiceImpl implements DcfgPeriodSaleService {
 
         dcfgPeriodSaleVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         dcfgPeriodSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
-            if(!StringUtil.getOrBlank(dcfgPeriodSaleVO.getStoreCd()).equals("")) {
-                dcfgPeriodSaleVO.setArrStoreCd(dcfgPeriodSaleVO.getStoreCd().split(","));
-            }
+
+        if (!StringUtil.getOrBlank(dcfgPeriodSaleVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dcfgPeriodSaleVO.getStoreCd(), 3900));
+            dcfgPeriodSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         // 할인유형
