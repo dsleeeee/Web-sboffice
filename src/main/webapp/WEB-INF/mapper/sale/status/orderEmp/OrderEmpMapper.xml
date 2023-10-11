@@ -27,12 +27,9 @@
 		AND		tme.EMP_NO = tssd.ORDER_EMP_NO
 		AND		tms.STORE_CD = tssd.STORE_CD
 		AND		tssd.HQ_OFFICE_CD = #{hqOfficeCd}
-				<if test='arrStoreCd != null and arrStoreCd != ""'>
-					AND
-		            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-						tssd.STORE_CD = #{item}
-		            </foreach>
-		        </if>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND tssd.STORE_CD IN (${storeCdQuery})
+                </if>
 				<if test='orgnFg != null and orgnFg == "H"'>
 					AND (
 							'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -71,12 +68,9 @@
 		AND		tme.EMP_NO = tssd.ORDER_EMP_NO
 		AND		tms.STORE_CD = tssd.STORE_CD
 		AND		tssd.HQ_OFFICE_CD = #{hqOfficeCd}
-		<if test='arrStoreCd != null and arrStoreCd != ""'>
-			AND
-			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-				tssd.STORE_CD = #{item}
-			</foreach>
-		</if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tssd.STORE_CD IN (${storeCdQuery})
+        </if>
 		<if test='orgnFg != null and orgnFg == "H"'>
 			AND (
 			'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')

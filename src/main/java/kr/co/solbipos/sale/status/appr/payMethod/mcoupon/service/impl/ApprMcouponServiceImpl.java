@@ -2,6 +2,10 @@ package kr.co.solbipos.sale.status.appr.payMethod.mcoupon.service.impl;
 
 import java.util.List;
 
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +18,13 @@ import kr.co.solbipos.sale.status.appr.payMethod.mcoupon.service.ApprMcouponVO;
 @Service("apprMcouponService")
 public class ApprMcouponServiceImpl implements ApprMcouponService {
     private final ApprMcouponMapper apprMcouponMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public ApprMcouponServiceImpl(ApprMcouponMapper apprMcouponMapper, MessageService messageService) {
+    public ApprMcouponServiceImpl(ApprMcouponMapper apprMcouponMapper, PopupMapper popupMapper, MessageService messageService) {
         this.apprMcouponMapper = apprMcouponMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -51,12 +57,11 @@ public class ApprMcouponServiceImpl implements ApprMcouponService {
         		}
     		}
     	} else {
-    		String[] arrStoreCd = apprMcouponVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				apprMcouponVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
+            if(!StringUtil.getOrBlank(apprMcouponVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(apprMcouponVO.getStoreCd(), 3900));
+                apprMcouponVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
     	}
 
 		return apprMcouponMapper.getApprMcouponList(apprMcouponVO);
@@ -89,12 +94,11 @@ public class ApprMcouponServiceImpl implements ApprMcouponService {
         		}
     		}
     	} else {
-    		String[] arrStoreCd = apprMcouponVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				apprMcouponVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
+            if(!StringUtil.getOrBlank(apprMcouponVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(apprMcouponVO.getStoreCd(), 3900));
+                apprMcouponVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
     	}
 
 		return apprMcouponMapper.getApprMcouponExcelList(apprMcouponVO);

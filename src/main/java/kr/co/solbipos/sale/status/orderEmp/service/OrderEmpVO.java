@@ -44,6 +44,8 @@ public class OrderEmpVO extends PageVO {
 	/** 판매자별, 동적 컬럼 생성을 위한 쿼리 문자열*/
 	private String sQuery1;
 	private String sQuery2;
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
     
 	public String getHqOfficeCd() {
 		return hqOfficeCd;
@@ -128,4 +130,12 @@ public class OrderEmpVO extends PageVO {
 	public void setsQuery2(String sQuery2) {
 		this.sQuery2 = sQuery2;
 	}
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
+    }
 }

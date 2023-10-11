@@ -38,6 +38,9 @@ public class NonSaleCardVO extends PageVO {
     /** 승인처리 */
     private String apprProcFg;
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -84,5 +87,13 @@ public class NonSaleCardVO extends PageVO {
 
     public void setApprProcFg(String apprProcFg) {
         this.apprProcFg = apprProcFg;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

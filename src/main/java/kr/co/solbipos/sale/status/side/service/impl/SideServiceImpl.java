@@ -2,7 +2,10 @@ package kr.co.solbipos.sale.status.side.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.status.side.service.SideService;
@@ -32,11 +35,13 @@ import java.util.List;
 @Service("sideService")
 public class SideServiceImpl implements SideService {
     private final SideMapper sideMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public SideServiceImpl(SideMapper sideMapper, MessageService messageService) {
+    public SideServiceImpl(SideMapper sideMapper, PopupMapper popupMapper, MessageService messageService) {
         this.sideMapper = sideMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -49,7 +54,9 @@ public class SideServiceImpl implements SideService {
         sideVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(sideVO.getStoreCd()).equals("")) {
-            sideVO.setArrStoreCd(sideVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(sideVO.getStoreCd(), 3900));
+            sideVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
         return sideMapper.sideProdClass(sideVO);
     }
@@ -62,7 +69,9 @@ public class SideServiceImpl implements SideService {
         sideVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(sideVO.getStoreCd()).equals("")) {
-            sideVO.setArrStoreCd(sideVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(sideVO.getStoreCd(), 3900));
+            sideVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
         return sideMapper.sideProdClassExcel(sideVO);
     }

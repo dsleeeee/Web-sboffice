@@ -2,7 +2,10 @@ package kr.co.solbipos.sale.anals.store.rank.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.anals.store.rank.service.StoreRankService;
 import kr.co.solbipos.sale.anals.store.rank.service.StoreRankVO;
@@ -17,11 +20,13 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Service("StoreRankService")
 public class StoreRankServiceImpl implements StoreRankService {
     private final StoreRankMapper storeRankMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public StoreRankServiceImpl(StoreRankMapper storeRankMapper, MessageService messageService) {
+    public StoreRankServiceImpl(StoreRankMapper storeRankMapper, PopupMapper popupMapper, MessageService messageService) {
     	this.storeRankMapper = storeRankMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -34,7 +39,9 @@ public class StoreRankServiceImpl implements StoreRankService {
         storeRankVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(storeRankVO.getStoreCd()).equals("")) {
-        	storeRankVO.setArrStoreCd(storeRankVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeRankVO.getStoreCd(), 3900));
+            storeRankVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
     	
         // 판매자별 쿼리 변수

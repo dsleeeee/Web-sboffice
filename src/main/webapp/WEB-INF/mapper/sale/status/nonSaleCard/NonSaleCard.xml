@@ -42,11 +42,8 @@
         WHERE 1=1
         AND tnnpc.HQ_OFFICE_CD = #{hqOfficeCd}
         AND tnnpc.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                tnnpc.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tnnpc.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='posNo != null and posNo != ""'>
             AND tnnpc.STORE_CD||'||'||tnnpc.POS_NO IN

@@ -2,7 +2,10 @@ package kr.co.solbipos.sale.anals.store.month.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.anals.store.month.service.StoreMonthService;
@@ -16,11 +19,13 @@ import java.util.List;
 @Service("StoreMonthService")
 public class StoreMonthServiceImpl implements StoreMonthService {
     private final StoreMonthMapper storeMonthMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public StoreMonthServiceImpl(StoreMonthMapper storeMonthMapper, MessageService messageService) {
+    public StoreMonthServiceImpl(StoreMonthMapper storeMonthMapper, PopupMapper popupMapper, MessageService messageService) {
     	this.storeMonthMapper = storeMonthMapper;
+    	this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -31,13 +36,10 @@ public class StoreMonthServiceImpl implements StoreMonthService {
     	storeMonthVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         
         String arrayStoreCd = "";
-        String[] array = storeMonthVO.getStoreCd().split(",");
-        for(int i=0; i<array.length;i++) {
-        	if(i > 0) {
-        		arrayStoreCd += " OR TSDT.STORE_CD ='"+array[i]+"'";
-        	}else {
-        		arrayStoreCd += " TSDT.STORE_CD ='"+array[i]+"'";
-        	}
+        if(!StringUtil.getOrBlank(storeMonthVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeMonthVO.getStoreCd(), 3900));
+            arrayStoreCd += popupMapper.getSearchMultiStoreRtn(storeVO);
         }
         
         
@@ -81,7 +83,7 @@ public class StoreMonthServiceImpl implements StoreMonthService {
 		    	sQuery3 +=" AND TSDT.HQ_OFFICE_CD = " + "'"+ m +"'" + "\n";
 		    	sQuery3 +=" AND TSDT.SALE_YM     = " + j + "\n";
 		    	if(!storeCd.equals("")) {
-		    		sQuery3 +=" AND (" + arrayStoreCd + ")" + "\n";
+		    		sQuery3 +=" AND TSDT.STORE_CD IN(" + arrayStoreCd + ")" + "\n";
 		    	}
 		    	if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
 					sQuery3 +="AND (" +
@@ -120,7 +122,7 @@ public class StoreMonthServiceImpl implements StoreMonthService {
 	    	sQuery3 +=" AND TSDT.HQ_OFFICE_CD = " + "'"+ m +"'" + "\n";
 	    	sQuery3 +=" AND TSDT.SALE_YM     = " + j + "\n";
 	    	if(!storeCd.equals("")) {
-	    		sQuery3 +=" AND (" + arrayStoreCd + ")" + "\n";
+	    		sQuery3 +=" AND TSDT.STORE_CD IN(" + arrayStoreCd + ")" + "\n";
 	    	}
 			if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
 				sQuery3 +="AND (" +

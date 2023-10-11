@@ -1,7 +1,10 @@
 package kr.co.solbipos.sale.anals.nonSaleCharge.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.anals.nonSaleCharge.service.NonSaleChargeService;
@@ -20,11 +23,13 @@ public class NonSaleChargeServiceImpl implements NonSaleChargeService {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final NonSaleChargeMapper nonSaleChargeMapper;
+    private final PopupMapper popupMapper;
 
     /** Constructor Injection */
     @Autowired
-    public NonSaleChargeServiceImpl(NonSaleChargeMapper nonSaleChargeMapper) {
+    public NonSaleChargeServiceImpl(NonSaleChargeMapper nonSaleChargeMapper, PopupMapper popupMapper) {
         this.nonSaleChargeMapper = nonSaleChargeMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 비매출 충전내역 조회 */
@@ -35,10 +40,14 @@ public class NonSaleChargeServiceImpl implements NonSaleChargeService {
         nonSaleChargeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         nonSaleChargeVO.setEmpNo(sessionInfoVO.getEmpNo());
 
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            if(!StringUtil.getOrBlank(nonSaleChargeVO.getStoreCd()).equals("")) {
-                nonSaleChargeVO.setArrStoreCd(nonSaleChargeVO.getStoreCd().split(","));
-            }
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            nonSaleChargeVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(nonSaleChargeVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(nonSaleChargeVO.getStoreCd(), 3900));
+            nonSaleChargeVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return nonSaleChargeMapper.getNonSaleChargeList(nonSaleChargeVO);
@@ -52,10 +61,14 @@ public class NonSaleChargeServiceImpl implements NonSaleChargeService {
         nonSaleChargeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         nonSaleChargeVO.setEmpNo(sessionInfoVO.getEmpNo());
 
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            if(!StringUtil.getOrBlank(nonSaleChargeVO.getStoreCd()).equals("")) {
-                nonSaleChargeVO.setArrStoreCd(nonSaleChargeVO.getStoreCd().split(","));
-            }
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            nonSaleChargeVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(nonSaleChargeVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(nonSaleChargeVO.getStoreCd(), 3900));
+            nonSaleChargeVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return nonSaleChargeMapper.getNonSaleChargeExcelList(nonSaleChargeVO);
