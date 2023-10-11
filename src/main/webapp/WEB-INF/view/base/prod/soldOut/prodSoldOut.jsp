@@ -114,7 +114,7 @@
                      modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
                      closeFunc - 팝업 닫기시 호출할 함수--%>
                 <jsp:include page="/WEB-INF/view/sale/com/popup/selectProdSMoms.jsp" flush="true">
-                    <jsp:param name="targetId" value="prodSoldOutProd"/>
+                    <jsp:param name="targetId" value="prodSoldOutProdSelect"/>
                 </jsp:include>
                 <%--// 상품선택 모듈 멀티 선택 사용시 include --%>
             </td>
@@ -442,4 +442,4 @@
     var branchCdComboList = ${branchCdComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOut/prodSoldOut.js?ver=20230524.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOut/prodSoldOut.js?ver=20230524.03" charset="utf-8"></script>

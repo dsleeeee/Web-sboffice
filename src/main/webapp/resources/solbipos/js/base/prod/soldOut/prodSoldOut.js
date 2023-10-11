@@ -188,15 +188,15 @@ app.controller('prodSoldOutCtrl', ['$scope', '$http', '$timeout', function ($sco
   // 상품선택 모듈 팝업 사용시 정의
   // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
   // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.prodSoldOutProdShow = function () {
-    $scope._broadcast('prodSoldOutProdCtrl');
+  $scope.prodSoldOutProdSelectShow = function () {
+    $scope._broadcast('prodSoldOutProdSelectCtrl');
   };
 
   // 상품 목록 조회
   $scope.searchProdList = function(){
 
     if(orgnFg == "HQ"){
-      if(($("#prodSoldOutStoreCd").val() === "" || $("#prodSoldOutStoreCd").val() === undefined) && ($("#prodSoldOutProdCd").val() === "" || $("#prodSoldOutProdCd").val() === undefined)){
+      if(($("#prodSoldOutStoreCd").val() === "" || $("#prodSoldOutStoreCd").val() === undefined) && ($("#prodSoldOutProdSelectCd").val() === "" || $("#prodSoldOutProdSelectCd").val() === undefined)){
         $scope._popMsg(messages["soldOut.require.select.msg"]);
         return false;
       }
@@ -210,7 +210,7 @@ app.controller('prodSoldOutCtrl', ['$scope', '$http', '$timeout', function ($sco
       params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
     }
     params.storeCds = $("#prodSoldOutStoreCd").val();
-    params.prodCds = $("#prodSoldOutProdCd").val();
+    params.prodCds = $("#prodSoldOutProdSelectCd").val();
     params.soldOutYn = $scope.soldOutYn;
     params.useYn = $scope.useYn;
     params.prodClassCd = $scope.prodClassCd;
