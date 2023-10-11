@@ -276,7 +276,7 @@
                        TB_MS_PRODUCT_BARCD tmpb
                  WHERE 1=1
                 <if test='storeCdQuery != null and storeCdQuery != ""'>
-                    AND tsdt.STORE_CD IN (${storeCdQuery})
+                    AND tsdpd.STORE_CD IN (${storeCdQuery})
                 </if>
                    AND tsdpd.STORE_CD = tmp.STORE_CD
                    AND tsdpd.PROD_CD  = tmp.PROD_CD
