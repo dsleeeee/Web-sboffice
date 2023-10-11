@@ -35,18 +35,18 @@
             </th>
             <td>
                 <div class="sb-select">
-                    <span class="txtIn"> <input id="kdsDayStartDate" name="kdsDayStartDate" class="w150px"/></span>
+                    <span class="txtIn"><input id="kdsDayStartDate" name="kdsDayStartDate" class="w120px"/></span>
                     <span class="rg">~</span>
-                    <span class="txtIn"> <input id="kdsDayEndDate" name="kdsDayEndDate" class="w150px"/></span>
+                    <span class="txtIn"><input id="kdsDayEndDate" name="kdsDayEndDate" class="w120px"/></span>
                 </div>
             </td>
-                <%-- 시간대 --%>
+            <%-- 시간대 --%>
             <th>
                 <s:message code="kds.time"/>
             </th>
             <td>
                 <div class="sb-select">
-                    <span class="txtIn w150px">
+                    <span class="txtIn w120px">
                         <wj-combo-box
                                 id="timeZone"
                                 ng-model="timeZone"
@@ -72,7 +72,7 @@
                     <%--                    </wj-input-date-time>--%>
                     </span>
                     <span class="rg">~</span>
-                    <span class="txtIn w150px">
+                    <span class="txtIn w120px">
                         <wj-combo-box
                                 id="timeZoneSec"
                                 ng-model="timeZoneSec"
@@ -93,7 +93,7 @@
             </th>
             <td>
                 <div class="sb-select">
-                    <span class="txtIn w150px">
+                    <span class="txtIn w120px">
                          <wj-combo-box
                                  id="makeDate"
                                  ng-model="makeDate"
@@ -106,7 +106,7 @@
                         </wj-combo-box>
                     </span>
                     <span class="rg">~</span>
-                    <span class="txtIn w150px">
+                    <span class="txtIn w120px">
                         <wj-combo-box
                                 id="makeDateSec"
                                 ng-model="makeDateSec"
@@ -125,7 +125,7 @@
             </th>
             <td>
                 <div class="sb-select">
-                    <span class="txtIn w150px">
+                    <span class="txtIn w120px">
                         <wj-combo-box
                                 id="picDate"
                                 ng-model="picDate"
@@ -138,7 +138,7 @@
                         </wj-combo-box>
                     </span>
                     <span class="rg">~</span>
-                    <span class="txtIn w150px">
+                    <span class="txtIn w120px">
                         <wj-combo-box
                                 id="picDateSec"
                                 ng-model="picDateSec"
@@ -155,11 +155,15 @@
         </tr>
         <c:if test="${orgnFg == 'HQ'}">
         <tr>
-            <th><s:message code="kds.store"/></th>
+            <%-- 매장선택 --%>
+            <th><s:message code="cmm.store.select"/></th>
             <td>
-                <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
+                <%-- 매장선택 모듈 사용시 include --%>
+                <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                    <jsp:param name="targetTypeFg" value="S"/>
                     <jsp:param name="targetId" value="regStore"/>
                 </jsp:include>
+                <%--// 매장선택 모듈 사용시 include --%>
             </td>
             <td></td>
             <td></td>

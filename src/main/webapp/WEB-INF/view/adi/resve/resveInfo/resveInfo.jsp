@@ -70,13 +70,17 @@
             <%-- 매장선택 --%>
             <c:if test="${orgnFg == 'HQ'}">
                 <tr>
-                    <th><s:message code="cmm.store.select" /></th>
+                    <%-- 매장선택 --%>
+                    <th><s:message code="cmm.store.select"/></th>
                     <td>
-                        <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                        <%-- 매장선택 모듈 사용시 include --%>
+                        <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                            <jsp:param name="targetTypeFg" value="M"/>
                             <jsp:param name="targetId" value="resveInfoStore"/>
                         </jsp:include>
+                        <%--// 매장선택 모듈 사용시 include --%>
                     </td>
-                    <th></th>
+                    <td></td>
                     <td></td>
                 </tr>
             </c:if>

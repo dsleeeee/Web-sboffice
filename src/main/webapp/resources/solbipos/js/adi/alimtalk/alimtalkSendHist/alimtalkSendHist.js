@@ -195,7 +195,7 @@ app.controller('alimtalkSendHistCtrl', ['$scope', '$http', '$timeout', function 
     // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
     // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
     $scope.alimtalkSendHistStoreShow = function () {
-        $scope._broadcast('alimtalksSendHistStoreCtrl');
+        $scope._broadcast('alimtalkSendHistStoreCtrl');
     };
 
     // 선택
