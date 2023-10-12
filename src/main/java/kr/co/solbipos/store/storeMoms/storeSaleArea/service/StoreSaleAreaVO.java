@@ -66,6 +66,9 @@ public class StoreSaleAreaVO extends PageVO {
     /** 매장관리타입 */
     private String momsStoreManageType;
 
+    /** 영업지역사용여부 */
+    private String areaUseYn;
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -200,5 +203,13 @@ public class StoreSaleAreaVO extends PageVO {
 
     public void setMomsStoreManageType(String momsStoreManageType) {
         this.momsStoreManageType = momsStoreManageType;
+    }
+
+    public String getAreaUseYn() {
+        return areaUseYn;
+    }
+
+    public void setAreaUseYn(String areaUseYn) {
+        this.areaUseYn = areaUseYn;
     }
 }

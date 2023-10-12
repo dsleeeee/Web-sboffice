@@ -13,6 +13,19 @@
  */
 var app = agrid.getApp();
 
+var useYnFg = [
+  {"name":"전체","value":""},
+  {"name":"사용","value":"Y"},
+  {"name":"사용안함","value":"N"}
+];
+
+// 사용여부 DropBoxDataMap
+var useYnFgDataMap = new wijmo.grid.DataMap([
+  {id: "", name: "전체"},
+  {id: "Y", name: "사용"},
+  {id: "N", name: "사용안함"}
+], 'id', 'name');
+
 app.controller('storeSaleAreaCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('storeSaleAreaCtrl', $scope, $http, true));
@@ -20,6 +33,7 @@ app.controller('storeSaleAreaCtrl', ['$scope', '$http', function ($scope, $http)
     // 조회조건 콤보박스 데이터 Set
     // $scope._setComboData("areaCd", areaCd);
     // $scope._setComboData("sysStatFg", sysStatFg);
+    $scope._setComboData("srchUseYnFg", useYnFg);
     $scope._setComboData("storeHqBrandCdCombo", momsHqBrandCdComboList); // 매장브랜드
     $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
     $scope._setComboData("momsAcShopCombo", momsAcShopComboList); // AC점포별
@@ -72,7 +86,7 @@ app.controller('storeSaleAreaCtrl', ['$scope', '$http', function ($scope, $http)
         $scope.searchStoreList();
         event.preventDefault();
     });
-    
+
     // 매장목록 조회
     $scope.searchStoreList = function(){
         var params = {};
@@ -81,6 +95,7 @@ app.controller('storeSaleAreaCtrl', ['$scope', '$http', function ($scope, $http)
         params.branchNm = $("#srchBranchNm").val();
         params.storeCd = $("#srchStoreCd").val();
         params.storeNm = $("#srchStoreNm").val();
+        params.areaUseYn = $scope.useYnFg;
         // params.areaCd = $scope.srchAreaCdCombo.selectedValue;
         // params.sysStatFg = $scope.srchSysStatFgCombo.selectedValue;
         params.prodHqBrandCd = $scope.prodHqBrandCd;
@@ -106,7 +121,7 @@ app.controller('storeSaleAreaCtrl', ['$scope', '$http', function ($scope, $http)
 
         $scope._inquiryMain("/store/storeMoms/storeSaleArea/getStoreList.sb", params, function(result){});
     };
-    
+
     // 신규 등록
     $scope.addStoreSaleArea = function () {
 

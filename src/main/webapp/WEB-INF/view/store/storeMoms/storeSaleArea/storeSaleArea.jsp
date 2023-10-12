@@ -57,8 +57,21 @@
                           control="srchStoreHqBrandCdCombo">
                   </wj-combo-box>
               </div>
-          </td>
-          </td>
+            <%-- 사용여부 --%>
+            <th><s:message code="storeSaleArea.useYn" /></th>
+              <td>
+                <div class="sb-select">
+                  <wj-combo-box
+                          id="srchUseYnFg"
+                          ng-model="useYnFg"
+                          items-source="_getComboData('srchUseYnFg')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          initialized="_initComboBox(s)">
+                  </wj-combo-box>
+                </div>
+              </td>
       </tr>
     </tbody>
     </table>
@@ -178,19 +191,19 @@
             <td>
                 <div class="sb-select">
                     <wj-combo-box
-                            id="srchBranchCdComboo"
+                            id="srchBranchCdCombo"
                             ng-model="branchCd"
                             items-source="_getComboData('branchCdCombo')"
                             display-member-path="name"
                             selected-value-path="value"
                             is-editable="false"
                             initialized="_initComboBox(s)"
-                            control="srchBranchCdComboo">
+                            control="srchBranchCdCombo">
                     </wj-combo-box>
                 </div>
             </td>
-            <td></td>
-            <td></td>
+          </td>
+          </td>
         </tr>
         </tbody>
     </table>
@@ -256,7 +269,7 @@
 </script>
 
 
-<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storeSaleArea/storeSaleArea.js?ver=20221125.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storeSaleArea/storeSaleArea.js?ver=20231012.01" charset="utf-8"></script>
 
 <%-- NAVER Maps API --%>
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=67szg2cbo7"></script>
