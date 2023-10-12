@@ -47,7 +47,7 @@ app.controller('orderChannelDtlCtrl', ['$scope', '$http', '$timeout', function (
   $scope.searchOrderChannelDtlList = function (data) {
     // 파라미터
     var params      = {};
-    params.srchStoreCd  = data.srchStoreCd;
+    params.storeCd  = data.storeCd;
     params.saleDate = data.saleDate;
     params.dlvrInFg = data.dlvrInFg;
 

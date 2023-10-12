@@ -143,4 +143,4 @@
     var arrDlvrInFgCol = dlvrInFgCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/dlvr/orderChannel/orderChannelPeriod.js?ver=20210903.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/dlvr/orderChannel/orderChannelPeriod.js?ver=20231012.01" charset="utf-8"></script>

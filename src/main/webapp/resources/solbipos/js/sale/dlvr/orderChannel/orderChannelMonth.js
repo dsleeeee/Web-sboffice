@@ -120,7 +120,7 @@ app.controller('orderChannelMonthCtrl', ['$scope', '$http', '$timeout', function
         var params = {};
         params.startDate = wijmo.Globalize.format(startMonth.value, 'yyyyMM') + '01'; // 조회기간
         params.endDate = wijmo.Globalize.format(endMonth.value, 'yyyyMM') + '31'; // 조회기간
-        params.srchStoreCd = $("#orderChannelMonthStoreCd").val();
+        params.storeCd = $("#orderChannelMonthStoreCd").val();
         params.dlvrInFgCol = dlvrInFgCol;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수

@@ -144,7 +144,7 @@ app.controller('orderChannelPeriodCtrl', ['$scope', '$http', '$timeout', functio
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
-        params.srchStoreCd = $("#orderChannelPeriodStoreCd").val();
+        params.storeCd = $("#orderChannelPeriodStoreCd").val();
         params.payCol = payCol;
         params.dcCol = dcCol;
         params.guestCol = guestCol;

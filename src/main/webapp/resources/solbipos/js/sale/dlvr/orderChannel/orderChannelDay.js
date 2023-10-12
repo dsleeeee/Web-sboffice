@@ -120,7 +120,7 @@ app.controller('orderChannelDayCtrl', ['$scope', '$http', '$timeout', function (
                 var col         = ht.panel.columns[ht.col];
                 var selectedRow = s.rows[ht.row].dataItem;
                 var params      = {};
-                params.srchStoreCd  = $("#orderChannelDayStoreCd").val();
+                params.storeCd  = $("#orderChannelDayStoreCd").val();
                 params.saleDate = selectedRow.saleDate.replaceAll("-","");
 
                 // 배달경로 i=0이 아닌이유 0은 일반이라 TB_SL_SALE_HDR_DLVR테이블에 정보가 없음
@@ -157,7 +157,7 @@ app.controller('orderChannelDayCtrl', ['$scope', '$http', '$timeout', function (
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
-        params.srchStoreCd = $("#orderChannelDayStoreCd").val();
+        params.storeCd = $("#orderChannelDayStoreCd").val();
         params.dlvrInFgCol = dlvrInFgCol;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
