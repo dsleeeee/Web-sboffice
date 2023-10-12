@@ -130,6 +130,7 @@
             </th>
             <td colspan="2">
                 <c:if test="${orgnFg == 'HQ'}">
+                    <%-- [NXPOS-1648,1699] 매장선택 모듈 통합 / 추후작업예정 --%>
                     <%-- 등록매장 선택 --%>
                     <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
                         <jsp:param name="targetId" value="bbqMemberExcelUploadStore"/>

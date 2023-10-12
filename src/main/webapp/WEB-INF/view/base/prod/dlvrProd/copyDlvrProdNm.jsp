@@ -47,6 +47,7 @@
                         <td>
                             <!-- 본사권한은 전매장에 복사가능 -->
                             <c:if test="${orgnFg == 'HQ'}">
+                                <%-- [NXPOS-1648,1699] 매장선택 모듈 통합 / 추후작업예정 --%>
                                 <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
                                 <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
                                     <jsp:param name="targetId" value="targetStore"/>

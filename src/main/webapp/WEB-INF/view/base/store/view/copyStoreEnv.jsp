@@ -30,6 +30,7 @@
             <%-- 기준매장 --%>
             <th><s:message code="storeView.original.storeCd" /></th>
             <td>
+              <%-- [NXPOS-1648,1699] 매장선택 모듈 통합 / 추후작업예정 --%>
               <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
               <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
                 <jsp:param name="targetId" value="originalStore"/>
@@ -40,6 +41,7 @@
             <%-- 적용대상매장 --%>
             <th><s:message code="storeView.target.storeCd" /></th>
             <td>
+              <%-- [NXPOS-1648,1699] 매장선택 모듈 통합 / 추후작업예정 --%>
               <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
               <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
                 <jsp:param name="targetId" value="targetStore"/>
