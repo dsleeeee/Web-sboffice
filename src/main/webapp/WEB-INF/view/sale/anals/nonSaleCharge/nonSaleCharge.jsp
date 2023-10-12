@@ -32,13 +32,15 @@
         </tr>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
             <tr>
-                <%-- 매장 --%>
-                <th><s:message code="nonSaleCharge.storeNm"/></th>
+                <%-- 매장선택 --%>
+                <th><s:message code="cmm.store.select"/></th>
                 <td>
-                    <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-                    <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                    <%-- 매장선택 모듈 사용시 include --%>
+                    <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                        <jsp:param name="targetTypeFg" value="M"/>
                         <jsp:param name="targetId" value="nonSaleChargeStore"/>
                     </jsp:include>
+                    <%--// 매장선택 모듈 사용시 include --%>
                 </td>
             </tr>
         </c:if>

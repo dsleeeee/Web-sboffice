@@ -52,19 +52,22 @@
 			</tr>
 			<tr>
 				<c:if test="${sessionInfo.orgnFg == 'HQ'}">
-					<%-- 매장코드 --%>
-					<th><s:message code="todayBillSaleDtl.store" /></th>
+					<%-- 매장선택 --%>
+					<th><s:message code="cmm.store.select"/></th>
 					<td colspan="3">
-						<%-- 매장선택 모듈 싱글 선택 사용시 include param 정의 :
-							targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-                            displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
-                            modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
-                            closeFunc - 팝업 닫기시 호출할 함수--%>
-                        <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+						<%-- 매장선택 모듈 사용시 include
+						 	param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+										 displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+										 modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+										 closeFunc - 팝업 닫기시 호출할 함수
+										 targetTypeFg - S:싱글, M:멀티
+					   	--%>
+						<jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+							<jsp:param name="targetTypeFg" value="M"/>
 							<jsp:param name="targetId" value="dcDcfgSelectStore" />
 							<jsp:param name="closeFunc" value="resetDcfg"/>
 						</jsp:include>
-						<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+						<%--// 매장선택 모듈 사용시 include --%>
 					</td>
 				</c:if>
 				<c:if test="${sessionInfo.orgnFg == 'STORE'}">
@@ -210,9 +213,7 @@
     <%--//엑셀 리스트--%>
 </div>
 
-<script type="text/javascript"
-	src="/resource/solbipos/js/sale/status/dc/dcfg/dcfg.js?ver=20230616.03"
-	charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/dc/dcfg/dcfg.js?ver=20230616.03" charset="utf-8"></script>
 
 <%-- 상품매출내역 팝업 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/com/popup/prod.jsp">

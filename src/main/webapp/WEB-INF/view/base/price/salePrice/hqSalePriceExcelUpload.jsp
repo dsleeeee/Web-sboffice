@@ -96,6 +96,7 @@
                 <s:message code="cmm.save" />
             </button>
             <div id="excelStoreSaveStore" class="fr mr10 oh bk" style="width: 200px; height:25px; display: none;">
+                <%-- [NXPOS-1648,1699] 매장선택 모듈 통합 / 추후작업예정 --%>
                 <c:if test="${momsEnvstVal == '0'}">
                     <jsp:include page="/WEB-INF/view/application/layer/searchPriceStoreM.jsp" flush="true">
                         <jsp:param name="targetId" value="excelChoiceSaveStore"/>

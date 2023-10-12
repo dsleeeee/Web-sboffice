@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="apprCardView" class="subCon3"  ng-controller="apprCardCtrl" style="display: none;">
+<div id="apprCardView" class="subCon3" ng-controller="apprCardCtrl" style="display: none;">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="store.pay1"/></a>
       <%-- 조회 --%>
@@ -28,7 +28,7 @@
         <td <c:if test="${sessionInfo.orgnFg == 'STORE'}">colspan="3"</c:if> >
         <div class="sb-select">
             <span class="txtIn"><input id="srchApprCardStartDate" class="w110px"></span>
-                <span class="rg">~</span>
+            <span class="rg">~</span>
             <span class="txtIn"><input id="srchApprCardEndDate" class="w110px"></span>
             <span class="chk ml10" style="display: none;">
                 <input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
@@ -40,9 +40,10 @@
         </td>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <input type="hidden" id="apprCardSelectStoreCd" value=""/>
-        <%-- 매장코드 --%>
-        <th><s:message code="todayBillSaleDtl.store"/></th>
+        <%-- 매장선택 --%>
+        <th><s:message code="cmm.store.select"/></th>
         <td>
+            <%-- [NXPOS-1648,1699] 매장선택 모듈 통합 / 추후작업예정 --%>
             <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
             <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
                 <jsp:param name="targetId" value="apprCardSelectStore"/>

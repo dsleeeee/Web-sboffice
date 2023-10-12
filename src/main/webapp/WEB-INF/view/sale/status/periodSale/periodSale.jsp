@@ -37,20 +37,16 @@
       </tr>
       <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <tr>
-            <%-- 매장코드 --%>
-          <th><s:message code="todayBillSaleDtl.store"/></th>
+          <%-- 매장선택 --%>
+          <th><s:message code="cmm.store.select"/></th>
           <td colspan="3">
-              <%-- 매장선택 모듈 싱글 선택 사용시 include
-                   param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-                                displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
-                                modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
-                                closeFunc - 팝업 닫기시 호출할 함수
-              --%>
-            <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
+            <%-- 매장선택 모듈 사용시 include --%>
+            <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+              <jsp:param name="targetTypeFg" value="S"/>
               <jsp:param name="targetId" value="periodSaleSelectStore"/>
               <jsp:param name="closeFunc" value="getStorePosList"/>
             </jsp:include>
-              <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+            <%--// 매장선택 모듈 사용시 include --%>
           </td>
         </tr>
       </c:if>
@@ -97,7 +93,7 @@
         <td>
           <input type="text" id="srchBarcdCd" name="srchBarcdCd" ng-model="barcdCd" class="sb-input w100" maxlength="40" onkeyup="fnNxBtnSearch('3');"/>
         </td>
-        <th></th>
+        <td></td>
         <td></td>
       </tr>
       </tbody>
@@ -125,7 +121,7 @@
           <wj-flex-grid-column header="<s:message code="todayBillSaleDtl.storeCd"/>" binding="storeCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="todayBillSaleDtl.storeNm"/>" binding="storeNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="todayBillSaleDtl.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="todayBillSaleDtl.posNo"/>" binding="posNo" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="todayBillSaleDtl.posNo"/>" binding="posNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="todayBillSaleDtl.billNo"/>" binding="billNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="todayBillSaleDtl.saleYn"/>" binding="saleYn" width="60" align="center" is-read-only="true" data-map="saleYnMap"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="todayBillSaleDtl.tblNm"/>" binding="tblNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -156,5 +152,5 @@
   var orgnFg = "${orgnFg}";
   var storeCd = "${storeCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/periodSale/periodSale.js?ver=20220701.01" charset="utf-8"></script>
 
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/periodSale/periodSale.js?ver=20220701.01" charset="utf-8"></script>

@@ -23,7 +23,7 @@
       </colgroup>
       <tbody>
       <tr>
-        <%-- 조회일자 --%>
+        <%-- 조회월 --%>
         <th><s:message code="cmm.search.month"/></th>
         <td <c:if test="${sessionInfo.orgnFg == 'STORE'}">colspan="3"</c:if> >
         <div class="sb-select">
@@ -60,15 +60,17 @@
             </span>  
         </div>
         </td>
-        
       <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <input type="hidden" id="goalMonthSelectStoreCd" valaue=""/>
-        <%-- 매장코드 --%>
-        <th><s:message code="todayBillSaleDtl.store"/></th>
+        <%-- 매장선택 --%>
+        <th><s:message code="cmm.store.select"/></th>
         <td>
-            <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
+            <%-- 매장선택 모듈 사용시 include --%>
+            <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                <jsp:param name="targetTypeFg" value="M"/>
                 <jsp:param name="targetId" value="goalMonthSelectStore"/>
             </jsp:include>
+            <%--// 매장선택 모듈 사용시 include --%>
         </td>
       </c:if>
       <c:if test="${sessionInfo.orgnFg == 'STORE'}">  

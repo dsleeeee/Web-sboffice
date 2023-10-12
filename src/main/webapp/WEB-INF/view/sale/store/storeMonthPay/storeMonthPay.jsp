@@ -29,7 +29,7 @@
                 <tr>
                     <%-- 조회월 --%>
                     <th>
-                        <s:message code="month.month" />
+                        <s:message code="cmm.search.month" />
                     </th>
                     <td colspan="3">
                         <div class="sb-select">

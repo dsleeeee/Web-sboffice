@@ -43,6 +43,7 @@
                     <%-- 매장코드 --%>
                     <th><s:message code="cmm.store"/></th>
                     <td>
+                        <%-- [NXPOS-1648,1699] 매장선택 모듈 통합 / 추후작업예정 --%>
                         <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
                         <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
                             <jsp:param name="targetId" value="apprNcardSelectStore"/>

@@ -31,7 +31,7 @@
             <tr>
                 <%-- 조회월 --%>
                 <th>
-                    <s:message code="month.month" />
+                    <s:message code="cmm.search.month" />
                 </th>
                 <td colspan="3">
                     <div class="sb-select">
@@ -42,14 +42,15 @@
                 </td>
             </tr>
             <tr <c:if test="${orgnFg == 'STORE'}">style="display: none;"</c:if> >
-                <%-- 매장코드 --%>
-                <th><s:message code="month.store"/></th>
+                <%-- 매장선택 --%>
+                <th><s:message code="cmm.store.select"/></th>
                 <td colspan="3">
-                    <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-                    <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
+                    <%-- 매장선택 모듈 사용시 include --%>
+                    <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                        <jsp:param name="targetTypeFg" value="S"/>
                         <jsp:param name="targetId" value="monthCornerStore"/>
                     </jsp:include>
-                    <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+                    <%--// 매장선택 모듈 사용시 include --%>
                 </td>
             </tr>
         </tbody>

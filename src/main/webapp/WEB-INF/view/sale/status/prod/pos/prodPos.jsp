@@ -47,17 +47,15 @@
 			</tr>
 			<tr>
 				<c:if test="${sessionInfo.orgnFg == 'HQ'}">
-					<%-- 매장코드 --%>
-					<th><s:message code="todayBillSaleDtl.store"/></th>
+					<%-- 매장선택 --%>
+					<th><s:message code="cmm.store.select"/></th>
 					<td>
-						<%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-<%-- 							<jsp:include page="/WEB-INF/view/sale/status/pos/cmm/selectStoreM.jsp" flush="true"> --%>
+						<%-- [NXPOS-1648,1699] 매장선택 모듈 통합 / 추후작업예정 --%>
 						<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
 							<jsp:param name="targetId" value="posProdSelectStore"/>
 							<jsp:param name="subTargetId" value="posProdSelectPos"/>
 							<jsp:param name="closeFunc" value="getPosNmList"/>
 						</jsp:include>
-						<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
 					</td>
 					<input type="hidden" id="posProdSelectStoreCd" value=""/>
 				</c:if>
