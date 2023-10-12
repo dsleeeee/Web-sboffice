@@ -23,7 +23,8 @@
        	</colgroup>
        	<tbody>
        		<tr>
-       			<th><s:message code="cmm.search.month"/></th>
+				<%-- 조회월 --%>
+				<th><s:message code="cmm.search.month"/></th>
        			<td>
 					<div class="sb-select">
 			          <span class="txtIn w110px">
@@ -59,9 +60,10 @@
 				<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 					<input type="hidden" id="tableMonthSelectStoreCd" value=""/>
 					<tr>
-						<%-- 매장코드 --%>
-						<th><s:message code="todayDtl.store"/></th>
+						<%-- 매장선택 --%>
+						<th><s:message code="cmm.store.select"/></th>
 						<td>
+							<%-- [NXPOS-1648,1699] 매장선택 모듈 통합 / 추후작업예정 --%>
 							<%-- 매장선택 모듈 멀티 선택 사용시 include --%>
 							<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
 								<jsp:param name="targetId" value="tableMonthSelectStore"/>

@@ -68,10 +68,10 @@
 				<%-- 매장코드 --%>
 				<th><s:message code="todayBillSaleDtl.store"/></th>
 				<td colspan="3">
+					<%-- [NXPOS-1648,1699] 매장선택 모듈 통합 / 추후작업예정 - 화면못찾음 --%>
 					<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreMMoms.jsp" flush="true">
 						<jsp:param name="targetId" value="prodRankSelectStore"/>
 					</jsp:include>
-				  <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
 				</td>
 			</tr>
 			</c:if>

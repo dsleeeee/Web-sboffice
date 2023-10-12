@@ -65,6 +65,7 @@
         <%-- 매장코드 --%>
         <th><s:message code="todayBillSaleDtl.store"/></th>
         <td>
+            <%-- [NXPOS-1648,1699] 매장선택 모듈 통합 / 추후작업예정 --%>
             <%-- 매장선택 모듈 싱글 선택 사용시 include
                param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
                             displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)

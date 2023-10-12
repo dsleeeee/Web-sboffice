@@ -30,7 +30,7 @@
             <tr>
                 <%-- 조회일자 --%>
                 <th>
-                    <s:message code="dayofweek.date" />
+                    <s:message code="cmm.search.date" />
                 </th>
                 <td colspan="3">
                     <div class="sb-select">

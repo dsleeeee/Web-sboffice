@@ -40,9 +40,10 @@
         </td>
     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <input type="hidden" id="apprAcquireNcardSelectStoreCd" value=""/>
-        <%-- 매장코드 --%>
-        <th><s:message code="todayBillSaleDtl.store"/></th>
+        <%-- 매장선택 --%>
+        <th><s:message code="cmm.store.select"/></th>
         <td>
+            <%-- [NXPOS-1648,1699] 매장선택 모듈 통합 / 추후작업예정 --%>
             <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
             <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
                 <jsp:param name="targetId" value="apprAcquireNcardSelectStore"/>
@@ -52,9 +53,7 @@
             </jsp:include>
             <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
         </td>
-
       </tr>
-
       <tr>
     </c:if>
         <%-- 포스선택 --%>
@@ -69,7 +68,6 @@
             <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
         </td>
       </tr>
-
       <tr>
         <%-- 승인구분 --%>
         <th><s:message code="dayMcoupn.apprProcFg" /></th>
@@ -88,7 +86,7 @@
                 </span>
           </div>
         </td>
-       <%-- 승인처리 --%>
+        <%-- 승인처리 --%>
         <th><s:message code="storeStatus.apprProcFg" /></th>
         <td>
           <div class="sb-select">
@@ -105,9 +103,9 @@
                 </span>
           </div>
         </td>
-      <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+        <c:if test="${sessionInfo.orgnFg == 'STORE'}">
             <input type="hidden" id="apprAcquireNcardSelectStoreCd" value="${sessionInfo.storeCd}"/>
-      </c:if>
+        </c:if>
         <input type="hidden" id="posAcquireNcardSelectPosCd" value=""/>
         <input type="hidden" id="posAcquireNcardSelectPosName" value=""/>
       </tr>

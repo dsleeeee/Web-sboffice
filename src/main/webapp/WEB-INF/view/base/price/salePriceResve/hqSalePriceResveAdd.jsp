@@ -191,6 +191,7 @@
                                 </wj-combo-box>
                             </div>
                             <div id="addStoreSaveStore" class="fl oh bk" style="width: 200px; height:25px; display: none">
+                                <%-- [NXPOS-1648,1699] 매장선택 모듈 통합 / 추후작업예정 --%>
                                 <c:if test="${momsEnvstVal == '0'}">
                                     <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
                                         <jsp:param name="targetId" value="addChoiceSaveStore"/>

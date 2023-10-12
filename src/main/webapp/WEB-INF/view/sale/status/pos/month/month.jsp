@@ -62,13 +62,13 @@
 						</span>
        				</div>
        			</td>
-
 				<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 					<input type="hidden" id="posMonthSelectStoreCd" value=""/>
 					<tr>
-						<%-- 매장코드 --%>
-						<th><s:message code="todayBillSaleDtl.store"/></th>
+                        <%-- 매장선택 --%>
+                        <th><s:message code="cmm.store.select"/></th>
 						<td>
+                            <%-- [NXPOS-1648,1699] 매장선택 모듈 통합 / 추후작업예정 --%>
 							<%-- 매장선택 모듈 멀티 선택 사용시 include --%>
 <%-- 							<jsp:include page="/WEB-INF/view/sale/status/pos/cmm/selectStoreM.jsp" flush="true"> --%>
 							<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
@@ -83,7 +83,6 @@
 				<c:if test="${sessionInfo.orgnFg == 'STORE'}">
 					<input type="hidden" id="posMonthSelectStoreCd" value="${sessionInfo.storeCd}"/>
 				</c:if>
-
 				<input type="hidden" id="posMonthSelectPosCd" value=""/>
 				<input type="hidden" id="posMonthSelectPosName" value=""/>
 				<input type="hidden" id="posMonthSelectHqOfficeCd" value="${sessionInfo.hqOfficeCd}"/>
@@ -100,7 +99,6 @@
 						<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
 					</td>
 				</tr>
-
 			</tr>
 		</tbody>
 	</table>

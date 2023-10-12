@@ -39,22 +39,22 @@
         </div>
         </td>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-        <input type="hidden" id="apprMcouponSelectStoreCd" value=""/>
-        <%-- 매장코드 --%>
-        <th><s:message code="todayBillSaleDtl.store"/></th>
-        <td>
-            <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-            <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
-                <jsp:param name="targetId" value="apprAcquireMcouponSelectStore"/>
-                <jsp:param name="targetPosId" value="apprAcquireMcouponSelectPos"/>
-                <jsp:param name="targetCornerId" value="apprAcquireMcouponSelectCorner"/>
-                <jsp:param name="closeFunc" value="getCornerNmList,getPosNmList"/>
-            </jsp:include>
-            <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-        </td>
-      </c:if>
+            <input type="hidden" id="apprMcouponSelectStoreCd" value=""/>
+            <%-- 매장선택 --%>
+            <th><s:message code="cmm.store.select"/></th>
+            <td>
+                <%-- [NXPOS-1648,1699] 매장선택 모듈 통합 / 추후작업예정 --%>
+                <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
+                <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
+                    <jsp:param name="targetId" value="apprAcquireMcouponSelectStore"/>
+                    <jsp:param name="targetPosId" value="apprAcquireMcouponSelectPos"/>
+                    <jsp:param name="targetCornerId" value="apprAcquireMcouponSelectCorner"/>
+                    <jsp:param name="closeFunc" value="getCornerNmList,getPosNmList"/>
+                </jsp:include>
+                <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+            </td>
+          </c:if>
       </tr>
-
       <tr>
         <%-- 포스선택 --%>
         <th><s:message code="pos.pos" /></th>
@@ -67,7 +67,6 @@
             </jsp:include>
             <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
         </td>
-
         <%-- 코너표시 --%>
         <th><s:message code="corner.cornrNm" /></th>
         <td>
@@ -78,7 +77,6 @@
             </jsp:include>
         </td>
       </tr>
-
       <tr>
         <%-- 승인구분 --%>
         <th><s:message code="dayMcoupn.apprProcFg" /></th>
