@@ -206,4 +206,32 @@ public class DlvrProdServiceImpl implements DlvrProdService {
 
         return procCnt;
     }
+
+    /**  배달시스템 상품 명칭 매핑 - 전체 엑셀다운로드 */
+    @Override
+    public List<DefaultMap<String>> getDlvrProdNmExcelList(@RequestBody DlvrProdVO dlvrProdVO, SessionInfoVO sessionInfoVO) {
+
+        // 소속구분 설정
+        dlvrProdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
+            dlvrProdVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
+        } else if ( sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+            dlvrProdVO.setStoreCd(sessionInfoVO.getOrgnCd());
+        }
+
+        // 배달앱 구분코드 array 값 세팅
+        dlvrProdVO.setArrDlvrCol(dlvrProdVO.getDlvrCol().split(","));
+
+        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+        String pivotDlvrCol = "";
+        String arrDlvrCol[] = dlvrProdVO.getDlvrCol().split(",");
+        for(int i=0; i < arrDlvrCol.length; i++) {
+            pivotDlvrCol += (pivotDlvrCol.equals("") ? "" : ",") + "'"+arrDlvrCol[i]+"'"+" AS DLVR_PROD_NM_"+arrDlvrCol[i];
+        }
+        dlvrProdVO.setPivotDlvrCol(pivotDlvrCol);
+
+        dlvrProdVO.setUserId(sessionInfoVO.getUserId());
+
+        return dlvrProdMapper.getDlvrProdNmExcelList(dlvrProdVO);
+    }
 }

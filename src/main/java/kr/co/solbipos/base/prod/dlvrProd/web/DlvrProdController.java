@@ -214,4 +214,27 @@ public class DlvrProdController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 상품명칭 매장적용 팝업 - 전체 엑셀다운로드
+     *
+     * @param dlvrProdVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김중선
+     * @since   2023. 10. 13
+     */
+    @RequestMapping(value = "/dlvrProd/getDlvrProdNmExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDlvrProdNmExcelList(DlvrProdVO dlvrProdVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dlvrProdService.getDlvrProdNmExcelList(dlvrProdVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, dlvrProdVO);
+    }
+
 }

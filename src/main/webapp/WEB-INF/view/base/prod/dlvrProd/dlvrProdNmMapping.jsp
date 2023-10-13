@@ -197,6 +197,10 @@
             </wj-combo-box>
             <%--// 페이지 스케일  --%>
 
+            <%-- 전체 엑셀다운로드 --%>
+            <button class="btn_skyblue ml5 fr" id="btnExcelDownloadTotal" ng-click="excelDownloadTotal()">
+                <s:message code="cmm.excel.downTotal" />
+            </button>
             <%-- 매장환경 복사 - 본사/프랜차이즈 매장만 사용 --%>
             <button class="btn_skyblue ml5 fr"  id="copyBtn" ng-click="copyDlvrProdNm()" <c:if test="${orgnFg eq 'STORE' and hqOfficeCd eq '00000'}">style="display: none;"</c:if>>
                 <s:message code="dlvrProd.nmCopy" />
@@ -205,6 +209,7 @@
             <button class="btn_skyblue ml5 fr" id="btnSave" ng-click="save()">
                 <s:message code="cmm.save" />
             </button>
+
         </div>
         <div class="wj-gridWrap mt10" style="height:370px; overflow-y: hidden;">
             <div class="row">
@@ -239,6 +244,37 @@
             </ul>
         </div>
         <%--//페이지 리스트--%>
+
+        <%--엑셀 리스트--%>
+
+        <div class="wj-gridWrap mt10" style="height:370px; overflow-y: hidden; display: none;" ng-controller="dlvrProdNmMappingExcelCtrl">
+            <div class="row">
+                <wj-flex-grid
+                        id="wjGridExcelList"
+                        autoGenerateColumns="false"
+                        control="excelFlex"
+                        initialized="initGrid(s,e)"
+                        sticky-headers="true"
+                        selection-mode="Row"
+                        items-source="data"
+                        item-formatter="_itemFormatter"
+                        ime-enabled="true">
+
+                    <!-- define columns -->
+                    <wj-flex-grid-column header="<s:message code="dlvrProd.prodCd"/>" binding="prodCd" width="100" is-read-only="true" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dlvrProd.prodNm"/>" binding="prodNm" width="200" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dlvrProd.useYn"/>" binding="useYn" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <%-- 배달앱 구분코드 컬럼 생성--%>
+                    <c:forEach var="dlvrCol" items="${dlvrColList}">
+                        <wj-flex-grid-column header="${dlvrCol.dlvrNm}[${dlvrCol.dlvrCd}]" binding="dlvrProdNm${dlvrCol.dlvrCd}" width="150" max-length=30></wj-flex-grid-column>
+                    </c:forEach>
+
+                </wj-flex-grid>
+            </div>
+        </div>
+
+        <%--//엑셀 리스트--%>
+
     </div>
 </div>
 
@@ -248,7 +284,7 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProd/dlvrProdNmMapping.js?ver=20230915.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProd/dlvrProdNmMapping.js?ver=20231013.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

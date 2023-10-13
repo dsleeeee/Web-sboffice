@@ -244,4 +244,74 @@ app.controller('dlvrProdNmMappingCtrl', ['$scope', '$http', function ($scope, $h
         });
     });
 
+    // 전체 엑셀다운로드
+    $scope.excelDownloadTotal = function () {
+        var params = {};
+        // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
+        $scope._popConfirm(messages["cmm.excel.totalExceDownload"], function() {
+            $scope._broadcast('dlvrProdNmMappingExcelCtrl', params);
+        });
+    };
+}]);
+
+
+/**
+ *  엑셀다운로드 그리드 생성
+ */
+app.controller('dlvrProdNmMappingExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('dlvrProdNmMappingExcelCtrl', $scope, $http, false));
+
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+
+        // 전체기간 체크박스 선택에 따른 등록일자 검색기준 초기화
+        $scope.regDtTypeCombo.isReadOnly = $scope.isChecked;
+    };
+
+    // 다른 컨트롤러의 broadcast 받기
+    $scope.$on("dlvrProdNmMappingExcelCtrl", function (event, data) {
+        $scope.searchExcelList(data);
+        // 기능수행 종료 : 반드시 추가
+        event.preventDefault();
+    });
+
+    // 엑셀 리스트 조회
+    $scope.searchExcelList = function (params) {
+
+        params.dlvrCol = dlvrCol;
+        params.chkDt = $scope.isChecked;
+
+        // 등록일자 '전체기간' 선택에 따른 params
+        if(!$scope.isChecked){
+            params.regDtType = $scope.regDtTypeCombo.selectedValue;
+            params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+            params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+        }
+
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $scope._inquiryMain("/base/prod/dlvrProd/dlvrProd/getDlvrProdNmExcelList.sb", params, function() {
+            if ($scope.excelFlex.rows.length <= 0) {
+                $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+                return false;
+            }
+
+            $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+            $timeout(function () {
+                wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
+                    includeColumnHeaders: true,
+                    includeCellStyles   : false,
+                    includeColumns      : function (column) {
+                        return column.visible;
+                    }
+                }, "상품매핑명칭" + '_' + getCurDateTime()+'.xlsx', function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                });
+            }, 10);
+        });
+    };
+
 }]);

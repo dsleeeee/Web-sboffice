@@ -44,4 +44,7 @@ public interface DlvrProdService {
 
     /** 상품명칭 매장적용 팝업 - 저장 */
     int getDlvrProdNmStoreRegistSave(DlvrProdVO[] dlvrProdVOs, SessionInfoVO sessionInfoVO);
+
+    /** 배달시스템 상품 명칭 매핑 - 전체 엑셀다운로드 */
+    List<DefaultMap<String>> getDlvrProdNmExcelList(DlvrProdVO dlvrProdVO, SessionInfoVO sessionInfoVO);
 }
