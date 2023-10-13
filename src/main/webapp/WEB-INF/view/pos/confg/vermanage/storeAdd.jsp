@@ -176,6 +176,7 @@
                 <wj-flex-grid-column header="<s:message code="verManage.store.storeNm"/>" binding="storeNm" align="left" width="60" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="40" align="center" is-read-only="true" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.posCnt"/>" binding="posCnt"  width="50" align="center" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="verManage.store.diffVerCnt"/>" binding="diffVerCnt"  width="90" align="center" is-read-only="true" ></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
           </div>
@@ -185,7 +186,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/storeAdd.js?ver=20220822.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/storeAdd.js?ver=20231013.01" charset="utf-8"></script>
 
 <script>
   $(document).ready(function(){

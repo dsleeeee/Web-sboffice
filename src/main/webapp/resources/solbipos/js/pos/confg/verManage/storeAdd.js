@@ -222,6 +222,16 @@ app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = new Array();
     var ver    = scope.getSelectVersion().verSerNo;
 
+    // NXPOS_V1/V2 외에 적용매장등록된 내역이 있습니다.<br>[포스관리] - [POS 설정관리] - [매장별 POS 버전 삭제] 에서 관리 후 진행하여 주십시오.
+    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+        if ($scope.flex.collectionView.items[i].gChk) {
+            if($scope.flex.collectionView.items[i].diffVerCnt > 0){
+                $scope._popMsg( "NXPOS_V" + manageVer + messages["verManage.store.diffVerCnt.chk.msg"]);
+                return false;
+            }
+        }
+    }
+
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
       if($scope.flex.collectionView.items[i].gChk) {
         $scope.flex.collectionView.items[i].verSerNo = ver;
