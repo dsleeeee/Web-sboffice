@@ -76,22 +76,4 @@ public class DcDcfgServiceImpl implements DcDcfgService {
 
 		return dcDcfgMapper.getDcDcfgDtlList(dcDcfgVO);
 	}
-
-	/** 할인구분별 탭 - 할인유형 콤보박스 리스트 조회 */
-	@Override
-	public List<DefaultMap<String>> getDcNmlList(DcDcfgVO dcDcfgVO, SessionInfoVO sessionInfoVO) {
-		dcDcfgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-
-        if(!StringUtil.getOrBlank(dcDcfgVO.getStoreCd()).equals("")) {
-            StoreVO storeVO = new StoreVO();
-            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dcDcfgVO.getStoreCd(), 3900));
-            dcDcfgVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
-        }
-
-		if(!StringUtil.getOrBlank(dcDcfgVO.getDcCd()).equals("")) {
-        	dcDcfgVO.setArrDcCd(dcDcfgVO.getDcCd().split(","));
-        }
-		return dcDcfgMapper.getDcNmList(dcDcfgVO);
-	}
-
 }

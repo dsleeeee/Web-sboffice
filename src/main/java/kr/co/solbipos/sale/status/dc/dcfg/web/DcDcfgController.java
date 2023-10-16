@@ -72,16 +72,4 @@ public class DcDcfgController {
         List<DefaultMap<String>> list = dcDcfgService.getDcDcfgDtlList(dcDcfgVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, dcDcfgVO);
     }
-
-    /** 할인구분별 탭 - 할인유형 콤보박스 리스트 조회 */
-    @RequestMapping(value = "/dcfg/dcNmList.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getDcNmList(HttpServletRequest request, HttpServletResponse response,
-        Model model, DcDcfgVO dcDcfgVO) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        List<DefaultMap<String>> list = dcDcfgService.getDcNmlList(dcDcfgVO, sessionInfoVO);
-        return ReturnUtil.returnListJson(Status.OK, list, dcDcfgVO);
-    }
 }

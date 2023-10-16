@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SelectDcfg.xml
+    (공통) 할인구분 팝업
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2023.10.16     최초작성
+-->
+<mapper namespace="kr.co.solbipos.common.popup.selectDcfg.service.impl.SelectDcfgMapper">
+
+    <!-- 선택상품 공통 - 선택상품 리스트 조회 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getSelectDcfgList" parameterType="selectDcfgVO" resultType="DefaultMap">
+        /* USE : SelectDcfgMapper.getSelectDcfgList */
+        SELECT
+        DISTINCT tssdd.DC_CD AS DC_CD,
+        tcn.NMCODE_NM AS DC_NM,
+        (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = tssdd.STORE_CD) AS STORE_NM
+        FROM TB_SL_SALE_DTL_DC tssdd,
+        TB_CM_NMCODE tcn
+        WHERE 1=1
+        AND tssdd.DC_CD = tcn.NMCODE_CD
+        AND tcn.NMCODE_GRP_CD = '041'
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+            AND tssdd.HQ_OFFICE_CD = #{hqOfficeCd}
+        </if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tssdd.STORE_CD IN (${storeCdQuery})
+        </if>
+        ORDER BY tcn.NMCODE_NM
+    </select>
+
+</mapper>
