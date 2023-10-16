@@ -29,14 +29,18 @@
         			,	   tcpvs.VER_SER_NO
         			,      tcpv.VER_SER_NM
         			,      tcpv.PROG_FG
+                    ,      tmse.ENVST_VAL AS CUR_PROG_FG
         			FROM TB_CM_POS_VERSN_STORE tcpvs
         			,	 TB_CM_POS_VERSN tcpv
         			,    TB_MS_STORE tms
         			,	 TB_HQ_OFFICE tho
+                    ,    TB_MS_STORE_ENVST tmse
         			WHERE 1=1
         			AND tms.STORE_CD = tcpvs.STORE_CD
         			AND tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
         			AND tcpv.VER_SER_NO (+)= tcpvs.VER_SER_NO
+                    AND tmse.STORE_CD (+)= tcpvs.STORE_CD
+                    AND tmse.ENVST_CD = '1014'
         			GROUP BY tms.HQ_OFFICE_CD
         			,      	 tho.HQ_OFFICE_NM
         			,      	 tcpvs.STORE_CD
@@ -44,6 +48,7 @@
         			,	  	 tcpvs.VER_SER_NO
         			,     	 tcpv.VER_SER_NM
         			,      	 tcpv.PROG_FG
+                    ,        tmse.ENVST_VAL
         		)A
         WHERE 1=1
         <if test='hqOfficeCd != null and hqOfficeCd != ""'>
@@ -87,14 +92,18 @@
                     ,	   tcpvs.VER_SER_NO
                     ,      tcpv.VER_SER_NM
                     ,      tcpv.PROG_FG
+                    ,      tmse.ENVST_VAL AS CUR_PROG_FG
                     FROM TB_CM_POS_VERSN_STORE tcpvs
                     ,	 TB_CM_POS_VERSN tcpv
                     ,    TB_MS_STORE tms
                     ,	 TB_HQ_OFFICE tho
+                    ,    TB_MS_STORE_ENVST tmse
                     WHERE 1=1
                     AND tms.STORE_CD = tcpvs.STORE_CD
                     AND tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
                     AND tcpv.VER_SER_NO (+)= tcpvs.VER_SER_NO
+                    AND tmse.STORE_CD (+)= tcpvs.STORE_CD
+                    AND tmse.ENVST_CD = '1014'
                     GROUP BY tms.HQ_OFFICE_CD
                     ,      	 tho.HQ_OFFICE_NM
                     ,      	 tcpvs.STORE_CD
@@ -102,6 +111,7 @@
                     ,	  	 tcpvs.VER_SER_NO
                     ,     	 tcpv.VER_SER_NM
                     ,      	 tcpv.PROG_FG
+                    ,        tmse.ENVST_VAL
                 )A
         WHERE 1=1
         <if test='hqOfficeCd != null and hqOfficeCd != ""'>

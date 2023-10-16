@@ -101,12 +101,13 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeVerDel.hqOfficeCd"/>" binding="hqOfficeCd" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeVerDel.hqOfficeNm"/>" binding="hqOfficeNm" align="left" width="200" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeVerDel.hqOfficeNm"/>" binding="hqOfficeNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeVerDel.storeCd"/>" binding="storeCd" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeVerDel.storeNm"/>" binding="storeNm" align="left" width="200" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeVerDel.curProg"/>" binding="curProgFg" data-map="progFgDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeVerDel.verSerNo"/>" binding="verSerNo" align="center" width="150" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeVerDel.verSerNm"/>" binding="verSerNm" align="left" width="200" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeVerDel.progFg"/>" binding="progFg" data-map="progFgDataMap" align="center" width="150" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeVerDel.progFg"/>" binding="progFg" data-map="progFgDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
@@ -134,12 +135,13 @@
             <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeVerDel.hqOfficeCd"/>" binding="hqOfficeCd" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeVerDel.hqOfficeNm"/>" binding="hqOfficeNm" align="left" width="200" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeVerDel.hqOfficeNm"/>" binding="hqOfficeNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeVerDel.storeCd"/>" binding="storeCd" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeVerDel.storeNm"/>" binding="storeNm" align="left" width="200" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeVerDel.curProg"/>" binding="curProgFg" data-map="progFgDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeVerDel.verSerNo"/>" binding="verSerNo" align="center" width="150" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeVerDel.verSerNm"/>" binding="verSerNm" align="left" width="200" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeVerDel.progFg"/>" binding="progFg" data-map="progFgDataMap" align="center" width="150" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeVerDel.progFg"/>" binding="progFg" data-map="progFgDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
     </div>
 </div>
