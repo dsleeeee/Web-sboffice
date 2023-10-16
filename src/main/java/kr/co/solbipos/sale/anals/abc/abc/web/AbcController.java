@@ -52,7 +52,7 @@ public class AbcController {
 
     @RequestMapping(value = "/abc/list.sb", method = RequestMethod.GET)
     public String dcDcfgView(HttpServletRequest request, HttpServletResponse response, Model model) {
-        return "sale/anals/abc/abcSale";
+        return "sale/anals/abc/abc";
     }
 
     /**
