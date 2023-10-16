@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}" />
 <c:set var="baseUrl" value="/sale/satus/dc/" />
 
-<div id="dcDcfgView" class="subCon" ng-controller="dcDcfgCtrl">
+<div class="subCon" ng-controller="dcDcfgCtrl">
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
