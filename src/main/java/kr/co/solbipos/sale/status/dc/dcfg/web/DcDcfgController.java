@@ -35,7 +35,7 @@ public class DcDcfgController {
 
     @RequestMapping(value = "/dcfg/view.sb", method = RequestMethod.GET)
     public String dcDcfgView(HttpServletRequest request, HttpServletResponse response, Model model) {
-        return "sale/status/dc/dcSale";
+        return "sale/status/dc/dcfg";
     }
 
     /** 할인구분별  탭- 리스트 조회 */
