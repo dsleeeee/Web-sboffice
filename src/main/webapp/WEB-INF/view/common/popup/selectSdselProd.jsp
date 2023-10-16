@@ -148,8 +148,10 @@
         $scope.subTargetId = "${param.subTargetId}";
         $("#"+$scope.targetId+"Nm").val(("${param.displayNm}" === "" ? messages["cmm.select"] : "${param.displayNm}"));
 
+        var targetTypeFg = '${param.targetTypeFg}'; // 매장선택 (S:싱글, M:멀티)
+
         // 상위 객체 상속 : T/F 는 picker
-        angular.extend(this, new RootController($scope.targetId + 'Ctrl', $scope, $http, true));
+        angular.extend(this, new RootController($scope.targetId + 'Ctrl', $scope, $http, false));
 
         // 콤보박스 셋팅
         $scope._setComboData("regStoreFgCombo", regStoreFgAllData); // 적용매장구분
