@@ -257,7 +257,7 @@
           <wj-flex-grid-column header="<s:message code="payFg.storeCd"/>"     binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="payFg.storeNm"/>"     binding="storeNm" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="payFg.payFg"/>"       binding="payCd" width="100" align="center" is-read-only="true" data-map="payCdDataMap" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="payFg.totSaleCnt"/>"  binding="payCnt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="payFg.payCnt"/>"  binding="payCnt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="payFg.totSaleAmt"/>"  binding="payAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="payFg.rate"/>"        binding="rate" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
         </wj-flex-grid>
@@ -294,7 +294,7 @@
         <wj-flex-grid-column header="<s:message code="payFg.storeCd"/>"     binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="payFg.storeNm"/>"     binding="storeNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="payFg.payFg"/>"       binding="payCd" width="100" align="center" is-read-only="true" data-map="payCdDataMap" ></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="payFg.totSaleCnt"/>"  binding="payCnt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="payFg.payCnt"/>"  binding="payCnt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="payFg.totSaleAmt"/>"  binding="payAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="payFg.rate"/>"        binding="rate" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
       </wj-flex-grid>

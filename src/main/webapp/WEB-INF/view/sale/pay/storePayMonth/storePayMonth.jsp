@@ -267,7 +267,7 @@
                         <wj-flex-grid-column header="<s:message code="month.totPayAmt"/>" binding="totPayAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <%-- 결제수단 컬럼 생성--%>
                         <c:forEach var="payCol" items="${payColList}">
-                            <wj-flex-grid-column header="<s:message code="storePayMonth.cnt"/>" binding="payCnt${payCol.payCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="storePayMonth.payCnt"/>" binding="payCnt${payCol.payCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="storePayMonth.realSaleAmt"/>" binding="payAmt${payCol.payCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="storePayMonth.rate"/>" binding="payRate${payCol.payCd}" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
                         </c:forEach>
@@ -317,7 +317,7 @@
                         <wj-flex-grid-column header="<s:message code="month.totPayAmt"/>" binding="totPayAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <%-- 결제수단 컬럼 생성--%>
                         <c:forEach var="payCol" items="${payColList}">
-                            <wj-flex-grid-column header="<s:message code="storePayMonth.cnt"/>" binding="payCnt${payCol.payCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="storePayMonth.payCnt"/>" binding="payCnt${payCol.payCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="storePayMonth.realSaleAmt"/>" binding="payAmt${payCol.payCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="storePayMonth.rate"/>" binding="payRate${payCol.payCd}" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
                         </c:forEach>
