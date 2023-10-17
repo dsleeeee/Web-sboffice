@@ -66,15 +66,16 @@
         <input type="hidden" id="tableDaySelectTableCdOrg" value=""/>
         <tr>
             <%-- 테이블선택 --%>
-            <th><s:message code="tableDay.table" /></th>
+            <th><s:message code="cmm.table.select" /></th>
             <td>
-                <%-- 테이블선택 모듈 멀티 선택 사용시 include --%>
-                <jsp:include page="/WEB-INF/view/sale/status/table/cmm/selectTableM.jsp" flush="true">
+                <%-- 테이블 선택 모듈 사용시 include --%>
+                <jsp:include page="/WEB-INF/view/common/popup/selectTable.jsp" flush="true">
+                    <jsp:param name="targetTypeFg" value="M"/>
                     <jsp:param name="targetId" value="tableDaySelectTable"/>
                     <jsp:param name="targetStoreId" value="tableDaySelectStore"/>
                     <jsp:param name="closeFunc" value="closeSelectTable"/>
                 </jsp:include>
-                <%--// 테이블선택 모듈 멀티 선택 사용시 include --%>
+                <%--// 테이블 선택 모듈 사용시 include --%>
             </td>
         </tr>
         </tbody>

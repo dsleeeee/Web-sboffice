@@ -494,6 +494,8 @@
     <typeAlias alias="selectStoreVO" type="kr.co.solbipos.common.popup.selectStore.service.SelectStoreVO"/>
     <!-- (공통) 할인구분 팝업 -->
     <typeAlias alias="selectDcfgVO" type="kr.co.solbipos.common.popup.selectDcfg.service.SelectDcfgVO"/>
+    <!-- (공통) 테이블 팝업 -->
+    <typeAlias alias="selectTableVO" type="kr.co.solbipos.common.popup.selectTable.service.SelectTableVO"/>
 
     <!--
         <typeAlias alias="gradeVO" type="kr.co.solbipos.membr.info.grade.service.GradeVO"/>

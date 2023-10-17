@@ -60,38 +60,38 @@
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
             <input type="hidden" id="tableMonthSelectStoreCd" value=""/>
             <tr>
-                    <%-- 매장선택 --%>
+                <%-- 매장선택 --%>
                 <th><s:message code="cmm.store.select"/></th>
                 <td>
-                        <%-- [NXPOS-1648,1699] 매장선택 모듈 통합 / 추후작업예정 --%>
-                        <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
+                    <%-- [NXPOS-1648,1699] 매장선택 모듈 통합 / 추후작업예정 --%>
+                    <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
                     <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
                         <jsp:param name="targetId" value="tableMonthSelectStore"/>
                         <jsp:param name="subTargetId" value="tableMonthSelectTable"/>
                         <jsp:param name="closeFunc" value="closeSelectStore"/>
                     </jsp:include>
-                        <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+                    <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
                 </td>
             </tr>
         </c:if>
         <c:if test="${sessionInfo.orgnFg == 'STORE'}">
             <input type="hidden" id="tableMonthSelectStoreCd" value="${sessionInfo.storeCd}"/>
         </c:if>
-
         <input type="hidden" id="tableMonthSelectTableCd" value=""/>
         <input type="hidden" id="tableMonthSelectTableName" value=""/>
         <input type="hidden" id="tableMonthSelectTableCdOrg" value=""/>
         <tr>
             <%-- 테이블선택 --%>
-            <th><s:message code="tableDay.table" /></th>
+            <th><s:message code="cmm.table.select" /></th>
             <td>
-                <%-- 테이블선택 모듈 멀티 선택 사용시 include --%>
-                <jsp:include page="/WEB-INF/view/sale/status/table/cmm/selectTableM.jsp" flush="true">
+                <%-- 테이블 선택 모듈 사용시 include --%>
+                <jsp:include page="/WEB-INF/view/common/popup/selectTable.jsp" flush="true">
+                    <jsp:param name="targetTypeFg" value="M"/>
                     <jsp:param name="targetId" value="tableMonthSelectTable"/>
                     <jsp:param name="targetStoreId" value="tableMonthSelectStore"/>
                     <jsp:param name="closeFunc" value="closeSelectTable"/>
                 </jsp:include>
-                <%--// 테이블선택 모듈 멀티 선택 사용시 include --%>
+                <%--// 테이블 선택 모듈 사용시 include --%>
             </td>
         </tr>
         </tbody>

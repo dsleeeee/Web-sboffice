@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SelectTable.xml
+    (공통) 테이블 팝업
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2023.10.17     최초작성
+-->
+<mapper namespace="kr.co.solbipos.common.popup.selectTable.service.impl.SelectTableMapper">
+
+    <!-- 테이블 공통 - 테이블 리스트 조회 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getSelectTableList" parameterType="selectTableVO" resultType="DefaultMap">
+        /* USE : SelectTableMapper.getSelectTableList */
+        SELECT
+        tmt.STORE_CD||'||'||tmt.TBL_CD AS TABLE_CD,
+        tmt.TBL_NM AS TABLE_NM,
+        (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = tmt.STORE_CD) AS STORE_NM,
+        tmt.TBL_GRP_CD,
+        tmt.TBL_CD AS TABLE_CD_ORG
+        FROM TB_MS_TABLE_V01 tmt
+        WHERE 1=1
+        AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.STORE_CD = tmt.STORE_CD AND Z.HQ_OFFICE_CD = #{hqOfficeCd})
+        <if test='arrStoreCd != null and arrStoreCd.length >= 0'>
+            AND
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
+                tmt.STORE_CD = #{item}
+            </foreach>
+        </if>
+        <if test='arrTableCd != null and arrTableCd.length >= 0'>
+            AND tmt.STORE_CD||'||'||tmt.TBL_CD IN
+            <foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        ORDER BY tmt.STORE_CD||'||'||tmt.TBL_CD
+    </select>
+
+</mapper>
