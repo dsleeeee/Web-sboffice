@@ -55,7 +55,7 @@
      */
     var app = agrid.getApp();
 
-    /** 할인구분 controller */
+    /** 할인구분 선택 controller */
     app.controller('${param.targetId}Ctrl', ['$scope', '$http', function ($scope, $http) {
 
         var targetId = '${param.targetId}';
@@ -71,7 +71,6 @@
         $scope.oldStoreCd = "";
         $scope.searchFg = "N";
         // 다른 컨트롤러의 broadcast 받기
-
         $scope.$on(targetId + 'Ctrl', function (event, paramObj) {
             // 테이블선택 팝업 오픈
             eval('$scope.wj' + targetId + 'Layer.show(true)');
@@ -151,4 +150,5 @@
             eval('$scope.wj' + targetId + 'Layer.hide(true)');
         };
     }]);
+
 </script>
