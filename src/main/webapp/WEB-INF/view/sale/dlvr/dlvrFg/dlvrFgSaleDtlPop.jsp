@@ -69,4 +69,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/dlvr/dlvrFg/dlvrFgPop/dlvrFgSaleDtlPop.js?ver=20210729.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/dlvr/dlvrFg/dlvrFgSaleDtlPop.js?ver=20210729.01" charset="utf-8"></script>

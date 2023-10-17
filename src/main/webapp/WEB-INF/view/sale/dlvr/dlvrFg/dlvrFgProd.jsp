@@ -247,5 +247,5 @@
 </c:import>
 
 <%-- 매출상세 팝업 --%>
-<c:import url="/WEB-INF/view/sale/dlvr/dlvrFg/dlvrFgPop/dlvrFgSaleDtlPop.jsp">
+<c:import url="/WEB-INF/view/sale/dlvr/dlvrFg/dlvrFgSaleDtlPop.jsp">
 </c:import>
