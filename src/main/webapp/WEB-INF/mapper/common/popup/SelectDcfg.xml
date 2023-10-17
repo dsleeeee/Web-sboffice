@@ -11,7 +11,7 @@
 -->
 <mapper namespace="kr.co.solbipos.common.popup.selectDcfg.service.impl.SelectDcfgMapper">
 
-    <!-- 선택상품 공통 - 선택상품 리스트 조회 -->
+    <!-- 할인구분 공통 - 할인구분 리스트 조회 -->
     <!--
         TABLE    :
         PARAM    :
