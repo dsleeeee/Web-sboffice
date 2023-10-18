@@ -18,7 +18,7 @@
         PARAM    : prodPosVO
         COMMENTS :
     -->
-	<select id="getStorePosList" parameterType="posProdVO" resultType="DefaultMap">
+	<select id="getStorePosList" parameterType="ProdPosVO" resultType="DefaultMap">
 		/* USE : ProdPosMapper.getStorePosList */
 		SELECT	DISTINCT TSDP.STORE_CD || '||' || TSDP.POS_NO AS STORE_CD
 		FROM	TB_SL_DAILY_POS TSDP
@@ -55,7 +55,7 @@
         PARAM    : prodPosVO
         COMMENTS :
     -->
-	<select id="getPosNmList" parameterType="posProdVO" resultType="DefaultMap">
+	<select id="getPosNmList" parameterType="ProdPosVO" resultType="DefaultMap">
 		/* USE : ProdPosMapper.getPosNmList */
 		SELECT	TMP.STORE_CD||'||'||TMP.POS_NO AS POS_CD
 		, TMP.POS_NM AS POS_NM
@@ -77,7 +77,7 @@
         PARAM    : prodPosVO
         COMMENTS :
     -->
-    <select id="getProdPosList" parameterType="prodPosVO" resultType="DefaultMap">
+    <select id="getProdPosList" parameterType="ProdPosVO" resultType="DefaultMap">
 		/* USE : ProdPosMapper.getProdPosList */
     	<include refid="CmmSQL.PagingTemplateHeader"/>
 		SELECT
@@ -177,7 +177,7 @@
         PARAM    : prodPosVO
         COMMENTS :
     -->
-    <select id="getProdPosExcelList" parameterType="prodPosVO" resultType="DefaultMap">
+    <select id="getProdPosExcelList" parameterType="ProdPosVO" resultType="DefaultMap">
 		/* USE : ProdPosMapper.getProdPosExcelList */
 		SELECT
 		A.PATH_NM,

@@ -58,37 +58,37 @@
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 일자별 --%>
-<c:import url="/WEB-INF/view/sale/status/pos/day/day.jsp">
+<c:import url="/WEB-INF/view/sale/status/pos/posDay.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
 <%-- 요일별 --%>
-<c:import url="/WEB-INF/view/sale/status/pos/dayOfWeek/dayOfWeek.jsp">
+<c:import url="/WEB-INF/view/sale/status/pos/posDayOfWeek.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
 <%-- 월별 --%>
-<c:import url="/WEB-INF/view/sale/status/pos/month/month.jsp">
+<c:import url="/WEB-INF/view/sale/status/pos/posMonth.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
 <%-- 상품별 --%>
-<c:import url="/WEB-INF/view/sale/status/pos/prod/prod.jsp">
+<c:import url="/WEB-INF/view/sale/status/pos/posProd.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
 <%-- 설정기간별 --%>
-<c:import url="/WEB-INF/view/sale/status/pos/dayPeriod/dayPeriod.jsp">
+<c:import url="/WEB-INF/view/sale/status/pos/posDayPeriod.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
 <%-- 시간대별 --%>
-<c:import url="/WEB-INF/view/sale/status/pos/hour/hour.jsp">
+<c:import url="/WEB-INF/view/sale/status/pos/posHour.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

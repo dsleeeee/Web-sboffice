@@ -6,7 +6,6 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.sale.status.pos.dayOfWeek.service.PosDayOfWeekVO;
 import kr.co.solbipos.sale.status.prod.rank.service.ProdRankService;
 import kr.co.solbipos.sale.status.prod.rank.service.ProdRankVO;
 import org.springframework.beans.factory.annotation.Autowired;

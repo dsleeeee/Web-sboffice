@@ -779,14 +779,9 @@
 
     <!-- 매출관리> 매출현황 > 테이블별 -->
     <typeAlias alias="tableSaleVO" type="kr.co.solbipos.sale.status.table.service.TableSaleVO"/>
+    <!-- 매출관리> 매출현황 > 포스별 -->
+    <typeAlias alias="posSaleVO" type="kr.co.solbipos.sale.status.pos.service.PosSaleVO"/>
 
-    <!-- 포스별 -->
-    <typeAlias alias="posDayVO" type="kr.co.solbipos.sale.status.pos.day.service.PosDayVO"/>
-    <typeAlias alias="posDayOfWeekVO" type="kr.co.solbipos.sale.status.pos.dayOfWeek.service.PosDayOfWeekVO"/>
-    <typeAlias alias="posMonthVO" type="kr.co.solbipos.sale.status.pos.month.service.PosMonthVO"/>
-    <typeAlias alias="posProdVO" type="kr.co.solbipos.sale.status.pos.prod.service.PosProdVO"/>
-	<typeAlias alias="posDayPeriodVO" type="kr.co.solbipos.sale.status.pos.dayPeriod.service.PosDayPeriodVO"/>
-	<typeAlias alias="posHourVO" type="kr.co.solbipos.sale.status.pos.hour.service.PosHourVO"/>
 
 	<typeAlias alias="posExcclcVO" type="kr.co.solbipos.sale.status.posExcclc.posExcclc.service.PosExcclcVO"/>
 
