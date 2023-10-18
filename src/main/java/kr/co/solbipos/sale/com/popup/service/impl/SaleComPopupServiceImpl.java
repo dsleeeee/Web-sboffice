@@ -1,14 +1,14 @@
 package kr.co.solbipos.sale.com.popup.service.impl;
 
-import kr.co.common.data.domain.CustomComboVO;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.com.popup.service.SaleComPopupService;
 import kr.co.solbipos.sale.com.popup.service.SaleComPopupVO;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +17,13 @@ import java.util.List;
 @Service("SaleComPopupService")
 public class SaleComPopupServiceImpl implements SaleComPopupService {
     private final SaleComPopupMapper saleComPopupMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public SaleComPopupServiceImpl(SaleComPopupMapper saleCompoPupMapper, MessageService messageService) {
+    public SaleComPopupServiceImpl(SaleComPopupMapper saleCompoPupMapper, PopupMapper popupMapper, MessageService messageService) {
     	this.saleComPopupMapper = saleCompoPupMapper;
+    	this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -146,7 +148,9 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
 		saleComPopupVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(saleComPopupVO.getStoreCd()).equals("")) {
-        	saleComPopupVO.setArrStoreCd(saleComPopupVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(saleComPopupVO.getStoreCd(), 3900));
+            saleComPopupVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
 		return saleComPopupMapper.getPayFgList(saleComPopupVO);

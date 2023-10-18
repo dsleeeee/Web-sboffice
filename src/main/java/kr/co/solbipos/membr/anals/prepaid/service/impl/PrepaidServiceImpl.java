@@ -4,8 +4,11 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.anals.prepaid.service.PrepaidService;
@@ -46,13 +49,15 @@ public class PrepaidServiceImpl implements PrepaidService {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final PrepaidMapper mapper;
+    private final PopupMapper popupMapper;
     private final CmmEnvUtil cmmEnvUtil;
     private final MessageService messageService;
 
     /** Constructor Injection */
     @Autowired
-    public PrepaidServiceImpl(PrepaidMapper mapper, CmmEnvUtil cmmEnvUtil, MessageService messageService) {
+    public PrepaidServiceImpl(PrepaidMapper mapper, PopupMapper popupMapper, CmmEnvUtil cmmEnvUtil, MessageService messageService) {
         this.mapper = mapper;
+        this.popupMapper = popupMapper;
         this.cmmEnvUtil = cmmEnvUtil;
         this.messageService = messageService;
     }
@@ -62,34 +67,38 @@ public class PrepaidServiceImpl implements PrepaidService {
     public List<DefaultMap<Object>> getPrepaidMemberList(PrepaidStoreVO prepaidStoreVO,
         SessionInfoVO sessionInfoVO) {
 
-        String[] storeCds = prepaidStoreVO.getStoreCds().split(",");
-
         prepaidStoreVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
         prepaidStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            prepaidStoreVO.setStoreCd(sessionInfoVO.getStoreCd());
+            prepaidStoreVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
-        prepaidStoreVO.setStoreCdList(storeCds);
         prepaidStoreVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         prepaidStoreVO.setEmpNo(sessionInfoVO.getEmpNo());
 
-        System.out.println("dhkdkdkk " + prepaidStoreVO.getUseYn());
+        if(!StringUtil.getOrBlank(prepaidStoreVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prepaidStoreVO.getStoreCds(), 3900));
+            prepaidStoreVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
         return mapper.getPrepaidMemberList(prepaidStoreVO);
     }
 
     /** 선불 회원 충전, 사용 내역(엑셀) */
     @Override
-    public List<DefaultMap<Object>> getPrepaidMemberListExcel(PrepaidStoreVO prepaidStoreVO,
-                                                         SessionInfoVO sessionInfoVO) {
-
-        String[] storeCds = prepaidStoreVO.getStoreCds().split(",");
+    public List<DefaultMap<Object>> getPrepaidMemberListExcel(PrepaidStoreVO prepaidStoreVO, SessionInfoVO sessionInfoVO) {
 
         prepaidStoreVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
         prepaidStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            prepaidStoreVO.setStoreCd(sessionInfoVO.getStoreCd());
+            prepaidStoreVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
-        prepaidStoreVO.setStoreCdList(storeCds);
+
+        if(!StringUtil.getOrBlank(prepaidStoreVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prepaidStoreVO.getStoreCds(), 3900));
+            prepaidStoreVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return mapper.getPrepaidMemberListExcel(prepaidStoreVO);
     }

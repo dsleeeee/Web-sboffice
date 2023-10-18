@@ -58,20 +58,10 @@
 	   			AND	TPHSO.IN_DATE	<![CDATA[<=]]>  #{endDate}
 	   		</if>	
 	   	 </when>
-	   	</choose> 
-	   <choose>
-            <when test='orgnFg != null and orgnFg == "H"'>
-            	<if test='storeCd != null and storeCd != ""'>
-                 	AND
-                 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-						TPHSO.STORE_CD = #{item}
-               		</foreach>
-               	</if>
-            </when>
-            <when test='orgnFg != null and orgnFg == "S"'>
-                AND TPHSO.STORE_CD  = #{storeCd}
-            </when>
-         </choose>       
+	   	</choose>
+         <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND TPHSO.STORE_CD IN (${storeCdQuery})
+         </if>
          <if test='slipFg != null and slipFg != ""'>
 	 		AND TPHSOD.SLIP_FG = #{slipFg}*1
 	 	 </if>
@@ -140,19 +130,9 @@
 	   		</if>	
 	   	 </when>
 	   	</choose> 
-       <choose>
-            <when test='orgnFg != null and orgnFg == "H"'>
-                <if test='storeCd != null and storeCd != ""'>
-                    AND TPHSO.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                        #{item}
-                    </foreach>
-                </if>
-            </when>
-            <when test='orgnFg != null and orgnFg == "S"'>
-                AND TPHSO.STORE_CD  = #{storeCd}
-            </when>
-         </choose>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+           AND TPHSO.STORE_CD IN (${storeCdQuery})
+        </if>
 		<choose>
 			<when test='vendrCd != null and vendrCd != ""'>
 				AND TPHSO.VENDR_CD = #{vendrCd}

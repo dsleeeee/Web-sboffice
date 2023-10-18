@@ -2,7 +2,10 @@ package kr.co.solbipos.sale.cmmSalePopup.dcInfo.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.cmmSalePopup.dcInfo.service.DcInfoService;
@@ -14,10 +17,12 @@ import java.util.List;
 @Service("dcInfoService")
 public class DcInfoServiceImpl implements DcInfoService {
     private final DcInfoMapper dcInfoMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
-    public DcInfoServiceImpl(DcInfoMapper dcInfoMapper, MessageService messageService) {
+    public DcInfoServiceImpl(DcInfoMapper dcInfoMapper, PopupMapper popupMapper, MessageService messageService) {
         this.dcInfoMapper = dcInfoMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -43,7 +48,9 @@ public class DcInfoServiceImpl implements DcInfoService {
         }
 
         if(!StringUtil.getOrBlank(dcInfoVO.getStoreCd()).equals("")) {
-            dcInfoVO.setArrStoreCd(dcInfoVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dcInfoVO.getStoreCd(), 3900));
+            dcInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
         return dcInfoMapper.getCoupnDcList(dcInfoVO);
     }
@@ -119,7 +126,9 @@ public class DcInfoServiceImpl implements DcInfoService {
         }
 
         if(!StringUtil.getOrBlank(dcInfoVO.getStoreCd()).equals("")) {
-            dcInfoVO.setArrStoreCd(dcInfoVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dcInfoVO.getStoreCd(), 3900));
+            dcInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
         return dcInfoMapper.getVcoupnDcList(dcInfoVO);
     }
@@ -135,7 +144,9 @@ public class DcInfoServiceImpl implements DcInfoService {
         }
 
         if(!StringUtil.getOrBlank(dcInfoVO.getStoreCd()).equals("")) {
-            dcInfoVO.setArrStoreCd(dcInfoVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dcInfoVO.getStoreCd(), 3900));
+            dcInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
         return dcInfoMapper.getSmartorderDcList(dcInfoVO);
     }

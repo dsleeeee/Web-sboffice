@@ -5,10 +5,12 @@ import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO;
@@ -51,6 +53,7 @@ public class RegistServiceImpl implements RegistService {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final RegistMapper mapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
     private final CmmEnvUtil cmmEnvUtil;
 
@@ -58,8 +61,9 @@ public class RegistServiceImpl implements RegistService {
      * Constructor Injection
      */
     @Autowired
-    public RegistServiceImpl(RegistMapper mapper, CmmEnvUtil cmmEnvUtil, MessageService messageService) {
+    public RegistServiceImpl(RegistMapper mapper, PopupMapper popupMapper, CmmEnvUtil cmmEnvUtil, MessageService messageService) {
         this.mapper = mapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
         this.cmmEnvUtil = cmmEnvUtil;
     }
@@ -156,11 +160,15 @@ public class RegistServiceImpl implements RegistService {
         registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-            if (!StringUtil.isEmpties(registVO.getRegStoreCd())) {
-                registVO.setRegStoreCds(registVO.getRegStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            if(!StringUtil.getOrBlank(registVO.getRegStoreCd()).equals("")) {
+               storeVO.setArrSplitStoreCd(CmmUtil.splitText(registVO.getRegStoreCd(), 3900));
+               registVO.setRegStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
             }
-            if (!StringUtil.isEmpties(registVO.getRegUseStoreCd())) {
-                registVO.setRegUseStoreCds(registVO.getRegUseStoreCd().split(","));
+
+            if(!StringUtil.getOrBlank(registVO.getRegUseStoreCd()).equals("")) {
+               storeVO.setArrSplitStoreCd(CmmUtil.splitText(registVO.getRegUseStoreCd(), 3900));
+               registVO.setRegUseStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
             }
         }
 
@@ -182,11 +190,15 @@ public class RegistServiceImpl implements RegistService {
         registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-            if (!StringUtil.isEmpties(registVO.getRegStoreCd())) {
-                registVO.setRegStoreCds(registVO.getRegStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            if(!StringUtil.getOrBlank(registVO.getRegStoreCd()).equals("")) {
+               storeVO.setArrSplitStoreCd(CmmUtil.splitText(registVO.getRegStoreCd(), 3900));
+               registVO.setRegStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
             }
-            if (!StringUtil.isEmpties(registVO.getRegUseStoreCd())) {
-                registVO.setRegUseStoreCds(registVO.getRegUseStoreCd().split(","));
+
+            if(!StringUtil.getOrBlank(registVO.getRegUseStoreCd()).equals("")) {
+               storeVO.setArrSplitStoreCd(CmmUtil.splitText(registVO.getRegUseStoreCd(), 3900));
+               registVO.setRegUseStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
             }
         }
 

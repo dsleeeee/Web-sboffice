@@ -2,6 +2,10 @@ package kr.co.solbipos.iostock.frnchs.prod.service.impl;
 
 import java.util.List;
 
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +19,13 @@ import kr.co.solbipos.iostock.frnchs.prod.service.ProdFrnchsVO;
 @Service("prodFrnchsService")
 public class ProdFrnchsServiceImpl implements ProdFrnchsService {
     private final ProdFrnchsMapper prodFrnchsMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public ProdFrnchsServiceImpl(ProdFrnchsMapper prodFrnchsMapper, MessageService messageService) {
+    public ProdFrnchsServiceImpl(ProdFrnchsMapper prodFrnchsMapper, PopupMapper popupMapper, MessageService messageService) {
         this.prodFrnchsMapper = prodFrnchsMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -27,12 +33,17 @@ public class ProdFrnchsServiceImpl implements ProdFrnchsService {
     @Override
     public List<DefaultMap<String>> getProdFrnchsList(ProdFrnchsVO prodFrnchsVO, SessionInfoVO sessionInfoVO) {
         prodFrnchsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        prodFrnchsVO.setStoreCd(sessionInfoVO.getStoreCd());
         prodFrnchsVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
         // 매장 멀티 선택
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodFrnchsVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
         if(!StringUtil.getOrBlank(prodFrnchsVO.getStoreCd()).equals("")) {
-        	prodFrnchsVO.setArrStoreCd(prodFrnchsVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodFrnchsVO.getStoreCd(), 3900));
+            prodFrnchsVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return prodFrnchsMapper.getProdFrnchsList(prodFrnchsVO);
@@ -43,9 +54,15 @@ public class ProdFrnchsServiceImpl implements ProdFrnchsService {
 		prodFrnchsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		prodFrnchsVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         
-		// 매장 멀티 선택
+        // 매장 멀티 선택
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodFrnchsVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
         if(!StringUtil.getOrBlank(prodFrnchsVO.getStoreCd()).equals("")) {
-        	prodFrnchsVO.setArrStoreCd(prodFrnchsVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodFrnchsVO.getStoreCd(), 3900));
+            prodFrnchsVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return prodFrnchsMapper.getProdInOutstockInfoList(prodFrnchsVO);
@@ -58,8 +75,14 @@ public class ProdFrnchsServiceImpl implements ProdFrnchsService {
         prodFrnchsVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
         // 매장 멀티 선택
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodFrnchsVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
         if(!StringUtil.getOrBlank(prodFrnchsVO.getStoreCd()).equals("")) {
-        	prodFrnchsVO.setArrStoreCd(prodFrnchsVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodFrnchsVO.getStoreCd(), 3900));
+            prodFrnchsVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return prodFrnchsMapper.getProdFrnchsExcelList(prodFrnchsVO);

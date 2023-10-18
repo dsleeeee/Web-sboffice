@@ -38,12 +38,9 @@
     		<if test='slipFg != null and slipFg != ""'>
             	AND TPHSO.SLIP_FG = #{slipFg}
         	</if>
-        	<if test='storeCd != null and storeCd != ""'>
-        		AND TPHSO.STORE_CD IN
-        		<foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
-          			#{item}
-        		</foreach>
-      		</if>
+            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                AND TPHSO.STORE_CD IN (${storeCdQuery})
+            </if>
       		<if test="storeNm != null and storeNm != ''">
             	AND TMS.STORE_NM LIKE '%'||#{storeNm}||'%'
         	</if>
@@ -101,11 +98,8 @@
             <if test='slipFg != null and slipFg != ""'>
                 AND TPHSO.SLIP_FG = #{slipFg}
             </if>
-            <if test='storeCd != null and storeCd != ""'>
-                AND TPHSO.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
-                    #{item}
-                </foreach>
+            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                AND TPHSO.STORE_CD IN (${storeCdQuery})
             </if>
             <if test="storeNm != null and storeNm != ''">
                 AND TMS.STORE_NM LIKE '%'||#{storeNm}||'%'

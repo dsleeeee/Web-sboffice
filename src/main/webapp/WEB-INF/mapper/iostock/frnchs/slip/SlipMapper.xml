@@ -33,12 +33,9 @@
 		 <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
             AND A.OUT_DATE BETWEEN #{startDate} AND #{endDate}
 		 </if>
-		 <if test='arrStoreCd != null and arrStoreCd.length >= 0'>
-                AND
-                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                    A.STORE_CD = #{item}
-                </foreach>
-              </if>
+         <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD IN (${storeCdQuery})
+         </if>
 		 <if test='slipFg != null and slipFg != ""'>
 		    AND A.SLIP_FG = #{slipFg}
 		 </if>
@@ -170,12 +167,9 @@
          <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
             AND A.OUT_DATE BETWEEN #{startDate} AND #{endDate}
          </if>
-         <if test='arrStoreCd != null and arrStoreCd.length >= 0'>
-                AND
-                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                    A.STORE_CD = #{item}
-                </foreach>
-              </if>
+         <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD IN (${storeCdQuery})
+         </if>
          <if test='slipFg != null and slipFg != ""'>
             AND A.SLIP_FG = #{slipFg}
          </if>

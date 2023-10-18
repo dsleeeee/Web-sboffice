@@ -456,11 +456,8 @@
                     </if>
                 </when>
             </choose>
-            <if test='arrStoreCd != null and arrStoreCd != ""'>
-                AND
-                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                    STORE_CD = #{item}
-                </foreach>
+            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                AND STORE_CD IN (${storeCdQuery})
             </if>
             <if test='orgnFg != null and orgnFg == "H"'>
                 AND (
@@ -666,11 +663,8 @@
                         </if>
                     </when>
                 </choose>
-                <if test='arrStoreCd != null and arrStoreCd != ""'>
-                    AND
-                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                        STORE_CD = #{item}
-                    </foreach>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND STORE_CD IN (${storeCdQuery})
                 </if>
                 <if test='orgnFg != null and orgnFg == "H"'>
                     AND (

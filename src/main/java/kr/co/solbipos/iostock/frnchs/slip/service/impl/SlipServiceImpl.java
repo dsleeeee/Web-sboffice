@@ -2,6 +2,10 @@ package kr.co.solbipos.iostock.frnchs.slip.service.impl;
 
 import java.util.List;
 
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +19,13 @@ import kr.co.solbipos.iostock.frnchs.slip.service.SlipVO;
 @Service("slipServiceImpl")
 public class SlipServiceImpl implements SlipService {
     private final SlipMapper slipMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public SlipServiceImpl(SlipMapper slipMapper, MessageService messageService) {
+    public SlipServiceImpl(SlipMapper slipMapper, PopupMapper popupMapper, MessageService messageService) {
         this.slipMapper = slipMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -29,9 +35,15 @@ public class SlipServiceImpl implements SlipService {
         slipVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         slipVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            slipVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
         // 매장 멀티 선택
         if(!StringUtil.getOrBlank(slipVO.getStoreCd()).equals("")) {
-            slipVO.setArrStoreCd(slipVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(slipVO.getStoreCd(), 3900));
+            slipVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return slipMapper.getSlipList(slipVO);
@@ -72,9 +84,15 @@ public class SlipServiceImpl implements SlipService {
 		slipVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         slipVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+           slipVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
         // 매장 멀티 선택
         if(!StringUtil.getOrBlank(slipVO.getStoreCd()).equals("")) {
-            slipVO.setArrStoreCd(slipVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(slipVO.getStoreCd(), 3900));
+            slipVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return slipMapper.getSlipExcelList(slipVO);

@@ -38,6 +38,8 @@ public class UnusualVO extends PageVO {
     
     private String outDateFg;
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
 
 	/**
      * @return the hqOfficeCd
@@ -208,4 +210,12 @@ public class UnusualVO extends PageVO {
 	public void setOutDateFg(String outDateFg) {
 		this.outDateFg = outDateFg;
 	}
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
+    }
 }

@@ -183,7 +183,9 @@ public class DayServiceImpl implements DayService {
         }
 
         if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
-            dayVO.setArrStoreCd(dayVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayVO.getStoreCd(), 3900));
+            dayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return dayMapper.getDayStoreDtlList(dayVO);
@@ -254,7 +256,9 @@ public class DayServiceImpl implements DayService {
         }
 
         if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
-            dayVO.setArrStoreCd(dayVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayVO.getStoreCd(), 3900));
+            dayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         // 할인구분 array 값 세팅

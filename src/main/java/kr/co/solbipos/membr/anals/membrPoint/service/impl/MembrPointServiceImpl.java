@@ -1,6 +1,10 @@
 package kr.co.solbipos.membr.anals.membrPoint.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.anals.membrPoint.service.MembrPointService;
@@ -32,13 +36,15 @@ import java.util.List;
 public class MembrPointServiceImpl implements MembrPointService {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     private final MembrPointMapper membrPointMapper;
+    private final PopupMapper popupMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public MembrPointServiceImpl(MembrPointMapper membrPointMapper) {
+    public MembrPointServiceImpl(MembrPointMapper membrPointMapper, PopupMapper popupMapper) {
         this.membrPointMapper = membrPointMapper;
+        this.popupMapper = popupMapper;
     }
 
     /**
@@ -52,13 +58,16 @@ public class MembrPointServiceImpl implements MembrPointService {
         membrPointVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         membrPointVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         membrPointVO.setEmpNo(sessionInfoVO.getEmpNo());
+
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-            membrPointVO.setStoreCd(sessionInfoVO.getStoreCd());
-        } else {
-            String[] storeCds = membrPointVO.getStoreCds().split(",");
-            membrPointVO.setStoreCdList(storeCds);
+            membrPointVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
 
+        if(!StringUtil.getOrBlank(membrPointVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(membrPointVO.getStoreCds(), 3900));
+            membrPointVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return membrPointMapper.getMembrPointList(membrPointVO);
     }

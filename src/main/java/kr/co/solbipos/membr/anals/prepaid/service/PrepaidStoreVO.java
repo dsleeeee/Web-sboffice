@@ -67,6 +67,9 @@ public class PrepaidStoreVO extends PageVO {
 
     private String useYn;
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
     public String getMembrOrgnCd() { return membrOrgnCd; }
 
     public void setMembrOrgnCd(String membrOrgnCd) { this.membrOrgnCd = membrOrgnCd; }
@@ -379,5 +382,13 @@ public class PrepaidStoreVO extends PageVO {
 
     public void setUseYn(String useYn) {
         this.useYn = useYn;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }
