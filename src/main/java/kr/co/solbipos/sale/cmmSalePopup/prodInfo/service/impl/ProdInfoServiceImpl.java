@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.cmmSalePopup.prodInfo.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.cmmSalePopup.prodInfo.service.ProdInfoService;
@@ -14,9 +18,11 @@ import java.util.List;
 @Service("prodInfoService")
 public class ProdInfoServiceImpl implements ProdInfoService {
     private final ProdInfoMapper prodInfoMapper;
+    private final PopupMapper popupMapper;
 
-    public ProdInfoServiceImpl(ProdInfoMapper prodInfoMapper) {
+    public ProdInfoServiceImpl(ProdInfoMapper prodInfoMapper, PopupMapper popupMapper) {
         this.prodInfoMapper = prodInfoMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 매출공통팝업 - 상품매출 상세내역 조회 */
@@ -59,15 +65,14 @@ public class ProdInfoServiceImpl implements ProdInfoService {
         prodInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         prodInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
 
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
-            // 매장 array 값 세팅
-            String[] storeCds = prodInfoVO.getStoreCds().split(",");
-            prodInfoVO.setStoreCdList(storeCds);
-        }
-        else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
             prodInfoVO.setStoreCds(sessionInfoVO.getStoreCd());
-            String[] storeCds = prodInfoVO.getStoreCds().split(",");
-            prodInfoVO.setStoreCdList(storeCds);
+        }
+
+        if(!StringUtil.getOrBlank(prodInfoVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodInfoVO.getStoreCds(), 3900));
+            prodInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return prodInfoMapper.getProdSaleDtlDayList(prodInfoVO);
@@ -81,15 +86,14 @@ public class ProdInfoServiceImpl implements ProdInfoService {
         prodInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         prodInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
 
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
-            // 매장 array 값 세팅
-            String[] storeCds = prodInfoVO.getStoreCds().split(",");
-            prodInfoVO.setStoreCdList(storeCds);
-        }
-        else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             prodInfoVO.setStoreCds(sessionInfoVO.getStoreCd());
-            String[] storeCds = prodInfoVO.getStoreCds().split(",");
-            prodInfoVO.setStoreCdList(storeCds);
+        }
+
+        if(!StringUtil.getOrBlank(prodInfoVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodInfoVO.getStoreCds(), 3900));
+            prodInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return prodInfoMapper.getProdSaleDtlMonthList(prodInfoVO);
@@ -104,15 +108,14 @@ public class ProdInfoServiceImpl implements ProdInfoService {
         prodInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
         prodInfoVO.setLevel("Level" + prodInfoVO.getLevel());
 
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
-            // 매장 array 값 세팅
-            String[] storeCds = prodInfoVO.getStoreCds().split(",");
-            prodInfoVO.setStoreCdList(storeCds);
-        }
-        else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             prodInfoVO.setStoreCds(sessionInfoVO.getStoreCd());
-            String[] storeCds = prodInfoVO.getStoreCds().split(",");
-            prodInfoVO.setStoreCdList(storeCds);
+        }
+
+        if(!StringUtil.getOrBlank(prodInfoVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodInfoVO.getStoreCds(), 3900));
+            prodInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         if(prodInfoVO.getStrProdClassCd() != null && prodInfoVO.getStrProdClassCd().length() > 0) {
@@ -132,15 +135,14 @@ public class ProdInfoServiceImpl implements ProdInfoService {
         prodInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
         prodInfoVO.setLevel("Level" + prodInfoVO.getLevel());
 
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
-            // 매장 array 값 세팅
-            String[] storeCds = prodInfoVO.getStoreCds().split(",");
-            prodInfoVO.setStoreCdList(storeCds);
-        }
-        else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             prodInfoVO.setStoreCds(sessionInfoVO.getStoreCd());
-            String[] storeCds = prodInfoVO.getStoreCds().split(",");
-            prodInfoVO.setStoreCdList(storeCds);
+        }
+
+        if(!StringUtil.getOrBlank(prodInfoVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodInfoVO.getStoreCds(), 3900));
+            prodInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         if(prodInfoVO.getStrProdClassCd() != null && prodInfoVO.getStrProdClassCd().length() > 0) {

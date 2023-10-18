@@ -219,11 +219,8 @@
                         <if test='visitStoreMembr == "true"'>
                             AND tmmps.CHG_MEMBR_ORGN_CD = #{storeCd}
                         </if>
-                        <if test='regUseStoreCd != null and !regUseStoreCd.equals("")'>
-                            AND tmmps.CHG_MEMBR_ORGN_CD IN
-                            <foreach collection="regUseStoreCds" item="item" open="(" separator="," close=")">
-                                #{item}
-                            </foreach>
+                        <if test='regUseStoreCdQuery != null and regUseStoreCdQuery != ""'>
+                            AND tmmps.CHG_MEMBR_ORGN_CD IN (${regUseStoreCdQuery})
                         </if>
                     </if>
                     <if test='cstCardUseFg != null and cstCardUseFg != ""'>
@@ -247,11 +244,8 @@
                     <if test='emailAddr != null and emailAddr.toString() != ""'>
                         AND tmm.EMAIL_ADDR LIKE '%'||#{emailAddr}||'%'
                     </if>
-                    <if test='regStoreCd != null and regStoreCd.toString() != ""'>
-                        AND
-                        <foreach collection="regStoreCds" item="item" open="(" separator="OR" close=")">
-                            tmm.REG_STORE_CD = #{item}
-                        </foreach>
+                    <if test='regStoreCdQuery != null and regStoreCdQuery != ""'>
+                        AND tmm.REG_STORE_CD IN (${regStoreCdQuery})
                     </if>
                     <if test='membrClassCd != null and membrClassCd.toString() != ""'>
                         AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
@@ -507,11 +501,8 @@
             <if test='visitStoreMembr == "true"'>
                 AND tmmps.CHG_MEMBR_ORGN_CD = #{storeCd}
             </if>
-            <if test='regUseStoreCd != null and !regUseStoreCd.equals("")'>
-                AND tmmps.CHG_MEMBR_ORGN_CD IN
-                <foreach collection="regUseStoreCds" item="item" open="(" separator="," close=")">
-                    #{item}
-                </foreach>
+            <if test='regUseStoreCdQuery != null and regUseStoreCdQuery != ""'>
+                AND tmmps.CHG_MEMBR_ORGN_CD IN (${regUseStoreCdQuery})
             </if>
         </if>
         <if test='cstCardUseFg != null and cstCardUseFg != ""'>
@@ -535,11 +526,8 @@
         <if test='emailAddr != null and emailAddr.toString() != ""'>
             AND tmm.EMAIL_ADDR LIKE '%'||#{emailAddr}||'%'
         </if>
-        <if test='regStoreCd != null and regStoreCd.toString() != ""'>
-            AND
-            <foreach collection="regStoreCds" item="item" open="(" separator="OR" close=")">
-                tmm.REG_STORE_CD = #{item}
-            </foreach>
+        <if test='regStoreCdQuery != null and regStoreCdQuery != ""'>
+            AND tmm.REG_STORE_CD IN (${regStoreCdQuery})
         </if>
         <if test='membrClassCd != null and membrClassCd.toString() != ""'>
             AND tmm.MEMBR_CLASS_CD = #{membrClassCd}

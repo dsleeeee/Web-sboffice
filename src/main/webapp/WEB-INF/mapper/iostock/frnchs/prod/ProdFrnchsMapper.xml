@@ -47,14 +47,8 @@
    		<if test='orgnFg != null and orgnFg == "H"'>
    			AND A.HQ_OFFICE_CD = #{hqOfficeCd}
    		</if>
-        <if test='orgnFg != null and orgnFg == "S"'>
-            AND A.STORE_CD = #{storeCd}
-        </if>
-        <if test='storeCd != null and storeCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                A.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD IN (${storeCdQuery})
         </if>
 <!-- 		<if test='prodClassCd != null and prodClassCd != ""'> -->
 <!--    			AND Z.PROD_CLASS_CD = #{prodClassCd} -->
@@ -153,12 +147,9 @@
 			<if test='orgnFg != null and orgnFg == "H"'>   <!-- 본사 -->
    			  AND TPHSOD.HQ_OFFICE_CD = #{hqOfficeCd}
    		    </if>
-        	<if test='storeCd != null and storeCd != ""'>
-			  AND
-               	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                    TPHSOD.STORE_CD = #{item}
-               	</foreach>
-			</if>
+            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                AND TPHSOD.STORE_CD IN (${storeCdQuery})
+            </if>
    			  AND TPHSO.HQ_OFFICE_CD  = TPHSOD.HQ_OFFICE_CD
    			  AND TPHSO.SLIP_NO       = TPHSOD.SLIP_NO
    			  AND TPHSOD.STORE_CD     = TMP.STORE_CD
@@ -224,14 +215,8 @@
         <if test='orgnFg != null and orgnFg == "H"'>
             AND A.HQ_OFFICE_CD = #{hqOfficeCd}
         </if>
-        <if test='orgnFg != null and orgnFg == "S"'>
-            AND A.STORE_CD = #{storeCd}
-        </if>
-        <if test='storeCd != null and storeCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                A.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD IN (${storeCdQuery})
         </if>
 <!--        <if test='prodClassCd != null and prodClassCd != ""'> -->
 <!--                AND Z.PROD_CLASS_CD = #{prodClassCd} -->

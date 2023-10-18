@@ -2,7 +2,10 @@ package kr.co.solbipos.sale.cmmSalePopup.dayPayInfo.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.cmmSalePopup.dayPayInfo.service.DayPayInfoService;
 import kr.co.solbipos.sale.cmmSalePopup.dayPayInfo.service.DayPayInfoVO;
@@ -13,10 +16,12 @@ import java.util.List;
 @Service("dayPayInfoService")
 public class DayPayInfoServiceImpl implements DayPayInfoService {
     private final DayPayInfoMapper dayPayInfoMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
-    public DayPayInfoServiceImpl(DayPayInfoMapper dayPayInfoMapper, MessageService messageService) {
+    public DayPayInfoServiceImpl(DayPayInfoMapper dayPayInfoMapper, PopupMapper popupMapper, MessageService messageService) {
         this.dayPayInfoMapper = dayPayInfoMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -29,7 +34,9 @@ public class DayPayInfoServiceImpl implements DayPayInfoService {
         dayPayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(dayPayInfoVO.getStoreCd()).equals("")) {
-            dayPayInfoVO.setArrStoreCd(dayPayInfoVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayPayInfoVO.getStoreCd(), 3900));
+            dayPayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return dayPayInfoMapper.getDayCardList(dayPayInfoVO);
@@ -44,7 +51,9 @@ public class DayPayInfoServiceImpl implements DayPayInfoService {
         dayPayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(dayPayInfoVO.getStoreCd()).equals("")) {
-            dayPayInfoVO.setArrStoreCd(dayPayInfoVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayPayInfoVO.getStoreCd(), 3900));
+            dayPayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return dayPayInfoMapper.getDayCashList(dayPayInfoVO);
@@ -59,7 +68,9 @@ public class DayPayInfoServiceImpl implements DayPayInfoService {
         dayPayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(dayPayInfoVO.getStoreCd()).equals("")) {
-            dayPayInfoVO.setArrStoreCd(dayPayInfoVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayPayInfoVO.getStoreCd(), 3900));
+            dayPayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return dayPayInfoMapper.getDayPaycoList(dayPayInfoVO);
@@ -73,7 +84,9 @@ public class DayPayInfoServiceImpl implements DayPayInfoService {
         dayPayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(dayPayInfoVO.getStoreCd()).equals("")) {
-            dayPayInfoVO.setArrStoreCd(dayPayInfoVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayPayInfoVO.getStoreCd(), 3900));
+            dayPayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return dayPayInfoMapper.getDayVpointList(dayPayInfoVO);
@@ -103,7 +116,9 @@ public class DayPayInfoServiceImpl implements DayPayInfoService {
         dayPayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(dayPayInfoVO.getStoreCd()).equals("")) {
-            dayPayInfoVO.setArrStoreCd(dayPayInfoVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayPayInfoVO.getStoreCd(), 3900));
+            dayPayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return dayPayInfoMapper.getDayVchargeList(dayPayInfoVO);
@@ -118,7 +133,9 @@ public class DayPayInfoServiceImpl implements DayPayInfoService {
         dayPayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(dayPayInfoVO.getStoreCd()).equals("")) {
-            dayPayInfoVO.setArrStoreCd(dayPayInfoVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayPayInfoVO.getStoreCd(), 3900));
+            dayPayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return dayPayInfoMapper.getDayMpayList(dayPayInfoVO);
@@ -133,7 +150,9 @@ public class DayPayInfoServiceImpl implements DayPayInfoService {
         dayPayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(dayPayInfoVO.getStoreCd()).equals("")) {
-            dayPayInfoVO.setArrStoreCd(dayPayInfoVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayPayInfoVO.getStoreCd(), 3900));
+            dayPayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return dayPayInfoMapper.getDayMcoupnList(dayPayInfoVO);
@@ -149,7 +168,9 @@ public class DayPayInfoServiceImpl implements DayPayInfoService {
         dayPayInfoVO.setOrgnGrpCd(sessionInfoVO.getOrgnGrpCd());
 
         if(!StringUtil.getOrBlank(dayPayInfoVO.getStoreCd()).equals("")) {
-            dayPayInfoVO.setArrStoreCd(dayPayInfoVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayPayInfoVO.getStoreCd(), 3900));
+            dayPayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return dayPayInfoMapper.getDayPointList(dayPayInfoVO);
@@ -165,7 +186,9 @@ public class DayPayInfoServiceImpl implements DayPayInfoService {
         dayPayInfoVO.setOrgnGrpCd(sessionInfoVO.getOrgnGrpCd());
 
         if(!StringUtil.getOrBlank(dayPayInfoVO.getStoreCd()).equals("")) {
-            dayPayInfoVO.setArrStoreCd(dayPayInfoVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayPayInfoVO.getStoreCd(), 3900));
+            dayPayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return dayPayInfoMapper.getDayPrepaidList(dayPayInfoVO);
@@ -181,7 +204,9 @@ public class DayPayInfoServiceImpl implements DayPayInfoService {
         dayPayInfoVO.setOrgnGrpCd(sessionInfoVO.getOrgnGrpCd());
 
         if(!StringUtil.getOrBlank(dayPayInfoVO.getStoreCd()).equals("")) {
-            dayPayInfoVO.setArrStoreCd(dayPayInfoVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayPayInfoVO.getStoreCd(), 3900));
+            dayPayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return dayPayInfoMapper.getDayPostpaidList(dayPayInfoVO);
@@ -196,7 +221,9 @@ public class DayPayInfoServiceImpl implements DayPayInfoService {
         dayPayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(dayPayInfoVO.getStoreCd()).equals("")) {
-            dayPayInfoVO.setArrStoreCd(dayPayInfoVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayPayInfoVO.getStoreCd(), 3900));
+            dayPayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return dayPayInfoMapper.getDayGiftList(dayPayInfoVO);
@@ -211,7 +238,9 @@ public class DayPayInfoServiceImpl implements DayPayInfoService {
         dayPayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(dayPayInfoVO.getStoreCd()).equals("")) {
-            dayPayInfoVO.setArrStoreCd(dayPayInfoVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayPayInfoVO.getStoreCd(), 3900));
+            dayPayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return dayPayInfoMapper.getDayFstmpList(dayPayInfoVO);
@@ -226,7 +255,9 @@ public class DayPayInfoServiceImpl implements DayPayInfoService {
         dayPayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(dayPayInfoVO.getStoreCd()).equals("")) {
-            dayPayInfoVO.setArrStoreCd(dayPayInfoVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayPayInfoVO.getStoreCd(), 3900));
+            dayPayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return dayPayInfoMapper.getDayPartnerList(dayPayInfoVO);
@@ -241,7 +272,9 @@ public class DayPayInfoServiceImpl implements DayPayInfoService {
         dayPayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(dayPayInfoVO.getStoreCd()).equals("")) {
-            dayPayInfoVO.setArrStoreCd(dayPayInfoVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayPayInfoVO.getStoreCd(), 3900));
+            dayPayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return dayPayInfoMapper.getDayEmpCardList(dayPayInfoVO);
@@ -256,7 +289,9 @@ public class DayPayInfoServiceImpl implements DayPayInfoService {
         dayPayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(dayPayInfoVO.getStoreCd()).equals("")) {
-            dayPayInfoVO.setArrStoreCd(dayPayInfoVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayPayInfoVO.getStoreCd(), 3900));
+            dayPayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return dayPayInfoMapper.getDayTemporaryList(dayPayInfoVO);
@@ -270,7 +305,9 @@ public class DayPayInfoServiceImpl implements DayPayInfoService {
         dayPayInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(dayPayInfoVO.getStoreCd()).equals("")) {
-            dayPayInfoVO.setArrStoreCd(dayPayInfoVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayPayInfoVO.getStoreCd(), 3900));
+            dayPayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return dayPayInfoMapper.getDaySmartorderList(dayPayInfoVO);

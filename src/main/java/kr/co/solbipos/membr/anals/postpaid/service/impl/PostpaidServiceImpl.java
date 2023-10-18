@@ -4,8 +4,11 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.anals.enums.StatusFg;
@@ -45,13 +48,15 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 public class PostpaidServiceImpl implements PostpaidService {
 
     private final PostpaidMapper mapper;
+    private final PopupMapper popupMapper;
     private final CmmEnvUtil cmmEnvUtil;
     private final MessageService messageService;
 
     /** Constructor Injection */
     @Autowired
-    public PostpaidServiceImpl(PostpaidMapper mapper, CmmEnvUtil cmmEnvUtil, MessageService messageService) {
+    public PostpaidServiceImpl(PostpaidMapper mapper, PopupMapper popupMapper, CmmEnvUtil cmmEnvUtil, MessageService messageService) {
         this.mapper = mapper;
+        this.popupMapper = popupMapper;
         this.cmmEnvUtil = cmmEnvUtil;
         this.messageService = messageService;
     }
@@ -61,15 +66,21 @@ public class PostpaidServiceImpl implements PostpaidService {
     public List<DefaultMap<Object>> getPostpaidMemberList(PostpaidStoreVO postpaidStoreVO,
         SessionInfoVO sessionInfoVO) {
 
-        String[] storeCds = postpaidStoreVO.getStoreCds().split(",");
-        postpaidStoreVO.setStoreCdList(storeCds);
-
         postpaidStoreVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
         postpaidStoreVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
         postpaidStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        postpaidStoreVO.setStoreCd(sessionInfoVO.getStoreCd());
         postpaidStoreVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         postpaidStoreVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            postpaidStoreVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(postpaidStoreVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(postpaidStoreVO.getStoreCds(), 3900));
+            postpaidStoreVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return mapper.getPostpaidMemberList(postpaidStoreVO);
     }
@@ -78,15 +89,21 @@ public class PostpaidServiceImpl implements PostpaidService {
     @Override
     public List<DefaultMap<Object>> getPostpaidMemberListExcel(PostpaidStoreVO postpaidStoreVO, SessionInfoVO sessionInfoVO) {
 
-        String[] storeCds = postpaidStoreVO.getStoreCds().split(",");
-        postpaidStoreVO.setStoreCdList(storeCds);
-
         postpaidStoreVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
         postpaidStoreVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
         postpaidStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        postpaidStoreVO.setStoreCd(sessionInfoVO.getStoreCd());
         postpaidStoreVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         postpaidStoreVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            postpaidStoreVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(postpaidStoreVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(postpaidStoreVO.getStoreCds(), 3900));
+            postpaidStoreVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return mapper.getPostpaidMemberListExcel(postpaidStoreVO);
     }

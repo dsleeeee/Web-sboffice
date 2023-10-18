@@ -1865,21 +1865,15 @@
    		AND 	TSSH.STORE_CD = TMS.STORE_CD
 		<choose>
             <when test='orgnFg != null and orgnFg == "H"'>
-            	<if test='storeCd != null and storeCd != ""'>
-                 	AND
-                 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-						TSSDP.STORE_CD = #{item}
-               		</foreach>
-               	</if>
 				AND (
 						'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
 					OR	TSSDP.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
 					)
             </when>
-            <when test='orgnFg != null and orgnFg == "S"'>
-                AND TSSDP.STORE_CD  = #{storeCd}
-            </when>
         </choose>
+            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                AND TSSDP.STORE_CD IN (${storeCdQuery})
+            </if>
         	<if test='startDate != null and startDate != ""'>
         		AND TSSDP.SALE_DATE <![CDATA[ >= ]]> #{startDate}
         	</if>

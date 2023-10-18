@@ -2,9 +2,11 @@ package kr.co.solbipos.membr.info.memberFg.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.info.grade.service.MembrClassVO;
@@ -44,6 +46,7 @@ public class MemberFgServiceImpl implements MemberFgService {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final MemberFgMapper memberFgMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
     private final CmmEnvUtil cmmEnvUtil;
 
@@ -51,8 +54,9 @@ public class MemberFgServiceImpl implements MemberFgService {
      * Constructor Injection
      */
     @Autowired
-    public MemberFgServiceImpl(MemberFgMapper memberFgMappe, CmmEnvUtil cmmEnvUtil, MessageService messageService) {
+    public MemberFgServiceImpl(MemberFgMapper memberFgMappe, PopupMapper popupMapper, CmmEnvUtil cmmEnvUtil, MessageService messageService) {
         this.memberFgMapper = memberFgMappe;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
         this.cmmEnvUtil = cmmEnvUtil;
     }
@@ -103,12 +107,14 @@ public class MemberFgServiceImpl implements MemberFgService {
         memberFgVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
         memberFgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            if(!StringUtil.getOrBlank(memberFgVO.getStoreCd()).equals("")) {
-                memberFgVO.setArrStoreCd(memberFgVO.getStoreCd().split(","));
-            }
-        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             memberFgVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(memberFgVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(memberFgVO.getStoreCd(), 3900));
+            memberFgVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         List<DefaultMap<String>> returnList = new ArrayList<DefaultMap<String>>();
@@ -133,12 +139,14 @@ public class MemberFgServiceImpl implements MemberFgService {
         memberFgVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
         memberFgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            if(!StringUtil.getOrBlank(memberFgVO.getStoreCd()).equals("")) {
-                memberFgVO.setArrStoreCd(memberFgVO.getStoreCd().split(","));
-            }
-        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             memberFgVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(memberFgVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(memberFgVO.getStoreCd(), 3900));
+            memberFgVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         List<DefaultMap<String>> returnList = new ArrayList<DefaultMap<String>>();
@@ -163,12 +171,14 @@ public class MemberFgServiceImpl implements MemberFgService {
         memberFgVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
         memberFgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            if(!StringUtil.getOrBlank(memberFgVO.getStoreCd()).equals("")) {
-                memberFgVO.setArrStoreCd(memberFgVO.getStoreCd().split(","));
-            }
-        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             memberFgVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(memberFgVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(memberFgVO.getStoreCd(), 3900));
+            memberFgVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         List<DefaultMap<String>> returnList = new ArrayList<DefaultMap<String>>();
@@ -193,12 +203,14 @@ public class MemberFgServiceImpl implements MemberFgService {
         memberFgVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
         memberFgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            if(!StringUtil.getOrBlank(memberFgVO.getStoreCd()).equals("")) {
-                memberFgVO.setArrStoreCd(memberFgVO.getStoreCd().split(","));
-            }
-        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             memberFgVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(memberFgVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(memberFgVO.getStoreCd(), 3900));
+            memberFgVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         List<DefaultMap<String>> returnList = new ArrayList<DefaultMap<String>>();

@@ -2,6 +2,9 @@ package kr.co.solbipos.iostock.frnchs.storeProd.service.impl;
 
 import java.util.List;
 
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +18,13 @@ import kr.co.solbipos.iostock.frnchs.storeProd.service.FrnchsStoreProdVO;
 @Service("FrnchsStoreProdService")
 public class FrnchsStoreProdServiceImpl implements FrnchsStoreProdService {
     private final FrnchsStoreProdMapper frnchsStoreProdMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public FrnchsStoreProdServiceImpl(FrnchsStoreProdMapper frnchsStoreProdMapper, MessageService messageService) {
+    public FrnchsStoreProdServiceImpl(FrnchsStoreProdMapper frnchsStoreProdMapper, PopupMapper popupMapper, MessageService messageService) {
     	this.frnchsStoreProdMapper = frnchsStoreProdMapper;
+    	this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -31,7 +36,9 @@ public class FrnchsStoreProdServiceImpl implements FrnchsStoreProdService {
     	frnchsStoreProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(frnchsStoreProdVO.getStoreCd()).equals("")) {
-        	frnchsStoreProdVO.setArrStoreCd(frnchsStoreProdVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(frnchsStoreProdVO.getStoreCd(), 3900));
+            frnchsStoreProdVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return frnchsStoreProdMapper.getFrnchsStoreProdList(frnchsStoreProdVO);
@@ -54,7 +61,9 @@ public class FrnchsStoreProdServiceImpl implements FrnchsStoreProdService {
     	frnchsStoreProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(frnchsStoreProdVO.getStoreCd()).equals("")) {
-        	frnchsStoreProdVO.setArrStoreCd(frnchsStoreProdVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(frnchsStoreProdVO.getStoreCd(), 3900));
+            frnchsStoreProdVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return frnchsStoreProdMapper.getFrnchsStoreProdExcelList(frnchsStoreProdVO);

@@ -2,6 +2,9 @@ package kr.co.solbipos.iostock.frnchs.store.service.impl;
 
 import java.util.List;
 
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +18,13 @@ import kr.co.solbipos.iostock.frnchs.store.service.FrnchsStoreVO;
 @Service("FrnchsStoreService")
 public class FrnchsStoreServiceImpl implements FrnchsStoreService {
     private final FrnchsStoreMapper frnchsStoreMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public FrnchsStoreServiceImpl(FrnchsStoreMapper frnchsStoreMapper, MessageService messageService) {
+    public FrnchsStoreServiceImpl(FrnchsStoreMapper frnchsStoreMapper, PopupMapper popupMapper, MessageService messageService) {
     	this.frnchsStoreMapper = frnchsStoreMapper;
+    	this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -31,7 +36,9 @@ public class FrnchsStoreServiceImpl implements FrnchsStoreService {
     	frnchsStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(frnchsStoreVO.getStoreCd()).equals("")) {
-        	frnchsStoreVO.setArrStoreCd(frnchsStoreVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(frnchsStoreVO.getStoreCd(), 3900));
+            frnchsStoreVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return frnchsStoreMapper.getFrnchsStoreList(frnchsStoreVO);
@@ -42,9 +49,9 @@ public class FrnchsStoreServiceImpl implements FrnchsStoreService {
 	public List<DefaultMap<String>> getFrnchsStoreInfoList(FrnchsStoreVO frnchsStoreVO) {
 		//frnchsStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        if(!StringUtil.getOrBlank(frnchsStoreVO.getStoreCd()).equals("")) {
+        /*if(!StringUtil.getOrBlank(frnchsStoreVO.getStoreCd()).equals("")) {
         	frnchsStoreVO.setArrStoreCd(frnchsStoreVO.getStoreCd().split(","));
-        }
+        }*/
 
         return frnchsStoreMapper.getFrnchsStoreInfoList(frnchsStoreVO);
 	}
@@ -54,9 +61,9 @@ public class FrnchsStoreServiceImpl implements FrnchsStoreService {
 	public List<DefaultMap<String>> getFrnchsStoreDtlList(FrnchsStoreVO frnchsStoreVO) {
 		//frnchsStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        if(!StringUtil.getOrBlank(frnchsStoreVO.getStoreCd()).equals("")) {
+        /*if(!StringUtil.getOrBlank(frnchsStoreVO.getStoreCd()).equals("")) {
         	frnchsStoreVO.setArrStoreCd(frnchsStoreVO.getStoreCd().split(","));
-        }
+        }*/
 
         return frnchsStoreMapper.getFrnchsStoreDtlList(frnchsStoreVO);
 	}
@@ -69,7 +76,9 @@ public class FrnchsStoreServiceImpl implements FrnchsStoreService {
     	frnchsStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(frnchsStoreVO.getStoreCd()).equals("")) {
-        	frnchsStoreVO.setArrStoreCd(frnchsStoreVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(frnchsStoreVO.getStoreCd(), 3900));
+            frnchsStoreVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return frnchsStoreMapper.getFrnchsStoreExcelList(frnchsStoreVO);

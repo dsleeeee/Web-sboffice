@@ -32,6 +32,9 @@ public class ProdFrnchsVO extends PageVO {
      */
     private String orgnFg;
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
     /**
      * @return the hqOfficeCd
      */
@@ -155,5 +158,12 @@ public class ProdFrnchsVO extends PageVO {
 	public void setArrStoreCd(String[] arrStoreCd) {
 		this.arrStoreCd = arrStoreCd;
 	}
-    
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
+    }
 }

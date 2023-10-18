@@ -64,23 +64,17 @@
                     FROM    TB_MS_COUPON
                     WHERE   STORE_CD  IN  ( SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} )
         ]]>
-                    <if test='arrStoreCd != null and arrStoreCd != ""'>
-                        AND
-                        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                            STORE_CD = #{item}
-                        </foreach>
-                    </if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND STORE_CD IN (${storeCdQuery})
+        </if>
         <![CDATA[
                 ) tmc
         ,       TB_MS_PRODUCT tmp
         WHERE   tssdd.HQ_OFFICE_CD        =   #{hqOfficeCd}
         AND     tssdd.SALE_DATE           =   #{saleDate}
         ]]>
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                tssdd.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tssdd.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
@@ -357,11 +351,8 @@
         WHERE   tsshd.HQ_OFFICE_CD        =   #{hqOfficeCd}
         AND     tsshd.SALE_DATE           =   #{saleDate}
         ]]>
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                tsshd.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsshd.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
@@ -406,11 +397,8 @@
         WHERE   tsshd.HQ_OFFICE_CD        =   #{hqOfficeCd}
         AND     tsshd.SALE_DATE           =   #{saleDate}
         ]]>
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                tsshd.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsshd.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (

@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.cmmSalePopup.dayBillInfo.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.cmmSalePopup.dayBillInfo.service.DayBillInfoService;
@@ -31,13 +35,15 @@ import java.util.List;
 @Transactional
 public class DayBillInfoServiceImpl implements DayBillInfoService {
     private final DayBillInfoMapper dayBillInfoMapper;
+    private final PopupMapper popupMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public DayBillInfoServiceImpl(DayBillInfoMapper dayBillInfoMapper) {
+    public DayBillInfoServiceImpl(DayBillInfoMapper dayBillInfoMapper, PopupMapper popupMapper) {
         this.dayBillInfoMapper = dayBillInfoMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 매장별 영수건수 팝업 - 매장별 영수건수 리스트 조회 */
@@ -55,6 +61,12 @@ public class DayBillInfoServiceImpl implements DayBillInfoService {
         // 매장 array 값 세팅
         String[] storeCds = dayBillInfoVO.getStoreCds().split(",");
         dayBillInfoVO.setStoreCdList(storeCds);
+
+        if(!StringUtil.getOrBlank(dayBillInfoVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayBillInfoVO.getStoreCds(), 3900));
+            dayBillInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return dayBillInfoMapper.getDayStoreBillList(dayBillInfoVO);
     }

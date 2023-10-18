@@ -64,12 +64,9 @@
 		          FROM TB_PO_HQ_STORE_ORDER A
 		         WHERE A.PROC_FG = '00'
 		         AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = A.STORE_CD)
-		           <if test='storeCd != null and storeCd != ""'>
-                       AND
-                       <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                           A.STORE_CD = #{item}
-                       </foreach>
-                   </if>
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND A.STORE_CD IN (${storeCdQuery})
+                    </if>
 		        UNION ALL
 
 		        SELECT A.REQ_DATE
@@ -103,12 +100,9 @@
 		                     , SUM(TPHSD.ORDER_TOT)     AS ORDER_TOT/* 주문합계금액 */
 		                  FROM TB_PO_HQ_STORE_DISTRIBUTE TPHSD
 		                 WHERE TPHSD.HQ_OFFICE_CD = #{hqOfficeCd}
-		                   <if test='storeCd != null and storeCd != ""'>
-					            AND
-					            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                                    TPHSD.STORE_CD = #{item}
-					            </foreach>
-					        </if>
+                            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                AND TPHSD.STORE_CD IN (${storeCdQuery})
+                            </if>
 		                 GROUP BY TPHSD.HQ_OFFICE_CD
 		                     , TPHSD.REQ_DATE
 		                     , TPHSD.STORE_CD
@@ -285,11 +279,8 @@
                   FROM TB_PO_HQ_STORE_ORDER A
                  WHERE A.PROC_FG = '00'
                  AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = A.STORE_CD)
-                   <if test='storeCd != null and storeCd != ""'>
-                       AND
-                       <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                           A.STORE_CD = #{item}
-                       </foreach>
+                   <if test='storeCdQuery != null and storeCdQuery != ""'>
+                       AND A.STORE_CD IN (${storeCdQuery})
                    </if>
                 UNION ALL
 
@@ -323,11 +314,8 @@
                              , SUM(TPHSD.ORDER_TOT)     AS ORDER_TOT/* 주문합계금액 */
                           FROM TB_PO_HQ_STORE_DISTRIBUTE TPHSD
                          WHERE TPHSD.HQ_OFFICE_CD = #{hqOfficeCd}
-                           <if test='storeCd != null and storeCd != ""'>
-                                AND
-                                <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                                    TPHSD.STORE_CD = #{item}
-                                </foreach>
+                            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                AND TPHSD.STORE_CD IN (${storeCdQuery})
                             </if>
                          GROUP BY TPHSD.HQ_OFFICE_CD
                              , TPHSD.REQ_DATE

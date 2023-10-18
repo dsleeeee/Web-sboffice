@@ -56,11 +56,8 @@
            <if test='prodNm != null and prodNm !=""'>
               AND Z.PROD_NM LIKE '%' || #{prodNm} || '%'
            </if>
-           <if test='storeCd != null and storeCd !=""'>
-              AND
-              <foreach collection="arrStoreCd" item="item" open="(" separator="OR" close=")">
-                  A.STORE_CD = #{item}
-              </foreach>
+           <if test='storeCdQuery != null and storeCdQuery != ""'>
+              AND A.STORE_CD IN (${storeCdQuery})
            </if>
             <choose>
                 <when test='vendrCd != null and vendrCd != ""'>
@@ -134,11 +131,8 @@
            <if test='prodNm != null and prodNm !=""'>
               AND Z.PROD_NM LIKE '%' || #{prodNm} || '%'
            </if>
-           <if test='storeCd != null and storeCd !=""'>
-              AND
-              <foreach collection="arrStoreCd" item="item" open="(" separator="OR" close=")">
-                  A.STORE_CD = #{item}
-              </foreach>
+           <if test='storeCdQuery != null and storeCdQuery != ""'>
+              AND A.STORE_CD IN (${storeCdQuery})
            </if>
             <choose>
                 <when test='vendrCd != null and vendrCd != ""'>
