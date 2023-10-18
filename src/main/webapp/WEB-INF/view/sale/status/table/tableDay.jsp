@@ -169,5 +169,5 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/table/tableDay.js?ver=20200904.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/table/tableDay.js?ver=20200904.03" charset="utf-8"></script>
 

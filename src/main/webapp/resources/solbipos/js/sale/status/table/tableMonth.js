@@ -202,7 +202,7 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
         $scope.isSearch		= true;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/status/table/month/list.sb", params, function() {
+        $scope._inquiryMain("/sale/status/table/month/getTableMonthList.sb", params, function() {
 
             var flex = $scope.flex;
             //row수가 0이면
@@ -488,7 +488,7 @@ app.controller('tableMonthExcelCtrl', ['$scope', '$http', '$timeout', function (
         params.endDate = $scope.excelEndDate;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/status/table/month/excelList.sb", params, function() {
+        $scope._inquiryMain("/sale/status/table/month/getTableMonthExcelList.sb", params, function() {
 
             var flex = $scope.excelFlex;
             //row수가 0이면

@@ -200,7 +200,7 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/status/table/day/list.sb", params, function() {
+        $scope._inquiryMain("/sale/status/table/day/getTableDayList.sb", params, function() {
 
             var flex = $scope.flex;
             //row수가 0이면
@@ -490,7 +490,7 @@ app.controller('tableDayExcelCtrl', ['$scope', '$http', '$timeout', function ($s
         params.endDate = $scope.excelEndDate;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/status/table/day/excelList.sb", params, function() {
+        $scope._inquiryMain("/sale/status/table/day/getTableDayExcelList.sb", params, function() {
 
             var flex = $scope.excelFlex;
             //row수가 0이면

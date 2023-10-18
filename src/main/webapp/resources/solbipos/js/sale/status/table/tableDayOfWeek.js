@@ -196,7 +196,7 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
         }
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/status/table/dayofweek/list.sb", params, function() {
+        $scope._inquiryMain("/sale/status/table/dayofweek/getTableDayOfWeekList.sb", params, function() {
 
             var flex = $scope.flex;
             //row수가 0이면

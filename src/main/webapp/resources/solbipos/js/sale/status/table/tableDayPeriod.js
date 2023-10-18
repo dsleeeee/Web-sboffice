@@ -107,7 +107,7 @@ app.controller('tableDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($
         $scope.isSearch				= true;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/status/table/dayperiod/list.sb", params);
+        $scope._inquiryMain("/sale/status/table/dayperiod/getTableDayPeriodList.sb", params);
 
     };
 
@@ -181,7 +181,7 @@ app.controller('tableDayPeriodExcelCtrl', ['$scope', '$http', '$timeout', functi
         }
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/status/table/dayperiod/excelList.sb", params, function() {
+        $scope._inquiryMain("/sale/status/table/dayperiod/getTableDayPeriodExcelList.sb", params, function() {
 
             var flex = $scope.excelFlex;
             //row수가 0이면
