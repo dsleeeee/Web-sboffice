@@ -62,6 +62,7 @@
                 <%--<td>--%>
                     <%--&lt;%&ndash; 선택그룹 선택 모듈 사용시 include &ndash;%&gt;--%>
                     <%--<jsp:include page="/WEB-INF/view/common/popup/selectSdselGrp.jsp" flush="true">--%>
+                        <%--<jsp:param name="targetTypeFg" value="S"/>--%>
                         <%--<jsp:param name="targetId" value="sideMenuProdStoreSdselGrp"/>--%>
                     <%--</jsp:include>--%>
                     <%--&lt;%&ndash;// 선택그룹 선택 모듈 사용시 include &ndash;%&gt;--%>

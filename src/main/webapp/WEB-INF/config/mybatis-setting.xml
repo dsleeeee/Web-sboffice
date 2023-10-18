@@ -492,7 +492,10 @@
     <typeAlias alias="selectSdselProdVO" type="kr.co.solbipos.common.popup.selectSdselProd.service.SelectSdselProdVO"/>
     <!-- (공통) 매장 팝업 -->
     <typeAlias alias="selectStoreVO" type="kr.co.solbipos.common.popup.selectStore.service.SelectStoreVO"/>
-
+    <!-- (공통) 할인구분 팝업 -->
+    <typeAlias alias="selectDcfgVO" type="kr.co.solbipos.common.popup.selectDcfg.service.SelectDcfgVO"/>
+    <!-- (공통) 테이블 팝업 -->
+    <typeAlias alias="selectTableVO" type="kr.co.solbipos.common.popup.selectTable.service.SelectTableVO"/>
 
     <!--
         <typeAlias alias="gradeVO" type="kr.co.solbipos.membr.info.grade.service.GradeVO"/>
@@ -774,11 +777,8 @@
     <typeAlias alias="cornerMonthVO" type="kr.co.solbipos.sale.status.corner.month.service.CornerMonthVO"/>
     <typeAlias alias="cornerDayPeriodVO" type="kr.co.solbipos.sale.status.corner.dayPeriod.service.CornerDayPeriodVO"/>
 
-    <!-- 테이블 -->
-    <typeAlias alias="tableDayVO" type="kr.co.solbipos.sale.status.table.day.service.TableDayVO"/>
-    <typeAlias alias="tableDayOfWeekVO" type="kr.co.solbipos.sale.status.table.dayOfWeek.service.TableDayOfWeekVO"/>
-    <typeAlias alias="tableMonthVO" type="kr.co.solbipos.sale.status.table.month.service.TableMonthVO"/>
-    <typeAlias alias="tableDayPeriodVO" type="kr.co.solbipos.sale.status.table.dayPeriod.service.TableDayPeriodVO"/>
+    <!-- 매출관리> 매출현황 > 테이블별 -->
+    <typeAlias alias="tableSaleVO" type="kr.co.solbipos.sale.status.table.service.TableSaleVO"/>
 
     <!-- 포스별 -->
     <typeAlias alias="posDayVO" type="kr.co.solbipos.sale.status.pos.day.service.PosDayVO"/>

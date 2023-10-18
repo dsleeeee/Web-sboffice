@@ -38,25 +38,25 @@
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 일자별 레이어 --%>
-<c:import url="/WEB-INF/view/sale/status/table/day/day.jsp">
+<c:import url="/WEB-INF/view/sale/status/table/tableDay.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
 <%-- 요일별 레이어 --%>
-<c:import url="/WEB-INF/view/sale/status/table/dayOfWeek/dayOfWeek.jsp">
+<c:import url="/WEB-INF/view/sale/status/table/tableDayOfWeek.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
 <%-- 월별 레이어 --%>
-<c:import url="/WEB-INF/view/sale/status/table/month/month.jsp">
+<c:import url="/WEB-INF/view/sale/status/table/tableMonth.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
 <%-- 설정기간별 레이어 --%>
-<c:import url="/WEB-INF/view/sale/status/table/dayPeriod/dayPeriod.jsp">
+<c:import url="/WEB-INF/view/sale/status/table/tableDayPeriod.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

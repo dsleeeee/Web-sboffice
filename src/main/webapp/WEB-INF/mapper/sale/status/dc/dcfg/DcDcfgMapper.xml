@@ -314,21 +314,4 @@
 		ORDER BY A.SALE_DATE, A.STORE_NM, A.DC_REASON_CD, A.PROD_CD, A.DC_CD
     </select>
 
-    <select id="getDcNmList" parameterType="dcDcfgVO" resultType="DefaultMap">
-    	SELECT DISTINCT DC.DC_CD DC_CD
-    		 , NMCODE.NMCODE_NM DC_NM
-    		 , (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = DC.STORE_CD) AS STORE_NM
-		FROM TB_SL_SALE_DTL_DC DC, TB_CM_NMCODE NMCODE
-		WHERE 1=1
-			  AND DC.DC_CD = NMCODE.NMCODE_CD
-			  AND NMCODE.NMCODE_GRP_CD = '041'
-			  <if test='hqOfficeCd != null and hqOfficeCd != ""'>
-			     AND DC.HQ_OFFICE_CD = #{hqOfficeCd}
-			  </if>
-              <if test='storeCdQuery != null and storeCdQuery != ""'>
-                 AND DC.STORE_CD IN (${storeCdQuery})
-              </if>
-		ORDER BY NMCODE.NMCODE_NM
-    </select>
-
 </mapper>

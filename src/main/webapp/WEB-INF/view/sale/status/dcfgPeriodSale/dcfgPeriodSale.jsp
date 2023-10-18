@@ -62,13 +62,16 @@
             <input type="hidden" id="dcfgPeriodSaleStoreCd" value="${sessionInfo.storeCd}" />
         </c:if>
         <tr>
-            <%-- 할인유형 --%>
-            <th><s:message code="dcfgPeriodSale.dcfg" /></th>
+            <%-- 할인구분선택 --%>
+            <th><s:message code="cmm.dcfg.select" /></th>
             <td colspan="3">
-                <jsp:include page="/WEB-INF/view/sale/status/dc/cmm/selectDcfgM.jsp" flush="true">
+                <%-- 할인구분 선택 모듈 사용시 include --%>
+                <jsp:include page="/WEB-INF/view/common/popup/selectDcfg.jsp" flush="true">
+                    <jsp:param name="targetTypeFg" value="M"/>
                     <jsp:param name="targetId" value="dcfgPeriodSaleDcfg" />
                     <jsp:param name="targetStoreId" value="dcfgPeriodSaleStore" />
                 </jsp:include>
+                <%--// 할인구분 선택 모듈 사용시 include --%>
             </td>
         </tr>
         </tbody>

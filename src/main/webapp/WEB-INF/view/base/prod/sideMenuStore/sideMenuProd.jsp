@@ -41,6 +41,7 @@
                 <td>
                     <%-- 선택상품 선택 모듈 사용시 include --%>
                     <jsp:include page="/WEB-INF/view/common/popup/selectSdselProd.jsp" flush="true">
+                        <jsp:param name="targetTypeFg" value="S"/>
                         <jsp:param name="targetId" value="sideMenuProdSdselProd"/>
                     </jsp:include>
                     <%--// 선택상품 선택 모듈 사용시 include --%>
