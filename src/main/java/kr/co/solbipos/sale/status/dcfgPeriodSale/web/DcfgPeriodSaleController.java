@@ -6,7 +6,6 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.sale.status.dc.service.DcDcfgVO;
 import kr.co.solbipos.sale.status.dcfgPeriodSale.service.DcfgPeriodSaleService;
 import kr.co.solbipos.sale.status.dcfgPeriodSale.service.DcfgPeriodSaleVO;
 import org.springframework.beans.factory.annotation.Autowired;
