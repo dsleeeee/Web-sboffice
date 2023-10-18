@@ -1,4 +1,4 @@
-package kr.co.solbipos.sale.status.dc.dcfg.service.impl;
+package kr.co.solbipos.sale.status.dc.service.impl;
 
 import java.util.List;
 
@@ -12,8 +12,8 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.sale.status.dc.dcfg.service.DcDcfgService;
-import kr.co.solbipos.sale.status.dc.dcfg.service.DcDcfgVO;
+import kr.co.solbipos.sale.status.dc.service.DcDcfgService;
+import kr.co.solbipos.sale.status.dc.service.DcDcfgVO;
 
 @Service("dcDcfgService")
 public class DcDcfgServiceImpl implements DcDcfgService {
@@ -32,9 +32,9 @@ public class DcDcfgServiceImpl implements DcDcfgService {
     /** 할일구분별매출 - 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getDcDcfgList(DcDcfgVO dcDcfgVO, SessionInfoVO sessionInfoVO) {
-		dcDcfgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-		dcDcfgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-		dcDcfgVO.setEmpNo(sessionInfoVO.getEmpNo());
+        dcDcfgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dcDcfgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dcDcfgVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(dcDcfgVO.getStoreCd()).equals("")) {
             StoreVO storeVO = new StoreVO();
@@ -42,8 +42,8 @@ public class DcDcfgServiceImpl implements DcDcfgService {
             dcDcfgVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
-    	if(!StringUtil.getOrBlank(dcDcfgVO.getDcCd()).equals("")) {
-        	dcDcfgVO.setArrDcCd(dcDcfgVO.getDcCd().split(","));
+        if(!StringUtil.getOrBlank(dcDcfgVO.getDcCd()).equals("")) {
+            dcDcfgVO.setArrDcCd(dcDcfgVO.getDcCd().split(","));
         }
         return dcDcfgMapper.getDcDcfgList(dcDcfgVO);
     }
@@ -51,9 +51,9 @@ public class DcDcfgServiceImpl implements DcDcfgService {
     /** 할일구분별매출 - 엑셀 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getDcDcfgExcelList(DcDcfgVO dcDcfgVO, SessionInfoVO sessionInfoVO) {
-		dcDcfgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-		dcDcfgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-		dcDcfgVO.setEmpNo(sessionInfoVO.getEmpNo());
+        dcDcfgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dcDcfgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dcDcfgVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(dcDcfgVO.getStoreCd()).equals("")) {
             StoreVO storeVO = new StoreVO();
@@ -61,19 +61,19 @@ public class DcDcfgServiceImpl implements DcDcfgService {
             dcDcfgVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
-    	if(!StringUtil.getOrBlank(dcDcfgVO.getDcCd()).equals("")) {
-        	dcDcfgVO.setArrDcCd(dcDcfgVO.getDcCd().split(","));
+        if(!StringUtil.getOrBlank(dcDcfgVO.getDcCd()).equals("")) {
+            dcDcfgVO.setArrDcCd(dcDcfgVO.getDcCd().split(","));
         }
         return dcDcfgMapper.getDcDcfgExcelList(dcDcfgVO);
     }
 
 
     /** 할일구분별매출 - 상세 리스트 조회 */
-	@Override
-	public List<DefaultMap<String>> getDcDcfgDtlList(DcDcfgVO dcDcfgVO, SessionInfoVO sessionInfoVO) {
-		dcDcfgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-		dcDcfgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    @Override
+    public List<DefaultMap<String>> getDcDcfgDtlList(DcDcfgVO dcDcfgVO, SessionInfoVO sessionInfoVO) {
+        dcDcfgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dcDcfgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-		return dcDcfgMapper.getDcDcfgDtlList(dcDcfgVO);
-	}
+        return dcDcfgMapper.getDcDcfgDtlList(dcDcfgVO);
+    }
 }

@@ -1,4 +1,5 @@
-package kr.co.solbipos.sale.status.dc.dcfg.service;
+package kr.co.solbipos.sale.status.dc.service;
+
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -13,5 +14,5 @@ public interface DcDcfgService {
     List<DefaultMap<String>> getDcDcfgExcelList(DcDcfgVO dcDcfgVO, SessionInfoVO sessionInfoVO);
 
     /** 할인구분별 탭 - 리스트 상세 조회 */
-	List<DefaultMap<String>> getDcDcfgDtlList(DcDcfgVO dcDcfgVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<String>> getDcDcfgDtlList(DcDcfgVO dcDcfgVO, SessionInfoVO sessionInfoVO);
 }

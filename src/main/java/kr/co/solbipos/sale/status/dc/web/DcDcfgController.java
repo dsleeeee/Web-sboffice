@@ -1,4 +1,4 @@
-package kr.co.solbipos.sale.status.dc.dcfg.web;
+package kr.co.solbipos.sale.status.dc.web;
 
 import java.util.List;
 
@@ -18,8 +18,8 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.sale.status.dc.dcfg.service.DcDcfgService;
-import kr.co.solbipos.sale.status.dc.dcfg.service.DcDcfgVO;
+import kr.co.solbipos.sale.status.dc.service.DcDcfgService;
+import kr.co.solbipos.sale.status.dc.service.DcDcfgVO;
 
 @Controller
 @RequestMapping("/sale/status/dc")
@@ -42,7 +42,7 @@ public class DcDcfgController {
     @RequestMapping(value = "/dcfg/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getDcDcfgList(HttpServletRequest request, HttpServletResponse response,
-        Model model, DcDcfgVO dcDcfgVO) {
+                                Model model, DcDcfgVO dcDcfgVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -65,7 +65,7 @@ public class DcDcfgController {
     @RequestMapping(value = "/dcfg/dtl.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getDcDcfgDtlList(HttpServletRequest request, HttpServletResponse response,
-        Model model, DcDcfgVO dcDcfgVO) {
+                                   Model model, DcDcfgVO dcDcfgVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 

@@ -769,7 +769,7 @@
     <typeAlias alias="dayPeriodVO" type="kr.co.solbipos.sale.day.dayPeriod.service.DayPeriodVO"/>
 
 	<!-- 할인구분별 -->
-    <typeAlias alias="dcDcfgVO" type="kr.co.solbipos.sale.status.dc.dcfg.service.DcDcfgVO"/>
+    <typeAlias alias="dcDcfgVO" type="kr.co.solbipos.sale.status.dc.service.DcDcfgVO"/>
 
     <!-- 코너별 -->
     <typeAlias alias="cornerDayVO" type="kr.co.solbipos.sale.status.corner.day.service.CornerDayVO"/>
