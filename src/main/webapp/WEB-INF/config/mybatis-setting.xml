@@ -850,7 +850,7 @@
     <typeAlias alias="versusPeriodWeekVO" type="kr.co.solbipos.sale.anals.versusPeriod.week.service.VersusPeriodWeekVO"/>
 
     <!-- 매출관리 > 삼품ABC분석 > 삼품ABC분석 -->
-    <typeAlias alias="abcVO" type="kr.co.solbipos.sale.anals.abc.abc.service.AbcVO"/>
+    <typeAlias alias="abcVO" type="kr.co.solbipos.sale.anals.abc.service.AbcVO"/>
 
     <!-- 매출관리 > 매출분석 > 매출추이분석 -->
     <typeAlias alias="saleTrnsitnDatesVO" 		type="kr.co.solbipos.sale.anals.saletrnsitn.service.SaleTrnsitnDatesVO"/>

@@ -1,4 +1,4 @@
-package kr.co.solbipos.sale.anals.abc.abc.web;
+package kr.co.solbipos.sale.anals.abc.web;
 
 import java.util.List;
 
@@ -18,8 +18,8 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.sale.anals.abc.abc.service.AbcService;
-import kr.co.solbipos.sale.anals.abc.abc.service.AbcVO;
+import kr.co.solbipos.sale.anals.abc.service.AbcService;
+import kr.co.solbipos.sale.anals.abc.service.AbcVO;
 
 /**
  * @Class Name : StoreFgController.java
