@@ -26,8 +26,8 @@
             <col class="w37"/>
         </colgroup>
         <tbody>
-        <%-- 출고일자 --%>
         <tr>
+            <%-- 출고일자 --%>
             <th><s:message code="frnchsStoreProd.date" /></th>
             <td>
             <div class="sb-select">
@@ -67,15 +67,17 @@
               <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
               <button type="button" class="btn_skyblue fl mr5" id="btnCancelFrnchsStoreProdCd" style="margin-left: 5px;" ng-click="delFrnchsStoreProd()"><s:message code="cmm.selectCancel"/></button>
             </td>
-            <%-- 매장코드 --%>
             <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-            <th><s:message code="todayBillSaleDtl.store"/></th>
-            <td>
-                <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
-                    <jsp:param name="targetId" value="frnchsStoreProdSelectStore"/>
-                </jsp:include>
-                <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-            </td>
+                <%-- 매장선택 --%>
+                <th><s:message code="cmm.store.select"/></th>
+                <td>
+                    <%-- 매장선택 모듈 사용시 include --%>
+                    <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                        <jsp:param name="targetTypeFg" value="M"/>
+                        <jsp:param name="targetId" value="frnchsStoreProdSelectStore"/>
+                    </jsp:include>
+                    <%--// 매장선택 모듈 사용시 include --%>
+                </td>
             </c:if>
         </tr>
         <c:if test="${sessionInfo.orgnFg == 'STORE'}">
