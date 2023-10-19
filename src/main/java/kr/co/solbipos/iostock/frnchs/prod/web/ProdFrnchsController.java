@@ -93,7 +93,7 @@ public class ProdFrnchsController {
         DstbReqVO dstbReqVO = new DstbReqVO();
         model.addAttribute("empVendrCd", dstbReqService.getEmployeeVendr(dstbReqVO, sessionInfoVO));
 
-        return "iostock/frnchs/prod/prod";
+        return "iostock/frnchs/prod/frnchsProd";
     }
 
 
