@@ -712,9 +712,12 @@
     <typeAlias alias="hqStoreMoveVO" type="kr.co.solbipos.iostock.move.hqStoreMove.service.HqStoreMoveVO"/>
     <typeAlias alias="storeMoveVO" type="kr.co.solbipos.iostock.move.storeMove.service.StoreMoveVO"/>
     <typeAlias alias="standMoveVO" type="kr.co.solbipos.iostock.move.standMove.service.StandMoveVO"/>
+    <!-- 수불관리>본사-매장간 입출고내역>매장별 입출고내역 -->
     <typeAlias alias="frnchsStoreVO" type="kr.co.solbipos.iostock.frnchs.store.service.FrnchsStoreVO"/>
+    <!-- 수불관리>본사-매장간 입출고내역>매장-상품별 입출고내역 -->
     <typeAlias alias="frnchsStoreProdVO" type="kr.co.solbipos.iostock.frnchs.storeProd.service.FrnchsStoreProdVO"/>
-    <typeAlias alias="ProdFrnchsVO" type="kr.co.solbipos.iostock.frnchs.prod.service.ProdFrnchsVO"/>
+    <!-- 수불관리>본사-매장간 입출고내역>상품별 입출고내역 -->
+    <typeAlias alias="frnchsProdVO" type="kr.co.solbipos.iostock.frnchs.prod.service.FrnchsProdVO"/>
 
     <!-- 재고 -->
     <typeAlias alias="hqCurrVO" type="kr.co.solbipos.stock.curr.hqCurr.service.HqCurrVO"/>

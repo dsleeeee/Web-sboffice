@@ -2,7 +2,7 @@ package kr.co.solbipos.iostock.frnchs.prod.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 
-public class ProdFrnchsVO extends PageVO {
+public class FrnchsProdVO extends PageVO {
 
     private static final long serialVersionUID = -4725659692876145685L;
 
@@ -22,7 +22,7 @@ public class ProdFrnchsVO extends PageVO {
     private String prodNm;
     /** 상품분류 */
     private String prodClassCd;
-    
+
     /**
      * 소속구분<br>
      * M : 시스템<br>
@@ -149,15 +149,15 @@ public class ProdFrnchsVO extends PageVO {
     /**
      * @return the arrStoreCd
      */
-	public String[] getArrStoreCd() {
-		return arrStoreCd;
-	}
+    public String[] getArrStoreCd() {
+        return arrStoreCd;
+    }
     /**
      * @param arrStoreCd the arrStoreCd to set
      */
-	public void setArrStoreCd(String[] arrStoreCd) {
-		this.arrStoreCd = arrStoreCd;
-	}
+    public void setArrStoreCd(String[] arrStoreCd) {
+        this.arrStoreCd = arrStoreCd;
+    }
 
     public String getStoreCdQuery() {
         return storeCdQuery;

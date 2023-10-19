@@ -25,13 +25,13 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.iostock.frnchs.prod.service.ProdFrnchsService;
-import kr.co.solbipos.iostock.frnchs.prod.service.ProdFrnchsVO;
+import kr.co.solbipos.iostock.frnchs.prod.service.FrnchsProdService;
+import kr.co.solbipos.iostock.frnchs.prod.service.FrnchsProdVO;
 
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
- * @Class Name : ProdController.java
+ * @Class Name : FrnchsProdController.java
  * @Description : 수불관리 > 본사-매장간 입출고관리 > 상품별 입출고내역
  * @Modification Information
  * @
@@ -49,17 +49,17 @@ import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 @Controller
 @RequestMapping("/iostock/frnchs/prod")
-public class ProdFrnchsController {
+public class FrnchsProdController {
     private final SessionService sessionService;
-    private final ProdFrnchsService prodFrnchsService;
+    private final FrnchsProdService frnchsProdService;
     private final StoreOrderService storeOrderService;
     private final CmmEnvService cmmEnvService;
     private final DstbReqService dstbReqService;
 
     @Autowired
-    public ProdFrnchsController(SessionService sessionService, ProdFrnchsService prodFrnchsService, StoreOrderService storeOrderService, CmmEnvService cmmEnvService, DstbReqService dstbReqService) {
+    public FrnchsProdController(SessionService sessionService, FrnchsProdService frnchsProdService, StoreOrderService storeOrderService, CmmEnvService cmmEnvService, DstbReqService dstbReqService) {
         this.sessionService = sessionService;
-        this.prodFrnchsService = prodFrnchsService;
+        this.frnchsProdService = frnchsProdService;
         this.storeOrderService = storeOrderService;
         this.cmmEnvService = cmmEnvService;
         this.dstbReqService = dstbReqService;
@@ -75,7 +75,7 @@ public class ProdFrnchsController {
      * @since   2018. 12. 05.
      */
     @RequestMapping(value = "/prod/view.sb", method = RequestMethod.GET)
-    public String prodFrnchsView(HttpServletRequest request, HttpServletResponse response, Model model) {
+    public String FrnchsProdView(HttpServletRequest request, HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -109,18 +109,18 @@ public class ProdFrnchsController {
      */
     @RequestMapping(value = "/prod/list.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getProdFrnchsList(HttpServletRequest request, HttpServletResponse response,
-        Model model, ProdFrnchsVO prodFrnchsVO) {
+    public Result getFrnchsProdList(HttpServletRequest request, HttpServletResponse response,
+                                    Model model, FrnchsProdVO frnchsProdVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<String>>
-            list = prodFrnchsService.getProdFrnchsList(prodFrnchsVO, sessionInfoVO);
+                list = frnchsProdService.getProdFrnchsList(frnchsProdVO, sessionInfoVO);
 
-        return ReturnUtil.returnListJson(Status.OK, list, prodFrnchsVO);
+        return ReturnUtil.returnListJson(Status.OK, list, frnchsProdVO);
     }
-    
-    
+
+
     /**
      * 거래처 상품별 입출고내역 - 상품별 입출고내역 엑셀리스트 조회
      * @param   request
@@ -133,18 +133,18 @@ public class ProdFrnchsController {
      */
     @RequestMapping(value = "/prod/excelList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getProdFrnchsExcelList(HttpServletRequest request, HttpServletResponse response,
-        Model model, ProdFrnchsVO prodFrnchsVO) {
+    public Result getFrnchsProdExcelList(HttpServletRequest request, HttpServletResponse response,
+                                         Model model, FrnchsProdVO frnchsProdVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<String>>
-            list = prodFrnchsService.getProdFrnchsExcelList(prodFrnchsVO, sessionInfoVO);
+                list = frnchsProdService.getProdFrnchsExcelList(frnchsProdVO, sessionInfoVO);
 
-        return ReturnUtil.returnListJson(Status.OK, list, prodFrnchsVO);
+        return ReturnUtil.returnListJson(Status.OK, list, frnchsProdVO);
     }
-    
-    
+
+
     /**
      * 거래처 발주대비 입고현황 - 상품 입고현황 리스트 조회
      * @param   request
@@ -158,12 +158,12 @@ public class ProdFrnchsController {
     @RequestMapping(value = "/prodInOutstockInfo/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getProdInOutstockInfoList(HttpServletRequest request, HttpServletResponse response,
-        Model model, ProdFrnchsVO prodFrnchsVO) {
+                                            Model model, FrnchsProdVO frnchsProdVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> list = prodFrnchsService.getProdInOutstockInfoList(prodFrnchsVO, sessionInfoVO);
+        List<DefaultMap<String>> list = frnchsProdService.getProdInOutstockInfoList(frnchsProdVO, sessionInfoVO);
 
-        return ReturnUtil.returnListJson(Status.OK, list, prodFrnchsVO);
+        return ReturnUtil.returnListJson(Status.OK, list, frnchsProdVO);
     }
 }
