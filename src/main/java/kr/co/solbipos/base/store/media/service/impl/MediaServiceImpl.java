@@ -233,11 +233,13 @@ public class MediaServiceImpl implements MediaService {
                 // 파일서버 대응 경로 지정 (운영)
                 String path = BaseEnv.FILE_UPLOAD_DIR + "Media/";
                 DefaultMap<String> fileInfo = mediaMapper.dtlInfo2(mediaVO);
-                if (fileInfo.size() > 0) {
-                    // 서버 파일 삭제
-                    File delFile = new File(path + fileInfo.get("fileNm"));
-                    if (delFile.exists()) {
-                        delFile.delete();
+                if(!fileInfo.get("fileNm").equals("0000000169017628290977")){   //기준테이블바탕화면 실제파일은 삭제하지 않음
+                    if (fileInfo.size() > 0) {
+                        // 서버 파일 삭제
+                        File delFile = new File(path + fileInfo.get("fileNm"));
+                        if (delFile.exists()) {
+                            delFile.delete();
+                        }
                     }
                 }
 
@@ -457,8 +459,10 @@ public class MediaServiceImpl implements MediaService {
             String path = BaseEnv.FILE_UPLOAD_DIR + "Media/";
             String pathFull = path + mediaVO.getFileNmExt();
             File delFile = new File(pathFull);
-            if(delFile.exists()) {
-                delFile.delete();
+            if(!mediaVO.getFileNmExt().equals("0000000169017628290977")) {      //기준테이블바탕화면 실제파일은 삭제하지 않음
+                if(delFile.exists()) {
+                    delFile.delete();
+                }
             }
         }
 

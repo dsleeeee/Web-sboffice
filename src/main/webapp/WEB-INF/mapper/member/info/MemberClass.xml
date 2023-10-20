@@ -259,14 +259,14 @@
             VALUES(#{membrOrgnCd},
                    #{membrClassCd},
                    #{membrClassNm},
-                   #{dcRate},
+                   NVL(#{dcRate}, 0),
                    #{pointSaveFg},
                    #{defltYn},
-                   #{newJoinSavePoint},
-                   #{firstSaleSavePoint},
-                   #{minUsePoint},
+                   NVL(#{newJoinSavePoint}, 0),
+                   NVL(#{firstSaleSavePoint}, 0),
+                   NVL(#{minUsePoint}, 0),
                    #{anvsrPointSaveFg},
-                   #{anvsrSavePoint},
+                   NVL(#{anvsrSavePoint}, 0),
                    #{useYn},
                    #{regDt},
                    #{regId},
@@ -309,14 +309,14 @@
         <!--        </selectKey>-->
         UPDATE TB_MB_MEMBER_CLASS
         SET MEMBR_CLASS_NM = #{membrClassNm}
-        , DC_RATE = #{dcRate}
+        , DC_RATE = NVL(#{dcRate}, 0)
         , POINT_SAVE_FG = #{pointSaveFg}
         , DEFLT_YN = #{defltYn}
-        , NEW_JOIN_SAVE_POINT = #{newJoinSavePoint}
-        , FIRST_SALE_SAVE_POINT = #{firstSaleSavePoint}
-        , MIN_USE_POINT = #{minUsePoint}
+        , NEW_JOIN_SAVE_POINT = NVL(#{newJoinSavePoint}, 0)
+        , FIRST_SALE_SAVE_POINT = NVL(#{firstSaleSavePoint}, 0)
+        , MIN_USE_POINT = NVL(#{minUsePoint}, 0)
         , ANVSR_POINT_SAVE_FG = #{anvsrPointSaveFg}
-        , ANVSR_SAVE_POINT = #{anvsrSavePoint}
+        , ANVSR_SAVE_POINT = NVL(#{anvsrSavePoint}, 0)
         , USE_YN = #{useYn}
         , MOD_DT = #{modDt}
         , MOD_ID = #{modId}
