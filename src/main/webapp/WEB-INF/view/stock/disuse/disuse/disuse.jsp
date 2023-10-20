@@ -78,7 +78,7 @@
     </tbody>
   </table>
 
-  <div class="mt20">
+  <div class="mt10">
     <div class="updownSet oh mb10">
       <span class="tl s14 mt5 lh15 red">* 확정된 데이터는 삭제 하실 수 없습니다.</span>
       <%-- 삭제 --%>
@@ -90,7 +90,7 @@
 
   <div class="w100 mt10">
     <%--위즈모 테이블--%>
-    <div class="wj-gridWrap" style="height: 350px;">
+    <div class="wj-gridWrap" style="height: 450px;">
       <wj-flex-grid
               autoGenerateColumns="false"
               selection-mode="Row"

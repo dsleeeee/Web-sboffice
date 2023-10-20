@@ -70,7 +70,7 @@
       </tbody>
     </table>
 
-    <div class="mt20 oh sb-select dkbr">
+    <div class="mt10 oh sb-select dkbr">
       <%-- 엑셀 다운로드 --%>
       <button class="btn_skyblue ml5 fr" id="btnExcel" ng-click="excelDownload()">
         <s:message code="cmm.excel.down" />
@@ -86,7 +86,7 @@
 
     <%-- 그리드 --%>
     <div class="w100 mt10 mb20">
-      <div class="wj-gridWrap" style="height:380px; overflow-y: hidden; overflow-x: hidden;">
+      <div class="wj-gridWrap" style="height:420px; overflow-y: hidden; overflow-x: hidden;">
         <wj-flex-grid
                 autoGenerateColumns="false"
                 control="flex"

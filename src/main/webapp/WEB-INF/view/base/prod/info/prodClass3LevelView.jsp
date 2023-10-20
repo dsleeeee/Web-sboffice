@@ -42,7 +42,7 @@
 
     <%-- left(대분류) --%>
     <div class="wj-TblWrap mt10 mb20 w33 fl">
-        <div class="wj-TblWrapBr mr10 pd10" style="height:600px;">
+        <div class="wj-TblWrapBr mr10 pd10" style="height:550px;">
             <span class="bk lh30" id="spLevel1"><s:message code='info.prodClassLevel1' /></span>
             <div class="updownSet oh mb10 pd5" id="divBtnLevel1">
                 <span class="fl bk lh30"><s:message code='info.prodClassLevel1' /></span>
@@ -57,7 +57,7 @@
                 </button>
             </div>
             <div class="w100 mt10 mb20">
-                <div class="wj-gridWrap" style="height:422px; overflow-x: hidden; overflow-y: hidden;">
+                <div class="wj-gridWrap" style="height:450px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"
@@ -90,7 +90,7 @@
 
     <%-- mid(중분류) --%>
     <div class="wj-TblWrap mt10 mb20 w33 fl" ng-controller="prodClassLevel2Ctrl">
-        <div class="wj-TblWrapBr mr10 pd10" style="height:600px;">
+        <div class="wj-TblWrapBr mr10 pd10" style="height:550px;">
             <span class="bk lh30" id="spLevel2"><s:message code='info.prodClassLevel2' /></span>
             <div class="updownSet oh mb10 pd5" id="divBtnLevel2">
                 <span class="fl bk lh30"><s:message code='info.prodClassLevel2' /></span>
@@ -105,7 +105,7 @@
                 </button>
             </div>
             <div class="w100 mt10 mb20">
-                <div class="wj-gridWrap" style="height:422px; overflow-x: hidden; overflow-y: hidden;">
+                <div class="wj-gridWrap" style="height:450px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"
@@ -137,7 +137,7 @@
 
     <%-- right(소분류) --%>
     <div class="wj-TblWrap mt10 mb20 w33 fl" ng-controller="prodClassLevel3Ctrl">
-        <div class="wj-TblWrapBr pd10" style="height:600px;">
+        <div class="wj-TblWrapBr pd10" style="height:550px;">
             <span class="bk lh30" id="spLevel3"><s:message code='info.prodClassLevel3' /></span>
             <div class="updownSet oh mb10 pd5" id="divBtnLevel3">
                 <span class="fl bk lh30"><s:message code='info.prodClassLevel3' /></span>
@@ -152,7 +152,7 @@
                 </button>
             </div>
             <div class="w100 mt10 mb20">
-                <div class="wj-gridWrap" style="height:422px; overflow-x: hidden; overflow-y: hidden;">
+                <div class="wj-gridWrap" style="height:450px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"

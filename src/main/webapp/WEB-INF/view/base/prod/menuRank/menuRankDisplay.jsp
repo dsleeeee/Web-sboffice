@@ -25,7 +25,7 @@
 
         <%-- left --%>
         <div class="wj-TblWrap mt10 mb20 w50 fl">
-            <div class="wj-TblWrapBr mr10 pd10" style="height:470px;">
+            <div class="wj-TblWrapBr mr10 pd10" style="height:600px;">
                 <s:message code="menuRank.menuRankDisplayYn"/>
                 <div class="updownSet oh mb10" <c:if test="${orgnFg == 'HQ'}">style="display: none;"</c:if>>
                     <button class="btn_skyblue" id="btnRankUseSave" ng-click="rankUseSave()"><s:message code='cmm.save' /></button>

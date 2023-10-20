@@ -90,7 +90,7 @@
 
     <div id="gridRepresent" class="w60 fl mt10" style="width: 60%" ng-controller="representCtrl">
       <%--위즈모 테이블--%>
-      <div class="wj-TblWrapBr mr10 pd20" style="height: 480px;">
+      <div class="wj-TblWrapBr mr10 pd10" style="height: 480px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='systemCd.grpGridNm' /></span>
         </div>
@@ -137,7 +137,7 @@
 
   <div id="gridDetail" class="w40 fr mt10" style="width: 40%" ng-controller="envstRemarkCtrl">
     <%--위즈모 테이블--%>
-    <div class="wj-TblWrapBr ml10 pd20" style="height: 480px;">
+    <div class="wj-TblWrapBr pd10" style="height: 480px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='envstRemark.envstRemark' /></span>
         <button class="btn_skyblue" id="btnSaveDetail" style="display: none;" ng-click="save()">

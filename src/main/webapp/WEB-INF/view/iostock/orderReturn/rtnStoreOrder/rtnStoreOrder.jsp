@@ -103,13 +103,13 @@
     </tbody>
   </table>
 
-  <div class="mt20 oh sb-select dkbr">
+  <div class="mt10 oh sb-select dkbr">
       <button class="btn_skyblue fr" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>  <%-- 엑셀 다운로드 --%>
   </div>
 
   <div class="w100 mt10">
     <%--위즈모 테이블--%>
-    <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
+    <div class="wj-gridWrap" style="height: 420px; overflow-y: hidden; overflow-x: hidden;">
       <wj-flex-grid
         autoGenerateColumns="false"
         selection-mode="Row"

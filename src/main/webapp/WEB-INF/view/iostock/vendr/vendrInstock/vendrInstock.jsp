@@ -93,7 +93,7 @@
     </tbody>
   </table>
 
-  <div class="mt20 tr">
+  <div class="mt10 tr">
     <%-- 입고신규등록 --%>
     <button type="button" class="btn_skyblue ml5" id="btnInRegist" ng-click="newVendrInstock(1)">
       <s:message code="vendrInstock.inRegist"/></button>
@@ -104,7 +104,7 @@
 
   <div class="w100 mt10">
     <%--위즈모 테이블--%>
-    <div class="wj-gridWrap" style="height: 350px; overflow-x: hidden; overflow-y: hidden;">
+    <div class="wj-gridWrap" style="height: 450px; overflow-x: hidden; overflow-y: hidden;">
       <wj-flex-grid
         autoGenerateColumns="false"
         selection-mode="Row"

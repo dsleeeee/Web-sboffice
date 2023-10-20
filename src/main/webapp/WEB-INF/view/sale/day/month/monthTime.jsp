@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="baseUrl" value="/sale/day/month/monthTime/"/>
 
-<div id="monthTimeView" name="monthView" class="subCon" style="display: none;" ng-controller="monthTimeCtrl">
+<div id="monthTimeView" name="monthView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="monthTimeCtrl">
 
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">
@@ -120,7 +120,7 @@
 
     <%-- 그리드 --%>
     <div class="w100 mt10 mb20">
-        <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="wj-gridWrap" style="height:420px; overflow-y: hidden; overflow-x: hidden;">
             <div class="row">
                 <wj-flex-grid
                     autoGenerateColumns="false"

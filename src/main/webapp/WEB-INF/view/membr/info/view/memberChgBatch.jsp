@@ -440,10 +440,10 @@
         </tbody>
     </table>
 
-    <div class="mt20 oh sb-select dkbr">
+    <div class="mt10 oh sb-select dkbr">
         <div <c:if test="${orgnFg == 'HQ' and membrClassManageFg == '0'}">style="display: none;"</c:if>>
             <%-- 회원등급 --%>
-            <span class="fl bk lh30 ml10 mb10 mr5"><s:message code='regist.class.nm'/></span>
+            <span class="fl bk lh30 ml10 mr5"><s:message code='regist.class.nm'/></span>
             <div class="sb-select w100px fl">
                 <wj-combo-box
                         id="rMemberClass"
@@ -540,7 +540,7 @@
 
     <%-- 회원목록 그리드 --%>
     <div class="w100 mt10 mb20">
-        <div class="wj-gridWrap" style="height:310px; overflow-x: hidden; overflow-y: hidden;">
+        <div class="wj-gridWrap" style="height:400px; overflow-x: hidden; overflow-y: hidden;">
             <wj-flex-grid
                     control="flex"
                     autoGenerateColumns="false"

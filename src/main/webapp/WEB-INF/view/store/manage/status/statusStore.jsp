@@ -9,7 +9,7 @@
 <c:set var="orgnNm" value="${sessionScope.sessionInfo.orgnNm}"/>
 <c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
 
-<div id="statusStoreView" class="subCon" style="display: none;" ng-controller="statusStoreCtrl">
+<div id="statusStoreView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="statusStoreCtrl">
 
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">
@@ -139,7 +139,7 @@
         </tbody>
     </table>
 
-    <div class="mt40 oh sb-select dkbr">
+    <div class="mt10 oh sb-select dkbr">
         <%-- 페이지 스케일  --%>
         <wj-combo-box
             class="w100px fl"

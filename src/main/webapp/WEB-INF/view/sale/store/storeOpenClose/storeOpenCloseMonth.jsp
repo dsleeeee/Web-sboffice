@@ -4,7 +4,7 @@
 
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
-<div id="storeOpenCloseMonthView" class="subCon" style="display: none;">
+<div id="storeOpenCloseMonthView" class="subCon" style="display: none;padding: 10px 20px 40px;">
     <div ng-controller="storeOpenCloseMonthTimeCtrl">
     <div class="searchBar">
         <a href="#" class="open fl"><s:message code="storeOpenClose.month"/></a>
@@ -211,8 +211,8 @@
     </c:if>
     </div>
 
-    <div class="w50 fl" ng-controller="storeOpenCloseMonthCtrl">
-        <div class="wj-TblWrapBr mr10 pd20">
+    <div class="w50 mt10 fl" ng-controller="storeOpenCloseMonthCtrl">
+        <div class="wj-TblWrapBr mr10 pd10">
             <div class="updownSet oh mb10">
                 <span class="fl bk lh30"><s:message code='storeOpenClose.dayTime' /></span>
                 <%-- 엑셀다운로드 --%>
@@ -250,8 +250,8 @@
         </div>
     </div>
 
-    <div class="w50 fl" ng-controller="storeOpenCloseMonthDtlCtrl">
-        <div class="wj-TblWrapBr pd20">
+    <div class="w50 mt10 fl" ng-controller="storeOpenCloseMonthDtlCtrl">
+        <div class="wj-TblWrapBr pd10">
             <div class="updownSet oh mb10">
                 <span class="fl bk lh30"><s:message code='storeOpenClose.storeDtlList' /></span>
                 <%-- 엑셀다운로드 --%>

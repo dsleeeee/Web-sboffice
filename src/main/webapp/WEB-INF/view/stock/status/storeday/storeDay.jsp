@@ -133,7 +133,7 @@
     <input type="hidden" id="hqOfficeCd" value="${sessionInfo.hqOfficeCd}"/>
 
     <div ng-controller="storeDayMainCtrl">
-	    <div class="mt20 oh sb-select dkbr">
+	    <div class="mt10 oh sb-select dkbr">
 	      <%-- 페이지 스케일  --%>
           <wj-combo-box
             class="w100px fl"
@@ -157,7 +157,7 @@
 
 	    <%-- gird 1 --%>
 	    <div class="w100 mt10" id="wjWrapType2">
-	        <div class="wj-gridWrap">
+	        <div class="wj-gridWrap" style="height:380px;">
 	            <wj-flex-grid
 	              id="storeDayMainGrid"
 	              loaded-rows="loadedRows(s,e)"

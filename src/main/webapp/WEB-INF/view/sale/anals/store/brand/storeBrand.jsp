@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}" />
 <c:set var="baseUrl" value="/sale/anals/store/" />
 
-<div id="storeBrandView" class="subCon" ng-controller="storeBrandCtrl">
+<div id="storeBrandView" class="subCon" ng-controller="storeBrandCtrl" style="padding: 10px 20px 40px;">
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="store.brand" /></a>
 		<%-- 조회 --%>
@@ -79,7 +79,7 @@
 
 		<%--위즈모 테이블--%>
 	    <div class="w100 mt10">
-	      <div class="wj-gridWrap" style="height: 350px; overflow-x: hidden; overflow-y: hidden;">
+	      <div class="wj-gridWrap" style="height: 380px; overflow-x: hidden; overflow-y: hidden;">
 	        <wj-flex-grid
 	          id="storeBrandGrid"
 	          autoGenerateColumns="false"

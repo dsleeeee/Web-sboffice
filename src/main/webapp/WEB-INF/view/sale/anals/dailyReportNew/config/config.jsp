@@ -11,7 +11,7 @@
 <%--
 <div id="configView" class="subCon" ng-controller="configCtrl">
 --%>
-<div id="configView" class="subCon" style="display: none;">
+<div id="configView" class="subCon" style="display: none;padding: 10px 20px 40px;">
 
 	<%--
     <div class="searchBar flddUnfld">
@@ -22,7 +22,7 @@
 
 
     <div id="gridRepresent" class="w50 fl" style="width:40%" ng-controller="configCtrl_1">
-        <div class="wj-TblWrapBr mr10 pd20" style="height: 400px;">
+        <div class="wj-TblWrapBr mr10 pd10" style="height: 400px;">
 	        <div class="updownSet oh mb10">
 		        <span class="fl bk lh30"><s:message code='dailyReport.cfgPayLine' /></span>	<%-- 결재라인 --%>
 		        <button class="btn_skyblue" style="display: none;" id="btnAdd" 	ng-click="addRow()"		><s:message code="cmm.add" 		/></button>	<%-- style="display: none;"	none block inline --%>
@@ -70,7 +70,7 @@
 
 
     <div id="gridDetail" class="w50 fr" style="width:60%" ng-controller="configCtrl_2">
-        <div class="wj-TblWrapBr ml10 pd20" style="height: 700px;">
+        <div class="wj-TblWrapBr pd10" style="height: 700px;">
 	        <div class="updownSet oh mb10">
 	        <span class="fl bk lh30"><s:message code='dailyReport.cfgNm' /></span>	<%-- 영업일보 구성내역 --%>
 	        

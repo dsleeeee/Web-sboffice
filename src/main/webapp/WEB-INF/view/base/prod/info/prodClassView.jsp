@@ -21,7 +21,7 @@
   <div class="wj-TblWrap mt10">
     <%-- 왼쪽 --%>
     <div class="w50 fl">
-      <div class="wj-TblWrapBr ml10 pd10" style="height:540px;">
+      <div class="wj-TblWrapBr ml10 pd10" style="height:600px;">
         <div class="sb-select dkbr mb10 oh">
           <div class="fl">
             <%-- 전체펼치기 --%>
@@ -39,8 +39,8 @@
           </div>
         </div>
         <%--위즈모 트리--%>
-        <div class="wj-TblWrapBr pd20" style="height:470px;">
-          <div class="theTreeAll_cls" id="clsTree" class="mt20" style="height:440px;"></div>
+        <div class="wj-TblWrapBr pd20" style="height:530px;">
+          <div class="theTreeAll_cls" id="clsTree" class="mt20" style="height:500px;"></div>
         </div>
         <%--//위즈모 트리--%>
       </div>

@@ -125,8 +125,8 @@
 
     <div class="wj-TblWrap" style="overflow-y: hidden; overflow-x: hidden;">
 
-      <div class="w100 mt20" ng-controller="orderMainCtrl">
-	    <div class="mt20 oh sb-select dkbr">
+      <div class="w100 mt10" ng-controller="orderMainCtrl">
+	    <div class="mt10 oh sb-select dkbr">
 	        <%-- 페이지 스케일  --%>
 	        <wj-combo-box
 	                class="w100px fl"
@@ -202,7 +202,7 @@
 
       <div style="clear: both"></div>
 
-      <div class="w100 mt20" ng-controller="orderDtlCtrl">
+      <div class="w100 mt10" ng-controller="orderDtlCtrl">
         <div class="oh sb-select mb10 dkbr">
           <%-- 페이지 스케일  --%>
           <wj-combo-box

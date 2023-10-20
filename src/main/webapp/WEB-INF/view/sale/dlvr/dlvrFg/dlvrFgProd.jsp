@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
-<div id="dlvrFgProdView" class="subCon" ng-controller="dlvrFgProdCtrl">
+<div id="dlvrFgProdView" class="subCon" ng-controller="dlvrFgProdCtrl" style="padding: 10px 20px 40px;">
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="dlvrFg.prod"/></a>
     	<%-- 조회 --%>

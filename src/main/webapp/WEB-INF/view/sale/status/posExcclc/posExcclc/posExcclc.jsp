@@ -6,8 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="posExcclcView" class="subCon3"  ng-controller="posExcclcCtrl">
-
+<div id="posExcclcView" class="subCon3"  ng-controller="posExcclcCtrl" style="padding: 10px 20px 40px;">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="posExccl.posExcclInfo"/></a>
       <%-- 조회 --%>

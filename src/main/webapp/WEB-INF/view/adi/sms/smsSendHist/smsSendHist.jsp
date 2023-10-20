@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<div id="smsSendHistView" class="subCon" style="display: none;">
+<div id="smsSendHistView" class="subCon" style="display: none;padding: 10px 20px 40px;">
     <div ng-controller="smsSendHistCtrl">
 
         <%-- 조회조건 --%>

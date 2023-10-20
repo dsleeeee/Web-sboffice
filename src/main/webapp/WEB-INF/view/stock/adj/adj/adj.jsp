@@ -80,8 +80,8 @@
     </tbody>
   </table>
 
-  <div class="mt20">
-    <div class="updownSet oh mb10">
+  <div class="mt10">
+    <div class="updownSet oh">
       <span class="tl s14 mt5 lh15 red">* 확정된 데이터는 삭제 하실 수 없습니다.</span>
       <%-- 삭제 --%>
       <button type="button" class="btn_skyblue ml5 fr" id="btnDelete" ng-click="deleteAdj()">
@@ -92,7 +92,7 @@
 
   <div class="w100 mt10">
     <%--위즈모 테이블--%>
-    <div class="wj-gridWrap" style="height: 350px; overflow-x: hidden; overflow-y: hidden;">
+    <div class="wj-gridWrap" style="height: 450px; overflow-x: hidden; overflow-y: hidden;">
       <wj-flex-grid
               autoGenerateColumns="false"
               selection-mode="Row"

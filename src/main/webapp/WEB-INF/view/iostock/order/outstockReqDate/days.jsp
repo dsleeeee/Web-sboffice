@@ -7,7 +7,7 @@
 <c:set var="baseUrl" value="/iostock/order/outstockReqDate/days/"/>
 
 
-<div id="daysView" class="subCon" style="display: none;" ng-controller="daysCtrl">
+<div id="daysView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="daysCtrl">
   <div class="searchBar flddUnfld">
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
@@ -35,7 +35,7 @@
     </tbody>
   </table>
 
-  <div class="mt20 oh sb-select dkbr">
+  <div class="mt10 oh sb-select dkbr">
       <%-- 페이지 스케일  --%>
       <wj-combo-box
         class="w100px fl"

@@ -8,7 +8,7 @@
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
 <c:set var="baseUrl" value="/sale/day/day/dayCorner/"/>
 
-<div id="dayCornerView" name="dayView" class="subCon" style="display: none;" ng-controller="dayCornerCtrl">
+<div id="dayCornerView" name="dayView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="dayCornerCtrl">
 
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">
@@ -63,7 +63,7 @@
 
     <%-- 그리드 --%>
     <div class="w100 mt10 mb20">
-        <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="wj-gridWrap" style="height:450px; overflow-y: hidden; overflow-x: hidden;">
             <div class="row">
                 <wj-flex-grid
                     autoGenerateColumns="false"

@@ -223,7 +223,7 @@
         </table>
 
         <%-- 페이지 스케일  --%>
-        <div class="mt20 oh sb-select dkbr">
+        <div class="mt10 oh sb-select dkbr">
             <%-- 페이지 스케일  --%>
             <wj-combo-box
                 class="w100px fl"
@@ -238,8 +238,8 @@
         </div>
 
         <%-- left --%>
-        <div class="wj-TblWrap mt20 mb20 w50 fl">
-            <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
+        <div class="wj-TblWrap mt10 mb20 w50 fl">
+            <div class="wj-TblWrapBr mr10 pd10" style="height:470px;">
                 <%--배달주소지--%>
                 <s:message code="dlvr.membr.adressList"/>
                 <div class="updownSet oh mb10">
@@ -280,8 +280,8 @@
     </div>
 
     <%--right--%>
-    <div class="wj-TblWrap mt20 mb20 w50 fr" ng-controller="dlvrTelCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
+    <div class="wj-TblWrap mt10 mb20 w50 fr" ng-controller="dlvrTelCtrl">
+        <div class="wj-TblWrapBr pd10" style="height:470px; overflow-y: hidden;">
             <%--배달전화번호--%>
             <s:message code="dlvr.membr.phoneNumberList"/>
             <div class="updownSet oh mb10">

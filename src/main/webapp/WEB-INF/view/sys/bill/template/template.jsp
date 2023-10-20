@@ -57,11 +57,11 @@
     </button>
   </div>
 
-  <div class="wj-TblWrap mt40">
+  <div class="wj-TblWrap mt10">
     <%-- 템플릿 --%>
     <div class="w25 fl">
       <%--위즈모 테이블--%>
-      <div id="gridTemplate" class="wj-TblWrapBr pd20" style="height:485px;">
+      <div id="gridTemplate" class="wj-TblWrapBr pd10" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='template.gridNm' /></span>
           <button class="btn_skyblue" id="btnAddTemplate" style="display: none;" ng-click="addRow()">
@@ -101,7 +101,7 @@
 
     <%-- 코드리스트 --%>
     <div class="w20 fl">
-      <div class="wj-TblWrapBr ml10 pd20" style="height:485px;">
+      <div class="wj-TblWrapBr ml10 pd10" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='template.listNm' /></span>
         </div>
@@ -112,7 +112,7 @@
     </div>
 
     <div class="fl" style="width:325px;">
-      <div class="wj-TblWrapBr ml10 pd20 templateEdit" style="height:485px;">
+      <div class="wj-TblWrapBr ml10 pd10 templateEdit" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='template.editNm' /></span>
           <button class="btn_skyblue" id="btnSaveEditTemplate" style="display: none;" ng-click="$broadcast('saveEditTemplate')">
@@ -126,7 +126,7 @@
     </div>
 
     <div class="fl" style="width:325px;">
-      <div class="wj-TblWrapBr ml10 pd20 templateEdit" style="height:485px;">
+      <div class="wj-TblWrapBr ml10 pd10 templateEdit" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='template.viewNm' /></span>
         </div>

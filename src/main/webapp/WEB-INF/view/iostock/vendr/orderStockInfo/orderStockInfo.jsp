@@ -53,12 +53,12 @@
       </tbody>
     </table>
 
-    <div class="wj-TblWrap" style="height: 500px;">
+    <div class="wj-TblWrap" style="height: 550px;">
 
       <div class="w100 mt10">
         <div class="wj-TblWrapBr">
           <%--위즈모 테이블--%>
-          <div class="wj-gridWrap" style="height: 200px; overflow-y: hidden; overflow-x: hidden;">
+          <div class="wj-gridWrap" style="height: 250px; overflow-y: hidden; overflow-x: hidden;">
             <wj-flex-grid
               autoGenerateColumns="false"
               selection-mode="Row"
@@ -101,7 +101,7 @@
       <div class="w100 mt10" ng-controller="orderStockInfoDtlCtrl">
         <div class="wj-TblWrapBr">
           <%--위즈모 테이블--%>
-          <div class="wj-gridWrap" style="height: 200px; overflow-y: hidden; overflow-x: hidden;">
+          <div class="wj-gridWrap" style="height: 250px; overflow-y: hidden; overflow-x: hidden;">
             <wj-flex-grid
               autoGenerateColumns="false"
               selection-mode="Row"

@@ -7,7 +7,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<div class="con" id="apprAcquireView" name="apprAcquireView" ng-controller="apprAcquireCtrl" ng-init="init()" style="display: none;">
+<div class="con" id="apprAcquireView" name="apprAcquireView" ng-controller="apprAcquireCtrl" ng-init="init()" style="display: none;padding: 10px 30px 0px;">
     <div class="tabType1">
         <ul>
             <%-- 신용카드 --%>

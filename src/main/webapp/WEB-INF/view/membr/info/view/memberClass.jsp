@@ -189,9 +189,9 @@
                 </tbody>
             </table>
 
-            <div class="wj-TblWrap mt20 mb20 w70 fl">
+            <div class="wj-TblWrap mt10 mb20 w70 fl">
                 <%--위즈모 테이블--%>
-                <div class="wj-TblWrapBr mr10 pd20" style="height: 470px; overflow-y: hidden;">
+                <div class="wj-TblWrapBr mr10 pd10" style="height: 470px; overflow-y: hidden;">
                     <div class="updownSet oh mb10">
                         <span class="fl bk lh30 mr10"><s:message code='grade.membr.orgn.list'/></span>
                         <%--삭제--%>
@@ -232,9 +232,9 @@
             </div>
         </div>
 
-        <div class="wj-TblWrap mt20 mb20 w30 fr" ng-controller="memberClassDetailCtrl">
+        <div class="wj-TblWrap mt10 mb20 w30 fr" ng-controller="memberClassDetailCtrl">
             <%--위즈모 테이블--%>
-            <div class="wj-TblWrapBr ml10 pd20" style="height: 470px; overflow-y: hidden;">
+            <div class="wj-TblWrapBr pd10" style="height: 470px; overflow-y: hidden;">
                 <div class="updownSet oh mb10" ng-switch="classData.pointSaveFg">
                     <span class="fl bk lh30 mr10" ng-switch-default><s:message code='grade.membr.point.list.rate'/></span>
                     <span class="fl bk lh30 mr10" ng-switch-when="1"><s:message code='grade.membr.point.list.rate'/></span>

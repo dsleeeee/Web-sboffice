@@ -7,7 +7,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="baseUrl" value="/sale/day/day/dayTable/"/>
 
-<div id="dayTableView" name="dayView" class="subCon" style="display: none;" ng-controller="dayTableCtrl">
+<div id="dayTableView" name="dayView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="dayTableCtrl">
 
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">

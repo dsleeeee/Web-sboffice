@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="rtnStatusBillView" class="subCon"  ng-controller="rtnStatusBillCtrl">
+<div id="rtnStatusBillView" class="subCon"  ng-controller="rtnStatusBillCtrl" style="padding: 10px 20px 40px;">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="rtnStatus.rtnBill"/></a>
       <%-- 조회 --%>

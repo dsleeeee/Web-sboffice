@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<div id="marketingSmsSendView" style="display: none;">
+<div id="marketingSmsSendView" style="display: none;padding: 10px 20px 40px;">
 
     <%--<div class="contents" id ="divSmsSendPageAuth" style="display: none;">--%>
         <%--<div class="elseCon">--%>

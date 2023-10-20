@@ -54,17 +54,17 @@
   </table>
 
 <c:if test="${isManager}">
-  <div class="mt20 tr">
+  <div class="mt10 tr">
     <button id="btnRegist" class="btn_skyblue"><s:message code="ehgt.btnCrncyRegist" /><%--통화구분등록--%></button>
   </div>
 </c:if>
 
 <c:if test="${isManager}">
   <%--2단--%>
-  <div class="wj-TblWrap mt20 oh">
+  <div class="wj-TblWrap mt10 oh">
     <%--left--%>
     <div class="w50 fl">
-      <div class="wj-TblWrapBr mr10" style="height:400px;">
+      <div class="wj-TblWrapBr mr10" style="height:500px;">
         <h3 class="h3_tbl2 pdt5 lh30">
             <s:message code="ehgt.labelCrncyNew" />
             <span class="fr"><a id="btnSave" href="#" class="btn_grayS"><s:message code="cmm.save"/></a></span>
@@ -105,7 +105,7 @@
 
     <%--right--%>
     <div class="w50 fr">
-      <div class="wj-TblWrapBr ml10" style="height:400px; overflow-x: hidden; overflow-y: hidden;">
+      <div class="wj-TblWrapBr ml10" style="height:500px; overflow-x: hidden; overflow-y: hidden;">
         <%--위즈모 테이블--%>
         <div id="theGrid" style="overflow-y: auto;"></div>
         <%--//위즈모 테이블--%>
@@ -119,7 +119,7 @@
 <c:if test="${not isManager}">
 
   <%--위즈모 테이블--%>
-  <div class="wj-TblWrapBr mt10" style="height:400px;">
+  <div class="wj-TblWrapBr mt10" style="height:500px;">
     <div id="theGrid" class="pd20"></div>
   </div>
   <%--//위즈모 테이블--%>

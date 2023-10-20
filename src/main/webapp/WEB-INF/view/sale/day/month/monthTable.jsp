@@ -7,7 +7,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="baseUrl" value="/sale/day/month/monthTable/"/>
 
-<div id="monthTableView" name="monthView" class="subCon" style="display: none;" ng-controller="monthTableCtrl">
+<div id="monthTableView" name="monthView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="monthTableCtrl">
 
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">

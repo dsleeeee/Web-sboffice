@@ -144,7 +144,7 @@
     </tbody>
   </table>
 
-   <div class="w100 mt20" ng-controller="slipMainCtrl">
+   <div class="w100 mt10" ng-controller="slipMainCtrl">
      <div class="oh sb-select dkbr mb10">
          <%-- 페이지 스케일  --%>
          <wj-combo-box

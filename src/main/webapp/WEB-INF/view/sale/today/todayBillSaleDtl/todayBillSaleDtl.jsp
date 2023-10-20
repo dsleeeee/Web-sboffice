@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sale/today/todayBillSaleDtl/todayBillSaleDtl/"/>
 
-<div id="todayBillSaleDtlView" class="subCon" style="display: none;">
+<div id="todayBillSaleDtlView" class="subCon" style="display: none;padding: 10px 20px 40px;">
   <div ng-controller="todayBillSaleDtlCtrl">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="todayBillSaleDtl.billSale"/></a>

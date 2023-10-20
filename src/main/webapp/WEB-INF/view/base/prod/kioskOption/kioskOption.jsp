@@ -129,7 +129,7 @@
         <div class="wj-TblWrap mt10 mb20 w40 fl">
             <div class="wj-TblWrapBr mr10 pd10" style="height:470px;">
                 <div class="w100 mt10 mb20">
-                    <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
+                    <div class="wj-gridWrap" style="height:420px; overflow-y: hidden; overflow-x: hidden;">
                         <div class="row">
                             <wj-flex-grid
                                 autoGenerateColumns="false"
@@ -179,7 +179,7 @@
 
             </div>
             <div class="w100 mt10 mb20">
-                <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
+                <div class="wj-gridWrap" style="height:400px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
                         autoGenerateColumns="false"
                         control="flex"

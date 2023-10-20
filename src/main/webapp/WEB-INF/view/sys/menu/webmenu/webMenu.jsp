@@ -38,7 +38,7 @@
 
     <%-- 왼쪽 메뉴 트리 --%>
     <div class="w30 fl">
-      <div class="wj-TblWrapBr mr10 pd20" style="height: 500px;">
+      <div class="wj-TblWrapBr mr10 pd10" style="height: 500px;">
 
         <div class="sb-select dkbr mb10 oh">
           <div id="theComboBox3" class="w130px fl"></div>
@@ -60,7 +60,7 @@
 
     <%-- 오른쪽 메뉴 정보 --%>
     <div class="w70 fr">
-      <div class="wj-TblWrapBr ml10 pd20" style="height: 500px;">
+      <div class="wj-TblWrapBr pd10" style="height: 500px;">
 
         <div class="tr mb10">
           <%-- 삭제 버튼 --%>

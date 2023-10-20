@@ -2,7 +2,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<div id="storeOpenCloseDayView" class="subCon">
+<div id="storeOpenCloseDayView" class="subCon" style="padding: 10px 20px 40px;">
     <div ng-controller="storeOpenCloseDayTimeCtrl">
     <div class="searchBar">
         <a href="#" class="open fl"><s:message code="storeOpenClose.day"/></a>
@@ -213,8 +213,8 @@
     </c:if>
     </div>
 
-    <div class="w40 fl" ng-controller="storeOpenCloseDayCtrl">
-        <div class="wj-TblWrapBr mr10 pd20">
+    <div class="w40 mt10 fl" ng-controller="storeOpenCloseDayCtrl">
+        <div class="wj-TblWrapBr mr10 pd10">
             <div class="updownSet oh mb10">
                 <span class="fl bk lh30"><s:message code='storeOpenClose.dayTime' /></span>
                 <%-- 엑셀다운로드 --%>
@@ -255,8 +255,8 @@
         </div>
     </div>
 
-    <div class="w60 fl" ng-controller="storeOpenCloseDayDtlCtrl">
-        <div class="wj-TblWrapBr pd20">
+    <div class="w60 mt10 fl" ng-controller="storeOpenCloseDayDtlCtrl">
+        <div class="wj-TblWrapBr pd10">
             <div class="updownSet oh mb10">
                 <span class="fl bk lh30"><s:message code='storeOpenClose.storeDtlList' /></span>
                 <%-- 엑셀다운로드 --%>

@@ -208,7 +208,7 @@
         </tbody>
     </table>
 
-  <div class="mt20 oh sb-select dkbr">
+  <div class="mt10 oh sb-select dkbr">
     <div class="tr">
       <%-- 신규등록 --%>
       <button class="btn_skyblue" ng-click="addStoreSaleArea()"><s:message code="cmm.new.add" /></button>
@@ -217,7 +217,7 @@
 
  <%-- 위즈모 테이블 --%>
   <div class="wj-TblWrap mt10">
-    <div class="wj-gridWrap" style="height: 400px; overflow-x: hidden; overflow-y: hidden;">
+    <div class="wj-gridWrap" style="height: 450px; overflow-x: hidden; overflow-y: hidden;">
         <wj-flex-grid
           control="flex"
           autoGenerateColumns="false"

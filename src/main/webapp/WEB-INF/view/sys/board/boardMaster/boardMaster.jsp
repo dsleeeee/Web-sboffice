@@ -22,8 +22,8 @@
     </div>
 
     <%-- 그리드 --%>
-    <div class="mt20 mb40">
-        <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
+    <div class="mt10 mb40">
+        <div class="wj-TblWrapBr pd10" style="height:470px;">
             <div class="updownSet oh mb10">
                 <button class="btn_skyblue" id="btnCouponAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
                 <button class="btn_skyblue" id="btnCouponDel" ng-click="del()"><s:message code='cmm.del' /></button>

@@ -24,7 +24,7 @@
 <div id="reportView" class="subCon">
     <div class="searchBar flddUnfld" ng-controller="reportCtrl">
 --%>
-<div id="reportView" class="subCon"  style="display: none;">
+<div id="reportView" class="subCon"  style="display: none;padding: 10px 20px 40px;">
 	<div class="div_sort_class" data-sort="0">
 	    <div class="searchBar flddUnfld" ng-controller="reportCtrl" ng-init="init()">
 	        <a href="#" class="open fl">${menuNm}</a>
@@ -100,7 +100,7 @@
 	<div id="div_sort_id_SL" class="div_sort_class" data-sort="1">
 		<div><br></div>
 	    <div class="w100 mt10 flddUnfld_sl" ng-controller="reportCtrl_sl">
-			<div class="oh mb10">
+			<div class="oh ">
 	        	<s:message code='dailyReport.sl'/>
 			</div>
 			<div id="div_SL">
@@ -147,7 +147,7 @@
 	<div id="div_sort_id_PAY" class="div_sort_class" data-sort="2" >
 		<div><br></div>
 	    <div class="w100 mt10 flddUnfld_pay" ng-controller="reportCtrl_pay">
-			<div class="oh mb10">
+			<div class="oh ">
 	        	<span id="span_PAY"><s:message code='dailyReport.pay'/></span>
 			</div>
 			<div id="div_PAY">
@@ -203,7 +203,7 @@
 	<div id="div_sort_id_NSL" class="div_sort_class" data-sort="3">
 		<div><br></div>
 	    <div class="w100 mt10 flddUnfld_nsl" ng-controller="reportCtrl_nsl">
-			<div class="oh mb10">
+			<div class="oh ">
 	        	<span id="span_NSL"><s:message code='dailyReport.nsl'/></span>
 			</div>
 			<div id="div_NSL">
@@ -246,7 +246,7 @@
 	<div id="div_sort_id_NPAY" class="div_sort_class" data-sort="4">
 		<div><br></div>
 	    <div class="w100 mt10 flddUnfld_npay" ng-controller="reportCtrl_npay">
-			<div class="oh mb10">
+			<div class="oh ">
 	        	<span id="span_NPAY"><s:message code='dailyReport.npay'/></span>
 			</div>
 			<div id="div_NPAY">
@@ -284,7 +284,7 @@
 	<div id="div_sort_id_POS" class="div_sort_class" data-sort="5">
 		<div><br></div>
 	    <div class="w100 mt10 flddUnfld_pos" ng-controller="reportCtrl_pos">
-			<div class="oh mb10">
+			<div class="oh ">
 	        	<span id="span_POS"><s:message code='dailyReport.pos'/></span>
 			</div>
 			<div id="div_POS">
@@ -324,7 +324,7 @@
 	<div id="div_sort_id_EMP" class="div_sort_class" data-sort="6">
 		<div><br></div>
 	    <div class="w100 mt10 flddUnfld_emp" ng-controller="reportCtrl_emp">
-			<div class="oh mb10">
+			<div class="oh ">
 	        	<span id="span_EMP"><s:message code='dailyReport.emp'/></span>
 			</div>
 			<div id="div_EMP">
@@ -369,7 +369,7 @@
 	<div id="div_sort_id_DC" class="div_sort_class" data-sort="7">
 		<div><br></div>
 	    <div class="w100 mt10 flddUnfld_dc" ng-controller="reportCtrl_dc">
-			<div class="oh mb10">
+			<div class="oh ">
 	        	<span id="span_DC"><s:message code='dailyReport.dc'/></span>
 			</div>
 			<div id="div_DC">
@@ -410,7 +410,7 @@
 	<div id="div_sort_id_DCDTL" class="div_sort_class" data-sort="8">
 		<div><br></div>
 	    <div class="w100 mt10 flddUnfld_dcdtl" ng-controller="reportCtrl_dcdtl">
-			<div class="oh mb10">
+			<div class="oh ">
 	        	<span id="span_DCDTL"><s:message code='dailyReport.dcdtl'/></span>
 			</div>
 			<div id="div_DCDTL">
@@ -451,7 +451,7 @@
 	<div id="div_sort_id_GIFT" class="div_sort_class" data-sort="9">
 		<div><br></div>
 	    <div class="w100 mt10 flddUnfld_gift" ng-controller="reportCtrl_gift">
-			<div class="oh mb10">
+			<div class="oh ">
 	        	<span id="span_GIFT"><s:message code='dailyReport.gift'/></span>
 			</div>
 			<div id="div_GIFT">
@@ -500,7 +500,7 @@
 	<div id="div_sort_id_ORDER" class="div_sort_class" data-sort="10">
 		<div><br></div>
 	    <div class="w100 mt10 flddUnfld_order" ng-controller="reportCtrl_order">
-			<div class="oh mb10">
+			<div class="oh ">
 	        	<span id="span_ORDER"><s:message code='dailyReport.order'/></span>
 			</div>
 			<div id="div_ORDER">
@@ -541,7 +541,7 @@
 	<div id="div_sort_id_LV1" class="div_sort_class" data-sort="11">
 		<div><br></div>
 	    <div class="w100 mt10 flddUnfld_lv1" ng-controller="reportCtrl_lv1">
-			<div class="oh mb10">
+			<div class="oh ">
 	        	<span id="span_LV1"><s:message code='dailyReport.lv1'/></span>
 			</div>
 			<div id="div_LV1">
@@ -580,7 +580,7 @@
 	<div id="div_sort_id_LV2" class="div_sort_class" data-sort="12">
 		<div><br></div>
 	    <div class="w100 mt10 flddUnfld_lv2" ng-controller="reportCtrl_lv2">
-			<div class="oh mb10">
+			<div class="oh ">
 	        	<span id="span_LV2"><s:message code='dailyReport.lv2'/></span>
 			</div>
 			<div id="div_LV2">
@@ -619,7 +619,7 @@
 	<div id="div_sort_id_LV3" class="div_sort_class" data-sort="13">
 		<div><br></div>
 	    <div class="w100 mt10 flddUnfld_lv3" ng-controller="reportCtrl_lv3">
-			<div class="oh mb10">
+			<div class="oh ">
 	        	<span id="span_LV3"><s:message code='dailyReport.lv3'/></span>
 			</div>
 			<div id="div_LV3">
@@ -658,7 +658,7 @@
 	<div id="div_sort_id_PROD" class="div_sort_class" data-sort="14">
 		<div><br></div>
 	    <div class="w100 mt10 flddUnfld_prod" ng-controller="reportCtrl_prod">
-			<div class="oh mb10">
+			<div class="oh ">
 	        	<span id="span_PROD"><s:message code='dailyReport.prod'/></span>
 			</div>
 			<div id="div_PROD">
@@ -694,7 +694,7 @@
 	<div id="div_sort_id_COMPT" class="div_sort_class" data-sort="15">
 		<div><br></div>
 	    <div class="w100 mt10 flddUnfld_compt" ng-controller="reportCtrl_compt">
-			<div class="oh mb10">
+			<div class="oh ">
 	        	<span id="span_COMPT"><s:message code='dailyReport.compt'/></span>
 			</div>
 			<div id="div_COMPT">
@@ -729,7 +729,7 @@
 	<div id="div_sort_id_APPR" class="div_sort_class" data-sort="16">
 		<div><br></div>
 	    <div class="w100 mt10 flddUnfld_appr" ng-controller="reportCtrl_appr">
-			<div class="oh mb10">
+			<div class="oh ">
 	        	<span id="span_APPR"><s:message code='dailyReport.appr'/></span>
 			</div>
 			<div id="div_APPR">
@@ -796,7 +796,7 @@
 	<div id="div_sort_id_MEMBR" class="div_sort_class" data-sort="17">
 		<div><br></div>
 	    <div class="w100 mt10 flddUnfld_membr" ng-controller="reportCtrl_membr">
-			<div class="oh mb10">
+			<div class="oh ">
 	        	<span id="span_MEMBR"><s:message code='dailyReport.membr'/></span>
 			</div>
 			<div id="div_MEMBR">
@@ -838,7 +838,7 @@
 	<div id="div_sort_id_WORK" class="div_sort_class" data-sort="18">
 		<div><br></div>
 	    <div class="w100 mt10 flddUnfld_work" ng-controller="reportCtrl_work">
-			<div class="oh mb10">
+			<div class="oh ">
 	        	<span id="span_WORK"><s:message code='dailyReport.work'/></span>
 			</div>
 			<div id="div_WORK">

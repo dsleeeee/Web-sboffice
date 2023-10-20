@@ -102,7 +102,7 @@
       </table>
     <%--//searchTbl--%>
 
-    <div class="mt20 tr">
+    <div class="mt10 tr">
         <%-- 엑셀 다운로드 --%>
         <button type="button" class="btn_skyblue ml5" ng-click="excelDownload()">
             <s:message code="cmm.excel.down"/>
@@ -111,7 +111,7 @@
 
     <%--위즈모 테이블--%>
     <div class="wj-TblWrapBr mt10">
-      <div class="wj-gridWrap" style="height: 370px;">
+      <div class="wj-gridWrap" style="height: 450px;">
         <wj-flex-grid
                 autoGenerateColumns="false"
                 control="flex"

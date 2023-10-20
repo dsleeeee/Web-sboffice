@@ -7,7 +7,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="baseUrl" value="/sale/anals/store/" />
 
-<div id="storeFgView" class="subCon" ng-controller="storeFgCtrl">
+<div id="storeFgView" class="subCon" ng-controller="storeFgCtrl" style="padding: 10px 20px 40px;">
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="store.fg" /></a>
 		<%-- 조회 --%>
@@ -90,7 +90,7 @@
 
 		<%--위즈모 테이블--%>
 	    <div class="w100 mt10">
-	      <div class="wj-gridWrap" style="height: 350px; overflow-x: hidden; overflow-y: hidden;">
+	      <div class="wj-gridWrap" style="height: 380px; overflow-x: hidden; overflow-y: hidden;">
 	        <wj-flex-grid
 	          id="storeFgGrid"
 	          autoGenerateColumns="false"

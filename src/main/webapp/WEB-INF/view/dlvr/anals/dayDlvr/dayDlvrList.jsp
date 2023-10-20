@@ -29,10 +29,8 @@
     </div>
     <table class="searchTbl">
         <colgroup>
-            <col class="w5"/>
             <col class="w30"/>
-            <col class="w5"/>
-            <col class="w25"/>
+            <col class="w70"/>
         </colgroup>
         <tbody>
         <tr>
@@ -42,26 +40,25 @@
             </th>
             <td>
                 <div class="sb-select">
-                    <span class="txtIn"> <input id="startDate" name="startDate" class="w200px"/></span>
+                    <span class="txtIn"><input id="startDate" name="startDate" class="w110px"/></span>
                     <span class="rg">~</span>
-                    <span class="txtIn"> <input id="endDate" name="endDate" class="w200px"/></span>
+                    <span class="txtIn"> <input id="endDate" name="endDate" class="w110px"/></span>
                 </div>
             </td>
-            <td></td>
         </tr>
         </tbody>
     </table>
 
 
     <%-- 그리드 left --%>
-    <div class="w50 fl mt40 mb20" style="width: 38%">
+    <div class="w50 fl mt10 mb20" style="width: 38%">
         <div class="oh sb-select dkbr">
             <%-- 엑셀G 버튼 --%>
             <button class="btn_skyblue ml5 fr" id="save" ng-click="leftExcelDownload()">
                 <s:message code="cmm.excel.down"/>
             </button>
         </div>
-        <div class="wj-TblWrapBr mt10 ml10 pd20" style="height: 600px;">
+        <div class="wj-TblWrapBr mt10 ml10 pd10" style="height: 600px;">
             <div class="wj-gridWrap" style="height:480px; overflow-y: hidden;">
                 <div class="row">
                     <wj-flex-grid
@@ -119,13 +116,13 @@
 <div ng-controller="dayDlvrDtlCtrl">
     <%--right--%>
     <%-- 그리드 right --%>
-    <div class="w50 fl mb20" style="width: 60%">
+    <div class="w50 fl mb20" style="width: 60%; margin-top: -30px;">
         <div class="oh sb-select dkbr">
             <button class="btn_skyblue ml5 fr" id="save" ng-click="rightExcelDownload()">
                 <s:message code="cmm.excel.down"/>
             </button>
         </div>
-        <div class="wj-TblWrapBr mt10 ml10 pd20" style="height: 600px;">
+        <div class="wj-TblWrapBr mt10 ml10 pd10" style="height: 600px;">
             <div class="wj-gridWrap" style="height:480px; overflow-y: hidden;">
                 <div class="row">
                     <wj-flex-grid

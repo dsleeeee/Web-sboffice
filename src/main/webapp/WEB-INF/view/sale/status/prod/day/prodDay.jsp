@@ -8,7 +8,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="baseUrl" value="/sale/status/prod/day/prodDay/"/>
 
-<div id="prodDayView" class="subCon" style="display: none;">
+<div id="prodDayView" class="subCon" style="display: none;padding: 10px 20px 40px;">
 	<div ng-controller="prodDayCtrl">
 		<div class="searchBar flddUnfld">
 			<a href="#" class="open fl"><s:message code="prodsale.day"/></a>
@@ -112,7 +112,7 @@
 
 		<%--위즈모 테이블--%>
 	    <div id="wjWrapType1" class="w100 mt10">
-	      <div class="wj-gridWrap">
+	      <div class="wj-gridWrap" style="height: 350px;">
 	        <wj-flex-grid
 	          autoGenerateColumns="false"
 	          control="flex"

@@ -9,7 +9,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 <c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
 
-<div id="runSaleStoreListView" class="subCon" style="display: none;" ng-controller="runSaleStoreListCtrl">
+<div id="runSaleStoreListView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="runSaleStoreListCtrl">
 
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">

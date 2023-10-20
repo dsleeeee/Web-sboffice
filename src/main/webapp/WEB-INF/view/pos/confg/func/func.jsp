@@ -12,7 +12,7 @@
   <div class="wj-TblWrap">
     <%-- 기능구분 --%>
     <div class="w25 fl" style="" ng-controller="funcFgCtrl">
-      <div class="wj-TblWrapBr mr10 pd20" >
+      <div class="wj-TblWrapBr mr10 pd10" >
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='func.funFg' /></span>
           <button class="btn_skyblue" id="btnDefaultFunc" ng-click="defaultFunc()">
@@ -43,7 +43,7 @@
 
     <%-- 기능 --%>
     <div class="w75 fr" ng-controller="funcCtrl">
-      <div class="wj-TblWrapBr ml10 pd20" style="overflow-y: hidden; overflow-x: hidden;">
+      <div class="wj-TblWrapBr ml10 pd10" style="overflow-y: hidden; overflow-x: hidden;">
 
         <%-- 등록 수정등은 시스템 계정에서만 가능 --%>
         <c:if test="${orgnFg == 'MASTER'}">

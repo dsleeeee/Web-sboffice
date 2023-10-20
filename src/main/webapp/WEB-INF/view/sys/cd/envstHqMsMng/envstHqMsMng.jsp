@@ -40,8 +40,8 @@
       </tbody>
     </table>
 
-    <div class="wj-TblWrap mt20 mb20 w50 fl">
-      <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
+    <div class="wj-TblWrap mt10 mb20 w50 fl">
+      <div class="wj-TblWrapBr mr10 pd10" style="height:470px;">
         <span><s:message code="envstHqMsMng.regEnvst" /></span>
         <button class="btn_skyblue ml5 fr" ng-click="del()"><s:message code="cmm.del" /></button>
         <%-- 버전 수신현황 그리드 --%>
@@ -75,8 +75,8 @@
     </div>
   </div>
 
-  <div class="wj-TblWrap mt20 mb20 w50 fr" ng-controller="noRegEnvstCtrl">
-    <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
+  <div class="wj-TblWrap mt10 mb20 w50 fr" ng-controller="noRegEnvstCtrl">
+    <div class="wj-TblWrapBr pd10" style="height:470px; overflow-y: hidden;">
       <div class="sb-select dkbr mb10 oh">
         <s:message code="envstHqMsMng.noRegEnvst"/>
         <button class="btn_skyblue ml5 fr" ng-click="save()"><s:message code="cmm.add"/></button>

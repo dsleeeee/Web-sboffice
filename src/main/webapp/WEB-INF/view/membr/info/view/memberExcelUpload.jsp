@@ -56,7 +56,7 @@
     </ul>
     <%-- 콤보 리스트 --%>
     <s:message code="member.excel.combo.list"/>
-    <div class="w100 mt10 mb20">
+    <div class="w100 mt10 mb10">
         <div class="wj-gridWrap wj-control wj-content wj-flexgrid">
             <wj-flex-grid
                 autoGenerateColumns="false"

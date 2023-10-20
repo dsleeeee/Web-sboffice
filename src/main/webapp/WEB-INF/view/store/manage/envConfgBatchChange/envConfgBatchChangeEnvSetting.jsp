@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-  <div id="envConfgBatchChangeEnvSettingView" class="subCon" style="display: none;">
+  <div id="envConfgBatchChangeEnvSettingView" class="subCon" style="display: none;padding: 10px 20px 40px;">
 <div ng-controller="envConfgBatchChangeEnvSettingCtrl">
   <div class="searchBar flddUnfld">
     <a href="#" class="open fl">${menuNm}</a>
@@ -78,7 +78,7 @@
     </table>
 
     <%-- 조회 --%>
-    <div class="mt20 oh">
+    <div class="mt10 oh">
       <%--환경변수값--%>
 <%--      <div class="sb-select dkbr ml5 fl" id="divTextFnkeyVal">--%>
 <%--        <input type="text" class="sb-input w150px" id="srchFnkeyVal" ng-model="envSettingVal" />--%>
@@ -113,7 +113,7 @@
 
     <div id="gridRepresent" class="w60 fl mt10" style="width: 60%" >
       <%--위즈모 테이블--%>
-      <div class="wj-TblWrapBr mr10 pd20" style="height: 480px;">
+      <div class="wj-TblWrapBr mr10 pd10" style="height: 480px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='systemCd.grpGridNm' /></span>
         </div>
@@ -158,7 +158,7 @@
 </div>
   <div id="gridDetail" class="w40 fr mt10" style="width: 40%" ng-controller="detailCtrl">
     <%--위즈모 테이블--%>
-    <div class="wj-TblWrapBr ml10 pd20" style="height: 480px;">
+    <div class="wj-TblWrapBr ml10 pd10" style="height: 480px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='systemCd.gridNm' /></span>
       </div>

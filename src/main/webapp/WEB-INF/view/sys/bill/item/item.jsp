@@ -19,9 +19,9 @@
     </div>
   </div>
 
-  <div class="w100 fl mt40 mb20">
+  <div class="w100 fl mt10 mb20">
     <%--위즈모 테이블--%>
-    <div id="gridPrintCode" class="wj-TblWrapBr mr10 pd20" style="height: 480px;">
+    <div id="gridPrintCode" class="wj-TblWrapBr mr10 pd10" style="height: 480px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='item.gridNm' /></span>
         <button class="btn_skyblue" id="btnAdd" style="display: none;" ng-click="addRow()">

@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sale/today/todayDtl/todayDtl/"/>
 
-  <div id="todayDtlView" class="subCon" style="display: none;" ng-controller="todayDtlCtrl">
+  <div id="todayDtlView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="todayDtlCtrl">
       <div class="searchBar flddUnfld">
         <a href="#" class="open fl"><s:message code="todayDtl.todaySaleDtl"/></a>
         <%-- 조회 --%>

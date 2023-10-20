@@ -143,7 +143,7 @@
 
   <%-- 매장목록 그리드 --%>
   <div class="w100 mt10 mb20">
-    <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
+    <div class="wj-gridWrap" style="height:450px; overflow-x: hidden; overflow-y: hidden;">
       <wj-flex-grid
               control="flex"
               autoGenerateColumns="false"

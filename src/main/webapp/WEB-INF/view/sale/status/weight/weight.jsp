@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
 
-<div class="subCon" ng-controller="weightCtrl" id="weightView" style="display: none;">
+<div class="subCon" ng-controller="weightCtrl" id="weightView" style="display: none;padding: 10px 20px 40px;">
 
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">

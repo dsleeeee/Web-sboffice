@@ -36,7 +36,7 @@
     </tbody>
   </table>
 
-  <ul class="txtSty2 mt10 pdb20 bb">
+  <ul class="txtSty2 mt10 pdb10 bb">
     <li class="red">
       <s:message code="loan.info1"/>(개발중)<br>
       <p>
@@ -59,7 +59,7 @@
     </li>
   </ul>
 
-  <div class="mt20 oh sb-select dkbr">
+  <div class="mt10 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <wj-combo-box
       class="w100px fl"

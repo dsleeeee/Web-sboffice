@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="goalDayView" class="subCon3"  ng-controller="goalDayCtrl">
+<div id="goalDayView" class="subCon3"  ng-controller="goalDayCtrl" style="padding: 10px 20px 40px;">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="goal.goalDay.versusGoalSaleAnals"/></a>
       <%-- 조회 --%>

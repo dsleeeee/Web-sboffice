@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="rtnStatusProdView" class="subCon3" style="display: none;" ng-controller="rtnStatusProdCtrl">
+<div id="rtnStatusProdView" class="subCon3" style="display: none;padding: 10px 20px 40px;" ng-controller="rtnStatusProdCtrl">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="rtnStatus.prod"/></a>
       <%-- 조회 --%>
@@ -89,7 +89,7 @@
             <button class="btn_skyblue fr" ng-click="excelDownloadDay()"><s:message code="cmm.excel.down" />
             </button>
         </div>
-        <div class="wj-gridWrap2 mt20">
+        <div class="wj-gridWrap2 mt10">
             <wj-flex-grid
                 id="rtnStatusProdGrid"
                 autoGenerateColumns="false"

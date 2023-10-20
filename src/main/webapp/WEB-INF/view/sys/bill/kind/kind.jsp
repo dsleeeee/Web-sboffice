@@ -19,10 +19,10 @@
     </div>
   </div>
 
-  <div class="wj-TblWrap mt40">
+  <div class="wj-TblWrap mt10">
     <div class="w50 fl">
       <%--위즈모 테이블--%>
-      <div id="gridPrint" class="wj-TblWrapBr mr10 pd20" style="height: 480px;" ng-controller="printCtrl">
+      <div id="gridPrint" class="wj-TblWrapBr mr10 pd10" style="height: 480px;" ng-controller="printCtrl">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='kind.gridNm' /></span>
           <button class="btn_skyblue" id="btnAddPrint" style="display: none;" ng-click="addRow()">
@@ -63,7 +63,7 @@
 
     <div class="w50 fl">
       <%--위즈모 테이블--%>
-      <div id="gridMapng" class="wj-TblWrapBr ml10 pd20" style="height: 480px;" ng-controller="mapngCtrl">
+      <div id="gridMapng" class="wj-TblWrapBr pd10" style="height: 480px;" ng-controller="mapngCtrl">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='kind.gridMapngNm' /></span>
           <button class="btn_up" id="btnUpMapng" style="display: none;" ng-click="rowMoveUp()">
