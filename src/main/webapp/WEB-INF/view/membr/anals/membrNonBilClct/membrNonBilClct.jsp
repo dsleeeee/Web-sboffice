@@ -60,8 +60,8 @@
         </table>
 
         <%--left--%>
-        <div class="wj-TblWrap mt20 mb20 w60 fl">
-            <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
+        <div class="wj-TblWrap mt10 mb20 w60 fl">
+            <div class="wj-TblWrapBr mr10 pd10" style="height:470px;">
                 <div class="updownSet oh mb10">
                     <%-- 엑셀다운로드 --%>
                     <button class="btn_skyblue ml5 fr" id="leftExcel" ng-click="excelDownload()">
@@ -96,8 +96,8 @@
     </div>
 
     <%--right--%>
-    <div class="wj-TblWrap mt20 mb20 w40 fr" ng-controller="membrNonBilClctDetailCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
+    <div class="wj-TblWrap mt10 mb20 w40 fr" ng-controller="membrNonBilClctDetailCtrl">
+        <div class="wj-TblWrapBr pd10" style="height:470px; overflow-y: hidden;">
             <div class="updownSet oh mb10">
                 <%-- 엑셀다운로드 --%>
                 <button class="btn_skyblue ml5 fr" id="rigthExcel" ng-click="excelDownload()">

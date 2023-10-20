@@ -65,7 +65,7 @@
     </tbody>
   </table>
 
-  <div class="mt40 oh sb-select dkbr">
+  <div class="mt10 oh sb-select dkbr">
     <%--페이지 스케일 --%>
     <div id="listScaleBox" class="w100px fl"></div>
     <div class="tr">

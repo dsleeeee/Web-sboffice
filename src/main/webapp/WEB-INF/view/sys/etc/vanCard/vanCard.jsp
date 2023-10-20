@@ -19,9 +19,9 @@
     </div>
   </div>
 
-  <div id="gridVan" class="w70 fl mt40" style="width: 60%" ng-controller="vanCtrl">
+  <div id="gridVan" class="w70 fl mt10" style="width: 60%" ng-controller="vanCtrl">
     <%--위즈모 테이블--%>
-    <div class="wj-TblWrapBr pd20" style="height: 300px;">
+    <div class="wj-TblWrapBr pd10" style="height: 300px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='vanCard.gridVanNm' /></span>
         <button class="btn_skyblue" id="btnAddVan" style="display: none;" ng-click="addRow()">
@@ -65,9 +65,9 @@
     <%--//위즈모 테이블--%>
   </div>
 
-  <div id="gridVanCard" class="w30 fr mt40" style="width: 40%" ng-controller="vanCardCtrl">
+  <div id="gridVanCard" class="w30 fr mt10" style="width: 40%" ng-controller="vanCardCtrl">
     <%--위즈모 테이블--%>
-    <div class="wj-TblWrapBr ml10 pd20" style="height: 610px;">
+    <div class="wj-TblWrapBr ml10 pd10" style="height: 610px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='vanCard.gridVanCardNm' /></span>
         <button class="btn_skyblue" id="btnAddMapng" style="display: none;" ng-click="addRow()">
@@ -108,7 +108,7 @@
 
   <div id="gridCard" class="w70 fl" style="width: 60%" ng-controller="cardCtrl">
     <%--위즈모 테이블--%>
-    <div class="wj-TblWrapBr mt10 pd20 mb10" style="height: 300px;">
+    <div class="wj-TblWrapBr mt10 pd10 mb10" style="height: 300px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='vanCard.gridCardNm' /></span>
         <button class="btn_skyblue" id="btnAddCard" style="display: none;" ng-click="addRow()">

@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<div id="orderEmpDayView" class="subCon" style="display: none;" ng-controller="orderEmpDayCtrl">
+<div id="orderEmpDayView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="orderEmpDayCtrl">
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="empsale.day"/></a>
     	<%-- 조회 --%>
@@ -61,7 +61,7 @@
 		</tbody>
 	</table>
     ${cornrList}
-	<div class="mt40 oh sb-select dkbr">
+	<div class="mt10 oh sb-select dkbr">
 	    <%-- 페이지 스케일  --%>
 	    <wj-combo-box
 	      class="w100px fl"
@@ -85,7 +85,7 @@
 
 	<%--위즈모 테이블--%>
     <div class="w100 mt10" id="wjWrapType3">
-      <div class="wj-gridWrap">
+      <div class="wj-gridWrap" style="height:420px;">
         <wj-flex-grid
           id="orderEmpDayGrid"
           autoGenerateColumns="false"

@@ -92,7 +92,7 @@
     </tbody>
   </table>
 
-  <div class="mt20 oh sb-select dkbr">
+  <div class="mt10 oh sb-select dkbr">
   	<%-- 페이지 스케일  --%>
 	<wj-combo-box
 	  class="w100px fl"
@@ -118,7 +118,7 @@
   <div id="wjWrapType2" class="w100 mt10">
     <div class="wj-TblWrapBr">
       <%--위즈모 테이블--%>
-      <div class="wj-gridWrap">
+      <div class="wj-gridWrap" style="height:400px;">
         <wj-flex-grid
           autoGenerateColumns="false"
           selection-mode="Row"

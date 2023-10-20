@@ -6,7 +6,7 @@
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 
-<div id="orderStatusView" class="subCon" ng-controller="orderStatusCtrl">
+<div id="orderStatusView" class="subCon" ng-controller="orderStatusCtrl" style="padding: 10px 20px 40px;">
 
   <%-- 조회조건 --%>
   <div class="searchBar">
@@ -105,7 +105,7 @@
 
   <%--위즈모 테이블--%>
   <div class="wj-TblWrapBr mt10">
-    <div id="theGrid" style="height: 300px; overflow-y: hidden; overflow-x: hidden;">
+    <div id="theGrid" style="height: 380px; overflow-y: hidden; overflow-x: hidden;">
       <wj-flex-grid
               autoGenerateColumns="false"
               control="flex"

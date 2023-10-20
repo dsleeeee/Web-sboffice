@@ -2,7 +2,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<div id="orderChannelDayView" class="subCon" ng-controller="orderChannelDayCtrl">
+<div id="orderChannelDayView" class="subCon" ng-controller="orderChannelDayCtrl" style="padding: 10px 20px 40px;">
     <div class="searchBar">
         <a href="#" class="open fl"><s:message code="orderChannel.day"/></a>
         <%-- 조회 --%>

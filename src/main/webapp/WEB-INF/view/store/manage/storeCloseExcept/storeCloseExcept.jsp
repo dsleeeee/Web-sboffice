@@ -100,9 +100,9 @@
   </table>
 
 
-  <div id="gridRepresent" class="w50 fl mt40" style="width: 50%" ng-controller="storeCloseExceptCtrl">
+  <div id="gridRepresent" class="w50 fl mt10" style="width: 50%" ng-controller="storeCloseExceptCtrl">
     <%--위즈모 테이블--%>
-    <div class="wj-TblWrapBr mr10 pd20" style="height: 480px;">
+    <div class="wj-TblWrapBr mr10 pd10" style="height: 480px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='storeCloseExcept.storeCloseExcept' /></span>
         <button class="btn_skyblue ml5 fr" id="btnDel" ng-click="delete()">
@@ -144,9 +144,9 @@
     <%--//위즈모 테이블--%>
   </div>
 
-  <div id="gridDetail" class="w50 fr mt40 mb20" style="width: 50%" ng-controller="storeCtrl">
+  <div id="gridDetail" class="w50 fr mt10 mb10" style="width: 50%" ng-controller="storeCtrl">
     <%--위즈모 테이블--%>
-    <div class="wj-TblWrapBr ml10 pd20" style="height: 480px;">
+    <div class="wj-TblWrapBr pd10" style="height: 480px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='storeCloseExcept.store' /></span>
         <button class="btn_skyblue ml5 fr" id="btnSave" ng-click="save()">

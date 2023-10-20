@@ -2,7 +2,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<div id="storeTotalView" name="storeTotalView" class="subCon" style="display: none;">
+<div id="storeTotalView" name="storeTotalView" class="subCon" style="display: none;padding: 10px 20px 40px;">
     <div ng-controller="storeTotalCtrl">
 
         <div class="searchBar">
@@ -49,8 +49,8 @@
             </tbody>
         </table>
 
-        <div class="wj-TblWrap mt20 mb20 w50 fl">
-            <div class="wj-TblWrapBr mr10 pd20" style="height:600px;">
+        <div class="wj-TblWrap mt10 mb20 w50 fl">
+            <div class="wj-TblWrapBr mr10 pd10" style="height:600px;">
                 <div class="updownSet oh mb10 pd5">
                     <span class="fl bk lh100"><s:message code="depositDdc.storeTotal" /></span>
                     <button class="btn_skyblue" id="btnExcel" ng-click="excelDownload()">
@@ -83,8 +83,8 @@
 
     </div>
 
-    <div class="wj-TblWrap mt20 mb20 w50 fr" ng-controller="storeTotalDtlCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:600px;">
+    <div class="wj-TblWrap mt10 mb20 w50 fr" ng-controller="storeTotalDtlCtrl">
+        <div class="wj-TblWrapBr pd10" style="height:600px;">
             <div class="updownSet oh mb10 pd5">
                 <span class="fl bk lh100"><s:message code="depositDdc.dtlHistory" /></span>
                 <button class="btn_skyblue" id="btnExcel2" ng-click="excelDownload2()">

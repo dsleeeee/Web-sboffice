@@ -9,7 +9,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="baseUrl" value="/sale/status/emp/day/empDayOfWeek/"/>
 
-<div id="empDayOfWeekView" class="subCon" style="display: none;" ng-controller="empDayOfWeekCtrl">
+<div id="empDayOfWeekView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="empDayOfWeekCtrl">
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="empsale.dayofweek"/></a>
     	<%-- 조회 --%>
@@ -66,7 +66,7 @@
       	</c:if>
 		</tbody>
 	</table>
-	<div class="mt40 oh sb-select dkbr">
+	<div class="mt10 oh sb-select dkbr">
 		<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 			<input type="text" id="empDayOfWeekSelectStoreStoreNum" ng-model="storeNum">
 		</c:if>
@@ -77,7 +77,7 @@
 
 	<%--위즈모 테이블--%>
     <div class="w100 mt10" id="wjWrapType3">
-      <div class="wj-gridWrap">
+      <div class="wj-gridWrap" style="height:380px;">
         <wj-flex-grid
           id="empDayOfWeekGrid"
           autoGenerateColumns="false"

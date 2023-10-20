@@ -402,7 +402,7 @@
 
   <%--위즈모 테이블--%>
   <div class="wj-TblWrapBr mt10">
-    <div id="theGridProd" style="height: 370px;">
+    <div id="theGridProd" style="height: 450px;">
       <wj-flex-grid
               autoGenerateColumns="false"
               control="flex"

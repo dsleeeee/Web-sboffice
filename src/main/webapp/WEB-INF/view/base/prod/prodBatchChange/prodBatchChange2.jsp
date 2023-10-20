@@ -158,7 +158,7 @@
 
     <%-- 그리드 --%>
     <div class="w100 mt10 mb20">
-        <div class="wj-gridWrap" style="height:300px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="wj-gridWrap" style="height:350px; overflow-y: hidden; overflow-x: hidden;">
             <wj-flex-grid
                     autoGenerateColumns="false"
                     control="flex"

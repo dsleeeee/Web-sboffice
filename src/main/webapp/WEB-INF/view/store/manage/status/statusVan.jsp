@@ -8,7 +8,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 <c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
 
-<div id="statusVanView" class="subCon" style="display: none;">
+<div id="statusVanView" class="subCon" style="display: none;padding: 10px 20px 40px;">
 
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">
@@ -84,8 +84,8 @@
     </table>
 
         <%--left--%>
-            <div class="wj-TblWrap mt20 mb20 w30 fl" ng-controller="statusVanCtrl">
-                <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
+            <div class="wj-TblWrap mt10 mb20 w30 fl" ng-controller="statusVanCtrl">
+                <div class="wj-TblWrapBr mr10 pd10" style="height:470px;">
                     <div class="w100 mt10 mb20">
                         <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
                             <wj-flex-grid
@@ -113,8 +113,8 @@
          <%--left--%>
 
          <%--right--%>
-            <div class="wj-TblWrap mt20 mb20 w70 fr" ng-controller="statusVanDetailCtrl">
-                <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
+            <div class="wj-TblWrap mt10 mb20 w70 fr" ng-controller="statusVanDetailCtrl">
+                <div class="wj-TblWrapBr pd10" style="height:470px; overflow-y: hidden;">
                     <div class="w100 mt10 mb20">
                         <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
                             <wj-flex-grid

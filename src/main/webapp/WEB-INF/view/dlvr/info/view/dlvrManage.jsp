@@ -16,7 +16,7 @@
     </div>
     <%-- 그리드 left --%>
     <div class="w50 fl" ng-controller="dlvrManageCtrl">
-        <div class="wj-TblWrapBr ml10 pd20 mt10" style="height: 600px;">
+        <div class="wj-TblWrapBr pd10 mt10" style="height: 600px;">
             <div class="updownSet oh mb10">
                 <span class="fl bk lh30"><s:message code='dlvrManage.first' /></span>
                 <button class="btn_skyblue" ng-click="dlvrAreaAdd()">
@@ -77,7 +77,7 @@
 
     <%-- 그리드 right --%>
     <div class="w50 fl" ng-controller="dlvrManageDetailCtrl">
-        <div class="wj-TblWrapBr ml10 pd20 mt10" style="height: 600px;">
+        <div class="wj-TblWrapBr ml10 pd10 mt10" style="height: 600px;">
             <div class="updownSet oh mb10">
                 <span class="fl bk lh30"><s:message code='dlvrManage.secend' /><label id="lblLzone" style="padding-left: 10px;"></label></span>
                 <button class="btn_skyblue" ng-click="dlvrDetailAreaAdd()">

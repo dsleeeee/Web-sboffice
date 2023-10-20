@@ -64,11 +64,11 @@
   </table>
 
   <%--2단--%>
-  <div class="wj-TblWrap mt40">
+  <div class="wj-TblWrap mt10">
 
     <%--left--%>
     <div class="w60 fl">
-      <div class="wj-TblWrapBr mr10 pd20" style="height:500px; overflow-y: hidden;">
+      <div class="wj-TblWrapBr mr10 pd10" style="height:500px; overflow-y: hidden;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code="authGroup.authGroup"/></span>
           <button id="btnAdd" class="btn_skyblue"><s:message code="cmm.add"/></button>
@@ -84,7 +84,7 @@
 
     <%--right--%>
     <div class="w40 fr">
-      <div class="wj-TblWrapBr ml10 pd20" style="height:500px; overflow-y: auto;">
+      <div class="wj-TblWrapBr pd10" style="height:500px; overflow-y: auto;">
         <div class="updownSet oh mb10">
           <span id="groupInfo" class="fl bk lh30 "></span>
           <span class="fl bk lh30 ml5"><s:message code="authGroup.resrcInfo"/></span>

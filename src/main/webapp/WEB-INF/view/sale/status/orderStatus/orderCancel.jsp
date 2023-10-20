@@ -6,7 +6,7 @@
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 
-<div id="orderCancelView" class="subCon" style="display: none;">
+<div id="orderCancelView" class="subCon" style="display: none;padding: 10px 20px 40px;">
 
     <div ng-controller="orderCancelSrch1Ctrl">
         <%-- 조회조건 --%>

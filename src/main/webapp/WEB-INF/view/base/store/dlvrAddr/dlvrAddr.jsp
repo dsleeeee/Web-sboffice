@@ -44,8 +44,8 @@
         </table>
 
         <%-- left --%>
-        <div class="wj-TblWrap mt20 mb20 w50 fl">
-            <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
+        <div class="wj-TblWrap mt10 mb20 w50 fl">
+            <div class="wj-TblWrapBr mr10 pd10" style="height:470px;">
                 <div class="updownSet oh mb10">
                     <span class="fl bk lh30"><s:message code="dlvrAddr.dlvrAddr"/></span>
                     <button class="btn_skyblue" id="btnFoodAllergyDel" ng-click="del()"><s:message code='cmm.del' /></button>
@@ -80,8 +80,8 @@
     </div>
 
     <%--right--%>
-    <div class="wj-TblWrap mt20 mb20 w50 fr" ng-controller="dlvrAddrCodeCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
+    <div class="wj-TblWrap mt10 mb20 w50 fr" ng-controller="dlvrAddrCodeCtrl">
+        <div class="wj-TblWrapBr pd10" style="height:470px; overflow-y: hidden;">
             <div class="updownSet oh mb10">
                 <span class="fl bk lh30"><s:message code="dlvrAddr.noDlvrAddr"/></span>
                 <button class="btn_skyblue" id="btnFoodAllergyProdAdd" ng-click="add()"><s:message code='cmm.add' /></button>

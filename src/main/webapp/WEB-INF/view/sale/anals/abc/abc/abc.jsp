@@ -10,7 +10,7 @@
 <c:set var="prodEnvstVal" value="${prodEnvstVal}" />
 <c:set var="baseUrl" value="/sale/anals/abc/" />
 
-<div id="abcView" class="subCon3" ng-controller="abcCtrl">
+<div id="abcView" class="subCon" ng-controller="abcCtrl">
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl"><s:message code="abc.abc" /></a>
         <%-- 조회 --%>

@@ -35,7 +35,7 @@
 
         <%-- left --%>
         <div class="wj-TblWrap mt10 mb20 w40 fl">
-            <div class="wj-TblWrapBr mr10 pd10" style="height:470px;">
+            <div class="wj-TblWrapBr mr10 pd10" style="height:600px;">
                 <s:message code="foodAllergy.foodAllergy"/>
                 <div class="updownSet oh mb10">
                     <button class="btn_skyblue" id="btnFoodAllergyAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
@@ -43,7 +43,7 @@
                     <button class="btn_skyblue" id="btnFoodAllergyDel" ng-click="del()"><s:message code='cmm.del' /></button>
                 </div>
                 <div class="w100 mt10 mb20">
-                    <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
+                    <div class="wj-gridWrap" style="height:520px; overflow-y: hidden; overflow-x: hidden;">
                         <div class="row">
                             <wj-flex-grid
                                 autoGenerateColumns.="false"
@@ -74,7 +74,7 @@
 
     <%--right--%>
     <div class="wj-TblWrap mt10 mb20 w60 fr" ng-controller="foodAllergyDetailCtrl">
-        <div class="wj-TblWrapBr pd10" style="height:470px; overflow-y: hidden;">
+        <div class="wj-TblWrapBr pd10" style="height:600px; overflow-y: hidden;">
             <s:message code="foodAllergy.allergyProd"/>
             <label id="lblRecipesCd"></label>
             <label id="lblRecipesNm"></label>
@@ -84,7 +84,7 @@
                 <button class="btn_skyblue" id="btnFoodAllergyProdDel" ng-click="del()"><s:message code='cmm.del' /></button>
             </div>
             <div class="w100 mt10 mb20">
-                <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
+                <div class="wj-gridWrap" style="height:520px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
                         autoGenerateColumns="false"
                         control="flex"

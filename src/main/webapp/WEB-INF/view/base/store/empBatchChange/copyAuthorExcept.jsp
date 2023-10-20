@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<div id="copyAuthorExceptView" class="subCon">
+<div id="copyAuthorExceptView" class="subCon" style="padding: 10px 20px 40px;">
     <div ng-controller="copyAuthorExceptCtrl">
         <%-- 조회조건 --%>
         <div class="searchBar">

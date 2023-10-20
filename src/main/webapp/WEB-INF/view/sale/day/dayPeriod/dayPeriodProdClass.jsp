@@ -7,7 +7,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="baseUrl" value="/sale/day/dayPeriod/dayPeriodProdClass/"/>
 
-<div id="dayPeriodProdClassView" name="dayPeriodView" class="subCon" style="display: none;">
+<div id="dayPeriodProdClassView" name="dayPeriodView" class="subCon" style="display: none;padding: 10px 20px 40px;">
 
     <div ng-controller="dayPeriodProdClassCtrl">
         <%-- 조회조건 --%>
@@ -61,8 +61,8 @@
         </table>
 
         <%--left--%>
-        <div class="wj-TblWrap mt20 mb20 w50 fl">
-            <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
+        <div class="wj-TblWrap mt10 mb20 w50 fl">
+            <div class="wj-TblWrapBr mr10 pd10" style="height:470px;">
                 <div class="updownSet oh mb10">
                     <span class="fl bk lh30"><s:message code="dayPeriod.prodClass"/></span>
                     <%-- 상품분류별 엑셀다운로드 --%>
@@ -102,8 +102,8 @@
     </div>
 
     <%--right--%>
-    <div class="wj-TblWrap mt20 mb20 w50 fr" ng-controller="dayPeriodProdClassDetailCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
+    <div class="wj-TblWrap mt10 mb20 w50 fr" ng-controller="dayPeriodProdClassDetailCtrl">
+        <div class="wj-TblWrapBr pd10" style="height:470px; overflow-y: hidden;">
             <div class="updownSet oh mb10">
                 <span class="fl bk lh30"><s:message code="dayPeriod.saleDtl"/></span>
                 <%-- 매출상세 엑셀다운로드 --%>

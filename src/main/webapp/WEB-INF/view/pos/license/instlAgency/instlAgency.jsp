@@ -55,11 +55,11 @@
         </tbody>
     </table>
 
-    <div class="wj-TblWrap mt40">
+    <div class="wj-TblWrap mt10">
 
         <!-- Left List -->
         <div class="w25 fl" style="overflow-x: visible">
-            <div class="wj-TblWrapBr mr10 pd20" style="height:650px;">
+            <div class="wj-TblWrapBr mr10 pd10" style="height:650px;">
                 <div class="mt20 oh sb-select dkbr">
                 <%-- 상품엑셀다운로드 --%>
                 <button class="btn_skyblue ml5 fr" id="excelDownload" ><s:message code="cmm.excel.down"/></button>
@@ -74,7 +74,7 @@
 
         <!-- Right List -->
         <div class="w75 fr">
-            <div class="wj-TblWrapBr ml10 pd20" style="height:650px;">
+            <div class="wj-TblWrapBr pd10" style="height:650px;">
                 <%-- 업체정보--%>
                 <c:import url="/WEB-INF/view/pos/license/instlAgency/agencyInfo.jsp">
                     <c:param name="menuCd" value="${menuCd}"/>

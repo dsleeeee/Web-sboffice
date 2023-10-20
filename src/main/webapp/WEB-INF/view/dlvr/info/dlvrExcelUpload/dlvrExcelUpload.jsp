@@ -43,7 +43,7 @@
         <%-- 그리드 --%>
         <%-- 양식 샘플 미리보기--%>
         <s:message code="dlvrExcelUpload.sample" />
-        <div class="w100 mt10 mb20">
+        <div class="w100 mt10">
             <div class="wj-gridWrap" style="height:70px; overflow-y: hidden; overflow-x: hidden;">
                 <wj-flex-grid
                     autoGenerateColumns="false"
@@ -89,7 +89,7 @@
         <%-- 배달지내역--%>
         <s:message code="dlvrExcelUpload.dlvrList" />
         <%-- 저장 --%>
-        <div class="w100 mt10 mb20">
+        <div class="w100 mt10">
             <div class="wj-gridWrap" style="height:310px; overflow-y: hidden; overflow-x: hidden;">
                 <wj-flex-grid
                     autoGenerateColumns="false"

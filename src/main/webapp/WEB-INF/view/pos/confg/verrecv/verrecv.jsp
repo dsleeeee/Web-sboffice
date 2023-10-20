@@ -80,13 +80,13 @@
     </table>
 
     <div class="wj-TblWrap mt10 mb20 w40 fl" ng-controller="verRecvCtrl">
-      <div class="wj-TblWrapBr mr10 pd10" style="height:470px;">
+      <div class="wj-TblWrapBr mr10 pd10" style="height:520px;">
         <span><s:message code="verRecv.verInfo" /></span>
         <div class="sb-select dkbr mb10 oh">
         </div>
         <%-- 버전 수신현황 그리드 --%>
         <div class="w100 mt10 mb20">
-          <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
+          <div class="wj-gridWrap" style="height:420px; overflow-x: hidden; overflow-y: hidden;">
             <wj-flex-grid
                     control="flex"
                     autoGenerateColumns="false"
@@ -118,7 +118,7 @@
   </div>
 
   <div class="wj-TblWrap mt10 mb10 w60 fr" ng-controller="verRecvStoreCtrl">
-    <div class="wj-TblWrapBr pd10" style="height:470px; overflow-y: hidden;">
+    <div class="wj-TblWrapBr pd10" style="height:520px; overflow-y: hidden;">
       <%--<span><s:message code="verRecv.recvStore"/></span>--%>
       <div class="sb-select dkbr mb10 oh">
         <s:message code="verRecv.recvStore"/>
@@ -129,7 +129,7 @@
 
       <%-- 버전등록매장 그리드 --%>
       <div class="w100 mt10 mb20">
-        <div class="wj-gridWrap" style="height:350px; overflow-x: hidden; overflow-y: hidden;">
+        <div class="wj-gridWrap" style="height:420px; overflow-x: hidden; overflow-y: hidden;">
           <wj-flex-grid
                   id="wjVerRecvStoreGridList"
                   control="flex"

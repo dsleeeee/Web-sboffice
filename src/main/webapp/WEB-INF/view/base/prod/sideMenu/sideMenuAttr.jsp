@@ -11,7 +11,7 @@
 <div id="attrArea" class="wj-TblWrap mt5 ng-cloak" ng-hide="isAttrTab">
   <div class="w50 fl">
     <%--위즈모 테이블--%>
-    <div id="gridAttrClass" class="wj-TblWrapBr mr10 pd5" style="height: 480px;" ng-controller="sideMenuAttrClassCtrl">
+    <div id="gridAttrClass" class="wj-TblWrapBr mr10 pd5" style="height: 550px;" ng-controller="sideMenuAttrClassCtrl">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='sideMenu.tab.attr.class' /></span>
         <button class="btn_skyblue" id="btnAddClass" ng-click="addRow()">
@@ -26,7 +26,7 @@
       </div>
       <%-- 개발시 높이 조절해서 사용--%>
       <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-      <div style="height:400px">
+      <div style="height:450px">
         <wj-flex-grid
             autoGenerateColumns="false"
             control="flex"
@@ -51,7 +51,7 @@
 
   <div class="w50 fl">
     <%--위즈모 테이블--%>
-    <div id="gridAttrCd" class="wj-TblWrapBr pd5" style="height: 480px;" ng-controller="sideMenuAttrAttrCtrl">
+    <div id="gridAttrCd" class="wj-TblWrapBr pd5" style="height: 550px;" ng-controller="sideMenuAttrAttrCtrl">
       <div class="updownSet oh mb10" style="height:60px;">
         <span class="fl bk lh30"><s:message code='sideMenu.tab.attr.attr' /><span id="sideMenuAttrTitle"></span> </span>
           <br>
@@ -74,7 +74,7 @@
       </div>
       <%-- 개발시 높이 조절해서 사용--%>
       <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-      <div style="height:370px;">
+      <div style="height:420px;">
         <wj-flex-grid
             autoGenerateColumns="false"
             control="flex"

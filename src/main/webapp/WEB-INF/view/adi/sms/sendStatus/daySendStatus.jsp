@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<div id="daySendStatusView" class="subCon" style="display: none;">
+<div id="daySendStatusView" class="subCon" style="display: none;padding: 10px 20px 40px;">
     <div ng-controller="daySendStatusCtrl">
 
         <%-- 조회조건 --%>
@@ -61,7 +61,7 @@
 
         <%-- 그리드 --%>
         <div class="w100 mt10 mb20">
-            <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
+            <div class="wj-gridWrap" style="height:420px; overflow-y: hidden; overflow-x: hidden;">
                 <wj-flex-grid
                         autoGenerateColumns="false"
                         control="flex"

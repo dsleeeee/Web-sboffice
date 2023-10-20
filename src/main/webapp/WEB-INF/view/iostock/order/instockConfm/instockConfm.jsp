@@ -104,11 +104,11 @@
     </tbody>
   </table>
 
-  <div class="mt10 pdb20 oh bb">
+  <div class="mt10 pdb10 oh bb">
 
   </div>
 
-	<div class="mt20 oh sb-select dkbr">
+	<div class="mt10 oh sb-select dkbr">
 		<button class="btn_skyblue fr" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>	<%-- 엑셀 다운로드 --%>
 	</div>
 

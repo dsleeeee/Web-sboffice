@@ -79,7 +79,7 @@
   </table>
 
 <div class="fl" style="width: 59%;">
-	<div class="mt20 oh sb-select dkbr">
+	<div class="mt10 oh sb-select dkbr">
 		<%-- 페이지 스케일  --%>
 		<wj-combo-box
 			class="w100px fl"
@@ -101,7 +101,7 @@
 
     <%--위즈모 테이블--%>
     <div class="w100 mt10" id="wjWrapType1">
-    <div class="wj-gridWrap" style="height: 350px; overflow-x: hidden; overflow-y: hidden;">
+    <div class="wj-gridWrap" style="height: 450px; overflow-x: hidden; overflow-y: hidden;">
       <wj-flex-grid
         id="currUnityMainGrid"
         loaded-rows="loadedRows(s,e)"
@@ -142,7 +142,7 @@
     
     <%--엑셀 리스트--%>
     <div class="w100 mt10" id="wjWrapType1" style="display:none;" ng-controller="currUnityMainExcelCtrl">
-    <div class="wj-gridWrap" style="height: 350px;">
+    <div class="wj-gridWrap" style="height: 450px;">
       <wj-flex-grid
         id="currUnityMainExcelGrid"
         loaded-rows="loadedRows(s,e)"
@@ -201,7 +201,7 @@
 
         <%--위즈모 테이블--%>
         <div class="w100 mt10">
-          <div class="wj-gridWrap" style="height: 350px; overflow-x: hidden; overflow-y: hidden;">
+          <div class="wj-gridWrap" style="height: 450px; overflow-x: hidden; overflow-y: hidden;">
             <wj-flex-grid
               id="currUnityHqDtlGrid"
               autoGenerateColumns="false"
@@ -238,7 +238,7 @@
 		
 		<%--엑셀 리스트--%>
         <div class="w100 mt10" style="display:none;" ng-controller="currUnityHqDtlExcelCtrl">
-          <div class="wj-gridWrap" style="height: 350px;">
+          <div class="wj-gridWrap" style="height: 450px;">
             <wj-flex-grid
               id="currUnityHqDtlExcelGrid"
               autoGenerateColumns="false"
@@ -291,7 +291,7 @@
 
         <%--위즈모 테이블--%>
         <div class="w100 mt10">
-          <div class="wj-gridWrap" style="height: 350px; overflow-x: hidden; overflow-y: hidden;">
+          <div class="wj-gridWrap" style="height: 450px; overflow-x: hidden; overflow-y: hidden;">
             <wj-flex-grid
               id="currUnityStoreDtlGrid"
               autoGenerateColumns="false"
@@ -328,7 +328,7 @@
       
       <%--엑셀 리스트--%>
         <div class="w100 mt10">
-          <div class="wj-gridWrap" style="height: 350px; display:none;" ng-controller="currUnityStoreDtlExcelCtrl">
+          <div class="wj-gridWrap" style="height: 450px; display:none;" ng-controller="currUnityStoreDtlExcelCtrl">
             <wj-flex-grid
               id="currUnityStoreDtlExcelGrid"
               autoGenerateColumns="false"

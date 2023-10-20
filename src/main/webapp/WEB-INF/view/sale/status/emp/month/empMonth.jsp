@@ -9,7 +9,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="baseUrl" value="/sale/status/emp/month/"/>
 
-<div id="empMonthView" class="subCon" style="display: none;" ng-controller="empMonthCtrl">
+<div id="empMonthView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="empMonthCtrl">
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="empsale.month"/></a>
     	<%-- 조회 --%>
@@ -91,7 +91,7 @@
 		</tbody>
 	</table>
 
-	<div class="mt40 oh sb-select dkbr">
+	<div class="mt10 oh sb-select dkbr">
 	    <%-- 페이지 스케일  --%>
 	    <wj-combo-box
 	      class="w100px fl"
@@ -115,7 +115,7 @@
 
 	<%--위즈모 테이블--%>
     <div class="w100 mt10" id="wjWrapType3">
-      <div class="wj-gridWrap">
+      <div class="wj-gridWrap" style="height:380px;">
         <wj-flex-grid
           id="empMonthGrid"
           autoGenerateColumns="false"

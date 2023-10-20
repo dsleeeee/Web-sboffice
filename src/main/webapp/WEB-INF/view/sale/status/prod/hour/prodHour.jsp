@@ -9,7 +9,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="baseUrl" value="/sale/status/prod/hour/prodHour/"/>
 
-<div id="prodHourView" name="dayView" class="subCon3" style="display: none;" ng-controller="prodHourCtrl"> <%-- 수정 사항 || 클래스 변경 :: class="subCon" >> class="subCon3"--%>
+<div id="prodHourView" name="dayView" class="subCon3" style="display: none;padding: 10px 20px 40px;" ng-controller="prodHourCtrl"> <%-- 수정 사항 || 클래스 변경 :: class="subCon" >> class="subCon3"--%>
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl"><s:message code="day.time"/></a>
         <%-- 조회 --%>
@@ -136,7 +136,7 @@
 
     <div id="wjWrapType2" class="w100 mt10"> <%-- 수정 사항 || head line 2 아이디 추가 :: id="wjWrapType2" --%>
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap"> <%-- 수정 사항 || 그리드 높이값 스타일 제거 :: style="height: 000px;" --%>
+        <div class="wj-gridWrap" style="height: 350px;"> <%-- 수정 사항 || 그리드 높이값 스타일 제거 :: style="height: 000px;" --%>
             <wj-flex-grid
                     autoGenerateColumns="false"
                     selection-mode="Row"

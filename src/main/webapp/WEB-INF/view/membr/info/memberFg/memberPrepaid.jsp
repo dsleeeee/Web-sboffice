@@ -9,7 +9,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
 <!--   선불 화면    -->
-<div class="subCon" id="memberPrepaidArea" ng-controller="memberPrepaidCtrl">
+<div class="subCon" id="memberPrepaidArea" ng-controller="memberPrepaidCtrl" style="padding: 10px 20px 40px;">
   <%--searchTbl--%>
   <div class="searchBar">
     <a href="#" class="open fl"><s:message code="memberFg.prepaid" /></a>
@@ -85,8 +85,8 @@
    </tbody>
   </table>
     <%--- 적용 그리드 --%>
-    <div class="wj-TblWrap mt20 w50 fl">
-      <div class="wj-TblWrapBr mr10 pd20" style="height:460px; overflow-y: hidden;" ng-controller="memberPrepaidRegistCtrl">
+    <div class="wj-TblWrap mt10 w50 fl">
+      <div class="wj-TblWrapBr mr10 pd10" style="height:460px; overflow-y: hidden;" ng-controller="memberPrepaidRegistCtrl">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code="memberFg.regist"/></span>
           <span <c:if test="${orgnFg == 'HQ' and membrClassManageFg == '0'}">style="display: none;"</c:if>>
@@ -124,8 +124,8 @@
     </div>
 
     <%--- 미적용 그리드 --%>
-    <div class="wj-TblWrap mt20 w50 fl">
-      <div class="wj-TblWrapBr ml10 pd20" style="height:460px; overflow-y: hidden;" ng-controller="memberPrepaidNoRegistCtrl">
+    <div class="wj-TblWrap mt10 w50 fl">
+      <div class="wj-TblWrapBr pd10" style="height:460px; overflow-y: hidden;" ng-controller="memberPrepaidNoRegistCtrl">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code="memberFg.noRegist"/></span>
           <span <c:if test="${orgnFg == 'HQ' and membrClassManageFg == '0'}">style="display: none;"</c:if>>

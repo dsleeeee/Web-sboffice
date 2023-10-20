@@ -27,7 +27,7 @@
   <%--//searchTbl--%>
     <div class="wj-TblWrapBr mt10">
       <%--위즈모 테이블--%>
-      <div class="wj-gridWrap" style="height: 330px; overflow-x: hidden; overflow-y: hidden;">
+      <div class="wj-gridWrap" style="height: 450px; overflow-x: hidden; overflow-y: hidden;">
         <wj-flex-grid
                 autoGenerateColumns="false"
                 selection-mode="Row"

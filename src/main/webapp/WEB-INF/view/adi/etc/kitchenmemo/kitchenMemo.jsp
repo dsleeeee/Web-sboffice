@@ -29,7 +29,7 @@
   </div>
 
   <div id="grid" class="w100">
-    <div class="wj-gridWrap mt5" style="height:370px; overflow-y: hidden;">
+    <div class="wj-gridWrap mt5" style="height:550px; overflow-y: hidden;">
       <div class="row">
         <wj-flex-grid
           autoGenerateColumns="false"

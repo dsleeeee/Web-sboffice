@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<div id="smsTelNoStopView" class="subCon" style="display: none;">
+<div id="smsTelNoStopView" class="subCon" style="display: none;padding: 10px 20px 40px;">
     <div ng-controller="smsTelNoStopCtrl">
 
         <%-- 조회조건 --%>
@@ -32,7 +32,7 @@
                     <s:message code="smsTelNoStop.smsGeneralNoManage" />
                 </button>
             </div>
-            <div class="wj-gridWrap" style="height:380px; overflow-y: hidden; overflow-x: hidden;">
+            <div class="wj-gridWrap" style="height:450px; overflow-y: hidden; overflow-x: hidden;">
                 <wj-flex-grid
                         autoGenerateColumns="false"
                         control="flex"

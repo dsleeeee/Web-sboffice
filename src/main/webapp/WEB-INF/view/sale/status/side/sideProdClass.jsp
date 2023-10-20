@@ -9,7 +9,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="baseUrl" value="/sale/status/prod/class/prodClass/"/>
 
-<div id="sideProdClassView" class="subCon3" ng-controller="sideProdClassCtrl"> <%-- 수정 사항 || 클래스 변경 :: class="subCon" >> class="subCon3"--%>
+<div id="sideProdClassView" class="subCon3" ng-controller="sideProdClassCtrl" style="padding: 10px 20px 40px;"> <%-- 수정 사항 || 클래스 변경 :: class="subCon" >> class="subCon3"--%>
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl"><s:message code="side.prodClass"/></a>
         <%-- 조회 --%>
@@ -109,7 +109,7 @@
 
     <%--위즈모 테이블--%>
     <div id="wjWrapType1" class="w100 mt10"> <%-- 수정 사항 || head line 1 아이디 추가 :: id="wjWrapType1" --%>
-        <div class="wj-gridWrap"> <%-- 수정 사항 || 그리드 높이값 스타일 제거 :: style="height: 000px;" --%>
+        <div class="wj-gridWrap" style="height:380px;"> <%-- 수정 사항 || 그리드 높이값 스타일 제거 :: style="height: 000px;" --%>
             <wj-flex-grid
                     autoGenerateColumns="false"
                     control="flex"

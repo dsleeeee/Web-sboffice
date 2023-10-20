@@ -5,7 +5,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="orderEmpPeriodView" class="subCon" style="display: none;" ng-controller="orderEmpPeriodCtrl">
+<div id="orderEmpPeriodView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="orderEmpPeriodCtrl">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="orderEmp.orderEmpPeriod"/></a>
       <%-- 조회 --%>
@@ -64,7 +64,7 @@
 
     <div id="gridRepresent" class="w50 fl" style="width:49%;">
      <%-- 판매자별 --%>
-     <div class="w100 mt20" ng-controller="orderEmpPeriodMainCtrl">
+     <div class="w100 mt10" ng-controller="orderEmpPeriodMainCtrl">
        <div class="oh sb-select mb10">
          <span class="fl bk lh30"><s:message code='orderEmp.orderEmp'/></span>
 
@@ -74,7 +74,7 @@
        </div>
       <%--위즈모 테이블--%>
     <div class="w100 mt10" id="wjWrapType1">
-      <div class="wj-gridWrap col2-t2">
+      <div class="wj-gridWrap col2-t2" style="height:420px;">
         <wj-flex-grid
           id="orderEmpPeriodGrid"
           loaded-rows="loadedRows(s,e)"
@@ -102,7 +102,7 @@
       <%--//위즈모 테이블--%>
 
       <%--페이지 리스트--%>
-      <div class="pageNum3 mt20">
+      <div class="pageNum3 mt10">
       	<%-- id --%>
       	<ul id="orderEmpPeriodMainCtrlPager" data-size="10"></ul>
       </div>
@@ -136,7 +136,7 @@
 
     <div id="gridDetail" class="w50 fr" style="width:49%;">
      <%-- 코너별 --%>
-     <div class="w100 mt20" ng-controller="orderEmpPeriodDtlCtrl">
+     <div class="w100 mt10" ng-controller="orderEmpPeriodDtlCtrl">
        <div class="oh sb-select mb10">
          <span class="fl bk lh30"><s:message code='orderEmp.saleDtl'/></span>
 
@@ -146,7 +146,7 @@
        </div>
       <%--위즈모 테이블--%>
     <div class="w100 mt10" id="wjWrapType1">
-      <div class="wj-gridWrap col2-t2">
+      <div class="wj-gridWrap col2-t2" style="height:420px;">
         <wj-flex-grid
           id="orderEmpPeriodDtlGrid"
           autoGenerateColumns="false"
@@ -178,7 +178,7 @@
       <%--//위즈모 테이블--%>
 
       <%-- 페이지 리스트 --%>
-      <div class="pageNum3 mt20">
+      <div class="pageNum3 mt10">
       	<%-- id --%>
       	<ul id="orderEmpPeriodDtlCtrlPager" data-size="10"></ul>
       </div>

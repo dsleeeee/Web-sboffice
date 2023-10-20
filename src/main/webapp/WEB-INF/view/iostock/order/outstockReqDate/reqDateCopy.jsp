@@ -8,7 +8,7 @@
 <c:set var="baseUrl" value="/iostock/order/outstockReqDate/reqDateCopy/"/>
 
 
-<div id="reqDateCopyView" class="subCon" style="display: none;">
+<div id="reqDateCopyView" class="subCon" style="display: none;padding: 10px 20px 40px;">
   <div ng-controller="reqDateCopyCtrl">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl">${menuNm}</a>

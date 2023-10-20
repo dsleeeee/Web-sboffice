@@ -2,7 +2,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<div id="orderChannelPeriodView" class="subCon" ng-controller="orderChannelPeriodCtrl">
+<div id="orderChannelPeriodView" class="subCon" ng-controller="orderChannelPeriodCtrl" style="padding: 10px 20px 40px;">
     <div class="searchBar">
         <a href="#" class="open fl"><s:message code="orderChannel.period"/></a>
         <%-- 조회 --%>

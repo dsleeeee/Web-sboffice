@@ -5,7 +5,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="empDayPeriodView" class="subCon" style="display: none;" ng-controller="empDayPeriodCtrl">
+<div id="empDayPeriodView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="empDayPeriodCtrl">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="empsale.dayPeriod"/></a>
       <%-- 조회 --%>
@@ -64,7 +64,7 @@
 
     <div id="gridRepresent" class="w50 fl" style="width:49%;">
      <%-- 판매자별 --%>
-     <div class="w100 mt20" ng-controller="empDayPeriodMainCtrl">
+     <div class="w100 mt10" ng-controller="empDayPeriodMainCtrl">
        <div class="oh sb-select mb10">
          <span class="fl bk lh30"><s:message code='empsale.empsale'/></span>
 
@@ -85,7 +85,7 @@
        </div>
       <%--위즈모 테이블--%>
     <div class="w100 mt10" id="wjWrapType1">
-      <div class="wj-gridWrap col2-t2">
+      <div class="wj-gridWrap col2-t2" style="height:380px;">
         <wj-flex-grid
           id="empDayPeriodGrid"
           loaded-rows="loadedRows(s,e)"
@@ -147,7 +147,7 @@
 
     <div id="gridDetail" class="w50 fr" style="width:49%;">
      <%-- 코너별 --%>
-     <div class="w100 mt20" ng-controller="empDayPeriodDtlCtrl">
+     <div class="w100 mt10" ng-controller="empDayPeriodDtlCtrl">
        <div class="oh sb-select mb10">
          <span class="fl bk lh30"><s:message code='corner.SaleDtl'/></span>
 
@@ -168,7 +168,7 @@
        </div>
       <%--위즈모 테이블--%>
     <div class="w100 mt10" id="wjWrapType1">
-      <div class="wj-gridWrap col2-t2">
+      <div class="wj-gridWrap col2-t2" style="height:380px;">
         <wj-flex-grid
           id="empDayPeriodDtlGrid"
           autoGenerateColumns="false"

@@ -46,14 +46,14 @@
     </tbody>
   </table>
 
-  <div class="mt20 oh sb-select dkbr">
-    <%-- 엑셀 다운로드 --%>
-    <%--<button id="btnExcel" class="btn_skyblue fr" ng-click="excelDown()"><s:message code="cmm.excel.down"/></button>--%>
-  </div>
+<%--  <div class="mt10 oh sb-select dkbr">--%>
+<%--    &lt;%&ndash; 엑셀 다운로드 &ndash;%&gt;--%>
+<%--    &lt;%&ndash;<button id="btnExcel" class="btn_skyblue fr" ng-click="excelDown()"><s:message code="cmm.excel.down"/></button>&ndash;%&gt;--%>
+<%--  </div>--%>
 
   <div class="w100 mt10">
     <%--위즈모 테이블--%>
-    <div class="wj-gridWrap" style="height: 350px; overflow-x: hidden; overflow-y: hidden; ">
+    <div class="wj-gridWrap" style="height: 450px; overflow-x: hidden; overflow-y: hidden; ">
       <wj-flex-grid
         autoGenerateColumns="false"
         selection-mode="Row"

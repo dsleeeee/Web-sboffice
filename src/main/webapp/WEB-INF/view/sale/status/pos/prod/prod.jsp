@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<div id="posProdView" class="subCon" style="display: none;" ng-controller="posProdCtrl">
+<div id="posProdView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="posProdCtrl">
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="pos.prod"/></a>
 		<%-- 조회 --%>
@@ -109,7 +109,7 @@
 
 	<%--위즈모 테이블--%>
     <div class="w100 mt10" id="wjWrapType3">
-      <div class="wj-gridWrap">
+      <div class="wj-gridWrap" style="height:380px;">
 			<wj-flex-grid
 				id="posProdGrid"
 				autoGenerateColumns="false"

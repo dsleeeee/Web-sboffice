@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="posHourView" class="subCon" style="display: none;" ng-controller="posHourCtrl">
+<div id="posHourView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="posHourCtrl">
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="pos.hour"/></a>
 		<%-- 조회 --%>
@@ -156,7 +156,7 @@
 
 	<%--위즈모 테이블--%>
     <div class="w100 mt10" id="wjWrapType3">
-      <div class="wj-gridWrap">
+      <div class="wj-gridWrap" style="height:380px;">
 			<wj-flex-grid
 				id="posHourGrid"
 				autoGenerateColumns="false"

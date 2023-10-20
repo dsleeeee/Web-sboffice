@@ -9,7 +9,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 
-<div id="envConfgBatchChangeFnkeyView" class="subCon" ng-controller="envConfgBatchChangeFnkeyCtrl" style="display: none;">
+<div id="envConfgBatchChangeFnkeyView" class="subCon" ng-controller="envConfgBatchChangeFnkeyCtrl" style="display: none;padding: 10px 20px 40px;">
 
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">
@@ -75,11 +75,11 @@
         </tbody>
     </table>
 
-    <div class="mt20 oh">
+    <div class="mt10 oh">
         <label id="lblFnkeyNo"></label>
         <label id="lblFnkeyNm"></label>
     </div>
-    <div class="mt20 oh">
+    <div class="mt10 oh">
         <%--환경변수값--%>
         <div class="sb-select dkbr ml5 fl" id="divTextFnkeyVal">
             <input type="text" class="sb-input w150px" id="srchFnkeyVal" ng-model="fnkeyVal" />

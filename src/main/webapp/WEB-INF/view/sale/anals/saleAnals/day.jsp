@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 
-<div id="dayView" name="dayView" class="subCon" ng-controller="dayCtrl">
+<div id="dayView" name="dayView" class="subCon" ng-controller="dayCtrl" style="padding: 10px 20px 40px;">
   <div class="searchBar flddUnfld">
     <a href="#" class="open fl"><s:message code="saleAnals.day"/></a>
     <%-- 조회 --%>
@@ -65,7 +65,7 @@
 
   <div class="w100 mt10">
     <%--위즈모 테이블--%>
-    <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
+    <div class="wj-gridWrap" style="height: 400px; overflow-y: hidden; overflow-x: hidden;">
       <wj-flex-grid
         autoGenerateColumns="false"
         selection-mode="Row"

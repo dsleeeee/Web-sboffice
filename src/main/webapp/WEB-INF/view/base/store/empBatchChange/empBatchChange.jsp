@@ -9,7 +9,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
-<div id="empBatchChangeView" class="subCon">
+<div id="empBatchChangeView" class="subCon" style="padding: 10px 20px 40px;">
     <div ng-controller="empBatchChangeCtrl">
         <%-- 조회조건 --%>
         <div class="searchBar">

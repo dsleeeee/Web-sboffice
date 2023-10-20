@@ -136,7 +136,7 @@
             </td>
 		</tr>
 	</table>
-	<div class="mt20 oh sb-select dkbr">
+	<div class="mt10 oh sb-select dkbr">
 		<%-- 페이지 스케일  --%>
         <wj-combo-box
             class="w100px fl"
@@ -157,7 +157,7 @@
 
   	<%--위즈모 테이블--%>
     <div id="wjGridWrap" class="mt10">
-      <div class="wj-gridWrap" style="height:320px; overflow-y: hidden; overflow-x: hidden;">
+      <div class="wj-gridWrap" style="height:380px; overflow-y: hidden; overflow-x: hidden;">
         <wj-flex-grid
           id="storePeriodGrid"
           autoGenerateColumns="false"

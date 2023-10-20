@@ -67,7 +67,7 @@
         </table>
 
         <%-- 그리드 left --%>
-        <div class="w50 fl mt40 mb20" style="width: 40%">
+        <div class="w50 fl mt10 mb20" style="width: 40%">
             <div class="mb10 oh sb-select dkbr ">
                 <%-- 페이지 스케일  --%>
                 <wj-combo-box
@@ -81,7 +81,7 @@
                         initialized="initComboBox(s)">
                 </wj-combo-box>
             </div>
-            <div class="wj-gridWrap pd20" style="height:480px; overflow-y: hidden;">
+            <div class="wj-gridWrap pd10" style="height:480px; overflow-y: hidden;">
                 <div class="row">
                     <wj-flex-grid
                             autoGenerateColumns="false"
@@ -122,7 +122,7 @@
 
     <div ng-controller="dlvrReceiptDetailCtrl">
         <%-- 그리드 right --%>
-        <div class="w50 mt40 fl mb20" style="width: 60%">
+        <div class="w50 mt10 fl mb20" style="width: 60%">
             <div class="mb10 ml10 oh sb-select dkbr ">
                 <%-- 페이지 스케일  --%>
                 <wj-combo-box
@@ -136,7 +136,7 @@
                         initialized="initComboBox(s)">
                 </wj-combo-box>
             </div>
-            <div class="wj-gridWrap ml10 pd20" style="height:480px; overflow-y: hidden;">
+            <div class="wj-gridWrap ml10 pd10" style="height:480px; overflow-y: hidden;">
                 <div class="row">
                     <wj-flex-grid
                             autoGenerateColumns="false"

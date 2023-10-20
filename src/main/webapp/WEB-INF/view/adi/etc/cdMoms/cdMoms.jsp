@@ -67,9 +67,9 @@
     <input type="hidden" id="s_nmcodeItem1" name="s_nmcodeItem1" value="" />
     <input type="hidden" id="s_nmcodeItem2" name="s_nmcodeItem2" value="" />
 
-    <div id="gridRepresent" class="w40 fl" ng-controller="cdMomsCtrl">
+    <div id="gridRepresent" class="w40 mt10 fl" ng-controller="cdMomsCtrl">
         <%--위즈모 테이블--%>
-        <div class="wj-TblWrapBr mr10 pd20" style="height: 400px;">
+        <div class="wj-TblWrapBr mr10 pd10" style="height: 550px;">
             <div class="updownSet oh mb10">
                 <span class="fl bk lh30"><s:message code='cdMoms.grpGridNm' /></span>
                 <button class="btn_skyblue" id="btnAddRepresent" style="display: none;" ng-click="addRow()">
@@ -84,7 +84,7 @@
             </div>
             <%-- 개발시 높이 조절해서 사용--%>
             <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-            <div class="wj-gridWrap" style="height:315px">
+            <div class="wj-gridWrap" style="height:450px">
                 <div class="row">
                     <wj-flex-grid
                             autoGenerateColumns="false"
@@ -117,9 +117,9 @@
         <%--//위즈모 테이블--%>
     </div>
 
-    <div id="gridDetail" class="w60 fr" ng-controller="cdMomsDetailCtrl">
+    <div id="gridDetail" class="w60 mt10 fr" ng-controller="cdMomsDetailCtrl">
         <%--위즈모 테이블--%>
-        <div class="wj-TblWrapBr ml10 pd20" style="height: 400px;">
+        <div class="wj-TblWrapBr pd10" style="height: 550px;">
             <div class="updownSet oh mb10">
                 <span class="fl bk lh30"><s:message code='cdMoms.gridNm' /></span>
                 <button class="btn_skyblue" id="btnAddDetail" style="display: none;" ng-click="addRow()">
@@ -134,7 +134,7 @@
             </div>
             <%-- 개발시 높이 조절해서 사용--%>
             <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
-            <div class="wj-gridWrap" style="height:310px">
+            <div class="wj-gridWrap" style="height:450px">
                 <wj-flex-grid
                         autoGenerateColumns="false"
                         control="flex"

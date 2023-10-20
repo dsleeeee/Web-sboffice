@@ -117,7 +117,7 @@
 	            </button>
             </div>
             <div class="wj-TblWrapBr1"  id="wjWrapType1">
-            		<div class="wj-gridWrap col2-t2">
+            		<div class="wj-gridWrap col2-t2" style="height:380px;">
                    <wj-flex-grid
                       id="barcdGrid"
                       loaded-rows="loadedRows(s,e)"
@@ -207,7 +207,7 @@
            </button>
            </div>
                 <div class="wj-TblWrapBr1" id="wjWrapType1">
-                	<div class="wj-gridWrap col2-t2">
+                	<div class="wj-gridWrap col2-t2" style="height:380px;">
                        <wj-flex-grid
                           id="barcdDtlGrid"
                           autoGenerateColumns="false"

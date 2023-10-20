@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}" />
 <c:set var="baseUrl" value="/sale/satus/dc/" />
 
-<div id="dcDcfgView" class="subCon" ng-controller="dcDcfgCtrl">
+<div id="dcDcfgView" class="subCon" ng-controller="dcDcfgCtrl" style="padding: 10px 20px 40px;">
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="dcDcfg.dcfg" /></a>
 		<%-- 조회 --%>
@@ -113,7 +113,7 @@
 			</div>
 			<%--위즈모 테이블--%>
 			<div class="w100 mt10" id="wjWrapType1">
-              <div class="wj-gridWrap col2-t2">
+              <div class="wj-gridWrap col2-t2" style="height: 410px;">
 				<wj-flex-grid loaded-rows="loadedRows(s,e)" autoGenerateColumns="false" selection-mode="Row" items-source="data" control="flex" initialized="initGrid(s,e)" is-read-only="false" item-formatter="_itemFormatter">
 					<!-- define columns -->
 					<wj-flex-grid-column header="<s:message code="dcDcfg.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -153,7 +153,7 @@
 			</div>
 			<%--위즈모 테이블--%>
 			<div class="w100 mt10 dtl"  id="wjWrapType1">
-              <div class="wj-gridWrap col2-t2">
+              <div class="wj-gridWrap col2-t2" style="height: 410px;">
 				<wj-flex-grid id="dcfgDtlGrid" autoGenerateColumns="false" selection-mode="Row" items-source="data" control="flex" initialized="initGrid(s,e)" is-read-only="false" item-formatter="_itemFormatter">
 					<!-- define columns -->
 					<wj-flex-grid-column header="<s:message code="dcDcfg.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>

@@ -45,7 +45,7 @@
     </tbody>
   </table>
 
-    <div class="updownSet oh mb10 mt10">
+    <div class="updownSet oh mt10">
         <span class="s14 fl">중복되는 수신자번호는 하나만 저장됩니다.</span>
         <button class="btn_skyblue" id="btnAddRepresent" ng-click="addRow()">
             <s:message code="cmm.add" />
@@ -60,7 +60,7 @@
 
     <div class="w100 mt10">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="wj-gridWrap" style="height: 450px; overflow-y: hidden; overflow-x: hidden;">
           <wj-flex-grid
             id="wjGridList"
             autoGenerateColumns="false"

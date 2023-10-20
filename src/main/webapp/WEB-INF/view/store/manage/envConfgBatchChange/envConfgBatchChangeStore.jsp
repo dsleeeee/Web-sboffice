@@ -9,7 +9,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 
-<div id="envConfgBatchChangeStoreView" class="subCon" ng-controller="envConfgBatchChangeStoreCtrl" style="display: none;">
+<div id="envConfgBatchChangeStoreView" class="subCon" ng-controller="envConfgBatchChangeStoreCtrl" style="display: none;padding: 10px 20px 40px;">
 
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">
@@ -95,11 +95,11 @@
         </tbody>
     </table>
 
-    <div class="mt20 oh">
+    <div class="mt10 oh">
         <label id="lblEnvstCdStore"></label>
         <label id="lblEnvstNmStore"></label>
     </div>
-    <div class="mt20 oh">
+    <div class="mt10 oh">
         <%--환경변수값--%>
         <div class="sb-select dkbr ml5 fl" id="divComboEnvstValStore">
             <wj-combo-box

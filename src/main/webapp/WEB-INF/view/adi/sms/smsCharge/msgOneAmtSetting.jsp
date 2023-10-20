@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<div id="msgOneAmtSettingView" class="subCon" style="display: none;">
+<div id="msgOneAmtSettingView" class="subCon" style="display: none;padding: 10px 20px 40px;">
     <div ng-controller="msgOneAmtSettingCtrl">
 
         <%-- 조회조건 --%>
@@ -131,8 +131,8 @@
         </table>
 
         <%-- left --%>
-        <div class="wj-TblWrap mt20 mb20 w50 fl">
-            <div class="wj-TblWrapBr mr10 pd20" style="height:420px;">
+        <div class="wj-TblWrap mt10 mb20 w50 fl">
+            <div class="wj-TblWrapBr mr10 pd10" style="height:420px;">
                 <div class="w100 mt10 mb20">
                     <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
                         <div class="row">
@@ -160,8 +160,8 @@
     </div>
 
     <%--right--%>
-    <div class="wj-TblWrap mt20 mb20 w50 fr" ng-controller="msgOneAmtSettingDetailCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:420px; overflow-y: hidden;">
+    <div class="wj-TblWrap mt10 mb20 w50 fr" ng-controller="msgOneAmtSettingDetailCtrl">
+        <div class="wj-TblWrapBr pd10" style="height:420px; overflow-y: hidden;">
             <div class="updownSet oh mb10">
                 <span class="fl bk lh30">
                     <label id="lblOrgnCd"></label>

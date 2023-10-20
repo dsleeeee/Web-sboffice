@@ -5,7 +5,7 @@
 <c:set var="menuCd"	value="${sessionScope.sessionInfo.currentMenu.resrceCd}" />
 <c:set var="menuNm"	value="${sessionScope.sessionInfo.currentMenu.resrceNm}" />
 
-<div id="cornerDayPeriodView" class="subCon" style="display: none;" ng-controller="cornerDayPeriodCtrl">
+<div id="cornerDayPeriodView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="cornerDayPeriodCtrl">
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="corner.dayPeriod" /></a>
 		<%-- 조회 --%>
@@ -120,7 +120,7 @@
 			</div>
 			<%--위즈모 테이블--%>
 		    <div class="w100 mt10" id="wjWrapType1">
-		        <div class="wj-gridWrap col2-t2">
+		        <div class="wj-gridWrap col2-t2" style="height:400px;">
 				<wj-flex-grid
 				    loaded-rows="loadedRows(s,e)"
 					autoGenerateColumns="false"
@@ -183,7 +183,7 @@
 			</div>
 			<%--위즈모 테이블--%>
 		    <div class="w100 mt10" id="wjWrapType1">
-		        <div class="wj-gridWrap col2-t2">
+		        <div class="wj-gridWrap col2-t2" style="height:400px;">
 				<wj-flex-grid
 				    autoGenerateColumns="false"
                     selection-mode="Row"

@@ -7,7 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="gvHqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 
-<div id="tableDayView" class="subCon"  ng-controller="tableDayCtrl" style="display: none;">
+<div id="tableDayView" class="subCon"  ng-controller="tableDayCtrl" style="display: none;padding: 10px 20px 40px;">
 	<input type="hidden" id="HqOfficeCd" name="HqOfficeCd" ng-model="HqOfficeCd" value="${gvHqOfficeCd}"/>
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="tableDay.tableDaySale"/></a>
@@ -105,7 +105,7 @@
 
 	<%--위즈모 테이블--%>
 	<div class="w100 mt10" id="wjWrapType3">
-        <div class="wj-gridWrap">
+        <div class="wj-gridWrap" style="height:380px;">
 			<wj-flex-grid
 				id="tableDayGrid"
 				autoGenerateColumns="false"

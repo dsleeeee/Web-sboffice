@@ -9,7 +9,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
-<div class="subCon" id ="storeBatchChangeExcelUploadView" style="display: none">
+<div class="subCon" id ="storeBatchChangeExcelUploadView" style="display: none;padding: 10px 20px 40px;">
     <div ng-controller="storeBatchChangeExcelUploadCtrl">
         <%-- 조회조건 --%>
         <div class="searchBar flddUnfld">

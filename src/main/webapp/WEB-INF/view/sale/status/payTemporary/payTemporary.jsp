@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 
-<div class="subCon" ng-controller="payTemporaryCtrl" id="payTemporaryView" style="display: none;">
+<div class="subCon" ng-controller="payTemporaryCtrl" id="payTemporaryView" style="display: none;padding: 10px 20px 40px;">
   <div class="searchBar">
     <a href="#" class="open fl">${menuNm}</a>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">

@@ -35,13 +35,13 @@
 
 
     <div class="w40 fl" style="width: 40%">
-      <div class="wj-TblWrapBr mr10 pd10" style="height: 400px;">
+      <div class="wj-TblWrapBr mr10 pd10" style="height: 500px;">
         <div class="oh sb-select mb10">
           <span class="fl bk lh30"><s:message code='storeClose.closeMonthSubTitle'/></span>
         </div>
 
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 335px; overflow-x: hidden; overflow-y: hidden;">
+        <div class="wj-gridWrap" style="height: 450px; overflow-x: hidden; overflow-y: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
@@ -70,7 +70,7 @@
   </div>
 
   <div class="w60 fr" style="width: 60%" ng-controller="storeCloseDtlCtrl">
-    <div class="wj-TblWrapBr pd10" style="height: 400px;">
+    <div class="wj-TblWrapBr pd10" style="height: 500px;">
 
       <div class="oh sb-select mb10">
         <span class="fl bk lh30"><s:message code='storeClose.closeDateSubTitle'/></span>
@@ -82,7 +82,7 @@
       </div>
 
       <%--위즈모 테이블--%>
-      <div class="wj-gridWrap" style="height: 335px; overflow-x: hidden; overflow-y: hidden;">
+      <div class="wj-gridWrap" style="height: 450px; overflow-x: hidden; overflow-y: hidden;">
         <wj-flex-grid
           autoGenerateColumns="false"
           selection-mode="Row"

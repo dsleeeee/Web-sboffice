@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}" />
 <c:set var="baseUrl" value="/sale/satus/table/" />
 
-<div id="tableDayPeriodView" class="subCon" ng-controller="tableDayPeriodCtrl" style="display: none;">
+<div id="tableDayPeriodView" class="subCon" ng-controller="tableDayPeriodCtrl" style="display: none;padding: 10px 20px 40px;">
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message
 				code="tableDayPeriod.tableDayPeriodSale" /></a>
@@ -101,7 +101,7 @@
 
 	<%--위즈모 테이블--%>
     <div class="w100 mt10" id="wjWrapType1">
-        <div class="wj-gridWrap">
+        <div class="wj-gridWrap" style="height:400px;">
 			<wj-flex-grid 
 				autoGenerateColumns="false" 
 				selection-mode="Row" 

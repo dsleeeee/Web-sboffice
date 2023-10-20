@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="rtnStatusDayView" class="subCon"  ng-controller="rtnStatusDayCtrl">
+<div id="rtnStatusDayView" class="subCon"  ng-controller="rtnStatusDayCtrl" style="padding: 10px 20px 40px;">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="rtnStatus.rtnStatus"/></a>
       <%-- 조회 --%>
@@ -88,7 +88,7 @@
         <button class="btn_skyblue fr" ng-click="excelDownloadDay()"><s:message code="cmm.excel.down" />
         </button>
         </div>
-	    <div class="wj-gridWrap2 mt10">
+	    <div class="wj-gridWrap2">
 			<wj-flex-grid
 			  id="rtnStatusDayGrid"
 			  loaded-rows="loadedRows(s,e)"
@@ -117,7 +117,7 @@
 	    </div>
 	    <%-- //wj grid end --%>
 	    <%-- 페이지 리스트 --%>
-        <div class="pageNum mt20">
+        <div class="pageNum">
           <ul id="rtnStatusDayMainCtrlPager" data-size="10">
           </ul>
         </div>
@@ -153,7 +153,7 @@
     <div class="wj-TblWrap" style="height:550px; overflow-y: hidden; overflow-x: hidden;">
 		<%-- left --%>
 		<div class="w50 fl" ng-controller="rtnStatusDayDtlCtrl" style="width:48%">
-	        <div class="mt10 oh sb-select dkbr mb10 mr10" >
+	        <div class="oh sb-select dkbr mb10 mr10" >
 				<%-- 페이지 스케일  --%>
 				<wj-combo-box
 						class="w100px fl"
@@ -239,7 +239,7 @@
 
         <%-- right --%>
         <div class="w50 fr" ng-controller="rtnStatusPosDtlCtrl" style="width:48%">
-			<div class="mt10 oh sb-select dkbr mb10">
+			<div class="oh sb-select dkbr mb10">
 			   <%-- 페이지 스케일  --%>
 			   <wj-combo-box
 					   class="w100px fl"

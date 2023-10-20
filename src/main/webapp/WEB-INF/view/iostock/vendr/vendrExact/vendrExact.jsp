@@ -49,7 +49,7 @@
     </table>
 
     <div class="w60 fl mt10">
-      <div class="wj-TblWrapBr pd20 mr10">
+      <div class="wj-TblWrapBr pd10 mr10">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='vendrExact.vendrExact'/></span>
           <%-- 지급액 등록 --%>
@@ -57,7 +57,7 @@
             <s:message code="vendrExact.regExcclcAmt"/></button>
         </div>
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="wj-gridWrap" style="height: 450px; overflow-y: hidden; overflow-x: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
@@ -90,12 +90,12 @@
   </div>
 
   <div class="w40 fr mt10" ng-controller="vendrExactDtlCtrl">
-    <div class="wj-TblWrapBr pd20 mr10 ">
+    <div class="wj-TblWrapBr pd10 ">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='vendrExact.vendrExactDtl'/></span>
       </div>
       <%--위즈모 테이블--%>
-      <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
+      <div class="wj-gridWrap" style="height: 450px; overflow-y: hidden; overflow-x: hidden;">
         <wj-flex-grid
           autoGenerateColumns="false"
           selection-mode="Row"

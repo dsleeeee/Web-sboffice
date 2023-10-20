@@ -81,7 +81,7 @@
 
   <%--위즈모 테이블--%>
   <div class="wj-TblWrapBr mt10">
-    <div id="theGridStore" style="height: 300px; overflow-y: hidden; overflow-x: hidden;">
+    <div id="theGridStore" style="height: 420px; overflow-y: hidden; overflow-x: hidden;">
       <wj-flex-grid
               autoGenerateColumns="false"
               control="flex"

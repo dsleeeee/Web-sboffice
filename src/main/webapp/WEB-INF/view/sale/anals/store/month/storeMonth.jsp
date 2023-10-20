@@ -10,7 +10,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="baseUrl" value="/sale/anals/store/rank/"/>
 
-<div id="storeMonthView" class="subCon" ng-controller="storeMonthCtrl">
+<div id="storeMonthView" class="subCon" ng-controller="storeMonthCtrl" style="padding: 10px 20px 40px;">
 	<input type="hidden" id="HqOfficeCd" name="HqOfficeCd" ng-model="HqOfficeCd" value="${gvHqOfficeCd}"/>
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="store.month"/></a>		
@@ -109,7 +109,7 @@
   
 	<%--위즈모 테이블--%>
     <div class="w100 mt10">   
-      <div class="wj-gridWrap" style="height: 350px; overflow-x: hidden; overflow-y: hidden;">
+      <div class="wj-gridWrap" style="height: 380px; overflow-x: hidden; overflow-y: hidden;">
         <wj-flex-grid
           id="storeMonthGrid"
           autoGenerateColumns="false"

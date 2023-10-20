@@ -8,7 +8,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 <c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
 
-<div id="agencyAuthListView" class="subCon" style="display: none;" ng-controller="agencyAuthListCtrl">
+<div id="agencyAuthListView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="agencyAuthListCtrl">
 
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">

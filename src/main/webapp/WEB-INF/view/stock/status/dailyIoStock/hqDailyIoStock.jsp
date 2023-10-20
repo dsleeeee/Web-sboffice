@@ -53,7 +53,7 @@
 			</td>
 		</tr>
 	</table>
-	<div class="mt20 oh sb-select dkbr">
+	<div class="mt10 oh sb-select dkbr">
         <%-- 페이지 스케일  --%>
         <wj-combo-box
             class="w100px fl"

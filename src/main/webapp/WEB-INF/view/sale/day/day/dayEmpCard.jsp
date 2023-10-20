@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 
-<div id="dayEmpCardView" name="dayView"  class="subCon" style="display: none;" ng-controller="dayEmpCardCtrl">
+<div id="dayEmpCardView" name="dayView"  class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="dayEmpCardCtrl">
 
     <%-- 조회조건 --%>
     <div class="searchBar">
