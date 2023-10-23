@@ -28,7 +28,7 @@
       <th><s:message code="cmm.search.date"/></th>
       <td colspan="3">
         <div class="sb-select">
-          <span class="txtIn w150px">
+          <span class="txtIn w120px">
           <wj-combo-box
             id="srchDateFg"
             ng-model="dateFg"
@@ -39,9 +39,9 @@
             initialized="_initComboBox(s)">
           </wj-combo-box>
           </span>
-          <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w120px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w120px"></span>
         </div>
       </td>
     </tr>
@@ -49,7 +49,7 @@
       <%-- 진행구분 --%>
       <th><s:message code="storeOrder.procFg"/></th>
       <td>
-        <span class="txtIn w150px sb-select fl mr5">
+        <span class="txtIn w120px sb-select fl mr5">
           <wj-combo-box
             id="srchProcFg"
             ng-model="procFg"
@@ -82,10 +82,10 @@
           <input type="hidden" id="rtnStoreOrderSelectStoreCd" value="${sessionInfo.storeCd}"/>
         </c:if>
         <div class="sb-select fl mr10">
-          <span class="txtIn"><input id="reqDate" class="w150px" ng-model="rtnStoreOrder.reqDate"></span>
+          <span class="txtIn"><input id="reqDate" class="w120px" ng-model="rtnStoreOrder.reqDate"></span>
         </div>
         <%-- 거래처 --%>
-        <div class="sb-select fl w150px" <c:if test="${envst1242 == '0'}">style="display: none;"</c:if>>
+        <div class="sb-select fl w120px" <c:if test="${envst1242 == '0'}">style="display: none;"</c:if>>
           <wj-combo-box
             id="vendrCd"
             ng-model="vendrCd"

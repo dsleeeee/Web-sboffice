@@ -26,7 +26,7 @@
       <th><s:message code="cmm.search.date"/></th>
       <td colspan="3">
         <div class="sb-select">
-          <span class="txtIn w150px">
+          <span class="txtIn w120px">
           <wj-combo-box
             id="srchDateFg"
             ng-model="dateFg"
@@ -37,9 +37,9 @@
             initialized="_initComboBox(s)">
           </wj-combo-box>
           </span>
-          <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w120px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w120px"></span>
         </div>
       </td>
     </tr>
@@ -47,7 +47,7 @@
       <%-- 진행구분 --%>
       <th><s:message code="rtnDstbCloseProd.procFg"/></th>
       <td colspan="3">
-        <span class="txtIn w150px sb-select fl mr5">
+        <span class="txtIn w120px sb-select fl mr5">
           <wj-combo-box
             id="srchProcFg"
             ng-model="procFg"
@@ -65,7 +65,7 @@
       <th><s:message code="rtnDstbCloseProd.reqDate"/></th>
       <td>
         <div class="sb-select fl mr10">
-          <span class="txtIn"><input id="reqDate" class="w150px"></span>
+          <span class="txtIn"><input id="reqDate" class="w120px"></span>
         </div>
         <a href="#" class="btn_grayS" ng-click="add()"><s:message code="rtnDstbCloseProd.addRegist"/></a>
       </td>

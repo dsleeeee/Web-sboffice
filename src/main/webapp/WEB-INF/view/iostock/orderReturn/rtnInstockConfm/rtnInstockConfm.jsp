@@ -27,17 +27,17 @@
       <th><s:message code="rtnInstockConfm.outDate"/></th>
       <td colspan="3">
         <div class="sb-select">
-          <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w120px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w120px"></span>
         </div>
       </td>
     </tr>
     <tr>
-      <%-- 진행 --%>
+      <%-- 진행구분 --%>
       <th><s:message code="rtnInstockConfm.procFg"/></th>
       <td>
-        <span class="txtIn w150px sb-select fl mr5">
+        <span class="txtIn w120px sb-select fl mr5">
           <wj-combo-box
             id="srchProcFg"
             ng-model="procFg"
@@ -49,10 +49,10 @@
           </wj-combo-box>
         </span>
       </td>
-      <%-- 종류 --%>
+      <%-- 전표종류 --%>
       <th><s:message code="rtnInstockConfm.slipKind"/></th>
       <td>
-        <span class="txtIn w150px sb-select fl mr5">
+        <span class="txtIn w120px sb-select fl mr5">
           <wj-combo-box
             id="srchSlipKind"
             ng-model="slipKind"
@@ -66,10 +66,10 @@
       </td>
     </tr>
     <tr>
-      <%-- 기사 --%>
+      <%-- 배송기사 --%>
       <th><s:message code="rtnInstockConfm.dlvrNm"/></th>
       <td>
-        <span class="txtIn w150px sb-select fl mr5">
+        <span class="txtIn w120px sb-select fl mr5">
           <wj-combo-box
             id="srchDlvrCd"
             ng-model="dlvrCd"

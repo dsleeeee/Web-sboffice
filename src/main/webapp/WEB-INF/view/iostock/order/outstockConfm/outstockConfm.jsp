@@ -26,9 +26,9 @@
       <th><s:message code="outstockConfm.outDate"/></th>
       <td colspan="3">
         <div class="sb-select">
-          <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w120px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w120px"></span>
         </div>
       </td>
     </tr>
@@ -36,7 +36,7 @@
       <%-- 진행 --%>
       <th><s:message code="outstockConfm.procFg"/></th>
       <td>
-        <span class="txtIn w150px sb-select fl mr5">
+        <span class="txtIn w120px sb-select fl mr5">
           <wj-combo-box
             id="srchProcFg"
             ng-model="procFg"
@@ -51,7 +51,7 @@
       <%-- 종류 --%>
       <th><s:message code="outstockConfm.slipKind"/></th>
       <td>
-        <span class="txtIn w150px sb-select fl mr5">
+        <span class="txtIn w120px sb-select fl mr5">
           <wj-combo-box
             id="srchSlipKind"
             ng-model="slipKind"
@@ -68,7 +68,7 @@
       <%-- 배송기사 --%>
       <th><s:message code="outstockConfm.dlvrNm"/></th>
       <td>
-          <span class="txtIn w150px sb-select fl mr5">
+          <span class="txtIn w120px sb-select fl mr5">
             <wj-combo-box
               id="srchDlvrCd"
               ng-model="srch.dlvrCd"
@@ -98,7 +98,7 @@
           <jsp:param name="displayWidth" value="170px"/>
         </jsp:include>--%>
         <%--// 거래처선택 모듈 싱글 선택 사용시 include --%>
-          <div class="sb-select fl w150px">
+          <div class="sb-select fl w120px">
             <wj-combo-box
               id="vendrCd"
               ng-model="vendrCd"
@@ -141,7 +141,7 @@
     <p class="s14 bk fl mr5 lh30" <c:if test="${storageEnvstVal == '0'}">style="display: none;"</c:if> >
       <s:message code="outstockConfm.dtl.outStorage"/>
     </p>
-    <span class="txtIn w150px sb-select fl mr5" <c:if test="${storageEnvstVal == '0'}">style="display: none;"</c:if> >
+    <span class="txtIn w120px sb-select fl mr5" <c:if test="${storageEnvstVal == '0'}">style="display: none;"</c:if> >
       <wj-combo-box
         id="srchOutStorageCd"
         ng-model="save.outStorageCd"
@@ -150,13 +150,12 @@
         selected-value-path="value"
         is-editable="false"
         initialized="_initComboBox(s)"
-        selected-index-changed="selectedIndexChanged(s)"
-        >
+        selected-index-changed="selectedIndexChanged(s)">
       </wj-combo-box>
     </span>
     <%--배송기사 --%>
     <p class="s14 bk fl mr5 lh30"><s:message code="outstockConfm.dtl.dlvrNm"/></p>
-    <span class="txtIn w150px sb-select fl mr5">
+    <span class="txtIn w120px sb-select fl mr5">
       <wj-combo-box
         id="saveDlvrCd"
         ng-model="save.dlvrCd"

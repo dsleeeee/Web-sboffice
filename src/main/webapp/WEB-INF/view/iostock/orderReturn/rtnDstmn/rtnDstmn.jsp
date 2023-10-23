@@ -25,9 +25,9 @@
       <th><s:message code="rtnDstmn.outDate"/></th>
       <td colspan="3">
         <div class="sb-select">
-          <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w120px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w120px"></span>
         </div>
       </td>
     </tr>
@@ -35,7 +35,7 @@
       <%-- 진행 --%>
       <th><s:message code="rtnDstmn.procFg"/></th>
       <td>
-        <span class="txtIn w150px sb-select fl mr5">
+        <span class="txtIn w120px sb-select fl mr5">
           <wj-combo-box
             id="srchProcFg"
             ng-model="procFg"
@@ -50,7 +50,7 @@
       <%-- 종류 --%>
       <th><s:message code="rtnDstmn.slipKind"/></th>
       <td>
-        <span class="txtIn w150px sb-select fl mr5">
+        <span class="txtIn w120px sb-select fl mr5">
           <wj-combo-box
             id="srchSlipKind"
             ng-model="slipKind"
@@ -67,7 +67,7 @@
       <%-- 기사 --%>
       <th><s:message code="rtnDstmn.dlvrNm"/></th>
       <td>
-        <span class="txtIn w150px sb-select fl mr5">
+        <span class="txtIn w120px sb-select fl mr5">
           <wj-combo-box
             id="srchDlvrCd"
             ng-model="dlvrCd"
@@ -108,7 +108,7 @@
       <%-- 거래명세표 --%>
       <th><s:message code="rtnDstmn.stmtAcct"/></th>
       <td colspan="3">
-        <span class="txtIn w150px sb-select fl mr5">
+        <span class="txtIn w120px sb-select fl mr5">
         <wj-combo-box
           id="stmtAcctFg"
           ng-model="stmtAcctFg"

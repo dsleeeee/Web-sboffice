@@ -25,9 +25,9 @@
       <th><s:message code="rtnOutstockConfm.outDate"/></th>
       <td colspan="3">
         <div class="sb-select">
-          <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w120px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w120px"></span>
         </div>
       </td>
     </tr>
@@ -35,7 +35,7 @@
       <%-- 진행 --%>
       <th><s:message code="rtnOutstockConfm.procFg"/></th>
       <td>
-        <span class="txtIn w150px sb-select fl mr5">
+        <span class="txtIn w120px sb-select fl mr5">
           <wj-combo-box
             id="srchProcFg"
             ng-model="procFg"
@@ -50,7 +50,7 @@
       <%-- 종류 --%>
       <th><s:message code="rtnOutstockConfm.slipKind"/></th>
         <td>
-          <span class="txtIn w150px sb-select fl mr5">
+          <span class="txtIn w120px sb-select fl mr5">
             <wj-combo-box
               id="srchSlipKind"
               ng-model="slipKind"
@@ -67,7 +67,7 @@
       <%-- 기사 --%>
       <th><s:message code="rtnOutstockConfm.dlvrNm"/></th>
       <td>
-        <span class="txtIn w150px sb-select fl mr5">
+        <span class="txtIn w120px sb-select fl mr5">
           <wj-combo-box
             id="srchDlvrCd"
             ng-model="dlvrCd"
@@ -96,7 +96,7 @@
           <jsp:param name="displayNm" value="전체"/>
         </jsp:include>--%>
         <%--// 거래처선택 모듈 싱글 선택 사용시 include --%>
-          <div class="sb-select fl w150px">
+          <div class="sb-select fl w120px">
             <wj-combo-box
               id="vendrCd"
               ng-model="vendrCd"
