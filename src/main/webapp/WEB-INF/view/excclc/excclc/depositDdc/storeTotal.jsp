@@ -27,23 +27,24 @@
             <tbody>
             <tr>
                 <%-- 조회일자 --%>
-                <th><s:message code="depositDdc.searchDate" /></th>
+                <th><s:message code="cmm.search.date"/></th>
                 <td>
                     <div class="sb-select">
-                        <span class="txtIn"> <input id="srchStartDate" name="srchStartDate" class="w150px" /></span>
+                        <span class="txtIn"> <input id="srchStartDate" name="srchStartDate" class="w120px" /></span>
                         <span class="rg">~</span>
-                        <span class="txtIn"> <input id="srchEndDate" name="srchEndDate" class="w150px" /></span>
+                        <span class="txtIn"> <input id="srchEndDate" name="srchEndDate" class="w120px" /></span>
                         </span>
                     </div>
                 </td>
                 <%-- 매장선택 --%>
-                <th><s:message code="depositDdc.storeSelect" /></th>
+                <th><s:message code="cmm.store.select"/></th>
                 <td>
-                    <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-                    <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                    <%-- 매장선택 모듈 사용시 include --%>
+                    <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                        <jsp:param name="targetTypeFg" value="M"/>
                         <jsp:param name="targetId" value="selectStore"/>
                     </jsp:include>
-                    <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+                    <%--// 매장선택 모듈 사용시 include --%>
                 </td>
             </tr>
             </tbody>

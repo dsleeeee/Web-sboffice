@@ -23,24 +23,23 @@
     <tbody>
     <tr>
       <%-- 조회일자 --%>
-      <th><s:message code="storeLoanInfo.searchDate"/></th>
-      <td colspan="3">
+      <th><s:message code="cmm.search.date"/></th>
+      <td>
         <div class="sb-select">
           <span class="txtIn"><input id="srchStartDate" class="w120px"></span>
           <span class="rg">~</span>
           <span class="txtIn"><input id="srchEndDate" class="w120px"></span>
         </div>
       </td>
-    </tr>
-    <tr>
-      <%-- 매장코드 --%>
-      <th><s:message code="storeLoanInfo.store"/></th>
-      <td colspan="3">
-        <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-        <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+      <%-- 매장선택 --%>
+      <th><s:message code="cmm.store.select"/></th>
+      <td>
+        <%-- 매장선택 모듈 사용시 include --%>
+        <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+          <jsp:param name="targetTypeFg" value="M"/>
           <jsp:param name="targetId" value="storeLoanInfoSelectStore"/>
         </jsp:include>
-        <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+        <%--// 매장선택 모듈 사용시 include --%>
       </td>
     </tr>
     </tbody>
