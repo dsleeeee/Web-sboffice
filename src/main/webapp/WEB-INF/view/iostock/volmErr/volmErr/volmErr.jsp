@@ -26,7 +26,7 @@
       <th><s:message code="cmm.search.date"/></th>
       <td <c:if test="${sessionInfo.orgnFg == 'STORE'}"> colspan="3"</c:if> >
         <div class="sb-select">
-          <span class="txtIn w150px">
+          <span class="txtIn w120px">
             <wj-combo-box
               id="srchDateFg"
               ng-model="dateFg"
@@ -37,20 +37,21 @@
               initialized="_initComboBox(s)">
             </wj-combo-box>
           </span>
-          <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w120px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w120px"></span>
         </div>
       </td>
       <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-	      <%-- 매장코드 --%>
-	      <th><s:message code="volmErr.storeCd"/></th>
+          <%-- 매장선택 --%>
+          <th><s:message code="cmm.store.select"/></th>
 	      <td colspan="3">
-	        <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-	        <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
-	          <jsp:param name="targetId" value="volmErrSelectStore"/>
-	        </jsp:include>
-	        <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+            <%-- 매장선택 모듈 사용시 include --%>
+            <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+              <jsp:param name="targetTypeFg" value="M"/>
+              <jsp:param name="targetId" value="volmErrSelectStore"/>
+            </jsp:include>
+            <%--// 매장선택 모듈 사용시 include --%>
 	      </td>
       </c:if>
     </tr>
@@ -59,7 +60,7 @@
       <th><s:message code="volmErr.slipFg"/></th>
       <td>
         <div class="sb-select">
-          <span class="txtIn w150px">
+          <span class="txtIn w120px">
             <wj-combo-box
               id="srchSlipFg"
               ng-model="slipFg"
@@ -76,7 +77,7 @@
       <th><s:message code="volmErr.procFg"/></th>
       <td>
         <div class="sb-select">
-          <span class="txtIn w150px">
+          <span class="txtIn w120px">
             <wj-combo-box
               id="srchProcFg"
               ng-model="procFg"
