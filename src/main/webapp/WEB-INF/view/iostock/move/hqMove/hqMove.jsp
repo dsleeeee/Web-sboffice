@@ -27,9 +27,9 @@
       <th><s:message code="cmm.search.date"/></th>
       <td colspan="3">
         <div class="sb-select">
-          <span class="txtIn"><input id="srchHqMoveStartDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchHqMoveStartDate" class="w120px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchHqMoveEndDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchHqMoveEndDate" class="w120px"></span>
         </div>
       </td>
     </tr>
@@ -38,7 +38,7 @@
       <th><s:message code="hqStoreMove.dlvrFg"/></th>
       <td>
         <div class="sb-select">
-          <span class="txtIn w150px">
+          <span class="txtIn w120px">
             <wj-combo-box
               id="srchHqMoveDlvrFg"
               ng-model="dlvrFg"
@@ -55,7 +55,7 @@
       <th><s:message code="hqStoreMove.procFg"/></th>
       <td>
         <div class="sb-select">
-          <span class="txtIn w150px">
+          <span class="txtIn w120px">
             <wj-combo-box
               id="srchHqMoveProcFg"
               ng-model="procFg"

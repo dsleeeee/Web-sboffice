@@ -26,9 +26,9 @@
       <th><s:message code="cmm.search.date"/></th>
       <td colspan="3">
         <div class="sb-select">
-          <span class="txtIn"><input id="srchHqStoreMoveStartDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchHqStoreMoveStartDate" class="w120px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchHqStoreMoveEndDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchHqStoreMoveEndDate" class="w120px"></span>
         </div>
       </td>
     </tr>
@@ -37,7 +37,7 @@
       <th><s:message code="hqStoreMove.dlvrFg"/></th>
       <td>
         <div class="sb-select">
-          <span class="txtIn w150px">
+          <span class="txtIn w120px">
             <wj-combo-box
               id="srchHqStoreMoveDlvrFg"
               ng-model="dlvrFg"
@@ -54,7 +54,7 @@
       <th><s:message code="hqStoreMove.procFg"/></th>
       <td>
         <div class="sb-select">
-          <span class="txtIn w150px">
+          <span class="txtIn w120px">
             <wj-combo-box
               id="srchHqStoreMoveProcFg"
               ng-model="procFg"
@@ -69,9 +69,10 @@
       </td>
     </tr>
     <tr>
-      <%-- 출고매장 --%>
+      <%-- 출고매장선택 --%>
       <th><s:message code="hqStoreMove.outStoreCd"/></th>
       <td colspan="3">
+        <%-- [NXPOS-1648,1699] 매장선택 모듈 통합 / 추후작업예정 --%>
         <%-- 매장선택 모듈 싱글 선택 사용시 include
              param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
                           displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
@@ -86,9 +87,10 @@
       </td>
     </tr>
     <tr>
-      <%-- 입고매장 --%>
+      <%-- 입고매장선택 --%>
       <th><s:message code="hqStoreMove.inStoreCd"/></th>
       <td colspan="3">
+        <%-- [NXPOS-1648,1699] 매장선택 모듈 통합 / 추후작업예정 --%>
         <%-- 매장선택 모듈 싱글 선택 사용시 include
              param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
                           displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
