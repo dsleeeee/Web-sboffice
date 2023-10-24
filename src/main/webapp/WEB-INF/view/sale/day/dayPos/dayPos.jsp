@@ -261,34 +261,34 @@
             <wj-flex-grid-column header="${mpayCol.mpayNm}" binding="mpay${mpayCol.mpayCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           </c:forEach>
           <wj-flex-grid-column header="<s:message code="day.dayTotal.genRealSaleAmt"/>" binding="genRealSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="day.dayTotal.genRealSaleRate"/>" binding="genRealSaleRate" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.genRealSaleAmt"/><s:message code="day.dayTotal.genRealSaleRate"/>" binding="genRealSaleRate" width="135" align="right" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="day.dayTotal.dlvrRealSaleAmt"/>" binding="dlvrRealSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="day.dayTotal.dlvrRealSaleRate"/>" binding="dlvrRealSaleRate" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.dlvrRealSaleAmt"/><s:message code="day.dayTotal.dlvrRealSaleRate"/>" binding="dlvrRealSaleRate" width="135" align="right" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="day.dayTotal.packRealSaleAmt"/>" binding="packRealSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="day.dayTotal.packRealSaleRate"/>" binding="packRealSaleRate" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.packRealSaleAmt"/><s:message code="day.dayTotal.packRealSaleRate"/>" binding="packRealSaleRate" width="135" align="right" is-read-only="true"></wj-flex-grid-column>
           <%-- 채널 컬럼 생성--%>
           <%-- 포스(포스+CID) --%>
-          <wj-flex-grid-column header="<s:message code="day.dayTotal.genRealSaleCnt"/>"  binding="genRealSaleCntPos" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.genBillCnt"/>"  binding="genRealSaleCntPos" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="day.dayTotal.genRealSaleAmt"/>"  binding="genRealSaleAmtPos" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="day.dayTotal.dlvrRealSaleCnt"/>" binding="dlvrRealSaleCntPos" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.dlvrBillCnt"/>" binding="dlvrRealSaleCntPos" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="day.dayTotal.dlvrRealSaleAmt"/>" binding="dlvrRealSaleAmtPos" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="day.dayTotal.packRealSaleCnt"/>" binding="packRealSaleCntPos" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.packBillCnt"/>" binding="packRealSaleCntPos" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="day.dayTotal.packRealSaleAmt"/>" binding="packRealSaleAmtPos" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <%-- 포스(포스+CID) --%>
           <%-- 포스(채널합) --%>
-          <wj-flex-grid-column header="<s:message code="day.dayTotal.genRealSaleCnt"/>"  binding="genRealSaleCntChannel" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.genBillCnt"/>"  binding="genRealSaleCntChannel" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="day.dayTotal.genRealSaleAmt"/>"  binding="genRealSaleAmtChannel" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="day.dayTotal.dlvrRealSaleCnt"/>" binding="dlvrRealSaleCntChannel" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.dlvrBillCnt"/>" binding="dlvrRealSaleCntChannel" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="day.dayTotal.dlvrRealSaleAmt"/>" binding="dlvrRealSaleAmtChannel" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="day.dayTotal.packRealSaleCnt"/>" binding="packRealSaleCntChannel" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.packBillCnt"/>" binding="packRealSaleCntChannel" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="day.dayTotal.packRealSaleAmt"/>" binding="packRealSaleAmtChannel" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <%-- 포스(채널합) --%>
           <%-- 포스(키오스크) --%>
-          <wj-flex-grid-column header="<s:message code="day.dayTotal.genRealSaleCnt"/>"  binding="genRealSaleCntKiosk" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.genBillCnt"/>"  binding="genRealSaleCntKiosk" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="day.dayTotal.genRealSaleAmt"/>"  binding="genRealSaleAmtKiosk" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="day.dayTotal.dlvrRealSaleCnt"/>" binding="dlvrRealSaleCntKiosk" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.dlvrBillCnt"/>" binding="dlvrRealSaleCntKiosk" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="day.dayTotal.dlvrRealSaleAmt"/>" binding="dlvrRealSaleAmtKiosk" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="day.dayTotal.packRealSaleCnt"/>" binding="packRealSaleCntKiosk" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="day.dayTotal.packBillCnt"/>" binding="packRealSaleCntKiosk" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="day.dayTotal.packRealSaleAmt"/>" binding="packRealSaleAmtKiosk" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <%-- 포스(키오스크) --%>
           <c:forEach var="dlvrInFgCol" items="${dlvrInFgColList}">

@@ -256,34 +256,34 @@
             <wj-flex-grid-column header="${mpayCol.mpayNm}" binding="mpay${mpayCol.mpayCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           </c:forEach>
           <wj-flex-grid-column header="<s:message code="month.genRealSaleAmt"/>" binding="genRealSaleAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="month.genRealSaleAmtPer"/>" binding="genRealSaleRate" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="month.genRealSaleAmt"/><s:message code="month.genRealSaleAmtPer"/>" binding="genRealSaleRate" width="135" is-read-only="true" align="right"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="month.dlvrRealSaleAmt"/>" binding="dlvrRealSaleAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="month.dlvrRealSaleAmtPer"/>" binding="dlvrRealSaleRate" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="month.dlvrRealSaleAmt"/><s:message code="month.dlvrRealSaleAmtPer"/>" binding="dlvrRealSaleRate" width="135" is-read-only="true" align="right"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="month.packRealSaleAmt"/>" binding="packRealSaleAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="month.packRealSaleAmtPer"/>" binding="packRealSaleRate" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="month.packRealSaleAmt"/><s:message code="month.packRealSaleAmtPer"/>" binding="packRealSaleRate" width="135" is-read-only="true" align="right"></wj-flex-grid-column>
           <%-- 채널 컬럼 생성--%>
           <%-- 포스(포스+CID) --%>
-          <wj-flex-grid-column header="<s:message code="month.genRealSaleCnt"/>"  binding="genRealSaleCntPos" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="month.genBillCnt"/>"  binding="genRealSaleCntPos" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="month.genRealSaleAmt"/>"  binding="genRealSaleAmtPos" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="month.dlvrRealSaleCnt"/>" binding="dlvrRealSaleCntPos" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="month.dlvrBillCnt"/>" binding="dlvrRealSaleCntPos" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="month.dlvrRealSaleAmt"/>" binding="dlvrRealSaleAmtPos" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="month.packRealSaleCnt"/>" binding="packRealSaleCntPos" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="month.packBillCnt"/>" binding="packRealSaleCntPos" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="month.packRealSaleAmt"/>" binding="packRealSaleAmtPos" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <%-- 포스(포스+CID) --%>
           <%-- 포스(채널합) --%>
-          <wj-flex-grid-column header="<s:message code="month.genRealSaleCnt"/>"  binding="genRealSaleCntChannel" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="month.genBillCnt"/>"  binding="genRealSaleCntChannel" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="month.genRealSaleAmt"/>"  binding="genRealSaleAmtChannel" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="month.dlvrRealSaleCnt"/>" binding="dlvrRealSaleCntChannel" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="month.dlvrBillCnt"/>" binding="dlvrRealSaleCntChannel" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="month.dlvrRealSaleAmt"/>" binding="dlvrRealSaleAmtChannel" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="month.packRealSaleCnt"/>" binding="packRealSaleCntChannel" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="month.packBillCnt"/>" binding="packRealSaleCntChannel" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="month.packRealSaleAmt"/>" binding="packRealSaleAmtChannel" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <%-- 포스(채널합) --%>
           <%-- 포스(키오스크) --%>
-          <wj-flex-grid-column header="<s:message code="month.genRealSaleCnt"/>"  binding="genRealSaleCntKiosk" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="month.genBillCnt"/>"  binding="genRealSaleCntKiosk" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="month.genRealSaleAmt"/>"  binding="genRealSaleAmtKiosk" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="month.dlvrRealSaleCnt"/>" binding="dlvrRealSaleCntKiosk" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="month.dlvrBillCnt"/>" binding="dlvrRealSaleCntKiosk" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="month.dlvrRealSaleAmt"/>" binding="dlvrRealSaleAmtKiosk" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="month.packRealSaleCnt"/>" binding="packRealSaleCntKiosk" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="month.packBillCnt"/>" binding="packRealSaleCntKiosk" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="month.packRealSaleAmt"/>" binding="packRealSaleAmtKiosk" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <%-- 포스(키오스크) --%>
           <c:forEach var="dlvrInFgCol" items="${dlvrInFgColList}">
