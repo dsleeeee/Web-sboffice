@@ -75,14 +75,15 @@
                 </div>
             </td>
             <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-                <%-- 매장명 --%>
-                <th>
-                    <s:message code="stock.storeNm" />
-                </th>
+                <%-- 매장선택 --%>
+                <th><s:message code="cmm.store.select"/></th>
                 <td>
-                    <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                    <%-- 매장선택 모듈 사용시 include --%>
+                    <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                        <jsp:param name="targetTypeFg" value="M"/>
                         <jsp:param name="targetId" value="stockSelectStore"/>
                     </jsp:include>
+                    <%--// 매장선택 모듈 사용시 include --%>
                 </td>
             </c:if>
             <c:if test="${sessionInfo.orgnFg == 'STORE'}">
