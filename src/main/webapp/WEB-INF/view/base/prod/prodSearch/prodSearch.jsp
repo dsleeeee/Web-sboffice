@@ -32,14 +32,14 @@
             <col class="w35" />
         </colgroup>
         <tbody>
-        <%-- 등록 일자 --%>
         <tr>
+            <%-- 등록 일자 --%>
             <th><s:message code="prod.regDate" /></th>
             <td colspan="3">
                 <div class="sb-select">
-                    <span class="txtIn"><input id="srchTimeStartDate" ng-model="startDate" class="w120px"></span>
+                    <span class="txtIn"><input id="srchTimeStartDate" ng-model="startDate" class="w110px"></span>
                     <span class="rg">~</span>
-                    <span class="txtIn"><input id="srchTimeEndDate" ng-model="endDate" class="w120px"></span>
+                    <span class="txtIn"><input id="srchTimeEndDate" ng-model="endDate" class="w110px"></span>
                     <%--전체기간--%>
                     <span class="chk ml10">
                       <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />

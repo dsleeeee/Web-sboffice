@@ -29,13 +29,12 @@
 			<th><s:message code="periodIostock.srchDate" /></th>
 			<td colspan="3">
 			<div class="sb-select">
-				<span class="txtIn"><input id="srchStartDate" ng-model="startDate" class="w120px"></span>
+				<span class="txtIn"><input id="srchStartDate" ng-model="startDate" class="w110px"></span>
 				<span class="rg">~</span>
-				<span class="txtIn"><input id="srchEndDate" ng-model="endDate" class="w120px"></span>
+				<span class="txtIn"><input id="srchEndDate" ng-model="endDate" class="w110px"></span>
 			</div>
 			</td>
 		</tr>
-
 		<tr>
 			<%-- 조회옵션 --%>
 			<th><s:message code="periodIostock.srchOption" /></th>
