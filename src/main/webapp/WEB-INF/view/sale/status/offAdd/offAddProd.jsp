@@ -25,9 +25,9 @@
 		        <col class="w35"/>
       		</colgroup>
       		<tbody>
-	       	<%-- 조회일자 --%>
 			<tr>
-		    	<th><s:message code="cmm.search.date" /></th>
+				<%-- 조회일자 --%>
+				<th><s:message code="cmm.search.date" /></th>
 	        	<td>
 					<div class="sb-select">
 						<span class="txtIn"> <input id="startDateProd" name="startDate" class="w110px" /></span>
@@ -47,14 +47,13 @@
 				</td>
 			</tr>
 			<tr>
-	        <%-- 상품코드 --%>
-	        <th><s:message code="offAdd.prod.prodCd" /></th>
-	        <td><input type="text" id="srchProdCd" class="sb-input w100" maxlength="13" onkeyup="fnNxBtnSearch('3');"/></td>
-	        <%-- 상품명 --%>
-	        <th><s:message code="offAdd.prod.prodNm" /></th>
-	        <td><input type="text" id="srchProdNm" class="sb-input w100" maxlength="100" onkeyup="fnNxBtnSearch('3');"/></td>
+				<%-- 상품코드 --%>
+				<th><s:message code="offAdd.prod.prodCd" /></th>
+				<td><input type="text" id="srchProdCd" class="sb-input w100" maxlength="13" onkeyup="fnNxBtnSearch('3');"/></td>
+				<%-- 상품명 --%>
+				<th><s:message code="offAdd.prod.prodNm" /></th>
+				<td><input type="text" id="srchProdNm" class="sb-input w100" maxlength="100" onkeyup="fnNxBtnSearch('3');"/></td>
 	      	</tr>
-
 			<tr>
 				<%-- 상품분류 --%>
 				<th><s:message code="offAdd.prod.prodClass"/></th>
@@ -81,16 +80,17 @@
 					</div>
 				</td>
 			</tr>
-
       		<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 	        <tr>
-	            <%-- 매장코드 --%>
-	          	<th><s:message code="offAdd.prod.store"/></th>
+				<%-- 매장선택 --%>
+				<th><s:message code="cmm.store.select"/></th>
 	          	<td>
-	            	<jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
-	             		<jsp:param name="targetId" value="offAddProdStore"/>
-	            	</jsp:include>
-	              	<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+					<%-- 매장선택 모듈 사용시 include --%>
+					<jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+						<jsp:param name="targetTypeFg" value="M"/>
+						<jsp:param name="targetId" value="offAddProdStore"/>
+					</jsp:include>
+					<%--// 매장선택 모듈 사용시 include --%>
 	          	</td>
 				<th></th>
 				<td></td>

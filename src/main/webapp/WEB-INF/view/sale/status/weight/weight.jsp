@@ -30,9 +30,7 @@
         <tbody>
             <tr>
                 <%-- 조회일자 --%>
-                <th>
-                    <s:message code="cmm.search.date" />
-                </th>
+                <th><s:message code="cmm.search.date" /></th>
                 <td>
                     <div class="sb-select">
                         <span class="txtIn"> <input id="startDate" name="startDate" class="w110px" /></span>
@@ -41,15 +39,15 @@
                     </div>
                 </td>
                 <c:if test="${orgnFg == 'HQ'}">
-                    <%-- 매장코드 --%>
-                    <th><s:message code="weight.store"/></th>
+                    <%-- 매장선택 --%>
+                    <th><s:message code="cmm.store.select"/></th>
                     <td>
-                        <%-- [NXPOS-1648,1699] 매장선택 모듈 통합 / 추후작업예정 --%>
-                        <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-                        <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
+                        <%-- 매장선택 모듈 사용시 include --%>
+                        <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                            <jsp:param name="targetTypeFg" value="M"/>
                             <jsp:param name="targetId" value="weightStore"/>
                         </jsp:include>
-                        <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+                        <%--// 매장선택 모듈 사용시 include --%>
                     </td>
                 </c:if>
                 <c:if test="${orgnFg != 'HQ'}">
