@@ -29,7 +29,7 @@
         <th><s:message code="cmm.search.date"/></th>
         <td>
           <div class="sb-select">
-            <span class="txtIn"><input id="srchStoreDayStartDate" class="w120px"></span>
+            <span class="txtIn"><input id="srchStoreDayStartDate" class="w110px"></span>
           </div>
         </td>
         <input type="hidden" id="storeDaySelectStoreCd" valaue=""/>
@@ -48,7 +48,6 @@
         <%-- 상품코드 --%>
         <th><s:message code="storeDay.prodCd"/></th>
         <td><input type="text" class="sb-input w100" id="srchProdCd" ng-model="srchProdCd" onkeyup="fnNxBtnSearch();"/></td>
-
         <%-- 상품명 --%>
         <th><s:message code="storeDay.prodNm"/></th>
         <td><input type="text" class="sb-input w100" id="srchProdNm" ng-model="srchProdNm" onkeyup="fnNxBtnSearch();"/></td>

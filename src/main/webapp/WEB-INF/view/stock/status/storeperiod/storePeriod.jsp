@@ -23,13 +23,13 @@
             <col class="w37"/>
 		</colgroup>
 		<tr>
-			<%-- 조회기간 --%>
-			<th><s:message code="storePeriod.srchDate" /></th>
+			<%-- 조회일자 --%>
+			<th><s:message code="cmm.search.date"/></th>
 			<td>
 			<div class="sb-select">
-				<span class="txtIn"><input id="srchClassStartDate" class="w120px"></span>
+				<span class="txtIn"><input id="srchClassStartDate" class="w110px"></span>
 				<span class="rg">~</span>
-				<span class="txtIn"><input id="srchClassEndDate" class="w120px"></span>
+				<span class="txtIn"><input id="srchClassEndDate" class="w110px"></span>
 			</div>
 			</td>
 			<%-- 매장선택 --%>

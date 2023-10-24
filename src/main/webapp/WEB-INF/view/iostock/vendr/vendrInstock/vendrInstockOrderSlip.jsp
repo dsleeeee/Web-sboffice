@@ -24,9 +24,9 @@
           <th><s:message code="vendrInstock.slip.orderDate"/></th>
           <td>
             <div class="sb-select">
-              <span class="txtIn"><input id="srchSlipStartDate" class="w120px"></span>
+              <span class="txtIn"><input id="srchSlipStartDate" class="w110px"></span>
               <span class="rg">~</span>
-              <span class="txtIn"><input id="srchSlipEndDate" class="w120px"></span>
+              <span class="txtIn"><input id="srchSlipEndDate" class="w110px"></span>
             </div>
           </td>
         </tr>

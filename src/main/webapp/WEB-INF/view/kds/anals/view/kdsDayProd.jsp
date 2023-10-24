@@ -35,9 +35,9 @@
             </th>
             <td>
                 <div class="sb-select">
-                    <span class="txtIn"><input id="kdsDayStartDate" name="kdsDayStartDate" class="w120px"/></span>
+                    <span class="txtIn"><input id="kdsDayStartDate" name="kdsDayStartDate" class="w110px"/></span>
                     <span class="rg">~</span>
-                    <span class="txtIn"><input id="kdsDayEndDate" name="kdsDayEndDate" class="w120px"/></span>
+                    <span class="txtIn"><input id="kdsDayEndDate" name="kdsDayEndDate" class="w110px"/></span>
                     <%--<span class="txtIn">
                       <div class="sb-select">
                         <wj-input-date

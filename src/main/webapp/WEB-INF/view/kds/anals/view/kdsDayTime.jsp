@@ -35,9 +35,9 @@
             </th>
             <td>
                 <div class="sb-select">
-                    <span class="txtIn"><input id="kdsDayStartDate" name="kdsDayStartDate" class="w120px"/></span>
+                    <span class="txtIn"><input id="kdsDayStartDate" name="kdsDayStartDate" class="w110px"/></span>
                     <span class="rg">~</span>
-                    <span class="txtIn"><input id="kdsDayEndDate" name="kdsDayEndDate" class="w120px"/></span>
+                    <span class="txtIn"><input id="kdsDayEndDate" name="kdsDayEndDate" class="w110px"/></span>
                 </div>
             </td>
             <%-- 시간대 --%>
@@ -46,7 +46,7 @@
             </th>
             <td>
                 <div class="sb-select">
-                    <span class="txtIn w120px">
+                    <span class="txtIn w80px">
                         <wj-combo-box
                                 id="timeZone"
                                 ng-model="timeZone"
@@ -72,7 +72,7 @@
                     <%--                    </wj-input-date-time>--%>
                     </span>
                     <span class="rg">~</span>
-                    <span class="txtIn w120px">
+                    <span class="txtIn w80px">
                         <wj-combo-box
                                 id="timeZoneSec"
                                 ng-model="timeZoneSec"

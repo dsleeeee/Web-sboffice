@@ -36,9 +36,9 @@
             initialized="_initComboBox(s)">
           </wj-combo-box>
           </span>
-          <span class="txtIn"><input id="srchStartDate" class="w120px"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w110px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w120px"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
         </div>
       </td>
     </tr>
@@ -67,7 +67,7 @@
     <%-- 출고일자 --%>
     <p class="s14 bk fl mr10 lh30"><s:message code="outstockData.outDate"/></p>
     <div class="sb-select mr10 fl">
-      <span class="txtIn"><input id="outDate" class="w120px"></span>
+      <span class="txtIn"><input id="outDate" class="w110px"></span>
     </div>
     <%-- 출고자료생성 --%>
     <button type="button" id="btnDataCreate" class="btn_skyblue ml5 fl" ng-click="saveValueCheck()"><s:message code="outstockData.dataCreate"/></button>

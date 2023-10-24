@@ -39,9 +39,9 @@
             initialized="_initComboBox(s)">
           </wj-combo-box>
           </span>
-          <span class="txtIn"><input id="srchStartDate" class="w120px"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w110px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w120px"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
         </div>
       </td>
     </tr>
@@ -82,7 +82,7 @@
           <input type="hidden" id="rtnStoreOrderSelectStoreCd" value="${sessionInfo.storeCd}"/>
         </c:if>
         <div class="sb-select fl mr10">
-          <span class="txtIn"><input id="reqDate" class="w120px" ng-model="rtnStoreOrder.reqDate"></span>
+          <span class="txtIn"><input id="reqDate" class="w110px" ng-model="rtnStoreOrder.reqDate"></span>
         </div>
         <%-- 거래처 --%>
         <div class="sb-select fl w120px" <c:if test="${envst1242 == '0'}">style="display: none;"</c:if>>

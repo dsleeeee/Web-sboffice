@@ -30,9 +30,9 @@
                 <th><s:message code="cmm.search.date"/></th>
                 <td>
                     <div class="sb-select">
-                        <span class="txtIn"> <input id="srchStartDate" name="srchStartDate" class="w120px" /></span>
+                        <span class="txtIn"> <input id="srchStartDate" name="srchStartDate" class="w110px" /></span>
                         <span class="rg">~</span>
-                        <span class="txtIn"> <input id="srchEndDate" name="srchEndDate" class="w120px" /></span>
+                        <span class="txtIn"> <input id="srchEndDate" name="srchEndDate" class="w110px" /></span>
                         </span>
                     </div>
                 </td>

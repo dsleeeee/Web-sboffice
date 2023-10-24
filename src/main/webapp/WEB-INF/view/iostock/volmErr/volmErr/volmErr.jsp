@@ -37,9 +37,9 @@
               initialized="_initComboBox(s)">
             </wj-combo-box>
           </span>
-          <span class="txtIn"><input id="srchStartDate" class="w120px"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w110px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w120px"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
         </div>
       </td>
       <c:if test="${sessionInfo.orgnFg == 'HQ'}">

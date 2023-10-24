@@ -26,9 +26,9 @@
       <th><s:message code="outstockConfm.outDate"/></th>
       <td colspan="3">
         <div class="sb-select">
-          <span class="txtIn"><input id="srchStartDate" class="w120px"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w110px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w120px"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
         </div>
       </td>
     </tr>
@@ -135,7 +135,7 @@
     <%-- 출고일자 --%>
     <p class="s14 bk fl mr5 lh30"><s:message code="outstockConfm.outDate"/></p>
     <div class="sb-select fl mr5">
-      <span class="txtIn "><input id="outDate" class="w120px"></span>
+      <span class="txtIn "><input id="outDate" class="w110px"></span>
     </div>
     <%--출고창고 --%>
     <p class="s14 bk fl mr5 lh30" <c:if test="${storageEnvstVal == '0'}">style="display: none;"</c:if> >

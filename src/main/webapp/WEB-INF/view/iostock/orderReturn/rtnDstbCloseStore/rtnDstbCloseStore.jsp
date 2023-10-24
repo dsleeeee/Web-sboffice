@@ -37,9 +37,9 @@
             initialized="_initComboBox(s)">
           </wj-combo-box>
           </span>
-          <span class="txtIn"><input id="srchStartDate" class="w120px"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w110px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w120px"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
         </div>
       </td>
     </tr>
@@ -77,7 +77,7 @@
     <th><s:message code="rtnDstbCloseStore.reqDate"/></th>
     <td>
       <div class="sb-select fl mr10">
-        <span class="txtIn"><input id="reqDate" class="w120px"></span>
+        <span class="txtIn"><input id="reqDate" class="w110px"></span>
       </div>
       <a href="#" class="btn_grayS" ng-click="add()"><s:message code="rtnDstbCloseStore.addRegist"/></a>
     </td>

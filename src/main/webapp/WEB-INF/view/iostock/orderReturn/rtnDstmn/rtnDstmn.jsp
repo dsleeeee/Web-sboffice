@@ -25,9 +25,9 @@
       <th><s:message code="rtnDstmn.outDate"/></th>
       <td colspan="3">
         <div class="sb-select">
-          <span class="txtIn"><input id="srchStartDate" class="w120px"></span>
+          <span class="txtIn"><input id="srchStartDate" class="w110px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w120px"></span>
+          <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
         </div>
       </td>
     </tr>
@@ -128,7 +128,7 @@
       <th><s:message code="rtnDstmn.writtenDateMonth"/></th>
       <td colspan="3">
         <div class="sb-select fl mr5">
-          <span class="txtIn"><input id="writtenDate" class="w120px"></span>
+          <span class="txtIn"><input id="writtenDate" class="w110px"></span>
         </div>
         <span class="txtIn w80px sb-select fl mr5">
           <wj-combo-box
