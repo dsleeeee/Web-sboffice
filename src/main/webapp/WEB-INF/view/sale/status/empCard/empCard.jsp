@@ -36,7 +36,7 @@
             <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
           </div>
         </td>
-      <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
           <%-- 매장선택 --%>
           <th><s:message code="cmm.store.select"/></th>
           <td colspan="3">
@@ -47,10 +47,10 @@
             </jsp:include>
             <%--// 매장선택 모듈 사용시 include --%>
           </td>
-      </c:if>
-      <c:if test="${sessionInfo.orgnFg == 'STORE'}">
-        <input type="hidden" id="empCardStoreCd" value="${sessionInfo.storeCd}"/>
-      </c:if>
+        </c:if>
+        <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+          <input type="hidden" id="empCardStoreCd" value="${sessionInfo.storeCd}"/>
+        </c:if>
       </tr>
       <tr>
         <%-- 포스번호 --%>
