@@ -38,6 +38,7 @@
                 <tr>
                     <th><s:message code="prod.storeProd"/></th>
                     <td>
+                        <%-- [NXPOS-1648,1699] 매장선택 모듈 통합 / 추후작업예정 - 화면못찾음 --%>
                         <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
                         <jsp:include page="/WEB-INF/view/base/prod/prod/selectStoreS.jsp" flush="true">
                             <jsp:param name="targetId" value="originalStore"/>

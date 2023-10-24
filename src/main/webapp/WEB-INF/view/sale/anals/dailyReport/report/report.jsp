@@ -52,25 +52,17 @@
                     </div>
                 </td>
             </tr>
-
             <c:if test="${orgnFg == 'HQ'}">
             <tr>
-                <th><s:message code="dailyReport.store"/></th>	<%-- 매장코드 --%>
+				<%-- 매장선택 --%>
+				<th><s:message code="cmm.store.select"/></th>
                 <td>
-                    <%-- 매장선택 모듈 멀티 선택 사용 시 include
-                    <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
-                        <jsp:param name="targetId" value="reportSelectStore"/>
-                    </jsp:include>
-                    --%>
-                    <%-- 매장선택 모듈 싱글 선택 사용 시 include
-                            param 정의 : targetId	- angular 콘트롤러 및 input 생성시 사용할 타켓id
-                                        displayNm 	- 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
-                                        modiFg 		- 수정여부(변수 없을 경우 기본값으로 수정가능)
-                                        closeFunc 	- 팝업 닫기시 호출할 함수
-                    --%>
-                    <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
-                        <jsp:param name="targetId" value="reportSelectStore"/>
-                    </jsp:include>
+					<%-- 매장선택 모듈 사용시 include --%>
+					<jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+						<jsp:param name="targetTypeFg" value="S"/>
+						<jsp:param name="targetId" value="reportSelectStore"/>
+					</jsp:include>
+					<%--// 매장선택 모듈 사용시 include --%>
                 </td>
             </tr>
             </c:if>
