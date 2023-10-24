@@ -30,8 +30,10 @@ public class StorePeriodVO extends PageVO {
 	private String unitFg;
 	/** 조회옵션 */
 	private String srchOption;
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
 
-	public String getHqOfficeCd() {
+    public String getHqOfficeCd() {
 		return hqOfficeCd;
 	}
 
@@ -126,4 +128,12 @@ public class StorePeriodVO extends PageVO {
 	public void setSrchOption(String srchOption) {
 		this.srchOption = srchOption;
 	}
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
+    }
 }

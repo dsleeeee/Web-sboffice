@@ -58,6 +58,9 @@ public class StockPeriodVO extends PageVO {
     /** 일자표시옵션 */
     private String dayOption;
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -131,4 +134,12 @@ public class StockPeriodVO extends PageVO {
     }
 
     public void setDayOption(String dayOption) { this.dayOption = dayOption; }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
+    }
 }

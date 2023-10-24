@@ -2,6 +2,10 @@ package kr.co.solbipos.stock.status.storemonth.service.impl;
 
 import java.util.List;
 
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +19,13 @@ import kr.co.solbipos.stock.status.storemonth.service.StockStoreMonthVO;
 @Service("StockStoreMonthService")
 public class StockStoreMonthServiceImpl implements StockStoreMonthService {
 	 private final StockStoreMonthMapper stockStoreMonthMapper;
+        private final PopupMapper popupMapper;
 	    private final MessageService messageService;
 
 	    @Autowired
-	    public StockStoreMonthServiceImpl(StockStoreMonthMapper stockStoreMonthMapper, MessageService messageService) {
+	    public StockStoreMonthServiceImpl(StockStoreMonthMapper stockStoreMonthMapper, PopupMapper popupMapper, MessageService messageService) {
 	        this.stockStoreMonthMapper = stockStoreMonthMapper;
+	        this.popupMapper = popupMapper;
 	        this.messageService = messageService;
 	    }
 
@@ -29,14 +35,11 @@ public class StockStoreMonthServiceImpl implements StockStoreMonthService {
 		stockStoreMonthVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		stockStoreMonthVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
-		if (stockStoreMonthVO.getStoreCd() != null && !"".equals(stockStoreMonthVO.getStoreCd())) {
-    		String[] arrStoreCd = stockStoreMonthVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				stockStoreMonthVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
-		}
+        if(!StringUtil.getOrBlank(stockStoreMonthVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(stockStoreMonthVO.getStoreCd(), 3900));
+            stockStoreMonthVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
 		if (stockStoreMonthVO.getVendrCd() != null && !"".equals(stockStoreMonthVO.getVendrCd())) {
     		String[] arrVendrCd = stockStoreMonthVO.getVendrCd().split(",");
@@ -55,14 +58,11 @@ public class StockStoreMonthServiceImpl implements StockStoreMonthService {
 		stockStoreMonthVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		stockStoreMonthVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
-		if (stockStoreMonthVO.getStoreCd() != null && !"".equals(stockStoreMonthVO.getStoreCd())) {
-			String[] arrStoreCd = stockStoreMonthVO.getStoreCd().split(",");
-			if (arrStoreCd.length > 0) {
-				if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-					stockStoreMonthVO.setArrStoreCd(arrStoreCd);
-				}
-			}
-		}
+        if(!StringUtil.getOrBlank(stockStoreMonthVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(stockStoreMonthVO.getStoreCd(), 3900));
+            stockStoreMonthVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
 		if (stockStoreMonthVO.getVendrCd() != null && !"".equals(stockStoreMonthVO.getVendrCd())) {
 			String[] arrVendrCd = stockStoreMonthVO.getVendrCd().split(",");

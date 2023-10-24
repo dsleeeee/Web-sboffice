@@ -67,7 +67,9 @@ public class StoreCurrVO extends PageVO {
     private String weightFg;
     /** 안전재고구분 */
     private String safeStockFg;
-    
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
     /**
      * @return the hqOfficeCd
      */
@@ -486,5 +488,13 @@ public class StoreCurrVO extends PageVO {
      */
     public void setSafeStockFg(String safeStockFg) {
         this.safeStockFg = safeStockFg;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

@@ -4,7 +4,10 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.orderReturn.rtnDstbCloseProd.service.RtnDstbCloseProdService;
 import kr.co.solbipos.iostock.orderReturn.rtnDstbCloseProd.service.RtnDstbCloseProdVO;
@@ -19,10 +22,12 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class RtnDstbCloseProdServiceImpl implements RtnDstbCloseProdService {
     private final RtnDstbCloseProdMapper rtnDstbCloseProdMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
-    public RtnDstbCloseProdServiceImpl(RtnDstbCloseProdMapper rtnDstbCloseProdMapper, MessageService messageService) {
+    public RtnDstbCloseProdServiceImpl(RtnDstbCloseProdMapper rtnDstbCloseProdMapper, PopupMapper popupMapper, MessageService messageService) {
         this.rtnDstbCloseProdMapper = rtnDstbCloseProdMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -121,7 +126,9 @@ public class RtnDstbCloseProdServiceImpl implements RtnDstbCloseProdService {
     @Override
     public List<DefaultMap<String>> getRtnDstbCloseProdAddRegistList(RtnDstbCloseProdVO rtnDstbCloseProdVO) {
         if(!StringUtil.getOrBlank(rtnDstbCloseProdVO.getStoreCd()).equals("")) {
-            rtnDstbCloseProdVO.setArrStoreCd(rtnDstbCloseProdVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(rtnDstbCloseProdVO.getStoreCd(), 3900));
+            rtnDstbCloseProdVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
         return rtnDstbCloseProdMapper.getRtnDstbCloseProdAddRegistList(rtnDstbCloseProdVO);
     }

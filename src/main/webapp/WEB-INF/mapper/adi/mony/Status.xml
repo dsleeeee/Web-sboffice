@@ -37,11 +37,8 @@
                       TB_HQ_ACCOUNT tha
                 WHERE tpei.HQ_OFFICE_CD = #{hqOfficeCd}
                   AND tpei.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-                  <if test='storeCd != null and storeCd != ""'>
-                      AND
-                      <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")" >
-                          tpei.STORE_CD = #{item}
-                      </foreach>
+                  <if test='storeCdQuery != null and storeCdQuery != ""'>
+                      AND tpei.STORE_CD IN (${storeCdQuery})
                   </if>
                   <if test="accntFg != null and accntFg != ''">
                       AND tpei.ACCNT_FG = #{accntFg}
@@ -70,8 +67,10 @@
                       TB_MS_STORE tms,
                       TB_MS_ACCOUNT tma
                 WHERE tpei.HQ_OFFICE_CD = #{hqOfficeCd}
-                  AND tpei.STORE_CD = #{storeCd}
                   AND tpei.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                  <if test='storeCdQuery != null and storeCdQuery != ""'>
+                      AND tpei.STORE_CD IN (${storeCdQuery})
+                  </if>
                   <if test="accntFg != null and accntFg != ''">
                       AND tpei.ACCNT_FG = #{accntFg}
                   </if>

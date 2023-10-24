@@ -1,8 +1,11 @@
 package kr.co.solbipos.adi.alimtalk.alimtalkSendHist.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.adi.alimtalk.alimtalkSendHist.service.AlimtalkSendHistService;
 import kr.co.solbipos.adi.alimtalk.alimtalkSendHist.service.AlimtalkSendHistVO;
@@ -35,12 +38,16 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class AlimtalkSendHistServiceImpl implements AlimtalkSendHistService {
     private final AlimtalkSendHistMapper alimtalkSendHistMapper;
+    private final PopupMapper popupMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public AlimtalkSendHistServiceImpl(AlimtalkSendHistMapper alimtalkSendHistMapper) { this.alimtalkSendHistMapper = alimtalkSendHistMapper; }
+    public AlimtalkSendHistServiceImpl(AlimtalkSendHistMapper alimtalkSendHistMapper, PopupMapper popupMapper) {
+        this.alimtalkSendHistMapper = alimtalkSendHistMapper;
+        this.popupMapper = popupMapper;
+    }
 
     /** 알림톡 전송이력 - 조회 */
     @Override
@@ -52,8 +59,11 @@ public class AlimtalkSendHistServiceImpl implements AlimtalkSendHistService {
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
             // 매장 array 값 세팅
-            String[] storeCds = alimtalkSendHistVO.getStoreCds().split(",");
-            alimtalkSendHistVO.setStoreCdList(storeCds);
+            if(!StringUtil.getOrBlank(alimtalkSendHistVO.getStoreCds()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(alimtalkSendHistVO.getStoreCds(), 3900));
+                alimtalkSendHistVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
         }
 
         return alimtalkSendHistMapper.getAlimtalkSendHistList(alimtalkSendHistVO);
@@ -69,8 +79,11 @@ public class AlimtalkSendHistServiceImpl implements AlimtalkSendHistService {
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
             // 매장 array 값 세팅
-            String[] storeCds = alimtalkSendHistVO.getStoreCds().split(",");
-            alimtalkSendHistVO.setStoreCdList(storeCds);
+            if(!StringUtil.getOrBlank(alimtalkSendHistVO.getStoreCds()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(alimtalkSendHistVO.getStoreCds(), 3900));
+                alimtalkSendHistVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
         }
 
         return alimtalkSendHistMapper.getAlimtalkSendHistExcelList(alimtalkSendHistVO);

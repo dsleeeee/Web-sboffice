@@ -116,6 +116,9 @@ public class VolmErrVO extends PageVO {
     private String vendrCd;
     /** 프로시져 실행 결과 */
     private String result;
+
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
     
     
     public String getOrgnFg() {
@@ -806,5 +809,13 @@ public class VolmErrVO extends PageVO {
 
     public void setResult(String result) {
         this.result = result;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

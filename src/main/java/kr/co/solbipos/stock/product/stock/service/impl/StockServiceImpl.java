@@ -1,7 +1,10 @@
 package kr.co.solbipos.stock.product.stock.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.stock.product.stock.service.StockService;
@@ -32,13 +35,14 @@ import java.util.List;
 public class StockServiceImpl implements StockService{
 
     private final StockMapper stockMapper;
+    private final PopupMapper popupMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public StockServiceImpl(StockMapper stockMapper) {
-        this.stockMapper = stockMapper;
+    public StockServiceImpl(StockMapper stockMapper, PopupMapper popupMapper) {
+        this.stockMapper = stockMapper;this.popupMapper = popupMapper;
     }
 
     /** 재고현황(매장) - 조회 */
@@ -53,7 +57,9 @@ public class StockServiceImpl implements StockService{
         }
 
         if(!StringUtil.getOrBlank(stockVO.getStoreCd()).equals("")) {
-            stockVO.setArrStoreCd(stockVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(stockVO.getStoreCd(), 3900));
+            stockVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return stockMapper.getStockList(stockVO);

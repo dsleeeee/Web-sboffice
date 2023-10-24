@@ -72,12 +72,9 @@
 		<if test="prodCd != null and prodCd != ''">
 			AND TMP.PROD_CD = #{prodCd}
 		</if>
-		<if test="storeCd != null and storeCd != ''">
-			AND TMP.STORE_CD IN
-			<foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
-				#{item}
-			</foreach>
-		</if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND TMP.STORE_CD IN (${storeCdQuery})
+        </if>
 		<if test="prodNm != null and prodNm != ''">
 			AND TMP.PROD_NM LIKE '%'||#{prodNm}||'%'
 		</if>
@@ -222,12 +219,9 @@
 		<if test="prodCd != null and prodCd != ''">
 			AND TMP.PROD_CD = #{prodCd}
 		</if>
-		<if test="storeCd != null and storeCd != ''">
-			AND TMP.STORE_CD IN
-			<foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
-				#{item}
-			</foreach>
-		</if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND TMP.STORE_CD IN (${storeCdQuery})
+        </if>
 		<if test="prodNm != null and prodNm != ''">
 			AND TMP.PROD_NM LIKE '%'||#{prodNm}||'%'
 		</if>

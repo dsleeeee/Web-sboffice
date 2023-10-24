@@ -2,6 +2,10 @@ package kr.co.solbipos.stock.status.storeday.service.impl;
 
 import java.util.List;
 
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +19,15 @@ import kr.co.solbipos.stock.status.storeday.service.StoreDayVO;
 @Service("StoreDayService")
 public class StoreDayServiceImpl implements StoreDayService {
 	 private final StoreDayMapper storeDayMapper;
-	    private final MessageService messageService;
+     private final PopupMapper popupMapper;
+     private final MessageService messageService;
 
-	    @Autowired
-	    public StoreDayServiceImpl(StoreDayMapper storeDayMapper, MessageService messageService) {
-	        this.storeDayMapper = storeDayMapper;
-	        this.messageService = messageService;
-	    }
+    @Autowired
+        public StoreDayServiceImpl(StoreDayMapper storeDayMapper, PopupMapper popupMapper, MessageService messageService) {
+        this.storeDayMapper = storeDayMapper;
+        this.popupMapper = popupMapper;
+        this.messageService = messageService;
+    }
 
 	/** 매장일수불 리스트 조회 */
 	@Override
@@ -29,14 +35,11 @@ public class StoreDayServiceImpl implements StoreDayService {
 		storeDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		storeDayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
-		if (storeDayVO.getStoreCd() != null && !"".equals(storeDayVO.getStoreCd())) {
-    		String[] arrStoreCd = storeDayVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				storeDayVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
-		}
+        if(!StringUtil.getOrBlank(storeDayVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeDayVO.getStoreCd(), 3900));
+            storeDayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
 		if (storeDayVO.getVendrCd() != null && !"".equals(storeDayVO.getVendrCd())) {
     		String[] arrVendrCd = storeDayVO.getVendrCd().split(",");
@@ -56,14 +59,11 @@ public class StoreDayServiceImpl implements StoreDayService {
 		storeDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		storeDayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
-		if (storeDayVO.getStoreCd() != null && !"".equals(storeDayVO.getStoreCd())) {
-    		String[] arrStoreCd = storeDayVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				storeDayVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
-		}
+        if(!StringUtil.getOrBlank(storeDayVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeDayVO.getStoreCd(), 3900));
+            storeDayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
 		if (storeDayVO.getVendrCd() != null && !"".equals(storeDayVO.getVendrCd())) {
     		String[] arrVendrCd = storeDayVO.getVendrCd().split(",");

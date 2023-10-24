@@ -23,6 +23,8 @@ public class StoreDayVO extends PageVO {
     private String prodClassCd;
     /** 단위구분 */
     private String unitFg;
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
 
 	public String getHqOfficeCd() {
 		return hqOfficeCd;
@@ -111,6 +113,12 @@ public class StoreDayVO extends PageVO {
 	public void setUnitFg(String unitFg) {
 		this.unitFg = unitFg;
 	}
-	
-	
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
+    }
 }

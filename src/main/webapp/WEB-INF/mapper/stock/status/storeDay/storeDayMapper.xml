@@ -71,11 +71,8 @@
                    <if test='prodCd != null and prodCd != ""'>
                       AND TMP.PROD_CD  = #{prodCd}
                    </if>
-                   <if test='arrStoreCd != null and arrStoreCd != ""'>
-                      AND
-                       <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                           TSSSD.STORE_CD = #{item}
-                       </foreach>
+                   <if test='storeCdQuery != null and storeCdQuery != ""'>
+                      AND TSSSD.STORE_CD IN (${storeCdQuery})
                    </if>
                    <if test='arrVendrCd != null and arrVendrCd != ""'>
 			          AND TMP.PROD_CD IN    ( SELECT  PROD_CD
@@ -178,11 +175,8 @@
                    <if test='prodCd != null and prodCd != ""'>
                       AND TMP.PROD_CD  = #{prodCd}
                    </if>
-                   <if test='arrStoreCd != null and arrStoreCd != ""'>
-                      AND
-                       <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                           TSSSD.STORE_CD = #{item}
-                       </foreach>
+                   <if test='storeCdQuery != null and storeCdQuery != ""'>
+                      AND TSSSD.STORE_CD IN (${storeCdQuery})
                    </if>
                    <if test='arrVendrCd != null and arrVendrCd != ""'>
 			          AND TMP.PROD_CD IN    ( SELECT  PROD_CD

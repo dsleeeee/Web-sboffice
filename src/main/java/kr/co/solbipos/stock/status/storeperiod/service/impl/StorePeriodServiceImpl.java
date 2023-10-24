@@ -2,6 +2,9 @@ package kr.co.solbipos.stock.status.storeperiod.service.impl;
 
 import java.util.List;
 
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +17,12 @@ import kr.co.solbipos.stock.status.storeperiod.service.StorePeriodVO;
 @Service("StorePeriodService")
 public class StorePeriodServiceImpl implements StorePeriodService {
 	private final StorePeriodMapper storePeriodMapper;
+    private final PopupMapper popupMapper;
 
 	@Autowired
-	public StorePeriodServiceImpl(StorePeriodMapper storePeriodMapper) {
+	public StorePeriodServiceImpl(StorePeriodMapper storePeriodMapper, PopupMapper popupMapper) {
 		this.storePeriodMapper = storePeriodMapper;
+        this.popupMapper = popupMapper;
 	}
 
 	/** 매장기간수불 - 매장기간수불 리스트 조회 */
@@ -29,8 +34,10 @@ public class StorePeriodServiceImpl implements StorePeriodService {
         }
         
 		storePeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-		if(!StringUtil.getOrBlank(storePeriodVO.getStoreCd()).equals("")) {
-			storePeriodVO.setArrStoreCd(storePeriodVO.getStoreCd().split(","));
+        if(!StringUtil.getOrBlank(storePeriodVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storePeriodVO.getStoreCd(), 3900));
+            storePeriodVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return storePeriodMapper.getStorePeriodList(storePeriodVO);
@@ -59,9 +66,12 @@ public class StorePeriodServiceImpl implements StorePeriodService {
         }
         
 		storePeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-		if(!StringUtil.getOrBlank(storePeriodVO.getStoreCd()).equals("")) {
-			storePeriodVO.setArrStoreCd(storePeriodVO.getStoreCd().split(","));
+        if(!StringUtil.getOrBlank(storePeriodVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storePeriodVO.getStoreCd(), 3900));
+            storePeriodVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
+
 
         return storePeriodMapper.getStoreperiodExcelList(storePeriodVO);
 	}

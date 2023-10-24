@@ -28,7 +28,8 @@ public class DepositDdcVO extends PageVO {
     private String remark;
     /** 일련번호 */
     private String seqNo;
-
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -120,5 +121,13 @@ public class DepositDdcVO extends PageVO {
 
     public void setSeqNo(String seqNo) {
         this.seqNo = seqNo;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

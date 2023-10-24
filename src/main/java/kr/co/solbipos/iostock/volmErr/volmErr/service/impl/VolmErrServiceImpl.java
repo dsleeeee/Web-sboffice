@@ -4,6 +4,9 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 import java.util.List;
 
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +33,15 @@ public class VolmErrServiceImpl implements VolmErrService {
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final VolmErrMapper volmErrMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
     private final OutstockConfmMapper outstockConfmMapper;
 
 
     @Autowired
-    public VolmErrServiceImpl(VolmErrMapper volmErrMapper, MessageService messageService, OutstockConfmMapper outstockConfmMapper) {
+    public VolmErrServiceImpl(VolmErrMapper volmErrMapper, PopupMapper popupMapper, MessageService messageService, OutstockConfmMapper outstockConfmMapper) {
         this.volmErrMapper = volmErrMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
         this.outstockConfmMapper = outstockConfmMapper;
     }
@@ -45,7 +50,9 @@ public class VolmErrServiceImpl implements VolmErrService {
     @Override
     public List<DefaultMap<String>> getVolmErrList(VolmErrVO volmErrVO) {
         if(!StringUtil.getOrBlank(volmErrVO.getStoreCd()).equals("")) {
-            volmErrVO.setArrStoreCd(volmErrVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(volmErrVO.getStoreCd(), 3900));
+            volmErrVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return volmErrMapper.getVolmErrList(volmErrVO);

@@ -29,6 +29,8 @@ public class StatusVO extends PageVO {
     private String arrStoreCd[];
     private String accntFg;
     private String accntCd;
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -92,5 +94,13 @@ public class StatusVO extends PageVO {
 
     public void setAccntCd(String accntCd) {
         this.accntCd = accntCd;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

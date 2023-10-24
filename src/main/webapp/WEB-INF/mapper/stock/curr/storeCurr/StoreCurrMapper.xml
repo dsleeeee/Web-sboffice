@@ -79,12 +79,9 @@
         /*
         AND     tmv.PROD_CD       (+) =   tsssc.PROD_CD
         */
-        <if test="storeCd != null and storeCd != ''">
-			AND
-			<foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")" >
-                TMP.STORE_CD = #{item}
-			</foreach>
-		</if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND TMP.STORE_CD IN (${storeCdQuery})
+        </if>
         <if test='prodCd != null and prodCd != ""'>
             AND tsssc.PROD_CD = #{prodCd}
         </if>
