@@ -46,6 +46,8 @@ public class OutstockReqDateVO extends PageVO {
     private String orderCloseYn;
     /** 요청일 복사할매장 */
     private String copyStoreCd;
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
 
     /**
      * @return the hqOfficeCd
@@ -325,5 +327,13 @@ public class OutstockReqDateVO extends PageVO {
      */
     public void setCopyStoreCd(String copyStoreCd) {
         this.copyStoreCd = copyStoreCd;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

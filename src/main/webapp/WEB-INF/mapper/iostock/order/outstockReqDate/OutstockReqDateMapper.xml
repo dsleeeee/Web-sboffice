@@ -54,11 +54,8 @@
         AND     tphsod.STORE_CD (+) =   tms.STORE_CD
         AND     tphsl.STORE_CD  (+) =   tms.STORE_CD
         ]]>
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                tms.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tms.STORE_CD IN (${storeCdQuery})
         </if>
         ORDER BY tms.STORE_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -138,11 +135,8 @@
         WHERE   tphsos.HQ_OFFICE_CD =   #{hqOfficeCd}
         AND     tms.STORE_CD        =   tphsos.STORE_CD
         ]]>
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                tphsos.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tphsos.STORE_CD IN (${storeCdQuery})
         </if>
         ORDER BY tphsos.STORE_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>

@@ -1,8 +1,11 @@
 package kr.co.solbipos.adi.sms.smsSendHist.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.adi.sms.smsSendHist.service.SmsSendHistService;
 import kr.co.solbipos.adi.sms.smsSendHist.service.SmsSendHistVO;
@@ -35,13 +38,15 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class SmsSendHistServiceImpl implements SmsSendHistService {
     private final SmsSendHistMapper smsSendHistMapper;
+    private final PopupMapper popupMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public SmsSendHistServiceImpl(SmsSendHistMapper smsSendHistMapper) {
+    public SmsSendHistServiceImpl(SmsSendHistMapper smsSendHistMapper, PopupMapper popupMapper) {
         this.smsSendHistMapper = smsSendHistMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** SMS전송이력 - 조회 */
@@ -54,8 +59,11 @@ public class SmsSendHistServiceImpl implements SmsSendHistService {
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
             // 매장 array 값 세팅
-            String[] storeCds = smsSendHistVO.getStoreCds().split(",");
-            smsSendHistVO.setStoreCdList(storeCds);
+            if(!StringUtil.getOrBlank(smsSendHistVO.getStoreCds()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(smsSendHistVO.getStoreCds(), 3900));
+                smsSendHistVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
         }
 
         return smsSendHistMapper.getSmsSendHistList(smsSendHistVO);
@@ -71,8 +79,11 @@ public class SmsSendHistServiceImpl implements SmsSendHistService {
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
             // 매장 array 값 세팅
-            String[] storeCds = smsSendHistVO.getStoreCds().split(",");
-            smsSendHistVO.setStoreCdList(storeCds);
+            if(!StringUtil.getOrBlank(smsSendHistVO.getStoreCds()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(smsSendHistVO.getStoreCds(), 3900));
+                smsSendHistVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
         }
 
         return smsSendHistMapper.getSmsSendHistExcelList(smsSendHistVO);

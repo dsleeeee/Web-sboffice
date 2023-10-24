@@ -159,6 +159,9 @@ public class RtnDstbCloseProdVO extends PageVO {
 
     /** 거래처코드 */
     private String vendrCd;
+
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
     
     /**
      * @return the hqOfficeCd
@@ -1028,5 +1031,13 @@ public class RtnDstbCloseProdVO extends PageVO {
 
     public void setVendrCd(String vendrCd) {
         this.vendrCd = vendrCd;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

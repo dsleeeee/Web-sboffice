@@ -425,11 +425,8 @@
         AND     suborder3.STORE_CD   (+) =   tms.STORE_CD
         AND     the.HQ_OFFICE_CD        =   #{hqOfficeCd}
         AND     the.ENVST_CD            =   '0011'
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                tms.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tms.STORE_CD IN (${storeCdQuery})
         </if>
         ORDER BY tms.STORE_CD
     </select>

@@ -1,9 +1,12 @@
 package kr.co.solbipos.adi.mony.status.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.adi.mony.status.service.StatusService;
 import kr.co.solbipos.adi.mony.status.service.StatusVO;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +36,13 @@ import java.util.List;
 public class StatusServiceImpl implements StatusService {
 
     private final StatusMapper statusMapper;
+    private final PopupMapper popupMapper;
 
     /** Constructor Injection */
     @Autowired
-    public StatusServiceImpl(StatusMapper statusMapper) {
+    public StatusServiceImpl(StatusMapper statusMapper, PopupMapper popupMapper) {
         this.statusMapper = statusMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 금전현황 리스트 조회 */
@@ -47,12 +52,14 @@ public class StatusServiceImpl implements StatusService {
         statusVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         statusVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            if(!StringUtil.getOrBlank(statusVO.getStoreCd()).equals("")) {
-                statusVO.setArrStoreCd(statusVO.getStoreCd().split(","));
-            }
-        }else{
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             statusVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(statusVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(statusVO.getStoreCd(), 3900));
+            statusVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return statusMapper.selectStatus(statusVO);

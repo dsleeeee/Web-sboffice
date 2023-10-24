@@ -1,7 +1,10 @@
 package kr.co.solbipos.stock.product.stockPeriod.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.stock.product.stockPeriod.service.StockPeriodService;
@@ -35,13 +38,15 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class StockPeriodServiceImpl implements StockPeriodService {
     private final StockPeriodMapper stockPeriodMapper;
+    private final PopupMapper popupMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public StockPeriodServiceImpl(StockPeriodMapper stockPeriodMapper) {
+    public StockPeriodServiceImpl(StockPeriodMapper stockPeriodMapper, PopupMapper popupMapper) {
         this.stockPeriodMapper = stockPeriodMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 재고현황(매장-기간별) - 조회 */
@@ -56,7 +61,9 @@ public class StockPeriodServiceImpl implements StockPeriodService {
         }
 
         if(!StringUtil.getOrBlank(stockPeriodVO.getStoreCd()).equals("")) {
-            stockPeriodVO.setArrStoreCd(stockPeriodVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(stockPeriodVO.getStoreCd(), 3900));
+            stockPeriodVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return stockPeriodMapper.getStockPeriodList(stockPeriodVO);

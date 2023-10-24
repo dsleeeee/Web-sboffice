@@ -4,8 +4,11 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.excclc.excclc.depositDdc.service.DepositDdcService;
 import kr.co.solbipos.excclc.excclc.depositDdc.service.DepositDdcVO;
@@ -43,14 +46,16 @@ public class DepositDdcServiceImpl implements DepositDdcService {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final DepositDdcMapper depositDdcMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public DepositDdcServiceImpl(DepositDdcMapper depositDdcMapper, MessageService messageService) {
+    public DepositDdcServiceImpl(DepositDdcMapper depositDdcMapper, PopupMapper popupMapper, MessageService messageService) {
         this.depositDdcMapper = depositDdcMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -59,8 +64,11 @@ public class DepositDdcServiceImpl implements DepositDdcService {
     public List<DefaultMap<String>> getStoreTotalList(DepositDdcVO depositDdcVO, SessionInfoVO sessionInfoVO) {
 
         depositDdcVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
         if(!StringUtil.getOrBlank(depositDdcVO.getStoreCd()).equals("")) {
-            depositDdcVO.setArrStoreCd(depositDdcVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(depositDdcVO.getStoreCd(), 3900));
+            depositDdcVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return depositDdcMapper.getStoreTotalList(depositDdcVO);

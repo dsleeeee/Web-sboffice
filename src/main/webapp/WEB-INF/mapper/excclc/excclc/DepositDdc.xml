@@ -30,11 +30,8 @@
            AND A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
            AND A.STORE_CD = B.STORE_CD
            AND A.MONEY_DATE BETWEEN #{startDate} AND #{endDate}
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                A.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD IN (${storeCdQuery})
         </if>
          GROUP
             BY A.STORE_CD,

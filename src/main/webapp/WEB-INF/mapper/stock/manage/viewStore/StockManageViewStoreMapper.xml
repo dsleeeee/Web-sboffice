@@ -39,12 +39,9 @@
 		           <if test="procFg != '' and procFg != null">
 		               AND TSSAI.PROC_FG = #{procFg}                              /* (0:등록, 1:확정) */
 		           </if>
-	               <if test="arrStoreCd != '' and arrStoreCd != null">
-	                   AND TSSAI.STORE_CD IN
-	                   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-	                        #{item}
-	                   </foreach>
-	               </if>
+	               <if test='storeCdQuery != null and storeCdQuery != ""'>
+                       AND TSSAI.STORE_CD IN (${storeCdQuery})
+                   </if>
 		        UNION ALL
 		        SELECT '2' AS HQ_GBN
 		             , TSSA.STORE_CD
@@ -63,12 +60,9 @@
 		           <if test="procFg != '' and procFg != null">
 		               AND TSSA.PROC_FG = #{procFg}                               /* (0:등록, 1:확정) */
 		           </if>
-		           <if test="arrStoreCd != '' and arrStoreCd != null">
-	                   AND TSSA.STORE_CD IN
-	                   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-	                        #{item}
-	                   </foreach>
-	               </if>
+                   <if test='storeCdQuery != null and storeCdQuery != ""'>
+                       AND TSSA.STORE_CD IN (${storeCdQuery})
+                   </if>
 		        UNION ALL
 		        SELECT '3' AS HQ_GBN
 		             , TSSD.STORE_CD
@@ -87,12 +81,9 @@
 		           <if test="procFg != '' and procFg != null">
 		               AND TSSD.PROC_FG = #{procFg}                               /* (0:등록, 1:확정) */
 		           </if>
-		           <if test="arrStoreCd != '' and arrStoreCd != null">
-	                   AND TSSD.STORE_CD IN
-	                   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-	                        #{item}
-	                   </foreach>
-	               </if>
+                   <if test='storeCdQuery != null and storeCdQuery != ""'>
+                       AND TSSD.STORE_CD IN (${storeCdQuery})
+                   </if>
 		      ) M
 		 WHERE 1 = 1
 		 <if test="statusFg != '' and statusFg != null">
@@ -139,12 +130,9 @@
 		           <if test="procFg != '' and procFg != null">
 		               AND TSSAI.PROC_FG = #{procFg}                              /* (0:등록, 1:확정) */
 		           </if>
-	               <if test="arrStoreCd != '' and arrStoreCd != null">
-	                   AND TSSAI.STORE_CD IN
-	                   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-	                        #{item}
-	                   </foreach>
-	               </if>
+                   <if test='storeCdQuery != null and storeCdQuery != ""'>
+                       AND TSSAI.STORE_CD IN (${storeCdQuery})
+                   </if>
 		        UNION ALL
 		        SELECT '2' AS HQ_GBN
 		             , TSSA.STORE_CD
@@ -163,12 +151,9 @@
 		           <if test="procFg != '' and procFg != null">
 		               AND TSSA.PROC_FG = #{procFg}                               /* (0:등록, 1:확정) */
 		           </if>
-		           <if test="arrStoreCd != '' and arrStoreCd != null">
-	                   AND TSSA.STORE_CD IN
-	                   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-	                        #{item}
-	                   </foreach>
-	               </if>
+                   <if test='storeCdQuery != null and storeCdQuery != ""'>
+                       AND TSSA.STORE_CD IN (${storeCdQuery})
+                   </if>
 		        UNION ALL
 		        SELECT '3' AS HQ_GBN
 		             , TSSD.STORE_CD
@@ -187,12 +172,9 @@
 		           <if test="procFg != '' and procFg != null">
 		               AND TSSD.PROC_FG = #{procFg}                               /* (0:등록, 1:확정) */
 		           </if>
-		           <if test="arrStoreCd != '' and arrStoreCd != null">
-	                   AND TSSD.STORE_CD IN
-	                   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-	                        #{item}
-	                   </foreach>
-	               </if>
+                   <if test='storeCdQuery != null and storeCdQuery != ""'>
+                       AND TSSD.STORE_CD IN (${storeCdQuery})
+                   </if>
 		      ) M
 		 WHERE 1 = 1
 		 <if test="statusFg != '' and statusFg != null">

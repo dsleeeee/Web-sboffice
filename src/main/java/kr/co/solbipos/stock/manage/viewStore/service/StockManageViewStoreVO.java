@@ -20,6 +20,8 @@ public class StockManageViewStoreVO extends PageVO {
     private String procFg;
     /** 사유 */
     private String reason;
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
 
 	public String getOrgnFg() {
 		return orgnFg;
@@ -65,4 +67,12 @@ public class StockManageViewStoreVO extends PageVO {
 	public void setReason(String reason) {
 		this.reason = reason;
 	}
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
+    }
 }

@@ -100,11 +100,8 @@
         WHERE   B.STORE_CD     =   tphsl.STORE_CD
         AND     tms.STORE_CD   =   tphsl.STORE_CD
         ]]>
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                tms.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tms.STORE_CD IN (${storeCdQuery})
         </if>
         <![CDATA[
         ORDER

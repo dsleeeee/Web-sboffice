@@ -4,7 +4,10 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.order.outstockReqDate.service.OutstockReqDateService;
 import kr.co.solbipos.iostock.order.outstockReqDate.service.OutstockReqDateVO;
@@ -20,16 +23,24 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class OutstockReqDateServiceImpl implements OutstockReqDateService {
     @Autowired
-    OutstockReqDateMapper outstockReqDateMapper;
+    private final OutstockReqDateMapper outstockReqDateMapper;
+    private final PopupMapper popupMapper; 
 
     @Autowired
     MessageService messageService;
+
+    public OutstockReqDateServiceImpl(OutstockReqDateMapper outstockReqDateMapper, PopupMapper popupMapper) {
+        this.outstockReqDateMapper = outstockReqDateMapper;
+        this.popupMapper = popupMapper;
+    }
 
     /** 출고요청일관리 요일별 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getDaysList(OutstockReqDateVO outstockReqDateVO) {
         if(!StringUtil.getOrBlank(outstockReqDateVO.getStoreCd()).equals("")) {
-            outstockReqDateVO.setArrStoreCd(outstockReqDateVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(outstockReqDateVO.getStoreCd(), 3900));
+            outstockReqDateVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return outstockReqDateMapper.getDaysList(outstockReqDateVO);
@@ -80,7 +91,9 @@ public class OutstockReqDateServiceImpl implements OutstockReqDateService {
     @Override
     public List<DefaultMap<String>> getSpecificDateList(OutstockReqDateVO outstockReqDateVO) {
         if(!StringUtil.getOrBlank(outstockReqDateVO.getStoreCd()).equals("")) {
-            outstockReqDateVO.setArrStoreCd(outstockReqDateVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(outstockReqDateVO.getStoreCd(), 3900));
+            outstockReqDateVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return outstockReqDateMapper.getSpecificDateList(outstockReqDateVO);

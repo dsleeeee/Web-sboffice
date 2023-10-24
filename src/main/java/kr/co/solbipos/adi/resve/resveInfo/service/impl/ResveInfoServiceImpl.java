@@ -1,9 +1,12 @@
 package kr.co.solbipos.adi.resve.resveInfo.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.adi.resve.resveInfo.service.ResveInfoService;
 import kr.co.solbipos.adi.resve.resveInfo.service.ResveInfoVO;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +35,15 @@ import java.util.List;
 @Transactional
 public class ResveInfoServiceImpl implements ResveInfoService {
     private final ResveInfoMapper resveInfoMapper;
+    private final PopupMapper popupMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public ResveInfoServiceImpl(ResveInfoMapper resveInfoMapper) {
+    public ResveInfoServiceImpl(ResveInfoMapper resveInfoMapper, PopupMapper popupMapper) {
         this.resveInfoMapper = resveInfoMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 예약현황 조회 */
@@ -47,15 +52,16 @@ public class ResveInfoServiceImpl implements ResveInfoService {
 
         // 접속사용자의 권한(M : 시스템, A : 대리점, H : 본사, S : 매장)
         resveInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-
         resveInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            if(!StringUtil.getOrBlank(resveInfoVO.getStoreCd()).equals("")) {
-                resveInfoVO.setArrStoreCd(resveInfoVO.getStoreCd().split(","));
-            }
-        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             resveInfoVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(resveInfoVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(resveInfoVO.getStoreCd(), 3900));
+            resveInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return resveInfoMapper.getResveList(resveInfoVO);

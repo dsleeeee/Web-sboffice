@@ -67,6 +67,8 @@ public class ResveInfoVO extends PageVO {
     private String modDt;
     /** 수정아이디 */
     private String modId;
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -238,5 +240,13 @@ public class ResveInfoVO extends PageVO {
     @Override
     public void setModId(String modId) {
         this.modId = modId;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

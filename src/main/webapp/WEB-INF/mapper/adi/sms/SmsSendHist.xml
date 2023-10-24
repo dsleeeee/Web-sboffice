@@ -89,15 +89,6 @@
                         AND hssrt.MSG_CONTENT LIKE '%'||#{msgContent}||'%'
                     </if>
                     <if test="gubunCombo != null and gubunCombo != ''">
-                        <!-- 전체 -->
-                        <if test='gubunCombo == ""'>
-                            <if test='storeCds != null and storeCds != ""'>
-                                AND
-                                <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
-                                    twuidv01.STORE_CD = #{item}
-                                </foreach>
-                            </if>
-                        </if>
                         <!-- 본사 -->
                         <if test='gubunCombo == "1"'>
                             <![CDATA[
@@ -109,11 +100,8 @@
                             <![CDATA[
                                 AND twuidv01.ORGN_FG IN ('S')
                             ]]>
-                            <if test='storeCds != null and storeCds != ""'>
-                                AND
-                                <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
-                                    twuidv01.STORE_CD = #{item}
-                                </foreach>
+                            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                AND twuidv01.STORE_CD IN (${storeCdQuery})
                             </if>
                         </if>
                     </if>
@@ -207,15 +195,6 @@
                         AND hssrt.MSG_CONTENT LIKE '%'||#{msgContent}||'%'
                     </if>
                     <if test="gubunCombo != null and gubunCombo != ''">
-                        <!-- 전체 -->
-                        <if test='gubunCombo == ""'>
-                            <if test='storeCds != null and storeCds != ""'>
-                                AND
-                                <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
-                                    twuidv01.STORE_CD = #{item}
-                                </foreach>
-                            </if>
-                        </if>
                         <!-- 본사 -->
                         <if test='gubunCombo == "1"'>
                             <![CDATA[
@@ -227,11 +206,8 @@
                             <![CDATA[
                                 AND twuidv01.ORGN_FG IN ('S')
                             ]]>
-                            <if test='storeCds != null and storeCds != ""'>
-                                AND
-                                <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
-                                    twuidv01.STORE_CD = #{item}
-                                </foreach>
+                            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                AND twuidv01.STORE_CD IN (${storeCdQuery})
                             </if>
                         </if>
                     </if>

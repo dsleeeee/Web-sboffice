@@ -55,6 +55,9 @@ public class StockVO extends PageVO {
     /** 단위구분 */
     private String unitFg;
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -121,5 +124,13 @@ public class StockVO extends PageVO {
 
     public void setUnitFg(String unitFg) {
         this.unitFg = unitFg;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

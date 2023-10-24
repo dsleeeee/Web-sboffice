@@ -1,8 +1,11 @@
 package kr.co.solbipos.stock.product.weightStock.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.stock.product.weightStock.service.WeightStockService;
 import kr.co.solbipos.stock.product.weightStock.service.WeightStockVO;
@@ -41,13 +44,15 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class WeightStockServiceImpl implements WeightStockService {
     private final WeightStockMapper weightStockMapper;
+    private final PopupMapper popupMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public WeightStockServiceImpl(WeightStockMapper weightStockMapper) {
+    public WeightStockServiceImpl(WeightStockMapper weightStockMapper, PopupMapper popupMapper) {
         this.weightStockMapper = weightStockMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 중량재고현황(매장) - 조회 */
@@ -62,7 +67,9 @@ public class WeightStockServiceImpl implements WeightStockService {
         }
 
         if(!StringUtil.getOrBlank(weightStockVO.getStoreCd()).equals("")) {
-            weightStockVO.setArrStoreCd(weightStockVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(weightStockVO.getStoreCd(), 3900));
+            weightStockVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return weightStockMapper.getWeightStockList(weightStockVO);
