@@ -31,7 +31,7 @@
         <th><s:message code="cmm.search.date"/></th>
         <td colspan="3">
           <div class="sb-select">
-            <span class="txtIn"><input id="srchDayIostockStartDate" class="w120px"></span>
+            <span class="txtIn"><input id="srchDayIostockStartDate" class="w110px"></span>
           </div>
         </td>
       </tr>
@@ -39,7 +39,6 @@
         <%-- 상품코드 --%>
         <th><s:message code="dayIostock.prodCd"/></th>
         <td><input type="text" class="sb-input w100" id="srchProdCd" ng-model="srchProdCd" onkeyup="fnNxBtnSearch();"/></td>
-
         <%-- 상품명 --%>
         <th><s:message code="dayIostock.prodNm"/></th>
         <td><input type="text" class="sb-input w100" id="srchProdNm" ng-model="srchProdNm" onkeyup="fnNxBtnSearch();"/></td>
@@ -48,23 +47,21 @@
         <%-- 바코드 --%>
         <th><s:message code="dayIostock.barcdCd"/></th>
         <td><input type="text" class="sb-input w100" id="srchBarcdCd" ng-model="srchBarcdCd" onkeyup="fnNxBtnSearch();"/></td>
-
-
 		<%-- 단위구분 --%>
 		<th><s:message code="dayIostock.unitFg"/></th>
 		<td>
 			<div class="sb-select">
-		<span class="txtIn w120px">
-			<wj-combo-box
-					id="srchUnitFgDisplay"
-					ng-model="unitFgModel"
-					items-source="_getComboData('srchUnitFgDisplay')"
-					display-member-path="name"
-					selected-value-path="value"
-					is-editable="false"
-					initialized="_initComboBox(s)">
-			</wj-combo-box>
-		</span>
+				<span class="txtIn w120px">
+					<wj-combo-box
+							id="srchUnitFgDisplay"
+							ng-model="unitFgModel"
+							items-source="_getComboData('srchUnitFgDisplay')"
+							display-member-path="name"
+							selected-value-path="value"
+							is-editable="false"
+							initialized="_initComboBox(s)">
+					</wj-combo-box>
+				</span>
 			</div>
 		</td>
       </tr>
@@ -77,28 +74,27 @@
 		  <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCdModel" disabled/>
 		  <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
 		</td>
-
 		<%-- 조회옵션 --%>
 		<th><s:message code="dayIostock.srchOption"/></th>
 		<td>
 			<div class="sb-select">
-		<span class="txtIn w120px">
-			<wj-combo-box
-					id="srchOptionDisplay"
-					ng-model="srchOption"
-					items-source="_getComboData('srchOptionDisplay')"
-					display-member-path="name"
-					selected-value-path="value"
-					is-editable="false"
-					initialized="_initComboBox(s)">
-			</wj-combo-box>
-		</span>
+				<span class="txtIn w120px">
+					<wj-combo-box
+							id="srchOptionDisplay"
+							ng-model="srchOption"
+							items-source="_getComboData('srchOptionDisplay')"
+							display-member-path="name"
+							selected-value-path="value"
+							is-editable="false"
+							initialized="_initComboBox(s)">
+					</wj-combo-box>
+				</span>
 				<span class="chk ml5">
-			<input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()"/>
-			<label for="chkDt">
-				<s:message code="dayIostock.prodClassDisplay" />
-			</label>
-		</span>
+					<input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()"/>
+					<label for="chkDt">
+						<s:message code="dayIostock.prodClassDisplay" />
+					</label>
+				</span>
 			</div>
 		</td>
       </tr>

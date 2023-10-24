@@ -22,14 +22,14 @@
             <col class="w15"/>
             <col class="w35"/>
 		</colgroup>
-		<%-- 조회일자 --%>
 		<tr>
-			<th><s:message code="periodIostock.srchDate" /></th>
+			<%-- 조회일자 --%>
+			<th><s:message code="cmm.search.date"/></th>
 			<td colspan="3">
 			<div class="sb-select">
-				<span class="txtIn"><input id="srchClassStartDate" class="w120px"></span>
+				<span class="txtIn"><input id="srchClassStartDate" class="w110px"></span>
 				<span class="rg">~</span>
-				<span class="txtIn"><input id="srchClassEndDate" class="w120px"></span>
+				<span class="txtIn"><input id="srchClassEndDate" class="w110px"></span>
 			</div>
 			</td>
 		</tr>

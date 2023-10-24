@@ -39,8 +39,8 @@
                 <col class="w35"/>
             </colgroup>
             <tbody>
-            <%-- 조회일자 --%>
             <tr>
+                <%-- 시작조회일자 --%>
                 <th><s:message code="salePriceResve.select.startDate" /></th>
                 <td colspan="3">
                     <div class="sb-select">
