@@ -236,6 +236,18 @@ app.controller('smsSendHistCtrl', ['$scope', '$http', '$timeout', function ($sco
         $scope._broadcast('smsSendHistExcelCtrl', params);
     };
     // <-- //엑셀다운로드 -->
+
+    // 조회구분 선택에 따른 매장선택 조회조건 show/hidden
+    $scope.gubunComboChanged = function (s) {
+        if (s.selectedValue === "" || s.selectedValue === "1") {
+            $("#thSelStore").css("display", "none");
+            $("#tdSelStore").css("display", "none");
+        }else {
+            $("#thSelStore").css("display", "");
+            $("#tdSelStore").css("display", "");
+        }
+    };
+
 }]);
 
 

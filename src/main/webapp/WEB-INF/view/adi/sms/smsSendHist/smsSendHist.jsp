@@ -73,13 +73,14 @@
                                     display-member-path="name"
                                     selected-value-path="value"
                                     is-editable="false"
-                                    initialized="_initComboBox(s)">
+                                    initialized="_initComboBox(s)"
+                                    selected-index-changed="gubunComboChanged(s)">
                             </wj-combo-box>
                         </div>
                     </td>
                     <%-- 매장선택 --%>
-                    <th><s:message code="cmm.store.select"/></th>
-                    <td>
+                    <th id="thSelStore" style="display:block"><s:message code="cmm.store.select"/></th>
+                    <td id="tdSelStore" style="display:block">
                         <%-- 매장선택 모듈 사용시 include --%>
                         <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
                             <jsp:param name="targetTypeFg" value="M"/>
@@ -189,7 +190,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSendHist/smsSendHist.js?ver=20220504.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSendHist/smsSendHist.js?ver=20231025.01" charset="utf-8"></script>
 
 <%-- 메세지 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/sendStatus/messageDtl.jsp">
