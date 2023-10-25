@@ -6130,7 +6130,8 @@
                NVL(tmpr.CNT, 0) AS CNT,
                tmp.BELL_USE_YN,
                tmp.T_POS_NO,
-               tmp.ONLINE_PRINT_YN
+               tmp.ONLINE_PRINT_YN,
+               tmp.DLVR_PRINT_YN
           FROM TB_MS_PRINTER tmp,
                (SELECT STORE_CD, PRTER_NO, COUNT(PROD_CD) AS CNT
                   FROM TB_MS_PRINTER_PROD
@@ -6173,7 +6174,8 @@
             MOD_DT,
             MOD_ID,
             T_POS_NO,
-            ONLINE_PRINT_YN
+            ONLINE_PRINT_YN,
+            DLVR_PRINT_YN
         )
         VALUES
         (
@@ -6197,7 +6199,8 @@
             #{modDt},
             #{modId},
             #{tPosNo},
-            #{onlinePrintYn}
+            #{onlinePrintYn},
+            #{dlvrPrintYn}
         )
     </insert>
 
@@ -6226,7 +6229,8 @@
                MOD_DT = #{modDt},
                MOD_ID = #{modId},
                T_POS_NO = #{tPosNo},
-               ONLINE_PRINT_YN = #{onlinePrintYn}
+               ONLINE_PRINT_YN = #{onlinePrintYn},
+               DLVR_PRINT_YN = #{dlvrPrintYn}
          WHERE STORE_CD = #{storeCd}
            AND PRTER_NO = #{prterNo}
     </update>

@@ -56,7 +56,8 @@ public class KitchenPrintVO extends CmmVO {
     private String bellUseYn;
     /** 온라인주문시출력여부*/
     private String onlinePrintYn;
-
+    /** 배달포장주문시 주방프린터 출력여부 */
+    private String dlvrPrintYn;
 
     /**
      * @return the storeCd
@@ -246,5 +247,13 @@ public class KitchenPrintVO extends CmmVO {
 
     public void setOnlinePrintYn(String onlinePrintYn) {
         this.onlinePrintYn = onlinePrintYn;
+    }
+
+    public String getDlvrPrintYn() {
+        return dlvrPrintYn;
+    }
+
+    public void setDlvrPrintYn(String dlvrPrintYn) {
+        this.dlvrPrintYn = dlvrPrintYn;
     }
 }

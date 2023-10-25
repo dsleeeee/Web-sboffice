@@ -158,7 +158,8 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
     params.prterCheckYn = "N";
     params.bellUseYn    = "N";
     params.useYn        = "Y";
-
+    params.onlinePrintYn = "Y";
+    params.dlvrPrintYn = "Y";
 
     //프린터 코드 값 셋팅을 위한
     var vPrterCd = '';
@@ -188,7 +189,7 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
 
     // 추가기능 수행 : 파라미터
     $scope._addRow(params);
-  }
+  };
 
   /*********************************************************
    * 주방프린터 삭제
