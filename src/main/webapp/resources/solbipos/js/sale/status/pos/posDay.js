@@ -328,7 +328,13 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
                 var selectedRow = grid.rows[ht.row].dataItem;
                 var storeNm		= grid.columnHeaders.getCellData(0,ht.col,true);
                 var storeCd 	= storeNm.match( /[^()]+(?=\))/g);
-                var posNo		= grid.columnHeaders.getCellData(1,ht.col,true);
+                var posNo		= "";
+
+                if(grid.columnHeaders.getCellData(1,ht.col,true).indexOf('-') > -1){
+                    posNo =  grid.columnHeaders.getCellData(1,ht.col,true).split('-')[0];
+                }else{
+                    posNo = grid.columnHeaders.getCellData(1,ht.col,true);
+                }
 
                 var params       = {};
                 params.chkPop	= "posPop";
