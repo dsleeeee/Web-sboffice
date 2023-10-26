@@ -11,28 +11,34 @@
     <ul>
       <%-- POS 버전 관리 --%>
       <li>
-        <a id="verManageTab" href="#" class="on" ng-click="verManageShow()"><s:message code="verHq.verManage"/></a>
+        <a id="verManageTab" href="#" ng-click="verManageShow()" style="display: none;"><s:message code="verHq.verManage"/></a>
       </li>
       <%-- POS 버전 관리(V2 버전) --%>
        <li>
-         <a id="verManageV2Tab" href="#" ng-click="verManageV2Show()"><s:message code="verHq.verManageV2"/></a>
+         <a id="verManageV2Tab" href="#" ng-click="verManageV2Show()" style="display: none;"><s:message code="verHq.verManageV2"/></a>
        </li>
       <%-- 버전별 수신현황 --%>
       <li>
-        <a id="verRecvTab" href="#" ng-click="verRecvShow()"><s:message code="verHq.verRecv"/></a>
+        <a id="verRecvTab" href="#" ng-click="verRecvShow()" style="display: none;"><s:message code="verHq.verRecv"/></a>
       </li>
       <%-- 매장별 수신현황--%>
       <li>
-        <a id="storeRecvTab" href="#" ng-click="storeRecvShow()"><s:message code="verHq.storeRecv"/></a>
+        <a id="storeRecvTab" href="#" ng-click="storeRecvShow()" style="display: none;"><s:message code="verHq.storeRecv"/></a>
       </li>
       <%-- 버전별 매장현황--%>
       <li>
-        <a id="verStoreTab" href="#" ng-click="verStoreShow()"><s:message code="verHq.verStore"/></a>
+        <a id="verStoreTab" href="#" ng-click="verStoreShow()" style="display: none;"><s:message code="verHq.verStore"/></a>
       </li>
     </ul>
   </div>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verhq/verHq.js?ver=20220822.01" charset="utf-8"></script>
+
+<script>
+    // [1014 포스프로그램구분] 환경설정값
+    var posVerEnvstVal = "${posVerEnvstVal}";
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verhq/verHq.js?ver=20231025.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- POS버전관리 --%>

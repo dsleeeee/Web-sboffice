@@ -18,11 +18,30 @@ var app = agrid.getApp();
  **********************************************************************/
 app.controller('verHqCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.init = function () {
-    $("#verManageView").show();
-    $("#verManageV2View").hide();
-    $("#verRecvView").hide();
-    $("#storeRecvView").hide();
-    $("#verStoreView").hide();
+
+    // 환경설정값 1014[포스프로그램구분]에 따른 탭표시
+    if(posVerEnvstVal === "1"){
+        // tab
+        $("#verManageTab").css("display", "");
+        $("#verManageV2Tab").css("display", "none");
+        $("#verRecvTab").css("display", "");
+        $("#storeRecvTab").css("display", "");
+        $("#verStoreTab").css("display", "");
+
+        // 화면
+        $scope.verManageShow();
+
+    }else{
+        // tab
+        $("#verManageTab").css("display", "none");
+        $("#verManageV2Tab").css("display", "");
+        $("#verRecvTab").css("display", "none");
+        $("#storeRecvTab").css("display", "none");
+        $("#verStoreTab").css("display", "none");
+
+        // 화면
+        $scope.verManageV2Show();
+    }
   };
 
   // POS버전관리 탭 보이기
