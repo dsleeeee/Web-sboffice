@@ -78,14 +78,16 @@
           <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
           <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
         </td>
-        <%-- 매장코드 --%>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-          <th><s:message code="todayBillSaleDtl.store"/></th>
+          <%-- 매장선택 --%>
+          <th><s:message code="cmm.store.select"/></th>
           <td>
-            <%-- [NXPOS-1648,1699] 매장선택 모듈 통합 / 추후작업예정 - 화면못찾음 --%>
-            <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreMMoms.jsp" flush="true">
+            <%-- 매장선택 모듈 사용시 include --%>
+            <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+              <jsp:param name="targetTypeFg" value="M"/>
               <jsp:param name="targetId" value="prodRankStoreStore"/>
             </jsp:include>
+            <%--// 매장선택 모듈 사용시 include --%>
           </td>
         </c:if>
         <c:if test="${sessionInfo.orgnFg == 'STORE'}">
