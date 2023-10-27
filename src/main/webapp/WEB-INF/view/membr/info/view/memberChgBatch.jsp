@@ -106,21 +106,25 @@
         <tbody>
         <c:if test="${orgnFg == 'HQ'}">
             <tr>
-                <%-- 등록매장 --%>
-                <th><s:message code="regist.reg.store.cd"/></th>
+                <%-- 등록매장선택 --%>
+                <th><s:message code="regist.reg.store"/></th>
                 <td>
-                    <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-                    <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                    <%-- 매장선택 모듈 사용시 include --%>
+                    <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                        <jsp:param name="targetTypeFg" value="M"/>
                         <jsp:param name="targetId" value="regStore"/>
                     </jsp:include>
-                    <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+                    <%--// 매장선택 모듈 사용시 include --%>
                 </td>
-                <%-- 사용매장 --%>
-                <th><s:message code="regist.use.store.cd"/></th>
+                <%-- 사용매장선택 --%>
+                <th><s:message code="regist.use.store"/></th>
                 <td>
-                    <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                    <%-- 매장선택 모듈 사용시 include --%>
+                    <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                        <jsp:param name="targetTypeFg" value="M"/>
                         <jsp:param name="targetId" value="regUseStore"/>
                     </jsp:include>
+                    <%--// 매장선택 모듈 사용시 include --%>
                 </td>
             </tr>
         </c:if>
