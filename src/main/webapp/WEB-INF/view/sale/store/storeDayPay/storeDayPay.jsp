@@ -128,4 +128,4 @@
   var orgnFg = "${orgnFg}";
   var storeCd = "${storeCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeDayPay/storeDayPay.js?ver=20221014.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeDayPay/storeDayPay.js?ver=20231027.01" charset="utf-8"></script>

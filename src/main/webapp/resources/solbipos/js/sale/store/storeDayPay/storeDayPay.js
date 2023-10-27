@@ -219,7 +219,7 @@ app.controller('storeDayPayCtrl', ['$scope', '$http', '$timeout', function ($sco
     var params       = {};
     params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
     params.endDate   = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
-    params.storeCd   = $scope.searchedStoreCd;
+    params.storeCd   = $("#storeDayPayStoreCd").val();
     params.payCol    = payCol;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
