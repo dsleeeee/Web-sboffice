@@ -25,24 +25,18 @@
         		,( SELECT COUNT(TMS.STORE_CD)	  
 					FROM TB_MS_STORE TMS
 					WHERE TMS.HQ_OFFICE_CD = #{hqOfficeCd}
-					<if test='storeCd != null and storeCd != ""'>
-					   AND
-				        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-							TMS.STORE_CD = #{item}
-	                    </foreach>
-					</if>
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND TMS.STORE_CD IN (${storeCdQuery})
+                    </if>
 			     ) AS STORE_CNT
 				, SUM(TSDE.REAL_SALE_AMT) AS REAL_SALE_AMT_TOT
 				, SUM(TSDE.BILL_CNT) AS TOT_BILL_CNT
 				${sQuery2}
 			FROM TB_SL_DAILY_EMPLOYEE TSDE
 			WHERE TSDE.HQ_OFFICE_CD = #{hqOfficeCd}
-			<if test='storeCd != null and storeCd != ""'>
-			   AND
-			        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-						TSDE.STORE_CD = #{item}
-                    </foreach>
-			</if>
+            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                AND TSDE.STORE_CD IN (${storeCdQuery})
+            </if>
 			<if test='startDate != null and startDate != ""'>
 			   AND TSDE.SALE_DATE >= #{startDate}
 			</if>
@@ -78,24 +72,18 @@
         		,( SELECT COUNT(TMS.STORE_CD)	  
 					FROM TB_MS_STORE TMS
 					WHERE TMS.HQ_OFFICE_CD = #{hqOfficeCd}
-					<if test='storeCd != null and storeCd != ""'>
-					   AND
-				        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-							TMS.STORE_CD = #{item}
-	                    </foreach>
-					</if>
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND TMS.STORE_CD IN (${storeCdQuery})
+                    </if>
 			     ) AS STORE_CNT
 				, SUM(TSDE.REAL_SALE_AMT) AS REAL_SALE_AMT_TOT
 				, SUM(TSDE.BILL_CNT) AS TOT_BILL_CNT
 				${sQuery2}
 			FROM TB_SL_DAILY_EMPLOYEE TSDE
 			WHERE TSDE.HQ_OFFICE_CD = #{hqOfficeCd}
-			<if test='storeCd != null and storeCd != ""'>
-			   AND
-			        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-						TSDE.STORE_CD = #{item}
-                    </foreach>
-			</if>
+            <if test='storeCdQuery != null and storeCdQuery != ""'>
+        		AND TSDE.STORE_CD IN (${storeCdQuery})
+        	</if>
 			<if test='startDate != null and startDate != ""'>
 			   AND TSDE.SALE_DATE >= #{startDate}
 			</if>
@@ -126,21 +114,15 @@
 		  		, TB_MS_STORE TMS
 		  WHERE TME.STORE_CD = TMS.STORE_CD
 		  AND TMS.HQ_OFFICE_CD = #{hqOfficeCd}
-		  <if test='storeCd != null and storeCd != ""'>
-		  	AND
-  				<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-					TME.STORE_CD = #{item}
-                </foreach>
+          <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND TME.STORE_CD IN (${storeCdQuery})
           </if>
 		  <if test='empChk != "Y"'>
 	          AND EXISTS (SELECT * FROM TB_SL_SALE_HDR Z 
 	                  WHERE Z.store_cd = TME.STORE_CD 
 	                  AND Z.EMP_NO = TME.EMP_NO
-	                  <if test='storeCd != null and storeCd != ""'>
-	                  AND
-	                  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-							Z.STORE_CD = #{item}
-                    	</foreach> 
+                      <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND Z.STORE_CD IN (${storeCdQuery})
                       </if>
                       <if test='startDate != null and startDate != ""'>
                           AND Z.SALE_DATE >= #{startDate}          

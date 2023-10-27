@@ -2,7 +2,10 @@ package kr.co.solbipos.sale.status.emp.month.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.status.emp.day.service.EmpDayVO;
 import kr.co.solbipos.sale.status.emp.month.service.EmpMonthService;
@@ -16,11 +19,13 @@ import java.util.List;
 @Service("EmpMonthService")
 public class EmpMonthServiceImpl implements EmpMonthService {
     private final EmpMonthMapper empMonthMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public EmpMonthServiceImpl(EmpMonthMapper empMonthMapper, MessageService messageService) {
+    public EmpMonthServiceImpl(EmpMonthMapper empMonthMapper, PopupMapper popupMapper, MessageService messageService) {
     	this.empMonthMapper = empMonthMapper;
+    	this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -29,9 +34,11 @@ public class EmpMonthServiceImpl implements EmpMonthService {
     public List<DefaultMap<String>> getEmpMonthList(EmpMonthVO empMonthVO, SessionInfoVO sessionInfoVO) {
   
     	empMonthVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-    	
+
         if(!StringUtil.getOrBlank(empMonthVO.getStoreCd()).equals("")) {
-        	empMonthVO.setArrStoreCd(empMonthVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(empMonthVO.getStoreCd(), 3900));
+            empMonthVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
     	
         // 판매자별 쿼리 변수
@@ -62,7 +69,9 @@ public class EmpMonthServiceImpl implements EmpMonthService {
     	empMonthVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
     	
         if(!StringUtil.getOrBlank(empMonthVO.getStoreCd()).equals("")) {
-        	empMonthVO.setArrStoreCd(empMonthVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(empMonthVO.getStoreCd(), 3900));
+            empMonthVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
     	
         // 판매자별 쿼리 변수
@@ -93,7 +102,9 @@ public class EmpMonthServiceImpl implements EmpMonthService {
     	empMonthVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
     	
         if(!StringUtil.getOrBlank(empMonthVO.getStoreCd()).equals("")) {
-        	empMonthVO.setArrStoreCd(empMonthVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(empMonthVO.getStoreCd(), 3900));
+            empMonthVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
         
         return empMonthMapper.getEmpMebList(empMonthVO);

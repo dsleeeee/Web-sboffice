@@ -68,7 +68,8 @@ public class ReportKwuVO extends PageVO {
     /** 승인구분 */
     private String apprFg;
 
-
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -168,5 +169,13 @@ public class ReportKwuVO extends PageVO {
 
     public void setApprFg(String apprFg) {
         this.apprFg = apprFg;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

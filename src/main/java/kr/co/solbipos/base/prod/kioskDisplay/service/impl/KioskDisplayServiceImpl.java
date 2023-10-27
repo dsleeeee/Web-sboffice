@@ -1,6 +1,10 @@
 package kr.co.solbipos.base.prod.kioskDisplay.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.kioskDisplay.service.KioskDisplayService;
@@ -37,11 +41,13 @@ public class KioskDisplayServiceImpl implements KioskDisplayService {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final KioskDisplayMapper kioskDisplayMapper;
+    private final PopupMapper popupMapper;
 
     /** Constructor Injection */
     @Autowired
-    public KioskDisplayServiceImpl(KioskDisplayMapper kioskDisplayMapper) {
+    public KioskDisplayServiceImpl(KioskDisplayMapper kioskDisplayMapper, PopupMapper popupMapper) {
         this.kioskDisplayMapper = kioskDisplayMapper;
+        this.popupMapper = popupMapper;
     }
 
     @Override
@@ -55,8 +61,11 @@ public class KioskDisplayServiceImpl implements KioskDisplayService {
         kioskDisplayVO.setUserId(sessionInfoVO.getUserId());
 
         // 매장 array 값 세팅
-        String[] storeCds = kioskDisplayVO.getStoreCds().split(",");
-        kioskDisplayVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(kioskDisplayVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(kioskDisplayVO.getStoreCd(), 3900));
+            kioskDisplayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 상품 array 값 세팅
         if (kioskDisplayVO.getProdCds() != null && !"".equals(kioskDisplayVO.getProdCds())) {

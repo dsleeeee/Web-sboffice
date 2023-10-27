@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.day.dayTest.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.day.dayTest.service.DayTestService;
@@ -30,9 +34,11 @@ import java.util.List;
 @Transactional
 public class DayTestServiceImpl implements DayTestService {
     private final DayTestMapper dayTestMapper;
+    private final PopupMapper popupMapper;
 
-    public DayTestServiceImpl(DayTestMapper dayTestMapper) {
+    public DayTestServiceImpl(DayTestMapper dayTestMapper, PopupMapper popupMapper) {
         this.dayTestMapper = dayTestMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 조회 */
@@ -46,8 +52,11 @@ public class DayTestServiceImpl implements DayTestService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayTestVO.getStoreCds().split(",");
-        dayTestVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayTestVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayTestVO.getStoreCds(), 3900));
+            dayTestVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return dayTestMapper.getDayTestList(dayTestVO);
     }
@@ -63,8 +72,11 @@ public class DayTestServiceImpl implements DayTestService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayTestVO.getStoreCds().split(",");
-        dayTestVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayTestVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayTestVO.getStoreCds(), 3900));
+            dayTestVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return dayTestMapper.getDayTestExcelList(dayTestVO);
     }

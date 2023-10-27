@@ -39,7 +39,8 @@ public class CornerDayOfWeekVO extends PageVO {
     /** 테이블 기준, 동적 컬럼 생성을 위한 쿼리 문자열*/
     private String sQuery1;
     
-    
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
 
 	public String getStoreCd() {
 		return storeCd;
@@ -172,4 +173,12 @@ public class CornerDayOfWeekVO extends PageVO {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
+    }
 }

@@ -298,6 +298,9 @@ public class KioskDisplayVO extends PageVO {
     /** 업로드 상품코드 array */
     private String arrProdCdCol[];
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
     /**
      * @return the hqOfficeCd
      */
@@ -1354,5 +1357,13 @@ public class KioskDisplayVO extends PageVO {
 
     public void setArrProdCdCol(String[] arrProdCdCol) {
         this.arrProdCdCol = arrProdCdCol;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

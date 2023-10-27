@@ -47,6 +47,8 @@ public class PayDayDeviceVO extends PageVO {
     private String empNo;
     /** 쿼리문의 PIVOT IN에 사용할 결제수단 컬럼 문자열 */
     private String pivotPayCol;
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+     private String storeCdQuery;
 
     public String getHqOfficeCd() { return hqOfficeCd; }
 
@@ -110,5 +112,13 @@ public class PayDayDeviceVO extends PageVO {
 
     public void setPivotPayCol(String pivotPayCol) {
         this.pivotPayCol = pivotPayCol;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

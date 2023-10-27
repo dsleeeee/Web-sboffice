@@ -1,7 +1,10 @@
 package kr.co.solbipos.sale.status.reportKwu.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.status.reportKwu.service.ReportKwuService;
 import kr.co.solbipos.sale.status.reportKwu.service.ReportKwuVO;
@@ -33,10 +36,12 @@ import java.util.List;
 @Service("reportKwuService")
 public class ReportKwuServiceImpl implements ReportKwuService {
     private final ReportKwuMapper reportKwuMapper;
+    private final PopupMapper popupMapper;
 
     @Autowired
-    public ReportKwuServiceImpl(ReportKwuMapper reportKwuMapper) {
+    public ReportKwuServiceImpl(ReportKwuMapper reportKwuMapper, PopupMapper popupMapper) {
         this.reportKwuMapper = reportKwuMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 분류별결제수단별 매출내역 - 리스트 조회 */
@@ -48,7 +53,9 @@ public class ReportKwuServiceImpl implements ReportKwuService {
         reportKwuVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(reportKwuVO.getStoreCd()).equals("")) {
-            reportKwuVO.setArrStoreCd(reportKwuVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(reportKwuVO.getStoreCd(), 3900));
+            reportKwuVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         // 결제수단 array 값 세팅
@@ -72,9 +79,11 @@ public class ReportKwuServiceImpl implements ReportKwuService {
        reportKwuVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
        reportKwuVO.setEmpNo(sessionInfoVO.getEmpNo());
 
-       if(!StringUtil.getOrBlank(reportKwuVO.getStoreCd()).equals("")) {
-           reportKwuVO.setArrStoreCd(reportKwuVO.getStoreCd().split(","));
-       }
+        if(!StringUtil.getOrBlank(reportKwuVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(reportKwuVO.getStoreCd(), 3900));
+            reportKwuVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         String payCol= "";
         // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
@@ -101,9 +110,11 @@ public class ReportKwuServiceImpl implements ReportKwuService {
        reportKwuVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
        reportKwuVO.setEmpNo(sessionInfoVO.getEmpNo());
 
-       if(!StringUtil.getOrBlank(reportKwuVO.getStoreCd()).equals("")) {
-           reportKwuVO.setArrStoreCd(reportKwuVO.getStoreCd().split(","));
-       }
+        if(!StringUtil.getOrBlank(reportKwuVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(reportKwuVO.getStoreCd(), 3900));
+            reportKwuVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
        return reportKwuMapper.getPayCardSaleList(reportKwuVO);
     }
@@ -116,9 +127,11 @@ public class ReportKwuServiceImpl implements ReportKwuService {
        reportKwuVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
        reportKwuVO.setEmpNo(sessionInfoVO.getEmpNo());
 
-       if(!StringUtil.getOrBlank(reportKwuVO.getStoreCd()).equals("")) {
-           reportKwuVO.setArrStoreCd(reportKwuVO.getStoreCd().split(","));
-       }
+        if(!StringUtil.getOrBlank(reportKwuVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(reportKwuVO.getStoreCd(), 3900));
+            reportKwuVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
        return reportKwuMapper.getCashBillInfoList(reportKwuVO);
     }

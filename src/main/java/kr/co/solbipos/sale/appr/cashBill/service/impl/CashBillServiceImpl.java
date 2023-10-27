@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.appr.cashBill.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.appr.cashBill.service.CashBillService;
@@ -29,9 +33,11 @@ import java.util.List;
 @Transactional
 public class CashBillServiceImpl implements CashBillService {
     private final CashBillMapper cashBillMapper;
+    private final PopupMapper popupMapper;
 
-    public CashBillServiceImpl(CashBillMapper cashBillMapper) {
+    public CashBillServiceImpl(CashBillMapper cashBillMapper, PopupMapper popupMapper) {
         this.cashBillMapper = cashBillMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 신용카드입금관리 - 매장 콤보박스 조회 */
@@ -45,9 +51,11 @@ public class CashBillServiceImpl implements CashBillService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = cashBillVO.getStoreCds().split(",");
-        cashBillVO.setStoreCdList(storeCds);
-
+        if(!StringUtil.getOrBlank(cashBillVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(cashBillVO.getStoreCds(), 3900));
+            cashBillVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return cashBillMapper.getCashBillList(cashBillVO);
     }
@@ -63,9 +71,11 @@ public class CashBillServiceImpl implements CashBillService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = cashBillVO.getStoreCds().split(",");
-        cashBillVO.setStoreCdList(storeCds);
-
+        if(!StringUtil.getOrBlank(cashBillVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(cashBillVO.getStoreCds(), 3900));
+            cashBillVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return cashBillMapper.getCashBillExcelList(cashBillVO);
     }

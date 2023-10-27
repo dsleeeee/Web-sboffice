@@ -2,7 +2,10 @@ package kr.co.solbipos.sale.status.corner.day.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.status.corner.day.service.CornerDayService;
 import kr.co.solbipos.sale.status.corner.day.service.CornerDayVO;
@@ -15,11 +18,13 @@ import java.util.List;
 @Service("cornerDayService")
 public class CornerDayServiceImpl implements CornerDayService {
     private final CornerDayMapper cornerDayMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public CornerDayServiceImpl(CornerDayMapper cornerDayMapper, MessageService messageService) {
+    public CornerDayServiceImpl(CornerDayMapper cornerDayMapper, PopupMapper popupMapper, MessageService messageService) {
         this.cornerDayMapper = cornerDayMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -38,12 +43,11 @@ public class CornerDayServiceImpl implements CornerDayService {
     			}
     		}
     	} else {
-    		String[] arrStoreCd = cornerDayVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				cornerDayVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
+            if(!StringUtil.getOrBlank(cornerDayVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(cornerDayVO.getStoreCd(), 3900));
+                cornerDayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
     	}
     	
     	if(!StringUtil.getOrBlank(cornerDayVO.getArrCornrCd()).equals("")) {
@@ -76,12 +80,11 @@ public class CornerDayServiceImpl implements CornerDayService {
     			}
     		}
     	} else {
-    		String[] arrStoreCd = cornerDayVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				cornerDayVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
+            if(!StringUtil.getOrBlank(cornerDayVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(cornerDayVO.getStoreCd(), 3900));
+                cornerDayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
     	}
 		
 		return cornerDayMapper.getCornerNmList(cornerDayVO);
@@ -102,12 +105,11 @@ public class CornerDayServiceImpl implements CornerDayService {
     			}
     		}
     	} else {
-    		String[] arrStoreCd = cornerDayVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				cornerDayVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
+            if(!StringUtil.getOrBlank(cornerDayVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(cornerDayVO.getStoreCd(), 3900));
+                cornerDayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
     	}
     	
     	if(!StringUtil.getOrBlank(cornerDayVO.getArrCornrCd()).equals("")) {

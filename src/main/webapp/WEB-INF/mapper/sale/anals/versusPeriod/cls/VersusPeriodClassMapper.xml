@@ -136,12 +136,9 @@
 									 FROM TB_MS_PRODUCT B
 									WHERE 1=1
 									AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = B.STORE_CD)
-									<if test='arrStoreCd != null and arrStoreCd != ""'>
-										AND
-										<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-											B.STORE_CD = #{item}
-										</foreach>
-									</if>
+                                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                        AND B.STORE_CD IN (${storeCdQuery})
+                                    </if>
 									<if test='orgnFg != null and orgnFg == "H"'>
 										AND (
 												'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -162,12 +159,9 @@
 									   	 <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
 									   	 	AND C.SALE_DATE BETWEEN REPLACE(#{startDate}, '-', '') AND REPLACE(#{endDate}, '-', '')
 										 </if>
-										 <if test='arrStoreCd != null and arrStoreCd != ""'>
-											AND
-											<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-												C.STORE_CD = #{item}
-											</foreach>
-										 </if>
+                                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                            AND C.STORE_CD IN (${storeCdQuery})
+                                        </if>
 										<if test='orgnFg != null and orgnFg == "H"'>
 											AND (
 													'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -291,12 +285,9 @@
 									    FROM TB_MS_PRODUCT B
 									   WHERE 1=1
 									   AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = B.STORE_CD)
-									   <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   AND
-										   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-											   B.STORE_CD = #{item}
-										   </foreach>
-									   </if>
+									    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                            AND B.STORE_CD IN (${storeCdQuery})
+                                        </if>
 										<if test='orgnFg != null and orgnFg == "H"'>
 											AND (
 													'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -317,12 +308,9 @@
 										  <if test="compStartDate != null and compStartDate != '' and compEndDate != null and compEndDate != ''">
 									   	 	AND C.SALE_DATE BETWEEN REPLACE(#{compStartDate}, '-', '') AND REPLACE(#{compEndDate}, '-', '')
 										 </if>
-										  <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  AND
-										      <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-												  C.STORE_CD = #{item}
-										      </foreach>
-									   	  </if>
+                                          <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                            AND C.STORE_CD IN (${storeCdQuery})
+                                          </if>
 										  <if test='orgnFg != null and orgnFg == "H"'>
 											AND (
 													'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -392,12 +380,9 @@
 											  FROM TB_MS_PRODUCT       B
 											 WHERE 1=1
 											 AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = B.STORE_CD)
-											 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  	   AND
-										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-													   B.STORE_CD = #{item}
-										      	   </foreach>
-									   	  	</if>
+                                            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                                AND B.STORE_CD IN (${storeCdQuery})
+                                            </if>
 											<if test='orgnFg != null and orgnFg == "H"'>
 												AND (
 														'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -419,12 +404,9 @@
 											  FROM TB_SL_DAILY_PROD    C
 											 WHERE 1=1
 											 AND	C.HQ_OFFICE_CD = #{hqOfficeCd}
-											 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  	   AND
-										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-													   C.STORE_CD = #{item}
-										      	   </foreach>
-									   	  	</if>
+                                            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                                AND C.STORE_CD IN (${storeCdQuery})
+                                            </if>
 											<if test='orgnFg != null and orgnFg == "H"'>
 												AND (
 														'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -445,12 +427,9 @@
 									 <if test='storeCd != null and storeCd != "" and prodClassCd != null and prodClassCd != ""'>
 									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z
 										 WHERE 1=1
-									   	 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									  	  AND
-									  	 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-												Z.STORE_CD = #{item}
-									  	  	</foreach>
-	                                     </if>
+                                         <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                            AND Z.STORE_CD IN (${storeCdQuery})
+                                        </if>
 										 <if test='orgnFg != null and orgnFg == "H"'>
 											 AND (
 											 'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -476,12 +455,9 @@
 											  FROM TB_MS_PRODUCT       B
 											 WHERE 1=1
 											 AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = B.STORE_CD)
-											 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  	   AND
-										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-													   B.STORE_CD = #{item}
-										      	   </foreach>
-									   	  	</if>
+                                            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                                AND B.STORE_CD IN (${storeCdQuery})
+                                            </if>
 											<if test='orgnFg != null and orgnFg == "H"'>
 												AND (
 														'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -502,12 +478,9 @@
 											     , SUM(C.TOT_SALE_QTY)     AS TOT_SALE_QTY
 											  FROM TB_SL_DAILY_PROD    C
 											 WHERE  C.HQ_OFFICE_CD = #{hqOfficeCd}
-											 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  	   AND
-										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-													   C.STORE_CD = #{item}
-										      	   </foreach>
-									   	  	 </if>
+                                            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                                AND C.STORE_CD IN (${storeCdQuery})
+                                            </if>
 											<if test='orgnFg != null and orgnFg == "H"'>
 												AND (
 														'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -527,12 +500,9 @@
 									 <if test='storeCd != null and storeCd != "" and prodClassCd != null and prodClassCd != ""'>
 									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z
 										 WHERE 1=1
-							             <if test='arrStoreCd != null and arrStoreCd != ""'>
-									  	   AND
-									  	 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-												Z.STORE_CD = #{item}
-									  	  	</foreach>
-	                                     </if>
+                                         <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                            AND Z.STORE_CD IN (${storeCdQuery})
+                                         </if>
 										 <if test='orgnFg != null and orgnFg == "H"'>
 											 AND (
 													'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -583,12 +553,9 @@
 											  FROM TB_MS_PRODUCT       B
 											 WHERE 1=1
 											 AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = B.STORE_CD)
-											 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  	   AND
-										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-													   B.STORE_CD = #{item}
-										      	   </foreach>
-									   	  	</if>
+                                            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                                AND B.STORE_CD IN (${storeCdQuery})
+                                            </if>
 											<if test='orgnFg != null and orgnFg == "H"'>
 												AND (
 														'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -609,12 +576,9 @@
 											     , SUM(C.TOT_SALE_QTY)     AS TOT_SALE_QTY
 											  FROM TB_SL_DAILY_PROD    C
 											 WHERE  C.HQ_OFFICE_CD = #{hqOfficeCd}
-											 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  	   AND
-										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-													   C.STORE_CD = #{item}
-										      	   </foreach>
-									   	  	</if>
+                                            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                                AND C.STORE_CD IN (${storeCdQuery})
+                                            </if>
 											<if test='orgnFg != null and orgnFg == "H"'>
 												AND (
 														'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -634,12 +598,9 @@
 									 <if test='storeCd != null and storeCd != "" and prodClassCd != null and prodClassCd != ""'>
 									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z
 										 WHERE 1=1
-									   	 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									  	   AND
-									  	 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-												Z.STORE_CD = #{item}
-									  	  	</foreach>
-	                                     </if>
+                                         <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                            AND Z.STORE_CD IN (${storeCdQuery})
+                                         </if>
 										 <if test='orgnFg != null and orgnFg == "H"'>
 											 AND (
 													'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -665,12 +626,9 @@
 											  FROM TB_MS_PRODUCT       B
 											 WHERE 1=1
 											 AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = B.STORE_CD)
-											 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  	   AND
-										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-													   B.STORE_CD = #{item}
-										      	   </foreach>
-									   	  	</if>
+                                            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                                AND B.STORE_CD IN (${storeCdQuery})
+                                            </if>
 											<if test='orgnFg != null and orgnFg == "H"'>
 												AND (
 														'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -691,12 +649,9 @@
 											     , SUM(C.TOT_SALE_QTY)     AS TOT_SALE_QTY
 											  FROM TB_SL_DAILY_PROD    C
 											 WHERE C.HQ_OFFICE_CD = #{hqOfficeCd}
-											 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  	   AND
-										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-													   C.STORE_CD = #{item}
-										      	   </foreach>
-									   	  	 </if>
+                                            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                                AND C.STORE_CD IN (${storeCdQuery})
+                                            </if>
 											<if test='orgnFg != null and orgnFg == "H"'>
 												AND (
 														'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -716,12 +671,9 @@
 									 <if test='storeCd != null and storeCd != "" and prodClassCd != null and prodClassCd != ""'>
 									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z
 									   	 WHERE 1=1
-							             <if test='arrStoreCd != null and arrStoreCd != ""'>
-									  	  AND
-									  	 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-												Z.STORE_CD = #{item}
-									  	  	</foreach>
-	                                     </if>
+                                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                             AND Z.STORE_CD IN (${storeCdQuery})
+                                         </if>
 										 <if test='orgnFg != null and orgnFg == "H"'>
 											 AND (
 													'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -771,19 +723,16 @@
 											  FROM TB_MS_PRODUCT       B
 											 WHERE 1=1
 											 AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = B.STORE_CD)
-											 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  	   AND
-										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-													   B.STORE_CD = #{item}
-										      	   </foreach>
-									   	  	</if>
+                                            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                                AND B.STORE_CD IN (${storeCdQuery})
+                                            </if>
 											<if test='orgnFg != null and orgnFg == "H"'>
 												AND (
 														'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
 													OR	B.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
 													)
 											</if>
-		<if test='prodClassCd != null and prodClassCd != ""'>
+		                                    <if test='prodClassCd != null and prodClassCd != ""'>
 											   AND B.PROD_CLASS_CD = #{prodClassCd}
 											</if>
 											<if test='brandCd != null and brandCd != ""'>
@@ -797,12 +746,9 @@
 											     , SUM(C.TOT_SALE_QTY)     AS TOT_SALE_QTY
 											  FROM TB_SL_DAILY_PROD    C
 											 WHERE C.HQ_OFFICE_CD = #{hqOfficeCd}
-											 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  	   AND
-										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-													   C.STORE_CD = #{item}
-										      	   </foreach>
-									   	  	</if>
+                                            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                                AND C.STORE_CD IN (${storeCdQuery})
+                                            </if>
 											<if test='orgnFg != null and orgnFg == "H"'>
 												AND (
 														'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -822,12 +768,9 @@
 									 <if test='storeCd != null and storeCd != "" and prodClassCd != null and prodClassCd != ""'>
 									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z
 									   	 WHERE 1=1
-									   	 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									  	  AND
-									  	 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-												Z.STORE_CD = #{item}
-									  	  	</foreach>
-	                                     </if>
+                                         <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                            AND Z.STORE_CD IN (${storeCdQuery})
+                                         </if>
 										 <if test='orgnFg != null and orgnFg == "H"'>
 											 AND (
 												 	'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -853,12 +796,9 @@
 											  FROM TB_MS_PRODUCT       B
 											 WHERE 1=1
 											 AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = B.STORE_CD)
-											 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  	   AND
-										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-													   B.STORE_CD = #{item}
-										      	   </foreach>
-									   	  	</if>
+                                            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                                AND B.STORE_CD IN (${storeCdQuery})
+                                            </if>
 											<if test='orgnFg != null and orgnFg == "H"'>
 												AND (
 														'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -879,12 +819,9 @@
 											     , SUM(C.TOT_SALE_QTY)     AS TOT_SALE_QTY
 											  FROM TB_SL_DAILY_PROD    C
 											 WHERE C.HQ_OFFICE_CD = #{hqOfficeCd}
-											 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									   	   	  	   AND
-										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-													   C.STORE_CD = #{item}
-										      	   </foreach>
-									   	  	 </if>
+                                            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                                AND C.STORE_CD IN (${storeCdQuery})
+                                            </if>
 											<if test='orgnFg != null and orgnFg == "H"'>
 												AND (
 														'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -904,12 +841,9 @@
 									 <if test='storeCd != null and storeCd != "" and prodClassCd != null and prodClassCd != ""'>
 									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z
 							             WHERE 1=1
-							             <if test='arrStoreCd != null and arrStoreCd != ""'>
-									  	  AND
-									  	 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-												Z.STORE_CD = #{item}
-									  	  	</foreach>
-	                                     </if>
+                                         <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                            AND Z.STORE_CD IN (${storeCdQuery})
+                                         </if>
 										 <if test='orgnFg != null and orgnFg == "H"'>
 											 AND (
 											 		'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')

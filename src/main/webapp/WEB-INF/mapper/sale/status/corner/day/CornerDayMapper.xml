@@ -25,11 +25,8 @@
         FROM TB_SL_DAILY_CORNR_PROD TSDCP
         WHERE TSDCP.HQ_OFFICE_CD = #{hqOfficeCd}
         ]]>
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-           AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                TSDCP.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND TSDCP.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='arrCornrCd != null and arrCornrCd != ""'>
             AND TSDCP.STORE_CD||'||'||TSDCP.CORNR_CD IN
@@ -60,11 +57,8 @@
         WHERE 1 = 1
           AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.STORE_CD = TMC.STORE_CD AND Z.HQ_OFFICE_CD = #{hqOfficeCd})
     ]]>
-        <if test='arrStoreCd != null and arrStoreCd.length >= 0'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                TMC.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND TMC.STORE_CD IN (${storeCdQuery})
         </if>
          <if test='arrCornrCd != null and arrCornrCd.length >= 0'>
             AND TMC.STORE_CD||'||'||TMC.CORNR_CD IN
@@ -97,11 +91,8 @@
         FROM TB_SL_DAILY_CORNR_PROD TSDCP
         WHERE TSDCP.HQ_OFFICE_CD = #{hqOfficeCd}
         ]]>
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-           AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                TSDCP.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND TSDCP.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='arrCornrCd != null and arrCornrCd != ""'>
             AND TSDCP.STORE_CD||'||'||TSDCP.CORNR_CD IN

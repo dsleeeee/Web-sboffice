@@ -2,6 +2,10 @@ package kr.co.solbipos.sale.orderStatus.orderStatus.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.orderStatus.orderStatus.service.OrderStatusService;
@@ -30,11 +34,13 @@ import java.util.List;
 @Service("orderStatusService")
 public class OrderStatusServiceImpl implements OrderStatusService {
     private final OrderStatusMapper orderStatusMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public OrderStatusServiceImpl(OrderStatusMapper orderStatusMapper, MessageService messageService) {
+    public OrderStatusServiceImpl(OrderStatusMapper orderStatusMapper, PopupMapper popupMapper, MessageService messageService) {
         this.orderStatusMapper = orderStatusMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -47,8 +53,11 @@ public class OrderStatusServiceImpl implements OrderStatusService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = orderStatusVO.getStoreCds().split(",");
-        orderStatusVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(orderStatusVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(orderStatusVO.getStoreCds(), 3900));
+            orderStatusVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return orderStatusMapper.getOrderStatusList(orderStatusVO);
     }
@@ -68,8 +77,11 @@ public class OrderStatusServiceImpl implements OrderStatusService {
             orderStatusVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
         // 매장 array 값 세팅
-        String[] storeCds = orderStatusVO.getStoreCds().split(",");
-        orderStatusVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(orderStatusVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(orderStatusVO.getStoreCds(), 3900));
+            orderStatusVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return orderStatusMapper.getOrderCancelPeriod(orderStatusVO);
     }
@@ -82,8 +94,11 @@ public class OrderStatusServiceImpl implements OrderStatusService {
             orderStatusVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
         // 매장 array 값 세팅
-        String[] storeCds = orderStatusVO.getStoreCds().split(",");
-        orderStatusVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(orderStatusVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(orderStatusVO.getStoreCds(), 3900));
+            orderStatusVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return orderStatusMapper.getOrderCancelByDate(orderStatusVO);
     }
@@ -96,8 +111,11 @@ public class OrderStatusServiceImpl implements OrderStatusService {
             orderStatusVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
         // 매장 array 값 세팅
-        String[] storeCds = orderStatusVO.getStoreCds().split(",");
-        orderStatusVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(orderStatusVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(orderStatusVO.getStoreCds(), 3900));
+            orderStatusVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return orderStatusMapper.getOrderCancelByCashier(orderStatusVO);
     }
@@ -110,8 +128,11 @@ public class OrderStatusServiceImpl implements OrderStatusService {
             orderStatusVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
         // 매장 array 값 세팅
-        String[] storeCds = orderStatusVO.getStoreCds().split(",");
-        orderStatusVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(orderStatusVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(orderStatusVO.getStoreCds(), 3900));
+            orderStatusVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return orderStatusMapper.getOrderCancelList(orderStatusVO);
     }

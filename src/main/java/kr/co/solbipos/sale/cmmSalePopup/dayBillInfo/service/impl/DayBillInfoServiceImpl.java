@@ -59,9 +59,6 @@ public class DayBillInfoServiceImpl implements DayBillInfoService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayBillInfoVO.getStoreCds().split(",");
-        dayBillInfoVO.setStoreCdList(storeCds);
-
         if(!StringUtil.getOrBlank(dayBillInfoVO.getStoreCds()).equals("")) {
             StoreVO storeVO = new StoreVO();
             storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayBillInfoVO.getStoreCds(), 3900));
@@ -81,8 +78,11 @@ public class DayBillInfoServiceImpl implements DayBillInfoService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayBillInfoVO.getStoreCds().split(",");
-        dayBillInfoVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayBillInfoVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayBillInfoVO.getStoreCds(), 3900));
+            dayBillInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return dayBillInfoMapper.getDayStoreBillList2(dayBillInfoVO);
     }

@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.prod.prodSaleRate2.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.prod.prodSaleRate2.service.ProdSaleRate2Service;
@@ -29,9 +33,11 @@ import java.util.List;
 @Transactional
 public class ProdSaleRate2ServiceImpl implements ProdSaleRate2Service {
     private final ProdSaleRate2Mapper prodSaleRate2Mapper;
+    private final PopupMapper popupMapper;
 
-    public ProdSaleRate2ServiceImpl(ProdSaleRate2Mapper prodSaleRate2Mapper) {
+    public ProdSaleRate2ServiceImpl(ProdSaleRate2Mapper prodSaleRate2Mapper, PopupMapper popupMapper) {
         this.prodSaleRate2Mapper = prodSaleRate2Mapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 조회 */
@@ -45,8 +51,11 @@ public class ProdSaleRate2ServiceImpl implements ProdSaleRate2Service {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = prodSaleRate2VO.getStoreCds().split(",");
-        prodSaleRate2VO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(prodSaleRate2VO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodSaleRate2VO.getStoreCds(), 3900));
+            prodSaleRate2VO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 동적 컬럼 생성을 위한 쿼리 변수;
         String sQuery1 = "";
@@ -86,8 +95,11 @@ public class ProdSaleRate2ServiceImpl implements ProdSaleRate2Service {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = prodSaleRate2VO.getStoreCds().split(",");
-        prodSaleRate2VO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(prodSaleRate2VO.getStoreCds()).equals("")) {
+        StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodSaleRate2VO.getStoreCds(), 3900));
+            prodSaleRate2VO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 동적 컬럼 생성을 위한 쿼리 변수;
         String sQuery1 = "";
