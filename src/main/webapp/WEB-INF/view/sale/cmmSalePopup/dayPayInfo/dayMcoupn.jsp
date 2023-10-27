@@ -59,6 +59,6 @@
 </wj-popup>
 
 <script type="text/javascript">
-  var mcouponCd = ${ccu.getCommCodeExcpAll("166")};
+  var mcouponCd = ${ccu.getCommCodeExcpAll("166")}; //TB_CM_VAN_CMPNY 로 변경예정
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dayPayInfo/dayMcoupn.js?ver=20210719.02" charset="utf-8"></script>
