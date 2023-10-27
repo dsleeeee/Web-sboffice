@@ -2,6 +2,7 @@ package kr.co.solbipos.sale.status.appr.cashBill.service.impl;
 
 import java.util.List;
 
+import kr.co.common.service.popup.impl.PopupMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +15,13 @@ import kr.co.solbipos.sale.status.appr.cashBill.service.ApprCashBillVO;
 @Service("apprCashBillService")
 public class ApprCashBillServiceImpl implements ApprCashBillService {
     private final ApprCashBillMapper apprCashBillMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public ApprCashBillServiceImpl(ApprCashBillMapper apprCashBillMapper, MessageService messageService) {
+    public ApprCashBillServiceImpl(ApprCashBillMapper apprCashBillMapper, PopupMapper popupMapper, MessageService messageService) {
         this.apprCashBillMapper = apprCashBillMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 

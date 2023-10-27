@@ -2,7 +2,10 @@ package kr.co.solbipos.sale.status.corner.dayOfWeek.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.status.corner.dayOfWeek.service.CornerDayOfWeekService;
 import kr.co.solbipos.sale.status.corner.dayOfWeek.service.CornerDayOfWeekVO;
@@ -15,11 +18,13 @@ import java.util.List;
 @Service("cornerDayOfWeekService")
 public class CornerDayOfWeekServiceImpl implements CornerDayOfWeekService {
     private final CornerDayOfWeekMapper cornerDayOfWeekMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public CornerDayOfWeekServiceImpl(CornerDayOfWeekMapper cornerDayOfWeekMapper, MessageService messageService) {
+    public CornerDayOfWeekServiceImpl(CornerDayOfWeekMapper cornerDayOfWeekMapper, PopupMapper popupMapper, MessageService messageService) {
         this.cornerDayOfWeekMapper = cornerDayOfWeekMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -38,12 +43,11 @@ public class CornerDayOfWeekServiceImpl implements CornerDayOfWeekService {
     			}
     		}
     	} else {
-    		String[] arrStoreCd = cornerDayOfWeekVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				cornerDayOfWeekVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
+            if(!StringUtil.getOrBlank(cornerDayOfWeekVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(cornerDayOfWeekVO.getStoreCd(), 3900));
+                cornerDayOfWeekVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
     	}
     	
     	if(!StringUtil.getOrBlank(cornerDayOfWeekVO.getArrCornrCd()).equals("")) {

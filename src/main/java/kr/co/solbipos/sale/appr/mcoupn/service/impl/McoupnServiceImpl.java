@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.appr.mcoupn.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.appr.mcoupn.service.McoupnService;
@@ -9,6 +13,7 @@ import kr.co.solbipos.sale.appr.mcoupn.service.impl.McoupnMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.*;
 import java.util.List;
 
 /**
@@ -30,9 +35,11 @@ import java.util.List;
 @Transactional
 public class McoupnServiceImpl implements McoupnService {
     private final McoupnMapper mcoupnMapper;
+    private final PopupMapper popupMapper;
 
-    public McoupnServiceImpl(McoupnMapper mcoupnMapper) {
+    public McoupnServiceImpl(McoupnMapper mcoupnMapper, PopupMapper popupMapper) {
         this.mcoupnMapper = mcoupnMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 모바일쿠폰입금관리 - 조회 */
@@ -46,9 +53,11 @@ public class McoupnServiceImpl implements McoupnService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = mcoupnVO.getStoreCds().split(",");
-        mcoupnVO.setStoreCdList(storeCds);
-
+        if(!StringUtil.getOrBlank(mcoupnVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mcoupnVO.getStoreCds(), 3900));
+            mcoupnVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return mcoupnMapper.getMcoupnList(mcoupnVO);
     }
@@ -64,9 +73,11 @@ public class McoupnServiceImpl implements McoupnService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = mcoupnVO.getStoreCds().split(",");
-        mcoupnVO.setStoreCdList(storeCds);
-
+        if(!StringUtil.getOrBlank(mcoupnVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mcoupnVO.getStoreCds(), 3900));
+            mcoupnVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return mcoupnMapper.getMcoupnExcelList(mcoupnVO);
     }

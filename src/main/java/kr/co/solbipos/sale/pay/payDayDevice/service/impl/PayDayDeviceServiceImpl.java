@@ -1,7 +1,10 @@
 package kr.co.solbipos.sale.pay.payDayDevice.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.pay.payDayDevice.service.PayDayDeviceService;
 import kr.co.solbipos.sale.pay.payDayDevice.service.PayDayDeviceVO;
@@ -30,9 +33,11 @@ import java.util.List;
 @Transactional
 public class PayDayDeviceServiceImpl implements PayDayDeviceService {
     private final PayDayDeviceMapper payDayDeviceMapper;
+    private final PopupMapper popupMapper;
 
-    public PayDayDeviceServiceImpl(PayDayDeviceMapper payDayDeviceMapper) {
+    public PayDayDeviceServiceImpl(PayDayDeviceMapper payDayDeviceMapper, PopupMapper popupMapper) {
         this.payDayDeviceMapper = payDayDeviceMapper;
+        this.popupMapper = popupMapper;
     }
 
 
@@ -44,7 +49,9 @@ public class PayDayDeviceServiceImpl implements PayDayDeviceService {
         payDayDeviceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(payDayDeviceVO.getStoreCd()).equals("")) {
-            payDayDeviceVO.setArrStoreCd(payDayDeviceVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(payDayDeviceVO.getStoreCd(), 3900));
+            payDayDeviceVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         String payCol= "";

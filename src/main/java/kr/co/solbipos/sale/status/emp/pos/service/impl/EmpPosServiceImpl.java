@@ -2,7 +2,10 @@ package kr.co.solbipos.sale.status.emp.pos.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.status.emp.pos.service.EmpPosService;
 import kr.co.solbipos.sale.status.emp.pos.service.EmpPosVO;
@@ -15,11 +18,13 @@ import java.util.List;
 @Service("EmpPosService")
 public class EmpPosServiceImpl implements EmpPosService {
     private final EmpPosMapper empPosMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public EmpPosServiceImpl(EmpPosMapper empPosMapper, MessageService messageService) {
+    public EmpPosServiceImpl(EmpPosMapper empPosMapper, PopupMapper popupMapper, MessageService messageService) {
     	this.empPosMapper = empPosMapper;
+    	this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -28,9 +33,11 @@ public class EmpPosServiceImpl implements EmpPosService {
     public List<DefaultMap<String>> getEmpPosList(EmpPosVO empPosVO, SessionInfoVO sessionInfoVO) {
   
     	empPosVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-    	
+
         if(!StringUtil.getOrBlank(empPosVO.getStoreCd()).equals("")) {
-        	empPosVO.setArrStoreCd(empPosVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(empPosVO.getStoreCd(), 3900));
+            empPosVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
     	
         // 판매자별 쿼리 변수
@@ -61,7 +68,9 @@ public class EmpPosServiceImpl implements EmpPosService {
     	empPosVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
     	
         if(!StringUtil.getOrBlank(empPosVO.getStoreCd()).equals("")) {
-        	empPosVO.setArrStoreCd(empPosVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(empPosVO.getStoreCd(), 3900));
+            empPosVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
     	
         // 판매자별 쿼리 변수
@@ -92,7 +101,9 @@ public class EmpPosServiceImpl implements EmpPosService {
     	empPosVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
     	
         if(!StringUtil.getOrBlank(empPosVO.getStoreCd()).equals("")) {
-        	empPosVO.setArrStoreCd(empPosVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(empPosVO.getStoreCd(), 3900));
+            empPosVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
         
         return empPosMapper.getEmpMebList(empPosVO);

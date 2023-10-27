@@ -50,24 +50,12 @@
        <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
           AND tpec.SALE_DATE BETWEEN #{startDate} AND #{endDate}
        </if>
-      <if test='inFg != null and inFg.toString() != ""'>
+       <if test='inFg != null and inFg.toString() != ""'>
           AND tpec.IN_FG = #{inFg}
-      </if>
-      <choose>
-          <!-- 본사 -->
-          <when test='orgnFg != null and orgnFg == "H"'>
-              <if test='storeCd != null and storeCd != ""'>
-                  AND
-                  <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")" >
-                      tpec.STORE_CD = #{item}
-                  </foreach>
-              </if>
-          </when>
-          <!-- 가맹점 -->
-          <when test='orgnFg != null and orgnFg == "S"'>
-              AND tpec.STORE_CD = #{storeCd}
-          </when>
-      </choose>
+       </if>
+       <if test='storeCdQuery != null and storeCdQuery != ""'>
+          AND tpec.STORE_CD IN (${storeCdQuery})
+       </if>
        ORDER
           BY tpec.SALE_DATE DESC, tpec.COMMUTE_IN_DT ASC
   </select>

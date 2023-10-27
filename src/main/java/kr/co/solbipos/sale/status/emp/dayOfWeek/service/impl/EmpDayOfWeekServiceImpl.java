@@ -2,7 +2,10 @@ package kr.co.solbipos.sale.status.emp.dayOfWeek.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.status.emp.dayOfWeek.service.EmpDayOfWeekService;
 import kr.co.solbipos.sale.status.emp.dayOfWeek.service.EmpDayOfWeekVO;
@@ -15,11 +18,13 @@ import java.util.List;
 @Service("EmpDayOfWeekService")
 public class EmpDayOfWeekServiceImpl implements EmpDayOfWeekService {
     private final EmpDayOfWeekMapper empDayOfWeekMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public EmpDayOfWeekServiceImpl(EmpDayOfWeekMapper empDayOfWeekMapper, MessageService messageService) {
+    public EmpDayOfWeekServiceImpl(EmpDayOfWeekMapper empDayOfWeekMapper, PopupMapper popupMapper, MessageService messageService) {
     	this.empDayOfWeekMapper = empDayOfWeekMapper;
+    	this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -28,9 +33,11 @@ public class EmpDayOfWeekServiceImpl implements EmpDayOfWeekService {
     public List<DefaultMap<String>> getEmpDayOfWeekList(EmpDayOfWeekVO empDayOfWeekVO, SessionInfoVO sessionInfoVO) {
   
     	empDayOfWeekVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-    	
+
         if(!StringUtil.getOrBlank(empDayOfWeekVO.getStoreCd()).equals("")) {
-        	empDayOfWeekVO.setArrStoreCd(empDayOfWeekVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(empDayOfWeekVO.getStoreCd(), 3900));
+            empDayOfWeekVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
     	
         // 판매자별 쿼리 변수

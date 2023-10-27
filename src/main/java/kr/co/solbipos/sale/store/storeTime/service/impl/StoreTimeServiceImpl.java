@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.store.storeTime.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.store.storeTime.service.StoreTimeService;
@@ -30,9 +34,11 @@ import java.util.List;
 @Transactional
 public class StoreTimeServiceImpl implements StoreTimeService {
     private final StoreTimeMapper storeTimeMapper;
+    private final PopupMapper popupMapper;
 
-    public StoreTimeServiceImpl(StoreTimeMapper storeTimeMapper) {
+    public StoreTimeServiceImpl(StoreTimeMapper storeTimeMapper, PopupMapper popupMapper) {
         this.storeTimeMapper = storeTimeMapper;
+        this.popupMapper = popupMapper;
     }
 
 
@@ -47,8 +53,12 @@ public class StoreTimeServiceImpl implements StoreTimeService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = storeTimeVO.getStoreCds().split(",");
-        storeTimeVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(storeTimeVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeTimeVO.getStoreCds(), 3900));
+            storeTimeVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
 
         // 매출 발생 시간대 기준, 동적 컬럼 생성을 위한 쿼리 변수;
         String sQuery1 = "";
@@ -81,8 +91,11 @@ public class StoreTimeServiceImpl implements StoreTimeService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = storeTimeVO.getStoreCds().split(",");
-        storeTimeVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(storeTimeVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeTimeVO.getStoreCds(), 3900));
+            storeTimeVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
         
         // 매출 발생 시간대 기준, 동적 컬럼 생성을 위한 쿼리 변수;
         String sQuery1 = "";

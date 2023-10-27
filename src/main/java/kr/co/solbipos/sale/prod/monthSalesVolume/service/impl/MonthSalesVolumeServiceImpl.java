@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.prod.monthSalesVolume.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.prod.monthSalesVolume.service.MonthSalesVolumeService;
@@ -29,9 +33,11 @@ import java.util.List;
 @Transactional
 public class MonthSalesVolumeServiceImpl implements MonthSalesVolumeService {
     private final MonthSalesVolumeMapper monthSalesVolumeMapper;
+    private final PopupMapper popupMapper;
 
-    public MonthSalesVolumeServiceImpl(MonthSalesVolumeMapper monthSalesVolumeMapper) {
+    public MonthSalesVolumeServiceImpl(MonthSalesVolumeMapper monthSalesVolumeMapper, PopupMapper popupMapper) {
         this.monthSalesVolumeMapper = monthSalesVolumeMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 조회 */
@@ -45,8 +51,11 @@ public class MonthSalesVolumeServiceImpl implements MonthSalesVolumeService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = monthSalesVolumeVO.getStoreCds().split(",");
-        monthSalesVolumeVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(monthSalesVolumeVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(monthSalesVolumeVO.getStoreCds(), 3900));
+            monthSalesVolumeVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return monthSalesVolumeMapper.getMonthSalesVolumeList(monthSalesVolumeVO);
     }
@@ -62,8 +71,11 @@ public class MonthSalesVolumeServiceImpl implements MonthSalesVolumeService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = monthSalesVolumeVO.getStoreCds().split(",");
-        monthSalesVolumeVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(monthSalesVolumeVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(monthSalesVolumeVO.getStoreCds(), 3900));
+            monthSalesVolumeVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return monthSalesVolumeMapper.getMonthSalesVolumeExcelList(monthSalesVolumeVO);
     }

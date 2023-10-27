@@ -2,6 +2,7 @@ package kr.co.solbipos.sale.status.prod.pos.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.status.prod.pos.service.ProdPosService;
 import kr.co.solbipos.sale.status.prod.pos.service.ProdPosVO;
@@ -14,11 +15,13 @@ import java.util.List;
 @Service("prodPosService")
 public class ProdPosServiceImpl implements ProdPosService {
     private final ProdPosMapper prodPosMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public ProdPosServiceImpl(ProdPosMapper prodPosMapper, MessageService messageService) {
+    public ProdPosServiceImpl(ProdPosMapper prodPosMapper, PopupMapper popupMapper, MessageService messageService) {
         this.prodPosMapper = prodPosMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 

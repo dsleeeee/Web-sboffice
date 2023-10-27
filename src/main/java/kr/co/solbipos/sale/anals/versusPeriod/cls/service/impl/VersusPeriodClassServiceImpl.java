@@ -2,6 +2,9 @@ package kr.co.solbipos.sale.anals.versusPeriod.cls.service.impl;
 
 import java.util.List;
 
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +18,13 @@ import kr.co.solbipos.sale.anals.versusPeriod.cls.service.VersusPeriodClassVO;
 @Service("VersusPeriodClassService")
 public class VersusPeriodClassServiceImpl implements VersusPeriodClassService {
     private final VersusPeriodClassMapper versusPeriodClassMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public VersusPeriodClassServiceImpl(VersusPeriodClassMapper versusPeriodClassMapper, MessageService messageService) {
+    public VersusPeriodClassServiceImpl(VersusPeriodClassMapper versusPeriodClassMapper, PopupMapper popupMapper, MessageService messageService) {
     	this.versusPeriodClassMapper = versusPeriodClassMapper;
+    	this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -33,7 +38,9 @@ public class VersusPeriodClassServiceImpl implements VersusPeriodClassService {
 		versusPeriodClassVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(versusPeriodClassVO.getStoreCd()).equals("")) {
-        	versusPeriodClassVO.setArrStoreCd(versusPeriodClassVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(versusPeriodClassVO.getStoreCd(), 3900));
+            versusPeriodClassVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return versusPeriodClassMapper.getVersusPeriodClassList(versusPeriodClassVO);
@@ -48,7 +55,9 @@ public class VersusPeriodClassServiceImpl implements VersusPeriodClassService {
 		versusPeriodClassVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(versusPeriodClassVO.getStoreCd()).equals("")) {
-        	versusPeriodClassVO.setArrStoreCd(versusPeriodClassVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(versusPeriodClassVO.getStoreCd(), 3900));
+            versusPeriodClassVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
 		return versusPeriodClassMapper.getVersusPeriodClassDtlList(versusPeriodClassVO);
@@ -63,7 +72,9 @@ public class VersusPeriodClassServiceImpl implements VersusPeriodClassService {
 		versusPeriodClassVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(versusPeriodClassVO.getStoreCd()).equals("")) {
-        	versusPeriodClassVO.setArrStoreCd(versusPeriodClassVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(versusPeriodClassVO.getStoreCd(), 3900));
+            versusPeriodClassVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
 		return versusPeriodClassMapper.getVersusPeriodClassDtlExcelList(versusPeriodClassVO);
@@ -77,7 +88,9 @@ public class VersusPeriodClassServiceImpl implements VersusPeriodClassService {
 		versusPeriodClassVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(versusPeriodClassVO.getStoreCd()).equals("")) {
-        	versusPeriodClassVO.setArrStoreCd(versusPeriodClassVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(versusPeriodClassVO.getStoreCd(), 3900));
+            versusPeriodClassVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
 		return versusPeriodClassMapper.getVersusPeriodClassDtlChartList(versusPeriodClassVO);

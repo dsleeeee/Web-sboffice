@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.day.dayStore.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.day.dayStore.service.DayStoreService;
@@ -30,9 +34,11 @@ import java.util.List;
 @Transactional
 public class DayStoreServiceImpl implements DayStoreService {
     private final DayStoreMapper dayStoreMapper;
+    private final PopupMapper popupMapper;
 
-    public DayStoreServiceImpl(DayStoreMapper dayStoreMapper) {
+    public DayStoreServiceImpl(DayStoreMapper dayStoreMapper, PopupMapper popupMapper) {
         this.dayStoreMapper = dayStoreMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 조회 */
@@ -46,8 +52,11 @@ public class DayStoreServiceImpl implements DayStoreService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayStoreVO.getStoreCds().split(",");
-        dayStoreVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayStoreVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayStoreVO.getStoreCds(), 3900));
+            dayStoreVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return dayStoreMapper.getDayStoreList(dayStoreVO);
     }
@@ -63,8 +72,11 @@ public class DayStoreServiceImpl implements DayStoreService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayStoreVO.getStoreCds().split(",");
-        dayStoreVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayStoreVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayStoreVO.getStoreCds(), 3900));
+            dayStoreVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return dayStoreMapper.getDayStoreExcelList(dayStoreVO);
     }

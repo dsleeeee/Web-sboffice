@@ -46,6 +46,9 @@ public class PeriodProdVO extends PageVO {
     /** 상품분류 */
     private String prodClassCd;
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
     public String getHqOfficeCd() { return hqOfficeCd; }
 
     public void setHqOfficeCd(String hqOfficeCd) { this.hqOfficeCd = hqOfficeCd; }
@@ -108,5 +111,13 @@ public class PeriodProdVO extends PageVO {
 
     public void setProdClassCd(String prodClassCd) {
         this.prodClassCd = prodClassCd;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

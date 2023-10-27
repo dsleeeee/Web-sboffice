@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.store.storeAvg.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.store.storeAvg.service.StoreAvgService;
@@ -30,9 +34,11 @@ import java.util.List;
 @Transactional
 public class StoreAvgServiceImpl implements StoreAvgService {
     private final StoreAvgMapper storeAvgMapper;
+    private final PopupMapper popupMapper;
 
-    public StoreAvgServiceImpl(StoreAvgMapper storeAvgMapper) {
+    public StoreAvgServiceImpl(StoreAvgMapper storeAvgMapper, PopupMapper popupMapper) {
         this.storeAvgMapper = storeAvgMapper;
+        this.popupMapper = popupMapper;
     }
 
 
@@ -47,8 +53,11 @@ public class StoreAvgServiceImpl implements StoreAvgService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = storeAvgVO.getStoreCds().split(",");
-        storeAvgVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(storeAvgVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeAvgVO.getStoreCds(), 3900));
+            storeAvgVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return storeAvgMapper.getStoreAvgList(storeAvgVO);
     }
@@ -64,8 +73,11 @@ public class StoreAvgServiceImpl implements StoreAvgService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = storeAvgVO.getStoreCds().split(",");
-        storeAvgVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(storeAvgVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeAvgVO.getStoreCds(), 3900));
+            storeAvgVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return storeAvgMapper.getStoreAvgExcelList(storeAvgVO);
     }

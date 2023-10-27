@@ -28,12 +28,9 @@
 		AND TSDP.STORE_CD = TSDPP.STORE_CD
 		AND TSDP.SALE_DATE = TSDPP.SALE_DATE
 		AND TSDP.POS_NO = TSDPP.POS_NO
-		<if test='arrStoreCd != null and arrStoreCd != ""'>
-			AND
-			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-				TSDP.STORE_CD = #{item}
-			</foreach>
-		</if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND TSDP.STORE_CD IN (${storeCdQuery})
+        </if>
 		<if test='arrPosNo != null and arrPosNo != ""'>
 			AND TSDP.STORE_CD||'||'||TSDP.POS_NO IN
 			<foreach collection="arrPosNo" item="item" open="(" close=")" separator=",">
@@ -62,12 +59,9 @@
 		, (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = TMP.STORE_CD) AS STORE_NM
 		FROM    TB_MS_POS TMP
 		WHERE	1=1
-		<if test='arrStoreCd != null and arrStoreCd.length >= 0'>
-			AND
-			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-				TMP.STORE_CD = #{item}
-			</foreach>
-		</if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND TMP.STORE_CD IN (${storeCdQuery})
+        </if>
 		ORDER BY TMP.STORE_CD||'||'||TMP.POS_NO
 	</select>
 

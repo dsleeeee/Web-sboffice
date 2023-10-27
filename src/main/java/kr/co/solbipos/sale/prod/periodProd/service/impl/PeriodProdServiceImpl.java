@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.prod.periodProd.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.prod.periodProd.service.PeriodProdService;
@@ -30,9 +34,11 @@ import java.util.List;
 @Transactional
 public class PeriodProdServiceImpl implements PeriodProdService {
     private final PeriodProdMapper periodProdMapper;
+    private final PopupMapper popupMapper;
 
-    public PeriodProdServiceImpl(PeriodProdMapper periodProdMapper) {
+    public PeriodProdServiceImpl(PeriodProdMapper periodProdMapper, PopupMapper popupMapper) {
         this.periodProdMapper = periodProdMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 조회 */
@@ -46,8 +52,11 @@ public class PeriodProdServiceImpl implements PeriodProdService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = periodProdVO.getStoreCds().split(",");
-        periodProdVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(periodProdVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(periodProdVO.getStoreCds(), 3900));
+            periodProdVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return periodProdMapper.getPeriodProdList(periodProdVO);
     }
@@ -63,8 +72,11 @@ public class PeriodProdServiceImpl implements PeriodProdService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = periodProdVO.getStoreCds().split(",");
-        periodProdVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(periodProdVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(periodProdVO.getStoreCds(), 3900));
+            periodProdVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return periodProdMapper.getPeriodProdExcelList(periodProdVO);
     }

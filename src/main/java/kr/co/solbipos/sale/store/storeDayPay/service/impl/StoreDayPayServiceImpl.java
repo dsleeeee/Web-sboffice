@@ -1,7 +1,10 @@
 package kr.co.solbipos.sale.store.storeDayPay.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.store.storeDayPay.service.StoreDayPayService;
 import kr.co.solbipos.sale.store.storeDayPay.service.StoreDayPayVO;
@@ -29,9 +32,11 @@ import java.util.List;
 @Transactional
 public class StoreDayPayServiceImpl implements StoreDayPayService {
     private final StoreDayPayMapper storeDayPayMapper;
+    private final PopupMapper popupMapper;
 
-    public StoreDayPayServiceImpl(StoreDayPayMapper storeDayPayMapper) {
+    public StoreDayPayServiceImpl(StoreDayPayMapper storeDayPayMapper, PopupMapper popupMapper) {
         this.storeDayPayMapper = storeDayPayMapper;
+        this.popupMapper = popupMapper;
     }
 
 
@@ -43,7 +48,9 @@ public class StoreDayPayServiceImpl implements StoreDayPayService {
         storeDayPayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(storeDayPayVO.getStoreCd()).equals("")) {
-            storeDayPayVO.setArrStoreCd(storeDayPayVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeDayPayVO.getStoreCd(), 3900));
+            storeDayPayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         String payCol= "";

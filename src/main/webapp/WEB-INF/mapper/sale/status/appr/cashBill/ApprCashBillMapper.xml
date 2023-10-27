@@ -40,11 +40,8 @@
                  WHERE SALE_FG='1'
                    AND APPR_PROC_FG IN ('1','2')
         ]]>
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND STORE_CD IN (${storeCdQuery})
         </if>
         <if test='startDate != null and startDate != ""'>
            AND SALE_DATE >= #{startDate}
@@ -62,11 +59,8 @@
                  WHERE SALE_FG='-1'
                    AND APPR_PROC_FG IN ('1','2')
         ]]>
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND STORE_CD IN (${storeCdQuery})
         </if>
         <if test='startDate != null and startDate != ""'>
            AND SALE_DATE >= #{startDate}

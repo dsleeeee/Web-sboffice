@@ -4,13 +4,12 @@
 
 <mapper namespace="kr.co.solbipos.sale.anals.versusPeriod.week.service.impl.VersusPeriodWeekMapper">
 
+    <!--
+   		화면 ID : 대비기간매출분석-주간대비탭
+   		화면 PAGE : 89P
+   		PARAM : STORE_CD, SALE_DATE(FR,TO)
+   	-->
     <select id="getVersusPeriodWeekList" parameterType="versusPeriodWeekVO" resultType="DefaultMap">
-
-	<!--
-		화면 ID : 대비기간매출분석-주간대비탭
-		화면 PAGE : 89P
-		PARAM : STORE_CD, SALE_DATE(FR,TO)
-	-->
 /* VersusPeriodWeekMapper.getVersusPeriodWeekList */
 	SELECT LV_NM, M.*
   FROM (
@@ -74,12 +73,9 @@
 										 <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
 										 	AND TSDT.SALE_DATE BETWEEN REPLACE(#{startDate}, '-', '') AND REPLACE(#{endDate}, '-', '')
 										 </if>
-										 <if test='arrStoreCd != null and arrStoreCd != ""'>
-										 	AND
-										 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-												TSDT.STORE_CD = #{item}
-										 	</foreach>
-										 </if>
+                                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                            AND TSDT.STORE_CD IN (${storeCdQuery})
+                                        </if>
 										<if test='orgnFg != null and orgnFg == "H"'>
 											AND (
 													'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -124,12 +120,9 @@
 										 <if test="compStartDate != null and compStartDate != '' and compEndDate != null and compEndDate != ''">
 										 	AND TSDT.SALE_DATE BETWEEN REPLACE(#{compStartDate}, '-', '') AND REPLACE(#{compEndDate}, '-', '')
 										 </if>
-										 <if test='arrStoreCd != null and arrStoreCd != ""'>
-										 	AND
-										 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-												TSDT.STORE_CD = #{item}
-										 	</foreach>
-										 </if>
+                                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                            AND TSDT.STORE_CD IN (${storeCdQuery})
+                                        </if>
 										<if test='orgnFg != null and orgnFg == "H"'>
 											AND (
 													'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -225,12 +218,9 @@ ORDER BY LV.LV
 										 				<if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
 										 					AND TSDT.SALE_DATE BETWEEN REPLACE(#{startDate}, '-', '') AND REPLACE(#{endDate}, '-', '')
 										 				</if>
-										 				<if test='arrStoreCd != null and arrStoreCd != ""'>
-										 					AND
-										 					<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-																TSDT.STORE_CD = #{item}
-										 					</foreach>
-														</if>
+                                                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                                            AND TSDT.STORE_CD IN (${storeCdQuery})
+                                                        </if>
 														<if test='orgnFg != null and orgnFg == "H"'>
 															AND (
 																	'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -275,12 +265,9 @@ ORDER BY LV.LV
 										 				<if test="compStartDate != null and compStartDate != '' and compEndDate != null and compEndDate != ''">
 										 					AND TSDT.SALE_DATE BETWEEN REPLACE(#{compStartDate}, '-', '') AND REPLACE(#{compEndDate}, '-', '')
 										 				</if>
-										 				<if test='arrStoreCd != null and arrStoreCd != ""'>
-										 					AND
-										 					<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-																TSDT.STORE_CD = #{item}
-										 					</foreach>
-														</if>
+                                                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                                            AND TSDT.STORE_CD IN (${storeCdQuery})
+                                                        </if>
 														<if test='orgnFg != null and orgnFg == "H"'>
 															AND (
 																	'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')

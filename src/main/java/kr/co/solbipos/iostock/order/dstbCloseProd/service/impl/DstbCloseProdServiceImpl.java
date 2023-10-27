@@ -4,6 +4,9 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 import java.util.List;
 
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,10 +23,12 @@ import kr.co.solbipos.iostock.order.dstbCloseProd.service.DstbCloseProdVO;
 @Transactional
 public class DstbCloseProdServiceImpl implements DstbCloseProdService {
     private final DstbCloseProdMapper dstbCloseProdMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
-    public DstbCloseProdServiceImpl(DstbCloseProdMapper dstbCloseProdMapper, MessageService messageService) {
+    public DstbCloseProdServiceImpl(DstbCloseProdMapper dstbCloseProdMapper, PopupMapper popupMapper, MessageService messageService) {
         this.dstbCloseProdMapper = dstbCloseProdMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -122,7 +127,9 @@ public class DstbCloseProdServiceImpl implements DstbCloseProdService {
     @Override
     public List<DefaultMap<String>> getDstbCloseProdAddRegistList(DstbCloseProdVO dstbCloseProdVO) {
         if(!StringUtil.getOrBlank(dstbCloseProdVO.getStoreCd()).equals("")) {
-            dstbCloseProdVO.setArrStoreCd(dstbCloseProdVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dstbCloseProdVO.getStoreCd(), 3900));
+            dstbCloseProdVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
         return dstbCloseProdMapper.getDstbCloseProdAddRegistList(dstbCloseProdVO);
     }

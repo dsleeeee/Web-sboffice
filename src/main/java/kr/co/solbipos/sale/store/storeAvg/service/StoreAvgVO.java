@@ -33,6 +33,9 @@ public class StoreAvgVO extends PageVO {
     /** 조회매장 */
     private String storeCds;
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -65,4 +68,11 @@ public class StoreAvgVO extends PageVO {
         this.storeCds = storeCds;
     }
 
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
+    }
 }
