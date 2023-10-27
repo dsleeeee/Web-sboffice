@@ -2193,32 +2193,12 @@
         /* USE : TouchkeyMapper.getTouchKeyGrpCd */
         <choose>
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT GRP_CD
-                FROM TB_CM_GROUP_CODE_TOUCHKEY_KIOSKKEYMAP
-                WHERE 1=1
-                AND SEQ = (
-                                SELECT
-                                NVL(MAX(B.SEQ), 0) +1
-                                FROM TB_HQ_TOUCH_KEY_CLASS A,
-                                TB_CM_GROUP_CODE_TOUCHKEY_KIOSKKEYMAP B
-                                WHERE 1=1
-                                AND A.HQ_OFFICE_CD = #{hqOfficeCd}
-                                AND B.GRP_CD (+)= A.TUKEY_GRP_CD
-                            )
+                SELECT  FN_GET_MAX_CODE_TOUCH_KEY_CLASS(#{hqOfficeCd}, '')  AS  GRP_CD
+                FROM    DUAL
             </when>
             <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT GRP_CD
-                FROM TB_CM_GROUP_CODE_TOUCHKEY_KIOSKKEYMAP
-                WHERE 1=1
-                AND SEQ = (
-                                SELECT
-                                NVL(MAX(B.SEQ), 0) +1
-                                FROM TB_MS_TOUCH_KEY_CLASS A,
-                                TB_CM_GROUP_CODE_TOUCHKEY_KIOSKKEYMAP B
-                                WHERE 1=1
-                                AND A.STORE_CD = #{storeCd}
-                                AND B.GRP_CD (+)= A.TUKEY_GRP_CD
-                            )
+                SELECT  FN_GET_MAX_CODE_TOUCH_KEY_CLASS(#{storeCd}, '')     AS  GRP_CD
+                FROM    DUAL
             </when>
         </choose>
     </select>

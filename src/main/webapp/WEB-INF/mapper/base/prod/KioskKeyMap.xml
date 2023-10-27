@@ -435,34 +435,13 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT GRP_CD
-                FROM TB_CM_GROUP_CODE_TOUCHKEY_KIOSKKEYMAP
-                WHERE 1=1
-                AND SEQ = (
-                                SELECT
-                                NVL(MAX(B.SEQ), 0) +1
-                                FROM TB_HQ_KIOSK_CLS A,
-                                TB_CM_GROUP_CODE_TOUCHKEY_KIOSKKEYMAP B
-                                WHERE 1=1
-                                AND A.HQ_OFFICE_CD = #{hqOfficeCd}
-                                AND B.GRP_CD (+)= A.TU_CLS_TYPE
-                            )
+                SELECT  FN_GET_MAX_CODE_KIOSK_CLS(#{hqOfficeCd}, '')  AS  GRP_CD
+                FROM    DUAL
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT GRP_CD
-                FROM TB_CM_GROUP_CODE_TOUCHKEY_KIOSKKEYMAP
-                WHERE 1=1
-                AND SEQ = (
-                                SELECT
-                                NVL(MAX(B.SEQ), 0) +1
-                                FROM TB_MS_KIOSK_CLS A,
-                                TB_CM_GROUP_CODE_TOUCHKEY_KIOSKKEYMAP B
-                                WHERE 1=1
-                                AND A.STORE_CD = #{storeCd}
-                                AND A.POS_NO = #{posNo}
-                                AND B.GRP_CD (+)= A.TU_CLS_TYPE
-                          )
+                SELECT  FN_GET_MAX_CODE_KIOSK_CLS(#{storeCd}, '')  AS  GRP_CD
+                FROM    DUAL
             </when>
         </choose>
     </select>

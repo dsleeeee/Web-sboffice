@@ -59,6 +59,6 @@
 </wj-popup>
 
 <script type="text/javascript">
-  var mcouponCd = ${ccu.getCommCodeExcpAll("110")};
+  var mcouponCd = ${ccu.getCommCodeExcpAll("166")};
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dayPayInfo/dayMcoupn.js?ver=20210719.02" charset="utf-8"></script>

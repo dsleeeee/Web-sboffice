@@ -375,7 +375,7 @@
     var orgnFg = "${orgnFg}";
 
     // 모바일쿠폰
-    var mCoupnFg = ${ccu.getCommCode("110")};
+    var mCoupnFg = ${ccu.getCommCode("166")};
 
     // [1250 맘스터치] 환경설정값
     var momsEnvstVal = "${momsEnvstVal}";
