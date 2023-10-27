@@ -100,7 +100,7 @@ app.controller('memberTermsRegistCtrl', ['$scope', '$http', function ($scope, $h
 
                 return false;
             } else {
-                $scope.version.fileSize = fileSize;
+                $scope.version.fileSize = getfileSize(fileSize);
             }
         });
     };
@@ -279,6 +279,9 @@ app.controller('memberTermsRegistCtrl', ['$scope', '$http', function ($scope, $h
             $("#fileIn").attr("colspan", 1);
             $("#fileOrgH").show();
             $("#fileOrgD").show();
+
+            // 파일사이즈 변환하여 표기
+            $scope.version.fileSize = getfileSize($scope.version.fileSize);
         });
     };
 

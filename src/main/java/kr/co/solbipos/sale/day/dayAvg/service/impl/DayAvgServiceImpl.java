@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.day.dayAvg.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.day.dayAvg.service.DayAvgService;
@@ -30,9 +34,11 @@ import java.util.List;
 @Transactional
 public class DayAvgServiceImpl implements DayAvgService {
     private final DayAvgMapper dayAvgMapper;
+    private final PopupMapper popupMapper;
 
-    public DayAvgServiceImpl(DayAvgMapper dayAvgMapper) {
+    public DayAvgServiceImpl(DayAvgMapper dayAvgMapper, PopupMapper popupMapper) {
         this.dayAvgMapper = dayAvgMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 조회 */
@@ -46,8 +52,11 @@ public class DayAvgServiceImpl implements DayAvgService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayAvgVO.getStoreCds().split(",");
-        dayAvgVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayAvgVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayAvgVO.getStoreCds(), 3900));
+            dayAvgVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return dayAvgMapper.getDayAvgList(dayAvgVO);
     }
@@ -63,8 +72,11 @@ public class DayAvgServiceImpl implements DayAvgService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayAvgVO.getStoreCds().split(",");
-        dayAvgVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayAvgVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayAvgVO.getStoreCds(), 3900));
+            dayAvgVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return dayAvgMapper.getDayAvgExcelList(dayAvgVO);
     }

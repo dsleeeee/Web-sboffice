@@ -62,6 +62,13 @@ app.controller('memberTermsCtrl', ['$scope', '$http', function ($scope, $http) {
                     // var item = s.rows[e.row].dataItem;
                     wijmo.addClass(e.cell, 'wijLink');
                 }
+
+                // 파일사이즈
+                if (col.binding === "fileSize") {
+                    if(e.cell.innerText !== null && e.cell.innerText !== undefined && e.cell.innerText !== ""){
+                        e.cell.innerHTML = getfileSize(e.cell.innerText.replaceAll(',',''));
+                    }
+                }
             }
         });
 

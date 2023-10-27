@@ -90,7 +90,7 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
         return false;
       } else {
-        $scope.version.fileSize = fileSize;
+        $scope.version.fileSize = getfileSize(fileSize);
       }
     });
   };
@@ -326,6 +326,9 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#fileIn").attr("colspan", 1);
       $("#fileOrgH").show();
       $("#fileOrgD").show();
+
+      // 파일사이즈 변환하여 표기
+      $scope.version.fileSize = getfileSize($scope.version.fileSize);
     });
   };
 

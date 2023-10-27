@@ -27,12 +27,9 @@
 				NVL(SUM(TOT_OFFADD_AMT), 0) AS TOT_OFFADD_AMT
 		FROM 	TB_SL_SALE_HDR
 		WHERE	HQ_OFFICE_CD = #{hqOfficeCd}
-		<if test='storeCd != null and storeCd != ""'>
-			AND
-			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-				STORE_CD = #{item}
-			</foreach>
-		</if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND STORE_CD IN (${storeCdQuery})
+        </if>
 		<if test='orgnFg != null and orgnFg == "H"'>
 			AND (
 					'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -62,12 +59,9 @@
 		WHERE 	tmp.STORE_CD = tssd.STORE_CD
 	  	AND		tmp.PROD_CD(+) = tssd.PROD_CD
 	  	AND 	tssd.HQ_OFFICE_CD = #{hqOfficeCd}
-		<if test='storeCd != null and storeCd != ""'>
-			AND
-			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-				tssd.STORE_CD = #{item}
-			</foreach>
-		</if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tssd.STORE_CD IN (${storeCdQuery})
+        </if>
 		<if test='orgnFg != null and orgnFg == "H"'>
 			AND (
 					'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -97,12 +91,9 @@
 				NVL(SUM(TOT_OFFADD_AMT), 0) AS TOT_OFFADD_AMT
 		FROM 	TB_SL_SALE_HDR
 		WHERE	HQ_OFFICE_CD = #{hqOfficeCd}
-		<if test='storeCd != null and storeCd != ""'>
-			AND
-			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-				STORE_CD = #{item}
-			</foreach>
-		</if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND STORE_CD IN (${storeCdQuery})
+        </if>
 		<if test='orgnFg != null and orgnFg == "H"'>
 			AND (
 					'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -132,12 +123,9 @@
 		WHERE 	tmp.STORE_CD = tssd.STORE_CD
 		AND		tmp.PROD_CD(+) = tssd.PROD_CD
 		AND 	tssd.HQ_OFFICE_CD = #{hqOfficeCd}
-		<if test='storeCd != null and storeCd != ""'>
-			AND
-			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-				tssd.STORE_CD = #{item}
-			</foreach>
-		</if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tssd.STORE_CD IN (${storeCdQuery})
+        </if>
 		<if test='orgnFg != null and orgnFg == "H"'>
 			AND (
 					'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -211,12 +199,9 @@
 								TB_MS_PRODUCT tmp,
 								TB_MS_PRODUCT_BARCD tmpb
 						WHERE   tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-						<if test='storeCd != null and storeCd != ""'>
-							AND
-							<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-								tsdp.STORE_CD = #{item}
-							</foreach>
-						</if>
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND tsdp.STORE_CD IN (${storeCdQuery})
+                        </if>
 						<if test='orgnFg != null and orgnFg == "H"'>
 							AND (
 									'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -266,12 +251,9 @@
 									SUM(PAY_AMT) AS PAY_AMT
 							FROM    TB_SL_SALE_DTL_PAY
 							WHERE   STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
-							<if test='storeCd != null and storeCd != ""'>
-								AND
-								<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-									STORE_CD = #{item}
-								</foreach>
-							</if>
+                            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                AND STORE_CD IN (${storeCdQuery})
+                            </if>
 							<if test='orgnFg != null and orgnFg == "H"'>
 								AND (
 										'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -357,12 +339,9 @@
 		TB_MS_PRODUCT tmp,
 		TB_MS_PRODUCT_BARCD tmpb
 		WHERE   tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-		<if test='storeCd != null and storeCd != ""'>
-			AND
-			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-				tsdp.STORE_CD = #{item}
-			</foreach>
-		</if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsdp.STORE_CD IN (${storeCdQuery})
+        </if>
 		<if test='orgnFg != null and orgnFg == "H"'>
 			AND (
 					'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
@@ -412,12 +391,9 @@
 		SUM(PAY_AMT) AS PAY_AMT
 		FROM    TB_SL_SALE_DTL_PAY
 		WHERE   STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
-		<if test='storeCd != null and storeCd != ""'>
-			AND
-			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-				STORE_CD = #{item}
-			</foreach>
-		</if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND STORE_CD IN (${storeCdQuery})
+        </if>
 		<if test='orgnFg != null and orgnFg == "H"'>
 			AND (
 					'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')

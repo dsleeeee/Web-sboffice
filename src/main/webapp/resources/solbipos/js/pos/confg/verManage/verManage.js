@@ -66,6 +66,20 @@ app.controller('verManageCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     });
 
+    // 그리드 링크 효과
+    s.formatItem.addHandler(function (s, e) {
+        if (e.panel === s.cells) {
+            var col = s.columns[e.col];
+
+            // 파일사이즈
+            if (col.binding === "fileSize") {
+                if(e.cell.innerText !== null && e.cell.innerText !== undefined && e.cell.innerText !== ""){
+                    e.cell.innerHTML = getfileSize(e.cell.innerText.replaceAll(',',''));
+                }
+            }
+        }
+    });
+
     // 프로그램구분은 수정 못하게 처리
     $scope.srchProgFgCombo.selectedValue = "1"; // [1] NXPOS_V1;
     $("#srchProgFg").attr("disabled", true);

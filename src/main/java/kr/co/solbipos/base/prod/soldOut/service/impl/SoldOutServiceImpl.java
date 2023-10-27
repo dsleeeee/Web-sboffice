@@ -1,6 +1,10 @@
 package kr.co.solbipos.base.prod.soldOut.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.soldOut.service.SoldOutService;
@@ -36,11 +40,13 @@ public class SoldOutServiceImpl implements SoldOutService {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final SoldOutMapper soldOutMapper;
+    private final PopupMapper popupMapper;
 
     /** Constructor Injection */
     @Autowired
-    public SoldOutServiceImpl(SoldOutMapper soldOutMapper) {
+    public SoldOutServiceImpl(SoldOutMapper soldOutMapper, PopupMapper popupMapper) {
         this.soldOutMapper = soldOutMapper;
+        this.popupMapper = popupMapper;
     }
 
     @Override
@@ -54,8 +60,11 @@ public class SoldOutServiceImpl implements SoldOutService {
         soldOutVO.setUserId(sessionInfoVO.getUserId());
 
         // 매장 array 값 세팅
-        String[] storeCds = soldOutVO.getStoreCds().split(",");
-        soldOutVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(soldOutVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(soldOutVO.getStoreCds(), 3900));
+            soldOutVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 상품 array 값 세팅
         if (soldOutVO.getProdCds() != null && !"".equals(soldOutVO.getProdCds())) {

@@ -124,4 +124,4 @@
     var useYnComboData = ${ccu.getCommCode("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/memberTerms/memberTermsDtl.js?ver=20220708.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/memberTerms/memberTermsDtl.js?ver=20231026.01" charset="utf-8"></script>

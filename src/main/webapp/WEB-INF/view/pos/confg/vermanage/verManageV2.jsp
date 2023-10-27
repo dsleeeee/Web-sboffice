@@ -134,7 +134,7 @@
   var hqOfficeCd = "${hqOfficeCd}";
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verManageV2.js?ver=20220822.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verManageV2.js?ver=20231026.01" charset="utf-8"></script>
 
 <!-- 관리자 화면인 경우만 아래 화면 import -->
 <!-- 본사 화면인 경우 탭 화면으로 구성되어 있어 이미 [POS 버전관리]화면에서 import 하고 있으므로, 중복을 방지하여 오류 안나게 처리 -->

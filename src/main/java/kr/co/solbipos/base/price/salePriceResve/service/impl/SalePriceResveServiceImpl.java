@@ -105,8 +105,9 @@ public class SalePriceResveServiceImpl implements SalePriceResveService {
             // choice - 선택한 매장만 적용
             if(salePriceResveVO.getApplyFg().equals("all") || salePriceResveVO.getApplyFg().equals("tot") || salePriceResveVO.getApplyFg().equals("choice")){
                 if (salePriceResveVO.getApplyFg().equals("choice")){
-                    String[] saveStoreCds = salePriceResveVO.getSaveStoreCds().split(",");
-                    salePriceResveVO.setSaveStoreCdList(saveStoreCds);
+                    StoreVO storeVO = new StoreVO();
+                    storeVO.setArrSplitStoreCd(CmmUtil.splitText(salePriceResveVO.getSaveStoreCds(), 3900));
+                    salePriceResveVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
                 }
                 salePriceResveMapper.insertHqSalePriceToStore(salePriceResveVO);
             }
@@ -169,9 +170,12 @@ public class SalePriceResveServiceImpl implements SalePriceResveService {
             if(salePriceResveVO.getApplyFg().equals("all") || salePriceResveVO.getApplyFg().equals("tot") || salePriceResveVO.getApplyFg().equals("choice")){
 
                 if (salePriceResveVO.getApplyFg().equals("choice")){
-                    String[] saveStoreCds = salePriceResveVO.getSaveStoreCds().split(",");
-                    salePriceResveVO.setSaveStoreCdList(saveStoreCds);
-                }
+                    if(!StringUtil.getOrBlank(salePriceResveVO.getSaveStoreCds()).equals("")) {
+                        StoreVO storeVO = new StoreVO();
+                        storeVO.setArrSplitStoreCd(CmmUtil.splitText(salePriceResveVO.getSaveStoreCds(), 3900));
+                        salePriceResveVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+                    }
+                                }
                 salePriceResveMapper.insertHqSalePriceToStore(salePriceResveVO);
             }
         }
@@ -450,8 +454,11 @@ public class SalePriceResveServiceImpl implements SalePriceResveService {
                     if(salePriceResveVO.getApplyFg().equals("all") || salePriceResveVO.getApplyFg().equals("tot") || salePriceResveVO.getApplyFg().equals("choice")){
 
                         if (salePriceResveVO.getApplyFg().equals("choice")){
-                            String[] saveStoreCds = salePriceResveVO.getSaveStoreCds().split(",");
-                            salePriceResveVO.setSaveStoreCdList(saveStoreCds);
+                            if(!StringUtil.getOrBlank(salePriceResveVO.getSaveStoreCds()).equals("")) {
+                                StoreVO storeVO = new StoreVO();
+                                storeVO.setArrSplitStoreCd(CmmUtil.splitText(salePriceResveVO.getSaveStoreCds(), 3900));
+                                salePriceResveVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+                            }
                         }
                         salePriceResveMapper.insertHqSalePriceToStore(salePriceResveVO);
                     }

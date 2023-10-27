@@ -79,7 +79,7 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.uploadChange = function(){
     $scope.$apply(function() {
       var fileSize = document.getElementById("file").files[0].size;
-      $scope.version.fileSize = fileSize;
+      $scope.version.fileSize = getfileSize(fileSize);
     });
   };
 
@@ -236,6 +236,10 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#orgnCdsCd").val(data.orgnCds);
         $("#orgnCdsNm").val(data.orgnCds);
       }
+
+      // 파일사이즈 변환하여 표기
+      $scope.version.fileSize = getfileSize($scope.version.fileSize);
+
     });
   };
 

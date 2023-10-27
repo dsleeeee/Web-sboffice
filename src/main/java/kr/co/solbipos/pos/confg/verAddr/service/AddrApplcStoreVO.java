@@ -61,7 +61,8 @@ public class AddrApplcStoreVO extends PageVO {
     private String[] userBrandList;
     /** 사용자별 브랜드코드 */
     private String userBrands;
-
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
 
     /**
      * @return the verSerNo
@@ -293,5 +294,13 @@ public class AddrApplcStoreVO extends PageVO {
 
     public void setUserBrands(String userBrands) {
         this.userBrands = userBrands;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

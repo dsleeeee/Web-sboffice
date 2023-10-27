@@ -149,7 +149,7 @@
                 <wj-flex-grid-column header="<s:message code="memberTerms.useDate"/>" binding="useDate" align="center" width="160" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="memberTerms.fileNm"/>" binding="fileOrgNm" data-map="fileTypeDataMap" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="memberTerms.fileType"/>" binding="fileUseType" data-map="fileTypeDataMap" width="140" align="center" is-read-only="true" ></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="memberTerms.fileSize"/>" binding="fileSize"  width="80" align="right" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="memberTerms.fileSize"/>" binding="fileSize"  width="100" align="right" is-read-only="true" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="memberTerms.useYn"/>" binding="useYn" data-map="useYnDataMap" align="center" width="80"  is-read-only="true"></wj-flex-grid-column>
 
             </wj-flex-grid>
@@ -175,7 +175,7 @@
     var hqList      = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/memberTerms/memberTerms.js?ver=20220708.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/memberTerms/memberTerms.js?ver=20231026.01" charset="utf-8"></script>
 
 <%-- 회원약관관리 신규등록 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/memberTerms/memberTermsRegist.jsp">

@@ -55,6 +55,9 @@ app.controller('memberTermsDtlCtrl', ['$scope', '$http', function ($scope, $http
             } else {
                 $("#btnMod").show();
             }
+
+            // 파일사이즈 변환하여 표기
+            $scope.version.fileSize = getfileSize($scope.version.fileSize);
         });
     };
     // <-- //검색 호출 -->

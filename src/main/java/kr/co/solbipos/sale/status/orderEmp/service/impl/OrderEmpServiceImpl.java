@@ -104,7 +104,9 @@ public class OrderEmpServiceImpl implements OrderEmpService {
         orderEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(orderEmpVO.getStoreCd()).equals("")) {
-            orderEmpVO.setArrStoreCd(orderEmpVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(orderEmpVO.getStoreCd(), 3900));
+            orderEmpVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         // 판매자별 쿼리 변수
@@ -137,7 +139,9 @@ public class OrderEmpServiceImpl implements OrderEmpService {
         orderEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if(!StringUtil.getOrBlank(orderEmpVO.getStoreCd()).equals("")) {
-            orderEmpVO.setArrStoreCd(orderEmpVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(orderEmpVO.getStoreCd(), 3900));
+            orderEmpVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         // 판매자별 쿼리 변수

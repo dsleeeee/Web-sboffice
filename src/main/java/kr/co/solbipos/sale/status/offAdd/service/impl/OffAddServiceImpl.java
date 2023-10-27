@@ -2,7 +2,10 @@ package kr.co.solbipos.sale.status.offAdd.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.status.offAdd.service.OffAddService;
@@ -31,11 +34,13 @@ import java.util.List;
 @Service("offAddService")
 public class OffAddServiceImpl implements OffAddService {
     private final OffAddMapper offAddMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public OffAddServiceImpl(OffAddMapper offAddMapper, MessageService messageService) {
+    public OffAddServiceImpl(OffAddMapper offAddMapper, PopupMapper popupMapper, MessageService messageService) {
         this.offAddMapper = offAddMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -48,7 +53,9 @@ public class OffAddServiceImpl implements OffAddService {
         offAddVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(offAddVO.getStoreCd()).equals("")) {
-            offAddVO.setArrStoreCd(offAddVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(offAddVO.getStoreCd(), 3900));
+            offAddVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return offAddMapper.getOffAddDayList(offAddVO);
@@ -63,7 +70,9 @@ public class OffAddServiceImpl implements OffAddService {
         offAddVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(offAddVO.getStoreCd()).equals("")) {
-            offAddVO.setArrStoreCd(offAddVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(offAddVO.getStoreCd(), 3900));
+            offAddVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return offAddMapper.getOffAddDayDetailList(offAddVO);
@@ -78,7 +87,9 @@ public class OffAddServiceImpl implements OffAddService {
         offAddVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(offAddVO.getStoreCd()).equals("")) {
-            offAddVO.setArrStoreCd(offAddVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(offAddVO.getStoreCd(), 3900));
+            offAddVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return offAddMapper.getOffAddMonthList(offAddVO);
@@ -93,7 +104,9 @@ public class OffAddServiceImpl implements OffAddService {
         offAddVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(offAddVO.getStoreCd()).equals("")) {
-            offAddVO.setArrStoreCd(offAddVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(offAddVO.getStoreCd(), 3900));
+            offAddVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return offAddMapper.getOffAddMonthDetailList(offAddVO);
@@ -108,7 +121,9 @@ public class OffAddServiceImpl implements OffAddService {
         offAddVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(offAddVO.getStoreCd()).equals("")) {
-            offAddVO.setArrStoreCd(offAddVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(offAddVO.getStoreCd(), 3900));
+            offAddVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         // 결제수단 array 값 세팅
@@ -133,7 +148,9 @@ public class OffAddServiceImpl implements OffAddService {
         offAddVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(offAddVO.getStoreCd()).equals("")) {
-            offAddVO.setArrStoreCd(offAddVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(offAddVO.getStoreCd(), 3900));
+            offAddVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         // 결제수단 array 값 세팅

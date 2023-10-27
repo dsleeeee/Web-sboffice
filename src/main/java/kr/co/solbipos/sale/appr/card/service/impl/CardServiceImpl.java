@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.appr.card.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.appr.card.service.CardService;
@@ -29,9 +33,11 @@ import java.util.List;
 @Transactional
 public class CardServiceImpl implements CardService {
     private final CardMapper cardMapper;
+    private final PopupMapper popupMapper;
 
-    public CardServiceImpl(CardMapper cardMapper) {
+    public CardServiceImpl(CardMapper cardMapper, PopupMapper popupMapper) {
         this.cardMapper = cardMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 신용카드입금관리 - 조회 */
@@ -45,9 +51,11 @@ public class CardServiceImpl implements CardService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = cardVO.getStoreCds().split(",");
-        cardVO.setStoreCdList(storeCds);
-
+        if(!StringUtil.getOrBlank(cardVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(cardVO.getStoreCds(), 3900));
+            cardVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return cardMapper.getCardList(cardVO);
     }
@@ -63,9 +71,11 @@ public class CardServiceImpl implements CardService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = cardVO.getStoreCds().split(",");
-        cardVO.setStoreCdList(storeCds);
-
+        if(!StringUtil.getOrBlank(cardVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(cardVO.getStoreCds(), 3900));
+            cardVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return cardMapper.getCardExcelList(cardVO);
     }

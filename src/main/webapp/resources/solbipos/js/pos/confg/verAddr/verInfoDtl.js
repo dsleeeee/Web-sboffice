@@ -71,6 +71,9 @@ app.controller('verDetailCtrl', ['$scope', '$http', function ($scope, $http) {
         }
       }
       $scope.version.incldDtls = incldDtlsStr;
+
+      // 파일사이즈 변환하여 표기
+      $scope.version.fileSize = getfileSize($scope.version.fileSize);
     });
   };
 

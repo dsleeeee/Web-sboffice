@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.dlvr.dlvrRate.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.dlvr.dlvrRate.service.DlvrRateService;
@@ -29,9 +33,11 @@ import java.util.List;
 @Transactional
 public class DlvrRateServiceImpl implements DlvrRateService {
     private final DlvrRateMapper dlvrRateMapper;
+    private final PopupMapper popupMapper;
 
-    public DlvrRateServiceImpl(DlvrRateMapper dlvrRateMapper) {
+    public DlvrRateServiceImpl(DlvrRateMapper dlvrRateMapper, PopupMapper popupMapper) {
         this.dlvrRateMapper = dlvrRateMapper;
+        this.popupMapper = popupMapper;
     }
 
 
@@ -46,8 +52,11 @@ public class DlvrRateServiceImpl implements DlvrRateService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dlvrRateVO.getStoreCds().split(",");
-        dlvrRateVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dlvrRateVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dlvrRateVO.getStoreCds(), 3900));
+            dlvrRateVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return dlvrRateMapper.getDlvrRateList(dlvrRateVO);
     }
@@ -63,8 +72,11 @@ public class DlvrRateServiceImpl implements DlvrRateService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dlvrRateVO.getStoreCds().split(",");
-        dlvrRateVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dlvrRateVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dlvrRateVO.getStoreCds(), 3900));
+            dlvrRateVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return dlvrRateMapper.getDlvrRateExcelList(dlvrRateVO);
     }

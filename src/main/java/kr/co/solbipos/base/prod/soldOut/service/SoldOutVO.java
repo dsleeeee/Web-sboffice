@@ -298,6 +298,9 @@ public class SoldOutVO extends PageVO {
     /** 사용자별 브랜드코드(상품) */
     private String userProdBrands;
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
     /**
      * @return the hqOfficeCd
      */
@@ -1346,5 +1349,13 @@ public class SoldOutVO extends PageVO {
 
     public void setUserProdBrands(String userProdBrands) {
         this.userProdBrands = userProdBrands;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

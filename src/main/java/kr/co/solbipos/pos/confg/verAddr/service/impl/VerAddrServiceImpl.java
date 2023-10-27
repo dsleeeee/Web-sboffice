@@ -5,7 +5,11 @@ import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
 import kr.co.common.system.BaseEnv;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.pos.confg.verAddr.service.AddrApplcStoreVO;
 import kr.co.solbipos.pos.confg.verAddr.service.AddrVerInfoVO;
@@ -43,12 +47,14 @@ public class VerAddrServiceImpl implements VerAddrService {
 
     private final VerAddrMapper verAddrMapper;
     private final MessageService messageService;
+    private final PopupMapper popupMapper;
 
     /** Constructor Injection */
     @Autowired
-    public VerAddrServiceImpl(VerAddrMapper verAddrMapper, MessageService messageService) {
+    public VerAddrServiceImpl(VerAddrMapper verAddrMapper, MessageService messageService, PopupMapper popupMapper) {
         this.verAddrMapper = verAddrMapper;
         this.messageService = messageService;
+        this.popupMapper = popupMapper;
     }
 
     /** 포스버전 목록 조회 */
@@ -252,12 +258,11 @@ public class VerAddrServiceImpl implements VerAddrService {
         // 매장코드 복수검색 추가(미적용매장 리스트 검색시에만 사용)
         if(applcStore.getSearchSatus() != null && "N".equals(applcStore.getSearchSatus())){
             if(applcStore.getChkMulti() != null && "Y".equals(applcStore.getChkMulti())){
-                String[] arrStoreCd = applcStore.getStoreCd().split(",");
-                if (arrStoreCd.length > 0) {
-                    if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-                        applcStore.setArrStoreCd(arrStoreCd);
-                        applcStore.setStoreCd("");
-                    }
+                if(!StringUtil.getOrBlank(applcStore.getStoreCd()).equals("")) {
+                    StoreVO storeVO = new StoreVO();
+                    storeVO.setArrSplitStoreCd(CmmUtil.splitText(applcStore.getStoreCd(), 3900));
+                    applcStore.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+                    applcStore.setStoreCd("");
                 }
             }
         }

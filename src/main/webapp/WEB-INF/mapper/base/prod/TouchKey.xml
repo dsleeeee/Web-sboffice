@@ -3495,12 +3495,6 @@
         AND thtk.PROD_CD = thp.PROD_CD
         AND tms.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND tms.STORE_CD = tmp.STORE_CD
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                tms.STORE_CD = #{item}
-            </foreach>
-        </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 선택한 매장브랜드가 있을 때
         </if>

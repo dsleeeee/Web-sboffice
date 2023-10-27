@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.prod.prodSaleRate.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.prod.prodSaleRate.service.ProdSaleRateService;
@@ -29,9 +33,11 @@ import java.util.List;
 @Transactional
 public class ProdSaleRateServiceImpl implements ProdSaleRateService {
     private final ProdSaleRateMapper prodSaleRateMapper;
+    private final PopupMapper popupMapper;
 
-    public ProdSaleRateServiceImpl(ProdSaleRateMapper prodSaleRateMapper) {
+    public ProdSaleRateServiceImpl(ProdSaleRateMapper prodSaleRateMapper, PopupMapper popupMapper) {
         this.prodSaleRateMapper = prodSaleRateMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 조회 */
@@ -45,8 +51,11 @@ public class ProdSaleRateServiceImpl implements ProdSaleRateService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = prodSaleRateVO.getStoreCds().split(",");
-        prodSaleRateVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(prodSaleRateVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodSaleRateVO.getStoreCds(), 3900));
+            prodSaleRateVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return prodSaleRateMapper.getProdSaleRateList(prodSaleRateVO);
     }
@@ -62,8 +71,11 @@ public class ProdSaleRateServiceImpl implements ProdSaleRateService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = prodSaleRateVO.getStoreCds().split(",");
-        prodSaleRateVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(prodSaleRateVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodSaleRateVO.getStoreCds(), 3900));
+            prodSaleRateVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return prodSaleRateMapper.getProdSaleRateExcelList(prodSaleRateVO);
     }

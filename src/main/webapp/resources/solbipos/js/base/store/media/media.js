@@ -98,6 +98,20 @@ app.controller('mediaCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     });
 
+    // 그리드 링크 효과
+    s.formatItem.addHandler(function (s, e) {
+        if (e.panel === s.cells) {
+          var col = s.columns[e.col];
+
+          // 파일사이즈
+          if (col.binding === "fileSize") {
+              if(e.cell.innerText !== null && e.cell.innerText !== undefined && e.cell.innerText !== ""){
+                  e.cell.innerHTML = getfileSize(e.cell.innerText.replaceAll(',',''));
+              }
+          }
+        }
+    });
+
     // 전체기간 체크박스 선택에 따른 날짜선택 초기화
     $scope.srchStartDate.isReadOnly = $scope.isChecked;
   };

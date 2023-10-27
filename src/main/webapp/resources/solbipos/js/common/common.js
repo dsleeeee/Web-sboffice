@@ -512,3 +512,15 @@ function fnNxBtnSearch(nxBtnSearchNumber)
         //alert('common.js : '+e);
     }
 }
+
+// 파일사이즈변환
+function getfileSize(x) {
+  var s = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
+  var e = Math.floor(Math.log(x) / Math.log(1024));
+
+    if(e == "-Infinity"){
+        return "0 "+s[0];
+    }else{
+        return (x / Math.pow(1024, e)).toFixed(2) + " " + s[e];
+    }
+}

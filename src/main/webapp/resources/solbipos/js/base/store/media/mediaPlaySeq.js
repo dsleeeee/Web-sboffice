@@ -40,6 +40,20 @@ app.controller('mediaPlaySeqCtrl', ['$scope', '$http', function ($scope, $http) 
         // 그리드 DataMap 설정
         $scope.fileTypeDataMap = new wijmo.grid.DataMap(fileTypeMediaPlaySeqComboData, 'value', 'name'); // 파일타입
         $scope.useYnDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name'); // 사용여부
+
+        // 그리드 링크 효과
+        s.formatItem.addHandler(function (s, e) {
+          if (e.panel === s.cells) {
+              var col = s.columns[e.col];
+
+              // 파일사이즈
+              if (col.binding === "fileSize") {
+                  if(e.cell.innerText !== null && e.cell.innerText !== undefined && e.cell.innerText !== ""){
+                      e.cell.innerHTML = getfileSize(e.cell.innerText.replaceAll(',',''));
+                  }
+              }
+          }
+        });
     };
 
     // <-- 검색 호출 -->

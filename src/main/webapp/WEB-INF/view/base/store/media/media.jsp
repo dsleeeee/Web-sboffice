@@ -133,7 +133,7 @@
         <wj-flex-grid-column header="<s:message code="media.useDate"/>" binding="useDate" align="center" width="160" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="media.fileNm"/>" binding="fileOrgNm" data-map="fileTypeDataMap" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="media.fileType"/>" binding="fileUseType" data-map="fileTypeDataMap" width="135" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="media.fileSize"/>" binding="fileSize"  width="75" align="right" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="media.fileSize"/>" binding="fileSize"  width="100" align="right" is-read-only="true"></wj-flex-grid-column>
 <%--        <wj-flex-grid-column header="<s:message code="media.regCnt"/>" binding="regCnt" align="center" width="80"  is-read-only="true"></wj-flex-grid-column>--%>
 <%--        <wj-flex-grid-column header="<s:message code="media.recvCnt"/>" binding="recvCnt" align="center" width="80"  is-read-only="true"></wj-flex-grid-column>--%>
         <wj-flex-grid-column header="<s:message code="media.useYn"/>" binding="useYn" data-map="useYnDataMap" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
@@ -175,7 +175,7 @@
   var hqOfficeCd  = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/media.js?ver=20230810.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/media.js?ver=20231026.01" charset="utf-8"></script>
 
 <%-- 버전 상세정보 레이어 --%>
 <c:import url="/WEB-INF/view/base/store/media/verInfoDtl.jsp">

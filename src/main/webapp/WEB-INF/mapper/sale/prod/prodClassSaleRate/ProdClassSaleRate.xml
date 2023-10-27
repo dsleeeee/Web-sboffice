@@ -32,12 +32,9 @@
         AND     thp.PROD_CD = tsdp.PROD_CD
         AND     tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
         AND 	tsdp.SALE_DATE BETWEEN #{startDate}  AND #{startDate}
-        <if test='storeCds != null and storeCds != ""'>
-            AND
-            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                tsdp.STORE_CD = #{item}
-            </foreach>
-        </if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+       		AND tsdp.STORE_CD IN (${storeCdQuery})
+       	</if>
         <if test='prodCd != null and prodCd != ""'>
             AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
         </if>
@@ -81,12 +78,9 @@
         AND     thp.PROD_CD = tsdp.PROD_CD
         AND     tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
         AND 	tsdp.SALE_DATE BETWEEN #{startDate}  AND #{startDate}
-        <if test='storeCds != null and storeCds != ""'>
-            AND
-            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                tsdp.STORE_CD = #{item}
-            </foreach>
-        </if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+       		AND tsdp.STORE_CD IN (${storeCdQuery})
+       	</if>
         <if test='prodCd != null and prodCd != ""'>
             AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
         </if>

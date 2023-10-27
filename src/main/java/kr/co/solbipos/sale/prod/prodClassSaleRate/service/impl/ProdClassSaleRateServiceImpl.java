@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.prod.prodClassSaleRate.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.prod.prodClassSaleRate.service.ProdClassSaleRateService;
@@ -30,9 +34,11 @@ import java.util.List;
 @Transactional
 public class ProdClassSaleRateServiceImpl implements ProdClassSaleRateService {
     private final ProdClassSaleRateMapper prodClassSaleRateMapper;
+    private final PopupMapper popupMapper;
 
-    public ProdClassSaleRateServiceImpl(ProdClassSaleRateMapper prodClassSaleRateMapper) {
+    public ProdClassSaleRateServiceImpl(ProdClassSaleRateMapper prodClassSaleRateMapper, PopupMapper popupMapper) {
         this.prodClassSaleRateMapper = prodClassSaleRateMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 조회 */
@@ -46,8 +52,11 @@ public class ProdClassSaleRateServiceImpl implements ProdClassSaleRateService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = prodClassSaleRateVO.getStoreCds().split(",");
-        prodClassSaleRateVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(prodClassSaleRateVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodClassSaleRateVO.getStoreCds(), 3900));
+            prodClassSaleRateVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return prodClassSaleRateMapper.getProdClassSaleRateList(prodClassSaleRateVO);
     }
@@ -63,8 +72,11 @@ public class ProdClassSaleRateServiceImpl implements ProdClassSaleRateService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = prodClassSaleRateVO.getStoreCds().split(",");
-        prodClassSaleRateVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(prodClassSaleRateVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodClassSaleRateVO.getStoreCds(), 3900));
+            prodClassSaleRateVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return prodClassSaleRateMapper.getProdClassSaleRateExcelList(prodClassSaleRateVO);
     }
