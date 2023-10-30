@@ -131,14 +131,14 @@
     /** 선택분류 선택 controller */
     app.controller('${param.targetId}Ctrl', ['$scope', '$http', function ($scope, $http) {
 
-        $scope.targetId = "${param.targetId}";
-        $scope.subTargetId = "${param.subTargetId}";
-        $("#"+$scope.targetId+"Nm").val(("${param.displayNm}" === "" ? messages["cmm.select"] : "${param.displayNm}"));
-
+        var targetId = "${param.targetId}";
+        var subTargetId = "${param.subTargetId}";
         var targetTypeFg = '${param.targetTypeFg}'; // 매장선택 (S:싱글, M:멀티)
 
+        $("#"+targetId+"Nm").val(("${param.displayNm}" === "" ? messages["cmm.select"] : "${param.displayNm}"));
+
         // 상위 객체 상속 : T/F 는 picker
-        angular.extend(this, new RootController($scope.targetId + 'Ctrl', $scope, $http, false));
+        angular.extend(this, new RootController(targetId + 'Ctrl', $scope, $http, false));
 
         // 콤보박스 셋팅
         $scope._setComboData("regStoreFgCombo", regStoreFgAllData); // 적용매장구분
@@ -167,12 +167,12 @@
                     var col         = ht.panel.columns[ht.col];
                     var selectedRow = s.rows[ht.row].dataItem;
                     if (col.binding === "sdselClassCd") {
-                        $("#" + $scope.targetId + "Cd").val(selectedRow.sdselClassCd);
-                        $("#" + $scope.targetId + "Nm").val("[" + selectedRow.sdselClassCd + "] " + selectedRow.sdselClassNm);
+                        $("#" + targetId + "Cd").val(selectedRow.sdselClassCd);
+                        $("#" + targetId + "Nm").val("[" + selectedRow.sdselClassCd + "] " + selectedRow.sdselClassNm);
 
-                        $("#" + $scope.subTargetId + "Nm").val(messages["cmm.all"]);
-                        $("#" + $scope.subTargetId + "Cd").val("");
-                        eval('$scope.wj' + $scope.targetId + 'Layer.hide(true)');
+                        $("#" + subTargetId + "Nm").val(messages["cmm.all"]);
+                        $("#" + subTargetId + "Cd").val("");
+                        eval('$scope.wj' + targetId + 'Layer.hide(true)');
                     }
                 }
             });
@@ -180,11 +180,11 @@
 
         $scope.searchFg = "N"; // 조회 했는지 여부
         // 다른 컨트롤러의 broadcast 받기
-        $scope.$on($scope.targetId + 'Ctrl', function (event, paramObj) {
+        $scope.$on(targetId + 'Ctrl', function (event, paramObj) {
             // 선택분류 선택 팝업 오픈
-            eval('$scope.wj' + $scope.targetId + 'Layer.show(true)');
+            eval('$scope.wj' + targetId + 'Layer.show(true)');
             // 팝업 닫힐시 이벤트
-            eval('$scope.wj' + $scope.targetId + 'Layer').hidden.addHandler(function () {
+            eval('$scope.wj' + targetId + 'Layer').hidden.addHandler(function () {
                 if ('${param.closeFunc}' !== '') {
                     eval('$scope.${param.closeFunc}()');
                 }
