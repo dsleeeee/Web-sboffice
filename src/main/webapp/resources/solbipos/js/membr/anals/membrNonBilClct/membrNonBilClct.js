@@ -16,7 +16,7 @@ var app = agrid.getApp();
 /**
  *  회원 미수금현황 그리드 생성
  */
-app.controller('membrNonBilClctCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('membrNonBilClctCtrl', ['$scope', '$http','$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('membrNonBilClctCtrl', $scope, $http, true));
@@ -196,7 +196,7 @@ app.controller('membrNonBilClctCtrl', ['$scope', '$http', function ($scope, $htt
 /**
  *  회원 미수금현황 상세조회 그리드 생성
  */
-app.controller('membrNonBilClctDetailCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('membrNonBilClctDetailCtrl', ['$scope', '$http','$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('membrNonBilClctDetailCtrl', $scope, $http, true));
