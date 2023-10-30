@@ -211,9 +211,14 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
     var storeScope  = agrid.getScope('storeManageCtrl');
 
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      if($scope.flex.collectionView.itemsEdited[i].prterNm.length > 16) {
-        $scope._popMsg(messages["storeManage.kitchenPrint.prterNmLengthChk"]); // 이름 길이가 너무 깁니다.
+      if($scope.flex.collectionView.itemsEdited[i].prterNm === "" || $scope.flex.collectionView.itemsEdited[i].prterNm === null || $scope.flex.collectionView.itemsEdited[i].prterNm === undefined) {
+        $scope._popMsg(messages["storeManage.kitchenPrint.prterNmBlank"]); // 이름을 입력해주세요.
         return false;
+      } else {
+        if ($scope.flex.collectionView.itemsEdited[i].prterNm.length > 16) {
+          $scope._popMsg(messages["storeManage.kitchenPrint.prterNmLengthChk"]); // 이름 길이가 너무 깁니다.
+          return false;
+        }
       }
       $scope.flex.collectionView.itemsEdited[i].storeCd = storeScope.selectedStore.storeCd;
       $scope.flex.collectionView.itemsEdited[i].status = "U";
@@ -221,9 +226,14 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
     }
 
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-      if($scope.flex.collectionView.itemsAdded[i].prterNm.length > 16) {
-        $scope._popMsg(messages["storeManage.kitchenPrint.prterNmLengthChk"]); // 이름 길이가 너무 깁니다.
+      if($scope.flex.collectionView.itemsAdded[i].prterNm === "" || $scope.flex.collectionView.itemsAdded[i].prterNm === null || $scope.flex.collectionView.itemsAdded[i].prterNm === undefined) {
+        $scope._popMsg(messages["storeManage.kitchenPrint.prterNmBlank"]); // 이름을 입력해주세요.
         return false;
+      } else {
+        if ($scope.flex.collectionView.itemsAdded[i].prterNm.length > 16) {
+          $scope._popMsg(messages["storeManage.kitchenPrint.prterNmLengthChk"]); // 이름 길이가 너무 깁니다.
+          return false;
+        }
       }
       $scope.flex.collectionView.itemsAdded[i].storeCd = storeScope.selectedStore.storeCd;
       $scope.flex.collectionView.itemsAdded[i].status = "I";
