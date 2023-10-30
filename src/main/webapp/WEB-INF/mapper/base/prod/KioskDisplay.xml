@@ -80,7 +80,10 @@
                 PROD_CD,
                 MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
                 FROM TB_MS_PRODUCT_SALE_PRICE
-                WHERE STORE_CD = #{storeCd}
+                WHERE 1=1
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND STORE_CD IN (${storeCdQuery})
+                </if>
                 <![CDATA[
                     AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                     AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')

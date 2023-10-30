@@ -55,7 +55,7 @@ public class KioskDisplayServiceImpl implements KioskDisplayService {
 
         // 소속구분 설정
         if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
-            kioskDisplayVO.setStoreCd(sessionInfoVO.getStoreCd());
+            kioskDisplayVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
         kioskDisplayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         kioskDisplayVO.setUserId(sessionInfoVO.getUserId());
@@ -63,7 +63,7 @@ public class KioskDisplayServiceImpl implements KioskDisplayService {
         // 매장 array 값 세팅
         if(!StringUtil.getOrBlank(kioskDisplayVO.getStoreCds()).equals("")) {
             StoreVO storeVO = new StoreVO();
-            storeVO.setArrSplitStoreCd(CmmUtil.splitText(kioskDisplayVO.getStoreCd(), 3900));
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(kioskDisplayVO.getStoreCds(), 3900));
             kioskDisplayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
