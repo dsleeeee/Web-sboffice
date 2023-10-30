@@ -14,7 +14,7 @@
 <wj-popup id="wj<c:out value="${param.targetId}"/>Layer" control="wj<c:out value="${param.targetId}"/>Layer" show-trigger="Click" hide-trigger="Click" style="display:none;width:630px;">
     <div class="wj-dialog wj-dialog-columns">
         <div class="wj-dialog-header wj-dialog-header-font">
-            <s:message code="cmm.store.select"/>
+            > <s:message code="cmm.store.select"/>
             <a href="#" class="wj-hide btn_close"></a>
         </div>
         <div class="wj-dialog-body" ng-controller="<c:out value="${param.targetId}"/>Ctrl">
