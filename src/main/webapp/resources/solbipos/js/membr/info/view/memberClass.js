@@ -191,10 +191,15 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
             });
             return false;
         }*/
+
+        // 숫자영문.
+        var numengChkregexp = /[^A-za-z0-9]/g;
+        // 숫자
+        var numChkregexp = /[^0-9]/g;
+
         // 등급코드 숫자영문.
         var msg = messages["grade.membr.grade.cd"] + messages["cmm.require.number.en"];
-        var numChkregexp = /[^A-za-z0-9]/g;
-        if (numChkregexp.test($scope.detailData.membrClassCd)) {
+        if (numengChkregexp.test($scope.detailData.membrClassCd)) {
             $scope._popMsg(msg, function () {
                 $("#membrClassCd").focus();
             });
@@ -219,7 +224,6 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
         }
         // 할인를 최소 0 최대 100.
         var msg = messages["grade.membr.dc.rate"] + messages["grade.membr.dc.message"];
-        var numChkregexp = /[^0-9]/g;
         if (numChkregexp.test($scope.detailData.dcRate) || $scope.detailData.dcRate < 0 || $scope.detailData.dcRate > 100) {
             $scope._popMsg(msg, function () {
                 $("#dcRate").focus();
@@ -228,8 +232,7 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
         }
         // 신규가입적립 point 입력하세요.
         var msg = messages["grade.membr.new.join.save.point"] + messages["cmm.require.text"];
-        var numChkregexp = /[^0-9]/g;
-        if (numChkregexp.test($scope.detailData.newJoinSavePoint)) {
+        if (isNull($scope.detailData.newJoinSavePoint) || numChkregexp.test($scope.detailData.newJoinSavePoint)) {
             $scope._popMsg(msg, function () {
                 $("#newJoinSavePoint").focus();
             });
@@ -237,8 +240,7 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
         }
         // 최소사용포인트 입력하세요.
         var msg = messages["grade.membr.min.use.point"] + messages["cmm.require.text"];
-        var numChkregexp = /[^0-9]/g;
-        if (numChkregexp.test($scope.detailData.minUsePoint)) {
+        if (isNull($scope.detailData.minUsePoint) || numChkregexp.test($scope.detailData.minUsePoint)) {
             $scope._popMsg(msg, function () {
                 $("#minUsePoint").focus();
             });
@@ -246,7 +248,7 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
         }
         // 첫거래적립포인트 입력하세요.
         var msg = messages["grade.membr.first.sale.save.point"] + messages["cmm.require.text"];
-        if (numChkregexp.test($scope.detailData.firstSaleSavePoint)) {
+        if (isNull($scope.detailData.firstSaleSavePoint) || numChkregexp.test($scope.detailData.firstSaleSavePoint)) {
             $scope._popMsg(msg, function () {
                 $("#firstSaleSavePoint").focus();
             });
@@ -254,7 +256,7 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
         }
         // 최대사용포인트 입력하세요.
         var msg = messages["grade.membr.max.use.point"] + messages["cmm.require.text"];
-        if (numChkregexp.test($scope.detailData.maxUsePoint)) {
+        if (isNull($scope.detailData.maxUsePoint) || numChkregexp.test($scope.detailData.maxUsePoint)) {
             $scope._popMsg(msg, function () {
                 $("#maxUsePoint").focus();
             });
@@ -270,7 +272,6 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
         }
         // 할인한도액은 숫자만 입력가능합니다.
         var msg = messages["grade.membr.dc.max"] + messages["cmm.require.number"];
-        var numChkregexp = /[^0-9]/g;
         if (numChkregexp.test($scope.detailData.dcLimitAmt)) {
             $scope._popMsg(msg, function () {
                 $("#dcLimitAmt").focus();
@@ -280,8 +281,8 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 기념일포인트 입력하세요.
         var msg = messages["grade.membr.anvsr.save.point"] + messages["cmm.require.text"];
-        if (!isNull($scope.membrAnvsrYnCombo.selectedValue)) {
-            if (isNull($scope.detailData.anvsrSavePoint)) {
+        if (!isNull($scope.membrAnvsrYnCombo.selectedValue) && ($scope.membrAnvsrYnCombo.selectedValue !== '0')) {
+            if (isNull($scope.detailData.anvsrSavePoint) || numChkregexp.test($scope.detailData.anvsrSavePoint)) {
                 $scope._popMsg(msg, function () {
                     $("#anvsrSavePoint").focus();
                 });
@@ -478,13 +479,17 @@ app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $h
         var params = new Array();
         var vScope = agrid.getScope('memberClassCtrl');
 
+        // 숫자영문.
+        var numengChkregexp2 = /[^A-za-z0-9]/g;
+        // 숫자
+        var numChkregexp2 = /[^0-9]/g;
+
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
             $scope.flex.collectionView.itemsEdited[i].status = "U";
             var item = $scope.flex.collectionView.itemsEdited[i];
 
             if(vScope.pointSaveFgCombo.selectedValue === "2") {
-                var numChkregexp = /[^0-9]/g;
-                if (numChkregexp.test(item.accRate)) {
+                if (numChkregexp2.test(item.accRate)) {
                     $scope._popMsg(messages["grade.membr.point.list.amt"] + messages["cmm.require.number"]);
                     return false;
                 }
@@ -501,8 +506,7 @@ app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $h
             }
 
             if(vScope.pointSaveFgCombo.selectedValue === "2") {
-                var numChkregexp = /[^0-9]/g;
-                if (numChkregexp.test(item.accRate)) {
+                if (numChkregexp2.test(item.accRate)) {
                     $scope._popMsg(messages["grade.membr.point.list.amt"] + messages["cmm.require.number"]);
                     return false;
                 }
